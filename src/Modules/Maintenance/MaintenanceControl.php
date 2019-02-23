@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
+use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -13,13 +14,21 @@ class MaintenanceControl extends ConsoleControl
 	private $bellGateway;
 	private $storeGateway;
 	private $foodsaverGateway;
+	private $mailingHelper;
 
-	public function __construct(MaintenanceModel $model, BellGateway $bellGateway, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		MaintenanceModel $model,
+		BellGateway $bellGateway,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		MailingHelper $mailingHelper
+	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->mailingHelper = $mailingHelper;
+
 		parent::__construct();
 	}
 
@@ -168,7 +177,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(30)) {
 			foreach ($foodsaver as $fs) {
 				$inactive_fsids[$fs['id']] = $fs['id'];
-				$this->func->tplMail(27, $fs['email'], array(
+				$this->mailingHelper->tplMail(27, $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
 				));
@@ -185,7 +194,7 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
 			foreach ($foodsaver as $fs) {
-				$this->func->tplMail(26, $fs['email'], array(
+				$this->mailingHelper->tplMail(26, $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
 				));
@@ -450,7 +459,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
-				$this->func->tplMail(28, $fs['fs_email'], array(
+				$this->mailingHelper->tplMail(28, $fs['fs_email'], array(
 					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],

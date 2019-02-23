@@ -83,7 +83,7 @@ final class RegionXhr extends Control
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->func->tplMail(19, $f['email'], array(
+							$this->mailingHelper->tplMail(19, $f['email'], array(
 								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,

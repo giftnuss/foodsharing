@@ -65,7 +65,7 @@ class MailboxControl extends Control
 			$this->pageCompositionHelper->addContent($this->view->options(), CNT_LEFT);
 		}
 
-		if (isset($_GET['mailto']) && $this->func->validEmail($_GET['mailto'])) {
+		if (isset($_GET['mailto']) && $this->mailingHelper->validEmail($_GET['mailto'])) {
 			$this->pageCompositionHelper->addJs('mb_mailto("' . $_GET['mailto'] . '");');
 		}
 	}

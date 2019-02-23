@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
@@ -12,17 +13,20 @@ final class NotificationService
 	private $fairteilerGateway;
 	private $func;
 	private $sanitizerService;
+	private $mailingHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		FairTeilerGateway $fairTeilerGateway,
 		Func $func,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		MailingHelper $mailingHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->fairteilerGateway = $fairTeilerGateway;
 		$this->func = $func;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailingHelper = $mailingHelper;
 	}
 
 	public function newFairteilerPost(int $fairteilerId)
@@ -45,7 +49,7 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->func->tplMail(18, $f['email'], array(
+					$this->mailingHelper->tplMail(18, $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId,
 						'name' => $f['name'],
 						'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

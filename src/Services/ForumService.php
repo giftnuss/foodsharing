@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
@@ -21,6 +22,7 @@ class ForumService
 	private $func;
 	private $session;
 	private $sanitizerService;
+	private $mailingHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -30,7 +32,8 @@ class ForumService
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		MailingHelper $mailingHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -40,6 +43,7 @@ class ForumService
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailingHelper = $mailingHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -116,7 +120,7 @@ class ForumService
 	public function notificationMail($recipients, $tpl, $data)
 	{
 		foreach ($recipients as $recipient) {
-			$this->func->tplMail(
+			$this->mailingHelper->tplMail(
 				$tpl,
 				$recipient['email'],
 				array_merge($data,

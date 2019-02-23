@@ -183,8 +183,8 @@ class EmailControl extends Control
 							$name = $arr[1];
 						}
 
-						if ($this->func->validEmail($email)) {
-							$this->func->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
+						if ($this->mailingHelper->validEmail($email)) {
+							$this->mailingHelper->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
 							++$count;
 						} else {
 							unset($foodsaver[$i]);

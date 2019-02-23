@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -49,6 +50,7 @@ class XhrMethods
 	private $mailboxGateway;
 	private $imageManager;
 	private $sanitizerService;
+	private $mailingHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -75,7 +77,8 @@ class XhrMethods
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
 		ImageManager $imageManager,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		MailingHelper $mailingHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -97,6 +100,7 @@ class XhrMethods
 		$this->mailboxGateway = $mailboxGateway;
 		$this->imageManager = $imageManager;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailingHelper = $mailingHelper;
 	}
 
 	public function xhr_verify($data)
@@ -843,7 +847,7 @@ class XhrMethods
 				$subject = str_replace($search, $replace, $mail['name']);
 
 				$check = false;
-				if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
+				if ($this->mailingHelper->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
 					$check = true;
 				}
 

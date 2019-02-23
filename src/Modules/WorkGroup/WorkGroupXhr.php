@@ -76,7 +76,7 @@ class WorkGroupXhr extends Control
 
 							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
 
-							$this->func->libmail(array(
+							$this->mailingHelper->libmail(array(
 								'email' => $fs['email'],
 								'email_name' => $fs['name']
 							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
@@ -108,7 +108,7 @@ class WorkGroupXhr extends Control
 				// tplMail uses AsyncMail, which in turn doesn't seem to provide CC or BCC, so use TO...
 				$recipients = array($group['email'], $from);
 
-				$this->func->tplMail(24, $recipients, array(
+				$this->mailingHelper->tplMail(24, $recipients, array(
 					'gruppenname' => $group['name'],
 					'message' => $message
 				), $from);

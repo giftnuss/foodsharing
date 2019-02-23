@@ -40,7 +40,7 @@ class LoginControl extends Control
 	{
 		$this->pageCompositionHelper->addTitle('Newsletter Abmeldung');
 		$this->pageCompositionHelper->addBread('Newsletter Abmeldung');
-		if (isset($_GET['e']) && $this->func->validEmail($_GET['e'])) {
+		if (isset($_GET['e']) && $this->mailingHelper->validEmail($_GET['e'])) {
 			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
 			$this->pageCompositionHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
@@ -147,7 +147,7 @@ class LoginControl extends Control
 			} else {
 				$mail = $_POST['email'];
 			}
-			if (!$this->func->validEmail($mail)) {
+			if (!$this->mailingHelper->validEmail($mail)) {
 				$this->func->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
 			} else {
 				if ($this->model->addPassRequest($mail)) {
@@ -175,7 +175,7 @@ class LoginControl extends Control
 							$check = false;
 							$this->func->error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
 							/*
-							$this->func->tplMail(11, 'kontakt@prographix.de',array(
+							$this->mailingHelper->tplMail(11, 'kontakt@prographix.de',array(
 								'data' => '<pre>'.print_r($_POST,true).'</pre>'
 							));
 							*/

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
@@ -69,6 +70,11 @@ abstract class Control
 	 */
 	private $metrics;
 
+	/**
+	 * @var MailingHelper
+	 */
+	protected $mailingHelper;
+
 	public function __construct()
 	{
 		global $container;
@@ -80,6 +86,7 @@ abstract class Control
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
+		$this->mailingHelper = $container->get(MailingHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -450,7 +457,7 @@ abstract class Control
 					$sessdata[$recipient['id']] = time();
 
 					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
-						$this->func->tplMail(30, $recipient['email'], array(
+						$this->mailingHelper->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -459,7 +466,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
-						$this->func->tplMail(30, $recipient['email'], array(
+						$this->mailingHelper->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -468,7 +475,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						$this->func->tplMail($tpl_id, $recipient['email'], array(
+						$this->mailingHelper->tplMail($tpl_id, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -497,7 +504,7 @@ abstract class Control
 					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
 					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
 
-					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
+					$this->mailingHelper->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],
