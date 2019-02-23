@@ -10,6 +10,7 @@
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
+- Properly escape store names in request popups !778 @NerdyProjects
 
 ## Refactoring
 
