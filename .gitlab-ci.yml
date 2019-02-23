@@ -47,23 +47,6 @@ triage:
   tags:
   - shared
 
-build:lint-backend:
-  <<: *defaults
-  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
-  stage: build
-  script:
-  - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
-  - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose
-  - vendor/bin/parallel-lint --no-progress --exclude vendor .
-  - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
-  cache:
-    key: backend:lint:v1
-    paths:
-    - vendor
-    - .php_cs.cache
-  except:
-  - schedules
-
 build:frontend:
   <<: *defaults
   image: node:11.9.0-alpine
@@ -83,14 +66,20 @@ build:frontend:
 
 build:backend:
   <<: *defaults
+  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
   stage: build
   script:
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+    - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose
+    - vendor/bin/parallel-lint --no-progress --exclude vendor .
+    - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
   cache:
     key: backend:build:v1
     paths:
     - vendor
+    - .php_cs.cache
   artifacts:
     expire_in: 1 week
     paths:
