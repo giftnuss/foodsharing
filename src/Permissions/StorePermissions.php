@@ -121,4 +121,17 @@ class StorePermissions
 
 		return true;
 	}
+
+	public function hasPreconfirmedPickup($storeId)
+	{
+		$fsId = $this->session->id();
+		if (!$fsId) {
+			return false;
+		}
+		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($fsId, $storeId)) {
+			return true;
+		}
+
+		return false;
+	}
 }
