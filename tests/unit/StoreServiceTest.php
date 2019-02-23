@@ -74,4 +74,17 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$datetime = \DateTime::createFromFormat(DATE_ATOM, $date . 'T' . $time . 'Z');
 		$this->assertFalse($this->service->pickupSlotAvailable($store['id'], $datetime));
 	}
+
+	public function testUserCanOnlySignupOncePerSlot()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = '2018-07-19';
+		$time = '16:45:00';
+		$datetime = \DateTime::createFromFormat(DATE_ATOM, $date . 'T' . $time . 'Z');
+		$dow = 3;
+		$fetcher = 2;
+		$this->tester->addRecurringPickup($store['id'], ['time' => $time, 'dow' => $dow, 'fetcher' => $fetcher]);
+		$this->assertTrue($this->service->signupForPickup($this->foodsaver['id'], $store['id'], $datetime));
+		$this->assertFalse($this->service->signupForPickup($this->foodsaver['id'], $store['id'], $datetime));
+	}
 }

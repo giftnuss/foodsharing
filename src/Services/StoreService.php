@@ -22,6 +22,10 @@ class StoreService
 			return false;
 		}
 
+		if (in_array(['foodsaver_id' => $fsId], $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate))) {
+			return false;
+		}
+
 		$this->storeGateway->addFetcher($fsId, $storeId, $pickupDate, $confirmed);
 		if (!$confirmed) {
 			$this->storeGateway->updateBellNotificationForBiebs($storeId, true);
