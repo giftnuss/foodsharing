@@ -3,11 +3,16 @@
 ## Major changes
 
 ## Features
+- Add Web Push Notifications #336 @janopae
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
 
 ## Refactoring
+
+- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
+and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
+are welcomed to check the E-Mails generated for missed chat messages. @janopae 
 
 ## Dev/Test/CI stuff
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
