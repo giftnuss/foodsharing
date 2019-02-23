@@ -241,7 +241,7 @@ class EventView extends View
 	public function eventTop($event)
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
 		} else {
 			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
@@ -261,7 +261,7 @@ class EventView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>' . $this->func->niceDate($event['start_ts']) . $end . '</li>
+						<li>' . $this->timeHelper->niceDate($event['start_ts']) . $end . '</li>
 					</ul>
 					<div class="clear"></div>
 				</div>

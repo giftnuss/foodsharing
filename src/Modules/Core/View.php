@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Core;
 
 use Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -18,6 +19,7 @@ class View
 	protected $session;
 	protected $sanitizerService;
 	protected $pageCompositionHelper;
+	protected $timeHelper;
 
 	/**
 	 * @var \Twig\Environment
@@ -30,7 +32,8 @@ class View
 		Utils $viewUtils,
 		Session $session,
 		SanitizerService $sanitizerService,
-		PageCompositionHelper $pageCompositionHelper
+		PageCompositionHelper $pageCompositionHelper,
+		TimeHelper $timeHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -38,6 +41,7 @@ class View
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
 		$this->pageCompositionHelper = $pageCompositionHelper;
+		$this->timeHelper = $timeHelper;
 	}
 
 	public function setSub($sub)

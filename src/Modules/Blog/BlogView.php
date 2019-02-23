@@ -38,12 +38,12 @@ class BlogView extends View
 
 	public function newsPost($news)
 	{
-		return $this->v_utils->v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
+		return $this->v_utils->v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
 	}
 
 	public function newsListItem($news)
 	{
-		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news) . '<p>' . $this->func->autolink($news['teaser']) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
+		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news) . '<p>' . $this->func->autolink($news['teaser']) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
 	}
 
 	private function getImage($news, $prefix = 'crop_1_528_')

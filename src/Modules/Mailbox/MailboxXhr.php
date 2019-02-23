@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
@@ -10,12 +11,18 @@ use Foodsharing\Services\SanitizerService;
 class MailboxXhr extends Control
 {
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		MailboxModel $model,
+		MailboxView $view,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 	}
@@ -160,7 +167,7 @@ class MailboxXhr extends Control
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
-				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));

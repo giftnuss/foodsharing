@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -13,19 +14,22 @@ class StoreUserControl extends Control
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $sanitizerService;
+	private $timeHelper;
 
 	public function __construct(
 		StoreModel $model,
 		StoreUserView $view,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 
@@ -304,7 +308,7 @@ class StoreUserControl extends Control
 					$g_data[$key][] = $r;
 				}
 
-				$days = $this->func->getDow();
+				$days = $this->timeHelper->getDow();
 
 				$pickup_date_content = '';
 

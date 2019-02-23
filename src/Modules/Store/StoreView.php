@@ -38,7 +38,7 @@ class StoreView extends View
 		$curdate = 0;
 		foreach ($history as $h) {
 			if ($curdate != $h['date']) {
-				$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
+				$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
 				$curdate = $h['date'];
 			}
 			$out .= '

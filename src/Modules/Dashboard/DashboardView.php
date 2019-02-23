@@ -15,7 +15,7 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht am ' . $this->func->niceDate($b['time_ts']) . '</span>
+					<span class="t">veröffentlicht am ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
@@ -183,7 +183,7 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . ' (' . $this->distance($b['distance']) . ')</span>
-					<span class="t">' . $this->func->niceDate($b['time_ts']) . '</span>
+					<span class="t">' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
@@ -224,7 +224,7 @@ class DashboardView extends View
 			$out .= '
 				<li>
 					<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-						<span class="title">' . $confirmSymbol . $this->func->niceDate($d['date_ts']) . '</span>
+						<span class="title">' . $confirmSymbol . $this->timeHelper->niceDate($d['date_ts']) . '</span>
 						<span>' . $d['betrieb_name'] . '</span>
 					</a>
 				</li>';
@@ -430,7 +430,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -453,7 +453,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -476,7 +476,7 @@ class DashboardView extends View
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
-							<span class="time">' . $this->func->niceDate($u['update_time_ts']) . '</span>
+							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -502,7 +502,7 @@ class DashboardView extends View
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
-							<p>' . $this->func->niceDate($i['start_ts']) . '</p>
+							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
 	
@@ -534,7 +534,7 @@ class DashboardView extends View
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
-							<p>' . $this->func->niceDate($i['start_ts']) . '</p>
+							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
 	

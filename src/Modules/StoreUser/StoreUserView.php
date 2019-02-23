@@ -424,7 +424,7 @@ class StoreUserView extends View
 				}
 
 				if ($fs['id'] == $this->session->id() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->timeHelper->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
 

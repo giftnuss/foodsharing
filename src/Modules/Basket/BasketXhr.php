@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
@@ -16,17 +17,20 @@ class BasketXhr extends Control
 	private $status;
 	private $basketGateway;
 	private $messageModel;
+	private $timeHelper;
 
 	public function __construct(
 		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
-		MessageModel $messageModel
+		MessageModel $messageModel,
+		TimeHelper $timeHelper
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->timeHelper = $timeHelper;
 
 		$this->status = [
 			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
@@ -499,7 +503,7 @@ class BasketXhr extends Control
 			$dia->addContent(
 				'<div>
 					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
+					<p>Anfragezeitpunkt: ' . $this->timeHelper->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
 				. $this->v_utils->v_form_radio(
