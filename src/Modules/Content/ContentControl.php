@@ -23,7 +23,7 @@ class ContentControl extends Control
 	{
 		if (!isset($_GET['sub'])) {
 			if (!$this->session->may('orga')) {
-				$this->func->go('/');
+				$this->linkingHelper->go('/');
 			}
 			$this->model;
 
@@ -41,7 +41,7 @@ class ContentControl extends Control
 			} elseif ($id = $this->func->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
 					$this->func->info($this->func->s('content_deleted'));
-					$this->func->goPage();
+					$this->linkingHelper->goPage();
 				}
 			} elseif ($id = $this->func->getActionId('edit')) {
 				$this->handle_edit();
@@ -65,7 +65,7 @@ class ContentControl extends Control
 					$this->pageCompositionHelper->addContent($this->view->simple($cnt));
 				}
 			} elseif (isset($_GET['id'])) {
-				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+				$this->linkingHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
 				$this->pageCompositionHelper->addBread($this->func->s('content_bread'), '/?page=content');
 
@@ -295,7 +295,7 @@ class ContentControl extends Control
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('content_edit_success'));
-				$this->func->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
+				$this->linkingHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -309,7 +309,7 @@ class ContentControl extends Control
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
 				$this->func->info($this->func->s('content_add_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

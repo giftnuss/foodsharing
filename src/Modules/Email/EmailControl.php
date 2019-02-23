@@ -42,7 +42,7 @@ class EmailControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 	}
 
@@ -221,7 +221,7 @@ class EmailControl extends Control
 					$foodsaver[] = $o;
 				}
 				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
 				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}

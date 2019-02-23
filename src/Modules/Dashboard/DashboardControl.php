@@ -58,7 +58,7 @@ class DashboardControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 
 		$this->user = $this->dashboardGateway->getUser($this->session->id());
@@ -205,7 +205,7 @@ class DashboardControl extends Control
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
 		) {
 			$this->func->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
-			$this->func->go('/?page=settings&sub=general&');
+			$this->linkingHelper->go('/?page=settings&sub=general&');
 		}
 
 		global $g_data;

@@ -18,7 +18,7 @@ class FAQAdminControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 	}
 
@@ -38,7 +38,7 @@ class FAQAdminControl extends Control
 		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
 				$this->func->info($this->func->s('faq_deleted'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			}
 		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
@@ -102,7 +102,7 @@ class FAQAdminControl extends Control
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('faq_edit_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -117,7 +117,7 @@ class FAQAdminControl extends Control
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
 				$this->func->info($this->func->s('faq_add_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

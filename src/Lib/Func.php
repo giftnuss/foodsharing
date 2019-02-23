@@ -2,20 +2,12 @@
 
 namespace Foodsharing\Lib;
 
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
 
 final class Func
 {
 	private $ids;
 	private $regionGateway;
-
-	public $jsData = [];
-
-	/**
-	 * @var \Twig\Environment
-	 */
-	private $twig;
 
 	/**
 	 * @var Session
@@ -27,14 +19,6 @@ final class Func
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->ids = array();
-	}
-
-	/**
-	 * @required
-	 */
-	public function setTwig(\Twig\Environment $twig)
-	{
-		$this->twig = $twig;
 	}
 
 	/**
@@ -102,75 +86,6 @@ final class Func
 		return false;
 	}
 
-	public function getMenu()
-	{
-		$regions = [];
-		$stores = [];
-		$workingGroups = [];
-		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
-			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
-				if ($region['type'] == Type::WORKING_GROUP) {
-					$workingGroups[] = $region;
-				} else {
-					$regions[] = $region;
-				}
-			}
-		}
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			$stores = $_SESSION['client']['betriebe'];
-		}
-
-		$loggedIn = $this->session->may();
-
-		return $this->getMenuFn(
-			$loggedIn,
-			$regions,
-			$this->session->may('fs'),
-			$this->session->isOrgaTeam(),
-			$this->session->mayEditBlog(),
-			$this->session->mayEditQuiz(),
-			$this->session->mayHandleReports(),
-			$stores,
-			$workingGroups,
-			$this->session->get('mailbox'),
-			(int)$this->session->id(),
-			$loggedIn ? $this->img() : '',
-			$this->session->may('bieb')
-		);
-	}
-
-	private function getMenuFn(
-		bool $loggedIn, array $regions, bool $hasFsRole,
-		bool $isOrgaTeam, bool $mayEditBlog, bool $mayEditQuiz, bool $mayHandleReports,
-		array $stores, array $workingGroups,
-		$sessionMailbox, int $fsId, string $image, bool $mayAddStore)
-	{
-		$params = array_merge([
-			'loggedIn' => $loggedIn,
-			'fsId' => $fsId,
-			'image' => $image,
-			'mailbox' => $sessionMailbox,
-			'hasFsRole' => $hasFsRole,
-			'isOrgaTeam' => $isOrgaTeam,
-			'may' => [
-				'editBlog' => $mayEditBlog,
-				'editQuiz' => $mayEditQuiz,
-				'handleReports' => $mayHandleReports,
-				'addStore' => $mayAddStore
-			],
-			'stores' => array_values($stores),
-			'regions' => $regions,
-			'workingGroups' => $workingGroups
-		]);
-
-		return $this->twig->render('partials/vue-wrapper.twig', [
-			'id' => 'vue-topbar',
-			'component' => 'topbar',
-			'props' => $params
-		]);
-	}
-
 	public function preZero($i)
 	{
 		if ($i < 10) {
@@ -233,56 +148,10 @@ final class Func
 		return '';
 	}
 
-	public function goPage($page = false)
-	{
-		if (!$page) {
-			$page = $this->getPage();
-			if (isset($_GET['bid'])) {
-				$page .= '&bid=' . (int)$_GET['bid'];
-			}
-		}
-		$this->go('/?page=' . $page);
-	}
-
-	public function go($url)
-	{
-		header('Location: ' . $url);
-		exit();
-	}
-
-	public function getPage()
-	{
-		$page = $this->getGet('page');
-		if (!$page) {
-			$page = 'index';
-		}
-
-		return $page;
-	}
-
-	private function getSubPage()
-	{
-		$sub_page = $this->getGet('sub');
-		if (!$sub_page) {
-			$sub_page = 'index';
-		}
-
-		return $sub_page;
-	}
-
 	public function getGetId($name)
 	{
 		if (isset($_GET[$name]) && (int)$_GET[$name] > 0) {
 			return (int)$_GET[$name];
-		}
-
-		return false;
-	}
-
-	public function getGet($name)
-	{
-		if (isset($_GET[$name])) {
-			return $_GET[$name];
 		}
 
 		return false;
@@ -334,63 +203,6 @@ final class Func
 		$_SESSION['msg']['error'][] = $t . $msg;
 	}
 
-	private function getTranslations()
-	{
-		global $g_lang;
-
-		return $g_lang;
-	}
-
-	/**
-	 * This is used to set window.serverData on in the frontend.
-	 */
-	public function getServerData()
-	{
-		$user = $this->session->get('user');
-
-		$userData = [
-			'id' => $this->session->id(),
-			'firstname' => $user['name'],
-			'lastname' => $user['nachname'],
-			'may' => $this->session->may(),
-			'verified' => $this->session->isVerified(),
-			'avatar' => [
-				'mini' => $this->img($user['photo'], 'mini'),
-				'50' => $this->img($user['photo'], '50'),
-				'130' => $this->img($user['photo'], '130')
-			]
-		];
-
-		if ($this->session->may()) {
-			$userData['token'] = $this->session->user('token');
-		}
-
-		$location = null;
-
-		if ($pos = $this->session->get('blocation')) {
-			$location = [
-				'lat' => (float)$pos['lat'],
-				'lon' => (float)$pos['lon'],
-			];
-		}
-
-		$ravenConfig = null;
-
-		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
-			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
-		}
-
-		return array_merge($this->jsData, [
-			'user' => $userData,
-			'page' => $this->getPage(),
-			'subPage' => $this->getSubPage(),
-			'location' => $location,
-			'ravenConfig' => $ravenConfig,
-			'translations' => $this->getTranslations(),
-			'isDev' => getenv('FS_ENV') === 'dev'
-		]);
-	}
-
 	public function getBezirk()
 	{
 		return $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
@@ -408,16 +220,6 @@ final class Func
 		return $out;
 	}
 
-	public function goSelf()
-	{
-		$this->go($this->getSelf());
-	}
-
-	public function getSelf()
-	{
-		return $_SERVER['REQUEST_URI'];
-	}
-
 	public function unsetAll($array, $fields)
 	{
 		$out = array();
@@ -428,10 +230,5 @@ final class Func
 		}
 
 		return $out;
-	}
-
-	public function goLogin()
-	{
-		$this->go('/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']));
 	}
 }

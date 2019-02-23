@@ -24,7 +24,7 @@ final class ProfileControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 
 		if ($id = $this->uriInt(2)) {
@@ -43,13 +43,13 @@ final class ProfileControl extends Control
 						$this->profile();
 					}
 				} else {
-					$this->func->goPage('dashboard');
+					$this->linkingHelper->goPage('dashboard');
 				}
 			} else {
-				$this->func->goPage('dashboard');
+				$this->linkingHelper->goPage('dashboard');
 			}
 		} else {
-			$this->func->goPage('dashboard');
+			$this->linkingHelper->goPage('dashboard');
 		}
 	}
 
@@ -72,7 +72,7 @@ final class ProfileControl extends Control
 				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
 			);
 		} else {
-			$this->func->go('/profile/' . $this->foodsaver['id']);
+			$this->linkingHelper->go('/profile/' . $this->foodsaver['id']);
 		}
 	}
 

@@ -16,7 +16,7 @@ class EmailTemplateAdminControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 	}
 
@@ -36,7 +36,7 @@ class EmailTemplateAdminControl extends Control
 		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->emailTemplateAdminGateway->del_message_tpl($id)) {
 				$this->func->info($this->func->s('message_tpl_deleted'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			}
 		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
@@ -86,7 +86,7 @@ class EmailTemplateAdminControl extends Control
 		if ($this->func->submitted()) {
 			if ($this->emailTemplateAdminGateway->update_message_tpl($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('message_tpl_edit_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}
@@ -99,7 +99,7 @@ class EmailTemplateAdminControl extends Control
 		if ($this->func->submitted()) {
 			if ($this->emailTemplateAdminGateway->add_message_tpl($g_data)) {
 				$this->func->info($this->func->s('message_tpl_add_success'));
-				$this->func->goPage();
+				$this->linkingHelper->goPage();
 			} else {
 				$this->func->error($this->func->s('error'));
 			}

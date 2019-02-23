@@ -6,15 +6,18 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Services\ImageService;
 
 class ActivityXhr extends Control
 {
 	private $mailboxModel;
+	private $imageService;
 
-	public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
+	public function __construct(ActivityModel $model, MailboxModel $mailboxModel, ImageService $imageService)
 	{
 		$this->model = $model;
 		$this->mailboxModel = $mailboxModel;
+		$this->imageService = $imageService;
 		parent::__construct();
 	}
 

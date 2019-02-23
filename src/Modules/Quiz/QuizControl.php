@@ -18,9 +18,9 @@ class QuizControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		} elseif (!$this->session->mayEditQuiz()) {
-			$this->func->go('/');
+			$this->linkingHelper->go('/');
 		}
 	}
 
@@ -48,7 +48,7 @@ class QuizControl extends Control
 
 		if (!isset($_GET['sub'])) {
 			if (!isset($_GET['id'])) {
-				$this->func->go('/?page=quiz&id=1');
+				$this->linkingHelper->go('/?page=quiz&id=1');
 			}
 			$this->pageCompositionHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->pageCompositionHelper->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
@@ -92,7 +92,7 @@ class QuizControl extends Control
 				if (!empty($name)) {
 					if ($id = $this->model->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
 						$this->func->info('Quiz wurde erfolgreich geändert!');
-						$this->func->go('/?page=quiz&id=' . (int)$id);
+						$this->linkingHelper->go('/?page=quiz&id=' . (int)$id);
 					}
 				}
 			}
@@ -116,7 +116,7 @@ class QuizControl extends Control
 			if (!empty($name)) {
 				if ($id = $this->model->addQuiz($name, $desc, $maxfp, $questcount)) {
 					$this->func->info('Quiz wurde erfolgreich angelegt!');
-					$this->func->go('/?page=quiz&id=' . (int)$id);
+					$this->linkingHelper->go('/?page=quiz&id=' . (int)$id);
 				}
 			}
 		}

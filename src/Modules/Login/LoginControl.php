@@ -80,7 +80,7 @@ class LoginControl extends Control
 			}
 		} else {
 			if (!isset($_GET['sub']) || $_GET['sub'] != 'unsubscribe') {
-				$this->func->go('/?page=dashboard');
+				$this->linkingHelper->go('/?page=dashboard');
 			}
 		}
 	}
@@ -89,10 +89,10 @@ class LoginControl extends Control
 	{
 		if ($this->model->activate($_GET['e'], $_GET['t'])) {
 			$this->func->info($this->func->s('activation_success'));
-			$this->func->goPage('login');
+			$this->linkingHelper->goPage('login');
 		} else {
 			$this->func->error($this->func->s('activation_failed'));
-			$this->func->goPage('login');
+			$this->linkingHelper->goPage('login');
 		}
 	}
 
@@ -121,11 +121,11 @@ class LoginControl extends Control
 
 		if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
 			if (isset($_GET['ref'])) {
-				$this->func->go(urldecode($_GET['ref']));
+				$this->linkingHelper->go(urldecode($_GET['ref']));
 			}
-			$this->func->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
+			$this->linkingHelper->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 	}
 
@@ -182,7 +182,7 @@ class LoginControl extends Control
 						}
 
 						if ($check) {
-							$this->func->go('/?page=login');
+							$this->linkingHelper->go('/?page=login');
 						}
 					} else {
 						$this->func->error('Sorry, die Passwörter stimmen nicht überein.');

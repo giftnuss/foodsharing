@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\LinkingHelper;
 use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Func;
@@ -27,6 +28,7 @@ class View
 	 */
 	public $twig;
 	protected $imageService;
+	protected $linkingHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -36,7 +38,8 @@ class View
 		SanitizerService $sanitizerService,
 		PageCompositionHelper $pageCompositionHelper,
 		TimeHelper $timeHelper,
-		ImageService $imageService
+		ImageService $imageService,
+		LinkingHelper $linkingHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -46,6 +49,7 @@ class View
 		$this->pageCompositionHelper = $pageCompositionHelper;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
+		$this->linkingHelper = $linkingHelper;
 	}
 
 	public function setSub($sub)

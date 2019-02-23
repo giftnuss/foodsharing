@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\LinkingHelper;
 use Foodsharing\Helpers\MailingHelper;
 use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Db\Db;
@@ -75,6 +76,11 @@ abstract class Control
 	 */
 	protected $mailingHelper;
 
+	/**
+	 * @var LinkingHelper
+	 */
+	protected $linkingHelper;
+
 	public function __construct()
 	{
 		global $container;
@@ -87,6 +93,7 @@ abstract class Control
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
 		$this->mailingHelper = $container->get(MailingHelper::class);
+		$this->linkingHelper = $container->get(LinkingHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;

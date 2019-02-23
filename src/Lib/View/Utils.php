@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Helpers\LinkingHelper;
 use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
@@ -26,12 +27,17 @@ class Utils
 	private $twig;
 	private $sanitizerService;
 	private $pageCompositionHelper;
+	private $linkingHelper;
 
-	public function __construct(SanitizerService $sanitizerService, PageCompositionHelper $pageCompositionHelper)
-	{
+	public function __construct(
+		SanitizerService $sanitizerService,
+		PageCompositionHelper $pageCompositionHelper,
+		LinkingHelper $linkingHelper
+	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
 		$this->pageCompositionHelper = $pageCompositionHelper;
+		$this->linkingHelper = $linkingHelper;
 	}
 
 	/**
@@ -579,7 +585,7 @@ class Utils
 			$this->pageCompositionHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
 		}
 
-		$action = $this->func->getSelf();
+		$action = $this->linkingHelper->getSelf();
 		if (isset($option['action'])) {
 			$action = $option['action'];
 		}
@@ -692,7 +698,7 @@ class Utils
 		if (isset($option['page'])) {
 			$page = $option['page'];
 		} else {
-			$page = $this->func->getPage();
+			$page = $this->linkingHelper->getPage();
 		}
 
 		if (isset($_GET['bid'])) {

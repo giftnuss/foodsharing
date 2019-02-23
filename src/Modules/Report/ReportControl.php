@@ -21,7 +21,7 @@ class ReportControl extends Control
 		parent::__construct();
 
 		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=report&sub=uncom');
+			$this->linkingHelper->go('/?page=report&sub=uncom');
 		}
 	}
 
@@ -30,7 +30,7 @@ class ReportControl extends Control
 		if ($this->session->mayHandleReports()) {
 			$this->pageCompositionHelper->addBread('Meldungen', '/?page=report');
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 	}
 
@@ -94,7 +94,7 @@ class ReportControl extends Control
 				);
 			}
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->linkingHelper->go('/?page=dashboard');
 		}
 	}
 }

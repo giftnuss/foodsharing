@@ -6,6 +6,7 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
+use Foodsharing\Helpers\LinkingHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
@@ -29,6 +30,7 @@ class Session
 	private $storeGateway;
 	private $db;
 	private $initialized = false;
+	private $linkingHelper;
 
 	public function __construct(
 		Func $func,
@@ -39,7 +41,8 @@ class Session
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
-		Db $db
+		Db $db,
+		LinkingHelper $linkingHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -50,6 +53,7 @@ class Session
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->db = $db;
+		$this->linkingHelper = $linkingHelper;
 	}
 
 	public function initIfCookieExists()
@@ -149,7 +153,7 @@ class Session
 			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
 				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
 			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->func->getPage(), ['settings', 'logout'])) {
+			if (in_array($this->linkingHelper->getPage(), ['settings', 'logout'])) {
 				return null;
 			}
 
@@ -394,7 +398,7 @@ class Session
 		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
-			$this->func->goPage('logout');
+			$this->linkingHelper->goPage('logout');
 		}
 		$this->set('g_location', array(
 			'lat' => $fs['lat'],

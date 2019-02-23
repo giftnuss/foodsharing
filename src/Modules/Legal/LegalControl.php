@@ -60,7 +60,7 @@ class LegalControl extends Control
 				}
 				/* need to reload session cache. TODO: This should be further abstracted */
 				$this->session->refreshFromDatabase();
-				$this->func->goSelf();
+				$this->linkingHelper->goSelf();
 			}
 		}
 		$response->setContent($this->render('pages/Legal/page.twig', [

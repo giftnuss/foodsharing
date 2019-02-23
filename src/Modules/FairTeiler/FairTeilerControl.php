@@ -57,14 +57,14 @@ class FairTeilerControl extends Control
 	private function setup(Request $request)
 	{
 		if ($request->query->has('uri') && $ftid = $this->uriInt(2)) {
-			$this->func->go('/?page=fairteiler&sub=ft&id=' . $ftid);
+			$this->linkingHelper->go('/?page=fairteiler&sub=ft&id=' . $ftid);
 		}
 
 		/*
 		 * allowed only for logged in users
 		 */
 		if (!$this->session->may() && $request->query->has('sub') && $request->query->get('sub') != 'ft') {
-			$this->func->goLogin();
+			$this->linkingHelper->goLogin();
 		}
 
 		$this->fairteiler = false;
@@ -74,7 +74,7 @@ class FairTeilerControl extends Control
 			$this->fairteiler = $this->gateway->getFairteiler($ftid);
 
 			if (!$this->fairteiler) {
-				$this->func->go('/?page=fairteiler');
+				$this->linkingHelper->go('/?page=fairteiler');
 			}
 			$bid = $this->fairteiler['bezirk_id'];
 		}
@@ -98,8 +98,8 @@ class FairTeilerControl extends Control
 			$follow = $request->query->get('follow');
 			$infotype = $request->query->get('infotype', 2);
 			if ($this->handleFollowUnfollow($ftid, $this->session->id(), $follow, $infotype)) {
-				$url = explode('&follow=', $this->func->getSelf());
-				$this->func->go($url[0]);
+				$url = explode('&follow=', $this->linkingHelper->getSelf());
+				$this->linkingHelper->go($url[0]);
 			}
 
 			if (!isset($this->bezirke[$this->fairteiler['bezirk_id']])) {
@@ -185,14 +185,14 @@ class FairTeilerControl extends Control
 	public function edit(Request $request)
 	{
 		if (!$this->mayEdit()) {
-			$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+			$this->linkingHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 		}
 		$this->pageCompositionHelper->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
 		$this->pageCompositionHelper->addBread($this->func->s('edit'));
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleEditFt($request)) {
 				$this->func->info($this->func->s('fairteiler_edit_success'));
-				$this->func->go($this->func->getSelf());
+				$this->linkingHelper->go($this->linkingHelper->getSelf());
 			} else {
 				$this->func->error($this->func->s('fairteiler_edit_fail'));
 			}
@@ -225,14 +225,14 @@ class FairTeilerControl extends Control
 	{
 		$this->gateway->acceptFairteiler($this->fairteiler['id']);
 		$this->func->info('Fair-Teiler ist jetzt aktiv');
-		$this->func->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+		$this->linkingHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 	}
 
 	private function delete()
 	{
 		if ($this->gateway->deleteFairteiler($this->fairteiler['id'])) {
 			$this->func->info($this->func->s('delete_success'));
-			$this->func->go('/?page=fairteiler&bid=' . $this->bezirk_id);
+			$this->linkingHelper->go('/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
 	}
 
@@ -253,10 +253,10 @@ class FairTeilerControl extends Control
 					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
 				), array('title' => 'Optionen')), CNT_RIGHT);
 			} else {
-				$this->func->goPage('fairteiler');
+				$this->linkingHelper->goPage('fairteiler');
 			}
 		} else {
-			$this->func->goPage('fairteiler');
+			$this->linkingHelper->goPage('fairteiler');
 		}
 	}
 
@@ -282,7 +282,7 @@ class FairTeilerControl extends Control
 			}
 
 			if ($this->isFollower()) {
-				$items[] = array('name' => $this->func->s('no_more_follow'), 'href' => $this->func->getSelf() . '&follow=0');
+				$items[] = array('name' => $this->func->s('no_more_follow'), 'href' => $this->linkingHelper->getSelf() . '&follow=0');
 			} else {
 				$items[] = array('name' => $this->func->s('follow'), 'click' => 'u_follow();return false;');
 				$this->pageCompositionHelper->addHidden($this->view->followHidden());
@@ -307,7 +307,7 @@ class FairTeilerControl extends Control
 				} else {
 					$this->func->info($this->func->s('fairteiler_prepare_success'));
 				}
-				$this->func->go('/?page=fairteiler&bid=' . (int)$this->bezirk_id);
+				$this->linkingHelper->go('/?page=fairteiler&bid=' . (int)$this->bezirk_id);
 			} else {
 				$this->func->error($this->func->s('fairteiler_add_fail'));
 			}

@@ -4,7 +4,10 @@ namespace Foodsharing\Helpers;
 
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Twig\Environment;
 
 final class PageCompositionHelper
 {
@@ -26,9 +29,21 @@ final class PageCompositionHelper
 	private $func;
 	private $session;
 	private $sanitizerService;
+	private $imageService;
+	private $linkingHelper;
+	private $translationHelper;
+	public $jsData = [];
+	private $twig;
 
-	public function __construct(Func $func, Session $session, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		Func $func,
+		Session $session,
+		SanitizerService $sanitizerService,
+		ImageService $imageService,
+		Environment $twig,
+		LinkingHelper $linkingHelper,
+		TranslationHelper $translationHelper
+	) {
 		$this->content_main = '';
 		$this->content_right = '';
 		$this->content_left = '';
@@ -41,10 +56,14 @@ final class PageCompositionHelper
 		$this->js_func = '';
 		$this->js = '';
 		$this->head = '';
-		$this->title = array('foodsharing');
+		$this->title = ['foodsharing'];
 		$this->func = $func;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
+		$this->twig = $twig;
+		$this->linkingHelper = $linkingHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -53,7 +72,7 @@ final class PageCompositionHelper
 		global $content_left_width;
 		global $content_right_width;
 
-		$menu = $this->func->getMenu();
+		$menu = $this->getMenu();
 
 		$this->getMessages();
 
@@ -76,13 +95,13 @@ final class PageCompositionHelper
 			$bodyClasses[] = 'loggedin';
 		}
 
-		$bodyClasses[] = 'page-' . $this->func->getPage();
+		$bodyClasses[] = 'page-' . $this->linkingHelper->getPage();
 
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->bread,
 			'bodyClasses' => $bodyClasses,
-			'serverDataJSON' => json_encode($this->func->getServerData()),
+			'serverDataJSON' => json_encode($this->getServerData()),
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->hidden,
@@ -119,6 +138,134 @@ final class PageCompositionHelper
 				]
 			]
 		];
+	}
+
+	/**
+	 * This is used to set window.serverData on in the frontend.
+	 */
+	public function getServerData()
+	{
+		$user = $this->session->get('user');
+
+		$userData = [
+			'id' => $this->session->id(),
+			'firstname' => $user['name'],
+			'lastname' => $user['nachname'],
+			'may' => $this->session->may(),
+			'verified' => $this->session->isVerified(),
+			'avatar' => [
+				'mini' => $this->imageService->img($user['photo'], 'mini'),
+				'50' => $this->imageService->img($user['photo'], '50'),
+				'130' => $this->imageService->img($user['photo'], '130')
+			]
+		];
+
+		if ($this->session->may()) {
+			$userData['token'] = $this->session->user('token');
+		}
+
+		$location = null;
+
+		if ($pos = $this->session->get('blocation')) {
+			$location = [
+				'lat' => (float)$pos['lat'],
+				'lon' => (float)$pos['lon'],
+			];
+		}
+
+		$ravenConfig = null;
+
+		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
+			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
+		}
+
+		return array_merge($this->jsData, [
+			'user' => $userData,
+			'page' => $this->linkingHelper->getPage(),
+			'subPage' => $this->linkingHelper->getSubPage(),
+			'location' => $location,
+			'ravenConfig' => $ravenConfig,
+			'translations' => $this->translationHelper->getTranslations(),
+			'isDev' => getenv('FS_ENV') === 'dev'
+		]);
+	}
+
+	private function getMenu()
+	{
+		$regions = [];
+		$stores = [];
+		$workingGroups = [];
+		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
+			foreach ($_SESSION['client']['bezirke'] as $region) {
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
+				if ($region['type'] == Type::WORKING_GROUP) {
+					$workingGroups[] = $region;
+				} else {
+					$regions[] = $region;
+				}
+			}
+		}
+		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
+			$stores = $_SESSION['client']['betriebe'];
+		}
+
+		$loggedIn = $this->session->may();
+
+		return $this->getMenuFn(
+			$loggedIn,
+			$regions,
+			$this->session->may('fs'),
+			$this->session->isOrgaTeam(),
+			$this->session->mayEditBlog(),
+			$this->session->mayEditQuiz(),
+			$this->session->mayHandleReports(),
+			$stores,
+			$workingGroups,
+			$this->session->get('mailbox'),
+			(int)$this->session->id(),
+			$loggedIn ? $this->imageService->img() : '',
+			$this->session->may('bieb')
+		);
+	}
+
+	private function getMenuFn(
+		bool $loggedIn,
+		array $regions,
+		bool $hasFsRole,
+		bool $isOrgaTeam,
+		bool $mayEditBlog,
+		bool $mayEditQuiz,
+		bool $mayHandleReports,
+		array $stores,
+		array $workingGroups,
+		$sessionMailbox,
+		int $fsId,
+		string $image,
+		bool $mayAddStore
+	) {
+		$params = array_merge([
+			'loggedIn' => $loggedIn,
+			'fsId' => $fsId,
+			'image' => $image,
+			'mailbox' => $sessionMailbox,
+			'hasFsRole' => $hasFsRole,
+			'isOrgaTeam' => $isOrgaTeam,
+			'may' => [
+				'editBlog' => $mayEditBlog,
+				'editQuiz' => $mayEditQuiz,
+				'handleReports' => $mayHandleReports,
+				'addStore' => $mayAddStore
+			],
+			'stores' => array_values($stores),
+			'regions' => $regions,
+			'workingGroups' => $workingGroups
+		]);
+
+		return $this->twig->render('partials/vue-wrapper.twig', [
+			'id' => 'vue-topbar',
+			'component' => 'topbar',
+			'props' => $params
+		]);
 	}
 
 	private function getHeadData(): array
