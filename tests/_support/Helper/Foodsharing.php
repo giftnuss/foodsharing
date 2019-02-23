@@ -255,6 +255,23 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addPickup($store, $extra_params = [])
+	{
+		$date = $this->faker->date('Y-m-d H:i:s');
+		$params = array_merge([
+			'betrieb_id' => $store,
+			'time' => $date,
+			'fetchercount' => $this->faker->numberBetween(1, 8)
+		], $extra_params);
+
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$id = $this->haveInDatabase('fs_fetchdate', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
 	public function addRecurringPickup($store, $extra_params = [])
 	{
 		$hours = $this->faker->numberBetween(0, 23);
