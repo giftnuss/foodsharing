@@ -43,7 +43,7 @@
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "^0.0.54",
     "underscore": "^1.9.1",
-    "vue": "^2.6.6",
+    "vue": "^2.6.7",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
@@ -84,12 +84,12 @@
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "vue-eslint-parser": "<6.0.0",
-    "vue-loader": "^15.6.2",
-    "vue-template-compiler": "^2.6.6",
+    "vue-loader": "^15.6.4",
+    "vue-template-compiler": "^2.6.7",
     "webpack": "^4.29.5",
     "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14",
+    "webpack-dev-server": "^3.2.0",
     "webpack-merge": "^4.2.1",
     "write-file-webpack-plugin": "^4.5.0",
     "yaml-loader": "^0.5.0"
