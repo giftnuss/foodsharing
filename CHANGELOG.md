@@ -1,3 +1,35 @@
+# Unreleased
+
+## Major changes
+
+## Features
+- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+
+## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
+- Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
+- Store member status icons suitable to status on ambassador view of profiles !766 @flukx
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
+- Properly escape store names in request popups !778 @NerdyProjects
+- Fix forum "Antworten" button !786 @nicksellen
+
+## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
+
+## Dev/Test/CI stuff
+- Several reference texts in devdocs about used technologies !741 @flukx
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+- Update mocha to version 6 @peter.toennies
+- Run all jobs except test and deployment on shared CI runners @NerdyProjects
+- Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
+- Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
+- Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
+
 # 2019-02-21
 
 We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last friday at Kanthaus near Leipzig.
