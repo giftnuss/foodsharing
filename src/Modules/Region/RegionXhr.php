@@ -5,19 +5,28 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 
-class RegionXhr extends Control
+final class RegionXhr extends Control
 {
 	private $responses;
+	private $foodsaverGateway;
 	private $forumGateway;
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Db $model, ForumGateway $forumGateway, ForumPermissions $forumPermissions, RegionHelper $regionHelper, \Twig\Environment $twig)
-	{
+	public function __construct(
+		Db $model,
+		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
+		RegionHelper $regionHelper,
+		\Twig\Environment $twig,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
@@ -105,12 +114,11 @@ class RegionXhr extends Control
 		exit();
 	}
 
-	public function signout()
+	public function signout(): array
 	{
 		$data = $_GET;
 		if ($this->session->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
-			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
+			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
 
 			return array('status' => 1);
 		}

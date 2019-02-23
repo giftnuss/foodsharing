@@ -19,7 +19,7 @@ class FoodsaverView extends View
 		$cnt .= $this->v_utils->v_input_wrapper('Letzter Login', $foodsaver['last_login']);
 
 		$cnt .= $this->v_utils->v_input_wrapper('Optionen', '
-			<span class="button" onclick="fsapp.delfromBezirk(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
+			<span class="button" onclick="fsapp.deleteFromRegion(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
 		');
 
 		return $this->v_utils->v_field($cnt, $foodsaver['name'], array('class' => 'ui-padding'));
