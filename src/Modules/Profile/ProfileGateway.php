@@ -2,77 +2,32 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 
-class ProfileModel extends Db
+final class ProfileGateway extends BaseGateway
 {
 	private $fs_id;
+	private $session;
+	private $mem;
 
-	public function setFsId($id)
+	public function __construct(Database $db, Mem $mem, Session $session)
 	{
-		$this->fs_id = (int)$id;
+		parent::__construct($db);
+		$this->mem = $mem;
+		$this->session = $session;
 	}
 
-	public function rate($fsid, $rate, $type = 1, $message = '')
+	public function setFsId(int $id): void
 	{
-		return $this->insert('
-			REPLACE INTO `fs_rating`
-			(
-				`foodsaver_id`,
-				`rater_id`,
-				`rating`,
-				`ratingtype`,
-				`msg`,
-				`time`
-			)
-			VALUES
-			(
-				' . (int)$fsid . ',
-				' . (int)$this->session->id() . ',
-				' . (int)$rate . ',
-				' . (int)$type . ',
-				' . $this->strval($message) . ',
-				NOW()
-			)
-		');
+		$this->fs_id = $id;
 	}
 
-	public function getRateMessage($fsid)
+	public function getData(int $fsId)
 	{
-		return $this->qOne('
-			SELECT 	`msg`
-			FROM	`fs_rating`
-			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`rater_id` = ' . (int)$this->session->id() . '
-		');
-	}
-
-	public function getNextDates($fsid, $LIMIT = 10)
-	{
-		return $this->q('
-			SELECT 	a.`date`,
-					UNIX_TIMESTAMP(a.`date`) AS date_ts,
-					b.name AS betrieb_name,
-					b.id AS betrieb_id,
-					b.bezirk_id AS bezirk_id,
-					confirmed AS confirmed
-			FROM   `fs_abholer` a,
-			       `fs_betrieb` b
-
-			WHERE a.betrieb_id =b.id
-			AND   a.foodsaver_id = ' . (int)$fsid . '
-			AND   a.`date` > NOW()
-
-			ORDER BY a.`date`
-
-			LIMIT ' . $LIMIT . '
-		');
-	}
-
-	public function getData()
-	{
-		if (($data = $this->qRow('
-
+		$stm = '
 			SELECT 	fs.`id`,
 					fs.`bezirk_id`,
 					fs.`plz`,
@@ -116,44 +71,43 @@ class ProfileModel extends Db
 
 			FROM 	fs_foodsaver fs
 
-			WHERE 	fs.id = ' . (int)$this->fs_id . '
-
-			')) == false
+			WHERE 	fs.id = :fs_id
+			';
+		if (($data = $this->db->fetch($stm, [':fs_id' => $this->fs_id])) === []
 		) {
 			return false;
 		}
 
-		//echo 'SELECT COUNT(rater_id) FROM `fs_rating` WHERE rater_id = '.(int)$this->session->id().' AND foodsaver_id = '.(int)$this->fs_id.' AND ratingtype = 2';
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if ($this->qOne('SELECT 1 FROM `fs_rating` WHERE rater_id = ' . (int)$this->session->id() . ' AND foodsaver_id = ' . (int)$this->fs_id . ' AND ratingtype = 2')) {
+
+		$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :fsId AND foodsaver_id = :fs_id AND ratingtype = 2';
+		if ($this->db->fetchValue($stm, [':fsId' => $fsId, ':fs_id' => $this->fs_id])) {
 			$data['bouched'] = true;
 		}
 		$data['online'] = $this->mem->userIsActive((int)$this->fs_id);
 
-		$data['bananen'] = $this->q('
+		$stm = '
 				SELECT 	fs.id,
 						fs.name,
 						fs.photo,
 						r.`msg`,
 						r.`time`,
 						UNIX_TIMESTAMP(r.`time`) AS time_ts
-
 				FROM 	`fs_foodsaver` fs,
 						 `fs_rating` r
 				WHERE 	r.rater_id = fs.id
-				AND 	r.foodsaver_id = ' . (int)$this->fs_id . '
+				AND 	r.foodsaver_id = :fs_id
 				AND 	r.ratingtype = 2
-		');
+		';
+		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id]);
 
 		if (!$data['bananen']) {
 			$data['bananen'] = array();
 		}
 
-		//echo((int)$data['bananen']);echo'<<<';die();
-
-		$this->update('UPDATE fs_foodsaver SET stat_bananacount = ' . (int)count($data['bananen']) . ' WHERE id = ' . (int)$this->fs_id);
-		$data['stat_bananacount'] = (int)count($data['bananen']);
+		$this->db->update('fs_foodsaver', ['stat_bananacount' => count($data['bananen'])], ['id' => (int)$this->fs_id]);
+		$data['stat_bananacount'] = count($data['bananen']);
 
 		$data['botschafter'] = false;
 		$data['foodsaver'] = false;
@@ -164,45 +118,44 @@ class ProfileModel extends Db
 			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
 		}
 
-		if ($bot = $this->q('
+		$stm = '
 			SELECT 	bz.`name`,
 					bz.`id`
-
 			FROM 	`fs_bezirk` bz,
 					fs_botschafter b
-
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
+			AND 	b.foodsaver_id = :fs_id
 			AND 	bz.type != 7
-		')
+		';
+		if ($bot = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id])
 		) {
 			$data['botschafter'] = $bot;
 		}
-		if ($fs = $this->q('
+
+		$stm = '
 			SELECT 	bz.`name`,
 					bz.`id`
-
 			FROM 	`fs_bezirk` bz,
 					fs_foodsaver_has_bezirk b
-
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
+			AND 	b.foodsaver_id = :fs_id
 			AND 	bz.type != 7
-		')
+		';
+		if ($fs = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id])
 		) {
 			$data['foodsaver'] = $fs;
 		}
-		if ($orga = $this->q('
+
+		$stm = '
 			SELECT 	bz.`name`,
 					bz.`id`
-
 			FROM 	`fs_bezirk` bz,
 					fs_botschafter b
-
 			WHERE 	b.`bezirk_id` = bz.`id`
-			AND 	b.foodsaver_id = ' . (int)$this->fs_id . '
+			AND 	b.foodsaver_id = :fs_id
 			AND 	bz.type = 7
-		')
+		';
+		if ($orga = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id])
 		) {
 			$data['orga'] = $orga;
 		}
@@ -219,37 +172,84 @@ class ProfileModel extends Db
 		return $data;
 	}
 
-	private function getNotesCount($fsid)
+	private function getNotesCount(int $fsId): int
 	{
-		return (int)$this->qOne('
+		$stm = '
 			SELECT
 				COUNT(wallpost_id)
 			FROM
 	           	`fs_usernotes_has_wallpost`
 			WHERE
-				usernotes_id = ' . (int)$fsid . '
-		');
+				usernotes_id = :fs_id
+		';
+
+		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	private function getViolationCount($fsid)
+	private function getViolationCount(int $fsId): int
 	{
-		return (int)$this->qOne('
+		$stm = '
 			SELECT
-					COUNT(r.id)
-
-
-				FROM
-	            	`fs_report` r
-
-				WHERE
-					r.foodsaver_id = ' . (int)$fsid . '
-		');
+				COUNT(r.id)
+			FROM
+	            `fs_report` r
+			WHERE
+				r.foodsaver_id = :fs_id
+		';
+		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function getPassHistory($fsid)
+	public function rate(int $fsId, int $rate, int $type = 1, string $message = '')
 	{
-		return $this->q('
+		return $this->insert(
+			'fs_rating',
+			[
+				'foodsaver_id' => $fsId,
+				'rater_id' => $this->session->id(),
+				'rating' => $rate,
+				'ratingtype' => $type,
+				'msg' => $message,
+				'time' => $this->db->now(),
+			]
+		);
+	}
 
+	public function getRateMessage(int $fsId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_rating',
+			'msg',
+			['foodsaver_id' => $fsId, 'rater_id' => $this->session->id()]
+		);
+	}
+
+	public function getNextDates(int $fsId, int $limit = 10): array
+	{
+		$stm = '
+			SELECT 	a.`date`,
+					UNIX_TIMESTAMP(a.`date`) AS date_ts,
+					b.name AS betrieb_name,
+					b.id AS betrieb_id,
+					b.bezirk_id AS bezirk_id,
+					confirmed AS confirmed
+			FROM   `fs_abholer` a,
+			       `fs_betrieb` b
+
+			WHERE a.betrieb_id =b.id
+			AND   a.foodsaver_id = :fs_id
+			AND   a.`date` > NOW()
+
+			ORDER BY a.`date`
+
+			LIMIT :limit
+		';
+
+		return $this->db->fetchAll($stm, [':fs_id' => $fsId, ':limit' => $limit]);
+	}
+
+	public function getPassHistory(int $fsId): array
+	{
+		$stm = '
 			SELECT
 			  pg.foodsaver_id,
 			  pg.date,
@@ -264,19 +264,18 @@ class ProfileModel extends Db
 			ON
 			  pg.bot_id = fs.id
 			WHERE
-			  pg.foodsaver_id = ' . (int)$fsid . '
+			  pg.foodsaver_id = :fs_id
 			ORDER BY
 			  pg.date
 			DESC
+		';
 
-
-		');
+		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 	}
 
-	public function getVerifyHistory($fsid)
+	public function getVerifyHistory(int $fsId): array
 	{
-		$ret = $this->q('
-
+		$stm = '
 			SELECT
 			  vh.fs_id,
 			  vh.date,
@@ -292,21 +291,19 @@ class ProfileModel extends Db
 			ON
 			  vh.bot_id = fs.id
 			WHERE
-			  vh.fs_id = ' . (int)$fsid . '
+			  vh.fs_id = :fs_id
 			ORDER BY
 			  vh.date
 			DESC
-
-
-		');
+		';
+		$ret = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 
 		return ($ret === false) ? array() : $ret;
 	}
 
-	public function getCompanies($fsid)
+	public function getCompanies(int $fsId): array
 	{
-		return $this->q('
-
+		$stm = '
 			SELECT 	b.id,
 					b.name,
 					bt.verantwortlich,
@@ -317,17 +314,16 @@ class ProfileModel extends Db
 
 			WHERE 	bt.betrieb_id = b.id
 			AND
-					bt.foodsaver_id = ' . (int)$fsid . '
+					bt.foodsaver_id = :fs_id
 			ORDER BY b.name ASC
+		';
 
-
-		');
+		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 	}
 
-	public function getCompaniesCount($fsid)
+	public function getCompaniesCount(int $fsId)
 	{
-		return $this->qOne('
-
+		$stm = '
 			SELECT 	count(b.id)
 
 			FROM 	fs_betrieb_team bt,
@@ -335,15 +331,19 @@ class ProfileModel extends Db
 
 			WHERE 	bt.betrieb_id = b.id
 			AND
-					bt.foodsaver_id = ' . (int)$fsid . '
+					bt.foodsaver_id = :fs_id
+		';
 
-
-		');
+		return $this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function buddyStatus($fsid)
+	public function buddyStatus(int $fsId)
 	{
-		if (($status = $this->qOne('SELECT `confirmed` FROM fs_buddy WHERE `foodsaver_id` = ' . (int)$this->session->id() . ' AND `buddy_id` = ' . (int)$fsid)) !== false) {
+		if (($status = $this->db->fetchValueByCriteria(
+				'fs_buddy',
+				'confirmed',
+				['foodsaver_id' => $this->session->id(), 'buddy_id' => $fsId]
+			)) !== []) {
 			return $status;
 		}
 
