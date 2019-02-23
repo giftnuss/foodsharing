@@ -13,7 +13,7 @@ final class PassportGeneratorView extends View
 		foreach ($region['foodsaver'] as $fs) {
 			$last = '<span style="display:none">a0</span> <a href="#" class="dateclick linkrow ui-corner-all"> - ' . $this->func->s('never_generated') . ' - </a>';
 			if ($fs['last_pass'] != '0000-00-00 00:00:00' && $fs['last_pass'] != null) {
-				$last = '<span style="display:none">a' . date('YmdHis', $fs['last_pass_ts']) . '</span> <a href="#" class="dateclick linkrow ui-corner-all">' . $this->func->niceDate($fs['last_pass_ts']) . '</a>';
+				$last = '<span style="display:none">a' . date('YmdHis', $fs['last_pass_ts']) . '</span> <a href="#" class="dateclick linkrow ui-corner-all">' . $this->timeHelper->niceDate($fs['last_pass_ts']) . '</a>';
 			}
 
 			$verified = '<span style="display:none">b</span><a title="' . $this->func->sv('click_to_verify', $fs['name']) . '" href="#" class="verify verify-n"><span></span></a>';

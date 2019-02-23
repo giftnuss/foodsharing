@@ -3,7 +3,6 @@
 namespace Foodsharing\Lib;
 
 use Exception;
-use Flourish\fDate;
 use Flourish\fFile;
 use Flourish\fImage;
 use Foodsharing\Lib\Db\Mem;
@@ -78,49 +77,6 @@ final class Func
 	public function setMem(Mem $mem)
 	{
 		$this->mem = $mem;
-	}
-
-	public function niceDateShort($ts)
-	{
-		if (date('Y-m-d', $ts) == date('Y-m-d')) {
-			return $this->s('today') . ' ' . date('H:i', $ts);
-		}
-
-		return date('j.m.Y. H:i', $ts);
-	}
-
-	// given a unix time it provides a human readable full date format.
-	// parameter $extendWithAbsoluteDate == true adds the date between "today/tomorrow" and the time while false leaves it empty.
-	public function niceDate(?int $unixTimeStamp, bool $extendWithAbsoluteDate = false): string
-	{
-		if (is_null($unixTimeStamp)) {
-			return '- -';
-		}
-
-		$date = new fDate($unixTimeStamp);
-
-		if ($date->eq('today')) {
-			$dateString = $this->s('today') . ', ';
-		} elseif ($date->eq('tomorrow')) {
-			$dateString = $this->s('tomorrow') . ', ';
-		} elseif ($date->eq('-1 day')) {
-			$dateString = $this->s('yesterday') . ', ';
-		} else {
-			$dateString = '';
-			$extendWithAbsoluteDate = true;
-		}
-
-		if ($extendWithAbsoluteDate == true) {
-			$days = $this->getDow();
-			$dateString = $dateString . $days[date('w', $unixTimeStamp)] . ', ' . (int)date('d', $unixTimeStamp) . '. ' . $this->s('smonth_' . date('n', $unixTimeStamp));
-			$year = date('Y', $unixTimeStamp);
-			if ($year != date('Y')) {
-				$dateString = $dateString . ' ' . $year;
-			}
-			$dateString = $dateString . ', ';
-		}
-
-		return $dateString . date('H:i', $unixTimeStamp) . ' ' . $this->s('clock');
 	}
 
 	public function s($id)
@@ -256,19 +212,6 @@ final class Func
 		}
 
 		return $i;
-	}
-
-	public function getDow()
-	{
-		return array(
-			1 => $this->s('monday'),
-			2 => $this->s('tuesday'),
-			3 => $this->s('wednesday'),
-			4 => $this->s('thursday'),
-			5 => $this->s('friday'),
-			6 => $this->s('saturday'),
-			0 => $this->s('sunday')
-		);
 	}
 
 	public function autolink($str, $attributes = array())

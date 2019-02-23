@@ -2,17 +2,20 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control
 {
 	private $blogGateway;
+	private $timeHelper;
 
-	public function __construct(BlogModel $model, BlogView $view, BlogGateway $blogGateway)
+	public function __construct(BlogModel $model, BlogView $view, BlogGateway $blogGateway, TimeHelper $timeHelper)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 		if ($id = $this->func->getActionId('delete')) {
@@ -95,7 +98,7 @@ class BlogControl extends Control
 					if ($post['active'] == 1) {
 						$this->pageCompositionHelper->addTitle($post['name']);
 						$this->pageCompositionHelper->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
-						$this->pageCompositionHelper->addContent($this->view->topbar($post['name'], $this->func->niceDate($post['time_ts'])));
+						$this->pageCompositionHelper->addContent($this->view->topbar($post['name'], $this->timeHelper->niceDate($post['time_ts'])));
 						$this->pageCompositionHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
 					}
 				}

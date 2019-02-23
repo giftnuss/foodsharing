@@ -129,7 +129,7 @@ class MailboxView extends View
 					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
 					<td class="from"><a href="#" onclick="return false;" title="' . $von_str . '">' . $von_str . '</a></td>
 					
-					<td class="date">' . $this->func->niceDateShort($m['time_ts']) . '</td>
+					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
 					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>	
 				</tr>		
 			';
@@ -190,7 +190,7 @@ class MailboxView extends View
 						</tr>
 						<tr>
 							<td class="label">' . $this->func->s('date') . '</td>
-							<td class="data">' . $this->func->niceDate($mail['time_ts']) . '</td>
+							<td class="data">' . $this->timeHelper->niceDate($mail['time_ts']) . '</td>
 						</tr>
 					</table>
 				</div>

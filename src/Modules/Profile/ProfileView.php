@@ -47,7 +47,7 @@ class ProfileView extends View
 			$out .= '
 						<li>
 							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $userConfirmedForPickup . $this->func->niceDate($d['date_ts']) . '</span>
+								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($d['date_ts']) . '</span>
 							</a>
 						</li>
 						<li>
@@ -341,7 +341,7 @@ class ProfileView extends View
 					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
-						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
+						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
 					</div></td>
 				</tr>';
 			}
@@ -382,13 +382,13 @@ class ProfileView extends View
 						$class = 'verify';
 						$typeofchange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				}
 				if ($changetype == 1) {
 					if (!is_null($h['bot_id'])) {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
 					}
 				}
 
