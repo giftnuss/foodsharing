@@ -22,6 +22,8 @@
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 - Update mocha to version 6 @peter.toennies
 - Run all jobs except test and deployment on shared CI runners @NerdyProjects
+- Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
+- Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 
 # 2019-02-21
 
