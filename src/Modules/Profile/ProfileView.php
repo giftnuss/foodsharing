@@ -274,14 +274,14 @@ class ProfileView extends View
 				</span>';
 		}
 
-        $foodBasketCount = '';
-        if ($this->foodsaver['stat_postcount'] > 0) {
-            $foodBasketCount = '
+		$foodBasketCount = '';
+		if ($this->foodsaver['stat_postcount'] > 0) {
+			$foodBasketCount = '
 				<span class="item stat_fetchcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">Essenskörbe</span>
 				</span>';
-        }
+		}
 
 		$postCount = '';
 		if ($this->foodsaver['stat_postcount'] > 0) {
