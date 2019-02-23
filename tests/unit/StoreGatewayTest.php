@@ -59,21 +59,52 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testGetPickupDates()
 	{
 		$store = $this->tester->createStore($this->region_id);
-		$time1 = '2018-07-18 16:40';
+		$date = '2018-07-18';
+		$time = '16:40:00';
+		$datetime = $date . ' ' . $time;
+		$dow = 3; /* above date is a wednesday */
+		$fetcher = 2;
 		$fsid = $this->foodsaver['id'];
-		$this->tester->addRecurringPickup($store['id'], ['time' => $time1]);
-		$this->gateway->addFetcher($fsid, $store['id'], $time1);
-		$fetcherList = $this->gateway->listFetcher($store['id'], [$time1]);
+		$this->tester->addRecurringPickup($store['id'], ['time' => $time, 'dow' => $dow, 'fetcher' => $fetcher]);
+		$regularSlots = $this->gateway->getRegularPickupSlots($store['id']);
+		$this->assertEquals([
+			[
+				'dow' => 3,
+				'time' => $time,
+				'fetcher' => $fetcher
+			]
+		], $regularSlots);
+		$this->gateway->addFetcher($fsid, $store['id'], $datetime);
+		$fetcherList = $this->gateway->listFetcher($store['id'], [$datetime]);
 
-		$this->assertEquals($fetcherList, [
+		$this->assertEquals([
 			[
 				'id' => $fsid,
 				'name' => $this->foodsaver['name'],
 				'photo' => null,
-				'date' => $time1 . ':00',
+				'date' => $datetime,
 				'confirmed' => 0
 			]
-		]);
+		], $fetcherList);
+	}
+
+	public function testGetIrregularPickupDate()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = '2018-07-19 12:35:00';
+		$expectedIsoDate = '2018-07-19T12:35:00Z';
+		$fetcher = 1;
+		$internalDate = DateTime::createFromFormat(DATE_ATOM, $expectedIsoDate);
+		$this->assertEquals($internalDate->format('Y-m-d H:i:s'), $date);
+		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetcher]);
+		$irregularSlots = $this->gateway->getSinglePickupSlots($store['id'], $internalDate);
+
+		$this->assertEquals([
+			[
+			'date' => $date,
+			'fetcher' => $fetcher
+		]
+		], $irregularSlots);
 	}
 
 	public function testIsInTeam()
