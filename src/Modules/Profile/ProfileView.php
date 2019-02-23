@@ -338,7 +338,7 @@ class ProfileView extends View
 				}
 				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
@@ -432,7 +432,7 @@ class ProfileView extends View
 		}
 
 		return '<div style="text-align:center;">
-					' . $this->func->avatar($this->foodsaver, 130) . $sleep_info . '
+					' . $this->imageService->avatar($this->foodsaver, 130) . $sleep_info . '
 				</div>
 				' . $online . '
 				' . $menu;

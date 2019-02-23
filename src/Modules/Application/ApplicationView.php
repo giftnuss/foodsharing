@@ -25,7 +25,7 @@ class ApplicationView extends View
 
 	public function application($application)
 	{
-		$out = $this->headline('Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'], $this->func->img($application['photo']), 'profile(' . $application['id'] . ');');
+		$out = $this->headline('Bewerbung für ' . $this->bezirk['name'] . ' von ' . $application['name'], $this->imageService->img($application['photo']), 'profile(' . $application['id'] . ');');
 
 		$cnt = nl2br($application['application']);
 

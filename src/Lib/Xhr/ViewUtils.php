@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Stats\StatsService;
+use Foodsharing\Services\ImageService;
 
 class ViewUtils
 {
@@ -19,21 +19,22 @@ class ViewUtils
 	 */
 	private $viewUtils;
 
-	/**
-	 * @var Db
-	 */
-	private $model;
-
 	private $statsService;
 	private $session;
+	private $imageService;
 
-	public function __construct(Func $func, Utils $viewUtils, Db $model, StatsService $statsService, Session $session)
-	{
+	public function __construct(
+		Func $func,
+		Utils $viewUtils,
+		StatsService $statsService,
+		Session $session,
+		ImageService $imageService
+	) {
 		$this->func = $func;
 		$this->viewUtils = $viewUtils;
-		$this->model = $model;
 		$this->statsService = $statsService;
 		$this->session = $session;
+		$this->imageService = $imageService;
 	}
 
 	public function fsBubble($fs)
@@ -41,7 +42,7 @@ class ViewUtils
 		return '<div style="height:80px;overflow:hidden;width:200px;">
 				<div style="margin-right:10px;float:left;margin-bottom:33px">
 					<a href="/profile/' . (int)$fs['id'] . '">
-							<img src="' . $this->func->img($fs['photo']) . '">
+							<img src="' . $this->imageService->img($fs['photo']) . '">
 					</a>
 				</div>
 				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/' . (int)$fs['id'] . '">' . $fs['name'] . '</a></h1>
@@ -65,7 +66,7 @@ class ViewUtils
 		foreach ($b['foodsaver'] as $fs) {
 			if ($fs['verantwortlich'] == 1) {
 				$verantwortlich .= '
-			<li><a style="background-color:transparent !important;" href="/profile/' . (int)$fs['id'] . '">' . $this->func->avatar($fs, 50) . '</a></li>';
+			<li><a style="background-color:transparent !important;" href="/profile/' . (int)$fs['id'] . '">' . $this->imageService->avatar($fs, 50) . '</a></li>';
 			}
 		}
 		$verantwortlich .= '

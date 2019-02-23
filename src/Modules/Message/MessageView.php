@@ -74,7 +74,7 @@ final class MessageView extends View
 						if ($m['id'] == $this->session->id()) {
 							continue;
 						}
-						$pics .= '<img src="' . $this->func->img($m['photo'], $size) . '" width="' . $pictureWidth . '" />';
+						$pics .= '<img src="' . $this->imageService->img($m['photo'], $size) . '" width="' . $pictureWidth . '" />';
 						$title .= ', ' . $m['name'];
 					}
 

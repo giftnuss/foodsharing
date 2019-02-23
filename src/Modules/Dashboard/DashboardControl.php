@@ -11,6 +11,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileModel;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class DashboardControl extends Control
@@ -25,6 +26,7 @@ class DashboardControl extends Control
 	private $twig;
 	private $profileModel;
 	private $sanitizerService;
+	private $imageService;
 
 	public function __construct(
 		DashboardView $view,
@@ -37,7 +39,8 @@ class DashboardControl extends Control
 		Db $model,
 		ProfileModel $profileModel,
 		\Twig\Environment $twig,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		ImageService $imageService
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -50,6 +53,7 @@ class DashboardControl extends Control
 		$this->twig = $twig;
 		$this->profileModel = $profileModel;
 		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 
@@ -160,7 +164,7 @@ class DashboardControl extends Control
 				'avatar' => [
 					'user' => $this->user,
 					'size' => 50,
-					'imageUrl' => $this->func->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
+					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
 				]
 			]),
 			CNT_TOP
@@ -486,7 +490,7 @@ class DashboardControl extends Control
 
             <a href="profile/' . $me['id'] . '">
                 <div class="ui-padding">
-                    <div class="img">' . $this->func->avatar($me, 50) . '</div>
+                    <div class="img">' . $this->imageService->avatar($me, 50) . '</div>
                     <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
                     <p>' . $pickup_text . ' Dein Stammbezirk ist ' . $me['bezirk_name'] . '.</p>
                     <div style="clear:both;"></div>

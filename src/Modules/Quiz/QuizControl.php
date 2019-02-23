@@ -3,13 +3,17 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
 {
-	public function __construct(QuizModel $model, QuizView $view)
+	private $imageService;
+
+	public function __construct(QuizModel $model, QuizView $view, ImageService $imageService)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 
@@ -122,9 +126,20 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		if ($fs = $this->model->getValues(array('name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'), 'foodsaver', $_GET['fsid'])) {
+		if ($fs = $this->model->getValues(
+			array('name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'),
+			'foodsaver',
+			$_GET['fsid']
+		)) {
 			$this->pageCompositionHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->pageCompositionHelper->addContent($this->view->topbar('Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'], $this->getRolle($fs['geschlecht'], $fs['rolle']), $this->func->avatar($fs)), CNT_TOP);
+			$this->pageCompositionHelper->addContent(
+				$this->view->topbar(
+					'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'],
+					$this->getRolle($fs['geschlecht'], $fs['rolle']),
+					$this->imageService->avatar($fs)
+				),
+				CNT_TOP
+			);
 
 			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
 				$this->pageCompositionHelper->addContent($this->view->userSessions($sessions, $fs));

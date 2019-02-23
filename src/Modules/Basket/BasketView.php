@@ -140,7 +140,7 @@ class BasketView extends View
 
 		foreach ($requests as $r) {
 			$out .= '
-			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->func->img(
+			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->imageService->img(
 					$r['fs_photo']
 				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->timeHelper->niceDate(
 					$r['time_ts']
@@ -315,7 +315,7 @@ class BasketView extends View
 
 	public function contactTitle($basket): string
 	{
-		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
+		return '<img src="' . $this->imageService->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
 		<p>' . $this->func->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
 		<div style="clear:both;"></div>';
 	}

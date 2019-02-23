@@ -2,20 +2,10 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
-use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
-	private $bellGateway;
-
-	public function __construct(Database $db, BellGateway $bellGateway)
-	{
-		parent::__construct($db);
-		$this->bellGateway = $bellGateway;
-	}
-
 	// Thread-related
 
 	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0, $threads_per_page = 15)

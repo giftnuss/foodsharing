@@ -21,8 +21,8 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +40,6 @@ class XhrMethods
 	private $mailboxModel;
 	private $messageModel;
 	private $regionGateway;
-	private $regionPermissions;
 	private $storePermissions;
 	private $forumGateway;
 	private $bellGateway;
@@ -51,6 +50,7 @@ class XhrMethods
 	private $imageManager;
 	private $sanitizerService;
 	private $mailingHelper;
+	private $imageService;
 
 	/**
 	 * XhrMethods constructor.
@@ -68,7 +68,6 @@ class XhrMethods
 		MailboxModel $mailboxModel,
 		MessageModel $messageModel,
 		RegionGateway $regionGateway,
-		RegionPermissions $regionPermissions,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
@@ -78,7 +77,8 @@ class XhrMethods
 		MailboxGateway $mailboxGateway,
 		ImageManager $imageManager,
 		SanitizerService $sanitizerService,
-		MailingHelper $mailingHelper
+		MailingHelper $mailingHelper,
+		ImageService $imageService
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -90,7 +90,6 @@ class XhrMethods
 		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
 		$this->regionGateway = $regionGateway;
-		$this->regionPermissions = $regionPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
@@ -101,6 +100,7 @@ class XhrMethods
 		$this->imageManager = $imageManager;
 		$this->sanitizerService = $sanitizerService;
 		$this->mailingHelper = $mailingHelper;
+		$this->imageService = $imageService;
 	}
 
 	public function xhr_verify($data)
@@ -194,7 +194,7 @@ class XhrMethods
 					} else {
 						$odd = 'odd';
 					}
-					$pic = $this->func->img($o['photo']);
+					$pic = $this->imageService->img($o['photo']);
 
 					$delete = '';
 					if ($this->session->isOrgaTeam() || $this->session->id() == $o['fsid']) {
@@ -1277,7 +1277,7 @@ class XhrMethods
 
 				$verantwortlicher = '';
 				if ($v = $this->storeGateway->getTeamleader($b['id'])) {
-					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->func->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
+					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->imageService->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
 				}
 
 				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->sanitizerService->jsSafe($b['plz']) . ' ' . $this->sanitizerService->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
@@ -1495,7 +1495,7 @@ class XhrMethods
 
 		$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
 		if ($this->storeGateway->addFetcher($this->session->id(), $storeId, $data['date'], $confirm)) {
-			return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
+			return $this->imageService->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
 		}
 	}
 

@@ -397,7 +397,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="updatepost">
 					<a class="poster ui-corner-all" href="/profile/' . (int)$u['foodsaver_id'] . '">
-						' . $this->func->avatar($fs, 50) . '
+						' . $this->imageService->avatar($fs, 50) . '
 					</a>
 					<div class="post">
 						' . $this->u_update_type($u) . '

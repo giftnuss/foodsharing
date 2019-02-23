@@ -14,15 +14,17 @@ class LoginXhr extends Control
 {
 	private $contentGateway;
 	private $foodsaverGateway;
-	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
-	{
+	public function __construct(
+		LoginModel $model,
+		LoginView $view,
+		ContentGateway $contentGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}

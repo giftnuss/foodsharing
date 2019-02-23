@@ -126,7 +126,7 @@ class ActivityXhr extends Control
 		$xhr->addData('user', [
 			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
-			'avatar' => $this->func->img($this->session->user('photo'))
+			'avatar' => $this->imageService->img($this->session->user('photo'))
 		]);
 
 		if (isset($_GET['listings'])) {
@@ -179,7 +179,7 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = [
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->imageService->img($b['photo']) . '" height="24" /> ' . $b['name'],
 						'checked' => $checked
 					];
 				}

@@ -11,6 +11,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
@@ -18,19 +19,22 @@ class BasketXhr extends Control
 	private $basketGateway;
 	private $messageModel;
 	private $timeHelper;
+	private $imageService;
 
 	public function __construct(
 		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
 		MessageModel $messageModel,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		ImageService $imageService
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
 
 		$this->status = [
 			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
@@ -502,7 +506,7 @@ class BasketXhr extends Control
 			);
 			$dia->addContent(
 				'<div>
-					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<img src="' . $this->imageService->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
 					<p>Anfragezeitpunkt: ' . $this->timeHelper->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
