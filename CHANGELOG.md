@@ -12,6 +12,7 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
+- Fix forum "Antworten" button !786 @nicksellen
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
