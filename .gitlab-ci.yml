@@ -52,7 +52,7 @@ build:frontend:
   image: node:11.9.0-alpine
   stage: build
   script:
-  - (cd client && yarn && yarn lint && yarn build)
+  - (cd client && yarn && yarn lint && yarn test && yarn build)
   cache:
     key: client:build:v2
     paths:
@@ -130,19 +130,6 @@ test:
     when: always
     paths:
     - tests/_output
-  except:
-  - schedules
-
-test:client:
-  <<: *defaults
-  image: node:11.9.0-alpine
-  stage: test
-  script:
-  - (cd client && yarn && yarn test)
-  cache:
-    key: client:build:v2
-    paths:
-    - client/node_modules
   except:
   - schedules
 
