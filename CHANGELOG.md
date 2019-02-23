@@ -26,6 +26,7 @@
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
 
 # 2019-02-21
 
