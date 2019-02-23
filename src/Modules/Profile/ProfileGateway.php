@@ -82,8 +82,13 @@ final class ProfileGateway extends BaseGateway
 		$data['bananen'] = false;
 
 		$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :fsId AND foodsaver_id = :fs_id AND ratingtype = 2';
-		if ($this->db->fetchValue($stm, [':fsId' => $fsId, ':fs_id' => $this->fs_id])) {
-			$data['bouched'] = true;
+
+		try {
+			if ($this->db->fetchValue($stm, [':fsId' => $fsId, ':fs_id' => $this->fs_id])) {
+				$data['bouched'] = true;
+			}
+		} catch (\Exception $e) {
+			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
 		$data['online'] = $this->mem->userIsActive((int)$this->fs_id);
 
@@ -202,7 +207,7 @@ final class ProfileGateway extends BaseGateway
 
 	public function rate(int $fsId, int $rate, int $type = 1, string $message = '')
 	{
-		return $this->insert(
+		return $this->db->insert(
 			'fs_rating',
 			[
 				'foodsaver_id' => $fsId,
@@ -340,12 +345,16 @@ final class ProfileGateway extends BaseGateway
 
 	public function buddyStatus(int $fsId)
 	{
-		if (($status = $this->db->fetchValueByCriteria(
-				'fs_buddy',
-				'confirmed',
-				['foodsaver_id' => $this->session->id(), 'buddy_id' => $fsId]
-			)) !== []) {
-			return $status;
+		try {
+			if (($status = $this->db->fetchValueByCriteria(
+					'fs_buddy',
+					'confirmed',
+					['foodsaver_id' => $this->session->id(), 'buddy_id' => $fsId]
+				)) !== []) {
+				return $status;
+			}
+		} catch (\Exception $e) {
+			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
 
 		return -1;
