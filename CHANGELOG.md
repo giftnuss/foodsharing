@@ -24,7 +24,8 @@
 - Run all jobs except test and deployment on shared CI runners @NerdyProjects
 - Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
-- Add php-cs-fixer to `./scripts/lint-php` !781 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
+- Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
 
 # 2019-02-21
 
