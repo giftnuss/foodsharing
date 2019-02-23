@@ -1,13 +1,13 @@
-import runtime from 'serviceworker-webpack-plugin/lib/runtime';
+import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 
-function registerServiceWorker() {
-  document.addEventListener("DOMContentLoaded", () => {
+function registerServiceWorker () {
+  document.addEventListener('DOMContentLoaded', () => {
     if (!('serviceWorker' in navigator)) {
-      console.warn("Service workers are not supported by this browser");
-      return;
+      console.warn('Service workers are not supported by this browser')
+      return
     }
-     runtime.register();
-  });
+    runtime.register()
+  })
 }
 
-export default registerServiceWorker;
+export default registerServiceWorker

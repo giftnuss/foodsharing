@@ -61,10 +61,10 @@ plugins.push(
 )
 
 plugins.push(
-new ServiceWorkerWebpackPlugin({
-  entry: path.join(__dirname, 'src/serviceWorker.js'),
-  filename: '../sw.js'
-})
+  new ServiceWorkerWebpackPlugin({
+    entry: path.join(__dirname, 'src/serviceWorker.js'),
+    filename: '../sw.js'
+  })
 )
 
 module.exports = merge(webpackBase, {
