@@ -68,7 +68,7 @@ $csrf_whitelist = [
 	// 'Event::ustatadd',
 	// 'Foodsaver::loadFoodsaver',
 	// 'Foodsaver::foodsaverrefresh',
-	// 'Foodsaver::delfrombezirk',
+	// 'Foodsaver::delFromRegion',
 	// 'GeoClean::masterupdate',
 	// 'GeoClean::updateGeo',
 	// 'Login::loginsubmit',

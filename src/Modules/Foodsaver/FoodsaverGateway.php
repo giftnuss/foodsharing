@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Foodsaver;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
-class FoodsaverGateway extends BaseGateway
+final class FoodsaverGateway extends BaseGateway
 {
 	public function getFoodsaver($bezirk_id)
 	{
@@ -784,5 +784,15 @@ class FoodsaverGateway extends BaseGateway
 		$options[$key] = $val;
 
 		return $this->db->update('fs_foodsaver', ['option' => serialize($options)], ['id' => $fs_id]);
+	}
+
+	public function deleteFromRegion(int $bezirk_id, int $foodsaver_id): void
+	{
+		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
+		if ($mainRegion_id === $bezirk_id) {
+			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);
+		}
 	}
 }

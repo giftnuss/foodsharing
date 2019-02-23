@@ -9,13 +9,20 @@ use Foodsharing\Services\SanitizerService;
 
 class FoodsaverXhr extends Control
 {
+	private $foodsaverGateway;
 	private $regionGateway;
 	private $sanitizerService;
 
-	public function __construct(FoodsaverModel $model, FoodsaverView $view, RegionGateway $regionGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		FoodsaverModel $model,
+		FoodsaverView $view,
+		RegionGateway $regionGateway,
+		SanitizerService $sanitizerService,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 
@@ -56,18 +63,18 @@ class FoodsaverXhr extends Control
 	}
 
 	/**
-	 * Method to delete an foodsaver from an bezirk.
+	 * Method to delete a foodsaver from an region.
 	 */
-	public function delfrombezirk()
+	public function deleteFromRegion()
 	{
 		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$this->model->delfrombezirk($_GET['bid'], $_GET['id']);
+		$this->foodsaverGateway->deleteFromRegion($_GET['bid'], $_GET['id']);
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshfoodsaver();'
-		);
+		];
 	}
 }
