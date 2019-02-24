@@ -4,6 +4,7 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -11,6 +12,7 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
+- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 @jofranz
 
 ## Refactoring
 
