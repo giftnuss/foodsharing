@@ -38,6 +38,7 @@
     "erusev/parsedown": "1.7.1",
     "exercise/htmlpurifier-bundle": "2.0.3",
     "filp/whoops": "2.3.1",
+    "flow/jsonpath": "^0.4.0",
     "friendsofsymfony/rest-bundle": "2.5.0",
     "guiguiboy/php-cli-progress-bar": "0.0.4",
     "hirak/prestissimo": "0.3.8",
