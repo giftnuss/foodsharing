@@ -3,7 +3,6 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Lib\Func;
 
 class vPageslider
 {
@@ -14,7 +13,7 @@ class vPageslider
 	public static $pageslider_count = 0;
 
 	/**
-	 * @var Func
+	 * @var PageHelper
 	 */
 	private $pageHelper;
 
