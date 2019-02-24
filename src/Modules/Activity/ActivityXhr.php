@@ -6,15 +6,18 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Services\ImageService;
 
 class ActivityXhr extends Control
 {
 	private $mailboxModel;
+	private $imageService;
 
-	public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
+	public function __construct(ActivityModel $model, MailboxModel $mailboxModel, ImageService $imageService)
 	{
 		$this->model = $model;
 		$this->mailboxModel = $mailboxModel;
+		$this->imageService = $imageService;
 		parent::__construct();
 	}
 
@@ -126,7 +129,7 @@ class ActivityXhr extends Control
 		$xhr->addData('user', [
 			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
-			'avatar' => $this->func->img($this->session->user('photo'))
+			'avatar' => $this->imageService->img($this->session->user('photo'))
 		]);
 
 		if (isset($_GET['listings'])) {
@@ -179,7 +182,7 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = [
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->imageService->img($b['photo']) . '" height="24" /> ' . $b['name'],
 						'checked' => $checked
 					];
 				}

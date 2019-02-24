@@ -14,15 +14,17 @@ class LoginXhr extends Control
 {
 	private $contentGateway;
 	private $foodsaverGateway;
-	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
-	{
+	public function __construct(
+		LoginModel $model,
+		LoginView $view,
+		ContentGateway $contentGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}
@@ -105,7 +107,7 @@ class LoginXhr extends Control
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->func->tplMail(25, $data['email'], array(
+			$this->emailHelper->tplMail(25, $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->func->s('anrede_' . $data['gender'])
@@ -172,7 +174,7 @@ class LoginXhr extends Control
 			return $this->func->s('error_name');
 		}
 
-		if (!$this->func->validEmail($data['email'])) {
+		if (!$this->emailHelper->validEmail($data['email'])) {
 			return $this->func->s('error_email');
 		}
 
@@ -229,7 +231,7 @@ class LoginXhr extends Control
 			$email = '';
 			$pass = '';
 			if (isset($_GET['p'], $_GET['e'])) {
-				if ($this->func->validEmail($_GET['e'])) {
+				if ($this->emailHelper->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
 				$pass = strip_tags($_GET['p']);

@@ -12,7 +12,7 @@ class FoodsaverView extends View
 			return '<div id="fsform"></div>';
 		}
 
-		$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="/profile/' . (int)$foodsaver['id'] . '"><img style="display:none;" class="corner-all" src="' . $this->func->img($foodsaver['photo'], 'med') . '" /></a>');
+		$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="/profile/' . (int)$foodsaver['id'] . '"><img style="display:none;" class="corner-all" src="' . $this->imageService->img($foodsaver['photo'], 'med') . '" /></a>');
 		$cnt .= $this->v_utils->v_input_wrapper('Name', $foodsaver['name'] . ' ' . $foodsaver['nachname']);
 		$cnt .= $this->v_utils->v_input_wrapper('Rolle', $this->func->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
 
@@ -70,7 +70,7 @@ class FoodsaverView extends View
 			));
 		}
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{

@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\PageHelper;
 
 class vPage
 {
@@ -14,9 +14,9 @@ class vPage
 	private $subtitle;
 	private $bread;
 	/**
-	 * @var PageCompositionHelper
+	 * @var PageHelper
 	 */
-	private $pageCompositionHelper;
+	private $pageHelper;
 
 	public function __construct($title, $content)
 	{
@@ -29,7 +29,7 @@ class vPage
 		$this->sections_right = array();
 		$this->subtitle = false;
 		$this->bread = array($title, false);
-		$this->pageCompositionHelper = $container->get(PageCompositionHelper::class);
+		$this->pageHelper = $container->get(PageHelper::class);
 	}
 
 	public function setTitle($title)
@@ -96,15 +96,15 @@ class vPage
 
 	public function render()
 	{
-		$this->pageCompositionHelper->addBread($this->bread[0], $this->bread[1]);
-		$this->pageCompositionHelper->addTitle($this->title);
+		$this->pageHelper->addBread($this->bread[0], $this->bread[1]);
+		$this->pageHelper->addTitle($this->title);
 
 		$subtitle = '';
 		if ($this->subtitle !== false) {
 			$subtitle = '<small>' . $this->subtitle . '</small>';
 		}
 
-		$this->pageCompositionHelper->addContent('
+		$this->pageHelper->addContent('
 		<div class="page ui-padding ui-widget-content corner-all">
 			<div class="h1">
 				<h1>' . $this->title . '</h1>
@@ -119,7 +119,7 @@ class vPage
 				$title = '<h2>' . $s['title'] . '</h2>
 				';
 			}
-			$this->pageCompositionHelper->addContent('
+			$this->pageHelper->addContent('
 		<div class="page page-section ui-padding ui-widget-content corner-all">
 			' . $title . $s['cnt'] . '
 		</div>');
@@ -147,7 +147,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			$this->pageCompositionHelper->addContent($s['cnt'], CNT_LEFT);
+			$this->pageHelper->addContent($s['cnt'], CNT_LEFT);
 		}
 
 		foreach ($this->sections_right as $i => $s) {
@@ -172,7 +172,7 @@ class vPage
 				$s['cnt'] = $title . $s['cnt'];
 			}
 
-			$this->pageCompositionHelper->addContent($s['cnt'], CNT_RIGHT);
+			$this->pageHelper->addContent($s['cnt'], CNT_RIGHT);
 		}
 	}
 }

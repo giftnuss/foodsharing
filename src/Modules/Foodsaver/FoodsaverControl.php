@@ -42,20 +42,20 @@ class FoodsaverControl extends Control
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
-				$this->pageCompositionHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
-				$this->pageCompositionHelper->addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
+				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
+				$this->pageHelper->addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
 
 				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all)
-				$this->pageCompositionHelper->addContent(
+				$this->pageHelper->addContent(
 					$this->view->foodsaverList($foodsaver, $bezirk),
 					CNT_LEFT
 				);
 
-				$this->pageCompositionHelper->addContent($this->view->foodsaverForm());
+				$this->pageHelper->addContent($this->view->foodsaverForm());
 
 				// list inactive foodsaver
 				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
-					$this->pageCompositionHelper->addContent(
+					$this->pageHelper->addContent(
 						$this->view->foodsaverList($foodsaverInactive, $bezirk, true),
 						CNT_RIGHT
 					);
@@ -68,22 +68,22 @@ class FoodsaverControl extends Control
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
-				$this->pageCompositionHelper->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
-				$this->pageCompositionHelper->addBread($this->func->s('bread_edit_foodsaver'));
+				$this->pageHelper->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
+				$this->pageHelper->addBread($this->func->s('bread_edit_foodsaver'));
 				$this->func->setEditData($data);
 				$regionDetails = false;
 				if ($data['bezirk_id'] > 0) {
 					$regionDetails = $this->regionGateway->getBezirk($data['bezirk_id']);
 				}
-				$this->pageCompositionHelper->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
+				$this->pageHelper->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
-				$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile')),
 					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->func->s('delete_account'))
 				)), $this->func->s('actions')), CNT_RIGHT);
 			}
 		} else {
-			$this->pageCompositionHelper->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
+			$this->pageHelper->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
 		}
 	}
 

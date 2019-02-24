@@ -66,7 +66,7 @@ class IndexView extends View
 
 	private function howto()
 	{
-		$this->pageCompositionHelper->addJs('$(".vidlink").on("click", function(ev){
+		$this->pageHelper->addJs('$(".vidlink").on("click", function(ev){
 			ev.preventDefault();
 			$vid = $(this);
 			$vid.parent().html(\'<iframe width="420" height="315" src="\'+$vid.attr(\'href\')+\'" frameborder="0" allowfullscreen></iframe>\');

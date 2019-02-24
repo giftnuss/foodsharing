@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\WorkGroup;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,13 +16,13 @@ class WorkGroupControl extends Control
 	 * @var FormFactoryBuilder
 	 */
 	private $formFactory;
-	private $regionGateway;
+	private $imageService;
 
-	public function __construct(WorkGroupModel $model, WorkGroupView $view, RegionGateway $regionGateway)
+	public function __construct(WorkGroupModel $model, WorkGroupView $view, ImageService $imageService)
 	{
 		$this->model = $model;
 		$this->view = $view;
-		$this->regionGateway = $regionGateway;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 	}
@@ -38,10 +38,10 @@ class WorkGroupControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->routeHelper->goLogin();
 		}
 
-		$this->pageCompositionHelper->addBread('Arbeitsgruppen', '/?page=groups');
+		$this->pageHelper->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
 			$this->list($request, $response);
@@ -133,26 +133,42 @@ class WorkGroupControl extends Control
 
 		$groups = array_map(
 			function ($group) use ($myApplications, $myStats) {
-				return array_merge($group, [
-					'leaders' => array_map(function ($leader) {return array_merge($leader, ['image' => $this->func->img($leader['photo'])]); }, $group['leaders']),
-					'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
-					'appliedFor' => in_array($group['id'], $myApplications),
-					'applyMinBananaCount' => $group['banana_count'],
-					'applyMinFetchCount' => $group['fetch_count'],
-					'applyMinFoodsaverWeeks' => $group['week_num'],
-					'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements($group, $myStats),
-					'mayEdit' => $this->mayEdit($group),
-					'mayAccess' => $this->mayAccess($group),
-					'mayApply' => $this->mayApply($group, $myApplications, $myStats),
-					'mayJoin' => $this->mayJoin($group)
-				]);
-			}, $groups);
+				return array_merge(
+					$group,
+					[
+						'leaders' => array_map(
+							function ($leader) {
+								return array_merge($leader, ['image' => $this->imageService->img($leader['photo'])]);
+							},
+							$group['leaders']
+						),
+						'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
+						'appliedFor' => in_array($group['id'], $myApplications),
+						'applyMinBananaCount' => $group['banana_count'],
+						'applyMinFetchCount' => $group['fetch_count'],
+						'applyMinFoodsaverWeeks' => $group['week_num'],
+						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements(
+								$group,
+								$myStats
+							),
+						'mayEdit' => $this->mayEdit($group),
+						'mayAccess' => $this->mayAccess($group),
+						'mayApply' => $this->mayApply($group, $myApplications, $myStats),
+						'mayJoin' => $this->mayJoin($group),
+					]
+				);
+			},
+			$groups
+		);
 
-		$this->pageCompositionHelper->addTitle($this->func->s('groups'));
+		$this->pageHelper->addTitle($this->func->s('groups'));
 
-		$response->setContent($this->render('pages/WorkGroup/list.twig',
-			['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
-		));
+		$response->setContent(
+			$this->render(
+				'pages/WorkGroup/list.twig',
+				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
+			)
+		);
 	}
 
 	private function edit(Request $request, Response $response)
@@ -161,13 +177,13 @@ class WorkGroupControl extends Control
 
 		if ($group = $this->model->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
-				$this->func->go('/?page=dashboard');
+				$this->routeHelper->go('/?page=dashboard');
 			}
 			if (!$this->mayEdit($group)) {
-				$this->func->go('/?page=dashboard');
+				$this->routeHelper->go('/?page=dashboard');
 			}
 
-			$this->pageCompositionHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
 			$form->handleRequest($request);
@@ -177,7 +193,7 @@ class WorkGroupControl extends Control
 					$this->model->updateGroup($group['id'], $data);
 					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->func->info('Änderungen gespeichert!');
-					$this->func->goSelf();
+					$this->routeHelper->goSelf();
 				}
 			}
 		}

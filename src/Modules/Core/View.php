@@ -2,10 +2,13 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\PageCompositionHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class View
@@ -17,12 +20,15 @@ class View
 	protected $func;
 	protected $session;
 	protected $sanitizerService;
-	protected $pageCompositionHelper;
+	protected $pageHelper;
+	protected $timeHelper;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
+	protected $imageService;
+	protected $routeHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -30,14 +36,20 @@ class View
 		Utils $viewUtils,
 		Session $session,
 		SanitizerService $sanitizerService,
-		PageCompositionHelper $pageCompositionHelper
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
-		$this->pageCompositionHelper = $pageCompositionHelper;
+		$this->pageHelper = $pageHelper;
+		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
+		$this->routeHelper = $routeHelper;
 	}
 
 	public function setSub($sub)
@@ -165,7 +177,7 @@ class View
 		foreach ($foodsaver as $fs) {
 			$jssaver[] = (int)$fs['id'];
 
-			$photo = $this->func->avatar($fs);
+			$photo = $this->imageService->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
 
@@ -191,7 +203,7 @@ class View
 
 		if ($option['scroller']) {
 			$out = $this->v_utils->v_scroller($out, $height);
-			$this->pageCompositionHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$this->pageHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -254,7 +266,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];

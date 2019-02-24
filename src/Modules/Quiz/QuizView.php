@@ -17,7 +17,7 @@ class QuizView extends View
 	{
 		$rows = array();
 
-		$this->pageCompositionHelper->addJs('
+		$this->pageHelper->addJs('
 			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
@@ -32,7 +32,7 @@ class QuizView extends View
 			}
 
 			$rows[] = array(
-				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . $this->func->img($s['fs_photo']) . '" /></a>'),
+				array('cnt' => '<a style="margin-left:10px;" href="#"><img src="' . $this->imageService->img($s['fs_photo']) . '" /></a>'),
 				array('cnt' => '<a class="usersessionlink" href="/?page=quiz&sub=sessiondetail&fsid=' . $s['fs_id'] . '">' . $s['fs_name'] . '</a>'),
 				array('cnt' => $s['max_fp']),
 				array('cnt' => substr($s['time_start'], 0, -3)),
@@ -365,7 +365,7 @@ class QuizView extends View
 	public function listQuestions($questions, $quiz_id)
 	{
 		if (is_array($questions)) {
-			$this->pageCompositionHelper->addJs('
+			$this->pageHelper->addJs('
 				$("#questions").accordion({
 					heightStyle: "content",
 					animate: 200,

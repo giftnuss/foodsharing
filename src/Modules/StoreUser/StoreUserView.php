@@ -22,7 +22,7 @@ class StoreUserView extends View
 	{
 		$out = '<table class="pintable">';
 		$odd = 'odd';
-		$this->pageCompositionHelper->addJs('$("table.pintable tr td ul li").tooltip();');
+		$this->pageHelper->addJs('$("table.pintable tr td ul li").tooltip();');
 
 		foreach ($betrieb['requests'] as $r) {
 			if ($odd == 'even') {
@@ -32,7 +32,7 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
+			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->imageService->img($r['photo']) . '" /></a></td>
 			<td style="padding-top:17px;"><span class="msg"><a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
@@ -40,10 +40,10 @@ class StoreUserView extends View
 
 		$out .= '</table>';
 
-		$this->pageCompositionHelper->hiddenDialog('requests', array($out));
-		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($betrieb['name'], '"') . '");');
-		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
-		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("open");');
+		$this->pageHelper->hiddenDialog('requests', array($out));
+		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($betrieb['name'], '"') . '");');
+		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
+		$this->pageHelper->addJs('$("#dialog_requests").dialog("open");');
 	}
 
 	public function u_innerRow($contentType, $betrieb)
@@ -130,7 +130,7 @@ class StoreUserView extends View
 			$tmp = '
 				<li class="team fs-' . $fs['id'] . '">
 					<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-						' . $this->func->avatar($fs) . '
+						' . $this->imageService->avatar($fs) . '
 						<span class="infos">
 							<span class="item"><strong>' . $fs['name'] . '</strong> <span style="float:right">(' . $fs['stat_fetchcount'] . ')</span></span>
 							' . $tel . '
@@ -186,7 +186,7 @@ class StoreUserView extends View
 				$tmp = '
 					<li class="jumper fs-' . $fs['id'] . '">
 						<a class="ui-corner-all' . $class . '" title="#tt-tt-' . $fs['id'] . '" href="' . $href . '"' . $onclick . '>
-							' . $this->func->avatar($fs) . '
+							' . $this->imageService->avatar($fs) . '
 							<span class="infos">
 								<span class="item"><strong>' . $fs['name'] . '</strong></span>
 								' . $tel . '
@@ -208,7 +208,7 @@ class StoreUserView extends View
 		$out .= $sleeper . '</ul><div style="clear:both"></div>';
 
 		if ($betrieb['verantwortlich']) {
-			$this->pageCompositionHelper->addJs('
+			$this->pageHelper->addJs('
 			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();
@@ -424,7 +424,7 @@ class StoreUserView extends View
 				}
 
 				if ($fs['id'] == $this->session->id() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->timeHelper->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
 
@@ -434,7 +434,7 @@ class StoreUserView extends View
 				}
 				$out .= '
 			<li class="filled ' . $class . '">
-				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . $this->func->img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
+				<a class="' . $aclass . '" href="#" onclick="' . $click . 'return false;" title="' . $fs['name'] . '"><input type="hidden" name="date" value="' . $fs['id'] . ':::' . $date . '" /><img src="' . $this->imageService->img($fs['photo']) . '" alt="' . $fs['name'] . '" /><span>&nbsp;</span></a>
 			</li>';
 				++$i;
 			}

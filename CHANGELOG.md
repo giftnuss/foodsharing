@@ -24,6 +24,8 @@
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - API does not expose full URL to avatar images to allow the frontend to chose the resolution !529 @NerdyProjects
 - FluentPDO Query builder integrated to try it out !529 @NerdyProjects
+- Forbid to signup for non-existant pickups !783 @NerdyProjects
+- handle pickup signups via rest api !783 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
