@@ -396,6 +396,11 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
+	public function getFoodbasketCount(int $fs_id)
+	{
+		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
+	}
+
 	public function listCloseBaskets($fs_id, $loc, $distance = 30)
 	{
 		return $this->db->fetchAll(

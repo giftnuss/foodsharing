@@ -3,12 +3,29 @@
 namespace Foodsharing\Modules\Profile;
 
 use Flourish\fDate;
+use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Basket\BasketGateway;
+use Foodsharing\Services\SanitizerService;
 
 class ProfileView extends View
 {
 	private $foodsaver;
+	private $basketGateway;
+
+	public function __construct(\Twig\Environment $twig,
+								Func $func,
+								Utils $viewUtils,
+								Session $session,
+								SanitizerService $sanitizerService,
+								BasketGateway $basketGateway)
+	{
+		$this->basketGateway = $basketGateway;
+		parent::__construct($twig, $func, $viewUtils, $session, $sanitizerService);
+	}
 
 	public function profile($wallposts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
@@ -274,23 +291,17 @@ class ProfileView extends View
 				</span>';
 		}
 
-		$foodBasketCount = '';
-		if ($this->foodsaver['stat_postcount'] > 0) {
-			$foodBasketCount = '
+		$foodBasketCount = '
 				<span class="item stat_fetchcount">
-					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					<span class="val">' . number_format($this->basketGateway->getFoodbasketCount($this->foodsaver['id']), 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">Essenskörbe</span>
 				</span>';
-		}
 
-		$postCount = '';
-		if ($this->foodsaver['stat_postcount'] > 0) {
-			$postCount = '
+		$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
 					<span class="name">Beiträge</span>
 				</span>';
-		}
 
 		$bananaCount = '';
 
@@ -366,8 +377,8 @@ class ProfileView extends View
 					' . $fetchWeight . '
 					' . $fetchCount . '
 					' . $postCount . '
-					' . $bananaCount . '
 					' . $foodBasketCount . '
+					' . $bananaCount . '
 				</div>
 			    <div class="infos"> ' . $out . ' </div>
 			</div>';
