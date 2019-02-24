@@ -346,7 +346,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		' .
 			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->func->s('basket_request_on_page') . '</a></div>';
 	}
@@ -360,7 +360,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		';
 	}
 
@@ -374,7 +374,7 @@ class BasketView extends View
 		return '
 		' . $img . '
 		' . $this->v_utils->v_input_wrapper($this->func->s('set_date'), $this->timeHelper->niceDate($basket['time_ts'])) . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		';
 	}
 }

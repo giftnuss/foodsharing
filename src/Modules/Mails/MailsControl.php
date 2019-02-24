@@ -130,7 +130,7 @@ class MailsControl extends ConsoleControl
 							}
 							if ($text != null) {
 								$body = $text;
-								$html = nl2br($this->func->autolink($text));
+								$html = nl2br($this->routeHelper->autolink($text));
 							} else {
 								++$stats['failure'];
 								continue;

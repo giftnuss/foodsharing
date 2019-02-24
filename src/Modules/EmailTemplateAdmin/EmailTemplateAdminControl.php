@@ -31,7 +31,7 @@ class EmailTemplateAdminControl extends Control
 			$this->pageHelper->addContent($this->view->message_tpl_form());
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('message_tpl', 'back_to_overview')
+				$this->routeHelper->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->emailTemplateAdminGateway->del_message_tpl($id)) {
@@ -50,7 +50,7 @@ class EmailTemplateAdminControl extends Control
 			$this->pageHelper->addContent($this->view->message_tpl_form());
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('message_tpl', 'back_to_overview')
+				$this->routeHelper->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} else {
 			$this->pageHelper->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');

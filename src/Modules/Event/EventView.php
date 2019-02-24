@@ -329,6 +329,6 @@ class EventView extends View
 
 	public function event($event)
 	{
-		return $this->v_utils->v_field('<p>' . nl2br($this->func->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
 	}
 }

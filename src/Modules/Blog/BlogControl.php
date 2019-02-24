@@ -126,7 +126,7 @@ class BlogControl extends Control
 			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke, true));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('blog', 'back_to_overview')
+				$this->routeHelper->pageLink('blog', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
 			$this->func->info('Du darfst keine Artikel erstellen!');
@@ -165,7 +165,7 @@ class BlogControl extends Control
 			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('blog', 'back_to_overview')
+				$this->routeHelper->pageLink('blog', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_LEFT);
 		} else {
 			$this->func->info('Diesen Artikel kannst Du nicht bearbeiten');

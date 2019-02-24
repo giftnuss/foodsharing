@@ -36,7 +36,7 @@ class ContentControl extends Control
 				$this->pageHelper->addContent($this->content_form());
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					$this->func->pageLink('content', 'back_to_overview')
+					$this->routeHelper->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
@@ -55,7 +55,7 @@ class ContentControl extends Control
 				$this->pageHelper->addContent($this->content_form());
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					$this->func->pageLink('content', 'back_to_overview')
+					$this->routeHelper->pageLink('content', 'back_to_overview')
 				)), $this->func->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->func->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {

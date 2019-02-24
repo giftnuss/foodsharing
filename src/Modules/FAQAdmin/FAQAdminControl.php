@@ -33,7 +33,7 @@ class FAQAdminControl extends Control
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('faq', 'back_to_overview')
+				$this->routeHelper->pageLink('faq', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
@@ -51,7 +51,7 @@ class FAQAdminControl extends Control
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('faq', 'back_to_overview')
+				$this->routeHelper->pageLink('faq', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$data = $this->faqGateway->getOne_faq($_GET['id']);

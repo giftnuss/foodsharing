@@ -68,15 +68,6 @@ final class Func
 		return isset($_GET['a']) && $_GET['a'] == $a;
 	}
 
-	public function pageLink($page, $id, $action = '')
-	{
-		if (!empty($action)) {
-			$action = '&a=' . $action;
-		}
-
-		return array('href' => '/?page=' . $page . $action, 'name' => $this->s($id));
-	}
-
 	public function getActionId($a)
 	{
 		if (isset($_GET['a'], $_GET['id']) && $_GET['a'] == $a && (int)$_GET['id'] > 0) {
@@ -93,25 +84,6 @@ final class Func
 		}
 
 		return $i;
-	}
-
-	public function autolink($str, $attributes = array())
-	{
-		$attributes['target'] = '_blank';
-		$attrs = '';
-		foreach ($attributes as $attribute => $value) {
-			$attrs .= " {$attribute}=\"{$value}\"";
-		}
-		$str = ' ' . $str;
-		$str = preg_replace(
-			'`([^"=\'>])(((http|https|ftp)://|www.)[^\s<]+[^\s<\.)])`i',
-			'$1<a href="$2"' . $attrs . '>$2</a>',
-			$str
-		);
-		$str = substr($str, 1);
-		$str = preg_replace('`href=\"www`', 'href="http://www', $str);
-		// fügt http:// hinzu, wenn nicht vorhanden
-		return $str;
 	}
 
 	public function isMob(): bool
