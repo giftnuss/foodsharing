@@ -1,4 +1,4 @@
-# Troubleshouting
+# Troubleshooting
 
 During development everyone knows the moments when the code shows exactly what you want but the computer just does something different.
 Some strategies how to find or avoid errors are collected here.

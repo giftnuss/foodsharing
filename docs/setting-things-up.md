@@ -38,7 +38,7 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Password | root |
 
 There you can directly look at and manipulate the data in the database
-which can be necessary or very useful for manual testing and troubleshouting.
+which can be necessary or very useful for manual testing and troubleshooting.
 
 MailDev is also included: [localhost:18084](localhost:18084). There you can read all e-mails that you write via the front end.
 
