@@ -70,35 +70,36 @@ Adding this to `.git/hooks/pre-commit` could look like that:
 
 ```
 #!/bin/sh
-HASH_BEFORE=`git diff | sha1sum`
+HASH_BEFORE=$(git diff | sha1sum)
 ./scripts/fix-codestyle-local
 # or use
 # vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
 # or
 # ./scripts/fix
-# if the local script throws an erro
-HASH_AFTER=`git diff | sha1sum`
+# if the -local script throws an error
+HASH_AFTER=$(git diff | sha1sum)
 
-if [ "$HASH_AFTER" != "$HASH_BEFORE" ]; then
-  echo "PHP Codestyle was fixed. Please readd your changes and retry commit."
+if test "$HASH_AFTER" != "$HASH_BEFORE" ; then
+  echo "PHP Codestyle was fixed. Please read the changes and retry commit."
   exit 1;
 fi
 ```
 
 ### Using docker PHP
 
-Executing the following script will use the dev environment to run the codestyle check. As it currently always runs a new container using docker-compose, it will take some seconds to execute:
+Executing the following script will use the dev environment to run the codestyle check.
+As it currently always runs a new container using docker-compose, it will take some seconds to execute:
 
 ```
 ./scripts/fix
 ```
-If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix` in the pre-commit hook.
 
 ### Using PHPstorm
 
 If you happen to use PHPstorm you can add `php-cs-fixer` to those settings as well:
 <div align="center"><img src="images/setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
 <div align="center"><img src="images/setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
+
 ## Editorconfig
 
 Depending on your editor you need to do nothing or install or configure a plugin to use the file `.editorconfig`. Please refer to the section about [Code style](codestyle.md).

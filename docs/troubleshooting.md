@@ -5,23 +5,23 @@ Some strategies how to find or avoid errors are collected here.
 
 ## CSRF Exception
 
-When working on the api one usually wants to try it out.
-If you just type in the api call in the web browser while running the local webpage on [`localhost:18080`](setting-things-up.md) you probably get a [`CSRF Exception`](https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery).
+When working on the API one usually wants to try it out.
+If you just type in the API call in the web browser while running the local webpage on [`localhost:18080`](setting-things-up.md) you probably get a [`CSRF Exception`](https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery).
 This is a safety feature:
-- While you are logined via foodsharing.de other pages can send api calls.
+- While you are logined via foodsharing.de other pages can send API calls.
 - Since your browser has a session foodsharing.de usually would answer the request, the other page got data that it shouldn't get.
-- Solution: foodsharing.de sends a csrf-token that the client saves as a cookie and sends with every api call. Since cookies can only be accessed by the correct web page, only the foodsharing.de-Tab can authenticate itself.
-- When you just type in the api call you look like a different site/ tab and get rejected.
+- Solution: foodsharing.de sends a CSRF-token that the browser saves as a cookie and the client reads from the cookie and sends the token as a header with every API call. Since cookies can only be accessed by the correct web page, only the foodsharing.de site can make requests.
+- When you just type in the API call the headers including the CSRF-token are not set and you are rejected.
 
 There are several work-arounds:
 - You write tests. You should write tests anyway and since they emulate a complete session, the CSRF-Token is sent and valid.
-- You add an api call in some javascript-file that gets executed. For example add the following into `/src/Modules/Dashboard/Dashboard.js`:
+- You add an API call in some javascript-file that gets executed. For example add the following into `/src/Modules/Dashboard/Dashboard.js`:
 ```
 import { get } from '@/api/base'
 get('/activity')
 ```
 Make sure that you do not commit those temporary changes!
-- You disable the SCRF-Check in `/src/EventListener/CsrfListener.php` by commenting the lines
+- You disable the CSRF-Check in `/src/EventListener/CsrfListener.php` by commenting the lines
 ```
 // if (!$this->session->isValidCsrfHeader()) {
 //  throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.');
@@ -41,7 +41,7 @@ But it takes quite a while.
 
 ## Cache
 
-The docker container are using a cache directory that is persistent over restarts and sometimes changes in the source files are not reflected in the running containers.
+Symfony that is running inside docker container are using a cache directory that is persistent over docker restarts and sometimes changes in the source files are not reflected in the running containers.
 Then errors that are already fixed might still appear during experiments.
 Hence sometimes it helps to remove the cache directory:
 ```
