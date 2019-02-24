@@ -54,7 +54,13 @@ final class BlogGateway extends BaseGateway
 
 	public function canEdit(int $article_id): bool
 	{
-		if ($val = $this->db->fetchByCriteria('blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id])) {
+		$val = false;
+		try {
+			$val = $this->db->fetchByCriteria('blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id]);
+		} catch (\Exception $e) {
+			// has to be caught until we can check whether a to be fetched value does really exist.
+		}
+		if ($val) {
 			if ($this->session->id() == $val['foodsaver_id'] || $this->session->isAdminFor($val['bezirk_id'])) {
 				return true;
 			}
