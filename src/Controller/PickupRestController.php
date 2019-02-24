@@ -38,10 +38,13 @@ class PickupRestController extends AbstractFOSRestController
 		if (!$date) {
 			throw new HttpException(400, 'Invalid date format');
 		}
-		if (!$this->storeService->signupForPickup($this->session->id(), $storeId, $date, $this->storePermissions->hasPreconfirmedPickup($storeId))) {
+		$confirmed = $this->storePermissions->hasPreconfirmedPickup($storeId);
+		if (!$this->storeService->signupForPickup($this->session->id(), $storeId, $date, $confirmed)) {
 			throw new HttpException(400, 'No pickup slot available');
 		}
 
-		return $this->handleView($this->view([], 200));
+		return $this->handleView($this->view([
+			'confirmed' => $confirmed
+		], 200));
 	}
 }
