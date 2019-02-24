@@ -22,6 +22,7 @@
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
 - handle pickup signups via rest api !783 @NerdyProjects
+- refactored blog from model to gateway !789 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
