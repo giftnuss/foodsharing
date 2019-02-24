@@ -54,6 +54,7 @@ class ForumApiCest
 
 	/**
 	 * @param ApiTester $I
+	 *
 	 * @throws Exception
 	 */
 	public function canUseEmojis(\ApiTester $I): void
