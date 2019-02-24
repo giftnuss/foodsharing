@@ -49,10 +49,15 @@ sudo rm -rf ./cache/dev
 ```
 or even `sudo rm -rf cache`.
 
-## Database access
+## Database and email access
 
-The local website gives you database access so that you can directly view and modify what is written in the database. For the `localhost:18080` version this phpadmin can be found under `localhost:18084` while for the test containers (which are running after running `./scripts/tests` once) you find the database under `localhost:28084`.
-28084: phpadmin for tests
+The local website gives you database access so that you can directly view and modify what is written in the database.
+Access to the e-mails that are sent via the website can also be found.
+| dev | test |
+Website | [`localhost:18080`](localhost:18080) | |
+phpadmin (database access) | [`localhost:18081`](localhost:18081) | [`localhost:18080`](localhost:28081) |
+smtp (outgoing email) | [`localhost:18084`](localhost:18084) | [`localhost:28084`](localhost:28084)
+Those ports are configured in `/docker/docker-compose.*.yml`.
 
 ## Logs
 
@@ -60,7 +65,7 @@ The server (also the local one) writes logs about a lot that happens including e
 ```
 ./scripts/docker-compose logs -f app
 ```
-where you can also replace `app` by other components of the application that are listed during starting them with `./scripts/start`.
+where you can also replace `app` by other components of the application that are listed by `./scripts/docker-compose ps` or just remove it to show all logs.
 
 `docker-compose` also respects the variable `FS_ENV` that can be set to `dev` or to `test` for running either the `localhost` (dev) containers or the testing containers.
 
