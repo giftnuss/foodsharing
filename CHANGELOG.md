@@ -13,6 +13,9 @@
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
 - Fix forum "Antworten" button !786 @nicksellen
+- Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Non-followers can comment on Fairteilers again #457 !691 @janopae
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -29,6 +32,8 @@
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
+- added /nbProject to .gitinore !791 @k.miklobusec
+
 
 # 2019-02-21
 
