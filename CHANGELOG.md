@@ -14,6 +14,7 @@
 - Properly escape store names in request popups !778 @NerdyProjects
 - Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
