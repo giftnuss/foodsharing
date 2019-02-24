@@ -15,8 +15,7 @@ import {
   showLoader,
   hideLoader,
   GET,
-  profile,
-  reload
+  profile
 } from '@/script'
 
 import 'jquery-tagedit'
@@ -61,16 +60,6 @@ expose({
   createConfirmedMenu,
   createUnconfirmedMenu
 })
-
-// Fix for Issue #171
-let days
-const seconds = store.prefetchtime
-if (seconds >= 86400) {
-  days = seconds / 86400
-} else {
-  // If Bieb did not set the option "how many weeks in advance can a foodsaver apply" an alternative value
-  days = 7
-}
 
 $('.cb-verantwortlicher').on('click', function () {
   if ($('.cb-verantwortlicher:checked').length >= 4) {
