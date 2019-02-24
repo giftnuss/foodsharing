@@ -186,7 +186,7 @@ class BlogModel extends Db
 			' . (int)$data['foodsaver_id'] . ',
 			' . $this->strval($data['name']) . ',
 			' . $this->strval($data['teaser']) . ',
-			' . $this->strval($data['body'], true) . ',
+			"' . $this->safe($data['body']) . '",
 			' . $this->dateval($data['time']) . ',
 			' . $this->strval($data['picture']) . ',
 			' . $active . '
