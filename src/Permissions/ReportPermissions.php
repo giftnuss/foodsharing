@@ -17,7 +17,8 @@ class ReportPermissions
 	public function mayAccessReportsForRegion($regionId): bool
 	{
 		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
-		 * reports list on region level is accessible for orga and for the AMBs of that very region
+		 * and https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
+		 * reports list on region level is accessible for orga and for the AMBs of that exact region
 		 * The reports team is having access to the Europe-Region list.
 		 *
 		 */
@@ -27,5 +28,10 @@ class ReportPermissions
 			/* ToDo: Need to check that regionId is a subgroup of europe. implied for now. */
 			$this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM)
 		;
+	}
+
+	public function mayAccessReportsForSubRegions(): bool
+	{
+		return $this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 }

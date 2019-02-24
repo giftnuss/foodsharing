@@ -38,12 +38,17 @@ class ReportRestController extends FOSRestController
 			throw new HttpException(403);
 		}
 
-		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
-		  reports lists do show every report from that region and all child regions (filter will be needed)
+		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296 with
+		  https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
+		  reports lists do show every report from that region excluding the child regions
 		  reports lists do only show the reports of the visitor if anonymity has been repealed by the reporter (feature yet to come)
 		  -> remove reports of the person visiting from output
 		*/
-		$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+		if ($this->reportPermissions->mayAccessReportsForSubRegions()) {
+			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+		} else {
+			$regions = [$regionId];
+		}
 
 		$reports = array_merge(
 			$this->reportGateway->getReportsByReporteeRegions($regions, $this->session->id()),
