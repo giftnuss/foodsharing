@@ -60,4 +60,4 @@ define('CNT_BOTTOM', 3);
 define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
 
-define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8');
+define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8mb4');
