@@ -21,9 +21,6 @@
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
-
-## Refactoring
-- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - handle pickup signups via rest api !783 @NerdyProjects
 
 ## Dev/Test/CI stuff
