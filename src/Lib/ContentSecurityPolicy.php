@@ -24,7 +24,11 @@ class ContentSecurityPolicy
 			'connect-src' => [
 				$self,
 				$this->websocketUrlFor(BASE_URL),
-				$this->websocketUrlFor('https://beta.foodsharing.de'), // in beta BASE_URL is foodsharing.de (see https://gitlab.com/foodsharing-dev/foodsharing/issues/479)
+				// BASE_URL doesn't get set to these other sites
+				// see https://gitlab.com/foodsharing-dev/foodsharing/issues/479
+				$this->websocketUrlFor('https://beta.foodsharing.de'),
+				$this->websocketUrlFor('https://foodsharing.at'),
+				$this->websocketUrlFor('https://foodsharingschweiz.ch'),
 				'https://sentry.io',
 				'https://photon.komoot.de',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
