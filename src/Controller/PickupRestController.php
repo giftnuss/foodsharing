@@ -3,24 +3,21 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\StoreService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class PickupRestController extends AbstractFOSRestController
+final class PickupRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $storePermissions;
 	private $storeService;
-	private $storeGateway;
 
-	public function __construct(Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, StoreService $storeService)
+	public function __construct(Session $session, StorePermissions $storePermissions, StoreService $storeService)
 	{
 		$this->session = $session;
-		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
 		$this->storeService = $storeService;
 	}
