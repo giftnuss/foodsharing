@@ -72,6 +72,11 @@ Adding this to `.git/hooks/pre-commit` could look like that:
 #!/bin/sh
 HASH_BEFORE=`git diff | sha1sum`
 ./scripts/fix-codestyle-local
+# or use
+# vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
+# or
+# ./scripts/fix
+# if the local script throws an erro
 HASH_AFTER=`git diff | sha1sum`
 
 if [ "$HASH_AFTER" != "$HASH_BEFORE" ]; then
@@ -85,9 +90,9 @@ fi
 Executing the following script will use the dev environment to run the codestyle check. As it currently always runs a new container using docker-compose, it will take some seconds to execute:
 
 ```
-./scripts/fix-codestyle
+./scripts/fix
 ```
-If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix-codestyle` in the pre-commit hook.
+If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix` in the pre-commit hook.
 
 ### Using PHPstorm
 

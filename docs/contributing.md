@@ -24,7 +24,7 @@ To work on an issue:
 
 To submit your change:
 
-1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle`.
+1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle-local` (or if that does not work by running the slower `./scripts/fix`).
 2. Check if the tests pass locally, by running `./scripts/test`.
 3. Create a merge request to master for your branch early on.
   1. Select the template "Default".
