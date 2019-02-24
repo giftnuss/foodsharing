@@ -152,6 +152,9 @@ options: Optionen
 error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
 
+store:
+  pickup_slot_unavailable: Dieser Abholslot kann derzeit nicht belegt werden. Bitte probiere es später erneut.
+
 forum:
   from: Von %name%
   threads: Themen

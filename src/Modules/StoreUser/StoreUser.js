@@ -289,10 +289,9 @@ $('#timedialog').dialog({
           .find('a')
           .attr('title', '')
           .tooltip('option', { disabled: true }).tooltip('close')
-
       } catch (err) {
         u_clearDialogs()
-        pulseError('Dieser Abholslot ist nicht verfügbar')
+        pulseError(i18n('store.pickup_slot_unavailable'))
       }
       $(this).dialog('close')
     },
