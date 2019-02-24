@@ -59,10 +59,10 @@ $mem = $container->get(Mem::class);
 /* @var $view_utils Utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $func RouteHelper */
+/* @var $routeHelper RouteHelper */
 $routeHelper = $container->get(RouteHelper::class);
 
-/* @var $func PageHelper */
+/* @var $pageHelper PageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
 /* @var $session Session */

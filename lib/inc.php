@@ -47,7 +47,7 @@ $response = new Response('--');
 /* @var $func Func */
 $func = $container->get(Func::class);
 
-/* @var $func PageHelper */
+/* @var $pageHelper PageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
 /* @var $viewUtils Utils */
