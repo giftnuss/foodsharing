@@ -28,3 +28,28 @@ Make sure that you do not commit those temporary changes!
 //}
 ```
 Make sure that you do not commit those temporary changes!
+
+## Restart
+
+Sometimes the docker container get into some weird state. It might help to restart them:
+```
+./scripts/stop
+sudo ./scripts/clean # sudo necessary since the container run with root privileges and therefore create directories with root ownership
+./scripts/start
+```
+But it takes quite a while.
+
+## Cache
+
+The docker container are using a cache directory that is persistent over restarts and sometimes changes in the source files are not reflected in the running containers.
+Then errors that are already fixed might still appear during experiments.
+Hence sometimes it helps to remove the cache directory:
+```
+sudo rm -rf ./cache/dev
+```
+or even `sudo rm -rf cache`.
+
+## Database access
+
+The local website gives you database access so that you can directly view and modify what is written in the database. For the `localhost:18080` version this phpadmin can be found under `localhost:18084` while for the test containers (which are running after running `./scripts/tests` once) you find the database under `localhost:28084`.
+28084: phpadmin for tests
