@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Db
@@ -11,13 +12,19 @@ class ActivityModel extends Db
 	private $mailboxModel;
 	private $activityGateway;
 	private $sanitizerService;
+	private $imageService;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		MailboxModel $mailboxModel,
+		ActivityGateway $activityGateway,
+		SanitizerService $sanitizerService,
+		ImageService $imageService
+	) {
 		parent::__construct();
 		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -53,7 +60,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
 					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 				];
@@ -71,7 +78,7 @@ class ActivityModel extends Db
 		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->sanitizerService->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';
@@ -119,7 +126,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
 				];
 			}
@@ -229,7 +236,7 @@ class ActivityModel extends Db
 						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
 						'desc' => $this->textPrepare($u['post_body']),
 						'time' => $u['update_time'],
-						'icon' => $this->func->img($u['foodsaver_photo'], 50),
+						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
 					];
@@ -254,7 +261,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
 					'desc' => $this->textPrepare($r['text']),
 					'time' => $r['update_time'],
-					'icon' => $this->func->img($r['foodsaver_photo'], 50),
+					'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
 					'time_ts' => $r['update_time_ts']
 				];
 			}

@@ -107,7 +107,7 @@ services:
 
   db:
     container_name: foodsharing_dev_db
-    image: registry.gitlab.com/foodsharing-dev/images/db/dev:1.0
+    image: registry.gitlab.com/foodsharing-dev/images/db/dev:1.1
     # so we can mount tmpfs inside container
     privileged: true
     expose:

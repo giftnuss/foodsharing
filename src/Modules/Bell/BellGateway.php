@@ -12,17 +12,12 @@ class BellGateway extends BaseGateway
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
-	/**
-	 * @var BellUpdateTrigger
-	 */
-	private $bellUpdateTrigger;
 
-	public function __construct(Database $db, WebSocketSender $webSocketSender, BellUpdateTrigger $bellUpdateTrigger)
+	public function __construct(Database $db, WebSocketSender $webSocketSender)
 	{
 		parent::__construct($db);
 
 		$this->webSocketSender = $webSocketSender;
-		$this->bellUpdateTrigger = $bellUpdateTrigger;
 	}
 
 	/**

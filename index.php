@@ -22,9 +22,10 @@ if(isset($_GET['g_path']))
 */
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -58,8 +59,11 @@ $mem = $container->get(Mem::class);
 /* @var $view_utils Utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $func Func */
-$func = $container->get(Func::class);
+/* @var $routeHelper RouteHelper */
+$routeHelper = $container->get(RouteHelper::class);
+
+/* @var $pageHelper PageHelper */
+$pageHelper = $container->get(PageHelper::class);
 
 /* @var $session Session */
 $session = $container->get(Session::class);
@@ -67,23 +71,23 @@ $session = $container->get(Session::class);
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 if (DebugBar::isEnabled()) {
-	$func->addHead(DebugBar::renderHead());
+	$pageHelper->addHead(DebugBar::renderHead());
 }
 
 if (DebugBar::isEnabled()) {
-	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$pageHelper->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($session->id() != $_GET['uc']) {
 			$mem->logout($session->id());
-			$func->goLogin();
+			$routeHelper->goLogin();
 		}
 	}
 }
 
-$app = $func->getPage();
+$app = $routeHelper->getPage();
 
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
@@ -118,7 +122,7 @@ if ($isUsingResponse) {
 } else {
 	/* @var $twig \Twig\Environment */
 	$twig = $container->get(\Twig\Environment::class);
-	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
+	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 }
 
 if (isset($cache) && $cache->shouldCache()) {

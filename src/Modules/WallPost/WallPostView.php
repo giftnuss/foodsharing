@@ -65,7 +65,7 @@ class WallPostView extends View
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
 						<a href="/profile/' . $p['foodsaver_id'] . '">
-							<img src="' . $this->func->img($p['photo']) . '" />
+							<img src="' . $this->imageService->img($p['photo']) . '" />
 						</a>
 					</td>
 					<td' . $gal_col . '>

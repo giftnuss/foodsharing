@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Db\Db;
 
 class LoginModel extends Db
@@ -10,6 +11,14 @@ class LoginModel extends Db
 	 * @var LoginGateway
 	 */
 	private $loginGateway;
+	private $emailHelper;
+
+	public function __construct(EmailHelper $emailHelper)
+	{
+		$this->emailHelper = $emailHelper;
+
+		parent::__construct();
+	}
 
 	/**
 	 * @required
@@ -136,7 +145,7 @@ class LoginModel extends Db
 					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
 
-				$this->func->tplMail(10, $fs['email'], $vars);
+				$this->emailHelper->tplMail(10, $fs['email'], $vars);
 
 				return true;
 			}

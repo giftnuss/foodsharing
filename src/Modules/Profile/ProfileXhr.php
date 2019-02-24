@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Lib\Xhr\XhrDialog;
 
 class ProfileXhr extends Control
 {
@@ -14,14 +14,20 @@ class ProfileXhr extends Control
 	private $storeModel;
 	private $bellGateway;
 	private $regionGateway;
+	private $profileGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel, BellGateway $bellGateway, RegionGateway $regionGateway)
-	{
-		$this->model = $model;
+	public function __construct(
+		ProfileView $view,
+		StoreModel $storeModel,
+		BellGateway $bellGateway,
+		RegionGateway $regionGateway,
+		ProfileGateway $profileGateway
+	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
+		$this->profileGateway = $profileGateway;
 
 		parent::__construct();
 
@@ -33,8 +39,8 @@ class ProfileXhr extends Control
 		}
 
 		if (isset($_GET['id'])) {
-			$this->model->setFsId($_GET['id']);
-			$fs = $this->model->getData($_GET['id']);
+			$this->profileGateway->setFsId($_GET['id']);
+			$fs = $this->profileGateway->getData($_GET['id']);
 
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
@@ -48,7 +54,7 @@ class ProfileXhr extends Control
 					*  0: requested
 					*  1: buddy
 				*/
-				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
+				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
 
 				$this->view->setData($this->foodsaver);
 			} else {
@@ -85,10 +91,10 @@ class ProfileXhr extends Control
 				);
 			}
 
-			$this->model->rate($fsid, $rate, $type, $message);
+			$this->profileGateway->rate($fsid, $rate, $type, $message);
 
 			$comment = '';
-			if ($msg = $this->model->getRateMessage($fsid)) {
+			if ($msg = $this->profileGateway->getRateMessage($fsid)) {
 				$comment = $msg;
 			}
 
@@ -107,12 +113,12 @@ class ProfileXhr extends Control
 		if ($this->session->may() && ($this->session->may('orga') || $this->session->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
-				$history = $this->model->getVerifyHistory($_GET['fsid']);
+				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);
 				$dia->setTitle('Verifizierungshistorie');
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
 			if ($_GET['type'] == 1) {
-				$history = $this->model->getPassHistory($_GET['fsid']);
+				$history = $this->profileGateway->getPassHistory($_GET['fsid']);
 
 				$dia->setTitle('Passhistorie');
 

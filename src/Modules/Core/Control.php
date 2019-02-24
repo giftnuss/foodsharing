@@ -2,6 +2,9 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -27,6 +30,11 @@ abstract class Control
 	 * @var Func
 	 */
 	protected $func;
+
+	/**
+	 * @var PageHelper
+	 */
+	protected $pageHelper;
 
 	/**
 	 * @var Mem
@@ -63,6 +71,16 @@ abstract class Control
 	 */
 	private $metrics;
 
+	/**
+	 * @var EmailHelper
+	 */
+	protected $emailHelper;
+
+	/**
+	 * @var RouteHelper
+	 */
+	protected $routeHelper;
+
 	public function __construct()
 	{
 		global $container;
@@ -73,6 +91,9 @@ abstract class Control
 		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
+		$this->pageHelper = $container->get(PageHelper::class);
+		$this->emailHelper = $container->get(EmailHelper::class);
+		$this->routeHelper = $container->get(RouteHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -119,9 +140,9 @@ abstract class Control
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {
 					if (substr($asset, -3) === '.js') {
-						$this->func->addWebpackScript($asset);
+						$this->pageHelper->addWebpackScript($asset);
 					} elseif (substr($asset, -4) === '.css') {
-						$this->func->addWebpackStylesheet($asset);
+						$this->pageHelper->addWebpackStylesheet($asset);
 					}
 				}
 			}
@@ -140,7 +161,7 @@ abstract class Control
 
 	protected function render($template, $data)
 	{
-		$global = $this->func->generateAndGetGlobalViewData();
+		$global = $this->pageHelper->generateAndGetGlobalViewData();
 		$viewData = array_merge($global, $data);
 
 		return $this->twig->render($template, $viewData);
@@ -182,7 +203,7 @@ abstract class Control
 
 	public function wallposts($table, $id)
 	{
-		$this->func->addJsFunc('
+		$this->pageHelper->addJsFunc('
 			function u_delPost(id, module, wallId)
 				{
 					var id = id;
@@ -214,7 +235,7 @@ abstract class Control
 					$("a.attach-load").remove();
 				}
 			');
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 				$("#wallpost-text").autosize();
 			$("#wallpost-text").on("focus", function(){
 				$("#wallpost-submit").show();
@@ -443,7 +464,7 @@ abstract class Control
 					$sessdata[$recipient['id']] = time();
 
 					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
-						$this->func->tplMail(30, $recipient['email'], array(
+						$this->emailHelper->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -452,7 +473,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
-						$this->func->tplMail(30, $recipient['email'], array(
+						$this->emailHelper->tplMail(30, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -461,7 +482,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						$this->func->tplMail($tpl_id, $recipient['email'], array(
+						$this->emailHelper->tplMail($tpl_id, $recipient['email'], array(
 							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -490,7 +511,7 @@ abstract class Control
 					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
 					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
 
-					$this->func->tplMail($tpl_id, $foodsaver['email'], array(
+					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],

@@ -6,6 +6,9 @@ set -o errexit
 
 source $(dirname "$0")/inc.sh
 
+echo "Linting php with php-cs-fixer"
+run-in-container app vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose
+
 echo "Linting php with parallel-lint"
 run-in-container app vendor/bin/parallel-lint --exclude vendor .
 

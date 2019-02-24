@@ -4,3 +4,5 @@ parameters:
     - src
   excludes_analyse:
     - %currentWorkingDirectory%/src/Lib/Flourish
+  ignoreErrors:
+    - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'

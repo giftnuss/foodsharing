@@ -38,13 +38,13 @@ class StoreView extends View
 		$curdate = 0;
 		foreach ($history as $h) {
 			if ($curdate != $h['date']) {
-				$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
+				$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
 				$curdate = $h['date'];
 			}
 			$out .= '
 				<li>
 					<a class="corner-all" href="/profile/' . (int)$h['id'] . '">
-						<span class="i"><img src="' . $this->func->img($h['photo']) . '" /></span>
+						<span class="i"><img src="' . $this->imageService->img($h['photo']) . '" /></span>
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>
 						<span class="c"></span>
@@ -82,7 +82,7 @@ class StoreView extends View
 			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
 		}
 
-		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+		$this->pageHelper->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
 		$latLonOptions = [];
 

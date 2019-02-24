@@ -4,6 +4,7 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -11,13 +12,30 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
+- Fix forum "Antworten" button !786 @nicksellen
+- Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Non-followers can comment on Fairteilers again #457 !691 @janopae
 
 ## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
+- Forbid to signup for non-existant pickups !783 @NerdyProjects
+- handle pickup signups via rest api !783 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+- Update mocha to version 6 @peter.toennies
+- Run all jobs except test and deployment on shared CI runners @NerdyProjects
+- Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
+- Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
+- Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
+- added /nbProject to .gitinore !791 @k.miklobusec
+
 
 # 2019-02-21
 

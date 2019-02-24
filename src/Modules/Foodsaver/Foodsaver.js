@@ -31,9 +31,9 @@ const fsapp = {
       bid: GET('bid')
     })
   },
-  delfromBezirk: function (foodsaverId) {
+  deletefromRegion: function (foodsaverId) {
     if (window.confirm('Wirklich aus Bezirk löschen?')) {
-      ajreq('delfrombezirk', {
+      ajreq('deleteFromRegion', {
         app: 'foodsaver',
         bid: GET('bid'),
         id: foodsaverId

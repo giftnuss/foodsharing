@@ -11,6 +11,7 @@
 [client]
 port		= 3306
 socket		= /var/run/mysqld/mysqld.sock
+default-character-set = utf8mb4
 
 [mysqld_safe]
 socket		= /var/run/mysqld/mysqld.sock
@@ -40,8 +41,9 @@ console=1
 general_log=1
 general_log_file=/dev/stdout
 log_error=/dev/stderr
-collation-server=utf8_unicode_ci
-character-set-server=utf8
+collation-server=utf8mb4_unicode_ci
+character-set-server=utf8mb4
+character-set-client-handshake = FALSE
 
 sync_frm=0
 innodb-flush-log-at-trx-commit=0
@@ -57,6 +59,7 @@ quote-names
 max_allowed_packet	= 16M
 
 [mysql]
+default-character-set = utf8mb4
 
 [isamchk]
 key_buffer		= 16M
