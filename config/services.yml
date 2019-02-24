@@ -128,7 +128,7 @@ services:
         - !php/const DB_PASS
         - !php/const DB_DB
       calls:
-        - [query, ['SET NAMES "utf8"']]
+        - [query, ['SET NAMES "utf8mb4"']]
     PDO:
       class: PDO
       arguments:
@@ -138,7 +138,7 @@ services:
       calls:
         - [ setAttribute, [!php/const PDO::ATTR_EMULATE_PREPARES, false]]
         - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
-        - [ setAttribute, [!php/const PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "utf8"']]
+        - [ setAttribute, [!php/const PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "utf8mb4"']]
 
     InfluxDB\Database:
         factory: ['InfluxDB\Client', 'fromdsn']
