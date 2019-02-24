@@ -4,17 +4,14 @@ namespace Foodsharing\Services;
 
 use Carbon\Carbon;
 use Foodsharing\Modules\Store\StoreGateway;
-use Psr\Log\LoggerInterface;
 
 class StoreService
 {
 	private $storeGateway;
-	private $log;
 
-	public function __construct(StoreGateway $storeGateway, LoggerInterface $log)
+	public function __construct(StoreGateway $storeGateway)
 	{
 		$this->storeGateway = $storeGateway;
-		$this->log = $log;
 	}
 
 	public function signupForPickup(int $fsId, int $storeId, \DateTime $pickupDate, bool $confirmed = false)
@@ -23,7 +20,7 @@ class StoreService
 			return false;
 		}
 
-		if (in_array(['foodsaver_id' => $fsId], $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate))) {
+		if (in_array(['foodsaver_id' => $fsId], $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate), true)) {
 			return false;
 		}
 
@@ -37,8 +34,8 @@ class StoreService
 
 	public function pickupSlotAvailable(int $storeId, \DateTime $pickupDate): bool
 	{
-		$signups = $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate);
-		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId, $pickupDate);
+		$signUps = $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate);
+		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId);
 		$additionalSlots = $this->storeGateway->getSinglePickupSlots($storeId, $pickupDate);
 		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
 
@@ -51,12 +48,14 @@ class StoreService
 		if ($pickupDate < Carbon::now()) {
 			/* do not allow signing up for past pickups */
 			return false;
-		} elseif ($pickupDate > Carbon::now()->add($intervalFuturePickupSignup)) {
-			/* do only allow signing up for very future pickups for single dates */
-			return ($numAdditionalSlots - count($signups)) > 0;
-		} else {
-			/* in between now and regular pickup interval: allow signing up for single and regular dates */
-			return ($numRegularSlots + $numAdditionalSlots - count($signups)) > 0;
 		}
+
+		if ($pickupDate > Carbon::now()->add($intervalFuturePickupSignup)) {
+			/* do only allow signing up for very future pickups for single dates */
+			return ($numAdditionalSlots - count($signUps)) > 0;
+		}
+
+		/* in between now and regular pickup interval: allow signing up for single and regular dates */
+		return ($numRegularSlots + $numAdditionalSlots - count($signUps)) > 0;
 	}
 }
