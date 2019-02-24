@@ -185,8 +185,8 @@ $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv.';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
 $g_lang['bezirk_request_successfull'] = 'Die Anfrage wurde erfolgreich versandt. Du wirst benachrichtigt sobald Du freigeschaltet wurdest.';
 $g_lang['position_search'] = 'Positionssuche';
-$g_lang['ort'] = 'Stadt/Gemeinde';
-$g_lang['plz_id'] = 'Postleitzahl';
+$g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
+$g_lang['plz_id'] = 'Postleitzahl (automatisch aus Karte oben!)';
 
 $g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
 $g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht</strong>';
