@@ -53,3 +53,30 @@ or even `sudo rm -rf cache`.
 
 The local website gives you database access so that you can directly view and modify what is written in the database. For the `localhost:18080` version this phpadmin can be found under `localhost:18084` while for the test containers (which are running after running `./scripts/tests` once) you find the database under `localhost:28084`.
 28084: phpadmin for tests
+
+## Logs
+
+The server (also the local one) writes logs about a lot that happens including errors. To view those logs, run
+```
+./scripts/docker-compose logs -f app
+```
+where you can also replace `app` by other components of the application that are listed during starting them with `./scripts/start`.
+
+`docker-compose` also respects the variable `FS_ENV` that can be set to `dev` or to `test` for running either the `localhost` (dev) containers or the testing containers.
+
+In order to print specific information in the logs, you can print them in your `php`-code.
+In order to do so, add a `LoggorInterface` in the constructor `__construct`:
+```
+use Psr/Log/LoggerInterface;
+...
+  private $logger;
+...
+  public function __construct(<other params>, LoggerInterface $logger) {
+...
+    $this->logger = $logger;
+  }
+...
+// somewhere in your tested, executed code:
+    $this->logger->error('some error text');
+// especially useful if put into an except clause that catches all errors and reraises them after printing some informative message
+```
