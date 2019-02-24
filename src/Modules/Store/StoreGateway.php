@@ -738,7 +738,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria(
 			'fs_abholer',
 			['foodsaver_id'],
-			['date' => $this->dateTimeToPickupDate($date)]
+			['date' => $this->dateTimeToPickupDate($date), 'betrieb_id' => $storeId]
 		);
 	}
 
