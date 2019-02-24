@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\CarbonInterval;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -766,6 +767,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				'fetcher' => $e['fetchercount']
 			];
 		}, $result);
+	}
+
+	public function getFutureRegularPickupInterval(int $storeId): CarbonInterval
+	{
+		$result = $this->db->fetchValueByCriteria('fs_betrieb', 'prefetchtime', ['id' => $storeId]);
+
+		return CarbonInterval::seconds($result);
 	}
 
 	private function dateTimeToPickupDate(\DateTime $date)

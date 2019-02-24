@@ -289,7 +289,11 @@ class Foodsharing extends \Codeception\Module\Db
 			$id = $this->haveInDatabase('fs_abholzeiten', $params);
 			$params['id'] = $id;
 		} catch (\Exception $e) {
-			return $this->addRecurringPickup($store, $extra_params);
+			if (!$extra_params) {
+				return $this->addRecurringPickup($store, $extra_params);
+			} else {
+				throw $e;
+			}
 		}
 
 		return $params;

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Services;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Store\StoreGateway;
 use Psr\Log\LoggerInterface;
 
@@ -39,6 +40,7 @@ class StoreService
 		$signups = $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate);
 		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId, $pickupDate);
 		$additionalSlots = $this->storeGateway->getSinglePickupSlots($storeId, $pickupDate);
+		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
 
 		$sum = function ($c, $e) {
 			return $c + $e['fetcher'];
@@ -46,6 +48,15 @@ class StoreService
 		$numRegularSlots = array_reduce($regularSlots, $sum, 0);
 		$numAdditionalSlots = array_reduce($additionalSlots, $sum, 0);
 
-		return ($numRegularSlots + $numAdditionalSlots - count($signups)) > 0;
+		if ($pickupDate < Carbon::now()) {
+			/* do not allow signing up for past pickups */
+			return false;
+		} elseif ($pickupDate > Carbon::now()->add($intervalFuturePickupSignup)) {
+			/* do only allow signing up for very future pickups for single dates */
+			return ($numAdditionalSlots - count($signups)) > 0;
+		} else {
+			/* in between now and regular pickup interval: allow signing up for single and regular dates */
+			return ($numRegularSlots + $numAdditionalSlots - count($signups)) > 0;
+		}
 	}
 }

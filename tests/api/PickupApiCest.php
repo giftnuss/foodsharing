@@ -2,6 +2,8 @@
 
 namespace Foodsharing\api;
 
+use Carbon\Carbon;
+
 class PickupApiCest
 {
 	private $user;
@@ -19,23 +21,28 @@ class PickupApiCest
 	public function acceptsDifferentIsoFormats(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
-		$I->addPickup($this->store['id'], ['time' => '2019-02-13 13:45:30', 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/2019-02-13T13:45:30+0000/signup');
+		$pickupBaseDate = Carbon::now()->add('2 days');
+		$pickupBaseDate->hours(13)->minutes(45)->seconds(0);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '+0000/signup');
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
-		$I->addPickup($this->store['id'], ['time' => '2019-02-13 13:46:30', 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/2019-02-13T13:46:30+01:00/signup');
+		$pickupBaseDate->minutes(50);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '+01:00/signup');
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
-		$I->addPickup($this->store['id'], ['time' => '2019-02-13 13:47:30', 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/2019-02-13T13:47:30-01:00/signup');
+		$pickupBaseDate->minutes(55);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '-01:00/signup');
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
-		$I->addPickup($this->store['id'], ['time' => '2019-02-13 13:48:30', 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/2019-02-13T13:48:30Z/signup');
+		$pickupBaseDate->minutes(35);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . 'Z/signup');
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
