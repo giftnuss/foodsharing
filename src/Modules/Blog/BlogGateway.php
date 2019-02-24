@@ -63,19 +63,6 @@ final class BlogGateway extends BaseGateway
 		return false;
 	}
 
-	public function canAdd(int $bezirkId): bool
-	{
-		if ($this->session->isOrgaTeam()) {
-			return true;
-		}
-
-		if ($this->session->isAdminFor($bezirkId)) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public function getPost(int $id): array
 	{
 		return $this->db->fetch('

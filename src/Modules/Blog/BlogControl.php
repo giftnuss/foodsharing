@@ -4,17 +4,20 @@ namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\BlogPermissions;
 
 class BlogControl extends Control
 {
 	private $blogGateway;
 	private $timeHelper;
+	private $blogPermissions;
 
-	public function __construct(BlogView $view, BlogGateway $blogGateway, TimeHelper $timeHelper)
+	public function __construct(BlogView $view, BlogGateway $blogGateway, BlogPermissions $blogPermissions, TimeHelper $timeHelper)
 	{
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
 		$this->timeHelper = $timeHelper;
+		$this->blogPermissions = $blogPermissions;
 
 		parent::__construct();
 		if ($id = $this->func->getActionId('delete')) {
@@ -141,7 +144,7 @@ class BlogControl extends Control
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->blogGateway->canAdd($g_data['bezirk_id']) && $this->blogGateway->add_blog_entry($g_data)) {
+			if ($this->blogPermissions->canAdd($g_data['bezirk_id']) && $this->blogGateway->add_blog_entry($g_data)) {
 				$this->func->info($this->func->s('blog_entry_add_success'));
 				$this->routeHelper->goPage();
 			} else {
