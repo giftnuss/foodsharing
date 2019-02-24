@@ -192,7 +192,7 @@ class WorkGroupControl extends Control
 					$data = $editWorkGroupRequest->toGroup();
 					$this->model->updateGroup($group['id'], $data);
 					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
-					$this->func->info('Änderungen gespeichert!');
+					$this->loggingHelper->info('Änderungen gespeichert!');
 					$this->routeHelper->goSelf();
 				}
 			}

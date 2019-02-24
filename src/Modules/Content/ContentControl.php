@@ -44,7 +44,7 @@ class ContentControl extends Control
 				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
-					$this->func->info($this->translationHelper->s('content_deleted'));
+					$this->loggingHelper->info($this->translationHelper->s('content_deleted'));
 					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -91,7 +91,7 @@ class ContentControl extends Control
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
-					$this->func->info($this->translationHelper->s('content_empty'));
+					$this->loggingHelper->info($this->translationHelper->s('content_empty'));
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -298,10 +298,10 @@ class ContentControl extends Control
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
-				$this->func->info($this->translationHelper->s('content_edit_success'));
+				$this->loggingHelper->info($this->translationHelper->s('content_edit_success'));
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -312,10 +312,10 @@ class ContentControl extends Control
 		if ($this->func->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
-				$this->func->info($this->translationHelper->s('content_add_success'));
+				$this->loggingHelper->info($this->translationHelper->s('content_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

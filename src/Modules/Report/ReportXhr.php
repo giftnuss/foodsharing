@@ -88,7 +88,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->func->info('Meldung wurde bestätigt!');
+			$this->loggingHelper->info('Meldung wurde bestätigt!');
 
 			return [
 				'status' => 1,
@@ -101,7 +101,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->func->info('Meldung wurde gelöscht!');
+			$this->loggingHelper->info('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,

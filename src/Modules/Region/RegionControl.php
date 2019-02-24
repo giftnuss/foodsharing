@@ -228,7 +228,7 @@ final class RegionControl extends Control
 				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $moderated);
 				$this->forumGateway->followThread($this->session->id(), $threadId);
 				if ($moderated) {
-					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
+					$this->loggingHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 				}
 				$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
 			}

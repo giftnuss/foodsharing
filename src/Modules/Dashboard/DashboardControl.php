@@ -204,7 +204,7 @@ class DashboardControl extends Control
 		if (empty($val['lat']) || empty($val['lon']) ||
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
 		) {
-			$this->func->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+			$this->loggingHelper->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 

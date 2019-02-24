@@ -48,7 +48,7 @@ class FAQAdminControl extends Control
 			)), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
-				$this->func->info($this->translationHelper->s('faq_deleted'));
+				$this->loggingHelper->info($this->translationHelper->s('faq_deleted'));
 				$this->routeHelper->goPage();
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -96,7 +96,7 @@ class FAQAdminControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
 				}
 			} else {
-				$this->func->info($this->translationHelper->s('faq_empty'));
+				$this->loggingHelper->info($this->translationHelper->s('faq_empty'));
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -112,10 +112,10 @@ class FAQAdminControl extends Control
 		if ($this->func->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
-				$this->func->info($this->translationHelper->s('faq_edit_success'));
+				$this->loggingHelper->info($this->translationHelper->s('faq_edit_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -127,10 +127,10 @@ class FAQAdminControl extends Control
 		if ($this->func->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
-				$this->func->info($this->translationHelper->s('faq_add_success'));
+				$this->loggingHelper->info($this->translationHelper->s('faq_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

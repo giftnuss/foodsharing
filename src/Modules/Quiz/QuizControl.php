@@ -102,7 +102,7 @@ class QuizControl extends Control
 
 				if (!empty($name)) {
 					if ($id = $this->model->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
-						$this->func->info('Quiz wurde erfolgreich geändert!');
+						$this->loggingHelper->info('Quiz wurde erfolgreich geändert!');
 						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 					}
 				}
@@ -126,7 +126,7 @@ class QuizControl extends Control
 
 			if (!empty($name)) {
 				if ($id = $this->model->addQuiz($name, $desc, $maxfp, $questcount)) {
-					$this->func->info('Quiz wurde erfolgreich angelegt!');
+					$this->loggingHelper->info('Quiz wurde erfolgreich angelegt!');
 					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 				}
 			}

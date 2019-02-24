@@ -99,7 +99,7 @@ class SettingsControl extends Control
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
-						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
+						$this->loggingHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 					$desc = $this->contentGateway->get(12);
@@ -211,12 +211,12 @@ class SettingsControl extends Control
 		} else {
 			switch ($this->foodsaver['rolle']) {
 				case 0:
-					$this->func->info('Du musst erst Foodsaver werden');
+					$this->loggingHelper->info('Du musst erst Foodsaver werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
 				case 1:
-					$this->func->info('Du musst erst BetriebsverantwortlicheR werden');
+					$this->loggingHelper->info('Du musst erst BetriebsverantwortlicheR werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
 
@@ -233,14 +233,14 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->translationHelper->s('not_rv_accepted'));
+					$this->loggingHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
 					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
-					$this->func->info('Danke! Du bist jetzt Foodsaver');
+					$this->loggingHelper->info('Danke! Du bist jetzt Foodsaver');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
@@ -256,10 +256,10 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->translationHelper->s('not_rv_accepted'));
+					$this->loggingHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->model->updateRole(2, $this->foodsaver['rolle']);
-					$this->func->info('Danke! Du bist jetzt Betriebsverantwortlicher');
+					$this->loggingHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
@@ -285,27 +285,27 @@ class SettingsControl extends Control
 				$check = true;
 				if (!isset($_POST['photo_public'])) {
 					$check = false;
-					$this->func->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
+					$this->loggingHelper->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
 				}
 
 				if (empty($_POST['about_me_public'])) {
 					$check = false;
-					$this->func->error('Deine Kurzbeschreibung ist leer');
+					$this->loggingHelper->error('Deine Kurzbeschreibung ist leer');
 				}
 
 				if (!isset($_POST['tel_public'])) {
 					$check = false;
-					$this->func->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
+					$this->loggingHelper->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
 					$check = false;
-					$this->func->error($this->translationHelper->s('not_rv_accepted'));
+					$this->loggingHelper->error($this->translationHelper->s('not_rv_accepted'));
 				}
 
 				if ((int)$_POST['bezirk'] == 0) {
 					$check = false;
-					$this->func->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
+					$this->loggingHelper->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
 				}
 
 				if ($check) {
@@ -457,7 +457,7 @@ class SettingsControl extends Control
 			}
 
 			if ($this->model->saveInfoSettings($nl, $infomail)) {
-				$this->func->info($this->translationHelper->s('changes_saved'));
+				$this->loggingHelper->info($this->translationHelper->s('changes_saved'));
 			}
 		}
 		$this->pageHelper->addBread($this->translationHelper->s('settings_info'));
@@ -484,7 +484,7 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
-					$this->func->error('Mit Deiner Homepage URL stimmt etwas nicht');
+					$this->loggingHelper->error('Mit Deiner Homepage URL stimmt etwas nicht');
 				}
 			}
 
@@ -495,7 +495,7 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['github'])) {
 					$check = false;
-					$this->func->error('Mit Deiner github URL stimmt etwas nicht');
+					$this->loggingHelper->error('Mit Deiner github URL stimmt etwas nicht');
 				}
 			}
 
@@ -506,7 +506,7 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['twitter'])) {
 					$check = false;
-					$this->func->error('Mit Deiner twitter URL stimmt etwas nicht');
+					$this->loggingHelper->error('Mit Deiner twitter URL stimmt etwas nicht');
 				}
 			}
 
@@ -525,9 +525,9 @@ class SettingsControl extends Control
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->session->refreshFromDatabase();
-					$this->func->info($this->translationHelper->s('foodsaver_edit_success'));
+					$this->loggingHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 				} else {
-					$this->func->error($this->translationHelper->s('error'));
+					$this->loggingHelper->error($this->translationHelper->s('error'));
 				}
 			}
 		}

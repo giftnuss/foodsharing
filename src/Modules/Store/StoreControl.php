@@ -80,14 +80,14 @@ class StoreControl extends Control
 					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
 				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} else {
-				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
+				$this->loggingHelper->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
 				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			/*
 			if($this->model->del_betrieb($id))
 			{
-				$this->func->info($this->translationHelper->s('betrieb_deleted'));
+				$this->loggingHelper->info($this->translationHelper->s('betrieb_deleted'));
 				$this->routeHelper->goPage();
 			}
 			*/
@@ -111,7 +111,7 @@ class StoreControl extends Control
 
 				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 			} else {
-				$this->func->info('Diesen Betrieb kannst Du nicht bearbeiten');
+				$this->loggingHelper->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -158,10 +158,10 @@ class StoreControl extends Control
 			$g_data['str'] = $g_data['anschrift'];
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				$this->func->info($this->translationHelper->s('betrieb_edit_success'));
+				$this->loggingHelper->info($this->translationHelper->s('betrieb_edit_success'));
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -176,7 +176,7 @@ class StoreControl extends Control
 				$g_data['bezirk_id'] = $this->session->getCurrentBezirkId();
 			}
 			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
-				$this->func->error($this->translationHelper->s('store.can_only_create_store_in_member_region'));
+				$this->loggingHelper->error($this->translationHelper->s('store.can_only_create_store_in_member_region'));
 				$this->routeHelper->goPage();
 			}
 
@@ -217,11 +217,11 @@ class StoreControl extends Control
 					'name' => $g_data['name']
 				), 'store-new-' . (int)$id);
 
-				$this->func->info($this->translationHelper->s('betrieb_add_success'));
+				$this->loggingHelper->info($this->translationHelper->s('betrieb_add_success'));
 
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

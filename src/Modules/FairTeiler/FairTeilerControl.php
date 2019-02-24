@@ -195,10 +195,10 @@ class FairTeilerControl extends Control
 		$this->pageHelper->addBread($this->translationHelper->s('edit'));
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleEditFt($request)) {
-				$this->func->info($this->translationHelper->s('fairteiler_edit_success'));
+				$this->loggingHelper->info($this->translationHelper->s('fairteiler_edit_success'));
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			} else {
-				$this->func->error($this->translationHelper->s('fairteiler_edit_fail'));
+				$this->loggingHelper->error($this->translationHelper->s('fairteiler_edit_fail'));
 			}
 		}
 
@@ -228,14 +228,14 @@ class FairTeilerControl extends Control
 	private function accept()
 	{
 		$this->gateway->acceptFairteiler($this->fairteiler['id']);
-		$this->func->info('Fair-Teiler ist jetzt aktiv');
+		$this->loggingHelper->info('Fair-Teiler ist jetzt aktiv');
 		$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 	}
 
 	private function delete()
 	{
 		if ($this->gateway->deleteFairteiler($this->fairteiler['id'])) {
-			$this->func->info($this->translationHelper->s('delete_success'));
+			$this->loggingHelper->info($this->translationHelper->s('delete_success'));
 			$this->routeHelper->go('/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
 	}
@@ -307,13 +307,13 @@ class FairTeilerControl extends Control
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleAddFt($request)) {
 				if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
-					$this->func->info($this->translationHelper->s('fairteiler_add_success'));
+					$this->loggingHelper->info($this->translationHelper->s('fairteiler_add_success'));
 				} else {
-					$this->func->info($this->translationHelper->s('fairteiler_prepare_success'));
+					$this->loggingHelper->info($this->translationHelper->s('fairteiler_prepare_success'));
 				}
 				$this->routeHelper->go('/?page=fairteiler&bid=' . (int)$this->bezirk_id);
 			} else {
-				$this->func->error($this->translationHelper->s('fairteiler_add_fail'));
+				$this->loggingHelper->error($this->translationHelper->s('fairteiler_add_fail'));
 			}
 		}
 

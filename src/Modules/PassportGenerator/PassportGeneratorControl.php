@@ -225,7 +225,7 @@ final class PassportGeneratorControl extends Control
 		}
 		if (!empty($noPhoto)) {
 			$last = array_pop($noPhoto);
-			$this->func->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+			$this->loggingHelper->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
 
 		$this->passportGeneratorGateway->updateLastGen($is_generated);

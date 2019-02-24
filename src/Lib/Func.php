@@ -22,22 +22,4 @@ final class Func
 	{
 		return isset($_POST) && !empty($_POST);
 	}
-
-	public function info($msg, $title = false)
-	{
-		$t = '';
-		if ($title !== false) {
-			$t = '<strong>' . $title . '</strong> ';
-		}
-		$_SESSION['msg']['info'][] = $msg;
-	}
-
-	public function error($msg, $title = false)
-	{
-		$t = '';
-		if ($title !== false) {
-			$t = '<strong>' . $title . '</strong> ';
-		}
-		$_SESSION['msg']['error'][] = $t . $msg;
-	}
 }

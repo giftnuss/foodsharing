@@ -195,7 +195,7 @@ class EmailControl extends Control
 						}
 					}
 
-					$this->func->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
+					$this->loggingHelper->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
 
 					$foodsaver = array();
 				} elseif ($data['recip_choose'] == 'filialbez') {
@@ -227,7 +227,7 @@ class EmailControl extends Control
 				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
 				$this->routeHelper->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
-				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
+				$this->loggingHelper->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}
 		}
 	}

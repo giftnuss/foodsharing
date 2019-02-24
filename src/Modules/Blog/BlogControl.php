@@ -27,10 +27,10 @@ class BlogControl extends Control
 		if ($id = $this->$identificationHelper->getActionId('delete')) {
 			if ($this->model->canEdit($id)) {
 				if ($this->model->del_blog_entry($id)) {
-					$this->func->info($this->translationHelper->s('blog_entry_deleted'));
+					$this->loggingHelper->info($this->translationHelper->s('blog_entry_deleted'));
 				}
 			} else {
-				$this->func->info('Diesen Artikel kannst Du nicht löschen');
+				$this->loggingHelper->info('Diesen Artikel kannst Du nicht löschen');
 			}
 			$this->routeHelper->goPage();
 		}
@@ -84,7 +84,7 @@ class BlogControl extends Control
 			if ($data = $this->model->listArticle()) {
 				$this->pageHelper->addContent($this->view->listArticle($data));
 			} else {
-				$this->func->info($this->translationHelper->s('blog_entry_empty'));
+				$this->loggingHelper->info($this->translationHelper->s('blog_entry_empty'));
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -135,7 +135,7 @@ class BlogControl extends Control
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
 			)), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
-			$this->func->info('Du darfst keine Artikel erstellen!');
+			$this->loggingHelper->info('Du darfst keine Artikel erstellen!');
 			$this->routeHelper->goPage();
 		}
 	}
@@ -149,10 +149,10 @@ class BlogControl extends Control
 			$g_data['time'] = date('Y-m-d H:i:s');
 
 			if ($this->model->canAdd((int)$this->session->id(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
-				$this->func->info($this->translationHelper->s('blog_entry_add_success'));
+				$this->loggingHelper->info($this->translationHelper->s('blog_entry_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -174,7 +174,7 @@ class BlogControl extends Control
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
 			)), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
-			$this->func->info('Diesen Artikel kannst Du nicht bearbeiten');
+			$this->loggingHelper->info('Diesen Artikel kannst Du nicht bearbeiten');
 			$this->routeHelper->goPage();
 		}
 	}
@@ -189,10 +189,10 @@ class BlogControl extends Control
 			$g_data['time'] = $data['time'];
 
 			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
-				$this->func->info($this->translationHelper->s('blog_entry_edit_success'));
+				$this->loggingHelper->info($this->translationHelper->s('blog_entry_edit_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->translationHelper->s('error'));
+				$this->loggingHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

@@ -20,7 +20,7 @@ class ApplicationXhr extends Control
 	{
 		if ($this->session->isAdminFor($_GET['bid']) || $this->session->isOrgaTeam()) {
 			$this->gateway->acceptApplication($_GET['bid'], $_GET['fid']);
-			$this->func->info('Bewerbung angenommen');
+			$this->loggingHelper->info('Bewerbung angenommen');
 
 			return array(
 					'status' => 1,
@@ -34,7 +34,7 @@ class ApplicationXhr extends Control
 		if ($this->session->isAdminFor($_GET['bid']) || $this->session->isOrgaTeam()) {
 			$this->gateway->denyApplication($_GET['bid'], $_GET['fid']);
 
-			$this->func->info('Bewerbung abgelehnt');
+			$this->loggingHelper->info('Bewerbung abgelehnt');
 
 			return array(
 				'status' => 1,
