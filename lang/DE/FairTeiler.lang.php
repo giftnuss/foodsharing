@@ -1,6 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['ort'] = 'Stadt/Gemeinde';
 $g_lang['new_fairteiler'] = 'Neuer Fair-Teiler';
 $g_lang['new_fairteiler_in'] = 'Neuer Fair-Teiler in {var}';
 $g_lang['list_fairteiler'] = 'Alle Fair-Teiler in {var}';

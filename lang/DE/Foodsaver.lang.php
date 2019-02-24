@@ -15,7 +15,6 @@ $g_lang['foodsavertyp_id'] = 'foodsavertyp';
 $g_lang['abholen_und_kuehlen_id'] = 'abholen_und_kuehlen';
 $g_lang['land_id'] = 'land';
 $g_lang['bezirk_id'] = 'bezirk';
-$g_lang['plz_id'] = 'Postleitzahl';
 $g_lang['passwd'] = 'Passwort';
 $g_lang['admin'] = 'admin';
 $g_lang['geb_datum'] = 'Geburtsdatum';
