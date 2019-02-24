@@ -292,15 +292,17 @@ class ProfileView extends View
 		}
 
 		$foodBasketCount = '
-				<span class="item stat_basketcount">
-					<span class="val">' . number_format($this->basketGateway->getFoodbasketCount($this->foodsaver['id']), 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
-					<span class="name">Essenskörbe</span>
-				</span>';
+				<a href="/essenskoerbe">
+				    <span class="item stat_basketcount">
+					    <span class="val">' . number_format($this->basketGateway->getFoodbasketCount($this->foodsaver['id']), 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					    <span class="name">Essenskörbe</span>
+				    </span>
+				</a>';
 
 		$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
-					<span class="name">Beiträge</span>
+					<span class="name">Beiträge</span> 
 				</span>';
 
 		$bananaCount = '';
