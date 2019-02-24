@@ -5,9 +5,18 @@ namespace Foodsharing\Modules\Settings;
 use DateTime;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsView extends View
 {
+	private $regionGateway;
+
+	public function __construct(RegionGateway $regionGateway)
+	{
+		$this->regionGateway = $regionGateway;
+		parent::__construct();
+	}
+
 	public function sleepMode($sleep)
 	{
 		$this->dataHelper->setEditData($sleep);
@@ -485,7 +494,7 @@ class SettingsView extends View
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
-			if ($b = $this->func->getBezirk($g_data['bezirk_id'])) {
+			if ($b = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId())) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
 			}

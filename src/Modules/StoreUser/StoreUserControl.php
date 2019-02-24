@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Services\SanitizerService;
@@ -17,6 +18,7 @@ class StoreUserControl extends Control
 	private $sanitizerService;
 	private $timeHelper;
 	private $dataHelper;
+	private $regionGateway;
 
 	public function __construct(
 		StoreModel $model,
@@ -25,7 +27,8 @@ class StoreUserControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		RegionGateway $regionGateway
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -34,6 +37,7 @@ class StoreUserControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
 		$this->dataHelper = $dataHelper;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -375,7 +379,7 @@ class StoreUserControl extends Control
 				array('href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new'))
 			), 'Aktionen'), CNT_RIGHT);
 
-			$bezirk = $this->func->getBezirk();
+			$bezirk = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
 			$betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId());
 			$this->pageHelper->addContent($this->view->u_betriebList($betriebe['verantwortlich'], $this->translationHelper->s('you_responsible'), true));
 			$this->pageHelper->addContent($this->view->u_betriebList($betriebe['team'], $this->translationHelper->s('you_fetcher'), false));

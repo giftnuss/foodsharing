@@ -7,6 +7,7 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizModel;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
 {
@@ -16,6 +17,7 @@ class SettingsControl extends Control
 	private $contentGateway;
 	private $foodsaverGateway;
 	private $dataHelper;
+	private $regionGateway;
 
 	public function __construct(
 		SettingsModel $model,
@@ -24,7 +26,8 @@ class SettingsControl extends Control
 		QuizModel $quizModel,
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		RegionGateway $regionGateway
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -33,6 +36,7 @@ class SettingsControl extends Control
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->dataHelper = $dataHelper;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
@@ -345,7 +349,7 @@ class SettingsControl extends Control
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getBezirk($this->session->getCurrentBezirkId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						$this->v_utils->v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
