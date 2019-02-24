@@ -487,7 +487,7 @@ class ProfileView extends View
 			$title = '<h3>' . $title . '</h3>';
 		}
 		$out = '
-	<div id="' . $this->func->id($title) . '" class="xv_set">
+	<div id="' . $this->identificationHelper->id($title) . '" class="xv_set">
 		' . $title;
 		foreach ($rows as $r) {
 			$out .= '

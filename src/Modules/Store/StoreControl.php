@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -13,6 +14,7 @@ class StoreControl extends Control
 	private $storeGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
+	private $identificationHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -20,7 +22,8 @@ class StoreControl extends Control
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -28,6 +31,7 @@ class StoreControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
@@ -55,7 +59,7 @@ class StoreControl extends Control
 		} else {
 			$bezirk = array('name' => 'kompletter Datenbank');
 		}
-		if ($this->func->getAction('new')) {
+		if ($this->identificationHelper->getAction('new')) {
 			if ($this->session->may('bieb')) {
 				$this->handle_add($this->session->id(), $bezirk_id);
 
@@ -75,7 +79,7 @@ class StoreControl extends Control
 				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
 				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
 			}
-		} elseif ($id = $this->func->getActionId('delete')) {
+		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			/*
 			if($this->model->del_betrieb($id))
 			{
@@ -83,7 +87,7 @@ class StoreControl extends Control
 				$this->routeHelper->goPage();
 			}
 			*/
-		} elseif ($id = $this->func->getActionId('edit')) {
+		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->pageHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
 			$this->pageHelper->addBread($this->func->s('bread_edit_betrieb'));
 			$data = $this->model->getOne_betrieb($id);

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -21,6 +22,7 @@ class EmailControl extends Control
 	private $emailGateway;
 	private $regionGateway;
 	private $sanitizerService;
+	private $identificationHelper;
 
 	public function __construct(
 		Db $model,
@@ -29,7 +31,8 @@ class EmailControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
@@ -38,6 +41,7 @@ class EmailControl extends Control
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
@@ -265,7 +269,7 @@ class EmailControl extends Control
 			AND 	e.email_id = ' . $mail['id'] . '
 		');
 
-		$id = $this->func->id('mailtosend');
+		$id = $this->identificationHelper->id('mailtosend');
 
 		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({

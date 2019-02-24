@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
@@ -13,6 +14,7 @@ class FoodsaverControl extends Control
 	private $settingsGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
+	private $identificationHelper;
 
 	public function __construct(
 		FoodsaverModel $model,
@@ -20,7 +22,8 @@ class FoodsaverControl extends Control
 		StoreModel $storeModel,
 		SettingsGateway $settingsGateway,
 		RegionGateway $regionGateway,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -28,6 +31,7 @@ class FoodsaverControl extends Control
 		$this->settingsGateway = $settingsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 	}
@@ -61,7 +65,7 @@ class FoodsaverControl extends Control
 					);
 				}
 			}
-		} elseif (($id = $this->func->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
+		} elseif (($id = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$bids = $this->regionGateway->getFsRegionIds($id);
 			if ($data && ($this->session->isOrgaTeam() || $this->session->isBotForA($bids, false, true))) {

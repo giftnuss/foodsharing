@@ -2,16 +2,19 @@
 
 namespace Foodsharing\Lib;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Twig_Extension;
 use Twig_Filter;
 
 class TwigExtensions extends Twig_Extension
 {
 	private $func;
+	private $identificationHelper;
 
-	public function __construct(Func $func)
+	public function __construct(Func $func, IdentificationHelper $identificationHelper)
 	{
 		$this->func = $func;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	public function getFilters()
@@ -40,7 +43,7 @@ class TwigExtensions extends Twig_Extension
 
 	public function idFilter($name)
 	{
-		return $this->func->id($name);
+		return $this->identificationHelper->id($name);
 	}
 
 	public function contentMainWidthFunction($hasLeft, $hasRight, $leftWidth, $rightWidth, $baseWidth = 24)

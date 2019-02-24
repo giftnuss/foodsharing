@@ -2,18 +2,25 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
 {
 	private $imageService;
+	private $identificationHelper;
 
-	public function __construct(QuizModel $model, QuizView $view, ImageService $imageService)
-	{
+	public function __construct(
+		QuizModel $model,
+		QuizView $view,
+		ImageService $imageService,
+		IdentificationHelper $identificationHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->imageService = $imageService;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
@@ -27,7 +34,7 @@ class QuizControl extends Control
 	public function index()
 	{
 		// quiz&a=delete&id=9
-		if ($id = $this->func->getActionId('delete')) {
+		if ($id = $this->identificationHelper->getActionId('delete')) {
 			$this->model->deleteSession($id);
 			$this->goBack();
 		}

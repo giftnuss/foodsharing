@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
@@ -50,6 +51,9 @@ $func = $container->get(Func::class);
 /* @var $pageHelper PageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
+/* @var $identificationHelper IdentificationHelper */
+$pageHelper = $container->get(IdentificationHelper::class);
+
 /* @var $viewUtils Utils */
 $viewUtils = $container->get(Utils::class);
 
@@ -59,8 +63,8 @@ $g_data = $func->getPostData();
 /* @var $db Db */
 $db = $container->get(Db::class);
 
-$pageHelper->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
-$pageHelper->addHidden('<div id="' . $func->id('fancy') . '"></div>');
+$pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
+$pageHelper->addHidden('<div id="' . $identificationHelper->id('fancy') . '"></div>');
 
 $pageHelper->addHidden('<div id="u-profile"></div>');
 $pageHelper->addHidden('<ul id="hidden-info"></ul>');

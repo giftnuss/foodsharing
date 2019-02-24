@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 
@@ -10,15 +11,20 @@ class BlogControl extends Control
 	private $blogGateway;
 	private $timeHelper;
 
-	public function __construct(BlogModel $model, BlogView $view, BlogGateway $blogGateway, TimeHelper $timeHelper)
-	{
+	public function __construct(
+		BlogModel $model,
+		BlogView $view,
+		BlogGateway $blogGateway,
+		TimeHelper $timeHelper,
+		IdentificationHelper $identificationHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
 		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
-		if ($id = $this->func->getActionId('delete')) {
+		if ($id = $this->$identificationHelper->getActionId('delete')) {
 			if ($this->model->canEdit($id)) {
 				if ($this->model->del_blog_entry($id)) {
 					$this->func->info($this->func->s('blog_entry_deleted'));

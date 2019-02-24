@@ -2,18 +2,25 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class FAQAdminControl extends Control
 {
 	private $faqGateway;
+	private $identificationHelper;
 
-	public function __construct(Db $model, FAQAdminView $view, FAQGateway $faqGateway)
-	{
+	public function __construct(
+		Db $model,
+		FAQAdminView $view,
+		FAQGateway $faqGateway,
+		IdentificationHelper $identificationHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
@@ -24,7 +31,7 @@ class FAQAdminControl extends Control
 
 	public function index()
 	{
-		if ($this->func->getAction('neu')) {
+		if ($this->identificationHelper->getAction('neu')) {
 			$this->handle_add();
 
 			$this->pageHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
@@ -35,12 +42,12 @@ class FAQAdminControl extends Control
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->routeHelper->pageLink('faq', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
-		} elseif ($id = $this->func->getActionId('delete')) {
+		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
 				$this->func->info($this->func->s('faq_deleted'));
 				$this->routeHelper->goPage();
 			}
-		} elseif ($id = $this->func->getActionId('edit')) {
+		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->handle_edit();
 			$this->pageHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
 			$this->pageHelper->addBread($this->func->s('bread_edit_faq'));

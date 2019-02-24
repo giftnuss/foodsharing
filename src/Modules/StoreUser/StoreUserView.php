@@ -70,7 +70,7 @@ class StoreUserView extends View
 
 	public function u_team($betrieb)
 	{
-		$id = $this->func->id('team');
+		$id = $this->identificationHelper->id('team');
 		$out = '<ul id="' . $id . '" class="team">';
 		$jssaver = array();
 		$sleeper = '';
@@ -395,7 +395,7 @@ class StoreUserView extends View
 			$ago = true;
 		}
 
-		$id = 'fetch-' . $this->func->id($date);
+		$id = 'fetch-' . $this->identificationHelper->id($date);
 		$out = '<input type="hidden" id="' . $id . '-date" name="' . $id . '-date" value="' . $date . '" />';
 
 		$bindabei = false;

@@ -34,6 +34,7 @@ final class PageHelper
 	private $translationHelper;
 	public $jsData = [];
 	private $twig;
+	private $identificationHelper;
 
 	public function __construct(
 		Func $func,
@@ -42,7 +43,8 @@ final class PageHelper
 		ImageService $imageService,
 		Environment $twig,
 		RouteHelper $routeHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -64,6 +66,7 @@ final class PageHelper
 		$this->twig = $twig;
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -392,7 +395,7 @@ final class PageHelper
 		if (isset($option['width'])) {
 			$width = 'width:' . $option['width'] . ',';
 		}
-		$id = $this->func->id('dialog_' . $table);
+		$id = $this->identificationHelper->id('dialog_' . $table);
 
 		$form = '';
 		foreach ($fields as $f) {

@@ -5,6 +5,7 @@ namespace Foodsharing\Lib\Xhr;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -51,6 +52,7 @@ class XhrMethods
 	private $sanitizerService;
 	private $emailHelper;
 	private $imageService;
+	private $identificationHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -78,7 +80,8 @@ class XhrMethods
 		ImageManager $imageManager,
 		SanitizerService $sanitizerService,
 		EmailHelper $emailHelper,
-		ImageService $imageService
+		ImageService $imageService,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -101,6 +104,7 @@ class XhrMethods
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
 		$this->imageService = $imageService;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	public function xhr_verify($data)
@@ -1162,7 +1166,7 @@ class XhrMethods
 
 		$out = array();
 		$out['status'] = 1;
-		$id = $this->func->id('botschafter');
+		$id = $this->identificationHelper->id('botschafter');
 
 		$inputs = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 		if (!empty($g_data['foodsaver'])) {

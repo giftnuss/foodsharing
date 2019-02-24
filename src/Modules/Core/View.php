@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TimeHelper;
@@ -29,6 +30,7 @@ class View
 	public $twig;
 	protected $imageService;
 	protected $routeHelper;
+	protected $identificationHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -39,7 +41,8 @@ class View
 		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -50,6 +53,7 @@ class View
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
 		$this->routeHelper = $routeHelper;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	public function setSub($sub)
@@ -158,7 +162,7 @@ class View
 			$option['scroller'] = true;
 		}
 
-		$id = $this->func->id('team');
+		$id = $this->identificationHelper->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
 		}
@@ -221,7 +225,7 @@ class View
 			$active = $option['active'];
 		}
 
-		$id = $this->func->id('vmenu');
+		$id = $this->identificationHelper->id('vmenu');
 
 		$out = '';
 

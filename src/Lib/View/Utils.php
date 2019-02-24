@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Func;
@@ -28,16 +29,19 @@ class Utils
 	private $sanitizerService;
 	private $pageHelper;
 	private $routeHelper;
+	private $identificationHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
 		PageHelper $pageHelper,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
 		$this->pageHelper = $pageHelper;
 		$this->routeHelper = $routeHelper;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	/**
@@ -75,7 +79,7 @@ class Utils
 			return $content;
 		}
 
-		$id = $this->func->id('scroller');
+		$id = $this->identificationHelper->id('scroller');
 		$this->pageHelper->addJs('$("#' . $id . '").slimScroll();');
 
 		return '
@@ -86,7 +90,7 @@ class Utils
 
 	public function v_activeSwitcher($table, $field_id, $active)
 	{
-		$id = $this->func->id('activeSwitch');
+		$id = $this->identificationHelper->id('activeSwitch');
 
 		$this->pageHelper->addJs('
 			$("#' . $id . ' input").switchButton({
@@ -137,7 +141,7 @@ class Utils
 				'name' => $this->func->s('no_bezirk_choosen')
 			);
 		}
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		$this->pageHelper->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
@@ -260,7 +264,7 @@ class Utils
 			$v = explode(':', $value);
 			$value = array('hour' => $v[0], 'min' => $v[1]);
 		}
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$hours = range(0, 23);
 		$mins = array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55);
 
@@ -291,7 +295,7 @@ class Utils
 
 	public function v_dialog_button($id, $label)
 	{
-		$new_id = $this->func->id($id);
+		$new_id = $this->identificationHelper->id($id);
 
 		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
 
@@ -300,7 +304,7 @@ class Utils
 
 	public function v_form_tinymce($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$label = $this->func->s($id);
 		$value = $this->func->getValue($id);
 
@@ -347,7 +351,7 @@ class Utils
 
 	public function v_form_hidden($name, $value)
 	{
-		$id = $this->func->id($name);
+		$id = $this->identificationHelper->id($name);
 
 		return '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $value . '" />';
 	}
@@ -453,7 +457,7 @@ class Utils
 		if (!$fsid) {
 			$fsid = (int)$this->session->id();
 		}
-		$id = $this->func->id('fotoupload');
+		$id = $this->identificationHelper->id('fotoupload');
 
 		$original = explode('_', $src);
 		$original = end($original);
@@ -570,9 +574,9 @@ class Utils
 	{
 		$js = '';
 		if (isset($option['id'])) {
-			$id = $this->func->makeId($option['id']);
+			$id = $this->identificationHelper->makeId($option['id']);
 		} else {
-			$id = $this->func->makeId($name, $this->id);
+			$id = $this->identificationHelper->makeId($name, $this->id);
 		}
 
 		if (isset($option['dialog'])) {
@@ -645,7 +649,7 @@ class Utils
 
 	public function v_menu($items, $title = false, $option = array())
 	{
-		$id = $this->func->id('vmenu');
+		$id = $this->identificationHelper->id('vmenu');
 
 		//$this->pageHelper->addJs('$("#'.$id.'").menu();');
 		$out = '
@@ -781,7 +785,7 @@ class Utils
 
 	public function v_form_textarea($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		if (isset($option['value'])) {
 			$value = $option['value'];
 		} else {
@@ -827,7 +831,7 @@ class Utils
 	 */
 	public function v_form_checkbox($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		if (isset($option['checked'])) {
 			$value = $option['checked'];
@@ -921,7 +925,7 @@ class Utils
 
 	public function v_form_picture($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
@@ -997,7 +1001,7 @@ class Utils
 
 	public function v_form_file($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		$val = $this->func->getValue($id);
 		if (!empty($val)) {
@@ -1021,7 +1025,7 @@ class Utils
 
 	public function v_form_radio($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$label = $this->func->s($id);
 
 		$check = $this->jsValidate($option, $id, $label);
@@ -1074,7 +1078,7 @@ class Utils
 
 	public function v_form_select($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		/* isset instead of array_key_exists does not matter here */
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
@@ -1161,7 +1165,7 @@ class Utils
 		}
 
 		if ($id === false) {
-			$id = $this->func->id('input');
+			$id = $this->identificationHelper->id('input');
 		}
 		$class = '';
 		$star = '';
@@ -1223,7 +1227,7 @@ class Utils
 	public function v_form_daterange($id = 'daterange', $option = array())
 	{
 		$label = $this->func->s($id);
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		if (!isset($option['options'])) {
 			$option['options'] = array('from' => array(), 'to' => array());
@@ -1264,7 +1268,7 @@ class Utils
 
 	public function v_form_date($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$label = $this->func->s($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
@@ -1290,7 +1294,7 @@ class Utils
 
 	public function v_form_text($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$label = $this->func->s($id);
 
 		if (isset($option['value'])) {
@@ -1356,7 +1360,7 @@ class Utils
 
 	public function v_form_passwd($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		$pl = '';
 		if (isset($option['placeholder'])) {

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\FairTeiler;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -22,6 +23,7 @@ class FairTeilerControl extends Control
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $sanitizerService;
+	private $identificationHelper;
 
 	public function __construct(
 		FairTeilerView $view,
@@ -29,7 +31,8 @@ class FairTeilerControl extends Control
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
 		Db $model,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
@@ -37,6 +40,7 @@ class FairTeilerControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->model = $model;
 		$this->sanitizerService = $sanitizerService;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 	}
@@ -86,7 +90,7 @@ class FairTeilerControl extends Control
 				if ((int)$bezirk['mailbox_id'] > 0) {
 					$this->bezirk['urlname'] = $this->model->getVal('name', 'mailbox', $bezirk['mailbox_id']);
 				} else {
-					$this->bezirk['urlname'] = $this->func->id($this->bezirk['name']);
+					$this->bezirk['urlname'] = $this->identificationHelper->id($this->bezirk['name']);
 				}
 			}
 		} else {
@@ -111,7 +115,7 @@ class FairTeilerControl extends Control
 			$this->view->setFairteiler($this->fairteiler, $this->follower);
 
 			$this->fairteiler['urlname'] = str_replace(' ', '_', $this->fairteiler['name']);
-			$this->fairteiler['urlname'] = $this->func->id($this->fairteiler['urlname']);
+			$this->fairteiler['urlname'] = $this->identificationHelper->id($this->fairteiler['urlname']);
 			$this->fairteiler['urlname'] = str_replace('_', '-', $this->fairteiler['urlname']);
 
 			$this->pageHelper->addHidden('

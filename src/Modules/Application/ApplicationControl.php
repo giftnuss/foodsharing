@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Application;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -12,7 +13,7 @@ class ApplicationControl extends Control
 	private $mode;
 	private $gateway;
 
-	public function __construct(ApplicationGateway $gateway, ApplicationView $view)
+	public function __construct(ApplicationGateway $gateway, ApplicationView $view, IdentificationHelper $identificationHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
@@ -20,7 +21,7 @@ class ApplicationControl extends Control
 		parent::__construct();
 
 		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
+		if (($this->bezirk_id = $this->$identificationHelper->getGetId('bid')) === false) {
 			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 

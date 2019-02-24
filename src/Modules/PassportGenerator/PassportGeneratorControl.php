@@ -2,11 +2,12 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
+use Endroid\QrCode\QrCode;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Endroid\QrCode\QrCode;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 final class PassportGeneratorControl extends Control
@@ -23,7 +24,8 @@ final class PassportGeneratorControl extends Control
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
 		PassportGeneratorGateway $passportGateway,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
@@ -34,7 +36,7 @@ final class PassportGeneratorControl extends Control
 		parent::__construct();
 
 		$this->regionId = false;
-		if (($this->regionId = $this->func->getGetId('bid')) === false) {
+		if (($this->regionId = $this->$identificationHelper->getGetId('bid')) === false) {
 			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 
