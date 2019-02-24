@@ -17,6 +17,10 @@ async function unsubscribeFromPushNotifications () {
   return removePushSubscriptionFromServer(subscription)
 }
 
+async function askForPermission () {
+  // TODO
+}
+
 function sendPushSubscriptionToServer (subscription) {
   const key = subscription.getKey('p256dh')
   const token = subscription.getKey('auth')
