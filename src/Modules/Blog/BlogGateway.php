@@ -52,7 +52,7 @@ final class BlogGateway extends BaseGateway
 		);
 	}
 
-	public function canEdit(int $article_id): bool
+	public function getAuthorOfPost(int $article_id)
 	{
 		$val = false;
 		try {
@@ -60,13 +60,8 @@ final class BlogGateway extends BaseGateway
 		} catch (\Exception $e) {
 			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
-		if ($val) {
-			if ($this->session->id() == $val['foodsaver_id'] || $this->session->isAdminFor($val['bezirk_id'])) {
-				return true;
-			}
-		}
 
-		return false;
+		return $val;
 	}
 
 	public function getPost(int $id): array
@@ -127,7 +122,7 @@ final class BlogGateway extends BaseGateway
 	{
 		$not = '';
 		if (!$this->session->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', $this->session->listRegionIDs()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . array_map('intval', $this->session->listRegionIDs()) . ')';
 		}
 
 		return $this->db->fetchAll('

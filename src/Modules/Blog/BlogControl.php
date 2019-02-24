@@ -21,7 +21,7 @@ class BlogControl extends Control
 
 		parent::__construct();
 		if ($id = $this->func->getActionId('delete')) {
-			if ($this->blogGateway->canEdit($id)) {
+			if ($this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($id))) {
 				if ($this->blogGateway->del_blog_entry($id)) {
 					$this->func->info($this->func->s('blog_entry_deleted'));
 				}
@@ -144,7 +144,7 @@ class BlogControl extends Control
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->blogPermissions->canAdd($g_data['bezirk_id']) && $this->blogGateway->add_blog_entry($g_data)) {
+			if ($this->blogPermissions->mayAdd($g_data['bezirk_id']) && $this->blogGateway->add_blog_entry($g_data)) {
 				$this->func->info($this->func->s('blog_entry_add_success'));
 				$this->routeHelper->goPage();
 			} else {
@@ -155,7 +155,7 @@ class BlogControl extends Control
 
 	public function edit()
 	{
-		if ($this->session->mayEditBlog() && $this->blogGateway->canEdit($_GET['id']) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
+		if ($this->session->mayEditBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
 			$this->pageHelper->addBread($this->func->s('bread_blog_entry'), '/?page=blog&sub=manage');
