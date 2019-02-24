@@ -61,7 +61,7 @@ class StoreUserView extends View
 				$content = $betrieb[$contentType];
 			}
 
-			$out = '<div class="innerRow"><span class="label">' . $this->func->s($contentType) . '</span>
+			$out = '<div class="innerRow"><span class="label">' . $this->translationHelper->s($contentType) . '</span>
 			<span class="cnt">' . $content . '</span></div><div style="clear:both"></div>';
 		}
 
@@ -102,11 +102,11 @@ class StoreUserView extends View
 			}
 
 			if ((int)$fs['last_fetch'] > 0) {
-				$last = $this->func->sv('stat_fetchcount', array(
+				$last = $this->translationHelper->sv('stat_fetchcount', array(
 					'date' => date('d.m.Y', $fs['last_fetch'])
 				));
 			} else {
-				$last = $this->func->sv('stat_fetchcount_none', array());
+				$last = $this->translationHelper->sv('stat_fetchcount_none', array());
 			}
 
 			//date at which user was added
@@ -114,8 +114,8 @@ class StoreUserView extends View
 			if ($betrieb['verantwortlich']) {
 				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
 						? date('d.m.Y', $fs['add_date'])
-						: '(' . $this->func->s('stat_since_unknown') . ')';
-				$memberSince = $this->func->sv('stat_teammember_since', array(
+						: '(' . $this->translationHelper->s('stat_since_unknown') . ')';
+				$memberSince = $this->translationHelper->sv('stat_teammember_since', array(
 					'date' => $addedAt
 				));
 			}
@@ -171,8 +171,8 @@ class StoreUserView extends View
 				//date at which jumper was added
 				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
 						? date('d.m.Y', $fs['add_date'])
-						: '(' . $this->func->s('stat_since_unknown') . ')';
-				$jumperSince = $this->func->sv('stat_jumper_since', array(
+						: '(' . $this->translationHelper->s('stat_since_unknown') . ')';
+				$jumperSince = $this->translationHelper->sv('stat_jumper_since', array(
 					'date' => $addedAt
 				));
 
@@ -430,7 +430,7 @@ class StoreUserView extends View
 
 				if ($fs['confirmed'] == 0) {
 					$class .= ' unconfirmed';
-					$fs['name'] = $this->func->sv('not_confirmed', array('name' => $fs['name']));
+					$fs['name'] = $this->translationHelper->sv('not_confirmed', array('name' => $fs['name']));
 				}
 				$out .= '
 			<li class="filled ' . $class . '">
@@ -445,8 +445,8 @@ class StoreUserView extends View
 				if (!$bindabei) {
 					$out .= '
 				<li class="filled empty timedialog-add-me">
-					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="/img/nobody.gif" alt="nobody" /></a>
-					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
+					<a href="#" onclick="return false;" title="' . $this->translationHelper->s('add_me_here') . '"><img src="/img/nobody.gif" alt="nobody" /></a>
+					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->format_db_date($date) . '::' . $this->translationHelper->s('dow' . date('w', strtotime($date))) . '" />
 					<input type="hidden" name="' . $id . '-dateid" class="dayid" value="' . $id . '" />
 				</li>';
 				} else {
@@ -473,14 +473,14 @@ class StoreUserView extends View
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 
-		return $this->v_utils->v_input_wrapper($this->func->s($id), $out . $dellink, $id, $option);
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), $out . $dellink, $id, $option);
 	}
 
 	public function format_db_date($date): string
 	{
 		$part = explode('-', $date);
 
-		return (int)$part[2] . '. ' . $this->func->s('month_' . (int)$part[1]);
+		return (int)$part[2] . '. ' . $this->translationHelper->s('month_' . (int)$part[1]);
 	}
 
 	public function u_form_abhol_table($zeiten = false, $option = array())
@@ -490,14 +490,14 @@ class StoreUserView extends View
 			
 			<thead>
 				<tr>
-					<th class="ui-padding">' . $this->func->s('day') . '</th>
-					<th class="ui-padding">' . $this->func->s('time') . '</th>
-					<th class="ui-padding">' . $this->func->s('fetcher_count') . '</th>
+					<th class="ui-padding">' . $this->translationHelper->s('day') . '</th>
+					<th class="ui-padding">' . $this->translationHelper->s('time') . '</th>
+					<th class="ui-padding">' . $this->translationHelper->s('fetcher_count') . '</th>
 				</tr>
 			</thead>
 			<tfoot>
 			    <tr>
-					<td colspan="3"><span id="nft-add">' . $this->func->s('add') . '</span></td>
+					<td colspan="3"><span id="nft-add">' . $this->translationHelper->s('add') . '</span></td>
 				</tr>
 			</tfoot>
 			<tbody>';
@@ -518,7 +518,7 @@ class StoreUserView extends View
 					if ($d == $z['dow']) {
 						$sel = ' selected="selected"';
 					}
-					$day .= '<option' . $sel . ' value="' . $d . '">' . $this->func->s('dow' . $d) . '</option>';
+					$day .= '<option' . $sel . ' value="' . $d . '">' . $this->translationHelper->s('dow' . $d) . '</option>';
 				}
 
 				$time = explode(':', $z['time']);
@@ -542,13 +542,13 @@ class StoreUserView extends View
 			<tr>
 			    <td class="ui-padding">
 					<select class="nft-row" style="width:100px;" name="newfetchtime[]" id="nft-dow">
-						<option value="0">' . $this->func->s('dow0') . '</option>	
-						<option value="1">' . $this->func->s('dow1') . '</option>	
-						<option value="2">' . $this->func->s('dow2') . '</option>	
-						<option value="3">' . $this->func->s('dow3') . '</option>	
-						<option value="4">' . $this->func->s('dow4') . '</option>	
-						<option value="5">' . $this->func->s('dow5') . '</option>	
-						<option value="6">' . $this->func->s('dow6') . '</option>		
+						<option value="0">' . $this->translationHelper->s('dow0') . '</option>	
+						<option value="1">' . $this->translationHelper->s('dow1') . '</option>	
+						<option value="2">' . $this->translationHelper->s('dow2') . '</option>	
+						<option value="3">' . $this->translationHelper->s('dow3') . '</option>	
+						<option value="4">' . $this->translationHelper->s('dow4') . '</option>	
+						<option value="5">' . $this->translationHelper->s('dow5') . '</option>	
+						<option value="6">' . $this->translationHelper->s('dow6') . '</option>		
 					</select>
 				  </td>
 			      <td class="ui-padding"><select class="nfttime-hour" name="nfttime[hour][]"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20" selected="selected">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select><select class="nfttime-min" name="nfttime[min][]"><option value="0" selected="selected">00</option><option value="5">05</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option></select> Uhr</td>

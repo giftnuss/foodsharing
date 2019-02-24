@@ -160,7 +160,7 @@ class QuizControl extends Control
 
 	private function getRolle($gender_id, $rolle_id)
 	{
-		return $this->func->s('rolle_' . $rolle_id . '_' . $gender_id);
+		return $this->translationHelper->s('rolle_' . $rolle_id . '_' . $gender_id);
 	}
 
 	public function sessions()

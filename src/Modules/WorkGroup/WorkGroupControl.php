@@ -161,7 +161,7 @@ class WorkGroupControl extends Control
 			$groups
 		);
 
-		$this->pageHelper->addTitle($this->func->s('groups'));
+		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
 
 		$response->setContent(
 			$this->render(

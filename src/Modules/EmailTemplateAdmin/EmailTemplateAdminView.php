@@ -20,7 +20,7 @@ class EmailTemplateAdminView extends View
 				'E-Mail-Vorlage',
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true)), $this->func->s('message'))
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true)), $this->translationHelper->s('message'))
 		), array('submit' => 'Speichern'));
 	}
 }

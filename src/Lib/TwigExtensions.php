@@ -3,6 +3,7 @@
 namespace Foodsharing\Lib;
 
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Twig_Extension;
 use Twig_Filter;
 
@@ -10,11 +11,13 @@ class TwigExtensions extends Twig_Extension
 {
 	private $func;
 	private $identificationHelper;
+	private $translationHelper;
 
-	public function __construct(Func $func, IdentificationHelper $identificationHelper)
+	public function __construct(Func $func, IdentificationHelper $identificationHelper, TranslationHelper $translationHelper)
 	{
 		$this->func = $func;
 		$this->identificationHelper = $identificationHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function getFilters()
@@ -35,10 +38,10 @@ class TwigExtensions extends Twig_Extension
 	public function translateFilter($key, $data = null)
 	{
 		if ($data === null) {
-			return $this->func->s($key);
+			return $this->translationHelper->s($key);
 		}
 
-		return $this->func->sv($key, $data);
+		return $this->translationHelper->sv($key, $data);
 	}
 
 	public function idFilter($name)

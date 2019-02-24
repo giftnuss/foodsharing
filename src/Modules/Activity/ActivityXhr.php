@@ -208,22 +208,22 @@ class ActivityXhr extends Control
 
 			$xhr->addData('listings', [
 				0 => [
-					'name' => $this->func->s('groups'),
+					'name' => $this->translationHelper->s('groups'),
 					'index' => 'bezirk',
 					'items' => $listings['groups']
 				],
 				1 => [
-					'name' => $this->func->s('regions'),
+					'name' => $this->translationHelper->s('regions'),
 					'index' => 'bezirk',
 					'items' => $listings['regions']
 				],
 				2 => [
-					'name' => $this->func->s('mailboxes'),
+					'name' => $this->translationHelper->s('mailboxes'),
 					'index' => 'mailbox',
 					'items' => $listings['mailboxes']
 				],
 				3 => [
-					'name' => $this->func->s('buddywalls'),
+					'name' => $this->translationHelper->s('buddywalls'),
 					'index' => 'buddywall',
 					'items' => $listings['buddywalls']
 				],

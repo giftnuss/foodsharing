@@ -7,6 +7,7 @@ use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
@@ -31,6 +32,7 @@ class Session
 	private $db;
 	private $initialized = false;
 	private $routeHelper;
+	private $translationHelper;
 
 	public function __construct(
 		Func $func,
@@ -42,7 +44,8 @@ class Session
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
 		Db $db,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -54,6 +57,7 @@ class Session
 		$this->storeGateway = $storeGateway;
 		$this->db = $db;
 		$this->routeHelper = $routeHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -259,7 +263,7 @@ class Session
 		}
 
 		if (!$title) {
-			$title = ' ' . $this->func->s($type);
+			$title = ' ' . $this->translationHelper->s($type);
 		} else {
 			$title = ' ';
 		}

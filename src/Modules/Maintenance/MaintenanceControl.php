@@ -179,7 +179,7 @@ class MaintenanceControl extends ConsoleControl
 				$inactive_fsids[$fs['id']] = $fs['id'];
 				$this->emailHelper->tplMail(27, $fs['email'], array(
 					'name' => $fs['name'],
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
 
 				$this->infoToBotsUserDeactivated($fs);
@@ -196,7 +196,7 @@ class MaintenanceControl extends ConsoleControl
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail(26, $fs['email'], array(
 					'name' => $fs['name'],
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
 			}
 
@@ -460,7 +460,7 @@ class MaintenanceControl extends ConsoleControl
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail(28, $fs['fs_email'], array(
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
 					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']

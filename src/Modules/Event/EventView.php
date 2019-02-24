@@ -30,7 +30,7 @@ class EventView extends View
 			$g_data['dateend'] = $g_data['end'];
 		}
 
-		$title = $this->func->s('new_event');
+		$title = $this->translationHelper->s('new_event');
 		$this->pageHelper->addStyle('
 			label.addend{
 				display:inline-block;
@@ -175,14 +175,14 @@ class EventView extends View
 			$this->v_utils->v_form_date('dateend', array('required' => true)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_textarea('description', array('desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
 			$this->v_utils->v_form_select('online_type', array('values' => array(
-				array('id' => 1, 'name' => $this->func->s('offline')),
-				array('id' => 0, 'name' => $this->func->s('online'))
+				array('id' => 1, 'name' => $this->translationHelper->s('offline')),
+				array('id' => 0, 'name' => $this->translationHelper->s('online'))
 			))),
 			$this->v_utils->v_form_text('location_name', array('required' => true)),
 			$this->latLonPicker('latLng', $latLonOptions)
-		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
+		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
 	public function statusMenu($event, $user_status)
@@ -235,22 +235,22 @@ class EventView extends View
 			);
 		}
 
-		return $this->v_utils->v_field($this->menu($menu), $this->func->s('event_options'), [], 'fas fa-cog');
+		return $this->v_utils->v_field($this->menu($menu), $this->translationHelper->s('event_options'), [], 'fas fa-cog');
 	}
 
 	public function eventTop($event)
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
+			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
 		} else {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
+			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
 		$out = '
 		<div class="event welcome ui-padding margin-bottom ui-corner-all">
 			<div class="welcome_profile_image">
 				<span class="calendar">
-					<span class="month">' . $this->func->s('month_' . (int)date('m', $event['start_ts'])) . '</span>
+					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $event['start_ts'])) . '</span>
 					<span class="day">' . date('d', $event['start_ts']) . '</span>
 				</span>
 				<div class="clear"></div>

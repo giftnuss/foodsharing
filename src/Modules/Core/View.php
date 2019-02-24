@@ -7,6 +7,7 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -33,6 +34,7 @@ class View
 	protected $routeHelper;
 	protected $identificationHelper;
 	protected $dataHelper;
+	protected $translationHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -45,7 +47,8 @@ class View
 		ImageService $imageService,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -58,6 +61,7 @@ class View
 		$this->routeHelper = $routeHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function setSub($sub)
@@ -342,7 +346,7 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return $this->v_utils->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
@@ -367,7 +371,7 @@ class View
 			}
 		}
 
-		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), '
 		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .

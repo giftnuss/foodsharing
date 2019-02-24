@@ -88,10 +88,10 @@ class LoginControl extends Control
 	public function activate()
 	{
 		if ($this->model->activate($_GET['e'], $_GET['t'])) {
-			$this->func->info($this->func->s('activation_success'));
+			$this->func->info($this->translationHelper->s('activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {
-			$this->func->error($this->func->s('activation_failed'));
+			$this->func->error($this->translationHelper->s('activation_failed'));
 			$this->routeHelper->goPage('login');
 		}
 	}

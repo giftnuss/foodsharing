@@ -320,7 +320,7 @@ class StoreXhr extends Control
 						});		
 					');
 					$dia->addContent($cnt);
-					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->func->s('save') . '</a>'));
+					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translationHelper->s('save') . '</a>'));
 
 					return $dia->xhrout();
 				}
@@ -332,12 +332,12 @@ class StoreXhr extends Control
 	{
 		$xhr = new Xhr();
 		if ($this->storeGateway->isResponsible($this->session->id(), $_GET['id'])) {
-			$xhr->addMessage($this->func->s('signout_error_admin'), 'error');
+			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
 		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
 			$this->model->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
-			$xhr->addMessage($this->func->s('no_member'), 'error');
+			$xhr->addMessage($this->translationHelper->s('no_member'), 'error');
 		}
 		$xhr->send();
 	}

@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
@@ -33,13 +34,15 @@ class Utils
 	private $routeHelper;
 	private $identificationHelper;
 	private $dataHelper;
+	private $translationHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
@@ -47,6 +50,7 @@ class Utils
 		$this->routeHelper = $routeHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	/**
@@ -100,8 +104,8 @@ class Utils
 		$this->pageHelper->addJs('
 			$("#' . $id . ' input").switchButton({
 				labels_placement: "right",
-				on_label: "' . $this->func->s('on_label') . '",
-				off_label: "' . $this->func->s('off_label') . '",
+				on_label: "' . $this->translationHelper->s('on_label') . '",
+				off_label: "' . $this->translationHelper->s('off_label') . '",
 				on_callback: function(){
 					showLoader();
 					$.ajax({
@@ -143,7 +147,7 @@ class Utils
 		if (!$bezirk) {
 			$bezirk = array(
 				'id' => 0,
-				'name' => $this->func->s('no_bezirk_choosen')
+				'name' => $this->translationHelper->s('no_bezirk_choosen')
 			);
 		}
 		$id = $this->identificationHelper->id($id);
@@ -212,7 +216,7 @@ class Utils
 			});');
 		$this->pageHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-		$label = $this->func->s('Stammbezirk');
+		$label = $this->translationHelper->s('Stammbezirk');
 		if (isset($option['label'])) {
 			$label = $option['label'];
 		}
@@ -310,7 +314,7 @@ class Utils
 	public function v_form_tinymce($id, $option = array())
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 		$value = $this->dataHelper->getValue($id);
 
 		$this->pageHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
@@ -365,7 +369,7 @@ class Utils
 	{
 		$id = 'recip_choose';
 
-		return $this->v_input_wrapper($this->func->s('recip_chooser'), '
+		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
 				<option value="botschafter">Alle Botschafter bundesweit</option>
 				<option value="orgateam">Orgateam bundesweit</option>
@@ -377,7 +381,7 @@ class Utils
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
-				<option value="all">' . $this->func->s('recip_all') . '</option>
+				<option value="all">' . $this->translationHelper->s('recip_all') . '</option>
 				<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
 				<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
 
@@ -387,7 +391,7 @@ class Utils
 				<option value="storemanagers_and_ambs">Alle Betriebsverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>
+				<option value="choose">' . $this->translationHelper->s('recip_choose_bezirk') . '</option>
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
 			<div id="' . $id . '-hidden" style="display:none">
@@ -454,7 +458,7 @@ class Utils
 				}
 			});');
 
-		return $this->v_input_wrapper($this->func->s('recip_chooser'), $out);
+		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), $out);
 	}
 
 	public function v_photo_edit($src, $fsid = false)
@@ -562,9 +566,9 @@ class Utils
 
 		$this->pageHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
-		$menu = array(array('name' => $this->func->s('edit_photo'), 'href' => '#edit'));
+		$menu = array(array('name' => $this->translationHelper->s('edit_photo'), 'href' => '#edit'));
 		if ($_GET['page'] == 'settings') {
-			$menu[] = array('name' => $this->func->s('upload_new_photo'), 'href' => '#new');
+			$menu[] = array('name' => $this->translationHelper->s('upload_new_photo'), 'href' => '#new');
 		}
 
 		return '
@@ -799,7 +803,7 @@ class Utils
 
 		$value = htmlspecialchars($value);
 
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		$style = '';
 		if (isset($option['style'])) {
@@ -843,7 +847,7 @@ class Utils
 		} else {
 			$value = $this->dataHelper->getValue($id);
 		}
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -925,7 +929,7 @@ class Utils
 			}
 		}
 
-		return $this->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function v_form_picture($id, $option = array())
@@ -966,7 +970,7 @@ class Utils
 		$this->pageHelper->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
-				<h3>' . $this->func->s($id) . ' Upload</h3>
+				<h3>' . $this->translationHelper->s($id) . ' Upload</h3>
 				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
 
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
@@ -999,9 +1003,9 @@ class Utils
 		}
 		$out = '
 			<input type="hidden" name="' . $id . '" id="' . $id . '" value="" /><div id="' . $id . '-preview">' . $thumb . '</div>
-			<span id="' . $id . '-opener">' . $this->func->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
+			<span id="' . $id . '-opener">' . $this->translationHelper->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
-		return $this->v_input_wrapper($this->func->s($id), $out);
+		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
 	public function v_form_file($id, $option = array())
@@ -1018,20 +1022,20 @@ class Utils
 		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
 		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
-		$btlabel = $this->func->s('choose_file');
+		$btlabel = $this->translationHelper->s('choose_file');
 		if (isset($option['btlabel'])) {
 			$btlabel = $option['btlabel'];
 		}
 
 		$out = '<input style="display:block;visibility:hidden;margin-bottom:-23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
 
-		return $this->v_input_wrapper($this->func->s($id), $out);
+		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
 	public function v_form_radio($id, $option = array())
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		$check = $this->jsValidate($option, $id, $label);
 
@@ -1090,7 +1094,7 @@ class Utils
 		} else {
 			$selected = $this->dataHelper->getValue($id);
 		}
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
@@ -1231,7 +1235,7 @@ class Utils
 
 	public function v_form_daterange($id = 'daterange', $option = array())
 	{
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 		$id = $this->identificationHelper->id($id);
 
 		if (!isset($option['options'])) {
@@ -1264,8 +1268,8 @@ class Utils
 		return $this->v_input_wrapper(
 			$label,
 			'
-			<input placeholder="' . $this->func->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
-			<input placeholder="' . $this->func->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
+			<input placeholder="' . $this->translationHelper->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
+			<input placeholder="' . $this->translationHelper->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
 			$id,
 			$option
 		);
@@ -1274,7 +1278,7 @@ class Utils
 	public function v_form_date($id, $option = array())
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
@@ -1300,7 +1304,7 @@ class Utils
 	public function v_form_text($id, $option = array())
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		if (isset($option['value'])) {
 			$value = $option['value'];
@@ -1372,7 +1376,7 @@ class Utils
 			$pl = ' placeholder="' . $option['placeholder'] . '"';
 		}
 
-		return $this->v_input_wrapper($this->func->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
+		return $this->v_input_wrapper($this->translationHelper->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
 	}
 
 	public function v_getStatusAmpel($status)

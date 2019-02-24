@@ -3,6 +3,7 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
@@ -23,6 +24,7 @@ class ForumService
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -33,7 +35,8 @@ class ForumService
 		Db $model,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -44,6 +47,7 @@ class ForumService
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -125,7 +129,7 @@ class ForumService
 				$recipient['email'],
 				array_merge($data,
 					[
-						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
 					])
 			);

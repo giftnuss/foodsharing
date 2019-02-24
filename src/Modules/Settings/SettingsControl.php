@@ -50,7 +50,7 @@ class SettingsControl extends Control
 			$this->routeHelper->go('/?page=settings&sub=general');
 		}
 
-		$this->pageHelper->addTitle($this->func->s('settings'));
+		$this->pageHelper->addTitle($this->translationHelper->s('settings'));
 	}
 
 	public function index()
@@ -58,26 +58,26 @@ class SettingsControl extends Control
 		$this->pageHelper->addBread('Einstellungen', '/?page=settings');
 
 		$menu = array(
-			array('name' => $this->func->s('settings_general'), 'href' => '/?page=settings&sub=general'),
-			array('name' => $this->func->s('settings_info'), 'href' => '/?page=settings&sub=info')
+			array('name' => $this->translationHelper->s('settings_general'), 'href' => '/?page=settings&sub=general'),
+			array('name' => $this->translationHelper->s('settings_info'), 'href' => '/?page=settings&sub=info')
 		);
 
-		$menu[] = array('name' => $this->func->s('bcard'), 'href' => '/?page=bcard');
-		//$menu[] = array('name' => $this->func->s('calendar'), 'href' => '/?page=settings&sub=calendar');
+		$menu[] = array('name' => $this->translationHelper->s('bcard'), 'href' => '/?page=bcard');
+		//$menu[] = array('name' => $this->translationHelper->s('calendar'), 'href' => '/?page=settings&sub=calendar');
 
-		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->func->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
+		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
 
 		$menu = array();
-		$menu[] = array('name' => $this->func->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
+		$menu[] = array('name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
 		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 
 		if ($this->foodsaver['rolle'] == 0) {
-			$menu[] = array('name' => 'Werde ' . $this->func->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
+			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
 		} elseif ($this->foodsaver['rolle'] == 1) {
-			$menu[] = array('name' => 'Werde ' . $this->func->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
+			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
 		}
-		$menu[] = array('name' => $this->func->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
-		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->func->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
+		$menu[] = array('name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
+		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
 	}
 
 	public function sleeping()
@@ -229,7 +229,7 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->func->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
@@ -252,7 +252,7 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->func->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->model->updateRole(2, $this->foodsaver['rolle']);
 					$this->func->info('Danke! Du bist jetzt Betriebsverantwortlicher');
@@ -296,7 +296,7 @@ class SettingsControl extends Control
 
 				if (!isset($_POST['rv_botschafter'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->func->error($this->translationHelper->s('not_rv_accepted'));
 				}
 
 				if ((int)$_POST['bezirk'] == 0) {
@@ -309,8 +309,8 @@ class SettingsControl extends Control
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
-						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
-						$this->func->s('upgrade_request_send'),
+						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
+						$this->translationHelper->s('upgrade_request_send'),
 						array(
 							'class' => 'ui-padding'
 						)
@@ -375,7 +375,7 @@ class SettingsControl extends Control
 					),
 
 						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
-								array('id' => 1, 'name' => $this->func->s('rv_accept'))
+								array('id' => 1, 'name' => $this->translationHelper->s('rv_accept'))
 							))), $rv['title'], array('class' => 'ui-padding'))
 					), array('submit' => 'Antrag auf Botschafterrolle verbindlich absenden'))
 				);
@@ -385,7 +385,7 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->pageHelper->addBread($this->func->s('delete_account'));
+		$this->pageHelper->addBread($this->translationHelper->s('delete_account'));
 		$this->pageHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 
@@ -404,7 +404,7 @@ class SettingsControl extends Control
 
 	public function calendar()
 	{
-		$this->pageHelper->addBread($this->func->s('calendar'));
+		$this->pageHelper->addBread($this->translationHelper->s('calendar'));
 		$token = $this->generate_api_token($this->session->id());
 		$this->pageHelper->addContent($this->view->settingsCalendar($token));
 	}
@@ -453,10 +453,10 @@ class SettingsControl extends Control
 			}
 
 			if ($this->model->saveInfoSettings($nl, $infomail)) {
-				$this->func->info($this->func->s('changes_saved'));
+				$this->func->info($this->translationHelper->s('changes_saved'));
 			}
 		}
-		$this->pageHelper->addBread($this->func->s('settings_info'));
+		$this->pageHelper->addBread($this->translationHelper->s('settings_info'));
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
@@ -521,9 +521,9 @@ class SettingsControl extends Control
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->session->refreshFromDatabase();
-					$this->func->info($this->func->s('foodsaver_edit_success'));
+					$this->func->info($this->translationHelper->s('foodsaver_edit_success'));
 				} else {
-					$this->func->error($this->func->s('error'));
+					$this->func->error($this->translationHelper->s('error'));
 				}
 			}
 		}

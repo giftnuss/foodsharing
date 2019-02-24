@@ -53,7 +53,7 @@ class EmailControl extends Control
 	public function index()
 	{
 		$this->handleEmail();
-		$this->pageHelper->addBread($this->func->s('mailinglist'), '/?page=email');
+		$this->pageHelper->addBread($this->translationHelper->s('mailinglist'), '/?page=email');
 
 		if ($emailstosend = $this->emailGateway->getEmailsToSend($this->session->id())) {
 			$this->pageHelper->addContent($this->v_email_statusbox($emailstosend));
@@ -81,10 +81,10 @@ class EmailControl extends Control
 				$this->v_utils->v_form_text('subject', array('required' => true)) .
 				$this->v_utils->v_form_file('attachement'),
 
-				$this->func->s('mailing_list'),
+				$this->translationHelper->s('mailing_list'),
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->func->s('message'))
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->translationHelper->s('message'))
 		), array('submit' => 'Zum Senden Vorbereiten')));
 
 		$this->pageHelper->addStyle('#testemail{width:91%;}');
@@ -94,11 +94,11 @@ class EmailControl extends Control
 		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
 		$this->pageHelper->addJs("$('#rightmenu').menu();");
-		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->func->s('personal_styling_desc') . '</div>', $this->func->s('personal_styling')), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->translationHelper->s('personal_styling_desc') . '</div>', $this->translationHelper->s('personal_styling')), CNT_RIGHT);
 
 		$this->pageHelper->addContent('
 	<div id="dialog-confirm" title="E-Mail senden?" style="display:none">
-	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->func->s('shure') . '</p>
+	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->translationHelper->s('shure') . '</p>
 	</div>
 	<h3 class="head ui-widget-header ui-corner-top">von Dir gesendete Mails</h3>
 	<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom">
@@ -341,8 +341,8 @@ class EmailControl extends Control
 
 					<div id="' . $id . '-comment">
 						' . $this->v_utils->v_input_wrapper('Empfänger', '<div' . $style . '>' . implode(', ', $recip) . '</div>') . '
-						' . $this->v_utils->v_input_wrapper($this->func->s('subject'), $mail['name']) . '
-						' . $this->v_utils->v_input_wrapper($this->func->s('message'), nl2br($mail['message'])) . '
+						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('subject'), $mail['name']) . '
+						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('message'), nl2br($mail['message'])) . '
 
 					</div>
 					<a id="' . $id . '-continue" href="#">Mit dem Senden weitermachen</a> <a id="' . $id . '-abort" href="#">Senden Abbrechen</a>

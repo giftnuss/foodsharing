@@ -29,8 +29,8 @@ class RegionAdminControl extends Control
 	public function index()
 	{
 		$id = $this->identificationHelper->id('tree');
-		$this->pageHelper->addBread($this->func->s('bezirk_bread'), '/?page=region');
-		$this->pageHelper->addTitle($this->func->s('bezirk_bread'));
+		$this->pageHelper->addBread($this->translationHelper->s('bezirk_bread'), '/?page=region');
+		$this->pageHelper->addTitle($this->translationHelper->s('bezirk_bread'));
 		$cnt = '
 		<div>
 			<div style="float:left;width:150px;" id="' . '..' . '"></div>
@@ -53,7 +53,7 @@ class RegionAdminControl extends Control
 		$this->pageHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', array('class' => 'ui-padding')), CNT_LEFT);
 		$this->pageHelper->addContent($this->v_utils->v_field($this->view->v_bezirk_tree($id) . '
 				<div id="bezirk-buttons" class="bootstrap">
-					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility:hidden;" onclick="deleteActiveGroup()">' . $this->func->s('group.delete') . '</button>
+					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility:hidden;" onclick="deleteActiveGroup()">' . $this->translationHelper->s('group.delete') . '</button>
 					' . $this->v_utils->v_dialog_button('newbezirk', 'Neuer Bezirk') . '	
 				</div>', 'Bezirke'), CNT_RIGHT);
 

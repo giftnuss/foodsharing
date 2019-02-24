@@ -5,12 +5,12 @@ Unfortunately, we are not there yet. At the moment there are three ways how fixe
 
 - Hardcoded text (obviously legacy code), e.g.
 ```
-$this->func->addContent('<...>Updates-Übersicht<...>')
+$this->pageHelper->addContent('<...>Updates-Übersicht<...>')
 ```
 Do not create more of this hardcoded German!
 - References to the translation files in `/lang/DE/....php` via the function `s` in `/src/Lib/Func.php`, e.g.
 ```
-$this->func->s('close_foodbaskets')
+$this->translationHelper->s('close_foodbaskets')
 ```
 - References to the translation file `/lang/lang.de.yml`.
 TODO: describe how to use this data. It has something to do with symfony.

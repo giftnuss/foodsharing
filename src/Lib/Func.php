@@ -38,23 +38,6 @@ final class Func
 		return $id;
 	}
 
-	public function sv($id, $var)
-	{
-		global $g_lang;
-		if (is_array($var)) {
-			$search = array();
-			$replace = array();
-			foreach ($var as $key => $value) {
-				$search[] = '{' . $key . '}';
-				$replace[] = $value;
-			}
-
-			return str_replace($search, $replace, $g_lang[$id]);
-		}
-
-		return str_replace('{var}', $var, $g_lang[$id]);
-	}
-
 	public function preZero($i)
 	{
 		if ($i < 10) {
@@ -95,17 +78,5 @@ final class Func
 	public function getBezirk()
 	{
 		return $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
-	}
-
-	public function genderWord($gender, $m, $w, $other)
-	{
-		$out = $other;
-		if ($gender == 1) {
-			$out = $m;
-		} elseif ($gender == 2) {
-			$out = $w;
-		}
-
-		return $out;
 	}
 }

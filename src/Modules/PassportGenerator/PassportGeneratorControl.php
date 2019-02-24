@@ -65,17 +65,17 @@ final class PassportGeneratorControl extends Control
 
 		if ($regions = $this->passportGeneratorGateway->getPassFoodsaver($this->regionId)) {
 			$this->pageHelper->addHidden('
-			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
-				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . $this->func->s('verify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
+			<div id="verifyconfirm-dialog" title="' . $this->translationHelper->s('verify_confirm_title') . '">
+				' . $this->v_utils->v_info('<p>' . $this->translationHelper->s('verify_confirm') . '</p>', $this->translationHelper->s('verify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->translationHelper->s('verify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 			</div>');
 
 			$this->pageHelper->addHidden('
 			<div id="unverifyconfirm-dialog" title="Es ist ein Problem aufgetreten">
-				' . $this->v_utils->v_info('<p>' . $this->func->s('unverify_confirm') . '</p>', $this->func->s('unverify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . $this->func->s('unverify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
+				' . $this->v_utils->v_info('<p>' . $this->translationHelper->s('unverify_confirm') . '</p>', $this->translationHelper->s('unverify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->translationHelper->s('unverify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 			</div>');
 
 			$this->pageHelper->addContent('<form id="generate" method="post">');

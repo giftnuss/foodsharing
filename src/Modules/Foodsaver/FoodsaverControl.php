@@ -76,8 +76,8 @@ class FoodsaverControl extends Control
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
-				$this->pageHelper->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
-				$this->pageHelper->addBread($this->func->s('bread_edit_foodsaver'));
+				$this->pageHelper->addBread($this->translationHelper->s('bread_foodsaver'), '/?page=foodsaver');
+				$this->pageHelper->addBread($this->translationHelper->s('bread_edit_foodsaver'));
 				$this->dataHelper->setEditData($data);
 				$regionDetails = false;
 				if ($data['bezirk_id'] > 0) {
@@ -86,9 +86,9 @@ class FoodsaverControl extends Control
 				$this->pageHelper->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/profile/' . $data['id'], 'name' => $this->func->s('back_to_profile')),
-					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->func->s('delete_account'))
-				)), $this->func->s('actions')), CNT_RIGHT);
+					array('href' => '/profile/' . $data['id'], 'name' => $this->translationHelper->s('back_to_profile')),
+					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->translationHelper->s('delete_account'))
+				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			}
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
@@ -114,9 +114,9 @@ class FoodsaverControl extends Control
 				$this->settingsGateway->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields, $this->session->id());
 			}
 			if ($this->model->update_foodsaver($_GET['id'], $g_data, $this->storeModel)) {
-				$this->func->info($this->func->s('foodsaver_edit_success'));
+				$this->func->info($this->translationHelper->s('foodsaver_edit_success'));
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->func->error($this->translationHelper->s('error'));
 			}
 		}
 	}

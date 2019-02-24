@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Core;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -81,6 +82,11 @@ abstract class Control
 	 */
 	protected $routeHelper;
 
+	/**
+	 * @var TranslationHelper
+	 */
+	protected $translationHelper;
+
 	public function __construct()
 	{
 		global $container;
@@ -94,6 +100,7 @@ abstract class Control
 		$this->pageHelper = $container->get(PageHelper::class);
 		$this->emailHelper = $container->get(EmailHelper::class);
 		$this->routeHelper = $container->get(RouteHelper::class);
+		$this->translationHelper = $container->get(TranslationHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -260,7 +267,7 @@ abstract class Control
 			});
 				$("#wall-submit").button().on("click", function(ev){
 					ev.preventDefault();
-					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->func->s('write_teaser') . '") || $("#attach-preview a").length > 0)
+					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->translationHelper->s('write_teaser') . '") || $("#attach-preview a").length > 0)
 					{
 						$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
 
@@ -274,7 +281,7 @@ abstract class Control
 						}
 
 						text = $("#wallpost-text").val();
-						if(text == "' . $this->func->s('write_teaser') . '")
+						if(text == "' . $this->translationHelper->s('write_teaser') . '")
 						{
 							text = "";
 						}
@@ -330,14 +337,14 @@ abstract class Control
 		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" title="' . $this->func->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
+				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->func->s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . $this->func->s('send') . '</a>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translationHelper->s('attach_image') . '</span>
+					<a href="#" id="wall-submit">' . $this->translationHelper->s('send') . '</a>
 					<div style="overflow:hidden;height:0;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
@@ -465,7 +472,7 @@ abstract class Control
 
 					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
 						$this->emailHelper->tplMail(30, $recipient['email'], array(
-							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => 'Betrieb ' . $betriebName,
@@ -474,7 +481,7 @@ abstract class Control
 						));
 					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
 						$this->emailHelper->tplMail(30, $recipient['email'], array(
-							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
@@ -483,7 +490,7 @@ abstract class Control
 						));
 					} else {
 						$this->emailHelper->tplMail($tpl_id, $recipient['email'], array(
-							'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
@@ -512,7 +519,7 @@ abstract class Control
 					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
 
 					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
-						'anrede' => $this->func->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],
 						'message' => $msg,

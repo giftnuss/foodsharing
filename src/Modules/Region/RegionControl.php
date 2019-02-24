@@ -208,8 +208,8 @@ final class RegionControl extends Control
 
 	private function fairteiler(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->func->s('fairteiler'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
-		$this->pageHelper->addTitle($this->func->s('fairteiler'));
+		$this->pageHelper->addBread($this->translationHelper->s('fairteiler'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->pageHelper->addTitle($this->translationHelper->s('fairteiler'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
 		$viewdata['fairteiler'] = $this->fairteilerGateway->listFairteiler($bezirk_ids);

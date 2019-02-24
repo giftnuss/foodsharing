@@ -67,8 +67,8 @@ class StoreControl extends Control
 			if ($this->session->may('bieb')) {
 				$this->handle_add($this->session->id(), $bezirk_id);
 
-				$this->pageHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-				$this->pageHelper->addBread($this->func->s('bread_new_betrieb'));
+				$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
+				$this->pageHelper->addBread($this->translationHelper->s('bread_new_betrieb'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
@@ -77,8 +77,8 @@ class StoreControl extends Control
 				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('name' => $this->func->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
-				)), $this->func->s('actions')), CNT_RIGHT);
+					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
+				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} else {
 				$this->func->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
 				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
@@ -87,17 +87,17 @@ class StoreControl extends Control
 			/*
 			if($this->model->del_betrieb($id))
 			{
-				$this->func->info($this->func->s('betrieb_deleted'));
+				$this->func->info($this->translationHelper->s('betrieb_deleted'));
 				$this->routeHelper->goPage();
 			}
 			*/
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
-			$this->pageHelper->addBread($this->func->s('bread_betrieb'), '/?page=betrieb');
-			$this->pageHelper->addBread($this->func->s('bread_edit_betrieb'));
+			$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
+			$this->pageHelper->addBread($this->translationHelper->s('bread_edit_betrieb'));
 			$data = $this->model->getOne_betrieb($id);
 
 			$this->pageHelper->addTitle($data['name']);
-			$this->pageHelper->addTitle($this->func->s('edit'));
+			$this->pageHelper->addTitle($this->translationHelper->s('edit'));
 
 			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
 				$this->handle_edit();
@@ -116,11 +116,11 @@ class StoreControl extends Control
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->routeHelper->pageLink('betrieb', 'back_to_overview')
-			)), $this->func->s('actions')), CNT_RIGHT);
+			)), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 		} else {
-			$this->pageHelper->addBread($this->func->s('betrieb_bread'), '/?page=betrieb');
+			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=betrieb');
 
 			if ($this->session->may('bieb')) {
 				$this->pageHelper->addContent($this->v_utils->v_menu(array(
@@ -158,10 +158,10 @@ class StoreControl extends Control
 			$g_data['str'] = $g_data['anschrift'];
 
 			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('betrieb_edit_success'));
+				$this->func->info($this->translationHelper->s('betrieb_edit_success'));
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->func->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -176,7 +176,7 @@ class StoreControl extends Control
 				$g_data['bezirk_id'] = $this->session->getCurrentBezirkId();
 			}
 			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
-				$this->func->error($this->func->s('store.can_only_create_store_in_member_region'));
+				$this->func->error($this->translationHelper->s('store.can_only_create_store_in_member_region'));
 				$this->routeHelper->goPage();
 			}
 
@@ -217,11 +217,11 @@ class StoreControl extends Control
 					'name' => $g_data['name']
 				), 'store-new-' . (int)$id);
 
-				$this->func->info($this->func->s('betrieb_add_success'));
+				$this->func->info($this->translationHelper->s('betrieb_add_success'));
 
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->func->error($this->translationHelper->s('error'));
 			}
 		}
 	}

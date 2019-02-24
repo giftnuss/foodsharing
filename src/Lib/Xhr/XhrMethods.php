@@ -7,6 +7,7 @@ use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -55,6 +56,7 @@ class XhrMethods
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
+	private $translationHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -84,7 +86,8 @@ class XhrMethods
 		EmailHelper $emailHelper,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -109,6 +112,7 @@ class XhrMethods
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function xhr_verify($data)
@@ -206,7 +210,7 @@ class XhrMethods
 
 					$delete = '';
 					if ($this->session->isOrgaTeam() || $this->session->id() == $o['fsid']) {
-						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->func->s('delete') . '</a>';
+						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
 					}
 
 					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
@@ -219,20 +223,20 @@ class XhrMethods
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
+						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
 					} elseif ($o['milestone'] == 2) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					} elseif ($o['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
-						$msg = '<span class="msg"><strong>' . $this->func->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->func->s($o['text']) . '</span>';
+						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->translationHelper->s($o['text']) . '</span>';
 					} elseif ($o['milestone'] == 5) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					}
 
 					$html .= '
@@ -1208,8 +1212,8 @@ class XhrMethods
 						],
 					]
 				),
-				$this->v_utils->v_input_wrapper($this->func->s($id), $inputs, $id)
-			), array('submit' => $this->func->s('save'))) .
+				$this->v_utils->v_input_wrapper($this->translationHelper->s($id), $inputs, $id)
+			), array('submit' => $this->translationHelper->s('save'))) .
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'region\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
@@ -1437,7 +1441,7 @@ class XhrMethods
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 
-			return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
+			return $this->xhr_out('pulseInfo("' . $this->translationHelper->s('edit_success') . '");');
 		}
 	}
 

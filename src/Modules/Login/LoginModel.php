@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 
 class LoginModel extends Db
@@ -12,10 +13,12 @@ class LoginModel extends Db
 	 */
 	private $loginGateway;
 	private $emailHelper;
+	private $translationHelper;
 
-	public function __construct(EmailHelper $emailHelper)
+	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper)
 	{
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 
 		parent::__construct();
 	}
@@ -142,7 +145,7 @@ class LoginModel extends Db
 				$vars = array(
 					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
 					'name' => $fs['name'],
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
+					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
 
 				$this->emailHelper->tplMail(10, $fs['email'], $vars);

@@ -159,7 +159,7 @@ class FairTeilerControl extends Control
 	public function index(Request $request)
 	{
 		$this->setup($request);
-		$this->pageHelper->addBread($this->func->s('your_fairteiler'), '/?page=fairteiler');
+		$this->pageHelper->addBread($this->translationHelper->s('your_fairteiler'), '/?page=fairteiler');
 		if ($this->bezirk_id > 0) {
 			$this->pageHelper->addBread($this->bezirk['name'], '/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
@@ -180,7 +180,7 @@ class FairTeilerControl extends Control
 			if ($fairteiler = $this->gateway->listFairteilerNested($bezirk_ids)) {
 				$this->pageHelper->addContent($this->view->listFairteiler($fairteiler));
 			} else {
-				$this->pageHelper->addContent($this->v_utils->v_info($this->func->s('no_fairteiler_available')));
+				$this->pageHelper->addContent($this->v_utils->v_info($this->translationHelper->s('no_fairteiler_available')));
 			}
 			$this->pageHelper->addContent($this->view->ftOptions($this->bezirk_id), CNT_RIGHT);
 		}
@@ -192,24 +192,24 @@ class FairTeilerControl extends Control
 			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 		}
 		$this->pageHelper->addBread($this->fairteiler['name'], '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id']);
-		$this->pageHelper->addBread($this->func->s('edit'));
+		$this->pageHelper->addBread($this->translationHelper->s('edit'));
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleEditFt($request)) {
-				$this->func->info($this->func->s('fairteiler_edit_success'));
+				$this->func->info($this->translationHelper->s('fairteiler_edit_success'));
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			} else {
-				$this->func->error($this->func->s('fairteiler_edit_fail'));
+				$this->func->error($this->translationHelper->s('fairteiler_edit_fail'));
 			}
 		}
 
 		$data = $this->fairteiler;
 
 		$items = array(
-			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
+			array('name' => $this->translationHelper->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'])
 		);
 
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($this->bezirk_id)) {
-			$items[] = array('name' => $this->func->s('delete'), 'click' => 'if(confirm(\'' . $this->func->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');
+			$items[] = array('name' => $this->translationHelper->s('delete'), 'click' => 'if(confirm(\'' . $this->translationHelper->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->bezirk_id . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');
 		}
 
 		$data['bfoodsaver'] = $this->follower['verantwortlich'];
@@ -235,7 +235,7 @@ class FairTeilerControl extends Control
 	private function delete()
 	{
 		if ($this->gateway->deleteFairteiler($this->fairteiler['id'])) {
-			$this->func->info($this->func->s('delete_success'));
+			$this->func->info($this->translationHelper->s('delete_success'));
 			$this->routeHelper->go('/?page=fairteiler&bid=' . $this->bezirk_id);
 		}
 	}
@@ -282,13 +282,13 @@ class FairTeilerControl extends Control
 			$items = array();
 
 			if ($this->mayEdit()) {
-				$items[] = array('name' => $this->func->s('edit'), 'href' => '/?page=fairteiler&bid=' . $this->bezirk_id . '&sub=edit&id=' . $this->fairteiler['id']);
+				$items[] = array('name' => $this->translationHelper->s('edit'), 'href' => '/?page=fairteiler&bid=' . $this->bezirk_id . '&sub=edit&id=' . $this->fairteiler['id']);
 			}
 
 			if ($this->isFollower()) {
-				$items[] = array('name' => $this->func->s('no_more_follow'), 'href' => $this->routeHelper->getSelf() . '&follow=0');
+				$items[] = array('name' => $this->translationHelper->s('no_more_follow'), 'href' => $this->routeHelper->getSelf() . '&follow=0');
 			} else {
-				$items[] = array('name' => $this->func->s('follow'), 'click' => 'u_follow();return false;');
+				$items[] = array('name' => $this->translationHelper->s('follow'), 'click' => 'u_follow();return false;');
 				$this->pageHelper->addHidden($this->view->followHidden());
 			}
 
@@ -302,25 +302,25 @@ class FairTeilerControl extends Control
 
 	public function addFt(Request $request)
 	{
-		$this->pageHelper->addBread($this->func->s('add_fairteiler'));
+		$this->pageHelper->addBread($this->translationHelper->s('add_fairteiler'));
 
 		if ($request->request->get('form_submit') == 'fairteiler') {
 			if ($this->handleAddFt($request)) {
 				if ($this->session->isAdminFor($this->bezirk_id) || $this->session->isOrgaTeam()) {
-					$this->func->info($this->func->s('fairteiler_add_success'));
+					$this->func->info($this->translationHelper->s('fairteiler_add_success'));
 				} else {
-					$this->func->info($this->func->s('fairteiler_prepare_success'));
+					$this->func->info($this->translationHelper->s('fairteiler_prepare_success'));
 				}
 				$this->routeHelper->go('/?page=fairteiler&bid=' . (int)$this->bezirk_id);
 			} else {
-				$this->func->error($this->func->s('fairteiler_add_fail'));
+				$this->func->error($this->translationHelper->s('fairteiler_add_fail'));
 			}
 		}
 
 		$this->pageHelper->addContent($this->view->fairteilerForm());
 		$this->pageHelper->addContent($this->v_utils->v_menu(array(
-			array('name' => $this->func->s('back'), 'href' => '/?page=fairteiler&bid=' . (int)$this->bezirk_id . '')
-		), $this->func->s('options')), CNT_RIGHT);
+			array('name' => $this->translationHelper->s('back'), 'href' => '/?page=fairteiler&bid=' . (int)$this->bezirk_id . '')
+		), $this->translationHelper->s('options')), CNT_RIGHT);
 	}
 
 	private function prepareInput(Request $request)
