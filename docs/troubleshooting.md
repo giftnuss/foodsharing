@@ -65,7 +65,7 @@ where you can also replace `app` by other components of the application that are
 `docker-compose` also respects the variable `FS_ENV` that can be set to `dev` or to `test` for running either the `localhost` (dev) containers or the testing containers.
 
 In order to print specific information in the logs, you can print them in your `php`-code.
-In order to do so, add a `LoggorInterface` in the constructor `__construct`:
+In order to do so, add a `LoggerInterface` in the constructor `__construct`:
 ```
 use Psr/Log/LoggerInterface;
 ...
