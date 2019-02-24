@@ -74,7 +74,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'fetcher' => $fetcher
 			]
 		], $regularSlots);
-		$this->gateway->addFetcher($fsid, $store['id'], $datetime);
+		$this->gateway->addFetcher($fsid, $store['id'], new DateTime($datetime));
 		$fetcherList = $this->gateway->listFetcher($store['id'], [$datetime]);
 
 		$this->assertEquals([
@@ -153,7 +153,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$store = $this->tester->createStore($this->region_id);
 		$foodsaver = $this->tester->createFoodsaver();
 
-		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '1970-01-01');
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new \DateTime('1970-01-01'));
 
 		$this->tester->updateInDatabase(
 			'fs_bell',
@@ -171,14 +171,14 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$store = $this->tester->createStore($this->region_id);
 		$foodsaver = $this->tester->createFoodsaver();
 
-		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-01');
-		$this->gateway->addFetcher($foodsaver['id'], $store['id'], '2150-01-02');
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new \DateTime('2150-01-01 00:00:00'));
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new \DateTime('2150-01-02 00:00:00'));
 
 		// As we can't cange the NOW() time in the database for the test, we have to move one fetch date to the past:
 		$this->tester->updateInDatabase(
 			'fs_abholer',
-			['date' => '1970-01-01'],
-			['date' => '2150-01-01']
+			['date' => '1970-01-01 00:00:00'],
+			['date' => '2150-01-01 00:00:00']
 		);
 
 		/* Now, we have two unconfirmed fetch dates in the database: One that is in the future (2150-01-02) and one
@@ -187,7 +187,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 		$this->tester->updateInDatabase(
 			'fs_bell',
-			['expiration' => '1970-01-01'],
+			['expiration' => '1970-01-01 00:00:00'],
 			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
 		); // outdate bell notification
 
@@ -208,9 +208,9 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$user = $this->tester->createFoodsaver();
 		$store = $this->tester->createStore(0);
 
-		$pastDate = $this->faker->dateTimeBetween($max = 'now')->format('Y-m-d H:i:s');
-		$soonDate = $this->faker->dateTimeBetween('+1 days', '+2 days')->format('Y-m-d H:i:s');
-		$futureDate = $this->faker->dateTimeBetween('+7 days', '+14 days')->format('Y-m-d H:i:s');
+		$pastDate = $this->faker->dateTimeBetween($max = 'now');
+		$soonDate = $this->faker->dateTimeBetween('+1 days', '+2 days');
+		$futureDate = $this->faker->dateTimeBetween('+7 days', '+14 days');
 
 		$this->gateway->addFetcher($user['id'], $store['id'], $pastDate);
 		$this->gateway->addFetcher($user['id'], $store['id'], $soonDate);
@@ -225,6 +225,6 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->assertEquals(2, $vars['count']);
 
 		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
-		$this->assertEquals($soonDate, $bellDate);
+		$this->assertEquals($soonDate->format('Y-m-d H:i:s'), $bellDate);
 	}
 }
