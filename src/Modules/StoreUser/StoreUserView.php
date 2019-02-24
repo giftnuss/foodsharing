@@ -405,7 +405,7 @@ class StoreUserView extends View
 
 		$i = 0;
 
-		if ($values = $this->func->getValue($id)) {
+		if ($values = $this->dataHelper->getValue($id)) {
 			foreach ($values as $fs) {
 				if ($fs['id'] == $this->session->id()) {
 					$bindabei = true;

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -15,6 +16,7 @@ class StoreUserControl extends Control
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $timeHelper;
+	private $dataHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -22,7 +24,8 @@ class StoreUserControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -30,6 +33,7 @@ class StoreUserControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -106,7 +110,7 @@ class StoreUserControl extends Control
 					}
 				}
 
-				$this->func->setEditData($betrieb);
+				$this->dataHelper->setEditData($betrieb);
 
 				$this->pageHelper->addBread($betrieb['name']);
 

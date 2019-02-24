@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -15,6 +16,7 @@ class FoodsaverControl extends Control
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
 		FoodsaverModel $model,
@@ -23,7 +25,8 @@ class FoodsaverControl extends Control
 		SettingsGateway $settingsGateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -32,6 +35,7 @@ class FoodsaverControl extends Control
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}
@@ -74,7 +78,7 @@ class FoodsaverControl extends Control
 
 				$this->pageHelper->addBread($this->func->s('bread_foodsaver'), '/?page=foodsaver');
 				$this->pageHelper->addBread($this->func->s('bread_edit_foodsaver'));
-				$this->func->setEditData($data);
+				$this->dataHelper->setEditData($data);
 				$regionDetails = false;
 				if ($data['bezirk_id'] > 0) {
 					$regionDetails = $this->regionGateway->getBezirk($data['bezirk_id']);

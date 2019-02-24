@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -14,15 +15,24 @@ class SettingsControl extends Control
 	private $quizModel;
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $dataHelper;
 
-	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $gateway, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		SettingsModel $model,
+		SettingsView $view,
+		SettingsGateway $gateway,
+		QuizModel $quizModel,
+		ContentGateway $contentGateway,
+		FoodsaverGateway $foodsaverGateway,
+		DataHelper $dataHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->quizModel = $quizModel;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -295,7 +305,7 @@ class SettingsControl extends Control
 				}
 
 				if ($check) {
-					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
+					$data = $this->dataHelper->unsetAll($_POST, array('photo_public', 'new_bezirk'));
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
@@ -385,7 +395,7 @@ class SettingsControl extends Control
 
 		$data = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
 
-		$this->func->setEditData($data);
+		$this->dataHelper->setEditData($data);
 
 		$this->pageHelper->addContent($this->view->foodsaver_form());
 
@@ -459,7 +469,7 @@ class SettingsControl extends Control
 	public function handle_edit()
 	{
 		if ($this->func->submitted()) {
-			$data = $this->func->getPostData();
+			$data = $this->dataHelper->getPostData();
 			$data['stadt'] = $data['ort'];
 			$check = true;
 

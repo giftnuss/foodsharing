@@ -126,7 +126,7 @@ class EmailControl extends Control
 
 			$nachricht = $this->handleImages($nachricht);
 
-			$data = $this->func->getPostData();
+			$data = $this->dataHelper->getPostData();
 
 			$foodsaver = array();
 

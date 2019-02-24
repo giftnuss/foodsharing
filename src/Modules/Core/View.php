@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
@@ -31,6 +32,7 @@ class View
 	protected $imageService;
 	protected $routeHelper;
 	protected $identificationHelper;
+	protected $dataHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -42,7 +44,8 @@ class View
 		TimeHelper $timeHelper,
 		ImageService $imageService,
 		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->twig = $twig;
 		$this->func = $func;
@@ -54,6 +57,7 @@ class View
 		$this->imageService = $imageService;
 		$this->routeHelper = $routeHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 	}
 
 	public function setSub($sub)

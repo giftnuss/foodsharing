@@ -2,12 +2,14 @@
 
 namespace Foodsharing\Lib\View;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class Utils
 {
@@ -30,18 +32,21 @@ class Utils
 	private $pageHelper;
 	private $routeHelper;
 	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
 		$this->pageHelper = $pageHelper;
 		$this->routeHelper = $routeHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 	}
 
 	/**
@@ -306,7 +311,7 @@ class Utils
 	{
 		$id = $this->identificationHelper->id($id);
 		$label = $this->func->s($id);
-		$value = $this->func->getValue($id);
+		$value = $this->dataHelper->getValue($id);
 
 		$this->pageHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
 
@@ -789,7 +794,7 @@ class Utils
 		if (isset($option['value'])) {
 			$value = $option['value'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
 
 		$value = htmlspecialchars($value);
@@ -836,7 +841,7 @@ class Utils
 		if (isset($option['checked'])) {
 			$value = $option['checked'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
 		$label = $this->func->s($id);
 
@@ -911,7 +916,7 @@ class Utils
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
-			$values = $this->func->getValue($id);
+			$values = $this->dataHelper->getValue($id);
 		}
 		if ($values) {
 			$input = '';
@@ -988,7 +993,7 @@ class Utils
 
 		$thumb = '';
 
-		$pic = (isset($option['pic']) ? $option['pic'] : $this->func->getValue($id));
+		$pic = (isset($option['pic']) ? $option['pic'] : $this->dataHelper->getValue($id));
 		if (!empty($pic)) {
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
@@ -1003,7 +1008,7 @@ class Utils
 	{
 		$id = $this->identificationHelper->id($id);
 
-		$val = $this->func->getValue($id);
+		$val = $this->dataHelper->getValue($id);
 		if (!empty($val)) {
 			$val = json_decode($val, true);
 			$val = substr($val['name'], 0, 30);
@@ -1033,7 +1038,7 @@ class Utils
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
 		} else {
-			$selected = $this->func->getValue($id);
+			$selected = $this->dataHelper->getValue($id);
 		}
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -1083,7 +1088,7 @@ class Utils
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
 		} else {
-			$selected = $this->func->getValue($id);
+			$selected = $this->dataHelper->getValue($id);
 		}
 		$label = $this->func->s($id);
 		$check = $this->jsValidate($option, $id, $label);
@@ -1274,7 +1279,7 @@ class Utils
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
 
-		$value = $this->func->getValue($id);
+		$value = $this->dataHelper->getValue($id);
 
 		$this->pageHelper->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
@@ -1300,7 +1305,7 @@ class Utils
 		if (isset($option['value'])) {
 			$value = $option['value'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
 
 		$value = htmlspecialchars($value);

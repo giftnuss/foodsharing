@@ -165,7 +165,7 @@ class BlogControl extends Control
 			$this->pageHelper->addBread($this->func->s('bread_blog_entry'), '/?page=blog&sub=manage');
 			$this->pageHelper->addBread($this->func->s('bread_edit_blog_entry'));
 
-			$this->func->setEditData($data);
+			$this->dataHelper->setEditData($data);
 			$bezirke = $this->session->getRegions();
 
 			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke));

@@ -10,7 +10,7 @@ class SettingsView extends View
 {
 	public function sleepMode($sleep)
 	{
-		$this->func->setEditData($sleep);
+		$this->dataHelper->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != 1) {
 			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');

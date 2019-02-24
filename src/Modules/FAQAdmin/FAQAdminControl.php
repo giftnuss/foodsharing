@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
@@ -10,17 +11,20 @@ class FAQAdminControl extends Control
 {
 	private $faqGateway;
 	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
 		Db $model,
 		FAQAdminView $view,
 		FAQGateway $faqGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -53,7 +57,7 @@ class FAQAdminControl extends Control
 			$this->pageHelper->addBread($this->func->s('bread_edit_faq'));
 
 			$data = $this->faqGateway->getOne_faq($id);
-			$this->func->setEditData($data);
+			$this->dataHelper->setEditData($data);
 
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 

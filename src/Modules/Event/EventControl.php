@@ -99,7 +99,7 @@ class EventControl extends Control
 					}
 				}
 
-				$this->func->setEditData($event);
+				$this->dataHelper->setEditData($event);
 
 				$this->pageHelper->addContent($this->view->eventForm($bezirke));
 			} else {

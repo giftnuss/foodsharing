@@ -54,7 +54,7 @@ class ContentControl extends Control
 				$this->pageHelper->addBread($this->func->s('bread_edit_content'));
 
 				$data = $this->contentGateway->getDetail($id);
-				$this->func->setEditData($data);
+				$this->dataHelper->setEditData($data);
 
 				$this->pageHelper->addContent($this->content_form());
 

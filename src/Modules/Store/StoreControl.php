@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
@@ -15,6 +16,7 @@ class StoreControl extends Control
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -23,7 +25,8 @@ class StoreControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		RegionGateway $regionGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -32,6 +35,7 @@ class StoreControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -98,7 +102,7 @@ class StoreControl extends Control
 			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
 				$this->handle_edit();
 
-				$this->func->setEditData($data);
+				$this->dataHelper->setEditData($data);
 
 				$bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $data['bezirk_id']);
 				if (isset($_GET['id'])) {

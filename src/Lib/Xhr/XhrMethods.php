@@ -4,6 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
@@ -53,6 +54,7 @@ class XhrMethods
 	private $emailHelper;
 	private $imageService;
 	private $identificationHelper;
+	private $dataHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -81,7 +83,8 @@ class XhrMethods
 		SanitizerService $sanitizerService,
 		EmailHelper $emailHelper,
 		ImageService $imageService,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -105,6 +108,7 @@ class XhrMethods
 		$this->emailHelper = $emailHelper;
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 	}
 
 	public function xhr_verify($data)
@@ -276,7 +280,7 @@ class XhrMethods
 	{
 		if ($this->session->may()) {
 			$this->mem->delPageCache('/?page=dashboard', $this->session->id());
-			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
+			$fields = $this->dataHelper->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->session->id())) {
 				return $this->xhr_out();
@@ -747,7 +751,7 @@ class XhrMethods
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		$data = $this->func->getPostData();
+		$data = $this->dataHelper->getPostData();
 
 		if (isset($data['fs_id'])) {
 			$user_id = (int)$data['fs_id'];

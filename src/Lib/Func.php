@@ -55,12 +55,6 @@ final class Func
 		return str_replace('{var}', $var, $g_lang[$id]);
 	}
 
-	public function setEditData($data)
-	{
-		global $g_data;
-		$g_data = $data;
-	}
-
 	public function preZero($i)
 	{
 		if ($i < 10) {
@@ -73,26 +67,6 @@ final class Func
 	public function isMob(): bool
 	{
 		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
-	}
-
-	public function getPostData()
-	{
-		if (isset($_POST)) {
-			return $_POST;
-		}
-
-		return array();
-	}
-
-	public function getValue($id)
-	{
-		global $g_data;
-
-		if (isset($g_data[$id])) {
-			return $g_data[$id];
-		}
-
-		return '';
 	}
 
 	public function submitted(): bool
@@ -130,18 +104,6 @@ final class Func
 			$out = $m;
 		} elseif ($gender == 2) {
 			$out = $w;
-		}
-
-		return $out;
-	}
-
-	public function unsetAll($array, $fields)
-	{
-		$out = array();
-		foreach ($fields as $f) {
-			if (isset($array[$f])) {
-				$out[$f] = $array[$f];
-			}
 		}
 
 		return $out;

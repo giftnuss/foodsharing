@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -12,19 +13,22 @@ class QuizXhr extends Control
 	private $contentGateway;
 	private $quizGateway;
 	private $sanitizerService;
+	private $dataHelper;
 
 	public function __construct(
 		QuizModel $model,
 		QuizGateway $quizGateway,
 		QuizView $view,
 		ContentGateway $contentGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}
@@ -158,7 +162,7 @@ class QuizXhr extends Control
 		if ($this->session->mayEditQuiz()) {
 			if ($answer = $this->model->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
-				$this->func->setEditData($answer);
+				$this->dataHelper->setEditData($answer);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();
@@ -235,7 +239,7 @@ class QuizXhr extends Control
 	{
 		if ($this->session->mayEditQuiz()) {
 			if ($quest = $this->model->getQuestion($_GET['id'])) {
-				$this->func->setEditData($quest);
+				$this->dataHelper->setEditData($quest);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();

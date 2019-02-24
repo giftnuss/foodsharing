@@ -51,7 +51,7 @@ class EmailTemplateAdminControl extends Control
 			$this->pageHelper->addBread($this->func->s('bread_edit_message_tpl'));
 
 			$data = $this->emailTemplateAdminGateway->getOne_message_tpl($id);
-			$this->func->setEditData($data);
+			$this->dataHelper->setEditData($data);
 
 			$this->pageHelper->addContent($this->view->message_tpl_form());
 
