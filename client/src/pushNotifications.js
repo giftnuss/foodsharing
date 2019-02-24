@@ -2,17 +2,19 @@ import * as ajax from '@/api/base'
 
 async function subscribeForPushNotifications () {
   const applicationServerKey = (await ajax.get('/pushnotification/webpush/publickey')).key
-  return new Promise(resolve => {
-    navigator.serviceWorker.ready
-      .then(serviceWorkerRegistration => serviceWorkerRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(applicationServerKey)
-      }))
-      .then(subscription => {
-        // create subscription on your server
-        return sendPushSubscriptionToServer(subscription)
-      })
+  const serviceWorkerRegistration = await navigator.serviceWorker.ready
+  const subscription = await serviceWorkerRegistration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(applicationServerKey)
   })
+  return sendPushSubscriptionToServer(subscription)
+}
+
+async function unsubscribeFromPushNotifications () {
+  const serviceWorkerRegistration = await navigator.serviceWorker.ready
+  const subscription = await serviceWorkerRegistration.pushManager.getSubscription()
+  await subscription.unsubscribe()
+  return removePushSubscriptionFromServer(subscription)
 }
 
 function sendPushSubscriptionToServer (subscription) {
@@ -21,6 +23,19 @@ function sendPushSubscriptionToServer (subscription) {
   const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
 
   return ajax.post('/pushnotification/webpush/subscription', {
+    endpoint: subscription.endpoint,
+    publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+    authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+    contentEncoding
+  })
+}
+
+function removePushSubscriptionFromServer (subscription) {
+  const key = subscription.getKey('p256dh')
+  const token = subscription.getKey('auth')
+  const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
+
+  return ajax.remove('/pushnotification/webpush/subscription', {
     endpoint: subscription.endpoint,
     publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
     authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
@@ -43,4 +58,4 @@ function urlBase64ToUint8Array (base64String) {
   return outputArray
 }
 
-export default subscribeForPushNotifications
+export { subscribeForPushNotifications, unsubscribeFromPushNotifications, askForPermission }
