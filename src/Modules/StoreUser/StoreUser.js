@@ -43,6 +43,7 @@ import {
   createUnconfirmedMenu,
   addContextMenu
 } from './StoreUser.lib'
+import { signup } from '@/api/stores'
 
 expose({
   u_updatePosts,
@@ -265,77 +266,46 @@ $('#timedialog').dialog({
   autoOpen: false,
   width: 500,
   buttons: {
-    'Eintragen': function () {
-      $.ajax({
-        url: '/xhr.php?f=addFetcher',
-        data: {
-          date: $('#timedialog-date').val(),
-          bid: store.id,
-          from: $('#timedialog-from').val(),
-          to: $('#timedialog-to').val()
-        },
-        success: function (ret) {
-          u_clearDialogs()
-          $('#timedialog').dialog('close')
-          if (ret == '2') {
-            reload()
-          } else if (ret != 0) {
-            $(`#${$('#timedialog-id').val()}-button`).last().remove()
+    'Eintragen': async function () {
+      const requestDate = ($('#timedialog-date').val()).replace(' ', 'T') + 'Z'
+      try {
+        const result = await signup(store.id, requestDate)
+        u_clearDialogs()
+        const timedialogId = $('#timedialog-id').val()
+        const $button = $(`#${timedialogId}-button`)
+        const $imglist = $(`#${timedialogId}-imglist`)
+        $button.last().remove()
 
-            const li = $(`<li><a class="img-link" href="#"><img src="${ret}" title="Du" /><span>&nbsp;</span></a></li>`)
-              .addClass(store.verantwortlich ? 'confirmed' : 'unconfirmed')
+        const li = $(`<li><a class="img-link" href="#"><img src="${user.avatar.mini}" title="Du" /><span>&nbsp;</span></a></li>`)
+          .addClass(result.confirmed ? 'confirmed' : 'unconfirmed')
 
-            $(`#${$('#timedialog-id').val()}-imglist`)
-              .prepend(li)
-              .find('.img-link')
-              .on('click', e => {
-                e.preventDefault()
-                profile(user.id)
-              })
+        $imglist
+          .prepend(li)
+          .find('.img-link')
+          .on('click', e => {
+            e.preventDefault()
+            profile(user.id)
+          })
 
-            if (!store.verantwortlich) pulseInfo(i18n('wait_for_confirm'))
-
-            if ($(`#${$('#timedialog-id').val()}-imglist li:last`).hasClass('empty')) {
-              $(`#${$('#timedialog-id').val()}-imglist li:last`).remove()
-            }
-
-            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).attr('title', '')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).off('click')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).addClass('nohover')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).removeClass('filled')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).tooltip('option', { disabled: true }).tooltip('close')
-          }
+        if (!result.confirmed) pulseInfo(i18n('wait_for_confirm'))
+        const $liLast = $imglist.find('li:last')
+        if ($liLast.hasClass('empty')) {
+          $liLast.remove()
         }
-      })
-    },
-    'Regelmäßig abholen': function () {
-      $('#shure_date').hide()
-      $('#rangeFetch').show()
-      $('#shure_range_date').show()
 
-      $('#timedialog-from').datepicker({
-        defaultDate: '+1w',
-        minDate: '0',
-        maxDate: `+${days}`,
-        numberOfMonths: 1,
-        onClose: function (selectedDate) {
-          if (selectedDate != '') {
-            $('#timedialog-to').datepicker('option', 'minDate', selectedDate)
-          }
-          $('#timedialog-to').datepicker('option', 'maxDate', `+${days}`)
-        }
-      })
+        $imglist.find('li.empty')
+          .off('click')
+          .addClass('nohover')
+          .removeClass('filled')
+          .find('a')
+          .attr('title', '')
+          .tooltip('option', { disabled: true }).tooltip('close')
 
-      $('#timedialog-to').datepicker({
-        defaultDate: '+1w',
-        minDate: '+2',
-        maxDate: `+${days}`,
-        numberOfMonths: 1,
-        onClose: function (selectedDate) {
-          $('#timedialog-from').datepicker('option', 'maxDate', selectedDate)
-        }
-      })
-      $('#timedialog').next().children().children(':nth-child(2)').hide()
+      } catch (err) {
+        u_clearDialogs()
+        pulseError('Dieser Abholslot ist nicht verfügbar')
+      }
+      $(this).dialog('close')
     },
     'Abbrechen': function () {
       u_clearDialogs()

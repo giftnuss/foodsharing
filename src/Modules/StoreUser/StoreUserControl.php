@@ -269,12 +269,6 @@ class StoreUserControl extends Control
 						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
 							
 						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info($this->func->sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
-						<span class="shure_range_date" id="shure_range_date" style="display:none;">' . $this->v_utils->v_info($this->func->sv('shure_range_date', array('label' => '<span id="range-day-label"></span>'))) . '</span>
-						<div class="rangeFetch" id="rangeFetch" style="display:none;">
-						
-								' . $this->v_utils->v_input_wrapper($this->func->s('zeitraum'), '<input type="text" value="" id="timedialog-from" name="timedialog-from" class="datefetch input text value"> bis <input type="text" value="" id="timedialog-to" name="timedialog-to" class="datefetch input text value">') . '
-						
-						</div>
 					</div>
 					<div id="delete_shure" title="' . $this->func->s('delete_sure_title') . '">
 						' . $this->v_utils->v_info($this->func->s('delete_post_sure')) . '
