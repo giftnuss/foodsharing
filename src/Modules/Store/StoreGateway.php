@@ -477,7 +477,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			]);
 	}
 
-	public function addFetcher($fsid, $bid, $date, $confirmed = 0): int
+	public function addFetcher(int $fsid, int $bid, \DateTime $date, bool $confirmed = false): int
 	{
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
