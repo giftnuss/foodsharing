@@ -37,32 +37,7 @@ class FoodsaverModel extends Db
 		    OR
 			fs.last_login IS NULL)' : '') . '
 		    ORDER BY
-			fs.last_login DESC
-		');
-	}
-
-	public function delfrombezirk($bezirk_id, $foodsaver_id)
-	{
-		$this->del('
-			DELETE FROM
-				fs_botschafter
-
-			WHERE
-				bezirk_id = ' . (int)$bezirk_id . '
-
-			AND
-				foodsaver_id = ' . (int)$foodsaver_id . '
-		');
-
-		return $this->del('
-			DELETE FROM
-				fs_foodsaver_has_bezirk
-
-			WHERE
-				bezirk_id = ' . (int)$bezirk_id . '
-
-			AND
-				foodsaver_id = ' . (int)$foodsaver_id . '
+			fs.name ASC
 		');
 	}
 

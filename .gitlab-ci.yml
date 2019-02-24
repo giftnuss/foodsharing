@@ -1,9 +1,8 @@
 .defaults: &defaults
-  image: registry.gitlab.com/foodsharing-dev/images/ci:1.6
-
-  # run it on our foodsharing ci server
   tags:
-  - non-shared
+  - shared
+  image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
+
 
 .ssh: &ssh
   before_script:
@@ -18,35 +17,79 @@
 
 .deploy: &deploy
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   <<: *ssh
   stage: deploy
+  dependencies:
+  - build:frontend
+  - build:backend
   script:
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
   - ./scripts/deploy.notifyslack.sh
 
 stages:
+- triage
 - build
 - test
 - deploy
 
-build:
+triage:
+  image: ruby:2.6-alpine
+  stage: triage
+  script:
+  - gem install gitlab-triage
+  - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
+  only:
+  - schedules
+  tags:
+  - shared
+
+build:frontend:
   <<: *defaults
-  image: node:10
+  image: node:11.9.0-alpine
   stage: build
   script:
-  - (cd client && yarn && yarn lint && yarn build)
+  - (cd client && yarn && yarn lint && yarn test && yarn build)
   cache:
-    key: client:build
+    key: client:build:v2
     paths:
     - client/node_modules
   artifacts:
+    expire_in: 1 week
     paths:
     - assets
+  except:
+  - schedules
+
+build:backend:
+  <<: *defaults
+  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
+  stage: build
+  script:
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+    - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose --ansi
+    - vendor/bin/parallel-lint --no-progress --exclude vendor .
+    - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
+    - composer dump-autoload --classmap-authoritative
+  cache:
+    key: backend:build:v1
+    paths:
+    - vendor
+    - .php_cs.cache
+  artifacts:
+    expire_in: 1 week
+    paths:
+    - vendor
+  except:
+  - schedules
 
 build:docs:
   <<: *defaults
-  image: node:10
+  image: node:11.9.0-alpine
   stage: build
   script:
   - yarn global add gitbook-cli
@@ -57,39 +100,38 @@ build:docs:
     paths:
     - docs/node_modules
   artifacts:
+    expire_in: 1 week
     paths:
     - docs/dist
   only:
   - master
+  except:
+  - schedules
 
 test:
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   script:
+  - composer validate --no-check-all --strict
   - ./scripts/ci.test
   after_script:
   # collect artifacts
-  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
-  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
-  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt
-  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt
+  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/ || true
+  - docker cp foodsharing_ci_codeception:/app/tests/_output/ tests/_output || true
+  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt || true
+  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt || true
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
   # collect any test output
   artifacts:
+    expire_in: 1 month
     when: always
     paths:
     - tests/_output
-
-test:client:
-  <<: *defaults
-  image: node:10
-  stage: test
-  script:
-  - (cd client && yarn && yarn test)
-  cache:
-    key: client:build
-    paths:
-    - client/node_modules
+  except:
+  - schedules
 
 deploy:beta:
   <<: *deploy
@@ -98,6 +140,18 @@ deploy:beta:
     url: https://beta.foodsharing.de
   only:
   - master
+  except:
+  - schedules
+
+deploy:production:
+  <<: *deploy
+  environment:
+    name: production
+    url: https://foodsharing.de
+  only:
+  - production
+  except:
+  - schedules
 
 deploy:docs:
   <<: *defaults
@@ -112,14 +166,8 @@ deploy:docs:
     url: https://devdocs.foodsharing.de
   only:
   - master
-
-deploy:production:
-  <<: *deploy
-  environment:
-    name: production
-    url: https://foodsharing.de
-  only:
-  - production
+  except:
+  - schedules
 
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/

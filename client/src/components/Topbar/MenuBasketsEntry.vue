@@ -1,30 +1,39 @@
 <template>
   <a
     :href="$url('basket', basket.id)"
-    class="list-group-item list-group-item-action">
+    class="list-group-item list-group-item-action"
+  >
     <div class="row">
       <div class="col-2 pl-2">
-        <img src="/img/basket.png" >
+        <img src="/img/basket.png">
       </div>
       <div class="col-10">
-        <div class="text-truncate"><b>{{ basket.description }}</b></div>
+        <div class="text-truncate">
+          <b>{{ basket.description }}</b>
+        </div>
         <small
           v-if="!basket.requests.length"
-          class="text-muted">
+          class="text-muted"
+        >
           Bisher keine Anfragen erhalten
         </small>
         <h5
           v-if="basket.requests.length"
-          class="text-muted mb-1 pl-2">angefragt von</h5>
+          class="text-muted mb-1 pl-2"
+        >
+          angefragt von
+        </h5>
         <div
           v-if="basket.requests.length"
-          class="requests list-group">
+          class="requests list-group"
+        >
           <a
             v-for="req in basket.requests"
             :key="req.time"
             href="#"
             class="list-group-item list-group-item-action p-1 request"
-            @click.prevent="openChat(req.user.id, $event)">
+            @click.prevent="openChat(req.user.id, $event)"
+          >
             <div class="row pl-1 align-items-center">
               <div class="col-1 text-right pt-1">
                 <avatar
@@ -35,7 +44,9 @@
               </div>
               <div class="col-10 pt-1">
                 <div class="row">
-                  <h6 class="col text-truncate mb-1">{{ req.user.name }}</h6>
+                  <h6 class="col text-truncate mb-1">
+                    {{ req.user.name }}
+                  </h6>
                   <div class="col nowrap text-right text-muted nhover">
                     {{ req.time | dateDistanceInWords }}
                   </div>
@@ -45,9 +56,11 @@
                       href="#"
                       class="m-1 btn btn-sm btn-secondary"
                       title="Essensanfrage abschließen"
-                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"><i class="fas fa-times" /></a>
+                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
+                    >
+                      <i class="fas fa-times" />
+                    </a>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -99,7 +112,7 @@ h5 {
 
 }
 .request .btn {
-    padding: 0rem 0.2rem;
+    padding: 0 0.2rem;
     position: absolute;
     right: 1.2em;
     top: -0.3em;

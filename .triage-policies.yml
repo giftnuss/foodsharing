@@ -1,0 +1,43 @@
+resource_rules:
+  issues:
+    rules:
+
+      - name: Mark stale issues
+        conditions:
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: months
+            interval: 8
+        limits:
+          oldest: 2
+        actions:
+          labels:
+            - stale
+          comment: |
+            Are you still interested in this issue?
+
+            It will be automatically closed in 2 weeks otherwise.
+
+            {{assignees}} {{author}}
+
+      - name: Close stale issues
+        conditions:
+          labels:
+            - stale
+          state: opened
+          date:
+            attribute: updated_at
+            condition: older_than
+            interval_type: weeks
+            interval: 2
+        limits:
+          oldest: 2
+        actions:
+          status: close
+          comment: |
+            This issue was closed due to inactivity. You can re-open it if it's still relevant :)
+
+            {{assignees}} {{author}}
+

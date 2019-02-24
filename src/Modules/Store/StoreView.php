@@ -9,7 +9,7 @@ class StoreView extends View
 	public function dateForm()
 	{
 		return
-			'<div id="datepicker" style="height:195px;"></div>' .
+			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
 			$this->v_utils->v_form_select('fetchercount', array('values' => array(
 				array('id' => 0, 'name' => 'Termin fällt aus'),
@@ -43,7 +43,7 @@ class StoreView extends View
 			}
 			$out .= '
 				<li>
-					<a class="corner-all" href="#" onclick="profile(' . (int)$h['id'] . ');return false;">
+					<a class="corner-all" href="/profile/' . (int)$h['id'] . '">
 						<span class="i"><img src="' . $this->func->img($h['photo']) . '" /></span>
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
 						<span class="t"></span>
@@ -65,13 +65,8 @@ class StoreView extends View
 		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
 
 		if (!isset($g_data['foodsaver'])) {
-			$g_data['foodsaver'] = array($this->func->fsId());
+			$g_data['foodsaver'] = array($this->session->id());
 		}
-
-		$this->func->addJs('
-			$("#lat-wrapper").hide();
-			$("#lon-wrapper").hide();
-		');
 
 		$first_post = '';
 		if ($this->func->getAction('new')) {
@@ -87,7 +82,7 @@ class StoreView extends View
 			$g_data['anschrift'] .= ' ' . $g_data['hsnr'];
 		}
 
-		$this->func->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
+		$this->pageCompositionHelper->addJs('$("textarea").css("height","70px");$("textarea").autosize();');
 
 		$latLonOptions = [];
 
@@ -98,6 +93,8 @@ class StoreView extends View
 		}
 		if (isset($g_data['lat'], $g_data['lon'])) {
 			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
+		} else {
+			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
 		return $this->v_utils->v_quickform('betrieb', array(

@@ -45,8 +45,8 @@ export default {
     },
     style () {
       return {
-        width: this.size + 'px',
-        height: this.size + 'px',
+        width: `${this.size}px`,
+        height: `${this.size}px`,
         backgroundImage: `url(${this.avatarUrl})`
       }
     }

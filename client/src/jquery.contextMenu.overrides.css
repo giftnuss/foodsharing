@@ -1,56 +1,17 @@
 .context-menu-item {
-  padding: 0px 8px 0px 34px;
-  line-height: 32px;
-  height: 32px;
+  padding: 0.25em 0 8px 38px;
+  line-height: 25px;
+  height: 25px;
+  margin-top: 5px;
 }
 
-.context-menu-icon::before {
-  display: none;
+.context-menu-icon.context-menu-icon--fa5 i {
+  color: var(--primary);
+  font-size: 1.25em;
 }
 
-.context-menu-icon {
-  min-height: 32px;
-  background-repeat: no-repeat;
-  background-image: url(/img/contextmenu.png);
-  overflow: hidden;
-}
-
-.context-menu-icon-wait {
-  background-position: -32px -64px;
-}
-
-.context-menu-icon-wait.hover {
-  background-position: 0px -64px;
-}
-
-.context-menu-icon-delete {
-  background-position: -32px 0px;
-}
-
-.context-menu-icon-delete.hover {
-  background-position: 0px 0px;
-}
-
-.context-menu-icon-accept {
-  background-position: -32px -32px;
-}
-
-.context-menu-icon-accept.hover {
-  background-position: 0px -32px;
-}
-
-.context-menu-icon-message {
-  background-position: -32px -96px;
-}
-
-.context-menu-icon-message.hover {
-  background-position: 0px -96px;
-}
-
-.context-menu-icon-report {
-  background-position: -32px -128px;
-}
-
-.context-menu-icon-report.hover {
-  background-position: 0px -128px;
+.context-menu-item.context-menu-hover {
+  color: var(--white);
+  cursor: pointer;
+  background-color: var(--primary);
 }

@@ -8,11 +8,11 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\SanitizerService;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class ForumRestController extends FOSRestController
+class ForumRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $forumGateway;
@@ -49,20 +49,10 @@ class ForumRestController extends FOSRestController
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$res['lastPost']['author'] = [
-				'id' => $thread['foodsaver_id'],
-				'name' => $thread['foodsaver_name'],
-				'avatar' => $thread['foodsaver_photo'] ?? null,
-				'sleepStatus' => $thread['sleep_status']
-			];
+			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_');
 		}
 		if (isset($thread['creator_name'])) {
-			$res['creator'] = [
-				'id' => $thread['creator_id'],
-				'name' => $thread['creator_name'],
-				'avatar' => $thread['creator_photo'] ?? null,
-				'sleepStatus' => $thread['creator_sleep_status']
-			];
+			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_');
 		}
 
 		return $res;
@@ -74,12 +64,7 @@ class ForumRestController extends FOSRestController
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'author' => [
-				'id' => $post['author_id'],
-				'name' => $post['author_name'],
-				'avatar' => $post['author_photo'] ?? null,
-				'sleepStatus' => $post['author_sleep_status']
-			],
+			'author' => RestNormalization::normalizeFoodsaver($post, 'author_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
@@ -112,11 +97,16 @@ class ForumRestController extends FOSRestController
 	 */
 	public function getThreadAction($threadId)
 	{
+		$thread = $this->forumGateway->getThread($threadId);
+
+		if (!$thread) {
+			throw new HttpException(404);
+		}
+
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
 
-		$thread = $this->forumGateway->getThread($threadId);
 		$posts = $this->forumGateway->listPosts($threadId);
 
 		$thread = $this->normalizeThread($thread);

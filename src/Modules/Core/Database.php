@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
-use FluentPDO;
+use Envms\FluentPDO\Query;
 use PDO;
 
 class Database
@@ -13,11 +13,11 @@ class Database
 	public function __construct(PDO $pdo)
 	{
 		$this->pdo = $pdo;
-		$this->fluent = new FluentPDO($pdo);
+		$this->fluent = new Query($pdo);
 	}
 
 	/**
-	 * @return FluentPDO FluentPDO Querybuilder
+	 * @return Query FluentPDO Querybuilder
 	 */
 	public function fluent()
 	{
@@ -153,12 +153,10 @@ class Database
 
 		$this->preparedQuery($query, array_values($data));
 
-		$lastInsertId = (int)$this->pdo->lastInsertId();
-
-		return $lastInsertId;
+		return (int)$this->pdo->lastInsertId();
 	}
 
-	public function update($table, array $data, array $criteria = []): int
+	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
 			throw new \InvalidArgumentException(
@@ -269,6 +267,11 @@ class Database
 
 	// === helper methods ===
 
+	/**
+	 * Generates comma separated question marks for use with SQLs IN() operator.
+	 *
+	 * @param int $length - number of question marks to be generated
+	 */
 	public function generatePlaceholders($length): string
 	{
 		return implode(', ', array_fill(0, $length, '?'));
@@ -297,6 +300,24 @@ class Database
 	// === private methods ===
 
 	/**
+	 * dehierarchize array – e.g. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd'].
+	 *
+	 * @param array $array some array
+	 *
+	 * @return array
+	 */
+	private function dehierarchizeArray(array $array): array
+	{
+		foreach ($array as $index => $value) {
+			if (is_array($value)) {
+				array_splice($array, $index, 1, $value);
+			}
+		}
+
+		return $array;
+	}
+
+	/**
 	 * @throws \Exception
 	 */
 	private function preparedQuery($query, $params)
@@ -305,6 +326,8 @@ class Database
 		if (!$statement) {
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
+
+		$params = $this->dehierarchizeArray($params);
 
 		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
@@ -367,6 +390,16 @@ class Database
 			if ($v === null) {
 				$params[] = $this->getQuotedName($k) . ' IS NULL ';
 				unset($criteria[$k]);
+				continue;
+			}
+
+			if (is_array($v) && empty($v)) {
+				$params[] = 'false'; // an empty array means that the WHERE clause will be false
+				continue;
+			}
+
+			if (is_array($v)) {
+				$params[] = $this->getQuotedName($k) . ' IN (' . $this->generatePlaceholders(count($v)) . ') ';
 				continue;
 			}
 

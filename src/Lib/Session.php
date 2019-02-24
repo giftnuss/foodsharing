@@ -9,6 +9,7 @@ use Flourish\fSession;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Legal\LegalGateway;
@@ -19,6 +20,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 class Session
 {
 	private $func;
+	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
@@ -30,6 +32,7 @@ class Session
 
 	public function __construct(
 		Func $func,
+		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
@@ -39,6 +42,7 @@ class Session
 		Db $db
 	) {
 		$this->func = $func;
+		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
@@ -48,18 +52,37 @@ class Session
 		$this->db = $db;
 	}
 
-	public function init()
+	public function initIfCookieExists()
+	{
+		if (isset($_COOKIE[session_name()]) && !$this->initialized) {
+			$this->init();
+		}
+	}
+
+	public function checkInitialized()
+	{
+		if (!$this->initialized) {
+			throw new Exception('Session not initialized');
+		}
+	}
+
+	public function init($rememberMe = false)
 	{
 		if ($this->initialized) {
 			throw new Exception('Session is already initialized');
 		}
+
 		$this->initialized = true;
 
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
 		fSession::setLength('24 hours', '1 week');
-		//fSession::enablePersistence();
+
+		if ($rememberMe) {
+			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
+			fSession::enablePersistence();
+		}
 
 		fAuthorization::setAuthLevels(
 			array(
@@ -76,6 +99,16 @@ class Session
 		);
 
 		fSession::open();
+
+		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
+			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
+			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
+		}
+	}
+
+	private function isPersistent(): bool
+	{
+		return $_SESSION['fSession::type'] === 'persistent';
 	}
 
 	public function setAuthLevel($role)
@@ -94,9 +127,11 @@ class Session
 
 	public function logout()
 	{
+		$this->mem->logout($this->id());
 		$this->set('user', false);
 		fAuthorization::destroyUserInfo();
 		$this->setAuthLevel('guest');
+		$this->destroy();
 	}
 
 	public function user($index)
@@ -126,11 +161,18 @@ class Session
 
 	public function id()
 	{
+		if (!$this->initialized) {
+			return null;
+		}
+
 		return fAuthorization::getUserToken();
 	}
 
 	public function may($role = 'user')
 	{
+		if (!$this->initialized) {
+			return false;
+		}
 		if (fAuthorization::checkAuthLevel($role)) {
 			return true;
 		}
@@ -138,11 +180,20 @@ class Session
 		return false;
 	}
 
+	// this is the old versin from Func (which had the same name as the method above)
+	public function mayLegacy(): bool
+	{
+		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
+	}
+
 	public function getLocation()
 	{
+		if (!$this->initialized) {
+			return false;
+		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->id());
 			$this->set('g_location', $loc);
 		}
 
@@ -159,16 +210,22 @@ class Session
 
 	public function destroy()
 	{
+		$this->checkInitialized();
 		fSession::destroy();
 	}
 
 	public function set($key, $value)
 	{
+		$this->checkInitialized();
 		fSession::set($key, $value);
 	}
 
 	public function get($var)
 	{
+		if (!$this->initialized) {
+			return false;
+		}
+
 		return fSession::get($var, false);
 	}
 
@@ -190,6 +247,7 @@ class Session
 
 	public function addMsg($message, $type, $title = null)
 	{
+		$this->checkInitialized();
 		$msg = fSession::get('g_message', array());
 
 		if (!isset($msg[$type])) {
@@ -241,13 +299,12 @@ class Session
 		return false;
 	}
 
-	public function isAdminFor($regionId)
+	public function isAdminFor(int $regionId): bool
 	{
-		if ($this->isBotschafter()) {
+		if ($this->isAmbassador()) {
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				if ($b['bezirk_id'] == $regionId) {
 					return true;
-					break;
 				}
 			}
 		}
@@ -295,9 +352,9 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public function mayGroup($group)
+	public function mayGroup(string $group): bool
 	{
-		if (isset($_SESSION) && isset($_SESSION['client']['group'][$group])) {
+		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
 		}
 
@@ -309,7 +366,7 @@ class Session
 		return $this->mayGroup('orgateam');
 	}
 
-	public function isBotschafter()
+	public function isAmbassador(): bool
 	{
 		if (isset($_SESSION['client']['botschafter'])) {
 			return true;
@@ -318,13 +375,23 @@ class Session
 		return false;
 	}
 
+	public function login($fs_id = null, $rememberMe = false)
+	{
+		if (!$this->initialized) {
+			$this->init($rememberMe);
+		}
+		$this->refreshFromDatabase($fs_id);
+	}
+
 	public function refreshFromDatabase($fs_id = null)
 	{
+		$this->checkInitialized();
+
 		if ($fs_id === null) {
 			$fs_id = $this->id();
 		}
 
-		Mem::updateActivity($fs_id);
+		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
 			$this->func->goPage('logout');
@@ -364,7 +431,7 @@ class Session
 		$fs['buddys'] = $this->buddyGateway->listBuddyIds($fs_id);
 
 		fAuthorization::setUserToken($fs['id']);
-		$this->setAuthLevel($this->func->rolleWrapInt($fs['rolle']));
+		$this->setAuthLevel($this->rolleWrapInt($fs['rolle']));
 
 		$this->set('user', array(
 			'name' => $fs['name'],
@@ -386,7 +453,7 @@ class Session
 		/*
 		 * Add entry into user -> session set
 		 */
-		Mem::userAddSession($fs_id, session_id());
+		$this->mem->userAddSession($fs_id, session_id());
 
 		/*
 		 * store all options in the session
@@ -449,5 +516,106 @@ class Session
 			$mailbox = true;
 		}
 		$this->set('mailbox', $mailbox);
+	}
+
+	private function rolleWrapInt($roleInt)
+	{
+		$roles = array(
+			0 => 'user',
+			1 => 'fs',
+			2 => 'bieb',
+			3 => 'bot',
+			4 => 'orga',
+			5 => 'admin'
+		);
+
+		return $roles[$roleInt];
+	}
+
+	public function mayBezirk($bid): bool
+	{
+		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isAdminFor($bid) || $this->isOrgaTeam();
+	}
+
+	public function mayHandleReports()
+	{
+		// group "Regelverletzungen/Meldungen"
+		return $this->may('orga') || $this->isAdminFor(432);
+	}
+
+	public function mayEditQuiz()
+	{
+		return $this->may('orga') || $this->isAdminFor(341);
+	}
+
+	public function mayEditBlog()
+	{
+		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
+			return $this->may('orga') || in_array($this->id(), unserialize($all_group_admins));
+		}
+
+		return $this->may('orga');
+	}
+
+	public function isVerified()
+	{
+		if ($this->isOrgaTeam()) {
+			return true;
+		}
+
+		if (isset($_SESSION['client']['verified']) && $_SESSION['client']['verified'] == 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
+	{
+		if (is_array($regions_ids) && count($regions_ids) && $this->isAmbassador()) {
+			if ($include_parent_regions) {
+				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
+			}
+			foreach ($_SESSION['client']['botschafter'] as $b) {
+				foreach ($regions_ids as $bid) {
+					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public function generateCrsfToken(string $key)
+	{
+		$token = bin2hex(random_bytes(16));
+		$this->set("csrf[$key][$token]", true);
+
+		return $token;
+	}
+
+	public function isValidCsrfToken(string $key, string $token): bool
+	{
+		if (defined('CSRF_TEST_TOKEN') && $token === CSRF_TEST_TOKEN) {
+			return true;
+		}
+
+		return $this->get("csrf[$key][$token]");
+	}
+
+	public function isValidCsrfHeader(): bool
+	{
+		// enable CSRF Protection only for loggedin users
+		if (!$this->id()) {
+			return true;
+		}
+
+		if (!isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+			return false;
+		}
+
+		return $this->isValidCsrfToken('cookie', $_SERVER['HTTP_X_CSRF_TOKEN']);
 	}
 }

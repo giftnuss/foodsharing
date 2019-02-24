@@ -8,9 +8,8 @@ class EventControl extends Control
 {
 	private $gateway;
 
-	public function __construct(EventModel $model, EventView $view, EventGateway $gateway)
+	public function __construct(EventView $view, EventGateway $gateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
@@ -24,46 +23,42 @@ class EventControl extends Control
 				return false;
 			}
 
-			$this->func->addBread('Termine', '/?page=event');
-			$this->func->addBread($event['name']);
+			$this->pageCompositionHelper->addBread('Termine', '/?page=event');
+			$this->pageCompositionHelper->addBread($event['name']);
 
-			$status = $this->model->getInviteStatus($event['id'], $this->func->fsId());
+			$status = $this->gateway->getInviteStatus($event['id'], $this->session->id());
 
-			$this->func->addContent($this->view->eventTop($event), CNT_TOP);
-			$this->func->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
-			$this->func->addContent($this->view->event($event));
+			$this->pageCompositionHelper->addContent($this->view->eventTop($event), CNT_TOP);
+			$this->pageCompositionHelper->addContent($this->view->statusMenu($event, $status), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->event($event));
 
 			if ($event['online'] == 0 && $event['location'] != false) {
-				$this->func->addContent($this->view->location($event['location']), CNT_RIGHT);
+				$this->pageCompositionHelper->addContent($this->view->location($event['location']), CNT_RIGHT);
 			} elseif ($event['online'] == 1) {
-				$this->func->addContent($this->view->locationMumble(), CNT_RIGHT);
+				$this->pageCompositionHelper->addContent($this->view->locationMumble(), CNT_RIGHT);
 			}
 
 			if ($event['invites']) {
-				$this->func->addContent($this->view->invites($event['invites']), CNT_RIGHT);
+				$this->pageCompositionHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
 			}
-			$this->func->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
 			$this->func->go('/?page=dashboard');
 		}
 	}
 
-	private function isEventAdmin($event)
+	private function isEventAdmin($event): bool
 	{
-		if ($event['fs_id'] == $this->func->fsId() || $this->func->isBotFor($event['bezirk_id']) || $this->session->may('orga')) {
-			return true;
-		}
-
-		return false;
+		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
+				$event['bezirk_id']
+			) || $this->session->may('orga');
 	}
 
-	private function mayEvent($event)
+	private function mayEvent($event): bool
 	{
-		if ($event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($event['bezirk_id']) || isset($event['invites']['may'][$this->func->fsId()])) {
-			return true;
-		}
-
-		return false;
+		return $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
+				$event['bezirk_id']
+			) || isset($event['invites']['may'][$this->session->id()]);
 	}
 
 	public function edit()
@@ -72,18 +67,18 @@ class EventControl extends Control
 			if (!$this->isEventAdmin($event)) {
 				return false;
 			}
-			if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam() || $this->func->isBotFor($event['bezirk_id'])) {
-				$this->func->addBread('Termine', '/?page=event');
-				$this->func->addBread('Neuer Termin');
+			if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam() || $this->session->isAdminFor($event['bezirk_id'])) {
+				$this->pageCompositionHelper->addBread('Termine', '/?page=event');
+				$this->pageCompositionHelper->addBread('Neuer Termin');
 
 				if ($this->isSubmitted()) {
 					if ($data = $this->validateEvent()) {
-						if ($this->model->updateEvent($_GET['id'], $data)) {
+						if ($this->gateway->updateEvent($_GET['id'], $data)) {
 							if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
-								$this->model->deleteInvites($_GET['id']);
+								$this->gateway->deleteInvites($_GET['id']);
 							}
 							if ($data['invite']) {
-								$this->model->inviteBezirk($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
+								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
 							$this->func->info('Event wurde erfolgreich geändert!');
 							$this->func->go('/?page=event&id=' . (int)$_GET['id']);
@@ -93,7 +88,7 @@ class EventControl extends Control
 
 				$bezirke = $this->session->getRegions();
 
-				if ($event['location_id'] > 0) {
+				if ($event['location_id'] !== null) {
 					if ($loc = $this->gateway->getLocation($event['location_id'])) {
 						$event['location_name'] = $loc['name'];
 						$event['lat'] = $loc['lat'];
@@ -106,7 +101,7 @@ class EventControl extends Control
 
 				$this->func->setEditData($event);
 
-				$this->func->addContent($this->view->eventForm($bezirke));
+				$this->pageCompositionHelper->addContent($this->view->eventForm($bezirke));
 			} else {
 				$this->func->go('/?page=event');
 			}
@@ -115,14 +110,14 @@ class EventControl extends Control
 
 	public function add()
 	{
-		$this->func->addBread('Termine', '/?page=event');
-		$this->func->addBread('Neuer Termin');
+		$this->pageCompositionHelper->addBread('Termine', '/?page=event');
+		$this->pageCompositionHelper->addBread('Neuer Termin');
 
 		if ($this->isSubmitted()) {
 			if ($data = $this->validateEvent()) {
-				if ($id = $this->model->addEvent($data)) {
+				if ($id = $this->gateway->addEvent($this->session->id(), $data)) {
 					if ($data['invite']) {
-						$this->model->inviteBezirk($data['bezirk_id'], $id, $data['invitesubs']);
+						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
 					$this->func->info('Event wurde erfolgreich eingetragen!');
 					$this->func->go('/?page=event&id=' . (int)$id);
@@ -131,7 +126,7 @@ class EventControl extends Control
 		} else {
 			$bezirke = $this->session->getRegions();
 
-			$this->func->addContent($this->view->eventForm($bezirke));
+			$this->pageCompositionHelper->addContent($this->view->eventForm($bezirke));
 		}
 	}
 
@@ -141,7 +136,7 @@ class EventControl extends Control
 			'name' => '',
 			'description' => '',
 			'online_type' => 0,
-			'location_id' => 0,
+			'location_id' => null,
 			'start' => date('Y-m-d') . ' 15:00:00',
 			'end' => date('Y-m-d') . ' 16:00:00',
 			'public' => 0,
@@ -204,7 +199,7 @@ class EventControl extends Control
 			$out['location_id'] = $id;
 		} else {
 			$out['online'] = 1;
-			$out['location_id'] = 0;
+			$out['location_id'] = null;
 		}
 
 		return $out;

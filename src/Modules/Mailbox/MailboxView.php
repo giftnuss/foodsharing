@@ -19,7 +19,7 @@ class MailboxView extends View
 						$("#mbh-folder").val("inbox");$("#mbh-mailbox").val(' . (int)$b['id'] . ');$("#mbh-type").val("' . $b['type'] . '");';
 			}
 
-			$children[] = '{title: "' . $b['name'] . '@' . DEFAULT_EMAIL_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
+			$children[] = '{title: "' . $b['name'] . '@' . PLATFORM_MAILBOX_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
                     children: [
                         {title: "' . $this->func->s('inbox') . '",ident:' . $b['id'] . ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '"},
                         {title: "' . $this->func->s('sent') . '",ident:' . $b['id'] . ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '"},
@@ -28,7 +28,7 @@ class MailboxView extends View
                 }';
 		}
 
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#mailfolder").dynatree({
             onActivate: function(node) {
                 
@@ -57,7 +57,7 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_EMAIL_HOST, array(
+		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, array(
 			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
 			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
@@ -168,7 +168,7 @@ class MailboxView extends View
 		}
 
 		if ($mail['time_ts'] > 1391338283) {
-			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
+			$body = '<iframe sandbox="" style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
 		} else {
 			$body = nl2br($mail['body']);
 		}
@@ -222,7 +222,7 @@ class MailboxView extends View
 
 	public function folderlist($mailboxes, $mailadresses)
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 		setAutocompleteAddresses(' . json_encode($mailadresses) . ');
 		$("#message-body").dialog({
 			autoOpen:false,
@@ -234,7 +234,7 @@ class MailboxView extends View
 		    	$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
 		  	}
 		});');
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 		<div id="message-body">
 			
 		</div>
@@ -246,18 +246,18 @@ class MailboxView extends View
 			[type] => bot
 		 */
 		if (count($mailboxes) == 1) {
-			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_EMAIL_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
+			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . PLATFORM_MAILBOX_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {
 			$von = '
 			<select class="von-select ui-corner-all" id="edit-von">';
 			foreach ($mailboxes as $m) {
 				$von .= '
-				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_EMAIL_HOST . ')</option>';
+				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . PLATFORM_MAILBOX_HOST . ')</option>';
 			}
 			$von .= '
 			</select>';
 		}
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 		$("#message-editor").dialog({
 			autoOpen:false,
 			width:980,
@@ -280,14 +280,14 @@ class MailboxView extends View
 				
 		  	}
 		});
-		$("#etattach").change(function(){
+		$("#etattach").on("change", function(){
 			if(this.files[0].size < 1310720)
 			{
 				$("#etattach-button").button( "option", "disabled", true );
 				setTimeout(function(){
 					$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
 				},10);
-				$(".et-filebox form").submit();
+				$(".et-filebox form").trigger("submit");
 			}
 			else
 			{
@@ -296,7 +296,7 @@ class MailboxView extends View
 		});
 		');
 
-		$this->func->addHidden('
+		$this->pageCompositionHelper->addHidden('
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">

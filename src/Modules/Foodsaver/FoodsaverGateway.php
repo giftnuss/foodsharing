@@ -2,9 +2,10 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
-class FoodsaverGateway extends BaseGateway
+final class FoodsaverGateway extends BaseGateway
 {
 	public function getFoodsaver($bezirk_id)
 	{
@@ -40,7 +41,7 @@ class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverDetails($fs_id)
+	public function getFoodsaverDetails($fs_id): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -79,7 +80,9 @@ class FoodsaverGateway extends BaseGateway
 					fs.photo,
 					fs.geschlecht,
 					fs.stat_fetchweight,
-					fs.sleep_status
+					fs.stat_fetchcount,
+					fs.sleep_status,
+					fs.id
 
 			FROM 	`fs_foodsaver` fs
 
@@ -277,34 +280,29 @@ class FoodsaverGateway extends BaseGateway
 
 	public function xhrGetFoodsaver($data): array
 	{
+		if (isset($data['bid'])) {
+			throw new Exception('filterung by bezirkIds is not supported anymore');
+		}
+
 		$term = $data['term'];
 		$term = trim($term);
 		$term = preg_replace('/[^a-zA-ZäöüÖÜß]/', '', $term);
-
-		$bezirk = '';
-		if (isset($data['bid'])) {
-			if (is_array($data['bid'])) {
-				$bezirk = 'AND bezirk_id IN(' . implode(',', $data['bid']) . ')';
-			} else {
-				$bezirk = 'AND bezirk_id = ' . (int)$data['bid'];
-			}
-		}
+		$term = $term . '%';
 
 		if (strlen($term) > 2) {
 			$out = $this->db->fetchAll('
 				SELECT		`id`,
 							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
 				FROM 		fs_foodsaver
-				WHERE 		((`name` LIKE "' . $term . '%"
-				OR 			`nachname` LIKE "' . $term . '%"))
+				WHERE 		((`name` LIKE :term
+				OR 			`nachname` LIKE :term2))
 				AND			deleted_at IS NULL
-				' . $bezirk . '
-			');
+			', [':term' => $term, ':term2' => $term]);
 
 			return $out;
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	public function getEmailAdressen($region_ids)
@@ -552,6 +550,8 @@ class FoodsaverGateway extends BaseGateway
 
 	public function del_foodsaver($id)
 	{
+		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $id]);
+
 		$this->db->execute('
 			INSERT INTO fs_foodsaver_archive
 			(
@@ -784,5 +784,15 @@ class FoodsaverGateway extends BaseGateway
 		$options[$key] = $val;
 
 		return $this->db->update('fs_foodsaver', ['option' => serialize($options)], ['id' => $fs_id]);
+	}
+
+	public function deleteFromRegion(int $bezirk_id, int $foodsaver_id): void
+	{
+		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
+		if ($mainRegion_id === $bezirk_id) {
+			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);
+		}
 	}
 }

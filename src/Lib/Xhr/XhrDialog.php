@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\SanitizerService;
 
 class XhrDialog
 {
@@ -15,7 +15,6 @@ class XhrDialog
 	private $script;
 	private $scriptBefore;
 	private $scriptAfter;
-	private $onclose;
 	private $onopen;
 	private $classnames;
 	/**
@@ -26,20 +25,25 @@ class XhrDialog
 	 * @var Func
 	 */
 	private $func;
+	/**
+	 * @var SanitizerService
+	 */
+	private $sanitizerService;
 
 	public function __construct($title = false)
 	{
-		$this->viewUtils = DI::$shared->get(Utils::class);
-		$this->func = DI::$shared->get(Func::class);
+		global $container;
+		$this->viewUtils = $container->get(Utils::class);
+		$this->func = $container->get(Func::class);
 		$this->id = 'd-' . uniqid();
 		$this->buttons = array();
 		$this->options = array();
 		$this->script = '';
 		$this->content = '';
 		$this->scriptBefore = '';
-		$this->onclose = array();
 		$this->onopen = array();
 		$this->classnames = array();
+		$this->sanitizerService = $container->get(SanitizerService::class);
 
 		if ($title !== false) {
 			$this->addOpt('title', $title);
@@ -106,11 +110,6 @@ class XhrDialog
 		);
 	}
 
-	public function onClose($js)
-	{
-		$this->onclose[] = $js;
-	}
-
 	public function onOpen($js)
 	{
 		$this->onopen[] = $js;
@@ -122,17 +121,6 @@ class XhrDialog
 			'text' => $text,
 			'click' => $click
 		);
-	}
-
-	public function removeTitlebar()
-	{
-		$this->onOpen('$("#' . $this->getId() . '").siblings("div.ui-dialog-titlebar").remove();');
-	}
-
-	public function noClose()
-	{
-		$this->onOpen('$(".ui-dialog-titlebar-close").hide();');
-		$this->addOpt('closeOnEscape', 'false', false);
 	}
 
 	public function setResizeable($val = true)
@@ -170,14 +158,14 @@ class XhrDialog
 				'));
 		$this->addJs('
 				
-			$("#' . $in_id . '-file").change(function(){
-				$("#' . $in_id . '-form").submit();
+			$("#' . $in_id . '-file").on("change", function(){
+				$("#' . $in_id . '-form").trigger("submit");
 				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
 				$(".attach-preview").show();
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
 			});
 			
-			$("#' . $in_id . '").button().click(function(){
+			$("#' . $in_id . '").button().on("click", function(){
 				$("#' . $in_id . '-file").trigger("click");
 			});;	
 		');
@@ -193,7 +181,7 @@ class XhrDialog
 				$("#' . $this->getId() . '").dialog("option","width",$(window).width()-30);
 			}
 				
-			$(window).resize(function(){
+			$(window).on("resize", function(){
 				$("#' . $this->getId() . '").dialog("option","maxHeight",$(window).height()-30);
 			});	
 		');
@@ -210,9 +198,6 @@ class XhrDialog
 
 		$this->addJs('$("#' . $this->id . '").dialog("option", "position", "center");');
 
-		if (!empty($this->onclose)) {
-			$this->addOpt('open', 'function( event, ui ) {alert(0);' . implode(' ', $this->onclose) . '}', false);
-		}
 		if (!empty($this->onopen)) {
 			$this->addOpt('open', 'function( event, ui ) {' . implode(' ', $this->onopen) . '}', false);
 		}
@@ -239,7 +224,7 @@ class XhrDialog
 					$(".xhrDialog").remove();
 				}
 				$("body").append(\'<div class="xhrDialog" style="display:none;" id="' . $this->id . '"></div>\');
-				$("#' . $this->id . '").html(\'' . $this->func->jsSafe($this->content) . '\');
+				$("#' . $this->id . '").html(\'' . $this->sanitizerService->jsSafe($this->content) . '\');
 				$(".xhrDialog .input.textarea").css("height","50px");
 				$(".xhrDialog .input.textarea").autosize();
 				$("#' . $this->id . '").dialog({

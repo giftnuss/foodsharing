@@ -13,13 +13,15 @@ class SettingsXhr extends Control
 {
 	private $foodsaverGateway;
 	private $loginGateway;
+	private $settingsGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
+	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
+		$this->settingsGateway = $settingsGateway;
 
 		parent::__construct();
 
@@ -30,7 +32,7 @@ class SettingsXhr extends Control
 
 	public function changemail()
 	{
-		if ($this->func->may()) {
+		if ($this->session->mayLegacy()) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 
@@ -39,10 +41,10 @@ class SettingsXhr extends Control
 			$dia->addButton('E-Mail-Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
 
 			return $dia->xhrout();
-		} else {
-			echo '0';
-			die();
 		}
+
+		echo '0';
+		die();
 	}
 
 	public function changemail2()
@@ -54,11 +56,11 @@ class SettingsXhr extends Control
 					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
 				);
 			}
-			$token = md5(uniqid(mt_rand(), true));
+			$token = bin2hex(random_bytes(16));
 			$this->model->addNewMail($_GET['email'], $token);
 			// anrede name link
 
-			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->func->fsId())) {
+			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {
 				$this->func->tplMail(21, $_GET['email'], array(
 					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
@@ -100,21 +102,23 @@ class SettingsXhr extends Control
 
 	public function changemail4()
 	{
-		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->func->fsId())) {
+		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->session->id())) {
 			$did = strip_tags($_GET['did']);
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
 					if ($this->model->changeMail($email)) {
+						$this->settingsGateway->logChangedSetting($this->session->id(), ['email' => $this->session->user('email')], ['email' => $email], ['email']);
+
 						return array(
 							'status' => 1,
 							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
 						);
-					} else {
-						return array(
-							'status' => 1,
-							'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-						);
 					}
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
+					);
 				}
 			}
 		}

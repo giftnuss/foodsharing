@@ -1,26 +1,35 @@
 <template>
   <nav-item-dropdown
     tooltip="Deine Betriebe"
-    no-caret>
+    no-caret
+  >
     <template slot="button-content">
-      <i class="fas fa-shopping-cart"/>
+      <i class="fas fa-shopping-cart" />
     </template>
     <div
       v-for="store in stores"
-      :key="store.id">
+      :key="store.id"
+    >
       <a
         :href="$url('store', store.id)"
         role="menuitem"
-        class="dropdown-item text-truncate"> {{ store.name }} </a>
+        class="dropdown-item text-truncate"
+      >
+        {{ store.name }}
+      </a>
     </div>
     <div
       v-if="stores.length && mayAddStore"
-      class="dropdown-divider"/>
+      class="dropdown-divider"
+    />
     <a
       v-if="mayAddStore"
       :href="$url('storeAdd')"
       role="menuitem"
-      class="dropdown-item"><small><i class="fas fa-plus" /> Einem Betrieb hinzufügen</small></a>
+      class="dropdown-item"
+    >
+      <small><i class="fas fa-plus" /> Neuen Betrieb anlegen</small>
+    </a>
   </nav-item-dropdown>
 </template>
 <script>

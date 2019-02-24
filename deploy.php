@@ -19,15 +19,13 @@ set('shared_files', ['config.inc.prod.php']);
 set('shared_dirs', ['images', 'data', 'tmp']);
 
 // Writable dirs by web server
-set('writable_dirs', ['tmp', 'cache', 'cache/searchindex', 'cache/htmlpurifier-cache']);
+set('writable_dirs', ['tmp', 'cache']);
 set('http_user', 'www-data');
-set('clear_paths', ['cache/.views-cache', 'cache/di-cache.php']);
 
 // default timeout of 300 was failing sometimes
 set('default_timeout', 600);
 
 // Hosts
-
 host('beta')
 	->hostname('banana.foodsharing.de')
 	->user('deploy')
@@ -39,12 +37,22 @@ host('production')
 	->set('deploy_path', '~/production-deploy');
 
 // Tasks
-
 desc('Create the revision information');
-task('deploy:create_revision', './scripts/generate-revision.sh');
+task('deploy:create_revision', function () {
+	$revision = input()->getOption('revision');
+	cd('{{release_path}}');
+	run("./scripts/generate-revision.sh $revision");
+});
 
-desc('Build the frontend');
-task('deploy:build_frontend', 'cd client && yarn && yarn build');
+task('deploy:update_code', function () {
+	upload(__DIR__ . '/', '{{release_path}}', [
+		'--exclude=.git',
+		'--exclude=client',
+		'--exclude=migrations',
+		'--exclude=deployer',
+		'--compress-level=9'
+	]);
+});
 
 desc('Deploy your project');
 task('deploy', [
@@ -53,12 +61,10 @@ task('deploy', [
 	'deploy:lock',
 	'deploy:release',
 	'deploy:update_code',
-	'deploy:shared',
 	'deploy:writable',
-	'deploy:vendors',
+	'deploy:shared',
 	'deploy:clear_paths',
 	'deploy:create_revision',
-	'deploy:build_frontend',
 	'deploy:symlink',
 	'deploy:unlock',
 	'cleanup',

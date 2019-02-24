@@ -1,3 +1,7 @@
+.infos {
+  width: 100%;
+}
+
 .infos p {
   font-size: 12px;
   letter-spacing: normal;
@@ -16,13 +20,20 @@
   background-color: red;
 }
 
+
 .profile.statdisplay {
-  position: relative;
-  top: -50px;
-  float: right;
-  display: block;
-  width: 100%;
-  margin: 0 0 -60px 0;
+  margin: -20px auto 10px auto;
+}
+
+@media screen and (min-width: 500px) {
+  .profile.statdisplay {
+    position: relative;
+    top: -50px;
+    float: right;
+    display: block;
+    width: 100%;
+    margin: 0 0 -60px 0;
+  }
 }
 
 .profile.statdisplay .item {

@@ -35,7 +35,7 @@ class StatsControl extends ConsoleControl
 				$stat_fetchcount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()');
 				$stat_post = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_theme_post WHERE foodsaver_id = ' . (int)$fsid);
 				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_wallpost WHERE foodsaver_id = ' . (int)$fsid);
-				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_betrieb_notiz WHERE foodsaver_id = ' . (int)$fsid);
+				$stat_post += (int)$this->model->qOne('SELECT COUNT(id) FROM fs_betrieb_notiz WHERE milestone = 0 AND foodsaver_id = ' . (int)$fsid);
 
 				$stat_bananacount = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 2 AND foodsaver_id = ' . (int)$fsid);
 
@@ -43,7 +43,7 @@ class StatsControl extends ConsoleControl
 
 				$stat_fetchrate = 100;
 
-				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 3 AND foodsaver_id = ' . (int)$fsid);
+				$count_not_fetch = (int)$this->model->qOne('SELECT COUNT(foodsaver_id) FROM fs_report WHERE `reporttype` = 1 AND committed = 1 AND tvalue like \'%Ist gar nicht zum Abholen gekommen%\' AND foodsaver_id = ' . (int)$fsid);
 
 				if ($count_not_fetch > 0 && $stat_fetchcount >= $count_not_fetch) {
 					$stat_fetchrate = round(100 - ($count_not_fetch / ($stat_fetchcount / 100)), 2);
@@ -51,14 +51,14 @@ class StatsControl extends ConsoleControl
 
 				$this->model->update('
 						UPDATE fs_foodsaver
-		
+
 						SET 	stat_fetchweight = ' . (float)$stat_gerettet . ',
 						stat_fetchcount = ' . (int)$stat_fetchcount . ',
 						stat_postcount = ' . (int)$stat_post . ',
 						stat_buddycount = ' . (int)$stat_buddycount . ',
 						stat_bananacount = ' . (int)$stat_bananacount . ',
 						stat_fetchrate = ' . (float)$stat_fetchrate . '
-		
+
 						WHERE 	id = ' . (int)$fsid . '
 				');
 			}
@@ -97,7 +97,6 @@ class StatsControl extends ConsoleControl
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
-						'stat_add_date' => $fs['stat_add_date'],
 						'foodsaver_id' => $fs['id'],
 						'betrieb_id' => $bid,
 						'verantwortlich' => $fs['verantwortlich'],
@@ -108,19 +107,11 @@ class StatsControl extends ConsoleControl
 					/* first_fetch */
 					if ($first_fetch = $this->model->getFirstFetchInBetrieb($bid, $fs['id'])) {
 						$newdata['stat_first_fetch'] = $first_fetch;
-						if ((int)$fs['add_date'] == 0) {
-							$newdata['stat_add_date'] = $first_fetch;
-						}
 					}
 
 					/*last fetch*/
 					if ($last_fetch = $this->model->getLastFetchInBetrieb($bid, $fs['id'])) {
 						$newdata['stat_last_fetch'] = $last_fetch;
-					}
-
-					/* add date*/
-					if ((int)$newdata['stat_add_date'] == 0) {
-						$newdata['stat_add_date'] = $added;
 					}
 
 					/*fetchcount*/
@@ -129,7 +120,7 @@ class StatsControl extends ConsoleControl
 					$this->model->updateBetriebStat(
 						$bid, // Betrieb id
 						$fs['id'], // foodsaver_id
-						$newdata['stat_add_date'], // add date
+						$fs['stat_add_date'], // add date
 						$newdata['stat_first_fetch'], // erste mal abholen
 						$fetchcount, // anzahl abholungen
 						$newdata['stat_last_fetch']

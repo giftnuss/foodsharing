@@ -6,11 +6,11 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\WallPost\WallPostGateway;
 use Foodsharing\Permissions\WallPostPermissions;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class WallRestController extends FOSRestController
+class WallRestController extends AbstractFOSRestController
 {
 	private $wallPostGateway;
 	private $wallPostService;

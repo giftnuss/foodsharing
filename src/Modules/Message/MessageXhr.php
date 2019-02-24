@@ -2,16 +2,27 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Store\StoreGateway;
 
-class MessageXhr extends Control
+final class MessageXhr extends Control
 {
-	public function __construct(MessageModel $model, MessageView $view)
+	private $messageGateway;
+	private $storeGateway;
+	/**
+	 * @var WebSocketSender
+	 */
+	private $webSocketSender;
+
+	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, StoreGateway $storeGateway, WebSocketSender $webSocketSender)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->messageGateway = $messageGateway;
+		$this->storeGateway = $storeGateway;
+		$this->webSocketSender = $webSocketSender;
 
 		parent::__construct();
 
@@ -24,7 +35,7 @@ class MessageXhr extends Control
 	/**
 	 * ajax call to rename an conversation.
 	 */
-	public function rename()
+	public function rename(): void
 	{
 		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid'])) {
 			$xhr = new Xhr();
@@ -32,10 +43,8 @@ class MessageXhr extends Control
 			$name = htmlentities($_GET['name']);
 			$name = trim($name);
 
-			if ($name != '') {
-				if ($this->model->renameConversation($_GET['cid'], $name)) {
-					$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
-				}
+			if (($name != '') && $this->model->renameConversation($_GET['cid'], $name)) {
+				$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
 			}
 
 			$xhr->send();
@@ -45,35 +54,34 @@ class MessageXhr extends Control
 	/**
 	 * ajax call to delete logged in user from an chat.
 	 */
-	public function leave()
+	public function leave(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid'])) {
-			if ($this->model->deleteUserFromConversation($_GET['cid'], $this->func->fsId())) {
-				$xhr = new Xhr();
-				$xhr->addScript('conv.close(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . '").remove();conv.registerPollingService();');
-				$xhr->send();
-			}
+		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked(
+				$_GET['cid']
+			) && $this->model->deleteUserFromConversation($_GET['cid'], $this->session->id())) {
+			$xhr = new Xhr();
+			$xhr->addScript('conv.close(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . '").remove();conv.registerPollingService();');
+			$xhr->send();
 		}
 	}
 
 	/**
 	 * ajax call to load an existing conversation.
 	 */
-	public function loadconversation()
+	public function loadconversation(): void
 	{
-		if ($this->mayConversation((int)$_GET['id'])) {
-			if ($member = $this->model->listConversationMembers($_GET['id'])) {
-				$xhr = new Xhr();
-				$xhr->addData('member', $member);
-				$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $_GET['id']));
-				if ($msgs = $this->model->loadConversationMessages($_GET['id'])) {
-					$xhr->addData('messages', $msgs);
-				}
-
-				$this->model->setAsRead(array((int)$_GET['id']));
-
-				$xhr->send();
+		$id = (int)$_GET['id'];
+		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
+			$xhr = new Xhr();
+			$xhr->addData('member', $member);
+			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
+				$xhr->addData('messages', $msgs);
 			}
+
+			$this->model->setAsRead(array((int)$_GET['id']));
+
+			$xhr->send();
 		}
 	}
 
@@ -83,7 +91,7 @@ class MessageXhr extends Control
 	 * GET['lmid'] = last message id
 	 * GET['cid'] = conversation_id
 	 */
-	public function loadmore()
+	public function loadmore(): void
 	{
 		if ($this->mayConversation((int)$_GET['cid'])) {
 			$xhr = new Xhr();
@@ -102,7 +110,7 @@ class MessageXhr extends Control
 	 * GET['b'] = body text
 	 * GET['c'] = conversation id
 	 */
-	public function sendmsg()
+	public function sendmsg(): void
 	{
 		$xhr = new Xhr();
 		if ($this->mayConversation($_POST['c'])) {
@@ -111,50 +119,48 @@ class MessageXhr extends Control
 			if (isset($_POST['b'])) {
 				$body = trim($_POST['b']);
 				$body = htmlentities($body);
-				if (!empty($body)) {
-					if ($message_id = $this->model->sendMessage($_POST['c'], $body)) {
-						$xhr->setStatus(1);
+				if (!empty($body) && $message_id = $this->model->sendMessage($_POST['c'], $body)) {
+					$xhr->setStatus(1);
 
-						/*
-						 * for not so db intensive polling store updates in memcache if the recipients are online
-						*/
-						if ($member = $this->model->listConversationMembers($_POST['c'])) {
-							$user_ids = array_column($member, 'id');
+					/*
+					 * for not so db intensive polling store updates in memcache if the recipients are online
+					*/
+					if ($member = $this->model->listConversationMembers($_POST['c'])) {
+						$user_ids = array_column($member, 'id');
 
-							$this->func->sendSockMulti($user_ids, 'conv', 'push', array(
-								'id' => $message_id,
-								'cid' => (int)$_POST['c'],
-								'fs_id' => $this->func->fsId(),
-								'fs_name' => $this->session->user('name'),
-								'fs_photo' => $this->session->user('photo'),
-								'body' => $body,
-								'time' => date('Y-m-d H:i:s')
-							));
+						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
+							'id' => $message_id,
+							'cid' => (int)$_POST['c'],
+							'fs_id' => $this->session->id(),
+							'fs_name' => $this->session->user('name'),
+							'fs_photo' => $this->session->user('photo'),
+							'body' => $body,
+							'time' => date('Y-m-d H:i:s')
+						));
 
-							foreach ($member as $m) {
-								if ($m['id'] != $this->func->fsId()) {
-									Mem::userAppend($m['id'], 'msg-update', (int)$_POST['c']);
+						foreach ($member as $m) {
+							if ($m['id'] != $this->session->id()) {
+								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
-									/*
-									 * send an E-Mail if the user is not online
-									*/
-									if ($this->model->wantMsgEmailInfo($m['id'])) {
-										$this->convMessage($m, $_POST['c'], $body, $this->model);
-									}
+								/*
+								 * send an E-Mail if the user is not online
+								*/
+								if ($this->model->wantMsgEmailInfo($m['id'])) {
+									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
 								}
 							}
 						}
-
-						$xhr->addData('msg', array(
-							'id' => $message_id,
-							'body' => $body,
-							'time' => date('Y-m-d H:i:s'),
-							'fs_photo' => $this->session->user('photo'),
-							'fs_name' => $this->session->user('name'),
-							'fs_id' => $this->func->fsId()
-						));
-						$xhr->send();
 					}
+
+					$xhr->addData('msg', array(
+						'id' => $message_id,
+						'body' => $body,
+						'time' => date('Y-m-d H:i:s'),
+						'fs_photo' => $this->session->user('photo'),
+						'fs_name' => $this->session->user('name'),
+						'fs_id' => $this->session->id()
+					));
+					$xhr->send();
 				}
 			}
 		}
@@ -165,11 +171,16 @@ class MessageXhr extends Control
 	/**
 	 * ajax call to load all active conversations.
 	 */
-	public function loadconvlist()
+	public function loadconvlist(): void
 	{
 		$this->session->noWrite();
 
-		if ($conversations = $this->model->listConversations()) {
+		$limit = -1;
+		if (isset($_GET['limit'])) {
+			$limit = (int)$_GET['limit'];
+		}
+
+		if ($conversations = $this->model->listConversations($limit)) {
 			$xhr = new Xhr();
 
 			// because some of the messages and the titles are still stored in encoded html, theres the option to
@@ -200,8 +211,10 @@ class MessageXhr extends Control
 	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array.
 	 *
 	 * @param int $conversation_id
+	 *
+	 * @return bool
 	 */
-	private function mayConversation($conversation_id)
+	private function mayConversation(int $conversation_id): bool
 	{
 		// first get the session array
 		if (!($ids = $this->session->get('msg_conversations'))) {
@@ -209,9 +222,11 @@ class MessageXhr extends Control
 		}
 
 		// check if the conversation in stored in the session
-		if (isset($ids[(int)$conversation_id])) {
+		if (isset($ids[$conversation_id])) {
 			return true;
-		} elseif ($this->model->mayConversation($conversation_id)) {
+		}
+
+		if ($this->model->mayConversation($conversation_id)) {
 			$ids[$conversation_id] = true;
 			$this->session->set('msg_conversations', $ids);
 
@@ -221,16 +236,14 @@ class MessageXhr extends Control
 		return false;
 	}
 
-	public function user2conv()
+	public function user2conv(): void
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['fsid']) && (int)$_GET['fsid'] > 0) {
-			if ($cid = $this->model->user2conv($_GET['fsid'])) {
-				$xhr->setStatus(1);
-				$xhr->addData('cid', $cid);
-				$xhr->send();
-			}
+		if (isset($_GET['fsid']) && (int)$_GET['fsid'] > 0 && $cid = $this->model->user2conv($_GET['fsid'])) {
+			$xhr->setStatus(1);
+			$xhr->addData('cid', $cid);
+			$xhr->send();
 		}
 
 		$xhr->setStatus(0);
@@ -240,7 +253,7 @@ class MessageXhr extends Control
 	/**
 	 * ajax call to add an new conversation to this call comes 2 important POST parameters recip => an array with user ids body => the message body text.
 	 */
-	public function newconversation()
+	public function newconversation(): void
 	{
 		/*
 		 *  body	asd
@@ -249,9 +262,9 @@ class MessageXhr extends Control
 		 */
 
 		/*
-		 * Check is there are correct post data sendet?
+		 * Check is there are correct post data sender?
 		 */
-		if (isset($_POST['recip']) && isset($_POST['body'])) {
+		if (isset($_POST['recip'], $_POST['body'])) {
 			/*
 			 * initiate an xhr object
 			 */
@@ -274,7 +287,7 @@ class MessageXhr extends Control
 
 			if (!empty($recip) && $body != '') {
 				/*
-				 * add conversation if successfull send an success message otherwise error
+				 * add conversation if successful send an success message otherwise error
 				 */
 				if ($cid = $this->model->addConversation($recip, $body)) {
 					/*
@@ -298,34 +311,36 @@ class MessageXhr extends Control
 	/**
 	 * ajax call to check every time updates in all conversations
 	 * GET[m] is the last message id and GET[cid] is the current conversation id.
+	 *
+	 * @param $opt
+	 *
+	 * @return array|bool
 	 */
 	public function heartbeat($opt)
 	{
 		$cid = false;
 		$lmid = false;
 
-		if (isset($opt['cid']) && $this->mayConversation($opt['cid']) && isset($opt['mid'])) {
+		if (isset($opt['cid'], $opt['mid']) && $this->mayConversation($opt['cid'])) {
 			$cid = (int)$opt['cid'];
 			$lmid = (int)$opt['mid'];
 		}
 
-		if ($convids = $this->model->checkConversationUpdates()) {
-			$conv_keys = array_flip($convids);
+		if ($conversationIDs = $this->model->checkConversationUpdates()) {
+			$conversationKeys = array_flip($conversationIDs);
 
-			$this->model->setAsRead($convids);
+			$this->model->setAsRead($conversationIDs);
 			$return = array();
 			/*
 			 * check is a new message there for active conversation?
 			 */
 
-			if ($cid && isset($conv_keys[$cid])) {
-				if ($messages = $this->model->getLastMessages($cid, $lmid)) {
-					$return['messages'] = $messages;
-				}
+			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->model->getLastMessages($cid, $lmid)) {
+				$return['messages'] = $messages;
 			}
 
-			if ($convs = $this->model->listConversationUpdates($convids)) {
-				$return['convs'] = $convs;
+			if ($conversations = $this->model->listConversationUpdates($conversationIDs)) {
+				$return['convs'] = $conversations;
 			}
 
 			return array(
@@ -337,7 +352,7 @@ class MessageXhr extends Control
 		return false;
 	}
 
-	public function people()
+	public function people(): void
 	{
 		$this->session->noWrite();
 

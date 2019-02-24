@@ -6,13 +6,12 @@ use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
-	private $emailTemplateGateway;
+	private $emailTemplateAdminGateway;
 
-	public function __construct(EmailTemplateAdminModel $model, EmailTemplateAdminView $view, EmailTemplateGateway $emailTemplateGateway)
+	public function __construct(EmailTemplateAdminView $view, EmailTemplateAdminGateway $emailTemplateAdminGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
-		$this->emailTemplateGateway = $emailTemplateGateway;
+		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 
 		parent::__construct();
 
@@ -26,37 +25,37 @@ class EmailTemplateAdminControl extends Control
 		if ($this->func->getAction('neu')) {
 			$this->handle_add();
 
-			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
-			$this->func->addBread($this->func->s('bread_new_message_tpl'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_new_message_tpl'));
 
-			$this->func->addContent($this->view->message_tpl_form());
+			$this->pageCompositionHelper->addContent($this->view->message_tpl_form());
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->func->getActionId('delete')) {
-			if ($this->model->del_message_tpl($id)) {
+			if ($this->emailTemplateAdminGateway->del_message_tpl($id)) {
 				$this->func->info($this->func->s('message_tpl_deleted'));
 				$this->func->goPage();
 			}
 		} elseif ($id = $this->func->getActionId('edit')) {
 			$this->handle_edit();
 
-			$this->func->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
-			$this->func->addBread($this->func->s('bread_edit_message_tpl'));
+			$this->pageCompositionHelper->addBread($this->func->s('bread_message_tpl'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('bread_edit_message_tpl'));
 
-			$data = $this->emailTemplateGateway->getOne_message_tpl($id);
+			$data = $this->emailTemplateAdminGateway->getOne_message_tpl($id);
 			$this->func->setEditData($data);
 
-			$this->func->addContent($this->view->message_tpl_form());
+			$this->pageCompositionHelper->addContent($this->view->message_tpl_form());
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->func->pageLink('message_tpl', 'back_to_overview')
 			)), $this->func->s('actions')), CNT_RIGHT);
 		} else {
-			$this->func->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
+			$this->pageCompositionHelper->addBread($this->func->s('message_tpl_bread'), '/?page=message_tpl');
 
-			if ($data = $this->model->getBasics_message_tpl()) {
+			if ($data = $this->emailTemplateAdminGateway->getBasics_message_tpl()) {
 				$rows = array();
 				foreach ($data as $d) {
 					$rows[] = array(
@@ -70,12 +69,12 @@ class EmailTemplateAdminControl extends Control
 					array('name' => $this->func->s('name'))
 				), $rows);
 
-				$this->func->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
 			} else {
 				$this->func->info($this->func->s('message_tpl_empty'));
 			}
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				array('href' => '/?page=message_tpl&a=neu', 'name' => $this->func->s('neu_message_tpl'))
 			)), 'Aktionen'), CNT_RIGHT);
 		}
@@ -85,7 +84,7 @@ class EmailTemplateAdminControl extends Control
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
-			if ($this->model->update_message_tpl($_GET['id'], $g_data)) {
+			if ($this->emailTemplateAdminGateway->update_message_tpl($_GET['id'], $g_data)) {
 				$this->func->info($this->func->s('message_tpl_edit_success'));
 				$this->func->goPage();
 			} else {
@@ -98,7 +97,7 @@ class EmailTemplateAdminControl extends Control
 	{
 		global $g_data;
 		if ($this->func->submitted()) {
-			if ($this->emailTemplateGateway->add_message_tpl($g_data)) {
+			if ($this->emailTemplateAdminGateway->add_message_tpl($g_data)) {
 				$this->func->info($this->func->s('message_tpl_add_success'));
 				$this->func->goPage();
 			} else {

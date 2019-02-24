@@ -21,7 +21,7 @@ function mapOldResponseToNewFormat (data) {
   const mapping = {
     'Foodsaver': 'users',
     'Bezirk': 'regions',
-    'Lebensmittelspenderbetrieb/e': 'stores',
+    'Kooperationsbetrieb/e': 'stores',
     'Deine Gruppen': 'myGroups',
     'Deine Betriebe': 'myStores',
     'Deine Bezirke': 'myRegions',
@@ -43,6 +43,6 @@ export async function instantSearch (query) {
   return mapOldResponseToNewFormat((await get(`/../xhrapp.php?app=search&m=search&s=${encodeURIComponent(query)}`)).data)
 }
 
-export async function instantSearchIndex (token) {
-  return mapOldResponseToNewFormat(await get(`/../cache/searchindex/${encodeURIComponent(token)}.json`))
+export async function instantSearchIndex () {
+  return mapOldResponseToNewFormat(await get(`/search/legacyindex`))
 }

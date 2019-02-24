@@ -17,11 +17,11 @@ class MapControl extends Control
 
 	public function index()
 	{
-		$this->func->addTitle($this->func->s('map'));
+		$this->pageCompositionHelper->addTitle($this->func->s('map'));
 		$this->setTemplate('map');
 
-		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
-		$this->func->addContent($this->view->mapControl(), CNT_TOP);
+		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());
+		$this->pageCompositionHelper->addContent($this->view->mapControl(), CNT_TOP);
 
 		$jsarr = '';
 		if (isset($_GET['load']) && $_GET['load'] == 'baskets') {
@@ -30,24 +30,24 @@ class MapControl extends Control
 			$jsarr = '["fairteiler"]';
 		}
 
-		$this->func->addContent(
+		$this->pageCompositionHelper->addContent(
 			$this->view->lMap()
 		);
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
 			$center = $this->model->getValues(array('lat', 'lon'), 'betrieb', (int)$_GET['bid']);
 
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 				u_loadDialog("/xhr.php?f=bBubble&id=' . (int)$_GET['bid'] . '");
 			');
 		}
 
-		$this->func->addJs('u_init_map();');
+		$this->pageCompositionHelper->addJs('u_init_map();');
 
 		if ($center) {
-			$this->func->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
+			$this->pageCompositionHelper->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
 		}
 
-		$this->func->addJs('map.initMarker(' . $jsarr . ');');
+		$this->pageCompositionHelper->addJs('map.initMarker(' . $jsarr . ');');
 	}
 }

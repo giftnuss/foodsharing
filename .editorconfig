@@ -6,10 +6,13 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
+[{*.yaml,*.yml}]
+insert_final_newline = false
+
 [*.php]
 indent_style = tab
 
-[{*.css,*.js,*.sh,*.vue}]
+[{*.css,*.js,*.sh,*.vue,*.neon}]
 indent_style = space
 indent_size = 2
 
@@ -17,9 +20,9 @@ indent_size = 2
 trim_trailing_whitespace = false
 
 [lib/**]
-indent_style = none
-indent_size = none
-end_of_line = none
-trim_trailing_whitespace = none
-charset = none
-insert_final_newline = none
+indent_style = unset
+indent_size = unset
+end_of_line = unset
+trim_trailing_whitespace = unset
+charset = unset
+insert_final_newline = unset

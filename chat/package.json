@@ -8,6 +8,8 @@
     "node": ">=6.5.0"
   },
   "scripts": {
+    "lint": "eslint -c package.json .",
+    "fix": "eslint -c package.json --fix .",
     "test": "tape test.js | tap-spec",
     "test:watch": "tape-watch test.js | tap-spec"
   },
@@ -15,15 +17,34 @@
     "cookie": "^0.3.1",
     "randomstring": "^1.1.5",
     "redis": "^2.8.0",
-    "socket.io": "^1.5.0",
-    "url": "0.10.1"
+    "socket.io": "^2.2.0",
+    "url": "^0.11.0"
   },
   "devDependencies": {
-    "socket.io-client": "^1.5.1",
-    "browser-env": "^3.1.2",
-    "request": "^2.81.0",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.8.0",
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "request": "^2.88.0",
+    "socket.io-client": "^2.2.0",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.10.1",
     "tape-watch": "^2.3.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "standard"
+    ],
+    "rules": {
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ]
+    }
   }
 }

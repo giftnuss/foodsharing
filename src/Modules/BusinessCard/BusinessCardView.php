@@ -13,22 +13,22 @@ class BusinessCardView extends View
 
 	public function optionform($seldata)
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
 			
-			$("#opt").change(function(){
-				$("#optionen-form").submit();
+			$("#opt").on("change", function(){
+				$("#optionen-form").trigger("submit");
 			});
 				
-			$("#optionen-form").submit(function(ev){
+			$("#optionen-form").on("submit", function(ev){
 				ev.preventDefault();
 				if($("#opt").val() == "")
 				{
-					pulseError(\'' . $this->func->jsSafe($this->func->s('should_choose_option')) . '\');
+					pulseError(\'' . $this->sanitizerService->jsSafe($this->func->s('should_choose_option')) . '\');
 				}
 				else
 				{
-					ajreq("makeCard",{opt:$("#opt").val()});
+					goTo("/?page=bcard&sub=makeCard&opt=" + $("#opt").val());
 				}
 				
 			});		
@@ -36,10 +36,6 @@ class BusinessCardView extends View
 
 		return $this->v_utils->v_quickform($this->func->s('options'), array(
 				$this->v_utils->v_form_select('opt', array('desc' => $this->func->s('opt_desc'), 'values' => $seldata))
-			), array('submit' => 'Visitenkarten erstellen')) . '
-				
-		<div class="input-wrapper" id="dlbox" style="display:none;">
-			<a href="#" target="_blank" class="button">' . $this->func->s('download_card') . '</a>		
-		</div>';
+			), array('submit' => 'Visitenkarten erstellen'));
 	}
 }

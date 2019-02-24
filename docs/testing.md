@@ -1,16 +1,33 @@
 # Testing
 
+## Running tests
+
 Run the tests with:
 
 ```
 ./scripts/test
 ```
 
-You will need to have initialized everything once (with `./scripts/start`),
-but you do not need to have the main containers running to run the tests
-as it uses it's own cluster of docker containers.
+You will need to have initialized everything once (with `./scripts/start`), but you do not need to have the main containers running to run the tests as it uses it's own cluster of docker containers.
 
-After you have run the tests once, you can use `./scripts/test-rerun` which will run faster, it assumes that the containers have already been created and initialized, but otherwise is the same.
+After you have run the tests once, you can use `./scripts/test-rerun` which will run faster. It assumes that the containers have already been created and initialized, but otherwise is the same.
+
+So far, end to end testing is working nicely (called acceptance tests in codeception).
+They run with a headless Firefox and Selenium inside the Docker setup, they are run on CI build too.
+
+We are working on [restructing the code](https://gitlab.com/foodsharing-dev/foodsharing/issues/68) to enable unit testing.
+
+The test contains stay around after running, and you can visit the test app
+[in your browser](http://localhost:28080/), and it has
+[it's own phpmyadmin](http://localhost:28081/).
+
+If you want to run with debug mode turned on, then use: `./scripts/test --debug`.
+
+If you just want to run one test, then pass the path to that test as an argument, e.g. `./scripts/test tests/acceptance/LoginCept.php`.
+
+## Writing unit tests
+
+CodeCeption uses PHPUnitTests under the hood and therefore the [PHPUnit test documentation](https://phpunit.readthedocs.io/en/8.0/) can be helpful.
 
 ## Writing acceptance tests
 
@@ -53,17 +70,4 @@ Even just a javascript popup, like an alert, may not be visible immediately!
 $I->waitForPageBody()
 ```
 can be used to wait for the static page load to be done.
-It does also not wait for any javascript executed etc...
-
-### Some useful commands / common pitfalls
-
-| command | Action | Pitfall |
-|---|---|---|
-| amOnPage | changes URL, loads page, waits for body visible | Do not use to assert being on a URL |
-| amOnSubdomain | changes internal URL state | Does not load a page |
-| amOnUrl | changes internal URL state | Does not load a page |
-| click | fires JavaScript click event | Does not wait for anything to happen afterwards |
-| seeCurrentUrlEquals | checks on which URL the browser is (e.g. after a redirect) | |
-| submitForm | fills form details and submits it via click on the submit button | does not wait for anything to happen afterwards |
-| waitForElement | waits until a specific element is available in the DOM | |
-| waitForPageBody | waits until the page body is visible (e.g. after click is expected to load a new page) | &nbsp; |
+It does also not wait for any javascript executed etc.

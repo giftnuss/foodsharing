@@ -20,6 +20,7 @@ class Status
 	public const NOT_PICKED_UP = 4;
 	/* deleted due to not picked up or someone else picked up (bell menu) */
 	public const DELETED_OTHER_REASON = 5;
+	/* unused, removed in code, might still be in DB */
 	public const FOLLOWED = 9;
 	/* request pop up opened */
 	public const REQESTED = 10;

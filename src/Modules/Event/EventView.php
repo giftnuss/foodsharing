@@ -31,15 +31,15 @@ class EventView extends View
 		}
 
 		$title = $this->func->s('new_event');
-		$this->func->addStyle('
+		$this->pageCompositionHelper->addStyle('
 			label.addend{
 				display:inline-block;
 				margin-left:15px;
 				cursor:pointer;
 			}
 		');
-		$this->func->addJs('
-			$("#online_type").change(function(){
+		$this->pageCompositionHelper->addJs('
+			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
 					$("#location_name-wrapper").removeClass("required");
@@ -59,17 +59,24 @@ class EventView extends View
 					$("#location_name-wrapper, #anschrift-wrapper, #plz-wrapper, #ort-wrapper").show();
 				}
 			});
-			$("#dateend-wrapper").hide();
+			
+			var dateend_wrapper = document.getElementById("dateend-wrapper");		
+			dateend_wrapper.style.display = "none";
+			
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
-	
-			$("#addend").change(function(){
+			
+			dateend_wrapper.classList.remove("required");
+
+			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
-					$("#dateend-wrapper").show();
+					dateend_wrapper.style.display = "block";
+					dateend_wrapper.classList.add("required");
 				}
 				else
 				{
-					$("#dateend-wrapper").hide();
+					dateend_wrapper.style.display = "none";
+					dateend_wrapper.classList.remove("required");
 				}
 			});
 	
@@ -106,8 +113,8 @@ class EventView extends View
 			$bez = '<optgroup label="Deine Bezirke">' . $bez . '</optgroup>';
 		}
 
-		$this->func->addJs('
-			$("#public").change(function(){
+		$this->pageCompositionHelper->addJs('
+			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
 					$("#input-wrapper").hide();
@@ -142,7 +149,7 @@ class EventView extends View
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
-				$this->func->addJs('$("#input-wrapper").hide();');
+				$this->pageCompositionHelper->addJs('$("#input-wrapper").hide();');
 			}
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
@@ -154,7 +161,7 @@ class EventView extends View
 				$latLonOptions[$i] = '';
 			}
 		}
-		if (isset($g_data['lat']) && isset($g_data['lon'])) {
+		if (isset($g_data['lat'], $g_data['lon'])) {
 			$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 		} else {
 			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
@@ -164,8 +171,8 @@ class EventView extends View
 			$public_el,
 			$bezirkchoose,
 			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_date('date'),
-			$this->v_utils->v_form_date('dateend'),
+			$this->v_utils->v_form_date('date', array('required' => true)),
+			$this->v_utils->v_form_date('dateend', array('required' => true)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
 			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
@@ -182,7 +189,7 @@ class EventView extends View
 	{
 		$menu = array();
 
-		if ($event['fs_id'] == $this->func->fsId() || $this->session->isOrgaTeam()) {
+		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
 			$menu[] = array(
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
@@ -228,15 +235,15 @@ class EventView extends View
 			);
 		}
 
-		return $this->v_utils->v_field($this->menu($menu), '<i class="fas fa-cog"></i> ' . $this->func->s('event_options'));
+		return $this->v_utils->v_field($this->menu($menu), $this->func->s('event_options'), [], 'fas fa-cog');
 	}
 
 	public function eventTop($event)
 	{
-		$end = '';
-
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' bis ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
+		} else {
+			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
 		$out = '
@@ -265,38 +272,59 @@ class EventView extends View
 		return $out;
 	}
 
+	private function ts_time($ts): string
+	{
+		return date('H:i', $ts) . ' Uhr';
+	}
+
 	public function invites($invites)
 	{
 		$out = '';
 
 		if (!empty($invites['accepted'])) {
-			$icons = $this->fsIcons($invites['accepted']);
-
-			if (!$this->func->isMob() && count($invites['accepted']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['accepted']) . ' sind dabei');
+			$avatars = $this->placeFsAvatars($invites['accepted'], 60);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['accepted']) . ' sind dabei');
 		}
 
 		if (!empty($invites['maybe'])) {
-			$icons = $this->fsIcons($invites['maybe']);
-
-			if (!$this->func->isMob() && count($invites['maybe']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['maybe']) . ' kommen vielleicht');
+			$avatars = $this->placeFsAvatars($invites['maybe'], 54);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['maybe']) . ' kommen vielleicht');
 		}
 
 		if (!empty($invites['invited'])) {
-			$icons = $this->fsIcons($invites['invited']);
-
-			if (!$this->func->isMob() && count($invites['invited']) > 20) {
-				$icons = $this->v_utils->v_scroller($icons, 200);
-			}
-			$out .= $this->v_utils->v_field($icons, '' . count($invites['invited']) . ' Einladungen');
+			$avatars = $this->placeFsAvatars($invites['invited'], 54);
+			$out .= $this->v_utils->v_field($avatars, '' . count($invites['invited']) . ' Einladungen');
 		}
 
 		return $out;
+	}
+
+	private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
+	{
+		if (!empty($foodsavers)) {
+			$out = '<ul class="fsicons">';
+
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				shuffle($foodsavers);
+				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
+			} else {
+				$foodsaverDisplayed = $foodsavers;
+			}
+
+			foreach ($foodsaverDisplayed as $fs) {
+				$out .= '
+				<li>
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
+				</li>';
+			}
+			if (count($foodsavers) > $maxNumberOfAvatars) {
+				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
+			}
+
+			return $out;
+		}
+
+		return '';
 	}
 
 	public function event($event)

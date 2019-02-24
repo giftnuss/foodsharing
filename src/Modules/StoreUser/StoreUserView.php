@@ -22,7 +22,7 @@ class StoreUserView extends View
 	{
 		$out = '<table class="pintable">';
 		$odd = 'odd';
-		$this->func->addJs('$("table.pintable tr td ul li").tooltip();');
+		$this->pageCompositionHelper->addJs('$("table.pintable tr td ul li").tooltip();');
 
 		foreach ($betrieb['requests'] as $r) {
 			if ($odd == 'even') {
@@ -32,27 +32,37 @@ class StoreUserView extends View
 			}
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
-			<td class="img" width="35px"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
-			<td style="padding-top:17px;"><span class="msg"><a href="#" onclick="profile(' . (int)$r['id'] . ');return false;">' . $r['name'] . '</a></span></td>
+			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->func->img($r['photo']) . '" /></a></td>
+			<td style="padding-top:17px;"><span class="msg"><a href="/profile/' . (int)$r['id'] . '">' . $r['name'] . '</a></span></td>
 			<td style="width:92px;padding-top:17px;"><span class="msg"><ul class="toolbar"><li class="ui-state-default ui-corner-left" title="Ablehnen" onclick="denyRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-closethick"></span></li><li class="ui-state-default" title="Auf die Springerliste setzen" onclick="warteRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-star"></span></li><li class="ui-state-default ui-corner-right" title="Akzeptieren" onclick="acceptRequest(' . (int)$r['id'] . ',' . (int)$betrieb['id'] . ');"><span class="ui-icon ui-icon-heart"></span></li></ul></span></td>
 		</tr>';
 		}
 
 		$out .= '</table>';
 
-		$this->func->hiddenDialog('requests', array($out));
-		$this->func->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->func->jsonSafe($betrieb['name'], '"') . '");');
-		$this->func->addJs('$("#dialog_requests").dialog("option","buttons",{});');
-		$this->func->addJs('$("#dialog_requests").dialog("open");');
+		$this->pageCompositionHelper->hiddenDialog('requests', array($out));
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($betrieb['name'], '"') . '");');
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
+		$this->pageCompositionHelper->addJs('$("#dialog_requests").dialog("open");');
 	}
 
-	public function u_innerRow($id, $betrieb)
+	public function u_innerRow($contentType, $betrieb)
 	{
 		$out = '';
-		if ($betrieb[$id] != '') {
-			$betrieb[$id] = trim($betrieb[$id]);
-			nl2br($betrieb[$id]);
-			$out = '<div class="innerRow"><span class="label">' . $this->func->s($id) . '</span><span class="cnt">' . $betrieb[$id] . '</span></div><div style="clear:both"></div>';
+		if ($betrieb[$contentType] != '') {
+			$betrieb[$contentType] = trim($betrieb[$contentType]);
+			nl2br($betrieb[$contentType]);
+
+			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($betrieb[$contentType], '1234567890')) {
+				$phoneNumber = preg_replace('/[^0-9\+]/', '', $betrieb[$contentType]);
+
+				$content = '<a href="tel:' . $phoneNumber . '">' . $betrieb[$contentType] . '</a>';
+			} else {
+				$content = $betrieb[$contentType];
+			}
+
+			$out = '<div class="innerRow"><span class="label">' . $this->func->s($contentType) . '</span>
+			<span class="cnt">' . $content . '</span></div><div style="clear:both"></div>';
 		}
 
 		return $out;
@@ -72,7 +82,7 @@ class StoreUserView extends View
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+			} elseif ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -99,6 +109,17 @@ class StoreUserView extends View
 				$last = $this->func->sv('stat_fetchcount_none', array());
 			}
 
+			//date at which user was added
+			$memberSince = '';
+			if ($betrieb['verantwortlich']) {
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
+				$memberSince = $this->func->sv('stat_teammember_since', array(
+					'date' => $addedAt
+				));
+			}
+
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
 			if ($number !== false && $this->func->isMob()) {
@@ -116,7 +137,7 @@ class StoreUserView extends View
 						</span>
 					</a>
 					<span style="display:none" class="tt-' . $fs['id'] . '">
-						' . $last . '
+						' . (!empty($memberSince) ? $memberSince . '<br>' : '') . $last . '
 					</span>
 				</li>';
 
@@ -133,7 +154,7 @@ class StoreUserView extends View
 
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($betrieb['verantwortlich'] || $this->func->isBotFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
+				if ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -146,6 +167,14 @@ class StoreUserView extends View
 				if (!empty($fs['telefon'])) {
 					$tel .= '<span class="item phone"><span>' . $fs['telefon'] . '</span></span>';
 				}
+
+				//date at which jumper was added
+				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
+						? date('d.m.Y', $fs['add_date'])
+						: '(' . $this->func->s('stat_since_unknown') . ')';
+				$jumperSince = $this->func->sv('stat_jumper_since', array(
+					'date' => $addedAt
+				));
 
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
@@ -164,7 +193,7 @@ class StoreUserView extends View
 							</span>
 						</a>
 						<span style="display:none" class="tt-' . $fs['id'] . '">
-							' . $fs['vorname'] . ' ist Springer seit ' . date('m/y', $fs['add_date']) . '
+							' . $jumperSince . '
 						</span>
 					</li>';
 
@@ -179,8 +208,8 @@ class StoreUserView extends View
 		$out .= $sleeper . '</ul><div style="clear:both"></div>';
 
 		if ($betrieb['verantwortlich']) {
-			$this->func->addJs('
-			$("#team_status").change(function(){
+			$this->pageCompositionHelper->addJs('
+			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
@@ -212,45 +241,45 @@ class StoreUserView extends View
 	{
 		if (empty($betriebe)) {
 			return '';
-		} else {
-			$bezirk = false;
-			$betriebrows = array();
-			foreach ($betriebe as $i => $b) {
-				$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
-
-				$betriebrows[$i] = array(
-					array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
-					array('cnt' => $b['str'] . ' ' . $b['hsnr']),
-					array('cnt' => $b['plz']),
-					array('cnt' => $status)
-				);
-
-				if (isset($b['bezirk_name'])) {
-					$betriebrows[$i][] = array('cnt' => $b['bezirk_name']);
-					$bezirk = true;
-				}
-
-				if ($verantwortlich) {
-					$betriebrows[$i][] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
-				}
-			}
-
-			$head = array(
-				array('name' => 'Name', 'width' => 180),
-				array('name' => 'Anschrift'),
-				array('name' => 'Postleitzahl', 'width' => 90),
-				array('name' => 'Status', 'width' => 50));
-			if ($bezirk) {
-				$head[] = array('name' => 'Region');
-			}
-			if ($verantwortlich) {
-				$head[] = array('name' => 'Aktionen', 'sort' => false, 'width' => 30);
-			}
-
-			$table = $this->v_utils->v_tablesorter($head, $betriebrows);
-
-			return $this->v_utils->v_field($table, $title);
 		}
+
+		$bezirk = false;
+		$betriebrows = array();
+		foreach ($betriebe as $i => $b) {
+			$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
+
+			$betriebrows[$i] = array(
+				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>'),
+				array('cnt' => $b['str'] . ' ' . $b['hsnr']),
+				array('cnt' => $b['plz']),
+				array('cnt' => $status)
+			);
+
+			if (isset($b['bezirk_name'])) {
+				$betriebrows[$i][] = array('cnt' => $b['bezirk_name']);
+				$bezirk = true;
+			}
+
+			if ($verantwortlich) {
+				$betriebrows[$i][] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $b['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $b['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
+			}
+		}
+
+		$head = array(
+			array('name' => 'Name', 'width' => 180),
+			array('name' => 'Anschrift'),
+			array('name' => 'Postleitzahl', 'width' => 90),
+			array('name' => 'Status', 'width' => 50));
+		if ($bezirk) {
+			$head[] = array('name' => 'Region');
+		}
+		if ($verantwortlich) {
+			$head[] = array('name' => 'Aktionen', 'sort' => false, 'width' => 30);
+		}
+
+		$table = $this->v_utils->v_tablesorter($head, $betriebrows);
+
+		return $this->v_utils->v_field($table, $title);
 	}
 
 	/**
@@ -378,7 +407,7 @@ class StoreUserView extends View
 
 		if ($values = $this->func->getValue($id)) {
 			foreach ($values as $fs) {
-				if ($fs['id'] == $this->func->fsId()) {
+				if ($fs['id'] == $this->session->id()) {
 					$bindabei = true;
 				}
 
@@ -389,13 +418,13 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->func->isBotFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
+				} elseif (!$ago && ($option['verantwortlich'] || $this->session->isAdminFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
 
-				if ($fs['id'] == $this->func->fsId() && !$ago) {
-					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->format_db_date($date) . '\');return false;';
+				if ($fs['id'] == $this->session->id() && !$ago) {
+					$click = 'u_undate(\'' . $date . '\',\'' . $this->func->niceDate(strtotime($date), true) . '\');return false;';
 					$aclass = '';
 				}
 
@@ -417,7 +446,7 @@ class StoreUserView extends View
 					$out .= '
 				<li class="filled empty timedialog-add-me">
 					<a href="#" onclick="return false;" title="' . $this->func->s('add_me_here') . '"><img src="/img/nobody.gif" alt="nobody" /></a>
-					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->func->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
+					<input type="hidden" name="' . $id . '-date" class="daydate" value="' . $date . '::' . $this->format_db_date($date) . '::' . $this->func->s('dow' . date('w', strtotime($date))) . '" />
 					<input type="hidden" name="' . $id . '-dateid" class="dayid" value="' . $id . '" />
 				</li>';
 				} else {
@@ -440,11 +469,18 @@ class StoreUserView extends View
 
 		$dellink = '';
 
-		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->func->isBotFor($option['bezirk_id']))) {
+		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAdminFor($option['bezirk_id']))) {
 			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 
 		return $this->v_utils->v_input_wrapper($this->func->s($id), $out . $dellink, $id, $option);
+	}
+
+	public function format_db_date($date): string
+	{
+		$part = explode('-', $date);
+
+		return (int)$part[2] . '. ' . $this->func->s('month_' . (int)$part[1]);
 	}
 
 	public function u_form_abhol_table($zeiten = false, $option = array())

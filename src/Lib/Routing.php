@@ -5,7 +5,6 @@ namespace Foodsharing\Lib;
 class Routing
 {
 	private static $classes = array('activity' => 'Activity',
-		'api' => 'API',
 		'application' => 'Application',
 		'basket' => 'Basket',
 		'bell' => 'Bell',
@@ -19,7 +18,6 @@ class Routing
 		'faq' => 'FAQAdmin',
 		'fairteiler' => 'FairTeiler',
 		'foodsaver' => 'Foodsaver',
-		'geoclean' => 'GeoClean',
 		'index' => 'Index',
 		'listFaq' => 'FAQList',
 		'legal' => 'Legal',
@@ -31,7 +29,6 @@ class Routing
 		'msg' => 'Message',
 		'message' => 'Message',
 		'message_tpl' => 'EmailTemplateAdmin',
-		'newarea' => 'NewArea',
 		'passgen' => 'PassportGenerator',
 		'profile' => 'Profile',
 		'quiz' => 'Quiz',

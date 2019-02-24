@@ -37,7 +37,7 @@ class ApplicationControl extends Control
 
 		$this->view->setBezirk($this->bezirk);
 
-		if (!($this->func->isBotFor($this->bezirk_id) || $this->session->may('orga'))) {
+		if (!($this->session->isAdminFor($this->bezirk_id) || $this->session->may('orga'))) {
 			$this->func->go('/');
 		}
 	}
@@ -45,16 +45,16 @@ class ApplicationControl extends Control
 	public function index()
 	{
 		if ($application = $this->gateway->getApplication($this->bezirk_id, $_GET['fid'])) {
-			$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
-			$this->func->addBread('Bewerbung von ' . $application['name'], '');
-			$this->func->addContent($this->view->application($application));
+			$this->pageCompositionHelper->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
+			$this->pageCompositionHelper->addBread('Bewerbung von ' . $application['name'], '');
+			$this->pageCompositionHelper->addContent($this->view->application($application));
 
-			$this->func->addContent($this->v_utils->v_field(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field(
 				$this->wallposts('application', $application['id']),
 				'Statusnotizen'
 			));
 
-			$this->func->addContent($this->view->applicationMenu($application), CNT_LEFT);
+			$this->pageCompositionHelper->addContent($this->view->applicationMenu($application), CNT_LEFT);
 		}
 	}
 }

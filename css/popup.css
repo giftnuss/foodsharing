@@ -41,8 +41,6 @@
   left: 0;
   top: 0;
   padding: 0 8px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -93,8 +91,6 @@
 }
 
 .mfp-close, .mfp-arrow, .mfp-preloader, .mfp-counter {
-  -webkit-user-select: none;
-  -moz-user-select: none;
   user-select: none;
 }
 
@@ -315,8 +311,6 @@ img.mfp-img {
   height: auto;
   display: block;
   line-height: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
   padding: 40px 0 40px;
   margin: 0 auto;
@@ -408,8 +402,6 @@ img.mfp-img {
     top: auto;
     padding: 3px 5px;
     position: fixed;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
   }
 

@@ -1,13 +1,14 @@
 /* eslint-disable eqeqeq */
 
 /*
- * This is mostly only relevent for the Message module, but some of the functions are called from elsewhere
+ * This is mostly only relevant for the Message module, but some of the functions are called from elsewhere
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
 import info from '@/info'
 import conv from '@/conv'
 import autoLink from '@/autoLink'
+import autosize from 'autosize'
 import timeformat from '@/timeformat'
 import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
@@ -38,7 +39,7 @@ const msg = {
 
   init: function () {
     /*
-     * to reduce server last stop all other heartbeat functionality
+     * to reduce server load, stop all other heartbeat functionality
      */
     stopHeartbeats()
 
@@ -56,7 +57,7 @@ const msg = {
     this.initComposer()
 
     if (!msg.isMob()) {
-      var height = ($(window).height() - 200) + 'px'
+      var height = `${$(window).height() - 200}px`
       this.$conversation.css('height', height)
 
       this.$conversation.slimScroll({
@@ -75,14 +76,14 @@ const msg = {
     /*
      * make the message windows as big as possible
      */
-    $(window).resize(function () {
+    $(window).on('resize', function () {
       if (!msg.isMob()) {
-        var height = ($(window).height() - 200) + 'px'
+        var height = `${$(window).height() - 200}px`
         msg.$conversation.css('height', height)
         msg.$conversation.parent('.slimScrollDiv').css('height', height)
         msg.$conversation.slimScroll({
           height: height,
-          scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px'
+          scrollTo: `${msg.$conversation.prop('scrollHeight')}px`
         })
       } else {
         /* THIS CODE IS BROKEN BECAUSE app.resize does not exist, it's a copy-and-paste from stackoverflow error
@@ -103,19 +104,19 @@ const msg = {
       }
     })
 
-    $('#msg_answer').autosize()
+    autosize(document.getElementById('msg_answer'))
 
-    $('#msg_answer').resize(function () {
-      $('#msg_answer').css('margin-top', '-' + ($('#msg_answer').height() - 40) + 'px')
+    msg.$answer.on('resize', function () {
+      msg.$answer.css('margin-top', `-${msg.$answer.height() - 40}px`)
     })
 
     /*
      * initiate message submit functionality for conversation form
      */
-    $('#msg-control form').submit(function (ev) {
+    $('#msg-control form').on('submit', function (ev) {
       ev.preventDefault()
 
-      var val = $('#msg_answer').val()
+      var val = msg.$answer.val()
       if (val != '') {
         msg.$answer.val('')
         msg.$answer.css('height', '40px')
@@ -163,14 +164,11 @@ const msg = {
   },
 
   isMob: function () {
-    if ($(window).width() > 600) {
-      return false
-    }
-    return true
+    return $(window).width() <= 600
   },
 
   /**
-   * list heartbeat checks everytime updates on all conversations
+   * list heartbeat checks every time updates on all conversations
    */
   heartbeat: function () {
     info.editService('msg', 'heartbeat', {
@@ -194,7 +192,7 @@ const msg = {
   },
 
   updateConvList: function (message) {
-    const $item = $('#convlist-' + message.cid)
+    const $item = $(`#convlist-${message.cid}`)
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
       $itemLink.children('.msg').html(message.body)
@@ -208,7 +206,7 @@ const msg = {
   },
 
   /**
-   * Method will be called if ther arrived something new from the server
+   * Method will be called if there arrived something new from the server
    */
   pushArrived: function (data) {
     let ret = data.msg_heartbeat
@@ -231,7 +229,7 @@ const msg = {
     if (ret.convs) {
       for (let i = 0; i < ret.convs.length; i++) {
         // if the element exist remove to add it new on the top
-        $('#convlist-' + ret.convs[i].id).remove()
+        $(`#convlist-${ret.convs[i].id}`).remove()
         msg.appendConvList(ret.convs[i], true)
       }
     }
@@ -248,8 +246,8 @@ const msg = {
     })
   },
   initComposer: function () {
-    $('#compose_body').autosize()
-    $('#compose_submit').click(function (ev) {
+    autosize(document.getElementById('compose_body'))
+    $('#compose_submit').on('click', function (ev) {
       ev.preventDefault()
 
       let recip = msg.getRecipients()
@@ -308,7 +306,7 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $('<li id="msg-' + message.id + '" style="display:none;"><span class="img"><a title="' + message.fs_name + '" href="#" onclick="profile(' + message.fs_id + ');return false;"><img height="35" src="' + img(message.fs_photo, 'mini') + '" /></a></span><span class="body">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><span class="clear"></span></li>')
+    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -329,8 +327,8 @@ const msg = {
     }
   },
   compose: function () {
-    $('#compose').show()
-    $('#msg-conversation-wrapper').hide()
+    document.getElementById('compose').style.display = ''
+    document.getElementById('msg-conversation-wrapper').style.display = 'none'
     $('#conversation-list .active').removeClass('active')
     msg.conversation_id = 0
     msg.last_message_id = 0
@@ -338,38 +336,32 @@ const msg = {
   loadConversation: async function (id) {
     if (id == msg.conversation_id) {
       msg.scrollBottom()
-      $('#msg_answer').select()
+      msg.$answer.trigger('select')
       return false
     }
     msg.conversation_id = id
 
-    const { conversation, member, messages } = await api.getConversation(id)
+    const { name, members, messages } = await api.getConversation(id)
 
     msg.resetConversation()
 
     const $conversation = $('#msg-conversation ul:first')
     $conversation.html('')
 
-    let title = ''
+    const otherMembers = members.filter(m => m.id != msg.fsid)
 
-    if (member != undefined && member.length > 0) {
-      const currentMember = member
-        .find(m => m.id != msg.fsid)
+    const titleText = name || `Unterhaltung mit ${otherMembers.map(member => member.name).join(', ')}`
 
-      if (currentMember) {
-        title = `
-          <a title="${currentMember.name}" href="#" onclick="profile(${currentMember.id});return false;">
-            <img src="${img(member.photo, 'mini')}" width="22" alt="${currentMember.name}" />
+    const title = `
+      &nbsp;<div class="images">
+        ${otherMembers.map(member => `
+          <a title="${member.name}" href="/profile/${member.id}">
+            <img src="${img(member.avatar, 'mini')}" width="22" alt="${member.name}" />
           </a>
-        `
-      }
-    }
-
-    const strTitle = conversation.name
-      ? conversation.name : `Unterhaltung mit ${member.map(m => m.name).join(', ')}`
-
-    title = `
-      &nbsp;<div class="images">${title}</div>${strTitle}<div style="clear:both;"></div>
+        `).join('')}  
+      </div>
+      ${titleText}
+      <div style="clear:both;"></div>
     `
 
     $('#msg-conversation-title a').remove()
@@ -384,14 +376,14 @@ const msg = {
         .forEach(m => msg.appendMsg(m))
     }
 
-    $('#compose').hide()
-    $('#msg-conversation-wrapper').show()
+    document.getElementById('compose').style.display = 'none'
+    document.getElementById('msg-conversation-wrapper').style.display = ''
     msg.scrollBottom()
 
     msg.$convs.children('li.active').removeClass('active')
     $(`#convlist-${id}`).addClass('active')
 
-    $('#msg_answer').select()
+    msg.$answer.trigger('select')
 
     msg.heartbeatRestart()
 
@@ -416,10 +408,12 @@ const msg = {
             msg.prependMsg(ret.messages[i])
           }
 
-          let position = $('#msg-' + lmid).position()
+          let position = $(`#msg-${lmid}`).position()
+
+          if (!position) return
 
           if (!msg.isMob()) {
-            $('#msg-conversation').slimScroll({ scrollTo: position.top + 'px' })
+            msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
           } else {
             $(window).scrollTop(position.top)
           }
@@ -432,17 +426,17 @@ const msg = {
     msg.moreIsLoading = false
 
     if (!msg.isMob()) {
-      msg.$conversation.unbind('scroll')
-      msg.$conversation.scroll(function () {
-        var $conv = $(this)
+      msg.$conversation.off('scroll')
+      msg.$conversation.on('scroll', function () {
+        let $conv = $(this)
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
         }
       })
     } else {
-      $(window).unbind('scroll')
-      $(window).scroll(function () {
-        var $conv = $(this)
+      $(window).off('scroll')
+      $(window).on('scroll', function () {
+        let $conv = $(this)
 
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
@@ -487,8 +481,8 @@ const msg = {
 
       for (var y = 0; y < conversation.member.length; y++) {
         if (msg.fsid != conversation.member[y].id) {
-          pics += '<img width="' + picwidth + '" src="' + img(conversation.member[y].photo, size) + '" />'
-          names += ', ' + conversation.member[y].name
+          pics += `<img width="${picwidth}" src="${img(conversation.member[y].photo, size)}" />`
+          names += `, ${conversation.member[y].name}`
         }
       }
     }
@@ -500,7 +494,7 @@ const msg = {
       cssclass = ' class="active"'
     }
 
-    const $el = $('<li style="display:none;" id="convlist-' + conversation.id + '"' + cssclass + '><a href="#" onclick="msg.loadConversation(' + conversation.id + ');return false;"><span class="pics">' + pics + '</span><span class="names">' + names + '</span><span class="msg">' + conversation.body + '</span><span class="time">' + timeformat.nice(conversation.time) + '</span><span class="clear"></span></a></li>')
+    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${names}</span><span class="msg">${conversation.body}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
 
     if (prepend != undefined) {
       msg.$convs.prepend($el)
@@ -518,7 +512,7 @@ const msg = {
   },
   scrollBottom: function () {
     if (!msg.isMob()) {
-      $('#msg-conversation').slimScroll({ scrollTo: $('#msg-conversation').prop('scrollHeight') + 'px' })
+      msg.$conversation.slimScroll({ scrollTo: `${msg.$conversation.prop('scrollHeight')}px` })
     } else {
       $(window).scrollTop($(document).height())
     }

@@ -17,8 +17,8 @@ class QuizView extends View
 	{
 		$rows = array();
 
-		$this->func->addJs('
-			$(".usersessionlink").parent().parent().click(function(){
+		$this->pageCompositionHelper->addJs('
+			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
 			});		
 		');
@@ -244,20 +244,20 @@ class QuizView extends View
 			$out .= '
 			<li id="qanswer-' . $a['id'] . '" class="answer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;color:#4A3520">
 				<label>
-					<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">' . ($k + 1) . '. &nbsp;</span>
+					<span style="cursor:pointer;user-select:none;float:left">' . ($k + 1) . '. &nbsp;</span>
 					<input id="qacb-' . $a['id'] . '" style="cursor:pointer;float:left;" type="checkbox" class="qanswers" name="qanswers[]" value="' . $a['id'] . '" />
-					<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;">' . $a['text'] . '</span>
+					<span style="cursor:pointer;user-select:none;display:block;margin-left:43px;">' . $a['text'] . '</span>
 					<span style="clear:both;"></span>
 				</label>
 			</li>';
 		}
 		++$i;
 		$out .= '
-		<li class="noanswer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;">
+		<li class="noanswer" onmouseout="$(this).css(\'background-color\',\'transparent\');" onmouseover="$(this).css(\'background-color\',\'#FFFFFF\');" style="cursor:pointer;-moz-user-select:none;border-radius:10px;display:block;list-style:none;padding:10px 10px;font-size:14px;">
 			<label>
-				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;float:left">' . ($i) . '. &nbsp;</span>
+				<span style="cursor:pointer;user-select:none;float:left">' . ($i) . '. &nbsp;</span>
 				<input class="nocheck" style="float:left;" type="checkbox" name="none" value="0" />
-				<span style="cursor:pointer;-moz-user-select:none;-khtml-user-select: none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
+				<span style="cursor:pointer;wouser-select:none;display:block;margin-left:43px;color:#4A3520;">Es ist keine Antwort richtig!</span>
 				<span style="clear:both;"></span>
 			</label>
 		</li>
@@ -365,7 +365,7 @@ class QuizView extends View
 	public function listQuestions($questions, $quiz_id)
 	{
 		if (is_array($questions)) {
-			$this->func->addJs('
+			$this->pageCompositionHelper->addJs('
 				$("#questions").accordion({
 					heightStyle: "content",
 					animate: 200,
@@ -387,7 +387,7 @@ class QuizView extends View
 				}
 				$answers .= '</ul>';
 				$out .= '
-				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->func->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
+				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->sanitizerService->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
 				 <div class="question-' . $q['id'] . '">
 					' . $this->v_utils->v_input_wrapper('Frage', $q['text'] . '
 					<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>
@@ -404,9 +404,9 @@ class QuizView extends View
 			</div>';
 
 			return $out;
-		} else {
-			return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 		}
+
+		return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 	}
 
 	public function answerSidebar($answers, $quiz_id)
@@ -423,7 +423,7 @@ class QuizView extends View
 				$out .= '
 				<li>
 					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->func->tt($a['text'], 60) . '</span>
+						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
 						<span style="clear:both;"></span>
 					</a>
 				</li>';

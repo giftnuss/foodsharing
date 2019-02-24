@@ -8,9 +8,7 @@ class_name: AcceptanceTester
 modules:
     enabled:
         - Sequence
-        - Db:
-            populate: true
-            cleanup: true
+        - Db
         - Asserts
         - \Helper\WebDriver:
             url: 'http://web:8080/'

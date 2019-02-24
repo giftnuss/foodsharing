@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Console;
 
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
 
 class ConsoleControl
@@ -16,6 +17,11 @@ class ConsoleControl
 	 */
 	protected $func;
 
+	/**
+	 * @var Mem
+	 */
+	protected $mem;
+
 	public function __construct()
 	{
 	}
@@ -26,6 +32,14 @@ class ConsoleControl
 	public function setFunc(Func $func)
 	{
 		$this->func = $func;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setMem(Mem $mem)
+	{
+		$this->mem = $mem;
 	}
 
 	public function index()
@@ -81,7 +95,7 @@ class ConsoleControl
 
 	public static function error($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		echo "\033[31m" . self::cliTime() . " [ERROR]\t" . $msg . " \033[0m\n";
@@ -89,7 +103,7 @@ class ConsoleControl
 
 	public static function info($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		//echo "\033[37m[INFO]\t" . $msg." \033[0m\n";
@@ -98,7 +112,7 @@ class ConsoleControl
 
 	public static function success($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		echo "\033[32m" . self::cliTime() . " [INFO]\t" . $msg . " \033[0m\n";

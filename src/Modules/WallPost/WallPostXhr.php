@@ -4,19 +4,35 @@ namespace Foodsharing\Modules\WallPost;
 
 use Flourish\fImage;
 use Foodsharing\Lib\Session;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\WallPostPermissions;
+use Foodsharing\Services\NotificationService;
+use Foodsharing\Services\SanitizerService;
 
 class WallPostXhr extends Control
 {
+	private $notificationService;
 	private $wallPostGateway;
+	private $wallPostPermissions;
 	private $table;
 	private $id;
+	private $sanitizerService;
 
-	public function __construct(WallPostGateway $wallPostGateway, WallPostView $view, Session $session)
-	{
+	public function __construct(
+		NotificationService $notificationService,
+		WallPostGateway $wallPostGateway,
+		WallPostPermissions $wallPostPermissions,
+		WallPostView $view,
+		Session $session,
+		SanitizerService $sanitizerService
+	) {
+		$this->notificationService = $notificationService;
 		$this->wallPostGateway = $wallPostGateway;
+		$this->wallPostPermissions = $wallPostPermissions;
 		$this->view = $view;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -34,9 +50,20 @@ class WallPostXhr extends Control
 	{
 		if ((int)$_GET['post'] > 0) {
 			$postId = (int)$_GET['post'];
+
+			if (!$this->wallPostGateway->isLinkedToTarget($postId, $this->table, $this->id)) {
+				return array(
+					'status' => 0
+				);
+			}
+
 			$fs = $this->wallPostGateway->getFsByPost($postId);
-			if ($fs == $this->func->fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->session->isOrgaTeam()))
+			if ($fs !== $this->session->id() && !$this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id)) {
+				return XhrResponses::PERMISSION_DENIED;
+			}
+
+			if ($fs == $this->session->id()
+				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam()))
 			) {
 				if ($this->wallPostGateway->deletePost($postId)) {
 					$this->wallPostGateway->unlinkPost($postId, $this->table);
@@ -55,11 +82,15 @@ class WallPostXhr extends Control
 
 	public function update()
 	{
+		if (!$this->wallPostPermissions->mayReadWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		if ((int)$this->wallPostGateway->getLastPostId($this->table, $this->id) != (int)$_GET['last']) {
 			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($posts)
+					'html' => $this->view->posts($posts, $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
 				);
 			}
 		} else {
@@ -71,7 +102,10 @@ class WallPostXhr extends Control
 
 	public function quickreply()
 	{
-		$message = trim(strip_tags($_POST['msg']));
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		$message = trim(strip_tags($_POST['msg'] ?? ''));
 
 		if (!empty($message)) {
 			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id)) {
@@ -92,6 +126,10 @@ class WallPostXhr extends Control
 
 	public function post()
 	{
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$message = strip_tags($_POST['text']);
 		if (!(empty($message) && empty($_POST['attach']))) {
 			$attach = '';
@@ -113,15 +151,14 @@ class WallPostXhr extends Control
 					$attach = json_encode($attach);
 				}
 			}
-			if ($post_id = $this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
+			if ($this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
+				if ($this->table === 'fairteiler') {
+					$this->notificationService->newFairteilerPost($this->id);
+				}
+
 				return array(
 					'status' => 1,
-					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id)),
-					'script' => '
-					if(typeof u_wallpostReady !== \'undefined\' && $.isFunction(u_wallpostReady))
-					{
-						u_wallpostReady(' . (int)$post_id . ');
-					}'
+					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id), $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
 				);
 			}
 		}
@@ -134,6 +171,10 @@ class WallPostXhr extends Control
 
 	public function attachimage()
 	{
+		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$init = '';
 		if (isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 9136365 && $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type'])) {
 			$new_filename = uniqid();
@@ -169,9 +210,9 @@ class WallPostXhr extends Control
 
 			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
 		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
 		}
 
 		echo '<html><head>

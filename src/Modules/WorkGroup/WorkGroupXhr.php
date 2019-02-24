@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
@@ -35,7 +36,7 @@ class WorkGroupXhr extends Control
 
 	public function addtogroup()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($this->session->may('fs') && $group = $this->model->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == ApplyType::OPEN) {
 				$this->model->addToGroup($_GET['id'], $this->session->id());
 
@@ -61,7 +62,7 @@ class WorkGroupXhr extends Control
 
 				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
 					if ($group = $this->model->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->func->fsId())) {
+						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
 							if ($email = $this->model->getFsMail($fs['id'])) {
 								$fs['email'] = $email;
 							}
@@ -92,18 +93,25 @@ class WorkGroupXhr extends Control
 	}
 
 	/*
-	 * CONTACT GROUP BY E-MAIL
+	 * CONTACT GROUP VIA EMAIL
 	 */
 	public function sendtogroup()
 	{
+		if (!$this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
 			$message = strip_tags($_GET['msg']);
 
 			if (!empty($message)) {
-				$this->func->tplMail(24, $group['email'], array(
+				$from = $this->session->user('email');
+				// tplMail uses AsyncMail, which in turn doesn't seem to provide CC or BCC, so use TO...
+				$recipients = array($group['email'], $from);
+
+				$this->func->tplMail(24, $recipients, array(
 					'gruppenname' => $group['name'],
 					'message' => $message
-				), $this->session->user('email'));
+				), $from);
 
 				return array(
 					'status' => 1,

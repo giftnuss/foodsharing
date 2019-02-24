@@ -7,9 +7,7 @@ modules:
         - \Helper\FoodsharingUrl
         - Sequence
         - \Helper\Maildev
-        - Db:
-            populate: true
-            cleanup: true
+        - Db
         - REST:
             url: 'http://web:8080/'
             depends: PhpBrowser

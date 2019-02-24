@@ -7,18 +7,26 @@
           v-model="text"
           :placeholder="i18n('wall.message_placeholder')"
           rows="3"
-          class="form-control"/>
+          class="form-control"
+        />
       </div>
       <div
         id="wallpost-submit"
-        class="text-right">
+        class="text-right"
+      >
         <button
           class="btn btn-secondary btn-sm"
-          @click="addPost">{{ i18n('button.send') }}
+          @click="addPost"
+        >
+          {{ i18n('button.send') }}
         </button>
       </div>
-      <span v-if="isSending">Sending...</span>
-      <span v-if="error">Es ist ein Fehler aufgetreten</span>
+      <span v-if="isSending">
+        Sending...
+      </span>
+      <span v-if="error">
+        Es ist ein Fehler aufgetreten
+      </span>
     </div>
     <div class="wall-posts">
       <table class="pintable">
@@ -26,7 +34,8 @@
           <tr
             v-for="post in posts"
             :key="post.id"
-            :class="['bpost', 'wallpost-' + post.id]">
+            :class="['bpost', `wallpost-${post.id}`]"
+          >
             <td class="img">
               <a :href="`/profile/${post.author.id}`">
                 <img :src="post.author.avatar">
@@ -40,13 +49,18 @@
                 <img
                   v-for="img in post.gallery"
                   :key="img.thumb"
-                  :src="img.thumb">
+                  :src="img.thumb"
+                >
               </span>
               <div class="foot">
-                <span class="time">{{ post.createdAt }} Uhr von {{ post.author.name }}</span>
+                <span class="time">
+                  {{ post.createdAt }} Uhr von {{ post.author.name }}
+                </span>
                 <button
                   v-if="mayDelete"
-                  @click="deletePost(post)">Delete
+                  @click="deletePost(post)"
+                >
+                  Delete
                 </button>
               </div>
             </td>
@@ -59,6 +73,7 @@
 
 <script>
 import i18n from '@/i18n'
+import { getWallPosts, addPost, deletePost } from '@/api/wall'
 
 export default {
   props: {
@@ -82,10 +97,7 @@ export default {
     }
   },
   async created () {
-    const res = await window.fetch(`/api/wall/${this.target}/${this.targetId}`, {
-      credentials: 'same-origin'
-    })
-    const data = await res.json()
+    const data = await getWallPosts(this.target, this.targetId)
     this.posts = data.results
     this.mayDelete = data.mayDelete
     this.mayPost = data.mayPost
@@ -94,16 +106,7 @@ export default {
     async addPost () {
       try {
         this.isSending = true
-        const data = { 'body': this.text }
-        const res = await window.fetch(`/api/wall/${this.target}/${this.targetId}`, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        })
-        const result = await res.json()
+        const result = await addPost(this.target, this.targetId, this.text)
         this.posts.unshift(result.post)
       } catch (err) {
         this.error = true
@@ -114,13 +117,7 @@ export default {
     async deletePost (post) {
       try {
         this.isSending = true
-        await window.fetch(`/api/wall/${this.target}/${this.targetId}/${post.id}`, {
-          method: 'DELETE',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        })
+        await deletePost(this.target, this.targetId, post.id)
       } finally {
         this.isSending = false
         let id = this.posts.indexOf(post)

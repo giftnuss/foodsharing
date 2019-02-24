@@ -191,10 +191,10 @@ class ReportView extends View
 
 	public function listReports($reports): string
 	{
-		$this->func->addStyle('.tablesorter td{ cursor:pointer; }');
+		$this->pageCompositionHelper->addStyle('.tablesorter td{ cursor:pointer; }');
 
-		$this->func->addJs('
-			$(".tablesorter tr").click(function(){
+		$this->pageCompositionHelper->addJs('
+			$(".tablesorter tr").on("click", function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadReport",{id:rid});
 			});
@@ -203,9 +203,9 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r) {
 			$rows[] = [
-				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="#" onclick="profile(' . (int)$r['fs_id'] . ');return false;"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->func->img($r['fs_photo']) . '" /></a></span>'],
-				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="#" onclick="profile(' . (int)$r['rp_id'] . ');return false;"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->func->img($r['rp_photo']) . '" /></a></span>'],
-				['cnt' => $this->func->tt($r['msg'], 50)],
+				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="/profile/' . (int)$r['fs_id'] . '"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->func->img($r['fs_photo']) . '" /></a></span>'],
+				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="/profile/' . (int)$r['rp_id'] . '"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->func->img($r['rp_photo']) . '" /></a></span>'],
+				['cnt' => htmlspecialchars($this->sanitizerService->tt($r['msg'], 50))],
 				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . $this->func->niceDateShort($r['time_ts']) . ' Uhr'],
 				['cnt' => $r['fs_stadt']],
 				['cnt' => $r['b_name']],

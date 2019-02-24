@@ -12,12 +12,12 @@ class BlogView extends View
 		foreach ($data as $d) {
 			$row_tmp = array();
 
-			if ($this->session->isOrgaTeam() || $this->func->isBotFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
 				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));
 			}
-			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $this->func->format_d($d['time_ts']) . '</a>');
+			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>');
 			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>');
 			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name']))));
 
@@ -50,9 +50,9 @@ class BlogView extends View
 	{
 		if (!empty($news['picture'])) {
 			return '<a href="/?page=blog&sub=read&id=' . $news['id'] . '"><img class="corner-all" src="/images/' . str_replace('/', '/' . $prefix, $news['picture']) . '" /></a>';
-		} else {
-			return '';
 		}
+
+		return '';
 	}
 
 	public function pager($page)
@@ -75,7 +75,7 @@ class BlogView extends View
 		} else {
 			$title = $this->func->s('edit_article');
 			global $g_data;
-			$this->func->addContent($this->v_utils->v_field(
+			$this->pageCompositionHelper->addContent($this->v_utils->v_field(
 				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
 				'Status',
 				array('class' => 'ui-padding')

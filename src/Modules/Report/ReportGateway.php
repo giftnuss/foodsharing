@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Envms\FluentPDO\Queries\Select;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class ReportGateway extends BaseGateway
@@ -205,7 +206,7 @@ class ReportGateway extends BaseGateway
 		return $report;
 	}
 
-	private function reportSelect(): \SelectQuery
+	private function reportSelect(): Select
 	{
 		$query = $this->db->fluent()
 			->from('fs_report r')

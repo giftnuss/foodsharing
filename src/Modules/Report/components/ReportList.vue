@@ -2,12 +2,14 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">{{ reports.length }}</span>)
+        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">
+          {{ reports.length }}
+        </span>)
       </div>
       <div
         v-if="reports.length"
-        class="card-body p-0">
-
+        class="card-body p-0"
+      >
         <b-table
           :fields="fields"
           :items="reports"
@@ -16,8 +18,9 @@
           responsive
         >
           <template
+            slot="avatar"
             slot-scope="row"
-            slot="avatar">
+          >
             <div class="avatars">
               <Avatar
                 :url="row.item.fs_photo"
@@ -33,22 +36,33 @@
           </template>
 
           <template
+            slot="actions"
             slot-scope="row"
-            slot="actions">
+          >
             <b-button
               size="sm"
-              @click.stop="row.toggleDetails">
+              @click.stop="row.toggleDetails"
+            >
               {{ row.detailsShowing ? 'Hide' : 'Show' }}
             </b-button>
           </template>
           <template
+            slot="row-details"
             slot-scope="row"
-            slot="row-details">
+          >
             <div class="report">
               <p><strong>{{ $i18n('reports.report_id') }}:</strong> {{ row.item.rp_id }}</p>
               <p><strong>{{ $i18n('reports.time') }}:</strong> {{ row.item.time }}</p>
-              <p><strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`"> {{ row.item.fs_name }} {{ row.item.fs_nachname }}</a></p>
-              <p><strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`"> {{ row.item.rp_name }} {{ row.item.rp_nachname }}</a></p>
+              <p>
+                <strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`">
+                  {{ row.item.fs_name }} {{ row.item.fs_nachname }}
+                </a>
+              </p>
+              <p>
+                <strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`">
+                  {{ row.item.rp_name }} {{ row.item.rp_nachname }}
+                </a>
+              </p>
               <p><strong>{{ $i18n('reports.reason') }}:</strong> {{ row.item.tvalue }}</p>
               <p><strong>{{ $i18n('reports.message') }}:</strong> {{ row.item.msg }}</p>
             </div>
@@ -56,15 +70,17 @@
         </b-table>
         <div class="float-right p-1 pr-3">
           <b-pagination
+            v-model="currentPage"
             :total-rows="reports.length"
             :per-page="perPage"
-            v-model="currentPage"
-            class="my-0" />
+            class="my-0"
+          />
         </div>
       </div>
       <div
         v-else
-        class="card-body">
+        class="card-body"
+      >
         {{ $i18n('reports.no_reports_fallback') }}
       </div>
     </div>
@@ -74,14 +90,13 @@
 <script>
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
-import bFormSelect from '@b/components/form-select/form-select'
 import bButton from '@b/components/button/button'
 import * as api from '@/api/report'
 
 import Avatar from '@/components/Avatar'
 
 export default {
-  components: { Avatar, bTable, bPagination, bFormSelect, bButton },
+  components: { Avatar, bTable, bPagination, bButton },
   props: {
     regionId: {
       type: String,

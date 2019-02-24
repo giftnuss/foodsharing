@@ -3,7 +3,7 @@
 import $ from 'jquery'
 
 import i18n from '@/i18n'
-import { hideLoader, showLoader, reload, chat, ajreq } from '@/script'
+import { hideLoader, showLoader, reload, chat, ajreq, profile } from '@/script'
 
 import { store } from '@/server-data'
 
@@ -19,7 +19,7 @@ export function u_updatePosts () {
   $.ajax({
     dataType: 'json',
     data: $('div#pinnwand form').serialize(),
-    url: 'xhr.php?f=getPinPost',
+    url: '/xhr.php?f=getPinPost',
     success: function (data) {
       if (data.status == 1) {
         $('#pinnwand .posts').html(data.html)
@@ -57,7 +57,7 @@ export function u_fetchconfirm (fsid, date, el) {
   var item = $(el)
   showLoader()
   $.ajax({
-    url: 'xhr.php?f=fetchConfirm',
+    url: '/xhr.php?f=fetchConfirm',
     data: {
       fsid: parseInt(fsid),
       bid: store.id,
@@ -78,7 +78,7 @@ export function u_fetchdeny (fsid, date, el) {
   var item = $(el)
   showLoader()
   $.ajax({
-    url: 'xhr.php?f=fetchDeny',
+    url: '/xhr.php?f=fetchDeny',
     data: {
       fsid: parseInt(fsid),
       bid: store.id,
@@ -101,7 +101,7 @@ export function acceptRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=acceptRequest',
+    url: '/xhr.php?f=acceptRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -115,7 +115,7 @@ export function warteRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=warteRequest',
+    url: '/xhr.php?f=warteRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -129,7 +129,7 @@ export function denyRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=denyRequest',
+    url: '/xhr.php?f=denyRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -140,25 +140,27 @@ export function denyRequest (fsid, bid) {
 }
 
 export function u_contextAction (action, fsid) {
-  if (action == 'message') {
+  if (action === 'gotoprofile') {
+    profile(fsid)
+  } else if (action === 'message') {
     chat(fsid)
-  } else if (action == 'report') {
+  } else if (action === 'report') {
     ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
   } else {
     showLoader()
     $.ajax({
-      url: 'xhr.php?f=bcontext',
+      url: '/xhr.php?f=bcontext',
       data: { 'action': action, 'fsid': fsid, 'bid': store.id, 'bzid': store.bezirk_id },
       dataType: 'json',
       success: function (data) {
         if (data.status == 1) {
-          if (action == 'toteam') {
+          if (action === 'toteam') {
             $('.fs-' + fsid).removeClass('jumper')
             $('.fs-' + fsid).addClass('team')
-          } else if (action == 'tojumper') {
+          } else if (action === 'tojumper') {
             $('.fs-' + fsid).removeClass('team')
             $('.fs-' + fsid).addClass('jumper')
-          } else if (action == 'delete') {
+          } else if (action === 'delete') {
             $('.fs-' + fsid).remove()
           }
         }
@@ -180,10 +182,11 @@ export function createJumperMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': { name: 'Melden', icon: 'report' },
-      'toteam': { name: 'Ins Team aufnehmen', icon: 'accept' },
-      'delete': { name: 'Aus Team löschen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -198,23 +201,25 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'report': { name: 'Melden', icon: 'report' },
-      'tojumper': { name: 'Auf die Springerliste', icon: 'wait' },
-      'delete': { name: 'Aus Team löschen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
 
 export function u_timetableAction (key, el) {
   const val = $(el).children('input:first').val().split(':::')
-
-  if (key == 'confirm') {
+  if (key === 'confirm') {
     u_fetchconfirm(val[0], val[1], el)
-  } else if (key == 'deny') {
+  } else if (key === 'deny') {
     u_fetchdeny(val[0], val[1], el)
-  } else if (key == 'message') {
+  } else if (key === 'message') {
     chat(val[0])
+  } else if (key === 'gotoprofile') {
+    profile(val[0])
   }
 }
 
@@ -224,8 +229,9 @@ export function createConfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'deny': { name: 'Austragen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -236,9 +242,10 @@ export function createUnconfirmedMenu () {
       u_timetableAction(key, this)
     },
     items: {
-      'confirm': { name: 'Bestätigen', icon: 'accept' },
-      'deny': { name: 'Austragen', icon: 'delete' },
-      'message': { name: 'Nachricht schreiben', icon: 'message' }
+      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      'confirm': { name: 'Bestätigen', icon: 'fas fa-check fa-fw' },
+      'deny': { name: 'Austragen', icon: 'fas fa-calendar-times fa-fw' },
+      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }

@@ -33,9 +33,9 @@ class TwigExtensions extends Twig_Extension
 	{
 		if ($data === null) {
 			return $this->func->s($key);
-		} else {
-			return $this->func->sv($key, $data);
 		}
+
+		return $this->func->sv($key, $data);
 	}
 
 	public function idFilter($name)

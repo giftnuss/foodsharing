@@ -3,7 +3,7 @@ const merge = require('webpack-merge')
 const webpackBase = require('./webpack.base')
 const { writeFileSync } = require('fs')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const clientRoot = path.resolve(__dirname)
@@ -12,7 +12,7 @@ const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = dev ? resolve('../dev-assets') : resolve('../assets')
+const assetsPath = dev ? resolve('../assets') : resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
@@ -44,7 +44,8 @@ plugins.push(
           data[entryName] = assets.map(asset => join(stats.publicPath, asset))
         }
         // We do not emit the data like a proper plugin as we want to create the file when running the dev server too
-        const json = JSON.stringify(data, null, 2) + '\n'
+        const json = `${JSON.stringify(data, null, 2)}
+`
         mkdirp.sync(assetsPath)
         writeFileSync(modulesJsonPath, json)
         return Promise.resolve()
@@ -81,6 +82,18 @@ module.exports = merge(webpackBase, {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.(js|vue)$/,
+        exclude: [
+          /node_modules/,
+          resolve('lib')
+        ],
+        loader: 'eslint-loader',
+        options: {
+          configFile: resolve('package.json')
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -101,16 +114,14 @@ module.exports = merge(webpackBase, {
   plugins,
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          safari10: true
-        },
+      new TerserPlugin({
         sourceMap: true
       })
     ],
     splitChunks: {
       chunks: 'all',
-      name: dev
+      name: dev,
+      maxInitialRequests: 5
     }
   }
 })

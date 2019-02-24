@@ -7,8 +7,9 @@
 Foodsharing\Debug\Whoops::register();
 
 /* Codeception remote codecoverage - only used for testing */
-define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
+/*define('C3_CODECOVERAGE_ERROR_LOG_FILE', '/app/tests/_output/c3_error.log'); //Optional (if not set the default c3 output dir will be used)
 include __DIR__ . '/vendor/codeception/c3/c3.php';
+*/
 
 $protocol = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
@@ -20,19 +21,19 @@ define('DB_HOST', 'db');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
+define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://lmr.local/');
-define('DEFAULT_EMAIL', 'noreply@lebensmittelretten.de');
-define('SUPPORT_EMAIL', 'it@lebensmittelretten.de');
-define('DEFAULT_EMAIL_NAME', 'Foodsharing Freiwillige');
+define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
+define('SUPPORT_EMAIL', 'it@foodsharing.network');
+define('DEFAULT_EMAIL_NAME', 'foodsharing-Freiwillige');
 define('VERSION', '0.8.1');
-define('EMAIL_PUBLIC', 'info@lebensmittelretten.de');
-define('EMAIL_PUBLIC_NAME', 'Foodsharing Freiwillige');
-define('DEFAULT_EMAIL_HOST', 'lebensmittelretten.de');
-define('MAPZEN_API_KEY', 'mapzen-RaXru7A');
-define('GOOGLE_API_KEY', '');
+define('EMAIL_PUBLIC', 'info@foodsharing.de');
+define('EMAIL_PUBLIC_NAME', 'foodsharing-Freiwillige');
+define('NOREPLY_EMAIL_HOST', 'foodsharing.de');
+define('PLATFORM_MAILBOX_HOST', 'foodsharing.network');
 
-define('MAILBOX_OWN_DOMAINS', array('lebensmittelretten.de'));
+define('MAILBOX_OWN_DOMAINS', array('foodsharing.network', 'lebensmittelretten.de', 'foodsharing.de'));
 
 define('SMTP_HOST', 'maildev');
 define('SMTP_PORT', 25);
@@ -42,6 +43,13 @@ define('SOCK_URL', 'http://chat:1338/');
 define('REDIS_HOST', 'redis');
 define('REDIS_PORT', 6379);
 
+define('BOUNCE_IMAP_HOST', null);
+define('BOUNCE_IMAP_USER', null);
+define('BOUNCE_IMAP_PASS', null);
+define('BOUNCE_IMAP_PORT', null);
+
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');
 }
+
+define('CSRF_TEST_TOKEN', '__TESTTOKEN__');

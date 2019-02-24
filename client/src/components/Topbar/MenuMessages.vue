@@ -4,12 +4,16 @@
     tooltip="Nachrichten"
     no-caret
     right
-    class="topbar-messages">
+    class="topbar-messages"
+  >
     <template slot="button-content">
-      <i class="fas fa-comments"/>
+      <i class="fas fa-comments" />
       <span
         v-if="unread"
-        class="badge badge-danger">{{ unread }}</span>
+        class="badge badge-danger"
+      >
+        {{ unread }}
+      </span>
     </template>
     <div class="list-group">
       <div class="scroll-container">
@@ -24,7 +28,8 @@
     <div class="list-grou-item p-2 text-right">
       <a
         :href="$url('conversations')"
-        class="btn btn-sm btn-secondary">
+        class="btn btn-sm btn-secondary"
+      >
         <i class="fas fa-comments" /> Alle Nachrichten
       </a>
     </div>
@@ -43,7 +48,7 @@ export default {
 
   computed: {
     conversations () {
-      return conversationStore.conversations.slice(0, 10)
+      return conversationStore.conversations
     },
     unread () {
       return conversationStore.unreadCount

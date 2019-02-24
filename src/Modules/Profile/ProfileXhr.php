@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Lib\Xhr\XhrDialog;
 
 class ProfileXhr extends Control
 {
@@ -14,14 +14,20 @@ class ProfileXhr extends Control
 	private $storeModel;
 	private $bellGateway;
 	private $regionGateway;
+	private $profileGateway;
 
-	public function __construct(ProfileModel $model, ProfileView $view, StoreModel $storeModel, BellGateway $bellGateway, RegionGateway $regionGateway)
-	{
-		$this->model = $model;
+	public function __construct(
+		ProfileView $view,
+		StoreModel $storeModel,
+		BellGateway $bellGateway,
+		RegionGateway $regionGateway,
+		ProfileGateway $profileGateway
+	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
+		$this->profileGateway = $profileGateway;
 
 		parent::__construct();
 
@@ -33,14 +39,14 @@ class ProfileXhr extends Control
 		}
 
 		if (isset($_GET['id'])) {
-			$this->model->setFsId($_GET['id']);
-			$fs = $this->model->getData($_GET['id']);
+			$this->profileGateway->setFsId($_GET['id']);
+			$fs = $this->profileGateway->getData($_GET['id']);
 
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
 				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
-					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . DEFAULT_EMAIL_HOST;
+					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
 				/*
@@ -48,7 +54,7 @@ class ProfileXhr extends Control
 					*  0: requested
 					*  1: buddy
 				*/
-				$this->foodsaver['buddy'] = $this->model->buddyStatus($this->foodsaver['id']);
+				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
 
 				$this->view->setData($this->foodsaver);
 			} else {
@@ -85,10 +91,10 @@ class ProfileXhr extends Control
 				);
 			}
 
-			$this->model->rate($fsid, $rate, $type, $message);
+			$this->profileGateway->rate($fsid, $rate, $type, $message);
 
 			$comment = '';
-			if ($msg = $this->model->getRateMessage($fsid)) {
+			if ($msg = $this->profileGateway->getRateMessage($fsid)) {
 				$comment = $msg;
 			}
 
@@ -104,15 +110,15 @@ class ProfileXhr extends Control
 	public function history()
 	{
 		$bids = $this->regionGateway->getFsRegionIds($_GET['fsid']);
-		if ($this->session->may() && ($this->session->may('orga') || $this->func->isBotForA($bids, false, false))) {
+		if ($this->session->may() && ($this->session->may('orga') || $this->session->isBotForA($bids, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
-				$history = $this->model->getVerifyHistory($_GET['fsid']);
+				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);
 				$dia->setTitle('Verifizierungshistorie');
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
 			if ($_GET['type'] == 1) {
-				$history = $this->model->getPassHistory($_GET['fsid']);
+				$history = $this->profileGateway->getPassHistory($_GET['fsid']);
 
 				$dia->setTitle('Passhistorie');
 
@@ -130,7 +136,7 @@ class ProfileXhr extends Control
 	{
 		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
 
-		if ($this->session->isOrgaTeam() || $this->func->isBotFor($betrieb['bezirk_id'])) {
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
 			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
 				return array(
 					'status' => 1,
@@ -138,57 +144,17 @@ class ProfileXhr extends Control
 					pulseSuccess("Termin gelöscht");
 					reload();'
 				);
-			} else {
-				return array(
-					'status' => 1,
-					'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
-				);
 			}
-		} else {
+
 			return array(
 				'status' => 1,
-				'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+				'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
 			);
 		}
-	}
-
-	public function quickprofile()
-	{
-		if (!is_object($this->model)) {
-			$this->model = new ProfileModel();
-			$this->view = new ProfileView();
-		}
-
-		$bezirk = $this->regionGateway->getBezirk($this->foodsaver['bezirk_id']);
-
-		if ($this->foodsaver['botschafter']) {
-			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Botschafter', 'Botschafterin', 'Botschafter/in') . ' f&uuml;r ';
-			foreach ($this->foodsaver['botschafter'] as $i => $b) {
-				$sep = ', ';
-
-				if ($i == (count($this->foodsaver['botschafter']) - 2)) {
-					$sep = ' und ';
-				}
-
-				$subtitle .= $b['name'] . $sep;
-			}
-
-			$subtitle = substr($subtitle, 0, (strlen($subtitle) - 2));
-			if ($this->foodsaver['orgateam'] == 1) {
-				$subtitle .= ', außerdem engagiert ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'er', 'sie', 'er/sie') . ' sich im Foodsharing Orgateam';
-			}
-		} elseif ($this->foodsaver['bezirk_id'] == 0) {
-			$subtitle = 'hat sich bisher für keinen Bezirk entschieden.';
-		} else {
-			$subtitle = 'ist ' . $this->func->genderWord($this->foodsaver['geschlecht'], 'Foodsaver', 'Foodsaverin', 'Foodsaver') . ' für ' . $bezirk['name'];
-		}
-
-		$photo = $this->func->img($this->foodsaver['photo'], 130, 'q');
 
 		return array(
 			'status' => 1,
-			'html' => $this->view->quickprofile($subtitle),
-			'script' => ''
+			'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
 		);
 	}
 }

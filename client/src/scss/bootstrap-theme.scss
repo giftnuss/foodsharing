@@ -32,7 +32,7 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     li {
         margin: initial;
     }
-    
+
     @import "~bootstrap/scss/reboot";
     @import "~bootstrap/scss/type";
     @import "~bootstrap/scss/images";
@@ -85,6 +85,10 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         background-color: #fff;
     }
 
+    .btn {
+        cursor: pointer;
+    }
+
     .btn-sm, .btn-group-sm > .btn {
         font-size: 0.7rem;
     }
@@ -94,6 +98,25 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     .modal {
         text-align: left; // sometimes modals are created inside a different aligned element
     }
+
+    .input-group {
+
+        .input-group-text {
+        background-color: white;
+        border: none;
+        font-size: 0.9rem;
+        }
+
+        input.form-control {
+        padding-left: 0;
+        border: none;
+
+        &:focus {
+            box-shadow: none;
+            border: none;
+        }
+        }
+  }
 
 }
 
@@ -109,7 +132,7 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     }
 }
 
-// bring jquery-ui 'ui-front' elements in front of bootstrap elements  
+// bring jquery-ui 'ui-front' elements in front of bootstrap elements
 .ui-front {
     z-index: $zindex-tooltip;
 }

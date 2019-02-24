@@ -11,10 +11,12 @@ use Foodsharing\Lib\Db\Mem;
  */
 class AsyncMail
 {
+	private $mem;
 	private $data;
 
-	public function __construct()
+	public function __construct(Mem $mem)
 	{
+		$this->mem = $mem;
 		$this->data = array(
 			'recipients' => array(),
 			'attachments' => array(),
@@ -22,7 +24,8 @@ class AsyncMail
 			'body' => '',
 			'html' => false,
 			'subject' => DEFAULT_EMAIL_NAME,
-			'identifier' => '');
+			'identifier' => '',
+			'queuedAt' => new \DateTime());
 	}
 
 	public function addRecipient($email, $name = null)
@@ -80,6 +83,6 @@ class AsyncMail
 
 	public function send()
 	{
-		Mem::queueWork('email', $this->toArray());
+		$this->mem->queueWork('email', $this->toArray());
 	}
 }

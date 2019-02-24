@@ -4,9 +4,9 @@ namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Modules\Core\View;
 
-class MessageView extends View
+final class MessageView extends View
 {
-	public function top()
+	public function top(): string
 	{
 		return '
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
@@ -33,14 +33,14 @@ class MessageView extends View
 		</div>';
 	}
 
-	public function leftMenu()
+	public function leftMenu(): string
 	{
 		return $this->menu(array(
 			array('name' => $this->func->s('new_message'), 'click' => 'msg.compose();return false;')
 		));
 	}
 
-	public function compose()
+	public function compose(): string
 	{
 		$content = $this->peopleChooser('compose_recipients');
 
@@ -51,7 +51,7 @@ class MessageView extends View
 		return '<div id="compose">' . $this->v_utils->v_field($content, $this->func->s('new_message'), array('class' => 'ui-padding')) . '</div>';
 	}
 
-	public function conversationList($conversations, $click = 'msg.loadConversation')
+	public function conversationList(array $conversations): string
 	{
 		$list = '';
 
@@ -61,30 +61,30 @@ class MessageView extends View
 				$title = '';
 
 				if (!empty($c['member'])) {
-					$picwidth = 50;
+					$pictureWidth = 50;
 					$size = 'med';
 
 					if (count($c['member']) > 2) {
-						$picwidth = 25;
+						$pictureWidth = 25;
 						$size = 'mini';
 						shuffle($c['member']);
 					}
 
 					foreach ($c['member'] as $m) {
-						if ($m['id'] == $this->func->fsId()) {
+						if ($m['id'] == $this->session->id()) {
 							continue;
 						}
-						$pics .= '<img src="' . $this->func->img($m['photo'], $size) . '" width="' . $picwidth . '" />';
+						$pics .= '<img src="' . $this->func->img($m['photo'], $size) . '" width="' . $pictureWidth . '" />';
 						$title .= ', ' . $m['name'];
 					}
 
-					if (is_null($c['name'])) {
+					if ($c['name'] === null) {
 						$title = substr($title, 2);
 					} else {
 						$title = $c['name'];
 					}
 
-					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="' . $click . '(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->func->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->func->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
 				}
 			}
 		} else {
@@ -94,12 +94,12 @@ class MessageView extends View
 		return $list;
 	}
 
-	public function convListWrapper($list)
+	public function conversationListWrapper(string $list): string
 	{
-		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fas fa-comments"></i> ' . $this->func->s('conversations'));
+		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', $this->func->s('conversations'), [], 'fas fa-comments');
 	}
 
-	public function conversation()
+	public function conversation(): string
 	{
 		$out = '
 			<div id="msg-conversation" class="corner-all"><ul></ul><div class="loader" style="display:none;"><i class="fas fa-sync fa-spin"></i></div></div>
@@ -112,6 +112,6 @@ class MessageView extends View
 				</form>
 			</div>';
 
-		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fas fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
+		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '', ['class' => 'ui-padding'], 'fas fa-comment', 'msg-conversation-title') . '</div>';
 	}
 }

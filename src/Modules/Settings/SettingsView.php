@@ -13,11 +13,11 @@ class SettingsView extends View
 		$this->func->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != 1) {
-			$this->func->addJs('$("#daterange-wrapper").hide();');
+			$this->pageCompositionHelper->addJs('$("#daterange-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 0) {
-			$this->func->addJs('$("#sleep_msg-wrapper").hide();');
+			$this->pageCompositionHelper->addJs('$("#sleep_msg-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 1) {
@@ -33,14 +33,14 @@ class SettingsView extends View
 			}
 			$to = $date->format('d.m.Y');
 
-			$this->func->addJs("
+			$this->pageCompositionHelper->addJs("
 				$('#daterange_from').val('$from');
 				$('#daterange_to').val('$to');
 			");
 		}
 
-		$this->func->addJs('
-			$("#sleep_status").change(function(){
+		$this->pageCompositionHelper->addJs('
+			$("#sleep_status").on("change", function(){
 				var $this = $(this);
 				if($this.val() == 1)
 				{
@@ -62,7 +62,7 @@ class SettingsView extends View
 			});
 			$("#sleep_msg").css("height","50px").autosize();
 
-			$("#schlafmtzenfunktion-form").submit(function(ev){
+			$("#schlafmtzenfunktion-form").on("submit", function(ev){
 				ev.preventDefault();
 				ajax.req("settings","sleepmode",{
 					method:"post",
@@ -111,8 +111,8 @@ class SettingsView extends View
 					$disabled = true;
 				}
 
-				$this->func->addJs('
-					$("input[disabled=\'disabled\']").parent().click(function(){
+				$this->pageCompositionHelper->addJs('
+					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
 				');
@@ -166,13 +166,14 @@ class SettingsView extends View
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
-		$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
-		$subtitle = 'Leider nicht bestanden';
-		if ($session['fp'] < $session['maxfp']) {
+		if ($session['fp'] <= $session['maxfp']) {
 			$subtitle = 'Bestanden!';
 			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
+		} else {
+			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
+			$subtitle = 'Leider nicht bestanden';
 		}
-		$this->func->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageCompositionHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -181,15 +182,15 @@ class SettingsView extends View
 			$btn = '';
 			switch ($session['quiz_id']) {
 				case 1:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen!</a>';
 					break;
 
 				case 2:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichen Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen!</a>';
 					break;
 
 				case 3:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafter Anmeldung abschließen!</a>';
+					$btn = '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen!</a>';
 					break;
 
 				default:
@@ -271,7 +272,7 @@ class SettingsView extends View
 				$was_a_ko_question = true;
 			}
 
-			$ftext = 'hast Du komplett richtig beantwortet, Prima!';
+			$ftext = 'hast Du komplett richtig beantwortet. Prima!';
 			++$i;
 			$cnt = '<div class="question">' . $r['text'] . '</div>';
 
@@ -307,16 +308,16 @@ class SettingsView extends View
 						$atext = ' ist richtig!';
 						$sort_right = 'right';
 					} else {
-						$atext = ' ist falsch, dass hast Du richtig erkannt!';
+						$atext = ' ist falsch. Das hast Du richtig erkannt!';
 						$sort_right = 'right';
 					}
 				} elseif ($a['right'] == 2) {
-					$atext = ' ist Neutral,daher ohne Wertung.';
+					$atext = ' ist neutral und daher ohne Wertung.';
 					$right = 'neutral';
 					$sort_right = 'neutral';
 				} else {
 					if ($a['right']) {
-						$atext = ' wäre auch richtig gewesen!';
+						$atext = ' wäre auch richtig gewesen.';
 						$sort_right = 'false';
 					} else {
 						$atext = ' stimmt so nicht!';
@@ -395,7 +396,7 @@ class SettingsView extends View
 			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
 				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
-				$cnt = $this->v_utils->v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum nicht bestehen wenn Du sie falsch beantwortest.');
+				$cnt = $this->v_utils->v_info('Fragen wie diese sind besonders hoch gewichtet und führen leider zum Nichtbbestehen, wenn Du sie falsch beantwortest.');
 			}
 
 			$out .= '
@@ -421,11 +422,11 @@ class SettingsView extends View
 
 	public function settingsCalendar($token)
 	{
-		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->func->fsId() . '&key=' . $token . '&opts=s';
+		$url = BASE_URL . '/api.php?f=cal&fs=' . $this->session->id() . '&key=' . $token . '&opts=s';
 
 		return $this->v_utils->v_field('
 <p>Du kannst Deinen Abholkalender auch mit einem Kalenderprogramm Deiner Wahl ansehen. Abonniere Dir dazu folgenden Kalender!</p>
-<p>Hinweis: Halte den Link unbedingt geheim, er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
+<p>Hinweis: Halte den Link unbedingt geheim! Er enthält einen Schlüssel, um ohne Passwort auf Deinen Account zuzugreifen.</p>
 <p>Hinweis: Dein Kalenderprogramm muss den Kalender regelmäßig neu synchronisieren. Nur dann tauchen neue Abholtermine auf!</p>
 
 				<table style="border-spacing: 10px;border-collapse: separate;">
@@ -438,39 +439,11 @@ class SettingsView extends View
 				', 'Dein Abholkalender', array('class' => 'ui-padding'));
 	}
 
-	public function delete_account()
+	public function delete_account(int $fsId)
 	{
-		$this->func->addJs('
-		$("#delete-account-confirm").dialog({
-			autoOpen: false,
-			modal: true,
-			title: "' . $this->func->s('delete_account_confirm_title') . '",
-			buttons: {
-				"' . $this->func->s('abort') . '" : function(){
-					$("#delete-account-confirm").dialog("close");
-				},
-				"' . $this->func->s('delete_account_confirm_bt') . '" : function(){
-					goTo("/?page=settings&deleteaccount=1&reason=" + encodeURIComponent($("#reason_to_delete").val()));
-				}
-			}
-		});
-
-		$("#delete-account").button().click(function(){
-			$("#delete-account-confirm").dialog("open");
-		});
-	');
-		$content = '
-	<div style="margin:20px;text-align:center;">
-		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
-	</div>
-	' . $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen, bist Du Dir ganz sicher?', $this->func->s('reference'));
-
-		$this->func->addHidden('
-		<div id="delete-account-confirm">
-			' . $this->v_utils->v_info($this->func->s('delete_account_confirm_msg')) . '
-			' . $this->v_utils->v_form_textarea('reason_to_delete') . '
-		</div>
-	');
+		$content =
+			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->func->s('delete_now') . '</button>'
+		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->func->s('reference'));
 
 		return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
 	}
@@ -479,11 +452,11 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->func->addJs('$("#foodsaver-form").submit(function(e){
+		$this->pageCompositionHelper->addJs('$("#foodsaver-form").on("submit", function(e){
 		if($("#photo_public").length > 0)
 		{
 			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
+			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
 			{
 
 			}
@@ -541,7 +514,7 @@ class SettingsView extends View
 			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),
 			$communications,
 			$position,
-			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
+			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
 			$oeff
 		), array('submit' => $this->func->s('save')));
 	}
@@ -573,7 +546,7 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem, Deine Sitzung wurde gespeichert, Du kannst jederzeit die Beantwortung fortführen.');
+		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem. Deine Sitzung wurde gespeichert. Du kannst jederzeit die Beantwortung fortführen.');
 
 		$out .= $this->v_utils->v_input_wrapper($quiz['name'], $quiz['desc']);
 

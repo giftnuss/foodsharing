@@ -12,6 +12,7 @@ button:
   abort: Abbrechen
   send: Senden
   answer: Antworten
+  clear_filter: Filter leeren
 
 group:
   name: Name
@@ -51,6 +52,7 @@ group:
   quit_name: Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
+  delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
 
 legal:
   pp: Datenschutzerklärung
@@ -100,7 +102,7 @@ register:
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
   have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -109,14 +111,14 @@ register:
   select_your_gender: Für die Anrede...
   woman: weiblich
   man: männlich
-  other: sonstiges/anders
+  other: sonstiges/anderes
   error: Es ist ein Fehler aufgetreten
   error_name: Bitte gib einen Namen ein
   error_email: Mit Deiner E-Mail-Adresse stimmt etwas nicht
-  error_passwd: Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben
+  error_passwd: Dein Passwort muss mindestens 8 Zeichen lang sein
   error_image: Dein Foto konnte nicht hochgeladen werden
-  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.
-  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
+  error_birthdate: Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
+  activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
   pass1: Dein neues gewünschtes Passwort
   pass2: Passwortwiederholung
@@ -136,6 +138,7 @@ terminology:
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
+  profile_picture: 'Profilbild'
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -146,7 +149,8 @@ really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
 options: Optionen
-error_unexpected: Es ist ein Fehler aufgetreten 
+error_unexpected: Es ist ein Fehler aufgetreten
+success: Erfolgreich abgeschlossen
 
 forum:
   from: Von %name%
@@ -179,6 +183,7 @@ wall:
 
 fairteiler:
   all_at: Alle Fair-Teiler in %name%
+  n_in_region: '{0} Keine Fair-Teiler in %name%| {1} Ein Fair-Teiler in %name%| [2, Inf[ %count% Fair-Teiler in %name%'
   add_new: Neuer Fair-Teiler
 
 events:
@@ -243,3 +248,17 @@ bell:
   buddy_request: "{name} kennt Dich."
   sharepoint_activate_title: "Neuer Fair-Teiler in {bezirk}"
   sharepoint_activate: "{name} wurde eingetragen"
+
+  passgen_failed: "Bitte lade ein Foto! Dann wird es klappen."
+  passgen_failed_title: "Dein Ausweis konnte nicht erstellt werden"
+
+list:
+  filter_for: "Filtern nach..."
+
+memberlist:
+  header_for_district: "Foodsaver im Bezirk {bezirk}"
+  header_for_workgroup: "Foodsaver in der AG {bezirk}"
+  some_in_all: "({some} von {all})"
+
+foodsaver:
+  delete_account_sure: "Soll der Account wirklich gelöscht werden?"

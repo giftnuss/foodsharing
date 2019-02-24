@@ -21,7 +21,7 @@ $g_lang['login_location'] = 'Deine Adresse';
 $g_lang['login_surname'] = 'Nachname';
 $g_lang['login_phone_info'] = 'Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen';
 $g_lang['have_read_the_legal_stuff1'] = 'Ich habe die Datenschutzerklärung zur Kenntnis genommen';
-$g_lang['have_read_the_legal_stuff2'] = 'Ich habe die <a href="http://wiki.lebensmittelretten.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen';
+$g_lang['have_read_the_legal_stuff2'] = 'Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen';
 $g_lang['prev'] = 'zur&uuml;ck';
 $g_lang['next'] = 'weiter';
 $g_lang['finish'] = 'Anmeldung absenden';
@@ -35,7 +35,7 @@ $g_lang['other'] = 'sonstiges/anders';
 $g_lang['error'] = 'Es ist ein Fehler aufgetreten';
 $g_lang['error_name'] = 'Bitte gib einen Namen ein';
 $g_lang['error_email'] = 'Mit Deiner E-Mail-Adresse stimmt etwas nicht';
-$g_lang['error_passwd'] = 'Dein Passwort muss mindestens 5 und darf maximal 30 Zeichen haben';
+$g_lang['error_passwd'] = 'Dein Passwort muss mindestens 8 Zeichen lang sein';
 $g_lang['error_image'] = 'Dein Foto konnte nicht hochgeladen werden';
 $g_lang['error_birthdate'] = 'Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.';
 

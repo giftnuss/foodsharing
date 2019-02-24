@@ -38,11 +38,11 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+      - influxdb
     environment:
       FS_ENV: test
     volumes:
       - selenium_downloads:/downloads
-      - vendor_cache:/app/vendor
       - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
   # php mail queue runner
@@ -61,11 +61,30 @@ services:
       - maildev
       - redis:redis
       - db:db
+    environment:
+      FS_ENV: test
+
+  # php container for running codeception
+  #------------------------------------
+
+  codeception:
+    container_name: foodsharing_ci_codeception
+    image: foodsharing_ci_app
+    depends_on:
+      - db
+      - redis
+      - mailqueuerunner
+    links:
+      - redis:redis
+      - db:db
+      - chat:chat
+      - influxdb
+    environment:
+      FS_ENV: test
     volumes:
       - selenium_downloads:/downloads
       - vendor_cache:/app/vendor
-    environment:
-      FS_ENV: test
+      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
   chat:
     container_name: foodsharing_ci_chat
@@ -137,8 +156,21 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_ci_maildev
 
+  influxdb:
+    container_name: foodsharing_ci_influxdb
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.influxdb.ci
+    image: foodsharing_ci_influxdb
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+
 volumes:
   selenium_downloads:
   vendor_cache:
   client_node_modules_cache:
   chat_node_modules_cache:
+

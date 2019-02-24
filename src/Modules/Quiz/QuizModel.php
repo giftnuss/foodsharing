@@ -29,7 +29,7 @@ class QuizModel extends Db
 			INSERT INTO `fs_quiz`
 			(`name`,`desc`,`maxfp`,`questcount`)
 			VALUES
-			(' . $this->strval($name) . ',' . $this->strval($desc, true) . ',' . (int)$maxfp . ',' . (int)$questcount . ')	
+			(' . $this->strval($name) . ',' . $this->strval($desc, true) . ',' . (int)$maxfp . ',' . (int)$questcount . ')
 		');
 	}
 
@@ -50,17 +50,17 @@ class QuizModel extends Db
 				q.name AS quiz_name,
 				q.id AS quiz_id
 
-				
+
 			FROM
 				fs_quiz_session s,
 				fs_quiz q
-				
+
 			WHERE
 				s.quiz_id = q.id
-				
+
 			AND
 				s.foodsaver_id = ' . (int)$fsid . '
-				
+
 			ORDER BY
 				q.id, s.time_start DESC
 		');
@@ -76,25 +76,25 @@ class QuizModel extends Db
 				MAX(s.`status`) AS max_status,
 				MIN(s.`fp`) AS min_fp,
 				MAX(s.`fp`) AS max_fp,
-				UNIX_TIMESTAMP(MAX(s.time_start)) AS time_start_ts,	
+				UNIX_TIMESTAMP(MAX(s.time_start)) AS time_start_ts,
 				CONCAT(fs.name," ",fs.nachname) AS fs_name,
 				fs.photo AS fs_photo,
 				fs.id AS fs_id,
 				count(s.foodsaver_id) AS trycount
-				
+
 			FROM
 				fs_quiz_session s,
 				fs_foodsaver fs
-				
+
 			WHERE
 				s.foodsaver_id = fs.id
-				
+
 			AND
 				s.quiz_id = ' . (int)$id . '
 
 			GROUP BY
 				s.foodsaver_id
-				
+
 			ORDER BY
 				time_start DESC
 		');
@@ -107,8 +107,8 @@ class QuizModel extends Db
 			SET 	`name` = ' . $this->strval($name) . ',
 					`desc` = ' . $this->strval($desc, true) . ',
 					`maxfp` = ' . (int)$maxfp . ',
-					`questcount` = ' . (int)$questcount . '	
-				
+					`questcount` = ' . (int)$questcount . '
+
 			WHERE 	`id` = ' . (int)$id . '
 		');
 	}
@@ -116,7 +116,7 @@ class QuizModel extends Db
 	public function getQuiz($id)
 	{
 		return $this->qRow('
-			SELECT 	`id`,`name`,`desc`,`maxfp`,`questcount` FROM fs_quiz WHERE id = ' . (int)$id . '		
+			SELECT 	`id`,`name`,`desc`,`maxfp`,`questcount` FROM fs_quiz WHERE id = ' . (int)$id . '
 		');
 	}
 
@@ -135,7 +135,7 @@ class QuizModel extends Db
 	public function addAnswer($qid, $text, $exp, $right)
 	{
 		return $this->insert('
-			INSERT INTO `fs_answer`(`question_id`, `text`,`explanation` ,`right`) VALUES (' . (int)$qid . ',' . $this->strval($text) . ',' . $this->strval($exp) . ', ' . (int)$right . ')		
+			INSERT INTO `fs_answer`(`question_id`, `text`,`explanation` ,`right`) VALUES (' . (int)$qid . ',' . $this->strval($text) . ',' . $this->strval($exp) . ', ' . (int)$right . ')
 		');
 	}
 
@@ -146,7 +146,7 @@ class QuizModel extends Db
 		')
 		) {
 			$this->insert('
-				INSERT INTO `fs_question_has_quiz`(`question_id`, `quiz_id`, `fp`) VALUES (' . (int)$id . ',' . (int)$qid . ',' . (int)$fp . ')		
+				INSERT INTO `fs_question_has_quiz`(`question_id`, `quiz_id`, `fp`) VALUES (' . (int)$id . ',' . (int)$qid . ',' . (int)$fp . ')
 			');
 
 			return $id;
@@ -161,7 +161,7 @@ class QuizModel extends Db
 			UPDATE 	`fs_answer`
 			SET 	`text` = ' . $this->strval($data['text']) . ',
 					`explanation` = ' . $this->strval($data['explanation']) . ',
-					`right` = ' . (int)$data['right'] . '	
+					`right` = ' . (int)$data['right'] . '
 			WHERE 	`id` = ' . (int)$id . '
 		');
 	}
@@ -171,7 +171,7 @@ class QuizModel extends Db
 		return $this->qRow('
 			SELECT 	`id`, question_id, `text`,`explanation`, `right`
 			FROM	fs_answer
-			WHERE 	id = ' . (int)$aid . '		
+			WHERE 	id = ' . (int)$aid . '
 		');
 	}
 
@@ -182,21 +182,21 @@ class QuizModel extends Db
 				q.id,
 				q.`duration`,
 				hq.fp
-		
+
 			FROM
 				fs_question q,
 				fs_question_has_quiz hq
-		
+
 			WHERE
 				hq.question_id = q.id
-		
+
 			AND
 				hq.quiz_id = ' . (int)$quiz_id . '
-				
+
 			AND
 				hq.fp = ' . (int)$fp . '
-				
-			ORDER BY 
+
+			ORDER BY
 				RAND()
 
 			LIMIT ' . (int)$count . '
@@ -210,14 +210,14 @@ class QuizModel extends Db
 				q.id,
 				q.`duration`,
 				hq.fp
-		
+
 			FROM
 				fs_question q,
 				fs_question_has_quiz hq
-		
+
 			WHERE
 				hq.question_id = q.id
-		
+
 			AND
 				hq.quiz_id = ' . (int)$quiz_id . '
 		')
@@ -228,14 +228,14 @@ class QuizModel extends Db
 				FROM
 				fs_question q,
 				fs_question_has_quiz hq
-		
+
 				WHERE
 					hq.question_id = q.id
-			
+
 				AND
 					hq.quiz_id = ' . (int)$quiz_id . '
-					
-				GROUP BY 
+
+				GROUP BY
 					hq.fp
 			')
 			) {
@@ -256,23 +256,23 @@ class QuizModel extends Db
 	public function getQuestion($id)
 	{
 		return $this->qRow('
-			SELECT 	
+			SELECT
 					q.id,
 					q.`text`,
 					q.duration,
 					q.wikilink,
 					hq.fp,
 					hq.quiz_id
-				
-				FROM 
+
+				FROM
 					fs_question q,
 					fs_question_has_quiz hq
-				
+
 				WHERE
 					hq.question_id = q.id
-				
+
 				AND
-					q.id = ' . (int)$id . '		
+					q.id = ' . (int)$id . '
 		');
 	}
 
@@ -280,13 +280,13 @@ class QuizModel extends Db
 	{
 		if ($id = $this->insert('
 			INSERT INTO `fs_wallpost`
-			(`foodsaver_id`, `body`, `time`) 
-			VALUES 
+			(`foodsaver_id`, `body`, `time`)
+			VALUES
 			(
-				' . (int)$this->func->fsId() . ',
+				' . (int)$this->session->id() . ',
 				' . $this->strval($comment) . ',
 				NOW()
-			)		
+			)
 		')
 		) {
 			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(341)) {
@@ -321,14 +321,14 @@ class QuizModel extends Db
 				q.duration,
 				q.wikilink,
 				hq.fp
-		
+
 				FROM
 				fs_question q,
 				fs_question_has_quiz hq
-		
+
 				WHERE
 				hq.question_id = q.id
-		
+
 				AND
 				hq.quiz_id = ' . (int)$quiz_id . '
 				')
@@ -357,20 +357,20 @@ class QuizModel extends Db
 	public function listQuestions($quiz_id)
 	{
 		if ($questions = $this->q('
-				SELECT 	
+				SELECT
 					q.id,
 					q.`text`,
 					q.duration,
 					q.wikilink,
 					hq.fp
-				
-				FROM 
+
+				FROM
 					fs_question q,
 					fs_question_has_quiz hq
-				
+
 				WHERE
 					hq.question_id = q.id
-				
+
 				AND
 					hq.quiz_id = ' . (int)$quiz_id . '
 		')
@@ -398,43 +398,13 @@ class QuizModel extends Db
 
 			SET
 				`status` = 2
-				
+
 			WHERE
 				id = ' . (int)$sid . '
-				
+
 			AND
-				foodsaver_id = ' . (int)$this->func->fsId() . '
+				foodsaver_id = ' . (int)$this->session->id() . '
 		');
-	}
-
-	public function getExsistingSession($quiz_id)
-	{
-		if ($session = $this->qRow('
-			SELECT 
-				id,
-				quiz_index,
-				quiz_questions,
-				easymode
-
-			FROM
-				fs_quiz_session
-				
-			WHERE
-				`quiz_id` = ' . $quiz_id . '
-				
-			AND
-				foodsaver_id = ' . (int)$this->func->fsId() . '
-				
-			AND
-				`status` = 0
-		')
-		) {
-			$session['quiz_questions'] = unserialize($session['quiz_questions']);
-
-			return $session;
-		}
-
-		return false;
 	}
 
 	public function getQuizStatus($quiz_id)
@@ -450,7 +420,7 @@ class QuizModel extends Db
 		if ($res = $this->q('
 				SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
 				FROM fs_quiz_session
-				WHERE foodsaver_id =' . (int)$this->func->fsId() . '
+				WHERE foodsaver_id =' . (int)$this->session->id() . '
 				AND quiz_id = ' . (int)$quiz_id . '
 				')
 		) {
@@ -473,51 +443,18 @@ class QuizModel extends Db
 		return $out;
 	}
 
-	public function initQuizSession($quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
-	{
-		$questions = serialize($questions);
-
-		return $this->insert('
-			INSERT INTO fs_quiz_session (
-				foodsaver_id, 
-				quiz_id, 
-				`status`, 
-				quiz_index, 
-				quiz_questions, 
-				time_start, 
-				fp, 
-				maxfp, 
-				quest_count,
-				easymode
-			) 
-			VALUES
-			(
-				' . (int)$this->func->fsId() . ',
-				' . (int)$quiz_id . ',
-				0,
-				0,
-				' . $this->strval($questions) . ',
-				NOW(),
-				0,
-				' . (int)$maxfp . ',
-				' . (int)$questcount . ',
-				' . (int)$easymode . '
-			)
-		');
-	}
-
 	public function updateQuizSession($session_id, $questions, $quiz_index)
 	{
 		$questions = serialize($questions);
 
 		$this->update('
-			UPDATE 	
+			UPDATE
 				`fs_quiz_session`
 
 			SET
 				quiz_questions = ' . $this->strval($questions) . ',
 				quiz_index = ' . (int)$quiz_index . '
-				
+
 			WHERE
 				id = ' . (int)$session_id . '
 		');
@@ -539,7 +476,7 @@ class QuizModel extends Db
 		$this->update('
 			UPDATE
 				`fs_quiz_session`
-		
+
 			SET
 				quiz_result = ' . $this->strval($quiz_result) . ',
 				quiz_questions = ' . $this->strval($questions) . ',
@@ -547,7 +484,7 @@ class QuizModel extends Db
 				`status` = ' . (int)$status . ',
 				`fp` = ' . floatval($fp) . ',
 				`maxfp` = ' . (int)$maxfp . '
-		
+
 			WHERE
 				id = ' . (int)$session_id . '
 		');
@@ -567,7 +504,7 @@ class QuizModel extends Db
 			UPDATE 	`fs_question_has_quiz`
 			SET 	`fp` = ' . (int)$fp . '
 			WHERE 	`question_id` = ' . (int)$id . '
-			AND 	`quiz_id` = ' . (int)$quiz_id . '		
+			AND 	`quiz_id` = ' . (int)$quiz_id . '
 		');
 	}
 }

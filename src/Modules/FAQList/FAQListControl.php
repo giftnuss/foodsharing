@@ -21,8 +21,8 @@ class FAQListControl extends Control
 	{
 		if (isset($_GET['id'])) {
 			if ($res = $this->faqGateway->getOne_faq($_GET['id'])) {
-				$this->func->addBread('FAQ`s', '/?page=listFaq');
-				$this->func->addBread(substr($res['name'], 0, 30));
+				$this->pageCompositionHelper->addBread('FAQ`s', '/?page=listFaq');
+				$this->pageCompositionHelper->addBread(substr($res['name'], 0, 30));
 
 				$cnt = '';
 
@@ -30,12 +30,12 @@ class FAQListControl extends Control
 					$cnt .= $res['answer'];
 				}
 
-				$this->func->addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
+				$this->pageCompositionHelper->addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
 			} else {
 				$this->func->goPage('listFaq');
 			}
 		} else {
-			$this->func->addBread('FAQ`s', '/?page=listFaq');
+			$this->pageCompositionHelper->addBread('FAQ`s', '/?page=listFaq');
 
 			$docs = $this->faqGateway->getFaqIntern();
 			$menu = array();
@@ -46,7 +46,7 @@ class FAQListControl extends Control
 				);
 			}
 
-			$this->func->addContent($this->v_utils->v_menu($menu, 'FAQ'));
+			$this->pageCompositionHelper->addContent($this->v_utils->v_menu($menu, 'FAQ'));
 		}
 	}
 }

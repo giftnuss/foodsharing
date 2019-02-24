@@ -1,6 +1,5 @@
 <?php
 
-
 use Foodsharing\Lib\Routing;
 
 class RouterReturnsCorrectClassNameTest extends \Codeception\Test\Unit

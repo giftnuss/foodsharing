@@ -41,7 +41,7 @@ class WorkGroupControl extends Control
 			$this->func->goLogin();
 		}
 
-		$this->func->addBread('Arbeitsgruppen', '/?page=groups');
+		$this->pageCompositionHelper->addBread('Arbeitsgruppen', '/?page=groups');
 
 		if (!$request->query->has('sub')) {
 			$this->list($request, $response);
@@ -66,13 +66,13 @@ class WorkGroupControl extends Control
 
 	private function mayAccess($group)
 	{
-		return $this->func->mayBezirk($group['id']) || $this->func->isBotFor($group['parent_id']);
+		return $this->session->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
 	private function mayApply($group, $applications, $stats)
 	{
 		return
-			!$this->func->mayBezirk($group['id'])
+			!$this->session->mayBezirk($group['id'])
 			&& !in_array($group['id'], $applications)
 			&& ($group['apply_type'] == ApplyType::EVERYBODY
 			  || ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES && $this->fulfillApplicationRequirements($group, $stats)));
@@ -81,7 +81,7 @@ class WorkGroupControl extends Control
 	private function mayJoin($group)
 	{
 		return
-			!$this->func->mayBezirk($group['id'])
+			!$this->session->mayBezirk($group['id'])
 			&& $group['apply_type'] == ApplyType::OPEN;
 	}
 
@@ -148,7 +148,7 @@ class WorkGroupControl extends Control
 				]);
 			}, $groups);
 
-		$this->func->addTitle($this->func->s('groups'));
+		$this->pageCompositionHelper->addTitle($this->func->s('groups'));
 
 		$response->setContent($this->render('pages/WorkGroup/list.twig',
 			['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
@@ -167,7 +167,7 @@ class WorkGroupControl extends Control
 				$this->func->go('/?page=dashboard');
 			}
 
-			$this->func->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+			$this->pageCompositionHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
 			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
 			$form->handleRequest($request);

@@ -87,7 +87,7 @@ const conv = {
       if (GET('page') == 'msg') {
         msg.loadConversation(cid)
       } else {
-        goTo('/?page=msg&cid=' + cid)
+        goTo(`/?page=msg&cid=${cid}`)
       }
     } else {
       if (!this.initiated) {
@@ -132,36 +132,8 @@ const conv = {
       conv.maxbox(data.cid)
       conv.append(key, data)
       conv.scrollBottom(data.cid)
-    } else {
-      // following line got commented out, because it is part of the old topbar
-      // this whole file should get replaced with a vue store
-      // info.badgeInc('msg')
     }
     conversationStore.loadConversations()
-    // alert(key);
-
-    /*
-    if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
-    {
-      var chats = data.msg_chat.chats;
-      var key = 0;
-
-      for(var i=0;i<chats.length;i++)
-      {
-        key = conv.getKey(chats[i].cid);
-
-        if(chats[i].msg != undefined && chats[i].msg.length > 0)
-        {
-          for(var x=0;x<chats[i].msg.length;x++)
-          {
-            conv.append(key,chats[i].msg[x]);
-          }
-          conv.maxbox(chats[i].cid);
-          conv.scrollBottom(chats[i].cid);
-        }
-      }
-    }
-    */
   },
 
   // minimize or maximize the chatbox
@@ -170,7 +142,7 @@ const conv = {
 
     conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle()
     // $('#chat-'+cid+' .slimScrollDiv, #chat-'+cid+' ').toggle();
-    if ($('#chat-' + cid + ' .chatboxinput').is(':visible')) {
+    if ($(`#chat-${cid} .chatboxinput`).is(':visible')) {
       conv.chatboxes[key].minimized = false
     } else {
       conv.chatboxes[key].minimized = true
@@ -231,7 +203,7 @@ const conv = {
    * scroll to bottom after appending messages
    */
   scrollBottom: function (cid) {
-    $('#chat-' + cid + ' .chatboxcontent').slimScroll({ scrollTo: $('#chat-' + cid + ' .chatboxcontent').prop('scrollHeight') + 'px' })
+    $(`#chat-${cid} .chatboxcontent`).slimScroll({ scrollTo: `${$('#chat-' + cid + ' .chatboxcontent').prop('scrollHeight')}px` })
     // var el = conv.chatboxes[conv.getKey(cid)].el.children('.chatboxcontent');
     // el.slimScroll({scrollTo : el.prop('scrollHeight') + 'px' });
   },
@@ -241,9 +213,9 @@ const conv = {
       size = 'med'
     }
     if (photo && photo.length > 3) {
-      return '/images/' + size + '_q_' + photo
+      return `/images/${size}_q_${photo}`
     } else {
-      return '/img/' + size + '_q_avatar.png'
+      return `/img/${size}_q_avatar.png`
     }
   },
 
@@ -257,7 +229,7 @@ const conv = {
       if (conv.chatboxes[i].id == cid) {
         conv.chatboxes[i].el.remove()
       } else {
-        conv.chatboxes[i].el.css('right', (20 + (x * 285)) + 'px')
+        conv.chatboxes[i].el.css('right', `${20 + (x * 285)}px`)
         tmp.push(conv.chatboxes[i])
         x++
       }
@@ -266,7 +238,6 @@ const conv = {
     this.chatboxes = tmp
 
     this.chatCount--
-    // this.rearrange();
 
     // re register polling service
     this.registerPollingService()
@@ -330,7 +301,7 @@ const conv = {
    */
   settings: function (cid) {
     const key = this.getKey(cid)
-    this.chatboxes[key].el.children('.chatboxhead').children('.settings').toggle()
+    this.chatboxes[key].el.children(`.chatboxhead`).children(`.settings`).toggle()
   },
 
   /**
@@ -338,7 +309,7 @@ const conv = {
    */
   append: function (key, message) {
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append('<div title="' + message.time + '" class="chatboxmessage"><span class="chatboxmessagefrom"><a href="#" class="photo" onclick="profile(' + message.fs_id + ');return false;"><img src="' + conv.img(message.fs_photo + '', 'mini') + '"></a></span><span class="chatboxmessagecontent">' + nl2br(autoLink(message.body)) + '<span class="time">' + timeformat.nice(message.time) + '</span></span><div style="clear:both;"></div></div>')
+    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
@@ -360,8 +331,8 @@ const conv = {
          */
         if (ret.member.length > 2) {
           // conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
-          conv.addChatOption(cid, '<a href="#" onclick="if(confirm(\'Bist Du Dir sicher, dass Du den Chat verlassen möchtest?\')){ajax.req(\'msg\',\'leave\',{data:{cid:' + cid + '}});}return false;">Chat verlassen</a>')
-          conv.addChatOption(cid, '<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req(\'msg\',\'rename\',{data:{cid:' + cid + ',name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>')
+          conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
+          conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req('msg','rename',{data:{cid:${cid},name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>`)
         }
 
         /*
@@ -373,13 +344,13 @@ const conv = {
           title = []
           for (var i = 0; i < ret.member.length; i++) {
             if (ret.member[i] != undefined && ret.member[i].id != serverData.user.id) {
-              title.push(ret.member[i].name)
+              title.push(`<a href="/profile/${ret.member[i].id}">${ret.member[i].name}</a>`)
             }
           }
           title = title.join(', ')
         }
 
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html('<i class="fas fa-comment fa-flip-horizontal"></i> ' + title)
+        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
 
         /*
          * now append all arrived messages
@@ -414,18 +385,18 @@ const conv = {
     if (conv.getKey(cid) === -1) {
       const right = 20 + (this.chatCount * 285)
 
-      const options = '<li><a href="/?page=msg&cid=' + cid + '">Alle Nachrichten</a></li>'
+      const options = `<li><a href="/?page=msg&cid=${cid}">Alle Nachrichten</a></li>`
 
       // I did not find out where name is supposed to be assigned, so I just set it to empty thing to avoid an error
       const name = ''
 
-      var $el = $('<div id="chat-' + cid + '" class="chatbox ui-corner-top" style="bottom: 0px; right: ' + right + 'px; display: block;"></div>').appendTo('body')
-      $el.html('<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(' + cid + ');return false;"><i class="fas fa-spinner fa-spin"></i> ' + name + '</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">' + options + '</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(' + cid + ');return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(' + cid + ');return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,\'' + cid + '\');"></textarea></div>')
+      var $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
+      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${name}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()
 
-      $el.children('.chatboxinput').children('textarea').focus(function () {
+      $el.children('.chatboxinput').children('textarea').on('focus', function () {
         conv.activeBox = cid
       })
 
@@ -446,7 +417,7 @@ const conv = {
       /*
        * focus textarea
        */
-      $el.children('.chatboxinput').children('textarea').select()
+      $el.children('.chatboxinput').children('textarea').trigger('select')
 
       /*
        * register service new
@@ -459,7 +430,7 @@ const conv = {
     }
   },
   addChatOption: function (cid, el) {
-    $('#chat-' + cid + ' .settings').append('<li>' + el + '</li>')
+    $(`#chat-${cid} .settings`).append(`<li>${el}</li>`)
   }
 }
 $(function () {

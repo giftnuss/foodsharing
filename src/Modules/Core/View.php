@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\DI;
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Helpers\PageCompositionHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\SanitizerService;
 
 class View
 {
@@ -16,18 +16,28 @@ class View
 	protected $v_utils;
 	protected $func;
 	protected $session;
+	protected $sanitizerService;
+	protected $pageCompositionHelper;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session)
-	{
+	public function __construct(
+		\Twig\Environment $twig,
+		Func $func,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageCompositionHelper $pageCompositionHelper
+	) {
 		$this->twig = $twig;
 		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
+		$this->pageCompositionHelper = $pageCompositionHelper;
 	}
 
 	public function setSub($sub)
@@ -126,34 +136,6 @@ class View
 		</div>';
 	}
 
-	public function fsIcons($foodsaver)
-	{
-		if (!empty($foodsaver)) {
-			$out = '<ul class="fsicons">';
-
-			if (count($foodsaver) > 100) {
-				shuffle($foodsaver);
-			}
-			$i = 52;
-			foreach ($foodsaver as $fs) {
-				--$i;
-				$out .= '
-				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="#" onclick="profile(' . (int)$fs['id'] . ');return false;"><span></span></a>	
-				</li>';
-				if ($i <= 0) {
-					$out .= '<li class="row">...und ' . (count($foodsaver) - 52) . ' weitere</li>';
-					break;
-				}
-			}
-			$out .= '</ul>';
-
-			return $out;
-		}
-
-		return '';
-	}
-
 	public function fsAvatarList($foodsaver, $option = array())
 	{
 		if (!is_array($foodsaver)) {
@@ -209,7 +191,7 @@ class View
 
 		if ($option['scroller']) {
 			$out = $this->v_utils->v_scroller($out, $height);
-			$this->func->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$this->pageCompositionHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -259,27 +241,26 @@ class View
 				' . $out . '
 			</ul>
 		</div>';
-		} else {
-			return '
-			<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
-			<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
-				<ul class="linklist">
-					' . $out . '
-				</ul>
-			</div>';
 		}
+
+		return '
+		<h3 class="head ui-widget-header ui-corner-top">' . $title . '</h3>
+		<div class="ui-widget ui-widget-content ui-corner-bottom ui-padding margin-bottom">
+			<ul class="linklist">
+				' . $out . '
+			</ul>
+		</div>';
 	}
 
 	public function peopleChooser($id, $option = array())
 	{
-		$this->func->addJs('
+		$this->pageCompositionHelper->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
-				url: "/cache/searchindex/' . $this->session->user('token') . '.json",
+				url: "/api/search/legacyindex",
 				dataType: "json",
-				data: {t:$.now()},
 				success: function(json){
 					
 					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
@@ -346,56 +327,18 @@ class View
 
 	public function latLonPicker($id, $options = array())
 	{
-		$this->func->addHead('<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=' . GOOGLE_API_KEY . '"></script>');
-
-		if (isset($options['location'])) {
-			$data = array_merge(['zoom' => 14], $options['location']);
+		if (!isset($options['location'])) {
+			$data = $this->session->getLocation();
 		} else {
-			/* @var $db Db */
-			$db = DI::$shared->get(Db::class);
-			$data = $db->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
-			$data['zoom'] = 14;
+			$data['lat'] = $options['location']['lat'];
+			$data['lon'] = $options['location']['lon'];
 		}
 
 		if (empty($data['lat']) || empty($data['lon'])) {
-			/* set empty coordinates somewhere in germany */
-			$data['lat'] = 51;
-			$data['lon'] = 10;
-			$data['zoom'] = 5;
+			/* set empty coordinates, javascript will take over default location */
+			$data['lat'] = 0;
+			$data['lon'] = 0;
 		}
-
-		$this->func->addJs('
-			
-			var addressPicker = new AddressPicker({
-				map: {
-					id: \'map\',
-					center: L.latLng(' . $data['lat'] . ',' . $data['lon'] . '),
-					zoom: ' . $data['zoom'] . '
-				},
-				autocompleteService: {
-					types: ["geocode", "establishment"]
-				},
-				placeDetails: true
-			});
-
-			$(\'#addresspicker\').typeahead(null, {
-				displayKey: \'description\',
-				source: addressPicker.ttAdapter()
-			});
-			$(\'#addresspicker\').bind(\'typeahead:selected\', addressPicker.updateMap)
-			$(\'#addresspicker\').bind(\'typeahead:cursorchanged\', addressPicker.updateMap)
-			addressPicker.bindDefaultTypeaheadEvent($(\'#addresspicker\'))
-			$(addressPicker).on(\'addresspicker:selected\', function (event, result) {
-				var number = result.nameForType(\'street_number\') || \'\'
-				var address = result.nameForType(\'route\') || \'\'
-				$(\'#lat\').val(result.lat());
-				$(\'#lon\').val(result.lng());
-				$(\'#plz\').val(result.nameForType(\'postal_code\'));
-				$(\'#ort\').val(result.nameForType(\'locality\'));
-				$(\'#anschrift\').val(address + (number ? (\' \' + number):\'\'));
-			});
-			$("#lat-wrapper,#lon-wrapper").hide();
-		');
 
 		// Default to blank values for these keys
 		foreach (['anschrift', 'plz', 'ort'] as $key) {
