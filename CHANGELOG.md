@@ -37,6 +37,14 @@
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
 
+# 2019-02-25 Hotfix
+
+We have to do some database maintenance for !792 which hopefully works fine and fast...
+
+## Bugfixes
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Fix forum "Antworten" button !786 @nicksellen
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 
 # 2019-02-21
 
