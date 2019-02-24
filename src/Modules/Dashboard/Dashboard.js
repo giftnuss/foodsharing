@@ -3,7 +3,8 @@ import '@/globals'
 import './Dashboard.css'
 
 import activity from '@/activity'
-import subscribeForPushNotifications from '@/pushNotifications'
+import { subscribeForPushNotifications } from '@/pushNotifications'
+import { pulseSuccess } from '@/script'
 
 activity.init()
 
@@ -13,10 +14,10 @@ if (('PushManager' in window) && (Notification.permission === 'default') && !doc
   pushnotificationsBanner.style.display = ''
 
   const pushnotificationsButton = document.querySelector('#button-pushnotifications')
-  pushnotificationsButton.onclick = function () {
-    subscribeForPushNotifications().then(
-      pushnotificationsBanner.style.display = 'none'
-    )
+  pushnotificationsButton.onclick = async () => {
+    await subscribeForPushNotifications()
+    pulseSuccess('Push-Benachrichtigungen erfolgreich aktiviert')
+    pushnotificationsBanner.style.display = 'none'
   }
 }
 const closeButton = document.querySelector('#close-top-banner-pushnotifications')

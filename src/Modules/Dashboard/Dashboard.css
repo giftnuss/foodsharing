@@ -5,6 +5,11 @@
 #close-top-banner-pushnotifications {
   font-size: 25pt;
   margin-left: auto;
+  color: #533a20;
+}
+
+#close-top-banner-pushnotifications:hover {
+  color: #1c130b;
 }
 
 .top-banner-flex-container {
