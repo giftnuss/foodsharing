@@ -7,6 +7,7 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
@@ -35,6 +36,7 @@ class Utils
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $utilitiesHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
@@ -42,7 +44,8 @@ class Utils
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		UtilitiesHelper $utilitiesHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
@@ -51,6 +54,7 @@ class Utils
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->utilitiesHelper = $utilitiesHelper;
 	}
 
 	/**
@@ -284,7 +288,7 @@ class Utils
 			if ($h == $value['hour']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $h . '">' . $this->func->preZero($h) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $h . '">' . $this->utilitiesHelper->preZero($h) . '</option>';
 		}
 		$out .= '</select>';
 
@@ -295,7 +299,7 @@ class Utils
 			if ($m == $value['min']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $m . '">' . $this->func->preZero($m) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $m . '">' . $this->utilitiesHelper->preZero($m) . '</option>';
 		}
 		$out .= '</select> Uhr';
 

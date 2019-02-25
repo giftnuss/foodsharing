@@ -8,6 +8,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Func;
@@ -57,6 +58,7 @@ class XhrMethods
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $utilitiesHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -87,7 +89,8 @@ class XhrMethods
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		UtilitiesHelper $utilitiesHelper
 	) {
 		$this->func = $func;
 		$this->mem = $mem;
@@ -113,6 +116,7 @@ class XhrMethods
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->utilitiesHelper = $utilitiesHelper;
 	}
 
 	public function xhr_verify($data)
@@ -1102,7 +1106,7 @@ class XhrMethods
 			(
 				' . (int)$data['bid'] . ',
 				' . (int)$data['newfetchtime'][$i] . ',
-				' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
+				' . $this->model->strval($this->utilitiesHelper->preZero($data['nfttime']['hour'][$i]) . ':' . $this->utilitiesHelper->preZero($data['nfttime']['min'][$i]) . ':00') . ',
 				' . (int)$data['nft-count'][$i] . '
 			)
 		');

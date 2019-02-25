@@ -2,16 +2,19 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Modules\Core\Control;
 
 class EventControl extends Control
 {
 	private $gateway;
+	private $utilitiesHelper;
 
-	public function __construct(EventView $view, EventGateway $gateway)
+	public function __construct(EventView $view, EventGateway $gateway, UtilitiesHelper $utilitiesHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->utilitiesHelper = $utilitiesHelper;
 
 		parent::__construct();
 	}
@@ -161,11 +164,11 @@ class EventControl extends Control
 		if ($start_date = $this->getPostDate('date')) {
 			if ($start_time = $this->getPostTime('time_start')) {
 				if ($end_time = $this->getPostTime('time_end')) {
-					$out['start'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($start_time['hour']) . ':' . $this->func->preZero($start_time['min']) . ':00';
-					$out['end'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
+					$out['start'] = date('Y-m-d', $start_date) . ' ' . $this->utilitiesHelper->preZero($start_time['hour']) . ':' . $this->utilitiesHelper->preZero($start_time['min']) . ':00';
+					$out['end'] = date('Y-m-d', $start_date) . ' ' . $this->utilitiesHelper->preZero($end_time['hour']) . ':' . $this->utilitiesHelper->preZero($end_time['min']) . ':00';
 
 					if ((int)$this->getPostInt('addend') == 1 && ($ed = $this->getPostDate('dateend'))) {
-						$out['end'] = date('Y-m-d', $ed) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
+						$out['end'] = date('Y-m-d', $ed) . ' ' . $this->utilitiesHelper->preZero($end_time['hour']) . ':' . $this->utilitiesHelper->preZero($end_time['min']) . ':00';
 					}
 				}
 			}

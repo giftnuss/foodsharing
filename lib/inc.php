@@ -52,7 +52,7 @@ $dataHelper = $container->get(DataHelper::class);
 $pageHelper = $container->get(PageHelper::class);
 
 /* @var $identificationHelper IdentificationHelper */
-$pageHelper = $container->get(IdentificationHelper::class);
+$identificationHelper = $container->get(IdentificationHelper::class);
 
 /* @var $viewUtils Utils */
 $viewUtils = $container->get(Utils::class);
