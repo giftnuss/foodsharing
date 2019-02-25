@@ -239,3 +239,12 @@ $g_lang['you'] = 'Du';
 $g_lang['store'] = 'Betrieb';
 $g_lang['chat_notification_2_member_conversation'] = '{var} hat dir geschrieben.';
 $g_lang['chat_notification_group_conversation']	= 'In {var} wurde geschrieben.';
+
+$g_lang['push_notifications_not_supported'] = 'Dein Browser unterstützt leider keine Push-Benarichtigungen.';
+$g_lang['push_notifications_denied_by_user'] = 'Du hast das Anzeigen von Push-Benachrichtigungen durch Foodsharing in deinem Browser abgelehnt. Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für Foodsharing und lade die Seite neu.';
+$g_lang['push_notifications_activation_explanation'] = 'Wenn du Push-Benachrichtigungen für dieses Gerät aktivierst, werden Chat-Nachrichten zukünftig direkt an dein Gerät zugestellt, auch dann, wenn du nicht eingeloggt bist. Dein Gerät zeigt dann eine entprechende Benachrichtigung bzw. reagiert mit einem Ton oder einer Vibration.';
+$g_lang['push_notifications_activation_button_text'] = 'Push-Benachrichtigungen aktivieren';
+$g_lang['push_notifications_activation_success'] = 'Push-Benachrichtigungen erfolgreich aktiviert';
+$g_lang['push_notifications_deactivation_explanation'] = 'Auf diesem Gerät sind die Push-Benachrichtigungen von Foodsharing eingeschaltet. Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig nicht mehr direkt an dein Gerät zugestellt. Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist und reagiert auch nicht mehr mit einem Ton oder einer Vibration.';
+$g_lang['push_notifications_deactivation_button_text'] = 'Push-Benachrichtigungen deaktivieren';
+$g_lang['push_notifications_deactivation_success'] = 'Push-Benachrichtigungen erfolgreich deaktivert';

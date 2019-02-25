@@ -51,25 +51,25 @@ async function refreshPushNotificationSettings () {
   const pushNotificationsButton = document.querySelector('#push-notification-button')
 
   if (!('PushManager' in window)) {
-    pushNotificationsLabel.textContent = 'Dein Browser unterstützt leider keine Push-Benarichtigungen.'
+    pushNotificationsLabel.textContent = i18n('push_notifications_not_supported')
     pushNotificationsButton.style.display = 'none'
     return
   }
 
   if (Notification.permission === 'denied') {
-    pushNotificationsLabel.textContent = 'Du hast das Anzeigen von Push-Benachrichtigungen durch Foodsharing in deinem Browser abgelehnt. Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für Foodsharing und lade die Seite neu.'
+    pushNotificationsLabel.textContent = i18n('push_notifications_denied_by_user')
     pushNotificationsButton.style.display = 'none'
     return
   }
 
-  pushNotificationsLabel.textContent = 'Wenn du Push-Benachrichtigungen für dieses Gerät aktivierst, werden Chat-Nachrichten zukünftig direkt an dein Gerät zugestellt, auch dann, wenn du nicht eingeloggt bist. Dein Gerät zeigt dann eine entprechende Benachrichtigung bzw. reagiert mit einem Ton oder einer Vibration.'
-  pushNotificationsButton.text = 'Push-Benachrichtigungen aktivieren'
+  pushNotificationsLabel.textContent = i18n('push_notifications_activation_explanation')
+  pushNotificationsButton.text = i18n('push_notifications_activation_button_text')
 
   const subscription = await (await navigator.serviceWorker.ready).pushManager.getSubscription()
   if (subscription === null) {
     pushNotificationsButton.addEventListener('click', async () => {
       await subscribeForPushNotifications()
-      pulseSuccess('Push-Benachrichtigungen erfolgreich aktiviert')
+      pulseSuccess(i18n('push_notifications_activation_success'))
       refreshPushNotificationSettings()
     })
     return
@@ -92,11 +92,11 @@ async function refreshPushNotificationSettings () {
   }
   */
 
-  pushNotificationsLabel.textContent = 'Auf diesem Gerät sind die Push-Benachrichtigungen von Foodsharing eingeschaltet. Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig nicht mehr direkt an dein Gerät zugestellt. Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist und reagiert auch nicht mehr mit einem Ton oder einer Vibration.'
-  pushNotificationsButton.text = 'Push-Benachrichtigungen deaktivieren'
+  pushNotificationsLabel.textContent = i18n('push_notifications_deactivation_explanation')
+  pushNotificationsButton.text = i18n('push_notifications_deactivation_button_text')
   pushNotificationsButton.addEventListener('click', async () => {
     await unsubscribeFromPushNotifications()
-    pulseSuccess('Push-Benachrichtigungen erfolgreich deaktivert')
+    pulseSuccess(i18n('push_notifications_deactivation_success'))
     refreshPushNotificationSettings()
   })
 }
