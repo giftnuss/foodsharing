@@ -55,12 +55,16 @@ final class EmailHelper
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
 			$mail->setFrom($from_email);
-		} elseif (array_key_exists('sender', $var)) {
-			$mail->setFrom(DEFAULT_EMAIL, $var['sender'] . ' via ' . DEFAULT_EMAIL_NAME);
-		} elseif (array_key_exists('poster', $var)) {
-			$mail->setFrom(DEFAULT_EMAIL, $var['poster'] . ' via ' . DEFAULT_EMAIL_NAME);
 		} else {
-			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
+			$emailName = '';
+			if (array_key_exists('sender', $var)) {
+				$emailName = $var['sender'] . ' via ' . DEFAULT_EMAIL_NAME;
+			} elseif (array_key_exists('poster', $var)) {
+				$emailName = $var['poster'] . ' via ' . DEFAULT_EMAIL_NAME;
+			} else {
+				$emailName = DEFAULT_EMAIL_NAME;
+			}
+			$mail->setFrom(DEFAULT_EMAIL, $emailName);
 		}
 
 		$locale = 'de-de';
