@@ -160,16 +160,14 @@ final class MessageXhr extends Control
 
 						foreach ($members as $m) {
 							if ($m['id'] != $this->session->id()) {
+
 								/*
 								 * send Push Notification
 								 */
-								$conversationName = $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId);
-
-								if (count($members) > 2) {
-									$notificationTitle = 'In ' . $conversationName . ' wurde geschrieben.';
-								} else {
-									$notificationTitle = $conversationName . ' hat dir geschrieben.';
-								}
+								$notificationTitle = $this->getNotificationTitle(
+									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId),
+									count($members)
+								);
 
 								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
 									$m['id'],
@@ -436,5 +434,14 @@ final class MessageXhr extends Control
 				$_SESSION['lastMailMessage'] = $sessdata;
 			}
 		}
+	}
+
+	private function getNotificationTitle(string $conversationName, int $conversationMemberCount)
+	{
+		if ($conversationMemberCount > 2) {
+			return $this->func->sv('chat_notification_group_conversation', $conversationName);
+		}
+
+		return $this->func->sv('chat_notification_2_member_conversation', $conversationName);
 	}
 }

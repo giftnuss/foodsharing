@@ -10,6 +10,7 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -21,10 +22,16 @@ final class MessageGateway extends BaseGateway
 	 */
 	private $storeGateway;
 
-	public function __construct(Database $db, StoreGateway $storeGateway)
+	/**
+	 * @var Func
+	 */
+	private $func;
+
+	public function __construct(Database $db, Func $func, StoreGateway $storeGateway)
 	{
 		parent::__construct($db);
 		$this->storeGateway = $storeGateway;
+		$this->func = $func;
 	}
 
 	public function getConversationName(int $conversationId): ?string
@@ -93,7 +100,7 @@ final class MessageGateway extends BaseGateway
 		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
 
 		if ($storeName !== null) {
-			return 'Betrieb ' . $storeName;
+			return $this->func->s('store'). ' ' . $storeName;
 		}
 
 		$conversationMembers = $this->getConversationMemberNames($conversationId);
@@ -103,7 +110,7 @@ final class MessageGateway extends BaseGateway
 		$conversationMembersRelevantForFoodsaver = array_diff($conversationMembers, [$foodsaverName]);
 		if (count($conversationMembers) > 2) {
 			// in conversations with more than 2 members, there should still be something representing the foodsaver
-			$conversationMembersRelevantForFoodsaver[] = 'Du';
+			$conversationMembersRelevantForFoodsaver[] = $this->func->s('you');
 		}
 
 		return implode(', ', $conversationMembersRelevantForFoodsaver);

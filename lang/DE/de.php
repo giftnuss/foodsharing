@@ -234,3 +234,8 @@ $g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
 $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';
+
+$g_lang['you'] = 'Du';
+$g_lang['store'] = 'Betrieb';
+$g_lang['chat_notification_2_member_conversation'] = '{var} hat dir geschrieben.';
+$g_lang['chat_notification_group_conversation']	= 'In {var} wurde geschrieben.';
