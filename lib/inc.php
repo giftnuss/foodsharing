@@ -9,8 +9,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /* @var $container Container */
 global $container;
@@ -41,10 +39,6 @@ if (isset($_GET['logout'])) {
 
 $content_left_width = 5;
 $content_right_width = 6;
-
-/* @var $request Request */
-$request = Request::createFromGlobals();
-$response = new Response('--');
 
 /* @var $dataHelper DataHelper */
 $dataHelper = $container->get(DataHelper::class);
