@@ -12,6 +12,7 @@
   - [Making and submitting changes](contributing.md)
   - [Code style](codestyle.md)
   - [Testing](testing.md)
+  - [Troubleshooting](troubleshooting.md)
 
 ### References
   - [Scripts](scripts.md)

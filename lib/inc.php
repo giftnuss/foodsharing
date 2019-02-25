@@ -41,6 +41,7 @@ if (isset($_GET['logout'])) {
 $content_left_width = 5;
 $content_right_width = 6;
 
+/* @var $request Request */
 $request = Request::createFromGlobals();
 $response = new Response('--');
 

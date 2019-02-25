@@ -165,7 +165,7 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_test_maildev
     ports:
-      - 28083:80
+      - 28084:80
 
   influxdb:
     container_name: foodsharing_test_influxdb

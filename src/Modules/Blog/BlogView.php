@@ -38,7 +38,19 @@ class BlogView extends View
 
 	public function newsPost($news)
 	{
-		return $this->v_utils->v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
+		return $this->v_utils->v_field(
+			'<div class="news-post full"><h2><a href="/?page=blog&sub=read&id='
+			. $news['id'] . '">' . $news['name']
+			. '</a></h2><p class="small"><span class="time">'
+			. $this->timeHelper->niceDate($news['time_ts'])
+			. '</span><span class="name"> von '
+			. $news['fs_name']
+			. '</span></p>'
+			. $this->getImage($news, 'crop_0_528_')
+			. '<p>'
+			. $this->sanitizerService->purifyHtml($news['body'])
+			. '</p><div style="clear:both;"></div></div>'
+		);
 	}
 
 	public function newsListItem($news)

@@ -17,7 +17,7 @@ In short, no review on anything regarding white space.
 
 Additionally, we do not want to have to review huge amounts of code with such a diff:
 
-<div align="center"><img src="codestyle-whitespacediff.png" alt="Indentation change diff"></img></div>
+<div align="center"><img src="images/codestyle-whitespacediff.png" alt="Indentation change diff"></img></div>
 
 if you see this in pure diff style (and are not able to read the matrix without a GUI), this becomes very cumbersome.
 
@@ -29,7 +29,7 @@ The file `/.editorconfig` (see [https://editorconfig.org/]) specifies our most b
 ### PHPstorm
 In PHPstorm this is how you select it: use the corresponding plugin:
 
-<div align="center"><img src="codestyle-phpstorm-plugin.png" alt="Plugin EditorConfig in PHPstorm"></div>
+<div align="center"><img src="images/codestyle-phpstorm-plugin.png" alt="Plugin EditorConfig in PHPstorm"></div>
 
 For the editorconfig file format there are super nice inspections in PHPstorm (under Editor-Inspections after searching for editorconfig). Leave them all in. The more annoying, the better.
 
