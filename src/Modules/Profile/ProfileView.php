@@ -256,59 +256,50 @@ class ProfileView extends View
 		/*
 		 * Statistics
 		 */
-		$fetchWeight = '';
+		$fetchweight = '';
 		if ($this->foodsaver['stat_fetchweight'] > 0) {
-			$fetchWeight = '
+			$fetchweight = '
 				<span class="item stat_fetchweight">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
 					<span class="name">gerettet</span>
 				</span>';
 		}
 
-		$fetchCount = '';
+		$fetchcount = '';
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$fetchCount = '
+			$fetchcount = '
 				<span class="item stat_fetchcount">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">abgeholt</span>
 				</span>';
 		}
 
-        $foodBasketCount = '';
-        if ($this->foodsaver['stat_postcount'] > 0) {
-            $foodBasketCount = '
-				<span class="item stat_fetchcount">
-					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
-					<span class="name">Essenskörbe</span>
-				</span>';
-        }
-
-		$postCount = '';
+		$postcount = '';
 		if ($this->foodsaver['stat_postcount'] > 0) {
-			$postCount = '
+			$postcount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
 					<span class="name">Beiträge</span>
 				</span>';
 		}
 
-		$bananaCount = '';
+		$bananacount = '';
 
 		/*
 		 * Banana
 		*/
 		if ($this->session->may('fs')) {
-			$countBanana = count($this->foodsaver['bananen']);
-			if ($countBanana == 0) {
-				$countBanana = '&nbsp;';
+			$count_banana = count($this->foodsaver['bananen']);
+			if ($count_banana == 0) {
+				$count_banana = '&nbsp;';
 			}
 
 			$banana_button_class = ' bouched';
-			$giveBanana = '';
+			$givebanana = '';
 
 			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
-				$giveBanana = '
+				$givebanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
 					<div class="vouch-banana-desc">
@@ -325,17 +316,17 @@ class ProfileView extends View
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');
-			$bananaCount = '
+			$bananacount = '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
-				<span class="val">' . $countBanana . '</span>
+				<span class="val">' . $count_banana . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
 			';
 
-			$bananaCount .= '
+			$bananacount .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $countBanana) . ' Vertrauensbananen</h3>
-				' . $giveBanana . '
+				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
+				' . $givebanana . '
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';
@@ -345,7 +336,7 @@ class ProfileView extends View
 				} else {
 					$odd = 'even';
 				}
-				$bananaCount .= '
+				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
 					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
@@ -354,7 +345,7 @@ class ProfileView extends View
 					</div></td>
 				</tr>';
 			}
-			$bananaCount .= '
+			$bananacount .= '
 					</tbody>
 				</table>
 			</div>';
@@ -363,11 +354,10 @@ class ProfileView extends View
 		return '
 			<div class="pure-g">
 				<div class="profile statdisplay">
-					' . $fetchWeight . '
-					' . $fetchCount . '
-					' . $postCount . '
-					' . $bananaCount . '
-					' . $foodBasketCount . '
+					' . $fetchweight . '
+					' . $fetchcount . '
+					' . $postcount . '
+					' . $bananacount . '
 				</div>
 			    <div class="infos"> ' . $out . ' </div>
 			</div>';
