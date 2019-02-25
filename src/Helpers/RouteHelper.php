@@ -4,6 +4,13 @@ namespace Foodsharing\Helpers;
 
 final class RouteHelper
 {
+	private $translationHelper;
+
+	public function __construct(TranslationHelper $translationHelper)
+	{
+		$this->translationHelper = $translationHelper;
+	}
+
 	public function go(string $url): void
 	{
 		header('Location: ' . $url);
@@ -67,7 +74,7 @@ final class RouteHelper
 			$action = '&a=' . $action;
 		}
 
-		return array('href' => '/?page=' . $page . $action, 'name' => $this->s($id));
+		return array('href' => '/?page=' . $page . $action, 'name' => $this->translationHelper->s($id));
 	}
 
 	public function autolink(string $str, array $attributes = array())

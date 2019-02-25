@@ -3,18 +3,53 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
 
 class SettingsView extends View
 {
 	private $regionGateway;
 
-	public function __construct(RegionGateway $regionGateway)
-	{
+	public function __construct(
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		RegionGateway $regionGateway
+	) {
 		$this->regionGateway = $regionGateway;
-		parent::__construct();
+
+		parent::__construct(
+			$twig,
+			$viewUtils,
+			$session,
+			$sanitizerService,
+			$pageHelper,
+			$timeHelper,
+			$imageService,
+			$routeHelper,
+			$identificationHelper,
+			$dataHelper,
+			$translationHelper
+		);
 	}
 
 	public function sleepMode($sleep)

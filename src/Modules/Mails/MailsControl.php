@@ -6,6 +6,7 @@ use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fSMTP;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
@@ -21,9 +22,15 @@ class MailsControl extends ConsoleControl
 	private $mailsGateway;
 	private $database;
 	private $metrics;
+	private $routeHelper;
 
-	public function __construct(Db $model, MailsGateway $mailsGateway, Database $database, InfluxMetrics $metrics)
-	{
+	public function __construct(
+		Db $model,
+		MailsGateway $mailsGateway,
+		Database $database,
+		InfluxMetrics $metrics,
+		RouteHelper $routeHelper
+	) {
 		echo "creating mailscontrl!!!!\n";
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
@@ -32,6 +39,7 @@ class MailsControl extends ConsoleControl
 		$this->mailsGateway = $mailsGateway;
 		$this->database = $database;
 		$this->metrics = $metrics;
+		$this->routeHelper = $routeHelper;
 		parent::__construct();
 		echo "-------------------------------------\n";
 	}

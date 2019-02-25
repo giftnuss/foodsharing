@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\EmailTemplateAdmin;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\Control;
@@ -11,17 +12,20 @@ class EmailTemplateAdminControl extends Control
 	private $emailTemplateAdminGateway;
 	private $identificationHelper;
 	private $statusChecksHelper;
+	private $dataHelper;
 
 	public function __construct(
 		EmailTemplateAdminView $view,
 		EmailTemplateAdminGateway $emailTemplateAdminGateway,
 		IdentificationHelper $identificationHelper,
-		StatusChecksHelper $statusChecksHelper
+		StatusChecksHelper $statusChecksHelper,
+		DataHelper $dataHelper
 	) {
 		$this->view = $view;
 		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->statusChecksHelper = $statusChecksHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 

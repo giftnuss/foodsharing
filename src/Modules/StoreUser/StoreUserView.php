@@ -2,18 +2,52 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
 
 class StoreUserView extends View
 {
 	private $statusChecksHelper;
 
-	public function __construct(StatusChecksHelper $statusChecksHelper)
-	{
+	public function __construct(
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		StatusChecksHelper $statusChecksHelper
+	) {
 		$this->statusChecksHelper = $statusChecksHelper;
 
-		parent::__construct();
+		parent::__construct(
+			$twig,
+			$viewUtils,
+			$session,
+			$sanitizerService,
+			$pageHelper,
+			$timeHelper,
+			$imageService,
+			$routeHelper,
+			$identificationHelper,
+			$dataHelper,
+			$translationHelper
+		);
 	}
 
 	public function u_getVerantwortlicher($betrieb)

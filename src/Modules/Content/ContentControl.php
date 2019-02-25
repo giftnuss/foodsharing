@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Content;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\Control;
@@ -12,17 +13,20 @@ class ContentControl extends Control
 	private $contentGateway;
 	private $identificationHelper;
 	private $statusChecksHelper;
+	private $dataHelper;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
-		StatusChecksHelper $statusChecksHelper
+		StatusChecksHelper $statusChecksHelper,
+		DataHelper $dataHelper
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->statusChecksHelper = $statusChecksHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}

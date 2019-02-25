@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -15,19 +16,22 @@ class MaintenanceControl extends ConsoleControl
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		MaintenanceModel $model,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 
 		parent::__construct();
 	}

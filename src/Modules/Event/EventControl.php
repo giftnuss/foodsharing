@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Modules\Core\Control;
 
@@ -9,12 +10,14 @@ class EventControl extends Control
 {
 	private $gateway;
 	private $utilitiesHelper;
+	private $dataHelper;
 
-	public function __construct(EventView $view, EventGateway $gateway, UtilitiesHelper $utilitiesHelper)
+	public function __construct(EventView $view, EventGateway $gateway, UtilitiesHelper $utilitiesHelper, DataHelper $dataHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->utilitiesHelper = $utilitiesHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}

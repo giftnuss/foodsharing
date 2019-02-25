@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Lib\Db\Db;
@@ -25,6 +26,7 @@ class EmailControl extends Control
 	private $sanitizerService;
 	private $identificationHelper;
 	private $statusChecksHelper;
+	private $dataHelper;
 
 	public function __construct(
 		Db $model,
@@ -35,7 +37,8 @@ class EmailControl extends Control
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
 		IdentificationHelper $identificationHelper,
-		StatusChecksHelper $statusChecksHelper
+		StatusChecksHelper $statusChecksHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
@@ -46,6 +49,7 @@ class EmailControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->identificationHelper = $identificationHelper;
 		$this->statusChecksHelper = $statusChecksHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
