@@ -19,7 +19,7 @@ class DataHelper
 		return array();
 	}
 
-	public function getValue($id): string
+	public function getValue($id)
 	{
 		global $g_data;
 

@@ -12,16 +12,18 @@ class ApplicationControl extends Control
 	private $bezirk_id;
 	private $mode;
 	private $gateway;
+	private $identificationHelper;
 
 	public function __construct(ApplicationGateway $gateway, ApplicationView $view, IdentificationHelper $identificationHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
 		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->$identificationHelper->getGetId('bid')) === false) {
+		if (($this->bezirk_id = $this->identificationHelper->getGetId('bid')) === false) {
 			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 

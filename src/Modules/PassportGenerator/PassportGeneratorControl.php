@@ -18,6 +18,7 @@ final class PassportGeneratorControl extends Control
 	private $regionGateway;
 	private $passportGeneratorGateway;
 	private $foodsaverGateway;
+	private $identificationHelper;
 
 	public function __construct(
 		PassportGeneratorView $view,
@@ -32,11 +33,12 @@ final class PassportGeneratorControl extends Control
 		$this->regionGateway = $regionGateway;
 		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
 		$this->regionId = false;
-		if (($this->regionId = $this->$identificationHelper->getGetId('bid')) === false) {
+		if (($this->regionId = $this->identificationHelper->getGetId('bid')) === false) {
 			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 

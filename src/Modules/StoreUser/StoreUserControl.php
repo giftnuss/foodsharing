@@ -145,10 +145,12 @@ class StoreUserControl extends Control
 					$edit_team = $this->v_utils->v_form(
 						'team',
 
-						array(
-							$this->v_utils->v_form_tagselect('foodsaver', array('valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->listRegionIDs()))),
-							$verantwortlich_select),
-						array('submit' => $this->translationHelper->s('save'))
+						[
+							$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->listRegionIDs())]
+							),
+							$verantwortlich_select
+						],
+						['submit' => $this->translationHelper->s('save')]
 					);
 
 					$this->pageHelper->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
