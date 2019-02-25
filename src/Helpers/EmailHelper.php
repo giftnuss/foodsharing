@@ -140,8 +140,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 		$message['subject'] = $this->sanitizerService->htmlToPlain($message['subject']);  // Probably redundant, but just in case.
 		$excerptAmount = substr_count($message['subject'], '{EXCERPT}'); // So we can calculate the proper subject length
 		if ($excerptAmount > 0) {
+			$plainMessage = $this->sanitizerService->htmlToPlain($message['body']);
 			$subjectLength = strlen($message['subject']) - strlen('{EXCERPT}') * $excerptAmount;
-			$excerpt = substr($plainBody, 0, intdiv(78 - $subjectLength, $excerptAmount)); // yes, magic number. It's the RFC recommendation.
+			$excerpt = substr($plainMessage, 0, intdiv(78 - $subjectLength, $excerptAmount)); // yes, magic number. It's the RFC recommendation.
 			$message['subject'] = str_replace('{EXCERPT}', $excerpt, $message['subject']);
 		}
 
