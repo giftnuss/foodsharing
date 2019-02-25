@@ -11,6 +11,16 @@
 #close-top-banner-pushnotifications:hover {
   color: #1c130b;
 }
+.top-banner-pushnotifications {
+  max-height: 500px; /* Needed for the transition, as CSS can not animate transistion from automated values and I want to animate height */
+  transition: transform 0.1s, max-height 0.5s, padding 0.2s 0.3s;
+}
+
+.top-banner-pushnotifications-closed {
+  transform: scale(1,0);
+  max-height: 0;
+  padding: 0;
+}
 
 .top-banner-flex-container {
   display: flex;

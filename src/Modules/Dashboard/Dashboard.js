@@ -17,11 +17,11 @@ if (('PushManager' in window) && (Notification.permission === 'default') && !doc
   pushnotificationsButton.onclick = async () => {
     await subscribeForPushNotifications()
     pulseSuccess('Push-Benachrichtigungen erfolgreich aktiviert')
-    pushnotificationsBanner.style.display = 'none'
+    pushnotificationsBanner.classList.add('top-banner-pushnotifications-closed')
   }
 }
 const closeButton = document.querySelector('#close-top-banner-pushnotifications')
 closeButton.onclick = () => {
-  pushnotificationsBanner.style.display = 'none'
+  pushnotificationsBanner.classList.add('top-banner-pushnotifications-closed')
   document.cookie = 'pushNotificationBannerClosed=true;'
 }
