@@ -106,6 +106,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if ($from_email !== false && $this->validEmail($from_email)) {
 			$mail->setFrom($from_email);
+		} elseif (array_key_exists('sender', $var)) {
+			$mail->setFrom(DEFAULT_EMAIL, $var['sender'] . ' via ' . DEFAULT_EMAIL_NAME);
+		} elseif (array_key_exists('poster', $var)) {
+			$mail->setFrom(DEFAULT_EMAIL, $var['poster'] . ' via ' . DEFAULT_EMAIL_NAME);
 		} else {
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
