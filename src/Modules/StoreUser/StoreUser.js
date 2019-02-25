@@ -81,7 +81,7 @@ $('#team_msg-wrapper').hide()
 $('#u_undate').dialog({
   autoOpen: false,
   modal: true,
-  width: 400,
+  width: 'auto',
   buttons: [
     {
       text: i18n('have_backup'),
@@ -253,7 +253,7 @@ $('#timedialog').dialog({
   resizable: false,
   modal: true,
   autoOpen: false,
-  width: 500,
+  width: 'auto',
   buttons: {
     'Eintragen': async function () {
       const requestDate = ($('#timedialog-date').val()).replace(' ', 'T') + 'Z'
