@@ -62,6 +62,9 @@ final class EmailHelper
 			} elseif (array_key_exists('poster', $var)) {
 				$emailName = $var['poster'];
 			}
+			if (array_key_exists('bezirk', $var)) {
+				$emailName .= ' in ' . $var['bezirk'];
+			}
 			if ($emailName !== '') {   // if sender information is present
 				$emailName .= ' via '; // though this is optional...
 			}
