@@ -3,7 +3,6 @@
 namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Stats\StatsService;
@@ -11,10 +10,6 @@ use Foodsharing\Services\ImageService;
 
 class ViewUtils
 {
-	/**
-	 * @var Func
-	 */
-	private $func;
 	/**
 	 * @var Utils
 	 */
@@ -26,14 +21,12 @@ class ViewUtils
 	private $translationHelper;
 
 	public function __construct(
-		Func $func,
 		Utils $viewUtils,
 		StatsService $statsService,
 		Session $session,
 		ImageService $imageService,
 		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->viewUtils = $viewUtils;
 		$this->statsService = $statsService;
 		$this->session = $session;

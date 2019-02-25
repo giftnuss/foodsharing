@@ -9,7 +9,6 @@ use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -28,10 +27,6 @@ abstract class Control
 	protected $view;
 	private $sub;
 	private $sub_func;
-	/**
-	 * @var Func
-	 */
-	protected $func;
 
 	/**
 	 * @var PageHelper
@@ -96,7 +91,6 @@ abstract class Control
 	public function __construct()
 	{
 		global $container;
-		$this->func = $container->get(Func::class);
 		$this->mem = $container->get(Mem::class);
 		$this->session = $container->get(Session::class);
 		$this->v_utils = $container->get(Utils::class);

@@ -21,7 +21,6 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class Session
 {
-	private $func;
 	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
@@ -35,7 +34,6 @@ class Session
 	private $translationHelper;
 
 	public function __construct(
-		Func $func,
 		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -47,7 +45,6 @@ class Session
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

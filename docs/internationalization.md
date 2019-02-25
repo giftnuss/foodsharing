@@ -8,7 +8,7 @@ Unfortunately, we are not there yet. At the moment there are three ways how fixe
 $this->pageHelper->addContent('<...>Updates-Übersicht<...>')
 ```
 Do not create more of this hardcoded German!
-- References to the translation files in `/lang/DE/....php` via the function `s` in `/src/Lib/Func.php`, e.g.
+- References to the translation files in `/lang/DE/....php` via the function `s` in `/src/Helpers/TranslationHelper.php`, e.g.
 ```
 $this->translationHelper->s('close_foodbaskets')
 ```

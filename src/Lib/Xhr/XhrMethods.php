@@ -11,7 +11,6 @@ use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
@@ -35,7 +34,6 @@ use Symfony\Component\HttpFoundation\Request;
 class XhrMethods
 {
 	private $model;
-	private $func;
 	private $mem;
 	private $session;
 	private $v_utils;
@@ -66,7 +64,6 @@ class XhrMethods
 	 * @param $model
 	 */
 	public function __construct(
-		Func $func,
 		Mem $mem,
 		Session $session,
 		Db $model,
@@ -92,7 +89,6 @@ class XhrMethods
 		TranslationHelper $translationHelper,
 		UtilitiesHelper $utilitiesHelper
 	) {
-		$this->func = $func;
 		$this->mem = $mem;
 		$this->session = $session;
 		$this->model = $model;

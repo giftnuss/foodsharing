@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Helpers;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
@@ -26,7 +25,6 @@ final class PageHelper
 	private $title;
 	private $webpackScripts;
 	private $webpackStylesheets;
-	private $func;
 	private $session;
 	private $sanitizerService;
 	private $imageService;
@@ -38,7 +36,6 @@ final class PageHelper
 	private $statusChecksHelper;
 
 	public function __construct(
-		Func $func,
 		Session $session,
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
@@ -61,7 +58,6 @@ final class PageHelper
 		$this->js = '';
 		$this->head = '';
 		$this->title = ['foodsharing'];
-		$this->func = $func;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;

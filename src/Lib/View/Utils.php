@@ -9,18 +9,12 @@ use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Helpers\UtilitiesHelper;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
-use Symfony\Component\VarDumper\Cloner\Data;
 
 class Utils
 {
 	private $id;
-	/**
-	 * @var Func
-	 */
-	private $func;
 
 	/**
 	 * @var \Foodsharing\Lib\Session
@@ -59,14 +53,6 @@ class Utils
 		$this->translationHelper = $translationHelper;
 		$this->utilitiesHelper = $utilitiesHelper;
 		$this->statusChecksHelper = $statusChecksHelper;
-	}
-
-	/**
-	 * @required
-	 */
-	public function setFunc(Func $func)
-	{
-		$this->func = $func;
 	}
 
 	/**

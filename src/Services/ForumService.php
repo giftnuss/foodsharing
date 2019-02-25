@@ -5,7 +5,6 @@ namespace Foodsharing\Services;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -20,7 +19,6 @@ class ForumService
 	private $bellGateway;
 	/* @var Db */
 	private $model;
-	private $func;
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
@@ -30,7 +28,6 @@ class ForumService
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
-		Func $func,
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
@@ -41,7 +38,6 @@ class ForumService
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
-		$this->func = $func;
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;

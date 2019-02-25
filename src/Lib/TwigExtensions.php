@@ -9,13 +9,11 @@ use Twig_Filter;
 
 class TwigExtensions extends Twig_Extension
 {
-	private $func;
 	private $identificationHelper;
 	private $translationHelper;
 
-	public function __construct(Func $func, IdentificationHelper $identificationHelper, TranslationHelper $translationHelper)
+	public function __construct(IdentificationHelper $identificationHelper, TranslationHelper $translationHelper)
 	{
-		$this->func = $func;
 		$this->identificationHelper = $identificationHelper;
 		$this->translationHelper = $translationHelper;
 	}

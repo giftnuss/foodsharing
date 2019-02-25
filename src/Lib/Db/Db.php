@@ -4,7 +4,6 @@ namespace Foodsharing\Lib\Db;
 
 use Exception;
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use mysqli;
 
@@ -15,10 +14,6 @@ class Db
 	 */
 	private $mysqli;
 	private $values;
-	/**
-	 * @var Func
-	 */
-	protected $func;
 
 	/**
 	 * @var Mem
@@ -33,14 +28,6 @@ class Db
 	public function __construct()
 	{
 		$this->values = array();
-	}
-
-	/**
-	 * @required
-	 */
-	public function setFunc(Func $func)
-	{
-		$this->func = $func;
 	}
 
 	/**

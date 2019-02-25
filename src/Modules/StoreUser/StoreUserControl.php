@@ -64,7 +64,7 @@ class StoreUserControl extends Control
 				$this->routeHelper->goPage();
 			}
 
-			$this->func->jsData['store'] = [
+			$this->pageHelper->jsData['store'] = [
 				'id' => (int)$betrieb['id'],
 				'name' => $betrieb['name'],
 				'bezirk_id' => (int)$betrieb['bezirk_id'],

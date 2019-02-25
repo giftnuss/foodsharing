@@ -8,7 +8,6 @@ use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\ImageService;
@@ -20,7 +19,6 @@ class View
 
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
-	protected $func;
 	protected $session;
 	protected $sanitizerService;
 	protected $pageHelper;
@@ -38,7 +36,6 @@ class View
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Func $func,
 		Utils $viewUtils,
 		Session $session,
 		SanitizerService $sanitizerService,
@@ -51,7 +48,6 @@ class View
 		TranslationHelper $translationHelper
 	) {
 		$this->twig = $twig;
-		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
