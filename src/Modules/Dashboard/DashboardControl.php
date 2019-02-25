@@ -504,7 +504,7 @@ class DashboardControl extends Control
 		);
 
 		// Advertisement for Push Notifications
-		$this->func->addContent(
+		$this->pageHelper->addContent(
 			$this->twig->render('partials/pushNotificationBanner.twig'),
 			CNT_TOP
 		);

@@ -423,7 +423,7 @@ final class MessageXhr extends Control
 
 					$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
 
-					$this->func->tplMail(30, $recipient['email'], array(
+					$this->emailHelper->tplMail(30, $recipient['email'], array(
 						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
