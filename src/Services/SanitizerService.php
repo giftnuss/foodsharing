@@ -27,6 +27,11 @@ class SanitizerService
 		return $this->htmlPurifier->purify($html);
 	}
 
+	public function purifyHtml(string $html): string
+	{
+		return $this->htmlPurifier->purify($html);
+	}
+
 	public function htmlToPlain(string $html): string
 	{
 		$html = new Html2Text($html);

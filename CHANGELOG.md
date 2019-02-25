@@ -5,6 +5,8 @@
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+- Email notifications now indicate the responsible user in the FROM field #450 !798 @zommuter
+- Email notifications now can include message excerpts in the SUBJECT #450 !800 @zommuter
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -16,6 +18,8 @@
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
 - Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
 - Non-followers can comment on Fairteilers again #457 !691 @janopae
+- Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
+- Allow blog posts to be properly formatted !795 @djahnie
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -37,6 +41,14 @@
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
 
+# 2019-02-25 Hotfix
+
+We have to do some database maintenance for !792 which hopefully works fine and fast...
+
+## Bugfixes
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Fix forum "Antworten" button !786 @nicksellen
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 
 # 2019-02-21
 
