@@ -8,8 +8,6 @@ use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\MessageGateway;
-use Foodsharing\Modules\Store\StoreGateway;
 use ReflectionClass;
 
 abstract class Control
@@ -423,7 +421,6 @@ abstract class Control
 
 		return false;
 	}
-
 
 	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
 	{

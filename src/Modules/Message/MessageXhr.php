@@ -34,8 +34,7 @@ final class MessageXhr extends Control
 		FoodsaverGateway $foodsaverGateway,
 		PushNotificationGateway $pushNotificationGateway,
 		WebSocketSender $webSocketSender
-	)
-	{
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
@@ -161,13 +160,12 @@ final class MessageXhr extends Control
 
 						foreach ($members as $m) {
 							if ($m['id'] != $this->session->id()) {
-
 								/*
 								 * send Push Notification
 								 */
 								$conversationName = $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId);
 
-								if(count($members) > 2) {
+								if (count($members) > 2) {
 									$notificationTitle = 'In ' . $conversationName . ' wurde geschrieben.';
 								} else {
 									$notificationTitle = $conversationName . ' hat dir geschrieben.';
@@ -439,5 +437,4 @@ final class MessageXhr extends Control
 			}
 		}
 	}
-
 }

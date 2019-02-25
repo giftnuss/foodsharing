@@ -77,8 +77,9 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		$reports = $this->webpush->flush();
 
 		/**
-		 * Check sent results
-		 * @var MessageSentReport $report
+		 * Check sent results.
+		 *
+		 * @var MessageSentReport
 		 */
 		foreach ($reports as $report) {
 			$endpoint = $report->getRequest()->getUri()->__toString();

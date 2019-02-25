@@ -108,5 +108,4 @@ final class MessageGateway extends BaseGateway
 
 		return implode(', ', $conversationMembersRelevantForFoodsaver);
 	}
-
 }

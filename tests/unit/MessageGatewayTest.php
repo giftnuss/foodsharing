@@ -5,7 +5,6 @@ use Foodsharing\Modules\Message\MessageGateway;
 
 class MessageGatewayTest extends Unit
 {
-
 	/**
 	 * @var UnitTester
 	 */
@@ -16,7 +15,7 @@ class MessageGatewayTest extends Unit
 	private $gateway;
 
 	private $testFoodsaver1;
- 	private $testFoodsaver2;
+	private $testFoodsaver2;
 
 	protected function _before()
 	{
@@ -73,7 +72,7 @@ class MessageGatewayTest extends Unit
 		);
 
 		$this->assertEquals(
-			'Betrieb '. $testStore['name'],
+			'Betrieb ' . $testStore['name'],
 			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
 		);
 	}
@@ -89,7 +88,7 @@ class MessageGatewayTest extends Unit
 		);
 
 		$this->assertEquals(
-			'Betrieb '. $testStore['name'],
+			'Betrieb ' . $testStore['name'],
 			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
 		);
 	}
@@ -103,5 +102,4 @@ class MessageGatewayTest extends Unit
 			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
 		);
 	}
-
 }

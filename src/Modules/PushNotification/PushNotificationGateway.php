@@ -63,7 +63,7 @@ class PushNotificationGateway extends BaseGateway
 				}
 			}
 
-			if(!empty($subscriptionDataForThisHandler)) {
+			if (!empty($subscriptionDataForThisHandler)) {
 				$handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options, $action);
 			}
 		}
