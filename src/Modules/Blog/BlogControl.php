@@ -7,7 +7,6 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
-use Symfony\Component\VarDumper\Cloner\Data;
 
 class BlogControl extends Control
 {

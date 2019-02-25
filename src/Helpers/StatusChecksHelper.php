@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Helpers;
 
-
 class StatusChecksHelper
 {
 	public function isMob(): bool

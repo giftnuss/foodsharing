@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Helpers;
 
-
 class UtilitiesHelper
 {
 	public function preZero($i)
