@@ -58,12 +58,14 @@ final class EmailHelper
 		} else {
 			$emailName = '';
 			if (array_key_exists('sender', $var)) {
-				$emailName = $var['sender'] . ' via ' . DEFAULT_EMAIL_NAME;
+				$emailName = $var['sender'];
 			} elseif (array_key_exists('poster', $var)) {
-				$emailName = $var['poster'] . ' via ' . DEFAULT_EMAIL_NAME;
-			} else {
-				$emailName = DEFAULT_EMAIL_NAME;
+				$emailName = $var['poster'];
 			}
+			if ($emailName !== '') {   // if sender information is present
+				$emailName .= ' via '; // though this is optional...
+			}
+			$emailName .= DEFAULT_EMAIL_NAME;
 			$mail->setFrom(DEFAULT_EMAIL, $emailName);
 		}
 
