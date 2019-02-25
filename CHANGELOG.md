@@ -6,6 +6,7 @@
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - Email notifications now indicate the responsible user in the FROM field #450 !798 @zommuter
+- Email notifications now can include message excerpts in the SUBJECT #450 !800 @zommuter
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec

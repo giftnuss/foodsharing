@@ -125,18 +125,28 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		$message['body'] = str_replace($search, $replace, $message['body']);
 
-		$message['subject'] = str_replace($search, $replace, $message['subject']);
-		if (!$message['subject']) {
-			$message['subject'] = 'foodsharing-Mail';
-		}
-
-		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
 		$htmlBody = $this->emailBodyTpl($message['body']);
 		$mail->setHTMLBody($htmlBody);
 
 		// playintext body
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
+
+		$message['subject'] = str_replace($search, $replace, $message['subject']);
+		if (!$message['subject']) {
+			$message['subject'] = 'foodsharing-Mail: {EXCERPT}';
+		}
+
+		$message['subject'] = $this->sanitizerService->htmlToPlain($message['subject']);  // Probably redundant, but just in case.
+		$excerptAmount = substr_count($message['subject'], '{EXCERPT}'); // So we can calculate the proper subject length
+		if ($excerptAmount > 0) {
+			$plainMessage = $this->sanitizerService->htmlToPlain($message['body']);
+			$subjectLength = strlen($message['subject']) - strlen('{EXCERPT}') * $excerptAmount;
+			$excerpt = substr($plainMessage, 0, intdiv(78 - $subjectLength, $excerptAmount)); // yes, magic number. It's the RFC recommendation.
+			$message['subject'] = str_replace('{EXCERPT}', $excerpt, $message['subject']);
+		}
+
+		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
 
 		if (is_iterable($to)) {
 			foreach ($to as $recipient) {
