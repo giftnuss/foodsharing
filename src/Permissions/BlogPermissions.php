@@ -18,7 +18,6 @@ final class BlogPermissions
 		return $this->session->isOrgaTeam() || $this->session->isAdminFor($bezirkId);
 	}
 
-
 	public function mayEdit($val): bool
 	{
 		if ($val) {
