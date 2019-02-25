@@ -17,10 +17,6 @@ async function unsubscribeFromPushNotifications () {
   return removePushSubscriptionFromServer(subscription)
 }
 
-async function askForPermission () {
-  // TODO
-}
-
 function sendPushSubscriptionToServer (subscription) {
   const key = subscription.getKey('p256dh')
   const token = subscription.getKey('auth')
@@ -62,4 +58,4 @@ function urlBase64ToUint8Array (base64String) {
   return outputArray
 }
 
-export { subscribeForPushNotifications, unsubscribeFromPushNotifications, askForPermission }
+export { subscribeForPushNotifications, unsubscribeFromPushNotifications }
