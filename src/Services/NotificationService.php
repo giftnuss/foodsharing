@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Func;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
@@ -11,12 +12,21 @@ final class NotificationService
 	private $bellGateway;
 	private $fairteilerGateway;
 	private $func;
+	private $sanitizerService;
+	private $emailHelper;
 
-	public function __construct(BellGateway $bellGateway, FairTeilerGateway $fairTeilerGateway, Func $func)
-	{
+	public function __construct(
+		BellGateway $bellGateway,
+		FairTeilerGateway $fairTeilerGateway,
+		Func $func,
+		SanitizerService $sanitizerService,
+		EmailHelper $emailHelper
+	) {
 		$this->bellGateway = $bellGateway;
 		$this->fairteilerGateway = $fairTeilerGateway;
 		$this->func = $func;
+		$this->sanitizerService = $sanitizerService;
+		$this->emailHelper = $emailHelper;
 	}
 
 	public function newFairteilerPost(int $fairteilerId)
@@ -39,7 +49,7 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->func->tplMail(18, $f['email'], array(
+					$this->emailHelper->tplMail(18, $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId,
 						'name' => $f['name'],
 						'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
@@ -57,7 +67,7 @@ final class NotificationService
 					'ft_update',
 					'img img-recycle yellow',
 					array('href' => '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId),
-					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->func->tt($post['body'], 100)),
+					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
 					'fairteiler-' . (int)$fairteilerId
 				);
 			}

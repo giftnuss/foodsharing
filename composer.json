@@ -4,16 +4,18 @@
   "description": "Network for foodsavers and foodsharers",
   "config": {
     "platform": {
-      "php": "7.3.1"
+      "php": "7.3.2"
     },
     "sort-packages": true
   },
   "require-dev": {
     "codeception/c3": "2.4.1",
-    "codeception/codeception": "2.5.3",
+    "codeception/codeception": "2.5.4",
+    "flow/jsonpath": "0.4.0",
     "friendsofphp/php-cs-fixer": "2.14.2",
-    "jakub-onderka/php-console-highlighter": "^0.4.0",
-    "jakub-onderka/php-parallel-lint": "^1.0",
+    "fzaninotto/faker": "1.8.0",
+    "jakub-onderka/php-console-highlighter": "0.4.0",
+    "jakub-onderka/php-parallel-lint": "1.0.0",
     "mashape/unirest-php": "3.0.4",
     "phpstan/phpstan": "0.11.2",
     "roave/security-advisories": "dev-master",
@@ -38,7 +40,6 @@
     "exercise/htmlpurifier-bundle": "2.0.3",
     "filp/whoops": "2.3.1",
     "friendsofsymfony/rest-bundle": "2.5.0",
-    "fzaninotto/faker": "1.8.0",
     "guiguiboy/php-cli-progress-bar": "0.0.4",
     "hirak/prestissimo": "0.3.8",
     "html2text/html2text": "4.2.1",
@@ -48,6 +49,7 @@
     "maximebf/debugbar": "1.15.0",
     "minishlink/web-push": "^5.1",
     "mobiledetect/mobiledetectlib": "2.8.33",
+    "nesbot/carbon": "2.13",
     "sensio/framework-extra-bundle": "5.2.4",
     "sentry/sentry": "1.10.0",
     "setasign/fpdi-tcpdf": "2.2.0",

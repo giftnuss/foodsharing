@@ -31,14 +31,14 @@ class EventView extends View
 		}
 
 		$title = $this->func->s('new_event');
-		$this->func->addStyle('
+		$this->pageHelper->addStyle('
 			label.addend{
 				display:inline-block;
 				margin-left:15px;
 				cursor:pointer;
 			}
 		');
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
@@ -113,7 +113,7 @@ class EventView extends View
 			$bez = '<optgroup label="Deine Bezirke">' . $bez . '</optgroup>';
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
@@ -149,7 +149,7 @@ class EventView extends View
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
-				$this->func->addJs('$("#input-wrapper").hide();');
+				$this->pageHelper->addJs('$("#input-wrapper").hide();');
 			}
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
@@ -241,7 +241,7 @@ class EventView extends View
 	public function eventTop($event)
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->func->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
 		} else {
 			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
@@ -261,7 +261,7 @@ class EventView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>' . $this->func->niceDate($event['start_ts']) . $end . '</li>
+						<li>' . $this->timeHelper->niceDate($event['start_ts']) . $end . '</li>
 					</ul>
 					<div class="clear"></div>
 				</div>
@@ -314,7 +314,7 @@ class EventView extends View
 			foreach ($foodsaverDisplayed as $fs) {
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->imageService->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
 			}
 			if (count($foodsavers) > $maxNumberOfAvatars) {

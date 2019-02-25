@@ -13,11 +13,11 @@ class SettingsView extends View
 		$this->func->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != 1) {
-			$this->func->addJs('$("#daterange-wrapper").hide();');
+			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 0) {
-			$this->func->addJs('$("#sleep_msg-wrapper").hide();');
+			$this->pageHelper->addJs('$("#sleep_msg-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == 1) {
@@ -33,13 +33,13 @@ class SettingsView extends View
 			}
 			$to = $date->format('d.m.Y');
 
-			$this->func->addJs("
+			$this->pageHelper->addJs("
 				$('#daterange_from').val('$from');
 				$('#daterange_to').val('$to');
 			");
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#sleep_status").on("change", function(){
 				var $this = $(this);
 				if($this.val() == 1)
@@ -111,7 +111,7 @@ class SettingsView extends View
 					$disabled = true;
 				}
 
-				$this->func->addJs('
+				$this->pageHelper->addJs('
 					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
@@ -178,7 +178,7 @@ class SettingsView extends View
 			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
 			$subtitle = 'Leider nicht bestanden';
 		}
-		$this->func->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -457,7 +457,7 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->func->addJs('$("#foodsaver-form").on("submit", function(e){
+		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
 		if($("#photo_public").length > 0)
 		{
 			$e = e;

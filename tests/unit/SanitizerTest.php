@@ -32,6 +32,16 @@ class SanitizerTest extends \Codeception\Test\Unit
 		);
 	}
 
+	public function testPurifyHtmlStripsScriptTag()
+	{
+		$in = '<p>This should stay</p><script type="text/javascript">alert()</script><p>And this is last</p>';
+		$out = $this->sanitizer->purifyHtml($in);
+		$this->assertEquals(
+			'<p>This should stay</p><p>And this is last</p>',
+			$out
+		);
+	}
+
 	public function testMarkdownToHtmlEncodesTags()
 	{
 		$in = 'Hi<there>, you <b>keep this</b>?';

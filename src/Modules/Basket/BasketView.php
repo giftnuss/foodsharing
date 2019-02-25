@@ -51,7 +51,7 @@ class BasketView extends View
 				<li>
 					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 						<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
-						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt(
+						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt(
 					$b['description'],
 					50
 				) . '</span>
@@ -140,9 +140,9 @@ class BasketView extends View
 
 		foreach ($requests as $r) {
 			$out .= '
-			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->func->img(
+			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->imageService->img(
 					$r['fs_photo']
-				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->func->niceDate(
+				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->timeHelper->niceDate(
 					$r['time_ts']
 				) . '</span><span class="clear"></span></a></li>';
 		}
@@ -155,13 +155,13 @@ class BasketView extends View
 
 	private function getSubtitle($basket)
 	{
-		$subtitle = '<p>' . $this->func->s('create_at') . ' <strong>' . $this->func->niceDate(
+		$subtitle = '<p>' . $this->func->s('create_at') . ' <strong>' . $this->timeHelper->niceDate(
 				$basket['time_ts']
 			) . '</strong>';
 
-		$subtitle .= '</p><p>' . $this->func->s('until') . ' <strong>' . $this->func->niceDate($basket['until_ts']) . '</strong></p>';
+		$subtitle .= '</p><p>' . $this->func->s('until') . ' <strong>' . $this->timeHelper->niceDate($basket['until_ts']) . '</strong></p>';
 		if ($basket['update_ts']) {
-			$subtitle .= '<p>' . $this->func->s('update_at') . ' <strong>' . $this->func->niceDate($basket['update_ts']) . '</strong></p>';
+			$subtitle .= '<p>' . $this->func->s('update_at') . ' <strong>' . $this->timeHelper->niceDate($basket['update_ts']) . '</strong></p>';
 		}
 
 		return $subtitle;
@@ -315,7 +315,7 @@ class BasketView extends View
 
 	public function contactTitle($basket): string
 	{
-		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
+		return '<img src="' . $this->imageService->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
 		<p>' . $this->func->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
 		<div style="clear:both;"></div>';
 	}
@@ -373,7 +373,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('set_date'), $this->func->niceDate($basket['time_ts'])) . '
+		' . $this->v_utils->v_input_wrapper($this->func->s('set_date'), $this->timeHelper->niceDate($basket['time_ts'])) . '
 		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
 		';
 	}

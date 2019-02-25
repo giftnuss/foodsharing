@@ -48,11 +48,6 @@ export default {
             label: this.$i18n('menu_manage_regions')
           },
           {
-            url: '/?page=geoclean&sub=lostregion',
-            icon: 'fas fa-map',
-            label: this.$i18n('menu_regions_without_bots')
-          },
-          {
             url: '/?page=email',
             icon: 'fas fa-envelope',
             label: this.$i18n('menu_email')
@@ -66,11 +61,6 @@ export default {
             url: '/?page=faq',
             icon: 'fas fa-question',
             label: this.$i18n('menu_faq')
-          },
-          {
-            url: '/?page=geoclean',
-            icon: 'fas fa-user',
-            label: this.$i18n('menu_foodsaver_without_region')
           },
           {
             url: '/?page=mailbox&a=manage',

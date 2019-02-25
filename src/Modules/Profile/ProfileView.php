@@ -16,7 +16,7 @@ class ProfileView extends View
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
-			$this->func->addStyle('#wallposts .tools{display:none;}');
+			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
 		if ($fetchDates) {
@@ -42,12 +42,12 @@ class ProfileView extends View
 				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
 					<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
-			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓ ' : '? ';
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
 
 			$out .= '
 						<li>
 							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $userConfirmedForPickup . $this->func->niceDate($d['date_ts']) . '</span>
+								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($d['date_ts']) . '</span>
 							</a>
 						</li>
 						<li>
@@ -73,11 +73,35 @@ class ProfileView extends View
 		return $out;
 	}
 
-	private function sideInfosCompanies($userCompanies)
+	/**
+	 * Create HTML for list of stores on the profile.
+	 * Each store has a symbol in front indicating if the user is
+	 *  - waiting for approval (a question mark)
+	 *  - in store (the shopping basket used for stores)
+	 *  - Springer = waiting list (a coffee mug).
+	 *
+	 * @param array $userCompanies
+	 *
+	 * @return string: HTML with the list
+	 */
+	private function sideInfosCompanies(array $userCompanies): string
 	{
 		$out = '';
 		foreach ($userCompanies as $b) {
-			$userStatusOfStore = $b['active'] == 1 ? '✓ ' : '? ';
+			switch ($b['active']) {
+				case 0:  // asked to be in store team
+					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
+					break;
+				case 1: // in store team
+					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
+					break;
+				case 2: // Springer (waiting list)
+					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
+					break;
+				default: // should not happen
+					$userStatusOfStore = '';
+					break;
+			}
 			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
 		}
 
@@ -288,7 +312,7 @@ class ProfileView extends View
 				</div>';
 			}
 
-			$this->func->addJs('
+			$this->pageHelper->addJs('
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');
@@ -314,10 +338,10 @@ class ProfileView extends View
 				}
 				$bananacount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
-						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
+						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
 					</div></td>
 				</tr>';
 			}
@@ -358,13 +382,13 @@ class ProfileView extends View
 						$class = 'verify';
 						$typeofchange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				}
 				if ($changetype == 1) {
 					if (!is_null($h['bot_id'])) {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
 					}
 				}
 
@@ -408,7 +432,7 @@ class ProfileView extends View
 		}
 
 		return '<div style="text-align:center;">
-					' . $this->func->avatar($this->foodsaver, 130) . $sleep_info . '
+					' . $this->imageService->avatar($this->foodsaver, 130) . $sleep_info . '
 				</div>
 				' . $online . '
 				' . $menu;

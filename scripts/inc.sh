@@ -102,7 +102,10 @@ function dropdb() {
 function createdb() {
   local database=$1;
   echo "Creating database $FS_ENV/$database"
-  sql-query mysql "create database if not exists $database"
+  sql-query mysql "\
+    create database if not exists $database; \
+    alter database $database character set = utf8mb4 collate = utf8mb4_unicode_ci; \
+  "
 }
 
 function recreatedb() {

@@ -28,7 +28,7 @@ class MailboxView extends View
                 }';
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#mailfolder").dynatree({
             onActivate: function(node) {
                 
@@ -129,7 +129,7 @@ class MailboxView extends View
 					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
 					<td class="from"><a href="#" onclick="return false;" title="' . $von_str . '">' . $von_str . '</a></td>
 					
-					<td class="date">' . $this->func->niceDateShort($m['time_ts']) . '</td>
+					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
 					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>	
 				</tr>		
 			';
@@ -190,7 +190,7 @@ class MailboxView extends View
 						</tr>
 						<tr>
 							<td class="label">' . $this->func->s('date') . '</td>
-							<td class="data">' . $this->func->niceDate($mail['time_ts']) . '</td>
+							<td class="data">' . $this->timeHelper->niceDate($mail['time_ts']) . '</td>
 						</tr>
 					</table>
 				</div>
@@ -222,7 +222,7 @@ class MailboxView extends View
 
 	public function folderlist($mailboxes, $mailadresses)
 	{
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 		setAutocompleteAddresses(' . json_encode($mailadresses) . ');
 		$("#message-body").dialog({
 			autoOpen:false,
@@ -234,7 +234,7 @@ class MailboxView extends View
 		    	$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
 		  	}
 		});');
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="message-body">
 			
 		</div>
@@ -257,7 +257,7 @@ class MailboxView extends View
 			$von .= '
 			</select>';
 		}
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 		$("#message-editor").dialog({
 			autoOpen:false,
 			width:980,
@@ -296,7 +296,7 @@ class MailboxView extends View
 		});
 		');
 
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">

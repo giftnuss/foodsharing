@@ -19,7 +19,7 @@ It will give you some dummy users you can use to sign in:
 | userbot@example.com  | user     |
 | userorga@example.com | user     |
 
-It also generates more dummy users and dummy data to fill the page with life (a bit at least). If you want to modify it, then look at the `SeedCommand.php` file.
+It also generates more dummy users and dummy data to fill the page with life (a bit at least). If you want to modify it, then look at the `/src/Dev/SeedCommand.php` file.
 
 If you make changes to non-PHP frontend files (e.g. .vue, .js or .scss files), then those are direclty reflected in the running docker.
 
@@ -37,7 +37,12 @@ PHPMyAdmin is also included: [localhost:18081](http://localhost:18081). Log in w
 | Username | root |
 | Password | root |
 
-## Code style
+There you can directly look at and manipulate the data in the database
+which can be necessary or very useful for manual testing and troubleshooting.
+
+MailDev is also included: [localhost:18084](localhost:18084). There you can read all e-mails that you write via the front end.
+
+## php Code style
 
 We use php-cs-fixer to format the code style. The aim is to make it use the same style as phpstorm does by default.
 It is based on the @Symfony ruleset, with a few changes.
@@ -65,21 +70,36 @@ Adding this to `.git/hooks/pre-commit` could look like that:
 
 ```
 #!/bin/sh
-HASH_BEFORE=`git diff | sha1sum`
+HASH_BEFORE=$(git diff | sha1sum)
 ./scripts/fix-codestyle-local
-HASH_AFTER=`git diff | sha1sum`
+# or use
+# vendor/bin/php-cs-fixer fix --show-progress=estimating --verbose
+# or
+# ./scripts/fix
+# if the -local script throws an error
+HASH_AFTER=$(git diff | sha1sum)
 
-if [ "$HASH_AFTER" != "$HASH_BEFORE" ]; then
-  echo "PHP Codestyle was fixed. Please readd your changes and retry commit."
+if test "$HASH_AFTER" != "$HASH_BEFORE" ; then
+  echo "PHP Codestyle was fixed. Please read the changes and retry commit."
   exit 1;
 fi
 ```
 
 ### Using docker PHP
 
-Executing the following script will use the dev environment to run the codestyle check. As it currently always runs a new container using docker-compose, it will take some seconds to execute:
+Executing the following script will use the dev environment to run the codestyle check.
+As it currently always runs a new container using docker-compose, it will take some seconds to execute:
 
 ```
-./scripts/fix-codestyle
+./scripts/fix
 ```
-If the `-local` version does not work for you, replace `fix-codestyle-local` with `fix-codestyle` in the pre-commit hook.
+
+### Using PHPstorm
+
+If you happen to use PHPstorm you can add `php-cs-fixer` to those settings as well:
+<div align="center"><img src="images/setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
+<div align="center"><img src="images/setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
+
+## Editorconfig
+
+Depending on your editor you need to do nothing or install or configure a plugin to use the file `.editorconfig`. Please refer to the section about [Code style](codestyle.md).

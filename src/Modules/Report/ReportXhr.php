@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
@@ -14,14 +15,22 @@ class ReportXhr extends Control
 	private $reportGateway;
 	private $foodsaverGateway;
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		ReportGateway $reportGateway,
+		Db $model,
+		ReportView $view,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 
@@ -40,7 +49,7 @@ class ReportXhr extends Control
 			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
-			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
+			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
 				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');

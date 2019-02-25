@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\PageHelper;
 
 class vPageslider
 {
@@ -10,17 +10,17 @@ class vPageslider
 	private $id;
 	private $defaultBgColor;
 
-	/**
-	 * @var Func
-	 */
-	private $func;
-
 	public static $pageslider_count = 0;
+
+	/**
+	 * @var PageHelper
+	 */
+	private $pageHelper;
 
 	public function __construct()
 	{
 		global $container;
-		$this->func = $container->get(Func::class);
+		$this->pageHelper = $container->get(PageHelper::class);
 		$this->sections = array();
 		$this->defaultBgColor = '#F1E7C9';
 
@@ -79,11 +79,11 @@ class vPageslider
 			'sections' => $this->sections,
 		];
 
-		if (!isset($this->func->jsData['sliders'])) {
-			$this->func->jsData['sliders'] = [];
+		if (!isset($this->pageHelper->jsData['sliders'])) {
+			$this->pageHelper->jsData['sliders'] = [];
 		}
 
-		$this->func->jsData['sliders'][] = $slider;
+		$this->pageHelper->jsData['sliders'][] = $slider;
 
 		return '
 		<div id="' . $this->id . '">

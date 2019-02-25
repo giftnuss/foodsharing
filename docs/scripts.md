@@ -1,10 +1,4 @@
-# References
-
-## Project structure
-
-(Work in progress.)
-
-## Helper scripts
+# Helper scripts
 
 There are a number of helper scripts available. Most of them obey the `FS_INT` env var. Default is `dev`, you can also set it to `test`.
 
@@ -29,17 +23,13 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/test | Run tests |
 | ./scripts/test-rerun | Run tests without recreating db |
 
-## Useful commands and common pitfalls
+Using the `docker-compose` you can run various php-scripts, e.g.
+```
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats foodsaver
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats betriebe
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats bezirke
+```
+This runs the statistics scripts that are run nightly on the production server.
+This can be necessary to test code concerning statistics since they are usually never run locally.
+`-rm` removes the containers afterwards, `--no-deps` lets docker not worry about any dependendent containers. This is often useful since they are often running already.
 
-Useful commands for testing and common pitfalls.
-
-| Command | Action | Pitfall |
-|---|---|---|
-| amOnPage | Changes URL, loads page, waits for body visible | Do not use to assert being on a URL |
-| amOnSubdomain | Changes internal URL state | Does not load a page |
-| amOnUrl | Changes internal URL state | Does not load a page |
-| click | Fires JavaScript click event | Does not wait for anything to happen afterwards |
-| seeCurrentUrlEquals | Checks on which URL the browser is (e.g. after a redirect) | |
-| submitForm | Fills form details and submits it via click on the submit button | Does not wait for anything to happen afterwards |
-| waitForElement | Waits until a specific element is available in the DOM | |
-| waitForPageBody | Waits until the page body is visible (e.g. after click is expected to load a new page) | |
