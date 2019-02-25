@@ -67,11 +67,11 @@ async function refreshPushNotificationSettings () {
 
   const subscription = await (await navigator.serviceWorker.ready).pushManager.getSubscription()
   if (subscription === null) {
-    pushNotificationsButton.onclick = async () => {
+    pushNotificationsButton.addEventListener('click', async () => {
       await subscribeForPushNotifications()
       pulseSuccess('Push-Benachrichtigungen erfolgreich aktiviert')
       refreshPushNotificationSettings()
-    }
+    })
     return
   }
 
@@ -84,19 +84,19 @@ async function refreshPushNotificationSettings () {
   // back to 'ask for push permissions'. In that case, we don't want to create a new subscription, as this would produce
   // 'dead' push subscriptions in our database.
   if (Notification.permission !== 'granted') {
-    pushNotificationsButton.onclick = async () => {
+    pushNotificationsButton.addEventlistener('click', async () => {
       await askForPermission()
       refreshPushNotificationSettings()
-    }
+    })
     return
   }
   */
 
   pushNotificationsLabel.textContent = 'Auf diesem Gerät sind die Push-Benachrichtigungen von Foodsharing eingeschaltet. Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig nicht mehr direkt an dein Gerät zugestellt. Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist und reagiert auch nicht mehr mit einem Ton oder einer Vibration.'
   pushNotificationsButton.text = 'Push-Benachrichtigungen deaktivieren'
-  pushNotificationsButton.onclick = async () => {
+  pushNotificationsButton.addEventListener('click', async () => {
     await unsubscribeFromPushNotifications()
     pulseSuccess('Push-Benachrichtigungen erfolgreich deaktivert')
     refreshPushNotificationSettings()
-  }
+  })
 }

@@ -14,14 +14,14 @@ if (('PushManager' in window) && (Notification.permission === 'default') && !doc
   pushnotificationsBanner.style.display = ''
 
   const pushnotificationsButton = document.querySelector('#button-pushnotifications')
-  pushnotificationsButton.onclick = async () => {
+  pushnotificationsButton.addEventListener('click', async () => {
     await subscribeForPushNotifications()
     pulseSuccess('Push-Benachrichtigungen erfolgreich aktiviert')
     pushnotificationsBanner.classList.add('top-banner-pushnotifications-closed')
-  }
+  })
 }
 const closeButton = document.querySelector('#close-top-banner-pushnotifications')
-closeButton.onclick = () => {
+closeButton.addEventListener('click', () => {
   pushnotificationsBanner.classList.add('top-banner-pushnotifications-closed')
   document.cookie = 'pushNotificationBannerClosed=true;'
-}
+})
