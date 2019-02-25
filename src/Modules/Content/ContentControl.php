@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Content;
 
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
 
@@ -10,15 +11,18 @@ class ContentControl extends Control
 {
 	private $contentGateway;
 	private $identificationHelper;
+	private $statusChecksHelper;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		StatusChecksHelper $statusChecksHelper
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 	}
@@ -295,7 +299,7 @@ class ContentControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('content_edit_success'));
@@ -309,7 +313,7 @@ class ContentControl extends Control
 	private function handle_add()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('content_add_success'));

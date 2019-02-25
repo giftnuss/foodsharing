@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Helpers\UtilitiesHelper;
 use Foodsharing\Lib\Func;
@@ -37,6 +38,7 @@ class Utils
 	private $dataHelper;
 	private $translationHelper;
 	private $utilitiesHelper;
+	private $statusChecksHelper;
 
 	public function __construct(
 		SanitizerService $sanitizerService,
@@ -45,7 +47,8 @@ class Utils
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
-		UtilitiesHelper $utilitiesHelper
+		UtilitiesHelper $utilitiesHelper,
+		StatusChecksHelper $statusChecksHelper
 	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
@@ -55,6 +58,7 @@ class Utils
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
 		$this->utilitiesHelper = $utilitiesHelper;
+		$this->statusChecksHelper = $statusChecksHelper;
 	}
 
 	/**
@@ -88,7 +92,7 @@ class Utils
 
 	public function v_scroller($content, $width = '232')
 	{
-		if ($this->func->isMob()) {
+		if ($this->statusChecksHelper->isMob()) {
 			return $content;
 		}
 

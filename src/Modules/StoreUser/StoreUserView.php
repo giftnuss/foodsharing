@@ -2,10 +2,20 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\View;
 
 class StoreUserView extends View
 {
+	private $statusChecksHelper;
+
+	public function __construct(StatusChecksHelper $statusChecksHelper)
+	{
+		$this->statusChecksHelper = $statusChecksHelper;
+
+		parent::__construct();
+	}
+
 	public function u_getVerantwortlicher($betrieb)
 	{
 		$out = array();
@@ -95,10 +105,10 @@ class StoreUserView extends View
 			$number = false;
 			if (!empty($fs['handy'])) {
 				$number = $fs['handy'];
-				$tel .= '<span class="item phone">' . (($this->func->isMob()) ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
+				$tel .= '<span class="item phone">' . (($this->statusChecksHelper->isMob()) ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
 			}
 			if (!empty($fs['telefon'])) {
-				$tel .= '<span class="item phone">' . (($this->func->isMob()) ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
+				$tel .= '<span class="item phone">' . (($this->statusChecksHelper->isMob()) ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
 			}
 
 			if ((int)$fs['last_fetch'] > 0) {
@@ -122,7 +132,7 @@ class StoreUserView extends View
 
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
-			if ($number !== false && $this->func->isMob()) {
+			if ($number !== false && $this->statusChecksHelper->isMob()) {
 				$onclick = '';
 				$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 			}
@@ -178,7 +188,7 @@ class StoreUserView extends View
 
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
-				if ($this->func->isMob() && $number !== false) {
+				if ($this->statusChecksHelper->isMob() && $number !== false) {
 					$onclick = '';
 					$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 				}

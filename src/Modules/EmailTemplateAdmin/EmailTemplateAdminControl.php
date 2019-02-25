@@ -3,21 +3,25 @@
 namespace Foodsharing\Modules\EmailTemplateAdmin;
 
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\Control;
 
 class EmailTemplateAdminControl extends Control
 {
 	private $emailTemplateAdminGateway;
 	private $identificationHelper;
+	private $statusChecksHelper;
 
 	public function __construct(
 		EmailTemplateAdminView $view,
 		EmailTemplateAdminGateway $emailTemplateAdminGateway,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		StatusChecksHelper $statusChecksHelper
 	) {
 		$this->view = $view;
 		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 		$this->identificationHelper = $identificationHelper;
+		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 
@@ -89,7 +93,7 @@ class EmailTemplateAdminControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			if ($this->emailTemplateAdminGateway->update_message_tpl($_GET['id'], $g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('message_tpl_edit_success'));
 				$this->routeHelper->goPage();
@@ -102,7 +106,7 @@ class EmailTemplateAdminControl extends Control
 	private function handle_add()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			if ($this->emailTemplateAdminGateway->add_message_tpl($g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('message_tpl_add_success'));
 				$this->routeHelper->goPage();

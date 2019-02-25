@@ -2,26 +2,35 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class BlogControl extends Control
 {
 	private $blogGateway;
 	private $timeHelper;
+	private $statusChecksHelper;
+	private $dataHelper;
 
 	public function __construct(
 		BlogModel $model,
 		BlogView $view,
 		BlogGateway $blogGateway,
 		TimeHelper $timeHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		StatusChecksHelper $statusChecksHelper,
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
 		$this->timeHelper = $timeHelper;
+		$this->statusChecksHelper = $statusChecksHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 		if ($id = $this->$identificationHelper->getActionId('delete')) {
@@ -144,7 +153,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if ($this->session->mayEditBlog() && $this->func->submitted()) {
+		if ($this->session->mayEditBlog() && $this->statusChecksHelper->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
@@ -182,7 +191,7 @@ class BlogControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->session->mayEditBlog() && $this->func->submitted()) {
+		if ($this->session->mayEditBlog() && $this->statusChecksHelper->submitted()) {
 			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];

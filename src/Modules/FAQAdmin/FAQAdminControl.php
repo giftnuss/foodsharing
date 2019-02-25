@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FAQAdmin;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
@@ -12,19 +13,22 @@ class FAQAdminControl extends Control
 	private $faqGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $statusChecksHelper;
 
 	public function __construct(
 		Db $model,
 		FAQAdminView $view,
 		FAQGateway $faqGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		StatusChecksHelper $statusChecksHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 
@@ -109,7 +113,7 @@ class FAQAdminControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('faq_edit_success'));
@@ -124,7 +128,7 @@ class FAQAdminControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->submitted()) {
+		if ($this->statusChecksHelper->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
 				$this->loggingHelper->info($this->translationHelper->s('faq_add_success'));
