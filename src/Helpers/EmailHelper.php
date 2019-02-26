@@ -100,7 +100,6 @@ final class EmailHelper
 			$message['subject'] = 'foodsharing-Mail: {EXCERPT}';
 		}
 
-		$message['subject'] = $this->sanitizerService->htmlToPlain($message['subject']);  // Probably redundant, but just in case.
 		$excerptAmount = substr_count($message['subject'], '{EXCERPT}'); // So we can calculate the proper subject length
 		if ($excerptAmount > 0) {
 			$plainMessage = $this->sanitizerService->htmlToPlain($message['body']);
@@ -109,7 +108,7 @@ final class EmailHelper
 			$message['subject'] = str_replace('{EXCERPT}', $excerpt, $message['subject']);
 		}
 
-		$mail->setSubject($this->sanitizerService->htmlToPlain($message['subject']));
+		$mail->setSubject($message['subject']);
 
 		if (is_iterable($to)) {
 			foreach ($to as $recipient) {
