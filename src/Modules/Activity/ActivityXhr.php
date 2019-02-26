@@ -5,19 +5,22 @@ namespace Foodsharing\Modules\Activity;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Services\ImageService;
 
 class ActivityXhr extends Control
 {
-	private $mailboxModel;
 	private $imageService;
+	private $mailboxGateway;
 
-	public function __construct(ActivityModel $model, MailboxModel $mailboxModel, ImageService $imageService)
-	{
+	public function __construct(
+		ActivityModel $model,
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
+	) {
 		$this->model = $model;
-		$this->mailboxModel = $mailboxModel;
 		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 		parent::__construct();
 	}
 
@@ -191,7 +194,7 @@ class ActivityXhr extends Control
 			/*
 			 * listings mailboxes
 			*/
-			if ($boxes = $this->mailboxModel->getBoxes()) {
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 				foreach ($boxes as $b) {
 					$checked = true;
 					$mailboxId = 'mailbox-' . $b['id'];

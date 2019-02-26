@@ -15,7 +15,6 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -37,7 +36,6 @@ class XhrMethods
 	private $v_utils;
 	private $xhrViewUtils;
 	private $storeModel;
-	private $mailboxModel;
 	private $messageModel;
 	private $regionGateway;
 	private $storePermissions;
@@ -65,7 +63,6 @@ class XhrMethods
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
-		MailboxModel $mailboxModel,
 		MessageModel $messageModel,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
@@ -87,7 +84,6 @@ class XhrMethods
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
-		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
@@ -813,7 +809,7 @@ class XhrMethods
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);
 
-			$mailbox = $this->mailboxModel->getMailbox((int)$mail['mailbox_id']);
+			$mailbox = $this->mailboxGateway->getMailbox((int)$mail['mailbox_id']);
 			$mailbox['email'] = $mailbox['name'] . '@' . NOREPLY_EMAIL_HOST;
 
 			$sender = $this->model->getValues(array('geschlecht', 'name'), 'foodsaver', $this->session->id());
