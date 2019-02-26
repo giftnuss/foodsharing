@@ -122,7 +122,7 @@ final class BlogGateway extends BaseGateway
 	{
 		$not = '';
 		if (!$this->session->isOrgaTeam()) {
-			$not = 'WHERE 		`bezirk_id` IN (' . array_map('intval', $this->session->listRegionIDs()) . ')';
+			$not = 'WHERE 		`bezirk_id` IN (' . implode(',', array_map('intval', $this->session->listRegionIDs())) . ')';
 		}
 
 		return $this->db->fetchAll('
