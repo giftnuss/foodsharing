@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -18,7 +17,6 @@ class StoreControl extends Control
 	private $foodsaverGateway;
 	private $identificationHelper;
 	private $dataHelper;
-	private $statusChecksHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -28,8 +26,7 @@ class StoreControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		RegionGateway $regionGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper,
-		StatusChecksHelper $statusChecksHelper
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -39,7 +36,6 @@ class StoreControl extends Control
 		$this->regionGateway = $regionGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
-		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 
@@ -156,7 +152,7 @@ class StoreControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->statusChecksHelper->submitted()) {
+		if ($this->submitted()) {
 			$g_data['stadt'] = $g_data['ort'];
 			$g_data['hsnr'] = '';
 			$g_data['str'] = $g_data['anschrift'];
@@ -173,7 +169,7 @@ class StoreControl extends Control
 	private function handle_add($coordinator, $bezirk_id)
 	{
 		global $g_data;
-		if ($this->statusChecksHelper->submitted()) {
+		if ($this->submitted()) {
 			$g_data['status_date'] = date('Y-m-d H:i:s');
 
 			if (!isset($g_data['bezirk_id'])) {

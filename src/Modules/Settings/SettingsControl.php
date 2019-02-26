@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -19,7 +18,6 @@ class SettingsControl extends Control
 	private $foodsaverGateway;
 	private $dataHelper;
 	private $regionGateway;
-	private $statusChecksHelper;
 
 	public function __construct(
 		SettingsModel $model,
@@ -29,8 +27,7 @@ class SettingsControl extends Control
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
 		DataHelper $dataHelper,
-		RegionGateway $regionGateway,
-		StatusChecksHelper $statusChecksHelper
+		RegionGateway $regionGateway
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -40,7 +37,6 @@ class SettingsControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->dataHelper = $dataHelper;
 		$this->regionGateway = $regionGateway;
-		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 
@@ -282,7 +278,7 @@ class SettingsControl extends Control
 
 			$rolle = 3;
 
-			if ($this->statusChecksHelper->submitted()) {
+			if ($this->submitted()) {
 				global $g_data;
 				$g_data = $_POST;
 
@@ -476,7 +472,7 @@ class SettingsControl extends Control
 
 	public function handle_edit()
 	{
-		if ($this->statusChecksHelper->submitted()) {
+		if ($this->submitted()) {
 			$data = $this->dataHelper->getPostData();
 			$data['stadt'] = $data['ort'];
 			$check = true;

@@ -6,7 +6,6 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
@@ -17,8 +16,6 @@ use Foodsharing\Services\SanitizerService;
 
 class StoreUserView extends View
 {
-	private $statusChecksHelper;
-
 	public function __construct(
 		\Twig\Environment $twig,
 		Utils $viewUtils,
@@ -30,11 +27,8 @@ class StoreUserView extends View
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper,
-		StatusChecksHelper $statusChecksHelper
+		TranslationHelper $translationHelper
 	) {
-		$this->statusChecksHelper = $statusChecksHelper;
-
 		parent::__construct(
 			$twig,
 			$viewUtils,
@@ -139,10 +133,10 @@ class StoreUserView extends View
 			$number = false;
 			if (!empty($fs['handy'])) {
 				$number = $fs['handy'];
-				$tel .= '<span class="item phone">' . (($this->statusChecksHelper->isMob()) ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
+				$tel .= '<span class="item phone">' . ($this->session->isMob() ? '<a href="tel:' . $fs['handy'] . '"><span>' . $fs['handy'] . '</span></a>' : $fs['handy']) . '</span>';
 			}
 			if (!empty($fs['telefon'])) {
-				$tel .= '<span class="item phone">' . (($this->statusChecksHelper->isMob()) ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
+				$tel .= '<span class="item phone">' . ($this->session->isMob() ? '<a href="tel:' . $fs['telefon'] . '"><span>' . $fs['telefon'] . '</span></a>' : $fs['telefon']) . '</span>';
 			}
 
 			if ((int)$fs['last_fetch'] > 0) {
@@ -166,7 +160,7 @@ class StoreUserView extends View
 
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
-			if ($number !== false && $this->statusChecksHelper->isMob()) {
+			if ($number !== false && $this->session->isMob()) {
 				$onclick = '';
 				$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 			}
@@ -222,7 +216,7 @@ class StoreUserView extends View
 
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
-				if ($this->statusChecksHelper->isMob() && $number !== false) {
+				if ($number !== false && $this->session->isMob()) {
 					$onclick = '';
 					$href = 'tel:' . preg_replace('/[^0-9\+]/', '', $number);
 				}

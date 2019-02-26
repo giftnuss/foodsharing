@@ -33,7 +33,6 @@ final class PageHelper
 	public $jsData = [];
 	private $twig;
 	private $identificationHelper;
-	private $statusChecksHelper;
 
 	public function __construct(
 		Session $session,
@@ -42,8 +41,7 @@ final class PageHelper
 		Environment $twig,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,
-		IdentificationHelper $identificationHelper,
-		StatusChecksHelper $statusChecksHelper
+		IdentificationHelper $identificationHelper
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -65,7 +63,6 @@ final class PageHelper
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
-		$this->statusChecksHelper = $statusChecksHelper;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -107,7 +104,7 @@ final class PageHelper
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->hidden,
-			'isMob' => $this->statusChecksHelper->isMob(),
+			'isMob' => $this->session->isMob(),
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,

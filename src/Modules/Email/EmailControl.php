@@ -7,7 +7,6 @@ use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -25,7 +24,6 @@ class EmailControl extends Control
 	private $regionGateway;
 	private $sanitizerService;
 	private $identificationHelper;
-	private $statusChecksHelper;
 	private $dataHelper;
 
 	public function __construct(
@@ -37,7 +35,6 @@ class EmailControl extends Control
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
 		IdentificationHelper $identificationHelper,
-		StatusChecksHelper $statusChecksHelper,
 		DataHelper $dataHelper
 	) {
 		$this->model = $model;
@@ -48,7 +45,6 @@ class EmailControl extends Control
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->identificationHelper = $identificationHelper;
-		$this->statusChecksHelper = $statusChecksHelper;
 		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
@@ -127,7 +123,7 @@ class EmailControl extends Control
 
 	private function handleEmail()
 	{
-		if ($this->statusChecksHelper->submitted()) {
+		if ($this->submitted()) {
 			$betreff = $_POST['subject'];
 			$nachricht = $_POST['message'];
 			$mailbox_id = $_POST['mailbox_id'];

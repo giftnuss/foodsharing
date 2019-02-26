@@ -623,4 +623,9 @@ class Session
 
 		return $this->isValidCsrfToken('cookie', $_SERVER['HTTP_X_CSRF_TOKEN']);
 	}
+
+	public function isMob(): bool
+	{
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
+	}
 }

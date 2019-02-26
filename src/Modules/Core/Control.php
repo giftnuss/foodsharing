@@ -369,6 +369,11 @@ abstract class Control
 		</div>';
 	}
 
+	public function submitted(): bool
+	{
+		return isset($_POST) && !empty($_POST);
+	}
+
 	public function isSubmitted($form = false): bool
 	{
 		if (isset($_POST) && !empty($_POST)) {

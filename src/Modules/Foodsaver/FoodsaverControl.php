@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
@@ -18,7 +17,6 @@ class FoodsaverControl extends Control
 	private $foodsaverGateway;
 	private $identificationHelper;
 	private $dataHelper;
-	private $statusChecksHelper;
 
 	public function __construct(
 		FoodsaverModel $model,
@@ -28,8 +26,7 @@ class FoodsaverControl extends Control
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper,
-		StatusChecksHelper $statusChecksHelper
+		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -39,7 +36,6 @@ class FoodsaverControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
-		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 	}
@@ -103,7 +99,7 @@ class FoodsaverControl extends Control
 	{
 		global $g_data;
 
-		if ($this->statusChecksHelper->submitted()) {
+		if ($this->submitted()) {
 			if ($this->session->isOrgaTeam()) {
 				if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 					$g_data['orgateam'] = 1;

@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\StoreUser;
 
 use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\StatusChecksHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -20,7 +19,6 @@ class StoreUserControl extends Control
 	private $timeHelper;
 	private $dataHelper;
 	private $regionGateway;
-	private $statusChecksHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -30,8 +28,7 @@ class StoreUserControl extends Control
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
 		DataHelper $dataHelper,
-		RegionGateway $regionGateway,
-		StatusChecksHelper $statusChecksHelper
+		RegionGateway $regionGateway
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -41,7 +38,6 @@ class StoreUserControl extends Control
 		$this->timeHelper = $timeHelper;
 		$this->dataHelper = $dataHelper;
 		$this->regionGateway = $regionGateway;
-		$this->statusChecksHelper = $statusChecksHelper;
 
 		parent::__construct();
 
@@ -232,7 +228,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addJs('u_updatePosts();');
 
 					$opt = array();
-					if ($this->statusChecksHelper->isMob()) {
+					if ($this->session->isMob()) {
 						$opt = array('class' => 'moreswap moreswap-height-200');
 					}
 					$this->pageHelper->addContent($this->v_utils->v_field('
