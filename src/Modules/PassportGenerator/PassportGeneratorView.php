@@ -64,7 +64,7 @@ final class PassportGeneratorView extends View
 	{
 		return $this->v_utils->v_menu(
 			[
-			['name' => 'markierte Ausweise generieren', 'href' => '#start']
+			['name' => 'Markierte Ausweise generieren', 'href' => '#start']
 			], $this->func->s('start'));
 	}
 
