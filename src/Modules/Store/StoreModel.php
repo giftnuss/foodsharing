@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -13,13 +14,20 @@ class StoreModel extends Db
 	private $bellGateway;
 	private $storeGateway;
 	private $regionGateway;
+	private $messagesGateway;
 
-	public function __construct(MessageModel $messageModel, BellGateway $bellGateway, StoreGateway $storeGateway, RegionGateway $regionGateway)
-	{
+	public function __construct(
+		MessageModel $messageModel,
+		BellGateway $bellGateway,
+		StoreGateway $storeGateway,
+		RegionGateway $regionGateway,
+		MessageGateway $messagesGateway
+	) {
 		$this->messageModel = $messageModel;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
+		$this->messagesGateway = $messagesGateway;
 		parent::__construct();
 	}
 
@@ -364,11 +372,11 @@ class StoreModel extends Db
 		$name = $data['name'];
 		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
 			$team_conversation_name = $this->func->sv('team_conversation_name', $name);
-			$this->messageModel->renameConversation($tcid, $team_conversation_name);
+			$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 		}
 		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
 			$springer_conversation_name = $this->func->sv('springer_conversation_name', $name);
-			$this->messageModel->renameConversation($scid, $springer_conversation_name);
+			$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		}
 
 		return $this->update('
@@ -603,7 +611,7 @@ class StoreModel extends Db
 		$tcid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$team_conversation_name = $this->func->sv('team_conversation_name', $betrieb['name']);
-		$this->messageModel->renameConversation($tcid, $team_conversation_name);
+		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$bid . '
@@ -624,7 +632,7 @@ class StoreModel extends Db
 		$scid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
 		$springer_conversation_name = $this->func->sv('springer_conversation_name', $betrieb['name']);
-		$this->messageModel->renameConversation($scid, $springer_conversation_name);
+		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '
 			');
