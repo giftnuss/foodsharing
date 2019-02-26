@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Helpers;
 
-class LoggingHelper
+class FlashMessageHelper
 {
 	public function info(string $msg, $title = false): void
 	{

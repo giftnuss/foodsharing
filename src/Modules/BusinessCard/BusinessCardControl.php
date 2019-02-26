@@ -27,16 +27,16 @@ class BusinessCardControl extends Control
 
 		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				$this->loggingHelper->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				$this->flashMessageHelper->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
 				$this->routeHelper->go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				$this->loggingHelper->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
+				$this->flashMessageHelper->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
 				$this->routeHelper->go('/?page=settings');
 			}
 			if ($data['verified'] == 0) {
 				// you have to be a verified user to generate your business card.
-				$this->loggingHelper->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+				$this->flashMessageHelper->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
 				$this->routeHelper->go('/?page=settings');
 			}
 			$sel_data = array();

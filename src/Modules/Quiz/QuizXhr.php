@@ -55,7 +55,7 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					if ($id = $this->model->addQuestion($_GET['qid'], $text, $fp, $duration)) {
-						$this->loggingHelper->info('Frage wurde angelegt');
+						$this->flashMessageHelper->info('Frage wurde angelegt');
 
 						return array(
 							'status' => 1,
@@ -1181,7 +1181,7 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					$this->model->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
-					$this->loggingHelper->info('Frage wurde geändert');
+					$this->flashMessageHelper->info('Frage wurde geändert');
 
 					return array(
 						'status' => 1,

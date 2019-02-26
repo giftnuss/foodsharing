@@ -52,7 +52,7 @@ class ContentControl extends Control
 				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
-					$this->loggingHelper->info($this->translationHelper->s('content_deleted'));
+					$this->flashMessageHelper->info($this->translationHelper->s('content_deleted'));
 					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -99,7 +99,7 @@ class ContentControl extends Control
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
-					$this->loggingHelper->info($this->translationHelper->s('content_empty'));
+					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -306,10 +306,10 @@ class ContentControl extends Control
 		if ($this->statusChecksHelper->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('content_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('content_edit_success'));
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -320,10 +320,10 @@ class ContentControl extends Control
 		if ($this->statusChecksHelper->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('content_add_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('content_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

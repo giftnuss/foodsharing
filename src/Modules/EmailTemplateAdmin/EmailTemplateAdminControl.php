@@ -49,7 +49,7 @@ class EmailTemplateAdminControl extends Control
 			)), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->emailTemplateAdminGateway->del_message_tpl($id)) {
-				$this->loggingHelper->info($this->translationHelper->s('message_tpl_deleted'));
+				$this->flashMessageHelper->info($this->translationHelper->s('message_tpl_deleted'));
 				$this->routeHelper->goPage();
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -85,7 +85,7 @@ class EmailTemplateAdminControl extends Control
 
 				$this->pageHelper->addContent($this->v_utils->v_field($table, 'Alle E-Mail-Vorlagen'));
 			} else {
-				$this->loggingHelper->info($this->translationHelper->s('message_tpl_empty'));
+				$this->flashMessageHelper->info($this->translationHelper->s('message_tpl_empty'));
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -99,10 +99,10 @@ class EmailTemplateAdminControl extends Control
 		global $g_data;
 		if ($this->statusChecksHelper->submitted()) {
 			if ($this->emailTemplateAdminGateway->update_message_tpl($_GET['id'], $g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('message_tpl_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('message_tpl_edit_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -112,10 +112,10 @@ class EmailTemplateAdminControl extends Control
 		global $g_data;
 		if ($this->statusChecksHelper->submitted()) {
 			if ($this->emailTemplateAdminGateway->add_message_tpl($g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('message_tpl_add_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('message_tpl_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

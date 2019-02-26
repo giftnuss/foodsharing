@@ -311,7 +311,7 @@ class LoginXhr extends Control
 
 				return $img;
 			} catch (Exception $e) {
-				$this->loggingHelper->info('Dein Foto konnte nicht gespeichert werden');
+				$this->flashMessageHelper->info('Dein Foto konnte nicht gespeichert werden');
 
 				return '';
 			}

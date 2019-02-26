@@ -86,7 +86,7 @@ class EventControl extends Control
 							if ($data['invite']) {
 								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
-							$this->loggingHelper->info('Event wurde erfolgreich geändert!');
+							$this->flashMessageHelper->info('Event wurde erfolgreich geändert!');
 							$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
 						}
 					}
@@ -125,7 +125,7 @@ class EventControl extends Control
 					if ($data['invite']) {
 						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
-					$this->loggingHelper->info('Event wurde erfolgreich eingetragen!');
+					$this->flashMessageHelper->info('Event wurde erfolgreich eingetragen!');
 					$this->routeHelper->go('/?page=event&id=' . (int)$id);
 				}
 			}

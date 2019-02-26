@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\LoggingHelper;
+use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\PageHelper;
@@ -84,9 +84,9 @@ abstract class Control
 	protected $translationHelper;
 
 	/**
-	 * @var LoggingHelper
+	 * @var FlashMessageHelper
 	 */
-	protected $loggingHelper;
+	protected $flashMessageHelper;
 
 	public function __construct()
 	{
@@ -101,7 +101,7 @@ abstract class Control
 		$this->emailHelper = $container->get(EmailHelper::class);
 		$this->routeHelper = $container->get(RouteHelper::class);
 		$this->translationHelper = $container->get(TranslationHelper::class);
-		$this->loggingHelper = $container->get(LoggingHelper::class);
+		$this->flashMessageHelper = $container->get(FlashMessageHelper::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;

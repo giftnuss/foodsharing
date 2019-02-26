@@ -88,10 +88,10 @@ class LoginControl extends Control
 	public function activate()
 	{
 		if ($this->model->activate($_GET['e'], $_GET['t'])) {
-			$this->loggingHelper->info($this->translationHelper->s('activation_success'));
+			$this->flashMessageHelper->info($this->translationHelper->s('activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {
-			$this->loggingHelper->error($this->translationHelper->s('activation_failed'));
+			$this->flashMessageHelper->error($this->translationHelper->s('activation_failed'));
 			$this->routeHelper->goPage('login');
 		}
 	}
@@ -104,7 +104,7 @@ class LoginControl extends Control
 		$fs_id = $this->loginGateway->login($email_address, $password);
 
 		if ($fs_id === null) {
-			$this->loggingHelper->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
+			$this->flashMessageHelper->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
 			return;
 		}
 
@@ -148,12 +148,12 @@ class LoginControl extends Control
 				$mail = $_POST['email'];
 			}
 			if (!$this->emailHelper->validEmail($mail)) {
-				$this->loggingHelper->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
+				$this->flashMessageHelper->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
 			} else {
 				if ($this->model->addPassRequest($mail)) {
-					$this->loggingHelper->info('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.');
+					$this->flashMessageHelper->info('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.');
 				} else {
-					$this->loggingHelper->error('Sorry, diese E-Mail-Adresse ist uns nicht bekannt.');
+					$this->flashMessageHelper->error('Sorry, diese E-Mail-Adresse ist uns nicht bekannt.');
 				}
 			}
 		}
@@ -167,13 +167,13 @@ class LoginControl extends Control
 							$this->view->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
-							$this->loggingHelper->error('Sorry, Dein gewähltes Passwort ist zu kurz.');
+							$this->flashMessageHelper->error('Sorry, Dein gewähltes Passwort ist zu kurz.');
 						} elseif (!$this->model->checkResetKey($_POST['k'])) {
 							$check = false;
-							$this->loggingHelper->error('Sorry, Du hast zu lang gewartet. Bitte beantrage noch einmal ein neues Passwort!');
+							$this->flashMessageHelper->error('Sorry, Du hast zu lang gewartet. Bitte beantrage noch einmal ein neues Passwort!');
 						} else {
 							$check = false;
-							$this->loggingHelper->error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
+							$this->flashMessageHelper->error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
 							/*
 							$this->emailHelper->tplMail(11, 'kontakt@prographix.de',array(
 								'data' => '<pre>'.print_r($_POST,true).'</pre>'
@@ -185,13 +185,13 @@ class LoginControl extends Control
 							$this->routeHelper->go('/?page=login');
 						}
 					} else {
-						$this->loggingHelper->error('Sorry, die Passwörter stimmen nicht überein.');
+						$this->flashMessageHelper->error('Sorry, die Passwörter stimmen nicht überein.');
 					}
 				}
 				$this->pageHelper->addJs('$("#pass1").val("");');
 				$this->pageHelper->addContent($this->view->newPasswordForm($k));
 			} else {
-				$this->loggingHelper->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
+				$this->flashMessageHelper->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
 				$this->pageHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {

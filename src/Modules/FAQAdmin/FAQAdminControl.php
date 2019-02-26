@@ -52,7 +52,7 @@ class FAQAdminControl extends Control
 			)), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
-				$this->loggingHelper->info($this->translationHelper->s('faq_deleted'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_deleted'));
 				$this->routeHelper->goPage();
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -100,7 +100,7 @@ class FAQAdminControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
 				}
 			} else {
-				$this->loggingHelper->info($this->translationHelper->s('faq_empty'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_empty'));
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
@@ -116,10 +116,10 @@ class FAQAdminControl extends Control
 		if ($this->statusChecksHelper->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('faq_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_edit_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -131,10 +131,10 @@ class FAQAdminControl extends Control
 		if ($this->statusChecksHelper->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
-				$this->loggingHelper->info($this->translationHelper->s('faq_add_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

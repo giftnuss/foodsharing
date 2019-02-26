@@ -118,9 +118,9 @@ class FoodsaverControl extends Control
 				$this->settingsGateway->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields, $this->session->id());
 			}
 			if ($this->model->update_foodsaver($_GET['id'], $g_data, $this->storeModel)) {
-				$this->loggingHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 			} else {
-				$this->loggingHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

@@ -51,7 +51,7 @@ class StoreXhr extends Control
 			}
 
 			if ($this->model->addFetchDate($storeId, $time, $fetchercount)) {
-				$this->loggingHelper->info('Abholtermin wurde eingetragen!');
+				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
 
 				return array(
 					'status' => 1,
@@ -71,7 +71,7 @@ class StoreXhr extends Control
 		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
 			$this->model->deldate($storeId, $_GET['time']);
 
-			$this->loggingHelper->info('Abholtermin wurde gelöscht.');
+			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
 
 			return array(
 				'status' => 1,

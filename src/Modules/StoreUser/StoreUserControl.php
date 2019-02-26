@@ -92,10 +92,10 @@ class StoreUserControl extends Control
 					if (!empty($g_data['foodsaver'])) {
 						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
 					} else {
-						$this->loggingHelper->info($this->translationHelper->s('team_not_empty'));
+						$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 					}
 				}
-				$this->loggingHelper->info($this->translationHelper->s('changes_saved'));
+				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 				$this->routeHelper->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($betrieb['bezirk_id']))) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
@@ -107,10 +107,10 @@ class StoreUserControl extends Control
 			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->session->isAdminFor($betrieb['bezirk_id'])) {
 				if ((!$betrieb['verantwortlich'] && $this->session->isAdminFor($betrieb['bezirk_id']))) {
 					$betrieb['verantwortlich'] = true;
-					$this->loggingHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));
+					$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));
 				} elseif (!$betrieb['verantwortlich'] && $this->session->isOrgaTeam()) {
 					$betrieb['verantwortlich'] = true;
-					$this->loggingHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_orga'));
+					$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_orga'));
 				}
 				if ($betrieb['verantwortlich']) {
 					if (!empty($betrieb['requests'])) {
@@ -373,7 +373,7 @@ class StoreUserControl extends Control
 			} else {
 				if ($betrieb = $this->storeGateway->getBetrieb($_GET['id'])) {
 					$this->pageHelper->addBread($betrieb['name']);
-					$this->loggingHelper->info($this->translationHelper->s('not_in_team'));
+					$this->flashMessageHelper->info($this->translationHelper->s('not_in_team'));
 					$this->routeHelper->go('/?page=map&bid=' . $_GET['id']);
 				} else {
 					$this->routeHelper->go('/karte');
