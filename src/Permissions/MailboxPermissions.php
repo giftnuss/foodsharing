@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Permissions;
 
-
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 
 class MailboxPermissions
 {
 	private $session;
+	private $mailboxGateway;
 
 	public function __construct(MailboxGateway $mailboxGateway, Session $session)
 	{
