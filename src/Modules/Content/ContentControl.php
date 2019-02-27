@@ -178,50 +178,50 @@ class ContentControl extends Control
 	public function contact()
 	{
 		if ($cnt = $this->contentGateway->get(73)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function academy()
 	{
 		if ($cnt = $this->contentGateway->get(69)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function festival()
 	{
 		if ($cnt = $this->contentGateway->get(72)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function international()
 	{
 		if ($cnt = $this->contentGateway->get(74)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function transparency()
 	{
 		if ($cnt = $this->contentGateway->get(68)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
@@ -321,20 +321,20 @@ class ContentControl extends Control
 	public function fasten()
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
 	public function workshops()
 	{
 		if ($cnt = $this->contentGateway->get(71)) {
-			$this->func->addBread($cnt['title']);
-			$this->func->addTitle($cnt['title']);
+			$this->pageHelper->addBread($cnt['title']);
+			$this->pageHelper->addTitle($cnt['title']);
 
-			$this->func->addContent($this->view->simple($cnt));
+			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
 
