@@ -21,22 +21,22 @@ class BusinessCardControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addBread($this->func->s('bcard_generator'));
+		$this->pageHelper->addBread($this->translationHelper->s('bcard_generator'));
 
 		$this->pageHelper->addContent($this->view->top(), CNT_TOP);
 
 		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				$this->func->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				$this->flashMessageHelper->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
 				$this->routeHelper->go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				$this->func->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
+				$this->flashMessageHelper->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
 				$this->routeHelper->go('/?page=settings');
 			}
 			if ($data['verified'] == 0) {
 				// you have to be a verified user to generate your business card.
-				$this->func->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+				$this->flashMessageHelper->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
 				$this->routeHelper->go('/?page=settings');
 			}
 			$sel_data = array();
@@ -44,7 +44,7 @@ class BusinessCardControl extends Control
 				foreach ($data['bot'] as $b) {
 					$sel_data[] = array(
 						'id' => 'bot:' . $b['id'],
-						'name' => $this->func->sv('bot_for', $b['name'])
+						'name' => $this->translationHelper->sv('bot_for', $b['name'])
 					);
 				}
 			}
@@ -53,7 +53,7 @@ class BusinessCardControl extends Control
 				foreach ($data['sm'] as $fs) {
 					$sel_data[] = array(
 						'id' => 'sm:' . $fs['id'],
-						'name' => $this->func->sv('sm_for', $fs['name'])
+						'name' => $this->translationHelper->sv('sm_for', $fs['name'])
 					);
 				}
 			}
@@ -61,7 +61,7 @@ class BusinessCardControl extends Control
 				foreach ($data['fs'] as $fs) {
 					$sel_data[] = array(
 						'id' => 'fs:' . $fs['id'],
-						'name' => $this->func->sv('fs_for', $fs['name'])
+						'name' => $this->translationHelper->sv('fs_for', $fs['name'])
 					);
 				}
 			}
@@ -90,21 +90,21 @@ class BusinessCardControl extends Control
 				if ($mailbox !== false) {
 					if ($type == 'fs') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->func->sv('fs_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('fs_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = $this->func->sv('fs_for', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('fs_for', $mailbox['name']);
 						}
 					} elseif ($type == 'sm') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->func->sv('sm_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('sm_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = $this->func->sv('sm_for', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('sm_for', $mailbox['name']);
 						}
 					} elseif ($type == 'bot') {
 						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->func->sv('bot_for_w', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('bot_for_w', $mailbox['name']);
 						} else {
-							$data['subtitle'] = $this->func->sv('bot_for', $mailbox['name']);
+							$data['subtitle'] = $this->translationHelper->sv('bot_for', $mailbox['name']);
 						}
 						$data['email'] = $mailbox['email'];
 					} else {

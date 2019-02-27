@@ -53,9 +53,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -302,7 +302,7 @@ class MailboxXhr extends Control
 					return array(
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . $this->func->s('send_success') . '");
+									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
 					);

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Maintenance;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -15,19 +16,22 @@ class MaintenanceControl extends ConsoleControl
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		MaintenanceModel $model,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 
 		parent::__construct();
 	}
@@ -179,7 +183,7 @@ class MaintenanceControl extends ConsoleControl
 				$inactive_fsids[$fs['id']] = $fs['id'];
 				$this->emailHelper->tplMail(27, $fs['email'], array(
 					'name' => $fs['name'],
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
 
 				$this->infoToBotsUserDeactivated($fs);
@@ -196,7 +200,7 @@ class MaintenanceControl extends ConsoleControl
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail(26, $fs['email'], array(
 					'name' => $fs['name'],
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht'])
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
 			}
 
@@ -460,7 +464,7 @@ class MaintenanceControl extends ConsoleControl
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail(28, $fs['fs_email'], array(
-					'anrede' => $this->func->s('anrede_' . $fs['geschlecht']),
+					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
 					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']

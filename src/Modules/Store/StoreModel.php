@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Message\MessageGateway;
@@ -15,19 +16,23 @@ class StoreModel extends Db
 	private $storeGateway;
 	private $regionGateway;
 	private $messagesGateway;
+	private $translationHelper;
 
 	public function __construct(
 		MessageModel $messageModel,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
-		MessageGateway $messagesGateway
+		MessageGateway $messagesGateway,
+		TranslationHelper $translationHelper
 	) {
 		$this->messageModel = $messageModel;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->messagesGateway = $messagesGateway;
+		$this->translationHelper = $translationHelper;
+
 		parent::__construct();
 	}
 
@@ -371,11 +376,11 @@ class StoreModel extends Db
 
 		$name = $data['name'];
 		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
-			$team_conversation_name = $this->func->sv('team_conversation_name', $name);
+			$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $name);
 			$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 		}
 		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
-			$springer_conversation_name = $this->func->sv('springer_conversation_name', $name);
+			$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $name);
 			$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		}
 
@@ -610,7 +615,7 @@ class StoreModel extends Db
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
-		$team_conversation_name = $this->func->sv('team_conversation_name', $betrieb['name']);
+		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
@@ -631,7 +636,7 @@ class StoreModel extends Db
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
 		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
-		$springer_conversation_name = $this->func->sv('springer_conversation_name', $betrieb['name']);
+		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '

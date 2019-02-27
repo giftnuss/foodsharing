@@ -62,7 +62,7 @@ class SettingsXhr extends Control
 
 			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {
 				$this->emailHelper->tplMail(21, $_GET['email'], array(
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
 					'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
 				));

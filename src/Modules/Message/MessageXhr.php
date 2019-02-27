@@ -164,7 +164,7 @@ final class MessageXhr extends Control
 				}
 			}
 		}
-		$xhr->addMessage($this->func->s('error'), 'error');
+		$xhr->addMessage($this->translationHelper->s('error'), 'error');
 		$xhr->send();
 	}
 
@@ -295,10 +295,10 @@ final class MessageXhr extends Control
 					 */
 					$xhr->addData('cid', $cid);
 				} else {
-					$xhr->addMessage($this->func->s('error'), 'error');
+					$xhr->addMessage($this->translationHelper->s('error'), 'error');
 				}
 			} else {
-				$xhr->addMessage($this->func->s('wrong_recip_count'), 'error');
+				$xhr->addMessage($this->translationHelper->s('wrong_recip_count'), 'error');
 			}
 
 			/*

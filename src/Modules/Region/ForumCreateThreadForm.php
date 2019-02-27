@@ -13,7 +13,7 @@ class ForumCreateThreadForm extends AbstractType
 	{
 		$builder
 			->add('title', TextType::class, ['label' => 'forum.thread_title'])
-			->add('body', TextAreaType::class, ['label' => 'forum.post_body'])
+			->add('body', TextareaType::class, ['label' => 'forum.post_body'])
 		;
 	}
 }

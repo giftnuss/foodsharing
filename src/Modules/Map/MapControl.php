@@ -17,7 +17,7 @@ class MapControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addTitle($this->func->s('map'));
+		$this->pageHelper->addTitle($this->translationHelper->s('map'));
 		$this->setTemplate('map');
 
 		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());

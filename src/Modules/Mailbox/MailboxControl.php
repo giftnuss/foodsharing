@@ -79,10 +79,10 @@ class MailboxControl extends Control
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->model->filterName($_POST['name'])) {
 					if ($this->model->addMailbox($mailbox, 1)) {
-						$this->func->info($this->func->s('mailbox_add_success'));
+						$this->flashMessageHelper->info($this->translationHelper->s('mailbox_add_success'));
 						$this->routeHelper->go('/?page=mailbox&a=manage');
 					} else {
-						$this->func->error($this->func->s('mailbox_already_exists'));
+						$this->flashMessageHelper->error($this->translationHelper->s('mailbox_already_exists'));
 					}
 				}
 			}
@@ -103,7 +103,7 @@ class MailboxControl extends Control
 				$this->sanitizerService->handleTagSelect($index);
 
 				if ($this->model->updateMember($_POST['mbid'], $g_data[$index])) {
-					$this->func->info($this->func->s('edit_success'));
+					$this->flashMessageHelper->info($this->translationHelper->s('edit_success'));
 					$this->routeHelper->go('/?page=mailbox&a=manage');
 				}
 			}

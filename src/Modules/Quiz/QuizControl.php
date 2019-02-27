@@ -2,18 +2,29 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
 {
 	private $imageService;
+	private $identificationHelper;
+	private $dataHelper;
 
-	public function __construct(QuizModel $model, QuizView $view, ImageService $imageService)
-	{
+	public function __construct(
+		QuizModel $model,
+		QuizView $view,
+		ImageService $imageService,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->imageService = $imageService;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -27,7 +38,7 @@ class QuizControl extends Control
 	public function index()
 	{
 		// quiz&a=delete&id=9
-		if ($id = $this->func->getActionId('delete')) {
+		if ($id = $this->identificationHelper->getActionId('delete')) {
 			$this->model->deleteSession($id);
 			$this->goBack();
 		}
@@ -91,12 +102,12 @@ class QuizControl extends Control
 
 				if (!empty($name)) {
 					if ($id = $this->model->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
-						$this->func->info('Quiz wurde erfolgreich geändert!');
+						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
 						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 					}
 				}
 			}
-			$this->func->setEditData($quiz);
+			$this->dataHelper->setEditData($quiz);
 			$this->pageHelper->addContent($this->view->quizForm());
 		}
 	}
@@ -115,7 +126,7 @@ class QuizControl extends Control
 
 			if (!empty($name)) {
 				if ($id = $this->model->addQuiz($name, $desc, $maxfp, $questcount)) {
-					$this->func->info('Quiz wurde erfolgreich angelegt!');
+					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
 					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 				}
 			}
@@ -149,7 +160,7 @@ class QuizControl extends Control
 
 	private function getRolle($gender_id, $rolle_id)
 	{
-		return $this->func->s('rolle_' . $rolle_id . '_' . $gender_id);
+		return $this->translationHelper->s('rolle_' . $rolle_id . '_' . $gender_id);
 	}
 
 	public function sessions()

@@ -69,7 +69,7 @@ class StoreView extends View
 		}
 
 		$first_post = '';
-		if ($this->func->getAction('new')) {
+		if ($this->identificationHelper->getAction('new')) {
 			$first_post = $this->v_utils->v_form_textarea('first_post', array('required' => true));
 		}
 		if (isset($g_data['stadt'])) {
