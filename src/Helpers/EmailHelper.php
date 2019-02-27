@@ -6,7 +6,6 @@ use Flourish\fFile;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\InfluxMetrics;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateAdminGateway;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
 
@@ -22,13 +21,11 @@ final class EmailHelper
 	private $twig;
 
 	public function __construct(
-		EmailTemplateAdminGateway $emailTemplateAdminGateway,
 		InfluxMetrics $metrics,
 		Mem $mem,
 		SanitizerService $sanitizerService,
 		Environment $twig
 	) {
-		$this->emailTemplateAdminGateway = $emailTemplateAdminGateway;
 		$this->mem = $mem;
 		$this->metrics = $metrics;
 		$this->sanitizerService = $sanitizerService;

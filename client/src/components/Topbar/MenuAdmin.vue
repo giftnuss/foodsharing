@@ -53,11 +53,6 @@ export default {
             label: this.$i18n('menu_email')
           },
           {
-            url: '/?page=message_tpl',
-            icon: 'fas fa-envelope',
-            label: this.$i18n('menu_email_tpl')
-          },
-          {
             url: '/?page=faq',
             icon: 'fas fa-question',
             label: this.$i18n('menu_faq')
