@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\SanitizerService;
 
@@ -22,9 +22,9 @@ class XhrDialog
 	 */
 	private $viewUtils;
 	/**
-	 * @var Func
+	 * @var TranslationHelper
 	 */
-	private $func;
+	private $translationHelper;
 	/**
 	 * @var SanitizerService
 	 */
@@ -34,7 +34,7 @@ class XhrDialog
 	{
 		global $container;
 		$this->viewUtils = $container->get(Utils::class);
-		$this->func = $container->get(Func::class);
+		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->id = 'd-' . uniqid();
 		$this->buttons = array();
 		$this->options = array();
@@ -137,8 +137,8 @@ class XhrDialog
 	{
 		$in_id = $this->id . '-' . $id;
 
-		$this->addContent($this->viewUtils->v_input_wrapper($this->func->s($id . '-desc'), '
-				<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->func->s($id . '-choose') . '</span>
+		$this->addContent($this->viewUtils->v_input_wrapper($this->translationHelper->s($id . '-desc'), '
+				<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->translationHelper->s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
 				<div class="attach-preview" style="float:right;">
 					

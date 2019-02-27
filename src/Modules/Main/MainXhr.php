@@ -34,7 +34,7 @@ class MainXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				$this->func->s('no_image')
+				$this->translationHelper->s('no_image')
 			);
 			try {
 				$file = $upload->move('tmp', 'picture');

@@ -2,16 +2,19 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\Control;
 
 class EventControl extends Control
 {
 	private $gateway;
+	private $dataHelper;
 
-	public function __construct(EventView $view, EventGateway $gateway)
+	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}
@@ -80,7 +83,7 @@ class EventControl extends Control
 							if ($data['invite']) {
 								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 							}
-							$this->func->info('Event wurde erfolgreich geändert!');
+							$this->flashMessageHelper->info('Event wurde erfolgreich geändert!');
 							$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
 						}
 					}
@@ -99,7 +102,7 @@ class EventControl extends Control
 					}
 				}
 
-				$this->func->setEditData($event);
+				$this->dataHelper->setEditData($event);
 
 				$this->pageHelper->addContent($this->view->eventForm($bezirke));
 			} else {
@@ -119,7 +122,7 @@ class EventControl extends Control
 					if ($data['invite']) {
 						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 					}
-					$this->func->info('Event wurde erfolgreich eingetragen!');
+					$this->flashMessageHelper->info('Event wurde erfolgreich eingetragen!');
 					$this->routeHelper->go('/?page=event&id=' . (int)$id);
 				}
 			}
@@ -158,15 +161,22 @@ class EventControl extends Control
 			}
 		}
 
-		if ($start_date = $this->getPostDate('date')) {
-			if ($start_time = $this->getPostTime('time_start')) {
-				if ($end_time = $this->getPostTime('time_end')) {
-					$out['start'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($start_time['hour']) . ':' . $this->func->preZero($start_time['min']) . ':00';
-					$out['end'] = date('Y-m-d', $start_date) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
+		if (($start_date = $this->getPostDate('date')) && $start_time = $this->getPostTime('time_start')) {
+			if ($end_time = $this->getPostTime('time_end')) {
+				$out['start'] = date('Y-m-d', $start_date) . ' ' . sprintf('%02d', $start_time['hour']) . ':' . sprintf(
+						'%02d',
+						$start_time['min']
+					) . ':00';
+				$out['end'] = date('Y-m-d', $start_date) . ' ' . sprintf('%02d', $end_time['hour']) . ':' . sprintf(
+						'%02d',
+						$end_time['min']
+					) . ':00';
 
-					if ((int)$this->getPostInt('addend') == 1 && ($ed = $this->getPostDate('dateend'))) {
-						$out['end'] = date('Y-m-d', $ed) . ' ' . $this->func->preZero($end_time['hour']) . ':' . $this->func->preZero($end_time['min']) . ':00';
-					}
+				if ((int)$this->getPostInt('addend') == 1 && ($ed = $this->getPostDate('dateend'))) {
+					$out['end'] = date('Y-m-d', $ed) . ' ' . sprintf('%02d', $end_time['hour']) . ':' . sprintf(
+							'%02d',
+							$end_time['min']
+						) . ':00';
 				}
 			}
 		}

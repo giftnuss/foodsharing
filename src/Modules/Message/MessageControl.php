@@ -24,8 +24,8 @@ final class MessageControl extends Control
 		$this->setContentWidth(5, 8);
 
 		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
-		$this->pageHelper->addBread($this->func->s('messages'));
-		$this->pageHelper->addTitle($this->func->s('messages'));
+		$this->pageHelper->addBread($this->translationHelper->s('messages'));
+		$this->pageHelper->addTitle($this->translationHelper->s('messages'));
 
 		$this->pageHelper->addContent($this->view->compose());
 		$this->pageHelper->addContent($this->view->conversation());

@@ -2,11 +2,12 @@
 
 namespace Foodsharing\Modules\PassportGenerator;
 
+use Endroid\QrCode\QrCode;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Endroid\QrCode\QrCode;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 final class PassportGeneratorControl extends Control
@@ -17,24 +18,27 @@ final class PassportGeneratorControl extends Control
 	private $regionGateway;
 	private $passportGeneratorGateway;
 	private $foodsaverGateway;
+	private $identificationHelper;
 
 	public function __construct(
 		PassportGeneratorView $view,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
 		PassportGeneratorGateway $passportGateway,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->regionGateway = $regionGateway;
 		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
 		$this->regionId = false;
-		if (($this->regionId = $this->func->getGetId('bid')) === false) {
+		if (($this->regionId = $this->identificationHelper->getGetId('bid')) === false) {
 			$this->regionId = $this->session->getCurrentBezirkId();
 		}
 
@@ -63,17 +67,17 @@ final class PassportGeneratorControl extends Control
 
 		if ($regions = $this->passportGeneratorGateway->getPassFoodsaver($this->regionId)) {
 			$this->pageHelper->addHidden('
-			<div id="verifyconfirm-dialog" title="' . $this->func->s('verify_confirm_title') . '">
-				' . $this->v_utils->v_info('<p>' . $this->func->s('verify_confirm') . '</p>', $this->func->s('verify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . $this->func->s('verify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
+			<div id="verifyconfirm-dialog" title="' . $this->translationHelper->s('verify_confirm_title') . '">
+				' . $this->v_utils->v_info('<p>' . $this->translationHelper->s('verify_confirm') . '</p>', $this->translationHelper->s('verify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->translationHelper->s('verify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 			</div>');
 
 			$this->pageHelper->addHidden('
 			<div id="unverifyconfirm-dialog" title="Es ist ein Problem aufgetreten">
-				' . $this->v_utils->v_info('<p>' . $this->func->s('unverify_confirm') . '</p>', $this->func->s('unverify_confirm_title')) . '
-				<span class="button_confirm" style="display:none">' . $this->func->s('unverify_confirm_button') . '</span>
-				<span class="button_abort" style="display:none">' . $this->func->s('abort') . '</span>
+				' . $this->v_utils->v_info('<p>' . $this->translationHelper->s('unverify_confirm') . '</p>', $this->translationHelper->s('unverify_confirm_title')) . '
+				<span class="button_confirm" style="display:none">' . $this->translationHelper->s('unverify_confirm_button') . '</span>
+				<span class="button_abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 			</div>');
 
 			$this->pageHelper->addContent('<form id="generate" method="post">');
@@ -223,7 +227,7 @@ final class PassportGeneratorControl extends Control
 		}
 		if (!empty($noPhoto)) {
 			$last = array_pop($noPhoto);
-			$this->func->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
+			$this->flashMessageHelper->info(implode(', ', $noPhoto) . ' und ' . $last . ' haben noch kein Foto hochgeladen und ihr Ausweis konnte nicht erstellt werden');
 		}
 
 		$this->passportGeneratorGateway->updateLastGen($is_generated);

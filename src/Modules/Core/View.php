@@ -2,10 +2,12 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\ImageService;
@@ -17,7 +19,6 @@ class View
 
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
-	protected $func;
 	protected $session;
 	protected $sanitizerService;
 	protected $pageHelper;
@@ -29,20 +30,24 @@ class View
 	public $twig;
 	protected $imageService;
 	protected $routeHelper;
+	protected $identificationHelper;
+	protected $dataHelper;
+	protected $translationHelper;
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Func $func,
 		Utils $viewUtils,
 		Session $session,
 		SanitizerService $sanitizerService,
 		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->twig = $twig;
-		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
@@ -50,6 +55,9 @@ class View
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
 		$this->routeHelper = $routeHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function setSub($sub)
@@ -158,7 +166,7 @@ class View
 			$option['scroller'] = true;
 		}
 
-		$id = $this->func->id('team');
+		$id = $this->identificationHelper->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
 		}
@@ -221,7 +229,7 @@ class View
 			$active = $option['active'];
 		}
 
-		$id = $this->func->id('vmenu');
+		$id = $this->identificationHelper->id('vmenu');
 
 		$out = '';
 
@@ -334,7 +342,7 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return $this->v_utils->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
@@ -359,7 +367,7 @@ class View
 			}
 		}
 
-		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), '
 		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
 		<div id="map" class="pickermap"></div>') .
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
