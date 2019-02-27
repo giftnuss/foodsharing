@@ -118,16 +118,24 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		if ($tpl_id != 10) {
-			$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
-		} else {
+		$tpl_map = array(
+			10 => 'reset_password',
+			21 => 'change_email'
+		);
+
+		if (array_key_exists($tpl_id, $tpl_map)) {
+			$tpl_name = 'reset_password';
+			$locale = 'de-de';
+			$tpl_prefix = 'emailTemplates/' . $tpl_name . '.' . $locale;
 			$message = array(
-				'id' => 10,
+				'id' => $tpl_id,
 				'lang_id' => 0,
-				'name' => 'Passwort ändern',
-				'subject' => 'Neues Passwort auf foodsharing.de',
-				'body' => '<p>{ANREDE} {NAME},</p><p>Klicke auf den folgenden Link um Dein Passwort auf Lebensmittelretten.de zu &auml;ndern:</p><p></p><p><a href="{LINK}" target="_blank">{LINK} </a></p><p></p><p>Alles Liebe, Dein Foodsharing Team.</p>'
+				'name' => $tpl_name,
+				'subject' => $this->twig->render($tpl_prefix . '.subject.twig', []),
+				'body' => $this->twig->render($tpl_prefix . '.body.html.twig', [])
 			);
+		} else {
+			$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
 		}
 
 		$search = array();
