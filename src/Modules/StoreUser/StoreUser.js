@@ -98,7 +98,7 @@ $('#u_undate').dialog({
       click: function () {
         showLoader()
         $.ajax({
-          url: 'xhr.php?f=delDate',
+          url: '/xhr.php?f=delDate',
           data: { 'date': $('#undate-date').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
@@ -131,7 +131,7 @@ $('#u_undate').dialog({
       click: function () {
         showLoader()
         $.ajax({
-          url: 'xhr.php?f=delDate',
+          url: '/xhr.php?f=delDate',
           data: { 'date': $('#undate-date').val(), 'msg': $('#team_msg').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
@@ -169,7 +169,7 @@ $('div#pinnwand form').on('submit', function (e) {
     $.ajax({
       dataType: 'json',
       data: $('div#pinnwand form').serialize(),
-      url: `xhr.php?f=addPinPost&team=${store.team_js}`,
+      url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
       success: function (data) {
         if (data.status == 1) {
           $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
@@ -216,7 +216,7 @@ $('#delete_shure').dialog({
         showLoader()
         const pid = $(this).data('pid')
         $.ajax({
-          url: 'xhr.php?f=delBPost',
+          url: '/xhr.php?f=delBPost',
           data: { 'pid': pid },
           success: function (ret) {
             if (ret == 1) {
@@ -267,7 +267,7 @@ $('#timedialog').dialog({
   buttons: {
     'Eintragen': function () {
       $.ajax({
-        url: 'xhr.php?f=addFetcher',
+        url: '/xhr.php?f=addFetcher',
         data: {
           date: $('#timedialog-date').val(),
           bid: store.id,

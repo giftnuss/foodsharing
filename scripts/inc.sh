@@ -55,7 +55,7 @@ function sql-dump() {
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
+  dc exec -T --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-with-image-user() {
@@ -67,13 +67,13 @@ function exec-in-container-with-image-user() {
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id --user):$(id --group) $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id --user):$(id --group) --service-ports $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
@@ -158,7 +158,7 @@ function wait-for-mysql() {
 function install-chat-dependencies() {
   # TODO: move this into scripts/mkdirs when MR#97 is merged
   run-in-container-asroot chat \
-    "mkdir --parents node_modules && chown --recursive $(id --user):$(id --group) node_modules"
+    "mkdir --parents node_modules && chown --recursive $(id -u):$(id -g) node_modules"
 
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and

@@ -25,6 +25,9 @@ class XhrDialog
 	 * @var Func
 	 */
 	private $func;
+	/**
+	 * @var SanitizerService
+	 */
 	private $sanitizerService;
 
 	public function __construct($title = false)

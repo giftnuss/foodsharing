@@ -79,6 +79,7 @@ class FoodsaverGateway extends BaseGateway
 					fs.photo,
 					fs.geschlecht,
 					fs.stat_fetchweight,
+					fs.stat_fetchcount,
 					fs.sleep_status,
 					fs.id
 

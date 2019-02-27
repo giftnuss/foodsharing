@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 class EventXhr extends Control
 {
@@ -19,9 +20,6 @@ class EventXhr extends Control
 
 		if (isset($_GET['id'])) {
 			$this->event = $this->gateway->getEventWithInvites($_GET['id']);
-			if (!$this->mayEvent()) {
-				return false;
-			}
 		}
 
 		$this->stats = array(
@@ -34,6 +32,9 @@ class EventXhr extends Control
 
 	public function accept()
 	{
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 1)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
@@ -47,6 +48,9 @@ class EventXhr extends Control
 
 	public function maybe()
 	{
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 2)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
@@ -60,6 +64,9 @@ class EventXhr extends Control
 
 	public function noaccept()
 	{
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 3)) {
 			return array(
 				'status' => 1,
@@ -70,6 +77,9 @@ class EventXhr extends Control
 
 	public function ustat()
 	{
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (isset($this->stats[(int)$_GET['s']])) {
 			if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
 				return array(
@@ -82,6 +92,9 @@ class EventXhr extends Control
 
 	public function ustatadd()
 	{
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (isset($this->stats[(int)$_GET['s']])) {
 			if ($this->gateway->addInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
 				return array(
@@ -92,8 +105,12 @@ class EventXhr extends Control
 		}
 	}
 
-	private function mayEvent(): bool
+	private function maySeeEvent(): bool
 	{
+		if (!$this->event) {
+			return false;
+		}
+
 		return $this->event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
 				$this->event['bezirk_id']
 			) || isset($this->event['invites']['may'][$this->session->id()]);

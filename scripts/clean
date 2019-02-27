@@ -11,7 +11,7 @@ base_dir=$(readlink -f "$dir/..")
 source $dir/inc.sh
 
 echo "Removing local node_modules"
-(cd $dir && rm -rf node_modules)
+(cd $dir && rm --recursive --force node_modules)
 
 echo "Removing containers"
 $dir/rm
@@ -19,7 +19,7 @@ FS_ENV=test $dir/rm
 
 echo "Removing directories"
 
-rm -rf \
+rm --recursive --force \
   $base_dir/images/basket \
   $base_dir/data/attach \
   $base_dir/data/mailattach \

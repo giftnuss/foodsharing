@@ -180,8 +180,8 @@ class LoginXhr extends Control
 			return $this->func->s('email_exists');
 		}
 
-		if (strlen($data['pw']) < 5 && strlen($data['pw']) > 30) {
-			return $this->func->s('error_password');
+		if (strlen($data['pw']) < 8) {
+			return $this->func->s('error_passwd');
 		}
 
 		$data['gender'] = (int)$data['gender'];
@@ -197,8 +197,8 @@ class LoginXhr extends Control
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
-		$data['lat'] = floatval($data['lat'] ?? null);
-		$data['lon'] = floatval($data['lon'] ?? null);
+		$data['lat'] = (float)$data['lat'] ?? null;
+		$data['lon'] = (float)$data['lon'] ?? null;
 		$data['str'] = strip_tags($data['str'] ?? null);
 		$data['plz'] = preg_replace('[^0-9]', '', $data['plz'] ?? null) . '';
 		$data['city'] = strip_tags($data['city'] ?? null);
@@ -206,7 +206,7 @@ class LoginXhr extends Control
 		$data['country'] = strip_tags($data['country'] ?? null);
 		$data['country'] = strtolower($data['country']);
 		$data['country'] = trim($data['country']);
-		$data['nr'] = $data['nr'] ?? null;
+		$data['nr'] = htmlspecialchars($data['nr']) ?? null;
 
 		$data['newsletter'] = (int)$data['newsletter'];
 		if (!in_array($data['newsletter'], array(0, 1), true)) {
@@ -260,6 +260,10 @@ class LoginXhr extends Control
 
 	private function resizeAvatar($img)
 	{
+		// prevent path traversal
+		$img = preg_replace('/%/', '', $img);
+		$img = preg_replace('/\.+/', '.', $img);
+
 		$folder = ROOT_DIR . 'tmp/';
 		if (file_exists($folder . $img)) {
 			$image = new fImage($folder . $img);

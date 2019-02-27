@@ -20,6 +20,8 @@
 - CSRF protection for API requests !715 @alangecker
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
+- Allow use of markdown in fairteiler description !690 @NerdyProjects
+- Reworking menue #473 !739 @k.miklobusec
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
@@ -42,6 +44,11 @@
 - Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
 - Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
+- Fix path traversals vulnerabilities !723 @alangecker
+- Fix multiple XSS vulnerabilities !722 @alangecker
+- Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
+- Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
+- Only allow creation of stores in a region you are member of @NerdyProjects
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies

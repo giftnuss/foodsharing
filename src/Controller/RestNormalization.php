@@ -32,7 +32,7 @@ class RestNormalization
 		return [
 			'id' => (int)$data[$prefix . 'id'],
 			'name' => $data[$prefix . 'name'],
-			'photo' => $data[$prefix . 'photo'] ? ('/images/' . $photoVersion . $data[$prefix . 'photo']) : null,
+			'avatar' => $data[$prefix . 'photo'] ? ('/images/' . $photoVersion . $data[$prefix . 'photo']) : null,
 			'sleepStatus' => $sleepStatus,
 		];
 	}

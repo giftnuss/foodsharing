@@ -5,6 +5,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
 use Symfony\Component\DependencyInjection\Container;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -28,7 +29,7 @@ $csrf_whitelist = [
 	// 'cropagain',
 	'pictureCrop',
 	// 'out',
-	'getRecip',
+	// 'getRecip',
 	'addPhoto',
 	// 'continueMail',
 	'uploadPhoto',
@@ -92,20 +93,28 @@ if (isset($_GET['f'])) {
 	if (method_exists($xhr, $func)) {
 		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 		$metrics->addPageStatData(['controller' => $func]);
+
+		ob_start();
+		echo $xhr->$func($_GET);
+		$page = ob_get_contents();
+		ob_end_clean();
+
+		if ($page === XhrResponses::PERMISSION_DENIED) {
+			header('HTTP/1.1 403 Forbidden');
+			die('Permission denied');
+		}
+
+		if ($page[0] == '{' || $page[0] == '[') {
+			// just assume it's an JSON, to prevent the browser from interpreting it as
+			// HTML, which could result in XSS possibilities
+			header('Content-Type: application/json');
+		}
 		/*
 		 * check for page caching
 		*/
 		if (isset($cache) && $cache->shouldCache()) {
-			ob_start();
-			echo $xhr->$func($_GET);
-			$page = ob_get_contents();
 			$cache->cache($page);
-
-			ob_end_clean();
-
-			echo $page;
-		} else {
-			echo $xhr->$func($_GET);
 		}
+		echo $page;
 	}
 }

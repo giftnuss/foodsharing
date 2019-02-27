@@ -502,6 +502,10 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$file = $_SESSION['client']['photo'];
 		}
 
+		// prevent path traversal
+		$file = preg_replace('/%/', '', $file);
+		$file = preg_replace('/\.+/', '.', $file);
+
 		if (!empty($file) && file_exists('images/' . $file)) {
 			if (!file_exists('images/' . $size . '_' . $format . '_' . $file)) {
 				$this->resizeImg('images/' . $file, $size, $format);
@@ -757,8 +761,8 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 		if ($pos = $this->session->get('blocation')) {
 			$location = [
-				'lat' => floatval($pos['lat']),
-				'lon' => floatval($pos['lon']),
+				'lat' => (float)$pos['lat'],
+				'lon' => (float)$pos['lon'],
 			];
 		}
 
@@ -1005,6 +1009,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 
 	private function resizeImg($img, $width, $format)
 	{
+		// prevent path traversal
+		$img = preg_replace('/%/', '', $img);
+		$img = preg_replace('/\.+/', '.', $img);
 		if (file_exists($img)) {
 			$opt = 'auto';
 			if ($format == 'q') {

@@ -21,20 +21,19 @@
       </a>
     </li>
 
-    <MenuBullhorn/>
-    <MenuInformation :displayText="!isMobile"/>
-    <MenuEnvelope/>
+    <MenuBullhorn />
+    <MenuInformation :display-text="!isMobile" />
+    <MenuEnvelope />
   </ul>
 </template>
 
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
 
 export default {
-  components: { NavItemDropdown, MenuBullhorn, MenuInformation, MenuEnvelope },
+  components: { MenuBullhorn, MenuInformation, MenuEnvelope },
   props: {
     isMobile: {
       type: Boolean,

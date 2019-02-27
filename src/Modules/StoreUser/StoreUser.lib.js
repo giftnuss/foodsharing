@@ -19,7 +19,7 @@ export function u_updatePosts () {
   $.ajax({
     dataType: 'json',
     data: $('div#pinnwand form').serialize(),
-    url: 'xhr.php?f=getPinPost',
+    url: '/xhr.php?f=getPinPost',
     success: function (data) {
       if (data.status == 1) {
         $('#pinnwand .posts').html(data.html)
@@ -57,7 +57,7 @@ export function u_fetchconfirm (fsid, date, el) {
   var item = $(el)
   showLoader()
   $.ajax({
-    url: 'xhr.php?f=fetchConfirm',
+    url: '/xhr.php?f=fetchConfirm',
     data: {
       fsid: parseInt(fsid),
       bid: store.id,
@@ -78,7 +78,7 @@ export function u_fetchdeny (fsid, date, el) {
   var item = $(el)
   showLoader()
   $.ajax({
-    url: 'xhr.php?f=fetchDeny',
+    url: '/xhr.php?f=fetchDeny',
     data: {
       fsid: parseInt(fsid),
       bid: store.id,
@@ -101,7 +101,7 @@ export function acceptRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=acceptRequest',
+    url: '/xhr.php?f=acceptRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -115,7 +115,7 @@ export function warteRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=warteRequest',
+    url: '/xhr.php?f=warteRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -129,7 +129,7 @@ export function denyRequest (fsid, bid) {
   $.ajax({
     dataType: 'json',
     data: 'fsid=' + fsid + '&bid=' + bid,
-    url: 'xhr.php?f=denyRequest',
+    url: '/xhr.php?f=denyRequest',
     success: function (data) {
       if (data.status == 1) {
         reload()
@@ -149,7 +149,7 @@ export function u_contextAction (action, fsid) {
   } else {
     showLoader()
     $.ajax({
-      url: 'xhr.php?f=bcontext',
+      url: '/xhr.php?f=bcontext',
       data: { 'action': action, 'fsid': fsid, 'bid': store.id, 'bzid': store.bezirk_id },
       dataType: 'json',
       success: function (data) {

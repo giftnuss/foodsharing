@@ -5,16 +5,19 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\SanitizerService;
 
 class FoodsaverXhr extends Control
 {
 	private $regionGateway;
+	private $sanitizerService;
 
-	public function __construct(FoodsaverModel $model, FoodsaverView $view, RegionGateway $regionGateway)
+	public function __construct(FoodsaverModel $model, FoodsaverView $view, RegionGateway $regionGateway, SanitizerService $sanitizerService)
 	{
 		$this->model = $model;
 		$this->view = $view;
 		$this->regionGateway = $regionGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}

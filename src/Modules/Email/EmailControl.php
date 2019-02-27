@@ -11,6 +11,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxModel;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
@@ -19,15 +20,24 @@ class EmailControl extends Control
 	private $foodsaverGateway;
 	private $emailGateway;
 	private $regionGateway;
+	private $sanitizerService;
 
-	public function __construct(Db $model, MailboxModel $mbmodel, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway, EmailGateway $emailGateway, RegionGateway $regionGateway)
-	{
+	public function __construct(
+		Db $model,
+		MailboxModel $mbmodel,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway,
+		EmailGateway $emailGateway,
+		RegionGateway $regionGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 
@@ -354,6 +364,12 @@ class EmailControl extends Control
 				$hheight = $tag->getAttribute('height');
 				$iname = $tag->getAttribute('name');
 
+				// prevent path traversal attacks
+				$src = preg_replace('/%/', '', $src);
+				$src = preg_replace('/\.+/', '.', $src);
+				$iname = preg_replace('/%/', '', $iname);
+				$iname = preg_replace('/\.+/', '.', $iname);
+
 				if (!empty($wwith) || !empty($hheight)) {
 					$old_filepath = '';
 
@@ -383,9 +399,9 @@ class EmailControl extends Control
 						}
 						copy($file, $new_path . $new_filename);
 						$fimage = new fImage($new_path . $new_filename);
-						if (!empty($src) && $width = $tag->getAttribute('width')) {
+						if (!empty($src) && $width = $tag->getAttribute('width') && $width < 2000) {
 							$fimage->resize($width, 0);
-						} elseif (!empty($src) && $height = $tag->getAttribute('height')) {
+						} elseif (!empty($src) && $height = $tag->getAttribute('height') && $height < 2000) {
 							$fimage->resize(0, $height);
 						}
 						$fimage->saveChanges();

@@ -5,18 +5,26 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
 {
 	private $contentGateway;
 	private $quizGateway;
+	private $sanitizerService;
 
-	public function __construct(QuizModel $model, QuizGateway $quizGateway, QuizView $view, ContentGateway $contentGateway)
-	{
+	public function __construct(
+		QuizModel $model,
+		QuizGateway $quizGateway,
+		QuizView $view,
+		ContentGateway $contentGateway,
+		SanitizerService $sanitizerService
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}
@@ -546,9 +554,7 @@ class QuizXhr extends Control
 			 * Have a look has the user entered an comment for this question?
 			*/
 			if (isset($_GET['comment']) && !empty($_GET['comment'])) {
-				$comment = strip_tags($_GET['comment']);
-
-				$comment = $_GET['commentanswers'] . $comment;
+				$comment = strip_tags($_GET['commentanswers'] . $_GET['comment']);
 
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);

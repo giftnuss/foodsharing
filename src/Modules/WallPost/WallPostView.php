@@ -15,7 +15,7 @@ class WallPostView extends View
 		$this->wallId = $wallId;
 	}
 
-	public function posts($posts)
+	public function posts($posts, $mayDelete)
 	{
 		/*
 		 [0] => Array
@@ -56,10 +56,7 @@ class WallPostView extends View
 				</div>';
 			}
 			$del = '';
-			if (
-				$p['foodsaver_id'] == $this->session->id()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam()))
-			) {
+			if ($mayDelete || $p['foodsaver_id'] == $this->session->id()) {
 				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
 			}
 

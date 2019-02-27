@@ -28,7 +28,7 @@ $('#verifyconfirm-dialog').dialog({
       click: function () {
         showLoader()
         $.ajax({
-          url: `xhr.php?f=verify&fid=${verify_fid}&v=1`,
+          url: `/xhr.php?f=verify&fid=${verify_fid}&v=1`,
           dataType: 'json',
           success: function (data) {
             verify_el.removeClass('verify-n')
@@ -89,7 +89,7 @@ $('.verify').on('click', function () {
   } else {
     showLoader()
     $.ajax({
-      url: `xhr.php?f=verify&fid=${$this.parent().parent().children('td:first').children('input').val()}&v=0`,
+      url: `/xhr.php?f=verify&fid=${$this.parent().parent().children('td:first').children('input').val()}&v=0`,
       dataType: 'json',
       success: function (data) {
         if (data.status == '0') {

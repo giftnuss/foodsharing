@@ -27,6 +27,12 @@ class Caching
 	{
 		if (isset($this->cacheRules[$_SERVER['REQUEST_URI']][$this->cacheMode]) && ($page = $this->mem->getPageCache($this->session->id())) !== false && !isset($_GET['flush'])) {
 			$this->metrics->addPageStatData(['cached' => 1]);
+			if ($page[0] == '{' || $page[0] == '[') {
+				// just assume it's an JSON, to prevent the browser from interpreting it as
+				// HTML, which could result in XSS possibilities
+				/* this part goes together with xhr.php and xhrapp.php. It is not needed anymore when they are gone. */
+				header('Content-Type: application/json');
+			}
 			echo $page;
 			exit();
 		} else {

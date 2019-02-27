@@ -683,7 +683,7 @@ export function pictureCrop (id, img) {
     })
   } else {
     showLoader()
-    $(`#${id}-form`).attr('action', `xhr.php?f=pictureCrop&id=${id}&img=${img}`)
+    $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
     $(`#${id}-form`).trigger('submit')
   }
 }

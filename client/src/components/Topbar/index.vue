@@ -146,9 +146,19 @@
               :is-orga-team="isOrgaTeam"
               :may="may"
             />
-            <MenuBullhorn :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
-            <MenuInformation :display-arrow="false" :display-text="ui.wXS || ui.wSM"/>
-            <MenuEnvelope :display-arrow="false" :display-mailbox="mailbox" :display-text="ui.wXS || ui.wSM"/>
+            <MenuBullhorn
+              :display-arrow="false"
+              :display-text="ui.wXS || ui.wSM"
+            />
+            <MenuInformation
+              :display-arrow="false"
+              :display-text="ui.wXS || ui.wSM"
+            />
+            <MenuEnvelope
+              :display-arrow="false"
+              :display-mailbox="mailbox"
+              :display-text="ui.wXS || ui.wSM"
+            />
 
             <menu-messages v-if="!isMobile" />
             <menu-bells v-if="!isMobile" />
@@ -170,7 +180,6 @@ import bTooltip from '@b/directives/tooltip/tooltip'
 import bCollapse from '@b/components/collapse/collapse'
 import bNavbarToggle from '@b/components/navbar/navbar-toggle'
 
-import NavItemDropdown from './NavItemDropdown'
 import MenuRegion from './MenuRegion'
 import MenuStores from './MenuStores'
 import MenuGroups from './MenuGroups'
@@ -190,7 +199,6 @@ export default {
   components: {
     bCollapse,
     bNavbarToggle,
-    NavItemDropdown,
     MenuLoggedout,
     MenuRegion,
     MenuStores,

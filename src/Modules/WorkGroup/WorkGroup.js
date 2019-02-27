@@ -151,7 +151,7 @@ $('#work_group_form_photo-opener').button().on('click', function () {
 })
 
 const tageditOptions = {
-  autocompleteURL: 'xhr.php?f=getRecip',
+  autocompleteURL: '/xhr.php?f=getRecip',
   allowEdit: false,
   allowAdd: false,
   animSpeed: 100

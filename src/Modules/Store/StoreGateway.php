@@ -49,6 +49,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb`.telefon,
 					`fs_betrieb`.email,
 					`fs_betrieb`.fax,
+					`fs_betrieb`.team_status,
 					`kette_id`
 
 		FROM 		`fs_betrieb`
