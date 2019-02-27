@@ -118,31 +118,9 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$tpl_map = array(
-			9 => 'new_message',
-			10 => 'reset_password',
-			12 => 'new_region_message',
-			13 => 'new_region_ambassador_message',
-			18 => 'new_fairteiler_message',
-			19 => 'forum_answer',  // TODO: cf. bell notification
-			20 => 'forum_activation',
-			21 => 'change_email',
-			24 => 'group_message',
-			25 => 'join',
-			26 => 'sleeping_warning',
-			27 => 'sleeping_automated',
-			28 => 'fetch_warning',
-			30 => 'chat_answer',
-			31 => 'privacy_notice',
-		);
-
-		$tpl_name = $tpl_map[$tpl_id];
 		$locale = 'de-de';
-		$tpl_prefix = 'emailTemplates/' . $tpl_name . '.' . $locale;
+		$tpl_prefix = 'emailTemplates/' . $tpl_id . '.' . $locale;
 		$message = array(
-			'id' => $tpl_id,
-			'lang_id' => 0,
-			'name' => $tpl_name,
 			'subject' => $this->twig->render($tpl_prefix . '.subject.twig', []),
 			'body' => $this->twig->render($tpl_prefix . '.body.html.twig', [])
 		);

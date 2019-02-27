@@ -148,7 +148,7 @@ class LoginModel extends Db
 					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				);
 
-				$this->emailHelper->tplMail(10, $fs['email'], $vars);
+				$this->emailHelper->tplMail('reset_password', $fs['email'], $vars);
 
 				return true;
 			}
