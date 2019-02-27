@@ -3,8 +3,8 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -19,31 +19,31 @@ class ForumService
 	private $bellGateway;
 	/* @var Db */
 	private $model;
-	private $func;
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
-		Func $func,
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
-		$this->func = $func;
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -125,7 +125,7 @@ class ForumService
 				$recipient['email'],
 				array_merge($data,
 					[
-						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
 					])
 			);

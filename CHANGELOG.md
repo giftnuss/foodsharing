@@ -27,6 +27,7 @@
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
 - handle pickup signups via rest api !783 @NerdyProjects
+- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx

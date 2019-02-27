@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Stats\StatsService;
@@ -11,10 +11,6 @@ use Foodsharing\Services\ImageService;
 class ViewUtils
 {
 	/**
-	 * @var Func
-	 */
-	private $func;
-	/**
 	 * @var Utils
 	 */
 	private $viewUtils;
@@ -22,19 +18,20 @@ class ViewUtils
 	private $statsService;
 	private $session;
 	private $imageService;
+	private $translationHelper;
 
 	public function __construct(
-		Func $func,
 		Utils $viewUtils,
 		StatsService $statsService,
 		Session $session,
-		ImageService $imageService
+		ImageService $imageService,
+		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->viewUtils = $viewUtils;
 		$this->statsService = $statsService;
 		$this->session = $session;
 		$this->imageService = $imageService;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function fsBubble($fs)
@@ -54,10 +51,10 @@ class ViewUtils
 	{
 		$button = '';
 		if (($b['inTeam']) || $this->session->isOrgaTeam()) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->func->s('to_team_page') . '</a></div>';
+			$button .= '<div class="buttonrow"><a class="lbutton" href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->translationHelper->s('to_team_page') . '</a></div>';
 		}
 		if ($b['team_status'] != 0 && (!$b['inTeam'] && (!$b['pendingRequest']))) {
-			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest(' . (int)$b['id'] . ');return false;">' . $this->func->s('want_to_fetch') . '</a></div>';
+			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="betriebRequest(' . (int)$b['id'] . ');return false;">' . $this->translationHelper->s('want_to_fetch') . '</a></div>';
 		} elseif ($b['team_status'] != 0 && (!$b['inTeam'] && ($b['pendingRequest']))) {
 			$button .= '<div class="buttonrow"><a class="lbutton" href="#" onclick="rejectBetriebRequest(' . (int)$this->session->id() . ',' . (int)$b['id'] . ');return false;">Anfrage zur&uuml;ckziehen </a></div>';
 		}
@@ -84,25 +81,25 @@ class ViewUtils
 
 		$time = strtotime($b['begin']);
 		if ($time > 0) {
-			$count_info .= '<div>Kooperation seit ' . $this->func->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time) . '</div>';
+			$count_info .= '<div>Kooperation seit ' . $this->translationHelper->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time) . '</div>';
 		}
 
 		if ((int)$b['public_time'] != 0) {
-			$b['public_info'] .= '<div>Es wird in etwa ' . $this->func->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt. Geh bitte niemals ohne Absprache zum Laden!</div>';
+			$b['public_info'] .= '<div>Es wird in etwa ' . $this->translationHelper->s('pubbtime_' . (int)$b['public_time']) . ' abgeholt. Geh bitte niemals ohne Absprache zum Laden!</div>';
 		}
 
 		if (!empty($b['public_info'])) {
-			$besonderheiten = $this->viewUtils->v_input_wrapper($this->func->s('info'), $b['public_info'], 'bcntspecial');
+			$besonderheiten = $this->viewUtils->v_input_wrapper($this->translationHelper->s('info'), $b['public_info'], 'bcntspecial');
 		}
 
 		$status = $this->viewUtils->v_getStatusAmpel($b['betrieb_status_id']);
 
 		return '
-			' . $this->viewUtils->v_input_wrapper($this->func->s('status'), $status . '<span class="bstatus">' . $this->func->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
+			' . $this->viewUtils->v_input_wrapper($this->translationHelper->s('status'), $status . '<span class="bstatus">' . $this->translationHelper->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
 			' . $this->viewUtils->v_input_wrapper('Verantwortliche Foodsaver', $verantwortlich, 'bcntverantwortlich') . '
 			' . $besonderheiten . '
 			<div class="ui-padding">
-				' . $this->viewUtils->v_info('' . $this->func->s('team_status_' . $b['team_status']) . '') . '		
+				' . $this->viewUtils->v_info('' . $this->translationHelper->s('team_status_' . $b['team_status']) . '') . '		
 			</div>
 			' . $button;
 	}

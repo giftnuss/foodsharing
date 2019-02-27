@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Helpers;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
@@ -26,7 +25,6 @@ final class PageHelper
 	private $title;
 	private $webpackScripts;
 	private $webpackStylesheets;
-	private $func;
 	private $session;
 	private $sanitizerService;
 	private $imageService;
@@ -34,15 +32,16 @@ final class PageHelper
 	private $translationHelper;
 	public $jsData = [];
 	private $twig;
+	private $identificationHelper;
 
 	public function __construct(
-		Func $func,
 		Session $session,
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
 		Environment $twig,
 		RouteHelper $routeHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		IdentificationHelper $identificationHelper
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -57,13 +56,13 @@ final class PageHelper
 		$this->js = '';
 		$this->head = '';
 		$this->title = ['foodsharing'];
-		$this->func = $func;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->twig = $twig;
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
+		$this->identificationHelper = $identificationHelper;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -105,7 +104,7 @@ final class PageHelper
 			'menu' => $menu,
 			'dev' => FS_ENV == 'dev',
 			'hidden' => $this->hidden,
-			'isMob' => $this->func->isMob(),
+			'isMob' => $this->session->isMob(),
 			'broadcast_message' => $g_broadcast_message,
 			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
@@ -392,7 +391,7 @@ final class PageHelper
 		if (isset($option['width'])) {
 			$width = 'width:' . $option['width'] . ',';
 		}
-		$id = $this->func->id('dialog_' . $table);
+		$id = $this->identificationHelper->id('dialog_' . $table);
 
 		$form = '';
 		foreach ($fields as $f) {

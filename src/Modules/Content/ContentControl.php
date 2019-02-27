@@ -2,19 +2,27 @@
 
 namespace Foodsharing\Modules\Content;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
 
 class ContentControl extends Control
 {
 	private $contentGateway;
+	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
 		ContentView $view,
-		ContentGateway $contentGateway
+		ContentGateway $contentGateway,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}
@@ -27,37 +35,37 @@ class ContentControl extends Control
 			}
 			$this->model;
 
-			if ($this->func->getAction('neu')) {
+			if ($this->identificationHelper->getAction('neu')) {
 				$this->handle_add();
 
-				$this->pageHelper->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->pageHelper->addBread($this->func->s('bread_new_content'));
+				$this->pageHelper->addBread($this->translationHelper->s('bread_content'), '/?page=content');
+				$this->pageHelper->addBread($this->translationHelper->s('bread_new_content'));
 
 				$this->pageHelper->addContent($this->content_form());
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					$this->func->pageLink('content', 'back_to_overview')
-				)), $this->func->s('actions')), CNT_RIGHT);
-			} elseif ($id = $this->func->getActionId('delete')) {
+					$this->routeHelper->pageLink('content', 'back_to_overview')
+				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
-					$this->func->info($this->func->s('content_deleted'));
+					$this->flashMessageHelper->info($this->translationHelper->s('content_deleted'));
 					$this->routeHelper->goPage();
 				}
-			} elseif ($id = $this->func->getActionId('edit')) {
+			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 				$this->handle_edit();
 
-				$this->pageHelper->addBread($this->func->s('bread_content'), '/?page=content');
-				$this->pageHelper->addBread($this->func->s('bread_edit_content'));
+				$this->pageHelper->addBread($this->translationHelper->s('bread_content'), '/?page=content');
+				$this->pageHelper->addBread($this->translationHelper->s('bread_edit_content'));
 
 				$data = $this->contentGateway->getDetail($id);
-				$this->func->setEditData($data);
+				$this->dataHelper->setEditData($data);
 
 				$this->pageHelper->addContent($this->content_form());
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					$this->func->pageLink('content', 'back_to_overview')
-				)), $this->func->s('actions')), CNT_RIGHT);
-			} elseif ($id = $this->func->getActionId('view')) {
+					$this->routeHelper->pageLink('content', 'back_to_overview')
+				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+			} elseif ($id = $this->identificationHelper->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
 					$this->pageHelper->addBread($cnt['title']);
 					$this->pageHelper->addTitle($cnt['title']);
@@ -67,7 +75,7 @@ class ContentControl extends Control
 			} elseif (isset($_GET['id'])) {
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->pageHelper->addBread($this->func->s('content_bread'), '/?page=content');
+				$this->pageHelper->addBread($this->translationHelper->s('content_bread'), '/?page=content');
 
 				if ($data = $this->contentGateway->list()) {
 					$rows = array();
@@ -75,23 +83,23 @@ class ContentControl extends Control
 						$rows[] = array(
 							array('cnt' => $d['id']),
 							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
+							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])))
 							));
 					}
 
 					$table = $this->v_utils->v_tablesorter(array(
 						array('name' => 'ID', 'width' => 30),
-						array('name' => $this->func->s('name')),
-						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
+						array('name' => $this->translationHelper->s('name')),
+						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
-					$this->func->info($this->func->s('content_empty'));
+					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/?page=content&a=neu', 'name' => $this->func->s('neu_content'))
+					array('href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content'))
 				)), 'Aktionen'), CNT_RIGHT);
 			}
 		}
@@ -285,19 +293,19 @@ class ContentControl extends Control
 				array('class' => 'ui-padding')
 			),
 			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('public_content' => true, 'nowrapper' => true)), 'Inhalt')
-		), array('submit' => $this->func->s('save')));
+		), array('submit' => $this->translationHelper->s('save')));
 	}
 
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('content_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('content_edit_success'));
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -305,13 +313,13 @@ class ContentControl extends Control
 	private function handle_add()
 	{
 		global $g_data;
-		if ($this->func->submitted()) {
+		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
-				$this->func->info($this->func->s('content_add_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('content_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
