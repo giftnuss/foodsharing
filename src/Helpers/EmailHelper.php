@@ -114,7 +114,17 @@ Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
 			$mail->setFrom(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME);
 		}
 
-		$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
+		if ($tpl_id != 10) {
+			$message = $this->emailTemplateAdminGateway->getOne_message_tpl($tpl_id);
+		} else {
+			$message = array(
+				'id' => 10,
+				'lang_id' => 0,
+				'name' => 'Passwort ändern',
+				'subject' => 'Neues Passwort auf foodsharing.de',
+				'body' => '<p>{ANREDE} {NAME},</p><p>Klicke auf den folgenden Link um Dein Passwort auf Lebensmittelretten.de zu &auml;ndern:</p><p></p><p><a href="{LINK}" target="_blank">{LINK} </a></p><p></p><p>Alles Liebe, Dein Foodsharing Team.</p>'
+			);
+		}
 
 		$search = array();
 		$replace = array();
