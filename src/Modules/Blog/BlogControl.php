@@ -19,7 +19,7 @@ class BlogControl extends Control
 		BlogView $view, BlogGateway $blogGateway, BlogPermissions $blogPermissions, TimeHelper $timeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
-	){
+	) {
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
 		$this->timeHelper = $timeHelper;
