@@ -74,19 +74,11 @@ final class EmailHelper
 
 		$locale = 'de-de';
 		$tpl_prefix = 'emailTemplates/' . $tpl_id . '.' . $locale;
+		$var = array_change_key_case($var, CASE_UPPER);
 		$message = array(
-			'subject' => $this->twig->render($tpl_prefix . '.subject.twig', []),
-			'body' => $this->twig->render($tpl_prefix . '.body.html.twig', [])
+			'subject' => $this->twig->render($tpl_prefix . '.subject.twig', $var),
+			'body' => $this->twig->render($tpl_prefix . '.body.html.twig', $var)
 		);
-
-		$search = array();
-		$replace = array();
-		foreach ($var as $key => $v) {
-			$search[] = '{' . strtoupper($key) . '}';
-			$replace[] = $v;
-		}
-
-		$message['body'] = str_replace($search, $replace, $message['body']);
 
 		$htmlBody = $this->emailBodyTpl($message['body']);
 		$mail->setHTMLBody($htmlBody);
@@ -95,7 +87,6 @@ final class EmailHelper
 		$plainBody = $this->sanitizerService->htmlToPlain($htmlBody);
 		$mail->setBody($plainBody);
 
-		$message['subject'] = str_replace($search, $replace, $message['subject']);
 		if (!$message['subject']) {
 			$message['subject'] = 'foodsharing-Mail: {EXCERPT}';
 		}
