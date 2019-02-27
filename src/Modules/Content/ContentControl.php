@@ -27,7 +27,7 @@ class ContentControl extends Control
 		parent::__construct();
 	}
 
-	public function index()
+	public function index(): void
 	{
 		if (!isset($_GET['sub'])) {
 			if (!$this->session->may('orga')) {
@@ -105,7 +105,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function partner()
+	public function partner(): void
 	{
 		if ($cnt = $this->contentGateway->get(10)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -115,7 +115,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function unterstuetzung()
+	public function unterstuetzung(): void
 	{
 		if ($cnt = $this->contentGateway->get(42)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -125,7 +125,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function presse()
+	public function presse(): void
 	{
 		if ($cnt = $this->contentGateway->get(58)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -135,7 +135,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function communitiesGermany()
+	public function communitiesGermany(): void
 	{
 		if ($cnt = $this->contentGateway->get(52)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -145,7 +145,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function communitiesAustria()
+	public function communitiesAustria(): void
 	{
 		if ($cnt = $this->contentGateway->get(61)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -155,7 +155,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function communitiesSwitzerland()
+	public function communitiesSwitzerland(): void
 	{
 		if ($cnt = $this->contentGateway->get(62)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -165,7 +165,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function forderungen()
+	public function forderungen(): void
 	{
 		if ($cnt = $this->contentGateway->get(60)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -175,7 +175,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function contact()
+	public function contact(): void
 	{
 		if ($cnt = $this->contentGateway->get(73)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -185,7 +185,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function academy()
+	public function academy(): void
 	{
 		if ($cnt = $this->contentGateway->get(69)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -195,7 +195,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function festival()
+	public function festival(): void
 	{
 		if ($cnt = $this->contentGateway->get(72)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -205,7 +205,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function international()
+	public function international(): void
 	{
 		if ($cnt = $this->contentGateway->get(74)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -215,7 +215,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function transparency()
+	public function transparency(): void
 	{
 		if ($cnt = $this->contentGateway->get(68)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -225,7 +225,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function leeretonne()
+	public function leeretonne(): void
 	{
 		if ($cnt = $this->contentGateway->get(46)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -235,7 +235,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fairteilerrettung()
+	public function fairteilerrettung(): void
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -264,7 +264,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function impressum()
+	public function impressum(): void
 	{
 		if ($cnt = $this->contentGateway->get(8)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -274,7 +274,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function about()
+	public function about(): void
 	{
 		if ($cnt = $this->contentGateway->get(9)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -284,21 +284,21 @@ class ContentControl extends Control
 		}
 	}
 
-	public function ratgeber()
+	public function ratgeber(): void
 	{
 		$this->pageHelper->addBread('Ratgeber');
 		$this->pageHelper->addTitle('Ratgeber Lebensmittelsicherheit');
 		$this->pageHelper->addContent($this->view->ratgeber());
 	}
 
-	public function joininfo()
+	public function joininfo(): void
 	{
 		$this->pageHelper->addBread('Mitmachen');
 		$this->pageHelper->addTitle('Mitmachen - Unsere Regeln');
 		$this->pageHelper->addContent($this->view->joininfo());
 	}
 
-	public function fuer_unternehmen()
+	public function fuer_unternehmen(): void
 	{
 		if ($cnt = $this->contentGateway->get(4)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -308,7 +308,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function infohub()
+	public function infohub(): void
 	{
 		if ($cnt = $this->contentGateway->get(59)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -318,7 +318,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fasten()
+	public function fasten(): void
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -328,7 +328,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function workshops()
+	public function workshops(): void
 	{
 		if ($cnt = $this->contentGateway->get(71)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -338,7 +338,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function changelog()
+	public function changelog(): void
 	{
 		$this->pageHelper->addBread('Changelog');
 		$this->pageHelper->addTitle('Changelog');
@@ -366,7 +366,7 @@ class ContentControl extends Control
 		), array('submit' => $this->translationHelper->s('save')));
 	}
 
-	private function handle_edit()
+	private function handle_edit(): void
 	{
 		global $g_data;
 		if ($this->submitted()) {
@@ -380,7 +380,7 @@ class ContentControl extends Control
 		}
 	}
 
-	private function handle_add()
+	private function handle_add(): void
 	{
 		global $g_data;
 		if ($this->submitted()) {

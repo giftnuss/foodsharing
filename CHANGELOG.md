@@ -75,7 +75,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
-- Reworking menue #473 !739 @k.miklobusec
+- Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Added member list for districts and work groups !697 @djahnie
@@ -87,7 +87,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 - Allow use of markdown in fairteiler description !690 @NerdyProjects
-- Reworking menue #473 !739 @k.miklobusec
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
