@@ -125,7 +125,7 @@ class ContentControl extends Control
 		}
 	}
 
-        public function presse()
+	public function presse()
 	{
 		if ($cnt = $this->contentGateway->get(58)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -175,7 +175,7 @@ class ContentControl extends Control
 		}
 	}
 
-        public function contact()
+	public function contact()
 	{
 		if ($cnt = $this->contentGateway->get(73)) {
 			$this->func->addBread($cnt['title']);
@@ -184,8 +184,8 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
-        
-        public function academy()
+
+	public function academy()
 	{
 		if ($cnt = $this->contentGateway->get(69)) {
 			$this->func->addBread($cnt['title']);
@@ -194,8 +194,8 @@ class ContentControl extends Control
 			$this->func->addContent($this->view->simple($cnt));
 		}
 	}
-        
-        public function festival()
+
+	public function festival()
 	{
 		if ($cnt = $this->contentGateway->get(72)) {
 			$this->func->addBread($cnt['title']);
@@ -205,7 +205,7 @@ class ContentControl extends Control
 		}
 	}
 
-        public function international()
+	public function international()
 	{
 		if ($cnt = $this->contentGateway->get(74)) {
 			$this->func->addBread($cnt['title']);
@@ -215,7 +215,7 @@ class ContentControl extends Control
 		}
 	}
 
-        public function transparency()
+	public function transparency()
 	{
 		if ($cnt = $this->contentGateway->get(68)) {
 			$this->func->addBread($cnt['title']);
@@ -225,7 +225,7 @@ class ContentControl extends Control
 		}
 	}
 
-        public function leeretonne()
+	public function leeretonne()
 	{
 		if ($cnt = $this->contentGateway->get(46)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -317,7 +317,7 @@ class ContentControl extends Control
 			$this->pageHelper->addContent($this->view->simple($cnt));
 		}
 	}
-        
+
 	public function fasten()
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
