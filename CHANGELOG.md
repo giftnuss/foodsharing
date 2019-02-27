@@ -20,6 +20,7 @@
 - Non-followers can comment on Fairteilers again #457 !691 @janopae
 - Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
 - Allow blog posts to be properly formatted !795 @djahnie
+- Some email templates still referred to lebensmittelretten.de instead of foodsharing.de !805 @zommuter
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
