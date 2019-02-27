@@ -2,33 +2,39 @@
 
 namespace Foodsharing\Controller;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
-use FOS\RestBundle\Controller\Annotations as Rest;
+use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RegionRestController extends AbstractFOSRestController
 {
 	private $bellGateway;
-	private $func;
 	private $foodsaverGateway;
 	private $regionGateway;
 	private $regionPermissions;
 	private $session;
+	private $imageService;
 
-	public function __construct(BellGateway $bellGateway, Func $func, FoodsaverGateway $foodsaverGateway, RegionPermissions $regionPermissions, RegionGateway $regionGateway, Session $session)
-	{
+	public function __construct(
+		BellGateway $bellGateway,
+		FoodsaverGateway $foodsaverGateway,
+		RegionPermissions $regionPermissions,
+		RegionGateway $regionGateway,
+		Session $session,
+		ImageService $imageService
+	) {
 		$this->bellGateway = $bellGateway;
-		$this->func = $func;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionPermissions = $regionPermissions;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+		$this->imageService = $imageService;
 	}
 
 	/**
@@ -50,7 +56,7 @@ class RegionRestController extends AbstractFOSRestController
 					$bots,
 					'new_foodsaver_title',
 					$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
-					$this->func->img($foodsaver['photo'], 50),
+					$this->imageService->img($foodsaver['photo'], 50),
 					array('href' => '/profile/' . (int)$this->session->id() . ''),
 					array(
 						'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],

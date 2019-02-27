@@ -4,9 +4,12 @@ namespace Foodsharing\Lib\Xhr;
 
 use Exception;
 use Flourish\fImage;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
@@ -20,8 +23,8 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,7 +33,6 @@ use Symfony\Component\HttpFoundation\Request;
 class XhrMethods
 {
 	private $model;
-	private $func;
 	private $mem;
 	private $session;
 	private $v_utils;
@@ -39,7 +41,6 @@ class XhrMethods
 	private $mailboxModel;
 	private $messageModel;
 	private $regionGateway;
-	private $regionPermissions;
 	private $storePermissions;
 	private $forumGateway;
 	private $bellGateway;
@@ -49,6 +50,11 @@ class XhrMethods
 	private $mailboxGateway;
 	private $imageManager;
 	private $sanitizerService;
+	private $emailHelper;
+	private $imageService;
+	private $identificationHelper;
+	private $dataHelper;
+	private $translationHelper;
 
 	/**
 	 * XhrMethods constructor.
@@ -56,7 +62,6 @@ class XhrMethods
 	 * @param $model
 	 */
 	public function __construct(
-		Func $func,
 		Mem $mem,
 		Session $session,
 		Db $model,
@@ -66,7 +71,6 @@ class XhrMethods
 		MailboxModel $mailboxModel,
 		MessageModel $messageModel,
 		RegionGateway $regionGateway,
-		RegionPermissions $regionPermissions,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
@@ -75,9 +79,13 @@ class XhrMethods
 		EmailGateway $emailGateway,
 		MailboxGateway $mailboxGateway,
 		ImageManager $imageManager,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		EmailHelper $emailHelper,
+		ImageService $imageService,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->mem = $mem;
 		$this->session = $session;
 		$this->model = $model;
@@ -87,7 +95,6 @@ class XhrMethods
 		$this->mailboxModel = $mailboxModel;
 		$this->messageModel = $messageModel;
 		$this->regionGateway = $regionGateway;
-		$this->regionPermissions = $regionPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
@@ -97,6 +104,11 @@ class XhrMethods
 		$this->mailboxGateway = $mailboxGateway;
 		$this->imageManager = $imageManager;
 		$this->sanitizerService = $sanitizerService;
+		$this->emailHelper = $emailHelper;
+		$this->imageService = $imageService;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function xhr_verify($data)
@@ -190,11 +202,11 @@ class XhrMethods
 					} else {
 						$odd = 'odd';
 					}
-					$pic = $this->func->img($o['photo']);
+					$pic = $this->imageService->img($o['photo']);
 
 					$delete = '';
 					if ($this->session->isOrgaTeam() || $this->session->id() == $o['fsid']) {
-						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->func->s('delete') . '</a>';
+						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
 					}
 
 					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
@@ -207,20 +219,20 @@ class XhrMethods
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->func->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
+						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
 					} elseif ($o['milestone'] == 2) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					} elseif ($o['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
-						$msg = '<span class="msg"><strong>' . $this->func->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->func->s($o['text']) . '</span>';
+						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->translationHelper->s($o['text']) . '</span>';
 					} elseif ($o['milestone'] == 5) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->func->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
 					}
 
 					$html .= '
@@ -268,7 +280,7 @@ class XhrMethods
 	{
 		if ($this->session->may()) {
 			$this->mem->delPageCache('/?page=dashboard', $this->session->id());
-			$fields = $this->func->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
+			$fields = $this->dataHelper->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->session->id())) {
 				return $this->xhr_out();
@@ -739,7 +751,7 @@ class XhrMethods
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		$data = $this->func->getPostData();
+		$data = $this->dataHelper->getPostData();
 
 		if (isset($data['fs_id'])) {
 			$user_id = (int)$data['fs_id'];
@@ -843,7 +855,7 @@ class XhrMethods
 				$subject = str_replace($search, $replace, $mail['name']);
 
 				$check = false;
-				if ($this->func->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
+				if ($this->emailHelper->libmail($mailbox, $fs['email'], $subject, $message, $attach, $fs['token'])) {
 					$check = true;
 				}
 
@@ -1086,7 +1098,7 @@ class XhrMethods
 			(
 				' . (int)$data['bid'] . ',
 				' . (int)$data['newfetchtime'][$i] . ',
-				' . $this->model->strval($this->func->preZero($data['nfttime']['hour'][$i]) . ':' . $this->func->preZero($data['nfttime']['min'][$i]) . ':00') . ',
+				' . $this->model->strval(sprintf('%02d', $data['nfttime']['hour'][$i]) . ':' . sprintf('%02d', $data['nfttime']['min'][$i]) . ':00') . ',
 				' . (int)$data['nft-count'][$i] . '
 			)
 		');
@@ -1158,7 +1170,7 @@ class XhrMethods
 
 		$out = array();
 		$out['status'] = 1;
-		$id = $this->func->id('botschafter');
+		$id = $this->identificationHelper->id('botschafter');
 
 		$inputs = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 		if (!empty($g_data['foodsaver'])) {
@@ -1196,9 +1208,9 @@ class XhrMethods
 						],
 					]
 				),
-				$this->v_utils->v_input_wrapper($this->func->s($id), $inputs, $id)
-			), array('submit' => $this->func->s('save'))) .
-			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'geoclean\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
+				$this->v_utils->v_input_wrapper($this->translationHelper->s($id), $inputs, $id)
+			), array('submit' => $this->translationHelper->s('save'))) .
+			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'region\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
 
 		$out['script'] = '
 		$("#bezirkform-form").off("submit");
@@ -1273,10 +1285,10 @@ class XhrMethods
 
 				$verantwortlicher = '';
 				if ($v = $this->storeGateway->getTeamleader($b['id'])) {
-					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->func->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
+					$verantwortlicher = '<p><a href="/profile/' . (int)$b['id'] . '"><img src="' . $this->imageService->img() . '" /></a><a href="/profile/' . (int)$b['id'] . '">' . $v['name'] . '</a> ist verantwortlich</p>';
 				}
 
-				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->func->jsSafe($b['plz']) . ' ' . $this->func->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
+				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->sanitizerService->jsSafe($b['plz']) . ' ' . $this->sanitizerService->jsSafe($b['stadt']) . '</p>' . $button . '</div><div style="clear:both;"></div>';
 			}
 		}
 
@@ -1421,77 +1433,11 @@ class XhrMethods
 				}
 			}
 
-			$this->sanitizerService->handleTagselect('botschafter');
+			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 
-			return $this->xhr_out('pulseInfo("' . $this->func->s('edit_success') . '");');
-		}
-	}
-
-	public function xhr_addFetcher($data)
-	{
-		$storeId = (int)$data['bid'];
-		if (!$this->storePermissions->mayDoPickup($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		/*
-			* 	[f] => addFetcher
-			[date] => 2013-09-23 20:00:00
-			[bid] => 1
-			*/
-		$confirm = 0;
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $storeId)) {
-			$confirm = 1;
-		}
-
-		if (!empty($data['to'])) {
-			$this->incLang('StoreUser');
-			if (empty($data['from'])) {
-				$data['from'] = date('Y-m-d');
-			}
-			$time = explode(' ', $data['date']);
-			$time = $time[1];
-
-			$from = strtotime($data['from']);
-			$to = strtotime($data['to']);
-			if ($to > time() + 86400 * 7 * 3) {
-				$this->func->info('Das Datum liegt zu weit in der Zukunft!');
-
-				return 0;
-			}
-
-			$start = strtotime($data['date']);
-
-			$cur_date = $from;
-
-			$dow = date('w', $start);
-			$count = 0;
-
-			do {
-				if (date('w', $cur_date) == $dow) {
-					++$count;
-					$this->storeGateway->addFetcher($this->session->id(), $storeId, date('Y-m-d', $cur_date) . ' ' . $time, $confirm);
-				}
-				if ($count > 20) {
-					break;
-				}
-				// + 1 Tag
-				$cur_date += 86400;
-			} while ($to > $cur_date);
-			$this->func->info($this->func->s('date_add_successful'));
-
-			return '2';
-		}
-
-		if (!empty($data['from'])) {
-			return 0;
-		}
-
-		$data['date'] = date('Y-m-d H:i:s', strtotime($data['date']));
-		if ($this->storeGateway->addFetcher($this->session->id(), $storeId, $data['date'], $confirm)) {
-			return $this->func->img($this->model->getVal('photo', 'foodsaver', $this->session->id()));
+			return $this->xhr_out('pulseInfo("' . $this->translationHelper->s('edit_success') . '");');
 		}
 	}
 

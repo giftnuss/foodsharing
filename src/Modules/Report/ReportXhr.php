@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
@@ -14,14 +15,22 @@ class ReportXhr extends Control
 	private $reportGateway;
 	private $foodsaverGateway;
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		ReportGateway $reportGateway,
+		Db $model,
+		ReportView $view,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 
@@ -40,7 +49,7 @@ class ReportXhr extends Control
 			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
-			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
+			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
 				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');
@@ -79,7 +88,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->func->info('Meldung wurde bestätigt!');
+			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
 			return [
 				'status' => 1,
@@ -92,7 +101,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->func->info('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,
@@ -118,7 +127,7 @@ class ReportXhr extends Control
 			$bid = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->func->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
 

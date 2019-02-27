@@ -41,7 +41,7 @@ class TeamXhr extends Control
 
 				$mail = new AsyncMail($this->mem);
 
-				if ($this->func->validEmail($_POST['email'])) {
+				if ($this->emailHelper->validEmail($_POST['email'])) {
 					$mail->setFrom($_POST['email']);
 				} else {
 					$mail->setFrom(DEFAULT_EMAIL);
@@ -61,12 +61,12 @@ class TeamXhr extends Control
 				$mail->send();
 
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
-				$xhr->addMessage($this->func->s('mail_send_success'), 'success');
+				$xhr->addMessage($this->translationHelper->s('mail_send_success'), 'success');
 				$xhr->send();
 			}
 		}
 
-		$xhr->addMessage($this->func->s('error'), 'error');
+		$xhr->addMessage($this->translationHelper->s('error'), 'error');
 		$xhr->send();
 	}
 

@@ -76,7 +76,7 @@ class WorkGroupXhr extends Control
 
 							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
 
-							$this->func->libmail(array(
+							$this->emailHelper->libmail(array(
 								'email' => $fs['email'],
 								'email_name' => $fs['name']
 							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
@@ -93,7 +93,7 @@ class WorkGroupXhr extends Control
 	}
 
 	/*
-	 * CONTACT GROUP BY E-MAIL
+	 * CONTACT GROUP VIA EMAIL
 	 */
 	public function sendtogroup()
 	{
@@ -104,10 +104,14 @@ class WorkGroupXhr extends Control
 			$message = strip_tags($_GET['msg']);
 
 			if (!empty($message)) {
-				$this->func->tplMail(24, $group['email'], array(
+				$from = $this->session->user('email');
+				// tplMail uses AsyncMail, which in turn doesn't seem to provide CC or BCC, so use TO...
+				$recipients = array($group['email'], $from);
+
+				$this->emailHelper->tplMail(24, $recipients, array(
 					'gruppenname' => $group['name'],
 					'message' => $message
-				), $this->session->user('email'));
+				), $from);
 
 				return array(
 					'status' => 1,

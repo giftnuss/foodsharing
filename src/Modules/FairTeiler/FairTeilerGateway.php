@@ -194,14 +194,6 @@ class FairTeilerGateway extends BaseGateway
 		return [];
 	}
 
-	public function getFairteilerIds($fsId)
-	{
-		return $this->db->fetchAllValues(
-			'SELECT fairteiler_id FROM fs_fairteiler_follower WHERE foodsaver_id = :id',
-			[':id' => $fsId]
-		);
-	}
-
 	public function follow($ft_id, $fs_id, $infotype)
 	{
 		$this->db->insertIgnore(
@@ -385,12 +377,5 @@ class FairTeilerGateway extends BaseGateway
 			return;
 		}
 		$this->bellGateway->delBellsByIdentifier($identifier);
-	}
-
-	public function mayFairteiler(int $foodsaverId, int $fairteilerId): bool
-	{
-		$ids = $this->getFairteilerIds($foodsaverId);
-
-		return $ids && in_array($fairteilerId, $ids, true);
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
@@ -10,12 +11,18 @@ use Foodsharing\Services\SanitizerService;
 class MailboxXhr extends Control
 {
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		MailboxModel $model,
+		MailboxView $view,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 	}
@@ -46,9 +53,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -160,7 +167,7 @@ class MailboxXhr extends Control
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
-				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
@@ -262,7 +269,7 @@ class MailboxXhr extends Control
 
 				$to = array();
 				foreach ($an as $a) {
-					if ($this->func->validEmail($a)) {
+					if ($this->emailHelper->validEmail($a)) {
 						$t = explode('@', $a);
 
 						$to[] = array(
@@ -295,7 +302,7 @@ class MailboxXhr extends Control
 					return array(
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . $this->func->s('send_success') . '");
+									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
 					);
@@ -312,13 +319,13 @@ class MailboxXhr extends Control
 		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
 
 		if (strpos(strtolower($html), '<body') === false) {
-			$html = '<html><head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body onload="parent.u_readyBody();">' . $html . '</body></html>';
+			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';
 		} else {
-			$html = str_replace(array('<body', '<BODY', '<Body'), '<body onload="parent.u_readyBody();"', $html);
-			$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
+			$html = str_replace(array('<body', '<BODY', '<Body'), '<body', $html);
+			$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
 		}
 
-		$html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
+		// $html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
 
 		echo $html;
 		exit();
@@ -361,8 +368,7 @@ class MailboxXhr extends Control
 					"overflow":"auto"
 				});
 				$("#message-body").dialog("open");
-				$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");
-				u_loadBody();'
+				$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");'
 			);
 		}
 	}
@@ -392,7 +398,7 @@ class MailboxXhr extends Control
 
 		if (is_array($email)) {
 			foreach ($email as $e) {
-				if ($this->func->validEmail($e)) {
+				if ($this->emailHelper->validEmail($e)) {
 					$this->model->addContact($e);
 					$mail->addRecipient($e);
 				}

@@ -49,10 +49,10 @@ class ForumRestController extends AbstractFOSRestController
 		if (isset($thread['post_time'])) {
 			$res['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_', '130_q_');
+			$res['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_');
 		}
 		if (isset($thread['creator_name'])) {
-			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_', '130_q_');
+			$res['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_');
 		}
 
 		return $res;
@@ -64,7 +64,7 @@ class ForumRestController extends AbstractFOSRestController
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'author' => RestNormalization::normalizeFoodsaver($post, 'author_', '130_q_'),
+			'author' => RestNormalization::normalizeFoodsaver($post, 'author_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
@@ -97,11 +97,16 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function getThreadAction($threadId)
 	{
+		$thread = $this->forumGateway->getThread($threadId);
+
+		if (!$thread) {
+			throw new HttpException(404);
+		}
+
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
 
-		$thread = $this->forumGateway->getThread($threadId);
 		$posts = $this->forumGateway->listPosts($threadId);
 
 		$thread = $this->normalizeThread($thread);

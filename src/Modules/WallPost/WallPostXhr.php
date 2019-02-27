@@ -85,7 +85,7 @@ class WallPostXhr extends Control
 		if (!$this->wallPostPermissions->mayReadWall($this->session->id(), $this->table, $this->id)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		
+
 		if ((int)$this->wallPostGateway->getLastPostId($this->table, $this->id) != (int)$_GET['last']) {
 			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return array(
@@ -210,9 +210,9 @@ class WallPostXhr extends Control
 
 			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
 		} elseif (!$this->attach_allow($_FILES['etattach']['name'])) {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_clear();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_clear();';
 		}
 
 		echo '<html><head>

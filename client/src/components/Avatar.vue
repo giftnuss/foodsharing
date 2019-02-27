@@ -8,6 +8,7 @@
 
 <script>
 import { AVATAR_DEFAULT } from '@/consts'
+import { img } from '@/script'
 
 export default {
   props: {
@@ -29,7 +30,7 @@ export default {
       return {
         width: `${this.size}px`,
         height: `${this.size}px`,
-        backgroundImage: `url(${this.url ? this.url : AVATAR_DEFAULT})`
+        backgroundImage: `url(${this.url ? img(this.url, '130') : AVATAR_DEFAULT})`
       }
     }
   }

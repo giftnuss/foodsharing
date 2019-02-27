@@ -15,35 +15,53 @@ class BlogView extends View
 			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
-				$row_tmp[] = array('cnt' => $this->func->s('status_' . $d['active']));
+				$row_tmp[] = array('cnt' => $this->translationHelper->s('status_' . $d['active']));
 			}
 			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>');
 			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>');
-			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name']))));
+			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name']))));
 
 			$rows[] = $row_tmp;
 		}
 
 		$theads = array();
 
-		$theads[] = array('name' => $this->func->s('status'), 'sort' => false, 'width' => 140);
-		$theads[] = array('name' => $this->func->s('date'), 'width' => 80);
-		$theads[] = array('name' => $this->func->s('name'));
-		$theads[] = array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50);
+		$theads[] = array('name' => $this->translationHelper->s('status'), 'sort' => false, 'width' => 140);
+		$theads[] = array('name' => $this->translationHelper->s('date'), 'width' => 80);
+		$theads[] = array('name' => $this->translationHelper->s('name'));
+		$theads[] = array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50);
 
 		$table = $this->v_utils->v_tablesorter($theads, $rows);
 
-		return $this->v_utils->v_field($table, $this->func->s('article'));
+		return $this->v_utils->v_field($table, $this->translationHelper->s('article'));
 	}
 
 	public function newsPost($news)
 	{
-		return $this->v_utils->v_field('<div class="news-post full"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news, 'crop_0_528_') . '<p>' . $this->func->autolink($news['body']) . '</p><div style="clear:both;"></div></div>');
+		return $this->v_utils->v_field(
+			'<div class="news-post full"><h2><a href="/?page=blog&sub=read&id='
+			. $news['id'] . '">' . $news['name']
+			. '</a></h2><p class="small"><span class="time">'
+			. $this->timeHelper->niceDate($news['time_ts'])
+			. '</span><span class="name"> von '
+			. $news['fs_name']
+			. '</span></p>'
+			. $this->getImage($news, 'crop_0_528_')
+			. '<p>'
+			. $this->sanitizerService->purifyHtml($news['body'])
+			. '</p><div style="clear:both;"></div></div>'
+		);
 	}
 
 	public function newsListItem($news)
 	{
-		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->func->niceDate($news['time_ts']) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage($news) . '<p>' . $this->func->autolink($news['teaser']) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
+		return '<div class="news-post"><h2><a href="/?page=blog&sub=read&id=' . $news['id'] . '">' . $news['name'] . '</a></h2><p class="small"><span class="time">' . $this->timeHelper->niceDate(
+				$news['time_ts']
+			) . '</span><span class="name"> von ' . $news['fs_name'] . '</span></p>' . $this->getImage(
+				$news
+			) . '<p>' . $this->routeHelper->autolink(
+				$news['teaser']
+			) . '</p><p><a class="button" href="/?page=blog&sub=read&id=' . $news['id'] . '">weiterlesen</a></p><div style="clear:both;"></div></div>';
 	}
 
 	private function getImage($news, $prefix = 'crop_1_528_')
@@ -71,11 +89,11 @@ class BlogView extends View
 	{
 		$bezirkchoose = '';
 		if ($add) {
-			$title = $this->func->s('neu_blog_entry');
+			$title = $this->translationHelper->s('neu_blog_entry');
 		} else {
-			$title = $this->func->s('edit_article');
+			$title = $this->translationHelper->s('edit_article');
 			global $g_data;
-			$this->func->addContent($this->v_utils->v_field(
+			$this->pageHelper->addContent($this->v_utils->v_field(
 				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
 				'Status',
 				array('class' => 'ui-padding')

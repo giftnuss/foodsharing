@@ -1,5 +1,71 @@
 # Unreleased
 
+## Major changes
+
+## Features
+- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+- Email notifications now indicate the responsible user in the FROM field #450 !798 @zommuter
+- Email notifications now can include message excerpts in the SUBJECT #450 !800 @zommuter
+
+## Bugfixes
+- Orga can delete quizzes #364 !767 @k.miklobusec
+- Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
+- Store member status icons suitable to status on ambassador view of profiles !766 @flukx
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
+- Properly escape store names in request popups !778 @NerdyProjects
+- Fix forum "Antworten" button !786 @nicksellen
+- Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Non-followers can comment on Fairteilers again #457 !691 @janopae
+- Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
+- Allow blog posts to be properly formatted !795 @djahnie
+
+## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
+- Forbid to signup for non-existant pickups !783 @NerdyProjects
+- handle pickup signups via rest api !783 @NerdyProjects
+- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+
+## Dev/Test/CI stuff
+- Several reference texts in devdocs about used technologies !741 @flukx
+- Use CI built assets and vendor for deployment !768 @NerdyProjects
+- Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+- Update mocha to version 6 @peter.toennies
+- Run all jobs except test and deployment on shared CI runners @NerdyProjects
+- Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
+- Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
+- Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
+- added /nbProject to .gitinore !791 @k.miklobusec
+
+# 2019-02-25 Hotfix
+
+We have to do some database maintenance for !792 which hopefully works fine and fast...
+
+## Bugfixes
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Fix forum "Antworten" button !786 @nicksellen
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
+
+# 2019-02-21
+
+We are happy to announce another release which got hundreds of hours of love, lastly from more then 10 people participating in the 2019 february foodsharing.de hackweek, sitting together since last friday at Kanthaus near Leipzig.
+
+This release is a milestone as we finally managed to tackle some issues that increase the security of foodsharing.de and by that the privacy of all our users.
+
+We are very proud to finally release foodsharing with an **AGPLv3** licence, making it finally a [Free and open-source software](https://en.wikipedia.org/wiki/Free_and_open-source_software).
+
+## Major changes
+- A security focussed code audit has been done by @alangecker which lead to fixing more than 50 related issues, from which 10 were of critical and 6 of high severity #472
+- AGPLv3 licence added. The [Gitlab repository](https://gitlab.com/foodsharing-dev/foodsharing) is now publically visible
+- [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) protection for most requests to avoid malicious requests deleting accounts or changing data without the users intention to do so
+- Lots of [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) vectors have been closed by setting the correct content type on json responses
+- Removed backend code to stop old android app *foodsharing lebensmittelretten* (*de.lebensmittelretten.app*) from working. The development team cannot take the responsibility for using this app as it implements very bad practices regarding security. We advice all current and recent users of that app to change the password they used on foodsharing.de.
+- We are happy with the continuous process of cleaning up our code and reimplementing more and more parts as proper API requests and getting rid of spaghetti-javascript
+
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
@@ -60,6 +126,8 @@
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint
+- remove unused quickprofile method !755 @NerdyProjects
+- fix a few linter warnings !755 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - better webpack splitting !681 @nicksellen

@@ -224,13 +224,13 @@ final class MessageModel extends Db
 	 * @param int $limit
 	 * @param int $offset
 	 *
-	 * @return array|bool
+	 * @return array
 	 */
 	public function listConversations(int $limit = -1, int $offset = 0)
 	{
 		$paginate = '';
 		if ($limit !== -1) {
-			$paginate = ' LIMIT ' . $offset . ',' . $limit;
+			$paginate = ' LIMIT ' . (int)$offset . ',' . (int)$limit;
 		}
 
 		if ($conversations = $this->q('
@@ -275,7 +275,7 @@ final class MessageModel extends Db
 			return $conversations;
 		}
 
-		return false;
+		return [];
 	}
 
 	/**

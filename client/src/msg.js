@@ -410,6 +410,8 @@ const msg = {
 
           let position = $(`#msg-${lmid}`).position()
 
+          if (!position) return
+
           if (!msg.isMob()) {
             msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
           } else {

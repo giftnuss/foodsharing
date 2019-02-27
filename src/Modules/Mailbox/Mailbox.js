@@ -10,9 +10,6 @@ import 'jquery-tagedit-auto-grow-input'
 import { expose } from '@/utils'
 import {
   ajreq,
-  hideLoader,
-  showLoader,
-  u_loadCoords,
   pulseInfo,
   pulseError,
   checkEmail
@@ -20,7 +17,6 @@ import {
 import './Mailbox.css'
 
 expose({
-  u_getGeo,
   mb_finishFile,
   mb_removeLast,
   mb_new_message,
@@ -30,35 +26,15 @@ expose({
   mb_answer,
   mb_forward,
   mb_setMailbox,
-  u_loadBody,
-  u_readyBody,
   mb_clearEditor,
   mb_closeEditor,
   mb_send_message,
-  u_goAll,
   mb_refresh,
   checkEmail,
   u_handleNewEmail,
   u_addTypeHead,
   setAutocompleteAddresses
 })
-
-function u_getGeo (id) {
-  showLoader()
-
-  if ($(`#fs${id}plz`).val() != '' && $('#fs' + id + 'stadt').val() != '' && $('#fs' + id + 'anschrift').val() != '') {
-    u_loadCoords({
-      plz: $(`#fs${id}plz`).val(),
-      stadt: $(`#fs${id}stadt`).val(),
-      anschrift: $(`#fs${id}anschrift`).val(),
-      complete: function () {
-        hideLoader()
-      }
-    }, function (lat, lon) {
-      ajreq('updateGeo', { lat: lat, lon: lon, id: id })
-    })
-  }
-}
 
 function mb_finishFile (newname) {
   $('ul#et-file-list li:last').addClass('finish').append(`<input type="hidden" class="tmp" value="${newname}" name="tmp_${$('ul#et-file-list li').length}" />`)
@@ -149,21 +125,9 @@ function mb_setMailbox (mb_id) {
   }
 }
 
-function u_loadBody () {
-  if ($('.mailbox-body iframe').length > 0) {
-    $('.mailbox-body-loader').show()
-    $('.mailbox-body').hide()
-  }
-}
-
-function u_readyBody () {
-  hideLoader()
-  $('.mailbox-body').show()
-  $('.mailbox-body-loader').hide()
-}
-
 function mb_clearEditor () {
   $('#edit-von').val('')
+  u_handleNewEmail('') // fixes some wired bug, where the edit-an-field is missing after reopening the form
   for (let i = 1; i < $('.edit-an').length; i++) {
     $('.edit-an:last').parent().parent().parent().remove()
   }
@@ -202,7 +166,7 @@ function mb_send_message () {
   $('.edit-an').each(function () {
     an = `${an};${$(this).val()}`
   })
-
+  console.log(an, $('.edit-an'))
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
@@ -216,10 +180,6 @@ function mb_send_message () {
       reply: parseInt($('#edit-reply').val())
     }, 'post')
   }
-}
-
-function u_goAll () {
-
 }
 
 function mb_refresh () {

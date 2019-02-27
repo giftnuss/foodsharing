@@ -9,11 +9,12 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageXhr extends Control
 {
+	private $messageGateway;
+	private $storeGateway;
 	/**
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
-	private $messageGateway;
 
 	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, StoreGateway $storeGateway, WebSocketSender $webSocketSender)
 	{
@@ -163,7 +164,7 @@ final class MessageXhr extends Control
 				}
 			}
 		}
-		$xhr->addMessage($this->func->s('error'), 'error');
+		$xhr->addMessage($this->translationHelper->s('error'), 'error');
 		$xhr->send();
 	}
 
@@ -294,10 +295,10 @@ final class MessageXhr extends Control
 					 */
 					$xhr->addData('cid', $cid);
 				} else {
-					$xhr->addMessage($this->func->s('error'), 'error');
+					$xhr->addMessage($this->translationHelper->s('error'), 'error');
 				}
 			} else {
-				$xhr->addMessage($this->func->s('wrong_recip_count'), 'error');
+				$xhr->addMessage($this->translationHelper->s('wrong_recip_count'), 'error');
 			}
 
 			/*
