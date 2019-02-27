@@ -4,6 +4,11 @@ namespace Foodsharing\Modules\EmailTemplateAdmin;
 
 use Foodsharing\Modules\Core\View;
 
+/**
+ * @deprecated
+ *
+ * @return $this
+ */
 class EmailTemplateAdminView extends View
 {
 	public function message_tpl_form()

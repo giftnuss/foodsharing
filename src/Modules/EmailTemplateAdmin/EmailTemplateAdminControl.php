@@ -6,6 +6,11 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 
+/**
+ * @deprecated
+ *
+ * @return $this
+ */
 class EmailTemplateAdminControl extends Control
 {
 	private $emailTemplateAdminGateway;
