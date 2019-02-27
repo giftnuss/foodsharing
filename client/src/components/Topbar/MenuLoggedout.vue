@@ -22,7 +22,7 @@
     </li>
 
     <MenuBullhorn />
-    <MenuInformation :display-text="!isMobile" />
+    <MenuInformation />
     <MenuEnvelope />
   </ul>
 </template>

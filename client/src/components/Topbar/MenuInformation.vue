@@ -1,5 +1,6 @@
 <template>
   <nav-item-dropdown
+    tooltip="Infos"
     :no-caret="!displayArrow"
     right
   >
@@ -9,51 +10,93 @@
         Infos
       </span>
     </template>
+    <h3 class="dropdown-header">
+      Über uns
+    </h3>
+
     <a
-      :href="$url('faq')"
-      class="dropdown-item"
+      :href="$url('mission')"
+      class="dropdown-item sub"
       role="menuitem"
     >
-      F.A.Q.
+      Mission
+    </a>
+    <a
+      :href="$url('grundsaetze')"
+      class="dropdown-item sub"
+      role="menuitem"
+    >
+      Grundsätze
     </a>
     <a
       :href="$url('blog')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Blog
     </a>
     <a
+      :href="$url('team')"
+      class="dropdown-item sub"
+      role="menuitem"
+    >
+      Team
+    </a>
+    <a
+      :href="$url('partner')"
+      class="dropdown-item sub"
+      role="menuitem"
+    >
+      Partner
+    </a>
+    <h3 class="dropdown-header">
+      Hintergrund
+    </h3>
+    <a
+      :href="$url('faq')"
+      class="dropdown-item sub"
+      role="menuitem"
+    >
+      F.A.Q.
+    </a>
+    <a
       :href="$url('wiki')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Wiki
     </a>
     <a
       :href="$url('guide')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Ratgeber
     </a>
     <a
+      :href="$url('statistics')"
+      class="dropdown-item sub"
+      role="menuitem"
+    >
+      Statistik
+    </a>
+    <a
       :href="$url('transparency')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Transparenz
     </a>
     <a
       :href="$url('dataprivacy')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Datenschutz
     </a>
     <a
       :href="$url('changelog')"
-      class="dropdown-item"
+      class="dropdown-item sub"
       role="menuitem"
     >
       Changelog

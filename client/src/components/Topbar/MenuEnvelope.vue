@@ -18,6 +18,10 @@
     >
       E-Mail-Postfach
     </a>
+    <div
+      v-if="displayMailbox"
+      class="dropdown-divider"
+    />
     <a
       :href="$url('contact')"
       class="dropdown-item"
