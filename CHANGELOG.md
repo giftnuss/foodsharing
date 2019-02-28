@@ -45,6 +45,7 @@
 - added /nbProject to .gitinore !791 @k.miklobusec
 - Email templates are no longer stored in the database but the repository #502 !805 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
+- Flush redis before running tests #135 !807 @nicksellen
 
 # 2019-02-25 Hotfix
 
