@@ -92,7 +92,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - CSRF protection for API requests !715 @alangecker
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
-- Allow use of markdown in fairteiler description !690 @NerdyProjects
 
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
