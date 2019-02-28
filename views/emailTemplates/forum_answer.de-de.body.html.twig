@@ -1,11 +1,5 @@
-<p>{ANREDE} {NAME}, </p>
-<p></p>
-<p>{POSTER} hat im Forum geantwortet</p>
-<p></p>
 <div class="border">
-<p><a href="{LINK}" target="_blank">{THEME}</a></p>
-<p>{POST}</p>
-<p><a href="{LINK}" target="_blank" class="button">Einloggen zum Antworten</a></p>
-<p></p>
+<p>{{ POST }}</p>
+<p>-- {{ POSTER }} in <a href="{{ LINK|raw }}" target="_blank">{{ THEME }}</a></p>
+<p><a href="{{ LINK|raw }}" target="_blank" class="button">Einloggen zum Antworten</a></p>
 </div>
-<p>Alles Liebe, <br /> Dein foodsharing-Team</p>

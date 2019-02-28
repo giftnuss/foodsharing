@@ -1,10 +1,5 @@
-<p>{ANREDE} {NAME}, </p>
-<p></p>
-<p>{SENDER} hat Dir eine Nachricht geschrieben.</p>
-<p>Gehe auf den folgenden Link, um Deine Nachricht auf der foodsharing-Plattform zu lesen.<br /> Dein foodsharing-Team</p>
-<p></p>
 <div class="border">
-<p>{MESSAGE}</p>
-<p><a href="{LINK}" target="_blank" class="button">Antworten</a></p>
-<p></p>
+<p>{{ MESSAGE }}</p>
+<p>-- {{ SENDER }}</p>
+<p><a href="{{ LINK|raw }}" target="_blank" class="button">Antworten</a></p>
 </div>
