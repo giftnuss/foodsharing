@@ -28,7 +28,6 @@ class Routing
 		'map' => 'Map',
 		'msg' => 'Message',
 		'message' => 'Message',
-		'message_tpl' => 'EmailTemplateAdmin',
 		'passgen' => 'PassportGenerator',
 		'profile' => 'Profile',
 		'quiz' => 'Quiz',

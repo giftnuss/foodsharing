@@ -143,7 +143,7 @@ class ForumService
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $this->sanitizerService->plainToHtml($poster)
 			];
-			$this->notificationMail($follower, 19, $data);
+			$this->notificationMail($follower, 'forum_answer', $data);
 		}
 	}
 
@@ -160,7 +160,7 @@ class ForumService
 				'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
 			];
 
-			$this->notificationMail($foodsaver, 20, $data);
+			$this->notificationMail($foodsaver, 'forum_activation', $data);
 		}
 	}
 
@@ -184,7 +184,8 @@ class ForumService
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
-		$this->notificationMail($foodsaver, $ambassadorForum ? 13 : 12, $data);
+		$this->notificationMail($foodsaver,
+			$ambassadorForum ? 'new_region_ambassador_message' : 'new_region_message', $data);
 	}
 
 	public function addReaction($fsId, $postId, $key)

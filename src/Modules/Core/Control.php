@@ -458,7 +458,7 @@ abstract class Control
 		return false;
 	}
 
-	public function convMessage($recipient, $conversation_id, $msg, MessageGateway $messageGateway, StoreGateway $storeGateway, $tpl_id = 9)
+	public function convMessage($recipient, $conversation_id, $msg, MessageGateway $messageGateway, StoreGateway $storeGateway)
 	{
 		/*
 		 * only send email if the user is not online
@@ -477,7 +477,7 @@ abstract class Control
 					$sessdata[$recipient['id']] = time();
 
 					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
-						$this->emailHelper->tplMail(30, $recipient['email'], array(
+						$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
 							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -486,7 +486,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
-						$this->emailHelper->tplMail(30, $recipient['email'], array(
+						$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
 							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -495,7 +495,7 @@ abstract class Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						$this->emailHelper->tplMail($tpl_id, $recipient['email'], array(
+						$this->emailHelper->tplMail('new_message', $recipient['email'], array(
 							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -510,7 +510,7 @@ abstract class Control
 		}
 	}
 
-	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
+	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
 	{
 		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
