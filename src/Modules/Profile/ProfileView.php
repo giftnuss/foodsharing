@@ -14,20 +14,8 @@ use Foodsharing\Services\SanitizerService;
 class ProfileView extends View
 {
 	private $foodsaver;
-	private $basketGateway;
 
-	public function __construct(\Twig\Environment $twig,
-								Func $func,
-								Utils $viewUtils,
-								Session $session,
-								SanitizerService $sanitizerService,
-								BasketGateway $basketGateway)
-	{
-		$this->basketGateway = $basketGateway;
-		parent::__construct($twig, $func, $viewUtils, $session, $sanitizerService);
-	}
-
-	public function profile($wallposts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
+	public function profile($wallPosts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
@@ -36,7 +24,7 @@ class ProfileView extends View
 			$this->func->addStyle('#wallposts .tools{display:none;}');
 		}
 
-		if ($fetchDates) {
+		if ($fetchDates) { // BOT functionality
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
@@ -46,13 +34,13 @@ class ProfileView extends View
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
-		if ($showSideInfoCompanies && $userCompanies) {
+		if ($showSideInfoCompanies && $userCompanies) { // BOT functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 		$page->render();
 	}
 
-	private function fetchDates($fetchDates)
+	private function fetchDates($fetchDates) // BOT functionality
 	{
 		$out = '
 				<div class="ui-padding" id="double">
@@ -128,7 +116,7 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function usernotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
+	public function userNotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->func->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
@@ -213,10 +201,10 @@ class ProfileView extends View
 
 		if ($this->foodsaver['foodsaver']) {
 			$fsa = array();
-			$fshomedistrict = array();
+			$fsHomeDistrict = array();
 			foreach ($this->foodsaver['foodsaver'] as $b) {
 				if ($b['id'] == $this->foodsaver['bezirk_id']) {
-					$fshomedistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+					$fsHomeDistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
 				if (!isset($bot[$b['id']])) {
 					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
@@ -228,10 +216,10 @@ class ProfileView extends View
 					'val' => implode(', ', $fsa)
 				);
 			}
-			if (!empty($fshomedistrict)) {
+			if (!empty($fsHomeDistrict)) {
 				$infos[] = array(
 					'name' => $this->func->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
-					'val' => implode(', ', $fshomedistrict)
+					'val' => implode(', ', $fsHomeDistrict)
 				);
 			}
 		}
@@ -299,11 +287,15 @@ class ProfileView extends View
 				    </span>
 				</a>';
 
-		$postCount = '
+		if ($this->foodsaver['rolle'] > 0) { // for foodsavers only
+			$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
 					<span class="name">Beiträge</span> 
 				</span>';
+		} else {
+			$postCount = '';
+		}
 
 		$bananaCount = '';
 
@@ -386,28 +378,28 @@ class ProfileView extends View
 			</div>';
 	}
 
-	public function getHistory($history, $changetype)
+	public function getHistory($history, $changeType)
 	{
 		$out = '
 			<ul class="linklist history">';
 		$class = '';
 
-		$curdate = 0;
+		$curDate = 0;
 		foreach ($history as $h) {
-			if ($curdate != $h['date']) {
-				if ($changetype == 0) {
-					$typeofchange = '';
+			if ($curDate != $h['date']) {
+				if ($changeType == 0) {
+					$typeOfChange = '';
 					if ($h['change_status'] == 0) {
 						$class = 'unverify';
-						$typeofchange = 'Entverifiziert';
+						$typeOfChange = 'Entverifiziert';
 					}
 					if ($h['change_status'] == 1) {
 						$class = 'verify';
-						$typeofchange = 'Verifiziert';
+						$typeOfChange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
 				}
-				if ($changetype == 1) {
+				if ($changeType == 1) {
 					if (!is_null($h['bot_id'])) {
 						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
@@ -415,7 +407,7 @@ class ProfileView extends View
 					}
 				}
 
-				$curdate = $h['date'];
+				$curDate = $h['date'];
 			}
 			if (!is_null($h['bot_id'])) {
 				$out .= '
@@ -435,7 +427,7 @@ class ProfileView extends View
 		}
 		$out .= '
 		</ul>';
-		if ($curdate == 0) {
+		if ($curDate == 0) {
 			$out = 'Es liegen keine Daten vor';
 		}
 
