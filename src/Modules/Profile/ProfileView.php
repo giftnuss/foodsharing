@@ -287,7 +287,7 @@ class ProfileView extends View
 				    </span>
 				</a>';
 
-		if ($this->foodsaver['rolle'] > 0) { // for foodsavers only
+		if ($this->session->may('fs')) { // for foodsavers only
 			$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
@@ -296,8 +296,6 @@ class ProfileView extends View
 		} else {
 			$postCount = '';
 		}
-
-		$bananaCount = '';
 
 		/*
 		 * Banana
@@ -363,6 +361,8 @@ class ProfileView extends View
 					</tbody>
 				</table>
 			</div>';
+		} else {
+			$bananaCount = '';
 		}
 
 		return '
