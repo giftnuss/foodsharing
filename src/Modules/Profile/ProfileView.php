@@ -3,13 +3,8 @@
 namespace Foodsharing\Modules\Profile;
 
 use Flourish\fDate;
-use Foodsharing\Lib\Func;
-use Foodsharing\Lib\Session;
-use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Modules\Basket\BasketGateway;
-use Foodsharing\Services\SanitizerService;
 
 class ProfileView extends View
 {
@@ -18,7 +13,7 @@ class ProfileView extends View
 	public function profile($wallPosts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
-		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
+		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
 			$this->func->addStyle('#wallposts .tools{display:none;}');
