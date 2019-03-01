@@ -91,11 +91,11 @@ final class EmailHelper
 			$message['subject'] = 'foodsharing-Mail: {EXCERPT}';
 		}
 
-		$excerptAmount = substr_count($message['subject'], '{EXCERPT}'); // So we can calculate the proper subject length
-		if ($excerptAmount > 0) {
+		if (mb_strpos($message['subject'], '{EXCERPT}') !== false) {
 			$plainMessage = $this->sanitizerService->htmlToPlain($message['body']);
-			$subjectLength = strlen($message['subject']) - strlen('{EXCERPT}') * $excerptAmount;
-			$excerpt = substr($plainMessage, 0, intdiv(78 - $subjectLength, $excerptAmount)); // yes, magic number. It's the RFC recommendation.
+			$subjectLength = mb_strlen($message['subject']) - strlen('{EXCERPT}');
+			/* RFC recommends 78 characters for subjects */
+			$excerpt = $this->sanitizerService->tt($plainMessage, 78 - $subjectLength);
 			$message['subject'] = str_replace('{EXCERPT}', $excerpt, $message['subject']);
 		}
 
