@@ -104,6 +104,53 @@ final class MessageXhr extends Control
 		}
 	}
 
+	private function convMessage($recipient, $conversation_id, $msg)
+	{
+		/*
+		 * only send email if the user is not online
+		 */
+
+		if (!$this->mem->userOnline($recipient['id'])) {
+			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+				$sessdata = array();
+			}
+
+			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+				$sessdata[$recipient['id']] = time();
+
+				if ($betriebName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
+					$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $this->session->user('name'),
+						'name' => $recipient['name'],
+						'chatname' => 'Betrieb ' . $betriebName,
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+					));
+				} elseif ($memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $this->session->id())) {
+					$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $this->session->user('name'),
+						'name' => $recipient['name'],
+						'chatname' => implode(', ', $memberNames),
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+					));
+				} else {
+					$this->emailHelper->tplMail('new_message', $recipient['email'], array(
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $this->session->user('name'),
+						'name' => $recipient['name'],
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+					));
+				}
+			}
+
+			$_SESSION['lastMailMessage'] = $sessdata;
+		}
+	}
+
 	/**
 	 * ajax call to send a message to an conversation.
 	 *
@@ -141,8 +188,9 @@ final class MessageXhr extends Control
 						foreach ($member as $m) {
 							if ($m['id'] != $this->session->id()) {
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
-
-								$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
+								if ($m['infomail_message']) {
+									$this->convMessage($m, $_POST['c'], $body);
+								}
 							}
 						}
 					}

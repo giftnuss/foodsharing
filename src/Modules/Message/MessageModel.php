@@ -192,7 +192,8 @@ final class MessageModel extends Db
 				fs.name,
 				fs.photo,
 				fs.email,
-				fs.geschlecht
+				fs.geschlecht,
+				fs.infomail_message
 
 			FROM
                 `fs_foodsaver_has_conversation` hc
