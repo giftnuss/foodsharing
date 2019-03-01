@@ -2,6 +2,10 @@
 
 class ChatCest
 {
+	private $foodsaver1;
+	private $foodsaver2;
+	private $testBezirk;
+
 	public function _before(AcceptanceTester $I)
 	{
 		$this->testBezirk = 241;
@@ -12,25 +16,41 @@ class ChatCest
 	{
 	}
 
-	private function createUsers($I)
+	private function createUsers(AcceptanceTester $I)
 	{
-		$this->foodsaver1 = $I->createFoodsaver('pw', ['bezirk_id' => $this->testBezirk]);
-		$this->foodsaver2 = $I->createFoodsaver('pw', ['bezirk_id' => $this->testBezirk]);
+		$this->foodsaver1 = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk]);
+		$this->foodsaver2 = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk]);
 	}
 
-	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)
+	public function GetEmailNotificationForMessage(AcceptanceTester $I)
 	{
-		$I->login($this->foodsaver1['email'], 'pw');
-
+		$I->login($this->foodsaver1['email']);
 		// view the other users profile and start a chat
 		$I->amOnPage('/profile/' . $this->foodsaver2['id']);
 		$I->click('Nachricht schreiben');
-		$I->waitForElementVisible('.chatboxtextarea', 10);
+		$I->waitForElementVisible('.chatboxtextarea', 15);
 
 		// write a message to them
 		$I->fillField('.chatboxtextarea', 'is anyone there?');
 		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
-		$I->waitForText('is anyone there?', 10, '.chatboxcontent');
+		$I->waitForText('is anyone there?', 20, '.chatboxcontent');
+
+		$I->expectNumMails(1);
+	}
+
+	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)
+	{
+		$I->login($this->foodsaver1['email']);
+
+		// view the other users profile and start a chat
+		$I->amOnPage('/profile/' . $this->foodsaver2['id']);
+		$I->click('Nachricht schreiben');
+		$I->waitForElementVisible('.chatboxtextarea', 15);
+
+		// write a message to them
+		$I->fillField('.chatboxtextarea', 'is anyone there?');
+		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
+		$I->waitForText('is anyone there?', 20, '.chatboxcontent');
 
 		$I->seeInDatabase('fs_msg', [
 			'foodsaver_id' => $this->foodsaver1['id'],
@@ -39,7 +59,7 @@ class ChatCest
 
 		$matthias = $I->haveFriend('matthias');
 		$matthias->does(function (AcceptanceTester $I) {
-			$I->login($this->foodsaver2['email'], 'pw');
+			$I->login($this->foodsaver2['email']);
 			$I->amOnPage('/');
 
 			$I->waitForActiveAPICalls();
