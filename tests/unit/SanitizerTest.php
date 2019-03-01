@@ -86,4 +86,23 @@ class SanitizerTest extends \Codeception\Test\Unit
 			$out
 		);
 	}
+
+	public function testTruncateWord()
+	{
+		$in = 'I am a too long text';
+		$this->assertEquals(' ...', $this->sanitizer->tt($in, 4));
+		$this->assertEquals('I ...', $this->sanitizer->tt($in, 5));
+		$this->assertEquals('I am ...', $this->sanitizer->tt($in, 8));
+		$this->assertEquals('I am ...', $this->sanitizer->tt($in, 9));
+		$this->assertEquals('I am a ...', $this->sanitizer->tt($in, 10));
+	}
+
+	public function testTruncateUtf8Word()
+	{
+		$in = 'Hi 😂 you!';
+		$this->assertEquals('Hi ...', $this->sanitizer->tt($in, 6));
+		$this->assertEquals('Hi ...', $this->sanitizer->tt($in, 7));
+		$this->assertEquals('Hi 😂 ...', $this->sanitizer->tt($in, 8));
+		$this->assertEquals($in, $this->sanitizer->tt($in, 9));
+	}
 }
