@@ -22,7 +22,7 @@ $mail = $I->getMails()[0];
 
 $I->assertEquals($mail->headers->to, $user['email'], 'correct recipient');
 
-$I->assertRegExp('/http:\/\/.*passwordReset.*&k=[a-f0-9]+/', $mail->html, 'mail should contain a link');
+$I->assertRegExp('/http:\/\/.*passwordReset.*&amp;k=[a-f0-9]+/', $mail->html, 'mail should contain a link');
 preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
 $link = $matches[1];
 
@@ -31,7 +31,7 @@ $link = $matches[1];
 // -> see commit 84ea2f1868b91a0cfabd85caa31139364b93f7f7
 
 // go to link in the mail
-$I->amOnPage($link);
+$I->amOnPage(html_entity_decode($link));
 $I->see('Jetzt kannst Du Dein Passwort ändern');
 $I->fillField('#pass1', $newpass);
 $I->fillField('#pass2', 'INVALID');
