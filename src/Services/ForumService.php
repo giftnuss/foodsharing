@@ -126,7 +126,7 @@ class ForumService
 				array_merge($data,
 					[
 						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
+						'name' => $recipient['name']
 					])
 			);
 		}
@@ -139,9 +139,9 @@ class ForumService
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
-				'theme' => $this->sanitizerService->plainToHtml($info['title']),
+				'theme' => $info['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $this->sanitizerService->plainToHtml($poster)
+				'poster' => $poster
 			];
 			$this->notificationMail($follower, 'forum_answer', $data);
 		}
@@ -155,9 +155,9 @@ class ForumService
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $this->sanitizerService->plainToHtml($theme['name']),
-				'poster' => $this->sanitizerService->plainToHtml($poster),
-				'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
+				'thread' => $theme['name'],
+				'poster' => $poster,
+				'bezirk' => $region['name'],
 			];
 
 			$this->notificationMail($foodsaver, 'forum_activation', $data);
@@ -178,9 +178,9 @@ class ForumService
 		}
 
 		$data = [
-			'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
-			'poster' => $this->sanitizerService->plainToHtml($poster),
-			'thread' => $this->sanitizerService->plainToHtml($theme['name']),
+			'bezirk' => $region['name'],
+			'poster' => $poster,
+			'thread' => $theme['name'],
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
