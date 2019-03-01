@@ -100,7 +100,7 @@ class ForumService
 	{
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
 		if ($moderated) {
-			$this->notifyAdminsModeratedThread($region, $threadId);
+			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
 		}
@@ -147,7 +147,7 @@ class ForumService
 		}
 	}
 
-	private function notifyAdminsModeratedThread($region, $threadId)
+	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
 	{
 		$theme = $this->model->getValues(array('foodsaver_id', 'name'), 'theme', $threadId);
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
@@ -156,6 +156,7 @@ class ForumService
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
 				'thread' => $theme['name'],
+				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $poster,
 				'bezirk' => $region['name'],
 			];
