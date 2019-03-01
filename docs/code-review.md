@@ -8,7 +8,7 @@ When you think there is something touched that might break one of the points lis
 
 ## What you should care about specifically
 
-### Okay to break master if you feel responsible. Try to not break it horribly
+### If you take responsibility it's okay to break master. Please try not to break it horribly :-D 
 We welcome new and beginner developers to contribute to foodsharing and understand that part of that might involve accidentally breaking bits of the site.
 And that is okay, as long as they stick around to fix what they broke.
 Still, try to be aware of what you are touching:
