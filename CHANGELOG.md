@@ -24,6 +24,7 @@
 - Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
 - Allow blog posts to be properly formatted !795 @djahnie
 - Some email templates still referred to lebensmittelretten.de instead of foodsharing.de !805 @zommuter
+- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 @jofranz
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
