@@ -142,12 +142,7 @@ final class MessageXhr extends Control
 							if ($m['id'] != $this->session->id()) {
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
 
-								/*
-								 * send an E-Mail if the user is not online
-								*/
-								if ($this->model->wantMsgEmailInfo($m['id'])) {
-									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
-								}
+								$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
 							}
 						}
 					}

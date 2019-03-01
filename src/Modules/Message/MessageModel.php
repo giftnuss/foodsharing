@@ -206,18 +206,6 @@ final class MessageModel extends Db
 		');
 	}
 
-	public function wantMsgEmailInfo($foodsaver_id): bool
-	{
-		/*
-		 * only send email if the user is not online
-		 */
-		if (!$this->mem->userIsActive($foodsaver_id) && $this->mem->get('infomail_message_' . $foodsaver_id)) {
-			return true;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Method returns an array of all conversation from the user.
 	 *
