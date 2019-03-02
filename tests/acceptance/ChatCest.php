@@ -31,11 +31,14 @@ class ChatCest
 		$I->waitForElementVisible('.chatboxtextarea', 15);
 
 		// write a message to them
-		$I->fillField('.chatboxtextarea', 'is anyone there?');
+		$I->fillField('.chatboxtextarea', 'is anyone there for the email?');
 		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
-		$I->waitForText('is anyone there?', 20, '.chatboxcontent');
+		$I->waitForText('is anyone there for', 20, '.chatboxcontent');
 
 		$I->expectNumMails(1);
+		$mail = $I->getMails()[0];
+		$I->assertContains('is anyone there for the email?', $mail->text);
+		$I->assertContains($this->foodsaver1['name'], $mail->subject);
 	}
 
 	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)

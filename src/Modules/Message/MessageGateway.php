@@ -22,9 +22,9 @@ final class MessageGateway extends BaseGateway
 	public function getConversationMemberNamesExcept(int $conversationId, int $excludeId): array
 	{
 		$members = $this->db->fetchAll(
-			'SELECT fs.name FROM fs_foodsaver_has_conversation fc, fs_foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = :id AND fs.deleted_at IS NULL AND fs.id <> :ownId',
+			'SELECT fs.name FROM fs_foodsaver_has_conversation fc, fs_foodsaver fs WHERE fs.id = fc.foodsaver_id AND fc.conversation_id = :id AND fs.deleted_at IS NULL AND fs.id <> :excludeId',
 			['id' => $conversationId,
-				'ownId' => $excludeId]
+				'excludeId' => $excludeId]
 		);
 
 		return array_map(function ($member) { return $member['name']; }, $members);

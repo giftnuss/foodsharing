@@ -118,35 +118,37 @@ final class MessageXhr extends Control
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 				$sessdata[$recipient['id']] = time();
 
-				if ($betriebName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
-					$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
+				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
+					$this->emailHelper->tplMail('chat_message_store', $recipient['email'], array(
 						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
-						'chatname' => 'Betrieb ' . $betriebName,
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-					));
-				} elseif ($memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $this->session->id())) {
-					$this->emailHelper->tplMail('chat_answer', $recipient['email'], array(
-						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $this->session->user('name'),
-						'name' => $recipient['name'],
-						'chatname' => implode(', ', $memberNames),
+						'storename' => $storeName,
 						'message' => $msg,
 						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 					));
 				} else {
-					$this->emailHelper->tplMail('new_message', $recipient['email'], array(
-						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $this->session->user('name'),
-						'name' => $recipient['name'],
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-					));
+					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
+					if (count($memberNames) > 1) {
+						$this->emailHelper->tplMail('chat_message_group', $recipient['email'], array(
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'sender' => $this->session->user('name'),
+							'name' => $recipient['name'],
+							'chatname' => implode(', ', $memberNames),
+							'message' => $msg,
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						));
+					} else {
+						$this->emailHelper->tplMail('chat_message', $recipient['email'], array(
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'sender' => $this->session->user('name'),
+							'name' => $recipient['name'],
+							'message' => $msg,
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						));
+					}
 				}
 			}
-
 			$_SESSION['lastMailMessage'] = $sessdata;
 		}
 	}
