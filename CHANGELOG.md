@@ -25,6 +25,8 @@
 - Allow blog posts to be properly formatted !795 @djahnie
 - Some email templates still referred to lebensmittelretten.de instead of foodsharing.de !805 @zommuter
 - Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
+- Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
+- Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -32,6 +34,7 @@
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
 - handle pickup signups via rest api !783 @NerdyProjects
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+- Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
@@ -48,6 +51,7 @@
 - Email templates are no longer stored in the database but the repository #502 !805 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
+- Test email templates for new forum messages
 
 # 2019-02-25 Hotfix
 
