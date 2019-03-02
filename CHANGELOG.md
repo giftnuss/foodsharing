@@ -9,6 +9,7 @@
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800
     - Briefer messages for better content preview !805, !806
+- Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -80,8 +81,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
 - Added API endpoints for basket pictures !671 @alex.simm 
-- Allow use of markdown in fairteiler description !690 @NerdyProjects
-- Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Added member list for districts and work groups !697 @djahnie
