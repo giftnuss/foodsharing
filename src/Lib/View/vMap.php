@@ -3,7 +3,6 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 
 class vMap extends vCore
 {
@@ -15,11 +14,6 @@ class vMap extends vCore
 	private $marker;
 
 	/**
-	 * @var Func
-	 */
-	private $func;
-
-	/**
 	 * @var Db
 	 */
 	private $model;
@@ -27,7 +21,6 @@ class vMap extends vCore
 	public function __construct($center = false)
 	{
 		global $container;
-		$this->func = $container->get(Func::class);
 		$this->model = $container->get(Db::class);
 
 		if (!$center) {

@@ -108,7 +108,7 @@ class WorkGroupXhr extends Control
 				// tplMail uses AsyncMail, which in turn doesn't seem to provide CC or BCC, so use TO...
 				$recipients = array($group['email'], $from);
 
-				$this->emailHelper->tplMail(24, $recipients, array(
+				$this->emailHelper->tplMail('group_message', $recipients, array(
 					'gruppenname' => $group['name'],
 					'message' => $message
 				), $from);

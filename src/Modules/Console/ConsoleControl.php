@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Console;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 
 class ConsoleControl
 {
@@ -12,10 +11,6 @@ class ConsoleControl
 	 * @var Db
 	 */
 	protected $model;
-	/**
-	 * @var Func
-	 */
-	protected $func;
 
 	/**
 	 * @var Mem
@@ -24,14 +19,6 @@ class ConsoleControl
 
 	public function __construct()
 	{
-	}
-
-	/**
-	 * @required
-	 */
-	public function setFunc(Func $func)
-	{
-		$this->func = $func;
 	}
 
 	/**

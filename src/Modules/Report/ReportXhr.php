@@ -88,7 +88,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->func->info('Meldung wurde bestätigt!');
+			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
 			return [
 				'status' => 1,
@@ -101,7 +101,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->func->info('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,
@@ -127,7 +127,7 @@ class ReportXhr extends Control
 			$bid = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->func->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
 

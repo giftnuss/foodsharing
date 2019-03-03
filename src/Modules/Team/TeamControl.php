@@ -23,8 +23,8 @@ class TeamControl extends Control
 
 	public function index(): void
 	{
-		$this->pageHelper->addBread($this->func->s('team'), '/team');
-		$this->pageHelper->addTitle($this->func->s('team'));
+		$this->pageHelper->addBread($this->translationHelper->s('team'), '/team');
+		$this->pageHelper->addTitle($this->translationHelper->s('team'));
 
 		// Three types of pages:
 		// a) /team - displays board
@@ -53,8 +53,8 @@ class TeamControl extends Control
 		if ($teamType = $this->uriStr(2)) {
 			if ($teamType === 'ehemalige') {
 				// Type b, display "Ehemalige"
-				$this->pageHelper->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
-				$this->pageHelper->addTitle($this->func->s('Ehemalige'));
+				$this->pageHelper->addBread($this->translationHelper->s('Ehemalige'), '/team/ehemalige');
+				$this->pageHelper->addTitle($this->translationHelper->s('Ehemalige'));
 				$this->displayTeamContent(1564, 54);
 
 				return;

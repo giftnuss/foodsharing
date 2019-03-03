@@ -10,13 +10,6 @@ The communication with the database is found in Model classes.
 For example we can find `sql`-commands to manipulate a foodsaver in `/src/Modules/Foodsaver/FoodsaverModel.php`.
 Those are executed with the functions inherited from the `Db` class (see `use Foodsharing\Lib\Db\Db;`, for example `$this->q(...)` where `q` stands for `query`.
 
-### func.inc.php
-
-In the past every function that would be useful in several pages went into `func.inc.php`.
-That is why there are very short and cryptic function names and several functions for very similar use cases.
-In the future we want to reduce that.
-<!-- todo: where do those things go to? -->
-
 ## Newer code structure
 
 Instead of model classes we move towards Gateway classes.
