@@ -21,14 +21,16 @@ class UploadsService
 			ROOT_DIR,
 			'data/uploads',
 			$uuid[0],
-			$uuid[1],
+			$uuid[1] . $uuid[2],
 			$filename
 		]);
 	}
 
 	public function isValidImage(string $file): bool
 	{
-		return false;
+		$img = new Imagick($file);
+
+		return $img->valid();
 	}
 
 	public function stripImageExifData(string $input, string $output): void
