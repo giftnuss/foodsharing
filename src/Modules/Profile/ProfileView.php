@@ -277,7 +277,7 @@ class ProfileView extends View
 		$foodBasketCount = '
 				<a href="/essenskoerbe">
 				    <span class="item stat_basketcount">
-					    <span class="val">' . number_format($this->basketGateway->getFoodbasketCount($this->foodsaver['id']), 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					    <span class="val">' . number_format($this->foodsaver['basketCount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					    <span class="name">Essenskörbe</span>
 				    </span>
 				</a>';

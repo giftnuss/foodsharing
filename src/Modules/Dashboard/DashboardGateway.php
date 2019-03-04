@@ -60,7 +60,7 @@ class DashboardGateway extends BaseGateway
 		', [':limit' => $limit]);
 	}
 
-	public function listCloseBaskets($id, $loc, $distance = 30)
+	public function listCloseBaskets($id, $loc, $distance = 40)
 	{
 		return $this->db->fetchAll('
 			SELECT

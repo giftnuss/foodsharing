@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Basket\BasketGateway;
 
 final class ProfileControl extends Control
 {
@@ -11,15 +12,18 @@ final class ProfileControl extends Control
 	private $fs_id;
 	private $regionGateway;
 	private $profileGateway;
+	private $basketGateway;
 
 	public function __construct(
 		ProfileView $view,
 		RegionGateway $regionGateway,
-		ProfileGateway $profileGateway
+		ProfileGateway $profileGateway,
+		BasketGateway $basketGateway
 	) {
 		$this->view = $view;
 		$this->profileGateway = $profileGateway;
 		$this->regionGateway = $regionGateway;
+		$this->basketGateway = $basketGateway;
 
 		parent::__construct();
 
@@ -34,7 +38,7 @@ final class ProfileControl extends Control
 				if (is_null($data['deleted_at']) || $this->session->may('orga')) {
 					$this->foodsaver = $data;
 					$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
-					$this->foodsaver['basketCount'] = $this->basketGateway->getFoodbasketCount($this->foodsaver['id']);
+					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodbaskets($this->foodsaver['id']);
 
 					$this->view->setData($this->foodsaver);
 
