@@ -1,5 +1,5 @@
 {
-  "title": "Foodsharing Developer Documentation",
+  "title": "foodsharing Developer Documentation",
   "gitbook": ">3.0.0",
   "structure": {
     "readme": "README.md"
@@ -19,7 +19,7 @@
   },
   "links": {
     "sidebar": {
-      "Foodsharing Developer Documentation": "/"
+      "foodsharing Developer Documentation": "/"
     }
   }
 }

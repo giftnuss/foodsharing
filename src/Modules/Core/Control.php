@@ -12,8 +12,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\MessageGateway;
-use Foodsharing\Modules\Store\StoreGateway;
 use ReflectionClass;
 
 abstract class Control
@@ -458,59 +456,7 @@ abstract class Control
 		return false;
 	}
 
-	public function convMessage($recipient, $conversation_id, $msg, MessageGateway $messageGateway, StoreGateway $storeGateway, $tpl_id = 9)
-	{
-		/*
-		 * only send email if the user is not online
-		 */
-
-		if (!$this->mem->userOnline($recipient['id'])) {
-			/*
-			 * only send email if the user want to retrieve emails
-			 */
-			if ($this->mem->user($recipient['id'], 'infomail')) {
-				if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-					$sessdata = array();
-				}
-
-				if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
-					$sessdata[$recipient['id']] = time();
-
-					if ($betriebName = $storeGateway->getStoreNameByConversationId($conversation_id)) {
-						$this->emailHelper->tplMail(30, $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => $this->session->user('name'),
-							'name' => $recipient['name'],
-							'chatname' => 'Betrieb ' . $betriebName,
-							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-						));
-					} elseif ($memberNames = $messageGateway->getConversationMemberNames($conversation_id)) {
-						$this->emailHelper->tplMail(30, $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => $this->session->user('name'),
-							'name' => $recipient['name'],
-							'chatname' => implode(', ', $memberNames),
-							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-						));
-					} else {
-						$this->emailHelper->tplMail($tpl_id, $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-							'sender' => $this->session->user('name'),
-							'name' => $recipient['name'],
-							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-						));
-					}
-				}
-
-				$_SESSION['lastMailMessage'] = $sessdata;
-			}
-		}
-	}
-
-	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 9)
+	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
 	{
 		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {

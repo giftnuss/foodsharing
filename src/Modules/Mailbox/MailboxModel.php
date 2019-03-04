@@ -509,7 +509,7 @@ class MailboxModel extends Db
 			) {
 				foreach ($bezirke as $b) {
 					if (empty($b['email_name'])) {
-						$b['email_name'] = 'Foodsharing ' . $b['name'];
+						$b['email_name'] = 'foodsharing ' . $b['name'];
 						$this->update(
 							'
 								UPDATE `fs_bezirk` 

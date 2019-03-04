@@ -167,9 +167,9 @@ class ForumPostCest
 		$mail = $I->getMails()[0];
 		$I->assertContains($title, $mail->text);
 		$I->assertContains('tigt werden', $mail->subject);
-		$I->assertRegExp('/http:\/\/.*bezirk.*&tid=[0-9]+/', $mail->html, 'mail should contain a link to thread');
+		$I->assertRegExp('/http:\/\/.*bezirk.*&amp;tid=[0-9]+/', $mail->html, 'mail should contain a link to thread');
 		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
-		$link = $matches[1];
+		$link = html_entity_decode($matches[1]);
 		$I->deleteAllMails();
 		$admin = $I->haveFriend('admin');
 		$admin->does(function (AcceptanceTester $I) use ($link, $title) {
