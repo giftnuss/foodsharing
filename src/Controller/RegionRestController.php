@@ -42,38 +42,56 @@ class RegionRestController extends AbstractFOSRestController
 	 */
 	public function joinRegionAction($regionId)
 	{
-		if ($region = $this->regionGateway->getBezirk($regionId)) {
-			if ($this->regionPermissions->mayJoinRegion($regionId)) {
-				$this->regionGateway->linkBezirk($this->session->id(), $regionId);
+		$this->validateRegionOrThrowException($regionId);
 
-				if (!$this->session->getCurrentBezirkId()) {
-					$this->foodsaverGateway->updateProfile($this->session->id(), ['bezirk_id' => $regionId]);
-				}
+		$region = $this->regionGateway->getBezirk($regionId);
 
-				$bots = $this->foodsaverGateway->getBotschafter($regionId);
-				$foodsaver = $this->session->get('user');
-				$this->bellGateway->addBell(
-					$bots,
-					'new_foodsaver_title',
-					$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
-					$this->imageService->img($foodsaver['photo'], 50),
-					array('href' => '/profile/' . (int)$this->session->id() . ''),
-					array(
-						'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
-						'bezirk' => $region['name']
-					),
-					'new-fs-' . $this->session->id(),
-					true
-				);
+		$sessionId = $this->session->id();
 
-				$view = $this->view([], 200);
+		$this->regionGateway->linkBezirk($sessionId, $regionId);
 
-				return $this->handleView($view);
-			} else {
-				throw new HttpException(403);
-			}
-		} else {
+		if (!$this->session->getCurrentBezirkId()) {
+			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
+		}
+
+		$bots = $this->foodsaverGateway->getBotschafter($regionId);
+		$foodsaver = $this->session->get('user');
+		$this->bellGateway->addBell(
+			$bots,
+			'new_foodsaver_title',
+			$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
+			$this->imageService->img($foodsaver['photo'], 50),
+			array('href' => '/profile/' . (int)$sessionId . ''),
+			array(
+				'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
+				'bezirk' => $region['name']
+			),
+			'new-fs-' . $sessionId,
+			true
+		);
+
+		$view = $this->view([], 200);
+
+		return $this->handleView($view);
+	}
+
+	private function validateRegionOrThrowException($regionId)
+	{
+		$this->throwExceptionIfRegionDoesNotExist($regionId);
+		$this->throwExceptionIfJoiningRegionIsNotAllowed($regionId);
+	}
+
+	private function throwExceptionIfRegionDoesNotExist($regionId)
+	{
+		if (!$this->regionGateway->getBezirk($regionId)) {
 			throw new HttpException(404);
+		}
+	}
+
+	private function throwExceptionIfJoiningRegionIsNotAllowed($regionId)
+	{
+		if (!$this->regionPermissions->mayJoinRegion($regionId)) {
+			throw new HttpException(403);
 		}
 	}
 }

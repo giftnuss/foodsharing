@@ -17,9 +17,21 @@ class RestNormalization
 	 *
 	 * @return array
 	 */
-	public static function normalizeFoodsaver($data, $prefix = ''): array
+	public static function normalizeFoodsaver(array $data, string $prefix = ''): array
 	{
 		//sleep_status is used with and without prefix
+		$sleepStatus = self::getSleepStatus($data, $prefix);
+
+		return [
+			'id' => (int)$data[$prefix . 'id'],
+			'name' => $data[$prefix . 'name'],
+			'avatar' => $data[$prefix . 'photo'] ?? null,
+			'sleepStatus' => $sleepStatus,
+		];
+	}
+
+	private static function getSleepStatus(array $data, string $prefix)
+	{
 		if (isset($data[$prefix . 'sleep_status'])) {
 			$sleepStatus = $data[$prefix . 'sleep_status'];
 		} elseif (isset($data['sleep_status'])) {
@@ -28,11 +40,6 @@ class RestNormalization
 			$sleepStatus = null;
 		}
 
-		return [
-			'id' => (int)$data[$prefix . 'id'],
-			'name' => $data[$prefix . 'name'],
-			'avatar' => $data[$prefix . 'photo'] ?? null,
-			'sleepStatus' => $sleepStatus,
-		];
+		return $sleepStatus;
 	}
 }
