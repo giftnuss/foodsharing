@@ -128,7 +128,7 @@ final class MessageGateway extends BaseGateway
 				m.`time` DESC
 
 			LIMIT 0,:limit
-		', [':conf_id' => $conversation_id, ':last_msg_id' => $last_message_id, ':limit' => $limit]);
+		', [':conv_id' => $conversation_id, ':last_msg_id' => $last_message_id, ':limit' => $limit]);
 	}
 
 	public function getLastMessages($conv_id, $last_msg_id): array
@@ -157,6 +157,6 @@ final class MessageGateway extends BaseGateway
 
 			ORDER BY
 				m.`time` ASC
-		', [':conf_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
+		', [':conv_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
 	}
 }
