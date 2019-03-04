@@ -4,13 +4,13 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
-- Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - Made email notifications great again #450 @zommuter: 
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
+- Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec

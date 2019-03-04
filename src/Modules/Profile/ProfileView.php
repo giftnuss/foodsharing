@@ -19,7 +19,7 @@ class ProfileView extends View
 			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
-		if ($fetchDates) { // BOT functionality
+		if ($fetchDates) { // AMB functionality
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
@@ -29,13 +29,13 @@ class ProfileView extends View
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
-		if ($showSideInfoCompanies && $userCompanies) { // BOT functionality
+		if ($showSideInfoCompanies && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 		$page->render();
 	}
 
-	private function fetchDates($fetchDates) // BOT functionality
+	private function fetchDates($fetchDates) // AMB functionality
 	{
 		$out = '
 				<div class="ui-padding" id="double">
@@ -184,13 +184,13 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->foodsaver['botschafter']) {
-			$bot = array();
+			$ambassador = array();
 			foreach ($this->foodsaver['botschafter'] as $b) {
-				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+				$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
 				'name' => $this->translationHelper->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
-				'val' => implode(', ', $bot)
+				'val' => implode(', ', $ambassador)
 			);
 		}
 
@@ -201,7 +201,7 @@ class ProfileView extends View
 				if ($b['id'] == $this->foodsaver['bezirk_id']) {
 					$fsHomeDistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
-				if (!isset($bot[$b['id']])) {
+				if (!isset($ambassador[$b['id']])) {
 					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
 			}
@@ -220,17 +220,17 @@ class ProfileView extends View
 		}
 
 		if ($this->foodsaver['orga']) {
-			$bot = array();
+			$ambassador = array();
 			foreach ($this->foodsaver['orga'] as $b) {
 				if ($this->session->isOrgaTeam()) {
-					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+					$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				} else {
-					$bot[$b['id']] = $b['name'];
+					$ambassador[$b['id']] = $b['name'];
 				}
 			}
 			$infos[] = array(
 				'name' => $this->translationHelper->sv('foodsaver_workgroups', array('gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
-				'val' => implode(', ', $bot)
+				'val' => implode(', ', $ambassador)
 			);
 		}
 
