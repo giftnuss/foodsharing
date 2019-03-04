@@ -2,8 +2,9 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -18,28 +19,31 @@ class ForumService
 	private $bellGateway;
 	/* @var Db */
 	private $model;
-	private $func;
 	private $session;
 	private $sanitizerService;
+	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
-		Func $func,
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
-		$this->func = $func;
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -116,12 +120,12 @@ class ForumService
 	public function notificationMail($recipients, $tpl, $data)
 	{
 		foreach ($recipients as $recipient) {
-			$this->func->tplMail(
+			$this->emailHelper->tplMail(
 				$tpl,
 				$recipient['email'],
 				array_merge($data,
 					[
-						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
 					])
 			);
@@ -139,7 +143,7 @@ class ForumService
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $this->sanitizerService->plainToHtml($poster)
 			];
-			$this->notificationMail($follower, 19, $data);
+			$this->notificationMail($follower, 'forum_answer', $data);
 		}
 	}
 
@@ -156,7 +160,7 @@ class ForumService
 				'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
 			];
 
-			$this->notificationMail($foodsaver, 20, $data);
+			$this->notificationMail($foodsaver, 'forum_activation', $data);
 		}
 	}
 
@@ -180,7 +184,8 @@ class ForumService
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
-		$this->notificationMail($foodsaver, $ambassadorForum ? 13 : 12, $data);
+		$this->notificationMail($foodsaver,
+			$ambassadorForum ? 'new_region_ambassador_message' : 'new_region_message', $data);
 	}
 
 	public function addReaction($fsId, $postId, $key)

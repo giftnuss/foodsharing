@@ -49,7 +49,7 @@ class SettingsXhr extends Control
 
 	public function changemail2()
 	{
-		if ($this->func->validEmail($_GET['email'])) {
+		if ($this->emailHelper->validEmail($_GET['email'])) {
 			if ($this->foodsaverGateway->emailExists($_GET['email'])) {
 				return array(
 					'status' => 1,
@@ -61,8 +61,8 @@ class SettingsXhr extends Control
 			// anrede name link
 
 			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {
-				$this->func->tplMail(21, $_GET['email'], array(
-					'anrede' => $this->func->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+				$this->emailHelper->tplMail('change_email', $_GET['email'], array(
+					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
 					'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
 				));

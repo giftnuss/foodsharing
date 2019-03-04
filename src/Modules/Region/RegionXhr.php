@@ -5,19 +5,28 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 
-class RegionXhr extends Control
+final class RegionXhr extends Control
 {
 	private $responses;
+	private $foodsaverGateway;
 	private $forumGateway;
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Db $model, ForumGateway $forumGateway, ForumPermissions $forumPermissions, RegionHelper $regionHelper, \Twig\Environment $twig)
-	{
+	public function __construct(
+		Db $model,
+		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
+		RegionHelper $regionHelper,
+		\Twig\Environment $twig,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
@@ -74,8 +83,8 @@ class RegionXhr extends Control
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->func->tplMail(19, $f['email'], array(
-								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							$this->emailHelper->tplMail('forum_answer', $f['email'], array(
+								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
@@ -100,17 +109,16 @@ class RegionXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'message' => $this->func->s('post_could_not_saved')
+			'message' => $this->translationHelper->s('post_could_not_saved')
 		));
 		exit();
 	}
 
-	public function signout()
+	public function signout(): array
 	{
 		$data = $_GET;
 		if ($this->session->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
-			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->session->id() . ' ');
+			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
 
 			return array('status' => 1);
 		}

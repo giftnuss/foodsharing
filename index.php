@@ -1,38 +1,24 @@
 <?php
-/*
-if(isset($_GET['g_path']))
-{
-	$path = explode('/', $_GET['g_path']);
-	//print_r($path);
-
-
-	switch ($path[0])
-	{
-		case 'group' :
-			$_GET['page'] = 'bezirk';
-			$_GET['bid'] = $path[1];
-			$_GET['sub'] = $path[2];
-			break;
-
-		default:
-			break;
-	}
-
-}
-*/
 
 use Foodsharing\Debug\DebugBar;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
+
+/* @var $request Request */
+$request = Request::createFromGlobals();
+$response = new Response('--');
 
 /* @var $container Container */
 global $container;
@@ -47,7 +33,7 @@ header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
 if (defined('CSP_REPORT_URI')) {
-	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
+	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 }
 
 require_once 'lib/inc.php';
@@ -58,8 +44,11 @@ $mem = $container->get(Mem::class);
 /* @var $view_utils Utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $func Func */
-$func = $container->get(Func::class);
+/* @var $routeHelper RouteHelper */
+$routeHelper = $container->get(RouteHelper::class);
+
+/* @var $pageHelper PageHelper */
+$pageHelper = $container->get(PageHelper::class);
 
 /* @var $session Session */
 $session = $container->get(Session::class);
@@ -67,23 +56,23 @@ $session = $container->get(Session::class);
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 if (DebugBar::isEnabled()) {
-	$func->addHead(DebugBar::renderHead());
+	$pageHelper->addHead(DebugBar::renderHead());
 }
 
 if (DebugBar::isEnabled()) {
-	$func->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+	$pageHelper->addContent(DebugBar::renderContent(), CNT_BOTTOM);
 }
 
 if ($session->may()) {
 	if (isset($_GET['uc'])) {
 		if ($session->id() != $_GET['uc']) {
 			$mem->logout($session->id());
-			$func->goLogin();
+			$routeHelper->goLogin();
 		}
 	}
 }
 
-$app = $func->getPage();
+$app = $routeHelper->getPage();
 
 if (($class = $session->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
@@ -118,7 +107,7 @@ if ($isUsingResponse) {
 } else {
 	/* @var $twig \Twig\Environment */
 	$twig = $container->get(\Twig\Environment::class);
-	$page = $twig->render('layouts/' . $g_template . '.twig', $func->generateAndGetGlobalViewData());
+	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 }
 
 if (isset($cache) && $cache->shouldCache()) {

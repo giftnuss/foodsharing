@@ -6,6 +6,8 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
@@ -19,7 +21,6 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class Session
 {
-	private $func;
 	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
@@ -29,9 +30,10 @@ class Session
 	private $storeGateway;
 	private $db;
 	private $initialized = false;
+	private $routeHelper;
+	private $translationHelper;
 
 	public function __construct(
-		Func $func,
 		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -39,9 +41,10 @@ class Session
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
-		Db $db
+		Db $db,
+		RouteHelper $routeHelper,
+		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -50,6 +53,8 @@ class Session
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->db = $db;
+		$this->routeHelper = $routeHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -149,7 +154,7 @@ class Session
 			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
 				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
 			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->func->getPage(), ['settings', 'logout'])) {
+			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
 				return null;
 			}
 
@@ -255,7 +260,7 @@ class Session
 		}
 
 		if (!$title) {
-			$title = ' ' . $this->func->s($type);
+			$title = ' ' . $this->translationHelper->s($type);
 		} else {
 			$title = ' ';
 		}
@@ -394,7 +399,7 @@ class Session
 		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
-			$this->func->goPage('logout');
+			$this->routeHelper->goPage('logout');
 		}
 		$this->set('g_location', array(
 			'lat' => $fs['lat'],
@@ -617,5 +622,10 @@ class Session
 		}
 
 		return $this->isValidCsrfToken('cookie', $_SERVER['HTTP_X_CSRF_TOKEN']);
+	}
+
+	public function isMob(): bool
+	{
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 }

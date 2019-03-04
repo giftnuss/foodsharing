@@ -20,11 +20,11 @@ To work on an issue:
 2. Create a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier.
   * For example, the issue number `56` would have a branch named `56-some-descriptive-words`.
   * Optionally, add your name to the branch name; for example, `56-nicksellen-some-descriptive-words`.
-3. Make your changes.
+3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci-skip` which disables running the build and test on the Gitlab server.
 
 To submit your change:
 
-1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle`.
+1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle-local` (or if that does not work by running the slower `./scripts/fix`).
 2. Check if the tests pass locally, by running `./scripts/test`.
 3. Create a merge request to master for your branch early on.
   1. Select the template "Default".
@@ -41,10 +41,6 @@ The next steps will be:
   * See [environments on GitLab](https://gitlab.com/foodsharing-dev/foodsharing/environments) for an overview of the different environments.
 * Hang around and see if people in #foodsharing-beta on [Slack](https://yunity.slack.com/) find any issues, etc.
 * At some point in the future, once a few changes have been collected, they will all be deployed to production.
-
-## Troubleshooting
-
-(Work in progress.)
 
 ## Testing
 

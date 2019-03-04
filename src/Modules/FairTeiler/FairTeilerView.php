@@ -67,14 +67,14 @@ class FairTeilerView extends View
 
 	public function fairteilerForm($data = false)
 	{
-		$title = $this->func->s('new_fairteiler');
+		$title = $this->translationHelper->s('new_fairteiler');
 
 		$tagselect = '';
 		if ($data) {
-			$title = $this->func->sv('edit_fairteiler_name', $this->fairteiler['name']);
+			$title = $this->translationHelper->sv('edit_fairteiler_name', $this->fairteiler['name']);
 
 			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
-			$this->func->addJs('
+			$this->pageHelper->addJs('
 			$("#fairteiler-form").on("submit", function(ev){
 				if($("#bfoodsaver input[type=\'hidden\']").length == 0)
 				{
@@ -92,11 +92,11 @@ class FairTeilerView extends View
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
 			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'selected' => $data['bezirk_id'], 'required' => true)),
 			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
-			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
 			$this->v_utils->v_form_picture('picture', array('pic' => $data['picture'], 'resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,
-		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
+		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
 	public function wallposts()
@@ -110,22 +110,22 @@ class FairTeilerView extends View
 
 	public function followHidden()
 	{
-		$this->func->addJsFunc('
+		$this->pageHelper->addJsFunc('
 			function u_follow()
 			{
 				$("#follow-hidden").dialog("open");
 			}
 		');
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
-				title: "' . $this->func->sv('infotype_title', $this->sanitizerService->jsSafe($this->fairteiler['name'], '"')) . '",
+				title: "' . $this->translationHelper->sv('infotype_title', $this->sanitizerService->jsSafe($this->fairteiler['name'], '"')) . '",
 				autoOpen: false,
 				width: 500,
 				resizable: false,
 				buttons: {
-					"' . $this->func->s('save') . '": function(){
-						goTo("' . $this->func->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
+					"' . $this->translationHelper->s('save') . '": function(){
+						goTo("' . $this->routeHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
 			});		
@@ -136,9 +136,9 @@ class FairTeilerView extends View
 
 		return '
 			<div id="follow-hidden">
-				' . $this->v_utils->v_form_radio('infotype', array('desc' => $this->func->s('infotype_desc'), 'values' => array(
-				array('id' => 1, 'name' => $this->func->s('infotype_email')),
-				array('id' => 2, 'name' => $this->func->s('infotype_alert'))
+				' . $this->v_utils->v_form_radio('infotype', array('desc' => $this->translationHelper->s('infotype_desc'), 'values' => array(
+				array('id' => 1, 'name' => $this->translationHelper->s('infotype_email')),
+				array('id' => 2, 'name' => $this->translationHelper->s('infotype_alert'))
 			))) . '
 			</div>
 		';
@@ -152,7 +152,7 @@ class FairTeilerView extends View
 			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['verantwortlich'], array('scroller' => false)), 'verantwortliche Foodsaver');
 		}
 		if (!empty($this->follower['follow'])) {
-			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['follow']), $this->func->s('follower'));
+			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['follow']), $this->translationHelper->s('follower'));
 		}
 
 		return $out;
@@ -160,7 +160,7 @@ class FairTeilerView extends View
 
 	public function desc()
 	{
-		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->func->s('desc'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->translationHelper->s('desc'), array('class' => 'ui-padding'));
 	}
 
 	public function listFairteiler($bezirke)
@@ -173,9 +173,9 @@ class FairTeilerView extends View
 		}
 
 		if ($this->bezirk_id > 0) {
-			$this->func->addContent($this->topbar($this->func->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		} else {
-			$this->func->addContent($this->topbar($this->func->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->translationHelper->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		}
 
 		return $content;

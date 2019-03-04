@@ -5,6 +5,12 @@
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
+- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+- Made email notifications great again #450 @zommuter: 
+    - Responsible user in the FROM field !798
+    - Message excerpts in the SUBJECT !800
+    - Briefer messages for better content preview !805, !806
+- Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -13,13 +19,46 @@
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
 - Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 @jofranz
+- Fix forum "Antworten" button !786 @nicksellen
+- Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Non-followers can comment on Fairteilers again #457 !691 @janopae
+- Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
+- Allow blog posts to be properly formatted !795 @djahnie
+- Some email templates still referred to lebensmittelretten.de instead of foodsharing.de !805 @zommuter
+- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
 
 ## Refactoring
+- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- refactored profile from model to gateway !782 #9 @peter.toennies
+- Forbid to signup for non-existant pickups !783 @NerdyProjects
+- handle pickup signups via rest api !783 @NerdyProjects
+- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
+- Update mocha to version 6 @peter.toennies
+- Run all jobs except test and deployment on shared CI runners @NerdyProjects
+- Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
+- Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
+- Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
+- Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
+- Make sure old CI containers are removed in test stage !787 @NerdyProjects
+- added /nbProject to .gitinore !791 @k.miklobusec
+- Email templates are no longer stored in the database but the repository #502 !805 @zommuter
+- Phase out EmailTemplateAdmin !805 @zommuter
+- Flush redis before running tests #135 !807 @nicksellen
+
+# 2019-02-25 Hotfix
+
+We have to do some database maintenance for !792 which hopefully works fine and fast...
+
+## Bugfixes
+- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
+- Fix forum "Antworten" button !786 @nicksellen
+- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 
 # 2019-02-21
 

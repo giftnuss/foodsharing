@@ -1,9 +1,8 @@
 .defaults: &defaults
+  tags:
+  - shared
   image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
 
-  # run it on our foodsharing ci server
-  tags:
-  - non-shared
 
 .ssh: &ssh
   before_script:
@@ -18,6 +17,9 @@
 
 .deploy: &deploy
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   <<: *ssh
   stage: deploy
   dependencies:
@@ -45,29 +47,12 @@ triage:
   tags:
   - shared
 
-build:lint-backend:
-  <<: *defaults
-  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
-  stage: build
-  script:
-  - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
-  - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose
-  - vendor/bin/parallel-lint --no-progress --exclude vendor .
-  - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
-  cache:
-    key: backend:lint:v1
-    paths:
-    - vendor
-    - .php_cs.cache
-  except:
-  - schedules
-
 build:frontend:
   <<: *defaults
   image: node:11.9.0-alpine
   stage: build
   script:
-  - (cd client && yarn && yarn lint && yarn build)
+  - (cd client && yarn && yarn lint && yarn test && yarn build)
   cache:
     key: client:build:v2
     paths:
@@ -81,14 +66,20 @@ build:frontend:
 
 build:backend:
   <<: *defaults
+  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
   stage: build
   script:
+    - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+    - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose --ansi
+    - vendor/bin/parallel-lint --no-progress --exclude vendor .
+    - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
   cache:
     key: backend:build:v1
     paths:
     - vendor
+    - .php_cs.cache
   artifacts:
     expire_in: 1 week
     paths:
@@ -119,15 +110,18 @@ build:docs:
 
 test:
   <<: *defaults
+  # run it on our foodsharing ci server
+  tags:
+  - non-shared
   script:
   - composer validate --no-check-all --strict
   - ./scripts/ci.test
   after_script:
   # collect artifacts
-  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/
-  - docker cp foodsharing_ci_app:/app/tests/_output/ tests/_output
-  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt
-  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt
+  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/ || true
+  - docker cp foodsharing_ci_codeception:/app/tests/_output/ tests/_output || true
+  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt || true
+  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt || true
   # stop/kill all the containers
   - FS_ENV=ci ./scripts/rm
   # collect any test output
@@ -136,19 +130,6 @@ test:
     when: always
     paths:
     - tests/_output
-  except:
-  - schedules
-
-test:client:
-  <<: *defaults
-  image: node:11.9.0-alpine
-  stage: test
-  script:
-  - (cd client && yarn && yarn test)
-  cache:
-    key: client:build:v2
-    paths:
-    - client/node_modules
   except:
   - schedules
 

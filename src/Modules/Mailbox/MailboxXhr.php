@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
@@ -10,12 +11,18 @@ use Foodsharing\Services\SanitizerService;
 class MailboxXhr extends Control
 {
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		MailboxModel $model,
+		MailboxView $view,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 	}
@@ -46,9 +53,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -160,7 +167,7 @@ class MailboxXhr extends Control
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
-				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
@@ -262,7 +269,7 @@ class MailboxXhr extends Control
 
 				$to = array();
 				foreach ($an as $a) {
-					if ($this->func->validEmail($a)) {
+					if ($this->emailHelper->validEmail($a)) {
 						$t = explode('@', $a);
 
 						$to[] = array(
@@ -295,7 +302,7 @@ class MailboxXhr extends Control
 					return array(
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . $this->func->s('send_success') . '");
+									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
 					);
@@ -391,7 +398,7 @@ class MailboxXhr extends Control
 
 		if (is_array($email)) {
 			foreach ($email as $e) {
-				if ($this->func->validEmail($e)) {
+				if ($this->emailHelper->validEmail($e)) {
 					$this->model->addContact($e);
 					$mail->addRecipient($e);
 				}

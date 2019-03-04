@@ -12,14 +12,14 @@ class FoodsaverView extends View
 			return '<div id="fsform"></div>';
 		}
 
-		$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="/profile/' . (int)$foodsaver['id'] . '"><img style="display:none;" class="corner-all" src="' . $this->func->img($foodsaver['photo'], 'med') . '" /></a>');
+		$cnt = $this->v_utils->v_input_wrapper('Foto', '<a class="avatarlink corner-all" href="/profile/' . (int)$foodsaver['id'] . '"><img style="display:none;" class="corner-all" src="' . $this->imageService->img($foodsaver['photo'], 'med') . '" /></a>');
 		$cnt .= $this->v_utils->v_input_wrapper('Name', $foodsaver['name'] . ' ' . $foodsaver['nachname']);
-		$cnt .= $this->v_utils->v_input_wrapper('Rolle', $this->func->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
+		$cnt .= $this->v_utils->v_input_wrapper('Rolle', $this->translationHelper->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht']));
 
 		$cnt .= $this->v_utils->v_input_wrapper('Letzter Login', $foodsaver['last_login']);
 
 		$cnt .= $this->v_utils->v_input_wrapper('Optionen', '
-			<span class="button" onclick="fsapp.delfromBezirk(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
+			<span class="button" onclick="fsapp.deleteFromRegion(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
 		');
 
 		return $this->v_utils->v_field($cnt, $foodsaver['name'], array('class' => 'ui-padding'));
@@ -33,7 +33,7 @@ class FoodsaverView extends View
 			'<div id="' . $name . 'foodsaverlist">' .
 			$this->v_utils->v_field(
 				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'noshuffle' => true)),
-				$this->func->s('fs_in') . $bezirk['name'] . ($inactive ? $this->func->s('fs_list_not_logged_for_6_months') : '')
+				$this->translationHelper->s('fs_in') . $bezirk['name'] . ($inactive ? $this->translationHelper->s('fs_list_not_logged_for_6_months') : '')
 			) . '
 		</div>';
 	}
@@ -70,7 +70,7 @@ class FoodsaverView extends View
 			));
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#rolle").on("change", function(){
 				if(this.value == 4)
 				{
@@ -135,10 +135,10 @@ class FoodsaverView extends View
 	{
 		$content = '
 	<div style="text-align:center;margin-bottom:10px;">
-		<span id="delete-account">' . $this->func->s('delete_now') . '</span>
+		<span id="delete-account">' . $this->translationHelper->s('delete_now') . '</span>
 	</div>
 	';
 
-		return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), array('class' => 'ui-padding'));
 	}
 }

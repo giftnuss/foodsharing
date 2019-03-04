@@ -6,11 +6,11 @@ use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fSMTP;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
-use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class MailsControl extends ConsoleControl
 {
@@ -20,21 +20,26 @@ class MailsControl extends ConsoleControl
 	public static $smtp = false;
 	public static $last_connect;
 	private $mailsGateway;
-	private $mailboxModel;
 	private $database;
 	private $metrics;
+	private $routeHelper;
 
-	public function __construct(Db $model, MailsGateway $mailsGateway, MailboxModel $mailboxModel, Database $database, InfluxMetrics $metrics)
-	{
+	public function __construct(
+		Db $model,
+		MailsGateway $mailsGateway,
+		Database $database,
+		InfluxMetrics $metrics,
+		RouteHelper $routeHelper
+	) {
 		echo "creating mailscontrl!!!!\n";
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
 		$this->model = $model;
 		$this->mailsGateway = $mailsGateway;
-		$this->mailboxModel = $mailboxModel;
 		$this->database = $database;
 		$this->metrics = $metrics;
+		$this->routeHelper = $routeHelper;
 		parent::__construct();
 		echo "-------------------------------------\n";
 	}
@@ -133,7 +138,7 @@ class MailsControl extends ConsoleControl
 							}
 							if ($text != null) {
 								$body = $text;
-								$html = nl2br($this->func->autolink($text));
+								$html = nl2br($this->routeHelper->autolink($text));
 							} else {
 								++$stats['failure'];
 								continue;

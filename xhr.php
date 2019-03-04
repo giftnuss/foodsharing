@@ -45,7 +45,6 @@ $csrf_whitelist = [
 	// 'warteRequest',
 	// 'betriebRequest',
 	// 'saveBezirk',
-	// 'addFetcher',
 	// 'delDate',
 	// 'fetchDeny',
 	// 'fetchConfirm',

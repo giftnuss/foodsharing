@@ -16,7 +16,7 @@ class ProfileView extends View
 		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
-			$this->func->addStyle('#wallposts .tools{display:none;}');
+			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
 		if ($fetchDates) { // BOT functionality
@@ -47,7 +47,7 @@ class ProfileView extends View
 			$out .= '
 						<li>
 							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $userConfirmedForPickup . $this->func->niceDate($d['date_ts']) . '</span>
+								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($d['date_ts']) . '</span>
 							</a>
 						</li>
 						<li>
@@ -113,7 +113,7 @@ class ProfileView extends View
 
 	public function userNotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
 	{
-		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->func->s('user_notes_info')) . $notes);
+		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
 
 		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
@@ -135,20 +135,20 @@ class ProfileView extends View
 			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
 
 			$infos[] = array(
-				'name' => $this->func->s('last_login'),
+				'name' => $this->translationHelper->s('last_login'),
 				'val' => $last_login->format('d.m.Y')
 			);
 			$infos[] = array(
-				'name' => $this->func->s('registration_date'),
+				'name' => $this->translationHelper->s('registration_date'),
 				'val' => $registration_date->format('d.m.Y')
 			);
 			$infos[] = array(
-				'name' => $this->func->s('private_mail'),
+				'name' => $this->translationHelper->s('private_mail'),
 				'val' => '<a href="/?page=mailbox&mailto=' . urlencode($this->foodsaver['email']) . '">' . $this->foodsaver['email'] . '</a>'
 			);
 			if (isset($this->foodsaver['mailbox'])) {
 				$infos[] = array(
-					'name' => $this->func->s('mailbox'),
+					'name' => $this->translationHelper->s('mailbox'),
 					'val' => '<a href="/?page=mailbox&mailto=' . urlencode($this->foodsaver['mailbox']) . '">' . $this->foodsaver['mailbox'] . '</a>'
 				);
 			}
@@ -189,7 +189,7 @@ class ProfileView extends View
 				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
-				'name' => $this->func->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->func->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
+				'name' => $this->translationHelper->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
 				'val' => implode(', ', $bot)
 			);
 		}
@@ -207,13 +207,13 @@ class ProfileView extends View
 			}
 			if (!empty($fsa)) {
 				$infos[] = array(
-					'name' => $this->func->sv('foodsaver_districts', array('name' => $this->foodsaver['name'])),
+					'name' => $this->translationHelper->sv('foodsaver_districts', array('name' => $this->foodsaver['name'])),
 					'val' => implode(', ', $fsa)
 				);
 			}
 			if (!empty($fsHomeDistrict)) {
 				$infos[] = array(
-					'name' => $this->func->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
+					'name' => $this->translationHelper->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
 					'val' => implode(', ', $fsHomeDistrict)
 				);
 			}
@@ -229,21 +229,21 @@ class ProfileView extends View
 				}
 			}
 			$infos[] = array(
-				'name' => $this->func->sv('foodsaver_workgroups', array('gender' => $this->func->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
+				'name' => $this->translationHelper->sv('foodsaver_workgroups', array('gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
 				'val' => implode(', ', $bot)
 			);
 		}
 
 		if ($this->foodsaver['sleep_status'] == 1) {
 			$infos[] = array(
-				'name' => $this->func->sv('foodsaver_sleeping_hat_time', array('name' => $this->foodsaver['name'], 'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
+				'name' => $this->translationHelper->sv('foodsaver_sleeping_hat_time', array('name' => $this->foodsaver['name'], 'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
 				'val' => $this->foodsaver['sleep_msg']
 			);
 		}
 
 		if ($this->foodsaver['sleep_status'] == 2) {
 			$infos[] = array(
-				'name' => $this->func->sv('foodsaver_sleeping_hat_time_undefined', array('name' => $this->foodsaver['name'])),
+				'name' => $this->translationHelper->sv('foodsaver_sleeping_hat_time_undefined', array('name' => $this->foodsaver['name'])),
 				'val' => $this->foodsaver['sleep_msg']
 			);
 		}
@@ -319,7 +319,7 @@ class ProfileView extends View
 				</div>';
 			}
 
-			$this->func->addJs('
+			$this->pageHelper->addJs('
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');
@@ -345,10 +345,10 @@ class ProfileView extends View
 				}
 				$bananaCount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->func->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
-						<span class="time">' . $this->func->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
+						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
 					</div></td>
 				</tr>';
 			}
@@ -392,13 +392,13 @@ class ProfileView extends View
 						$class = 'verify';
 						$typeOfChange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				}
 				if ($changeType == 1) {
 					if (!is_null($h['bot_id'])) {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . ' durch:</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
-						$out .= '<li class="title">' . $this->func->niceDate($h['date_ts']) . '</li>';
+						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
 					}
 				}
 
@@ -442,7 +442,7 @@ class ProfileView extends View
 		}
 
 		return '<div style="text-align:center;">
-					' . $this->func->avatar($this->foodsaver, 130) . $sleep_info . '
+					' . $this->imageService->avatar($this->foodsaver, 130) . $sleep_info . '
 				</div>
 				' . $online . '
 				' . $menu;
@@ -469,10 +469,10 @@ class ProfileView extends View
 
 		if ($this->session->mayHandleReports()) {
 			if (isset($this->foodsaver['note_count'])) {
-				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->func->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
+				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
 			}
 			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
-				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->func->sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
+				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->translationHelper->sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
 			}
 		}
 
@@ -497,7 +497,7 @@ class ProfileView extends View
 			$title = '<h3>' . $title . '</h3>';
 		}
 		$out = '
-	<div id="' . $this->func->id($title) . '" class="xv_set">
+	<div id="' . $this->identificationHelper->id($title) . '" class="xv_set">
 		' . $title;
 		foreach ($rows as $r) {
 			$out .= '
