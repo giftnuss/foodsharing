@@ -181,7 +181,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(30)) {
 			foreach ($foodsaver as $fs) {
 				$inactive_fsids[$fs['id']] = $fs['id'];
-				$this->emailHelper->tplMail(27, $fs['email'], array(
+				$this->emailHelper->tplMail('sleeping_automated', $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
@@ -198,7 +198,7 @@ class MaintenanceControl extends ConsoleControl
 		 */
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
 			foreach ($foodsaver as $fs) {
-				$this->emailHelper->tplMail(26, $fs['email'], array(
+				$this->emailHelper->tplMail('sleeping_warning', $fs['email'], array(
 					'name' => $fs['name'],
 					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
 				));
@@ -318,19 +318,6 @@ class MaintenanceControl extends ConsoleControl
 
 	private function memcacheUserInfo()
 	{
-		if ($foodsaver = $this->model->getUserInfo()) {
-			foreach ($foodsaver as $fs) {
-				$info = false;
-				if ($fs['infomail_message']) {
-					$info = true;
-				}
-
-				$this->mem->userSet($fs['id'], 'infomail', $info);
-			}
-
-			self::info('memcache userinfo updated');
-		}
-
 		$admins = $this->foodsaverGateway->getBotIds(0, false, true);
 		if (!$admins) {
 			$admins = array();
@@ -463,7 +450,7 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
-				$this->emailHelper->tplMail(28, $fs['fs_email'], array(
+				$this->emailHelper->tplMail('fetch_warning', $fs['fs_email'], array(
 					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],

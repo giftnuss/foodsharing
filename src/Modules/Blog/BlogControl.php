@@ -12,6 +12,7 @@ class BlogControl extends Control
 	private $blogGateway;
 	private $timeHelper;
 	private $dataHelper;
+	private $identificationHelper;
 
 	public function __construct(
 		BlogModel $model,
@@ -26,9 +27,10 @@ class BlogControl extends Control
 		$this->blogGateway = $blogGateway;
 		$this->timeHelper = $timeHelper;
 		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
-		if ($id = $this->$identificationHelper->getActionId('delete')) {
+		if ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->model->canEdit($id)) {
 				if ($this->model->del_blog_entry($id)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_deleted'));

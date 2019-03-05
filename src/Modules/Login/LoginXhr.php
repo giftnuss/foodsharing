@@ -30,20 +30,6 @@ class LoginXhr extends Control
 	}
 
 	/**
-	 * Method to add some user specific vars to the memcache for more performance and less db access.
-	 */
-	private function fillMemcacheUserVars()
-	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->session->id());
-
-		if ((int)$info > 0) {
-			$this->mem->userSet($this->session->id(), 'infomail', true);
-		} else {
-			$this->mem->userSet($this->session->id(), 'infomail', false);
-		}
-	}
-
-	/**
 	 * here arrives the photo what user cann upload in the quick join form.
 	 */
 	public function photoupload()
@@ -107,7 +93,7 @@ class LoginXhr extends Control
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->emailHelper->tplMail(25, $data['email'], array(
+			$this->emailHelper->tplMail('join', $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
