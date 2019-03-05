@@ -170,9 +170,8 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($message = $this->mailboxGateway->getMessage(
-			$_GET['mid'], $this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))
-		)) {
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))) {
+			$message = $this->mailboxGateway->getMessage($_GET['mid']);
 			$sender = @json_decode($message['sender'], true);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
@@ -307,18 +306,17 @@ class MailboxXhr extends Control
 					1
 				)
 				) {
-					$this->mailboxGateway->setAnswered(
-						$_POST['reply'],
-						$this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_POST['reply']))
-					);
+					if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_POST['reply']))) {
+						$this->mailboxGateway->setAnswered($_POST['reply']);
+					}
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => '
 									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
-					);
+					];
 				}
 			}
 		}
@@ -349,8 +347,8 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($mail = $this->mailboxGateway->getMessage(
-			$_GET['id'], $this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id'])))) {
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id']))) {
+			$mail = $this->mailboxGateway->getMessage($_GET['id']);
 			$this->mailboxGateway->setRead($_GET['id'], 1);
 			$mail['attach'] = trim($mail['attach']);
 			if (!empty($mail['attach'])) {

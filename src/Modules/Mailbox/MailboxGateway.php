@@ -23,7 +23,7 @@ class MailboxGateway extends BaseGateway
 
 	public function addContact(string $email, int $fsId): bool
 	{
-		$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => $email]);
+		$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => strip_tags($email)]);
 
 		if (!$id) {
 			$id = $this->db->insert('fs_contact', ['email' => $email]);
@@ -67,7 +67,7 @@ class MailboxGateway extends BaseGateway
 
 	public function addMailbox(string $name, int $member = 0): int
 	{
-		return $this->db->insert('fs_mailbox', ['name' => $name, 'member' => $member]);
+		return $this->db->insert('fs_mailbox', ['name' => strip_tags($name), 'member' => $member]);
 	}
 
 	public function getNewCount(array $boxes): array
@@ -87,7 +87,7 @@ class MailboxGateway extends BaseGateway
 					`fs_mailbox_message` mm
 
 			WHERE 	mm.mailbox_id = mb.id
-			AND 	mb.id IN(' . array_map('intval', $barr) . ')
+			AND 	mb.id IN(' . implode(',', array_map('intval', $barr)) . ')
 			AND 	mm.read = 0
 				
 			GROUP BY mm.mailbox_id
@@ -95,9 +95,9 @@ class MailboxGateway extends BaseGateway
 		);
 	}
 
-	public function setAnswered(int $message_id, bool $may)
+	public function setAnswered(int $message_id)
 	{
-		if ($may && $this->getMailboxId($message_id)) {
+		if ($this->getMailboxId($message_id)) {
 			return $this->db->update('fs_mailbox_message', ['answer' => 1], ['id' => $message_id]);
 		}
 
@@ -126,9 +126,9 @@ class MailboxGateway extends BaseGateway
 		return $this->db->update('fs_mailbox_message', ['folder' => $folder], ['id' => $mail_id]);
 	}
 
-	public function getMessage(int $message_id, bool $may)
+	public function getMessage(int $message_id)
 	{
-		$mail = $this->db->fetch(
+		return $this->db->fetch(
 			'
 			SELECT 	m.`id`,
 					m.`folder`,
@@ -142,24 +142,14 @@ class MailboxGateway extends BaseGateway
 					m.`answer`,
 					m.`body`,
 					m.`mailbox_id`,
-					b.name AS mailbox
-				
-			FROM 	fs_mailbox_message m
-				
-			LEFT JOIN fs_mailbox b
-				
-			ON m.mailbox_id = b.id
-				
+					b.name AS mailbox				
+			FROM 	fs_mailbox_message m				
+			LEFT JOIN fs_mailbox b				
+			ON m.mailbox_id = b.id				
 			WHERE	m.id = :message_id
 		',
 			[':message_id' => $message_id]
 		);
-
-		if ($may) {
-			return $mail;
-		}
-
-		return false;
 	}
 
 	public function setRead(int $mail_id, int $read): int
@@ -218,13 +208,13 @@ class MailboxGateway extends BaseGateway
 			[
 				'mailbox_id' => $mailbox_id,
 				'folder' => $folder,
-				'sender' => $from,
-				'to' => $to,
-				'subject' => $subject,
-				'body' => $body,
-				'body_html' => $html,
-				'time' => $time,
-				'attach' => $attach,
+				'sender' => strip_tags($from),
+				'to' => strip_tags($to),
+				'subject' => strip_tags($subject),
+				'body' => strip_tags($body),
+				'body_html' => strip_tags($html),
+				'time' => strip_tags($time),
+				'attach' => strip_tags($attach),
 				'read' => $read,
 				'answer' => $answer,
 			]
@@ -312,7 +302,7 @@ class MailboxGateway extends BaseGateway
 				INSERT INTO `fs_mailbox_member`
 				(`mailbox_id`,`foodsaver_id`,`email_name`)
 				VALUES
-				' . array_map('intval', $insert) . '		
+				' . implode(',', array_map('intval', $insert)) . '		
 			'
 			);
 
@@ -386,7 +376,7 @@ class MailboxGateway extends BaseGateway
 						$tmp_name = $mb_name;
 						$i = 0;
 
-						while (($mb_id = $this->db->insert('fs_mailbox', ['name' => $tmp_name])) === false) {
+						while (($mb_id = $this->db->insert('fs_mailbox', ['name' => strip_tags($tmp_name)])) === false) {
 							++$i;
 							$tmp_name = $mb_name . $i;
 						}
@@ -418,7 +408,7 @@ class MailboxGateway extends BaseGateway
 						$b['email_name'] = 'Foodsharing ' . $b['name'];
 						$this->db->update(
 							'fs_bezirk',
-							['email_name' => $b['email_name']],
+							['email_name' => strip_tags($b['email_name'])],
 							['id' => (int)$b['bezirk_id']]
 						);
 					}
@@ -461,7 +451,7 @@ class MailboxGateway extends BaseGateway
 			$mb_id = 0;
 
 			if ($tmp_name[0] !== '.' && strlen($tmp_name) > 3) {
-				while (($mb_id = $this->db->insert('fs_mailbox', ['name' => $tmp_name])) === false) {
+				while (($mb_id = $this->db->insert('fs_mailbox', ['name' => strip_tags($tmp_name)])) === false) {
 					++$i;
 					$tmp_name = $mb_name . $i;
 				}
@@ -491,7 +481,7 @@ class MailboxGateway extends BaseGateway
 					$m['email_name'] = $m['name'] . '@' . PLATFORM_MAILBOX_HOST;
 					$this->db->update(
 						'fs_mailbox_member',
-						['email_name' => $m['name'] . '@' . PLATFORM_MAILBOX_HOST],
+						['email_name' => strip_tags($m['name']) . '@' . PLATFORM_MAILBOX_HOST],
 						['mailbox_id' => (int)$m['id'], 'foodsaver_id' => $fsId]
 					);
 				}
