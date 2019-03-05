@@ -197,8 +197,8 @@ class Db
 	}
 
 	/**
-	 * @deprecated use strip_tags() until the frontend can escape properly.
-	 * String escaping is not needed anymore with prepared statements
+	 * @deprecated use strip_tags() until the frontend can escape properly!
+	 * (The string escaping part is not needed anymore with prepared statements)
 	 */
 	public function strval($val, $html = false)
 	{
