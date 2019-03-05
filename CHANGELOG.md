@@ -52,6 +52,7 @@
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages
+- Update copy webpack plugin to version 5
 
 # 2019-02-25 Hotfix
 
