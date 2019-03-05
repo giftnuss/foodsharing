@@ -405,7 +405,7 @@ class MailboxGateway extends BaseGateway
 			) {
 				foreach ($regions as $b) {
 					if (empty($b['email_name'])) {
-						$b['email_name'] = 'Foodsharing ' . $b['name'];
+						$b['email_name'] = 'foodsharing ' . $b['name'];
 						$this->db->update(
 							'fs_bezirk',
 							['email_name' => strip_tags($b['email_name'])],
