@@ -119,14 +119,16 @@ class ProfileXhr extends Control
 			}
 			if ($_GET['type'] == 1) {
 				$history = $this->profileGateway->getPassHistory($_GET['fsid']);
-
 				$dia->setTitle('Passhistorie');
-
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
-
-			$dia->addOpt('width', '400px');
-			$dia->addOpt('height', '($(window).height()-100)', false);
+			if (true || $this->func->isMob()) {
+				$dia->addOpt('width', 'auto', false);
+				$dia->addOpt('height', 'auto', false);
+			} else {
+				$dia->addOpt('width', '800px', false);
+				$dia->addOpt('height', '($(window).height()-100)', false);
+			}
 
 			return $dia->xhrout();
 		}

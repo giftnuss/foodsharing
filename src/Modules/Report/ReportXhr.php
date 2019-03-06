@@ -131,7 +131,7 @@ class ReportXhr extends Control
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
 
-		$dialog->addOpt('width', '600', false);
+		$dialog->addOpt('width', '$(window).width()-15', false);
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
@@ -148,7 +148,7 @@ class ReportXhr extends Control
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
-		$dialog->addJs('$("#reportmessage").css("width","555px");');
+		//$dialog->addJs('$("#reportmessage").css("width","auto");');
 		$dialog->addButton('Meldung senden', '
 
 		if($("#reportreason").val() == 0)
