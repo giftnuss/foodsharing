@@ -106,7 +106,7 @@ class MailboxGateway extends BaseGateway
 
 	public function deleteMessage(int $mid): int
 	{
-		$attach = $this->db->fetchValueByCriteria('attach', 'mailbox_message', ['id' => $mid]);
+		$attach = $this->db->fetchValueByCriteria('mailbox_message', 'attach', ['id' => $mid]);
 		if (!empty($attach)) {
 			$attach = json_decode($attach, true);
 			if (is_array($attach)) {
@@ -223,7 +223,7 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		if ($mb = $this->db->fetchByCriteria(['name'], 'mailbox', ['id' => $mb_id])) {
+		if ($mb = $this->db->fetchByCriteria('mailbox', ['name'], ['id' => $mb_id])) {
 			if ($email_name = $this->db->fetchValue(
 				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
 				[':mb_id' => $mb_id]
@@ -524,6 +524,6 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailboxId(int $mid)
 	{
-		return $this->db->fetchValueByCriteria('mailbox_id', 'mailbox_message', ['id' => $mid]);
+		return $this->db->fetchValueByCriteria('mailbox_message', 'mailbox_id', ['id' => $mid]);
 	}
 }
