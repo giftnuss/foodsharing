@@ -91,19 +91,6 @@ final class MessageModel extends Db
 		return $conversation_id;
 	}
 
-	/**
-	 * Renames an Conversation.
-	 */
-	public function renameConversation($cid, $name): bool
-	{
-		return $this->update('UPDATE fs_conversation SET name = ' . $this->strval($name) . ' WHERE id = ' . (int)$cid);
-	}
-
-	public function conversationLocked($cid)
-	{
-		return $this->qOne('SELECT locked FROM fs_conversation WHERE id = ' . (int)$cid);
-	}
-
 	public function updateConversation($cid, $last_fs_id, $body, $last_message_id): bool
 	{
 		return $this->update('
@@ -303,94 +290,6 @@ final class MessageModel extends Db
 		return $this->qCol('SELECT conversation_id FROM fs_foodsaver_has_conversation WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND unread = 1');
 	}
 
-	public function chatHistory($conversation_id)
-	{
-		if ($conversation_id > 0) {
-			return $this->q('
-				SELECT
-					fs.name AS n,
-					m.`body` AS m,
-					UNIX_TIMESTAMP(m.`time`) AS t,
-					fs.photo AS p
-
-				FROM
-					`fs_msg` m,
-					`fs_foodsaver` fs
-
-				WHERE
-					m.foodsaver_id = fs.id
-
-				AND
-					m.conversation_id = ' . (int)$conversation_id . '
-
-				ORDER BY
-					m.`time` DESC
-
-				LIMIT 0,50
-			');
-		}
-	}
-
-	public function loadMore(int $conversation_id, int $last_message_id, int $limit = 20): array
-	{
-		return $this->q('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-
-			WHERE
-				m.foodsaver_id = fs.id
-
-			AND
-				m.conversation_id = ' . $conversation_id . '
-
-			AND
-				m.id < ' . $last_message_id . '
-
-			ORDER BY
-				m.`time` DESC
-
-			LIMIT 0,' . $limit . '
-		');
-	}
-
-	public function getLastMessages($conv_id, $last_msg_id): array
-	{
-		return $this->q('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-
-			WHERE
-				m.foodsaver_id = fs.id
-
-			AND
-				m.conversation_id = ' . (int)$conv_id . '
-
-			AND
-				m.id > ' . (int)$last_msg_id . '
-
-			ORDER BY
-				m.`time` ASC
-		');
-	}
-
 	/**
 	 * set conversations as read.
 	 *
@@ -403,32 +302,6 @@ final class MessageModel extends Db
 		$this->mem->userDel($this->session->id(), 'msg-update');
 
 		return $this->update('UPDATE fs_foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
-	}
-
-	public function listConversationUpdates($conv_ids)
-	{
-		if ($return = $this->q('
-			SELECT
-				`id` AS id,
-				`last` AS time,
-				`last_message` AS body,
-				`member`
-
-			FROM
-				`fs_conversation`
-
-			WHERE
-				`id` IN(' . implode(',', $conv_ids) . ')
-		')
-		) {
-			foreach ($return as $i => $iValue) {
-				$return[$i]['member'] = unserialize($return[$i]['member']);
-			}
-
-			return $return;
-		}
-
-		return false;
 	}
 
 	public function sendMessage($cid, $body, $sender_id = false)

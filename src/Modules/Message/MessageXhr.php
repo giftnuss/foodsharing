@@ -37,13 +37,13 @@ final class MessageXhr extends Control
 	 */
 	public function rename(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid'])) {
+		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked($_GET['cid'])) {
 			$xhr = new Xhr();
 
 			$name = htmlentities($_GET['name']);
 			$name = trim($name);
 
-			if (($name != '') && $this->model->renameConversation($_GET['cid'], $name)) {
+			if (($name != '') && $this->messageGateway->renameConversation($_GET['cid'], $name)) {
 				$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
 			}
 
@@ -56,7 +56,7 @@ final class MessageXhr extends Control
 	 */
 	public function leave(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked(
+		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked(
 				$_GET['cid']
 			) && $this->model->deleteUserFromConversation($_GET['cid'], $this->session->id())) {
 			$xhr = new Xhr();
@@ -95,7 +95,7 @@ final class MessageXhr extends Control
 	{
 		if ($this->mayConversation((int)$_GET['cid'])) {
 			$xhr = new Xhr();
-			if ($msgs = $this->model->loadMore((int)$_GET['cid'], (int)$_GET['lmid'])) {
+			if ($msgs = $this->messageGateway->loadMore((int)$_GET['cid'], (int)$_GET['lmid'])) {
 				$xhr->addData('messages', $msgs);
 			} else {
 				$xhr->setStatus(0);
@@ -380,11 +380,11 @@ final class MessageXhr extends Control
 			 * check is a new message there for active conversation?
 			 */
 
-			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->model->getLastMessages($cid, $lmid)) {
+			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->messageGateway->getLastMessages($cid, $lmid)) {
 				$return['messages'] = $messages;
 			}
 
-			if ($conversations = $this->model->listConversationUpdates($conversationIDs)) {
+			if ($conversations = $this->messageGateway->listConversationUpdates($conversationIDs)) {
 				$return['convs'] = $conversations;
 			}
 
