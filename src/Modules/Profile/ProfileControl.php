@@ -38,7 +38,7 @@ final class ProfileControl extends Control
 				if (is_null($data['deleted_at']) || $this->session->may('orga')) {
 					$this->foodsaver = $data;
 					$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
-					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodbaskets($this->foodsaver['id']);
+					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets($this->foodsaver['id']);
 
 					$this->view->setData($this->foodsaver);
 

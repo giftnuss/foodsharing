@@ -396,7 +396,7 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function getAmountOfFoodbaskets(int $fs_id): int
+	public function getAmountOfFoodBaskets(int $fs_id): int
 	{
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
