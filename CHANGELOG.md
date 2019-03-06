@@ -5,11 +5,18 @@
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter: 
+- Made email notifications great again #450 @zommuter : 
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
+- Fit popup dialogs to smartphone and desktop screens with different conditions !826 @jofranz :
+    - profile: verfication and pass history (BOT functionality)
+    - profile: report user
+    - store: manually add team members (BIEB functionality)
+    - store: change automatic pickup times (BIEB functionality)
+    - store: slot join
+    - store: slot leave
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec

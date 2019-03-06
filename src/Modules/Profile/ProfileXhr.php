@@ -122,12 +122,12 @@ class ProfileXhr extends Control
 				$dia->setTitle('Passhistorie');
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
+
+			$dia->addOpt('height', '$(window).height() - 0.1 * $(window).height()', false);
 			if ($this->session->isMob()) {
-				$dia->addOpt('width', 'auto', false);
-				$dia->addOpt('height', 'auto', false);
-			} else {
-				$dia->addOpt('width', '800px', false);
-				$dia->addOpt('height', '($(window).height()-100)', false);
+				$dia->addOpt('width', '$(window).width() - 0.1 * $(window).width()', false);
+			} else { // desktop
+				$dia->addOpt('width', '$(window).width() - 0.4 * $(window).width()', false);
 			}
 
 			return $dia->xhrout();
