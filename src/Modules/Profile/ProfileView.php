@@ -10,16 +10,16 @@ class ProfileView extends View
 {
 	private $foodsaver;
 
-	public function profile($wallposts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
+	public function profile($wallPosts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
-		$page->addSection($wallposts, 'Status-Updates von ' . $this->foodsaver['name']);
+		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
 			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
-		if ($fetchDates) {
+		if ($fetchDates) { // AMB functionality
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
@@ -29,13 +29,13 @@ class ProfileView extends View
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
-		if ($showSideInfoCompanies && $userCompanies) {
+		if ($showSideInfoCompanies && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 		$page->render();
 	}
 
-	private function fetchDates($fetchDates)
+	private function fetchDates($fetchDates) // AMB functionality
 	{
 		$out = '
 				<div class="ui-padding" id="double">
@@ -111,7 +111,7 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function usernotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
+	public function userNotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
 	{
 		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
@@ -184,24 +184,24 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->foodsaver['botschafter']) {
-			$bot = array();
+			$ambassador = array();
 			foreach ($this->foodsaver['botschafter'] as $b) {
-				$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+				$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
 				'name' => $this->translationHelper->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
-				'val' => implode(', ', $bot)
+				'val' => implode(', ', $ambassador)
 			);
 		}
 
 		if ($this->foodsaver['foodsaver']) {
 			$fsa = array();
-			$fshomedistrict = array();
+			$fsHomeDistrict = array();
 			foreach ($this->foodsaver['foodsaver'] as $b) {
 				if ($b['id'] == $this->foodsaver['bezirk_id']) {
-					$fshomedistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+					$fsHomeDistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
-				if (!isset($bot[$b['id']])) {
+				if (!isset($ambassador[$b['id']])) {
 					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				}
 			}
@@ -211,26 +211,26 @@ class ProfileView extends View
 					'val' => implode(', ', $fsa)
 				);
 			}
-			if (!empty($fshomedistrict)) {
+			if (!empty($fsHomeDistrict)) {
 				$infos[] = array(
 					'name' => $this->translationHelper->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
-					'val' => implode(', ', $fshomedistrict)
+					'val' => implode(', ', $fsHomeDistrict)
 				);
 			}
 		}
 
 		if ($this->foodsaver['orga']) {
-			$bot = array();
+			$ambassador = array();
 			foreach ($this->foodsaver['orga'] as $b) {
 				if ($this->session->isOrgaTeam()) {
-					$bot[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
+					$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 				} else {
-					$bot[$b['id']] = $b['name'];
+					$ambassador[$b['id']] = $b['name'];
 				}
 			}
 			$infos[] = array(
 				'name' => $this->translationHelper->sv('foodsaver_workgroups', array('gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
-				'val' => implode(', ', $bot)
+				'val' => implode(', ', $ambassador)
 			);
 		}
 
@@ -256,50 +256,57 @@ class ProfileView extends View
 		/*
 		 * Statistics
 		 */
-		$fetchweight = '';
+		$fetchWeight = '';
 		if ($this->foodsaver['stat_fetchweight'] > 0) {
-			$fetchweight = '
+			$fetchWeight = '
 				<span class="item stat_fetchweight">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
 					<span class="name">gerettet</span>
 				</span>';
 		}
 
-		$fetchcount = '';
+		$fetchCount = '';
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$fetchcount = '
+			$fetchCount = '
 				<span class="item stat_fetchcount">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">abgeholt</span>
 				</span>';
 		}
 
-		$postcount = '';
-		if ($this->foodsaver['stat_postcount'] > 0) {
-			$postcount = '
+		$foodBasketCount = '
+				<a href="/essenskoerbe">
+				    <span class="item stat_basketcount">
+					    <span class="val">' . number_format($this->foodsaver['basketCount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					    <span class="name">Essenskörbe</span>
+				    </span>
+				</a>';
+
+		if ($this->session->may('fs')) { // for foodsavers only
+			$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
-					<span class="name">Beiträge</span>
+					<span class="name">Beiträge</span> 
 				</span>';
+		} else {
+			$postCount = '';
 		}
-
-		$bananacount = '';
 
 		/*
 		 * Banana
 		*/
 		if ($this->session->may('fs')) {
-			$count_banana = count($this->foodsaver['bananen']);
-			if ($count_banana == 0) {
-				$count_banana = '&nbsp;';
+			$countBanana = count($this->foodsaver['bananen']);
+			if ($countBanana == 0) {
+				$countBanana = '&nbsp;';
 			}
 
 			$banana_button_class = ' bouched';
-			$givebanana = '';
+			$giveBanana = '';
 
 			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
-				$givebanana = '
+				$giveBanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
 					<div class="vouch-banana-desc">
@@ -316,17 +323,17 @@ class ProfileView extends View
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');
-			$bananacount = '
+			$bananaCount = '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
-				<span class="val">' . $count_banana . '</span>
+				<span class="val">' . $countBanana . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
 			';
 
-			$bananacount .= '
+			$bananaCount .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
-				' . $givebanana . '
+				<h3>' . str_replace('&nbsp;', '', $countBanana) . ' Vertrauensbananen</h3>
+				' . $giveBanana . '
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';
@@ -336,7 +343,7 @@ class ProfileView extends View
 				} else {
 					$odd = 'even';
 				}
-				$bananacount .= '
+				$bananaCount .= '
 				<tr class="' . $odd . ' bpost">
 					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
@@ -345,46 +352,49 @@ class ProfileView extends View
 					</div></td>
 				</tr>';
 			}
-			$bananacount .= '
+			$bananaCount .= '
 					</tbody>
 				</table>
 			</div>';
+		} else {
+			$bananaCount = '';
 		}
 
 		return '
 			<div class="pure-g">
 				<div class="profile statdisplay">
-					' . $fetchweight . '
-					' . $fetchcount . '
-					' . $postcount . '
-					' . $bananacount . '
+					' . $fetchWeight . '
+					' . $fetchCount . '
+					' . $postCount . '
+					' . $foodBasketCount . '
+					' . $bananaCount . '
 				</div>
 			    <div class="infos"> ' . $out . ' </div>
 			</div>';
 	}
 
-	public function getHistory($history, $changetype)
+	public function getHistory($history, $changeType)
 	{
 		$out = '
 			<ul class="linklist history">';
 		$class = '';
 
-		$curdate = 0;
+		$curDate = 0;
 		foreach ($history as $h) {
-			if ($curdate != $h['date']) {
-				if ($changetype == 0) {
-					$typeofchange = '';
+			if ($curDate != $h['date']) {
+				if ($changeType == 0) {
+					$typeOfChange = '';
 					if ($h['change_status'] == 0) {
 						$class = 'unverify';
-						$typeofchange = 'Entverifiziert';
+						$typeOfChange = 'Entverifiziert';
 					}
 					if ($h['change_status'] == 1) {
 						$class = 'verify';
-						$typeofchange = 'Verifiziert';
+						$typeOfChange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeofchange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				}
-				if ($changetype == 1) {
+				if ($changeType == 1) {
 					if (!is_null($h['bot_id'])) {
 						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
@@ -392,7 +402,7 @@ class ProfileView extends View
 					}
 				}
 
-				$curdate = $h['date'];
+				$curDate = $h['date'];
 			}
 			if (!is_null($h['bot_id'])) {
 				$out .= '
@@ -412,7 +422,7 @@ class ProfileView extends View
 		}
 		$out .= '
 		</ul>';
-		if ($curdate == 0) {
+		if ($curDate == 0) {
 			$out = 'Es liegen keine Daten vor';
 		}
 
