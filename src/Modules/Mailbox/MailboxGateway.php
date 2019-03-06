@@ -524,6 +524,6 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailboxId(int $mid)
 	{
-		return $this->db->fetchValueByCriteria('mailbox_id', 'mailbox_message', ['id' => $mid]);
+		return $this->db->fetchValueByCriteria('mailbox_message', 'mailbox_id', ['id' => $mid]);
 	}
 }

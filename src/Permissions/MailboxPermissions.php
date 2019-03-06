@@ -27,7 +27,7 @@ class MailboxPermissions
 
 	public function mayMailbox(int $mb_id): bool
 	{
-		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may(['bieb']))) {
+		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			foreach ($boxes as $b) {
 				if ($b['id'] == $mb_id) {
 					return true;
