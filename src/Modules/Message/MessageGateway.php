@@ -40,17 +40,13 @@ final class MessageGateway extends BaseGateway
 				fs.photo AS fs_photo,
 				m.`body`,
 				m.`time`
-
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
-
 			WHERE
 				m.foodsaver_id = fs.id
-
 			AND
 				m.conversation_id = :id
-
 			ORDER BY
 				m.`time` DESC
 
@@ -83,10 +79,8 @@ final class MessageGateway extends BaseGateway
 				`last` AS time,
 				`last_message` AS body,
 				`member`
-
 			FROM
 				`fs_conversation`
-
 			WHERE
 				`id` IN(' . implode(',', array_map('intval', $conv_ids)) . ')
 		')
@@ -111,23 +105,17 @@ final class MessageGateway extends BaseGateway
 				fs.photo AS fs_photo,
 				m.`body`,
 				m.`time`
-
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
-
 			WHERE
 				m.foodsaver_id = fs.id
-
 			AND
-				m.conversation_id = :conf_id
-
+				m.conversation_id = :conv_id
 			AND
 				m.id < :last_msg_id
-
 			ORDER BY
 				m.`time` DESC
-
 			LIMIT 0,:limit
 		', [':conv_id' => $conversation_id, ':last_msg_id' => $last_message_id, ':limit' => $limit]);
 	}
@@ -142,20 +130,15 @@ final class MessageGateway extends BaseGateway
 				fs.photo AS fs_photo,
 				m.`body`,
 				m.`time`
-
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
-
 			WHERE
 				m.foodsaver_id = fs.id
-
 			AND
-				m.conversation_id = :conf_id
-
+				m.conversation_id = :conv_id
 			AND
 				m.id > :last_msg_id
-
 			ORDER BY
 				m.`time` ASC
 		', [':conv_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
