@@ -122,7 +122,7 @@ class ProfileXhr extends Control
 				$dia->setTitle('Passhistorie');
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
-			if (true || $this->func->isMob()) {
+			if ($this->session->isMob()) {
 				$dia->addOpt('width', 'auto', false);
 				$dia->addOpt('height', 'auto', false);
 			} else {
