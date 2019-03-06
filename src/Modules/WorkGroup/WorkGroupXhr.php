@@ -101,17 +101,18 @@ class WorkGroupXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
-			$message = strip_tags($_GET['msg']);
+			$message = $_GET['msg'];
 
 			if (!empty($message)) {
-				$from = $this->session->user('email');
-				// tplMail uses AsyncMail, which in turn doesn't seem to provide CC or BCC, so use TO...
-				$recipients = array($group['email'], $from);
+				$userMail = $this->session->user('email');
+				$recipients = array($group['email'], $userMail);
 
-				$this->emailHelper->tplMail('group_message', $recipients, array(
+				$this->emailHelper->tplMail('workgroup_contact', $recipients, array(
 					'gruppenname' => $group['name'],
-					'message' => $message
-				), $from);
+					'message' => $message,
+					'username' => $this->session->user('name'),
+					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
+				), $userMail);
 
 				return array(
 					'status' => 1,

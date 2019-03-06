@@ -192,7 +192,8 @@ final class MessageModel extends Db
 				fs.name,
 				fs.photo,
 				fs.email,
-				fs.geschlecht
+				fs.geschlecht,
+				fs.infomail_message
 
 			FROM
                 `fs_foodsaver_has_conversation` hc
@@ -204,18 +205,6 @@ final class MessageModel extends Db
 				hc.conversation_id = ' . (int)$conversation_id . ' AND
 				fs.deleted_at IS NULL
 		');
-	}
-
-	public function wantMsgEmailInfo($foodsaver_id): bool
-	{
-		/*
-		 * only send email if the user is not online
-		 */
-		if (!$this->mem->userIsActive($foodsaver_id) && $this->mem->get('infomail_message_' . $foodsaver_id)) {
-			return true;
-		}
-
-		return true;
 	}
 
 	/**
