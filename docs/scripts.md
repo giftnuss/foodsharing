@@ -23,3 +23,13 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/test | Run tests |
 | ./scripts/test-rerun | Run tests without recreating db |
 
+Using the `docker-compose` you can run various php-scripts, e.g.
+```
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats foodsaver
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats betriebe
+./scripts/docker-compose run app php -f -rm --no-deps run.php Stats bezirke
+```
+This runs the statistics scripts that are run nightly on the production server.
+This can be necessary to test code concerning statistics since they are usually never run locally.
+`-rm` removes the containers afterwards, `--no-deps` lets docker not worry about any dependendent containers. This is often useful since they are often running already.
+

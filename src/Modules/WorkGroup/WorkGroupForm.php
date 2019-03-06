@@ -18,7 +18,7 @@ class WorkGroupForm extends AbstractType
 	{
 		$builder
 			->add('name', TextType::class, ['label' => 'group.name'])
-			->add('description', TextAreaType::class, ['label' => 'group.description'])
+			->add('description', TextareaType::class, ['label' => 'group.description'])
 			->add('photo', PictureUploadType::class, ['label' => 'group.photo'])
 			->add('applyType', ChoiceType::class, ['label' => 'group.application_requirements.requirements', 'choices' => [
 				'group.application_requirements.nobody' => ApplyType::NOBODY,

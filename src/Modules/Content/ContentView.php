@@ -73,7 +73,7 @@ class ContentView extends View
 			<h5><span>1</span>Sei ehrlich</h5>
 			<p>Wir alle, die wir foodsharing entwickelt haben, nehmen unsere Aufgabe sehr ernst und befolgen Gesetze und Auflagen. Sei auch Du bitte ehrlich beim Ausfüllen Deiner Daten und bei der Beschreibung des Essenskorbes.</p>
 			<h5><span>2</span>Beachte die Regeln</h5>
-			<p>Wir weisen ausdrücklich darauf hin, dass wir das Anbieten und Teilen bestimmter Lebensmittel und anderer Waren aus rechtlichen Gründen nicht gestatten. Verderbliche Lebensmittel wie Fisch, Geflügel, Fleisch, rohe Eierspeisen und zubereitete Lebensmittel sowie Medikamente (auch homöopathische Medikamente) sind von foodsharing ausgeschlossen. Auch Kleidung, Kosmetika, Haushaltschemie, Spielzeug und andere Non-Food-Produkte können über foodsharing nicht getauscht oder geteilt werden. Foodsharing behält sich vor, derartige Angebote zu löschen.</p>
+			<p>Wir weisen ausdrücklich darauf hin, dass wir das Anbieten und Teilen bestimmter Lebensmittel und anderer Waren aus rechtlichen Gründen nicht gestatten. Verderbliche Lebensmittel wie Fisch, Geflügel, Fleisch, rohe Eierspeisen und zubereitete Lebensmittel sowie Medikamente (auch homöopathische Medikamente) sind von foodsharing ausgeschlossen. Auch Kleidung, Kosmetika, Haushaltschemie, Spielzeug und andere Non-Food-Produkte können über foodsharing nicht getauscht oder geteilt werden. Die Plattform foodsharing behält sich vor, derartige Angebote zu löschen.</p>
 			<h5><span>3</span>Sei verantwortungsvoll</h5>
 			<p>30<span style="white-space:nowrap">&thinsp;</span>% aller Lebensmittel landen im Müll. Damit soll nun endlich Schluss sein. Wir möchten nichts mehr wegwerfen! Wir wollen verantwortungsvoll mit Lebensmitteln umgehen und freuen uns, dass Du mitmachst.</p>
 			<h5><span>4</span>Sei zuverlässig</h5>
@@ -193,14 +193,14 @@ class ContentView extends View
         <li>Virushepatitis A oder E (Leberentzündung)</li>
         </ul>
         <p>Bei infizierten Wunden oder Hauterkrankungen bei denen die Möglichkeit besteht, dass Krankheitserreger über Lebensmittel auf andere Menschen übertragen werden können, wird von einer Weitergabe der Lebensmittel abgeraten. Ein Hinweis dafür, dass Wunden oder offene Stellen von Hauterkrankungen infiziert sind, kann sein, wenn diese gerötet, schmierig belegt, nässend oder geschwollen sind.</p>
-        <p>Denn der Erfolg und auch das Gelingen von Foodsharing hängt vom respektvollen und achtsamen Umgang mit allen Lebensmittelnab!</p>
+        <p>Denn der Erfolg und auch das Gelingen von foodsharing hängt vom respektvollen und achtsamen Umgang mit allen Lebensmittelnab!</p>
         <p>Es sollte bei der Abgabe von Lebensmitteln durch foodsharing darauf geachtet werden, dass die Anbieter selbst, sich über die aufgeführten Punkte im Klaren sind und beim Auftreten bestimmter Krankheitssymptome keine Lebensmittel anbieten.</p>');
 
 		return '
 		<div class="page ui-padding ui-widget-content corner-all">
 			<h1>Ratgeber Lebensmittelsicherheit</h1>
 			<p>Da Lebensmittel uns am Leben erhalten, sollte man mit ihnen auch respektvoll umgehen. Gegen die Lebensmittelverschwendung etwas zu tun, ist eine Möglichkeit Respekt zu zeigen. Um den Lebensmitteltausch oder die Lebensmittelabgabe für alle Teilnehmer so sicher wie möglich zu gestalten, haben wir die wichtigsten Voraussetzungen im folgenden Leitfaden zusammengefasst. Lebensmittel an andere weiterzugeben ist eine sehr menschliche aber auch verantwortungsvolle Situation. Grundsätzlich gilt wohl immer: „Nichts an andere weitergeben, was man selbst nicht mehr essen würde“. Die nun aufgeführten Punkte, sollen die Entscheidung erleichtern. </p>
-			' . $this->v_utils->v_info('Nicht gestattet ist das Anbieten und Teilen hygienisch riskanter Lebensmittel. Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Foodsharing.de behält sich vor, derartige Angebote zu löschen. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums.', 'Das Wichtigste in Kürze!') . '
+			' . $this->v_utils->v_info('Nicht gestattet ist das Anbieten und Teilen hygienisch riskanter Lebensmittel. Dazu gehören alle Lebensmittel, die ein Verbrauchsdatum tragen („zu verbrauchen bis…“), wie auch roher Fisch, Geflügel und anderes Fleisch, insbesondere Hackfleisch, rohe Eierspeisen und zubereitete Lebensmittel, die Fleisch oder Fisch enthalten, es sei denn es kann durch Lieferscheine sichergestellt werden, dass die Kühlkette lückenlos war. Die Plattform foodsharing behält sich vor, derartige Angebote zu löschen. Unproblematisch sind hingegen Lebensmittel mit einem Mindesthaltbarkeitsdatum („mindestens haltbar bis…“), auch nach Ablauf dieses Datums.', 'Das Wichtigste in Kürze!') . '
 
 			' . $accordion->render() . '
 		</div>';

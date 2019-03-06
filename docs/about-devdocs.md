@@ -54,6 +54,9 @@ This makes the current devdocs avaiable via `localhost:4001` in your browser.
 It is updated at every change of the files.
 It would be nice to have a docker setup (to avoid the local `yarn` dependency). Please document it here if you set it up.
 
+The gitlab ci is not triggered if you push with the option `git push -o ci.skip`.
+This is useful if you work on the devdocs since they are only built on master anyway.
+
 ## GitBook
 
 The devdocs are built with [GitBook](https://docs.gitbook.com/).

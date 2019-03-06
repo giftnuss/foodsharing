@@ -98,7 +98,7 @@ class Database
 		}
 	}
 
-	public function count($table, array $criteria): bool
+	public function count($table, array $criteria): int
 	{
 		$where = $this->generateWhereClause($criteria);
 

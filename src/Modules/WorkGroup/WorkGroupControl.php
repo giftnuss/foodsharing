@@ -161,7 +161,7 @@ class WorkGroupControl extends Control
 			$groups
 		);
 
-		$this->pageHelper->addTitle($this->func->s('groups'));
+		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
 
 		$response->setContent(
 			$this->render(
@@ -192,7 +192,7 @@ class WorkGroupControl extends Control
 					$data = $editWorkGroupRequest->toGroup();
 					$this->model->updateGroup($group['id'], $data);
 					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
-					$this->func->info('Änderungen gespeichert!');
+					$this->flashMessageHelper->info('Änderungen gespeichert!');
 					$this->routeHelper->goSelf();
 				}
 			}

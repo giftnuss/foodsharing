@@ -23,12 +23,12 @@ $I->see('Gehe jetzt zu Deinem');
 $I->expectNumMails(1, 5);
 $mail = $I->getMails()[0];
 $I->assertEquals($mail->headers->to, $newmail, 'correct recipient');
-$I->assertRegExp('/http:\/\/.*&newmail=[a-f0-9]+/', $mail->html, 'mail should contain a link');
+$I->assertRegExp('/http:\/\/.*&amp;newmail=[a-f0-9]+/', $mail->html, 'mail should contain a link');
 preg_match('/http:\/\/.*?(\/.*?)"/', $mail->html, $matches);
 $link = $matches[1];
 
 // open link, fill in password and submit
-$I->amOnPage($link);
+$I->amOnPage(html_entity_decode($link));
 $I->waitForElementVisible('#passcheck');
 $I->fillField('#passcheck', $pass);
 $I->executeJS("$('button:contains(Bestätigen)').trigger('click')");

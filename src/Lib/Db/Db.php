@@ -4,7 +4,6 @@ namespace Foodsharing\Lib\Db;
 
 use Exception;
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use mysqli;
 
@@ -15,10 +14,6 @@ class Db
 	 */
 	private $mysqli;
 	private $values;
-	/**
-	 * @var Func
-	 */
-	protected $func;
 
 	/**
 	 * @var Mem
@@ -33,14 +28,6 @@ class Db
 	public function __construct()
 	{
 		$this->values = array();
-	}
-
-	/**
-	 * @required
-	 */
-	public function setFunc(Func $func)
-	{
-		$this->func = $func;
 	}
 
 	/**
@@ -118,33 +105,6 @@ class Db
 	}
 
 	/**
-	 * Method to get an asoc array insted the colums are the keys
-	 * so aftter all we can check like this if(isset($test[$key])) ...
-	 *
-	 * @param string $sql
-	 *
-	 * @return array |boolean
-	 *
-	 * @deprecated use db->fetchAllValues and adapt code to not use indexed array
-	 */
-	public function qColKey($sql)
-	{
-		$out = array();
-		if ($res = $this->sql($sql)) {
-			while ($row = $res->fetch_array()) {
-				$val = (int)($row[0]);
-				$out[$val] = $val;
-			}
-		}
-
-		if (count($out) > 0) {
-			return $out;
-		}
-
-		return false;
-	}
-
-	/**
 	 * @deprecated use db->fetch
 	 */
 	public function qRow($sql)
@@ -210,8 +170,8 @@ class Db
 	}
 
 	/**
-	 * @deprecated use strip_tags() until the frontend can escape properly.
-	 * String escaping is not needed anymore with prepared statements
+	 * @deprecated use strip_tags() until the frontend can escape properly!
+	 * (The string escaping part is not needed anymore with prepared statements)
 	 */
 	public function strval($val, $html = false)
 	{

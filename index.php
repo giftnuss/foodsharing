@@ -1,29 +1,8 @@
 <?php
-/*
-if(isset($_GET['g_path']))
-{
-	$path = explode('/', $_GET['g_path']);
-	//print_r($path);
-
-
-	switch ($path[0])
-	{
-		case 'group' :
-			$_GET['page'] = 'bezirk';
-			$_GET['bid'] = $path[1];
-			$_GET['sub'] = $path[2];
-			break;
-
-		default:
-			break;
-	}
-
-}
-*/
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
@@ -31,9 +10,15 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
+
+/* @var $request Request */
+$request = Request::createFromGlobals();
+$response = new Response('--');
 
 /* @var $container Container */
 global $container;
@@ -48,7 +33,7 @@ header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
 if (defined('CSP_REPORT_URI')) {
-	header($csp->generate(CSP_REPORT_URI, CSP_REPORT_ONLY));
+	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 }
 
 require_once 'lib/inc.php';
