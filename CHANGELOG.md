@@ -31,6 +31,7 @@
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 
 ## Refactoring
+- refactored mailbox from model to gateway !803 #9 @peter.toennies
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects

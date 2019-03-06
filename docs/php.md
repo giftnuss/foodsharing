@@ -48,8 +48,8 @@ Loading a depencency via [`require`](https://secure.php.net/manual/de/function.r
 The classes that are actually used are mentioned in constructors (`__construct`), e.g.
 ```
 class ActivityXhr extends Control {
-  private $mailboxModel; /* attributes (member variables) */
-  public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
+  private $mailboxGateway; /* attributes (member variables) */
+  public function __construct(ActivityModel $model, MailboxGateway $mailboxGateway)
     { /* using arguments for setting attributes */ }
 ... }
 ```

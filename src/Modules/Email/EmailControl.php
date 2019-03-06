@@ -10,40 +10,40 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
-	private $mbmodel;
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailGateway;
 	private $regionGateway;
 	private $sanitizerService;
+	private $mailboxGateway;
 	private $identificationHelper;
 	private $dataHelper;
 
 	public function __construct(
 		Db $model,
-		MailboxModel $mbmodel,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
+		MailboxGateway $mailboxGateway,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
 		$this->model = $model;
-		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 
@@ -74,7 +74,7 @@ class EmailControl extends Control
 			$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
 		}
 
-		$boxes = $this->mbmodel->getBoxes();
+		$boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'));
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}

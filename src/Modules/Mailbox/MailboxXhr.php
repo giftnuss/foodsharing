@@ -3,26 +3,34 @@
 namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
 	private $sanitizerService;
 	private $timeHelper;
+	private $mailboxGateway;
+	private $mailboxPermissions;
 
 	public function __construct(
-		MailboxModel $model,
+		Db $model,
 		MailboxView $view,
 		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		MailboxGateway $mailboxGateway,
+		MailboxPermissions $mailboxPermissions
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
+		$this->mailboxGateway = $mailboxGateway;
+		$this->mailboxPermissions = $mailboxPermissions;
 
 		parent::__construct();
 	}
@@ -90,12 +98,12 @@ class MailboxXhr extends Control
 		}
 
 		$mb_id = (int)$_GET['mb'];
-		if ($this->model->mayMailbox($mb_id, $_GET['type'])) {
-			$this->model->mailboxActivity($mb_id);
-			if ($messages = $this->model->listMessages($mb_id, $_GET['folder'])) {
+		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
+			$this->mailboxGateway->mailboxActivity($mb_id);
+			if ($messages = $this->mailboxGateway->listMessages($mb_id, $_GET['folder'])) {
 				$nc_js = '';
-				if ($boxes = $this->model->getBoxes()) {
-					if ($newcount = $this->model->getNewCount($boxes)) {
+				if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
+					if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 						foreach ($newcount as $nc) {
 							$nc_js .= '
 								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
@@ -140,15 +148,15 @@ class MailboxXhr extends Control
 
 	public function move()
 	{
-		if (!$this->session->may('bieb') || !$this->model->mayMessage($_GET['mid'])) {
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
 
 		if ($folder == 3) {
-			$this->model->deleteMessage($_GET['mid']);
+			$this->mailboxGateway->deleteMessage($_GET['mid']);
 		} else {
-			$this->model->move($_GET['mid'], $_GET['f']);
+			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
 		}
 
 		return array(
@@ -159,10 +167,11 @@ class MailboxXhr extends Control
 
 	public function quickreply()
 	{
-		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->model->mayMessage($_GET['mid'])) {
+		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($message = $this->model->getMessage($_GET['mid'])) {
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))) {
+			$message = $this->mailboxGateway->getMessage($_GET['mid']);
 			$sender = @json_decode($message['sender'], true);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
@@ -221,8 +230,8 @@ class MailboxXhr extends Control
 
 		$this->mem->userSet($this->session->id(), 'mailbox-last', time());
 
-		if ($this->model->mayMailbox($_POST['mb'])) {
-			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {
+		if ($this->mailboxPermissions->mayMailbox($_POST['mb'])) {
+			if ($mailbox = $this->mailboxGateway->getMailbox($_POST['mb'])) {
 				$an = explode(';', $_POST['an']);
 				$tmp = array();
 				foreach ($an as $a) {
@@ -280,7 +289,7 @@ class MailboxXhr extends Control
 					}
 				}
 
-				if ($this->model->saveMessage(
+				if ($this->mailboxGateway->saveMessage(
 					$_POST['mb'],
 					2,
 					json_encode(array(
@@ -297,15 +306,17 @@ class MailboxXhr extends Control
 					1
 				)
 				) {
-					$this->model->setAnswered($_POST['reply']);
+					if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_POST['reply']))) {
+						$this->mailboxGateway->setAnswered($_POST['reply']);
+					}
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => '
 									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
-					);
+					];
 				}
 			}
 		}
@@ -313,7 +324,7 @@ class MailboxXhr extends Control
 
 	public function fmail()
 	{
-		if (!$this->session->may('bieb') || !$this->model->mayMessage($_GET['id'])) {
+		if (!$this->session->may('bieb') || !$this->mailboxGateway->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
@@ -333,11 +344,12 @@ class MailboxXhr extends Control
 
 	public function loadMail()
 	{
-		if (!$this->session->may('bieb') || !$this->model->mayMessage($_GET['id'])) {
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($mail = $this->model->getMessage($_GET['id'])) {
-			$this->model->setRead($_GET['id'], 1);
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id']))) {
+			$mail = $this->mailboxGateway->getMessage($_GET['id']);
+			$this->mailboxGateway->setRead($_GET['id'], 1);
 			$mail['attach'] = trim($mail['attach']);
 			if (!empty($mail['attach'])) {
 				$mail['attach'] = json_decode($mail['attach'], true);
@@ -399,7 +411,7 @@ class MailboxXhr extends Control
 		if (is_array($email)) {
 			foreach ($email as $e) {
 				if ($this->emailHelper->validEmail($e)) {
-					$this->model->addContact($e);
+					$this->mailboxGateway->addContact($e, $this->session->id());
 					$mail->addRecipient($e);
 				}
 			}
