@@ -37,13 +37,13 @@ final class MessageXhr extends Control
 	 */
 	public function rename(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked($_GET['cid'])) {
+		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked($_GET['cid'])) {
 			$xhr = new Xhr();
 
 			$name = htmlentities($_GET['name']);
 			$name = trim($name);
 
-			if (($name != '') && $this->model->renameConversation($_GET['cid'], $name)) {
+			if (($name != '') && $this->messageGateway->renameConversation($_GET['cid'], $name)) {
 				$xhr->addScript('$("#chat-' . (int)$_GET['cid'] . ' .chatboxtitle").html(\'<i class="fas fa-comment fa-flip-horizontal"></i> ' . $name . '\');conv.settings(' . (int)$_GET['cid'] . ');$("#convlist-' . (int)$_GET['cid'] . ' .names").html("' . $name . '")');
 			}
 
@@ -56,7 +56,7 @@ final class MessageXhr extends Control
 	 */
 	public function leave(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->model->conversationLocked(
+		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked(
 				$_GET['cid']
 			) && $this->model->deleteUserFromConversation($_GET['cid'], $this->session->id())) {
 			$xhr = new Xhr();
@@ -95,12 +95,61 @@ final class MessageXhr extends Control
 	{
 		if ($this->mayConversation((int)$_GET['cid'])) {
 			$xhr = new Xhr();
-			if ($msgs = $this->model->loadMore((int)$_GET['cid'], (int)$_GET['lmid'])) {
+			if ($msgs = $this->messageGateway->loadMore((int)$_GET['cid'], (int)$_GET['lmid'])) {
 				$xhr->addData('messages', $msgs);
 			} else {
 				$xhr->setStatus(0);
 			}
 			$xhr->send();
+		}
+	}
+
+	private function convMessage($recipient, $conversation_id, $msg)
+	{
+		/*
+		 * only send email if the user is not online
+		 */
+
+		if (!$this->mem->userOnline($recipient['id'])) {
+			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+				$sessdata = array();
+			}
+
+			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+				$sessdata[$recipient['id']] = time();
+
+				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
+					$this->emailHelper->tplMail('chat_message_store', $recipient['email'], array(
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $this->session->user('name'),
+						'name' => $recipient['name'],
+						'storename' => $storeName,
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+					));
+				} else {
+					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
+					if (count($memberNames) > 1) {
+						$this->emailHelper->tplMail('chat_message_group', $recipient['email'], array(
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'sender' => $this->session->user('name'),
+							'name' => $recipient['name'],
+							'chatname' => implode(', ', $memberNames),
+							'message' => $msg,
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						));
+					} else {
+						$this->emailHelper->tplMail('chat_message', $recipient['email'], array(
+							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'sender' => $this->session->user('name'),
+							'name' => $recipient['name'],
+							'message' => $msg,
+							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						));
+					}
+				}
+			}
+			$_SESSION['lastMailMessage'] = $sessdata;
 		}
 	}
 
@@ -141,12 +190,8 @@ final class MessageXhr extends Control
 						foreach ($member as $m) {
 							if ($m['id'] != $this->session->id()) {
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
-
-								/*
-								 * send an E-Mail if the user is not online
-								*/
-								if ($this->model->wantMsgEmailInfo($m['id'])) {
-									$this->convMessage($m, $_POST['c'], $body, $this->messageGateway, $this->storeGateway);
+								if ($m['infomail_message']) {
+									$this->convMessage($m, $_POST['c'], $body);
 								}
 							}
 						}
@@ -335,11 +380,11 @@ final class MessageXhr extends Control
 			 * check is a new message there for active conversation?
 			 */
 
-			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->model->getLastMessages($cid, $lmid)) {
+			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->messageGateway->getLastMessages($cid, $lmid)) {
 				$return['messages'] = $messages;
 			}
 
-			if ($conversations = $this->model->listConversationUpdates($conversationIDs)) {
+			if ($conversations = $this->messageGateway->listConversationUpdates($conversationIDs)) {
 				$return['convs'] = $conversations;
 			}
 

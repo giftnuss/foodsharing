@@ -318,19 +318,6 @@ class MaintenanceControl extends ConsoleControl
 
 	private function memcacheUserInfo()
 	{
-		if ($foodsaver = $this->model->getUserInfo()) {
-			foreach ($foodsaver as $fs) {
-				$info = false;
-				if ($fs['infomail_message']) {
-					$info = true;
-				}
-
-				$this->mem->userSet($fs['id'], 'infomail', $info);
-			}
-
-			self::info('memcache userinfo updated');
-		}
-
 		$admins = $this->foodsaverGateway->getBotIds(0, false, true);
 		if (!$admins) {
 			$admins = array();

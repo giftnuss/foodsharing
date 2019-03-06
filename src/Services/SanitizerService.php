@@ -70,11 +70,19 @@ class SanitizerService
 		return str_replace([$quote, "\n", "\r"], ['\\' . $quote . '', '\\n', ''], $str);
 	}
 
+	/* this method returns the string $str truncated to the first $length characters while keeping words intact.
+	   It adds ' ...' as an ellipsis. */
 	public function tt(string $str, int $length = 160): string
 	{
-		if (strlen($str) > $length) {
-			/* this removes the part of the last word that might have been destroyed by substr */
-			$str = preg_replace('/[^ ]*$/', '', substr($str, 0, $length)) . ' ...';
+		if (mb_strlen($str) > $length) {
+			$shortened = mb_substr($str, 0, $length - 4);
+			$followingChar = mb_substr($str, $length - 4, 1);
+			if (preg_match('/\s/', $followingChar) !== false) {
+				/* following char is whitespace -> last word is complete but might have whitespace at the end */
+				return preg_replace('/\s$/', '', $shortened) . ' ...';
+			}
+			/* word is broken: remove it */
+			return preg_replace('/\s?\S*$/', '', $shortened) . ' ...';
 		}
 
 		return $str;

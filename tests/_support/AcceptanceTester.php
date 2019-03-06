@@ -32,6 +32,7 @@ class AcceptanceTester extends \Codeception\Actor
 	{
 		$I = $this;
 		$I->amOnPage('/');
+		$I->executeJS('window.localStorage.clear();');
 		$I->waitForElement('#login-email');
 		$I->fillField('#login-email', $email);
 		$I->fillField('#login-password', $password);
@@ -45,6 +46,7 @@ class AcceptanceTester extends \Codeception\Actor
 	public function logout()
 	{
 		$this->amOnPage('/?page=logout');
+		$this->waitForPageBody();
 	}
 
 	/**
