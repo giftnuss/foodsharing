@@ -163,10 +163,11 @@ final class MessageXhr extends Control
 
 								/*
 								 * send Push Notification
+								 *
 								 */
-								$notificationTitle = $this->getNotificationTitle(
-									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId),
-									count($members)
+								$notificationTitle = $this->func->sv(
+									count($m) > 2 ? 'chat_notification_group_conversation' : 'chat_notification_2_member_conversation',
+									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId)
 								);
 
 								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
@@ -434,14 +435,5 @@ final class MessageXhr extends Control
 				$_SESSION['lastMailMessage'] = $sessdata;
 			}
 		}
-	}
-
-	private function getNotificationTitle(string $conversationName, int $conversationMemberCount)
-	{
-		if ($conversationMemberCount > 2) {
-			return $this->func->sv('chat_notification_group_conversation', $conversationName);
-		}
-
-		return $this->func->sv('chat_notification_2_member_conversation', $conversationName);
 	}
 }
