@@ -22,7 +22,7 @@
               v-model="filterText"
               type="text"
               class="form-control form-control-sm"
-              placeholder="Name/Adresse/Bezirk"
+              placeholder="Name/Adresse"
             >
           </div>
           <div class="col-3">
@@ -63,75 +63,72 @@
               <StoreStatusIcon :status="data.value" />
             </div>
           </template>
-
           <template
             slot="name"
             slot-scope="data"
           >
-            <div id="myContainer">
-              <div>
-                <a
-                  :id="'popover-'+data.value"
-                  href="#"
-                  class="ui-corner-all"
-                >
-                  {{ data.value }}
-                  <!--:href="$url('store', data.item.id)"-->
-                </a>
-              </div>
-              <!--popover title and content render container -->
-              <b-popover
-                ref="popover"
-                :target="'popover-'+data.value"
-                triggers="hover focus"
-                placement="auto"
-                container="myContainer"
+            <div id="popoverContainer">
+              <a
+                :id="'store-'+data.value"
+                href="#"
+                class="ui-corner-all"
               >
-                <template slot="title">
-                  <div class="head ui-widget-header">
-                    {{ data.value }}
-                    <b-button
-                      class="close"
-                      aria-labe="Close"
-                      @click="onClose(this)"
-                    >
-                      <span
-                        class="d-inline-block"
-                        aria-hidden="true"
-                      >
-                        &times;
-                      </span>
-                    </b-button>
-                  </div>
-                </template>
-
-                <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
-                  <div
-                    id="input-1"
-                    class="input-wrapper"
+                {{ data.value }}
+              </a>
+            </div>
+            <b-Popover
+              ref="popover"
+              :target="'store-'+data.value"
+              triggers="hover focus"
+              placement="auto"
+              container="popoverContainer"
+            >
+              <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front popover-content">
+                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                  <span
+                    id="ui-id-2"
+                    class="ui-dialog-title"
                   >
-                    <label
-                      class="wrapper-label ui-widget"
-                      for="input-1"
-                    >
-                      Adresse
-                    </label>
-                    <div class="element-wrapper">
-                      {{ data.item.address }}
-                      <br>
-                      {{ data.item.plz }} {{ data.item.city }}
-                      <a
-                        :href="'?page=map&bid='+data.item.id"
-                        class="nav-link"
-                      >
-                        <i class="fas fa-map-marker-alt" />
+                    {{ data.value }}
+                  </span>
+                  <button
+                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close"
+                    role="button"
+                    aria-disabled="false"
+                    title="close"
+                    @click="onClose"
+                  >
+                    <span class="ui-button-icon-primary ui-icon ui-icon-closethick" />
+                  </button>
+                </div>
+                <div
+                  id="b_content"
+                  class="ui-dialog-content ui-widget-content"
+                >
+                  <div class="input-wrapper">
+                    <div class="inner">
+                      <label class="wrapper-label ui-widget">
+                        Adresse
+                      </label>
+                      <div class="element-wrapper">
+                        <a
+                          class="nav-link"
+                          :href="mapLink(data.item)"
+                          title="Karte"
+                        >
+                          <i class="fas fa-map-marker-alt" />
+                        </a>
                         <span>
-                          Karte
+                          {{ data.item.address }}
+                          <br>
+                          {{ data.item.city }}
                         </span>
-                      </a>
+                      </div>
                     </div>
                   </div>
-                  <div class="buttonrow">
+                  <div
+                    class="ui-padding"
+                  >
                     <a
                       class="lbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                       :href="$url('store', data.item.id)"
@@ -144,11 +141,10 @@
                     </a>
                   </div>
                 </div>
-              </b-popover>
-            </div>
+              </div>
+            </b-popover>
           </template>
         </b-table>
-
         <div class="float-right p-1 pr-3">
           <b-pagination
             v-model="currentPage"
@@ -171,15 +167,14 @@
 <script>
 import { optimizedCompare } from '@/utils'
 import bTable from '@b/components/table/table'
-import bButton from '@b/components/button/button'
+import bPopover from '@b/components/popover/popover'
 import bPagination from '@b/components/pagination/pagination'
 import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import StoreStatusIcon from './StoreStatusIcon.vue'
-import bPopover from '@b/components/popover/popover'
 
 export default {
-  components: { bTable, bButton, bPagination, bFormSelect, StoreStatusIcon, bPopover },
+  components: { bTable, bPopover, bPagination, bFormSelect, StoreStatusIcon },
   directives: { bTooltip },
   props: {
     regionName: {
@@ -197,7 +192,6 @@ export default {
       perPage: 20,
       filterText: '',
       filterStatus: null,
-      popoverShow: false,
       fields: {
         status: {
           label: 'Status',
@@ -208,16 +202,12 @@ export default {
           label: 'Name',
           sortable: true
         },
+        city: {
+          label: 'PLZ/Ort',
+          sortable: true
+        },
         address: {
           label: 'Anschrift',
-          sortable: true
-        },
-        zipCode: {
-          label: 'PLZ',
-          sortable: true
-        },
-        city: {
-          label: 'Ort',
           sortable: true
         },
         added: {
@@ -227,6 +217,10 @@ export default {
         region: {
           label: 'Bezirk',
           sortable: true
+        },
+        geo: {
+          label: 'geo',
+          sortable: false
         }
       },
       statusOptions: [
@@ -249,27 +243,23 @@ export default {
           (!filterText || (
             store.name.toLowerCase().indexOf(filterText) !== -1 ||
             store.address.toLowerCase().indexOf(filterText) !== -1 ||
-            store.region.toLowerCase().indexOf(filterText) !== -1 ||
-            store.city.toLowerCase().indexOf(filterText) !== -1
+            store.region.toLowerCase().indexOf(filterText) !== -1
           ))
         )
       })
     },
-
     fieldsFiltered: function () {
-      var regions = []
-      this.stores.map(function (value, key) {
-        if (!regions.includes(value['region'])) {
-          regions.push(value['region'])
-        }
+      let regions = []
+      let fields = {}
+      this.stores.map(function (value) {
+        if (!regions.includes(value['region'])) regions.push(value['region'])
       })
-      const filterText = regions.length < 2 ? 'region' : null
-
-      return Object.keys(this.fields).filter(f =>
-        f !== 'zipCode' && f !== 'address' && f !== filterText
-      )
+      for (let key in this.fields) {
+        if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
+        else if (key !== 'region' && key !== 'address' && key !== 'geo') fields[key] = this.fields[key]
+      }
+      return fields
     }
-
   },
   methods: {
     compare: optimizedCompare,
@@ -277,6 +267,13 @@ export default {
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''
+    },
+    onClose () {
+      this.$root.$emit('bv::hide::popover')
+    },
+    mapLink: function (store) {
+      if (window.innerWidth <= 800 && window.innerHeight <= 600) return 'geo:0,0?q=' + store.geo
+      else return '?page=map&bid=' + store.id
     }
   }
 }

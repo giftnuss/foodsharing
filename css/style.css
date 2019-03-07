@@ -1288,6 +1288,24 @@ span.verified {
   background: #ffffff;
 }
 
+.popover-body {
+  margin: -9px -11px -9px -11px;
+}
+
+.popover-content {
+  width: 250px;
+  position: relative;
+}
+
+.popover-content .element-wrapper .nav-link {
+  float: right;
+  font-size: 20px;
+}
+
+.popover-content .ui-padding {
+  text-align: center;
+}
+
 .vouch-banana span {
   display: block;
   background-image: url(/img/banana.png);
@@ -1323,7 +1341,6 @@ a.light {
   text-decoration: none;
   color: #533a22;
 }
-
 
 .calendar {
   display: block;
