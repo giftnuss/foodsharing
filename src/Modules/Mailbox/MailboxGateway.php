@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class MailboxGateway extends BaseGateway
@@ -518,6 +519,10 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailboxId(int $mid)
 	{
-		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'mailbox_id', ['id' => $mid]);
+		try {
+			return $this->db->fetchValueByCriteria('fs_mailbox_message', 'mailbox_id', ['id' => $mid]);
+		} catch (Exception $e) {
+			return 0;
+		}
 	}
 }
