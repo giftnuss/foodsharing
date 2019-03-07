@@ -2,10 +2,24 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 
 class LoginGateway extends BaseGateway
 {
+	private $emailHelper;
+	private $translationHelper;
+
+	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db)
+	{
+		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
+
+		parent::__construct($db);
+	}
+
 	public function login($email, $pass)
 	{
 		$email = trim($email);
@@ -104,5 +118,124 @@ class LoginGateway extends BaseGateway
 		$salt = 'DYZG93b04yJfIxfs2guV3Uub5wv7iR2G0FgaC9mi';
 
 		return sha1($salt . $pass);
+	}
+
+	public function activate(string $email, string $token): bool
+	{
+		return $this->db->update('fs_foodsaver', ['active' => 1], ['email' => strip_tags($email), 'token' => strip_tags($token)]) > 0;
+	}
+
+	public function insertNewUser(array $data, string $token): int
+	{
+		/*
+				 [iam] => org
+				[name] => Peter
+				[email] => peter@pan.de
+				[pw] => 12345
+				[avatar] => 5427fb55f3a5d.jpg
+				[phone] => 02261889971
+				[lat] => 48.0649838
+				[lon] => 7.885475300000053
+				[str] => Bauerngasse
+				[nr] => 6
+				[plz] => 79211
+				[country] => DE
+		*/
+
+		return $this->db->insert(
+			'fs_foodsaver',
+			[
+				'rolle' => 0,
+				'type' => (int)$data['type'],
+				'active' => 0,
+				'plz' => strip_tags($data['plz']),
+				'email' => strip_tags($data['email']),
+				'password' => strip_tags($this->password_hash($data['pw'])),
+				'name' => strip_tags($data['name']),
+				'nachname' => strip_tags($data['surname']),
+				'anschrift' => strip_tags($data['str'] . ' ' . trim($data['nr'])),
+				'geb_datum' => strip_tags($data['birthdate']),
+				'handy' => strip_tags($data['mobile_phone']),
+				'newsletter' => (int)$data['newsletter'],
+				'geschlecht' => (int)$data['gender'],
+				'anmeldedatum' => $this->db->now(),
+				'stadt' => strip_tags($data['city']),
+				'lat' => strip_tags($data['lat']),
+				'lon' => strip_tags($data['lon']),
+				'token' => strip_tags($token),
+				'photo' => strip_tags($data['avatar']),
+			]
+		);
+	}
+
+	public function checkResetKey(string $key)
+	{
+		return $this->db->fetchValueByCriteria('fs_pass_request', 'foodsaver_id', ['name' => strip_tags($key)]);
+	}
+
+	public function newPassword(array $data)
+	{
+		if (strlen($data['pass1']) > 4) {
+			if ($fsid = $this->db->fetchValueByCriteria(
+				'fs_pass_request',
+				'foodsaver_id',
+				['name' => strip_tags($data['k'])]
+			)) {
+				$this->db->delete('fs_pass_request', ['foodsaver_id' => (int)$fsid]);
+
+				return $this->db->update(
+					'fs_foodsaver',
+					[
+						'password' => strip_tags($this->password_hash($data['pass1'])),
+						'passwd' => null,
+						'fs_password' => null,
+					],
+					['id' => (int)$fsid]
+				);
+			}
+		}
+
+		return false;
+	}
+
+	public function addPassRequest(string $email, $mail = true)
+	{
+		if ($fs = $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			['id', 'email', 'name', 'geschlecht'],
+			['deleted_at' => null, 'email' => strip_tags($email)]
+		)) {
+			$key = bin2hex(random_bytes(16));
+
+			$this->db->execute('
+			REPLACE INTO 	`fs_pass_request`
+			(
+				`foodsaver_id`,
+				`name`,
+				`time`
+			)
+			VALUES
+			(
+				:fs_id,
+				:key,
+				NOW()
+			)', [':fs_id' => (int)$fs['id'], ':key' => strip_tags($key)]);
+
+			if ($mail) {
+				$vars = [
+					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
+					'name' => $fs['name'],
+					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
+				];
+
+				$this->emailHelper->tplMail('reset_password', $fs['email'], $vars);
+
+				return true;
+			}
+
+			return $key;
+		}
+
+		return false;
 	}
 }

@@ -38,6 +38,7 @@
 - handle pickup signups via rest api !783 @NerdyProjects
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
+- refactored login from model to gateway !828 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
