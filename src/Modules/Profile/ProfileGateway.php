@@ -222,7 +222,7 @@ final class ProfileGateway extends BaseGateway
 
 	public function getRateMessage(int $fsId): array
 	{
-		return $this->db->fetchByCriteria(
+		return $this->db->fetchValueByCriteria(
 			'fs_rating',
 			'msg',
 			['foodsaver_id' => $fsId, 'rater_id' => $this->session->id()]
