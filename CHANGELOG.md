@@ -101,6 +101,8 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
+- Added a new button to the contextmenu wich appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
+- Added a city column to the StoreList in the store-overview #456 !679 @tihar
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
