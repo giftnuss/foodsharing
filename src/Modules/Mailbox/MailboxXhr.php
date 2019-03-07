@@ -324,7 +324,7 @@ class MailboxXhr extends Control
 
 	public function fmail()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxGateway->mayMessage($_GET['id'])) {
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
