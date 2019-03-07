@@ -95,13 +95,9 @@ class MailboxGateway extends BaseGateway
 		);
 	}
 
-	public function setAnswered(int $message_id)
+	public function setAnswered(int $message_id): int
 	{
-		if ($this->getMailboxId($message_id)) {
-			return $this->db->update('fs_mailbox_message', ['answer' => 1], ['id' => $message_id]);
-		}
-
-		return false;
+		return $this->db->update('fs_mailbox_message', ['answer' => 1], ['id' => $message_id]);
 	}
 
 	public function deleteMessage(int $mid): int
@@ -223,7 +219,7 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		if ($mb = $this->db->fetchByCriteria('mailbox', ['name'], ['id' => $mb_id])) {
+		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
 			if ($email_name = $this->db->fetchValue(
 				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
 				[':mb_id' => $mb_id]
@@ -297,14 +293,12 @@ class MailboxGateway extends BaseGateway
 				$insert[] = '(' . $mbid . ',' . (int)$fs . ',' . strip_tags($g_data['email_name']) . ')';
 			}
 
-			$this->db->execute(
-				'
+			$this->db->execute('
 				INSERT INTO `fs_mailbox_member`
 				(`mailbox_id`,`foodsaver_id`,`email_name`)
 				VALUES
-				' . implode(',', array_map('intval', $insert)) . '		
-			'
-			);
+				' . implode(',', $insert) . '		
+			');
 
 			return true;
 		}
@@ -425,7 +419,7 @@ class MailboxGateway extends BaseGateway
 		$me = [];
 		try {
 			$me = $this->db->fetchByCriteria(
-			'foodsaver',
+			'fs_foodsaver',
 			['mailbox_id', 'name', 'nachname'],
 			['id' => $fsId]
 		);
@@ -524,6 +518,6 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailboxId(int $mid)
 	{
-		return $this->db->fetchValueByCriteria('mailbox_message', 'mailbox_id', ['id' => $mid]);
+		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'mailbox_id', ['id' => $mid]);
 	}
 }
