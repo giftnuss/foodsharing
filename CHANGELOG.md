@@ -11,6 +11,7 @@
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
+- Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
