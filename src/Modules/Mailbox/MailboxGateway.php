@@ -24,11 +24,12 @@ class MailboxGateway extends BaseGateway
 
 	public function addContact(string $email, int $fsId): bool
 	{
-		$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => strip_tags($email)]);
-
-		if (!$id) {
+		try {
+			$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => strip_tags($email)]);
+		} catch (Exception $e) {
 			$id = $this->db->insert('fs_contact', ['email' => $email]);
 		}
+
 		if ((int)$id > 0) {
 			$this->db->insertIgnore('fs_foodsaver_has_contact', ['foodsaver_id' => $fsId, 'contact_id' => (int)$id]);
 
