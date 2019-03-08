@@ -220,11 +220,16 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
-			if ($email_name = $this->db->fetchValue(
+		try {
+			$email_name = $this->db->fetchValue(
 				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
 				[':mb_id' => $mb_id]
-			)) {
+			);
+		} catch (Exception $e) {
+			$email_name = '';
+		}
+		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
+			if ($email_name) {
 				$mb['email_name'] = $email_name;
 			} elseif ($email_name = $this->db->fetchValueByCriteria(
 				'fs_bezirk',
