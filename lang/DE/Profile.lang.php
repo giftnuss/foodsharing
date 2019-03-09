@@ -2,7 +2,7 @@
 global $g_lang;
 
 $g_lang['write_teaser'] = 'Schreibe etwas...';
-$g_lang['attach_image'] = 'Bild hochladen';
+$g_lang['attach_image'] = 'Statusbilder  hochladen';
 $g_lang['mailbox'] = 'Interne Mailbox';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['registration_date'] = 'Registrierungsdatum';
