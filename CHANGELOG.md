@@ -119,10 +119,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
 - Fix recently broken quiz session storage !730 @NerdyProjects
-- Fix broken permission checks in foodsaver module @NerdyProjects
-- Fix broken permission checks in foodsaver xhr module @NerdyProjects
-- Fix broken permission checks in geoclean xhr module @NerdyProjects
-- Fix broken permission checks in mailbox xhr module @NerdyProjects
 - Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
 - Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
@@ -131,7 +127,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
 - Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
 - Only allow creation of stores in a region you are member of @NerdyProjects
-- All chat messages are visible on mobiles #419 @Defka
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies
