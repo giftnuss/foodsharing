@@ -259,10 +259,10 @@ class StoreUserControl extends Control
 					$cnt = '';
 
 					foreach ($verantwortlicher as $v) {
-						$tmp = $this->view->u_innerRow('telefon', $v);
-						$tmp .= $this->view->u_innerRow('handy', $v);
+						$phoneNumbers = $this->view->u_innerRow('telefon', $v);
+						$phoneNumbers .= $this->view->u_innerRow('handy', $v);
 
-						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $tmp);
+						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $phoneNumbers);
 					}
 
 					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
