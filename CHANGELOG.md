@@ -48,7 +48,6 @@
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 - Update mocha to version 6 @peter.toennies
-- Run all jobs except test and deployment on shared CI runners @NerdyProjects
 - Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
@@ -58,8 +57,8 @@
 - Email templates are no longer stored in the database but the repository #502 !805 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
-- Test email templates for new forum messages
-- Update copy webpack plugin to version 5
+- Test email templates for new forum messages !812 @NerdyProjects
+- Update copy webpack plugin to version 5 @peter.reutlingen
 
 # 2019-02-25 Hotfix
 
@@ -137,7 +136,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
-- user normalisation in conversations API endpoint
+- user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
 
