@@ -1,6 +1,7 @@
 # Summary
 
 - [Overview](README.md)
+- [Wanted!](wanted.md)
 
 ### Getting started
   - [Getting the code](getting-the-code.md)
