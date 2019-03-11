@@ -34,6 +34,7 @@ class StatisticsGateway extends BaseGateway
 				`name`,
 				`stat_fetchweight` AS fetchweight,
 				`stat_fetchcount` AS fetchcount,
+				`type`
 			FROM
 				fs_bezirk	
 			WHERE

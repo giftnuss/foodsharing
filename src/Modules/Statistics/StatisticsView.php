@@ -118,6 +118,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('our_foodsavers'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('most_active_foodsavers'), array('class' => 'ui-padding'));
 	}
 }
