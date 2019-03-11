@@ -23,10 +23,8 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>' . $c['name'] . '</h4>
-						<p>' . number_format($c['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg (' . $c['percent'] . '<span style="white-space:nowrap">&thinsp;</span>%)</p>
-						<div class="percentbar">
-							<div class="inner" style="width:' . $c['percent'] . '%;"></div>
-						</div>
+						<p>' . number_format($c['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
+						<p>' . number_format($c['fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x abgeholt</p>
 					</td>
 				</tr>';
 			}
@@ -37,14 +35,12 @@ class StatisticsView extends View
 		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), array('class' => 'ui-padding'));
 	}
 
-	public function getStatTotal($stat)
+	public function getStatTotal($stat, int $foodsharerCount)
 	{
 		/*
 		 *  fetchweight,
 		fetchcount,
-		postcount,
-		betriebcount,
-		korpcount,
+		cooperationscount,
 		botcount,
 		fscount,
 		fairteilercount
@@ -74,7 +70,7 @@ class StatisticsView extends View
 						<div class="stat_icon korpcount"></div>
 					</div>
 					<div class="stat_text">
-						<h4>' . number_format($stat['korpcount'], 0, ',', '.') . '</h4>
+						<h4>' . number_format($stat['cooperationscount'], 0, ',', '.') . '</h4>
 						<p>Betriebe kooperieren kontinuierlich und zufrieden mit uns.</p>
 					</div>
 			</div>
@@ -85,6 +81,12 @@ class StatisticsView extends View
 					<div class="stat_text">
 						<h4>' . number_format($stat['fscount'], 0, ',', '.') . '</h4>
 						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.</p>
+					</div>
+			</div><br />
+			<div class="stat_item">
+					<div class="stat_text">
+						<h4>' . number_format($foodsharerCount, 0, ',', '.') . '</h4>
+						<p>Foodsharer sind derzeit auf foodsharing registriert.</p>
 					</div>
 			</div><br />
 		</div>', $this->translationHelper->s('stat_whole'));
