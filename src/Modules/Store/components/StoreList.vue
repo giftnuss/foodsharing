@@ -1,5 +1,8 @@
 <template>
-  <div class="container bootstrap">
+  <div
+    id="popoverContainer"
+    class="container bootstrap"
+  >
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
         Alle Betriebe aus dem Bezirk {{ regionName }}
@@ -67,21 +70,20 @@
             slot="name"
             slot-scope="data"
           >
-            <div id="popoverContainer">
-              <a
-                :id="'store-'+data.value"
-                href="#"
-                class="ui-corner-all"
-              >
-                {{ data.value }}
-              </a>
-            </div>
+            <a
+              :id="'store-'+data.value"
+              href="#"
+              class="ui-corner-all"
+            >
+              {{ data.value }}
+            </a>
             <b-Popover
               ref="popover"
               :target="'store-'+data.value"
               triggers="hover focus"
               placement="auto"
               container="popoverContainer"
+              boundary="window"
             >
               <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front popover-content">
                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
