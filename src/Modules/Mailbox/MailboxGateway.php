@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class MailboxGateway extends BaseGateway
@@ -23,11 +24,12 @@ class MailboxGateway extends BaseGateway
 
 	public function addContact(string $email, int $fsId): bool
 	{
-		$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => strip_tags($email)]);
-
-		if (!$id) {
+		try {
+			$id = $this->db->fetchValueByCriteria('fs_contact', 'id', ['email' => strip_tags($email)]);
+		} catch (Exception $e) {
 			$id = $this->db->insert('fs_contact', ['email' => $email]);
 		}
+
 		if ((int)$id > 0) {
 			$this->db->insertIgnore('fs_foodsaver_has_contact', ['foodsaver_id' => $fsId, 'contact_id' => (int)$id]);
 
@@ -219,11 +221,16 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
-			if ($email_name = $this->db->fetchValue(
+		try {
+			$email_name = $this->db->fetchValue(
 				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
 				[':mb_id' => $mb_id]
-			)) {
+			);
+		} catch (Exception $e) {
+			$email_name = '';
+		}
+		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
+			if ($email_name) {
 				$mb['email_name'] = $email_name;
 			} elseif ($email_name = $this->db->fetchValueByCriteria(
 				'fs_bezirk',
@@ -518,6 +525,10 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailboxId(int $mid)
 	{
-		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'mailbox_id', ['id' => $mid]);
+		try {
+			return $this->db->fetchValueByCriteria('fs_mailbox_message', 'mailbox_id', ['id' => $mid]);
+		} catch (Exception $e) {
+			return 0;
+		}
 	}
 }

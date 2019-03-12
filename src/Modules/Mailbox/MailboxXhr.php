@@ -306,7 +306,8 @@ class MailboxXhr extends Control
 					1
 				)
 				) {
-					if (($mb_id = $this->mailboxGateway->getMailboxId($_POST['reply'])) && $this->mailboxPermissions->mayMailbox($mb_id)) {
+					if (($mb_id = $this->mailboxGateway->getMailboxId($_POST['reply']))
+						&& $this->mailboxPermissions->mayMailbox($mb_id)) {
 						$this->mailboxGateway->setAnswered($_POST['reply']);
 					}
 

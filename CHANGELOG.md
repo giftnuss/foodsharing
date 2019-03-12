@@ -11,6 +11,7 @@
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
+- Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -38,6 +39,7 @@
 - handle pickup signups via rest api !783 @NerdyProjects
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
+- refactored login from model to gateway !828 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
@@ -129,6 +131,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Properly show quiz as succeeded when errorpoints match max. allowed errorpoints @NerdyProjects
 - Fix wrong stated relationship between user role and home district on user dashboard. Add information about user pickups to dashboard.!748 @pmayd
 - Only allow creation of stores in a region you are member of @NerdyProjects
+- All chat messages are visible on mobiles #419 @Defka
 
 ## Refactoring
 - replaced many outdated jquery functions !655 @peter.toennies

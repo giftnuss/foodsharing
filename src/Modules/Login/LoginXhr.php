@@ -14,17 +14,18 @@ class LoginXhr extends Control
 {
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $loginGateway;
 
 	public function __construct(
-		LoginModel $model,
 		LoginView $view,
 		ContentGateway $contentGateway,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		LoginGateway $loginGateway
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 	}
@@ -90,7 +91,7 @@ class LoginXhr extends Control
 		}
 
 		$token = bin2hex(random_bytes(12));
-		if ($id = $this->model->insertNewUser($data, $token)) {
+		if ($id = $this->loginGateway->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
 			$this->emailHelper->tplMail('join', $data['email'], array(
