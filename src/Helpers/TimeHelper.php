@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Helpers;
 
-use Flourish\fDate;
+use Carbon\Carbon;
 
 final class TimeHelper
 {
@@ -21,7 +21,7 @@ final class TimeHelper
 			return '- -';
 		}
 
-		$date = new fDate($unixTimeStamp);
+		$date = Carbon::createFromTimestamp($unixTimeStamp);
 
 		if ($date->eq('today')) {
 			$dateString = $this->translationHelper->s('today') . ', ';
