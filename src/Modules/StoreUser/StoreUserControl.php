@@ -342,7 +342,17 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
-					$this->pageHelper->hiddenDialog('abholen', array($this->view->u_form_abhol_table($pickup_dates), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => 500));
+					if ($this->session->isMob()) {
+						$width = '$(window).width() * 0.96';
+					} else {
+						$width = '$(window).width() / 2';
+					}
+					$this->pageHelper->hiddenDialog('abholen',
+						array($this->view->u_form_abhol_table($pickup_dates),
+							$this->v_utils->v_form_hidden('bid', 0),
+							'<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'
+						),
+						$this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => $width));
 				}
 
 				if (!$betrieb['jumper']) {
