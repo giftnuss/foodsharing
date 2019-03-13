@@ -123,12 +123,15 @@ class ProfileXhr extends Control
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
 
-			$dia->addOpt('height', '$(window).height() - 0.1 * $(window).height()', false);
+			/*
+			$dia->addOpt('height', '$(window).height()*0.9', false);
 			if ($this->session->isMob()) {
-				$dia->addOpt('width', '$(window).width() - 0.1 * $(window).width()', false);
+				$dia->addOpt('width', '$(window).width()*0.9', false);
 			} else { // desktop
-				$dia->addOpt('width', '$(window).width() - 0.4 * $(window).width()', false);
+				$dia->addOpt('width', '$(window).width()*0.7', false);
 			}
+				*/
+			$dia->noOverflow();
 
 			return $dia->xhrout();
 		}

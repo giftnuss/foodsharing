@@ -151,7 +151,7 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
 				}
-				$this->pageHelper->addStyle('#team_msg{width:358px;}');
+				$this->pageHelper->addStyle('#team_msg{width:97%;}');
 				$this->pageHelper->addHidden('
 						<div id="u_undate">
 							' . $this->v_utils->v_info($this->translationHelper->s('shure_of_backup'), $this->translationHelper->s('attention')) . '
@@ -204,7 +204,7 @@ class StoreUserControl extends Control
 				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$betrieb['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $betrieb['id']);
-					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()-15,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
+					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
 				if (!$betrieb['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
