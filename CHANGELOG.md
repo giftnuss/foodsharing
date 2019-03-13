@@ -40,6 +40,7 @@
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
 - refactored login from model to gateway !828 #9 @peter.toennies
+- Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
