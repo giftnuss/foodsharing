@@ -184,8 +184,14 @@ class StoreXhr extends Control
 				
 		');
 
-		$dia->addOpt('width', '500px');
+		if($this->session->isMob()) {
+            $dia->addOpt('width', '95%');
+        } else {
+            $dia->addOpt('width', '50%');
+        }
+
 		$dia->addOpt('height', '($(window).height()-40)', false);
+		$dia->noOverflow();
 
 		return $dia->xhrout();
 	}
