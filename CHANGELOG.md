@@ -30,6 +30,7 @@
 - Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
 - Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
+- Fix width of inputfields to a defined value !834 @peter.reutlingen
 
 ## Refactoring
 - refactored mailbox from model to gateway !803 #9 @peter.toennies
