@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use Flourish\fDate;
+use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
 
@@ -131,8 +131,8 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->session->may('orga')) {
-			$last_login = new fDate($this->foodsaver['last_login']);
-			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
+			$last_login = Carbon::parse($this->foodsaver['last_login']);
+			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
 
 			$infos[] = array(
 				'name' => $this->translationHelper->s('last_login'),
