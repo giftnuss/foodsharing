@@ -10,13 +10,12 @@ use Foodsharing\Lib\Session;
 
 class CsrfListener
 {
-	/** @var Reader */
 	private $reader;
-
 	private $session;
 
 	/**
 	 * @param Reader $reader
+	 * @param Session $session
 	 */
 	public function __construct(Reader $reader, Session $session)
 	{
@@ -29,9 +28,6 @@ class CsrfListener
 		if (!is_array($controllers = $event->getController())) {
 			return;
 		}
-
-		$request = $event->getRequest();
-		$content = $request->getContent();
 
 		list($controller, $methodName) = $controllers;
 		$reflectionObject = new \ReflectionObject($controller);
