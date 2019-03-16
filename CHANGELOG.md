@@ -98,7 +98,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
-- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
@@ -132,7 +131,8 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
-- removed unused php,js and css code !720 @alangecker
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
+- removed unused php, js and css code !720 @alangecker
 - user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
