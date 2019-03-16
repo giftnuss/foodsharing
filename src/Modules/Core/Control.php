@@ -343,7 +343,7 @@ abstract class Control
 				<div id="wallpost-submit" align="right">
 
 					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translationHelper->s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . $this->translationHelper->s('send_wall_post') . '</a>
+					<a href="#" id="wall-submit">' . $this->translationHelper->s('send') . '</a>
 					<div style="overflow:hidden;height:0;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
