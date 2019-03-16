@@ -19,7 +19,6 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
-- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 @jofranz
 - Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
 - Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
