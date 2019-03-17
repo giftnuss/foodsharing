@@ -1,7 +1,7 @@
 # Summary
 
 - [Overview](README.md)
-- [Wanted!](wanted.md)
+- [Call for contribution (GER)](it-tasks.md)
 
 ### Getting started
   - [Getting the code](getting-the-code.md)
