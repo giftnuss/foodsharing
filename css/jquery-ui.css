@@ -877,7 +877,8 @@ body .ui-tooltip {
 }
 
 .ui-widget select {
-    width: 90%
+    width: 50%;
+    min-width: 243px
 }
 
 .ui-widget-content {
