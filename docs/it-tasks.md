@@ -1,10 +1,10 @@
-# Die Foodsharing IT sucht HelferInnen 💻🔧
+# Die foodsharing IT sucht HelferInnen 💻🔧
 Lieber Interessent (w/m/d),
 
-es freut uns, dass du dich für dieses Thema interesseirst. Wir von Foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
-Unsere Homepage ist das zentrale Werkzeug unserer Iinitiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich. 
+es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
+Unsere Homepage ist das zentrale Werkzeug unserer Initiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich. 
 
-Was viele aber nicht wissen: Wir haben sehr bald **250.000** registrierte Konten und verschicken hundertausende Mails pro Monat. Ein riesen Apparat. Etwa **52.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
+Was viele aber nicht wissen: Wir haben sehr bald **250.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **52.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
 **Dem gegenüber stehen im Schnitt etwa nur 4-5 ProgrammiererInnen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im März 2019 einen neuen Aufruf starten.
 
 ## Du hast jetzt bereits Lust bekommen?
