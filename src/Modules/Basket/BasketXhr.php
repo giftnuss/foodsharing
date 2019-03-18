@@ -330,7 +330,6 @@ class BasketXhr extends Control
 				$dia->addOpt('modal', 'false', $modal);
 				$dia->addOpt('resizeable', 'false', false);
 
-				//$dia->addOpt('width', 400);
 				$dia->noOverflow();
 
 				return $dia->xhrout();
