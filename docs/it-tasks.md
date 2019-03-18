@@ -1,4 +1,4 @@
-# Die foodsharing IT sucht HelferInnen 💻🔧
+# Die foodsharing-IT sucht HelferInnen 💻🔧
 Lieber Interessent (w/m/d),
 
 es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
@@ -12,7 +12,7 @@ Melde dich gerne bei Slack https://slackin.yunity.org im Kanal/Gruppenchat **#fo
 
 ## Wo sind all die Freiwilligen mit IT-Kenntnissen?
 
-Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Projekt. Doch nur so wenige bringen sich bisher in die IT ein. Wo sind denn all die Hobby-Programmierer? Wir müssten bei einer so jungen und frischen Einrichtung doch dutzende haben.
+Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Projekt. Doch nur so wenige bringen sich bisher in die IT ein. Wo sind denn all die Hobby-Programmierer? Wir müssten bei einer so jungen und frischen Einrichtung doch Dutzende haben.
 
 ## Was benötigen wir?
 
@@ -32,7 +32,7 @@ Frag doch einmal in Deinem Bezirk herum. Innerhalb von foodsharing, aber gerne a
 
 ## Was gibt es zu tun?
 Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgabe für dich. Mögliche Aufgaben sind unter anderem:
-- Die rund 240 derzeit gemeldeten Fehler oder Feature Wünsche angehen
+- Die rund 230 derzeit gemeldeten Fehler oder Feature Wünsche angehen
 - App für jeweils Android und iOS
 - Die vielen Botschafter und Botschafterinnen aber auch Mitglieder bei ihren IT-Problemen zu unterstützen
 - Die Plattform ins Englische transferieren
@@ -44,10 +44,10 @@ Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgab
 Wie schon gesagt, mach ordentlich Werbung für unsere IT und sende den Link zu diesen Informationen hier gerne weiter. Besonders schön wäre es aber natürlich, **Dich** dabei zu haben:
 1. Schau Dich doch mal auf unserem [Blog](https://devblog.foodsharing.de/index.de.html "foodsharing Entwickler Blog") um, oder in unserem [Contribution Guide](https://devdocs.foodsharing.de/contributing.html "foodsharing contributer's guide")!
 2. Sieh Dir die lange Liste unserer [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing Issues auf GitLab") an! Einige davon sind speziell für Anfänger markiert!
-3. Besonders freuen wir uns, wenn Du in unserem [Slack Chat](https://slackin.yunity.org "Programmierer Chat") vorbei schaust und wir im Kanal *#foodsharing-dev* mit dir gemeinsam mögliche Aufgaben und Betätigungsfelder in der IT für dich finden.
+3. Besonders freuen wir uns, wenn Du in unserem [Slack Chat](https://slackin.yunity.org "Programmierer Chat") vorbei schaust und wir im Kanal *#foodsharing-dev* mit Dir gemeinsam mögliche Aufgaben und Betätigungsfelder in der IT für dich finden.
 4. Wenn Du unsicher bist oder die englischen Programmiererseiten nicht verstehst, dann darfst Du uns gerne eine Mail schreiben oder auf [Peter](https://foodsharing.de/profile/116481 "Peters Profil") zukommen. Wir versuchen weiterzuhelfen.
 
-Schickte uns auch gerne eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network) wo wir weiter darüber sprechen können wie Du dich einbringen kannst.
+Schickte uns auch gerne eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network) wo wir weiter darüber sprechen können wie Du Dich einbringen kannst.
 
 
 ## Gibt es nicht noch 'ne nerdige Auflistung, um was es IT-technisch geht?
@@ -85,7 +85,7 @@ Aber natürlich!
 - Carthage als Packet Manager
 - Die grundlegende Architektur der App baut auf ReSwift auf
 - Views werden im Code, mit AutoLayout und Constraints erzeugt
-- Als UI Architekutr wird RxSwift verwendet 
+- Als UI Architektur wird RxSwift verwendet 
 - Coordinator Pattern als Screenflow
 
 ## Hackweeks
@@ -103,11 +103,10 @@ https://yunity.org/heartbeat
 
 Danke Dir, dass Du so lange gelesen hast. Mit einer fitten IT hätten wir so viel mehr Potential und es wäre natürlich generell toll, die vielen Aufgaben auf viele Schultern zu verteilen. Mit einem noch cooleren IT-Team können wir in guter Stimmung eigentlich alles umsetzen, was wir uns wünschen. Und man lernt nebenbei 'nen ganzen Haufen spannenden Kram. Wir freuen uns schon sehr darauf, Dich und Deine Bekannten bald im Team willkommen zu heißen.
 
-📣📣 **Vielleicht ist es leider wirklich nichts für dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns WIRKLICH SEHR! ❤️ ❤️**   
+📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR! ❤️ ❤️**   
 https://devdocs.foodsharing.de/it-tasks.html  
 
-Herzlichste Grüße von euerem IT-Team!   
+Herzliche Grüße von Eurem IT-Team!   
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
-(Letzte Änderung: 17.03.2019)
-
+(Letzte Änderung: 18.03.2019)
