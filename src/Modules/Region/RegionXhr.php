@@ -88,7 +88,7 @@ final class RegionXhr extends Control
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'thread' => $theme,
-								// 'bezirk' => $region['name'], // TODO
+								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
 							));
