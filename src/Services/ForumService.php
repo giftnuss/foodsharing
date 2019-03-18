@@ -137,11 +137,9 @@ class ForumService
 		if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
-			$bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid']);
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
 				'thread' => $info['title'],
-				'bezirk' => $bezirk['name'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $poster
 			];
