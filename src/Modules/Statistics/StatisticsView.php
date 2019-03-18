@@ -86,7 +86,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_text">
 						<h4>' . number_format($foodsharerCount, 0, ',', '.') . '</h4>
-						<p>Foodsharer sind derzeit auf foodsharing registriert.</p>
+						<p>Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit.</p>
 					</div>
 			</div><br />
 		</div>', $this->translationHelper->s('stat_whole'));
