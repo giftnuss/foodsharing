@@ -153,9 +153,14 @@ class MaintenanceControl extends ConsoleControl
 		$counts = $this->foodsaverGateway->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating CH BOT group');
+		self::info('updating Switzerland BOT group');
 		$chBots = $this->foodsaverGateway->getBotIds(106);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1763, $chBots, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Austria BOT group');
+		$aBots = $this->foodsaverGateway->getBotIds(63);
+		$counts = $this->foodsaverGateway->updateGroupMembers(761, $aBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Zürich BIEB austausch');

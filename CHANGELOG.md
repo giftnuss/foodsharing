@@ -14,6 +14,7 @@
 - Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
 - Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
+- Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
