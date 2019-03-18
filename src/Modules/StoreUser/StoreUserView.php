@@ -456,7 +456,7 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->session->isAdminFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
+				} elseif (!$ago && $option['verantwortlich']) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}

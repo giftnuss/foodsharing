@@ -13,6 +13,7 @@
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 - Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
 - Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
+- Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
