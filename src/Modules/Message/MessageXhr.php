@@ -119,7 +119,7 @@ final class MessageXhr extends Control
 				$sessdata[$recipient['id']] = time();
 
 				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
-					$this->emailHelper->tplMail('chat_message_store', $recipient['email'], array(
+					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], array(
 						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
@@ -130,7 +130,7 @@ final class MessageXhr extends Control
 				} else {
 					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
 					if (count($memberNames) > 1) {
-						$this->emailHelper->tplMail('chat_message_group', $recipient['email'], array(
+						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], array(
 							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
@@ -139,7 +139,7 @@ final class MessageXhr extends Control
 							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
 						));
 					} else {
-						$this->emailHelper->tplMail('chat_message', $recipient['email'], array(
+						$this->emailHelper->tplMail('chat/message', $recipient['email'], array(
 							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],

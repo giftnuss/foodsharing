@@ -34,10 +34,10 @@ final class EmailHelper
 
 	private function emailBodyTpl(string $message, $email = false, $token = false): string
 	{
-		$unsubscribe = $this->twig->render('emailTemplates/unsubscribe.html.twig', []);
+		$unsubscribe = $this->twig->render('emailTemplates/general/unsubscribe.html.twig', []);
 
 		if ($email !== false && $token !== false) {
-			$unsubscribe = $this->twig->render('emailTemplates/unsubscribe_newsletter.html.twig', array('TOKEN' => $token, 'EMAIL' => $email));
+			$unsubscribe = $this->twig->render('emailTemplates/general/unsubscribe_newsletter.html.twig', array('TOKEN' => $token, 'EMAIL' => $email));
 		}
 
 		$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
@@ -46,7 +46,7 @@ final class EmailHelper
 		$replace = array('<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"');
 		$message = str_replace($search, $replace, $message);
 
-		return $this->twig->render('emailTemplates/body.html.twig', array('MESSAGE' => $message, 'UNSUBSCRIBE' => $unsubscribe));
+		return $this->twig->render('emailTemplates/general/body.html.twig', array('MESSAGE' => $message, 'UNSUBSCRIBE' => $unsubscribe));
 	}
 
 	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)

@@ -57,7 +57,7 @@
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
-- Email templates are no longer stored in the database but the repository #502 !805 @zommuter
+- Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
