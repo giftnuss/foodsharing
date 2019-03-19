@@ -256,18 +256,18 @@ class ProfileView extends View
 		/*
 		 * Statistics
 		 */
-		$fetchweight = '';
+		$fetchWeight = '';
 		if ($this->foodsaver['stat_fetchweight'] > 0) {
-			$fetchweight = '
+			$fetchWeight = '
 				<span class="item stat_fetchweight">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
 					<span class="name">gerettet</span>
 				</span>';
 		}
 
-		$fetchcount = '';
+		$fetchCount = '';
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$fetchcount = '
+			$fetchCount = '
 				<span class="item stat_fetchcount">
 					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
 					<span class="name">abgeholt</span>
@@ -323,14 +323,14 @@ class ProfileView extends View
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
 			});');
-			$bananacount = '
+			$bananaCount = '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
 				<span class="val">' . $count_banana . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
 			';
 
-			$bananacount .= '
+			$bananaCount .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
 				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
 				' . $givebanana . '
@@ -343,7 +343,7 @@ class ProfileView extends View
 				} else {
 					$odd = 'even';
 				}
-				$bananacount .= '
+				$bananaCount .= '
 				<tr class="' . $odd . ' bpost">
 					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
@@ -352,7 +352,7 @@ class ProfileView extends View
 					</div></td>
 				</tr>';
 			}
-			$bananacount .= '
+			$bananaCount .= '
 					</tbody>
 				</table>
 			</div>';
