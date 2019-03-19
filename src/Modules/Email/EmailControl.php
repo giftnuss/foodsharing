@@ -7,43 +7,40 @@ use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
-	private $mbmodel;
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailGateway;
 	private $regionGateway;
 	private $sanitizerService;
+	private $mailboxGateway;
 	private $identificationHelper;
 	private $dataHelper;
 
 	public function __construct(
-		Db $model,
-		MailboxModel $mbmodel,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
+		MailboxGateway $mailboxGateway,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
-		$this->model = $model;
-		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 
@@ -74,7 +71,7 @@ class EmailControl extends Control
 			$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
 		}
 
-		$boxes = $this->mbmodel->getBoxes();
+		$boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'));
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
@@ -93,7 +90,7 @@ class EmailControl extends Control
 
 		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
-		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->session->id());
+		$g_data['testemail'] = $this->emailGateway->getEmailAddressOfFoodsaver($this->session->id());
 
 		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
@@ -152,11 +149,7 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, false);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
-					$foodsaver = $this->model->q('
-						SELECT 	`id`,`email`
-						FROM `fs_foodsaver`
-						WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
-					');
+					$foodsaver = $this->emailGateway->listNewsletterOnlyFoodsharer();
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllFoodsaverNoBotschafter();
 				} elseif ($data['recip_choose'] == 'storemanagers') {
@@ -265,13 +258,7 @@ class EmailControl extends Control
 	{
 		$out = '';
 
-		$recip = $this->model->qCol('
-			SELECT 	CONCAT(fs.name," ",fs.nachname)
-			FROM 	`fs_email_status` e,
-					`fs_foodsaver` fs
-			WHERE 	e.foodsaver_id = fs.id
-			AND 	e.email_id = ' . $mail['id'] . '
-		');
+		$recip = $this->emailGateway->getRecipient($mail['id']);
 
 		$id = $this->identificationHelper->id('mailtosend');
 

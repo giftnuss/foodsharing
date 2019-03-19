@@ -8,10 +8,10 @@ class BusinessCardView extends View
 {
 	public function top()
 	{
-		return $this->topbar('Deine foodsharing Visitenkarte', 'hier easy generieren, ausdrucken und ausschneiden...', '<img src="/img/bcard.png" />');
+		return $this->topbar('Deine foodsharing Visitenkarte', 'Hier easy generieren, ausdrucken und ausschneiden...', '<img src="/img/bcard.png" />');
 	}
 
-	public function optionform($seldata)
+	public function optionForm($selectedData)
 	{
 		$this->pageHelper->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
@@ -35,7 +35,7 @@ class BusinessCardView extends View
 		');
 
 		return $this->v_utils->v_quickform($this->translationHelper->s('options'), array(
-				$this->v_utils->v_form_select('opt', array('desc' => $this->translationHelper->s('opt_desc'), 'values' => $seldata))
+				$this->v_utils->v_form_select('opt', array('desc' => $this->translationHelper->s('opt_desc'), 'values' => $selectedData))
 			), array('submit' => 'Visitenkarten erstellen'));
 	}
 }

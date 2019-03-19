@@ -259,10 +259,10 @@ class StoreUserControl extends Control
 					$cnt = '';
 
 					foreach ($verantwortlicher as $v) {
-						$tmp = $this->view->u_innerRow('telefon', $v);
-						$tmp .= $this->view->u_innerRow('handy', $v);
+						$phoneNumbers = $this->view->u_innerRow('telefon', $v);
+						$phoneNumbers .= $this->view->u_innerRow('handy', $v);
 
-						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $tmp);
+						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $phoneNumbers);
 					}
 
 					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
@@ -282,12 +282,12 @@ class StoreUserControl extends Control
 					</div>
 					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('sure') . '</span>
+						<span class="sure" style="display:none">' . $this->translationHelper->s('delete_post') . '</span>
 						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 					</div>
 					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('sure') . '</span>
+						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
 						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 					</div>');
 

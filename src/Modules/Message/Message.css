@@ -124,7 +124,7 @@ li.unread-1 {
     overflow-x: hidden !important;
   }
 
-  #right {
+  #right.list-active {
     display: none;
   }
 

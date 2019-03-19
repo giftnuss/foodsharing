@@ -1,8 +1,9 @@
 <?php
 global $g_lang;
 
-$g_lang['write_teaser'] = 'Schreibe etwas...';
-$g_lang['attach_image'] = 'Bild hochladen';
+$g_lang['write_teaser'] = 'Schreibe etwas auf deine Pinnwand...';
+$g_lang['attach_image'] = 'Statusbilder  hochladen';
+$g_lang['send_wall_post'] = 'Beitrag absenden';
 $g_lang['mailbox'] = 'Interne Mailbox';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['registration_date'] = 'Registrierungsdatum';

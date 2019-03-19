@@ -456,7 +456,7 @@ class StoreUserView extends View
 				if (!$ago && $option['verantwortlich'] && $fs['confirmed'] == 0) {
 					$aclass = 'context-unconfirmed';
 					$click = '';
-				} elseif (!$ago && ($option['verantwortlich'] || $this->session->isAdminFor($option['bezirk_id']) || $this->session->isOrgaTeam())) {
+				} elseif (!$ago && $option['verantwortlich']) {
 					$aclass .= 'context-confirmed';
 					$click = '';
 				}
@@ -508,7 +508,7 @@ class StoreUserView extends View
 		$dellink = '';
 
 		if (!$ago && isset($option['field']['additional']) && ($option['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAdminFor($option['bezirk_id']))) {
-			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'Termin wirklich löschen?\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
+			$dellink = '<br /><a class="button" href="#" onclick="if(confirm(\'' . $this->translationHelper->s('delete-manual-slot-warning-text') . '\')){ajreq(\'deldate\',{app:\'betrieb\',id:\'' . (int)$_GET['id'] . '\',time:\'' . $option['field']['datetime'] . '\'});}return false;">Termin löschen</a>';
 		}
 
 		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), $out . $dellink, $id, $option);
