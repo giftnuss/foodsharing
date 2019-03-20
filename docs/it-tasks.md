@@ -109,4 +109,4 @@ https://devdocs.foodsharing.de/it-tasks.html
 Herzliche Grüße von Eurem IT-Team!   
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
-(Letzte Änderung: 18.03.2019)
+(Letzte Änderung: 20.03.2019)
