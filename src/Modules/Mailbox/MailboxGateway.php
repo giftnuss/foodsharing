@@ -269,7 +269,7 @@ class MailboxGateway extends BaseGateway
 							`fs_foodsaver` fs
 				
 					WHERE 	mm.foodsaver_id = fs.id
-					AND 	mm.mailbox_id = :bid
+					AND 	mm.mailbox_id = :b_id
 				',
 					[':b_id' => (int)$b['id']]
 				)

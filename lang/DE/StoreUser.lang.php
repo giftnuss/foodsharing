@@ -81,7 +81,7 @@ Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
 $g_lang['shure_of_backup'] = 'Hast Du eine Vertretung? Unsere Verlässlichkeit ist sehr wichtig!';
 $g_lang['msg_to_team'] = 'Team benachrichtigen';
-$g_lang['have_backup'] = 'Ich habe schon eine Vertretung';
+$g_lang['have_backup'] = 'Ich habe eine Vertretung';
 $g_lang['del_date_for'] = 'Austragen für';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';

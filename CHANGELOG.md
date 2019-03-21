@@ -5,13 +5,25 @@
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter: 
+- Made email notifications great again #450 @zommuter : 
+- Made email notifications great again #450 @zommuter 
     - Responsible user in the FROM field !798
-    - Message excerpts in the SUBJECT !800
+    - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
+- Fit popup dialogs to smartphone and desktop screens with different conditions !826 @jofranz :
+    - profile: verfication and pass history (BOT functionality)
+    - profile: report user
+    - store: manually add team members (BIEB functionality)
+    - store: change automatic pickup times (BIEB functionality)
+    - store: slot join
+    - store: slot leave
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 - Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
+- Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
+- Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
+- Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
+- Adjust devdocs to being open source !823 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -29,6 +41,7 @@
 - Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
 - Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
+- Fix width of inputfields to a defined value !834 @peter.reutlingen
 
 ## Refactoring
 - refactored mailbox from model to gateway !803 #9 @peter.toennies
@@ -39,6 +52,7 @@
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
 - refactored login from model to gateway !828 #9 @peter.toennies
+- Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
@@ -51,11 +65,12 @@
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
-- Email templates are no longer stored in the database but the repository #502 !805 @zommuter
+- Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
 - Update copy webpack plugin to version 5 @peter.reutlingen
+- Update copy webpack plugin to version 5 @peter.toennies
 
 # 2019-02-25 Hotfix
 
@@ -133,6 +148,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - removed unused php, js and css code !720 @alangecker
+- removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects

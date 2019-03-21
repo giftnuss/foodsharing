@@ -127,9 +127,9 @@ class StoreView extends View
 			$first_post,
 			$this->v_utils->v_form_select('ueberzeugungsarbeit', array('values' => array(
 				array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
-				array('id' => 2, 'name' => 'Nach einiger Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
+				array('id' => 2, 'name' => 'Nach Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
 				array('id' => 3, 'name' => 'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
-				array('id' => 4, 'name' => 'Zuerst sah es so aus, als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
+				array('id' => 4, 'name' => 'Zuerst sah es schlecht aus, dann hat er/sie sich aber doch gemeldet')
 			))),
 			$this->v_utils->v_form_select('presse', array('values' => array(
 				array('id' => 1, 'name' => 'Ja'),

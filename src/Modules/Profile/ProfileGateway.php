@@ -220,7 +220,7 @@ final class ProfileGateway extends BaseGateway
 		);
 	}
 
-	public function getRateMessage(int $fsId): array
+	public function getRateMessage(int $fsId)
 	{
 		return $this->db->fetchValueByCriteria(
 			'fs_rating',

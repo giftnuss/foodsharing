@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Helpers;
 
-use Flourish\fDate;
+use Carbon\Carbon;
 
 final class TimeHelper
 {
@@ -21,13 +21,13 @@ final class TimeHelper
 			return '- -';
 		}
 
-		$date = new fDate($unixTimeStamp);
+		$date = Carbon::createFromTimestamp($unixTimeStamp);
 
-		if ($date->eq('today')) {
+		if ($date->isToday()) {
 			$dateString = $this->translationHelper->s('today') . ', ';
-		} elseif ($date->eq('tomorrow')) {
+		} elseif ($date->isTomorrow()) {
 			$dateString = $this->translationHelper->s('tomorrow') . ', ';
-		} elseif ($date->eq('-1 day')) {
+		} elseif ($date->isYesterday()) {
 			$dateString = $this->translationHelper->s('yesterday') . ', ';
 		} else {
 			$dateString = '';

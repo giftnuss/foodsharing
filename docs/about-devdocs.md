@@ -23,7 +23,8 @@ The devdocs are based on the following principles:
 - Information should be concise (but some repetition is necessary)
 - Information should be complete (probably an infeasible ideal)
 
-But don't worry too much about the last three principles. There are people solely dedicated to improving the devdocs.
+But don't worry too much about the last three principles.
+<!-- There are people solely dedicated to improving the devdocs. -->
 
 ### What in, what out?
 

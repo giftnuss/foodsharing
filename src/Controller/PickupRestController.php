@@ -27,21 +27,38 @@ final class PickupRestController extends AbstractFOSRestController
 	 */
 	public function signupForPickupAction(int $storeId, string $pickupDate)
 	{
+		$this->throwExceptionIfNotAllowedToPickup($storeId);
+
+		$confirmed = $this->getPickupIsConfirmedOrThrowException($storeId, $pickupDate);
+
+		return $this->handleView($this->view([
+			'confirmed' => $confirmed
+		], 200));
+	}
+
+	private function throwExceptionIfNotAllowedToPickup($storeId)
+	{
 		if (!$this->storePermissions->mayDoPickup($storeId)) {
 			throw new HttpException(403);
 		}
+	}
 
+	private function getPickupIsConfirmedOrThrowException(int $storeId, string $pickupDate)
+	{
 		$date = \DateTime::createFromFormat(DATE_ATOM, $pickupDate);
 		if (!$date) {
 			throw new HttpException(400, 'Invalid date format');
 		}
 		$confirmed = $this->storePermissions->hasPreconfirmedPickup($storeId);
+		$this->throwExceptionIfNoSlotIsAvailable($storeId, $date, $confirmed);
+
+		return $confirmed;
+	}
+
+	private function throwExceptionIfNoSlotIsAvailable(int $storeId, \DateTime $date, $confirmed)
+	{
 		if (!$this->storeService->signupForPickup($this->session->id(), $storeId, $date, $confirmed)) {
 			throw new HttpException(400, 'No pickup slot available');
 		}
-
-		return $this->handleView($this->view([
-			'confirmed' => $confirmed
-		], 200));
 	}
 }

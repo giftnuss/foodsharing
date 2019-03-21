@@ -94,7 +94,7 @@ class LoginXhr extends Control
 		if ($id = $this->loginGateway->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->emailHelper->tplMail('join', $data['email'], array(
+			$this->emailHelper->tplMail('user/join', $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
