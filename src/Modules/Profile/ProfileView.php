@@ -134,7 +134,7 @@ class ProfileView extends View
 			$last_login = (
 				$this->foodsaver['last_login']
 				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
-				: 'Never'
+				: $this->translationHelper->s('Never')
 			);
 			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
 

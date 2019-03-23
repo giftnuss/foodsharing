@@ -922,7 +922,7 @@ CREATE TABLE IF NOT EXISTS `fs_foodsaver` (
   `newsletter`         TINYINT(1)             NOT NULL DEFAULT '1',
   `token`              VARCHAR(25)            NOT NULL,
   `infomail_message`   TINYINT(1)             NOT NULL DEFAULT '1',
-  `last_login`         DATETIME               DEFAULT NULL,
+  `last_login`         DATETIME               NOT NULL,
   `stat_fetchweight`   DECIMAL(7, 2) UNSIGNED NOT NULL DEFAULT '0.00',
   `stat_fetchcount`    INT(10) UNSIGNED       NOT NULL DEFAULT '0',
   `stat_ratecount`     INT(10) UNSIGNED       NOT NULL DEFAULT '0',
