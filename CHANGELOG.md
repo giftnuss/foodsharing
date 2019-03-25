@@ -4,20 +4,19 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
-- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter : 
+- It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - Made email notifications great again #450 @zommuter 
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
 - Fit popup dialogs to smartphone and desktop screens with different conditions !826 @jofranz :
-    - profile: verfication and pass history (BOT functionality)
-    - profile: report user
-    - store: manually add team members (BIEB functionality)
-    - store: change automatic pickup times (BIEB functionality)
-    - store: slot join
-    - store: slot leave
+    - Profile: verfication and pass history (BOT functionality)
+    - Profile: report user
+    - Store: manually add team members (BIEB functionality)
+    - Store: change automatic pickup times (BIEB functionality)
+    - Store: slot join
+    - Store: slot leave
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
 - Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
 - Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
@@ -44,14 +43,14 @@
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
 
 ## Refactoring
-- refactored mailbox from model to gateway !803 #9 @peter.toennies
-- removed the geoClean and LostRegion modules !756 #103 @peter.toennies
-- refactored profile from model to gateway !782 #9 @peter.toennies
+- Refactored mailbox from model to gateway !803 #9 @peter.toennies
+- Removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- Refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
-- handle pickup signups via rest api !783 @NerdyProjects
-- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+- Handle pickup signups via rest api !783 @NerdyProjects
+- Removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
-- refactored login from model to gateway !828 #9 @peter.toennies
+- Refactored login from model to gateway !828 #9 @peter.toennies
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 
 ## Dev/Test/CI stuff
