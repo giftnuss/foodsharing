@@ -147,7 +147,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - removed unused php, js and css code !720 @alangecker
-- removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
