@@ -11,7 +11,6 @@
   "require-dev": {
     "codeception/c3": "2.4.1",
     "codeception/codeception": "2.5.4",
-    "flow/jsonpath": "0.4.0",
     "friendsofphp/php-cs-fixer": "2.14.2",
     "fzaninotto/faker": "1.8.0",
     "jakub-onderka/php-console-highlighter": "0.4.0",
@@ -20,7 +19,7 @@
     "phpstan/phpstan": "0.11.2",
     "roave/security-advisories": "dev-master",
     "sebastian/diff": "3.0.2",
-    "symfony/debug": "4.2.3"
+    "symfony/debug": "4.2.4"
   },
   "require": {
     "ext-dom": "*",
@@ -40,8 +39,8 @@
     "erusev/parsedown": "1.7.1",
     "exercise/htmlpurifier-bundle": "2.0.4",
     "filp/whoops": "2.3.1",
+    "flow/jsonpath": "0.4.0",
     "fpdo/fluentpdo": "2.1.2",
-    "flow/jsonpath": "^0.4.0",
     "friendsofsymfony/rest-bundle": "2.5.0",
     "guiguiboy/php-cli-progress-bar": "0.0.4",
     "hirak/prestissimo": "0.3.8",

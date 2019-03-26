@@ -23,6 +23,7 @@ class ReportControl extends Control
 		parent::__construct();
 	}
 
+	// Request is needed here, even if not used inside the method.
 	public function index(Request $request, Response $response): void
 	{
 		if (isset($_GET['bid'])) {
