@@ -24,6 +24,6 @@ $I->login($ambassador['email']);
 $I->amOnPage('/?page=passgen&bid=' . $testRegion);
 $I->waitForText('fs1 saver1');
 $I->click('Alle markieren');
-$I->click('markierte Ausweise generieren');
+$I->click('Markierte Ausweise generieren');
 
 $I->waitForFileExists('/downloads/foodsaver_pass_' . convertRegionName($regionName) . '.pdf', 10);

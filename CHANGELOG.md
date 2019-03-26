@@ -8,11 +8,25 @@
 - API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
 - Vue.JS implementation of reports page !529 #296 @theolampert
 - Made email notifications great again #450 @zommuter: 
+- It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+- Made email notifications great again #450 @zommuter 
     - Responsible user in the FROM field !798
-    - Message excerpts in the SUBJECT !800
+    - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
 - Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @k.miklobusec @D0nPiano
+- Fit popup dialogs to smartphone and desktop screens with different conditions !826 @jofranz :
+    - Profile: verfication and pass history (BOT functionality)
+    - Profile: report user
+    - Store: manually add team members (BIEB functionality)
+    - Store: change automatic pickup times (BIEB functionality)
+    - Store: slot join
+    - Store: slot leave
 - Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
+- Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
+- Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
+- Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
+- Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
+- Adjust devdocs to being open source !823 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -20,7 +34,6 @@
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
 - getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
-- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 @jofranz
 - Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
 - Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
@@ -31,23 +44,28 @@
 - Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
 - Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
+- Fix width of inputfields to a defined value !834 @peter.reutlingen
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - refactored profile from model to gateway !782 #9 @peter.toennies
 - API does not expose full URL to avatar images to allow the frontend to chose the resolution !529 @NerdyProjects
 - FluentPDO Query builder integrated to try it out !529 @NerdyProjects
+- Refactored mailbox from model to gateway !803 #9 @peter.toennies
+- Removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- Refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
-- handle pickup signups via rest api !783 @NerdyProjects
-- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+- Handle pickup signups via rest api !783 @NerdyProjects
+- Removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
+- Refactored login from model to gateway !828 #9 @peter.toennies
+- Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 
 ## Dev/Test/CI stuff
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 - Update mocha to version 6 @peter.toennies
-- Run all jobs except test and deployment on shared CI runners @NerdyProjects
 - Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
@@ -56,10 +74,11 @@
 - added /nbProject to .gitinore !791 @k.miklobusec
 - Seed data for reports !529 @NerdyProjects
 - Email templates are no longer stored in the database but the repository #502 !805 @zommuter
+- Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
-- Test email templates for new forum messages
-- Update copy webpack plugin to version 5
+- Test email templates for new forum messages !812 @NerdyProjects
+- Update copy webpack plugin to version 5 @peter.toennies
 
 # 2019-02-25 Hotfix
 
@@ -102,7 +121,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
-- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
@@ -119,10 +137,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
 - Fix recently broken quiz session storage !730 @NerdyProjects
-- Fix broken permission checks in foodsaver module @NerdyProjects
-- Fix broken permission checks in foodsaver xhr module @NerdyProjects
-- Fix broken permission checks in geoclean xhr module @NerdyProjects
-- Fix broken permission checks in mailbox xhr module @NerdyProjects
 - Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
 - Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
@@ -140,8 +154,9 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
-- removed unused php,js and css code !720 @alangecker
-- user normalisation in conversations API endpoint
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
+- removed unused php, js and css code !720 @alangecker
+- user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
 

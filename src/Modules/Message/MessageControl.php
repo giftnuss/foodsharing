@@ -29,7 +29,10 @@ final class MessageControl extends Control
 
 		$this->pageHelper->addContent($this->view->compose());
 		$this->pageHelper->addContent($this->view->conversation());
-		$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
+
+		if (!$this->session->isMob()) { /* for desktop only */
+			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
+		}
 
 		$conversations = $this->model->listConversations();
 		if ($conversations) {

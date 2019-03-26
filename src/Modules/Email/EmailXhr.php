@@ -2,18 +2,10 @@
 
 namespace Foodsharing\Modules\Email;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class EmailXhr extends Control
 {
-	public function __construct(Db $model)
-	{
-		$this->model = $model;
-
-		parent::__construct();
-	}
-
 	public function testmail()
 	{
 		if (!$this->session->may('orga')) {

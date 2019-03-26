@@ -77,27 +77,6 @@ table.stat_cities {
   vertical-align: top;
 }
 
-table.stat_cities td.city div.percentbar {
-  width: 200px;
-  background-color: #FFFFFF;
-  border: 1px solid #b3ab9f;
-  height: 10px;
-  border-radius: 6px;
-}
-
-table.stat_cities td.city div.percentbar div.inner {
-  background: #598939;
-  background: -moz-linear-gradient(left, #598939 0%, #a4bc71 100%, #a4bc71 100%);
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%, #598939), color-stop(100%, #a4bc71), color-stop(100%, #a4bc71));
-  background: -webkit-linear-gradient(left, #598939 0%, #a4bc71 100%, #a4bc71 100%);
-  background: -o-linear-gradient(left, #598939 0%, #a4bc71 100%, #a4bc71 100%);
-  background: -ms-linear-gradient(left, #598939 0%, #a4bc71 100%, #a4bc71 100%);
-  background: linear-gradient(to right, #598939 0%, #a4bc71 100%, #a4bc71 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#598939', endColorstr='#a4bc71', GradientType=1);
-  height: 10px;
-  border-radius: 6px;
-}
-
 table.stat_cities .city {
   overflow: hidden;
   line-height: 12px;
