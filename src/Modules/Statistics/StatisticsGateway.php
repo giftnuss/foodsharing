@@ -10,21 +10,16 @@ class StatisticsGateway extends BaseGateway
 {
 	public function listTotalStat(): array
 	{
-		$stm = '
-	
+		$stm = '	
 				SELECT
 					SUM(`stat_fetchweight`) AS fetchweight,
 					SUM(`stat_fetchcount`) AS fetchcount,
-					SUM(`stat_postcount`) AS postcount,
-					SUM(`stat_betriebcount`) AS betriebcount,
-					SUM(`stat_korpcount`) AS korpcount,
+					SUM(`stat_korpcount`) AS cooperationscount,
 					SUM(`stat_botcount`) AS botcount,
 					SUM(`stat_fscount`) AS fscount,
-					SUM(`stat_fairteilercount`) AS fairteilercount
-	
+					SUM(`stat_fairteilercount`) AS fairteilercount	
 				FROM
-					fs_bezirk
-	
+					fs_bezirk	
 				WHERE
 					`id` = :region_id
 		';
@@ -36,22 +31,14 @@ class StatisticsGateway extends BaseGateway
 	{
 		$stm = '
 			SELECT
-				`id`,
 				`name`,
 				`stat_fetchweight` AS fetchweight,
 				`stat_fetchcount` AS fetchcount,
-				`stat_postcount`AS postcount,
-				`stat_betriebcount` AS betriebcount,
-				`stat_korpcount` AS korpcount,
-				`stat_botcount` AS botcount,
-				`stat_fscount` AS fscount,
-				`stat_fairteilercount` AS fairteilercount
+				`type`
 			FROM
-				fs_bezirk
-	
+				fs_bezirk	
 			WHERE
-				`type` IN(:city, :bigCity)
-	
+				`type` IN(:city, :bigCity)	
 			ORDER BY fetchweight DESC
 			LIMIT 10
 		';
@@ -71,12 +58,16 @@ class StatisticsGateway extends BaseGateway
 			FROM
 				fs_foodsaver
 			WHERE
-				deleted_at IS NULL
-	
+				deleted_at IS NULL	
 			ORDER BY fetchweight DESC
 			LIMIT 10
 		';
 
 		return $this->db->fetchAll($stm);
+	}
+
+	public function countAllFoodsharers(): int
+	{
+		return $this->db->count('fs_foodsaver', ['active' => 1, 'deleted_at' => null]);
 	}
 }

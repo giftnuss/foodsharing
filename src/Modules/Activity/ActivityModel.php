@@ -3,28 +3,28 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Db
 {
-	private $mailboxModel;
 	private $activityGateway;
 	private $sanitizerService;
 	private $imageService;
+	private $mailboxGateway;
 
 	public function __construct(
-		MailboxModel $mailboxModel,
 		ActivityGateway $activityGateway,
 		SanitizerService $sanitizerService,
-		ImageService $imageService
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
 	) {
 		parent::__construct();
-		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -139,7 +139,7 @@ class ActivityModel extends Db
 
 	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
 	{
-		if ($boxes = $this->mailboxModel->getBoxes()) {
+		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			$mb_ids = array();
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {

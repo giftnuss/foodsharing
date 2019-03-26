@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "520e1c0ed32613dfdc70294c965fba42",
+    "content-hash": "a98088f2a409834fb6d617ca567c9f8a",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -972,97 +972,6 @@
                 "whoops"
             ],
             "time": "2018-10-23T09:00:00+00:00"
-        },
-        {
-            "name": "flow/jsonpath",
-            "version": "0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FlowCommunications/JSONPath.git",
-                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/f0222818d5c938e4ab668ab2e2c079bd51a27112",
-                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "peekmo/jsonpath": "dev-master",
-                "phpunit/phpunit": "^4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Flow\\JSONPath": "src/",
-                    "Flow\\JSONPath\\Test": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Stephen Frank",
-                    "email": "stephen@flowsa.com"
-                }
-            ],
-            "description": "JSONPath implementation for parsing, searching and flattening arrays",
-            "time": "2018-03-04T16:39:47+00:00"
-        },
-        {
-            "name": "fpdo/fluentpdo",
-            "version": "v2.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/envms/fluentpdo.git",
-                "reference": "3af5c02ec3d38654e0346029ccbcd8aca930a663"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/envms/fluentpdo/zipball/3af5c02ec3d38654e0346029ccbcd8aca930a663",
-                "reference": "3af5c02ec3d38654e0346029ccbcd8aca930a663",
-                "shasum": ""
-            },
-            "require-dev": {
-                "envms/fluent-test": "^1.0",
-                "phpunit/phpunit": "^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Envms\\FluentPDO\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0",
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "envms",
-                    "homepage": "http://env.ms"
-                }
-            ],
-            "description": "FluentPDO is a quick and light PHP library for rapid query building. It features a smart join builder, which automatically creates table joins.",
-            "homepage": "https://github.com/envms/fluentpdo",
-            "keywords": [
-                "builder",
-                "database",
-                "db",
-                "dbal",
-                "fluent",
-                "mysql",
-                "oracle",
-                "pdo",
-                "query"
-            ],
-            "time": "2018-10-30T11:53:23+00:00"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -3579,16 +3488,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v4.2.3",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "cf9b2e33f757deb884ce474e06d2647c1c769b65"
+                "reference": "de73f48977b8eaf7ce22814d66e43a1662cc864f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/cf9b2e33f757deb884ce474e06d2647c1c769b65",
-                "reference": "cf9b2e33f757deb884ce474e06d2647c1c769b65",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/de73f48977b8eaf7ce22814d66e43a1662cc864f",
+                "reference": "de73f48977b8eaf7ce22814d66e43a1662cc864f",
                 "shasum": ""
             },
             "require": {
@@ -3631,7 +3540,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-25T14:35:16+00:00"
+            "time": "2019-03-03T18:11:24+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -6174,6 +6083,47 @@
                 "webdriver"
             ],
             "time": "2018-05-16T17:37:13+00:00"
+        },
+        {
+            "name": "flow/jsonpath",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FlowCommunications/JSONPath.git",
+                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/f0222818d5c938e4ab668ab2e2c079bd51a27112",
+                "reference": "f0222818d5c938e4ab668ab2e2c079bd51a27112",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "peekmo/jsonpath": "dev-master",
+                "phpunit/phpunit": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Flow\\JSONPath": "src/",
+                    "Flow\\JSONPath\\Test": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Frank",
+                    "email": "stephen@flowsa.com"
+                }
+            ],
+            "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "time": "2018-03-04T16:39:47+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",

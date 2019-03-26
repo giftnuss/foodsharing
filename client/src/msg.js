@@ -328,6 +328,7 @@ const msg = {
   },
   compose: function () {
     document.getElementById('compose').style.display = ''
+    document.getElementById('right').classList.remove('list-active')
     document.getElementById('msg-conversation-wrapper').style.display = 'none'
     $('#conversation-list .active').removeClass('active')
     msg.conversation_id = 0
@@ -377,6 +378,7 @@ const msg = {
     }
 
     document.getElementById('compose').style.display = 'none'
+    document.getElementById('right').classList.add('list-active')
     document.getElementById('msg-conversation-wrapper').style.display = ''
     msg.scrollBottom()
 

@@ -24,22 +24,37 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	// TODO: this is copied directly from from messageXhr.php
-	private function mayConversation($conversation_id)
+	private function mayConversation($conversationId)
+	{
+		$ids = $this->getNormalizedMsgConversations();
+
+		if ($this->conversationIsStoredInSession($conversationId)) {
+			return true;
+		}
+
+		if ($this->model->mayConversation($conversationId)) {
+			$ids[$conversationId] = true;
+			$this->session->set('msg_conversations', $ids);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	private function getNormalizedMsgConversations()
 	{
 		// first get the session array
 		if (!($ids = $this->session->get('msg_conversations'))) {
 			$ids = [];
 		}
 
-		// check if the conversation in stored in the session
-		if (isset($ids[(int)$conversation_id])) {
-			return true;
-		}
+		return $ids;
+	}
 
-		if ($this->model->mayConversation($conversation_id)) {
-			$ids[$conversation_id] = true;
-			$this->session->set('msg_conversations', $ids);
-
+	private function conversationIsStoredInSession($conversationId)
+	{
+		if (isset($ids[(int)$conversationId])) {
 			return true;
 		}
 
@@ -57,6 +72,15 @@ class MessageRestController extends AbstractFOSRestController
 			throw new HttpException(401);
 		}
 
+		$conversationData = $this->getConversationData($paramFetcher, $conversationId);
+
+		$view = $this->view($conversationData, 200);
+
+		return $this->handleView($view);
+	}
+
+	private function getConversationData(ParamFetcher $paramFetcher, $conversationId)
+	{
 		$messagesLimit = $paramFetcher->get('messagesLimit');
 		$messagesOffset = $paramFetcher->get('messagesOffset');
 
@@ -70,16 +94,14 @@ class MessageRestController extends AbstractFOSRestController
 		$name = $this->gateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 
-		$data = [
+		$conversationData = [
 			'name' => $name,
 			'member' => $members, // remove this in the future once clients have updated
 			'members' => $members,
 			'messages' => $messages,
 		];
 
-		$view = $this->view($data, 200);
-
-		return $this->handleView($view);
+		return $conversationData;
 	}
 
 	/**
