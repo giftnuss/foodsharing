@@ -1,15 +1,14 @@
 <?php
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\PageHelper;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /* @var $container Container */
 global $container;
@@ -41,27 +40,26 @@ if (isset($_GET['logout'])) {
 $content_left_width = 5;
 $content_right_width = 6;
 
-/* @var $request Request */
-$request = Request::createFromGlobals();
-$response = new Response('--');
-
-/* @var $func Func */
-$func = $container->get(Func::class);
+/* @var $dataHelper DataHelper */
+$dataHelper = $container->get(DataHelper::class);
 
 /* @var $pageHelper PageHelper */
 $pageHelper = $container->get(PageHelper::class);
+
+/* @var $identificationHelper IdentificationHelper */
+$identificationHelper = $container->get(IdentificationHelper::class);
 
 /* @var $viewUtils Utils */
 $viewUtils = $container->get(Utils::class);
 
 $g_template = 'default';
-$g_data = $func->getPostData();
+$g_data = $dataHelper->getPostData();
 
 /* @var $db Db */
 $db = $container->get(Db::class);
 
-$pageHelper->addHidden('<a id="' . $func->id('fancylink') . '" href="#fancy">&nbsp;</a>');
-$pageHelper->addHidden('<div id="' . $func->id('fancy') . '"></div>');
+$pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
+$pageHelper->addHidden('<div id="' . $identificationHelper->id('fancy') . '"></div>');
 
 $pageHelper->addHidden('<div id="u-profile"></div>');
 $pageHelper->addHidden('<ul id="hidden-info"></ul>');

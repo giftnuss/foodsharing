@@ -7,6 +7,7 @@ use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
@@ -20,7 +21,6 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class Session
 {
-	private $func;
 	private $mem;
 	private $legalGateway;
 	private $foodsaverGateway;
@@ -31,9 +31,9 @@ class Session
 	private $db;
 	private $initialized = false;
 	private $routeHelper;
+	private $translationHelper;
 
 	public function __construct(
-		Func $func,
 		Mem $mem,
 		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -42,9 +42,9 @@ class Session
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
 		Db $db,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		TranslationHelper $translationHelper
 	) {
-		$this->func = $func;
 		$this->mem = $mem;
 		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -54,6 +54,7 @@ class Session
 		$this->storeGateway = $storeGateway;
 		$this->db = $db;
 		$this->routeHelper = $routeHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -259,7 +260,7 @@ class Session
 		}
 
 		if (!$title) {
-			$title = ' ' . $this->func->s($type);
+			$title = ' ' . $this->translationHelper->s($type);
 		} else {
 			$title = ' ';
 		}
@@ -621,5 +622,10 @@ class Session
 		}
 
 		return $this->isValidCsrfToken('cookie', $_SERVER['HTTP_X_CSRF_TOKEN']);
+	}
+
+	public function isMob(): bool
+	{
+		return isset($_SESSION['mob']) && $_SESSION['mob'] == 1;
 	}
 }

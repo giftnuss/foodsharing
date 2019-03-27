@@ -165,7 +165,7 @@ final class MessageXhr extends Control
 								 * send Push Notification
 								 *
 								 */
-								$notificationTitle = $this->func->sv(
+								$notificationTitle = $this->translationHelper->sv(
 									count($m) > 2 ? 'chat_notification_group_conversation' : 'chat_notification_2_member_conversation',
 									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId)
 								);
@@ -201,7 +201,7 @@ final class MessageXhr extends Control
 				}
 			}
 		}
-		$xhr->addMessage($this->func->s('error'), 'error');
+		$xhr->addMessage($this->translationHelper->s('error'), 'error');
 		$xhr->send();
 	}
 
@@ -332,10 +332,10 @@ final class MessageXhr extends Control
 					 */
 					$xhr->addData('cid', $cid);
 				} else {
-					$xhr->addMessage($this->func->s('error'), 'error');
+					$xhr->addMessage($this->translationHelper->s('error'), 'error');
 				}
 			} else {
-				$xhr->addMessage($this->func->s('wrong_recip_count'), 'error');
+				$xhr->addMessage($this->translationHelper->s('wrong_recip_count'), 'error');
 			}
 
 			/*
@@ -423,7 +423,7 @@ final class MessageXhr extends Control
 					$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
 
 					$this->emailHelper->tplMail(30, $recipient['email'], array(
-						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
 						'chatname' => $chatname,

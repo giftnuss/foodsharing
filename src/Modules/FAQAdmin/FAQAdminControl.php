@@ -2,18 +2,29 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class FAQAdminControl extends Control
 {
 	private $faqGateway;
+	private $identificationHelper;
+	private $dataHelper;
 
-	public function __construct(Db $model, FAQAdminView $view, FAQGateway $faqGateway)
-	{
+	public function __construct(
+		Db $model,
+		FAQAdminView $view,
+		FAQGateway $faqGateway,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
@@ -24,40 +35,40 @@ class FAQAdminControl extends Control
 
 	public function index()
 	{
-		if ($this->func->getAction('neu')) {
+		if ($this->identificationHelper->getAction('neu')) {
 			$this->handle_add();
 
-			$this->pageHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
-			$this->pageHelper->addBread($this->func->s('bread_new_faq'));
+			$this->pageHelper->addBread($this->translationHelper->s('bread_faq'), '/?page=faq');
+			$this->pageHelper->addBread($this->translationHelper->s('bread_new_faq'));
 
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('faq', 'back_to_overview')
-			)), $this->func->s('actions')), CNT_RIGHT);
-		} elseif ($id = $this->func->getActionId('delete')) {
+				$this->routeHelper->pageLink('faq', 'back_to_overview')
+			)), $this->translationHelper->s('actions')), CNT_RIGHT);
+		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
-				$this->func->info($this->func->s('faq_deleted'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_deleted'));
 				$this->routeHelper->goPage();
 			}
-		} elseif ($id = $this->func->getActionId('edit')) {
+		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->handle_edit();
-			$this->pageHelper->addBread($this->func->s('bread_faq'), '/?page=faq');
-			$this->pageHelper->addBread($this->func->s('bread_edit_faq'));
+			$this->pageHelper->addBread($this->translationHelper->s('bread_faq'), '/?page=faq');
+			$this->pageHelper->addBread($this->translationHelper->s('bread_edit_faq'));
 
 			$data = $this->faqGateway->getOne_faq($id);
-			$this->func->setEditData($data);
+			$this->dataHelper->setEditData($data);
 
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('faq', 'back_to_overview')
-			)), $this->func->s('actions')), CNT_RIGHT);
+				$this->routeHelper->pageLink('faq', 'back_to_overview')
+			)), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$data = $this->faqGateway->getOne_faq($_GET['id']);
 			print_r($data);
 		} else {
-			$this->pageHelper->addBread($this->func->s('faq_bread'), '/?page=faq');
+			$this->pageHelper->addBread($this->translationHelper->s('faq_bread'), '/?page=faq');
 
 			if ($data = $this->faqGateway->get_faq()) {
 				$sort = array();
@@ -73,23 +84,23 @@ class FAQAdminControl extends Control
 					foreach ($data as $d) {
 						$rows[] = array(
 							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=faq&a=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->func->sv('delete_sure', $d['name'])))
+							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])))
 							));
 					}
 
 					$table = $this->v_utils->v_tablesorter(array(
-						array('name' => $this->func->s('name')),
-						array('name' => $this->func->s('actions'), 'sort' => false, 'width' => 50)
+						array('name' => $this->translationHelper->s('name')),
+						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
 				}
 			} else {
-				$this->func->info($this->func->s('faq_empty'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_empty'));
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array('href' => '/?page=faq&a=neu', 'name' => $this->func->s('neu_faq'))
+				array('href' => '/?page=faq&a=neu', 'name' => $this->translationHelper->s('neu_faq'))
 			)), 'Aktionen'), CNT_RIGHT);
 		}
 	}
@@ -98,13 +109,13 @@ class FAQAdminControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->submitted()) {
+		if ($this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->faqGateway->update_faq($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('faq_edit_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_edit_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
@@ -113,13 +124,13 @@ class FAQAdminControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->submitted()) {
+		if ($this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			if ($this->model->add_faq($g_data)) {
-				$this->func->info($this->func->s('faq_add_success'));
+				$this->flashMessageHelper->info($this->translationHelper->s('faq_add_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

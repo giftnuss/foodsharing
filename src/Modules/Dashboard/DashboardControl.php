@@ -119,7 +119,7 @@ class DashboardControl extends Control
 				'{ANREDE}'
 			), array(
 				$this->session->user('name'),
-				$this->func->s('anrede_' . $this->session->user('gender'))
+				$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 			), $cnt['body']);
 
 			if ($this->session->option('quiz-infobox-seen')) {
@@ -151,15 +151,15 @@ class DashboardControl extends Control
 	private function dashFs()
 	{
 		$this->setContentWidth(8, 8);
-		$subtitle = $this->func->s('no_saved_food');
+		$subtitle = $this->translationHelper->s('no_saved_food');
 
 		if ($this->user['stat_fetchweight'] > 0) {
-			$subtitle = $this->func->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
+			$subtitle = $this->translationHelper->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
 		}
 
 		$this->pageHelper->addContent(
 			$this->twig->render('partials/topbar.twig', [
-				'title' => $this->func->sv('welcome', ['name' => $this->user['name']]),
+				'title' => $this->translationHelper->sv('welcome', ['name' => $this->user['name']]),
 				'subtitle' => $subtitle,
 				'avatar' => [
 					'user' => $this->user,
@@ -181,7 +181,7 @@ class DashboardControl extends Control
 			'{ANREDE}'
 		), array(
 			$this->session->user('name'),
-			$this->func->s('anrede_' . $this->session->user('gender'))
+			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
 		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
@@ -204,7 +204,7 @@ class DashboardControl extends Control
 		if (empty($val['lat']) || empty($val['lon']) ||
 			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
 		) {
-			$this->func->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+			$this->flashMessageHelper->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 

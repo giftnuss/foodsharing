@@ -151,7 +151,7 @@ class QuizView extends View
 	{
 		return '
 		<div id="quizcomment">
-			' . $this->v_utils->v_form_textarea('quizusercomment', array('placeholder' => $this->func->s('quizusercomment'), 'nolabel' => true)) . '
+			' . $this->v_utils->v_form_textarea('quizusercomment', array('placeholder' => $this->translationHelper->s('quizusercomment'), 'nolabel' => true)) . '
 		</div>';
 	}
 

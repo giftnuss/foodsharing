@@ -26,7 +26,7 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, $this->func->s('new_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('new_foodbaskets'));
 	}
 
 	public function updates()
@@ -169,8 +169,8 @@ class DashboardView extends View
 	public function foodsharerMenu()
 	{
 		return $this->menu(array(
-			array('name' => $this->func->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"),
-			array('name' => $this->func->s('all_baskets'), 'href' => '/karte?load=baskets')
+			array('name' => $this->translationHelper->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"),
+			array('name' => $this->translationHelper->s('all_baskets'), 'href' => '/karte?load=baskets')
 		));
 	}
 
@@ -194,7 +194,7 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, $this->func->s('close_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('close_foodbaskets'));
 	}
 
 	private function img($basket)
@@ -233,7 +233,7 @@ class DashboardView extends View
 			</ul>
 		</div>';
 
-		return $this->v_utils->v_field($out, $this->func->s('next_dates'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('next_dates'));
 	}
 
 	public function u_myBetriebe($betriebe)
@@ -406,7 +406,7 @@ class DashboardView extends View
 			</div>';
 		}
 
-		return $this->v_utils->v_field($out, $this->func->s('updates'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('updates'), array('class' => 'ui-padding'));
 	}
 
 	public function u_update_type($u)
@@ -493,7 +493,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . $this->func->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 						
@@ -516,7 +516,7 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, $this->func->s('you_were_invited'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), array('class' => 'ui-padding'));
 	}
 
 	public function u_events($events)
@@ -526,7 +526,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;padding-top:15px;">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . $this->func->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 			
@@ -549,9 +549,9 @@ class DashboardView extends View
 		}
 
 		if (count($events) > 1) {
-			$eventTitle = $this->func->s('events_headline') . ' (' . count($events) . ')';
+			$eventTitle = $this->translationHelper->s('events_headline') . ' (' . count($events) . ')';
 		} else {
-			$eventTitle = $this->func->s('event_headline');
+			$eventTitle = $this->translationHelper->s('event_headline');
 		}
 
 		return $this->v_utils->v_field($out, $eventTitle, array('class' => 'ui-padding moreswap'));

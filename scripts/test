@@ -18,6 +18,9 @@ $dir/mkdirs
 echo "Waiting for mysql to start"
 wait-for-mysql
 
+echo "Flush redis"
+exec-in-container redis redis-cli flushall
+
 echo "Initializing database"
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 

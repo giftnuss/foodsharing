@@ -3,7 +3,7 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 
@@ -11,22 +11,22 @@ final class NotificationService
 {
 	private $bellGateway;
 	private $fairteilerGateway;
-	private $func;
 	private $sanitizerService;
 	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		FairTeilerGateway $fairTeilerGateway,
-		Func $func,
 		SanitizerService $sanitizerService,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->fairteilerGateway = $fairTeilerGateway;
-		$this->func = $func;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function newFairteilerPost(int $fairteilerId)
@@ -49,10 +49,10 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->emailHelper->tplMail(18, $f['email'], array(
+					$this->emailHelper->tplMail('new_fairteiler_message', $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId,
 						'name' => $f['name'],
-						'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'fairteiler' => $ft['name'],
 						'post' => $body
 					));

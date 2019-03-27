@@ -3,14 +3,58 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
 
 class SettingsView extends View
 {
+	private $regionGateway;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		RegionGateway $regionGateway
+	) {
+		$this->regionGateway = $regionGateway;
+
+		parent::__construct(
+			$twig,
+			$viewUtils,
+			$session,
+			$sanitizerService,
+			$pageHelper,
+			$timeHelper,
+			$imageService,
+			$routeHelper,
+			$identificationHelper,
+			$dataHelper,
+			$translationHelper
+		);
+	}
+
 	public function sleepMode($sleep)
 	{
-		$this->func->setEditData($sleep);
+		$this->dataHelper->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != 1) {
 			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');
@@ -73,28 +117,28 @@ class SettingsView extends View
 						msg: $("#sleep_msg").val()
 					},
 					success: function(){
-						pulseSuccess("' . $this->func->s('sleep_mode_saved') . '");
+						pulseSuccess("' . $this->translationHelper->s('sleep_mode_saved') . '");
 					}
 				});
 			});
 			$("#formwrapper").show();
 		');
 
-		$out = $this->v_utils->v_quickform($this->func->s('sleepmode'), array(
-			$this->v_utils->v_info($this->func->s('sleepmode_info')),
-			$this->v_utils->v_info($this->func->s('sleepmode_show')),
+		$out = $this->v_utils->v_quickform($this->translationHelper->s('sleepmode'), array(
+			$this->v_utils->v_info($this->translationHelper->s('sleepmode_info')),
+			$this->v_utils->v_info($this->translationHelper->s('sleepmode_show')),
 			$this->v_utils->v_form_select('sleep_status', array(
 				'values' => array(
-					array('id' => 0, 'name' => $this->func->s('no_sleepmode')),
-					array('id' => 1, 'name' => $this->func->s('temp_sleepmode')),
-					array('id' => 2, 'name' => $this->func->s('full_sleepmode'))
+					array('id' => 0, 'name' => $this->translationHelper->s('no_sleepmode')),
+					array('id' => 1, 'name' => $this->translationHelper->s('temp_sleepmode')),
+					array('id' => 2, 'name' => $this->translationHelper->s('full_sleepmode'))
 				)
 			)),
 			$this->v_utils->v_form_daterange(),
 			$this->v_utils->v_form_textarea('sleep_msg', array(
 				'maxlength' => 150
 			))
-		), array('submit' => $this->func->s('save')));
+		), array('submit' => $this->translationHelper->s('save')));
 
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
@@ -119,12 +163,12 @@ class SettingsView extends View
 
 				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
 				$out .= $this->v_utils->v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => $this->func->sv('follow_fairteiler', $ft['name']),
-					'desc' => $this->func->sv('follow_fairteiler_desc', $ft['name']),
+					'label' => $this->translationHelper->sv('follow_fairteiler', $ft['name']),
+					'desc' => $this->translationHelper->sv('follow_fairteiler_desc', $ft['name']),
 					'values' => array(
-						array('id' => 1, 'name' => $this->func->s('follow_fairteiler_mail')),
-						array('id' => 2, 'name' => $this->func->s('follow_fairteiler_alert')),
-						array('id' => 0, 'name' => $this->func->s('follow_fairteiler_none'))
+						array('id' => 1, 'name' => $this->translationHelper->s('follow_fairteiler_mail')),
+						array('id' => 2, 'name' => $this->translationHelper->s('follow_fairteiler_alert')),
+						array('id' => 0, 'name' => $this->translationHelper->s('follow_fairteiler_none'))
 					),
 					'disabled' => $disabled
 				));
@@ -135,11 +179,11 @@ class SettingsView extends View
 			foreach ($threads as $ft) {
 				$g_data['thread_' . $ft['id']] = $ft['infotype'];
 				$out .= $this->v_utils->v_form_radio('thread_' . $ft['id'], array(
-					'label' => $this->func->sv('follow_thread', $ft['name']),
-					'desc' => $this->func->sv('follow_thread_desc', $ft['name']),
+					'label' => $this->translationHelper->sv('follow_thread', $ft['name']),
+					'desc' => $this->translationHelper->sv('follow_thread_desc', $ft['name']),
 					'values' => array(
-						array('id' => 1, 'name' => $this->func->s('follow_thread_mail')),
-						array('id' => 0, 'name' => $this->func->s('follow_thread_none'))
+						array('id' => 1, 'name' => $this->translationHelper->s('follow_thread_mail')),
+						array('id' => 0, 'name' => $this->translationHelper->s('follow_thread_none'))
 					)
 				));
 			}
@@ -152,21 +196,21 @@ class SettingsView extends View
 						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
 			),
 			$this->v_utils->v_form_radio('newsletter', array(
-				'desc' => $this->func->s('newsletter_desc'),
+				'desc' => $this->translationHelper->s('newsletter_desc'),
 				'values' => array(
-					array('id' => 0, 'name' => $this->func->s('no')),
-					array('id' => 1, 'name' => $this->func->s('yes'))
+					array('id' => 0, 'name' => $this->translationHelper->s('no')),
+					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
 				)
 			)),
 			$this->v_utils->v_form_radio('infomail_message', array(
-				'desc' => $this->func->s('infomail_message_desc'),
+				'desc' => $this->translationHelper->s('infomail_message_desc'),
 				'values' => array(
-					array('id' => 0, 'name' => $this->func->s('no')),
-					array('id' => 1, 'name' => $this->func->s('yes'))
+					array('id' => 0, 'name' => $this->translationHelper->s('no')),
+					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
 				)
 			)),
 			$out
-		), array('submit' => $this->func->s('save'))), $this->func->s('settings_info'), array('class' => 'ui-padding'));
+		), array('submit' => $this->translationHelper->s('save'))), $this->translationHelper->s('settings_info'), array('class' => 'ui-padding'));
 	}
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
@@ -447,10 +491,10 @@ class SettingsView extends View
 	public function delete_account(int $fsId)
 	{
 		$content =
-			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->func->s('delete_now') . '</button>'
-		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->func->s('reference'));
+			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
+		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->translationHelper->s('reference'));
 
-		return $this->v_utils->v_field($content, $this->func->s('delete_account'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), array('class' => 'ui-padding'));
 	}
 
 	public function foodsaver_form()
@@ -486,11 +530,11 @@ class SettingsView extends View
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage') .
-			$this->v_utils->v_form_text('tox', array('desc' => $this->func->s('tox_desc')));
+			$this->v_utils->v_form_text('tox', array('desc' => $this->translationHelper->s('tox_desc')));
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
-			if ($b = $this->func->getBezirk($g_data['bezirk_id'])) {
+			if ($b = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId())) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
 			}
@@ -511,7 +555,7 @@ class SettingsView extends View
 		}
 		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
-		return $this->v_utils->v_quickform($this->func->s('settings'), array(
+		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), array(
 			$bezirkchoose,
 			$this->latLonPicker('LatLng', $latLonOptions),
 			$this->v_utils->v_form_text('telefon'),
@@ -521,7 +565,7 @@ class SettingsView extends View
 			$position,
 			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
 			$oeff
-		), array('submit' => $this->func->s('save')));
+		), array('submit' => $this->translationHelper->s('save')));
 	}
 
 	public function quizFailed($failed)
@@ -601,7 +645,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->func->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
@@ -626,7 +670,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->func->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';

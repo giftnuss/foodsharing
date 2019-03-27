@@ -30,20 +30,6 @@ class LoginXhr extends Control
 	}
 
 	/**
-	 * Method to add some user specific vars to the memcache for more performance and less db access.
-	 */
-	private function fillMemcacheUserVars()
-	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->session->id());
-
-		if ((int)$info > 0) {
-			$this->mem->userSet($this->session->id(), 'infomail', true);
-		} else {
-			$this->mem->userSet($this->session->id(), 'infomail', false);
-		}
-	}
-
-	/**
 	 * here arrives the photo what user cann upload in the quick join form.
 	 */
 	public function photoupload()
@@ -57,7 +43,7 @@ class LoginXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				$this->func->s('upload_no_image')
+				$this->translationHelper->s('upload_no_image')
 			);
 			$uploader->setMaxSize('5MB');
 
@@ -80,7 +66,7 @@ class LoginXhr extends Control
 				$func = 'parent.join.readyUpload(\'' . $name . '\');';
 			}
 		} catch (Exception $e) {
-			$func = 'parent.join.photoUploadError(\'' . $this->func->s('error_image') . '\');';
+			$func = 'parent.join.photoUploadError(\'' . $this->translationHelper->s('error_image') . '\');';
 		}
 
 		echo '<html>
@@ -107,10 +93,10 @@ class LoginXhr extends Control
 		if ($id = $this->model->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->emailHelper->tplMail(25, $data['email'], array(
+			$this->emailHelper->tplMail('join', $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
-				'anrede' => $this->func->s('anrede_' . $data['gender'])
+				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
 			));
 
 			echo json_encode(array(
@@ -121,7 +107,7 @@ class LoginXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'error' => $this->func->s('error')
+			'error' => $this->translationHelper->s('error')
 		));
 		exit();
 	}
@@ -171,19 +157,19 @@ class LoginXhr extends Control
 		$data['surname'] = trim($data['surname']);
 
 		if ($data['name'] == '') {
-			return $this->func->s('error_name');
+			return $this->translationHelper->s('error_name');
 		}
 
 		if (!$this->emailHelper->validEmail($data['email'])) {
-			return $this->func->s('error_email');
+			return $this->translationHelper->s('error_email');
 		}
 
 		if ($this->foodsaverGateway->emailExists($data['email'])) {
-			return $this->func->s('email_exists');
+			return $this->translationHelper->s('email_exists');
 		}
 
 		if (strlen($data['pw']) < 8) {
-			return $this->func->s('error_passwd');
+			return $this->translationHelper->s('error_passwd');
 		}
 
 		$data['gender'] = (int)$data['gender'];
@@ -195,7 +181,7 @@ class LoginXhr extends Control
 		$min_birthdate = new \DateTime();
 		$min_birthdate->modify('-18 years');
 		if (!$birthdate || $birthdate > $min_birthdate) {
-			return $this->func->s('error_birthdate');
+			return $this->translationHelper->s('error_birthdate');
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
@@ -226,7 +212,7 @@ class LoginXhr extends Control
 		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle($this->func->s('join'));
+			$dia->setTitle($this->translationHelper->s('join'));
 
 			$email = '';
 			$pass = '';
@@ -311,7 +297,7 @@ class LoginXhr extends Control
 
 				return $img;
 			} catch (Exception $e) {
-				$this->func->info('Dein Foto konnte nicht gespeichert werden');
+				$this->flashMessageHelper->info('Dein Foto konnte nicht gespeichert werden');
 
 				return '';
 			}

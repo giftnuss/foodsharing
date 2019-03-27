@@ -83,8 +83,8 @@ final class RegionXhr extends Control
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->emailHelper->tplMail(19, $f['email'], array(
-								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							$this->emailHelper->tplMail('forum_answer', $f['email'], array(
+								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'theme' => $theme,
@@ -109,7 +109,7 @@ final class RegionXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'message' => $this->func->s('post_could_not_saved')
+			'message' => $this->translationHelper->s('post_could_not_saved')
 		));
 		exit();
 	}

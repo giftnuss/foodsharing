@@ -15,7 +15,7 @@ class ReportView extends View
 
 	public function betriebList($betriebe): string
 	{
-		return $this->v_utils->v_form_select('betrieb_id', ['label' => $this->func->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe]);
+		return $this->v_utils->v_form_select('betrieb_id', ['label' => $this->translationHelper->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe]);
 	}
 
 	public function reportDialog(): string
@@ -215,8 +215,8 @@ class ReportView extends View
 		$table = $this->v_utils->v_tablesorter([
 			['name' => 'Über', 'width' => 40],
 			['name' => 'Von', 'width' => 40],
-			['name' => $this->func->s('message')],
-			['name' => $this->func->s('datetime'), 'width' => 80],
+			['name' => $this->translationHelper->s('message')],
+			['name' => $this->translationHelper->s('datetime'), 'width' => 80],
 			['name' => 'FS Wohnort', 'width' => 80],
 			['name' => 'Stammbezirk', 'width' => 40]
 		], $rows, ['pager' => true]);

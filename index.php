@@ -1,8 +1,8 @@
 <?php
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
@@ -10,9 +10,15 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
+
+/* @var $request Request */
+$request = Request::createFromGlobals();
+$response = new Response('--');
 
 /* @var $container Container */
 global $container;
@@ -26,11 +32,11 @@ $csp = $container->get(ContentSecurityPolicy::class);
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
-require_once 'lib/inc.php';
-
 if (defined('CSP_REPORT_URI')) {
 	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 }
+
+require_once 'lib/inc.php';
 
 /* @var $mem Mem */
 $mem = $container->get(Mem::class);
