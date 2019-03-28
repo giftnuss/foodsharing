@@ -2,6 +2,7 @@
 
 use Codeception\Test\Unit;
 use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Helpers\TranslationHelper;
 
 class MessageGatewayTest extends Unit
 {
@@ -14,12 +15,19 @@ class MessageGatewayTest extends Unit
 	 */
 	private $gateway;
 
+	/**
+	 * @var TranslationHelper
+	 */
+	private $translationHelper;
+
 	private $testFoodsaver1;
 	private $testFoodsaver2;
 
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(MessageGateway::class);
+		$this->translationHelper = $this->tester->get(TranslationHelper::class);
+
 		$this->testFoodsaver1 = $this->tester->createFoodsaver();
 		$this->testFoodsaver2 = $this->tester->createFoodsaver();
 	}
@@ -38,13 +46,13 @@ class MessageGatewayTest extends Unit
 		);
 	}
 
-	public function testGetConversationMemberNames()
+	public function testGetConversationMemberNamesExcept()
 	{
 		$testConversation = $this->tester->createConversation([$this->testFoodsaver1['id'], $this->testFoodsaver2['id']]);
 
-		$result = $this->gateway->getConversationMemberNames($testConversation['id']);
-		$this->assertContains($this->testFoodsaver1['name'], $result);
+		$result = $this->gateway->getConversationMemberNamesExcept($testConversation['id'], $this->testFoodsaver1['id']);
 		$this->assertContains($this->testFoodsaver2['name'], $result);
+		$this->assertNotContains($this->testFoodsaver1['name'], $result);
 	}
 
 	public function testGetProperConversationNameReturnsProperConversationNameForNamedConversations()
@@ -72,7 +80,7 @@ class MessageGatewayTest extends Unit
 		);
 
 		$this->assertEquals(
-			'Betrieb ' . $testStore['name'],
+			$this->translationHelper->s('store') . ' ' . $testStore['name'],
 			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
 		);
 	}
@@ -88,7 +96,7 @@ class MessageGatewayTest extends Unit
 		);
 
 		$this->assertEquals(
-			'Betrieb ' . $testStore['name'],
+			$this->translationHelper->s('store') . ' ' . $testStore['name'],
 			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
 		);
 	}

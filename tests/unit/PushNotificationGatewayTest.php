@@ -72,9 +72,9 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return '';
 			}
 
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options): void
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array
 			{
-				return;
+				return [];
 			}
 		};
 
@@ -101,9 +101,9 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return 'testPublicKey';
 			}
 
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options): void
+			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array
 			{
-				return;
+				return [];
 			}
 		};
 		$this->gateway->addHandler($testHandler);
