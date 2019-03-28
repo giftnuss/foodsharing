@@ -151,7 +151,7 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
 				}
-				$this->pageHelper->addStyle('#team_msg{width:358px;}');
+				$this->pageHelper->addStyle('#team_msg{width:97%;}');
 				$this->pageHelper->addHidden('
 						<div id="u_undate">
 							' . $this->v_utils->v_info($this->translationHelper->s('shure_of_backup'), $this->translationHelper->s('attention')) . '
@@ -204,7 +204,7 @@ class StoreUserControl extends Control
 				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$betrieb['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $betrieb['id']);
-					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:425,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
+					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$betrieb['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
 				if (!$betrieb['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
@@ -259,10 +259,10 @@ class StoreUserControl extends Control
 					$cnt = '';
 
 					foreach ($verantwortlicher as $v) {
-						$tmp = $this->view->u_innerRow('telefon', $v);
-						$tmp .= $this->view->u_innerRow('handy', $v);
+						$phoneNumbers = $this->view->u_innerRow('telefon', $v);
+						$phoneNumbers .= $this->view->u_innerRow('handy', $v);
 
-						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $tmp);
+						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $phoneNumbers);
 					}
 
 					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
@@ -282,12 +282,12 @@ class StoreUserControl extends Control
 					</div>
 					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('sure') . '</span>
+						<span class="sure" style="display:none">' . $this->translationHelper->s('delete_post') . '</span>
 						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 					</div>
 					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('sure') . '</span>
+						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
 						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 					</div>');
 
@@ -342,7 +342,17 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($betrieb['verantwortlich'] || $this->session->may('orga')) {
-					$this->pageHelper->hiddenDialog('abholen', array($this->view->u_form_abhol_table($pickup_dates), $this->v_utils->v_form_hidden('bid', 0), '<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'), $this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => 500));
+					if ($this->session->isMob()) {
+						$width = '$(window).width() * 0.96';
+					} else {
+						$width = '$(window).width() / 2';
+					}
+					$this->pageHelper->hiddenDialog('abholen',
+						array($this->view->u_form_abhol_table($pickup_dates),
+							$this->v_utils->v_form_hidden('bid', 0),
+							'<input type="hidden" name="team" value="' . $betrieb['team_js'] . '" />'
+						),
+						$this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => $width));
 				}
 
 				if (!$betrieb['jumper']) {

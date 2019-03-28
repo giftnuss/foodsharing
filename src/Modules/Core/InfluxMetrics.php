@@ -45,7 +45,7 @@ class InfluxMetrics
 	 */
 	public function flush()
 	{
-		$this->influxdb->writePoints($this->points);
+		//$this->influxdb->writePoints($this->points); //commented out due to performance issue
 		$this->points = [];
 	}
 

@@ -49,7 +49,7 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->emailHelper->tplMail('new_fairteiler_message', $f['email'], array(
+					$this->emailHelper->tplMail('fairSharePoint/new_message', $f['email'], array(
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId,
 						'name' => $f['name'],
 						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

@@ -7,7 +7,6 @@ use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -27,7 +26,6 @@ class EmailControl extends Control
 	private $dataHelper;
 
 	public function __construct(
-		Db $model,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
@@ -37,7 +35,6 @@ class EmailControl extends Control
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
-		$this->model = $model;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
@@ -93,7 +90,7 @@ class EmailControl extends Control
 
 		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
-		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->session->id());
+		$g_data['testemail'] = $this->emailGateway->getEmailAddressOfFoodsaver($this->session->id());
 
 		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
@@ -152,11 +149,7 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, false);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
-					$foodsaver = $this->model->q('
-						SELECT 	`id`,`email`
-						FROM `fs_foodsaver`
-						WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
-					');
+					$foodsaver = $this->emailGateway->listNewsletterOnlyFoodsharer();
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllFoodsaverNoBotschafter();
 				} elseif ($data['recip_choose'] == 'storemanagers') {
@@ -265,13 +258,7 @@ class EmailControl extends Control
 	{
 		$out = '';
 
-		$recip = $this->model->qCol('
-			SELECT 	CONCAT(fs.name," ",fs.nachname)
-			FROM 	`fs_email_status` e,
-					`fs_foodsaver` fs
-			WHERE 	e.foodsaver_id = fs.id
-			AND 	e.email_id = ' . $mail['id'] . '
-		');
+		$recip = $this->emailGateway->getRecipient($mail['id']);
 
 		$id = $this->identificationHelper->id('mailtosend');
 
