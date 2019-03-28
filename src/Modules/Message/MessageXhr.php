@@ -166,7 +166,7 @@ final class MessageXhr extends Control
 								 *
 								 */
 								$notificationTitle = $this->translationHelper->sv(
-									count($m) > 2 ? 'chat_notification_group_conversation' : 'chat_notification_2_member_conversation',
+									count($members) > 2 ? 'chat_notification_group_conversation' : 'chat_notification_2_member_conversation',
 									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId)
 								);
 
@@ -182,7 +182,7 @@ final class MessageXhr extends Control
 								/*
 								 * send an E-Mail if the user is not online
 								*/
-								if ($this->model->wantMsgEmailInfo($m['id'])) {
+								if ($m['infomail_message']) {
 									$this->convMessage($m, $conversationId, $body);
 								}
 							}

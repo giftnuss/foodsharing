@@ -104,10 +104,10 @@ final class MessageGateway extends BaseGateway
 
 		if (count($conversationMembers) > 1) {
 			// in conversations with more than 2 members, there should still be something representing the foodsaver
-			$conversationMembersRelevantForFoodsaver[] = $this->translationHelper->s('you');
+			$conversationMembers[] = $this->translationHelper->s('you');
 		}
 
-		return implode(', ', $conversationMembersRelevantForFoodsaver);
+		return implode(', ', $conversationMembers);
 	}
 
 	/**
