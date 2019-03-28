@@ -36,6 +36,14 @@ class PushNotificationGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * @param string[] $subscriptionData - array of subscription data to be removed
+	 */
+	private function deleteSubscriptionsByData(array $subscriptionData)
+	{
+		return $this->db->delete('fs_push_notification_subscription', ['data' => $subscriptionData]);
+	}
+
 	public function addHandler(PushNotificationHandlerInterface $handler)
 	{
 		$this->pushNotificationHandlers[$handler::getTypeIdentifier()] = $handler;
@@ -64,7 +72,8 @@ class PushNotificationGateway extends BaseGateway
 			}
 
 			if (!empty($subscriptionDataForThisHandler)) {
-				$handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options, $action);
+				$deadSubscriptions = $handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options, $action);
+				$this->deleteSubscriptionsByData($deadSubscriptions);
 			}
 		}
 	}

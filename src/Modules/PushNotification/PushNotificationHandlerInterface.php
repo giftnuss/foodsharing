@@ -24,8 +24,11 @@ interface PushNotificationHandlerInterface
 	 * @param string $action [string page, array params]: An array containing information about what to happen when the user
 	 * 		clicks or taps on the notification. The page string should be one of the function names defined in
 	 * 		client/src/urls.js, the params array should contain th()//e parameters to be passed to the function.
+	 * @return string[] - Dead subscriptions: The returned array contains strings that identify endpoints to which the
+	 * 		delivery failed. Subscriptions with data equaling one of the dead subscriptions will be removed form the
+	 * 		database.
 	 */
-	public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, array $action = null): void;
+	public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array;
 
 	/**
 	 * Returns the public key fitting to the private key the PushNotificationHandler signs its notifications with.

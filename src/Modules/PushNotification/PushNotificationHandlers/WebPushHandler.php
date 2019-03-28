@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\PushNotification\PushNotificationHandlers;
 
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
+use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\VAPID;
 use Minishlink\WebPush\WebPush;
@@ -58,7 +59,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	 *
 	 * @var array - an array with subscription strings in JSON format
 	 */
-	public function sendPushNotificationsToClients(array $subscriptionData, $title, array $options, array $action = null): void
+	public function sendPushNotificationsToClients(array $subscriptionData, $title, array $options, array $action = null): array
 	{
 		$options['data']['action'] = $action;
 		$payloadJson = json_encode(['title' => $title, 'options' => $options]);
@@ -71,23 +72,26 @@ class WebPushHandler implements PushNotificationHandlerInterface
 
 			$subscription = Subscription::create($subscriptionArray);
 
-			$this->webpush->sendNotification($subscription, $payloadJson);
-		}
+			/**
+			 * @var MessageSentReport$report
+			 */
+			$reportGenerator = $this->webpush->sendNotification($subscription, $payloadJson, true);
 
-		$reports = $this->webpush->flush();
+			foreach ($reportGenerator as $report) {
+				$endpoint = $report->getEndpoint();
 
-		/**
-		 * Check sent results.
-		 *
-		 * @var MessageSentReport
-		 */
-		foreach ($reports as $report) {
-			$endpoint = $report->getRequest()->getUri()->__toString();
+				if ($report->isSubscriptionExpired()) {
+					$deadSubscriptions[] = $subscriptionAsJson;
+				}
 
-			if (!$report->isSuccess()) {
-				error_log("Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
+				// logging
+				if (!$report->isSuccess()) {
+					error_log("Message failed to sent for subscription {$endpoint}: {$report->getReason()}");
+				}
 			}
 		}
+
+		return $deadSubscriptions;
 	}
 
 	/**
