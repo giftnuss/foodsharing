@@ -41,6 +41,7 @@
 - Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
+- Mailbox users can be autocompleted/managed again !852 @NerdyProjects
 
 ## Refactoring
 - Refactored mailbox from model to gateway !803 #9 @peter.toennies
