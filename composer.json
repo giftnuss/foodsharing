@@ -67,7 +67,7 @@
     "symfony/validator": "4.2.4",
     "symfony/yaml": "4.2.4",
     "twig/extensions": "1.5.4",
-    "twig/twig": "2.6.2",
+    "twig/twig": "^2.6.2",
     "voku/bounce-mail-handler": "6.0.0"
   },
   "autoload": {
