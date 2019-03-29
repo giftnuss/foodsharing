@@ -52,7 +52,7 @@ class PushNotificationGateway extends BaseGateway
 	/**
 	 * @param string $title: the notification title
 	 * @param array $options: an array of options to be sent to the endpoint - @see PushNotificationHandlerInterface::sendPushNotificationsToClients() for more information
-	 * @param array $action: the action to be berformed when the user clicks on the notificaation - @see PushNotificationHandlerInterface::sendPushNotificationsToClients()
+	 * @param array $action: the action to be performed when the user clicks on the notification - @see PushNotificationHandlerInterface::sendPushNotificationsToClients()
 	 */
 	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $title, array $options, array $action): void
 	{
@@ -91,7 +91,7 @@ class PushNotificationGateway extends BaseGateway
 
 	/**
 	 * @param string $typeIdentifier - the identifier of the PushNotificationHandler, returned by the getTypeIdentifier
-	 * of the PushNotificationHandler object
+	 * method of the PushNotificationHandler object
 	 */
 	public function getPublicKey(string $typeIdentifier): string
 	{

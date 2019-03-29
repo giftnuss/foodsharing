@@ -160,7 +160,6 @@ final class MessageXhr extends Control
 
 						foreach ($members as $m) {
 							if ($m['id'] != $this->session->id()) {
-
 								/*
 								 * send Push Notification
 								 *

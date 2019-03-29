@@ -97,7 +97,7 @@ final class MessageGateway extends BaseGateway
 		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
 
 		if ($storeName !== null) {
-			return $this->translationHelper->s('store'). ' ' . $storeName;
+			return $this->translationHelper->s('store') . ' ' . $storeName;
 		}
 
 		$conversationMembers = $this->getConversationMemberNamesExcept($conversationId, $foodsaverId);
