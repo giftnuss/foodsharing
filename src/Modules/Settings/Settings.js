@@ -62,11 +62,10 @@ async function refreshPushNotificationSettings () {
     return
   }
 
-  pushNotificationsLabel.textContent = i18n('push_notifications_activation_explanation')
-  pushNotificationsButton.text = i18n('push_notifications_activation_button_text')
-
   const subscription = await (await navigator.serviceWorker.ready).pushManager.getSubscription()
   if (subscription === null) {
+    pushNotificationsLabel.textContent = i18n('push_notifications_activation_explanation')
+    pushNotificationsButton.text = i18n('push_notifications_activation_button_text')
     pushNotificationsButton.addEventListener('click', async () => {
       await subscribeForPushNotifications()
       pulseSuccess(i18n('push_notifications_activation_success'))
@@ -74,23 +73,6 @@ async function refreshPushNotificationSettings () {
     })
     return
   }
-
-  /*
-
-  This does not work currently, neither in Firefox nor Chrom(ium). As long as I have no better idea, we'll have to live
-  with some 'dead subscriptions' in our database.
-
-  // This is for the rare case that a user has subscribed for push notifications, but then set their browser permissions
-  // back to 'ask for push permissions'. In that case, we don't want to create a new subscription, as this would produce
-  // 'dead' push subscriptions in our database.
-  if (Notification.permission !== 'granted') {
-    pushNotificationsButton.addEventlistener('click', async () => {
-      await askForPermission()
-      refreshPushNotificationSettings()
-    })
-    return
-  }
-  */
 
   pushNotificationsLabel.textContent = i18n('push_notifications_deactivation_explanation')
   pushNotificationsButton.text = i18n('push_notifications_deactivation_button_text')
