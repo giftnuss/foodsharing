@@ -27,6 +27,7 @@
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Adjust devdocs to being open source !823 @flukx
+- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -45,6 +46,7 @@
 - Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
+- Mailbox users can be autocompleted/managed again !852 @NerdyProjects
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -78,7 +80,7 @@
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
-- Update copy webpack plugin to version 5 @peter.toennies
+- Update copy webpack plugin to version 5, jsdom to v 14, and dotenv to v 7 @peter.toennies
 
 # 2019-02-25 Hotfix
 
