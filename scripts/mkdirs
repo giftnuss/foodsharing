@@ -23,7 +23,7 @@ dirs="\
   data/mailattach/tmp \
   data/pass \
   data/visite \
-  data/keys \
+  data/keys/webpush \
   cache \
   cache/searchindex \
   cache/htmlpurifier-cache \
