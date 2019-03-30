@@ -70,7 +70,7 @@ async function refreshPushNotificationSettings () {
       await subscribeForPushNotifications()
       pulseSuccess(i18n('push_notifications_activation_success'))
       refreshPushNotificationSettings()
-    })
+    }, { once: true })
     return
   }
 
@@ -80,5 +80,5 @@ async function refreshPushNotificationSettings () {
     await unsubscribeFromPushNotifications()
     pulseSuccess(i18n('push_notifications_deactivation_success'))
     refreshPushNotificationSettings()
-  })
+  }, { once: true })
 }
