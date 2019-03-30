@@ -23,6 +23,7 @@
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Adjust devdocs to being open source !823 @flukx
+- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec

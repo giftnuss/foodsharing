@@ -3,6 +3,13 @@
 During development everyone knows the moments when the code shows exactly what you want but the computer just does something different.
 Some strategies how to find or avoid errors are collected here.
 
+## Test artifacts
+
+During the Gitlab CI tests are run at every push.
+These builds and tests can be found under the menu item [CI/CD](https://gitlab.com/foodsharing-dev/foodsharing/pipelines) (the rocket).
+There you can already see, which stages (build, test, deploy) passed.
+In order to get the detailed test results, go to the job `test` in the suitable pipeline (also reacheable via the corresponding MR if existing), click „Browse“ and navigate to `tests/_output/_output/report.html` (`https://gitlab.com/foodsharing-dev/foodsharing/-/jobs/<job number>/artifacts/browse/tests/_output/_output/report.html`).
+
 ## CSRF Exception
 
 When working on the API one usually wants to try it out.
@@ -53,10 +60,13 @@ or even `sudo rm -rf cache`.
 
 The local website gives you database access so that you can directly view and modify what is written in the database.
 Access to the e-mails that are sent via the website can also be found.
+
 | dev | test |
+--- | --- | --- |
 Website | [`localhost:18080`](localhost:18080) | |
 phpadmin (database access) | [`localhost:18081`](localhost:18081) | [`localhost:18080`](localhost:28081) |
 smtp (outgoing email) | [`localhost:18084`](localhost:18084) | [`localhost:28084`](localhost:28084)
+
 Those ports are configured in `/docker/docker-compose.*.yml`.
 
 ## Logs
