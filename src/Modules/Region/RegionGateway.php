@@ -221,15 +221,20 @@ class RegionGateway extends BaseGateway
 		', [':fs_id' => $foodsaver_id]);
 	}
 
-	public function listIdsForDescendantsAndSelf($bid)
+	public function listIdsForDescendantsAndSelf($bid, $includeSelf = true)
 	{
 		if ((int)$bid == 0) {
 			return [];
 		}
+		if ($includeSelf) {
+			$minDepth = 0;
+		} else {
+			$minDepth = 1;
+		}
 
 		return $this->db->fetchAllValues(
-			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid',
-			['bid' => $bid]
+			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid AND depth >= :min_depth',
+			['bid' => $bid, 'min_depth' => $minDepth]
 		);
 	}
 
