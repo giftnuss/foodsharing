@@ -242,7 +242,7 @@ class ReportGateway extends BaseGateway
 		return $query;
 	}
 
-	public function getReportsByReporteeRegions($regions, $excludeReportsAboutUser = null)
+	public function getReportsByReporteeRegions($regions, $excludeReportsAboutUser = null, $includeOnlyAdminsOfSelectedGroups = false)
 	{
 		$query = $this->reportSelect();
 
@@ -251,6 +251,9 @@ class ReportGateway extends BaseGateway
 		}
 		if ($excludeReportsAboutUser !== null) {
 			$query = $query->where('fs.id != ?', $excludeReportsAboutUser);
+		}
+		if ($includeOnlyAdminsOfSelectedGroups) {
+			$query = $query->innerJoin('fs_botschafter admin ON admin.foodsaver_id = fs.id AND admin.bezirk_id = fs.bezirk_id');
 		}
 
 		return $query->fetchAll();

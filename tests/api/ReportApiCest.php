@@ -34,13 +34,13 @@ class ReportApiCest
 		$I->seeResponseContainsJson(['data' => ['fs_id' => $this->foodsaver['id'], 'rp_id' => $this->foodsharer['id']]]);
 	}
 
-	public function seeReportAboutFoodsaverInSubRegion(\ApiTester $I)
+	public function cantSeeReportAboutFoodsaverInSubRegion(\ApiTester $I)
 	{
 		$I->login($this->ambassador['email']);
 		$I->addReport($this->foodsharer['id'], $this->subRegionFoodsaver['id']);
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->seeResponseContainsJson(['data' => ['fs_id' => $this->subRegionFoodsaver['id'], 'rp_id' => $this->foodsharer['id']]]);
+		$I->cantSeeResponseContainsJson(['data' => ['fs_id' => $this->subRegionFoodsaver['id'], 'rp_id' => $this->foodsharer['id']]]);
 	}
 
 	public function dontSeeReportAboutSelf(\ApiTester $I)
