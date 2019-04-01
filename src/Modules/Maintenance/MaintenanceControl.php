@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Maintenance;
 
-use Flourish\fImage;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
@@ -17,6 +16,7 @@ class MaintenanceControl extends ConsoleControl
 	private $foodsaverGateway;
 	private $emailHelper;
 	private $translationHelper;
+	private $maintenanceGateway;
 
 	public function __construct(
 		MaintenanceModel $model,
@@ -24,7 +24,8 @@ class MaintenanceControl extends ConsoleControl
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		MaintenanceGateway $maintenanceGateway
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
@@ -32,6 +33,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->maintenanceGateway = $maintenanceGateway;
 
 		parent::__construct();
 	}
@@ -44,18 +46,12 @@ class MaintenanceControl extends ConsoleControl
 	public function daily()
 	{
 		/*
-		 * warn food store manager if there are no fetching people
+		 * warn store manager if there are no fetching people
 		 */
 		$this->betriebFetchWarning();
 
 		/*
-		 * update bezirk ids
-		 * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
-		 */
-		//$this->updateBezirkIds();
-
-		/*
-		 * fill memcache with info about users if they want information mails etc..
+		 * fill memcache with info about users if they want information mails etc.
 		 */
 		$this->memcacheUserInfo();
 
@@ -65,12 +61,12 @@ class MaintenanceControl extends ConsoleControl
 		$this->deleteBells();
 
 		/*
-		 * delete unuser images
+		 * delete unused images
 		 */
 		$this->deleteImages();
 
 		/*
-		 * delete unconfirmed Betrieb dates in the past
+		 * delete unconfirmed store dates in the past
 		 */
 		$this->deleteUnconformedFetchDates();
 
@@ -99,11 +95,6 @@ class MaintenanceControl extends ConsoleControl
 		$this->model->deleteOldIpBlocks();
 
 		/*
-		 * check inactive users and send wake up emails or set in sleeping mode
-		 */
-		//$this->sleepingMode();
-
-		/*
 		 * There may be some groups where people should automatically be added
 		 * (e.g. Hamburgs BIEB group)
 		 */
@@ -113,14 +104,6 @@ class MaintenanceControl extends ConsoleControl
 		 * sleeping users, where the time period of sleepiness ended
 		 */
 		$this->wakeupSleepingUsers();
-	}
-
-	public function hourly()
-	{
-		/*
-		 * some updates for new user management
-		*/
-		//$this->model->updateRolle();
 	}
 
 	public function rebuildBezirkClosure()
@@ -177,7 +160,7 @@ class MaintenanceControl extends ConsoleControl
 	private function sleepingMode()
 	{
 		/*
-		 * get foodsaver more than 30 days inactive set to sleeping mode and send email
+		 * get foodsaver which are more than 30 days inactive; set to sleeping mode and send email
 		 */
 
 		self::info('sleeping mode');
@@ -199,7 +182,7 @@ class MaintenanceControl extends ConsoleControl
 		}
 
 		/*
-		 * get all foodasver theyre dont login since 14 days and send an wake up email
+		 * get all foodsavers if they haven't logged in since 14 days and send a wake-up email
 		 */
 		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
 			foreach ($foodsaver as $fs) {
@@ -209,7 +192,7 @@ class MaintenanceControl extends ConsoleControl
 				));
 			}
 
-			self::info(count($foodsaver) . ' get an wakeup email..');
+			self::info(count($foodsaver) . ' get a wakeup email..');
 		}
 	}
 
@@ -237,7 +220,7 @@ class MaintenanceControl extends ConsoleControl
 	private function deleteBells()
 	{
 		if ($ids = $this->model->listOldBellIds()) {
-			$this->model->deleteBells($ids);
+			$this->maintenanceGateway->deleteBells($ids);
 			self::info(count($ids) . ' old bells deleted');
 		}
 	}
@@ -296,31 +279,6 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 
-	private function checkAvatars()
-	{
-		if ($foodsaver = $this->model->listAvatars()) {
-			$nophoto = array();
-			foreach ($foodsaver as $fs) {
-				if (file_exists('images/' . $fs['photo'])) {
-					if (!file_exists('images/50_q_' . $fs['photo'])) {
-						copy('images/' . $fs['photo'], 'images/50_q_' . $fs['photo']);
-						$photo = new fImage('images/50_q_' . $fs['photo']);
-						$photo->cropToRatio(1, 1);
-						$photo->resize(50, 50);
-						$photo->saveChanges();
-					}
-				} else {
-					$nophoto[] = (int)$fs['id'];
-				}
-			}
-
-			if (!empty($nophoto)) {
-				$this->model->noAvatars($nophoto);
-				self::info(count($nophoto) . ' foodsaver noavatar updates');
-			}
-		}
-	}
-
 	private function memcacheUserInfo()
 	{
 		$admins = $this->foodsaverGateway->getBotIds(0, false, true);
@@ -328,12 +286,6 @@ class MaintenanceControl extends ConsoleControl
 			$admins = array();
 		}
 		$this->mem->set('all_global_group_admins', serialize($admins));
-	}
-
-	private function updateBezirkIds()
-	{
-		$this->model->updateBezirkIds();
-		self::info('bezirk_id relation update');
 	}
 
 	private function masterBezirkUpdate()
