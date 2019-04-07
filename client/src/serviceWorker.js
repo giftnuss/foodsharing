@@ -23,3 +23,14 @@ self.addEventListener('notificationclick', function (event) {
     self.clients.openWindow(url)
   }
 })
+
+// Ensure new workers to replace old ones...
+// https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting
+
+self.addEventListener('install', event => {
+  event.waitUntil(self.skipWaiting())
+})
+
+self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim())
+})
