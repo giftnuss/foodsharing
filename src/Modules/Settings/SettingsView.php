@@ -191,7 +191,7 @@ class SettingsView extends View
 
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', array(
 			$this->v_utils->v_input_wrapper(
-				'Push-Benachrichtigungen',
+				$this->translationHelper->s('push_notifications'),
 				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div> 
 						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
 			),

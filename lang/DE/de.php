@@ -240,6 +240,7 @@ $g_lang['store'] = 'Betrieb';
 $g_lang['chat_notification_2_member_conversation'] = '{var} hat dir geschrieben.';
 $g_lang['chat_notification_group_conversation']	= 'In {var} wurde geschrieben.';
 
+$g_lang['push_notifications'] = 'Push-Benachrichtigungen';
 $g_lang['push_notifications_not_supported'] = 'Dein Browser unterstützt leider keine Push-Benarichtigungen.';
 $g_lang['push_notifications_denied_by_user'] = 'Du hast das Anzeigen von Push-Benachrichtigungen durch foodsharing in deinem Browser abgelehnt. Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für foodsharing und lade die Seite neu.';
 $g_lang['push_notifications_activation_explanation'] = 'Wenn du Push-Benachrichtigungen für dieses Gerät aktivierst, werden Chat-Nachrichten zukünftig direkt an dein Gerät zugestellt, auch dann, wenn du nicht eingeloggt bist. Dein Gerät zeigt dann eine entprechende Benachrichtigung bzw. reagiert mit einem Ton oder einer Vibration.';
