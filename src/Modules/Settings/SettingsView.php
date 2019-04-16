@@ -518,16 +518,6 @@ class SettingsView extends View
 
 	});');
 
-		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-		)));
-
-		if ($this->session->may('bot')) {
-			$oeff = '<input type="hidden" name="photo_public" value="1" />';
-		}
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
