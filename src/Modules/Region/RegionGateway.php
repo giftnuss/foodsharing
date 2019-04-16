@@ -503,4 +503,20 @@ class RegionGateway extends BaseGateway
 	{
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
+
+	public function genderCountRegion($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'select  geschlecht as gender,
+						   count(*) as anzahl
+
+					from fs_foodsaver_has_bezirk fb
+		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+
+					where fb.bezirk_id = :id
+					group by geschlecht',
+			[':id' => $bezirkid]
+		);
+	}
+
 }

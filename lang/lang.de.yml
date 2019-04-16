@@ -130,6 +130,7 @@ terminology:
   ambassadors: Botschafter
   admins: Administratoren
   wall: Pinnwand
+  statistic: Statistik
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
@@ -262,6 +263,9 @@ memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
   header_for_workgroup: "Foodsaver in der AG {bezirk}"
   some_in_all: "({some} von {all})"
+
+genderlist:
+  header_for_district: "Aufteilung nach m/w {bezirk}"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
