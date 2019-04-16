@@ -135,7 +135,7 @@ final class RegionControl extends Control
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
 			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
 		];
-		if ($activeSubpage == 'statistic'){
+		if ($activeSubpage == 'statistic') {
 			$viewdata['genderData'] = $this->gateway->genderCountRegion((int)$region['id']);
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
