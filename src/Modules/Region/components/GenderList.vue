@@ -12,20 +12,20 @@
 
 <script>
 
-  export default {
-    props: {
-      regionName: {
-        type: String,
-        default: ''
-      },
-      genderData: {
-        type: Array,
-        default: () => []
-      },
-      isWorkGroup: {
-        type: Boolean,
-        default: false
-      }
+export default {
+  props: {
+    regionName: {
+      type: String,
+      default: ''
+    },
+    genderData: {
+      type: Array,
+      default: () => []
+    },
+    isWorkGroup: {
+      type: Boolean,
+      default: false
     }
   }
+}
 </script>
