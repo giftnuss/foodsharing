@@ -518,5 +518,4 @@ class RegionGateway extends BaseGateway
 			[':id' => $bezirkid]
 		);
 	}
-
 }
