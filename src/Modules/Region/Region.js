@@ -13,6 +13,7 @@ import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
 import MemberList from './components/MemberList'
+import GenderList from './components/GenderList'
 
 $('a[href=\'#signout\']').on('click', function () {
   $('#signout_sure').dialog('open')
@@ -52,6 +53,11 @@ if (GET('sub') == 'wall') {
     MemberList
   })
   vueApply('#vue-memberlist')
+} else if (GET('sub') === 'statistic') {
+    vueRegister({
+    GenderList
+  })
+  vueApply('#vue-genderlist')
 } else if (['botforum', 'forum'].includes(GET('sub'))) {
   if (GET('tid') !== 'undefined') {
     vueRegister({
