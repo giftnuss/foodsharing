@@ -4,6 +4,11 @@
       <div
         class="card-header text-white bg-primary"
       >
+        Das hier ist text
+      </div>
+      <div
+        class="card-header text-white bg-primary"
+      >
         {{ $i18n('genderlist.header_for_district', {bezirk: regionName}) }}
       </div>
     </div>
@@ -18,13 +23,13 @@ export default {
       type: String,
       default: ''
     },
-    genderData: {
-      type: Array,
-      default: () => []
-    },
     isWorkGroup: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
     }
   }
 }
