@@ -53,7 +53,7 @@ if (GET('sub') == 'wall') {
     MemberList
   })
   vueApply('#vue-memberlist')
-} else if (GET('sub') === 'statistic') {
+} else if (GET('sub') == 'statistic') {
   vueRegister({
     GenderList
   })

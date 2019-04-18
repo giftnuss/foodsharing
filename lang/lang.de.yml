@@ -265,7 +265,7 @@ memberlist:
   some_in_all: "({some} von {all})"
 
 genderlist:
-  header_for_district: "Aufteilung nach m/w {bezirk}"
+  header_for_district: "Aufteilung der Foodsaver*in nach Geschlecht in {bezirk}"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

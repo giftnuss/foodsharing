@@ -507,8 +507,14 @@ class RegionGateway extends BaseGateway
 	public function genderCountRegion($bezirkid)
 	{
 		return $this->db->fetchAll(
-			'select  geschlecht as gender,
-						   count(*) as anzahl
+			'select  case 
+    						when geschlecht = 0 then "divers"
+    						when geschlecht = 1 then "männlich"
+    						else
+    							"weiblich"
+							end 
+    						as Geschlecht,
+						   count(*) as Anzahl
 
 					from fs_foodsaver_has_bezirk fb
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
