@@ -524,6 +524,7 @@ class RegionGateway extends BaseGateway
 			[':id' => $bezirkid]
 		);
 	}
+	
 	public function genderCountHomeRegion($bezirkid)
 	{
 		return $this->db->fetchAll(
