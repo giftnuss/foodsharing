@@ -7,7 +7,10 @@
         {{ $i18n('genderlist.header_for_district', {bezirk: regionName}) }}
       </div>
       <div>
-        <b-tabs>
+        <b-tabs
+          pills
+          card
+        >
           <b-tab
             title="Gesamtbezirk"
             active

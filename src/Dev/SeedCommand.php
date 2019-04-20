@@ -132,7 +132,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
 		foreach (range(0, 100) as $_) {
-			$geschlecht = rand(0,2);
+			$geschlecht = rand(0, 2);
 			$user = $I->createFoodsaver($password, ['bezirk_id' => $bezirk1, 'geschlecht' => $geschlecht]);
 			$this->foodsavers[] = $user['id'];
 			$I->addStoreTeam($store['id'], $user['id']);
