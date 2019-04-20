@@ -137,6 +137,7 @@ final class RegionControl extends Control
 		];
 		if ($activeSubpage == 'statistic') {
 			$viewdata['genderData'] = $this->gateway->genderCountRegion((int)$region['id']);
+			$viewdata['genderDataHomeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 

@@ -524,4 +524,24 @@ class RegionGateway extends BaseGateway
 			[':id' => $bezirkid]
 		);
 	}
+	public function genderCountHomeRegion($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'select  case 
+    						when geschlecht = 0 then "divers"
+    						when geschlecht = 1 then "männlich"
+    						else
+    							"weiblich"
+							end 
+    						as Geschlecht,
+						   count(*) as Anzahl
+
+					from fs_foodsaver_has_bezirk fb
+		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+
+					where fs.bezirk_id = :id
+					group by geschlecht',
+			[':id' => $bezirkid]
+		);
+	}
 }
