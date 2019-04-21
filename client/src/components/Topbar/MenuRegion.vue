@@ -79,6 +79,13 @@
           <i class="fas fa-users" />Arbeitsgruppen
         </a>
         <a
+          :href="$url('statistic', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-chart-bar" />Statistik
+        </a>
+        <a
           v-if="region.isBot"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
