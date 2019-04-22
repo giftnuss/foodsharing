@@ -267,5 +267,8 @@ memberlist:
 genderlist:
   header_for_district: "Aufteilung der Foodsaver*in nach Geschlecht in {bezirk}"
 
+pickuplist:
+  header_for_district: "Aufteilung der Abholungen in {bezirk}"
+
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

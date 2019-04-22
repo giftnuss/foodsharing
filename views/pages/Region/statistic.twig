@@ -8,7 +8,15 @@
             regionName: region.name,
             genderDataTab: genderData,
             genderDataHomeDistrictTab: genderDataHomeDistrict,
-            isWorkGroup: region.isWorkGroup
         }
     } %}
-{% endblock %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-pickuplist',
+        component: 'pickup-list',
+        props: {
+            regionName: region.name,
+            pickupDataDailyTab: pickupData.daily,
+            pickupDataWeeklyTab: pickupData.weekly,
+            pickupDataMonthlyTab: pickupData.monthly
+        }
+    } %}{% endblock %}

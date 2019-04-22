@@ -7,34 +7,44 @@
         {{ $i18n('genderlist.header_for_district', {bezirk: regionName}) }}
       </div>
       <div>
-        <b-tabs
-          pills
-          card
-        >
-          <b-tab
-            title="Gesamtbezirk"
-            active
+        <b-card no-body>
+          <b-tabs
+            pills
+            card
           >
-            <P />
-            <P>&nbsp;&nbsp;Aufteilung des Merkmales "Geschlecht" auf alle foodsaver, die dem Bezirk beigetreten sind.</P>
-            <b-table
-              striped
-              hover
-              :items="genderDataTab"
-            />
-          </b-tab>
-          <b-tab
-            title="Stammbezirk"
-          >
-            <P />
-            <p>&nbsp;&nbsp;Aufteilung des Merkmales "Geschlecht" auf die foodsaver, die als Stammbezirk eingetragen sind</p>
-            <b-table
-              striped
-              hover
-              :items="genderDataHomeDistrictTab"
-            />
-          </b-tab>
-        </b-tabs>
+            <b-tab
+              title="Gesamtbezirk"
+              active
+            >
+              <b-table
+                striped
+                hover
+                small
+                :items="genderDataTab"
+                caption-top
+              >
+                <template slot="table-caption">
+                  Aufteilung des Merkmales "Geschlecht" auf alle foodsaver, die dem Bezirk beigetreten sind.
+                </template>
+              </b-table>
+            </b-tab>
+            <b-tab
+              title="Stammbezirk"
+            >
+              <b-table
+                striped
+                hover
+                small
+                :items="genderDataHomeDistrictTab"
+                caption-top
+              >
+                <template slot="table-caption">
+                  Aufteilung des Merkmales "Geschlecht" auf die foodsaver, die als Stammbezirk eingetragen sind
+                </template>
+              </b-table>
+            </b-tab>
+          </b-tabs>
+        </b-card>
       </div>
     </div>
   </div>
@@ -60,10 +70,6 @@ export default {
     genderDataHomeDistrictTab: {
       type: Array,
       default: () => []
-    },
-    isWorkGroup: {
-      type: Boolean,
-      default: false
     }
   },
   data () {
