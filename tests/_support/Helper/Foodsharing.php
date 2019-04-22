@@ -236,7 +236,7 @@ class Foodsharing extends \Codeception\Module\Db
 		if ($res < 1) {
 			$id = $this->haveInDatabase('fs_abholer', $params);
 		} else {
-			$id = '1'; //Quick'n Dirty solution - kinda wrong
+			$id = '1';
 		}
 		$params['id'] = $id;
 
