@@ -136,12 +136,11 @@ final class RegionControl extends Control
 			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
 		];
 		if ($activeSubpage == 'statistic') {
-			$viewdata['genderData'] = $this->gateway->genderCountRegion((int)$region['id']);
-			$viewdata['genderDataHomeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
-			$viewdata['pickupData']['daily'] = $this->gateway->Regionpickupsdaily((int)$region['id']);
-			$viewdata['pickupData']['weekly'] = $this->gateway->Regionpickupsweekly((int)$region['id']);
-			$viewdata['pickupData']['monthly'] = $this->gateway->Regionpickupsmonthly((int)$region['id']);
-
+			$viewdata['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
+			$viewdata['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
+			$viewdata['pickupData']['daily'] = $this->gateway->RegionPickupsDaily((int)$region['id']);
+			$viewdata['pickupData']['weekly'] = $this->gateway->RegionPickupsWeekly((int)$region['id']);
+			$viewdata['pickupData']['monthly'] = $this->gateway->RegionPickupsMonthly((int)$region['id']);
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 

@@ -530,7 +530,8 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function regionpickupsdaily($bezirkid) {
+	public function regionPickupsDaily($bezirkid)
+	{
 		return $this->db->fetchAll(
 			'SELECT
 						date_format(date,\'%Y-%m-%d\') as time,
@@ -549,7 +550,8 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function regionpickupsweekly($bezirkid) {
+	public function regionPickupsWeekly($bezirkid)
+	{
 		return $this->db->fetchAll(
 			'select 
        					date_format(date, \'%Y-%v\') as time,
@@ -565,7 +567,8 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function regionpickupsmonthly($bezirkid) {
+	public function regionPickupsMonthly($bezirkid)
+	{
 		return $this->db->fetchAll(
 			'select 
 						date_Format(date,\'%Y-%m\') as time,

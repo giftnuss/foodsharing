@@ -6,8 +6,8 @@
         component: 'gender-list',
         props: {
             regionName: region.name,
-            genderDataTab: genderData,
-            genderDataHomeDistrictTab: genderDataHomeDistrict,
+            genderDataTab: genderData.district,
+            genderDataHomeDistrictTab: genderData.homeDistrict,
         }
     } %}
     {% include 'partials/vue-wrapper.twig' with {
