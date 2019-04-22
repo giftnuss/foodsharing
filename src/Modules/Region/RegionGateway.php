@@ -545,4 +545,56 @@ class RegionGateway extends BaseGateway
 			[':id' => $bezirkid]
 		);
 	}
+
+	public function statisticpickupsdaily($bezirkid) {
+		return $this->db->fetchAll(
+			'SELECT
+						DATE_FORMAT(date,GET_FORMAT(DATE,\'INTERNAL\')) as datum,
+						DATE_FORMAT(date,\'%d.%m.%Y\') as datum,
+						count(distinct date, betrieb_id) as Anzahl_Termine ,
+						count(*) as Anzahl_Abholslots,
+						count(distinct foodsaver_id) as Anzahl_foodsaver
+					from fs_abholer a
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+						where
+								b.bezirk_id = :id
+						group by
+							DATE_FORMAT(date,GET_FORMAT(DATE,\'INTERNAL\')),
+							b.bezirk_id
+						ORDER BY `datum`  DESC',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function statisticpickupsweekly($bezirkid) {
+		return $this->db->fetchAll(
+			'select 
+						yearweek(date,1) as Kalenderwoche,
+						count(distinct date,betrieb_id) as Anzahl_Termine ,
+						count(*) as Anzahl_Abholslots,
+						count(distinct foodsaver_id) as Anzahl_foodsaver
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+					where b.bezirk_id = :id
+					group by yearweek(date,1)
+					order by date desc',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function statisticpickupsmonthly($bezirkid) {
+		return $this->db->fetchAll(
+			'select 
+						date_Format(date,\'%Y-%m\') as Monat,
+						count(*) as Anzahl_Abholslots,
+						count(distinct date, betrieb_id) as Anzahl_Termine ,
+						count(distinct foodsaver_id) as Anzahl_foodsaver
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+					where b.bezirk_id = :id
+					group by date_Format(date,\'%Y-%m\')
+					order by date desc',
+			[':id' => $bezirkid]
+		);
+	}
 }

@@ -132,8 +132,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
 		foreach (range(0, 100) as $_) {
-			$geschlecht = rand(0, 2);
-			$user = $I->createFoodsaver($password, ['bezirk_id' => $bezirk1, 'geschlecht' => $geschlecht]);
+			$user = $I->createFoodsaver($password, ['bezirk_id' => $bezirk1]);
 			$this->foodsavers[] = $user['id'];
 			$I->addStoreTeam($store['id'], $user['id']);
 			$I->addCollector($user['id'], $store['id']);
@@ -153,7 +152,15 @@ class SeedCommand extends Command implements CustomCommandInterface
 			}
 		}
 		$this->output->writeln('Created conversations');
-
+		// create more pickups
+		for($i = 0; $i <= 10; ++$i) {
+			$pickupDate = time() - (rand(1, 7) * 24 * 60 * 60);
+			for ($k = 0; $k <= 2; ++$k) {
+				$foodsaver_id = $this->getRandomUser();
+				$I->addCollector($foodsaver_id, $store['id'], ['date' => date('Y-m-d H:i:s', $pickupDate)]);
+			}
+		}
+		$this->output->writeln('Created more pickups');
 		// create more stores
 		foreach (range(0, 20) as $_) {
 			// TODO conversations are missing the other store members
