@@ -7,9 +7,9 @@
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
 - Vue.JS implementation of reports page !529 #296 @theolampert
-- Made email notifications great again #450 @zommuter: 
+- Made email notifications great again #450 @zommuter:
 - It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter 
+- Made email notifications great again #450 @zommuter
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
@@ -47,6 +47,7 @@
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
 - Mailbox users can be autocompleted/managed again !852 @NerdyProjects
+- When a orga views a profile of a user who has never logged in before, the last login date shown now "never" instead of todays date !846 @Caluera
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -110,11 +111,11 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
-- Added API endpoints for basket pictures !671 @alex.simm 
+- Added API endpoints for basket pictures !671 @alex.simm
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Added member list for districts and work groups !697 @djahnie
@@ -170,7 +171,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Fixup conversation header display !658 @nicksellen
 
 # 2019-02-18 Hotfix
@@ -253,13 +254,13 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 
 # 2018-12-24
 
-We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
-not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
-really nice. 
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is
+really nice.
 
-You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs,
 updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
-system of ours. We hope you will enjoy it. 
+system of ours. We hope you will enjoy it.
 
 Merry Christmas :-)
 
@@ -325,7 +326,7 @@ Merry Christmas :-)
 
 - Use Ctrl+Enter instead Shift+Enter for sending messages
 
-## Bugfixes 
+## Bugfixes
 - Fix an issue with the navbar for users of safari 11 !527 @theolampert
 - Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 
