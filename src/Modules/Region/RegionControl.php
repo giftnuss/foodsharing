@@ -138,9 +138,9 @@ final class RegionControl extends Control
 		if ($activeSubpage == 'statistic') {
 			$viewdata['genderData'] = $this->gateway->genderCountRegion((int)$region['id']);
 			$viewdata['genderDataHomeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
-			$viewdata['pickupData']['daily'] = $this->gateway->statisticpickupsdaily((int)$region['id']);
-			$viewdata['pickupData']['weekly'] = $this->gateway->statisticpickupsweekly((int)$region['id']);
-			$viewdata['pickupData']['monthly'] = $this->gateway->statisticpickupsmonthly((int)$region['id']);
+			$viewdata['pickupData']['daily'] = $this->gateway->Regionpickupsdaily((int)$region['id']);
+			$viewdata['pickupData']['weekly'] = $this->gateway->Regionpickupsweekly((int)$region['id']);
+			$viewdata['pickupData']['monthly'] = $this->gateway->Regionpickupsmonthly((int)$region['id']);
 
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];

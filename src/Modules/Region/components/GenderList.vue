@@ -13,33 +13,35 @@
             card
           >
             <b-tab
-              title="Gesamtbezirk"
+              :title="$i18n('genderlist.district_tab')"
               active
             >
               <b-table
                 striped
                 hover
                 small
+                :fields="fields"
                 :items="genderDataTab"
                 caption-top
               >
                 <template slot="table-caption">
-                  Aufteilung des Merkmales "Geschlecht" auf alle foodsaver, die dem Bezirk beigetreten sind.
+                  {{ $i18n('genderlist.gender_district_table_caption') }}
                 </template>
               </b-table>
             </b-tab>
             <b-tab
-              title="Stammbezirk"
+              :title="$i18n('genderlist.home_district_tab')"
             >
               <b-table
                 striped
                 hover
                 small
+                :fields="fields"
                 :items="genderDataHomeDistrictTab"
                 caption-top
               >
                 <template slot="table-caption">
-                  Aufteilung des Merkmales "Geschlecht" auf die foodsaver, die als Stammbezirk eingetragen sind
+                  {{ $i18n('genderlist.gender_home_district_table_caption') }}
                 </template>
               </b-table>
             </b-tab>
@@ -74,6 +76,28 @@ export default {
   },
   data () {
     return {
+      fields: {
+        gender: {
+          label: this.$i18n('genderlist.gender_table_header'),
+          formatter: item => {
+            switch (item) {
+              case 0:
+                return this.$i18n('genderlist.gender_divers')
+              case 1:
+                return this.$i18n('genderlist.gender_male')
+              case 2:
+                return this.$i18n('genderlist.gender_female')
+              default :
+                return this.$i18n('genderlist.gender_divers')
+            }
+          },
+          sortable: true
+        },
+        NumberOfGender: {
+          label: 'Anzahl',
+          sortable: true
+        }
+      }
     }
   }
 }
