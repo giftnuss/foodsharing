@@ -3,7 +3,7 @@
 ## Major changes
 
 ## Features
-- small statistic information in regions #582 !858 @k.miklobusec
+- gender and pickup statistic information in regions #582 !858 @k.miklobusec
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
 - it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
