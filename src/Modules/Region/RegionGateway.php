@@ -530,57 +530,20 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function regionPickupsDaily($bezirkid)
-	{
-		return $this->db->fetchAll(
-			'SELECT
-						date_format(date,\'%Y-%m-%d\') as time,
-						count(distinct date, betrieb_id) as NumberOfAppointments ,
-						count(*) as NumberOfSlots,
-						count(distinct foodsaver_id) as NumberOfFoodsavers
-					from fs_abholer a
-					left outer join fs_betrieb b on a.betrieb_id = b.id
-						where
-								b.bezirk_id = :id
-						group by
-							DATE_FORMAT(date,GET_FORMAT(DATE,\'INTERNAL\')),
-							b.bezirk_id
-						ORDER BY date  DESC',
-			[':id' => $bezirkid]
-		);
-	}
-
-	public function regionPickupsWeekly($bezirkid)
+	public function regionPickupsByDate($districtId, $dateFormat)
 	{
 		return $this->db->fetchAll(
 			'select 
-       					date_format(date, \'%Y-%v\') as time,
-						count(distinct date,betrieb_id) as NumberOfAppointments ,
-						count(*) as NumberOfSlots,
-						count(distinct foodsaver_id) as NumberOfFoodsavers
-					from fs_abholer a 
-					left outer join fs_betrieb b on a.betrieb_id = b.id
-					where b.bezirk_id = :id
-					group by yearweek(date,1)
-					order by date desc',
-			[':id' => $bezirkid]
-		);
-	}
-
-	public function regionPickupsMonthly($bezirkid)
-	{
-		return $this->db->fetchAll(
-			'select 
-						date_Format(date,\'%Y-%m\') as time,
+						date_Format(date,:form) as time,
 						count(distinct date, betrieb_id) as NumberOfAppointments ,
 						count(*) as NumberOfSlots,
 						count(distinct foodsaver_id) as NumberOfFoodsavers
 					from fs_abholer a 
 					left outer join fs_betrieb b on a.betrieb_id = b.id
 					where b.bezirk_id = :id
-					group by date_Format(date,\'%Y-%m\')
+					group by date_Format(date,:groupForm)
 					order by date desc',
-			[':id' => $bezirkid]
+			[':id' => $districtId, ':form' => $dateFormat, ':groupForm' => $dateFormat]
 		);
 	}
 }
