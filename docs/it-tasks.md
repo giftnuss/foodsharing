@@ -19,11 +19,11 @@ Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Pr
 - ProgrammiererInnen !!!
 - Beta-TesterInnen
 - GrafikdesignerInnen
-- ÜbersetzerInnen
 - IT-SupporterInnen
 - Technische Redakteure
 - Issue BetreuerInnen
 - Unit Test EntwicklerInnen
+- RecruiterInnen
 - ...
 
 ## Wie finden wir mehr UnterstützerInnen?
@@ -37,6 +37,7 @@ Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgab
 - Die vielen Botschafter und Botschafterinnen aber auch Mitglieder bei ihren IT-Problemen zu unterstützen
 - Die Plattform ins Englische transferieren
 - Akkumulation und Moderation der Issues und Feature-Wünsche
+- Auf Freiwilligenplattformen für uns neue ProgrammiererInnen werben
 - ...
 
 ## Wie kannst Du Dich einbringen?
@@ -109,4 +110,4 @@ https://devdocs.foodsharing.de/it-tasks.html
 Herzliche Grüße von Eurem IT-Team!   
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
-(Letzte Änderung: 20.03.2019)
+(Letzte Änderung: 08.04.2019)
