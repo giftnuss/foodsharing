@@ -507,20 +507,79 @@ class RegionGateway extends BaseGateway
 	public function genderCountRegion($bezirkid)
 	{
 		return $this->db->fetchAll(
-			'select  case 
-    						when geschlecht = 0 then "divers"
-    						when geschlecht = 1 then "männlich"
-    						else
-    							"weiblich"
-							end 
-    						as Geschlecht,
-						   count(*) as Anzahl
-
+			'select  geschlecht as gender,
+						   count(*) as NumberOfGender
 					from fs_foodsaver_has_bezirk fb
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
-
 					where fb.bezirk_id = :id
 					group by geschlecht',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function genderCountHomeRegion($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'select  geschlecht as gender,
+						   count(*) as NumberOfGender
+					from fs_foodsaver_has_bezirk fb
+		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+					where fs.bezirk_id = :id
+					group by geschlecht',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function regionPickupsDaily($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'SELECT
+						date_format(date,\'%Y-%m-%d\') as time,
+						count(distinct date, betrieb_id) as NumberOfAppointments ,
+						count(*) as NumberOfSlots,
+						count(distinct foodsaver_id) as NumberOfFoodsavers
+					from fs_abholer a
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+						where
+								b.bezirk_id = :id
+						group by
+							DATE_FORMAT(date,GET_FORMAT(DATE,\'INTERNAL\')),
+							b.bezirk_id
+						ORDER BY date  DESC',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function regionPickupsWeekly($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'select 
+       					date_format(date, \'%Y-%v\') as time,
+						count(distinct date,betrieb_id) as NumberOfAppointments ,
+						count(*) as NumberOfSlots,
+						count(distinct foodsaver_id) as NumberOfFoodsavers
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+					where b.bezirk_id = :id
+					group by yearweek(date,1)
+					order by date desc',
+			[':id' => $bezirkid]
+		);
+	}
+
+	public function regionPickupsMonthly($bezirkid)
+	{
+		return $this->db->fetchAll(
+			'select 
+						date_Format(date,\'%Y-%m\') as time,
+						count(distinct date, betrieb_id) as NumberOfAppointments ,
+						count(*) as NumberOfSlots,
+						count(distinct foodsaver_id) as NumberOfFoodsavers
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+					where b.bezirk_id = :id
+					group by date_Format(date,\'%Y-%m\')
+					order by date desc',
 			[':id' => $bezirkid]
 		);
 	}

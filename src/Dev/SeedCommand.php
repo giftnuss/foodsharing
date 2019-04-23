@@ -152,7 +152,15 @@ class SeedCommand extends Command implements CustomCommandInterface
 			}
 		}
 		$this->output->writeln('Created conversations');
-
+		// create more pickups
+		for ($i = 0; $i <= 10; ++$i) {
+			$pickupDate = time() - (rand(1, 7) * 24 * 60 * 60);
+			for ($k = 0; $k <= 2; ++$k) {
+				$foodsaver_id = $this->getRandomUser();
+				$I->addCollector($foodsaver_id, $store['id'], ['date' => date('Y-m-d H:i:s', $pickupDate)]);
+			}
+		}
+		$this->output->writeln('Created more pickups');
 		// create more stores
 		foreach (range(0, 20) as $_) {
 			// TODO conversations are missing the other store members
