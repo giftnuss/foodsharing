@@ -120,6 +120,10 @@ export default {
           label: this.$i18n('pickuplist.time_table_header'),
           sortable: true
         },
+        NumberOfStores: {
+          label: this.$i18n('pickuplist.NumberOfStores_table_header'),
+          sortable: true
+        },
         NumberOfAppointments: {
           label: this.$i18n('pickuplist.NumberOfAppointments_table_header'),
           sortable: true

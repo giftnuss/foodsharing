@@ -534,10 +534,11 @@ class RegionGateway extends BaseGateway
 	{
 		return $this->db->fetchAll(
 			'select 
-						date_Format(date,:form) as time,
-						count(distinct date, betrieb_id) as NumberOfAppointments ,
+						date_Format(a.date,:form) as time,
+						count(distinct a.betrieb_id) as NumberOfStores,
+						count(distinct a.date, a.betrieb_id) as NumberOfAppointments ,
 						count(*) as NumberOfSlots,
-						count(distinct foodsaver_id) as NumberOfFoodsavers
+						count(distinct a.foodsaver_id) as NumberOfFoodsavers
 					from fs_abholer a 
 					left outer join fs_betrieb b on a.betrieb_id = b.id
 					where b.bezirk_id = :id
