@@ -21,6 +21,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected $output;
 
 	protected $foodsavers = [];
+	protected $stores = [];
 
 	/**
 	 * returns the name of the command.
@@ -66,6 +67,20 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		if (count($rand) > 0) {
 			return array_intersect_key($this->foodsavers, $rand);
+		}
+
+		return [];
+	}
+
+	protected function getRandomStore($number = 1)
+	{
+		$rand = array_rand($this->stores, $number);
+
+		if ($number === 1) {
+			return $this->stores[$rand];
+		}
+		if (count($rand) > 0) {
+			return array_intersect_key($this->stores, $rand);
 		}
 
 		return [];
@@ -152,17 +167,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 			}
 		}
 		$this->output->writeln('Created conversations');
-		// create more pickups
-		for ($i = 0; $i <= 10; ++$i) {
-			$pickupDate = time() - (rand(1, 7) * 24 * 60 * 60);
-			for ($k = 0; $k <= 2; ++$k) {
-				$foodsaver_id = $this->getRandomUser();
-				$I->addCollector($foodsaver_id, $store['id'], ['date' => date('Y-m-d H:i:s', $pickupDate)]);
-			}
-		}
-		$this->output->writeln('Created more pickups');
-		// create more stores
-		foreach (range(0, 20) as $_) {
+
+		// create more stores and collect their ids in a list
+		$this->stores = [$store['id']];
+		foreach (range(0, 40) as $_) {
 			// TODO conversations are missing the other store members
 			$conv1 = $I->createConversation([$userbot['id']], ['name' => 'team']);
 			$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer']);
@@ -171,8 +179,22 @@ class SeedCommand extends Command implements CustomCommandInterface
 			foreach (range(0, 5) as $_) {
 				$I->addRecurringPickup($store['id']);
 			}
+			$this->stores[] = $store['id'];
 		}
 		$this->output->writeln('Created stores');
+
+		// create more pickups
+		for ($m = 0; $m <= 10; ++$m) {
+			$store_id = $this->getRandomStore();
+			for ($i = 0; $i <= 10; ++$i) {
+				$pickupDate = time() - (rand(1, 14) * 24 * 60 * 60);
+				for ($k = 0; $k <= 2; ++$k) {
+					$foodsaver_id = $this->getRandomUser();
+					$I->addCollector($foodsaver_id, $store_id, ['date' => date('Y-m-d H:i:s', $pickupDate)]);
+				}
+			}
+		}
+		$this->output->writeln('Created more pickups');
 
 		// create foodbaskets
 		foreach (range(0, 500) as $_) {

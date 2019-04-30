@@ -542,7 +542,7 @@ class RegionGateway extends BaseGateway
 					from fs_abholer a 
 					left outer join fs_betrieb b on a.betrieb_id = b.id
 					where b.bezirk_id = :id
-					group by date_Format(date,:groupForm)
+						group by date_Format(date,:groupForm)
 					order by date desc',
 			[':id' => $districtId, ':form' => $dateFormat, ':groupForm' => $dateFormat]
 		);
