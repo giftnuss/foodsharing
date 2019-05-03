@@ -37,7 +37,7 @@
     "object-path": "^0.11.4",
     "raven-js": "^3.27.0",
     "socket.io-client": "^2.2.0",
-    "timeago": "^1.6.5",
+    "timeago": "^1.6.7",
     "tinysort": "^3.2.5",
     "twemoji": "^11.3.0",
     "typeahead-address-photon": "^1.0.0",
