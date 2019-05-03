@@ -48,6 +48,7 @@
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
 - Mailbox users can be autocompleted/managed again !852 @NerdyProjects
 - When a orga views a profile of a user who has never logged in before, the last login date shown now "never" instead of todays date !846 @Caluera
+- Also display sleeping foodsavers in members list !861 @jofranz
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
