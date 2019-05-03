@@ -21,7 +21,7 @@ Object.assign(module.exports, convert({
       L: 'leaflet'
     },
     dependencies: [
-      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
+      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css')
     ]
   },
 

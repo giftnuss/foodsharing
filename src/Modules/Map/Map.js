@@ -28,7 +28,7 @@ expose({
   u_loadDialog
 })
 
-L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
 
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
