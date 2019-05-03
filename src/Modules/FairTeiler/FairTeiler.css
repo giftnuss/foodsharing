@@ -1,10 +1,9 @@
 .ft-head {
   height: 80px;
   width: 100%;
-  background-image: url(img/fairteiler_head.jpg);
+  background-image: url(/img/fairteiler_head.jpg);
   background-position: center;
   background-repeat: no-repeat;
-
 }
 
 /* fairteilerlist */

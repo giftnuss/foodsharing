@@ -1,12 +1,11 @@
 <template>
   <div class="bootstrap">
-
     <!-- emoji buttons & selector -->
     <span class="emojis">
       <span
-        v-for="(users, key) in reactions"
-        v-if="users.length"
-        :key="key">
+        v-for="(users, key) in reactionsWithUsers"
+        :key="key"
+      >
         <a
           v-b-tooltip.hover
           :title="concatUsers(users)"
@@ -17,8 +16,8 @@
         </a>
       </span>
       <b-dropdown
-        v-b-tooltip.hover
         ref="emojiSelector"
+        v-b-tooltip.hover
         title="Eine Reaktion hinzufügen"
         text="+"
         class="emoji-dropdown"
@@ -35,7 +34,6 @@
           <Emoji :name="key" />
         </a>
       </b-dropdown>
-
     </span>
 
     <span :class="{divider: true, textPprimary: true, mobile: isMobile }" />
@@ -43,13 +41,17 @@
     <!-- non emoji button -->
     <a
       class="btn btn-sm btn-secondary"
-      @click="$emit('reply')">{{ $i18n('button.answer') }}</a>
+      @click="$emit('reply')"
+    >
+      {{ $i18n('button.answer') }}
+    </a>
     <a
-      v-b-tooltip.hover
       v-if="mayDelete"
+      v-b-tooltip.hover
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
-      @click="$refs.modal.show()">
+      @click="$refs.modal.show()"
+    >
       <i class="fas fa-trash-alt" />
     </a>
 
@@ -77,6 +79,8 @@
 </template>
 
 <script>
+import pickBy from 'lodash.pickby'
+
 import bDropdown from '@b/components/dropdown/dropdown'
 import bModal from '@b/components/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
@@ -105,6 +109,11 @@ export default {
   data () {
     return {
       emojis: emojiList
+    }
+  },
+  computed: {
+    reactionsWithUsers () {
+      return pickBy(this.reactions, users => users.length > 0)
     }
   },
   methods: {

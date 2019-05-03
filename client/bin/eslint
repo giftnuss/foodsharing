@@ -30,6 +30,10 @@ const paths = [
 
 const args = process.argv.slice(2)
 
-spawn(join(__dirname, '../node_modules/.bin/eslint'), [...args, ...paths], {
+const eslint = spawn(join(__dirname, '../node_modules/.bin/eslint'), [...args, ...paths], {
   stdio: 'inherit'
+})
+
+eslint.on('close', (code, signal) => {
+  process.exit(code)
 })

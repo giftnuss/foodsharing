@@ -1,11 +1,10 @@
 
 <template>
   <li :class="dropdownClasses">
-
     <a
+      :id="`dropdown_${_uid}`"
       ref="toggle"
       :class="toggleClasses"
-      :id="`dropdown_${_uid}`"
       :aria-expanded="visible ? 'true' : 'false'"
       :aria-label="tooltip"
       href="#"
@@ -15,13 +14,14 @@
       @mouseout="() => hover = false"
       @keydown="buttonClick"
     >
-      <slot name="button-content"/>
+      <slot name="button-content" />
     </a>
     <b-tooltip
       ref="tooltip"
       :target="`dropdown_${_uid}`"
       :show="hover && !visible"
-      :triggers="[]">
+      :triggers="[]"
+    >
       {{ tooltip }}
     </b-tooltip>
     <div
@@ -30,7 +30,7 @@
       @mouseover="onMouseOver"
       @keydown="onKeydown"
     >
-      <slot/>
+      <slot />
     </div>
   </li>
 </template>

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
@@ -35,7 +36,7 @@ class WorkGroupXhr extends Control
 
 	public function addtogroup()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($this->session->may('fs') && $group = $this->model->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == ApplyType::OPEN) {
 				$this->model->addToGroup($_GET['id'], $this->session->id());
 
@@ -61,7 +62,7 @@ class WorkGroupXhr extends Control
 
 				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
 					if ($group = $this->model->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->func->fsId())) {
+						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
 							if ($email = $this->model->getFsMail($fs['id'])) {
 								$fs['email'] = $email;
 							}
@@ -75,7 +76,7 @@ class WorkGroupXhr extends Control
 
 							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
 
-							$this->func->libmail(array(
+							$this->emailHelper->libmail(array(
 								'email' => $fs['email'],
 								'email_name' => $fs['name']
 							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
@@ -92,18 +93,26 @@ class WorkGroupXhr extends Control
 	}
 
 	/*
-	 * CONTACT GROUP BY E-MAIL
+	 * CONTACT GROUP VIA EMAIL
 	 */
 	public function sendtogroup()
 	{
+		if (!$this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
-			$message = strip_tags($_GET['msg']);
+			$message = $_GET['msg'];
 
 			if (!empty($message)) {
-				$this->func->tplMail(24, $group['email'], array(
+				$userMail = $this->session->user('email');
+				$recipients = array($group['email'], $userMail);
+
+				$this->emailHelper->tplMail('general/workgroup_contact', $recipients, array(
 					'gruppenname' => $group['name'],
-					'message' => $message
-				), $this->session->user('email'));
+					'message' => $message,
+					'username' => $this->session->user('name'),
+					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
+				), $userMail);
 
 				return array(
 					'status' => 1,

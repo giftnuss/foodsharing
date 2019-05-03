@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Services;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -15,29 +14,32 @@ class SearchService
 	private $workGroupModel;
 	private $storeModel;
 	private $regionGateway;
-	private $func;
 	private $session;
+	private $sanitizerService;
+	private $imageService;
 
 	public function __construct(
 		BuddyGateway $buddyGateway,
 		WorkGroupModel $workGroupModel,
 		StoreModel $storeModel,
 		regionGateway $regionGateway,
-		Func $func,
-		Session $session
+		Session $session,
+		SanitizerService $sanitizerService,
+		ImageService $imageService
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupModel = $workGroupModel;
 		$this->storeModel = $storeModel;
 		$this->regionGateway = $regionGateway;
-		$this->func = $func;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
 	}
 
 	/**
 	 * Method to generate search Index for instant seach.
 	 */
-	public function generateIndex($fsId, $token)
+	public function generateIndex($fsId)
 	{
 		$index = [];
 
@@ -50,7 +52,7 @@ class SearchService
 				$img = '/img/avatar-mini.png';
 
 				if (!empty($b['photo'])) {
-					$img = $this->func->img($b['photo']);
+					$img = $this->imageService->img($b['photo']);
 				}
 
 				$result[] = array(
@@ -83,7 +85,7 @@ class SearchService
 				}
 				$result[] = array(
 					'name' => $b['name'],
-					'teaser' => $this->func->tt($b['teaser'], 65),
+					'teaser' => $this->sanitizerService->tt($b['teaser'], 65),
 					'img' => $img,
 					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
 					'search' => array(
@@ -139,19 +141,6 @@ class SearchService
 			'result' => $result
 		);
 
-		/*
-		 * Get or set an individual token as filename for the public json file
-		*/
 		return $index;
-	}
-
-	public function writeSearchIndexToDisk($fsId, $token)
-	{
-		if (!$token) {
-			return false;
-		}
-		file_put_contents('cache/searchindex/' . $token . '.json', json_encode($this->generateIndex($fsId, $token)));
-
-		return $token;
 	}
 }

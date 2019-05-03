@@ -25,7 +25,6 @@ $method = 'index';
 if (isset($argv[3]) && $argv[3] == 'quiet') {
 	define('QUIET', true);
 } else {
-	define('QUIET', false);
 }
 
 if (isset($argv) && is_array($argv)) {
@@ -44,7 +43,6 @@ $appInstance = $container->get(ltrim($app, '\\'));
 
 if (is_callable([$appInstance, $method])) {
 	$appInstance->$method();
-	exit();
+} else {
+	echo 'Modul ' . $app . ' konnte nicht geladen werden';
 }
-
-echo 'Modul ' . $app . ' konnte nicht geladen werden';

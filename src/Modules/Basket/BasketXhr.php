@@ -3,29 +3,38 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
 	private $status;
 	private $basketGateway;
 	private $messageModel;
+	private $timeHelper;
+	private $imageService;
 
 	public function __construct(
 		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
-		MessageModel $messageModel
+		MessageModel $messageModel,
+		TimeHelper $timeHelper,
+		ImageService $imageService
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
 
 		$this->status = [
 			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
@@ -53,7 +62,7 @@ class BasketXhr extends Control
 			echo json_encode(
 				[
 					'status' => 1,
-					'script' => 'pulseError("' . $this->func->s('not_login_hint') . '");',
+					'script' => 'pulseError("' . $this->translationHelper->s('not_login_hint') . '");',
 				]
 			);
 			exit();
@@ -73,9 +82,9 @@ class BasketXhr extends Control
 	public function newBasket(): array
 	{
 		$dia = new XhrDialog();
-		$dia->setTitle($this->func->s('basket_offer'));
+		$dia->setTitle($this->translationHelper->s('basket_offer'));
 
-		$dia->addContent($this->v_utils->v_info($this->func->s('basket_reference_info'), $this->func->s('basket_reference')));
+		$dia->addContent($this->v_utils->v_info($this->translationHelper->s('basket_reference_info'), $this->translationHelper->s('basket_reference')));
 
 		$dia->addPictureField('picture');
 
@@ -89,7 +98,7 @@ class BasketXhr extends Control
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
 		
-		$("input.input.cb-contact_type[value=\'2\']").change(function(){
+		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
@@ -102,7 +111,7 @@ class BasketXhr extends Control
 			}
 		});
 				
-		$(".cb-food_art[value=3]").click(function(){
+		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
 				$(".cb-food_art[value=2]")[0].checked = true;
@@ -113,10 +122,10 @@ class BasketXhr extends Control
 
 		$dia->noOverflow();
 
-		$dia->addOpt('width', 550);
+		$dia->addOpt('width', '90%');
 
 		$dia->addButton(
-			$this->func->s('basket_publish'),
+			$this->translationHelper->s('basket_publish'),
 			'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId(
 			) . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId(
 			) . '-picture-filename\').val(),weight:$(\'#weight\').val()});'
@@ -138,7 +147,7 @@ class BasketXhr extends Control
 		if (empty($desc)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->func->s('basket_publish_error_desc') . '");',
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_desc') . '");',
 			];
 		}
 
@@ -163,7 +172,7 @@ class BasketXhr extends Control
 		if ($lat == 0 && $lon == 0) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->func->s('basket_publish_error_address') . '");',
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_address') . '");',
 			];
 		}
 
@@ -228,7 +237,7 @@ class BasketXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-					pulseInfo("' . $this->func->s('basket_publish_thank_you') . '");
+					pulseInfo("' . $this->translationHelper->s('basket_publish_thank_you') . '");
 					basketStore.loadBaskets();
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
@@ -238,7 +247,7 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseInfo("' . $this->func->s('basket_publish_error') . '");',
+			'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
 		];
 	}
 
@@ -305,14 +314,14 @@ class BasketXhr extends Control
 				 * What see the user if not logged in?
 				 */
 				if (!$this->session->may()) {
-					$dia->setTitle($this->func->s('basket'));
+					$dia->setTitle($this->translationHelper->s('basket'));
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
-					$dia->setTitle($this->func->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
+					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
 					$dia->addContent($this->view->bubble($basket));
 				}
 
-				$dia->addButton($this->func->s('to_basket'), 'goTo(\'/essenskoerbe/' . (int)$basket['id'] . '\');');
+				$dia->addButton($this->translationHelper->s('to_basket'), 'goTo(\'/essenskoerbe/' . (int)$basket['id'] . '\');');
 
 				$modal = false;
 				if (isset($_GET['modal'])) {
@@ -321,7 +330,6 @@ class BasketXhr extends Control
 				$dia->addOpt('modal', 'false', $modal);
 				$dia->addOpt('resizeable', 'false', false);
 
-				$dia->addOpt('width', 400);
 				$dia->noOverflow();
 
 				return $dia->xhrout();
@@ -332,7 +340,7 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("' . $this->func->s('basket_error') . '");',
+			'script' => 'pulseError("' . $this->translationHelper->s('basket_error') . '");',
 		];
 	}
 
@@ -363,8 +371,8 @@ class BasketXhr extends Control
 		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
 			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
 			$dia = new XhrDialog();
-			$dia->setTitle($this->func->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
-			$dia->addOpt('width', 300);
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
+			$dia->addOpt('width', '90%');
 			$dia->noOverflow();
 			$dia->addContent($this->view->contactTitle($basket));
 
@@ -380,7 +388,7 @@ class BasketXhr extends Control
 			if (in_array(1, $contact_type)) {
 				$dia->addContent($this->view->contactMsg());
 				$dia->addButton(
-					$this->func->s('send_request'),
+					$this->translationHelper->s('send_request'),
 					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});'
 				);
 			}
@@ -395,8 +403,8 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $this->session->id(), $msg, 0);
-				$this->mailMessage($this->session->id(), $fs_id, $msg, 22);
+				$this->messageModel->message($fs_id, $msg);
+				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 				return [
@@ -405,19 +413,19 @@ class BasketXhr extends Control
 						if($(".xhrDialog").length > 0){
 							$(".xhrDialog").dialog("close");
 						}
-						pulseInfo("' . $this->func->s('sent_request') . '");',
+						pulseInfo("' . $this->translationHelper->s('sent_request') . '");',
 				];
 			}
 
 			return [
 				'status' => 1,
-				'script' => 'pulseError("' . $this->func->s('basket_error_message') . '");',
+				'script' => 'pulseError("' . $this->translationHelper->s('basket_error_message') . '");',
 			];
 		}
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("' . $this->func->s('error_default') . '");',
+			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
 		];
 	}
 
@@ -467,13 +475,16 @@ class BasketXhr extends Control
 
 	public function answer()
 	{
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
+		$basketId = (int)$_GET['id'];
+		$fsId = (int)$_GET['fid'];
+
+		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
 			if ($id == $this->session->id()) {
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_READ, $_GET['fid']);
+				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
 
 				return array(
 					'status' => 1,
-					'script' => 'chat(' . $_GET['fid'] . ');basketStore.loadBaskets();',
+					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
 				);
 			}
 		}
@@ -485,8 +496,8 @@ class BasketXhr extends Control
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
-			$dia->setTitle($this->func->sv('basket_foodsaver_close', array('name' => $request['fs_name'])));
-			$gender = $this->func->genderWord(
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', array('name' => $request['fs_name'])));
+			$gender = $this->translationHelper->genderWord(
 				$request['fs_gender'],
 				'er',
 				'sie',
@@ -494,8 +505,8 @@ class BasketXhr extends Control
 			);
 			$dia->addContent(
 				'<div>
-					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
+					<img src="' . $this->imageService->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<p>Anfragezeitpunkt: ' . $this->timeHelper->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
 				. $this->v_utils->v_form_radio(
@@ -504,15 +515,15 @@ class BasketXhr extends Control
 						'values' => [
 							[
 								'id' => Status::DELETED_PICKED_UP,
-								'name' => $this->func->sv('basket_deleted_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
 							],
 							[
 								'id' => Status::NOT_PICKED_UP,
-								'name' => $this->func->sv('basket_not_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
 							],
 							[
 								'id' => Status::DELETED_OTHER_REASON,
-								'name' => $this->func->s('basket_deleted_other_reason'),
+								'name' => $this->translationHelper->s('basket_deleted_other_reason'),
 							],
 						],
 						'selected' => Status::DELETED_PICKED_UP,
@@ -521,7 +532,7 @@ class BasketXhr extends Control
 			);
 			$dia->addAbortButton();
 			$dia->addButton(
-				$this->func->s('continue'),
+				$this->translationHelper->s('continue'),
 				'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
 			);
 
@@ -535,27 +546,30 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'basketStore.loadBaskets();pulseInfo("' . $this->func->s('basket_not_active') . '");',
+			'script' => 'basketStore.loadBaskets();pulseInfo("' . $this->translationHelper->s('basket_not_active') . '");',
 		];
 	}
 
-	public function editBasket(): array
+	public function editBasket()
 	{
+		$basket = $this->basketGateway->getBasket($_GET['id']);
+
+		if ($basket['fs_id'] !== $this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+
 		$dia = new XhrDialog();
-		$dia->setTitle($this->func->s('basket_edit'));
+		$dia->setTitle($this->translationHelper->s('basket_edit'));
 
 		$dia->addPictureField('picture');
 
-		$basket = $this->basketGateway->getBasket($_GET['id']);
-
 		$dia->addContent($this->view->basketEditForm($basket));
 
+		$dia->addOpt('width', '90%');
 		$dia->noOverflow();
 
-		$dia->addOpt('width', 550);
-
 		$dia->addButton(
-			$this->func->s('basket_publish'),
+			$this->translationHelper->s('basket_publish'),
 			'ajreq(\'publishEdit\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId(
 			) . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId(
 			) . '-picture-filename\').val(),basket_id:$(\'#basket_id\').val()});'
@@ -574,7 +588,7 @@ class BasketXhr extends Control
 		if (empty($id)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->func->s('basket_publish_error') . '");',
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
 			];
 		}
 
@@ -582,7 +596,7 @@ class BasketXhr extends Control
 		if ($basket['fs_id'] != $this->session->id()) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->func->s('basket_publish_error_permission') . '");',
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_permission') . '");',
 			];
 		}
 
@@ -591,7 +605,7 @@ class BasketXhr extends Control
 		if (empty($desc)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->func->s('basket_publish_error_desc') . '");',
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_desc') . '");',
 			];
 		}
 
@@ -604,7 +618,7 @@ class BasketXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-					pulseInfo("' . $this->func->s('basket_publish_thank_you') . '");
+					pulseInfo("' . $this->translationHelper->s('basket_publish_thank_you') . '");
 					basketStore.loadBaskets();
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
@@ -615,15 +629,8 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseInfo("' . $this->func->s('basket_publish_error') . '");',
+			'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
 		];
-	}
-
-	public function follow(): void
-	{
-		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			$this->basketGateway->follow($_GET['bid'], $this->session->id());
-		}
 	}
 
 	public function finishRequest()
@@ -638,7 +645,7 @@ class BasketXhr extends Control
 			return [
 				'status' => 1,
 				'script' => '
-						pulseInfo("' . $this->func->s('finish_request') . '");
+						pulseInfo("' . $this->translationHelper->s('finish_request') . '");
 						$(".xhrDialog").dialog("close");
 						$(".xhrDialog").dialog("destroy");
 						$(".xhrDialog").remove();
@@ -648,7 +655,7 @@ class BasketXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("' . $this->func->s('error_default') . '");',
+			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
 		];
 	}
 

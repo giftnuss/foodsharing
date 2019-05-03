@@ -31,6 +31,10 @@ export function vueRegister (components) {
 
 export function vueApply (selector) {
   let elements = document.querySelectorAll(selector)
+
+  // querySelectorAll().forEach() is broken in iOS 9
+  elements = Array.from(elements)
+
   if (!elements.length) {
     throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
   }

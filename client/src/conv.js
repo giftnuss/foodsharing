@@ -132,36 +132,8 @@ const conv = {
       conv.maxbox(data.cid)
       conv.append(key, data)
       conv.scrollBottom(data.cid)
-    } else {
-      // following line got commented out, because it is part of the old topbar
-      // this whole file should get replaced with a vue store
-      // info.badgeInc('msg')
     }
     conversationStore.loadConversations()
-    // alert(key);
-
-    /*
-    if(data.msg_chat.chats != undefined && data.msg_chat.chats.length > 0)
-    {
-      var chats = data.msg_chat.chats;
-      var key = 0;
-
-      for(var i=0;i<chats.length;i++)
-      {
-        key = conv.getKey(chats[i].cid);
-
-        if(chats[i].msg != undefined && chats[i].msg.length > 0)
-        {
-          for(var x=0;x<chats[i].msg.length;x++)
-          {
-            conv.append(key,chats[i].msg[x]);
-          }
-          conv.maxbox(chats[i].cid);
-          conv.scrollBottom(chats[i].cid);
-        }
-      }
-    }
-    */
   },
 
   // minimize or maximize the chatbox
@@ -266,7 +238,6 @@ const conv = {
     this.chatboxes = tmp
 
     this.chatCount--
-    // this.rearrange();
 
     // re register polling service
     this.registerPollingService()
@@ -338,7 +309,7 @@ const conv = {
    */
   append: function (key, message) {
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo + '', 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
@@ -373,13 +344,13 @@ const conv = {
           title = []
           for (var i = 0; i < ret.member.length; i++) {
             if (ret.member[i] != undefined && ret.member[i].id != serverData.user.id) {
-              title.push(ret.member[i].name)
+              title.push(`<a href="/profile/${ret.member[i].id}">${ret.member[i].name}</a>`)
             }
           }
           title = title.join(', ')
         }
 
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i> ${title}`)
+        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
 
         /*
          * now append all arrived messages
@@ -420,12 +391,12 @@ const conv = {
       const name = ''
 
       var $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
-      $el.html(`<div class="chatboxhead ui-corner-top"><a class="chatboxtitle" href="#" onclick="conv.togglebox(${cid});return false;"><i class="fas fa-spinner fa-spin"></i> ${name}</a><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
+      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${name}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()
 
-      $el.children('.chatboxinput').children('textarea').focus(function () {
+      $el.children('.chatboxinput').children('textarea').on('focus', function () {
         conv.activeBox = cid
       })
 
@@ -446,7 +417,7 @@ const conv = {
       /*
        * focus textarea
        */
-      $el.children('.chatboxinput').children('textarea').select()
+      $el.children('.chatboxinput').children('textarea').trigger('select')
 
       /*
        * register service new

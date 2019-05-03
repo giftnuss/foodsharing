@@ -2,14 +2,20 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }} (<span v-if="stores.length !== storesFiltered.length">{{ storesFiltered.length }} von </span>{{ stores.length }})
+        Alle Betriebe aus dem Bezirk {{ regionName }}
+        <span>
+          {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
+        </span>
       </div>
       <div
         v-if="stores.length"
-        class="card-body p-0">
+        class="card-body p-0"
+      >
         <div class="form-row p-1 ">
           <div class="col-2 text-center">
-            <label class=" col-form-label col-form-label-sm">Filtern nach...</label>
+            <label class=" col-form-label col-form-label-sm">
+              Filtern nach...
+            </label>
           </div>
           <div class="col-4">
             <input
@@ -23,7 +29,8 @@
             <b-form-select
               v-model="filterStatus"
               :options="statusOptions"
-              size="sm" />
+              size="sm"
+            />
           </div>
           <div class="col">
             <button
@@ -33,9 +40,8 @@
               title="Filter leeren"
               @click="clearFilter"
             >
-              <i class="fas fa-times"/>
+              <i class="fas fa-times" />
             </button>
-
           </div>
         </div>
 
@@ -50,29 +56,38 @@
           responsive
         >
           <template
+            slot="status"
             slot-scope="data"
-            slot="status">
-            <div class="text-center"><StoreStatusIcon :status="data.value" /></div>
+          >
+            <div class="text-center">
+              <StoreStatusIcon :status="data.value" />
+            </div>
           </template>
           <template
+            slot="name"
             slot-scope="data"
-            slot="name">
+          >
             <a
               :href="$url('store', data.item.id)"
-              class="ui-corner-all">{{ data.value }}</a>
+              class="ui-corner-all"
+            >
+              {{ data.value }}
+            </a>
           </template>
         </b-table>
         <div class="float-right p-1 pr-3">
           <b-pagination
+            v-model="currentPage"
             :total-rows="storesFiltered.length"
             :per-page="perPage"
-            v-model="currentPage"
-            class="my-0" />
+            class="my-0"
+          />
         </div>
       </div>
       <div
         v-else
-        class="card-body">
+        class="card-body"
+      >
         Es sind noch keine Betriebe eingetragen
       </div>
     </div>
@@ -80,13 +95,12 @@
 </template>
 
 <script>
+import { optimizedCompare } from '@/utils'
 import bTable from '@b/components/table/table'
 import bPagination from '@b/components/pagination/pagination'
 import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import StoreStatusIcon from './StoreStatusIcon.vue'
-
-const noLocale = /^[\w-.\s,]*$/
 
 export default {
   components: { bTable, bPagination, bFormSelect, StoreStatusIcon },
@@ -137,21 +151,7 @@ export default {
         { value: 3, text: 'In Kooperation' },
         { value: 4, text: 'Will nicht kooperieren' },
         { value: 6, text: 'Wirft nichts weg' }
-      ],
-      compare (a, b, key) {
-        const elemA = a[key]
-        const elemB = b[key]
-        if (typeof elemA === 'number' || (noLocale.test(elemA) && noLocale.test(elemB))) {
-          if (typeof elemA === 'string') {
-            const a = elemA.toLowerCase()
-            const b = elemB.toLowerCase()
-            return (a > b ? 1 : (a === b ? 0 : -1))
-          }
-          return (elemA > elemB ? 1 : (elemA === elemB ? 0 : -1))
-        } else {
-          return elemA.localeCompare(elemB)
-        }
-      }
+      ]
     }
   },
   computed: {
@@ -171,6 +171,8 @@ export default {
     }
   },
   methods: {
+    compare: optimizedCompare,
+
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''

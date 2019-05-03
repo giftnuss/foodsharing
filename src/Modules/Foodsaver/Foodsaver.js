@@ -3,12 +3,14 @@ import '@/globals'
 import { ajreq, GET } from '@/script'
 import $ from 'jquery'
 import 'jquery-dynatree'
+import i18n from '@/i18n'
+import { deleteUser } from '@/api/user'
 import './Foodsaver.css'
 
 const fsapp = {
   init: function () {
     if ($('#fslist').length > 0) {
-      $('#fslist a').click(function (ev) {
+      $('#fslist a').on('click', function (ev) {
         ev.preventDefault()
         let fsida = $(this).attr('href').split('#')
         let fsid = parseInt(fsida[(fsida.length - 1)])
@@ -29,13 +31,18 @@ const fsapp = {
       bid: GET('bid')
     })
   },
-  delfromBezirk: function (foodsaverId) {
+  deletefromRegion: function (foodsaverId) {
     if (window.confirm('Wirklich aus Bezirk löschen?')) {
-      ajreq('delfrombezirk', {
+      ajreq('deleteFromRegion', {
         app: 'foodsaver',
         bid: GET('bid'),
         id: foodsaverId
       })
+    }
+  },
+  confirmDeleteUser: async function (fsId) {
+    if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
+      await deleteUser(fsId)
     }
   }
 }

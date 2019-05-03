@@ -49,7 +49,8 @@ class FairTeilerGateway extends BaseGateway
 						UNIX_TIMESTAMP(wp.time) AS time_ts,
 						wp.body,
 						wp.attach,
-						fs.name AS fs_name
+						fs.name AS fs_name,
+						fs.id AS fs_id
 
 			FROM 		fs_fairteiler_has_wallpost hw
 			LEFT JOIN 	fs_wallpost wp
@@ -193,14 +194,6 @@ class FairTeilerGateway extends BaseGateway
 		return [];
 	}
 
-	public function getFairteilerIds($fsId)
-	{
-		return $this->db->fetchAllValues(
-			'SELECT fairteiler_id FROM fs_fairteiler_follower WHERE foodsaver_id = :id',
-			[':id' => $fsId]
-		);
-	}
-
 	public function follow($ft_id, $fs_id, $infotype)
 	{
 		$this->db->insertIgnore(
@@ -221,7 +214,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function getFollower($id)
 	{
-		if ($follower = $this->db->fetchAll(
+		$follower = $this->db->fetchAll(
 			'
 			SELECT 	fs.`name`,
 					fs.`nachname`,
@@ -237,29 +230,25 @@ class FairTeilerGateway extends BaseGateway
 
 		',
 			[':id' => $id]
-		)
-		) {
-			$normal = array();
-			$verantwortliche = array();
-			$all = array();
-			foreach ($follower as $f) {
-				if ($f['type'] == 1) {
-					$normal[] = $f;
-					$all[$f['id']] = 'follow';
-				} elseif ($f['type'] == 2) {
-					$verantwortliche[] = $f;
-					$all[$f['id']] = 'verantwortlich';
-				}
+		);
+		$normal = [];
+		$verantwortliche = [];
+		$all = [];
+		foreach ($follower as $f) {
+			if ($f['type'] == 1) {
+				$normal[] = $f;
+				$all[$f['id']] = 'follow';
+			} elseif ($f['type'] == 2) {
+				$verantwortliche[] = $f;
+				$all[$f['id']] = 'verantwortlich';
 			}
-
-			return array(
-				'follow' => $normal,
-				'verantwortlich' => $verantwortliche,
-				'all' => $all,
-			);
 		}
 
-		return false;
+		return [
+			'follow' => $normal,
+			'verantwortlich' => $verantwortliche,
+			'all' => $all,
+		];
 	}
 
 	public function acceptFairteiler($id)
@@ -388,12 +377,5 @@ class FairTeilerGateway extends BaseGateway
 			return;
 		}
 		$this->bellGateway->delBellsByIdentifier($identifier);
-	}
-
-	public function mayFairteiler(int $foodsaverId, int $fairteilerId): bool
-	{
-		$ids = $this->getFairteilerIds($foodsaverId);
-
-		return $ids && in_array($fairteilerId, $ids, true);
 	}
 }

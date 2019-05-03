@@ -18,9 +18,9 @@ class ApplicationXhr extends Control
 
 	public function accept()
 	{
-		if ($this->func->isBotFor($_GET['bid']) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAdminFor($_GET['bid']) || $this->session->isOrgaTeam()) {
 			$this->gateway->acceptApplication($_GET['bid'], $_GET['fid']);
-			$this->func->info('Bewerbung angenommen');
+			$this->flashMessageHelper->info('Bewerbung angenommen');
 
 			return array(
 					'status' => 1,
@@ -31,10 +31,10 @@ class ApplicationXhr extends Control
 
 	public function decline()
 	{
-		if ($this->func->isBotFor($_GET['bid']) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAdminFor($_GET['bid']) || $this->session->isOrgaTeam()) {
 			$this->gateway->denyApplication($_GET['bid'], $_GET['fid']);
 
-			$this->func->info('Bewerbung abgelehnt');
+			$this->flashMessageHelper->info('Bewerbung abgelehnt');
 
 			return array(
 				'status' => 1,

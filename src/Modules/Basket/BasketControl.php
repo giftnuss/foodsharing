@@ -16,7 +16,7 @@ class BasketControl extends Control
 
 		parent::__construct();
 
-		$this->func->addBread('Essenskörbe');
+		$this->pageHelper->addBread('Essenskörbe');
 	}
 
 	public function index(): void
@@ -30,10 +30,10 @@ class BasketControl extends Control
 				if (method_exists($this, $m)) {
 					$this->$m();
 				} else {
-					$this->func->go('/essenskoerbe/find');
+					$this->routeHelper->go('/essenskoerbe/find');
 				}
 			} else {
-				$this->func->go('/essenskoerbe/find');
+				$this->routeHelper->go('/essenskoerbe/find');
 			}
 		}
 	}
@@ -50,17 +50,6 @@ class BasketControl extends Control
 		$requests = false;
 
 		if ($this->session->may()) {
-			if ($basket['fs_id'] != $this->session->id()) {
-				$this->func->addJsFunc(
-					'
-				function u_wallpostReady(postid)
-				{
-					ajax.req("basket","follow",{
-						data:{bid:' . (int)$basket['id'] . '}
-					});
-				}'
-				);
-			}
 			$wallPosts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->session->id()) {
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());

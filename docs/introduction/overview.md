@@ -14,9 +14,9 @@
 
 # Content
 
-## Pull Requests
+## Merge Requests
 
- - if the proposed PR closes an issue `NUMBER`, the description should begin with: `Closes issues0#NUMBER`.
+ - if the proposed MR closes an issue `NUMBER`, the description should begin with: `Closes issues0#NUMBER`.
  - check that you absolutely use the default template.
  - comment the code and describe what you did
  - check if tests work, see: [how to run tests]

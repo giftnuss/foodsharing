@@ -1,0 +1,3 @@
+FROM influxdb:1.6.4-alpine
+COPY docker/conf/influxdb/influxdb.toml /etc/influxdb/influxdb.toml
+RUN chmod 644 /etc/influxdb/influxdb.toml

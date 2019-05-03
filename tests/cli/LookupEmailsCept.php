@@ -10,10 +10,10 @@ $I->seeInDatabase('fs_foodsaver', ['id' => $fsA['id'], 'deleted_at' => null]);
 $I->seeInDatabase('fs_foodsaver', ['id' => $fsB['id'], 'deleted_at' => null]);
 $I->seeInDatabase('fs_foodsaver', ['id' => $fsC['id'], 'deleted_at' => null]);
 $I->amInPath('');
-$I->runShellCommand('php -f run.php Lookup lookup tests/_data/emaillist.csv');
+$I->runShellCommand('FS_ENV=test php -f run.php Lookup lookup tests/_data/emaillist.csv', false);
 $I->seeInShellOutput($fsA['id'] . ',');
 $I->seeInShellOutput($fsB['id'] . ',');
-$I->runShellCommand('php -f run.php Lookup deleteOldUsers tests/_data/emaillist.csv');
+$I->runShellCommand('FS_ENV=test php -f run.php Lookup deleteOldUsers tests/_data/emaillist.csv', false);
 
 $a = $I->grabFromDatabase('fs_foodsaver', 'deleted_at', array('id' => $fsA['id']));
 $I->assertNotNull($a);

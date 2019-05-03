@@ -1,0 +1,19 @@
+{% embed 'components/field.twig' with {'title': 'fairteiler.n_in_region'|transchoice(fairteiler|length, {'%name%': region.name})} %}
+    {% block content %}
+        <ul class="linklist fairteilerlist">
+            {% for ft in fairteiler %}
+                <li>
+                    <a href="/?page=fairteiler&bid={{ region.id }}&sub=ft&id={{ ft.id }}">
+                        {% if ft.pic %}
+                            <span class="image ui-corner-all" style="background-image:url({{ ft.pic.thumb }});"></span>
+                        {% else %}
+                            <span class="image noimage ui-corner-all" style="background-image:url(img/fairteiler_thumb.png);"></span>
+                        {% endif %}
+                        <span class="name">{{ ft.name }}</span>
+                        <span class="clear"></span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+{% endembed %}

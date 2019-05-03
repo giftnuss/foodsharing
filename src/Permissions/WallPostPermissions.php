@@ -5,22 +5,18 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\WallPost\WallPostGateway;
 
 class WallPostPermissions
 {
-	private $wallPostGateway;
 	private $regionGateway;
 	private $eventGateway;
 	private $fairteilerGateway;
 
 	public function __construct(
 		RegionGateway $regionGateway,
-		WallPostGateway $wallPostGateway,
 		EventGateway $eventGateway,
 		FairteilerGateway $fairteilerGateway
 	) {
-		$this->wallPostGateway = $wallPostGateway;
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
@@ -28,6 +24,10 @@ class WallPostPermissions
 
 	public function mayReadWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'bezirk':
 				return $this->regionGateway->hasMember($fsId, $targetId);
@@ -49,13 +49,15 @@ class WallPostPermissions
 
 	public function mayWriteWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'foodsaver':
 				return $fsId == $targetId;
 			case 'question':
 				return $fsId > 0;
-			case 'fairteiler':
-				return $this->fairteilerGateway->mayFairteiler($fsId, $targetId);
 			default:
 				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}
@@ -70,6 +72,10 @@ class WallPostPermissions
 	 */
 	public function mayDeleteFromWall($fsId, $target, $targetId)
 	{
+		if (!$fsId) {
+			return false;
+		}
+
 		switch ($target) {
 			case 'foodsaver':
 				return $fsId == $targetId;

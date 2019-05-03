@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\EmailTemplateAdmin\EmailTemplateGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -17,33 +17,33 @@ class ForumService
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
-	private $emailTemplateGateway;
 	/* @var Db */
 	private $model;
-	private $func;
 	private $session;
 	private $sanitizerService;
+	private $emailHelper;
+	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
-		EmailTemplateGateway $emailTemplateGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
-		Func $func,
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->bellGateway = $bellGateway;
-		$this->emailTemplateGateway = $emailTemplateGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
-		$this->func = $func;
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -100,7 +100,7 @@ class ForumService
 	{
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
 		if ($moderated) {
-			$this->notifyAdminsModeratedThread($region, $threadId);
+			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
 		}
@@ -120,13 +120,13 @@ class ForumService
 	public function notificationMail($recipients, $tpl, $data)
 	{
 		foreach ($recipients as $recipient) {
-			$this->func->tplMail(
+			$this->emailHelper->tplMail(
 				$tpl,
 				$recipient['email'],
 				array_merge($data,
 					[
-						'anrede' => $this->func->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'name' => $this->sanitizerService->plainToHtml($recipient['name'])
+						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'name' => $recipient['name']
 					])
 			);
 		}
@@ -139,15 +139,15 @@ class ForumService
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
-				'theme' => $this->sanitizerService->plainToHtml($info['title']),
+				'thread' => $info['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $this->sanitizerService->plainToHtml($poster)
+				'poster' => $poster
 			];
-			$this->notificationMail($follower, 19, $data);
+			$this->notificationMail($follower, 'forum/answer', $data);
 		}
 	}
 
-	private function notifyAdminsModeratedThread($region, $threadId)
+	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
 	{
 		$theme = $this->model->getValues(array('foodsaver_id', 'name'), 'theme', $threadId);
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
@@ -155,12 +155,13 @@ class ForumService
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $this->sanitizerService->plainToHtml($theme['name']),
-				'poster' => $this->sanitizerService->plainToHtml($poster),
-				'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
+				'thread' => $theme['name'],
+				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
+				'poster' => $poster,
+				'bezirk' => $region['name'],
 			];
 
-			$this->notificationMail($foodsaver, 20, $data);
+			$this->notificationMail($foodsaver, 'forum/activation', $data);
 		}
 	}
 
@@ -178,13 +179,14 @@ class ForumService
 		}
 
 		$data = [
-			'bezirk' => $this->sanitizerService->plainToHtml($region['name']),
-			'poster' => $this->sanitizerService->plainToHtml($poster),
-			'thread' => $this->sanitizerService->plainToHtml($theme['name']),
+			'bezirk' => $region['name'],
+			'poster' => $poster,
+			'thread' => $theme['name'],
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
-		$this->notificationMail($foodsaver, $ambassadorForum ? 13 : 12, $data);
+		$this->notificationMail($foodsaver,
+			$ambassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
 	}
 
 	public function addReaction($fsId, $postId, $key)

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -e
+
+. $(dirname "$0")/inc.sh
+
+PARAMS="$@"
+dc exec -T --user 33:33 app sh -c "HOME=./ php -f run.php $PARAMS"

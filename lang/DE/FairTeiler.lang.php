@@ -1,6 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['ort'] = 'Stadt/Gemeinde';
 $g_lang['new_fairteiler'] = 'Neuer Fair-Teiler';
 $g_lang['new_fairteiler_in'] = 'Neuer Fair-Teiler in {var}';
 $g_lang['list_fairteiler'] = 'Alle Fair-Teiler in {var}';
@@ -31,5 +30,5 @@ $g_lang['infotype'] = 'Benachrichtigung';
 $g_lang['infotype_desc'] = 'Wie möchtest Du über Updates wie Essenslieferungen informiert werden?';
 $g_lang['infotype_email'] = 'über eine E-Mail Benachrichtigung';
 $g_lang['infotype_alert'] = 'nur über interne Infomeldungen';
-$g_lang['desc_desc'] = 'Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist.';
+$g_lang['desc_desc'] = 'Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist. Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.';
 $g_lang['bfoodsaver'] = 'Verantwortliche Foodsaver';

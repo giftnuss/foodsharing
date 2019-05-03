@@ -10,6 +10,6 @@ dir=$(dirname "$0")
 source $dir/inc.sh
 
 docker-compose \
-  -f $dir/../docker/docker-compose.$FS_ENV.yml \
-  -p foodsharing_$FS_ENV \
+  --file $dir/../docker/docker-compose.$FS_ENV.yml \
+  --project-name foodsharing_$FS_ENV \
   "$@"

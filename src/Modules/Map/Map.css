@@ -11,7 +11,6 @@ body.page-map #topbar {
   width: 100%;
 }
 
-
 .map-wrapper {
   position: absolute;
   top: 0;
@@ -19,12 +18,6 @@ body.page-map #topbar {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-#foodsaver_map {
-  width: 100%;
-  height: 100%;
-  background-color: #f1e7c9;
 }
 
 #map {
@@ -35,14 +28,11 @@ body.page-map #topbar {
   height: 100%;
 }
 
-
-
 @media (max-width: 630px) {
   #map {
     top: 73px;
   }
 }
-
 
 div#main {
   position: absolute;
@@ -64,13 +54,7 @@ div#main {
   z-index: 50;
 }
 
-.leaflet-control-attribution {
-  color: #666;
-}
 
-.leaflet-container a {
-  color: #4a3520;
-}
 
 #map-control ul.linklist a {
   cursor: pointer;
@@ -123,6 +107,7 @@ div#main {
   right: 16px;
   margin: 0;
   top: 80px;
+  z-index: 800 !important;
 }
 
 #map-control-wrapper > div {
@@ -131,10 +116,6 @@ div#main {
 
 #map-control a {
   padding-left: 0;
-}
-
-#msgbar-infos, #msgbar-messages {
-  z-index: 15;
 }
 
 .leaflet-popup-content p {

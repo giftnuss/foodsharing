@@ -221,15 +221,20 @@ class RegionGateway extends BaseGateway
 		', [':fs_id' => $foodsaver_id]);
 	}
 
-	public function listIdsForDescendantsAndSelf($bid)
+	public function listIdsForDescendantsAndSelf($bid, $includeSelf = true)
 	{
 		if ((int)$bid == 0) {
 			return [];
 		}
+		if ($includeSelf) {
+			$minDepth = 0;
+		} else {
+			$minDepth = 1;
+		}
 
 		return $this->db->fetchAllValues(
-			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid',
-			['bid' => $bid]
+			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid AND depth >= :min_depth',
+			['bid' => $bid, 'min_depth' => $minDepth]
 		);
 	}
 
@@ -404,38 +409,6 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function deleteBezirk($id)
-	{
-		$parent_id = $this->db->fetchValueByCriteria(
-			'fs_bezirk',
-			'parent_id',
-			['id' => $id]
-		);
-
-		$this->db->update(
-			'fs_foodsaver',
-			['bezirk_id' => null],
-			['bezirk_id' => $id]
-		);
-		$this->db->update(
-			'fs_bezirk',
-			['parent_id' => 0],
-			['parent_id' => $id]
-		);
-
-		$this->db->delete('fs_bezirk', ['id' => $id]);
-
-		$count = $this->db->fetchValue('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = :id', [':id' => $parent_id]);
-
-		if ($count == 0) {
-			$this->db->update(
-				'fs_bezirk',
-				['has_children' => 0],
-				['id' => $parent_id]
-			);
-		}
-	}
-
 	public function denyBezirkRequest($fsid, $bid)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
@@ -524,5 +497,10 @@ class RegionGateway extends BaseGateway
 			'active' => 1,
 			'added' => $this->db->now()
 		]);
+	}
+
+	public function updateMasterRegions(array $regionIds, int $masterId): void
+	{
+		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 }

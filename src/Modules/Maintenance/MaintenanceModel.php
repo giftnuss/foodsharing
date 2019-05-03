@@ -112,10 +112,10 @@ class MaintenanceModel extends Db
 					UPDATE `fs_foodsaver`
 	
 					SET
-						`rolle` = ' . $this->func->rolleWrap('bot') . '
+						`rolle` = ' . $this->rolleWrap('bot') . '
 	
 					WHERE
-						`rolle` < ' . $this->func->rolleWrap('bot') . '
+						`rolle` < ' . $this->rolleWrap('bot') . '
 	
 					AND
 						`id` IN(' . implode(',', $botsch) . ')
@@ -130,10 +130,24 @@ class MaintenanceModel extends Db
 			}
 			if (!empty($nomore)) {
 				$count = $this->update('
-					UPDATE `fs_foodsaver` SET `rolle` = ' . $this->func->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
+					UPDATE `fs_foodsaver` SET `rolle` = ' . $this->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
 				');
 			}
 		}
+	}
+
+	private function rolleWrap($roleStr)
+	{
+		$roles = array(
+			'user' => 0,
+			'fs' => 1,
+			'bieb' => 2,
+			'bot' => 3,
+			'orga' => 4,
+			'admin' => 5
+		);
+
+		return $roles[$roleStr];
 	}
 
 	public function setFoodsaverInactive($fsids)

@@ -3,20 +3,25 @@
     ref="dropdown"
     :no-caret="!showLabel"
     tooltip="Essenskörbe"
-    class="topbar-baskets">
+    class="topbar-baskets"
+  >
     <template slot="button-content">
-      <i class="fas fa-shopping-basket"/>
-      <span v-if="showLabel">Essenskörbe</span>
+      <i class="fas fa-shopping-basket" />
+      <span v-if="showLabel">
+        Essenskörbe
+      </span>
     </template>
     <div class="list-group">
       <p
         v-if="!baskets.length"
-        class="dropdown-header">
+        class="dropdown-header"
+      >
         Du hast keine Essenskörbe eingetragen
       </p>
       <div
         v-else
-        class="scroll-container">
+        class="scroll-container"
+      >
         <menu-baskets-entry
           v-for="basket in basketsSorted"
           :key="basket.id"
@@ -27,13 +32,15 @@
       <div class="list-grou-item p-2 text-center">
         <a
           :href="$url('baskets')"
-          class="btn btn-sm btn-secondary">
+          class="btn btn-sm btn-secondary"
+        >
           Alle Essenskörbe
         </a>
         <a
           href="#"
           class="btn btn-sm btn-secondary"
-          @click="openBasketCreationForm">
+          @click="openBasketCreationForm"
+        >
           Essenskorb anlegen
         </a>
       </div>

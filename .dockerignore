@@ -1,6 +1,11 @@
-.pip-cache
-vendor
+client
 node_modules
-chat/node_modules
 api
 light
+.pip-cache
+tmp
+images
+cache
+data
+tests/_output
+deployer

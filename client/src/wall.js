@@ -34,27 +34,27 @@ function mb_clear () {
 
 export function init (module, wallId) {
   $('#wallpost-text').autosize()
-  $('#wallpost-text').focus(function () {
+  $('#wallpost-text').on('focus', function () {
     $('#wallpost-submit').show()
   })
 
-  $('#wallpost-attach-trigger').change(function () {
+  $('#wallpost-attach-trigger').on('change', function () {
     $('#attach-preview div:last').remove()
     $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>')
     $('#attach-preview').append('<div style="clear:both;"></div>')
-    $('#wallpost-attachimage-form').submit()
+    $('#wallpost-attachimage-form').trigger('submit')
   })
 
-  $('#wallpost-text').blur(function () {
+  $('#wallpost-text').on('blur', function () {
     $('#wallpost-submit').show()
   })
-  $('#wallpost-post').submit(function (ev) {
+  $('#wallpost-post').on('submit', function (ev) {
     ev.preventDefault()
   })
-  $('#wallpost-attach-image').button().click(function () {
-    $('#wallpost-attach-trigger').click()
+  $('#wallpost-attach-image').button().on('click', function () {
+    $('#wallpost-attach-trigger').trigger('click')
   })
-  $('#wall-submit').button().click(function (ev) {
+  $('#wall-submit').button().on('click', function (ev) {
     ev.preventDefault()
     if (($('#wallpost-text').val() != '' && $('#wallpost-text').val() != i18n('wall.message_placeholder')) || $('#attach-preview a').length > 0) {
       $('.wall-posts table tr:first').before('<tr><td colspan="2" class="load">&nbsp;</td></tr>')
@@ -102,7 +102,7 @@ export function init (module, wallId) {
       $('#wallpost-text').css('height', '33px')
     }
   })
-  $('#wallpost-attach-trigger').focus(function () {
+  $('#wallpost-attach-trigger').on('focus', function () {
     $('#wall-submit')[0].focus()
   })
   $.ajax({

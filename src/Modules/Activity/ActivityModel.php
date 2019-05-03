@@ -3,21 +3,28 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Db
 {
-	private $mailboxModel;
 	private $activityGateway;
 	private $sanitizerService;
+	private $imageService;
+	private $mailboxGateway;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		ActivityGateway $activityGateway,
+		SanitizerService $sanitizerService,
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
+	) {
 		parent::__construct();
-		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -53,7 +60,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts'],
 					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 				];
@@ -71,7 +78,7 @@ class ActivityModel extends Db
 		$sanitized = $this->sanitizerService->markdownToHtml($txt);
 
 		if (strlen($txt) > 100) {
-			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->func->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
+			return '<span class="txt">' . $this->sanitizerService->markdownToHtml($this->sanitizerService->tt($txt, 90)) . ' <a href="#" onclick="$(this).parent().hide().next().show();return false;">alles zeigen <i class="fas fa-angle-down"></i></a></span><span class="txt" style="display:none;">' . $sanitized . ' <a href="#" onclick="$(this).parent().hide().prev().show();return false;">weniger <i class="fas fa-angle-up"></i></a></span>';
 		}
 
 		return '<span class="txt">' . $sanitized . '</span>';
@@ -85,7 +92,7 @@ class ActivityModel extends Db
 			$buddy_ids = $b;
 		}
 
-		$buddy_ids[$this->func->fsId()] = $this->func->fsId();
+		$buddy_ids[$this->session->id()] = $this->session->id();
 
 		$bids = array();
 		foreach ($buddy_ids as $id) {
@@ -108,7 +115,7 @@ class ActivityModel extends Db
 
 				$smTitle = $u['fs_name'] . 's Status';
 
-				if ($u['fs_id'] === $this->func->fsId()) {
+				if ($u['fs_id'] === $this->session->id()) {
 					$smTitle = 'Deine Pinnwand';
 				}
 
@@ -119,7 +126,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($u['body']),
 					'time' => $u['time'],
-					'icon' => $this->func->img($u['fs_photo'], 50),
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'time_ts' => $u['time_ts']
 				];
 			}
@@ -132,7 +139,7 @@ class ActivityModel extends Db
 
 	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
 	{
-		if ($boxes = $this->mailboxModel->getBoxes()) {
+		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			$mb_ids = array();
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {
@@ -153,9 +160,9 @@ class ActivityModel extends Db
 
 					if ($sender !== null) {
 						if (isset($sender['from']) && !empty($sender['from'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['personal'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['personal'], 22) . '</a>';
 						} elseif (isset($sender['mailbox'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->func->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
+							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
 						}
 					}
 
@@ -163,7 +170,7 @@ class ActivityModel extends Db
 						'attr' => [
 							'href' => '/?page=mailbox&show=' . $u['id']
 						],
-						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->func->ttt($u['subject'], 30) . '</a><small>' . $this->func->ttt($u['mb_name'] . '@' . DEFAULT_EMAIL_HOST, 19) . '</small>',
+						'title' => $from . ' <i class="fas fa-angle-right"></i> <a href="/?page=mailbox&show=' . $u['id'] . '">' . $this->ttt($u['subject'], 30) . '</a><small>' . $this->ttt($u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST, 19) . '</small>',
 						'desc' => $this->textPrepare($u['body']),
 						'time' => $u['time'],
 						'icon' => '/img/mailbox-50x50.png',
@@ -177,6 +184,15 @@ class ActivityModel extends Db
 		}
 
 		return false;
+	}
+
+	private function ttt($str, $length = 160)
+	{
+		if (strlen($str) > $length) {
+			$str = substr($str, 0, ($length - 4)) . '...';
+		}
+
+		return $str;
 	}
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
@@ -205,7 +221,7 @@ class ActivityModel extends Db
 				$sub = 'forum';
 				if ($u['bot_theme'] === 1) {
 					$sub = 'botforum';
-					if (!$this->func->isBotFor($u['bezirk_id'])) {
+					if (!$this->session->isAdminFor($u['bezirk_id'])) {
 						$check = false;
 					}
 				}
@@ -220,7 +236,7 @@ class ActivityModel extends Db
 						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
 						'desc' => $this->textPrepare($u['post_body']),
 						'time' => $u['update_time'],
-						'icon' => $this->func->img($u['foodsaver_photo'], 50),
+						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
 					];
@@ -245,7 +261,7 @@ class ActivityModel extends Db
 					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
 					'desc' => $this->textPrepare($r['text']),
 					'time' => $r['update_time'],
-					'icon' => $this->func->img($r['foodsaver_photo'], 50),
+					'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
 					'time_ts' => $r['update_time_ts']
 				];
 			}

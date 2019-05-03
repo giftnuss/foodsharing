@@ -4,21 +4,21 @@ namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Modules\Core\View;
 
-class MessageView extends View
+final class MessageView extends View
 {
-	public function top()
+	public function top(): string
 	{
 		return '
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
 
 			<div class="welcome_profile_image">
 				<a onclick="profile(56);return false;" href="#">
-					<img width="50" height="50" src="/img/message.png" alt="' . $this->func->s('messages') . '" class="image_online">
+					<img width="50" height="50" src="/img/message.png" alt="' . $this->translationHelper->s('messages') . '" class="image_online">
 				</a>
 			</div>
 			<div class="welcome_profile_name">
 				<div class="user_display_name">
-					' . $this->func->s('your_messages') . '
+					' . $this->translationHelper->s('your_messages') . '
 				</div>
 				<div class="welcome_quick_link">
 
@@ -26,32 +26,32 @@ class MessageView extends View
 				</div>
 			</div>
 			<div class="welcome_profile_survived v-desktop">
-				<a class="button" href="#">' . $this->func->s('new_message') . '</a>
+				<a class="button" href="#">' . $this->translationHelper->s('new_message') . '</a>
 			</div>
 
 			<div class="clear"></div>
 		</div>';
 	}
 
-	public function leftMenu()
+	public function leftMenu(): string
 	{
 		return $this->menu(array(
-			array('name' => $this->func->s('new_message'), 'click' => 'msg.compose();return false;')
+			array('name' => $this->translationHelper->s('new_message'), 'click' => 'msg.compose();return false;')
 		));
 	}
 
-	public function compose()
+	public function compose(): string
 	{
 		$content = $this->peopleChooser('compose_recipients');
 
 		$content .= $this->v_utils->v_form_textarea('compose_body');
 
-		$content .= $this->v_utils->v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->func->s('send') . '</a>');
+		$content .= $this->v_utils->v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->translationHelper->s('send') . '</a>');
 
-		return '<div id="compose">' . $this->v_utils->v_field($content, $this->func->s('new_message'), array('class' => 'ui-padding')) . '</div>';
+		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), array('class' => 'ui-padding')) . '</div>';
 	}
 
-	public function conversationList($conversations, $click = 'msg.loadConversation')
+	public function conversationList(array $conversations): string
 	{
 		$list = '';
 
@@ -61,45 +61,45 @@ class MessageView extends View
 				$title = '';
 
 				if (!empty($c['member'])) {
-					$picwidth = 50;
+					$pictureWidth = 50;
 					$size = 'med';
 
 					if (count($c['member']) > 2) {
-						$picwidth = 25;
+						$pictureWidth = 25;
 						$size = 'mini';
 						shuffle($c['member']);
 					}
 
 					foreach ($c['member'] as $m) {
-						if ($m['id'] == $this->func->fsId()) {
+						if ($m['id'] == $this->session->id()) {
 							continue;
 						}
-						$pics .= '<img src="' . $this->func->img($m['photo'], $size) . '" width="' . $picwidth . '" />';
+						$pics .= '<img src="' . $this->imageService->img($m['photo'], $size) . '" width="' . $pictureWidth . '" />';
 						$title .= ', ' . $m['name'];
 					}
 
-					if (is_null($c['name'])) {
+					if ($c['name'] === null) {
 						$title = substr($title, 2);
 					} else {
 						$title = $c['name'];
 					}
 
-					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="' . $click . '(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->func->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->timeHelper->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
 				}
 			}
 		} else {
-			$list = '<li class="noconv">' . $this->v_utils->v_info($this->func->s('no_conversations')) . '</li>';
+			$list = '<li class="noconv">' . $this->v_utils->v_info($this->translationHelper->s('no_conversations')) . '</li>';
 		}
 
 		return $list;
 	}
 
-	public function convListWrapper($list)
+	public function conversationListWrapper(string $list): string
 	{
-		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', '<i class="fas fa-comments"></i> ' . $this->func->s('conversations'));
+		return $this->v_utils->v_field('<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>', $this->translationHelper->s('conversations'), [], 'fas fa-comments');
 	}
 
-	public function conversation()
+	public function conversation(): string
 	{
 		$out = '
 			<div id="msg-conversation" class="corner-all"><ul></ul><div class="loader" style="display:none;"><i class="fas fa-sync fa-spin"></i></div></div>
@@ -108,10 +108,10 @@ class MessageView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					' . $this->v_utils->v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->func->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
+					' . $this->v_utils->v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->translationHelper->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 				</form>
 			</div>';
 
-		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '<span id="msg-conversation-title"><i class="fas fa-comment"></i></span>', array('class' => 'ui-padding')) . '</div>';
+		return '<div id="msg-conversation-wrapper" style="display:none;">' . $this->v_utils->v_field($out, '', ['class' => 'ui-padding'], 'fas fa-comment', 'msg-conversation-title') . '</div>';
 	}
 }

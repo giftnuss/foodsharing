@@ -2,11 +2,14 @@
   <div>
     <div
       v-if="isEmpty && !isLoading"
-      class="dropdown-header alert alert-warning">
+      class="dropdown-header alert alert-warning"
+    >
       Es konnten keine Ergebnisse gefunden werden
     </div>
     <div v-if="filtered.myBuddies.length">
-      <h3 class="dropdown-header"><i class="fas fa-user" /> Meine Buddies</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-user" /> Meine Buddies
+      </h3>
       <search-result-entry
         v-for="buddy in filtered.myBuddies"
         :key="buddy.id"
@@ -15,10 +18,12 @@
         :teaser="buddy.teaser"
         :image="buddy.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.myGroups.length">
-      <h3 class="dropdown-header"><i class="fas fa-users" /> Meine Gruppen</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-users" /> Meine Gruppen
+      </h3>
       <search-result-entry
         v-for="group in filtered.myGroups"
         :key="group.id"
@@ -27,10 +32,12 @@
         :teaser="group.teaser"
         :image="group.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.myStores.length">
-      <h3 class="dropdown-header"><i class="fas fa-shopping-cart" /> Meine Betriebe</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-shopping-cart" /> Meine Betriebe
+      </h3>
       <search-result-entry
         v-for="store in filtered.myStores"
         :key="store.id"
@@ -39,10 +46,12 @@
         :teaser="store.teaser"
         :image="store.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.myRegions.length">
-      <h3 class="dropdown-header"><i class="fas fa-home" /> Meine Bezirke</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-home" /> Meine Bezirke
+      </h3>
       <search-result-entry
         v-for="region in filtered.myRegions"
         :key="region.id"
@@ -51,11 +60,13 @@
         :teaser="region.teaser"
         :image="region.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
 
     <div v-if="filtered.groups.length">
-      <h3 class="dropdown-header"><i class="fas fa-users" /> Gruppen</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-users" /> Gruppen
+      </h3>
       <search-result-entry
         v-for="group in filtered.groups"
         :key="group.id"
@@ -64,10 +75,12 @@
         :teaser="group.teaser"
         :image="group.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.users.length">
-      <h3 class="dropdown-header"><i class="fas fa-child" /> Personen</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-child" /> Personen
+      </h3>
       <search-result-entry
         v-for="user in filtered.users"
         :key="user.id"
@@ -76,10 +89,12 @@
         :teaser="user.teaser"
         :image="user.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.stores.length">
-      <h3 class="dropdown-header"><i class="fas fa-shopping-cart" /> Betriebe</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-shopping-cart" /> Betriebe
+      </h3>
       <search-result-entry
         v-for="store in filtered.stores"
         :key="store.id"
@@ -88,10 +103,12 @@
         :teaser="store.teaser"
         :image="store.image"
       />
-      <div class="dropdown-divider"/>
+      <div class="dropdown-divider" />
     </div>
     <div v-if="filtered.regions.length">
-      <h3 class="dropdown-header"><i class="fas fa-home" /> Bezirke</h3>
+      <h3 class="dropdown-header">
+        <i class="fas fa-home" /> Bezirke
+      </h3>
       <search-result-entry
         v-for="region in filtered.regions"
         :key="region.id"
@@ -101,7 +118,6 @@
         :image="region.image"
       />
     </div>
-
   </div>
 </template>
 

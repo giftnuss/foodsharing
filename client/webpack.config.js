@@ -12,7 +12,7 @@ const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = dev ? resolve('../dev-assets') : resolve('../assets')
+const assetsPath = dev ? resolve('../assets') : resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
@@ -82,6 +82,18 @@ module.exports = merge(webpackBase, {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.(js|vue)$/,
+        exclude: [
+          /node_modules/,
+          resolve('lib')
+        ],
+        loader: 'eslint-loader',
+        options: {
+          configFile: resolve('package.json')
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
@@ -108,7 +120,8 @@ module.exports = merge(webpackBase, {
     ],
     splitChunks: {
       chunks: 'all',
-      name: dev
+      name: dev,
+      maxInitialRequests: 5
     }
   }
 })
