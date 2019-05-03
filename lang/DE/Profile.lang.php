@@ -17,3 +17,4 @@ $g_lang['foodsaver_home_district'] = 'Stammbezirk von {name}';
 $g_lang['foodsaver_workgroups'] = '{gender} ist Ansprechpartner für folgende Arbeitsgruppen';
 $g_lang['foodsaver_sleeping_hat_time'] = '{name} hat eine Schlafmütze auf vom {datum_von} bis {datum_bis}';
 $g_lang['foodsaver_sleeping_hat_time_undefined'] = '{name} hat eine Schlafmütze auf unbestimmte Zeit';
+$g_lang['Never'] = 'Nie';
