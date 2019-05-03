@@ -4,6 +4,8 @@ namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Foodsharing\Services\ImageService;
 
 class ReportControl extends Control
@@ -19,19 +21,30 @@ class ReportControl extends Control
 		$this->imageService = $imageService;
 
 		parent::__construct();
+	}
 
-		if (!isset($_GET['sub'])) {
-			$this->routeHelper->go('/?page=report&sub=uncom');
+	// Request is needed here, even if not used inside the method.
+	public function index(Request $request, Response $response): void
+	{
+		if (isset($_GET['bid'])) {
+			$this->byRegion($_GET['bid'], $response);
+		} else {
+			if (!isset($_GET['sub'])) {
+				$this->routeHelper->go('/?page=report&sub=uncom');
+			}
+			if ($this->session->mayHandleReports()) {
+				$this->pageHelper->addBread('Meldungen', '/?page=report');
+			} else {
+				$this->routeHelper->go('/?page=dashboard');
+			}
 		}
 	}
 
-	public function index(): void
+	private function byRegion($bid, $response)
 	{
-		if ($this->session->mayHandleReports()) {
-			$this->pageHelper->addBread('Meldungen', '/?page=report');
-		} else {
-			$this->routeHelper->go('/?page=dashboard');
-		}
+		$response->setContent($this->render('pages/Report/by-region.twig',
+			['bid' => $bid]
+		));
 	}
 
 	public function uncom(): void

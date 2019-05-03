@@ -1,0 +1,11 @@
+{% extends 'layouts/default.twig' %}
+
+{% block main %}
+{% include "partials/vue-wrapper.twig" with {
+    id: 'vue-reportlist',
+    component: "ReportList",
+    props: {
+        regionId: bid,
+    }
+} %}
+{% endblock %}

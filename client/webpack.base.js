@@ -60,7 +60,8 @@ module.exports = {
                     'browsers': ['> 0.5%', 'ie_mob >=11']
                   },
                   'useBuiltIns': 'usage',
-                  'modules': 'commonjs'
+                  'modules': 'commonjs',
+                  'corejs': '2.x'
                 }
               ]
             ]
