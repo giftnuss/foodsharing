@@ -156,23 +156,19 @@ class StoreUserControl extends Control
 						<div id="u_undate">
 							' . $this->v_utils->v_info($this->translationHelper->s('shure_of_backup'), $this->translationHelper->s('attention')) . '
 							<input type="hidden" name="undate-date" id="undate-date" value="" />
-							
+
 							' . $this->v_utils->v_form_textarea('team_msg') . '
 						</div>
 					');
 
 				/*Infos*/
-				$betrieb['menge'] = '';
-				if ($menge = $this->fetchedQuantity($betrieb['abholmenge'])) {
-					$betrieb['menge'] = $menge;
-				}
 
 				$info = '';
 				if (!empty($betrieb['besonderheiten'])) {
 					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('besonderheiten'), nl2br($betrieb['besonderheiten']));
 				}
-				if ($betrieb['menge'] > 0) {
-					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('menge'), $betrieb['menge']);
+				if ($menge = $this->fetchedQuantity($betrieb['abholmenge'])) {
+					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('menge'), $menge);
 				}
 				if ($betrieb['presse'] == 1) {
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', 'Dieser Betrieb darf &ouml;ffentlich genannt werden.');
@@ -233,7 +229,7 @@ class StoreUserControl extends Control
 					}
 					$this->pageHelper->addContent($this->v_utils->v_field('
 							<div id="pinnwand">
-								
+
 								<div class="tools ui-padding">
 									<form method="get" action="' . $this->routeHelper->getSelf() . '">
 										<textarea class="comment textarea inlabel" title="Nachricht schreiben..." name="text"></textarea>
@@ -243,7 +239,7 @@ class StoreUserControl extends Control
 										<input type="hidden" name="bid" value="' . (int)$betrieb['id'] . '" />
 									</form>
 								</div>
-							
+
 								<div class="posts"></div>
 							</div>', 'Pinnwand', $opt));
 				/*pinnwand ende*/
@@ -274,10 +270,10 @@ class StoreUserControl extends Control
 
 				$this->pageHelper->addHidden('
 					<div id="timedialog">
-						
+
 						<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
 						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
-							
+
 						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info($this->translationHelper->sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
 					</div>
 					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
