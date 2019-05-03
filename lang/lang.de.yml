@@ -265,13 +265,13 @@ memberlist:
   some_in_all: "({some} von {all})"
 
 genderlist:
-  header_for_district: "Aufteilung der Foodsaver*in nach Geschlecht in {bezirk}"
+  header_for_district: "Verteilung der Foodsaver nach Geschlecht in {bezirk}"
   district_tab: "Bezirk"
   home_district_tab: "Stammbezirk"
-  gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle foodsaver, die dem Bezirk beigetreten sind."
+  gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
   gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-foodsaver"
   gender_table_header: "Geschlecht"
-  gender_divers: "divers"
+  gender_divers: "divers (oder nicht gewählt)"
   gender_male: "männlich"
   gender_female: "weiblich"
   number_table_header: "Anzahl"
@@ -281,11 +281,11 @@ pickuplist:
   day_tab: "Tag"
   week_tab: "Woche"
   month_tab: "Monat"
-  time_table_header: "Zeitraum"
+  time_table_header: "Zeit"
   NumberOfStores_table_header: "Anzahl Betriebe"
   NumberOfAppointments_table_header: "Anzahl Termine"
   NumberOfSlots_table_header: "Anzahl Abholslots"
-  NumberOfFoodSavers_table_header: "Anzahl foodsaver"
+  NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

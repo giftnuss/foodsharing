@@ -94,7 +94,7 @@ export default {
           sortable: true
         },
         NumberOfGender: {
-          label: 'Anzahl',
+          label: this.$i18n('genderlist.number_table_header'),
           sortable: true
         }
       }
