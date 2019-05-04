@@ -81,7 +81,7 @@
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
-- Update copy webpack plugin to version 5, jsdom to v 15, and dotenv to v 8, eslint-plugin-node to v 9, and null-loader to v 1 @peter.toennies
+- Update copy webpack plugin to version 5, jsdom to v 15, and dotenv to v 8, eslint-plugin-node to v 9, vue-eslint-parser to v 6, and null-loader to v 1 @peter.toennies
 
 # 2019-02-25 Hotfix
 

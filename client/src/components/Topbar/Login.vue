@@ -1,8 +1,8 @@
 <template>
   <form
     id="login-form"
-    class="form-inline my-2 my-lg-0 flex-grow-1"
     @submit.prevent
+    class="form-inline my-2 my-lg-0 flex-grow-1"
   >
     <div
       ref="inputgroup"
@@ -19,12 +19,12 @@
       <input
         id="login-email"
         v-model="email"
+        @keydown.enter="submit"
         type="email"
         name="login-email"
         class="form-control text-primary"
         placeholder="E-Mail"
         aria-label="E-Mail"
-        @keydown.enter="submit"
       >
     </div>
     <div
@@ -43,26 +43,26 @@
       <input
         id="login-password"
         v-model="password"
+        @keydown.enter="submit"
         type="password"
         name="login-password"
         class="form-control text-primary"
         placeholder="Passwort"
         aria-label="Passwort"
-        @keydown.enter="submit"
       >
     </div>
     <button
       v-if="!isLoading "
+      @click="submit"
       href="#"
       class="btn btn-secondary btn-sm"
-      @click="submit"
     >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
-      class="btn btn-light btn-sm loadingButton"
       @click="submit"
+      class="btn btn-light btn-sm loadingButton"
     >
       <img src="/img/469.gif">
     </button>
