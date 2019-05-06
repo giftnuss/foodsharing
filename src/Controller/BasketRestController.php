@@ -274,14 +274,21 @@ final class BasketRestController extends AbstractFOSRestController
 		if (empty($description)) {
 			throw new HttpException(400, 'The description must not be empty.');
 		}
+
+		return $description;
 	}
 
 	private function createAndReturnBasketOrThrowException(ParamFetcher $paramFetcher, $description, $lat, $lon)
 	{
+		$contactTypes = $paramFetcher->get(self::CONTACT_TYPES);
+		if ($contactTypes !== null && \is_array($contactTypes)) {
+			$contactTypes = array_map('intval', $contactTypes);
+		}
+
 		$basket = $this->service->addBasket(
 			$description,
 			'',
-			$paramFetcher->get(self::CONTACT_TYPES),
+			$contactTypes,
 			$paramFetcher->get(self::TEL),
 			$paramFetcher->get(self::MOBILE_NUMBER),
 			$paramFetcher->get('weight'),
