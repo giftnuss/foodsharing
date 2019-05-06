@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\PushNotification;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
+use Foodsharing\Modules\PushNotification\PushNotificationHandlers\AndroidPushHandler;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlers\WebPushHandler;
 
 class PushNotificationGateway extends BaseGateway
@@ -14,9 +15,10 @@ class PushNotificationGateway extends BaseGateway
 	 */
 	private $pushNotificationHandlers = [];
 
-	public function __construct(Database $db, WebPushHandler $webPushHandler)
+	public function __construct(Database $db, WebPushHandler $webPushHandler, AndroidPushHandler $androidPushHandler)
 	{
 		parent::__construct($db);
+		$this->addHandler($androidPushHandler);
 		$this->addHandler($webPushHandler);
 	}
 
