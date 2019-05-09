@@ -27,6 +27,7 @@
 - Added logout Rest endpoint !866 @alex.simm
 
 ## Bugfixes
+- Show pickup amount in store if set over 50 kg #546 !862 @svenpascal
 - Orga can delete quizzes #364 !767 @k.miklobusec
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
