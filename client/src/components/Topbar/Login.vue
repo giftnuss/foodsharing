@@ -98,7 +98,14 @@ export default {
       try {
         let user = await login(this.email, this.password)
         pulseSuccess(`<b>Wunderschönen Tag Dir, ${user.name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.`)
-        window.location = this.$url('dashboard')
+
+        var urlParams = new URLSearchParams(window.location.search)
+
+        if (urlParams.has('ref')) {
+          window.location = decodeURIComponent(urlParams.get('ref'))
+        } else {
+          window.location = this.$url('dashboard')
+        }
       } catch (err) {
         this.isLoading = false
         if (err.code && err.code === 401) {
