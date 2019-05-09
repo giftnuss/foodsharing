@@ -1,8 +1,8 @@
 <template>
   <a
     :class="classes"
-    href="#"
     @click="$emit('bellClick', bell)"
+    href="#"
   >
     <div class="row">
       <div class="col-2 icon-side">
@@ -24,9 +24,9 @@
         </div>
         <a
           v-if="bell.isCloseable"
+          @click.stop="$emit('remove', bell.id)"
           class="showonhover"
           href="#"
-          @click.stop="$emit('remove', bell.id)"
         >
           <i
             class="fas fa-times"

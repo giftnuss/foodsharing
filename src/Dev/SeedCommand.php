@@ -191,5 +191,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addBlogPost($userbot['id'], $bezirk1);
 		}
 		$this->output->writeln('Created blog posts');
+
+		foreach (range(0, 4) as $_) {
+			$I->addReport($this->getRandomUser(), $this->getRandomUser(), 0, 0);
+		}
+
+		foreach (range(0, 3) as $_) {
+			$I->addReport($this->getRandomUser(), $this->getRandomUser(), 0, 1);
+		}
 	}
 }

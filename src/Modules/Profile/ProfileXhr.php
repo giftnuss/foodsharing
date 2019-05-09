@@ -119,14 +119,10 @@ class ProfileXhr extends Control
 			}
 			if ($_GET['type'] == 1) {
 				$history = $this->profileGateway->getPassHistory($_GET['fsid']);
-
 				$dia->setTitle('Passhistorie');
-
 				$dia->addContent($this->view->getHistory($history, $_GET['type']));
 			}
-
-			$dia->addOpt('width', '400px');
-			$dia->addOpt('height', '($(window).height()-100)', false);
+			$dia->noOverflow();
 
 			return $dia->xhrout();
 		}

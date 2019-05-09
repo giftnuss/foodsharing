@@ -228,7 +228,7 @@ class LoginGateway extends BaseGateway
 					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				];
 
-				$this->emailHelper->tplMail('reset_password', $fs['email'], $vars);
+				$this->emailHelper->tplMail('user/reset_password', $fs['email'], $vars);
 
 				return true;
 			}

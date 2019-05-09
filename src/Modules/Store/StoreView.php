@@ -103,7 +103,7 @@ class StoreView extends View
 			$this->v_utils->v_form_text('name', ['required' => true]),
 			$this->latLonPicker('LatLng', $latLonOptions),
 
-			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
+			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe bis maximal 3 Filialen ansprechen, niemals Filialen einer größeren Kette ansprechen! Betriebskettenregeln beachten!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),
 
 			$this->v_utils->v_form_select('betrieb_status_id', array('values' => $status)),
@@ -116,7 +116,7 @@ class StoreView extends View
 			$this->v_utils->v_form_checkbox('lebensmittel', array('values' => $lebensmittel_values)),
 			$this->v_utils->v_form_date('begin'),
 			$this->v_utils->v_form_textarea('besonderheiten'),
-			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig</strong>: Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
+			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig:</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
 			$this->v_utils->v_form_select('public_time', ['values' => [
 				['id' => 0, 'name' => 'Keine Angabe'],
 				['id' => 1, 'name' => 'morgens'],
@@ -127,9 +127,9 @@ class StoreView extends View
 			$first_post,
 			$this->v_utils->v_form_select('ueberzeugungsarbeit', array('values' => array(
 				array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
-				array('id' => 2, 'name' => 'Nach einiger Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
+				array('id' => 2, 'name' => 'Nach Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
 				array('id' => 3, 'name' => 'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
-				array('id' => 4, 'name' => 'Zuerst sah es so aus, als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
+				array('id' => 4, 'name' => 'Zuerst sah es schlecht aus, dann hat er/sie sich aber doch gemeldet')
 			))),
 			$this->v_utils->v_form_select('presse', array('values' => array(
 				array('id' => 1, 'name' => 'Ja'),

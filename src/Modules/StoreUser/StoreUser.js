@@ -81,7 +81,7 @@ $('#team_msg-wrapper').hide()
 $('#u_undate').dialog({
   autoOpen: false,
   modal: true,
-  width: 400,
+  width: 'auto',
   buttons: [
     {
       text: i18n('have_backup'),
@@ -253,7 +253,7 @@ $('#timedialog').dialog({
   resizable: false,
   modal: true,
   autoOpen: false,
-  width: 500,
+  width: 'auto',
   buttons: {
     'Eintragen': async function () {
       const requestDate = ($('#timedialog-date').val()).replace(' ', 'T') + 'Z'
@@ -330,7 +330,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
     if (val == 0) {
       val = 1
     } else if (val > 2) {
-      pulseError('Du hast mehr als zwei Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nicht mehr als zwei Leute</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
+      pulseError('Du hast mehrere Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nur so viele Abholer wie nötig</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
         sticky: true
       })
     }

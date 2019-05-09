@@ -39,7 +39,9 @@ final class BasketRestController extends AbstractFOSRestController
 	private const LON = 'lon';
 	private const TEL = 'tel';
 
-	private const MAX_PICTURE_SIZE_MB = 60 * 1024 * 1024;
+	private const BYTES_PER_KILOBYTE = 1024;
+	private const KILOBYTES_PER_MEGABYTE = 1024;
+	private const MAX_PICTURE_SIZE_BYTES = 60 * self::KILOBYTES_PER_MEGABYTE * self::BYTES_PER_KILOBYTE;
 	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
 
 	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
@@ -48,99 +50,6 @@ final class BasketRestController extends AbstractFOSRestController
 		$this->service = $service;
 		$this->imageService = $imageService;
 		$this->session = $session;
-	}
-
-	/**
-	 * Normalizes a basket request.
-	 *
-	 * @param array $request
-	 *
-	 * @return array
-	 */
-	private function normalizeRequest($request): array
-	{
-		$user = RestNormalization::normalizeFoodsaver($request, 'fs_');
-
-		return [
-			'user' => $user,
-			'time' => $request[self::TIME_TS],
-		];
-	}
-
-	/**
-	 * Normalizes the details of a basket of the current user for the Rest
-	 * response, including requests.
-	 *
-	 * @param array $b basket data
-	 * @param array $updates list of updates
-	 */
-	private function normalizeMyBasket($b, array $updates = []): array
-	{
-		$basket = [
-			self::ID => (int)$b[self::ID],
-			self::DESCRIPTION => html_entity_decode($b[self::DESCRIPTION]),
-			self::PICTURE => $b[self::PICTURE],
-			self::CREATED_AT => (int)$b[self::TIME_TS],
-			self::UPDATED_AT => (int)$b[self::TIME_TS],
-			self::REQUESTS => []
-		];
-
-		// add requests, if there are any in the updates
-		foreach ($updates as $update) {
-			if ((int)$update[self::ID] == $basket[self::ID]) {
-				$basket[self::REQUESTS][] = $this->normalizeRequest($update);
-				$basket[self::UPDATED_AT] = max($basket[self::UPDATED_AT], (int)$update[self::TIME_TS]);
-			}
-		}
-
-		return $basket;
-	}
-
-	/**
-	 * Normalizes the details of a basket for the Rest response.
-	 *
-	 * @param array $b the basket data
-	 *
-	 * @return array
-	 */
-	private function normalizeBasket($b): array
-	{
-		// set main properties
-		$creator = RestNormalization::normalizeFoodsaver($b, 'fs_');
-		$basket = [
-			self::ID => (int)$b[self::ID],
-			self::STATUS => (int)$b[self::STATUS],
-			self::DESCRIPTION => html_entity_decode($b[self::DESCRIPTION]),
-			self::PICTURE => $b[self::PICTURE],
-			self::CONTACT_TYPES => array_map('\intval', explode(':', $b['contact_type'])),
-			self::CREATED_AT => (int)$b[self::TIME_TS],
-			self::UPDATED_AT => (int)$b[self::TIME_TS],
-			'until' => (int)$b['until_ts'],
-			self::LAT => (float)$b[self::LAT],
-			self::LON => (float)$b[self::LON],
-			'creator' => $creator
-		];
-
-		// add phone numbers if contact_type includes telephone
-		$tel = '';
-		$handy = '';
-		if (isset($b['contact_type']) && \in_array(2, $basket[self::CONTACT_TYPES], true)) {
-			$tel = $b[self::TEL];
-			$handy = $b[self::MOBILE_NUMBER];
-		}
-		$basket[self::TEL] = $tel;
-		$basket[self::MOBILE_NUMBER] = $handy;
-
-		return $basket;
-	}
-
-	/**
-	 * Checks if the number is a valid value in the given range.
-	 */
-	private function isValidNumber($value, $lowerBound, $upperBound): bool
-	{
-		return !is_null($value) && !is_nan($value)
-			&& ($lowerBound <= $value) && ($upperBound >= $value);
 	}
 
 	/**
@@ -159,24 +68,85 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function listBasketsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
+		$this->throwExceptionIfNotLoggedIn();
+
+		$baskets = [];
+		switch ($paramFetcher->get('type')) {
+			case 'mine':
+				$baskets = $this->getCurrentUsersBaskets();
+				break;
+			case 'coordinates':
+				$baskets = $this->gateway->getBasketCoordinates();
+				break;
+		}
+
+		return $this->handleView($this->view(['baskets' => $baskets], 200));
+	}
+
+	private function throwExceptionIfNotLoggedIn()
+	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
+	}
 
-		switch ($paramFetcher->get('type')) {
-			case 'mine':
-				$updates = $this->gateway->listUpdates($this->session->id());
-				$baskets = $this->gateway->listMyBaskets($this->session->id());
-				$data = array_map(function ($b) use ($updates) {
-					return $this->normalizeMyBasket($b, $updates);
-				}, $baskets);
-				break;
-			case 'coordinates':
-				$data = $this->gateway->getBasketCoordinates();
-				break;
+	private function getCurrentUsersBaskets()
+	{
+		$updates = $this->gateway->listUpdates($this->session->id());
+		$baskets = $this->gateway->listMyBaskets($this->session->id());
+		$baskets = array_map(function ($b) use ($updates) {
+			return $this->normalizeMyBasket($b, $updates);
+		}, $baskets);
+
+		return $baskets;
+	}
+
+	/**
+	 * Normalizes the details of a basket of the current user for the Rest
+	 * response, including requests.
+	 *
+	 * @param array $basketData basket data
+	 * @param array $updates list of updates
+	 *
+	 * @return array
+	 */
+	private function normalizeMyBasket(array $basketData, array $updates = []): array
+	{
+		$basket = [
+			self::ID => (int)$basketData[self::ID],
+			self::DESCRIPTION => html_entity_decode($basketData[self::DESCRIPTION]),
+			self::PICTURE => $basketData[self::PICTURE],
+			self::CREATED_AT => (int)$basketData[self::TIME_TS],
+			self::UPDATED_AT => (int)$basketData[self::TIME_TS],
+			self::REQUESTS => []
+		];
+
+		// add requests, if there are any in the updates
+		foreach ($updates as $update) {
+			if ((int)$update[self::ID] == $basket[self::ID]) {
+				$basket[self::REQUESTS][] = $this->normalizeRequest($update);
+				$basket[self::UPDATED_AT] = max($basket[self::UPDATED_AT], (int)$update[self::TIME_TS]);
+			}
 		}
 
-		return $this->handleView($this->view(['baskets' => $data], 200));
+		return $basket;
+	}
+
+	/**
+	 * Normalizes a basket request.
+	 *
+	 * @param array $request
+	 *
+	 * @return array
+	 */
+	private function normalizeRequest(array $request): array
+	{
+		$user = RestNormalization::normalizeFoodsaver($request, 'fs_');
+
+		return [
+			'user' => $user,
+			'time' => $request[self::TIME_TS],
+		];
 	}
 
 	/**
@@ -189,11 +159,9 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function getBasketAction($basketId): \Symfony\Component\HttpFoundation\Response
+	public function getBasketAction(int $basketId): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
-		}
+		$this->throwExceptionIfNotLoggedIn();
 
 		$basket = $this->gateway->getBasket($basketId);
 		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON) {
@@ -202,9 +170,48 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(404, 'Basket was already picked up.');
 		}
 
-		$data = $this->normalizeBasket($basket);
+		$basket = $this->normalizeBasket($basket);
 
-		return $this->handleView($this->view(['basket' => $data], 200));
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Normalizes the details of a basket for the Rest response.
+	 *
+	 * @param array $basketData the basket data
+	 *
+	 * @return array
+	 */
+	private function normalizeBasket(array $basketData): array
+	{
+		// set main properties
+		$creator = RestNormalization::normalizeFoodsaver($basketData, 'fs_');
+		$basket = [
+			self::ID => (int)$basketData[self::ID],
+			self::STATUS => (int)$basketData[self::STATUS],
+			self::DESCRIPTION => html_entity_decode($basketData[self::DESCRIPTION]),
+			self::PICTURE => $basketData[self::PICTURE],
+			self::CONTACT_TYPES => array_map('\intval', explode(':', $basketData['contact_type'])),
+			self::CREATED_AT => (int)$basketData[self::TIME_TS],
+			self::UPDATED_AT => (int)$basketData[self::TIME_TS],
+			'until' => (int)$basketData['until_ts'],
+			self::LAT => (float)$basketData[self::LAT],
+			self::LON => (float)$basketData[self::LON],
+			'creator' => $creator
+		];
+
+		// add phone numbers if contact_type includes telephone
+		$tel = '';
+		$handy = '';
+		$telephoneContactType = 2;
+		if (isset($basketData['contact_type']) && \in_array($telephoneContactType, $basket[self::CONTACT_TYPES], true)) {
+			$tel = $basketData[self::TEL];
+			$handy = $basketData[self::MOBILE_NUMBER];
+		}
+		$basket[self::TEL] = $tel;
+		$basket[self::MOBILE_NUMBER] = $handy;
+
+		return $basket;
 	}
 
 	/**
@@ -227,15 +234,9 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function addBasketAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
-		}
+		$this->throwExceptionIfNotLoggedIn();
 
-		// prepare and check description
-		$description = trim(strip_tags($paramFetcher->get(self::DESCRIPTION)));
-		if (empty($description)) {
-			throw new HttpException(400, 'The description must not be empty.');
-		}
+		$description = $this->getValidatedDescriptionOrThrowException($paramFetcher);
 
 		$lat = $paramFetcher->get(self::LAT);
 		$lon = $paramFetcher->get(self::LON);
@@ -249,19 +250,58 @@ final class BasketRestController extends AbstractFOSRestController
 			}
 		}
 
-		//add basket
-		$basket = $this->service->addBasket($description, '', $paramFetcher->get(self::CONTACT_TYPES),
-				$paramFetcher->get(self::TEL), $paramFetcher->get(self::MOBILE_NUMBER),
-				$paramFetcher->get('weight'), $lat, $lon,
-				$paramFetcher->get('lifetime'));
+		$basket = $this->createAndReturnBasketOrThrowException($paramFetcher, $description, $lat, $lon);
+
+		// return the created basket
+		$basket = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Checks if the number is a valid value in the given range.
+	 */
+	private function isValidNumber($value, $lowerBound, $upperBound): bool
+	{
+		return !is_null($value) && !is_nan($value)
+			&& ($lowerBound <= $value) && ($upperBound >= $value);
+	}
+
+	private function getValidatedDescriptionOrThrowException(ParamFetcher $paramFetcher)
+	{
+		// prepare and check description
+		$description = trim(strip_tags($paramFetcher->get(self::DESCRIPTION)));
+		if (empty($description)) {
+			throw new HttpException(400, 'The description must not be empty.');
+		}
+
+		return $description;
+	}
+
+	private function createAndReturnBasketOrThrowException(ParamFetcher $paramFetcher, $description, $lat, $lon)
+	{
+		$contactTypes = $paramFetcher->get(self::CONTACT_TYPES);
+		if ($contactTypes !== null && \is_array($contactTypes)) {
+			$contactTypes = array_map('intval', $contactTypes);
+		}
+
+		$basket = $this->service->addBasket(
+			$description,
+			'',
+			$contactTypes,
+			$paramFetcher->get(self::TEL),
+			$paramFetcher->get(self::MOBILE_NUMBER),
+			$paramFetcher->get('weight'),
+			$lat,
+			$lon,
+			$paramFetcher->get('lifetime')
+		);
+
 		if (!$basket) {
 			throw new HttpException(400, 'Unable to create the basket.');
 		}
 
-		// return the created basket
-		$data = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $data], 200));
+		return $basket;
 	}
 
 	/**
@@ -275,19 +315,20 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response|null
 	 */
-	public function removeBasketAction($basketId): ?\Symfony\Component\HttpFoundation\Response
+	public function removeBasketAction(int $basketId): ?\Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401);
-		}
+		$this->throwExceptionIfNotLoggedIn();
+		$this->removeBasketOrThrowException($basketId);
 
+		return $this->handleView($this->view([], 200));
+	}
+
+	private function removeBasketOrThrowException(int $basketId)
+	{
 		$status = $this->gateway->removeBasket($basketId, $this->session->id());
-
 		if ($status === 0) {
 			throw new HttpException(404, 'Basket was not found or cannot be deleted.');
 		}
-
-		return $this->handleView($this->view([], 200));
 	}
 
 	/**
@@ -296,25 +337,17 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId ID of an existing basket
+	 * @param Request $request
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function setPictureAction(int $basketId, Request $request): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401);
-		}
+		$this->throwExceptionIfNotLoggedIn();
 
 		$basket = $this->findEditableBasket($basketId);
 
-		//check data
-		$data = $request->getContent();
-		if ($data === '') {
-			throw new HttpException(400, 'The picture data must not be empty.');
-		}
-		if (strlen($data) > self::MAX_PICTURE_SIZE_MB) {
-			throw new HttpException(400, 'The picture data must not exceed ' . (self::MAX_PICTURE_SIZE_MB / (1024 * 1024)) . ' MB.');
-		}
+		$data = $this->getValidatedDataOrThrowException($request);
 
 		//save and resize image
 		$tmp = uniqid('tmp/', true);
@@ -340,6 +373,18 @@ final class BasketRestController extends AbstractFOSRestController
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
 
+	private function getValidatedDataOrThrowException(Request $request)
+	{
+		$data = $request->getContent();
+		if ($data === '') {
+			throw new HttpException(400, 'The picture data must not be empty.');
+		}
+		if (strlen($data) > self::MAX_PICTURE_SIZE_BYTES) {
+			$maxPictureSizeMegabytes = self::MAX_PICTURE_SIZE_BYTES / (self::KILOBYTES_PER_MEGABYTE * self::BYTES_PER_KILOBYTE);
+			throw new HttpException(400, 'The picture data must not exceed ' . $maxPictureSizeMegabytes . ' MB.');
+		}
+	}
+
 	/**
 	 * Sets a new picture for this basket.
 	 *
@@ -351,22 +396,26 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function removePictureAction(int $basketId): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401);
-		}
-
-		$basket = $this->findEditableBasket($basketId);
+		$this->throwExceptionIfNotLoggedIn();
 
 		//update basket
+		$basket = $this->removePictureFromBasketAndReturnBasket($basketId);
+
+		$basket = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	private function removePictureFromBasketAndReturnBasket(int $basketId)
+	{
+		$basket = $this->findEditableBasket($basketId);
 		if (isset($basket[self::PICTURE])) {
 			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
 		}
 
-		$data = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $data], 200));
+		return $basket;
 	}
 
 	/**
@@ -380,14 +429,29 @@ final class BasketRestController extends AbstractFOSRestController
 	private function findEditableBasket(int $basketId): array
 	{
 		$basket = $this->gateway->getBasket($basketId);
+		$this->validateBasketIsEditableOrThrowException($basket);
+
+		return $basket;
+	}
+
+	private function validateBasketIsEditableOrThrowException($basket)
+	{
+		$this->throwExceptionIfBasketDoesNotExist($basket);
+		$this->throwExceptionIfBasketIsOwnedByOtherUser($basket);
+	}
+
+	private function throwExceptionIfBasketDoesNotExist($basket)
+	{
 		if (!$basket || $basket[self::STATUS] === Status::DELETED_OTHER_REASON
 			|| $basket[self::STATUS] === Status::DELETED_PICKED_UP) {
 			throw new HttpException(404, 'Basket does not exist or was deleted.');
 		}
+	}
+
+	private function throwExceptionIfBasketIsOwnedByOtherUser($basket)
+	{
 		if ($basket['fs_id'] !== $this->session->id()) {
 			throw new HttpException(401, 'You are not the owner of the basket.');
 		}
-
-		return $basket;
 	}
 }

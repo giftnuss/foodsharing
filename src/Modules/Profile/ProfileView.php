@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use Flourish\fDate;
+use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
 
@@ -131,12 +131,16 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->session->may('orga')) {
-			$last_login = new fDate($this->foodsaver['last_login']);
-			$registration_date = new fDate($this->foodsaver['anmeldedatum']);
+			$last_login = (
+				$this->foodsaver['last_login']
+				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
+				: $this->translationHelper->s('Never')
+			);
+			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
 
 			$infos[] = array(
 				'name' => $this->translationHelper->s('last_login'),
-				'val' => $last_login->format('d.m.Y')
+				'val' => $last_login
 			);
 			$infos[] = array(
 				'name' => $this->translationHelper->s('registration_date'),
@@ -286,7 +290,7 @@ class ProfileView extends View
 			$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
-					<span class="name">Beiträge</span> 
+					<span class="name">Beiträge</span>
 				</span>';
 		} else {
 			$postCount = '';
@@ -296,17 +300,17 @@ class ProfileView extends View
 		 * Banana
 		*/
 		if ($this->session->may('fs')) {
-			$countBanana = count($this->foodsaver['bananen']);
-			if ($countBanana == 0) {
-				$countBanana = '&nbsp;';
+			$count_banana = count($this->foodsaver['bananen']);
+			if ($count_banana == 0) {
+				$count_banana = '&nbsp;';
 			}
 
 			$banana_button_class = ' bouched';
-			$giveBanana = '';
+			$givebanana = '';
 
 			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
-				$giveBanana = '
+				$givebanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
 					<div class="vouch-banana-desc">
@@ -325,15 +329,15 @@ class ProfileView extends View
 			});');
 			$bananaCount = '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
-				<span class="val">' . $countBanana . '</span>
+				<span class="val">' . $count_banana . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
 			';
 
 			$bananaCount .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $countBanana) . ' Vertrauensbananen</h3>
-				' . $giveBanana . '
+				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
+				' . $givebanana . '
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';

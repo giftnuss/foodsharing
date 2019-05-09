@@ -38,10 +38,10 @@
           <div class="col">
             <button
               v-b-tooltip.hover
+              @click="clearFilter"
               type="button"
               class="btn btn-sm"
               title="Filter leeren"
-              @click="clearFilter"
             >
               <i class="fas fa-times" />
             </button>

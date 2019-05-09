@@ -10,6 +10,17 @@ If you feel comfortable submitting a fix (or if you like to try ;) ) too, then f
 
 ## Submitting a change
 
+### Becoming a member
+
+As an “member” on Gitlab you can
+ * create and push to branches within the repository (except master)
+ * see confidential issues
+ * set labels to issues
+ * assign yourself to issues (to tell others that they do not need to start on them)
+After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* Button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
+
+### Working on an issue
+
 You can either submit your own issue and work on it or work on existing issues. Issues that are suitable for newcomers are labeled as [starter tasks](https://gitlab.com/foodsharing-dev/foodsharing/issues?label_name%5B%5D=starter+task).
 
 To work on an issue:

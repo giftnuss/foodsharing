@@ -49,7 +49,7 @@ triage:
 
 build:frontend:
   <<: *defaults
-  image: node:11.9.0-alpine
+  image: node:11.13.0-alpine
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn test && yarn build)
@@ -89,7 +89,7 @@ build:backend:
 
 build:docs:
   <<: *defaults
-  image: node:11.9.0-alpine
+  image: node:11.13.0-alpine
   stage: build
   script:
   - yarn global add gitbook-cli

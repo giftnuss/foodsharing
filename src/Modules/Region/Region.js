@@ -20,8 +20,10 @@ $('a[href=\'#signout\']').on('click', function () {
 })
 
 $('#signout_sure').dialog({
+  resizable: false,
   autoOpen: false,
   modal: true,
+  width: 'auto',
   buttons: [
     {
       text: i18n('button.yes_i_am_sure'),

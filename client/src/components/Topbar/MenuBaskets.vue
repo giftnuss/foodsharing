@@ -37,9 +37,9 @@
           Alle Essenskörbe
         </a>
         <a
+          @click="openBasketCreationForm"
           href="#"
           class="btn btn-sm btn-secondary"
-          @click="openBasketCreationForm"
         >
           Essenskorb anlegen
         </a>

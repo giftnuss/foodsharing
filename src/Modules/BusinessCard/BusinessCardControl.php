@@ -66,7 +66,7 @@ class BusinessCardControl extends Control
 				}
 			}
 
-			$this->pageHelper->addContent($this->view->optionform($sel_data));
+			$this->pageHelper->addContent($this->view->optionForm($sel_data));
 		}
 	}
 

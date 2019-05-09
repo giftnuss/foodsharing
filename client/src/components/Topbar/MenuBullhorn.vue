@@ -1,7 +1,7 @@
 <template>
   <nav-item-dropdown
-    tooltip="Aktionen"
     :no-caret="!displayArrow"
+    tooltip="Aktionen"
     right
   >
     <template slot="button-content">

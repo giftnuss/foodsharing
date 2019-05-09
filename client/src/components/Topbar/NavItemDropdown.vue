@@ -2,17 +2,17 @@
 <template>
   <li :class="dropdownClasses">
     <a
-      :id="`dropdown_${_uid}`"
       ref="toggle"
+      :id="`dropdown_${_uid}`"
       :class="toggleClasses"
       :aria-expanded="visible ? 'true' : 'false'"
       :aria-label="tooltip"
-      href="#"
-      aria-haspopup="true"
       @click="buttonClick"
       @mouseover="() => hover = true"
       @mouseout="() => hover = false"
       @keydown="buttonClick"
+      href="#"
+      aria-haspopup="true"
     >
       <slot name="button-content" />
     </a>

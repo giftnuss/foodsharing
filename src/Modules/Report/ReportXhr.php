@@ -71,7 +71,7 @@ class ReportXhr extends Control
 
 			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
 			$dialog->addContent($content);
-			$dialog->addOpt('width', '600px');
+			$dialog->addOpt('width', '$(window).width()*0.9');
 
 			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
@@ -130,8 +130,7 @@ class ReportXhr extends Control
 		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
-
-		$dialog->addOpt('width', '600', false);
+		$dialog->addOpt('width', '$(window).width()*0.9', false);
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
@@ -148,7 +147,7 @@ class ReportXhr extends Control
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
-		$dialog->addJs('$("#reportmessage").css("width","555px");');
+		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
 		$dialog->addButton('Meldung senden', '
 
 		if($("#reportreason").val() == 0)
@@ -185,6 +184,7 @@ class ReportXhr extends Control
 			});
 		}
 		');
+		$dialog->noOverflow();
 
 		return $dialog->xhrout();
 	}
