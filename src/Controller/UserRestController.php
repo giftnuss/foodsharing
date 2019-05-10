@@ -66,7 +66,7 @@ class UserRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("user/logout")
 	 */
-	public function logoutAction(ParamFetcher $paramFetcher): Response
+	public function logoutAction(): Response
 	{
 		$this->session->logout();
 
