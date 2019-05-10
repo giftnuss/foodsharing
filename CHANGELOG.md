@@ -4,12 +4,10 @@
 
 ## Features
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
-- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
 - Vue.JS implementation of reports page !529 #296 @theolampert
-- Made email notifications great again #450 @zommuter:
 - It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter
+- Made email notifications great again #450 @zommuter:
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
@@ -26,10 +24,7 @@
 - Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
-- Adjust devdocs to being open source !823 @flukx
-- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
 - Added logout Rest endpoint !866 @alex.simm
-- add section about font awesome in devdocs !842 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -70,6 +65,9 @@
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 
 ## Dev/Test/CI stuff
+- Adjust devdocs to being open source !823 @flukx
+- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
+- add section about font awesome in devdocs !842 @flukx
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
@@ -81,7 +79,6 @@
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
 - Seed data for reports !529 @NerdyProjects
-- Email templates are no longer stored in the database but the repository #502 !805 @zommuter
 - Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
