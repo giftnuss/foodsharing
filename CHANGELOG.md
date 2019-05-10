@@ -29,6 +29,7 @@
 - Adjust devdocs to being open source !823 @flukx
 - Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
 - Added logout Rest endpoint !866 @alex.simm
+- add section about font awesome in devdocs !842 @flukx
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
