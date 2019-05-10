@@ -69,6 +69,7 @@ class UserRestController extends AbstractFOSRestController
 	public function logoutAction(ParamFetcher $paramFetcher): Response
 	{
 		$this->session->logout();
+
 		return $this->handleView($this->view([], 200));
 	}
 
