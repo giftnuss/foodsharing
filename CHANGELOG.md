@@ -27,7 +27,6 @@
 - Added logout Rest endpoint !866 @alex.simm
 
 ## Bugfixes
-- Show pickup amount in store if set over 50 kg #546 !862 @svenpascal
 - Orga can delete quizzes #364 !767 @k.miklobusec
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
@@ -50,7 +49,7 @@
 - Fix in the AddBasketAction to allow setting a description and message preferences while creating a basket in the Android App !863 @dthulke
 - Workaround to fix selecting adresses in Vienna !854 @dthulke
 - Make comments visible again on fair-share-points for non-registered users !867 @fs_k @jofranz
-
+- Show pickup amount in store if set over 50 kg. #546 !862 @svenpascal
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -66,6 +65,8 @@
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
 - Refactored login from model to gateway !828 #9 @peter.toennies
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
+- Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
+- Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
 
 ## Dev/Test/CI stuff
 - Adjust devdocs to being open source !823 @flukx
@@ -87,6 +88,7 @@
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
 - Update copy webpack plugin to version 5, jsdom to v 15, and dotenv to v 8, eslint-plugin-node to v 9, vue-eslint-parser to v 6, and null-loader to v 1 @peter.toennies
+- Wrote acceptance tests for showing fetched quantity and store public mentioning (StoreUserCest.php). !862 @svenpascal
 
 # 2019-02-25 Hotfix
 
