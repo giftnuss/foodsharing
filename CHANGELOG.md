@@ -48,6 +48,8 @@
 - Also display sleeping foodsavers in members list !861 @jofranz
 - Fix in the AddBasketAction to allow setting a description and message preferences while creating a basket in the Android App !863 @dthulke
 - Workaround to fix selecting adresses in Vienna !854 @dthulke
+- Make comments visible again on fair-share-points for non-registered users !867 @fs_k @jofranz
+
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
