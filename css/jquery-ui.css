@@ -873,7 +873,7 @@ body .ui-tooltip {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 1em;
     white-space: normal;
-    word-break: break-word
+    overflow-wrap: break-word
 }
 
 .ui-widget select {
