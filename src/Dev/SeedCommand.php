@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Codeception\CustomCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Carbon\Carbon;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -77,10 +78,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 		for ($m = 0; $m <= 10; ++$m) {
 			$store_id = $this->getRandomIDOfArray($this->stores);
 			for ($i = 0; $i <= 10; ++$i) {
-				$pickupDate = time() - (rand(1, 14) * 24 * 60 * 60);
+				$pickupDate = Carbon::create(2019, 4, rand(1, 30), rand(1, 24), rand(1, 59), 0);
 				for ($k = 0; $k <= 2; ++$k) {
 					$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
-					$this->helper->addCollector($foodSaver_id, $store_id, ['date' => date('Y-m-d H:i:s', $pickupDate)]);
+					$this->helper->addCollector($foodSaver_id, $store_id, ['date' => $pickupDate->toDateTimeString()]);
 				}
 			}
 		}
@@ -183,7 +184,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln('Created stores');
 
-		// create more pickups
 		$this->CreateMorePickups();
 		$this->output->writeln('Created more pickups');
 
