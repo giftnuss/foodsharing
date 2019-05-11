@@ -138,9 +138,13 @@ final class RegionControl extends Control
 		if ($activeSubpage == 'statistic') {
 			$viewdata['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
 			$viewdata['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
+			$timestart = microtime(true);
 			$viewdata['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
 			$viewdata['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%v');
 			$viewdata['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+			$timeend = microtime(true);
+			$timeduration = $timeend - $timestart;
+			$viewdata['pickupData']['dailyQueryRuntime'] = $timeduration;
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 

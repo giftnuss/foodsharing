@@ -70,7 +70,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 
 		return [];
-
 	}
 
 	protected function CreateMorePickups()
