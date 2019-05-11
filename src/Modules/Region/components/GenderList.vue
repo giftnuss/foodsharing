@@ -23,6 +23,8 @@
                 :fields="fields"
                 :items="genderDataTab"
                 caption-top
+                :sort-by="sortBy"
+                :sort-desc="sortDesc"
               >
                 <template slot="table-caption">
                   {{ $i18n('genderlist.gender_district_table_caption') }}
@@ -39,6 +41,8 @@
                 :fields="fields"
                 :items="genderDataHomeDistrictTab"
                 caption-top
+                :sort-by="sortBy"
+                :sort-desc="sortDesc"
               >
                 <template slot="table-caption">
                   {{ $i18n('genderlist.gender_home_district_table_caption') }}
@@ -76,6 +80,8 @@ export default {
   },
   data () {
     return {
+      sortBy: 'gender',
+      sortDesc: 'true',
       fields: {
         gender: {
           label: this.$i18n('genderlist.gender_table_header'),
