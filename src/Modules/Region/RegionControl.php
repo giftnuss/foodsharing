@@ -143,7 +143,7 @@ final class RegionControl extends Control
 			$viewdata['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%v');
 			$viewdata['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
 			$timeend = microtime(true);
-			$timeduration = $timeend - $timestart;
+			$timeduration = round($timeend - $timestart, 5);
 			$viewdata['pickupData']['dailyQueryRuntime'] = $timeduration;
 		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];

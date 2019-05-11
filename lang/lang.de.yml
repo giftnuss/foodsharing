@@ -278,7 +278,7 @@ genderlist:
 
 pickuplist:
   header_for_district: "Aufteilung der Abholungen in {bezirk} "
-  table_footer_duration: "Abfragedauer : {dauer}"
+  table_footer_duration: "Abfragedauer : {dauer} Sekunden"
   day_tab: "Tag"
   week_tab: "Woche"
   month_tab: "Monat"

@@ -31,6 +31,8 @@
               :per-page="perPage"
               :fields="fields"
               :items="pickupDataDailyTab"
+              :sort-by="sortBy"
+              :sort-desc="sortDesc"
             />
           </b-tab>
           <b-tab
@@ -53,6 +55,8 @@
               :items="pickupDataWeeklyTab"
               :current-page="currentPageWeekly"
               :per-page="perPage"
+              :sort-by="sortBy"
+              :sort-desc="sortDesc"
             />
           </b-tab>
           <b-tab
@@ -74,6 +78,8 @@
               :items="pickupDataMonthlyTab"
               :current-page="currentPageMonthly"
               :per-page="perPage"
+              :sort-by="sortBy"
+              :sort-desc="sortDesc"
             />
           </b-tab>
         </b-tabs>
@@ -116,6 +122,8 @@ export default {
   },
   data () {
     return {
+      sortBy: 'time',
+      sortDesc: 'true',
       currentPageDaily: 1,
       currentPageWeekly: 1,
       currentPageMonthly: 1,
