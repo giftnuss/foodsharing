@@ -140,7 +140,7 @@ final class RegionControl extends Control
 			$viewdata['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
 			$timestart = microtime(true);
 			$viewdata['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
-			$viewdata['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%v');
+			$viewdata['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
 			$viewdata['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
 			$timeend = microtime(true);
 			$timeduration = round($timeend - $timestart, 5);

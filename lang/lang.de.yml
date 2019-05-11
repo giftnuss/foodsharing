@@ -282,7 +282,7 @@ pickuplist:
   day_tab: "Tag"
   week_tab: "Woche"
   month_tab: "Monat"
-  time_table_header: "Zeit"
+  time_table_header: "Zeitraum"
   NumberOfStores_table_header: "Anzahl Betriebe"
   NumberOfAppointments_table_header: "Anzahl Termine"
   NumberOfSlots_table_header: "Anzahl Abholslots"
