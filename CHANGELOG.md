@@ -50,6 +50,7 @@
 - Workaround to fix selecting adresses in Vienna !854 @dthulke
 - Make comments visible again on fair-share-points for non-registered users !867 @fs_k @jofranz
 - Show pickup amount in store if set over 50 kg. #546 !862 @svenpascal
+- Tidy up content security policy !870 @NerdyProjects
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
