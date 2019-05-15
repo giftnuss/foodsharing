@@ -504,7 +504,7 @@ class RegionGateway extends BaseGateway
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 
-	public function genderCountRegion($bezirkid)
+	public function genderCountRegion(int $districtId): array
 	{
 		return $this->db->fetchAll(
 			'select  geschlecht as gender,
@@ -513,11 +513,11 @@ class RegionGateway extends BaseGateway
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
 					where fb.bezirk_id = :id
 					group by geschlecht',
-			[':id' => $bezirkid]
+			[':id' => $districtId]
 		);
 	}
 
-	public function genderCountHomeRegion($bezirkid)
+	public function genderCountHomeRegion(int $districtId): array
 	{
 		return $this->db->fetchAll(
 			'select  geschlecht as gender,
@@ -526,11 +526,11 @@ class RegionGateway extends BaseGateway
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
 					where fs.bezirk_id = :id
 					group by geschlecht',
-			[':id' => $bezirkid]
+			[':id' => $districtId]
 		);
 	}
 
-	public function regionPickupsByDate($districtId, $dateFormat)
+	public function regionPickupsByDate(int $districtId, $dateFormat): array
 	{
 		return $this->db->fetchAll(
 			'select 

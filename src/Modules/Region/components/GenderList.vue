@@ -17,14 +17,14 @@
               active
             >
               <b-table
+                :fields="fields"
+                :items="genderDataTab"
+                :sort-by="sortBy"
+                :sort-desc="sortDesc"
                 striped
                 hover
                 small
-                :fields="fields"
-                :items="genderDataTab"
                 caption-top
-                :sort-by="sortBy"
-                :sort-desc="sortDesc"
               >
                 <template slot="table-caption">
                   {{ $i18n('genderlist.gender_district_table_caption') }}
@@ -35,14 +35,14 @@
               :title="$i18n('genderlist.home_district_tab')"
             >
               <b-table
+                :fields="fields"
+                :items="genderDataHomeDistrictTab"
+                :sort-by="sortBy"
+                :sort-desc="sortDesc"
                 striped
                 hover
                 small
-                :fields="fields"
-                :items="genderDataHomeDistrictTab"
                 caption-top
-                :sort-by="sortBy"
-                :sort-desc="sortDesc"
               >
                 <template slot="table-caption">
                   {{ $i18n('genderlist.gender_home_district_table_caption') }}

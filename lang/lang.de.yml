@@ -269,7 +269,7 @@ genderlist:
   district_tab: "Bezirk"
   home_district_tab: "Stammbezirk"
   gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
-  gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-foodsaver"
+  gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-Foodsaver"
   gender_table_header: "Geschlecht"
   gender_divers: "divers (oder nicht gewählt)"
   gender_male: "männlich"
@@ -278,14 +278,14 @@ genderlist:
 
 pickuplist:
   header_for_district: "Aufteilung der Abholungen in {bezirk} "
-  table_footer_duration: "Abfragedauer : {dauer} Sekunden"
+  table_footer_duration: "Abfragedauer: {dauer} Sekunden"
   day_tab: "Tag"
   week_tab: "Woche"
   month_tab: "Monat"
   time_table_header: "Zeitraum"
   NumberOfStores_table_header: "Anzahl Betriebe"
   NumberOfAppointments_table_header: "Anzahl Termine"
-  NumberOfSlots_table_header: "Anzahl Abholslots"
+  NumberOfSlots_table_header: "Anzahl Abhol-Slots"
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:

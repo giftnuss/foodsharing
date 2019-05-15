@@ -308,10 +308,13 @@ final class RegionControl extends Control
 
 	private function statistic(Request $request, Response $response, array $region): void
 	{
-		$this->pageHelper->addBread($this->translator->trans('terminology.statistic'), '/?page=bezirk&bid=' . $region['id'] . '&sub=statistic');
+		$this->pageHelper->addBread(
+			$this->translator->trans('terminology.statistic'),
+			'/?page=bezirk&bid=' . $region['id'] . '&sub=statistic'
+		);
 		$this->pageHelper->addTitle($this->translator->trans('terminology.statistic'));
 		$sub = $request->query->get('sub');
-		$viewdata = $this->regionViewData($region, $sub);
-		$response->setContent($this->render('pages/Region/statistic.twig', $viewdata));
+		$viewData = $this->regionViewData($region, $sub);
+		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }

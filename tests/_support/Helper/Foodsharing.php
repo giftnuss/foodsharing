@@ -112,7 +112,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
-			'geschlecht' => rand(0, 2)
+			'geschlecht' => random_int(0, 2)
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);

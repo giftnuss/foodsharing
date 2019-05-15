@@ -22,17 +22,17 @@
             />
             <b-table
               id="pickupDaily-table"
-              striped
-              hover
-              small
-              bordered
-              responsive
               :current-page="currentPageDaily"
               :per-page="perPage"
               :fields="fields"
               :items="pickupDataDailyTab"
               :sort-by="sortBy"
               :sort-desc="sortDesc"
+              striped
+              hover
+              small
+              bordered
+              responsive
             />
           </b-tab>
           <b-tab
@@ -46,17 +46,17 @@
             />
             <b-table
               id="pickupWeekly-table"
-              striped
-              hover
-              small
-              bordered
-              responsive
               :fields="fields"
               :items="pickupDataWeeklyTab"
               :current-page="currentPageWeekly"
               :per-page="perPage"
               :sort-by="sortBy"
               :sort-desc="sortDesc"
+              striped
+              hover
+              small
+              bordered
+              responsive
             />
           </b-tab>
           <b-tab
@@ -69,17 +69,17 @@
               aria-controls="pickupMonthly-table"
             />
             <b-table
-              striped
-              hover
-              small
-              bordered
-              responsive
               :fields="fields"
               :items="pickupDataMonthlyTab"
               :current-page="currentPageMonthly"
               :per-page="perPage"
               :sort-by="sortBy"
               :sort-desc="sortDesc"
+              striped
+              hover
+              small
+              bordered
+              responsive
             />
           </b-tab>
         </b-tabs>
