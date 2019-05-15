@@ -102,6 +102,7 @@ class StatisticsView extends View
 			$i = 0;
 			foreach ($foodsaver as $fs) {
 				++$i;
+				/* Adding "Über" to kilos over 100 tons is a temporary workaround for https://gitlab.com/foodsharing-dev/foodsharing/issues/127 */
 				$out .= '
 				<tr>
 					<td style="width:5px;text-align:right;padding-right:5px;" valign="top">
