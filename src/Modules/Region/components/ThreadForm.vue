@@ -9,9 +9,9 @@
         <textarea
           ref="textarea"
           v-model="text"
+          @keyup.ctrl.enter="submit"
           class="form-control"
           rows="3"
-          @keyup.ctrl.enter="submit"
         />
       </div>
       <div class="card-footer">
@@ -27,8 +27,8 @@
           <div class="col-auto text-right">
             <button
               :disabled="!text.trim()"
-              class="btn btn-secondary"
               @click="submit"
+              class="btn btn-secondary"
             >
               Senden
             </button>

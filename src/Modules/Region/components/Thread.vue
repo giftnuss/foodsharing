@@ -21,15 +21,15 @@
           </div>
           <div class="col text-right">
             <a
-              class="btn btn-sm btn-secondary"
               @click="toggleFollow"
+              class="btn btn-sm btn-secondary"
             >
               {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
             </a>
             <a
               v-if="mayModerate"
-              class="btn btn-sm btn-secondary"
               @click="toggleStickyness"
+              class="btn btn-sm btn-secondary"
             >
               {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
             </a>
@@ -47,14 +47,14 @@
           {{ $i18n('forum.thread_is_inactive_description') }}
           <hr>
           <button
-            class="btn btn-secondary btn-sm"
             @click="activateThread"
+            class="btn btn-secondary btn-sm"
           >
             <i class="fas fa-check" /> {{ $i18n('forum.activate_thread') }}
           </button>
           <button
-            class="btn btn-secondary btn-sm"
             @click="$refs.deleteModal.show()"
+            class="btn btn-secondary btn-sm"
           >
             <i class="fas fa-trash-alt" /> {{ $i18n('forum.delete_thread') }}
           </button>

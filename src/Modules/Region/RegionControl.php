@@ -133,7 +133,7 @@ final class RegionControl extends Control
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
-			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
+			'members' => array_map($avatarListEntry, array_merge($this->region['foodsaver'], $this->region['sleeper']))
 		];
 		if ($activeSubpage == 'statistic') {
 			$viewdata['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
