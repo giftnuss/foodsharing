@@ -14,13 +14,16 @@ class StoreService
 		$this->storeGateway = $storeGateway;
 	}
 
-	public function signupForPickup(int $fsId, int $storeId, \DateTime $pickupDate, bool $confirmed = false)
+	public function signupForPickup(int $fsId, int $storeId, Carbon $pickupDate, bool $confirmed = false)
 	{
+		/* Never occupy more slots than available */
 		if (!$this->pickupSlotAvailable($storeId, $pickupDate)) {
 			return false;
 		}
 
-		if (in_array(['foodsaver_id' => $fsId], $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate), true)) {
+		/* never signup a person twice */
+		if (!empty(array_filter($this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate),
+			function ($e) use ($fsId) { return $e['foodsaver_id'] === $fsId; }))) {
 			return false;
 		}
 
@@ -32,30 +35,89 @@ class StoreService
 		return true;
 	}
 
-	public function pickupSlotAvailable(int $storeId, \DateTime $pickupDate): bool
+	public function pickupSlotAvailable(int $storeId, Carbon $pickupDate): bool
 	{
-		$signUps = $this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate);
-		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId);
-		$additionalSlots = $this->storeGateway->getSinglePickupSlots($storeId, $pickupDate);
-		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
-
-		$sum = function ($c, $e) {
-			return $c + $e['fetcher'];
-		};
-		$numRegularSlots = array_reduce($regularSlots, $sum, 0);
-		$numAdditionalSlots = array_reduce($additionalSlots, $sum, 0);
-
 		if ($pickupDate < Carbon::now()) {
 			/* do not allow signing up for past pickups */
 			return false;
 		}
 
-		if ($pickupDate > Carbon::now()->add($intervalFuturePickupSignup)) {
-			/* do only allow signing up for very future pickups for single dates */
-			return ($numAdditionalSlots - count($signUps)) > 0;
+		$pickupSlots = $this->listPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
+		if (count($pickupSlots) == 1 && $pickupSlots[0]['available']) {
+			return true;
 		}
 
-		/* in between now and regular pickup interval: allow signing up for single and regular dates */
-		return ($numRegularSlots + $numAdditionalSlots - count($signUps)) > 0;
+		return false;
+	}
+
+	private function realMod(int $a, int $b)
+	{
+		$res = $a % $b;
+		if ($res < 0) {
+			return $res += abs($b);
+		}
+
+		return $res;
+	}
+
+	/**
+	 * @param int $storeId
+	 * @param \DateTime $from
+	 * @param \DateTime $to
+	 * @param \DateTime $additionalTo DateRange for additional slots to be taken into account
+	 *
+	 * @return array
+	 */
+	public function listPickupSlots(int $storeId, Carbon $from, Carbon $to, ?Carbon $additionalTo = null): array
+	{
+		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId);
+		$additionalSlots = $this->storeGateway->getSinglePickupSlotsForRange($storeId, $from, $additionalTo);
+		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
+		$signups = $this->storeGateway->getPickupSignupsForDateRange($storeId, $from, $to);
+
+		$slots = [];
+		foreach ($regularSlots as $slot) {
+			$date = $from->copy();
+			$date->addDays($this->realMod($slot['dow'] - $date->format('w'), 7));
+			$date->setTimeFromTimeString($slot['time']);
+			while ($date <= $to) {
+				if (empty(array_filter($additionalSlots, function ($e) use ($date) {
+					return $date == $e['date'];
+				}))) {
+					/* only take this regular slot into account when there is no manual slot for the same time */
+					$occupiedSlots = array_filter($signups, function ($e) use ($date) {
+						return $date == $e['date'];
+					});
+					$isAvailable =
+						$date > Carbon::now() &&
+						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
+						$slot['fetcher'] > count($occupiedSlots);
+					$slots[] = [
+						'date' => $date,
+						'totalSlots' => $slot['fetcher'],
+						'occupiedSlots' => $occupiedSlots,
+						'available' => $isAvailable
+					];
+				}
+
+				$date = $date->copy()->addDays(7);
+			}
+		}
+		foreach ($additionalSlots as $slot) {
+			$occupiedSlots = array_filter($signups, function ($e) use ($slot) {
+				return $slot['date'] == $e['date'];
+			});
+			/* Additional slots are always in the future available for signups */
+			$isAvailable =
+				$slot['date'] > Carbon::now() &&
+				$slot['fetcher'] > count($occupiedSlots);
+			$slots[] = [
+				'date' => $slot['date'],
+				'totalSlots' => $slot['fetcher'],
+				'occupiedSlots' => $occupiedSlots,
+				'available' => $isAvailable];
+		}
+
+		return $slots;
 	}
 }

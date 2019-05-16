@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -14,17 +16,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {
 	private $regionGateway;
 	private $bellGateway;
+	private $timeHelper;
 
 	public function __construct(
 		Database $db,
 		RegionGateway $regionGateway,
 		BellGateway $bellGateway,
-		BellUpdateTrigger $bellUpdateTrigger
+		BellUpdateTrigger $bellUpdateTrigger,
+		TimeHelper $timeHelper
 	) {
 		parent::__construct($db);
 
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+		$this->timeHelper = $timeHelper;
 
 		$bellUpdateTrigger->subscribe($this);
 	}
@@ -482,7 +487,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
 			'betrieb_id' => $bid,
-			'date' => $this->dateTimeToPickupDate($date),
+			'date' => $this->timeHelper->toDbDateTime($date),
 			'confirmed' => $confirmed
 		]);
 
@@ -733,13 +738,24 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	public function getPickupSignupsForDate(int $storeId, \DateTime $date)
+	public function getPickupSignupsForDate(int $storeId, Carbon $date)
 	{
-		return $this->db->fetchAllByCriteria(
+		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
+	}
+
+	public function getPickupSignupsForDateRange(int $storeId, Carbon $from, Carbon $to)
+	{
+		$result = $this->db->fetchAllByCriteria(
 			'fs_abholer',
-			['foodsaver_id'],
-			['date' => $this->dateTimeToPickupDate($date), 'betrieb_id' => $storeId]
+			['foodsaver_id', 'date', 'confirmed'],
+			['date >=' => $this->timeHelper->toDbDateTime($from), 'date <=' => $this->timeHelper->toDbDateTime($to), 'betrieb_id' => $storeId]
 		);
+
+		return array_map(function ($e) {
+			$e['date'] = $this->timeHelper->fromDbDateTime($e['date']);
+
+			return $e;
+		}, $result);
 	}
 
 	public function getRegularPickupSlots(int $storeId)
@@ -750,20 +766,33 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['betrieb_id' => $storeId]);
 	}
 
-	public function getSinglePickupSlots(int $storeId, \DateTime $date)
+	public function getSinglePickupSlots(int $storeId, Carbon $date)
 	{
+		return $this->getSinglePickupSlotsForRange($storeId, $date, $date);
+	}
+
+	public function getSinglePickupSlotsForRange(int $storeId, Carbon $from, ?Carbon $to)
+	{
+		$condition = [
+			'betrieb_id' => $storeId,
+			'time >=' => $this->timeHelper->toDbDateTime($from)
+		];
+		if ($to) {
+			$condition = array_merge($condition,
+				[
+					'time <=' => $this->timeHelper->toDbDateTime($to)
+				]
+			);
+		}
 		$result = $this->db->fetchAllByCriteria(
 			'fs_fetchdate',
 			['time', 'fetchercount'],
-			[
-				'betrieb_id' => $storeId,
-				'time' => $this->dateTimeToPickupDate($date)
-			]
+			$condition
 		);
 
 		return array_map(function ($e) {
 			return [
-				'date' => $e['time'],
+				'date' => $this->timeHelper->fromDbDateTime($e['time']),
 				'fetcher' => $e['fetchercount']
 			];
 		}, $result);
@@ -774,11 +803,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->fetchValueByCriteria('fs_betrieb', 'prefetchtime', ['id' => $storeId]);
 
 		return CarbonInterval::seconds($result);
-	}
-
-	private function dateTimeToPickupDate(\DateTime $date)
-	{
-		return $date->format('Y-m-d H:i:s');
 	}
 
 	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime

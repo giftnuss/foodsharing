@@ -71,4 +71,14 @@ final class TimeHelper
 			0 => $this->translationHelper->s('sunday'),
 		];
 	}
+
+	public function toDbDateTime(\DateTime $date): string
+	{
+		return $date->format('Y-m-d H:i:s');
+	}
+
+	public function fromDbDateTime(string $date): Carbon
+	{
+		return Carbon::createFromFormat('Y-m-d H:i:s', $date);
+	}
 }
