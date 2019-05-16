@@ -83,8 +83,8 @@
             />
           </b-tab>
         </b-tabs>
+        <small class="text-muted">{{ $i18n('pickuplist.table_footer_duration', {dauer: pickupQueryRunTime}) }}</small>
       </div>
-      <div>{{ $i18n('pickuplist.table_footer_duration', {dauer: pickupQueryRunTime}) }}</div>
     </div>
   </div>
 </template>
