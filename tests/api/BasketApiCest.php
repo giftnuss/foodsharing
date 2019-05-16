@@ -67,6 +67,20 @@ class BasketApiCest
 		$I->seeResponseIsJson();
 	}
 
+	public function listCloseBaskets(\ApiTester $I)
+	{
+		$I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendGET(self::API_BASKETS . '/close?distance=30');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+
+		$I->sendGET(self::API_BASKETS . '/close?lat=50&lon=9&distance=30');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+	}
+
 	public function addBasket(\ApiTester $I)
 	{
 		$I->login($this->user[self::EMAIL]);
