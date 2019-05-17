@@ -27,7 +27,6 @@
     <div
       ref="menu"
       :class="menuClasses"
-      @mouseover="onMouseOver"
       @keydown="onKeydown"
     >
       <slot />
