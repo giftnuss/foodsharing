@@ -3,6 +3,7 @@
 ## Major changes
 
 ## Features
+- updated bootstrap-vue to v2.0.0-rc20
 
 ## Bugfixes
 
