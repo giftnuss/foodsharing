@@ -1,4 +1,6 @@
-# Unreleased
+# 2019-05-17
+Hey again,
+another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now. Also, we are relieving the report team from a lot of work because ambassadors can now work with the reports for their region directly.
 
 ## Major changes
 
@@ -28,15 +30,11 @@
 - Added logout Rest endpoint !866 @alex.simm
 
 ## Bugfixes
-- fixes for region statistic !876 @k.miklobusec
 - Orga can delete quizzes #364 !767 @k.miklobusec
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
-- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
-- Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
-- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
 - Non-followers can comment on Fairteilers again #457 !691 @janopae
 - Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
 - Allow blog posts to be properly formatted !795 @djahnie
