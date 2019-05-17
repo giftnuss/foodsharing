@@ -43,6 +43,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private const KILOBYTES_PER_MEGABYTE = 1024;
 	private const MAX_PICTURE_SIZE_BYTES = 60 * self::KILOBYTES_PER_MEGABYTE * self::BYTES_PER_KILOBYTE;
 	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
+	private const MAX_BASKET_DISTANCE = 50;
 
 	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
 	{
@@ -87,7 +88,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 * Returns a list of baskets close to a given location. If the location is not valid the user's
 	 * home location is used.
 	 *
-	 * Returns 200 and a list of baskets or 401 if not logged in.
+	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/close")
 	 * @Rest\QueryParam(name="lat", nullable=true)
@@ -103,8 +104,12 @@ final class BasketRestController extends AbstractFOSRestController
 		$this->throwExceptionIfNotLoggedIn();
 
 		$location = $this->fetchLocationOrUserHome($paramFetcher);
+		$distance = $paramFetcher->get('distance');
+		if ($distance < 1 || $distance > self::MAX_BASKET_DISTANCE) {
+			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_BASKET_DISTANCE);
+		}
 
-		$baskets = $this->gateway->listCloseBaskets($this->session->id(), $location, $paramFetcher->get('distance'));
+		$baskets = $this->gateway->listCloseBaskets($this->session->id(), $location, $distance);
 		$baskets = array_map(function ($b) {
 			$basket = $this->gateway->getBasket((int)$b[self::ID]);
 
