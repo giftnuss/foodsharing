@@ -130,6 +130,7 @@ terminology:
   ambassadors: Botschafter
   admins: Administratoren
   wall: Pinnwand
+  statistic: Statistik
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
@@ -262,6 +263,29 @@ memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
   header_for_workgroup: "Foodsaver in der AG {bezirk}"
   some_in_all: "({some} von {all})"
+
+genderlist:
+  header_for_district: "Verteilung der Foodsaver nach Geschlecht in {bezirk}"
+  district_tab: "Bezirk"
+  home_district_tab: "Stammbezirk"
+  gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
+  gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-Foodsaver"
+  gender_table_header: "Geschlecht"
+  gender_divers: "divers (oder nicht gewählt)"
+  gender_male: "männlich"
+  gender_female: "weiblich"
+  number_table_header: "Anzahl"
+
+pickuplist:
+  header_for_district: "Aufteilung der Abholungen in {bezirk} "
+  day_tab: "Tag"
+  week_tab: "Woche"
+  month_tab: "Monat"
+  time_table_header: "Zeitraum"
+  NumberOfStores_table_header: "Anzahl Betriebe"
+  NumberOfAppointments_table_header: "Anzahl Termine"
+  NumberOfSlots_table_header: "Anzahl Abhol-Slots"
+  NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

@@ -503,4 +503,49 @@ class RegionGateway extends BaseGateway
 	{
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
+
+	public function genderCountRegion(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'select  fs.geschlecht as gender,
+						   count(*) as NumberOfGender
+					from fs_foodsaver_has_bezirk fb
+		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+					where fb.bezirk_id = :id
+					and fs.deleted_at is null
+					group by geschlecht',
+			[':id' => $districtId]
+		);
+	}
+
+	public function genderCountHomeRegion(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'select  fs.geschlecht as gender,
+						   count(*) as NumberOfGender
+					from fs_foodsaver fs
+					where fs.bezirk_id = :id
+					and fs.deleted_at is null
+					group by geschlecht',
+			[':id' => $districtId]
+		);
+	}
+
+	public function regionPickupsByDate(int $districtId, $dateFormat): array
+	{
+		return $this->db->fetchAll(
+			'select 
+						date_Format(a.date,:form) as time,
+						count(distinct a.betrieb_id) as NumberOfStores,
+						count(distinct a.date, a.betrieb_id) as NumberOfAppointments ,
+						count(*) as NumberOfSlots,
+						count(distinct a.foodsaver_id) as NumberOfFoodsavers
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+					where b.bezirk_id = :id
+						group by date_Format(date,:groupForm)
+					order by date desc',
+			[':id' => $districtId, ':form' => $dateFormat, ':groupForm' => $dateFormat]
+		);
+	}
 }

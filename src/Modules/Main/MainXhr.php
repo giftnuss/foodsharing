@@ -53,7 +53,7 @@ class MainXhr extends Control
 		}
 
 		if (!$check) {
-			$function = 'window.parent.pulseError(\'Sorry, Dieses Foto konnte nicht verarbeitet werden.\');window.parent.$(\'.attach-preview\').hide();';
+			$function = 'window.parent.pulseError(\'Sorry, dieses Foto konnte nicht verarbeitet werden.\');window.parent.$(\'.attach-preview\').hide();';
 		}
 
 		echo '<html><head><title>upload</title>
