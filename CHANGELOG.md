@@ -10,9 +10,17 @@
 
 ## Dev/Test/CI stuff
 
+# 2019-05-17 Hotfix
+
+- Clarify message when you cannot sign up for a pickup.
+@NerdyProjects has been working on the pickup backend in the last months so the website does not allow you to sign up for pickups that are further in the future than the setting in the store allows (1-4 weeks).
+The frontend does not yet follow that behaviour (showing pickup slots always for more days than allowed to sign up), but if you want to sign up, the backend disallows that and you get an error message.
+@NerdyProjects currently works on redoing the pickup frontend as well and we hopefully get it shiny in a few days :-)
+- fixed the switched store publicity settings @peter.toennies
+
 # 2019-05-17
 Hey again,
-another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now. Also, we are relieving the report team from a lot of work because ambassadors can now work with the reports for their region directly.
+another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
 
 ## Major changes
 

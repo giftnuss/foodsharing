@@ -422,12 +422,14 @@ class StoreUserControl extends Control
 		return false;
 	}
 
-	private function mentionPublicly($id)
+	private function mentionPublicly(int $id)
 	{
-		if ($id == 0) {
-			return 'Dieser Betrieb darf &ouml;ffentlich genannt werden.';
-		} elseif ($id == 1) {
-			return 'Bitte diesen Betrieb niemals &ouml;ffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essensk&ouml;rben, Facebook oder Presseanfragen) nennen!';
+		if ($id === 0) {
+			return $this->translationHelper->s('may_not_reffered_to_in_public');
+		}
+
+		if ($id === 1) {
+			return $this->translationHelper->s('may_reffered_to_in_public');
 		}
 
 		return false;
