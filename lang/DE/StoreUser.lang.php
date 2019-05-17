@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $g_lang;
 $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv.';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
@@ -104,3 +104,5 @@ $g_lang['stat_teammember_since'] = 'Im Team seit {date}';
 $g_lang['stat_jumper_since'] = 'Springer seit {date}';
 $g_lang['stat_since_unknown'] = 'unbekannt';
 $g_lang['delete-manual-slot-warning-text'] = 'Termin wirklich löschen? \nMögliche Abholer dieser Uhrzeit werden dabei ausgetragen.';
+$g_lang['may_reffered_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt werden.';
+$g_lang['may_not_reffered_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
