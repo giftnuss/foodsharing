@@ -154,7 +154,7 @@ error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
 
 store:
-  pickup_slot_unavailable: Dieser Abhol-Slot kann derzeit nicht belegt werden. Bitte probiere es später erneut.
+  pickup_slot_unavailable: Dieser Abhol-Slot liegt zu weit in der Zukunft, um jetzt belegt zu werden. Bitte probiere es in einigen Tagen erneut.
 
 forum:
   from: Von %name%
