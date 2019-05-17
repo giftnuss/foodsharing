@@ -13,7 +13,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
     "autosize": "^4.0.2",
-    "bootstrap-vue": "<2.0.0-rc.12",
+    "bootstrap-vue": "2.0.0-rc.20",
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "<3.0.0",
     "corejs-typeahead": "^1.2.1",
@@ -53,6 +53,7 @@
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "css-loader": "^2.1.1",
     "dotenv": "^8.0.0",
     "eslint": "^5.16.0",
