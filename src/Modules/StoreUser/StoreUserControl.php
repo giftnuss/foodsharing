@@ -425,11 +425,11 @@ class StoreUserControl extends Control
 	private function mentionPublicly(int $id)
 	{
 		if ($id === 0) {
-			return $this->translationHelper->s('may_not_reffered_to_in_public');
+			return $this->translationHelper->s('may_not_referred_to_in_public');
 		}
 
 		if ($id === 1) {
-			return $this->translationHelper->s('may_reffered_to_in_public');
+			return $this->translationHelper->s('may_referred_to_in_public');
 		}
 
 		return false;
