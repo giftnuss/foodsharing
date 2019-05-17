@@ -83,7 +83,6 @@
             />
           </b-tab>
         </b-tabs>
-        <small class="text-muted">{{ $i18n('pickuplist.table_footer_duration', {dauer: pickupQueryRunTime}) }}</small>
       </div>
     </div>
   </div>
@@ -100,10 +99,6 @@ export default {
   components: { bTable, bTabs, bTab, bPagination },
   props: {
     regionName: {
-      type: String,
-      default: ''
-    },
-    pickupQueryRunTime: {
       type: String,
       default: ''
     },

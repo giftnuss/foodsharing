@@ -507,11 +507,12 @@ class RegionGateway extends BaseGateway
 	public function genderCountRegion(int $districtId): array
 	{
 		return $this->db->fetchAll(
-			'select  geschlecht as gender,
+			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
 					from fs_foodsaver_has_bezirk fb
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
 					where fb.bezirk_id = :id
+					and fs.deleted_at is null
 					group by geschlecht',
 			[':id' => $districtId]
 		);
@@ -520,11 +521,11 @@ class RegionGateway extends BaseGateway
 	public function genderCountHomeRegion(int $districtId): array
 	{
 		return $this->db->fetchAll(
-			'select  geschlecht as gender,
+			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
-					from fs_foodsaver_has_bezirk fb
-		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+					from fs_foodsaver fs
 					where fs.bezirk_id = :id
+					and fs.deleted_at is null
 					group by geschlecht',
 			[':id' => $districtId]
 		);

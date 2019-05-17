@@ -135,17 +135,6 @@ final class RegionControl extends Control
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
 			'members' => array_map($avatarListEntry, array_merge($this->region['foodsaver'], $this->region['sleeper']))
 		];
-		if ($activeSubpage == 'statistic') {
-			$viewdata['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
-			$viewdata['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
-			$timestart = microtime(true);
-			$viewdata['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
-			$viewdata['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
-			$viewdata['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
-			$timeend = microtime(true);
-			$timeduration = round($timeend - $timestart, 5);
-			$viewdata['pickupData']['dailyQueryRuntime'] = $timeduration;
-		}
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 
 		return $viewdata;
@@ -315,6 +304,11 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('terminology.statistic'));
 		$sub = $request->query->get('sub');
 		$viewData = $this->regionViewData($region, $sub);
+		$viewData['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
+		$viewData['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
+		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
+		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }
