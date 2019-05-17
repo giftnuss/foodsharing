@@ -1,3 +1,15 @@
+# Unreleased
+
+## Major changes
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2019-05-17
 Hey again,
 another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now. Also, we are relieving the report team from a lot of work because ambassadors can now work with the reports for their region directly.
