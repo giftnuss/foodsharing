@@ -56,12 +56,12 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import clickoutMixin from '@b/mixins/clickout'
+import clickOutMixin from '@b/mixins/click-out'
 import listenOnRootMixin from '@b/mixins/listen-on-root'
 
 export default {
   components: { SearchResults },
-  mixins: [clickoutMixin, listenOnRootMixin],
+  mixins: [clickOutMixin, listenOnRootMixin],
   data () {
     return {
       posX: 0,
