@@ -6,6 +6,8 @@
 
 ## Bugfixes
 
+- Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
+
 ## Refactoring
 
 ## Dev/Test/CI stuff
