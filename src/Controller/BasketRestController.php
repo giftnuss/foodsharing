@@ -86,7 +86,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Returns a list of baskets close to a given location. If the location is not valid the user's
-	 * home location is used.
+	 * home location is used. The distance is measured in kilometers.
 	 *
 	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
 	 *
@@ -99,7 +99,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function listCloseBasketsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	public function listNearbyBasketsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
 		$this->throwExceptionIfNotLoggedIn();
 
