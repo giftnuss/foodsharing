@@ -62,17 +62,19 @@ class StoreService
 
 	/**
 	 * @param int $storeId
-	 * @param \DateTime $from
-	 * @param \DateTime $to
+	 * @param \DateTime $from DateRange start for all slots. Now if empty.
+	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
 	 * @param \DateTime $additionalTo DateRange for additional slots to be taken into account
 	 *
 	 * @return array
 	 */
-	public function listPickupSlots(int $storeId, Carbon $from, Carbon $to, ?Carbon $additionalTo = null): array
+	public function listPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $additionalTo = null): array
 	{
+		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
+		$from = $from ?? Carbon::now();
+		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
 		$regularSlots = $this->storeGateway->getRegularPickupSlots($storeId);
 		$additionalSlots = $this->storeGateway->getSinglePickupSlotsForRange($storeId, $from, $additionalTo);
-		$intervalFuturePickupSignup = $this->storeGateway->getFutureRegularPickupInterval($storeId);
 		$signups = $this->storeGateway->getPickupSignupsForDateRange($storeId, $from, $to);
 
 		$slots = [];
@@ -85,9 +87,16 @@ class StoreService
 					return $date == $e['date'];
 				}))) {
 					/* only take this regular slot into account when there is no manual slot for the same time */
-					$occupiedSlots = array_filter($signups, function ($e) use ($date) {
-						return $date == $e['date'];
-					});
+					$occupiedSlots = array_map(
+						function ($e) {
+							return ['foodsaver_id' => $e['foodsaver_id'], 'confirmed' => (bool)$e['confirmed']];
+						},
+						array_filter($signups,
+							function ($e) use ($date) {
+								return $date == $e['date'];
+							}
+						)
+					);
 					$isAvailable =
 						$date > Carbon::now() &&
 						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
@@ -95,7 +104,7 @@ class StoreService
 					$slots[] = [
 						'date' => $date,
 						'totalSlots' => $slot['fetcher'],
-						'occupiedSlots' => $occupiedSlots,
+						'occupiedSlots' => array_values($occupiedSlots),
 						'available' => $isAvailable
 					];
 				}
@@ -114,7 +123,7 @@ class StoreService
 			$slots[] = [
 				'date' => $slot['date'],
 				'totalSlots' => $slot['fetcher'],
-				'occupiedSlots' => $occupiedSlots,
+				'occupiedSlots' => array_values($occupiedSlots),
 				'available' => $isAvailable];
 		}
 

@@ -122,6 +122,11 @@ class StorePermissions
 		return true;
 	}
 
+	public function maySeePickups($storeId)
+	{
+		return $this->mayDoPickup($storeId);
+	}
+
 	public function hasPreconfirmedPickup(int $storeId): bool
 	{
 		$fsId = $this->session->id();
