@@ -3,6 +3,7 @@
 ## Major changes
 
 ## Features
+- Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 
 ## Bugfixes
@@ -51,7 +52,6 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
-- Added Rest endpoint for close baskets !875 @alex.simm
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
