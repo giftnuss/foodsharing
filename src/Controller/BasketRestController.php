@@ -90,7 +90,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
 	 *
-	 * @Rest\Get("baskets/close")
+	 * @Rest\Get("baskets/nearby")
 	 * @Rest\QueryParam(name="lat", nullable=true)
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
