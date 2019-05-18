@@ -43,6 +43,8 @@ import {
   addContextMenu
 } from './StoreUser.lib'
 import { signup } from '@/api/stores'
+import { vueApply, vueRegister } from '@/vue'
+import PickupList from './components/PickupList'
 
 expose({
   u_updatePosts,
@@ -364,3 +366,8 @@ $('#nft-add').button({
     $this.parent().parent().remove()
   })
 })
+
+vueRegister({
+  PickupList
+})
+vueApply('#vue-pickuplist')

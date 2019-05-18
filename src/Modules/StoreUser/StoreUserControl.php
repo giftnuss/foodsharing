@@ -307,7 +307,7 @@ class StoreUserControl extends Control
 				}
 
 				$days = $this->timeHelper->getDow();
-
+				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id']]), CNT_RIGHT);
 				$pickup_date_content = '';
 
 				foreach ($next_dates as $date => $time) {
