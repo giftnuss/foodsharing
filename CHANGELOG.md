@@ -14,6 +14,7 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- update null-loader to version 2 @peter.toennies
 
 # 2019-05-17 Hotfix
 
