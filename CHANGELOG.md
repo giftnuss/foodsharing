@@ -5,6 +5,7 @@
 ## Features
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
+- Added Rest endpoint for the current user's profile !880 @dthulke
 
 ## Bugfixes
 
