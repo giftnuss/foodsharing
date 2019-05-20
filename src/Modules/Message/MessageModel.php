@@ -243,7 +243,8 @@ final class MessageModel extends Db
 				$member = @unserialize($conversations[$i]['member']);
 				// unserialize error handling
 				if ($member === false) {
-					$this->updateDenormalizedConversationData($conversations[$i]['id']);
+					$members = $this->updateDenormalizedConversationData($conversations[$i]['id']);
+					$member = $members[0];
 				}
 				$conversations[$i]['member'] = $member;
 			}
@@ -350,13 +351,14 @@ final class MessageModel extends Db
 		return false;
 	}
 
-	private function updateDenormalizedConversationData($cids = false): void
+	private function updateDenormalizedConversationData($cids = false): array
 	{
 		if ($cids === false) {
 			$cids = $this->qCol('SELECT id FROM fs_conversation');
 		} elseif (!is_array($cids)) {
 			$cids = array($cids);
 		}
+		$members = array();
 		foreach ($cids as $id) {
 			$member = $this->listConversationMembers($id);
 
@@ -373,7 +375,11 @@ final class MessageModel extends Db
 				WHERE
 					`id` = ' . (int)$id . '
 			');
+
+			$members[] = $member;
 		}
+
+		return $members;
 	}
 
 	public function setConversationMembers($cid, $fsids, $unread = false)

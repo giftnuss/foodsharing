@@ -17,7 +17,7 @@ As an “member” on Gitlab you can
  * see confidential issues
  * set labels to issues
  * assign yourself to issues (to tell others that they do not need to start on them)
-After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev.
+After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* Button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
 
 ### Working on an issue
 

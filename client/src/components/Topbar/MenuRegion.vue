@@ -79,6 +79,13 @@
           <i class="fas fa-users" />Arbeitsgruppen
         </a>
         <a
+          :href="$url('statistic', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-chart-bar" />Statistik
+        </a>
+        <a
           v-if="region.isBot"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
@@ -101,10 +108,10 @@
       class="dropdown-divider"
     />
     <a
+      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
-      @click="joinRegionDialog"
     >
       <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
     </a>

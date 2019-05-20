@@ -43,6 +43,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private const KILOBYTES_PER_MEGABYTE = 1024;
 	private const MAX_PICTURE_SIZE_BYTES = 60 * self::KILOBYTES_PER_MEGABYTE * self::BYTES_PER_KILOBYTE;
 	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
+	private const MAX_BASKET_DISTANCE = 50;
 
 	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
 	{
@@ -79,6 +80,41 @@ final class BasketRestController extends AbstractFOSRestController
 				$baskets = $this->gateway->getBasketCoordinates();
 				break;
 		}
+
+		return $this->handleView($this->view(['baskets' => $baskets], 200));
+	}
+
+	/**
+	 * Returns a list of baskets close to a given location. If the location is not valid the user's
+	 * home location is used. The distance is measured in kilometers.
+	 *
+	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
+	 *
+	 * @Rest\Get("baskets/nearby")
+	 * @Rest\QueryParam(name="lat", nullable=true)
+	 * @Rest\QueryParam(name="lon", nullable=true)
+	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function listNearbyBasketsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	{
+		$this->throwExceptionIfNotLoggedIn();
+
+		$location = $this->fetchLocationOrUserHome($paramFetcher);
+		$distance = $paramFetcher->get('distance');
+		if ($distance < 1 || $distance > self::MAX_BASKET_DISTANCE) {
+			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_BASKET_DISTANCE);
+		}
+
+		$baskets = $this->gateway->listCloseBaskets($this->session->id(), $location, $distance);
+		$baskets = array_map(function ($b) {
+			$basket = $this->gateway->getBasket((int)$b[self::ID]);
+
+			return $this->normalizeBasket($basket);
+		}, $baskets);
 
 		return $this->handleView($this->view(['baskets' => $baskets], 200));
 	}
@@ -237,20 +273,9 @@ final class BasketRestController extends AbstractFOSRestController
 		$this->throwExceptionIfNotLoggedIn();
 
 		$description = $this->getValidatedDescriptionOrThrowException($paramFetcher);
+		$location = $this->fetchLocationOrUserHome($paramFetcher);
 
-		$lat = $paramFetcher->get(self::LAT);
-		$lon = $paramFetcher->get(self::LON);
-		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, 0.0, 180.0)) {
-			// find user's location
-			$loc = $this->session->getLocation();
-			$lat = $loc[self::LAT];
-			$lon = $loc[self::LON];
-			if ($lat === 0 && $lon === 0) {
-				throw new HttpException(400, 'The user profile has no address.');
-			}
-		}
-
-		$basket = $this->createAndReturnBasketOrThrowException($paramFetcher, $description, $lat, $lon);
+		$basket = $this->createAndReturnBasketOrThrowException($paramFetcher, $description, $location['lat'], $location['lon']);
 
 		// return the created basket
 		$basket = $this->normalizeBasket($basket);
@@ -274,14 +299,21 @@ final class BasketRestController extends AbstractFOSRestController
 		if (empty($description)) {
 			throw new HttpException(400, 'The description must not be empty.');
 		}
+
+		return $description;
 	}
 
 	private function createAndReturnBasketOrThrowException(ParamFetcher $paramFetcher, $description, $lat, $lon)
 	{
+		$contactTypes = $paramFetcher->get(self::CONTACT_TYPES);
+		if ($contactTypes !== null && \is_array($contactTypes)) {
+			$contactTypes = array_map('intval', $contactTypes);
+		}
+
 		$basket = $this->service->addBasket(
 			$description,
 			'',
-			$paramFetcher->get(self::CONTACT_TYPES),
+			$contactTypes,
 			$paramFetcher->get(self::TEL),
 			$paramFetcher->get(self::MOBILE_NUMBER),
 			$paramFetcher->get('weight'),
@@ -446,5 +478,22 @@ final class BasketRestController extends AbstractFOSRestController
 		if ($basket['fs_id'] !== $this->session->id()) {
 			throw new HttpException(401, 'You are not the owner of the basket.');
 		}
+	}
+
+	private function fetchLocationOrUserHome($paramFetcher): array
+	{
+		$lat = $paramFetcher->get(self::LAT);
+		$lon = $paramFetcher->get(self::LON);
+		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, 0.0, 180.0)) {
+			// find user's location
+			$loc = $this->session->getLocation();
+			$lat = $loc[self::LAT];
+			$lon = $loc[self::LON];
+			if ($lat === 0 && $lon === 0) {
+				throw new HttpException(400, 'The user profile has no address.');
+			}
+		}
+
+		return ['lat' => $lat, 'lon' => $lon];
 	}
 }

@@ -131,12 +131,16 @@ class ProfileView extends View
 		$infos = array();
 
 		if ($this->session->may('orga')) {
-			$last_login = Carbon::parse($this->foodsaver['last_login']);
+			$last_login = (
+				$this->foodsaver['last_login']
+				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
+				: $this->translationHelper->s('Never')
+			);
 			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
 
 			$infos[] = array(
 				'name' => $this->translationHelper->s('last_login'),
-				'val' => $last_login->format('d.m.Y')
+				'val' => $last_login
 			);
 			$infos[] = array(
 				'name' => $this->translationHelper->s('registration_date'),
@@ -286,7 +290,7 @@ class ProfileView extends View
 			$postCount = '
 				<span class="item stat_postcount">
 					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
-					<span class="name">Beiträge</span> 
+					<span class="name">Beiträge</span>
 				</span>';
 		} else {
 			$postCount = '';

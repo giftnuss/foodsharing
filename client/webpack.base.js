@@ -31,7 +31,6 @@ module.exports = {
       ...shims.alias,
       'fonts': resolve('../fonts'),
       'img': resolve('../img'),
-      './img': resolve('../img'),
       'css': resolve('../css'),
       'js': resolve('lib'),
       '@': resolve('src'),
