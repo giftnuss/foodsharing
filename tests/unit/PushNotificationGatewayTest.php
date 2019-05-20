@@ -67,7 +67,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return 'test';
 			}
 
-			public function getPublicKey(): string
+			public function getEndpointInformation(): array
 			{
 				return '';
 			}
@@ -96,9 +96,9 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 				return 'test';
 			}
 
-			public function getPublicKey(): string
+			public function getEndpointInformation(): array
 			{
-				return 'testPublicKey';
+				return ['key' => 'testPublicKey'];
 			}
 
 			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array
@@ -108,8 +108,8 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		};
 		$this->gateway->addHandler($testHandler);
 
-		$publicKey = $this->gateway->getPublicKey('test');
+		$endpointInformation = $this->gateway->getEndpointInformation('test');
 
-		$this->tester->assertEquals('testPublicKey', $publicKey);
+		$this->tester->assertEquals('testPublicKey', $endpointInformation['key']);
 	}
 }

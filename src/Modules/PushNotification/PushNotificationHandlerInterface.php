@@ -32,7 +32,7 @@ interface PushNotificationHandlerInterface
 	public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array;
 
 	/**
-	 * Returns the public key fitting to the private key the PushNotificationHandler signs its notifications with.
+	 * Returns information like the public key fitting to the private key the PushNotificationHandler signs its notifications with.
 	 */
-	public function getPublicKey(): string;
+	public function getEndpointInformation(): array;
 }

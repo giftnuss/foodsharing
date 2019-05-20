@@ -93,8 +93,8 @@ class PushNotificationGateway extends BaseGateway
 	 * @param string $typeIdentifier - the identifier of the PushNotificationHandler, returned by the getTypeIdentifier
 	 * method of the PushNotificationHandler object
 	 */
-	public function getPublicKey(string $typeIdentifier): string
+	public function getEndpointInformation(string $typeIdentifier): array
 	{
-		return $this->pushNotificationHandlers[$typeIdentifier]->getPublicKey();
+		return $this->pushNotificationHandlers[$typeIdentifier]->getEndpointInformation();
 	}
 }

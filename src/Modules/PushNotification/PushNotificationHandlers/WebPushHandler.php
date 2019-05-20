@@ -75,8 +75,8 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		return $deadSubscriptions;
 	}
 
-	public function getPublicKey(): string
+	public function getEndpointInformation(): array
 	{
-		return WEBPUSH_PUBLIC_KEY;
+		return ['key' => WEBPUSH_PUBLIC_KEY];
 	}
 }
