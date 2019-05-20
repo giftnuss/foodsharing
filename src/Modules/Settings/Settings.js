@@ -67,9 +67,15 @@ async function refreshPushNotificationSettings () {
     pushNotificationsLabel.textContent = i18n('push_notifications_activation_explanation')
     pushNotificationsButton.text = i18n('push_notifications_activation_button_text')
     pushNotificationsButton.addEventListener('click', async () => {
-      await subscribeForPushNotifications()
-      pulseSuccess(i18n('push_notifications_activation_success'))
-      refreshPushNotificationSettings()
+      try {
+        await subscribeForPushNotifications()
+        pulseSuccess(i18n('push_notifications_activation_success'))
+        refreshPushNotificationSettings()
+      } catch (error) {
+        pulseError(i18n('error_ajax'))
+        refreshPushNotificationSettings()
+        throw error
+      }
     }, { once: true })
     return
   }
@@ -77,8 +83,14 @@ async function refreshPushNotificationSettings () {
   pushNotificationsLabel.textContent = i18n('push_notifications_deactivation_explanation')
   pushNotificationsButton.text = i18n('push_notifications_deactivation_button_text')
   pushNotificationsButton.addEventListener('click', async () => {
-    await unsubscribeFromPushNotifications()
-    pulseSuccess(i18n('push_notifications_deactivation_success'))
-    refreshPushNotificationSettings()
+    try {
+      await unsubscribeFromPushNotifications()
+      pulseSuccess(i18n('push_notifications_deactivation_success'))
+      refreshPushNotificationSettings()
+    } catch (error) {
+      pulseError(i18n('error_ajax'))
+      refreshPushNotificationSettings()
+      throw error
+    }
   }, { once: true })
 }
