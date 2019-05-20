@@ -10,34 +10,15 @@ use Minishlink\WebPush\WebPush;
 
 class WebPushHandler implements PushNotificationHandlerInterface
 {
-	private const keyFileDirectory = __DIR__ . '/../../../../data/keys/webpush';
-	private const privateKeyFileName = 'priv.key';
-	private const publicKeyFileName = 'pub.key';
-
 	private const typeIdentifier = 'webpush';
-
-	/**
-	 * @var string
-	 */
-	private $privateKey;
-
-	/**
-	 * @var string
-	 */
-	private $publicKey;
-
-	/**
-	 * @var WebPush
-	 */
-	private $webpush;
 
 	public function __construct()
 	{
 		$auth = [
 			'VAPID' => [
 				'subject' => $_SERVER['SERVER_NAME'] ?? '',
-				'publicKey' => $this->getPublicKey(),
-				'privateKey' => $this->getPrivateKey()
+				'publicKey' => WEBPUSH_PUBLIC_KEY,
+				'privateKey' => WEBPUSH_PRIVATE_KEY
 			],
 		];
 
@@ -94,50 +75,8 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		return $deadSubscriptions;
 	}
 
-	/**
-	 * Returns the public key fitting to the private key the PushNotificationHandler signs its notifications with.
-	 */
 	public function getPublicKey(): string
 	{
-		if ($this->publicKey !== null) {
-			return $this->publicKey;
-		}
-
-		if (is_file(self::keyFileDirectory . '/' . self::publicKeyFileName)) {
-			return $this->publicKey = file_get_contents(self::keyFileDirectory . '/' . self::publicKeyFileName);
-		}
-
-		$this->generateKeys();
-
-		return $this->publicKey;
-	}
-
-	private function getPrivateKey(): string
-	{
-		if ($this->privateKey !== null) {
-			return $this->privateKey;
-		}
-
-		if (is_file(self::keyFileDirectory . '/' . self::privateKeyFileName)) {
-			return $this->privateKey = file_get_contents(self::keyFileDirectory . '/' . self::privateKeyFileName);
-		}
-
-		$this->generateKeys();
-
-		return $this->privateKey;
-	}
-
-	private function generateKeys(): void
-	{
-		$keys = VAPID::createVapidKeys();
-		$this->publicKey = $keys['publicKey'];
-		$this->privateKey = $keys['privateKey'];
-
-		file_put_contents(self::keyFileDirectory . '/' . self::privateKeyFileName, $this->privateKey);
-		file_put_contents(self::keyFileDirectory . '/' . self::publicKeyFileName, $this->publicKey);
-
-		if (FS_ENV !== 'test' && FS_ENV !== 'dev') { // Tests don't work with restrictive file rights
-			chmod(self::keyFileDirectory . '/' . self::privateKeyFileName, 0600);
-		}
+		return WEBPUSH_PUBLIC_KEY;
 	}
 }

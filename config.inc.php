@@ -61,3 +61,18 @@ define('CNT_LEFT', 4);
 define('CNT_OVERTOP', 5);
 
 define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8mb4');
+
+// define('WEBPUSH_PUBLIC_KEY', 'TO CHANGE AT DEPLOYMENT');
+// define('WEBPUSH_PRIVATE_KEY', 'TO CHANGE AT DEPLOYMENT');
+
+/*
+ * How to put the webpush keys at the first deployment after webpush was introduced:
+ *
+ * 1. Generate the keys by executing the following in your UNIX shell:
+ * 	openssl ecparam -genkey -name prime256v1 -out private_key.pem
+ *  openssl ec -in private_key.pem -pubout -outform DER|tail -c 65|base64|tr -d '=' |tr '/+' '_-' >> public_key.txt
+ *  openssl ec -in private_key.pem -outform DER|tail -c +8|head -c 32|base64|tr -d '=' |tr '/+' '_-' >> private_key.txt
+ *
+ * 2. Uncomment ll. 65-66 of this script and replace TO CHANGE AT DEPLOYMENT with the contents of public_key.txt and
+ * 	private_key.txt
+ */
