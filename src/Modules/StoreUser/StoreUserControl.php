@@ -246,8 +246,6 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
-
 				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich']]), CNT_RIGHT);
 
 				/*
@@ -259,6 +257,7 @@ class StoreUserControl extends Control
 					} else {
 						$width = '$(window).width() / 2';
 					}
+					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0),
