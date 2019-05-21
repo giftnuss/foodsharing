@@ -74,19 +74,28 @@ export default {
       user: user
     }
   },
+  _interval: null,
   async created () {
     await this.reload()
+
+    // pull for updates every 30 seconds
+    this._interval = setInterval(() => {
+      this.reload(true) // reload without loading indicator
+    }, 30 * 1000)
+  },
+  destroyed () {
+    clearInterval(this._interval)
   },
   methods: {
-    async reload () {
-      this.isLoading = true
+    async reload (silent = false) {
+      if (!silent) this.isLoading = true
       try {
         this.pickups = await listPickups(this.storeId)
       } catch (e) {
         pulseError('failed loading pickup list ' + e)
       }
 
-      this.isLoading = false
+      if (!silent) this.isLoading = false
     },
     async join (date) {
       this.isLoading = true
