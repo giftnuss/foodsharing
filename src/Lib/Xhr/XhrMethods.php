@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Carbon\Carbon;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
@@ -1441,42 +1440,6 @@ class XhrMethods
 	private function incLang(string $moduleName): void
 	{
 		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
-	}
-
-	public function xhr_delDate($data)
-	{
-		$status = 0;
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) && isset($data['date'])) {
-			if ($this->storeModel->deleteFetchDate($this->session->id(), $data['bid'], $data['date'])) {
-				$status = 1;
-			}
-
-			if (isset($data['msg'])) {
-				$this->storeModel->addTeamMessage($data['bid'], $data['msg']);
-			}
-		}
-
-		return json_encode(array(
-			'status' => $status
-		));
-	}
-
-	public function xhr_fetchDeny($data)
-	{
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) && isset($data['date'])) {
-			$this->storeModel->deleteFetchDate($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
-
-			return 1;
-		}
-	}
-
-	public function xhr_fetchConfirm($data)
-	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
-			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], Carbon::createFromTimestamp(strtotime($data['date'])));
-
-			return 1;
-		}
 	}
 
 	public function xhr_delBPost($data)

@@ -136,15 +136,6 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
 				}
-				$this->pageHelper->addStyle('#team_msg{width:97%;}');
-				$this->pageHelper->addHidden('
-						<div id="u_undate">
-							' . $this->v_utils->v_info($this->translationHelper->s('shure_of_backup'), $this->translationHelper->s('attention')) . '
-							<input type="hidden" name="undate-date" id="undate-date" value="" />
-
-							' . $this->v_utils->v_form_textarea('team_msg') . '
-						</div>
-					');
 
 				/*Infos*/
 
@@ -248,12 +239,12 @@ class StoreUserControl extends Control
 				 */
 
 				$this->pageHelper->addHidden('
-					<div id="timedialog">
-
-						<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
-						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
-
-					</div>');
+					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
+						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
+						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
+						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
+					</div>
+');
 
 				$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
 
