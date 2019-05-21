@@ -29,9 +29,6 @@ class StoreService
 		}
 
 		$this->storeGateway->addFetcher($fsId, $storeId, $pickupDate, $confirmed);
-		if (!$confirmed) {
-			$this->storeGateway->updateBellNotificationForBiebs($storeId, true);
-		}
 
 		return true;
 	}

@@ -480,7 +480,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'date' => $this->db->date($date),
 			'confirmed' => $confirmed
 		]);
-		$this->updateBellNotificationForBiebs($bid);
+
+		if (!$confirmed) {
+			$this->updateBellNotificationForBiebs($bid, true);
+		}
 
 		return $queryResult;
 	}
