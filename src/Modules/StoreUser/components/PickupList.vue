@@ -10,22 +10,26 @@
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
             Nächste Abholtermine
           </div>
+          <div class="col col-2 p-0">
+            <button
+              v-b-tooltip
+              @click="loadAddPickupModal"
+              class="btn btn-secondary btn-sm"
+              title="Zusatztermin eintragen"
+            >
+              <i class="fa fa-plus" />
+            </button>
+          </div>
         </div>
       </div>
       <div
         :class="{disabledLoading: isLoading}"
         class="card-body text-center"
       >
-        <b-btn
-          v-if="isCoordinator"
-          @click="loadAddPickupModal"
-          class="m-2"
-        >
-          Zusatztermin eintragen
-        </b-btn>
         <template v-for="pickup in pickups">
           <Pickup
             v-bind="pickup"
+            :key="pickup.date.valueOf()"
             :store-id="storeId"
             :is-coordinator="isCoordinator"
             :user="user"
@@ -44,14 +48,15 @@
 </template>
 
 <script>
+import bTooltip from '@b/directives/tooltip/tooltip'
 import Pickup from './Pickup'
 import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
 import { user } from '@/server-data'
 import { ajreq, pulseError } from '@/script'
-import bBtn from '@b/components/button/button'
 
 export default {
-  components: { bBtn, Pickup },
+  components: { Pickup },
+  directives: { bTooltip },
   props: {
     storeId: {
       type: Number,
