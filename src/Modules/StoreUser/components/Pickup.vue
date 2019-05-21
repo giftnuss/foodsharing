@@ -8,32 +8,27 @@
         class="clearfix"
       >
         <ul class="slots">
-          <template
+          <TakenSlot
             v-for="slot in occupiedSlots"
-          >
-            <TakenSlot
-              :profile="slot.profile"
-              :confirmed="slot.isConfirmed"
-              :allow-leave="slot.profile.id == user.id"
-              :allow-kick="isCoordinator"
-              :allow-confirm="isCoordinator"
-              @leave="$refs.modal_leave.show()"
-              @kick="activeSlot = slot; $refs.modal_kick.show()"
-              @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
-            />
-          </template>
-          <template
+            :key="slot.profile.id"
+            :profile="slot.profile"
+            :confirmed="slot.isConfirmed"
+            :allow-leave="slot.profile.id == user.id"
+            :allow-kick="isCoordinator"
+            :allow-confirm="isCoordinator"
+            @leave="$refs.modal_leave.show()"
+            @kick="activeSlot = slot; $refs.modal_kick.show()"
+            @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
+          />
+          <EmptySlot
             v-for="n in totalSlots-occupiedSlots.length"
-          >
-            <EmptySlot
-              :allow-join="!isUserParticipant && !isInPast"
-              :key="n"
-              @join="$refs.modal_join.show()"
-            />
-          </template>
+            :allow-join="!isUserParticipant && !isInPast"
+            :key="n"
+            @join="$refs.modal_join.show()"
+          />
         </ul>
       </b-card-text>
-      <b-card-footer>
+      <b-card-footer v-if="isCoordinator">
         <b-btn
           v-b-tooltip.hover
           @click="$emit('add-slot', date)"
