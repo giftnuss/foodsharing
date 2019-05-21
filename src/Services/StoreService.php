@@ -15,54 +15,6 @@ class StoreService
 		$this->storeGateway = $storeGateway;
 	}
 
-	public function joinPickup(int $fsId, int $storeId, Carbon $pickupDate, bool $confirmed = false)
-	{
-		/* Never occupy more slots than available */
-		if (!$this->pickupSlotAvailable($storeId, $pickupDate)) {
-			return false;
-		}
-
-		/* never signup a person twice */
-		if (!empty(array_filter($this->storeGateway->getPickupSignupsForDate($storeId, $pickupDate),
-			function ($e) use ($fsId) { return $e['foodsaver_id'] === $fsId; }))) {
-			return false;
-		}
-
-		$this->storeGateway->addFetcher($fsId, $storeId, $pickupDate, $confirmed);
-
-		return true;
-	}
-
-	public function pickupSlotAvailable(int $storeId, Carbon $pickupDate): bool
-	{
-		if ($pickupDate < Carbon::now()) {
-			/* do not allow signing up for past pickups */
-			return false;
-		}
-
-		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
-		if (count($pickupSlots) == 1 && $pickupSlots[0]['available']) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Remove a user from a pickup.
-	 *
-	 * @return bool if a user was deleted from the pickup
-	 */
-	public function leavePickup(int $storeId, \DateTime $date, int $fsId)
-	{
-		return $this->storeGateway->removeFetcher($fsId, $storeId, $date) > 0;
-	}
-
-	public function confirmPickup(int $storeId, \DateTime $date, int $fsId): bool
-	{
-		return $this->storeGateway->confirmFetcher($fsId, $storeId, $date) === 1;
-	}
-
 	/**
 	 * Changes the number of total slots for a pickup. Implements the logic to take care to
 	 *   * not remove a slot where somebody is signed up for
@@ -88,15 +40,5 @@ class StoreService
 		}
 
 		return true;
-	}
-
-	public function addPickupSlot(int $storeId, \DateTime $date): bool
-	{
-		return $this->changePickupSlots($storeId, $date, 1);
-	}
-
-	public function removePickupSlot(int $storeId, \DateTime $date): bool
-	{
-		return $this->changePickupSlots($storeId, $date, -1);
 	}
 }

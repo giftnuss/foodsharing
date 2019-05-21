@@ -65,13 +65,38 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 		$confirmed = $this->storePermissions->hasPreconfirmedPickup($storeId);
-		if (!$this->storeService->joinPickup($fsId, $storeId, $date, $confirmed)) {
+
+		/* Never occupy more slots than available */
+		if (!$this->pickupSlotAvailable($storeId, $date)) {
 			throw new HttpException(400, 'No pickup slot available');
 		}
+
+		/* never signup a person twice */
+		if (!empty(array_filter($this->storeGateway->getPickupSignupsForDate($storeId, $date),
+			function ($e) use ($fsId) { return $e['foodsaver_id'] === $fsId; }))) {
+			throw new HttpException(400, 'Already signed in');
+		}
+
+		$this->storeGateway->addFetcher($fsId, $storeId, $date, $confirmed);
 
 		return $this->handleView($this->view([
 			'confirmed' => $confirmed
 		], 200));
+	}
+
+	private function pickupSlotAvailable(int $storeId, Carbon $pickupDate): bool
+	{
+		if ($pickupDate < Carbon::now()) {
+			/* do not allow signing up for past pickups */
+			return false;
+		}
+
+		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
+		if (count($pickupSlots) == 1 && $pickupSlots[0]['available']) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -89,7 +114,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 
-		if (!$this->storeService->leavePickup($storeId, $date, $fsId)) {
+		if (!$this->storeGateway->removeFetcher($fsId, $storeId, $date)) {
 			throw new HttpException(400, 'Failed to remove user from pickup');
 		}
 
@@ -109,7 +134,7 @@ final class PickupRestController extends AbstractFOSRestController
 		$date = $this->parsePickupDate($pickupDate);
 
 		if ($paramFetcher->get('isConfirmed')) {
-			if (!$this->storeService->confirmPickup($storeId, $date, $fsId)) {
+			if (!$this->storeGateway->confirmFetcher($fsId, $storeId, $date)) {
 				throw new HttpException(400);
 			}
 		}
@@ -148,7 +173,7 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$pickups = $this->storeService->listPickupSlots($storeId);
+		$pickups = $this->storeGateway->getPickupSlots($storeId);
 		$profiles = [];
 		foreach ($this->storeGateway->getBetriebTeam($storeId) as $user) {
 			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
