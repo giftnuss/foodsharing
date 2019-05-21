@@ -76,7 +76,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'fetcher' => $fetcher
 			]
 		], $regularSlots);
-		$this->gateway->addFetcher($fsid, $store['id'], new DateTime($datetime));
+		$this->gateway->addFetcher($fsid, $store['id'], new Carbon($datetime));
 		$fetcherList = $this->gateway->listFetcher($store['id'], [$datetime]);
 
 		$this->assertEquals([
@@ -93,17 +93,16 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testGetIrregularPickupDate()
 	{
 		$store = $this->tester->createStore($this->region_id);
-		$date = '2018-07-19 12:35:00';
-		$expectedIsoDate = '2018-07-19T12:35:00Z';
+		$expectedIsoDate = '2018-07-19T10:35:00Z';
 		$fetcher = 1;
 		$internalDate = Carbon::createFromFormat(DATE_ATOM, $expectedIsoDate);
-		$this->assertEquals($internalDate->format('Y-m-d H:i:s'), $date);
+		$date = $internalDate->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
 		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetcher]);
 		$irregularSlots = $this->gateway->getOnetimePickups($store['id'], $internalDate);
 
 		$this->assertEquals([
 			[
-			'date' => $date,
+			'date' => $internalDate->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s'),
 			'fetcher' => $fetcher
 		]
 		], $irregularSlots);
