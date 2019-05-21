@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Deployer\Exception\Exception;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
@@ -318,16 +319,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 		$out['team_js'] = implode(',', $out['team_js']);
 
-		$out['abholer'] = false;
-		if ($abholer = $this->db->fetchAll('SELECT `betrieb_id`,`dow` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $id])) {
-			$out['abholer'] = array();
-			foreach ($abholer as $a) {
-				if (!isset($out['abholer'][$a['dow']])) {
-					$out['abholer'][$a['dow']] = array();
-				}
-			}
-		}
-
 		return $out;
 	}
 
@@ -482,16 +473,29 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			]);
 	}
 
-	public function addFetcher(int $fsid, int $bid, \DateTime $date, bool $confirmed = false): int
+	public function addFetcher(int $fsId, int $bid, \DateTime $date, bool $confirmed = false): int
 	{
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
-			'foodsaver_id' => $fsid,
+			'foodsaver_id' => $fsId,
 			'betrieb_id' => $bid,
 			'date' => $this->timeHelper->toDbDateTime($date),
 			'confirmed' => $confirmed
 		]);
+		$this->updateBellNotificationForBiebs($bid);
 
 		return $queryResult;
+	}
+
+	public function removeFetcher(int $fsId, int $bid, \DateTime $date)
+	{
+		$deletedRows = $this->db->delete('fs_abholer', [
+			'foodsaver_id' => $fsId,
+			'betrieb_id' => $bid,
+			'date' => $this->timeHelper->toDbDateTime($date)
+		]);
+		$this->updateBellNotificationForBiebs($bid);
+
+		return $deletedRows;
 	}
 
 	/**
@@ -536,22 +540,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	/**
-	 * @deprecated
-	 *
-	 * This function does not match to our database structure. Column 'dow' does not exist
-	 * in 'fs_abholer', but it exists in in 'fs_abholen'. Its only usage in StoreUserControl may need to be
-	 * replaced with addFetcher, otherwise it may lead to exceptions.
-	 */
-	public function addAbholer($betrieb_id, $foodsaver_id, $dow): int
-	{
-		return $this->db->insert('fs_abholer', [
-			'betrieb_id' => $betrieb_id,
-			'foodsaver_id' => $foodsaver_id,
-			'dow' => $dow
-		]);
-	}
-
 	public function clearAbholer($betrieb_id): int
 	{
 		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
@@ -565,7 +553,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->update(
 		'fs_abholer',
 			['confirmed' => 1],
-			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $date]
+			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $this->timeHelper->toDbDateTime($date)]
 		);
 
 		$this->updateBellNotificationForBiebs($bid);
@@ -758,7 +746,24 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function getRegularPickupSlots(int $storeId)
+	public function getRegularPickup(int $storeId, int $dow, string $time): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_abholzeiten',
+				'fetcher',
+				[
+					'betrieb_id' => $storeId,
+					'dow' => $dow,
+					'time' => $time
+				]
+			);
+		} catch (Exception $e) {
+			return null;
+		}
+	}
+
+	public function getRegularPickups(int $storeId)
 	{
 		return $this->db->fetchAllByCriteria(
 			'fs_abholzeiten',
@@ -766,12 +771,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['betrieb_id' => $storeId]);
 	}
 
-	public function getSinglePickupSlots(int $storeId, Carbon $date)
+	public function getSinglePickups(int $storeId, Carbon $date)
 	{
-		return $this->getSinglePickupSlotsForRange($storeId, $date, $date);
+		return $this->getSinglePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getSinglePickupSlotsForRange(int $storeId, Carbon $from, ?Carbon $to)
+	public function getSinglePickupsForRange(int $storeId, Carbon $from, ?Carbon $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
@@ -796,6 +801,30 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				'fetcher' => $e['fetchercount']
 			];
 		}, $result);
+	}
+
+	public function addSinglePickup(int $storeId, \DateTime $date, int $slots)
+	{
+		$this->db->insert(
+			'fs_fetchdate',
+			[
+				'betrieb_id' => $storeId,
+				'time' => $this->timeHelper->toDbDateTime($date),
+				'fetchercount' => $slots
+			]
+		);
+	}
+
+	public function updateSinglePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
+	{
+		return $this->db->update(
+			'fs_fetchdate',
+			['fetchercount' => $slots],
+			[
+				'betrieb_id' => $storeId,
+				'time' => $this->timeHelper->toDbDateTime($date)
+			]
+		) === 1;
 	}
 
 	public function getFutureRegularPickupInterval(int $storeId): CarbonInterval

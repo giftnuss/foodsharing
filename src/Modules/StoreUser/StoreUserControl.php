@@ -70,26 +70,11 @@ class StoreUserControl extends Control
 			];
 
 			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($store['bezirk_id']))) {
-				if ($_POST['form_submit'] == 'zeiten') {
-					$range = range(0, 6);
-					global $g_data;
-					$this->storeGateway->clearAbholer($_GET['id']);
-					foreach ($range as $r) {
-						if (isset($_POST['dow' . $r])) {
-							$this->sanitizerService->handleTagSelect('dow' . $r);
-							foreach ($g_data['dow' . $r] as $fs_id) {
-								$this->storeGateway->addAbholer($_GET['id'], $fs_id, $r);
-							}
-						}
-					}
+				$this->sanitizerService->handleTagSelect('foodsaver');
+				if (!empty($g_data['foodsaver'])) {
+					$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
 				} else {
-					$this->sanitizerService->handleTagSelect('foodsaver');
-
-					if (!empty($g_data['foodsaver'])) {
-						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
-					} else {
-						$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
-					}
+					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}
 				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 				$this->routeHelper->goSelf();
@@ -244,10 +229,6 @@ class StoreUserControl extends Control
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
-				$pickup_date_cnt = '';
-				if ($store['verantwortlich']) {
-					$pickup_date_cnt .= '<p style="text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
-				}
 
 				if ($verantwortlicher = $this->view->u_getVerantwortlicher($store)) {
 					$cnt = '';
@@ -272,65 +253,11 @@ class StoreUserControl extends Control
 						<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
 						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
 
-						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info($this->translationHelper->sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
-					</div>
-					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
-						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('delete_post') . '</span>
-						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
-					</div>
-					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
-						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
-						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
 					</div>');
-
-				if (is_array($store['abholer'])) {
-					foreach ($store['abholer'] as $dow => $a) {
-						$g_data['dow' . $dow] = $a;
-					}
-				}
 
 				$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
 
-				$next_dates = $this->view->u_getNextDates($pickup_dates, $store, $this->model->listUpcommingFetchDates($_GET['id']));
-
-				$fetcherList = $this->storeGateway->listFetcher($store['id'], array_keys($next_dates));
-
-				global $g_data;
-				foreach ($fetcherList as $r) {
-					$key = 'fetch-' . str_replace(array(':', ' ', '-'), '', $r['date']);
-					if (!isset($g_data[$key])) {
-						$g_data[$key] = array();
-					}
-					$g_data[$key][] = $r;
-				}
-
-				$days = $this->timeHelper->getDow();
-				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id']]), CNT_RIGHT);
-				$pickup_date_content = '';
-
-				foreach ($next_dates as $date => $time) {
-					$part = explode(' ', $date);
-					$date = $part[0];
-					$pickup_date_content .= $this->view->u_form_checkboxTagAlt(
-						$date . ' ' . $time['time'],
-						array(
-							'label' => $days[date('w', strtotime($date))] . ' ' . $this->view->format_db_date($date) . ', ' . $this->format_time($time['time']),
-							'verantwortlich' => $store['verantwortlich'],
-							'fetcher_count' => $time['fetcher'],
-							'bezirk_id' => $store['bezirk_id'],
-							'field' => $time
-						)
-					);
-				}
-
-				$pickup_date_cnt .= $pickup_date_content;
-
-				if ($store['verantwortlich'] && empty($next_dates)) {
-					$pickup_date_cnt = $this->v_utils->v_info($this->translationHelper->sv('no_fetchtime', array('name' => $store['name'])), $this->translationHelper->s('attention') . '!') .
-						'<p style="margin-top:10px;text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
-				}
+				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich']]), CNT_RIGHT);
 
 				/*
 				 * Abholzeiten ändern
@@ -351,7 +278,6 @@ class StoreUserControl extends Control
 
 				if (!$store['jumper']) {
 					if (($store['betrieb_status_id'] == 3 || $store['betrieb_status_id'] == 5)) {
-						$this->pageHelper->addContent($this->v_utils->v_field($pickup_date_cnt, $this->translationHelper->s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
 					} else {
 						$bt = '';
 						$storeStateName = '';

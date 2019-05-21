@@ -66,7 +66,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$fetcher = 2;
 		$fsid = $this->foodsaver['id'];
 		$this->tester->addRecurringPickup($store['id'], ['time' => $time, 'dow' => $dow, 'fetcher' => $fetcher]);
-		$regularSlots = $this->gateway->getRegularPickupSlots($store['id']);
+		$regularSlots = $this->gateway->getRegularPickups($store['id']);
 		$this->assertEquals([
 			[
 				'dow' => 3,
@@ -97,7 +97,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$internalDate = DateTime::createFromFormat(DATE_ATOM, $expectedIsoDate);
 		$this->assertEquals($internalDate->format('Y-m-d H:i:s'), $date);
 		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetcher]);
-		$irregularSlots = $this->gateway->getSinglePickupSlots($store['id'], $internalDate);
+		$irregularSlots = $this->gateway->getSinglePickups($store['id'], $internalDate);
 
 		$this->assertEquals([
 			[

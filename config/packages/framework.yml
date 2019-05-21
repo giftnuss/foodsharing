@@ -12,6 +12,9 @@ fos_rest:
     exception: true
     serializer:
         serialize_null: true
+    routing_loader:
+        default_format: json
+        include_format: false
 
 exercise_html_purifier:
     default:

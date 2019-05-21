@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Lib\Xhr;
 
+use Carbon\Carbon;
 use Exception;
 use Flourish\fImage;
 use Foodsharing\Helpers\DataHelper;
@@ -1472,7 +1473,7 @@ class XhrMethods
 	public function xhr_fetchConfirm($data)
 	{
 		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
-			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], date('Y-m-d H:i:s', strtotime($data['date'])));
+			$this->storeGateway->confirmFetcher($data['fsid'], $data['bid'], Carbon::createFromTimestamp(strtotime($data['date'])));
 
 			return 1;
 		}

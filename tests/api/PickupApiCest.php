@@ -21,28 +21,29 @@ class PickupApiCest
 	public function acceptsDifferentIsoFormats(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
+		$id = $this->user['id'];
 		$pickupBaseDate = Carbon::now()->add('2 days');
 		$pickupBaseDate->hours(13)->minutes(45)->seconds(0);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '+0000/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '+0000/' . $id);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$pickupBaseDate->minutes(50);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '+01:00/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '.000+01:00/' . $id);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$pickupBaseDate->minutes(55);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '-01:00/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . '-01:00/' . $id);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$pickupBaseDate->minutes(35);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . 'Z/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->format('Y-m-d\TH:i:s') . 'Z/' . $id);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
@@ -54,7 +55,7 @@ class PickupApiCest
 		$pickupBaseDate = Carbon::now()->add('2 days');
 		$pickupBaseDate->hours(14)->minutes(45)->seconds(0);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->toIso8601String() . '/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->toIso8601String() . '/' . $this->user['id']);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->canSeeResponseContainsJson([
@@ -72,7 +73,7 @@ class PickupApiCest
 		$I->addStoreTeam($this->store['id'], $coordinator['id'], true, false, true);
 		$I->login($coordinator['email']);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->toIso8601String() . '/signup');
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/' . $pickupBaseDate->toIso8601String() . '/' . $coordinator['id']);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->canSeeResponseContainsJson([
