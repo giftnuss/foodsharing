@@ -69,6 +69,7 @@ export default {
       query: '',
       isOpen: false,
       isLoading: false,
+      isIndexLoaded: false,
       results: {
         stores: [],
         users: [],
@@ -91,6 +92,9 @@ export default {
   },
   watch: {
     query (query, oldQuery) {
+      if (!this.isIndexLoaded) {
+        this.fetchIndex()
+      }
       if (query.trim().length > 2) {
         this.open()
         this.delayedFetch()
@@ -108,9 +112,6 @@ export default {
   mounted () {
     // close the result box if another dropdown menu gets opened
     this.listenOnRoot('bv::dropdown::shown', this.close)
-  },
-  created () {
-    this.fetchIndex()
   },
   methods: {
     open () {
@@ -142,6 +143,7 @@ export default {
       this.isLoading = false
     },
     async fetchIndex () {
+      this.isIndexLoaded = true
       this.index = await instantSearchIndex()
     },
     clickOutListener () {
