@@ -84,6 +84,19 @@ class StorePermissions
 		return false;
 	}
 
+	public function mayRemovePickupUser(int $storeId, int $fsId): bool
+	{
+		if ($fsId === $this->session->id()) {
+			return true;
+		}
+
+		if ($this->mayEditPickups($storeId)) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public function mayEditPickups($storeId)
 	{
 		return $this->mayEditStore($storeId);

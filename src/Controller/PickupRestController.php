@@ -83,7 +83,7 @@ final class PickupRestController extends AbstractFOSRestController
 	 */
 	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId)
 	{
-		if ($fsId != $this->session->id() && !$this->storePermissions->mayEditPickups($storeId)) {
+		if (!$this->storePermissions->mayRemovePickupUser($storeId, $fsId)) {
 			throw new HttpException(403);
 		}
 
