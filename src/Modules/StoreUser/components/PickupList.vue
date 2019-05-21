@@ -24,7 +24,7 @@
       </div>
       <div
         :class="{disabledLoading: isLoading}"
-        class="card-body text-center"
+        class="card-body"
       >
         <template v-for="pickup in pickups">
           <Pickup

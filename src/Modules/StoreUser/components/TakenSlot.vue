@@ -13,26 +13,26 @@
       />
       <span :class="{slotstatus: true, pending: !confirmed, confirmed: confirmed}" />
     </template>
-    <b-dropdown-item
-      v-if="allowLeave"
-      @click="$emit('leave')"
-    >
-      Austragen
-    </b-dropdown-item>
-    <b-dropdown-item
-      v-if="allowKick && !allowLeave"
-      @click="$emit('kick', profile.id)"
-    >
-      Austragen
-    </b-dropdown-item>
     <b-dropdown-item :href="`/profile/${profile.id}`">
-      Profil aufrufen
+      <i class="fa fa-user mr-1" />  Profil aufrufen
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!confirmed && allowConfirm"
       @click="$emit('confirm', profile.id)"
     >
-      Bestätigen
+      <i class="fa fa-check mr-1" /> Bestätigen
+    </b-dropdown-item>
+    <b-dropdown-item
+      v-if="allowLeave"
+      @click="$emit('leave')"
+    >
+      <i class="fa fa-times-circle mr-1" /> Austragen
+    </b-dropdown-item>
+    <b-dropdown-item
+      v-if="allowKick && !allowLeave"
+      @click="$emit('kick', profile.id)"
+    >
+      <i class="fa fa-times-circle mr-1" /> Austragen
     </b-dropdown-item>
   </nav-item-dropdown>
 </template>
@@ -85,5 +85,8 @@ export default {
   }
   .confirmed {
     background-image: url(/img/check.png);
+  }
+  .fa {
+    margin-left: -5px;
   }
 </style>
