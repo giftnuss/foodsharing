@@ -12,6 +12,7 @@
           </div>
           <div class="col col-2 p-0">
             <button
+              v-if="isCoordinator"
               v-b-tooltip
               @click="loadAddPickupModal"
               class="btn btn-secondary btn-sm"

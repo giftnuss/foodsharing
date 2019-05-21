@@ -17,6 +17,12 @@
       <i class="fa fa-user mr-1" />  Profil aufrufen
     </b-dropdown-item>
     <b-dropdown-item
+      v-if="allowChat"
+      @click="openChat"
+    >
+      <i class="fa fa-comment mr-1" />  Nachricht schreiben
+    </b-dropdown-item>
+    <b-dropdown-item
       v-if="!confirmed && allowConfirm"
       @click="$emit('confirm', profile.id)"
     >
@@ -43,6 +49,7 @@ import Avatar from '@/components/Avatar'
 // use custom navItemDropdown for now, better tooltip support and look...
 import NavItemDropdown from '@/components/Topbar/NavItemDropdown'
 import bDropdownItem from '@b/components/dropdown/dropdown-item'
+import conv from '@/conv'
 
 export default {
   components: { Avatar, NavItemDropdown, bDropdownItem },
@@ -66,6 +73,15 @@ export default {
     allowConfirm: {
       type: Boolean,
       default: false
+    },
+    allowChat: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    openChat () {
+      conv.userChat(this.profile.id)
     }
   }
 }
