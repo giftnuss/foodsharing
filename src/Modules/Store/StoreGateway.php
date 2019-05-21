@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use Deployer\Exception\Exception;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
@@ -758,7 +757,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					'time' => $time
 				]
 			);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			return null;
 		}
 	}
