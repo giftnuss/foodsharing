@@ -1,36 +1,60 @@
 <template>
-  <li :class="{clickable: allowJoin}">
-    <b-img
+  <li>
+    <button
       v-if="allowJoin"
       v-b-tooltip
-      :title="$i18n('pickup.take_empty_slot')"
       @click="$emit('join')"
-      alt="empty"
-      src="/img/nobody.gif"
-    />
-    <b-img
+      :title="$i18n('pickup.take_empty_slot')"
+      class="btn"
+    >
+      <i class="fa fa-question" />
+    </button>
+
+    <button
+      v-else-if="allowRemove"
+      v-b-tooltip
+      @click="$emit('remove')"
+      @mouseover="hover = true"
+      @mouseout="hover = false"
+      title="Slot entfernen"
+      class="btn"
+    >
+      <i :class="`fa ${hover ? 'fa-times' : 'fa-question'}`" />
+    </button>
+
+    <button
       v-else
-      alt="empty"
-      src="/img/nobody.gif"
-    />
+      class="btn"
+      disabled
+    >
+      <i class="fa fa-question" />
+    </button>
   </li>
 </template>
 
 <script>
-import bImg from '@b/components/image/img'
 import bTooltip from '@b/directives/tooltip/tooltip'
 
 export default {
-  components: { bImg },
   directives: { bTooltip },
   props: {
     allowJoin: {
       type: Boolean,
       default: false
+    },
+    allowRemove: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      hover: false
     }
   }
 }
 </script>
 
 <style scoped>
+
 </style>

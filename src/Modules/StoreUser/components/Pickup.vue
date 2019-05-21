@@ -21,31 +21,28 @@
             @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
           />
           <EmptySlot
-            v-for="n in totalSlots-occupiedSlots.length"
-            :allow-join="!isUserParticipant && !isInPast"
+            v-for="n in emptySlots"
+            :allow-join="!isUserParticipant && !isInPast && n == 1"
+            :allow-remove="isCoordinator && n == emptySlots"
             :key="n"
             @join="$refs.modal_join.show()"
+            @remove="$emit('remove-slot', date)"
           />
+          <li
+            v-if="isCoordinator && totalSlots < 10"
+            @click="$emit('add-slot', date)"
+          >
+            <button
+              v-b-tooltip.hover
+              type="button"
+              class="btn secondary"
+              title="Slot hinzufügen"
+            >
+              <i class="fa fa-plus" />
+            </button>
+          </li>
         </ul>
       </b-card-text>
-      <b-card-footer v-if="isCoordinator">
-        <b-btn
-          v-b-tooltip.hover
-          @click="$emit('remove-slot', date)"
-          class="btn-sm"
-          title="Slot entfernen"
-        >
-          {{ $i18n('pickup.remove_slot') }}
-        </b-btn>
-        <b-btn
-          v-b-tooltip.hover
-          @click="$emit('add-slot', date)"
-          class="btn-sm"
-          title="Slot hinzufügen"
-        >
-          {{ $i18n('pickup.add_slot') }}
-        </b-btn>
-      </b-card-footer>
     </b-card>
     <b-modal
       ref="modal_join"
@@ -94,10 +91,8 @@
 </template>
 
 <script>
-import bBtn from '@b/components/button/button'
 import bCard from '@b/components/card/card'
 import bCardText from '@b/components/card/card-text'
-import bCardFooter from '@b/components/card/card-footer'
 import bFormTextarea from '@b/components/form-textarea/form-textarea'
 import bModal from '@b/components/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
@@ -106,7 +101,7 @@ import EmptySlot from './EmptySlot'
 import dateFnsCompareAsc from 'date-fns/compare_asc'
 
 export default {
-  components: { EmptySlot, TakenSlot, bBtn, bCard, bCardFooter, bCardText, bFormTextarea, bModal },
+  components: { EmptySlot, TakenSlot, bCard, bCardText, bFormTextarea, bModal },
   directives: { bTooltip },
   props: {
     storeId: {
@@ -158,6 +153,9 @@ export default {
     },
     isInPast () {
       return dateFnsCompareAsc(new Date(), this.date) >= 1
+    },
+    emptySlots () {
+      return this.totalSlots - this.occupiedSlots.length
     }
   }
 }
@@ -173,18 +171,28 @@ export default {
 
   ul.slots li {
     float: left;
-    margin: 2px;
+  }
+
+  ul.slots >>> .btn {
+    display: inline-block;
     padding: 4px;
-    background-color: #f1e7c9;
-    border-radius: 3px;
-
+    margin: 2px;
+    width: 35px;
+    height: 35px;
+    border-color: #f1e7c9;
+    border-width: 3px;
   }
-
-  ul.slots li.clickable {
-    cursor: pointer;
+  ul.slots >>> .btn.filled {
+    overflow: hidden;
   }
-
-  ul.slots li.clickable:hover {
-    background-color: #533a20;
+  ul.slots >>> .btn.secondary {
+    opacity: 0.3;
+  }
+  ul.slots >>> .btn:hover {
+      border-color: #533a20
+  }
+  ul.slots >>> .btn[disabled]:hover {
+      border-color: #f1e7c9;
+      cursor: default;
   }
 </style>
