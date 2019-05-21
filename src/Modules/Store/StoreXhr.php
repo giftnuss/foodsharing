@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Lib\Xhr\XhrDialog;
@@ -9,11 +10,13 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
+use Foodsharing\Services\StoreService;
 
 class StoreXhr extends Control
 {
 	private $storeGateway;
 	private $storePermissions;
+	private $storeService;
 	private $sanitizerService;
 
 	public function __construct(
@@ -21,12 +24,14 @@ class StoreXhr extends Control
 		StoreView $view,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
+		StoreService $storeService,
 		SanitizerService $sanitizerService
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
+		$this->storeService = $storeService;
 		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
@@ -50,7 +55,7 @@ class StoreXhr extends Control
 				$fetchercount = 8;
 			}
 
-			if ($this->model->addFetchDate($storeId, $time, $fetchercount)) {
+			if ($this->storeService->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
 				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
 
 				return array(
