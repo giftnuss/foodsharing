@@ -85,7 +85,9 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function listThreadsAction(int $forumId, int $forumSubId): \Symfony\Component\HttpFoundation\Response
 	{
-		$this->throwExceptionIfNotAllowedToAccessForum($forumId, $forumSubId);
+		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
+			throw new HttpException(403);
+		}
 
 		$threads = $this->getNormalizedThreads($forumId, $forumSubId);
 
@@ -94,13 +96,6 @@ class ForumRestController extends AbstractFOSRestController
 		], 200);
 
 		return $this->handleView($view);
-	}
-
-	private function throwExceptionIfNotAllowedToAccessForum(int $forumId, int $forumSubId)
-	{
-		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
-			throw new HttpException(403);
-		}
 	}
 
 	private function getNormalizedThreads(int $forumId, int $forumSubId)
@@ -118,20 +113,6 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function getThreadAction($threadId)
 	{
-		$thread = $this->getValidatedThreadOrThrowException($threadId);
-
-		$thread = $this->normalizeThread($thread);
-		$thread = $this->addAdditionalInformationToThread($thread, $threadId);
-
-		$view = $this->view([
-			'data' => $thread
-		], 200);
-
-		return $this->handleView($view);
-	}
-
-	private function getValidatedThreadOrThrowException($threadId)
-	{
 		$thread = $this->forumGateway->getThread($threadId);
 
 		if (!$thread) {
@@ -142,11 +123,7 @@ class ForumRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		return $thread;
-	}
-
-	private function addAdditionalInformationToThread($thread, $threadId)
-	{
+		$thread = $this->normalizeThread($thread);
 		$posts = $this->forumGateway->listPosts($threadId);
 
 		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
@@ -155,7 +132,11 @@ class ForumRestController extends AbstractFOSRestController
 			return $this->normalizePost($post);
 		}, $posts);
 
-		return $thread;
+		$view = $this->view([
+			'data' => $thread
+		], 200);
+
+		return $this->handleView($view);
 	}
 
 	/**
@@ -164,19 +145,14 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function createPostAction($threadId, ParamFetcher $paramFetcher)
 	{
-		$this->throwExceptionIfNotAllowedToPostToThread($threadId);
+		if (!$this->forumPermissions->mayPostToThread($threadId)) {
+			throw new HttpException(403);
+		}
 
 		$body = $paramFetcher->get('body');
 		$this->forumService->addPostToThread($this->session->id(), $threadId, $body);
 
 		return $this->handleView($this->view());
-	}
-
-	private function throwExceptionIfNotAllowedToPostToThread($threadId)
-	{
-		if (!$this->forumPermissions->mayPostToThread($threadId)) {
-			throw new HttpException(403);
-		}
 	}
 
 	/**
@@ -186,7 +162,9 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function createThreadAction($forumId, $forumSubId, ParamFetcher $paramFetcher)
 	{
-		$this->throwExceptionIfNotAllowedToAccessForum($forumId, $forumSubId);
+		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
+			throw new HttpException(403);
+		}
 
 		$body = $paramFetcher->get('body');
 		$title = $paramFetcher->get('title');
@@ -203,11 +181,17 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function patchThreadAction($threadId, ParamFetcher $paramFetcher)
 	{
-		$this->throwExceptionIfNotAllowedToModerateThread($threadId);
+		if (!$this->forumPermissions->mayModerate($threadId)) {
+			throw new HttpException(403);
+		}
 
 		$isSticky = $paramFetcher->get('isSticky');
 		if (!is_null($isSticky)) {
-			$this->stickOrUnstickThread($threadId, $isSticky);
+			if ($isSticky === true) {
+				$this->forumGateway->stickThread($threadId);
+			} else {
+				$this->forumGateway->unstickThread($threadId);
+			}
 		}
 		$isActive = $paramFetcher->get('isActive');
 		if ($isActive === true) {
@@ -217,39 +201,18 @@ class ForumRestController extends AbstractFOSRestController
 		return $this->getThreadAction($threadId);
 	}
 
-	private function throwExceptionIfNotAllowedToModerateThread($threadId)
-	{
-		if (!$this->forumPermissions->mayModerate($threadId)) {
-			throw new HttpException(403);
-		}
-	}
-
-	private function stickOrUnstickThread($threadId, $isSticky)
-	{
-		if ($isSticky === true) {
-			$this->forumGateway->stickThread($threadId);
-		} else {
-			$this->forumGateway->unstickThread($threadId);
-		}
-	}
-
 	/**
 	 * @Rest\Post("forum/thread/{threadId}/follow", requirements={"threadId" = "\d+"})
 	 */
 	public function followThreadAction($threadId)
 	{
-		$this->throwExceptionIfNotAllowedToAccessThread($threadId);
+		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
+		}
 
 		$this->forumGateway->followThread($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
-	}
-
-	private function throwExceptionIfNotAllowedToAccessThread($threadId)
-	{
-		if (!$this->forumPermissions->mayAccessThread($threadId)) {
-			throw new HttpException(403);
-		}
 	}
 
 	/**
@@ -267,15 +230,6 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function deletePostAction($postId)
 	{
-		$this->validatePostOrThrowException($postId);
-
-		$this->forumGateway->deletePost($postId);
-
-		return $this->handleView($this->view([]));
-	}
-
-	private function validatePostOrThrowException($postId)
-	{
 		$post = $this->forumGateway->getPost($postId);
 		if (!$post) {
 			throw new HttpException(404);
@@ -283,6 +237,10 @@ class ForumRestController extends AbstractFOSRestController
 		if (!$this->forumPermissions->mayDeletePost($post)) {
 			throw new HttpException(403);
 		}
+
+		$this->forumGateway->deletePost($postId);
+
+		return $this->handleView($this->view([]));
 	}
 
 	/**

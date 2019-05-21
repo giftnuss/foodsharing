@@ -28,7 +28,8 @@ class MessageRestController extends AbstractFOSRestController
 	{
 		$ids = $this->getNormalizedMsgConversations();
 
-		if ($this->conversationIsStoredInSession($conversationId)) {
+		// isConversationStoredInSession
+		if (isset($ids[(int)$conversationId])) {
 			return true;
 		}
 
@@ -50,15 +51,6 @@ class MessageRestController extends AbstractFOSRestController
 		}
 
 		return $ids;
-	}
-
-	private function conversationIsStoredInSession($conversationId)
-	{
-		if (isset($ids[(int)$conversationId])) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
