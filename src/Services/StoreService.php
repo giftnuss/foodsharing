@@ -75,7 +75,7 @@ class StoreService
 		$from = $from ?? Carbon::now()->sub('2 hours');
 		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
 		$regularSlots = $this->storeGateway->getRegularPickups($storeId);
-		$additionalSlots = $this->storeGateway->getSinglePickupsForRange($storeId, $from, $additionalTo);
+		$additionalSlots = $this->storeGateway->getOnetimePickupsForRange($storeId, $from, $additionalTo);
 		$signups = $this->storeGateway->getPickupSignupsForDateRange($storeId, $from, $to);
 
 		$slots = [];
@@ -163,7 +163,7 @@ class StoreService
 	}
 
 	/**
-	 * Changes the number of total slots for a single pickup. Implements the logic to take care to
+	 * Changes the number of total slots for a onetime pickup. Implements the logic to take care to
 	 *   * not remove a slot where somebody is signed up for
 	 *   * handle transition between regular and additional pickup
 	 *   * (does not convert additional back to regular as the gain is little).
@@ -171,18 +171,18 @@ class StoreService
 	public function changePickupSlots(int $storeId, Carbon $date, int $newTotalSlots): bool
 	{
 		$occupiedSlots = count($this->storeGateway->getPickupSignupsForDate($storeId, $date));
-		$pickups = $this->storeGateway->getSinglePickupsForRange($storeId, $date, $date);
+		$pickups = $this->storeGateway->getOnetimePickupsForRange($storeId, $date, $date);
 		if (!$pickups) {
 			$previousCount = $this->storeGateway->getRegularPickup($storeId, $date->weekday(), $date->toTimeString());
 			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->storeGateway->addSinglePickup($storeId, $date, $newTotalSlots);
+				$this->storeGateway->addOnetimePickup($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}
 		} else {
 			$previousCount = $pickups[0]['fetcher'];
 			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
-				$this->storeGateway->updateSinglePickupTotalSlots($storeId, $date, $newTotalSlots);
+				$this->storeGateway->updateOnetimePickupTotalSlots($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}

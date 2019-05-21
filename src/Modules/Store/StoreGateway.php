@@ -770,12 +770,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['betrieb_id' => $storeId]);
 	}
 
-	public function getSinglePickups(int $storeId, Carbon $date)
+	public function getOnetimePickups(int $storeId, Carbon $date)
 	{
-		return $this->getSinglePickupsForRange($storeId, $date, $date);
+		return $this->getOnetimePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getSinglePickupsForRange(int $storeId, Carbon $from, ?Carbon $to)
+	public function getOnetimePickupsForRange(int $storeId, Carbon $from, ?Carbon $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
@@ -802,7 +802,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function addSinglePickup(int $storeId, \DateTime $date, int $slots)
+	public function addOnetimePickup(int $storeId, \DateTime $date, int $slots)
 	{
 		$this->db->insert(
 			'fs_fetchdate',
@@ -814,7 +814,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function updateSinglePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
+	public function updateOnetimePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
 	{
 		return $this->db->update(
 			'fs_fetchdate',
