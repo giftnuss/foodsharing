@@ -66,7 +66,6 @@ export default {
       type: Boolean,
       default: false
     }
-
   }
 }
 </script>
@@ -78,9 +77,9 @@ export default {
   }
   .slotstatus {
     display: block;
-    position: relative;
-    top: -16px;
-    right: -21px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     width: 16px;
     height: 16px;
   }
