@@ -97,6 +97,11 @@ class StorePermissions
 		return false;
 	}
 
+	public function mayConfirmPickup(int $storeId): bool
+	{
+		return $this->mayEditPickups($storeId);
+	}
+
 	public function mayEditPickups($storeId)
 	{
 		return $this->mayEditStore($storeId);

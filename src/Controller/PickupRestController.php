@@ -102,7 +102,7 @@ final class PickupRestController extends AbstractFOSRestController
 	 */
 	public function editPickupSlotAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher)
 	{
-		if (!$this->storePermissions->mayEditPickups($storeId)) {
+		if (!$this->storePermissions->mayConfirmPickup($storeId)) {
 			throw new HttpException(403);
 		}
 
