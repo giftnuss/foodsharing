@@ -119,7 +119,7 @@ export default {
       default: null
     },
     date: {
-      type: Object,
+      type: Date,
       default: null
     },
     isAvailable: {

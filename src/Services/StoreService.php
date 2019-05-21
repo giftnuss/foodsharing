@@ -82,7 +82,7 @@ class StoreService
 		foreach ($regularSlots as $slot) {
 			$date = $from->copy();
 			$date->addDays($this->realMod($slot['dow'] - $date->format('w'), 7));
-			$date->setTimeFromTimeString($slot['time']);
+			$date->setTimeFromTimeString($slot['time'])->shiftTimezone('Europe/Berlin');
 			if ($date < $from) {
 				/* setting time could shift it into past */
 				$date->addDays(7);

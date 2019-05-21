@@ -32,7 +32,6 @@
     "leaflet.awesome-markers": "^2.0.5",
     "leaflet.markercluster": "^1.4.1",
     "lodash.pickby": "^4.6.0",
-    "luxon": "^1.15.0",
     "magnific-popup": "^1.1.0",
     "node-sass": "^4.12.0",
     "object-path": "^0.11.4",

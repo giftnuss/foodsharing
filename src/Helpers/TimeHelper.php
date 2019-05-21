@@ -72,13 +72,13 @@ final class TimeHelper
 		];
 	}
 
-	public function toDbDateTime(\DateTime $date): string
+	public function toDbDateTime(Carbon $date): string
 	{
-		return $date->format('Y-m-d H:i:s');
+		return $date->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
 	}
 
 	public function fromDbDateTime(string $date): Carbon
 	{
-		return Carbon::createFromFormat('Y-m-d H:i:s', $date);
+		return Carbon::createFromFormat('Y-m-d H:i:s', $date, 'Europe/Berlin');
 	}
 }
