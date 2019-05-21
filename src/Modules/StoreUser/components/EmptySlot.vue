@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li :class="{clickable: allowJoin}">
     <b-img
       v-if="allowJoin"
       v-b-tooltip

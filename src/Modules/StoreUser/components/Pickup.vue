@@ -177,10 +177,14 @@ export default {
     padding: 4px;
     background-color: #f1e7c9;
     border-radius: 3px;
+
+  }
+
+  ul.slots li.clickable {
     cursor: pointer;
   }
 
-  ul.slots li:hover {
+  ul.slots li.clickable:hover {
     background-color: #533a20;
   }
 </style>
