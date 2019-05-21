@@ -31,19 +31,19 @@
       <b-card-footer v-if="isCoordinator">
         <b-btn
           v-b-tooltip.hover
-          @click="$emit('add-slot', date)"
-          class="btn-sm"
-          title="Slot hinzufügen"
-        >
-          +
-        </b-btn>
-        <b-btn
-          v-b-tooltip.hover
           @click="$emit('remove-slot', date)"
           class="btn-sm"
           title="Slot entfernen"
         >
-          -
+          {{ $i18n('pickup.remove_slot') }}
+        </b-btn>
+        <b-btn
+          v-b-tooltip.hover
+          @click="$emit('add-slot', date)"
+          class="btn-sm"
+          title="Slot hinzufügen"
+        >
+          {{ $i18n('pickup.add_slot') }}
         </b-btn>
       </b-card-footer>
     </b-card>
