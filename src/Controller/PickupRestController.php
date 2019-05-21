@@ -51,7 +51,7 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Post("stores/{storeId}/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
+	 * @Rest\Post("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 */
 	public function joinPickupAction(int $storeId, string $pickupDate, int $fsId)
 	{
@@ -75,7 +75,7 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Delete("stores/{storeId}/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
+	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 *
 	 * @param int $storeId
 	 * @param string $pickupDate
@@ -97,7 +97,7 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Patch("stores/{storeId}/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
+	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 * @Rest\RequestParam(name="isConfirmed", nullable=true, default=null)
 	 */
 	public function editPickupSlotAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher)
@@ -118,9 +118,8 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Patch("stores/{storeId}/{pickupDate}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+"})
-	 * @Rest\RequestParam(name="addSlot", nullable=true, default=null)
-	 * @Rest\RequestParam(name="removeSlot", nullable=true, default=null)
+	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+"})
+	 * @Rest\RequestParam(name="totalSlots", nullable=true, default=null)
 	 */
 	public function editPickupAction(int $storeId, string $pickupDate, ParamFetcher $paramFetcher)
 	{
@@ -130,13 +129,9 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 
-		if ($paramFetcher->get('addSlot')) {
-			if (!$this->storeService->changePickupSlots($storeId, $date, 1)) {
-				throw new HttpException(400);
-			}
-		}
-		if ($paramFetcher->get('removeSlot')) {
-			if (!$this->storeService->changePickupSlots($storeId, $date, -1)) {
+		$totalSlots = $paramFetcher->get('totalSlots');
+		if (!is_null($totalSlots)) {
+			if (!$this->storeService->changePickupSlots($storeId, $date, $totalSlots)) {
 				throw new HttpException(400);
 			}
 		}

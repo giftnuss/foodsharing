@@ -33,8 +33,8 @@
             @kick="kick"
             @join="join"
             @confirm="confirm"
-            @add-slot="addSlot"
-            @remove-slot="removeSlot"
+            @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
+            @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
             class="mb-2"
           />
         </template>
@@ -45,7 +45,7 @@
 
 <script>
 import Pickup from './Pickup'
-import { addPickupSlot, removePickupSlot, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
+import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
 import { user } from '@/server-data'
 import { ajreq, pulseError } from '@/script'
 import bBtn from '@b/components/button/button'
@@ -114,21 +114,12 @@ export default {
       }
       this.reload()
     },
-    async addSlot (date) {
+    async setSlots (date, totalSlots) {
       this.isLoading = true
       try {
-        await addPickupSlot(this.storeId, date)
+        await setPickupSlots(this.storeId, date, totalSlots)
       } catch (e) {
-        pulseError('add slot failed: ' + e)
-      }
-      this.reload()
-    },
-    async removeSlot (date) {
-      this.isLoading = true
-      try {
-        await removePickupSlot(this.storeId, date)
-      } catch (e) {
-        pulseError('remove slot failed: ' + e)
+        pulseError('change slot count failed: ' + e)
       }
       this.reload()
     },

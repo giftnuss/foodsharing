@@ -3,7 +3,7 @@ import parse from 'date-fns/parse'
 
 export async function joinPickup (storeId, pickupDate, fsId) {
   const date = pickupDate.toISOString()
-  return post(`/stores/${storeId}/${date}/${fsId}`)
+  return post(`/stores/${storeId}/pickups/${date}/${fsId}`)
 }
 
 export async function listPickups (storeId) {
@@ -17,20 +17,15 @@ export async function listPickups (storeId) {
 
 export async function leavePickup (storeId, pickupDate, fsId) {
   const date = pickupDate.toISOString()
-  return remove(`/stores/${storeId}/${date}/${fsId}`)
+  return remove(`/stores/${storeId}/pickups/${date}/${fsId}`)
 }
 
 export async function confirmPickup (storeId, pickupDate, fsId) {
   const date = pickupDate.toISOString()
-  return patch(`/stores/${storeId}/${date}/${fsId}`, { isConfirmed: true })
+  return patch(`/stores/${storeId}/pickups/${date}/${fsId}`, { isConfirmed: true })
 }
 
-export async function removePickupSlot (storeId, pickupDate) {
+export async function setPickupSlots (storeId, pickupDate, totalSlots) {
   const date = pickupDate.toISOString()
-  return patch(`/stores/${storeId}/${date}`, { removeSlot: true })
-}
-
-export async function addPickupSlot (storeId, pickupDate) {
-  const date = pickupDate.toISOString()
-  return patch(`/stores/${storeId}/${date}`, { addSlot: true })
+  return patch(`/stores/${storeId}/pickups/${date}`, { totalSlots: totalSlots })
 }

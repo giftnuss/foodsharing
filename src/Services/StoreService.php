@@ -168,23 +168,21 @@ class StoreService
 	 *   * handle transition between regular and additional pickup
 	 *   * (does not convert additional back to regular as the gain is little).
 	 */
-	public function changePickupSlots(int $storeId, Carbon $date, int $add): bool
+	public function changePickupSlots(int $storeId, Carbon $date, int $newTotalSlots): bool
 	{
 		$occupiedSlots = count($this->storeGateway->getPickupSignupsForDate($storeId, $date));
 		$pickups = $this->storeGateway->getSinglePickupsForRange($storeId, $date, $date);
 		if (!$pickups) {
 			$previousCount = $this->storeGateway->getRegularPickup($storeId, $date->weekday(), $date->toTimeString());
-			$newCount = $previousCount + $add;
-			if ($newCount >= 0 && $newCount <= self::MAX_SLOTS_PER_PICKUP && $newCount >= $occupiedSlots) {
-				$this->storeGateway->addSinglePickup($storeId, $date, $newCount);
+			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
+				$this->storeGateway->addSinglePickup($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}
 		} else {
 			$previousCount = $pickups[0]['fetcher'];
-			$newCount = $previousCount + $add;
-			if ($newCount >= 0 && $newCount <= self::MAX_SLOTS_PER_PICKUP && $newCount >= $occupiedSlots) {
-				$this->storeGateway->updateSinglePickupTotalSlots($storeId, $date, $newCount);
+			if ($newTotalSlots >= 0 && $newTotalSlots <= self::MAX_SLOTS_PER_PICKUP && $newTotalSlots >= $occupiedSlots) {
+				$this->storeGateway->updateSinglePickupTotalSlots($storeId, $date, $newTotalSlots);
 			} else {
 				return false;
 			}
