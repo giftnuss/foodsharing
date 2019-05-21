@@ -941,7 +941,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 * @param int $storeId
 	 * @param \DateTime $from DateRange start for all slots. Now if empty.
 	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
-	 * @param \DateTime $additionalTo DateRange for additional slots to be taken into account
+	 * @param \DateTime $additionalTo DateRange for onetime slots to be taken into account
 	 *
 	 * @return array
 	 */
@@ -951,7 +951,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$from = $from ?? Carbon::now()->sub('2 hours');
 		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
 		$regularSlots = $this->getRegularPickups($storeId);
-		$additionalSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
+		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
 		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $to);
 
 		$slots = [];
@@ -964,7 +964,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				$date->addDays(7);
 			}
 			while ($date <= $to) {
-				if (empty(array_filter($additionalSlots, function ($e) use ($date) {
+				if (empty(array_filter($onetimeSlots, function ($e) use ($date) {
 					return $date == $e['date'];
 				}))) {
 					/* only take this regular slot into account when there is no manual slot for the same time */
@@ -993,7 +993,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				$date = $date->copy()->addDays(7);
 			}
 		}
-		foreach ($additionalSlots as $slot) {
+		foreach ($onetimeSlots as $slot) {
 			$occupiedSlots = array_map(
 				function ($e) {
 					return ['foodsaverId' => $e['foodsaver_id'], 'isConfirmed' => (bool)$e['confirmed']];
@@ -1009,7 +1009,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				Do show them, when somebody is signed up (although this should not happen) */
 				continue;
 			}
-			/* Additional slots are always in the future available for signups */
+			/* Onetime slots are always in the future available for signups */
 			$isAvailable =
 				$slot['date'] > Carbon::now() &&
 				$slot['fetcher'] > count($occupiedSlots);

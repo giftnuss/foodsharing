@@ -64,39 +64,12 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		$date = $this->parsePickupDate($pickupDate);
-		$confirmed = $this->storePermissions->hasPreconfirmedPickup($storeId);
 
-		/* Never occupy more slots than available */
-		if (!$this->pickupSlotAvailable($storeId, $date)) {
-			throw new HttpException(400, 'No pickup slot available');
-		}
-
-		/* never signup a person twice */
-		if (!empty(array_filter($this->storeGateway->getPickupSignupsForDate($storeId, $date),
-			function ($e) use ($fsId) { return $e['foodsaver_id'] === $fsId; }))) {
-			throw new HttpException(400, 'Already signed in');
-		}
-
-		$this->storeGateway->addFetcher($fsId, $storeId, $date, $confirmed);
+		$confirmed = $this->storeService->joinPickup($storeId, $date, $fsId, $this->session->id());
 
 		return $this->handleView($this->view([
 			'confirmed' => $confirmed
 		], 200));
-	}
-
-	private function pickupSlotAvailable(int $storeId, Carbon $pickupDate): bool
-	{
-		if ($pickupDate < Carbon::now()) {
-			/* do not allow signing up for past pickups */
-			return false;
-		}
-
-		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
-		if (count($pickupSlots) == 1 && $pickupSlots[0]['available']) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
