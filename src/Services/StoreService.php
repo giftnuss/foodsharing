@@ -83,7 +83,11 @@ class StoreService
 			$date = $from->copy();
 			$date->addDays($this->realMod($slot['dow'] - $date->format('w'), 7));
 			$date->setTimeFromTimeString($slot['time']);
-			while ($date >= $from && $date <= $to) {
+			if ($date < $from) {
+				/* setting time could shift it into past */
+				$date->addDays(7);
+			}
+			while ($date <= $to) {
 				if (empty(array_filter($additionalSlots, function ($e) use ($date) {
 					return $date == $e['date'];
 				}))) {

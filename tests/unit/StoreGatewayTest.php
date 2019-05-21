@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class StoreGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -94,7 +96,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$date = '2018-07-19 12:35:00';
 		$expectedIsoDate = '2018-07-19T12:35:00Z';
 		$fetcher = 1;
-		$internalDate = DateTime::createFromFormat(DATE_ATOM, $expectedIsoDate);
+		$internalDate = Carbon::createFromFormat(DATE_ATOM, $expectedIsoDate);
 		$this->assertEquals($internalDate->format('Y-m-d H:i:s'), $date);
 		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetcher]);
 		$irregularSlots = $this->gateway->getSinglePickups($store['id'], $internalDate);
