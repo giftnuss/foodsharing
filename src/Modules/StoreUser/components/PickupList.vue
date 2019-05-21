@@ -75,7 +75,12 @@ export default {
   methods: {
     async reload () {
       this.isLoading = true
-      this.pickups = await listPickups(this.storeId)
+      try {
+        this.pickups = await listPickups(this.storeId)
+      } catch (e) {
+        pulseError('failed loading pickup list ' + e)
+      }
+
       this.isLoading = false
     },
     async join (date) {

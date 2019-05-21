@@ -477,7 +477,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsId,
 			'betrieb_id' => $bid,
-			'date' => $this->timeHelper->toDbDateTime($date),
+			'date' => $this->db->date($date),
 			'confirmed' => $confirmed
 		]);
 		$this->updateBellNotificationForBiebs($bid);
@@ -490,7 +490,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$deletedRows = $this->db->delete('fs_abholer', [
 			'foodsaver_id' => $fsId,
 			'betrieb_id' => $bid,
-			'date' => $this->timeHelper->toDbDateTime($date)
+			'date' => $this->db->date($date)
 		]);
 		$this->updateBellNotificationForBiebs($bid);
 
@@ -552,7 +552,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->update(
 		'fs_abholer',
 			['confirmed' => 1],
-			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $this->timeHelper->toDbDateTime($date)]
+			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $this->db->date($date)]
 		);
 
 		$this->updateBellNotificationForBiebs($bid);
@@ -735,11 +735,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->fetchAllByCriteria(
 			'fs_abholer',
 			['foodsaver_id', 'date', 'confirmed'],
-			['date >=' => $this->timeHelper->toDbDateTime($from), 'date <=' => $this->timeHelper->toDbDateTime($to), 'betrieb_id' => $storeId]
+			['date >=' => $this->db->date($from), 'date <=' => $this->db->date($to), 'betrieb_id' => $storeId]
 		);
 
 		return array_map(function ($e) {
-			$e['date'] = $this->timeHelper->fromDbDateTime($e['date']);
+			$e['date'] = $this->db->parseDate($e['date']);
 
 			return $e;
 		}, $result);
@@ -779,12 +779,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
-			'time >=' => $this->timeHelper->toDbDateTime($from)
+			'time >=' => $this->db->date($from)
 		];
 		if ($to) {
 			$condition = array_merge($condition,
 				[
-					'time <=' => $this->timeHelper->toDbDateTime($to)
+					'time <=' => $this->db->date($to)
 				]
 			);
 		}
@@ -796,7 +796,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		return array_map(function ($e) {
 			return [
-				'date' => $this->timeHelper->fromDbDateTime($e['time']),
+				'date' => $this->db->parseDate($e['time']),
 				'fetcher' => $e['fetchercount']
 			];
 		}, $result);
@@ -808,7 +808,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'fs_fetchdate',
 			[
 				'betrieb_id' => $storeId,
-				'time' => $this->timeHelper->toDbDateTime($date),
+				'time' => $this->db->date($date),
 				'fetchercount' => $slots
 			]
 		);
@@ -821,7 +821,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['fetchercount' => $slots],
 			[
 				'betrieb_id' => $storeId,
-				'time' => $this->timeHelper->toDbDateTime($date)
+				'time' => $this->db->date($date)
 			]
 		) === 1;
 	}

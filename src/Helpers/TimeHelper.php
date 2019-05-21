@@ -71,14 +71,4 @@ final class TimeHelper
 			0 => $this->translationHelper->s('sunday'),
 		];
 	}
-
-	public function toDbDateTime(Carbon $date): string
-	{
-		return $date->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
-	}
-
-	public function fromDbDateTime(string $date): Carbon
-	{
-		return Carbon::createFromFormat('Y-m-d H:i:s', $date, 'Europe/Berlin');
-	}
 }
