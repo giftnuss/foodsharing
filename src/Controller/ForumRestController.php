@@ -250,7 +250,9 @@ class ForumRestController extends AbstractFOSRestController
 	{
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 
-		$this->throwExceptionIfNotAllowedToAccessThread($threadId);
+		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
+		}
 
 		$this->forumService->addReaction($this->session->id(), $postId, $emoji);
 
