@@ -94,6 +94,7 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 - Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
 - Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
+- Refactored conversations API and related javascript !592 @theolampert
 
 ## Dev/Test/CI stuff
 - Adjust devdocs to being open source !823 @flukx
