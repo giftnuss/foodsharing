@@ -42,7 +42,7 @@ import {
   createUnconfirmedMenu,
   addContextMenu
 } from './StoreUser.lib'
-import { signup } from '@/api/stores'
+import { joinPickup } from '@/api/stores'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
 
@@ -260,7 +260,7 @@ $('#timedialog').dialog({
     'Eintragen': async function () {
       const requestDate = ($('#timedialog-date').val()).replace(' ', 'T') + 'Z'
       try {
-        const result = await signup(store.id, requestDate)
+        const result = await joinPickup(store.id, requestDate, user.id)
         u_clearDialogs()
         const timedialogId = $('#timedialog-id').val()
         const $button = $(`#${timedialogId}-button`)

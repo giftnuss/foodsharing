@@ -1,10 +1,8 @@
 <template>
   <div
-    :class="{disabledLoading: isLoading}"
     class="container bootstrap"
   >
     <div
-      v-if="!isLoading"
       class="card rounded"
     >
       <div class="card-header text-white bg-primary">
@@ -14,12 +12,30 @@
           </div>
         </div>
       </div>
-      <div class="card-body">
+      <div
+        :class="{disabledLoading: isLoading}"
+        class="card-body text-center"
+      >
+        <b-btn
+          v-if="isCoordinator"
+          @click="loadAddPickupModal"
+          class="m-2"
+        >
+          Zusatztermin eintragen
+        </b-btn>
         <template v-for="pickup in pickups">
           <Pickup
             v-bind="pickup"
             :store-id="storeId"
-            :store-coordinator="storeCoordinator"
+            :is-coordinator="isCoordinator"
+            :user="user"
+            @leave="leave"
+            @kick="kick"
+            @join="join"
+            @confirm="confirm"
+            @add-slot="addSlot"
+            @remove-slot="removeSlot"
+            class="mb-2"
           />
         </template>
       </div>
@@ -29,16 +45,19 @@
 
 <script>
 import Pickup from './Pickup'
-import { listPickups } from '@/api/stores'
+import { addPickupSlot, removePickupSlot, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
+import { user } from '@/server-data'
+import { ajreq, pulseError } from '@/script'
+import bBtn from '@b/components/button/button'
 
 export default {
-  components: { Pickup },
+  components: { bBtn, Pickup },
   props: {
     storeId: {
       type: Number,
       default: null
     },
-    storeCoordinator: {
+    isCoordinator: {
       type: Boolean,
       default: false
     }
@@ -46,8 +65,8 @@ export default {
   data () {
     return {
       pickups: [],
-
-      isLoading: false
+      isLoading: false,
+      user: user
     }
   },
   async created () {
@@ -58,6 +77,69 @@ export default {
       this.isLoading = true
       this.pickups = await listPickups(this.storeId)
       this.isLoading = false
+    },
+    async join (date) {
+      this.isLoading = true
+      try {
+        await joinPickup(this.storeId, date, this.user.id)
+      } catch (e) {
+        pulseError('join failed: ' + e)
+      }
+      this.reload()
+    },
+    async leave (date) {
+      this.isLoading = true
+      try {
+        await leavePickup(this.storeId, date, this.user.id)
+      } catch (e) {
+        pulseError('leave failed: ' + e)
+      }
+      this.reload()
+    },
+    async kick (data) {
+      this.isLoading = true
+      try {
+        await leavePickup(this.storeId, data.date, data.fsId)
+      } catch (e) {
+        pulseError('kick failed: ' + e)
+      }
+      this.reload()
+    },
+    async confirm (data) {
+      this.isLoading = true
+      try {
+        await confirmPickup(this.storeId, data.date, data.fsId)
+      } catch (e) {
+        pulseError('confirm failed: ' + e)
+      }
+      this.reload()
+    },
+    async addSlot (date) {
+      this.isLoading = true
+      try {
+        await addPickupSlot(this.storeId, date)
+      } catch (e) {
+        pulseError('add slot failed: ' + e)
+      }
+      this.reload()
+    },
+    async removeSlot (date) {
+      this.isLoading = true
+      try {
+        await removePickupSlot(this.storeId, date)
+      } catch (e) {
+        pulseError('remove slot failed: ' + e)
+      }
+      this.reload()
+    },
+    loadAddPickupModal () {
+      ajreq(
+        'adddate',
+        {
+          app: 'betrieb',
+          id: this.storeId
+        }
+      )
     }
   }
 }

@@ -158,11 +158,20 @@ store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
 
 pickup:
-  really_kick: Benutzer wirklich aus der Abholung austragen?
-  really_leave: Wirklich aus der Abholung austragen?
-  really_kick_user_pickup_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
-  really_leave_pickup_date: Möchtest Du Dich wirklich aus der Abholung am {date} austragen?
-
+  really_kick_user_date_title: '{name} für {date} austragen?'
+  really_leave_date_title: Für {date} austragen?
+  really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
+  really_leave_date: Hast du eine Vertretung für {date}, sodass die Abholung gewährleistet ist?
+  leave_pickup_ok: Ja, austragen
+  leave_pickup_message_team: Nein, Team benachrichtigen
+  leave_team_message_title: Nachricht an Team
+  leave_team_message_template: Hallo Team, leider kann ich das Pickup am {date} nicht durchführen. Wer kann für mich einspringen? Und ich will mal gucken wie groß die textarea so ist, deswegen hier ein ordentlich langer Text ob das wohl automatisch ein größeres Feld ergibt? Ich werde sehen!
+  team_message_send_and_leave: Senden und austragen
+  join_title_date: Verbindlich für {date} eintragen?
+  really_join_date: Möchtest Du dich für die Abholung am {date} verbindlich eintragen?
+  join_cancel: Doch nicht
+  join_agree: Ja, verbindlich eintragen
+  take_empty_slot: Hier eintragen
 
 forum:
   from: Von %name%
