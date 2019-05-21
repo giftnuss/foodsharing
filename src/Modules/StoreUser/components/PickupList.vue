@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container bootstrap"
+    class="bootstrap"
   >
     <div
       class="card rounded"
@@ -93,7 +93,8 @@ export default {
       try {
         await joinPickup(this.storeId, date, this.user.id)
       } catch (e) {
-        pulseError('join failed: ' + e)
+        console.error(e)
+        pulseError('Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemensch anderes wohl schneller war.<br /><br />Versuche es ansonsten einfach noch mal!')
       }
       this.reload()
     },
