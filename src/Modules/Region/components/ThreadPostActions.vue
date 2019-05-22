@@ -48,7 +48,7 @@
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
-      @click="$refs.modal.show()"
+      @click="showModal"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
     >
@@ -117,6 +117,9 @@ export default {
     }
   },
   methods: {
+    showModal () {
+      this.$refs['modal'].show()
+    },
     toggleReaction (key, dontRemove = false) {
       if (this.gaveIThisReaction(key)) {
         if (!dontRemove) this.$emit('reactionRemove', key)
