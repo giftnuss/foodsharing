@@ -42,4 +42,46 @@ class RestNormalization
 
 		return $sleepStatus;
 	}
+
+	/**
+	 * Returns the response data for a store.
+	 *
+	 * @param array $data the store data from the database
+	 *
+	 * @return array
+	 */
+	public static function normalizeStore(array $data): array
+	{
+		return [
+			'id' => (int)$data['id'],
+			'name' => $data['name'],
+			'address' => self::normalizeAddress($data),
+			'group' => [
+				'id' => $data['bezirk_id'],
+				'name' => $data['bezirk'],
+			],
+			'lat' => (float)$data['lat'],
+			'lon' => (float)$data['lon'],
+			'phone' => $data['telefon'],
+			'fax' => $data['fax'],
+			'email' => $data['email'],
+			'contactPerson' => $data['verantwortlicher'],
+			'chainId' => (int)$data['kette_id'],
+			'storeCategoryId' => (int)$data['betrieb_kategorie_id'],
+			'cooperationStatus' => (int)$data['betrieb_status_id'],
+			'updatedAt' => $data['status_date'],
+			'teamStatus' => (int)$data['team_status'],
+			'notes' => $data['notizen']
+		];
+	}
+
+	public static function normalizeAddress(array $data): array
+	{
+		return [
+			'street' => $data['str'],
+			'houseNumber' => (int)$data['hsnr'],
+			'city' => $data['stadt'],
+			'postalCode' => (int)$data['plz']
+		];
+	}
 }
