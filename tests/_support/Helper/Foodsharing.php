@@ -112,6 +112,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
+			'geschlecht' => random_int(0, 2)
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
@@ -231,8 +232,12 @@ class Foodsharing extends \Codeception\Module\Db
 			'confirmed' => 1
 		], $extra_params);
 		$params['date'] = $this->toDateTime($params['date']);
-
-		$id = $this->haveInDatabase('fs_abholer', $params);
+		$res = $this->countInDatabase('fs_abholer', $params);
+		if ($res < 1) {
+			$id = $this->haveInDatabase('fs_abholer', $params);
+		} else {
+			$id = '1';
+		}
 		$params['id'] = $id;
 
 		return $params;

@@ -50,7 +50,7 @@
                   <div class="col nowrap text-right text-muted nhover">
                     {{ req.time | dateDistanceInWords }}
                   </div>
-                  <div class="text-right text-muted hover">
+                  <div class="col text-right text-muted hover">
                     <a
                       v-b-tooltip
                       @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
