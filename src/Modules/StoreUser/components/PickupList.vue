@@ -54,8 +54,9 @@
 import bTooltip from '@b/directives/tooltip/tooltip'
 import Pickup from './Pickup'
 import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
+import { sendMessage } from '@/api/conversations'
 import { user } from '@/server-data'
-import { ajreq, pulseError } from '@/script'
+import { ajreq, pulseError, pulseSuccess } from '@/script'
 
 export default {
   components: { Pickup },
@@ -151,9 +152,13 @@ export default {
       this.reload()
     },
     async sendTeamMessage (msg) {
-      pulseError('Message sending not implemented!')
-      console.error('Not implemented yet, will be done in separate MR')
-      console.log('would send message', msg)
+      try {
+        await sendMessage(this.teamConversationId, msg)
+        pulseSuccess('Nachricht wurde erfolgreich versendet')
+      } catch (e) {
+        console.error(e)
+        pulseError('Error while sending message')
+      }
     },
     loadAddPickupModal () {
       ajreq(
