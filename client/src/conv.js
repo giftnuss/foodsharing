@@ -3,12 +3,13 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { ajax, GET, goTo, isMob, nl2br } from '@/script'
+import { ajax, GET, goTo, isMob, nl2br, pulseError } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
+import { sendMessage } from '@/api/conversations'
 
 const conv = {
 
@@ -165,7 +166,7 @@ const conv = {
     conv.chatboxes[key].minimized = true
   },
 
-  checkInputKey: function (event, chatboxtextarea, cid) {
+  checkInputKey: async function (event, chatboxtextarea, cid) {
     var $ta = $(chatboxtextarea)
     var val = $ta.val().trim()
 
@@ -182,20 +183,14 @@ const conv = {
       // eslint-disable-next-line no-control-regex
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
-      ajax.req('msg', 'sendmsg', {
-        loader: false,
-        method: 'post',
-        data: {
-          c: cid,
-          b: val
-        },
-        complete: function () {
-          conv.hideLoader(cid)
-
-          // reload conversations
-          conversationStore.loadConversations()
-        }
-      })
+      try {
+        await sendMessage(cid, val)
+        conversationStore.loadConversations()
+      } catch (err) {
+        console.error(err)
+        pulseError('Beim versenden der Nachricht ist leider ein Fehler aufgetreten')
+      }
+      conv.hideLoader(cid)
     }
   },
 
