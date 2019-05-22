@@ -1,50 +1,65 @@
 <template>
   <div>
-    <b-card
-      :title="date | dateFormat('full-long')"
-      title-tag="span"
-    >
-      <b-card-text
-        class="clearfix"
-      >
-        <ul class="slots">
-          <TakenSlot
-            v-for="slot in occupiedSlots"
-            :key="slot.profile.id"
-            :profile="slot.profile"
-            :confirmed="slot.isConfirmed"
-            :allow-leave="slot.profile.id == user.id"
-            :allow-kick="isCoordinator"
-            :allow-confirm="isCoordinator"
-            :allow-chat="slot.profile.id !== user.id"
-            @leave="$refs.modal_leave.show()"
-            @kick="activeSlot = slot; $refs.modal_kick.show()"
-            @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
-          />
-          <EmptySlot
-            v-for="n in emptySlots"
-            :allow-join="!isUserParticipant && !isInPast && n == 1"
-            :allow-remove="isCoordinator && n == emptySlots"
-            :key="n"
-            @join="$refs.modal_join.show()"
-            @remove="$emit('remove-slot', date)"
-          />
-          <li
-            v-if="isCoordinator && totalSlots < 10"
-            @click="$emit('add-slot', date)"
+    <div class="card pickup">
+      <div class="card-body">
+        <div class="card-title row">
+          <div :class="{col: true, 'text-truncate':true, 'font-weight-bold': isToday}">
+            {{ date | dateFormat('full-long') }}
+          </div>
+          <div
+            v-if="isCoordinator"
+            class="col-2 p-0 remove"
           >
             <button
               v-b-tooltip.hover
-              type="button"
-              class="btn secondary"
-              title="Slot hinzufügen"
+              @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
+              class="btn btn-sm p-0"
+              title="Abholtermin entfernen"
             >
-              <i class="fa fa-plus" />
+              <i class="fa fa-times" />
             </button>
-          </li>
-        </ul>
-      </b-card-text>
-    </b-card>
+          </div>
+        </div>
+        <p class="card-text clearfix">
+          <ul class="slots">
+            <TakenSlot
+              v-for="slot in occupiedSlots"
+              :key="slot.profile.id"
+              :profile="slot.profile"
+              :confirmed="slot.isConfirmed"
+              :allow-leave="slot.profile.id == user.id"
+              :allow-kick="isCoordinator"
+              :allow-confirm="isCoordinator"
+              :allow-chat="slot.profile.id !== user.id"
+              @leave="$refs.modal_leave.show()"
+              @kick="activeSlot = slot; $refs.modal_kick.show()"
+              @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
+            />
+            <EmptySlot
+              v-for="n in emptySlots"
+              :allow-join="!isUserParticipant && !isInPast && n == 1"
+              :allow-remove="isCoordinator && n == emptySlots"
+              :key="n"
+              @join="$refs.modal_join.show()"
+              @remove="$emit('remove-slot', date)"
+            />
+            <li
+              v-if="isCoordinator && totalSlots < 10"
+              @click="$emit('add-slot', date)"
+            >
+              <button
+                v-b-tooltip.hover
+                type="button"
+                class="btn secondary"
+                title="Slot hinzufügen"
+              >
+                <i class="fa fa-plus" />
+              </button>
+            </li>
+          </ul>
+        </p>
+      </div>
+    </div>
     <b-modal
       ref="modal_join"
       v-model="showJoinModal"
@@ -89,21 +104,36 @@
         rows="4"
       />
     </b-modal>
+    <b-modal
+      ref="modal_delete_error"
+      :title="$i18n('pickup.delete_title')"
+      ok-only
+    >
+      <p>{{ $i18n('pickup.delete_not_empty', {'date': $dateFormat(date, 'full-long')}) }}</p>
+    </b-modal>
+    <b-modal
+      ref="modal_delete"
+      :title="$i18n('pickup.delete_title')"
+      :cancel-title="$i18n('button.abort')"
+      :ok-title="$i18n('yes')"
+      @ok="$emit('delete', date)"
+    >
+      <p>{{ $i18n('pickup.really_delete_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import bCard from '@b/components/card/card'
-import bCardText from '@b/components/card/card-text'
 import bFormTextarea from '@b/components/form-textarea/form-textarea'
 import bModal from '@b/components/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
 import dateFnsCompareAsc from 'date-fns/compare_asc'
+import isSameDay from 'date-fns/is_same_day'
 
 export default {
-  components: { EmptySlot, TakenSlot, bCard, bCardText, bFormTextarea, bModal },
+  components: { EmptySlot, TakenSlot, bFormTextarea, bModal },
   directives: { bTooltip },
   props: {
     storeId: {
@@ -156,6 +186,9 @@ export default {
     isInPast () {
       return dateFnsCompareAsc(new Date(), this.date) >= 1
     },
+    isToday () {
+      return isSameDay(this.date, new Date())
+    },
     emptySlots () {
       return this.totalSlots - this.occupiedSlots.length
     }
@@ -196,5 +229,12 @@ export default {
   ul.slots >>> .btn[disabled]:hover {
       border-color: #f1e7c9;
       cursor: default;
+  }
+  .pickup .remove {
+    display: none;
+    margin-top: -0.1rem;
+  }
+  .pickup:hover .remove {
+    display: block;
   }
 </style>

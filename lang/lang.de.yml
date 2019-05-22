@@ -172,6 +172,9 @@ pickup:
   join_cancel: Doch nicht
   join_agree: Ja, verbindlich eintragen
   take_empty_slot: Hier eintragen
+  delete_title: Abholtermin löschen
+  really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
+  delete_not_empty: Aktuell sind noch Menschen eingetragen. Du kannst diese Aholung erst löschen, sobald sie leer ist.  
 
 forum:
   from: Von %name%

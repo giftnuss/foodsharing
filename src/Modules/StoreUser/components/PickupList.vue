@@ -38,6 +38,7 @@
             @kick="kick"
             @join="join"
             @confirm="confirm"
+            @delete="setSlots(pickup.date, 0)"
             @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
             @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
             @team-message="sendTeamMessage"
