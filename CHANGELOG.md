@@ -15,6 +15,7 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
 - update null-loader to version 2 @peter.toennies
 
 # 2019-05-17 Hotfix
