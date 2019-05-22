@@ -13,13 +13,13 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class MessageRestController extends AbstractFOSRestController
 {
 	private $model;
-	private $gateway;
+	private $messageGateway;
 	private $session;
 
-	public function __construct(MessageModel $model, MessageGateway $gateway, Session $session)
+	public function __construct(MessageModel $model, MessageGateway $messageGateway, Session $session)
 	{
 		$this->model = $model;
-		$this->gateway = $gateway;
+		$this->messageGateway = $messageGateway;
 		$this->session = $session;
 	}
 
@@ -110,15 +110,10 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		// Filter out any conversations with the wrong member type (this should rarely happen).
-		$conversations = array_filter(
-			$this->model->listConversations($limit, $offset),
-			function ($c) {
-				return is_array($c['member']);
-			});
+		$conversations = $this->messageGateway->listConversationsForUserIncludeProfiles($this->session->id(), $limit, $offset);
 
-		$view = $this->view($conversations, 200);
-
-		return $this->handleView($view);
+		return $this->handleView($this->view([
+			'data' => $conversations
+		], 200));
 	}
 }

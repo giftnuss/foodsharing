@@ -6,10 +6,13 @@ use Foodsharing\Modules\Core\Control;
 
 final class MessageControl extends Control
 {
-	public function __construct(MessageModel $model, MessageView $view)
+	private $messageGateway;
+
+	public function __construct(MessageModel $model, MessageGateway $messageGateway, MessageView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->messageGateway = $messageGateway;
 
 		parent::__construct();
 
@@ -34,7 +37,7 @@ final class MessageControl extends Control
 			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
 		}
 
-		$conversations = $this->model->listConversations();
+		$conversations = $this->messageGateway->listConversationsForUser($this->session->id());
 		if ($conversations) {
 			$ids = array();
 			foreach ($conversations as $c) {

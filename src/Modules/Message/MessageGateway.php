@@ -143,4 +143,120 @@ final class MessageGateway extends BaseGateway
 				m.`time` ASC
 		', [':conv_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
 	}
+
+	/**
+	 * Method returns an array of all conversations a given user is part of.
+	 *
+	 * @param int $limit
+	 * @param int $offset
+	 *
+	 * @return array
+	 */
+	public function listConversationsForUser(int $fsId, int $limit = null, int $offset = 0)
+	{
+		$paginate = null;
+		if ($limit !== null) {
+			$paginate = ' LIMIT :offset, :limit';
+		}
+
+		$query = '
+			SELECT
+				c.`id`,
+				c.`last` AS last_message_at,
+				c.`last_message`,
+				c.`last_foodsaver_id` AS last_message_author_id,
+				hc.unread,
+				c.name
+
+			FROM
+				fs_conversation c,
+				`fs_foodsaver_has_conversation` hc
+
+			WHERE
+				hc.conversation_id = c.id
+
+			AND
+				hc.foodsaver_id = :fsId
+				
+			AND
+			    c.last_message <> ""
+
+			ORDER BY
+				hc.unread DESC,
+				c.`last` DESC';
+		if ($paginate) {
+			$conversations = $this->db->fetchAll($query . $paginate, [':fsId' => $fsId, ':offset' => $offset, ':limit' => $limit]);
+		} else {
+			$conversations = $this->db->fetchAll($query, [':fsId' => $fsId]);
+		}
+
+		array_walk($conversations, function (&$c) {
+			$c['last_message'] = new \DateTime($c['last_message_at']);
+			$c['unread'] = (bool)$c['unread'];
+		});
+
+		return $conversations;
+	}
+
+	private function getProfileForUsers(array $fsIds): array
+	{
+		return $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			['id', 'name', 'photo', 'sleep_status'],
+			['id' => $fsIds]);
+	}
+
+	private function getMembersForConversations(array $cids): array
+	{
+		if ($cids) {
+			$placeholders = $this->db->generatePlaceholders(count($cids));
+
+			$results = $this->db->fetchAll('
+					SELECT
+						conversation_id,
+						GROUP_CONCAT(foodsaver_id) as members
+					FROM fs_foodsaver_has_conversation
+					WHERE conversation_id IN (' . $placeholders . ') GROUP BY conversation_id',
+				$cids
+			);
+			$indexedResult = [];
+			foreach ($results as $result) {
+				$indexedResult[$result['conversation_id']] = explode(',', $result['members']);
+			}
+
+			return $indexedResult;
+		}
+
+		return [];
+	}
+
+	private function flatten(array $array)
+	{
+		$return = array();
+		array_walk_recursive($array, function ($a) use (&$return) { $return[] = $a; });
+
+		return $return;
+	}
+
+	public function listConversationsForUserIncludeProfiles(int $fsId, int $limit = null, int $offset = 0): array
+	{
+		$conversations = $this->listConversationsForUser($fsId, $limit, $offset);
+		$cids = array_column($conversations, 'id');
+		$members = $this->getMembersForConversations($cids);
+		$allUserIds = array_unique($this->flatten($members));
+		$profiles = $this->getProfileForUsers($allUserIds);
+		$indexedProfiles = [];
+		foreach ($profiles as $profile) {
+			$indexedProfiles[$profile['id']] = $profile;
+		}
+		array_walk($conversations, function (&$c) use ($members, $indexedProfiles) {
+			$res = [];
+			foreach ($members[$c['id']] as $member) {
+				$res[] = $indexedProfiles[$member];
+			}
+			$c['members'] = $res;
+		});
+
+		return $conversations;
+	}
 }
