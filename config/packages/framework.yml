@@ -9,7 +9,9 @@ framework:
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
-    exception: true
+    exception:
+        codes:
+            'DomainException': 409
     format_listener:
         rules:
           - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
