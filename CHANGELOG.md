@@ -1,3 +1,8 @@
+# 2019-06-09 Hotfix
+- InfluxDB Metrics via UDP !882 @alangecker
+- Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
+- Updated deployment for new production server
+
 # 2019-05-17 Hotfix
 
 - Clarify message when you cannot sign up for a pickup.
