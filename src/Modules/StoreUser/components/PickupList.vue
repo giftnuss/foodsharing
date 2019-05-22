@@ -6,20 +6,34 @@
       class="card rounded"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row">
-          <div class="col text-truncate ml-2 pt-1 font-weight-bold">
-            Nächste Abholtermine
+        <div class="row align-items-center">
+          <div class="col text-truncate font-weight-bold">
+            Abholtermine
           </div>
-          <div class="col col-2 p-0">
-            <button
-              v-if="isCoordinator"
-              v-b-tooltip
-              @click="loadAddPickupModal"
-              class="btn btn-secondary btn-sm"
-              title="Zusatztermin eintragen"
+          <div class="col col-5 text-right">
+            <div
+              class="btn-group"
+              role="group"
             >
-              <i class="fa fa-plus" />
-            </button>
+              <button
+                v-if="isCoordinator"
+                v-b-tooltip
+                @click="loadEditRecurringPickupModal"
+                class="btn btn-secondary btn-sm"
+                title="Regelmäßige Abholzeiten bearbeiten"
+              >
+                <i class="fa fa-pen" />
+              </button>
+              <button
+                v-if="isCoordinator"
+                v-b-tooltip
+                @click="loadAddPickupModal"
+                class="btn btn-secondary btn-sm"
+                title="Zusatztermin eintragen"
+              >
+                <i class="fa fa-plus" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -57,6 +71,7 @@ import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } f
 import { sendMessage } from '@/api/conversations'
 import { user } from '@/server-data'
 import { ajreq, pulseError, pulseSuccess } from '@/script'
+import $ from 'jquery'
 
 export default {
   components: { Pickup },
@@ -168,6 +183,10 @@ export default {
           id: this.storeId
         }
       )
+    },
+    loadEditRecurringPickupModal () {
+      $('#bid').val(this.storeId)
+      $('#dialog_abholen').dialog('open')
     }
   }
 }
