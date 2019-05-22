@@ -68,6 +68,10 @@ export default {
     isCoordinator: {
       type: Boolean,
       default: false
+    },
+    teamConversationId: {
+      type: Number,
+      default: null
     }
   },
   data () {

@@ -246,7 +246,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich']]), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 
 				/*
 				 * Abholzeiten ändern
