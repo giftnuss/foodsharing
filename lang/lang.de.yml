@@ -165,7 +165,7 @@ pickup:
   leave_pickup_ok: Ich habe bereits Ersatz
   leave_pickup_message_team: Team benachrichtigen
   leave_team_message_title: Nachricht ans Team
-  leave_team_message_template: Hallo Team, leider kann ich das Pickup am {date} nicht durchführen. Wer kann für mich einspringen? Und ich will mal gucken wie groß die textarea so ist, deswegen hier ein ordentlich langer Text ob das wohl automatisch ein größeres Feld ergibt? Ich werde sehen!
+  leave_team_message_template: Liebes Team, meine Abholung am {date} ...
   team_message_send_and_leave: Senden und austragen
   join_title_date: Sicher?
   really_join_date: Möchtest Du Dich verbindlich für die Abholung am {date} eintragen?
