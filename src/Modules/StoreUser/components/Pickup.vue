@@ -59,9 +59,10 @@
     <b-modal
       ref="modal_leave"
       :title="$i18n('pickup.really_leave_date_title', {'date': $dateFormat(date, 'full-long')})"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('pickup.leave_pickup_message_team')"
       :ok-title="$i18n('pickup.leave_pickup_ok')"
       @ok="$emit('leave', date)"
+      @cancel="$refs.modal_team_message.show()"
       cancel-variant="primary"
       ok-variant="secondary"
     >
@@ -81,7 +82,7 @@
       :title="$i18n('pickup.leave_team_message_title')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('pickup.team_message_send_and_leave')"
-      @ok="$emit('team_message', teamMessage); $emit('leave', date)"
+      @ok="$emit('team-message', teamMessage); $emit('leave', date)"
     >
       <b-form-textarea
         v-model="teamMessage"

@@ -40,6 +40,7 @@
             @confirm="confirm"
             @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
             @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
+            @team-message="sendTeamMessage"
             class="mb-2"
           />
         </template>
@@ -143,6 +144,11 @@ export default {
         pulseError('change slot count failed: ' + e)
       }
       this.reload()
+    },
+    async sendTeamMessage (msg) {
+      pulseError('Message sending not implemented!')
+      console.error('Not implemented yet, will be done in separate MR')
+      console.log('would send message', msg)
     },
     loadAddPickupModal () {
       ajreq(

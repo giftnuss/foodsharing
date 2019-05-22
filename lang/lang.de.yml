@@ -172,8 +172,6 @@ pickup:
   join_cancel: Doch nicht
   join_agree: Ja, verbindlich eintragen
   take_empty_slot: Hier eintragen
-  remove_slot: '-1'
-  add_slot: '+1'
 
 forum:
   from: Von %name%
