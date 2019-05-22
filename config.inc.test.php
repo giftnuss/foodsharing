@@ -21,7 +21,7 @@ define('DB_HOST', 'db');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
-define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
+define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://lmr.local/');
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
