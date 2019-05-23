@@ -207,7 +207,7 @@ abstract class Control
 		return false;
 	}
 
-	public function wallposts($table, $id)
+	public function wallposts($table, $id, $allowCommentsIfAble = true)
 	{
 		$this->pageHelper->addJsFunc('
 			function u_delPost(id, module, wallId)
@@ -333,7 +333,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		if ($this->session->may()) {
+		if ($allowCommentsIfAble && $this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>

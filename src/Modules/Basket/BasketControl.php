@@ -50,9 +50,11 @@ class BasketControl extends Control
 		$requests = false;
 
 		if ($this->session->may()) {
-			$wallPosts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->session->id()) {
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
+				$wallPosts = $this->wallposts('basket', $basket['id'], true);
+			} else {
+				$wallPosts = $this->wallposts('basket', $basket['id'], false);
 			}
 		}
 		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
