@@ -154,7 +154,7 @@ error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
 
 store:
-  pickup_slot_unavailable: Dieser Abhol-Slot liegt zu weit in der Zukunft, um jetzt belegt zu werden. Bitte probiere es in einigen Tagen erneut.
+  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
 
 forum:
   from: Von %name%
