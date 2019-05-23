@@ -6,7 +6,7 @@ set -o errexit
 
 dir=$(dirname "$0")
 
-base_dir=$(readlink -f "$dir/..")
+base_dir=$(cd "$dir/.." && pwd)
 
 source $dir/inc.sh
 
