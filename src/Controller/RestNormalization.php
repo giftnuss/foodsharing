@@ -90,12 +90,12 @@ class RestNormalization
 		if (isset($data['kette'])) {
 			$store['chain'] = $data['kette'];
 		}
-		if (isset($data['verantwortlicher']) && is_array($data['verantwortlicher'])) {	
+		if (isset($data['verantwortlicher']) && is_array($data['verantwortlicher'])) {
 			$store['responsibleUserIds'] = array_map(function ($u) {
 				return (int)$u;
 			}, $data['verantwortlicher']);
 		}
-		if (isset($data['notizen']) && is_array($data['notizen'])) {	
+		if (isset($data['notizen']) && is_array($data['notizen'])) {
 			$store['notes'] = array_map(function ($n) {
 				return self::normalizeStoreNote($n);
 			}, $data['notizen']);
