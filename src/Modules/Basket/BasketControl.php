@@ -57,7 +57,7 @@ class BasketControl extends Control
 		}
 		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
 			$this->view->basket($basket, $wallPosts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED) {
+		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED || $basket['status'] == Status::DELETED_OTHER_REASON) {
 			$this->view->basketTaken($basket);
 		}
 	}
