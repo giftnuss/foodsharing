@@ -11,6 +11,7 @@
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
+- Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 
 ## Refactoring
 
