@@ -18,6 +18,7 @@
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
 - update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
 
 # 2019-05-17 Hotfix
 
