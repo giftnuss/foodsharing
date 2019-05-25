@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a78168b39d5ab964ae1b58703514d1e2",
+    "content-hash": "884086621e229506c3ce2791267f33b9",
     "packages": [
         {
             "name": "ddeboer/imap",
-            "version": "1.7.1",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/imap.git",
-                "reference": "31a39dc2ad2d7ca5b7b19855cef636b35161eddc"
+                "reference": "ff985d72916267cba2f944e7c9ee654c69893219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/imap/zipball/31a39dc2ad2d7ca5b7b19855cef636b35161eddc",
-                "reference": "31a39dc2ad2d7ca5b7b19855cef636b35161eddc",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/ff985d72916267cba2f944e7c9ee654c69893219",
+                "reference": "ff985d72916267cba2f944e7c9ee654c69893219",
                 "shasum": ""
             },
             "require": {
@@ -30,6 +30,7 @@
                 "friendsofphp/php-cs-fixer": "^2.14",
                 "phpstan/phpstan": "^0.11",
                 "phpstan/phpstan-phpunit": "^0.11",
+                "phpstan/phpstan-strict-rules": "^0.11.0",
                 "phpunit/phpunit": "^7.5",
                 "zendframework/zend-mail": "^2.10"
             },
@@ -63,7 +64,7 @@
                 "imap",
                 "mail"
             ],
-            "time": "2019-03-18T11:53:51+00:00"
+            "time": "2019-04-15T09:18:52+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -766,16 +767,16 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "v1.7.2",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf"
+                "reference": "6d893938171a817f4e9bc9e86f2da1e370b7bcd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/d60bcdc46978357759ecb13cb4b078da783f8faf",
-                "reference": "d60bcdc46978357759ecb13cb4b078da783f8faf",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/6d893938171a817f4e9bc9e86f2da1e370b7bcd7",
+                "reference": "6d893938171a817f4e9bc9e86f2da1e370b7bcd7",
                 "shasum": ""
             },
             "require": {
@@ -808,7 +809,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2019-03-17T17:19:46+00:00"
+            "time": "2019-03-17T18:48:37+00:00"
         },
         {
             "name": "exercise/htmlpurifier-bundle",
@@ -1398,16 +1399,16 @@
         },
         {
             "name": "hirak/prestissimo",
-            "version": "0.3.8",
+            "version": "0.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hirak/prestissimo.git",
-                "reference": "7cc32689810e604f95f9eadb3c5074135aa872f1"
+                "reference": "01bed92c45e84d01a96f5d15c6e49958cbd57f36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hirak/prestissimo/zipball/7cc32689810e604f95f9eadb3c5074135aa872f1",
-                "reference": "7cc32689810e604f95f9eadb3c5074135aa872f1",
+                "url": "https://api.github.com/repos/hirak/prestissimo/zipball/01bed92c45e84d01a96f5d15c6e49958cbd57f36",
+                "reference": "01bed92c45e84d01a96f5d15c6e49958cbd57f36",
                 "shasum": ""
             },
             "require": {
@@ -1417,7 +1418,7 @@
             },
             "require-dev": {
                 "composer/composer": "1.0.0",
-                "phpunit/phpunit": "^4.8",
+                "phpunit/phpunit": "4.8.* || 5.7.* || ^6.3",
                 "squizlabs/php_codesniffer": "^2.5"
             },
             "type": "composer-plugin",
@@ -1445,7 +1446,7 @@
                 "parallel",
                 "speedup"
             ],
-            "time": "2018-08-21T22:35:06+00:00"
+            "time": "2019-05-04T08:16:12+00:00"
         },
         {
             "name": "hoa/compiler",
