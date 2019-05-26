@@ -1,5 +1,10 @@
 <?php
 
+use function Sentry\configureScope;
+use function Sentry\init;
+use Sentry\State\Hub;
+use Sentry\State\Scope;
+
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
 if (defined('FS_ENV')) {
@@ -33,12 +38,17 @@ if (file_exists($revision_filename)) {
 /*
  * Configure Raven (sentry.io client) for remote error reporting
  */
+
 if (defined('SENTRY_URL')) {
-	$client = new Raven_Client(SENTRY_URL);
-	$client->install();
-	$client->tags_context(array('FS_ENV' => $FS_ENV));
+	init(['dsn' => SENTRY_URL]);
+
+	configureScope(function (Scope $scope): void {
+		$scope->setTag(FS_ENV, '$FS_ENV');
+		//$scope->setLevel(Sentry\Severity::debug());
+	});
 	if (defined('SRC_REVISION')) {
-		$client->setRelease(SRC_REVISION);
+		$options = Hub::getCurrent()->getClient()->getOptions();
+		$options->setRelease(SRC_REVISION);
 	}
 }
 
