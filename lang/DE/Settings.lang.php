@@ -11,6 +11,7 @@ $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 
 $g_lang['position_search'] = 'Adresssuche';
+$g_lang['position_search_infobox'] = 'Positionssuche Positionssuche Positionssuche Positionssuche';
 $g_lang['settings_general'] = 'Deine Angaben';
 $g_lang['settings_info'] = 'Benachrichtigungen';
 $g_lang['settings_mumble'] = 'Mumble-Einstellungen';

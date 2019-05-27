@@ -18,6 +18,8 @@
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
 - Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
+- Added yellow info box with "how to use the address picker" @jofranz
+
 
 ## Refactoring
 
