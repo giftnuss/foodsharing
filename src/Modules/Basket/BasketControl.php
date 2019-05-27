@@ -55,9 +55,9 @@ class BasketControl extends Control
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
+		if ($basket['until_ts'] >= time() && $basket['status'] === Status::REQUESTED_MESSAGE_READ) {
 			$this->view->basket($basket, $wallPosts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED || $basket['status'] == Status::DELETED_OTHER_REASON) {
+		} elseif ($basket['until_ts'] <= time() || $basket['status'] === Status::DENIED || $basket['status'] === Status::DELETED_OTHER_REASON) {
 			$this->view->basketTaken($basket);
 		}
 	}
