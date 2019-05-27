@@ -35,18 +35,16 @@ class ProfileRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([
 			'id' => $profile['id'],
-			'bezirk_id' => $profile['bezirk_id'],
-			'plz' => $profile['plz'],
-			'stadt' => $profile['stadt'],
+			'name' => $profile['name'],
+			'lastname' => $profile['nachname'],
+			'address' => $profile['anschrift'],
+			'city' => $profile['stadt'],
+			'postcode' => $profile['plz'],
 			'lat' => $profile['lat'],
 			'lon' => $profile['lon'],
 			'email' => $profile['email'],
-			'name' => $profile['name'],
-			'nachname' => $profile['nachname'],
-			'anschrift' => $profile['anschrift'],
-			'telefon' => $profile['telefon'],
-			'handy' => $profile['handy'],
-			'photo' => $profile['photo'],
+			'landline' => $profile['telefon'],
+			'mobile' => $profile['handy'],
 		], 200));
 	}
 }

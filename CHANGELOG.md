@@ -18,6 +18,8 @@
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
 - update null-loader to version 2 @peter.toennies
+- Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
 
 # 2019-05-17 Hotfix
 
@@ -57,6 +59,7 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
+- Added Rest controller and normalization for stores !885 @alex.simm
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
