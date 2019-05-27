@@ -8,3 +8,4 @@ $g_lang['active_cities'] = 'Aktivste Bezirke';
 $g_lang['stat_whole'] = 'Gesamtstatistik';
 // getStatFoodsaver
 $g_lang['most_active_foodsavers'] = 'Aktivste Foodsaver';
+$g_lang['Over'] = 'Über';

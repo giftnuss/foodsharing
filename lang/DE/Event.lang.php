@@ -13,3 +13,4 @@ $g_lang['online'] = 'Multilokal auf mumble.foodsharing.de';
 $g_lang['mumble_room'] = 'In welchem mumble-Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'Enddatum';
 $g_lang['event_options'] = 'Eventoptionen';
+$g_lang['saveEventInfo'] = '<b>Bitte beachten:</b><br>Beim Speichern werden alle derzeitigen Mitglieder der oben gewählten Gruppe eingeladen. Um Neuzugänge in Bezirk oder AG später noch dazuzuladen, speichere den Termin einfach erneut.';
