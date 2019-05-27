@@ -72,6 +72,7 @@
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="$emit('delete')"
+      static="true"
     >
       <p>{{ $i18n('really_delete') }}</p>
     </b-modal>
