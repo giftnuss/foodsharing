@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Carbon\Carbon;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
@@ -155,7 +156,8 @@ class StoreUserControl extends Control
 				}
 
 				if ($lastPickupByUser = $this->storeGateway->lastPickupDateByStore($store['id'], $this->session->id())) {
-					$info .= $this->v_utils->v_input_wrapper('Meine letzte Abholung', $lastPickupByUser);
+					$lastDate = Carbon::create($lastPickupByUser);
+					$info .= $this->v_utils->v_input_wrapper('Meine letzte Abholung', $lastDate->format('d.m.Y') . ' (Vor ' . Carbon::now()->diff($lastDate)->days . ' Tagen)');
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field(
