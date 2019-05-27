@@ -154,6 +154,10 @@ class StoreUserControl extends Control
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
 				}
 
+				if ($lastPickupByUser = $this->storeGateway->lastPickupDateByStore($store['id'], $this->session->id())) {
+					$info .= $this->v_utils->v_input_wrapper('Meine letzte Abholung', $lastPickupByUser);
+				}
+
 				$this->pageHelper->addContent($this->v_utils->v_field(
 					$this->v_utils->v_input_wrapper($this->translationHelper->s('address'), $store['str'] . ' ' . $store['hsnr'] . '<br />' . $store['plz'] . ' ' . $store['stadt']) .
 					$info,
