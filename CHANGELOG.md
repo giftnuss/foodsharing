@@ -11,7 +11,7 @@
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
-- Fixed broken modal for forum post deltion !888 #599 @peter.toennies
+- Fixed broken modal for forum post deltion !894 #599 @peter.toennies
 
 ## Refactoring
 
