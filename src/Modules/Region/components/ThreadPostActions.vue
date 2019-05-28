@@ -48,7 +48,7 @@
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
-      @click="showModal"
+      @click="$refs.confirmDelete.show()"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
     >
@@ -66,7 +66,7 @@
 
     <!-- delete confirm modal -->
     <b-modal
-      ref="modal"
+      ref="confirmDelete"
       v-if="mayDelete"
       :title="$i18n('forum.delete_post')"
       :cancel-title="$i18n('button.abort')"
@@ -118,9 +118,6 @@ export default {
     }
   },
   methods: {
-    showModal () {
-      this.$refs['modal'].show()
-    },
     toggleReaction (key, dontRemove = false) {
       if (this.gaveIThisReaction(key)) {
         if (!dontRemove) this.$emit('reactionRemove', key)
