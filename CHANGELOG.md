@@ -15,6 +15,7 @@
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
+- Removed workaround which was used to move accidentally behind top bar menu placed page to correct height @jofranz
 
 ## Refactoring
 
