@@ -193,7 +193,7 @@ class UploadsRestController extends AbstractFOSRestController
 
 		// image? check whether its valid
 		if ((strpos($mimeType, 'image/') === 0) && !$this->uploadsService->isValidImage($tempfile)) {
-			unlink($tempfile);
+				unlink($tempfile);
 			throw new HttpException(400, 'invalid image provided');
 		}
 
@@ -203,7 +203,7 @@ class UploadsRestController extends AbstractFOSRestController
 			$path = $this->uploadsService->getFileLocation($file['uuid']);
 			$dir = dirname($path);
 
-			// create parent directories if they don't exist yet
+			// create parent directories if they don't exist yeted
 			if (!mkdir($dir, 0775, true) && !is_dir($dir)) {
 				throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
 			}
