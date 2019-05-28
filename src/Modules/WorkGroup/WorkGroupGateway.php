@@ -16,7 +16,7 @@ class WorkGroupGateway extends BaseGateway
 			'SELECT `bezirk_id`
 			FROM 	`fs_foodsaver_has_bezirk`	
 			WHERE 	`active` != :active	
-			AND 	foodsaver_id = :foodsaver_id',
+			AND 	foodsaver_id` = :foodsaver_id',
 			[':active' => 1, ':foodsaver_id' => (int)$fsId]
 		);
 		if ($ret) {
@@ -38,14 +38,12 @@ class WorkGroupGateway extends BaseGateway
 	{
 		if ($memberIds) {
 			// delete all members they're not in the submitted array
-			$this->db->delete(
-				'fs_foodsaver_has_bezirk',
-				[
-					'bezirk_id' => (int)$groupId,
-					'foodsaver_id NOT' => array_map('intval', $memberIds),
-					'active' => 1
-				]
-			);
+			$this->db->execute('
+				DELETE FROM fs_foodsaver_has_bezirk
+				WHERE bezirk_id = ' . (int)$groupId . '
+					AND	foodsaver_id NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')
+					AND active = 1
+			');
 
 			// insert new members
 			$values = [
@@ -64,13 +62,11 @@ class WorkGroupGateway extends BaseGateway
 		// the same for the group admins
 		if ($leaderIds) {
 			// delete all group-admins (botschafter) they're not in the submitted array
-			$this->db->delete(
-				'fs_botschafter',
-				[
-					'bezirk_id' => (int)$groupId,
-					'foodsaver_id NOT' => array_map('intval', $leaderIds)
-				]
-			);
+			$this->db->execute('
+				DELETE FROM fs_botschafter
+				WHERE bezirk_id = ' . (int)$groupId . '
+				 AND foodsaver_id NOT IN(' . implode(',', array_map('intval', $leaderIds)) . ')
+			');
 
 			// insert new group-admins
 			$values = ['bezirk_id' => (int)$groupId];
