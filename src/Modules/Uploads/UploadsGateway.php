@@ -11,24 +11,18 @@ class UploadsGateway extends BaseGateway
 		return $this->db->fetchByCriteria('uploads', ['uuid', 'mimeType'], ['uuid' => $uuid]);
 	}
 
-	public function addFile(string $tmpFile): array
+	public function addFile($userId, string $hash, int $size, string $mimeType): array
 	{
-		$hash = hash_file('sha256', $tmpFile);
-		$size = filesize($tmpFile);
-		$mimeType = mime_content_type($tmpFile);
-
 		// same file already uploaded?
 		if ($res = $this->db->fetchByCriteria('uploads', ['uuid'], ['sha256hash' => $hash])) {
 			// update uploaded date
 			$this->db->update('uploads', [
-				'uploadedAt' => $this->db->now(),
-				'lastAccessAt' => $this->db->now()
+				'uploaded_at' => $this->db->now(),
+				'lastaccess_at' => $this->db->now()
 			], ['uuid' => $res['uuid']]);
 
 			return [
 				'uuid' => $res['uuid'],
-				'mimeType' => $mimeType,
-				'filesize' => $size,
 				'isReuploaded' => true
 			];
 		}
@@ -37,24 +31,23 @@ class UploadsGateway extends BaseGateway
 
 		$this->db->insert('uploads', [
 			'uuid' => $uuid,
+			'user_id' => $userId,
 			'sha256hash' => $hash,
-			'mimeType' => $mimeType,
-			'uploadedAt' => $this->db->now(),
-			'lastAccessAt' => $this->db->now(),
+			'mimetype' => $mimeType,
+			'uploaded_at' => $this->db->now(),
+			'lastaccess_at' => $this->db->now(),
 			'filesize' => $size,
 		]);
 
 		return [
 			'uuid' => $uuid,
-			'mimeType' => $mimeType,
-			'filesize' => $size,
-			'isReuploaded' => false,
+			'isReuploaded' => false
 		];
 	}
 
 	public function touchFile(string $uuid): void
 	{
-		$this->db->update('uploads', ['lastAccessAt' => $this->db->now()], ['uuid' => $uuid]);
+		$this->db->update('uploads', ['lastaccess_at' => $this->db->now()], ['uuid' => $uuid]);
 	}
 
 	// our mysql query builder doesn't offer UUID(), so we use this PHP code

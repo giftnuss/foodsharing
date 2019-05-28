@@ -112,8 +112,20 @@ class UploadsRestController extends AbstractFOSRestController
 		header('Cache-Control: max-age=' . (86400 * 7));
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400 * 7));
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-		header('Content-Type: ' . $file['mimeType']);
 
+		$mime = explode('/', $file['mimeType']);
+		switch ($mime[0]) {
+			case 'video':
+			case 'audio':
+			case 'image':
+				header('Content-Type: ' . $file['mimeType']);
+				break;
+			case 'text':
+				header('Content-Type: text/plain');
+				break;
+			default:
+				header('Content-Type: application/octet-stream');
+		}
 		readfile($filename);
 		die();
 	}
@@ -121,57 +133,84 @@ class UploadsRestController extends AbstractFOSRestController
 	/**
 	 * @DisableCsrfProtection
 	 * @Rest\Post("uploads")
+	 * @Rest\RequestParam(name="filename")
+	 * @Rest\RequestParam(name="body")
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function uploadFileAction()
+	public function uploadFileAction(ParamFetcher $paramFetcher)
 	{
-		$MAX_UPLOAD_FILE_SIZE = 1.5 * 1024 * 1024; // max 1.5MB
-
-		// if (!$this->session->id()) {
-		//     throw new HttpException(403, "not loggedin");
-		// }
-
-		if (!$_FILES['file']) {
-			throw new HttpException(400, 'not file specified');
+		if ($this->session->id()) {
+			$MAX_UPLOAD_FILE_SIZE = 1.5 * 1024 * 1024; // max 1.5MB
+		} else {
+			$MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024; // max 300 KB for non loggedin users
 		}
 
-		if ($_FILES['file']['size'] > $MAX_UPLOAD_FILE_SIZE) {
-			// throw new HttpException(413, "file is bigger than ".round($MAX_UPLOAD_FILE_SIZE/1024/1024, 1)." MB");
+		$MAX_BASE64_SIZE = 4 * ($MAX_UPLOAD_FILE_SIZE / 3);
+
+		$filename = $paramFetcher->get('filename');
+		$body_encoded = $paramFetcher->get('body');
+
+		if (!$filename) {
+			throw new HttpException(400, 'no filename provided');
+		}
+		if (!$body_encoded) {
+			throw new HttpException(400, 'no body provided');
+		}
+
+		if (strlen($body_encoded) > $MAX_BASE64_SIZE) {
+			throw new HttpException(413, 'file is bigger than ' . round($MAX_UPLOAD_FILE_SIZE / 1024 / 1024, 1) . ' MB');
+		}
+
+		$body = base64_decode($body_encoded, true);
+		if (!$body) {
+			throw new HttpException(400, 'invalid body');
+		}
+
+		$tempfile = tempnam(sys_get_temp_dir(), 'fs_upload');
+		file_put_contents($tempfile, $body);
+
+		$hash = hash_file('sha256', $tempfile);
+		$size = filesize($tempfile);
+		$mimeType = mime_content_type($tempfile);
+
+		if (!$this->session->id() && strpos($mimeType, 'image/') !== 0) {
+			unlink($tempfile);
+			throw new HttpException(400, 'only images allowed for non loggedin users');
 		}
 
 		// image? check whether its valid
-		if (strpos($_FILES['file']['type'], 'image/') == 0) {
-			if (!$this->uploadsService->isValidImage($_FILES['file']['tmp_name'])) {
+		if (strpos($mimeType, 'image/') === 0) {
+			if (!$this->uploadsService->isValidImage($tempfile)) {
+				unlink($tempfile);
 				throw new HttpException(400, 'invalid image provided');
 			}
 		}
 
-		$file = $this->uploadsGateway->addFile($_FILES['file']['tmp_name']);
+		$file = $this->uploadsGateway->addFile($this->session->id(), $hash, $size, $mimeType);
 
 		if (!$file['isReuploaded']) {
 			$path = $this->uploadsService->getFileLocation($file['uuid']);
 			$dir = dirname($path);
 
-			// create parent directories if they don't exist yet
+			// create parent directories if they don't exist yeted
 			@mkdir($dir, 0775, true);
 
 			// JPEG? strip exif data!
 			// https://gitlab.com/foodsharing-dev/foodsharing/issues/375
-			if ($file['mimeType'] === 'image/jpeg') {
-				$this->uploadsService->stripImageExifData($_FILES['file']['tmp_name'], $path);
+			if ($mimeType === 'image/jpeg') {
+				$this->uploadsService->stripImageExifData($tempfile, $path);
 			} else {
 				// otherweise just move it
-				move_uploaded_file($_FILES['file']['tmp_name'], $path);
+				rename($tempfile, $path);
 			}
 		}
-
 		$view = $this->view([
-			'url' => '/api/uploads/' . $file['uuid'] . '/' . $_FILES['file']['name'],
+			'url' => '/api/uploads/' . $file['uuid'] . '/' . $filename,
 			'uuid' => $file['uuid'],
-			'filename' => $_FILES['file']['name'],
-			'mimeType' => $file['mimeType'],
-			'filesize' => $file['filesize']
+			'filename' => $filename,
+			'mimeType' => $mimeType,
+			'filesize' => $size
 		], 200);
 
 		return $this->handleView($view);
