@@ -7,7 +7,7 @@
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - InfluxDB Metrics via UDP !882 @alangecker
-- Added yellow info box with bug warning to edit event page !892 @jofranz
+- Added yellow info box with warning to edit event page !892 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -15,7 +15,7 @@
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
-- Removed workaround which was used to move accidentally behind top bar menu placed page to correct height @jofranz
+- Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
 
 ## Refactoring
 
