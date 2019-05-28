@@ -12,7 +12,7 @@ class WorkGroupGateway extends BaseGateway
 	 */
 	public function getApplications($fsId)
 	{
-		$foodsaverIds = $this->db->fetchAllValues(
+		$ret = $this->db->fetchAllValues(
 			'SELECT `bezirk_id`
 			FROM 	`fs_foodsaver_has_bezirk`	
 			WHERE 	`active` != :active	
