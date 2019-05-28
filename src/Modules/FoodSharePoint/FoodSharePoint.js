@@ -6,6 +6,8 @@ import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import 'jquery-jcrop'
 import { attachAddressPicker } from '@/addressPicker'
+import { vueApply, vueRegister } from '@/vue'
+import FileUploadVForm from '@/components/upload/FileUploadVForm'
 
 import {
   pictureCrop,
@@ -15,6 +17,10 @@ import { expose } from '@/utils'
 import { GET } from '@/browser'
 
 import './FoodSharePoint.css'
+
+vueRegister({
+  FileUploadVForm
+})
 
 expose({
   pictureCrop,
@@ -28,4 +34,5 @@ $('#wall-submit').on('mousedown', function () {
 const sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
+  vueApply('#image-upload')
 }
