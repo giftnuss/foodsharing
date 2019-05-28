@@ -31,6 +31,9 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     li {
         margin: initial;
     }
+    input, select, textarea, button {
+        white-space: unset;
+    }
 
     @import "~bootstrap/scss/reboot";
     @import "~bootstrap/scss/type";

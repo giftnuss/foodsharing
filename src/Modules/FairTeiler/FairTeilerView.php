@@ -97,7 +97,7 @@ class FairTeilerView extends View
 				'label' => 'Bild',
 				'inputName' => 'picture',
 				'image' => true,
-				'initialValue' => (strpos('/api/uploads/', $data['picture']) !== 0 ? '/images/' : '') . $data['picture'],
+				'initialValue' => (strpos($data['picture'], '/api/uploads/') !== 0 ? '/images/' : '') . $data['picture'],
 				'resize' => array(528, 60),
 			]),
 			$this->latLonPicker('latLng', $latLonOptions),
