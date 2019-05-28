@@ -2,24 +2,31 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Modules\Core\Control;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
 {
-	public function __construct(WorkGroupModel $model, WorkGroupView $view)
-	{
+	private $workGroupGateway;
+
+	public function __construct(
+		Db $model,
+		WorkGroupView $view,
+		WorkGroupGateway $workGroupGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->workGroupGateway = $workGroupGateway;
 
 		parent::__construct();
 	}
 
 	public function apply()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		if ($group = $this->workGroupGateway->getGroup($_GET['id'])) {
 			$dialog = new XhrDialog();
 
 			$dialog->addContent($this->view->applyForm($group));
@@ -36,9 +43,9 @@ class WorkGroupXhr extends Control
 
 	public function addtogroup()
 	{
-		if ($this->session->may('fs') && $group = $this->model->getGroup($_GET['id'])) {
+		if ($this->session->may('fs') && $group = $this->workGroupGateway->getGroup($_GET['id'])) {
 			if ($group['apply_type'] == ApplyType::OPEN) {
-				$this->model->addToGroup($_GET['id'], $this->session->id());
+				$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
 
 				return array(
 					'status' => 1,
@@ -60,10 +67,10 @@ class WorkGroupXhr extends Control
 				$zeit = strip_tags($output['zeit']);
 				$zeit = substr($zeit, 0, 300);
 
-				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
-					if ($group = $this->model->getGroup($_GET['id'])) {
+				if ($groupmail = $this->workGroupGateway->getGroupMail($_GET['id'])) {
+					if ($group = $this->workGroupGateway->getGroup($_GET['id'])) {
 						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
-							if ($email = $this->model->getFsMail($fs['id'])) {
+							if ($email = $this->workGroupGateway->getFsMail($fs['id'])) {
 								$fs['email'] = $email;
 							}
 
@@ -74,7 +81,7 @@ class WorkGroupXhr extends Control
 								'Zeit:' . "\n=====\n" . trim($zeit)
 							);
 
-							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
+							$this->workGroupGateway->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
 
 							$this->emailHelper->libmail(array(
 								'email' => $fs['email'],
@@ -100,7 +107,7 @@ class WorkGroupXhr extends Control
 		if (!$this->session->id()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
+		if (($group = $this->workGroupGateway->getGroup($_GET['id'])) && !empty($group['email'])) {
 			$message = $_GET['msg'];
 
 			if (!empty($message)) {
@@ -124,7 +131,7 @@ class WorkGroupXhr extends Control
 
 	public function contactgroup()
 	{
-		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
+		if (($group = $this->workGroupGateway->getGroup($_GET['id'])) && !empty($group['email'])) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle($group['name'] . ' kontaktieren');
 

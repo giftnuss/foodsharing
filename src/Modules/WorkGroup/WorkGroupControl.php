@@ -17,12 +17,16 @@ class WorkGroupControl extends Control
 	 */
 	private $formFactory;
 	private $imageService;
+	private $workGroupGateway;
 
-	public function __construct(WorkGroupModel $model, WorkGroupView $view, ImageService $imageService)
-	{
-		$this->model = $model;
+	public function __construct(
+		WorkGroupView $view,
+		ImageService $imageService,
+		WorkGroupGateway $workGroupGateway
+	) {
 		$this->view = $view;
 		$this->imageService = $imageService;
+		$this->workGroupGateway = $workGroupGateway;
 
 		parent::__construct();
 	}
@@ -87,7 +91,7 @@ class WorkGroupControl extends Control
 
 	private function getSideMenuData($activeUrlPartial = null)
 	{
-		$countries = $this->model->getCountryGroups();
+		$countries = $this->workGroupGateway->getCountryGroups();
 		$bezirke = $this->session->getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
@@ -127,9 +131,9 @@ class WorkGroupControl extends Control
 	private function list(Request $request, Response $response)
 	{
 		$parent = $request->query->getInt('p', 392);
-		$myApplications = $this->model->getApplications($this->session->id());
-		$myStats = $this->model->getStats($this->session->id());
-		$groups = $this->model->listGroups($parent);
+		$myApplications = $this->workGroupGateway->getApplications($this->session->id());
+		$myStats = $this->workGroupGateway->getStats($this->session->id());
+		$groups = $this->workGroupGateway->listGroups($parent);
 
 		$groups = array_map(
 			function ($group) use ($myApplications, $myStats) {
@@ -175,7 +179,7 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		if ($group = $this->model->getGroup($groupId)) {
+		if ($group = $this->workGroupGateway->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
 				$this->routeHelper->go('/?page=dashboard');
 			}
@@ -190,8 +194,8 @@ class WorkGroupControl extends Control
 			if ($form->isSubmitted()) {
 				if ($form->isValid()) {
 					$data = $editWorkGroupRequest->toGroup();
-					$this->model->updateGroup($group['id'], $data);
-					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
+					$this->workGroupGateway->updateGroup($group['id'], $data);
+					$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->flashMessageHelper->info('Änderungen gespeichert!');
 					$this->routeHelper->goSelf();
 				}
