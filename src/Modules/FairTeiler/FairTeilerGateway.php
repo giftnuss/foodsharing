@@ -369,7 +369,7 @@ class FairTeilerGateway extends BaseGateway
 
 	private function getPicturePaths($picture)
 	{
-		if (strpos($picture, '/api/uploads/') === 0 || true) {
+		if (strpos($picture, '/api/uploads/') === 0) {
 			return array(
 				'thumb' => $picture . '?h=60&w=60',
 				'head' => $picture . '?h=169&w=525',

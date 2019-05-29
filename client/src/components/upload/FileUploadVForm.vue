@@ -39,7 +39,8 @@ export default {
       default: null
     },
     inputName: {
-      type: String
+      type: String,
+      default: 'file'
     },
     resize: {
       type: Array,
