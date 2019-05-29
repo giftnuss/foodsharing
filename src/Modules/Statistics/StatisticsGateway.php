@@ -72,7 +72,7 @@ class StatisticsGateway extends BaseGateway
 		return $this->db->count('fs_foodsaver', ['active' => 1, 'deleted_at' => null]);
 	}
 
-	public function meanFetchCount(): int
+	public function avgDailyFetchCount(): int
 	{
 		// get number of all fetches
 		$q = '

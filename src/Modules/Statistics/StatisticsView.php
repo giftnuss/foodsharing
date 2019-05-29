@@ -35,7 +35,7 @@ class StatisticsView extends View
 		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), array('class' => 'ui-padding'));
 	}
 
-	public function getStatTotal($stat, int $foodsharerCount, int $meanDailyFetchCount)
+	public function getStatTotal($stat, int $foodsharerCount, int $avgDailyFetchCount)
 	{
 		/*
 		 *  fetchweight,
@@ -91,7 +91,7 @@ class StatisticsView extends View
 			</div>
 			<div class="stat_item">
 					<div class="stat_text">
-						<h4>' . number_format($meanDailyFetchCount, 0, ',', '.') . '</h4>
+						<h4>' . number_format($avgDailyFetchCount, 0, ',', '.') . '</h4>
 						<p>Rettungseinsätze gibt es durchschnittlich pro Tag</p>
 					</div>
 			</div><br />
