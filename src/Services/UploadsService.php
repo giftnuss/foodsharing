@@ -105,11 +105,11 @@ class UploadsService
 			$new_width = $width;
 			$new_height = $width / $old_width * $old_height;
 			$crop_x = 0;
-			$crop_y = intval(($new_height - $height) / 2);
+			$crop_y = (int)(($new_height - $height) / 2);
 		} else {
 			$new_width = $height / $old_height * $old_width;
 			$new_height = $height;
-			$crop_x = intval(($new_width - $width) / 2);
+			$crop_x = (int)(($new_width - $width) / 2);
 			$crop_y = 0;
 		}
 		$img->resizeImage($new_width, $new_height, imagick::FILTER_LANCZOS, 0.9, true);

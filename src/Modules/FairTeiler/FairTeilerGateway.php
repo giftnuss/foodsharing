@@ -113,7 +113,7 @@ class FairTeilerGateway extends BaseGateway
 		if (!$bezirk_ids) {
 			return [];
 		}
-		if ($fairteiler = $this->db->fetchAll(
+		if ($fairSharePoints = $this->db->fetchAll(
 			'
 			SELECT 	`id`,
 					`name`,
@@ -125,14 +125,14 @@ class FairTeilerGateway extends BaseGateway
 		'
 		)
 		) {
-			foreach ($fairteiler as $key => $ft) {
-				$fairteiler[$key]['pic'] = false;
+			foreach ($fairSharePoints as $key => $ft) {
+				$fairSharePoints[$key]['pic'] = false;
 				if (!empty($ft['picture'])) {
-					$fairteiler[$key]['pic'] = $this->getPicturePaths($ft['picture']);
+					$fairSharePoints[$key]['pic'] = $this->getPicturePaths($ft['picture']);
 				}
 			}
 
-			return $fairteiler;
+			return $fairSharePoints;
 		}
 
 		return [];
@@ -140,7 +140,7 @@ class FairTeilerGateway extends BaseGateway
 
 	public function listFairteilerNested($bezirk_ids = [])
 	{
-		if (!empty($bezirk_ids) && ($fairteiler = $this->db->fetchAll(
+		if (!empty($bezirk_ids) && ($fairSharePoints = $this->db->fetchAll(
 				'
 			SELECT 	ft.`id`,
 					ft.`name`,
@@ -160,7 +160,7 @@ class FairTeilerGateway extends BaseGateway
 		) {
 			$out = array();
 
-			foreach ($fairteiler as $key => $ft) {
+			foreach ($fairSharePoints as $key => $ft) {
 				if (!isset($out[$ft['bezirk_id']])) {
 					$out[$ft['bezirk_id']] = array(
 						'id' => $ft['bezirk_id'],
@@ -170,7 +170,7 @@ class FairTeilerGateway extends BaseGateway
 				}
 				$pic = false;
 				if (!empty($ft['picture'])) {
-					$fairteiler[$key]['pic'] = $this->getPicturePaths($ft['picture']);
+					$fairSharePoints[$key]['pic'] = $this->getPicturePaths($ft['picture']);
 				}
 				$out[$ft['bezirk_id']]['fairteiler'][] = array(
 					'id' => $ft['id'],
@@ -367,7 +367,7 @@ class FairTeilerGateway extends BaseGateway
 		$this->bellGateway->delBellsByIdentifier($identifier);
 	}
 
-	private function getPicturePaths($picture)
+	private function getPicturePaths(string $picture): array
 	{
 		if (strpos($picture, '/api/uploads/') === 0) {
 			return array(
@@ -375,12 +375,12 @@ class FairTeilerGateway extends BaseGateway
 				'head' => $picture . '?h=169&w=525',
 				'orig' => $picture
 			);
-		} else {
-			return array(
-				'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $picture),
-				'head' => 'images/' . str_replace('/', '/crop_0_528_', $picture),
-				'orig' => 'images/' . ($picture),
-			);
 		}
+
+		return array(
+			'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $picture),
+			'head' => 'images/' . str_replace('/', '/crop_0_528_', $picture),
+			'orig' => 'images/' . ($picture),
+		);
 	}
 }

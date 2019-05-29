@@ -18,6 +18,7 @@
           <img
             v-if="value"
             :src="value+'?h=100&w=100'"
+            alt="Preview Image"
           >
         </div>
       </div>
@@ -29,13 +30,13 @@
           v-else
           class="text-muted"
         >
-          Noch kein Bild hochgeladen
+          {{ $i18n('upload.no_image_yet') }}
         </div>
         <button
           @click.prevent="openUploadDialog"
           :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
         >
-          <span v-if="value">Neues </span>Bild hochladen
+          <span v-if="value">{{ $i18n('upload.new_neuter') }} </span>{{ $i18n('upload.image') }}
         </button>
       </div>
     </div>
@@ -47,13 +48,13 @@
         v-else
         class="text-muted"
       >
-        Noch keine Datei ausgewählt
+        {{ $i18n('upload.no_image_chosen') }}
       </div>
       <button
         @click.prevent="openUploadDialog"
         :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
       >
-        <span v-if="value">Neue </span>Datei hochladen
+        <span v-if="value">{{ $i18n('upload.new_feminine') }} </span>{{ $i18n('upload.file') }}
       </button>
     </div>
 

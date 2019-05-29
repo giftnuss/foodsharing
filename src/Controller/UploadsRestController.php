@@ -2,14 +2,15 @@
 
 namespace Foodsharing\Controller;
 
+use Foodsharing\Annotation\DisableCsrfProtection;
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Uploads\UploadsGateway;
+use Foodsharing\Services\UploadsService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
-use Foodsharing\Annotation\DisableCsrfProtection;
-use Foodsharing\Modules\Uploads\UploadsGateway;
-use Foodsharing\Services\UploadsService;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Foodsharing\Lib\Session;
 
 class UploadsRestController extends AbstractFOSRestController
 {
@@ -43,7 +44,7 @@ class UploadsRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="q", requirements="\d+", default=0, description="Image quality (between 1 and 100")
 	 * resize behavior: fill
 	 */
-	public function getFileAction(string $uuid, string $filename, ParamFetcher $paramFetcher)
+	public function getFileAction(string $uuid, string $filename, ParamFetcher $paramFetcher): void
 	{
 		$width = $paramFetcher->get('w');
 		$height = $paramFetcher->get('h');
@@ -136,14 +137,14 @@ class UploadsRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="filename")
 	 * @Rest\RequestParam(name="body")
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 */
-	public function uploadFileAction(ParamFetcher $paramFetcher)
+	public function uploadFileAction(ParamFetcher $paramFetcher): Response
 	{
 		if ($this->session->id()) {
-			$MAX_UPLOAD_FILE_SIZE = 1.5 * 1024 * 1024; // max 1.5MB
+			$MAX_UPLOAD_FILE_SIZE = 1.5 * 1024 * 1024; // max 1.5 MB
 		} else {
-			$MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024; // max 300 KB for non loggedin users
+			$MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024; // max 300 kB for non logged-in users
 		}
 
 		$MAX_BASE64_SIZE = 4 * ($MAX_UPLOAD_FILE_SIZE / 3);
@@ -180,11 +181,9 @@ class UploadsRestController extends AbstractFOSRestController
 		}
 
 		// image? check whether its valid
-		if (strpos($mimeType, 'image/') === 0) {
-			if (!$this->uploadsService->isValidImage($tempfile)) {
-				unlink($tempfile);
-				throw new HttpException(400, 'invalid image provided');
-			}
+		if ((strpos($mimeType, 'image/') === 0) && !$this->uploadsService->isValidImage($tempfile)) {
+			unlink($tempfile);
+			throw new HttpException(400, 'invalid image provided');
 		}
 
 		$file = $this->uploadsGateway->addFile($this->session->id(), $hash, $size, $mimeType);
@@ -193,15 +192,17 @@ class UploadsRestController extends AbstractFOSRestController
 			$path = $this->uploadsService->getFileLocation($file['uuid']);
 			$dir = dirname($path);
 
-			// create parent directories if they don't exist yeted
-			@mkdir($dir, 0775, true);
+			// create parent directories if they don't exist yet
+			if (!mkdir($dir, 0775, true) && !is_dir($dir)) {
+				throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+			}
 
 			// JPEG? strip exif data!
 			// https://gitlab.com/foodsharing-dev/foodsharing/issues/375
 			if ($mimeType === 'image/jpeg') {
 				$this->uploadsService->stripImageExifData($tempfile, $path);
 			} else {
-				// otherweise just move it
+				// otherwise just move it
 				rename($tempfile, $path);
 			}
 		}

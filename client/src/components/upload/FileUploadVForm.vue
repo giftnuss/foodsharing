@@ -6,7 +6,7 @@
     <label
       class="wrapper-label ui-widget"
       for="input"
-    >Bild</label>
+    >{{ $i18n('image') }}</label>
 
     <div class="element-wrapper">
       <file-upload

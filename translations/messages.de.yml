@@ -3,6 +3,14 @@ picture_upload_widget:
   picture_upload: Foto-Upload
   choose_picture: Wähle ein Bild von Deinem Rechner!
 
+upload:
+  no_image_yet: Noch kein Bild hochgeladen
+  no_image_chosen: Noch keine Datei ausgewählt
+  new_neuter: Neues
+  new_feminine: Neue
+  image: Bild hochladen
+  file: Datei hochladen
+
 button:
   save: Speichern
   change_picture: Bild ändern
