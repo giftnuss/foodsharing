@@ -8,6 +8,7 @@
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - InfluxDB Metrics via UDP !882 @alangecker
 - Added yellow info box with warning to edit event page !892 @jofranz
+- improved the region join selector text #562 @peter.toennies
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
