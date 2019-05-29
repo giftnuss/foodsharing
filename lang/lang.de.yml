@@ -158,6 +158,11 @@ store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
 
 pickup:
+  dates: Abholtermine
+  confirm: 'Bestätigen'
+  kick: Austragen
+  leave: Austragen
+  open_profile: Profil aufrufen
   really_kick_user_date_title: '{name} für {date} austragen?'
   really_leave_date_title: Für {date} austragen?
   really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
@@ -167,6 +172,7 @@ pickup:
   leave_team_message_title: Nachricht ans Team
   leave_team_message_template: Liebes Team, meine Abholung am {date} ...
   team_message_send_and_leave: Senden und austragen
+  team_message_success: Nachricht ans Team wurde erfolgreich versendet
   join_title_date: Sicher?
   really_join_date: Möchtest Du Dich verbindlich für die Abholung am {date} eintragen?
   join_cancel: Doch nicht
@@ -175,6 +181,11 @@ pickup:
   delete_title: Abholtermin löschen
   really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
   delete_not_empty: Aktuell sind noch Foodsaver eingetragen. Du kannst diese Aholung erst löschen, sobald sie leer ist.
+  edit_recurring_pickups: Regelmäßige Abholzeiten bearbeiten
+  add_onetime_pickup: Zusatztermin eintragen
+  slot_add: Slot hinzufügen
+  slot_remove: Slot entfernen
+
 
 forum:
   from: Von %name%

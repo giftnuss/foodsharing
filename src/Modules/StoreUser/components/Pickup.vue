@@ -13,8 +13,8 @@
             <button
               v-b-tooltip.hover
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
+              :title="$i18n('pickup.delete_title')"
               class="btn btn-sm p-0"
-              title="Abholtermin entfernen"
             >
               <i class="fa fa-times" />
             </button>
@@ -49,9 +49,9 @@
             >
               <button
                 v-b-tooltip.hover
+                :title="$i18n('pickup.slot_add')"
                 type="button"
                 class="btn secondary"
-                title="Slot hinzufügen"
               >
                 <i class="fa fa-plus" />
               </button>

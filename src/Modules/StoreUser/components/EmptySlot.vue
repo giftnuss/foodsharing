@@ -16,7 +16,7 @@
       @click="$emit('remove')"
       @mouseover="hover = true"
       @mouseout="hover = false"
-      title="Slot entfernen"
+      :title="$i18n('pickup.slot_remove')"
       class="btn"
     >
       <i :class="`fa ${hover ? 'fa-times' : 'fa-question'}`" />

@@ -8,7 +8,7 @@
       <div class="card-header text-white bg-primary">
         <div class="row align-items-center">
           <div class="col text-truncate font-weight-bold">
-            Abholtermine
+            {{ $i18n('pickup.dates') }}
           </div>
           <div class="col col-5 text-right">
             <div
@@ -19,8 +19,8 @@
                 v-if="isCoordinator"
                 v-b-tooltip
                 @click="loadEditRecurringPickupModal"
+                :title="$i18n('pickup.edit_recurring_pickups')"
                 class="btn btn-secondary btn-sm"
-                title="Regelmäßige Abholzeiten bearbeiten"
               >
                 <i class="fa fa-pen" />
               </button>
@@ -28,8 +28,8 @@
                 v-if="isCoordinator"
                 v-b-tooltip
                 @click="loadAddPickupModal"
+                :title="$i18n('pickup.add_onetime_pickup')"
                 class="btn btn-secondary btn-sm"
-                title="Zusatztermin eintragen"
               >
                 <i class="fa fa-plus" />
               </button>
@@ -169,7 +169,7 @@ export default {
     async sendTeamMessage (msg) {
       try {
         await sendMessage(this.teamConversationId, msg)
-        pulseSuccess('Nachricht wurde erfolgreich versendet')
+        pulseSuccess(this.$i18n('pickup.team_message_success'))
       } catch (e) {
         console.error(e)
         pulseError('Error while sending message')
