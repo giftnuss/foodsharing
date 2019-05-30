@@ -83,6 +83,7 @@ final class RegionControl extends Control
 		$menu = [
 			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=forum'],
 			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
+			['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . (int)$region['id']],
 			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=members'],
 		];
 
