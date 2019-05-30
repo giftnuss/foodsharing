@@ -51,20 +51,20 @@
             slot-scope="row"
           >
             <div class="report">
-              <p><strong>{{ $i18n('reports.report_id') }}:</strong> {{ row.item.rp_id }}</p>
-              <p><strong>{{ $i18n('reports.time') }}:</strong> {{ row.item.time }}</p>
+              <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>
+              <p><strong>{{ $i18n('reports.time') }}</strong>: {{ row.item.time }}</p>
               <p>
-                <strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`">
+                <strong>{{ $i18n('reports.about') }}</strong>:<a :href="`/profile/${row.item.fs_id}`">
                   {{ row.item.fs_name }} {{ row.item.fs_nachname }}
-                </a>
+                </a> ({{ row.item.fs_id }})
               </p>
               <p>
-                <strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`">
+                <strong>{{ $i18n('reports.from') }}</strong>:<a :href="`/profile/${row.item.rp_id}`">
                   {{ row.item.rp_name }} {{ row.item.rp_nachname }}
-                </a>
+                </a> ({{ row.item.rp_id }})
               </p>
-              <p><strong>{{ $i18n('reports.reason') }}:</strong> {{ row.item.tvalue }}</p>
-              <p><strong>{{ $i18n('reports.message') }}:</strong> {{ row.item.msg }}</p>
+              <p><strong>{{ $i18n('reports.reason') }}</strong>: {{ row.item.tvalue }}</p>
+              <p><strong>{{ $i18n('reports.message') }}</strong>: {{ row.item.msg }}</p>
             </div>
           </template>
         </b-table>
