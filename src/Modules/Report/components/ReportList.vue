@@ -53,6 +53,10 @@
             <div class="report">
               <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>
               <p><strong>{{ $i18n('reports.time') }}</strong>: {{ row.item.time }}</p>
+              <p v-if="row.item.betrieb_id !== 0">
+                <strong>{{ $i18n('reports.store') }}</strong>: <a :href="`/?page=fsbetrieb&id=${row.item.betrieb_id}`">
+                  {{ row.item.betrieb_name }}</a> ({{ row.item.betrieb_id }})
+              </p>
               <p>
                 <strong>{{ $i18n('reports.about') }}</strong>:<a :href="`/profile/${row.item.fs_id}`">
                   {{ row.item.fs_name }} {{ row.item.fs_nachname }}

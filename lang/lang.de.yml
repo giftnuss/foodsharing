@@ -211,6 +211,7 @@ reports:
   report_id: Meldungs-ID
   time: Zeitpunkt
   no_reports_fallback: Es sind noch keine Meldungen vorhanden
+  store: Zugeordneter Betrieb
 
 bell:
   no_bells: "Keine Benachrichtigungen"
