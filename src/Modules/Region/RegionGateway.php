@@ -535,6 +535,7 @@ class RegionGateway extends BaseGateway
 	public function regionPickupsByDate(int $districtId, $dateFormat): array
 	{
 		$value = implode(',', $this->listIdsForDescendantsAndSelf($districtId));
+
 		return $this->db->fetchAll(
 			'select 
 						date_Format(a.date,:form) as time,
