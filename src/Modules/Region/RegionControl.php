@@ -101,7 +101,7 @@ final class RegionControl extends Control
 		} else {
 			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
 			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
-			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&p=' . (int)$region['id'] . '&sub=statistic'];
+			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=statistic'];
 		}
 		if ($this->mayAccessApplications($region['id'])) {
 			if ($requests = $this->gateway->listRequests($region['id'])) {
@@ -312,6 +312,7 @@ final class RegionControl extends Control
 		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
 		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
 		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+		$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }

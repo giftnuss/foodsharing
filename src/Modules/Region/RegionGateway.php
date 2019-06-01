@@ -534,6 +534,7 @@ class RegionGateway extends BaseGateway
 
 	public function regionPickupsByDate(int $districtId, $dateFormat): array
 	{
+		$value = implode(',', $this->listIdsForDescendantsAndSelf($districtId));
 		return $this->db->fetchAll(
 			'select 
 						date_Format(a.date,:form) as time,
@@ -543,10 +544,10 @@ class RegionGateway extends BaseGateway
 						count(distinct a.foodsaver_id) as NumberOfFoodsavers
 					from fs_abholer a 
 					left outer join fs_betrieb b on a.betrieb_id = b.id
-					where b.bezirk_id = :id
-						group by date_Format(date,:groupForm)
+						where b.bezirk_id in (' . $value . ')
+					group by date_Format(date,:groupForm)
 					order by date desc',
-			[':id' => $districtId, ':form' => $dateFormat, ':groupForm' => $dateFormat]
+			[':form' => $dateFormat, ':groupForm' => $dateFormat]
 		);
 	}
 }
