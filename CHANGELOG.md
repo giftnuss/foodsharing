@@ -22,6 +22,7 @@
 - Added yellow info box with "how to use the address picker" @jofranz
 - Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
 
+- Fixed disappearing brown top bar menu !907 @jofranz @alangecker 
 
 ## Refactoring
 
