@@ -5,7 +5,6 @@
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
-import info from '@/info'
 import conv from '@/conv'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
@@ -15,7 +14,6 @@ import conversationStore from '@/stores/conversations'
 
 import {
   ajax,
-  stopHeartbeats,
   img,
   GET,
   pulseInfo,
@@ -27,9 +25,7 @@ import {
 const msg = {
   conversation_id: 0,
   last_message_id: 0,
-  heartbeatTime: 500,
   fsid: 0,
-  heartbeatXhr: false,
   listTimeout: false,
   moreIsLoading: false,
   $conversation: null,
@@ -38,11 +34,6 @@ const msg = {
   $convs: null,
 
   init: function () {
-    /*
-     * to reduce server load, stop all other heartbeat functionality
-     */
-    stopHeartbeats()
-
     /*
      * initiate dom querys for a little bit js performance
      */
@@ -158,24 +149,11 @@ const msg = {
     } else if ($('#conversation-list ul li a').length > 0) {
       cid = $('#conversation-list ul li:first').attr('id').split('-')[1]
       this.loadConversation(cid)
-    } else {
-      msg.heartbeat()
     }
   },
 
   isMob: function () {
     return $(window).width() <= 600
-  },
-
-  /**
-   * list heartbeat checks every time updates on all conversations
-   */
-  heartbeat: function () {
-    info.editService('msg', 'heartbeat', {
-      cid: msg.conversation_id,
-      mid: msg.last_message_id,
-      speed: 'fast'
-    })
   },
 
   /*
@@ -205,46 +183,6 @@ const msg = {
     }
   },
 
-  /**
-   * Method will be called if there arrived something new from the server
-   */
-  pushArrived: function (data) {
-    let ret = data.msg_heartbeat
-
-    console.log(ret._duration)
-
-    /*
-     * update current chat if there are new messages
-     */
-    if (ret.messages != undefined) {
-      for (var i = 0; i < ret.messages.length; i++) {
-        msg.appendMsg(ret.messages[i])
-      }
-      msg.scrollBottom()
-    }
-
-    /*
-     * update conversation list move newest on top etc.
-     */
-    if (ret.convs) {
-      for (let i = 0; i < ret.convs.length; i++) {
-        // if the element exist remove to add it new on the top
-        $(`#convlist-${ret.convs[i].id}`).remove()
-        msg.appendConvList(ret.convs[i], true)
-      }
-    }
-  },
-
-  /**
-   * function will abort the heartbeat ajax call and restart it
-   */
-  heartbeatRestart: function () {
-    info.editService('msg', 'heartbeat', {
-      cid: msg.conversation_id,
-      mid: msg.last_message_id,
-      speed: 'fast'
-    })
-  },
   initComposer: function () {
     autosize(document.getElementById('compose_body'))
     $('#compose_submit').on('click', function (ev) {
@@ -386,8 +324,6 @@ const msg = {
     $(`#convlist-${id}`).addClass('active')
 
     msg.$answer.trigger('select')
-
-    msg.heartbeatRestart()
 
     msg.scrollTrigger()
   },

@@ -60,8 +60,6 @@ $('#fs-profile-rate-comment').dialog({
 
 if (serverData.user.may) {
   socket.connect()
-} else {
-  clearInterval(window.g_interval_newBasket)
 }
 
 // add CSRF-Token to all jquery requests

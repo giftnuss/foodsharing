@@ -405,11 +405,6 @@ export function img (photo, size) {
   }
 }
 
-export function stopHeartbeats () {
-  clearInterval(window.g_interval_newBasket)
-  // stopChatHeartbeat();
-}
-
 export function fancy (content, title, subtitle) {
   let t = ''
   let s = ''

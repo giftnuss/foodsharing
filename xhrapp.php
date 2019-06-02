@@ -92,7 +92,6 @@ $csrf_whitelist = [
 	// 'Message::loadconvlist',
 	// 'Message::user2conv',
 	// 'Message::newconversation',
-	// 'Message::heartbeat($opt)',
 	// 'Message::people',
 	// 'Profile::rate',
 	// 'Profile::history',

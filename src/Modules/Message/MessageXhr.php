@@ -353,50 +353,6 @@ final class MessageXhr extends Control
 		}
 	}
 
-	/**
-	 * ajax call to check every time updates in all conversations
-	 * GET[m] is the last message id and GET[cid] is the current conversation id.
-	 *
-	 * @param $opt
-	 *
-	 * @return array|bool
-	 */
-	public function heartbeat($opt)
-	{
-		$cid = false;
-		$lmid = false;
-
-		if (isset($opt['cid'], $opt['mid']) && $this->mayConversation($opt['cid'])) {
-			$cid = (int)$opt['cid'];
-			$lmid = (int)$opt['mid'];
-		}
-
-		if ($conversationIDs = $this->model->checkConversationUpdates()) {
-			$conversationKeys = array_flip($conversationIDs);
-
-			$this->model->setAsRead($conversationIDs);
-			$return = array();
-			/*
-			 * check is a new message there for active conversation?
-			 */
-
-			if ($cid && isset($conversationKeys[$cid]) && $messages = $this->messageGateway->getLastMessages($cid, $lmid)) {
-				$return['messages'] = $messages;
-			}
-
-			if ($conversations = $this->messageGateway->listConversationUpdates($conversationIDs)) {
-				$return['convs'] = $conversations;
-			}
-
-			return array(
-				'data' => $return,
-				'script' => 'msg.pushArrived(ajax.data);'
-			);
-		}
-
-		return false;
-	}
-
 	public function people(): void
 	{
 		$this->session->noWrite();

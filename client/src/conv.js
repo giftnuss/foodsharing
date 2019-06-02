@@ -108,18 +108,8 @@ const conv = {
     if (ids.length > 0) {
       var infos = conv.getChatInfos()
       storage.set('msg-chats', infos)
-
-      /*
-      info.editService('msg','chat',{
-        speed:'fast',
-        premethod:'setSessionInfo',
-        ids:ids,
-        infos:infos
-      });
-      */
     } else {
       storage.del('msg-chats')
-      // info.removeService('msg-chats','chat')
     }
   },
 
