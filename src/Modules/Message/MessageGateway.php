@@ -196,8 +196,9 @@ final class MessageGateway extends BaseGateway
 		}
 
 		array_walk($conversations, function (&$c) {
-			$c['last_message'] = new \DateTime($c['last_message_at']);
-			$c['unread'] = (bool)$c['unread'];
+			$c['last_message_at'] = new \DateTime($c['last_message_at']);
+			$c['has_unread_messages'] = (bool)$c['unread'];
+			unset($c['unread']);
 		});
 
 		return $conversations;

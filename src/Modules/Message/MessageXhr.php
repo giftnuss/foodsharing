@@ -220,12 +220,12 @@ final class MessageXhr extends Control
 	{
 		$this->session->noWrite();
 
-		$limit = -1;
+		$limit = null;
 		if (isset($_GET['limit'])) {
 			$limit = (int)$_GET['limit'];
 		}
 
-		if ($conversations = $this->model->listConversations($limit)) {
+		if ($conversations = $this->messageGateway->listConversationsForUser($this->session->id(), $limit)) {
 			$xhr = new Xhr();
 
 			// because some of the messages and the titles are still stored in encoded html, theres the option to
