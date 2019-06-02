@@ -298,20 +298,22 @@ class WorkGroupGateway extends BaseGateway
 			]
 		);
 	}
-
-	public function getFsMail(int $fsId)
+	
+	public function getFsWithMail(int $fsId): array
 	{
-		return $this->db->fetchValue('
+		return $this->db->fetch('
 			SELECT
-				CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '")
+				fs.`id`,
+				fs.`name`,
+				IF(mb.`name` IS NULL, fs.`email`, CONCAT(mb.`name`,"@' . PLATFORM_MAILBOX_HOST . '")) AS email
 			FROM
-				fs_mailbox mb
-			INNER JOIN
-				fs_foodsaver fs
+				fs_foodsaver `fs`
+			LEFT JOIN
+				fs_mailbox `mb`
 			ON
-				fs.mailbox_id = mb.id
+				fs.`mailbox_id` = mb.`id`
 			WHERE
-				fs.id = :fs_id
+				fs.`id` = :fs_id
 		', [':fs_id' => $fsId]);
 	}
 
