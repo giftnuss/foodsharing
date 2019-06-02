@@ -213,45 +213,6 @@ final class MessageXhr extends Control
 		$xhr->send();
 	}
 
-	/**
-	 * ajax call to load all active conversations.
-	 */
-	public function loadconvlist(): void
-	{
-		$this->session->noWrite();
-
-		$limit = null;
-		if (isset($_GET['limit'])) {
-			$limit = (int)$_GET['limit'];
-		}
-
-		if ($conversations = $this->messageGateway->listConversationsForUser($this->session->id(), $limit)) {
-			$xhr = new Xhr();
-
-			// because some of the messages and the titles are still stored in encoded html, theres the option to
-			// decode them again for the usage in vue components
-			// At some point there should always the raw input handled, which the user has entered
-			// and served over a proper API endpoint
-
-			if (isset($_GET['raw']) && $_GET['raw']) {
-				$xhr->addData('convs', array_map(function ($c) {
-					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
-					if (isset($c['name']) && $c['name']) {
-						$c['name'] = html_entity_decode($c['name']);
-					}
-					if (isset($c['last_message'])) {
-						$c['last_message'] = html_entity_decode($c['last_message']);
-					}
-
-					return $c;
-				}, $conversations));
-			} else {
-				$xhr->addData('convs', $conversations);
-			}
-			$xhr->send();
-		}
-	}
-
 	public function user2conv(): void
 	{
 		$xhr = new Xhr();

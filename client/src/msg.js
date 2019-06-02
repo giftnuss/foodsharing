@@ -370,25 +370,6 @@ const msg = {
       })
     }
   },
-
-  loadConversationList: function () {
-    ajax.req('msg', 'loadconvlist', {
-      loader: false,
-      success: function (ret) {
-        if (ret.convs != undefined && ret.convs.length > 0) {
-          msg.$convs.html('')
-          msg.loadConversation(ret.convs[0].id)
-
-          for (var i = 0; i < ret.convs.length; i++) {
-            msg.appendConvList(ret.convs[i])
-          }
-        }
-      },
-      complete: function () {
-
-      }
-    })
-  },
   resetConversation: function () {
     $('#msg-conversation-title').html('<i class="fas fa-comment"></i>')
     $('#msg-conversation ul').html('')
