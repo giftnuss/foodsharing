@@ -171,29 +171,6 @@ final class MessageModel extends Db
 		return $out;
 	}
 
-	public function listConversationMembers($conversation_id): array
-	{
-		return $this->q('
-			SELECT
-				fs.id,
-				fs.name,
-				fs.photo,
-				fs.email,
-				fs.geschlecht,
-				fs.infomail_message
-
-			FROM
-                `fs_foodsaver_has_conversation` hc
-                
-			INNER JOIN
-				`fs_foodsaver` fs ON fs.id = hc.foodsaver_id
-
-			WHERE
-				hc.conversation_id = ' . (int)$conversation_id . ' AND
-				fs.deleted_at IS NULL
-		');
-	}
-
 	/**
 	 * check if there are unread messages in conversation give back the conversation ids.
 	 */
@@ -237,13 +214,6 @@ final class MessageModel extends Db
 	 *
 	 * @return bool | int
 	 */
-	public function setAsRead($conv_ids)
-	{
-		$this->mem->userDel($this->session->id(), 'msg-update');
-
-		return $this->update('UPDATE fs_foodsaver_has_conversation SET unread = 0 WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND conversation_id IN(' . implode(',', $conv_ids) . ')');
-	}
-
 	public function sendMessage($cid, $body, $sender_id = false)
 	{
 		if (!$sender_id) {

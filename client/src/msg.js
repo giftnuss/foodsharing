@@ -92,7 +92,7 @@ const msg = {
     /*
      * initiate message submit functionality for conversation form
      */
-    $('#msg-control form').on('submit', function (ev) {
+    $('#msg-control form').on('submit', async function (ev) {
       ev.preventDefault()
 
       var val = msg.$answer.val()
@@ -101,27 +101,19 @@ const msg = {
         msg.$answer.css('height', '40px')
         msg.$answer[0].focus()
         msg.showLoader()
-
-        ajax.req('msg', 'sendmsg', {
-          loader: false,
-          method: 'post',
-          data: {
-            c: msg.conversation_id,
-            b: val
-          },
-          complete: async function () {
+        try {
+          await api.sendMessage(msg.conversation_id, val)
+        } catch (e) {
+          pulseError('Fehler beim Senden der Nachricht')
+          console.error(e)
+        } finally {
+          setTimeout(function () {
             msg.hideLoader()
-            setTimeout(function () {
-              msg.hideLoader()
-            }, 100)
-
-            // reload conversations
-            await conversationStore.loadConversations()
-            let conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
-            msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.bodyRaw, time: conversation.lastMessageTime })
-          }
-
-        })
+          }, 100)
+          await conversationStore.loadConversations()
+          let conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
+          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.bodyRaw, time: conversation.lastMessageTime })
+        }
       }
     })
 
@@ -316,35 +308,32 @@ const msg = {
     msg.scrollTrigger()
   },
 
-  loadMore: function () {
+  loadMore: async function () {
     let lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
 
     if (!msg.moreIsLoading) {
       msg.moreIsLoading = true
-      ajax.req('msg', 'loadmore', {
-        loader: true,
-        data: {
-          lmid: lmid,
-          cid: msg.conversation_id
-        },
-        success: function (ret) {
-          msg.moreIsLoading = false
-
-          for (let i = 0; i < ret.messages.length; i++) {
-            msg.prependMsg(ret.messages[i])
-          }
-
-          let position = $(`#msg-${lmid}`).position()
-
-          if (!position) return
-
-          if (!msg.isMob()) {
-            msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
-          } else {
-            $(window).scrollTop(position.top)
-          }
+      try {
+        let ret = await api.getMessages(msg.conversation_id, lmid)
+        for (let i = 0; i < ret.messages.length; i++) {
+          msg.prependMsg(ret.messages[i])
         }
-      })
+
+        let position = $(`#msg-${lmid}`).position()
+
+        if (!position) return
+
+        if (!msg.isMob()) {
+          msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
+        } else {
+          $(window).scrollTop(position.top)
+        }
+      } catch (e) {
+        pulseError('Das Nachladen von Nachrichten ist fehlgeschlagne')
+        console.error(e)
+      } finally {
+        msg.moreIsLoading = false
+      }
     }
   },
 

@@ -10,6 +10,7 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
 
 final class MessageGateway extends BaseGateway
@@ -35,8 +36,18 @@ final class MessageGateway extends BaseGateway
 		return array_map(function ($member) { return $member['name']; }, $members);
 	}
 
-	public function getConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0): array
+	public function getConversationMessages(int $conversation_id, int $limit = 20, ?int $olderThanId = null): array
 	{
+		$offsetStr = '';
+		$queryParams = [
+			'id' => $conversation_id,
+			'limit' => $limit,
+		];
+		if (!is_null($olderThanId)) {
+			$offsetStr = 'AND m.id < :olderThanId';
+			$queryParams['olderThanId'] = $olderThanId;
+		}
+
 		return $this->db->fetchAll('
 			SELECT
 				m.id,
@@ -52,15 +63,12 @@ final class MessageGateway extends BaseGateway
 				m.foodsaver_id = fs.id
 			AND
 				m.conversation_id = :id
+			' . $offsetStr . '
 			ORDER BY
 				m.`time` DESC
 
-			LIMIT :offset, :limit
-		', [
-			'id' => $conversation_id,
-			'offset' => $offset,
-			'limit' => $limit,
-		]);
+			LIMIT :limit
+		', $queryParams);
 	}
 
 	/**
@@ -98,55 +106,6 @@ final class MessageGateway extends BaseGateway
 		}
 
 		return false;
-	}
-
-	public function loadMore(int $conversation_id, int $last_message_id, int $limit = 20): array
-	{
-		return $this->db->fetchAll('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-			WHERE
-				m.foodsaver_id = fs.id
-			AND
-				m.conversation_id = :conv_id
-			AND
-				m.id < :last_msg_id
-			ORDER BY
-				m.`time` DESC
-			LIMIT 0,:limit
-		', [':conv_id' => $conversation_id, ':last_msg_id' => $last_message_id, ':limit' => $limit]);
-	}
-
-	public function getLastMessages($conv_id, $last_msg_id): array
-	{
-		return $this->db->fetchAll('
-			SELECT
-				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
-				m.`body`,
-				m.`time`
-			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
-			WHERE
-				m.foodsaver_id = fs.id
-			AND
-				m.conversation_id = :conv_id
-			AND
-				m.id > :last_msg_id
-			ORDER BY
-				m.`time` ASC
-		', [':conv_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
 	}
 
 	/**
@@ -201,6 +160,29 @@ final class MessageGateway extends BaseGateway
 		});
 
 		return $conversations;
+	}
+
+	public function listConversationMembersWithProfile(int $conversationId): array
+	{
+		return $this->db->fetchAll('		
+			SELECT
+				fs.id,
+				fs.name,
+				fs.photo,
+				fs.email,
+				fs.geschlecht,
+				fs.infomail_message
+
+			FROM
+                `fs_foodsaver_has_conversation` hc
+                
+			INNER JOIN
+				`fs_foodsaver` fs ON fs.id = hc.foodsaver_id
+
+			WHERE
+				hc.conversation_id = :conversationId AND
+				fs.deleted_at IS NULL
+		', [':conversationId' => $conversationId]);
 	}
 
 	private function getProfileForUsers(array $fsIds): array
@@ -263,5 +245,56 @@ final class MessageGateway extends BaseGateway
 		});
 
 		return $conversations;
+	}
+
+	private function updateLastConversationMessage(int $conversationId, int $lastMessageId, string $lastMessageBody, int $lastMessageAuthor, Carbon $lastMessageAt)
+	{
+		$this->db->update('fs_conversation',
+			[
+				'last' => $lastMessageAt->toDateTimeString(),
+				'last_foodsaver_id' => $lastMessageAuthor,
+				'last_message' => $lastMessageBody,
+				'last_message_id' => $lastMessageId
+			],
+			['id' => $conversationId]
+		);
+	}
+
+	private function markAsUnread(int $conversationId, int $exceptFsId)
+	{
+		$this->db->update('fs_foodsaver_has_conversation',
+			['unread' => 1],
+			[
+				'conversation_id' => $conversationId,
+				'foodsaver_id !=' => $exceptFsId
+			]);
+	}
+
+	public function markAsRead(int $conversationId, int $fsId)
+	{
+		$this->db->update('fs_foodsaver_has_conversation',
+			['unread' => 0],
+			[
+				'foodsaver_id' => $fsId,
+				'conversation_id' => $conversationId]
+		);
+	}
+
+	public function addMessage(int $conversationId, int $senderId, string $body, Carbon $sentAt = null)
+	{
+		if (is_null($sentAt)) {
+			$sentAt = Carbon::now();
+		}
+		$messageId = $this->db->insert('fs_msg',
+			[
+				'conversation_id' => $conversationId,
+				'foodsaver_id' => $senderId,
+				'body' => $body,
+				'time' => $sentAt->toDateTimeString()
+			]);
+		$this->markAsUnread($conversationId, $senderId);
+		$this->updateLastConversationMessage($conversationId, $messageId, $body, $senderId, $sentAt);
+
+		return $messageId;
 	}
 }

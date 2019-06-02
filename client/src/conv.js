@@ -3,12 +3,13 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { ajax, GET, goTo, isMob, nl2br } from '@/script'
+import { ajax, GET, goTo, isMob, nl2br, pulseError } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
+import * as api from '@/api/conversations'
 
 const conv = {
 
@@ -98,11 +99,7 @@ const conv = {
     }
   },
 
-  /**
-   * method to send the right data to the polling service
-   *
-   */
-  registerPollingService: function () {
+  storeOpenedChatWindows: function () {
     var ids = conv.getCids()
 
     if (ids.length > 0) {
@@ -138,7 +135,7 @@ const conv = {
       conv.chatboxes[key].minimized = true
     }
 
-    conv.registerPollingService()
+    conv.storeOpenedChatWindows()
   },
 
   // maximoze mini box
@@ -155,7 +152,7 @@ const conv = {
     conv.chatboxes[key].minimized = true
   },
 
-  checkInputKey: function (event, chatboxtextarea, cid) {
+  checkInputKey: async function (event, chatboxtextarea, cid) {
     var $ta = $(chatboxtextarea)
     var val = $ta.val().trim()
 
@@ -172,20 +169,15 @@ const conv = {
       // eslint-disable-next-line no-control-regex
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
-      ajax.req('msg', 'sendmsg', {
-        loader: false,
-        method: 'post',
-        data: {
-          c: cid,
-          b: val
-        },
-        complete: function () {
-          conv.hideLoader(cid)
-
-          // reload conversations
-          conversationStore.loadConversations()
-        }
-      })
+      try {
+        await api.sendMessage(cid, val)
+      } catch (e) {
+        pulseError('Fehler beim Senden der Nachricht')
+        console.error(e)
+      } finally {
+        /* we intentionally don't reload conversation here as we will be updated via websocket */
+        conv.hideLoader(cid)
+      }
     }
   },
 
@@ -230,7 +222,7 @@ const conv = {
     this.chatCount--
 
     // re register polling service
-    this.registerPollingService()
+    this.storeOpenedChatWindows()
   },
 
   showLoader: function (cid) {
@@ -305,62 +297,55 @@ const conv = {
   /**
    * load the first content for one chatbox
    */
-  initChat: function (cid) {
+  initChat: async function (cid) {
     conv.showLoader(cid)
 
     var key = this.getKey(cid)
 
-    ajax.req('msg', 'loadconversation', {
-      loader: false,
-      data: {
-        id: cid
-      },
-      success: function (ret) {
-        /*
-         * add link to leave the chat only if its no 1:1 conversation
-         */
-        if (ret.member.length > 2) {
-          // conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
-          conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
-          conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req('msg','rename',{data:{cid:${cid},name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>`)
-        }
-
-        /*
-         * first make a title with all the usernames
-         */
-
-        let title = ret.conversation.name
-        if (ret.conversation.name == null) {
-          title = []
-          for (var i = 0; i < ret.member.length; i++) {
-            if (ret.member[i] != undefined && ret.member[i].id != serverData.user.id) {
-              title.push(`<a href="/profile/${ret.member[i].id}">${ret.member[i].name}</a>`)
-            }
-          }
-          title = title.join(', ')
-        }
-
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
-
-        /*
-         * now append all arrived messages
-         */
-        if (ret.messages != undefined && ret.messages.length > 0) {
-          /*
-           * list messages the reverse way
-           */
-          for (var y = (ret.messages.length - 1); y >= 0; y--) {
-            conv.append(key, ret.messages[y])
-          }
-
-          conv.scrollBottom(cid)
-        }
-      },
-      complete: function () {
-        conv.hideLoader(cid)
-        conv.registerPollingService()
+    try {
+      let conversation = await api.getConversation(cid)
+      if (conversation.members.length > 2) {
+        conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
+        conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req('msg','rename',{data:{cid:${cid},name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>`)
       }
-    })
+
+      /*
+       * first make a title with all the usernames
+       */
+
+      let title = conversation.name
+      if (title == null) {
+        title = []
+        for (let i = 0; i < conversation.members.length; i++) {
+          if (conversation.members[i] != undefined && conversation.members[i].id != serverData.user.id) {
+            title.push(`<a href="/profile/${conversation.members[i].id}">${conversation.members[i].name}</a>`)
+          }
+        }
+        title = title.join(', ')
+      }
+
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
+
+      /*
+       * now append all arrived messages
+       */
+      if (conversation.messages != undefined && conversation.messages.length > 0) {
+        /*
+         * list messages the reverse way
+         */
+        for (var y = (conversation.messages.length - 1); y >= 0; y--) {
+          conv.append(key, conversation.messages[y])
+        }
+
+        conv.scrollBottom(cid)
+      }
+    } catch (e) {
+      pulseError('Fehler beim Laden der Unterhaltung')
+      console.error(e)
+    } finally {
+      conv.hideLoader(cid)
+      conv.storeOpenedChatWindows()
+    }
   },
 
   appendChatbox: function (cid, min) {
