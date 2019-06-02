@@ -281,15 +281,6 @@ final class MessageModel extends Db
 		return false;
 	}
 
-	public function mayConversation($conversation_id): bool
-	{
-		if ($this->q('SELECT foodsaver_id FROM `fs_foodsaver_has_conversation` WHERE `foodsaver_id` = ' . (int)$this->session->id() . ' AND conversation_id = ' . (int)$conversation_id)) {
-			return true;
-		}
-
-		return false;
-	}
-
 	private function updateDenormalizedConversationData($cids = false): array
 	{
 		if ($cids === false) {

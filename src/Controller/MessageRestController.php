@@ -23,36 +23,6 @@ class MessageRestController extends AbstractFOSRestController
 		$this->session = $session;
 	}
 
-	// TODO: this is copied directly from from messageXhr.php
-	private function mayConversation($conversationId)
-	{
-		$ids = $this->getNormalizedMsgConversations();
-
-		// isConversationStoredInSession
-		if (isset($ids[(int)$conversationId])) {
-			return true;
-		}
-
-		if ($this->model->mayConversation($conversationId)) {
-			$ids[$conversationId] = true;
-			$this->session->set('msg_conversations', $ids);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	private function getNormalizedMsgConversations()
-	{
-		// first get the session array
-		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = [];
-		}
-
-		return $ids;
-	}
-
 	/**
 	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"}, defaults={"messagesNumber" = 20})
 	 * @Rest\QueryParam(name="messagesLimit", requirements="\d+", default="20", description="How many messages to return.")
@@ -60,7 +30,7 @@ class MessageRestController extends AbstractFOSRestController
 	 */
 	public function getConversationAction(int $conversationId, ParamFetcher $paramFetcher)
 	{
-		if (!$this->session->may() || !$this->mayConversation($conversationId)) {
+		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
 		}
 
@@ -82,8 +52,8 @@ class MessageRestController extends AbstractFOSRestController
 		};
 		$members = array_map($publicMemberInfo, $members);
 
-		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
-		$name = $this->gateway->getConversationName($conversationId);
+		$messages = $this->messageGateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
+		$name = $this->messageGateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 
 		$conversationData = [

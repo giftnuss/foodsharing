@@ -37,7 +37,7 @@ final class MessageXhr extends Control
 	 */
 	public function rename(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked($_GET['cid'])) {
+		if ($this->messageGateway->mayConversation($this->session->id(), $_GET['cid']) && !$this->messageGateway->conversationLocked($_GET['cid'])) {
 			$xhr = new Xhr();
 
 			$name = htmlentities($_GET['name']);
@@ -56,7 +56,7 @@ final class MessageXhr extends Control
 	 */
 	public function leave(): void
 	{
-		if ($this->mayConversation($_GET['cid']) && !$this->messageGateway->conversationLocked(
+		if ($this->messageGateway->mayConversation($this->session->id(), $_GET['cid']) && !$this->messageGateway->conversationLocked(
 				$_GET['cid']
 			) && $this->model->deleteUserFromConversation($_GET['cid'], $this->session->id())) {
 			$xhr = new Xhr();
@@ -71,7 +71,7 @@ final class MessageXhr extends Control
 	public function loadconversation(): void
 	{
 		$id = (int)$_GET['id'];
-		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
+		if ($this->messageGateway->mayConversation($this->session->id(), $id) && $member = $this->model->listConversationMembers($id)) {
 			$xhr = new Xhr();
 			$xhr->addData('member', $member);
 			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
@@ -93,7 +93,7 @@ final class MessageXhr extends Control
 	 */
 	public function loadmore(): void
 	{
-		if ($this->mayConversation((int)$_GET['cid'])) {
+		if ($this->messageGateway->mayConversation($this->session->id(), (int)$_GET['cid'])) {
 			$xhr = new Xhr();
 			if ($msgs = $this->messageGateway->loadMore((int)$_GET['cid'], (int)$_GET['lmid'])) {
 				$xhr->addData('messages', $msgs);
@@ -162,7 +162,7 @@ final class MessageXhr extends Control
 	public function sendmsg(): void
 	{
 		$xhr = new Xhr();
-		if ($this->mayConversation($_POST['c'])) {
+		if ($this->messageGateway->mayConversation($this->session->id(), $_POST['c'])) {
 			$this->session->noWrite();
 
 			if (isset($_POST['b'])) {
@@ -250,35 +250,6 @@ final class MessageXhr extends Control
 			}
 			$xhr->send();
 		}
-	}
-
-	/**
-	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array.
-	 *
-	 * @param int $conversation_id
-	 *
-	 * @return bool
-	 */
-	private function mayConversation(int $conversation_id): bool
-	{
-		// first get the session array
-		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = array();
-		}
-
-		// check if the conversation in stored in the session
-		if (isset($ids[$conversation_id])) {
-			return true;
-		}
-
-		if ($this->model->mayConversation($conversation_id)) {
-			$ids[$conversation_id] = true;
-			$this->session->set('msg_conversations', $ids);
-
-			return true;
-		}
-
-		return false;
 	}
 
 	public function user2conv(): void

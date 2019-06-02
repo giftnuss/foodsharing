@@ -14,6 +14,11 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 final class MessageGateway extends BaseGateway
 {
+	public function mayConversation($fsId, $conversationId): bool
+	{
+		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
+	}
+
 	public function getConversationName(int $conversationId): ?string
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);

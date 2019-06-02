@@ -38,13 +38,6 @@ final class MessageControl extends Control
 		}
 
 		$conversations = $this->messageGateway->listConversationsForUser($this->session->id());
-		if ($conversations) {
-			$ids = array();
-			foreach ($conversations as $c) {
-				$ids[$c['id']] = true;
-			}
-			$this->session->set('msg_conversations', $ids);
-		}
 		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }
