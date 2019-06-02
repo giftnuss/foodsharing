@@ -2,37 +2,38 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
 class WorkGroupXhr extends Control
 {
 	private $workGroupGateway;
 
 	public function __construct(
-		Db $model,
-		WorkGroupView $view,
-		WorkGroupGateway $workGroupGateway
+			WorkGroupView $view,
+			WorkGroupGateway $workGroupGateway
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->workGroupGateway = $workGroupGateway;
-
+		
 		parent::__construct();
 	}
 
 	public function apply()
 	{
-		if ($group = $this->workGroupGateway->getGroup($_GET['id'])) {
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group) {
 			$dialog = new XhrDialog();
 
 			$dialog->addContent($this->view->applyForm($group));
 
 			$dialog->setTitle('Bewerbung ' . $group['name']);
-			$dialog->addButton('Bewerbung absenden', 'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})');
+			$dialog->addButton('Bewerbung absenden',
+					'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})'
+			);
 
 			$dialog->setResizeable(false);
 			$dialog->addOpt('width', 450);
@@ -43,57 +44,65 @@ class WorkGroupXhr extends Control
 
 	public function addtogroup()
 	{
-		if ($this->session->may('fs') && $group = $this->workGroupGateway->getGroup($_GET['id'])) {
-			if ($group['apply_type'] == ApplyType::OPEN) {
-				$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
+		if (!$this->session->may('fs')) {
+			return;
+		}
 
-				return array(
-					'status' => 1,
-					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall");'
-				);
-			}
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group && $group['apply_type'] == ApplyType::OPEN) {
+			$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
+
+			return array(
+				'status' => 1,
+				'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall");'
+			);
 		}
 	}
 
 	public function applysend()
 	{
-		if (isset($_GET['f'])) {
-			$output = array();
-			parse_str($_GET['f'], $output);
-			if (!empty($output)) {
-				$motivation = strip_tags($output['motivation']);
-				$fahig = strip_tags($output['faehigkeit']);
-				$erfahrung = strip_tags($output['erfahrung']);
-				$zeit = strip_tags($output['zeit']);
-				$zeit = substr($zeit, 0, 300);
+		if (!isset($_GET['f'])) {
+			return;
+		}
 
-				if ($groupmail = $this->workGroupGateway->getGroupMail($_GET['id'])) {
-					if ($group = $this->workGroupGateway->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
-							if ($email = $this->workGroupGateway->getFsMail($fs['id'])) {
-								$fs['email'] = $email;
-							}
+		$output = array();
+		parse_str($_GET['f'], $output);
+		if (empty($output)) {
+			return;
+		}
 
-							$content = array(
-								'Motivation:' . "\n===========\n" . trim($motivation),
-								'Fähigkeiten:' . "\n============\n" . trim($fahig),
-								'Erfahrung:' . "\n==========\n" . trim($erfahrung),
-								'Zeit:' . "\n=====\n" . trim($zeit)
-							);
+		$groupId = $_GET['id'];
+		$groupmail = $this->workGroupGateway->getGroupMail($groupId);
+		if ($groupmail) {
+			$group = $this->workGroupGateway->getGroup($groupId);
+			if ($group) {
+				$fsId = $this->session->id();
+				$fs = $this->workGroupGateway->getFsWithMail($fsId);
+				if ($fs) {
+					$motivation = strip_tags($output['motivation']);
+					$fahig = strip_tags($output['faehigkeit']);
+					$erfahrung = strip_tags($output['erfahrung']);
+					$zeit = strip_tags($output['zeit']);
+					$zeit = substr($zeit, 0, 300);
 
-							$this->workGroupGateway->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
+					$content = array(
+						'Motivation:' . "\n===========\n" . trim($motivation),
+						'Fähigkeiten:' . "\n============\n" . trim($fahig),
+						'Erfahrung:' . "\n==========\n" . trim($erfahrung),
+						'Zeit:' . "\n=====\n" . trim($zeit)
+					);
 
-							$this->emailHelper->libmail(array(
-								'email' => $fs['email'],
-								'email_name' => $fs['name']
-							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
+					$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));
 
-							return array(
-								'status' => 1,
-								'script' => 'pulseInfo("Bewerbung wurde abgeschickt!");$("#' . preg_replace('/[^a-z0-9\-]/', '', $_GET['d']) . '").dialog("close");'
-							);
-						}
-					}
+					$this->emailHelper->libmail(array(
+						'email' => $fs['email'],
+						'email_name' => $fs['name']
+					), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseInfo("Bewerbung wurde abgeschickt!");$("#' . preg_replace('/[^a-z0-9\-]/', '', $_GET['d']) . '").dialog("close");'
+					);
 				}
 			}
 		}
@@ -102,6 +111,7 @@ class WorkGroupXhr extends Control
 	/*
 	 * CONTACT GROUP VIA EMAIL
 	 */
+
 	public function sendtogroup()
 	{
 		if (!$this->session->id()) {
@@ -119,7 +129,7 @@ class WorkGroupXhr extends Control
 					'message' => $message,
 					'username' => $this->session->user('name'),
 					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-				), $userMail);
+						), $userMail);
 
 				return array(
 					'status' => 1,
