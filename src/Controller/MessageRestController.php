@@ -58,7 +58,6 @@ class MessageRestController extends AbstractFOSRestController
 
 		$conversationData = [
 			'name' => $name,
-			'member' => $members, // remove this in the future once clients have updated
 			'members' => $members,
 			'messages' => $messages,
 		];

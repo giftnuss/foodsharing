@@ -60,17 +60,17 @@ final class MessageView extends View
 				$pics = '';
 				$title = '';
 
-				if (!empty($c['member'])) {
+				if (!empty($c['members'])) {
 					$pictureWidth = 50;
 					$size = 'med';
 
-					if (count($c['member']) > 2) {
+					if (count($c['members']) > 2) {
 						$pictureWidth = 25;
 						$size = 'mini';
-						shuffle($c['member']);
+						shuffle($c['members']);
 					}
 
-					foreach ($c['member'] as $m) {
+					foreach ($c['members'] as $m) {
 						if ($m['id'] == $this->session->id()) {
 							continue;
 						}
@@ -84,7 +84,7 @@ final class MessageView extends View
 						$title = $c['name'];
 					}
 
-					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['unread'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->timeHelper->niceDate($c['last_ts']) . '</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['has_unread_messages'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->timeHelper->niceDate($c['last_message_at']->getTimestamp()) . '</span><span class="clear"></span></a></li>';
 				}
 			}
 		} else {

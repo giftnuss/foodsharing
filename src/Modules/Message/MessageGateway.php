@@ -170,7 +170,7 @@ final class MessageGateway extends BaseGateway
 				c.`last` AS last_message_at,
 				c.`last_message`,
 				c.`last_foodsaver_id` AS last_message_author_id,
-				hc.unread,
+				hc.unread as has_unread_messages,
 				c.name
 
 			FROM
@@ -197,8 +197,7 @@ final class MessageGateway extends BaseGateway
 
 		array_walk($conversations, function (&$c) {
 			$c['last_message_at'] = new \DateTime($c['last_message_at']);
-			$c['has_unread_messages'] = (bool)$c['unread'];
-			unset($c['unread']);
+			$c['has_unread_messages'] = (bool)$c['has_unread_messages'];
 		});
 
 		return $conversations;

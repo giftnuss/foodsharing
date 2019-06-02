@@ -14,11 +14,11 @@ export default new Vue({
     async loadConversations (limit = 10) {
       const res = await getConversationList(limit)
       this.conversations = res.data.map(c => ({
-        id: parseInt(c.id),
+        id: c.id,
         title: c.name,
         lastMessageTime: new Date(c.last_message_at),
         members: c.members.length ? c.members.map((m) => ({
-          id: parseInt(m.id, 10),
+          id: m.id,
           name: m.name,
           avatar: m.photo ? `/images/mini_q_${m.photo}` : null
         })) : [],
@@ -26,7 +26,7 @@ export default new Vue({
           bodyRaw: c.last_message,
           authorId: c.last_message_author_id
         },
-        hasUnreadMessages: c.has_unread_messages === '1'
+        hasUnreadMessages: c.has_unread_messages
       }))
     }
   }

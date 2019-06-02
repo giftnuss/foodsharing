@@ -22,6 +22,10 @@ import {
   nl2br
 } from '@/script'
 
+import {
+  dateDistanceInWords
+} from '@/utils'
+
 const msg = {
   conversation_id: 0,
   last_message_id: 0,
@@ -76,22 +80,6 @@ const msg = {
           height: height,
           scrollTo: `${msg.$conversation.prop('scrollHeight')}px`
         })
-      } else {
-        /* THIS CODE IS BROKEN BECAUSE app.resize does not exist, it's a copy-and-paste from stackoverflow error
-        // resize event is triggered also on scrolling in android / ios
-        // http://stackoverflow.com/questions/14257541/android-browser-triggers-jquery-window-resize-on-scolling
-        clearTimeout(app.resize.timer)
-        app.resize.timer = setTimeout(function () {
-          // do not check height, because it changes on scrolling due to hide / show address bar
-          let windowChanged = $(window).width() != app.size.window_width
-          if (windowChanged) {
-
-            // window was actually resized
-            msg.scrollBottom()
-
-          }
-        }, 500)
-        */
       }
     })
 
@@ -121,14 +109,16 @@ const msg = {
             c: msg.conversation_id,
             b: val
           },
-          complete: function () {
+          complete: async function () {
             msg.hideLoader()
             setTimeout(function () {
               msg.hideLoader()
             }, 100)
 
             // reload conversations
-            conversationStore.loadConversations()
+            await conversationStore.loadConversations()
+            let conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
+            msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.bodyRaw, time: conversation.lastMessageTime })
           }
 
         })
@@ -174,12 +164,10 @@ const msg = {
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
       $itemLink.children('.msg').html(message.body)
-      $itemLink.children('.time').text(timeformat.nice(message.time))
+      $itemLink.children('.time').text(dateDistanceInWords(message.time))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
       $item.show('highlight', { color: '#F5F5B5' })
-    } else {
-      msg.loadConversationList()
     }
   },
 
