@@ -23,6 +23,7 @@
 - Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
 
 - Fixed disappearing brown top bar menu !907 @jofranz @alangecker 
+- Caused by a previous change the brown top menu bar was just scrolling away. This is an attempt to fix it again to restore previous behaviour in order to keep the top bar on top !907 @jofranz @alangecker
 
 ## Refactoring
 
