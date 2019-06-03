@@ -115,14 +115,14 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         }
   }
 
+    // increases the priority of this position statement
+    // can be removed as soon we stop scoping bootstrap
+    .fixed-top {
+        position: fixed;
+    }
 }
 
 
-// increases the priority of this position statement
-// can be removed as soon we stop scoping bootstrap
-.bootstrap .fixed-top {
-    position: fixed;
-}
 
 // some components get created outside the scope (e.g. tooltip)
 @import "~bootstrap/scss/tooltip";
