@@ -104,7 +104,6 @@ class UploadsRestController extends AbstractFOSRestController
 			$filename = $this->uploadsService->getFileLocation($uuid, $width, $height, $quality);
 
 			if (!file_exists($filename)) {
-				$originalFilename = $this->uploadsService->getFileLocation($uuid);
 				$this->uploadsService->resizeImage($originalFilename, $filename, $width, $height, $quality);
 			}
 		}
