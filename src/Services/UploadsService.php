@@ -117,7 +117,6 @@ class UploadsService
 		if ($quality) {
 			$img->setImageCompressionQuality($quality);
 		}
-		// $img->resizeImage($width, $height, Imagick::FILTER_POINT, 1);
 		$img->writeImage($output);
 	}
 }
