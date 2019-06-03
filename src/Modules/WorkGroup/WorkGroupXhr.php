@@ -2,11 +2,10 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
-use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
 class WorkGroupXhr extends Control
 {
@@ -18,7 +17,7 @@ class WorkGroupXhr extends Control
 	) {
 		$this->view = $view;
 		$this->workGroupGateway = $workGroupGateway;
-		
+
 		parent::__construct();
 	}
 

@@ -298,7 +298,7 @@ class WorkGroupGateway extends BaseGateway
 			]
 		);
 	}
-	
+
 	public function getFsWithMail(int $fsId): array
 	{
 		return $this->db->fetch('
