@@ -10,7 +10,7 @@
 - Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
-- Added yellow info box with a warning not to change the address fields @jofranz
+- Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
