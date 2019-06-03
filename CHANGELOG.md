@@ -23,6 +23,7 @@
 - Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
 
 ## Refactoring
+- Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
