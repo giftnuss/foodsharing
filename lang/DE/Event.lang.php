@@ -14,3 +14,4 @@ $g_lang['mumble_room'] = 'In welchem mumble-Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'Enddatum';
 $g_lang['event_options'] = 'Eventoptionen';
 $g_lang['saveEventInfo'] = '<b>Bitte beachten:</b><br>Beim Speichern werden alle derzeitigen Mitglieder der oben gewählten Gruppe eingeladen. Um Neuzugänge in Bezirk oder AG später noch dazuzuladen, speichere den Termin einfach erneut.';
+$g_lang['event_not_available'] = 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.';
