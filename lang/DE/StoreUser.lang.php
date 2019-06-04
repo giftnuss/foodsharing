@@ -106,4 +106,6 @@ $g_lang['stat_since_unknown'] = 'unbekannt';
 $g_lang['delete-manual-slot-warning-text'] = 'Termin wirklich löschen? \nMögliche Abholer dieser Uhrzeit werden dabei ausgetragen.';
 $g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt werden.';
 $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
-
+$g_lang['my_last_pickup'] = 'Meine letzte Abholung';
+$g_lang['prefix_Ago'] = 'Vor';
+$g_lang['days'] = 'Tagen';
