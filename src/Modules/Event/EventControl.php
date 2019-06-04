@@ -42,8 +42,8 @@ class EventControl extends Control
 			}
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
-            $this->flashMessageHelper->info($this->translationHelper->s('event_not_available'));
-		    $this->routeHelper->go('/?page=dashboard');
+			$this->flashMessageHelper->info($this->translationHelper->s('event_not_available'));
+			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 
