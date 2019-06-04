@@ -94,13 +94,14 @@
             <b-card>
               <div class="details">
                 <p>
-                  <strong>Anschrift:</strong> {{ row.item.address }}<a
+                  <strong>Anschrift:</strong><br>
+                  {{ row.item.address }} <a
                     :href="mapLink(row.item)"
-                    class="nav-link"
+                    class="nav-link details-nav"
                     title="Karte"
                   >
                     <i class="fas fa-map-marker-alt" />
-                  </a>
+                  </a><br> {{ row.item.zipcode }} {{ row.item.city }}
                 </p>
                 <p><strong>Eingetragen:</strong> {{ row.item.added }}</p>
               </div>
@@ -166,12 +167,16 @@ export default {
           label: 'Name',
           sortable: true
         },
-        city: {
-          label: 'Ort',
+        address: {
+          label: 'Straße',
           sortable: true
         },
-        address: {
-          label: 'Anschrift',
+        zipcode: {
+          label: 'PLZ',
+          sortable: true
+        },
+        city: {
+          label: 'Ort',
           sortable: true
         },
         added: {
@@ -230,7 +235,7 @@ export default {
       } else {
         for (const key in this.fields) {
           if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
-          else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added') fields[key] = this.fields[key]
+          else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added' && key !== 'zipcode') fields[key] = this.fields[key]
         }
       }
       return fields
@@ -248,7 +253,7 @@ export default {
 }
 </script>
 <style>
-  .nav-link {
+  .details-nav {
     float:right;
     font-size: 2em;
   }
