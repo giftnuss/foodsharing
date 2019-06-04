@@ -10,6 +10,7 @@
 - Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
+- Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by date added !679 @tihar
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke

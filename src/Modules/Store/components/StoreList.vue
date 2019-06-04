@@ -205,7 +205,7 @@ export default {
     storesFiltered: function () {
       if (!this.filterText.trim() && !this.filterStatus) return this.stores
       let filterText = this.filterText ? this.filterText.toLowerCase() : null
-      return this.stores.filter((store) => {
+      return Array.from(this.stores.filter((store) => {
         return (
           (!this.filterStatus || store.status === this.filterStatus) &&
           (!filterText || (
@@ -214,7 +214,7 @@ export default {
             store.region.toLowerCase().indexOf(filterText) !== -1
           ))
         )
-      })
+      }))
     },
     fieldsFiltered: function () {
       let regions = []
@@ -235,12 +235,6 @@ export default {
       }
       return fields
     }
-  },
-  created () {
-    const stores = Array.from(this.stores)
-    Object.assign(this, {
-      stores
-    })
   },
   methods: {
     clearFilter () {
