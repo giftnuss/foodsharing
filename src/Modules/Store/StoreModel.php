@@ -342,7 +342,6 @@ class StoreModel extends Db
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
 				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
-				ORDER BY fs_betrieb.added DESC
 
 		');
 	}

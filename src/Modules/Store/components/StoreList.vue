@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="popoverContainer"
-    class="container bootstrap"
-  >
+  <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
         Alle Betriebe aus dem Bezirk {{ regionName }}
@@ -50,101 +47,64 @@
 
         <b-table
           :fields="fieldsFiltered"
-          :items="storesFiltered"
           :current-page="currentPage"
           :per-page="perPage"
-          :sort-compare="compare"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :items="storesFiltered"
           small
           hover
           responsive
         >
           <template
             slot="status"
-            slot-scope="data"
+            slot-scope="row"
+            :v-if="isMobile"
           >
             <div class="text-center">
-              <StoreStatusIcon :status="data.value" />
+              <StoreStatusIcon :status="row.value" />
             </div>
           </template>
           <template
             slot="name"
-            slot-scope="data"
+            slot-scope="row"
           >
             <a
-              :id="'store-'+data.value"
-              href="#"
+              :href="$url('store', row.item.id)"
               class="ui-corner-all"
             >
-              {{ data.value }}
+              {{ row.value }}
             </a>
-            <b-Popover
-              ref="popover"
-              :target="'store-'+data.value"
-              triggers="hover focus"
-              placement="auto"
-              container="popoverContainer"
-              boundary="window"
+          </template>
+          <template
+            slot="actions"
+            slot-scope="row"
+          >
+            <b-button
+              @click.stop="row.toggleDetails"
+              size="sm"
             >
-              <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front popover-content">
-                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-                  <span
-                    id="ui-id-2"
-                    class="ui-dialog-title"
+              {{ row.detailsShowing ? 'x' : 'Details' }}
+            </b-button>
+          </template>
+          <template
+            slot="row-details"
+            slot-scope="row"
+          >
+            <b-card>
+              <div class="details">
+                <p>
+                  <strong>Anschrift:</strong> {{ row.item.address }}<a
+                    :href="mapLink(row.item)"
+                    class="nav-link"
+                    title="Karte"
                   >
-                    {{ data.value }}
-                  </span>
-                  <button
-                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close"
-                    role="button"
-                    aria-disabled="false"
-                    title="close"
-                    @click="onClose"
-                  >
-                    <span class="ui-button-icon-primary ui-icon ui-icon-closethick" />
-                  </button>
-                </div>
-                <div
-                  id="b_content"
-                  class="ui-dialog-content ui-widget-content"
-                >
-                  <div class="input-wrapper">
-                    <div class="inner">
-                      <label class="wrapper-label ui-widget">
-                        Adresse
-                      </label>
-                      <div class="element-wrapper">
-                        <a
-                          class="nav-link"
-                          :href="mapLink(data.item)"
-                          title="Karte"
-                        >
-                          <i class="fas fa-map-marker-alt" />
-                        </a>
-                        <span>
-                          {{ data.item.address }}
-                          <br>
-                          {{ data.item.city }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="ui-padding"
-                  >
-                    <a
-                      class="lbutton ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                      :href="$url('store', data.item.id)"
-                      role="button"
-                      aria-disabled="false"
-                    >
-                      <span class="ui-button-text">
-                        Zur Teamseite
-                      </span>
-                    </a>
-                  </div>
-                </div>
+                    <i class="fas fa-map-marker-alt" />
+                  </a>
+                </p>
+                <p><strong>Eingetragen:</strong> {{ row.item.added }}</p>
               </div>
-            </b-popover>
+            </b-card>
           </template>
         </b-table>
         <div class="float-right p-1 pr-3">
@@ -167,16 +127,16 @@
 </template>
 
 <script>
-import { optimizedCompare } from '@/utils'
 import bTable from '@b/components/table/table'
-import bPopover from '@b/components/popover/popover'
 import bPagination from '@b/components/pagination/pagination'
 import bFormSelect from '@b/components/form-select/form-select'
 import bTooltip from '@b/directives/tooltip/tooltip'
+import bButton from '@b/components/button/button'
 import StoreStatusIcon from './StoreStatusIcon.vue'
+import bCard from '@b/components/card/card'
 
 export default {
-  components: { bTable, bPopover, bPagination, bFormSelect, StoreStatusIcon },
+  components: { bCard, bTable, bButton, bPagination, bFormSelect, StoreStatusIcon },
   directives: { bTooltip },
   props: {
     regionName: {
@@ -190,6 +150,8 @@ export default {
   },
   data () {
     return {
+      sortBy: 'added',
+      sortDesc: true,
       currentPage: 1,
       perPage: 20,
       filterText: '',
@@ -205,7 +167,7 @@ export default {
           sortable: true
         },
         city: {
-          label: 'PLZ/Ort',
+          label: 'Ort',
           sortable: true
         },
         address: {
@@ -222,6 +184,10 @@ export default {
         },
         geo: {
           label: 'geo',
+          sortable: false
+        },
+        actions: {
+          label: '',
           sortable: false
         }
       },
@@ -256,27 +222,40 @@ export default {
       this.stores.map(function (value) {
         if (!regions.includes(value['region'])) regions.push(value['region'])
       })
-      for (let key in this.fields) {
-        if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
-        else if (key !== 'region' && key !== 'address' && key !== 'geo') fields[key] = this.fields[key]
+      if (window.innerWidth > 800 && window.innerHeight > 600) {
+        for (const key in this.fields) {
+          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
+          else if (key !== 'region' && key !== 'geo' && key !== 'actions') fields[key] = this.fields[key]
+        }
+      } else {
+        for (const key in this.fields) {
+          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
+          else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added') fields[key] = this.fields[key]
+        }
       }
       return fields
     }
   },
+  created () {
+    const stores = Array.from(this.stores)
+    Object.assign(this, {
+      stores
+    })
+  },
   methods: {
-    compare: optimizedCompare,
-
     clearFilter () {
       this.filterStatus = null
       this.filterText = ''
     },
-    onClose () {
-      this.$root.$emit('bv::hide::popover')
-    },
     mapLink: function (store) {
-      if (window.innerWidth <= 800 && window.innerHeight <= 600) return 'geo:0,0?q=' + store.geo
-      else return '?page=map&bid=' + store.id
+      return 'geo:0,0?q=' + store.geo
     }
   }
 }
 </script>
+<style>
+  .nav-link {
+    float:right;
+    font-size: 2em;
+  }
+</style>
