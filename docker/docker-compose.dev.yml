@@ -169,6 +169,7 @@ services:
       influxd -config /etc/influxdb/influxdb.toml
     ports:
     - 8083:8083
+    - 18089:8089/udp
     - 18086:8086
     environment:
       INFLUXDB_ADMIN_ENABLED: "true"

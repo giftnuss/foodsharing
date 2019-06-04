@@ -7,5 +7,20 @@
 class_name: FunctionalTester
 modules:
     enabled:
+        - Symfony:
+            app_path: 'src'
+            environment: 'test'
+            kernel_class: 'Foodsharing\FoodsharingKernel'
+            cache_router: 'true'
         # add framework module here
         - \Helper\Functional
+        - Asserts
+        - \Helper\Api
+        - \Helper\Foodsharing
+        - \Helper\FoodsharingUrl
+        - Sequence
+        - \Helper\Maildev
+        - Db
+        - REST:
+            url: '/'
+            depends: Symfony

@@ -48,7 +48,7 @@
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
-      @click="$refs.modal.show()"
+      @click="$refs.confirmDelete.show()"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
     >
@@ -66,12 +66,13 @@
 
     <!-- delete confirm modal -->
     <b-modal
-      ref="modal"
+      ref="confirmDelete"
       v-if="mayDelete"
       :title="$i18n('forum.delete_post')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="$emit('delete')"
+      modal-class="bootstrap"
     >
       <p>{{ $i18n('really_delete') }}</p>
     </b-modal>

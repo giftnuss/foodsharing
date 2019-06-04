@@ -67,7 +67,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(1)) {
 				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageHelper->addContent($this->view->topbar('Bestätigte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Zugestellte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 

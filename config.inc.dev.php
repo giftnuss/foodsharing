@@ -18,7 +18,7 @@ define('DB_DB', 'foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://localhost:18080');
 
-define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
+define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
 define('SUPPORT_EMAIL', 'it@foodsharing.network');

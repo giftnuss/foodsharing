@@ -3,16 +3,44 @@
 ## Major changes
 
 ## Features
+- Added Rest endpoint for nearby baskets !875 @alex.simm
+- updated bootstrap-vue to v2.0.0-rc20
+- Added Rest endpoint for the current user's profile !880 @dthulke
+- InfluxDB Metrics via UDP !882 @alangecker
+- Added yellow info box with warning to edit event page !892 @jofranz
+- improved the region join selector text #562 @peter.toennies
+- Allow Subgroups to groups !904 @k.miklobusec
 
 ## Bugfixes
+- Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
+- Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
+- Fixed broken modal for forum post deletion !894 #599 @peter.toennies
+- Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
+- Allow users being deleted out of regions #604 @NerdyProjects
+- Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
+- Added yellow info box with "how to use the address picker" @jofranz
+- Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
+
 
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
+- update null-loader to version 2 @peter.toennies
+- Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
+
+# 2019-05-17 Hotfix
+
+- Clarify message when you cannot sign up for a pickup.
+@NerdyProjects has been working on the pickup backend in the last months so the website does not allow you to sign up for pickups that are further in the future than the setting in the store allows (1-4 weeks).
+The frontend does not yet follow that behaviour (showing pickup slots always for more days than allowed to sign up), but if you want to sign up, the backend disallows that and you get an error message.
+@NerdyProjects currently works on redoing the pickup frontend as well and we hopefully get it shiny in a few days :-)
+- fixed the switched store publicity settings @peter.toennies
 
 # 2019-05-17
 Hey again,
-another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now. Also, we are relieving the report team from a lot of work because ambassadors can now work with the reports for their region directly.
+another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
 
 ## Major changes
 
@@ -40,6 +68,7 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
+- Added Rest controller and normalization for stores !885 @alex.simm
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
@@ -80,6 +109,7 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 - Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
 - Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
+- Refactored conversations API and related javascript !592 @theolampert
 
 ## Dev/Test/CI stuff
 - Adjust devdocs to being open source !823 @flukx

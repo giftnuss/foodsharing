@@ -34,10 +34,10 @@ class StoreUserCest
 	/**
 	 * @param HtmlAcceptanceTester $I
 	 * @param \Codeception\Example $example
-	 * @example[0, "public"]
-	 * @example[1, "private"]
+	 * @example[0, "private"]
+	 * @example[1, "public"]
 	 */
-	public function SeeStoreMentioning(HtmlAcceptanceTester $I, \Codeception\Example $example)
+	public function SeeStoreMentioning(HtmlAcceptanceTester $I, \Codeception\Example $example): void
 	{
 		$this->store = $I->createStore($this->bezirk_id['id'], null, null, ['presse' => $example[0]]);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);

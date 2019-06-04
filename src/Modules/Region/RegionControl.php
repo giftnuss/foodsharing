@@ -92,6 +92,9 @@ final class RegionControl extends Control
 
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
+			if ($region['has_children'] === 1) {
+				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . (int)$region['id']];
+			}
 			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
 			}

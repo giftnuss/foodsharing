@@ -281,7 +281,8 @@ class RegionGateway extends BaseGateway
 				`stat_postcount`,
 				`stat_betriebcount`,
 				`stat_korpcount`,
-				`moderated`
+				`moderated`,
+				`has_children`
 
 			FROM 	`fs_bezirk`
 

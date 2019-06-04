@@ -102,6 +102,7 @@ class StatisticsView extends View
 			$i = 0;
 			foreach ($foodsaver as $fs) {
 				++$i;
+				/* Adding "Über" to kilos over 100 tons is a temporary workaround for https://gitlab.com/foodsharing-dev/foodsharing/issues/127 */
 				$out .= '
 				<tr>
 					<td style="width:5px;text-align:right;padding-right:5px;" valign="top">
@@ -109,7 +110,7 @@ class StatisticsView extends View
 					</td>
 					<td class="city">
 						<h4>' . $fs['name'] . '</h4>
-						<p>' . number_format($fs['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
+						<p>' . ($fs['fetchweight'] > 99998 ? $this->translationHelper->s('Over') . ' ' : '') . number_format($fs['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</p>
 						<p>' . number_format($fs['fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x abgeholt</p>
 					</td>
 				</tr>';

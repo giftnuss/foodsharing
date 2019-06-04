@@ -79,3 +79,11 @@ export function optimizedCompare (a, b, key) {
     return elemA.localeCompare(elemB)
   }
 }
+
+export const generateQueryString = params => {
+  const qs = Object.keys(params)
+    .filter(key => params[key] !== '')
+    .map(key => key + '=' + params[key])
+    .join('&')
+  return qs.length ? `?${qs}` : ''
+}
