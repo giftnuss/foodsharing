@@ -18,12 +18,14 @@
             </label>
           </div>
           <div class="col-4">
-            <input
-              v-model="filterText"
-              type="text"
-              class="form-control form-control-sm"
-              placeholder="Name/Adresse"
-            >
+            <label>
+              <input
+                v-model="filterText"
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Name/Adresse"
+              >
+            </label>
           </div>
           <div class="col-3">
             <b-form-select
@@ -50,7 +52,6 @@
           :current-page="currentPage"
           :per-page="perPage"
           :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
           :items="storesFiltered"
           small
           hover
@@ -150,8 +151,7 @@ export default {
   },
   data () {
     return {
-      sortBy: 'added',
-      sortDesc: true,
+      sortBy: 'name',
       currentPage: 1,
       perPage: 20,
       filterText: '',
@@ -211,7 +211,8 @@ export default {
           (!filterText || (
             store.name.toLowerCase().indexOf(filterText) !== -1 ||
             store.address.toLowerCase().indexOf(filterText) !== -1 ||
-            store.region.toLowerCase().indexOf(filterText) !== -1
+            store.region.toLowerCase().indexOf(filterText) !== -1 ||
+            store.city.toLowerCase().indexOf(filterText) !== -1
           ))
         )
       }))
