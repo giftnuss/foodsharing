@@ -3,7 +3,7 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { ajax, GET, goTo, isMob, nl2br, pulseError } from '@/script'
+import { GET, goTo, isMob, nl2br, pulseError } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
@@ -61,16 +61,17 @@ const conv = {
       }
     }
   },
-  userChat: function (fsid) {
+  userChat: async function (fsid) {
     if (!this.initiated) {
       this.init()
     }
-    ajax.req('msg', 'user2conv', {
-      data: { fsid: fsid },
-      success: function (ret) {
-        conv.chat(ret.cid)
-      }
-    })
+    try {
+      let conversation = await api.getConversationIdForConversationWithUser(fsid)
+      conv.chat(conversation.id)
+    } catch (e) {
+      pulseError('Fehler beim Starten der Unterhaltung')
+      console.error(e)
+    }
   },
 
   getConvByFs: function (fsid) {

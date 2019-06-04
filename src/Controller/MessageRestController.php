@@ -110,4 +110,18 @@ class MessageRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * @Rest\Post("user/{userId}/conversation")
+	 */
+	public function getUserConversationAction(int $userId)
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$conversationId = $this->messageGateway->getOrCreateConversation([$this->session->id(), $userId]);
+
+		return $this->handleView($this->view(['id' => $conversationId], 200));
+	}
 }

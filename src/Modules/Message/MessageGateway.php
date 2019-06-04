@@ -20,6 +20,79 @@ final class MessageGateway extends BaseGateway
 		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
 	}
 
+	private function createConversation(array $fsIds, bool $locked = false): int
+	{
+		$this->db->beginTransaction();
+		$conversationId = $this->db->insert('fs_conversation', [
+			'locked' => $locked ? 1 : 0
+		]);
+		foreach ($fsIds as $fsId) {
+			$this->db->insert('fs_foodsaver_has_conversation', [
+				'foodsaver_id' => $fsId,
+				'conversation_id' => $conversationId,
+				'unread' => 0
+			]);
+		}
+		$this->db->commit();
+
+		return $conversationId;
+	}
+
+	public function getOrCreateConversation(array $fsIds)
+	{
+		/* need to fetch a conversation with the exact set of participants. As there is no direct way to do this,
+		   the approach is to
+		   1. get the set of possible conversations by selecting all conversations where one of the users is a participant
+		   2. comparing the participant lists of the conversations from 1 with the participant list we want to have
+		   3. in case 2 did not yield a result, creating a new conversation.
+		*/
+
+		sort($fsIds);
+		$possibleConversations = $this->db->fetchAllValues(
+			'SELECT hc.conversation_id
+			FROM fs_foodsaver_has_conversation hc 
+			LEFT JOIN fs_conversation c on hc.conversation_id = c.id
+			WHERE hc.foodsaver_id = :fsId',
+			[':fsId' => $fsIds[0]]
+		);
+
+		if ($possibleConversations) {
+			$idString = implode(':', array_map('intval', $fsIds));
+			$results = $this->db->fetchAllValues('
+			SELECT
+                  conversation_id,
+                  GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
+        
+                FROM
+                  fs_foodsaver_has_conversation
+        
+                WHERE
+                  conversation_id IN (' . $this->db->generatePlaceholders(count($possibleConversations)) . ')
+        
+                GROUP BY
+                  conversation_id
+        
+                HAVING
+                  idstring = ?',
+			array_merge($possibleConversations, [$idString]));
+			if (count($results) > 1) {
+				trigger_error('Found multiple conversations with ID set ' . $idString);
+
+				return $results[0];
+			}
+			if ($results) {
+				return $results[0];
+			}
+		}
+
+		/*
+		 * 3. No conversation found, create one
+		*/
+		$conversation_id = $this->createConversation($fsIds);
+
+		return $conversation_id;
+	}
+
 	public function getConversationName(int $conversationId): ?string
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);

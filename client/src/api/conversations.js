@@ -10,6 +10,10 @@ export function getConversation (conversationId) {
   return get(`/conversations/${conversationId}`)
 }
 
+export function getConversationIdForConversationWithUser (userId) {
+  return post(`/user/${userId}/conversation`)
+}
+
 export function getMessages (conversationId, olderThanID) {
   return get(`/conversations/${conversationId}/messages?olderThanId=${olderThanID}`)
 }

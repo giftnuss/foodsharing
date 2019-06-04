@@ -429,15 +429,11 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'locked' => 1,
 			'name' => null,
-			'start' => $this->faker->dateTime(),
 			'last' => $this->faker->dateTime(),
 			'last_foodsaver_id' => $users[0],
-			'start_foodsaver_id' => $users[0],
 			'last_message_id' => null,
 			'last_message' => '',
-			'member' => '',
 		], $extra_params);
-		$params['start'] = $this->toDateTime($params['start']);
 		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
 
