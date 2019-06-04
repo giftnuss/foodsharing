@@ -32,11 +32,15 @@ class WorkGroupGateway extends BaseGateway
 
 	/**
 	 * Updates Group Members and Group-Admins.
+	 *
+	 * @param int $groupId
+	 * @param array $memberIds
+	 * @param array $leaderIds
 	 */
-	public function updateTeam(int $groupId, array $memberIds, array $leaderIds)
+	public function updateTeam(int $groupId, array $memberIds, array $leaderIds): void
 	{
 		if ($memberIds) {
-			// delete all members they're not in the submitted array
+			// delete all members if they're not in the submitted array
 			$this->db->execute('
 				DELETE
 				FROM	`fs_foodsaver_has_bezirk`
@@ -63,7 +67,7 @@ class WorkGroupGateway extends BaseGateway
 
 		// the same for the group admins
 		if ($leaderIds) {
-			// delete all group-admins (botschafter) they're not in the submitted array
+			// delete all group-admins (botschafter) if they're not in the submitted array
 			$this->db->execute('
 				DELETE
 				FROM	`fs_botschafter`
@@ -90,6 +94,8 @@ class WorkGroupGateway extends BaseGateway
 	 * Delete all Leaders from a group.
 	 *
 	 * @param int $groupId
+	 *
+	 * @return int
 	 */
 	private function emptyLeader(int $groupId): int
 	{
@@ -97,9 +103,11 @@ class WorkGroupGateway extends BaseGateway
 	}
 
 	/**
-	 * Delete all Leaders from a group.
+	 * Delete all members from a group.
 	 *
 	 * @param int $groupId
+	 *
+	 * @return int
 	 */
 	private function emptyMember(int $groupId): int
 	{
@@ -301,7 +309,7 @@ class WorkGroupGateway extends BaseGateway
 		);
 		if ($ret) {
 			$time = strtotime($ret['anmeldedatum']);
-			// 604800 = sekunden pro woche
+			// 604800 = seconds per week
 			$weeks = (int)round((time() - $time) / 604800);
 
 			return [
