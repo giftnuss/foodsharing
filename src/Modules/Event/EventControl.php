@@ -21,11 +21,7 @@ class EventControl extends Control
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id']))) {
-			if (!$this->mayEvent($event)) {
-				return false;
-			}
-
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->mayEvent($event)) {
 			$this->pageHelper->addBread('Termine', '/?page=event');
 			$this->pageHelper->addBread($event['name']);
 
@@ -47,6 +43,7 @@ class EventControl extends Control
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
 			$this->routeHelper->go('/?page=dashboard');
+			$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));
 		}
 	}
 
@@ -59,7 +56,7 @@ class EventControl extends Control
 
 	private function mayEvent($event): bool
 	{
-		return $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
+		return $this->session->mayBezirk($event['bezirk_id']) || $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
 				$event['bezirk_id']
 			) || isset($event['invites']['may'][$this->session->id()]);
 	}
