@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Statistics;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use DateTime;
 
 class StatisticsGateway extends BaseGateway
 {
@@ -87,7 +86,7 @@ class StatisticsGateway extends BaseGateway
 		$fetchCount = (int)$this->db->fetch($q)['fetchCount'];
 		// time range to average over in days
 		$diffDays = 28;
-			// divide number of fetches by time difference
+		// divide number of fetches by time difference
 		return (int)$fetchCount / $diffDays;
 	}
 }
