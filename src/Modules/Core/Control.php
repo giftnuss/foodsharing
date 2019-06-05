@@ -13,6 +13,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use ReflectionClass;
+use Foodsharing\Permissions\WallPostPermissions;
 
 abstract class Control
 {
@@ -86,6 +87,8 @@ abstract class Control
 	 */
 	protected $flashMessageHelper;
 
+	private $wallpostPermissions;
+
 	public function __construct()
 	{
 		global $container;
@@ -100,6 +103,7 @@ abstract class Control
 		$this->routeHelper = $container->get(RouteHelper::class);
 		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->flashMessageHelper = $container->get(FlashMessageHelper::class);
+		$this->wallpostPermissions = $container->get(WallPostPermissions::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -207,7 +211,7 @@ abstract class Control
 		return false;
 	}
 
-	public function wallposts($table, $id, $allowCommentsIfAble = true)
+	public function wallposts($table, $id)
 	{
 		$this->pageHelper->addJsFunc('
 			function u_delPost(id, module, wallId)
@@ -333,7 +337,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		if ($allowCommentsIfAble && $this->session->may()) {
+		if ($this->wallpostPermissions->mayWriteWall($this->session->id(), $table, $id) && $this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
