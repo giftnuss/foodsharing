@@ -92,7 +92,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_text">
 						<h4>' . number_format($avgDailyFetchCount, 0, ',', '.') . '</h4>
-						<p>Rettungseinsätze gibt es durchschnittlich pro Tag</p>
+						<p>Foodsaver sind durchschnittlich pro Tag unterwegs.</p>
 					</div>
 			</div><br />
 		</div>', $this->translationHelper->s('stat_whole'));

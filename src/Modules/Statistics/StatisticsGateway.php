@@ -74,26 +74,20 @@ class StatisticsGateway extends BaseGateway
 
 	public function avgDailyFetchCount(): int
 	{
-		// get number of all fetches
+		// get number of all fetches within time range
 		$q = '
 	    SELECT
-	      SUM(`stat_fetchcount`) AS fetchcount
+	      COUNT(*) as fetchCount
 	    FROM
-	      fs_bezirk
-	    WHERE
-	      `id` = :region_id
+	      fs_abholer
+			WHERE
+				CAST(`date` as date) > DATE_ADD(CURDATE(), INTERVAL -29 DAY) AND
+				CAST(`date` as date) < CURDATE()
 	  ';
-		$fetchcount = (int)$this->db->fetch($q, [':region_id' => RegionIDs::EUROPE])['fetchcount'];
-		// Get todays date
-		$date = new DateTime(date('Y-m-d'));
-		// get first fetch date
-		$q = '
-	    SELECT MIN(`date`) as mindate from fs_abholer
-	  ';
-		$startdate = new DateTime($this->db->fetch($q)['mindate']);
-		// difference between days and fetches
-		$diffdays = $startdate->diff($date)->days;
-		// divide number of fetches by time difference
-		return (int)$fetchcount / $diffdays;
+		$fetchCount = (int)$this->db->fetch($q)['fetchCount'];
+		// time range to average over in days
+		$diffDays = 28;
+			// divide number of fetches by time difference
+		return (int)$fetchCount / $diffDays;
 	}
 }
