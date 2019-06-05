@@ -31,7 +31,7 @@ class WorkGroupXhr extends Control
 
 			$dialog->setTitle('Bewerbung ' . $group['name']);
 			$dialog->addButton('Bewerbung absenden',
-					'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})'
+				'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})'
 			);
 
 			$dialog->setResizeable(false);
@@ -39,72 +39,70 @@ class WorkGroupXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return XhrResponses::fail_generic();
 	}
 
 	public function addtogroup()
 	{
-		if (!$this->session->may('fs')) {
-			return;
-		}
+		if ($this->session->may('fs')) {
+			$group = $this->workGroupGateway->getGroup($_GET['id']);
+			if ($group && $group['apply_type'] == ApplyType::OPEN) {
+				$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
 
-		$group = $this->workGroupGateway->getGroup($_GET['id']);
-		if ($group && $group['apply_type'] == ApplyType::OPEN) {
-			$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
-
-			return array(
-				'status' => 1,
-				'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall");'
-			);
+				return array(
+					'status' => 1,
+					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall");'
+				);
+			}
 		}
+		return XhrResponses::fail_generic();
 	}
 
 	public function applysend()
 	{
-		if (!isset($_GET['f'])) {
-			return;
-		}
+		if (isset($_GET['f'])) {
+			$output = array();
+			parse_str($_GET['f'], $output);
+			if (!empty($output)) {
+				$groupId = $_GET['id'];
+				$groupmail = $this->workGroupGateway->getGroupMail($groupId);
+				if ($groupmail) {
+					$group = $this->workGroupGateway->getGroup($groupId);
+					if ($group) {
+						$fsId = $this->session->id();
+						$fs = $this->workGroupGateway->getFsWithMail($fsId);
+						if ($fs) {
+							$motivation = strip_tags($output['motivation']);
+							$fahig = strip_tags($output['faehigkeit']);
+							$erfahrung = strip_tags($output['erfahrung']);
+							$zeit = strip_tags($output['zeit']);
+							$zeit = substr($zeit, 0, 300);
 
-		$output = array();
-		parse_str($_GET['f'], $output);
-		if (empty($output)) {
-			return;
-		}
+							$content = array(
+								'Motivation:' . "\n===========\n" . trim($motivation),
+								'Fähigkeiten:' . "\n============\n" . trim($fahig),
+								'Erfahrung:' . "\n==========\n" . trim($erfahrung),
+								'Zeit:' . "\n=====\n" . trim($zeit)
+							);
 
-		$groupId = $_GET['id'];
-		$groupmail = $this->workGroupGateway->getGroupMail($groupId);
-		if ($groupmail) {
-			$group = $this->workGroupGateway->getGroup($groupId);
-			if ($group) {
-				$fsId = $this->session->id();
-				$fs = $this->workGroupGateway->getFsWithMail($fsId);
-				if ($fs) {
-					$motivation = strip_tags($output['motivation']);
-					$fahig = strip_tags($output['faehigkeit']);
-					$erfahrung = strip_tags($output['erfahrung']);
-					$zeit = strip_tags($output['zeit']);
-					$zeit = substr($zeit, 0, 300);
+							$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));
 
-					$content = array(
-						'Motivation:' . "\n===========\n" . trim($motivation),
-						'Fähigkeiten:' . "\n============\n" . trim($fahig),
-						'Erfahrung:' . "\n==========\n" . trim($erfahrung),
-						'Zeit:' . "\n=====\n" . trim($zeit)
-					);
+							$this->emailHelper->libmail(array(
+								'email' => $fs['email'],
+								'email_name' => $fs['name']
+							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
 
-					$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));
-
-					$this->emailHelper->libmail(array(
-						'email' => $fs['email'],
-						'email_name' => $fs['name']
-					), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
-
-					return array(
-						'status' => 1,
-						'script' => 'pulseInfo("Bewerbung wurde abgeschickt!");$("#' . preg_replace('/[^a-z0-9\-]/', '', $_GET['d']) . '").dialog("close");'
-					);
+							return array(
+								'status' => 1,
+								'script' => 'pulseInfo("Bewerbung wurde abgeschickt!");$("#' . preg_replace('/[^a-z0-9\-]/', '', $_GET['d']) . '").dialog("close");'
+							);
+						}
+					}
 				}
 			}
 		}
+		return XhrResponses::fail_generic();
 	}
 
 	/*
@@ -116,7 +114,9 @@ class WorkGroupXhr extends Control
 		if (!$this->session->id()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if (($group = $this->workGroupGateway->getGroup($_GET['id'])) && !empty($group['email'])) {
+
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group && !empty($group['email'])) {
 			$message = $_GET['msg'];
 
 			if (!empty($message)) {
@@ -136,11 +136,14 @@ class WorkGroupXhr extends Control
 				);
 			}
 		}
+
+		return XhrResponses::fail_generic();
 	}
 
 	public function contactgroup()
 	{
-		if (($group = $this->workGroupGateway->getGroup($_GET['id'])) && !empty($group['email'])) {
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group && !empty($group['email'])) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle($group['name'] . ' kontaktieren');
 
@@ -154,5 +157,6 @@ class WorkGroupXhr extends Control
 
 			return $ret;
 		}
+		return XhrResponses::fail_generic();
 	}
 }
