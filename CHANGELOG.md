@@ -18,12 +18,9 @@
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
-- Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
 - Added yellow info box with "how to use the address picker" @jofranz
 - Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
-
-- Fixed disappearing brown top bar menu !907 @jofranz @alangecker 
-- Caused by a previous change the brown top menu bar was just scrolling away. This is an attempt to fix it again to restore previous behaviour in order to keep the top bar on top !907 @jofranz @alangecker
 
 ## Refactoring
 
