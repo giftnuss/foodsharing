@@ -56,6 +56,7 @@ class WorkGroupXhr extends Control
 				);
 			}
 		}
+
 		return XhrResponses::fail_generic();
 	}
 
@@ -102,6 +103,7 @@ class WorkGroupXhr extends Control
 				}
 			}
 		}
+
 		return XhrResponses::fail_generic();
 	}
 
@@ -157,6 +159,7 @@ class WorkGroupXhr extends Control
 
 			return $ret;
 		}
+
 		return XhrResponses::fail_generic();
 	}
 }
