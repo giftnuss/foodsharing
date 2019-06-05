@@ -10,6 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 class WorkGroupXhr extends Control
 {
 	private $workGroupGateway;
+	private $responses;
 
 	public function __construct(
 			WorkGroupView $view,
@@ -17,6 +18,7 @@ class WorkGroupXhr extends Control
 	) {
 		$this->view = $view;
 		$this->workGroupGateway = $workGroupGateway;
+		$this->responses = new XhrResponses();
 
 		parent::__construct();
 	}
@@ -40,7 +42,7 @@ class WorkGroupXhr extends Control
 			return $dialog->xhrout();
 		}
 
-		return XhrResponses::fail_generic();
+		return $this->responses->fail_generic();
 	}
 
 	public function addtogroup()
@@ -57,7 +59,7 @@ class WorkGroupXhr extends Control
 			}
 		}
 
-		return XhrResponses::fail_generic();
+		return $this->responses->fail_generic();
 	}
 
 	public function applysend()
@@ -104,7 +106,7 @@ class WorkGroupXhr extends Control
 			}
 		}
 
-		return XhrResponses::fail_generic();
+		return $this->responses->fail_generic();
 	}
 
 	/*
@@ -139,7 +141,7 @@ class WorkGroupXhr extends Control
 			}
 		}
 
-		return XhrResponses::fail_generic();
+		return $this->responses->fail_generic();
 	}
 
 	public function contactgroup()
@@ -160,6 +162,6 @@ class WorkGroupXhr extends Control
 			return $ret;
 		}
 
-		return XhrResponses::fail_generic();
+		return $this->responses->fail_generic();
 	}
 }
