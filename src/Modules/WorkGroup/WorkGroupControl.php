@@ -130,13 +130,25 @@ class WorkGroupControl extends Control
 
 	private function list(Request $request, Response $response)
 	{
+		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
+
 		$parent = $request->query->getInt('p', 392);
 		$myApplications = $this->workGroupGateway->getApplications($this->session->id());
 		$myStats = $this->workGroupGateway->getStats($this->session->id());
-		$groups = $this->workGroupGateway->listGroups($parent);
+		$groups = $this->getGroups($parent, $myApplications, $myStats);
 
-		$groups = array_map(
-			function ($group) use ($myApplications, $myStats) {
+		$response->setContent(
+			$this->render(
+				'pages/WorkGroup/list.twig',
+				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
+			)
+		);
+	}
+
+	private function getGroups(int $parent, array $applications, array $stats): array
+	{
+		return array_map(
+			function ($group) use ($applications, $stats) {
 				return array_merge(
 					$group,
 					[
@@ -147,31 +159,20 @@ class WorkGroupControl extends Control
 							$group['leaders']
 						),
 						'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
-						'appliedFor' => in_array($group['id'], $myApplications),
+						'appliedFor' => in_array($group['id'], $applications),
 						'applyMinBananaCount' => $group['banana_count'],
 						'applyMinFetchCount' => $group['fetch_count'],
 						'applyMinFoodsaverWeeks' => $group['week_num'],
-						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements(
-								$group,
-								$myStats
-							),
+						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES)
+																	&& !$this->fulfillApplicationRequirements($group, $stats),
 						'mayEdit' => $this->mayEdit($group),
 						'mayAccess' => $this->mayAccess($group),
-						'mayApply' => $this->mayApply($group, $myApplications, $myStats),
+						'mayApply' => $this->mayApply($group, $applications, $stats),
 						'mayJoin' => $this->mayJoin($group),
 					]
 				);
 			},
-			$groups
-		);
-
-		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
-
-		$response->setContent(
-			$this->render(
-				'pages/WorkGroup/list.twig',
-				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
-			)
+			$this->workGroupGateway->listGroups($parent)
 		);
 	}
 
