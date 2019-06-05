@@ -11,7 +11,7 @@ $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 
 $g_lang['position_search'] = 'Adresssuche';
-$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im weißen Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><b>Foodsharer</b> benötigen die Adresse, um Essenksörbe anbieten zu können. Als <b>Foodsaver</b> ist sie notwendig, um nach erfolgreicher Verifizierung Lebensmittelrettungen bei Betrieben unterstützen zu können.';
+$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenksörbe anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
 $g_lang['settings_general'] = 'Deine Angaben';
 $g_lang['settings_info'] = 'Benachrichtigungen';
 $g_lang['settings_mumble'] = 'Mumble-Einstellungen';
