@@ -33,18 +33,18 @@ class WorkGroupGateway extends BaseGateway
 	/**
 	 * Updates Group Members and Group-Admins.
 	 *
-	 * @param int $groupId
+	 * @param int $regionId
 	 * @param array $memberIds
 	 * @param array $leaderIds
 	 */
-	public function updateTeam(int $groupId, array $memberIds, array $leaderIds): void
+	public function updateTeam(int $regionId, array $memberIds, array $leaderIds): void
 	{
 		if ($memberIds) {
 			// delete all members if they're not in the submitted array
 			$this->db->execute('
 				DELETE
 				FROM	`fs_foodsaver_has_bezirk`
-				WHERE	`bezirk_id` = ' . $groupId . '
+				WHERE	`bezirk_id` = ' . $regionId . '
 				AND		`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')
 				AND		`active` = 1
 			');
@@ -55,14 +55,14 @@ class WorkGroupGateway extends BaseGateway
 					'fs_foodsaver_has_bezirk',
 					[
 						'foodsaver_id' => (int)$m,
-						'bezirk_id' => $groupId,
+						'bezirk_id' => $regionId,
 						'active' => 1,
 						'added' => $this->db->now()
 					]
 				);
 			}
 		} else {
-			$this->emptyMember($groupId);
+			$this->emptyMember($regionId);
 		}
 
 		// the same for the group admins
@@ -71,7 +71,7 @@ class WorkGroupGateway extends BaseGateway
 			$this->db->execute('
 				DELETE
 				FROM	`fs_botschafter`
-				WHERE	`bezirk_id` = ' . $groupId . '
+				WHERE	`bezirk_id` = ' . $regionId . '
 				AND		`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $leaderIds)) . ')
 			');
 
@@ -81,46 +81,46 @@ class WorkGroupGateway extends BaseGateway
 					'fs_botschafter',
 					[
 						'foodsaver_id' => (int)$m,
-						'bezirk_id' => $groupId
+						'bezirk_id' => $regionId
 					]
 				);
 			}
 		} else {
-			$this->emptyLeader($groupId);
+			$this->emptyLeader($regionId);
 		}
 	}
 
 	/**
 	 * Delete all Leaders from a group.
 	 *
-	 * @param int $groupId
+	 * @param int $regionId
 	 *
 	 * @return int
 	 */
-	private function emptyLeader(int $groupId): int
+	private function emptyLeader(int $regionId): int
 	{
-		return $this->db->delete('fs_botschafter', ['bezirk_id' => $groupId]);
+		return $this->db->delete('fs_botschafter', ['bezirk_id' => $regionId]);
 	}
 
 	/**
 	 * Delete all members from a group.
 	 *
-	 * @param int $groupId
+	 * @param int $regionId
 	 *
 	 * @return int
 	 */
-	private function emptyMember(int $groupId): int
+	private function emptyMember(int $regionId): int
 	{
 		return $this->db->delete(
 			'fs_foodsaver_has_bezirk',
 			[
-				'bezirk_id' => $groupId,
+				'bezirk_id' => $regionId,
 				'active' => 1
 			]
 		);
 	}
 
-	public function getGroup(int $id): array
+	public function getGroup(int $regionId): array
 	{
 		$group = $this->db->fetch('
 			SELECT	b.`id`,
@@ -139,18 +139,18 @@ class WorkGroupGateway extends BaseGateway
 			LEFT JOIN	`fs_mailbox` m
 			ON			b.`mailbox_id` = m.`id`
 			WHERE	b.`id` = :bezirk_id
-		', [':bezirk_id' => $id]);
+		', [':bezirk_id' => $regionId]);
 		if ($group) {
 			$group['member'] = $this->db->fetchAll('
-				SELECT		`id`, 
-							`name`, 
+				SELECT		`id`,
+							`name`,
 							`photo`
 				FROM		`fs_foodsaver` fs
 				INNER JOIN	`fs_foodsaver_has_bezirk` hb
 				ON			hb.`foodsaver_id` = fs.`id`
 				WHERE		hb.`bezirk_id` = :bezirk_id
 				AND			hb.`active` = 1
-			', [':bezirk_id' => $id]);
+			', [':bezirk_id' => $regionId]);
 			$group['leader'] = $this->db->fetchAll('
 				SELECT		`id`,
 							`name`,
@@ -159,19 +159,19 @@ class WorkGroupGateway extends BaseGateway
 				INNER JOIN	`fs_botschafter` hb
 				ON			hb.`foodsaver_id` = fs.`id`
 				WHERE		hb.`bezirk_id` = :bezirk_id
-			', [':bezirk_id' => $id]);
+			', [':bezirk_id' => $regionId]);
 		}
 
 		return $group;
 	}
 
-	public function addToGroup(int $groupId, int $fsId): int
+	public function addToGroup(int $regionId, int $fsId): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_foodsaver_has_bezirk',
 			[
 				'foodsaver_id' => $fsId,
-				'bezirk_id' => $groupId,
+				'bezirk_id' => $regionId,
 				'active' => 1,
 				'added' => $this->db->now()
 			]
@@ -217,8 +217,8 @@ class WorkGroupGateway extends BaseGateway
 		if ($groups) {
 			foreach ($groups as $i => $g) {
 				$members = $this->db->fetchAll('
-					SELECT		`id`, 
-								`name`, 
+					SELECT		`id`,
+								`name`,
 								`photo`
 					FROM		`fs_foodsaver` fs
 					INNER JOIN	`fs_foodsaver_has_bezirk` hb
@@ -245,13 +245,13 @@ class WorkGroupGateway extends BaseGateway
 		return [];
 	}
 
-	public function groupApply(int $groupId, int $fsId, string $application): int
+	public function groupApply(int $regionId, int $fsId, string $application): int
 	{
 		return $this->db->insertOrUpdate(
 			'fs_foodsaver_has_bezirk',
 			[
 				'foodsaver_id' => $fsId,
-				'bezirk_id' => $groupId,
+				'bezirk_id' => $regionId,
 				'active' => 0,
 				'added' => $this->db->now(),
 				'application' => strip_tags($application)
@@ -272,18 +272,18 @@ class WorkGroupGateway extends BaseGateway
 		', [':fs_id' => $fsId]);
 	}
 
-	public function getGroupMail(int $id)
+	public function getGroupMail(int $regionId)
 	{
 		return $this->db->fetchValue('
 			SELECT		CONCAT(mb.`name`,"@' . PLATFORM_MAILBOX_HOST . '")
 			FROM		`fs_bezirk` bz
 			INNER JOIN	`fs_mailbox` mb
-			ON			bz.`mailbox_id` = mb.`id`				
+			ON			bz.`mailbox_id` = mb.`id`
 			WHERE		bz.`id` = :bezirk_id
-		', [':bezirk_id' => $id]);
+		', [':bezirk_id' => $regionId]);
 	}
 
-	public function updateGroup(int $id, array $data): int
+	public function updateGroup(int $regionId, array $data): int
 	{
 		return $this->db->update(
 			'fs_bezirk',
@@ -296,7 +296,7 @@ class WorkGroupGateway extends BaseGateway
 				'fetch_count' => $data['fetch_count'],
 				'week_num' => $data['week_num']
 			],
-			['id' => $id]
+			['id' => $regionId]
 		);
 	}
 
@@ -318,6 +318,8 @@ class WorkGroupGateway extends BaseGateway
 				'bananacount' => $ret['stat_bananacount'],
 			];
 		}
+
+		return [];
 	}
 
 	public function getCountryGroups(): array
