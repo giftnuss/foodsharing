@@ -28,4 +28,3 @@ $g_lang['all_baskets'] ='Alle Körbe auf der Karte';
 $g_lang['events_headline'] ='Nächste Events';
 $g_lang['event_headline'] ='Nächstes Event';
 $g_lang['you_were_invited'] ='Du wurdest eingeladen';
-$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenksörbe anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
