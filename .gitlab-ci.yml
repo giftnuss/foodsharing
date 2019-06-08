@@ -61,7 +61,7 @@ build:backend-chat:
   artifacts:
     expire_in: 1 week
     paths:
-    - client/node_modules
+    - chat/node_modules
   except:
   - schedules
 
