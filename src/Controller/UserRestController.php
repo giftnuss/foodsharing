@@ -41,7 +41,7 @@ class UserRestController extends AbstractFOSRestController
 	 * Lists details about a user. Returns 200 and the user data, 404 if the
 	 * user does not exist, or 401 if not logged in.
 	 *
-	 * @Rest\Get("user/{id}", requirements={"basketId" = "\d+"})
+	 * @Rest\Get("user/{id}", requirements={"id" = "\d+"})
 	 *
 	 * @param int $id
 	 *
