@@ -25,6 +25,7 @@
   dependencies:
   - build:frontend
   - build:backend
+  - build:backend-chat
   script:
   - (cd deployer && composer install)
   - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
@@ -46,6 +47,23 @@ triage:
   - schedules
   tags:
   - shared
+
+build:backend-chat:
+  <<: *defaults
+    image: node:11.13.0-alpine
+    stage: build
+    script:
+      - (cd chat && yarn && yarn lint)
+    cache:
+      key: chat:build:v2
+      paths:
+        - chat/node_modules
+    artifacts:
+      expire_in: 1 week
+      paths:
+        - assets
+    except:
+      - schedules
 
 build:frontend:
   <<: *defaults
