@@ -20,6 +20,7 @@
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
 - Shake it! Randomly shuffle ambassadors and working group admins chronology to make it harder always to contact the most senior one !924 @jofranz
+- Added Rest endpoint for users !916 @alex.simm
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
