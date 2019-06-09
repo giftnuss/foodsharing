@@ -6,7 +6,6 @@
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
-- InfluxDB Metrics via UDP !882 @alangecker
 - Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
@@ -30,6 +29,11 @@
 - update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
+
+# 2019-06-09 Hotfix
+- InfluxDB Metrics via UDP !882 @alangecker
+- Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
+- Updated deployment for new production server
 
 # 2019-05-17 Hotfix
 
