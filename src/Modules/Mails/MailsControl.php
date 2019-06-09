@@ -140,8 +140,7 @@ class MailsControl extends ConsoleControl
 								$body = $text;
 								$html = nl2br($this->routeHelper->autolink($text));
 							} else {
-								++$stats['failure'];
-								continue;
+								$body = '';
 							}
 						}
 
