@@ -10,6 +10,7 @@
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
+- Added active foodsaver and jumper count to store popup on map !920 #620 @k.miklobusec
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
