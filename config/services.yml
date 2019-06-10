@@ -155,6 +155,7 @@ services:
             serviceOption: 'tls'
             boxname: 'INBOX'
             maxMessages: 10000
+            verbose: 0
 
     Foodsharing\EventListener\CsrfListener:
         tags:

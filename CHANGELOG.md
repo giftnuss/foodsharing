@@ -1,3 +1,36 @@
+# Unreleased
+
+## Major changes
+
+## Features
+- Added Rest endpoint for nearby baskets !875 @alex.simm
+- updated bootstrap-vue to v2.0.0-rc20
+- Added Rest endpoint for the current user's profile !880 @dthulke
+- Added yellow info box with warning to edit event page !892 @jofranz
+- improved the region join selector text #562 @peter.toennies
+- Allow Subgroups to groups !904 @k.miklobusec
+- Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
+
+## Bugfixes
+- Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
+- Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
+- Fixed broken modal for forum post deletion !894 #599 @peter.toennies
+- Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
+- Allow users being deleted out of regions #604 @NerdyProjects
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
+- Added yellow info box with "how to use the address picker" @jofranz
+- Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
+
+## Refactoring
+- Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
+
+## Dev/Test/CI stuff
+- enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
+- update null-loader to version 2 @peter.toennies
+- Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
