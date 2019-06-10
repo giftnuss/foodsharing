@@ -30,6 +30,7 @@
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker

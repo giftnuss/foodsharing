@@ -17,6 +17,7 @@
     "jakub-onderka/php-parallel-lint": "1.0.0",
     "mashape/unirest-php": "3.0.4",
     "phpstan/phpstan": "0.11.7",
+    "phpunit/phpunit": "8.1.*",
     "roave/security-advisories": "dev-master",
     "sebastian/diff": "3.0.2",
     "symfony/debug": "4.2.8"
@@ -42,7 +43,6 @@
     "flow/jsonpath": "0.4.0",
     "fpdo/fluentpdo": "2.1.2",
     "friendsofsymfony/rest-bundle": "2.5.0",
-    "guiguiboy/php-cli-progress-bar": "0.0.4",
     "hirak/prestissimo": "0.3.9",
     "html2text/html2text": "4.2.1",
     "influxdb/influxdb-php": "1.14.7",

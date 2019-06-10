@@ -49,12 +49,6 @@ class MaintenanceControl extends ConsoleControl
 		$this->betriebFetchWarning();
 
 		/*
-		 * update bezirk ids
-		 * there is this old 1:n relation foodsaver <=> bezirk we just check in one step the relation table
-		 */
-		//$this->updateBezirkIds();
-
-		/*
 		 * fill memcache with info about users if they want information mails etc..
 		 */
 		$this->memcacheUserInfo();
@@ -97,11 +91,6 @@ class MaintenanceControl extends ConsoleControl
 		 * Delete old blocked ips
 		 */
 		$this->model->deleteOldIpBlocks();
-
-		/*
-		 * check inactive users and send wake up emails or set in sleeping mode
-		 */
-		//$this->sleepingMode();
 
 		/*
 		 * There may be some groups where people should automatically be added
@@ -330,12 +319,6 @@ class MaintenanceControl extends ConsoleControl
 		$this->mem->set('all_global_group_admins', serialize($admins));
 	}
 
-	private function updateBezirkIds()
-	{
-		$this->model->updateBezirkIds();
-		self::info('bezirk_id relation update');
-	}
-
 	private function masterBezirkUpdate()
 	{
 		self::info('master bezirk update');
@@ -401,55 +384,6 @@ class MaintenanceControl extends ConsoleControl
 		self::success('OK');
 	}
 
-	public function membackup()
-	{
-		self::info('backup memcache to file...');
-
-		$this->mem->ensureConnected();
-
-		if ($keys = $this->mem->cache->getAllKeys()) {
-			$bar = $this->progressbar(count($keys));
-			$data = array();
-			$i = 0;
-			foreach ($keys as $key) {
-				++$i;
-				$bar->update($i);
-				if (substr($key, 0, 3) == 'cb-' || substr($key, 0, 5) == 'user-') {
-					$data[$key] = $this->mem->get($key);
-				}
-			}
-			file_put_contents(ROOT_DIR . 'tmp/membackup.ser', serialize($data));
-		}
-
-		echo "\n";
-		self::success('OK');
-	}
-
-	public function memrestore()
-	{
-		self::info('backup memcache from file...');
-		if ($data = file_get_contents(ROOT_DIR . 'tmp/membackup.ser')) {
-			$data = unserialize($data);
-
-			$bar = $this->progressbar(count($data));
-			$i = 0;
-
-			$this_night_ts = (mktime(5, 0, 0, date('n'), date('j'), date('Y')) + (24 * 60 * 60));
-
-			foreach ($data as $key => $val) {
-				++$i;
-				$bar->update($i);
-
-				$ttl = 0;
-
-				$this->mem->set($key, $val, $ttl);
-			}
-		}
-
-		echo "\n";
-		self::success('OK');
-	}
-
 	public function betriebFetchWarning()
 	{
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
@@ -496,9 +430,7 @@ class MaintenanceControl extends ConsoleControl
 	public function quizrole()
 	{
 		if ($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0')) {
-			$bar = $this->progressbar(count($foodsaver));
 			foreach ($foodsaver as $key => $fs) {
-				$bar->update(($key + 1));
 				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
 				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
 				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');
