@@ -29,7 +29,7 @@ class UserApiCest
 		$I->seeResponseIsJson();
 
 		$I->login($this->user[self::EMAIL]);
-		$I->sendGET(self::API_USER . '/999999');
+		$I->sendGET(self::API_USER . '/999999999');
 		$I->seeResponseCodeIs(Http::NOT_FOUND);
 		$I->seeResponseIsJson();
 	}
