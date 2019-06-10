@@ -659,6 +659,20 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addQuiz(int $quizId, array $extra_params = []): array
+	{
+		$params = [
+			'id' => $quizId,
+			'name' => 'Quiz #' . $quizId,
+			'desc' => '',
+			'maxfp' => 3,
+			'questcount' => 3,
+		];
+		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
+
+		return $params;
+	}
+
 	// =================================================================================================================
 	// private methods
 	// =================================================================================================================
