@@ -37,6 +37,8 @@
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
 - Updated deployment for new production server
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
 
 # 2019-05-17 Hotfix
 
