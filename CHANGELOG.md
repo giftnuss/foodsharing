@@ -10,7 +10,7 @@
 - Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
-- Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by date added !679 @tihar
+- Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -19,9 +19,7 @@
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
 - Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
-- Added yellow info box with "how to use the address picker" @jofranz
 - Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
-
 
 ## Refactoring
 
@@ -177,8 +175,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - CSRF protection for API requests !715 @alangecker
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
-- Added a new button to the contextmenu wich appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
-- Added a city column to the StoreList in the store-overview #456 !679 @tihar
 ## Bugfixes
 - Search index is now shared between deployments so we avoid a lot of javascript errors regarding failed requests !657 @NerdyProjects
 - Fixup conversation header display !658 @nicksellen
