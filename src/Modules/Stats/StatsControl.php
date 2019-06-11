@@ -30,13 +30,7 @@ class StatsControl extends ConsoleControl
 		self::info('Statistik Auswertung für Foodsaver');
 
 		if ($fsids = $this->model->getFoodsaverIds()) {
-			$bar = $this->progressbar(count($fsids));
-
-			$i = 0;
 			foreach ($fsids as $fsid) {
-				++$i;
-				$bar->update($i);
-
 				$stat_gerettet = $this->model->getGerettet($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
 					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
@@ -95,13 +89,7 @@ class StatsControl extends ConsoleControl
 
 		$betriebe = $this->statsGateway->fetchStores();
 
-		$count = count($betriebe);
-		$start_ts = time();
-
-		$bar = $this->progressbar(count($betriebe));
-
 		foreach ($betriebe as $i => $b) {
-			$bar->update($i + 1);
 			$this->calcBetrieb($b);
 		}
 
@@ -167,18 +155,8 @@ class StatsControl extends ConsoleControl
 
 		// get all Bezirke non memcached
 		$bezirke = $this->model->getAllBezirke();
-
-		$start_ts = time();
-
-		$count = count($bezirke);
 		foreach ($bezirke as $i => $b) {
-			$this->info($b['id'] . ' ' . $b['name'] . ' (' . ($i + 1) . '/' . $count . ')');
-
 			$kilo = $this->calcBezirk($b);
-
-			$this->success($kilo . '<span style="white-space:nowrap">&thinsp;</span>kg fetched.');
-
-			$this->info($this->calcDuration($start_ts, ($i + 1), $count));
 		}
 
 		self::success('ready :o)');
