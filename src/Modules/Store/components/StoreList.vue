@@ -217,7 +217,8 @@ export default {
             store.name.toLowerCase().indexOf(filterText) !== -1 ||
             store.address.toLowerCase().indexOf(filterText) !== -1 ||
             store.region.toLowerCase().indexOf(filterText) !== -1 ||
-            store.city.toLowerCase().indexOf(filterText) !== -1
+            store.city.toLowerCase().indexOf(filterText) !== -1 ||
+            store.zipcode.toLowerCase().indexOf(filterText) !== -1
           ))
         )
       }))
