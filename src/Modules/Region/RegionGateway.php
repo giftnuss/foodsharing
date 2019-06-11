@@ -309,6 +309,7 @@ class RegionGateway extends BaseGateway
 		', ['id' => $id]);
 
 		$bezirk['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($id);
+		shuffle($bezirk['botschafter']);
 
 		return $bezirk;
 	}
