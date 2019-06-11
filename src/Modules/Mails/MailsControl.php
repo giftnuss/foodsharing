@@ -31,7 +31,6 @@ class MailsControl extends ConsoleControl
 		InfluxMetrics $metrics,
 		RouteHelper $routeHelper
 	) {
-		echo "creating mailscontrl!!!!\n";
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
@@ -41,7 +40,6 @@ class MailsControl extends ConsoleControl
 		$this->metrics = $metrics;
 		$this->routeHelper = $routeHelper;
 		parent::__construct();
-		echo "-------------------------------------\n";
 	}
 
 	public function queueWorker()
@@ -87,16 +85,11 @@ class MailsControl extends ConsoleControl
 		$messages = $mailbox->getMessages();
 		$stats = ['unknown-recipient' => 0, 'failure' => 0, 'delivered' => 0, 'has-attachment' => 0];
 		if (count($messages) > 0) {
-			self::info(count($messages) . ' in Inbox');
-
-			$progressbar = $this->progressbar(count($messages));
-
 			$have_send = [];
 			$i = 0;
 			try {
 				foreach ($messages as $msg) {
 					++$i;
-					$progressbar->update($i);
 					$mboxes = [];
 					$recipients = $msg->getTo() + $msg->getCc() + $msg->getBcc();
 					foreach ($recipients as $to) {
@@ -122,7 +115,7 @@ class MailsControl extends ConsoleControl
 							$html = $msg->getBodyHtml();
 						} catch (\Exception $e) {
 							$html = null;
-							echo 'Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n';
+							self::error('Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n');
 						}
 
 						if ($html) {
@@ -134,14 +127,13 @@ class MailsControl extends ConsoleControl
 								$text = $msg->getBodyText();
 							} catch (\Exception $e) {
 								$text = null;
-								echo 'Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n';
+								self::error('Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n');
 							}
 							if ($text != null) {
 								$body = $text;
 								$html = nl2br($this->routeHelper->autolink($text));
 							} else {
-								++$stats['failure'];
-								continue;
+								$body = '';
 							}
 						}
 
@@ -164,7 +156,7 @@ class MailsControl extends ConsoleControl
 										'mime' => null
 									];
 								} catch (\Exception $e) {
-									echo 'Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n";
+									self::error('Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n");
 								}
 							}
 						}
@@ -177,7 +169,7 @@ class MailsControl extends ConsoleControl
 						try {
 							$date = $msg->getDate();
 						} catch (\Exception $e) {
-							echo 'Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n";
+							self::error('Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n");
 						}
 						if ($date === null) {
 							$date = new \DateTime();
@@ -230,13 +222,10 @@ class MailsControl extends ConsoleControl
 					$msg->delete();
 				}
 			} catch (\Exception $e) {
-				echo 'Something went wrong, ' . $e->getMessage() . "\n";
+				self::error('Something went wrong, ' . $e->getMessage() . "\n");
 			} finally {
 				$connection->expunge();
 			}
-
-			echo "\n";
-			self::success('ready :o)');
 		}
 
 		return $stats;

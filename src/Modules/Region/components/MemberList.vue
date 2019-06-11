@@ -41,10 +41,10 @@
           <div class="col">
             <button
               v-b-tooltip.hover
-              type="button"
-              class="btn btn-sm"
               :title="$i18n('button.clear_filter')"
               @click="clearFilter"
+              type="button"
+              class="btn btn-sm"
             >
               <i class="fas fa-times" />
             </button>

@@ -102,7 +102,7 @@ register:
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
   have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -130,9 +130,11 @@ terminology:
   ambassadors: Botschafter
   admins: Administratoren
   wall: Pinnwand
+  statistic: Statistik
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
+  subgroup: Untergruppen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
@@ -153,7 +155,7 @@ error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
 
 store:
-  pickup_slot_unavailable: Dieser Abhol-Slot kann derzeit nicht belegt werden. Bitte probiere es später erneut.
+  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
 
 forum:
   from: Von %name%
@@ -262,6 +264,29 @@ memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
   header_for_workgroup: "Foodsaver in der AG {bezirk}"
   some_in_all: "({some} von {all})"
+
+genderlist:
+  header_for_district: "Verteilung der Foodsaver nach Geschlecht in {bezirk}"
+  district_tab: "Bezirk"
+  home_district_tab: "Stammbezirk"
+  gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
+  gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-Foodsaver"
+  gender_table_header: "Geschlecht"
+  gender_divers: "divers (oder nicht gewählt)"
+  gender_male: "männlich"
+  gender_female: "weiblich"
+  number_table_header: "Anzahl"
+
+pickuplist:
+  header_for_district: "Aufteilung der Abholungen in {bezirk} "
+  day_tab: "Tag"
+  week_tab: "Woche"
+  month_tab: "Monat"
+  time_table_header: "Zeitraum"
+  NumberOfStores_table_header: "Anzahl Betriebe"
+  NumberOfAppointments_table_header: "Anzahl Termine"
+  NumberOfSlots_table_header: "Anzahl Abhol-Slots"
+  NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

@@ -3,13 +3,64 @@
 ## Major changes
 
 ## Features
+- Added Rest endpoint for nearby baskets !875 @alex.simm
+- updated bootstrap-vue to v2.0.0-rc20
+- Added Rest endpoint for the current user's profile !880 @dthulke
+- Added yellow info box with warning to edit event page !892 @jofranz
+- improved the region join selector text #562 @peter.toennies
+- Allow Subgroups to groups !904 @k.miklobusec
+- Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
+- Added active foodsaver and jumper count to store popup on map !920 #620 @k.miklobusec
+
+## Bugfixes
+- Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
+- Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
+- Fixed broken modal for forum post deletion !894 #599 @peter.toennies
+- Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
+- Allow users being deleted out of regions #604 @NerdyProjects
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
+- Added yellow info box with "how to use the address picker" @jofranz
+- Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
+
+## Refactoring
+- Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
+
+## Dev/Test/CI stuff
+- enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
+- update null-loader to version 2 @peter.toennies
+- Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
+
+# 2019-06-09 Hotfix
+- InfluxDB Metrics via UDP !882 @alangecker
+- Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
+- Updated deployment for new production server
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
+
+# 2019-05-17 Hotfix
+
+- Clarify message when you cannot sign up for a pickup.
+@NerdyProjects has been working on the pickup backend in the last months so the website does not allow you to sign up for pickups that are further in the future than the setting in the store allows (1-4 weeks).
+The frontend does not yet follow that behaviour (showing pickup slots always for more days than allowed to sign up), but if you want to sign up, the backend disallows that and you get an error message.
+@NerdyProjects currently works on redoing the pickup frontend as well and we hopefully get it shiny in a few days :-)
+- fixed the switched store publicity settings @peter.toennies
+
+# 2019-05-17
+Hey again,
+another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
+
+## Major changes
+
+## Features
+- gender and pickup statistic information in regions #582 !858 @k.miklobusec
 - Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
-- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
 - API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
 - Vue.JS implementation of reports page !529 #296 @theolampert
-- Made email notifications great again #450 @zommuter: 
 - It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Made email notifications great again #450 @zommuter 
+- Made email notifications great again #450 @zommuter:
     - Responsible user in the FROM field !798
     - Message excerpts in the SUBJECT !800, !838
     - Briefer messages for better content preview !805, !806
@@ -26,18 +77,15 @@
 - Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @k.miklobusec
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
-- Adjust devdocs to being open source !823 @flukx
-- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
+- Added logout Rest endpoint !866 @alex.simm
+- Added Rest controller and normalization for stores !885 @alex.simm
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @k.miklobusec
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
-- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
-- Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
-- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
 - Non-followers can comment on Fairteilers again #457 !691 @janopae
 - Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
 - Allow blog posts to be properly formatted !795 @djahnie
@@ -47,6 +95,13 @@
 - Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
 - Fix width of inputfields to a defined value !834 @peter.reutlingen
 - Mailbox users can be autocompleted/managed again !852 @NerdyProjects
+- When a orga views a profile of a user who has never logged in before, the last login date shown now "never" instead of todays date !846 @Caluera
+- Also display sleeping foodsavers in members list !861 @jofranz
+- Fix in the AddBasketAction to allow setting a description and message preferences while creating a basket in the Android App !863 @dthulke
+- Workaround to fix selecting adresses in Vienna !854 @dthulke
+- Make comments visible again on fair-share-points for non-registered users !867 @fs_k @jofranz
+- Show pickup amount in store if set over 50 kg. #546 !862 @svenpascal
+- Tidy up content security policy !870 @NerdyProjects
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
@@ -62,8 +117,14 @@
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
 - Refactored login from model to gateway !828 #9 @peter.toennies
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
+- Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
+- Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
+- Refactored conversations API and related javascript !592 @theolampert
 
 ## Dev/Test/CI stuff
+- Adjust devdocs to being open source !823 @flukx
+- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
+- add section about font awesome in devdocs !842 @flukx
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
@@ -75,12 +136,12 @@
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
 - added /nbProject to .gitinore !791 @k.miklobusec
 - Seed data for reports !529 @NerdyProjects
-- Email templates are no longer stored in the database but the repository #502 !805 @zommuter
 - Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
 - Phase out EmailTemplateAdmin !805 @zommuter
 - Flush redis before running tests #135 !807 @nicksellen
 - Test email templates for new forum messages !812 @NerdyProjects
-- Update copy webpack plugin to version 5, jsdom to v 14, and dotenv to v 7 @peter.toennies
+- Update copy webpack plugin to version 5, jsdom to v 15, and dotenv to v 8, eslint-plugin-node to v 9, vue-eslint-parser to v 6, and null-loader to v 1 @peter.toennies
+- Wrote acceptance tests for showing fetched quantity and store public mentioning (StoreUserCest.php). !862 @svenpascal
 
 # 2019-02-25 Hotfix
 
@@ -110,11 +171,11 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
-- Added API endpoints for basket pictures !671 @alex.simm 
+- Added API endpoints for basket pictures !671 @alex.simm
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Added member list for districts and work groups !697 @djahnie
@@ -170,7 +231,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Fixup conversation header display !658 @nicksellen
 
 # 2019-02-18 Hotfix
@@ -253,13 +314,13 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 
 # 2018-12-24
 
-We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
-not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
-really nice. 
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is
+really nice.
 
-You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs,
 updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
-system of ours. We hope you will enjoy it. 
+system of ours. We hope you will enjoy it.
 
 Merry Christmas :-)
 
@@ -325,7 +386,7 @@ Merry Christmas :-)
 
 - Use Ctrl+Enter instead Shift+Enter for sending messages
 
-## Bugfixes 
+## Bugfixes
 - Fix an issue with the navbar for users of safari 11 !527 @theolampert
 - Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 

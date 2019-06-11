@@ -1,7 +1,7 @@
 <template>
   <nav-item-dropdown
-    tooltip="Infos"
     :no-caret="!displayArrow"
+    tooltip="Infos"
     right
   >
     <template slot="button-content">

@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $g_lang;
 $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv.';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
@@ -92,6 +92,9 @@ $g_lang['edit_betrieb'] = 'Betrieb bearbeiten';
 $g_lang['besonderheiten'] = 'Besonderheiten';
 $g_lang['signout_sure'] = '<strong>Möchtest Du Dich austragen?</strong><p>Sämtliche Abholtermine werden gelöscht.</p>';
 $g_lang['signout_sure_title'] = 'Bist Du Dir sicher?';
+$g_lang['delete_post'] = 'Beitrag löschen';
+$g_lang['delete_post_sure'] = 'Soll der Beitrag wirklich gelöscht werden?';
+$g_lang['delete_sure_title'] = 'Wirklich löschen?';
 $g_lang['betrieb_sign_out'] = 'Mich hier austragen';
 $g_lang['not_verified'] = 'Dein Account wurde noch nicht von einem Botschafter verifiziert. Erst dann kannst Du Dich zum Lebensmittelabholen eintragen';
 $g_lang['team_status'] = 'Teamstatus';
@@ -104,3 +107,6 @@ $g_lang['stat_teammember_since'] = 'Im Team seit {date}';
 $g_lang['stat_jumper_since'] = 'Springer seit {date}';
 $g_lang['stat_since_unknown'] = 'unbekannt';
 $g_lang['delete-manual-slot-warning-text'] = 'Termin wirklich löschen? \nMögliche Abholer dieser Uhrzeit werden dabei ausgetragen.';
+$g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt werden.';
+$g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
+

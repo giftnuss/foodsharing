@@ -353,55 +353,6 @@ class MaintenanceControl extends ConsoleControl
 		self::success('OK');
 	}
 
-	public function membackup()
-	{
-		self::info('backup memcache to file...');
-
-		$this->mem->ensureConnected();
-
-		if ($keys = $this->mem->cache->getAllKeys()) {
-			$bar = $this->progressbar(count($keys));
-			$data = array();
-			$i = 0;
-			foreach ($keys as $key) {
-				++$i;
-				$bar->update($i);
-				if (substr($key, 0, 3) == 'cb-' || substr($key, 0, 5) == 'user-') {
-					$data[$key] = $this->mem->get($key);
-				}
-			}
-			file_put_contents(ROOT_DIR . 'tmp/membackup.ser', serialize($data));
-		}
-
-		echo "\n";
-		self::success('OK');
-	}
-
-	public function memrestore()
-	{
-		self::info('backup memcache from file...');
-		if ($data = file_get_contents(ROOT_DIR . 'tmp/membackup.ser')) {
-			$data = unserialize($data);
-
-			$bar = $this->progressbar(count($data));
-			$i = 0;
-
-			$this_night_ts = (mktime(5, 0, 0, date('n'), date('j'), date('Y')) + (24 * 60 * 60));
-
-			foreach ($data as $key => $val) {
-				++$i;
-				$bar->update($i);
-
-				$ttl = 0;
-
-				$this->mem->set($key, $val, $ttl);
-			}
-		}
-
-		echo "\n";
-		self::success('OK');
-	}
-
 	public function betriebFetchWarning()
 	{
 		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
@@ -448,9 +399,7 @@ class MaintenanceControl extends ConsoleControl
 	public function quizrole()
 	{
 		if ($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0')) {
-			$bar = $this->progressbar(count($foodsaver));
 			foreach ($foodsaver as $key => $fs) {
-				$bar->update(($key + 1));
 				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
 				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
 				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');

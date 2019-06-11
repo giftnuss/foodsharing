@@ -92,12 +92,16 @@ final class RegionControl extends Control
 
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
+			if ($region['has_children'] === 1) {
+				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . (int)$region['id']];
+			}
 			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
 			}
 		} else {
 			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
 			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
+			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&p=' . (int)$region['id'] . '&sub=statistic'];
 		}
 		if ($this->mayAccessApplications($region['id'])) {
 			if ($requests = $this->gateway->listRequests($region['id'])) {
@@ -132,9 +136,8 @@ final class RegionControl extends Control
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
-			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
+			'members' => array_map($avatarListEntry, array_merge($this->region['foodsaver'], $this->region['sleeper']))
 		];
-
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 
 		return $viewdata;
@@ -188,6 +191,9 @@ final class RegionControl extends Control
 				break;
 			case 'members':
 				$this->members($request, $response, $region);
+				break;
+			case 'statistic':
+				$this->statistic($request, $response, $region);
 				break;
 			default:
 				if ($this->isWorkGroup($region)) {
@@ -290,5 +296,22 @@ final class RegionControl extends Control
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
+	}
+
+	private function statistic(Request $request, Response $response, array $region): void
+	{
+		$this->pageHelper->addBread(
+			$this->translator->trans('terminology.statistic'),
+			'/?page=bezirk&bid=' . $region['id'] . '&sub=statistic'
+		);
+		$this->pageHelper->addTitle($this->translator->trans('terminology.statistic'));
+		$sub = $request->query->get('sub');
+		$viewData = $this->regionViewData($region, $sub);
+		$viewData['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
+		$viewData['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
+		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
+		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }

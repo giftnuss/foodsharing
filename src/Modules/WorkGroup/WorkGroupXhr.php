@@ -2,43 +2,55 @@
 
 namespace Foodsharing\Modules\WorkGroup;
 
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 
 class WorkGroupXhr extends Control
 {
-	public function __construct(WorkGroupModel $model, WorkGroupView $view)
-	{
-		$this->model = $model;
+	private $workGroupGateway;
+	private $responses;
+
+	public function __construct(
+			WorkGroupView $view,
+			WorkGroupGateway $workGroupGateway
+	) {
 		$this->view = $view;
+		$this->workGroupGateway = $workGroupGateway;
+		$this->responses = new XhrResponses();
 
 		parent::__construct();
 	}
 
 	public function apply()
 	{
-		if ($group = $this->model->getGroup($_GET['id'])) {
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group) {
 			$dialog = new XhrDialog();
 
 			$dialog->addContent($this->view->applyForm($group));
 
 			$dialog->setTitle('Bewerbung ' . $group['name']);
-			$dialog->addButton('Bewerbung absenden', 'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})');
+			$dialog->addButton('Bewerbung absenden',
+				'ajreq(\'applysend\',{d:\'' . $dialog->getId() . '\',id:' . (int)$group['id'] . ', f:$(\'#apply-form\').serialize()})'
+			);
 
 			$dialog->setResizeable(false);
 			$dialog->addOpt('width', 450);
 
 			return $dialog->xhrout();
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function addtogroup()
 	{
-		if ($this->session->may('fs') && $group = $this->model->getGroup($_GET['id'])) {
-			if ($group['apply_type'] == ApplyType::OPEN) {
-				$this->model->addToGroup($_GET['id'], $this->session->id());
+		if ($this->session->may('fs')) {
+			$group = $this->workGroupGateway->getGroup($_GET['id']);
+			if ($group && $group['apply_type'] == ApplyType::OPEN) {
+				$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
 
 				return array(
 					'status' => 1,
@@ -46,6 +58,8 @@ class WorkGroupXhr extends Control
 				);
 			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function applysend()
@@ -54,18 +68,19 @@ class WorkGroupXhr extends Control
 			$output = array();
 			parse_str($_GET['f'], $output);
 			if (!empty($output)) {
-				$motivation = strip_tags($output['motivation']);
-				$fahig = strip_tags($output['faehigkeit']);
-				$erfahrung = strip_tags($output['erfahrung']);
-				$zeit = strip_tags($output['zeit']);
-				$zeit = substr($zeit, 0, 300);
-
-				if ($groupmail = $this->model->getGroupMail($_GET['id'])) {
-					if ($group = $this->model->getGroup($_GET['id'])) {
-						if ($fs = $this->model->getValues(array('id', 'name', 'email'), 'foodsaver', $this->session->id())) {
-							if ($email = $this->model->getFsMail($fs['id'])) {
-								$fs['email'] = $email;
-							}
+				$groupId = $_GET['id'];
+				$groupmail = $this->workGroupGateway->getGroupMail($groupId);
+				if ($groupmail) {
+					$group = $this->workGroupGateway->getGroup($groupId);
+					if ($group) {
+						$fsId = $this->session->id();
+						$fs = $this->workGroupGateway->getFsWithMail($fsId);
+						if ($fs) {
+							$motivation = strip_tags($output['motivation']);
+							$fahig = strip_tags($output['faehigkeit']);
+							$erfahrung = strip_tags($output['erfahrung']);
+							$zeit = strip_tags($output['zeit']);
+							$zeit = substr($zeit, 0, 300);
 
 							$content = array(
 								'Motivation:' . "\n===========\n" . trim($motivation),
@@ -74,7 +89,7 @@ class WorkGroupXhr extends Control
 								'Zeit:' . "\n=====\n" . trim($zeit)
 							);
 
-							$this->model->groupApply($group['id'], $this->session->id(), implode("\n\n", $content));
+							$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));
 
 							$this->emailHelper->libmail(array(
 								'email' => $fs['email'],
@@ -90,17 +105,22 @@ class WorkGroupXhr extends Control
 				}
 			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	/*
 	 * CONTACT GROUP VIA EMAIL
 	 */
+
 	public function sendtogroup()
 	{
 		if (!$this->session->id()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
+
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group && !empty($group['email'])) {
 			$message = $_GET['msg'];
 
 			if (!empty($message)) {
@@ -112,7 +132,7 @@ class WorkGroupXhr extends Control
 					'message' => $message,
 					'username' => $this->session->user('name'),
 					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-				), $userMail);
+						), $userMail);
 
 				return array(
 					'status' => 1,
@@ -120,11 +140,14 @@ class WorkGroupXhr extends Control
 				);
 			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function contactgroup()
 	{
-		if (($group = $this->model->getGroup($_GET['id'])) && !empty($group['email'])) {
+		$group = $this->workGroupGateway->getGroup($_GET['id']);
+		if ($group && !empty($group['email'])) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle($group['name'] . ' kontaktieren');
 
@@ -138,5 +161,7 @@ class WorkGroupXhr extends Control
 
 			return $ret;
 		}
+
+		return $this->responses->fail_generic();
 	}
 }

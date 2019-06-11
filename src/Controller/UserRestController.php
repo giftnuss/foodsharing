@@ -64,6 +64,16 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Post("user/logout")
+	 */
+	public function logoutAction(): Response
+	{
+		$this->session->logout();
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * @Rest\Delete("user/{userId}", requirements={"userId" = "\d+"})
 	 */
 	public function deleteUserAction(int $userId): Response

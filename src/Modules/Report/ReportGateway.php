@@ -247,7 +247,12 @@ class ReportGateway extends BaseGateway
 		$query = $this->reportSelect();
 
 		if ($regions !== null && is_array($regions)) {
-			$query = $query->where('fs.bezirk_id', $regions);
+			if (!empty($regions)) {
+				/* fluentpdo ignores the where clause when $regions is empty... */
+				$query = $query->where('fs.bezirk_id', $regions);
+			} else {
+				return [];
+			}
 		}
 		if ($excludeReportsAboutUser !== null) {
 			$query = $query->where('fs.id != ?', $excludeReportsAboutUser);
