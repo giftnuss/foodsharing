@@ -15,8 +15,7 @@ import {
   showLoader,
   hideLoader,
   GET,
-  profile,
-  reload
+  profile
 } from '@/script'
 
 import 'jquery-tagedit'
@@ -43,6 +42,7 @@ import {
   createUnconfirmedMenu,
   addContextMenu
 } from './StoreUser.lib'
+import { signup } from '@/api/stores'
 
 expose({
   u_updatePosts,
@@ -61,24 +61,14 @@ expose({
   createUnconfirmedMenu
 })
 
-// Fix for Issue #171
-let days
-const seconds = store.prefetchtime
-if (seconds >= 86400) {
-  days = seconds / 86400
-} else {
-  // If Bieb did not set the option "how many weeks in advance can a foodsaver apply" an alternative value
-  days = 7
-}
-
-$('.cb-verantwortlicher').click(function () {
+$('.cb-verantwortlicher').on('click', function () {
   if ($('.cb-verantwortlicher:checked').length >= 4) {
     pulseError(i18n('max_3_leader'))
     return false
   }
 })
 
-$('#team-form').submit(function (ev) {
+$('#team-form').on('submit', function (ev) {
   if ($('.cb-verantwortlicher:checked').length == 0) {
     pulseError(i18n('verantwortlicher_must_be'))
     ev.preventDefault()
@@ -91,14 +81,14 @@ $('#team_msg-wrapper').hide()
 $('#u_undate').dialog({
   autoOpen: false,
   modal: true,
-  width: 400,
+  width: 'auto',
   buttons: [
     {
       text: i18n('have_backup'),
       click: function () {
         showLoader()
         $.ajax({
-          url: 'xhr.php?f=delDate',
+          url: '/xhr.php?f=delDate',
           data: { 'date': $('#undate-date').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
@@ -131,7 +121,7 @@ $('#u_undate').dialog({
       click: function () {
         showLoader()
         $.ajax({
-          url: 'xhr.php?f=delDate',
+          url: '/xhr.php?f=delDate',
           data: { 'date': $('#undate-date').val(), 'msg': $('#team_msg').val(), 'bid': store.id },
           dataType: 'json',
           success: function (ret) {
@@ -155,21 +145,21 @@ $('#u_undate').dialog({
 
 $('#comment-post').hide()
 
-$('div#pinnwand form textarea').focus(function () {
+$('div#pinnwand form textarea').on('focus', function () {
   $('#comment-post').show()
 })
 
-$('div#pinnwand form input.submit').button().bind('keydown', function (event) {
-  $('div#pinnwand form').submit()
+$('div#pinnwand form input.submit').button().on('keydown', function (event) {
+  $('div#pinnwand form').trigger('submit')
 })
 
-$('div#pinnwand form').submit(function (e) {
+$('div#pinnwand form').on('submit', function (e) {
   e.preventDefault()
   if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
     $.ajax({
       dataType: 'json',
       data: $('div#pinnwand form').serialize(),
-      url: `xhr.php?f=addPinPost&team=${store.team_js}`,
+      url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
       success: function (data) {
         if (data.status == 1) {
           $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
@@ -216,7 +206,7 @@ $('#delete_shure').dialog({
         showLoader()
         const pid = $(this).data('pid')
         $.ajax({
-          url: 'xhr.php?f=delBPost',
+          url: '/xhr.php?f=delBPost',
           data: { 'pid': pid },
           success: function (ret) {
             if (ret == 1) {
@@ -239,7 +229,7 @@ $('#delete_shure').dialog({
   ]
 })
 
-$('.timedialog-add-me').click(function () {
+$('.timedialog-add-me').on('click', function () {
   u_clearDialogs()
 
   if (user.verified) {
@@ -263,79 +253,47 @@ $('#timedialog').dialog({
   resizable: false,
   modal: true,
   autoOpen: false,
-  width: 500,
+  width: 'auto',
   buttons: {
-    'Eintragen': function () {
-      $.ajax({
-        url: 'xhr.php?f=addFetcher',
-        data: {
-          date: $('#timedialog-date').val(),
-          bid: store.id,
-          from: $('#timedialog-from').val(),
-          to: $('#timedialog-to').val()
-        },
-        success: function (ret) {
-          u_clearDialogs()
-          $('#timedialog').dialog('close')
-          if (ret == '2') {
-            reload()
-          } else if (ret != 0) {
-            $(`#${$('#timedialog-id').val()}-button`).last().remove()
+    'Eintragen': async function () {
+      const requestDate = ($('#timedialog-date').val()).replace(' ', 'T') + 'Z'
+      try {
+        const result = await signup(store.id, requestDate)
+        u_clearDialogs()
+        const timedialogId = $('#timedialog-id').val()
+        const $button = $(`#${timedialogId}-button`)
+        const $imglist = $(`#${timedialogId}-imglist`)
+        $button.last().remove()
 
-            const li = $(`<li><a class="img-link" href="#"><img src="${ret}" title="Du" /><span>&nbsp;</span></a></li>`)
-              .addClass(store.verantwortlich ? 'confirmed' : 'unconfirmed')
+        const li = $(`<li><a class="img-link" href="#"><img src="${user.avatar.mini}" title="Du" /><span>&nbsp;</span></a></li>`)
+          .addClass(result.confirmed ? 'confirmed' : 'unconfirmed')
 
-            $(`#${$('#timedialog-id').val()}-imglist`)
-              .prepend(li)
-              .find('.img-link')
-              .click(e => {
-                e.preventDefault()
-                profile(user.id)
-              })
+        $imglist
+          .prepend(li)
+          .find('.img-link')
+          .on('click', e => {
+            e.preventDefault()
+            profile(user.id)
+          })
 
-            if (!store.verantwortlich) pulseInfo(i18n('wait_for_confirm'))
-
-            if ($(`#${$('#timedialog-id').val()}-imglist li:last`).hasClass('empty')) {
-              $(`#${$('#timedialog-id').val()}-imglist li:last`).remove()
-            }
-
-            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).attr('title', '')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).unbind('click')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).addClass('nohover')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty`).removeClass('filled')
-            $(`#${$('#timedialog-id').val()}-imglist li.empty a`).tooltip('option', { disabled: true }).tooltip('close')
-          }
+        if (!result.confirmed) pulseInfo(i18n('wait_for_confirm'))
+        const $liLast = $imglist.find('li:last')
+        if ($liLast.hasClass('empty')) {
+          $liLast.remove()
         }
-      })
-    },
-    'Regelmäßig abholen': function () {
-      $('#shure_date').hide()
-      $('#rangeFetch').show()
-      $('#shure_range_date').show()
 
-      $('#timedialog-from').datepicker({
-        defaultDate: '+1w',
-        minDate: '0',
-        maxDate: `+${days}`,
-        numberOfMonths: 1,
-        onClose: function (selectedDate) {
-          if (selectedDate != '') {
-            $('#timedialog-to').datepicker('option', 'minDate', selectedDate)
-          }
-          $('#timedialog-to').datepicker('option', 'maxDate', `+${days}`)
-        }
-      })
-
-      $('#timedialog-to').datepicker({
-        defaultDate: '+1w',
-        minDate: '+2',
-        maxDate: `+${days}`,
-        numberOfMonths: 1,
-        onClose: function (selectedDate) {
-          $('#timedialog-from').datepicker('option', 'maxDate', selectedDate)
-        }
-      })
-      $('#timedialog').next().children().children(':nth-child(2)').hide()
+        $imglist.find('li.empty')
+          .off('click')
+          .addClass('nohover')
+          .removeClass('filled')
+          .find('a')
+          .attr('title', '')
+          .tooltip('option', { disabled: true }).tooltip('close')
+      } catch (err) {
+        u_clearDialogs()
+        pulseError(i18n('store.pickup_slot_unavailable'))
+      }
+      $(this).dialog('close')
     },
     'Abbrechen': function () {
       u_clearDialogs()
@@ -344,7 +302,7 @@ $('#timedialog').dialog({
   }
 })
 
-$('#changeStatus').button().click(() => {
+$('#changeStatus').button().on('click', () => {
   $('#changeStatus-hidden').dialog({
     title: i18n('change_status'),
     modal: true
@@ -356,7 +314,7 @@ $('.nft-remove').button({
   icons: {
     primary: 'ui-icon-minus'
   }
-}).click(function () {
+}).on('click', function () {
   const $this = $(this)
   $this.parent().parent().remove()
 })
@@ -372,7 +330,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
     if (val == 0) {
       val = 1
     } else if (val > 2) {
-      pulseError('Du hast mehr als zwei Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nicht mehr als zwei Leute</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
+      pulseError('Du hast mehrere Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nur so viele Abholer wie nötig</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
         sticky: true
       })
     }
@@ -382,7 +340,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
 
 $('#nft-add').button({
   text: false
-}).click(function () {
+}).on('click', function () {
   $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
   let clname = 'odd'
   $('table.timetable tbody tr').each(function () {
@@ -401,7 +359,7 @@ $('#nft-add').button({
     icons: {
       primary: 'ui-icon-minus'
     }
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
     $this.parent().parent().remove()
   })

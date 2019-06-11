@@ -2,23 +2,35 @@
 
 namespace Foodsharing\Modules\Report;
 
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Services\SanitizerService;
 
 class ReportXhr extends Control
 {
 	private $foodsaver;
 	private $reportGateway;
 	private $foodsaverGateway;
+	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		ReportGateway $reportGateway,
+		Db $model,
+		ReportView $view,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 
@@ -30,23 +42,23 @@ class ReportXhr extends Control
 
 	public function loadReport(): ?array
 	{
-		if ($this->func->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
+		if ($this->session->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
-			$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
+			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
-			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
+			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
-				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . $report['betrieb']['name'] . '</a>');
+				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');
 			}
 
 			if (\is_array($reason)) {
 				$out = '<ul>';
 				foreach ($reason as $r) {
-					$out .= '<li>' . trim($r) . '</li>';
+					$out .= '<li>' . htmlspecialchars(trim($r)) . '</li>';
 				}
 				$out .= '</ul>';
 
@@ -54,17 +66,17 @@ class ReportXhr extends Control
 			}
 
 			if (!empty($report['msg'])) {
-				$content .= $this->v_utils->v_input_wrapper('Beschreibung', nl2br($report['msg']));
+				$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->plainToHtml($report['msg']));
 			}
 
-			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . $report['rp_name'] . ' ' . $report['rp_nachname'] . '</a>');
+			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
 			$dialog->addContent($content);
-			$dialog->addOpt('width', '600px');
+			$dialog->addOpt('width', '$(window).width()*0.9');
 
 			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
 			if ($report['committed'] === 0) {
-				$dialog->addButton('Report bestätigen', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
+				$dialog->addButton('Meldung zugestellt', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
 			}
 			$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
 
@@ -74,9 +86,9 @@ class ReportXhr extends Control
 
 	public function comReport(): ?array
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->func->info('Meldung wurde bestätigt!');
+			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
 			return [
 				'status' => 1,
@@ -87,9 +99,9 @@ class ReportXhr extends Control
 
 	public function delReport(): ?array
 	{
-		if ($this->func->mayHandleReports()) {
+		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->func->info('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,
@@ -115,18 +127,17 @@ class ReportXhr extends Control
 			$bid = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->func->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
-
-		$dialog->addOpt('width', '600', false);
+		$dialog->addOpt('width', '$(window).width()*0.9', false);
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
-			$("#betrieb_id").change(function(){
+			$("#betrieb_id").on("change", function(){
 				$("#reportbid").val($(this).val());
 			});
-			$("#reportreason").change(function(){
+			$("#reportreason").on("change", function(){
 			var value = $(this).val();
 			$("#reportreason ~ select").hide();
 			$("#reportreason ~ div.cb").hide();
@@ -136,7 +147,7 @@ class ReportXhr extends Control
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
-		$dialog->addJs('$("#reportmessage").css("width","555px");');
+		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
 		$dialog->addButton('Meldung senden', '
 
 		if($("#reportreason").val() == 0)
@@ -173,6 +184,7 @@ class ReportXhr extends Control
 			});
 		}
 		');
+		$dialog->noOverflow();
 
 		return $dialog->xhrout();
 	}

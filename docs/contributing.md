@@ -1,56 +1,75 @@
 # Contributing
 
-If you have any questions please pester us in [yunity slack](https://slackin.yunity.org/) in #foodsharing-dev channel.
+If you have any questions please reach out to us via slack: [yunity slack](https://slackin.yunity.org/) and join the #foodsharing-dev channel.
 
-## Coding guidelines
+## Submitting an issue
 
-We do not have specific coding guidelines yet, please use your common sense and make it fit with the existing code.
+If you found an issue on the foodsharing website, then please submit it to our GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
 
-## Found an issue?
-
-Submit an issue in our [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues)!
-
-If you feel comfortable submitting a fix too, follow the next section.
+If you feel comfortable submitting a fix (or if you like to try ;) ) too, then follow the next section.
 
 ## Submitting a change
 
-* Ensure there is an issue for the change in the [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues)
-  * This is a seperate project as it is public, and the repo is not
-  * If you are just submitting a very small change or a doc fix don't worry about creating an issue
-* Make your changes in a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier
-  * E.g. issue number `56` would have a branch named `56-some-descriptive-words`
-  * Optionally add your name, e.g. `56-nicksellen-some-descriptive-words`
-* Ensure the code style is fixed before commiting, by running ./scripts/fix-codestyle
-* Ensure the tests pass locally, by running ./scripts/test
-* Create a merge request to master for your branch early on
-  * Select the template "Default"
-  * Prefix the name of the merge request with `WIP:`
-* Make sure your merge request checks all the checkboxes in the Default template (and check them in the description!)
-* Once you think your branch is ready to be merged, remove the WIP prefix from your merge request
-* An approver will get back to you with feedback or change requests (have some patience if this does not happen right away)
-* Once the approver considers your changeset ready to be made, they will merge it into the master branch
-* The master branch will be deployed automatically to beta.foodsharing.de where you can try it out (uses production database)
-  * See https://gitlab.com/foodsharing-dev/foodsharing/environments for an overview of the different envuironments
-* Hang around and see if people in #foodsharing-beta on Slack ( yunity.slack.com ) find any issues, etc...
-* At some point in the future once a few changes have been collected it'll be deployed to production
+### Becoming a member
+
+As an “member” on Gitlab you can
+ * create and push to branches within the repository (except master)
+ * see confidential issues
+ * set labels to issues
+ * assign yourself to issues (to tell others that they do not need to start on them)
+After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* Button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
+
+### Working on an issue
+
+You can either submit your own issue and work on it or work on existing issues. Issues that are suitable for newcomers are labeled as [starter tasks](https://gitlab.com/foodsharing-dev/foodsharing/issues?label_name%5B%5D=starter+task).
+
+To work on an issue:
+
+1. Check if there is an issue for the change in the GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
+  * This is a seperate project as it is public and the repo is not.
+  * If you are just submitting a very small change or a doc fix, then don't worry about creating an issue.
+2. Create a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier.
+  * For example, the issue number `56` would have a branch named `56-some-descriptive-words`.
+  * Optionally, add your name to the branch name; for example, `56-nicksellen-some-descriptive-words`.
+3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci-skip` which disables running the build and test on the Gitlab server.
+
+To submit your change:
+
+1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle-local` (or if that does not work by running the slower `./scripts/fix`).
+2. Check if the tests pass locally, by running `./scripts/test`.
+3. Create a merge request to master for your branch early on.
+  1. Select the template "Default".
+  2. Prefix the name of the merge request with `WIP:`.
+4. Make sure your merge request checks all the checkboxes in the "Default" template (and check them in the description).
+5. Once you think your branch is ready to be merged, remove the `WIP:` prefix from the name of your merge request. Rebase your branch onto master (which might have developed since your branching). It is OK to force-push (`git push origin <your_branch_name> -f`) after rebasing.
+6. Submit your merge request.
+
+The next steps will be:
+
+* An approver will get back to you with feedback or change requests. Please have some patience if this does not happen right away.
+* Once the approver considers your changeset ready to be made, they will merge it into the master branch.
+* The master branch will be deployed automatically to [beta.foodsharing.de](https://beta.foodsharing.de), where you can try it out (uses production database).
+  * See [environments on GitLab](https://gitlab.com/foodsharing-dev/foodsharing/environments) for an overview of the different environments.
+* Hang around and see if people in #foodsharing-beta on [Slack](https://yunity.slack.com/) find any issues, etc.
+* At some point in the future, once a few changes have been collected, they will all be deployed to production.
 
 ## Testing
 
 You can run the tests with `./scripts/test`,
-once you have run them once you can use `./scripts/test-rerun` which runs much quicker
-(so long as we keep writing the tests to run idempotently, please do!).
+for your second and following runs, you can use `./scripts/test-rerun` which runs much quicker
+(as long as we keep writing the tests to run idempotently, please do!).
 
-So far end to end testing is working nicely (called acceptance tests in codeception).
-They run with a headless firefox and selenium inside the docker setup, they are run on CI build too.
+So far, end to end tests (called _acceptance tests_ in codeception) work nicely.
+They run with a headless Firefox and Selenium inside the Docker setup and they are run on CI build too.
 
-We are working on [restructing the code](https://gitlab.com/foodsharing-dev/foodsharing/issues/68)
-to enable unit testing.
+We are restructuring the code to enable unit testing.  
+Related issue: [Incremental refactor](https://gitlab.com/foodsharing-dev/foodsharing/issues/68).
 
-The test contains stay around after running, and you can visit the test app
+The state created during testing is not thrown away, and you can visit the test app
 [in your browser](http://localhost:28080/), and it has
-[it's own phpmyadmin](http://localhost:28081/).
+[its own phpmyadmin](http://localhost:28081/).
 
-If you want to run with debug mode turned on use: `./scripts/test --debug`.
+If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
 
-If you just want to run one test pass the path to that test as an argument,
-e.g. `./scripts/test tests/acceptance/LoginCept.php`
+If you just want to run one test, pass the path to that test as an argument,
+e.g.: `./scripts/test tests/acceptance/LoginCept.php`.

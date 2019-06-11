@@ -1,8 +1,9 @@
 <?php
 global $g_lang;
 
-$g_lang['write_teaser'] = 'Schreibe etwas...';
-$g_lang['attach_image'] = 'Bild hochladen';
+$g_lang['write_teaser'] = 'Schreibe etwas auf deine Pinnwand...';
+$g_lang['attach_image'] = 'Statusbilder  hochladen';
+$g_lang['send'] = 'Beitrag absenden';
 $g_lang['mailbox'] = 'Interne Mailbox';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['registration_date'] = 'Registrierungsdatum';
@@ -16,3 +17,4 @@ $g_lang['foodsaver_home_district'] = 'Stammbezirk von {name}';
 $g_lang['foodsaver_workgroups'] = '{gender} ist Ansprechpartner für folgende Arbeitsgruppen';
 $g_lang['foodsaver_sleeping_hat_time'] = '{name} hat eine Schlafmütze auf vom {datum_von} bis {datum_bis}';
 $g_lang['foodsaver_sleeping_hat_time_undefined'] = '{name} hat eine Schlafmütze auf unbestimmte Zeit';
+$g_lang['Never'] = 'Nie';

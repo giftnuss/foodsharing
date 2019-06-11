@@ -1,12 +1,11 @@
 <template>
   <div
     id="topbar-search"
-    class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1"
+    class="form my-2 my-lg-0 flex-grow-1"
   >
     <div
       ref="inputgroup"
-      class="input-group"
+      class="input-group input-group-sm"
     >
       <div class="input-group-prepend">
         <label
@@ -34,8 +33,8 @@
       >
     </div>
     <div
-      v-if="isOpen"
       id="search-results"
+      v-if="isOpen"
       :style="resultsStyle"
       class="dropdown-menu"
     >
@@ -57,13 +56,12 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import { user } from '@/server-data'
-import clickoutMixin from '@b/mixins/clickout'
+import clickOutMixin from '@b/mixins/click-out'
 import listenOnRootMixin from '@b/mixins/listen-on-root'
 
 export default {
   components: { SearchResults },
-  mixins: [clickoutMixin, listenOnRootMixin],
+  mixins: [clickOutMixin, listenOnRootMixin],
   data () {
     return {
       posX: 0,
@@ -71,6 +69,7 @@ export default {
       query: '',
       isOpen: false,
       isLoading: false,
+      isIndexLoaded: false,
       results: {
         stores: [],
         users: [],
@@ -93,6 +92,9 @@ export default {
   },
   watch: {
     query (query, oldQuery) {
+      if (!this.isIndexLoaded) {
+        this.fetchIndex()
+      }
       if (query.trim().length > 2) {
         this.open()
         this.delayedFetch()
@@ -110,9 +112,6 @@ export default {
   mounted () {
     // close the result box if another dropdown menu gets opened
     this.listenOnRoot('bv::dropdown::shown', this.close)
-  },
-  created () {
-    this.fetchIndex()
   },
   methods: {
     open () {
@@ -144,7 +143,8 @@ export default {
       this.isLoading = false
     },
     async fetchIndex () {
-      this.index = await instantSearchIndex(user.token)
+      this.isIndexLoaded = true
+      this.index = await instantSearchIndex()
     },
     clickOutListener () {
       this.isOpen = false
@@ -154,41 +154,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-</style>
-
-<style lang="scss">
-  #topbar-search {
-    .input-group {
-      margin-bottom: 0;
-      width: 100% !important;
-
-      img, i {
-        height: 1em;
-        width: 1em;
-      }
-
-      .input-group-text {
-        background-color: white;
-        border: none;
-        padding: 0.1rem 0.4rem;
-        font-size: .9em;
-      }
-
-      input.form-control {
-        font-size: 1em;
-        border: none;
-        padding: 0.1rem 0.75rem 0.1rem 0;
-        font-weight: bold;
-
-        &:focus {
-          box-shadow: none;
-          border: none;
-        }
-      }
-    }
-  }
-
   #search-results {
     display: block;
     width: 250px;

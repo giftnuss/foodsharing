@@ -2,33 +2,48 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Services\SanitizerService;
 
 class MailboxXhr extends Control
 {
 	private $sanitizerService;
+	private $timeHelper;
+	private $mailboxGateway;
+	private $mailboxPermissions;
 
-	public function __construct(MailboxModel $model, MailboxView $view, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		Db $model,
+		MailboxView $view,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper,
+		MailboxGateway $mailboxGateway,
+		MailboxPermissions $mailboxPermissions
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
+		$this->mailboxGateway = $mailboxGateway;
+		$this->mailboxPermissions = $mailboxPermissions;
 
 		parent::__construct();
-
-		if (!$this->session->may('bieb')) {
-			return false;
-		}
 	}
 
 	public function attach()
 	{
+		if (!$this->session->may('bieb')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		// is filesize (10MB) and filetype allowed?
 		$attachmentIsAllowed = $this->attach_allow($_FILES['etattach']['name'], $_FILES['etattach']['type']);
 		if ($attachmentIsAllowed && isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 1310720) {
-			$new_filename = uniqid();
+			$new_filename = bin2hex(random_bytes(16));
 
 			$ext = strtolower($_FILES['etattach']['name']);
 			$ext = explode('.', $ext);
@@ -46,9 +61,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->func->jsSafe($this->func->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -67,6 +82,9 @@ class MailboxXhr extends Control
 
 	public function loadmails()
 	{
+		if (!$this->session->may('bieb')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		$last_refresh = (int)$this->mem->get('mailbox_refresh');
 
 		$cur_time = (int)time();
@@ -77,19 +95,18 @@ class MailboxXhr extends Control
 			($cur_time - $last_refresh) > 30
 		) {
 			$this->mem->set('mailbox_refresh', $cur_time);
-			$ref = $this->refresh();
 		}
 
 		$mb_id = (int)$_GET['mb'];
-		if ($this->model->mayMailbox($mb_id, $_GET['type'])) {
-			$this->model->mailboxActivity($mb_id);
-			if ($messages = $this->model->listMessages($mb_id, $_GET['folder'])) {
+		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
+			$this->mailboxGateway->mailboxActivity($mb_id);
+			if ($messages = $this->mailboxGateway->listMessages($mb_id, $_GET['folder'])) {
 				$nc_js = '';
-				if ($boxes = $this->model->getBoxes()) {
-					if ($newcount = $this->model->getNewCount($boxes)) {
+				if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
+					if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 						foreach ($newcount as $nc) {
 							$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . DEFAULT_EMAIL_HOST . ' (' . (int)$nc['count'] . ')");';
+								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
 						}
 					}
 				}
@@ -104,15 +121,15 @@ class MailboxXhr extends Control
 					'append' => '#messagelist tbody',
 					'script' => '
 						$("#messagelist .from a:first").text("' . $vontext . '");
-						$("#messagelist tbody tr").mouseover(function(){
+						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
 							
 						});
-						$("#messagelist tbody tr").mouseout(function(){
+						$("#messagelist tbody tr").on("mouseout", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");							
 						});
-						$("#messagelist tbody tr").click(function(){
+						$("#messagelist tbody tr").on("click", function(){
 							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
 						});
 						$("#messagelist tbody td").disableSelection();
@@ -131,52 +148,55 @@ class MailboxXhr extends Control
 
 	public function move()
 	{
-		if ($this->model->mayMessage($_GET['mid'])) {
-			$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
-
-			if ($folder == 3) {
-				$this->model->deleteMessage($_GET['mid']);
-			} else {
-				$this->model->move($_GET['mid'], $_GET['f']);
-			}
-
-			return array(
-				'status' => 1,
-				'script' => '$("tr#message-' . (int)$_GET['mid'] . '").remove();$("#message-body").dialog("close");'
-			);
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+		$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
+
+		if ($folder == 3) {
+			$this->mailboxGateway->deleteMessage($_GET['mid']);
+		} else {
+			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
+		}
+
+		return array(
+			'status' => 1,
+			'script' => '$("tr#message-' . (int)$_GET['mid'] . '").remove();$("#message-body").dialog("close");'
+		);
 	}
 
 	public function quickreply()
 	{
-		if (isset($_GET['mid']) && $this->model->mayMessage($_GET['mid'])) {
-			if ($message = $this->model->getMessage($_GET['mid'])) {
-				$sender = @json_decode($message['sender'], true);
-				if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
-					$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
+		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))) {
+			$message = $this->mailboxGateway->getMessage($_GET['mid']);
+			$sender = @json_decode($message['sender'], true);
+			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
+				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
 
-					$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->func->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
-					$mail = new AsyncMail($this->mem);
-					$mail->setFrom($message['mailbox'] . '@' . DEFAULT_EMAIL_HOST, $this->session->user('name'));
-					if ($sender['personal']) {
-						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
-					} else {
-						$mail->addRecipient($sender['mailbox'] . '@' . $sender['host']);
-					}
-					$mail->setSubject($subject);
-					$html = nl2br($body);
-					$mail->setHTMLBody($html);
-					$plainBody = $this->sanitizerService->htmlToPlain($html);
-					$mail->setBody($body);
-					$mail->send();
-
-					echo json_encode(array(
-						'status' => 1,
-						'message' => 'Spitze! Die E-Mail wurde versendet.'
-					));
-					exit();
+				$mail = new AsyncMail($this->mem);
+				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
+				if ($sender['personal']) {
+					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
+				} else {
+					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host']);
 				}
+				$mail->setSubject($subject);
+				$html = nl2br($body);
+				$mail->setHTMLBody($html);
+				$plainBody = $this->sanitizerService->htmlToPlain($html);
+				$mail->setBody($body);
+				$mail->send();
+
+				echo json_encode(array(
+					'status' => 1,
+					'message' => 'Spitze! Die E-Mail wurde versendet.'
+				));
+				exit();
 			}
 		}
 
@@ -189,6 +209,9 @@ class MailboxXhr extends Control
 
 	public function send_message()
 	{
+		if (!$this->session->may('bieb')) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		/*
 		 *  an		an
 			body	body
@@ -196,7 +219,7 @@ class MailboxXhr extends Control
 			sub		betr
 		 */
 
-		if ($last = (int)$this->mem->user($this->func->fsId(), 'mailbox-last')) {
+		if ($last = (int)$this->mem->user($this->session->id(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
 				return array(
 					'status' => 1,
@@ -205,10 +228,10 @@ class MailboxXhr extends Control
 			}
 		}
 
-		$this->mem->userSet($this->func->fsId(), 'mailbox-last', time());
+		$this->mem->userSet($this->session->id(), 'mailbox-last', time());
 
-		if ($this->model->mayMailbox($_POST['mb'])) {
-			if ($mailbox = $this->model->getMailbox($_POST['mb'])) {
+		if ($this->mailboxPermissions->mayMailbox($_POST['mb'])) {
+			if ($mailbox = $this->mailboxGateway->getMailbox($_POST['mb'])) {
 				$an = explode(';', $_POST['an']);
 				$tmp = array();
 				foreach ($an as $a) {
@@ -245,7 +268,7 @@ class MailboxXhr extends Control
 				$this->libPlainMail(
 					$an,
 					array(
-						'email' => $mailbox['name'] . '@' . DEFAULT_EMAIL_HOST,
+						'email' => $mailbox['name'] . '@' . PLATFORM_MAILBOX_HOST,
 						'name' => $mailbox['email_name']
 					),
 					$_POST['sub'],
@@ -255,7 +278,7 @@ class MailboxXhr extends Control
 
 				$to = array();
 				foreach ($an as $a) {
-					if ($this->func->validEmail($a)) {
+					if ($this->emailHelper->validEmail($a)) {
 						$t = explode('@', $a);
 
 						$to[] = array(
@@ -266,11 +289,11 @@ class MailboxXhr extends Control
 					}
 				}
 
-				if ($this->model->saveMessage(
+				if ($this->mailboxGateway->saveMessage(
 					$_POST['mb'],
 					2,
 					json_encode(array(
-						'host' => DEFAULT_EMAIL_HOST,
+						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $mailbox['name'],
 						'personal' => $mailbox['email_name']
 					)),
@@ -283,15 +306,18 @@ class MailboxXhr extends Control
 					1
 				)
 				) {
-					$this->model->setAnswered($_POST['reply']);
+					if (($mb_id = $this->mailboxGateway->getMailboxId($_POST['reply']))
+						&& $this->mailboxPermissions->mayMailbox($mb_id)) {
+						$this->mailboxGateway->setAnswered($_POST['reply']);
+					}
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . $this->func->s('send_success') . '");
+									pulseInfo("' . $this->translationHelper->s('send_success') . '");
 									mb_clearEditor();
 									mb_closeEditor();'
-					);
+					];
 				}
 			}
 		}
@@ -299,71 +325,65 @@ class MailboxXhr extends Control
 
 	public function fmail()
 	{
-		if ($this->model->mayMessage((int)$_GET['id'])) {
-			$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
-
-			if (strpos(strtolower($html), '<body') === false) {
-				$html = '<html><head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body onload="parent.u_readyBody();">' . $html . '</body></html>';
-			} else {
-				$html = str_replace(array('<body', '<BODY', '<Body'), '<body onload="parent.u_readyBody();"', $html);
-				$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
-			}
-
-			$html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
-
-			echo $html;
-			exit();
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
+
+		if (strpos(strtolower($html), '<body') === false) {
+			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';
+		} else {
+			$html = str_replace(array('<body', '<BODY', '<Body'), '<body', $html);
+			$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
+		}
+
+		// $html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
+
+		echo $html;
+		exit();
 	}
 
 	public function loadMail()
 	{
-		if ($mail = $this->model->getMessage($_GET['id'])) {
-			if ($this->model->mayMessage($mail['id'])) {
-				$this->model->setRead($_GET['id'], 1);
-				$mail['attach'] = trim($mail['attach']);
-				if (!empty($mail['attach'])) {
-					$mail['attach'] = json_decode($mail['attach'], true);
-				}
-
-				return array(
-					'status' => 1,
-					'html' => $this->view->message($mail),
-					'append' => '#message-body',
-					'script' => '
-			
-					bodymin = 80;
-					if($("#mailattch").length > 0)
-					{
-						bodymin += 40;
-					}
-			
-					$("#message-body").dialog("option",{
-						title: \'' . $this->func->jsSafe($mail['subject']) . '\',
-						height: ($( window ).height()-40)
-					});
-					$(".mailbox-body").css({
-						"height" : ($("#message-body").height()-bodymin)+"px",
-						"overflow":"auto"
-					});
-					$(".mailbox-body-loader").css({
-						"height" : ($("#message-body").height()-bodymin)+"px",
-						"overflow":"auto"
-					});
-					$("#message-body").dialog("open");
-					$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");
-					u_loadBody();'
-				);
-			}
+		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
-	}
+		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id']))) {
+			$mail = $this->mailboxGateway->getMessage($_GET['id']);
+			$this->mailboxGateway->setRead($_GET['id'], 1);
+			$mail['attach'] = trim($mail['attach']);
+			if (!empty($mail['attach'])) {
+				$mail['attach'] = json_decode($mail['attach'], true);
+			}
 
-	public function refresh()
-	{
-		return array(
-			'status' => 1,
-			'script' => 'mb_refresh();'
-		);
+			return array(
+				'status' => 1,
+				'html' => $this->view->message($mail),
+				'append' => '#message-body',
+				'script' => '
+		
+				bodymin = 80;
+				if($("#mailattch").length > 0)
+				{
+					bodymin += 40;
+				}
+		
+				$("#message-body").dialog("option",{
+					title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
+					height: ($( window ).height()-40)
+				});
+				$(".mailbox-body").css({
+					"height" : ($("#message-body").height()-bodymin)+"px",
+					"overflow":"auto"
+				});
+				$(".mailbox-body-loader").css({
+					"height" : ($("#message-body").height()-bodymin)+"px",
+					"overflow":"auto"
+				});
+				$("#message-body").dialog("open");
+				$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");'
+			);
+		}
 	}
 
 	private function libPlainMail($to, $from, $subject, $message, $attach = false)
@@ -391,8 +411,8 @@ class MailboxXhr extends Control
 
 		if (is_array($email)) {
 			foreach ($email as $e) {
-				if ($this->func->validEmail($e)) {
-					$this->model->addContact($e);
+				if ($this->emailHelper->validEmail($e)) {
+					$this->mailboxGateway->addContact($e, $this->session->id());
 					$mail->addRecipient($e);
 				}
 			}

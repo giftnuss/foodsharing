@@ -6,46 +6,9 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function updateBezirkIds()
-	{
-		$foodsaver = $this->q('SELECT `bezirk_id`, `id` FROM `fs_foodsaver` WHERE `bezirk_id` != 0');
-
-		$query = array();
-
-		foreach ($foodsaver as $fs) {
-			$query[] = '(' . (int)$fs['id'] . ',' . (int)$fs['bezirk_id'] . ',1)';
-		}
-
-		$this->sql('
-			REPLACE INTO `fs_foodsaver_has_bezirk`
-			(
-				`foodsaver_id`,
-				`bezirk_id`,
-				`active`
-			)
-			VALUES
-			' . implode(',', $query) . '
-		');
-	}
-
 	public function deleteUnconformedFetchDates()
 	{
 		return $this->del('DELETE FROM fs_abholer WHERE confirmed = 0 AND `date` < NOW()');
-	}
-
-	public function listAvatars()
-	{
-		return $this->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""');
-	}
-
-	public function noAvatars($foodsaver_ids)
-	{
-		return $this->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $foodsaver_ids) . ')');
-	}
-
-	public function getUserInfo()
-	{
-		return $this->q('SELECT id, infomail_message FROM fs_foodsaver');
 	}
 
 	public function listOldBellIds($days = 7)
@@ -65,75 +28,6 @@ class MaintenanceModel extends Db
 			until < NOW()
 			AND `status` = 1
 		');
-	}
-
-	public function deleteBells($bell_ids)
-	{
-		$this->del('
-			DELETE FROM fs_foodsaver_has_bell 
-			WHERE 	bell_id IN(' . implode(',', $bell_ids) . ')
-		');
-
-		$this->del('
-			DELETE FROM `fs_bell` 
-			WHERE 	id IN(' . implode(',', $bell_ids) . ')
-		');
-
-		$this->sql('LOCK TABLES `fs_bell` WRITE');
-		$this->sql('ALTER TABLE `fs_bell` AUTO_INCREMENT = (SELECT MAX(id) FROM `fs_bell`)');
-		$this->sql('UNLOCK TABLES');
-	}
-
-	public function updateRolle()
-	{
-		if ($botschafter = $this->q('SELECT DISTINCT foodsaver_id FROM `fs_botschafter` ')) {
-			$foodsaver = $this->q('
-				SELECT DISTINCT bot.foodsaver_id
-	
-				FROM
-				    `fs_botschafter` bot,
-				    `fs_bezirk` b
-	
-				WHERE
-				    bot.bezirk_id = b.id
-	
-				AND
-				    b.`type` != 7
-			
-			');
-			$botsch = array();
-
-			foreach ($botschafter as $b) {
-				$botsch[$b['foodsaver_id']] = $b['foodsaver_id'];
-			}
-
-			if (!empty($botsch)) {
-				$count = $this->update('
-					UPDATE `fs_foodsaver`
-	
-					SET
-						`rolle` = ' . $this->func->rolleWrap('bot') . '
-	
-					WHERE
-						`rolle` < ' . $this->func->rolleWrap('bot') . '
-	
-					AND
-						`id` IN(' . implode(',', $botsch) . ')
-				');
-			}
-
-			$nomore = array();
-			foreach ($foodsaver as $fs) {
-				if (!isset($botsch[$fs['foodsaver_id']])) {
-					$nomore[] = $fs['foodsaver_id'];
-				}
-			}
-			if (!empty($nomore)) {
-				$count = $this->update('
-					UPDATE `fs_foodsaver` SET `rolle` = ' . $this->func->rolleWrap('fs') . ' WHERE `id` IN(' . implode(',', $nomore) . ')
-				');
-			}
-		}
 	}
 
 	public function setFoodsaverInactive($fsids)

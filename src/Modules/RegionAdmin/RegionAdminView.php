@@ -8,7 +8,7 @@ class RegionAdminView extends View
 {
 	public function v_bezirk_tree($id)
 	{
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 	$("#' . $id . '").dynatree({
 		onDblClick: function(node, event) {
 			alert(node.data.ident);
@@ -129,7 +129,7 @@ class RegionAdminView extends View
 
 	public function i_map($id)
 	{
-		$this->func->addJsFunc('
+		$this->pageHelper->addJsFunc('
 	var ' . $id . '_markers = [];
 	var ' . $id . '_bounds = L.latLngBounds([]);
 	var ' . $id . '_infowindow = L.popup();
@@ -140,13 +140,13 @@ class RegionAdminView extends View
 		' . $id . '_markers = [];
 	}');
 
-		$this->func->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
+		$this->pageHelper->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
 		$zoom = 6;
 		$lat = '51.303145';
 		$lon = '10.235595';
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 	 	var ' . $id . '_center = L.latLng(' . $lat . ',' . $lon . ');
 		var ' . $id . '_options = {
 		  \'zoom\': ' . $zoom . ',
@@ -154,8 +154,8 @@ class RegionAdminView extends View
 		};
 		
 		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-      attribution: "Tiles &copy; Esri 2014"
+    L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
+	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>"
     }).addTo(' . $id . '_map);
 	');
 	}

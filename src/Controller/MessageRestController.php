@@ -3,44 +3,54 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class MessageRestController extends FOSRestController
+class MessageRestController extends AbstractFOSRestController
 {
 	private $model;
+	private $gateway;
 	private $session;
 
-	public function __construct(MessageModel $model, Session $session)
+	public function __construct(MessageModel $model, MessageGateway $gateway, Session $session)
 	{
 		$this->model = $model;
+		$this->gateway = $gateway;
 		$this->session = $session;
 	}
 
 	// TODO: this is copied directly from from messageXhr.php
-	private function mayConversation($conversation_id)
+	private function mayConversation($conversationId)
 	{
-		// first get the session array
-		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = [];
-		}
+		$ids = $this->getNormalizedMsgConversations();
 
-		// check if the conversation in stored in the session
-		if (isset($ids[(int)$conversation_id])) {
+		// isConversationStoredInSession
+		if (isset($ids[(int)$conversationId])) {
 			return true;
 		}
 
-		if ($this->model->mayConversation($conversation_id)) {
-			$ids[$conversation_id] = true;
+		if ($this->model->mayConversation($conversationId)) {
+			$ids[$conversationId] = true;
 			$this->session->set('msg_conversations', $ids);
 
 			return true;
 		}
 
 		return false;
+	}
+
+	private function getNormalizedMsgConversations()
+	{
+		// first get the session array
+		if (!($ids = $this->session->get('msg_conversations'))) {
+			$ids = [];
+		}
+
+		return $ids;
 	}
 
 	/**
@@ -54,32 +64,36 @@ class MessageRestController extends FOSRestController
 			throw new HttpException(401);
 		}
 
+		$conversationData = $this->getConversationData($paramFetcher, $conversationId);
+
+		$view = $this->view($conversationData, 200);
+
+		return $this->handleView($view);
+	}
+
+	private function getConversationData(ParamFetcher $paramFetcher, $conversationId)
+	{
 		$messagesLimit = $paramFetcher->get('messagesLimit');
 		$messagesOffset = $paramFetcher->get('messagesOffset');
 
-		$member = $this->model->listConversationMembers($conversationId);
+		$members = $this->model->listConversationMembers($conversationId);
 		$publicMemberInfo = function ($member) {
-			return [
-				'id' => $member['id'],
-				'name' => $member['name'],
-				'photo' => $member['photo']
-			];
+			return RestNormalization::normalizeFoodsaver($member);
 		};
-		$member = array_map($publicMemberInfo, $member);
+		$members = array_map($publicMemberInfo, $members);
 
-		$messages = $this->model->loadConversationMessages($conversationId, $messagesLimit, $messagesOffset);
-		$conversation = $this->model->getValues(array('name'), 'conversation', $conversationId);
+		$messages = $this->gateway->getConversationMessages($conversationId, $messagesLimit, $messagesOffset);
+		$name = $this->gateway->getConversationName($conversationId);
 		$this->model->setAsRead([$conversationId]);
 
-		$data = [
-			'conversation' => $conversation,
-			'member' => $member,
+		$conversationData = [
+			'name' => $name,
+			'member' => $members, // remove this in the future once clients have updated
+			'members' => $members,
 			'messages' => $messages,
 		];
 
-		$view = $this->view($data, 200);
-
-		return $this->handleView($view);
+		return $conversationData;
 	}
 
 	/**
@@ -96,7 +110,13 @@ class MessageRestController extends FOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->model->listConversations($limit, $offset);
+		// Filter out any conversations with the wrong member type (this should rarely happen).
+		$conversations = array_filter(
+			$this->model->listConversations($limit, $offset),
+			function ($c) {
+				return is_array($c['member']);
+			});
+
 		$view = $this->view($conversations, 200);
 
 		return $this->handleView($view);

@@ -30,7 +30,7 @@ const activity = {
 
     this.initLoad()
 
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if (!activity.isLoading) {
         if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
           activity.isLoading = true
@@ -107,11 +107,11 @@ const activity = {
       var $loader = $el.next()
 
       $el.autosize()
-      $el.focus(function () {
+      $el.on('focus', function () {
         $el.parent().css({ opacity: 1 })
       })
 
-      $el.keydown(function (event) {
+      $el.on('keydown', function (event) {
         if (event.which === 13 && !event.shiftKey && $el.val() != '' && $el.data('load') == '0') {
           event.preventDefault()
 
@@ -177,7 +177,7 @@ const activity = {
       type: 'inline'
     })
 
-    $('#activity-save-option').click(function (ev) {
+    $('#activity-save-option').on('click', function (ev) {
       ev.preventDefault()
 
       activity.listOptions = null

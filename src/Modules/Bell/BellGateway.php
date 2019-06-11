@@ -12,17 +12,12 @@ class BellGateway extends BaseGateway
 	 * @var WebSocketSender
 	 */
 	private $webSocketSender;
-	/**
-	 * @var BellUpdateTrigger
-	 */
-	private $bellUpdateTrigger;
 
-	public function __construct(Database $db, WebSocketSender $webSocketSender, BellUpdateTrigger $bellUpdateTrigger)
+	public function __construct(Database $db, WebSocketSender $webSocketSender)
 	{
 		parent::__construct($db);
 
 		$this->webSocketSender = $webSocketSender;
-		$this->bellUpdateTrigger = $bellUpdateTrigger;
 	}
 
 	/**
@@ -63,12 +58,12 @@ class BellGateway extends BaseGateway
 		$bid = $this->db->insert(
 			'fs_bell',
 			[
-				'name' => strip_tags($title),
-				'body' => strip_tags($body),
-				'vars' => strip_tags($vars),
-				'attr' => strip_tags($link_attributes),
-				'icon' => strip_tags($icon),
-				'identifier' => strip_tags($identifier),
+				'name' => $title,
+				'body' => $body,
+				'vars' => $vars,
+				'attr' => $link_attributes,
+				'icon' => $icon,
+				'identifier' => $identifier,
 				'time' => $time->format('Y-m-d H:i:s'),
 				'closeable' => $closeable,
 				'expiration' => $expiration ? $expiration->format('Y-m-d H:i:s') : null
@@ -110,7 +105,7 @@ class BellGateway extends BaseGateway
 
 		$foodsaverIds = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bell', 'foodsaver_id', ['bell_id' => $bellId]);
 
-		if ($setUnseen) {
+		if ($setUnseen && !empty($foodsaverIds)) {
 			$this->db->update('fs_foodsaver_has_bell', ['seen' => 0], ['foodsaver_id' => $foodsaverIds, 'bell_id' => $bellId]);
 		}
 
@@ -239,8 +234,10 @@ class BellGateway extends BaseGateway
 
 	public function setBellsAsSeen(array $bids, int $foodsaverId): void
 	{
-		$stm = 'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', $bids) . ') AND `foodsaver_id` = ' . $foodsaverId;
-		$this->db->execute($stm);
+		$this->db->execute(
+			'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', array_map('intval', $bids)) . ') AND `foodsaver_id` =:fsId',
+			['fsId' => $foodsaverId]
+		);
 	}
 
 	private function updateFoodsaverClient(int $foodsaverId): void

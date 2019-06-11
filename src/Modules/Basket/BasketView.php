@@ -10,10 +10,10 @@ class BasketView extends View
 {
 	public function find($baskets, $location)
 	{
-		$page = new vPage($this->func->s('baskets'), $this->findMap($location));
+		$page = new vPage($this->translationHelper->s('baskets'), $this->findMap($location));
 
 		if ($baskets) {
-			$page->addSectionRight($this->closeBaskets($baskets), $this->func->s('basket_near'));
+			$page->addSectionRight($this->closeBaskets($baskets), $this->translationHelper->s('basket_near'));
 		}
 
 		$page->render();
@@ -51,7 +51,7 @@ class BasketView extends View
 				<li>
 					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 						<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
-						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->func->tt(
+						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt(
 					$b['description'],
 					50
 				) . '</span>
@@ -63,7 +63,7 @@ class BasketView extends View
 		$out .= '
 		</ul>
 		<div style="text-align:center;">
-			<a class="button" href="/karte?load=baskets">' . $this->func->s('basket_on_map') . '</a>
+			<a class="button" href="/karte?load=baskets">' . $this->translationHelper->s('basket_on_map') . '</a>
 		</div>';
 
 		return $out;
@@ -72,7 +72,7 @@ class BasketView extends View
 	public function basket($basket, $wallposts, $requests)
 	{
 		$page = new vPage(
-			$this->func->s('basket') . ' #' . $basket['id'], '
+			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
 		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-1-3">
@@ -88,10 +88,10 @@ class BasketView extends View
 		$page->setSubTitle($this->getSubtitle($basket));
 
 		if ($wallposts) {
-			$page->addSection($wallposts, $this->func->s('wallboard'));
+			$page->addSection($wallposts, $this->translationHelper->s('wallboard'));
 		}
 		if ($this->session->may()) {
-			$page->addSectionRight($this->userBox($basket), $this->func->s('provider'));
+			$page->addSectionRight($this->userBox($basket), $this->translationHelper->s('provider'));
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
 				$map = new vMap([$basket['lat'], $basket['lon']]);
@@ -105,11 +105,11 @@ class BasketView extends View
 			}
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
-				$page->addSectionRight($this->requests($requests), $this->func->sv('req_count', array('count' => count($requests))));
+				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', array('count' => count($requests))));
 			}
 		} else {
 			$page->addSectionRight(
-				$this->v_utils->v_info($this->func->s('basket_detail_login_hint'), $this->func->s('reference')),
+				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translationHelper->s('reference')),
 				false,
 				array('wrapper' => false)
 			);
@@ -121,11 +121,11 @@ class BasketView extends View
 	public function basketTaken($basket)
 	{
 		$page = new vPage(
-			$this->func->s('basket') . ' #' . $basket['id'], '
+			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
 		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-2-3">
-				<p>' . $this->func->s('basket_picked_up') . '</p>
+				<p>' . $this->translationHelper->s('basket_picked_up') . '</p>
 			</div>
 		</div>
 		'
@@ -140,9 +140,9 @@ class BasketView extends View
 
 		foreach ($requests as $r) {
 			$out .= '
-			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->func->img(
+			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->imageService->img(
 					$r['fs_photo']
-				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->func->niceDate(
+				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->timeHelper->niceDate(
 					$r['time_ts']
 				) . '</span><span class="clear"></span></a></li>';
 		}
@@ -155,13 +155,13 @@ class BasketView extends View
 
 	private function getSubtitle($basket)
 	{
-		$subtitle = '<p>' . $this->func->s('create_at') . ' <strong>' . $this->func->niceDate(
+		$subtitle = '<p>' . $this->translationHelper->s('create_at') . ' <strong>' . $this->timeHelper->niceDate(
 				$basket['time_ts']
 			) . '</strong>';
 
-		$subtitle .= '</p><p>' . $this->func->s('until') . ' <strong>' . $this->func->niceDate($basket['until_ts']) . '</strong></p>';
+		$subtitle .= '</p><p>' . $this->translationHelper->s('until') . ' <strong>' . $this->timeHelper->niceDate($basket['until_ts']) . '</strong></p>';
 		if ($basket['update_ts']) {
-			$subtitle .= '<p>' . $this->func->s('update_at') . ' <strong>' . $this->func->niceDate($basket['update_ts']) . '</strong></p>';
+			$subtitle .= '<p>' . $this->translationHelper->s('update_at') . ' <strong>' . $this->timeHelper->niceDate($basket['update_ts']) . '</strong></p>';
 		}
 
 		return $subtitle;
@@ -170,13 +170,13 @@ class BasketView extends View
 	private function userBox($basket)
 	{
 		if ($basket['fs_id'] != $this->session->id()) {
-			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_request') . '</a>	</div>';
+			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_request') . '</a>	</div>';
 		} else {
 			$request = '
 				<div class="ui-padding-bottom">
-					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_edit') . '</a>
+					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_edit') . '</a>
 				</div><div>
-					<a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->func->s('basket_delete') . '</a>
+					<a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_delete') . '</a>
 				</div>';
 		}
 
@@ -252,7 +252,7 @@ class BasketView extends View
 		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
 		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
-		$lifetimeNames = $this->func->sv('lifetime_options', array());
+		$lifetimeNames = $this->translationHelper->sv('lifetime_options', array());
 		$out .= $this->v_utils->v_form_select(
 			'lifetime',
 			[
@@ -315,8 +315,8 @@ class BasketView extends View
 
 	public function contactTitle($basket): string
 	{
-		return '<img src="' . $this->func->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
-		<p>' . $this->func->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
+		return '<img src="' . $this->imageService->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
+		<p>' . $this->translationHelper->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
 		<div style="clear:both;"></div>';
 	}
 
@@ -325,13 +325,13 @@ class BasketView extends View
 		$out = '';
 		$content = '';
 		if (!empty($basket['tel'])) {
-			$content .= ('<tr><td>' . $this->func->s('telefon') . ': &nbsp;</td><td>' . $basket['tel'] . '</td></tr>');
+			$content .= ('<tr><td>' . $this->translationHelper->s('telefon') . ': &nbsp;</td><td>' . $basket['tel'] . '</td></tr>');
 		}
 		if (!empty($basket['handy'])) {
-			$content .= ('<tr><td>' . $this->func->s('handy') . ': &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
+			$content .= ('<tr><td>' . $this->translationHelper->s('handy') . ': &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
 		}
 		if (!empty($content)) {
-			$out .= $this->v_utils->v_input_wrapper($this->func->s('phone_contact'), '<table>' . $content . '</table>');
+			$out .= $this->v_utils->v_input_wrapper($this->translationHelper->s('phone_contact'), '<table>' . $content . '</table>');
 		}
 
 		return $out;
@@ -346,9 +346,9 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		' .
-			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->func->s('basket_request_on_page') . '</a></div>';
+			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->translationHelper->s('basket_request_on_page') . '</a></div>';
 	}
 
 	public function bubbleNoUser($basket): string
@@ -360,7 +360,7 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		';
 	}
 
@@ -373,8 +373,8 @@ class BasketView extends View
 
 		return '
 		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('set_date'), $this->func->niceDate($basket['time_ts'])) . '
-		' . $this->v_utils->v_input_wrapper($this->func->s('desc'), nl2br($this->func->autolink($basket['description']))) . '
+		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('set_date'), $this->timeHelper->niceDate($basket['time_ts'])) . '
+		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
 		';
 	}
 }

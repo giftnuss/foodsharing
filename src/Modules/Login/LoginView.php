@@ -28,7 +28,7 @@ class LoginView extends View
 	{
 		if (!$this->session->may()) {
 			$params = array(
-				'email' => $this->func->s('login_email'),
+				'email' => $this->translationHelper->s('login_email'),
 				'action' => $_SERVER['REQUEST_URI']
 			);
 
@@ -45,9 +45,18 @@ class LoginView extends View
 				<input type="hidden" name="k" value="' . $key . '" />
 				' . $this->v_utils->v_form_passwd('pass1') . '
 				' . $this->v_utils->v_form_passwd('pass2') . '
-				' . $this->v_utils->v_form_submit($this->func->s('save'), 'submitted') . '
+				' . $this->v_utils->v_form_submit($this->translationHelper->s('save'), 'submitted') . '
 			</form>';
 
 		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', array('class' => 'ui-padding'));
+	}
+
+	public function success($msg, $title = false)
+	{
+		$t = '';
+		if ($title !== false) {
+			$t = '<strong>' . $title . '</strong> ';
+		}
+		$_SESSION['msg']['success'][] = $t . $msg;
 	}
 }

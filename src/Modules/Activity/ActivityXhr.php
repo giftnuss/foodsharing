@@ -5,16 +5,22 @@ namespace Foodsharing\Modules\Activity;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Services\ImageService;
 
 class ActivityXhr extends Control
 {
-	private $mailboxModel;
+	private $imageService;
+	private $mailboxGateway;
 
-	public function __construct(ActivityModel $model, MailboxModel $mailboxModel)
-	{
+	public function __construct(
+		ActivityModel $model,
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
+	) {
 		$this->model = $model;
-		$this->mailboxModel = $mailboxModel;
+		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 		parent::__construct();
 	}
 
@@ -124,9 +130,9 @@ class ActivityXhr extends Control
 		$xhr->addData('updates', $updates);
 
 		$xhr->addData('user', [
-			'id' => $this->func->fsId(),
+			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
-			'avatar' => $this->func->img($this->session->user('photo'))
+			'avatar' => $this->imageService->img($this->session->user('photo'))
 		]);
 
 		if (isset($_GET['listings'])) {
@@ -179,7 +185,7 @@ class ActivityXhr extends Control
 					}
 					$listings['buddywalls'][] = [
 						'id' => $b['id'],
-						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->func->img($b['photo']) . '" height="24" /> ' . $b['name'],
+						'name' => '<img style="border-radius:4px;position:relative;top:5px;" src="' . $this->imageService->img($b['photo']) . '" height="24" /> ' . $b['name'],
 						'checked' => $checked
 					];
 				}
@@ -188,7 +194,7 @@ class ActivityXhr extends Control
 			/*
 			 * listings mailboxes
 			*/
-			if ($boxes = $this->mailboxModel->getBoxes()) {
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 				foreach ($boxes as $b) {
 					$checked = true;
 					$mailboxId = 'mailbox-' . $b['id'];
@@ -197,7 +203,7 @@ class ActivityXhr extends Control
 					}
 					$listings['mailboxes'][] = [
 						'id' => $b['id'],
-						'name' => $b['name'] . '@' . DEFAULT_EMAIL_HOST,
+						'name' => $b['name'] . '@' . PLATFORM_MAILBOX_HOST,
 						'checked' => $checked
 					];
 				}
@@ -205,22 +211,22 @@ class ActivityXhr extends Control
 
 			$xhr->addData('listings', [
 				0 => [
-					'name' => $this->func->s('groups'),
+					'name' => $this->translationHelper->s('groups'),
 					'index' => 'bezirk',
 					'items' => $listings['groups']
 				],
 				1 => [
-					'name' => $this->func->s('regions'),
+					'name' => $this->translationHelper->s('regions'),
 					'index' => 'bezirk',
 					'items' => $listings['regions']
 				],
 				2 => [
-					'name' => $this->func->s('mailboxes'),
+					'name' => $this->translationHelper->s('mailboxes'),
 					'index' => 'mailbox',
 					'items' => $listings['mailboxes']
 				],
 				3 => [
-					'name' => $this->func->s('buddywalls'),
+					'name' => $this->translationHelper->s('buddywalls'),
 					'index' => 'buddywall',
 					'items' => $listings['buddywalls']
 				],

@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Modules\Core\Control;
 
-class MessageControl extends Control
+final class MessageControl extends Control
 {
 	public function __construct(MessageModel $model, MessageView $view)
 	{
@@ -14,30 +14,34 @@ class MessageControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->routeHelper->goLogin();
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->setTemplate('msg');
 		$this->setContentWidth(5, 8);
 
-		$this->func->addJs('msg.fsid = ' . (int)$this->func->fsId() . ';');
-		$this->func->addBread($this->func->s('messages'));
-		$this->func->addTitle($this->func->s('messages'));
+		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
+		$this->pageHelper->addBread($this->translationHelper->s('messages'));
+		$this->pageHelper->addTitle($this->translationHelper->s('messages'));
 
-		$this->func->addContent($this->view->compose());
-		$this->func->addContent($this->view->conversation());
-		$this->func->addContent($this->view->leftMenu(), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->compose());
+		$this->pageHelper->addContent($this->view->conversation());
 
-		if ($conversations = $this->model->listConversations()) {
+		if (!$this->session->isMob()) { /* for desktop only */
+			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
+		}
+
+		$conversations = $this->model->listConversations();
+		if ($conversations) {
 			$ids = array();
 			foreach ($conversations as $c) {
 				$ids[$c['id']] = true;
 			}
 			$this->session->set('msg_conversations', $ids);
 		}
-		$this->func->addContent($this->view->convListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

@@ -18,10 +18,6 @@ This is the developer documentation for the code that powers
 [foodsharing.at](https://foodsharing.at), and
 [foodsharingschweiz.ch](https://foodsharingschweiz.ch).
 
-## Getting started
-
-Head over to [install](install.md) to get your system setup, once you've done that [up and running](up-and-running.md) will explain our developer environment.
-
 ## Useful links
 
 - **main site** [foodsharing.de](https://foodsharing.de)
@@ -29,4 +25,4 @@ Head over to [install](install.md) to get your system setup, once you've done th
 - **gitlab organisation** [gitlab.com/foodsharing-dev](https://gitlab.com/foodsharing-dev)
 - **main repo** [gitlab.com/foodsharing-dev/foodsharing](https://gitlab.com/foodsharing-dev/foodsharing)
 - **issue tracker** [gitlab.com/foodsharing-dev/foodsharing/issues](https://gitlab.com/foodsharing-dev/foodsharing/issues)
-- **developers chat** [slackin.yunity.org](https://slackin.yunity.org) (channel: \#foodsharing-dev)
+- **developer chat** [slackin.yunity.org](https://slackin.yunity.org) (channel: \#foodsharing-dev)

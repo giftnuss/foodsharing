@@ -12,15 +12,20 @@ import './Region.css'
 import * as wall from '@/wall'
 import { vueRegister, vueApply } from '@/vue'
 import Thread from './components/Thread'
+import MemberList from './components/MemberList'
+import GenderList from './components/GenderList'
+import PickupList from './components/PickupList'
 
-$('a[href=\'#signout\']').click(function () {
+$('a[href=\'#signout\']').on('click', function () {
   $('#signout_sure').dialog('open')
   return false
 })
 
 $('#signout_sure').dialog({
+  resizable: false,
   autoOpen: false,
   modal: true,
+  width: 'auto',
   buttons: [
     {
       text: i18n('button.yes_i_am_sure'),
@@ -44,9 +49,19 @@ $('#signout_sure').dialog({
 
 if (GET('sub') == 'wall') {
   wall.init('bezirk', GET('bid'))
-}
-
-if (['botforum', 'forum'].includes(GET('sub'))) {
+} else if (GET('sub') === 'members') {
+  vueRegister({
+    MemberList
+  })
+  vueApply('#vue-memberlist')
+} else if (GET('sub') == 'statistic') {
+  vueRegister({
+    GenderList,
+    PickupList
+  })
+  vueApply('#vue-genderlist')
+  vueApply('#vue-pickuplist')
+} else if (['botforum', 'forum'].includes(GET('sub'))) {
   if (GET('tid') !== 'undefined') {
     vueRegister({
       Thread
@@ -54,7 +69,7 @@ if (['botforum', 'forum'].includes(GET('sub'))) {
     vueApply('#vue-thread')
   } else {
     let loadedPages = []
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
         return
       }

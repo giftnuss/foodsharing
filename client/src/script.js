@@ -7,7 +7,7 @@ import 'jquery-slimscroll'
 import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
-import { goTo, isMob, GET } from '@/browser'
+import { GET, goTo, isMob } from '@/browser'
 
 import conv from '@/conv'
 
@@ -57,11 +57,11 @@ export function closeAllDialogs () {
 
 export const sleepmode = {
   init: function () {
-    $('.sleepmode-1, .sleepmode-2').mouseover(function () {
+    $('.sleepmode-1, .sleepmode-2').on('mouseover', function () {
       var $this = $(this)
       $this.append(`<span class="corner-all bubble bubble-right ui-shadow">${$this.text()} nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>`)
     })
-    $('.sleepmode-1, .sleepmode-2').mouseout(function () {
+    $('.sleepmode-1, .sleepmode-2').on('mouseout', function () {
       var $this = $(this)
       $this.children('.bubble').remove()
     })
@@ -70,7 +70,7 @@ export const sleepmode = {
 
 export function initialize () {
   var g_moreswapheight = 100
-  $(document).ready(function () {
+  $(function () {
     // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
     sleepmode.init()
 
@@ -105,7 +105,7 @@ export function initialize () {
         'height': `${g_moreswapheight}px`,
         'overflow': 'hidden'
       })
-      $this.click(function (ev) {
+      $this.on('click', function (ev) {
         ev.preventDefault()
         if ($this.attr('data-show') == 0) {
           $this.prev().css({
@@ -130,12 +130,12 @@ export function initialize () {
       if ($this.val() === '') {
         $this.val($this.attr('title'))
       }
-      $this.focus(function () {
+      $this.on('focus', function () {
         if ($this.val() === $this.attr('title')) {
           $this.val('')
         }
       })
-      $this.blur(function () {
+      $this.on('blur', function () {
         if ($this.val() === '') {
           $this.val($this.attr('title'))
         }
@@ -189,29 +189,26 @@ export function initialize () {
     })
     // $('.button').button();
     $('.dialog').dialog()
-    $('.v-switch').buttonset()
 
-    $('ul.toolbar li').hover(
-      function () {
-        $(this).addClass('ui-state-hover')
-      },
-      function () {
-        $(this).removeClass('ui-state-hover')
-      }
+    $('ul.toolbar li').on('mouseenter', function () {
+      $(this).addClass('ui-state-hover')
+    }).on('mouseleave', function () {
+      $(this).removeClass('ui-state-hover')
+    }
     )
 
-    $('.text, .textarea, select').focus(
+    $('.text, .textarea, select').on('focus',
       function () {
         $(this).addClass('focus')
       }
     )
-    $('.text, .textarea, select').blur(
+    $('.text, .textarea, select').on('blur',
       function () {
         $(this).removeClass('focus')
       }
     )
 
-    $('.value').blur(function () {
+    $('.value').on('blur', function () {
       let el = $(this)
       if (el.val() != '') {
         el.removeClass('input-error')
@@ -266,78 +263,6 @@ export function profile (id) {
   goTo(`/profile/${id}`)
 }
 
-export function quickprofile (id) {
-  showLoader()
-
-  $.ajax({
-    dataType: 'json',
-    url: `/xhrapp.php?app=profile&m=quickprofile&id=${id}`,
-    success: function (data) {
-      hideLoader()
-      if (data.status == 1) {
-        $('#tabs-profile').tabs('destroy')
-        $('#dialog-profile-info').dialog('destroy')
-        $('#u-profile').html(data.html)
-        $('#tabs-profile').tabs()
-
-        $('#dialog-profile-info').dialog({
-          closeOnEscape: false,
-          draggable: false,
-          resizable: false,
-          autoOpen: true,
-          modal: true,
-          width: 470,
-          open: function () {
-            $(this).find('.ui-dialog-titlebar-close').blur()
-          }
-        }).parent().find('.ui-dialog-titlebar-close').prependTo('#tabs-profile').closest('.ui-dialog').children('.ui-dialog-titlebar').remove()
-
-        $('#dialog-profile-info').css('padding', '0')
-        $('.ui-dialog-titlebar-close').css({
-          'position': 'absolute',
-          'right': '8px',
-          'top': '17px'
-        })
-        $('#tabs-profile').css({
-          'border': 'none',
-          'padding': '0'
-        })
-        $('.vouch-banana').tooltip({
-          position: {
-            my: 'center bottom-20',
-            at: 'center top',
-            using: function (position, feedback) {
-              $(this).css(position)
-              $('<div>')
-                .addClass('arrow')
-                .addClass(feedback.vertical)
-                .addClass(feedback.horizontal)
-                .appendTo(this)
-            }
-          }
-        })
-        $('#fsprofileratemsg').val('')
-
-        $('#tabs-profile').tabs('option', {
-          heightStyle: 'fill'
-        })
-        $('#tabs-profile .ui-tabs-panel:first').css('overflow', 'hidden')
-        $('.xvmoreinfo').slimScroll()
-
-        $('#dialog-profile-info').dialog('option', 'position', 'center')
-
-        if (data.script != undefined) {
-          $.globalEval(data.script)
-        }
-      } else {
-        error(data.msg)
-      }
-    },
-    complete: function () {
-      hideLoader()
-    }
-  })
-}
 export const ajax = {
   data: {},
   msg: function (msg) {
@@ -437,12 +362,12 @@ function definePulse (type, defaultTimeout = 5000) {
     el.html(html).stop().fadeIn(animationDuration)
     const hide = () => {
       el.stop().fadeOut(animationDuration)
-      $(document).unbind('click', hide)
+      $(document).off('click', hide)
       clearTimeout(timer)
     }
     const timer = setTimeout(hide, timeout)
     setTimeout(() => {
-      $(document).bind('click', hide)
+      $(document).on('click', hide)
     }, 500)
   }
 }
@@ -451,7 +376,10 @@ export const pulseInfo = definePulse('info', 4000)
 export const pulseSuccess = definePulse('success', 5000)
 export const pulseError = definePulse('error', 6000)
 
-export function addHover (sel) { $(sel).hover(function () { $(this).addClass('hover') }, function () { $(this).removeClass('hover') }) }
+export function addHover (sel) {
+  $(sel).on('mouseenter', function () { $(this).addClass('hover') })
+    .on('mouseleave', function () { $(this).removeClass('hover') })
+}
 
 export function aNotify () {
   // $('#xhr-chat-notify')[0].play();
@@ -537,7 +465,7 @@ export function error (txt) {
 }
 
 export function uploadPhoto () {
-  $('#uploadPhoto form').submit()
+  $('#uploadPhoto form').trigger('submit')
 }
 
 export function uploadPhotoReady (id, file) {
@@ -616,7 +544,7 @@ export function fotoupload (file, id) {
     }
   })
   $(`#${id}-save`).show()
-  $(`#${id}-save`).button().click(function () {
+  $(`#${id}-save`).button().on('click', function () {
     showLoader()
     $(`#${id}-action`).val('crop')
     $(`#${id}-form`)[0].submit()
@@ -670,7 +598,7 @@ export function pictureCrop (id, img) {
       $.fancybox.toggle()
     }, 200)
 
-    $(`#${id}-crop-save`).button().click(function () {
+    $(`#${id}-crop-save`).button().on('click', function () {
       ratio_val[ratio_val.length] = {
         x: Math.round($(`#${id}-x`).val()),
         y: Math.round($('#' + id + '-y').val()),
@@ -683,8 +611,8 @@ export function pictureCrop (id, img) {
     })
   } else {
     showLoader()
-    $(`#${id}-form`).attr('action', `xhr.php?f=pictureCrop&id=${id}&img=${img}`)
-    $(`#${id}-form`).submit()
+    $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
+    $(`#${id}-form`).trigger('submit')
   }
 }
 export function nl2br (str, is_xhtml) {
@@ -705,7 +633,7 @@ export function u_loadCoords (addressdata, func) {
   let url = `https://search.mapzen.com/v1/search?text=${address}`
 
   showLoader()
-  $(document).ready(function () {
+  $(function () {
     $.getJSON(url,
       function (data) {
         if (data.features) {

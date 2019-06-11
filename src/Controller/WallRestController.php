@@ -6,11 +6,11 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\WallPost\WallPostGateway;
 use Foodsharing\Permissions\WallPostPermissions;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class WallRestController extends FOSRestController
+class WallRestController extends AbstractFOSRestController
 {
 	private $wallPostGateway;
 	private $wallPostService;
@@ -23,7 +23,7 @@ class WallRestController extends FOSRestController
 		$this->session = $session;
 	}
 
-	private function normalizePost($post)
+	private function normalizePost($post): array
 	{
 		return [
 			'id' => $post['id'],
@@ -33,7 +33,7 @@ class WallRestController extends FOSRestController
 			'author' => [
 				'id' => $post['foodsaver_id'],
 				'name' => $post['name'],
-				'avatar' => '/images/mini_q_' . $post['photo']
+				'avatar' => $post['photo'] ?? null
 			]
 		];
 	}
@@ -46,16 +46,28 @@ class WallRestController extends FOSRestController
 		if (!$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
-		$posts = $this->wallPostGateway->getPosts($target, $targetId);
-		$posts = array_map(function ($value) {return $this->normalizePost($value); }, $posts);
+
+		$posts = $this->getNormalizedPosts($target, $targetId);
+
+		$sessionId = $this->session->id();
 
 		$view = $this->view([
 			'results' => $posts,
-			'mayPost' => $this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId),
-			'mayDelete' => $this->wallPostService->mayDeleteFromWall($this->session->id(), $target, $targetId)
+			'mayPost' => $this->wallPostService->mayWriteWall($sessionId, $target, $targetId),
+			'mayDelete' => $this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
 		], 200);
 
 		return $this->handleView($view);
+	}
+
+	private function getNormalizedPosts($target, $targetId)
+	{
+		$posts = $this->wallPostGateway->getPosts($target, $targetId);
+		$posts = array_map(function ($value) {
+			return $this->normalizePost($value);
+		}, $posts);
+
+		return $posts;
 	}
 
 	/**
@@ -67,8 +79,10 @@ class WallRestController extends FOSRestController
 		if (!$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
+
 		$body = $paramFetcher->get('body');
 		$postId = $this->wallPostGateway->addPost($body, $this->session->id(), $target, $targetId);
+
 		$view = $this->view(['post' => $this->normalizePost($this->wallPostGateway->getPost($postId))], 200);
 
 		return $this->handleView($view);
@@ -79,11 +93,16 @@ class WallRestController extends FOSRestController
 	 */
 	public function delPostAction($target, $targetId, $id)
 	{
-		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId) ||
-			($this->wallPostGateway->getFsByPost($id) != $this->session->id() &&
-			!$this->wallPostService->mayDeleteFromWall($this->session->id(), $target, $targetId))) {
+		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId)) {
 			throw new HttpException(403);
 		}
+		$sessionId = $this->session->id();
+		if ($this->wallPostGateway->getFsByPost($id) != $sessionId
+			&& !$this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
+		) {
+			throw new HttpException(403);
+		}
+
 		$this->wallPostGateway->unlinkPost($id, $target);
 		$this->wallPostGateway->deletePost($id);
 

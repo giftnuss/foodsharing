@@ -15,7 +15,7 @@ class ReportView extends View
 
 	public function betriebList($betriebe): string
 	{
-		return $this->v_utils->v_form_select('betrieb_id', ['label' => $this->func->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe]);
+		return $this->v_utils->v_form_select('betrieb_id', ['label' => $this->translationHelper->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe]);
 	}
 
 	public function reportDialog(): string
@@ -161,7 +161,7 @@ class ReportView extends View
 	{
 		$menu = [
 			['name' => 'Neue Meldungen (' . $stats['new'] . ')', 'href' => '/?page=report&sub=uncom'],
-			['name' => 'Bestätigte (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
+			['name' => 'Zugestellte (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
 		];
 
 		$active = 'uncom';
@@ -191,10 +191,10 @@ class ReportView extends View
 
 	public function listReports($reports): string
 	{
-		$this->func->addStyle('.tablesorter td{ cursor:pointer; }');
+		$this->pageHelper->addStyle('.tablesorter td{ cursor:pointer; }');
 
-		$this->func->addJs('
-			$(".tablesorter tr").click(function(){
+		$this->pageHelper->addJs('
+			$(".tablesorter tr").on("click", function(){
 				rid = parseInt($(this).children("td:first").children("input:first").val());
 				ajreq("loadReport",{id:rid});
 			});
@@ -203,10 +203,10 @@ class ReportView extends View
 		$rows = array();
 		foreach ($reports as $r) {
 			$rows[] = [
-				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="/profile/' . (int)$r['fs_id'] . '"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->func->img($r['fs_photo']) . '" /></a></span>'],
-				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="/profile/' . (int)$r['rp_id'] . '"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->func->img($r['rp_photo']) . '" /></a></span>'],
-				['cnt' => $this->func->tt($r['msg'], 50)],
-				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . $this->func->niceDateShort($r['time_ts']) . ' Uhr'],
+				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="/profile/' . (int)$r['fs_id'] . '"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->imageService->img($r['fs_photo']) . '" /></a></span>'],
+				['cnt' => '<span class="photo"><a title="' . $r['rp_name'] . ' ' . $r['rp_nachname'] . '" href="/profile/' . (int)$r['rp_id'] . '"><img id="miniq-' . $r['rp_id'] . '" src="' . $this->imageService->img($r['rp_photo']) . '" /></a></span>'],
+				['cnt' => htmlspecialchars($this->sanitizerService->tt($r['msg'], 50))],
+				['cnt' => '<span style="display:none;">a' . $r['time_ts'] . ' </span>' . $this->timeHelper->niceDateShort($r['time_ts']) . ' Uhr'],
 				['cnt' => $r['fs_stadt']],
 				['cnt' => $r['b_name']],
 			];
@@ -215,8 +215,8 @@ class ReportView extends View
 		$table = $this->v_utils->v_tablesorter([
 			['name' => 'Über', 'width' => 40],
 			['name' => 'Von', 'width' => 40],
-			['name' => $this->func->s('message')],
-			['name' => $this->func->s('datetime'), 'width' => 80],
+			['name' => $this->translationHelper->s('message')],
+			['name' => $this->translationHelper->s('datetime'), 'width' => 80],
 			['name' => 'FS Wohnort', 'width' => 80],
 			['name' => 'Stammbezirk', 'width' => 40]
 		], $rows, ['pager' => true]);

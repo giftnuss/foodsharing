@@ -2,9 +2,17 @@ const BASE_URL = '/api'
 const DEFAULT_OPTIONS = {
   method: 'GET',
   credentials: 'same-origin',
-  mode: 'cors'
+  mode: 'cors',
+  headers: {}
 }
 if (window.fetch) window.fetch.activeFetchCalls = 0
+
+export function getCsrfToken () {
+  if (!document.cookie) return null
+  const match = document.cookie.match(/CSRF_TOKEN=([0-9a-f]+)/)
+  if (!match) return null
+  return match[1]
+}
 
 export class HTTPError extends Error {
   constructor (code, text, method, url) {
@@ -17,7 +25,10 @@ export class HTTPError extends Error {
 export async function request (path, options = {}) {
   try {
     window.fetch.activeFetchCalls++
-    const request = new window.Request(BASE_URL + path, Object.assign({}, DEFAULT_OPTIONS, options))
+    const o = Object.assign({}, DEFAULT_OPTIONS, options)
+    const csrfToken = getCsrfToken()
+    if (csrfToken) o.headers['X-CSRF-Token'] = csrfToken
+    const request = new window.Request(BASE_URL + path, o)
     const res = await window.fetch(request)
     if (!res.ok) {
       throw new HTTPError(res.status, res.statusText, request.method, request.url)

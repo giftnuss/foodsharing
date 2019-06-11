@@ -6,10 +6,11 @@ use Ddeboer\Imap\Server;
 use Flourish\fEmail;
 use Flourish\fFile;
 use Flourish\fSMTP;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
-use Foodsharing\Modules\Mailbox\MailboxModel;
 
 class MailsControl extends ConsoleControl
 {
@@ -18,22 +19,27 @@ class MailsControl extends ConsoleControl
 	 */
 	public static $smtp = false;
 	public static $last_connect;
-	private $mailboxModel;
+	private $mailsGateway;
 	private $database;
 	private $metrics;
+	private $routeHelper;
 
-	public function __construct(MailsModel $model, MailboxModel $mailboxModel, Database $database, InfluxMetrics $metrics)
-	{
-		echo "creating mailscontrl!!!!\n";
+	public function __construct(
+		Db $model,
+		MailsGateway $mailsGateway,
+		Database $database,
+		InfluxMetrics $metrics,
+		RouteHelper $routeHelper
+	) {
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
 		self::$smtp = false;
 		$this->model = $model;
-		$this->mailboxModel = $mailboxModel;
+		$this->mailsGateway = $mailsGateway;
 		$this->database = $database;
 		$this->metrics = $metrics;
+		$this->routeHelper = $routeHelper;
 		parent::__construct();
-		echo "-------------------------------------\n";
 	}
 
 	public function queueWorker()
@@ -79,16 +85,11 @@ class MailsControl extends ConsoleControl
 		$messages = $mailbox->getMessages();
 		$stats = ['unknown-recipient' => 0, 'failure' => 0, 'delivered' => 0, 'has-attachment' => 0];
 		if (count($messages) > 0) {
-			self::info(count($messages) . ' in Inbox');
-
-			$progressbar = $this->progressbar(count($messages));
-
 			$have_send = [];
 			$i = 0;
 			try {
 				foreach ($messages as $msg) {
 					++$i;
-					$progressbar->update($i);
 					$mboxes = [];
 					$recipients = $msg->getTo() + $msg->getCc() + $msg->getBcc();
 					foreach ($recipients as $to) {
@@ -102,10 +103,10 @@ class MailsControl extends ConsoleControl
 						continue;
 					}
 
-					$mb_ids = $this->model->getMailboxIds($mboxes);
+					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$mb_ids = $this->model->getMailboxIds(array('lost'));
+						$mb_ids = $this->mailsGateway->getMailboxIds(array('lost'));
 						++$stats['unknown-recipient'];
 					}
 
@@ -114,7 +115,7 @@ class MailsControl extends ConsoleControl
 							$html = $msg->getBodyHtml();
 						} catch (\Exception $e) {
 							$html = null;
-							echo 'Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n';
+							self::error('Could not get HTML body ' . $e->getMessage() . ', continuing with PLAIN TEXT\n');
 						}
 
 						if ($html) {
@@ -126,14 +127,13 @@ class MailsControl extends ConsoleControl
 								$text = $msg->getBodyText();
 							} catch (\Exception $e) {
 								$text = null;
-								echo 'Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n';
+								self::error('Could not get PLAIN TEXT body ' . $e->getMessage() . ', skipping mail.\n');
 							}
 							if ($text != null) {
 								$body = $text;
-								$html = nl2br($this->func->autolink($text));
+								$html = nl2br($this->routeHelper->autolink($text));
 							} else {
-								++$stats['failure'];
-								continue;
+								$body = '';
 							}
 						}
 
@@ -141,7 +141,7 @@ class MailsControl extends ConsoleControl
 						foreach ($msg->getAttachments() as $a) {
 							$filename = $a->getFilename();
 							if ($this->attach_allow($filename, null)) {
-								$new_filename = uniqid();
+								$new_filename = bin2hex(random_bytes(16));
 								$path = 'data/mailattach/';
 								$j = 0;
 								while (file_exists($path . $new_filename)) {
@@ -156,7 +156,7 @@ class MailsControl extends ConsoleControl
 										'mime' => null
 									];
 								} catch (\Exception $e) {
-									echo 'Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n";
+									self::error('Could not parse/save an attachment (' . $e->getMessage() . "), skipping that one...\n");
 								}
 							}
 						}
@@ -169,7 +169,7 @@ class MailsControl extends ConsoleControl
 						try {
 							$date = $msg->getDate();
 						} catch (\Exception $e) {
-							echo 'Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n";
+							self::error('Error parsing date: ' . $e->getMessage() . ", continuing with 'now'\n");
 						}
 						if ($date === null) {
 							$date = new \DateTime();
@@ -195,7 +195,7 @@ class MailsControl extends ConsoleControl
 									$from['personal'] = $msg->getFrom()->getName();
 								}
 
-								$this->model->saveMessage(
+								$this->mailsGateway->saveMessage(
 									$id, // mailbox id
 									1, // folder
 									json_encode($from), // sender
@@ -222,13 +222,10 @@ class MailsControl extends ConsoleControl
 					$msg->delete();
 				}
 			} catch (\Exception $e) {
-				echo 'Something went wrong, ' . $e->getMessage() . "\n";
+				self::error('Something went wrong, ' . $e->getMessage() . "\n");
 			} finally {
 				$connection->expunge();
 			}
-
-			echo "\n";
-			self::success('ready :o)');
 		}
 
 		return $stats;
@@ -298,9 +295,19 @@ class MailsControl extends ConsoleControl
 
 	public function handleEmail($data)
 	{
-		self::info('mail arrived ...: ' . $data['from'][0] . '@' . $data['from'][1]);
+		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new fEmail();
-		$email->setFromEmail($data['from'][0], $data['from'][1]);
+
+		$mailParts = explode('@', $data['from'][0]);
+		$fromDomain = end($mailParts);
+		if (in_array($fromDomain, MAILBOX_OWN_DOMAINS, true)) {
+			$email->setFromEmail($data['from'][0], $data['from'][1]);
+		} else {
+			// use DEFAULT_EMAIL as sender and ReplyTo for the actual sender
+			$email->setFromEmail(DEFAULT_EMAIL, $data['from'][1]);
+			$email->setReplyToEmail($data['from'][0], $data['from'][1]);
+		}
+
 		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
 		$email->setSubject($subject);
 		$email->setHTMLBody($data['html']);
@@ -319,15 +326,18 @@ class MailsControl extends ConsoleControl
 		$has_recip = false;
 		foreach ($data['recipients'] as $r) {
 			$r[0] = strtolower($r[0]);
-			self::info($r[0]);
+			self::info('To: ' . $r[0]);
 			$address = explode('@', $r[0]);
 			if (count($address) != 2) {
 				self::error('invalid address');
 				continue;
 			}
-
-			$email->addRecipient($r[0], $r[1]);
-			$has_recip = true;
+			if (!$this->mailsGateway->emailIsBouncing($r[0])) {
+				$email->addRecipient($r[0], $r[1]);
+				$has_recip = true;
+			} else {
+				self::error('bouncing address');
+			}
 		}
 		if (!$has_recip) {
 			return true;
@@ -338,7 +348,7 @@ class MailsControl extends ConsoleControl
 			self::smtpReconnect();
 		}
 
-		$max_try = 3;
+		$max_try = 2;
 		$sended = false;
 		while (!$sended) {
 			--$max_try;

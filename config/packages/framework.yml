@@ -10,8 +10,9 @@ fos_rest:
     param_fetcher_listener: true
     body_listener: true
     exception: true
+    serializer:
+        serialize_null: true
 
-#html_purifier config duplicated in src/DI.php for legacy PHP entry points
 exercise_html_purifier:
     default:
         Cache.SerializerPath: '%kernel.cache_dir%/htmlpurifier-cache'

@@ -51,6 +51,13 @@
           <i class="fas fa-recycle" />Fair-Teiler
         </a>
         <a
+          :href="$url('members', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-user" />Mitglieder
+        </a>
+        <a
           :href="$url('events', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
@@ -70,6 +77,13 @@
           class="dropdown-item dropdown-item-sub"
         >
           <i class="fas fa-users" />Arbeitsgruppen
+        </a>
+        <a
+          :href="$url('statistic', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-chart-bar" />Statistik
         </a>
         <a
           v-if="region.isBot"
@@ -94,10 +108,10 @@
       class="dropdown-divider"
     />
     <a
+      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
-      @click="joinRegionDialog"
     >
       <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
     </a>

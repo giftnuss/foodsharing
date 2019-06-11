@@ -54,13 +54,7 @@ div#main {
   z-index: 50;
 }
 
-.leaflet-control-attribution {
-  color: #666;
-}
 
-.leaflet-container a {
-  color: #4a3520;
-}
 
 #map-control ul.linklist a {
   cursor: pointer;
@@ -117,6 +111,7 @@ div#main {
   right: 16px;
   margin: 0;
   top: 80px;
+  z-index: 800 !important;
 }
 
 #map-control-wrapper > div {

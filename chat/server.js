@@ -139,7 +139,7 @@ io.use((socket, next) => {
   if (cookieVal) {
     let cookie = parseCookie(cookieVal)
     socket.sid = cookie.PHPSESSID || cookie.sessionid
-    if (socket.sid) next()
+    if (socket.sid) return next()
   }
   next(new Error('not authorized'))
 })

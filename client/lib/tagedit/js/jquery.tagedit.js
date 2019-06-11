@@ -15,7 +15,7 @@
 * Requires: jQuery v1.4+, jQueryUI v1.8+, jQuerry.autoGrowInput
 *
 * 2018-07-03
-* Warning Foodsharing Maintainers:
+* Warning foodsharing Maintainers:
 * Hotfix from https://github.com/webworka/Tagedit/commit/6dc7da904c3c68b186f99831ea2c14c9f39c0f1b applied manually
 *
 * Example of usage:

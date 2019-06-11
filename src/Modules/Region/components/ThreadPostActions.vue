@@ -3,8 +3,7 @@
     <!-- emoji buttons & selector -->
     <span class="emojis">
       <span
-        v-for="(users, key) in reactions"
-        v-if="users.length"
+        v-for="(users, key) in reactionsWithUsers"
         :key="key"
       >
         <a
@@ -29,8 +28,8 @@
         <a
           v-for="(symbol, key) in emojis"
           :key="key"
-          class="btn"
           @click="giveEmoji(key)"
+          class="btn"
         >
           <Emoji :name="key" />
         </a>
@@ -41,17 +40,17 @@
 
     <!-- non emoji button -->
     <a
-      class="btn btn-sm btn-secondary"
       @click="$emit('reply')"
+      class="btn btn-sm btn-secondary"
     >
       {{ $i18n('button.answer') }}
     </a>
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
+      @click="$refs.confirmDelete.show()"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
-      @click="$refs.modal.show()"
     >
       <i class="fas fa-trash-alt" />
     </a>
@@ -67,12 +66,13 @@
 
     <!-- delete confirm modal -->
     <b-modal
+      ref="confirmDelete"
       v-if="mayDelete"
-      ref="modal"
       :title="$i18n('forum.delete_post')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="$emit('delete')"
+      modal-class="bootstrap"
     >
       <p>{{ $i18n('really_delete') }}</p>
     </b-modal>
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import pickBy from 'lodash.pickby'
+
 import bDropdown from '@b/components/dropdown/dropdown'
 import bModal from '@b/components/modal/modal'
 import bTooltip from '@b/directives/tooltip/tooltip'
@@ -108,6 +110,11 @@ export default {
   data () {
     return {
       emojis: emojiList
+    }
+  },
+  computed: {
+    reactionsWithUsers () {
+      return pickBy(this.reactions, users => users.length > 0)
     }
   },
   methods: {

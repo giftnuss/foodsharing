@@ -1,12 +1,12 @@
 <template>
   <form
-    class="form-inline my-2 my-lg-0"
-    style="flex-grow: 1"
+    id="login-form"
     @submit.prevent
+    class="form-inline my-2 my-lg-0 flex-grow-1"
   >
     <div
       ref="inputgroup"
-      class="input-group mr-2"
+      class="input-group input-group-sm mr-2 my-1"
     >
       <div class="input-group-prepend">
         <label
@@ -19,17 +19,18 @@
       <input
         id="login-email"
         v-model="email"
+        @keydown.enter="submit"
         type="email"
         name="login-email"
         class="form-control text-primary"
         placeholder="E-Mail"
         aria-label="E-Mail"
-        @keydown.enter="submit"
       >
     </div>
     <div
       ref="inputgroup"
-      class="input-group mr-2"
+      class="input-group input-group-sm mr-2 my-1
+"
     >
       <div class="input-group-prepend">
         <label
@@ -42,26 +43,26 @@
       <input
         id="login-password"
         v-model="password"
+        @keydown.enter="submit"
         type="password"
         name="login-password"
         class="form-control text-primary"
         placeholder="Passwort"
         aria-label="Passwort"
-        @keydown.enter="submit"
       >
     </div>
     <button
       v-if="!isLoading "
+      @click="submit"
       href="#"
       class="btn btn-secondary btn-sm"
-      @click="submit"
     >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
-      class="btn btn-light btn-sm loadingButton"
       @click="submit"
+      class="btn btn-light btn-sm loadingButton"
     >
       <img src="/img/469.gif">
     </button>
@@ -97,7 +98,14 @@ export default {
       try {
         let user = await login(this.email, this.password)
         pulseSuccess(`<b>Wunderschönen Tag Dir, ${user.name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.`)
-        window.location = this.$url('dashboard')
+
+        let urlParams = new URLSearchParams(window.location.search)
+
+        if (urlParams.has('ref')) {
+          window.location = decodeURIComponent(urlParams.get('ref'))
+        } else {
+          window.location = this.$url('dashboard')
+        }
       } catch (err) {
         this.isLoading = false
         if (err.code && err.code === 401) {
@@ -115,43 +123,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
-  #topbar .input-group {
-    margin-bottom: 0;
-    width: 10em;
-
-    @media (max-width: 320px) {
-      width: 80%;
-    }
-
-    img, i {
-      height: 1em;
-      width: 1em;
-    }
-
-    .input-group-text {
-      background-color: white;
-      border: none;
-      padding: 0.1rem 0.4rem;
-      font-size: .9em;
-    }
-
-    input.form-control {
-      font-size: 1em;
-      padding: 0.1rem 0.4rem 0.1rem 0;
-      font-weight: bold;
-      border: none;
-
-      &:focus {
-        box-shadow: none;
-        border: none;
-      }
-    }
-  }
-
+<style lang="scss" scoped>
   .loadingButton {
     img {
       height: 1em;
+    }
+  }
+
+  #login-form .input-group {
+    @media (max-width: 575px) {
+      width: 80%;
     }
   }
 </style>

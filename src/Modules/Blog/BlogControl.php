@@ -2,31 +2,46 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 
 class BlogControl extends Control
 {
 	private $blogGateway;
+	private $timeHelper;
+	private $dataHelper;
+	private $identificationHelper;
 
-	public function __construct(BlogModel $model, BlogView $view, BlogGateway $blogGateway)
-	{
+	public function __construct(
+		BlogModel $model,
+		BlogView $view,
+		BlogGateway $blogGateway,
+		TimeHelper $timeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
+		$this->timeHelper = $timeHelper;
+		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
-		if ($id = $this->func->getActionId('delete')) {
+		if ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->model->canEdit($id)) {
 				if ($this->model->del_blog_entry($id)) {
-					$this->func->info($this->func->s('blog_entry_deleted'));
+					$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_deleted'));
 				}
 			} else {
-				$this->func->info('Diesen Artikel kannst Du nicht löschen');
+				$this->flashMessageHelper->info('Diesen Artikel kannst Du nicht löschen');
 			}
-			$this->func->goPage();
+			$this->routeHelper->goPage();
 		}
-		$this->func->addBread($this->func->s('blog_bread'), '/?page=blog');
-		$this->func->addTitle($this->func->s('blog_bread'));
+		$this->pageHelper->addBread($this->translationHelper->s('blog_bread'), '/?page=blog');
+		$this->pageHelper->addTitle($this->translationHelper->s('blog_bread'));
 	}
 
 	public function index()
@@ -49,54 +64,54 @@ class BlogControl extends Control
 				$out .= $this->view->newsListItem($n);
 			}
 
-			$this->func->addContent($this->v_utils->v_field($out, $this->func->s('news')));
-			$this->func->addContent($this->view->pager($page));
+			$this->pageHelper->addContent($this->v_utils->v_field($out, $this->translationHelper->s('news')));
+			$this->pageHelper->addContent($this->view->pager($page));
 		} elseif ($page > 1) {
-			$this->func->go('/?page=blog');
+			$this->routeHelper->go('/?page=blog');
 		}
 	}
 
 	public function read()
 	{
 		if ($news = $this->model->getPost($_GET['id'])) {
-			$this->func->addBread($news['name']);
-			$this->func->addContent($this->view->newsPost($news));
+			$this->pageHelper->addBread($news['name']);
+			$this->pageHelper->addContent($this->view->newsPost($news));
 		}
 	}
 
 	public function manage()
 	{
-		if ($this->func->mayEditBlog()) {
-			$this->func->addBread($this->func->s('manage_blog'));
+		if ($this->session->mayEditBlog()) {
+			$this->pageHelper->addBread($this->translationHelper->s('manage_blog'));
 			$title = 'Blog Artikel';
 
-			$this->func->addContent($this->view->headline($title));
+			$this->pageHelper->addContent($this->view->headline($title));
 
 			if ($data = $this->model->listArticle()) {
-				$this->func->addContent($this->view->listArticle($data));
+				$this->pageHelper->addContent($this->view->listArticle($data));
 			} else {
-				$this->func->info($this->func->s('blog_entry_empty'));
+				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_empty'));
 			}
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				array(
 					'href' => '/?page=blog&sub=add',
-					'name' => $this->func->s('new_article')
+					'name' => $this->translationHelper->s('new_article')
 				)
-			)), $this->func->s('actions')), CNT_LEFT);
+			)), $this->translationHelper->s('actions')), CNT_LEFT);
 		}
 	}
 
 	public function post()
 	{
-		if ($this->func->mayEditBlog()) {
+		if ($this->session->mayEditBlog()) {
 			if (isset($_GET['id'])) {
 				if ($post = $this->model->getOne_blog_entry($_GET['id'])) {
 					if ($post['active'] == 1) {
-						$this->func->addTitle($post['name']);
-						$this->func->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
-						$this->func->addContent($this->view->topbar($post['name'], $this->func->niceDate($post['time_ts'])));
-						$this->func->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
+						$this->pageHelper->addTitle($post['name']);
+						$this->pageHelper->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
+						$this->pageHelper->addContent($this->view->topbar($post['name'], $this->timeHelper->niceDate($post['time_ts'])));
+						$this->pageHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
 					}
 				}
 			}
@@ -105,10 +120,10 @@ class BlogControl extends Control
 
 	public function add()
 	{
-		if ($this->func->mayEditBlog()) {
+		if ($this->session->mayEditBlog()) {
 			$this->handle_add();
 
-			$this->func->addBread($this->func->s('bread_new_blog_entry'));
+			$this->pageHelper->addBread($this->translationHelper->s('bread_new_blog_entry'));
 
 			$bezirke = $this->session->getRegions();
 			if (!$this->session->may('orga')) {
@@ -120,14 +135,14 @@ class BlogControl extends Control
 				}
 			}
 
-			$this->func->addContent($this->view->blog_entry_form($bezirke, true));
+			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke, true));
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('blog', 'back_to_overview')
-			)), $this->func->s('actions')), CNT_LEFT);
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->routeHelper->pageLink('blog', 'back_to_overview')
+			)), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
-			$this->func->info('Du darfst keine Artikel erstellen!');
-			$this->func->goPage();
+			$this->flashMessageHelper->info('Du darfst keine Artikel erstellen!');
+			$this->routeHelper->goPage();
 		}
 	}
 
@@ -135,55 +150,55 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if ($this->func->mayEditBlog() && $this->func->submitted()) {
-			$g_data['foodsaver_id'] = $this->func->fsId();
+		if ($this->session->mayEditBlog() && $this->submitted()) {
+			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->model->canAdd((int)$this->func->fsId(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
-				$this->func->info($this->func->s('blog_entry_add_success'));
-				$this->func->goPage();
+			if ($this->model->canAdd((int)$this->session->id(), $g_data['bezirk_id']) && $this->model->add_blog_entry($g_data)) {
+				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_add_success'));
+				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}
 
 	public function edit()
 	{
-		if ($this->func->mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
+		if ($this->session->mayEditBlog() && $this->model->canEdit($_GET['id']) && ($data = $this->model->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
-			$this->func->addBread($this->func->s('bread_blog_entry'), '/?page=blog&sub=manage');
-			$this->func->addBread($this->func->s('bread_edit_blog_entry'));
+			$this->pageHelper->addBread($this->translationHelper->s('bread_blog_entry'), '/?page=blog&sub=manage');
+			$this->pageHelper->addBread($this->translationHelper->s('bread_edit_blog_entry'));
 
-			$this->func->setEditData($data);
+			$this->dataHelper->setEditData($data);
 			$bezirke = $this->session->getRegions();
 
-			$this->func->addContent($this->view->blog_entry_form($bezirke));
+			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke));
 
-			$this->func->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				$this->func->pageLink('blog', 'back_to_overview')
-			)), $this->func->s('actions')), CNT_LEFT);
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->routeHelper->pageLink('blog', 'back_to_overview')
+			)), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
-			$this->func->info('Diesen Artikel kannst Du nicht bearbeiten');
-			$this->func->goPage();
+			$this->flashMessageHelper->info('Diesen Artikel kannst Du nicht bearbeiten');
+			$this->routeHelper->goPage();
 		}
 	}
 
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->func->mayEditBlog() && $this->func->submitted()) {
+		if ($this->session->mayEditBlog() && $this->submitted()) {
 			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];
 
 			if ($this->blogGateway->update_blog_entry($_GET['id'], $g_data)) {
-				$this->func->info($this->func->s('blog_entry_edit_success'));
-				$this->func->goPage();
+				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_edit_success'));
+				$this->routeHelper->goPage();
 			} else {
-				$this->func->error($this->func->s('error'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
 	}

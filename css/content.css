@@ -132,14 +132,6 @@ input[type=number] {
   border-radius: 6px;
 }
 
-input.hasDatepicker {
-  background-image: url(/img/cal.png);
-  background-position: 175px 3px;
-  background-repeat: no-repeat;
-  cursor: pointer !important;
-  width: 189px !important;
-}
-
 select {
   border: 1px solid #c9bcaf;
   border-radius: 6px;
@@ -167,24 +159,6 @@ textarea {
 .ui-dialog-content textarea,
 .ui-dialog-content select {
   width: 254px;
-}
-
-.input_hsnr {
-  width: 47px;
-  margin-left: 5px;
-}
-
-.input_str {
-  width: 149px;
-}
-
-.input_plz {
-  width: 57px;
-}
-
-.input_ort {
-  width: 139px;
-  margin-left: 5px;
 }
 
 .focus {
@@ -219,18 +193,6 @@ a.linkrow span.item {
   text-align: left;
   display: block;
   float: left;
-}
-
-div.titlebar a.linkrow {
-  float: left;
-}
-
-select.v-switch {
-  float: right;
-  position: relative;
-  right: -11px;
-  top: -3px;
-  width: 120px;
 }
 
 .hidden {

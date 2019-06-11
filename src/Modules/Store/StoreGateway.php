@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\CarbonInterval;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -49,6 +50,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb`.telefon,
 					`fs_betrieb`.email,
 					`fs_betrieb`.fax,
+					`fs_betrieb`.team_status,
 					`kette_id`
 
 		FROM 		`fs_betrieb`
@@ -475,18 +477,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			]);
 	}
 
-	public function addFetcher($fsid, $bid, $date, $confirm = 0): int
+	public function addFetcher(int $fsid, int $bid, \DateTime $date, bool $confirmed = false): int
 	{
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsid,
 			'betrieb_id' => $bid,
-			'date' => $date,
-			'confirmed' => $confirm
+			'date' => $this->dateTimeToPickupDate($date),
+			'confirmed' => $confirmed
 		]);
-
-		if ($confirm === 0) {
-			$this->updateBellNotificationForBiebs($bid, true);
-		}
 
 		return $queryResult;
 	}
@@ -735,6 +733,54 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
+	public function getPickupSignupsForDate(int $storeId, \DateTime $date)
+	{
+		return $this->db->fetchAllByCriteria(
+			'fs_abholer',
+			['foodsaver_id'],
+			['date' => $this->dateTimeToPickupDate($date), 'betrieb_id' => $storeId]
+		);
+	}
+
+	public function getRegularPickupSlots(int $storeId)
+	{
+		return $this->db->fetchAllByCriteria(
+			'fs_abholzeiten',
+			['time', 'dow', 'fetcher'],
+			['betrieb_id' => $storeId]);
+	}
+
+	public function getSinglePickupSlots(int $storeId, \DateTime $date)
+	{
+		$result = $this->db->fetchAllByCriteria(
+			'fs_fetchdate',
+			['time', 'fetchercount'],
+			[
+				'betrieb_id' => $storeId,
+				'time' => $this->dateTimeToPickupDate($date)
+			]
+		);
+
+		return array_map(function ($e) {
+			return [
+				'date' => $e['time'],
+				'fetcher' => $e['fetchercount']
+			];
+		}, $result);
+	}
+
+	public function getFutureRegularPickupInterval(int $storeId): CarbonInterval
+	{
+		$result = $this->db->fetchValueByCriteria('fs_betrieb', 'prefetchtime', ['id' => $storeId]);
+
+		return CarbonInterval::seconds($result);
+	}
+
+	private function dateTimeToPickupDate(\DateTime $date)
+	{
+		return $date->format('Y-m-d H:i:s');
+	}
+
 	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
 	{
 		$date = $this->db->fetchValue(
@@ -823,6 +869,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			];
 
 			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
+		}
+	}
+
+	public function getStoreNameByConversationId(int $id): ?string
+	{
+		$store = $this->db->fetch('SELECT name FROM fs_betrieb WHERE team_conversation_id = ? OR springer_conversation_id = ?', [$id, $id]);
+		if ($store) {
+			return $store['name'];
+		} else {
+			return null;
 		}
 	}
 }

@@ -20,7 +20,7 @@ class IndexControl extends Control
 
 	public function index()
 	{
-		$this->func->addTitle('Rette mit!');
+		$this->pageHelper->addTitle('Rette mit!');
 
 		$gerettet = (int)$this->indexGateway->getFetchedWeight();
 

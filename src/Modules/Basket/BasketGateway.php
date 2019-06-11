@@ -368,32 +368,6 @@ class BasketGateway extends BaseGateway
 		return [];
 	}
 
-	public function follow($basket_id, $fsId): void
-	{
-		$stm = 'SELECT 1 FROM `fs_basket_anfrage` WHERE basket_id = :basket_id AND foodsaver_id = :foodsaver_id AND status <= :status';
-		$status = $this->db->fetchValue(
-			$stm,
-			[':basket_id' => $basket_id, ':foodsaver_id' => $fsId, ':status' => Status::FOLLOWED]
-		);
-
-		if (!$status) {
-			$stm = '
-			REPLACE INTO `fs_basket_anfrage`
-			(
-				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
-			)
-			VALUES
-			(
-				:foodsaver_id, :basket_id, :status, NOW(), 0
-			)
-		';
-			$this->db->execute(
-				$stm,
-				[':foodsaver_id' => $fsId, ':basket_id' => $basket_id, ':status' => Status::FOLLOWED]
-			);
-		}
-	}
-
 	public function setStatus($basket_id, $status, $fsId): void
 	{
 		$appost = 1;
@@ -420,6 +394,11 @@ class BasketGateway extends BaseGateway
 				':appost' => $appost,
 			]
 		);
+	}
+
+	public function getAmountOfFoodBaskets(int $fs_id): int
+	{
+		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
 	public function listCloseBaskets($fs_id, $loc, $distance = 30)

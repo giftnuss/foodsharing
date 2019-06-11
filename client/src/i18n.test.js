@@ -33,4 +33,11 @@ describe('i18n', () => {
   it('complains with missing variables', () => {
     assert.throws(() => i18n('bar', { NAME: 'peter' }))
   })
+
+  it('accepts falsy value as variable', () => {
+    assert.strictEqual(i18n('bar', {
+      NAME: '',
+      AGE: 0
+    }), 'my name is  and I am 0 years old')
+  })
 })

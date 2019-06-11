@@ -22,6 +22,6 @@ class ContentGatewayTest extends \Codeception\Test\Unit
 		$content = $this->gateway->get(33);
 		$this->assertNotNull($content);
 		$this->assertEquals('Wichtiger Hinweis:', $content['title']);
-		$this->assertContains('Lebensmittelverschwendung', $content['body']);
+		$this->assertStringContainsString('Lebensmittelverschwendung', $content['body']);
 	}
 }

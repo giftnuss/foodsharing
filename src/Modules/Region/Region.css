@@ -49,13 +49,6 @@ ul.forum_threads.linklist li a:hover, ul.forum_threads.linklist li a:hover span.
   color: #4a3522 !important;
 }
 
-div.forum_user_info_holder {
-  width: 160px;
-  margin-top: 5px;
-  float: left;
-  margin-bottom: 15px;
-}
-
 div.post_body {
   float: left;
   margin-top: 7px;

@@ -15,10 +15,7 @@ class LogoutControl extends Control
 
 	public function index()
 	{
-		$this->mem->logout($this->session->id());
-		$_SESSION['login'] = false;
-		$_SESSION = array();
-		$this->session->destroy();
+		$this->session->logout();
 		header('Location: /');
 		exit();
 	}
