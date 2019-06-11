@@ -162,6 +162,21 @@
   height: 35px;
 }
 
+.chatboxmessage.mymessage {
+	margin-left: unset;
+  margin-right: 1em;
+}
+
+.chatboxmessage.mymessage .chatboxmessagefrom {
+  float: right;
+	margin: -5px -25px 0 0px;
+}
+
+.chatboxmessage.mymessage .chatboxmessagecontent {
+  background: none repeat scroll 0 0 #64ae2499;
+
+}
+
 .chatboxmessagefrom .photo {
   display: block;
   margin-right: 4px;
@@ -173,7 +188,7 @@
 }
 
 .chatboxmessagecontent {
-  background: none repeat scroll 0 0 #f5f5b5;
+  background: none repeat scroll 0 0 #e1e1db;
   border-radius: 6px;
   color: #4a3520;
   display: block;
@@ -185,7 +200,7 @@
 
 .chatboxmessagecontent .time {
   display: block;
-  color: #a2986d;
+  color: #533a20;
   font-size: 11px;
 }
 
