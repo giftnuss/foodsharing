@@ -14,3 +14,5 @@ $g_lang['mumble_room'] = 'In welchem mumble-Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'Enddatum';
 $g_lang['event_options'] = 'Eventoptionen';
 $g_lang['saveEventInfo'] = '<b>Bitte beachten:</b><br>Beim Speichern werden alle derzeitigen Mitglieder der oben gewählten Gruppe eingeladen. Um Neuzugänge in Bezirk oder AG später noch dazuzuladen, speichere den Termin einfach erneut.';
+$g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Treffpunktes im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';
+
