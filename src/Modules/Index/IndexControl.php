@@ -41,7 +41,7 @@ class IndexControl extends Control
 			$page_content = $this->contentGateway->get(38);
 		}
 
-		$this->func->addContent($this->view->index(
+		$this->pageHelper->addContent($this->view->index(
 			$page_content['body']
 		), CNT_OVERTOP);
 	}
