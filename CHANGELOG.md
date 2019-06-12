@@ -18,6 +18,7 @@
 - InfluxDB Metrics via UDP !882 @alangecker
 - Added yellow info box with bug warning to edit event page !892 @jofranz
 - Added average daily fetch count to statistics page !900 @chris2up9
+- Use SwiftMailer for outgoing emails !925 @NerdyProjects
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
