@@ -19,10 +19,11 @@
 ### References
   - [Scripts](scripts.md)
   - [php](php.md)
+    - [Translation](internationalization.md)
   - [request types](requests.md)
   - [javascript, vue.js](javascript.md)
+    - [icons](icons.md)
   - [Databases](database.md)
-  - [Translation](internationalization.md)
   - [Tests](tests.md)
   - [Glossary](GLOSSARY.md)
 

@@ -7,6 +7,7 @@ export default {
   forum: (regionId, regionSubId = 0) => `/?page=bezirk&bid=${regionId}&sub=${regionSubId === 1 ? 'botforum' : 'forum'}`,
   fairteiler: (regionId) => `/?page=bezirk&bid=${regionId}&sub=fairteiler`,
   members: (regionId) => `/?page=bezirk&bid=${regionId}&sub=members`,
+  statistic: (regionId) => `/?page=bezirk&bid=${regionId}&sub=statistic`,
   events: (regionId) => `/?page=bezirk&bid=${regionId}&sub=events`,
   stores: (regionId) => `/?page=betrieb&bid=${regionId}`,
   storeAdd: (regionId = null) => regionId ? `/?page=betrieb&a=new&bid=${regionId}` : `/?page=betrieb&a=new`,

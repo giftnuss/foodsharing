@@ -25,13 +25,13 @@ const fsapp = {
       bid: GET('bid')
     })
   },
-  refreshfoodsaver: function () {
+  refreshFoodsaver: function () {
     ajreq('foodsaverrefresh', {
       app: 'foodsaver',
       bid: GET('bid')
     })
   },
-  deletefromRegion: function (foodsaverId) {
+  deleteFromRegion: function (foodsaverId) {
     if (window.confirm('Wirklich aus Bezirk löschen?')) {
       ajreq('deleteFromRegion', {
         app: 'foodsaver',

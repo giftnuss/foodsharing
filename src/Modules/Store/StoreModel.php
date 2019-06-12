@@ -333,6 +333,7 @@ class StoreModel extends Db
 						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
 						fs_betrieb.str,
 						fs_betrieb.hsnr,
+						CONCAT(fs_betrieb.lat,", ",fs_betrieb.lon) AS geo,
 						fs_betrieb.`betrieb_status_id`,
 						fs_bezirk.name AS bezirk_name
 
@@ -341,7 +342,6 @@ class StoreModel extends Db
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
 				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
-
 
 		');
 	}

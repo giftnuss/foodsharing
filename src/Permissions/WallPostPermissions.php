@@ -24,24 +24,20 @@ class WallPostPermissions
 
 	public function mayReadWall($fsId, $target, $targetId)
 	{
-		if (!$fsId) {
-			return false;
-		}
-
 		switch ($target) {
 			case 'bezirk':
-				return $this->regionGateway->hasMember($fsId, $targetId);
+				return $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
 				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $event['public'] || isset($event['invites']['may'][$fsId]);
+				return $fsId && ($event['public'] || isset($event['invites']['may'][$fsId]));
 			case 'fairteiler':
 				return true;
 			case 'question':
-				return $this->regionGateway->hasMember($fsId, 341);
+				return $fsId && $this->regionGateway->hasMember($fsId, 341);
 			case 'usernotes':
-				return $this->regionGateway->hasMember($fsId, 432);
+				return $fsId && $this->regionGateway->hasMember($fsId, 432);
 			default:
 				return $fsId > 0;
 		}

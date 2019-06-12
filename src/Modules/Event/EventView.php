@@ -181,7 +181,8 @@ class EventView extends View
 				array('id' => 0, 'name' => $this->translationHelper->s('online'))
 			))),
 			$this->v_utils->v_form_text('location_name', array('required' => true)),
-			$this->latLonPicker('latLng', $latLonOptions)
+			$this->latLonPicker('latLng', $latLonOptions),
+			$this->v_utils->v_info($this->translationHelper->s('saveEventInfo'))
 		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
@@ -329,6 +330,7 @@ class EventView extends View
 
 	public function event($event)
 	{
-		return $this->v_utils->v_field('<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field(
+			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
 	}
 }

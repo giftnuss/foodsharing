@@ -18,8 +18,7 @@ class ContentSecurityPolicy
 			'script-src' => [
 				$self,
 				$unsafeInline,
-				$unsafeEval, // lots of `$.globalEval` still ... 😢
-				'https://www.bildungsspender.de' // donation form on /unterstuetzung
+				$unsafeEval // lots of `$.globalEval` still ... 😢
 			],
 			'connect-src' => [
 				$self,
@@ -44,8 +43,7 @@ class ContentSecurityPolicy
 				'data:'
 			],
 			'frame-src' => [
-				$self,
-				'https://www.bildungsspender.de' // donation form on /unterstuetzung
+				$self
 			],
 			'frame-ancestors' => [
 				$none

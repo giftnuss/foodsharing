@@ -74,7 +74,7 @@ class FoodsaverXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshfoodsaver();'
+			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshFoodsaver();'
 		];
 	}
 }
