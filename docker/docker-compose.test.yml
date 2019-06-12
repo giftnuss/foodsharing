@@ -100,7 +100,7 @@ services:
 
   db:
     container_name: foodsharing_test_db
-    image: registry.gitlab.com/foodsharing-dev/images/db/test:1.2
+    image: registry.gitlab.com/foodsharing-dev/images/db/test:1.4
     expose:
       - 3306
     ports:
@@ -109,7 +109,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Europe/Berlin
     tmpfs:
-      - /tmp
+      - /var/lib/mysql-tmpfs
     volumes:
       - ../:/app
 

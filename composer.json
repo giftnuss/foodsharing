@@ -54,6 +54,7 @@
     "sensio/framework-extra-bundle": "5.3.1",
     "sentry/sentry": "<2.0.0",
     "setasign/fpdi-tcpdf": "2.2.0",
+    "swiftmailer/swiftmailer": "^6.2",
     "symfony/config": "4.3.1",
     "symfony/console": "4.3.1",
     "symfony/dependency-injection": "4.3.1",

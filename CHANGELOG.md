@@ -12,8 +12,16 @@
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 - Added active foodsaver and jumper count to store popup on map !920 #620 @k.miklobusec
-- Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
-- Added yellow info box with "how to use the address picker" to the event page !915 @jofranz
+- Added yellow info box with "how to use the address picker" and what this data is used for to:
+    - profile settings !895 @jofranz
+    - event page !915 @jofranz
+    - store settings !922 @jofranz
+- InfluxDB Metrics via UDP !882 @alangecker
+- Added yellow info box with bug warning to edit event page !892 @jofranz
+- Added average daily fetch count to statistics page !900 @chris2up9
+- Use SwiftMailer for outgoing emails !925 @NerdyProjects
+- Shake it! Randomly shuffle ambassadors and working group admins chronology to make it harder always to contact the most senior one !924 @jofranz
+- Added Rest endpoint for users !916 @alex.simm
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -28,6 +36,8 @@
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
+- The page does not use fullpage anymore. New landing page !597 #393 @theolampert
+- Reduce Load on every Request to RegionControl !921 @alangeker
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

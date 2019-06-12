@@ -162,3 +162,13 @@ services:
             - { name: kernel.event_listener, event: kernel.controller }
         arguments:
             - "@annotation_reader"
+
+    mailer.transport:
+        class: Swift_SmtpTransport
+        arguments:
+            - !php/const MAILER_HOST
+
+    Swift_Mailer:
+        class: Swift_Mailer
+        arguments:
+            - '@mailer.transport'

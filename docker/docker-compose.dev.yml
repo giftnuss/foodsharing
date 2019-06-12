@@ -107,7 +107,7 @@ services:
 
   db:
     container_name: foodsharing_dev_db
-    image: registry.gitlab.com/foodsharing-dev/images/db/dev:1.2
+    image: registry.gitlab.com/foodsharing-dev/images/db/dev:1.4
     expose:
       - 3306
     ports:
