@@ -54,6 +54,10 @@
   margin-top: 4px;
 }
 
+#msg-conversation li.mymessage span.time {
+	color: #ccc;
+}
+
 #msg-conversation span.body {
   border-radius: 6px;
   background: none repeat scroll 0 0 #ffffff;
@@ -65,9 +69,10 @@
 }
 
 #msg-conversation li.mymessage span.body {
-	background: none repeat scroll 0 0 #64ae2499;
+	background: none repeat scroll 0 0 #64ae24;
 	margin-left: 0px;
 	margin-right: 50px;
+	color: #eee;
 }
 
 #msg-conversation li.mymessage span.img {
@@ -89,7 +94,7 @@
 
 #msg-conversation li.mymessage span.body:after {
   border-width: 8px 0 8px 9px;
-	border-color: transparent #64ae2499;
+	border-color: transparent #64ae24;
 	left: unset;
 	right: -9px;
 }
