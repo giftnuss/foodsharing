@@ -33,6 +33,8 @@ final class MessageGateway extends BaseGateway
 				'unread' => 0
 			]);
 		}
+		/* todo: would expect foreign key constraints to fail when a conversation with non-existing users is added.
+		That constraint is not in place and previous behaviour of messages did not check either, so keep it for now... */
 		$this->db->commit();
 
 		return $conversationId;
@@ -147,14 +149,14 @@ final class MessageGateway extends BaseGateway
 	/**
 	 * Renames an Conversation.
 	 */
-	public function renameConversation($cid, $name): bool
+	public function renameConversation(int $cid, string $name): bool
 	{
-		return $this->db->update('fs_conversation', ['name' => strip_tags($name)], ['id' => (int)$cid]);
+		return $this->db->update('fs_conversation', ['name' => $name], ['id' => $cid]);
 	}
 
-	public function conversationLocked($cid)
+	public function conversationLocked(int $cid)
 	{
-		return $this->db->fetchValueByCriteria('fs_conversation', 'locked', ['id' => (int)$cid]);
+		return $this->db->fetchValueByCriteria('fs_conversation', 'locked', ['id' => $cid]);
 	}
 
 	public function listConversationUpdates($conv_ids)

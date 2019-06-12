@@ -301,13 +301,13 @@ const conv = {
   initChat: async function (cid) {
     conv.showLoader(cid)
 
-    var key = this.getKey(cid)
+    let key = this.getKey(cid)
 
     try {
       let conversation = await api.getConversation(cid)
       if (conversation.members.length > 2) {
         conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
-        conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req('msg','rename',{data:{cid:${cid},name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>`)
+        conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
       }
 
       /*
@@ -346,6 +346,19 @@ const conv = {
     } finally {
       conv.hideLoader(cid)
       conv.storeOpenedChatWindows()
+    }
+  },
+
+  rename: async function (cid, newName) {
+    try {
+      await api.renameConversation(cid, newName)
+      let key = this.getKey(cid)
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${newName}`)
+    } catch (e) {
+      pulseError('Fehler beim Umbenennen der Unterhaltung')
+      console.error(e)
+    } finally {
+
     }
   },
 

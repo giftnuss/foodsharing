@@ -1,4 +1,4 @@
-import { get, post } from './base'
+import { get, patch, post } from './base'
 import { generateQueryString } from '../utils'
 
 export function getConversationList (limit = '', offset = '') {
@@ -21,5 +21,17 @@ export function getMessages (conversationId, olderThanID) {
 export function sendMessage (conversationId, body) {
   return post(`/conversations/${conversationId}`, {
     body: body
+  })
+}
+
+export function renameConversation (conversationId, newName) {
+  return patch(`/conversations/${conversationId}`, {
+    name: newName
+  })
+}
+
+export function createConversation (userIds) {
+  return post(`/conversations`, {
+    members: userIds
   })
 }

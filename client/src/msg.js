@@ -13,7 +13,6 @@ import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
 
 import {
-  ajax,
   img,
   GET,
   pulseInfo,
@@ -165,24 +164,21 @@ const msg = {
 
   initComposer: function () {
     autosize(document.getElementById('compose_body'))
-    $('#compose_submit').on('click', function (ev) {
+    $('#compose_submit').on('click', async function (ev) {
       ev.preventDefault()
 
       let recip = msg.getRecipients()
       if (recip != false) {
         let body = $('#compose_body').val()
         if (body != '') {
-          ajax.req('msg', 'newconversation', {
-            data: {
-              recip: recip,
-              body: body
-            },
-            method: 'post',
-            success: function (data) {
-              msg.clearComposeForm()
-              msg.loadConversation(data.cid)
-            }
-          })
+          try {
+            let conversation = await api.createConversation(recip)
+            await api.sendMessage(conversation.id, body)
+            msg.clearComposeForm()
+            msg.loadConversation(conversation.id)
+          } catch (e) {
+            pulseError('Die Nachricht konnte nicht gesendet werden')
+          }
         } else {
           pulseInfo('Du musst eine Nachricht eingeben')
         }
