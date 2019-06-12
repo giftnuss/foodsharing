@@ -17,13 +17,14 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\MessageService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,7 +38,7 @@ class XhrMethods
 	private $v_utils;
 	private $xhrViewUtils;
 	private $storeModel;
-	private $messageModel;
+	private $messageGateway;
 	private $regionGateway;
 	private $storePermissions;
 	private $forumGateway;
@@ -53,6 +54,7 @@ class XhrMethods
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $messageService;
 
 	/**
 	 * XhrMethods constructor.
@@ -66,7 +68,7 @@ class XhrMethods
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
-		MessageModel $messageModel,
+		MessageGateway $messageGateway,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
@@ -81,7 +83,8 @@ class XhrMethods
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		MessageService $messageService
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -89,7 +92,7 @@ class XhrMethods
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
-		$this->messageModel = $messageModel;
+		$this->messageGateway = $messageGateway;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
@@ -105,6 +108,7 @@ class XhrMethods
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->messageService = $messageService;
 	}
 
 	public function xhr_verify($data)
@@ -1444,14 +1448,16 @@ class XhrMethods
 
 	public function xhr_delDate($data)
 	{
+		$storeId = $data['bid'];
 		$status = 0;
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) && isset($data['date'])) {
-			if ($this->storeModel->deleteFetchDate($this->session->id(), $data['bid'], $data['date'])) {
+		if ($this->storeGateway->isInTeam($this->session->id(), $storeId) && isset($data['date'])) {
+			if ($this->storeModel->deleteFetchDate($this->session->id(), $storeId, $data['date'])) {
 				$status = 1;
 			}
 
 			if (isset($data['msg'])) {
-				$this->storeModel->addTeamMessage($data['bid'], $data['msg']);
+				$conversationId = $this->storeGateway->getBetriebConversation($storeId);
+				$this->messageService->sendMessage($conversationId, $this->session->id(), $data['msg']);
 			}
 		}
 
@@ -1528,10 +1534,10 @@ class XhrMethods
 				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
 
 				if ($tcid = $this->storeGateway->getBetriebConversation((int)$data['bid'])) {
-					$this->messageModel->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
+					$this->messageGateway->deleteUserFromConversation($tcid, (int)$data['fsid']);
 				}
 				if ($scid = $this->storeGateway->getBetriebConversation((int)$data['bid'], true)) {
-					$this->messageModel->deleteUserFromConversation($scid, (int)$data['fsid'], true);
+					$this->messageGateway->deleteUserFromConversation($scid, (int)$data['fsid']);
 				}
 			}
 

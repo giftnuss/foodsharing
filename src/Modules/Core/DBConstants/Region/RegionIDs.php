@@ -8,4 +8,5 @@ class RegionIDs
 	public const EUROPE = 741;
 
 	public const EUROPE_REPORT_TEAM = 432;
+	public const EUROPE_WELCOME_TEAM = 813;
 }

@@ -2,13 +2,14 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 final class MessageControl extends Control
 {
 	private $messageGateway;
 
-	public function __construct(MessageModel $model, MessageGateway $messageGateway, MessageView $view)
+	public function __construct(Db $model, MessageGateway $messageGateway, MessageView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;

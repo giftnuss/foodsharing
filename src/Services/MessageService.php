@@ -32,7 +32,7 @@ class MessageService
 		$this->webSocketSender = $webSocketSender;
 	}
 
-	private function sendNewMessageNotificationEmail($recipient, $conversation_id, $msg, $templateData)
+	private function sendNewMessageNotificationEmail(array $recipient, int $conversation_id, string $msg, array $templateData)
 	{
 		if (!$this->mem->userOnline($recipient['id'])) {
 			/* skip repeated notification emails in a short interval */
@@ -54,11 +54,13 @@ class MessageService
 		}
 	}
 
-	private function getNotificationTemplateData(int $conversationId, array $sender, string $body, array $members): array
+	private function getNotificationTemplateData(int $conversationId, array $sender, string $body, array $members, string $notificationTemplate = null): array
 	{
 		$data = [];
 		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
-		if (!is_null($storeName)) {
+		if (!is_null($notificationTemplate)) {
+			$data['emailTemplate'] = $notificationTemplate;
+		} elseif (!is_null($storeName)) {
 			$data['emailTemplate'] = 'chat/message_store';
 			$data['storeName'] = $storeName;
 		} else {
@@ -86,7 +88,7 @@ class MessageService
 		return $data;
 	}
 
-	private function sendNewMessageNotifications(int $conversationId, int $senderId, string $body, Carbon $time, int $messageId)
+	private function sendNewMessageNotifications(int $conversationId, int $senderId, string $body, Carbon $time, int $messageId, string $notificationTemplate = null)
 	{
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
@@ -102,7 +104,7 @@ class MessageService
 				'time' => $time->toDateTimeString()
 			));
 
-			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $sender, $body, $members);
+			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $sender, $body, $members, $notificationTemplate);
 			foreach ($members as $m) {
 				if ($m['id'] != $senderId) {
 					if ($m['infomail_message']) {
@@ -113,7 +115,14 @@ class MessageService
 		}
 	}
 
-	public function sendMessage(int $conversationId, int $senderId, string $body): ?int
+	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): ?int
+	{
+		$conversationId = $this->messageGateway->getOrCreateConversation([$senderId, $userId]);
+
+		return $this->sendMessage($conversationId, $senderId, $body, $notificationTemplate);
+	}
+
+	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?int
 	{
 		$body = trim($body);
 		/* todo: we do want to get rid of this line */

@@ -20,7 +20,7 @@ final class MessageGateway extends BaseGateway
 		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
 	}
 
-	private function createConversation(array $fsIds, bool $locked = false): int
+	public function createConversation(array $fsIds, bool $locked = false): int
 	{
 		$this->db->beginTransaction();
 		$conversationId = $this->db->insert('fs_conversation', [
@@ -379,6 +379,42 @@ final class MessageGateway extends BaseGateway
 			'conversation_id' => $conversationId,
 			'foodsaver_id' => $userId
 		]) === 1;
+	}
+
+	public function addUserToConversation(int $conversationId, int $userId): bool
+	{
+		return $this->db->insert('fs_foodsaver_has_conversation', [
+			'conversation_id' => $conversationId,
+			'foodsaver_id' => $userId,
+			'unread' => 0
+		], ['ignore' => true]) > 0;
+	}
+
+	public function setConversationMembers(int $conversationId, array $userIds): bool
+	{
+		if (!$userIds) {
+			/* Empty user list gets special handling */
+			$this->db->delete('fs_foodsaver_has_conversation', [
+				'conversation_id' => $conversationId
+			]);
+		} else {
+			$this->db->beginTransaction();
+			$this->db->execute('
+			DELETE FROM fs_foodsaver_has_conversation
+			WHERE foodsaver_id NOT IN (' . $this->db->generatePlaceholders(count($userIds)) . ')
+			AND conversation_id = ?
+			', array_merge($userIds, [$conversationId]));
+
+			/* TODO: database layer doesn't support helpers for bulk insert */
+			foreach ($userIds as $userId) {
+				$this->db->insert('fs_foodsaver_has_conversation', [
+					'conversation_id' => $conversationId,
+					'foodsaver_id' => $userId,
+					'unread' => 0
+				]);
+			}
+			$this->db->commit();
+		}
 	}
 
 	/* checks if the conversation has a member that is not deleted (to expunge the conversation otherwise) */

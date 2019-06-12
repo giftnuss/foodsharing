@@ -9,15 +9,15 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
-use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\MessageService;
 
 class BasketXhr extends Control
 {
 	private $status;
 	private $basketGateway;
-	private $messageModel;
+	private $messageService;
 	private $timeHelper;
 	private $imageService;
 
@@ -25,12 +25,12 @@ class BasketXhr extends Control
 		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
-		MessageModel $messageModel,
+		MessageService $messageService,
 		TimeHelper $timeHelper,
 		ImageService $imageService
 	) {
 		$this->model = $model;
-		$this->messageModel = $messageModel;
+		$this->messageService = $messageService;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 		$this->timeHelper = $timeHelper;
@@ -400,11 +400,9 @@ class BasketXhr extends Control
 	public function sendreqmessage()
 	{
 		if ($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			$msg = strip_tags($_GET['msg']);
-			$msg = trim($msg);
+			$msg = trim($_GET['msg']);
 			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $msg);
-				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
+				$this->messageService->sendMessage($fs_id, $this->session->id(), $msg, 'basket/request');
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 				return [

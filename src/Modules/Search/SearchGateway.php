@@ -116,4 +116,31 @@ class SearchGateway extends BaseGateway
 			
 		');
 	}
+
+	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver)
+	{
+		$searchStr = '%' . str_replace(['_', '%'], ['\\\\_', '\\\\%'], $q) . '%';
+		$select = 'SELECT fs.id AS id, CONCAT(fs.name," ",fs.nachname) AS value ';
+		$condition = 'WHERE fs.deleted_at IS NULL AND CONCAT(fs.name," ",fs.nachname ) LIKE ? ';
+
+		$result = [];
+
+		if ($findInAllFoodsaver) {
+			$result = $this->db->fetchAll(
+				$select .
+				'FROM fs_foodsaver fs ' .
+				$condition .
+				' AND fs.rolle >= 1', [$searchStr]);
+		} elseif ($groupIds) {
+			$result = $this->db->fetchAll(
+				$select .
+				'FROM fs_foodsaver_has_bezirk hb ' .
+				'LEFT JOIN fs_foodsaver fs ON hb.foodsaver_id = fs.id ' .
+				$condition .
+				'AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')',
+				array_merge([$searchStr], $groupIds));
+		}
+
+		return $result;
+	}
 }
