@@ -1,4 +1,4 @@
-import { get, patch, post } from './base'
+import { get, patch, post, remove } from './base'
 import { generateQueryString } from '../utils'
 
 export function getConversationList (limit = '', offset = '') {
@@ -28,6 +28,10 @@ export function renameConversation (conversationId, newName) {
   return patch(`/conversations/${conversationId}`, {
     name: newName
   })
+}
+
+export function removeUserFromConversation (conversationId, userId) {
+  return remove(`/conversations/${conversationId}/members/${userId}`)
 }
 
 export function createConversation (userIds) {

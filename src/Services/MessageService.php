@@ -128,4 +128,22 @@ class MessageService
 
 		return null;
 	}
+
+	public function deleteUserFromConversation(int $conversationId, int $userId): bool
+	{
+		/* only allow removing users from non-locked conversations (as "locked" means more something like "is part
+		of a synchronized user group".
+		When a user gets removed, check if the whole conversation can be removed. */
+		if (!$this->messageGateway->isConversationLocked($conversationId)) {
+			if ($this->messageGateway->deleteUserFromConversation($conversationId, $userId)) {
+				if (!$this->messageGateway->conversationHasRealMembers(($conversationId))) {
+					$this->messageGateway->deleteConversation($conversationId);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

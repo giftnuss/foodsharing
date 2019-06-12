@@ -234,19 +234,6 @@ final class MessageModel extends Db
 		$this->updateDenormalizedConversationData($cid);
 	}
 
-	public function deleteUserFromConversation($cid, $fsid, $deleteAlways = false): bool
-	{
-		/*
-		 * delete only users from non 1:1 conversations
-		 */
-		if ($deleteAlways || ((int)$this->qOne('SELECT COUNT(foodsaver_id) FROM `fs_foodsaver_has_conversation` WHERE conversation_id = ' . (int)$cid) > 2)) {
-			$this->del('DELETE FROM `fs_foodsaver_has_conversation` WHERE conversation_id = ' . (int)$cid . ' AND foodsaver_id = ' . (int)$fsid);
-			$this->updateDenormalizedConversationData($cid);
-		}
-
-		return false;
-	}
-
 	public function add_message($data): bool
 	{
 		if ($cid = $this->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {

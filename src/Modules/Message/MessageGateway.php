@@ -154,7 +154,7 @@ final class MessageGateway extends BaseGateway
 		return $this->db->update('fs_conversation', ['name' => $name], ['id' => $cid]);
 	}
 
-	public function conversationLocked(int $cid)
+	public function isConversationLocked(int $cid)
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'locked', ['id' => $cid]);
 	}
@@ -371,5 +371,34 @@ final class MessageGateway extends BaseGateway
 		$this->updateLastConversationMessage($conversationId, $messageId, $body, $senderId, $sentAt);
 
 		return $messageId;
+	}
+
+	public function deleteUserFromConversation(int $conversationId, int $userId): bool
+	{
+		return $this->db->delete('fs_foodsaver_has_conversation', [
+			'conversation_id' => $conversationId,
+			'foodsaver_id' => $userId
+		]) === 1;
+	}
+
+	/* checks if the conversation has a member that is not deleted (to expunge the conversation otherwise) */
+	public function conversationHasRealMembers(int $conversationId): bool
+	{
+		return $this->db->fetchValue('
+		SELECT COUNT(*)
+		FROM fs_foodsaver_has_conversation hc
+		INNER JOIN fs_foodsaver fs ON fs.id = hc.foodsaver_id
+		WHERE hc.conversation_id = :conversationId
+		AND fs.deleted_at IS NULL
+		', [':conversationId' => $conversationId]) >= 1;
+	}
+
+	public function deleteConversation(int $conversationId): void
+	{
+		$this->db->beginTransaction();
+		$this->db->delete('fs_foodsaver_has_conversation', ['conversation_id' => $conversationId]);
+		$this->db->delete('fs_msg', ['conversation_id' => $conversationId]);
+		$this->db->delete('fs_conversation', ['id' => $conversationId]);
+		$this->db->commit();
 	}
 }

@@ -146,13 +146,29 @@ class MessageRestController extends AbstractFOSRestController
 	 */
 	public function patchConversationAction(int $conversationId, ParamFetcher $paramFetcher)
 	{
-		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId) || $this->messageGateway->conversationLocked($conversationId)) {
+		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId) || $this->messageGateway->isConversationLocked($conversationId)) {
 			throw new HttpException(401);
 		}
 
 		if ($name = $paramFetcher->get('name')) {
 			/* a name needs to have a non-zero length */
 			$this->messageGateway->renameConversation($conversationId, $name);
+		}
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * @Rest\Delete("conversations/{conversationId}/members/{userId}", requirements={"conversationId" = "\d+", "userId" = "\d+"})
+	 */
+	public function removeMemberFromConversationAction(int $conversationId, int $userId)
+	{
+		if (!$this->session->may() || $userId != $this->session->id()) {
+			/* only allow users to remove themselves from conversations */
+			throw new HttpException(403);
+		}
+		if (!$this->messageService->deleteUserFromConversation($conversationId, $userId)) {
+			throw new HttpException(400);
 		}
 
 		return $this->handleView($this->view([], 200));

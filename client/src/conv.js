@@ -305,10 +305,8 @@ const conv = {
 
     try {
       let conversation = await api.getConversation(cid)
-      if (conversation.members.length > 2) {
-        conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
-        conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
-      }
+      conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest? Dadurch verlierst du unwiderruflich Zugriff auf alle Nachrichten in dieser Unterhaltung.')){conv.leaveConversation(${cid});}return false;">Chat verlassen</a>`)
+      conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
 
       /*
        * first make a title with all the usernames
@@ -360,6 +358,12 @@ const conv = {
     } finally {
 
     }
+  },
+
+  leaveConversation: async function (cid) {
+    await api.removeUserFromConversation(cid, serverData.user.id)
+    conv.close(cid)
+    conversationStore.loadConversations()
   },
 
   appendChatbox: function (cid, min) {
