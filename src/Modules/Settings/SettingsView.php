@@ -699,4 +699,17 @@ class SettingsView extends View
 
 		return $out;
 	}
+
+	public function picture_box($photo): string
+	{
+		$p_cnt = $this->v_utils->v_info($this->translationHelper->s('photo_should_be_usable'));
+
+		if (!file_exists('images/thumb_crop_' . $photo)) {
+			$p_cnt .= $this->v_utils->v_photo_edit('img/portrait.png');
+		} else {
+			$p_cnt .= $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
+		}
+
+		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
+	}
 }

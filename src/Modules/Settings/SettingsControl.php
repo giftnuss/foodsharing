@@ -542,17 +542,11 @@ class SettingsControl extends Control
 		return true;
 	}
 
-	public function picture_box()
+	private function picture_box(): string
 	{
 		$photo = $this->foodsaverGateway->getPhoto($this->session->id());
 
-		if (!(file_exists('images/thumb_crop_' . $photo))) {
-			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
-		} else {
-			$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
-		}
-
-		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
+		return $this->view->picture_box($photo);
 	}
 
 	private function handle_newmail()
