@@ -140,7 +140,7 @@ class StoreControl extends Control
 					'region' => $store['bezirk_name'],
 					'address' => $store['anschrift'],
 					'city' => $store['stadt'],
-                    'zipcode' => $store['plz'],
+					'zipcode' => $store['plz'],
 					'geo' => $store['geo'],
 				];
 			}, $stores);
