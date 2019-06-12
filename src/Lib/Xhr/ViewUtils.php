@@ -72,9 +72,12 @@ class ViewUtils
 		$besonderheiten = '';
 
 		$count_info = '';
+		$activeFoodSaver = count($b['foodsaver']);
+		$jumperFoodSaver = count($b['springer']);
+		$count_info .= '<div>Es sind <strong>' . $activeFoodSaver . '</strong> Aktive und <strong>' . $jumperFoodSaver . '</strong> Springer im Team</div>';
 		$pickup_count = (int)$b['pickup_count'];
 		if ($pickup_count > 0) {
-			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
+			$count_info .= '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
 			$fetch_weight = round(floatval(($pickup_count * $this->statsService->gerettet_wrapper($b['abholmenge']))), 2);
 			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}

@@ -444,8 +444,13 @@ export default {
     }
 }
 
+// move the main content below the topbar
 div#main {
-    margin-top: 5px;
+  margin-top: 45px;
+  @media (max-width: 630px) {
+      // two line topbar
+      margin-top: 85px;
+  }
 }
 
 // following is applied on the initial <div> before the vue component gets injected

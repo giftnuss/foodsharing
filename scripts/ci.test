@@ -42,7 +42,7 @@ log-header "Bring up containers"
 SECONDS=0
 dc up -d --no-build
 
-echo "Waiting for mysql to start"
+echo "Waiting for database to start"
 wait-for-mysql
 echo $SECONDS seconds elapsed
 

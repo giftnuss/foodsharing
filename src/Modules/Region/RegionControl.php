@@ -7,6 +7,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
@@ -22,7 +23,7 @@ final class RegionControl extends Control
 	private $eventGateway;
 	private $forumGateway;
 	private $fairteilerGateway;
-
+	private $foodsaverGateway;
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */
@@ -51,6 +52,7 @@ final class RegionControl extends Control
 	public function __construct(
 		EventGateway $eventGateway,
 		FairTeilerGateway $fairteilerGateway,
+		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
@@ -65,6 +67,7 @@ final class RegionControl extends Control
 		$this->forumPermissions = $forumPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
 		$this->imageService = $imageService;
@@ -122,8 +125,8 @@ final class RegionControl extends Control
 		};
 		$viewdata['isRegion'] = !$isWorkGroup;
 		$stat = [
-			'num_fs' => count($this->region['foodsaver']),
-			'num_sleeping' => count($this->region['sleeper']),
+			'num_fs' => $this->region['fs_count'],
+			'num_sleeping' => $this->region['sleeper_count'],
 			'num_ambassadors' => $this->region['stat_botcount'],
 			'num_stores' => $this->region['stat_betriebcount'],
 			'num_cooperations' => $this->region['stat_korpcount'],
@@ -136,7 +139,6 @@ final class RegionControl extends Control
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
-			'members' => array_map($avatarListEntry, array_merge($this->region['foodsaver'], $this->region['sleeper']))
 		];
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 
@@ -295,6 +297,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
+		$viewdata['region']['members'] = $this->foodsaverGateway->listFoodsaverByRegion($region['id']);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
 

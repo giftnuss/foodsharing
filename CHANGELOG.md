@@ -6,12 +6,24 @@
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
-- InfluxDB Metrics via UDP !882 @alangecker
 - Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow Subgroups to groups !904 @k.miklobusec
 - pickup list includes now stores in subdistricts, year added, divers seperated !906 @k.miklobusec
 
+- Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
+- Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
+- Added active foodsaver and jumper count to store popup on map !920 #620 @k.miklobusec
+- Added yellow info box with "how to use the address picker" and what this data is used for to:
+    - profile settings !895 @jofranz
+    - event page !915 @jofranz
+    - store settings !922 @jofranz
+- InfluxDB Metrics via UDP !882 @alangecker
+- Added yellow info box with bug warning to edit event page !892 @jofranz
+- Added average daily fetch count to statistics page !900 @chris2up9
+- Use SwiftMailer for outgoing emails !925 @NerdyProjects
+- Shake it! Randomly shuffle ambassadors and working group admins chronology to make it harder always to contact the most senior one !924 @jofranz
+- Added Rest endpoint for users !916 @alex.simm
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -19,15 +31,30 @@
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
 - Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
+- Added yellow info box with "how to use the address picker" and what this data is used for to profile settings !895 @jofranz
+- Fixed wrong ID for reports in reports list !903 @peter.toennies
 
 ## Refactoring
+- Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
+- The page does not use fullpage anymore. New landing page !597 #393 @theolampert
+- Reduce Load on every Request to RegionControl !921 @alangeker
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
 - update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
+
+# 2019-06-09 Hotfix
+- InfluxDB Metrics via UDP !882 @alangecker
+- Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
+- Updated deployment for new production server
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
 
 # 2019-05-17 Hotfix
 
