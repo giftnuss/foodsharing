@@ -173,7 +173,8 @@
 }
 
 .chatboxmessage.mymessage .chatboxmessagecontent {
-  background: none repeat scroll 0 0 #64ae2499;
+  background: none repeat scroll 0 0 #64ae24;
+	color: #eee;
 
 }
 
@@ -202,6 +203,10 @@
   display: block;
   color: #533a20;
   font-size: 11px;
+}
+
+.chatboxmessagecontent.mymessage .time {
+  color: #ccc;
 }
 
 .chatboxoptions {
