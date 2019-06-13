@@ -14,7 +14,6 @@ export function getConversation (conversationId) {
 // legacy MessageXhr method, going to be replaced by a proper REST Endpoint
 export async function sendMessage (conversationId, message) {
   return new Promise((resolve, reject) => {
-    console.log(conversationId, message)
     ajax.req('msg', 'sendmsg', {
       loader: false,
       method: 'post',
