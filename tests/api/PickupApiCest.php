@@ -59,7 +59,7 @@ class PickupApiCest
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->canSeeResponseContainsJson([
-			'confirmed' => false
+			'isConfirmed' => false
 		]);
 		$coordinator = $I->createStoreCoordinator();
 		$I->addStoreTeam($this->store['id'], $coordinator['id'], true, false, true);
@@ -77,7 +77,7 @@ class PickupApiCest
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->canSeeResponseContainsJson([
-			'confirmed' => true
+			'isConfirmed' => true
 		]);
 	}
 }
