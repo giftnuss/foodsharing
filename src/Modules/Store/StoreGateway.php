@@ -733,12 +733,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
 	}
 
-	public function getPickupSignupsForDateRange(int $storeId, Carbon $from, Carbon $to)
+	public function getPickupSignupsForDateRange(int $storeId, Carbon $from, Carbon $to = null)
 	{
+		$condition = ['date >=' => $this->db->date($from), 'betrieb_id' => $storeId];
+		if (!is_null($to)) {
+			$condition['date <='] = $this->db->date($to);
+		}
 		$result = $this->db->fetchAllByCriteria(
 			'fs_abholer',
 			['foodsaver_id', 'date', 'confirmed'],
-			['date >=' => $this->db->date($from), 'date <=' => $this->db->date($to), 'betrieb_id' => $storeId]
+			$condition
 		);
 
 		return array_map(function ($e) {
@@ -948,7 +952,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $additionalTo = null): array
 	{
 		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
-		$from = $from ?? Carbon::now()->sub('2 hours');
+		$from = $from ?? Carbon::now();
 		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
 		$regularSlots = $this->getRegularPickups($storeId);
 		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);

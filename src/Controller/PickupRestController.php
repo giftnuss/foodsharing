@@ -150,7 +150,7 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$pickups = $this->storeGateway->getPickupSlots($storeId);
+		$pickups = $this->storeGateway->getPickupSlots($storeId, Carbon::now()->sub('6 hours'));
 		$profiles = [];
 		foreach ($this->storeGateway->getBetriebTeam($storeId) as $user) {
 			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
