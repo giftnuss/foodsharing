@@ -38,13 +38,13 @@
             <EmptySlot
               v-for="n in emptySlots"
               :allow-join="!isUserParticipant && !isInPast && n == 1"
-              :allow-remove="isCoordinator && n == emptySlots"
+              :allow-remove="isCoordinator && n == emptySlots && !isInPast && n != 1"
               :key="n"
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
             />
             <li
-              v-if="isCoordinator && totalSlots < 10"
+              v-if="isCoordinator && totalSlots < 10 && !isInPast"
               @click="$emit('add-slot', date)"
             >
               <button

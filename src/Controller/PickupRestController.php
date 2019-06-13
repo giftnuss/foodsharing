@@ -127,6 +127,10 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 
+		if ($date < Carbon::now()) {
+			throw new HttpException(400, 'Cannot modify pickup in the past.');
+		}
+
 		$totalSlots = $paramFetcher->get('totalSlots');
 		if (!is_null($totalSlots)) {
 			if (!$this->storeService->changePickupSlots($storeId, $date, $totalSlots)) {
