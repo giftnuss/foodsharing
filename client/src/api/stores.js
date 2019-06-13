@@ -9,7 +9,7 @@ export async function joinPickup (storeId, pickupDate, fsId) {
 export async function listPickups (storeId) {
   const res = await get(`/stores/${storeId}/pickups`)
 
-  return res.data.map(c => ({
+  return res.pickups.map(c => ({
     ...c,
     date: parse(c.date)
   }))

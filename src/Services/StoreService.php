@@ -50,7 +50,7 @@ class StoreService
 		}
 
 		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, $pickupDate, $pickupDate, $pickupDate);
-		if (count($pickupSlots) == 1 && $pickupSlots[0]['available']) {
+		if (count($pickupSlots) == 1 && $pickupSlots[0]['isAvailable']) {
 			/* expect a free slot */
 			if ($fsId) {
 				if (!empty(array_filter($pickupSlots[0]['occupiedSlots'],

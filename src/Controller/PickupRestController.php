@@ -65,10 +65,10 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 
-		$confirmed = $this->storeService->joinPickup($storeId, $date, $fsId, $this->session->id());
+		$isConfirmed = $this->storeService->joinPickup($storeId, $date, $fsId, $this->session->id());
 
 		return $this->handleView($this->view([
-			'confirmed' => $confirmed
+			'isConfirmed' => $isConfirmed
 		], 200));
 	}
 
@@ -171,7 +171,7 @@ final class PickupRestController extends AbstractFOSRestController
 		});
 
 		return $this->handleView($this->view([
-			'data' => $pickups
+			'pickups' => $pickups
 		]));
 	}
 }

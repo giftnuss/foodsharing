@@ -990,7 +990,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						'date' => $date,
 						'totalSlots' => $slot['fetcher'],
 						'occupiedSlots' => array_values($occupiedSlots),
-						'available' => $isAvailable
+						'isAvailable' => $isAvailable
 					];
 				}
 
@@ -1021,7 +1021,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				'date' => $slot['date'],
 				'totalSlots' => $slot['fetcher'],
 				'occupiedSlots' => array_values($occupiedSlots),
-				'available' => $isAvailable];
+				'isAvailable' => $isAvailable];
 		}
 
 		return $slots;
