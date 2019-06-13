@@ -1522,23 +1522,25 @@ class XhrMethods
 	{
 		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAdminFor($data['bzid'])) {
 			$check = false;
+			$fsId = (int)$data['fsid'];
+			$tcid = $this->storeGateway->getBetriebConversation((int)$data['bid']);
+			$scid = $this->storeGateway->getBetriebConversation((int)$data['bid'], true);
 			if ($data['action'] == 'toteam') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . $fsId . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->messageGateway->addUserToConversation($tcid, $fsId);
+				$this->messageGateway->deleteUserFromConversation($scid, $fsId);
 			} elseif ($data['action'] == 'tojumper') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . $fsId . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->messageGateway->addUserToConversation($scid, $fsId);
+				$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
 			} elseif ($data['action'] == 'delete') {
 				$check = true;
 				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
 				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
-
-				if ($tcid = $this->storeGateway->getBetriebConversation((int)$data['bid'])) {
-					$this->messageGateway->deleteUserFromConversation($tcid, (int)$data['fsid']);
-				}
-				if ($scid = $this->storeGateway->getBetriebConversation((int)$data['bid'], true)) {
-					$this->messageGateway->deleteUserFromConversation($scid, (int)$data['fsid']);
-				}
+				$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
+				$this->messageGateway->deleteUserFromConversation($scid, $fsId);
 			}
 
 			if ($check) {
