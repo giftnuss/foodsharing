@@ -9,11 +9,13 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
 class StoreUserControl extends Control
 {
 	private $storeGateway;
+	private $storePermissions;
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $timeHelper;
@@ -24,6 +26,7 @@ class StoreUserControl extends Control
 		StoreModel $model,
 		StoreUserView $view,
 		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
@@ -33,6 +36,7 @@ class StoreUserControl extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
@@ -69,7 +73,7 @@ class StoreUserControl extends Control
 				'prefetchtime' => $store['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($store['bezirk_id']))) {
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($store['id'])) {
 				$this->sanitizerService->handleTagSelect('foodsaver');
 				if (!empty($g_data['foodsaver'])) {
 					$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
@@ -78,14 +82,14 @@ class StoreUserControl extends Control
 				}
 				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 				$this->routeHelper->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($store['bezirk_id']))) {
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			}
 
 			$this->pageHelper->addTitle($store['name']);
 
-			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->session->isAdminFor($store['bezirk_id'])) {
+			if ($this->storePermissions->mayAccessStore()) {
 				if ((!$store['verantwortlich'] && $this->session->isAdminFor($store['bezirk_id']))) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));

@@ -3,8 +3,8 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class StorePermissions
 {
@@ -34,7 +34,7 @@ class StorePermissions
 		}
 
 		// already in team?
-		if ($this->storeGateway->isInTeam($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) !== \Foodsharing\Modules\Store\TeamStatus::Nothing) {
 			return false;
 		}
 
@@ -51,7 +51,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->isInTeam($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::Waiter) {
 			return true;
 		}
 
@@ -61,6 +61,33 @@ class StorePermissions
 		}
 
 		return false;
+	}
+
+	public function mayReadStoreWall($storeId)
+	{
+		$fsId = $this->session->id();
+		if (!$fsId) {
+			return false;
+		}
+
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::Team) {
+			return true;
+		}
+
+		$store = $this->storeGateway->getBetrieb($storeId);
+		if ($this->session->isAdminFor($store['bezirk_id'])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function mayWriteStoreWall($storeId)
+	{
+		return $this->mayReadStoreWall($storeId);
 	}
 
 	public function mayEditStore($storeId)
@@ -73,7 +100,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->isResponsible($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) === \Foodsharing\Modules\Store\TeamStatus::Coordinator) {
 			return true;
 		}
 		$store = $this->storeGateway->getBetrieb($storeId);
@@ -82,6 +109,11 @@ class StorePermissions
 		}
 
 		return false;
+	}
+
+	public function mayEditStoreTeam(int $storeId): bool
+	{
+		return $this->mayEditStore($storeId);
 	}
 
 	public function mayRemovePickupUser(int $storeId, int $fsId): bool
@@ -133,7 +165,7 @@ class StorePermissions
 			return false;
 		}
 
-		if (!$this->mayAccessStore($storeId)) {
+		if (!$this->mayReadStoreWall($storeId)) {
 			return false;
 		}
 

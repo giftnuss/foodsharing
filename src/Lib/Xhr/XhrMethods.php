@@ -22,6 +22,7 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -169,7 +170,7 @@ class XhrMethods
 		$this->incLang('Store');
 		$this->incLang('StoreUser');
 
-		if ($this->storeGateway->isInTeam($this->session->id(), $data['bid']) || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
+		if ($this->storePermissions->mayReadStoreWall($data['bid'])) {
 			if ($out = $this->model->q('
 				SELECT 	n.id,
 						n.`text`,
@@ -287,7 +288,7 @@ class XhrMethods
 	public function xhr_addPinPost($data)
 	{
 		$storeId = (int)$data['bid'];
-		if (!$this->storePermissions->mayAccessStore($storeId)) {
+		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
@@ -342,15 +343,11 @@ class XhrMethods
 	public function xhr_bBubble($data)
 	{
 		if ($this->session->may('fs')) {
-			if ($b = $this->storeGateway->getMyBetrieb($this->session->id(), $data['id'])) {
-				$b['inTeam'] = false;
-				$b['pendingRequest'] = false;
-				if ($this->storeGateway->isInTeam($this->session->id(), $b['id'])) {
-					$b['inTeam'] = true;
-				}
-				if ($this->storeGateway->userAppliedForStore($this->session->id(), $b['id'])) {
-					$b['pendingRequest'] = true;
-				}
+			$storeId = (int)$data['id'];
+			if ($b = $this->storeGateway->getMyBetrieb($this->session->id(), $storeId)) {
+				$teamStatus = $this->storeGateway->getUserTeamStatus($this->session->id(), $storeId);
+				$b['inTeam'] = $teamStatus > TeamStatus::Applied;
+				$b['pendingRequest'] = $teamStatus == TeamStatus::Applied;
 
 				return json_encode(array(
 					'status' => 1,
@@ -1137,16 +1134,13 @@ class XhrMethods
 
 	public function xhr_bteamstatus($data)
 	{
-		$allow = array(
-			0 => true,
-			1 => true,
-			2 => true
-		);
-		if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['bid'])) && isset($allow[(int)$_GET['s']])) {
+		$status = (int)$_GET['status'];
+		$storeId = (int)$_GET['bid'];
+		if ($this->storePermissions->mayEditStore($storeId) && $status >= 0 && $status <= 2) {
 			return $this->model->update('
 			UPDATE `fs_betrieb`
-			SET 	`team_status` = ' . (int)$_GET['s'] . '
-			WHERE 	`id` = ' . (int)$_GET['bid'] . '
+			SET 	`team_status` = ' . $status . '
+			WHERE 	`id` = ' . $storeId . '
 		');
 		}
 	}
@@ -1308,7 +1302,7 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->isResponsible($this->session->id(), $data['bid'])) {
+		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
@@ -1466,23 +1460,24 @@ class XhrMethods
 
 	public function xhr_bcontext($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $data['bid']) || $this->session->isAdminFor($data['bzid'])) {
+		$storeId = (int)$data['bid'];
+		if ($this->storePermissions->mayEditStoreTeam($storeId)) {
 			$check = false;
 			if ($data['action'] == 'toteam') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
 			} elseif ($data['action'] == 'tojumper') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
 			} elseif ($data['action'] == 'delete') {
 				$check = true;
-				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . (int)$data['bid']);
-				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
+				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
+				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
 
-				if ($tcid = $this->storeGateway->getBetriebConversation((int)$data['bid'])) {
+				if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
 					$this->messageModel->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
 				}
-				if ($scid = $this->storeGateway->getBetriebConversation((int)$data['bid'], true)) {
+				if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 					$this->messageModel->deleteUserFromConversation($scid, (int)$data['fsid'], true);
 				}
 			}

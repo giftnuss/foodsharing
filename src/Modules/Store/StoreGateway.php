@@ -455,25 +455,30 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function isResponsible($fs_id, $betrieb_id)
+	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
-		return $this->db->exists('fs_betrieb_team', [
-			'betrieb_id' => $betrieb_id,
-			'foodsaver_id' => $fs_id,
-			'verantwortlich' => 1,
-			'active' => 1
-		]);
-	}
-
-	public function userAppliedForStore($fsId, $storeId)
-	{
-		return $this->db->exists('fs_betrieb_team',
+		$result = $this->db->fetchByCriteria('fs_betrieb_team',
+			['active', 'verantwortlich'],
 			[
 				'betrieb_id' => $storeId,
-				'foodsaver_id' => $fsId,
-				'verantwortlich' => 0,
-				'active' => 0
+				'foodsaver_id' => $userId,
 			]);
+		if (!$result) {
+			return TeamStatus::Nothing;
+		} else {
+			if ($result['verantwortlich'] && $result['active'] == 1) {
+				return TeamStatus::Coordinator;
+			} else {
+				switch ($result['active']) {
+					case 2:
+						return TeamStatus::Waiter;
+					case 1:
+						return TeamStatus::Team;
+					default:
+						return TeamStatus::Applied;
+				}
+			}
+		}
 	}
 
 	public function addFetcher(int $fsId, int $bid, \DateTime $date, bool $confirmed = false): int
@@ -687,16 +692,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND fs.`active` = 1
 				AND	fs.deleted_at IS NULL',
 			[':id' => $betrieb_id]);
-	}
-
-	public function isInTeam($fs_id, $bid): bool
-	{
-		return $this->db->exists('fs_betrieb_team',
-			[
-				'foodsaver_id' => $fs_id,
-				'betrieb_id' => $bid,
-				'active >=' => 1
-			]);
 	}
 
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */

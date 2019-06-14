@@ -3,12 +3,14 @@
 namespace Foodsharing\api;
 
 use Carbon\Carbon;
+use Codeception\Util\HttpCode;
 
 class PickupApiCest
 {
 	private $user;
 	private $store;
 	private $region;
+	private $waiter;
 
 	public function _before(\ApiTester $I)
 	{
@@ -16,6 +18,8 @@ class PickupApiCest
 		$this->region = $I->createRegion();
 		$this->store = $I->createStore($this->region['id']);
 		$I->addStoreTeam($this->store['id'], $this->user['id']);
+		$this->waiter = $I->createFoodsaver();
+		$I->addStoreTeam($this->store['id'], $this->waiter['id'], false, true);
 	}
 
 	public function acceptsDifferentIsoFormats(\ApiTester $I)
@@ -51,13 +55,11 @@ class PickupApiCest
 
 	public function signupAsWaiterDoesNotWork(\ApiTester $I)
 	{
-		$waiter = $I->createFoodsaver();
-		$I->addStoreTeam($this->store['id'], $waiter['id'], false, true);
-		$I->login($waiter['email']);
+		$I->login($this->waiter['email']);
 		$pickupBaseDate = Carbon::now()->add('2 days');
 		$pickupBaseDate->hours(14)->minutes(50)->seconds(0);
 		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
-		$I->sendPOST('api/stores/' . $this->store['id'] . '/pickups/' . $pickupBaseDate->toIso8601String() . '/' . $this->user['id']);
+		$I->sendPOST('api/stores/' . $this->store['id'] . '/pickups/' . $pickupBaseDate->toIso8601String() . '/' . $this->waiter['id']);
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 	}
@@ -90,5 +92,15 @@ class PickupApiCest
 		$I->canSeeResponseContainsJson([
 			'isConfirmed' => true
 		]);
+	}
+
+	public function AsWaiterICannotSeePickups(\ApiTester $I)
+	{
+		$pickupBaseDate = Carbon::now()->add('2 days');
+		$pickupBaseDate->hours(16)->minutes(55)->seconds(0);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->login($this->waiter['email']);
+		$I->sendGET('api/stores/' . $this->store['id'] . '/pickups');
+		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
 	}
 }

@@ -4,6 +4,7 @@ namespace Foodsharing\Services;
 
 use Carbon\Carbon;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Store\TeamStatus;
 
 class StoreService
 {
@@ -83,7 +84,7 @@ class StoreService
 	private function pickupIsPreconfirmed(int $storeId, int $issuerId = null): bool
 	{
 		if ($issuerId) {
-			return $this->storeGateway->isResponsible($issuerId, $storeId);
+			return $this->storeGateway->getUserTeamStatus($issuerId, $storeId) === TeamStatus::Coordinator;
 		}
 
 		return false;
