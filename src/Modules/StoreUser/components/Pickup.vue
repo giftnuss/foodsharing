@@ -38,7 +38,7 @@
             <EmptySlot
               v-for="n in emptySlots"
               :allow-join="!isUserParticipant && !isInPast && n == 1"
-              :allow-remove="isCoordinator && n == emptySlots && !isInPast && n != 1"
+              :allow-remove="isCoordinator && n == emptySlots && !isInPast"
               :key="n"
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
