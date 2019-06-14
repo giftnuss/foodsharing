@@ -14,6 +14,7 @@ Vue.filter('i18n', (key, variables = {}) => {
 Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
 }
+Vue.prototype.$dateFormat = dateFormat
 
 Vue.prototype.$url = (key, ...params) => {
   if (!urls[key]) {

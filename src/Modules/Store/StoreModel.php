@@ -36,24 +36,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function addFetchDate($bid, $time, $fetchercount)
-	{
-		return $this->insert('
-			INSERT INTO `fs_fetchdate`
-			(
-				`betrieb_id`, 
-				`time`, 
-				`fetchercount`
-			) 
-			VALUES 
-			(
-				' . (int)$bid . ',
-				' . $this->dateval($time) . ',
-				' . (int)$fetchercount . '
-			)
-		');
-	}
-
 	public function updateBetriebBezirk($betrieb_id, $bezirk_id)
 	{
 		return $this->update('UPDATE fs_betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);

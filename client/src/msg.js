@@ -10,7 +10,7 @@ import conv from '@/conv'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
-import * as api from '@/api/conversations'
+import { getConversation, sendMessage } from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
 
 import {
@@ -113,7 +113,7 @@ const msg = {
     /*
      * initiate message submit functionality for conversation form
      */
-    $('#msg-control form').on('submit', function (ev) {
+    $('#msg-control form').on('submit', async function (ev) {
       ev.preventDefault()
 
       var val = msg.$answer.val()
@@ -123,24 +123,18 @@ const msg = {
         msg.$answer[0].focus()
         msg.showLoader()
 
-        ajax.req('msg', 'sendmsg', {
-          loader: false,
-          method: 'post',
-          data: {
-            c: msg.conversation_id,
-            b: val
-          },
-          complete: function () {
-            msg.hideLoader()
-            setTimeout(function () {
-              msg.hideLoader()
-            }, 100)
+        try {
+          await sendMessage(msg.conversation_id, val)
+          conversationStore.loadConversations()
+        } catch (err) {
+          console.error(err)
+          pulseError('Die Nachricht konnte nicht versendet werden')
+        }
 
-            // reload conversations
-            conversationStore.loadConversations()
-          }
-
-        })
+        msg.hideLoader()
+        setTimeout(function () {
+          msg.hideLoader()
+        }, 100)
       }
     })
 
@@ -342,7 +336,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await api.getConversation(id)
+    const { name, members, messages } = await getConversation(id)
 
     msg.resetConversation()
 

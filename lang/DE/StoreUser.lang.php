@@ -72,17 +72,7 @@ $g_lang['status_change_at'] = 'Statusänderung am {var}';
 $g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählten Zeitraum abholen.';
 $g_lang['zeitraum'] = 'Zeitraum';
 $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.</b><br>Sie müssen nur noch vom Betriebsverantwortlichen bestätigt werden.</p>';
-$g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
-$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
-
-{DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
-
-Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
-$g_lang['shure_of_backup'] = 'Hast Du eine Vertretung? Unsere Verlässlichkeit ist sehr wichtig!';
-$g_lang['msg_to_team'] = 'Team benachrichtigen';
-$g_lang['have_backup'] = 'Ich habe eine Vertretung';
-$g_lang['del_date_for'] = 'Austragen für';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
 $g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diesen Betrieb geben.';
@@ -106,7 +96,6 @@ $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';
 $g_lang['stat_teammember_since'] = 'Im Team seit {date}';
 $g_lang['stat_jumper_since'] = 'Springer seit {date}';
 $g_lang['stat_since_unknown'] = 'unbekannt';
-$g_lang['delete-manual-slot-warning-text'] = 'Termin wirklich löschen? \nMögliche Abholer dieser Uhrzeit werden dabei ausgetragen.';
 $g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt werden.';
 $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
 

@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -14,17 +16,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {
 	private $regionGateway;
 	private $bellGateway;
+	private $timeHelper;
 
 	public function __construct(
 		Database $db,
 		RegionGateway $regionGateway,
 		BellGateway $bellGateway,
-		BellUpdateTrigger $bellUpdateTrigger
+		BellUpdateTrigger $bellUpdateTrigger,
+		TimeHelper $timeHelper
 	) {
 		parent::__construct($db);
 
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+		$this->timeHelper = $timeHelper;
 
 		$bellUpdateTrigger->subscribe($this);
 	}
@@ -74,29 +79,33 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMapsBetriebe($bezirk_id): array
+	public function getMapsBetriebe(int $groupId): array
 	{
 		return $this->db->fetchAll('
-			SELECT 	fs_betrieb.id,
-					`fs_betrieb`.betrieb_status_id,
-					fs_betrieb.plz,
-					`lat`,
-					`lon`,
-					`stadt`,
-					fs_betrieb.kette_id,
-					fs_betrieb.betrieb_kategorie_id,
-					fs_betrieb.name,
-					CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
-					fs_betrieb.str,
-					fs_betrieb.hsnr,
-					fs_betrieb.`betrieb_status_id`
+			SELECT 	b.id,
+					b.betrieb_status_id,
+					b.plz,
+					b.`lat`,
+					b.`lon`,
+					b.`stadt`,
+					b.kette_id,
+					b.betrieb_kategorie_id,
+					b.name,
+					CONCAT(b.str," ",b.hsnr) AS anschrift,
+					b.str,
+					b.hsnr,
+					b.`betrieb_status_id`,
+					k.logo
 
-			FROM 	fs_betrieb
+			FROM 	fs_betrieb b
+			LEFT JOIN fs_kette k ON b.kette_id = k.id
 
-			WHERE 	fs_betrieb.bezirk_id = :bezirk_id
+			WHERE 	b.bezirk_id = :bezirk_id
 
-			AND `lat` != ""',
-			[':bezirk_id' => $bezirk_id]
+			AND b.`lat` != ""',
+			[
+				':bezirk_id' => $groupId
+			]
 		);
 	}
 
@@ -313,16 +322,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 		$out['team_js'] = implode(',', $out['team_js']);
 
-		$out['abholer'] = false;
-		if ($abholer = $this->db->fetchAll('SELECT `betrieb_id`,`dow` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $id])) {
-			$out['abholer'] = array();
-			foreach ($abholer as $a) {
-				if (!isset($out['abholer'][$a['dow']])) {
-					$out['abholer'][$a['dow']] = array();
-				}
-			}
-		}
-
 		return $out;
 	}
 
@@ -456,37 +455,58 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function isResponsible($fs_id, $betrieb_id)
+	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
-		return $this->db->exists('fs_betrieb_team', [
-			'betrieb_id' => $betrieb_id,
-			'foodsaver_id' => $fs_id,
-			'verantwortlich' => 1,
-			'active' => 1
-		]);
-	}
-
-	public function userAppliedForStore($fsId, $storeId)
-	{
-		return $this->db->exists('fs_betrieb_team',
+		$result = $this->db->fetchByCriteria('fs_betrieb_team',
+			['active', 'verantwortlich'],
 			[
 				'betrieb_id' => $storeId,
-				'foodsaver_id' => $fsId,
-				'verantwortlich' => 0,
-				'active' => 0
+				'foodsaver_id' => $userId,
 			]);
+		if (!$result) {
+			return TeamStatus::NoMember;
+		} else {
+			if ($result['verantwortlich'] && $result['active'] == 1) {
+				return TeamStatus::Coordinator;
+			} else {
+				switch ($result['active']) {
+					case 2:
+						return TeamStatus::WaitingList;
+					case 1:
+						return TeamStatus::Member;
+					default:
+						return TeamStatus::Applied;
+				}
+			}
+		}
 	}
 
-	public function addFetcher(int $fsid, int $bid, \DateTime $date, bool $confirmed = false): int
+	public function addFetcher(int $fsId, int $bid, \DateTime $date, bool $confirmed = false): int
 	{
 		$queryResult = $this->db->insertIgnore('fs_abholer', [
-			'foodsaver_id' => $fsid,
+			'foodsaver_id' => $fsId,
 			'betrieb_id' => $bid,
-			'date' => $this->dateTimeToPickupDate($date),
+			'date' => $this->db->date($date),
 			'confirmed' => $confirmed
 		]);
 
+		if (!$confirmed) {
+			$this->updateBellNotificationForBiebs($bid, true);
+		}
+
 		return $queryResult;
+	}
+
+	public function removeFetcher(int $fsId, int $bid, \DateTime $date)
+	{
+		$deletedRows = $this->db->delete('fs_abholer', [
+			'foodsaver_id' => $fsId,
+			'betrieb_id' => $bid,
+			'date' => $this->db->date($date)
+		]);
+		$this->updateBellNotificationForBiebs($bid);
+
+		return $deletedRows;
 	}
 
 	/**
@@ -531,22 +551,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	/**
-	 * @deprecated
-	 *
-	 * This function does not match to our database structure. Column 'dow' does not exist
-	 * in 'fs_abholer', but it exists in in 'fs_abholen'. Its only usage in StoreUserControl may need to be
-	 * replaced with addFetcher, otherwise it may lead to exceptions.
-	 */
-	public function addAbholer($betrieb_id, $foodsaver_id, $dow): int
-	{
-		return $this->db->insert('fs_abholer', [
-			'betrieb_id' => $betrieb_id,
-			'foodsaver_id' => $foodsaver_id,
-			'dow' => $dow
-		]);
-	}
-
 	public function clearAbholer($betrieb_id): int
 	{
 		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
@@ -560,7 +564,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->update(
 		'fs_abholer',
 			['confirmed' => 1],
-			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $date]
+			['foodsaver_id' => $fsid, 'betrieb_id' => $bid, 'date' => $this->db->date($date)]
 		);
 
 		$this->updateBellNotificationForBiebs($bid);
@@ -690,16 +694,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $betrieb_id]);
 	}
 
-	public function isInTeam($fs_id, $bid): bool
-	{
-		return $this->db->exists('fs_betrieb_team',
-			[
-				'foodsaver_id' => $fs_id,
-				'betrieb_id' => $bid,
-				'active >=' => 1
-			]);
-	}
-
 	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
 	public function getBiebIds($bezirk): array
 	{
@@ -733,16 +727,48 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	public function getPickupSignupsForDate(int $storeId, \DateTime $date)
+	public function getPickupSignupsForDate(int $storeId, Carbon $date)
 	{
-		return $this->db->fetchAllByCriteria(
-			'fs_abholer',
-			['foodsaver_id'],
-			['date' => $this->dateTimeToPickupDate($date), 'betrieb_id' => $storeId]
-		);
+		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
 	}
 
-	public function getRegularPickupSlots(int $storeId)
+	public function getPickupSignupsForDateRange(int $storeId, Carbon $from, Carbon $to = null)
+	{
+		$condition = ['date >=' => $this->db->date($from), 'betrieb_id' => $storeId];
+		if (!is_null($to)) {
+			$condition['date <='] = $this->db->date($to);
+		}
+		$result = $this->db->fetchAllByCriteria(
+			'fs_abholer',
+			['foodsaver_id', 'date', 'confirmed'],
+			$condition
+		);
+
+		return array_map(function ($e) {
+			$e['date'] = $this->db->parseDate($e['date']);
+
+			return $e;
+		}, $result);
+	}
+
+	public function getRegularPickup(int $storeId, int $dow, string $time): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_abholzeiten',
+				'fetcher',
+				[
+					'betrieb_id' => $storeId,
+					'dow' => $dow,
+					'time' => $time
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	public function getRegularPickups(int $storeId)
 	{
 		return $this->db->fetchAllByCriteria(
 			'fs_abholzeiten',
@@ -750,23 +776,60 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['betrieb_id' => $storeId]);
 	}
 
-	public function getSinglePickupSlots(int $storeId, \DateTime $date)
+	public function getOnetimePickups(int $storeId, Carbon $date)
 	{
+		return $this->getOnetimePickupsForRange($storeId, $date, $date);
+	}
+
+	public function getOnetimePickupsForRange(int $storeId, Carbon $from, ?Carbon $to)
+	{
+		$condition = [
+			'betrieb_id' => $storeId,
+			'time >=' => $this->db->date($from)
+		];
+		if ($to) {
+			$condition = array_merge($condition,
+				[
+					'time <=' => $this->db->date($to)
+				]
+			);
+		}
 		$result = $this->db->fetchAllByCriteria(
 			'fs_fetchdate',
 			['time', 'fetchercount'],
-			[
-				'betrieb_id' => $storeId,
-				'time' => $this->dateTimeToPickupDate($date)
-			]
+			$condition
 		);
 
 		return array_map(function ($e) {
 			return [
-				'date' => $e['time'],
+				'date' => $this->db->parseDate($e['time']),
 				'fetcher' => $e['fetchercount']
 			];
 		}, $result);
+	}
+
+	public function addOnetimePickup(int $storeId, \DateTime $date, int $slots)
+	{
+		$this->db->insert(
+			'fs_fetchdate',
+			[
+				'betrieb_id' => $storeId,
+				'time' => $this->db->date($date),
+				'fetchercount' => $slots
+			]
+		);
+	}
+
+	public function updateOnetimePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
+	{
+		return $this->db->update(
+			'fs_fetchdate',
+			['fetchercount' => $slots],
+			[
+				'betrieb_id' => $storeId,
+				'time' => $this->db->date($date)
+			]
+		) === 1;
 	}
 
 	public function getFutureRegularPickupInterval(int $storeId): CarbonInterval
@@ -774,11 +837,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result = $this->db->fetchValueByCriteria('fs_betrieb', 'prefetchtime', ['id' => $storeId]);
 
 		return CarbonInterval::seconds($result);
-	}
-
-	private function dateTimeToPickupDate(\DateTime $date)
-	{
-		return $date->format('Y-m-d H:i:s');
 	}
 
 	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
@@ -880,5 +938,101 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @param int $storeId
+	 * @param \DateTime $from DateRange start for all slots. Now if empty.
+	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
+	 * @param \DateTime $additionalTo DateRange for onetime slots to be taken into account
+	 *
+	 * @return array
+	 */
+	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $additionalTo = null): array
+	{
+		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
+		$from = $from ?? Carbon::now();
+		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
+		$regularSlots = $this->getRegularPickups($storeId);
+		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
+		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $to);
+
+		$slots = [];
+		foreach ($regularSlots as $slot) {
+			$date = $from->copy();
+			$date->addDays($this->realMod($slot['dow'] - $date->format('w'), 7));
+			$date->setTimeFromTimeString($slot['time'])->shiftTimezone('Europe/Berlin');
+			if ($date < $from) {
+				/* setting time could shift it into past */
+				$date->addDays(7);
+			}
+			while ($date <= $to) {
+				if (empty(array_filter($onetimeSlots, function ($e) use ($date) {
+					return $date == $e['date'];
+				}))) {
+					/* only take this regular slot into account when there is no manual slot for the same time */
+					$occupiedSlots = array_map(
+						function ($e) {
+							return ['foodsaverId' => $e['foodsaver_id'], 'isConfirmed' => (bool)$e['confirmed']];
+						},
+						array_filter($signups,
+							function ($e) use ($date) {
+								return $date == $e['date'];
+							}
+						)
+					);
+					$isAvailable =
+						$date > Carbon::now() &&
+						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
+						$slot['fetcher'] > count($occupiedSlots);
+					$slots[] = [
+						'date' => $date,
+						'totalSlots' => $slot['fetcher'],
+						'occupiedSlots' => array_values($occupiedSlots),
+						'isAvailable' => $isAvailable
+					];
+				}
+
+				$date = $date->copy()->addDays(7);
+			}
+		}
+		foreach ($onetimeSlots as $slot) {
+			$occupiedSlots = array_map(
+				function ($e) {
+					return ['foodsaverId' => $e['foodsaver_id'], 'isConfirmed' => (bool)$e['confirmed']];
+				},
+				array_filter($signups,
+					function ($e) use ($slot) {
+						return $slot['date'] == $e['date'];
+					}
+				)
+			);
+			if ($slot['fetcher'] === 0 && count($occupiedSlots) === 0) {
+				/* Do not display empty/cancelled pickups.
+				Do show them, when somebody is signed up (although this should not happen) */
+				continue;
+			}
+			/* Onetime slots are always in the future available for signups */
+			$isAvailable =
+				$slot['date'] > Carbon::now() &&
+				$slot['fetcher'] > count($occupiedSlots);
+			$slots[] = [
+				'date' => $slot['date'],
+				'totalSlots' => $slot['fetcher'],
+				'occupiedSlots' => array_values($occupiedSlots),
+				'isAvailable' => $isAvailable];
+		}
+
+		return $slots;
+	}
+
+	private function realMod(int $a, int $b)
+	{
+		$res = $a % $b;
+		if ($res < 0) {
+			return $res += abs($b);
+		}
+
+		return $res;
 	}
 }
