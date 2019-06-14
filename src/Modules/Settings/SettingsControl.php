@@ -510,10 +510,6 @@ class SettingsControl extends Control
 				}
 			}
 
-			if (!empty($data['tox'])) {
-				$data['tox'] = preg_replace('/[^0-9A-Z]/', '', $data['tox']);
-			}
-
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');

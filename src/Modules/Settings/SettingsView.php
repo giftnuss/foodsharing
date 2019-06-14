@@ -524,8 +524,7 @@ class SettingsView extends View
 		}
 		$bezirkchoose = '';
 		$position = '';
-		$communications = $this->v_utils->v_form_text('homepage') .
-			$this->v_utils->v_form_text('tox', array('desc' => $this->translationHelper->s('tox_desc')));
+		$communications = $this->v_utils->v_form_text('homepage');
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
