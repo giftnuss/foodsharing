@@ -126,7 +126,6 @@ final class FoodsaverGateway extends BaseGateway
 				`data`,
 				`rolle`,
 				`position`,
-				`tox`,
 				`github`,
 				`twitter`,
 				`homepage`
@@ -648,7 +647,6 @@ final class FoodsaverGateway extends BaseGateway
 			nachname = NULL,
 			anschrift = NULL,
 			telefon = NULL,
-			tox = NULL,
 			github = NULL,
 			twitter = NULL,
 			handy = NULL,
@@ -705,8 +703,7 @@ final class FoodsaverGateway extends BaseGateway
 			'homepage',
 			'twitter',
 			'github',
-			'position',
-			'tox'
+			'position'
 		];
 
 		$fieldsToStripTags = [
@@ -721,8 +718,7 @@ final class FoodsaverGateway extends BaseGateway
 			'homepage',
 			'twitter',
 			'github',
-			'position',
-			'tox'
+			'position'
 		];
 
 		$clean_data = [];
