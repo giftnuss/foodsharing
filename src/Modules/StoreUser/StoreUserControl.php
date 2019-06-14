@@ -89,7 +89,7 @@ class StoreUserControl extends Control
 
 			$this->pageHelper->addTitle($store['name']);
 
-			if ($this->storePermissions->mayAccessStore()) {
+			if ($this->storePermissions->mayAccessStore($store['id'])) {
 				if ((!$store['verantwortlich'] && $this->session->isAdminFor($store['bezirk_id']))) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));
