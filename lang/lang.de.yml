@@ -170,7 +170,7 @@ pickup:
   leave_pickup_ok: Ich habe bereits Ersatz
   leave_pickup_message_team: Team benachrichtigen
   leave_team_message_title: Nachricht ans Team
-  leave_team_message_template: Liebes Team, meine Abholung am {date} ...
+  leave_team_message_template: Ihr Lieben, {date} ...
   team_message_send_and_leave: Senden und austragen
   team_message_success: Nachricht ans Team wurde erfolgreich versendet
   join_title_date: Sicher?
@@ -185,7 +185,6 @@ pickup:
   add_onetime_pickup: Zusatztermin eintragen
   slot_add: Slot hinzufügen
   slot_remove: Slot entfernen
-
 
 forum:
   from: Von %name%
