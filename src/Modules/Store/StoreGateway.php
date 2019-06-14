@@ -79,29 +79,33 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMapsBetriebe($bezirk_id): array
+	public function getMapsBetriebe(int $groupId): array
 	{
 		return $this->db->fetchAll('
-			SELECT 	fs_betrieb.id,
-					`fs_betrieb`.betrieb_status_id,
-					fs_betrieb.plz,
-					`lat`,
-					`lon`,
-					`stadt`,
-					fs_betrieb.kette_id,
-					fs_betrieb.betrieb_kategorie_id,
-					fs_betrieb.name,
-					CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
-					fs_betrieb.str,
-					fs_betrieb.hsnr,
-					fs_betrieb.`betrieb_status_id`
+			SELECT 	b.id,
+					b.betrieb_status_id,
+					b.plz,
+					b.`lat`,
+					b.`lon`,
+					b.`stadt`,
+					b.kette_id,
+					b.betrieb_kategorie_id,
+					b.name,
+					CONCAT(b.str," ",b.hsnr) AS anschrift,
+					b.str,
+					b.hsnr,
+					b.`betrieb_status_id`,
+					k.logo
 
-			FROM 	fs_betrieb
+			FROM 	fs_betrieb b
+			LEFT JOIN fs_kette k ON b.kette_id = k.id
 
-			WHERE 	fs_betrieb.bezirk_id = :bezirk_id
+			WHERE 	b.bezirk_id = :bezirk_id
 
-			AND `lat` != ""',
-			[':bezirk_id' => $bezirk_id]
+			AND b.`lat` != ""',
+			[
+				':bezirk_id' => $groupId
+			]
 		);
 	}
 
