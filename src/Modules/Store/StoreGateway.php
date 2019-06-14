@@ -464,16 +464,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				'foodsaver_id' => $userId,
 			]);
 		if (!$result) {
-			return TeamStatus::Nothing;
+			return TeamStatus::NoMember;
 		} else {
 			if ($result['verantwortlich'] && $result['active'] == 1) {
 				return TeamStatus::Coordinator;
 			} else {
 				switch ($result['active']) {
 					case 2:
-						return TeamStatus::Waiter;
+						return TeamStatus::WaitingList;
 					case 1:
-						return TeamStatus::Team;
+						return TeamStatus::Member;
 					default:
 						return TeamStatus::Applied;
 				}

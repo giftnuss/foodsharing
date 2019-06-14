@@ -111,12 +111,12 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testIsInTeam()
 	{
 		$store = $this->tester->createStore($this->region_id);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Nothing,
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::NoMember,
 			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $store['id'])
 		);
 
 		$this->tester->addStoreTeam($store['id'], $this->foodsaver['id']);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Team,
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Member,
 			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $store['id'])
 		);
 
@@ -128,7 +128,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 		$waiter = $this->tester->createFoodsaver();
 		$this->tester->addStoreTeam($store['id'], $waiter['id'], false, true);
-		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Waiter,
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::WaitingList,
 			$this->gateway->getUserTeamStatus($waiter['id'], $store['id'])
 		);
 	}
