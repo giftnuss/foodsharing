@@ -445,13 +445,12 @@ final class FoodsaverGateway extends BaseGateway
 		return array($rows_ins, $rows_del);
 	}
 
-	public function listActiveByRegion($id)
+	public function listFoodsaverByRegion(int $regionId)
 	{
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
-					fs.`nachname`,
 					fs.sleep_status
 
 			FROM 	`fs_foodsaver` fs,
@@ -461,10 +460,26 @@ final class FoodsaverGateway extends BaseGateway
 			AND     fs.deleted_at IS NULL
 			AND 	c.bezirk_id = :id
 			AND 	c.active = 1
-			AND 	fs.sleep_status = 0
-
 			ORDER BY fs.`name`
-		', ['id' => $id]);
+		', ['id' => $regionId]);
+
+		return array_map(function ($fs) {
+			if ($fs['photo']) {
+				$image = '/images/50_q_' . $fs['photo'];
+			} else {
+				$image = '/img/50_q_avatar.png';
+			}
+
+			return [
+				'user' => [
+					'id' => $fs['id'],
+					'name' => $fs['name'],
+					'sleep_status' => $fs['sleep_status']
+				],
+				'size' => 50,
+				'imageUrl' => $image
+			];
+		}, $res);
 	}
 
 	public function listActiveWithFullNameByRegion($id)
@@ -488,28 +503,6 @@ final class FoodsaverGateway extends BaseGateway
 			AND 	fb.bezirk_id = :id
 			AND 	fb.`active` = 1
 			AND		fs.deleted_at IS NULL
-		', ['id' => $id]);
-	}
-
-	public function listInactiveByRegion($id)
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.sleep_status
-
-			FROM 	`fs_foodsaver` fs,
-					`fs_foodsaver_has_bezirk` c
-
-			WHERE 	c.`foodsaver_id` = fs.id
-			AND     fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
-			AND 	c.active = 1
-			AND 	fs.sleep_status > 0
-
-			ORDER BY fs.`name`
 		', ['id' => $id]);
 	}
 

@@ -872,8 +872,8 @@ body .ui-tooltip {
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 1em;
-    white-space: normal;
-    word-break: break-word
+    white-space: pre-wrap;
+    overflow-wrap: break-word
 }
 
 .ui-widget select {

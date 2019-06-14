@@ -28,13 +28,39 @@ class UserRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("user/current")
 	 */
-	public function userAction(): Response
+	public function currentUserAction(): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(404);
 		}
 
 		return $this->handleUserView();
+	}
+
+	/**
+	 * Lists details about a user. Returns 200 and the user data, 404 if the
+	 * user does not exist, or 401 if not logged in.
+	 *
+	 * @Rest\Get("user/{id}", requirements={"id" = "\d+"})
+	 *
+	 * @param int $id
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function userAction(int $id): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		$data = $this->foodsaverGateway->getFoodsaverBasics($id);
+		if (!$data || empty($data)) {
+			throw new HttpException(404, 'User does not exist.');
+		}
+
+		$normalized = RestNormalization::normalizeFoodsaver($data);
+
+		return $this->handleView($this->view($normalized, 200));
 	}
 
 	/**
@@ -61,6 +87,16 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		throw new HttpException(401, 'email or password are invalid');
+	}
+
+	/**
+	 * @Rest\Post("user/logout")
+	 */
+	public function logoutAction(): Response
+	{
+		$this->session->logout();
+
+		return $this->handleView($this->view([], 200));
 	}
 
 	/**

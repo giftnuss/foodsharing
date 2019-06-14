@@ -161,7 +161,7 @@ class ReportView extends View
 	{
 		$menu = [
 			['name' => 'Neue Meldungen (' . $stats['new'] . ')', 'href' => '/?page=report&sub=uncom'],
-			['name' => 'Bestätigte (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
+			['name' => 'Zugestellte (' . $stats['com'] . ')', 'href' => '/?page=report&sub=com']
 		];
 
 		$active = 'uncom';

@@ -85,6 +85,8 @@ $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');
 $I->waitForText('Hi friend, can I have');
+$I->click('.topbar-baskets > a');
+$I->waitForText('angefragt von');
 $I->moveMouseOver(['css' => '.topbar-baskets .requests > a'], 5, 5);
 $I->click('a[data-original-title="Essensanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
