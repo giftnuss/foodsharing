@@ -163,3 +163,14 @@ div#main {
   width: 50px;
   height: 50px;
 }
+
+.ui-corner-all.active > span .fa-circle {
+
+  opacity: 1;
+
+}
+.ui-corner-all > span .fa-circle{
+
+  opacity: 0.40;
+
+}
