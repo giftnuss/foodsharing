@@ -51,6 +51,8 @@ class StoreModel extends Db
 				' . $this->dateval($time) . ',
 				' . (int)$fetchercount . '
 			)
+			ON DUPLICATE KEY UPDATE
+			`fetchercount` = ' . (int)$fetchercount . '
 		');
 	}
 

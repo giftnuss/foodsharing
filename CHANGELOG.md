@@ -1,3 +1,6 @@
+# 2019-06-17 Hotfix
+- Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
+
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
