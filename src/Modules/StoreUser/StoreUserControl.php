@@ -250,12 +250,14 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
+				if ($this->storePermissions->maySeePickups($store['id'])) {
+					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
+				}
 
 				/*
 				 * Abholzeiten ändern
 				 */
-				if ($store['verantwortlich'] || $this->session->may('orga')) {
+				if ($this->storePermissions->mayEditPickups()) {
 					if ($this->session->isMob()) {
 						$width = '$(window).width() * 0.96';
 					} else {
