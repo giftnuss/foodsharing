@@ -19,7 +19,7 @@ class StorePermissions
 		$this->session = $session;
 	}
 
-	public function mayJoinStoreRequest($storeId)
+	public function mayJoinStoreRequest(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -41,7 +41,7 @@ class StorePermissions
 		return true;
 	}
 
-	public function mayAccessStore($storeId)
+	public function mayAccessStore(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -63,7 +63,7 @@ class StorePermissions
 		return false;
 	}
 
-	public function mayReadStoreWall($storeId)
+	public function mayReadStoreWall(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -85,12 +85,12 @@ class StorePermissions
 		return false;
 	}
 
-	public function mayWriteStoreWall($storeId)
+	public function mayWriteStoreWall(int $storeId): bool
 	{
 		return $this->mayReadStoreWall($storeId);
 	}
 
-	public function mayEditStore($storeId)
+	public function mayEditStore(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -134,32 +134,32 @@ class StorePermissions
 		return $this->mayEditPickups($storeId);
 	}
 
-	public function mayEditPickups($storeId)
+	public function mayEditPickups(int $storeId): bool
 	{
 		return $this->mayEditStore($storeId);
 	}
 
-	public function mayAcceptRequests($storeId)
+	public function mayAcceptRequests(int $storeId): bool
 	{
 		return $this->mayEditStore($storeId);
 	}
 
-	public function mayAddPickup($storeId)
+	public function mayAddPickup(int $storeId): bool
 	{
 		return $this->mayEditPickups($storeId);
 	}
 
-	public function mayDeletePickup($storeId)
+	public function mayDeletePickup(int $storeId): bool
 	{
 		return $this->mayEditPickups($storeId);
 	}
 
-	public function maySeeFetchHistory($storeId)
+	public function maySeeFetchHistory(int $storeId): bool
 	{
 		return $this->mayEditStore($storeId);
 	}
 
-	public function mayDoPickup($storeId)
+	public function mayDoPickup(int $storeId): bool
 	{
 		if (!$this->session->isVerified()) {
 			return false;

@@ -257,7 +257,7 @@ class StoreUserControl extends Control
 				/*
 				 * Abholzeiten ändern
 				 */
-				if ($this->storePermissions->mayEditPickups()) {
+				if ($this->storePermissions->mayEditPickups($store['id'])) {
 					if ($this->session->isMob()) {
 						$width = '$(window).width() * 0.96';
 					} else {
