@@ -36,6 +36,8 @@
 - Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
 - Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
+- Orga can send bananas again !937 @NerdyProjects
+- Mails from trash can be deleted again @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
