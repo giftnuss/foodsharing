@@ -11,10 +11,12 @@ class EventXhr extends Control
 	private $stats;
 	private $event;
 	private $gateway;
+	private $responses;
 
 	public function __construct(EventGateway $gateway)
 	{
 		$this->gateway = $gateway;
+		$this->responses = new XhrResponses();
 
 		parent::__construct();
 
@@ -22,12 +24,12 @@ class EventXhr extends Control
 			$this->event = $this->gateway->getEventWithInvites($_GET['id']);
 		}
 
-		$this->stats = array(
-			0 => true, // eingeladen
-			1 => true, // dabei
-			2 => true, // kann vielleciht
-			3 => true  // eingeladen aber abgesagt
-		);
+		$this->stats = [
+			0 => true, // invited
+			1 => true, // will join
+			2 => true, // might join
+			3 => true  // will not join (but has been invited)
+		];
 	}
 
 	public function accept()
@@ -44,6 +46,8 @@ class EventXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function maybe()
@@ -60,6 +64,8 @@ class EventXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function noaccept()
@@ -73,6 +79,8 @@ class EventXhr extends Control
 				'script' => 'pulseInfo("Einladung gelöscht.");'
 			);
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function ustat()
@@ -80,14 +88,18 @@ class EventXhr extends Control
 		if (!$this->maySeeEvent()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
-				return array(
+		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->setInviteStatus(
+				$_GET['id'],
+				$this->session->id(),
+				$_GET['s']
+			)) {
+			return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Einladungsstatus geändert!");'
 				);
-			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function ustatadd()
@@ -95,14 +107,18 @@ class EventXhr extends Control
 		if (!$this->maySeeEvent()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->gateway->addInviteStatus($_GET['id'], $this->session->id(), $_GET['s'])) {
-				return array(
+		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->addInviteStatus(
+				$_GET['id'],
+				$this->session->id(),
+				$_GET['s']
+			)) {
+			return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Status geändert!");'
 				);
-			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	private function maySeeEvent(): bool
