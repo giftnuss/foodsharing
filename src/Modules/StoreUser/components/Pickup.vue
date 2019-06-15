@@ -38,7 +38,7 @@
             <EmptySlot
               v-for="n in emptySlots"
               :allow-join="!isUserParticipant && !isInPast && n == 1"
-              :allow-remove="isCoordinator && n == emptySlots && !isInPast && n != 1"
+              :allow-remove="isCoordinator && n == emptySlots && !isInPast"
               :key="n"
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
@@ -117,7 +117,7 @@
       ref="modal_delete"
       :title="$i18n('pickup.delete_title')"
       :cancel-title="$i18n('button.abort')"
-      :ok-title="$i18n('yes')"
+      :ok-title="$i18n('delete')"
       @ok="$emit('delete', date)"
       modal-class="bootstrap"
     >
