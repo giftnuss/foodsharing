@@ -38,6 +38,7 @@
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
+- Walls do now show all comments. !940 #630 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal

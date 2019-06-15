@@ -73,29 +73,24 @@ class WallPostGateway extends BaseGateway
 		return $post;
 	}
 
-	public function getPosts($target, $targetId)
+	public function getPosts($target, $targetId): array
 	{
 		$posts = $this->db->fetchAll('
 		SELECT 	p.id,
-					p.`body`,
-					p.`time`,
-					UNIX_TIMESTAMP(p.`time`) AS time_ts,
-					p.`attach`,
+					p.body,
+					p.time,
+					UNIX_TIMESTAMP(p.time) AS time_ts,
+					p.attach,
 					fs.id AS foodsaver_id,
-					fs.`name`,
-					fs.`photo`
-
-			FROM 	`fs_wallpost` p,
-					`' . $this->makeTargetLinkTableName($target) . '` hp,
-					`fs_foodsaver` fs
-
+					fs.name,
+					fs.photo
+			FROM 	fs_wallpost p,
+					' . $this->makeTargetLinkTableName($target) . ' hp,
+					fs_foodsaver fs
 			WHERE 	p.foodsaver_id = fs.id
 			AND 	hp.wallpost_id = p.id
 			AND 	hp.`' . $this->makeTargetLinkTableForeignIdColumnName($target) . '` = :targetId
-
 			ORDER BY p.time DESC
-
-			LIMIT 30
 		', ['targetId' => $targetId]);
 		foreach ($posts as $key => $w) {
 			if (!empty($w['attach'])) {
