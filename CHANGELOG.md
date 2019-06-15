@@ -3,7 +3,6 @@
 ## Major changes
 
 ## Features
-- Removed TOX-ID in foodsaver settings !33 @chriswalg
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
@@ -27,6 +26,8 @@
 - improved description for photo upload in user settings !902 @peter.toennies
 - Moved pickup signup logic into API !874 @NerdyProjects
 - Rewrite pickup list on store page in vue !874 @alangecker @NerdyProjects
+- Removed TOX-ID in foodsaver settings !33 @chriswalg
+
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
