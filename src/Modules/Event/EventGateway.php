@@ -113,27 +113,24 @@ class EventGateway extends BaseGateway
 			SELECT
 				e.id,
 				e.public,
-				fs.`id` AS fs_id,
+				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				e.`bezirk_id`,
-				e.`location_id`,
-				e.`name`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				e.`end`,
-				UNIX_TIMESTAMP(e.`end`) AS end_ts,
-				e.`description`,
-				e.`bot`,
-				e.`online`
-	
+				e.bezirk_id,
+				e.location_id,
+				e.name,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
+				e.end,
+				UNIX_TIMESTAMP(e.end) AS end_ts,
+				e.description,
+				e.bot,
+				e.online	
 			FROM
-				`fs_event` e,
-				`fs_foodsaver` fs
-	
+				fs_event e,
+				fs_foodsaver fs	
 			WHERE
-				e.foodsaver_id = fs.id
-	
+				e.foodsaver_id = fs.id	
 			AND
 				e.id = :id
 		', [':id' => $id]);
@@ -159,7 +156,6 @@ class EventGateway extends BaseGateway
 					fs.name,
 					fs.photo,
 					fe.status
-
 			FROM 
 				`fs_foodsaver_has_event` fe,
 				`fs_foodsaver` fs
@@ -191,73 +187,67 @@ class EventGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getNextEvents($fs_id)
+	public function getEventsInterestedIn(int $fs_id): array
 	{
 		$next = $this->db->fetchAll('
 			SELECT
 				e.id,
 				e.name,
-				e.`description`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				fe.`status`
-
+				e.description,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
+				fe.status
 			FROM
-				`fs_event` e
+				fs_event e
 			LEFT JOIN
-				`fs_foodsaver_has_event` fe
+				fs_foodsaver_has_event fe
 			ON
 				e.id = fe.event_id AND fe.foodsaver_id = :fs_id
-
 			WHERE
 				e.start >= CURDATE()
 			AND
-				((e.public = 1 AND (fe.`status` IS NULL OR fe.`status` <> 3))
+				((e.public = 1 AND (fe.status IS NULL OR fe.status <> 3))
 				OR
-					fe.`status` IN(1,2)
+					fe.status IN(1,2)
 				)
-			ORDER BY e.`start`
-		', [':fs_id' => (int)$fs_id]);
+			ORDER BY e.start
+		', [':fs_id' => $fs_id]);
 
-		$out = array();
+		$out = [];
 
 		if ($next) {
 			foreach ($next as $n) {
 				$out[date('Y-m-d H:i', $n['start_ts']) . '-' . $n['id']] = $n;
 			}
 		}
-		if (!empty($out)) {
-			return $out;
-		}
+
+		return $out;
 	}
 
-	public function getInvites($fs_id)
+	public function getEventInvitations(int $fs_id): array
 	{
 		return $this->db->fetchAll('
 			SELECT
 				e.id,
 				e.name,
-				e.`description`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
+				e.description,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
 				fe.`status`
-
 			FROM
-				`fs_event` e,
-				`fs_foodsaver_has_event` fe
-
+				fs_event e,
+				fs_foodsaver_has_event fe
 			WHERE
-				fe.event_id = e.id
-
+			    fe.event_id = e.id
 			AND
 				fe.foodsaver_id = :fs_id
-
 			AND
-				fe.`status` = 0
-
+				fe.status = 0
 			AND
-				e.`end` > NOW()
-		', [':fs_id' => (int)$fs_id]);
+				e.end > NOW()
+			ORDER BY 
+			e.start 
+		', [':fs_id' => $fs_id]);
 	}
 
 	public function addEvent($fs_id, $event): int

@@ -38,6 +38,7 @@
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
+- Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
