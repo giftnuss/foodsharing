@@ -73,7 +73,7 @@ class WallPostGateway extends BaseGateway
 		return $post;
 	}
 
-	public function getPosts($target, $targetId): array
+	public function getPosts($target, $targetId, int $limit = 60): array
 	{
 		$posts = $this->db->fetchAll('
 		SELECT 	p.id,
@@ -91,7 +91,8 @@ class WallPostGateway extends BaseGateway
 			AND 	hp.wallpost_id = p.id
 			AND 	hp.`' . $this->makeTargetLinkTableForeignIdColumnName($target) . '` = :targetId
 			ORDER BY p.time DESC
-		', ['targetId' => $targetId]);
+			LIMIT :limit
+		', ['targetId' => $targetId, 'limit' => $limit]);
 		foreach ($posts as $key => $w) {
 			if (!empty($w['attach'])) {
 				$data = json_decode($w['attach'], true);
