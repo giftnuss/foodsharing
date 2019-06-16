@@ -18,20 +18,20 @@ Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Pr
 
 ### ProgrammiererInnen !!!
 - Android ProgrammiererInnen (nativ)
-- iOS ProgrammiererInnen (nativ)
-- Web EntwicklerInnen
+- iOS-ProgrammiererInnen (nativ)
+- Web-EntwicklerInnen
 
 ### Qualitätssicherung
 - Beta-TesterInnen
-- Issue BetreuerInnen
-- Unit Test EntwicklerInnen
+- Issue-BetreuerInnen
+- Unit-Test-EntwicklerInnen
 
 ### Design
 - GrafikdesignerInnen
-- Android Frontend Design Menschen fürs die Verbesserung des App Designs
+- Android-Frontend-DesignerInnen (Verbesserung des App-Designs)
 
 ### Support
-- Webseiten Support Menschen (deutschsprachig)
+- Webseiten-SupporterInnen (deutschsprachig)
 - IT-SupporterInnen
 - Technische Redakteure
 - RecruiterInnen
