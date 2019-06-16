@@ -126,8 +126,6 @@ final class FoodsaverGateway extends BaseGateway
 				`data`,
 				`rolle`,
 				`position`,
-				`github`,
-				`twitter`,
 				`homepage`
 			FROM 		`fs_foodsaver`
 			WHERE 		`id` = :id',
@@ -647,8 +645,6 @@ final class FoodsaverGateway extends BaseGateway
 			nachname = NULL,
 			anschrift = NULL,
 			telefon = NULL,
-			github = NULL,
-			twitter = NULL,
 			handy = NULL,
 			geb_datum = NULL,
 			deleted_at = NOW()
@@ -701,8 +697,6 @@ final class FoodsaverGateway extends BaseGateway
 			'about_me_public',
 			'photo_public',
 			'homepage',
-			'twitter',
-			'github',
 			'position'
 		];
 
@@ -716,8 +710,6 @@ final class FoodsaverGateway extends BaseGateway
 			'handy',
 			'about_me_public',
 			'homepage',
-			'twitter',
-			'github',
 			'position'
 		];
 

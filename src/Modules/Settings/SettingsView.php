@@ -534,12 +534,7 @@ class SettingsView extends View
 			}
 
 			$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
-
 			$position = $this->v_utils->v_form_text('position');
-
-			$communications .=
-				$this->v_utils->v_form_text('twitter') .
-				$this->v_utils->v_form_text('github');
 		}
 
 		$g_data['ort'] = $g_data['stadt'];

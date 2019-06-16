@@ -33,7 +33,7 @@
         <i class="fa fa-question" />
       </template>
       <b-dropdown-item @click="$emit('join')">
-        <i class="fa fa-check-circle mr-1" />{{ $i18n('pickup.take_empty_slot') }}
+        <i class="fa fa-check-circle mr-1" /> {{ $i18n('pickup.take_empty_slot') }}
       </b-dropdown-item>
       <b-dropdown-item @click="$emit('remove')">
         <i class="fa fa-times-circle mr-1" /> {{ $i18n('pickup.slot_remove') }}

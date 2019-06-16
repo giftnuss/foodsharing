@@ -14,13 +14,13 @@
       <span :class="{slotstatus: true, pending: !confirmed, confirmed: confirmed}" />
     </template>
     <b-dropdown-item :href="`/profile/${profile.id}`">
-      <i class="fa fa-user mr-1" />  {{ $i18n('pickup.open_profile') }}
+      <i class="fa fa-user mr-1" /> {{ $i18n('pickup.open_profile') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="allowChat"
       @click="openChat"
     >
-      <i class="fa fa-comment mr-1" />  {{ $i18n('chat.open_chat') }}
+      <i class="fa fa-comment mr-1" /> {{ $i18n('chat.open_chat') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!confirmed && allowConfirm"

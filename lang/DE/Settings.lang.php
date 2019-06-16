@@ -63,7 +63,6 @@ $g_lang['sleepmode_info'] = 'Mit der Schlafmützenfunktion ist es Dir möglich d
 $g_lang['sleepmode_show'] = 'Mit der Nutzung dieser Funktion bist Du damit einverstanden, dass Dein Status, Deine Abwesenheitsdauer und Deine Nachricht auf Deiner Profilseite angezeigt und ein "Schlafmützensymbol" über Dein Profilbild gesetzt wird.';
 $g_lang['sleep_msg'] = 'Hier kannst Du eine kurze Nachricht hinterlassen, warum Du gerade keine Zeit hast.';
 $g_lang['geb_datum'] = 'Geburtsdatum';
-$g_lang['twitter'] = 'Twitter';
 $g_lang['homepage'] = 'Deine Webseite';
 $g_lang['position'] = 'Deine Position bei foodsharing (öffentlich)';
 $g_lang['calendar'] = 'Kalender';
