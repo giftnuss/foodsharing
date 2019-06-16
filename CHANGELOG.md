@@ -27,6 +27,7 @@
 - Moved pickup signup logic into API !874 @NerdyProjects
 - Rewrite pickup list on store page in vue !874 @alangecker @NerdyProjects
 - Removed TOX-ID in foodsaver settings #31 !935 @chriswalg
+- Removed twitter and github for Team-Member !944 @chriswalg
 
 
 ## Bugfixes
