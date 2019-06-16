@@ -18,8 +18,9 @@ Information in Redis include session IDs (Who is loged in?), and email queues.
 If your code change requires customization of the database, create a file migrations/incremental...sql with the SQL statements without the "commit" command.
 
 *For example: migrations/incremental-20161101-remove-autokennzeichen.sql*
-`DROP TABLE fs_autokennzeichen;
+```DROP TABLE fs_autokennzeichen;
 ALTER TABLE fs_foodsaver
   DROP COLUMN autokennzeichen_id;
 ALTER TABLE fs_foodsaver_archive
-  DROP COLUMN autokennzeichen_id;`
+  DROP COLUMN autokennzeichen_id;
+```
