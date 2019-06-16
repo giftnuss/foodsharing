@@ -6,7 +6,6 @@
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
-- Added yellow info box with warning to edit event page !892 @jofranz
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @k.miklobusec
 - pickup list includes now stores in subdistricts, year added, divers seperated !906 @k.miklobusec
@@ -18,7 +17,6 @@
     - event page !915 @jofranz
     - store settings !922 @jofranz
 - InfluxDB Metrics via UDP !882 @alangecker
-- Added yellow info box with bug warning to edit event page !892 @jofranz
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
 - Shake it! Randomly shuffle ambassadors and working group admin's list order to make it harder always to contact the most senior one !924 @jofranz
@@ -38,8 +36,7 @@
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
 - Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
 - Allow users being deleted out of regions #604 @NerdyProjects
-- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker 
-- Fixed big gap between brown menu bar and breadcrumb. Removed workaround which was used to move accidentally behind-top-bar-menu-placed page to correct height !897 @jofranz
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
