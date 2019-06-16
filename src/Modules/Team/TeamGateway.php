@@ -20,8 +20,6 @@ class TeamGateway extends BaseGateway
 					fs.rolle,
 					fs.geschlecht,
 					fs.homepage,
-					fs.github,
-					fs.twitter,
 					fs.position,
 					fs.contact_public				
 				FROM 
@@ -58,9 +56,7 @@ class TeamGateway extends BaseGateway
                         fs.rolle,
                         fs.geschlecht,
                         fs.photo,
-                        fs.twitter,
                         fs.homepage,
-                        fs.github,
                         fs.position,
                         fs.email,
                         fs.contact_public

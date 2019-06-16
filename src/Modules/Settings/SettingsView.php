@@ -537,9 +537,6 @@ class SettingsView extends View
 
 			$position = $this->v_utils->v_form_text('position');
 
-			$communications .=
-				$this->v_utils->v_form_text('twitter') .
-				$this->v_utils->v_form_text('github');
 		}
 
 		$g_data['ort'] = $g_data['stadt'];
