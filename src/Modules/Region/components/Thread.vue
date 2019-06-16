@@ -19,7 +19,7 @@
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
             {{ title }}
           </div>
-          <div class="col text-right">
+          <span class="title-buttons">
             <a
               @click="toggleFollow"
               class="btn btn-sm btn-secondary"
@@ -33,7 +33,7 @@
             >
               {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
             </a>
-          </div>
+          </span>
         </div>
       </div>
       <div
