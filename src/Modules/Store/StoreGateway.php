@@ -952,7 +952,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
 		$from = $from ?? Carbon::now();
-		$to = $to ?? Carbon::now()->add($intervalFuturePickupSignup);
+        $to = $to ?? Carbon::tomorrow()->addHour(2)->add($intervalFuturePickupSignup);
 		$regularSlots = $this->getRegularPickups($storeId);
 		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
 		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $to);
