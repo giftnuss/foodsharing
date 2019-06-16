@@ -26,6 +26,8 @@
 - improved description for photo upload in user settings !902 @peter.toennies
 - Moved pickup signup logic into API !874 @NerdyProjects
 - Rewrite pickup list on store page in vue !874 @alangecker @NerdyProjects
+- Removed TOX-ID in foodsaver settings #31 !935 @chriswalg
+
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
