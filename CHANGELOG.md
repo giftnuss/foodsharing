@@ -30,6 +30,7 @@
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
 
 
+
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
@@ -41,6 +42,7 @@
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. !626 @ctwx_ok
+- Move title buttons in forum into the second line #591 !949 @chris.walg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
