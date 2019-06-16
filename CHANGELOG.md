@@ -27,7 +27,7 @@
 - Removed TOX-ID in foodsaver settings #31 !935 @chriswalg
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
-- Added one week as a option for automatic pickup slots in store settings !945 @jofranz
+- Added one week as an option for automatic pickup slots in store settings !945 @jofranz
 
 
 ## Bugfixes
