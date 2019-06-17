@@ -28,6 +28,7 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
+- An all new chat design
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
