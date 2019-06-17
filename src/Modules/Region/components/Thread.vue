@@ -19,7 +19,7 @@
           <div class="col text-truncate ml-2 pt-1 font-weight-bold">
             {{ title }}
           </div>
-          <span class="title-buttons">
+          <span class="forum-title-buttons">
             <a
               @click="toggleFollow"
               class="btn btn-sm btn-secondary"

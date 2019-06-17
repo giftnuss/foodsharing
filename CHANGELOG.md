@@ -43,6 +43,7 @@
 - Mails from trash can be deleted again @peter.toennies
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. !626 @ctwx_ok
 - Move title buttons in forum into the second line #591 !949 @chris.walg
+- Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
