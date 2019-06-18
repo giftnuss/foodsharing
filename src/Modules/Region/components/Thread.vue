@@ -15,13 +15,13 @@
       class="card rounded"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row text-truncate ml-2 pt-1 mr-3 font-weight-bold">
+        <div class="row text-truncate ml-1 pt-1 mr-3 font-weight-bold">
           {{ title }}
         </div>
-        <div class="row ml-2 pt-2">
+        <div class="row mr-1 pt-2 flex-row-reverse">
           <a
             @click="toggleFollow"
-            class="btn btn-sm btn-secondary mr-2"
+            class="btn btn-sm btn-secondary ml-2"
           >
             {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
           </a>
