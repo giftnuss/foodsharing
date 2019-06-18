@@ -15,25 +15,23 @@
       class="card rounded"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row">
-          <div class="text-truncate ml-3 pt-1 mr-3 font-weight-bold">
-            {{ title }}
-          </div>
-          <div class="row ml-3 pt-2">
-            <a
-              @click="toggleFollow"
-              class="btn btn-sm btn-secondary mr-2"
-            >
-              {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
-            </a>
-            <a
-              v-if="mayModerate"
-              @click="toggleStickyness"
-              class="btn btn-sm btn-secondary"
-            >
-              {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
-            </a>
-          </div>
+        <div class="row text-truncate ml-2 pt-1 mr-3 font-weight-bold">
+          {{ title }}
+        </div>
+        <div class="row ml-2 pt-2 d-flex align-items-end">
+          <a
+            @click="toggleFollow"
+            class="btn btn-sm btn-secondary mr-2"
+          >
+            {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
+          </a>
+          <a
+            v-if="mayModerate"
+            @click="toggleStickyness"
+            class="btn btn-sm btn-secondary"
+          >
+            {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+          </a>
         </div>
       </div>
       <div
