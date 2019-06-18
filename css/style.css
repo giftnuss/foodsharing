@@ -1700,14 +1700,6 @@ footer .linklist li a:hover {
   }
 }
 
-.forum-title-buttons {
-
-  padding-left: 22px;
-  padding-top: 5px;
-
-}
-
 .col.text-truncate.ml-2.pt-1.font-weight-bold
 {
-  flex-basis: auto;
 }

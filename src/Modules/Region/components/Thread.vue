@@ -16,13 +16,13 @@
     >
       <div class="card-header text-white bg-primary">
         <div class="row">
-          <div class="col text-truncate ml-2 pt-1 font-weight-bold">
+          <div class="text-truncate ml-3 pt-1 mr-3 font-weight-bold">
             {{ title }}
           </div>
-          <span class="forum-title-buttons">
+          <div class="row ml-3 pt-2">
             <a
               @click="toggleFollow"
-              class="btn btn-sm btn-secondary"
+              class="btn btn-sm btn-secondary mr-2"
             >
               {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
             </a>
@@ -33,7 +33,7 @@
             >
               {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
             </a>
-          </span>
+          </div>
         </div>
       </div>
       <div
