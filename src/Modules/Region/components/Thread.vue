@@ -18,7 +18,7 @@
         <div class="row text-truncate ml-2 pt-1 mr-3 font-weight-bold">
           {{ title }}
         </div>
-        <div class="row ml-2 pt-2 d-flex align-items-end">
+        <div class="row ml-2 pt-2">
           <a
             @click="toggleFollow"
             class="btn btn-sm btn-secondary mr-2"
