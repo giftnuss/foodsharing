@@ -8,7 +8,7 @@
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
-- pickup list includes now stores in subdistricts, year added, divers seperated !906 @fs_k
+- pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 - Added active foodsaver and jumper count to store popup on map !920 #620 @fs_k
@@ -29,7 +29,6 @@
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
 
-
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
@@ -41,7 +40,6 @@
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. !626 @ctwx_ok
-- Move title buttons in forum into the second line #591 !949 @chris.walg
 - Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
 
 ## Refactoring
