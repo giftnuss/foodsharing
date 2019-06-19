@@ -40,6 +40,7 @@
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
+- Redirect to the forum instead of showing 404 on deleting the last post of a thread. !626 @ctwx_ok
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal

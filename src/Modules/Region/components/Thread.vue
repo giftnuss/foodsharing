@@ -169,7 +169,7 @@ export default {
       // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
       this.$refs.form.focus()
     },
-    async reload () {
+    async reload (isDeleteAction = false) {
       try {
         let res = (await api.getThread(this.id)).data
         Object.assign(this, {
@@ -185,8 +185,13 @@ export default {
         })
         this.isLoading = false
       } catch (err) {
-        this.isLoading = false
-        this.errorMessage = err.message
+        if (!isDeleteAction) {
+          this.isLoading = false
+          this.errorMessage = err.message
+        } else {
+          // In this case the last post was deleted.
+          window.location = this.$url('forum', this.regionId)
+        }
       }
     },
 
@@ -195,7 +200,7 @@ export default {
 
       try {
         await api.deletePost(post.id)
-        await this.reload()
+        await this.reload(true)
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       } finally {
