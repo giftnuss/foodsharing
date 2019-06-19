@@ -49,7 +49,7 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
-  quit_name: Team %name% verlassen
+  quit_name: Bezirk/Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
