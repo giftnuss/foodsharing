@@ -39,7 +39,7 @@
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
-- Redirect to the forum instead of showing 404 on deleting the last post of a thread. !626 @ctwx_ok
+- Redirect to the forum instead of showing 404 on deleting the last post of a thread. #626 !953 @ctwx_ok
 - Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
 
 ## Refactoring
