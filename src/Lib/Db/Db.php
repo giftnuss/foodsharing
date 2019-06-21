@@ -165,7 +165,7 @@ class Db
 	 * @deprecated not needed when passing data as prepared statement
 	 */
 	public function dateval($val)
-	{
+{
 		return '"' . $this->safe($val) . '"';
 	}
 

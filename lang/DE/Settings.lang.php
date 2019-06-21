@@ -52,6 +52,7 @@ $g_lang['follow_thread_desc'] = '';
 $g_lang['newmail'] = 'Gib hier Deine neue E-Mail-Adresse ein';
 $g_lang['passcheck'] = 'Bestätige die Änderung bitte mit Deinem Passwort';
 $g_lang['sleep_mode_saved'] = 'Die Einstellungen wurden gespeichert';
+$g_lang['sleep_mode_date_missing'] = 'Bitte gibt für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!';
 $g_lang['sleeping_user'] = 'Schlafmütze';
 $g_lang['no_sleepmode'] = 'Ich bin aktiv und voll dabei';
 $g_lang['temp_sleepmode'] = 'Ich bin für eine Weile nicht verfügbar';
