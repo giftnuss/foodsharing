@@ -43,6 +43,7 @@
 - Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
+- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
