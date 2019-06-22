@@ -56,12 +56,12 @@ class SanitizerTest extends \Codeception\Test\Unit
 	{
 		$in = "Hi\nthere";
 		$out = $this->sanitizer->markdownToHtml($in);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Hi<br />',
 			$out
 		);
 		/* We do not want to specify if it keeps newline or not, but we want to have a break in the output. */
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'there',
 			$out
 		);
@@ -81,7 +81,7 @@ class SanitizerTest extends \Codeception\Test\Unit
 	{
 		$in = "* Hi\n* there";
 		$out = $this->sanitizer->markdownToHtml($in);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<li>Hi</li>',
 			$out
 		);

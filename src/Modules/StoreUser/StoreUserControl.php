@@ -9,11 +9,13 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
 class StoreUserControl extends Control
 {
 	private $storeGateway;
+	private $storePermissions;
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $timeHelper;
@@ -24,6 +26,7 @@ class StoreUserControl extends Control
 		StoreModel $model,
 		StoreUserView $view,
 		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
@@ -33,6 +36,7 @@ class StoreUserControl extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
@@ -69,38 +73,23 @@ class StoreUserControl extends Control
 				'prefetchtime' => $store['prefetchtime']
 			];
 
-			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($store['bezirk_id']))) {
-				if ($_POST['form_submit'] == 'zeiten') {
-					$range = range(0, 6);
-					global $g_data;
-					$this->storeGateway->clearAbholer($_GET['id']);
-					foreach ($range as $r) {
-						if (isset($_POST['dow' . $r])) {
-							$this->sanitizerService->handleTagSelect('dow' . $r);
-							foreach ($g_data['dow' . $r] as $fs_id) {
-								$this->storeGateway->addAbholer($_GET['id'], $fs_id, $r);
-							}
-						}
-					}
+			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($store['id'])) {
+				$this->sanitizerService->handleTagSelect('foodsaver');
+				if (!empty($g_data['foodsaver'])) {
+					$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
 				} else {
-					$this->sanitizerService->handleTagSelect('foodsaver');
-
-					if (!empty($g_data['foodsaver'])) {
-						$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
-					} else {
-						$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
-					}
+					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}
 				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 				$this->routeHelper->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $_GET['id']) || $this->session->isAdminFor($store['bezirk_id']))) {
+			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			}
 
 			$this->pageHelper->addTitle($store['name']);
 
-			if ($this->storeGateway->isInTeam($this->session->id(), $_GET['id']) || $this->session->may('orga') || $this->session->isAdminFor($store['bezirk_id'])) {
+			if ($this->storePermissions->mayAccessStore($store['id'])) {
 				if ((!$store['verantwortlich'] && $this->session->isAdminFor($store['bezirk_id']))) {
 					$store['verantwortlich'] = true;
 					$this->flashMessageHelper->info('<strong>' . $this->translationHelper->s('reference') . ':</strong> ' . $this->translationHelper->s('not_responsible_but_bot'));
@@ -151,15 +140,6 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->addHidden('<div id="teamEditor">' . $edit_team . '</div>');
 				}
-				$this->pageHelper->addStyle('#team_msg{width:97%;}');
-				$this->pageHelper->addHidden('
-						<div id="u_undate">
-							' . $this->v_utils->v_info($this->translationHelper->s('shure_of_backup'), $this->translationHelper->s('attention')) . '
-							<input type="hidden" name="undate-date" id="undate-date" value="" />
-
-							' . $this->v_utils->v_form_textarea('team_msg') . '
-						</div>
-					');
 
 				/*Infos*/
 
@@ -244,10 +224,6 @@ class StoreUserControl extends Control
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
-				$pickup_date_cnt = '';
-				if ($store['verantwortlich']) {
-					$pickup_date_cnt .= '<p style="text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
-				}
 
 				if ($verantwortlicher = $this->view->u_getVerantwortlicher($store)) {
 					$cnt = '';
@@ -267,80 +243,27 @@ class StoreUserControl extends Control
 				 */
 
 				$this->pageHelper->addHidden('
-					<div id="timedialog">
-
-						<input type="hidden" name="timedialog-id" id="timedialog-id" value="" />
-						<input type="hidden" name="timedialog-date" id="timedialog-date" value="" />
-
-						<span class="shure_date" id="shure_date">' . $this->v_utils->v_info($this->translationHelper->sv('shure_date', array('label' => '<span id="date-label"></span>'))) . '</span>
-					</div>
-					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
-						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
-						<span class="sure" style="display:none">' . $this->translationHelper->s('delete_post') . '</span>
-						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
-					</div>
 					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
 						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
 						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
-					</div>');
+					</div>
+');
 
-				if (is_array($store['abholer'])) {
-					foreach ($store['abholer'] as $dow => $a) {
-						$g_data['dow' . $dow] = $a;
-					}
-				}
-
-				$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
-
-				$next_dates = $this->view->u_getNextDates($pickup_dates, $store, $this->model->listUpcommingFetchDates($_GET['id']));
-
-				$fetcherList = $this->storeGateway->listFetcher($store['id'], array_keys($next_dates));
-
-				global $g_data;
-				foreach ($fetcherList as $r) {
-					$key = 'fetch-' . str_replace(array(':', ' ', '-'), '', $r['date']);
-					if (!isset($g_data[$key])) {
-						$g_data[$key] = array();
-					}
-					$g_data[$key][] = $r;
-				}
-
-				$days = $this->timeHelper->getDow();
-
-				$pickup_date_content = '';
-
-				foreach ($next_dates as $date => $time) {
-					$part = explode(' ', $date);
-					$date = $part[0];
-					$pickup_date_content .= $this->view->u_form_checkboxTagAlt(
-						$date . ' ' . $time['time'],
-						array(
-							'label' => $days[date('w', strtotime($date))] . ' ' . $this->view->format_db_date($date) . ', ' . $this->format_time($time['time']),
-							'verantwortlich' => $store['verantwortlich'],
-							'fetcher_count' => $time['fetcher'],
-							'bezirk_id' => $store['bezirk_id'],
-							'field' => $time
-						)
-					);
-				}
-
-				$pickup_date_cnt .= $pickup_date_content;
-
-				if ($store['verantwortlich'] && empty($next_dates)) {
-					$pickup_date_cnt = $this->v_utils->v_info($this->translationHelper->sv('no_fetchtime', array('name' => $store['name'])), $this->translationHelper->s('attention') . '!') .
-						'<p style="margin-top:10px;text-align:center;"><a class="button" href="#" onclick="ajreq(\'adddate\',{app:\'betrieb\',id:' . (int)$_GET['id'] . '});return false;">einzelnen Termin eintragen</a></p>';
+				if ($this->storePermissions->maySeePickups($store['id'])) {
+					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
 				/*
 				 * Abholzeiten ändern
 				 */
-				if ($store['verantwortlich'] || $this->session->may('orga')) {
+				if ($this->storePermissions->mayEditPickups($store['id'])) {
 					if ($this->session->isMob()) {
 						$width = '$(window).width() * 0.96';
 					} else {
 						$width = '$(window).width() / 2';
 					}
+					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0),
@@ -351,7 +274,6 @@ class StoreUserControl extends Control
 
 				if (!$store['jumper']) {
 					if (($store['betrieb_status_id'] == 3 || $store['betrieb_status_id'] == 5)) {
-						$this->pageHelper->addContent($this->v_utils->v_field($pickup_date_cnt, $this->translationHelper->s('next_fetch_dates'), array('class' => 'ui-padding')), CNT_RIGHT);
 					} else {
 						$bt = '';
 						$storeStateName = '';

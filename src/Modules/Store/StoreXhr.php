@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Lib\Xhr\XhrDialog;
@@ -9,11 +10,13 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
+use Foodsharing\Services\StoreService;
 
 class StoreXhr extends Control
 {
 	private $storeGateway;
 	private $storePermissions;
+	private $storeService;
 	private $sanitizerService;
 
 	public function __construct(
@@ -21,12 +24,14 @@ class StoreXhr extends Control
 		StoreView $view,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
+		StoreService $storeService,
 		SanitizerService $sanitizerService
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
+		$this->storeService = $storeService;
 		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
@@ -50,7 +55,7 @@ class StoreXhr extends Control
 				$fetchercount = 8;
 			}
 
-			if ($this->model->addFetchDate($storeId, $time, $fetchercount)) {
+			if ($this->storeService->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
 				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
 
 				return array(
@@ -250,7 +255,7 @@ class StoreXhr extends Control
 	{
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
-				if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $b['id'])) && (int)$b['v'] > 0) {
+				if ($this->storePermissions->mayEditStore($b['id']) && (int)$b['v'] > 0) {
 					$this->model->updateBetriebBezirk($b['id'], $b['v']);
 				}
 			}
@@ -337,9 +342,10 @@ class StoreXhr extends Control
 	public function signout()
 	{
 		$xhr = new Xhr();
-		if ($this->storeGateway->isResponsible($this->session->id(), $_GET['id'])) {
+		$status = $this->storeGateway->getUserTeamStatus($this->session->id(), $_GET['id']);
+		if ($status === TeamStatus::Coordinator) {
 			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
-		} elseif ($this->storeGateway->isInTeam($this->session->id(), $_GET['id'])) {
+		} elseif ($status >= TeamStatus::Applied) {
 			$this->model->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {

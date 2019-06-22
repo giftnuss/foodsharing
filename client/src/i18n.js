@@ -7,7 +7,10 @@ const { translations } = serverData
 export default function (key, variables = {}) {
   let message = objectPath.get(trans, key)
   if (!message) message = translations[key]
-  if (!message) throw new Error(`Missing translation for [${key}]`)
+  if (!message) {
+    console.error(new Error(`Missing translation for [${key}]`))
+    return key
+  }
   return message.replace(/\{([^}]+)\}/g, (match, name) => {
     if (variables.hasOwnProperty(name)) {
       const value = variables[name]
