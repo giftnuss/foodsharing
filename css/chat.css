@@ -206,7 +206,7 @@
 }
 
 .chatboxmessage.mymessage .chatboxmessagecontent .time {
-  color: #ccc;
+  color: #f9f5e0;
 }
 
 .chatboxoptions {
@@ -331,12 +331,12 @@
 
 .conversation-list .msg, #conversation-list .names {
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
 }
 
 .conversation-list .msg {
-  line-height: 20px;
+  height: 2.5em;
 }
 
 .conversation-list .names {

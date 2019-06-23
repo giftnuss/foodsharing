@@ -23,6 +23,8 @@
 
 #conversation-list li.active {
   background-color: #dbd7d1;
+	border: 1px solid #533a24;
+	border-radius: 4px;
 }
 
 #conversation-list li.active a, #conversation-list li.active a:active, #conversation-list li.active a:focus {
@@ -55,7 +57,7 @@
 }
 
 #msg-conversation li.mymessage span.time {
-	color: #ccc;
+	color: #f9f5e0;
 }
 
 #msg-conversation span.body {
