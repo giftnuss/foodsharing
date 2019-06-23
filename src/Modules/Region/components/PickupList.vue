@@ -82,6 +82,29 @@
               responsive
             />
           </b-tab>
+          <b-tab
+            :title="$i18n('pickuplist.year_tab')"
+          >
+            <b-pagination
+              v-model="currentPageYearly"
+              :total-rows="pickupDataYearlyTab.length"
+              :per-page="perPage"
+              aria-controls="pickupYearly-table"
+            />
+            <b-table
+              :fields="fields"
+              :items="pickupDataYearlyTab"
+              :current-page="currentPageYearly"
+              :per-page="perPage"
+              :sort-by="sortBy"
+              :sort-desc="sortDesc"
+              striped
+              hover
+              small
+              bordered
+              responsive
+            />
+          </b-tab>
         </b-tabs>
       </div>
     </div>
@@ -113,6 +136,10 @@ export default {
     pickupDataMonthlyTab: {
       type: Array,
       default: () => []
+    },
+    pickupDataYearlyTab: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -122,6 +149,7 @@ export default {
       currentPageDaily: 1,
       currentPageWeekly: 1,
       currentPageMonthly: 1,
+      currentPageYearly: 1,
       perPage: 14,
       fields: {
         time: {

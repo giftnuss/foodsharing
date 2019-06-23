@@ -76,7 +76,7 @@ class ReportXhr extends Control
 			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
 			if ($report['committed'] === 0) {
-				$dialog->addButton('Report bestätigen', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
+				$dialog->addButton('Meldung zugestellt', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
 			}
 			$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
 

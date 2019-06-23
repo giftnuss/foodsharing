@@ -15,25 +15,23 @@
       class="card rounded"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row">
-          <div class="col text-truncate ml-2 pt-1 font-weight-bold">
-            {{ title }}
-          </div>
-          <div class="col text-right">
-            <a
-              @click="toggleFollow"
-              class="btn btn-sm btn-secondary"
-            >
-              {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
-            </a>
-            <a
-              v-if="mayModerate"
-              @click="toggleStickyness"
-              class="btn btn-sm btn-secondary"
-            >
-              {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
-            </a>
-          </div>
+        <div class="row text-truncate ml-1 pt-1 mr-3 font-weight-bold">
+          {{ title }}
+        </div>
+        <div class="row mr-1 pt-2 flex-row-reverse">
+          <a
+            @click="toggleFollow"
+            class="btn btn-sm btn-secondary ml-2"
+          >
+            {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
+          </a>
+          <a
+            v-if="mayModerate"
+            @click="toggleStickyness"
+            class="btn btn-sm btn-secondary"
+          >
+            {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+          </a>
         </div>
       </div>
       <div
@@ -169,7 +167,7 @@ export default {
       // this.$refs.form.text = `> ${body.split('\n').join('\n> ')}\n\n${this.$refs.form.text}`
       this.$refs.form.focus()
     },
-    async reload () {
+    async reload (isDeleteAction = false) {
       try {
         let res = (await api.getThread(this.id)).data
         Object.assign(this, {
@@ -185,8 +183,13 @@ export default {
         })
         this.isLoading = false
       } catch (err) {
-        this.isLoading = false
-        this.errorMessage = err.message
+        if (!isDeleteAction) {
+          this.isLoading = false
+          this.errorMessage = err.message
+        } else {
+          // In this case the last post was deleted.
+          window.location = this.$url('forum', this.regionId)
+        }
       }
     },
 
@@ -195,7 +198,7 @@ export default {
 
       try {
         await api.deletePost(post.id)
-        await this.reload()
+        await this.reload(true)
       } catch (err) {
         pulseError(i18n('error_unexpected'))
       } finally {

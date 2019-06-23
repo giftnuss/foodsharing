@@ -88,13 +88,15 @@ export default {
           formatter: item => {
             switch (item) {
               case 0:
-                return this.$i18n('genderlist.gender_divers')
+                return this.$i18n('genderlist.gender_not_selected')
               case 1:
                 return this.$i18n('genderlist.gender_male')
               case 2:
                 return this.$i18n('genderlist.gender_female')
-              default :
+              case 3 :
                 return this.$i18n('genderlist.gender_divers')
+              default :
+                return this.$i18n('genderlist.gender_not_selected')
             }
           },
           sortable: true

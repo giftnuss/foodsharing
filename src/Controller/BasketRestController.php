@@ -450,7 +450,7 @@ final class BasketRestController extends AbstractFOSRestController
 	{
 		$lat = $paramFetcher->get(self::LAT);
 		$lon = $paramFetcher->get(self::LON);
-		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, 0.0, 180.0)) {
+		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
 			// find user's location
 			$loc = $this->session->getLocation();
 			$lat = $loc[self::LAT];

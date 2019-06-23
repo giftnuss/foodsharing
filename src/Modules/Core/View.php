@@ -367,15 +367,18 @@ class View
 			}
 		}
 
-		return $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), '
+		$out = $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), $this->v_utils->v_info($this->translationHelper->s('position_search_infobox')) . '
 		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap"></div>') .
+		<div id="map" class="pickermap"></div>');
+		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('ort', ['value' => $options['ort'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('lat', ['value' => $data['lat']]) .
 			$this->v_utils->v_form_text('lon', ['value' => $data['lon']]) .
 			'';
+
+		return $out;
 	}
 
 	public function simpleContent($content)

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Carbon\Carbon;
 use Envms\FluentPDO\Query;
 use PDO;
 
@@ -285,6 +286,16 @@ class Database
 	public function now(): string
 	{
 		return date('Y-m-d H:i:s');
+	}
+
+	public function date(Carbon $date): string
+	{
+		return $date->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
+	}
+
+	public function parseDate(string $date): Carbon
+	{
+		return Carbon::createFromFormat('Y-m-d H:i:s', $date, 'Europe/Berlin');
 	}
 
 	public function beginTransaction(): bool

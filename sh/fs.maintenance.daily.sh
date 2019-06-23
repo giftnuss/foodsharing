@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/deploy/production-deploy/current/
+cd /var/www/production/current/
 FS_ENV=prod php run.php Maintenance daily

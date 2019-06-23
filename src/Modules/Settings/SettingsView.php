@@ -524,8 +524,7 @@ class SettingsView extends View
 		}
 		$bezirkchoose = '';
 		$position = '';
-		$communications = $this->v_utils->v_form_text('homepage') .
-			$this->v_utils->v_form_text('tox', array('desc' => $this->translationHelper->s('tox_desc')));
+		$communications = $this->v_utils->v_form_text('homepage');
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
@@ -535,12 +534,7 @@ class SettingsView extends View
 			}
 
 			$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
-
 			$position = $this->v_utils->v_form_text('position');
-
-			$communications .=
-				$this->v_utils->v_form_text('twitter') .
-				$this->v_utils->v_form_text('github');
 		}
 
 		$g_data['ort'] = $g_data['stadt'];
@@ -698,5 +692,18 @@ class SettingsView extends View
 		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
+	}
+
+	public function picture_box($photo): string
+	{
+		$p_cnt = $this->v_utils->v_info($this->translationHelper->s('photo_should_be_usable'));
+
+		if (!file_exists('images/thumb_crop_' . $photo)) {
+			$p_cnt .= $this->v_utils->v_photo_edit('img/portrait.png');
+		} else {
+			$p_cnt .= $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
+		}
+
+		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
 	}
 }

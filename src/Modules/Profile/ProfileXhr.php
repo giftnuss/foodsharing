@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Profile;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
@@ -13,6 +14,7 @@ class ProfileXhr extends Control
 	private $foodsaver;
 	private $storeModel;
 	private $bellGateway;
+	private $mailboxGateway;
 	private $regionGateway;
 	private $profileGateway;
 
@@ -21,11 +23,13 @@ class ProfileXhr extends Control
 		StoreModel $storeModel,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
+		MailboxGateway $mailboxGateway,
 		ProfileGateway $profileGateway
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
 
@@ -46,7 +50,7 @@ class ProfileXhr extends Control
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
 				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
-					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
+					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
 				/*

@@ -1,0 +1,154 @@
+@import "../../../client/src/scss/bootstrap-theme.scss";
+
+.page-index div#main {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.header {
+  padding: 41px 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header__text, .header__image {
+  height: 80%;
+  display: flex;
+  align-items: center;
+}
+
+.header__text {
+  font-size: 2.5vh;
+  width: 65%;
+  margin-left: 5%;
+  color: #f9f5e0;
+  text-shadow: 0 1px #555;
+  -webkit-text-size-adjust: none;
+}
+
+.header__text h2 {
+  font-family: "Alfa Slab One", serif;
+  font-size: 2.6em;
+  font-weight: normal;
+  padding:2vh;
+}
+
+.header__image {
+  width: 30%;
+  background: no-repeat 50%;
+  background-size: auto 85%;
+}
+
+@media (max-aspect-ratio: 3/2) {
+  .header__text {
+    font-size: 1.5vw;
+  }
+}
+
+@media (max-aspect-ratio: 9/10) {
+  .header {
+    padding: 73px 0;
+    flex-wrap: wrap;
+    height: calc(100vh - 73px);
+  }
+
+  .header__text, .header__image {
+    width: 100%;
+  }
+
+  .header__image {
+    height: 50%;
+  }
+
+  .header__text {
+    font-size: 1.9vw;
+    padding-top: 0.5vh;
+    height: 20%;
+    text-align: center;
+  }
+}
+
+.carpet-roll {
+  color: #533a20;
+  padding: 40px 0;
+  margin:0 auto;
+}
+
+.carpet-roll p {
+  margin: 1rem 0rem 0 0rem;
+  font-size: 1.1em;
+}
+
+.carpet-roll h3 {
+  color: #64ae24;
+  font-size: 2.5em;
+  line-height: 1.75em;
+  font-weight: normal;
+  font-family: "Alfa Slab One", serif;
+  letter-spacing: 0.4px;
+  border-bottom: 4px solid #64ae24;
+  margin: 1rem 0 0 0;
+  display: inline;
+}
+
+.carpet-roll .button {
+  background-color: #64ae24;
+  font-size: 150%;
+  font-family: "Alfa Slab One", serif;
+  font-weight: normal !important;
+}
+
+.what-is-what .clickable {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.what-is-what .iconlegend {
+  color: rgb(83, 58, 32);
+  font-family: "Alfa Slab One", Arial;
+  width: 100%;
+  font-size: 0.65em;
+  text-align: center;
+  display: block;
+  margin-top: 0.75em;
+}
+
+.what-is-what i {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2rem;
+  font-size: 2em;
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  background-color: #64ae24;
+  transition: transform 0.2s ease;
+}
+
+.what-is-what i:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.section--dark-brown {
+  background-color: rgb(83, 58, 32);
+}
+
+.section--beige {
+    background-color: rgb(241, 231, 201);
+}
+
+.section--light-beige {
+  background-color: rgb(249, 245, 224);
+}
