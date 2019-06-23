@@ -350,3 +350,33 @@
   color: #b4aba3;
   font-size: 11px;
 }
+
+/*
+* Unread chats are now bordered and badged
+*/
+
+.conversation-list .unread-1 .pics {
+  border: 1px solid black;
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.conversation-list .unread-1 .pics::after {
+  content: "!";
+  height: 10px;
+  width: 10px;
+  top: -60px;
+  right: -40px;
+  padding: 3px;
+  border: 2px solid #f9f5e0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f44336;
+  position: relative;
+  color: #f9f5e0;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+}
+
