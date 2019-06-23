@@ -306,10 +306,10 @@ const conv = {
   /**
   * addedclass to indicate own messages
   */
-    var addedclass = ''
-    if (message.fs_id == serverData.user.id) { addedclass = ' mymessage' }
+    var ownmessageclass = ''
+    if (message.fs_id == serverData.user.id) { ownmessageclass = ' mymessage' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage${addedclass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage${ownmessageclass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
