@@ -28,7 +28,6 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
-- Add my own last date of pickup to store info box @jofranz
 - Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
 
 ## Bugfixes
