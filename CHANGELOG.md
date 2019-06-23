@@ -32,6 +32,7 @@
 - An all new chat design !928 @kniggerich
 - new chat design with badges and layout changed plus a two-line preview !928 @kniggerich
 - new chat design with badges and layout changed plus a twoline preview !928 @kniggerich
+- new chat design with badges and layout changed plus a two-line preview !928 @kniggerich
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
