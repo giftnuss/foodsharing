@@ -186,60 +186,60 @@ class EventView extends View
 		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
-	public function statusMenu($event, $user_status)
+	public function statusMenu(array $event, int $user_status): string
 	{
 		$menu = array();
 
 		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
-			$menu[] = array(
+			$menu[] = [
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
-			);
+			];
 		}
 
-		if ($user_status != -1) {
-			if ($user_status != 3) {
-				$menu[] = array(
+		if ($user_status !== -1) {
+			if ($user_status !== 3) {
+				$menu[] = [
 					'name' => 'Ich kann doch nicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:3});return false;'
-				);
+				];
 			}
 
-			if ($user_status == 0) {
-				$menu[] = array(
+			if ($user_status === 0) {
+				$menu[] = [
 					'name' => 'Einladung annehmen',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
-				);
+				];
 			}
 
-			if ($user_status != 0 && $user_status != 1) {
+			if ($user_status !== 0 && $user_status !== 1) {
 				$menu[] = array(
 					'name' => 'Ich kann doch',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
 				);
 			}
 
-			if ($user_status != 2) {
-				$menu[] = array(
+			if ($user_status !== 2) {
+				$menu[] = [
 					'name' => 'Ich kann vielleicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:2});return false;'
-				);
+				];
 			}
 		} else {
-			$menu[] = array(
+			$menu[] = [
 				'name' => 'Ich werde teilnehmen',
 				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:1});return false;'
-			);
-			$menu[] = array(
+			];
+			$menu[] = [
 				'name' => 'Ich werde vielleicht teilnehmen',
 				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:2});return false;'
-			);
+			];
 		}
 
 		return $this->v_utils->v_field($this->menu($menu), $this->translationHelper->s('event_options'), [], 'fas fa-cog');
 	}
 
-	public function eventTop($event)
+	public function eventTop(array $event): string
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
 			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
@@ -247,7 +247,7 @@ class EventView extends View
 			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
-		$out = '
+		return '
 		<div class="event welcome ui-padding margin-bottom ui-corner-all">
 			<div class="welcome_profile_image">
 				<span class="calendar">
@@ -269,8 +269,6 @@ class EventView extends View
 			</div>
 			<div class="clear"></div>
 		</div>';
-
-		return $out;
 	}
 
 	private function ts_time($ts): string
@@ -278,7 +276,7 @@ class EventView extends View
 		return date('H:i', $ts) . ' Uhr';
 	}
 
-	public function invites($invites)
+	public function invites(array $invites): string
 	{
 		$out = '';
 
@@ -328,7 +326,7 @@ class EventView extends View
 		return '';
 	}
 
-	public function event($event)
+	public function event(array $event): string
 	{
 		return $this->v_utils->v_field(
 			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
