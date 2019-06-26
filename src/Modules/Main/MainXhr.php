@@ -20,6 +20,7 @@ class MainXhr extends Control
 	{
 		$function = '';
 		$newname = '';
+        $inid = '';
 
 		$check = false;
 
