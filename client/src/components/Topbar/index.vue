@@ -449,7 +449,7 @@ div#main {
   margin-top: 45px;
   @media (max-width: 630px) {
       // two line topbar
-      margin-top: 85px;
+      margin-top: 133px;
   }
 }
 
