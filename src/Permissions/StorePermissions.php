@@ -174,6 +174,8 @@ class StorePermissions
 
 	public function maySeePickups($storeId)
 	{
-		return $this->mayDoPickup($storeId);
+		$store = $this->storeGateway->getBetrieb($storeId);
+
+		return $this->mayDoPickup($storeId) && ($store['betrieb_status_id'] == 3 || $store['betrieb_status_id'] == 5);
 	}
 }
