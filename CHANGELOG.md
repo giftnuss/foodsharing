@@ -42,6 +42,7 @@
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. #626 !953 @ctwx_ok
 - Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
+- Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
