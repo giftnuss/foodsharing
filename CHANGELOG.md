@@ -38,7 +38,6 @@
 - Fixed wrong ID for reports in reports list !903 @peter.toennies
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
-- Walls do now show all comments. !940 #630 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 
 ## Refactoring
