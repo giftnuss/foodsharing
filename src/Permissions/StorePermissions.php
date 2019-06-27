@@ -5,7 +5,6 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Store\StoreStatus;
 
 class StorePermissions
 {
@@ -175,8 +174,6 @@ class StorePermissions
 
 	public function maySeePickups($storeId)
 	{
-		$store = $this->storeGateway->getBetrieb($storeId);
-
-		return $this->mayDoPickup($storeId) && ($store['betrieb_status_id'] == StoreStatus::cooperation_starting || $store['betrieb_status_id'] == StoreStatus::cooperation_established);
+		return $this->mayDoPickup($storeId) && $this->storeGateway->storeIsInActiveCooperation($storeId);
 	}
 }

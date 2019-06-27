@@ -255,7 +255,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id'])) {
+				if ($this->storePermissions->maySeePickups($store['id']) && $this->storeGateway->storeIsInActiveCooperation($store['id'])) {
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 

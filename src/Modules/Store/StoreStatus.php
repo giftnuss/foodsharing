@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Store;
 
 class StoreStatus
 {
-	// see: SELECT * FROM `fs_betrieb_status`
+	// see db/sql: SELECT * FROM fs_betrieb_status
 
 	const no_contact = 1; // "Es besteht noch kein Kontakt"
 	const in_negotiation = 2; // "Verhandlungen laufen"

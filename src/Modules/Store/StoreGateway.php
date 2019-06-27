@@ -1035,4 +1035,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		return $res;
 	}
+
+	public function storeIsInActiveCooperation($storeId): bool
+	{
+		$store = $this->getBetrieb($storeId);
+
+		return $store['betrieb_status_id'] == StoreStatus::cooperation_starting || $store['betrieb_status_id'] == StoreStatus::cooperation_established;
+	}
 }
