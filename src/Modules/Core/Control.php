@@ -13,7 +13,6 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use ReflectionClass;
-use Foodsharing\Permissions\WallPostPermissions;
 
 abstract class Control
 {
@@ -103,7 +102,6 @@ abstract class Control
 		$this->routeHelper = $container->get(RouteHelper::class);
 		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->flashMessageHelper = $container->get(FlashMessageHelper::class);
-		$this->wallpostPermissions = $container->get(WallPostPermissions::class);
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -337,7 +335,10 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		if ($this->wallpostPermissions->mayWriteWall($this->session->id(), $table, $id) && $this->session->may()) {
+		/* disable food basket comments during migration period (max. 3 weeks after release) until there are no pre existing baskets with comments left.
+		 * #todo @jo remove this check and food basket comment section entirely afterwards
+		 */
+		if ($this->session->may() && $table != 'basket') {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>

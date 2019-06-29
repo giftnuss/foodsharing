@@ -54,8 +54,6 @@ class WallPostPermissions
 				return $fsId == $targetId;
 			case 'question':
 				return $fsId > 0;
-			case 'basket':
-				return $fsId == $targetId;
 			default:
 				return $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 		}
