@@ -37,7 +37,7 @@ $g_lang['basket_reference'] = 'Hinweis!';
 $g_lang['basket_reference_info'] = 'Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar.';
 $g_lang['basket_request'] = 'Essenskorb anfragen';
 $g_lang['basket_request_on_page'] = 'Essenskorb anfragen auf unserer foodsharing-Homepage';
-$g_lang['basket_pickup_warning'] = '<b>Bitte verwende die grüne "Essenskorb anfragen"-Schaltfläche, um Interesse zu bekunden.</b> <br>Kommentare wurden deaktiviert, um die Abholrate zu steigern und um die Entwicklung zu vereinfachen. Für neue Informationen kann der Text des Essenskorbs vom Anbieter bearbeitet werden.';
+$g_lang['basket_pickup_warning'] = '<b>Bitte verwende die grüne "Essenskorb anfragen"-Schaltfläche, um Interesse zu bekunden.</b> <br>Kommentare wurden deaktiviert, um die Abholrate zu steigern und um die <a href="https://devdocs.foodsharing.network/it-tasks.html">Entwicklung</a> zu vereinfachen. Für neue Informationen kann der Text des Essenskorbs vom Anbieter bearbeitet werden.';
 $g_lang['basket_delete'] = 'Essenskorb löschen';
 $g_lang['basket_publish'] = 'Essenskorb veröffentlichen';
 $g_lang['to_basket'] = 'zum Essenskorb';
