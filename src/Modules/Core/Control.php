@@ -86,8 +86,6 @@ abstract class Control
 	 */
 	protected $flashMessageHelper;
 
-	private $wallpostPermissions;
-
 	public function __construct()
 	{
 		global $container;
