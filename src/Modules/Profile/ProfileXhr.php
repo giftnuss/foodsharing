@@ -136,6 +136,16 @@ class ProfileXhr extends Control
 	{
 		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
 
+		if ($this->session->isOrgaTeam() && $betrieb == 0) {
+			if ($this->storeModel->deleteFetchDate($_GET['fsid'])) {
+				return array(
+					'status' => 1,
+					'script' => '
+					pulseSuccess("Alle Termine gelöscht");
+					reload();'
+				);
+			}
+		}
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
 			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
 				return array(
