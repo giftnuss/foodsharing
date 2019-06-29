@@ -17,7 +17,6 @@
     - event page !915 @jofranz
     - store settings !922 @jofranz
 - InfluxDB Metrics via UDP !882 @alangecker
-- Only allow basket comments for basket providers !890 @jofranz
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
 - Shake it! Randomly shuffle ambassadors and working group admin's list order to make it harder always to contact the most senior one !924 @jofranz
@@ -29,7 +28,7 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
-- Disabled new food basket comments while showing pre existing ones for another while @jofranz
+- Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
