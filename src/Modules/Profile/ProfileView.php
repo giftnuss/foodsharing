@@ -40,7 +40,7 @@ class ProfileView extends View
 		$out = '
 				<div class="ui-padding" id="double">';
 
-		if ($this->session->isOrgaTeam()){
+		if ($this->session->isOrgaTeam()) {
 			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>';
 		}
 
