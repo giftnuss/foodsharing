@@ -317,13 +317,13 @@ class DashboardControl extends Control
 			}
 		}
 
-		/* Einladungen */
-		if ($invites = $this->eventGateway->getInvites($this->session->id())) {
+		/* Invitations */
+		if ($invites = $this->eventGateway->getEventInvitations($this->session->id())) {
 			$this->pageHelper->addContent($this->view->u_invites($invites));
 		}
 
 		/* Events */
-		if ($events = $this->eventGateway->getNextEvents($this->session->id())) {
+		if ($events = $this->eventGateway->getEventsInterestedIn($this->session->id())) {
 			$this->pageHelper->addContent($this->view->u_events($events));
 		}
 

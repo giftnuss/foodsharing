@@ -2,7 +2,6 @@ import $ from 'jquery'
 
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
-
 import 'leaflet.markercluster'
 
 import 'corejs-typeahead'
@@ -61,7 +60,7 @@ function initializeSearchpanel (searchpanel, cb = null) {
     {
       icon: 'smile',
       markerColor: 'orange',
-      prefix: 'img'
+      prefix: 'fa'
     })
 
   let engine = new PhotonAddressEngine(

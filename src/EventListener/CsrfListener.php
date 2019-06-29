@@ -29,6 +29,12 @@ class CsrfListener
 			return;
 		}
 
+		$httpMethod = $event->getRequest()->getMethod();
+		if (in_array($httpMethod, ['GET', 'OPTIONS', 'HEAD'])) {
+			// since these methods should not cause any changes, we can savely execute cross site requests
+			return;
+		}
+
 		list($controller, $methodName) = $controllers;
 		$reflectionObject = new \ReflectionObject($controller);
 		$reflectionMethod = $reflectionObject->getMethod($methodName);

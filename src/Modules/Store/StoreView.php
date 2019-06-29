@@ -11,8 +11,7 @@ class StoreView extends View
 		return
 			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
-			$this->v_utils->v_form_select('fetchercount', array('values' => array(
-				array('id' => 0, 'name' => 'Termin fällt aus'),
+			$this->v_utils->v_form_select('fetchercount', array('selected' => 1, 'values' => array(
 				array('id' => 1, 'name' => '1 Abholer/in'),
 				array('id' => 2, 'name' => '2 Abholer/innen'),
 				array('id' => 3, 'name' => '3 Abholer/innen'),
@@ -140,6 +139,7 @@ class StoreView extends View
 				array('id' => 0, 'name' => 'Nein')
 			))),
 			$this->v_utils->v_form_select('prefetchtime', array('values' => array(
+				array('id' => 604800, 'name' => '1 Woche'),
 				array('id' => 1209600, 'name' => '2 Wochen'),
 				array('id' => 1814400, 'name' => '3 Wochen'),
 				array('id' => 2419200, 'name' => '4 Wochen')

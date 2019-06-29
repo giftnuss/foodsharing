@@ -36,24 +36,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function addFetchDate($bid, $time, $fetchercount)
-	{
-		return $this->insert('
-			INSERT INTO `fs_fetchdate`
-			(
-				`betrieb_id`, 
-				`time`, 
-				`fetchercount`
-			) 
-			VALUES 
-			(
-				' . (int)$bid . ',
-				' . $this->dateval($time) . ',
-				' . (int)$fetchercount . '
-			)
-		');
-	}
-
 	public function updateBetriebBezirk($betrieb_id, $bezirk_id)
 	{
 		return $this->update('UPDATE fs_betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);
@@ -333,6 +315,7 @@ class StoreModel extends Db
 						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
 						fs_betrieb.str,
 						fs_betrieb.hsnr,
+						CONCAT(fs_betrieb.lat,", ",fs_betrieb.lon) AS geo,
 						fs_betrieb.`betrieb_status_id`,
 						fs_bezirk.name AS bezirk_name
 
@@ -341,7 +324,6 @@ class StoreModel extends Db
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
 				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
-
 
 		');
 	}

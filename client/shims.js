@@ -21,8 +21,7 @@ Object.assign(module.exports, convert({
       L: 'leaflet'
     },
     dependencies: [
-      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
-      lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css')
+      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css')
     ]
   },
 

@@ -111,6 +111,7 @@ class FoodsaverView extends View
 
 			$position,
 
+			$this->v_utils->v_info($this->translationHelper->s('warning_of_address_change')),
 			$this->v_utils->v_form_text('stadt', array('required' => true)),
 			$this->v_utils->v_form_text('plz', array('required' => true)),
 			$this->v_utils->v_form_text('anschrift', array('required' => true)),
