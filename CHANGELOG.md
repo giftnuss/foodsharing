@@ -42,11 +42,15 @@
 - Mails from trash can be deleted again @peter.toennies
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. #626 !953 @ctwx_ok
 - Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
+- Fixed order of event invites on the dashboard !938 #608 @peter.toennies
+- Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
+- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
 - The page does not use fullpage anymore. New landing page !597 #393 @theolampert
 - Reduce Load on every Request to RegionControl !921 @alangeker
+- reduced codebase around map markers. !588 @chriswalg @peter.toennies
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
@@ -266,6 +270,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 
 # 2019-02-02 Hotfix
 - readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
+- Devdocs: Restructured and added content, fixed typos and punctuation, and unified spelling !617 @llzmb
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"

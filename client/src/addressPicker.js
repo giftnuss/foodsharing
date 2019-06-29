@@ -7,7 +7,7 @@ import 'leaflet.awesome-markers'
 let fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
   markerColor: 'orange',
-  prefix: 'img'
+  prefix: 'fa'
 })
 
 let markers = L.featureGroup()

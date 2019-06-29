@@ -1002,7 +1002,7 @@ ul.linklist li > a.active {
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
   background-color: #64ae24;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .updatepost {

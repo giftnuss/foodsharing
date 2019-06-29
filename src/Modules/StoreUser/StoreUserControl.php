@@ -243,6 +243,11 @@ class StoreUserControl extends Control
 				 */
 
 				$this->pageHelper->addHidden('
+					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
+						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
+						<span class="sure" style="display:none">' . $this->translationHelper->s('delete_post') . '</span>
+						<span class="abort" style="display:none">' . $this->translationHelper->s('abort') . '</span>
+					</div>
 					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
 						<span class="sure" style="display:none">' . $this->translationHelper->s('betrieb_sign_out') . '</span>
