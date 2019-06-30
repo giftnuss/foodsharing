@@ -13,7 +13,7 @@ $g_lang['online'] = 'Multilokal auf mumble.foodsharing.de';
 $g_lang['mumble_room'] = 'In welchem mumble-Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'Enddatum';
 $g_lang['event_options'] = 'Eventoptionen';
-$g_lang['saveEventInfo'] = '<b>Bitte beachten:</b><br>Beim Speichern werden alle derzeitigen Mitglieder der oben gewählten Gruppe eingeladen. Um Neuzugänge in Bezirk oder AG später noch dazuzuladen, speichere den Termin einfach erneut.';
+$g_lang['saveEventInfo'] = '<b>Bitte beachten:</b><br>Beim Speichern erhalten <b>alle derzeitigen Mitglieder</b> des Bezirks oder der AG eine <b>Einladung auf ihrer Startseite</b>. Speichere den Termin einfach <b>später erneut</b>, damit dieser auch bei zwischenzeitlichen <b>Neuzugängen</b> auf der Startseite <b>erscheint</b>.<br>Im jeweiligen <b>Gruppenmenü oder per Link</b> ist der Termin für Mitglieder der jeweiligen Gruppe auch <b>ohne Zwischenspeichern erreichbar</b>.';
 $g_lang['event_not_available'] = 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.';
 $g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Treffpunktes im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';
 

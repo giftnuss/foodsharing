@@ -28,7 +28,6 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
-- It is now possible for every foodsaver to see and join a pre existing event links of a district. This fs only needs to be part of the district where the event was created #273 !912 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -45,6 +44,7 @@
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
+- It is now possible for every foodsaver to see and join a pre existing event links of a district or working group. This foodsaver only needs to be part of this specific group where the event was created #273 !912 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
