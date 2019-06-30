@@ -50,17 +50,10 @@ class EventControl extends Control
 		}
 	}
 
-	private function isEventAdmin(array $event): bool
-	{
-		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || $this->session->may('orga');
-	}
-
 	public function edit()
 	{
 		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
-			if (!$this->isEventAdmin($event)) {
+			if (!$this->eventPermissions->mayEditEvent($event)) {
 				return false;
 			}
 			if ($this->session->isOrgaTeam() || $event['fs_id'] == $this->session->id() || $this->session->isAdminFor($event['bezirk_id'])) {

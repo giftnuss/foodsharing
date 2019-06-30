@@ -26,4 +26,11 @@ final class EventPermissions
 	{
 		return $this->maySeeEvent($event);
 	}
+
+	public function mayEditEvent(array $event): bool
+	{
+		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
+				$event['bezirk_id']
+			) || $this->session->may('orga');
+	}
 }
