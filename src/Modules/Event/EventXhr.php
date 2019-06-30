@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Event;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Permissions\EventPermissions;
 
 class EventXhr extends Control
 {
@@ -12,11 +13,13 @@ class EventXhr extends Control
 	private $event;
 	private $gateway;
 	private $responses;
+	private $eventPermissions;
 
-	public function __construct(EventGateway $gateway)
+	public function __construct(EventGateway $gateway, EventPermissions $eventPermissions)
 	{
 		$this->gateway = $gateway;
 		$this->responses = new XhrResponses();
+		$this->eventPermissions = $eventPermissions;
 
 		parent::__construct();
 
@@ -34,7 +37,7 @@ class EventXhr extends Control
 
 	public function accept()
 	{
-		if (!$this->maySeeEvent()) {
+		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::accepted)) {
@@ -52,7 +55,7 @@ class EventXhr extends Control
 
 	public function maybe()
 	{
-		if (!$this->maySeeEvent()) {
+		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::maybe)) {
@@ -70,7 +73,7 @@ class EventXhr extends Control
 
 	public function noaccept()
 	{
-		if (!$this->maySeeEvent()) {
+		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::wont_join)) {
@@ -85,7 +88,7 @@ class EventXhr extends Control
 
 	public function ustat()
 	{
-		if (!$this->maySeeEvent()) {
+		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->setInviteStatus(
@@ -104,7 +107,7 @@ class EventXhr extends Control
 
 	public function ustatadd()
 	{
-		if (!$this->maySeeEvent()) {
+		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->addInviteStatus(
@@ -119,14 +122,5 @@ class EventXhr extends Control
 		}
 
 		return $this->responses->fail_generic();
-	}
-
-	private function maySeeEvent(): bool
-	{
-		if (!$this->event) {
-			return false;
-		}
-
-		return $this->session->mayBezirk($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->session->id()]) || $this->event['public'] == 1;
 	}
 }

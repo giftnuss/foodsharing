@@ -1,0 +1,29 @@
+<?php
+
+namespace Foodsharing\Permissions;
+
+use Foodsharing\Lib\Session;
+
+final class EventPermissions
+{
+	private $session;
+
+	public function __construct(Session $session)
+	{
+		$this->session = $session;
+	}
+
+	public function maySeeEvent(array $event): bool
+	{
+		if (!isset($event)) {
+			return false;
+		}
+
+		return $this->session->mayBezirk($event['bezirk_id']) || isset($event['invites']['may'][$this->session->id()]) || $event['public'] == 1;
+	}
+
+	public function mayJoinEvent(array $event): bool
+	{
+		return $this->maySeeEvent($event);
+	}
+}

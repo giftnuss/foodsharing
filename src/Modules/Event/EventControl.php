@@ -4,24 +4,27 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\EventPermissions;
 
 class EventControl extends Control
 {
 	private $gateway;
 	private $dataHelper;
+	private $eventPermissions;
 
-	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper)
+	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper, EventPermissions $eventPermissions)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->dataHelper = $dataHelper;
+		$this->eventPermissions = $eventPermissions;
 
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->mayEvent($event)) {
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->eventPermissions->maySeeEvent($event)) {
 			$this->pageHelper->addBread('Termine', '/?page=event');
 			$this->pageHelper->addBread($event['name']);
 
@@ -52,11 +55,6 @@ class EventControl extends Control
 		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
 				$event['bezirk_id']
 			) || $this->session->may('orga');
-	}
-
-	private function mayEvent(array $event): bool
-	{
-		return $this->session->mayBezirk($event['bezirk_id']) || isset($event['invites']['may'][$this->session->id()]) || $event['public'] == 1;
 	}
 
 	public function edit()

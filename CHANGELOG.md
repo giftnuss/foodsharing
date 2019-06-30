@@ -7,8 +7,6 @@
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
-- Allow Subgroups to groups !904 @k.miklobusec
-- It is now possible for every foodsaver of a district to see pre existing event infos of this district #273 !912 @jofranz
 - Allow subgroups to groups !904 @fs_k
 - pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
@@ -30,6 +28,7 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
+- It is now possible for every foodsaver to see and join a pre existing event links of a district. This fs only needs to be part of the district where the event was created #273 !912 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
