@@ -25,10 +25,10 @@ class EventXhr extends Control
 		}
 
 		$this->stats = [
-			0 => true, // invited
-			1 => true, // will join
-			2 => true, // might join
-			3 => true  // will not join (but has been invited)
+			InvitationStatus::invited => true, // invited
+			InvitationStatus::accepted => true, // will join
+			InvitationStatus::maybe => true, // might join
+			InvitationStatus::wont_join => true  // will not join (but has been invited)
 		];
 	}
 
@@ -37,7 +37,7 @@ class EventXhr extends Control
 		if (!$this->maySeeEvent()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 1)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::accepted)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Du hast die Einladung angenommen.'));
@@ -55,7 +55,7 @@ class EventXhr extends Control
 		if (!$this->maySeeEvent()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 2)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::maybe)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
@@ -73,7 +73,7 @@ class EventXhr extends Control
 		if (!$this->maySeeEvent()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 3)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::wont_join)) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("Einladung gelöscht.");'
@@ -127,8 +127,6 @@ class EventXhr extends Control
 			return false;
 		}
 
-		return $this->event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
-				$this->event['bezirk_id']
-			) || isset($this->event['invites']['may'][$this->session->id()]);
+		return $this->session->mayBezirk($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->session->id()]) || $this->event['public'] == 1;
 	}
 }

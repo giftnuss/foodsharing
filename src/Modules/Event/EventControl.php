@@ -56,9 +56,7 @@ class EventControl extends Control
 
 	private function mayEvent(array $event): bool
 	{
-		return $this->session->mayBezirk($event['bezirk_id']) || $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || isset($event['invites']['may'][$this->session->id()]);
+		return $this->session->mayBezirk($event['bezirk_id']) || isset($event['invites']['may'][$this->session->id()]) || $event['public'] == 1;
 	}
 
 	public function edit()
@@ -144,7 +142,7 @@ class EventControl extends Control
 			$out['public'] = 1;
 		} elseif ($bid = $this->getPostInt('bezirk_id')) {
 			$out['bezirk_id'] = (int)$bid;
-			if (isset($_POST['invite']) && $_POST['invite'] == 1) {
+			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::accepted) {
 				$out['invite'] = true;
 				if (isset($_POST['invitesubs']) && $_POST['invitesubs'] == 1) {
 					$out['invitesubs'] = true;
