@@ -174,6 +174,6 @@ class StorePermissions
 
 	public function maySeePickups($storeId)
 	{
-		return $this->mayDoPickup($storeId) && $this->storeGateway->storeIsInActiveCooperation($storeId);
+		return $this->mayDoPickup($storeId);
 	}
 }
