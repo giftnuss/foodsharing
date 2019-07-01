@@ -198,28 +198,28 @@ class EventView extends View
 		}
 
 		if ($user_status !== -1) {
-			if (true || $user_status !== InvitationStatus::wont_join) {
+			if (true || $user_status !== InvitationStatus::WONT_JOIN) {
 				$menu[] = [
 					'name' => 'Ich kann doch nicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:3});return false;'
 				];
 			}
 
-			if ($user_status === InvitationStatus::invited) {
+			if ($user_status === InvitationStatus::INVITED) {
 				$menu[] = [
 					'name' => 'Einladung annehmen',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
 				];
 			}
 
-			if ($user_status !== InvitationStatus::invited && $user_status !== InvitationStatus::accepted) {
+			if ($user_status !== InvitationStatus::INVITED && $user_status !== InvitationStatus::ACCEPTED) {
 				$menu[] = array(
 					'name' => 'Ich kann doch',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
 				);
 			}
 
-			if ($user_status !== InvitationStatus::maybe) {
+			if ($user_status !== InvitationStatus::MAYBE) {
 				$menu[] = [
 					'name' => 'Ich kann vielleicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:2});return false;'

@@ -133,7 +133,7 @@ class EventControl extends Control
 			$out['public'] = 1;
 		} elseif ($bid = $this->getPostInt('bezirk_id')) {
 			$out['bezirk_id'] = (int)$bid;
-			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::accepted) {
+			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::ACCEPTED) {
 				$out['invite'] = true;
 				if (isset($_POST['invitesubs']) && $_POST['invitesubs'] == 1) {
 					$out['invitesubs'] = true;

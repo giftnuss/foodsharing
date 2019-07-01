@@ -28,10 +28,10 @@ class EventXhr extends Control
 		}
 
 		$this->stats = [
-			InvitationStatus::invited => true, // invited
-			InvitationStatus::accepted => true, // will join
-			InvitationStatus::maybe => true, // might join
-			InvitationStatus::wont_join => true  // will not join (but has been invited)
+			InvitationStatus::INVITED => true, // invited
+			InvitationStatus::ACCEPTED => true, // will join
+			InvitationStatus::MAYBE => true, // might join
+			InvitationStatus::WONT_JOIN => true  // will not join (but has been invited)
 		];
 	}
 
@@ -40,7 +40,7 @@ class EventXhr extends Control
 		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::accepted)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::ACCEPTED)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Du hast die Einladung angenommen.'));
@@ -58,7 +58,7 @@ class EventXhr extends Control
 		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::maybe)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::MAYBE)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
@@ -76,7 +76,7 @@ class EventXhr extends Control
 		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::wont_join)) {
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::WONT_JOIN)) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("Einladung gelöscht.");'
