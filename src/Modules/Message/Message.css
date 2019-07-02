@@ -22,9 +22,8 @@
 }
 
 #conversation-list li.active {
-  background-color: #dbd7d1;
-  border: 1px solid #533a24;
-  border-radius: 4px;
+background-color: #dbd7d1;
+border-radius: 4px;
 }
 
 #conversation-list li.active a, #conversation-list li.active a:active, #conversation-list li.active a:focus {
@@ -140,7 +139,7 @@
 }
 
 ul.conversation-list > li.unread-1 {
-    background-color: #d3cec6;
+    background-color: #dbd7d1;
     border: 1px solid #533a20;
     border-radius: 4px;
 }
