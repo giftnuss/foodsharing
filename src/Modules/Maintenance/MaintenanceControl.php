@@ -6,6 +6,7 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -127,8 +128,8 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Europe Bot group');
-		$bots = $this->foodsaverGateway->getBotIds(741);
-		$counts = $this->foodsaverGateway->updateGroupMembers(881, $bots, true);
+		$bots = $this->foodsaverGateway->getBotIds(RegionIDs::EUROPE);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::EUROPE_BOT_GROUP, $bots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating berlin bieb austausch');

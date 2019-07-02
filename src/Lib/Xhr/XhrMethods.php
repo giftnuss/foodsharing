@@ -1442,7 +1442,7 @@ class XhrMethods
 		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == 7)) {
+		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP)) {
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;
