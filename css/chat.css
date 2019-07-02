@@ -331,8 +331,11 @@
 
 .conversation-list .msg, #conversation-list .names {
   text-overflow: ellipsis;
-  white-space: wrap;
+  white-space: normal;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .conversation-list .msg {
