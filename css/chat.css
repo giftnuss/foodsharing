@@ -162,17 +162,17 @@
   height: 35px;
 }
 
-.chatboxmessage.mymessage {
+.chatboxmessage.my-message {
   margin-left: unset;
   margin-right: 1em;
 }
 
-.chatboxmessage.mymessage .chatboxmessagefrom {
+.chatboxmessage.my-message .chatboxmessagefrom {
   float: right;
   margin: -5px -25px 0 0px;
 }
 
-.chatboxmessage.mymessage .chatboxmessagecontent {
+.chatboxmessage.my-message .chatboxmessagecontent {
   background: none repeat scroll 0 0 #64ae24;
   color: #eee;
 
@@ -205,7 +205,7 @@
   font-size: 11px;
 }
 
-.chatboxmessage.mymessage .chatboxmessagecontent .time {
+.chatboxmessage.my-message .chatboxmessagecontent .time {
   color: #f9f5e0;
 }
 

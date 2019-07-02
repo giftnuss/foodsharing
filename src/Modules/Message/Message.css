@@ -56,7 +56,7 @@
   margin-top: 4px;
 }
 
-#msg-conversation li.mymessage span.time {
+#msg-conversation li.my-message span.time {
   color: #f9f5e0;
 }
 
@@ -70,14 +70,14 @@
   color: #4a3520;
 }
 
-#msg-conversation li.mymessage span.body {
+#msg-conversation li.my-message span.body {
   background: none repeat scroll 0 0 #64ae24;
   margin-left: 0px;
   margin-right: 50px;
   color: #eee;
 }
 
-#msg-conversation li.mymessage span.img {
+#msg-conversation li.my-message span.img {
   float: right;
 }
 
@@ -94,7 +94,7 @@
   top: 8px;
 }
 
-#msg-conversation li.mymessage span.body:after {
+#msg-conversation li.my-message span.body:after {
   border-width: 8px 0 8px 9px;
   border-color: transparent #64ae24;
   left: unset;
