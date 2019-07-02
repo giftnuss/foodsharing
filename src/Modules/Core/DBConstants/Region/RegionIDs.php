@@ -10,4 +10,7 @@ class RegionIDs
 	public const EUROPE_REPORT_TEAM = 432;
 	public const EUROPE = 741;
 	public const EUROPE_BOT_GROUP = 881;
+	public const TEAM_BOARD_MEMBER = 1373;
+	public const TEAM_ALUMNI_MEMBER = 1564;
+	public const TEAM_ADMINISTRATION_MEMBER = 1565;
 }
