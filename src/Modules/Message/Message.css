@@ -139,8 +139,10 @@
   color: #fff;
 }
 
-li.unread-1 {
-  background-color: #f5f5b5;
+ul.conversation-list > li.unread-1 {
+    background-color: #d3cec6;
+    border: 1px solid #533a20;
+    border-radius: 4px;
 }
 
 @media all and (max-width: 600px) {
