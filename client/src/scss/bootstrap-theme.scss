@@ -113,7 +113,18 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
             border: none;
         }
         }
-  }
+    }
+   
+    .scroll-container > a > .row p.text-truncate {
+        text-overflow: ellipsis;
+        white-space: normal;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        height: 2.4em;
+        line-height: 1.2em;
+    }
 
     // increases the priority of this position statement
     // can be removed as soon we stop scoping bootstrap
