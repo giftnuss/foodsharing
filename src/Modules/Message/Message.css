@@ -23,8 +23,8 @@
 
 #conversation-list li.active {
   background-color: #dbd7d1;
-	border: 1px solid #533a24;
-	border-radius: 4px;
+  border: 1px solid #533a24;
+  border-radius: 4px;
 }
 
 #conversation-list li.active a, #conversation-list li.active a:active, #conversation-list li.active a:focus {
@@ -57,7 +57,7 @@
 }
 
 #msg-conversation li.mymessage span.time {
-	color: #f9f5e0;
+  color: #f9f5e0;
 }
 
 #msg-conversation span.body {
@@ -71,10 +71,10 @@
 }
 
 #msg-conversation li.mymessage span.body {
-	background: none repeat scroll 0 0 #64ae24;
-	margin-left: 0px;
-	margin-right: 50px;
-	color: #eee;
+  background: none repeat scroll 0 0 #64ae24;
+  margin-left: 0px;
+  margin-right: 50px;
+  color: #eee;
 }
 
 #msg-conversation li.mymessage span.img {
@@ -96,9 +96,9 @@
 
 #msg-conversation li.mymessage span.body:after {
   border-width: 8px 0 8px 9px;
-	border-color: transparent #64ae24;
-	left: unset;
-	right: -9px;
+  border-color: transparent #64ae24;
+  left: unset;
+  right: -9px;
 }
 
 #msg-conversation ul li {
