@@ -335,7 +335,7 @@ class Foodsharing extends \Codeception\Module\Db
 		if ($name == null) {
 			$name = $this->faker->lastName() . '-region';
 		}
-		/* 741 is germany?europe, so suitable for normal sub regions */
+
 		$v = array_merge([
 			'parent_id' => $parentId,
 			'name' => $name,
@@ -353,24 +353,24 @@ class Foodsharing extends \Codeception\Module\Db
 		return $v;
 	}
 
-	public function addBezirkAdmin($bezirk_id, $fs_id)
+	public function addBezirkAdmin($region_id, $fs_id)
 	{
 		$v = [
-			'bezirk_id' => $bezirk_id,
+			'bezirk_id' => $region_id,
 			'foodsaver_id' => $fs_id,
 		];
 		$this->haveInDatabase('fs_botschafter', $v);
 	}
 
-	public function addBezirkMember($bezirk_id, $fs_id, $is_active = true)
+	public function addBezirkMember($region_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
-			array_map(function ($x) use ($bezirk_id, $is_active) {
-				$this->addBezirkMember($bezirk_id, $x, $is_active);
+			array_map(function ($x) use ($region_id, $is_active) {
+				$this->addBezirkMember($region_id, $x, $is_active);
 			}, $fs_id);
 		} else {
 			$v = [
-				'bezirk_id' => $bezirk_id,
+				'bezirk_id' => $region_id,
 				'foodsaver_id' => $fs_id,
 				'active' => $is_active ? 1 : 0,
 			];
@@ -378,7 +378,7 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function addForumTheme($bezirk_id, $fs_id, $bot_theme = false, $extra_params = [])
+	public function addForumTheme($region_id, $fs_id, $bot_theme = false, $extra_params = [])
 	{
 		$params = array_merge([
 			'foodsaver_id' => $fs_id,
@@ -392,7 +392,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$this->haveInDatabase('fs_bezirk_has_theme', [
 			'theme_id' => $theme_id,
-			'bezirk_id' => $bezirk_id,
+			'bezirk_id' => $region_id,
 			'bot_theme' => ($bot_theme ? 1 : 0),
 		]);
 
