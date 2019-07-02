@@ -31,6 +31,6 @@ final class EventPermissions
 	{
 		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
 				$event['bezirk_id']
-			) || $this->session->may('orga');
+			) || $this->session->isOrgaTeam();
 	}
 }
