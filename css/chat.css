@@ -163,18 +163,18 @@
 }
 
 .chatboxmessage.mymessage {
-	margin-left: unset;
+  margin-left: unset;
   margin-right: 1em;
 }
 
 .chatboxmessage.mymessage .chatboxmessagefrom {
   float: right;
-	margin: -5px -25px 0 0px;
+  margin: -5px -25px 0 0px;
 }
 
 .chatboxmessage.mymessage .chatboxmessagecontent {
   background: none repeat scroll 0 0 #64ae24;
-	color: #eee;
+  color: #eee;
 
 }
 
