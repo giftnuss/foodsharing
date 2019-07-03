@@ -29,8 +29,7 @@ class ActivityModel extends Db
 
 	public function loadEventWallUpdates($page = 0): array
 	{
-		$updates = array();
-		$updates = $this->activityGateway->fetchAllEventUpdates(S::id(), $page);
+		$updates = $this->activityGateway->fetchAllEventUpdates($this->session->id(), $page);
 
 		$out = array();
 
@@ -50,7 +49,7 @@ class ActivityModel extends Db
 				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
 				'desc' => $this->textPrepare(nl2br($u['body'])),
 				'time' => $u['time'],
-				'icon' => $this->func->img($u['fs_photo'], 50),
+				'icon' => $this->imageService->img($u['fs_photo'], 50),
 				'time_ts' => $u['time_ts'],
 				'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id']
 			];
@@ -101,7 +100,7 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	private function textPrepare($txt): ?string

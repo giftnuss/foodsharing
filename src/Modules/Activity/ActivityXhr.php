@@ -64,9 +64,10 @@ class ActivityXhr extends Control
 			$updates = array_merge($updates, $up);
 		}
 
-		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($_GET['page']));
-
-		$updates = array_merge($updates, $this->model->loadEventWallUpdates($_GET['page']));
+		$updates = array_merge(
+			$updates,
+			$this->model->loadBasketWallUpdates($_GET['page']),
+			$this->model->loadEventWallUpdates($_GET['page']));
 
 		$xhr->addData('updates', $updates);
 
@@ -128,9 +129,9 @@ class ActivityXhr extends Control
 			$updates = array_merge($updates, $up);
 		}
 
-		$updates = array_merge($updates, $this->model->loadBasketWallUpdates($page));
-
-		$updates = array_merge($updates, $this->model->loadEventWallUpdates($page));
+		$updates = array_merge($updates,
+			$this->model->loadBasketWallUpdates($page),
+			$this->model->loadEventWallUpdates($page));
 
 		$xhr->addData('updates', $updates);
 
