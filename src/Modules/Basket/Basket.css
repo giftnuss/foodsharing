@@ -10,3 +10,7 @@
 .findmap .vmap {
   height: 400px;
 }
+
+div.ui-dialog textarea {
+  width: 98%;
+}

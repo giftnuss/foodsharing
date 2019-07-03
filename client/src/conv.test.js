@@ -30,15 +30,15 @@ describe('conv', () => {
       sandbox.stub(conv, 'init')
       sandbox.stub(ajax, 'req').callsFake((app, method, { data, success }) => {
         // It makes an ajax request with the fsid
-        assert.equal(app, 'msg')
-        assert.equal(method, 'user2conv')
-        assert.equal(data.fsid, fsId)
+        assert.strictEqual(app, 'msg')
+        assert.strictEqual(method, 'user2conv')
+        assert.strictEqual(data.fsid, fsId)
         // The server would send back a cid value
         success({ cid })
       })
       sandbox.stub(conv, 'chat').callsFake(val => {
         // It then triggers the chat
-        assert.equal(val, cid)
+        assert.strictEqual(val, cid)
       })
       conv.userChat(fsId)
       assert(conv.init.called)

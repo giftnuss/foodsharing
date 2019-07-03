@@ -5,18 +5,15 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumGateway;
-use Foodsharing\Modules\Region\RegionGateway;
 
 class ForumPermissions
 {
 	private $forumGateway;
-	private $regionGateway;
 	private $session;
 
-	public function __construct(ForumGateway $forumGateway, RegionGateway $regionGateway, Session $session)
+	public function __construct(ForumGateway $forumGateway, Session $session)
 	{
 		$this->forumGateway = $forumGateway;
-		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 	}
 
@@ -25,10 +22,8 @@ class ForumPermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if (!in_array($regionId, $this->session->getRegionIds())) {
-			return false;
-		}
-		if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
+		if (($ambassadorForum && !$this->session->isAdminFor($regionId)) ||
+			!in_array($regionId, $this->session->listRegionIDs())) {
 			return false;
 		}
 
@@ -81,17 +76,17 @@ class ForumPermissions
 
 	public function mayAccessAmbassadorBoard($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
 	public function mayActivateThreads($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayChangeStickyness($regionId): bool
+	public function mayChangeStickiness($regionId): bool
 	{
-		return $this->mayPostToRegion($regionId, 1);
+		return $this->mayPostToRegion($regionId, true);
 	}
 
 	public function mayDeletePost($post): bool

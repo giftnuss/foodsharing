@@ -5,7 +5,7 @@ const storage = {
   prefix: '',
 
   setPrefix: function (prefix) {
-    this.prefix = prefix + ':'
+    this.prefix = `${prefix}:`
   },
   set: function (key, val) {
     val = JSON.stringify({ v: val })

@@ -55,48 +55,44 @@ class WallPostGateway extends BaseGateway
 	{
 		$post = $this->db->fetch('
 		SELECT 	p.id,
-					p.`body`, 
-					p.`time`, 
+					p.`body`,
+					p.`time`,
 					fs.id AS foodsaver_id,
 					fs.`name`,
 					fs.`photo`
-				
+
 			FROM 	`fs_wallpost` p
 			LEFT JOIN `fs_foodsaver` fs
 			ON fs.id = p.foodsaver_id
-				
+
 			WHERE 	p.id = :postId
-				
+
 			LIMIT 1
 		', ['postId' => $postId]);
 
 		return $post;
 	}
 
-	public function getPosts($target, $targetId)
+	public function getPosts($target, $targetId, int $limit = 60): array
 	{
 		$posts = $this->db->fetchAll('
 		SELECT 	p.id,
-					p.`body`, 
-					p.`time`, 
-					UNIX_TIMESTAMP(p.`time`) AS time_ts,
-					p.`attach`,
+					p.body,
+					p.time,
+					UNIX_TIMESTAMP(p.time) AS time_ts,
+					p.attach,
 					fs.id AS foodsaver_id,
-					fs.`name`,
-					fs.`photo`
-				
-			FROM 	`fs_wallpost` p,
-					`' . $this->makeTargetLinkTableName($target) . '` hp,
-					`fs_foodsaver` fs
-				
+					fs.name,
+					fs.photo
+			FROM 	fs_wallpost p,
+					' . $this->makeTargetLinkTableName($target) . ' hp,
+					fs_foodsaver fs
 			WHERE 	p.foodsaver_id = fs.id
 			AND 	hp.wallpost_id = p.id
 			AND 	hp.`' . $this->makeTargetLinkTableForeignIdColumnName($target) . '` = :targetId
-				
 			ORDER BY p.time DESC
-				
-			LIMIT 30
-		', ['targetId' => $targetId]);
+			LIMIT :limit
+		', ['targetId' => $targetId, 'limit' => $limit]);
 		foreach ($posts as $key => $w) {
 			if (!empty($w['attach'])) {
 				$data = json_decode($w['attach'], true);
@@ -109,7 +105,7 @@ class WallPostGateway extends BaseGateway
 							'thumb' => 'images/wallpost/thumb_' . $img['file']
 						);
 					}
-					$wp[$key]['gallery'] = $gallery;
+					$posts[$key]['gallery'] = $gallery;
 				}
 			}
 		}
@@ -120,7 +116,7 @@ class WallPostGateway extends BaseGateway
 	public function getLastPostId($target, $targetId)
 	{
 		return $this->db->fetchValue('
-			SELECT 	MAX(id) 
+			SELECT 	MAX(id)
 			FROM 	`fs_wallpost` wp,
 					`' . $this->makeTargetLinkTableName($target) . '` hp
 			WHERE 	hp.wallpost_id = wp.id

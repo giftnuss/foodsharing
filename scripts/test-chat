@@ -2,12 +2,12 @@
 
 export FS_ENV=test
 
-set -e
+set -o errexit
 
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 
 echo "Running chat tests"
-run-in-container chat npm test
+run-in-container chat 'npm run lint && npm test'
 
 echo "Done!"
 

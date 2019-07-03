@@ -4,7 +4,6 @@ namespace Foodsharing\Lib\Db;
 
 use Exception;
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use mysqli;
 
@@ -15,10 +14,11 @@ class Db
 	 */
 	private $mysqli;
 	private $values;
+
 	/**
-	 * @var Func
+	 * @var Mem
 	 */
-	protected $func;
+	protected $mem;
 
 	/**
 	 * @var Session
@@ -33,9 +33,9 @@ class Db
 	/**
 	 * @required
 	 */
-	public function setFunc(Func $func)
+	public function setMem(Mem $mem)
 	{
-		$this->func = $func;
+		$this->mem = $mem;
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Db
 		$duration = microtime(true) - $start;
 
 		if ($res == false) {
-			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv']) . ' IN ' . $query . ' : ' . $this->mysqli->error);
+			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
 			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
 			DebugBar::addQuery($query, $duration, true);
@@ -81,7 +81,7 @@ class Db
 		if ($res = $this->sql($sql)) {
 			if ($row = $res->fetch_array()) {
 				if (isset($row[0])) {
-					return $this->func->qs($row[0]);
+					return $row[0];
 				}
 			}
 		}
@@ -97,38 +97,11 @@ class Db
 		$out = array();
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
-				$out[] = $this->func->qs($row[0]);
+				$out[] = $row[0];
 			}
 		}
 
 		return $out;
-	}
-
-	/**
-	 * Method to get an asoc array insted the colums are the keys
-	 * so aftter all we can check like this if(isset($test[$key])) ...
-	 *
-	 * @param string $sql
-	 *
-	 * @return array |boolean
-	 *
-	 * @deprecated use db->fetchAllValues and adapt code to not use indexed array
-	 */
-	public function qColKey($sql)
-	{
-		$out = array();
-		if ($res = $this->sql($sql)) {
-			while ($row = $res->fetch_array()) {
-				$val = (int)($row[0]);
-				$out[$val] = $val;
-			}
-		}
-
-		if (count($out) > 0) {
-			return $out;
-		} else {
-			return false;
-		}
 	}
 
 	/**
@@ -141,7 +114,7 @@ class Db
 
 			if (is_object($res) && ($row = $res->fetch_assoc())) {
 				foreach ($row as $i => $r) {
-					$row[$i] = $this->func->qs($r);
+					$row[$i] = $r;
 				}
 
 				return $row;
@@ -171,9 +144,9 @@ class Db
 	{
 		if ($res = $this->sql($sql)) {
 			return $this->mysqli->insert_id;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -183,9 +156,9 @@ class Db
 	{
 		if ($this->sql($sql)) {
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -197,8 +170,8 @@ class Db
 	}
 
 	/**
-	 * @deprecated use strip_tags() until the frontend can escape properly.
-	 * String escaping is not needed anymore with prepared statements
+	 * @deprecated use strip_tags() until the frontend can escape properly!
+	 * (The string escaping part is not needed anymore with prepared statements)
 	 */
 	public function strval($val, $html = false)
 	{
@@ -222,7 +195,7 @@ class Db
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {
-					$row[$i] = $this->func->qs($r);
+					$row[$i] = $r;
 				}
 				$out[] = $row;
 			}

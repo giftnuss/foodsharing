@@ -34,7 +34,7 @@ describe('script', () => {
 
     describe('isMob', () => {
       it('works', () => {
-        assert.equal(script.isMob(), true)
+        assert.strictEqual(script.isMob(), true)
       })
     })
 
@@ -78,7 +78,7 @@ describe('script', () => {
     beforeEach(() => sandbox.stub(browser, 'isMob').returns(false))
 
     it('is not mobile!', () => {
-      assert.equal(script.isMob(), false)
+      assert.strictEqual(script.isMob(), false)
     })
 
     it('can initialize', () => {
@@ -108,28 +108,28 @@ describe('script', () => {
       it('can show info', () => {
         const message = 'a nice info message'
         script.pulseInfo(message, { timeout: 0 })
-        assert.equal(info.innerHTML, message)
+        assert.strictEqual(info.innerHTML, message)
       })
 
       it('can show success', () => {
         const message = 'a nice success message'
         script.pulseSuccess(message, { timeout: 0 })
-        assert.equal(success.innerHTML, message)
+        assert.strictEqual(success.innerHTML, message)
       })
 
       it('can show error', () => {
         const message = 'a nice error message'
         script.pulseError(message, { timeout: 0 })
-        assert.equal(error.innerHTML, message)
+        assert.strictEqual(error.innerHTML, message)
       })
 
       it('will be hidden after a timeout', async () => {
         const message = 'a nice message'
-        assert.equal(info.style.display, 'none')
+        assert.strictEqual(info.style.display, 'none')
         script.pulseInfo(message, { timeout: 0 })
         assert(['block', ''].includes(info.style.display))
         await sleep(20)
-        assert.equal(info.style.display, 'none')
+        assert.strictEqual(info.style.display, 'none')
       })
     })
   })

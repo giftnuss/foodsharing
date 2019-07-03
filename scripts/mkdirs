@@ -1,12 +1,14 @@
 #!/bin/bash
+# create necessary directories in container app (the main php app container)
 
+# use dev if not specified yet
 export FS_ENV=${FS_ENV:-dev}
 
-set -e
+set -o errexit
 
 dir=$(dirname "$0")
 
-. $dir/inc.sh
+source $dir/inc.sh
 
 # directories used by the application
 
@@ -30,6 +32,6 @@ dirs="\
 echo "Creating directories"
 
 exec-in-container-asroot app \
-  "mkdir -p $dirs && chmod 777 $dirs && chown -R www-data:www-data $dirs"
+  "mkdir --parents $dirs && chmod 777 $dirs && chown --recursive www-data:www-data $dirs"
 
 echo "Done"

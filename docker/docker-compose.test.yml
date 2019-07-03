@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_test_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.4
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.8
     ports:
       - 28080:8080
     expose:
@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
     working_dir: /app
     expose:
       - 9000
@@ -32,6 +32,7 @@ services:
       - redis:redis
       - db:db
       - chat:chat
+      - influxdb
     depends_on:
       - db
       - redis
@@ -49,7 +50,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:10
+    image: node:12.3.1-stretch
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -62,7 +63,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.11
+    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
     command: php run.php Mails queueWorker
     working_dir: /app
     restart: always
@@ -81,7 +82,7 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
-    image: registry.gitlab.com/foodsharing-dev/images/chat:1.1
+    image: node:12.3.1-stretch
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:
@@ -99,15 +100,16 @@ services:
 
   db:
     container_name: foodsharing_test_db
-    image: registry.gitlab.com/foodsharing-dev/images/db/test:1.0
-    # so we can mount tmpfs inside container
-    privileged: true
+    image: registry.gitlab.com/foodsharing-dev/images/db/test:1.4
     expose:
       - 3306
     ports:
       - 23306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
+      TZ: Europe/Berlin
+    tmpfs:
+      - /var/lib/mysql-tmpfs
     volumes:
       - ../:/app
 
@@ -116,7 +118,7 @@ services:
 
   redis:
     container_name: foodsharing_test_redis
-    image: redis:alpine
+    image: redis:5.0-stretch
     expose:
       - 6379
 
@@ -127,7 +129,7 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.2
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.3
     shm_size: 256M
     links:
       - web:web
@@ -143,7 +145,9 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: foodsharing_test_phpmyadmin
     environment:
-      - PMA_ARBITRARY=1
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
     restart: always
     ports:
       - 28081:80
@@ -162,8 +166,24 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_test_maildev
     ports:
-      - 28083:80
+      - 28084:80
+
+  influxdb:
+    container_name: foodsharing_test_influxdb
+    image: influxdb:latest
+    command: >
+      influxd -config /etc/influxdb/influxdb.toml
+    ports:
+    - 28086:8086
+    - 28089:8089/udp
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_DB: "foodsharing"
+    volumes:
+    - influxdb:/var/lib/influxdb
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
 
 
 volumes:
   selenium_downloads:
+  influxdb:

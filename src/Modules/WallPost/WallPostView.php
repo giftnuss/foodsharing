@@ -15,7 +15,7 @@ class WallPostView extends View
 		$this->wallId = $wallId;
 	}
 
-	public function posts($posts)
+	public function posts($posts, $mayDelete)
 	{
 		/*
 		 [0] => Array
@@ -56,19 +56,16 @@ class WallPostView extends View
 				</div>';
 			}
 			$del = '';
-			if (
-				$p['foodsaver_id'] == $this->func->fsId()
-				|| (!in_array($this->table, array('fairteiler', 'foodsaver')) && ($this->func->isBotschafter() || $this->func->isOrgaTeam()))
-			) {
-				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
+			if ($mayDelete || $p['foodsaver_id'] == $this->session->id()) {
+				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->translationHelper->s('delete') . '</a>';
 			}
 
 			$out .= '
 				<tr class="' . $odd . ' bpost wallpost-' . $p['id'] . '">
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
-						<a href="#" onclick="profile(' . $p['foodsaver_id'] . ');return false;">
-							<img src="' . $this->func->img($p['photo']) . '" />
+						<a href="/profile/' . $p['foodsaver_id'] . '">
+							<img src="' . $this->imageService->img($p['photo']) . '" />
 						</a>
 					</td>
 					<td' . $gal_col . '>
@@ -77,7 +74,7 @@ class WallPostView extends View
 						' . $gallery . '
 					</span>
 					<div class="foot">
-						<span class="time">' . date('d.m.Y H:i', $p['time_ts']) . ' Uhr von ' . $p['name'] . '</span>' . $del . '
+						<span class="time">' . $this->timeHelper->niceDate($p['time_ts'], false) . ' von ' . $p['name'] . '</span>' . $del . '
 					</div>
 					</td>
 				</tr>';

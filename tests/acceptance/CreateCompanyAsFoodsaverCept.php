@@ -10,8 +10,6 @@ $foodsaver = $I->createFoodsaver($pass);
 
 $I->login($foodsaver['email'], $pass);
 
-$I->dontSee('Neuen Betrieb eintragen');
-
 // check if user see Link to "Neuen Betrieb eintragen"
 $I->amOnPage('/?page=betrieb&bid=903');
 $I->dontSee('Neuen Betrieb eintragen');

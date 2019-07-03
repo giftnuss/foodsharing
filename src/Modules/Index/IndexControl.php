@@ -8,10 +8,11 @@ use Foodsharing\Modules\Core\Control;
 class IndexControl extends Control
 {
 	private $contentGateway;
+	private $indexGateway;
 
-	public function __construct(IndexModel $model, IndexView $view, ContentGateway $contentGateway)
+	public function __construct(IndexGateway $indexGateway, IndexView $view, ContentGateway $contentGateway)
 	{
-		$this->model = $model;
+		$this->indexGateway = $indexGateway;
 		parent::__construct();
 		$this->contentGateway = $contentGateway;
 		$this->view = $view;
@@ -19,9 +20,9 @@ class IndexControl extends Control
 
 	public function index()
 	{
-		$this->func->addTitle('Rette mit!');
+		$this->pageHelper->addTitle('Rette mit!');
 
-		$gerettet = (int)$this->model->getGerettet();
+		$gerettet = (int)$this->indexGateway->getFetchedWeight();
 
 		if ($gerettet == 0) {
 			$gerettet = 762338;
@@ -29,19 +30,19 @@ class IndexControl extends Control
 
 		$gerettet = round($gerettet, 0);
 
-		if (strpos($_SERVER['HTTP_HOST'], 'foodsharing.at') !== false) {
+		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
+		if (strpos($host, 'foodsharing.at') !== false) {
 			$page_content = $this->contentGateway->get(37);
-		} elseif (strpos($_SERVER['HTTP_HOST'], 'foodsharingschweiz.ch') !== false) {
+		} elseif (strpos($host, 'foodsharingschweiz.ch') !== false) {
 			$page_content = $this->contentGateway->get(47);
-		} elseif (strpos($_SERVER['HTTP_HOST'], 'beta.foodsharing.de') !== false) {
+		} elseif (strpos($host, 'beta.foodsharing.de') !== false) {
 			$page_content = $this->contentGateway->get(48);
 		} else {
 			$page_content = $this->contentGateway->get(38);
 		}
 
-		$this->func->addContent($this->view->index(
-			$page_content['body'],
-			$gerettet
+		$this->pageHelper->addContent($this->view->index(
+			$page_content['body']
 		), CNT_OVERTOP);
 	}
 }

@@ -92,4 +92,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		return '/?page=event&sub=add&bid=' . (int)$region;
 	}
+
+	public function apiReportListForRegion($region)
+	{
+		return 'api/report/region/' . (int)$region;
+	}
 }

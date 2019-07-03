@@ -4,15 +4,12 @@ import '@/globals'
 import '@/tablesorter'
 import $ from 'jquery'
 import 'jquery-dynatree'
-import 'typeahead'
+import 'corejs-typeahead'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import { expose } from '@/utils'
 import {
   ajreq,
-  hideLoader,
-  showLoader,
-  u_loadCoords,
   pulseInfo,
   pulseError,
   checkEmail
@@ -20,7 +17,6 @@ import {
 import './Mailbox.css'
 
 expose({
-  u_getGeo,
   mb_finishFile,
   mb_removeLast,
   mb_new_message,
@@ -30,12 +26,9 @@ expose({
   mb_answer,
   mb_forward,
   mb_setMailbox,
-  u_loadBody,
-  u_readyBody,
   mb_clearEditor,
   mb_closeEditor,
   mb_send_message,
-  u_goAll,
   mb_refresh,
   checkEmail,
   u_handleNewEmail,
@@ -43,25 +36,8 @@ expose({
   setAutocompleteAddresses
 })
 
-function u_getGeo (id) {
-  showLoader()
-
-  if ($('#fs' + id + 'plz').val() != '' && $('#fs' + id + 'stadt').val() != '' && $('#fs' + id + 'anschrift').val() != '') {
-    u_loadCoords({
-      plz: $('#fs' + id + 'plz').val(),
-      stadt: $('#fs' + id + 'stadt').val(),
-      anschrift: $('#fs' + id + 'anschrift').val(),
-      complete: function () {
-        hideLoader()
-      }
-    }, function (lat, lon) {
-      ajreq('updateGeo', { lat: lat, lon: lon, id: id })
-    })
-  }
-}
-
 function mb_finishFile (newname) {
-  $('ul#et-file-list li:last').addClass('finish').append('<input type="hidden" class="tmp" value="' + newname + '" name="tmp_' + $('ul#et-file-list li').length + '" />')
+  $('ul#et-file-list li:last').addClass('finish').append(`<input type="hidden" class="tmp" value="${newname}" name="tmp_${$('ul#et-file-list li').length}" />`)
   $('#etattach-button').button('option', 'disabled', false)
 }
 
@@ -114,7 +90,7 @@ function mb_answer () {
 
   let subject = $('#mb-hidden-subject').val()
   if (subject.substring(0, 3) != 'Re:') {
-    subject = 'Re: ' + subject
+    subject = `Re: ${subject}`
   }
 
   $('#message-editor').dialog('option', {
@@ -140,30 +116,18 @@ function mb_forward () {
 
 function mb_setMailbox (mb_id) {
   if ($('#edit-von').length > 0) {
-    let email = $('#edit-von option.mb-' + mb_id).text()
-    $('#edit-von option.mb-' + mb_id).remove()
+    let email = $(`#edit-von option.mb-${mb_id}`).text()
+    $(`#edit-von option.mb-${mb_id}`).remove()
     let html = $('#edit-von').html()
     $('#edit-von').html('')
 
-    $('#edit-von').html('<option value="' + mb_id + '" class="mb-' + mb_id + '">' + email + '</option>' + html)
+    $('#edit-von').html(`<option value="${mb_id}" class="mb-${mb_id}">${email}</option>${html}`)
   }
-}
-
-function u_loadBody () {
-  if ($('.mailbox-body iframe').length > 0) {
-    $('.mailbox-body-loader').show()
-    $('.mailbox-body').hide()
-  }
-}
-
-function u_readyBody () {
-  hideLoader()
-  $('.mailbox-body').show()
-  $('.mailbox-body-loader').hide()
 }
 
 function mb_clearEditor () {
   $('#edit-von').val('')
+  u_handleNewEmail('') // fixes some wired bug, where the edit-an-field is missing after reopening the form
   for (let i = 1; i < $('.edit-an').length; i++) {
     $('.edit-an:last').parent().parent().parent().remove()
   }
@@ -200,9 +164,9 @@ function mb_send_message () {
 
   let an = ''
   $('.edit-an').each(function () {
-    an = an + ';' + $(this).val()
+    an = `${an};${$(this).val()}`
   })
-
+  console.log(an, $('.edit-an'))
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
@@ -216,10 +180,6 @@ function mb_send_message () {
       reply: parseInt($('#edit-reply').val())
     }, 'post')
   }
-}
-
-function u_goAll () {
-
 }
 
 function mb_refresh () {
@@ -263,12 +223,13 @@ function u_addTypeHead () {
     minLength: 2
   }, {
     name: 'addresses',
+    displayKey: 'value',
     source: substringMatcher(addresses),
     limit: 15
   })
 
   $('.edit-an').on('typeahead:selected typeahead:autocompleted', function (e, datum) {
-    window.setTimeout(() => (u_handleNewEmail(this.value, $(this))), 100)
+    window.setTimeout(() => (u_handleNewEmail(datum.value, $(this))), 100)
   }).on('blur', function () {
     let $this = this
     if ($this.value != '' && !checkEmail($this.value)) {
@@ -299,10 +260,10 @@ function u_handleNewEmail (email, el) {
     u_addTypeHead()
     var height = $('#edit-body').height() - (availmail_count * 28)
     if (height > 40) {
-      $('#edit-body').css('height', height + 'px')
+      $('#edit-body').css('height', `${height}px`)
     }
 
-    $('.edit-an:last').focus()
+    $('.edit-an:last').trigger('focus')
   }
 }
 

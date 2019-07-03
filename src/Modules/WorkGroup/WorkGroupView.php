@@ -32,12 +32,12 @@ class WorkGroupView extends View
 
 		if ($group['leader']) {
 			foreach ($group['leader'] as $gl) {
-				$head .= '<a style="margin:4px 4px 0 0;" onclick="profile(' . (int)$gl['id'] . ');return false;" href="#" class="member"><img alt="' . $gl['name'] . '" src="' . $this->func->img($gl['photo']) . '"></a>';
+				$head .= '<a style="margin:4px 4px 0 0;" href="/profile/' . (int)$gl['id'] . '" class="member"><img alt="' . $gl['name'] . '" src="' . $this->imageService->img($gl['photo']) . '"></a>';
 			}
 			$head = $this->v_utils->v_input_wrapper(count($group['leader']) . ' Ansprechpartner', $head);
 		}
 
-		$head .= $this->v_utils->v_field($this->func->s('contact-disclaimer'));
+		$head .= $this->v_utils->v_field($this->translationHelper->s('contact-disclaimer'));
 
 		return $head . $this->v_utils->v_form_textarea('message');
 	}

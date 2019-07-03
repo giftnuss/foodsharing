@@ -10,23 +10,31 @@
             <Avatar
               :url="author.avatar"
               :sleep-status="author.sleepStatus"
-              size="130"
+              :size="130"
             />
           </a>
           <a
             v-if="!wXS"
+            @click="openChat"
             class="btn btn-sm btn-outline-primary"
-            @click="openChat"><i class="fa fa-comments" /> {{ $i18n('chat.open_chat') }}</a>
+          >
+            <i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}
+          </a>
         </div>
         <div
+          v-html="body"
           class="col-sm-9"
-          v-html="body" />
+        />
       </div>
       <div class="card-footer">
         <div class="row">
           <div class="col-auto text-muted pt-1 pl-3">
-            <small v-if="wXS">{{ createdAt | dateFormat('full-short') }}</small>
-            <small v-else>{{ createdAt | dateFormat('full-long') }}</small>
+            <small v-if="wXS">
+              {{ createdAt | dateFormat('full-short') }}
+            </small>
+            <small v-else>
+              {{ createdAt | dateFormat('full-long') }}
+            </small>
           </div>
           <div class="col text-right">
             <ThreadPostActions
@@ -39,7 +47,6 @@
               @reactionRemove="$emit('reactionRemove', $event)"
               @reply="$emit('reply', body)"
             />
-
           </div>
         </div>
       </div>
@@ -59,7 +66,7 @@ export default {
   props: {
     id: { type: Number, default: null },
     body: { type: String, default: '' },
-    author: { type: Object, default: () => ({ avatar: {} }) },
+    author: { type: Object, default: () => ({ avatar: null }) },
     createdAt: { type: Date, default: null },
     reactions: { type: Object, default: () => ({}) },
     mayEdit: { type: Boolean, default: false },

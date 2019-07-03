@@ -6,18 +6,18 @@ export FS_ENV=test
 # assumes all the tests are idempotent
 # the db does not get recreated between runs
 
-set -e
+set -o errexit
 
-. $(dirname "$0")/inc.sh
+source $(dirname "$0")/inc.sh
 
 echo "Running tests"
 exec-in-container-asroot selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"
-exec-in-container-asroot app rm -rf cache/.views-cache cache/di-cache.php
+exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 exec-in-container app vendor/bin/codecept run "$@"
 
 if [ $# -eq 0 ]; then
   echo "Running chat tests"
-  run-in-container chat npm test
+  run-in-container chat 'npm run lint && npm test'
 fi
 
 echo "Done!"

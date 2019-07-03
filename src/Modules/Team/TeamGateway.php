@@ -12,7 +12,7 @@ class TeamGateway extends BaseGateway
 		$stm = '
 				SELECT 
 					fs.id, 
-					CONCAT(mb.name,"@' . DEFAULT_EMAIL_HOST . '") AS email, 
+					CONCAT(mb.name,"@' . PLATFORM_MAILBOX_HOST . '") AS email, 
 					fs.name,
 					fs.nachname,
 					fs.photo,
@@ -20,9 +20,6 @@ class TeamGateway extends BaseGateway
 					fs.rolle,
 					fs.geschlecht,
 					fs.homepage,
-					fs.github,
-					fs.tox,
-					fs.twitter,
 					fs.position,
 					fs.contact_public				
 				FROM 
@@ -59,10 +56,7 @@ class TeamGateway extends BaseGateway
                         fs.rolle,
                         fs.geschlecht,
                         fs.photo,
-                        fs.twitter,
-                        fs.tox,
                         fs.homepage,
-                        fs.github,
                         fs.position,
                         fs.email,
                         fs.contact_public

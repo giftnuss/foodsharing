@@ -5,28 +5,33 @@
         Antworten
       </div>
       <div class="card-body">
+        <p v-html="$i18n('forum.markdown_description')" />
         <textarea
           ref="textarea"
           v-model="text"
+          @keyup.ctrl.enter="submit"
           class="form-control"
           rows="3"
-          @keyup.shift.enter="submit"/>
+        />
       </div>
       <div class="card-footer">
         <div class="row">
           <div class="col ml-2 pt-2">
             <b-form-checkbox
               :checked="isFollowing"
-              @change="$emit('toggleFollow')" >
+              @change="$emit('toggleFollow')"
+            >
               {{ $i18n('forum.subscribe_thread') }}
             </b-form-checkbox>
-
           </div>
           <div class="col-auto text-right">
             <button
               :disabled="!text.trim()"
+              @click="submit"
               class="btn btn-secondary"
-              @click="submit">Senden</button>
+            >
+              Senden
+            </button>
           </div>
         </div>
       </div>

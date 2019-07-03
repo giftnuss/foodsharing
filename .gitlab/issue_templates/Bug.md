@@ -4,7 +4,7 @@ Before opening a new bug report, make sure to search for any existing issues tha
 
 You can view the list of open issues here:
 
-https://gitlab.com/foodsharing-dev/issues0/issues
+https://gitlab.com/foodsharing-dev/foodsharing/issues
 
 Please understand we have very few developers who can work on bug fixes, so please don't expect any immediate response.
 

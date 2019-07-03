@@ -1,6 +1,9 @@
 #!/bin/bash
 
-set -eu
+# exit shell as soon as a command fails (exit status not 0):
+set -o errexit
+# Treat unset variables as an error when substituting:
+set -o nounset
 
 if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
 
@@ -10,7 +13,7 @@ if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
   COMMIT_MESSAGE=$(git log -1 --pretty="%s - %an")
   REF=$CI_COMMIT_REF_NAME;
   REF_URL="$REPO_URL/tree/$REF"
-  COMMIT_URL="$REPO_URL/tree/$COMMIT_SHA"
+  COMMIT_URL="$REPO_URL/tree/$CI_COMMIT_SHA"
 
   URL="$CI_ENVIRONMENT_URL"
   DEPLOY_ENV="$CI_ENVIRONMENT_NAME"

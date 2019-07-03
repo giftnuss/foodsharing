@@ -2,6 +2,7 @@
     {% block content %}
         {{ form_start(newThreadForm) }}
         {{ form_row(newThreadForm.title) }}
+        {{ 'forum.markdown_description'|trans|raw }}
         {{ form_row(newThreadForm.body) }}
         <input type="submit" class="button" name="submitted"
                value="{{ 'button.send'|trans }}"/>

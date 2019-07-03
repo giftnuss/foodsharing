@@ -1,7 +1,7 @@
 <?php
 
-use Foodsharing\DI;
 use Foodsharing\Lib\Db\Db;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -60,7 +60,7 @@ function api_generate_calendar($fs, $options, Db $model)
 	/* from https://gist.github.com/jakebellacera/635416 */
 	header('Content-type: text/calendar; charset=utf-8');
 	header('Content-Disposition: attachment; filename=calendar.ics');
-	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
+	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	if (strpos($options, 's') !== false) {
 		$fetches = $model->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM fs_abholer a INNER JOIN fs_betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = ' . (int)$fs . ' AND a.`date` > NOW() - INTERVAL 1 DAY');
 		if (is_array($fetches)) {
@@ -73,7 +73,7 @@ function api_generate_calendar($fs, $options, Db $model)
 				if (!$f['confirmed']) {
 					$summary .= ' (unbestätigt)';
 				}
-				$description = 'Foodsharing Abholung bei ' . $f['name'];
+				$description = 'foodsharing Abholung bei ' . $f['name'];
 				$uri = BASE_URL . '/?page=fsbetrieb&id=' . $f['id'];
 				// 3. Echo out the ics file's contents
 				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
@@ -118,7 +118,7 @@ function api_generate_calendar($fs, $options, Db $model)
 				$dateend = $c['end_ts'];
 				$uid = $c['id'] . $c['start_ts'] . '@event.foodsharing.de';
 				if ($c['online']) {
-					$address = 'Online, mumble.lebensmittelretten.de';
+					$address = 'Online, mumble.foodsharing.de';
 				} else {
 					$address = $c['loc_name'] . ', ' . $c['street'] . ' ' . $c['zip'] . ', ' . $c['city'];
 				}
@@ -126,7 +126,7 @@ function api_generate_calendar($fs, $options, Db $model)
 				if (!$c['status'] == 1) {
 					$summary = '(' . $summary . ')';
 				}
-				$description = 'Foodsharing Event: ' . $c['description'];
+				$description = 'foodsharing Event: ' . $c['description'];
 				$uri = BASE_URL . '/?page=event&id=' . $c['id'];
 				// 3. Echo out the ics file's contents
 				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
@@ -142,8 +142,12 @@ $fs = $_GET['fs'];
 $key = $_GET['key'];
 $opts = $_GET['opts'];
 
-/* @var $model Model */
-$model = DI::$shared->get(Model::class);
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
+
+/* @var $model Db */
+$model = $container->get(Db::class);
 
 if (!check_api_token($fs, $key, $model)) {
 	http_response_code(403);

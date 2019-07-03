@@ -9,6 +9,7 @@ settings:
     bootstrap: _bootstrap.php
     colors: true
     memory_limit: 1024M
+    backup_globals: false
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
@@ -25,23 +26,24 @@ modules:
     config:
         Db:
             # http://codeception.com/docs/modules/Db
-            dsn: mysql:host=db;dbname=foodsharing
+            dsn: mysql:host=db;dbname=foodsharing;charset=utf8mb4
             user: root
             password: root
-            populator: 'mysql -uroot -hdb -proot foodsharing < migrations/_reload_data.sql'
+            cleanup: true
+            populator: 'mysql -u$user -h$host -p$password $dbname < migrations/_reload_data.sql'
         \Helper\Foodsharing:
             # custom module that inherits from Db so also needs db config
-            dsn: mysql:host=db;dbname=foodsharing
+            dsn: mysql:host=db;dbname=foodsharing;charset=utf8mb4
             user: root
             password: root
         \Helper\FoodsharingUrl:
             # custom module that inherits from Db so also needs db config
-            dsn: mysql:host=db;dbname=foodsharing
+            dsn: mysql:host=db;dbname=foodsharing;charset=utf8mb4
             user: root
             password: root
         \Helper\Container:
             # custom module that inherits from Db so also needs db config
-            dsn: mysql:host=db;dbname=foodsharing
+            dsn: mysql:host=db;dbname=foodsharing;charset=utf8mb4
             user: root
             password: root
             host: db

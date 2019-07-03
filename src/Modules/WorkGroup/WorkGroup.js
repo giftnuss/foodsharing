@@ -13,11 +13,11 @@ if ($groups.length > 3) {
   $groups.children('.head').css({
     'cursor': 'pointer',
     'margin-bottom': '10px'
-  }).mouseover(function () {
+  }).on('mouseover', function () {
     $(this).css('text-decoration', 'underline')
-  }).mouseout(function () {
+  }).on('mouseout', function () {
     $(this).css('text-decoration', 'none')
-  }).click(function () {
+  }).on('click', function () {
     const $this = $(this)
 
     if (!$this.next('.ui-widget.ui-widget-content.corner-bottom').is(':visible')) {
@@ -49,7 +49,7 @@ function handleApplicationConstraintVisibility () {
   }
 }
 
-selectEl.change(handleApplicationConstraintVisibility)
+selectEl.on('change', handleApplicationConstraintVisibility)
 handleApplicationConstraintVisibility()
 
 const onAfterClose = []
@@ -112,7 +112,7 @@ $('#work_group_form_photo-link').fancybox({
     const onUploadClick = () => {
       cropper.getCroppedCanvas({
         width: 500,
-        heigth: 500,
+        height: 500,
         maxWidth: 2000,
         maxHeight: 2000,
         fillColor: '#ffffff',
@@ -133,7 +133,7 @@ $('#work_group_form_photo-link').fancybox({
             $.fancybox.close()
           },
           error: (data) => {
-            uploadError.innerHTML = 'Upload failed: ' + data
+            uploadError.innerHTML = `Upload failed: ${data}`
           }
         })
       })
@@ -146,12 +146,12 @@ $('#work_group_form_photo-link').fancybox({
   }
 })
 
-$('#work_group_form_photo-opener').button().click(function () {
+$('#work_group_form_photo-opener').button().on('click', function () {
   $('#work_group_form_photo-link').trigger('click')
 })
 
 const tageditOptions = {
-  autocompleteURL: 'xhr.php?f=getRecip',
+  autocompleteURL: '/xhr.php?f=getRecip',
   allowEdit: false,
   allowAdd: false,
   animSpeed: 100

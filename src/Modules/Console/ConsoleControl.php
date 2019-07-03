@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Console;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Func;
+use Foodsharing\Lib\Db\Mem;
 
 class ConsoleControl
 {
@@ -11,10 +11,11 @@ class ConsoleControl
 	 * @var Db
 	 */
 	protected $model;
+
 	/**
-	 * @var Func
+	 * @var Mem
 	 */
-	protected $func;
+	protected $mem;
 
 	public function __construct()
 	{
@@ -23,9 +24,9 @@ class ConsoleControl
 	/**
 	 * @required
 	 */
-	public function setFunc(Func $func)
+	public function setMem(Mem $mem)
 	{
-		$this->func = $func;
+		$this->mem = $mem;
 	}
 
 	public function index()
@@ -37,51 +38,9 @@ class ConsoleControl
 		return false;
 	}
 
-	protected function progressbar($count)
-	{
-		return new \ProgressBar\Manager(0, $count);
-	}
-
-	protected function calcDuration($start_ts, $current_item, $total_count)
-	{
-		$duration = (time() - $start_ts);
-		$duration_one = ($duration / $current_item);
-		$time_left = $duration_one * ($total_count - $current_item);
-
-		return 'duration: ' . $this->secs_to_h($duration) . ' time left: ' . $this->secs_to_h($time_left);
-	}
-
-	private function secs_to_h($secs)
-	{
-		$units = array(
-			'week' => 7 * 24 * 3600,
-			'day' => 24 * 3600,
-			'hour' => 3600,
-			'minute' => 60,
-			'second' => 1,
-		);
-
-		// specifically handle zero
-		if ($secs == 0) {
-			return '0 seconds';
-		}
-
-		$s = '';
-
-		foreach ($units as $name => $divisor) {
-			if ($quot = (int)($secs / $divisor)) {
-				$s .= "$quot $name";
-				$s .= (abs($quot) > 1 ? 's' : '') . ', ';
-				$secs -= $quot * $divisor;
-			}
-		}
-
-		return substr($s, 0, -2);
-	}
-
 	public static function error($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		echo "\033[31m" . self::cliTime() . " [ERROR]\t" . $msg . " \033[0m\n";
@@ -89,7 +48,7 @@ class ConsoleControl
 
 	public static function info($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		//echo "\033[37m[INFO]\t" . $msg." \033[0m\n";
@@ -98,7 +57,7 @@ class ConsoleControl
 
 	public static function success($msg)
 	{
-		if (QUIET) {
+		if (defined('QUIET') && QUIET == true) {
 			return false;
 		}
 		echo "\033[32m" . self::cliTime() . " [INFO]\t" . $msg . " \033[0m\n";

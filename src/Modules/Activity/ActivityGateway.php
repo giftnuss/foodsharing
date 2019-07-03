@@ -56,7 +56,7 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
-	public function fetchAllWallpostsFromFoodBasekts($fsId, $page): array
+	public function fetchAllWallpostsFromFoodBaskets($fsId, $page): array
 	{
 		$stm = '
 			SELECT
@@ -228,6 +228,7 @@ class ActivityGateway extends BaseGateway
 			AND 	n.betrieb_id = b.id
 			AND 	bt.betrieb_id = n.betrieb_id
 			AND 	bt.foodsaver_id = :foodsaver_id
+			AND 	bt.active = 1
 			AND 	n.milestone = 0
 			AND 	n.last = 1
 

@@ -5,7 +5,7 @@ function lib (filename) {
   return path.join(clientRoot, 'lib', filename)
 }
 
-// const shims = createShimHelper()
+const production = process.env.NODE_ENV === 'production'
 
 Object.assign(module.exports, convert({
 
@@ -21,8 +21,7 @@ Object.assign(module.exports, convert({
       L: 'leaflet'
     },
     dependencies: [
-      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css'),
-      lib('leaflet/leaflet.awesome-markers.foodsharing-overrides.css')
+      require.resolve('leaflet.awesome-markers/dist/leaflet.awesome-markers.css')
     ]
   },
 
@@ -41,6 +40,17 @@ Object.assign(module.exports, convert({
     dependencies: [
       'fullpage.js/dist/jquery.fullpage.css'
     ]
+  },
+
+  'jquery-migrate': {
+    // production version does not show all the JQMIGRATE warnings/traces
+    resolve: require.resolve(production ? 'jquery-migrate/dist/jquery-migrate.min.js' : 'jquery-migrate'),
+    // disableAMD resolves https://github.com/jquery/jquery-migrate/issues/273
+    // maybe can remove if newer versions of jquery-migrate fix the issue
+    disableAMD: true,
+    imports: {
+      jQuery: 'jquery'
+    }
   },
 
   'jquery-slimscroll': {
@@ -62,15 +72,18 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'typeahead-addresspicker': {
-    resolve: lib('typeahead-addresspicker.js'),
-    imports: {
-      jQuery: 'jquery'
-    },
+  'corejs-typeahead': {
     dependencies: [
-      'typeahead'
-    ],
-    exports: 'AddressPicker'
+      'css/typeahead.css'
+    ]
+  },
+
+  'typeahead-address-photon': {
+    imports: {
+      jQuery: 'jquery',
+      Bloodhound: 'corejs-typeahead'
+    },
+    exports: 'this.PhotonAddressEngine'
   },
 
   'jquery-ui-addons': {
@@ -99,13 +112,6 @@ Object.assign(module.exports, convert({
     dependencies: [
       lib('dynatree/skin/ui.dynatree.css')
     ]
-  },
-
-  'typeahead': {
-    resolve: lib('typeahead.bundle.js'),
-    imports: {
-      'window.jQuery': 'jquery'
-    }
   },
 
   'jquery-tablesorter': {

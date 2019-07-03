@@ -15,11 +15,6 @@ class StatsModel extends Db
 		parent::__construct();
 	}
 
-	public function getBetriebe($bezirk_id = false)
-	{
-		return $this->q('SELECT id, name, added FROM fs_betrieb');
-	}
-
 	public function getFirstFetchInBetrieb($bid, $fsid)
 	{
 		return $this->qOne(

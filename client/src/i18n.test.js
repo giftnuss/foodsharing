@@ -16,21 +16,28 @@ describe('i18n', () => {
   })
 
   it('basic translation', () => {
-    assert.equal(i18n('foo'), 'my nice translation')
+    assert.strictEqual(i18n('foo'), 'my nice translation')
   })
 
   it('translation with variables', () => {
-    assert.equal(i18n('bar', {
+    assert.strictEqual(i18n('bar', {
       NAME: 'Peter',
       AGE: 23
     }), 'my name is Peter and I am 23 years old')
   })
 
-  it('complains if missing key', () => {
-    assert.throws(() => i18n('doesnotexist'))
+  it('responds with placeholder if missing key', () => {
+    assert.strictEqual(i18n('doesnotexist'), 'doesnotexist')
   })
 
   it('complains with missing variables', () => {
     assert.throws(() => i18n('bar', { NAME: 'peter' }))
+  })
+
+  it('accepts falsy value as variable', () => {
+    assert.strictEqual(i18n('bar', {
+      NAME: '',
+      AGE: 0
+    }), 'my name is  and I am 0 years old')
   })
 })

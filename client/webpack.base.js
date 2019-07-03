@@ -3,9 +3,11 @@ const clientRoot = path.resolve(__dirname)
 const shims = require('./shims')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const plugins = [
-  new VueLoaderPlugin()
+  new VueLoaderPlugin(),
+  new WriteFilePlugin() // to write files to filesystem when using webpack-dev-server
 ]
 
 const production = process.env.NODE_ENV === 'production'
@@ -46,7 +48,24 @@ module.exports = {
           /(node_modules)/,
           resolve('lib') // ignore the old lib/**.js files
         ],
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            'presets': [
+              [
+                '@babel/preset-env',
+                {
+                  'targets': {
+                    'browsers': ['> 0.5%', 'ie_mob >=11']
+                  },
+                  'useBuiltIns': 'usage',
+                  'modules': 'commonjs',
+                  'corejs': '2.x'
+                }
+              ]
+            ]
+          }
+        }
       },
       {
         test: /\.vue$/,
@@ -58,12 +77,7 @@ module.exports = {
         use: [
           production ? MiniCssExtractPlugin.loader : 'style-loader',
           {
-            loader: 'css-loader',
-            options: {
-              alias: {
-                './img': ('img')
-              }
-            }
+            loader: 'css-loader'
           }
         ]
       },

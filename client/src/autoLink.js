@@ -3,9 +3,6 @@ export default function autoLink (text) {
   var currentHost = document.location.host
 
   return text.replace(pattern, function (match, space, url, urlWithoutProto) {
-    return space + '<a' +
-      ' href="' + url + '"' +
-      (urlWithoutProto.split('/', 2)[0] !== currentHost ? ' target="_blank"' : '') +
-      '>' + urlWithoutProto + '</a>'
+    return `${space}<a href="${url}" ${urlWithoutProto.split('/', 2)[0] !== currentHost ? ' target="_blank"' : ''}>${urlWithoutProto}</a>`
   })
 }

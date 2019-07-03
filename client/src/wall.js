@@ -7,21 +7,21 @@ expose({ u_delPost, mb_finishImage })
 
 export function u_delPost (postId, module, wallId) {
   $.ajax({
-    url: '/xhrapp.php?app=wallpost&m=delpost&table=' + module + '&id=' + wallId + '&post=' + postId,
+    url: `/xhrapp.php?app=wallpost&m=delpost&table=${module}&id=${wallId}&post=${postId}`,
     dataType: 'JSON',
     success: function (data) {
       if (data.status == 1) {
-        $('.wallpost-' + postId).remove()
+        $(`.wallpost-${postId}`).remove()
       }
     }
   })
 }
 
 export function mb_finishImage (file) {
-  $('#wallpost-attach').append('<input type="hidden" name="attach[]" value="image-' + file + '" />')
+  $('#wallpost-attach').append(`<input type="hidden" name="attach[]" value="image-${file}" />`)
   $('#attach-preview div:last').remove()
   $('.attach-load').remove()
-  $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/' + file + '"><img src="images/wallpost/thumb_' + file + '" height="60" /></a>')
+  $('#attach-preview').append(`<a rel="wallpost-gallery" class="preview-thumb" href="images/wallpost/${file}"><img src="images/wallpost/thumb_${file}" height="60" /></a>`)
   $('#attach-preview').append('<div style="clear:both;"></div>')
   $('#attach-preview a').fancybox()
   mb_clear()
@@ -34,34 +34,34 @@ function mb_clear () {
 
 export function init (module, wallId) {
   $('#wallpost-text').autosize()
-  $('#wallpost-text').focus(function () {
+  $('#wallpost-text').on('focus', function () {
     $('#wallpost-submit').show()
   })
 
-  $('#wallpost-attach-trigger').change(function () {
+  $('#wallpost-attach-trigger').on('change', function () {
     $('#attach-preview div:last').remove()
     $('#attach-preview').append('<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>')
     $('#attach-preview').append('<div style="clear:both;"></div>')
-    $('#wallpost-attachimage-form').submit()
+    $('#wallpost-attachimage-form').trigger('submit')
   })
 
-  $('#wallpost-text').blur(function () {
+  $('#wallpost-text').on('blur', function () {
     $('#wallpost-submit').show()
   })
-  $('#wallpost-post').submit(function (ev) {
+  $('#wallpost-post').on('submit', function (ev) {
     ev.preventDefault()
   })
-  $('#wallpost-attach-image').button().click(function () {
-    $('#wallpost-attach-trigger').click()
+  $('#wallpost-attach-image').button().on('click', function () {
+    $('#wallpost-attach-trigger').trigger('click')
   })
-  $('#wall-submit').button().click(function (ev) {
+  $('#wall-submit').button().on('click', function (ev) {
     ev.preventDefault()
     if (($('#wallpost-text').val() != '' && $('#wallpost-text').val() != i18n('wall.message_placeholder')) || $('#attach-preview a').length > 0) {
       $('.wall-posts table tr:first').before('<tr><td colspan="2" class="load">&nbsp;</td></tr>')
 
       let attach = ''
       $('#wallpost-attach input').each(function () {
-        attach = attach + ':' + $(this).val()
+        attach = `${attach}:${$(this).val()}`
       })
       if (attach.length > 0) {
         attach = attach.substring(1)
@@ -73,7 +73,7 @@ export function init (module, wallId) {
       }
 
       $.ajax({
-        url: '/xhrapp.php?app=wallpost&m=post&table=' + module + '&id=' + wallId,
+        url: `/xhrapp.php?app=wallpost&m=post&table=${module}&id=${wallId}`,
         type:
           'POST',
         data:
@@ -102,11 +102,11 @@ export function init (module, wallId) {
       $('#wallpost-text').css('height', '33px')
     }
   })
-  $('#wallpost-attach-trigger').focus(function () {
+  $('#wallpost-attach-trigger').on('focus', function () {
     $('#wall-submit')[0].focus()
   })
   $.ajax({
-    url: '/xhrapp.php?app=wallpost&m=update&table=' + module + '&id=' + wallId + '&last=0',
+    url: `/xhrapp.php?app=wallpost&m=update&table=${module}&id=${wallId}&last=0`,
     dataType:
       'JSON',
     success:

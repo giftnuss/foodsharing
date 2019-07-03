@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { getBellList, deleteBell } from '@/api/bells'
+import { getBellList, deleteBell, markBellsAsRead } from '@/api/bells'
 
 export default new Vue({
   data: {
@@ -24,6 +24,20 @@ export default new Vue({
         this.$set(bell, 'isDeleting', false)
         throw err
       }
+    },
+    async markAsRead (bell) {
+      let bellsToMarkAsRead = this.allBellsWithSameHref(bell)
+
+      let ids = []
+      for (let b of bellsToMarkAsRead) {
+        b.isRead = true
+        ids.push(b.id)
+      }
+
+      await markBellsAsRead(ids)
+    },
+    allBellsWithSameHref (bell) {
+      return this.bells.filter(b => b.href === bell.href)
     }
   }
 })

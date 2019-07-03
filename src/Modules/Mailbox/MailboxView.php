@@ -19,19 +19,19 @@ class MailboxView extends View
 						$("#mbh-folder").val("inbox");$("#mbh-mailbox").val(' . (int)$b['id'] . ');$("#mbh-type").val("' . $b['type'] . '");';
 			}
 
-			$children[] = '{title: "' . $b['name'] . '@' . DEFAULT_EMAIL_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
+			$children[] = '{title: "' . $b['name'] . '@' . PLATFORM_MAILBOX_HOST . '", isFolder: true, icon:"mailbox.png",' . $expand . '
                     children: [
-                        {title: "' . $this->func->s('inbox') . '",ident:' . $b['id'] . ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '"},
-                        {title: "' . $this->func->s('sent') . '",ident:' . $b['id'] . ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '"},
-                        {title: "' . $this->func->s('trash') . '",ident:' . $b['id'] . ',folder:"trash",icon:"trash.png",type:"' . $b['type'] . '"}
+                        {title: "' . $this->translationHelper->s('inbox') . '",ident:' . $b['id'] . ',folder:"inbox",icon:"inbox.png",type:"' . $b['type'] . '"},
+                        {title: "' . $this->translationHelper->s('sent') . '",ident:' . $b['id'] . ',folder:"sent",icon:"sent.png",type:"' . $b['type'] . '"},
+                        {title: "' . $this->translationHelper->s('trash') . '",ident:' . $b['id'] . ',folder:"trash",icon:"trash.png",type:"' . $b['type'] . '"}
                     ]
                 }';
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#mailfolder").dynatree({
             onActivate: function(node) {
-                
+
 				if(node.data.ident != undefined)
 				{
 					ajreq("loadmails",{mb:node.data.ident,folder:node.data.folder,type:node.data.type});
@@ -40,16 +40,16 @@ class MailboxView extends View
 					$("#mbh-folder").val(node.data.folder);
 					$("#mbh-type").val(node.data.type);
 				}
-				
-                
+
+
             },
 			imagePath: "/img/icon-mail/",
             persist: false,
-            children: [ 
+            children: [
                 ' . implode(',', $children) . '
             ]
-        });	
-         ' . $lat_js . '	
+        });
+         ' . $lat_js . '
 		');
 
 		return $this->v_utils->v_field('<div id="mailfolder"></div><input type="hidden" id="mbh-mailbox" value="" /><input type="hidden" id="mbh-folder" value="" /><input type="hidden" id="mbh-type" value="" />', 'Mailboxen');
@@ -57,41 +57,41 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . DEFAULT_EMAIL_HOST, array(
-			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->func->s('mailbox_member'), 'xhr' => 'foodsaver')),
-			$this->v_utils->v_input_wrapper($this->func->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
+		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, array(
+			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->translationHelper->s('mailbox_member'), 'xhr' => 'Recip')),
+			$this->v_utils->v_input_wrapper($this->translationHelper->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
-		), array('submit' => $this->func->s('save')));
+		), array('submit' => $this->translationHelper->s('save')));
 	}
 
 	public function mailboxform()
 	{
-		return $this->v_utils->v_quickform($this->func->s('new_mailbox'), array(
-			$this->v_utils->v_form_text('name', array('desc' => $this->func->s('mailbox_name_desc')))
-		), array('submit' => $this->func->s('save')));
+		return $this->v_utils->v_quickform($this->translationHelper->s('new_mailbox'), array(
+			$this->v_utils->v_form_text('name', array('desc' => $this->translationHelper->s('mailbox_name_desc')))
+		), array('submit' => $this->translationHelper->s('save')));
 	}
 
 	public function manageOpt()
 	{
 		return $this->v_utils->v_menu(array(
-			array('name' => $this->func->s('new_mailbox'), 'href' => '/?page=mailbox&a=newbox')
-		), $this->func->s('options'));
+			array('name' => $this->translationHelper->s('new_mailbox'), 'href' => '/?page=mailbox&a=newbox')
+		), $this->translationHelper->s('options'));
 	}
 
 	public function options()
 	{
 		return $this->v_utils->v_menu(array(
-			array('name' => $this->func->s('refresh'), 'click' => 'mb_refresh();return false;'),
-			array('name' => $this->func->s('new_message'), 'click' => 'mb_new_message();return false;')
-		), $this->func->s('options'));
+			array('name' => $this->translationHelper->s('refresh'), 'click' => 'mb_refresh();return false;'),
+			array('name' => $this->translationHelper->s('new_message'), 'click' => 'mb_new_message();return false;')
+		), $this->translationHelper->s('options'));
 	}
 
 	public function noMessage()
 	{
 		return '
 			<tr class="message">
-				<td colspan="4" align="center"><div class="ui-padding">' . $this->v_utils->v_info($this->func->s('no_message')) . '</div></td>	
-			</tr>		
+				<td colspan="4" align="center"><div class="ui-padding">' . $this->v_utils->v_info($this->translationHelper->s('no_message')) . '</div></td>
+			</tr>
 		';
 	}
 
@@ -128,10 +128,10 @@ class MailboxView extends View
 				<tr id="message-' . $m['id'] . '" class="message ' . $status . '">
 					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
 					<td class="from"><a href="#" onclick="return false;" title="' . $von_str . '">' . $von_str . '</a></td>
-					
-					<td class="date">' . $this->func->niceDateShort($m['time_ts']) . '</td>
-					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>	
-				</tr>		
+
+					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
+					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>
+				</tr>
 			';
 		}
 
@@ -168,7 +168,7 @@ class MailboxView extends View
 		}
 
 		if ($mail['time_ts'] > 1391338283) {
-			$body = '<iframe style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
+			$body = '<iframe sandbox="" style="width:100%;height:100%;border:0;margin:0;padding:0;" frameborder="0" src="/xhrapp.php?app=mailbox&m=fmail&id=' . $mail['id'] . '"></iframe>';
 		} else {
 			$body = nl2br($mail['body']);
 		}
@@ -177,33 +177,33 @@ class MailboxView extends View
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->func->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->func->s('answer') . '</a> 
+						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->translationHelper->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->translationHelper->s('answer') . '</a>
 					</div>
 					<table class="header">
 						<tr>
-							<td class="label">' . $this->func->s('von') . '</td>
+							<td class="label">' . $this->translationHelper->s('von') . '</td>
 							<td class="data"><a onclick="mb_mailto(\'' . $von['mailbox'] . '@' . $von['host'] . '\');return false;" href="#" title="' . $von['mailbox'] . '@' . $von['host'] . '">' . $von_str . '</a></td>
 						</tr>
 						<tr>
-							<td class="label">' . $this->func->s('an') . '</td>
+							<td class="label">' . $this->translationHelper->s('an') . '</td>
 							<td class="data">' . implode(', ', $an_str) . '</td>
 						</tr>
 						<tr>
-							<td class="label">' . $this->func->s('date') . '</td>
-							<td class="data">' . $this->func->niceDate($mail['time_ts']) . '</td>
+							<td class="label">' . $this->translationHelper->s('date') . '</td>
+							<td class="data">' . $this->timeHelper->niceDate($mail['time_ts']) . '</td>
 						</tr>
 					</table>
 				</div>
 				<div class="mailbox-body">
 					' . $body . '
-					
+
 				</div>
 				<div class="mailbox-body-loader" style="display:none;"></div>
 				' . $attach . '
 				<input type="hidden" name="mb-hidden-id" id="mb-hidden-id" value="' . $mail['id'] . '" />
 				<input type="hidden" name="mb-hidden-subject" id="mb-hidden-subject" value="' . $mail['subject'] . '" />
 				<input type="hidden" name="mb-hidden-email" id="mb-hidden-email" value="' . $von['mailbox'] . '@' . $von['host'] . '" />
-						
+
 				<textarea id="mailbox-body-plain" style="display:none;">' . $this->mailAnswer($mail['body'], $mail['time_ts']) . '</textarea>
 			</div>';
 	}
@@ -215,14 +215,14 @@ class MailboxView extends View
 			PHP_EOL .
 			'foodsharing.de - verwenden statt verschwenden' .
 			PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL .
-			'----------- ' . $this->func->sv('message_from', date('j.m.Y H:i', $ts)) . ' Uhr -----------' .
+			'----------- ' . $this->translationHelper->sv('message_from', date('j.m.Y H:i', $ts)) . ' Uhr -----------' .
 			PHP_EOL . PHP_EOL .
 			PHP_EOL . '> ' . str_replace(array("\r", "\n"), array('', PHP_EOL . '> '), $plain);
 	}
 
 	public function folderlist($mailboxes, $mailadresses)
 	{
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 		setAutocompleteAddresses(' . json_encode($mailadresses) . ');
 		$("#message-body").dialog({
 			autoOpen:false,
@@ -234,9 +234,9 @@ class MailboxView extends View
 		    	$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
 		  	}
 		});');
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="message-body">
-			
+
 		</div>
 		');
 
@@ -246,18 +246,18 @@ class MailboxView extends View
 			[type] => bot
 		 */
 		if (count($mailboxes) == 1) {
-			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . DEFAULT_EMAIL_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
+			$von = $mailboxes[0]['email_name'] . ' (' . $mailboxes[0]['name'] . '@' . PLATFORM_MAILBOX_HOST . ')<input type="hidden" id="h-edit-von" value="' . $mailboxes[0]['id'] . '" />';
 		} else {
 			$von = '
 			<select class="von-select ui-corner-all" id="edit-von">';
 			foreach ($mailboxes as $m) {
 				$von .= '
-				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . DEFAULT_EMAIL_HOST . ')</option>';
+				<option class="mb-' . $m['id'] . '" value="' . $m['id'] . '">' . $m['email_name'] . ' (' . $m['name'] . '@' . PLATFORM_MAILBOX_HOST . ')</option>';
 			}
 			$von .= '
 			</select>';
 		}
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 		$("#message-editor").dialog({
 			autoOpen:false,
 			width:980,
@@ -277,43 +277,43 @@ class MailboxView extends View
 					});
 				}
 				u_addTypeHead();
-				
+
 		  	}
 		});
-		$("#etattach").change(function(){
+		$("#etattach").on("change", function(){
 			if(this.files[0].size < 1310720)
 			{
 				$("#etattach-button").button( "option", "disabled", true );
 				setTimeout(function(){
 					$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
 				},10);
-				$(".et-filebox form").submit();
+				$(".et-filebox form").trigger("submit");
 			}
 			else
 			{
-				pulseError("' . $this->func->s('file_to_big') . '");
+				pulseError("' . $this->translationHelper->s('file_to_big') . '");
 			}
 		});
 		');
 
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->func->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->func->s('abort') . '</a>
+						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->translationHelper->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->translationHelper->s('abort') . '</a>
 					</div>
 					<table class="header">
 						<tr>
-							<td class="label">' . $this->func->s('von') . '</td>
+							<td class="label">' . $this->translationHelper->s('von') . '</td>
 							<td class="data">' . $von . '</td>
 						</tr>
 						<tr>
-							<td class="label">' . $this->func->s('an') . '</td>
+							<td class="label">' . $this->translationHelper->s('an') . '</td>
 							<td class="data"><input type="text" name="an[]" class="edit-an" value="" /></td>
 						</tr>
 						<tr id="mail-subject">
-							<td class="label">' . $this->func->s('subject') . '</td>
+							<td class="label">' . $this->translationHelper->s('subject') . '</td>
 							<td class="data"><input class="data ui-corner-all" type="text" name="subject" id="edit-subject" value="" /></td>
 						</tr>
 					</table>
@@ -325,20 +325,20 @@ class MailboxView extends View
 								<div class="wrapper">
 									<div class="et-filebox">
 										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
-											' . $this->v_utils->v_form_file('et-attach', array('btlabel' => $this->func->s('attach_file'))) . '
+											' . $this->v_utils->v_form_file('et-attach', array('btlabel' => $this->translationHelper->s('attach_file'))) . '
 										</form>
 									</div>
-	
-									<iframe width="1" height="1" frameborder="0" name="et-upload" src="empty.html"></iframe>
+
+									<iframe width="1" height="1" frameborder="0" name="et-upload"></iframe>
 									<ul id="et-file-list">
-													
+
 									</ul>
 								</div>
 						</td>
 					</tr>
 				</table>
 				<input type="hidden" name="edit-reply" id="edit-reply" value="0" />
-			</div>	
+			</div>
 		</div>
 		');
 
@@ -353,7 +353,7 @@ class MailboxView extends View
 					</tr>
 				</thead>
 				<tbody>
-				
+
 				</tbody>
 			</table>
 		', 'E-Mails');

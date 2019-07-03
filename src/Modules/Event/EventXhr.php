@@ -4,38 +4,40 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Lib\Xhr\XhrResponses;
 
 class EventXhr extends Control
 {
 	private $stats;
 	private $event;
 	private $gateway;
+	private $responses;
 
-	public function __construct(EventModel $model, EventGateway $gateway)
+	public function __construct(EventGateway $gateway)
 	{
-		$this->model = $model;
 		$this->gateway = $gateway;
+		$this->responses = new XhrResponses();
 
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
 			$this->event = $this->gateway->getEventWithInvites($_GET['id']);
-			if (!$this->mayEvent()) {
-				return false;
-			}
 		}
 
-		$this->stats = array(
-			0 => true, // eingeladen
-			1 => true, // dabei
-			2 => true, // kann vielleciht
-			3 => true  // eingeladen aber abgesagt
-		);
+		$this->stats = [
+			0 => true, // invited
+			1 => true, // will join
+			2 => true, // might join
+			3 => true  // will not join (but has been invited)
+		];
 	}
 
 	public function accept()
 	{
-		if ($this->model->setInviteStatus($_GET['id'], 1)) {
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 1)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Du hast die Einladung angenommen.'));
@@ -44,11 +46,16 @@ class EventXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function maybe()
 	{
-		if ($this->model->setInviteStatus($_GET['id'], 2)) {
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 2)) {
 			$dialog = new XhrDialog();
 			$dialog->setTitle('Einladung');
 			$dialog->addContent($this->v_utils->v_info('Lieben Dank! Schön, dass Du vielleicht dabei bist.'));
@@ -57,48 +64,71 @@ class EventXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function noaccept()
 	{
-		if ($this->model->setInviteStatus($_GET['id'], 3)) {
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), 3)) {
 			return array(
 				'status' => 1,
 				'script' => 'pulseInfo("Einladung gelöscht.");'
 			);
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function ustat()
 	{
-		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->model->setInviteStatus($_GET['id'], $_GET['s'])) {
-				return array(
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->setInviteStatus(
+				$_GET['id'],
+				$this->session->id(),
+				$_GET['s']
+			)) {
+			return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Einladungsstatus geändert!");'
 				);
-			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
 	public function ustatadd()
 	{
-		if (isset($this->stats[(int)$_GET['s']])) {
-			if ($this->model->addInviteStatus($_GET['id'], $_GET['s'])) {
-				return array(
+		if (!$this->maySeeEvent()) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
+		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->addInviteStatus(
+				$_GET['id'],
+				$this->session->id(),
+				$_GET['s']
+			)) {
+			return array(
 					'status' => 1,
 					'script' => 'pulseInfo("Status geändert!");'
 				);
-			}
 		}
+
+		return $this->responses->fail_generic();
 	}
 
-	private function mayEvent()
+	private function maySeeEvent(): bool
 	{
-		if ($this->event['public'] == 1 || $this->session->may('orga') || $this->func->isBotFor($this->event['bezirk_id']) || isset($this->event['invites']['may'][$this->func->fsId()])) {
-			return true;
+		if (!$this->event) {
+			return false;
 		}
 
-		return false;
+		return $this->event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
+				$this->event['bezirk_id']
+			) || isset($this->event['invites']['may'][$this->session->id()]);
 	}
 }

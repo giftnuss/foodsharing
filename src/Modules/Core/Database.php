@@ -2,15 +2,27 @@
 
 namespace Foodsharing\Modules\Core;
 
+use Carbon\Carbon;
+use Envms\FluentPDO\Query;
 use PDO;
 
 class Database
 {
 	private $pdo;
+	private $fluent;
 
 	public function __construct(PDO $pdo)
 	{
 		$this->pdo = $pdo;
+		$this->fluent = new Query($pdo);
+	}
+
+	/**
+	 * @return Query FluentPDO Querybuilder
+	 */
+	public function fluent()
+	{
+		return $this->fluent;
 	}
 
 	// === high-level methods that build SQL internally ===
@@ -87,7 +99,7 @@ class Database
 		}
 	}
 
-	public function count($table, array $criteria): bool
+	public function count($table, array $criteria): int
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -142,12 +154,10 @@ class Database
 
 		$this->preparedQuery($query, array_values($data));
 
-		$lastInsertId = (int)$this->pdo->lastInsertId();
-
-		return $lastInsertId;
+		return (int)$this->pdo->lastInsertId();
 	}
 
-	public function update($table, array $data, array $criteria = []): int
+	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
 			throw new \InvalidArgumentException(
@@ -258,6 +268,11 @@ class Database
 
 	// === helper methods ===
 
+	/**
+	 * Generates comma separated question marks for use with SQLs IN() operator.
+	 *
+	 * @param int $length - number of question marks to be generated
+	 */
 	public function generatePlaceholders($length): string
 	{
 		return implode(', ', array_fill(0, $length, '?'));
@@ -273,6 +288,16 @@ class Database
 		return date('Y-m-d H:i:s');
 	}
 
+	public function date(Carbon $date): string
+	{
+		return $date->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
+	}
+
+	public function parseDate(string $date): Carbon
+	{
+		return Carbon::createFromFormat('Y-m-d H:i:s', $date, 'Europe/Berlin');
+	}
+
 	public function beginTransaction(): bool
 	{
 		return $this->pdo->beginTransaction();
@@ -286,6 +311,24 @@ class Database
 	// === private methods ===
 
 	/**
+	 * dehierarchize array – e.g. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd'].
+	 *
+	 * @param array $array some array
+	 *
+	 * @return array
+	 */
+	private function dehierarchizeArray(array $array): array
+	{
+		foreach ($array as $index => $value) {
+			if (is_array($value)) {
+				array_splice($array, $index, 1, $value);
+			}
+		}
+
+		return $array;
+	}
+
+	/**
 	 * @throws \Exception
 	 */
 	private function preparedQuery($query, $params)
@@ -294,6 +337,8 @@ class Database
 		if (!$statement) {
 			throw new \Exception("Query '$query' can't be prepared.");
 		}
+
+		$params = $this->dehierarchizeArray($params);
 
 		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
@@ -356,6 +401,16 @@ class Database
 			if ($v === null) {
 				$params[] = $this->getQuotedName($k) . ' IS NULL ';
 				unset($criteria[$k]);
+				continue;
+			}
+
+			if (is_array($v) && empty($v)) {
+				$params[] = 'false'; // an empty array means that the WHERE clause will be false
+				continue;
+			}
+
+			if (is_array($v)) {
+				$params[] = $this->getQuotedName($k) . ' IN (' . $this->generatePlaceholders(count($v)) . ') ';
 				continue;
 			}
 

@@ -37,6 +37,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler_follower;
 			DELETE FROM fs_fairteiler_has_wallpost;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_report;
 			DELETE FROM fs_basket;
 			DELETE FROM fs_basket_has_wallpost;
 		', []);
@@ -111,6 +112,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'verified' => 1,
 			'rolle' => 1,
 			'quiz_rolle' => 1,
+			'geschlecht' => random_int(0, 3)
 		], $extra_params);
 		$params = $this->createFoodsharer($pass, $params);
 		$this->createQuizTry($params['id'], 1, 1);
@@ -230,9 +232,11 @@ class Foodsharing extends \Codeception\Module\Db
 			'confirmed' => 1
 		], $extra_params);
 		$params['date'] = $this->toDateTime($params['date']);
-
-		$id = $this->haveInDatabase('fs_abholer', $params);
-		$params['id'] = $id;
+		$res = $this->countInDatabase('fs_abholer', $params);
+		if ($res < 1) {
+			$id = $this->haveInDatabase('fs_abholer', $params);
+			$params['id'] = $id;
+		}
 
 		return $params;
 	}
@@ -255,6 +259,23 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addPickup($store, $extra_params = [])
+	{
+		$date = $this->faker->date('Y-m-d H:i:s');
+		$params = array_merge([
+			'betrieb_id' => $store,
+			'time' => $date,
+			'fetchercount' => $this->faker->numberBetween(1, 8)
+		], $extra_params);
+
+		$params['time'] = $this->toDateTime($params['time']);
+
+		$id = $this->haveInDatabase('fs_fetchdate', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
 	public function addRecurringPickup($store, $extra_params = [])
 	{
 		$hours = $this->faker->numberBetween(0, 23);
@@ -272,7 +293,11 @@ class Foodsharing extends \Codeception\Module\Db
 			$id = $this->haveInDatabase('fs_abholzeiten', $params);
 			$params['id'] = $id;
 		} catch (\Exception $e) {
-			return $this->addRecurringPickup($store, $extra_params);
+			if (!$extra_params) {
+				return $this->addRecurringPickup($store, $extra_params);
+			} else {
+				throw $e;
+			}
 		}
 
 		return $params;
@@ -293,6 +318,17 @@ class Foodsharing extends \Codeception\Module\Db
 		return $this->createRegion($name, $parentId, 7, $extra_params);
 	}
 
+	public function createMailbox($name = null)
+	{
+		if ($name == null) {
+			$name = $this->faker->userName();
+		}
+		$mb['name'] = $name;
+		$mb['id'] = $this->haveInDatabase('fs_mailbox', $mb);
+
+		return $mb;
+	}
+
 	public function createRegion($name = null, $parentId = 741, $type = 9, $extra_params = [])
 	{
 		if ($name == null) {
@@ -305,6 +341,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'type' => $type],
 			$extra_params);
 		$v['id'] = $this->haveInDatabase('fs_bezirk', $v);
+		$mailbox = $this->createMailbox('region-' . $v['id']);
+		$this->updateInDatabase('fs_bezirk', ['mailbox_id' => $mailbox['id']], ['id' => $v['id']]);
 		/* Add to closure table for hierarchies */
 		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)
@@ -599,6 +637,23 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params['time'] = $this->toDateTime($params['time']);
 		$params['id'] = $this->haveInDatabase('fs_blog_entry', $params);
+
+		return $params;
+	}
+
+	public function addReport($reporterId, $reporteeId, $storeId = 0, $confirmed = 0, $reason = null, $msg = null)
+	{
+		$params = [
+			'reporter_id' => $reporterId,
+			'foodsaver_id' => $reporteeId,
+			'betrieb_id' => $storeId,
+			'reporttype' => 1,
+			'time' => $this->toDateTime($this->faker->dateTime($max = 'now')),
+			'msg' => $msg ?? $this->faker->text(500),
+			'tvalue' => $reason ?? $this->faker->text(50),
+			'committed' => $confirmed
+		];
+		$params['id'] = $this->haveInDatabase('fs_report', $params);
 
 		return $params;
 	}

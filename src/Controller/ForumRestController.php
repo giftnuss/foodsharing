@@ -8,11 +8,11 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\SanitizerService;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class ForumRestController extends FOSRestController
+class ForumRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $forumGateway;
@@ -20,8 +20,13 @@ class ForumRestController extends FOSRestController
 	private $forumService;
 	private $sanitizerService;
 
-	public function __construct(Session $session, ForumGateway $forumGateway, ForumPermissions $forumPermissions, ForumService $forumService, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		Session $session,
+		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
+		ForumService $forumService,
+		SanitizerService $sanitizerService
+	) {
 		$this->session = $session;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
@@ -29,14 +34,14 @@ class ForumRestController extends FOSRestController
 		$this->sanitizerService = $sanitizerService;
 	}
 
-	private function normalizeThread($thread)
+	private function normalizeThread($thread): array
 	{
-		$res = [
+		$normalizedThread = [
 			'id' => $thread['id'],
 			'regionId' => $thread['regionId'],
 			'regionSubId' => $thread['regionSubId'],
 			'title' => $thread['title'],
-			'createdAt' => $thread['time'],
+			'createdAt' => str_replace(' ', 'T', $thread['time']),
 			'isSticky' => (bool)$thread['sticky'],
 			'isActive' => (bool)$thread['active'] ?? true,
 			'lastPost' => [
@@ -47,39 +52,24 @@ class ForumRestController extends FOSRestController
 			]
 		];
 		if (isset($thread['post_time'])) {
-			$res['lastPost']['createdAt'] = $thread['post_time'];
-			$res['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$res['lastPost']['author'] = [
-				'id' => $thread['foodsaver_id'],
-				'name' => $thread['foodsaver_name'],
-				'avatar' => '/images/130_q_' . $thread['foodsaver_photo'],
-				'sleepStatus' => $thread['sleep_status']
-			];
+			$normalizedThread['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
+			$normalizedThread['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
+			$normalizedThread['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_');
 		}
 		if (isset($thread['creator_name'])) {
-			$res['creator'] = [
-				'id' => $thread['creator_id'],
-				'name' => $thread['creator_name'],
-				'avatar' => '/images/130_q_' . $thread['creator_photo'],
-				'sleepStatus' => $thread['creator_sleep_status']
-			];
+			$normalizedThread['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_');
 		}
 
-		return $res;
+		return $normalizedThread;
 	}
 
-	private function normalizePost($post)
+	private function normalizePost($post): array
 	{
 		return [
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
-			'createdAt' => $post['time'],
-			'author' => [
-				'id' => $post['author_id'],
-				'name' => $post['author_name'],
-				'avatar' => '/images/130_q_' . $post['author_photo'],
-				'sleepStatus' => $post['author_sleep_status']
-			],
+			'createdAt' => str_replace(' ', 'T', $post['time']),
+			'author' => RestNormalization::normalizeFoodsaver($post, 'author_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
@@ -90,15 +80,16 @@ class ForumRestController extends FOSRestController
 	 * @param $forumSubId integer each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
 	 * So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads)
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function listThreadsAction(int $forumId, int $forumSubId)
+	public function listThreadsAction(int $forumId, int $forumSubId): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
 		}
 
-		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, 0, 0, 1000);
-		$threads = array_map(function ($thread) { return $this->normalizeThread($thread); }, $threads);
+		$threads = $this->getNormalizedThreads($forumId, $forumSubId);
 
 		$view = $this->view([
 			'data' => $threads
@@ -107,22 +98,39 @@ class ForumRestController extends FOSRestController
 		return $this->handleView($view);
 	}
 
+	private function getNormalizedThreads(int $forumId, int $forumSubId)
+	{
+		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, 0, 0, 1000);
+		$threads = array_map(function ($thread) {
+			return $this->normalizeThread($thread);
+		}, $threads);
+
+		return $threads;
+	}
+
 	/**
 	 * @Rest\Get("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 */
 	public function getThreadAction($threadId)
 	{
+		$thread = $this->forumGateway->getThread($threadId);
+
+		if (!$thread) {
+			throw new HttpException(404);
+		}
+
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
 
-		$thread = $this->forumGateway->getThread($threadId);
+		$thread = $this->normalizeThread($thread);
 		$posts = $this->forumGateway->listPosts($threadId);
 
-		$thread = $this->normalizeThread($thread);
 		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
 		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
-		$thread['posts'] = array_map(function ($post) { return $this->normalizePost($post); }, $posts);
+		$thread['posts'] = array_map(function ($post) {
+			return $this->normalizePost($post);
+		}, $posts);
 
 		$view = $this->view([
 			'data' => $thread
@@ -176,8 +184,8 @@ class ForumRestController extends FOSRestController
 		if (!$this->forumPermissions->mayModerate($threadId)) {
 			throw new HttpException(403);
 		}
+
 		$isSticky = $paramFetcher->get('isSticky');
-		$isActive = $paramFetcher->get('isActive');
 		if (!is_null($isSticky)) {
 			if ($isSticky === true) {
 				$this->forumGateway->stickThread($threadId);
@@ -185,6 +193,7 @@ class ForumRestController extends FOSRestController
 				$this->forumGateway->unstickThread($threadId);
 			}
 		}
+		$isActive = $paramFetcher->get('isActive');
 		if ($isActive === true) {
 			$this->forumService->activateThread($threadId);
 		}
@@ -228,6 +237,7 @@ class ForumRestController extends FOSRestController
 		if (!$this->forumPermissions->mayDeletePost($post)) {
 			throw new HttpException(403);
 		}
+
 		$this->forumGateway->deletePost($postId);
 
 		return $this->handleView($this->view([]));
@@ -239,9 +249,11 @@ class ForumRestController extends FOSRestController
 	public function addReactionAction($postId, $emoji)
 	{
 		$threadId = $this->forumGateway->getThreadForPost($postId);
+
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
+
 		$this->forumService->addReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
@@ -252,7 +264,6 @@ class ForumRestController extends FOSRestController
 	 */
 	public function deleteReactionAction($postId, $emoji)
 	{
-		$threadId = $this->forumGateway->getThreadForPost($postId);
 		$this->forumService->removeReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));

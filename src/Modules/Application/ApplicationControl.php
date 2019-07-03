@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Application;
 
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -11,17 +12,19 @@ class ApplicationControl extends Control
 	private $bezirk_id;
 	private $mode;
 	private $gateway;
+	private $identificationHelper;
 
-	public function __construct(ApplicationGateway $gateway, ApplicationView $view)
+	public function __construct(ApplicationGateway $gateway, ApplicationView $view, IdentificationHelper $identificationHelper)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
 
 		$this->bezirk_id = false;
-		if (($this->bezirk_id = $this->func->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->func->getBezirkId();
+		if (($this->bezirk_id = $this->identificationHelper->getGetId('bid')) === false) {
+			$this->bezirk_id = $this->session->getCurrentBezirkId();
 		}
 
 		$this->bezirk = false;
@@ -37,24 +40,24 @@ class ApplicationControl extends Control
 
 		$this->view->setBezirk($this->bezirk);
 
-		if (!($this->func->isBotFor($this->bezirk_id) || $this->session->may('orga'))) {
-			$this->func->go('/');
+		if (!($this->session->isAdminFor($this->bezirk_id) || $this->session->may('orga'))) {
+			$this->routeHelper->go('/');
 		}
 	}
 
 	public function index()
 	{
 		if ($application = $this->gateway->getApplication($this->bezirk_id, $_GET['fid'])) {
-			$this->func->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
-			$this->func->addBread('Bewerbung von ' . $application['name'], '');
-			$this->func->addContent($this->view->application($application));
+			$this->pageHelper->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
+			$this->pageHelper->addBread('Bewerbung von ' . $application['name'], '');
+			$this->pageHelper->addContent($this->view->application($application));
 
-			$this->func->addContent($this->v_utils->v_field(
+			$this->pageHelper->addContent($this->v_utils->v_field(
 				$this->wallposts('application', $application['id']),
 				'Statusnotizen'
 			));
 
-			$this->func->addContent($this->view->applicationMenu($application), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->applicationMenu($application), CNT_LEFT);
 		}
 	}
 }

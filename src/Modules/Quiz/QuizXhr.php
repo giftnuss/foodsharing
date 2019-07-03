@@ -2,19 +2,33 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
 {
 	private $contentGateway;
+	private $quizGateway;
+	private $sanitizerService;
+	private $dataHelper;
 
-	public function __construct(QuizModel $model, QuizView $view, ContentGateway $contentGateway)
-	{
+	public function __construct(
+		QuizModel $model,
+		QuizGateway $quizGateway,
+		QuizView $view,
+		ContentGateway $contentGateway,
+		SanitizerService $sanitizerService,
+		DataHelper $dataHelper
+	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
+		$this->sanitizerService = $sanitizerService;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 	}
@@ -33,15 +47,15 @@ class QuizXhr extends Control
 	[fp] => fdgh
 )
 		 */
-		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['qid'])) {
+		if ($this->session->mayEditQuiz()) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
 
 				if (!empty($text)) {
 					if ($id = $this->model->addQuestion($_GET['qid'], $text, $fp, $duration)) {
-						$this->func->info('Frage wurde angelegt');
+						$this->flashMessageHelper->info('Frage wurde angelegt');
 
 						return array(
 							'status' => 1,
@@ -60,7 +74,7 @@ class QuizXhr extends Control
 
 	public function delquest()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteQuest($_GET['id']);
 
 			return array(
@@ -72,7 +86,7 @@ class QuizXhr extends Control
 
 	public function delanswer()
 	{
-		if ($this->func->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->model->deleteAnswer($_GET['id']);
 
 			return array(
@@ -91,8 +105,8 @@ class QuizXhr extends Control
 		text	458
 		 */
 
-		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['qid'])) {
+		if ($this->session->mayEditQuiz()) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -101,7 +115,7 @@ class QuizXhr extends Control
 					if ($id = $this->model->addAnswer($_GET['qid'], $text, $exp, $right)) {
 						return array(
 							'status' => 1,
-							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
+							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 						);
 					}
 				} else {
@@ -116,8 +130,8 @@ class QuizXhr extends Control
 
 	public function updateansw()
 	{
-		if ($this->func->mayEditQuiz()) {
-			if (isset($_GET['text']) && isset($_GET['right']) && isset($_GET['id'])) {
+		if ($this->session->mayEditQuiz()) {
+			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
 				$right = (int)$_GET['right'];
@@ -131,24 +145,24 @@ class QuizXhr extends Control
 
 					return array(
 						'status' => 1,
-						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->func->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
-					);
-				} else {
-					return array(
-						'status' => 1,
-						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
 					);
 				}
+
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+				);
 			}
 		}
 	}
 
 	public function editanswer()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($answer = $this->model->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
-				$this->func->setEditData($answer);
+				$this->dataHelper->setEditData($answer);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();
@@ -223,9 +237,9 @@ class QuizXhr extends Control
 
 	public function editquest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			if ($quest = $this->model->getQuestion($_GET['id'])) {
-				$this->func->setEditData($quest);
+				$this->dataHelper->setEditData($quest);
 				$dia = new XhrDialog();
 
 				$dia->addAbortButton();
@@ -267,7 +281,7 @@ class QuizXhr extends Control
 	private function abortOrOpenDialog($session_id)
 	{
 		return '
-				$("body").append(\'<div id="abortOrPause">' . $this->func->jsSafe($this->view->abortOrPause()) . '</div>\');
+				$("body").append(\'<div id="abortOrPause">' . $this->sanitizerService->jsSafe($this->view->abortOrPause()) . '</div>\');
 				$("#abortOrPause").dialog({
 					autoOpen: false,
 					title: "Quiz wirklich abbrechen?",
@@ -300,7 +314,7 @@ class QuizXhr extends Control
 		/*
 		 * First we want to check if there is a quiz session that the user has lost?
 		 */
-		if ($session = $this->model->getExsistingSession($_GET['qid'])) {
+		if ($session = $this->quizGateway->getExistingSession($_GET['qid'], $this->session->id())) {
 			// if yes, reinitiate the running quiz session
 			$this->session->set('quiz-id', (int)$_GET['qid']);
 			$this->session->set('quiz-questions', $session['quiz_questions']);
@@ -326,10 +340,12 @@ class QuizXhr extends Control
 			$return['script'] .= $this->abortOrOpenDialog($session['id']);
 
 			return $return;
-		} /*
+		}
+
+		/*
 		 * Otherwise, we start a new quiz session
 		 */
-		elseif ($quiz = $this->model->getQuiz($_GET['qid'])) {
+		if ($quiz = $this->model->getQuiz($_GET['qid'])) {
 			/*
 			 * if foodsaver quiz, user can choose between easy and quick mode
 			*/
@@ -369,7 +385,7 @@ class QuizXhr extends Control
 				$dia->setTitle($quiz['name'] . '-Quiz');
 				$dia->addContent($this->view->initQuiz($quiz, $content));
 				$dia->addAbortButton();
-				$dia->addButton('Quiz Starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#' . $dia->getId() . '\').dialog(\'close\');');
+				$dia->addButton('Quiz starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#' . $dia->getId() . '\').dialog(\'close\');');
 
 				$return = $dia->xhrout();
 
@@ -416,7 +432,7 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if ($this->session->may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->func->fsId() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = 1');
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
@@ -460,8 +476,6 @@ class QuizXhr extends Control
 
 	/**
 	 * xhr request to get next question stored in the users session.
-	 *
-	 * @return boolean|string|multitype:number string |Ambigous <boolean, multitype:number string , string>
 	 */
 	public function next()
 	{
@@ -489,7 +503,7 @@ class QuizXhr extends Control
 			if ($i == 0) {
 				$quuizz = $this->model->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
-				if ($id = $this->model->initQuizSession($this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
+				if ($id = $this->quizGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
 					$this->session->set('quiz-session', $id);
 				}
 			}
@@ -542,9 +556,7 @@ class QuizXhr extends Control
 			 * Have a look has the user entered an comment for this question?
 			*/
 			if (isset($_GET['comment']) && !empty($_GET['comment'])) {
-				$comment = strip_tags($_GET['comment']);
-
-				$comment = $_GET['commentanswers'] . $comment;
+				$comment = strip_tags($_GET['commentanswers'] . $_GET['comment']);
 
 				// if yes lets store in the db
 				$this->model->addUserComment((int)$_GET['qid'], $comment);
@@ -583,7 +595,7 @@ class QuizXhr extends Control
 
 						$x = 1;
 						foreach ($answers as $a) {
-							$comment_aswers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', $this->func->tt($a['text'], 25)) . "\n";
+							$comment_aswers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', $this->sanitizerService->tt($a['text'], 25)) . "\n";
 							++$x;
 						}
 
@@ -614,7 +626,7 @@ class QuizXhr extends Control
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\'' . $session_id . '\'});');
 
-						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fa fa-spinner fa-spin"></i> \')');
+						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fas fa-spinner fa-spin"></i> \')');
 
 						/*
 						 * add next() Button
@@ -624,8 +636,8 @@ class QuizXhr extends Control
 						function(){
 							setTimeout(function(){
 								$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
-								$close.unbind("click");
-								$close.click(function(){
+								$close.off("click");
+								$close.on("click", function(){
 									ajreq("pause",{app:"quiz",sid:' . (int)$session_id . '});
 									//abortOrPause("' . $dia->getId() . '");
 								});
@@ -732,7 +744,7 @@ class QuizXhr extends Control
 									special = 0;
 								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->func->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
 							}
 							
 							function breaknext()
@@ -775,7 +787,7 @@ class QuizXhr extends Control
 								}	
 							}
 										
-							$("li.noanswer").click(function(){
+							$("li.noanswer").on("click", function(){
 								setTimeout(function(){
 									if($("input.nocheck:checked").length > 0)
 									{
@@ -786,14 +798,14 @@ class QuizXhr extends Control
 								},50);
 							});
 							
-							$("li.answer input").click(function(){
+							$("li.answer input").on("click", function(){
 								if(this.checked)
 								{
 								
 								}
 							});
 							
-							$("li.answer, li.noanswer").click(function(ev){
+							$("li.answer, li.noanswer").on("click", function(ev){
 								
 								var nName = ev.target.nodeName.toLowerCase();
 								
@@ -810,7 +822,7 @@ class QuizXhr extends Control
 								}
 							});
 							
-							$("li.answer").click(function(){
+							$("li.answer").on("click", function(){
 								
 								if($("li.answer input:checked").length > 0)
 								{
@@ -827,7 +839,7 @@ class QuizXhr extends Control
 								width:width,
 								height:($(window).height()-40)
 							});
-							$(window).resize(function(){
+							$(window).on("resize", function(){
 								var width = 1000;
 								if($(window).width() < 1000)
 								{
@@ -844,15 +856,15 @@ class QuizXhr extends Control
 						' . $quizbreath;
 
 						return $return;
-					} else {
-						++$i;
-						$this->session->set('quiz-index', $i);
-
-						return array(
-							'status' => 1,
-							'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
-						);
 					}
+
+					++$i;
+					$this->session->set('quiz-index', $i);
+
+					return array(
+						'status' => 1,
+						'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
+					);
 				}
 			} else {
 				return $this->quizResult();
@@ -991,7 +1003,7 @@ class QuizXhr extends Control
 						"background-color":answers[i].bg,
 						"color":answers[i].color
 					}).effect("highlight").attr("onmouseover","return false;").attr("onmouseout","return false;");
-					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\'</div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;"><span class="tail">\'+answers[i].exp.substr(0,60)+\'...</span><span class="complete" style="display:none">\'+answers[i].exp+\'</span> <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().children().toggle();return false;">mehr lesen <i class="fa fa-arrow-circle-o-right"></i></a></div>\');
+					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\'</div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;"><span class="tail">\'+answers[i].exp.substr(0,60)+\'...</span><span class="complete" style="display:none">\'+answers[i].exp+\'</span> <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().children().toggle();return false;">mehr lesen <i class="far fa-arrow-circle-right"></i></a></div>\');
 				}
 				
 			'
@@ -1014,8 +1026,8 @@ class QuizXhr extends Control
 			function(){
 				setTimeout(function(){
 					$close = $("#' . $dia->getId() . '").prev().children(".ui-dialog-titlebar-close");
-					//$close.unbind("click");
-					$close.click(function(){
+					//$close.off("click");
+					$close.on("click", function(){
 						ajreq(\'next\',{app:\'quiz\'});
 					});
 				},200);
@@ -1155,13 +1167,13 @@ class QuizXhr extends Control
 
 	public function updatequest()
 	{
-		if ($this->func->mayEditQuiz()) {
+		if ($this->session->mayEditQuiz()) {
 			/*
 			 *   [id] => 10
 				 [text] => test
 				 [fp] => 3
 			 */
-			if (isset($_GET['text']) && isset($_GET['fp']) && isset($_GET['id'])) {
+			if (isset($_GET['text'], $_GET['fp'], $_GET['id'])) {
 				$fp = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
@@ -1169,18 +1181,18 @@ class QuizXhr extends Control
 
 				if (!empty($text)) {
 					$this->model->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
-					$this->func->info('Frage wurde geändert');
+					$this->flashMessageHelper->info('Frage wurde geändert');
 
 					return array(
 						'status' => 1,
 						'script' => 'reload();'
 					);
-				} else {
-					return array(
-						'status' => 1,
-						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-					);
 				}
+
+				return array(
+					'status' => 1,
+					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
+				);
 			}
 		}
 	}

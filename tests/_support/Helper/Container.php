@@ -2,7 +2,7 @@
 
 namespace Helper;
 
-use Foodsharing\DI;
+require_once __DIR__ . '/../../../includes/setup.php';
 
 class Container extends \Codeception\Module\Db
 {
@@ -16,12 +16,9 @@ class Container extends \Codeception\Module\Db
 	public function _initialize()
 	{
 		parent::_initialize();
-		$this->di = DI::$shared;
-		if (!$this->di->isCompiled()) {
-			$this->di->usePDO($this->config['dsn'], $this->config['user'], $this->config['password']);
-			$this->di->configureMysqli($this->config['host'], $this->config['user'], $this->config['password'], $this->config['db']);
-			$this->di->compile();
-		}
+		global $container;
+		$container = initializeContainer();
+		$this->di = $container;
 	}
 
 	public function get($id)

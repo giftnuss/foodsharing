@@ -5,18 +5,30 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\ForumPermissions;
 
-class RegionXhr extends Control
+final class RegionXhr extends Control
 {
 	private $responses;
+	private $foodsaverGateway;
 	private $forumGateway;
+	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
 
-	public function __construct(Db $model, ForumGateway $forumGateway, RegionHelper $regionHelper, \Twig\Environment $twig)
-	{
+	public function __construct(
+		Db $model,
+		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
+		RegionHelper $regionHelper,
+		\Twig\Environment $twig,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->model = $model;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
+		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
@@ -26,17 +38,17 @@ class RegionXhr extends Control
 
 	private function hasThemeAccess($BotThemestatus)
 	{
-		return ($BotThemestatus['bot_theme'] == 0 && $this->func->mayBezirk($BotThemestatus['bezirk_id']))
-			|| ($BotThemestatus['bot_theme'] == 1 && $this->func->isBotFor($BotThemestatus['bezirk_id']))
-			|| $this->func->isOrgaTeam();
+		return ($BotThemestatus['bot_theme'] == 0 && $this->session->mayBezirk($BotThemestatus['bezirk_id']))
+			|| ($BotThemestatus['bot_theme'] == 1 && $this->session->isAdminFor($BotThemestatus['bezirk_id']))
+			|| $this->session->isOrgaTeam();
 	}
 
 	public function morethemes()
 	{
 		$regionId = (int)$_GET['bid'];
 		$ambassadorForum = ($_GET['bot'] == 1);
-		if (isset($_GET['page']) && $this->func->mayBezirk($regionId)) {
-			if ($ambassadorForum && !$this->func->isBotFor($regionId)) {
+		if (isset($_GET['page']) && $this->session->mayBezirk($regionId)) {
+			if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
 				return $this->responses->fail_permissions();
 			}
 
@@ -54,27 +66,29 @@ class RegionXhr extends Control
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid']) && isset($_GET['tid']) && isset($_GET['pid']) && $this->session->may() && isset($_POST['msg']) && $_POST['msg'] != '') {
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $_POST['msg']) && $this->session->may(
+			) && $_POST['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
 			}
 
-			$body = strip_tags($_POST['msg']);
-			$body = nl2br($body);
-			$body = $this->func->autolink($body);
+			$body = $_POST['msg'];
 
-			if ($bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])) {
+			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
+				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
+			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->func->tplMail(19, $f['email'], array(
-								'anrede' => $this->func->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							$this->emailHelper->tplMail('forum/answer', $f['email'], array(
+								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
-								'theme' => $theme,
+								'thread' => $theme,
+								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
 							));
@@ -96,17 +110,16 @@ class RegionXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'message' => $this->func->s('post_could_not_saved')
+			'message' => $this->translationHelper->s('post_could_not_saved')
 		));
 		exit();
 	}
 
-	public function signout()
+	public function signout(): array
 	{
 		$data = $_GET;
-		if ($this->func->mayBezirk($data['bid'])) {
-			$this->model->del('DELETE FROM `fs_foodsaver_has_bezirk` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
-			$this->model->del('DELETE FROM `fs_botschafter` WHERE `bezirk_id` = ' . (int)$data['bid'] . ' AND `foodsaver_id` = ' . (int)$this->func->fsId() . ' ');
+		if ($this->session->mayBezirk($data['bid'])) {
+			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
 
 			return array('status' => 1);
 		}

@@ -41,6 +41,6 @@ describe('StoreList', () => {
         stores: [createMockStore()]
       }
     })
-    assert.notEqual(wrapper.vm.$el.innerHTML.indexOf(regionName), -1)
+    assert.notStrictEqual(wrapper.vm.$el.innerHTML.indexOf(regionName), -1)
   })
 })

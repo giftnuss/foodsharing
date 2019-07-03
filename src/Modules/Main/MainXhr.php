@@ -20,6 +20,7 @@ class MainXhr extends Control
 	{
 		$function = '';
 		$newname = '';
+		$inid = '';
 
 		$check = false;
 
@@ -34,7 +35,7 @@ class MainXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				$this->func->s('no_image')
+				$this->translationHelper->s('no_image')
 			);
 			try {
 				$file = $upload->move('tmp', 'picture');
@@ -53,7 +54,7 @@ class MainXhr extends Control
 		}
 
 		if (!$check) {
-			$function = 'window.parent.pulseError(\'Sorry, Dieses Foto konnte nicht verarbeitet werden.\');window.parent.$(\'.attach-preview\').hide();';
+			$function = 'window.parent.pulseError(\'Sorry, dieses Foto konnte nicht verarbeitet werden.\');window.parent.$(\'.attach-preview\').hide();';
 		}
 
 		echo '<html><head><title>upload</title>

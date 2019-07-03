@@ -32,6 +32,16 @@ class SanitizerTest extends \Codeception\Test\Unit
 		);
 	}
 
+	public function testPurifyHtmlStripsScriptTag()
+	{
+		$in = '<p>This should stay</p><script type="text/javascript">alert()</script><p>And this is last</p>';
+		$out = $this->sanitizer->purifyHtml($in);
+		$this->assertEquals(
+			'<p>This should stay</p><p>And this is last</p>',
+			$out
+		);
+	}
+
 	public function testMarkdownToHtmlEncodesTags()
 	{
 		$in = 'Hi<there>, you <b>keep this</b>?';
@@ -46,12 +56,12 @@ class SanitizerTest extends \Codeception\Test\Unit
 	{
 		$in = "Hi\nthere";
 		$out = $this->sanitizer->markdownToHtml($in);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'Hi<br />',
 			$out
 		);
 		/* We do not want to specify if it keeps newline or not, but we want to have a break in the output. */
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'there',
 			$out
 		);
@@ -71,9 +81,28 @@ class SanitizerTest extends \Codeception\Test\Unit
 	{
 		$in = "* Hi\n* there";
 		$out = $this->sanitizer->markdownToHtml($in);
-		$this->assertContains(
+		$this->assertStringContainsString(
 			'<li>Hi</li>',
 			$out
 		);
+	}
+
+	public function testTruncateWord()
+	{
+		$in = 'I am a too long text';
+		$this->assertEquals(' ...', $this->sanitizer->tt($in, 4));
+		$this->assertEquals('I ...', $this->sanitizer->tt($in, 5));
+		$this->assertEquals('I am ...', $this->sanitizer->tt($in, 8));
+		$this->assertEquals('I am ...', $this->sanitizer->tt($in, 9));
+		$this->assertEquals('I am a ...', $this->sanitizer->tt($in, 10));
+	}
+
+	public function testTruncateUtf8Word()
+	{
+		$in = 'Hi 😂 you!';
+		$this->assertEquals('Hi ...', $this->sanitizer->tt($in, 6));
+		$this->assertEquals('Hi ...', $this->sanitizer->tt($in, 7));
+		$this->assertEquals('Hi 😂 ...', $this->sanitizer->tt($in, 8));
+		$this->assertEquals($in, $this->sanitizer->tt($in, 9));
 	}
 }

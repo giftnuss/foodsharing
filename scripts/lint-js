@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export FS_ENV=dev
+
+set -o errexit
+
+source $(dirname "$0")/inc.sh
+
+echo "Linting client js"
+run-in-container client yarn lint
+
+echo "Linting chat js"
+run-in-container chat yarn lint

@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import $ from 'jquery'
 import i18n from '@/i18n'
 import urls from '@/urls'
 import { dateFormat, dateDistanceInWords } from '@/utils'
@@ -15,6 +14,7 @@ Vue.filter('i18n', (key, variables = {}) => {
 Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
 }
+Vue.prototype.$dateFormat = dateFormat
 
 Vue.prototype.$url = (key, ...params) => {
   if (!urls[key]) {
@@ -31,14 +31,18 @@ export function vueRegister (components) {
 }
 
 export function vueApply (selector) {
-  let elements = $(selector)
+  let elements = document.querySelectorAll(selector)
+
+  // querySelectorAll().forEach() is broken in iOS 9
+  elements = Array.from(elements)
+
   if (!elements.length) {
     throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
   }
-  elements.each((index, el) => {
-    let componentName = $(el).data('vue-component')
-    let props = $(el).data('vue-props') || {}
-    let initialData = $(el).data('vue-initial-data') || {}
+  elements.forEach((el, index) => {
+    let componentName = el.getAttribute('data-vue-component')
+    let props = JSON.parse(el.getAttribute('data-vue-props')) || {}
+    let initialData = JSON.parse(el.getAttribute('vue-initial-data')) || {}
 
     if (!componentName) {
       throw new Error('vueUse-Error: missing component name. pass it as <div data-vue-component="my-component" />')

@@ -3,86 +3,102 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
 	private $status;
 	private $basketGateway;
 	private $messageModel;
+	private $timeHelper;
+	private $imageService;
 
 	public function __construct(
-		BasketModel $model,
+		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
-		MessageModel $messageModel
+		MessageModel $messageModel,
+		TimeHelper $timeHelper,
+		ImageService $imageService
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
 
-		$this->status = array(
-			'ungelesen' => 0,
-			'gelesen' => 1,
-			'abgeholt' => 2,
-			'abgelehnt' => 3,
-			'nicht_gekommen' => 4,
-			'wall_follow' => 9,
-			'angeklickt' => 10
-		);
+		$this->status = [
+			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
+			'gelesen' => Status::REQUESTED_MESSAGE_READ,
+			'abgeholt' => Status::DELETED_PICKED_UP,
+			'abgelehnt' => Status::DENIED,
+			'nicht_gekommen' => Status::NOT_PICKED_UP,
+			'wall_follow' => Status::FOLLOWED,
+			'angeklickt' => Status::REQESTED,
+		];
 
 		parent::__construct();
 
 		/*
 		 * allowed method for not logged in users
 		 */
-		$allowed = array(
+		$allowed = [
 			'bubble' => true,
 			'login' => true,
-			'basketchoords' => true,
-			'closebaskets' => true
-		);
+			'basketCoordinates' => true,
+			'closeBaskets' => true,
+		];
 
-		if (!$this->session->may() && !isset($allowed[$_GET['m']])) {
-			echo json_encode(array(
-				'status' => 1,
-				'script' => 'pulseError("Du bist nicht eingeloggt, vielleicht ist Deine Session abgelaufen, bitte logge Dich ein und sende Deine Anfrage erneut ab.");'
-			));
+		if (!isset($allowed[$_GET['m']]) && !$this->session->may()) {
+			echo json_encode(
+				[
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translationHelper->s('not_login_hint') . '");',
+				]
+			);
 			exit();
 		}
 	}
 
-	public function basketchoords()
+	public function basketCoordinates(): void
 	{
 		$xhr = new Xhr();
-		if ($baskets = $this->model->getBasketChoords()) {
+		if ($baskets = $this->basketGateway->getBasketCoordinates()) {
 			$xhr->addData('baskets', $baskets);
 		}
 
 		$xhr->send();
 	}
 
-	public function newbasket()
+	public function newBasket(): array
 	{
 		$dia = new XhrDialog();
-		$dia->setTitle('Essenskorb anbieten');
+		$dia->setTitle($this->translationHelper->s('basket_offer'));
+
+		$dia->addContent($this->v_utils->v_info($this->translationHelper->s('basket_reference_info'), $this->translationHelper->s('basket_reference')));
 
 		$dia->addPictureField('picture');
 
-		$foodsaver = $this->model->getValues(array('telefon', 'handy'), 'foodsaver', $this->func->fsId());
+		$foodsaver = $this->model->getValues(['telefon', 'handy'], 'foodsaver', $this->session->id());
 
 		$dia->addContent($this->view->basketForm($foodsaver));
 
-		$dia->addJs('
+		$dia->addJs(
+			'
 				
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
 		
-		$("input.input.cb-contact_type[value=\'2\']").change(function(){
+		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
@@ -95,24 +111,30 @@ class BasketXhr extends Control
 			}
 		});
 				
-		$(".cb-food_art[value=3]").click(function(){
+		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
 				$(".cb-food_art[value=2]")[0].checked = true;
 			}
 		});
-		');
+		'
+		);
 
 		$dia->noOverflow();
 
-		$dia->addOpt('width', 550);
+		$dia->addOpt('width', '90%');
 
-		$dia->addButton('Essenskorb veröffentlichen', 'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId() . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId() . '-picture-filename\').val(),weight:$(\'#weight\').val()});');
+		$dia->addButton(
+			$this->translationHelper->s('basket_publish'),
+			'ajreq(\'publish\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId(
+			) . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId(
+			) . '-picture-filename\').val(),weight:$(\'#weight\').val()});'
+		);
 
 		return $dia->xhrout();
 	}
 
-	public function publish()
+	public function publish(): array
 	{
 		$data = false;
 
@@ -123,20 +145,17 @@ class BasketXhr extends Control
 		$desc = trim($desc);
 
 		if (empty($desc)) {
-			return array(
+			return [
 				'status' => 1,
-				'script' => 'pulseInfo("Bitte gib eine Beschreibung ein!");'
-			);
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_desc') . '");',
+			];
 		}
 
 		$pic = '';
-		$weight = floatval($data['weight']);
+		$weight = (float)$data['weight'];
 
 		if (isset($data['filename'])) {
-			$pic = preg_replace('/[^a-z0-9\.]/', '', $data['filename']);
-			if (!empty($pic) && file_exists('tmp/' . $pic)) {
-				$this->resizePic($pic);
-			}
+			$pic = $this->preparePicture($data['filename']);
 		}
 
 		$lat = 0;
@@ -145,75 +164,94 @@ class BasketXhr extends Control
 		$location_type = 0;
 
 		if ($location_type == 0) {
-			$fs = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->func->fsId());
+			$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->session->id());
 			$lat = $fs['lat'];
 			$lon = $fs['lon'];
 		}
 
 		if ($lat == 0 && $lon == 0) {
-			return array(
+			return [
 				'status' => 1,
-				'script' => 'pulseInfo("Bitte gib in Deinem Profil eine Adresse ein!");'
-			);
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_address') . '");',
+			];
 		}
 
 		$contact_type = 1;
-		$tel = array(
+		$tel = [
 			'tel' => '',
-			'handy' => ''
-		);
+			'handy' => '',
+		];
 
 		if (isset($data['contact_type']) && is_array($data['contact_type'])) {
 			$contact_type = implode(':', $data['contact_type']);
 			if (in_array(2, $data['contact_type'])) {
-				$tel = array(
+				$tel = [
 					'tel' => preg_replace('/[^0-9\-\/]/', '', $data['tel']),
-					'handy' => preg_replace('/[^0-9\-\/]/', '', $data['handy'])
-				);
+					'handy' => preg_replace('/[^0-9\-\/]/', '', $data['handy']),
+				];
 			}
 		}
 
-		if (!empty($desc) && ($id = $this->model->addBasket($desc, $pic, $tel, $contact_type, $weight, $location_type, $lat, $lon, $this->session->user('bezirk_id')))) {
+		//fix lifetime between 1 and 21 days and convert from days to seconds
+		$lifetime = (int)$data['lifetime'];
+		if ($lifetime < 1 || $lifetime > 21) {
+			$lifetime = 7;
+		}
+		$lifetime *= 60 * 60 * 24;
+
+		if (!empty($desc) && ($id = $this->basketGateway->addBasket(
+				$desc,
+				$pic,
+				$tel,
+				$contact_type,
+				$weight,
+				$location_type,
+				$lat,
+				$lon,
+				$lifetime,
+				$this->session->user('bezirk_id'),
+				$this->session->id()
+			))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
 				$types = array();
-				foreach ($data['food_type'] as $ft) {
-					if ((int)$ft > 0) {
-						$types[] = (int)$ft;
+				foreach ($data['food_type'] as $foodType) {
+					if ((int)$foodType > 0) {
+						$types[] = (int)$foodType;
 					}
 				}
 
-				$this->model->addTypes($id, $types);
+				$this->basketGateway->addTypes($id, $types);
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
-				$arts = array();
-				foreach ($data['food_art'] as $ft) {
-					if ((int)$ft > 0) {
-						$arts[] = (int)$ft;
+				$kinds = array();
+				foreach ($data['food_art'] as $foodKind) {
+					if ((int)$foodKind > 0) {
+						$kinds[] = (int)$foodKind;
 					}
 				}
 
-				$this->model->addArt($id, $arts);
+				$this->basketGateway->addKind($id, $kinds);
 			}
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '
-					pulseInfo("Danke Dir! Der Essenskorb wurde veröffentlicht!");
+					pulseInfo("' . $this->translationHelper->s('basket_publish_thank_you') . '");
 					basketStore.loadBaskets();
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
-					$(".xhrDialog").remove();'
-			);
+					$(".xhrDialog").remove();',
+			];
 		}
 
-		return array(
+		return [
 			'status' => 1,
-			'script' => 'pulseError("Es gab einen Fehler, der Essenskorb konnte nicht veröffentlicht werden.");'
-		);
+			'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
+		];
 	}
 
-	public function resizePic($pic)
+	public function resizePic($pic): void
 	{
 		copy('tmp/' . $pic, 'images/basket/' . $pic);
 
@@ -249,18 +287,18 @@ class BasketXhr extends Control
 		$img->saveChanges();
 	}
 
-	public function closebaskets()
+	public function closeBaskets()
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['choords'])) {
-			if ($basket = $this->basketGateway->listCloseBaskets($this->session->id(), array(
-				'lat' => $_GET['choords'][0],
-				'lon' => $_GET['choords'][1]
-			))
-			) {
-				$xhr->addData('baskets', $basket);
-			}
+		if (isset($_GET['choords']) && $basket = $this->basketGateway->listCloseBaskets(
+				$this->session->id(),
+				[
+					'lat' => $_GET['choords'][0],
+					'lon' => $_GET['choords'][1],
+				]
+			)) {
+			$xhr->addData('baskets', $basket);
 		}
 
 		$xhr->send();
@@ -268,7 +306,7 @@ class BasketXhr extends Control
 
 	public function bubble()
 	{
-		if (($basket = $this->model->getBasket($_GET['id']))) {
+		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
 			if ($basket['fsf_id'] == 0) {
 				$dia = new XhrDialog();
 
@@ -276,14 +314,14 @@ class BasketXhr extends Control
 				 * What see the user if not logged in?
 				 */
 				if (!$this->session->may()) {
-					$dia->setTitle('Essenskorb');
+					$dia->setTitle($this->translationHelper->s('basket'));
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
-					$dia->setTitle('Essenskorb von ' . $basket['fs_name']);
+					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
 					$dia->addContent($this->view->bubble($basket));
 				}
 
-				$dia->addButton('zum Essenskorb', 'goTo(\'/essenskoerbe/' . (int)$basket['id'] . '\');');
+				$dia->addButton($this->translationHelper->s('to_basket'), 'goTo(\'/essenskoerbe/' . (int)$basket['id'] . '\');');
 
 				$modal = false;
 				if (isset($_GET['modal'])) {
@@ -292,21 +330,18 @@ class BasketXhr extends Control
 				$dia->addOpt('modal', 'false', $modal);
 				$dia->addOpt('resizeable', 'false', false);
 
-				$dia->addOpt('width', 400);
 				$dia->noOverflow();
 
-				$return = $dia->xhrout();
-
-				return $return;
-			} else {
-				return $this->fsBubble($basket);
+				return $dia->xhrout();
 			}
-		} else {
-			return array(
-				'status' => 1,
-				'script' => 'pulseError("Essenskorb konnte nicht geladen werden");'
-			);
+
+			return $this->fsBubble($basket);
 		}
+
+		return [
+			'status' => 1,
+			'script' => 'pulseError("' . $this->translationHelper->s('basket_error') . '");',
+		];
 	}
 
 	public function fsBubble($basket)
@@ -328,22 +363,20 @@ class BasketXhr extends Control
 
 		$dia->addJs('$(".fsbutton").button();');
 
-		$return = $dia->xhrout();
-
-		return $return;
+		return $dia->xhrout();
 	}
 
 	public function request()
 	{
-		if ($basket = $this->model->getBasket($_GET['id'])) {
-			$this->model->setStatus($_GET['id'], 10);
+		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
+			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
 			$dia = new XhrDialog();
-			$dia->setTitle('Essenskorb von ' . $basket['fs_name'] . '');
-			$dia->addOpt('width', 300);
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
+			$dia->addOpt('width', '90%');
 			$dia->noOverflow();
 			$dia->addContent($this->view->contactTitle($basket));
 
-			$contact_type = array(1);
+			$contact_type = [1];
 
 			if (!empty($basket['contact_type'])) {
 				$contact_type = explode(':', $basket['contact_type']);
@@ -353,8 +386,11 @@ class BasketXhr extends Control
 				$dia->addContent($this->view->contactNumber($basket));
 			}
 			if (in_array(1, $contact_type)) {
-				$dia->addContent($this->view->contactMsg($basket));
-				$dia->addButton('Anfrage absenden', 'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});');
+				$dia->addContent($this->view->contactMsg());
+				$dia->addButton(
+					$this->translationHelper->s('send_request'),
+					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});'
+				);
 			}
 
 			return $dia->xhrout();
@@ -367,29 +403,33 @@ class BasketXhr extends Control
 			$msg = strip_tags($_GET['msg']);
 			$msg = trim($msg);
 			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $this->func->fsId(), $msg, 0);
-				$this->mailMessage($this->func->fsId(), $fs_id, $msg, 22);
-				$this->model->setStatus($_GET['id'], 0);
+				$this->messageModel->message($fs_id, $msg);
+				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
+				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
-				return array(
+				return [
 					'status' => 1,
-					'script' => 'if($(".xhrDialog").length > 0){$(".xhrDialog").dialog("close");}pulseInfo("Anfrage wurde versendet.");'
-				);
-			} else {
-				return array(
-					'status' => 1,
-					'script' => 'pulseError("Du hast keine Nachricht eingegeben");'
-				);
+					'script' => '
+						if($(".xhrDialog").length > 0){
+							$(".xhrDialog").dialog("close");
+						}
+						pulseInfo("' . $this->translationHelper->s('sent_request') . '");',
+				];
 			}
+
+			return [
+				'status' => 1,
+				'script' => 'pulseError("' . $this->translationHelper->s('basket_error_message') . '");',
+			];
 		}
 
-		return array(
+		return [
 			'status' => 1,
-			'script' => 'pulseError("Es ist ein Fehler aufgetreten");'
-		);
+			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
+		];
 	}
 
-	public function infobar()
+	public function infobar(): void
 	{
 		// TODO: rewrite this to an proper API endpoint
 		// and update /client/src/api/baskets.js
@@ -397,20 +437,20 @@ class BasketXhr extends Control
 
 		$xhr = new Xhr();
 
-		$updates = $this->model->listUpdates();
-		$baskets = $this->model->listMyBaskets();
+		$updates = $this->basketGateway->listUpdates($this->session->id());
+		$baskets = $this->basketGateway->listMyBaskets($this->session->id());
 
 		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
 			$basket = [
 				'id' => (int)$b['id'],
 				'description' => html_entity_decode($b['description']),
-				'createdAt' => date('Y-m-d H:i:s', $b['time_ts']),
-				'updatedAt' => date('Y-m-d H:i:s', $b['time_ts']),
+				'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
+				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
 				'requests' => []
 			];
 			foreach ($updates as $update) {
 				if ((int)$update['id'] == $basket['id']) {
-					$time = date('Y-m-d H:i:s', $update['time_ts']);
+					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
 					$basket['requests'][] = [
 						'user' => [
 							'id' => (int)$update['fs_id'],
@@ -435,13 +475,16 @@ class BasketXhr extends Control
 
 	public function answer()
 	{
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			if ($id == $this->func->fsId()) {
-				$this->model->setStatus($_GET['id'], 1, $_GET['fid']);
+		$basketId = (int)$_GET['id'];
+		$fsId = (int)$_GET['fid'];
+
+		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
+			if ($id == $this->session->id()) {
+				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
 
 				return array(
 					'status' => 1,
-					'script' => 'chat(' . $_GET['fid'] . ');basketStore.loadBaskets();'
+					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
 				);
 			}
 		}
@@ -449,70 +492,180 @@ class BasketXhr extends Control
 
 	public function removeRequest()
 	{
-		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
+		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], $this->session->id())) {
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
-			$dia->setTitle('Essenskorbanfrage von ' . $request['fs_name'] . ' abschließen');
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', array('name' => $request['fs_name'])));
+			$gender = $this->translationHelper->genderWord(
+				$request['fs_gender'],
+				'er',
+				'sie',
+				'er/sie'
+			);
 			$dia->addContent(
 				'<div>
-					<img src="' . $this->func->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
-					<p>Anfragezeitpunkt: ' . $this->func->niceDate($request['time_ts']) . '</p>
+					<img src="' . $this->imageService->img($request['fs_photo']) . '" style="float:left;margin-right:10px;">
+					<p>Anfragezeitpunkt: ' . $this->timeHelper->niceDate($request['time_ts']) . '</p>
 					<div style="clear:both;"></div>
 				</div>'
-				. $this->v_utils->v_form_radio('fetchstate', array(
-					'values' => array(
-						array('id' => 3, 'name' => 'Ja, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' hat den Korb abgeholt.'),
-						array('id' => 5, 'name' => 'Nein, ' . $this->func->genderWord($request['fs_gender'], 'er', 'sie', 'er/sie') . ' ist leider nicht wie verabredet erschienen.'),
-						array('id' => 5, 'name' => 'Die Lebensmittel wurden von jemand anderem abgeholt.')),
-					'selected' => 3
-				))
+				. $this->v_utils->v_form_radio(
+					'fetchstate',
+					[
+						'values' => [
+							[
+								'id' => Status::DELETED_PICKED_UP,
+								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
+							],
+							[
+								'id' => Status::NOT_PICKED_UP,
+								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
+							],
+							[
+								'id' => Status::DELETED_OTHER_REASON,
+								'name' => $this->translationHelper->s('basket_deleted_other_reason'),
+							],
+						],
+						'selected' => Status::DELETED_PICKED_UP,
+					]
+				)
 			);
 			$dia->addAbortButton();
-			$dia->addButton('Weiter', 'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});');
+			$dia->addButton(
+				$this->translationHelper->s('continue'),
+				'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
+			);
 
 			return $dia->xhrout();
 		}
 	}
 
-	public function removeBasket()
+	public function removeBasket(): array
 	{
-		$this->model->removeBasket($_GET['id']);
+		$this->basketGateway->removeBasket($_GET['id'], $this->session->id());
 
-		return array(
+		return [
 			'status' => 1,
-			'script' => 'basketStore.loadBaskets();pulseInfo("Essenskorb ist jetzt nicht mehr aktiv!");'
-		);
+			'script' => 'basketStore.loadBaskets();pulseInfo("' . $this->translationHelper->s('basket_not_active') . '");',
+		];
 	}
 
-	public function follow()
+	public function editBasket()
 	{
-		if (isset($_GET['bid']) && (int)$_GET['bid'] > 0) {
-			$this->model->follow($_GET['bid']);
+		$basket = $this->basketGateway->getBasket($_GET['id']);
+
+		if ($basket['fs_id'] !== $this->session->id()) {
+			return XhrResponses::PERMISSION_DENIED;
 		}
+
+		$dia = new XhrDialog();
+		$dia->setTitle($this->translationHelper->s('basket_edit'));
+
+		$dia->addPictureField('picture');
+
+		$dia->addContent($this->view->basketEditForm($basket));
+
+		$dia->addOpt('width', '90%');
+		$dia->noOverflow();
+
+		$dia->addButton(
+			$this->translationHelper->s('basket_publish'),
+			'ajreq(\'publishEdit\',{appost:0,app:\'basket\',data:$(\'#' . $dia->getId(
+			) . ' .input\').serialize(),description:$(\'#description\').val(),picture:$(\'#' . $dia->getId(
+			) . '-picture-filename\').val(),basket_id:$(\'#basket_id\').val()});'
+		);
+
+		return $dia->xhrout();
+	}
+
+	public function publishEdit(): array
+	{
+		$data = false;
+
+		parse_str($_GET['data'], $data);
+
+		$id = strip_tags($_GET['basket_id']);
+		if (empty($id)) {
+			return [
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
+			];
+		}
+
+		$basket = $this->basketGateway->getBasket($id);
+		if ($basket['fs_id'] != $this->session->id()) {
+			return [
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_permission') . '");',
+			];
+		}
+
+		$desc = strip_tags($data['description']);
+		$desc = trim($desc);
+		if (empty($desc)) {
+			return [
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_desc') . '");',
+			];
+		}
+
+		$pic = $basket['picture'];
+		if (isset($data['filename']) && !empty($data['filename'])) {
+			$pic = $this->preparePicture($data['filename']);
+		}
+
+		if (!empty($desc) && !empty($id) && ($this->basketGateway->editBasket($id, $desc, $pic, $this->session->id()))) {
+			return [
+				'status' => 1,
+				'script' => '
+					pulseInfo("' . $this->translationHelper->s('basket_publish_thank_you') . '");
+					basketStore.loadBaskets();
+					$(".xhrDialog").dialog("close");
+					$(".xhrDialog").dialog("destroy");
+					$(".xhrDialog").remove();
+					window.reload()',
+			];
+		}
+
+		return [
+			'status' => 1,
+			'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error') . '");',
+		];
 	}
 
 	public function finishRequest()
 	{
-		if ($request = $this->model->getRequest($_GET['id'], $_GET['fid'])) {
-			if (isset($_GET['sk']) && (int)$_GET['sk'] > 0) {
-				$this->model->setStatus($_GET['id'], $_GET['sk'], $_GET['fid']);
+		if (isset($_GET['sk']) && (int)$_GET['sk'] > 0 && $this->basketGateway->getRequest(
+				$_GET['id'],
+				$_GET['fid'],
+				$this->session->id()
+			)) {
+			$this->basketGateway->setStatus($_GET['id'], $_GET['sk'], $_GET['fid']);
 
-				return array(
-					'status' => 1,
-					'script' => '
-						pulseInfo("Danke Dir! Der Vorgang ist abgeschlossen.");
+			return [
+				'status' => 1,
+				'script' => '
+						pulseInfo("' . $this->translationHelper->s('finish_request') . '");
 						$(".xhrDialog").dialog("close");
 						$(".xhrDialog").dialog("destroy");
 						$(".xhrDialog").remove();
-						'
-				);
-			}
+						',
+			];
 		}
 
-		return array(
+		return [
 			'status' => 1,
-			'script' => 'pulseError("Es ist ein Fehler aufgetreten");'
-		);
+			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
+		];
+	}
+
+	private function preparePicture($filename): string
+	{
+		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename);
+		if (!empty($pic) && file_exists('tmp/' . $pic)) {
+			$this->resizePic($pic);
+		}
+
+		return $pic;
 	}
 }

@@ -1,0 +1,9 @@
+{% embed 'components/field.twig' with {'title': fairteiler.name, 'classes': ['ui-padding']} %}
+    {% block content %}
+        {%  if fairteiler.picture %}
+            <div class="ft-head ui-corner-bottom" style="height:150px;background-image:url({{ fairteiler.pic.head }})"></div>
+        {% else %}
+            <div class="ft-head ui-corner-bottom"></div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

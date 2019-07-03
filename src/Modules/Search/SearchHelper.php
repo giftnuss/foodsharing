@@ -17,7 +17,7 @@ class SearchHelper
 
 	public function search($q)
 	{
-		$isAdmin = $this->session->isBotschafter() || $this->session->isOrgaTeam();
+		$isAdmin = $this->session->isAmbassador() || $this->session->isOrgaTeam();
 
 		return $this->searchGateway->search(
 			$q,

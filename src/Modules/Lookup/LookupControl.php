@@ -8,10 +8,11 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 class LookupControl extends ConsoleControl
 {
 	private $foodsaverGateway;
+	private $lookupGateway;
 
-	public function __construct(LookupModel $model, FoodsaverGateway $foodsaverGateway)
+	public function __construct(LookupGateway $lookupGateway, FoodsaverGateway $foodsaverGateway)
 	{
-		$this->model = $model;
+		$this->lookupGateway = $lookupGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
@@ -27,17 +28,20 @@ class LookupControl extends ConsoleControl
 		}
 
 		$this->info('Loading emails from ' . $filename);
-		$csv = array_map('str_getcsv', file($filename));
 
-		return $csv;
+		return array_map('str_getcsv', file($filename));
 	}
 
-	public function lookup()
+	public function lookup(): void
 	{
 		$csv = $this->loadFile();
 		foreach ($csv as $row) {
 			$email = $row[0];
-			$fs = $this->model->getFoodsaverByEmail($email);
+			$fs = $this->lookupGateway->getFoodsaverByEmail($email);
+			if (empty($fs)) {
+				continue;
+			}
+
 			echo $fs['id'] . ',' . $fs['last_login'] . ',' . $fs['bezirk_id'] . ',' . $fs['name'] . ',' . $fs['nachname'] . implode(',', $row) . "\n";
 		}
 	}
@@ -47,7 +51,7 @@ class LookupControl extends ConsoleControl
 		$csv = $this->loadFile();
 		foreach ($csv as $row) {
 			$email = $row[0];
-			$fs = $this->model->getFoodsaverByEmail($email);
+			$fs = $this->lookupGateway->getFoodsaverByEmail($email);
 			if (empty($fs)) {
 				continue;
 			}

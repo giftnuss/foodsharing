@@ -92,15 +92,11 @@ class RegionGateway extends BaseGateway
 			WHERE 		`id` = ' . (int)$id);
 	}
 
-	public function getParentBezirke($bid)
+	public function listRegionsIncludingParents($region_id): array
 	{
-		if (is_array($bid)) {
-			$where = 'WHERE bezirk_id IN (' . implode(',', array_map('intval', $bid)) . ')';
-		} else {
-			$where = 'WHERE bezirk_id = ' . (int)$bid;
-		}
+		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $region_id)) . ')';
 
-		return $this->db->fetchAllValues('SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` ' . $where);
+		return $this->db->fetchAllValues($stm);
 	}
 
 	public function getBasics_bezirk()
@@ -216,7 +212,7 @@ class RegionGateway extends BaseGateway
 		return $output;
 	}
 
-	public function getFsBezirkIds($foodsaver_id)
+	public function getFsRegionIds($foodsaver_id): array
 	{
 		return $this->db->fetchAllValues('
 			SELECT 	`bezirk_id`
@@ -225,15 +221,20 @@ class RegionGateway extends BaseGateway
 		', [':fs_id' => $foodsaver_id]);
 	}
 
-	public function listIdsForDescendantsAndSelf($bid)
+	public function listIdsForDescendantsAndSelf($bid, $includeSelf = true)
 	{
 		if ((int)$bid == 0) {
 			return [];
 		}
+		if ($includeSelf) {
+			$minDepth = 0;
+		} else {
+			$minDepth = 1;
+		}
 
 		return $this->db->fetchAllValues(
-			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid',
-			['bid' => $bid]
+			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid AND depth >= :min_depth',
+			['bid' => $bid, 'min_depth' => $minDepth]
 		);
 	}
 
@@ -268,33 +269,47 @@ class RegionGateway extends BaseGateway
 	{
 		$bezirk = $this->db->fetch('
 			SELECT
-				`id`,
-				`name`,
-				`email`,
-				`email_name`,
-				`type`,
-				`stat_fetchweight`,
-				`stat_fetchcount`,
-				`stat_fscount`,
-				`stat_botcount`,
-				`stat_postcount`,
-				`stat_betriebcount`,
-				`stat_korpcount`,
-				`moderated`
+				b.`id`,
+				b.`name`,
+				b.`email`,
+				b.`email_name`,
+				b.`type`,
+				b.`stat_fetchweight`,
+				b.`stat_fetchcount`,
+				b.`stat_fscount`,
+				b.`stat_botcount`,
+				b.`stat_postcount`,
+				b.`stat_betriebcount`,
+				b.`stat_korpcount`,
+				b.`moderated`,
+				b.`has_children`,
+				(
+					SELECT 	count(c.`foodsaver_id`)		
+					FROM 	`fs_foodsaver_has_bezirk` c
+					LEFT JOIN `fs_foodsaver` fs ON c.`foodsaver_id` = fs.id
+					WHERE     fs.deleted_at IS NULL
+					AND 	c.bezirk_id = b.id
+					AND 	c.active = 1
+					AND 	fs.sleep_status = 0
+				) AS fs_count,
+				(
+					SELECT 	count(c.`foodsaver_id`)		
+					FROM 	`fs_foodsaver_has_bezirk` c
+					LEFT JOIN `fs_foodsaver` fs ON c.`foodsaver_id` = fs.id
+					WHERE     fs.deleted_at IS NULL
+					AND 	c.bezirk_id = b.id
+					AND 	c.active = 1
+					AND 	fs.sleep_status > 0
+				) AS sleeper_count
 
-			FROM 	`fs_bezirk`
+			FROM 	`fs_bezirk` AS b
 
-			WHERE 	`id` = :id
+			WHERE 	b.`id` = :id
 			LIMIT 1
 		', ['id' => $id]);
 
-		$bezirk['foodsaver'] = $this->foodsaverGateway->listActiveByRegion($id);
-
-		$bezirk['sleeper'] = $this->foodsaverGateway->listInactiveByRegion($id);
-
-		$bezirk['fs_count'] = count($bezirk['foodsaver']);
-
 		$bezirk['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($id);
+		shuffle($bezirk['botschafter']);
 
 		return $bezirk;
 	}
@@ -408,38 +423,6 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function deleteBezirk($id)
-	{
-		$parent_id = $this->db->fetchValueByCriteria(
-			'fs_bezirk',
-			'parent_id',
-			['id' => $id]
-		);
-
-		$this->db->update(
-			'fs_foodsaver',
-			['bezirk_id' => null],
-			['bezirk_id' => $id]
-		);
-		$this->db->update(
-			'fs_bezirk',
-			['parent_id' => 0],
-			['parent_id' => $id]
-		);
-
-		$this->db->delete('fs_bezirk', ['id' => $id]);
-
-		$count = $this->db->fetchValue('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = :id', [':id' => $parent_id]);
-
-		if ($count == 0) {
-			$this->db->update(
-				'fs_bezirk',
-				['has_children' => 0],
-				['id' => $parent_id]
-			);
-		}
-	}
-
 	public function denyBezirkRequest($fsid, $bid)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
@@ -528,5 +511,57 @@ class RegionGateway extends BaseGateway
 			'active' => 1,
 			'added' => $this->db->now()
 		]);
+	}
+
+	public function updateMasterRegions(array $regionIds, int $masterId): void
+	{
+		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
+	}
+
+	public function genderCountRegion(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'select  fs.geschlecht as gender,
+						   count(*) as NumberOfGender
+					from fs_foodsaver_has_bezirk fb
+		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
+					where fb.bezirk_id = :id
+					and fs.deleted_at is null
+					group by geschlecht',
+			[':id' => $districtId]
+		);
+	}
+
+	public function genderCountHomeRegion(int $districtId): array
+	{
+		return $this->db->fetchAll(
+			'select  fs.geschlecht as gender,
+						   count(*) as NumberOfGender
+					from fs_foodsaver fs
+					where fs.bezirk_id = :id
+					and fs.deleted_at is null
+					group by geschlecht',
+			[':id' => $districtId]
+		);
+	}
+
+	public function regionPickupsByDate(int $districtId, $dateFormat): array
+	{
+		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($districtId)));
+
+		return $this->db->fetchAll(
+			'select 
+						date_Format(a.date,:format) as time,
+						count(distinct a.betrieb_id) as NumberOfStores,
+						count(distinct a.date, a.betrieb_id) as NumberOfAppointments ,
+						count(*) as NumberOfSlots,
+						count(distinct a.foodsaver_id) as NumberOfFoodsavers
+					from fs_abholer a 
+					left outer join fs_betrieb b on a.betrieb_id = b.id
+						where b.bezirk_id in (' . $regionIDs . ')
+					group by date_Format(date,:groupFormat)
+					order by date desc',
+			[':format' => $dateFormat, ':groupFormat' => $dateFormat]
+		);
 	}
 }

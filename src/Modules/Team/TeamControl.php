@@ -23,8 +23,8 @@ class TeamControl extends Control
 
 	public function index(): void
 	{
-		$this->func->addBread($this->func->s('team'), '/team');
-		$this->func->addTitle($this->func->s('team'));
+		$this->pageHelper->addBread($this->translationHelper->s('team'), '/team');
+		$this->pageHelper->addTitle($this->translationHelper->s('team'));
 
 		// Three types of pages:
 		// a) /team - displays board
@@ -34,18 +34,18 @@ class TeamControl extends Control
 		if ($id = $this->uriInt(2)) {
 			// Type c, display user
 			if ($user = $this->gateway->getUser($id)) {
-				$this->func->addTitle($user['name']);
-				$this->func->addBread($user['name']);
-				$this->func->addContent($this->view->user($user));
+				$this->pageHelper->addTitle($user['name']);
+				$this->pageHelper->addBread($user['name']);
+				$this->pageHelper->addContent($this->view->user($user));
 
 				if ($user['contact_public']) {
-					$this->func->addContent($this->view->contactForm($user));
+					$this->pageHelper->addContent($this->view->contactForm($user));
 				}
 
 				return;
 			}
 
-			$this->func->go('/team');
+			$this->routeHelper->go('/team');
 
 			return;
 		}
@@ -53,30 +53,30 @@ class TeamControl extends Control
 		if ($teamType = $this->uriStr(2)) {
 			if ($teamType === 'ehemalige') {
 				// Type b, display "Ehemalige"
-				$this->func->addBread($this->func->s('Ehemalige'), '/team/ehemalige');
-				$this->func->addTitle($this->func->s('Ehemalige'));
+				$this->pageHelper->addBread($this->translationHelper->s('Ehemalige'), '/team/ehemalige');
+				$this->pageHelper->addTitle($this->translationHelper->s('Ehemalige'));
 				$this->displayTeamContent(1564, 54);
 
 				return;
 			}
 
-			$this->func->addContent('Page not found');
+			$this->pageHelper->addContent('Page not found');
 
 			return;
 		}
 
 		// Type a, display "Vorstand" and "Aktive"
-		$this->func->addContent("<div id='vorstand'>");
+		$this->pageHelper->addContent("<div id='vorstand'>");
 		$this->displayTeamContent(1373, 39);
-		$this->func->addContent("</div><div id='aktive'>");
+		$this->pageHelper->addContent("</div><div id='aktive'>");
 		$this->displayTeamContent(1565, 53);
-		$this->func->addContent('</div>');
+		$this->pageHelper->addContent('</div>');
 	}
 
 	private function displayTeamContent($bezirkId, $contentId): void
 	{
 		if ($team = $this->gateway->getTeam($bezirkId)) {
-			$this->func->addContent($this->view->teamList($team, $this->contentGateway->get($contentId)));
+			$this->pageHelper->addContent($this->view->teamList($team, $this->contentGateway->get($contentId)));
 		}
 	}
 }

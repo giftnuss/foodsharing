@@ -3,8 +3,9 @@
     v-b-tooltip.hover
     :title="description"
     :data-status="status"
-    class="status">
-    <i class="fa fa-circle" />
+    class="status"
+  >
+    <i class="fas fa-circle" />
   </span>
 </template>
 

@@ -1,12 +1,17 @@
 <?php
 
-use Foodsharing\DI;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
+require_once 'config.inc.php';
+
+/* @var $container Container */
+global $container;
+$container = initializeContainer();
+
 /*
  * force only executing on commandline
 */
-require_once 'config.inc.php';
 if (!isset($argv)) {
 	header('Location: ' . BASE_URL);
 	exit();
@@ -20,7 +25,6 @@ $method = 'index';
 if (isset($argv[3]) && $argv[3] == 'quiet') {
 	define('QUIET', true);
 } else {
-	define('QUIET', false);
 }
 
 if (isset($argv) && is_array($argv)) {
@@ -35,11 +39,10 @@ if (isset($argv) && is_array($argv)) {
 $app = '\\Foodsharing\\Modules\\' . $app . '\\' . $app . 'Control';
 echo "Starting $app::$method...\n";
 
-$appInstance = DI::$shared->get(ltrim($app, '\\'));
+$appInstance = $container->get(ltrim($app, '\\'));
 
 if (is_callable([$appInstance, $method])) {
 	$appInstance->$method();
-	exit();
+} else {
+	echo 'Modul ' . $app . ' konnte nicht geladen werden';
 }
-
-echo 'Modul ' . $app . ' konnte nicht geladen werden';

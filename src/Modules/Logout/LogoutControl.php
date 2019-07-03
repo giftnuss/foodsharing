@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Logout;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Core\Control;
 
 class LogoutControl extends Control
@@ -16,10 +15,7 @@ class LogoutControl extends Control
 
 	public function index()
 	{
-		Mem::logout($this->session->id());
-		$_SESSION['login'] = false;
-		$_SESSION = array();
-		$this->session->destroy();
+		$this->session->logout();
 		header('Location: /');
 		exit();
 	}
