@@ -28,6 +28,7 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
+- For not declined events, the last wall posts are shown on the dashboard update-section. !417 #227 @fs_k
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -425,10 +426,6 @@ Another big thing to note is that we accidentally removed support for a lot of b
 IE11, Safari and slightly older androids should work again, although I can only ask you to please always keep your devices and browsers up to date!
 
 ## Features
-- For not declined events, the last wall posts are shown on the dashboard update-section. !417 #227 @k.miklobusec
-
-## Bugfixes
-- removed XSS-possibility in xhr_out method. !370 @theolampert
 - new topbar in vue.js !451, #11, #15, #155, #158, #30, #66, #67, #93 @alangecker
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
