@@ -304,10 +304,10 @@ const conv = {
    */
   append: function (key, message) {
   /**
-  * addedclass to indicate own messages
+  * adding a class 'my-message' to current user's own messages
   */
-    var ownMessageClass = ''
-    if (message.fs_id == serverData.user.id) { ownMessageClass = ' my-message' }
+    let ownMessageClass = ''
+    if (message.fs_id === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
     conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },

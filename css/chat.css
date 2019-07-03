@@ -354,10 +354,6 @@
   font-size: 11px;
 }
 
-/*
-* Unread chats are now bordered and badged
-*/
-
 .conversation-list .unread-1 .pics {
   border: 1px solid black;
   border-radius: 4px;

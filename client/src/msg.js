@@ -303,11 +303,10 @@ const msg = {
 
   msgTpl: function (message) {
     /*
-     * Again find my own messages for an added class
+     * set a class 'my-message' to active user's own messages
      */
     let ownMessageClass = ''
     if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
-    /* if (${message.fs_id} == serverData.user.id) alert("selbe") */
     return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
