@@ -24,6 +24,6 @@ class MaintenanceGateway extends BaseGateway
 
 	public function deleteUnconfirmedFetchDates(): int
 	{
-		return $this->db->delete('fs_abholer', [['confirmed' => 0], ['date <' => $this->db->now()]]);
+		return $this->db->delete('fs_abholer', ['confirmed' => 0, 'date <' => $this->db->now()]);
 	}
 }
