@@ -51,6 +51,7 @@
 - The page does not use fullpage anymore. New landing page !597 #393 @theolampert
 - Reduce Load on every Request to RegionControl !921 @alangeker
 - reduced codebase around map markers. !588 @chriswalg @peter.toennies
+- Refactored team page. Moved ipBlock() to another class @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
