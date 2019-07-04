@@ -26,8 +26,10 @@ class TeamXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		if ($this->gateway->ipIsBlocked(60 * 60, 'contact')) {
-			$xhr->addMessage('Du hast zu viele Nachrichten versendet. Bitte warte einen Moment!', 'error');
+		$minuteWaiting = 10;
+
+		if ($this->gateway->ipIsBlocked($minuteWaiting * 60, 'contact')) {
+			$xhr->addMessage('Bitte warte ' . $minuteWaiting . ' Minuten, bis du die nächste Nachricht senden kannst.', 'error');
 			$xhr->send();
 		}
 
