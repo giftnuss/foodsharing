@@ -77,6 +77,7 @@ class TeamControl extends Control
 	private function displayTeamContent($regionId, $contentId): void
 	{
 		if ($team = $this->gateway->getTeam($regionId)) {
+            shuffle($team);
 			$this->pageHelper->addContent($this->view->teamList($team, $this->contentGateway->get($contentId)));
 		}
 	}
