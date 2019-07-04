@@ -69,7 +69,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * delete unconfirmed store dates in the past
 		 */
-		$this->deleteUnconformedFetchDates();
+		$this->deleteUnconfirmedFetchDates();
 
 		/*
 		 * deactivate too old food baskets
@@ -214,7 +214,7 @@ class MaintenanceControl extends ConsoleControl
 
 	private function deactivateBaskets()
 	{
-		$count = $this->model->deactivateOldBaskets();
+		$count = $this->maintenanceGateway->deactivateOldBaskets();
 		self::info($count . ' old foodbaskets deactivated');
 	}
 
@@ -226,10 +226,10 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 
-	private function deleteUnconformedFetchDates()
+	private function deleteUnconfirmedFetchDates()
 	{
-		self::info('delete unfonfirmed fetchdates...');
-		$count = $this->model->deleteUnconformedFetchDates();
+		self::info('delete unconfirmed fetchdates...');
+		$count = $this->maintenanceGateway->deleteUnconfirmedFetchDates();
 		self::success($count . ' deleted');
 	}
 
