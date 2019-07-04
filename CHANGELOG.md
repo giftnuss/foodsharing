@@ -294,6 +294,7 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 - link top area of welcome message to profile #427 !635 @Defka
 - Added a number conditionally to the dashboard event view if there is more than one event !650 @jofranz
+- Sorted trust bananas by date #550 !970 @sepulcrum89
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd
