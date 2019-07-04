@@ -46,6 +46,7 @@
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
 - Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
+- Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -54,6 +55,7 @@
 - reduced codebase around map markers. !588 @chriswalg @peter.toennies
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway @jofranz
 - Refactored team page. Moved ipBlock() to another class @jofranz
+- Refactored team page. Got rid of legacy methods !974 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
