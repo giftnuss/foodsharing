@@ -19,7 +19,7 @@ class MaintenanceGateway extends BaseGateway
 		return $this->db->update(
 			'fs_basket',
 			['status' => 6],
-			[['status' => 1], ['until <' => $this->db->now()]]);
+			['status' => 1, 'until <' => $this->db->now()]);
 	}
 
 	public function deleteUnconfirmedFetchDates(): int
