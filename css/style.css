@@ -145,6 +145,14 @@
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 }
 
+.my-message a {
+  color: #f1e7c9;
+}
+
+.my-message a:hover {
+  color: #533a20;
+}
+
 textarea {
   resize: none;
 }
