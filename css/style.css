@@ -988,6 +988,7 @@ ul.linklist li > a {
   text-decoration: none !important;
   color: #533a20;
   font-weight: lighter;
+  position: relative;
 }
 
 ul.linklist li > a span.title {
