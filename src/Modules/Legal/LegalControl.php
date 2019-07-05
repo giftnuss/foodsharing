@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Legal;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\View;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -18,9 +17,8 @@ class LegalControl extends Control
 	 */
 	private $formFactory;
 
-	public function __construct(LegalGateway $gateway, View $view, Db $model)
+	public function __construct(LegalGateway $gateway, View $view)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
