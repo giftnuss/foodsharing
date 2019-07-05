@@ -31,6 +31,7 @@
 - new chat design with badges and layout changed !928 @kniggerich
 
 ## Bugfixes
+- Profilebutton "remove from all slots" working for orga. !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
