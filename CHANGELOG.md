@@ -28,6 +28,7 @@
 - Removed twitter and github for Team-Member !944 @chriswalg
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
+- new chat design with badges and layout changed !928 @kniggerich
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -44,12 +45,14 @@
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
+- Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
 - The page does not use fullpage anymore. New landing page !597 #393 @theolampert
 - Reduce Load on every Request to RegionControl !921 @alangeker
 - reduced codebase around map markers. !588 @chriswalg @peter.toennies
+- Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
@@ -294,6 +297,7 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 - Use typeahead-address-photon for address autocomplete. Update leaflet and typeahead for recent NPM versions in the same go !640 @NerdyProjects
 - link top area of welcome message to profile #427 !635 @Defka
 - Added a number conditionally to the dashboard event view if there is more than one event !650 @jofranz
+- Sorted trust bananas by date #550 !970 @sepulcrum89
 
 ## Bugfixes
 - Improve/correct user profile badge count !612 @pmayd

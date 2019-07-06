@@ -5,8 +5,10 @@
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
+
 import info from '@/info'
 import conv from '@/conv'
+import serverData from '@/server-data'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
@@ -300,7 +302,12 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    /*
+     * set a class 'my-message' to active user's own messages
+     */
+    let ownMessageClass = ''
+    if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -310,7 +317,6 @@ const msg = {
       id = parseInt(id)
       out[out.length] = id
     })
-
     console.log(out)
 
     if (out.length > 0) {

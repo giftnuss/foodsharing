@@ -6,27 +6,12 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function deleteUnconformedFetchDates()
-	{
-		return $this->del('DELETE FROM fs_abholer WHERE confirmed = 0 AND `date` < NOW()');
-	}
-
 	public function listOldBellIds($days = 7)
 	{
 		return $this->qCol('
 			SELECT id
 			FROM `fs_bell`
 			WHERE `time` <= NOW( ) - INTERVAL ' . (int)$days . ' DAY
-		');
-	}
-
-	public function deactivateOldBaskets()
-	{
-		return $this->update('
-			UPDATE fs_basket
-			SET `status` = 6 WHERE
-			until < NOW()
-			AND `status` = 1
 		');
 	}
 
