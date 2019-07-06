@@ -45,6 +45,7 @@
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
+- Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
