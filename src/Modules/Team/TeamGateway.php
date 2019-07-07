@@ -3,10 +3,11 @@
 namespace Foodsharing\Modules\Team;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class TeamGateway extends BaseGateway
 {
-	public function getTeam($bezirkId = 1373): array
+	public function getTeam($region_id = RegionIDs::TEAM_BOARD_MEMBER): array
 	{
 		$out = array();
 		$stm = '
@@ -38,7 +39,7 @@ class TeamGateway extends BaseGateway
 					hb.bezirk_id = :region_id
 				ORDER BY fs.name
 		';
-		$orgas = $this->db->fetchAll($stm, [':region_id' => $bezirkId]);
+		$orgas = $this->db->fetchAll($stm, [':region_id' => $region_id]);
 		foreach ($orgas as $o) {
 			$out[(int)$o['id']] = $o;
 		}

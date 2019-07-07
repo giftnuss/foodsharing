@@ -11,6 +11,7 @@ use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Legal\LegalControl;
@@ -545,12 +546,12 @@ class Session
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
-		return $this->may('orga') || $this->isAdminFor(432);
+		return $this->may('orga') || $this->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
 	public function mayEditQuiz()
 	{
-		return $this->may('orga') || $this->isAdminFor(341);
+		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 	}
 
 	public function mayEditBlog()
