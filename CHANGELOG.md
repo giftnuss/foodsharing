@@ -31,6 +31,7 @@
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
 - Added Rest controller and normalization for stores !885 @alex.simm
 - new chat design with badges and layout changed !928 @kniggerich
+- Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
