@@ -576,7 +576,7 @@ class Session
 		return false;
 	}
 
-	public function isBotForA($regions_ids, $include_groups = true, $include_parent_regions = false): bool
+	public function isAmbassadorForRegion($regions_ids, $include_groups = true, $include_parent_regions = false): bool
 	{
 		if (is_array($regions_ids) && count($regions_ids) && $this->isAmbassador()) {
 			if ($include_parent_regions) {

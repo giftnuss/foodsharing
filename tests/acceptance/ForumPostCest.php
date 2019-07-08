@@ -158,6 +158,20 @@ class ForumPostCest
 		$I->assertContains('tigt werden', $mail->subject);
 	}
 
+	/**
+	 * @param AcceptanceTester $I
+	 * @param \Codeception\Example $example
+	 * @example["ambassador", "thread_ambassador_user", true]
+	 */
+	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, \Codeception\Example $example)
+	{
+		$I->login($this->{$example[0]}['email']);
+		$title = 'TestAmbassadorThreadTitle';
+		$this->_createThread($I, $this->testBezirk['id'], $title);
+		$I->amOnPage($I->forumUrl($this->testBezirk['id']));
+		$I->see($title);
+	}
+
 	public function newThreadCanBeActivated(AcceptanceTester $I)
 	{
 		$I->login($this->foodsaver['email']);
