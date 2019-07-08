@@ -78,14 +78,14 @@ class TeamGateway extends BaseGateway
 	}
 
 	/**
-	 * Function to check and block an ip address.
+	 * Function to check and block an IP address.
 	 *
 	 * @param int $durationSeconds
 	 * @param string $context
 	 *
 	 * @return bool
 	 */
-	public function ipIsBlocked(int $durationSeconds, $context): bool
+	public function isABlockedIP(int $durationSeconds, string $context): bool
 	{
 		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$ip = strip_tags($_SERVER['REMOTE_ADDR']);
@@ -95,10 +95,11 @@ class TeamGateway extends BaseGateway
 
 		$context = strip_tags($context);
 
-		if ($block = $this->db->fetch('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM fs_ipblock WHERE ip = :ip AND context = :context', [[':ip' => $ip], [':context' => $context]])) {
-			if (time() < ((int)$block['start'] + (int)$block['duration'])) {
-				return true;
-			}
+		if (($block = $this->db->fetch(
+				'SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM fs_ipblock WHERE ip = :ip AND context = :context',
+				[[':ip' => $ip], [':context' => $context]]
+			)) && time() < ((int)$block['start'] + (int)$block['duration'])) {
+			return true;
 		}
 
 		$this->db->insertOrUpdate('fs_ipblock', [
