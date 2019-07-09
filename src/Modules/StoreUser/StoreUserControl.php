@@ -155,8 +155,9 @@ class StoreUserControl extends Control
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
 				}
 
-				if ($lastPickupByUserInStore = $this->storeGateway->lastPickupDateOfFoodsaverByStore($store['id'], $this->session->id())) {
-					$lastDate = Carbon::create($lastPickupByUserInStore);
+				$lastFetchesFromTeam = array_column($store['foodsaver'], 'last_fetch', 'id');
+				if ($last_pickup = $lastFetchesFromTeam[$this->session->id()]) {
+					$lastDate = Carbon::createFromTimestamp($last_pickup);
 					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
 						. ' ' . Carbon::now()->diff($lastDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
 				}

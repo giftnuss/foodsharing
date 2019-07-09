@@ -213,25 +213,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function lastPickupDateOfFoodsaverByStore(int $storeID, int $fs_id)
-	{
-		try {
-			$sqlStatement = '
-                SELECT `date` 
-                FROM `fs_abholer` 
-                WHERE `betrieb_id` = :store_id 
-                AND `foodsaver_id` = :fs_id 
-                AND `date` < CURDATE()
-                AND `confirmed` = 1 
-                group  by date DESC limit 1';
-			$out = $this->db->fetchValue($sqlStatement, [':store_id' => $storeID, ':fs_id' => $fs_id]);
-		} catch (\Exception $e) {
-			$out = null;
-		}
-
-		return $out;
-	}
-
 	public function getMyBetrieb($fs_id, $id): array
 	{
 		$out = $this->db->fetch('
