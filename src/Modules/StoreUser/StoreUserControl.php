@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Carbon\Carbon;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
@@ -149,6 +150,13 @@ class StoreUserControl extends Control
 				}
 				if ($press = $this->mentionPublicly($store['presse'])) {
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
+				}
+
+				$lastFetchesFromTeam = array_column($store['foodsaver'], 'last_fetch', 'id');
+				if ($last_pickup = $lastFetchesFromTeam[$this->session->id()]) {
+					$lastDate = Carbon::createFromTimestamp($last_pickup);
+					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
+						. ' ' . Carbon::now()->diff($lastDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field(
