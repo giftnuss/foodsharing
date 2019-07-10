@@ -44,33 +44,7 @@ class ActivityXhr extends Control
 		}
 
 		$xhr = new Xhr();
-
-		/*
-		 * get forum updates
-		*/
-
-		$updates = array();
-
-		if ($up = $this->model->loadForumUpdates($_GET['page'], $hidden_ids['bezirk'])) {
-			$updates = $up;
-		}
-		if ($up = $this->model->loadStoreUpdates($_GET['page'])) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadMailboxUpdates($_GET['page'], $hidden_ids['mailbox'])) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $_GET['page'])) {
-			$updates = array_merge($updates, $up);
-		}
-
-		$updates = array_merge(
-			$updates,
-			$this->model->loadBasketWallUpdates($_GET['page']),
-			$this->model->loadEventWallUpdates($_GET['page']));
-
-		$xhr->addData('updates', $updates);
-
+		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, $_GET['page']));
 		$xhr->send();
 	}
 
@@ -113,28 +87,7 @@ class ActivityXhr extends Control
 		}
 
 		$xhr = new Xhr();
-		$updates = array();
-		if ($up = $this->model->loadForumUpdates($page, $hidden_ids['bezirk'])) {
-			$updates = $up;
-		}
-
-		if ($up = $this->model->loadStoreUpdates()) {
-			$updates = array_merge($updates, $up);
-		}
-
-		if ($up = $this->model->loadMailboxUpdates($page, $hidden_ids['mailbox'])) {
-			$updates = array_merge($updates, $up);
-		}
-		if ($up = $this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page)) {
-			$updates = array_merge($updates, $up);
-		}
-
-		$updates = array_merge($updates,
-			$this->model->loadBasketWallUpdates($page),
-			$this->model->loadEventWallUpdates($page));
-
-		$xhr->addData('updates', $updates);
-
+		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, $page));
 		$xhr->addData('user', [
 			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
@@ -240,5 +193,17 @@ class ActivityXhr extends Control
 		}
 
 		$xhr->send();
+	}
+
+	private function buildUpdateData($hidden_ids, int $page): array
+	{
+		return array_merge(
+			$this->model->loadForumUpdates($page, $hidden_ids['bezirk']),
+			$this->model->loadStoreUpdates($page),
+			$this->model->loadMailboxUpdates($page, $hidden_ids['mailbox']),
+			$this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page),
+			$this->model->loadBasketWallUpdates($page),
+			$this->model->loadEventWallUpdates($page)
+		);
 	}
 }
