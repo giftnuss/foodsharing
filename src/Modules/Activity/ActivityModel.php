@@ -115,7 +115,7 @@ class ActivityModel extends Db
 		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
-	public function loadFriendWallUpdates($hidden_ids, $page = 0)
+	public function loadFriendWallUpdates($hidden_ids, $page = 0): array
 	{
 		$buddy_ids = array();
 
@@ -164,10 +164,10 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
+	public function loadMailboxUpdates($page = 0, $hidden_ids = false): array
 	{
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			$mb_ids = array();
@@ -213,7 +213,7 @@ class ActivityModel extends Db
 			}
 		}
 
-		return false;
+		return [];
 	}
 
 	private function ttt($str, $length = 160)
@@ -225,7 +225,7 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates($page = 0, $bids_not_load = false)
+	public function loadForumUpdates($page = 0, $bids_not_load = false): array
 	{
 		$tmp = $this->session->listRegionIDs();
 		$bids = array();
@@ -276,10 +276,10 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function loadStoreUpdates($page = 0)
+	public function loadStoreUpdates($page = 0): array
 	{
 		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = array();
@@ -299,7 +299,7 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getBuddies()
