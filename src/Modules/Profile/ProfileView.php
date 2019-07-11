@@ -19,7 +19,7 @@ class ProfileView extends View
 			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
-		if ($fetchDates) { // AMB functionality
+		if ($fetchDates) {
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
@@ -35,7 +35,7 @@ class ProfileView extends View
 		$page->render();
 	}
 
-	private function fetchDates($fetchDates) // AMB functionality
+	private function fetchDates($fetchDates)
 	{
 		$out = '
 				<div class="ui-padding" id="double">';
@@ -60,13 +60,17 @@ class ProfileView extends View
 							</a>
 						</li>';
 
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
+			if ($this->session->may('fs')) {
+				$out .= '<li>
+							<a class="button button-big disabled" hidden=hidden href="#">austragen</a>
+							</li>';
+			} elseif ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$out .= '<li>
 							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
 			} else {
 				$out .= '<li>
-							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
+							<a class="button button-big disabled" disabled=disabled href="#"></a>
 							</li>';
 			}
 		}
