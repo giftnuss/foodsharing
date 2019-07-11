@@ -88,7 +88,7 @@ final class ProfileControl extends Control
 				false,
 				null,
 				null,
-				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
+				$this->foodsaver['id'] == $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : null
 			);
 		}
 	}

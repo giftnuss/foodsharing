@@ -25,7 +25,7 @@ class ProfileView extends View
 			$this->pageHelper->addStyle('#wallposts .tools{display:none;}');
 		}
 
-		if ($fetchDates) { // AMB functionality
+		if ($fetchDates) {
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
@@ -101,13 +101,17 @@ class ProfileView extends View
 						</a>
 					</li>';
 
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($date['bezirk_id'])) {
+			if ($this->session->may('fs')) {
+				$out .= '<li>
+							<a class="button button-big disabled" hidden=hidden href="#">austragen</a>
+							</li>';
+			} elseif ($this->session->isOrgaTeam() || $this->session->isAdminFor($date['bezirk_id'])) {
 				$out .= '<li>
 							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $date['betrieb_id'] . ',date:' . $date['date_ts'] . '});return false;">austragen</a>
 						</li>';
 			} else {
 				$out .= '<li>
-							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
+							<a class="button button-big disabled" disabled=disabled href="#"></a>
 						</li>';
 			}
 		}
