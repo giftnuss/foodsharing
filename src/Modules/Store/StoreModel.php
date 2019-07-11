@@ -133,31 +133,6 @@ class StoreModel extends Db
 		return false;
 	}
 
-	/* delete fetch dates a user signed up for.
-	 * Either a specific fetch date (fsid, bid and date set)
-	 * or all fetch dates for a store (only fsid, bid set)
-	 * or all fetch dates for a user (only fsid set)
-	 */
-	public function deleteFetchDate($fsid, $bid = null, $date = null)
-	{
-		if ($date !== null && $bid !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
-			$this->storeGateway->updateBellNotificationForBiebs($bid);
-		} elseif ($bid !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$this->storeGateway->updateBellNotificationForBiebs($bid);
-		} else {
-			$storeIdsThatWillBeDeleted = $this->qCol('SELECT `betrieb_id` FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-
-			foreach ($storeIdsThatWillBeDeleted as $storeId) {
-				$this->storeGateway->updateBellNotificationForBiebs($storeId);
-			}
-		}
-
-		return $result;
-	}
-
 	public function signout($bid, $fsid)
 	{
 		$bid = (int)$bid;
