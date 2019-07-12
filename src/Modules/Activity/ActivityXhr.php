@@ -201,7 +201,7 @@ class ActivityXhr extends Control
 			$this->model->loadForumUpdates($page, $hidden_ids['bezirk']),
 			$this->model->loadStoreUpdates($page),
 			$this->model->loadMailboxUpdates($page, $hidden_ids['mailbox']),
-			$this->model->loadFriendWallUpdates($hidden_ids['buddywall'], $page),
+			$this->model->loadFriendWallUpdates($page, $hidden_ids['buddywall']),
 			$this->model->loadBasketWallUpdates($page),
 			$this->model->loadEventWallUpdates($page)
 		);

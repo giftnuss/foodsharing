@@ -115,7 +115,7 @@ class ActivityModel extends Db
 		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
-	public function loadFriendWallUpdates($hidden_ids, $page = 0): array
+	public function loadFriendWallUpdates($page = 0, $hidden_ids): array
 	{
 		$buddy_ids = array();
 
