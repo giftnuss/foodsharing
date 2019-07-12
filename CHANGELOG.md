@@ -54,7 +54,6 @@
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
-- Fixed fancybox loading (apple) and navigation sprites #644 @jofranz
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
 - Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
 
@@ -65,7 +64,6 @@
 - reduced codebase around map markers. !588 @chriswalg @peter.toennies
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
-- Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
 
 ## Dev/Test/CI stuff
