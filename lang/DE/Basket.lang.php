@@ -37,7 +37,7 @@ $g_lang['basket_reference'] = 'Hinweis!';
 $g_lang['basket_reference_info'] = 'Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar.';
 $g_lang['basket_request'] = 'Essenskorb anfragen';
 $g_lang['basket_request_on_page'] = 'Essenskorb anfragen auf unserer foodsharing-Homepage';
-$g_lang['basket_pickup_warning'] = 'Bitte verwende die "Essenskorb anfragen"-Funktion, um Interesse zu bekunden. Kommentare auf der Pinnwand werden vom Anbieter häufig nicht gelesen.';
+$g_lang['basket_pickup_warning'] = '<b>Kommentare auf der Pinnwand wurden deaktiviert und werden bald ganz entfernt.</b> <br>Bitte nutze die grünen Schaltflächen "Essenskorb anfragen", um Interesse an diesem Korb zu bekunden, oder "<a href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:{var}});">Essenskorb bearbeiten</a>", um Deinen eigenen Korb nachträglich zu bearbeiten!';
 $g_lang['basket_delete'] = 'Essenskorb löschen';
 $g_lang['basket_publish'] = 'Essenskorb veröffentlichen';
 $g_lang['to_basket'] = 'zum Essenskorb';

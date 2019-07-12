@@ -152,7 +152,7 @@ class FairTeilerView extends View
 			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['verantwortlich'], array('scroller' => false)), 'verantwortliche Foodsaver');
 		}
 		if (!empty($this->follower['follow'])) {
-			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['follow']), $this->translationHelper->s('follower'));
+			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['follow'], array('height' => 700)), $this->translationHelper->s('follower'));
 		}
 
 		return $out;

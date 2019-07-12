@@ -68,17 +68,17 @@ class Utils
 		return $this->v_field('<div class="v-form">' . $this->v_form($titel, $elements, $option) . '</div>', $titel);
 	}
 
-	public function v_scroller($content, $width = '232')
+	public function v_scroller($content, $maxHeight)
 	{
 		if ($this->session->isMob()) {
 			return $content;
 		}
 
 		$id = $this->identificationHelper->id('scroller');
-		$this->pageHelper->addJs('$("#' . $id . '").slimScroll();');
+		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: \'auto\'});');
 
 		return '
-			<div id="' . $id . '" class="scroller">
+			<div style="max-height:' . $maxHeight . 'px" id="' . $id . '" class="scroller">
 				' . $content . '
 			</div>';
 	}

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
+use Carbon\Carbon;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
@@ -9,6 +10,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\Store\StoreStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -107,10 +109,6 @@ class StoreUserControl extends Control
 
 				$this->pageHelper->addBread($store['name']);
 
-				$edit_team = '';
-
-				$verantwortlich_select = '';
-
 				$bibsaver = array();
 				foreach ($store['foodsaver'] as $fs) {
 					if ($fs['rolle'] >= 2) {
@@ -152,6 +150,13 @@ class StoreUserControl extends Control
 				}
 				if ($press = $this->mentionPublicly($store['presse'])) {
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
+				}
+
+				$lastFetchesFromTeam = array_column($store['foodsaver'], 'last_fetch', 'id');
+				if ($last_pickup = $lastFetchesFromTeam[$this->session->id()]) {
+					$lastDate = Carbon::createFromTimestamp($last_pickup);
+					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
+						. ' ' . Carbon::now()->diff($lastDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field(
@@ -255,7 +260,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id'])) {
+				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
@@ -278,7 +283,7 @@ class StoreUserControl extends Control
 				}
 
 				if (!$store['jumper']) {
-					if (($store['betrieb_status_id'] == 3 || $store['betrieb_status_id'] == 5)) {
+					if ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED) {
 					} else {
 						$bt = '';
 						$storeStateName = '';

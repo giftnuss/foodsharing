@@ -26,9 +26,14 @@
 - Rewrite pickup list on store page in vue !874 @alangecker @NerdyProjects
 - Removed TOX-ID in foodsaver settings #31 !935 @chriswalg
 - Removed twitter and github for Team-Member !944 @chriswalg
+- Sorted trust bananas by date #550 !970 @sepulcrum89
 - Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
 - Added one week as an option for automatic pickup slots in store settings !945 @jofranz
 - For not declined events, the last wall posts are shown on the dashboard update-section. !417 #227 @fs_k
+- Added Rest controller and normalization for stores !885 @alex.simm
+- new chat design with badges and layout changed !928 @kniggerich
+- Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
+- Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -41,16 +46,27 @@
 - Orga can send bananas again !937 @NerdyProjects
 - Mails from trash can be deleted again @peter.toennies
 - Redirect to the forum instead of showing 404 on deleting the last post of a thread. #626 !953 @ctwx_ok
-- Moved "forum-title-buttons" into the second line #591 !949 @chris.walg
+- Moved "forum-title-buttons" into the second line #591 !949 @chriswalg
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
+- Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
+- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
+- Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
+- Enable ambassador's new threads by default. #614 !967 @ctwx_ok
+- Fixed fancybox loading (apple) and navigation sprites #644 @jofranz
+- Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
 - The page does not use fullpage anymore. New landing page !597 #393 @theolampert
 - Reduce Load on every Request to RegionControl !921 @alangeker
 - reduced codebase around map markers. !588 @chriswalg @peter.toennies
+- Refactored conversations API and related javascript !592 @theolampert
+- Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
+- Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway @jofranz
+- Refactored team page. Got rid of legacy methods !974 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
@@ -63,7 +79,7 @@
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
-- Updated deployment for new production server
+- Updated deployment for new production server @alangecker @NerdyProjects
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 
@@ -105,7 +121,6 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @fs_k
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
-- Added Rest controller and normalization for stores !885 @alex.simm
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @fs_k
@@ -146,7 +161,6 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 - Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
 - Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
-- Refactored conversations API and related javascript !592 @theolampert
 
 ## Dev/Test/CI stuff
 - Adjust devdocs to being open source !823 @flukx
