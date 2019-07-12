@@ -230,16 +230,18 @@ final class RegionControl extends Control
 		$data = CreateForumThreadData::create();
 		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
 		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)) {
-				$moderated = !$this->session->user('verified') || $this->region['moderated'];
-				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $moderated);
-				$this->forumGateway->followThread($this->session->id(), $threadId);
-				if ($moderated) {
-					$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
-				}
-				$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
+		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
+				$region['id'],
+				$ambassadorForum
+			)) {
+			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+
+			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$this->forumGateway->followThread($this->session->id(), $threadId);
+			if (!$postActiveWithoutModeration) {
+				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}
+			$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
 		}
 
 		return $form->createView();

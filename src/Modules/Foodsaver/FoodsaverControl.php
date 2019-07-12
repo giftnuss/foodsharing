@@ -46,7 +46,7 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->session->isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
@@ -72,7 +72,7 @@ class FoodsaverControl extends Control
 		} elseif (($id = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$bids = $this->regionGateway->getFsRegionIds($id);
-			if ($data && ($this->session->isOrgaTeam() || $this->session->isBotForA($bids, false, true))) {
+			if ($data && ($this->session->isOrgaTeam() || $this->session->isAmbassadorForRegion($bids, false, true))) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 

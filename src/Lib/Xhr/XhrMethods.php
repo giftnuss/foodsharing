@@ -112,7 +112,7 @@ class XhrMethods
 	{
 		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->session->isBotForA($bids, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAmbassadorForRegion($bids, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -1442,7 +1442,7 @@ class XhrMethods
 		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == 7)) {
+		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP)) {
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;

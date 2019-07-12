@@ -251,7 +251,7 @@ class StoreUserView extends View
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
-					url: "/xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&s=" + val,
+					url: "/xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&status=" + val,
 					success: function(){
 						hideLoader();
 					}
