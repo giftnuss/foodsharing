@@ -287,7 +287,7 @@ class StoreUserControl extends Control
 					} else {
 						$bt = '';
 						$storeStateName = '';
-						$storeStateList = $this->model->q('SELECT id, name FROM fs_betrieb_status');
+						$storeStateList = $this->storeGateway->getStoreStateList();
 						foreach ($storeStateList as $storeState) {
 							if ($storeState['id'] == $store['betrieb_status_id']) {
 								$storeStateName = $storeState['name'];
