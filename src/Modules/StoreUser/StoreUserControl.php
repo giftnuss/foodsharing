@@ -271,12 +271,9 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($this->storePermissions->mayEditPickups($store['id'])) {
-					if ($this->session->isMob()) {
-						$width = '$(window).width() * 0.96';
-					} else {
-						$width = '$(window).width() / 2';
-					}
+					$width = $this->session->isMob() ? '$(window).width() * 0.96' : '$(window).width() / 2';
 					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
+
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0),
