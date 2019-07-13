@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
@@ -56,12 +55,10 @@ final class RegionControl extends Control
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
-		Db $model,
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ImageService $imageService
 	) {
-		$this->model = $model;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
 		$this->forumPermissions = $forumPermissions;
