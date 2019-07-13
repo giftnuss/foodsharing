@@ -152,11 +152,14 @@ class StoreUserControl extends Control
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
 				}
 
-				$lastFetchesFromTeam = array_column($store['foodsaver'], 'last_fetch', 'id');
-				if ($last_pickup = $lastFetchesFromTeam[$this->session->id()]) {
-					$lastDate = Carbon::createFromTimestamp($last_pickup);
-					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
-						. ' ' . Carbon::now()->diff($lastDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
+				/* find yourself in the pickup list and show your last pickup date in store info */
+				foreach ($store['foodsaver'] as $fs) {
+					if ($fs['id'] === $this->session->id() && $fs['last_fetch'] != null) {
+						$lastFetchDate = Carbon::createFromTimestamp($fs['last_fetch']);
+						$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastFetchDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
+								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
+						break;
+					}
 				}
 
 				$this->pageHelper->addContent($this->v_utils->v_field(
