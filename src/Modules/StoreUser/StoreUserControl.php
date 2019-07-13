@@ -328,16 +328,6 @@ class StoreUserControl extends Control
 		}
 	}
 
-	private function format_time($time): string
-	{
-		$p = explode(':', $time);
-		if (count($p) >= 2) {
-			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		}
-
-		return '';
-	}
-
 	private function fetchedQuantity($id)
 	{
 		$arr = [
