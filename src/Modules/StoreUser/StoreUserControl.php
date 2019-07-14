@@ -175,15 +175,15 @@ class StoreUserControl extends Control
 
 				$menu = array();
 
-				if (!$store['jumper'] || $this->session->may('orga')) {
+				if (!$store['jumper'] || $this->storePermissions->mayEditStore($store['id'])) {
 					if (!is_null($store['team_conversation_id'])) {
 						$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 					}
-					if ($store['verantwortlich'] && !is_null($store['springer_conversation_id'])) {
+					if ($this->storePermissions->mayEditStore($store['id']) && !is_null($store['springer_conversation_id'])) {
 						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
 					}
 				}
-				if ($store['verantwortlich'] || $this->session->may('orga')) {
+				if ($this->storePermissions->maySeeStoreSettingsMenu($store['id'])) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$store['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $store['id']);
 					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
@@ -206,7 +206,7 @@ class StoreUserControl extends Control
 					CNT_LEFT
 				);
 
-				if (!$store['jumper'] || $this->session->may('orga')) {
+				if (!$store['jumper'] || $this->session->isOrgaTeam()) {
 					$this->pageHelper->addJs('u_updatePosts();');
 
 					$opt = array();

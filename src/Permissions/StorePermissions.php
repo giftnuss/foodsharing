@@ -176,4 +176,9 @@ class StorePermissions
 	{
 		return $this->mayDoPickup($storeId);
 	}
+
+	public function maySeeStoreSettingsMenu(int $storeId)
+	{
+		return$this->mayEditStore($storeId);
+	}
 }
