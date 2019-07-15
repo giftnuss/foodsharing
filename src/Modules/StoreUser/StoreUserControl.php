@@ -171,8 +171,7 @@ class StoreUserControl extends Control
 					array('class' => 'ui-padding')
 				), CNT_RIGHT);
 
-				/*Optionsn*/
-
+				/* options menu */
 				$menu = array();
 
 				if (!$store['jumper'] || $this->session->may('orga')) {
@@ -197,22 +196,18 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_menu($menu, $this->translationHelper->s('options')), CNT_LEFT);
 				}
 
+				/* team list */
 				$this->pageHelper->addContent(
 					$this->v_utils->v_field(
 						$this->view->u_team($store) . '',
-
-						$store['name'] . '-Team'
+						$store['name'] . '-Team',
+						($this->session->isMob() && count($store['foodsaver']) > 8) ? array('class' => 'moreswap moreswap-height-280') : []
 					),
-					CNT_LEFT
+					CNT_LEFT,
 				);
 
 				if (!$store['jumper'] || $this->session->may('orga')) {
 					$this->pageHelper->addJs('u_updatePosts();');
-
-					$opt = array();
-					if ($this->session->isMob()) {
-						$opt = array('class' => 'moreswap moreswap-height-200');
-					}
 					$this->pageHelper->addContent($this->v_utils->v_field('
 							<div id="pinnwand">
 
@@ -227,8 +222,8 @@ class StoreUserControl extends Control
 								</div>
 
 								<div class="posts"></div>
-							</div>', 'Pinnwand', $opt));
-				/*pinnwand ende*/
+							</div>', 'Pinnwand', $this->session->isMob() ? array('class' => 'moreswap moreswap-height-280') : []));
+				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
 				}
@@ -246,10 +241,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), array('class' => 'ui-padding')), CNT_LEFT);
 				}
 
-				/*
-				 * Abholzeiten
-				 */
-
+				/* fetchdates */
 				$this->pageHelper->addHidden('
 					<div id="delete_shure" title="' . $this->translationHelper->s('delete_sure_title') . '">
 						' . $this->v_utils->v_info($this->translationHelper->s('delete_post_sure')) . '
@@ -267,9 +259,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
-				/*
-				 * Abholzeiten ändern
-				 */
+				/* change regular fetchdates */
 				if ($this->storePermissions->mayEditPickups($store['id'])) {
 					$width = $this->session->isMob() ? '$(window).width() * 0.96' : '$(window).width() / 2';
 					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);

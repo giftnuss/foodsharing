@@ -33,6 +33,7 @@
 - new chat design with badges and layout changed !928 @kniggerich
 - Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 - Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
+- Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
