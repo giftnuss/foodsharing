@@ -57,6 +57,7 @@
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
 - Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok 
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
