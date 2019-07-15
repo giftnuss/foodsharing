@@ -199,19 +199,6 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function get_betrieb_status()
-	{
-		$out = $this->q('
-				SELECT
-				`id`,
-				`name`
-				
-				FROM 		`fs_betrieb_status`
-				ORDER BY `name`');
-
-		return $out;
-	}
-
 	public function getOne_betrieb($id)
 	{
 		$out = $this->qRow('

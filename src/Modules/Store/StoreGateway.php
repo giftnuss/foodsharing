@@ -1035,4 +1035,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		return $res;
 	}
+
+	public function getStoreStateList()
+	{
+		return $this->db->fetchAll('
+				SELECT
+				`id`,
+				`name`
+				FROM `fs_betrieb_status`
+				ORDER BY `name`');
+	}
 }

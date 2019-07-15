@@ -10,6 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -27,6 +28,7 @@ class DashboardControl extends Control
 	private $profileGateway;
 	private $sanitizerService;
 	private $imageService;
+	private $quizGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -40,7 +42,8 @@ class DashboardControl extends Control
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
-		ImageService $imageService
+		ImageService $imageService,
+		QuizGateway $quizGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -54,6 +57,7 @@ class DashboardControl extends Control
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
+		$this->quizGateway = $quizGateway;
 
 		parent::__construct();
 
@@ -86,23 +90,9 @@ class DashboardControl extends Control
 		}
 
 		if (
-			(
-				$is_fs
-				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
-			)
-			||
-			(
-				$is_bieb
-				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 2 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
-			)
-			||
-			(
-				$is_bot
-				&&
-				(int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 3 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0
-			)
+			($is_fs && (int)$this->quizGateway->countByQuizId($this->session->id(), 1) == 0) ||
+			($is_bieb && (int)$this->quizGateway->countByQuizId($this->session->id(), 2) == 0) ||
+			($is_bot && (int)$this->quizGateway->countByQuizId($this->session->id(), 3) == 0)
 		) {
 			$check = true;
 
@@ -132,9 +122,7 @@ class DashboardControl extends Control
 
 		$this->pageHelper->addBread('Dashboard');
 		$this->pageHelper->addTitle('Dashboard');
-		/*
-		 * User is foodsaver
-		 */
+		/* User is foodsaver */
 
 		if ($this->user['rolle'] > 0 && !$this->session->getCurrentBezirkId()) {
 			$this->pageHelper->addJs('becomeBezirk();');

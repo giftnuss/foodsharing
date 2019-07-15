@@ -271,12 +271,9 @@ class StoreUserControl extends Control
 				 * Abholzeiten ändern
 				 */
 				if ($this->storePermissions->mayEditPickups($store['id'])) {
-					if ($this->session->isMob()) {
-						$width = '$(window).width() * 0.96';
-					} else {
-						$width = '$(window).width() / 2';
-					}
+					$width = $this->session->isMob() ? '$(window).width() * 0.96' : '$(window).width() / 2';
 					$pickup_dates = $this->storeGateway->getAbholzeiten($store['id']);
+
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0),
@@ -290,7 +287,7 @@ class StoreUserControl extends Control
 					} else {
 						$bt = '';
 						$storeStateName = '';
-						$storeStateList = $this->model->q('SELECT id, name FROM fs_betrieb_status');
+						$storeStateList = $this->storeGateway->getStoreStateList();
 						foreach ($storeStateList as $storeState) {
 							if ($storeState['id'] == $store['betrieb_status_id']) {
 								$storeStateName = $storeState['name'];
@@ -326,16 +323,6 @@ class StoreUserControl extends Control
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name'])), false));
 		}
-	}
-
-	private function format_time($time): string
-	{
-		$p = explode(':', $time);
-		if (count($p) >= 2) {
-			return (int)$p[0] . '.' . $p[1] . ' Uhr';
-		}
-
-		return '';
 	}
 
 	private function fetchedQuantity($id)

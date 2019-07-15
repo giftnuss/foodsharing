@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\BusinessCard;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
@@ -10,9 +9,8 @@ class BusinessCardControl extends Control
 {
 	private $gateway;
 
-	public function __construct(Db $model, BusinessCardView $view, BusinessCardGateway $gateway)
+	public function __construct(BusinessCardView $view, BusinessCardGateway $gateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 
