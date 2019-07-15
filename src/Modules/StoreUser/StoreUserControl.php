@@ -182,7 +182,7 @@ class StoreUserControl extends Control
 					if (!is_null($store['team_conversation_id'])) {
 						$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 					}
-					if ($this->storePermissions->mayEditStore($store['id']) && !is_null($store['springer_conversation_id'])) {
+					if ($store['verantwortlich'] && !is_null($store['springer_conversation_id'])) {
 						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
 					}
 				}
@@ -210,7 +210,7 @@ class StoreUserControl extends Control
 					CNT_LEFT,
 				);
 
-				if (!$store['jumper'] || $this->session->isOrgaTeam()) {
+				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
 					$this->pageHelper->addJs('u_updatePosts();');
 					$this->pageHelper->addContent($this->v_utils->v_field('
 							<div id="pinnwand">
