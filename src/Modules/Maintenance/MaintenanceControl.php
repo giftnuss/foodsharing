@@ -147,14 +147,19 @@ class MaintenanceControl extends ConsoleControl
 		$counts = $this->foodsaverGateway->updateGroupMembers(761, $aBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Zürich BIEB austausch');
+		self::info('updating Zürich BIEB group');
 		$zuerich_biebs = $this->storeGateway->getBiebIds(108);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Wien BIEB austausch (Filialverantwortung)');
+		self::info('updating Wien BIEB group');
 		$wien_biebs = $this->storeGateway->getBiebIds(13);
 		$counts = $this->foodsaverGateway->updateGroupMembers(707, $wien_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Graz BIEB group');
+		$graz_biebs = $this->storeGateway->getBiebIds(149);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1655, $graz_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
