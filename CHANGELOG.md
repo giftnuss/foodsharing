@@ -66,6 +66,7 @@
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
+- Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
