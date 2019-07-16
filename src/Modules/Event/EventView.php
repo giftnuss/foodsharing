@@ -198,7 +198,7 @@ class EventView extends View
 		}
 
 		if ($user_status !== -1) {
-			if (true || $user_status !== InvitationStatus::WONT_JOIN) {
+			if ($user_status !== InvitationStatus::WONT_JOIN) {
 				$menu[] = [
 					'name' => 'Ich kann doch nicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:3});return false;'
