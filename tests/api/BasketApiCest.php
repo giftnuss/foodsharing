@@ -15,6 +15,7 @@ class BasketApiCest
 	private const API_BASKETS = 'api/baskets';
 	private const ID = 'id';
 	private const TEST_PICTURE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg==';
+	private const TEST_DESCRIPTION = 'lorem ipsum';
 
 	public function _before(\ApiTester $I)
 	{
@@ -145,5 +146,21 @@ class BasketApiCest
 		$I->login($this->user[self::EMAIL]);
 		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+	}
+
+	public function editBasket(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => '']);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => self::TEST_DESCRIPTION]);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'description' => self::TEST_DESCRIPTION
+		]);
 	}
 }
