@@ -115,7 +115,7 @@ class ActivityModel extends Db
 		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
-	public function loadFriendWallUpdates($page = 0, $hidden_ids): array
+	public function loadFriendWallUpdates($page, $hidden_ids): array
 	{
 		$buddy_ids = array();
 
@@ -134,6 +134,7 @@ class ActivityModel extends Db
 
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 			$hb = array();
+			$out = [];
 			foreach ($updates as $u) {
 				/*
 				 * quick fix later list all comments in a package
@@ -178,7 +179,7 @@ class ActivityModel extends Db
 			}
 
 			if (count($mb_ids) === 0) {
-				return false;
+				return [];
 			}
 
 			if ($updates = $this->activityGateway->fetchAllMailboxUpdates($mb_ids, $page)) {
@@ -230,7 +231,7 @@ class ActivityModel extends Db
 		$tmp = $this->session->listRegionIDs();
 		$bids = array();
 		if ($tmp === false || count($tmp) === 0) {
-			return false;
+			return [];
 		}
 
 		foreach ($tmp as $t) {
@@ -240,7 +241,7 @@ class ActivityModel extends Db
 		}
 
 		if (count($bids) === 0) {
-			return false;
+			return [];
 		}
 
 		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
