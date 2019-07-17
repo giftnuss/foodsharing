@@ -64,6 +64,9 @@
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
 - Don't return outdated baskets via the REST API !1008 @dthulke
 - Fixed saving an edited quiz answer !1006 #408 @svenpascal
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
