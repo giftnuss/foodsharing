@@ -18,7 +18,7 @@ class RegionGateway extends BaseGateway
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function getBezirk($id)
+	public function getRegion($id)
 	{
 		if ($id == 0) {
 			return null;

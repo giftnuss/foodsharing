@@ -344,7 +344,7 @@ class XhrMethods
 	{
 		if ($this->session->may('fs')) {
 			$storeId = (int)$data['id'];
-			if ($b = $this->storeGateway->getMyBetrieb($this->session->id(), $storeId)) {
+			if ($b = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
 				$teamStatus = $this->storeGateway->getUserTeamStatus($this->session->id(), $storeId);
 				$b['inTeam'] = $teamStatus > TeamStatus::Applied;
 				$b['pendingRequest'] = $teamStatus == TeamStatus::Applied;
@@ -1257,7 +1257,7 @@ class XhrMethods
 		if ($foodsaver = $this->foodsaverGateway->getFsMap($data['id'])) {
 			$out['foodsaver'] = $foodsaver;
 		}
-		if ($betriebe = $this->storeGateway->getMapsBetriebe($data['id'])) {
+		if ($betriebe = $this->storeGateway->getMapsStores($data['id'])) {
 			$out['betriebe'] = $betriebe;
 			foreach ($out['betriebe'] as $i => $b) {
 				$img = '';

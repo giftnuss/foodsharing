@@ -137,7 +137,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	{
 		$store = $this->tester->createStore($this->region_id);
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [],
@@ -150,7 +150,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->addStoreTeam($store['id'], $this->foodsaver['id']);
 
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [$this->storeData($store, 'team')],

@@ -79,7 +79,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMapsBetriebe(int $groupId): array
+	public function getMapsStores(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.id,
@@ -104,12 +104,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			AND b.`lat` != ""',
 			[
-				':bezirk_id' => $groupId
+				':bezirk_id' => $regionId
 			]
 		);
 	}
 
-	public function getMyBetriebe($fs_id, $bezirk_id, $options = array()): array
+	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -172,7 +172,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		if ($options['sonstige']) {
-			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
+			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
 			$out['sonstige'] = array();
@@ -213,7 +213,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMyBetrieb($fs_id, $id): array
+	public function getMyStore($fs_id, $storeId): array
 	{
 		$out = $this->db->fetch('
 			SELECT
@@ -255,7 +255,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			WHERE 		b.`id` = :id
 			GROUP BY b.`id`',
-			[':id' => $id]
+			[':id' => $storeId]
 		);
 		if (!$out) {
 			return $out;
@@ -268,11 +268,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 							`fs_lebensmittel` l
 				WHERE 		l.id = hl.lebensmittel_id
 				AND 		`betrieb_id` = :id
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 
-		$out['foodsaver'] = $this->getBetriebTeam($id);
+		$out['foodsaver'] = $this->getStoreTeam($storeId);
 
-		$out['springer'] = $this->getBetriebSpringer($id);
+		$out['springer'] = $this->getBetriebSpringer($storeId);
 
 		$out['requests'] = $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -288,7 +288,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		`betrieb_id` = :id
 				AND 		t.active = 0
 				AND			fs.deleted_at IS NULL
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 
 		$out['verantwortlich'] = false;
 		$foodsaver = array();
@@ -325,7 +325,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getBetriebTeam($id): array
+	public function getStoreTeam($id): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,

@@ -63,7 +63,7 @@ class StoreControl extends Control
 			$bezirk_id = $this->session->getCurrentBezirkId();
 		}
 		if ($bezirk_id > 0) {
-			$bezirk = $this->regionGateway->getBezirk($bezirk_id);
+			$bezirk = $this->regionGateway->getRegion($bezirk_id);
 		} else {
 			$bezirk = array('name' => 'kompletter Datenbank');
 		}

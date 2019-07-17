@@ -583,7 +583,7 @@ class StoreModel extends Db
 	public function createTeamConversation($bid)
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $bid);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
@@ -591,7 +591,7 @@ class StoreModel extends Db
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$bid . '
 			');
 
-		$teamMembers = $this->storeGateway->getBetriebTeam($bid);
+		$teamMembers = $this->storeGateway->getStoreTeam($bid);
 		if ($teamMembers) {
 			foreach ($teamMembers as $fs) {
 				$this->messageModel->addUserToConversation($tcid, $fs['id']);
@@ -604,7 +604,7 @@ class StoreModel extends Db
 	public function createSpringerConversation($bid)
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $bid);
 		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		$this->update('
@@ -623,7 +623,7 @@ class StoreModel extends Db
 
 	public function addTeamMessage($bid, $message)
 	{
-		if ($betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid)) {
+		if ($betrieb = $this->storeGateway->getMyStore($this->session->id(), $bid)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
 				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {
