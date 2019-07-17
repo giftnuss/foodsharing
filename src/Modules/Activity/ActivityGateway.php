@@ -8,7 +8,7 @@ class ActivityGateway extends BaseGateway
 {
 	private const ITEMS_PER_PAGE = 10;
 
-	public function fetchAllBasketWallUpdates($fsId, $page): array
+	public function fetchAllBasketWallUpdates(int $fsId, int $page): array
 	{
 		$stm = '
 			SELECT
@@ -48,15 +48,15 @@ class ActivityGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':foodsaver_id' => (int)$fsId,
-				':foodsaver_id_dup' => (int)$fsId,
-				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':foodsaver_id' => $fsId,
+				':foodsaver_id_dup' => $fsId,
+				':lower_limit' => $page * self::ITEMS_PER_PAGE,
 				':upper_limit' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
 
-	public function fetchAllWallpostsFromFoodBaskets($fsId, $page): array
+	public function fetchAllWallpostsFromFoodBaskets(int $fsId, int $page): array
 	{
 		$stm = '
 			SELECT
@@ -98,15 +98,15 @@ class ActivityGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':foodsaver_id' => (int)$fsId,
-				':foodsaver_id_dup' => (int)$fsId,
-				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':foodsaver_id' => $fsId,
+				':foodsaver_id_dup' => $fsId,
+				':lower_limit' => $page * self::ITEMS_PER_PAGE,
 				':upper_limit' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
 
-	public function fetchAllFriendWallUpdates($bids, $page): array
+	public function fetchAllFriendWallUpdates(array $buddyIds, int $page): array
 	{
 		$stm = '
 			SELECT
@@ -132,7 +132,7 @@ class ActivityGateway extends BaseGateway
 			AND
 				hw.foodsaver_id = fs.id
 			AND
-				hw.foodsaver_id IN(' . implode(',', $bids) . ')
+				hw.foodsaver_id IN(' . implode(',', $buddyIds) . ')
 
 			ORDER BY w.id DESC
 			LIMIT :lower_limit, :upper_limit
@@ -140,11 +140,11 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
 		);
 	}
 
-	public function fetchAllMailboxUpdates($mb_ids, $page): array
+	public function fetchAllMailboxUpdates(array $mb_ids, int $page): array
 	{
 		$stm = '
 				SELECT
@@ -171,11 +171,11 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
 		);
 	}
 
-	public function fetchAllForumUpdates($bids, $page): array
+	public function fetchAllForumUpdates(array $regionIds, int $page): array
 	{
 		$stm = '
 			SELECT 		t.id,
@@ -203,7 +203,7 @@ class ActivityGateway extends BaseGateway
 			WHERE 		t.last_post_id = p.id
 			AND 		p.foodsaver_id = fs.id
 			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id IN(' . implode(',', $bids) . ')
+			AND 		bt.bezirk_id IN(' . implode(',', $regionIds) . ')
 			AND 		bt.bot_theme = 0
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
@@ -214,11 +214,11 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
 		);
 	}
 
-	public function fetchAllStoreUpdates($fsId, $page): array
+	public function fetchAllStoreUpdates(int $fsId, int $page): array
 	{
 		$stm = '
 			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
@@ -239,21 +239,21 @@ class ActivityGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':foodsaver_id' => (int)$fsId,
-				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':foodsaver_id' => $fsId,
+				':lower_limit' => $page * self::ITEMS_PER_PAGE,
 				':upper_limit' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
 
-	public function fetchAllBuddies($bids): array
+	public function fetchAllBuddies(array $buddyIds): array
 	{
-		$stm = 'SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $bids) . ')';
+		$stm = 'SELECT photo,name,id FROM fs_foodsaver WHERE id IN(' . implode(',', $buddyIds) . ')';
 
 		return $this->db->fetchAll($stm);
 	}
 
-	public function fetchAllEventUpdates($fsId, $page): array
+	public function fetchAllEventUpdates(int $fsId, int $page): array
 	{
 		$stm = '
 			SELECT
@@ -285,8 +285,8 @@ class ActivityGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':foodsaver_id' => (int)$fsId,
-				':lower_limit' => (int)$page * self::ITEMS_PER_PAGE,
+				':foodsaver_id' => $fsId,
+				':lower_limit' => $page * self::ITEMS_PER_PAGE,
 				':upper_limit' => self::ITEMS_PER_PAGE,
 			]
 		);

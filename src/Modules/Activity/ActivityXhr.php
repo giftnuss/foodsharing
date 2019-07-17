@@ -71,7 +71,6 @@ class ActivityXhr extends Control
 			$this->session->setOption('activity-listings', $options, $this->model);
 		}
 
-		$page = 0;
 		$hidden_ids = array(
 			'bezirk' => array(),
 			'mailbox' => array(),
@@ -87,7 +86,7 @@ class ActivityXhr extends Control
 		}
 
 		$xhr = new Xhr();
-		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, $page));
+		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, 0));
 		$xhr->addData('user', [
 			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
@@ -195,7 +194,7 @@ class ActivityXhr extends Control
 		$xhr->send();
 	}
 
-	private function buildUpdateData($hidden_ids, int $page): array
+	private function buildUpdateData(array $hidden_ids, int $page): array
 	{
 		return array_merge(
 			$this->model->loadForumUpdates($page, $hidden_ids['bezirk']),

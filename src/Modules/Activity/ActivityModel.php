@@ -27,7 +27,7 @@ class ActivityModel extends Db
 		$this->mailboxGateway = $mailboxGateway;
 	}
 
-	public function loadEventWallUpdates($page = 0): array
+	public function loadEventWallUpdates(int $page): array
 	{
 		$updates = $this->activityGateway->fetchAllEventUpdates($this->session->id(), $page);
 
@@ -58,7 +58,7 @@ class ActivityModel extends Db
 		return $out;
 	}
 
-	public function loadBasketWallUpdates($page = 0): array
+	public function loadBasketWallUpdates(int $page): array
 	{
 		$updates = array();
 		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
@@ -115,7 +115,7 @@ class ActivityModel extends Db
 		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
-	public function loadFriendWallUpdates($page, $hidden_ids): array
+	public function loadFriendWallUpdates(int $page, array $hidden_ids): array
 	{
 		$buddy_ids = array();
 
@@ -168,7 +168,7 @@ class ActivityModel extends Db
 		return [];
 	}
 
-	public function loadMailboxUpdates($page = 0, $hidden_ids = false): array
+	public function loadMailboxUpdates(int $page, array $hidden_ids): array
 	{
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			$mb_ids = array();
@@ -226,7 +226,7 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates($page = 0, $bids_not_load = false): array
+	public function loadForumUpdates(int $page, array $hidden_ids): array
 	{
 		$tmp = $this->session->listRegionIDs();
 		$bids = array();
@@ -235,7 +235,7 @@ class ActivityModel extends Db
 		}
 
 		foreach ($tmp as $t) {
-			if ($t > 0 && !isset($bids_not_load[$t])) {
+			if ($t > 0 && !isset($hidden_ids[$t])) {
 				$bids[] = $t;
 			}
 		}
@@ -280,7 +280,7 @@ class ActivityModel extends Db
 		return [];
 	}
 
-	public function loadStoreUpdates($page = 0): array
+	public function loadStoreUpdates(int $page): array
 	{
 		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = array();
@@ -305,8 +305,8 @@ class ActivityModel extends Db
 
 	public function getBuddies()
 	{
-		if ($bids = $this->session->get('buddy-ids')) {
-			return $this->activityGateway->fetchAllBuddies($bids);
+		if ($buddyIds = $this->session->get('buddy-ids')) {
+			return $this->activityGateway->fetchAllBuddies($buddyIds);
 		}
 
 		return false;
