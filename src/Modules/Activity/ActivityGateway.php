@@ -204,7 +204,6 @@ class ActivityGateway extends BaseGateway
 			AND 		p.foodsaver_id = fs.id
 			AND 		bt.theme_id = t.id
 			AND 		bt.bezirk_id IN(' . implode(',', $bids) . ')
-			AND 		bt.bot_theme = 0
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
 
