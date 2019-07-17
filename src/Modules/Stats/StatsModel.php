@@ -40,15 +40,13 @@ class StatsModel extends Db
 	{
 		$out = 0;
 		if ($stores = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
+			SELECT COUNT(a.`betrieb_id`) AS anz, b.abholmenge
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
-			WHERE a.betrieb_id =b.id
+			WHERE a.betrieb_id = b.id
 			AND   foodsaver_id = ' . $fs_id . '
 			AND   a.`date` < NOW()
-			GROUP BY a.`betrieb_id`
-	
-	
+			GROUP BY b.`abholmenge`
 		')
 		) {
 			foreach ($stores as $s) {
