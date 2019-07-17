@@ -33,4 +33,9 @@ final class EventPermissions
 				$event['bezirk_id']
 			) || $this->session->isOrgaTeam();
 	}
+
+	public function mayCommentInEvent(array $event): bool
+	{
+		return $this->maySeeEvent($event);
+	}
 }

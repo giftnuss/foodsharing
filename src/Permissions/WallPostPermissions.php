@@ -34,7 +34,7 @@ class WallPostPermissions
 			case 'event':
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $this->eventPermission->maySeeEvent($event);
+				return $this->eventPermission->mayCommentInEvent($event);
 			case 'fairteiler':
 				return true;
 			case 'question':
