@@ -9,6 +9,7 @@ use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
 {
+	private $quizGateway;
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
@@ -16,12 +17,14 @@ class QuizControl extends Control
 	public function __construct(
 		QuizModel $model,
 		QuizView $view,
+		QuizGateway $quizGateway,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
+		$this->quizGateway = $quizGateway;
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
