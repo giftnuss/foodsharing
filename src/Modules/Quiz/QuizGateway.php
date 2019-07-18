@@ -15,6 +15,18 @@ class QuizGateway extends BaseGateway
 		');
 	}
 
+	public function addQuiz(String $name, String $desc, int $maxfp, int $questcount)
+	{
+		return $this->db->insert('fs_quiz',
+			[
+				'name' => $name,
+				'desc' => $desc,
+				'maxfp' => $maxfp,
+				'questcount' => $questcount
+			]
+		);
+	}
+
 	public function countByQuizId($fs_id, $quiz_id)
 	{
 		return $this->db->count('fs_quiz_session', [

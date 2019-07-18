@@ -19,11 +19,17 @@ class QuizModel extends Db
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
+	/**
+	 * @deprecated use QuizGateway->getQuizzes
+	 */
 	public function listQuiz()
 	{
 		return $this->q('SELECT id,name FROM fs_quiz ORDER BY id');
 	}
 
+	/**
+	 * @deprecated use QuizGateway->addQuiz
+	 */
 	public function addQuiz($name, $desc, $maxfp, $questcount)
 	{
 		return $this->insert('
