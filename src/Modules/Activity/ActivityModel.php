@@ -197,15 +197,15 @@ class ActivityModel extends Db
 
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
-		$tmp = $this->session->listRegionIDs();
+		$myRegionIds = $this->session->listRegionIDs();
 		$region_ids = array();
-		if ($tmp === false || count($tmp) === 0) {
+		if ($myRegionIds === false || count($myRegionIds) === 0) {
 			return false;
 		}
 
-		foreach ($tmp as $t) {
-			if ($t > 0 && !isset($bids_not_load[$t])) {
-				$region_ids[] = $t;
+		foreach ($myRegionIds as $regionId) {
+			if ($regionId > 0 && !isset($bids_not_load[$regionId])) {
+				$region_ids[] = $regionId;
 			}
 		}
 
@@ -223,20 +223,17 @@ class ActivityModel extends Db
 			foreach ($updates as $u) {
 				$forumType = $u['bot_theme'] === 0 ? 'forum' : 'botforum';
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumType . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
-
-				if (true) {
-					$out[] = [
-						'attr' => [
-							'href' => $url
-						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
-						'desc' => $this->textPrepare($u['post_body']),
-						'time' => $u['update_time'],
-						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumType
-					];
-				}
+				$out[] = [
+					'attr' => [
+						'href' => $url
+					],
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
+					'desc' => $this->textPrepare($u['post_body']),
+					'time' => $u['update_time'],
+					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+					'time_ts' => $u['update_time_ts'],
+					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumType
+				];
 			}
 
 			return $out;
