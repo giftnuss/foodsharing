@@ -42,7 +42,7 @@ class ActivityGateway extends BaseGateway
 
 			ORDER BY w.id DESC
 
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
@@ -50,8 +50,8 @@ class ActivityGateway extends BaseGateway
 			[
 				':foodsaver_id' => $fsId,
 				':foodsaver_id_dup' => $fsId,
-				':lower_limit' => $page * self::ITEMS_PER_PAGE,
-				':upper_limit' => self::ITEMS_PER_PAGE,
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
@@ -92,7 +92,7 @@ class ActivityGateway extends BaseGateway
 				ba.foodsaver_id = :foodsaver_id_dup
 
 			ORDER BY w.id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
@@ -100,8 +100,8 @@ class ActivityGateway extends BaseGateway
 			[
 				':foodsaver_id' => $fsId,
 				':foodsaver_id_dup' => $fsId,
-				':lower_limit' => $page * self::ITEMS_PER_PAGE,
-				':upper_limit' => self::ITEMS_PER_PAGE,
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
@@ -135,12 +135,12 @@ class ActivityGateway extends BaseGateway
 				hw.foodsaver_id IN(' . implode(',', $buddyIds) . ')
 
 			ORDER BY w.id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE]
 		);
 	}
 
@@ -166,12 +166,12 @@ class ActivityGateway extends BaseGateway
 					m.mailbox_id IN(' . implode(',', $mb_ids) . ')
 
 				ORDER BY m.id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE]
 		);
 	}
 
@@ -209,12 +209,12 @@ class ActivityGateway extends BaseGateway
 			AND 		t.active = 1
 
 			ORDER BY t.last_post_id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => $page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE]
+			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE]
 		);
 	}
 
@@ -233,15 +233,15 @@ class ActivityGateway extends BaseGateway
 			AND 	n.last = 1
 
 			ORDER BY n.id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
 			$stm,
 			[
 				':foodsaver_id' => $fsId,
-				':lower_limit' => $page * self::ITEMS_PER_PAGE,
-				':upper_limit' => self::ITEMS_PER_PAGE,
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
@@ -279,15 +279,15 @@ class ActivityGateway extends BaseGateway
 			AND
 				fhe.status <> 3
 			ORDER BY w.id DESC
-			LIMIT :lower_limit, :upper_limit
+			LIMIT :start_item_index, :items_per_page
 		';
 
 		return $this->db->fetchAll(
 			$stm,
 			[
 				':foodsaver_id' => $fsId,
-				':lower_limit' => $page * self::ITEMS_PER_PAGE,
-				':upper_limit' => self::ITEMS_PER_PAGE,
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
 	}
