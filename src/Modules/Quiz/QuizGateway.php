@@ -6,6 +6,15 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class QuizGateway extends BaseGateway
 {
+	public function getQuizzes(): array
+	{
+		return $this->db->fetchAll('
+			SELECT id, name
+			FROM fs_quiz
+			ORDER BY id
+		');
+	}
+
 	public function countByQuizId($fs_id, $quiz_id)
 	{
 		return $this->db->count('fs_quiz_session', [
@@ -46,7 +55,7 @@ class QuizGateway extends BaseGateway
 	public function getExistingSession(int $quizId, int $fsId)
 	{
 		$session = $this->db->fetch('
-			SELECT 
+			SELECT
 				id,
 				quiz_index,
 				quiz_questions,
@@ -54,13 +63,13 @@ class QuizGateway extends BaseGateway
 
 			FROM
 				fs_quiz_session
-				
+
 			WHERE
 				`quiz_id` = :quizId
-				
+
 			AND
 				foodsaver_id = :fsId
-				
+
 			AND
 				`status` = 0
 		', [

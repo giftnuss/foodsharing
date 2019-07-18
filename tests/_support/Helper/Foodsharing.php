@@ -659,7 +659,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function addQuiz(int $quizId, array $extra_params = []): array
+	public function createQuiz(int $quizId, array $extra_params = []): array
 	{
 		$params = [
 			'id' => $quizId,
