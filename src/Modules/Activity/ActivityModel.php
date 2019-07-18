@@ -33,11 +33,6 @@ class ActivityModel extends Db
 		$out = [];
 
 		foreach ($updates as $u) {
-			if (isset($hb[$u['event_id']])) {
-				continue;
-			}
-			$hb[$u['event_id']] = true;
-
 			$smTitle = '';
 			$title = 'Veranstaltung : ' . $u['name'];
 
@@ -72,14 +67,6 @@ class ActivityModel extends Db
 			$out = [];
 
 			foreach ($updates as $u) {
-				/*
-				 * quick fix later list all comments in a package
-				*/
-				if (isset($hb[$u['basket_id']])) {
-					continue;
-				}
-				$hb[$u['basket_id']] = true;
-
 				$smTitle = '';
 				$title = 'Essenskorb #' . $u['basket_id'];
 
@@ -132,17 +119,8 @@ class ActivityModel extends Db
 		}
 
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
-			$hb = [];
 			$out = [];
 			foreach ($updates as $u) {
-				/*
-				 * quick fix later list all comments in a package
-				*/
-				if (isset($hb[$u['fs_id']])) {
-					continue;
-				}
-				$hb[$u['fs_id']] = true;
-
 				$smTitle = $u['fs_name'] . 's Status';
 
 				if ($u['fs_id'] === $this->session->id()) {
