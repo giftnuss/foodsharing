@@ -289,7 +289,7 @@ class Session
 		return [];
 	}
 
-	public function getBotBezirkIds()
+	public function getMyAmbRegionIds()
 	{
 		$out = array();
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {

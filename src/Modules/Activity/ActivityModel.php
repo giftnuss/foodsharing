@@ -198,37 +198,33 @@ class ActivityModel extends Db
 	public function loadForumUpdates($page = 0, $bids_not_load = false)
 	{
 		$tmp = $this->session->listRegionIDs();
-		$bids = array();
+		$region_ids = array();
 		if ($tmp === false || count($tmp) === 0) {
 			return false;
 		}
 
 		foreach ($tmp as $t) {
 			if ($t > 0 && !isset($bids_not_load[$t])) {
-				$bids[] = $t;
+				$region_ids[] = $t;
 			}
 		}
 
-		if (count($bids) === 0) {
+		if (count($region_ids) === 0) {
 			return false;
 		}
 
-		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
-		) {
+		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
+		if ($ambIds = $this->session->getMyAmbRegionIds()) {
+			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambIds, $page, true));
+		}
+
+		if (!empty($updates)) {
 			$out = array();
 			foreach ($updates as $u) {
-				$check = true;
-				$sub = 'forum';
-				if ($u['bot_theme'] === 1) {
-					$sub = 'botforum';
-					if (!$this->session->isAdminFor($u['bezirk_id'])) {
-						$check = false;
-					}
-				}
+				$forumType = $u['bot_theme'] === 0 ? 'forum' : 'botforum';
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumType . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $sub . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
-
-				if ($check) {
+				if (true) {
 					$out[] = [
 						'attr' => [
 							'href' => $url
@@ -238,7 +234,7 @@ class ActivityModel extends Db
 						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
+						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumType
 					];
 				}
 			}
