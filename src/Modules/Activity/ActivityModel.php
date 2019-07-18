@@ -30,8 +30,7 @@ class ActivityModel extends Db
 	public function loadEventWallUpdates(int $page): array
 	{
 		$updates = $this->activityGateway->fetchAllEventUpdates($this->session->id(), $page);
-
-		$out = array();
+		$out = [];
 
 		foreach ($updates as $u) {
 			if (isset($hb[$u['event_id']])) {
@@ -60,7 +59,7 @@ class ActivityModel extends Db
 
 	public function loadBasketWallUpdates(int $page): array
 	{
-		$updates = array();
+		$updates = [];
 		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
 			$updates = $up;
 		}
@@ -70,7 +69,7 @@ class ActivityModel extends Db
 		}
 
 		if (!empty($updates)) {
-			$out = array();
+			$out = [];
 
 			foreach ($updates as $u) {
 				/*
@@ -117,7 +116,7 @@ class ActivityModel extends Db
 
 	public function loadFriendWallUpdates(int $page, array $hidden_ids): array
 	{
-		$buddy_ids = array();
+		$buddy_ids = [];
 
 		if ($b = $this->session->get('buddy-ids')) {
 			$buddy_ids = $b;
@@ -125,7 +124,7 @@ class ActivityModel extends Db
 
 		$buddy_ids[$this->session->id()] = $this->session->id();
 
-		$bids = array();
+		$bids = [];
 		foreach ($buddy_ids as $id) {
 			if (!isset($hidden_ids[$id])) {
 				$bids[] = $id;
@@ -133,7 +132,7 @@ class ActivityModel extends Db
 		}
 
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
-			$hb = array();
+			$hb = [];
 			$out = [];
 			foreach ($updates as $u) {
 				/*
@@ -171,7 +170,7 @@ class ActivityModel extends Db
 	public function loadMailboxUpdates(int $page, array $hidden_ids): array
 	{
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
-			$mb_ids = array();
+			$mb_ids = [];
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {
 					$mb_ids[] = $b['id'];
@@ -183,7 +182,7 @@ class ActivityModel extends Db
 			}
 
 			if ($updates = $this->activityGateway->fetchAllMailboxUpdates($mb_ids, $page)) {
-				$out = array();
+				$out = [];
 				foreach ($updates as $u) {
 					$sender = @json_decode($u['sender'], true);
 
@@ -229,7 +228,7 @@ class ActivityModel extends Db
 	public function loadForumUpdates(int $page, array $hidden_ids): array
 	{
 		$tmp = $this->session->listRegionIDs();
-		$bids = array();
+		$bids = [];
 		if ($tmp === false || count($tmp) === 0) {
 			return [];
 		}
@@ -246,7 +245,7 @@ class ActivityModel extends Db
 
 		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
 		) {
-			$out = array();
+			$out = [];
 			foreach ($updates as $u) {
 				$check = true;
 				$sub = 'forum';
@@ -283,7 +282,7 @@ class ActivityModel extends Db
 	public function loadStoreUpdates(int $page): array
 	{
 		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
-			$out = array();
+			$out = [];
 			foreach ($ret as $r) {
 				$out[] = [
 					'attr' => [
