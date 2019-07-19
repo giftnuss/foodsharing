@@ -481,6 +481,15 @@ class QuizGateway extends BaseGateway
 		', ['quizId' => $quizId]);
 	}
 
+	public function getAnswer($answerId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_answer',
+			['id', 'question_id', 'text', 'explanation', 'right'],
+			['id' => $answerId]
+		);
+	}
+
 	public function getAnswers(int $questionId): array
 	{
 		return $this->db->fetchAllByCriteria(

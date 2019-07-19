@@ -42,15 +42,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function getAnswer($aid)
-	{
-		return $this->qRow('
-			SELECT 	`id`, question_id, `text`,`explanation`, `right`
-			FROM	fs_answer
-			WHERE 	id = ' . (int)$aid . '
-		');
-	}
-
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('

@@ -163,7 +163,7 @@ class QuizXhr extends Control
 	public function editanswer()
 	{
 		if ($this->session->mayEditQuiz()) {
-			if ($answer = $this->model->getAnswer($_GET['id'])) {
+			if ($answer = $this->quizGateway->getAnswer($_GET['id'])) {
 				$answer['isright'] = $answer['right'];
 				$this->dataHelper->setEditData($answer);
 				$dia = new XhrDialog();
