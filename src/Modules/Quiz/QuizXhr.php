@@ -1183,7 +1183,7 @@ class QuizXhr extends Control
 				$wikilink = strip_tags($_GET['wikilink']);
 
 				if (!empty($text)) {
-					$this->model->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
+					$this->quizGateway->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
 					$this->flashMessageHelper->info('Frage wurde geändert');
 
 					return array(

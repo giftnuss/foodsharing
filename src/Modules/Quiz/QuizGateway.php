@@ -386,6 +386,28 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
+	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikilink): int
+	{
+		$this->db->update(
+			'fs_question',
+			[
+				'text' => $text,
+				'duration' => $duration,
+				'wikilink' => $wikilink
+			],
+			['id' => $questionId]
+		);
+
+		return $this->db->update(
+			'fs_question_has_quiz',
+			['fp' => $fp],
+			[
+				'question_id' => $questionId,
+				'quiz_id' => $quiz_id
+			]
+		);
+	}
+
 	public function deleteQuestion(int $questionId)
 	{
 		$this->db->delete('fs_answer', ['question_id' => $questionId]);

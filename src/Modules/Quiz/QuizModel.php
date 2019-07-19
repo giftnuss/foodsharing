@@ -164,22 +164,4 @@ class QuizModel extends Db
 
 		return false;
 	}
-
-	public function updateQuestion($id, $quiz_id, $text, $fp, $duration, $wikilink)
-	{
-		$this->update('
-			UPDATE 	`fs_question`
-			SET 	`text` = ' . $this->strval($text) . ',
-					`duration` = ' . (int)$duration . ',
-					`wikilink` = ' . $this->strval($wikilink) . '
-			WHERE 	`id` = ' . (int)$id . '
-		');
-
-		return $this->update('
-			UPDATE 	`fs_question_has_quiz`
-			SET 	`fp` = ' . (int)$fp . '
-			WHERE 	`question_id` = ' . (int)$id . '
-			AND 	`quiz_id` = ' . (int)$quiz_id . '
-		');
-	}
 }
