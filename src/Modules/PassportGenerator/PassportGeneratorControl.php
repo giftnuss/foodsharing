@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi\Tcpdf\Fpdi;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 
 final class PassportGeneratorControl extends Control
 {
@@ -243,37 +244,47 @@ final class PassportGeneratorControl extends Control
 
 	public function getRole(int $gender_id, int $role_id)
 	{
-		$role = [
-			0 => [ // not defined
-				0 => 'Freiwillige_r',
-				1 => 'Foodsaver_in',
-				2 => 'Betriebsverantwortliche_r',
-				3 => 'Botschafter_in',
-				4 => 'Botschafter_in' // role 4 stands for Orga but is referred to an AMB for the business card
-			],
-			1 => [ // male
-				0 => 'Freiwilliger',
-				1 => 'Foodsaver',
-				2 => 'Betriebsverantwortlicher',
-				3 => 'Botschafter',
-				4 => 'Botschafter'
-			],
-			2 => [ // female
-				0 => 'Freiwillige',
-				1 => 'Foodsaverin',
-				2 => 'Betriebsverantwortliche',
-				3 => 'Botschafterin',
-				4 => 'Botschafterin'
-			]
-		];
 
-		return $role[$gender_id][$role_id];
+		switch ($gender_id) {
+			case Gender::MALE:
+			  $role = [
+					0 => 'Freiwilliger',
+					1 => 'Foodsaver',
+					2 => 'Betriebsverantwortlicher',
+					3 => 'Botschafter',
+					4 => 'Botschafter'
+				];
+				break;
+
+			case Gender::FEMALE:
+			  $role = [
+					0 => 'Freiwillige',
+					1 => 'Foodsaverin',
+					2 => 'Betriebsverantwortliche',
+					3 => 'Botschafterin',
+					4 => 'Botschafterin'
+				];
+				break;
+
+			// All other gender_id's:
+			default:
+        $role = [
+					0 => 'Freiwillige_r',
+					1 => 'Foodsaver_in',
+					2 => 'Betriebsverantwortliche_r',
+					3 => 'Botschafter_in',
+					4 => 'Botschafter_in'
+				];
+			  break;
+		}
+
+		return $role[$role_id];
 	}
 
 	private function download1(): void
 	{
 		$this->pageHelper->addJs('
-			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->regionId . '&dl2")},100);		
+			setTimeout(function(){goTo("/?page=passgen&bid=' . $this->regionId . '&dl2")},100);
 		');
 	}
 
