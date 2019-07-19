@@ -214,8 +214,8 @@ class ActivityModel extends Db
 		}
 
 		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
-		if ($ambIds = $this->session->getMyAmbRegionIds()) {
-			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambIds, $page, true));
+		if ($ambassadorIds = $this->session->getMyAmbassadorRegionIds()) {
+			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
 		}
 
 		if (!empty($updates)) {

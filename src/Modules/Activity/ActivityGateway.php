@@ -175,7 +175,7 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
-	public function fetchAllForumUpdates($bids, $page, $isBotTheme = false): array
+	public function fetchAllForumUpdates($bids, $page, $isAmbassadorTheme = false): array
 	{
 		$stm = '
 			SELECT 		t.id,
@@ -214,7 +214,7 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE, ':bot_theme_id' => $isBotTheme ? 1 : 0]
+			[':lower_limit' => (int)$page * self::ITEMS_PER_PAGE, ':upper_limit' => self::ITEMS_PER_PAGE, ':bot_theme_id' => $isAmbassadorTheme ? 1 : 0]
 		);
 	}
 
