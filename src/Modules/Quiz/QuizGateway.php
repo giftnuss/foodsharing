@@ -27,43 +27,46 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function deleteSession(int $id): int
+	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questcount): int
 	{
-		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
+		return $this->db->update(
+			'fs_quiz',
+			[
+				'name' => $name,
+				'desc' => $desc,
+				'maxfp' => $maxfp,
+				'questcount' => $questcount
+			],
+			['id' => $id]
+		);
 	}
 
-	public function countByQuizId($fs_id, $quiz_id)
+	public function getQuiz(int $id): array
 	{
-		return $this->db->count('fs_quiz_session', [
-			'foodsaver_id' => $fs_id,
-			'quiz_id' => $quiz_id,
-			'status' => 1
-		]);
+		return $this->db->fetchByCriteria(
+			'fs_quiz',
+			['id', 'name', 'desc', 'maxfp', 'questcount'],
+			['id' => $id]
+		);
 	}
 
-	public function getUserSessions(int $fsId): array
+	public function initQuizSession($fsId, $quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
 	{
-		return $this->db->fetchAll('
-			SELECT
-				s.id,
-				s.fp,
-				s.status,
-				s.time_start,
-				UNIX_TIMESTAMP(s.time_start) AS time_start_ts,
-				q.name AS quiz_name,
-				q.id AS quiz_id
+		$questions = serialize($questions);
 
-			FROM
-				fs_quiz_session s
-					LEFT JOIN fs_quiz q
-					ON s.quiz_id = q.id
-
-			WHERE
-				s.foodsaver_id = :foodsaver_id
-
-			ORDER BY
-				q.id, s.time_start DESC
-		', [':foodsaver_id' => $fsId]);
+		return $this->db->insert('fs_quiz_session',
+			[
+				'foodsaver_id' => $fsId,
+				'quiz_id' => $quiz_id,
+				'status' => 0,
+				'quiz_index' => 0,
+				'quiz_questions' => $questions,
+				'time_start' => $this->db->now(),
+				'fp' => 0,
+				'maxfp' => $maxfp,
+				'quest_count' => $questcount,
+				'easymode' => $easymode
+				]);
 	}
 
 	public function getSessions($quizId): array
@@ -98,55 +101,29 @@ class QuizGateway extends BaseGateway
 			', [':quiz_id' => $quizId]);
 	}
 
-	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questcount): int
+	public function getUserSessions(int $fsId): array
 	{
-		return $this->db->update(
-			'fs_quiz',
-			[
-				'name' => $name,
-				'desc' => $desc,
-				'maxfp' => $maxfp,
-				'questcount' => $questcount
-			],
-			['id' => $id]
-		);
-	}
+		return $this->db->fetchAll('
+			SELECT
+				s.id,
+				s.fp,
+				s.status,
+				s.time_start,
+				UNIX_TIMESTAMP(s.time_start) AS time_start_ts,
+				q.name AS quiz_name,
+				q.id AS quiz_id
 
-	public function getQuiz(int $id): array
-	{
-		return $this->db->fetchByCriteria(
-			'fs_quiz',
-			['id', 'name', 'desc', 'maxfp', 'questcount'],
-			['id' => $id]
-		);
-	}
+			FROM
+				fs_quiz_session s
+					LEFT JOIN fs_quiz q
+					ON s.quiz_id = q.id
 
-	public function setRole($fs_id, $quiz_rolle)
-	{
-		$this->db->update(
-			'fs_foodsaver',
-			['quiz_rolle' => $quiz_rolle],
-			['id' => $fs_id]
-		);
-	}
+			WHERE
+				s.foodsaver_id = :foodsaver_id
 
-	public function initQuizSession($fsId, $quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
-	{
-		$questions = serialize($questions);
-
-		return $this->db->insert('fs_quiz_session',
-			[
-				'foodsaver_id' => $fsId,
-				'quiz_id' => $quiz_id,
-				'status' => 0,
-				'quiz_index' => 0,
-				'quiz_questions' => $questions,
-				'time_start' => $this->db->now(),
-				'fp' => 0,
-				'maxfp' => $maxfp,
-				'quest_count' => $questcount,
-				'easymode' => $easymode
-				]);
+			ORDER BY
+				q.id, s.time_start DESC
+		', [':foodsaver_id' => $fsId]);
 	}
 
 	public function getExistingSession(int $quizId, int $fsId)
@@ -180,5 +157,33 @@ class QuizGateway extends BaseGateway
 		} else {
 			return null;
 		}
+	}
+
+	public function deleteSession(int $id): int
+	{
+		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
+	}
+
+	public function countClearedQuizSessions(int $fs_id, int $quiz_id): int
+	{
+		return $this->countQuizSessions($fs_id, $quiz_id, 1);
+	}
+
+	public function countQuizSessions(int $fs_id, int $quiz_id, int $status): int
+	{
+		return $this->db->count('fs_quiz_session', [
+			'foodsaver_id' => $fs_id,
+			'quiz_id' => $quiz_id,
+			'status' => $status
+		]);
+	}
+
+	public function setRole($fs_id, $quiz_rolle)
+	{
+		$this->db->update(
+			'fs_foodsaver',
+			['quiz_rolle' => $quiz_rolle],
+			['id' => $fs_id]
+		);
 	}
 }

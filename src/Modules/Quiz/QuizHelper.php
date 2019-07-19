@@ -20,9 +20,9 @@ class QuizHelper
 
 	public function refreshQuizData($fs_id, $fs_role)
 	{
-		$count_fs_quiz = $this->quizGateway->countByQuizId($fs_id, 1);
-		$count_bib_quiz = $this->quizGateway->countByQuizId($fs_id, 2);
-		$count_bot_quiz = $this->quizGateway->countByQuizId($fs_id, 3);
+		$count_fs_quiz = $this->quizGateway->countClearedQuizSessions($fs_id, 1);
+		$count_bib_quiz = $this->quizGateway->countClearedQuizSessions($fs_id, 2);
+		$count_bot_quiz = $this->quizGateway->countClearedQuizSessions($fs_id, 3);
 
 		$count_verantwortlich = $this->storeGateway->getStoreCountForBieb($fs_id);
 		$count_botschafter = $this->foodsaverGateway->getBezirkCountForBotschafter($fs_id);
