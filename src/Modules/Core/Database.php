@@ -179,12 +179,20 @@ class Database
 		return $this->preparedQuery($query, $params)->rowCount();
 	}
 
-	public function delete($table, array $criteria): int
+	/**
+	 * Deletes all rows from table for a given criteria.
+	 *
+	 * @param string $table The table descriptor.
+	 * @param array $criteria Criteria for the WHERE clause.
+	 * @param int $limit Limits the number of rows to delete, if greater than 0.
+	 */
+	public function delete(string $table, array $criteria, int $limit = 0): int
 	{
 		$where = $this->generateWhereClause($criteria);
-
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
-
+		if ($limit > 0) {
+			$query = $query . ' LIMIT ' . $limit;
+		}
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
 	}
 
