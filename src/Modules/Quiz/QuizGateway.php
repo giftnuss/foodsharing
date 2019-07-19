@@ -112,6 +112,15 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
+	public function getQuiz(int $id): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_quiz',
+			['id', 'name', 'desc', 'maxfp', 'questcount'],
+			['id' => $id]
+		);
+	}
+
 	public function setRole($fs_id, $quiz_rolle)
 	{
 		$this->db->update(

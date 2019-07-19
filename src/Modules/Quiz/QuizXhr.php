@@ -345,7 +345,7 @@ class QuizXhr extends Control
 		/*
 		 * Otherwise, we start a new quiz session
 		 */
-		if ($quiz = $this->model->getQuiz($_GET['qid'])) {
+		if ($quiz = $this->quizGateWay->getQuiz($_GET['qid'])) {
 			/*
 			 * if foodsaver quiz, user can choose between easy and quick mode
 			*/
@@ -501,7 +501,7 @@ class QuizXhr extends Control
 			}
 
 			if ($i == 0) {
-				$quuizz = $this->model->getQuiz($this->session->get('quiz-id'));
+				$quuizz = $this->quizGateway->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
 				if ($id = $this->quizGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
 					$this->session->set('quiz-session', $id);
@@ -673,7 +673,7 @@ class QuizXhr extends Control
 							$("#' . $dia->getId() . '").next(".ui-dialog-buttonpane").css("visibility","hidden");
 							var count = ' . (int)$question['duration'] . ';
 							var counter = null;
-									
+
 							function timer()
 							{
 							  count--;
@@ -685,7 +685,7 @@ class QuizXhr extends Control
 							     return;
 							  }
 							}
-							
+
 							setTimeout(function(){
 								$(\'#quizbreath span\').text("Auf die Plätze!");
 							},3000);
@@ -695,16 +695,16 @@ class QuizXhr extends Control
 							setTimeout(function(){
 								$(\'#quizbreath span\').text("Weiter gehts!");
 							},5000);
-							
+
 							setTimeout(function(){
-								
-								
-								counter = setInterval(timer, 1000); 
+
+
+								counter = setInterval(timer, 1000);
 								$("#countdown").progressbar({
 						             value: ' . $question['duration'] . ',
 						             max:' . $question['duration'] . '
 						        });
-									
+
 								$(\'#quizwrapper\').show();
 								$(\'#quizbreath\').hide();
 								$(".ui-dialog-buttonpane").css("visibility","visible");
@@ -712,12 +712,12 @@ class QuizXhr extends Control
 						}
 
 						$return['script'] .= '
-							
+
 							function abortOrPause()
 							{
 								$("#abortOrPause").dialog("open");
 							}
-							
+
 							function questcomment(el)
 							{
 								if($(\'#qanswers input:checked\').length > 0)
@@ -736,7 +736,7 @@ class QuizXhr extends Control
 									pulseError(\'Bitte triff erst eine Auswahl!\')
 								}
 							}
-							
+
 							function questgonext(special)
 							{
 								if(special == undefined)
@@ -746,7 +746,7 @@ class QuizXhr extends Control
 								clearInterval(counter);
 								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
 							}
-							
+
 							function breaknext()
 							{
 								if($(\'#qanswers input:checked\').length > 0)
@@ -758,7 +758,7 @@ class QuizXhr extends Control
 									pulseError(\'Bitte triff erst eine Auswahl!\')
 								}
 							}
-							
+
 							function questionnext()
 							{
 								if($(\'#qanswers input:checked\').length > 0)
@@ -770,7 +770,7 @@ class QuizXhr extends Control
 									pulseError(\'Bitte triff eine Auswahl!\')
 								}
 							}
-							
+
 							function questcheckresult(nowait)
 							{
 								if(nowait == undefined)
@@ -784,9 +784,9 @@ class QuizXhr extends Control
 								else
 								{
 									pulseError(\'Bitte triff erst eine Auswahl!\')
-								}	
+								}
 							}
-										
+
 							$("li.noanswer").on("click", function(){
 								setTimeout(function(){
 									if($("input.nocheck:checked").length > 0)
@@ -797,18 +797,18 @@ class QuizXhr extends Control
 									}
 								},50);
 							});
-							
+
 							$("li.answer input").on("click", function(){
 								if(this.checked)
 								{
-								
+
 								}
 							});
-							
+
 							$("li.answer, li.noanswer").on("click", function(ev){
-								
+
 								var nName = ev.target.nodeName.toLowerCase();
-								
+
 								if(nName == "li" || nName == "label")
 								{
 									if($(this).children("label").children("input:checked").length >= 1)
@@ -821,15 +821,15 @@ class QuizXhr extends Control
 									}
 								}
 							});
-							
+
 							$("li.answer").on("click", function(){
-								
+
 								if($("li.answer input:checked").length > 0)
 								{
 									$("input.nocheck")[0].checked = false;
 								}
 							});
-	
+
 							var width = 1000;
 							if($(window).width() < 1000)
 							{
@@ -850,9 +850,9 @@ class QuizXhr extends Control
 									height:($(window).height()-40)
 								});
 							});
-						
-							
-							
+
+
+
 						' . $quizbreath;
 
 						return $return;
@@ -886,7 +886,7 @@ class QuizXhr extends Control
 			return false;
 		}
 
-		if ($quiz = $this->model->getQuiz($this->session->get('quiz-id'))) {
+		if ($quiz = $this->quizGateway->getQuiz($this->session->get('quiz-id'))) {
 			if ($questions = $this->session->get('quiz-questions')) {
 				if ($rightQuestions = $this->model->getRightQuestions($this->session->get('quiz-id'))) {
 					$explains = array();
@@ -984,13 +984,13 @@ class QuizXhr extends Control
 			'status' => 1,
 			'script' => '
 				$(".ui-dialog-titlebar-close").show();
-				
+
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").hide();
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:last").show();
 				$(".quiz-questiondialog .ui-dialog-buttonset .ui-button:contains(\'Pause\')").show();
 				$("#quizcomment").show();
 				$("#countdown").hide();
-				
+
 				var answers = ' . json_encode($out) . ';
 				$(".answer, .answer span").css({
 					"cursor":"default"
@@ -1005,7 +1005,7 @@ class QuizXhr extends Control
 					}).effect("highlight").attr("onmouseover","return false;").attr("onmouseout","return false;");
 					$("#qanswer-" + answers[i].id).append(\'<div style="margin:15px 0 0 43px;">\'+answers[i].atext+\'</div><div id="explanation-\'+answers[i].id+\'" style="font-weight:bold;margin:15px 0 0 43px;"><span class="tail">\'+answers[i].exp.substr(0,60)+\'...</span><span class="complete" style="display:none">\'+answers[i].exp+\'</span> <a style="color:\'+answers[i].color+\';font-weight:bold;" href="#" onclick="$(this).parent().children().toggle();return false;">mehr lesen <i class="far fa-arrow-circle-right"></i></a></div>\');
 				}
-				
+
 			'
 		);
 	}
@@ -1016,10 +1016,10 @@ class QuizXhr extends Control
 		$dia->setTitle('Pause');
 		$dia->addContent($this->view->pause());
 		$dia->addJsBefore('
-			
+
 		');
 		$dia->addJs('
-			clearInterval(counter);	
+			clearInterval(counter);
 		');
 
 		$dia->addOpt('open', '

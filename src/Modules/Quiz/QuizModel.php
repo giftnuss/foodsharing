@@ -19,13 +19,6 @@ class QuizModel extends Db
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function getQuiz($id)
-	{
-		return $this->qRow('
-			SELECT 	`id`,`name`,`desc`,`maxfp`,`questcount` FROM fs_quiz WHERE id = ' . (int)$id . '
-		');
-	}
-
 	public function deleteQuest($id)
 	{
 		$this->del('DELETE FROM fs_answer WHERE `question_id` = ' . (int)$id);

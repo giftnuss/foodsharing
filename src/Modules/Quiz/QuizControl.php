@@ -92,7 +92,7 @@ class QuizControl extends Control
 
 	public function edit()
 	{
-		if ($quiz = $this->model->getQuiz($_GET['qid'])) {
+		if ($quiz = $this->quizGateway->getQuiz($_GET['qid'])) {
 			if ($this->isSubmitted()) {
 				$name = strip_tags($_POST['name']);
 				$name = trim($name);
