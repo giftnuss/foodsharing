@@ -104,7 +104,7 @@ class QuizControl extends Control
 				$questcount = (int)$_POST['questcount'];
 
 				if (!empty($name)) {
-					if ($id = $this->model->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
+					if ($id = $this->quizGateway->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
 						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
 						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 					}
