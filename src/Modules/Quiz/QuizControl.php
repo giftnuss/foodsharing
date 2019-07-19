@@ -86,7 +86,7 @@ class QuizControl extends Control
 			$this->pageHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
 			$this->pageHelper->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
-			$this->pageHelper->addContent($this->view->answerSidebar($this->guizGateway->getAnswers($q['id']), $questionId), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($q['id']), $questionId), CNT_RIGHT);
 		}
 	}
 

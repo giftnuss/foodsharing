@@ -436,10 +436,10 @@ class QuizGateway extends BaseGateway
 			SELECT COUNT(question_id)
 			FROM fs_question_has_wallpost
 			WHERE question_id = :questionId
-		', ['questionId' => $q['id']]);
+		', ['questionId' => $questionId]);
 	}
 
-	public function getRightQuestions(int $quiz_id): array
+	public function getRightQuestions(int $quizId): array
 	{
 		$out = array();
 		$questions = $this->getQuestions($quizId);
