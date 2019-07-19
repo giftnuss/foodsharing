@@ -314,6 +314,31 @@ class QuizGateway extends BaseGateway
 		', ['questionId' => $questionId]);
 	}
 
+	public function getRandomQuestions(int $count, int $fp, int $quizId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				q.id,
+				q.duration,
+				hq.fp
+
+			FROM
+				fs_question q
+				LEFT JOIN fs_question_has_quiz hq
+				ON hq.question_id = q.id
+
+			WHERE
+				hq.quiz_id = :quizId
+			AND
+				hq.fp = :fp
+
+			ORDER BY
+				RAND()
+
+			LIMIT :count
+		', ['quizId' => $quizId, 'fp' => $fp, 'count' => $count]);
+	}
+
 	public function deleteQuestion(int $questionId)
 	{
 		$this->db->delete('fs_answer', ['question_id' => $questionId]);

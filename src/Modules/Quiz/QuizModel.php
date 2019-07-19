@@ -51,34 +51,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function getRandomQuestions($count, $fp, $quiz_id)
-	{
-		return $this->q('
-			SELECT
-				q.id,
-				q.`duration`,
-				hq.fp
-
-			FROM
-				fs_question q,
-				fs_question_has_quiz hq
-
-			WHERE
-				hq.question_id = q.id
-
-			AND
-				hq.quiz_id = ' . (int)$quiz_id . '
-
-			AND
-				hq.fp = ' . (int)$fp . '
-
-			ORDER BY
-				RAND()
-
-			LIMIT ' . (int)$count . '
-		');
-	}
-
 	public function getQuestionMetas($quiz_id)
 	{
 		if ($questions = $this->q('

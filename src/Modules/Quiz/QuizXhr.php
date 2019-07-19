@@ -1131,13 +1131,13 @@ class QuizXhr extends Control
 			}
 
 			$out = array();
-			// Prozentanzeil von jeder Fragenart
+			// Prozentanteil von jeder Fragenart
 			foreach ($questions['meta'] as $key => $m) {
 				$percent = round($this->percentFrom($summe, $m));
 
 				$count = round($this->percentTo($count_questions, $percent));
 
-				if ($rquest = $this->model->getRandomQuestions($count, $key, $quiz_id)) {
+				if ($rquest = $this->quizGateway->getRandomQuestions($count, $key, $quiz_id)) {
 					foreach ($rquest as $r) {
 						$out[] = $r;
 					}
