@@ -128,40 +128,4 @@ class QuizModel extends Db
 
 		return false;
 	}
-
-	public function listQuestions($quiz_id)
-	{
-		if ($questions = $this->q('
-				SELECT
-					q.id,
-					q.`text`,
-					q.duration,
-					q.wikilink,
-					hq.fp
-
-				FROM
-					fs_question q,
-					fs_question_has_quiz hq
-
-				WHERE
-					hq.question_id = q.id
-
-				AND
-					hq.quiz_id = ' . (int)$quiz_id . '
-		')
-		) {
-			foreach ($questions as $key => $q) {
-				$questions[$key]['answers'] = $this->q('
-					SELECT 	`id`, `text`,`explanation`, `right`
-					FROM	fs_answer
-					WHERE 	question_id = ' . (int)$q['id'] . '
-				');
-				$questions[$key]['comment_count'] = (int)$this->qOne('SELECT COUNT(question_id) FROM fs_question_has_wallpost WHERE question_id = ' . (int)$q['id']);
-			}
-
-			return $questions;
-		}
-
-		return false;
-	}
 }

@@ -186,7 +186,7 @@ class QuizControl extends Control
 	{
 		$this->pageHelper->addContent($this->view->quizbuttons($quiz_id));
 
-		$this->pageHelper->addContent($this->view->listQuestions($this->model->listQuestions($quiz_id), $quiz_id));
+		$this->pageHelper->addContent($this->view->listQuestions($this->quizGateway->getQuestions($quiz_id), $quiz_id));
 
 		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $this->view->quizbuttons($quiz_id));
 	}

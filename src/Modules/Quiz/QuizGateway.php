@@ -414,4 +414,47 @@ class QuizGateway extends BaseGateway
 		$this->db->delete('fs_question', ['id' => $questionId]);
 		$this->db->delete('fs_question_has_quiz', ['question_id' => $questionId]);
 	}
+
+	public function getQuestions(int $quizId): array
+	{
+		$questions = $this->db->fetchAll('
+				SELECT
+					q.id,
+					q.text,
+					q.duration,
+					q.wikilink,
+					hq.fp
+
+				FROM
+					fs_question q
+					LEFT JOIN fs_question_has_quiz hq
+					ON hq.question_id = q.id
+
+				WHERE
+					hq.quiz_id = :quizId
+		', ['quizId' => $quizId]);
+		if ($questions) {
+			foreach ($questions as $key => $q) {
+				$questions[$key]['answers'] = $this->db->fetchAllByCriteria(
+					'fs_answer',
+					['id', 'text', 'explanation', 'right'],
+					['question_id' => $q['id']]
+				);
+				$questions[$key]['comment_count'] = $this->getCommentCount($q['id']);
+			}
+
+			return $questions;
+		}
+
+		return [];
+	}
+
+	private function getCommentCount(int $questionId): int
+	{
+		return $this->db->fetchValue('
+			SELECT COUNT(question_id)
+			FROM fs_question_has_wallpost
+			WHERE question_id = :questionId
+		', ['questionId' => $q['id']]);
+	}
 }
