@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -312,11 +313,11 @@ class QuizModel extends Db
 					$out['last_try'] = $r['time_ts'];
 				}
 
-				if ($r['status'] == 0) {
+				if ($r['status'] == SessionStatus::RUNNING) {
 					++$out['running'];
-				} elseif ($r['status'] == 1) {
+				} elseif ($r['status'] == SessionStatus::PASSED) {
 					++$out['cleared'];
-				} elseif ($r['status'] == 2) {
+				} elseif ($r['status'] == SessionStatus::FAILED) {
 					++$out['failed'];
 				}
 			}
@@ -330,12 +331,11 @@ class QuizModel extends Db
 		$quiz_result = serialize($quiz_result);
 		$questions = serialize($questions);
 
-		// nicht bestanden ?
-		$status = 2;
+		$status = SessionStatus::FAILED;
 
 		// quiz fertig und bestanden
 		if ($fp <= $maxfp) {
-			$status = 1;
+			$status = SessionStatus::PASSED;
 		}
 
 		$this->update('

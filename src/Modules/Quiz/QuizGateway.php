@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizGateway extends BaseGateway
 {
@@ -58,7 +59,7 @@ class QuizGateway extends BaseGateway
 			[
 				'foodsaver_id' => $fsId,
 				'quiz_id' => $quiz_id,
-				'status' => 0,
+				'status' => SessionStatus::RUNNING,
 				'quiz_index' => 0,
 				'quiz_questions' => $questions,
 				'time_start' => $this->db->now(),
@@ -143,10 +144,11 @@ class QuizGateway extends BaseGateway
 			AND
 				foodsaver_id = :fsId
 			AND
-				status = 0
+				status = :status
 		', [
 			'quizId' => $quizId,
-			'fsId' => $fsId
+			'fsId' => $fsId,
+			'status' => SessionStatus::RUNNING
 		]);
 		if ($session) {
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
@@ -175,7 +177,7 @@ class QuizGateway extends BaseGateway
 	{
 		return $this->db->update(
 			'fs_quiz_session',
-			['status' => 2],
+			['status' => SessionStatus::FAILED],
 			[
 				'id' => $sid,
 				'foodsaver_id' => $fsId
@@ -188,9 +190,9 @@ class QuizGateway extends BaseGateway
 		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
 	}
 
-	public function countClearedQuizSessions(int $fs_id, int $quiz_id): int
+	public function countPassedQuizSessions(int $fs_id, int $quiz_id): int
 	{
-		return $this->countQuizSessions($fs_id, $quiz_id, 1);
+		return $this->countQuizSessions($fs_id, $quiz_id, SessionStatus::PASSED);
 	}
 
 	public function countQuizSessions(int $fs_id, int $quiz_id, int $status): int

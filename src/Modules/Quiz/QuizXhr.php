@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
@@ -432,7 +433,7 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if ($this->session->may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = 1');
+			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = ' . SessionStatus::PASSED);
 			if ($count == 0) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);

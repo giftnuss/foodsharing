@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizView extends View
 {
@@ -20,14 +21,14 @@ class QuizView extends View
 		$this->pageHelper->addJs('
 			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
-			});		
+			});
 		');
 
 		foreach ($sessions as $s) {
 			$status = '<span style="color:orange;">Quiz läuft</span>';
-			if ($s['min_status'] == 1) {
+			if ($s['min_status'] == SessionStatus::PASSED) {
 				$status = '<span style="color:green">bestanden</span>';
-			} elseif ($s['max_status'] == 2) {
+			} elseif ($s['max_status'] == SessionStatus::FAILED) {
 				$status = '<span style="color:red;">durchgefallen</span>';
 			}
 
@@ -62,7 +63,7 @@ class QuizView extends View
 			(
 				[id] => 9
 				[fp] => 0.00
-				[status] => 1
+				[status] => SessionStatus::PASSED
 				[time_start] => 2014-07-05 18:14:02
 				[time_start_ts] => 1404576842
 				[name] => Foodsaver
@@ -72,7 +73,7 @@ class QuizView extends View
 			(
 				[id] => 10
 				[fp] => 5.50
-				[status] => 2
+				[status] => SessionStatus::FAILED
 				[time_start] => 2014-07-07 09:06:33
 				[time_start_ts] => 1404716793
 				[name] => Foodsaver
@@ -84,9 +85,9 @@ class QuizView extends View
 		$rows = array();
 		foreach ($sessions as $key => $s) {
 			$status = '<span style="color:orange;">Quiz läuft</span>';
-			if ($s['status'] == 1) {
+			if ($s['status'] == SessionStatus::PASSED) {
 				$status = '<span style="color:green">bestanden</span>';
-			} elseif ($s['status'] == 2) {
+			} elseif ($s['status'] == SessionStatus::FAILED) {
 				$status = '<span style="color:red;">durchgefallen</span>';
 			}
 
@@ -370,8 +371,8 @@ class QuizView extends View
 					heightStyle: "content",
 					animate: 200,
 					collapsible: true,
-					autoHeight: false, 
-    				active: false 
+					autoHeight: false,
+    				active: false
 				});
 				setTimeout(function(){
 					$("#questions").css("opacity",1);
@@ -394,10 +395,10 @@ class QuizView extends View
 					<p style="margin-top:15px;">
 						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:' . (int)$q['id'] . '});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:' . (int)$q['id'] . '});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$quiz_id . '});return false;">Frage bearbeiten</a> <a class="button" href="/?page=quiz&sub=wall&id=' . (int)$q['id'] . '">Kommentare</a>
 					</p>') . '
-					
+
 					' . $this->v_utils->v_input_wrapper('Antworten', $answers) . '
 
-					
+
 				 </div>';
 			}
 			$out .= '

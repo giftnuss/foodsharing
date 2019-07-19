@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
+
 class QuizGatewayTest extends \Codeception\Test\Unit
 {
 	protected $tester;
@@ -33,10 +35,9 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 	{
 		$fsId = $this->foodsaver['id'];
 		$quizId = 1;
-		$quizSessionStatus = 0;
-		$this->tester->createQuizTry($fsId, $quizId, $quizSessionStatus);
+		$this->tester->createQuizTry($fsId, $quizId, SessionStatus::RUNNING);
 
-		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, $quizSessionStatus);
+		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, SessionStatus::RUNNING);
 		$this->assertEquals(1, $runningSessionCount);
 
 		$runningSession = $this->gateway->getExistingSession($quizId, $fsId);
@@ -51,13 +52,13 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$runningSessionId = $this->gateway->getExistingSession($quizId, $fsId)['id'];
 		$data = ['id' => $runningSessionId, 'quiz_id' => $quizId, 'foodsaver_id' => $fsId];
 
-		$data['status'] = 0;
+		$data['status'] = SessionStatus::RUNNING;
 		$this->tester->seeInDatabase('fs_quiz_session', $data);
 
 		$this->gateway->abortSession($runningSessionId, $fsId);
 		$this->tester->dontSeeInDatabase('fs_quiz_session', $data);
 
-		$data['status'] = 2;
+		$data['status'] = SessionStatus::FAILED;
 		$this->tester->seeInDatabase('fs_quiz_session', $data);
 	}
 }
