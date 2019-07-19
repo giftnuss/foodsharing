@@ -42,19 +42,6 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$this->assertEquals('3', $quizzes[2]['id']);
 	}
 
-	public function testCountRunningQuizSession()
-	{
-		$fsId = $this->foodsaver['id'];
-		$quizId = RoleType::AMBASSADOR;
-		$this->tester->createQuizTry($fsId, $quizId, SessionStatus::RUNNING);
-
-		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, SessionStatus::RUNNING);
-		$this->assertEquals(1, $runningSessionCount);
-
-		$runningSession = $this->gateway->getExistingSession($quizId, $fsId);
-		$this->assertArrayHasKey('id', $runningSession);
-	}
-
 	public function testAbortQuizSession()
 	{
 		$fsId = $this->foodsaver['id'];

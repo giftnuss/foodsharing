@@ -254,18 +254,15 @@ class QuizGateway extends BaseGateway
 		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
 	}
 
-	public function countPassedQuizSessions(int $fs_id, int $quiz_id): int
+	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
 	{
-		return $this->countQuizSessions($fs_id, $quiz_id, SessionStatus::PASSED);
-	}
-
-	public function countQuizSessions(int $fs_id, int $quiz_id, int $status): int
-	{
-		return $this->db->count('fs_quiz_session', [
-			'foodsaver_id' => $fs_id,
-			'quiz_id' => $quiz_id,
-			'status' => $status
+		$sessionCount = $this->db->count('fs_quiz_session', [
+			'foodsaver_id' => $fsId,
+			'quiz_id' => $quizId,
+			'status' => SessionStatus::PASSED
 		]);
+
+		return $sessionCount > 0;
 	}
 
 	public function getSessionDetails(int $fsId): array

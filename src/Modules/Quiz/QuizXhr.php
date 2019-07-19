@@ -7,7 +7,6 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Quiz\RoleType;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
@@ -431,19 +430,19 @@ class QuizXhr extends Control
 	public function quizpopup()
 	{
 		if ($this->session->may('fs')) {
-			$count = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$this->session->id() . ' AND quiz_id = ' . (int)$this->session->get('hastodoquiz-id') . ' AND `status` = ' . SessionStatus::PASSED);
-			if ($count == 0) {
+			$nextRole = $this->session->get('hastodoquiz-id');
+			if (!$this->quizGateway->hasUserPassedQuiz($this->session->id(), $nextRole)) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
 				$content_id = 18;
 				$dia->addAbortButton();
 
-				if ($this->session->get('hastodoquiz-id') == RoleType::FOODSAVER) {
+				if ($nextRole == RoleType::FOODSAVER) {
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
-				} elseif ($this->session->get('hastodoquiz-id') == RoleType::STORE_COORDINATOR) {
+				} elseif ($nextRole == RoleType::STORE_COORDINATOR) {
 					$content_id = 34;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
-				} elseif ($this->session->get('hastodoquiz-id') == RoleType::AMBASSADOR) {
+				} elseif ($nextRole == RoleType::AMBASSADOR) {
 					$content_id = 35;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
