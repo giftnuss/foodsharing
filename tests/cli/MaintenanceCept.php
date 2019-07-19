@@ -39,4 +39,4 @@ $I->runShellCommand('php -f run.php Maintenance daily');
 
 $I->seeInShellOutput('delete unconfirmed fetchdates');
 $I->seeInShellOutput('2 deleted');
-$I->seeInShellOutput('updating Wien BIEB austausch');
+$I->seeInShellOutput('updating Wien BIEB group');
