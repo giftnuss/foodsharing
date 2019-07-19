@@ -101,7 +101,7 @@ class SettingsControl extends Control
 			if (!$this->foodsaver['verified']) {
 				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
-				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizGateway->getQuiz(2))) {
+				if (($status = $this->quizGateway->getQuizStatus(2, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
 						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
@@ -147,7 +147,7 @@ class SettingsControl extends Control
 	public function up_fs()
 	{
 		if ($this->session->may()) {
-			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizGateway->getQuiz(1))) {
+			if (($status = $this->quizGateway->getQuizStatus(1, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(1))) {
 				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
@@ -182,7 +182,7 @@ class SettingsControl extends Control
 	public function up_bot()
 	{
 		if ($this->session->may() && $this->foodsaver['rolle'] >= 2) {
-			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizGateway->getQuiz(3))) {
+			if (($status = $this->quizGateway->getQuizStatus(3, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(3))) {
 				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
