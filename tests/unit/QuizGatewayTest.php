@@ -34,12 +34,30 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$fsId = $this->foodsaver['id'];
 		$quizId = 1;
 		$quizSessionStatus = 0;
-		$this->tester->createQuizTry($fsId, $quizId, 0);
+		$this->tester->createQuizTry($fsId, $quizId, $quizSessionStatus);
 
 		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, $quizSessionStatus);
-		$runningSessions = $this->gateway->getExistingSession($quizId, $fsId);
-
 		$this->assertEquals(1, $runningSessionCount);
-		$this->assertArrayHasKey('id', $runningSessions);
+
+		$runningSession = $this->gateway->getExistingSession($quizId, $fsId);
+		$this->assertArrayHasKey('id', $runningSession);
+	}
+
+	public function testAbortQuizSession()
+	{
+		$fsId = $this->foodsaver['id'];
+		$quizId = 1;
+		$this->tester->createQuizTry($fsId, $quizId, 0);
+		$runningSessionId = $this->gateway->getExistingSession($quizId, $fsId)['id'];
+		$data = ['id' => $runningSessionId, 'quiz_id' => $quizId, 'foodsaver_id' => $fsId];
+
+		$data['status'] = 0;
+		$this->tester->seeInDatabase('fs_quiz_session', $data);
+
+		$this->gateway->abortSession($runningSessionId, $fsId);
+		$this->tester->dontSeeInDatabase('fs_quiz_session', $data);
+
+		$data['status'] = 2;
+		$this->tester->seeInDatabase('fs_quiz_session', $data);
 	}
 }

@@ -139,13 +139,11 @@ class QuizGateway extends BaseGateway
 				fs_quiz_session
 
 			WHERE
-				`quiz_id` = :quizId
-
+				quiz_id = :quizId
 			AND
 				foodsaver_id = :fsId
-
 			AND
-				`status` = 0
+				status = 0
 		', [
 			'quizId' => $quizId,
 			'fsId' => $fsId
@@ -170,6 +168,18 @@ class QuizGateway extends BaseGateway
 				'quiz_index' => $quiz_index
 			],
 			['id' => $session_id]
+		);
+	}
+
+	public function abortSession(int $sid, int $fsId): int
+	{
+		return $this->db->update(
+			'fs_quiz_session',
+			['status' => 2],
+			[
+				'id' => $sid,
+				'foodsaver_id' => $fsId
+			]
 		);
 	}
 

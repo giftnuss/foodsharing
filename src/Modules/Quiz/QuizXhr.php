@@ -269,7 +269,7 @@ class QuizXhr extends Control
 	public function abort()
 	{
 		if ($this->session->may()) {
-			$this->model->abortSession($_GET['sid']);
+			$this->quizGateway->abortSession($_GET['sid'], $this->session->id());
 
 			return array(
 				'status' => 1,

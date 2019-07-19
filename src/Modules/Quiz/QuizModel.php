@@ -289,23 +289,6 @@ class QuizModel extends Db
 		return false;
 	}
 
-	public function abortSession($sid)
-	{
-		$this->update('
-			UPDATE
-				fs_quiz_session
-
-			SET
-				`status` = 2
-
-			WHERE
-				id = ' . (int)$sid . '
-
-			AND
-				foodsaver_id = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function getQuizStatus($quiz_id)
 	{
 		$out = array(
