@@ -568,13 +568,13 @@ class QuizXhr extends Control
 			if (isset($_GET['special'])) {
 				// make a break
 				if ($_GET['special'] == 'pause') {
-					$this->model->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
+					$this->quizGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->pause();
 				}
 
 				if ($_GET['special'] == 'result') {
-					$this->model->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
+					$this->quizGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->resultNew($quiz[($i - 1)], $dia->getId());
 				}
@@ -607,7 +607,7 @@ class QuizXhr extends Control
 
 						// update quiz session
 						$session_id = $this->session->get('quiz-session');
-						$this->model->updateQuizSession($session_id, $quiz, $i);
+						$this->quizGateway->updateQuizSession($session_id, $quiz, $i);
 						$this->session->set('quiz-quest-start', time());
 
 						/*

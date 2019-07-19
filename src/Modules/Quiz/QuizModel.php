@@ -342,23 +342,6 @@ class QuizModel extends Db
 		return $out;
 	}
 
-	public function updateQuizSession($session_id, $questions, $quiz_index)
-	{
-		$questions = serialize($questions);
-
-		$this->update('
-			UPDATE
-				`fs_quiz_session`
-
-			SET
-				quiz_questions = ' . $this->strval($questions) . ',
-				quiz_index = ' . (int)$quiz_index . '
-
-			WHERE
-				id = ' . (int)$session_id . '
-		');
-	}
-
 	public function finishQuiz($session_id, $questions, $quiz_result, $fp, $maxfp)
 	{
 		$quiz_result = serialize($quiz_result);

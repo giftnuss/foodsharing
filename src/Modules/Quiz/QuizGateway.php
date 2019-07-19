@@ -159,6 +159,20 @@ class QuizGateway extends BaseGateway
 		}
 	}
 
+	public function updateQuizSession(int $session_id, string $questions, int $quiz_index): int
+	{
+		$questions = serialize($questions);
+
+		$this->db->update(
+			'fs_quiz_session',
+			[
+				'quiz_questions' => $questions,
+				'quiz_index' => $quiz_index
+			],
+			['id' => $session_id]
+		);
+	}
+
 	public function deleteSession(int $id): int
 	{
 		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
