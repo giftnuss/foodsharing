@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
