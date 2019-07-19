@@ -10,6 +10,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi\Tcpdf\Fpdi;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 
 final class PassportGeneratorControl extends Control
 {
@@ -244,36 +245,35 @@ final class PassportGeneratorControl extends Control
 
 	public function getRole(int $gender_id, int $role_id)
 	{
-
 		switch ($gender_id) {
 			case Gender::MALE:
 			  $role = [
-					0 => 'Freiwilliger',
-					1 => 'Foodsaver',
-					2 => 'Betriebsverantwortlicher',
-					3 => 'Botschafter',
-					4 => 'Botschafter'
+					Role::FOODSHARER => 'Freiwilliger',
+					Role::FOODSAVER => 'Foodsaver',
+					Role::STORE_MANAGER => 'Betriebsverantwortlicher',
+					Role::AMBASSADOR => 'Botschafter',
+					Role::ORGA => 'Botschafter' //Orga is referred to an AMB for the business card
 				];
 				break;
 
 			case Gender::FEMALE:
 			  $role = [
-					0 => 'Freiwillige',
-					1 => 'Foodsaverin',
-					2 => 'Betriebsverantwortliche',
-					3 => 'Botschafterin',
-					4 => 'Botschafterin'
+					Role::FOODSHARER => 'Freiwillige',
+					Role::FOODSAVER => 'Foodsaverin',
+					Role::STORE_MANAGER => 'Betriebsverantwortliche',
+					Role::AMBASSADOR => 'Botschafterin',
+					Role::ORGA => 'Botschafterin'
 				];
 				break;
 
 			// All other gender_id's:
 			default:
-        $role = [
-					0 => 'Freiwillige_r',
-					1 => 'Foodsaver_in',
-					2 => 'Betriebsverantwortliche_r',
-					3 => 'Botschafter_in',
-					4 => 'Botschafter_in'
+				$role = [
+					Role::FOODSHARER => 'Freiwillige_r',
+					Role::FOODSAVER => 'Foodsaver_in',
+					Role::STORE_MANAGER => 'Betriebsverantwortliche_r',
+					Role::AMBASSADOR => 'Botschafter_in',
+					Role::ORGA => 'Botschafter_in'
 				];
 			  break;
 		}
