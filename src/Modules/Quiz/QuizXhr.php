@@ -17,14 +17,12 @@ class QuizXhr extends Control
 	private $dataHelper;
 
 	public function __construct(
-		QuizModel $model,
 		QuizGateway $quizGateway,
 		QuizView $view,
 		ContentGateway $contentGateway,
 		SanitizerService $sanitizerService,
 		DataHelper $dataHelper
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
@@ -36,7 +34,7 @@ class QuizXhr extends Control
 
 	public function hideinfo()
 	{
-		$this->session->setOption('quiz-infobox-seen', true, $this->model);
+		$this->session->setOption('quiz-infobox-seen', true);
 	}
 
 	public function addquest()
