@@ -241,7 +241,7 @@ class QuizXhr extends Control
 	public function editquest()
 	{
 		if ($this->session->mayEditQuiz()) {
-			if ($quest = $this->model->getQuestion($_GET['id'])) {
+			if ($quest = $this->quizGateway->getQuestion($_GET['id'])) {
 				$this->dataHelper->setEditData($quest);
 				$dia = new XhrDialog();
 
@@ -589,7 +589,7 @@ class QuizXhr extends Control
 			 */
 			if (isset($quiz[$i])) {
 				// get the question
-				if ($question = $this->model->getQuestion($quiz[$i]['id'])) {
+				if ($question = $this->quizGateway->getQuestion($quiz[$i]['id'])) {
 					// get possible answers
 					$comment_aswers = '';
 					if ($answers = $this->model->getAnswers($question['id'])) {
@@ -933,7 +933,7 @@ class QuizXhr extends Control
 			}
 		}
 		// get the question
-		if ($quest = $this->model->getQuestion($question['id'])) {
+		if ($quest = $this->quizGateway->getQuestion($question['id'])) {
 			// get possible answers
 			if ($answers = $this->model->getAnswers($question['id'])) {
 				$joke = false;

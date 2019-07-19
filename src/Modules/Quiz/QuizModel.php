@@ -129,29 +129,6 @@ class QuizModel extends Db
 		}
 	}
 
-	public function getQuestion($id)
-	{
-		return $this->qRow('
-			SELECT
-					q.id,
-					q.`text`,
-					q.duration,
-					q.wikilink,
-					hq.fp,
-					hq.quiz_id
-
-				FROM
-					fs_question q,
-					fs_question_has_quiz hq
-
-				WHERE
-					hq.question_id = q.id
-
-				AND
-					q.id = ' . (int)$id . '
-		');
-	}
-
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('

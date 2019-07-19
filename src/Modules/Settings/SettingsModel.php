@@ -157,7 +157,7 @@ class SettingsModel extends Db
 		foreach ($indexList as $id => $value) {
 			++$number;
 			if (!isset($fullList[$id])) {
-				if ($question = $this->quizModel->getQuestion($id)) {
+				if ($question = $this->quizGateway->getQuestion($id)) {
 					$answers = array();
 					if ($qanswers = $this->quizModel->getAnswers($id)) {
 						foreach ($qanswers as $a) {

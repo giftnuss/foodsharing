@@ -79,7 +79,7 @@ class QuizControl extends Control
 	public function wall()
 	{
 		$questionId = (int)$_GET['id'];
-		if ($q = $this->model->getQuestion($questionId)) {
+		if ($q = $this->quizGateway->getQuestion($questionId)) {
 			if ($name = $this->model->getVal('name', 'quiz', $q['quiz_id'])) {
 				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $questionId);
 			}
