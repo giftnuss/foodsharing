@@ -481,6 +481,19 @@ class QuizGateway extends BaseGateway
 		', ['quizId' => $quizId]);
 	}
 
+	public function addAnswer(int $questionId, string $text, string $explanation, int $right): int
+	{
+		return $this->db->insert(
+			'fs_answer',
+			[
+				'question_id' => $ququestionId,
+				'text' => $text,
+				'explanation' => $explanation,
+				'right' => $right
+			]
+		);
+	}
+
 	public function getAnswer(int $answerId): array
 	{
 		return $this->db->fetchByCriteria(

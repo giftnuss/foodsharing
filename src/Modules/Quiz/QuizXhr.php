@@ -115,7 +115,7 @@ class QuizXhr extends Control
 				$right = (int)$_GET['right'];
 
 				if (!empty($text) && ($right == 0 || $right == 1 || $right == 2)) {
-					if ($id = $this->model->addAnswer($_GET['qid'], $text, $exp, $right)) {
+					if ($id = $this->quizGateway->addAnswer($_GET['qid'], $text, $exp, $right)) {
 						return array(
 							'status' => 1,
 							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'

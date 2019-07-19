@@ -24,13 +24,6 @@ class QuizModel extends Db
 		return $this->del('DELETE FROM fs_answer WHERE `id` = ' . (int)$id);
 	}
 
-	public function addAnswer($qid, $text, $exp, $right)
-	{
-		return $this->insert('
-			INSERT INTO `fs_answer`(`question_id`, `text`,`explanation` ,`right`) VALUES (' . (int)$qid . ',' . $this->strval($text) . ',' . $this->strval($exp) . ', ' . (int)$right . ')
-		');
-	}
-
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('
