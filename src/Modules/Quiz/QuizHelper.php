@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Modules\Core\DBConstants\Quiz\RoleType;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -20,39 +21,39 @@ class QuizHelper
 
 	public function refreshQuizData($fs_id, $fs_role)
 	{
-		$count_fs_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, 1);
-		$count_bib_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, 2);
-		$count_bot_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, 3);
+		$count_fs_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, RoleType::FOODSAVER);
+		$count_bib_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, RoleType::STORE_COORDINATOR);
+		$count_bot_quiz = $this->quizGateway->countPassedQuizSessions($fs_id, RoleType::AMBASSADOR);
 
 		$count_verantwortlich = $this->storeGateway->getStoreCountForBieb($fs_id);
 		$count_botschafter = $this->foodsaverGateway->getBezirkCountForBotschafter($fs_id);
 
-		$quiz_rolle = 0;
+		$quiz_rolle = RoleType::FOODSHARER;
 		if ($count_fs_quiz > 0) {
-			$quiz_rolle = 1;
+			$quiz_rolle = RoleType::FOODSAVER;
 		}
 		if ($count_bib_quiz > 0) {
-			$quiz_rolle = 2;
+			$quiz_rolle = RoleType::STORE_COORDINATOR;
 		}
 		if ($count_bot_quiz > 0) {
-			$quiz_rolle = 3;
+			$quiz_rolle = RoleType::AMBASSADOR;
 		}
 
 		$this->quizGateway->setRole($fs_id, $quiz_rolle);
 
 		$hastodo_id = 0;
 		if (
-			$fs_role == 1 && $count_fs_quiz == 0
+			$fs_role == RoleType::FOODSAVER && $count_fs_quiz == 0
 		) {
-			$hastodo_id = 1;
+			$hastodo_id = RoleType::FOODSAVER;
 		} elseif (
-			($fs_role > 1 || $count_verantwortlich > 0) && $count_bib_quiz === 0
+			($fs_role > RoleType::FOODSAVER || $count_verantwortlich > 0) && $count_bib_quiz === 0
 		) {
-			$hastodo_id = 2;
+			$hastodo_id = RoleType::STORE_COORDINATOR;
 		} elseif (
-			($fs_role > 2 || $count_botschafter > 0) && $count_bot_quiz === 0
+			($fs_role > RoleType::STORE_COORDINATOR || $count_botschafter > 0) && $count_bot_quiz === 0
 		) {
-			$hastodo_id = 3;
+			$hastodo_id = RoleType::AMBASSADOR;
 		}
 
 		return $hastodo_id;

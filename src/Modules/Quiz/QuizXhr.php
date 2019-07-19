@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Quiz\RoleType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Services\SanitizerService;
 
@@ -415,11 +416,11 @@ class QuizXhr extends Control
 
 		$dia->addAbortButton();
 
-		if ($this->session->get('hastodoquiz-id') == 1) {
+		if ($this->session->get('hastodoquiz-id') == RoleType::FOODSAVER) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
-		} elseif ($this->session->get('hastodoquiz-id') == 2) {
+		} elseif ($this->session->get('hastodoquiz-id') == RoleType::STORE_COORDINATOR) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche*r bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
-		} elseif ($this->session->get('hastodoquiz-id') == 3) {
+		} elseif ($this->session->get('hastodoquiz-id') == RoleType::AMBASSADOR) {
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
@@ -440,12 +441,12 @@ class QuizXhr extends Control
 				$content_id = 18;
 				$dia->addAbortButton();
 
-				if ($this->session->get('hastodoquiz-id') == 1) {
+				if ($this->session->get('hastodoquiz-id') == RoleType::FOODSAVER) {
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
-				} elseif ($this->session->get('hastodoquiz-id') == 2) {
+				} elseif ($this->session->get('hastodoquiz-id') == RoleType::STORE_COORDINATOR) {
 					$content_id = 34;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
-				} elseif ($this->session->get('hastodoquiz-id') == 3) {
+				} elseif ($this->session->get('hastodoquiz-id') == RoleType::AMBASSADOR) {
 					$content_id = 35;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}

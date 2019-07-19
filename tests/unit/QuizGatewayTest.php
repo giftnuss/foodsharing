@@ -1,5 +1,6 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\Quiz\RoleType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizGatewayTest extends \Codeception\Test\Unit
@@ -33,10 +34,6 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		return $params;
 	}
 
-	protected function _after()
-	{
-	}
-
 	public function testGetQuizzes()
 	{
 		$quizzes = $this->gateway->getQuizzes();
@@ -48,7 +45,7 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 	public function testCountRunningQuizSession()
 	{
 		$fsId = $this->foodsaver['id'];
-		$quizId = 1;
+		$quizId = RoleType::AMBASSADOR;
 		$this->tester->createQuizTry($fsId, $quizId, SessionStatus::RUNNING);
 
 		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, SessionStatus::RUNNING);
@@ -61,7 +58,7 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 	public function testAbortQuizSession()
 	{
 		$fsId = $this->foodsaver['id'];
-		$quizId = 1;
+		$quizId = RoleType::AMBASSADOR;
 		$this->tester->createQuizTry($fsId, $quizId, 0);
 		$runningSessionId = $this->gateway->getExistingSession($quizId, $fsId)['id'];
 		$data = ['id' => $runningSessionId, 'quiz_id' => $quizId, 'foodsaver_id' => $fsId];
