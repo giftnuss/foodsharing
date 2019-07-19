@@ -169,7 +169,7 @@ class QuizControl extends Control
 	public function sessions()
 	{
 		if ($quiz = $this->model->getValues(array('id', 'name'), 'quiz', $_GET['id'])) {
-			if ($sessions = $this->model->getSessions($_GET['id'])) {
+			if ($sessions = $this->quizGateway->getSessions($_GET['id'])) {
 				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
 			} else {
 				$this->pageHelper->addContent($this->view->noSessions($quiz));

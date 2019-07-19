@@ -19,40 +19,6 @@ class QuizModel extends Db
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function getSessions($id)
-	{
-		return $this->q('
-			SELECT
-				s.id,
-				MAX(s.time_start) AS time_start,
-				MIN(s.`status`) AS min_status,
-				MAX(s.`status`) AS max_status,
-				MIN(s.`fp`) AS min_fp,
-				MAX(s.`fp`) AS max_fp,
-				UNIX_TIMESTAMP(MAX(s.time_start)) AS time_start_ts,
-				CONCAT(fs.name," ",fs.nachname) AS fs_name,
-				fs.photo AS fs_photo,
-				fs.id AS fs_id,
-				count(s.foodsaver_id) AS trycount
-
-			FROM
-				fs_quiz_session s,
-				fs_foodsaver fs
-
-			WHERE
-				s.foodsaver_id = fs.id
-
-			AND
-				s.quiz_id = ' . (int)$id . '
-
-			GROUP BY
-				s.foodsaver_id
-
-			ORDER BY
-				time_start DESC
-		');
-	}
-
 	public function updateQuiz($id, $name, $desc, $maxfp, $questcount)
 	{
 		return $this->update('

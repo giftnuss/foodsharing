@@ -66,6 +66,38 @@ class QuizGateway extends BaseGateway
 		', [':foodsaver_id' => $fsId]);
 	}
 
+	public function getSessions($quizId): array
+	{
+		return $this->db->fetchAll('
+				SELECT
+					s.id,
+					MAX(s.time_start) AS time_start,
+					MIN(s.`status`) AS min_status,
+					MAX(s.`status`) AS max_status,
+					MIN(s.`fp`) AS min_fp,
+					MAX(s.`fp`) AS max_fp,
+					UNIX_TIMESTAMP(MAX(s.time_start)) AS time_start_ts,
+					CONCAT(fs.name," ",fs.nachname) AS fs_name,
+					fs.photo AS fs_photo,
+					fs.id AS fs_id,
+					count(s.foodsaver_id) AS trycount
+
+				FROM
+					fs_quiz_session s
+						LEFT JOIN fs_foodsaver fs
+						ON s.foodsaver_id = fs.id
+
+				WHERE
+					s.quiz_id = :quiz_id
+
+				GROUP BY
+					s.foodsaver_id
+
+				ORDER BY
+					time_start DESC
+			', [':quiz_id' => $quizId]);
+	}
+
 	public function setRole($fs_id, $quiz_rolle)
 	{
 		$this->db->update(
