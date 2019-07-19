@@ -529,4 +529,46 @@ class QuizGateway extends BaseGateway
 	{
 		return $this->db->delete('fs_answer', ['id' => $answerId]);
 	}
+
+	public function addUserComment(int $questionId, int $fsId, string $comment): bool
+	{
+		$commentId = $this->db->insert(
+			'fs_wallpost',
+			[
+				'foodsaver_id' => $fsId,
+				'body' => $comment,
+				'time' => $this->db->now()
+			]
+		);
+
+		return $this->handleUserComment($questionId, $commentId, $comment);
+	}
+
+	private function handleUserComment(int $questionId, int $commentId, string $comment): bool
+	{
+		if ($commentId > 0) {
+			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(341)) {
+				$this->bellGateway->addBell(
+					$quizAMBs,
+					'new_quiz_comment_title',
+					'new_quiz_comment',
+					'fas fa-question-circle',
+					array('href' => '/?page=quiz&sub=wall&id=' . $questionId),
+					array('comment' => $comment)
+				);
+			}
+			$this->db->insert(
+				'fs_question_has_wallpost',
+				[
+					'question_id' => $questionId,
+					'wallpost_id' => $commentId,
+					'usercomment' => 1
+				]
+			);
+
+			return true;
+		}
+
+		return false;
+	}
 }

@@ -464,7 +464,7 @@ class QuizXhr extends Control
 	public function addcomment()
 	{
 		if ($this->session->may() && !empty($_GET['comment']) && (int)$_GET['id'] > 0) {
-			$this->model->addUserComment((int)$_GET['id'], $_GET['comment']);
+			$this->quizGateway->addUserComment((int)$_GET['id'], $this->session->id(), $_GET['comment']);
 
 			return array(
 				'status' => 1,
@@ -558,7 +558,7 @@ class QuizXhr extends Control
 				$comment = strip_tags($_GET['commentanswers'] . $_GET['comment']);
 
 				// if yes lets store in the db
-				$this->model->addUserComment((int)$_GET['qid'], $comment);
+				$this->quizGateway->addUserComment((int)$_GET['qid'], $this->session->id(), $comment);
 			}
 
 			/*
