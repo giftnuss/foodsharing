@@ -2,11 +2,28 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class QuizGateway extends BaseGateway
 {
+	private $bellGateway;
+	private $foodsaverGateway;
+
+	public function __construct(
+		Database $db,
+		BellGateway $bellGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
+		parent::__construct($db);
+
+		$this->bellGateway = $bellGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+	}
+
 	public function getQuizzes(): array
 	{
 		return $this->db->fetchAll('
@@ -501,7 +518,7 @@ class QuizGateway extends BaseGateway
 		return $this->db->insert(
 			'fs_answer',
 			[
-				'question_id' => $ququestionId,
+				'question_id' => $questionId,
 				'text' => $text,
 				'explanation' => $explanation,
 				'right' => $right
