@@ -6,7 +6,6 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Quiz\QuizModel;
 use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -14,7 +13,6 @@ class SettingsControl extends Control
 {
 	private $gateway;
 	private $foodsaver;
-	private $quizModel;
 	private $quizGateway;
 	private $contentGateway;
 	private $foodsaverGateway;
@@ -25,7 +23,6 @@ class SettingsControl extends Control
 		SettingsModel $model,
 		SettingsView $view,
 		SettingsGateway $gateway,
-		QuizModel $quizModel,
 		QuizGateway $quizGateway,
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -35,7 +32,6 @@ class SettingsControl extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
-		$this->quizModel = $quizModel;
 		$this->quizGateway = $quizGateway;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

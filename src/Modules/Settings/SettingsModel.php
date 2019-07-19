@@ -4,15 +4,9 @@ namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Quiz\QuizGateway;
-use Foodsharing\Modules\Quiz\QuizModel;
 
 class SettingsModel extends Db
 {
-	/**
-	 * @var QuizModel
-	 */
-	private $quizModel;
-
 	/**
 	 * @var QuizGateway
 	 */
@@ -21,12 +15,10 @@ class SettingsModel extends Db
 	/**
 	 * SettingsModel constructor.
 	 *
-	 * @param QuizModel $quizModel
 	 * @param QuizGateway $quizGateway
 	 */
-	public function __construct(QuizModel $quizModel, QuizGateway $quizGateway)
+	public function __construct(QuizGateway $quizGateway)
 	{
-		$this->quizModel = $quizModel;
 		$this->quizGateway = $quizGateway;
 
 		parent::__construct();
