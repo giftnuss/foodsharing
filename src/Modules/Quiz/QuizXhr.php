@@ -348,7 +348,7 @@ class QuizXhr extends Control
 		/*
 		 * Otherwise, we start a new quiz session
 		 */
-		if ($quiz = $this->quizGateWay->getQuiz($_GET['qid'])) {
+		if ($quiz = $this->quizGateway->getQuiz($_GET['qid'])) {
 			/*
 			 * if foodsaver quiz, user can choose between easy and quick mode
 			*/
