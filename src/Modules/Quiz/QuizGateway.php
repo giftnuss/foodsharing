@@ -481,7 +481,7 @@ class QuizGateway extends BaseGateway
 		', ['quizId' => $quizId]);
 	}
 
-	public function getAnswer($answerId): array
+	public function getAnswer(int $answerId): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_answer',
@@ -496,6 +496,19 @@ class QuizGateway extends BaseGateway
 			'fs_answer',
 			['id', 'text', 'explanation', 'right'],
 			['question_id' => $questionId]
+		);
+	}
+
+	public function updateAnswer(int $answerId, string $text, string $explanation, int $right): int
+	{
+		return $this->db->update(
+			'fs_answer',
+			[
+				'text' => $text,
+				'explanation' => $explanation,
+				'right' => $right
+			],
+			['id' => $answerId]
 		);
 	}
 }

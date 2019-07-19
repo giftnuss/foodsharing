@@ -31,17 +31,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function updateAnswer($id, $data)
-	{
-		return $this->update('
-			UPDATE 	`fs_answer`
-			SET 	`text` = ' . $this->strval($data['text']) . ',
-					`explanation` = ' . $this->strval($data['explanation']) . ',
-					`right` = ' . (int)$data['right'] . '
-			WHERE 	`id` = ' . (int)$id . '
-		');
-	}
-
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('

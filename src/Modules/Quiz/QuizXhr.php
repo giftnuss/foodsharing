@@ -140,11 +140,7 @@ class QuizXhr extends Control
 				$right = (int)$_GET['right'];
 
 				if (!empty($text) && ($right == 0 || $right == 1 || $right == 2)) {
-					$this->model->updateAnswer($_GET['id'], array(
-						'text' => $text,
-						'explanation' => $exp,
-						'right' => $right
-					));
+					$this->model->updateAnswer($_GET['id'], $text, $exp, $right);
 
 					return array(
 						'status' => 1,
