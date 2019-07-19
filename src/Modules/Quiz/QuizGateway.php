@@ -91,14 +91,14 @@ class QuizGateway extends BaseGateway
 						ON s.foodsaver_id = fs.id
 
 				WHERE
-					s.quiz_id = :quiz_id
+					s.quiz_id = :quizId
 
 				GROUP BY
 					s.foodsaver_id
 
 				ORDER BY
 					time_start DESC
-			', [':quiz_id' => $quizId]);
+			', [':quizId' => $quizId]);
 	}
 
 	public function getUserSessions(int $fsId): array
@@ -119,11 +119,11 @@ class QuizGateway extends BaseGateway
 					ON s.quiz_id = q.id
 
 			WHERE
-				s.foodsaver_id = :foodsaver_id
+				s.foodsaver_id = :fsId
 
 			ORDER BY
 				q.id, s.time_start DESC
-		', [':foodsaver_id' => $fsId]);
+		', [':fsId' => $fsId]);
 	}
 
 	public function getExistingSession(int $quizId, int $fsId)
