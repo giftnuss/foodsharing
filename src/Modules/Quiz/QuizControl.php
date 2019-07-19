@@ -140,11 +140,8 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		if ($fs = $this->model->getValues(
-			array('name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'),
-			'foodsaver',
-			$_GET['fsid']
-		)) {
+		$fs = $this->quizGateway->getSessionDetails($_GET['fsid']);
+		if ($fs) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
 			$this->pageHelper->addContent(
 				$this->view->topbar(
@@ -168,7 +165,7 @@ class QuizControl extends Control
 
 	public function sessions()
 	{
-		if ($quiz = $this->model->getValues(array('id', 'name'), 'quiz', $_GET['id'])) {
+		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
 			if ($sessions = $this->quizGateway->getSessions($_GET['id'])) {
 				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
 			} else {

@@ -268,6 +268,15 @@ class QuizGateway extends BaseGateway
 		]);
 	}
 
+	public function getSessionDetails(int $fsId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			['name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'],
+			['id' => $fsId]
+		);
+	}
+
 	public function setRole($fs_id, $quiz_rolle)
 	{
 		$this->db->update(
