@@ -40,6 +40,9 @@ class QuizModel extends Db
 		');
 	}
 
+	/**
+	 * @deprecated use QuizGateway->delete
+	 */
 	public function deleteSession($id)
 	{
 		return $this->del('DELETE FROM fs_quiz_session WHERE id = ' . (int)$id . ' LIMIT 1');

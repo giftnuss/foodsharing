@@ -15,7 +15,7 @@ class QuizGateway extends BaseGateway
 		');
 	}
 
-	public function addQuiz(String $name, String $desc, int $maxfp, int $questcount)
+	public function addQuiz(String $name, String $desc, int $maxfp, int $questcount): int
 	{
 		return $this->db->insert('fs_quiz',
 			[
@@ -25,6 +25,11 @@ class QuizGateway extends BaseGateway
 				'questcount' => $questcount
 			]
 		);
+	}
+
+	public function deleteSession(int $id): int
+	{
+		return $this->db->delete('fs_quiz_session',	[ 'id' => $id ], 1);
 	}
 
 	public function countByQuizId($fs_id, $quiz_id)
