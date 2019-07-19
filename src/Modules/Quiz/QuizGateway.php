@@ -415,31 +415,12 @@ class QuizGateway extends BaseGateway
 		$this->db->delete('fs_question_has_quiz', ['question_id' => $questionId]);
 	}
 
-	public function getQuestions(int $quizId): array
+	public function listQuestions(int $quizId): array
 	{
-		$questions = $this->db->fetchAll('
-				SELECT
-					q.id,
-					q.text,
-					q.duration,
-					q.wikilink,
-					hq.fp
-
-				FROM
-					fs_question q
-					LEFT JOIN fs_question_has_quiz hq
-					ON hq.question_id = q.id
-
-				WHERE
-					hq.quiz_id = :quizId
-		', ['quizId' => $quizId]);
+		$questions = $this->getQuestions($quizId);
 		if ($questions) {
 			foreach ($questions as $key => $q) {
-				$questions[$key]['answers'] = $this->db->fetchAllByCriteria(
-					'fs_answer',
-					['id', 'text', 'explanation', 'right'],
-					['question_id' => $q['id']]
-				);
+				$questions[$key]['answers'] = $this->getAnswers($q['id']);
 				$questions[$key]['comment_count'] = $this->getCommentCount($q['id']);
 			}
 
@@ -456,5 +437,56 @@ class QuizGateway extends BaseGateway
 			FROM fs_question_has_wallpost
 			WHERE question_id = :questionId
 		', ['questionId' => $q['id']]);
+	}
+
+	public function getRightQuestions(int $quiz_id): array
+	{
+		$out = array();
+		$questions = $this->getQuestions($quizId);
+		if ($questions) {
+			foreach ($questions as $key => $q) {
+				$out[$q['id']] = $q;
+				$answers = $this->getAnswers($q['id']);
+				if ($answers) {
+					$out[$q['id']]['answers'] = array();
+					foreach ($answers as $a) {
+						$out[$q['id']]['answers'][$a['id']] = $a;
+					}
+				}
+			}
+
+			return $out;
+		}
+
+		return [];
+	}
+
+	private function getQuestions(int $quizId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				q.id,
+				q.text,
+				q.duration,
+				q.wikilink,
+				hq.fp
+
+			FROM
+				fs_question q
+				LEFT JOIN fs_question_has_quiz hq
+				ON hq.question_id = q.id
+
+			WHERE
+				hq.quiz_id = :quizId
+		', ['quizId' => $quizId]);
+	}
+
+	public function getAnswers(int $questionId): array
+	{
+		return $this->db->fetchAllByCriteria(
+			'fs_answer',
+			['id', 'text', 'explanation', 'right'],
+			['question_id' => $questionId]
+		);
 	}
 }

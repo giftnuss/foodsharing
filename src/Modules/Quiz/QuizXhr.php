@@ -592,7 +592,7 @@ class QuizXhr extends Control
 				if ($question = $this->quizGateway->getQuestion($quiz[$i]['id'])) {
 					// get possible answers
 					$comment_aswers = '';
-					if ($answers = $this->model->getAnswers($question['id'])) {
+					if ($answers = $this->quizGateway->getAnswers($question['id'])) {
 						// random sorting for the answers
 						shuffle($answers);
 
@@ -891,7 +891,7 @@ class QuizXhr extends Control
 
 		if ($quiz = $this->quizGateway->getQuiz($this->session->get('quiz-id'))) {
 			if ($questions = $this->session->get('quiz-questions')) {
-				if ($rightQuestions = $this->model->getRightQuestions($this->session->get('quiz-id'))) {
+				if ($rightQuestions = $this->quizGateway->getRightQuestions($this->session->get('quiz-id'))) {
 					$explains = array();
 					$fp = 0;
 					$question_number = 0;
@@ -935,7 +935,7 @@ class QuizXhr extends Control
 		// get the question
 		if ($quest = $this->quizGateway->getQuestion($question['id'])) {
 			// get possible answers
-			if ($answers = $this->model->getAnswers($question['id'])) {
+			if ($answers = $this->quizGateway->getAnswers($question['id'])) {
 				$joke = false;
 				if ($question['fp'] == 0) {
 					$joke = true;

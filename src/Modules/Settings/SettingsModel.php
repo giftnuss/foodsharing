@@ -167,7 +167,7 @@ class SettingsModel extends Db
 			if (!isset($fullList[$id])) {
 				if ($question = $this->quizGateway->getQuestion($id)) {
 					$answers = array();
-					if ($qanswers = $this->quizModel->getAnswers($id)) {
+					if ($qanswers = $this->quizGateway->getAnswers($id)) {
 						foreach ($qanswers as $a) {
 							$answers[$a['id']] = $a;
 							$answers[$a['id']]['user_say'] = $a['right'];
