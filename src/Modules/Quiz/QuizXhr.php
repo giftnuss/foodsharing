@@ -78,7 +78,7 @@ class QuizXhr extends Control
 	public function delquest()
 	{
 		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
-			$this->model->deleteQuest($_GET['id']);
+			$this->quizGateway->deleteQuestion($_GET['id']);
 
 			return array(
 				'status' => 1,

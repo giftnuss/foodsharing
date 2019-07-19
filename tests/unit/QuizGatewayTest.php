@@ -79,4 +79,17 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_question', ['text' => 'question text']);
 		$this->tester->seeInDatabase('fs_question_has_quiz', ['question_id' => $questionId, 'quiz_id' => 1]);
 	}
+
+	public function testDeleteQuestion()
+	{
+		$this->tester->haveInDatabase('fs_question', ['id' => 1]);
+		$this->tester->haveInDatabase('fs_question_has_quiz', ['quiz_id' => 1, 'question_id' => 1]);
+		$this->tester->haveInDatabase('fs_answer', ['question_id' => 1]);
+
+		$this->gateway->deleteQuestion(1);
+
+		$this->tester->dontSeeInDatabase('fs_question', ['id' => 1]);
+		$this->tester->dontSeeInDatabase('fs_question_has_quiz', ['question_id' => 1]);
+		$this->tester->dontSeeInDatabase('fs_answer', ['question_id' => 1]);
+	}
 }

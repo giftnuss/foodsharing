@@ -292,4 +292,11 @@ class QuizGateway extends BaseGateway
 
 		return 0;
 	}
+
+	public function deleteQuestion(int $questionId)
+	{
+		$this->db->delete('fs_answer', ['question_id' => $questionId]);
+		$this->db->delete('fs_question', ['id' => $questionId]);
+		$this->db->delete('fs_question_has_quiz', ['question_id' => $questionId]);
+	}
 }
