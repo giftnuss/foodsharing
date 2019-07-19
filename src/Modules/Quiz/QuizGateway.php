@@ -524,4 +524,9 @@ class QuizGateway extends BaseGateway
 			['id' => $answerId]
 		);
 	}
+
+	public function deleteAnswer(int $answerId): int
+	{
+		return $this->db->delete('fs_answer', ['id' => $answerId]);
+	}
 }
