@@ -403,7 +403,7 @@ class QuizGateway extends BaseGateway
 			['fp' => $fp],
 			[
 				'question_id' => $questionId,
-				'quiz_id' => $quiz_id
+				'quiz_id' => $quizId
 			]
 		);
 	}
