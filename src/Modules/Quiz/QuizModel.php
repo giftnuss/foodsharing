@@ -19,19 +19,6 @@ class QuizModel extends Db
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function updateQuiz($id, $name, $desc, $maxfp, $questcount)
-	{
-		return $this->update('
-			UPDATE	`fs_quiz`
-			SET 	`name` = ' . $this->strval($name) . ',
-					`desc` = ' . $this->strval($desc, true) . ',
-					`maxfp` = ' . (int)$maxfp . ',
-					`questcount` = ' . (int)$questcount . '
-
-			WHERE 	`id` = ' . (int)$id . '
-		');
-	}
-
 	public function getQuiz($id)
 	{
 		return $this->qRow('

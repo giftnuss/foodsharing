@@ -98,6 +98,20 @@ class QuizGateway extends BaseGateway
 			', [':quiz_id' => $quizId]);
 	}
 
+	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questcount): int
+	{
+		return $this->db->update(
+			'fs_quiz',
+			[
+				'name' => $name,
+				'desc' => $desc,
+				'maxfp' => $maxfp,
+				'questcount' => $questcount
+			],
+			['id' => $id]
+		);
+	}
+
 	public function setRole($fs_id, $quiz_rolle)
 	{
 		$this->db->update(
