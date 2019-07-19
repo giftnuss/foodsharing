@@ -21,11 +21,25 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 	{
 	}
 
-	public function testListQuiz()
+	public function testGetQuizzes()
 	{
 		$quizzes = $this->gateway->getQuizzes();
 		$this->assertEquals('1', $quizzes[0]['id']);
 		$this->assertEquals('2', $quizzes[1]['id']);
 		$this->assertEquals('3', $quizzes[2]['id']);
+	}
+
+	public function testCountRunningQuizSession()
+	{
+		$fsId = $this->foodsaver['id'];
+		$quizId = 1;
+		$quizSessionStatus = 0;
+		$this->tester->createQuizTry($fsId, $quizId, 0);
+
+		$runningSessionCount = $this->gateway->countQuizSessions($fsId, $quizId, $quizSessionStatus);
+		$runningSessions = $this->gateway->getExistingSession($quizId, $fsId);
+
+		$this->assertEquals(1, $runningSessionCount);
+		$this->assertArrayHasKey('id', $runningSessions);
 	}
 }
