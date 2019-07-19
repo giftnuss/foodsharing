@@ -42,7 +42,7 @@ class QuizControl extends Control
 	{
 		// quiz&a=delete&id=9
 		if ($id = $this->identificationHelper->getActionId('delete')) {
-			$this->model->deleteSession($id);
+			$this->quizGateway->deleteSession($id);
 			$this->goBack();
 		}
 
@@ -65,7 +65,7 @@ class QuizControl extends Control
 				$this->routeHelper->go('/?page=quiz&id=1');
 			}
 			$this->pageHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
-			$this->pageHelper->addContent($this->view->listQuiz($this->model->listQuiz()), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->listQuiz($this->quizGateway->getQuizzes()), CNT_LEFT);
 			$this->pageHelper->addContent($this->view->quizMenu(), CNT_LEFT);
 		}
 	}
@@ -128,7 +128,7 @@ class QuizControl extends Control
 			$questcount = (int)$_POST['questcount'];
 
 			if (!empty($name)) {
-				if ($id = $this->model->addQuiz($name, $desc, $maxfp, $questcount)) {
+				if ($id = $this->quizGateway->addQuiz($name, $desc, $maxfp, $questcount)) {
 					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
 					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 				}

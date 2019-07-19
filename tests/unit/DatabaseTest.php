@@ -107,7 +107,7 @@ class DatabaseTest extends \Codeception\Test\Unit
 
 	public function testDelete()
 	{
-		$params = [ 'quiz_id' => 1, 'foodsaver_id' => $this->foodsaver['id'] ];
+		$params = ['quiz_id' => 1, 'foodsaver_id' => $this->foodsaver['id']];
 		$this->tester->haveInDatabase('fs_quiz_session', $params);
 
 		$this->db->delete('fs_quiz_session', $params);
@@ -117,7 +117,7 @@ class DatabaseTest extends \Codeception\Test\Unit
 
 	public function testDeleteWithLimit()
 	{
-		$params = [ 'foodsaver_id' => $this->foodsaver['id'] ];
+		$params = ['foodsaver_id' => $this->foodsaver['id']];
 		$this->tester->haveInDatabase('fs_quiz_session', $params);
 		$this->tester->haveInDatabase('fs_quiz_session', $params);
 		$this->assertEquals(3, $this->db->count('fs_quiz_session', $params));
