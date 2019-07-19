@@ -52,7 +52,7 @@ class QuizControl extends Control
 		$topbtn = '';
 		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
 		if (!isset($_GET['sub']) && isset($_GET['id']) && (int)$_GET['id'] > 0) {
-			if ($name = $this->model->getVal('name', 'quiz', $_GET['id'])) {
+			if ($name = $this->quizGateway->getQuizName($_GET['id'])) {
 				$this->pageHelper->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
 				$topbtn = ' - ' . $name;
 				$slogan = 'Klausurfragen für ' . $name;
@@ -80,7 +80,7 @@ class QuizControl extends Control
 	{
 		$questionId = (int)$_GET['id'];
 		if ($q = $this->quizGateway->getQuestion($questionId)) {
-			if ($name = $this->model->getVal('name', 'quiz', $q['quiz_id'])) {
+			if ($name = $this->quizGateway->getQuizName($q['quiz_id'])) {
 				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $questionId);
 			}
 			$this->pageHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
