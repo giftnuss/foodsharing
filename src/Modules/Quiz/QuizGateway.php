@@ -339,6 +339,53 @@ class QuizGateway extends BaseGateway
 		', ['quizId' => $quizId, 'fp' => $fp, 'count' => $count]);
 	}
 
+	public function getQuestionMetas(int $quizId): array
+	{
+		$questions = $this->db->fetchAll('
+			SELECT
+				q.id,
+				q.duration,
+				hq.fp
+
+			FROM
+				fs_question q
+				LEFT JOIN fs_question_has_quiz hq
+				ON hq.question_id = q.id
+
+			WHERE
+				hq.quiz_id = :quizId
+		', ['quizId' => $quizId]);
+		if ($questions) {
+			$outmeta = array();
+			$meta = $this->db->fetchAll('
+				SELECT 	hq.fp, COUNT(q.id) AS `count`
+				FROM fs_question q
+					LEFT JOIN fs_question_has_quiz hq
+					ON hq.question_id = q.id
+
+				WHERE
+					hq.quiz_id = :quizId
+
+				GROUP BY
+					hq.fp
+			', ['quizId' => $quizId]);
+			if ($meta) {
+				foreach ($meta as $m) {
+					if (!isset($outmeta[$m['fp']])) {
+						$outmeta[$m['fp']] = $m['count'];
+					}
+				}
+			}
+
+			return array(
+				'meta' => $outmeta,
+				'question' => $questions
+			);
+		}
+
+		return [];
+	}
+
 	public function deleteQuestion(int $questionId)
 	{
 		$this->db->delete('fs_answer', ['question_id' => $questionId]);

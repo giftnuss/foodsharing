@@ -51,56 +51,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function getQuestionMetas($quiz_id)
-	{
-		if ($questions = $this->q('
-			SELECT
-				q.id,
-				q.`duration`,
-				hq.fp
-
-			FROM
-				fs_question q,
-				fs_question_has_quiz hq
-
-			WHERE
-				hq.question_id = q.id
-
-			AND
-				hq.quiz_id = ' . (int)$quiz_id . '
-		')
-		) {
-			$outmeta = array();
-			if ($meta = $this->q('
-				SELECT 	hq.fp, COUNT(q.id) AS `count`
-				FROM
-				fs_question q,
-				fs_question_has_quiz hq
-
-				WHERE
-					hq.question_id = q.id
-
-				AND
-					hq.quiz_id = ' . (int)$quiz_id . '
-
-				GROUP BY
-					hq.fp
-			')
-			) {
-				foreach ($meta as $m) {
-					if (!isset($outmeta[$m['fp']])) {
-						$outmeta[$m['fp']] = $m['count'];
-					}
-				}
-			}
-
-			return array(
-				'meta' => $outmeta,
-				'question' => $questions
-			);
-		}
-	}
-
 	public function addUserComment($question_id, $comment)
 	{
 		if ($id = $this->insert('

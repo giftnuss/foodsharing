@@ -1123,7 +1123,7 @@ class QuizXhr extends Control
 	{
 		$count_questions = $count;
 
-		if ($questions = $this->model->getQuestionMetas($quiz_id)) {
+		if ($questions = $this->quizGateway->getQuestionMetas($quiz_id)) {
 			// Wie viele Fragen gibt es insgesamt?
 			$summe = 0;
 			foreach ($questions['meta'] as $key => $m) {
