@@ -19,63 +19,6 @@ class QuizModel extends Db
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	/**
-	 * @deprecated use QuizGateway->getQuizzes
-	 */
-	public function listQuiz()
-	{
-		return $this->q('SELECT id,name FROM fs_quiz ORDER BY id');
-	}
-
-	/**
-	 * @deprecated use QuizGateway->addQuiz
-	 */
-	public function addQuiz($name, $desc, $maxfp, $questcount)
-	{
-		return $this->insert('
-			INSERT INTO `fs_quiz`
-			(`name`,`desc`,`maxfp`,`questcount`)
-			VALUES
-			(' . $this->strval($name) . ',' . $this->strval($desc, true) . ',' . (int)$maxfp . ',' . (int)$questcount . ')
-		');
-	}
-
-	/**
-	 * @deprecated use QuizGateway->delete
-	 */
-	public function deleteSession($id)
-	{
-		return $this->del('DELETE FROM fs_quiz_session WHERE id = ' . (int)$id . ' LIMIT 1');
-	}
-
-	public function getUserSessions($fsid)
-	{
-		return $this->q('
-			SELECT
-				s.id,
-				s.fp,
-				s.`status`,
-				s.time_start,
-				UNIX_TIMESTAMP(s.time_start) AS time_start_ts,
-				q.name AS quiz_name,
-				q.id AS quiz_id
-
-
-			FROM
-				fs_quiz_session s,
-				fs_quiz q
-
-			WHERE
-				s.quiz_id = q.id
-
-			AND
-				s.foodsaver_id = ' . (int)$fsid . '
-
-			ORDER BY
-				q.id, s.time_start DESC
-		');
-	}
-
 	public function getSessions($id)
 	{
 		return $this->q('
