@@ -155,7 +155,7 @@ class QuizControl extends Control
 				CNT_TOP
 			);
 
-			if ($sessions = $this->model->getUserSessions($_GET['fsid'])) {
+			if ($sessions = $this->quizGateway->getUserSessions($_GET['fsid'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
