@@ -47,7 +47,7 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$fsId = $this->foodsaver['id'];
 		$quizId = RoleType::AMBASSADOR;
 		$this->tester->createQuizTry($fsId, $quizId, 0);
-		$runningSessionId = $this->gateway->getExistingSession($quizId, $fsId)['id'];
+		$runningSessionId = $this->gateway->getRunningSession($quizId, $fsId)['id'];
 		$data = ['id' => $runningSessionId, 'quiz_id' => $quizId, 'foodsaver_id' => $fsId];
 
 		$data['status'] = SessionStatus::RUNNING;
