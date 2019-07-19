@@ -290,35 +290,6 @@ class QuizModel extends Db
 		return false;
 	}
 
-	public function finishQuiz($session_id, $questions, $quiz_result, $fp, $maxfp)
-	{
-		$quiz_result = serialize($quiz_result);
-		$questions = serialize($questions);
-
-		$status = SessionStatus::FAILED;
-
-		// quiz fertig und bestanden
-		if ($fp <= $maxfp) {
-			$status = SessionStatus::PASSED;
-		}
-
-		$this->update('
-			UPDATE
-				`fs_quiz_session`
-
-			SET
-				quiz_result = ' . $this->strval($quiz_result) . ',
-				quiz_questions = ' . $this->strval($questions) . ',
-				time_end = ' . $this->dateval(date('Y-m-d H:i:s')) . ',
-				`status` = ' . (int)$status . ',
-				`fp` = ' . floatval($fp) . ',
-				`maxfp` = ' . (int)$maxfp . '
-
-			WHERE
-				id = ' . (int)$session_id . '
-		');
-	}
-
 	public function updateQuestion($id, $quiz_id, $text, $fp, $duration, $wikilink)
 	{
 		$this->update('

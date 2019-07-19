@@ -911,7 +911,7 @@ class QuizXhr extends Control
 					}
 				}
 
-				$this->model->finishQuiz($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
+				$this->quizGateway->finishQuiz($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
 
 				return array(
 					'status' => 1,

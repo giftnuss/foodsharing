@@ -106,6 +106,25 @@ class QuizGateway extends BaseGateway
 				]);
 	}
 
+	public function finishQuiz(int $session_id, string $questions, string $quiz_result, float $fp, int $maxfp): int
+	{
+		$quiz_result = serialize($quiz_result);
+		$questions = serialize($questions);
+
+		return $this->db->update(
+			'fs_quiz_session',
+			[
+				'quiz_result' => $quiz_result,
+				'quiz_questions' => $questions,
+				'time_end' => $this->db->now(),
+				'status' => ($fp <= $maxfp) ? SessionStatus::PASSED : SessionStatus::FAILED,
+				'fp' => $fp,
+				'maxfp' => $maxfp
+			],
+			['id' => $session_id]
+		);
+	}
+
 	public function getSessions($quizId): array
 	{
 		return $this->db->fetchAll('
