@@ -56,7 +56,8 @@ class QuizXhr extends Control
 				$duration = (int)$_GET['duration'];
 
 				if (!empty($text)) {
-					if ($id = $this->model->addQuestion($_GET['qid'], $text, $fp, $duration)) {
+					$id = $this->quizGateway->addQuestion($_GET['qid'], $text, $fp, $duration);
+					if ($id > 0) {
 						$this->flashMessageHelper->info('Frage wurde angelegt');
 
 						return array(

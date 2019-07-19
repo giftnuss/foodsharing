@@ -72,4 +72,11 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$data['status'] = SessionStatus::FAILED;
 		$this->tester->seeInDatabase('fs_quiz_session', $data);
 	}
+
+	public function testAddQuestion()
+	{
+		$questionId = $this->gateway->addQuestion(1, 'question text', 3, 60);
+		$this->tester->seeInDatabase('fs_question', ['text' => 'question text']);
+		$this->tester->seeInDatabase('fs_question_has_quiz', ['question_id' => $questionId, 'quiz_id' => 1]);
+	}
 }

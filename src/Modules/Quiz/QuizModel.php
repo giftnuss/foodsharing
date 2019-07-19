@@ -38,22 +38,6 @@ class QuizModel extends Db
 		');
 	}
 
-	public function addQuestion($qid, $text, $fp, $duration)
-	{
-		if ($id = $this->insert('
-			INSERT INTO `fs_question`(`text`,`duration`) VALUES (' . $this->strval($text) . ',' . (int)$duration . ')
-		')
-		) {
-			$this->insert('
-				INSERT INTO `fs_question_has_quiz`(`question_id`, `quiz_id`, `fp`) VALUES (' . (int)$id . ',' . (int)$qid . ',' . (int)$fp . ')
-			');
-
-			return $id;
-		}
-
-		return false;
-	}
-
 	public function updateAnswer($id, $data)
 	{
 		return $this->update('

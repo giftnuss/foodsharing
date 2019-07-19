@@ -267,4 +267,29 @@ class QuizGateway extends BaseGateway
 			['id' => $fs_id]
 		);
 	}
+
+	public function addQuestion(int $quizId, string $text, int $fp, int $duration): int
+	{
+		$questionId = $this->db->insert(
+			'fs_question',
+			[
+				'text' => $text,
+				'duration' => $duration
+			]
+		);
+		if ($questionId > 0) {
+			$this->db->insert(
+				'fs_question_has_quiz',
+				[
+					'question_id' => $questionId,
+					'quiz_id' => $quizId,
+					'fp' => $fp
+				]
+			);
+
+			return $questionId;
+		}
+
+		return 0;
+	}
 }
