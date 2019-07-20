@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Settings;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -75,9 +76,9 @@ class SettingsControl extends Control
 		$menu[] = array('name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
 		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 
-		if ($this->foodsaver['rolle'] == 0) {
+		if ($this->foodsaver['rolle'] == Role::FOODSHARER) {
 			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
-		} elseif ($this->foodsaver['rolle'] == 1) {
+		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
 			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
 		}
 		$menu[] = array('name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
@@ -93,12 +94,12 @@ class SettingsControl extends Control
 
 	public function up_bip()
 	{
-		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
+		if ($this->session->may() && $this->foodsaver['rolle'] > Role::FOODSHARER) {
 			if (!$this->foodsaver['verified']) {
 				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
-				if (($status = $this->quizGateway->getQuizStatus(2, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(2))) {
-					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
+				if (($status = $this->quizGateway->getQuizStatus(Role::STORE_MANAGER, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::STORE_MANAGER))) {
+					if (!$this->quizGateway->hasUserPassedQuiz($this->session->id(), Role::FOODSAVER)) {
 						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
@@ -143,7 +144,7 @@ class SettingsControl extends Control
 	public function up_fs()
 	{
 		if ($this->session->may()) {
-			if (($status = $this->quizGateway->getQuizStatus(1, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(1))) {
+			if (($status = $this->quizGateway->getQuizStatus(Role::FOODSAVER, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::FOODSAVER))) {
 				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
@@ -177,8 +178,8 @@ class SettingsControl extends Control
 
 	public function up_bot()
 	{
-		if ($this->session->may() && $this->foodsaver['rolle'] >= 2) {
-			if (($status = $this->quizGateway->getQuizStatus(3, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(3))) {
+		if ($this->session->may() && $this->foodsaver['rolle'] >= Role::STORE_MANAGER) {
+			if (($status = $this->quizGateway->getQuizStatus(Role::AMBASSADOR, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::AMBASSADOR))) {
 				$desc = $this->contentGateway->get(12);
 
 				// Quiz wurde noch gar nicht probiert
@@ -210,12 +211,12 @@ class SettingsControl extends Control
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
-				case 0:
+				case Role::FOODSHARER:
 					$this->flashMessageHelper->info('Du musst erst Foodsaver werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
-				case 1:
+				case Role::FOODSAVER:
 					$this->flashMessageHelper->info('Du musst erst BetriebsverantwortlicheR werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
@@ -229,7 +230,7 @@ class SettingsControl extends Control
 
 	private function confirm_fs()
 	{
-		if ($this->model->hasQuizCleared(1)) {
+		if ($this->model->hasQuizCleared(Role::FOODSAVER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
@@ -238,7 +239,7 @@ class SettingsControl extends Control
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
 					if (!$this->session->may('fs')) {
-						$this->model->updateRole(1, $this->foodsaver['rolle']);
+						$this->model->updateRole(Role::FOODSAVER, $this->foodsaver['rolle']);
 					}
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Foodsaver');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
@@ -252,13 +253,13 @@ class SettingsControl extends Control
 
 	private function confirm_bip()
 	{
-		if ($this->model->hasQuizCleared(2)) {
+		if ($this->model->hasQuizCleared(Role::STORE_MANAGER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
-					$this->model->updateRole(2, $this->foodsaver['rolle']);
+					$this->model->updateRole(Role::STORE_MANAGER, $this->foodsaver['rolle']);
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
@@ -273,10 +274,8 @@ class SettingsControl extends Control
 	{
 		$this->pageHelper->addBread('Botschafter werden');
 
-		if ($this->model->hasQuizCleared(3)) {
+		if ($this->model->hasQuizCleared(Role::AMBASSADOR)) {
 			$showform = true;
-
-			$rolle = 3;
 
 			if ($this->submitted()) {
 				global $g_data;
