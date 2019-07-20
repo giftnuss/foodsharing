@@ -113,14 +113,14 @@ class QuizGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initQuizSession($fsId, $quiz_id, $questions, $maxfp, $questcount, $easymode = 0)
+	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
 	{
 		$questions = serialize($questions);
 
 		return $this->db->insert('fs_quiz_session',
 			[
 				'foodsaver_id' => $fsId,
-				'quiz_id' => $quiz_id,
+				'quiz_id' => $quizId,
 				'status' => SessionStatus::RUNNING,
 				'quiz_index' => 0,
 				'quiz_questions' => $questions,
@@ -132,26 +132,26 @@ class QuizGateway extends BaseGateway
 				]);
 	}
 
-	public function finishQuiz(int $session_id, string $questions, string $quiz_result, float $fp, int $maxfp): int
+	public function finishQuiz(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
 	{
-		$quiz_result = serialize($quiz_result);
+		$quizResult = serialize($quizResult);
 		$questions = serialize($questions);
 
 		return $this->db->update(
 			'fs_quiz_session',
 			[
-				'quiz_result' => $quiz_result,
+				'quiz_result' => $quizResult,
 				'quiz_questions' => $questions,
 				'time_end' => $this->db->now(),
 				'status' => ($fp <= $maxfp) ? SessionStatus::PASSED : SessionStatus::FAILED,
 				'fp' => $fp,
 				'maxfp' => $maxfp
 			],
-			['id' => $session_id]
+			['id' => $sessionId]
 		);
 	}
 
-	public function getSessions($quizId): array
+	public function getSessions(int $quizId): array
 	{
 		return $this->db->fetchAll('
 				SELECT
@@ -240,7 +240,7 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuizSession(int $session_id, string $questions, int $quiz_index): int
+	public function updateQuizSession(int $sessionId, string $questions, int $quizIndex): int
 	{
 		$questions = serialize($questions);
 
@@ -248,9 +248,9 @@ class QuizGateway extends BaseGateway
 			'fs_quiz_session',
 			[
 				'quiz_questions' => $questions,
-				'quiz_index' => $quiz_index
+				'quiz_index' => $quizIndex
 			],
-			['id' => $session_id]
+			['id' => $sessionId]
 		);
 	}
 
@@ -418,7 +418,7 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikilink): int
+	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikilink): void
 	{
 		$this->db->update(
 			'fs_question',
@@ -430,7 +430,7 @@ class QuizGateway extends BaseGateway
 			['id' => $questionId]
 		);
 
-		return $this->db->update(
+		$this->db->update(
 			'fs_question_has_quiz',
 			['fp' => $fp],
 			[
