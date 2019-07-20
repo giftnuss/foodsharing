@@ -146,4 +146,21 @@ class BasketApiCest
 		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 	}
+
+	public function editBasket(\ApiTester $I)
+	{
+		$testDescription = 'lorem ipsum';
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => '']);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => $testDescription]);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'description' => $testDescription
+		]);
+	}
 }

@@ -171,9 +171,9 @@ class View
 			$id = $option['id'];
 		}
 
-		$height = 185;
+		$maxHeight = 185;
 		if (isset($option['height'])) {
-			$height = $option['height'];
+			$maxHeight = $option['height'];
 		}
 
 		$out = '
@@ -210,7 +210,7 @@ class View
 		</div>';
 
 		if ($option['scroller']) {
-			$out = $this->v_utils->v_scroller($out, $height);
+			$out = $this->v_utils->v_scroller($out, $maxHeight);
 			$this->pageHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 

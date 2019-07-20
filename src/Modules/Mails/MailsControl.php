@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
 use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
@@ -18,7 +17,6 @@ class MailsControl extends ConsoleControl
 	private $routeHelper;
 
 	public function __construct(
-		Db $model,
 		MailsGateway $mailsGateway,
 		Database $database,
 		InfluxMetrics $metrics,
@@ -27,7 +25,6 @@ class MailsControl extends ConsoleControl
 	) {
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
-		$this->model = $model;
 		$this->mailsGateway = $mailsGateway;
 		$this->database = $database;
 		$this->mailer = $mailer;

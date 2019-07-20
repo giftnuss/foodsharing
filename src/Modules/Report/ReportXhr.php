@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -19,13 +18,11 @@ class ReportXhr extends Control
 
 	public function __construct(
 		ReportGateway $reportGateway,
-		Db $model,
 		ReportView $view,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

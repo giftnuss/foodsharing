@@ -108,6 +108,12 @@ class SettingsView extends View
 
 			$("#schlafmtzenfunktion-form").on("submit", function(ev){
 				ev.preventDefault();
+				if ($("#sleep_status").val() == 1 ){
+					if ($("#daterange_from").val() == "" || $("#daterange_to").val() == "" ){
+						pulseError("' . $this->translationHelper->s('sleep_mode_date_missing') . '");
+						return;
+					}
+				}
 				ajax.req("settings","sleepmode",{
 					method:"post",
 					data: {

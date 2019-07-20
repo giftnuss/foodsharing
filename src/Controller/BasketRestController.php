@@ -345,6 +345,41 @@ final class BasketRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Updates the description of an existing basket. The description must not be empty.
+	 * Returns the updated basket.
+	 *
+	 * @Rest\Put("baskets/{basketId}", requirements={"basketId" = "\d+"})
+	 * @Rest\RequestParam(name="description", nullable=false)
+	 *
+	 * @param int $basketId ID of an existing basket
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function editBasketAction(int $basketId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
+		$basket = $this->findEditableBasket($basketId);
+
+		// prepare and check description
+		$description = trim(strip_tags($paramFetcher->get(self::DESCRIPTION)));
+		if (empty($description)) {
+			throw new HttpException(400, 'The description must not be empty.');
+		}
+
+		//update basket
+		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $this->session->id());
+
+		$basket = $this->gateway->getBasket($basketId);
+		$data = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $data], 200));
+	}
+
+	/**
 	 * Sets a new picture for this basket.
 	 *
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})

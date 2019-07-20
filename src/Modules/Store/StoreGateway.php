@@ -717,15 +717,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $betrieb_id]);
 	}
 
-	/* retrieves all biebs that are biebs for a given bezirk (by being bieb in a Betrieb that is part of that bezirk, which is semantically not the same we use on platform) */
-	public function getBiebIds($bezirk): array
+	/* retrieves all store managers for a given region (by being store manager in a store that is part of that region, which is semantically not the same we use on platform) */
+	public function getStoreManagersOf(int $regionID): array
 	{
 		return $this->db->fetchAllValues('SELECT DISTINCT bt.foodsaver_id FROM `fs_bezirk_closure` c
 			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `fs_betrieb_team` bt ON bt.betrieb_id = b.id
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
 			WHERE c.ancestor_id = :id AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
-			[':id' => $bezirk]);
+			[':id' => $regionID]);
 	}
 
 	public function listStoresForFoodsaver($fsId)
@@ -1057,5 +1057,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		return $res;
+	}
+
+	public function getStoreStateList()
+	{
+		return $this->db->fetchAll('
+				SELECT
+				`id`,
+				`name`
+				FROM `fs_betrieb_status`
+				ORDER BY `name`');
 	}
 }

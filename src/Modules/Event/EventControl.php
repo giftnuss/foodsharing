@@ -4,28 +4,27 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\EventPermissions;
 
 class EventControl extends Control
 {
 	private $gateway;
 	private $dataHelper;
+	private $eventPermissions;
 
-	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper)
+	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper, EventPermissions $eventPermissions)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->dataHelper = $dataHelper;
+		$this->eventPermissions = $eventPermissions;
 
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id']))) {
-			if (!$this->mayEvent($event)) {
-				return false;
-			}
-
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->eventPermissions->maySeeEvent($event)) {
 			$this->pageHelper->addBread('Termine', '/?page=event');
 			$this->pageHelper->addBread($event['name']);
 
@@ -46,28 +45,15 @@ class EventControl extends Control
 			}
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('event_not_available'));
 			$this->routeHelper->go('/?page=dashboard');
 		}
-	}
-
-	private function isEventAdmin(array $event): bool
-	{
-		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || $this->session->may('orga');
-	}
-
-	private function mayEvent(array $event): bool
-	{
-		return $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || isset($event['invites']['may'][$this->session->id()]);
 	}
 
 	public function edit()
 	{
 		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
-			if (!$this->isEventAdmin($event)) {
+			if (!$this->eventPermissions->mayEditEvent($event)) {
 				return false;
 			}
 			if ($this->session->isOrgaTeam() || $event['fs_id'] == $this->session->id() || $this->session->isAdminFor($event['bezirk_id'])) {
@@ -147,7 +133,7 @@ class EventControl extends Control
 			$out['public'] = 1;
 		} elseif ($bid = $this->getPostInt('bezirk_id')) {
 			$out['bezirk_id'] = (int)$bid;
-			if (isset($_POST['invite']) && $_POST['invite'] == 1) {
+			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::ACCEPTED) {
 				$out['invite'] = true;
 				if (isset($_POST['invitesubs']) && $_POST['invitesubs'] == 1) {
 					$out['invitesubs'] = true;

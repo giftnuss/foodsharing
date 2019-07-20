@@ -168,11 +168,11 @@ class EventGateway extends BaseGateway
 		);
 		foreach ($invites as $i) {
 			$out['may'][$i['id']] = true;
-			if ($i['status'] == 0) {
+			if ($i['status'] == InvitationStatus::INVITED) {
 				$out['invited'][] = $i;
-			} elseif ($i['status'] == 1) {
+			} elseif ($i['status'] == InvitationStatus::ACCEPTED) {
 				$out['accepted'][] = $i;
-			} elseif ($i['status'] == 2) {
+			} elseif ($i['status'] == InvitationStatus::MAYBE) {
 				$out['maybe'][] = $i;
 			}
 		}
@@ -356,7 +356,7 @@ class EventGateway extends BaseGateway
 
 			foreach ($fsids as $id) {
 				if (!isset($invited[$id])) {
-					$this->addInviteStatus($event_id, $id, 0);
+					$this->addInviteStatus($event_id, $id, InvitationStatus::INVITED);
 				}
 			}
 		}

@@ -6,6 +6,7 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -68,7 +69,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * delete unconfirmed store dates in the past
 		 */
-		$this->deleteUnconformedFetchDates();
+		$this->deleteUnconfirmedFetchDates();
 
 		/*
 		 * deactivate too old food baskets
@@ -121,18 +122,18 @@ class MaintenanceControl extends ConsoleControl
 	private function updateSpecialGroupMemberships()
 	{
 		self::info('updating HH bieb austausch');
-		$hh_biebs = $this->storeGateway->getBiebIds(31);
+		$hh_biebs = $this->storeGateway->getStoreManagersOf(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->foodsaverGateway->updateGroupMembers(826, $hh_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Europe Bot group');
-		$bots = $this->foodsaverGateway->getBotIds(741);
-		$counts = $this->foodsaverGateway->updateGroupMembers(881, $bots, true);
+		$bots = $this->foodsaverGateway->getBotIds(RegionIDs::EUROPE);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::EUROPE_BOT_GROUP, $bots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating berlin bieb austausch');
-		$berlin_biebs = $this->storeGateway->getBiebIds(47);
+		$berlin_biebs = $this->storeGateway->getStoreManagersOf(47);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
@@ -146,14 +147,19 @@ class MaintenanceControl extends ConsoleControl
 		$counts = $this->foodsaverGateway->updateGroupMembers(761, $aBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Zürich BIEB austausch');
-		$zuerich_biebs = $this->storeGateway->getBiebIds(108);
+		self::info('updating Zürich BIEB group');
+		$zuerich_biebs = $this->storeGateway->getStoreManagersOf(108);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Wien BIEB austausch (Filialverantwortung)');
-		$wien_biebs = $this->storeGateway->getBiebIds(13);
+		self::info('updating Wien BIEB group');
+		$wien_biebs = $this->storeGateway->getStoreManagersOf(13);
 		$counts = $this->foodsaverGateway->updateGroupMembers(707, $wien_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Graz BIEB group');
+		$graz_biebs = $this->storeGateway->getStoreManagersOf(149);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1655, $graz_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
@@ -213,7 +219,7 @@ class MaintenanceControl extends ConsoleControl
 
 	private function deactivateBaskets()
 	{
-		$count = $this->model->deactivateOldBaskets();
+		$count = $this->maintenanceGateway->deactivateOldBaskets();
 		self::info($count . ' old foodbaskets deactivated');
 	}
 
@@ -225,10 +231,10 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 
-	private function deleteUnconformedFetchDates()
+	private function deleteUnconfirmedFetchDates()
 	{
-		self::info('delete unfonfirmed fetchdates...');
-		$count = $this->model->deleteUnconformedFetchDates();
+		self::info('delete unconfirmed fetchdates...');
+		$count = $this->maintenanceGateway->deleteUnconfirmedFetchDates();
 		self::success($count . ' deleted');
 	}
 
