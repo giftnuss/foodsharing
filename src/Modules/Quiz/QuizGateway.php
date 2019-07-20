@@ -208,7 +208,7 @@ class QuizGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function getRunningSession(int $quizId, int $fsId)
+	public function getRunningSession(int $quizId, int $fsId): array
 	{
 		$session = $this->db->fetch('
 			SELECT
@@ -235,9 +235,9 @@ class QuizGateway extends BaseGateway
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
 
 			return $session;
-		} else {
-			return null;
 		}
+
+		return [];
 	}
 
 	public function updateQuizSession(int $session_id, string $questions, int $quiz_index): int
