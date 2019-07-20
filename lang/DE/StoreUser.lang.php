@@ -93,3 +93,5 @@ $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffent
 $g_lang['my_last_pickup'] = 'Meine letzte Abholung';
 $g_lang['prefix_Ago'] = 'Vor';
 $g_lang['Days'] = 'Tagen';
+$g_lang['chatWithRegularTeam'] = 'Nachricht ans Team';
+$g_lang['chatWithJumperWaitingTeam'] = 'Nachricht an Springer';
