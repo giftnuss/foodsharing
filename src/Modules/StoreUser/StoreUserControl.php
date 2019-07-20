@@ -176,11 +176,11 @@ class StoreUserControl extends Control
 				$menu = array();
 
 				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
-					$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
+					$menu[] = array('name' => $this->translationHelper->s('chatWithRegularTeam'), 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 				}
 
 				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
-					$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
+					$menu[] = array('name' => $this->translationHelper->s('chatWithJumperWaitingTeam'), 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
 				}
 
 				if ($this->storePermissions->mayEditStore($store['id'])) {
