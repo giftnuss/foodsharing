@@ -440,7 +440,7 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function deleteQuestion(int $questionId)
+	public function deleteQuestion(int $questionId): void
 	{
 		$this->db->delete('fs_answer', ['question_id' => $questionId]);
 		$this->db->delete('fs_question', ['id' => $questionId]);
@@ -476,13 +476,14 @@ class QuizGateway extends BaseGateway
 		$out = array();
 		$questions = $this->getQuestions($quizId);
 		if ($questions) {
-			foreach ($questions as $key => $q) {
-				$out[$q['id']] = $q;
-				$answers = $this->getAnswers($q['id']);
+			foreach ($questions as $q) {
+				$questionId = $q['id'];
+				$out[$questionId] = $q;
+				$answers = $this->getAnswers($questionId);
 				if ($answers) {
-					$out[$q['id']]['answers'] = array();
+					$out[$questionId]['answers'] = array();
 					foreach ($answers as $a) {
-						$out[$q['id']]['answers'][$a['id']] = $a;
+						$out[$questionId]['answers'][$a['id']] = $a;
 					}
 				}
 			}
