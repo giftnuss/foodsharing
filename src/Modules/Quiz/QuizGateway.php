@@ -87,180 +87,52 @@ class QuizGateway extends BaseGateway
 
 	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
 	{
-		$questions = serialize($questions);
-
-		return $this->db->insert('fs_quiz_session',
-			[
-				'foodsaver_id' => $fsId,
-				'quiz_id' => $quizId,
-				'status' => SessionStatus::RUNNING,
-				'quiz_index' => 0,
-				'quiz_questions' => $questions,
-				'time_start' => $this->db->now(),
-				'fp' => 0,
-				'maxfp' => $maxfp,
-				'quest_count' => $questcount,
-				'easymode' => $easymode
-				]);
+		return $this->quizSessionGateway->initQuizSession($fsId, $quizId, $questions, $maxfp, $questcount, $easymode);
 	}
 
 	public function finishQuiz(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
 	{
-		$quizResult = serialize($quizResult);
-		$questions = serialize($questions);
-
-		return $this->db->update(
-			'fs_quiz_session',
-			[
-				'quiz_result' => $quizResult,
-				'quiz_questions' => $questions,
-				'time_end' => $this->db->now(),
-				'status' => ($fp <= $maxfp) ? SessionStatus::PASSED : SessionStatus::FAILED,
-				'fp' => $fp,
-				'maxfp' => $maxfp
-			],
-			['id' => $sessionId]
-		);
+		return $this->quizSessionGateway->initQuizSession($sessionId, $questions, $quizResult, $fp, $maxfp);
 	}
 
 	public function getSessions(int $quizId): array
 	{
-		return $this->db->fetchAll('
-				SELECT
-					s.id,
-					MAX(s.time_start) AS time_start,
-					MIN(s.`status`) AS min_status,
-					MAX(s.`status`) AS max_status,
-					MIN(s.`fp`) AS min_fp,
-					MAX(s.`fp`) AS max_fp,
-					UNIX_TIMESTAMP(MAX(s.time_start)) AS time_start_ts,
-					CONCAT(fs.name," ",fs.nachname) AS fs_name,
-					fs.photo AS fs_photo,
-					fs.id AS fs_id,
-					count(s.foodsaver_id) AS trycount
-
-				FROM
-					fs_quiz_session s
-						LEFT JOIN fs_foodsaver fs
-						ON s.foodsaver_id = fs.id
-
-				WHERE
-					s.quiz_id = :quizId
-
-				GROUP BY
-					s.foodsaver_id
-
-				ORDER BY
-					time_start DESC
-			', [':quizId' => $quizId]);
+		return $this->quizSessionGateway->getSessions($quizId);
 	}
 
 	public function getUserSessions(int $fsId): array
 	{
-		return $this->db->fetchAll('
-			SELECT
-				s.id,
-				s.fp,
-				s.status,
-				s.time_start,
-				UNIX_TIMESTAMP(s.time_start) AS time_start_ts,
-				q.name AS quiz_name,
-				q.id AS quiz_id
-
-			FROM
-				fs_quiz_session s
-					LEFT JOIN fs_quiz q
-					ON s.quiz_id = q.id
-
-			WHERE
-				s.foodsaver_id = :fsId
-
-			ORDER BY
-				q.id, s.time_start DESC
-		', [':fsId' => $fsId]);
+		return $this->quizSessionGateway->getUserSessions($fsId);
 	}
 
 	public function getRunningSession(int $quizId, int $fsId): array
 	{
-		$session = $this->db->fetch('
-			SELECT
-				id,
-				quiz_index,
-				quiz_questions,
-				easymode
-
-			FROM
-				fs_quiz_session
-
-			WHERE
-				quiz_id = :quizId
-			AND
-				foodsaver_id = :fsId
-			AND
-				status = :status
-		', [
-			'quizId' => $quizId,
-			'fsId' => $fsId,
-			'status' => SessionStatus::RUNNING
-		]);
-		if ($session) {
-			$session['quiz_questions'] = unserialize($session['quiz_questions']);
-
-			return $session;
-		}
-
-		return [];
+		return $this->quizSessionGateway->getRunningSession($quizId, $fsId);
 	}
 
 	public function updateQuizSession(int $sessionId, string $questions, int $quizIndex): int
 	{
-		$questions = serialize($questions);
-
-		return $this->db->update(
-			'fs_quiz_session',
-			[
-				'quiz_questions' => $questions,
-				'quiz_index' => $quizIndex
-			],
-			['id' => $sessionId]
-		);
+		return $this->quizSessionGateway->updateQuizSession($sessionId, $questions, $quizIndex);
 	}
 
-	public function abortSession(int $sid, int $fsId): int
+	public function abortSession(int $sessionId, int $fsId): int
 	{
-		return $this->db->update(
-			'fs_quiz_session',
-			['status' => SessionStatus::FAILED],
-			[
-				'id' => $sid,
-				'foodsaver_id' => $fsId
-			]
-		);
+		return $this->quizSessionGateway->abortSession($sessionId, $fsId);
 	}
 
-	public function deleteSession(int $id): int
+	public function deleteSession(int $sessionId): int
 	{
-		return $this->db->delete('fs_quiz_session', ['id' => $id], 1);
+		return $this->quizSessionGateway->deleteSession($sessionId);
 	}
 
 	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
 	{
-		$sessionCount = $this->db->count('fs_quiz_session', [
-			'foodsaver_id' => $fsId,
-			'quiz_id' => $quizId,
-			'status' => SessionStatus::PASSED
-		]);
-
-		return $sessionCount > 0;
+		return $this->quizSessionGateway->hasUserPassedQuiz($fsId, $quizId);
 	}
 
 	public function getSessionDetails(int $fsId): array
 	{
-		return $this->db->fetchByCriteria(
-			'fs_foodsaver',
-			['name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'],
-			['id' => $fsId]
-		);
+		return $this->quizSessionGateway->getSessionDetails($fsId);
 	}
 
 	public function setRole(int $fsId, int $quizRole): int
