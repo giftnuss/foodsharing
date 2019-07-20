@@ -178,14 +178,14 @@ class StoreUserControl extends Control
 				/* options menu */
 				$menu = array();
 
-				if (!$store['jumper'] || $this->storePermissions->mayEditStore($store['id'])) {
-					if (!is_null($store['team_conversation_id'])) {
-						$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
-					}
-					if ($store['verantwortlich'] && !is_null($store['springer_conversation_id'])) {
-						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
-					}
+				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
+					$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 				}
+
+				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
+					$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
+				}
+
 				if ($this->storePermissions->mayEditStore($store['id'])) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$store['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $store['id']);
