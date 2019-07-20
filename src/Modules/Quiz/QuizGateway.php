@@ -244,7 +244,7 @@ class QuizGateway extends BaseGateway
 	{
 		$questions = serialize($questions);
 
-		$this->db->update(
+		return $this->db->update(
 			'fs_quiz_session',
 			[
 				'quiz_questions' => $questions,
