@@ -420,7 +420,6 @@ final class FoodsaverGateway extends BaseGateway
 	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
 	{
 		$rows_ins = 0;
-		$rows_del = 0;
 		if ($leave_admins) {
 			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . (int)$bezirk);
 			if ($admins) {
