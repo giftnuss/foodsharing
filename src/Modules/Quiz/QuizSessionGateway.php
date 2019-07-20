@@ -60,7 +60,7 @@ class QuizSessionGateway extends BaseGateway
 				'quest_count' => $questcount,
 				'easymode' => $easymode
 			]
-	);
+	  );
 	}
 
 	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
@@ -211,6 +211,17 @@ class QuizSessionGateway extends BaseGateway
 			'quiz_id' => $quizId,
 			'status' => $sessionStatus
 		]);
+	}
+
+	public function getLastTry(int $fsId, int $quizId): int
+	{
+		return $this->db->fetchValue('
+      SELECT UNIX_TIMESTAMP(`time_start`) AS time_ts
+      FROM fs_quiz_session
+      WHERE foodsaver_id = :fsId
+      AND quiz_id = :quizId
+      ORDER BY time_ts DESC
+    ', ['fsId' => $fsId, 'quizId' => $quizId]);
 	}
 
 	public function getSessionDetails(int $fsId): array

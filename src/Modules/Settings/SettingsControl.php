@@ -6,8 +6,11 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizGateway;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
@@ -15,6 +18,7 @@ class SettingsControl extends Control
 	private $gateway;
 	private $foodsaver;
 	private $quizGateway;
+	private $quizSessionGateway;
 	private $contentGateway;
 	private $foodsaverGateway;
 	private $dataHelper;
@@ -25,6 +29,7 @@ class SettingsControl extends Control
 		SettingsView $view,
 		SettingsGateway $gateway,
 		QuizGateway $quizGateway,
+		QuizSessionGateway $quizSessionGateway,
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
 		DataHelper $dataHelper,
@@ -34,6 +39,7 @@ class SettingsControl extends Control
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->dataHelper = $dataHelper;
@@ -98,36 +104,39 @@ class SettingsControl extends Control
 			if (!$this->foodsaver['verified']) {
 				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
-				if (($status = $this->quizGateway->getQuizStatus(Role::STORE_MANAGER, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::STORE_MANAGER))) {
-					if (!$this->quizGateway->hasUserPassedQuiz($this->session->id(), Role::FOODSAVER)) {
+				if ($quiz = $this->quizGateway->getQuiz(Role::STORE_MANAGER)) {
+					$fsId = $this->session->id();
+					if (!$this->quizGateway->hasUserPassedQuiz($fsId, Role::FOODSAVER)) {
 						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 					$desc = $this->contentGateway->get(12);
 
-					// Quiz wurde noch gar nicht probiert
-					if ($status['times'] == 0) {
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-					} // quiz ist bereits bestanden
-					elseif ($status['cleared'] > 0) {
-						return $this->confirm_bip();
-					} // es läuft ein quiz weitermachen
-					elseif ($status['running'] > 0) {
-						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-					} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-					elseif ($status['failed'] < 3) {
-						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-					} // 3x nicht bestanden 30 Tage Lernpause
-					elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-						$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
+					$quizStatus = $this->quizGateway->getQuizStatus(Role::STORE_MANAGER, $fsId);
+					switch ($quizStatus) {
+						case QuizStatus::NEVER_TRIED:
+							$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+							break;
+						case QuizStatus::RUNNING:
+							$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+							break;
+						case QuizStatus::PASSED:
+							return $this->confirm_bip();
+						case QuizStatus::FAILED:
+							$failCount = $this->quizSessionGateway->countSessions($fsId, Role::STORE_MANAGER, SessionStatus::FAILED);
+							$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+							break;
+						case QuizStatus::PAUSE:
+							$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::STORE_MANAGER);
+							$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
 
-						return $this->view->pause($days_to_wait, $desc);
-					} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-					elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-					} // hat alles nichts genützt
-					else {
-						$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+							return $this->view->pause($days_to_wait, $desc);
+						case QuizStatus::PAUSE_ELAPSED:
+							$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+							break;
+						default:
+							$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+							break;
 					}
 				}
 			}
@@ -144,33 +153,36 @@ class SettingsControl extends Control
 	public function up_fs()
 	{
 		if ($this->session->may()) {
-			if (($status = $this->quizGateway->getQuizStatus(Role::FOODSAVER, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::FOODSAVER))) {
+			if ($quiz = $this->quizGateway->getQuiz(Role::FOODSAVER)) {
 				$desc = $this->contentGateway->get(12);
 
-				// Quiz wurde noch gar nicht probiert
-				if ($status['times'] == 0) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // quiz ist bereits bestanden
-				elseif ($status['cleared'] > 0) {
-					return $this->confirm_fs();
-				} // es läuft ein quiz weitermachen
-				elseif ($status['running'] > 0) {
-					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-				elseif ($status['failed'] < 3) {
-					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-				} // 3x nicht bestanden 30 Tage Lernpause
-				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-					$this->model->updateRole(0, $this->foodsaver['rolle']);
-					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
+				$fsId = $this->session->id();
+				$quizStatus = $this->quizGateway->getQuizStatus(Role::FOODSAVER, $fsId);
+				switch ($quizStatus) {
+					case QuizStatus::NEVER_TRIED:
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+						break;
+					case QuizStatus::RUNNING:
+						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+						break;
+					case QuizStatus::PASSED:
+						return $this->confirm_fs();
+					case QuizStatus::FAILED:
+						$failCount = $this->quizSessionGateway->countSessions($fsId, Role::FOODSAVER, SessionStatus::FAILED);
+						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+						break;
+					case QuizStatus::PAUSE:
+						$this->model->updateRole(0, $this->foodsaver['rolle']);
+						$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::FOODSAVER);
+						$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
 
-					return $this->view->pause($days_to_wait, $desc);
-				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // hat alles nichts genützt
-				else {
-					$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+						return $this->view->pause($days_to_wait, $desc);
+					case QuizStatus::PAUSE_ELAPSED:
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+						break;
+					default:
+						$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+						break;
 				}
 			}
 		}
@@ -179,32 +191,34 @@ class SettingsControl extends Control
 	public function up_bot()
 	{
 		if ($this->session->may() && $this->foodsaver['rolle'] >= Role::STORE_MANAGER) {
-			if (($status = $this->quizGateway->getQuizStatus(Role::AMBASSADOR, $this->session->id())) && ($quiz = $this->quizGateway->getQuiz(Role::AMBASSADOR))) {
+			if ($quiz = $this->quizGateway->getQuiz(Role::AMBASSADOR)) {
 				$desc = $this->contentGateway->get(12);
 
-				// Quiz wurde noch gar nicht probiert
-				if ($status['times'] == 0) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // es läuft ein quiz weitermachen
-				elseif ($status['running'] > 0) {
-					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-				} // quiz ist bereits bestanden
-				elseif ($status['cleared'] > 0) {
-					return $this->confirm_bot();
-				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-				elseif ($status['failed'] < 3) {
-					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-				} // 3x nicht bestanden 30 Tage Lernpause
-				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
+				$fsId = $this->session->id();
+				$quizStatus = $this->quizGateway->getQuizStatus(Role::AMBASSADOR, $fsId);
+				switch ($quizStatus) {
+					case QuizStatus::NEVER_TRIED:
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+						break;
+					case QuizStatus::RUNNING:
+						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+						break;
+					case QuizStatus::PASSED:
+						return $this->confirm_bot();
+					case QuizStatus::FAILED:
+						$failCount = $this->quizSessionGateway->countSessions($fsId, Role::AMBASSADOR, SessionStatus::FAILED);
+						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+						break;
+					case QuizStatus::PAUSE:
+						$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::AMBASSADOR);
+						$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
 
-					return $this->view->pause($days_to_wait, $desc);
-				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // hat alles nichts genützt
-				else {
-					return $this->view->quizFailed($this->contentGateway->get(13));
+						return $this->view->pause($days_to_wait, $desc);
+					case QuizStatus::PAUSE_ELAPSED:
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+						break;
+					default:
+						return $this->view->quizFailed($this->contentGateway->get(13));
 				}
 			} else {
 				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));

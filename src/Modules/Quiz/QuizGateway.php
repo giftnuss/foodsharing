@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
@@ -80,9 +81,25 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function getQuizStatus(int $quizId, int $fsId): array
+	public function getQuizStatus(int $quizId, int $fsId): QuizStatus
 	{
-		return $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
+		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
+
+		if ($quizSessionStatus['times'] == 0) {
+			return QuizStatus::NEVER_TRIED;
+		} elseif ($status['running'] > 0) {
+			return QuizStatus::RUNNING;
+		} elseif ($quizSessionStatus['cleared'] > 0) {
+			return QuizStatus::PASSED;
+		} elseif ($status['failed'] < 3) {
+			return QuizStatus::FAILED;
+		} elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
+			return QuizStatus::PAUSE;
+		} elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
+			return QuizStatus::PAUSE_ELAPSED;
+		}
+
+		return QuizStatus::DISQUALIFIED;
 	}
 
 	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
