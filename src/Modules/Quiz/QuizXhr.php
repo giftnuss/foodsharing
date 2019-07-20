@@ -13,11 +13,13 @@ class QuizXhr extends Control
 {
 	private $contentGateway;
 	private $quizGateway;
+	private $quizSessionGateway;
 	private $sanitizerService;
 	private $dataHelper;
 
 	public function __construct(
 		QuizGateway $quizGateway,
+		QuizGateway $quizSessionGateway,
 		QuizView $view,
 		ContentGateway $contentGateway,
 		SanitizerService $sanitizerService,
@@ -25,6 +27,7 @@ class QuizXhr extends Control
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->dataHelper = $dataHelper;
@@ -265,7 +268,7 @@ class QuizXhr extends Control
 	public function abort()
 	{
 		if ($this->session->may()) {
-			$this->quizGateway->abortSession($_GET['sid'], $this->session->id());
+			$this->quizSessionGateway->abortSession($_GET['sid'], $this->session->id());
 
 			return array(
 				'status' => 1,
@@ -310,7 +313,7 @@ class QuizXhr extends Control
 		/*
 		 * First we want to check if there is a quiz session that the user has lost?
 		 */
-		if ($session = $this->quizGateway->getRunningSession($_GET['qid'], $this->session->id())) {
+		if ($session = $this->quizSessionGateway->getRunningSession($_GET['qid'], $this->session->id())) {
 			// if yes, reinitiate the running quiz session
 			$this->session->set('quiz-id', (int)$_GET['qid']);
 			$this->session->set('quiz-questions', $session['quiz_questions']);
@@ -499,7 +502,7 @@ class QuizXhr extends Control
 			if ($i == 0) {
 				$quuizz = $this->quizGateway->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
-				if ($id = $this->quizGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
+				if ($id = $this->quizSessionGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
 					$this->session->set('quiz-session', $id);
 				}
 			}
@@ -564,13 +567,13 @@ class QuizXhr extends Control
 			if (isset($_GET['special'])) {
 				// make a break
 				if ($_GET['special'] == 'pause') {
-					$this->quizGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
+					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->pause();
 				}
 
 				if ($_GET['special'] == 'result') {
-					$this->quizGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
+					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $quiz, $i);
 
 					return $this->resultNew($quiz[($i - 1)], $dia->getId());
 				}
@@ -603,7 +606,7 @@ class QuizXhr extends Control
 
 						// update quiz session
 						$session_id = $this->session->get('quiz-session');
-						$this->quizGateway->updateQuizSession($session_id, $quiz, $i);
+						$this->quizSessionGateway->updateQuizSession($session_id, $quiz, $i);
 						$this->session->set('quiz-quest-start', time());
 
 						/*
@@ -905,7 +908,7 @@ class QuizXhr extends Control
 					}
 				}
 
-				$this->quizGateway->finishQuiz($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
+				$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
 
 				return array(
 					'status' => 1,

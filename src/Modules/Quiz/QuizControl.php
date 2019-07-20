@@ -10,6 +10,7 @@ use Foodsharing\Services\ImageService;
 class QuizControl extends Control
 {
 	private $quizGateway;
+	private $quizSessionGateway;
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
@@ -17,12 +18,14 @@ class QuizControl extends Control
 	public function __construct(
 		QuizView $view,
 		QuizGateway $quizGateway,
+		QuizSessionGateway $quizSessionGateway,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
@@ -40,7 +43,7 @@ class QuizControl extends Control
 	{
 		// quiz&a=delete&id=9
 		if ($id = $this->identificationHelper->getActionId('delete')) {
-			$this->quizGateway->deleteSession($id);
+			$this->quizSessionGateway->deleteSession($id);
 			$this->goBack();
 		}
 
@@ -138,7 +141,7 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		$fs = $this->quizGateway->getSessionDetails($_GET['fsid']);
+		$fs = $this->quizSessionGateway->getSessionDetails($_GET['fsid']);
 		if ($fs) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
 			$this->pageHelper->addContent(
@@ -150,7 +153,7 @@ class QuizControl extends Control
 				CNT_TOP
 			);
 
-			if ($sessions = $this->quizGateway->getUserSessions($_GET['fsid'])) {
+			if ($sessions = $this->quizSessionGateway->getUserSessions($_GET['fsid'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
@@ -164,7 +167,7 @@ class QuizControl extends Control
 	public function sessions()
 	{
 		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
-			if ($sessions = $this->quizGateway->getSessions($_GET['id'])) {
+			if ($sessions = $this->quizSessionGateway->getSessions($_GET['id'])) {
 				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
 			} else {
 				$this->pageHelper->addContent($this->view->noSessions($quiz));

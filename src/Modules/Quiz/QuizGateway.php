@@ -85,54 +85,11 @@ class QuizGateway extends BaseGateway
 		return $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
 	}
 
-	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
-	{
-		return $this->quizSessionGateway->initQuizSession($fsId, $quizId, $questions, $maxfp, $questcount, $easymode);
-	}
-
-	public function finishQuiz(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
-	{
-		return $this->quizSessionGateway->initQuizSession($sessionId, $questions, $quizResult, $fp, $maxfp);
-	}
-
-	public function getSessions(int $quizId): array
-	{
-		return $this->quizSessionGateway->getSessions($quizId);
-	}
-
-	public function getUserSessions(int $fsId): array
-	{
-		return $this->quizSessionGateway->getUserSessions($fsId);
-	}
-
-	public function getRunningSession(int $quizId, int $fsId): array
-	{
-		return $this->quizSessionGateway->getRunningSession($quizId, $fsId);
-	}
-
-	public function updateQuizSession(int $sessionId, string $questions, int $quizIndex): int
-	{
-		return $this->quizSessionGateway->updateQuizSession($sessionId, $questions, $quizIndex);
-	}
-
-	public function abortSession(int $sessionId, int $fsId): int
-	{
-		return $this->quizSessionGateway->abortSession($sessionId, $fsId);
-	}
-
-	public function deleteSession(int $sessionId): int
-	{
-		return $this->quizSessionGateway->deleteSession($sessionId);
-	}
-
 	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
 	{
-		return $this->quizSessionGateway->hasUserPassedQuiz($fsId, $quizId);
-	}
+		$passedCount = $this->quizSessionGateway->countSessions($fsId, $quizId, SessionStatus::PASSED);
 
-	public function getSessionDetails(int $fsId): array
-	{
-		return $this->quizSessionGateway->getSessionDetails($fsId);
+		return $passedSessionCount > 0;
 	}
 
 	public function setRole(int $fsId, int $quizRole): int

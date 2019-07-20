@@ -2,17 +2,14 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
-use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class QuizSessionGateway extends BaseGateway
 {
-  public function collectQuizStatus(int $quizId, int $fsId): array
-  {
-    $out = array(
+	public function collectQuizStatus(int $quizId, int $fsId): array
+	{
+		$out = array(
 			'cleared' => 0,
 			'running' => 0,
 			'failed' => 0,
@@ -44,10 +41,10 @@ class QuizSessionGateway extends BaseGateway
 		}
 
 		return $out;
-  }
+	}
 
-  public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
-  {
+	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
+	{
 		$questions = serialize($questions);
 
 		return $this->db->insert('fs_quiz_session',
@@ -63,10 +60,10 @@ class QuizSessionGateway extends BaseGateway
 				'quest_count' => $questcount,
 				'easymode' => $easymode
 			]
-    );
+	);
 	}
 
-  public function finishSession(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
+	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
 	{
 		$quizResult = serialize($quizResult);
 		$questions = serialize($questions);
@@ -117,7 +114,7 @@ class QuizSessionGateway extends BaseGateway
 			', [':quizId' => $quizId]);
 	}
 
-  public function getUserSessions(int $fsId): array
+	public function getUserSessions(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -202,19 +199,18 @@ class QuizSessionGateway extends BaseGateway
 
 	public function deleteSession(int $sessionId): int
 	{
-    $deletionLimit = 1;
+		$deletionLimit = 1;
+
 		return $this->db->delete('fs_quiz_session', ['id' => $sessionId], $deletionLimit);
 	}
 
-	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
+	public function countSessions(int $fsId, int $quizId, int $sessionStatus): int
 	{
-		$sessionCount = $this->db->count('fs_quiz_session', [
+		return $this->db->count('fs_quiz_session', [
 			'foodsaver_id' => $fsId,
 			'quiz_id' => $quizId,
-			'status' => SessionStatus::PASSED
+			'status' => $sessionStatus
 		]);
-
-		return $sessionCount > 0;
 	}
 
 	public function getSessionDetails(int $fsId): array
@@ -225,5 +221,4 @@ class QuizSessionGateway extends BaseGateway
 			['id' => $fsId]
 		);
 	}
-
 }
