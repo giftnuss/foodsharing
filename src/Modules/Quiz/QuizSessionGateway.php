@@ -45,4 +45,24 @@ class QuizSessionGateway extends BaseGateway
 
 		return $out;
   }
+
+  public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
+  {
+		$questions = serialize($questions);
+
+		return $this->db->insert('fs_quiz_session',
+			[
+				'foodsaver_id' => $fsId,
+				'quiz_id' => $quizId,
+				'status' => SessionStatus::RUNNING,
+				'quiz_index' => 0,
+				'quiz_questions' => $questions,
+				'time_start' => $this->db->now(),
+				'fp' => 0,
+				'maxfp' => $maxfp,
+				'quest_count' => $questcount,
+				'easymode' => $easymode
+			]
+    );
+	}
 }
