@@ -221,7 +221,7 @@ class ActivityModel extends Db
 		if (!empty($updates)) {
 			$out = array();
 			foreach ($updates as $u) {
-				$forumType = $u['bot_theme'] === 0 ? 'forum' : 'botforum';
+				$forumType = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumType . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 				$out[] = [
 					'attr' => [
