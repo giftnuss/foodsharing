@@ -10,7 +10,7 @@ class QuizSessionGateway extends BaseGateway
 	public function collectQuizStatus(int $quizId, int $fsId): array
 	{
 		$out = array(
-			'cleared' => 0,
+			'passed' => 0,
 			'running' => 0,
 			'failed' => 0,
 			'last_try' => 0,
@@ -33,7 +33,7 @@ class QuizSessionGateway extends BaseGateway
 				if ($r['status'] == SessionStatus::RUNNING) {
 					++$out['running'];
 				} elseif ($r['status'] == SessionStatus::PASSED) {
-					++$out['cleared'];
+					++$out['passed'];
 				} elseif ($r['status'] == SessionStatus::FAILED) {
 					++$out['failed'];
 				}

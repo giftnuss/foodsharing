@@ -89,7 +89,7 @@ class QuizGateway extends BaseGateway
 			return QuizStatus::NEVER_TRIED;
 		} elseif ($quizSessionStatus['running'] > 0) {
 			return QuizStatus::RUNNING;
-		} elseif ($quizSessionStatus['cleared'] > 0) {
+		} elseif ($quizSessionStatus['passed'] > 0) {
 			return QuizStatus::PASSED;
 		} elseif ($quizSessionStatus['failed'] < 3) {
 			return QuizStatus::FAILED;
