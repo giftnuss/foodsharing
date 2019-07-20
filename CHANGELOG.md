@@ -73,6 +73,7 @@
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
+- Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
