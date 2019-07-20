@@ -87,15 +87,15 @@ class QuizGateway extends BaseGateway
 
 		if ($quizSessionStatus['times'] == 0) {
 			return QuizStatus::NEVER_TRIED;
-		} elseif ($status['running'] > 0) {
+		} elseif ($quizSessionStatus['running'] > 0) {
 			return QuizStatus::RUNNING;
 		} elseif ($quizSessionStatus['cleared'] > 0) {
 			return QuizStatus::PASSED;
-		} elseif ($status['failed'] < 3) {
+		} elseif ($quizSessionStatus['failed'] < 3) {
 			return QuizStatus::FAILED;
-		} elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
+		} elseif ($quizSessionStatus['failed'] == 3 && (time() - $quizSessionStatus['last_try']) < (86400 * 30)) {
 			return QuizStatus::PAUSE;
-		} elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
+		} elseif ($quizSessionStatus['failed'] >= 3 && $quizSessionStatus['failed'] < 5 && (time() - $quizSessionStatus['last_try']) >= (86400 * 14)) {
 			return QuizStatus::PAUSE_ELAPSED;
 		}
 
