@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Modules\Core\DBConstants\Quiz\RoleType;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -21,39 +21,39 @@ class QuizHelper
 
 	public function refreshQuizData($fs_id, $fs_role)
 	{
-		$passed_fs_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, RoleType::FOODSAVER);
-		$passed_bib_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, RoleType::STORE_COORDINATOR);
-		$passed_bot_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, RoleType::AMBASSADOR);
+		$passed_fs_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::FOODSAVER);
+		$passed_bib_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::STORE_MANAGER);
+		$passed_bot_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::AMBASSADOR);
 
 		$count_verantwortlich = $this->storeGateway->getStoreCountForBieb($fs_id);
 		$count_botschafter = $this->foodsaverGateway->getBezirkCountForBotschafter($fs_id);
 
-		$quiz_rolle = RoleType::FOODSHARER;
+		$quiz_rolle = Role::FOODSHARER;
 		if ($passed_fs_quiz) {
-			$quiz_rolle = RoleType::FOODSAVER;
+			$quiz_rolle = Role::FOODSAVER;
 		}
 		if ($passed_bib_quiz) {
-			$quiz_rolle = RoleType::STORE_COORDINATOR;
+			$quiz_rolle = Role::STORE_MANAGER;
 		}
 		if ($passed_bot_quiz) {
-			$quiz_rolle = RoleType::AMBASSADOR;
+			$quiz_rolle = Role::AMBASSADOR;
 		}
 
 		$this->quizGateway->setRole($fs_id, $quiz_rolle);
 
 		$hastodo_id = 0;
 		if (
-			$fs_role == RoleType::FOODSAVER && !$passed_fs_quiz
+			$fs_role == Role::FOODSAVER && !$passed_fs_quiz
 		) {
-			$hastodo_id = RoleType::FOODSAVER;
+			$hastodo_id = Role::FOODSAVER;
 		} elseif (
-			($fs_role > RoleType::FOODSAVER || $count_verantwortlich > 0) && !$passed_bib_quiz
+			($fs_role > Role::FOODSAVER || $count_verantwortlich > 0) && !$passed_bib_quiz
 		) {
-			$hastodo_id = RoleType::STORE_COORDINATOR;
+			$hastodo_id = Role::STORE_MANAGER;
 		} elseif (
-			($fs_role > RoleType::STORE_COORDINATOR || $count_botschafter > 0) && !$passed_bot_quiz
+			($fs_role > Role::STORE_MANAGER || $count_botschafter > 0) && !$passed_bot_quiz
 		) {
-			$hastodo_id = RoleType::AMBASSADOR;
+			$hastodo_id = Role::AMBASSADOR;
 		}
 
 		return $hastodo_id;
