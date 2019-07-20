@@ -34,7 +34,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$bellUpdateTrigger->subscribe($this);
 	}
 
-	public function getBetrieb($id): array
+	public function getBetrieb($storeId): array
 	{
 		$out = $this->db->fetch('
 		SELECT		`id`,
@@ -61,25 +61,25 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		FROM 		`fs_betrieb`
 
 		WHERE 		`fs_betrieb`.`id` = :id',
-		[':id' => $id]);
+		[':id' => $storeId]);
 
 		$out['verantwortlicher'] = '';
 		if ($bezirk = $this->regionGateway->getBezirkName($out['bezirk_id'])) {
 			$out['bezirk'] = $bezirk;
 		}
-		if ($verantwortlich = $this->getBiebsForStore($id)) {
+		if ($verantwortlich = $this->getBiebsForStore($storeId)) {
 			$out['verantwortlicher'] = $verantwortlich;
 		}
 		if ($kette = $this->getOne_kette($out['kette_id'])) {
 			$out['kette'] = $kette;
 		}
 
-		$out['notizen'] = $this->getBetriebNotiz($id);
+		$out['notizen'] = $this->getBetriebNotiz($storeId);
 
 		return $out;
 	}
 
-	public function getMapsBetriebe(int $groupId): array
+	public function getMapsBetriebe(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.id,
@@ -104,12 +104,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			AND b.`lat` != ""',
 			[
-				':bezirk_id' => $groupId
+				':bezirk_id' => $regionId
 			]
 		);
 	}
 
-	public function getMyBetriebe($fs_id, $bezirk_id, $options = array()): array
+	public function getMyBetriebe($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -172,7 +172,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		if ($options['sonstige']) {
-			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
+			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
 			$out['sonstige'] = array();
@@ -213,7 +213,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMyBetrieb($fs_id, $id): array
+	public function getMyBetrieb($fs_id, $storeId): array
 	{
 		$out = $this->db->fetch('
 			SELECT
@@ -255,7 +255,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			WHERE 		b.`id` = :id
 			GROUP BY b.`id`',
-			[':id' => $id]
+			[':id' => $storeId]
 		);
 		if (!$out) {
 			return $out;
@@ -268,11 +268,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 							`fs_lebensmittel` l
 				WHERE 		l.id = hl.lebensmittel_id
 				AND 		`betrieb_id` = :id
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 
-		$out['foodsaver'] = $this->getBetriebTeam($id);
+		$out['foodsaver'] = $this->getBetriebTeam($storeId);
 
-		$out['springer'] = $this->getBetriebSpringer($id);
+		$out['springer'] = $this->getBetriebSpringer($storeId);
 
 		$out['requests'] = $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -288,7 +288,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		`betrieb_id` = :id
 				AND 		t.active = 0
 				AND			fs.deleted_at IS NULL
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 
 		$out['verantwortlich'] = false;
 		$foodsaver = array();
@@ -325,7 +325,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getBetriebTeam($id): array
+	public function getBetriebTeam($storeId): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -356,10 +356,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		t.active  = 1
 				AND			fs.deleted_at IS NULL
 				ORDER BY 	t.`stat_fetchcount` DESC
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 	}
 
-	public function getBetriebSpringer($id): array
+	public function getBetriebSpringer($storeId): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -384,10 +384,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		`betrieb_id` = :id
 				AND 		t.active  = 2
 				AND			fs.deleted_at IS NULL
-		', [':id' => $id]);
+		', [':id' => $storeId]);
 	}
 
-	public function getBiebsForStore($betrieb_id)
+	public function getBiebsForStore($storeId)
 	{
 		return $this->db->fetchAll(
 			'
@@ -396,7 +396,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			WHERE `betrieb_id` = :betrieb_id
 			AND verantwortlich = 1
 			AND `active` = 1',
-			[':betrieb_id' => $betrieb_id]);
+			[':betrieb_id' => $storeId]);
 	}
 
 	public function getAllStoreManagers(): array
@@ -551,10 +551,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function clearAbholer($betrieb_id): int
+	public function clearAbholer($storeId): int
 	{
-		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $betrieb_id]);
-		$this->updateBellNotificationForBiebs($betrieb_id);
+		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $storeId]);
+		$this->updateBellNotificationForBiebs($storeId);
 
 		return $result;
 	}
@@ -600,9 +600,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return [];
 	}
 
-	public function getAbholzeiten($betrieb_id)
+	public function getAbholzeiten($storeId)
 	{
-		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $betrieb_id])) {
+		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $storeId])) {
 			$out = array();
 			foreach ($res as $r) {
 				$out[$r['dow'] . '-' . $r['time']] = array(
@@ -879,7 +879,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $id]);
 	}
 
-	private function getBetriebNotiz($id): array
+	private function getBetriebNotiz($storeId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -893,7 +893,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			FROM 		`fs_betrieb_notiz`
 
 			WHERE `betrieb_id` = :id',
-		[':id' => $id]);
+		[':id' => $storeId]);
 	}
 
 	/**
