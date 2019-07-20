@@ -89,7 +89,7 @@ class QuizGateway extends BaseGateway
 	{
 		$passedCount = $this->quizSessionGateway->countSessions($fsId, $quizId, SessionStatus::PASSED);
 
-		return $passedSessionCount > 0;
+		return $passedCount > 0;
 	}
 
 	public function setRole(int $fsId, int $quizRole): int
