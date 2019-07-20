@@ -154,7 +154,6 @@ class ProfileXhr extends Control
 
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
 			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['bid'], Carbon::createFromTimestamp($_GET['date']))) {
-
 				return array(
 					'status' => 1,
 					'script' => '
