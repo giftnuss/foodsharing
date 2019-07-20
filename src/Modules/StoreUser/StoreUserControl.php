@@ -186,7 +186,7 @@ class StoreUserControl extends Control
 						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
 					}
 				}
-				if ($this->storePermissions->maySeeStoreSettingsMenu($store['id'])) {
+				if ($this->storePermissions->mayEditStore($store['id'])) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$store['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $store['id']);
 					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
