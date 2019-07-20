@@ -291,12 +291,12 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function setRole($fs_id, $quiz_rolle)
+	public function setRole(int $fsId, int $quizRole): int
 	{
-		$this->db->update(
+		return $this->db->update(
 			'fs_foodsaver',
-			['quiz_rolle' => $quiz_rolle],
-			['id' => $fs_id]
+			['quiz_rolle' => $quizRole],
+			['id' => $fsId]
 		);
 	}
 
