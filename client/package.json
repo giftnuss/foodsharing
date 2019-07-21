@@ -40,7 +40,7 @@
     "socket.io-client": "^2.2.0",
     "timeago": "^1.6.7",
     "tinysort": "^3.2.5",
-    "twemoji": "^12.0.1",
+    "twemoji": "^12.1.2",
     "typeahead-address-photon": "^1.0.0",
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "^0.0.72",
