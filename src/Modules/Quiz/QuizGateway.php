@@ -102,7 +102,7 @@ class QuizGateway extends BaseGateway
 		return QuizStatus::DISQUALIFIED;
 	}
 
-	public function hasUserPassedQuiz(int $fsId, int $quizId): bool
+	public function hasPassedQuiz(int $fsId, int $quizId): bool
 	{
 		$passedCount = $this->quizSessionGateway->countSessions($fsId, $quizId, SessionStatus::PASSED);
 

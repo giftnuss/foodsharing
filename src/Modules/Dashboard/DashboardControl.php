@@ -92,9 +92,9 @@ class DashboardControl extends Control
 
 		$fsId = $this->session->id();
 		if (
-			($is_fs && !$this->quizGateway->hasUserPassedQuiz($fsId, Role::FOODSAVER)) ||
-			($is_bieb && !$this->quizGateway->hasUserPassedQuiz($fsId, Role::STORE_MANAGER)) ||
-			($is_bot && !$this->quizGateway->hasUserPassedQuiz($fsId, Role::AMBASSADOR))
+			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 

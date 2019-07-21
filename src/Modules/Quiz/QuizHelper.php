@@ -21,9 +21,9 @@ class QuizHelper
 
 	public function refreshQuizData($fs_id, $fs_role)
 	{
-		$passed_fs_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::FOODSAVER);
-		$passed_bib_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::STORE_MANAGER);
-		$passed_bot_quiz = $this->quizGateway->hasUserPassedQuiz($fs_id, Role::AMBASSADOR);
+		$passed_fs_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::FOODSAVER);
+		$passed_bib_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::STORE_MANAGER);
+		$passed_bot_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::AMBASSADOR);
 
 		$count_verantwortlich = $this->storeGateway->getStoreCountForBieb($fs_id);
 		$count_botschafter = $this->foodsaverGateway->getBezirkCountForBotschafter($fs_id);

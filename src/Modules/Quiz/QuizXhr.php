@@ -432,7 +432,7 @@ class QuizXhr extends Control
 	{
 		if ($this->session->may('fs')) {
 			$nextRole = $this->session->get('hastodoquiz-id');
-			if (!$this->quizGateway->hasUserPassedQuiz($this->session->id(), $nextRole)) {
+			if (!$this->quizGateway->hasPassedQuiz($this->session->id(), $nextRole)) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
 				$content_id = 18;

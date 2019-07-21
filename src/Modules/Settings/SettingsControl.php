@@ -106,7 +106,7 @@ class SettingsControl extends Control
 			} else {
 				if ($quiz = $this->quizGateway->getQuiz(Role::STORE_MANAGER)) {
 					$fsId = $this->session->id();
-					if (!$this->quizGateway->hasUserPassedQuiz($fsId, Role::FOODSAVER)) {
+					if (!$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
