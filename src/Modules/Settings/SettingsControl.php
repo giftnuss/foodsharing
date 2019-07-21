@@ -98,51 +98,6 @@ class SettingsControl extends Control
 		}
 	}
 
-	public function up_bip()
-	{
-		if ($this->session->may() && $this->foodsaver['rolle'] > Role::FOODSHARER) {
-			if (!$this->foodsaver['verified']) {
-				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
-			} else {
-				if ($quiz = $this->quizGateway->getQuiz(Role::STORE_MANAGER)) {
-					$fsId = $this->session->id();
-					if (!$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
-						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
-						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
-					}
-					$desc = $this->contentGateway->get(12);
-
-					$quizStatus = $this->quizGateway->getQuizStatus(Role::STORE_MANAGER, $fsId);
-					switch ($quizStatus) {
-						case QuizStatus::NEVER_TRIED:
-							$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-							break;
-						case QuizStatus::RUNNING:
-							$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-							break;
-						case QuizStatus::PASSED:
-							return $this->confirm_bip();
-						case QuizStatus::FAILED:
-							$failCount = $this->quizSessionGateway->countSessions($fsId, Role::STORE_MANAGER, SessionStatus::FAILED);
-							$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
-							break;
-						case QuizStatus::PAUSE:
-							$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::STORE_MANAGER);
-							$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
-
-							return $this->view->pause($days_to_wait, $desc);
-						case QuizStatus::PAUSE_ELAPSED:
-							$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-							break;
-						default:
-							$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
-							break;
-					}
-				}
-			}
-		}
-	}
-
 	public function quizsession()
 	{
 		if ($session = $this->model->getQuizSession($_GET['sid'])) {
@@ -152,37 +107,29 @@ class SettingsControl extends Control
 
 	public function up_fs()
 	{
+		$quizRole = Role::FOODSAVER;
 		if ($this->session->may()) {
-			if ($quiz = $this->quizGateway->getQuiz(Role::FOODSAVER)) {
-				$desc = $this->contentGateway->get(12);
+			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+				$this->handleQuizStatus($quizRole);
+			}
+		}
+	}
 
-				$fsId = $this->session->id();
-				$quizStatus = $this->quizGateway->getQuizStatus(Role::FOODSAVER, $fsId);
-				switch ($quizStatus) {
-					case QuizStatus::NEVER_TRIED:
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-						break;
-					case QuizStatus::RUNNING:
-						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-						break;
-					case QuizStatus::PASSED:
-						return $this->confirm_fs();
-					case QuizStatus::FAILED:
-						$failCount = $this->quizSessionGateway->countSessions($fsId, Role::FOODSAVER, SessionStatus::FAILED);
-						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
-						break;
-					case QuizStatus::PAUSE:
-						$this->model->updateRole(0, $this->foodsaver['rolle']);
-						$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::FOODSAVER);
-						$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
+	public function up_bip()
+	{
+		$quizRole = Role::STORE_MANAGER;
+		if ($this->session->may() && $this->foodsaver['rolle'] > Role::FOODSHARER) {
+			if (!$this->foodsaver['verified']) {
+				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
+			} else {
+				if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+					$fsId = $this->session->id();
+					if (!$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
+						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
+						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
+					}
 
-						return $this->view->pause($days_to_wait, $desc);
-					case QuizStatus::PAUSE_ELAPSED:
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-						break;
-					default:
-						$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
-						break;
+					$this->handleQuizStatus($quizRole);
 				}
 			}
 		}
@@ -190,36 +137,10 @@ class SettingsControl extends Control
 
 	public function up_bot()
 	{
+		$quizRole = Role::AMBASSADOR;
 		if ($this->session->may() && $this->foodsaver['rolle'] >= Role::STORE_MANAGER) {
-			if ($quiz = $this->quizGateway->getQuiz(Role::AMBASSADOR)) {
-				$desc = $this->contentGateway->get(12);
-
-				$fsId = $this->session->id();
-				$quizStatus = $this->quizGateway->getQuizStatus(Role::AMBASSADOR, $fsId);
-				switch ($quizStatus) {
-					case QuizStatus::NEVER_TRIED:
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-						break;
-					case QuizStatus::RUNNING:
-						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-						break;
-					case QuizStatus::PASSED:
-						return $this->confirm_bot();
-					case QuizStatus::FAILED:
-						$failCount = $this->quizSessionGateway->countSessions($fsId, Role::AMBASSADOR, SessionStatus::FAILED);
-						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
-						break;
-					case QuizStatus::PAUSE:
-						$lastTry = $this->quizSessionGateway->getLastTry($fsId, Role::AMBASSADOR);
-						$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
-
-						return $this->view->pause($days_to_wait, $desc);
-					case QuizStatus::PAUSE_ELAPSED:
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-						break;
-					default:
-						return $this->view->quizFailed($this->contentGateway->get(13));
-				}
+			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+				$this->handleQuizStatus($quizRole);
 			} else {
 				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
@@ -239,6 +160,66 @@ class SettingsControl extends Control
 					$this->routeHelper->go('/?page=settings');
 					break;
 			}
+		}
+	}
+
+	private function handleQuizStatus(Role $role): void
+	{
+		$fsId = $this->session->id();
+		$desc = $this->contentGateway->get(12);
+		$quizStatus = $this->quizGateway->getQuizStatus($role, $fsId);
+		switch ($quizStatus) {
+			case QuizStatus::NEVER_TRIED:
+				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				break;
+
+			case QuizStatus::RUNNING:
+				$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+				break;
+
+			case QuizStatus::PASSED:
+				$this->confirmRole($role);
+				break;
+
+			case QuizStatus::FAILED:
+				$failCount = $this->quizSessionGateway->countSessions($fsId, $role, SessionStatus::FAILED);
+				$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+				break;
+
+			case QuizStatus::PAUSE:
+				if ($role == Role::FOODSAVER) {
+					$this->model->updateRole(Role::FOODSHARER, $this->foodsaver['rolle']);
+				}
+				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
+				$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
+				$this->view->pause($days_to_wait, $desc);
+				break;
+
+			case QuizStatus::PAUSE_ELAPSED:
+				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				break;
+
+			default:
+				$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+		}
+	}
+
+	private function confirmRole(Role $role): void
+	{
+		switch ($role) {
+			case Role::FOODSAVER:
+				$this->confirm_fs();
+				break;
+
+			case Role::STORE_MANAGER:
+				$this->confirm_bip();
+				break;
+
+			case Role::AMBASSADOR:
+				$this->confirm_bot();
+				break;
+
+			default:
 		}
 	}
 
