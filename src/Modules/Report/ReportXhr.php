@@ -115,18 +115,18 @@ class ReportXhr extends Control
 		global $g_data;
 		$g_data['reportreason'] = 0;
 		$dialog->addContent($this->view->reportDialog());
-		$bid = 0;
+		$storeId = 0;
 		if (!isset($_GET['bid']) || (int)$_GET['bid'] === 0) {
-			if ($betriebe = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
-				$dialog->addContent($this->view->betriebList($betriebe));
+			if ($stores = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
+				$dialog->addContent($this->view->betriebList($stores));
 			}
 		} else {
-			$bid = $_GET['bid'];
+			$storeId = $_GET['bid'];
 		}
 
 		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
-		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
+		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
 		$dialog->addOpt('width', '$(window).width()*0.9', false);
 		$dialog->addAbortButton();
 

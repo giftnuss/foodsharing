@@ -38,10 +38,10 @@ class ReportControl extends Control
 		}
 	}
 
-	private function byRegion($bid, $response)
+	private function byRegion($regionId, $response)
 	{
 		$response->setContent($this->render('pages/Report/by-region.twig',
-			['bid' => $bid]
+			['bid' => $regionId]
 		));
 	}
 
