@@ -51,12 +51,12 @@ class QuizXhr extends Control
 		 */
 		if ($this->session->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
-				$fp = (int)$_GET['fp'];
+				$failurePoints = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
 
 				if (!empty($text)) {
-					$id = $this->quizGateway->addQuestion($_GET['qid'], $text, $fp, $duration);
+					$id = $this->quizGateway->addQuestion($_GET['qid'], $text, $failurePoints, $duration);
 					if ($id > 0) {
 						$this->flashMessageHelper->info('Frage wurde angelegt');
 
@@ -319,11 +319,11 @@ class QuizXhr extends Control
 			$this->session->set('quiz-questions', $session['quiz_questions']);
 			$this->session->set('quiz-index', $session['quiz_index']);
 			$this->session->set('quiz-session', $session['id']);
-			$easymode = false;
+			$easyMode = false;
 			if ($session['easymode'] == 1 && (int)$_GET['qid'] == 1) {
-				$easymode = true;
+				$easyMode = true;
 			}
-			$this->session->set('quiz-easymode', $easymode);
+			$this->session->set('quiz-easymode', $easyMode);
 
 			/*
 			 * Make a little output that the user can continue the quiz
@@ -494,15 +494,15 @@ class QuizXhr extends Control
 			 * If the quiz index is 0 we have to start a new quiz session
 			 */
 
-			$easymode = 0;
+			$easyMode = 0;
 			if ($this->session->get('quiz-easymode')) {
-				$easymode = 1;
+				$easyMode = 1;
 			}
 
 			if ($i == 0) {
 				$quuizz = $this->quizGateway->getQuiz($this->session->get('quiz-id'));
 				// init quiz session in DB
-				if ($id = $this->quizSessionGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easymode)) {
+				if ($id = $this->quizSessionGateway->initQuizSession($this->session->id(), $this->session->get('quiz-id'), $quiz, $quuizz['maxfp'], $quuizz['questcount'], $easyMode)) {
 					$this->session->set('quiz-session', $id);
 				}
 			}
@@ -665,7 +665,7 @@ class QuizXhr extends Control
 							var counter = null;
 						';
 
-						if ($easymode == 0) {
+						if ($easyMode == 0) {
 							$quizbreath = '
 							$(\'#quizwrapper\').hide();
 							$(\'#quizbreath\').show();
@@ -889,12 +889,12 @@ class QuizXhr extends Control
 			if ($questions = $this->session->get('quiz-questions')) {
 				if ($rightQuestions = $this->quizGateway->getRightQuestions($this->session->get('quiz-id'))) {
 					$explains = array();
-					$fp = 0;
+					$failurePoints = 0;
 					$question_number = 0;
 					foreach ($questions as $q_key => $q) {
 						++$question_number;
 						$valid = $this->validateAnswer($rightQuestions, $q);
-						$fp += $valid['fp'];
+						$failurePoints += $valid['fp'];
 						foreach ($valid['explain'] as $e) {
 							if (!isset($explains[$q['id']])) {
 								$explains[$q['id']] = $rightQuestions[$q['id']];
@@ -908,7 +908,7 @@ class QuizXhr extends Control
 					}
 				}
 
-				$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $fp, $quiz['maxfp']);
+				$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $failurePoints, $quiz['maxfp']);
 
 				return array(
 					'status' => 1,
@@ -1090,7 +1090,7 @@ class QuizXhr extends Control
 		// wie viel Prozent sind falsch?
 		$percent = $this->percentFrom($checkCount, $wrongAnswers);
 
-		$fp = $this->percentTo($question['fp'], $percent);
+		$failurePoints = $this->percentTo($question['fp'], $percent);
 
 		// wenn alles falsch angeklickt wurde, das aber nicht stimmt, gibt's die volle Fehlerpunktezahl
 		if (
@@ -1098,18 +1098,18 @@ class QuizXhr extends Control
 			||
 			(!$everything_false && (int)$question['noco'] > 0)
 		) {
-			$fp = $question['fp'];
+			$failurePoints = $question['fp'];
 			$percent = 100;
 		}
 
 		// fix alle Fragen sind neutral
 		if ($allNeutral) {
-			$fp = 0;
+			$failurePoints = 0;
 			$percent = '0';
 		}
 
 		return array(
-			'fp' => $fp,
+			'fp' => $failurePoints,
 			'explain' => $explains,
 			'percent' => $percent
 		);
@@ -1173,13 +1173,13 @@ class QuizXhr extends Control
 				 [fp] => 3
 			 */
 			if (isset($_GET['text'], $_GET['fp'], $_GET['id'])) {
-				$fp = (int)$_GET['fp'];
+				$failurePoints = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
 				$duration = (int)$_GET['duration'];
-				$wikilink = strip_tags($_GET['wikilink']);
+				$wikiLink = strip_tags($_GET['wikilink']);
 
 				if (!empty($text)) {
-					$this->quizGateway->updateQuestion($_GET['id'], $_GET['qid'], $text, $fp, $duration, $wikilink);
+					$this->quizGateway->updateQuestion($_GET['id'], $_GET['qid'], $text, $failurePoints, $duration, $wikiLink);
 					$this->flashMessageHelper->info('Frage wurde geändert');
 
 					return array(

@@ -101,11 +101,11 @@ class QuizControl extends Control
 				$desc = $_POST['desc'];
 				$desc = trim($desc);
 
-				$maxfp = (int)$_POST['maxfp'];
-				$questcount = (int)$_POST['questcount'];
+				$maxFailurePoints = (int)$_POST['maxfp'];
+				$questionCount = (int)$_POST['questcount'];
 
 				if (!empty($name)) {
-					if ($id = $this->quizGateway->updateQuiz($_GET['qid'], $name, $desc, $maxfp, $questcount)) {
+					if ($id = $this->quizGateway->updateQuiz($_GET['qid'], $name, $desc, $maxFailurePoints, $questionCount)) {
 						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
 						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 					}
@@ -125,11 +125,11 @@ class QuizControl extends Control
 			$desc = $_POST['desc'];
 			$desc = trim($desc);
 
-			$maxfp = (int)$_POST['maxfp'];
-			$questcount = (int)$_POST['questcount'];
+			$maxFailurePoints = (int)$_POST['maxfp'];
+			$questionCount = (int)$_POST['questcount'];
 
 			if (!empty($name)) {
-				if ($id = $this->quizGateway->addQuiz($name, $desc, $maxfp, $questcount)) {
+				if ($id = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
 					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
 					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
 				}

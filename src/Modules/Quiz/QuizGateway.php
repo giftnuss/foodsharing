@@ -37,27 +37,27 @@ class QuizGateway extends BaseGateway
 		');
 	}
 
-	public function addQuiz(string $name, string $desc, int $maxfp, int $questCount): int
+	public function addQuiz(string $name, string $desc, int $maxFailurePoints, int $questionCount): int
 	{
 		return $this->db->insert('fs_quiz',
 			[
 				'name' => $name,
 				'desc' => $desc,
-				'maxfp' => $maxfp,
-				'questcount' => $questCount
+				'maxfp' => $maxFailurePoints,
+				'questcount' => $questionCount
 			]
 		);
 	}
 
-	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questCount): int
+	public function updateQuiz(int $id, string $name, string $desc, string $maxFailurePoints, string $questionCount): int
 	{
 		return $this->db->update(
 			'fs_quiz',
 			[
 				'name' => $name,
 				'desc' => $desc,
-				'maxfp' => $maxfp,
-				'questcount' => $questCount
+				'maxfp' => $maxFailurePoints,
+				'questcount' => $questionCount
 			],
 			['id' => $id]
 		);
@@ -118,7 +118,7 @@ class QuizGateway extends BaseGateway
 		);
 	}
 
-	public function addQuestion(int $quizId, string $text, int $fp, int $duration): int
+	public function addQuestion(int $quizId, string $text, int $failurePoints, int $duration): int
 	{
 		$questionId = $this->db->insert(
 			'fs_question',
@@ -133,7 +133,7 @@ class QuizGateway extends BaseGateway
 				[
 					'question_id' => $questionId,
 					'quiz_id' => $quizId,
-					'fp' => $fp
+					'fp' => $failurePoints
 				]
 			);
 
@@ -164,7 +164,7 @@ class QuizGateway extends BaseGateway
 		', ['questionId' => $questionId]);
 	}
 
-	public function getRandomQuestions(int $count, int $fp, int $quizId): array
+	public function getRandomQuestions(int $count, int $failurePoints, int $quizId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -186,7 +186,7 @@ class QuizGateway extends BaseGateway
 				RAND()
 
 			LIMIT :count
-		', ['quizId' => $quizId, 'fp' => $fp, 'count' => $count]);
+		', ['quizId' => $quizId, 'fp' => $failurePoints, 'count' => $count]);
 	}
 
 	public function getQuestionMetas(int $quizId): array
@@ -236,7 +236,7 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikiLink): void
+	public function updateQuestion(int $questionId, int $quizId, string $text, int $failurePoints, int $duration, string $wikiLink): void
 	{
 		$this->db->update(
 			'fs_question',
@@ -250,7 +250,7 @@ class QuizGateway extends BaseGateway
 
 		$this->db->update(
 			'fs_question_has_quiz',
-			['fp' => $fp],
+			['fp' => $failurePoints],
 			[
 				'question_id' => $questionId,
 				'quiz_id' => $quizId

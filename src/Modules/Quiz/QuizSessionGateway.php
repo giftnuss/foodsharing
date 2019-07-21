@@ -43,7 +43,7 @@ class QuizSessionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easyMode = 0): int
+	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
 
@@ -56,14 +56,14 @@ class QuizSessionGateway extends BaseGateway
 				'quiz_questions' => $questions,
 				'time_start' => $this->db->now(),
 				'fp' => 0,
-				'maxfp' => $maxfp,
-				'quest_count' => $questcount,
+				'maxfp' => $maxFailurePoints,
+				'quest_count' => $questionCount,
 				'easymode' => $easyMode
 			]
 	  );
 	}
 
-	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $fp, int $maxfp): int
+	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $failurePoints, int $maxFailurePoints): int
 	{
 		$quizResult = serialize($quizResult);
 		$questions = serialize($questions);
@@ -74,9 +74,9 @@ class QuizSessionGateway extends BaseGateway
 				'quiz_result' => $quizResult,
 				'quiz_questions' => $questions,
 				'time_end' => $this->db->now(),
-				'status' => ($fp <= $maxfp) ? SessionStatus::PASSED : SessionStatus::FAILED,
-				'fp' => $fp,
-				'maxfp' => $maxfp
+				'status' => ($failurePoints <= $maxFailurePoints) ? SessionStatus::PASSED : SessionStatus::FAILED,
+				'fp' => $failurePoints,
+				'maxfp' => $maxFailurePoints
 			],
 			['id' => $sessionId]
 		);

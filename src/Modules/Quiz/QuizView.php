@@ -289,18 +289,18 @@ class QuizView extends View
 		</p>';
 	}
 
-	public function result($explains, $fp, $maxfp)
+	public function result($explains, $failurePoints, $maxFailurePoints)
 	{
 		$valid = 'Sorry, diesmal hat es nicht geklappt.';
 		$bg = '#ED563D';
-		if ($fp < $maxfp) {
+		if ($failurePoints < $maxFailurePoints) {
 			$valid = 'Herzlichen Glückwunsch! Bestanden.';
 			$bg = '#48A21C';
 		}
 		$out = '
 		<div style="font-size:16px;font-weight:bold;margin-bottom:15px;background-color:' . $bg . ';padding:15px;border-radius:10px;line-height:30px;text-align:center;color:#fff;">
 		' . $valid . '<br />
-		<span style="font-size:13px;">' . $fp . ' von maximal ' . $maxfp . ' Fehlerpunkten</span>
+		<span style="font-size:13px;">' . $failurePoints . ' von maximal ' . $maxFailurePoints . ' Fehlerpunkten</span>
 		</div>';
 
 		$out .= '
@@ -333,7 +333,7 @@ class QuizView extends View
 		</div>
 		<p style="text-align:center;">';
 
-		if ($fp < $maxfp) {
+		if ($failurePoints < $maxFailurePoints) {
 			switch ($this->session->get('quiz-id')) {
 				case 1:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
