@@ -28,16 +28,16 @@ class BellGateway extends BaseGateway
 	 * @param \DateTime $time A DateTime object for the bell's time - null means current date and time
 	 */
 	public function addBell(
-        $foodsaver,
-        string $title,
-        string $body,
-        string $icon,
-        array $link_attributes,
-        array $vars,
-        string $identifier = '',
-        int $closeable = 1,
-        \DateTime $expiration = null,
-        \DateTime $time = null
+		$foodsaver,
+		string $title,
+		string $body,
+		string $icon,
+		array $link_attributes,
+		array $vars,
+		string $identifier = '',
+		int $closeable = 1,
+		\DateTime $expiration = null,
+		\DateTime $time = null
 	): void {
 		if (!is_array($foodsaver)) {
 			$foodsaver = array($foodsaver);
@@ -206,15 +206,15 @@ class BellGateway extends BaseGateway
 		return $this->db->exists('fs_bell', ['identifier' => $identifier]);
 	}
 
-	public function delBellForFoodsaver($id, $fsId): void
+	public function delBellForFoodsaver($bellId, $fsId): void
 	{
-		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => (int)$id]);
+		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => (int)$bellId]);
 
 		if (!$bellIsCloseable) {
 			return;
 		}
 
-		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$bellId, 'foodsaver_id' => (int)$fsId]);
 		$this->updateFoodsaverClient($fsId);
 	}
 
