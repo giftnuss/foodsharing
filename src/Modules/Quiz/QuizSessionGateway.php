@@ -43,7 +43,7 @@ class QuizSessionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easymode = 0): int
+	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxfp, int $questcount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
 
@@ -58,7 +58,7 @@ class QuizSessionGateway extends BaseGateway
 				'fp' => 0,
 				'maxfp' => $maxfp,
 				'quest_count' => $questcount,
-				'easymode' => $easymode
+				'easymode' => $easyMode
 			]
 	  );
 	}

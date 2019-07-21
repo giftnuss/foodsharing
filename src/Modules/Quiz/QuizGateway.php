@@ -37,19 +37,19 @@ class QuizGateway extends BaseGateway
 		');
 	}
 
-	public function addQuiz(string $name, string $desc, int $maxfp, int $questcount): int
+	public function addQuiz(string $name, string $desc, int $maxfp, int $questCount): int
 	{
 		return $this->db->insert('fs_quiz',
 			[
 				'name' => $name,
 				'desc' => $desc,
 				'maxfp' => $maxfp,
-				'questcount' => $questcount
+				'questcount' => $questCount
 			]
 		);
 	}
 
-	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questcount): int
+	public function updateQuiz(int $id, string $name, string $desc, string $maxfp, string $questCount): int
 	{
 		return $this->db->update(
 			'fs_quiz',
@@ -57,7 +57,7 @@ class QuizGateway extends BaseGateway
 				'name' => $name,
 				'desc' => $desc,
 				'maxfp' => $maxfp,
-				'questcount' => $questcount
+				'questcount' => $questCount
 			],
 			['id' => $id]
 		);
@@ -236,14 +236,14 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikilink): void
+	public function updateQuestion(int $questionId, int $quizId, string $text, int $fp, int $duration, string $wikiLink): void
 	{
 		$this->db->update(
 			'fs_question',
 			[
 				'text' => $text,
 				'duration' => $duration,
-				'wikilink' => $wikilink
+				'wikilink' => $wikiLink
 			],
 			['id' => $questionId]
 		);
