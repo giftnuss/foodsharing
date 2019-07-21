@@ -19,43 +19,36 @@ class QuizHelper
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function refreshQuizData($fs_id, $fs_role)
+	public function refreshQuizData(int $fsId, int $fsRole): int
 	{
-		$passed_fs_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::FOODSAVER);
-		$passed_bib_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::STORE_MANAGER);
-		$passed_bot_quiz = $this->quizGateway->hasPassedQuiz($fs_id, Role::AMBASSADOR);
+		$hasPassedFoodsaverQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER);
+		$hasPassedStoreManagerQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER);
+		$hasPassedAmbassadorQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR);
 
-		$count_verantwortlich = $this->storeGateway->getStoreCountForBieb($fs_id);
-		$count_botschafter = $this->foodsaverGateway->getBezirkCountForBotschafter($fs_id);
-
-		$quiz_rolle = Role::FOODSHARER;
-		if ($passed_fs_quiz) {
-			$quiz_rolle = Role::FOODSAVER;
+		$quizRole = Role::FOODSHARER;
+		if ($hasPassedFoodsaverQuiz) {
+			$quizRole = Role::FOODSAVER;
 		}
-		if ($passed_bib_quiz) {
-			$quiz_rolle = Role::STORE_MANAGER;
+		if ($hasPassedStoreManagerQuiz) {
+			$quizRole = Role::STORE_MANAGER;
 		}
-		if ($passed_bot_quiz) {
-			$quiz_rolle = Role::AMBASSADOR;
+		if ($hasPassedAmbassadorQuiz) {
+			$quizRole = Role::AMBASSADOR;
 		}
 
-		$this->quizGateway->setRole($fs_id, $quiz_rolle);
+		$doesManageStores = $this->storeGateway->getStoreCountForBieb($fsId) > 0;
+		$doesRepresentRegions = $this->foodsaverGateway->getBezirkCountForBotschafter($fsId) > 0;
 
-		$hastodo_id = 0;
-		if (
-			$fs_role == Role::FOODSAVER && !$passed_fs_quiz
-		) {
-			$hastodo_id = Role::FOODSAVER;
-		} elseif (
-			($fs_role > Role::FOODSAVER || $count_verantwortlich > 0) && !$passed_bib_quiz
-		) {
-			$hastodo_id = Role::STORE_MANAGER;
-		} elseif (
-			($fs_role > Role::STORE_MANAGER || $count_botschafter > 0) && !$passed_bot_quiz
-		) {
-			$hastodo_id = Role::AMBASSADOR;
+		$this->quizGateway->setRole($fsId, $quizRole);
+
+		if ($fsRole == Role::FOODSAVER && !$hasPassedFoodsaverQuiz) {
+			return Role::FOODSAVER;
+		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$hasPassedStoreManagerQuiz) {
+			return Role::STORE_MANAGER;
+		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$hasPassedAmbassadorQuiz) {
+			return Role::AMBASSADOR;
 		}
 
-		return $hastodo_id;
+		return Role::FOODSHARER;
 	}
 }
