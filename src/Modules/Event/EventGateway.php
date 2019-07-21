@@ -330,8 +330,8 @@ class EventGateway extends BaseGateway
 		$b_sql = '= ' . $region_id;
 
 		if ($invite_subs) {
-			$bids = $this->regionGateway->listIdsForDescendantsAndSelf($region_id);
-			$b_sql = 'IN(' . implode(',', $bids) . ')';
+			$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($region_id);
+			$b_sql = 'IN(' . implode(',', $regionIds) . ')';
 		}
 
 		if ($fsids = $this->db->fetchAllValues('
