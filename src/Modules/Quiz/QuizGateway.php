@@ -74,11 +74,9 @@ class QuizGateway extends BaseGateway
 
 	public function getQuizName(int $quizId): string
 	{
-		return $this->db->fetchValueByCriteria(
-			'fs_quiz',
-			'name',
-			['id' => $quizId]
-		);
+		$quiz = $this->getQuiz($quizId);
+
+		return $quiz ? $quiz['name'] : '';
 	}
 
 	public function getQuizStatus(int $quizId, int $fsId): QuizStatus
