@@ -48,11 +48,11 @@ import Avatar from '@/components/Avatar'
 // import bDropdown from '@b/components/dropdown/dropdown'
 // use custom navItemDropdown for now, better tooltip support and look...
 import NavItemDropdown from '@/components/Topbar/NavItemDropdown'
-import bDropdownItem from '@b/components/dropdown/dropdown-item'
+import { BDropdownItem } from 'bootstrap-vue'
 import conv from '@/conv'
 
 export default {
-  components: { Avatar, NavItemDropdown, bDropdownItem },
+  components: { Avatar, NavItemDropdown, BDropdownItem },
   props: {
     profile: {
       type: Object,

@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { VBTooltip } from 'bootstrap-vue'
 import Pickup from './Pickup'
 import { setPickupSlots, confirmPickup, joinPickup, leavePickup, listPickups } from '@/api/stores'
 import { sendMessage } from '@/api/conversations'
@@ -75,7 +75,7 @@ import $ from 'jquery'
 
 export default {
   components: { Pickup },
-  directives: { bTooltip },
+  directives: { VBTooltip },
   props: {
     storeId: {
       type: Number,

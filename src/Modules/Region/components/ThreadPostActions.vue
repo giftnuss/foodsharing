@@ -82,17 +82,15 @@
 <script>
 import pickBy from 'lodash.pickby'
 
-import bDropdown from '@b/components/dropdown/dropdown'
-import bModal from '@b/components/modal/modal'
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { BDropdown, BModal, VBTooltip } from 'bootstrap-vue'
 
 import Emoji from '@/components/Emoji'
 import emojiList from '@/emojiList.json'
 import { user } from '@/server-data'
 
 export default {
-  components: { bDropdown, Emoji, bModal },
-  directives: { bTooltip },
+  components: { BDropdown, Emoji, BModal },
+  directives: { VBTooltip },
   props: {
     reactions: {
       type: Object,

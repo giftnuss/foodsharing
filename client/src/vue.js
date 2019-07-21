@@ -2,7 +2,10 @@ import Vue from 'vue'
 import i18n from '@/i18n'
 import urls from '@/urls'
 import { dateFormat, dateDistanceInWords } from '@/utils'
+import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(BootstrapVue)
 
 Vue.filter('dateFormat', dateFormat)
 Vue.filter('dateDistanceInWords', dateDistanceInWords)

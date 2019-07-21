@@ -58,12 +58,10 @@
 
 <script>
 
-import bTable from '@b/components/table/table'
-import bTabs from '@b/components/tabs/tabs'
-import bTab from '@b/components/tabs/tab'
+import { BTable, BTabs, BTab } from 'bootstrap-vue'
 
 export default {
-  components: { bTable, bTabs, bTab },
+  components: { BTable, BTabs, BTab },
   props: {
     regionName: {
       type: String,
