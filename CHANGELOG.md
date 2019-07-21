@@ -61,6 +61,7 @@
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
+- Fixed saving an edited quiz answer !988 #408 @svenpascal
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
