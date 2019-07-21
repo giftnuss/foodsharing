@@ -110,7 +110,7 @@ class SettingsControl extends Control
 		$quizRole = Role::FOODSAVER;
 		if ($this->session->may()) {
 			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
-				$this->handleQuizStatus($quizRole);
+				$this->handleQuizStatus($quiz, $quizRole);
 			}
 		}
 	}
@@ -129,7 +129,7 @@ class SettingsControl extends Control
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 
-					$this->handleQuizStatus($quizRole);
+					$this->handleQuizStatus($quiz, $quizRole);
 				}
 			}
 		}
@@ -140,7 +140,7 @@ class SettingsControl extends Control
 		$quizRole = Role::AMBASSADOR;
 		if ($this->session->may() && $this->foodsaver['rolle'] >= Role::STORE_MANAGER) {
 			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
-				$this->handleQuizStatus($quizRole);
+				$this->handleQuizStatus($quiz, $quizRole);
 			} else {
 				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
@@ -163,7 +163,7 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function handleQuizStatus(Role $role): void
+	private function handleQuizStatus(array $quiz, Role $role): void
 	{
 		$fsId = $this->session->id();
 		$desc = $this->contentGateway->get(12);
