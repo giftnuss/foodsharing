@@ -146,7 +146,7 @@ class SettingsModel extends Db
 	}
 
 	/*
-	 * in the session are only the failired answeres stored in so now we get all the right answers an fill out the array
+	 * in the session are only the failed answers stored in so now we get all the right answers an fill out the array
 	 */
 	private function addRightAnswers($indexList, $fullList)
 	{
@@ -274,12 +274,12 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function updateFollowThread($tid, $infotype)
+	public function updateFollowThread($themeId, $infotype)
 	{
 		return $this->update('
 			UPDATE 		`fs_theme_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
-			WHERE 		`theme_id` = ' . (int)$tid . '
+			WHERE 		`theme_id` = ' . (int)$themeId . '
 			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
 		');
 	}
@@ -302,7 +302,7 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function getFsCount($bid)
+	public function getFsCount($regionId)
 	{
 		return (int)$this->qOne('
 			SELECT
@@ -312,7 +312,7 @@ class SettingsModel extends Db
 				fs_foodsaver_has_bezirk hb
 
 			WHERE
-				hb.bezirk_id = ' . (int)$bid . '
+				hb.bezirk_id = ' . (int)$regionId . '
 
 			AND
 				hb.active = 1
