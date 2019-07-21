@@ -538,9 +538,9 @@ class Session
 		return $roles[$roleInt];
 	}
 
-	public function mayBezirk($bid): bool
+	public function mayBezirk($regionId): bool
 	{
-		return isset($_SESSION['client']['bezirke'][$bid]) || $this->isAdminFor($bid) || $this->isOrgaTeam();
+		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
 	}
 
 	public function mayHandleReports()
@@ -576,15 +576,15 @@ class Session
 		return false;
 	}
 
-	public function isAmbassadorForRegion($regions_ids, $include_groups = true, $include_parent_regions = false): bool
+	public function isAmbassadorForRegion($regionIds, $include_groups = true, $include_parent_regions = false): bool
 	{
-		if (is_array($regions_ids) && count($regions_ids) && $this->isAmbassador()) {
+		if (is_array($regionIds) && count($regionIds) && $this->isAmbassador()) {
 			if ($include_parent_regions) {
-				$regions_ids = $this->regionGateway->listRegionsIncludingParents($regions_ids);
+				$regionIds = $this->regionGateway->listRegionsIncludingParents($regionIds);
 			}
 			foreach ($_SESSION['client']['botschafter'] as $b) {
-				foreach ($regions_ids as $bid) {
-					if ($b['bezirk_id'] == $bid && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
+				foreach ($regionIds as $regId) {
+					if ($b['bezirk_id'] == $regId && ($include_groups || $b['type'] != Type::WORKING_GROUP)) {
 						return true;
 					}
 				}
