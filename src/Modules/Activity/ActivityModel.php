@@ -195,12 +195,12 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates($page = 0, $bids_not_load = false)
+	public function loadForumUpdates($page = 0, $bids_not_load = false): array
 	{
 		$myRegionIds = $this->session->listRegionIDs();
 		$region_ids = array();
-		if ($myRegionIds === false || count($myRegionIds) === 0) {
-			return false;
+		if ($myRegionIds === [] || count($myRegionIds) === 0) {
+			return [];
 		}
 
 		foreach ($myRegionIds as $regionId) {
@@ -210,7 +210,7 @@ class ActivityModel extends Db
 		}
 
 		if (count($region_ids) === 0) {
-			return false;
+			return [];
 		}
 
 		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
@@ -221,8 +221,8 @@ class ActivityModel extends Db
 		if (!empty($updates)) {
 			$out = array();
 			foreach ($updates as $u) {
-				$forumType = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumType . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
+				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 				$out[] = [
 					'attr' => [
 						'href' => $url
@@ -232,14 +232,14 @@ class ActivityModel extends Db
 					'time' => $u['update_time'],
 					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 					'time_ts' => $u['update_time_ts'],
-					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumType
+					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
 				];
 			}
 
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function loadStoreUpdates($page = 0)
