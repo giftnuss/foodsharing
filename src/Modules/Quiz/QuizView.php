@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizView extends View
@@ -59,11 +60,13 @@ class QuizView extends View
 		$out = '';
 
 		/*
-		 * [0] => Array
+		 * Example:
+		 *
+		  [0] => Array
 			(
 				[id] => 9
 				[fp] => 0.00
-				[status] => SessionStatus::PASSED
+				[status] => 1
 				[time_start] => 2014-07-05 18:14:02
 				[time_start_ts] => 1404576842
 				[name] => Foodsaver
@@ -73,7 +76,7 @@ class QuizView extends View
 			(
 				[id] => 10
 				[fp] => 5.50
-				[status] => SessionStatus::FAILED
+				[status] => 2
 				[time_start] => 2014-07-07 09:06:33
 				[time_start_ts] => 1404716793
 				[name] => Foodsaver
@@ -335,15 +338,15 @@ class QuizView extends View
 
 		if ($failurePoints < $maxFailurePoints) {
 			switch ($this->session->get('quiz-id')) {
-				case 1:
+				case Role::FOODSAVER:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
 					break;
 
-				case 2:
+				case Role::STORE_MANAGER:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen.</a>';
 					break;
 
-				case 3:
+				case Role::AMBASSADOR:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen.</a>';
 					break;
 
@@ -410,28 +413,30 @@ class QuizView extends View
 		return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 	}
 
-	public function answerSidebar($answers, $quiz_id)
+	public function answerSidebar(array $answers): string
 	{
-		if (!empty($answers)) {
-			$out = '<ul class="linklist">';
-			foreach ($answers as $a) {
-				$ampel = 'ampel ampel-gruen';
-				if ($a['right'] == 0) {
-					$ampel = 'ampel ampel-rot';
-				} elseif ($a['right'] == 2) {
-					$ampel = '';
-				}
-				$out .= '
-				<li>
-					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
-						<span style="clear:both;"></span>
-					</a>
-				</li>';
-			}
-			$out .= '</ul>';
-
-			return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
+		if (empty($answers)) {
+			return '';
 		}
+
+		$out = '<ul class="linklist">';
+		foreach ($answers as $a) {
+			$ampel = 'ampel ampel-gruen';
+			if ($a['right'] == 0) {
+				$ampel = 'ampel ampel-rot';
+			} elseif ($a['right'] == 2) {
+				$ampel = '';
+			}
+			$out .= '
+			<li>
+			<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
+			<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
+			<span style="clear:both;"></span>
+			</a>
+			</li>';
+		}
+		$out .= '</ul>';
+
+		return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
 	}
 }
