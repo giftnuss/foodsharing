@@ -127,17 +127,16 @@
 </template>
 
 <script>
-import bFormTextarea from '@b/components/form-textarea/form-textarea'
-import bModal from '@b/components/modal/modal'
-import bTooltip from '@b/directives/tooltip/tooltip'
+
+import { BFormTextarea, BModal, VBTooltip } from 'bootstrap-vue'
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
 import dateFnsCompareAsc from 'date-fns/compare_asc'
 import isSameDay from 'date-fns/is_same_day'
 
 export default {
-  components: { EmptySlot, TakenSlot, bFormTextarea, bModal },
-  directives: { bTooltip },
+  components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
+  directives: { VBTooltip },
   props: {
     storeId: {
       type: Number,

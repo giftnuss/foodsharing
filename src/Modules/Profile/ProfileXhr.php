@@ -113,8 +113,8 @@ class ProfileXhr extends Control
 
 	public function history()
 	{
-		$bids = $this->regionGateway->getFsRegionIds($_GET['fsid']);
-		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion($bids, false, false))) {
+		$regionIds = $this->regionGateway->getFsRegionIds($_GET['fsid']);
+		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion($regionIds, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);

@@ -12,15 +12,18 @@ class WallPostPermissions
 	private $regionGateway;
 	private $eventGateway;
 	private $fairteilerGateway;
+	private $eventPermission;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
-		FairteilerGateway $fairteilerGateway
+		FairteilerGateway $fairteilerGateway,
+		EventPermissions $eventPermissions
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
+		$this->eventPermission = $eventPermissions;
 	}
 
 	public function mayReadWall($fsId, $target, $targetId)
@@ -29,10 +32,9 @@ class WallPostPermissions
 			case 'bezirk':
 				return $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
-				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $fsId && ($event['public'] || isset($event['invites']['may'][$fsId]));
+				return $this->eventPermission->mayCommentInEvent($event);
 			case 'fairteiler':
 				return true;
 			case 'question':

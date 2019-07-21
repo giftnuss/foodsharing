@@ -99,14 +99,12 @@
   </div>
 </template>
 <script>
-import bCollapse from '@b/components/collapse/collapse'
-import bToggle from '@b/directives/toggle/toggle'
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
 import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { bCollapse, NavItemDropdown },
-  directives: { bToggle, bTooltip },
+  components: { BCollapse, NavItemDropdown },
+  directives: { VBToggle, VBTooltip },
   props: {
     workingGroups: {
       type: Array,

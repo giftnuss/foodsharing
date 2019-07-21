@@ -56,8 +56,8 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import clickOutMixin from '@b/mixins/click-out'
-import listenOnRootMixin from '@b/mixins/listen-on-root'
+import clickOutMixin from 'bootstrap-vue/esm/mixins/click-out'
+import listenOnRootMixin from 'bootstrap-vue/esm/mixins/listen-on-root'
 
 export default {
   components: { SearchResults },

@@ -87,10 +87,10 @@ class StatsControl extends ConsoleControl
 	{
 		self::info('Statistik Auswertung für Betriebe');
 
-		$betriebe = $this->statsGateway->fetchAllStores();
+		$stores = $this->statsGateway->fetchAllStores();
 
-		foreach ($betriebe as $i => $b) {
-			$this->calcStores($b);
+		foreach ($stores as $i => $store) {
+			$this->calcStores($store);
 		}
 
 		self::success('stores ready :o)');
@@ -154,9 +154,9 @@ class StatsControl extends ConsoleControl
 		self::info('Statistik Auswertung für Bezirke');
 
 		// get all Bezirke non memcached
-		$bezirke = $this->model->getAllRegions();
-		foreach ($bezirke as $i => $b) {
-			$kilo = $this->calcRegion($b);
+		$regions = $this->model->getAllRegions();
+		foreach ($regions as $i => $region) {
+			$kilo = $this->calcRegion($region);
 		}
 
 		self::success('region ready :o)');

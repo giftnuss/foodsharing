@@ -107,9 +107,9 @@ class EventControl extends Control
 				$this->routeHelper->go('/?page=event&id=' . $id);
 			}
 		} else {
-			$bezirke = $this->session->getRegions();
+			$regions = $this->session->getRegions();
 
-			$this->pageHelper->addContent($this->view->eventForm($bezirke));
+			$this->pageHelper->addContent($this->view->eventForm($regions));
 		}
 	}
 
@@ -131,8 +131,8 @@ class EventControl extends Control
 
 		if (isset($_POST['public']) && $_POST['public'] == 1) {
 			$out['public'] = 1;
-		} elseif ($bid = $this->getPostInt('bezirk_id')) {
-			$out['bezirk_id'] = (int)$bid;
+		} elseif ($regionId = $this->getPostInt('bezirk_id')) {
+			$out['bezirk_id'] = (int)$regionId;
 			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::ACCEPTED) {
 				$out['invite'] = true;
 				if (isset($_POST['invitesubs']) && $_POST['invitesubs'] == 1) {

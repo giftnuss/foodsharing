@@ -15,7 +15,7 @@ class StatsModel extends Db
 		parent::__construct();
 	}
 
-	public function getFirstFetchInStore($bid, $fsid)
+	public function getFirstFetchInStore($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -26,10 +26,10 @@ class StatsModel extends Db
 					fs_abholer 
 				
 				WHERE 
-					betrieb_id = ' . $bid . ' 
+					betrieb_id = ' . $storeId . ' 
 				
 				AND 
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND 
 					`confirmed` = 1'
 		);
@@ -63,7 +63,7 @@ class StatsModel extends Db
 		return $this->qCol('SELECT id FROM fs_foodsaver');
 	}
 
-	public function getLastFetchInStore($bid, $fsid)
+	public function getLastFetchInStore($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -74,10 +74,10 @@ class StatsModel extends Db
 					fs_abholer
 	
 				WHERE
-					betrieb_id = ' . $bid . '
+					betrieb_id = ' . $storeId . '
 	
 				AND
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND
 					`confirmed` = 1
 				AND 
@@ -107,15 +107,15 @@ class StatsModel extends Db
 		');
 	}
 
-	public function getStoreFetchCount($bid, $fs_id, $last_update, $stat_fetchcount)
+	public function getStoreFetchCount($storeId, $fsId, $last_update, $stat_fetchcount)
 	{
 		$val = $this->qOne('
 			SELECT COUNT(foodsaver_id)
 					
 			FROM 	fs_abholer
 				
-			WHERE 	`foodsaver_id` = ' . (int)$fs_id . '
-			AND 	`betrieb_id` = ' . (int)$bid . '
+			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
+			AND 	`betrieb_id` = ' . (int)$storeId . '
 			AND 	`date` > ' . $this->dateval($last_update) . '
 			AND 	`date` < NOW()
 			AND 	`confirmed` = 1

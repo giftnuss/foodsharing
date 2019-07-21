@@ -10,10 +10,11 @@
 </template>
 
 <script>
-import bTooltip from '@b/directives/tooltip/tooltip'
+
+import { VBTooltip } from 'bootstrap-vue'
 
 export default {
-  directives: { bTooltip },
+  directives: { VBTooltip },
   props: {
     status: {
       type: Number,

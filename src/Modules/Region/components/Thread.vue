@@ -115,7 +115,8 @@
 </template>
 
 <script>
-import bModal from '@b/components/modal/modal'
+
+import { BModal } from 'bootstrap-vue'
 
 import ThreadPost from './ThreadPost'
 import ThreadForm from './ThreadForm'
@@ -126,7 +127,7 @@ import { user } from '@/server-data'
 import { GET } from '@/browser'
 
 export default {
-  components: { bModal, ThreadPost, ThreadForm },
+  components: { BModal, ThreadPost, ThreadForm },
   props: {
     id: {
       type: Number,

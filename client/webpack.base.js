@@ -36,8 +36,7 @@ module.exports = {
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
-      '@translations': resolve('../lang'),
-      '@b': resolve('node_modules/bootstrap-vue/es')
+      '@translations': resolve('../lang')
     }
   },
   module: {
