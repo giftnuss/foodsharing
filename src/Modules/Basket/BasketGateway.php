@@ -409,7 +409,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
-	public function listCloseBaskets($fs_id, $loc, $distance = 30)
+	public function listCloseBaskets($fs_id, $loc, $distanceKm = 30)
 	{
 		return $this->db->fetchAll(
 			'
@@ -420,7 +420,8 @@ class BasketGateway extends BaseGateway
 				b.lat,
 				b.lon,
 				(6371 * acos( cos( radians( :lat ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( :lon ) ) + sin( radians( :lat1 ) ) * sin( radians( b.lat ) ) ))
-				AS distance
+				AS distance,
+				b.until
 			FROM
 				fs_basket b
 
@@ -429,6 +430,8 @@ class BasketGateway extends BaseGateway
 
 			AND
 				foodsaver_id != :fs_id
+			AND 
+			    b.until > NOW()
 
 			HAVING
 				distance <= :distance
@@ -444,7 +447,7 @@ class BasketGateway extends BaseGateway
 				':lon' => (float)$loc['lon'],
 				':status' => Status::REQUESTED_MESSAGE_READ,
 				':fs_id' => $fs_id,
-				':distance' => $distance,
+				':distance' => $distanceKm,
 			]
 		);
 	}
