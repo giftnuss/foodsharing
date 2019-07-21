@@ -87,53 +87,53 @@ class StatsControl extends ConsoleControl
 	{
 		self::info('Statistik Auswertung für Betriebe');
 
-		$betriebe = $this->statsGateway->fetchStores();
+		$stores = $this->statsGateway->fetchStores();
 
-		foreach ($betriebe as $i => $b) {
-			$this->calcBetrieb($b);
+		foreach ($stores as $i => $store) {
+			$this->calcBetrieb($store);
 		}
 
 		self::success('ready :o)');
 	}
 
-	private function calcBetrieb($betrieb)
+	private function calcBetrieb($store)
 	{
-		$bid = $betrieb['id'];
+		$storeId = $store['id'];
 
-		if ($bid > 0) {
-			$added = $betrieb['added'];
+		if ($storeId > 0) {
+			$added = $store['added'];
 
-			if ($team = $this->storeGateway->getBetriebTeam($bid)) {
+			if ($team = $this->storeGateway->getBetriebTeam($storeId)) {
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
 						'foodsaver_id' => $fs['id'],
-						'betrieb_id' => $bid,
+						'betrieb_id' => $storeId,
 						'verantwortlich' => $fs['verantwortlich'],
 						'stat_fetchcount' => $fs['stat_fetchcount'],
 						'stat_last_fetch' => null,
 					);
 
 					/* first_fetch */
-					if ($first_fetch = $this->model->getFirstFetchInBetrieb($bid, $fs['id'])) {
+					if ($first_fetch = $this->model->getFirstFetchInBetrieb($storeId, $fs['id'])) {
 						$newdata['stat_first_fetch'] = $first_fetch;
 					}
 
 					/*last fetch*/
-					if ($last_fetch = $this->model->getLastFetchInBetrieb($bid, $fs['id'])) {
+					if ($last_fetch = $this->model->getLastFetchInBetrieb($storeId, $fs['id'])) {
 						$newdata['stat_last_fetch'] = $last_fetch;
 					}
 
 					/*fetchcount*/
 					$fetchcount = $this->model->getBetriebFetchCount(
-						$bid,
+						$storeId,
 						$fs['id'],
 						$fs['stat_last_update'],
 						$fs['stat_fetchcount']
 					);
 
 					$this->model->updateBetriebStat(
-						$bid, // Betrieb id
+						$storeId, // Betrieb id
 						$fs['id'], // foodsaver_id
 						$fs['stat_add_date'], // add date
 						$newdata['stat_first_fetch'], // erste mal abholen
@@ -154,46 +154,46 @@ class StatsControl extends ConsoleControl
 		self::info('Statistik Auswertung für Bezirke');
 
 		// get all Bezirke non memcached
-		$bezirke = $this->model->getAllBezirke();
-		foreach ($bezirke as $i => $b) {
-			$kilo = $this->calcBezirk($b);
+		$regions = $this->model->getAllBezirke();
+		foreach ($regions as $i => $region) {
+			$kilo = $this->calcBezirk($region);
 		}
 
 		self::success('ready :o)');
 	}
 
-	private function calcBezirk($bezirk)
+	private function calcBezirk($region)
 	{
-		$bezirk_id = $bezirk['id'];
-		$last_update = $bezirk['stat_last_update'];
+		$regionId = $region['id'];
+		$last_update = $region['stat_last_update'];
 
-		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
+		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 
 		/* abholmenge & anzahl abholungen */
-		$stat_fetchweight = $this->model->getFetchWeight($bezirk_id, $last_update, $child_ids);
+		$stat_fetchweight = $this->model->getFetchWeight($regionId, $last_update, $child_ids);
 		$stat_fetchcount = $stat_fetchweight['count'];
 		$stat_fetchweight = $stat_fetchweight['weight'];
 
 		/* anzahl foodsaver */
-		$stat_fscount = $this->model->getFsCount($bezirk_id, $child_ids);
+		$stat_fscount = $this->model->getFsCount($regionId, $child_ids);
 
 		/*anzahl botschafter*/
-		$stat_botcount = $this->model->getBotCount($bezirk_id, $child_ids);
+		$stat_botcount = $this->model->getBotCount($regionId, $child_ids);
 
 		/* anzahl posts */
-		$stat_postcount = $this->model->getPostCount($bezirk_id, $child_ids);
+		$stat_postcount = $this->model->getPostCount($regionId, $child_ids);
 
 		/* fairteiler_count */
-		$stat_fairteilercount = $this->model->getFairteilerCount($bezirk_id, $child_ids);
+		$stat_fairteilercount = $this->model->getFairteilerCount($regionId, $child_ids);
 
 		/* count betriebe */
-		$stat_betriebecount = $this->model->getBetriebCount($bezirk_id, $child_ids);
+		$stat_betriebecount = $this->model->getBetriebCount($regionId, $child_ids);
 
 		/* count koorp betriebe */
-		$stat_betriebCoorpCount = $this->model->getBetriebKoorpCount($bezirk_id, $child_ids);
+		$stat_betriebCoorpCount = $this->model->getBetriebKoorpCount($regionId, $child_ids);
 
 		$this->model->updateStats(
-			$bezirk_id,
+			$regionId,
 			$stat_fetchweight,
 			$stat_fetchcount,
 			$stat_postcount,
