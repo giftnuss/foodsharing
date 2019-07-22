@@ -25,21 +25,20 @@ class QuizHelper
 		$hasPassedStoreManagerQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER);
 		$hasPassedAmbassadorQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR);
 
+
 		$quizRole = Role::FOODSHARER;
-		if ($hasPassedFoodsaverQuiz) {
-			$quizRole = Role::FOODSAVER;
-		}
-		if ($hasPassedStoreManagerQuiz) {
-			$quizRole = Role::STORE_MANAGER;
-		}
 		if ($hasPassedAmbassadorQuiz) {
 			$quizRole = Role::AMBASSADOR;
+		} else if ($hasPassedStoreManagerQuiz) {
+			$quizRole = Role::STORE_MANAGER;
+		} else if ($hasPassedFoodsaverQuiz) {
+			$quizRole = Role::FOODSAVER;
 		}
 
-		$doesManageStores = $this->storeGateway->getStoreCountForBieb($fsId) > 0;
-		$doesRepresentRegions = $this->foodsaverGateway->getBezirkCountForBotschafter($fsId) > 0;
+		$doesManageStores = (int)$this->storeGateway->getStoreCountForBieb($fsId) > 0;
+		$doesRepresentRegions = (int)$this->foodsaverGateway->getBezirkCountForBotschafter($fsId) > 0;
 
-		$this->quizGateway->setRole($fsId, $quizRole);
+		$this->quizGateway->setFsQuizRole($fsId, $quizRole);
 
 		if ($fsRole == Role::FOODSAVER && !$hasPassedFoodsaverQuiz) {
 			return Role::FOODSAVER;

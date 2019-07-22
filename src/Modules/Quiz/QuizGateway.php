@@ -107,7 +107,7 @@ class QuizGateway extends BaseGateway
 		return $passedCount > 0;
 	}
 
-	public function setRole(int $fsId, int $quizRole): int
+	public function setFsQuizRole(int $fsId, int $quizRole): int
 	{
 		return $this->db->update(
 			'fs_foodsaver',
