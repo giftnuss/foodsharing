@@ -16,7 +16,7 @@ class BasketControl extends Control
 
 		parent::__construct();
 
-		$this->func->addBread('Essenskörbe');
+		$this->pageHelper->addBread('Essenskörbe');
 	}
 
 	public function index(): void
@@ -30,10 +30,10 @@ class BasketControl extends Control
 				if (method_exists($this, $m)) {
 					$this->$m();
 				} else {
-					$this->func->go('/essenskoerbe/find');
+					$this->routeHelper->go('/essenskoerbe/find');
 				}
 			} else {
-				$this->func->go('/essenskoerbe/find');
+				$this->routeHelper->go('/essenskoerbe/find');
 			}
 		}
 	}
@@ -55,9 +55,9 @@ class BasketControl extends Control
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] == Status::REQUESTED_MESSAGE_READ) {
+		if ($basket['until_ts'] >= time() && $basket['status'] === Status::REQUESTED_MESSAGE_READ) {
 			$this->view->basket($basket, $wallPosts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] == Status::DENIED) {
+		} elseif ($basket['until_ts'] <= time() || $basket['status'] === Status::DENIED || $basket['status'] === Status::DELETED_OTHER_REASON) {
 			$this->view->basketTaken($basket);
 		}
 	}

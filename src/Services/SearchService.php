@@ -2,36 +2,38 @@
 
 namespace Foodsharing\Services;
 
-use Foodsharing\Lib\Func;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\WorkGroup\WorkGroupModel;
+use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
 class SearchService
 {
 	private $buddyGateway;
-	private $workGroupModel;
+	private $workGroupGateway;
 	private $storeModel;
 	private $regionGateway;
-	private $func;
 	private $session;
+	private $sanitizerService;
+	private $imageService;
 
 	public function __construct(
 		BuddyGateway $buddyGateway,
-		WorkGroupModel $workGroupModel,
+		WorkGroupGateway $workGroupGateway,
 		StoreModel $storeModel,
-		regionGateway $regionGateway,
-		Func $func,
-		Session $session
+		RegionGateway $regionGateway,
+		Session $session,
+		SanitizerService $sanitizerService,
+		ImageService $imageService
 	) {
 		$this->buddyGateway = $buddyGateway;
-		$this->workGroupModel = $workGroupModel;
+		$this->workGroupGateway = $workGroupGateway;
 		$this->storeModel = $storeModel;
 		$this->regionGateway = $regionGateway;
-		$this->func = $func;
 		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
 	}
 
 	/**
@@ -50,7 +52,7 @@ class SearchService
 				$img = '/img/avatar-mini.png';
 
 				if (!empty($b['photo'])) {
-					$img = $this->func->img($b['photo']);
+					$img = $this->imageService->img($b['photo']);
 				}
 
 				$result[] = array(
@@ -74,7 +76,7 @@ class SearchService
 		/*
 		 * Groups load Groups connected to the user in the array
 		*/
-		if ($groups = $this->workGroupModel->listMemberGroups($fsId)) {
+		if ($groups = $this->workGroupGateway->listMemberGroups($fsId)) {
 			$result = [];
 			foreach ($groups as $b) {
 				$img = '/img/groups.png';
@@ -83,7 +85,7 @@ class SearchService
 				}
 				$result[] = array(
 					'name' => $b['name'],
-					'teaser' => $this->func->tt($b['teaser'], 65),
+					'teaser' => $this->sanitizerService->tt($b['teaser'], 65),
 					'img' => $img,
 					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
 					'search' => array(

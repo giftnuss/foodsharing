@@ -30,15 +30,15 @@ class EventView extends View
 			$g_data['dateend'] = $g_data['end'];
 		}
 
-		$title = $this->func->s('new_event');
-		$this->func->addStyle('
+		$title = $this->translationHelper->s('new_event');
+		$this->pageHelper->addStyle('
 			label.addend{
 				display:inline-block;
 				margin-left:15px;
 				cursor:pointer;
 			}
 		');
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#online_type").on("change", function(){
 				if($(this).val() == 0)
 				{
@@ -113,7 +113,7 @@ class EventView extends View
 			$bez = '<optgroup label="Deine Bezirke">' . $bez . '</optgroup>';
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#public").on("change", function(){
 				if($("#public:checked").length > 0)
 				{
@@ -149,7 +149,7 @@ class EventView extends View
 			$chk = '';
 			if (isset($g_data['public']) && $g_data['public'] == 1) {
 				$chk = ' checked="checked"';
-				$this->func->addJs('$("#input-wrapper").hide();');
+				$this->pageHelper->addJs('$("#input-wrapper").hide();');
 			}
 			$public_el = $this->v_utils->v_input_wrapper('Ist die Veranstaltung öffentlich?', '<label><input id="public" type="checkbox" name="public" value="1"' . $chk . ' /> Ja die Veranstaltung ist Öffentlich</label>');
 		}
@@ -175,82 +175,83 @@ class EventView extends View
 			$this->v_utils->v_form_date('dateend', array('required' => true)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			$this->v_utils->v_form_textarea('description', array('desc' => $this->func->s('desc_desc'), 'required' => true)),
+			$this->v_utils->v_form_textarea('description', array('desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
 			$this->v_utils->v_form_select('online_type', array('values' => array(
-				array('id' => 1, 'name' => $this->func->s('offline')),
-				array('id' => 0, 'name' => $this->func->s('online'))
+				array('id' => 1, 'name' => $this->translationHelper->s('offline')),
+				array('id' => 0, 'name' => $this->translationHelper->s('online'))
 			))),
 			$this->v_utils->v_form_text('location_name', array('required' => true)),
-			$this->latLonPicker('latLng', $latLonOptions)
-		), array('submit' => $this->func->s('save'))), $title, array('class' => 'ui-padding'));
+			$this->latLonPicker('latLng', $latLonOptions),
+			$this->v_utils->v_info($this->translationHelper->s('saveEventInfo'))
+		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
 	}
 
-	public function statusMenu($event, $user_status)
+	public function statusMenu(array $event, int $user_status): string
 	{
 		$menu = array();
 
 		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
-			$menu[] = array(
+			$menu[] = [
 				'name' => 'Event bearbeiten',
 				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
-			);
+			];
 		}
 
-		if ($user_status != -1) {
-			if ($user_status != 3) {
-				$menu[] = array(
+		if ($user_status !== -1) {
+			if ($user_status !== InvitationStatus::WONT_JOIN) {
+				$menu[] = [
 					'name' => 'Ich kann doch nicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:3});return false;'
-				);
+				];
 			}
 
-			if ($user_status == 0) {
-				$menu[] = array(
+			if ($user_status === InvitationStatus::INVITED) {
+				$menu[] = [
 					'name' => 'Einladung annehmen',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
-				);
+				];
 			}
 
-			if ($user_status != 0 && $user_status != 1) {
+			if ($user_status !== InvitationStatus::INVITED && $user_status !== InvitationStatus::ACCEPTED) {
 				$menu[] = array(
 					'name' => 'Ich kann doch',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
 				);
 			}
 
-			if ($user_status != 2) {
-				$menu[] = array(
+			if ($user_status !== InvitationStatus::MAYBE) {
+				$menu[] = [
 					'name' => 'Ich kann vielleicht',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:2});return false;'
-				);
+				];
 			}
 		} else {
-			$menu[] = array(
+			$menu[] = [
 				'name' => 'Ich werde teilnehmen',
 				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:1});return false;'
-			);
-			$menu[] = array(
+			];
+			$menu[] = [
 				'name' => 'Ich werde vielleicht teilnehmen',
 				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:2});return false;'
-			);
+			];
 		}
 
-		return $this->v_utils->v_field($this->menu($menu), $this->func->s('event_options'), [], 'fas fa-cog');
+		return $this->v_utils->v_field($this->menu($menu), $this->translationHelper->s('event_options'), [], 'fas fa-cog');
 	}
 
-	public function eventTop($event)
+	public function eventTop(array $event): string
 	{
 		if (date('Y-m-d', $event['start_ts']) != date('Y-m-d', $event['end_ts'])) {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->func->niceDate($event['end_ts']);
+			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->timeHelper->niceDate($event['end_ts']);
 		} else {
-			$end = ' ' . $this->func->s('to') . ' ' . $this->ts_time($event['end_ts']);
+			$end = ' ' . $this->translationHelper->s('to') . ' ' . $this->ts_time($event['end_ts']);
 		}
 
-		$out = '
+		return '
 		<div class="event welcome ui-padding margin-bottom ui-corner-all">
 			<div class="welcome_profile_image">
 				<span class="calendar">
-					<span class="month">' . $this->func->s('month_' . (int)date('m', $event['start_ts'])) . '</span>
+					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $event['start_ts'])) . '</span>
 					<span class="day">' . date('d', $event['start_ts']) . '</span>
 				</span>
 				<div class="clear"></div>
@@ -261,15 +262,13 @@ class EventView extends View
 				</div>
 				<div class="welcome_quick_link">
 					<ul>
-						<li>' . $this->func->niceDate($event['start_ts']) . $end . '</li>
+						<li>' . $this->timeHelper->niceDate($event['start_ts']) . $end . '</li>
 					</ul>
 					<div class="clear"></div>
 				</div>
 			</div>
 			<div class="clear"></div>
 		</div>';
-
-		return $out;
 	}
 
 	private function ts_time($ts): string
@@ -277,7 +276,7 @@ class EventView extends View
 		return date('H:i', $ts) . ' Uhr';
 	}
 
-	public function invites($invites)
+	public function invites(array $invites): string
 	{
 		$out = '';
 
@@ -314,7 +313,7 @@ class EventView extends View
 			foreach ($foodsaverDisplayed as $fs) {
 				$out .= '
 				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->func->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
+					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->imageService->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
 				</li>';
 			}
 			if (count($foodsavers) > $maxNumberOfAvatars) {
@@ -327,8 +326,9 @@ class EventView extends View
 		return '';
 	}
 
-	public function event($event)
+	public function event(array $event): string
 	{
-		return $this->v_utils->v_field('<p>' . nl2br($this->func->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field(
+			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
 	}
 }

@@ -23,7 +23,7 @@ $not_expired_id = $I->haveInDatabase('fs_basket', [
 
 $I->wantTo('Ensure that the expired Foodbasket show another text');
 $I->amOnPage('/essenskoerbe/' . $expired_id);
-$I->see('Dieser Essenskorb wurde bereits abgeholt');
+$I->see('Dieser Essenskorb ist leider nicht mehr verfügbar!');
 
 $I->wantTo('Ensure that the not expired Foodbasket show the Basket');
 $I->amOnPage('/essenskoerbe/' . $not_expired_id);

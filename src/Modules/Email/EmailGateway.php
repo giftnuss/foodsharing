@@ -155,4 +155,29 @@ class EmailGateway extends BaseGateway
 
 		return $row;
 	}
+
+	public function getRecipient($mail_id): array
+	{
+		return $this->db->fetchAllValues('
+			SELECT 	CONCAT(fs.name," ",fs.nachname)
+			FROM 	`fs_email_status` e,
+					`fs_foodsaver` fs
+			WHERE 	e.foodsaver_id = fs.id
+			AND 	e.email_id = :mail_id
+		', [':mail_id' => $mail_id]);
+	}
+
+	public function listNewsletterOnlyFoodsharer(): array
+	{
+		return $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			['id', 'email'],
+			['newsletter' => 1, 'rolle' => 0, 'active' => 1, 'deleted_at' => null]
+		);
+	}
+
+	public function getEmailAddressOfFoodsaver(int $fsId)
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
+	}
 }

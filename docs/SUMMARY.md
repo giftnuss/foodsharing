@@ -1,6 +1,7 @@
 # Summary
 
 - [Overview](README.md)
+- [Call for contribution (GER)](it-tasks.md)
 
 ### Getting started
   - [Getting the code](getting-the-code.md)
@@ -10,9 +11,21 @@
 ### Contributing
 
   - [Making and submitting changes](contributing.md)
+  - [Code style](codestyle.md)
   - [Testing](testing.md)
+  - [Code quality and review](code-review.md)
+  - [Troubleshooting](troubleshooting.md)
 
-- [References](references.md)
-- [Reference php](php.md)
+### References
+  - [Scripts](scripts.md)
+  - [php](php.md)
+    - [Translation](internationalization.md)
+  - [request types](requests.md)
+  - [javascript, vue.js](javascript.md)
+    - [icons](icons.md)
+  - [Databases](database.md)
+  - [Tests](tests.md)
+  - [Glossary](GLOSSARY.md)
+
 - [About the devdocs](about-devdocs.md)
 - [Contributors](contributors.md)

@@ -14,14 +14,6 @@ class TeamView extends View
 			$socials .= '<li><a title="Homepage" href="' . $user['homepage'] . '" target="_blank"><i class="fas fa-globe"></i></a></li>';
 		}
 
-		if ($user['twitter'] != '') {
-			$socials .= '<li><a title="twitter" href="' . $user['twitter'] . '" target="_blank"><i class="fab fa-twitter"></i></a></li>';
-		}
-
-		if ($user['github'] != '') {
-			$socials .= '<li><a title="github" href="' . $user['github'] . '" target="_blank"><i class="fab fa-github"></i></a></li>';
-		}
-
 		if (!empty($socials)) {
 			$socials = '
 			<ul id="team-socials">
@@ -66,14 +58,6 @@ class TeamView extends View
 				$socials .= '<i class="fas fa-globe"><span>' . $t['homepage'] . '</span></i>';
 			}
 
-			if ($t['twitter'] != '') {
-				$socials .= '<i class="fab fa-twitter"><span>' . $t['twitter'] . '</span></i>';
-			}
-
-			if ($t['github'] != '') {
-				$socials .= '<i class="fab fa-github"><span>' . $t['github'] . '</span></i>';
-			}
-
 			$out .= '
 			<li>
 				<a id="t-' . $t['id'] . '" href="/team/' . $t['id'] . '" class="corner-all" target="_self">
@@ -81,7 +65,7 @@ class TeamView extends View
 					<h3>' . $t['name'] . ' ' . $t['nachname'] . '</h3>
 					<span class="subtitle">' . $t['position'] . '</span>
 					<span class="desc">
-						' . $this->func->tt($t['desc'], 240) . '
+						' . $this->sanitizerService->tt($t['desc'], 240) . '
 					</span>
 					<span class="foot corner-bottom">
 						' . $socials . '	

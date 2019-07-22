@@ -2,20 +2,10 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
-use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
-	private $bellGateway;
-
-	public function __construct(Database $db, BellGateway $bellGateway)
-	{
-		parent::__construct($db);
-		$this->bellGateway = $bellGateway;
-	}
-
 	// Thread-related
 
 	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0, $threads_per_page = 15)
@@ -118,14 +108,14 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $thread_id]);
 	}
 
-	public function addThread($fs_id, $bezirk_id, $title, $body, $bot_theme = false, $active)
+	public function addThread($fs_id, $bezirk_id, $title, $body, $isActive, $bot_theme = false)
 	{
 		$bot_theme_v = $bot_theme ? 1 : 0;
 		$thread_id = $this->db->insert('fs_theme', [
 			'foodsaver_id' => $fs_id,
 			'name' => $title,
 			'time' => date('Y-m-d H:i:s'),
-			'active' => $active,
+			'active' => $isActive,
 		]);
 
 		$this->followThread($fs_id, $thread_id);

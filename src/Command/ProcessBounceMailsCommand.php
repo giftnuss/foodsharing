@@ -3,6 +3,7 @@
 namespace Foodsharing\Command;
 
 use Foodsharing\Lib\Mail\BounceProcessing;
+use Foodsharing\Modules\Core\InfluxMetrics;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,10 +13,12 @@ class ProcessBounceMailsCommand extends Command
 	protected static $defaultName = 'foodsharing:process-bounce-emails';
 
 	private $bounceProcessing;
+	private $influxMetrics;
 
-	public function __construct(BounceProcessing $bounceProcessing)
+	public function __construct(BounceProcessing $bounceProcessing, InfluxMetrics $influxMetrics)
 	{
 		$this->bounceProcessing = $bounceProcessing;
+		$this->influxMetrics = $influxMetrics;
 		parent::__construct();
 	}
 
@@ -27,6 +30,6 @@ class ProcessBounceMailsCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): void
 	{
 		$this->bounceProcessing->process();
-		$output->writeln('processed ' . $this->bounceProcessing->getNumberOfProcessedBounces() . ' bounces');
+		$this->influxMetrics->addPoint('mail_bounce', [], ['cnt' => $this->bounceProcessing->getNumberOfProcessedBounces()]);
 	}
 }

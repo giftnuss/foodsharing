@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -14,14 +14,20 @@ class ReportXhr extends Control
 	private $reportGateway;
 	private $foodsaverGateway;
 	private $sanitizerService;
+	private $timeHelper;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, FoodsaverGateway $foodsaverGateway, SanitizerService $sanitizerService)
-	{
-		$this->model = $model;
+	public function __construct(
+		ReportGateway $reportGateway,
+		ReportView $view,
+		FoodsaverGateway $foodsaverGateway,
+		SanitizerService $sanitizerService,
+		TimeHelper $timeHelper
+	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 
 		parent::__construct();
 
@@ -40,7 +46,7 @@ class ReportXhr extends Control
 			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
-			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->func->niceDate($report['time_ts']));
+			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
 
 			if (isset($report['betrieb'])) {
 				$content .= $this->v_utils->v_input_wrapper('Zugeordneter Betrieb', '<a href="/?page=fsbetrieb&id=' . $report['betrieb']['id'] . '">' . htmlspecialchars($report['betrieb']['name']) . '</a>');
@@ -62,12 +68,12 @@ class ReportXhr extends Control
 
 			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
 			$dialog->addContent($content);
-			$dialog->addOpt('width', '600px');
+			$dialog->addOpt('width', '$(window).width()*0.9');
 
 			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
 			if ($report['committed'] === 0) {
-				$dialog->addButton('Report bestätigen', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
+				$dialog->addButton('Meldung zugestellt', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
 			}
 			$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
 
@@ -79,7 +85,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
-			$this->func->info('Meldung wurde bestätigt!');
+			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
 			return [
 				'status' => 1,
@@ -92,7 +98,7 @@ class ReportXhr extends Control
 	{
 		if ($this->session->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
-			$this->func->info('Meldung wurde gelöscht!');
+			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 
 			return [
 				'status' => 1,
@@ -109,20 +115,19 @@ class ReportXhr extends Control
 		global $g_data;
 		$g_data['reportreason'] = 0;
 		$dialog->addContent($this->view->reportDialog());
-		$bid = 0;
+		$storeId = 0;
 		if (!isset($_GET['bid']) || (int)$_GET['bid'] === 0) {
-			if ($betriebe = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
-				$dialog->addContent($this->view->betriebList($betriebe));
+			if ($stores = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
+				$dialog->addContent($this->view->betriebList($stores));
 			}
 		} else {
-			$bid = $_GET['bid'];
+			$storeId = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->func->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
-		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
-
-		$dialog->addOpt('width', '600', false);
+		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
+		$dialog->addOpt('width', '$(window).width()*0.9', false);
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
@@ -139,7 +144,7 @@ class ReportXhr extends Control
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
-		$dialog->addJs('$("#reportmessage").css("width","555px");');
+		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
 		$dialog->addButton('Meldung senden', '
 
 		if($("#reportreason").val() == 0)
@@ -176,6 +181,7 @@ class ReportXhr extends Control
 			});
 		}
 		');
+		$dialog->noOverflow();
 
 		return $dialog->xhrout();
 	}

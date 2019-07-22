@@ -1,18 +1,25 @@
 # Contributing
 
-Feel free to ask questions at the #foodsharing-dev [Slack](https://slackin.yunity.org/) channel at any time.
-
-## Coding guidelines
-
-We do not have specific coding guidelines yet. Please use your common sense and make it fit with the existing code.
+If you have any questions please reach out to us via slack: [yunity slack](https://slackin.yunity.org/) and join the #foodsharing-dev channel.
 
 ## Submitting an issue
 
 If you found an issue on the foodsharing website, then please submit it to our GitLab [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues).
 
-If you feel comfortable submitting a fix too, then follow the next section.
+If you feel comfortable submitting a fix (or if you like to try ;) ) too, then follow the next section.
 
 ## Submitting a change
+
+### Becoming a member
+
+As an “member” on Gitlab you can
+ * create and push to branches within the repository (except master)
+ * see confidential issues
+ * set labels to issues
+ * assign yourself to issues (to tell others that they do not need to start on them)
+After creating a Gitlab account and applying for membership, write a few introducing lines about you on the Slack channel [yunity slack](https://slackin.yunity.org/) #foodsharing-dev. You can apply for membership by clicking the *Request Access* Button in the [GitLab UI](https://gitlab.com/foodsharing-dev/foodsharing), after you created your account.
+
+### Working on an issue
 
 You can either submit your own issue and work on it or work on existing issues. Issues that are suitable for newcomers are labeled as [starter tasks](https://gitlab.com/foodsharing-dev/foodsharing/issues?label_name%5B%5D=starter+task).
 
@@ -24,17 +31,17 @@ To work on an issue:
 2. Create a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier.
   * For example, the issue number `56` would have a branch named `56-some-descriptive-words`.
   * Optionally, add your name to the branch name; for example, `56-nicksellen-some-descriptive-words`.
-3. Make your changes.
+3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci.skip` which disables running the build and test on the Gitlab server.
 
 To submit your change:
 
-1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle`.
+1. Check if the code style is fixed before commiting, by running `./scripts/fix-codestyle-local` (or if that does not work by running the slower `./scripts/fix`).
 2. Check if the tests pass locally, by running `./scripts/test`.
 3. Create a merge request to master for your branch early on.
   1. Select the template "Default".
   2. Prefix the name of the merge request with `WIP:`.
 4. Make sure your merge request checks all the checkboxes in the "Default" template (and check them in the description).
-5. Once you think your branch is ready to be merged, remove the `WIP:` prefix from the name of your merge request.
+5. Once you think your branch is ready to be merged, remove the `WIP:` prefix from the name of your merge request. Rebase your branch onto master (which might have developed since your branching). It is OK to force-push (`git push origin <your_branch_name> -f`) after rebasing.
 6. Submit your merge request.
 
 The next steps will be:
@@ -46,6 +53,23 @@ The next steps will be:
 * Hang around and see if people in #foodsharing-beta on [Slack](https://yunity.slack.com/) find any issues, etc.
 * At some point in the future, once a few changes have been collected, they will all be deployed to production.
 
-## Troubleshooting
+## Testing
 
-(Work in progress.)
+You can run the tests with `./scripts/test`,
+for your second and following runs, you can use `./scripts/test-rerun` which runs much quicker
+(as long as we keep writing the tests to run idempotently, please do!).
+
+So far, end to end tests (called _acceptance tests_ in codeception) work nicely.
+They run with a headless Firefox and Selenium inside the Docker setup and they are run on CI build too.
+
+We are restructuring the code to enable unit testing.  
+Related issue: [Incremental refactor](https://gitlab.com/foodsharing-dev/foodsharing/issues/68).
+
+The state created during testing is not thrown away, and you can visit the test app
+[in your browser](http://localhost:28080/), and it has
+[its own phpmyadmin](http://localhost:28081/).
+
+If you want to run the tests with debug mode turned on, use: `./scripts/test --debug`.
+
+If you just want to run one test, pass the path to that test as an argument,
+e.g.: `./scripts/test tests/acceptance/LoginCept.php`.

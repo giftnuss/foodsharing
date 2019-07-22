@@ -49,7 +49,7 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
-  quit_name: Team %name% verlassen
+  quit_name: Bezirk/Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
@@ -102,7 +102,7 @@ register:
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
   have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -130,9 +130,11 @@ terminology:
   ambassadors: Botschafter
   admins: Administratoren
   wall: Pinnwand
+  statistic: Statistik
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
+  subgroup: Untergruppen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
@@ -151,6 +153,39 @@ no: Nein
 options: Optionen
 error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
+delete: Löschen
+
+store:
+  pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
+
+pickup:
+  dates: Abholtermine
+  confirm: 'Bestätigen'
+  kick: Austragen
+  leave: Austragen
+  open_profile: Profil aufrufen
+  really_kick_user_date_title: '{name} für {date} austragen?'
+  really_leave_date_title: Für {date} austragen?
+  really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
+  really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere Dich eigenständig um Ersatz.
+  leave_pickup_ok: Ich habe bereits Ersatz
+  leave_pickup_message_team: Team benachrichtigen
+  leave_team_message_title: Nachricht ans Team
+  leave_team_message_template: Ihr Lieben, {date} ...
+  team_message_send_and_leave: Senden und austragen
+  team_message_success: Nachricht ans Team wurde erfolgreich versendet
+  join_title_date: Sicher?
+  really_join_date: Möchtest Du Dich verbindlich für die Abholung am {date} eintragen?
+  join_cancel: Doch nicht
+  join_agree: Ja, verbindlich eintragen
+  take_empty_slot: Hier eintragen
+  delete_title: Abholtermin löschen
+  really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
+  delete_not_empty: Aktuell sind noch Foodsaver eingetragen. Du kannst diese Aholung erst löschen, sobald sie leer ist.
+  edit_recurring_pickups: Regelmäßige Abholzeiten bearbeiten
+  add_onetime_pickup: Zusatztermin eintragen
+  slot_add: Slot hinzufügen
+  slot_remove: Slot entfernen
 
 forum:
   from: Von %name%
@@ -190,6 +225,23 @@ events:
   name: Termine
   add_new_event: Jetzt neuen Termin eintragen
   add_event: Neues Event
+
+reports:
+  about: Über
+  about_first_name: Über Name
+  about_last_name: Über Nachname
+  all_reports: Alle Meldungen
+  city: Stadt
+  from: Von
+  from_first_name: Von Name
+  from_last_name: Von Nachname
+  message: Beschreibung
+  reason: Grund
+  region: Stammbezirk
+  report_id: Meldungs-ID
+  time: Zeitpunkt
+  no_reports_fallback: Es sind noch keine Meldungen vorhanden
+  store: Zugeordneter Betrieb
 
 bell:
   no_bells: "Keine Benachrichtigungen"
@@ -243,6 +295,31 @@ memberlist:
   header_for_district: "Foodsaver im Bezirk {bezirk}"
   header_for_workgroup: "Foodsaver in der AG {bezirk}"
   some_in_all: "({some} von {all})"
+
+genderlist:
+  header_for_district: "Verteilung der Foodsaver nach Geschlecht in {bezirk}"
+  district_tab: "Bezirk"
+  home_district_tab: "Stammbezirk"
+  gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
+  gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-Foodsaver"
+  gender_table_header: "Geschlecht"
+  gender_divers: "divers"
+  gender_not_selected: "nicht gewählt"
+  gender_male: "männlich"
+  gender_female: "weiblich"
+  number_table_header: "Anzahl"
+
+pickuplist:
+  header_for_district: "Aufteilung der Abholungen in {bezirk} "
+  day_tab: "Tag"
+  week_tab: "Woche"
+  month_tab: "Monat"
+  year_tab: "Jahr"
+  time_table_header: "Zeitraum"
+  NumberOfStores_table_header: "Anzahl Betriebe"
+  NumberOfAppointments_table_header: "Anzahl Termine"
+  NumberOfSlots_table_header: "Anzahl Abhol-Slots"
+  NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"

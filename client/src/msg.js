@@ -5,12 +5,14 @@
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
+
 import info from '@/info'
 import conv from '@/conv'
+import serverData from '@/server-data'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
-import * as api from '@/api/conversations'
+import { getConversation, sendMessage } from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
 
 import {
@@ -113,7 +115,7 @@ const msg = {
     /*
      * initiate message submit functionality for conversation form
      */
-    $('#msg-control form').on('submit', function (ev) {
+    $('#msg-control form').on('submit', async function (ev) {
       ev.preventDefault()
 
       var val = msg.$answer.val()
@@ -123,24 +125,18 @@ const msg = {
         msg.$answer[0].focus()
         msg.showLoader()
 
-        ajax.req('msg', 'sendmsg', {
-          loader: false,
-          method: 'post',
-          data: {
-            c: msg.conversation_id,
-            b: val
-          },
-          complete: function () {
-            msg.hideLoader()
-            setTimeout(function () {
-              msg.hideLoader()
-            }, 100)
+        try {
+          await sendMessage(msg.conversation_id, val)
+          conversationStore.loadConversations()
+        } catch (err) {
+          console.error(err)
+          pulseError('Die Nachricht konnte nicht versendet werden')
+        }
 
-            // reload conversations
-            conversationStore.loadConversations()
-          }
-
-        })
+        msg.hideLoader()
+        setTimeout(function () {
+          msg.hideLoader()
+        }, 100)
       }
     })
 
@@ -306,7 +302,12 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    /*
+     * set a class 'my-message' to active user's own messages
+     */
+    let ownMessageClass = ''
+    if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -316,7 +317,6 @@ const msg = {
       id = parseInt(id)
       out[out.length] = id
     })
-
     console.log(out)
 
     if (out.length > 0) {
@@ -328,6 +328,7 @@ const msg = {
   },
   compose: function () {
     document.getElementById('compose').style.display = ''
+    document.getElementById('right').classList.remove('list-active')
     document.getElementById('msg-conversation-wrapper').style.display = 'none'
     $('#conversation-list .active').removeClass('active')
     msg.conversation_id = 0
@@ -341,7 +342,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await api.getConversation(id)
+    const { name, members, messages } = await getConversation(id)
 
     msg.resetConversation()
 
@@ -377,6 +378,7 @@ const msg = {
     }
 
     document.getElementById('compose').style.display = 'none'
+    document.getElementById('right').classList.add('list-active')
     document.getElementById('msg-conversation-wrapper').style.display = ''
     msg.scrollBottom()
 

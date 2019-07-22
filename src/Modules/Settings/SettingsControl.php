@@ -2,10 +2,12 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizModel;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
 {
@@ -14,20 +16,32 @@ class SettingsControl extends Control
 	private $quizModel;
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $dataHelper;
+	private $regionGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $gateway, QuizModel $quizModel, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		SettingsModel $model,
+		SettingsView $view,
+		SettingsGateway $gateway,
+		QuizModel $quizModel,
+		ContentGateway $contentGateway,
+		FoodsaverGateway $foodsaverGateway,
+		DataHelper $dataHelper,
+		RegionGateway $regionGateway
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->quizModel = $quizModel;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->dataHelper = $dataHelper;
+		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->routeHelper->goLogin();
 		}
 
 		if (isset($_GET['newmail'])) {
@@ -37,43 +51,43 @@ class SettingsControl extends Control
 		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
 
 		if (!isset($_GET['sub'])) {
-			$this->func->go('/?page=settings&sub=general');
+			$this->routeHelper->go('/?page=settings&sub=general');
 		}
 
-		$this->func->addTitle($this->func->s('settings'));
+		$this->pageHelper->addTitle($this->translationHelper->s('settings'));
 	}
 
 	public function index()
 	{
-		$this->func->addBread('Einstellungen', '/?page=settings');
+		$this->pageHelper->addBread('Einstellungen', '/?page=settings');
 
 		$menu = array(
-			array('name' => $this->func->s('settings_general'), 'href' => '/?page=settings&sub=general'),
-			array('name' => $this->func->s('settings_info'), 'href' => '/?page=settings&sub=info')
+			array('name' => $this->translationHelper->s('settings_general'), 'href' => '/?page=settings&sub=general'),
+			array('name' => $this->translationHelper->s('settings_info'), 'href' => '/?page=settings&sub=info')
 		);
 
-		$menu[] = array('name' => $this->func->s('bcard'), 'href' => '/?page=bcard');
-		//$menu[] = array('name' => $this->func->s('calendar'), 'href' => '/?page=settings&sub=calendar');
+		$menu[] = array('name' => $this->translationHelper->s('bcard'), 'href' => '/?page=bcard');
+		//$menu[] = array('name' => $this->translationHelper->s('calendar'), 'href' => '/?page=settings&sub=calendar');
 
-		$this->func->addContent($this->view->menu($menu, array('title' => $this->func->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
+		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
 
 		$menu = array();
-		$menu[] = array('name' => $this->func->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
+		$menu[] = array('name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
 		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 
 		if ($this->foodsaver['rolle'] == 0) {
-			$menu[] = array('name' => 'Werde ' . $this->func->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
+			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
 		} elseif ($this->foodsaver['rolle'] == 1) {
-			$menu[] = array('name' => 'Werde ' . $this->func->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
+			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
 		}
-		$menu[] = array('name' => $this->func->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
-		$this->func->addContent($this->view->menu($menu, array('title' => $this->func->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
+		$menu[] = array('name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
+		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
 	}
 
 	public function sleeping()
 	{
 		if ($sleep = $this->model->getSleepData()) {
-			$this->func->addContent($this->view->sleepMode($sleep));
+			$this->pageHelper->addContent($this->view->sleepMode($sleep));
 		}
 	}
 
@@ -81,27 +95,27 @@ class SettingsControl extends Control
 	{
 		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
 			if (!$this->foodsaver['verified']) {
-				$this->func->addContent($this->view->simpleContent($this->contentGateway->get(45)));
+				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
 			} else {
 				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
 					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
-						$this->func->info('Du darfst zunächst das Foodsaver Quiz machen');
-						$this->func->go('/?page=settings&sub=upgrade/up_fs');
+						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
+						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 					$desc = $this->contentGateway->get(12);
 
 					// Quiz wurde noch gar nicht probiert
 					if ($status['times'] == 0) {
-						$this->func->addContent($this->view->quizIndex($quiz, $desc));
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 					} // quiz ist bereits bestanden
 					elseif ($status['cleared'] > 0) {
 						return $this->confirm_bip();
 					} // es läuft ein quiz weitermachen
 					elseif ($status['running'] > 0) {
-						$this->func->addContent($this->view->quizContinue($quiz, $desc));
+						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
 					} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 					elseif ($status['failed'] < 3) {
-						$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 					} // 3x nicht bestanden 30 Tage Lernpause
 					elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 						$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
@@ -109,10 +123,10 @@ class SettingsControl extends Control
 						return $this->view->pause($days_to_wait, $desc);
 					} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 					elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-						$this->func->addContent($this->view->quizIndex($quiz, $desc));
+						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 					} // hat alles nichts genützt
 					else {
-						$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+						$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 					}
 				}
 			}
@@ -122,7 +136,7 @@ class SettingsControl extends Control
 	public function quizsession()
 	{
 		if ($session = $this->model->getQuizSession($_GET['sid'])) {
-			$this->func->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
+			$this->pageHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}
 
@@ -134,16 +148,16 @@ class SettingsControl extends Control
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // quiz ist bereits bestanden
 				elseif ($status['cleared'] > 0) {
 					return $this->confirm_fs();
 				} // es läuft ein quiz weitermachen
 				elseif ($status['running'] > 0) {
-					$this->func->addContent($this->view->quizContinue($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
 				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 				elseif ($status['failed'] < 3) {
-					$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 				} // 3x nicht bestanden 30 Tage Lernpause
 				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 					$this->model->updateRole(0, $this->foodsaver['rolle']);
@@ -152,10 +166,10 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait, $desc);
 				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
-					$this->func->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+					$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
 				}
 			}
 		}
@@ -169,16 +183,16 @@ class SettingsControl extends Control
 
 				// Quiz wurde noch gar nicht probiert
 				if ($status['times'] == 0) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // es läuft ein quiz weitermachen
 				elseif ($status['running'] > 0) {
-					$this->func->addContent($this->view->quizContinue($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
 				} // quiz ist bereits bestanden
 				elseif ($status['cleared'] > 0) {
 					return $this->confirm_bot();
 				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
 				elseif ($status['failed'] < 3) {
-					$this->func->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
+					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
 				} // 3x nicht bestanden 30 Tage Lernpause
 				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
 					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
@@ -186,28 +200,28 @@ class SettingsControl extends Control
 					return $this->view->pause($days_to_wait, $desc);
 				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
 				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->func->addContent($this->view->quizIndex($quiz, $desc));
+					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 				} // hat alles nichts genützt
 				else {
 					return $this->view->quizFailed($this->contentGateway->get(13));
 				}
 			} else {
-				$this->func->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
+				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
 				case 0:
-					$this->func->info('Du musst erst Foodsaver werden');
-					$this->func->go('/?page=settings&sub=upgrade/up_fs');
+					$this->flashMessageHelper->info('Du musst erst Foodsaver werden');
+					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
 				case 1:
-					$this->func->info('Du musst erst BetriebsverantwortlicheR werden');
-					$this->func->go('/?page=settings&sub=upgrade/up_bip');
+					$this->flashMessageHelper->info('Du musst erst BetriebsverantwortlicheR werden');
+					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
 
 				default:
-					$this->func->go('/?page=settings');
+					$this->routeHelper->go('/?page=settings');
 					break;
 			}
 		}
@@ -219,20 +233,20 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
 					if (!$this->session->may('fs')) {
 						$this->model->updateRole(1, $this->foodsaver['rolle']);
 					}
-					$this->func->info('Danke! Du bist jetzt Foodsaver');
-					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->flashMessageHelper->info('Danke! Du bist jetzt Foodsaver');
+					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->contentGateway->get(14);
 			$rv = $this->contentGateway->get(30);
-			$this->func->addContent($this->view->confirmFs($cnt, $rv));
+			$this->pageHelper->addContent($this->view->confirmFs($cnt, $rv));
 		}
 	}
 
@@ -242,65 +256,65 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->model->updateRole(2, $this->foodsaver['rolle']);
-					$this->func->info('Danke! Du bist jetzt Betriebsverantwortlicher');
-					$this->func->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
+					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
 			$cnt = $this->contentGateway->get(15);
 			$rv = $this->contentGateway->get(31);
-			$this->func->addContent($this->view->confirmBip($cnt, $rv));
+			$this->pageHelper->addContent($this->view->confirmBip($cnt, $rv));
 		}
 	}
 
 	private function confirm_bot()
 	{
-		$this->func->addBread('Botschafter werden');
+		$this->pageHelper->addBread('Botschafter werden');
 
 		if ($this->model->hasQuizCleared(3)) {
 			$showform = true;
 
 			$rolle = 3;
 
-			if ($this->func->submitted()) {
+			if ($this->submitted()) {
 				global $g_data;
 				$g_data = $_POST;
 
 				$check = true;
 				if (!isset($_POST['photo_public'])) {
 					$check = false;
-					$this->func->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
+					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
 				}
 
 				if (empty($_POST['about_me_public'])) {
 					$check = false;
-					$this->func->error('Deine Kurzbeschreibung ist leer');
+					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');
 				}
 
 				if (!isset($_POST['tel_public'])) {
 					$check = false;
-					$this->func->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
+					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
 					$check = false;
-					$this->func->error($this->func->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				}
 
 				if ((int)$_POST['bezirk'] == 0) {
 					$check = false;
-					$this->func->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
+					$this->flashMessageHelper->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
 				}
 
 				if ($check) {
-					$data = $this->func->unsetAll($_POST, array('photo_public', 'new_bezirk'));
+					$data = $this->dataHelper->unsetAll($_POST, array('photo_public', 'new_bezirk'));
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
-					$this->func->addContent($this->v_utils->v_field(
-						$this->v_utils->v_info($this->func->s('upgrade_bot_success')),
-						$this->func->s('upgrade_request_send'),
+					$this->pageHelper->addContent($this->v_utils->v_field(
+						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
+						$this->translationHelper->s('upgrade_request_send'),
 						array(
 							'class' => 'ui-padding'
 						)
@@ -312,7 +326,7 @@ class SettingsControl extends Control
 			}
 
 			if ($showform) {
-				$this->func->addJs('$("#upBotsch").on("submit", function(ev){
+				$this->pageHelper->addJs('$("#upBotsch").on("submit", function(ev){
 					check = true;
 					if($("#bezirk").val() == 0)
 					{
@@ -331,11 +345,11 @@ class SettingsControl extends Control
 
 				$rv = $this->contentGateway->get(32);
 
-				$this->func->addContent(
+				$this->pageHelper->addContent(
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->func->getBezirk(), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getBezirk($this->session->getCurrentBezirkId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						$this->v_utils->v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
@@ -365,7 +379,7 @@ class SettingsControl extends Control
 					),
 
 						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
-								array('id' => 1, 'name' => $this->func->s('rv_accept'))
+								array('id' => 1, 'name' => $this->translationHelper->s('rv_accept'))
 							))), $rv['title'], array('class' => 'ui-padding'))
 					), array('submit' => 'Antrag auf Botschafterrolle verbindlich absenden'))
 				);
@@ -375,8 +389,8 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->func->addBread($this->func->s('delete_account'));
-		$this->func->addContent($this->view->delete_account($this->session->id()));
+		$this->pageHelper->addBread($this->translationHelper->s('delete_account'));
+		$this->pageHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 
 	public function general()
@@ -385,18 +399,18 @@ class SettingsControl extends Control
 
 		$data = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
 
-		$this->func->setEditData($data);
+		$this->dataHelper->setEditData($data);
 
-		$this->func->addContent($this->view->foodsaver_form());
+		$this->pageHelper->addContent($this->view->foodsaver_form());
 
-		$this->func->addContent($this->picture_box(), CNT_RIGHT);
+		$this->pageHelper->addContent($this->picture_box(), CNT_RIGHT);
 	}
 
 	public function calendar()
 	{
-		$this->func->addBread($this->func->s('calendar'));
+		$this->pageHelper->addBread($this->translationHelper->s('calendar'));
 		$token = $this->generate_api_token($this->session->id());
-		$this->func->addContent($this->view->settingsCalendar($token));
+		$this->pageHelper->addContent($this->view->settingsCalendar($token));
 	}
 
 	public function info()
@@ -443,23 +457,23 @@ class SettingsControl extends Control
 			}
 
 			if ($this->model->saveInfoSettings($nl, $infomail)) {
-				$this->func->info($this->func->s('changes_saved'));
+				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 			}
 		}
-		$this->func->addBread($this->func->s('settings_info'));
+		$this->pageHelper->addBread($this->translationHelper->s('settings_info'));
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
 		$fairteiler = $this->model->getFairteiler();
 		$threads = $this->model->getForumThreads();
 
-		$this->func->addContent($this->view->settingsInfo($fairteiler, $threads));
+		$this->pageHelper->addContent($this->view->settingsInfo($fairteiler, $threads));
 	}
 
 	public function handle_edit()
 	{
-		if ($this->func->submitted()) {
-			$data = $this->func->getPostData();
+		if ($this->submitted()) {
+			$data = $this->dataHelper->getPostData();
 			$data['stadt'] = $data['ort'];
 			$check = true;
 
@@ -470,34 +484,8 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
-					$this->func->error('Mit Deiner Homepage URL stimmt etwas nicht');
+					$this->flashMessageHelper->error('Mit Deiner Homepage URL stimmt etwas nicht');
 				}
-			}
-
-			if (!empty($data['github'])) {
-				if (substr($data['github'], 0, 19) != 'https://github.com/') {
-					$data['github'] = 'https://github.com/' . $data['github'];
-				}
-
-				if (!$this->validUrl($data['github'])) {
-					$check = false;
-					$this->func->error('Mit Deiner github URL stimmt etwas nicht');
-				}
-			}
-
-			if (!empty($data['twitter'])) {
-				if (substr($data['twitter'], 0, 20) != 'https://twitter.com/') {
-					$data['twitter'] = 'https://twitter.com/' . $data['twitter'];
-				}
-
-				if (!$this->validUrl($data['twitter'])) {
-					$check = false;
-					$this->func->error('Mit Deiner twitter URL stimmt etwas nicht');
-				}
-			}
-
-			if (!empty($data['tox'])) {
-				$data['tox'] = preg_replace('/[^0-9A-Z]/', '', $data['tox']);
 			}
 
 			if ($check) {
@@ -511,9 +499,9 @@ class SettingsControl extends Control
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->session->refreshFromDatabase();
-					$this->func->info($this->func->s('foodsaver_edit_success'));
+					$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 				} else {
-					$this->func->error($this->func->s('error'));
+					$this->flashMessageHelper->error($this->translationHelper->s('error'));
 				}
 			}
 		}
@@ -528,23 +516,17 @@ class SettingsControl extends Control
 		return true;
 	}
 
-	public function picture_box()
+	private function picture_box(): string
 	{
 		$photo = $this->foodsaverGateway->getPhoto($this->session->id());
 
-		if (!(file_exists('images/thumb_crop_' . $photo))) {
-			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
-		} else {
-			$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
-		}
-
-		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
+		return $this->view->picture_box($photo);
 	}
 
 	private function handle_newmail()
 	{
 		if ($email = $this->model->getNewMail($_GET['newmail'])) {
-			$this->func->addJs("ajreq('changemail3');");
+			$this->pageHelper->addJs("ajreq('changemail3');");
 		}
 	}
 

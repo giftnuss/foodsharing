@@ -5,54 +5,59 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
-	private $mbmodel;
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailGateway;
 	private $regionGateway;
 	private $sanitizerService;
+	private $mailboxGateway;
+	private $identificationHelper;
+	private $dataHelper;
 
 	public function __construct(
-		Db $model,
-		MailboxModel $mbmodel,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService
+		SanitizerService $sanitizerService,
+		MailboxGateway $mailboxGateway,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper
 	) {
-		$this->model = $model;
-		$this->mbmodel = $mbmodel;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->mailboxGateway = $mailboxGateway;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
 
 		parent::__construct();
 
 		if (!$this->session->may('orga')) {
-			$this->func->go('/');
+			$this->routeHelper->go('/');
 		}
 	}
 
 	public function index()
 	{
 		$this->handleEmail();
-		$this->func->addBread($this->func->s('mailinglist'), '/?page=email');
+		$this->pageHelper->addBread($this->translationHelper->s('mailinglist'), '/?page=email');
 
 		if ($emailstosend = $this->emailGateway->getEmailsToSend($this->session->id())) {
-			$this->func->addContent($this->v_email_statusbox($emailstosend));
+			$this->pageHelper->addContent($this->v_email_statusbox($emailstosend));
 		}
 
 		$recip = '';
@@ -66,35 +71,35 @@ class EmailControl extends Control
 			$g_data['message'] = '<p><strong>{ANREDE} {NAME}</strong><br /><br /><br />';
 		}
 
-		$boxes = $this->mbmodel->getBoxes();
+		$boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'));
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
-		$this->func->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
+		$this->pageHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
 			$this->v_utils->v_field(
 				$recip .
 				$this->v_utils->v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
 				$this->v_utils->v_form_text('subject', array('required' => true)) .
 				$this->v_utils->v_form_file('attachement'),
 
-				$this->func->s('mailing_list'),
+				$this->translationHelper->s('mailing_list'),
 				array('class' => 'ui-padding')
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->func->s('message'))
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->translationHelper->s('message'))
 		), array('submit' => 'Zum Senden Vorbereiten')));
 
-		$this->func->addStyle('#testemail{width:91%;}');
+		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
-		$g_data['testemail'] = $this->model->getVal('email', 'foodsaver', $this->session->id());
+		$g_data['testemail'] = $this->emailGateway->getEmailAddressOfFoodsaver($this->session->id());
 
-		$this->func->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
-		$this->func->addJs("$('#rightmenu').menu();");
-		$this->func->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->func->s('personal_styling_desc') . '</div>', $this->func->s('personal_styling')), CNT_RIGHT);
+		$this->pageHelper->addJs("$('#rightmenu').menu();");
+		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->translationHelper->s('personal_styling_desc') . '</div>', $this->translationHelper->s('personal_styling')), CNT_RIGHT);
 
-		$this->func->addContent('
+		$this->pageHelper->addContent('
 	<div id="dialog-confirm" title="E-Mail senden?" style="display:none">
-	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->func->s('shure') . '</p>
+	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->translationHelper->s('shure') . '</p>
 	</div>
 	<h3 class="head ui-widget-header ui-corner-top">von Dir gesendete Mails</h3>
 	<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom">
@@ -105,24 +110,24 @@ class EmailControl extends Control
 		if ($mails = $this->emailGateway->getSendMails($this->session->id())) {
 			foreach ($mails as $m) {
 				++$i;
-				$this->func->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
+				$this->pageHelper->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
 				$divs .= '<div id="right-' . $i . '" style="display:none;">' . nl2br($m['message']) . '</div>';
-				$this->func->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
+				$this->pageHelper->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
 			}
 		}
-		$this->func->addContent('</ul></div>' . $divs, CNT_RIGHT);
+		$this->pageHelper->addContent('</ul></div>' . $divs, CNT_RIGHT);
 	}
 
 	private function handleEmail()
 	{
-		if ($this->func->submitted()) {
+		if ($this->submitted()) {
 			$betreff = $_POST['subject'];
 			$nachricht = $_POST['message'];
 			$mailbox_id = $_POST['mailbox_id'];
 
 			$nachricht = $this->handleImages($nachricht);
 
-			$data = $this->func->getPostData();
+			$data = $this->dataHelper->getPostData();
 
 			$foodsaver = array();
 
@@ -144,11 +149,7 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, false);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
-					$foodsaver = $this->model->q('
-						SELECT 	`id`,`email`
-						FROM `fs_foodsaver`
-						WHERE newsletter = 1 AND rolle = 0 AND `active` = 1 AND deleted_at IS NULL
-					');
+					$foodsaver = $this->emailGateway->listNewsletterOnlyFoodsharer();
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllFoodsaverNoBotschafter();
 				} elseif ($data['recip_choose'] == 'storemanagers') {
@@ -166,7 +167,7 @@ class EmailControl extends Control
 					str_replace(array("\r"), '', $foodsaver);
 					$foodsaver = explode("\n", $foodsaver);
 
-					$bezirk = $this->func->getBezirk();
+					$bezirk = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
 
 					$count = 0;
 					foreach ($foodsaver as $i => $fs) {
@@ -183,15 +184,15 @@ class EmailControl extends Control
 							$name = $arr[1];
 						}
 
-						if ($this->func->validEmail($email)) {
-							$this->func->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
+						if ($this->emailHelper->validEmail($email)) {
+							$this->emailHelper->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
 							++$count;
 						} else {
 							unset($foodsaver[$i]);
 						}
 					}
 
-					$this->func->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
+					$this->flashMessageHelper->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
 
 					$foodsaver = array();
 				} elseif ($data['recip_choose'] == 'filialbez') {
@@ -221,9 +222,9 @@ class EmailControl extends Control
 					$foodsaver[] = $o;
 				}
 				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
-				$this->func->goPage();
+				$this->routeHelper->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
-				$this->func->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
+				$this->flashMessageHelper->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
 			}
 		}
 	}
@@ -257,17 +258,11 @@ class EmailControl extends Control
 	{
 		$out = '';
 
-		$recip = $this->model->qCol('
-			SELECT 	CONCAT(fs.name," ",fs.nachname)
-			FROM 	`fs_email_status` e,
-					`fs_foodsaver` fs
-			WHERE 	e.foodsaver_id = fs.id
-			AND 	e.email_id = ' . $mail['id'] . '
-		');
+		$recip = $this->emailGateway->getRecipient($mail['id']);
 
-		$id = $this->func->id('mailtosend');
+		$id = $this->identificationHelper->id('mailtosend');
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -296,7 +291,7 @@ class EmailControl extends Control
 
 		');
 
-		$this->func->addJsFunc('
+		$this->pageHelper->addJsFunc('
 		function ' . $id . '_continue_xhr()
 		{
 				showLoader();
@@ -329,7 +324,7 @@ class EmailControl extends Control
 			$style = ' style="height:100px;overflow:auto;font-size:10px;background-color:#fff;color:#333;padding:5px;"';
 		}
 
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 				<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>
 				<div class="popbox" id="' . $id . '">
 					<h3>E-Mail senden</h3>
@@ -337,8 +332,8 @@ class EmailControl extends Control
 
 					<div id="' . $id . '-comment">
 						' . $this->v_utils->v_input_wrapper('Empfänger', '<div' . $style . '>' . implode(', ', $recip) . '</div>') . '
-						' . $this->v_utils->v_input_wrapper($this->func->s('subject'), $mail['name']) . '
-						' . $this->v_utils->v_input_wrapper($this->func->s('message'), nl2br($mail['message'])) . '
+						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('subject'), $mail['name']) . '
+						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('message'), nl2br($mail['message'])) . '
 
 					</div>
 					<a id="' . $id . '-continue" href="#">Mit dem Senden weitermachen</a> <a id="' . $id . '-abort" href="#">Senden Abbrechen</a>

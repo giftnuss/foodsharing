@@ -1,0 +1,194 @@
+.campaign {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.campaign .topbarpadding {
+  padding: 41px 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+.campaigntext, .campaignimg {
+  height: auto;
+  width: 50%;
+}
+
+.campaigntext {
+  text-align: center;
+  font-size: 2.5vh;
+  color: #f9f5e0;
+  text-shadow: 0 1px #555;
+  -webkit-text-size-adjust: none;
+  padding-right: 70px;
+}
+
+.campaigntext h2 {
+  font-family: "Alfa Slab One", serif;
+  font-size: 2.6em;
+  font-weight: normal;
+  padding:2vh;
+}
+
+.campaigntext h4 {
+  font-family: "Alfa Slab One", serif;
+  font-size: 1.3em;
+  font-weight: normal;
+}
+
+.campaigntext div img {
+  width: 8.5vh;
+  margin: 0 auto;
+}
+
+.campaigntext h3 {
+  font-family: "Alfa Slab One", serif;
+  font-size: 2em;
+  font-weight: normal;
+}
+
+.campaigntext span {
+  color: #64ae24;
+}
+
+.campaignimg {
+  background: no-repeat 50%;
+  background-size: auto 85%;
+  height: 80vh;
+}
+
+.campaignimg img {
+  max-width: 100%;
+  margin: auto;
+  display: block;
+  height: 100%;
+  object-fit: contain;
+}
+
+.page-index div#main {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.header {
+  padding: 41px 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (max-aspect-ratio: 3/2) {
+  .campaigntext h3 {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-aspect-ratio: 9/10) {
+  .header {
+    height: 130vh;
+  }
+  .campaign {
+    flex-wrap: wrap;
+  }
+  .campaignimg {
+    padding-top: 60px;
+    height: 60vh;
+  }
+  .campaigntext {
+    padding-top: 0px;
+    padding-right: 0px;
+  }
+  .campaigntext, .campaignimg {
+    width: 100%;
+  }
+}
+
+.carpet-roll {
+  color: #533a20;
+  padding: 40px 0;
+  margin:0 auto;
+}
+
+.carpet-roll p {
+  margin: 1rem 0rem 0 0rem;
+  font-size: 1.1em;
+}
+
+.carpet-roll h3 {
+  color: #64ae24;
+  font-size: 2.5em;
+  line-height: 1.75em;
+  font-weight: normal;
+  font-family: "Alfa Slab One", serif;
+  letter-spacing: 0.4px;
+  border-bottom: 4px solid #64ae24;
+  margin: 1rem 0 0 0;
+  display: inline;
+}
+
+.carpet-roll .button {
+  background-color: #64ae24;
+  font-size: 150%;
+  font-family: "Alfa Slab One", serif;
+  font-weight: normal !important;
+}
+
+.what-is-what .clickable {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.what-is-what .iconlegend {
+  color: rgb(83, 58, 32);
+  font-family: "Alfa Slab One", Arial;
+  width: 100%;
+  font-size: 0.65em;
+  text-align: center;
+  display: block;
+  margin-top: 0.75em;
+}
+
+.what-is-what i {
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2rem;
+  font-size: 2em;
+  margin: 0 auto;
+  color: white;
+  text-align: center;
+  background-color: #64ae24;
+  transition: transform 0.2s ease;
+}
+
+.what-is-what i:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.section--dark-brown {
+  background-color: rgb(83, 58, 32);
+}
+
+.section--beige {
+    background-color: rgb(241, 231, 201);
+}
+
+.section--light-beige {
+  background-color: rgb(249, 245, 224);
+}

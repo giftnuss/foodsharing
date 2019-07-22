@@ -11,7 +11,7 @@ resource_rules:
             interval_type: months
             interval: 8
         limits:
-          oldest: 1
+          oldest: 2
         actions:
           labels:
             - stale
@@ -33,7 +33,7 @@ resource_rules:
             interval_type: weeks
             interval: 2
         limits:
-          oldest: 1
+          oldest: 2
         actions:
           status: close
           comment: |

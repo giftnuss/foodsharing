@@ -14,7 +14,7 @@ final class MessageControl extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->routeHelper->goLogin();
 		}
 	}
 
@@ -23,13 +23,16 @@ final class MessageControl extends Control
 		$this->setTemplate('msg');
 		$this->setContentWidth(5, 8);
 
-		$this->func->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
-		$this->func->addBread($this->func->s('messages'));
-		$this->func->addTitle($this->func->s('messages'));
+		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
+		$this->pageHelper->addBread($this->translationHelper->s('messages'));
+		$this->pageHelper->addTitle($this->translationHelper->s('messages'));
 
-		$this->func->addContent($this->view->compose());
-		$this->func->addContent($this->view->conversation());
-		$this->func->addContent($this->view->leftMenu(), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->compose());
+		$this->pageHelper->addContent($this->view->conversation());
+
+		if (!$this->session->isMob()) { /* for desktop only */
+			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
+		}
 
 		$conversations = $this->model->listConversations();
 		if ($conversations) {
@@ -39,6 +42,6 @@ final class MessageControl extends Control
 			}
 			$this->session->set('msg_conversations', $ids);
 		}
-		$this->func->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

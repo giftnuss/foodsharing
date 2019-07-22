@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Codeception\CustomCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Carbon\Carbon;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -21,6 +22,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected $output;
 
 	protected $foodsavers = [];
+	protected $stores = [];
 
 	/**
 	 * returns the name of the command.
@@ -57,18 +59,31 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('All done!');
 	}
 
-	protected function getRandomUser($number = 1)
+	protected function getRandomIDOfArray(array $value, $number = 1)
 	{
-		$rand = array_rand($this->foodsavers, $number);
-
+		$rand = array_rand($value, $number);
 		if ($number === 1) {
-			return $this->foodsavers[$rand];
+			return $value[$rand];
 		}
 		if (count($rand) > 0) {
-			return array_intersect_key($this->foodsavers, $rand);
+			return array_intersect_key($value, $rand);
 		}
 
 		return [];
+	}
+
+	protected function CreateMorePickups()
+	{
+		for ($m = 0; $m <= 10; ++$m) {
+			$store_id = $this->getRandomIDOfArray($this->stores);
+			for ($i = 0; $i <= 10; ++$i) {
+				$pickupDate = Carbon::create(2019, 4, random_int(1, 30), random_int(1, 24), random_int(1, 59));
+				for ($k = 0; $k <= 2; ++$k) {
+					$foodSaver_id = $this->getRandomIDOfArray($this->foodsavers);
+					$this->helper->addCollector($foodSaver_id, $store_id, ['date' => $pickupDate->toDateTimeString()]);
+				}
+			}
+		}
 	}
 
 	private function writeUser($user, $password, $name = 'user')
@@ -143,7 +158,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		// create conversations between users
 		foreach ($this->foodsavers as $user) {
-			foreach ($this->getRandomUser(10) as $chatpartner) {
+			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $chatpartner) {
 				if ($user !== $chatpartner) {
 					$conv = $I->createConversation([$user, $chatpartner]);
 					$I->addConversationMessage($user, $conv['id']);
@@ -153,8 +168,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln('Created conversations');
 
-		// create more stores
-		foreach (range(0, 20) as $_) {
+		// create more stores and collect their ids in a list
+		$this->stores = [$store['id']];
+		foreach (range(0, 40) as $_) {
 			// TODO conversations are missing the other store members
 			$conv1 = $I->createConversation([$userbot['id']], ['name' => 'team']);
 			$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer']);
@@ -163,22 +179,26 @@ class SeedCommand extends Command implements CustomCommandInterface
 			foreach (range(0, 5) as $_) {
 				$I->addRecurringPickup($store['id']);
 			}
+			$this->stores[] = $store['id'];
 		}
 		$this->output->writeln('Created stores');
 
+		$this->CreateMorePickups();
+		$this->output->writeln('Created more pickups');
+
 		// create foodbaskets
 		foreach (range(0, 500) as $_) {
-			$user = $this->getRandomUser();
+			$user = $this->getRandomIDOfArray($this->foodsavers);
 			$foodbasket = $I->createFoodbasket($user);
-			$commenter = $this->getRandomUser();
+			$commenter = $this->getRandomIDOfArray($this->foodsavers);
 			$I->addFoodbasketWallpost($commenter, $foodbasket['id']);
 		}
 		$this->output->writeln('Created foodbaskets');
 
 		// create fairteiler
-		foreach ($this->getRandomUser(50) as $user) {
+		foreach ($this->getRandomIDOfArray($this->foodsavers, 50) as $user) {
 			$fairteiler = $I->createFairteiler($user, $bezirk1);
-			foreach ($this->getRandomUser(10) as $follower) {
+			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $follower) {
 				if ($user !== $follower) {
 					$I->addFairteilerFollower($follower, $fairteiler['id']);
 				}
@@ -191,5 +211,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addBlogPost($userbot['id'], $bezirk1);
 		}
 		$this->output->writeln('Created blog posts');
+
+		foreach (range(0, 4) as $_) {
+			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+		}
+
+		foreach (range(0, 3) as $_) {
+			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
+		}
 	}
 }

@@ -57,7 +57,7 @@ class WallPostView extends View
 			}
 			$del = '';
 			if ($mayDelete || $p['foodsaver_id'] == $this->session->id()) {
-				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->func->s('delete') . '</a>';
+				$del = '<span class="dot">·</span><a onclick="u_delPost(' . $p['id'] . ', \'' . $this->table . '\', ' . $this->wallId . ');return false;" href="#p' . $p['id'] . '" class="pdelete light">' . $this->translationHelper->s('delete') . '</a>';
 			}
 
 			$out .= '
@@ -65,7 +65,7 @@ class WallPostView extends View
 					<td class="img">
 						<input type="hidden" name="pid" class="pid" value="' . $p['id'] . '" />
 						<a href="/profile/' . $p['foodsaver_id'] . '">
-							<img src="' . $this->func->img($p['photo']) . '" />
+							<img src="' . $this->imageService->img($p['photo']) . '" />
 						</a>
 					</td>
 					<td' . $gal_col . '>
@@ -74,7 +74,7 @@ class WallPostView extends View
 						' . $gallery . '
 					</span>
 					<div class="foot">
-						<span class="time">' . date('d.m.Y H:i', $p['time_ts']) . ' Uhr von ' . $p['name'] . '</span>' . $del . '
+						<span class="time">' . $this->timeHelper->niceDate($p['time_ts'], false) . ' von ' . $p['name'] . '</span>' . $del . '
 					</div>
 					</td>
 				</tr>';

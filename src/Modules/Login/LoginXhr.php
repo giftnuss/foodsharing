@@ -16,29 +16,18 @@ class LoginXhr extends Control
 	private $foodsaverGateway;
 	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, ContentGateway $contentGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
-	{
-		$this->model = $model;
+	public function __construct(
+		LoginView $view,
+		ContentGateway $contentGateway,
+		FoodsaverGateway $foodsaverGateway,
+		LoginGateway $loginGateway
+	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
-	}
-
-	/**
-	 * Method to add some user specific vars to the memcache for more performance and less db access.
-	 */
-	private function fillMemcacheUserVars()
-	{
-		$info = $this->model->getVal('infomail_message', 'foodsaver', $this->session->id());
-
-		if ((int)$info > 0) {
-			$this->mem->userSet($this->session->id(), 'infomail', true);
-		} else {
-			$this->mem->userSet($this->session->id(), 'infomail', false);
-		}
 	}
 
 	/**
@@ -55,7 +44,7 @@ class LoginXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				),
-				$this->func->s('upload_no_image')
+				$this->translationHelper->s('upload_no_image')
 			);
 			$uploader->setMaxSize('5MB');
 
@@ -78,7 +67,7 @@ class LoginXhr extends Control
 				$func = 'parent.join.readyUpload(\'' . $name . '\');';
 			}
 		} catch (Exception $e) {
-			$func = 'parent.join.photoUploadError(\'' . $this->func->s('error_image') . '\');';
+			$func = 'parent.join.photoUploadError(\'' . $this->translationHelper->s('error_image') . '\');';
 		}
 
 		echo '<html>
@@ -102,13 +91,13 @@ class LoginXhr extends Control
 		}
 
 		$token = bin2hex(random_bytes(12));
-		if ($id = $this->model->insertNewUser($data, $token)) {
+		if ($id = $this->loginGateway->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->func->tplMail(25, $data['email'], array(
+			$this->emailHelper->tplMail('user/join', $data['email'], array(
 				'name' => $data['name'],
 				'link' => $activationUrl,
-				'anrede' => $this->func->s('anrede_' . $data['gender'])
+				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
 			));
 
 			echo json_encode(array(
@@ -119,7 +108,7 @@ class LoginXhr extends Control
 
 		echo json_encode(array(
 			'status' => 0,
-			'error' => $this->func->s('error')
+			'error' => $this->translationHelper->s('error')
 		));
 		exit();
 	}
@@ -169,19 +158,19 @@ class LoginXhr extends Control
 		$data['surname'] = trim($data['surname']);
 
 		if ($data['name'] == '') {
-			return $this->func->s('error_name');
+			return $this->translationHelper->s('error_name');
 		}
 
-		if (!$this->func->validEmail($data['email'])) {
-			return $this->func->s('error_email');
+		if (!$this->emailHelper->validEmail($data['email'])) {
+			return $this->translationHelper->s('error_email');
 		}
 
 		if ($this->foodsaverGateway->emailExists($data['email'])) {
-			return $this->func->s('email_exists');
+			return $this->translationHelper->s('email_exists');
 		}
 
 		if (strlen($data['pw']) < 8) {
-			return $this->func->s('error_passwd');
+			return $this->translationHelper->s('error_passwd');
 		}
 
 		$data['gender'] = (int)$data['gender'];
@@ -193,7 +182,7 @@ class LoginXhr extends Control
 		$min_birthdate = new \DateTime();
 		$min_birthdate->modify('-18 years');
 		if (!$birthdate || $birthdate > $min_birthdate) {
-			return $this->func->s('error_birthdate');
+			return $this->translationHelper->s('error_birthdate');
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
@@ -224,12 +213,12 @@ class LoginXhr extends Control
 		if (!$this->session->may()) {
 			$dia = new XhrDialog();
 
-			$dia->setTitle($this->func->s('join'));
+			$dia->setTitle($this->translationHelper->s('join'));
 
 			$email = '';
 			$pass = '';
 			if (isset($_GET['p'], $_GET['e'])) {
-				if ($this->func->validEmail($_GET['e'])) {
+				if ($this->emailHelper->validEmail($_GET['e'])) {
 					$email = strip_tags($_GET['e']);
 				}
 				$pass = strip_tags($_GET['p']);
@@ -309,7 +298,7 @@ class LoginXhr extends Control
 
 				return $img;
 			} catch (Exception $e) {
-				$this->func->info('Dein Foto konnte nicht gespeichert werden');
+				$this->flashMessageHelper->info('Dein Foto konnte nicht gespeichert werden');
 
 				return '';
 			}

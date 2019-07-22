@@ -20,7 +20,7 @@ class IndexControl extends Control
 
 	public function index()
 	{
-		$this->func->addTitle('Rette mit!');
+		$this->pageHelper->addTitle('Rette mit!');
 
 		$gerettet = (int)$this->indexGateway->getFetchedWeight();
 
@@ -41,9 +41,8 @@ class IndexControl extends Control
 			$page_content = $this->contentGateway->get(38);
 		}
 
-		$this->func->addContent($this->view->index(
-			$page_content['body'],
-			$gerettet
+		$this->pageHelper->addContent($this->view->index(
+			$page_content['body']
 		), CNT_OVERTOP);
 	}
 }

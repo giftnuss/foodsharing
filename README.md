@@ -1,4 +1,3 @@
-
 <div align="center">
 	<br>
 	<br>
@@ -22,7 +21,7 @@ This is the code that powers
 
 ## 💻 Development
 
-Visit [devdocs.foodsharing.de](https://devdocs.foodsharing.de) to get started with development.
+Visit [devdocs.foodsharing.network](https://devdocs.foodsharing.network) to get started with development.
 
 ## 💒 Community
 
@@ -108,7 +107,7 @@ Our developers hang out in the
       <td border="0" align="center" valign="top" width="16%">
         <div style="height: 100px; width: 100px;">
           <a href="https://gitlab.com/k.miklobusec">
-            <img src="https://foodsharing.de/images/q_e09cefb9259140ef547313b6cb5691ea.jpg" width="100px">
+            <img src="https://secure.gravatar.com/avatar/722f002e5ac2b5e0084a5c3d4ba1ce31?s=800&d=identicon" width="100px">
           </a><br>
         </div>
         <span title="Board member">🏢</span>&nbsp;<span title="Bug reports">🐜</span>&nbsp;<span title="Code">💻</span>&nbsp;<span title="Ideas, Planning, & Feedback">💡</span>&nbsp;<span title="Answering Questions">💬</span><br>

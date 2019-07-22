@@ -23,11 +23,26 @@ The devdocs are based on the following principles:
 - Information should be concise (but some repetition is necessary)
 - Information should be complete (probably an infeasible ideal)
 
-But don't worry too much about the last three principles. There are people solely dedicated to improving the devdocs.
+But don't worry too much about the last three principles.
+<!-- There are people solely dedicated to improving the devdocs. -->
+
+### What in, what out?
+
+How do I decide if a specific information should be in the devdocs?
+Here are some principles:
+- Is the information specific to foodsharing? -> Yes
+- Were you surprised about it? -> Yes
+- Is the information general enough to be explained in a foodsharing-independent tutorial or documentation? -> No, include a link
+- Is the information specificly about one piece of code and only interesting during reading this code (and not for finding this piece of code)? -> No, explain the code with comments in the code.
+
+### Markdown
+
+The devdocs are written in [Markdown](https://toolchain.gitbook.com/syntax/markdown.html) (md).
+Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitbook-plugin-richquotes).
 
 ### Setting things up
 
-The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
+The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.network).
 To see your changes, you can build the devdocs locally.
 You need to have `yarn` installed on your system.
 Run
@@ -40,6 +55,9 @@ This makes the current devdocs avaiable via `localhost:4001` in your browser.
 It is updated at every change of the files.
 It would be nice to have a docker setup (to avoid the local `yarn` dependency). Please document it here if you set it up.
 
+The gitlab ci is not triggered if you push with the option `git push -o ci.skip`.
+This is useful if you work on the devdocs since they are only built on master anyway.
+
 ## GitBook
 
-The devdocs are based on [GitBook](https://docs.gitbook.com/).
+The devdocs are built with [GitBook](https://docs.gitbook.com/).

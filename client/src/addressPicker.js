@@ -7,7 +7,7 @@ import 'leaflet.awesome-markers'
 let fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
   markerColor: 'orange',
-  prefix: 'img'
+  prefix: 'fa'
 })
 
 let markers = L.featureGroup()
@@ -81,6 +81,10 @@ export function attachAddressPicker () {
     }
     if (prop.city) {
       $('#ort').val(prop.city)
+    } else if (prop.state === 'Wien' || prop.state === 'Vienna') {
+      // Workaround for https://gitlab.com/foodsharing-dev/foodsharing/issues/549
+      // The city attribute is not set for addresses in Wien
+      $('#ort').val(prop.state)
     }
     if (prop.street) {
       $('#anschrift').val(prop.street + (prop.housenumber ? ' ' + prop.housenumber : ''))

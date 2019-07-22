@@ -1,0 +1,24 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-genderlist',
+        component: 'gender-list',
+        props: {
+            regionName: region.name,
+            genderDataTab: genderData.district,
+            genderDataHomeDistrictTab: genderData.homeDistrict,
+        }
+    } %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-pickuplist',
+        component: 'pickup-list',
+        props: {
+            regionName: region.name,
+            pickupDataDailyTab: pickupData.daily,
+            pickupDataWeeklyTab: pickupData.weekly,
+            pickupDataMonthlyTab: pickupData.monthly,
+            pickupDataYearlyTab: pickupData.yearly,
+        }
+    } %}
+{% endblock %}

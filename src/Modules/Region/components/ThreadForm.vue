@@ -9,9 +9,9 @@
         <textarea
           ref="textarea"
           v-model="text"
+          @keyup.ctrl.enter="submit"
           class="form-control"
           rows="3"
-          @keyup.ctrl.enter="submit"
         />
       </div>
       <div class="card-footer">
@@ -27,8 +27,8 @@
           <div class="col-auto text-right">
             <button
               :disabled="!text.trim()"
-              class="btn btn-secondary"
               @click="submit"
+              class="btn btn-secondary"
             >
               Senden
             </button>
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import bFormCheckbox from '@b/components/form-checkbox/form-checkbox'
+import { BFormCheckbox } from 'bootstrap-vue'
 
 export default {
-  components: { bFormCheckbox },
+  components: { BFormCheckbox },
   props: {
     isFollowing: {
       type: Boolean,
@@ -62,7 +62,7 @@ export default {
       this.text = ''
     },
     focus () {
-      this.$refs.textarea.trigger('focus')
+      this.$refs.textarea.focus()
     }
   }
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
@@ -10,6 +9,7 @@ use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,18 +20,17 @@ final class RegionControl extends Control
 	private $region;
 	private $gateway;
 	private $eventGateway;
-	private $foodsaverGateway;
 	private $forumGateway;
 	private $fairteilerGateway;
-
+	private $foodsaverGateway;
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */
 	private $formFactory;
 	private $forumService;
 	private $forumPermissions;
-	private $forumModerated;
 	private $regionHelper;
+	private $imageService;
 
 	/**
 	 * @required
@@ -56,19 +55,19 @@ final class RegionControl extends Control
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
-		Db $model,
 		RegionGateway $gateway,
-		RegionHelper $regionHelper
+		RegionHelper $regionHelper,
+		ImageService $imageService
 	) {
-		$this->model = $model;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
-		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
+		$this->imageService = $imageService;
 
 		parent::__construct();
 	}
@@ -93,12 +92,16 @@ final class RegionControl extends Control
 
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
+			if ($region['has_children'] === 1) {
+				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . (int)$region['id']];
+			}
 			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
 			}
 		} else {
 			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
 			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
+			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=statistic'];
 		}
 		if ($this->mayAccessApplications($region['id'])) {
 			if ($requests = $this->gateway->listRequests($region['id'])) {
@@ -114,13 +117,13 @@ final class RegionControl extends Control
 					'sleep_status' => $fs['sleep_status']
 				],
 				'size' => 50,
-				'imageUrl' => $this->func->img($fs['photo'], 50, 'q')
+				'imageUrl' => $this->imageService->img($fs['photo'], 50, 'q')
 			];
 		};
 		$viewdata['isRegion'] = !$isWorkGroup;
 		$stat = [
-			'num_fs' => count($this->region['foodsaver']),
-			'num_sleeping' => count($this->region['sleeper']),
+			'num_fs' => $this->region['fs_count'],
+			'num_sleeping' => $this->region['sleeper_count'],
 			'num_ambassadors' => $this->region['stat_botcount'],
 			'num_stores' => $this->region['stat_betriebcount'],
 			'num_cooperations' => $this->region['stat_korpcount'],
@@ -133,9 +136,7 @@ final class RegionControl extends Control
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
 			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
-			'members' => array_map($avatarListEntry, $this->region['foodsaver'])
 		];
-
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 
 		return $viewdata;
@@ -149,7 +150,7 @@ final class RegionControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		if (!$this->session->may()) {
-			$this->func->goLogin();
+			$this->routeHelper->goLogin();
 		}
 
 		$region_id = $request->query->getInt('bid', $_SESSION['client']['bezirk_id']);
@@ -159,16 +160,16 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
-			$this->func->go('/?page=dashboard');
+			$this->routeHelper->go('/?page=dashboard');
 		}
 
-		$this->func->addTitle($region['name']);
-		$this->func->addBread($region['name'], '/?page=bezirk&bid=' . $region_id);
+		$this->pageHelper->addTitle($region['name']);
+		$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region_id);
 
 		switch ($request->query->get('sub')) {
 			case 'botforum':
 				if (!$this->forumPermissions->mayAccessAmbassadorBoard($region_id)) {
-					$this->func->go($this->forumService->url($region_id, false));
+					$this->routeHelper->go($this->forumService->url($region_id, false));
 				}
 				$this->forum($request, $response, $region, true);
 				break;
@@ -190,11 +191,14 @@ final class RegionControl extends Control
 			case 'members':
 				$this->members($request, $response, $region);
 				break;
+			case 'statistic':
+				$this->statistic($request, $response, $region);
+				break;
 			default:
 				if ($this->isWorkGroup($region)) {
-					$this->func->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
+					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
 				} else {
-					$this->func->go($this->forumService->url($region_id, false));
+					$this->routeHelper->go($this->forumService->url($region_id, false));
 				}
 				break;
 		}
@@ -209,8 +213,8 @@ final class RegionControl extends Control
 
 	private function fairteiler(Request $request, Response $response, $region)
 	{
-		$this->func->addBread($this->func->s('fairteiler'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
-		$this->func->addTitle($this->func->s('fairteiler'));
+		$this->pageHelper->addBread($this->translationHelper->s('fairteiler'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->pageHelper->addTitle($this->translationHelper->s('fairteiler'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
 		$viewdata['fairteiler'] = $this->fairteilerGateway->listFairteiler($bezirk_ids);
@@ -219,20 +223,22 @@ final class RegionControl extends Control
 
 	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
 	{
-		$this->func->addBread($this->translator->trans('forum.new_thread'));
+		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
 		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
 		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)) {
-				$moderated = !$this->session->user('verified') || $this->region['moderated'];
-				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $moderated);
-				$this->forumGateway->followThread($this->session->id(), $threadId);
-				if ($moderated) {
-					$this->func->info($this->translator->trans('forum.hold_back_for_moderation'));
-				}
-				$this->func->go($this->forumService->url($region['id'], $ambassadorForum));
+		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
+				$region['id'],
+				$ambassadorForum
+			)) {
+			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+
+			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$this->forumGateway->followThread($this->session->id(), $threadId);
+			if (!$postActiveWithoutModeration) {
+				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}
+			$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
 		}
 
 		return $form->createView();
@@ -243,8 +249,8 @@ final class RegionControl extends Control
 		$sub = $request->query->get('sub');
 		$trans = $this->translator->trans(($ambassadorForum) ? 'terminology.ambassador_forum' : 'terminology.forum');
 		$viewdata = $this->regionViewData($region, $sub);
-		$this->func->addBread($trans, $this->forumService->url($region['id'], $ambassadorForum));
-		$this->func->addTitle($trans);
+		$this->pageHelper->addBread($trans, $this->forumService->url($region['id'], $ambassadorForum));
+		$this->pageHelper->addTitle($trans);
 		$viewdata['sub'] = $sub;
 
 		if ($tid = $request->query->getInt('tid')) {
@@ -262,8 +268,8 @@ final class RegionControl extends Control
 
 	private function events(Request $request, Response $response, $region)
 	{
-		$this->func->addBread($this->translator->trans('events.name'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
-		$this->func->addTitle($this->translator->trans('events.name'));
+		$this->pageHelper->addBread($this->translator->trans('events.name'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->pageHelper->addTitle($this->translator->trans('events.name'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 
@@ -274,8 +280,8 @@ final class RegionControl extends Control
 
 	private function applications(Request $request, Response $response, $region)
 	{
-		$this->func->addBread($this->translator->trans('group.applications'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
-		$this->func->addTitle($this->translator->trans('group.applications_for', ['%name%' => $region['name']]));
+		$this->pageHelper->addBread($this->translator->trans('group.applications'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->pageHelper->addTitle($this->translator->trans('group.applications_for', ['%name%' => $region['name']]));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 		if ($this->mayAccessApplications($region['id'])) {
@@ -286,10 +292,29 @@ final class RegionControl extends Control
 
 	private function members(Request $request, Response $response, array $region): void
 	{
-		$this->func->addBread($this->translator->trans('group.members'), '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
-		$this->func->addTitle($this->translator->trans('group.members'));
+		$this->pageHelper->addBread($this->translator->trans('group.members'), '/?page=bezirk&bid=' . $region['id'] . '&sub=members');
+		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
+		$viewdata['region']['members'] = $this->foodsaverGateway->listFoodsaverByRegion($region['id']);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
+	}
+
+	private function statistic(Request $request, Response $response, array $region): void
+	{
+		$this->pageHelper->addBread(
+			$this->translator->trans('terminology.statistic'),
+			'/?page=bezirk&bid=' . $region['id'] . '&sub=statistic'
+		);
+		$this->pageHelper->addTitle($this->translator->trans('terminology.statistic'));
+		$sub = $request->query->get('sub');
+		$viewData = $this->regionViewData($region, $sub);
+		$viewData['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
+		$viewData['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
+		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
+		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+		$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
+		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Team;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
@@ -14,10 +13,9 @@ class TeamXhr extends Control
 	private $gateway;
 	private $sanitizerService;
 
-	public function __construct(TeamGateway $gateway, Db $model, TeamView $view, SanitizerService $sanitizerService)
+	public function __construct(TeamGateway $gateway, TeamView $view, SanitizerService $sanitizerService)
 	{
 		$this->gateway = $gateway;
-		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
 
@@ -28,8 +26,10 @@ class TeamXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		if ($this->ipIsBlocked(120, 'contact')) {
-			$xhr->addMessage('Du hast zu viele Nachrichten versendet. Bitte warte einen Moment!', 'error');
+		$minutesWaiting = 10;
+
+		if ($this->gateway->isABlockedIP($minutesWaiting * 60, 'contact')) {
+			$xhr->addMessage('Bitte warte ' . $minutesWaiting . ' Minuten, bis du die nächste Nachricht senden kannst.', 'error');
 			$xhr->send();
 		}
 
@@ -41,7 +41,7 @@ class TeamXhr extends Control
 
 				$mail = new AsyncMail($this->mem);
 
-				if ($this->func->validEmail($_POST['email'])) {
+				if ($this->emailHelper->validEmail($_POST['email'])) {
 					$mail->setFrom($_POST['email']);
 				} else {
 					$mail->setFrom(DEFAULT_EMAIL);
@@ -61,48 +61,12 @@ class TeamXhr extends Control
 				$mail->send();
 
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
-				$xhr->addMessage($this->func->s('mail_send_success'), 'success');
+				$xhr->addMessage($this->translationHelper->s('mail_send_success'), 'success');
 				$xhr->send();
 			}
 		}
 
-		$xhr->addMessage($this->func->s('error'), 'error');
+		$xhr->addMessage($this->translationHelper->s('error'), 'error');
 		$xhr->send();
-	}
-
-	/**
-	 * Function to check and block an ip address.
-	 *
-	 * @param int $duration
-	 * @param string $context
-	 *
-	 * @return bool
-	 */
-	private function ipIsBlocked($duration = 60, $context = 'default'): bool
-	{
-		$ip = $this->getIp();
-
-		if ($block = $this->model->qRow('SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM fs_ipblock WHERE ip = ' . strip_tags($this->getIp()) . ' AND context = ' . strip_tags($context))) {
-			if (time() < ((int)$block['start'] + (int)$block['duration'])) {
-				return true;
-			}
-		}
-
-		$this->model->insert('
-	REPLACE INTO fs_ipblock
-	(`ip`,`context`,`start`,`duration`)
-	VALUES
-	("' . strip_tags($ip) . '","' . strip_tags($context) . '",NOW(),' . (int)$duration . ')');
-
-		return false;
-	}
-
-	private function getIp()
-	{
-		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return $_SERVER['REMOTE_ADDR'];
-		}
-
-		return $_SERVER['HTTP_X_FORWARDED_FOR'];
 	}
 }

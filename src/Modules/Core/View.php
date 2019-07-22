@@ -2,9 +2,15 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class View
@@ -13,22 +19,45 @@ class View
 
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
-	protected $func;
 	protected $session;
 	protected $sanitizerService;
+	protected $pageHelper;
+	protected $timeHelper;
 
 	/**
 	 * @var \Twig\Environment
 	 */
 	public $twig;
+	protected $imageService;
+	protected $routeHelper;
+	protected $identificationHelper;
+	protected $dataHelper;
+	protected $translationHelper;
 
-	public function __construct(\Twig\Environment $twig, Func $func, Utils $viewUtils, Session $session, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
+	) {
 		$this->twig = $twig;
-		$this->func = $func;
 		$this->v_utils = $viewUtils;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
+		$this->pageHelper = $pageHelper;
+		$this->timeHelper = $timeHelper;
+		$this->imageService = $imageService;
+		$this->routeHelper = $routeHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function setSub($sub)
@@ -137,14 +166,14 @@ class View
 			$option['scroller'] = true;
 		}
 
-		$id = $this->func->id('team');
+		$id = $this->identificationHelper->id('team');
 		if (isset($option['id'])) {
 			$id = $option['id'];
 		}
 
-		$height = 185;
+		$maxHeight = 185;
 		if (isset($option['height'])) {
-			$height = $option['height'];
+			$maxHeight = $option['height'];
 		}
 
 		$out = '
@@ -156,7 +185,7 @@ class View
 		foreach ($foodsaver as $fs) {
 			$jssaver[] = (int)$fs['id'];
 
-			$photo = $this->func->avatar($fs);
+			$photo = $this->imageService->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
 
@@ -181,8 +210,8 @@ class View
 		</div>';
 
 		if ($option['scroller']) {
-			$out = $this->v_utils->v_scroller($out, $height);
-			$this->func->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
+			$out = $this->v_utils->v_scroller($out, $maxHeight);
+			$this->pageHelper->addStyle('.scroller .overview{left:0;}.scroller{margin:0}');
 		}
 
 		return $out;
@@ -200,7 +229,7 @@ class View
 			$active = $option['active'];
 		}
 
-		$id = $this->func->id('vmenu');
+		$id = $this->identificationHelper->id('vmenu');
 
 		$out = '';
 
@@ -245,7 +274,7 @@ class View
 
 	public function peopleChooser($id, $option = array())
 	{
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			var date = new Date(); 
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
@@ -313,7 +342,7 @@ class View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return $this->v_utils->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = array())
@@ -338,15 +367,18 @@ class View
 			}
 		}
 
-		return $this->v_utils->v_input_wrapper($this->func->s('position_search'), '
+		$out = $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), $this->v_utils->v_info($this->translationHelper->s('position_search_infobox')) . '
 		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap"></div>') .
+		<div id="map" class="pickermap"></div>');
+		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('ort', ['value' => $options['ort'], 'disabled' => '1', 'required' => '1']) .
 			$this->v_utils->v_form_text('lat', ['value' => $data['lat']]) .
 			$this->v_utils->v_form_text('lon', ['value' => $data['lon']]) .
 			'';
+
+		return $out;
 	}
 
 	public function simpleContent($content)

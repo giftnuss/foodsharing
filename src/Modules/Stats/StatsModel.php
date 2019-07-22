@@ -15,12 +15,7 @@ class StatsModel extends Db
 		parent::__construct();
 	}
 
-	public function getBetriebe($bezirk_id = false)
-	{
-		return $this->q('SELECT id, name, added FROM fs_betrieb');
-	}
-
-	public function getFirstFetchInBetrieb($bid, $fsid)
+	public function getFirstFetchInBetrieb($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -31,16 +26,16 @@ class StatsModel extends Db
 					fs_abholer 
 				
 				WHERE 
-					betrieb_id = ' . $bid . ' 
+					betrieb_id = ' . $storeId . ' 
 				
 				AND 
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND 
 					`confirmed` = 1'
 		);
 	}
 
-	public function getGerettet($fsid)
+	public function getGerettet($fsId)
 	{
 		$out = 0;
 		if ($res = $this->q('
@@ -48,7 +43,7 @@ class StatsModel extends Db
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 			WHERE a.betrieb_id =b.id
-			AND   foodsaver_id = ' . (int)$fsid . '
+			AND   foodsaver_id = ' . (int)$fsId . '
 			AND   a.`date` < NOW()
 			GROUP BY a.`betrieb_id`
 	
@@ -68,7 +63,7 @@ class StatsModel extends Db
 		return $this->qCol('SELECT id FROM fs_foodsaver');
 	}
 
-	public function getLastFetchInBetrieb($bid, $fsid)
+	public function getLastFetchInBetrieb($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -79,10 +74,10 @@ class StatsModel extends Db
 					fs_abholer
 	
 				WHERE
-					betrieb_id = ' . $bid . '
+					betrieb_id = ' . $storeId . '
 	
 				AND
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND
 					`confirmed` = 1
 				AND 
@@ -112,15 +107,15 @@ class StatsModel extends Db
 		');
 	}
 
-	public function getBetriebFetchCount($bid, $fsid, $last_update, $current)
+	public function getBetriebFetchCount($storeId, $fsId, $last_update, $current)
 	{
 		$val = $this->qOne('
 			SELECT COUNT(foodsaver_id)
 					
 			FROM 	fs_abholer
 				
-			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`betrieb_id` = ' . (int)$bid . '
+			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
+			AND 	`betrieb_id` = ' . (int)$storeId . '
 			AND 	`date` > ' . $this->dateval($last_update) . '
 			AND 	`date` < NOW()
 			AND 	`confirmed` = 1
@@ -129,7 +124,7 @@ class StatsModel extends Db
 		return (int)$val + (int)$current;
 	}
 
-	public function getBetriebTeam($bid)
+	public function getBetriebTeam($regionId)
 	{
 		return $this->q('
 
@@ -149,12 +144,12 @@ class StatsModel extends Db
 				fs_betrieb_team t
 
 			WHERE 
-				t.betrieb_id = ' . (int)$bid . '
+				t.betrieb_id = ' . (int)$regionId . '
 				
 		');
 	}
 
-	public function updateStats($bezirk_id, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $fairteilercount)
+	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $fairteilercount)
 	{
 		return $this->update('
 
@@ -173,12 +168,12 @@ class StatsModel extends Db
 					`stat_fairteilercount`=' . (int)$fairteilercount . ' 
 				
 				WHERE 
-					`id` = ' . (int)$bezirk_id . '
+					`id` = ' . (int)$regionId . '
 				
 		');
 	}
 
-	public function getAllBezirke($region_id = false)
+	public function getAllBezirke()
 	{
 		return $this->q('SELECT id, name, stat_last_update FROM fs_bezirk');
 	}

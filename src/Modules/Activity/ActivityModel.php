@@ -3,21 +3,28 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Mailbox\MailboxModel;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
 class ActivityModel extends Db
 {
-	private $mailboxModel;
 	private $activityGateway;
 	private $sanitizerService;
+	private $imageService;
+	private $mailboxGateway;
 
-	public function __construct(MailboxModel $mailboxModel, ActivityGateway $activityGateway, SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		ActivityGateway $activityGateway,
+		SanitizerService $sanitizerService,
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
+	) {
 		parent::__construct();
-		$this->mailboxModel = $mailboxModel;
 		$this->activityGateway = $activityGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 	}
 
 	public function loadBasketWallUpdates($page = 0)
@@ -51,7 +58,7 @@ class ActivityModel extends Db
 						'basked_id' => $u['basket_id'],
 						'desc' => $u['body'],
 						'time' => $u['time'],
-						'icon' => $this->func->img($u['fs_photo'], 50),
+						'icon' => $this->imageService->img($u['fs_photo'], 50),
 						'time_ts' => $u['time_ts'],
 						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 					]
@@ -106,7 +113,7 @@ class ActivityModel extends Db
 						'poster_name' => $u['poster_name'],
 						'desc' => $u['body'],
 						'time' => $u['time'],
-						'icon' => $this->func->img($u['fs_photo'], 50),
+						'icon' => $this->imageService->img($u['fs_photo'], 50),
 						'time_ts' => $u['time_ts'],
 						'gallery' => $u['gallery']
 					]
@@ -121,7 +128,7 @@ class ActivityModel extends Db
 
 	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
 	{
-		if ($boxes = $this->mailboxModel->getBoxes()) {
+		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			$mb_ids = array();
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {
@@ -224,7 +231,7 @@ class ActivityModel extends Db
 							'region_name' => $u['bezirk_name'],
 							'desc' => $u['post_body'],
 							'time' => $u['update_time'],
-							'icon' => $this->func->img($u['foodsaver_photo'], 50),
+							'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 							'time_ts' => $u['update_time_ts'],
 							'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
 						]
@@ -252,7 +259,7 @@ class ActivityModel extends Db
 						'store_name' => $r['betrieb_name'],
 						'desc' => $r['text'],
 						'time' => $r['update_time'],
-						'icon' => $this->func->img($r['foodsaver_photo'], 50),
+						'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
 						'time_ts' => $r['update_time_ts']
 					]
 				];

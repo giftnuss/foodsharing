@@ -31,14 +31,12 @@ module.exports = {
       ...shims.alias,
       'fonts': resolve('../fonts'),
       'img': resolve('../img'),
-      './img': resolve('../img'),
       'css': resolve('../css'),
       'js': resolve('lib'),
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
-      '@translations': resolve('../lang'),
-      '@b': resolve('node_modules/bootstrap-vue/es')
+      '@translations': resolve('../lang')
     }
   },
   module: {
@@ -60,7 +58,8 @@ module.exports = {
                     'browsers': ['> 0.5%', 'ie_mob >=11']
                   },
                   'useBuiltIns': 'usage',
-                  'modules': 'commonjs'
+                  'modules': 'commonjs',
+                  'corejs': '2.x'
                 }
               ]
             ]

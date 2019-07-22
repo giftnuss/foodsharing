@@ -2,7 +2,6 @@
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
 $g_lang['betrieb'] = 'Betrieb';
-$g_lang['plz_id'] = 'PLZ';
 $g_lang['bezirk_id'] = 'Bezirk';
 $g_lang['kette_id'] = 'Betriebskette';
 $g_lang['betrieb_kategorie_id'] = 'Kategorie';
@@ -43,3 +42,4 @@ $g_lang['no_member'] = 'Du bist gar kein Mitglied in diesem Betrieb';
 $g_lang['signout_error_admin'] = 'Du bist verantwortlich für diesen Betrieb und kannst Dich nicht löschen!';
 $g_lang['team_conversation_name'] = 'Team {var}';
 $g_lang['springer_conversation_name'] = 'Springer {var}';
+$g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Betriebs im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';

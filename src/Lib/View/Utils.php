@@ -2,17 +2,17 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Lib\Func;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
 
 class Utils
 {
 	private $id;
-	/**
-	 * @var Func
-	 */
-	private $func;
 
 	/**
 	 * @var \Foodsharing\Lib\Session
@@ -24,19 +24,27 @@ class Utils
 	 */
 	private $twig;
 	private $sanitizerService;
+	private $pageHelper;
+	private $routeHelper;
+	private $identificationHelper;
+	private $dataHelper;
+	private $translationHelper;
 
-	public function __construct(SanitizerService $sanitizerService)
-	{
+	public function __construct(
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper
+	) {
 		$this->id = array();
 		$this->sanitizerService = $sanitizerService;
-	}
-
-	/**
-	 * @required
-	 */
-	public function setFunc(Func $func)
-	{
-		$this->func = $func;
+		$this->pageHelper = $pageHelper;
+		$this->routeHelper = $routeHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->dataHelper = $dataHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	/**
@@ -60,30 +68,30 @@ class Utils
 		return $this->v_field('<div class="v-form">' . $this->v_form($titel, $elements, $option) . '</div>', $titel);
 	}
 
-	public function v_scroller($content, $width = '232')
+	public function v_scroller($content, $maxHeight)
 	{
-		if ($this->func->isMob()) {
+		if ($this->session->isMob()) {
 			return $content;
 		}
 
-		$id = $this->func->id('scroller');
-		$this->func->addJs('$("#' . $id . '").slimScroll();');
+		$id = $this->identificationHelper->id('scroller');
+		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: \'auto\'});');
 
 		return '
-			<div id="' . $id . '" class="scroller">
+			<div style="max-height:' . $maxHeight . 'px" id="' . $id . '" class="scroller">
 				' . $content . '
 			</div>';
 	}
 
 	public function v_activeSwitcher($table, $field_id, $active)
 	{
-		$id = $this->func->id('activeSwitch');
+		$id = $this->identificationHelper->id('activeSwitch');
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . ' input").switchButton({
 				labels_placement: "right",
-				on_label: "' . $this->func->s('on_label') . '",
-				off_label: "' . $this->func->s('off_label') . '",
+				on_label: "' . $this->translationHelper->s('on_label') . '",
+				off_label: "' . $this->translationHelper->s('off_label') . '",
 				on_callback: function(){
 					showLoader();
 					$.ajax({
@@ -123,18 +131,17 @@ class Utils
 	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
 	{
 		if (!$bezirk) {
-			//$bezirk = $this->func->getBezirk();
 			$bezirk = array(
 				'id' => 0,
-				'name' => $this->func->s('no_bezirk_choosen')
+				'name' => $this->translationHelper->s('no_bezirk_choosen')
 			);
 		}
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
-		$this->func->addJs('$("#' . $id . '-button").button().on("click", function(){
+		$this->pageHelper->addJs('$("#' . $id . '-button").button().on("click", function(){
 			$("#' . $id . '-dialog").dialog("open");
 		});');
-		$this->func->addJs('$("#' . $id . '-dialog").dialog({
+		$this->pageHelper->addJs('$("#' . $id . '-dialog").dialog({
 			autoOpen:false,
 			modal:true,
 			title:"Bezirk ändern",
@@ -154,7 +161,7 @@ class Utils
 			$nodeselect = 'true';
 		}
 
-		$this->func->addJs('$("#' . $id . '-tree").dynatree({
+		$this->pageHelper->addJs('$("#' . $id . '-tree").dynatree({
 				onSelect: function(select, node) {
 					$("#' . $id . '-hidden").html("");
 					$.map(node.tree.getSelectedNodes(), function(node){
@@ -193,9 +200,9 @@ class Utils
 					});
 				}
 			});');
-		$this->func->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
+		$this->pageHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-		$label = $this->func->s('Stammbezirk');
+		$label = $this->translationHelper->s('Stammbezirk');
 		if (isset($option['label'])) {
 			$label = $option['label'];
 		}
@@ -252,7 +259,7 @@ class Utils
 			$v = explode(':', $value);
 			$value = array('hour' => $v[0], 'min' => $v[1]);
 		}
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		$hours = range(0, 23);
 		$mins = array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55);
 
@@ -263,7 +270,7 @@ class Utils
 			if ($h == $value['hour']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $h . '">' . $this->func->preZero($h) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $h . '">' . sprintf('%02d', $h) . '</option>';
 		}
 		$out .= '</select>';
 
@@ -274,7 +281,7 @@ class Utils
 			if ($m == $value['min']) {
 				$sel = ' selected="selected"';
 			}
-			$out .= '<option' . $sel . ' value="' . $m . '">' . $this->func->preZero($m) . '</option>';
+			$out .= '<option' . $sel . ' value="' . $m . '">' . sprintf('%02d', $m) . '</option>';
 		}
 		$out .= '</select> Uhr';
 
@@ -283,20 +290,20 @@ class Utils
 
 	public function v_dialog_button($id, $label)
 	{
-		$new_id = $this->func->id($id);
+		$new_id = $this->identificationHelper->id($id);
 
-		$this->func->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
+		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
 
 	public function v_form_tinymce($id, $option = array())
 	{
-		$id = $this->func->id($id);
-		$label = $this->func->s($id);
-		$value = $this->func->getValue($id);
+		$id = $this->identificationHelper->id($id);
+		$label = $this->translationHelper->s($id);
+		$value = $this->dataHelper->getValue($id);
 
-		$this->func->addStyle('div#content {width: 580px;}div#right{width:222px;}');
+		$this->pageHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
 
 		$css = 'css/content.css,css/jquery-ui.css';
 		$class = 'ui-widget ui-widget-content ui-padding';
@@ -332,14 +339,14 @@ class Utils
 
 		});';
 
-		$this->func->addJs($js);
+		$this->pageHelper->addJs($js);
 
 		return $this->v_input_wrapper($label, '<textarea name="' . $id . '" id="' . $id . '">' . $value . '</textarea>', $id, $option);
 	}
 
 	public function v_form_hidden($name, $value)
 	{
-		$id = $this->func->id($name);
+		$id = $this->identificationHelper->id($name);
 
 		return '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $value . '" />';
 	}
@@ -348,7 +355,7 @@ class Utils
 	{
 		$id = 'recip_choose';
 
-		return $this->v_input_wrapper($this->func->s('recip_chooser'), '
+		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
 				<option value="botschafter">Alle Botschafter bundesweit</option>
 				<option value="orgateam">Orgateam bundesweit</option>
@@ -360,7 +367,7 @@ class Utils
 		$id = 'recip_choose';
 		$out = '
 			<select class="select" name="' . $id . '" id="' . $id . '">
-				<option value="all">' . $this->func->s('recip_all') . '</option>
+				<option value="all">' . $this->translationHelper->s('recip_all') . '</option>
 				<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
 				<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
 
@@ -370,7 +377,7 @@ class Utils
 				<option value="storemanagers_and_ambs">Alle Betriebsverantwortlichen + Botschafter</option>
 				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
 				<option value="orgateam">Orgateam</option>
-				<option value="choose">' . $this->func->s('recip_choose_bezirk') . '</option>
+				<option value="choose">' . $this->translationHelper->s('recip_choose_bezirk') . '</option>
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
 			<div id="' . $id . '-hidden" style="display:none">
@@ -386,7 +393,7 @@ class Utils
 				</div>
 			</div>';
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 				$(\'#' . $id . '\').on("change", function(){
 					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
 					{
@@ -437,7 +444,7 @@ class Utils
 				}
 			});');
 
-		return $this->v_input_wrapper($this->func->s('recip_chooser'), $out);
+		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), $out);
 	}
 
 	public function v_photo_edit($src, $fsid = false)
@@ -445,12 +452,12 @@ class Utils
 		if (!$fsid) {
 			$fsid = (int)$this->session->id();
 		}
-		$id = $this->func->id('fotoupload');
+		$id = $this->identificationHelper->id('fotoupload');
 
 		$original = explode('_', $src);
 		$original = end($original);
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 
 				$("#' . $id . '-link").fancybox({
 					minWidth : 600,
@@ -518,7 +525,7 @@ class Utils
 				});
 				');
 
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
 					<h3>Fotoupload</h3>
 					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
@@ -540,14 +547,14 @@ class Utils
 				</div>');
 
 		if (isset($_GET['pinit'])) {
-			$this->func->addJs('$("#' . $id . '-link").trigger("click");');
+			$this->pageHelper->addJs('$("#' . $id . '-link").trigger("click");');
 		}
 
-		$this->func->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
+		$this->pageHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
-		$menu = array(array('name' => $this->func->s('edit_photo'), 'href' => '#edit'));
+		$menu = array(array('name' => $this->translationHelper->s('edit_photo'), 'href' => '#edit'));
 		if ($_GET['page'] == 'settings') {
-			$menu[] = array('name' => $this->func->s('upload_new_photo'), 'href' => '#new');
+			$menu[] = array('name' => $this->translationHelper->s('upload_new_photo'), 'href' => '#new');
 		}
 
 		return '
@@ -562,9 +569,9 @@ class Utils
 	{
 		$js = '';
 		if (isset($option['id'])) {
-			$id = $this->func->makeId($option['id']);
+			$id = $this->identificationHelper->makeId($option['id']);
 		} else {
-			$id = $this->func->makeId($name, $this->id);
+			$id = $this->identificationHelper->makeId($name, $this->id);
 		}
 
 		if (isset($option['dialog'])) {
@@ -574,10 +581,10 @@ class Utils
 				closeOnEscape: false,
 				open: function(event, ui) {$(this).parent().children().children(".ui-dialog-titlebar-close").hide();}';
 			}
-			$this->func->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
+			$this->pageHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
 		}
 
-		$action = $this->func->getSelf();
+		$action = $this->routeHelper->getSelf();
 		if (isset($option['action'])) {
 			$action = $option['action'];
 		}
@@ -601,7 +608,7 @@ class Utils
 		</form>
 		';
 
-		$this->func->addJs('$("#' . $id . '-form").on("submit", function(ev){
+		$this->pageHelper->addJs('$("#' . $id . '-form").on("submit", function(ev){
 
 			check = true;
 			$("#' . $id . '-form div.required .value").each(function(i,el){
@@ -637,9 +644,9 @@ class Utils
 
 	public function v_menu($items, $title = false, $option = array())
 	{
-		$id = $this->func->id('vmenu');
+		$id = $this->identificationHelper->id('vmenu');
 
-		//$this->func->addJs('$("#'.$id.'").menu();');
+		//$this->pageHelper->addJs('$("#'.$id.'").menu();');
 		$out = '
 		<ul class="linklist">';
 
@@ -690,7 +697,7 @@ class Utils
 		if (isset($option['page'])) {
 			$page = $option['page'];
 		} else {
-			$page = $this->func->getPage();
+			$page = $this->routeHelper->getPage();
 		}
 
 		if (isset($_GET['bid'])) {
@@ -773,16 +780,16 @@ class Utils
 
 	public function v_form_textarea($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		if (isset($option['value'])) {
 			$value = $option['value'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
 
 		$value = htmlspecialchars($value);
 
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		$style = '';
 		if (isset($option['style'])) {
@@ -819,14 +826,14 @@ class Utils
 	 */
 	public function v_form_checkbox($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		if (isset($option['checked'])) {
 			$value = $option['checked'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -879,7 +886,7 @@ class Utils
 			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . ' input.tag").tagedit({
 				' . $source . ',
 				allowEdit: false,
@@ -899,7 +906,7 @@ class Utils
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
-			$values = $this->func->getValue($id);
+			$values = $this->dataHelper->getValue($id);
 		}
 		if ($values) {
 			$input = '';
@@ -908,14 +915,14 @@ class Utils
 			}
 		}
 
-		return $this->v_input_wrapper($this->func->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function v_form_picture($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
 				minWidth : 600,
 				scrolling :"auto",
@@ -946,10 +953,10 @@ class Utils
 			$options .= '<input type="hidden" id="' . $id . '-resize" name="resize" value="' . json_encode($option['resize']) . '" />';
 		}
 
-		$this->func->addHidden('
+		$this->pageHelper->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
-				<h3>' . $this->func->s($id) . ' Upload</h3>
+				<h3>' . $this->translationHelper->s($id) . ' Upload</h3>
 				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
 
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
@@ -976,52 +983,52 @@ class Utils
 
 		$thumb = '';
 
-		$pic = (isset($option['pic']) ? $option['pic'] : $this->func->getValue($id));
+		$pic = (isset($option['pic']) ? $option['pic'] : $this->dataHelper->getValue($id));
 		if (!empty($pic)) {
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
 		$out = '
 			<input type="hidden" name="' . $id . '" id="' . $id . '" value="" /><div id="' . $id . '-preview">' . $thumb . '</div>
-			<span id="' . $id . '-opener">' . $this->func->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
+			<span id="' . $id . '-opener">' . $this->translationHelper->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
-		return $this->v_input_wrapper($this->func->s($id), $out);
+		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
 	public function v_form_file($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
-		$val = $this->func->getValue($id);
+		$val = $this->dataHelper->getValue($id);
 		if (!empty($val)) {
 			$val = json_decode($val, true);
 			$val = substr($val['name'], 0, 30);
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
 		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
 
-		$btlabel = $this->func->s('choose_file');
+		$btlabel = $this->translationHelper->s('choose_file');
 		if (isset($option['btlabel'])) {
 			$btlabel = $option['btlabel'];
 		}
 
 		$out = '<input style="display:block;visibility:hidden;margin-bottom:-23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
 
-		return $this->v_input_wrapper($this->func->s($id), $out);
+		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
 	public function v_form_radio($id, $option = array())
 	{
-		$id = $this->func->id($id);
-		$label = $this->func->s($id);
+		$id = $this->identificationHelper->id($id);
+		$label = $this->translationHelper->s($id);
 
 		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
 		} else {
-			$selected = $this->func->getValue($id);
+			$selected = $this->dataHelper->getValue($id);
 		}
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -1066,14 +1073,14 @@ class Utils
 
 	public function v_form_select($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 		/* isset instead of array_key_exists does not matter here */
 		if (isset($option['selected'])) {
 			$selected = $option['selected'];
 		} else {
-			$selected = $this->func->getValue($id);
+			$selected = $this->dataHelper->getValue($id);
 		}
-		$label = $this->func->s($id);
+		$label = $this->translationHelper->s($id);
 		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
@@ -1099,14 +1106,14 @@ class Utils
 		</select>';
 
 		if (isset($option['add'])) {
-			$this->func->addHidden('
+			$this->pageHelper->addHidden('
 			<div id="' . $id . '-dialog" style="display:none;">
 				' . $this->v_form_text($id . ': NEU') . '
 			</div>');
 
 			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
 
-			$this->func->addJs('
+			$this->pageHelper->addJs('
 
 					$("#' . $id . 'neu").on("keyup", function(e){
 
@@ -1153,7 +1160,7 @@ class Utils
 		}
 
 		if ($id === false) {
-			$id = $this->func->id('input');
+			$id = $this->identificationHelper->id('input');
 		}
 		$class = '';
 		$star = '';
@@ -1175,7 +1182,7 @@ class Utils
 
 		if (isset($option['collapse'])) {
 			$label = '<i class="fas fa-caret-right"></i> ' . $label;
-			$this->func->addJs('
+			$this->pageHelper->addJs('
 				$("#' . $id . '-wrapper .element-wrapper").hide();
 			');
 
@@ -1214,14 +1221,14 @@ class Utils
 
 	public function v_form_daterange($id = 'daterange', $option = array())
 	{
-		$label = $this->func->s($id);
-		$id = $this->func->id($id);
+		$label = $this->translationHelper->s($id);
+		$id = $this->identificationHelper->id($id);
 
 		if (!isset($option['options'])) {
 			$option['options'] = array('from' => array(), 'to' => array());
 		}
 
-		$this->func->addJs('
+		$this->pageHelper->addJs('
 			 $(function() {
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
@@ -1247,8 +1254,8 @@ class Utils
 		return $this->v_input_wrapper(
 			$label,
 			'
-			<input placeholder="' . $this->func->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
-			<input placeholder="' . $this->func->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
+			<input placeholder="' . $this->translationHelper->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
+			<input placeholder="' . $this->translationHelper->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
 			$id,
 			$option
 		);
@@ -1256,15 +1263,15 @@ class Utils
 
 	public function v_form_date($id, $option = array())
 	{
-		$id = $this->func->id($id);
-		$label = $this->func->s($id);
+		$id = $this->identificationHelper->id($id);
+		$label = $this->translationHelper->s($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
 
-		$value = $this->func->getValue($id);
+		$value = $this->dataHelper->getValue($id);
 
-		$this->func->addJs('$("#' . $id . '").datepicker({
+		$this->pageHelper->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
 			changeMonth: true,
 			dateFormat: "yy-mm-dd",
@@ -1282,13 +1289,13 @@ class Utils
 
 	public function v_form_text($id, $option = array())
 	{
-		$id = $this->func->id($id);
-		$label = $this->func->s($id);
+		$id = $this->identificationHelper->id($id);
+		$label = $this->translationHelper->s($id);
 
 		if (isset($option['value'])) {
 			$value = $option['value'];
 		} else {
-			$value = $this->func->getValue($id);
+			$value = $this->dataHelper->getValue($id);
 		}
 
 		$value = htmlspecialchars($value);
@@ -1348,14 +1355,14 @@ class Utils
 
 	public function v_form_passwd($id, $option = array())
 	{
-		$id = $this->func->id($id);
+		$id = $this->identificationHelper->id($id);
 
 		$pl = '';
 		if (isset($option['placeholder'])) {
 			$pl = ' placeholder="' . $option['placeholder'] . '"';
 		}
 
-		return $this->v_input_wrapper($this->func->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
+		return $this->v_input_wrapper($this->translationHelper->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
 	}
 
 	public function v_getStatusAmpel($status)

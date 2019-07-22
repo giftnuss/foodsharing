@@ -25,6 +25,10 @@ If you want to run with debug mode turned on, then use: `./scripts/test --debug`
 
 If you just want to run one test, then pass the path to that test as an argument, e.g. `./scripts/test tests/acceptance/LoginCept.php`.
 
+## Writing unit tests
+
+CodeCeption uses PHPUnitTests under the hood and therefore the [PHPUnit test documentation](https://phpunit.readthedocs.io/en/8.0/) can be helpful.
+
 ## Writing acceptance tests
 
 The `tests` directory has much stuff in it.
