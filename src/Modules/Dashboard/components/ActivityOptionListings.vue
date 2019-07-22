@@ -22,14 +22,14 @@
             >
               <input
                 v-model="item.checked"
-                type="checkbox"
                 :name="listing.index"
                 :value="item.id"
+                type="checkbox"
               >
               <img
                 v-if="item.imgUrl"
-                class="option-img"
                 :src="item.imgUrl"
+                class="option-img"
                 height="24"
               >
               {{ item.name }}
@@ -43,14 +43,14 @@
           </p>
         </div>
         <a
-          class="button"
           @click="saveOptionListings"
+          class="button"
         >
           Einstellungen speichern
         </a>
         <a
-          class="button cancel-button"
           @click="$emit('close')"
+          class="button cancel-button"
         >
           Abbrechen
         </a>

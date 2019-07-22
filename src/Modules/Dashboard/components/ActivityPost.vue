@@ -88,8 +88,8 @@
         >
           {{ isTxtShortend ? 'alles zeigen' : 'weniger' }}
           <i
-            class="fas fa-angle-down"
             :class="{ 'fa-rotate-180': !isTxtShortend }"
+            class="fas fa-angle-down"
           />
         </a>
       </span>
@@ -102,10 +102,10 @@
       <textarea
         v-if="!qrLoading"
         v-model="quickreplyValue"
+        @keyup.enter="sendQuickreply"
         name="quickreply"
         class="quickreply"
         placeholder="Schreibe eine Antwort..."
-        @keyup.enter="sendQuickreply"
       />
       <span
         v-else

@@ -36,6 +36,8 @@
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
+- Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
+- Link Avatar pictures on dashboard to profiles !464 @D0nPiano
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -70,6 +72,8 @@
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
+- recreate Dashboard update-overview with vue components @D0nPiano 
+- changed ActivityModel to return data without HTML or JS @D0nPiano
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
@@ -230,8 +234,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
-- Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
-- Link Avatar pictures on dashboard to profiles !464 @D0nPiano
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
@@ -267,8 +269,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
 - removed unused php,js and css code !720 @alangecker
 - user normalisation in conversations API endpoint
-- recreate Dashboard update-overview with vue components @D0nPiano 
-- changed ActivityModel to return data without HTML or JS @D0nPiano 
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - removed unused php, js and css code !720 @alangecker
 - user normalisation in conversations API endpoint @alex.simm

@@ -315,7 +315,7 @@ class DashboardControl extends Control
 			$this->pageHelper->addContent($this->view->u_events($events));
 		}
 
-		$this->func->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));
+		$this->pageHelper->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));
 
 		/*
 		 * Top

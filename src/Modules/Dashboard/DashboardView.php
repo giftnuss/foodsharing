@@ -31,7 +31,7 @@ class DashboardView extends View
 
 	public function updates()
 	{
-		$this->func->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));
+		$this->pageHelper->addContent($this->vueComponent('activity-overview', 'activity-overview', []));
 	}
 
 	public function foodsharerMenu()
