@@ -160,6 +160,7 @@ class QuizXhr extends Control
 	{
 		if ($this->session->mayEditQuiz()) {
 			if ($answer = $this->quizGateway->getAnswer($_GET['id'])) {
+				$answer['isright'] = $answer['right'];
 				$this->dataHelper->setEditData($answer);
 				$dia = new XhrDialog();
 
@@ -168,7 +169,7 @@ class QuizXhr extends Control
 				$dia->addOpt('width', 500);
 				$dia->addContent($this->view->answerForm());
 
-				$dia->addButton('Speichern', 'ajreq(\'updateansw\',{id:' . (int)$_GET['id'] . ',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#right\').val()});$(\'#' . $dia->getId() . '\').dialog("close");');
+				$dia->addButton('Speichern', 'ajreq(\'updateansw\',{id:' . (int)$_GET['id'] . ',explanation:$(\'#explanation\').val(),text:$(\'#text\').val(),right:$(\'#isright\').val()});$(\'#' . $dia->getId() . '\').dialog("close");');
 
 				$return = $dia->xhrout();
 
