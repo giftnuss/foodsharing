@@ -25,13 +25,12 @@ class QuizHelper
 		$hasPassedStoreManagerQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER);
 		$hasPassedAmbassadorQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR);
 
-
 		$quizRole = Role::FOODSHARER;
 		if ($hasPassedAmbassadorQuiz) {
 			$quizRole = Role::AMBASSADOR;
-		} else if ($hasPassedStoreManagerQuiz) {
+		} elseif ($hasPassedStoreManagerQuiz) {
 			$quizRole = Role::STORE_MANAGER;
-		} else if ($hasPassedFoodsaverQuiz) {
+		} elseif ($hasPassedFoodsaverQuiz) {
 			$quizRole = Role::FOODSAVER;
 		}
 
