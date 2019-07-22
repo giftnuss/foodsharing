@@ -4,7 +4,7 @@ import './Event.css'
 import { attachAddressPicker } from '@/addressPicker'
 import { GET } from '@/browser'
 
-let sub = GET('sub')
+const sub = GET('sub')
 if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
 }

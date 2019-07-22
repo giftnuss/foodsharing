@@ -9,7 +9,7 @@ const production = process.env.NODE_ENV === 'production'
 
 Object.assign(module.exports, convert({
 
-  'leaflet': {
+  leaflet: {
     dependencies: [
       'leaflet/dist/leaflet.css'
     ]
@@ -128,7 +128,7 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'tablesorter': {
+  tablesorter: {
     resolve: lib('tablesorter/jquery.tablesorter.js')
   },
 

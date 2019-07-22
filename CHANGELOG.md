@@ -79,6 +79,7 @@
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
+- updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker

@@ -120,7 +120,7 @@ export default {
         await deletePost(this.target, this.targetId, post.id)
       } finally {
         this.isSending = false
-        let id = this.posts.indexOf(post)
+        const id = this.posts.indexOf(post)
         if (id !== -1) {
           this.posts.splice(id, 1)
         }

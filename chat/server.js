@@ -26,14 +26,14 @@ let numConnections = 0
 const sendToUser = (userId, channel, method, payload) => {
   fetchSessionIdsForUser(userId, (err, sessionIds) => {
     if (err) return console.error('could not get session ids for', userId, err)
-    for (let sessionId of sessionIds) {
+    for (const sessionId of sessionIds) {
       sendToSession(sessionId, channel, method, payload)
     }
   })
 }
 
 const sendToSession = (sessionId, channel, method, payload) => {
-  for (let connection of connectionsForSession(sessionId)) {
+  for (const connection of connectionsForSession(sessionId)) {
     connection.emit(channel, { m: method, o: payload })
   }
 }
@@ -92,7 +92,7 @@ const parseRequestURL = (req) => {
 }
 
 const inputServer = http.createServer((req, res) => {
-  let url = parseRequestURL(req)
+  const url = parseRequestURL(req)
   if (url.pathname === '/stats') {
     res.writeHead(200)
     res.end(JSON.stringify({
@@ -119,7 +119,7 @@ const inputServer = http.createServer((req, res) => {
   }
 
   if (userIds) {
-    for (let userId of userIds.split(',')) {
+    for (const userId of userIds.split(',')) {
       sendToUser(userId, app, method, options)
     }
   }
@@ -137,7 +137,7 @@ const io = connectSocketIO(chatServer)
 io.use((socket, next) => {
   const cookieVal = socket.request.headers.cookie
   if (cookieVal) {
-    let cookie = parseCookie(cookieVal)
+    const cookie = parseCookie(cookieVal)
     socket.sid = cookie.PHPSESSID || cookie.sessionid
     if (socket.sid) return next()
   }

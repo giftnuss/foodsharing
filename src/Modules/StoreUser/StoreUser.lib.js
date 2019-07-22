@@ -81,7 +81,7 @@ export function u_contextAction (action, fsid) {
     showLoader()
     $.ajax({
       url: '/xhr.php?f=bcontext',
-      data: { 'action': action, 'fsid': fsid, 'bid': store.id, 'bzid': store.bezirk_id },
+      data: { action: action, fsid: fsid, bid: store.id, bzid: store.bezirk_id },
       dataType: 'json',
       success: function (data) {
         if (data.status == 1) {
@@ -113,11 +113,11 @@ export function createJumperMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
-      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
-      'toteam': { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check fa-fw' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
+      gotoprofile: { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      report: { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      delete: { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      toteam: { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check fa-fw' },
+      message: { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
@@ -132,11 +132,11 @@ export function createMenu () {
       u_contextAction(key, fsid)
     },
     items: {
-      'gotoprofile': { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
-      'report': { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
-      'delete': { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
-      'tojumper': { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot fa-fw' },
-      'message': { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
+      gotoprofile: { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
+      report: { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
+      delete: { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
+      tojumper: { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot fa-fw' },
+      message: { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
     }
   }
 }
