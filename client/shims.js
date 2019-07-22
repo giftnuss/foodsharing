@@ -35,13 +35,6 @@ Object.assign(module.exports, convert({
     ]
   },
 
-  'fullpage.js': {
-    disableAMD: true,
-    dependencies: [
-      'fullpage.js/dist/jquery.fullpage.css'
-    ]
-  },
-
   'jquery-migrate': {
     // production version does not show all the JQMIGRATE warnings/traces
     resolve: require.resolve(production ? 'jquery-migrate/dist/jquery-migrate.min.js' : 'jquery-migrate'),
