@@ -409,7 +409,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
-	public function listCloseBaskets($fs_id, $loc, $distanceKm = 30)
+	public function listCloseBasketsByCoordinate($fs_id, $gps_coordinate, $distance_km = 30)
 	{
 		return $this->db->fetchAll(
 			'
@@ -442,12 +442,12 @@ class BasketGateway extends BaseGateway
 			LIMIT 6
 		',
 			[
-				':lat' => (float)$loc['lat'],
-				':lat1' => (float)$loc['lat'],
-				':lon' => (float)$loc['lon'],
+				':lat' => (float)$gps_coordinate['lat'],
+				':lat1' => (float)$gps_coordinate['lat'],
+				':lon' => (float)$gps_coordinate['lon'],
 				':status' => Status::REQUESTED_MESSAGE_READ,
 				':fs_id' => $fs_id,
-				':distance' => $distanceKm,
+				':distance' => $distance_km,
 			]
 		);
 	}

@@ -113,7 +113,7 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_BASKET_DISTANCE);
 		}
 
-		$baskets = $this->gateway->listCloseBaskets($this->session->id(), $location, $distance);
+		$baskets = $this->gateway->listCloseBasketsByCoordinate($this->session->id(), $location, $distance);
 		$baskets = array_map(function ($b) {
 			$basket = $this->gateway->getBasket((int)$b[self::ID]);
 

@@ -537,7 +537,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listCloseBasketsByCoordinate($this->session->id(), $this->session->getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {

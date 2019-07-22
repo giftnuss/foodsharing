@@ -40,7 +40,7 @@ class BasketControl extends Control
 
 	public function find(): void
 	{
-		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
+		$baskets = $this->basketGateway->listCloseBasketsByCoordinate($this->session->id(), $this->session->getLocation());
 		$this->view->find($baskets, $this->session->getLocation());
 	}
 
