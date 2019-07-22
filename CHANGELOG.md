@@ -78,6 +78,7 @@
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
+- include rules from !511 in devdocs @flukx
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
