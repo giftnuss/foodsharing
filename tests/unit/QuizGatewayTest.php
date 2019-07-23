@@ -33,7 +33,7 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetQuizzes()
 	{
-		$quizzes = $this->gateway->getQuizzes();
+		$quizzes = $this->gateway->listQuiz();
 		$this->assertEquals('1', $quizzes[0]['id']);
 		$this->assertEquals('2', $quizzes[1]['id']);
 		$this->assertEquals('3', $quizzes[2]['id']);
