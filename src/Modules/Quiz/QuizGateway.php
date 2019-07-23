@@ -79,7 +79,7 @@ class QuizGateway extends BaseGateway
 		return $quiz ? $quiz['name'] : '';
 	}
 
-	public function getQuizStatus(int $quizId, int $fsId): QuizStatus
+	public function getQuizStatus(int $quizId, int $fsId): int
 	{
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
 
