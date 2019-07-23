@@ -133,8 +133,8 @@ function u_loadDialog (purl) {
   $('#b_content').dialog('open')
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
-    'left': `${pos.left}px`,
-    'top': '80px'
+    left: `${pos.left}px`,
+    top: '80px'
   })
 
   if (purl != undefined) {

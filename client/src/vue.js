@@ -28,7 +28,7 @@ Vue.prototype.$url = (key, ...params) => {
 }
 
 export function vueRegister (components) {
-  for (let key in components) {
+  for (const key in components) {
     Vue.component(key, components[key])
   }
 }
@@ -43,23 +43,23 @@ export function vueApply (selector) {
     throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
   }
   elements.forEach((el, index) => {
-    let componentName = el.getAttribute('data-vue-component')
-    let props = JSON.parse(el.getAttribute('data-vue-props')) || {}
-    let initialData = JSON.parse(el.getAttribute('vue-initial-data')) || {}
+    const componentName = el.getAttribute('data-vue-component')
+    const props = JSON.parse(el.getAttribute('data-vue-props')) || {}
+    const initialData = JSON.parse(el.getAttribute('vue-initial-data')) || {}
 
     if (!componentName) {
       throw new Error('vueUse-Error: missing component name. pass it as <div data-vue-component="my-component" />')
     }
 
     // eslint-disable-next-line no-new
-    let vm = new Vue({
+    const vm = new Vue({
       el,
       render (h) {
         return h(componentName, { props })
       }
     })
     if (initialData && typeof initialData === 'object') {
-      for (let key in initialData) {
+      for (const key in initialData) {
         if (typeof vm.$children[0][key] === 'undefined' || typeof vm.$children[0][key] === 'function') {
           throw new Error(`vueUse() Error: prop '${key}' needs to be defined in data()`)
         }

@@ -185,7 +185,7 @@ const activity = {
 
       $('#activity-option-form input[type=\'checkbox\']').each(function () {
         if (!this.checked) {
-          let $el = $(this)
+          const $el = $(this)
           activity.listOptions.push({ index: $el.attr('name'), id: $el.val() })
         }
       })

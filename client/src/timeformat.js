@@ -16,7 +16,7 @@ const timeformat = {
     const date = parts[0]
 
     parts = date.split('-')
-    let out = `${parts[2]}.${parts[1]}.${parts[0]} `
+    const out = `${parts[2]}.${parts[1]}.${parts[0]} `
 
     parts = time.split(':')
     return `${out + parts[0]}.${parts[1]} Uhr`

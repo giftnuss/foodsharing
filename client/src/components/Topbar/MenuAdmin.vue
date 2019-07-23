@@ -39,7 +39,7 @@ export default {
   computed: {
     items () {
       // TODO: replace hard coded links with $url()
-      let items = []
+      const items = []
       if (this.isOrgaTeam) {
         items.push(...[
           {
