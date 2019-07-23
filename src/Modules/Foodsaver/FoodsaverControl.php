@@ -72,7 +72,7 @@ class FoodsaverControl extends Control
 		} elseif (($id = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
 			$regionIds = $this->regionGateway->getFsRegionIds($id);
-			if ($data && ($this->session->isOrgaTeam() || $this->session->isAmbassadorForRegion($regionIds, false, true))) {
+			if ($data && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 

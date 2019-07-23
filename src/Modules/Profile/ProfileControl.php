@@ -84,7 +84,7 @@ final class ProfileControl extends Control
 	public function profile(): void
 	{
 		$regionIDs = $this->regionGateway->getFsRegionIds($this->foodsaver['id']);
-		if ($this->session->isOrgaTeam() || $this->session->isAmbassadorForRegion($regionIDs, false, true)) {
+		if ($this->session->isAmbassadorForRegion($regionIDs, false, true) || $this->session->isOrgaTeam()) {
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				true,

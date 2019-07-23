@@ -202,7 +202,7 @@ class XhrMethods
 					$pic = $this->imageService->img($o['photo']);
 
 					$delete = '';
-					if ($this->session->isOrgaTeam() || $this->session->id() == $o['fsid']) {
+					if ($this->session->id() == $o['fsid'] || $this->session->isOrgaTeam()) {
 						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
 					}
 
@@ -804,7 +804,7 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->isAmbassador()) {
+		if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
@@ -1302,7 +1302,7 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator) {
+		if ($this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator || $this->session->isOrgaTeam()) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
@@ -1427,7 +1427,7 @@ class XhrMethods
 	public function xhr_delBPost($data)
 	{
 		$fsid = $this->model->getVal('foodsaver_id', 'betrieb_notiz', $data['pid']);
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id()) {
+		if ($fsid == $this->session->id() || $this->session->isOrgaTeam()) {
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
@@ -1438,11 +1438,11 @@ class XhrMethods
 
 	public function xhr_delPost($data)
 	{
-		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
+		$fsId = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
 		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP)) {
+		if ($fsId == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP) || $this->session->isOrgaTeam()) {
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;
