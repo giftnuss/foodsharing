@@ -21,29 +21,32 @@ class QuizHelper
 
 	public function refreshQuizData(int $fsId, int $fsRole): int
 	{
-		$hasPassedFoodsaverQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER);
-		$hasPassedStoreManagerQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER);
-		$hasPassedAmbassadorQuiz = $this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR);
+		$this->refreshFsQuizRole($fsId);
 
-		$quizRole = Role::FOODSHARER;
-		if ($hasPassedAmbassadorQuiz) {
-			$quizRole = Role::AMBASSADOR;
-		} elseif ($hasPassedStoreManagerQuiz) {
-			$quizRole = Role::STORE_MANAGER;
-		} elseif ($hasPassedFoodsaverQuiz) {
-			$quizRole = Role::FOODSAVER;
+		return $this->nextQuizTodo($fsId, $fsRole);
+	}
+
+	public function refreshFsQuizRole(int $fsId): int
+	{
+		foreach ([Role::AMBASSADOR, Role::STORE_MANAGER, Role::FOODSAVER] as $quizRole) {
+			if ($this->quizGateway->hasPassedQuiz($fsId, $quizRole)) {
+				return $this->foodsaverGateway->setQuizRole($fsId, $quizRole);
+			}
 		}
 
+		return $this->foodsaverGateway->setQuizRole($fsId, Role::FOODSHARER);
+	}
+
+	public function nextQuizTodo(int $fsId, int $fsRole): int
+	{
 		$doesManageStores = (int)$this->storeGateway->getStoreCountForBieb($fsId) > 0;
 		$doesRepresentRegions = (int)$this->foodsaverGateway->getBezirkCountForBotschafter($fsId) > 0;
 
-		$this->quizGateway->setFsQuizRole($fsId, $quizRole);
-
-		if ($fsRole == Role::FOODSAVER && !$hasPassedFoodsaverQuiz) {
+		if ($fsRole == Role::FOODSAVER && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 			return Role::FOODSAVER;
-		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$hasPassedStoreManagerQuiz) {
+		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
 			return Role::STORE_MANAGER;
-		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$hasPassedAmbassadorQuiz) {
+		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
 			return Role::AMBASSADOR;
 		}
 

@@ -134,10 +134,10 @@ final class FoodsaverGateway extends BaseGateway
 
 		$bot = $this->db->fetchAll('
 			SELECT `fs_bezirk`.`name`,
-				   `fs_bezirk`.`id` 
+				   `fs_bezirk`.`id`
 			FROM `fs_bezirk`,
 				 fs_botschafter
-			WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id` 
+			WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
 			AND `fs_botschafter`.foodsaver_id = :id',
 			[':id' => $id]
 		);
@@ -254,8 +254,8 @@ final class FoodsaverGateway extends BaseGateway
 			'SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`)
 			AS `name`,`plz`,`stadt`,`anschrift`,`photo`
 			FROM `fs_foodsaver`
-			WHERE `active` = 1 
-			AND `bezirk_id` = :id 
+			WHERE `active` = 1
+			AND `bezirk_id` = :id
 			AND `lat` != "" ',
 			[':id' => $bezirk_id]
 		);
@@ -775,5 +775,14 @@ final class FoodsaverGateway extends BaseGateway
 		if ($mainRegion_id === $bezirk_id) {
 			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);
 		}
+	}
+
+	public function setQuizRole(int $fsId, int $quizRole): int
+	{
+		return $this->db->update(
+			'fs_foodsaver',
+			['quiz_rolle' => $quizRole],
+			['id' => $fsId]
+		);
 	}
 }
