@@ -163,7 +163,7 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function handleQuizStatus(array $quiz, Role $role): void
+	private function handleQuizStatus(array $quiz, int $role): void
 	{
 		$fsId = $this->session->id();
 		$desc = $this->contentGateway->get(12);
