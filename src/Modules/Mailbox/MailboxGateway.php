@@ -344,24 +344,24 @@ class MailboxGateway extends BaseGateway
 	{
 		if ($isAmbassador) {
 			$regions = $this->getMailboxBezirkIds($fsId);
-			$bids = array();
-			$mboxes = array();
-			foreach ($regions as $b) {
-				$bids[] = (int)$b;
+			$selectedRegioins = array();
+			$mBoxes = array();
+			foreach ($regions as $region) {
+				$selectedRegioins[] = (int)$region;
 			}
 
 			if ($regions = $this->db->fetchAll(
 				'
 				SELECT 	`id`,`mailbox_id`,`name`
 				FROM 	`fs_bezirk`
-				WHERE 	`id` IN (' . implode(',', array_map('intval', $bids)) . ')
+				WHERE 	`id` IN (' . implode(',', array_map('intval', $selectedRegioins)) . ')
 				AND 	`mailbox_id` = 0
 			'
 			)
 			) {
-				foreach ($regions as $b) {
-					if ($b['mailbox_id'] == 0) {
-						$mb_name = strtolower($b['name']);
+				foreach ($regions as $region) {
+					if ($region['mailbox_id'] == 0) {
+						$mb_name = strtolower($region['name']);
 						$mb_name = trim($mb_name);
 						$mb_name = str_replace(
 							['ä', 'ö', 'ü', 'è', 'à', 'ß', ' ', '-', '/', '\\'],
@@ -382,8 +382,8 @@ class MailboxGateway extends BaseGateway
 							$tmp_name = $mb_name . $i;
 						}
 
-						if ($this->db->update('fs_bezirk', ['mailbox_id' => (int)$mb_id], ['id' => (int)$b['id']])) {
-							$b['mailbox_id'] = $mb_id;
+						if ($this->db->update('fs_bezirk', ['mailbox_id' => (int)$mb_id], ['id' => (int)$region['id']])) {
+							$region['mailbox_id'] = $mb_id;
 						}
 					}
 				}
@@ -399,24 +399,24 @@ class MailboxGateway extends BaseGateway
 						`fs_mailbox` m
 					
 				WHERE 	b.mailbox_id = m.id
-				AND 	b.`id` IN (' . implode(',', array_map('intval', $bids)) . ')
+				AND 	b.`id` IN (' . implode(',', array_map('intval', $selectedRegioins)) . ')
 				
 			'
 			)
 			) {
-				foreach ($regions as $b) {
-					if (empty($b['email_name'])) {
-						$b['email_name'] = 'foodsharing ' . $b['name'];
+				foreach ($regions as $region) {
+					if (empty($region['email_name'])) {
+						$region['email_name'] = 'foodsharing ' . $region['name'];
 						$this->db->update(
 							'fs_bezirk',
-							['email_name' => strip_tags($b['email_name'])],
-							['id' => (int)$b['bezirk_id']]
+							['email_name' => strip_tags($region['email_name'])],
+							['id' => (int)$region['bezirk_id']]
 						);
 					}
-					$mboxes[] = [
-						'id' => $b['id'],
-						'name' => $b['name'],
-						'email_name' => $b['email_name'],
+					$mBoxes[] = [
+						'id' => $region['id'],
+						'name' => $region['name'],
+						'email_name' => $region['email_name'],
 						'type' => 'bot',
 					];
 				}
@@ -486,7 +486,7 @@ class MailboxGateway extends BaseGateway
 						['mailbox_id' => (int)$m['id'], 'foodsaver_id' => $fsId]
 					);
 				}
-				$mboxes[] = [
+				$mBoxes[] = [
 					'id' => $m['id'],
 					'name' => $m['name'],
 					'email_name' => $m['email_name'],
@@ -508,7 +508,7 @@ class MailboxGateway extends BaseGateway
 			[':fs_id' => $fsId]
 		)
 		) {
-			$mboxes[] = [
+			$mBoxes[] = [
 				'id' => $mebox['id'],
 				'name' => $mebox['name'],
 				'email_name' => $mebox['email_name'],
@@ -516,11 +516,11 @@ class MailboxGateway extends BaseGateway
 			];
 		}
 
-		if (empty($mboxes)) {
+		if (empty($mBoxes)) {
 			return false;
 		}
 
-		return $mboxes;
+		return $mBoxes;
 	}
 
 	public function getMailboxId(int $mid)

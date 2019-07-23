@@ -110,9 +110,9 @@ class XhrMethods
 
 	public function xhr_verify($data)
 	{
-		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
+		$regions = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->session->isAmbassadorForRegion($bids, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAmbassadorForRegion($regions, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -957,7 +957,7 @@ class XhrMethods
 		return false;
 	}
 
-	private function cropImage($bild, $x, $y, $w, $h)
+	private function cropImage($image, $x, $y, $w, $h)
 	{
 		if ($w > 2000 || $h > 2000) {
 			return false;
@@ -967,7 +967,7 @@ class XhrMethods
 		$targ_h = 600;
 		$jpeg_quality = 100;
 
-		$ext = explode('.', $bild);
+		$ext = explode('.', $image);
 		$ext = end($ext);
 		$ext = strtolower($ext);
 
@@ -975,13 +975,13 @@ class XhrMethods
 
 		switch ($ext) {
 			case 'gif':
-				$img_r = imagecreatefromgif('./tmp/' . $bild);
+				$img_r = imagecreatefromgif('./tmp/' . $image);
 				break;
 			case 'jpg':
-				$img_r = imagecreatefromjpeg('./tmp/' . $bild);
+				$img_r = imagecreatefromjpeg('./tmp/' . $image);
 				break;
 			case 'png':
-				$img_r = imagecreatefrompng('./tmp/' . $bild);
+				$img_r = imagecreatefrompng('./tmp/' . $image);
 				break;
 		}
 
@@ -993,28 +993,28 @@ class XhrMethods
 
 		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
 
-		@unlink('../tmp/crop_' . $bild);
+		@unlink('../tmp/crop_' . $image);
 
 		switch ($ext) {
 			case 'gif':
-				imagegif($dst_r, './tmp/crop_' . $bild);
+				imagegif($dst_r, './tmp/crop_' . $image);
 				break;
 			case 'jpg':
-				imagejpeg($dst_r, './tmp/crop_' . $bild, $jpeg_quality);
+				imagejpeg($dst_r, './tmp/crop_' . $image, $jpeg_quality);
 				break;
 			case 'png':
-				imagepng($dst_r, './tmp/crop_' . $bild, 0);
+				imagepng($dst_r, './tmp/crop_' . $image, 0);
 				break;
 		}
 
-		if (file_exists('./tmp/crop_' . $bild)) {
+		if (file_exists('./tmp/crop_' . $image)) {
 			try {
-				copy('./tmp/crop_' . $bild, './tmp/thumb_crop_' . $bild);
-				$img = new fImage('./tmp/thumb_crop_' . $bild);
+				copy('./tmp/crop_' . $image, './tmp/thumb_crop_' . $image);
+				$img = new fImage('./tmp/thumb_crop_' . $image);
 				$img->resize(200, 0);
 				$img->saveChanges();
 
-				return 'thumb_crop_' . $bild;
+				return 'thumb_crop_' . $image;
 			} catch (Exception $e) {
 				return false;
 			}
