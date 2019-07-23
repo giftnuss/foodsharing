@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -396,14 +397,14 @@ class QuizGateway extends BaseGateway
 	private function handleUserComment(int $questionId, int $commentId, string $comment): bool
 	{
 		if ($commentId > 0) {
-			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(341)) {
+			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
 				$this->bellGateway->addBell(
 					$quizAMBs,
 					'new_quiz_comment_title',
 					'new_quiz_comment',
 					'fas fa-question-circle',
-					array('href' => '/?page=quiz&sub=wall&id=' . $questionId),
-					array('comment' => $comment)
+					['href' => '/?page=quiz&sub=wall&id=' . $questionId],
+					['comment' => $comment]
 				);
 			}
 			$this->db->insert(
