@@ -19,14 +19,14 @@ class QuizStatus
 	public const RUNNING = 1;
 
 	/**
-	 * The quiz had been passed.
+	 * Quiz had been passed.
 	 *
 	 * @var int
 	 */
 	public const PASSED = 2;
 
 	/**
-	 * The user failed to pass the quiz. The number of failures is less than three.
+	 * User failed to pass the quiz. The number of failures is less than three.
 	 *
 	 * @var int
 	 */
@@ -37,19 +37,19 @@ class QuizStatus
 	 *
 	 * @var int
 	 */
-	public const PAUSE = 4;	// Three failures lead to a 30-days learning pause
+	public const PAUSE = 4;
 
 	/**
 	 * A 30-days pause after failing three times elapsed. The quiz is open for another two tries to solve.
 	 *
 	 * @var int
 	 */
-	public const PAUSE_ELAPSED = 5;	// After 30 days there are two additional tries
+	public const PAUSE_ELAPSED = 5;
 
 	/**
 	 * All tries to solve the quiz were unsuccessful.
 	 *
 	 * @var int
 	 */
-	public const DISQUALIFIED = 6;	// Failed another two times
+	public const DISQUALIFIED = 6;
 }
