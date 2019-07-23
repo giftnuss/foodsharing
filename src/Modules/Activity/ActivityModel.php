@@ -222,12 +222,13 @@ class ActivityModel extends Db
 			$out = array();
 			foreach ($updates as $u) {
 				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 				$out[] = [
 					'attr' => [
 						'href' => $url
 					],
-					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
 					'desc' => $this->textPrepare($u['post_body']),
 					'time' => $u['update_time'],
 					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
