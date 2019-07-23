@@ -194,7 +194,7 @@ class Database
 		$where = $this->generateWhereClause($criteria);
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
 		if ($limit > 0) {
-			$query = $query . ' LIMIT ' . $limit;
+			$query .= ' LIMIT ' . $limit;
 		}
 
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
