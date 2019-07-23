@@ -386,7 +386,7 @@ class QuizGateway extends BaseGateway
 
 	public function addUserComment(int $questionId, int $fsId, string $comment): bool
 	{
-		$commentId = $this->wallPostGateway($comment, $fsId, 'question', $questionId);
+		$commentId = $this->wallPostGateway->addPost($comment, $fsId, 'question', $questionId);
 
 		return $this->handleUserComment($questionId, $commentId, $comment);
 	}
