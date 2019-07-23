@@ -66,7 +66,7 @@ class QuizControl extends Control
 				$this->routeHelper->go('/?page=quiz&id=1');
 			}
 			$this->pageHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
-			$this->pageHelper->addContent($this->view->listQuiz($this->quizGateway->getQuizzes()), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->listQuiz($this->quizGateway->listQuiz()), CNT_LEFT);
 			$this->pageHelper->addContent($this->view->quizMenu(), CNT_LEFT);
 		}
 	}

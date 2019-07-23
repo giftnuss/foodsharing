@@ -28,7 +28,7 @@ class QuizGateway extends BaseGateway
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function getQuizzes(): array
+	public function listQuiz(): array
 	{
 		return $this->db->fetchAll('
 			SELECT id, name
