@@ -9,6 +9,12 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 
 	private $gateway;
 
+	private $foodsaver;
+	/**
+	 * @var array
+	 */
+	private $basketsIds;
+
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Quiz\QuizSessionGateway::class);
@@ -20,7 +26,7 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 		}
 	}
 
-	private function createQuiz(int $quizId, array $extra_params = []): array
+	private function createQuiz(int $quizId): array
 	{
 		$params = [
 			'id' => $quizId,
