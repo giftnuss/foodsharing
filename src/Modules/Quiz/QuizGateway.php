@@ -9,24 +9,28 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\WallPost\WallPostGateway;
 
 class QuizGateway extends BaseGateway
 {
 	private $bellGateway;
 	private $foodsaverGateway;
 	private $quizSessionGateway;
+	private $wallPostGateway;
 
 	public function __construct(
 		Database $db,
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
-		QuizSessionGateway $quizSessionGateway
+		QuizSessionGateway $quizSessionGateway,
+		WallPostGateway $wallPostGateway
 	) {
 		parent::__construct($db);
 
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
+		$this->wallPostGateway = $wallPostGateway;
 	}
 
 	public function listQuiz(): array
@@ -382,14 +386,7 @@ class QuizGateway extends BaseGateway
 
 	public function addUserComment(int $questionId, int $fsId, string $comment): bool
 	{
-		$commentId = $this->db->insert(
-			'fs_wallpost',
-			[
-				'foodsaver_id' => $fsId,
-				'body' => $comment,
-				'time' => $this->db->now()
-			]
-		);
+		$commentId = $this->wallPostGateway($comment, $fsId, 'question', $questionId);
 
 		return $this->handleUserComment($questionId, $commentId, $comment);
 	}
@@ -407,13 +404,11 @@ class QuizGateway extends BaseGateway
 					['comment' => $comment]
 				);
 			}
-			$this->db->insert(
+
+			$this->db->update(
 				'fs_question_has_wallpost',
-				[
-					'question_id' => $questionId,
-					'wallpost_id' => $commentId,
-					'usercomment' => 1
-				]
+				['usercomment' => 1],
+				['wallpost_id' => $commentId]
 			);
 
 			return true;
