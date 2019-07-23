@@ -182,9 +182,12 @@ class Database
 	/**
 	 * Deletes all rows from table for a given criteria.
 	 *
-	 * @param string $table the table descriptor
-	 * @param array $criteria criteria for the WHERE clause
-	 * @param int $limit limits the number of rows to delete, if greater than 0
+	 * @param string $table Table descriptor.
+	 * @param array $criteria Criteria for the WHERE clause.
+	 * @param int $limit Limits the number of rows to delete, if greater than 0.
+	 *
+	 * @return int Number of deleted rows.
+	 * @throws \Exception
 	 */
 	public function delete(string $table, array $criteria, int $limit = 0): int
 	{
