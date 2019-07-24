@@ -36,6 +36,7 @@
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
+- Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
