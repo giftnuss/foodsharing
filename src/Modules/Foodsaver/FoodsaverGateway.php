@@ -70,7 +70,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverBasics(int $fsid): array
+	public function getFoodsaverBasics(int $fsId): array
 	{
 		if ($fs = $this->db->fetch('
 			SELECT 	fs.`name`,

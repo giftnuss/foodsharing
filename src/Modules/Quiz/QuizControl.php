@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
