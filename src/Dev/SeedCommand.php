@@ -137,8 +137,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
 
+		// Forum theads and posts
 		$theme = $I->addForumTheme($bezirk1, $userbot['id']);
 		$I->addForumThemePost($theme['id'], $user2['id']);
+		$theme = $I->addForumTheme($bezirk1, $user2['id']);
+		$I->addForumThemePost($theme['id'], $user1['id']);
+		$theme = $I->addForumTheme($bezirk1, $user1['id']);
+		$I->addForumThemePost($theme['id'], $userorga['id']);
 
 		$fairteiler = $I->createFairteiler($userbot['id'], $bezirk1);
 		$I->addFairteilerFollower($user2['id'], $fairteiler['id']);
