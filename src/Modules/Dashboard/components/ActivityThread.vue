@@ -44,13 +44,6 @@ export default {
       return this.updates.filter(a => this.displayedTypes.indexOf(a.type) !== -1)
     }
   },
-  async created () {
-    this.page = 0
-    this.updates = await getUpdates(this.page)
-    this.updates.sort((a, b) => {
-      return b.data.time_ts - a.data.time_ts
-    })
-  },
   methods: {
     async infiniteHandler ($state) {
       var res = await getUpdates(this.page)
