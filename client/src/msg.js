@@ -205,7 +205,7 @@ const msg = {
    * Method will be called if there arrived something new from the server
    */
   pushArrived: function (data) {
-    let ret = data.msg_heartbeat
+    const ret = data.msg_heartbeat
 
     console.log(ret._duration)
 
@@ -246,9 +246,9 @@ const msg = {
     $('#compose_submit').on('click', function (ev) {
       ev.preventDefault()
 
-      let recip = msg.getRecipients()
+      const recip = msg.getRecipients()
       if (recip != false) {
-        let body = $('#compose_body').val()
+        const body = $('#compose_body').val()
         if (body != '') {
           ajax.req('msg', 'newconversation', {
             data: {
@@ -276,7 +276,7 @@ const msg = {
   },
 
   prependMsg: function (message) {
-    let $el = msg.msgTpl(message)
+    const $el = msg.msgTpl(message)
 
     if (msg.$conversation == undefined) {
       msg.$conversation = $('#msg-conversation')
@@ -288,7 +288,7 @@ const msg = {
   },
 
   appendMsg: function (message) {
-    let $el = msg.msgTpl(message)
+    const $el = msg.msgTpl(message)
 
     if (msg.$conversation == undefined) {
       msg.$conversation = $('#msg-conversation')
@@ -311,7 +311,7 @@ const msg = {
   },
 
   getRecipients: function () {
-    let out = []
+    const out = []
     $('#compose_recipients li.tagedit-listelement-old input').each(function () {
       let id = $(this).attr('name').replace('compose_recipients[', '').split('-')[0]
       id = parseInt(id)
@@ -393,7 +393,7 @@ const msg = {
   },
 
   loadMore: function () {
-    let lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
+    const lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
 
     if (!msg.moreIsLoading) {
       msg.moreIsLoading = true
@@ -410,7 +410,7 @@ const msg = {
             msg.prependMsg(ret.messages[i])
           }
 
-          let position = $(`#msg-${lmid}`).position()
+          const position = $(`#msg-${lmid}`).position()
 
           if (!position) return
 
@@ -430,7 +430,7 @@ const msg = {
     if (!msg.isMob()) {
       msg.$conversation.off('scroll')
       msg.$conversation.on('scroll', function () {
-        let $conv = $(this)
+        const $conv = $(this)
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
         }
@@ -438,7 +438,7 @@ const msg = {
     } else {
       $(window).off('scroll')
       $(window).on('scroll', function () {
-        let $conv = $(this)
+        const $conv = $(this)
 
         if ($conv.scrollTop() == 0) {
           msg.loadMore()

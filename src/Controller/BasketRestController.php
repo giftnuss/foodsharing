@@ -204,6 +204,8 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(404, 'Basket does not exist.');
 		} elseif ($basket[self::STATUS] == Status::DELETED_PICKED_UP) {
 			throw new HttpException(404, 'Basket was already picked up.');
+		} elseif ($basket['until_ts'] < time()) {
+			throw new HttpException(404, 'Basket is expired.');
 		}
 
 		$basket = $this->normalizeBasket($basket);

@@ -32,8 +32,8 @@ export const dialogs = {
 }
 
 export function collapse_wrapper (id) {
-  let $content = $(`#${id}-wrapper .element-wrapper`)
-  let $label = $(`#${id}-wrapper .wrapper-label i`)
+  const $content = $(`#${id}-wrapper .element-wrapper`)
+  const $label = $(`#${id}-wrapper .wrapper-label i`)
   if ($content.is(':visible')) {
     $content.hide()
     $label.removeClass('fa-caret-down').addClass('fa-caret-right')
@@ -44,10 +44,10 @@ export function collapse_wrapper (id) {
 }
 
 export function closeAllDialogs () {
-  let $activeDialogs = $('.ui-dialog').find('.ui-dialog-content')
+  const $activeDialogs = $('.ui-dialog').find('.ui-dialog-content')
 
   $activeDialogs.each(function () {
-    let $dia = $(this)
+    const $dia = $(this)
     $dia.dialog()
     if ($dia.dialog('isOpen')) {
       $dia.dialog().dialog('close')
@@ -80,10 +80,10 @@ export function initialize () {
     $('.moreswap').each(function () {
       var height = 100
 
-      let $this = $(this)
+      const $this = $(this)
       $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
 
-      let cheight = $this.attr('class').split('moreswap-height-')
+      const cheight = $this.attr('class').split('moreswap-height-')
 
       if (cheight.length > 1) {
         height = parseInt(cheight[1])
@@ -93,31 +93,31 @@ export function initialize () {
 
       if ($this.height() > 100) {
         $this.css({
-          'height': `${height}px`,
-          'overflow': 'hidden'
+          height: `${height}px`,
+          overflow: 'hidden'
         })
       }
     })
 
     $('.moreswaplink').each(function () {
-      let $this = $(this)
+      const $this = $(this)
       $this.prev().css({
-        'height': `${g_moreswapheight}px`,
-        'overflow': 'hidden'
+        height: `${g_moreswapheight}px`,
+        overflow: 'hidden'
       })
       $this.on('click', function (ev) {
         ev.preventDefault()
         if ($this.attr('data-show') == 0) {
           $this.prev().css({
-            'height': 'auto',
-            'overflow': 'visible'
+            height: 'auto',
+            overflow: 'visible'
           })
           $this.text('einklappen')
           $this.attr('data-show', 1)
         } else {
           $this.prev().css({
-            'height': `${g_moreswapheight}px`,
-            'overflow': 'hidden'
+            height: `${g_moreswapheight}px`,
+            overflow: 'hidden'
           })
           $this.text('Mehr anzeigen')
           $this.attr('data-show', 0)
@@ -181,7 +181,7 @@ export function initialize () {
             goTo($('#dialog-confirm-url').val())
             $(this).dialog('close')
           },
-          'Abbrechen': function () {
+          Abbrechen: function () {
             $(this).dialog('close')
           }
         }
@@ -209,7 +209,7 @@ export function initialize () {
     )
 
     $('.value').on('blur', function () {
-      let el = $(this)
+      const el = $(this)
       if (el.val() != '') {
         el.removeClass('input-error')
       }
@@ -220,7 +220,7 @@ export function initialize () {
       modal: true,
       buttons:
         {
-          'Upload': function () {
+          Upload: function () {
             uploadPhoto()
           }
         }
@@ -248,8 +248,8 @@ export function addbanana (fsid) {
   $('#fsprofileratemsg-wrapper label').html($('.vouch-banana-title').html())
   $('#fsprofileratemsg-wrapper div.desc').html($('.vouch-banana-desc').html())
   $('#fsprofileratemsg').css({
-    'height': '137px',
-    'width': '558px'
+    height: '137px',
+    width: '558px'
   })
   $('#fs-profile-rate-comment').dialog('option', {
     width: 600,
@@ -516,8 +516,8 @@ export function ifconfirm (url, question, title) {
 export function picFinish (img, id) {
   $(`#${id}-action`).val('upload')
   $.fancybox.close()
-  let d = new Date()
-  let imgp = `${img}?${d.getTime()}`
+  const d = new Date()
+  const imgp = `${img}?${d.getTime()}`
   $(`#${id}-open`).html(`<img src="images/${imgp}" /><input type="hidden" name="photo" value="${img}" />`)
   hideLoader()
   reload()
@@ -529,12 +529,12 @@ export function pic_error (msg, id) {
 }
 export function fotoupload (file, id) {
   $(`#${id}-file`).val(file)
-  let d = new Date()
-  let img = `${file}?${d.getTime()}`
+  const d = new Date()
+  const img = `${file}?${d.getTime()}`
 
   $(`#${id}-placeholder`).html(`<img src="./tmp/${img}" />`)
   $(`#${id}-placeholder img`).Jcrop({
-    setSelect: [ 100, 0, 400, 400 ],
+    setSelect: [100, 0, 400, 400],
     aspectRatio: 35 / 45,
     onSelect: function (c) {
       $(`#${id}-x`).val(c.x)
@@ -573,16 +573,16 @@ export function pictureReady (id, img) {
 }
 
 export function pictureCrop (id, img) {
-  let ratio = $.parseJSON($(`#${id}-ratio`).val())
-  let ratio_val = $.parseJSON($(`#${id}-ratio-val`).val())
+  const ratio = $.parseJSON($(`#${id}-ratio`).val())
+  const ratio_val = $.parseJSON($(`#${id}-ratio-val`).val())
 
-  let ratio_i = parseInt($(`#${id}-ratio-i`).val())
+  const ratio_i = parseInt($(`#${id}-ratio-i`).val())
 
   if (ratio[ratio_i] != undefined) {
     $(`#${id}-ratio-i`).val((ratio_i + 1))
     $(`#${id}-crop`).html(`<img src="images/${id}/${img}" /><br /><span id="${id}-crop-save">Speichern</span>`)
     $(`#${id}-crop img`).Jcrop({
-      setSelect: [ 100, 0, 400, 400 ],
+      setSelect: [100, 0, 400, 400],
       aspectRatio: ratio[ratio_i],
       onSelect: function (c) {
         $(`#${id}-x`).val(c.x)
@@ -625,12 +625,12 @@ export function u_loadCoords (addressdata, func) {
   if (addressdata.str != undefined) {
     anschrift = `${addressdata.str} ${addressdata.hsnr}`
   } else {
-    let tmp = addressdata.anschrift.split('/')
+    const tmp = addressdata.anschrift.split('/')
     anschrift = tmp[0]
   }
-  let address = encodeURIComponent(`${anschrift}, ${addressdata.plz}, ${addressdata.stadt}, Germany`)
+  const address = encodeURIComponent(`${anschrift}, ${addressdata.plz}, ${addressdata.stadt}, Germany`)
 
-  let url = `https://search.mapzen.com/v1/search?text=${address}`
+  const url = `https://search.mapzen.com/v1/search?text=${address}`
 
   showLoader()
   $(function () {
@@ -665,7 +665,7 @@ export function betriebRequest (id) {
   showLoader()
   $.ajax({
     url: '/xhr.php?f=betriebRequest',
-    data: { 'id': id },
+    data: { id: id },
     dataType: 'json',
     success: function (data) {
       if (data.status == 1) {

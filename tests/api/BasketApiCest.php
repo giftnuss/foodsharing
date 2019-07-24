@@ -3,6 +3,7 @@
 namespace api;
 
 use Codeception\Util\HttpCode as Http;
+use Faker;
 
 /**
  * Tests for the basket api.
@@ -10,6 +11,7 @@ use Codeception\Util\HttpCode as Http;
 class BasketApiCest
 {
 	private $user;
+	private $faker;
 
 	private const EMAIL = 'email';
 	private const API_BASKETS = 'api/baskets';
@@ -19,6 +21,7 @@ class BasketApiCest
 	public function _before(\ApiTester $I)
 	{
 		$this->user = $I->createFoodsaver();
+		$this->faker = Faker\Factory::create('de_DE');
 	}
 
 	public function getBasket(\ApiTester $I)
@@ -29,6 +32,18 @@ class BasketApiCest
 		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
+	}
+
+	public function getOutdatedBasket(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID], 241, [
+			'time' => $this->faker->dateTime($max = '-2 days'),
+			'until' => $this->faker->dateTime($max = '-1 day')
+		]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
+		$I->seeResponseCodeIs(Http::NOT_FOUND);
 	}
 
 	public function removeExistingBasket(\ApiTester $I)

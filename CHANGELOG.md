@@ -38,6 +38,7 @@
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
 - Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
 - Link Avatar pictures on dashboard to profiles !464 @D0nPiano
+- Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -63,6 +64,7 @@
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
+- Don't return outdated baskets via the REST API !1008 @dthulke
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -83,6 +85,8 @@
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
+- updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
+- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies 
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker

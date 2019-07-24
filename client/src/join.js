@@ -40,8 +40,8 @@ var join = {
       const mapEL = document.getElementById('map')
       if (mapEL) {
         initializeMap(mapEL, (result) => {
-          let prop = result.properties
-          let geo = result.geometry.coordinates
+          const prop = result.properties
+          const geo = result.geometry.coordinates
           $('#join_lat').val(geo[1])
           $('#join_lon').val(geo[0])
           $('#join_plz').val(prop.postcode)
@@ -131,8 +131,8 @@ var join = {
           $('#login_email').trigger('select')
           return false
         }
-        let birthdate = new Date($('#birthdate').val())
-        let now = new Date()
+        const birthdate = new Date($('#birthdate').val())
+        const now = new Date()
         let diff = now.getFullYear() - birthdate.getFullYear()
         if (birthdate.getMonth() > now.getMonth()) {
           diff--

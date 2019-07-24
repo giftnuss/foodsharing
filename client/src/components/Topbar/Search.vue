@@ -132,9 +132,9 @@ export default {
       this.isOpen = false
     },
     async fetch () {
-      let curQuery = this.query
+      const curQuery = this.query
       this.isLoading = true
-      let res = await instantSearch(curQuery)
+      const res = await instantSearch(curQuery)
       if (curQuery !== this.query) {
         // query has changed, throw away this response
         return false
