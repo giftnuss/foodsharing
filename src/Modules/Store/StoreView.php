@@ -57,11 +57,11 @@ class StoreView extends View
 		return $out;
 	}
 
-	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $chains, $categories, $status)
+	public function betrieb_form($region = false, $page = '', $lebensmittel_values, $chains, $categories, $status, $weightArray)
 	{
 		global $g_data;
 
-		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
+		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $region);
 
 		if (!isset($g_data['foodsaver'])) {
 			$g_data['foodsaver'] = array($this->session->id());
@@ -144,15 +144,7 @@ class StoreView extends View
 				array('id' => 1814400, 'name' => '3 Wochen'),
 				array('id' => 2419200, 'name' => '4 Wochen')
 			))),
-			$this->v_utils->v_form_select('abholmenge', ['values' => [
-				['id' => 1, 'name' => '1-3 kg'],
-				['id' => 2, 'name' => '3-5 kg'],
-				['id' => 3, 'name' => '5-10 kg'],
-				['id' => 4, 'name' => '10-20 kg'],
-				['id' => 5, 'name' => '20-30 kg'],
-				['id' => 6, 'name' => '40-50 kg'],
-				['id' => 7, 'name' => 'mehr als 50 kg']
-			]])
+			$this->v_utils->v_form_select('abholmenge', ['values' => $weightArray])
 		));
 	}
 }

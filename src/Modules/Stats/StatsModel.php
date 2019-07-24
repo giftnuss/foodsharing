@@ -52,7 +52,7 @@ class StatsModel extends Db
 		')
 		) {
 			foreach ($res as $r) {
-				$out += $this->weightHelper->convertIdToKilos($r['abholmenge']) * $r['anz'];
+				$out += $this->weightHelper->mapIdToKilos($r['abholmenge']) * $r['anz'];
 			}
 		}
 
@@ -296,7 +296,7 @@ class StatsModel extends Db
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}
 			foreach ($dat as $r) {
-				$weight += $this->weightHelper->convertIdToKilos($r['abholmenge']);
+				$weight += $this->weightHelper->mapIdToKilos($r['abholmenge']);
 			}
 		}
 

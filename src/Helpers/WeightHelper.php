@@ -4,7 +4,7 @@ namespace Foodsharing\Helpers;
 
 class WeightHelper
 {
-	public function convertIdToKilos(int $weightId)
+	public function mapIdToKilos(int $weightId)
 	{
 		$weightArray = $this->createWeightBaseArray();
 

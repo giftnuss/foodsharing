@@ -77,7 +77,7 @@ class ViewUtils
 		$pickup_count = (int)$b['pickup_count'];
 		if ($pickup_count > 0) {
 			$count_info .= '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
-			$fetch_weight = round(floatval(($pickup_count * $this->weightHelper->convertIdToKilos($b['abholmenge']))), 2);
+			$fetch_weight = round(floatval(($pickup_count * $this->weightHelper->mapIdToKilos($b['abholmenge']))), 2);
 			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}
 
