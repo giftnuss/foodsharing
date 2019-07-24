@@ -70,7 +70,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverBasics($fsid)
+	public function getFoodsaverBasics(int $fsid): array
 	{
 		if ($fs = $this->db->fetch('
 			SELECT 	fs.`name`,
@@ -86,8 +86,8 @@ final class FoodsaverGateway extends BaseGateway
 
 			FROM 	`fs_foodsaver` fs
 
-			WHERE fs.id = ' . (int)$fsid . '
-		')
+			WHERE fs.id = :fsId
+		', [':fsId' => $fsId])
 		) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
@@ -97,7 +97,7 @@ final class FoodsaverGateway extends BaseGateway
 			return $fs;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getOne_foodsaver($id)

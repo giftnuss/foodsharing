@@ -5,12 +5,14 @@ namespace Foodsharing\Modules\Quiz;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\Foodsaver\FoodsaverGateway;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
 {
 	private $quizGateway;
 	private $quizSessionGateway;
+	private $foodsaverGateway;
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
@@ -19,6 +21,7 @@ class QuizControl extends Control
 		QuizView $view,
 		QuizGateway $quizGateway,
 		QuizSessionGateway $quizSessionGateway,
+		FoodsaverGateway $foodsaverGateway,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
@@ -26,6 +29,7 @@ class QuizControl extends Control
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
@@ -141,7 +145,7 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		$fs = $this->quizSessionGateway->getSessionDetails($_GET['fsid']);
+		$fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid']);
 		if ($fs) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
 			$this->pageHelper->addContent(

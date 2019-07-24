@@ -223,13 +223,4 @@ class QuizSessionGateway extends BaseGateway
       ORDER BY time_ts DESC
     ', ['fsId' => $fsId, 'quizId' => $quizId]);
 	}
-
-	public function getSessionDetails(int $fsId): array
-	{
-		return $this->db->fetchByCriteria(
-			'fs_foodsaver',
-			['name', 'nachname', 'photo', 'rolle', 'geschlecht', 'sleep_status'],
-			['id' => $fsId]
-		);
-	}
 }
