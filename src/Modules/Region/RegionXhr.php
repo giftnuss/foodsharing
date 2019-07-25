@@ -36,13 +36,6 @@ final class RegionXhr extends Control
 		parent::__construct();
 	}
 
-	private function hasThemeAccess($BotThemestatus)
-	{
-		return ($BotThemestatus['bot_theme'] == 0 && $this->session->mayBezirk($BotThemestatus['bezirk_id']))
-			|| ($BotThemestatus['bot_theme'] == 1 && $this->session->isAdminFor($BotThemestatus['bezirk_id']))
-			|| $this->session->isOrgaTeam();
-	}
-
 	public function morethemes()
 	{
 		$regionId = (int)$_GET['bid'];
@@ -83,11 +76,12 @@ final class RegionXhr extends Control
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->emailHelper->tplMail(19, $f['email'], array(
+							$this->emailHelper->tplMail('forum/answer', $f['email'], array(
 								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
-								'theme' => $theme,
+								'thread' => $theme,
+								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
 							));

@@ -14,6 +14,7 @@ class BlogControl extends Control
 	private $timeHelper;
 	private $blogPermissions;
 	private $dataHelper;
+	private $identificationHelper;
 
 	public function __construct(
 		BlogView $view, BlogGateway $blogGateway, BlogPermissions $blogPermissions, TimeHelper $timeHelper,
@@ -25,9 +26,10 @@ class BlogControl extends Control
 		$this->timeHelper = $timeHelper;
 		$this->blogPermissions = $blogPermissions;
 		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
 
 		parent::__construct();
-		if ($id = $this->$identificationHelper->getActionId('delete')) {
+		if ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($id))) {
 				if ($this->blogGateway->del_blog_entry($id)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_deleted'));
@@ -124,7 +126,7 @@ class BlogControl extends Control
 
 			$bezirke = $this->session->getRegions();
 			if (!$this->session->may('orga')) {
-				$bot_ids = $this->session->getBotBezirkIds();
+				$bot_ids = $this->session->getMyAmbassadorRegionIds();
 				foreach ($bezirke as $k => $v) {
 					if ($v['type'] != 7 || !in_array($v['id'], $bot_ids)) {
 						unset($bezirke[$k]);

@@ -45,7 +45,10 @@ class InfluxMetrics
 	 */
 	public function flush()
 	{
-		$this->influxdb->writePoints($this->points);
+		try {
+			@$this->influxdb->writePoints($this->points);
+		} catch (\Exception $e) {
+		}
 		$this->points = [];
 	}
 

@@ -35,11 +35,9 @@ class Api extends \Codeception\Module
 		$rest = $this->getModule('REST');
 		$rest->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-		$rest->sendPOST('/?page=login', [
-			'login_form' => [
-				'email_address' => $email,
+		$rest->sendPOST('api/user/login', [
+				'email' => $email,
 				'password' => $pass
-			]
 		]);
 	}
 }

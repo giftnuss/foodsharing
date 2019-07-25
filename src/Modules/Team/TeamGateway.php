@@ -3,10 +3,11 @@
 namespace Foodsharing\Modules\Team;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class TeamGateway extends BaseGateway
 {
-	public function getTeam($bezirkId = 1373): array
+	public function getTeam($region_id = RegionIDs::TEAM_BOARD_MEMBER): array
 	{
 		$out = array();
 		$stm = '
@@ -20,9 +21,6 @@ class TeamGateway extends BaseGateway
 					fs.rolle,
 					fs.geschlecht,
 					fs.homepage,
-					fs.github,
-					fs.tox,
-					fs.twitter,
 					fs.position,
 					fs.contact_public				
 				FROM 
@@ -41,7 +39,7 @@ class TeamGateway extends BaseGateway
 					hb.bezirk_id = :region_id
 				ORDER BY fs.name
 		';
-		$orgas = $this->db->fetchAll($stm, [':region_id' => $bezirkId]);
+		$orgas = $this->db->fetchAll($stm, [':region_id' => $region_id]);
 		foreach ($orgas as $o) {
 			$out[(int)$o['id']] = $o;
 		}
@@ -59,10 +57,7 @@ class TeamGateway extends BaseGateway
                         fs.rolle,
                         fs.geschlecht,
                         fs.photo,
-                        fs.twitter,
-                        fs.tox,
                         fs.homepage,
-                        fs.github,
                         fs.position,
                         fs.email,
                         fs.contact_public
@@ -80,5 +75,40 @@ class TeamGateway extends BaseGateway
 		) {
 			return $user;
 		}
+	}
+
+	/**
+	 * Function to check and block an IP address.
+	 *
+	 * @param int $durationSeconds
+	 * @param string $context
+	 *
+	 * @return bool
+	 */
+	public function isABlockedIP(int $durationSeconds, string $context): bool
+	{
+		if (!isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$ip = strip_tags($_SERVER['REMOTE_ADDR']);
+		} else {
+			$ip = strip_tags($_SERVER['HTTP_X_FORWARDED_FOR']);
+		}
+
+		$context = strip_tags($context);
+
+		if (($block = $this->db->fetch(
+				'SELECT UNIX_TIMESTAMP(`start`) AS `start`,`duration` FROM fs_ipblock WHERE ip = :ip AND context = :context',
+				[[':ip' => $ip], [':context' => $context]]
+			)) && time() < ((int)$block['start'] + (int)$block['duration'])) {
+			return true;
+		}
+
+		$this->db->insertOrUpdate('fs_ipblock', [
+			'ip' => $ip,
+			'context' => $context,
+			'start' => $this->db->now(),
+			'duration' => $durationSeconds
+		]);
+
+		return false;
 	}
 }

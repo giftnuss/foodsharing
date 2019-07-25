@@ -6,12 +6,12 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\WorkGroup\WorkGroupModel;
+use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
 class SearchService
 {
 	private $buddyGateway;
-	private $workGroupModel;
+	private $workGroupGateway;
 	private $storeModel;
 	private $regionGateway;
 	private $session;
@@ -20,15 +20,15 @@ class SearchService
 
 	public function __construct(
 		BuddyGateway $buddyGateway,
-		WorkGroupModel $workGroupModel,
+		WorkGroupGateway $workGroupGateway,
 		StoreModel $storeModel,
-		regionGateway $regionGateway,
+		RegionGateway $regionGateway,
 		Session $session,
 		SanitizerService $sanitizerService,
 		ImageService $imageService
 	) {
 		$this->buddyGateway = $buddyGateway;
-		$this->workGroupModel = $workGroupModel;
+		$this->workGroupGateway = $workGroupGateway;
 		$this->storeModel = $storeModel;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
@@ -76,7 +76,7 @@ class SearchService
 		/*
 		 * Groups load Groups connected to the user in the array
 		*/
-		if ($groups = $this->workGroupModel->listMemberGroups($fsId)) {
+		if ($groups = $this->workGroupGateway->listMemberGroups($fsId)) {
 			$result = [];
 			foreach ($groups as $b) {
 				$img = '/img/groups.png';

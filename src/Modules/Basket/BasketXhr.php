@@ -122,7 +122,7 @@ class BasketXhr extends Control
 
 		$dia->noOverflow();
 
-		$dia->addOpt('width', 550);
+		$dia->addOpt('width', '90%');
 
 		$dia->addButton(
 			$this->translationHelper->s('basket_publish'),
@@ -330,7 +330,6 @@ class BasketXhr extends Control
 				$dia->addOpt('modal', 'false', $modal);
 				$dia->addOpt('resizeable', 'false', false);
 
-				$dia->addOpt('width', 400);
 				$dia->noOverflow();
 
 				return $dia->xhrout();
@@ -373,7 +372,7 @@ class BasketXhr extends Control
 			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
 			$dia = new XhrDialog();
 			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
-			$dia->addOpt('width', 300);
+			$dia->addOpt('width', '90%');
 			$dia->noOverflow();
 			$dia->addContent($this->view->contactTitle($basket));
 
@@ -405,7 +404,7 @@ class BasketXhr extends Control
 			$msg = trim($msg);
 			if (!empty($msg)) {
 				$this->messageModel->message($fs_id, $msg);
-				$this->mailMessage($this->session->id(), $fs_id, $msg, 22);
+				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 				return [
@@ -566,9 +565,8 @@ class BasketXhr extends Control
 
 		$dia->addContent($this->view->basketEditForm($basket));
 
+		$dia->addOpt('width', '90%');
 		$dia->noOverflow();
-
-		$dia->addOpt('width', 550);
 
 		$dia->addButton(
 			$this->translationHelper->s('basket_publish'),

@@ -28,8 +28,8 @@
         <a
           v-for="(symbol, key) in emojis"
           :key="key"
-          class="btn"
           @click="giveEmoji(key)"
+          class="btn"
         >
           <Emoji :name="key" />
         </a>
@@ -40,17 +40,17 @@
 
     <!-- non emoji button -->
     <a
-      class="btn btn-sm btn-secondary"
       @click="$emit('reply')"
+      class="btn btn-sm btn-secondary"
     >
       {{ $i18n('button.answer') }}
     </a>
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
+      @click="$refs.confirmDelete.show()"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
-      @click="$refs.modal.show()"
     >
       <i class="fas fa-trash-alt" />
     </a>
@@ -66,12 +66,13 @@
 
     <!-- delete confirm modal -->
     <b-modal
+      ref="confirmDelete"
       v-if="mayDelete"
-      ref="modal"
       :title="$i18n('forum.delete_post')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="$emit('delete')"
+      modal-class="bootstrap"
     >
       <p>{{ $i18n('really_delete') }}</p>
     </b-modal>
@@ -81,17 +82,15 @@
 <script>
 import pickBy from 'lodash.pickby'
 
-import bDropdown from '@b/components/dropdown/dropdown'
-import bModal from '@b/components/modal/modal'
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { BDropdown, BModal, VBTooltip } from 'bootstrap-vue'
 
 import Emoji from '@/components/Emoji'
 import emojiList from '@/emojiList.json'
 import { user } from '@/server-data'
 
 export default {
-  components: { bDropdown, Emoji, bModal },
-  directives: { bTooltip },
+  components: { BDropdown, Emoji, BModal },
+  directives: { VBTooltip },
   props: {
     reactions: {
       type: Object,
@@ -133,7 +132,7 @@ export default {
       return !!this.reactions[key].find(r => r.id === user.id)
     },
     concatUsers (users) {
-      let names = users.map(u => u.id === user.id ? 'Du' : u.name)
+      const names = users.map(u => u.id === user.id ? 'Du' : u.name)
       if (names.length === 1) return names[0]
 
       return `${names.slice(0, names.length - 1).join(', ')} & ${names[names.length - 1]}`

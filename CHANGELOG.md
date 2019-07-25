@@ -3,44 +3,205 @@
 ## Major changes
 
 ## Features
-- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
-- it is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
-- Email notifications now indicate the responsible user in the FROM field #450 !798 @zommuter
-- Email notifications now can include message excerpts in the SUBJECT #450 !800 @zommuter
+- Added Rest endpoint for nearby baskets !875 @alex.simm
+- updated bootstrap-vue to v2.0.0-rc20
+- Added Rest endpoint for the current user's profile !880 @dthulke
+- improved the region join selector text #562 @peter.toennies
+- Allow subgroups to groups !904 @fs_k
+- pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
+- Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
+- Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
+- Added active foodsaver and jumper count to store popup on map !920 #620 @fs_k
+- Added yellow info box with "how to use the address picker" and what this data is used for to:
+    - profile settings !895 @jofranz
+    - event page !915 @jofranz
+    - store settings !922 @jofranz
+- InfluxDB Metrics via UDP !882 @alangecker
+- Added average daily fetch count to statistics page !900 @chris2up9
+- Use SwiftMailer for outgoing emails !925 @NerdyProjects
+- Shake it! Randomly shuffle ambassadors and working group admin's list order to make it harder always to contact the most senior one !924 @jofranz
+- Added Rest endpoint for users !916 @alex.simm
+- improved description for photo upload in user settings !902 @peter.toennies
+- Moved pickup signup logic into API !874 @NerdyProjects
+- Rewrite pickup list on store page in vue !874 @alangecker @NerdyProjects
+- Removed TOX-ID in foodsaver settings #31 !935 @chriswalg
+- Removed twitter and github for Team-Member !944 @chriswalg
+- Sorted trust bananas by date #550 !970 @sepulcrum89
+- Added a mailto hyperlink for group mail in workgroup #139 !948 @chriswalg
+- Added one week as an option for automatic pickup slots in store settings !945 @jofranz
+- Added Rest controller and normalization for stores !885 @alex.simm
+- new chat design with badges and layout changed !928 @kniggerich
+- Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
+- Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
+- Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
+- Added Rest endpoint to edit baskets !992 @alex.simm
+- Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
+- Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 
 ## Bugfixes
-- Orga can delete quizzes #364 !767 @k.miklobusec
+- Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
+- Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
+- Fixed broken modal for forum post deletion !894 #599 @peter.toennies
+- Show "food basket already got picked up" instead of accidentally showing a blank page !891 @jofranz
+- Allow users being deleted out of regions #604 @NerdyProjects
+- Topbar now static again after related changes in css !907 !897 @jofranz @alangecker
+- Fixed wrong ID for reports in reports list !903 @peter.toennies
+- Orga can send bananas again !937 @NerdyProjects
+- Mails from trash can be deleted again @peter.toennies
+- Redirect to the forum instead of showing 404 on deleting the last post of a thread. #626 !953 @ctwx_ok
+- Moved "forum-title-buttons" into the second line #591 !949 @chriswalg
+- Fixed order of event invites on the dashboard !938 #608 @peter.toennies
+- Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
+- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
+- It is now possible for every foodsaver to see and join a pre existing event links of a district or working group. This foodsaver only needs to be part of this specific group where the event was created #273 !912 @jofranz
+- Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
+- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
+- Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
+- Enable ambassador's new threads by default. #614 !967 @ctwx_ok
+- Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
+- Don't return outdated baskets via the REST API !1008 @dthulke
+- Fixed saving an edited quiz answer !1006 #408 @svenpascal
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
+
+## Refactoring
+- Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
+- The page does not use fullpage anymore. New landing page !597 #393 @theolampert
+- Reduce Load on every Request to RegionControl !921 @alangeker
+- reduced codebase around map markers. !588 @chriswalg @peter.toennies
+- Refactored conversations API and related javascript !592 @theolampert
+- Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
+- Refactored team page. Got rid of legacy methods !974 @jofranz
+- Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
+- Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
+
+## Dev/Test/CI stuff
+- enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
+- update null-loader to version 2 @peter.toennies
+- Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
+- updated codeception to version 3 @peter.toennies
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
+- include rules from !511 in devdocs @flukx
+- updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
+- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies 
+
+# 2019-06-09 Hotfix
+- InfluxDB Metrics via UDP !882 @alangecker
+- Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
+- Updated deployment for new production server @alangecker @NerdyProjects
+- remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
+- remove progressbar from cron scripts !919 @NerdyProjects
+
+# 2019-05-17 Hotfix
+
+- Clarify message when you cannot sign up for a pickup.
+@NerdyProjects has been working on the pickup backend in the last months so the website does not allow you to sign up for pickups that are further in the future than the setting in the store allows (1-4 weeks).
+The frontend does not yet follow that behaviour (showing pickup slots always for more days than allowed to sign up), but if you want to sign up, the backend disallows that and you get an error message.
+@NerdyProjects currently works on redoing the pickup frontend as well and we hopefully get it shiny in a few days :-)
+- fixed the switched store publicity settings @peter.toennies
+
+# 2019-05-17
+Hey again,
+another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
+
+## Major changes
+
+## Features
+- gender and pickup statistic information in regions #582 !858 @fs_k
+- Messages to working groups (AG) are now sent in email copy to the member sending them. #493 !774 @zommuter
+- API to display report per region allowing ambassadors to work on their reports !529 #296 @NerdyProjects
+- Vue.JS implementation of reports page !529 #296 @theolampert
+- It is now possible to sign out from my main region (and chose a new one) #26 !778 @peter.toennies
+- Made email notifications great again #450 @zommuter:
+    - Responsible user in the FROM field !798
+    - Message excerpts in the SUBJECT !800, !838
+    - Briefer messages for better content preview !805, !806
+- Reworking menue (Added "Aktionen" menu item, made some pages available also in logged-in menu, added several new pages on politics and transparency) #473 !739 @fs_k @D0nPiano
+- Fit popup dialogs to smartphone and desktop screens with different conditions !826 @jofranz :
+    - Profile: verfication and pass history (BOT functionality)
+    - Profile: report user
+    - Store: manually add team members (BIEB functionality)
+    - Store: change automatic pickup times (BIEB functionality)
+    - Store: slot join
+    - Store: slot leave
+- Added button/badge to user profile with amount of food baskets created. Enabled postCount as a button/badge even if the person has 0 posts #466 !788 @jofranz
+- Chat section "All messages" is now accessible on mobile !670 #419 @Defka @jofranz @D0nPiano
+- Showing number of foodsharers in statistics. Small graphical changes. !832 @jofranz @peter.toennies
+- Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @fs_k
+- Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
+- Added logout Rest endpoint !866 @alex.simm
+
+## Bugfixes
+- Orga can delete quizzes #364 !767 @fs_k
 - Return 404 instead of 403 for non-existing forum threads !761 @NerdyProjects
 - Store member status icons suitable to status on ambassador view of profiles !766 @flukx
-- getBezirk in region admin tool fails for all regions that have stores in them #495 !777 @NerdyProjects
 - Properly escape store names in request popups !778 @NerdyProjects
-- Fix forum "Antworten" button !786 @nicksellen
 - Clarify that PLZ/Ort have to be selected in the map and cannot be modified manually #497 !790 @zommuter
-- Fix truncation of messages when using emojis by using utf8mb4 charset #338 !792 @nicksellen
 - Non-followers can comment on Fairteilers again #457 !691 @janopae
 - Add CSP headers that work with Austria/Switzerland sites !793 @nicksellen
 - Allow blog posts to be properly formatted !795 @djahnie
+- Some email templates still referred to lebensmittelretten.de instead of foodsharing.de !805 @zommuter
+- Fixed bug in Database.php class where count() is returning bool (0/1) instead of the actual amount in int !788 !813 @jofranz
+- Fix excerpt generation (dashboard overview, email excerpts, ...) to be unicode aware and not return more characters as it should !812 @NerdyProjects
+- Put more useful information in forum moderation emails and workgroup contact emails !812 @NerdyProjects
+- Fix width of inputfields to a defined value !834 @peter.reutlingen
+- Mailbox users can be autocompleted/managed again !852 @NerdyProjects
+- When a orga views a profile of a user who has never logged in before, the last login date shown now "never" instead of todays date !846 @Caluera
+- Also display sleeping foodsavers in members list !861 @jofranz
+- Fix in the AddBasketAction to allow setting a description and message preferences while creating a basket in the Android App !863 @dthulke
+- Workaround to fix selecting adresses in Vienna !854 @dthulke
+- Make comments visible again on fair-share-points for non-registered users !867 @fs_k @jofranz
+- Show pickup amount in store if set over 50 kg. #546 !862 @svenpascal
+- Tidy up content security policy !870 @NerdyProjects
 
 ## Refactoring
 - removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - refactored profile from model to gateway !782 #9 @peter.toennies
+- API does not expose full URL to avatar images to allow the frontend to chose the resolution !529 @NerdyProjects
+- FluentPDO Query builder integrated to try it out !529 @NerdyProjects
+- Refactored mailbox from model to gateway !803 #9 @peter.toennies
+- Removed the geoClean and LostRegion modules !756 #103 @peter.toennies
+- Refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
 - handle pickup signups via rest api !783 @NerdyProjects
 - refactored blog from model to gateway !789 #9 @peter.toennies
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+- Handle pickup signups via rest api !783 @NerdyProjects
+- Removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
+- Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
+- Refactored login from model to gateway !828 #9 @peter.toennies
+- Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
+- Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
+- Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
 
 ## Dev/Test/CI stuff
+- Adjust devdocs to being open source !823 @flukx
+- Mention test artifacts under „Troubleshooting in devdocs“ !845 @flukx
+- add section about font awesome in devdocs !842 @flukx
 - Several reference texts in devdocs about used technologies !741 @flukx
 - Use CI built assets and vendor for deployment !768 @NerdyProjects
 - Use php-cs-fixer, parallel-lint and phpstan in CI build:lint step !775 @NerdyProjects
 - Update mocha to version 6 @peter.toennies
-- Run all jobs except test and deployment on shared CI runners @NerdyProjects
 - Run all jobs except test and deployment on shared CI runners !780 @NerdyProjects
 - Run frontend lint/test/build and backend lint/build in one CI job each !780 @NerdyProjects
 - Add php-cs-fixer to `./scripts/lint-php`, remove `./scripts/fix-codestyle` in favour of `./scripts/fix` !781 @NerdyProjects
 - Remove `./scripts/build-assets` as they are continuosly built by webpack-dev-server !781 @NerdyProjects
 - Make sure old CI containers are removed in test stage !787 @NerdyProjects
-- added /nbProject to .gitinore !791 @k.miklobusec
+- added /nbProject to .gitinore !791 @fs_k
+- Seed data for reports !529 @NerdyProjects
+- Email templates are no longer stored in the database but the repository #502 !805 !839 @zommuter
+- Phase out EmailTemplateAdmin !805 @zommuter
+- Flush redis before running tests #135 !807 @nicksellen
+- Test email templates for new forum messages !812 @NerdyProjects
+- Update copy webpack plugin to version 5, jsdom to v 15, and dotenv to v 8, eslint-plugin-node to v 9, vue-eslint-parser to v 6, and null-loader to v 1 @peter.toennies
+- Wrote acceptance tests for showing fetched quantity and store public mentioning (StoreUserCest.php). !862 @svenpascal
 
 # 2019-02-25 Hotfix
 
@@ -70,20 +231,19 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 ## Features
 - On dashboard there now is a symbol indicating the confirmation status of a pickup !661 @jofranz
 - Pre-fill end date of pickup history with today's date for comfort reasons !660 @jofranz
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Added the amount of events conditionally to the dashboard event headline in case there is more than one event !650 @jofranz
 - Added a new button to the contextmenu which appears by clicking the profilepic in shops #302 !671 @peter.reutlingen
 - Make date in event a mandatory field #436 !669 @tihar
-- Added API endpoints for basket pictures !671 @alex.simm 
+- Added API endpoints for basket pictures !671 @alex.simm
 - Allow use of markdown in Fair-Teiler description !690 @NerdyProjects
 - Joining regions REST API !696 @NerdyProjects
 - Added member list for districts and work groups !697 @djahnie
 - Prevent group admins to be able to access the passport generation page !706 #392 @jofranz
-- Start page content over content manager #470 !701 @k.miklobusec
+- Start page content over content manager #470 !701 @fs_k
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
-- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
@@ -100,10 +260,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Only allow edting regions as an orga user !714 @NerdyProjects
 - higher entropy for security & privacy related tokens !709 @alangecker
 - Fix recently broken quiz session storage !730 @NerdyProjects
-- Fix broken permission checks in foodsaver module @NerdyProjects
-- Fix broken permission checks in foodsaver xhr module @NerdyProjects
-- Fix broken permission checks in geoclean xhr module @NerdyProjects
-- Fix broken permission checks in mailbox xhr module @NerdyProjects
 - Fix broken permission checks in foodsaver xhr module !731 @NerdyProjects
 - Fix broken permission checks in geoclean xhr module !731 @NerdyProjects
 - Fix broken permission checks in mailbox xhr module !731 @NerdyProjects
@@ -121,8 +277,9 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
-- removed unused php,js and css code !720 @alangecker
-- user normalisation in conversations API endpoint
+- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
+- removed unused php, js and css code !720 @alangecker
+- user normalisation in conversations API endpoint @alex.simm
 - remove unused quickprofile method !755 @NerdyProjects
 - fix a few linter warnings !755 @NerdyProjects
 
@@ -134,7 +291,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 
 # 2019-02-19 Hotfix
 - Backport some changes that were needed for yesterdays hotfix
-- Conversation API returns name (or null) !658 @nicksellen 
+- Conversation API returns name (or null) !658 @nicksellen
 - Fixup conversation header display !658 @nicksellen
 
 # 2019-02-18 Hotfix
@@ -146,6 +303,7 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 
 # 2019-02-02 Hotfix
 - readded adresspicker functionality to Fair-Teiler creation page !668 @peter.toennies
+- Devdocs: Restructured and added content, fixed typos and punctuation, and unified spelling !617 @llzmb
 
 # 2019-01-25
 Matthias: "Are there any concerns about merging the addresspicker / map / geolocation to production?"
@@ -217,18 +375,18 @@ Here we go :-) Just a month after our last release. Expect the next one in a mon
 
 # 2018-12-24
 
-We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is 
-not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is 
-really nice. 
+We are happy to release our next version of the foodsharing homepage today. The most beautiful part of that release is
+not its content but the fact that we have input from 15 different developers. The team is growing steadily, which is
+really nice.
 
-You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs, 
+You will find some new features regarding store pages and food baskets but we have also fixed a big bunch of bugs,
 updated and cleaned out a lot of stuff, worked on the interface for our upcoming apps and put some work into the mailing
-system of ours. We hope you will enjoy it. 
+system of ours. We hope you will enjoy it.
 
 Merry Christmas :-)
 
 ## Features
-- shows hint in food basket about public information #373 !570 @k.miklobusec
+- shows hint in food basket about public information #373 !570 @fs_k
 - Fix conversation name when changing store (name) #294 !508 @surrim
 - Notify user when bell notifications arrive without need for page reload #328 !542 @janopae
 - Fix read/unread behavior for bell notifications #328 !542 @janopae
@@ -255,7 +413,7 @@ Merry Christmas :-)
 - removed not needed add store button from the dashboard !523 @peter.toennies
 - limit conversations sent to client at page loading !542 @janopae
 - check permissions before saving a wallpost in WallpostXhr !542 @janopae
-- stat_fetchrate is calculated correctly and shown in profile added tvalue in select !598 #281 @k.miklobusec
+- stat_fetchrate is calculated correctly and shown in profile added tvalue in select !598 #281 @fs_k
 - fix mail sending by passing instance of Mem to AsyncMail constructor !551 @nicksellen
 - fixed wrong html formatting in quick replies to forum posts !534 @peter.toennies
 - fixed index check in BasketGateway #354 !556 @alex.simm
@@ -289,7 +447,7 @@ Merry Christmas :-)
 
 - Use Ctrl+Enter instead Shift+Enter for sending messages
 
-## Bugfixes 
+## Bugfixes
 - Fix an issue with the navbar for users of safari 11 !527 @theolampert
 - Return 404 instead of 500 or broken layout for non existant pages !525 @NerdyProjects
 
@@ -305,7 +463,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - reactive vue stores !451 @alangecker
 - resizeable avatar component !451 @alangecker
 - updated landingpage with festival content !462 and !471 @michi-zuri
-- Only accepted store members see updates on dashboard !412 @k.miklobusec
+- Only accepted store members see updates on dashboard !412 @fs_k
 - Add description about markdown formatting in forum posts !496 @NerdyProjects
 - introduce new font fontawesome 5.2 !500 @peter.toennies
 - added placeholder text for the birth date in the registration form !505 @peter.toennies
@@ -408,7 +566,7 @@ Many thanks to @peter.toennies @NerdyProjects @alangecker @theolampert @nicksell
 - Proper input sanitizing for forum posts with support for markdown markup !442 @NerdyProjects
 - Properly sanitize outgoing HTML mails !442 @NerdyProjects
 - All outgoing emails now generate their plain text via HTML2Text !442 @NerdyProjects
-- Show Report ID in Detail Report window #246 @k.miklobusec
+- Show Report ID in Detail Report window #246 @fs_k
 - updated wording in respect to new report handling procedure !454 @peter.toennies
 
 ## Bugfixes
@@ -474,10 +632,10 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 
 ## Features
 - decreased distance to "close baskets" from 50 to 30 km. !332 #338 by @peter.toennies
-- show date and comment of sleeping hat on profile page. !427 #178 by @k.miklobusec
-- show home district on profile page. !427 #237 by @k.miklobusec
-- sort fairtiler list by name. !357 #171 by @k.miklobusec
-- Store Managers business card creation for region. Remove country card. !76 by @k.miklobusec
+- show date and comment of sleeping hat on profile page. !427 #178 by @fs_k
+- show home district on profile page. !427 #237 by @fs_k
+- sort fairtiler list by name. !357 #171 by @fs_k
+- Store Managers business card creation for region. Remove country card. !76 by @fs_k
 - Registered users need to fill their birthday and be 18+ for data protection and liability reasons. !377 @NerdyProjects
 - Remove google analytics !374 @NerdyProjects
 - Remove external paypal donate button and host locally !374 @NerdyProjects
@@ -496,7 +654,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - fixed stripping of whitespace on email field for registration #58 @nigeldgreen
 - use babel polyfills to support more browsers !359 @nicksellen
 - fixed check for allowed attachment types in the mail app. !363 #183 by @peter.toennies
-- data privacy : removed foodsaver / ambassador selection from map. #165 by @k.miklobusec
+- data privacy : removed foodsaver / ambassador selection from map. #165 by @fs_k
 - fixed potential security issue in profile picture uploads. !371 #84 @theolampert
 - updated fpdi plugin to v2.0.2 !351 #168 by @peter.toennies
 
@@ -518,7 +676,7 @@ Also, we introduce new frontend technology here. I hope we did not break too muc
 - Events can be accepted or denied by non event admins again. !342 #418 by @NerdyProjects
 
 # 2018-03-05
-- remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @k.miklobusec and @peter.toennies
+- remove ability for ambassador to add any foodsaver to his/her district !328 #405 by @fs_k and @peter.toennies
 
 # 2018-03-02
 
@@ -563,8 +721,8 @@ as well as modern coding techniques.
 - auto adding of CH-BOTs, Vienna-BIEBs, and ZH-BIEBs to their working groups. !271 by @peter.toennies
 - Renamed footer "Unterstützung" to "Spenden" !273 @BassTii
 - Updates fullpage.js to 2.9.5 for fixing scrolling in firefox, general smoothness !244 @NerdyProjects
-- Page with list of communities for Austria/Germany/Switzerland. !286 by @k.miklobusec
-- Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @k.miklobusec
+- Page with list of communities for Austria/Germany/Switzerland. !286 by @fs_k
+- Single appointment can be set to "appointment cancelled" (=0 Slots) !372 by @fs_k
 - Changed the Store address format to not have a separate house number !294 @NerdyProjects
 
 
@@ -582,7 +740,7 @@ as well as modern coding techniques.
 - consistent use of jumper list (Springerliste) all over the page. !293 by @peter.toennies
 - fixed new fairteiler can not get a region set !294 @NerdyProjects
 - fixed ambassador of other region could edit fairteiler !294 @NerdyProjects
-- phone number validatino removed from login. Mobile Phone instead of landline phone asked. !361 by @k.miklobusec
+- phone number validatino removed from login. Mobile Phone instead of landline phone asked. !361 by @fs_k
 
 ## Refactoring
 - Consolidate remaining functions and modules !269 @NerdyProjects
@@ -697,7 +855,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 * @valentin.unicorn
 * @nicksellen
 * @NerdyProjects
-* @k.miklobusec
+* @fs_k
 * @peter.toennies
 * @raphaelw
 * @tiltec
@@ -711,7 +869,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Added a list of inactive foodsavers to the foodsavers page !183 @valentin.unicorn
 - Ensure PHP7 compatibility and upgrade environment to PHP7 !171 @nicksellen
 - Show current commit in footer as well as use it in sentry if errors occur !153 @NerdyProjects
-- Reports list can be sorted by main region of the FS !151 @k.miklobusec @peter.toennies
+- Reports list can be sorted by main region of the FS !151 @fs_k @peter.toennies
 
 ## Bugfixes
 
@@ -719,7 +877,7 @@ Many many thanks to all the contributors that made this possible (in order of ap
 - Fix spinning apple when in profile/conversation with a user without a profile picture !172 @NerdyProjects
 - Move login button in navigation a bit to the right to be always clickable !162 @NerdyProjects
 - Set the pages timezone globally to Europe/Berlin to not having to rely on server settings !256 @NerdyProjects
-- Foodsharers and unverified Foodsavers are no longer able to create business cards !145 @k.miklobusec @peter.toennies
+- Foodsharers and unverified Foodsavers are no longer able to create business cards !145 @fs_k @peter.toennies
 - Breadcrumb links in forum view are working now. !142 @raphaelw @NerdyProjects
 - Lots of corrections in spelling and grammar !140, !118 @peter.toennies
 - Consistancy in naming: All uses of "Region" are now called "Bezirk" !141 @peter.toennies
@@ -760,4 +918,4 @@ Many many thanks to all the contributors that made this possible (in order of ap
 
 # 2016-10-10 and before
 
-* see [previous changelog](https://wiki.foodsharing.de/Foodsharing.de_Plattform:_%C3%84nderungshistorie)
+* see [previous changelog](https://wiki.foodsharing.de/Foodsharing.de_Plattform:_%C3%84nderungshistorie)ˆ

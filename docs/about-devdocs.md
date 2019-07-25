@@ -23,7 +23,8 @@ The devdocs are based on the following principles:
 - Information should be concise (but some repetition is necessary)
 - Information should be complete (probably an infeasible ideal)
 
-But don't worry too much about the last three principles. There are people solely dedicated to improving the devdocs.
+But don't worry too much about the last three principles.
+<!-- There are people solely dedicated to improving the devdocs. -->
 
 ### What in, what out?
 
@@ -41,7 +42,7 @@ Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitboo
 
 ### Setting things up
 
-The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
+The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.network).
 To see your changes, you can build the devdocs locally.
 You need to have `yarn` installed on your system.
 Run

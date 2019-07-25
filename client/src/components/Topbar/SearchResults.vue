@@ -125,7 +125,7 @@
 import SearchResultEntry from './SearchResultEntry'
 
 function arrayFilterDuplicate (list, ignore) {
-  let ids = ignore.map(e => e.id)
+  const ids = ignore.map(e => e.id)
   return list.filter(e => ids.indexOf(e.id) === -1)
 }
 
@@ -187,12 +187,12 @@ export default {
       // filter elements, whether all of the query words are contained somewhere in name or teaser
       const filterFunction = (e) => {
         if (!words.length) return false
-        for (let word of words) {
+        for (const word of words) {
           if (!match(word, e)) return false
         }
         return true
       }
-      let res = {
+      const res = {
         stores: this.stores.filter(filterFunction),
         regions: this.regions.filter(filterFunction),
         users: this.users.filter(filterFunction),

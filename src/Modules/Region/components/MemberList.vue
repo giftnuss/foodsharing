@@ -41,10 +41,10 @@
           <div class="col">
             <button
               v-b-tooltip.hover
-              type="button"
-              class="btn btn-sm"
               :title="$i18n('button.clear_filter')"
               @click="clearFilter"
+              type="button"
+              class="btn btn-sm"
             >
               <i class="fas fa-times" />
             </button>
@@ -99,13 +99,11 @@
 
 <script>
 import { optimizedCompare } from '@/utils'
-import bTable from '@b/components/table/table'
-import bPagination from '@b/components/pagination/pagination'
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { BTable, BPagination, VBTooltip } from 'bootstrap-vue'
 
 export default {
-  components: { bTable, bPagination },
-  directives: { bTooltip },
+  components: { BTable, BPagination },
+  directives: { VBTooltip },
   props: {
     regionName: {
       type: String,
@@ -144,7 +142,7 @@ export default {
       if (!this.filterText.trim()) {
         return this.members
       }
-      let filterText = this.filterText ? this.filterText.toLowerCase() : null
+      const filterText = this.filterText ? this.filterText.toLowerCase() : null
       return this.members.filter((member) => {
         return (
           !filterText || (member.user.name.toLowerCase().indexOf(filterText) !== -1

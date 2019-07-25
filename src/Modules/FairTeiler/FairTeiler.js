@@ -25,7 +25,7 @@ $('#wall-submit').on('mousedown', function () {
   $('#ft-public-link').trigger('click')
 })
 
-let sub = GET('sub')
+const sub = GET('sub')
 if (sub === 'addFt' || sub === 'edit') {
   attachAddressPicker()
 }

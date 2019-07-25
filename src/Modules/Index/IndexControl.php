@@ -42,8 +42,7 @@ class IndexControl extends Control
 		}
 
 		$this->pageHelper->addContent($this->view->index(
-			$page_content['body'],
-			$gerettet
+			$page_content['body']
 		), CNT_OVERTOP);
 	}
 }

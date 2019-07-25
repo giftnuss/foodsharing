@@ -39,7 +39,7 @@ export default {
   computed: {
     items () {
       // TODO: replace hard coded links with $url()
-      let items = []
+      const items = []
       if (this.isOrgaTeam) {
         items.push(...[
           {
@@ -51,11 +51,6 @@ export default {
             url: '/?page=email',
             icon: 'fas fa-envelope',
             label: this.$i18n('menu_email')
-          },
-          {
-            url: '/?page=message_tpl',
-            icon: 'fas fa-envelope',
-            label: this.$i18n('menu_email_tpl')
           },
           {
             url: '/?page=faq',

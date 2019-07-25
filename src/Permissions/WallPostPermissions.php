@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Permissions;
 
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -11,37 +12,35 @@ class WallPostPermissions
 	private $regionGateway;
 	private $eventGateway;
 	private $fairteilerGateway;
+	private $eventPermission;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
-		FairteilerGateway $fairteilerGateway
+		FairteilerGateway $fairteilerGateway,
+		EventPermissions $eventPermissions
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
+		$this->eventPermission = $eventPermissions;
 	}
 
 	public function mayReadWall($fsId, $target, $targetId)
 	{
-		if (!$fsId) {
-			return false;
-		}
-
 		switch ($target) {
 			case 'bezirk':
-				return $this->regionGateway->hasMember($fsId, $targetId);
+				return $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 			case 'event':
-				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $event['public'] || isset($event['invites']['may'][$fsId]);
+				return $this->eventPermission->mayCommentInEvent($event);
 			case 'fairteiler':
 				return true;
 			case 'question':
-				return $this->regionGateway->hasMember($fsId, 341);
+				return $fsId && $this->regionGateway->hasMember($fsId, RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 			case 'usernotes':
-				return $this->regionGateway->hasMember($fsId, 432);
+				return $fsId && $this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM);
 			default:
 				return $fsId > 0;
 		}

@@ -11,8 +11,7 @@ class StoreView extends View
 		return
 			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
-			$this->v_utils->v_form_select('fetchercount', array('values' => array(
-				array('id' => 0, 'name' => 'Termin fällt aus'),
+			$this->v_utils->v_form_select('fetchercount', array('selected' => 1, 'values' => array(
 				array('id' => 1, 'name' => '1 Abholer/in'),
 				array('id' => 2, 'name' => '2 Abholer/innen'),
 				array('id' => 3, 'name' => '3 Abholer/innen'),
@@ -58,11 +57,11 @@ class StoreView extends View
 		return $out;
 	}
 
-	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $chains, $categories, $status)
+	public function betrieb_form($region = false, $page = '', $lebensmittel_values, $chains, $categories, $status, $weightArray)
 	{
 		global $g_data;
 
-		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
+		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $region);
 
 		if (!isset($g_data['foodsaver'])) {
 			$g_data['foodsaver'] = array($this->session->id());
@@ -103,7 +102,7 @@ class StoreView extends View
 			$this->v_utils->v_form_text('name', ['required' => true]),
 			$this->latLonPicker('LatLng', $latLonOptions),
 
-			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe selbstständig ansprechen, niemals Betriebe einer Kette anfragen!')),
+			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe bis maximal 3 Filialen ansprechen, niemals Filialen einer größeren Kette ansprechen! Betriebskettenregeln beachten!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),
 
 			$this->v_utils->v_form_select('betrieb_status_id', array('values' => $status)),
@@ -116,7 +115,7 @@ class StoreView extends View
 			$this->v_utils->v_form_checkbox('lebensmittel', array('values' => $lebensmittel_values)),
 			$this->v_utils->v_form_date('begin'),
 			$this->v_utils->v_form_textarea('besonderheiten'),
-			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig</strong>: Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
+			$this->v_utils->v_form_textarea('public_info', array('maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig:</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>')),
 			$this->v_utils->v_form_select('public_time', ['values' => [
 				['id' => 0, 'name' => 'Keine Angabe'],
 				['id' => 1, 'name' => 'morgens'],
@@ -127,9 +126,9 @@ class StoreView extends View
 			$first_post,
 			$this->v_utils->v_form_select('ueberzeugungsarbeit', array('values' => array(
 				array('id' => 1, 'name' => 'Überhaupt kein Problem, er/sie war/en sofort begeistert!'),
-				array('id' => 2, 'name' => 'Nach einiger Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
+				array('id' => 2, 'name' => 'Nach Überzeugungsarbeit erklärte er/sie sich bereit mitzumachen '),
 				array('id' => 3, 'name' => 'Ganz schwierig, aber am Ende hat er/sie eingewilligt'),
-				array('id' => 4, 'name' => 'Zuerst sah es so aus, als ob er/sie nicht mitmachen wollte, aber dann hat sie/er sich doch bei mir gemeldet')
+				array('id' => 4, 'name' => 'Zuerst sah es schlecht aus, dann hat er/sie sich aber doch gemeldet')
 			))),
 			$this->v_utils->v_form_select('presse', array('values' => array(
 				array('id' => 1, 'name' => 'Ja'),
@@ -140,19 +139,12 @@ class StoreView extends View
 				array('id' => 0, 'name' => 'Nein')
 			))),
 			$this->v_utils->v_form_select('prefetchtime', array('values' => array(
+				array('id' => 604800, 'name' => '1 Woche'),
 				array('id' => 1209600, 'name' => '2 Wochen'),
 				array('id' => 1814400, 'name' => '3 Wochen'),
 				array('id' => 2419200, 'name' => '4 Wochen')
 			))),
-			$this->v_utils->v_form_select('abholmenge', ['values' => [
-				['id' => 1, 'name' => '1-3 kg'],
-				['id' => 2, 'name' => '3-5 kg'],
-				['id' => 3, 'name' => '5-10 kg'],
-				['id' => 4, 'name' => '10-20 kg'],
-				['id' => 5, 'name' => '20-30 kg'],
-				['id' => 6, 'name' => '40-50 kg'],
-				['id' => 7, 'name' => 'mehr als 50 kg']
-			]])
+			$this->v_utils->v_form_select('abholmenge', ['values' => $weightArray])
 		));
 	}
 }

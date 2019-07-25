@@ -4,38 +4,46 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\StorePermissions;
 
 class StoreControl extends Control
 {
 	private $bellGateway;
 	private $storeGateway;
+	private $storePermissions;
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $weightHelper;
 
 	public function __construct(
 		StoreModel $model,
+		StorePermissions $storePermissions,
 		StoreView $view,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		RegionGateway $regionGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		WeightHelper $weightHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->weightHelper = $weightHelper;
 
 		parent::__construct();
 
@@ -74,7 +82,7 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
@@ -99,7 +107,7 @@ class StoreControl extends Control
 			$this->pageHelper->addTitle($data['name']);
 			$this->pageHelper->addTitle($this->translationHelper->s('edit'));
 
-			if (($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($this->session->id(), $id)) || $this->session->isAdminFor($data['bezirk_id'])) {
+			if ($this->storePermissions->mayEditStore($id)) {
 				$this->handle_edit();
 
 				$this->dataHelper->setEditData($data);
@@ -109,7 +117,7 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->model->get_betrieb_status()));
+				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 			} else {
 				$this->flashMessageHelper->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
@@ -139,6 +147,9 @@ class StoreControl extends Control
 					'added' => $store['added'],
 					'region' => $store['bezirk_name'],
 					'address' => $store['anschrift'],
+					'city' => $store['stadt'],
+					'zipcode' => $store['plz'],
+					'geo' => $store['geo'],
 				];
 			}, $stores);
 

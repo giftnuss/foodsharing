@@ -15,8 +15,8 @@
         class="text-right"
       >
         <button
-          class="btn btn-secondary btn-sm"
           @click="addPost"
+          class="btn btn-secondary btn-sm"
         >
           {{ i18n('button.send') }}
         </button>
@@ -120,7 +120,7 @@ export default {
         await deletePost(this.target, this.targetId, post.id)
       } finally {
         this.isSending = false
-        let id = this.posts.indexOf(post)
+        const id = this.posts.indexOf(post)
         if (id !== -1) {
           this.posts.splice(id, 1)
         }

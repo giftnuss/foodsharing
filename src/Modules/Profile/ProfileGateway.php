@@ -104,6 +104,7 @@ final class ProfileGateway extends BaseGateway
 				WHERE 	r.rater_id = fs.id
 				AND 	r.foodsaver_id = :fs_id
 				AND 	r.ratingtype = 2
+				ORDER BY time DESC
 		';
 		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id]);
 
@@ -220,9 +221,9 @@ final class ProfileGateway extends BaseGateway
 		);
 	}
 
-	public function getRateMessage(int $fsId): array
+	public function getRateMessage(int $fsId)
 	{
-		return $this->db->fetchByCriteria(
+		return $this->db->fetchValueByCriteria(
 			'fs_rating',
 			'msg',
 			['foodsaver_id' => $fsId, 'rater_id' => $this->session->id()]

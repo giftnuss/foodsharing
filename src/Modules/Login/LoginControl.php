@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,7 @@ class LoginControl extends Control
 
 	private $loginGateway;
 
-	public function __construct(LoginModel $model, LoginView $view, LoginGateway $loginGateway)
+	public function __construct(Db $model, LoginView $view, LoginGateway $loginGateway)
 	{
 		$this->model = $model;
 		$this->view = $view;
@@ -87,7 +88,7 @@ class LoginControl extends Control
 
 	public function activate()
 	{
-		if ($this->model->activate($_GET['e'], $_GET['t'])) {
+		if ($this->loginGateway->activate($_GET['e'], $_GET['t'])) {
 			$this->flashMessageHelper->info($this->translationHelper->s('activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {
@@ -150,7 +151,7 @@ class LoginControl extends Control
 			if (!$this->emailHelper->validEmail($mail)) {
 				$this->flashMessageHelper->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
 			} else {
-				if ($this->model->addPassRequest($mail)) {
+				if ($this->loginGateway->addPassRequest($mail)) {
 					$this->flashMessageHelper->info('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.');
 				} else {
 					$this->flashMessageHelper->error('Sorry, diese E-Mail-Adresse ist uns nicht bekannt.');
@@ -158,17 +159,17 @@ class LoginControl extends Control
 			}
 		}
 
-		if ($k !== false && $this->model->checkResetKey($k)) {
-			if ($this->model->checkResetKey($k)) {
+		if ($k !== false && $this->loginGateway->checkResetKey($k)) {
+			if ($this->loginGateway->checkResetKey($k)) {
 				if (isset($_POST['pass1'], $_POST['pass2'])) {
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
-						if ($this->model->newPassword($_POST)) {
+						if ($this->loginGateway->newPassword($_POST)) {
 							$this->view->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
 							$this->flashMessageHelper->error('Sorry, Dein gewähltes Passwort ist zu kurz.');
-						} elseif (!$this->model->checkResetKey($_POST['k'])) {
+						} elseif (!$this->loginGateway->checkResetKey($_POST['k'])) {
 							$check = false;
 							$this->flashMessageHelper->error('Sorry, Du hast zu lang gewartet. Bitte beantrage noch einmal ein neues Passwort!');
 						} else {

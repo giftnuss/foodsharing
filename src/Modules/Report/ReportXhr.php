@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -19,13 +18,11 @@ class ReportXhr extends Control
 
 	public function __construct(
 		ReportGateway $reportGateway,
-		Db $model,
 		ReportView $view,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -71,12 +68,12 @@ class ReportXhr extends Control
 
 			$content .= $this->v_utils->v_input_wrapper('Gemeldet von', '<a href="/profile/' . (int)$report['rp_id'] . '">' . htmlspecialchars($report['rp_name'] . ' ' . $report['rp_nachname']) . '</a>');
 			$dialog->addContent($content);
-			$dialog->addOpt('width', '600px');
+			$dialog->addOpt('width', '$(window).width()*0.9');
 
 			$dialog->addButton('Alle Meldungen über ' . $report['fs_name'], 'goTo(\'/?page=report&sub=foodsaver&id=' . $report['fs_id'] . '\');');
 
 			if ($report['committed'] === 0) {
-				$dialog->addButton('Report bestätigen', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
+				$dialog->addButton('Meldung zugestellt', 'ajreq(\'comReport\',{\'id\':' . (int)$_GET['id'] . '});');
 			}
 			$dialog->addButton('Löschen', 'if(confirm(\'Diese Meldung wirklich löschen?\')){ajreq(\'delReport\',{id:' . $report['id'] . '});$(\'#' . $dialog->getId() . '\').dialog(\'close\');}');
 
@@ -118,20 +115,19 @@ class ReportXhr extends Control
 		global $g_data;
 		$g_data['reportreason'] = 0;
 		$dialog->addContent($this->view->reportDialog());
-		$bid = 0;
+		$storeId = 0;
 		if (!isset($_GET['bid']) || (int)$_GET['bid'] === 0) {
-			if ($betriebe = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
-				$dialog->addContent($this->view->betriebList($betriebe));
+			if ($stores = $this->reportGateway->getFoodsaverBetriebe($_GET['fsid'])) {
+				$dialog->addContent($this->view->betriebList($stores));
 			}
 		} else {
-			$bid = $_GET['bid'];
+			$storeId = $_GET['bid'];
 		}
 
 		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
-		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $bid));
-
-		$dialog->addOpt('width', '600', false);
+		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
+		$dialog->addOpt('width', '$(window).width()*0.9', false);
 		$dialog->addAbortButton();
 
 		$dialog->addJs('
@@ -148,7 +144,7 @@ class ReportXhr extends Control
 		$("#reportreason ~ select").hide();
 		$("#reportreason ~ div.cb").hide();');
 
-		$dialog->addJs('$("#reportmessage").css("width","555px");');
+		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
 		$dialog->addButton('Meldung senden', '
 
 		if($("#reportreason").val() == 0)
@@ -185,6 +181,7 @@ class ReportXhr extends Control
 			});
 		}
 		');
+		$dialog->noOverflow();
 
 		return $dialog->xhrout();
 	}

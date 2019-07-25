@@ -88,6 +88,7 @@ class BasketView extends View
 		$page->setSubTitle($this->getSubtitle($basket));
 
 		if ($wallposts) {
+			$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])), $this->translationHelper->s('warning'));
 			$page->addSection($wallposts, $this->translationHelper->s('wallboard'));
 		}
 		if ($this->session->may()) {

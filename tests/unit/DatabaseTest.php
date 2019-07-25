@@ -104,4 +104,27 @@ class DatabaseTest extends \Codeception\Test\Unit
 		$this->db->insertOrUpdate('fs_foodsaver', $data);
 		$this->tester->seeInDatabase('fs_foodsaver', $data);
 	}
+
+	public function testDelete()
+	{
+		$params = ['quiz_id' => 1, 'foodsaver_id' => $this->foodsaver['id']];
+		$this->tester->haveInDatabase('fs_quiz_session', $params);
+
+		$this->db->delete('fs_quiz_session', $params);
+
+		$this->tester->dontSeeInDatabase('fs_quiz_session', $params);
+	}
+
+	public function testDeleteWithLimit()
+	{
+		$params = ['foodsaver_id' => $this->foodsaver['id']];
+		$this->tester->haveInDatabase('fs_quiz_session', $params);
+		$this->tester->haveInDatabase('fs_quiz_session', $params);
+		$this->assertEquals(3, $this->db->count('fs_quiz_session', $params));
+
+		$delCount = $this->db->delete('fs_quiz_session', $params, 2);
+
+		$this->assertEquals(2, $delCount);
+		$this->assertEquals(1, $this->db->count('fs_quiz_session', $params));
+	}
 }

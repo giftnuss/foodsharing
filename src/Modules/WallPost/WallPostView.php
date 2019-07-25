@@ -74,7 +74,7 @@ class WallPostView extends View
 						' . $gallery . '
 					</span>
 					<div class="foot">
-						<span class="time">' . date('d.m.Y H:i', $p['time_ts']) . ' Uhr von ' . $p['name'] . '</span>' . $del . '
+						<span class="time">' . $this->timeHelper->niceDate($p['time_ts'], false) . ' von ' . $p['name'] . '</span>' . $del . '
 					</div>
 					</td>
 				</tr>';

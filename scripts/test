@@ -15,13 +15,16 @@ dc up -d
 
 $dir/mkdirs
 
-echo "Waiting for mysql to start"
+echo "Waiting for database to start"
 wait-for-mysql
+
+echo "Flush redis"
+exec-in-container redis redis-cli flushall
 
 echo "Initializing database"
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
-echo "Running migations"
+echo "Running migrations"
 migratedb foodsharing
 
 echo "Running composer install"
