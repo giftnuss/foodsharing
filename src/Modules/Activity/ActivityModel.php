@@ -203,7 +203,7 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates(int $page, array $$hidden_ids = false): array
+	public function loadForumUpdates(int $page, array $hidden_ids): array
 	{
 		$myRegionIds = $this->session->listRegionIDs();
 		$region_ids = [];
@@ -221,11 +221,10 @@ class ActivityModel extends Db
 			return [];
 		}
 
-
 		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
 		if ($ambassadorIds = $this->session->getMyAmbassadorRegionIds()) {
-            $updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
-        }
+			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
+		}
 
 		if (!empty($updates)) {
 			$out = [];
