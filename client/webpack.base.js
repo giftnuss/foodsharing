@@ -29,10 +29,10 @@ module.exports = {
     ],
     alias: {
       ...shims.alias,
-      'fonts': resolve('../fonts'),
-      'img': resolve('../img'),
-      'css': resolve('../css'),
-      'js': resolve('lib'),
+      fonts: resolve('../fonts'),
+      img: resolve('../img'),
+      css: resolve('../css'),
+      js: resolve('lib'),
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
@@ -50,16 +50,16 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            'presets': [
+            presets: [
               [
                 '@babel/preset-env',
                 {
-                  'targets': {
-                    'browsers': ['> 0.5%', 'ie_mob >=11']
+                  targets: {
+                    browsers: ['> 0.5%', 'ie_mob >=11']
                   },
-                  'useBuiltIns': 'usage',
-                  'modules': 'commonjs',
-                  'corejs': '2.x'
+                  useBuiltIns: 'usage',
+                  modules: 'commonjs',
+                  corejs: '2.x'
                 }
               ]
             ]

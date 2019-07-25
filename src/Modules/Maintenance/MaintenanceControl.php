@@ -6,8 +6,10 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
@@ -18,6 +20,7 @@ class MaintenanceControl extends ConsoleControl
 	private $emailHelper;
 	private $translationHelper;
 	private $maintenanceGateway;
+	private $quizHelper;
 
 	public function __construct(
 		MaintenanceModel $model,
@@ -26,7 +29,8 @@ class MaintenanceControl extends ConsoleControl
 		FoodsaverGateway $foodsaverGateway,
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
-		MaintenanceGateway $maintenanceGateway
+		MaintenanceGateway $maintenanceGateway,
+		QuizHelper $quizHelper
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
@@ -35,6 +39,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
 		$this->maintenanceGateway = $maintenanceGateway;
+		$this->quizHelper = $quizHelper;
 
 		parent::__construct();
 	}
@@ -404,24 +409,10 @@ class MaintenanceControl extends ConsoleControl
 
 	public function quizrole()
 	{
-		if ($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0')) {
-			foreach ($foodsaver as $key => $fs) {
-				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
-				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
-				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');
-
-				$quiz_rolle = 0;
-				if ($count_fs_quiz > 0) {
-					$quiz_rolle = 1;
-				}
-				if ($count_bib_quiz > 0) {
-					$quiz_rolle = 2;
-				}
-				if ($count_bot_quiz > 0) {
-					$quiz_rolle = 3;
-				}
-
-				$this->model->update('UPDATE fs_foodsaver SET quiz_rolle = ' . (int)$quiz_rolle . ' WHERE id = ' . (int)$fs['id']);
+		$foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > ' . Role::FOODSHARER);
+		if ($foodsaver) {
+			foreach ($foodsaver as $fs) {
+				$this->quizHelper->refreshFsQuizRole($fs['id']);
 			}
 		}
 	}

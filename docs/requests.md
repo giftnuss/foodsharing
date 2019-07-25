@@ -44,6 +44,8 @@ chat/socket.io -> nodejs server, in chat/server.js. There is documentation for a
 The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony).
 <!-- TODO: good link to intro/ tutorial -->
 
+In the [Code quality page](code-review.md) we have some notes on how to define the REST API Endpoints.
+
 The javascript code that sends REST API requests is found under `/client/src/api` and is used by other javascript by [import](javascript.md).
 
 All php classes working with REST requests are found in [`/src/Modules/Controllers/<..>RestController.php`](https://symfony.com/doc/current/controller.html).

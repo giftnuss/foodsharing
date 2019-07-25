@@ -38,7 +38,7 @@ plugins.push(
     // This is how the php app will know if it is a webpack-enabled module or not.
     apply (compiler) {
       compiler.hooks.emit.tapPromise('write-modules', compiler => {
-        let stats = compiler.getStats().toJson()
+        const stats = compiler.getStats().toJson()
         const data = {}
         for (const [entryName, { assets }] of Object.entries(stats.entrypoints)) {
           data[entryName] = assets.map(asset => join(stats.publicPath, asset))

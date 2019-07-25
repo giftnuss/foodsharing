@@ -9,7 +9,7 @@ const production = process.env.NODE_ENV === 'production'
 
 Object.assign(module.exports, convert({
 
-  'leaflet': {
+  leaflet: {
     dependencies: [
       'leaflet/dist/leaflet.css'
     ]
@@ -32,13 +32,6 @@ Object.assign(module.exports, convert({
     dependencies: [
       require.resolve('leaflet.markercluster/dist/MarkerCluster.css'),
       require.resolve('leaflet.markercluster/dist/MarkerCluster.Default.css')
-    ]
-  },
-
-  'fullpage.js': {
-    disableAMD: true,
-    dependencies: [
-      'fullpage.js/dist/jquery.fullpage.css'
     ]
   },
 
@@ -128,7 +121,7 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'tablesorter': {
+  tablesorter: {
     resolve: lib('tablesorter/jquery.tablesorter.js')
   },
 

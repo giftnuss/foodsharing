@@ -36,6 +36,7 @@
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
+- Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -58,9 +59,16 @@
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
+- Don't return outdated baskets via the REST API !1008 @dthulke
+- Fixed saving an edited quiz answer !1006 #408 @svenpascal
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -70,6 +78,8 @@
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
+- Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
+- Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
@@ -78,6 +88,9 @@
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
+- include rules from !511 in devdocs @flukx
+- updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
+- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies 
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker

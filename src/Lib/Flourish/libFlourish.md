@@ -25,19 +25,8 @@
     - fValidation
     - fXML
 - 2017-11-10: Namespaced, fixed codestyle 
+- 2019-07-25 removed fMailbox as it is not used 
 
 ## General descriptions of this folder
 The folder is containing the classes of https://github.com/flourishlib/flourish-classes
-It also contains a revision file, this description file and the following files which have put here due to lack of autoloading:
-- AsyncMail
-- Console-Progressbar
-- SocketClient
-- SocketData
-- SocketPush
-- SocketServer
-- vAccordion
-- vMap
-- vPage
-- Xhr
-- XhrDialog
-- XhrDialogConsole
+It also contains a revision file and this description file

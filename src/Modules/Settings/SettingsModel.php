@@ -3,23 +3,23 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Quiz\QuizModel;
+use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsModel extends Db
 {
 	/**
-	 * @var QuizModel
+	 * @var QuizGateway
 	 */
-	private $quizModel;
+	private $quizGateway;
 
 	/**
 	 * SettingsModel constructor.
 	 *
-	 * @param QuizModel $quizModel
+	 * @param QuizGateway $quizGateway
 	 */
-	public function __construct(QuizModel $quizModel)
+	public function __construct(QuizGateway $quizGateway)
 	{
-		$this->quizModel = $quizModel;
+		$this->quizGateway = $quizGateway;
 
 		parent::__construct();
 	}
@@ -157,9 +157,9 @@ class SettingsModel extends Db
 		foreach ($indexList as $id => $value) {
 			++$number;
 			if (!isset($fullList[$id])) {
-				if ($question = $this->quizModel->getQuestion($id)) {
+				if ($question = $this->quizGateway->getQuestion($id)) {
 					$answers = array();
-					if ($qanswers = $this->quizModel->getAnswers($id)) {
+					if ($qanswers = $this->quizGateway->getAnswers($id)) {
 						foreach ($qanswers as $a) {
 							$answers[$a['id']] = $a;
 							$answers[$a['id']]['user_say'] = $a['right'];

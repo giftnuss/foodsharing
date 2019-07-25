@@ -142,7 +142,7 @@ export default {
       if (!this.filterText.trim()) {
         return this.members
       }
-      let filterText = this.filterText ? this.filterText.toLowerCase() : null
+      const filterText = this.filterText ? this.filterText.toLowerCase() : null
       return this.members.filter((member) => {
         return (
           !filterText || (member.user.name.toLowerCase().indexOf(filterText) !== -1

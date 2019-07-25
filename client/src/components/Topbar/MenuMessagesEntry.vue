@@ -54,14 +54,14 @@ export default {
     },
     title () {
       if (this.conversation.title) return this.conversation.title
-      let members = this.conversation.members
+      const members = this.conversation.members
       // without ourselve
         .filter(m => m.id !== this.loggedinUser.id)
 
       return members.map(m => m.name).join(', ')
     },
     avatars () {
-      let lastId = this.conversation.lastMessage.authorId
+      const lastId = this.conversation.lastMessage.authorId
       let members = this.conversation.members
 
       // without ourselve
