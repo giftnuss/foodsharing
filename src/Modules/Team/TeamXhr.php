@@ -29,7 +29,7 @@ class TeamXhr extends Control
 		$minutesWaiting = 10;
 
 		if ($this->gateway->isABlockedIP($minutesWaiting * 60, 'contact')) {
-			$xhr->addMessage('Bitte warte ' . $minutesWaiting . ' Minuten, bis du die nächste Nachricht senden kannst.', 'error');
+			$xhr->addMessage($this->translationHelper->sv('wait-var-minutes-till-next-message', ['minutes' => $minutesWaiting]), 'error');
 			$xhr->send();
 		}
 
@@ -47,14 +47,15 @@ class TeamXhr extends Control
 					$mail->setFrom(DEFAULT_EMAIL);
 				}
 
-				$msg = $_POST['message'];
-				$name = strip_tags($_POST['name']);
+				$senderName = strip_tags($_POST['name']);
 
-				$msg = 'Name: ' . $name . "\n\n" . $msg;
+				$msg = 'Name: ' . $senderName . "\n";
+				$msg .= $this->translationHelper->s('email') . ': ' . strip_tags($_POST['email']) . "\n\n";
+				$msg .= $_POST['message'];
 
 				$mail->setBody($msg);
 				$mail->setHtmlBody($this->sanitizerService->plainToHtml($msg));
-				$mail->setSubject('foodsharing.de Kontaktformular Anfrage von ' . $name);
+				$mail->setSubject($this->translationHelper->sv('var-name-send-fs-contact-message', ['name' => $senderName]));
 
 				$mail->addRecipient($user['email']);
 

@@ -61,10 +61,16 @@
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
 - Don't return outdated baskets via the REST API !1008 @dthulke
+- Fixed saving an edited quiz answer !1006 #408 @svenpascal
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -76,6 +82,8 @@
 - Refactored team page. Got rid of legacy methods !974 @jofranz
 - recreate Dashboard update-overview with vue components @D0nPiano 
 - changed ActivityModel to return data without HTML or JS @D0nPiano
+- Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
+- Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

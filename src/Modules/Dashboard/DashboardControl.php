@@ -6,6 +6,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -89,10 +90,11 @@ class DashboardControl extends Control
 			$is_bieb = true;
 		}
 
+		$fsId = $this->session->id();
 		if (
-			($is_fs && (int)$this->quizGateway->countByQuizId($this->session->id(), 1) == 0) ||
-			($is_bieb && (int)$this->quizGateway->countByQuizId($this->session->id(), 2) == 0) ||
-			($is_bot && (int)$this->quizGateway->countByQuizId($this->session->id(), 3) == 0)
+			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 
@@ -229,7 +231,7 @@ class DashboardControl extends Control
                         });
                     }
                 });
-            
+
                 $("#lat-wrapper").hide();
                 $("#lon-wrapper").hide();
             ');
@@ -249,11 +251,11 @@ class DashboardControl extends Control
                     closeBtn:true,
                 });
                 $("#grab-info-link").trigger("click");
-                
+
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
                     check = true;
-            
+
                     if($("input[name=\'photo_public\']:checked").val()==4)
                     {
                         $("input[name=\'photo_public\']")[0].focus();
@@ -353,7 +355,7 @@ class DashboardControl extends Control
                 </div>
             </a>
 		</li>
-		</ul>			
+		</ul>
 		</div>',
 
 			CNT_TOP
@@ -427,7 +429,7 @@ class DashboardControl extends Control
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
 							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
-							
+
 							<span style="clear:both;"></span>
 						</a>
 					</li>';

@@ -2,15 +2,16 @@
 
 namespace Foodsharing\Modules\Stats;
 
+use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Db\Db;
 
 class StatsModel extends Db
 {
-	private $statsService;
+	private $weightHelper;
 
-	public function __construct(StatsService $statsService)
+	public function __construct(WeightHelper $weightHelper)
 	{
-		$this->statsService = $statsService;
+		$this->weightHelper = $weightHelper;
 
 		parent::__construct();
 	}
@@ -51,7 +52,7 @@ class StatsModel extends Db
 		')
 		) {
 			foreach ($res as $r) {
-				$out += $this->statsService->gerettet_wrapper($r['abholmenge']) * $r['anz'];
+				$out += $this->weightHelper->mapIdToKilos($r['abholmenge']) * $r['anz'];
 			}
 		}
 
@@ -295,7 +296,7 @@ class StatsModel extends Db
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}
 			foreach ($dat as $r) {
-				$weight += $this->statsService->gerettet_wrapper($r['abholmenge']);
+				$weight += $this->weightHelper->mapIdToKilos($r['abholmenge']);
 			}
 		}
 
