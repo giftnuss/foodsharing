@@ -151,7 +151,7 @@ class BlogControl extends Control
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
-			if ($this->blogPermissions->mayAdd($g_data['bezirk_id']) && $this->blogGateway->add_blog_entry($g_data)) {
+			if ($this->blogGateway->add_blog_entry($g_data) && $this->blogPermissions->mayAdd($g_data['bezirk_id'])) {
 				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_add_success'));
 				$this->routeHelper->goPage();
 			} else {

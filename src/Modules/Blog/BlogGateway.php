@@ -137,9 +137,9 @@ final class BlogGateway extends BaseGateway
 			ORDER BY `id` DESC');
 	}
 
-	public function del_blog_entry($id): int
+	public function del_blog_entry(int $id): int
 	{
-		return $this->db->delete('fs_blog_entry', ['id' => (int)$id]);
+		return $this->db->delete('fs_blog_entry', ['id' => $id]);
 	}
 
 	public function getOne_blog_entry(int $id): array
@@ -163,7 +163,7 @@ final class BlogGateway extends BaseGateway
 		);
 	}
 
-	public function add_blog_entry($data)
+	public function add_blog_entry(array $data): int
 	{
 		$active = 0;
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($data['bezirk_id'])) {
@@ -175,11 +175,11 @@ final class BlogGateway extends BaseGateway
 			[
 				'bezirk_id' => (int)$data['bezirk_id'],
 				'foodsaver_id' => (int)$data['foodsaver_id'],
-				'name' => $this->$data['name'],
-				'teaser' => $this->$data['teaser'],
-				'body' => $this->$data['body'], true,
+				'name' => strip_tags($this->$data['name']),
+				'teaser' => strip_tags($this->$data['teaser']),
+				'body' => $this->$data['body'],
 				'time' => $this->$data['time'],
-				'picture' => $this->$data['picture'],
+				'picture' => strip_tags($this->$data['picture']),
 				'active' => $active
 			]
 		);
