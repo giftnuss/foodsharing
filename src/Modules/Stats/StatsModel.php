@@ -36,7 +36,7 @@ class StatsModel extends Db
 		);
 	}
 
-	public function totallyFetchedByFoodsaver(int $fs_id)
+	public function getTotallyFetchedByFoodsaver(int $fs_id)
 	{
 		$out = 0;
 		if ($stores = $this->q('
