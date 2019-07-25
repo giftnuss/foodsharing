@@ -203,52 +203,47 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates(int $page, array $hidden_ids): array
+	public function loadForumUpdates(int $page, array $$hidden_ids = false): array
 	{
-		$tmp = $this->session->listRegionIDs();
-		$bids = [];
-		if ($tmp === false || count($tmp) === 0) {
+		$myRegionIds = $this->session->listRegionIDs();
+		$region_ids = [];
+		if ($myRegionIds === [] || count($myRegionIds) === 0) {
 			return [];
 		}
 
-		foreach ($tmp as $t) {
-			if ($t > 0 && !isset($hidden_ids[$t])) {
-				$bids[] = $t;
+		foreach ($myRegionIds as $regionId) {
+			if ($regionId > 0 && !isset($hidden_ids[$regionId])) {
+				$region_ids[] = $regionId;
 			}
 		}
 
-		if (count($bids) === 0) {
+		if (count($region_ids) === 0) {
 			return [];
 		}
 
-		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
-		) {
+
+		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
+		if ($ambassadorIds = $this->session->getMyAmbassadorRegionIds()) {
+            $updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
+        }
+
+		if (!empty($updates)) {
 			$out = [];
 			foreach ($updates as $u) {
-				$check = true;
-				$sub = 'forum';
-				if ($u['bot_theme'] === 1) {
-					$sub = 'botforum';
-					if (!$this->session->isAdminFor($u['bezirk_id'])) {
-						$check = false;
-					}
-				}
-
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $sub . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
-
-				if ($check) {
-					$out[] = [
-						'attr' => [
-							'href' => $url
-						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
-						'desc' => $this->textPrepare($u['post_body']),
-						'time' => $u['update_time'],
-						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
-					];
-				}
+				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
+				$out[] = [
+					'attr' => [
+						'href' => $url
+					],
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
+					'desc' => $this->textPrepare($u['post_body']),
+					'time' => $u['update_time'],
+					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+					'time_ts' => $u['update_time_ts'],
+					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
+				];
 			}
 
 			return $out;

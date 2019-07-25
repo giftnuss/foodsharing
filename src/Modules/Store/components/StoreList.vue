@@ -129,17 +129,21 @@
 </template>
 
 <script>
-import bTable from '@b/components/table/table'
-import bPagination from '@b/components/pagination/pagination'
-import bFormSelect from '@b/components/form-select/form-select'
-import bTooltip from '@b/directives/tooltip/tooltip'
-import bButton from '@b/components/button/button'
+
+import {
+  BTable,
+  BPagination,
+  BFormSelect,
+  VBTooltip,
+  BButton,
+  BCard
+} from 'bootstrap-vue'
+
 import StoreStatusIcon from './StoreStatusIcon.vue'
-import bCard from '@b/components/card/card'
 
 export default {
-  components: { bCard, bTable, bButton, bPagination, bFormSelect, StoreStatusIcon },
-  directives: { bTooltip },
+  components: { BCard, BTable, BButton, BPagination, BFormSelect, StoreStatusIcon },
+  directives: { VBTooltip },
   props: {
     regionName: {
       type: String,
@@ -209,7 +213,7 @@ export default {
   computed: {
     storesFiltered: function () {
       if (!this.filterText.trim() && !this.filterStatus) return this.stores
-      let filterText = this.filterText ? this.filterText.toLowerCase() : null
+      const filterText = this.filterText ? this.filterText.toLowerCase() : null
       return Array.from(this.stores.filter((store) => {
         return (
           (!this.filterStatus || store.status === this.filterStatus) &&
@@ -224,8 +228,8 @@ export default {
       }))
     },
     fieldsFiltered: function () {
-      let regions = []
-      let fields = {}
+      const regions = []
+      const fields = {}
       this.stores.map(function (value) {
         if (!regions.includes(value['region'])) regions.push(value['region'])
       })

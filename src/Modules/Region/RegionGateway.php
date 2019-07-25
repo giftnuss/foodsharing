@@ -221,9 +221,9 @@ class RegionGateway extends BaseGateway
 		', [':fs_id' => $foodsaver_id]);
 	}
 
-	public function listIdsForDescendantsAndSelf($bid, $includeSelf = true)
+	public function listIdsForDescendantsAndSelf($regionId, $includeSelf = true)
 	{
-		if ((int)$bid == 0) {
+		if ((int)$regionId == 0) {
 			return [];
 		}
 		if ($includeSelf) {
@@ -233,8 +233,8 @@ class RegionGateway extends BaseGateway
 		}
 
 		return $this->db->fetchAllValues(
-			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :bid AND depth >= :min_depth',
-			['bid' => $bid, 'min_depth' => $minDepth]
+			'SELECT bezirk_id FROM `fs_bezirk_closure` WHERE ancestor_id = :regionId AND depth >= :min_depth',
+			['regionId' => $regionId, 'min_depth' => $minDepth]
 		);
 	}
 
@@ -348,16 +348,16 @@ class RegionGateway extends BaseGateway
 		', ['id' => $id]);
 	}
 
-	public function acceptBezirkRequest($fsid, $bid)
+	public function acceptBezirkRequest($fsid, $regionId)
 	{
 		return $this->db->update(
 			'fs_foodsaver_has_bezirk',
 					['active' => 1, 'add' => date('Y-m-d H:i:s')],
-					['bezirk_id' => $bid, 'foodsaver_id' => $fsid]
+					['bezirk_id' => $regionId, 'foodsaver_id' => $fsid]
 		);
 	}
 
-	public function linkBezirk($fsid, $bid, $active = 1)
+	public function linkBezirk($fsid, $regionId, $active = 1)
 	{
 		$this->db->execute('
 			REPLACE INTO `fs_foodsaver_has_bezirk`
@@ -369,7 +369,7 @@ class RegionGateway extends BaseGateway
 			)
 			VALUES
 			(
-				' . (int)$bid . ',
+				' . (int)$regionId . ',
 				' . (int)$fsid . ',
 				NOW(),
 				' . (int)$active . '
@@ -423,10 +423,10 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function denyBezirkRequest($fsid, $bid)
+	public function denyBezirkRequest($fsid, $regionId)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
-			'bezirk_id' => $bid,
+			'bezirk_id' => $regionId,
 			'foodsaver_id' => $fsid,
 		]);
 	}

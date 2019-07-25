@@ -320,21 +320,6 @@ class StoreUserView extends View
 		return $this->v_utils->v_field($table, $title);
 	}
 
-	public function u_day($dow)
-	{
-		$days = array(
-			0 => 'Sunday',
-			1 => 'Monday',
-			2 => 'Tuesday',
-			3 => 'Wednesday',
-			4 => 'Thursday',
-			5 => 'Friday',
-			6 => 'Saturday'
-		);
-
-		return $days[$dow];
-	}
-
 	public function format_db_date($date): string
 	{
 		$part = explode('-', $date);

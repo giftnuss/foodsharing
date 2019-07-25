@@ -115,7 +115,8 @@
 </template>
 
 <script>
-import bModal from '@b/components/modal/modal'
+
+import { BModal } from 'bootstrap-vue'
 
 import ThreadPost from './ThreadPost'
 import ThreadForm from './ThreadForm'
@@ -126,7 +127,7 @@ import { user } from '@/server-data'
 import { GET } from '@/browser'
 
 export default {
-  components: { bModal, ThreadPost, ThreadForm },
+  components: { BModal, ThreadPost, ThreadForm },
   props: {
     id: {
       type: Number,
@@ -158,7 +159,7 @@ export default {
   },
   methods: {
     scrollToPost (pid) {
-      let els = window.document.getElementsByName(`post-${pid}`)
+      const els = window.document.getElementsByName(`post-${pid}`)
       if (els.length > 0) {
         els[0].scrollIntoView(false)
       }
@@ -169,7 +170,7 @@ export default {
     },
     async reload (isDeleteAction = false) {
       try {
-        let res = (await api.getThread(this.id)).data
+        const res = (await api.getThread(this.id)).data
         Object.assign(this, {
           title: res.title,
           regionId: res.regionId,
@@ -227,7 +228,7 @@ export default {
       }
     },
     async reactionRemove (post, key, onlyLocally = false) {
-      let reactionUser = post.reactions[key].find(r => r.id === user.id)
+      const reactionUser = post.reactions[key].find(r => r.id === user.id)
 
       if (!reactionUser) return
 
@@ -244,7 +245,7 @@ export default {
       }
     },
     async toggleFollow () {
-      let targetState = !this.isFollowing
+      const targetState = !this.isFollowing
       this.isFollowing = targetState
       try {
         if (targetState) {
@@ -259,7 +260,7 @@ export default {
       }
     },
     async toggleStickyness () {
-      let targetState = !this.isSticky
+      const targetState = !this.isSticky
       this.isSticky = targetState
       try {
         if (targetState) {
@@ -275,7 +276,7 @@ export default {
     },
     async createPost (body) {
       this.errorMessage = null
-      let dummyPost = {
+      const dummyPost = {
         id: -1,
         time: new Date(),
         body: body,
@@ -292,7 +293,7 @@ export default {
         await api.createPost(this.id, body)
         await this.reload()
       } catch (err) {
-        let index = this.posts.indexOf(dummyPost)
+        const index = this.posts.indexOf(dummyPost)
         this.posts.splice(index, 1)
 
         this.errorMessage = err.message

@@ -128,7 +128,7 @@ $('#delete_shure').dialog({
         const pid = $(this).data('pid')
         $.ajax({
           url: '/xhr.php?f=delBPost',
-          data: { 'pid': pid },
+          data: { pid: pid },
           success: function (ret) {
             if (ret == 1) {
               $(`.bpost-${pid}`).remove()

@@ -51,13 +51,13 @@
 </template>
 
 <script>
-import bTooltip from '@b/directives/tooltip/tooltip'
+
+import { VBTooltip, BDropdownItem } from 'bootstrap-vue'
 import NavItemDropdown from '@/components/Topbar/NavItemDropdown'
-import bDropdownItem from '@b/components/dropdown/dropdown-item'
 
 export default {
-  components: { NavItemDropdown, bDropdownItem },
-  directives: { bTooltip },
+  components: { NavItemDropdown, BDropdownItem },
+  directives: { VBTooltip },
   props: {
     allowJoin: {
       type: Boolean,

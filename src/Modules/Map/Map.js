@@ -65,7 +65,7 @@ const map = {
     expose({ u_map }) // need to re-expose it as it is just a variable
 
     L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
+      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(u_map)
 
     this.initiated = true
@@ -133,8 +133,8 @@ function u_loadDialog (purl) {
   $('#b_content').dialog('open')
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
-    'left': `${pos.left}px`,
-    'top': '80px'
+    left: `${pos.left}px`,
+    top: '80px'
   })
 
   if (purl != undefined) {

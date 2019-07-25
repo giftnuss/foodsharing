@@ -6,8 +6,10 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
@@ -18,6 +20,7 @@ class MaintenanceControl extends ConsoleControl
 	private $emailHelper;
 	private $translationHelper;
 	private $maintenanceGateway;
+	private $quizHelper;
 
 	public function __construct(
 		MaintenanceModel $model,
@@ -26,7 +29,8 @@ class MaintenanceControl extends ConsoleControl
 		FoodsaverGateway $foodsaverGateway,
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
-		MaintenanceGateway $maintenanceGateway
+		MaintenanceGateway $maintenanceGateway,
+		QuizHelper $quizHelper
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
@@ -35,6 +39,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
 		$this->maintenanceGateway = $maintenanceGateway;
+		$this->quizHelper = $quizHelper;
 
 		parent::__construct();
 	}
@@ -122,7 +127,7 @@ class MaintenanceControl extends ConsoleControl
 	private function updateSpecialGroupMemberships()
 	{
 		self::info('updating HH bieb austausch');
-		$hh_biebs = $this->storeGateway->getBiebIds(31);
+		$hh_biebs = $this->storeGateway->getStoreManagersOf(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->foodsaverGateway->updateGroupMembers(826, $hh_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
@@ -133,7 +138,7 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating berlin bieb austausch');
-		$berlin_biebs = $this->storeGateway->getBiebIds(47);
+		$berlin_biebs = $this->storeGateway->getStoreManagersOf(47);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1057, $berlin_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
@@ -147,14 +152,19 @@ class MaintenanceControl extends ConsoleControl
 		$counts = $this->foodsaverGateway->updateGroupMembers(761, $aBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Zürich BIEB austausch');
-		$zuerich_biebs = $this->storeGateway->getBiebIds(108);
+		self::info('updating Zürich BIEB group');
+		$zuerich_biebs = $this->storeGateway->getStoreManagersOf(108);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1313, $zuerich_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
-		self::info('updating Wien BIEB austausch (Filialverantwortung)');
-		$wien_biebs = $this->storeGateway->getBiebIds(13);
+		self::info('updating Wien BIEB group');
+		$wien_biebs = $this->storeGateway->getStoreManagersOf(13);
 		$counts = $this->foodsaverGateway->updateGroupMembers(707, $wien_biebs, true);
+		self::info('+' . $counts[0] . ', -' . $counts[1]);
+
+		self::info('updating Graz BIEB group');
+		$graz_biebs = $this->storeGateway->getStoreManagersOf(149);
+		$counts = $this->foodsaverGateway->updateGroupMembers(1655, $graz_biebs, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 	}
 
@@ -399,24 +409,10 @@ class MaintenanceControl extends ConsoleControl
 
 	public function quizrole()
 	{
-		if ($foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > 0')) {
-			foreach ($foodsaver as $key => $fs) {
-				$count_fs_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 1 AND `status` = 1');
-				$count_bib_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 2 AND `status` = 1');
-				$count_bot_quiz = (int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE foodsaver_id = ' . (int)$fs['id'] . ' AND quiz_id = 3 AND `status` = 1');
-
-				$quiz_rolle = 0;
-				if ($count_fs_quiz > 0) {
-					$quiz_rolle = 1;
-				}
-				if ($count_bib_quiz > 0) {
-					$quiz_rolle = 2;
-				}
-				if ($count_bot_quiz > 0) {
-					$quiz_rolle = 3;
-				}
-
-				$this->model->update('UPDATE fs_foodsaver SET quiz_rolle = ' . (int)$quiz_rolle . ' WHERE id = ' . (int)$fs['id']);
+		$foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > ' . Role::FOODSHARER);
+		if ($foodsaver) {
+			foreach ($foodsaver as $fs) {
+				$this->quizHelper->refreshFsQuizRole($fs['id']);
 			}
 		}
 	}

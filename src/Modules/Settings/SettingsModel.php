@@ -3,23 +3,23 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Quiz\QuizModel;
+use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsModel extends Db
 {
 	/**
-	 * @var QuizModel
+	 * @var QuizGateway
 	 */
-	private $quizModel;
+	private $quizGateway;
 
 	/**
 	 * SettingsModel constructor.
 	 *
-	 * @param QuizModel $quizModel
+	 * @param QuizGateway $quizGateway
 	 */
-	public function __construct(QuizModel $quizModel)
+	public function __construct(QuizGateway $quizGateway)
 	{
-		$this->quizModel = $quizModel;
+		$this->quizGateway = $quizGateway;
 
 		parent::__construct();
 	}
@@ -146,7 +146,7 @@ class SettingsModel extends Db
 	}
 
 	/*
-	 * in the session are only the failired answeres stored in so now we get all the right answers an fill out the array
+	 * in the session are only the failed answers stored in so now we get all the right answers an fill out the array
 	 */
 	private function addRightAnswers($indexList, $fullList)
 	{
@@ -157,9 +157,9 @@ class SettingsModel extends Db
 		foreach ($indexList as $id => $value) {
 			++$number;
 			if (!isset($fullList[$id])) {
-				if ($question = $this->quizModel->getQuestion($id)) {
+				if ($question = $this->quizGateway->getQuestion($id)) {
 					$answers = array();
-					if ($qanswers = $this->quizModel->getAnswers($id)) {
+					if ($qanswers = $this->quizGateway->getAnswers($id)) {
 						foreach ($qanswers as $a) {
 							$answers[$a['id']] = $a;
 							$answers[$a['id']]['user_say'] = $a['right'];
@@ -274,12 +274,12 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function updateFollowThread($tid, $infotype)
+	public function updateFollowThread($themeId, $infotype)
 	{
 		return $this->update('
 			UPDATE 		`fs_theme_follower`
 			SET 		`infotype` = ' . (int)$infotype . '
-			WHERE 		`theme_id` = ' . (int)$tid . '
+			WHERE 		`theme_id` = ' . (int)$themeId . '
 			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
 		');
 	}
@@ -302,7 +302,7 @@ class SettingsModel extends Db
 		');
 	}
 
-	public function getFsCount($bid)
+	public function getFsCount($regionId)
 	{
 		return (int)$this->qOne('
 			SELECT
@@ -312,7 +312,7 @@ class SettingsModel extends Db
 				fs_foodsaver_has_bezirk hb
 
 			WHERE
-				hb.bezirk_id = ' . (int)$bid . '
+				hb.bezirk_id = ' . (int)$regionId . '
 
 			AND
 				hb.active = 1
