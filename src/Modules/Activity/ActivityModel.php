@@ -213,26 +213,26 @@ class ActivityModel extends Db
 		if (!empty($updates)) {
 			$out = array();
 			foreach ($updates as $u) {
-                $forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-                $ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
+				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
 
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 
-                $out[] = [
-                    'type' => 'forum',
-                    'data' => [
-                        'fs_id' => (int)$u['foodsaver_id'],
-                        'fs_name' => $u['foodsaver_name'],
-                        'forum_href' => $url,
-                        'forum_name' => $u['name'],
-                        'region_name' => $ambPrefix . ' ' . $u['bezirk_name'],
-                        'desc' => $u['post_body'],
-                        'time' => $u['update_time'],
-                        'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-                        'time_ts' => $u['update_time_ts'],
-                        'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $$forumTypeString
-                    ]
-                ];
+				$out[] = [
+					'type' => 'forum',
+					'data' => [
+						'fs_id' => (int)$u['foodsaver_id'],
+						'fs_name' => $u['foodsaver_name'],
+						'forum_href' => $url,
+						'forum_name' => $u['name'],
+						'region_name' => $ambPrefix . ' ' . $u['bezirk_name'],
+						'desc' => $u['post_body'],
+						'time' => $u['update_time'],
+						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+						'time_ts' => $u['update_time_ts'],
+						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $$forumTypeString
+					]
+				];
 			}
 
 			return $out;
