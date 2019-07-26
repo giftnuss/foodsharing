@@ -29,8 +29,8 @@ class StatsControl extends ConsoleControl
 	{
 		self::info('Statistik Auswertung für Foodsaver');
 
-		if ($fsids = $this->model->getAllFoodsaverIds()) {
-			foreach ($fsids as $fsid) {
+		if ($allFsIds = $this->model->getAllFoodsaverIds()) {
+			foreach ($allFsIds as $fsid) {
 				$stat_gerettet = $this->model->getTotallyFetchedByFoodsaver($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
 					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
@@ -87,9 +87,9 @@ class StatsControl extends ConsoleControl
 	{
 		self::info('Statistik Auswertung für Betriebe');
 
-		$stores = $this->statsGateway->fetchAllStores();
+		$allStores = $this->statsGateway->fetchAllStores();
 
-		foreach ($stores as $i => $store) {
+		foreach ($allStores as $store) {
 			$this->calcStores($store);
 		}
 
@@ -146,17 +146,17 @@ class StatsControl extends ConsoleControl
 	}
 
 	/**
-	 * public accessible method to calculate all statictic for each bezirk
-	 * for the moment i have no other idea to calculate live because the hierarchical child bezirk query neeed so long time.
+	 * public accessible method to calculate all statistics for each region
+	 * for the moment I have no other idea to calculate live because the hierarchical child region query takes to long.
 	 */
 	public function bezirke()
 	{
 		self::info('Statistik Auswertung für Bezirke');
 
-		// get all Bezirke non memcached
-		$regions = $this->model->getAllRegions();
-		foreach ($regions as $i => $region) {
-			$kilo = $this->calcRegion($region);
+		// get all regions non memcached
+		$allRegions = $this->model->getAllRegions();
+		foreach ($allRegions as $region) {
+			$this->calcRegion($region);
 		}
 
 		self::success('region ready :o)');
