@@ -33,6 +33,7 @@
 - new chat design with badges and layout changed !928 @kniggerich
 - Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 - Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
+- Show last event wall posts on the dashboard update-section for events which got not declined #227 !417 @fs_k @jofranz 
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
