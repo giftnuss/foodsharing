@@ -186,7 +186,6 @@ class ActivityGateway extends BaseGateway
 						fs.name AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
 						fs.sleep_status,
-						fs.deleted_at as foodsaver_deleted,
 						p.body AS post_body,
 						p.`time` AS update_time,
 						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
@@ -208,6 +207,7 @@ class ActivityGateway extends BaseGateway
 			AND 		bt.bot_theme = :bot_theme_id
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
+			AND 		fs.deleted_at IS NULL
 
 			ORDER BY t.last_post_id DESC
 			LIMIT :start_item_index, :items_per_page

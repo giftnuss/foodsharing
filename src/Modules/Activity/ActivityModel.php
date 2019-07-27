@@ -229,22 +229,20 @@ class ActivityModel extends Db
 		if (!empty($updates)) {
 			$out = [];
 			foreach ($updates as $u) {
-				if (!isset($u['foodsaver_deleted'])) {
-					$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-					$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
-					$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
-					$out[] = [
-						'attr' => [
-							'href' => $url
-						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
-						'desc' => $this->textPrepare($u['post_body']),
-						'time' => $u['update_time'],
-						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
-					];
-				}
+				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
+				$out[] = [
+					'attr' => [
+						'href' => $url
+					],
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
+					'desc' => $this->textPrepare($u['post_body']),
+					'time' => $u['update_time'],
+					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+					'time_ts' => $u['update_time_ts'],
+					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
+				];
 			}
 
 			return $out;
