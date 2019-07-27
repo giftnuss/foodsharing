@@ -38,6 +38,7 @@
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
 - Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
+- Added Rest endpoint for fair share points !1012 @dthulke
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
