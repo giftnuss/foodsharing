@@ -29,7 +29,7 @@ class WallRestController extends AbstractFOSRestController
 			'id' => $post['id'],
 			'body' => $post['body'],
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'pictures' => null,
+			'pictures' => isset($post['gallery']) ? $post['gallery'] : null,
 			'author' => [
 				'id' => $post['foodsaver_id'],
 				'name' => $post['name'],

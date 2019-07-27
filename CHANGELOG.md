@@ -70,6 +70,7 @@
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 - Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
+- Return images attached to a wall post in the WallRestController !1013 @dthulke
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
