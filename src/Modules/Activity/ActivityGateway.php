@@ -186,6 +186,7 @@ class ActivityGateway extends BaseGateway
 						fs.name AS foodsaver_name,
 						fs.photo AS foodsaver_photo,
 						fs.sleep_status,
+						fs.deleted_at as foodsaver_deleted,
 						p.body AS post_body,
 						p.`time` AS update_time,
 						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
