@@ -33,9 +33,11 @@
 - new chat design with badges and layout changed !928 @kniggerich
 - Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 - Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
+- Show last event wall posts on the dashboard update-section for events which got not declined #227 !417 @fs_k @jofranz 
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
+- Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 
 ## Bugfixes
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
@@ -58,9 +60,16 @@
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
+- Don't return outdated baskets via the REST API !1008 @dthulke
+- Fixed saving an edited quiz answer !1006 #408 @svenpascal
+- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -70,6 +79,8 @@
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
+- Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
+- Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

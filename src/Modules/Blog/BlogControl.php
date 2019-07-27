@@ -128,7 +128,7 @@ class BlogControl extends Control
 
 			$regions = $this->session->getRegions();
 			if (!$this->session->may('orga')) {
-				$bot_ids = $this->session->getBotBezirkIds();
+				$bot_ids = $this->session->getMyAmbassadorRegionIds();
 				foreach ($regions as $k => $v) {
 					if ($v['type'] != Type::WORKING_GROUP || !in_array($v['id'], $bot_ids)) {
 						unset($regions[$k]);

@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\StoreUser;
 use Carbon\Carbon;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -23,6 +24,7 @@ class StoreUserControl extends Control
 	private $timeHelper;
 	private $dataHelper;
 	private $regionGateway;
+	private $weightHelper;
 
 	public function __construct(
 		StoreModel $model,
@@ -33,7 +35,8 @@ class StoreUserControl extends Control
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
 		DataHelper $dataHelper,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		WeightHelper $weightHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;
@@ -44,6 +47,7 @@ class StoreUserControl extends Control
 		$this->timeHelper = $timeHelper;
 		$this->dataHelper = $dataHelper;
 		$this->regionGateway = $regionGateway;
+		$this->weightHelper = $weightHelper;
 
 		parent::__construct();
 
@@ -145,8 +149,8 @@ class StoreUserControl extends Control
 				if (!empty($store['besonderheiten'])) {
 					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('besonderheiten'), nl2br($store['besonderheiten']));
 				}
-				if ($quantity = $this->fetchedQuantity($store['abholmenge'])) {
-					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('menge'), $quantity);
+				if ($quantityName = $this->weightHelper->getFetchWeightName($store['abholmenge'])) {
+					$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('menge'), $quantityName);
 				}
 				if ($press = $this->mentionPublicly($store['presse'])) {
 					$info .= $this->v_utils->v_input_wrapper('Namensnennung', $press);
@@ -313,25 +317,6 @@ class StoreUserControl extends Control
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name'])), false));
 		}
-	}
-
-	private function fetchedQuantity($id)
-	{
-		$arr = [
-			1 => ['id' => 1, 'name' => '1-3 kg'],
-			2 => ['id' => 2, 'name' => '3-5 kg'],
-			3 => ['id' => 3, 'name' => '5-10 kg'],
-			4 => ['id' => 4, 'name' => '10-20 kg'],
-			5 => ['id' => 5, 'name' => '20-30 kg'],
-			6 => ['id' => 6, 'name' => '40-50 kg'],
-			7 => ['id' => 7, 'name' => 'mehr als 50 kg']
-		];
-
-		if (isset($arr[$id])) {
-			return $arr[$id]['name'];
-		}
-
-		return false;
 	}
 
 	private function mentionPublicly(int $id)

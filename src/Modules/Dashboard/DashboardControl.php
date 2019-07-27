@@ -6,6 +6,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -89,10 +90,11 @@ class DashboardControl extends Control
 			$is_bieb = true;
 		}
 
+		$fsId = $this->session->id();
 		if (
-			($is_fs && (int)$this->quizGateway->countByQuizId($this->session->id(), 1) == 0) ||
-			($is_bieb && (int)$this->quizGateway->countByQuizId($this->session->id(), 2) == 0) ||
-			($is_bot && (int)$this->quizGateway->countByQuizId($this->session->id(), 3) == 0)
+			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 
@@ -229,7 +231,7 @@ class DashboardControl extends Control
                         });
                     }
                 });
-            
+
                 $("#lat-wrapper").hide();
                 $("#lon-wrapper").hide();
             ');
@@ -249,11 +251,11 @@ class DashboardControl extends Control
                     closeBtn:true,
                 });
                 $("#grab-info-link").trigger("click");
-                
+
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
                     check = true;
-            
+
                     if($("input[name=\'photo_public\']:checked").val()==4)
                     {
                         $("input[name=\'photo_public\']")[0].focus();
@@ -317,19 +319,19 @@ class DashboardControl extends Control
 
 		$this->pageHelper->addStyle('
 			#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
-	
+
 			#activity ul.linklist li span.qr
 			{
 				margin-left:58px;
 				border-radius: 3px;
 				opacity:0.5;
 			}
-				
+
 			#activity ul.linklist li span.qr:hover
 			{
 				opacity:1;
 			}
-			
+
 			#activity ul.linklist li span.qr img
 			{
 				height:32px;
@@ -351,7 +353,7 @@ class DashboardControl extends Control
 				margin-right:-30px;
 				background-color:#F9F9F9;
 			}
-				
+
 			#activity ul.linklist li span.qr .loader
 			{
 				background-color: #ffffff;
@@ -359,7 +361,7 @@ class DashboardControl extends Control
 				text-align: left;
 				top: -10px;
 			}
-	
+
 			#activity ul.linklist li span.t span.txt {
 				overflow: hidden;
 				text-overflow: unset;
@@ -377,7 +379,7 @@ class DashboardControl extends Control
 			{
 				color:#46891b !important;
 			}
-			#activity span.n i.fa	
+			#activity span.n i.fa
 			{
 				display:inline-block;
 				width:11px;
@@ -394,7 +396,7 @@ class DashboardControl extends Control
 				text-decoration:underline !important;
 				color:#46891b !important;
 			}
-			
+
 			#activity ul.linklist li
 			{
 				margin-bottom:10px;
@@ -402,24 +404,24 @@ class DashboardControl extends Control
 				padding:10px;
 				border-radius: 6px;
 			}
-	
+
 			ul.linklist li span.n
 			{
 				font-weight:normal;
-				font-size:13px;	
+				font-size:13px;
 				margin-bottom:10px;
 				text-overflow: unset;
 				white-space: inherit;
 			}
-		
-			@media (max-width: 900px) 
+
+			@media (max-width: 900px)
 			{
 				#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
 				{
 					width:74.6%;
 				}
 			}
-			@media (max-width: 400px) 
+			@media (max-width: 400px)
 			{
 				ul.linklist li span.n
 				{
@@ -485,7 +487,7 @@ class DashboardControl extends Control
                 </div>
             </a>
 		</li>
-		</ul>			
+		</ul>
 		</div>',
 
 			CNT_TOP
@@ -559,7 +561,7 @@ class DashboardControl extends Control
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
 							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
-							
+
 							<span style="clear:both;"></span>
 						</a>
 					</li>';
