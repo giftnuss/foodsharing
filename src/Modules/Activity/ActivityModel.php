@@ -34,7 +34,7 @@ class ActivityModel extends Db
 
 		foreach ($updates as $u) {
 			$smTitle = '';
-			$title = 'Veranstaltung : ' . $u['name'];
+			$title = 'Termin: ' . $u['name'];
 
 			$out[] = [
 				'attr' => [
