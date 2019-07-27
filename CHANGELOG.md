@@ -71,6 +71,7 @@
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
 - Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 - Return images attached to a wall post in the WallRestController !1013 @dthulke
+- Don't show forum updates from deleted users on dashboard !1011 #666 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
