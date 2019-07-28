@@ -44,7 +44,7 @@ class StatsModel extends Db
 			       sum(fsa.menge) as saved 
 			from fs_abholer fa
 				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
-				left outer join fs_abholmengen fsa on fb.abholmenge = fsa.id
+				left outer join fs_fetchweight fsa on fb.fetchweight = fsa.id
 			where
 			      fa.foodsaver_id = ' . $fs_id . '
 			  and fa.date < now();
