@@ -41,7 +41,7 @@ class StatsModel extends Db
 		$out = 0;
 		if ($stores = $this->qOne('
 			select 
-			       sum(fsa.menge) as saved 
+			       sum(fsa.weight) as saved 
 			from fs_abholer fa
 				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
 				left outer join fs_fetchweight fsa on fb.fetchweight = fsa.id
