@@ -194,6 +194,7 @@ And we have even included some new features for you.
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 - Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
 - Refactored the WallPost module !1038 @peter.toennies
+- statistic KG calculation optimized !999 @fs_k
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
