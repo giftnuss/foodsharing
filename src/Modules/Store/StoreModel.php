@@ -133,7 +133,7 @@ class StoreModel extends Db
 		return false;
 	}
 
-	public function signout($bid, $fsid)
+	public function signout($storeId, $fsId)
 	{
 		$storeId = (int)$storeId;
 		$fsId = (int)$fsId;
