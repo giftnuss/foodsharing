@@ -42,7 +42,7 @@
 - Add backend logic for changing basket locations !1021 @alex.simm
 
 ## Bugfixes
-- Profilebutton "remove from all slots" working for orga. !968 #362 @fs_k
+- Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
@@ -89,6 +89,7 @@
 - Refactored team page. Got rid of legacy methods !974 @jofranz
 - Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
+- Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
