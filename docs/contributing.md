@@ -31,7 +31,7 @@ To work on an issue:
 2. Create a new git branch, prefixed with the issue number rather than fork the repo, as it makes permissions trickier.
   * For example, the issue number `56` would have a branch named `56-some-descriptive-words`.
   * Optionally, add your name to the branch name; for example, `56-nicksellen-some-descriptive-words`.
-3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci-skip` which disables running the build and test on the Gitlab server.
+3. Make your changes and push them. If they are very small or only documentation you can consider using the push option `git push -o ci.skip` which disables running the build and test on the Gitlab server.
 
 To submit your change:
 

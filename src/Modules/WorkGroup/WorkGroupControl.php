@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -132,7 +133,7 @@ class WorkGroupControl extends Control
 	{
 		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
 
-		$parent = $request->query->getInt('p', 392);
+		$parent = $request->query->getInt('p', RegionIDs::GLOBAL_WORKING_GROUPS);
 		$myApplications = $this->workGroupGateway->getApplications($this->session->id());
 		$myStats = $this->workGroupGateway->getStats($this->session->id());
 		$groups = $this->getGroups($parent, $myApplications, $myStats);

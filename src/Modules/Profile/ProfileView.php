@@ -345,6 +345,7 @@ class ProfileView extends View
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';
+
 			foreach ($this->foodsaver['bananen'] as $b) {
 				if ($odd == 'even') {
 					$odd = 'odd';

@@ -251,7 +251,7 @@ class StoreUserView extends View
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
-					url: "/xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&s=" + val,
+					url: "/xhr.php?f=bteamstatus&bid=' . (int)$betrieb['id'] . '&status=" + val,
 					success: function(){
 						hideLoader();
 					}
@@ -318,21 +318,6 @@ class StoreUserView extends View
 		$table = $this->v_utils->v_tablesorter($head, $betriebrows);
 
 		return $this->v_utils->v_field($table, $title);
-	}
-
-	public function u_day($dow)
-	{
-		$days = array(
-			0 => 'Sunday',
-			1 => 'Monday',
-			2 => 'Tuesday',
-			3 => 'Wednesday',
-			4 => 'Thursday',
-			5 => 'Friday',
-			6 => 'Saturday'
-		);
-
-		return $days[$dow];
 	}
 
 	public function format_db_date($date): string

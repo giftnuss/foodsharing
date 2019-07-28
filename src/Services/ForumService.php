@@ -96,10 +96,10 @@ class ForumService
 		return $pid;
 	}
 
-	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $moderated)
+	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $isActive)
 	{
-		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
-		if ($moderated) {
+		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $isActive, $ambassadorForum);
+		if (!$isActive) {
 			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);

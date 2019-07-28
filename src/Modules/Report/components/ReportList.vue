@@ -92,15 +92,14 @@
 </template>
 
 <script>
-import bTable from '@b/components/table/table'
-import bPagination from '@b/components/pagination/pagination'
-import bButton from '@b/components/button/button'
+
+import { BTable, BPagination, BButton } from 'bootstrap-vue'
 import * as api from '@/api/report'
 
 import Avatar from '@/components/Avatar'
 
 export default {
-  components: { Avatar, bTable, bPagination, bButton },
+  components: { Avatar, BTable, BPagination, BButton },
   props: {
     regionId: {
       type: String,

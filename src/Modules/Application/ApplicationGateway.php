@@ -10,7 +10,7 @@ class ApplicationGateway extends BaseGateway
 	private const STATUS_TENTATIVE = 10;
 	private const STATUS_DENIED = 20;
 
-	public function getApplication($bid, $fid)
+	public function getApplication($regionId, $fsId)
 	{
 		$stm = '
 			SELECT 	fs.`id`,
@@ -29,7 +29,7 @@ class ApplicationGateway extends BaseGateway
 			AND 	fb.foodsaver_id = :foodsaver_id
 		';
 
-		return $this->db->fetch($stm, [':region_id' => $bid, ':foodsaver_id' => $fid]);
+		return $this->db->fetch($stm, [':region_id' => $regionId, ':foodsaver_id' => $fsId]);
 	}
 
 	public function acceptApplication($regionId, $foodsaverId): void

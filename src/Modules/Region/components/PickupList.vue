@@ -113,13 +113,10 @@
 
 <script>
 
-import bPagination from '@b/components/pagination/pagination'
-import bTable from '@b/components/table/table'
-import bTabs from '@b/components/tabs/tabs'
-import bTab from '@b/components/tabs/tab'
+import { BPagination, BTable, BTabs, BTab } from 'bootstrap-vue'
 
 export default {
-  components: { bTable, bTabs, bTab, bPagination },
+  components: { BTable, BTabs, BTab, BPagination },
   props: {
     regionName: {
       type: String,

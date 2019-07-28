@@ -5,14 +5,12 @@ namespace Foodsharing\Modules\Main;
 use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class MainXhr extends Control
 {
-	public function __construct(Db $model)
+	public function __construct()
 	{
-		$this->model = $model;
 		parent::__construct();
 	}
 
@@ -20,6 +18,7 @@ class MainXhr extends Control
 	{
 		$function = '';
 		$newname = '';
+		$inid = '';
 
 		$check = false;
 
