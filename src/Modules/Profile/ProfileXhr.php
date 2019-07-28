@@ -139,9 +139,7 @@ class ProfileXhr extends Control
 
 	public function deleteFromSlot()
 	{
-		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
-
-		if ($this->session->isOrgaTeam() && $betrieb == 0) {
+		if ($this->session->isOrgaTeam() && $_GET['bid'] == 0) {
 			if ($this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
 				return array(
 					'status' => 1,
@@ -152,7 +150,9 @@ class ProfileXhr extends Control
 			}
 		}
 
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
+		$store = $this->storeModel->getBetriebBezirkID($_GET['bid']);
+
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
 			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['bid'], Carbon::createFromTimestamp($_GET['date']))) {
 				return array(
 					'status' => 1,
