@@ -513,8 +513,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'date >' => $this->db->now()
 		]);
 
-		foreach ($storeIdsThatWillBeDeleted as $storeId) {
-			$this->updateBellNotificationForBiebs($storeId);
+		foreach ($storeIdsThatWillBeDeleted as $storeIdDel) {
+			$this->updateBellNotificationForBiebs($storeIdDel);
 		}
 
 		return $result;
