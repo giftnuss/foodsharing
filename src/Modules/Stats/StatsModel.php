@@ -50,7 +50,7 @@ class StatsModel extends Db
 			  and fa.date < now();
 		')
 		) {
-			$out =$res;
+			$out = $res;
 		}
 
 		return $out;
