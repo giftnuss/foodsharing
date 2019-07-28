@@ -11,6 +11,8 @@ class WeightHelper
 		return isset($weightArray[$weightId]) ? $weightArray[$weightId]['value'] : 1.5;
 	}
 
+
+	/* todo Depending on future stats calculations this maybe needs to follow fs_abholmenge (if still needed) */
 	private function createWeightBaseArray(): array
 	{
 		return array(
