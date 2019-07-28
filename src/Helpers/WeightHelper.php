@@ -12,7 +12,7 @@ class WeightHelper
 	}
 
 
-	/* todo Depending on future stats calculations this maybe needs to follow fs_abholmenge (if still needed) */
+	/* todo Depending on future stats calculations this maybe needs to follow fs_abholmengen / fs_fetchweight (if still needed) */
 	private function createWeightBaseArray(): array
 	{
 		return array(
