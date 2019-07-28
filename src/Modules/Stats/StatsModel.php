@@ -39,19 +39,18 @@ class StatsModel extends Db
 	public function getTotallyFetchedByFoodsaver(int $fs_id)
 	{
 		$out = 0;
-		if ($stores = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, b.abholmenge
-			FROM   `fs_abholer` a,
-			       `fs_betrieb` b
-			WHERE a.betrieb_id = b.id
-			AND   foodsaver_id = ' . $fs_id . '
-			AND   a.`date` < NOW()
-			GROUP BY b.`abholmenge`
+		if ($stores = $this->qOne('
+			select 
+			       sum(fsa.menge) as saved 
+			from fs_abholer fa
+				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
+				left outer join fs_abholmengen fsa on fb.abholmenge = fsa.id
+			where
+			      fa.foodsaver_id = ' . $fs_id . '
+			  and fa.date < now();
 		')
 		) {
-			foreach ($stores as $s) {
-				$out += $this->weightHelper->mapIdToKilos($s['abholmenge']) * $s['anz'];
-			}
+			$out =$res;
 		}
 
 		return $out;

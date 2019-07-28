@@ -244,7 +244,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'ueberzeugungsarbeit' => 0,
 			'presse' => 0,
 			'sticker' => 0,
-			'abholmenge' => $this->faker->numberBetween(0, 70),
+			'abholmenge' => $this->faker->numberBetween(0, 7),
 			'team_status' => 1,
 			'prefetchtime' => 1209600,
 
