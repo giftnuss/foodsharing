@@ -137,9 +137,9 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function deleteFromSlot()
+	public function deleteAllDatesFromFoodsaver()
 	{
-		if ($this->session->isOrgaTeam() && $_GET['bid'] == 0) {
+		if ($this->session->isOrgaTeam()) {
 			if ($this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
 				return array(
 					'status' => 1,
@@ -150,14 +150,22 @@ class ProfileXhr extends Control
 			}
 		}
 
-		$store = $this->storeModel->getBetriebBezirkID($_GET['bid']);
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("Du kannst nicht alle Termine löschen!");'
+		);
+	}
 
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
-			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['bid'], Carbon::createFromTimestamp($_GET['date']))) {
+	public function deleteSinglePickup()
+	{
+		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
+
+		if ($this->session->isAdminFor($store['bezirk_id']) || $this->session->isOrgaTeam()) {
+			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['storeId'], Carbon::createFromTimestamp($_GET['date']))) {
 				return array(
 					'status' => 1,
 					'script' => '
-					pulseSuccess("Termin gelöscht");
+					pulseSuccess("Einzeltermin gelöscht");
 					reload();'
 				);
 			}
@@ -165,7 +173,7 @@ class ProfileXhr extends Control
 
 		return array(
 			'status' => 1,
-			'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
+			'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");'
 		);
 	}
 }
