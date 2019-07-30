@@ -98,6 +98,61 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function createQuiz(int $quizId): array
+	{
+		$params = [
+			'id' => $quizId,
+			'name' => 'Quiz #' . $quizId,
+			'desc' => '',
+			'maxfp' => 3,
+			'questcount' => 3,
+		];
+		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
+
+		$params['questions'] = [];
+		for ($i = 1; $i <= 1; ++$i) {
+			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
+			array_push($params['questions'], $this->createQuestion($params['id'], $questionText));
+		}
+
+		return $params;
+	}
+
+	private function createQuestion(int $quizId, string $text = 'Question'): array
+	{
+		$params = [
+			'text' => $text,
+			'duration' => 60,
+			'wikilink' => 'wiki.foodsharing.de'
+		];
+		$questionId = $this->haveInDatabase('fs_question', $params);
+		$params['id'] = $questionId;
+
+		$this->haveInDatabase('fs_question_has_quiz', [
+			'question_id' => $questionId,
+			'quiz_id' => $quizId
+		]);
+
+		$params['answers'] = [];
+		array_push($params['answers'], $this->createAnswer($questionId, true));
+		array_push($params['answers'], $this->createAnswer($questionId, false));
+
+		return $params;
+	}
+
+	private function createAnswer(int $questionId, bool $right = true): array
+	{
+		$params = [
+			'question_id' => $questionId,
+			'text' => 'Answer for question with ID ' . $questionId,
+			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
+			'right' => $right ? 1 : 0
+		];
+		$params['id'] = $this->haveInDatabase('fs_answer', $params);
+
+		return $params;
+	}
+
 	public function createQuizTry($fs_id, $level, $status)
 	{
 		$v = [
