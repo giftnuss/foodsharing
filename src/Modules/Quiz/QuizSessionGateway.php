@@ -43,7 +43,7 @@ class QuizSessionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
+	public function initQuizSession(int $fsId, int $quizId, array $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
 
@@ -63,7 +63,7 @@ class QuizSessionGateway extends BaseGateway
 	  );
 	}
 
-	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $failurePoints, int $maxFailurePoints): int
+	public function finishQuizSession(int $sessionId, array $questions, array $quizResult, float $failurePoints, int $maxFailurePoints): int
 	{
 		$quizResult = serialize($quizResult);
 		$questions = serialize($questions);
@@ -171,7 +171,7 @@ class QuizSessionGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuizSession(int $sessionId, string $questions, int $quizIndex): int
+	public function updateQuizSession(int $sessionId, array $questions, int $quizIndex): int
 	{
 		$questions = serialize($questions);
 
