@@ -98,7 +98,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createQuiz(int $quizId): array
+	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
 		$params = [
 			'id' => $quizId,
@@ -110,7 +110,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
 
 		$params['questions'] = [];
-		for ($i = 1; $i <= 1; ++$i) {
+		for ($i = 1; $i <= $questionCount; ++$i) {
 			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
 			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
 		}
@@ -144,7 +144,7 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$params = [
 			'question_id' => $questionId,
-			'text' => 'Answer for question with ID ' . $questionId,
+			'text' => 'The ' . ($right ? 'right' : 'wrong') . ' answer for question with ID ' . $questionId,
 			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
 			'right' => $right ? 1 : 0
 		];

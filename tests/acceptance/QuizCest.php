@@ -23,7 +23,7 @@ class QuizCest
 	/**
 	 * @param AcceptanceTester $I
 	 * @param \Codeception\Example $example
-	 * @example["foodsharer", "Werde Foodsaver", "Quiz mit Zeitlimit"]
+	 * @example["foodsharer", "Werde Foodsaver", "Quiz ohne Zeitlimit"]
 	 * @example["foodsaver", "Werde Betriebsverantwortliche", "Quiz jetzt starten"]
 	 */
 	public function canStartQuiz(AcceptanceTester $I, \Codeception\Example $example)

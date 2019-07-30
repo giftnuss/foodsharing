@@ -19,22 +19,8 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->basketsIds = [];
 		foreach (range(1, 3) as $quizId) {
-			$this->createQuiz($quizId);
+			$this->tester->createQuiz($quizId);
 		}
-	}
-
-	private function createQuiz(int $quizId): array
-	{
-		$params = [
-			'id' => $quizId,
-			'name' => 'Quiz #' . $quizId,
-			'desc' => '',
-			'maxfp' => 3,
-			'questcount' => 3,
-		];
-		$params['id'] = $this->tester->haveInDatabase('fs_quiz', $params);
-
-		return $params;
 	}
 
 	public function testGetQuizzes()
