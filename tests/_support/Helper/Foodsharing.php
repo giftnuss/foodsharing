@@ -118,7 +118,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	private function createQuestion(int $quizId, string $text = 'Question'): array
+	private function createQuestion(int $quizId, string $text = 'Question', int $failurePoints = 1): array
 	{
 		$params = [
 			'text' => $text,
@@ -130,7 +130,8 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$this->haveInDatabase('fs_question_has_quiz', [
 			'question_id' => $questionId,
-			'quiz_id' => $quizId
+			'quiz_id' => $quizId,
+			'fp' => $failurePoints
 		]);
 
 		$params['answers'] = [];
