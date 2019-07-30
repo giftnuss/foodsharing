@@ -515,11 +515,7 @@ class MailboxGateway extends BaseGateway
 			];
 		}
 
-		if (empty($mBoxes)) {
-			return false;
-		}
-
-		return $mBoxes;
+		return empty($mBoxes) ? false : $mBoxes;
 	}
 
 	public function getMailboxId(int $mid)
