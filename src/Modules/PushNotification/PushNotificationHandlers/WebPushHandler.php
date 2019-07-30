@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\PushNotification\PushNotificationHandlers;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
-use Minishlink\WebPush\VAPID;
 use Minishlink\WebPush\WebPush;
 
 class WebPushHandler implements PushNotificationHandlerInterface
