@@ -18,7 +18,7 @@ define('DB_DB', 'foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://localhost:18080');
 
-define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
+define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
 define('SUPPORT_EMAIL', 'it@foodsharing.network');
@@ -31,8 +31,7 @@ define('PLATFORM_MAILBOX_HOST', 'foodsharing.network');
 
 define('MAILBOX_OWN_DOMAINS', array('foodsharing.network', 'lebensmittelretten.de', 'foodsharing.de'));
 
-define('SMTP_HOST', 'maildev');
-define('SMTP_PORT', 25);
+define('MAILER_HOST', 'maildev');
 
 define('MEM_ENABLED', true);
 

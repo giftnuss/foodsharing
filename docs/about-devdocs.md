@@ -42,7 +42,7 @@ Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitboo
 
 ### Setting things up
 
-The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.de).
+The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.network).
 To see your changes, you can build the devdocs locally.
 You need to have `yarn` installed on your system.
 Run

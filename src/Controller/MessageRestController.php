@@ -28,7 +28,8 @@ class MessageRestController extends AbstractFOSRestController
 	{
 		$ids = $this->getNormalizedMsgConversations();
 
-		if ($this->conversationIsStoredInSession($conversationId)) {
+		// isConversationStoredInSession
+		if (isset($ids[(int)$conversationId])) {
 			return true;
 		}
 
@@ -50,15 +51,6 @@ class MessageRestController extends AbstractFOSRestController
 		}
 
 		return $ids;
-	}
-
-	private function conversationIsStoredInSession($conversationId)
-	{
-		if (isset($ids[(int)$conversationId])) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -118,7 +110,13 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->model->listConversations($limit, $offset);
+		// Filter out any conversations with the wrong member type (this should rarely happen).
+		$conversations = array_filter(
+			$this->model->listConversations($limit, $offset),
+			function ($c) {
+				return is_array($c['member']);
+			});
+
 		$view = $this->view($conversations, 200);
 
 		return $this->handleView($view);

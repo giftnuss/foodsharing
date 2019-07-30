@@ -43,7 +43,7 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 	{
 		//existing basket
 		$result = $this->gateway->getBasket($this->basketIds[0]);
-		$this->assertInternalType('array', $result);
+		$this->assertIsArray($result);
 
 		//non-existing basket
 		$this->assertEquals(false, $this->gateway->getBasket(99999));

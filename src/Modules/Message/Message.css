@@ -22,7 +22,8 @@
 }
 
 #conversation-list li.active {
-  background-color: #dbd7d1;
+background-color: #dbd7d1;
+border-radius: 4px;
 }
 
 #conversation-list li.active a, #conversation-list li.active a:active, #conversation-list li.active a:focus {
@@ -50,8 +51,12 @@
 
 #msg-conversation span.time {
   font-size: 13px;
-  color: #b4aba3;
+  color: #533a20;
   margin-top: 4px;
+}
+
+#msg-conversation li.my-message span.time {
+  color: #eee;
 }
 
 #msg-conversation span.body {
@@ -62,6 +67,17 @@
   padding: 6px;
   position: relative;
   color: #4a3520;
+}
+
+#msg-conversation li.my-message span.body {
+  background: none repeat scroll 0 0 #64ae24;
+  margin-left: 0px;
+  margin-right: 50px;
+  color: #eee;
+}
+
+#msg-conversation li.my-message span.img {
+  float: right;
 }
 
 #msg-conversation span.body:after {
@@ -75,6 +91,13 @@
   z-index: 1;
   left: -9px;
   top: 8px;
+}
+
+#msg-conversation li.my-message span.body:after {
+  border-width: 8px 0 8px 9px;
+  border-color: transparent #64ae24;
+  left: unset;
+  right: -9px;
 }
 
 #msg-conversation ul li {
@@ -115,8 +138,10 @@
   color: #fff;
 }
 
-li.unread-1 {
-  background-color: #f5f5b5;
+ul.conversation-list > li.unread-1 {
+    background-color: #dbd7d1;
+    border: 1px solid #533a20;
+    border-radius: 4px;
 }
 
 @media all and (max-width: 600px) {

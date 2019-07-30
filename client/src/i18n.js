@@ -7,11 +7,13 @@ const { translations } = serverData
 export default function (key, variables = {}) {
   let message = objectPath.get(trans, key)
   if (!message) message = translations[key]
-  if (!message) throw new Error(`Missing translation for [${key}]`)
-  return message.replace(/\{([^}]+)\}/g, (match, name) => {
-    if (variables.hasOwnProperty(name)) {
-      const value = variables[name]
-      return value
+  if (!message) {
+    console.error(new Error(`Missing translation for [${key}]`))
+    return key
+  }
+  return message.replace(/{([^}]+)}/g, (match, name) => {
+    if (Object.prototype.hasOwnProperty.call(variables, name)) {
+      return variables[name]
     } else {
       throw new Error(`Variable [${name}] was not provided for [${key}]`)
     }

@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\RegionAdmin;
 
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -12,9 +11,8 @@ class RegionAdminControl extends Control
 	private $regionGateway;
 	private $identificationHelper;
 
-	public function __construct(Db $model, RegionAdminView $view, RegionGateway $regionGateway, IdentificationHelper $identificationHelper)
+	public function __construct(RegionAdminView $view, RegionGateway $regionGateway, IdentificationHelper $identificationHelper)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->regionGateway = $regionGateway;
 		$this->identificationHelper = $identificationHelper;

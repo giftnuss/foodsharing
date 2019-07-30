@@ -10,7 +10,6 @@ import 'jquery-migrate'
 import { initialize, ajreq } from '@/script'
 
 import 'jquery-ui'
-import 'fullpage.js'
 import registerServiceWorker from '@/registerServiceWorker'
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
