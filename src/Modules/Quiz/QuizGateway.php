@@ -224,8 +224,9 @@ class QuizGateway extends BaseGateway
 			', ['quizId' => $quizId]);
 			if ($meta) {
 				foreach ($meta as $m) {
-					if (!isset($outmeta[$m['fp']])) {
-						$outmeta[$m['fp']] = $m['count'];
+					$fp = $m['fp'] ? $m['fp'] : 0;
+					if (!isset($outmeta[$fp])) {
+						$outmeta[$fp] = $m['count'];
 					}
 				}
 			}
