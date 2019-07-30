@@ -276,7 +276,109 @@ class QuizXhr extends Control
 		}
 	}
 
-	private function abortOrOpenDialog($session_id)
+	private function replaceDoubles($questions)
+	{
+		return $questions;
+	}
+
+	/**
+	 * Method to initiate a quiz session so get the defined amount of questions, sort it randomly, and store it in a session variable.
+	 */
+	public function startquiz(): array
+	{
+		if (!$this->session->may()) {
+			return [];
+		}
+
+		$quizId = $_GET['qid'];
+
+		$runningQuizSession = $this->quizSessionGateway->getRunningSession($quizId, $this->session->id());
+		if ($runningQuizSession) {
+			return $this->resumeQuizSession($quizId, $runningQuizSession);
+		}
+
+		return $this->startNewQuizSession($quizId);
+	}
+
+	private function resumeQuizSession(int $quizId, array $quizSession): array
+	{
+		$this->session->set('quiz-id', $quizId);
+		$this->session->set('quiz-questions', $quizSession['quiz_questions']);
+		$this->session->set('quiz-index', $quizSession['quiz_index']);
+		$this->session->set('quiz-session', $quizSession['id']);
+		$easyMode = $quizSession['easymode'] == 1 && $quizId == Role::FOODSAVER;
+		$this->session->set('quiz-easymode', $easyMode);
+
+		/*
+		 * Make a little output that the user can continue the quiz
+		 */
+		$dia = new XhrDialog();
+		$dia->setTitle('Quiz fortführen');
+		$dia->addContent('<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge, Du kannst einfach jetzt das Quiz zu Ende bringen.</p><p>Also viel Spaß beim Weiterquizzen.</p>');
+		$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
+
+		$result = $dia->xhrout();
+		$result['script'] .= $this->abortOrOpenDialog($quizSession['id']);
+
+		return $result;
+	}
+
+	private function startNewQuizSession(int $quizId): array
+	{
+		$quiz = $this->quizGateway->getQuiz($quizId);
+		if ($quiz) {
+			if ($quizId == Role::FOODSAVER && isset($_GET['easymode']) && $_GET['easymode'] == 1) {
+				$this->session->set('quiz-easymode', true);
+				$quiz['questcount'] = 20;
+			} else {
+				$this->session->set('quiz-easymode', false);
+			}
+
+			$questions = $this->getRandomQuestions($quizId, $quiz['questcount']);
+			if ($questions) {
+				// for safety check if there are not too many questions
+				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
+
+				// check for double questions (bugfix)
+				$questions = $this->replaceDoubles($questions);
+
+				/*
+				 * Store quiz data in the users session
+				 */
+				$this->session->set('quiz-id', $quizId);
+				$this->session->set('quiz-questions', $questions);
+				$this->session->set('quiz-index', 0);
+
+				/*
+				 * Make a litle output for the user that he/she can just start the quiz now
+				 */
+				$dia = new XhrDialog();
+				$dia->addOpt('width', 600);
+				$dia->setTitle($quiz['name'] . '-Quiz');
+				$quizHowTo = $this->contentGateway->get(17);
+				$dia->addContent($this->view->initQuiz($quiz, $quizHowTo));
+				$dia->addAbortButton();
+				$dia->addButton('Quiz starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#' . $dia->getId() . '\').dialog(\'close\');');
+
+				$result = $dia->xhrout();
+				//if ($session && isset($session['id'])) {
+				//	$result['script'] .= $this->abortOrOpenDialog($session['id']);
+				//}
+
+				return $result;
+			}
+		}
+
+		/*
+		 * If we can't get a quiz from the db, send an error
+		 */
+		return [
+			'status' => 1,
+			'script' => 'pulseError("Quiz konnte nicht gestartet werden...");'
+		];
+	}
+
+	private function abortOrOpenDialog(int $quizSessionId): string
 	{
 		return '
 				$("body").append(\'<div id="abortOrPause">' . $this->sanitizerService->jsSafe($this->view->abortOrPause()) . '</div>\');
@@ -289,117 +391,11 @@ class QuizXhr extends Control
 							text: "Quiz pausieren",
 							click: function(){
 								$(this).dialog("close");
-								ajreq("pause",{app:"quiz",sid:' . (int)$session_id . '});
+								ajreq("pause",{app:"quiz",sid:' . $quizSessionId . '});
 							}
 						}
 					]
 				});';
-	}
-
-	private function replaceDoubles($questions)
-	{
-		return $questions;
-	}
-
-	/**
-	 * Method to initiate a quiz session so get the defined amount of questions, sort it randomly, and store it in a session variable.
-	 */
-	public function startquiz()
-	{
-		if (!$this->session->may()) {
-			return false;
-		}
-		/*
-		 * First we want to check if there is a quiz session that the user has lost?
-		 */
-		if ($session = $this->quizSessionGateway->getRunningSession($_GET['qid'], $this->session->id())) {
-			// if yes, reinitiate the running quiz session
-			$this->session->set('quiz-id', (int)$_GET['qid']);
-			$this->session->set('quiz-questions', $session['quiz_questions']);
-			$this->session->set('quiz-index', $session['quiz_index']);
-			$this->session->set('quiz-session', $session['id']);
-			$easyMode = false;
-			if ($session['easymode'] == 1 && (int)$_GET['qid'] == 1) {
-				$easyMode = true;
-			}
-			$this->session->set('quiz-easymode', $easyMode);
-
-			/*
-			 * Make a little output that the user can continue the quiz
-			 */
-			$dia = new XhrDialog();
-
-			$dia->setTitle('Quiz fortführen');
-
-			$dia->addContent('<h1>Du hast Dein Quiz nicht beendet</h1><p>Aber keine Sorge, Du kannst einfach jetzt das Quiz zu Ende bringen.</p><p>Also viel Spaß beim Weiterquizzen.</p>');
-			$dia->addButton('Quiz fortführen', 'ajreq(\'next\',{app:\'quiz\'});');
-			$return = $dia->xhrout();
-
-			$return['script'] .= $this->abortOrOpenDialog($session['id']);
-
-			return $return;
-		}
-
-		/*
-		 * Otherwise, we start a new quiz session
-		 */
-		if ($quiz = $this->quizGateway->getQuiz($_GET['qid'])) {
-			/*
-			 * if foodsaver quiz, user can choose between easy and quick mode
-			*/
-
-			if ($_GET['qid'] == 1 && isset($_GET['easymode']) && $_GET['easymode'] == 1) {
-				$this->session->set('quiz-easymode', true);
-				$quiz['questcount'] = 20;
-			} else {
-				$this->session->set('quiz-easymode', false);
-			}
-
-			/*
-			 * first get random sorted quiz questions
-			 */
-			if ($questions = $this->getRandomQuestions($_GET['qid'], $quiz['questcount'])) {
-				// Get the description on how the quiz works
-				$content = $this->contentGateway->get(17);
-
-				// for safety check if there are not too many questions
-				$questions = array_slice($questions, 0, (int)$quiz['questcount']);
-
-				// check for double questions (bugfix)
-				$questions = $this->replaceDoubles($questions);
-
-				/*
-				 * Store quiz data in the users session
-				 */
-				$this->session->set('quiz-id', (int)$_GET['qid']);
-				$this->session->set('quiz-questions', $questions);
-				$this->session->set('quiz-index', 0);
-
-				/*
-				 * Make a litle output for the user that he/she can just start the quiz now
-				 */
-				$dia = new XhrDialog();
-				$dia->addOpt('width', 600);
-				$dia->setTitle($quiz['name'] . '-Quiz');
-				$dia->addContent($this->view->initQuiz($quiz, $content));
-				$dia->addAbortButton();
-				$dia->addButton('Quiz starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#' . $dia->getId() . '\').dialog(\'close\');');
-
-				$return = $dia->xhrout();
-
-				$return['script'] .= $this->abortOrOpenDialog($session['id']);
-
-				return $return;
-			}
-		}
-
-		/*
-		 * If we can't get a quiz from the db, send an error
-		 */
-		return array(
-			'status' => 1,
-			'script' => 'pulseError("Quiz konnte nicht gestartet werden...");'
-		);
 	}
 
 	public function endpopup()
