@@ -461,12 +461,11 @@ class QuizXhr extends Control
 			return [];
 		}
 
-		$i = -1;
 		if ($questions = $this->session->get('quiz-questions')) {
 			$dia = new XhrDialog();
 			$dia->addClass('quiz-questiondialog');
 			// get quiz_index it is the current array index of the questions
-			$i = $this->session->get('quiz-index');
+			$quizIndex = $this->session->get('quiz-index');
 
 			/*
 			 * If the quiz index is 0 we have to start a new quiz session
@@ -477,7 +476,7 @@ class QuizXhr extends Control
 				$easyMode = 1;
 			}
 
-			if ($i == 0) {
+			if ($quizIndex == 0) {
 				$quizId = $this->session->get('quiz-id');
 				$quiz = $this->quizGateway->getQuiz($quizId);
 				// init quiz session in DB
@@ -505,25 +504,25 @@ class QuizXhr extends Control
 				 * store params in the quiz array to save users answers
 				 */
 				if (isset($params['qanswers'])) {
-					$questions[($i - 1)]['answers'] = $params['qanswers'];
+					$questions[($quizIndex - 1)]['answers'] = $params['qanswers'];
 				}
 
 				/*
 				 * check if there are 0 point for the questions its a joke
 				 */
-				if ($questions[($i - 1)]['fp'] == 0) {
+				if ($questions[($quizIndex - 1)]['fp'] == 0) {
 					$was_a_joke = true;
 				}
 
 				/*
 				 * store the time how much time has the user need
 				 */
-				$questions[($i - 1)]['userduration'] = (time() - (int)$this->session->get('quiz-quest-start'));
+				$questions[($quizIndex - 1)]['userduration'] = (time() - (int)$this->session->get('quiz-quest-start'));
 
 				/*
 				 * has store noco ;) its the value when the user marked that no answer is correct
 				 */
-				$questions[($i - 1)]['noco'] = (int)$_GET['noco'];
+				$questions[($quizIndex - 1)]['noco'] = (int)$_GET['noco'];
 
 				/*
 				 * And store it all back to the session
@@ -547,15 +546,15 @@ class QuizXhr extends Control
 			if (isset($_GET['special'])) {
 				// make a break
 				if ($_GET['special'] == 'pause') {
-					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $questions, $i);
+					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $questions, $quizIndex);
 
 					return $this->pause();
 				}
 
 				if ($_GET['special'] == 'result') {
-					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $questions, $i);
+					$this->quizSessionGateway->updateQuizSession($this->session->get('quiz-session'), $questions, $quizIndex);
 
-					return $this->resultNew($questions[($i - 1)], $dia->getId());
+					return $this->resultNew($questions[($quizIndex - 1)], $dia->getId());
 				}
 			}
 
@@ -563,9 +562,9 @@ class QuizXhr extends Control
 			 * check if there is a next question in quiz array push it to the user
 			 * othwise forward to the result of the quiz
 			 */
-			if (isset($questions[$i])) {
+			if (isset($questions[$quizIndex])) {
 				// get the question
-				if ($question = $this->quizGateway->getQuestion($questions[$i]['id'])) {
+				if ($question = $this->quizGateway->getQuestion($questions[$quizIndex]['id'])) {
 					// get possible answers
 					$comment_aswers = '';
 					if ($answers = $this->quizGateway->getAnswers($question['id'])) {
@@ -581,12 +580,12 @@ class QuizXhr extends Control
 						/*
 						 * increase the question index so we are at the next question ;)
 						 */
-						++$i;
-						$this->session->set('quiz-index', $i);
+						++$quizIndex;
+						$this->session->set('quiz-index', $quizIndex);
 
 						// update quiz session
 						$session_id = $this->session->get('quiz-session');
-						$this->quizSessionGateway->updateQuizSession($session_id, $questions, $i);
+						$this->quizSessionGateway->updateQuizSession($session_id, $questions, $quizIndex);
 						$this->session->set('quiz-quest-start', time());
 
 						/*
@@ -595,7 +594,7 @@ class QuizXhr extends Control
 						$dia->addOpt('width', 1000);
 						$dia->addOpt('height', '($(window).height()-40)', false);
 						$dia->addOpt('position', 'center');
-						$dia->setTitle('Frage ' . ($i) . ' / ' . count($questions));
+						$dia->setTitle('Frage ' . ($quizIndex) . ' / ' . count($questions));
 
 						$dia->addContent($this->view->quizQuestion($question, $answers));
 
@@ -837,8 +836,8 @@ class QuizXhr extends Control
 						return $return;
 					}
 
-					++$i;
-					$this->session->set('quiz-index', $i);
+					++$quizIndex;
+					$this->session->set('quiz-index', $quizIndex);
 
 					return array(
 						'status' => 1,
@@ -850,8 +849,8 @@ class QuizXhr extends Control
 			}
 		}
 
-		++$i;
-		$this->session->set('quiz-index', $i);
+		++$quizIndex;
+		$this->session->set('quiz-index', $quizIndex);
 
 		return array(
 			'status' => 1,
