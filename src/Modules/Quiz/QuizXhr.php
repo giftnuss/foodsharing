@@ -19,7 +19,7 @@ class QuizXhr extends Control
 
 	public function __construct(
 		QuizGateway $quizGateway,
-		QuizGateway $quizSessionGateway,
+		QuizSessionGateway $quizSessionGateway,
 		QuizView $view,
 		ContentGateway $contentGateway,
 		SanitizerService $sanitizerService,
