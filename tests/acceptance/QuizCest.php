@@ -31,9 +31,9 @@ class QuizCest
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->settingsUrl());
 
-    $I->click($example[1]);
+		$I->click($example[1]);
 		$quizRole = $this->{$example[0]}['rolle'] + 1;
-    $I->seeCurrentUrlEquals($I->upgradeQuizUrl($quizRole));
+		$I->seeCurrentUrlEquals($I->upgradeQuizUrl($quizRole));
 
 		$I->waitForText('Du musst noch das Quiz bestehen!');
 		$I->click($example[2]);

@@ -104,9 +104,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	{
 		$result = '/?page=settings&sub=upgrade/up_';
 		switch ($quizRole) {
-			case (Role::STORE_MANAGER):
+			case Role::STORE_MANAGER:
 				return $result . 'bip';
-			case (Role::AMBASSADOR):
+			case Role::AMBASSADOR:
 				return $result . 'bot';
 			default:
 				return $result . 'fs';
