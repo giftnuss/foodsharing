@@ -344,17 +344,17 @@ class MailboxGateway extends BaseGateway
 	{
 		if ($isAmbassador) {
 			$regions = $this->getMailboxBezirkIds($fsId);
-			$selectedRegioins = array();
+			$selectedRegions = array();
 			$mBoxes = array();
 			foreach ($regions as $region) {
-				$selectedRegioins[] = (int)$region;
+				$selectedRegions[] = (int)$region;
 			}
 
 			if ($regions = $this->db->fetchAll(
 				'
 				SELECT 	`id`,`mailbox_id`,`name`
 				FROM 	`fs_bezirk`
-				WHERE 	`id` IN (' . implode(',', array_map('intval', $selectedRegioins)) . ')
+				WHERE 	`id` IN (' . implode(',', array_map('intval', $selectedRegions)) . ')
 				AND 	`mailbox_id` = 0
 			'
 			)
@@ -399,7 +399,7 @@ class MailboxGateway extends BaseGateway
 						`fs_mailbox` m
 					
 				WHERE 	b.mailbox_id = m.id
-				AND 	b.`id` IN (' . implode(',', array_map('intval', $selectedRegioins)) . ')
+				AND 	b.`id` IN (' . implode(',', array_map('intval', $selectedRegions)) . ')
 				
 			'
 			)
