@@ -170,8 +170,10 @@ class XhrMethods
 		$this->incLang('Store');
 		$this->incLang('StoreUser');
 
-		if ($this->storePermissions->mayReadStoreWall($data['bid'])) {
-			if ($out = $this->model->q('
+		$storeId = (int)$data['bid'];
+
+		if ($this->storePermissions->mayReadStoreWall($storeId)) {
+			if ($allWallposts = $this->model->q('
 				SELECT 	n.id,
 						n.`text`,
 						fs.name,
@@ -184,57 +186,57 @@ class XhrMethods
 						fs_foodsaver fs
 
 				WHERE fs.id = n.foodsaver_id
-				AND n.betrieb_id = ' . (int)$data['bid'] . '
+				AND n.betrieb_id = ' . $storeId . '
 
 				ORDER BY n.zeit DESC
 
 				LIMIT 50')
 			) {
-				//$out = array_reverse($out);
+				//$allWallposts = array_reverse($allWallposts);
 				$html = '<table class="pintable">';
 				$odd = 'odd';
-				foreach ($out as $o) {
+				foreach ($allWallposts as $wallpost) {
 					if ($odd == 'odd') {
 						$odd = 'even';
 					} else {
 						$odd = 'odd';
 					}
-					$pic = $this->imageService->img($o['photo']);
+					$pic = $this->imageService->img($wallpost['photo']);
 
 					$delete = '';
-					if ($this->session->id() == $o['fsid'] || $this->session->isOrgaTeam()) {
-						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
+					if ($this->session->id() == $wallpost['fsid'] || $this->session->isOrgaTeam()) {
+						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $wallpost['id'] . '" onclick="u_delPost(' . (int)$wallpost['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
 					}
 
-					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
+					$msg = '<span class="msg">' . nl2br($wallpost['text']) . '</span>
 						<div class="foot">
-							<span class="time">' . $this->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
+							<span class="time">' . $this->format_dt($wallpost['zeit']) . ' von ' . $wallpost['name'] . '</span>' . $delete . '
 						</div>';
 
-					if ($o['milestone'] == 1) {
+					if ($wallpost['milestone'] == 1) {
 						$odd .= ' milestone';
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
+						<a href="/profile/"' . (int)$wallpost['fsid'] . '">' . $wallpost['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $wallpost['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
-					} elseif ($o['milestone'] == 2) {
+					} elseif ($wallpost['milestone'] == 2) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
-					} elseif ($o['milestone'] == 3) {
+						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
+					} elseif ($wallpost['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
-						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->translationHelper->s($o['text']) . '</span>';
-					} elseif ($o['milestone'] == 5) {
+						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $wallpost['zeit'])) . '</strong> ' . $this->translationHelper->s($wallpost['text']) . '</span>';
+					} elseif ($wallpost['milestone'] == 5) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
 					}
 
 					$html .= '
-					<tr class="' . $odd . ' bpost bpost-' . $o['id'] . '">
-						<td class="img"><a href="/profile/' . (int)$o['fsid'] . '"><img src="' . $pic . '" /></a></td>
+					<tr class="' . $odd . ' bpost bpost-' . $wallpost['id'] . '">
+						<td class="img"><a href="/profile/' . (int)$wallpost['fsid'] . '"><img src="' . $pic . '" /></a></td>
 						<td>' . $msg . '</td>
 					</tr>';
 				}
