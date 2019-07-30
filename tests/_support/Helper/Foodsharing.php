@@ -112,7 +112,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['questions'] = [];
 		for ($i = 1; $i <= 1; ++$i) {
 			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
-			array_push($params['questions'], $this->createQuestion($params['id'], $questionText));
+			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
 		}
 
 		return $params;
@@ -134,8 +134,8 @@ class Foodsharing extends \Codeception\Module\Db
 		]);
 
 		$params['answers'] = [];
-		array_push($params['answers'], $this->createAnswer($questionId, true));
-		array_push($params['answers'], $this->createAnswer($questionId, false));
+		$params['answers'][] = $this->createAnswer($questionId, true);
+		$params['answers'][] = $this->createAnswer($questionId, false);
 
 		return $params;
 	}
