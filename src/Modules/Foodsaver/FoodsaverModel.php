@@ -87,13 +87,13 @@ class FoodsaverModel extends Db
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';
 
-				$storeIDs = $this->q('
+				$storeIds = $this->q('
 					SELECT 	bt.betrieb_id as id
 					FROM 	fs_betrieb_team bt
 					WHERE 	bt.foodsaver_id = ' . (int)$fsId . '
 				');
 				//Delete from Companies
-				foreach ($storeIDs as $storeId) {
+				foreach ($storeIds as $storeId) {
 					$storeModel->signout($storeId, $fsId);
 				}
 
