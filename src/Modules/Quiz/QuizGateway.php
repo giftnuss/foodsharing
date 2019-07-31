@@ -164,7 +164,7 @@ class QuizGateway extends BaseGateway
 
 				WHERE
 					q.id = :questionId
-		', ['questionId' => $questionId]);
+		', [':questionId' => $questionId]);
 	}
 
 	public function getRandomQuestions(int $count, int $failurePoints, int $quizId): array
@@ -189,7 +189,7 @@ class QuizGateway extends BaseGateway
 				RAND()
 
 			LIMIT :count
-		', ['quizId' => $quizId, 'fp' => $failurePoints, 'count' => $count]);
+		', [':quizId' => $quizId, ':fp' => $failurePoints, ':count' => $count]);
 	}
 
 	public function getQuestionCountByFailurePoints(int $quizId): array
@@ -207,7 +207,7 @@ class QuizGateway extends BaseGateway
 
 			WHERE
 				hq.quiz_id = :quizId
-		', ['quizId' => $quizId]);
+		', [':quizId' => $quizId]);
 		if ($questions) {
 			$result = [];
 
@@ -222,7 +222,7 @@ class QuizGateway extends BaseGateway
 
 				GROUP BY
 					hq.fp
-			', ['quizId' => $quizId]);
+			', [':quizId' => $quizId]);
 			if ($questionCounts) {
 				foreach ($questionCounts as $counts) {
 					$failurePoints = $counts['fp'] ? $counts['fp'] : 0;
@@ -288,7 +288,7 @@ class QuizGateway extends BaseGateway
 			SELECT COUNT(question_id)
 			FROM fs_question_has_wallpost
 			WHERE question_id = :questionId
-		', ['questionId' => $questionId]);
+		', [':questionId' => $questionId]);
 	}
 
 	public function getRightQuestions(int $quizId): array
@@ -331,7 +331,7 @@ class QuizGateway extends BaseGateway
 
 			WHERE
 				hq.quiz_id = :quizId
-		', ['quizId' => $quizId]);
+		', [':quizId' => $quizId]);
 	}
 
 	public function addAnswer(int $questionId, string $text, string $explanation, int $right): int

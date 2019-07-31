@@ -22,7 +22,7 @@ class QuizSessionGateway extends BaseGateway
 			FROM fs_quiz_session
 			WHERE foodsaver_id = :fsId
 			AND quiz_id = :quizId
-		', ['fsId' => $fsId, 'quizId' => $quizId]);
+		', [':fsId' => $fsId, ':quizId' => $quizId]);
 		if ($res) {
 			foreach ($res as $r) {
 				++$out['times'];
@@ -158,9 +158,9 @@ class QuizSessionGateway extends BaseGateway
 			AND
 				status = :status
 		', [
-			'quizId' => $quizId,
-			'fsId' => $fsId,
-			'status' => SessionStatus::RUNNING
+			':quizId' => $quizId,
+			':fsId' => $fsId,
+			':status' => SessionStatus::RUNNING
 		]);
 		if ($session) {
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
@@ -221,6 +221,6 @@ class QuizSessionGateway extends BaseGateway
       WHERE foodsaver_id = :fsId
       AND quiz_id = :quizId
       ORDER BY time_ts DESC
-    ', ['fsId' => $fsId, 'quizId' => $quizId]);
+    ', [':fsId' => $fsId, ':quizId' => $quizId]);
 	}
 }
