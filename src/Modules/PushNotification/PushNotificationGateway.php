@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\PushNotification;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlers\WebPushHandler;
 
 class PushNotificationGateway extends BaseGateway
@@ -21,6 +22,10 @@ class PushNotificationGateway extends BaseGateway
 
 	public function addSubscription(int $foodsaverId, string $subscriptionData, string $type): int
 	{
+		if (!$this->hasHandlerFor($type)) {
+			throw new \InvalidArgumentException("There is no handler reqistered to handle {$type}.");
+		}
+
 		return $this->db->insert('fs_push_notification_subscription', [
 			'foodsaver_id' => $foodsaverId,
 			'data' => $subscriptionData,
@@ -41,12 +46,7 @@ class PushNotificationGateway extends BaseGateway
 		$this->pushNotificationHandlers[$handler::getTypeIdentifier()] = $handler;
 	}
 
-	/**
-	 * @param string $title: the notification title
-	 * @param array $options: an array of options to be sent to the endpoint - @see PushNotificationHandlerInterface::sendPushNotificationsToClients() for more information
-	 * @param array $action: the action to be performed when the user clicks on the notification - @see PushNotificationHandlerInterface::sendPushNotificationsToClients()
-	 */
-	public function sendPushNotificationsToFoodsaver(int $foodsaverId, string $title, array $options, array $action): void
+	public function sendPushNotificationsToFoodsaver(int $foodsaverId, PushNotification $notification): void
 	{
 		$subscriptions = $this->db->fetchAllByCriteria(
 			'fs_push_notification_subscription',
@@ -64,7 +64,7 @@ class PushNotificationGateway extends BaseGateway
 			}
 
 			if (!empty($subscriptionDataForThisHandler)) {
-				$deadSubscriptions = $handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $title, $options, $action);
+				$deadSubscriptions = $handler->sendPushNotificationsToClients($subscriptionDataForThisHandler, $notification);
 				$this->deleteSubscriptionsByData($deadSubscriptions);
 			}
 		}

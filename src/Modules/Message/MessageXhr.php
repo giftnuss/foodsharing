@@ -6,6 +6,7 @@ use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 final class MessageXhr extends Control
@@ -164,17 +165,16 @@ final class MessageXhr extends Control
 								 * send Push Notification
 								 *
 								 */
-								$notificationTitle = $this->translationHelper->sv(
-									count($members) > 2 ? 'chat_notification_group_conversation' : 'chat_notification_2_member_conversation',
-									$this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId)
+
+								$pushNotification = new MessagePushNotification(
+									$this->session->user('name'),
+									$body,
+									new \DateTime(),
+									$conversationId,
+									count($members) > 2 ? $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId) : null
 								);
 
-								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver(
-									$m['id'],
-									$notificationTitle,
-									['body' => $body],
-									['page' => 'conversations', 'params' => [$conversationId]]
-								);
+								$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $pushNotification);
 
 								$this->mem->userAppend($m['id'], 'msg-update', (int)$conversationId);
 
