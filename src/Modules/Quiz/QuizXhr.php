@@ -348,7 +348,7 @@ class QuizXhr extends Control
 				$dia->addOpt('width', 600);
 				$dia->setTitle($quiz['name'] . '-Quiz');
 				$quizHowTo = $this->contentGateway->get(17);
-				$dia->addContent($this->view->initQuiz($quiz, $quizHowTo));
+				$dia->addContent($this->view->initQuizPage($quizHowTo));
 				$dia->addAbortButton();
 				$dia->addButton('Quiz starten', 'ajreq(\'next\',{app:\'quiz\'});$(\'#' . $dia->getId() . '\').dialog(\'close\');');
 
