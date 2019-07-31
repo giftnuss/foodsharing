@@ -431,7 +431,7 @@ class RegionGateway extends BaseGateway
 		]);
 	}
 
-	public function add_bezirk($data)
+	public function addRegion($data)
 	{
 		$this->db->beginTransaction();
 

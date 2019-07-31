@@ -1059,7 +1059,7 @@ class XhrMethods
 			$data['email_name'] = 'foodsharing ' . $data['name'];
 
 			if (!empty($data['name'])) {
-				if ($out = $this->regionGateway->add_bezirk($data)) {
+				if ($out = $this->regionGateway->addRegion($data)) {
 					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . (int)$data['parent_id']);
 
 					return json_encode(array(
