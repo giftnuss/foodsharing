@@ -64,7 +64,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		[':id' => $storeId]);
 
 		$out['verantwortlicher'] = '';
-		if ($bezirk = $this->regionGateway->getBezirkName($out['bezirk_id'])) {
+		if ($bezirk = $this->regionGateway->getRegionName($out['bezirk_id'])) {
 			$out['bezirk'] = $bezirk;
 		}
 		if ($verantwortlich = $this->getBiebsForStore($storeId)) {

@@ -463,9 +463,9 @@ class RegionGateway extends BaseGateway
 		return $id;
 	}
 
-	public function getBezirkName($bezirk_id)
+	public function getRegionName($regionId)
 	{
-		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :id', [':id' => $bezirk_id]);
+		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :id', [':id' => $regionId]);
 	}
 
 	public function addMember($fsId, $regionId)

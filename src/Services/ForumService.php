@@ -63,7 +63,7 @@ class ForumService
 	{
 		$posts = $this->forumGateway->listPosts($threadId);
 		$info = $this->forumGateway->getThreadInfo($threadId);
-		$regionName = $this->regionGateway->getBezirkName($info['region_id']);
+		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
 		$getFsId = function ($post) {
 			return $post['author_id'];
