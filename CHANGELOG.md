@@ -74,7 +74,7 @@
 - Return images attached to a wall post in the WallRestController !1013 @dthulke
 - Don't show forum updates from deleted users on dashboard !1011 #666 @alex.simm
 - Fixed role description for gender 'diverse' !1016 #674 @svenpascal
-- Fixed broken quiz after refactoring !998 @svenpascal
+- Fixed broken quiz after refactoring !1017 @svenpascal
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
