@@ -1296,7 +1296,7 @@ class XhrMethods
 	public function xhr_denyBezirkRequest($data)
 	{
 		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
-			$this->regionGateway->denyBezirkRequest($data['fsid'], $data['bid']);
+			$this->regionGateway->denyRegionRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
 		}

@@ -423,11 +423,11 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function denyBezirkRequest($fsid, $regionId)
+	public function denyRegionRequest($fsId, $regionId)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
 			'bezirk_id' => $regionId,
-			'foodsaver_id' => $fsid,
+			'foodsaver_id' => $fsId,
 		]);
 	}
 
