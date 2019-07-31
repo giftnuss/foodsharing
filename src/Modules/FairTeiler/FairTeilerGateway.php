@@ -398,7 +398,7 @@ class FairTeilerGateway extends BaseGateway
 			return; //Fairteiler has been created by orga member or the ambassador himself
 		}
 
-		$region = $this->regionGateway->getBezirk($fairteiler['bezirk_id']);
+		$region = $this->regionGateway->getRegion($fairteiler['bezirk_id']);
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 

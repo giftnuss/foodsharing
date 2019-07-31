@@ -534,7 +534,7 @@ class SettingsView extends View
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
-			if ($b = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId())) {
+			if ($b = $this->regionGateway->getRegion($this->session->getCurrentBezirkId())) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
 			}

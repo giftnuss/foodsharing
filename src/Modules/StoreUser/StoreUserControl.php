@@ -311,7 +311,7 @@ class StoreUserControl extends Control
 				array('href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new'))
 			), 'Aktionen'), CNT_RIGHT);
 
-			$region = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
+			$region = $this->regionGateway->getRegion($this->session->getCurrentBezirkId());
 			$stores = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId());
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['verantwortlich'], $this->translationHelper->s('you_responsible'), true));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));

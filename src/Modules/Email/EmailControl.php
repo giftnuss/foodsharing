@@ -167,7 +167,7 @@ class EmailControl extends Control
 					str_replace(array("\r"), '', $foodsaver);
 					$foodsaver = explode("\n", $foodsaver);
 
-					$bezirk = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
+					$bezirk = $this->regionGateway->getRegion($this->session->getCurrentBezirkId());
 
 					$count = 0;
 					foreach ($foodsaver as $i => $fs) {

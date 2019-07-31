@@ -18,9 +18,9 @@ class RegionGateway extends BaseGateway
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function getBezirk($id)
+	public function getRegion($regionId)
 	{
-		if ($id == 0) {
+		if ($regionId == 0) {
 			return null;
 		}
 
@@ -34,7 +34,7 @@ class RegionGateway extends BaseGateway
 					`mailbox_id`
 			FROM 	`fs_bezirk`
 			WHERE 	`id` = :id',
-			[':id' => $id]
+			[':id' => $regionId]
 		);
 	}
 
