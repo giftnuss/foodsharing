@@ -38,6 +38,10 @@ class QuizCest
 		$I->waitForText('Du musst noch das Quiz bestehen!');
 		$I->click($example[2]);
 
+		$quizName = $this->quizzes[$quizRole]['name'];
+		$I->waitForText($quizName . '-Quiz');
+		$I->click('Quiz starten');
+
 		$questionText = $this->quizzes[$quizRole]['questions'][0]['text'];
 		$I->waitForText($questionText);
 	}
