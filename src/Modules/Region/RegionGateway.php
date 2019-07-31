@@ -265,9 +265,9 @@ class RegionGateway extends BaseGateway
 		', ['fs_id' => $fs_id]);
 	}
 
-	public function getRegionDetails($id)
+	public function getRegionDetails($regionId)
 	{
-		$bezirk = $this->db->fetch('
+		$region = $this->db->fetch('
 			SELECT
 				b.`id`,
 				b.`name`,
@@ -306,12 +306,12 @@ class RegionGateway extends BaseGateway
 
 			WHERE 	b.`id` = :id
 			LIMIT 1
-		', ['id' => $id]);
+		', ['id' => $regionId]);
 
-		$bezirk['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($id);
-		shuffle($bezirk['botschafter']);
+		$region['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($regionId);
+		shuffle($region['botschafter']);
 
-		return $bezirk;
+		return $region;
 	}
 
 	public function getType($id)
