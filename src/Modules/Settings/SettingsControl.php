@@ -204,7 +204,7 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function confirmRole(Role $role): void
+	private function confirmRole(int $role): void
 	{
 		switch ($role) {
 			case Role::FOODSAVER:
