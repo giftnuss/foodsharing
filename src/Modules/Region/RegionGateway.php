@@ -314,18 +314,18 @@ class RegionGateway extends BaseGateway
 		return $region;
 	}
 
-	public function getType($id)
+	public function getType($regionId)
 	{
-		$bezirkType = $this->db->fetchValue('
+		$regionType = $this->db->fetchValue('
 			SELECT
 				`type`
 			FROM 	`fs_bezirk`
 
-			WHERE 	`id` = :id
+			WHERE 	`id` = :regionId
 			LIMIT 1
-		', ['id' => $id]);
+		', ['regionId' => $regionId]);
 
-		return $bezirkType;
+		return $regionType;
 	}
 
 	public function listRequests($id)
