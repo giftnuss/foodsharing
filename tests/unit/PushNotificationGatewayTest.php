@@ -47,7 +47,6 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertTrue($this->gateway->hasHandlerFor('test'));
 	}
 
-
 	public function testAddSubscription()
 	{
 		$testHandler = $this->makeTestPushNotificationHandler('test type');
@@ -81,6 +80,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		return new class($typeIdentifier, $publicKey) implements PushNotificationHandlerInterface {
 			private static $typeIdentifier;
 			private $publicKey;
+
 			public function __construct(string $typeIdentifier, string $publicKey)
 			{
 				self::$typeIdentifier = $typeIdentifier;

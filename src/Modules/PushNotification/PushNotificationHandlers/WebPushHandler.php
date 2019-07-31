@@ -70,7 +70,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 			$subscription = Subscription::create($subscriptionArray);
 
 			/**
-			 * @var MessageSentReport $report
+			 * @var MessageSentReport
 			 */
 			$reportGenerator = $this->webpush->sendNotification($subscription, $payload, true);
 
@@ -127,6 +127,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		}
 
 		$payloadArray = $this->cropPayload($payloadArray);
+
 		return json_encode($payloadArray);
 	}
 

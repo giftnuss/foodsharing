@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Foodsharing\Modules\PushNotification\Notification;
-
 
 use Foodsharing\Helpers\TranslationHelper;
 
@@ -14,5 +12,5 @@ abstract class PushNotification
 	 * could still display some sort of notification even if it does not know any features specific to the notification
 	 * type.
 	 */
-	public abstract function getFallbackString(TranslationHelper $translationHelper): string;
+	abstract public function getFallbackString(TranslationHelper $translationHelper): string;
 }

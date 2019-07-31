@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Foodsharing\Modules\PushNotification\Notification;
 
 use Foodsharing\Helpers\TranslationHelper;
@@ -21,22 +20,21 @@ class MessagePushNotification extends PushNotification
 	/**
 	 * @var string
 	 *
-	 * The actual text of the message.
+	 * The actual text of the message
 	 */
 	private $body;
-
 
 	/**
 	 * @var \DateTime
 	 *
-	 * This is the time the message has been sent.
+	 * This is the time the message has been sent
 	 */
 	private $time;
 
 	/**
 	 * @var int
 	 *
-	 * The conversation id will be needed to enable the user to reply to the message this notification resembles.
+	 * The conversation id will be needed to enable the user to reply to the message this notification resembles
 	 */
 	private $conversationId;
 
