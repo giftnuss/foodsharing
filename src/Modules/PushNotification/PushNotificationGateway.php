@@ -28,14 +28,6 @@ class PushNotificationGateway extends BaseGateway
 		]);
 	}
 
-	public function deleteSubscription(int $foodsaverId, string $subscriptionData): int
-	{
-		return $this->db->delete(
-			'fs_push_notification_subscription',
-			['foodsaver_id' => $foodsaverId, 'data' => $subscriptionData]
-		);
-	}
-
 	/**
 	 * @param string[] $subscriptionData - array of subscription data to be removed
 	 */

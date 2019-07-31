@@ -61,31 +61,6 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 		return $this->handleHttpStatus(200);
 	}
 
-	/**
-	 * @Rest\Delete("pushnotification/{type}/subscription")
-	 */
-	public function deletePushSubscriptionAction(Request $request, string $type)
-	{
-		if (!$this->gateway->hasHandlerFor($type)) {
-			return $this->handleHttpStatus(404);
-		}
-
-		if (!$this->session->may()) {
-			return $this->handleHttpStatus(403);
-		}
-
-		$subscription = $request->getContent();
-		$foodsaverId = $this->session->id();
-
-		$numberOfAffectedRows = $this->gateway->deleteSubscription($foodsaverId, $subscription);
-
-		if ($numberOfAffectedRows === 0) {
-			return $this->handleHttpStatus(404);
-		}
-
-		return $this->handleHttpStatus(200);
-	}
-
 	private function handleHttpStatus(int $statusCode)
 	{
 		return $this->handleView($this->view([], $statusCode));

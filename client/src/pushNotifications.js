@@ -13,8 +13,7 @@ async function subscribeForPushNotifications () {
 async function unsubscribeFromPushNotifications () {
   const serviceWorkerRegistration = await navigator.serviceWorker.ready
   const subscription = await serviceWorkerRegistration.pushManager.getSubscription()
-  await subscription.unsubscribe()
-  return removePushSubscriptionFromServer(subscription)
+  return subscription.unsubscribe()
 }
 
 function sendPushSubscriptionToServer (subscription) {
@@ -23,19 +22,6 @@ function sendPushSubscriptionToServer (subscription) {
   const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
 
   return ajax.post('/pushnotification/webpush/subscription', {
-    endpoint: subscription.endpoint,
-    publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
-    authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
-    contentEncoding
-  })
-}
-
-function removePushSubscriptionFromServer (subscription) {
-  const key = subscription.getKey('p256dh')
-  const token = subscription.getKey('auth')
-  const contentEncoding = (PushManager.supportedContentEncodings || ['aesgcm'])[0]
-
-  return ajax.remove('/pushnotification/webpush/subscription', {
     endpoint: subscription.endpoint,
     publicKey: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
     authToken: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
