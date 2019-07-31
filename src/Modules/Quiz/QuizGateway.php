@@ -192,7 +192,7 @@ class QuizGateway extends BaseGateway
 		', ['quizId' => $quizId, 'fp' => $failurePoints, 'count' => $count]);
 	}
 
-	public function getQuestionMetas(int $quizId): array
+	public function getQuestionCountByFailurePoints(int $quizId): array
 	{
 		$questions = $this->db->fetchAll('
 			SELECT
@@ -209,8 +209,9 @@ class QuizGateway extends BaseGateway
 				hq.quiz_id = :quizId
 		', ['quizId' => $quizId]);
 		if ($questions) {
-			$outmeta = array();
-			$meta = $this->db->fetchAll('
+			$result = [];
+
+			$questionCounts = $this->db->fetchAll('
 				SELECT 	hq.fp, COUNT(q.id) AS `count`
 				FROM fs_question q
 					LEFT JOIN fs_question_has_quiz hq
@@ -222,19 +223,16 @@ class QuizGateway extends BaseGateway
 				GROUP BY
 					hq.fp
 			', ['quizId' => $quizId]);
-			if ($meta) {
-				foreach ($meta as $m) {
-					$fp = $m['fp'] ? $m['fp'] : 0;
-					if (!isset($outmeta[$fp])) {
-						$outmeta[$fp] = $m['count'];
+			if ($questionCounts) {
+				foreach ($questionCounts as $counts) {
+					$failurePoints = $counts['fp'] ? $counts['fp'] : 0;
+					if (!isset($result[$failurePoints])) {
+						$result[$failurePoints] = $counts['count'];
 					}
 				}
 			}
 
-			return array(
-				'meta' => $outmeta,
-				'question' => $questions
-			);
+			return $result;
 		}
 
 		return [];

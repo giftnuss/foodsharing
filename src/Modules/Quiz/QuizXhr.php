@@ -1098,21 +1098,21 @@ class QuizXhr extends Control
 	{
 		$count_questions = $count;
 
-		if ($questions = $this->quizGateway->getQuestionMetas($quiz_id)) {
+		if ($questionCounts = $this->quizGateway->getQuestionCountByFailurePoints($quiz_id)) {
 			// Wie viele Fragen gibt es insgesamt?
 			$summe = 0;
-			foreach ($questions['meta'] as $key => $m) {
-				$summe += $m;
+			foreach ($questionCounts as $failurePoints => $count) {
+				$summe += $failurePoints;
 			}
 
 			$out = array();
 			// Prozentanteil von jeder Fragenart
-			foreach ($questions['meta'] as $key => $m) {
-				$percent = round($this->percentFrom($summe, $m));
+			foreach ($questionCounts as $failurePoints => $failurePoints) {
+				$percent = round($this->percentFrom($summe, $failurePoints));
 
 				$count = round($this->percentTo($count_questions, $percent));
 
-				if ($rquest = $this->quizGateway->getRandomQuestions($count, $key, $quiz_id)) {
+				if ($rquest = $this->quizGateway->getRandomQuestions($count, $failurePoints, $quiz_id)) {
 					foreach ($rquest as $r) {
 						$out[] = $r;
 					}
