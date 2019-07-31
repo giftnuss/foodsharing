@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +12,9 @@ class ReportControl extends Control
 	private $reportGateway;
 	private $imageService;
 
-	public function __construct(ReportGateway $reportGateway, Db $model, ReportView $view, ImageService $imageService)
+	public function __construct(ReportGateway $reportGateway, ReportView $view, ImageService $imageService)
 	{
 		$this->reportGateway = $reportGateway;
-		$this->model = $model;
 		$this->view = $view;
 		$this->imageService = $imageService;
 
@@ -40,10 +38,10 @@ class ReportControl extends Control
 		}
 	}
 
-	private function byRegion($bid, $response)
+	private function byRegion($regionId, $response)
 	{
 		$response->setContent($this->render('pages/Report/by-region.twig',
-			['bid' => $bid]
+			['bid' => $regionId]
 		));
 	}
 
@@ -67,7 +65,7 @@ class ReportControl extends Control
 			if ($reports = $this->reportGateway->getReports(1)) {
 				$this->pageHelper->addContent($this->view->listReports($reports));
 			}
-			$this->pageHelper->addContent($this->view->topbar('Bestätigte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Zugestellte Meldungen', \count($reports) . ' insgesamt', '<img src="/img/shit.png" />'), CNT_TOP);
 		}
 	}
 

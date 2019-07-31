@@ -11,7 +11,7 @@ import './WorkGroup.css'
 const $groups = $('.groups .field')
 if ($groups.length > 3) {
   $groups.children('.head').css({
-    'cursor': 'pointer',
+    cursor: 'pointer',
     'margin-bottom': '10px'
   }).on('mouseover', function () {
     $(this).css('text-decoration', 'underline')

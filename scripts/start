@@ -25,7 +25,7 @@ echo "Running composer install"
 exec-in-container app composer install
 exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 
-echo "Waiting for mysql"
+echo "Waiting for database"
 wait-for-mysql
 
 # Creating db
@@ -49,5 +49,5 @@ echo "    ./scripts/seed"
 echo
 echo "  You can find more useful information at:"
 echo
-echo "    https://devdocs.foodsharing.de/setting-things-up.html"
+echo "    https://devdocs.foodsharing.network/setting-things-up.html"
 echo

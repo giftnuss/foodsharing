@@ -158,6 +158,20 @@ class ForumPostCest
 		$I->assertContains('tigt werden', $mail->subject);
 	}
 
+	/**
+	 * @param AcceptanceTester $I
+	 * @param \Codeception\Example $example
+	 * @example["ambassador", "thread_ambassador_user", true]
+	 */
+	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, \Codeception\Example $example)
+	{
+		$I->login($this->{$example[0]}['email']);
+		$title = 'TestAmbassadorThreadTitle';
+		$this->_createThread($I, $this->testBezirk['id'], $title);
+		$I->amOnPage($I->forumUrl($this->testBezirk['id']));
+		$I->see($title);
+	}
+
 	public function newThreadCanBeActivated(AcceptanceTester $I)
 	{
 		$I->login($this->foodsaver['email']);
@@ -184,5 +198,49 @@ class ForumPostCest
 		$I->see($title);
 		/* There should have been notification mails - they are missing... */
 		//$I->expectNumMails(3); /* Number of users in region, all should have gotten an email */
+	}
+
+	/**
+	 * @param AcceptanceTester $I
+	 * @param \Codeception\Example $example
+	 * @example["foodsaver", "bigTestBezirk"]
+	 */
+	public function DeleteLastPostAndGetRedirectedToForum(AcceptanceTester $I, \Codeception\Example $example)
+	{
+		$I->login($this->{$example[0]}['email']);
+		$title = 'TestThreadTitleForDeletion';
+		$I->deleteAllMails();
+		$this->_createThread($I, $this->{$example[1]}['id'], $title);
+		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
+
+		$mail = $I->getMails()[0];
+		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
+		$link = html_entity_decode($matches[1]);
+
+		$admin = $I->haveFriend('admin');
+		$admin->does(function (AcceptanceTester $I) use ($link, $title) {
+			$I->login($this->ambassador['email']);
+			$I->amOnPage($link);
+			$I->waitForActiveAPICalls();
+			$I->see($title);
+			$I->click('Thema aktivieren');
+			$I->waitForActiveAPICalls();
+		});
+
+		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
+		$I->canSee($title);
+		$I->click('.forum_threads a');
+		$I->waitForActiveAPICalls();
+
+		$I->seeCurrentUrlMatches('~' . $I->forumUrl($this->{$example[1]}['id']) . '&tid=(\d+)~');
+		$I->click('a[data-original-title="Beitrag löschen"]');
+		$I->canSee('Beitrag löschen');
+		$confirmButton = \Codeception\Util\Locator::contains('.btn', 'Ja, ich bin mir sicher');
+		$I->waitForElementVisible($confirmButton);
+		$I->click($confirmButton);
+		$I->waitForElementNotVisible($confirmButton);
+		$I->waitForActiveAPICalls();
+		$I->seeCurrentUrlEquals($I->forumUrl($this->{$example[1]}['id']));
+		$I->cantSee($title);
 	}
 }

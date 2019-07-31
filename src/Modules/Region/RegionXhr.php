@@ -36,13 +36,6 @@ final class RegionXhr extends Control
 		parent::__construct();
 	}
 
-	private function hasThemeAccess($BotThemestatus)
-	{
-		return ($BotThemestatus['bot_theme'] == 0 && $this->session->mayBezirk($BotThemestatus['bezirk_id']))
-			|| ($BotThemestatus['bot_theme'] == 1 && $this->session->isAdminFor($BotThemestatus['bezirk_id']))
-			|| $this->session->isOrgaTeam();
-	}
-
 	public function morethemes()
 	{
 		$regionId = (int)$_GET['bid'];

@@ -104,7 +104,7 @@ class MailboxGateway extends BaseGateway
 
 	public function deleteMessage(int $mid): int
 	{
-		$attach = $this->db->fetchValueByCriteria('mailbox_message', 'attach', ['id' => $mid]);
+		$attach = $this->db->fetchValueByCriteria('fs_mailbox_message', 'attach', ['id' => $mid]);
 		if (!empty($attach)) {
 			$attach = json_decode($attach, true);
 			if (is_array($attach)) {

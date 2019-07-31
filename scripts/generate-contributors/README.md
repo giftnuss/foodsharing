@@ -21,7 +21,7 @@ This is the code that powers
 
 ## Development
 
-Visit [devdocs.foodsharing.de](https://devdocs.foodsharing.de) to get started with development.
+Visit [devdocs.foodsharing.network](https://devdocs.foodsharing.network) to get started with development.
 
 ## Community
 

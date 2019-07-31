@@ -2,16 +2,25 @@ framework:
     secret: 'unused' # this is currently required by symfony but not actually in use
     session:
         handler_id: ~
-
     php_errors:
         log: true
+
 
 fos_rest:
     param_fetcher_listener: true
     body_listener: true
-    exception: true
+    exception:
+        codes:
+            'DomainException': 409
+    format_listener:
+        rules:
+          - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
+
     serializer:
         serialize_null: true
+    routing_loader:
+        default_format: json
+        include_format: false
 
 exercise_html_purifier:
     default:

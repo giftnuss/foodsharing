@@ -21,7 +21,7 @@ define('DB_HOST', 'db');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
 define('DB_DB', 'foodsharing');
-define('INFLUX_DSN', 'influxdb://influxdb:8086/foodsharing');
+define('INFLUX_DSN', 'udp+influxdb://influxdb:8089/foodsharing');
 define('ERROR_REPORT', E_ALL);
 define('BASE_URL', $protocol . '://lmr.local/');
 define('DEFAULT_EMAIL', 'noreply@foodsharing.de');
@@ -35,8 +35,7 @@ define('PLATFORM_MAILBOX_HOST', 'foodsharing.network');
 
 define('MAILBOX_OWN_DOMAINS', array('foodsharing.network', 'lebensmittelretten.de', 'foodsharing.de'));
 
-define('SMTP_HOST', 'maildev');
-define('SMTP_PORT', 25);
+define('MAILER_HOST', 'maildev');
 define('MEM_ENABLED', true);
 
 define('SOCK_URL', 'http://chat:1338/');
@@ -47,6 +46,8 @@ define('BOUNCE_IMAP_HOST', null);
 define('BOUNCE_IMAP_USER', null);
 define('BOUNCE_IMAP_PASS', null);
 define('BOUNCE_IMAP_PORT', null);
+
+define('IMAP', []);
 
 if (!defined('ROOT_DIR')) {
 	define('ROOT_DIR', './');

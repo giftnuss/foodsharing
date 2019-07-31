@@ -10,7 +10,7 @@ import emojiList from '@/emojiList.json'
 // TODO:
 export default {
   props: {
-    'name': {
+    name: {
       type: String,
       default: null
     }

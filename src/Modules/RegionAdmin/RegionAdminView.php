@@ -155,7 +155,7 @@ class RegionAdminView extends View
 		
 		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
     L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
-	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>"
+	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>, Map data © <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap contributors</a>"
     }).addTo(' . $id . '_map);
 	');
 	}

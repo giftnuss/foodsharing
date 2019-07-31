@@ -195,7 +195,7 @@ final class MessageModel extends Db
 	}
 
 	/**
-	 * Method returns an array of all conversation from the user.
+	 * Method returns an array of all conversations from the logged in user.
 	 *
 	 * @param int $limit
 	 * @param int $offset
@@ -246,6 +246,12 @@ final class MessageModel extends Db
 					$members = $this->updateDenormalizedConversationData($conversations[$i]['id']);
 					$member = $members[0];
 				}
+
+				// Strip emails from response
+				foreach ($member as $index => $value) {
+					unset($member[$index]['email']);
+				}
+
 				$conversations[$i]['member'] = $member;
 			}
 

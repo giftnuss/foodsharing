@@ -155,9 +155,20 @@ services:
             serviceOption: 'tls'
             boxname: 'INBOX'
             maxMessages: 10000
+            verbose: 0
 
     Foodsharing\EventListener\CsrfListener:
         tags:
             - { name: kernel.event_listener, event: kernel.controller }
         arguments:
             - "@annotation_reader"
+
+    mailer.transport:
+        class: Swift_SmtpTransport
+        arguments:
+            - !php/const MAILER_HOST
+
+    Swift_Mailer:
+        class: Swift_Mailer
+        arguments:
+            - '@mailer.transport'

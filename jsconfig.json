@@ -4,7 +4,6 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "@b/*": ["client/node_modules/bootstrap-vue/es/*"],
       "@/*": ["client/src/*"]
     }
   },

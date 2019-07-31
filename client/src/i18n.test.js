@@ -26,8 +26,8 @@ describe('i18n', () => {
     }), 'my name is Peter and I am 23 years old')
   })
 
-  it('complains if missing key', () => {
-    assert.throws(() => i18n('doesnotexist'))
+  it('responds with placeholder if missing key', () => {
+    assert.strictEqual(i18n('doesnotexist'), 'doesnotexist')
   })
 
   it('complains with missing variables', () => {
