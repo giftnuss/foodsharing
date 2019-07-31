@@ -1,6 +1,7 @@
 <?php
 
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
+use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 
 class PushNotificationGatewayTest extends \Codeception\Test\Unit
 {
@@ -38,49 +39,26 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 		}';
 	}
 
-	public function testAddSubscription()
-	{
-		$testType = 'test type';
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, $testType);
-
-		$this->tester->seeInDatabase(
-			'fs_push_notification_subscription',
-			['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription, 'type' => $testType]
-		);
-	}
-
-	public function testDeleteSubscription()
-	{
-		//insert test subsription:
-		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, '');
-
-		$this->gateway->deleteSubscription($this->testUser['id'], $this->testSubscription);
-
-		$this->tester->dontSeeInDatabase('fs_push_notification_subscription', ['foodsaver_id' => $this->testUser['id']]);
-	}
-
 	public function testAddHandler()
 	{
-		$testHandler = new class() implements PushNotificationHandlerInterface {
-			public static function getTypeIdentifier(): string
-			{
-				return 'test';
-			}
-
-			public function getEndpointInformation(): array
-			{
-				return '';
-			}
-
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array
-			{
-				return [];
-			}
-		};
-
+		$testHandler = $this->makeTestPushNotificationHandler('test');
 		$this->gateway->addHandler($testHandler);
 
 		$this->tester->assertTrue($this->gateway->hasHandlerFor('test'));
+	}
+
+
+	public function testAddSubscription()
+	{
+		$testHandler = $this->makeTestPushNotificationHandler('test type');
+		$this->gateway->addHandler($testHandler);
+
+		$this->gateway->addSubscription($this->testUser['id'], $this->testSubscription, 'test type');
+
+		$this->tester->seeInDatabase(
+			'fs_push_notification_subscription',
+			['foodsaver_id' => $this->testUser['id'], 'data' => $this->testSubscription, 'type' => 'test type']
+		);
 	}
 
 	public function testHasHandlerForReturnsFalseIfThereIsNoHandler()
@@ -90,26 +68,39 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetPublicKey()
 	{
-		$testHandler = new class() implements PushNotificationHandlerInterface {
+		$testHandler = $this->makeTestPushNotificationHandler('test', 'testPublicKey');
+		$this->gateway->addHandler($testHandler);
+
+		$endpointInformation = $this->gateway->getServerInformation('test');
+
+		$this->tester->assertEquals('testPublicKey', $endpointInformation['key']);
+	}
+
+	private function makeTestPushNotificationHandler(string $typeIdentifier, string $publicKey = ''): PushNotificationHandlerInterface
+	{
+		return new class($typeIdentifier, $publicKey) implements PushNotificationHandlerInterface {
+			private static $typeIdentifier;
+			private $publicKey;
+			public function __construct(string $typeIdentifier, string $publicKey)
+			{
+				self::$typeIdentifier = $typeIdentifier;
+				$this->publicKey = $publicKey;
+			}
+
 			public static function getTypeIdentifier(): string
 			{
-				return 'test';
+				return self::$typeIdentifier;
 			}
 
-			public function getEndpointInformation(): array
+			public function getServerInformation(): array
 			{
-				return ['key' => 'testPublicKey'];
+				return $this->publicKey ? ['key' => $this->publicKey] : [];
 			}
 
-			public function sendPushNotificationsToClients(array $subscriptionData, string $title, array $options, ?array $action = null): array
+			public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 			{
 				return [];
 			}
 		};
-		$this->gateway->addHandler($testHandler);
-
-		$endpointInformation = $this->gateway->getEndpointInformation('test');
-
-		$this->tester->assertEquals('testPublicKey', $endpointInformation['key']);
 	}
 }

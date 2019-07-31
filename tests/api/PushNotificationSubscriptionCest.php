@@ -38,30 +38,4 @@ class PushNotificationSubscriptionCest
 
 		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
 	}
-
-	public function deletionSucceedsIfLoggedInAndSubscriptionExists(\ApiTester $I)
-	{
-		$I->login($this->user['email']);
-		$I->sendPOST('api/pushnotification/webpush/subscription', $this->testSubscription);
-
-		$I->sendDELETE('api/pushnotification/webpush/subscription', $this->testSubscription);
-
-		$I->seeResponseCodeIs(HttpCode::OK);
-	}
-
-	public function deletionReturns404IfSubscriptionDoesntExist(\ApiTester $I)
-	{
-		$I->login($this->user['email']);
-
-		$I->sendDELETE('api/pushnotification/webpush/subscription', $this->testSubscription);
-
-		$I->seeResponseCodeIs(HttpCode::NOT_FOUND);
-	}
-
-	public function deletionReturns403IfNotLoggedIn(\ApiTester $I)
-	{
-		$I->sendDELETE('api/pushnotification/webpush/subscription', $this->testSubscription);
-
-		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
-	}
 }
