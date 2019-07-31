@@ -27,15 +27,15 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 	}
 
 	/**
-	 * @Rest\Get("pushnotification/{type}/endpoint-information")
+	 * @Rest\Get("pushnotification/{type}/server-information")
 	 */
-	public function getEndpointInformationAction(string $type)
+	public function getServerInformationAction(string $type)
 	{
 		if (!$this->gateway->hasHandlerFor($type)) {
 			return $this->handleHttpStatus(404);
 		}
 
-		$view = $this->view($this->gateway->getEndpointInformation($type), 200);
+		$view = $this->view($this->gateway->getServerInformation($type), 200);
 
 		return $this->handleView($view);
 	}

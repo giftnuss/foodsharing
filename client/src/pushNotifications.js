@@ -1,7 +1,7 @@
 import * as ajax from '@/api/base'
 
 async function subscribeForPushNotifications () {
-  const applicationServerKey = (await ajax.get('/pushnotification/webpush/endpoint-information')).key
+  const applicationServerKey = (await ajax.get('/pushnotification/webpush/server-information')).key
   const serviceWorkerRegistration = await navigator.serviceWorker.ready
   const subscription = await serviceWorkerRegistration.pushManager.subscribe({
     userVisibleOnly: true,
