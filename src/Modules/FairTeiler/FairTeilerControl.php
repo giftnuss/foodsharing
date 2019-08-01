@@ -127,7 +127,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->region['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
-			if ($request->query->has('delete') && ($this->session->isAdminFor($this->regionId)) || $this->session->isOrgaTeam()) {
+			if ($request->query->has('delete') && ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam())) {
 				$this->delete();
 			}
 		}
