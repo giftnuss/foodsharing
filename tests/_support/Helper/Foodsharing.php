@@ -154,12 +154,14 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createQuizTry($fs_id, $level, $status)
+	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
 	{
+		$startTime = $this->faker->dateTimeBetween('-' . $daysAgo . ' days', '-' . $daysAgo . ' days');
 		$v = [
 			'quiz_id' => $level,
 			'status' => $status,
-			'foodsaver_id' => $fs_id,
+			'foodsaver_id' => $fsId,
+			'time_start' => $this->toDateTime($startTime)
 		];
 		$this->haveInDatabase('fs_quiz_session', $v);
 	}
