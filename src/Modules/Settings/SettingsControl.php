@@ -168,7 +168,7 @@ class SettingsControl extends Control
 		$fsId = $this->session->id();
 		$desc = $this->contentGateway->get(12);
 		$quizStatus = $this->quizGateway->getQuizStatus($role, $fsId);
-		switch ($quizStatus) {
+		switch ($quizStatus['status']) {
 			case QuizStatus::NEVER_TRIED:
 				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
 				break;
@@ -191,8 +191,7 @@ class SettingsControl extends Control
 					$this->model->updateRole(Role::FOODSHARER, $this->foodsaver['rolle']);
 				}
 				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
-				$days_to_wait = ((time() - $lastTry) - (86400 * 30) / 30);
-				$this->view->pause($days_to_wait, $desc);
+				$this->view->pause($quizStatus['wait'], $desc);
 				break;
 
 			case QuizStatus::PAUSE_ELAPSED:

@@ -84,28 +84,37 @@ class QuizGateway extends BaseGateway
 		return $quiz ? $quiz['name'] : '';
 	}
 
-	public function getQuizStatus(int $quizId, int $fsId): int
+	/**
+	 *	Determines a user's current quiz status.
+	 *
+	 *	@param int $quizId Quiz level/role
+	 *	@param int $fsId Foodsaver ID
+	 *
+	 *	@return array indicates the status of type DBConstants\Quiz\QuizStatus ('status') and a possible waiting time in days ('wait')
+	 */
+	public function getQuizStatus(int $quizId, int $fsId): array
 	{
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
 		$daysSinceLastTry = (time() - $quizSessionStatus['last_try']) / 86400;
+		$pauseDays = 30;
 
 		if ($quizSessionStatus['times'] == 0) {
-			return QuizStatus::NEVER_TRIED;
+			return ['status' => QuizStatus::NEVER_TRIED, 'wait' => 0];
 		} elseif ($quizSessionStatus['running'] > 0) {
-			return QuizStatus::RUNNING;
+			return ['status' => QuizStatus::RUNNING, 'wait' => 0];
 		} elseif ($quizSessionStatus['passed'] > 0) {
-			return QuizStatus::PASSED;
+			return ['status' => QuizStatus::PASSED, 'wait' => 0];
 		} elseif ($quizSessionStatus['failed'] < 3) {
-			return QuizStatus::FAILED;
-		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry < 30) {
-			return QuizStatus::PAUSE;
-		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry >= 30) {
-			return QuizStatus::PAUSE_ELAPSED;
+			return ['status' => QuizStatus::FAILED, 'wait' => 0];
+		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry < $pauseDays) {
+			return ['status' => QuizStatus::PAUSE, 'wait' => $pauseDays - $daysSinceLastTry];
+		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry >= $pauseDays) {
+			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
 		} elseif ($quizSessionStatus['failed'] == 4) {
-			return QuizStatus::PAUSE_ELAPSED;
+			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
 		}
 
-		return QuizStatus::DISQUALIFIED;
+		return ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
 	}
 
 	public function hasPassedQuiz(int $fsId, int $quizId): bool
