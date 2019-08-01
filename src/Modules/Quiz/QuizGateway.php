@@ -98,23 +98,27 @@ class QuizGateway extends BaseGateway
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
 		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
 
+		$result = ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
+
+		$now = Carbon::now();
 		if ($quizSessionStatus['times'] == 0) {
-			return ['status' => QuizStatus::NEVER_TRIED, 'wait' => 0];
+			$result['status'] = QuizStatus::NEVER_TRIED;
 		} elseif ($quizSessionStatus['running'] > 0) {
-			return ['status' => QuizStatus::RUNNING, 'wait' => 0];
+			$result['status'] = QuizStatus::RUNNING;
 		} elseif ($quizSessionStatus['passed'] > 0) {
-			return ['status' => QuizStatus::PASSED, 'wait' => 0];
+			$result['status'] = QuizStatus::PASSED;
 		} elseif ($quizSessionStatus['failed'] < 3) {
-			return ['status' => QuizStatus::FAILED, 'wait' => 0];
-		} elseif ($quizSessionStatus['failed'] == 3 && Carbon::now()->isBefore($pauseEnd)) {
-			return ['status' => QuizStatus::PAUSE, 'wait' => Carbon::now()->diffInDays($pauseEnd)];
-		} elseif ($quizSessionStatus['failed'] == 3 && Carbon::now()->greaterThanOrEqualTo($pauseEnd)) {
-			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
+			$result['status'] = QuizStatus::FAILED;
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->isBefore($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE;
+			$result['wait'] = $now->diffInDays($pauseEnd);
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->greaterThanOrEqualTo($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
 		} elseif ($quizSessionStatus['failed'] == 4) {
-			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
 		}
 
-		return ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
+		return $result;
 	}
 
 	public function hasPassedQuiz(int $fsId, int $quizId): bool
