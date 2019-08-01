@@ -4,6 +4,7 @@ namespace Helper;
 
 use DateTime;
 use Faker;
+use Carbon\Carbon;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -156,7 +157,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
 	{
-		$startTime = $this->faker->dateTimeBetween('-' . $daysAgo . ' days', '-' . $daysAgo . ' days');
+		$startTime = Carbon::now()->subDays($daysAgo);
 		$v = [
 			'quiz_id' => $level,
 			'status' => $status,

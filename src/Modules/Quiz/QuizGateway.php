@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -95,8 +96,7 @@ class QuizGateway extends BaseGateway
 	public function getQuizStatus(int $quizId, int $fsId): array
 	{
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
-		$daysSinceLastTry = (time() - $quizSessionStatus['last_try']) / 86400;
-		$pauseDays = 30;
+		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
 
 		if ($quizSessionStatus['times'] == 0) {
 			return ['status' => QuizStatus::NEVER_TRIED, 'wait' => 0];
@@ -106,9 +106,9 @@ class QuizGateway extends BaseGateway
 			return ['status' => QuizStatus::PASSED, 'wait' => 0];
 		} elseif ($quizSessionStatus['failed'] < 3) {
 			return ['status' => QuizStatus::FAILED, 'wait' => 0];
-		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry < $pauseDays) {
-			return ['status' => QuizStatus::PAUSE, 'wait' => $pauseDays - $daysSinceLastTry];
-		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry >= $pauseDays) {
+		} elseif ($quizSessionStatus['failed'] == 3 && Carbon::now()->isBefore($pauseEnd)) {
+			return ['status' => QuizStatus::PAUSE, 'wait' => Carbon::now()->diffInDays($pauseEnd)];
+		} elseif ($quizSessionStatus['failed'] == 3 && Carbon::now()->greaterThanOrEqualTo($pauseEnd)) {
 			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
 		} elseif ($quizSessionStatus['failed'] == 4) {
 			return ['status' => QuizStatus::PAUSE_ELAPSED, 'wait' => 0];
