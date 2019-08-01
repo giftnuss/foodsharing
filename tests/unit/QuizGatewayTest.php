@@ -102,7 +102,7 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 
 	public function testFoodsharerHasAFifthTry()
 	{
-		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 4, 30);
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 4);
 		$this->tester->assertEquals(QuizStatus::PAUSE_ELAPSED, $this->foodsharerQuizStatus());
 	}
 

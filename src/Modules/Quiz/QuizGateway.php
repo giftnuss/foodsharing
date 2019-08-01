@@ -87,6 +87,7 @@ class QuizGateway extends BaseGateway
 	public function getQuizStatus(int $quizId, int $fsId): int
 	{
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
+		$daysSinceLastTry = (time() - $quizSessionStatus['last_try']) / 86400;
 
 		if ($quizSessionStatus['times'] == 0) {
 			return QuizStatus::NEVER_TRIED;
@@ -96,9 +97,11 @@ class QuizGateway extends BaseGateway
 			return QuizStatus::PASSED;
 		} elseif ($quizSessionStatus['failed'] < 3) {
 			return QuizStatus::FAILED;
-		} elseif ($quizSessionStatus['failed'] == 3 && (time() - $quizSessionStatus['last_try']) < (86400 * 30)) {
+		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry < 30) {
 			return QuizStatus::PAUSE;
-		} elseif ($quizSessionStatus['failed'] >= 3 && $quizSessionStatus['failed'] < 5 && (time() - $quizSessionStatus['last_try']) >= (86400 * 30)) {
+		} elseif ($quizSessionStatus['failed'] == 3 && $daysSinceLastTry >= 30) {
+			return QuizStatus::PAUSE_ELAPSED;
+		} elseif ($quizSessionStatus['failed'] == 4) {
 			return QuizStatus::PAUSE_ELAPSED;
 		}
 
