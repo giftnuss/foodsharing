@@ -100,9 +100,15 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertEquals(QuizStatus::PAUSE_ELAPSED, $this->foodsharerQuizStatus());
 	}
 
-	public function testFoodsharerGetsDisqualifiedAfterFourthFailure()
+	public function testFoodsharerHasAFifthTry()
 	{
-		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 4);
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 4, 30);
+		$this->tester->assertEquals(QuizStatus::PAUSE_ELAPSED, $this->foodsharerQuizStatus());
+	}
+
+	public function testFoodsharerGetsDisqualifiedAfterFifthFailure()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 5);
 		$this->tester->assertEquals(QuizStatus::DISQUALIFIED, $this->foodsharerQuizStatus());
 	}
 
