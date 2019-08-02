@@ -4,10 +4,10 @@ $g_lang['photo_public'] = 'Veröffentlichung Deines Namens und Deines Fotos';
 $g_lang['photo_should_be_usable'] = 'Dein Gesicht sollte auf dem Profilfoto <a href="https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto">erkennbar</a> sein, da es, wenn Du mal <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> wirst, für den Foodsharing-<a href="https://wiki.foodsharing.de/Ausweis">Ausweis</a> verwendet wird.';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
-$g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wieder hergestellt werden';
+$g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wiederhergestellt werden';
 $g_lang['delete_now'] = 'Account jetzt löschen';
 $g_lang['delete_account'] = 'Account löschen';
-$g_lang['delete_account_confirm_msg'] = 'Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?';
+$g_lang['delete_account_confirm_msg'] = 'Du bist dabei, Deinen Account zu löschen. Bist Du Dir ganz sicher?';
 $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 
@@ -19,8 +19,8 @@ $g_lang['settings_mumble'] = 'Mumble-Einstellungen';
 $g_lang['newsletter'] = 'Newsletter';
 $g_lang['newsletter_desc'] = 'Ca. 1x im Monat senden wir aktuelle Informationen rund um die Lebensmittelretterbewegung in einem Newsletter raus. Möchtest Du diese E-Mails bekommen?';
 
-$g_lang['infomail_message'] = 'Benachrichtigung über foodsharing.de-Nachrichten';
-$g_lang['infomail_message_desc'] = 'Wenn Du auf foodsharing.de eine interne Nachricht geschickt bekommst, aber gerade nicht eingeloggt bist, kannst Du per E-Mail darüber informiert werden. Möchtest Du das?';
+$g_lang['infomail_message'] = 'Benachrichtigung über Chat-Nachrichten auf foodsharing';
+$g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine interne Nachricht geschickt bekommst, aber gerade nicht eingeloggt bist, kannst Du per E-Mail darüber informiert werden. Möchtest Du das?';
 
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
@@ -38,14 +38,14 @@ $g_lang['upgrade_bot_success'] = 'Danke Dir für Deine Motivation mehr Verantwor
 $g_lang['upgrade_request_send'] = 'Anfrage erfolgreich versendet!';
 $g_lang['account_option'] = 'Account-Optionen';
 $g_lang['settings'] = 'Einstellungen';
-$g_lang['follow_fairteiler'] = 'Updates vom {var} Fair-Teiler';
-$g_lang['follow_fairteiler_desc'] = 'Du hast Dich als Follower für den {var} Fair-Teiler eingetragen. Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
-$g_lang['follow_fairteiler_mail'] = 'über eine E-Mail Benachrichtigung';
+$g_lang['follow_fairteiler'] = 'Updates vom Fair-Teiler "{var}"';
+$g_lang['follow_fairteiler_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
+$g_lang['follow_fairteiler_mail'] = 'über eine E-Mail-Benachrichtigung';
 $g_lang['follow_fairteiler_alert'] = 'nur über interne Infomeldungen';
 $g_lang['follow_fairteiler_none'] = 'gar nicht mehr';
 
 $g_lang['follow_thread'] = 'Über das Forenthema "{var}" auf dem Laufenden bleiben?';
-$g_lang['follow_thread_mail'] = 'Ja, ich möchte per Mail über neue Posts informiert werden.';
+$g_lang['follow_thread_mail'] = 'Ja, ich möchte per E-Mail über neue Posts informiert werden.';
 $g_lang['follow_thread_none'] = 'Bitte nicht mehr über neue Posts informieren.';
 $g_lang['follow_thread_desc'] = '';
 
