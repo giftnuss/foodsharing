@@ -377,7 +377,7 @@ final class BasketRestController extends AbstractFOSRestController
 		$location = $this->fetchLocationOrUserHome($paramFetcher);
 
 		//update basket
-		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LON],
+		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
 			$location[self::LON], $this->session->id());
 
 		$basket = $this->gateway->getBasket($basketId);

@@ -165,17 +165,23 @@ class BasketApiCest
 	public function editBasket(\ApiTester $I)
 	{
 		$testDescription = 'lorem ipsum';
+		$lat = 12.34;
+		$lon = 56.78;
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => '']);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
 
-		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => $testDescription]);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], [
+			'description' => $testDescription, 'lat' => $lat, 'lon' => $lon
+		]);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$I->canSeeResponseContainsJson([
 			'description' => $testDescription
 		]);
+		$I->assertEquals($lat, $I->grabDataFromResponseByJsonPath('basket.lat')[0], '', 0.1);
+		$I->assertEquals($lon, $I->grabDataFromResponseByJsonPath('basket.lon')[0], '', 0.1);
 	}
 }
