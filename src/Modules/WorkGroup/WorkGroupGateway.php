@@ -136,7 +136,7 @@ class WorkGroupGateway extends BaseGateway
 		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk' => $regionId]);
 
 		$query = '
-			DELETE	tf
+			DELETE	tf.*
 			FROM		`fs_theme_follower` tf
 			JOIN		`fs_bezirk_has_theme` ht
 			ON			ht.`theme_id` = tf.`theme_id`
@@ -145,7 +145,7 @@ class WorkGroupGateway extends BaseGateway
 			AND			b.`foodsaver_id` = tf.`foodsaver_id`
 			WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')
 		';
-		if ($memberIds !== null) {
+		if ($memberIds && !empty($memberIds)) {
 			$query .= 'AND	tf.`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')';
 		}
 
