@@ -134,23 +134,25 @@ class WorkGroupGateway extends BaseGateway
 	private function deleteSubscriptions(int $regionId, array $memberIds, bool $leaders)
 	{
 		$foodsaverTableName = $leaders ? 'fs_botschafter' : 'fs_foodsaver_has_bezirk';
-		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk' => $regionId]);
+		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $regionId]);
 
-		$query = '
-			DELETE	tf.*
-			FROM		`fs_theme_follower` tf
-			JOIN		`fs_bezirk_has_theme` ht
-			ON			ht.`theme_id` = tf.`theme_id`
-			LEFT JOIN	`' . $foodsaverTableName . '` b
-			ON			b.`bezirk_id` = ht.`bezirk_id`
-			AND			b.`foodsaver_id` = tf.`foodsaver_id`
-			WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')
-		';
-		if ($memberIds && !empty($memberIds)) {
-			$query .= 'AND	tf.`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')';
+		if ($themeIds && !empty($themeIds)) {
+			$query = '
+				DELETE	tf.*
+				FROM		`fs_theme_follower` tf
+				JOIN		`fs_bezirk_has_theme` ht
+				ON			ht.`theme_id` = tf.`theme_id`
+				LEFT JOIN	`' . $foodsaverTableName . '` b
+				ON			b.`bezirk_id` = ht.`bezirk_id`
+				AND			b.`foodsaver_id` = tf.`foodsaver_id`
+				WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')
+			';
+			if ($memberIds && !empty($memberIds)) {
+				$query .= 'AND	tf.`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')';
+			}
+
+			$this->db->execute($query);
 		}
-
-		$this->db->execute($query);
 	}
 
 	public function getGroup(int $regionId): array
