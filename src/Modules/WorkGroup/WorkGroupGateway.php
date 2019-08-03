@@ -125,13 +125,14 @@ class WorkGroupGateway extends BaseGateway
 	}
 
 	/**
-	 * Removes the forum subscriptions for all deleted members in the region
+	 * Removes the forum subscriptions for all deleted members in the region.
 	 *
 	 * @param int $regionId id of the group
 	 * @param array $memberIds list of remaining members, or null to remove all
 	 * @param bool $leaders if the botschafter table should be used
 	 */
-	private function deleteSubscriptions(int $regionId, array $memberIds, bool $leaders) {
+	private function deleteSubscriptions(int $regionId, array $memberIds, bool $leaders)
+	{
 		$foodsaverTableName = $leaders ? 'fs_botschafter' : 'fs_foodsaver_has_bezirk';
 		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk' => $regionId]);
 
@@ -140,7 +141,7 @@ class WorkGroupGateway extends BaseGateway
 			FROM		`fs_theme_follower` tf
 			JOIN		`fs_bezirk_has_theme` ht
 			ON			ht.`theme_id` = tf.`theme_id`
-			LEFT JOIN	`'.$foodsaverTableName.'` b
+			LEFT JOIN	`' . $foodsaverTableName . '` b
 			ON			b.`bezirk_id` = ht.`bezirk_id`
 			AND			b.`foodsaver_id` = tf.`foodsaver_id`
 			WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')

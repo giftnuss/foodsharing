@@ -448,7 +448,8 @@ final class FoodsaverGateway extends BaseGateway
 	 * @param int $regionId id of the group
 	 * @param array $memberIds list of remaining members, or null to remove all
 	 */
-	private function deleteSubscriptions(int $regionId, array $memberIds) {
+	private function deleteSubscriptions(int $regionId, array $memberIds)
+	{
 		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk' => $regionId]);
 
 		$query = '
