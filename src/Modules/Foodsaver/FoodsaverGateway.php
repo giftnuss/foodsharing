@@ -439,7 +439,7 @@ final class FoodsaverGateway extends BaseGateway
 			}
 		}
 		$ids = implode(',', array_map('intval', $foodsaver_ids));
-		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids);
+		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids, false);
 		if ($ids) {
 			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($bezirk) {

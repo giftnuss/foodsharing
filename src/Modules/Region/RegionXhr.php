@@ -13,6 +13,7 @@ final class RegionXhr extends Control
 	private $responses;
 	private $foodsaverGateway;
 	private $forumGateway;
+	private $forumFollowerGateway;
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
@@ -23,11 +24,13 @@ final class RegionXhr extends Control
 		ForumPermissions $forumPermissions,
 		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		ForumFollowerGateway $forumFollowerGateway
 	) {
 		$this->model = $model;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
@@ -72,7 +75,7 @@ final class RegionXhr extends Control
 				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
 			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
-					if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
+					if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
 
 						foreach ($follower as $f) {

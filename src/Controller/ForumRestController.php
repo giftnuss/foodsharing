@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ForumPermissions;
@@ -18,6 +19,7 @@ class ForumRestController extends AbstractFOSRestController
 	private $session;
 	private $regionGateway;
 	private $forumGateway;
+	private $forumFollowerGateway;
 	private $forumPermissions;
 	private $forumService;
 	private $sanitizerService;
@@ -26,6 +28,7 @@ class ForumRestController extends AbstractFOSRestController
 		Session $session,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		SanitizerService $sanitizerService
@@ -33,6 +36,7 @@ class ForumRestController extends AbstractFOSRestController
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumService = $forumService;
 		$this->sanitizerService = $sanitizerService;
@@ -130,7 +134,7 @@ class ForumRestController extends AbstractFOSRestController
 		$thread = $this->normalizeThread($thread);
 		$posts = $this->forumGateway->listPosts($threadId);
 
-		$thread['isFollowing'] = $this->forumGateway->isFollowing($this->session->id(), $threadId);
+		$thread['isFollowing'] = $this->forumFollowerGateway->isFollowing($this->session->id(), $threadId);
 		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
 		$thread['posts'] = array_map(function ($post) {
 			return $this->normalizePost($post);
@@ -216,7 +220,7 @@ class ForumRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$this->forumGateway->followThread($this->session->id(), $threadId);
+		$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
 	}
@@ -226,7 +230,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function unfollowThreadAction($threadId)
 	{
-		$this->forumGateway->unfollowThread($this->session->id(), $threadId);
+		$this->forumFollowerGateway->unfollowThread($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
 	}
