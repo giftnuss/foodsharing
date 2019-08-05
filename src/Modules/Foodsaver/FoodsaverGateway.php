@@ -4,9 +4,21 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 final class FoodsaverGateway extends BaseGateway
 {
+	private $forumFollowerGateway;
+
+	public function __construct(
+		Database $db,
+		ForumFollowerGateway $forumFollowerGateway
+	) {
+		parent::__construct($db);
+		$this->forumFollowerGateway = $forumFollowerGateway;
+	}
+
 	public function getFoodsaver($bezirk_id)
 	{
 		$and = ' AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
@@ -427,7 +439,7 @@ final class FoodsaverGateway extends BaseGateway
 			}
 		}
 		$ids = implode(',', array_map('intval', $foodsaver_ids));
-		$this->deleteSubscriptions((int)$bezirk, $foodsaver_ids);
+		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids);
 		if ($ids) {
 			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($bezirk) {
@@ -440,34 +452,6 @@ final class FoodsaverGateway extends BaseGateway
 		}
 
 		return array($rows_ins, $rows_del);
-	}
-
-	/**
-	 * Removes the forum subscriptions for all deleted members in the region.
-	 *
-	 * @param int $regionId id of the group
-	 * @param array $memberIds list of remaining members, or null to remove all
-	 */
-	private function deleteSubscriptions(int $regionId, array $memberIds)
-	{
-		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $regionId]);
-		if ($themeIds && !empty($themeIds)) {
-			$query = '
-				DELETE	tf.*
-				FROM		`fs_theme_follower` tf
-				JOIN		`fs_bezirk_has_theme` ht
-				ON			ht.`theme_id` = tf.`theme_id`
-				LEFT JOIN	`fs_foodsaver_has_bezirk` b
-				ON			b.`bezirk_id` = ht.`bezirk_id`
-				AND			b.`foodsaver_id` = tf.`foodsaver_id`
-				WHERE		tf.`theme_id` IN (' . implode(',', array_map('intval', $themeIds)) . ')
-			';
-			if ($memberIds && !empty($memberIds)) {
-				$query .= 'AND	tf.`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')';
-			}
-
-			$this->db->execute($query);
-		}
 	}
 
 	public function listFoodsaverByRegion(int $regionId)
