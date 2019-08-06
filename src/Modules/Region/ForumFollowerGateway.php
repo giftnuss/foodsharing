@@ -47,6 +47,20 @@ class ForumFollowerGateway extends BaseGateway
 	}
 
 	/**
+	 * Removes the forum subscription for one foodsaver from the region or group.
+	 *
+	 * @param int $regionId id of the group
+	 * @param int $foodsaverId id of the foodsaver
+	 *
+	 * @throws \Exception
+	 */
+	public function deleteForumSubscription(int $regionId, int $foodsaverId): void
+	{
+		$themeIds = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $regionId]);
+		$this->db->delete('fs_theme_follower', ['theme_id' => $themeIds, 'foodsaver_id' => $foodsaverId]);
+	}
+
+	/**
 	 * Removes the forum subscriptions for all deleted members or ambassadors in the region or group.
 	 *
 	 * @param int $regionId id of the group

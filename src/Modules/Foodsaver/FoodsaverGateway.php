@@ -784,8 +784,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
 
-		$theme_ids = $this->db->fetchAllValuesByCriteria('fs_bezirk_has_theme', 'theme_id', ['bezirk_id' => $bezirk_id]);
-		$this->db->delete('fs_theme_follower', ['theme_id' => $theme_ids, 'foodsaver_id' => $foodsaver_id]);
+		$this->forumFollowerGateway->deleteForumSubscription($bezirk_id, $foodsaver_id);
 
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
 		if ($mainRegion_id === $bezirk_id) {
