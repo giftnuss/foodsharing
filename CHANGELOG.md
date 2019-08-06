@@ -39,8 +39,10 @@
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
 - Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 - Added Rest endpoint for fair share points !1012 @dthulke
+- Add backend logic for changing basket locations !1021 @alex.simm
 
 ## Bugfixes
+- Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
@@ -74,6 +76,8 @@
 - Return images attached to a wall post in the WallRestController !1013 @dthulke
 - Don't show forum updates from deleted users on dashboard !1011 #666 @alex.simm
 - Fixed role description for gender 'diverse' !1016 #674 @svenpascal
+- Fixed broken quiz after refactoring !1017 @svenpascal
+- Verify quiz session status without having a second learning break !1018 #673 @svenpascal
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -85,6 +89,7 @@
 - Refactored team page. Got rid of legacy methods !974 @jofranz
 - Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
+- Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

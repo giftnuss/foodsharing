@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -84,25 +85,40 @@ class QuizGateway extends BaseGateway
 		return $quiz ? $quiz['name'] : '';
 	}
 
-	public function getQuizStatus(int $quizId, int $fsId): int
+	/**
+	 *	Determines a user's current quiz status.
+	 *
+	 *	@param int $quizId Quiz level/role
+	 *	@param int $fsId Foodsaver ID
+	 *
+	 *	@return array indicates the status of type DBConstants\Quiz\QuizStatus ('status') and a possible waiting time in days ('wait')
+	 */
+	public function getQuizStatus(int $quizId, int $fsId): array
 	{
 		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
+		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
 
+		$result = ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
+
+		$now = Carbon::now();
 		if ($quizSessionStatus['times'] == 0) {
-			return QuizStatus::NEVER_TRIED;
+			$result['status'] = QuizStatus::NEVER_TRIED;
 		} elseif ($quizSessionStatus['running'] > 0) {
-			return QuizStatus::RUNNING;
+			$result['status'] = QuizStatus::RUNNING;
 		} elseif ($quizSessionStatus['passed'] > 0) {
-			return QuizStatus::PASSED;
+			$result['status'] = QuizStatus::PASSED;
 		} elseif ($quizSessionStatus['failed'] < 3) {
-			return QuizStatus::FAILED;
-		} elseif ($quizSessionStatus['failed'] == 3 && (time() - $quizSessionStatus['last_try']) < (86400 * 30)) {
-			return QuizStatus::PAUSE;
-		} elseif ($quizSessionStatus['failed'] >= 3 && $quizSessionStatus['failed'] < 5 && (time() - $quizSessionStatus['last_try']) >= (86400 * 14)) {
-			return QuizStatus::PAUSE_ELAPSED;
+			$result['status'] = QuizStatus::FAILED;
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->isBefore($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE;
+			$result['wait'] = $now->diffInDays($pauseEnd);
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->greaterThanOrEqualTo($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
+		} elseif ($quizSessionStatus['failed'] == 4) {
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
 		}
 
-		return QuizStatus::DISQUALIFIED;
+		return $result;
 	}
 
 	public function hasPassedQuiz(int $fsId, int $quizId): bool
@@ -164,7 +180,7 @@ class QuizGateway extends BaseGateway
 
 				WHERE
 					q.id = :questionId
-		', ['questionId' => $questionId]);
+		', [':questionId' => $questionId]);
 	}
 
 	public function getRandomQuestions(int $count, int $failurePoints, int $quizId): array
@@ -189,10 +205,10 @@ class QuizGateway extends BaseGateway
 				RAND()
 
 			LIMIT :count
-		', ['quizId' => $quizId, 'fp' => $failurePoints, 'count' => $count]);
+		', [':quizId' => $quizId, ':fp' => $failurePoints, ':count' => $count]);
 	}
 
-	public function getQuestionMetas(int $quizId): array
+	public function getQuestionCountByFailurePoints(int $quizId): array
 	{
 		$questions = $this->db->fetchAll('
 			SELECT
@@ -207,10 +223,11 @@ class QuizGateway extends BaseGateway
 
 			WHERE
 				hq.quiz_id = :quizId
-		', ['quizId' => $quizId]);
+		', [':quizId' => $quizId]);
 		if ($questions) {
-			$outmeta = array();
-			$meta = $this->db->fetchAll('
+			$result = [];
+
+			$questionCounts = $this->db->fetchAll('
 				SELECT 	hq.fp, COUNT(q.id) AS `count`
 				FROM fs_question q
 					LEFT JOIN fs_question_has_quiz hq
@@ -221,19 +238,17 @@ class QuizGateway extends BaseGateway
 
 				GROUP BY
 					hq.fp
-			', ['quizId' => $quizId]);
-			if ($meta) {
-				foreach ($meta as $m) {
-					if (!isset($outmeta[$m['fp']])) {
-						$outmeta[$m['fp']] = $m['count'];
+			', [':quizId' => $quizId]);
+			if ($questionCounts) {
+				foreach ($questionCounts as $counts) {
+					$failurePoints = $counts['fp'] ? $counts['fp'] : 0;
+					if (!isset($result[$failurePoints])) {
+						$result[$failurePoints] = $counts['count'];
 					}
 				}
 			}
 
-			return array(
-				'meta' => $outmeta,
-				'question' => $questions
-			);
+			return $result;
 		}
 
 		return [];
@@ -289,7 +304,7 @@ class QuizGateway extends BaseGateway
 			SELECT COUNT(question_id)
 			FROM fs_question_has_wallpost
 			WHERE question_id = :questionId
-		', ['questionId' => $questionId]);
+		', [':questionId' => $questionId]);
 	}
 
 	public function getRightQuestions(int $quizId): array
@@ -332,7 +347,7 @@ class QuizGateway extends BaseGateway
 
 			WHERE
 				hq.quiz_id = :quizId
-		', ['quizId' => $quizId]);
+		', [':quizId' => $quizId]);
 	}
 
 	public function addAnswer(int $questionId, string $text, string $explanation, int $right): int
