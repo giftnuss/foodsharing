@@ -347,11 +347,13 @@ final class BasketRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Updates the description of an existing basket. The description must not be empty.
-	 * Returns the updated basket.
+	 * Updates the description of an existing basket. The description must not be empty. If the location
+	 * is not given or invalid it falls back to the user's home. Returns the updated basket.
 	 *
 	 * @Rest\Put("baskets/{basketId}", requirements={"basketId" = "\d+"})
 	 * @Rest\RequestParam(name="description", nullable=false)
+	 * @Rest\RequestParam(name="lat", nullable=true)
+	 * @Rest\RequestParam(name="lon", nullable=true)
 	 *
 	 * @param int $basketId ID of an existing basket
 	 * @param ParamFetcher $paramFetcher
@@ -372,8 +374,11 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'The description must not be empty.');
 		}
 
+		$location = $this->fetchLocationOrUserHome($paramFetcher);
+
 		//update basket
-		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $this->session->id());
+		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
+			$location[self::LON], $this->session->id());
 
 		$basket = $this->gateway->getBasket($basketId);
 		$data = $this->normalizeBasket($basket);
@@ -425,7 +430,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		//update basket
 		$basket[self::PICTURE] = $picname;
-		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
+		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $basket[self::LAT], $basket[self::LON], $this->session->id());
 
 		$data = $this->normalizeBasket($basket);
 
@@ -452,7 +457,7 @@ final class BasketRestController extends AbstractFOSRestController
 		if (isset($basket[self::PICTURE])) {
 			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
-			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
+			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $basket[self::LAT], $basket[self::LON], $this->session->id());
 		}
 
 		$basket = $this->normalizeBasket($basket);

@@ -361,7 +361,7 @@ class QuizView extends View
 		return $out;
 	}
 
-	public function initQuiz($quiz, $page)
+	public function initQuizPage(array $page): string
 	{
 		return '<h1>' . $page['title'] . '</h1>' . $page['body'];
 	}
