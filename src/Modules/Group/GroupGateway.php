@@ -7,26 +7,26 @@ use Foodsharing\Modules\Core\BaseGateway;
 /* Group gateway meant to collect methods common for regions as well as working groups */
 class GroupGateway extends BaseGateway
 {
-	public function deleteGroup($id)
+	public function deleteGroup($groupId)
 	{
 		$parent_id = $this->db->fetchValueByCriteria(
 			'fs_bezirk',
 			'parent_id',
-			['id' => $id]
+			['id' => $groupId]
 		);
 
 		$this->db->update(
 			'fs_foodsaver',
 			['bezirk_id' => null],
-			['bezirk_id' => $id]
+			['bezirk_id' => $groupId]
 		);
 		$this->db->update(
 			'fs_bezirk',
 			['parent_id' => 0],
-			['parent_id' => $id]
+			['parent_id' => $groupId]
 		);
 
-		$this->db->delete('fs_bezirk', ['id' => $id]);
+		$this->db->delete('fs_bezirk', ['id' => $groupId]);
 
 		$count = $this->db->fetchValue('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = :id', [':id' => $parent_id]);
 
