@@ -80,13 +80,13 @@ class StatisticsGateway extends BaseGateway
 	    FROM
 	      fs_abholer
 			WHERE
-				CAST(`date` as date) > DATE_ADD(CURDATE(), INTERVAL -29 DAY) AND
+				CAST(`date` as date) > DATE_ADD(CURDATE(), INTERVAL -100 DAY) AND
 				CAST(`date` as date) < CURDATE()
 	  ';
 		$fetchCount = (int)$this->db->fetch($q)['fetchCount'];
 		// time range to average over in days
-		$diffDays = 28;
+		$diffDays = 99;
 		// divide number of fetches by time difference
-		return (int)$fetchCount / $diffDays;
+		return (int)($fetchCount / $diffDays);
 	}
 }
