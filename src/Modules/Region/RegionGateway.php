@@ -518,36 +518,36 @@ class RegionGateway extends BaseGateway
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 
-	public function genderCountRegion(int $districtId): array
+	public function genderCountRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(
 			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
 					from fs_foodsaver_has_bezirk fb
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
-					where fb.bezirk_id = :id
+					where fb.bezirk_id = :regionId
 					and fs.deleted_at is null
 					group by geschlecht',
-			[':id' => $districtId]
+			[':regionId' => $regionId]
 		);
 	}
 
-	public function genderCountHomeRegion(int $districtId): array
+	public function genderCountHomeRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(
 			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
 					from fs_foodsaver fs
-					where fs.bezirk_id = :id
+					where fs.bezirk_id = :regionId
 					and fs.deleted_at is null
 					group by geschlecht',
-			[':id' => $districtId]
+			[':regionId' => $regionId]
 		);
 	}
 
-	public function regionPickupsByDate(int $districtId, $dateFormat): array
+	public function regionPickupsByDate(int $regiontId, $dateFormat): array
 	{
-		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($districtId)));
+		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($regiontId)));
 
 		return $this->db->fetchAll(
 			'select 

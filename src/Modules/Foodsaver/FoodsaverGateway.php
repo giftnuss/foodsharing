@@ -165,9 +165,9 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE fs.id = `fs_botschafter`.`foodsaver_id`
 
-			AND `fs_botschafter`.`bezirk_id` = :id
+			AND `fs_botschafter`.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
@@ -255,9 +255,9 @@ final class FoodsaverGateway extends BaseGateway
 			AS `name`,`plz`,`stadt`,`anschrift`,`photo`
 			FROM `fs_foodsaver`
 			WHERE `active` = 1
-			AND `bezirk_id` = :id
+			AND `bezirk_id` = :regionId
 			AND `lat` != "" ',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
