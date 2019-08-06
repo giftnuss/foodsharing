@@ -33,8 +33,8 @@ class RegionGateway extends BaseGateway
 					`parent_id`,
 					`mailbox_id`
 			FROM 	`fs_bezirk`
-			WHERE 	`id` = :id',
-			[':id' => $regionId]
+			WHERE 	`id` = :regionId',
+			[':regionId' => $regionId]
 		);
 	}
 
@@ -465,7 +465,7 @@ class RegionGateway extends BaseGateway
 
 	public function getRegionName($regionId)
 	{
-		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :id', [':id' => $regionId]);
+		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :regionId', [':regionId' => $regionId]);
 	}
 
 	public function addMember($fsId, $regionId)
