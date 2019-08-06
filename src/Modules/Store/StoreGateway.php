@@ -497,7 +497,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $queryResult;
 	}
 
-	public function deleteAllDatesFromAFoodsaver($fs_id)
+	public function deleteAllDatesFromAFoodsaver(int $fs_id)
 	{
 		$storeIdsThatWillBeDeleted = $this->db->fetchAllValuesByCriteria(
 			'fs_abholer',
