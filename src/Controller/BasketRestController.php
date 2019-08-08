@@ -374,14 +374,14 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'The description must not be empty.');
 		}
 
-		$location = $this->fetchLocationOrUserHome($paramFetcher);
+		$location = $this->fetchLocationOrUserHome($paramFetcher, [self::LAT => $basket[self::LAT], self::LON => $basket[self::LON]]);
 
 		//update basket
 		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
 			$location[self::LON], $this->session->id());
 
 		$basket = $this->gateway->getBasket($basketId);
-		$data = $this->normalizeBasket($basket, [$basket[self::LAT], $basket[self::LON]]);
+		$data = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $data], 200));
 	}
@@ -508,8 +508,7 @@ final class BasketRestController extends AbstractFOSRestController
 		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
 			if ($defaultLocation !== null) {
 				return $defaultLocation;
-			}
-			else {
+			} else {
 				// find user's location
 				$loc = $this->session->getLocation();
 				$lat = $loc[self::LAT];

@@ -183,5 +183,11 @@ class BasketApiCest
 		]);
 		$I->assertEquals($lat, $I->grabDataFromResponseByJsonPath('basket.lat')[0], '', 0.1);
 		$I->assertEquals($lon, $I->grabDataFromResponseByJsonPath('basket.lon')[0], '', 0.1);
+
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], [
+			'description' => $testDescription
+		]);
+		$I->assertEquals($lat, $I->grabDataFromResponseByJsonPath('basket.lat')[0], '', 0.1);
+		$I->assertEquals($lon, $I->grabDataFromResponseByJsonPath('basket.lon')[0], '', 0.1);
 	}
 }
