@@ -489,7 +489,7 @@ final class BasketRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Finds returns a location from the param fetcher in the 'lat' and 'lon' fields. If none
+	 * Returns a location from the param fetcher in the 'lat' and 'lon' fields. If none
 	 * is given, it returns the default location or the user's home address, if the default
 	 * location is null.
 	 *
