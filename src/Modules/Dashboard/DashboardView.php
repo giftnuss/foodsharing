@@ -127,7 +127,7 @@ class DashboardView extends View
 			text-overflow: unset;
     		white-space: inherit;
 		}
-		
+
 		@media (max-width: 900px)
 		{
 			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
@@ -488,6 +488,16 @@ class DashboardView extends View
 
 	public function u_invites($invites)
 	{
+		$this->pageHelper->addStyle('
+			@media (max-width: 410px)
+			{
+				.top_margin_on_small_screen 
+				{
+					margin-top: 45px;
+				}
+			}
+		');
+
 		$out = '';
 		foreach ($invites as $i) {
 			$out .= '
@@ -505,9 +515,10 @@ class DashboardView extends View
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-	
-					<div>
-						<a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a> <a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a> <a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a>
+					<div class="top_margin_on_small_screen">
+						<a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a> 
+						<a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a> 
+						<a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a>
 					</div>
 				</div>
 				
