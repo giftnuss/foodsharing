@@ -1,5 +1,7 @@
 # Unreleased
 - changed icons on statistic page !538 @henrikhertler
+- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
+
 ## Major changes
 
 ## Features
