@@ -34,7 +34,7 @@
 - new chat design with badges and layout changed !928 @kniggerich
 - Disabled new food basket comments while showing pre existing ones for another while during migration period until there are no comments left !969 #534 @jofranz
 - Add my own last date of pickup to particular store info box to help stores with pickup rules/limitations !893 @jofranz
-- Show last event wall posts on the dashboard update-section for events which got not declined #227 !417 @fs_k @jofranz 
+- Show last event wall posts on the dashboard update-section for events which got not declined #227 !417 @fs_k @jofranz
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
@@ -62,7 +62,7 @@
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
 - Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
-- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
@@ -70,10 +70,11 @@
 - Fixed saving an edited quiz answer !1006 #408 @svenpascal
 - Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
-- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz 
+- Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 - Return images attached to a wall post in the WallRestController !1013 @dthulke
 - Don't show forum updates from deleted users on dashboard !1011 #666 @alex.simm
+- Fixed role description for gender 'diverse' !1016 #674 @svenpascal
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -95,7 +96,7 @@
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
 - updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
-- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies 
+- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
