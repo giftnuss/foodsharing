@@ -1,3 +1,7 @@
+# 2020-03-26 Hotfix 
+- Use WebSocket connection to determine whether a user is online or not !734 @janopae
+
+
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
