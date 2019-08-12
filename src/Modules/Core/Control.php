@@ -11,7 +11,6 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use ReflectionClass;
 
 abstract class Control
@@ -52,16 +51,6 @@ abstract class Control
 	private $twig;
 
 	/**
-	 * @var Db
-	 */
-	private $legacyDb;
-
-	/**
-	 * @var FoodsaverGateway
-	 */
-	private $foodsaverGateway;
-
-	/**
 	 * @var InfluxMetrics
 	 */
 	private $metrics;
@@ -92,8 +81,6 @@ abstract class Control
 		$this->mem = $container->get(Mem::class);
 		$this->session = $container->get(Session::class);
 		$this->v_utils = $container->get(Utils::class);
-		$this->legacyDb = $container->get(Db::class);
-		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageHelper = $container->get(PageHelper::class);
 		$this->emailHelper = $container->get(EmailHelper::class);
@@ -153,7 +140,6 @@ abstract class Control
 				}
 			}
 		}
-		$this->mem->updateActivity($this->session->id());
 		$this->metrics->addPageStatData(['controller' => $className]);
 	}
 
@@ -457,32 +443,6 @@ abstract class Control
 		}
 
 		return false;
-	}
-
-	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
-	{
-		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
-		if ((int)$info > 0) {
-			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
-			}
-
-			if (!$this->mem->userIsActive($recip_id)) {
-				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
-					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
-					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
-
-					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
-						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $sender['name'],
-						'name' => $foodsaver['name'],
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
-					));
-				}
-			}
-		}
 	}
 
 	public function appout($data)

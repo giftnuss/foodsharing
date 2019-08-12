@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
@@ -12,12 +13,14 @@ final class ProfileGateway extends BaseGateway
 	private $fs_id;
 	private $session;
 	private $mem;
+	private $webSocketSender;
 
-	public function __construct(Database $db, Mem $mem, Session $session)
+	public function __construct(Database $db, Mem $mem, Session $session, WebSocketSender $webSocketSender)
 	{
 		parent::__construct($db);
 		$this->mem = $mem;
 		$this->session = $session;
+		$this->webSocketSender = $webSocketSender;
 	}
 
 	public function setFsId(int $id): void
@@ -90,7 +93,7 @@ final class ProfileGateway extends BaseGateway
 		} catch (\Exception $e) {
 			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
-		$data['online'] = $this->mem->userIsActive((int)$this->fs_id);
+		$data['online'] = $this->webSocketSender->isUserOnline((int)$this->fs_id);
 
 		$stm = '
 				SELECT 	fs.id,

@@ -3,7 +3,8 @@
 ## Major changes
 
 ## Features
-- Add Web Push Notifications #336 @janopae
+- Add Web Push Notifications #336 !734 @janopae
+- Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Added Rest endpoint for nearby baskets !875 @alex.simm
 - updated bootstrap-vue to v2.0.0-rc20
 - Added Rest endpoint for the current user's profile !880 @dthulke

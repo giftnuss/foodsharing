@@ -5,10 +5,12 @@ namespace Foodsharing\Modules\Basket;
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Services\ImageService;
@@ -17,24 +19,30 @@ class BasketXhr extends Control
 {
 	private $status;
 	private $basketGateway;
+	private $foodsaverGateway;
 	private $messageModel;
 	private $timeHelper;
 	private $imageService;
+	private $webSocketSender;
 
 	public function __construct(
 		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
+		FoodsaverGateway $foodsaverGateway,
 		MessageModel $messageModel,
 		TimeHelper $timeHelper,
-		ImageService $imageService
+		ImageService $imageService,
+		WebSocketSender $webSocketSender
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
+		$this->webSocketSender = $webSocketSender;
 
 		$this->status = [
 			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
@@ -427,6 +435,32 @@ class BasketXhr extends Control
 			'status' => 1,
 			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
 		];
+	}
+
+	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
+	{
+		$info = $this->model->getVal('infomail_message', 'foodsaver', $recip_id);
+		if ((int)$info > 0) {
+			if (!isset($_SESSION['lastMailMessage'])) {
+				$_SESSION['lastMailMessage'] = array();
+			}
+
+			if (!$this->webSocketSender->isUserOnline($recip_id)) {
+				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
+					$_SESSION['lastMailMessage'][$recip_id] = time();
+					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
+					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
+
+					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
+						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'sender' => $sender['name'],
+						'name' => $foodsaver['name'],
+						'message' => $msg,
+						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
+					));
+				}
+			}
+		}
 	}
 
 	public function infobar(): void

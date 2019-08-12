@@ -2,9 +2,16 @@
 
 namespace Foodsharing\Lib;
 
+/**
+ * This class is for handling connections to our WebSocket server.
+ *
+ * Because it has to handle many connections at the same time, it is written in JavaScript/Node.js and not in PHP.
+ * For historical reasons, the docker container containing our WebSocket server has been called "chat". You can find a
+ * brief description of its API in chat/server.js.
+ */
 class WebSocketSender
 {
-	public function sendSock($fsid, $app, $method, $options)
+	public function sendSock(int $fsid, string $app, string $method, array $options): void
 	{
 		$query = http_build_query(array(
 			'u' => $fsid, // user id
@@ -15,7 +22,7 @@ class WebSocketSender
 		file_get_contents(SOCK_URL . '?' . $query);
 	}
 
-	public function sendSockMulti($fsids, $app, $method, $options)
+	public function sendSockMulti(array $fsids, string $app, string $method, array $options): void
 	{
 		$query = http_build_query(array(
 			'us' => join(',', $fsids), // user ids
@@ -24,5 +31,16 @@ class WebSocketSender
 			'o' => json_encode($options) // options
 		));
 		file_get_contents(SOCK_URL . '?' . $query);
+	}
+
+	public function isUserOnline(int $fsid): bool
+	{
+		$userIsOnline = file_get_contents(SOCK_URL . 'is-connected?u=' . $fsid);
+
+		if ($userIsOnline === 'true') {
+			return true;
+		}
+
+		return false;
 	}
 }

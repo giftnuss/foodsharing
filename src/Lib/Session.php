@@ -397,7 +397,6 @@ class Session
 			$fs_id = $this->id();
 		}
 
-		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
 			$this->routeHelper->goPage('logout');

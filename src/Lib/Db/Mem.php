@@ -140,55 +140,8 @@ class Mem
 		return $this->del('pc-' . $page . ':' . $fsId);
 	}
 
-	/**
-	 * Method to check users online status by checking timestamp from memcahce.
-	 *
-	 * @param int $fs_id
-	 *
-	 * @return bool
-	 */
-	public function userOnline($fs_id)
-	{
-		if ($time = $this->user($fs_id, 'active')) {
-			if ((time() - $time) < 600) {
-				return true;
-			}
-		}
-		/*
-		 * free memcache from userdata
-		 */
-		$this->userDel($fs_id, 'lastMailMessage');
-		$this->userDel($fs_id, 'active');
-
-		return false;
-	}
-
-	/**
-	 * Method to check users online status by checking timestamp from memcache.
-	 *
-	 * @param int $fs_id
-	 *
-	 * @return bool
-	 */
-	public function userIsActive($fs_id)
-	{
-		if ($time = $this->user($fs_id, 'active')) {
-			return !((time() - $time) > 600);
-		}
-
-		return false;
-	}
-
-	public function updateActivity($fs_id = null)
-	{
-		if ($fs_id) {
-			$this->userSet($fs_id, 'active', time());
-		}
-	}
-
 	public function logout($fs_id)
 	{
-		$this->userDel($fs_id, 'active');
 		$this->userDel($fs_id, 'lastMailMessage');
 		$this->userRemoveSession($fs_id, session_id());
 	}
