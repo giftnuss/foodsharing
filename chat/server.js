@@ -113,7 +113,7 @@ const parseRequestURL = (req) => {
  *    arguments:
  *      u: int (required) - foodsaver id
  */
-const inputServer = http.createServer(async (req, res) => {
+const inputServer = http.createServer((req, res) => {
   const url = parseRequestURL(req)
   if (url.pathname === '/stats') {
     res.writeHead(200)
