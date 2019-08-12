@@ -139,7 +139,7 @@ const inputServer = http.createServer((req, res) => {
       }
 
       res.writeHead(200)
-      for (let sessionId of sessionIds) {
+      for (const sessionId of sessionIds) {
         if (sessionId in connectedClients) {
           res.end('true') // there is at least one session for userId
         }
