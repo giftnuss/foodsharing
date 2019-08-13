@@ -183,7 +183,7 @@ final class MessageXhr extends Control
 			 */
 			$pushNotification = new MessagePushNotification(
 				$this->session->user('name'),
-				$body,
+				html_entity_decode($body),
 				new \DateTime(),
 				$conversationId,
 				count($members) > 2 ? $this->messageGateway->getProperConversationNameForFoodsaver($member['id'], $conversationId) : null
