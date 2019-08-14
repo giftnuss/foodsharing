@@ -309,8 +309,9 @@ class XhrMethods
 		))
 		) {
 			$betrieb = $this->model->getVal('name', 'betrieb', $storeId);
+			$teamArray = explode(',', $data['team']);
 
-			$this->bellGateway->addBell($data['team'], 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
+			$this->bellGateway->addBell($teamArray, 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
 				'href' => '/?page=fsbetrieb&id=' . $storeId
 			), array(
 				'user' => $this->session->user('name'),
