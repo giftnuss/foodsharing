@@ -49,7 +49,9 @@ class StatisticsView extends View
 		<div id="stat_whole">
 			<div class="stat_item">
 					<div class="stat_badge">
-						<div class="stat_icon fetchweight"></div>
+						<div class="stat_icon fetchweight">
+							<i class="fas fa-apple-alt"></i>
+						</div>
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</h4>
@@ -58,7 +60,9 @@ class StatisticsView extends View
 			</div>
 			<div class="stat_item">
 					<div class="stat_badge">
-						<div class="stat_icon fetchcount"></div>
+						<div class="stat_icon fetchcount">
+							<i class="fas fa-bicycle"></i>
+						</div>
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['fetchcount'], 0, ',', '.') . '</h4>
@@ -67,7 +71,9 @@ class StatisticsView extends View
 			</div><br />
 			<div class="stat_item">
 					<div class="stat_badge">
-						<div class="stat_icon korpcount"></div>
+						<div class="stat_icon coorpcount">
+							<i class="fas fa-store-alt"></i>
+						</div>
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['cooperationscount'], 0, ',', '.') . '</h4>
@@ -76,7 +82,9 @@ class StatisticsView extends View
 			</div>
 			<div class="stat_item">
 					<div class="stat_badge">
-						<div class="stat_icon fscount"></div>
+						<div class="stat_icon fscount">
+							<i class="fas fa-user-check"></i>	
+						</div>
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($stat['fscount'], 0, ',', '.') . '</h4>
@@ -84,12 +92,22 @@ class StatisticsView extends View
 					</div>
 			</div><br />
 			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fscount2">
+							<i class="fas fa-users"></i>	
+						</div>
+					</div>
 					<div class="stat_text">
 						<h4>' . number_format($foodsharerCount, 0, ',', '.') . '</h4>
 						<p>Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit.</p>
 					</div>
 			</div>
 			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon dailyfetchcount">
+							<i class="fas fa-bicycle"></i>	
+						</div>
+					</div>
 					<div class="stat_text">
 						<h4>' . number_format($avgDailyFetchCount, 0, ',', '.') . '</h4>
 						<p>' . $this->translationHelper->s('average_daily_fetches') . '</p>
