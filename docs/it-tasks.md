@@ -1,14 +1,16 @@
 # The foodsharing-IT is looking for helpers 💻🔧
+[Eine **Deutsche Version** ist hier zu finden.] (it-tasks_DE.md)
+
 Dear potentially interested people (f/m/d),
 
-we are pleased that you are interested in this topic. We at foodsharing are an initiative to fight food waste: https://foodsharing.de/ueber-uns
+we are pleased that you are interested in this topic. We at foodsharing are an initiative to fight food waste: https://foodsharing.de/ueber-uns (link to page in German)
 Our homepage is the central tool of our initiative. This platform enables the entire networking among each other, the common work on different topics and last but not least the organisation of all our food rescues.
 
-What many might not know: Currently we have **260.666** 260,666 registered accounts and send out hundreds of thousands of e-mails every month. A giant apparatus. Around **58.112** food savers are organised via the homepage, and many hundreds of ambassadors (Botschafter) administer a wide variety of regions throughout the German-speaking world.
-**On the other hand, there are on average only 4-5 programmers.**. That's why we want to launch a new call with this refreshed post in June 2019.
+What many might not know: Currently we more than **270.000** registered accounts and send out hundreds of thousands of emails every month. A giant apparatus. Around **62.000** food savers are organised via the homepage, and many hundreds of ambassadors (Botschafter) administer a wide variety of regions throughout the German-speaking world.
+**On the other hand, there are on average only 5 programmers.**. That's why we want to launch a new call with this refreshed post in June 2019.
 
 ## Have we gotten you interested?
-Feel free to contact us on Slack (https://slackin.yunity.org) in the channel/group chat **#foodsharing-dev or send us an email to [it@foodsharing.network](mailto:it@foodsharing.network)** so that we can find together some possible tasks and fields of activity around the topics listed below for you. Should these two ways of contact keep you away, you can also write a message to  [Peter](https://foodsharing.de/profile/116481 "Peter's Profile") via the website. We are a great team and so far we have found a task for everyone who wanted to help!
+Feel free to contact us on Slack (https://slackin.yunity.org) in the channel/group chat **#foodsharing-dev or send us an email to [it@foodsharing.network](mailto:it@foodsharing.network)** so that we can find together some possible tasks and fields of activity around the topics listed below for you. Should these two ways of contact keep you away, you can also write a message to [Peter](https://foodsharing.de/profile/116481 "Peter's profile") via the website. We are a great team and so far we have found a task for everyone who wanted to help.
 
 ## Where are all the volunteers with IT skills?
 
@@ -16,7 +18,7 @@ We have so many highly active and committed volunteers in our marvellous project
 
 ## What do we need?
 
-### Programmers!
+### Programmers
 - Android Programmers (native)
 - iOS programmers (native)
 - web developers
@@ -36,6 +38,9 @@ We have so many highly active and committed volunteers in our marvellous project
 - Technical Editors
 - recruiters
 
+
+## How do we find more supporters?
+
 Ask around in your district: Inside foodsharing, but also outside. There are certainly people who would like to get involved, but have no desire or time for our usual food rescue program. You can also advertise volunteer positions or search for interested people at information events. You'll be surprised how many people can program these days. Help us motivate and convince these people.
 
 ### What is there to do?
@@ -53,8 +58,8 @@ Depending on the motivation you bring along, there will certainly be a task for 
 ### How can you get involved?
 
 As already said, you can do some good advertising for our IT and send the link to this information here. But of course it would be especially nice to have **you** here:
-1. Have a look around on our [blog](https://devblog.foodsharing.de "foodsharing developer's blog") or in our [Contribution Guide](https://devdocs.foodsharing.network/contributing.html "foodsharing contributer's guide")!
-2. Have a look at the long list of our [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing issues on GitLab")! Some of them are specially marked for beginners!
+1. Have a look around on our [blog](https://devblog.foodsharing.de "foodsharing developer's blog") or in our [Contribution Guide](https://devdocs.foodsharing.network/contributing.html "foodsharing contributer's guide").
+2. Have a look at the long list of our [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing issues on GitLab"). Some of them are specially marked for beginners.
 3. We are especially happy if you drop by in our [Slack Chat](https://slackin.yunity.org "programmer's chat") and we find together with you possible tasks and fields of activity in IT for you in the channel *#foodsharing-dev*.
 4. If you are unsure or don't understand the English programmer pages, you are welcome to send us an email or approach [Peter](https://foodsharing.de/profile/116481 "Peter's profile"). We’ll try to help you. 
 
@@ -62,7 +67,7 @@ We would also be happy to receive an email to [it@foodsharing.network](mailto:it
 
 
 ## Isn't there some kind of nerdy listing in tech speak that states, what is needed?
-But of course!
+But of course:
 
 ### Website Front- and Backend
 - PHP (Symfony 4)
@@ -71,7 +76,7 @@ But of course!
 - CSS (Bootstrap)
 - MySQL
 - RESTful APIs
-- git
+- Git
 - Docker Compose development environment
 - Codeception for Unit-, API-, and Acceptance testing (with Selenium)
 - GitLab CI for tests and automatic deployment (with php deployer)
