@@ -10,7 +10,7 @@ import { expose } from '@/utils'
 import $ from 'jquery'
 import {
   ajax,
-  pulseError,
+  pulseError, pulseInfo,
   showLoader,
   hideLoader,
   GET
@@ -176,7 +176,7 @@ $('.timetable').on('keyup', '.fetchercount', function () {
     if (val == 0) {
       val = 1
     } else if (val > 2) {
-      pulseError('Du hast mehrere Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nur so viele Abholer wie nötig</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
+      pulseInfo(i18n('max_2_foodsaver'), {
         sticky: true
       })
     }

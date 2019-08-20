@@ -67,6 +67,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
+$g_lang['max_2_foodsaver'] = 'Du hast mehr als zwei Personen zum Abholen angegeben.<br />Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab! Zusätzlich benötigte Helfer_innen können mit Fahrradanhänger o. ä. außer Sichtweite des Betriebes warten.';
 $g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diesen Betrieb geben.';
 $g_lang['menge'] = 'Abholmenge im Schnitt';
 $g_lang['verantwortlicher_must_be'] = 'Es muss mindestens einen Verantwortlichen für jeden Betrieb geben!';
