@@ -180,11 +180,11 @@ class StorePermissions
 	public function mayChatWithRegularTeam(array $store): bool
 	{
 		return (!$store['jumper'] || $store['verantwortlich'])
-			&& !is_null($store['team_conversation_id']);
+			&& $store['team_conversation_id'] !== null;
 	}
 
 	public function mayChatWithJumperWaitingTeam(array $store): bool
 	{
-		return $store['verantwortlich'] && !is_null($store['springer_conversation_id']);
+		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
 	}
 }

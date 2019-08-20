@@ -92,6 +92,6 @@ $g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt 
 $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
 $g_lang['my_last_pickup'] = 'Meine letzte Abholung';
 $g_lang['prefix_Ago'] = 'Vor';
-$g_lang['Days'] = 'Tagen';
-$g_lang['chatWithRegularTeam'] = 'Nachricht ans Team';
-$g_lang['chatWithJumperWaitingTeam'] = 'Nachricht an Springer';
+$g_lang['days'] = 'Tagen';
+$g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
+$g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';

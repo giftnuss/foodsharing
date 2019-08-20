@@ -161,7 +161,7 @@ class StoreUserControl extends Control
 					if ($fs['id'] === $this->session->id() && $fs['last_fetch'] != null) {
 						$lastFetchDate = Carbon::createFromTimestamp($fs['last_fetch']);
 						$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastFetchDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
-								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
+								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('days') . ')');
 						break;
 					}
 				}
@@ -179,11 +179,11 @@ class StoreUserControl extends Control
 				$menu = array();
 
 				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
-					$menu[] = array('name' => $this->translationHelper->s('chatWithRegularTeam'), 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
+					$menu[] = array('name' => $this->translationHelper->s('chat_with_regular_team'), 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 				}
 
 				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
-					$menu[] = array('name' => $this->translationHelper->s('chatWithJumperWaitingTeam'), 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
+					$menu[] = array('name' => $this->translationHelper->s('chat_with_jumper_waiting_team'), 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
 				}
 
 				if ($this->storePermissions->mayEditStore($store['id'])) {
