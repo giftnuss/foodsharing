@@ -108,27 +108,27 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $thread_id]);
 	}
 
-	public function addThread($fs_id, $bezirk_id, $title, $body, $isActive, $bot_theme = false)
+	public function addThread($foodsaverId, $regionId, $title, $body, $isActive, $ambassadorForum = false)
 	{
-		$bot_theme_v = $bot_theme ? 1 : 0;
-		$thread_id = $this->db->insert('fs_theme', [
-			'foodsaver_id' => $fs_id,
+		$isAmbassadorForum = $ambassadorForum ? 1 : 0;
+		$threadId = $this->db->insert('fs_theme', [
+			'foodsaver_id' => $foodsaverId,
 			'name' => $title,
 			'time' => date('Y-m-d H:i:s'),
 			'active' => $isActive,
 		]);
 
-		$this->followThread($fs_id, $thread_id);
+		$this->followThread($foodsaverId, $threadId);
 
 		$this->db->insert('fs_bezirk_has_theme', [
-			'bezirk_id' => $bezirk_id,
-			'theme_id' => $thread_id,
-			'bot_theme' => $bot_theme_v
+			'bezirk_id' => $regionId,
+			'theme_id' => $threadId,
+			'bot_theme' => $isAmbassadorForum
 		]);
 
-		$this->addPost($fs_id, $thread_id, $body);
+		$this->addPost($foodsaverId, $threadId, $body);
 
-		return $thread_id;
+		return $threadId;
 	}
 
 	public function activateThread($thread_id)

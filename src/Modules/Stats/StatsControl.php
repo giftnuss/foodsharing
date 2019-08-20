@@ -29,9 +29,9 @@ class StatsControl extends ConsoleControl
 	{
 		self::info('Statistik Auswertung für Foodsaver');
 
-		if ($fsids = $this->model->getFoodsaverIds()) {
-			foreach ($fsids as $fsid) {
-				$stat_gerettet = $this->model->getGerettet($fsid);
+		if ($allFsIds = $this->model->getAllFoodsaverIds()) {
+			foreach ($allFsIds as $fsid) {
+				$stat_gerettet = $this->model->getTotallyFetchedByFoodsaver($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
 					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
 				);
@@ -80,30 +80,30 @@ class StatsControl extends ConsoleControl
 			}
 		}
 
-		self::success('OK');
+		self::success('foodsaver ready :o)');
 	}
 
 	public function betriebe()
 	{
 		self::info('Statistik Auswertung für Betriebe');
 
-		$stores = $this->statsGateway->fetchStores();
+		$allStores = $this->statsGateway->fetchAllStores();
 
-		foreach ($stores as $i => $store) {
-			$this->calcBetrieb($store);
+		foreach ($allStores as $store) {
+			$this->calcStores($store);
 		}
 
-		self::success('ready :o)');
+		self::success('stores ready :o)');
 	}
 
-	private function calcBetrieb($store)
+	private function calcStores($store)
 	{
 		$storeId = $store['id'];
 
 		if ($storeId > 0) {
 			$added = $store['added'];
 
-			if ($team = $this->storeGateway->getBetriebTeam($storeId)) {
+			if ($team = $this->storeGateway->getStoreTeam($storeId)) {
 				foreach ($team as $fs) {
 					$newdata = array(
 						'stat_first_fetch' => $fs['stat_first_fetch'],
@@ -115,24 +115,24 @@ class StatsControl extends ConsoleControl
 					);
 
 					/* first_fetch */
-					if ($first_fetch = $this->model->getFirstFetchInBetrieb($storeId, $fs['id'])) {
+					if ($first_fetch = $this->model->getFirstFetchInStore($storeId, $fs['id'])) {
 						$newdata['stat_first_fetch'] = $first_fetch;
 					}
 
-					/*last fetch*/
-					if ($last_fetch = $this->model->getLastFetchInBetrieb($storeId, $fs['id'])) {
+					/*last_fetch*/
+					if ($last_fetch = $this->model->getLastFetchInStore($storeId, $fs['id'])) {
 						$newdata['stat_last_fetch'] = $last_fetch;
 					}
 
 					/*fetchcount*/
-					$fetchcount = $this->model->getBetriebFetchCount(
+					$fetchcount = $this->model->getStoreFetchCount(
 						$storeId,
 						$fs['id'],
 						$fs['stat_last_update'],
 						$fs['stat_fetchcount']
 					);
 
-					$this->model->updateBetriebStat(
+					$this->model->updateStoreStats(
 						$storeId, // Betrieb id
 						$fs['id'], // foodsaver_id
 						$fs['stat_add_date'], // add date
@@ -146,54 +146,54 @@ class StatsControl extends ConsoleControl
 	}
 
 	/**
-	 * public accacable method to calculate all statictic for each bezirk
-	 * for the moment i have no other idea to calculate live because the hierarchical child bezirk query neeed so long time.
+	 * public accessible method to calculate all statistics for each region
+	 * for the moment I have no other idea to calculate live because the hierarchical child region query takes to long.
 	 */
 	public function bezirke()
 	{
 		self::info('Statistik Auswertung für Bezirke');
 
-		// get all Bezirke non memcached
-		$regions = $this->model->getAllBezirke();
-		foreach ($regions as $i => $region) {
-			$kilo = $this->calcBezirk($region);
+		// get all regions non memcached
+		$allRegions = $this->model->getAllRegions();
+		foreach ($allRegions as $region) {
+			$this->calcRegion($region);
 		}
 
-		self::success('ready :o)');
+		self::success('region ready :o)');
 	}
 
-	private function calcBezirk($region)
+	private function calcRegion($region)
 	{
-		$regionId = $region['id'];
+		$region_id = $region['id'];
 		$last_update = $region['stat_last_update'];
 
-		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+		$child_ids = $this->regionGateway->listIdsForDescendantsAndSelf($region_id);
 
 		/* abholmenge & anzahl abholungen */
-		$stat_fetchweight = $this->model->getFetchWeight($regionId, $last_update, $child_ids);
+		$stat_fetchweight = $this->model->getFetchWeight($region_id, $last_update, $child_ids);
 		$stat_fetchcount = $stat_fetchweight['count'];
 		$stat_fetchweight = $stat_fetchweight['weight'];
 
 		/* anzahl foodsaver */
-		$stat_fscount = $this->model->getFsCount($regionId, $child_ids);
+		$stat_fscount = $this->model->getFsCount($region_id, $child_ids);
 
 		/*anzahl botschafter*/
-		$stat_botcount = $this->model->getBotCount($regionId, $child_ids);
+		$stat_botcount = $this->model->getBotCount($region_id, $child_ids);
 
 		/* anzahl posts */
-		$stat_postcount = $this->model->getPostCount($regionId, $child_ids);
+		$stat_postcount = $this->model->getPostCount($region_id, $child_ids);
 
 		/* fairteiler_count */
-		$stat_fairteilercount = $this->model->getFairteilerCount($regionId, $child_ids);
+		$stat_fairteilercount = $this->model->getFairteilerCount($region_id, $child_ids);
 
 		/* count betriebe */
-		$stat_betriebecount = $this->model->getBetriebCount($regionId, $child_ids);
+		$stat_betriebecount = $this->model->getStoreCount($region_id, $child_ids);
 
 		/* count koorp betriebe */
-		$stat_betriebCoorpCount = $this->model->getBetriebKoorpCount($regionId, $child_ids);
+		$stat_betriebCoorpCount = $this->model->getCooperatingStoresCount($region_id, $child_ids);
 
 		$this->model->updateStats(
-			$regionId,
+			$region_id,
 			$stat_fetchweight,
 			$stat_fetchcount,
 			$stat_postcount,

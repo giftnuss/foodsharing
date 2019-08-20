@@ -374,7 +374,7 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'The description must not be empty.');
 		}
 
-		$location = $this->fetchLocationOrUserHome($paramFetcher);
+		$location = $this->fetchLocationOrUserHome($paramFetcher, [self::LAT => $basket[self::LAT], self::LON => $basket[self::LON]]);
 
 		//update basket
 		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
@@ -488,17 +488,34 @@ final class BasketRestController extends AbstractFOSRestController
 		return $basket;
 	}
 
-	private function fetchLocationOrUserHome($paramFetcher): array
+	/**
+	 * Returns a location from the param fetcher in the 'lat' and 'lon' fields. If none
+	 * is given, it returns the default location or the user's home address, if the default
+	 * location is null.
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 * @param array $defaultLocation a fallback value or null
+	 *
+	 * @return array the location
+	 *
+	 * @throws \HttpException if no location and no default location were given and the user's
+	 * home address is not set
+	 */
+	private function fetchLocationOrUserHome(ParamFetcher $paramFetcher, array $defaultLocation = null): array
 	{
 		$lat = $paramFetcher->get(self::LAT);
 		$lon = $paramFetcher->get(self::LON);
 		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
-			// find user's location
-			$loc = $this->session->getLocation();
-			$lat = $loc[self::LAT];
-			$lon = $loc[self::LON];
-			if ($lat === 0 && $lon === 0) {
-				throw new HttpException(400, 'The user profile has no address.');
+			if ($defaultLocation !== null) {
+				return $defaultLocation;
+			} else {
+				// find user's location
+				$loc = $this->session->getLocation();
+				$lat = $loc[self::LAT];
+				$lon = $loc[self::LON];
+				if ($lat === 0 && $lon === 0) {
+					throw new HttpException(400, 'The user profile has no address.');
+				}
 			}
 		}
 

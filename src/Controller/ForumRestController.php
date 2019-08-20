@@ -4,6 +4,7 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\ForumGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\SanitizerService;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ForumRestController extends AbstractFOSRestController
 {
 	private $session;
+	private $regionGateway;
 	private $forumGateway;
 	private $forumPermissions;
 	private $forumService;
@@ -22,12 +24,14 @@ class ForumRestController extends AbstractFOSRestController
 
 	public function __construct(
 		Session $session,
+		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		SanitizerService $sanitizerService
 	) {
 		$this->session = $session;
+		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumService = $forumService;
@@ -168,8 +172,10 @@ class ForumRestController extends AbstractFOSRestController
 
 		$body = $paramFetcher->get('body');
 		$title = $paramFetcher->get('title');
+		$regionDetails = $this->regionGateway->getRegionDetails($forumId);
+		$postActiveWithoutModeration = ($this->session->user('verified') && !$regionDetails['moderated']) || $this->session->isAmbassadorForRegion([$forumId]);
 
-		$threadId = $this->forumService->createThread($this->session->id(), $title, $body, $forumId, $forumSubId);
+		$threadId = $this->forumService->createThread($this->session->id(), $title, $body, $regionDetails, $forumSubId, $postActiveWithoutModeration);
 
 		return $this->getThreadAction($threadId);
 	}

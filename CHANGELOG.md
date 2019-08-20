@@ -78,6 +78,8 @@
 - Fixed role description for gender 'diverse' !1016 #674 @svenpascal
 - Fixed broken quiz after refactoring !1017 @svenpascal
 - Verify quiz session status without having a second learning break !1018 #673 @svenpascal
+- Show message and redirect page after deleting an account !1028 #533 @alex.simm
+- Fixed the createThread call inside the ForumRestController !1031 @ctwx_ok
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal

@@ -64,7 +64,7 @@ class StoreUserControl extends Control
 			$this->pageHelper->addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 
-			$store = $this->storeGateway->getMyBetrieb($this->session->id(), $_GET['id']);
+			$store = $this->storeGateway->getMyStore($this->session->id(), $_GET['id']);
 
 			if (!$store) {
 				$this->routeHelper->goPage();
@@ -312,7 +312,7 @@ class StoreUserControl extends Control
 			), 'Aktionen'), CNT_RIGHT);
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
-			$stores = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentRegionId());
+			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['verantwortlich'], $this->translationHelper->s('you_responsible'), true));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name'])), false));

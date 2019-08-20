@@ -79,7 +79,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMapsBetriebe(int $regionId): array
+	public function getMapsStores(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.id,
@@ -109,7 +109,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function getMyBetriebe($fs_id, $regionId, $options = array()): array
+	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -213,7 +213,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMyBetrieb($fs_id, $storeId): array
+	public function getMyStore($fs_id, $storeId): array
 	{
 		$out = $this->db->fetch('
 			SELECT
@@ -270,7 +270,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		`betrieb_id` = :id
 		', [':id' => $storeId]);
 
-		$out['foodsaver'] = $this->getBetriebTeam($storeId);
+		$out['foodsaver'] = $this->getStoreTeam($storeId);
 
 		$out['springer'] = $this->getBetriebSpringer($storeId);
 
@@ -325,7 +325,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getBetriebTeam($storeId): array
+	public function getStoreTeam($storeId): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
