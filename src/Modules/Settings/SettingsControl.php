@@ -342,7 +342,7 @@ class SettingsControl extends Control
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentBezirkId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						$this->v_utils->v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
@@ -488,7 +488,7 @@ class SettingsControl extends Control
 				}
 
 				if (!isset($data['bezirk_id'])) {
-					$data['bezirk_id'] = $this->session->getCurrentBezirkId();
+					$data['bezirk_id'] = $this->session->getCurrentRegionId();
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->session->refreshFromDatabase();

@@ -55,7 +55,7 @@ class RegionRestController extends AbstractFOSRestController
 
 		$this->regionGateway->linkBezirk($sessionId, $regionId);
 
-		if (!$this->session->getCurrentBezirkId()) {
+		if (!$this->session->getCurrentRegionId()) {
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 

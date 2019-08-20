@@ -58,12 +58,12 @@ class FairTeilerGateway extends BaseGateway
 
 			LEFT JOIN 	fs_foodsaver fs ON wp.foodsaver_id = fs.id
 
-			WHERE 		hw.fairteiler_id = :fspId
+			WHERE 		hw.fairteiler_id = :foodSharePointId
 
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		',
-			[':fspId' => $fspId]
+			[':foodSharePointId' => $fspId]
 		);
 	}
 

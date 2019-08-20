@@ -811,7 +811,7 @@ class XhrMethods
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
 
-			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentBezirkId());
+			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentRegionId());
 			$bezirk['email'] = EMAIL_PUBLIC;
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);

@@ -58,22 +58,22 @@ class StoreControl extends Control
 		global $g_data;
 
 		if (isset($_GET['bid'])) {
-			$bezirk_id = (int)$_GET['bid'];
+			$regionId = (int)$_GET['bid'];
 		} else {
-			$bezirk_id = $this->session->getCurrentBezirkId();
+			$regionId = $this->session->getCurrentRegionId();
 		}
 
-		if (!$this->session->isOrgaTeam() && $bezirk_id == 0) {
-			$bezirk_id = $this->session->getCurrentBezirkId();
+		if (!$this->session->isOrgaTeam() && $regionId == 0) {
+			$regionId = $this->session->getCurrentRegionId();
 		}
-		if ($bezirk_id > 0) {
-			$bezirk = $this->regionGateway->getRegion($bezirk_id);
+		if ($regionId > 0) {
+			$region = $this->regionGateway->getRegion($regionId);
 		} else {
-			$bezirk = array('name' => 'kompletter Datenbank');
+			$region = array('name' => 'kompletter Datenbank');
 		}
 		if ($this->identificationHelper->getAction('new')) {
 			if ($this->session->may('bieb')) {
-				$this->handle_add($this->session->id(), $bezirk_id);
+				$this->handle_add($this->session->id());
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
 				$this->pageHelper->addBread($this->translationHelper->s('bread_new_betrieb'));
@@ -82,10 +82,10 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$this->pageHelper->addContent($this->view->betrieb_form($region, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $bezirk_id)
+					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $regionId)
 				)), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} else {
 				$this->flashMessageHelper->info('Zum Anlegen eines Betriebes musst Du Betriebsverantwortlicher sein');
@@ -112,12 +112,12 @@ class StoreControl extends Control
 
 				$this->dataHelper->setEditData($data);
 
-				$bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $data['bezirk_id']);
+				$region = $this->model->getValues(array('id', 'name'), 'bezirk', $data['bezirk_id']);
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($bezirk, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$this->pageHelper->addContent($this->view->betrieb_form($region, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 			} else {
 				$this->flashMessageHelper->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
@@ -132,11 +132,11 @@ class StoreControl extends Control
 
 			if ($this->session->may('bieb')) {
 				$this->pageHelper->addContent($this->v_utils->v_menu(array(
-					array('href' => '/?page=betrieb&a=new&bid=' . (int)$bezirk_id, 'name' => 'Neuen Betrieb eintragen')
+					array('href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen')
 				), 'Aktionen'), CNT_RIGHT);
 			}
 
-			$stores = $this->model->listBetriebReq($bezirk_id);
+			$stores = $this->model->listBetriebReq($regionId);
 
 			$storesMapped = array_map(function ($store) {
 				return [
@@ -154,7 +154,7 @@ class StoreControl extends Control
 			}, $stores);
 
 			$this->pageHelper->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
-				'regionName' => $bezirk['name'],
+				'regionName' => $region['name'],
 				'stores' => $storesMapped
 			]));
 		}
@@ -177,14 +177,14 @@ class StoreControl extends Control
 		}
 	}
 
-	private function handle_add($coordinator, $bezirk_id)
+	private function handle_add($coordinator)
 	{
 		global $g_data;
 		if ($this->submitted()) {
 			$g_data['status_date'] = date('Y-m-d H:i:s');
 
 			if (!isset($g_data['bezirk_id'])) {
-				$g_data['bezirk_id'] = $this->session->getCurrentBezirkId();
+				$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
 			}
 			if (!in_array($g_data['bezirk_id'], $this->session->listRegionIDs())) {
 				$this->flashMessageHelper->error($this->translationHelper->s('store.can_only_create_store_in_member_region'));

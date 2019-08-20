@@ -24,7 +24,7 @@ class ApplicationControl extends Control
 
 		$this->bezirk_id = false;
 		if (($this->bezirk_id = $this->identificationHelper->getGetId('bid')) === false) {
-			$this->bezirk_id = $this->session->getCurrentBezirkId();
+			$this->bezirk_id = $this->session->getCurrentRegionId();
 		}
 
 		$this->bezirk = false;
