@@ -318,14 +318,22 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function editBasket($id, $desc, $pic, $fsId): int
-	{
+	public function editBasket(
+		int $id,
+		string $desc,
+		?string $pic,
+		float $lat,
+		float $lon,
+		int $fsId
+	): int {
 		return $this->db->update(
 			'fs_basket',
 			[
 				'update' => date('Y-m-d H:i:s'),
 				'description' => strip_tags($desc),
 				'picture' => strip_tags($pic),
+				'lat' => $lat,
+				'lon' => $lon
 			],
 			['id' => $id, 'foodsaver_id' => $fsId]
 		);

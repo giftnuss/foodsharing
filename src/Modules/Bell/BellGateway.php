@@ -21,14 +21,14 @@ class BellGateway extends BaseGateway
 	}
 
 	/**
-	 * @param int|int[] $foodsaver
+	 * @param int|int[] $foodsavers
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
 	 * @param \DateTime $expiration A DateTime object that defines when the time since when the bell will be outdated - null means it doesn't expire
 	 * @param \DateTime $time A DateTime object for the bell's time - null means current date and time
 	 */
 	public function addBell(
-		$foodsaver,
+		$foodsavers,
 		string $title,
 		string $body,
 		string $icon,
@@ -39,8 +39,8 @@ class BellGateway extends BaseGateway
 		\DateTime $expiration = null,
 		\DateTime $time = null
 	): void {
-		if (!is_array($foodsaver)) {
-			$foodsaver = array($foodsaver);
+		if (!is_array($foodsavers)) {
+			$foodsavers = array($foodsavers);
 		}
 
 		if ($link_attributes !== false) {
@@ -70,7 +70,7 @@ class BellGateway extends BaseGateway
 			]
 		);
 
-		foreach ($foodsaver as $fs) {
+		foreach ($foodsavers as $fs) {
 			if (is_array($fs)) {
 				$fs = $fs['id'];
 			}

@@ -110,9 +110,9 @@ class XhrMethods
 
 	public function xhr_verify($data)
 	{
-		$bids = $this->regionGateway->getFsRegionIds((int)$data['fid']);
+		$regions = $this->regionGateway->getFsRegionIds((int)$data['fid']);
 
-		if ($this->session->isAmbassadorForRegion($bids, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->session->isAmbassadorForRegion($regions, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
 					return json_encode(array(
@@ -170,8 +170,10 @@ class XhrMethods
 		$this->incLang('Store');
 		$this->incLang('StoreUser');
 
-		if ($this->storePermissions->mayReadStoreWall($data['bid'])) {
-			if ($out = $this->model->q('
+		$storeId = (int)$data['bid'];
+
+		if ($this->storePermissions->mayReadStoreWall($storeId)) {
+			if ($allWallposts = $this->model->q('
 				SELECT 	n.id,
 						n.`text`,
 						fs.name,
@@ -184,57 +186,57 @@ class XhrMethods
 						fs_foodsaver fs
 
 				WHERE fs.id = n.foodsaver_id
-				AND n.betrieb_id = ' . (int)$data['bid'] . '
+				AND n.betrieb_id = ' . $storeId . '
 
 				ORDER BY n.zeit DESC
 
 				LIMIT 50')
 			) {
-				//$out = array_reverse($out);
+				//$allWallposts = array_reverse($allWallposts);
 				$html = '<table class="pintable">';
 				$odd = 'odd';
-				foreach ($out as $o) {
+				foreach ($allWallposts as $wallpost) {
 					if ($odd == 'odd') {
 						$odd = 'even';
 					} else {
 						$odd = 'odd';
 					}
-					$pic = $this->imageService->img($o['photo']);
+					$pic = $this->imageService->img($wallpost['photo']);
 
 					$delete = '';
-					if ($this->session->isOrgaTeam() || $this->session->id() == $o['fsid']) {
-						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $o['id'] . '" onclick="u_delPost(' . (int)$o['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
+					if ($this->session->id() == $wallpost['fsid'] || $this->session->isOrgaTeam()) {
+						$delete = '<span class="dot">·</span><a class="pdelete light" href="#p' . $wallpost['id'] . '" onclick="u_delPost(' . (int)$wallpost['id'] . ');return false;">' . $this->translationHelper->s('delete') . '</a>';
 					}
 
-					$msg = '<span class="msg">' . nl2br($o['text']) . '</span>
+					$msg = '<span class="msg">' . nl2br($wallpost['text']) . '</span>
 						<div class="foot">
-							<span class="time">' . $this->format_dt($o['zeit']) . ' von ' . $o['name'] . '</span>' . $delete . '
+							<span class="time">' . $this->format_dt($wallpost['zeit']) . ' von ' . $wallpost['name'] . '</span>' . $delete . '
 						</div>';
 
-					if ($o['milestone'] == 1) {
+					if ($wallpost['milestone'] == 1) {
 						$odd .= ' milestone';
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$o['fsid'] . '">' . $o['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $o['zeit'])) . '
+						<a href="/profile/"' . (int)$wallpost['fsid'] . '">' . $wallpost['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $wallpost['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
-					} elseif ($o['milestone'] == 2) {
+					} elseif ($wallpost['milestone'] == 2) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
-					} elseif ($o['milestone'] == 3) {
+						$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
+					} elseif ($wallpost['milestone'] == 3) {
 						$odd .= ' milestone';
 						$pic = 'img/milestone.png';
-						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $o['zeit'])) . '</strong> ' . $this->translationHelper->s($o['text']) . '</span>';
-					} elseif ($o['milestone'] == 5) {
+						$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $wallpost['zeit'])) . '</strong> ' . $this->translationHelper->s($wallpost['text']) . '</span>';
+					} elseif ($wallpost['milestone'] == 5) {
 						$odd .= ' milestone';
-						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$o['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $o['fsid']) . '</a>') . '</span>';
+						$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
 					}
 
 					$html .= '
-					<tr class="' . $odd . ' bpost bpost-' . $o['id'] . '">
-						<td class="img"><a href="/profile/' . (int)$o['fsid'] . '"><img src="' . $pic . '" /></a></td>
+					<tr class="' . $odd . ' bpost bpost-' . $wallpost['id'] . '">
+						<td class="img"><a href="/profile/' . (int)$wallpost['fsid'] . '"><img src="' . $pic . '" /></a></td>
 						<td>' . $msg . '</td>
 					</tr>';
 				}
@@ -804,7 +806,7 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->isAmbassador()) {
+		if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
@@ -957,7 +959,7 @@ class XhrMethods
 		return false;
 	}
 
-	private function cropImage($bild, $x, $y, $w, $h)
+	private function cropImage($image, $x, $y, $w, $h)
 	{
 		if ($w > 2000 || $h > 2000) {
 			return false;
@@ -967,7 +969,7 @@ class XhrMethods
 		$targ_h = 600;
 		$jpeg_quality = 100;
 
-		$ext = explode('.', $bild);
+		$ext = explode('.', $image);
 		$ext = end($ext);
 		$ext = strtolower($ext);
 
@@ -975,13 +977,13 @@ class XhrMethods
 
 		switch ($ext) {
 			case 'gif':
-				$img_r = imagecreatefromgif('./tmp/' . $bild);
+				$img_r = imagecreatefromgif('./tmp/' . $image);
 				break;
 			case 'jpg':
-				$img_r = imagecreatefromjpeg('./tmp/' . $bild);
+				$img_r = imagecreatefromjpeg('./tmp/' . $image);
 				break;
 			case 'png':
-				$img_r = imagecreatefrompng('./tmp/' . $bild);
+				$img_r = imagecreatefrompng('./tmp/' . $image);
 				break;
 		}
 
@@ -993,28 +995,28 @@ class XhrMethods
 
 		imagecopyresampled($dst_r, $img_r, 0, 0, $x, $y, $targ_w, $targ_h, $w, $h);
 
-		@unlink('../tmp/crop_' . $bild);
+		@unlink('../tmp/crop_' . $image);
 
 		switch ($ext) {
 			case 'gif':
-				imagegif($dst_r, './tmp/crop_' . $bild);
+				imagegif($dst_r, './tmp/crop_' . $image);
 				break;
 			case 'jpg':
-				imagejpeg($dst_r, './tmp/crop_' . $bild, $jpeg_quality);
+				imagejpeg($dst_r, './tmp/crop_' . $image, $jpeg_quality);
 				break;
 			case 'png':
-				imagepng($dst_r, './tmp/crop_' . $bild, 0);
+				imagepng($dst_r, './tmp/crop_' . $image, 0);
 				break;
 		}
 
-		if (file_exists('./tmp/crop_' . $bild)) {
+		if (file_exists('./tmp/crop_' . $image)) {
 			try {
-				copy('./tmp/crop_' . $bild, './tmp/thumb_crop_' . $bild);
-				$img = new fImage('./tmp/thumb_crop_' . $bild);
+				copy('./tmp/crop_' . $image, './tmp/thumb_crop_' . $image);
+				$img = new fImage('./tmp/thumb_crop_' . $image);
 				$img->resize(200, 0);
 				$img->saveChanges();
 
-				return 'thumb_crop_' . $bild;
+				return 'thumb_crop_' . $image;
 			} catch (Exception $e) {
 				return false;
 			}
@@ -1302,7 +1304,7 @@ class XhrMethods
 
 	public function xhr_denyRequest($data)
 	{
-		if ($this->session->isOrgaTeam() || $this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator) {
+		if ($this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator || $this->session->isOrgaTeam()) {
 			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
@@ -1427,7 +1429,7 @@ class XhrMethods
 	public function xhr_delBPost($data)
 	{
 		$fsid = $this->model->getVal('foodsaver_id', 'betrieb_notiz', $data['pid']);
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id()) {
+		if ($fsid == $this->session->id() || $this->session->isOrgaTeam()) {
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
@@ -1438,11 +1440,11 @@ class XhrMethods
 
 	public function xhr_delPost($data)
 	{
-		$fsid = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
+		$fsId = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
 		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
 		$bezirkType = $this->regionGateway->getType($bezirkId);
 
-		if ($this->session->isOrgaTeam() || $fsid == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP)) {
+		if ($fsId == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP) || $this->session->isOrgaTeam()) {
 			$this->forumGateway->deletePost($data['pid']);
 
 			return 1;

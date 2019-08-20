@@ -1,6 +1,6 @@
 import '@/core'
 import '@/globals'
-import { ajreq, GET } from '@/script'
+import { ajreq, GET, goTo } from '@/script'
 import $ from 'jquery'
 import 'jquery-dynatree'
 import i18n from '@/i18n'
@@ -43,6 +43,8 @@ const fsapp = {
   confirmDeleteUser: async function (fsId) {
     if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
       await deleteUser(fsId)
+      window.alert(i18n('success'))
+      goTo(`/?page=dashboard`)
     }
   }
 }

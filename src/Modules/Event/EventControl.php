@@ -56,7 +56,8 @@ class EventControl extends Control
 			if (!$this->eventPermissions->mayEditEvent($event)) {
 				return false;
 			}
-			if ($this->session->isOrgaTeam() || $event['fs_id'] == $this->session->id() || $this->session->isAdminFor($event['bezirk_id'])) {
+
+			if ($this->eventPermissions->mayEditEvent($event)) {
 				$this->pageHelper->addBread('Termine', '/?page=event');
 				$this->pageHelper->addBread('Neuer Termin');
 

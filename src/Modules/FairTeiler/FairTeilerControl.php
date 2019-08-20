@@ -127,7 +127,7 @@ class FairTeilerControl extends Control
 				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->region['urlname'] . '/fairteiler/' . $this->fairteiler['id'] . '_' . $this->fairteiler['urlname'] . '" />
 				');
 
-			if ($request->query->has('delete') && ($this->session->isOrgaTeam() || $this->session->isAdminFor($this->regionId))) {
+			if ($request->query->has('delete') && ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam())) {
 				$this->delete();
 			}
 		}
@@ -208,7 +208,7 @@ class FairTeilerControl extends Control
 			array('name' => $this->translationHelper->s('back'), 'href' => '/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->fairteiler['id'])
 		);
 
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($this->regionId)) {
+		if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
 			$items[] = array('name' => $this->translationHelper->s('delete'), 'click' => 'if(confirm(\'' . $this->translationHelper->sv('delete_sure', $this->fairteiler['name']) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->fairteiler['id'] . '&delete=1\');}return false;');
 		}
 
@@ -243,7 +243,7 @@ class FairTeilerControl extends Control
 	public function check(Request $request)
 	{
 		if ($ft = $this->fairteiler) {
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($ft['bezirk_id'])) {
+			if ($this->session->isAdminFor($ft['bezirk_id']) || $this->session->isOrgaTeam()) {
 				if ($request->query->has('agree')) {
 					if ($request->query->get('agree')) {
 						$this->accept();
