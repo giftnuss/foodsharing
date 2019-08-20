@@ -125,7 +125,7 @@ class StatsModel extends Db
 		return (int)$val + (int)$stat_fetchcount;
 	}
 
-	// dead method?
+	// method currently not used. @fs_k wants to keep it in source for now.
 	public function getBetriebTeam($storeId)
 	{
 		return $this->q('
@@ -178,12 +178,6 @@ class StatsModel extends Db
 	public function getAllRegions()
 	{
 		return $this->q('SELECT id, name, stat_last_update FROM fs_bezirk');
-	}
-
-	// not used?
-	public function getAllBezirkeNotUpdated($region_id = false)
-	{
-		return $this->q('SELECT id, name FROM fs_bezirk WHERE DATE_SUB(CURDATE(), INTERVAL 1 DAY) >= `stat_last_update`');
 	}
 
 	public function getFairteilerCount($region_id, $child_ids)
