@@ -64,7 +64,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		[':id' => $storeId]);
 
 		$out['verantwortlicher'] = '';
-		if ($bezirk = $this->regionGateway->getBezirkName($out['bezirk_id'])) {
+		if ($bezirk = $this->regionGateway->getRegionName($out['bezirk_id'])) {
 			$out['bezirk'] = $bezirk;
 		}
 		if ($verantwortlich = $this->getBiebsForStore($storeId)) {
@@ -497,7 +497,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $queryResult;
 	}
 
-	public function deleteAllDatesFromAFoodsaver($fs_id)
+	public function deleteAllDatesFromAFoodsaver(int $fs_id)
 	{
 		$storeIdsThatWillBeDeleted = $this->db->fetchAllValuesByCriteria(
 			'fs_abholer',
@@ -718,14 +718,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	}
 
 	/* retrieves all store managers for a given region (by being store manager in a store that is part of that region, which is semantically not the same we use on platform) */
-	public function getStoreManagersOf(int $regionID): array
+	public function getStoreManagersOf(int $regionId): array
 	{
 		return $this->db->fetchAllValues('SELECT DISTINCT bt.foodsaver_id FROM `fs_bezirk_closure` c
 			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `fs_betrieb_team` bt ON bt.betrieb_id = b.id
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
-			WHERE c.ancestor_id = :id AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
-			[':id' => $regionID]);
+			WHERE c.ancestor_id = :regionId AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
+			[':regionId' => $regionId]);
 	}
 
 	public function listStoresForFoodsaver($fsId)

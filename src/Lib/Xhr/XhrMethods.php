@@ -811,7 +811,7 @@ class XhrMethods
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
 
-			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentBezirkId());
+			$bezirk = $this->regionGateway->getMailBezirk($this->session->getCurrentRegionId());
 			$bezirk['email'] = EMAIL_PUBLIC;
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);
@@ -1059,7 +1059,7 @@ class XhrMethods
 			$data['email_name'] = 'foodsharing ' . $data['name'];
 
 			if (!empty($data['name'])) {
-				if ($out = $this->regionGateway->add_bezirk($data)) {
+				if ($out = $this->regionGateway->addRegion($data)) {
 					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . (int)$data['parent_id']);
 
 					return json_encode(array(
@@ -1296,7 +1296,7 @@ class XhrMethods
 	public function xhr_denyBezirkRequest($data)
 	{
 		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
-			$this->regionGateway->denyBezirkRequest($data['fsid'], $data['bid']);
+			$this->regionGateway->denyRegionRequest($data['fsid'], $data['bid']);
 
 			return json_encode(array('status' => 1));
 		}
