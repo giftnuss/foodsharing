@@ -82,6 +82,7 @@
 - Show message and redirect page after deleting an account !1028 #533 @alex.simm
 - Fixed the createThread call inside the ForumRestController !1031 @ctwx_ok
 - Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
+- When logging in, referenced redirects work now. !1034 #563 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
