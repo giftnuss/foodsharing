@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Profile;
 use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
+use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 
 class ProfileView extends View
@@ -259,16 +260,16 @@ class ProfileView extends View
 		$out = '';
 		foreach ($userCompanies as $b) {
 			switch ($b['active']) {
-				case 0:  // asked to be in store team
+				case MembershipStatus::APPLIED_FOR_TEAM:
 					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
 					break;
-				case 1: // in store team
+				case MembershipStatus::MEMBER:
 					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
 					break;
-				case 2: // Springer (waiting list)
+				case MembershipStatus::JUMPER:
 					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
 					break;
-				default: // should not happen
+				default:
 					$userStatusOfStore = '';
 					break;
 			}
