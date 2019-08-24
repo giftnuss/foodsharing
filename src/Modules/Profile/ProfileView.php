@@ -285,8 +285,7 @@ class ProfileView extends View
 	public function userNotes(
 		string $notes,
 		bool $profileVisitorMayAdminThisFoodsharer,
-		array $userCompanies,
-		$userCompaniesCount
+		array $userCompanies
 	): void {
 		$page = new vPage(
 			$this->foodsaver['name'] . ' Notizen',
@@ -298,7 +297,7 @@ class ProfileView extends View
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($this->session->may('orga')) {
-			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
+			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
 		}
 
 		$page->render();

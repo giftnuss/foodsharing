@@ -63,7 +63,6 @@ final class ProfileControl extends Control
 				$this->wallposts('usernotes', $this->foodsaver['id']),
 				true,
 				$this->profileGateway->getCompanies($this->foodsaver['id']),
-				$this->profileGateway->getCompaniesCount($this->foodsaver['id'])
 			);
 		} else {
 			$this->routeHelper->go('/profile/' . $this->foodsaver['id']);
