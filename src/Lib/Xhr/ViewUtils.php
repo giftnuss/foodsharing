@@ -120,20 +120,4 @@ class ViewUtils
 
 		return $out;
 	}
-
-	public function set($rows, $title = '')
-	{
-		$out = '
-	<div class="xv_set">
-		<h3>' . $title . '</h3>';
-		foreach ($rows as $r) {
-			$out .= '
-		<div class="xv_row">
-			<span class="xv_label">' . $r['name'] . '</span><span class="xv_val">' . $r['val'] . '</span>
-		</div>';
-		}
-
-		return $out . '
-	</div>';
-	}
 }

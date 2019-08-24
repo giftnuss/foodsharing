@@ -10,7 +10,16 @@ class ProfileView extends View
 {
 	private $foodsaver;
 
-	public function profile($wallPosts, bool $showEditButton = false, bool $showPassportGenerationHistoryButton = false, bool $showVerificationHistoryButton = false, bool $showSideInfoCompanies = false, $userCompanies = null, $userCompaniesCount = null, $fetchDates = null)
+	public function profile(
+		string $wallPosts,
+		bool $showEditButton = false,
+		bool $showPassportGenerationHistoryButton = false,
+		bool $showVerificationHistoryButton = false,
+		bool $showSideInfoCompanies = false,
+		array $userCompanies = [],
+		$userCompaniesCount = null,
+		$fetchDates = null
+	): void
 	{
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
@@ -35,7 +44,8 @@ class ProfileView extends View
 		$page->render();
 	}
 
-	private function fetchDates($fetchDates) // AMB functionality
+	// AMB functionality
+	private function fetchDates(array $fetchDates): string
 	{
 		$out = '
 				<div class="ui-padding" id="double">';
@@ -70,11 +80,10 @@ class ProfileView extends View
 							</li>';
 			}
 		}
-		$out .= '
+
+		return $out . '
 					</ul>
 				</div>';
-
-		return $out;
 	}
 
 	/**
@@ -115,8 +124,14 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function userNotes($notes, bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton, $userCompanies, $userCompaniesCount)
-	{
+	public function userNotes(
+		string $notes,
+		bool $showEditButton,
+		bool $showPassportGenerationHistoryButton,
+		bool $showVerificationHistoryButton,
+		array $userCompanies,
+		$userCompaniesCount
+	): void {
 		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes);
 		$page->setBread('Notizen');
 
@@ -130,7 +145,7 @@ class ProfileView extends View
 		$page->render();
 	}
 
-	private function sideInfos()
+	private function sideInfos(): string
 	{
 		$infos = array();
 
@@ -177,7 +192,7 @@ class ProfileView extends View
 		}
 
 		$out = '';
-		foreach ($infos as $key => $info) {
+		foreach ($infos as $info) {
 			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
 		}
 
@@ -187,7 +202,7 @@ class ProfileView extends View
 		</div>';
 	}
 
-	public function infos()
+	public function infos(): string
 	{
 		$infos = array();
 
@@ -257,7 +272,7 @@ class ProfileView extends View
 		}
 
 		$out = '';
-		foreach ($infos as $key => $info) {
+		foreach ($infos as $info) {
 			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
 		}
 
@@ -310,11 +325,11 @@ class ProfileView extends View
 			}
 
 			$banana_button_class = ' bouched';
-			$givebanana = '';
+			$giveBanana = '';
 
 			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
 				$banana_button_class = '';
-				$givebanana = '
+				$giveBanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
 					<div class="vouch-banana-desc">
@@ -341,13 +356,13 @@ class ProfileView extends View
 			$bananaCount .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
 				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
-				' . $givebanana . '
+				' . $giveBanana . '
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';
 
 			foreach ($this->foodsaver['bananen'] as $b) {
-				if ($odd == 'even') {
+				if ($odd === 'even') {
 					$odd = 'odd';
 				} else {
 					$odd = 'even';
@@ -382,7 +397,7 @@ class ProfileView extends View
 			</div>';
 	}
 
-	public function getHistory($history, $changeType)
+	public function getHistory(array $history, int $changeType): string
 	{
 		$out = '
 			<ul class="linklist history">';
@@ -404,7 +419,7 @@ class ProfileView extends View
 					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				}
 				if ($changeType == 1) {
-					if (!is_null($h['bot_id'])) {
+					if ($h['bot_id'] !== null) {
 						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
 						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
@@ -413,7 +428,7 @@ class ProfileView extends View
 
 				$curDate = $h['date'];
 			}
-			if (!is_null($h['bot_id'])) {
+			if ($h['bot_id'] !== null) {
 				$out .= '
 				<li>
 					<a class="corner-all" href="/profile/' . (int)$h['bot_id'] . '">
@@ -438,7 +453,7 @@ class ProfileView extends View
 		return $out;
 	}
 
-	private function photo(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton)
+	private function photo(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton): string
 	{
 		$menu = $this->profileMenu($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton);
 
@@ -457,7 +472,7 @@ class ProfileView extends View
 				' . $menu;
 	}
 
-	private function profileMenu(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton)
+	private function profileMenu(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton): string
 	{
 		$opt = '';
 
@@ -493,29 +508,8 @@ class ProfileView extends View
 		</ul>';
 	}
 
-	public function setData($data)
+	public function setData(array $data): void
 	{
 		$this->foodsaver = $data;
-	}
-
-	public function xv_set($rows, $title = false)
-	{
-		if (!$title) {
-			$title = '';
-		} else {
-			$title = '<h3>' . $title . '</h3>';
-		}
-		$out = '
-	<div id="' . $this->identificationHelper->id($title) . '" class="xv_set">
-		' . $title;
-		foreach ($rows as $r) {
-			$out .= '
-		<div class="xv_row">
-			<span class="xv_label">' . $r['name'] . '</span><span class="xv_val">' . $r['val'] . '</span>
-		</div>';
-		}
-
-		return $out . '
-	</div>';
 	}
 }
