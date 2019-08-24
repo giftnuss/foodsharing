@@ -76,7 +76,7 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function rate()
+	public function rate(): ?array
 	{
 		$rate = 1;
 		if (isset($_GET['rate'])) {
@@ -116,7 +116,7 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function history()
+	public function history(): ?array
 	{
 		$regionIds = $this->regionGateway->getFsRegionIds($_GET['fsid']);
 		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion($regionIds, false, false))) {
@@ -137,17 +137,15 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function deleteAllDatesFromFoodsaver()
+	public function deleteAllDatesFromFoodsaver(): array
 	{
-		if ($this->session->isOrgaTeam()) {
-			if ($this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
-				return array(
-					'status' => 1,
-					'script' => '
-					pulseSuccess("Alle Termine gelöscht");
-					reload();'
-				);
-			}
+		if ($this->session->isOrgaTeam() && $this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
+			return array(
+				'status' => 1,
+				'script' => '
+				pulseSuccess("Alle Termine gelöscht");
+				reload();'
+			);
 		}
 
 		return array(
@@ -156,11 +154,12 @@ class ProfileXhr extends Control
 		);
 	}
 
-	public function deleteSinglePickup()
+	// used in ProfileView:fetchDates (
+	public function deleteSinglePickup(): array
 	{
 		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
 
-		if ($this->session->isAdminFor($store['bezirk_id']) || $this->session->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
 			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['storeId'], Carbon::createFromTimestamp($_GET['date']))) {
 				return array(
 					'status' => 1,

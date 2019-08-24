@@ -9,7 +9,6 @@ use Foodsharing\Modules\Basket\BasketGateway;
 final class ProfileControl extends Control
 {
 	private $foodsaver;
-	private $fs_id;
 	private $regionGateway;
 	private $profileGateway;
 	private $basketGateway;
@@ -33,17 +32,16 @@ final class ProfileControl extends Control
 
 		if ($id = $this->uriInt(2)) {
 			$this->profileGateway->setFsId((int)$id);
-			$this->fs_id = (int)$id;
 			if ($data = $this->profileGateway->getData($this->session->id())) {
-				if (is_null($data['deleted_at']) || $this->session->may('orga')) {
+				if ($data['deleted_at'] === null || $this->session->may('orga')) {
 					$this->foodsaver = $data;
 					$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
 					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets($this->foodsaver['id']);
 
 					$this->view->setData($this->foodsaver);
 
-					if ($this->uriStr(3) == 'notes') {
-						$this->orgaNotes();
+					if ($this->uriStr(3) === 'notes') {
+						$this->organisationTeamNotes();
 					} else {
 						$this->profile();
 					}
@@ -59,11 +57,11 @@ final class ProfileControl extends Control
 	}
 
 	// this is required even if empty.
-	public function index()
+	public function index(): void
 	{
 	}
 
-	private function orgaNotes()
+	private function organisationTeamNotes(): void
 	{
 		$this->pageHelper->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if ($this->session->may('orga')) {
@@ -73,8 +71,7 @@ final class ProfileControl extends Control
 				true,
 				true,
 				$this->profileGateway->getCompanies($this->foodsaver['id']),
-				$this->profileGateway->getCompaniesCount($this->foodsaver['id']),
-				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
+				$this->profileGateway->getCompaniesCount($this->foodsaver['id'])
 			);
 		} else {
 			$this->routeHelper->go('/profile/' . $this->foodsaver['id']);
@@ -97,13 +94,7 @@ final class ProfileControl extends Control
 			);
 		} else {
 			$this->view->profile(
-				$this->wallposts('foodsaver', $this->foodsaver['id']),
-				false,
-				false,
-				false,
-				false,
-				null,
-				null
+				$this->wallposts('foodsaver', $this->foodsaver['id'])
 			);
 		}
 	}

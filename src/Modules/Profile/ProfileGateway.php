@@ -206,7 +206,7 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function rate(int $fsId, int $rate, int $type = 1, string $message = '')
+	public function rate(int $fsId, int $rate, int $type = 1, string $message = ''): int
 	{
 		return $this->db->insert(
 			'fs_rating',
@@ -322,7 +322,7 @@ final class ProfileGateway extends BaseGateway
 			WHERE 	bt.betrieb_id = b.id
 			AND
 					bt.foodsaver_id = :fs_id
-			ORDER BY b.name ASC
+			ORDER BY b.name
 		';
 
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
