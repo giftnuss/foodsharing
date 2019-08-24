@@ -13,10 +13,7 @@ class ProfileView extends View
 
 	public function profile(
 		string $wallPosts,
-		bool $showEditButton = false,
-		bool $showPassportGenerationHistoryButton = false,
-		bool $showVerificationHistoryButton = false,
-		bool $showSideInfoCompanies = false,
+		bool $profileVisitorMayAdminThisFoodsharer = false,
 		array $userCompanies = [],
 		$userCompaniesCount = null,
 		$fetchDates = null
@@ -33,7 +30,7 @@ class ProfileView extends View
 		}
 
 		$page->addSectionLeft(
-			$this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton)
+			$this->photo($profileVisitorMayAdminThisFoodsharer)
 		);
 
 		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may(
@@ -42,7 +39,7 @@ class ProfileView extends View
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
-		if ($showSideInfoCompanies && $userCompanies) { // AMB functionality
+		if ($profileVisitorMayAdminThisFoodsharer && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
 		}
 		$page->render();
@@ -124,19 +121,11 @@ class ProfileView extends View
 				</div>';
 	}
 
-	private function photo(
-		bool $showEditButton,
-		bool $showPassportGenerationHistoryButton,
-		bool $showVerificationHistoryButton
-	): string {
-		$menu = $this->profileMenu(
-			$showEditButton,
-			$showPassportGenerationHistoryButton,
-			$showVerificationHistoryButton
-		);
+	private function photo(bool $profileVisitorMayAdminThisFoodsharer): string
+	{
+		$menu = $this->profileMenu($profileVisitorMayAdminThisFoodsharer);
 
 		$sleep_info = '';
-
 		$online = '';
 
 		if ($this->foodsaver['online']) {
@@ -154,14 +143,11 @@ class ProfileView extends View
 				' . $menu;
 	}
 
-	private function profileMenu(
-		bool $showEditButton,
-		bool $showPassportGenerationHistoryButton,
-		bool $showVerificationHistoryButton
-	): string {
+	private function profileMenu(bool $profileVisitorMayAdminThisFoodsharer): string
+	{
 		$opt = '';
 
-		if ($showEditButton) {
+		if ($profileVisitorMayAdminThisFoodsharer) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
 		}
 		if ($this->foodsaver['buddy'] === BuddyId::NO_BUDDY && $this->foodsaver['id'] != $this->session->id()) {
@@ -169,10 +155,8 @@ class ProfileView extends View
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
 		}
-		if ($showPassportGenerationHistoryButton) {
+		if ($profileVisitorMayAdminThisFoodsharer) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';
-		}
-		if ($showVerificationHistoryButton) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
 
@@ -300,9 +284,7 @@ class ProfileView extends View
 
 	public function userNotes(
 		string $notes,
-		bool $showEditButton,
-		bool $showPassportGenerationHistoryButton,
-		bool $showVerificationHistoryButton,
+		bool $profileVisitorMayAdminThisFoodsharer,
 		array $userCompanies,
 		$userCompaniesCount
 	): void {
@@ -312,9 +294,7 @@ class ProfileView extends View
 		);
 		$page->setBread('Notizen');
 
-		$page->addSectionLeft(
-			$this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton)
-		);
+		$page->addSectionLeft($this->photo($profileVisitorMayAdminThisFoodsharer));
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($this->session->may('orga')) {
