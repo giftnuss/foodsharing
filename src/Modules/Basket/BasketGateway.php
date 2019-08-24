@@ -409,7 +409,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
-	public function listCloseBasketsByCoordinate($fs_id, $gps_coordinate, $distance_km = 30)
+	public function listNearbyBasketsByDistance(int $fs_id, $gps_coordinate, int $distance_km = 30): array
 	{
 		return $this->db->fetchAll(
 			'
@@ -419,26 +419,25 @@ class BasketGateway extends BaseGateway
 				b.description,
 				b.lat,
 				b.lon,
-				(6371 * acos( cos( radians( :lat ) ) * cos( radians( b.lat ) ) * cos( radians( b.lon ) - radians( :lon ) ) + sin( radians( :lat1 ) ) * sin( radians( b.lat ) ) ))
-				AS distance,
+				(6371 * acos(
+					cos(radians(:lat)) *
+					cos(radians(b.lat)) *
+					cos(radians(b.lon) - radians(:lon)) +
+					sin(radians(:lat1)) *
+					sin(radians(b.lat)))) AS distance,
 				b.until
 			FROM
 				fs_basket b
-
 			WHERE
 				b.status = :status
-
 			AND
 				foodsaver_id != :fs_id
 			AND 
 			    b.until > NOW()
-
 			HAVING
 				distance <= :distance
-
 			ORDER BY
-				distance ASC
-
+				distance
 			LIMIT 6
 		',
 			[
@@ -450,5 +449,38 @@ class BasketGateway extends BaseGateway
 				':distance' => $distance_km,
 			]
 		);
+	}
+
+	public function listNewestBaskets(): array
+	{
+		return $this->db->fetchAll('	
+			SELECT
+				b.id,
+				b.`time`,
+				UNIX_TIMESTAMP(b.`time`) AS time_ts,
+				b.description,
+				b.picture,
+				b.contact_type,
+				b.tel,
+				b.handy,
+				b.fs_id AS fsf_id,
+			    b.until,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo	
+			FROM
+				fs_basket b,
+				fs_foodsaver fs	
+			WHERE
+				b.foodsaver_id = fs.id
+			AND
+				b.status = :status
+			AND 
+			    b.until > NOW()
+			ORDER BY
+				id DESC	
+			LIMIT
+				0, 10	
+		', [':status' => Status::REQUESTED_MESSAGE_READ]);
 	}
 }

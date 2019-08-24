@@ -178,10 +178,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation($this->model)))) {
 			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -537,7 +537,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listCloseBasketsByCoordinate($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
