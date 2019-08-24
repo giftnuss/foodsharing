@@ -19,8 +19,7 @@ class ProfileView extends View
 		array $userCompanies = [],
 		$userCompaniesCount = null,
 		$fetchDates = null
-	): void
-	{
+	): void {
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
 
@@ -32,9 +31,13 @@ class ProfileView extends View
 			$page->addSection($this->fetchDates($fetchDates), 'Nächste Abholtermine');
 		}
 
-		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
+		$page->addSectionLeft(
+			$this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton)
+		);
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may('orga')) {
+		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may(
+				'orga'
+			)) {
 			$page->addSectionLeft($this->sideInfos(), 'Infos');
 		}
 
@@ -45,162 +48,6 @@ class ProfileView extends View
 	}
 
 	// AMB functionality
-	private function fetchDates(array $fetchDates): string
-	{
-		$out = '
-				<div class="ui-padding" id="double">';
-
-		if ($this->session->isOrgaTeam()) {
-			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteAllDatesFromFoodsaver\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . '});return false;">' . $this->translationHelper->s('cancel_all') . '</a>';
-		}
-
-		$out .= '<ul class="datelist linklist" id="double">';
-		foreach ($fetchDates as $d) {
-			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
-
-			$out .= '
-						<li>
-							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($d['date_ts']) . '</span>
-							</a>
-						</li>
-						<li>
-							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $d['betrieb_name'] . '</span>
-							</a>
-						</li>';
-
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
-				$out .= '<li>
-							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
-							</li>';
-			} else {
-				$out .= '<li>
-							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
-							</li>';
-			}
-		}
-
-		return $out . '
-					</ul>
-				</div>';
-	}
-
-	/**
-	 * Create HTML for list of stores on the profile.
-	 * Each store has a symbol in front indicating if the user is
-	 *  - waiting for approval (a question mark)
-	 *  - in store (the shopping basket used for stores)
-	 *  - Springer = waiting list (a coffee mug).
-	 *
-	 * @param array $userCompanies
-	 *
-	 * @return string: HTML with the list
-	 */
-	private function sideInfosCompanies(array $userCompanies): string
-	{
-		$out = '';
-		foreach ($userCompanies as $b) {
-			switch ($b['active']) {
-				case 0:  // asked to be in store team
-					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
-					break;
-				case 1: // in store team
-					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
-					break;
-				case 2: // Springer (waiting list)
-					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
-					break;
-				default: // should not happen
-					$userStatusOfStore = '';
-					break;
-			}
-			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
-		}
-
-		return '
-		<div class="pure-g">
-		    <div class="infos"> ' . $out . ' </div>
-		</div>';
-	}
-
-	public function userNotes(
-		string $notes,
-		bool $showEditButton,
-		bool $showPassportGenerationHistoryButton,
-		bool $showVerificationHistoryButton,
-		array $userCompanies,
-		$userCompaniesCount
-	): void {
-		$page = new vPage($this->foodsaver['name'] . ' Notizen', $this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes);
-		$page->setBread('Notizen');
-
-		$page->addSectionLeft($this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton));
-		$page->addSectionLeft($this->sideInfos(), 'Infos');
-
-		if ($this->session->may('orga')) {
-			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
-		}
-
-		$page->render();
-	}
-
-	private function sideInfos(): string
-	{
-		$infos = array();
-
-		if ($this->session->may('orga')) {
-			$last_login = (
-				$this->foodsaver['last_login']
-				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
-				: $this->translationHelper->s('Never')
-			);
-			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
-
-			$infos[] = array(
-				'name' => $this->translationHelper->s('last_login'),
-				'val' => $last_login
-			);
-			$infos[] = array(
-				'name' => $this->translationHelper->s('registration_date'),
-				'val' => $registration_date->format('d.m.Y')
-			);
-			$infos[] = array(
-				'name' => $this->translationHelper->s('private_mail'),
-				'val' => '<a href="/?page=mailbox&mailto=' . urlencode($this->foodsaver['email']) . '">' . $this->foodsaver['email'] . '</a>'
-			);
-			if (isset($this->foodsaver['mailbox'])) {
-				$infos[] = array(
-					'name' => $this->translationHelper->s('mailbox'),
-					'val' => '<a href="/?page=mailbox&mailto=' . urlencode($this->foodsaver['mailbox']) . '">' . $this->foodsaver['mailbox'] . '</a>'
-				);
-			}
-		}
-
-		if ($this->foodsaver['stat_buddycount'] > 0) {
-			$infos[] = array(
-				'name' => 'Bekannte',
-				'val' => $this->foodsaver['name'] . (($this->foodsaver['stat_buddycount'] == 1) ? ' kennt ' : ' kennen ') . $this->foodsaver['stat_buddycount'] . ' Foodsaver'
-			);
-		}
-
-		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$infos[] = array(
-				'name' => 'Abholquote',
-				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
-			);
-		}
-
-		$out = '';
-		foreach ($infos as $info) {
-			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
-		}
-
-		return '
-		<div class="pure-g">
-		    <div class="infos"> ' . $out . ' </div>
-		</div>';
-	}
 
 	public function infos(): string
 	{
@@ -212,8 +59,19 @@ class ProfileView extends View
 				$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
 			}
 			$infos[] = array(
-				'name' => $this->translationHelper->sv('ambassador_districts', array('name' => $this->foodsaver['name'], 'gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], '', 'in', '_in'))),
-				'val' => implode(', ', $ambassador)
+				'name' => $this->translationHelper->sv(
+					'ambassador_districts',
+					array(
+						'name' => $this->foodsaver['name'],
+						'gender' => $this->translationHelper->genderWord(
+							$this->foodsaver['geschlecht'],
+							'',
+							'in',
+							'_in'
+						),
+					)
+				),
+				'val' => implode(', ', $ambassador),
 			);
 		}
 
@@ -230,14 +88,20 @@ class ProfileView extends View
 			}
 			if (!empty($fsa)) {
 				$infos[] = array(
-					'name' => $this->translationHelper->sv('foodsaver_districts', array('name' => $this->foodsaver['name'])),
-					'val' => implode(', ', $fsa)
+					'name' => $this->translationHelper->sv(
+						'foodsaver_districts',
+						array('name' => $this->foodsaver['name'])
+					),
+					'val' => implode(', ', $fsa),
 				);
 			}
 			if (!empty($fsHomeDistrict)) {
 				$infos[] = array(
-					'name' => $this->translationHelper->sv('foodsaver_home_district', array('name' => $this->foodsaver['name'])),
-					'val' => implode(', ', $fsHomeDistrict)
+					'name' => $this->translationHelper->sv(
+						'foodsaver_home_district',
+						array('name' => $this->foodsaver['name'])
+					),
+					'val' => implode(', ', $fsHomeDistrict),
 				);
 			}
 		}
@@ -252,22 +116,42 @@ class ProfileView extends View
 				}
 			}
 			$infos[] = array(
-				'name' => $this->translationHelper->sv('foodsaver_workgroups', array('gender' => $this->translationHelper->genderWord($this->foodsaver['geschlecht'], 'Er', 'Sie', 'Er/Sie'))),
-				'val' => implode(', ', $ambassador)
+				'name' => $this->translationHelper->sv(
+					'foodsaver_workgroups',
+					array(
+						'gender' => $this->translationHelper->genderWord(
+							$this->foodsaver['geschlecht'],
+							'Er',
+							'Sie',
+							'Er/Sie'
+						),
+					)
+				),
+				'val' => implode(', ', $ambassador),
 			);
 		}
 
 		if ($this->foodsaver['sleep_status'] == 1) {
 			$infos[] = array(
-				'name' => $this->translationHelper->sv('foodsaver_sleeping_hat_time', array('name' => $this->foodsaver['name'], 'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']), 'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']))),
-				'val' => $this->foodsaver['sleep_msg']
+				'name' => $this->translationHelper->sv(
+					'foodsaver_sleeping_hat_time',
+					array(
+						'name' => $this->foodsaver['name'],
+						'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']),
+						'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']),
+					)
+				),
+				'val' => $this->foodsaver['sleep_msg'],
 			);
 		}
 
 		if ($this->foodsaver['sleep_status'] == 2) {
 			$infos[] = array(
-				'name' => $this->translationHelper->sv('foodsaver_sleeping_hat_time_undefined', array('name' => $this->foodsaver['name'])),
-				'val' => $this->foodsaver['sleep_msg']
+				'name' => $this->translationHelper->sv(
+					'foodsaver_sleeping_hat_time_undefined',
+					array('name' => $this->foodsaver['name'])
+				),
+				'val' => $this->foodsaver['sleep_msg'],
 			);
 		}
 
@@ -342,10 +226,12 @@ class ProfileView extends View
 				</div>';
 			}
 
-			$this->pageHelper->addJs('
+			$this->pageHelper->addJs(
+				'
 			$(".stat_bananacount").magnificPopup({
 				type:"inline"
-			});');
+			});'
+			);
 			$bananaCount = '
 			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
 				<span class="val">' . $count_banana . '</span>
@@ -369,7 +255,9 @@ class ProfileView extends View
 				}
 				$bananaCount .= '
 				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img($b['photo']) . '"></a></td>
+					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img(
+						$b['photo']
+					) . '"></a></td>
 					<td><span class="msg">' . nl2br($b['msg']) . '</span>
 					<div class="foot">
 						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
@@ -397,6 +285,251 @@ class ProfileView extends View
 			</div>';
 	}
 
+	private function fetchDates(array $fetchDates): string
+	{
+		$out = '
+				<div class="ui-padding" id="double">';
+
+		if ($this->session->isOrgaTeam()) {
+			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteAllDatesFromFoodsaver\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . '});return false;">' . $this->translationHelper->s(
+					'cancel_all'
+				) . '</a>';
+		}
+
+		$out .= '<ul class="datelist linklist" id="double">';
+		foreach ($fetchDates as $d) {
+			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
+
+			$out .= '
+						<li>
+							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
+								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate(
+					$d['date_ts']
+				) . '</span>
+							</a>
+						</li>
+						<li>
+							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
+								<span class="title">' . $d['betrieb_name'] . '</span>
+							</a>
+						</li>';
+
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
+				$out .= '<li>
+							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
+							</li>';
+			} else {
+				$out .= '<li>
+							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
+							</li>';
+			}
+		}
+
+		return $out . '
+					</ul>
+				</div>';
+	}
+
+	private function photo(
+		bool $showEditButton,
+		bool $showPassportGenerationHistoryButton,
+		bool $showVerificationHistoryButton
+	): string {
+		$menu = $this->profileMenu(
+			$showEditButton,
+			$showPassportGenerationHistoryButton,
+			$showVerificationHistoryButton
+		);
+
+		$sleep_info = '';
+
+		$online = '';
+
+		if ($this->foodsaver['online']) {
+			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info(
+					$this->foodsaver['name'] . ' ist online!',
+					false,
+					'<i class="fas fa-circle" style="color:#5ab946;"></i>'
+				) . '</div>';
+		}
+
+		return '<div style="text-align:center;">
+					' . $this->imageService->avatar($this->foodsaver, 130) . $sleep_info . '
+				</div>
+				' . $online . '
+				' . $menu;
+	}
+
+	private function profileMenu(
+		bool $showEditButton,
+		bool $showPassportGenerationHistoryButton,
+		bool $showVerificationHistoryButton
+	): string {
+		$opt = '';
+
+		if ($showEditButton) {
+			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
+		}
+		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
+			$name = explode(' ', $this->foodsaver['name']);
+			$name = $name[0];
+			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
+		}
+		if ($showPassportGenerationHistoryButton) {
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';
+		}
+		if ($showVerificationHistoryButton) {
+			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
+		}
+
+		if ($this->session->mayHandleReports()) {
+			if (isset($this->foodsaver['note_count'])) {
+				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv(
+						'notes_count',
+						array('count' => $this->foodsaver['note_count'])
+					) . '</a></li>';
+			}
+			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
+				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->translationHelper->sv(
+						'violation_count',
+						array('count' => $this->foodsaver['violation_count'])
+					) . '</a></li>';
+			}
+		}
+
+		return '
+		<ul class="linklist">
+			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>
+			' . $opt . '
+			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
+		</ul>';
+	}
+
+	private function sideInfos(): string
+	{
+		$infos = array();
+
+		if ($this->session->may('orga')) {
+			$last_login = (
+			$this->foodsaver['last_login']
+				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
+				: $this->translationHelper->s('Never')
+			);
+			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
+
+			$infos[] = array(
+				'name' => $this->translationHelper->s('last_login'),
+				'val' => $last_login,
+			);
+			$infos[] = array(
+				'name' => $this->translationHelper->s('registration_date'),
+				'val' => $registration_date->format('d.m.Y'),
+			);
+			$infos[] = array(
+				'name' => $this->translationHelper->s('private_mail'),
+				'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
+						$this->foodsaver['email']
+					) . '">' . $this->foodsaver['email'] . '</a>',
+			);
+			if (isset($this->foodsaver['mailbox'])) {
+				$infos[] = array(
+					'name' => $this->translationHelper->s('mailbox'),
+					'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
+							$this->foodsaver['mailbox']
+						) . '">' . $this->foodsaver['mailbox'] . '</a>',
+				);
+			}
+		}
+
+		if ($this->foodsaver['stat_buddycount'] > 0) {
+			$infos[] = array(
+				'name' => 'Bekannte',
+				'val' => $this->foodsaver['name'] . (($this->foodsaver['stat_buddycount'] == 1) ? ' kennt ' : ' kennen ') . $this->foodsaver['stat_buddycount'] . ' Foodsaver',
+			);
+		}
+
+		if ($this->foodsaver['stat_fetchcount'] > 0) {
+			$infos[] = array(
+				'name' => 'Abholquote',
+				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%',
+			);
+		}
+
+		$out = '';
+		foreach ($infos as $info) {
+			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
+		}
+
+		return '
+		<div class="pure-g">
+		    <div class="infos"> ' . $out . ' </div>
+		</div>';
+	}
+
+	/**
+	 * Create HTML for list of stores on the profile.
+	 * Each store has a symbol in front indicating if the user is
+	 *  - waiting for approval (a question mark)
+	 *  - in store (the shopping basket used for stores)
+	 *  - Springer = waiting list (a coffee mug).
+	 *
+	 * @param array $userCompanies
+	 *
+	 * @return string: HTML with the list
+	 */
+	private function sideInfosCompanies(array $userCompanies): string
+	{
+		$out = '';
+		foreach ($userCompanies as $b) {
+			switch ($b['active']) {
+				case 0:  // asked to be in store team
+					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
+					break;
+				case 1: // in store team
+					$userStatusOfStore = '<i class="fas fa-shopping-cart fw"></i> ';
+					break;
+				case 2: // Springer (waiting list)
+					$userStatusOfStore = '<i class="fas fa-mug-hot fw"></i> ';
+					break;
+				default: // should not happen
+					$userStatusOfStore = '';
+					break;
+			}
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
+		}
+
+		return '
+		<div class="pure-g">
+		    <div class="infos"> ' . $out . ' </div>
+		</div>';
+	}
+
+	public function userNotes(
+		string $notes,
+		bool $showEditButton,
+		bool $showPassportGenerationHistoryButton,
+		bool $showVerificationHistoryButton,
+		array $userCompanies,
+		$userCompaniesCount
+	): void {
+		$page = new vPage(
+			$this->foodsaver['name'] . ' Notizen',
+			$this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes
+		);
+		$page->setBread('Notizen');
+
+		$page->addSectionLeft(
+			$this->photo($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton)
+		);
+		$page->addSectionLeft($this->sideInfos(), 'Infos');
+
+		if ($this->session->may('orga')) {
+			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
+		}
+
+		$page->render();
+	}
+
 	public function getHistory(array $history, int $changeType): string
 	{
 		$out = '
@@ -416,7 +549,9 @@ class ProfileView extends View
 						$class = 'verify';
 						$typeOfChange = 'Verifiziert';
 					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
+					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate(
+							$h['date_ts']
+						) . ' durch:</li>';
 				}
 				if ($changeType == 1) {
 					if ($h['bot_id'] !== null) {
@@ -451,61 +586,6 @@ class ProfileView extends View
 		}
 
 		return $out;
-	}
-
-	private function photo(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton): string
-	{
-		$menu = $this->profileMenu($showEditButton, $showPassportGenerationHistoryButton, $showVerificationHistoryButton);
-
-		$sleep_info = '';
-
-		$online = '';
-
-		if ($this->foodsaver['online']) {
-			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info($this->foodsaver['name'] . ' ist online!', false, '<i class="fas fa-circle" style="color:#5ab946;"></i>') . '</div>';
-		}
-
-		return '<div style="text-align:center;">
-					' . $this->imageService->avatar($this->foodsaver, 130) . $sleep_info . '
-				</div>
-				' . $online . '
-				' . $menu;
-	}
-
-	private function profileMenu(bool $showEditButton, bool $showPassportGenerationHistoryButton, bool $showVerificationHistoryButton): string
-	{
-		$opt = '';
-
-		if ($showEditButton) {
-			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
-		}
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
-			$name = explode(' ', $this->foodsaver['name']);
-			$name = $name[0];
-			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
-		}
-		if ($showPassportGenerationHistoryButton) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';
-		}
-		if ($showVerificationHistoryButton) {
-			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
-		}
-
-		if ($this->session->mayHandleReports()) {
-			if (isset($this->foodsaver['note_count'])) {
-				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv('notes_count', array('count' => $this->foodsaver['note_count'])) . '</a></li>';
-			}
-			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
-				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->translationHelper->sv('violation_count', array('count' => $this->foodsaver['violation_count'])) . '</a></li>';
-			}
-		}
-
-		return '
-		<ul class="linklist">
-			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>
-			' . $opt . '
-			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
-		</ul>';
 	}
 
 	public function setData(array $data): void
