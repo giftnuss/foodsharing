@@ -1,5 +1,5 @@
 # The foodsharing-IT is looking for helpers 💻🔧
-[Eine **Deutsche Version** ist hier zu finden.] (it-tasks_DE.md)
+[Eine **Deutsche Version** ist hier zu finden.](it-tasks_DE.md)
 
 Dear potentially interested people (f/m/d),
 
