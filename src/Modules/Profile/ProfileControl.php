@@ -78,7 +78,6 @@ final class ProfileControl extends Control
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				true,
 				$this->profileGateway->getCompanies($this->foodsaver['id']),
-				$this->profileGateway->getCompaniesCount($this->foodsaver['id']),
 				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
 			);
 		} else {

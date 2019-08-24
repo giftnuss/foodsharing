@@ -15,8 +15,7 @@ class ProfileView extends View
 		string $wallPosts,
 		bool $profileVisitorMayAdminThisFoodsharer = false,
 		array $userCompanies = [],
-		$userCompaniesCount = null,
-		$fetchDates = null
+		array $fetchDates = []
 	): void {
 		$page = new vPage($this->foodsaver['name'], $this->infos());
 		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
@@ -40,7 +39,7 @@ class ProfileView extends View
 		}
 
 		if ($profileVisitorMayAdminThisFoodsharer && $userCompanies) { // AMB functionality
-			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . $userCompaniesCount . ')');
+			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
 		}
 		$page->render();
 	}
