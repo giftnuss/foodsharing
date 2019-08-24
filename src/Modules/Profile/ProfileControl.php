@@ -32,23 +32,20 @@ final class ProfileControl extends Control
 
 		if ($id = $this->uriInt(2)) {
 			$this->profileGateway->setFsId((int)$id);
-			if ($data = $this->profileGateway->getData($this->session->id())) {
-				if ($data['deleted_at'] === null || $this->session->may('orga')) {
-					$this->foodsaver = $data;
-					$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
-					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
+			$data = $this->profileGateway->getData($this->session->id());
+			if ($data && ($data['deleted_at'] === null || $this->session->may('orga'))) {
+				$this->foodsaver = $data;
+				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
+				$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
 						$this->foodsaver['id']
 					);
 
-					$this->view->setData($this->foodsaver);
+				$this->view->setData($this->foodsaver);
 
-					if ($this->uriStr(3) === 'notes') {
-						$this->organisationTeamNotes();
-					} else {
-						$this->profile();
-					}
+				if ($this->uriStr(3) === 'notes') {
+					$this->organisationTeamNotes();
 				} else {
-					$this->routeHelper->goPage('dashboard');
+					$this->profile();
 				}
 			} else {
 				$this->routeHelper->goPage('dashboard');
@@ -57,8 +54,6 @@ final class ProfileControl extends Control
 			$this->routeHelper->goPage('dashboard');
 		}
 	}
-
-	// this is required even if empty.
 
 	private function organisationTeamNotes(): void
 	{
@@ -98,6 +93,7 @@ final class ProfileControl extends Control
 		}
 	}
 
+	// this is required even if empty.
 	public function index(): void
 	{
 	}
