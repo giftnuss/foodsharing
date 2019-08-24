@@ -328,32 +328,11 @@ class ProfileView extends View
 	{
 		$out = '
 			<ul class="linklist history">';
-		$class = '';
 
 		$curDate = 0;
 		foreach ($history as $h) {
 			if ($curDate != $h['date']) {
-				if ($changeType === 0) {
-					$typeOfChange = '';
-					if ($h['change_status'] == 0) {
-						$class = 'unverify';
-						$typeOfChange = 'Entverifiziert';
-					}
-					if ($h['change_status'] == 1) {
-						$class = 'verify';
-						$typeOfChange = 'Verifiziert';
-					}
-					$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate(
-							$h['date_ts']
-						) . ' durch:</li>';
-				}
-				if ($changeType === 1) {
-					if ($h['bot_id'] !== null) {
-						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
-					} else {
-						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
-					}
-				}
+				$out = $this->renderTypeOfHistoryEntry($changeType, $h, $out);
 
 				$curDate = $h['date'];
 			}
@@ -642,6 +621,7 @@ class ProfileView extends View
 
 	/**
 	 * @param array $infos
+	 *
 	 * @return array
 	 */
 	private function renderSleepingHatInformation(array $infos): array
@@ -674,5 +654,47 @@ class ProfileView extends View
 		}
 
 		return $infos;
+	}
+
+	/**
+	 * @param int $changeType
+	 * @param array $h
+	 * @param string $out
+	 *
+	 * @return string
+	 */
+	private function renderTypeOfHistoryEntry(int $changeType, array $h, string $out): string
+	{
+		switch ($changeType) {
+			case 0:
+				$typeOfChange = '';
+				switch ($h['change_status']) {
+					case 0:
+						$class = 'unverify';
+						$typeOfChange = 'Entverifiziert';
+						break;
+					case 1:
+						$class = 'verify';
+						$typeOfChange = 'Verifiziert';
+						break;
+					default:
+						break;
+				}
+				$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate(
+						$h['date_ts']
+					) . ' durch:</li>';
+				break;
+			case 1:
+				if ($h['bot_id'] !== null) {
+					$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
+				} else {
+					$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
+				}
+				break;
+			default:
+				break;
+		}
+
+		return $out;
 	}
 }
