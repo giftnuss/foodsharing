@@ -96,6 +96,7 @@
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 - Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
+- Reduced complexity of the profile module !1037 @peter.toennies
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

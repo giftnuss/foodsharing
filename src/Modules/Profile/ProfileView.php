@@ -45,7 +45,6 @@ class ProfileView extends View
 		$page->render();
 	}
 
-	// AMB functionality
 	private function infos(): string
 	{
 		/*
@@ -76,6 +75,7 @@ class ProfileView extends View
 			</div>';
 	}
 
+	// AMB functionality
 	private function fetchDates(array $fetchDates): string
 	{
 		$out = '
