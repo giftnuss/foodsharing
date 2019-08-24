@@ -315,33 +315,14 @@ final class ProfileGateway extends BaseGateway
 					b.name,
 					bt.verantwortlich,
 					bt.active
-
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
-
 			WHERE 	bt.betrieb_id = b.id
-			AND
-					bt.foodsaver_id = :fs_id
+			AND		bt.foodsaver_id = :fs_id
 			ORDER BY b.name
 		';
 
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
-	}
-
-	public function getCompaniesCount(int $fsId)
-	{
-		$stm = '
-			SELECT 	count(b.id)
-
-			FROM 	fs_betrieb_team bt,
-					fs_betrieb b
-
-			WHERE 	bt.betrieb_id = b.id
-			AND
-					bt.foodsaver_id = :fs_id
-		';
-
-		return $this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
 	public function buddyStatus(int $fsId)
