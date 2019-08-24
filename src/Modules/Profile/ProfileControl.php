@@ -62,8 +62,6 @@ final class ProfileControl extends Control
 			$this->view->userNotes(
 				$this->wallposts('usernotes', $this->foodsaver['id']),
 				true,
-				true,
-				true,
 				$this->profileGateway->getCompanies($this->foodsaver['id']),
 				$this->profileGateway->getCompaniesCount($this->foodsaver['id'])
 			);
@@ -78,9 +76,6 @@ final class ProfileControl extends Control
 		if ($this->session->isAmbassadorForRegion($regionIDs, false, true) || $this->session->isOrgaTeam()) {
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
-				true,
-				true,
-				true,
 				true,
 				$this->profileGateway->getCompanies($this->foodsaver['id']),
 				$this->profileGateway->getCompaniesCount($this->foodsaver['id']),
