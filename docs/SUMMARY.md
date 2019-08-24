@@ -1,8 +1,8 @@
 # Summary
 
 - [Overview](README.md)
-- [Call for contribution (EN)](it-tasks.md)
-- [Aufruf zur Unterstützung (DE)](it-tasks_DE.md)
+- [Aufruf zur Unterstützung (DE)](it-tasks.md)
+- [Call for contribution (EN)](it-tasks_EN.md)
 
 ### Getting started
   - [Getting the code](getting-the-code.md)
