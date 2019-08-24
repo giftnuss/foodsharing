@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Basket\BasketGateway;
 
 final class ProfileControl extends Control
 {
@@ -36,7 +36,9 @@ final class ProfileControl extends Control
 				if ($data['deleted_at'] === null || $this->session->may('orga')) {
 					$this->foodsaver = $data;
 					$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
-					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets($this->foodsaver['id']);
+					$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
+						$this->foodsaver['id']
+					);
 
 					$this->view->setData($this->foodsaver);
 
@@ -57,9 +59,6 @@ final class ProfileControl extends Control
 	}
 
 	// this is required even if empty.
-	public function index(): void
-	{
-	}
 
 	private function organisationTeamNotes(): void
 	{
@@ -97,5 +96,9 @@ final class ProfileControl extends Control
 				$this->wallposts('foodsaver', $this->foodsaver['id'])
 			);
 		}
+	}
+
+	public function index(): void
+	{
 	}
 }

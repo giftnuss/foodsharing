@@ -171,25 +171,11 @@ final class ProfileGateway extends BaseGateway
 			$data['pic'] = array(
 				'original' => 'images/' . $data['photo'],
 				'medium' => 'images/130_q_' . $data['photo'],
-				'mini' => 'images/50_q_' . $data['photo']
+				'mini' => 'images/50_q_' . $data['photo'],
 			);
 		}
 
 		return $data;
-	}
-
-	private function getNotesCount(int $fsId): int
-	{
-		$stm = '
-			SELECT
-				COUNT(wallpost_id)
-			FROM
-	           	`fs_usernotes_has_wallpost`
-			WHERE
-				usernotes_id = :fs_id
-		';
-
-		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
 	private function getViolationCount(int $fsId): int
@@ -201,6 +187,20 @@ final class ProfileGateway extends BaseGateway
 	            `fs_report` r
 			WHERE
 				r.foodsaver_id = :fs_id
+		';
+
+		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
+	}
+
+	private function getNotesCount(int $fsId): int
+	{
+		$stm = '
+			SELECT
+				COUNT(wallpost_id)
+			FROM
+	           	`fs_usernotes_has_wallpost`
+			WHERE
+				usernotes_id = :fs_id
 		';
 
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
