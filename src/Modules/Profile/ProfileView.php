@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Profile;
 
 use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
+use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\View;
 
 class ProfileView extends View
@@ -48,229 +49,22 @@ class ProfileView extends View
 	}
 
 	// AMB functionality
-
-	public function infos(): string
+	private function infos(): string
 	{
-		$infos = array();
-
-		if ($this->foodsaver['botschafter']) {
-			$ambassador = array();
-			foreach ($this->foodsaver['botschafter'] as $b) {
-				$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
-			}
-			$infos[] = array(
-				'name' => $this->translationHelper->sv(
-					'ambassador_districts',
-					array(
-						'name' => $this->foodsaver['name'],
-						'gender' => $this->translationHelper->genderWord(
-							$this->foodsaver['geschlecht'],
-							'',
-							'in',
-							'_in'
-						),
-					)
-				),
-				'val' => implode(', ', $ambassador),
-			);
-		}
-
-		if ($this->foodsaver['foodsaver']) {
-			$fsa = array();
-			$fsHomeDistrict = array();
-			foreach ($this->foodsaver['foodsaver'] as $b) {
-				if ($b['id'] == $this->foodsaver['bezirk_id']) {
-					$fsHomeDistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
-				}
-				if (!isset($ambassador[$b['id']])) {
-					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
-				}
-			}
-			if (!empty($fsa)) {
-				$infos[] = array(
-					'name' => $this->translationHelper->sv(
-						'foodsaver_districts',
-						array('name' => $this->foodsaver['name'])
-					),
-					'val' => implode(', ', $fsa),
-				);
-			}
-			if (!empty($fsHomeDistrict)) {
-				$infos[] = array(
-					'name' => $this->translationHelper->sv(
-						'foodsaver_home_district',
-						array('name' => $this->foodsaver['name'])
-					),
-					'val' => implode(', ', $fsHomeDistrict),
-				);
-			}
-		}
-
-		if ($this->foodsaver['orga']) {
-			$ambassador = array();
-			foreach ($this->foodsaver['orga'] as $b) {
-				if ($this->session->isOrgaTeam()) {
-					$ambassador[$b['id']] = '<a class="light" href="/?page=bezirk&bid=' . $b['id'] . '&sub=forum">' . $b['name'] . '</a>';
-				} else {
-					$ambassador[$b['id']] = $b['name'];
-				}
-			}
-			$infos[] = array(
-				'name' => $this->translationHelper->sv(
-					'foodsaver_workgroups',
-					array(
-						'gender' => $this->translationHelper->genderWord(
-							$this->foodsaver['geschlecht'],
-							'Er',
-							'Sie',
-							'Er/Sie'
-						),
-					)
-				),
-				'val' => implode(', ', $ambassador),
-			);
-		}
-
-		if ($this->foodsaver['sleep_status'] == 1) {
-			$infos[] = array(
-				'name' => $this->translationHelper->sv(
-					'foodsaver_sleeping_hat_time',
-					array(
-						'name' => $this->foodsaver['name'],
-						'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']),
-						'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']),
-					)
-				),
-				'val' => $this->foodsaver['sleep_msg'],
-			);
-		}
-
-		if ($this->foodsaver['sleep_status'] == 2) {
-			$infos[] = array(
-				'name' => $this->translationHelper->sv(
-					'foodsaver_sleeping_hat_time_undefined',
-					array('name' => $this->foodsaver['name'])
-				),
-				'val' => $this->foodsaver['sleep_msg'],
-			);
-		}
-
-		$out = '';
-		foreach ($infos as $info) {
-			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
-		}
+		/*
+		* Information
+		 */
+		$out = $this->renderInformation();
 
 		/*
 		 * Statistics
 		 */
-		$fetchWeight = '';
-		if ($this->foodsaver['stat_fetchweight'] > 0) {
-			$fetchWeight = '
-				<span class="item stat_fetchweight">
-					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
-					<span class="name">gerettet</span>
-				</span>';
-		}
-
-		$fetchCount = '';
-		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$fetchCount = '
-				<span class="item stat_fetchcount">
-					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
-					<span class="name">abgeholt</span>
-				</span>';
-		}
-
-		$foodBasketCount = '
-				<a href="/essenskoerbe">
-				    <span class="item stat_basketcount">
-					    <span class="val">' . number_format($this->foodsaver['basketCount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
-					    <span class="name">Essenskörbe</span>
-				    </span>
-				</a>';
-
-		if ($this->session->may('fs')) { // for foodsavers only
-			$postCount = '
-				<span class="item stat_postcount">
-					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
-					<span class="name">Beiträge</span>
-				</span>';
-		} else {
-			$postCount = '';
-		}
+		[$fetchWeight, $fetchCount, $foodBasketCount, $postCount] = $this->renderStatistics();
 
 		/*
-		 * Banana
+		 * Bananas
 		*/
-		if ($this->session->may('fs')) {
-			$count_banana = count($this->foodsaver['bananen']);
-			if ($count_banana == 0) {
-				$count_banana = '&nbsp;';
-			}
-
-			$banana_button_class = ' bouched';
-			$giveBanana = '';
-
-			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
-				$banana_button_class = '';
-				$giveBanana = '
-				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
-				<div class="vouch-banana-wrapper" style="display:none;">
-					<div class="vouch-banana-desc">
-						Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
-						Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
-						<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
-						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:' . (int)$this->foodsaver['id'] . ',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
-					</div>
-					<textarea id="bouch-ta" class="textarea" placeholder="min. 100 Zeichen..." style="height:50px;"></textarea>
-				</div>';
-			}
-
-			$this->pageHelper->addJs(
-				'
-			$(".stat_bananacount").magnificPopup({
-				type:"inline"
-			});'
-			);
-			$bananaCount = '
-			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
-				<span class="val">' . $count_banana . '</span>
-				<span class="name">&nbsp;</span>
-			</a>
-			';
-
-			$bananaCount .= '
-			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
-				' . $giveBanana . '
-				<table class="pintable">
-					<tbody>';
-			$odd = 'even';
-
-			foreach ($this->foodsaver['bananen'] as $b) {
-				if ($odd === 'even') {
-					$odd = 'odd';
-				} else {
-					$odd = 'even';
-				}
-				$bananaCount .= '
-				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $b['name'] . '" href="/profile/' . $b['id'] . '"><img src="' . $this->imageService->img(
-						$b['photo']
-					) . '"></a></td>
-					<td><span class="msg">' . nl2br($b['msg']) . '</span>
-					<div class="foot">
-						<span class="time">' . $this->timeHelper->niceDate($b['time_ts']) . ' von ' . $b['name'] . '</span>
-					</div></td>
-				</tr>';
-			}
-			$bananaCount .= '
-					</tbody>
-				</table>
-			</div>';
-		} else {
-			$bananaCount = '';
-		}
+		$bananaCount = $this->renderBananas();
 
 		return '
 			<div class="pure-g">
@@ -370,7 +164,7 @@ class ProfileView extends View
 		if ($showEditButton) {
 			$opt .= '<li><a href="/?page=foodsaver&a=edit&id=' . $this->foodsaver['id'] . '"><i class="fas fa-pencil-alt fa-fw"></i>Profil bearbeiten</a></li>';
 		}
-		if ($this->foodsaver['buddy'] === -1 && $this->foodsaver['id'] != $this->session->id()) {
+		if ($this->foodsaver['buddy'] === BuddyId::NO_BUDDY && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
@@ -407,7 +201,7 @@ class ProfileView extends View
 
 	private function sideInfos(): string
 	{
-		$infos = array();
+		$infos = [];
 
 		if ($this->session->may('orga')) {
 			$last_login = (
@@ -417,42 +211,42 @@ class ProfileView extends View
 			);
 			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
 
-			$infos[] = array(
+			$infos[] = [
 				'name' => $this->translationHelper->s('last_login'),
 				'val' => $last_login,
-			);
-			$infos[] = array(
+			];
+			$infos[] = [
 				'name' => $this->translationHelper->s('registration_date'),
 				'val' => $registration_date->format('d.m.Y'),
-			);
-			$infos[] = array(
+			];
+			$infos[] = [
 				'name' => $this->translationHelper->s('private_mail'),
 				'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
 						$this->foodsaver['email']
 					) . '">' . $this->foodsaver['email'] . '</a>',
-			);
+			];
 			if (isset($this->foodsaver['mailbox'])) {
-				$infos[] = array(
+				$infos[] = [
 					'name' => $this->translationHelper->s('mailbox'),
 					'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
 							$this->foodsaver['mailbox']
 						) . '">' . $this->foodsaver['mailbox'] . '</a>',
-				);
+				];
 			}
 		}
 
 		if ($this->foodsaver['stat_buddycount'] > 0) {
-			$infos[] = array(
+			$infos[] = [
 				'name' => 'Bekannte',
 				'val' => $this->foodsaver['name'] . (($this->foodsaver['stat_buddycount'] == 1) ? ' kennt ' : ' kennen ') . $this->foodsaver['stat_buddycount'] . ' Foodsaver',
-			);
+			];
 		}
 
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
-			$infos[] = array(
+			$infos[] = [
 				'name' => 'Abholquote',
 				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%',
-			);
+			];
 		}
 
 		$out = '';
@@ -539,7 +333,7 @@ class ProfileView extends View
 		$curDate = 0;
 		foreach ($history as $h) {
 			if ($curDate != $h['date']) {
-				if ($changeType == 0) {
+				if ($changeType === 0) {
 					$typeOfChange = '';
 					if ($h['change_status'] == 0) {
 						$class = 'unverify';
@@ -553,7 +347,7 @@ class ProfileView extends View
 							$h['date_ts']
 						) . ' durch:</li>';
 				}
-				if ($changeType == 1) {
+				if ($changeType === 1) {
 					if ($h['bot_id'] !== null) {
 						$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 					} else {
@@ -563,6 +357,7 @@ class ProfileView extends View
 
 				$curDate = $h['date'];
 			}
+
 			if ($h['bot_id'] !== null) {
 				$out .= '
 				<li>
@@ -591,5 +386,293 @@ class ProfileView extends View
 	public function setData(array $data): void
 	{
 		$this->foodsaver = $data;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function renderStatistics(): array
+	{
+		$fetchWeight = '';
+		if ($this->foodsaver['stat_fetchweight'] > 0) {
+			$fetchWeight = '
+				<span class="item stat_fetchweight">
+					<span class="val">' . number_format($this->foodsaver['stat_fetchweight'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg</span>
+					<span class="name">gerettet</span>
+				</span>';
+		}
+
+		$fetchCount = '';
+		if ($this->foodsaver['stat_fetchcount'] > 0) {
+			$fetchCount = '
+				<span class="item stat_fetchcount">
+					<span class="val">' . number_format($this->foodsaver['stat_fetchcount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					<span class="name">abgeholt</span>
+				</span>';
+		}
+
+		$foodBasketCount = '
+				<a href="/essenskoerbe">
+				    <span class="item stat_basketcount">
+					    <span class="val">' . number_format($this->foodsaver['basketCount'], 0, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>x</span>
+					    <span class="name">Essenskörbe</span>
+				    </span>
+				</a>';
+
+		if ($this->session->may('fs')) { // for foodsavers only
+			$postCount = '
+				<span class="item stat_postcount">
+					<span class="val">' . number_format($this->foodsaver['stat_postcount'], 0, ',', '.') . '</span>
+					<span class="name">Beiträge</span>
+				</span>';
+		} else {
+			$postCount = '';
+		}
+
+		return array($fetchWeight, $fetchCount, $foodBasketCount, $postCount);
+	}
+
+	/**
+	 * @return string
+	 */
+	private function renderBananas(): string
+	{
+		if ($this->session->may('fs')) {
+			$count_banana = count($this->foodsaver['bananen']);
+			if ($count_banana === 0) {
+				$count_banana = '&nbsp;';
+			}
+
+			$banana_button_class = ' bouched';
+			$giveBanana = '';
+
+			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
+				$banana_button_class = '';
+				$giveBanana = '
+				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
+				<div class="vouch-banana-wrapper" style="display:none;">
+					<div class="vouch-banana-desc">
+						Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+						Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
+						<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
+						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:' . (int)$this->foodsaver['id'] . ',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
+					</div>
+					<textarea id="bouch-ta" class="textarea" placeholder="min. 100 Zeichen..." style="height:50px;"></textarea>
+				</div>';
+			}
+
+			$this->pageHelper->addJs(
+				'
+			$(".stat_bananacount").magnificPopup({
+				type:"inline"
+			});'
+			);
+			$bananaCount = '
+			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
+				<span class="val">' . $count_banana . '</span>
+				<span class="name">&nbsp;</span>
+			</a>
+			';
+
+			$bananaCount .= '
+			<div id="bananas" class="white-popup mfp-hide corner-all">
+				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
+				' . $giveBanana . '
+				<table class="pintable">
+					<tbody>';
+			$odd = 'even';
+
+			foreach ($this->foodsaver['bananen'] as $foodsaver) {
+				if ($odd === 'even') {
+					$odd = 'odd';
+				} else {
+					$odd = 'even';
+				}
+				$bananaCount .= '
+				<tr class="' . $odd . ' bpost">
+					<td class="img"><a title="' . $foodsaver['name'] . '" href="/profile/' . $foodsaver['id'] . '"><img src="' . $this->imageService->img(
+						$foodsaver['photo']
+					) . '"></a></td>
+					<td><span class="msg">' . nl2br($foodsaver['msg']) . '</span>
+					<div class="foot">
+						<span class="time">' . $this->timeHelper->niceDate(
+						$foodsaver['time_ts']
+					) . ' von ' . $foodsaver['name'] . '</span>
+					</div></td>
+				</tr>';
+			}
+			$bananaCount .= '
+					</tbody>
+				</table>
+			</div>';
+		} else {
+			$bananaCount = '';
+		}
+
+		return $bananaCount;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function renderInformation(): string
+	{
+		$infos = [];
+		[$ambassador, $infos] = $this->renderAmbassadorInformation($infos);
+		$infos = $this->renderFoodsaverInformation($ambassador, $infos);
+		$infos = $this->renderOrgaTeamMemberInformation($infos);
+		$infos = $this->renderSleepingHatInformation($infos);
+
+		$out = '';
+		foreach ($infos as $info) {
+			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param array $infos
+	 *
+	 * @return array
+	 */
+	private function renderAmbassadorInformation(array $infos): array
+	{
+		$ambassador = [];
+		if ($this->foodsaver['botschafter']) {
+			foreach ($this->foodsaver['botschafter'] as $foodsaver) {
+				$ambassador[$foodsaver['id']] = '<a class="light" href="/?page=bezirk&bid=' . $foodsaver['id'] . '&sub=forum">' . $foodsaver['name'] . '</a>';
+			}
+			$infos[] = [
+				'name' => $this->translationHelper->sv(
+					'ambassador_districts',
+					[
+						'name' => $this->foodsaver['name'],
+						'gender' => $this->translationHelper->genderWord(
+							$this->foodsaver['geschlecht'],
+							'',
+							'in',
+							'_in'
+						),
+					]
+				),
+				'val' => implode(', ', $ambassador),
+			];
+		}
+
+		return array($ambassador, $infos);
+	}
+
+	/**
+	 * @param array $ambassador
+	 * @param array $infos
+	 *
+	 * @return array
+	 */
+	private function renderFoodsaverInformation(array $ambassador, array $infos): array
+	{
+		if ($this->foodsaver['foodsaver']) {
+			$fsa = [];
+			$fsHomeDistrict = [];
+			foreach ($this->foodsaver['foodsaver'] as $foodsaver) {
+				if ($foodsaver['id'] == $this->foodsaver['bezirk_id']) {
+					$fsHomeDistrict[] = '<a class="light" href="/?page=bezirk&bid=' . $foodsaver['id'] . '&sub=forum">' . $foodsaver['name'] . '</a>';
+				}
+				if (!isset($ambassador[$foodsaver['id']])) {
+					$fsa[] = '<a class="light" href="/?page=bezirk&bid=' . $foodsaver['id'] . '&sub=forum">' . $foodsaver['name'] . '</a>';
+				}
+			}
+			if (!empty($fsa)) {
+				$infos[] = [
+					'name' => $this->translationHelper->sv(
+						'foodsaver_districts',
+						['name' => $this->foodsaver['name']]
+					),
+					'val' => implode(', ', $fsa),
+				];
+			}
+			if (!empty($fsHomeDistrict)) {
+				$infos[] = [
+					'name' => $this->translationHelper->sv(
+						'foodsaver_home_district',
+						['name' => $this->foodsaver['name']]
+					),
+					'val' => implode(', ', $fsHomeDistrict),
+				];
+			}
+		}
+
+		return $infos;
+	}
+
+	/**
+	 * @param array $infos
+	 *
+	 * @return array
+	 */
+	private function renderOrgaTeamMemberInformation(array $infos): array
+	{
+		if ($this->foodsaver['orga']) {
+			$ambassador = [];
+			foreach ($this->foodsaver['orga'] as $foodsaver) {
+				if ($this->session->isOrgaTeam()) {
+					$ambassador[$foodsaver['id']] = '<a class="light" href="/?page=bezirk&bid=' . $foodsaver['id'] . '&sub=forum">' . $foodsaver['name'] . '</a>';
+				} else {
+					$ambassador[$foodsaver['id']] = $foodsaver['name'];
+				}
+			}
+			$infos[] = [
+				'name' => $this->translationHelper->sv(
+					'foodsaver_workgroups',
+					[
+						'gender' => $this->translationHelper->genderWord(
+							$this->foodsaver['geschlecht'],
+							'Er',
+							'Sie',
+							'Er/Sie'
+						),
+					]
+				),
+				'val' => implode(', ', $ambassador),
+			];
+		}
+
+		return $infos;
+	}
+
+	/**
+	 * @param array $infos
+	 * @return array
+	 */
+	private function renderSleepingHatInformation(array $infos): array
+	{
+		switch ($this->foodsaver['sleep_status']) {
+			case 1:
+				$infos[] = [
+					'name' => $this->translationHelper->sv(
+						'foodsaver_sleeping_hat_time',
+						[
+							'name' => $this->foodsaver['name'],
+							'datum_von' => date('d.m.Y', $this->foodsaver['sleep_from_ts']),
+							'datum_bis' => date('d.m.Y', $this->foodsaver['sleep_until_ts']),
+						]
+					),
+					'val' => $this->foodsaver['sleep_msg'],
+				];
+				break;
+			case 2:
+				$infos[] = [
+					'name' => $this->translationHelper->sv(
+						'foodsaver_sleeping_hat_time_undefined',
+						['name' => $this->foodsaver['name']]
+					),
+					'val' => $this->foodsaver['sleep_msg'],
+				];
+				break;
+			default:
+				break;
+		}
+
+		return $infos;
 	}
 }

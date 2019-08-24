@@ -25,7 +25,7 @@ final class ProfileGateway extends BaseGateway
 		$this->fs_id = $id;
 	}
 
-	public function getData(int $fsId)
+	public function getData(int $fsId): array
 	{
 		$stm = '
 			SELECT 	fs.`id`,
@@ -75,7 +75,7 @@ final class ProfileGateway extends BaseGateway
 			';
 		if (($data = $this->db->fetch($stm, [':fs_id' => $this->fs_id])) === []
 		) {
-			return false;
+			return [];
 		}
 
 		$data['bouched'] = false;
@@ -120,8 +120,8 @@ final class ProfileGateway extends BaseGateway
 		$data['orga'] = false;
 
 		if ($this->session->mayHandleReports()) {
-			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
-			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
+			$data['violation_count'] = $this->getViolationCount($this->fs_id);
+			$data['note_count'] = $this->getNotesCount($this->fs_id);
 		}
 
 		$stm = '

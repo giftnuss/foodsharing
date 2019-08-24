@@ -40,13 +40,6 @@ class ProfileXhr extends Control
 
 		parent::__construct();
 
-		if (!$this->session->may()) {
-			return array(
-				'status' => 1,
-				'script' => '',
-			);
-		}
-
 		if (isset($_GET['id'])) {
 			$this->profileGateway->setFsId($_GET['id']);
 			$fs = $this->profileGateway->getData($_GET['id']);
@@ -54,40 +47,31 @@ class ProfileXhr extends Control
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
-				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
+				if ((int)$fs['mailbox_id'] > 0 && $this->session->may('orga')) {
 					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname(
 							$fs['mailbox_id']
 						) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
-				/*
-					* -1: no buddy
-					*  0: requested
-					*  1: buddy
-				*/
 				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
 
 				$this->view->setData($this->foodsaver);
 			} else {
 				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$_GET['id']);
-
-				return array(
-					'status' => 0,
-				);
 			}
 		}
 	}
 
-	public function rate(): ?array
+	public function rate(): array
 	{
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];
 		}
 
-		$fsid = (int)$_GET['id'];
+		$foodsharerId = (int)$_GET['id'];
 
-		if ($fsid > 0) {
+		if ($foodsharerId > 0) {
 			$type = (int)$_GET['type'];
 
 			$message = '';
@@ -96,34 +80,35 @@ class ProfileXhr extends Control
 			}
 
 			if (strlen($message) < 100) {
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'pulseError("Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.");',
-				);
+				];
 			}
 
-			$this->profileGateway->rate($fsid, $rate, $type, $message);
+			$this->profileGateway->rate($foodsharerId, $rate, $type, $message);
 
 			$comment = '';
-			if ($msg = $this->profileGateway->getRateMessage($fsid)) {
+			if ($msg = $this->profileGateway->getRateMessage($foodsharerId)) {
 				$comment = $msg;
 			}
 
-			return array(
+			return [
 				'status' => 1,
 				'comment' => $comment,
 				'title' => 'Nachricht hinterlassen',
-				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . (int)$fsid . ');',
-			);
+				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . (int)$foodsharerId . ');',
+			];
 		}
+
+		return [];
 	}
 
-	public function history(): ?array
+	public function history(): array
 	{
 		$regionIds = $this->regionGateway->getFsRegionIds($_GET['fsid']);
 		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(
 					$regionIds,
-					false,
 					false
 				))) {
 			$dia = new XhrDialog();
@@ -141,26 +126,29 @@ class ProfileXhr extends Control
 
 			return $dia->xhrout();
 		}
+
+		return [];
 	}
 
+	// used in ProfileView:fetchDates
 	public function deleteAllDatesFromFoodsaver(): array
 	{
 		if ($this->session->isOrgaTeam() && $this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => '
 				pulseSuccess("Alle Termine gelöscht");
 				reload();',
-			);
+			];
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseError("Du kannst nicht alle Termine löschen!");',
-		);
+		];
 	}
 
-	// used in ProfileView:fetchDates (
+	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
 		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
@@ -171,18 +159,18 @@ class ProfileXhr extends Control
 				$_GET['storeId'],
 				Carbon::createFromTimestamp($_GET['date'])
 			)) {
-				return array(
+				return [
 					'status' => 1,
 					'script' => '
 					pulseSuccess("Einzeltermin gelöscht");
 					reload();',
-				);
+				];
 			}
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");',
-		);
+		];
 	}
 }
