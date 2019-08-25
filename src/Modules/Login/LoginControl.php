@@ -124,7 +124,7 @@ class LoginControl extends Control
 		if (isset($_GET['ref'])) {
 			$this->routeHelper->go(urldecode($_GET['ref']));
 		}
-		$this->routeHelper->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
+		$this->routeHelper->go('/?page=dashboard');
 	}
 
 	public function passwordReset()
