@@ -41,6 +41,7 @@
 - Added Rest endpoint for fair share points !1012 @dthulke
 - Add backend logic for changing basket locations !1021 @alex.simm
 - Updated the wording regarding "not more than 2 foodsavers per pickup !1029 @peter.toennies
+- Fixed bell notifications for new wallposts in stores !1030 @jofranz
 
 ## Bugfixes
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
