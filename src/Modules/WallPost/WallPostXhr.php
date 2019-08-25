@@ -183,7 +183,7 @@ class WallPostXhr extends Control
 		}
 
 		if (isset($_FILES['etattach']['size']) && $_FILES['etattach']['size'] < 9136365 && $this->attach_allow($_FILES['etattach']['name'])) {
-			$new_filename = uniqid();
+			$new_filename = uniqid('', true);
 
 			$ext = strtolower($_FILES['etattach']['name']);
 			$ext = explode('.', $ext);
