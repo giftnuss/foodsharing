@@ -109,7 +109,7 @@ final class ProfileGateway extends BaseGateway
 		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id]);
 
 		if (!$data['bananen']) {
-			$data['bananen'] = array();
+			$data['bananen'] = [];
 		}
 
 		$this->db->update('fs_foodsaver', ['stat_bananacount' => count($data['bananen'])], ['id' => (int)$this->fs_id]);
@@ -168,11 +168,11 @@ final class ProfileGateway extends BaseGateway
 
 		$data['pic'] = false;
 		if (!empty($data['photo']) && file_exists('images/' . $data['photo'])) {
-			$data['pic'] = array(
+			$data['pic'] = [
 				'original' => 'images/' . $data['photo'],
 				'medium' => 'images/130_q_' . $data['photo'],
 				'mini' => 'images/50_q_' . $data['photo'],
-			);
+			];
 		}
 
 		return $data;
@@ -305,7 +305,7 @@ final class ProfileGateway extends BaseGateway
 		';
 		$ret = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 
-		return ($ret === false) ? array() : $ret;
+		return ($ret === false) ? [] : $ret;
 	}
 
 	public function getCompanies(int $fsId): array
