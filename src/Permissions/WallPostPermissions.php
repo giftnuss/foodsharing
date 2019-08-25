@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Permissions;
 
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -11,15 +12,18 @@ class WallPostPermissions
 	private $regionGateway;
 	private $eventGateway;
 	private $eventPermission;
+	private $session;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
-		EventPermissions $eventPermissions
+		EventPermissions $eventPermissions,
+		Session $session
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
 		$this->eventPermission = $eventPermissions;
+		$this->session = $session;
 	}
 
 	public function mayReadWall(int $fsId, string $target, int $targetId): bool
@@ -40,7 +44,8 @@ class WallPostPermissions
 				$result = $fsId && $this->regionGateway->hasMember($fsId, RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 				break;
 			case 'usernotes':
-				$result = $fsId && $this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM);
+			case 'fsreport':
+				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
 				break;
 			default:
 				$result = $fsId > 0;
@@ -75,17 +80,14 @@ class WallPostPermissions
 	{
 		switch ($target) {
 			case 'foodsaver':
+			case 'fairteiler':
 				$result = $fsId === $targetId;
 				break;
 			case 'bezirk':
 				$result = $this->regionGateway->isAdmin($fsId, $targetId);
 				break;
-			case 'usernotes':
-			case 'question':
-			$result = $this->mayReadWall($fsId, $target, $targetId);
-			break;
 			default:
-				$result = $fsId > 0;
+				$result = $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
 				break;
 		}
 

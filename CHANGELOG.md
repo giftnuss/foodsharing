@@ -87,6 +87,7 @@
 - When logging in, referenced redirects work now. !1034 #563 @peter.toennies
 - Open link to markdown description in a new window !1050 #698 @chriswalg
 - Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
+- Deleting report notes now possible for Orga and report team. Writing user notes now possible for orga !1038 #537 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -100,6 +101,7 @@
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 - Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
+- Refactored the WallPost module !1038 @peter.toennies
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
