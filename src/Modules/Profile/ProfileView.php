@@ -78,8 +78,7 @@ class ProfileView extends View
 	// AMB functionality
 	private function fetchDates(array $fetchDates): string
 	{
-		$out = '
-				<div class="ui-padding" id="double">';
+		$out = '<div class="ui-padding" id="double">';
 
 		if ($this->session->isOrgaTeam()) {
 			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteAllDatesFromFoodsaver\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . '});return false;">' . $this->translationHelper->s(
@@ -88,31 +87,28 @@ class ProfileView extends View
 		}
 
 		$out .= '<ul class="datelist linklist" id="double">';
-		foreach ($fetchDates as $d) {
-			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
+		foreach ($fetchDates as $date) {
+			$userConfirmedForPickup = $date['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
 
-			$out .= '
-						<li>
-							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate(
-					$d['date_ts']
-				) . '</span>
-							</a>
-						</li>
-						<li>
-							<a href="/?page=fsbetrieb&id=' . $d['betrieb_id'] . '" class="ui-corner-all">
-								<span class="title">' . $d['betrieb_name'] . '</span>
-							</a>
-						</li>';
+			$out .= '<li>
+						<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
+							<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($date['date_ts']) . '</span>
+						</a>
+					</li>
+					<li>
+						<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
+							<span class="title">' . $date['betrieb_name'] . '</span>
+						</a>
+					</li>';
 
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
+			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($date['bezirk_id'])) {
 				$out .= '<li>
-							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
-							</li>';
+							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $date['betrieb_id'] . ',date:' . $date['date_ts'] . '});return false;">austragen</a>
+						</li>';
 			} else {
 				$out .= '<li>
 							<a class="button button-big disabled" disabled=disabled href="#">austragen</a>
-							</li>';
+						</li>';
 			}
 		}
 
@@ -164,13 +160,13 @@ class ProfileView extends View
 			if (isset($this->foodsaver['note_count'])) {
 				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv(
 						'notes_count',
-						array('count' => $this->foodsaver['note_count'])
+						['count' => $this->foodsaver['note_count']]
 					) . '</a></li>';
 			}
 			if (isset($this->foodsaver['violation_count']) && $this->foodsaver['violation_count'] > 0) {
 				$opt .= '<li><a href="/?page=report&sub=foodsaver&id=' . (int)$this->foodsaver['id'] . '"><i class="far fa-meh fa-fw"></i>' . $this->translationHelper->sv(
 						'violation_count',
-						array('count' => $this->foodsaver['violation_count'])
+						['count' => $this->foodsaver['violation_count']]
 					) . '</a></li>';
 			}
 		}
@@ -258,8 +254,8 @@ class ProfileView extends View
 	private function sideInfosCompanies(array $userCompanies): string
 	{
 		$out = '';
-		foreach ($userCompanies as $b) {
-			switch ($b['active']) {
+		foreach ($userCompanies as $company) {
+			switch ($company['active']) {
 				case MembershipStatus::APPLIED_FOR_TEAM:
 					$userStatusOfStore = '<i class="far fa-question-circle fw"></i> ';
 					break;
@@ -273,7 +269,7 @@ class ProfileView extends View
 					$userStatusOfStore = '';
 					break;
 			}
-			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $userStatusOfStore . $b['name'] . '</a></p>';
+			$out .= '<p><a class="light" href="/?page=fsbetrieb&id=' . $company['id'] . '">' . $userStatusOfStore . $company['name'] . '</a></p>';
 		}
 
 		return '
@@ -288,16 +284,19 @@ class ProfileView extends View
 		array $userCompanies
 	): void {
 		$page = new vPage(
-			$this->foodsaver['name'] . ' Notizen',
+			$this->translationHelper->sv('notes_about', ['name' => $this->foodsaver['name']]),
 			$this->v_utils->v_info($this->translationHelper->s('user_notes_info')) . $notes
 		);
-		$page->setBread('Notizen');
+		$page->setBread($this->translationHelper->s('notes'));
 
 		$page->addSectionLeft($this->photo($profileVisitorMayAdminThisFoodsharer));
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($this->session->may('orga')) {
-			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
+			$page->addSectionLeft(
+				$this->sideInfosCompanies($userCompanies),
+				$this->translationHelper->sv('stores', ['count' => count($userCompanies)])
+			);
 		}
 
 		$page->render();
@@ -335,7 +334,7 @@ class ProfileView extends View
 		$out .= '
 		</ul>';
 		if ($curDate == 0) {
-			$out = 'Es liegen keine Daten vor';
+			$out = $this->translationHelper->s('no_data');
 		}
 
 		return $out;
@@ -387,7 +386,7 @@ class ProfileView extends View
 			$postCount = '';
 		}
 
-		return array($fetchWeight, $fetchCount, $foodBasketCount, $postCount);
+		return [$fetchWeight, $fetchCount, $foodBasketCount, $postCount];
 	}
 
 	/**
@@ -396,16 +395,16 @@ class ProfileView extends View
 	private function renderBananas(): string
 	{
 		if ($this->session->may('fs')) {
-			$count_banana = count($this->foodsaver['bananen']);
-			if ($count_banana === 0) {
-				$count_banana = '&nbsp;';
+			$bananaCount = count($this->foodsaver['bananen']);
+			if ($bananaCount === 0) {
+				$bananaCount = '&nbsp;';
 			}
 
-			$banana_button_class = ' bouched';
+			$banananButtonClass = ' bouched';
 			$giveBanana = '';
 
 			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
-				$banana_button_class = '';
+				$banananButtonClass = '';
 				$giveBanana = '
 				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
 				<div class="vouch-banana-wrapper" style="display:none;">
@@ -425,16 +424,16 @@ class ProfileView extends View
 				type:"inline"
 			});'
 			);
-			$bananaCount = '
-			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banana_button_class . '">
-				<span class="val">' . $count_banana . '</span>
+			$bananaCountButton = '
+			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banananButtonClass . '">
+				<span class="val">' . $bananaCount . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
 			';
 
-			$bananaCount .= '
+			$bananaCountButton .= '
 			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $count_banana) . ' Vertrauensbananen</h3>
+				<h3>' . str_replace('&nbsp;', '', $bananaCount) . ' Vertrauensbananen</h3>
 				' . $giveBanana . '
 				<table class="pintable">
 					<tbody>';
@@ -446,7 +445,7 @@ class ProfileView extends View
 				} else {
 					$odd = 'even';
 				}
-				$bananaCount .= '
+				$bananaCountButton .= '
 				<tr class="' . $odd . ' bpost">
 					<td class="img"><a title="' . $foodsaver['name'] . '" href="/profile/' . $foodsaver['id'] . '"><img src="' . $this->imageService->img(
 						$foodsaver['photo']
@@ -459,15 +458,15 @@ class ProfileView extends View
 					</div></td>
 				</tr>';
 			}
-			$bananaCount .= '
+			$bananaCountButton .= '
 					</tbody>
 				</table>
 			</div>';
 		} else {
-			$bananaCount = '';
+			$bananaCountButton = '';
 		}
 
-		return $bananaCount;
+		return $bananaCountButton;
 	}
 
 	/**
@@ -518,7 +517,7 @@ class ProfileView extends View
 			];
 		}
 
-		return array($ambassador, $infos);
+		return [$ambassador, $infos];
 	}
 
 	/**
@@ -650,11 +649,11 @@ class ProfileView extends View
 				switch ($h['change_status']) {
 					case 0:
 						$class = 'unverify';
-						$typeOfChange = 'Entverifiziert';
+						$typeOfChange = $this->translationHelper->s('verified');
 						break;
 					case 1:
 						$class = 'verify';
-						$typeOfChange = 'Verifiziert';
+						$typeOfChange = $this->translationHelper->s('de_verified');
 						break;
 					default:
 						break;
