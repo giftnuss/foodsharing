@@ -409,7 +409,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
-	public function listNearbyBasketsByDistance(int $fs_id, $gps_coordinate, int $distance_km = 30): array
+	public function listNearbyBasketsByDistance($fs_id, $gps_coordinate, int $distance_km = 30): array
 	{
 		return $this->db->fetchAll(
 			'
