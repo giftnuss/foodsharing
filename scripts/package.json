@@ -5,7 +5,7 @@
   "description": "",
   "dependencies": {},
   "devDependencies": {
-    "watch": "^0.19.1"
+    "watch": "^1.0.2"
   },
   "keywords": [],
   "author": ""
