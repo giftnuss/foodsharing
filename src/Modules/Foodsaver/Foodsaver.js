@@ -44,7 +44,7 @@ const fsapp = {
     if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
       await deleteUser(fsId)
       window.alert(i18n('success'))
-      goTo(`/?page=dashboard`)
+      goTo('/?page=dashboard')
     }
   }
 }
