@@ -60,17 +60,6 @@ class StatisticsView extends View
 			</div>
 			<div class="stat_item">
 					<div class="stat_badge">
-						<div class="stat_icon fetchcount">
-							<i class="fas fa-bicycle"></i>
-						</div>
-					</div>
-					<div class="stat_text">
-						<h4>' . number_format($stat['fetchcount'], 0, ',', '.') . '</h4>
-						<p>Rettungseinsätze haben unsere Foodsaver gemeistert.</p>
-					</div>
-			</div><br />
-			<div class="stat_item">
-					<div class="stat_badge">
 						<div class="stat_icon coorpcount">
 							<i class="fas fa-store-alt"></i>
 						</div>
@@ -79,7 +68,7 @@ class StatisticsView extends View
 						<h4>' . number_format($stat['cooperationscount'], 0, ',', '.') . '</h4>
 						<p>Betriebe kooperieren kontinuierlich und zufrieden mit uns.</p>
 					</div>
-			</div>
+			</div><br />
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fscount">
@@ -90,7 +79,7 @@ class StatisticsView extends View
 						<h4>' . number_format($stat['fscount'], 0, ',', '.') . '</h4>
 						<p>Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.</p>
 					</div>
-			</div><br />
+			</div>
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fscount2">
@@ -100,6 +89,17 @@ class StatisticsView extends View
 					<div class="stat_text">
 						<h4>' . number_format($foodsharerCount, 0, ',', '.') . '</h4>
 						<p>Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit.</p>
+					</div>
+			</div><br />
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fetchcount">
+							<i class="fas fa-bicycle"></i>
+						</div>
+					</div>
+					<div class="stat_text">
+						<h4>' . number_format($stat['fetchcount'], 0, ',', '.') . '</h4>
+						<p>Rettungseinsätze haben unsere Foodsaver gemeistert.</p>
 					</div>
 			</div>
 			<div class="stat_item">

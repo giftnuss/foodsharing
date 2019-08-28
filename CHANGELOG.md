@@ -1,5 +1,5 @@
 # Unreleased
-
+- changed icons on statistic page !538 @henrikhertler
 ## Major changes
 
 ## Features
