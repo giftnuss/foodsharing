@@ -10,7 +10,7 @@ import serverData from '@/server-data'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
-import { getConversation, sendMessage } from '@/api/conversations'
+import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
 
 import {
@@ -111,7 +111,7 @@ const msg = {
             msg.hideLoader()
           }, 100)
           await conversationStore.loadConversations()
-          let conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
+          const conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
           msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.bodyRaw, time: conversation.lastMessageTime })
         }
       }
@@ -173,7 +173,7 @@ const msg = {
         const body = $('#compose_body').val()
         if (body != '') {
           try {
-            let conversation = await api.createConversation(recip)
+            const conversation = await api.createConversation(recip)
             await api.sendMessage(conversation.id, body)
             msg.clearComposeForm()
             msg.loadConversation(conversation.id)
@@ -261,7 +261,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await getConversation(id)
+    const { name, members, messages } = await api.getConversation(id)
 
     msg.resetConversation()
 
@@ -315,7 +315,7 @@ const msg = {
     if (!msg.moreIsLoading) {
       msg.moreIsLoading = true
       try {
-        let ret = await api.getMessages(msg.conversation_id, lmid)
+        const ret = await api.getMessages(msg.conversation_id, lmid)
         for (let i = 0; i < ret.messages.length; i++) {
           msg.prependMsg(ret.messages[i])
         }

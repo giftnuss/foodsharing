@@ -35,7 +35,7 @@ export function removeUserFromConversation (conversationId, userId) {
 }
 
 export function createConversation (userIds) {
-  return post(`/conversations`, {
+  return post('/conversations', {
     members: userIds
   })
 }
