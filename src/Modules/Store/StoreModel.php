@@ -435,31 +435,10 @@ class StoreModel extends Db
 			}
 		}
 
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						REPLACE INTO `fs_betrieb_team`
-						(
-							`betrieb_id`,
-							`foodsaver_id`,
-							`verantwortlich`,
-							`active`,
-							`stat_add_date`
-						)
-						VALUES
-						(
-							' . (int)$id . ',
-							' . (int)$foodsaver_id . ',
-							1,
-							1,
-							NOW()
-						)
-					');
-			}
-		}
-
 		$this->createTeamConversation($id);
 		$this->createSpringerConversation($id);
+
+		$this->addBetriebTeam($id, $data['foodsaver'], $data['foodsaver']);
 
 		return $id;
 	}
@@ -551,9 +530,10 @@ class StoreModel extends Db
 			)');
 	}
 
-	public function createTeamConversation($storeId)
+	/* creates an empty team conversation for the given store */
+	public function createTeamConversation(int $storeId): int
 	{
-		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebTeam($bid));
+		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebTeam($storeId));
 		$tcid = $this->messageGateway->createConversation($teamIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
@@ -563,19 +543,13 @@ class StoreModel extends Db
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$teamMembers = $this->storeGateway->getStoreTeam($storeId);
-		if ($teamMembers) {
-			foreach ($teamMembers as $fs) {
-				$this->messageModel->addUserToConversation($tcid, $fs['id']);
-			}
-		}
-
 		return $tcid;
 	}
 
-	public function createSpringerConversation($storeId)
+	/* creates an empty springer conversation for the given store */
+	public function createSpringerConversation(int $storeId): int
 	{
-		$springerIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($bid));
+		$springerIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
 		$scid = $this->messageGateway->createConversation($springerIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
@@ -584,17 +558,10 @@ class StoreModel extends Db
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$springerMembers = $this->storeGateway->getBetriebSpringer($storeId);
-		if ($springerMembers) {
-			foreach ($springerMembers as $fs) {
-				$this->messageModel->addUserToConversation($scid, $fs['id']);
-			}
-		}
-
 		return $scid;
 	}
 
-	public function addBetriebTeam($bid, $member, $verantwortlicher = false)
+	public function addBetriebTeam(int $storeId, array $member, ?array $verantwortlicher = null)
 	{
 		if (empty($member)) {
 			return false;
