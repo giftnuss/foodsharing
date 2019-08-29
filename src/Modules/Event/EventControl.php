@@ -4,28 +4,27 @@ namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\EventPermissions;
 
 class EventControl extends Control
 {
 	private $gateway;
 	private $dataHelper;
+	private $eventPermissions;
 
-	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper)
+	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper, EventPermissions $eventPermissions)
 	{
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->dataHelper = $dataHelper;
+		$this->eventPermissions = $eventPermissions;
 
 		parent::__construct();
 	}
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id']))) {
-			if (!$this->mayEvent($event)) {
-				return false;
-			}
-
+		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->eventPermissions->maySeeEvent($event)) {
 			$this->pageHelper->addBread('Termine', '/?page=event');
 			$this->pageHelper->addBread($event['name']);
 
@@ -46,96 +45,78 @@ class EventControl extends Control
 			}
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
 		} elseif (!isset($_GET['sub'])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('event_not_available'));
 			$this->routeHelper->go('/?page=dashboard');
 		}
-	}
-
-	private function isEventAdmin($event): bool
-	{
-		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || $this->session->may('orga');
-	}
-
-	private function mayEvent($event): bool
-	{
-		return $event['public'] == 1 || $this->session->may('orga') || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || isset($event['invites']['may'][$this->session->id()]);
 	}
 
 	public function edit()
 	{
 		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
-			if (!$this->isEventAdmin($event)) {
+			if (!$this->eventPermissions->mayEditEvent($event)) {
 				return false;
 			}
-			if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam() || $this->session->isAdminFor($event['bezirk_id'])) {
+
+			if ($this->eventPermissions->mayEditEvent($event)) {
 				$this->pageHelper->addBread('Termine', '/?page=event');
 				$this->pageHelper->addBread('Neuer Termin');
 
-				if ($this->isSubmitted()) {
-					if ($data = $this->validateEvent()) {
-						if ($this->gateway->updateEvent($_GET['id'], $data)) {
-							if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
-								$this->gateway->deleteInvites($_GET['id']);
-							}
-							if ($data['invite']) {
-								$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
-							}
-							$this->flashMessageHelper->info('Event wurde erfolgreich geändert!');
-							$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
+				if ($this->isSubmitted() && $data = $this->validateEvent()) {
+					if ($this->gateway->updateEvent($_GET['id'], $data)) {
+						if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
+							$this->gateway->deleteInvites($_GET['id']);
 						}
+						if ($data['invite']) {
+							$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
+						}
+						$this->flashMessageHelper->info('Event wurde erfolgreich geändert!');
+						$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
 					}
 				}
 
-				$bezirke = $this->session->getRegions();
+				$regions = $this->session->getRegions();
 
-				if ($event['location_id'] !== null) {
-					if ($loc = $this->gateway->getLocation($event['location_id'])) {
-						$event['location_name'] = $loc['name'];
-						$event['lat'] = $loc['lat'];
-						$event['lon'] = $loc['lon'];
-						$event['plz'] = $loc['zip'];
-						$event['ort'] = $loc['city'];
-						$event['anschrift'] = $loc['street'];
-					}
+				if (($event['location_id'] !== null) && $loc = $this->gateway->getLocation($event['location_id'])) {
+					$event['location_name'] = $loc['name'];
+					$event['lat'] = $loc['lat'];
+					$event['lon'] = $loc['lon'];
+					$event['plz'] = $loc['zip'];
+					$event['ort'] = $loc['city'];
+					$event['anschrift'] = $loc['street'];
 				}
 
 				$this->dataHelper->setEditData($event);
 
-				$this->pageHelper->addContent($this->view->eventForm($bezirke));
+				$this->pageHelper->addContent($this->view->eventForm($regions));
 			} else {
 				$this->routeHelper->go('/?page=event');
 			}
 		}
 	}
 
-	public function add()
+	public function add(): void
 	{
 		$this->pageHelper->addBread('Termine', '/?page=event');
 		$this->pageHelper->addBread('Neuer Termin');
 
 		if ($this->isSubmitted()) {
-			if ($data = $this->validateEvent()) {
-				if ($id = $this->gateway->addEvent($this->session->id(), $data)) {
-					if ($data['invite']) {
-						$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
-					}
-					$this->flashMessageHelper->info('Event wurde erfolgreich eingetragen!');
-					$this->routeHelper->go('/?page=event&id=' . (int)$id);
+			if (($data = $this->validateEvent()) && $id = $this->gateway->addEvent($this->session->id(), $data)) {
+				if ($data['invite']) {
+					$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 				}
+				$this->flashMessageHelper->info('Event wurde erfolgreich eingetragen!');
+				$this->routeHelper->go('/?page=event&id=' . $id);
 			}
 		} else {
-			$bezirke = $this->session->getRegions();
+			$regions = $this->session->getRegions();
 
-			$this->pageHelper->addContent($this->view->eventForm($bezirke));
+			$this->pageHelper->addContent($this->view->eventForm($regions));
 		}
 	}
 
-	private function validateEvent()
+	private function validateEvent(): array
 	{
-		$out = array(
+		$out = [
 			'name' => '',
 			'description' => '',
 			'online_type' => 0,
@@ -147,13 +128,13 @@ class EventControl extends Control
 			'invite' => false,
 			'online' => 0,
 			'invitesubs' => false
-		);
+		];
 
 		if (isset($_POST['public']) && $_POST['public'] == 1) {
 			$out['public'] = 1;
-		} elseif ($bid = $this->getPostInt('bezirk_id')) {
-			$out['bezirk_id'] = (int)$bid;
-			if (isset($_POST['invite']) && $_POST['invite'] == 1) {
+		} elseif ($regionId = $this->getPostInt('bezirk_id')) {
+			$out['bezirk_id'] = (int)$regionId;
+			if (isset($_POST['invite']) && $_POST['invite'] == InvitationStatus::ACCEPTED) {
 				$out['invite'] = true;
 				if (isset($_POST['invitesubs']) && $_POST['invitesubs'] == 1) {
 					$out['invitesubs'] = true;

@@ -3,8 +3,8 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
+use Foodsharing\Modules\Store\StoreGateway;
 
 class StorePermissions
 {
@@ -19,7 +19,7 @@ class StorePermissions
 		$this->session = $session;
 	}
 
-	public function mayJoinStoreRequest($storeId)
+	public function mayJoinStoreRequest(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -34,14 +34,14 @@ class StorePermissions
 		}
 
 		// already in team?
-		if ($this->storeGateway->isInTeam($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) !== \Foodsharing\Modules\Store\TeamStatus::NoMember) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public function mayAccessStore($storeId)
+	public function mayAccessStore(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -51,7 +51,7 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->isInTeam($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::WaitingList) {
 			return true;
 		}
 
@@ -63,7 +63,7 @@ class StorePermissions
 		return false;
 	}
 
-	public function mayEditStore($storeId)
+	public function mayReadStoreWall(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
@@ -73,7 +73,34 @@ class StorePermissions
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
-		if ($this->storeGateway->isResponsible($fsId, $storeId)) {
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) >= \Foodsharing\Modules\Store\TeamStatus::Member) {
+			return true;
+		}
+
+		$store = $this->storeGateway->getBetrieb($storeId);
+		if ($this->session->isAdminFor($store['bezirk_id'])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function mayWriteStoreWall(int $storeId): bool
+	{
+		return $this->mayReadStoreWall($storeId);
+	}
+
+	public function mayEditStore(int $storeId): bool
+	{
+		$fsId = $this->session->id();
+		if (!$fsId) {
+			return false;
+		}
+
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		if ($this->storeGateway->getUserTeamStatus($fsId, $storeId) === \Foodsharing\Modules\Store\TeamStatus::Coordinator) {
 			return true;
 		}
 		$store = $this->storeGateway->getBetrieb($storeId);
@@ -84,55 +111,80 @@ class StorePermissions
 		return false;
 	}
 
-	public function mayEditPickups($storeId)
+	public function mayEditStoreTeam(int $storeId): bool
 	{
 		return $this->mayEditStore($storeId);
 	}
 
-	public function mayAcceptRequests($storeId)
+	public function mayRemovePickupUser(int $storeId, int $fsId): bool
 	{
-		return $this->mayEditStore($storeId);
+		if ($fsId === $this->session->id()) {
+			return true;
+		}
+
+		if ($this->mayEditPickups($storeId)) {
+			return true;
+		}
+
+		return false;
 	}
 
-	public function mayAddPickup($storeId)
+	public function mayConfirmPickup(int $storeId): bool
 	{
 		return $this->mayEditPickups($storeId);
 	}
 
-	public function mayDeletePickup($storeId)
-	{
-		return $this->mayEditPickups($storeId);
-	}
-
-	public function maySeeFetchHistory($storeId)
+	public function mayEditPickups(int $storeId): bool
 	{
 		return $this->mayEditStore($storeId);
 	}
 
-	public function mayDoPickup($storeId)
+	public function mayAcceptRequests(int $storeId): bool
+	{
+		return $this->mayEditStore($storeId);
+	}
+
+	public function mayAddPickup(int $storeId): bool
+	{
+		return $this->mayEditPickups($storeId);
+	}
+
+	public function mayDeletePickup(int $storeId): bool
+	{
+		return $this->mayEditPickups($storeId);
+	}
+
+	public function maySeeFetchHistory(int $storeId): bool
+	{
+		return $this->mayEditStore($storeId);
+	}
+
+	public function mayDoPickup(int $storeId): bool
 	{
 		if (!$this->session->isVerified()) {
 			return false;
 		}
 
-		if (!$this->mayAccessStore($storeId)) {
+		if (!$this->mayReadStoreWall($storeId)) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public function hasPreconfirmedPickup(int $storeId): bool
+	public function maySeePickups($storeId)
 	{
-		$fsId = $this->session->id();
-		if (!$fsId) {
-			return false;
-		}
+		return $this->mayDoPickup($storeId);
+	}
 
-		if ($this->session->isOrgaTeam() || $this->storeGateway->isResponsible($fsId, $storeId)) {
-			return true;
-		}
+	public function mayChatWithRegularTeam(array $store): bool
+	{
+		return (!$store['jumper'] || $store['verantwortlich'])
+			&& $store['team_conversation_id'] !== null;
+	}
 
-		return false;
+	public function mayChatWithJumperWaitingTeam(array $store): bool
+	{
+		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
 	}
 }

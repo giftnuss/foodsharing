@@ -6,7 +6,7 @@ const watch = process.argv.indexOf('--watch') !== -1
 
 const compiler = webpack(require('../webpack.test.config'))
 
-let mocha = new Mocha()
+const mocha = new Mocha()
 
 const setupFile = require.resolve('./setup-jsdom')
 

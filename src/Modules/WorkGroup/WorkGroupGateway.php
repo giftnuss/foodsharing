@@ -3,10 +3,22 @@
 namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 class WorkGroupGateway extends BaseGateway
 {
+	private $forumFollowerGateway;
+
+	public function __construct(
+		Database $db,
+		ForumFollowerGateway $forumFollowerGateway
+	) {
+		parent::__construct($db);
+		$this->forumFollowerGateway = $forumFollowerGateway;
+	}
+
 	/*
 	 * Own existing applications.
 	 */
@@ -39,6 +51,8 @@ class WorkGroupGateway extends BaseGateway
 	 */
 	public function updateTeam(int $regionId, array $memberIds, array $leaderIds): void
 	{
+		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $memberIds, false);
+
 		if ($memberIds) {
 			// delete all members if they're not in the submitted array
 			$this->db->execute('
@@ -66,6 +80,8 @@ class WorkGroupGateway extends BaseGateway
 		}
 
 		// the same for the group admins
+		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $leaderIds, true);
+
 		if ($leaderIds) {
 			// delete all group-admins (botschafter) if they're not in the submitted array
 			$this->db->execute('

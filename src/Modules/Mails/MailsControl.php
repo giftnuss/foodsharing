@@ -3,40 +3,31 @@
 namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
-use Flourish\fEmail;
-use Flourish\fFile;
-use Flourish\fSMTP;
 use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
 
 class MailsControl extends ConsoleControl
 {
-	/**
-	 * @var fSMTP
-	 */
-	public static $smtp = false;
-	public static $last_connect;
 	private $mailsGateway;
 	private $database;
+	private $mailer;
 	private $metrics;
 	private $routeHelper;
 
 	public function __construct(
-		Db $model,
 		MailsGateway $mailsGateway,
 		Database $database,
 		InfluxMetrics $metrics,
+		\Swift_Mailer $mailer,
 		RouteHelper $routeHelper
 	) {
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
-		self::$smtp = false;
-		$this->model = $model;
 		$this->mailsGateway = $mailsGateway;
 		$this->database = $database;
+		$this->mailer = $mailer;
 		$this->metrics = $metrics;
 		$this->routeHelper = $routeHelper;
 		parent::__construct();
@@ -45,7 +36,8 @@ class MailsControl extends ConsoleControl
 	public function queueWorker()
 	{
 		$this->mem->ensureConnected();
-		while (1) {
+		$running = true;
+		while ($running) {
 			$elem = $this->mem->cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
 			if ($elem !== false && $e = unserialize($elem)) {
 				if ($e['type'] == 'email') {
@@ -59,6 +51,9 @@ class MailsControl extends ConsoleControl
 				if ($res) {
 					$this->mem->cache->lrem('workqueueprocessing', $elem, 1);
 				} else {
+					sleep(3);
+					/* trigger a restart as there is the database and SMTP connection that can hang :-( */
+					$running = false;
 					// TODO handle failed tasks?
 				}
 			}
@@ -296,31 +291,29 @@ class MailsControl extends ConsoleControl
 	public function handleEmail($data)
 	{
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
-		$email = new fEmail();
+		$email = new \Swift_Message();
 
 		$mailParts = explode('@', $data['from'][0]);
 		$fromDomain = end($mailParts);
+
 		if (in_array($fromDomain, MAILBOX_OWN_DOMAINS, true)) {
-			$email->setFromEmail($data['from'][0], $data['from'][1]);
+			$email->setFrom($data['from'][0], $data['from'][1]);
 		} else {
-			// use DEFAULT_EMAIL as sender and ReplyTo for the actual sender
-			$email->setFromEmail(DEFAULT_EMAIL, $data['from'][1]);
-			$email->setReplyToEmail($data['from'][0], $data['from'][1]);
+			$email->setFrom(DEFAULT_EMAIL, $data['from'][1]);
+			$email->setReplyTo($data['from'][0], $data['from'][1]);
 		}
 
 		$subject = preg_replace('/\s+/', ' ', trim($data['subject']));
+		if (!$subject) {
+			$subject = '[Leerer Betreff]';
+		}
 		$email->setSubject($subject);
-		$email->setHTMLBody($data['html']);
-		$email->setBody($data['body']);
+		$email->setBody($data['html'], 'text/html');
+		$email->addPart($data['body'], 'text/plain');
 
 		if (!empty($data['attachments'])) {
 			foreach ($data['attachments'] as $a) {
-				$file = new fFile($a[0]);
-
-				// only files smaller 10 MB
-				if ($file->getSize() < 1310720) {
-					$email->addAttachment($file, $a[1]);
-				}
+				$file = $email->attach(\Swift_Attachment::fromPath($a[0]));
 			}
 		}
 		$has_recip = false;
@@ -333,7 +326,7 @@ class MailsControl extends ConsoleControl
 				continue;
 			}
 			if (!$this->mailsGateway->emailIsBouncing($r[0])) {
-				$email->addRecipient($r[0], $r[1]);
+				$email->addTo($r[0], $r[1]);
 				$has_recip = true;
 			} else {
 				self::error('bouncing address');
@@ -343,18 +336,14 @@ class MailsControl extends ConsoleControl
 			return true;
 		}
 
-		// reconnect first time and force after 60 seconds inactive
-		if (self::$smtp === false || (time() - self::$last_connect) > 60) {
-			self::smtpReconnect();
-		}
-
 		$max_try = 2;
 		$sended = false;
 		while (!$sended) {
 			--$max_try;
 			try {
 				self::info('send email tries remaining ' . ($max_try));
-				$email->send(self::$smtp);
+				$this->mailer->getTransport()->ping();
+				$this->mailer->send($email);
 				self::success('email send OK');
 
 				// remove atachements from temp folder
@@ -368,7 +357,6 @@ class MailsControl extends ConsoleControl
 				$sended = true;
 				break;
 			} catch (\Exception $e) {
-				self::smtpReconnect();
 				self::error('email send error: ' . $e->getMessage());
 				self::error(print_r($data, true));
 			}
@@ -395,35 +383,5 @@ class MailsControl extends ConsoleControl
 			'mailbox' => $p[0],
 			'host' => $p[1]
 		);
-	}
-
-	/**
-	 * checks current status and renew the connection to smtp server.
-	 */
-	public static function smtpReconnect()
-	{
-		self::info('SMTP reconnect.. ');
-		try {
-			if (self::$smtp !== false) {
-				self::info('close smtp and sleep 5 sec ...');
-				@self::$smtp->close();
-				//sleep(5);
-			}
-
-			self::info('connect...');
-			self::$smtp = new fSMTP(SMTP_HOST, SMTP_PORT);
-			//MailsControl::$smtp->authenticate(SMTP_USER, SMTP_PASS);
-			self::$last_connect = time();
-
-			self::success('reconnect OK');
-
-			return true;
-		} catch (\Exception $e) {
-			self::error('reconnect failed: ' . $e->getMessage());
-
-			return false;
-		}
-
-		return true;
 	}
 }

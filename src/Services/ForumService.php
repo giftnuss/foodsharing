@@ -8,6 +8,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -17,6 +18,7 @@ class ForumService
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $bellGateway;
+	private $forumFollowerGateway;
 	/* @var Db */
 	private $model;
 	private $session;
@@ -28,6 +30,7 @@ class ForumService
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
 		Session $session,
 		Db $model,
 		RegionGateway $regionGateway,
@@ -38,6 +41,7 @@ class ForumService
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->session = $session;
 		$this->model = $model;
 		$this->regionGateway = $regionGateway;
@@ -63,7 +67,7 @@ class ForumService
 	{
 		$posts = $this->forumGateway->listPosts($threadId);
 		$info = $this->forumGateway->getThreadInfo($threadId);
-		$regionName = $this->regionGateway->getBezirkName($info['region_id']);
+		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
 		$getFsId = function ($post) {
 			return $post['author_id'];
@@ -96,10 +100,10 @@ class ForumService
 		return $pid;
 	}
 
-	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $moderated)
+	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $isActive)
 	{
-		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $ambassadorForum, !$moderated);
-		if ($moderated) {
+		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $isActive, $ambassadorForum);
+		if (!$isActive) {
 			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
 			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
@@ -134,7 +138,7 @@ class ForumService
 
 	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
 	{
-		if ($follower = $this->forumGateway->getThreadFollower($this->session->id(), $threadId)) {
+		if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
 			$data = [

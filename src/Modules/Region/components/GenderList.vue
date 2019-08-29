@@ -58,12 +58,10 @@
 
 <script>
 
-import bTable from '@b/components/table/table'
-import bTabs from '@b/components/tabs/tabs'
-import bTab from '@b/components/tabs/tab'
+import { BTable, BTabs, BTab } from 'bootstrap-vue'
 
 export default {
-  components: { bTable, bTabs, bTab },
+  components: { BTable, BTabs, BTab },
   props: {
     regionName: {
       type: String,
@@ -88,13 +86,15 @@ export default {
           formatter: item => {
             switch (item) {
               case 0:
-                return this.$i18n('genderlist.gender_divers')
+                return this.$i18n('genderlist.gender_not_selected')
               case 1:
                 return this.$i18n('genderlist.gender_male')
               case 2:
                 return this.$i18n('genderlist.gender_female')
-              default :
+              case 3 :
                 return this.$i18n('genderlist.gender_divers')
+              default :
+                return this.$i18n('genderlist.gender_not_selected')
             }
           },
           sortable: true

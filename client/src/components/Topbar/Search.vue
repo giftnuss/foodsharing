@@ -56,8 +56,8 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import clickOutMixin from '@b/mixins/click-out'
-import listenOnRootMixin from '@b/mixins/listen-on-root'
+import clickOutMixin from 'bootstrap-vue/esm/mixins/click-out'
+import listenOnRootMixin from 'bootstrap-vue/esm/mixins/listen-on-root'
 
 export default {
   components: { SearchResults },
@@ -132,9 +132,9 @@ export default {
       this.isOpen = false
     },
     async fetch () {
-      let curQuery = this.query
+      const curQuery = this.query
       this.isLoading = true
-      let res = await instantSearch(curQuery)
+      const res = await instantSearch(curQuery)
       if (curQuery !== this.query) {
         // query has changed, throw away this response
         return false

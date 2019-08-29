@@ -38,9 +38,13 @@ class ProfileView extends View
 	private function fetchDates($fetchDates) // AMB functionality
 	{
 		$out = '
-				<div class="ui-padding" id="double">
-				<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',bid:0,date:0});return false;">Aus allen austragen</a>
-					<ul class="datelist linklist" id="double">';
+				<div class="ui-padding" id="double">';
+
+		if ($this->session->isOrgaTeam()) {
+			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteAllDatesFromFoodsaver\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . '});return false;">' . $this->translationHelper->s('cancel_all') . '</a>';
+		}
+
+		$out .= '<ul class="datelist linklist" id="double">';
 		foreach ($fetchDates as $d) {
 			$userConfirmedForPickup = $d['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
 
@@ -58,7 +62,7 @@ class ProfileView extends View
 
 			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
 				$out .= '<li>
-							<a class="button button-big" href="#" onclick="ajreq(\'deleteFromSlot\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',deleteAll:false,bid:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
+							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $d['betrieb_id'] . ',date:' . $d['date_ts'] . '});return false;">austragen</a>
 							</li>';
 			} else {
 				$out .= '<li>
@@ -341,6 +345,7 @@ class ProfileView extends View
 				<table class="pintable">
 					<tbody>';
 			$odd = 'even';
+
 			foreach ($this->foodsaver['bananen'] as $b) {
 				if ($odd == 'even') {
 					$odd = 'odd';

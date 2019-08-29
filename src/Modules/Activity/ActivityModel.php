@@ -27,9 +27,34 @@ class ActivityModel extends Db
 		$this->mailboxGateway = $mailboxGateway;
 	}
 
-	public function loadBasketWallUpdates($page = 0)
+	public function loadEventWallUpdates(int $page): array
 	{
-		$updates = array();
+		$updates = $this->activityGateway->fetchAllEventUpdates($this->session->id(), $page);
+		$out = [];
+
+		foreach ($updates as $u) {
+			$smTitle = '';
+			$title = 'Termin: ' . $u['name'];
+
+			$out[] = [
+				'attr' => [
+				'href' => '/profile/' . $u['fs_id']
+				],
+				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
+				'desc' => $this->textPrepare($u['body']),
+				'time' => $u['time'],
+				'icon' => $this->imageService->img($u['fs_photo'], 50),
+				'time_ts' => $u['time_ts'],
+				'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id']
+			];
+		}
+
+		return $out;
+	}
+
+	public function loadBasketWallUpdates(int $page): array
+	{
+		$updates = [];
 		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
 			$updates = $up;
 		}
@@ -39,17 +64,9 @@ class ActivityModel extends Db
 		}
 
 		if (!empty($updates)) {
-			$out = array();
+			$out = [];
 
 			foreach ($updates as $u) {
-				/*
-				 * quick fix later list all comments in a package
-				*/
-				if (isset($hb[$u['basket_id']])) {
-					continue;
-				}
-				$hb[$u['basket_id']] = true;
-
 				$smTitle = '';
 				$title = 'Essenskorb #' . $u['basket_id'];
 
@@ -69,7 +86,7 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	private function textPrepare($txt): ?string
@@ -84,9 +101,9 @@ class ActivityModel extends Db
 		return '<span class="txt">' . $sanitized . '</span>';
 	}
 
-	public function loadFriendWallUpdates($hidden_ids, $page = 0)
+	public function loadFriendWallUpdates(int $page, array $hidden_ids): array
 	{
-		$buddy_ids = array();
+		$buddy_ids = [];
 
 		if ($b = $this->session->get('buddy-ids')) {
 			$buddy_ids = $b;
@@ -94,7 +111,7 @@ class ActivityModel extends Db
 
 		$buddy_ids[$this->session->id()] = $this->session->id();
 
-		$bids = array();
+		$bids = [];
 		foreach ($buddy_ids as $id) {
 			if (!isset($hidden_ids[$id])) {
 				$bids[] = $id;
@@ -102,17 +119,8 @@ class ActivityModel extends Db
 		}
 
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
-			$out = array();
-			$hb = array();
+			$out = [];
 			foreach ($updates as $u) {
-				/*
-				 * quick fix later list all comments in a package
-				*/
-				if (isset($hb[$u['fs_id']])) {
-					continue;
-				}
-				$hb[$u['fs_id']] = true;
-
 				$smTitle = $u['fs_name'] . 's Status';
 
 				if ($u['fs_id'] === $this->session->id()) {
@@ -134,13 +142,13 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function loadMailboxUpdates($page = 0, $hidden_ids = false)
+	public function loadMailboxUpdates(int $page, array $hidden_ids): array
 	{
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
-			$mb_ids = array();
+			$mb_ids = [];
 			foreach ($boxes as $b) {
 				if (!isset($hidden_ids[$b['id']])) {
 					$mb_ids[] = $b['id'];
@@ -148,11 +156,11 @@ class ActivityModel extends Db
 			}
 
 			if (count($mb_ids) === 0) {
-				return false;
+				return [];
 			}
 
 			if ($updates = $this->activityGateway->fetchAllMailboxUpdates($mb_ids, $page)) {
-				$out = array();
+				$out = [];
 				foreach ($updates as $u) {
 					$sender = @json_decode($u['sender'], true);
 
@@ -183,7 +191,7 @@ class ActivityModel extends Db
 			}
 		}
 
-		return false;
+		return [];
 	}
 
 	private function ttt($str, $length = 160)
@@ -195,64 +203,58 @@ class ActivityModel extends Db
 		return $str;
 	}
 
-	public function loadForumUpdates($page = 0, $bids_not_load = false)
+	public function loadForumUpdates(int $page, array $hidden_ids): array
 	{
-		$tmp = $this->session->listRegionIDs();
-		$bids = array();
-		if ($tmp === false || count($tmp) === 0) {
-			return false;
+		$myRegionIds = $this->session->listRegionIDs();
+		$region_ids = [];
+		if ($myRegionIds === [] || count($myRegionIds) === 0) {
+			return [];
 		}
 
-		foreach ($tmp as $t) {
-			if ($t > 0 && !isset($bids_not_load[$t])) {
-				$bids[] = $t;
+		foreach ($myRegionIds as $regionId) {
+			if ($regionId > 0 && !isset($hidden_ids[$regionId])) {
+				$region_ids[] = $regionId;
 			}
 		}
 
-		if (count($bids) === 0) {
-			return false;
+		if (count($region_ids) === 0) {
+			return [];
 		}
 
-		if ($updates = $this->activityGateway->fetchAllForumUpdates($bids, $page)
-		) {
-			$out = array();
+		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
+		if ($ambassadorIds = $this->session->getMyAmbassadorRegionIds()) {
+			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
+		}
+
+		if (!empty($updates)) {
+			$out = [];
 			foreach ($updates as $u) {
-				$check = true;
-				$sub = 'forum';
-				if ($u['bot_theme'] === 1) {
-					$sub = 'botforum';
-					if (!$this->session->isAdminFor($u['bezirk_id'])) {
-						$check = false;
-					}
-				}
-
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $sub . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
-
-				if ($check) {
-					$out[] = [
-						'attr' => [
-							'href' => $url
-						],
-						'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . '</small>',
-						'desc' => $this->textPrepare($u['post_body']),
-						'time' => $u['update_time'],
-						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $sub
-					];
-				}
+				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
+				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
+				$out[] = [
+					'attr' => [
+						'href' => $url
+					],
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
+					'desc' => $this->textPrepare($u['post_body']),
+					'time' => $u['update_time'],
+					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+					'time_ts' => $u['update_time_ts'],
+					'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
+				];
 			}
 
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function loadStoreUpdates($page = 0)
+	public function loadStoreUpdates(int $page): array
 	{
 		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
-			$out = array();
+			$out = [];
 			foreach ($ret as $r) {
 				$out[] = [
 					'attr' => [
@@ -269,13 +271,13 @@ class ActivityModel extends Db
 			return $out;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getBuddies()
 	{
-		if ($bids = $this->session->get('buddy-ids')) {
-			return $this->activityGateway->fetchAllBuddies($bids);
+		if ($buddyIds = $this->session->get('buddy-ids')) {
+			return $this->activityGateway->fetchAllBuddies($buddyIds);
 		}
 
 		return false;

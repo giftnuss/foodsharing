@@ -13,4 +13,17 @@ class MaintenanceGateway extends BaseGateway
 
 		$this->db->delete('fs_bell', ['id' => $bellIds]);
 	}
+
+	public function deactivateOldBaskets(): int
+	{
+		return $this->db->update(
+			'fs_basket',
+			['status' => 6],
+			['status' => 1, 'until <' => $this->db->now()]);
+	}
+
+	public function deleteUnconfirmedFetchDates(): int
+	{
+		return $this->db->delete('fs_abholer', ['confirmed' => 0, 'date <' => $this->db->now()]);
+	}
 }

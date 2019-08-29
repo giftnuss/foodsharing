@@ -68,7 +68,7 @@ if (GET('sub') == 'wall') {
     })
     vueApply('#vue-thread')
   } else {
-    let loadedPages = []
+    const loadedPages = []
     $(window).on('scroll', function () {
       if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
         return
@@ -81,7 +81,7 @@ if (GET('sub') == 'wall') {
         }
       }
       loadedPages.push(page)
-      let last = $('.thread:last').attr('id')
+      const last = $('.thread:last').attr('id')
       if (last != undefined) {
         ajax.req('bezirk', 'morethemes', {
           data: {

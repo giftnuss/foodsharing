@@ -70,4 +70,23 @@ class StatisticsGateway extends BaseGateway
 	{
 		return $this->db->count('fs_foodsaver', ['active' => 1, 'deleted_at' => null]);
 	}
+
+	public function avgDailyFetchCount(): int
+	{
+		// get number of all fetches within time range
+		$q = '
+	    SELECT
+	      COUNT(*) as fetchCount
+	    FROM
+	      fs_abholer
+			WHERE
+				CAST(`date` as date) > DATE_ADD(CURDATE(), INTERVAL -100 DAY) AND
+				CAST(`date` as date) < CURDATE()
+	  ';
+		$fetchCount = (int)$this->db->fetch($q)['fetchCount'];
+		// time range to average over in days
+		$diffDays = 99;
+		// divide number of fetches by time difference
+		return (int)($fetchCount / $diffDays);
+	}
 }

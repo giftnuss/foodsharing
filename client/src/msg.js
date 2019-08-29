@@ -6,10 +6,11 @@
  */
 import $ from 'jquery'
 import conv from '@/conv'
+import serverData from '@/server-data'
 import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
-import * as api from '@/api/conversations'
+import { getConversation, sendMessage } from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
 
 import {
@@ -167,9 +168,9 @@ const msg = {
     $('#compose_submit').on('click', async function (ev) {
       ev.preventDefault()
 
-      let recip = msg.getRecipients()
+      const recip = msg.getRecipients()
       if (recip != false) {
-        let body = $('#compose_body').val()
+        const body = $('#compose_body').val()
         if (body != '') {
           try {
             let conversation = await api.createConversation(recip)
@@ -194,7 +195,7 @@ const msg = {
   },
 
   prependMsg: function (message) {
-    let $el = msg.msgTpl(message)
+    const $el = msg.msgTpl(message)
 
     if (msg.$conversation == undefined) {
       msg.$conversation = $('#msg-conversation')
@@ -206,7 +207,7 @@ const msg = {
   },
 
   appendMsg: function (message) {
-    let $el = msg.msgTpl(message)
+    const $el = msg.msgTpl(message)
 
     if (msg.$conversation == undefined) {
       msg.$conversation = $('#msg-conversation')
@@ -220,17 +221,21 @@ const msg = {
   },
 
   msgTpl: function (message) {
-    return $(`<li id="msg-${message.id}" style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    /*
+     * set a class 'my-message' to active user's own messages
+     */
+    let ownMessageClass = ''
+    if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
-    let out = []
+    const out = []
     $('#compose_recipients li.tagedit-listelement-old input').each(function () {
       let id = $(this).attr('name').replace('compose_recipients[', '').split('-')[0]
       id = parseInt(id)
       out[out.length] = id
     })
-
     console.log(out)
 
     if (out.length > 0) {
@@ -256,7 +261,7 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await api.getConversation(id)
+    const { name, members, messages } = await getConversation(id)
 
     msg.resetConversation()
 
@@ -305,7 +310,7 @@ const msg = {
   },
 
   loadMore: async function () {
-    let lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
+    const lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
 
     if (!msg.moreIsLoading) {
       msg.moreIsLoading = true
@@ -315,7 +320,7 @@ const msg = {
           msg.prependMsg(ret.messages[i])
         }
 
-        let position = $(`#msg-${lmid}`).position()
+        const position = $(`#msg-${lmid}`).position()
 
         if (!position) return
 
@@ -339,7 +344,7 @@ const msg = {
     if (!msg.isMob()) {
       msg.$conversation.off('scroll')
       msg.$conversation.on('scroll', function () {
-        let $conv = $(this)
+        const $conv = $(this)
         if ($conv.scrollTop() == 0) {
           msg.loadMore()
         }
@@ -347,7 +352,7 @@ const msg = {
     } else {
       $(window).off('scroll')
       $(window).on('scroll', function () {
-        let $conv = $(this)
+        const $conv = $(this)
 
         if ($conv.scrollTop() == 0) {
           msg.loadMore()

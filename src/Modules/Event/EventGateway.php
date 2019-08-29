@@ -16,57 +16,50 @@ class EventGateway extends BaseGateway
 		$this->regionGateway = $regionGateway;
 	}
 
-	public function listForRegion($id)
+	public function listForRegion(int $id): array
 	{
 		return $this->db->fetchAll('
 			SELECT
-				e.`id`,
-				e.`name`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				e.`end`,
-				UNIX_TIMESTAMP(e.`end`) AS end_ts
-
+				e.id,
+				e.name,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
+				e.end,
+				UNIX_TIMESTAMP(e.end) AS end_ts
 			FROM
-				`fs_event` e
-
+				fs_event e
 			WHERE
 				e.bezirk_id = :id
-
 			AND e.start > NOW()
-
 			ORDER BY
 				e.start
 		', [':id' => $id]);
 	}
 
-	public function getEvent($id)
+	public function getEvent(int $id): array
 	{
 		$event = $this->db->fetch('
 			SELECT
 				e.id,
-				fs.`id` AS fs_id,
+				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				e.`bezirk_id`,
-				e.`location_id`,
-				e.`name`,
+				e.bezirk_id,
+				e.location_id,
+				e.name,
 				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
 				e.`end`,
-				UNIX_TIMESTAMP(e.`end`) AS end_ts,
-				e.`description`,
-				e.`bot`,
-				e.`online`,
-				e.`public`
-
+				UNIX_TIMESTAMP(e.end) AS end_ts,
+				e.description,
+				e.bot,
+				e.online,
+				e.public
 			FROM
-				`fs_event` e,
-				`fs_foodsaver` fs
-
+				fs_event e,
+				fs_foodsaver fs
 			WHERE
 				e.foodsaver_id = fs.id
-
 			AND
 				e.id = :id
 		', [':id' => $id]);
@@ -79,7 +72,7 @@ class EventGateway extends BaseGateway
 		return $event;
 	}
 
-	public function getLocation($id)
+	public function getLocation(int $id)
 	{
 		if ($id === null) {
 			return null;
@@ -92,15 +85,15 @@ class EventGateway extends BaseGateway
 		', [':id' => $id]);
 	}
 
-	public function addLocation($location_name, $lat, $lon, $address, $zip, $city)
+	public function addLocation(string $location_name, float $lat, float $lon, string $address, string $zip, string $city): int
 	{
 		$lat = round($lat, 8);
 		$lon = round($lon, 8);
 
 		return $this->db->insert('fs_location', [
 			'name' => strip_tags($location_name),
-			'lat' => (float)$lat,
-			'lon' => (float)$lon,
+			'lat' => $lat,
+			'lon' => $lon,
 			'zip' => strip_tags($zip),
 			'city' => strip_tags($city),
 			'street' => strip_tags($address)
@@ -113,27 +106,24 @@ class EventGateway extends BaseGateway
 			SELECT
 				e.id,
 				e.public,
-				fs.`id` AS fs_id,
+				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				e.`bezirk_id`,
-				e.`location_id`,
-				e.`name`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				e.`end`,
-				UNIX_TIMESTAMP(e.`end`) AS end_ts,
-				e.`description`,
-				e.`bot`,
-				e.`online`
-	
+				e.bezirk_id,
+				e.location_id,
+				e.name,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
+				e.end,
+				UNIX_TIMESTAMP(e.end) AS end_ts,
+				e.description,
+				e.bot,
+				e.online	
 			FROM
-				`fs_event` e,
-				`fs_foodsaver` fs
-	
+				fs_event e,
+				fs_foodsaver fs	
 			WHERE
-				e.foodsaver_id = fs.id
-	
+				e.foodsaver_id = fs.id	
 			AND
 				e.id = :id
 		', [':id' => $id]);
@@ -159,7 +149,6 @@ class EventGateway extends BaseGateway
 					fs.name,
 					fs.photo,
 					fe.status
-
 			FROM 
 				`fs_foodsaver_has_event` fe,
 				`fs_foodsaver` fs
@@ -179,11 +168,11 @@ class EventGateway extends BaseGateway
 		);
 		foreach ($invites as $i) {
 			$out['may'][$i['id']] = true;
-			if ($i['status'] == 0) {
+			if ($i['status'] == InvitationStatus::INVITED) {
 				$out['invited'][] = $i;
-			} elseif ($i['status'] == 1) {
+			} elseif ($i['status'] == InvitationStatus::ACCEPTED) {
 				$out['accepted'][] = $i;
-			} elseif ($i['status'] == 2) {
+			} elseif ($i['status'] == InvitationStatus::MAYBE) {
 				$out['maybe'][] = $i;
 			}
 		}
@@ -191,76 +180,70 @@ class EventGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getNextEvents($fs_id)
+	public function getEventsInterestedIn(int $fs_id): array
 	{
 		$next = $this->db->fetchAll('
 			SELECT
 				e.id,
 				e.name,
-				e.`description`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
-				fe.`status`
-
+				e.description,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
+				fe.status
 			FROM
-				`fs_event` e
+				fs_event e
 			LEFT JOIN
-				`fs_foodsaver_has_event` fe
+				fs_foodsaver_has_event fe
 			ON
 				e.id = fe.event_id AND fe.foodsaver_id = :fs_id
-
 			WHERE
 				e.start >= CURDATE()
 			AND
-				((e.public = 1 AND (fe.`status` IS NULL OR fe.`status` <> 3))
+				((e.public = 1 AND (fe.status IS NULL OR fe.status <> 3))
 				OR
-					fe.`status` IN(1,2)
+					fe.status IN(1,2)
 				)
-			ORDER BY e.`start`
-		', [':fs_id' => (int)$fs_id]);
+			ORDER BY e.start
+		', [':fs_id' => $fs_id]);
 
-		$out = array();
+		$out = [];
 
 		if ($next) {
 			foreach ($next as $n) {
 				$out[date('Y-m-d H:i', $n['start_ts']) . '-' . $n['id']] = $n;
 			}
 		}
-		if (!empty($out)) {
-			return $out;
-		}
+
+		return $out;
 	}
 
-	public function getInvites($fs_id)
+	public function getEventInvitations(int $fs_id): array
 	{
 		return $this->db->fetchAll('
 			SELECT
 				e.id,
 				e.name,
-				e.`description`,
-				e.`start`,
-				UNIX_TIMESTAMP(e.`start`) AS start_ts,
+				e.description,
+				e.start,
+				UNIX_TIMESTAMP(e.start) AS start_ts,
 				fe.`status`
-
 			FROM
-				`fs_event` e,
-				`fs_foodsaver_has_event` fe
-
+				fs_event e,
+				fs_foodsaver_has_event fe
 			WHERE
-				fe.event_id = e.id
-
+			    fe.event_id = e.id
 			AND
 				fe.foodsaver_id = :fs_id
-
 			AND
-				fe.`status` = 0
-
+				fe.status = 0
 			AND
-				e.`end` > NOW()
-		', [':fs_id' => (int)$fs_id]);
+				e.end > NOW()
+			ORDER BY 
+			e.start 
+		', [':fs_id' => $fs_id]);
 	}
 
-	public function addEvent($fs_id, $event): int
+	public function addEvent(int $fs_id, array $event): int
 	{
 		$extracted_event = [
 			'foodsaver_id' => $fs_id,
@@ -278,7 +261,7 @@ class EventGateway extends BaseGateway
 		return $this->db->insert('fs_event', $extracted_event);
 	}
 
-	public function updateEvent($id, $event): bool
+	public function updateEvent(int $id, array $event): bool
 	{
 		$extracted_event = [
 			'bezirk_id' => $event['bezirk_id'],
@@ -297,12 +280,12 @@ class EventGateway extends BaseGateway
 		return true;
 	}
 
-	public function deleteInvites($event_id)
+	public function deleteInvites(int $event_id): int
 	{
 		return $this->db->delete('fs_foodsaver_has_event', ['event_id' => $event_id]);
 	}
 
-	public function getInviteStatus($event_id, $foodsaver_id)
+	public function getInviteStatus(int $event_id, int $foodsaver_id): int
 	{
 		try {
 			$status = $this->db->fetchValueByCriteria(
@@ -317,7 +300,7 @@ class EventGateway extends BaseGateway
 		return (int)$status;
 	}
 
-	public function setInviteStatus($event_id, $foodsaver_id, $status)
+	public function setInviteStatus(int $event_id, int $foodsaver_id, int $status): bool
 	{
 		$this->db->update(
 			'fs_foodsaver_has_event',
@@ -328,7 +311,7 @@ class EventGateway extends BaseGateway
 		return true;
 	}
 
-	public function addInviteStatus($event_id, $foodsaver_id, $status): bool
+	public function addInviteStatus(int $event_id, int $foodsaver_id, int $status): bool
 	{
 		$this->db->insertOrUpdate(
 			'fs_foodsaver_has_event',
@@ -342,13 +325,13 @@ class EventGateway extends BaseGateway
 		return true;
 	}
 
-	public function inviteFullRegion($bezirk_id, $event_id, $invite_subs = false)
+	public function inviteFullRegion(int $region_id, int $event_id, bool $invite_subs = false): void
 	{
-		$b_sql = '= ' . (int)$bezirk_id;
+		$b_sql = '= ' . $region_id;
 
 		if ($invite_subs) {
-			$bids = $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id);
-			$b_sql = 'IN(' . implode(',', $bids) . ')';
+			$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($region_id);
+			$b_sql = 'IN(' . implode(',', $regionIds) . ')';
 		}
 
 		if ($fsids = $this->db->fetchAllValues('
@@ -363,7 +346,7 @@ class EventGateway extends BaseGateway
 				'
 				SELECT `foodsaver_id` FROM `fs_foodsaver_has_event`
 				WHERE `event_id` = :event_id',
-				[':event_id' => (int)$event_id]
+				[':event_id' => $event_id]
 			)
 			) {
 				foreach ($inv as $i) {
@@ -373,7 +356,7 @@ class EventGateway extends BaseGateway
 
 			foreach ($fsids as $id) {
 				if (!isset($invited[$id])) {
-					$this->addInviteStatus($event_id, $id, 0);
+					$this->addInviteStatus($event_id, $id, InvitationStatus::INVITED);
 				}
 			}
 		}

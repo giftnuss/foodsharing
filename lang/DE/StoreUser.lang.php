@@ -46,15 +46,7 @@ $g_lang['add_new'] = 'Neuen Betrieb eintragen';
 $g_lang['you_responsible'] = 'Betriebe für die Du verantwortlich bist';
 $g_lang['you_fetcher'] = 'Betriebe bei denen Du Lebensmittel abholst';
 $g_lang['more_stores'] = 'Weitere Betriebe aus {name}';
-$g_lang['your_store'] = 'Für diesen Betrieb bist Du verantwortlich.';
-$g_lang['not_fetching'] = 'Du holst noch keine Lebensmittel ab.';
-$g_lang['change_times'] = 'Abholzeiten ändern';
-$g_lang['change_fetcher'] = 'Abholer ändern';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
-$g_lang['next_fetch_dates'] = 'Nächste Abholtermine';
-$g_lang['wait_for_confirm'] = '<strong>Du bist vorgemerkt</strong><br>Die Betriebsverantwortlichen müssen jetzt nur noch Deine Anfrage bestätigen.';
-$g_lang['not_confirmed'] = '{name} ist noch nicht bestätigt!';
-$g_lang['click_to_confirm'] = 'Unbestätigte Foodsaver kannst Du durch einen Klick auf das kleine Foto aktivieren.';
 $g_lang['info'] = 'Infos';
 $g_lang['edit_team'] = 'Team bearbeiten';
 $g_lang['add_me_here'] = 'Mich hier eintragen';
@@ -72,19 +64,10 @@ $g_lang['status_change_at'] = 'Statusänderung am {var}';
 $g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählten Zeitraum abholen.';
 $g_lang['zeitraum'] = 'Zeitraum';
 $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.</b><br>Sie müssen nur noch vom Betriebsverantwortlichen bestätigt werden.</p>';
-$g_lang['del_and_send'] = 'Termin löschen und Nachricht senden';
-$g_lang['tpl_msg_to_team'] = 'Liebes {BETRIEB}-Team, 
-
-{DATE} kann ich leider doch keine Lebensmittel abholen. Daher suche ich dringend eine Vertretung. Kannst Du für mich einspringen?
-
-Liebe Grüße';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
-$g_lang['shure_of_backup'] = 'Hast Du eine Vertretung? Unsere Verlässlichkeit ist sehr wichtig!';
-$g_lang['msg_to_team'] = 'Team benachrichtigen';
-$g_lang['have_backup'] = 'Ich habe eine Vertretung';
-$g_lang['del_date_for'] = 'Austragen für';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
+$g_lang['max_2_foodsaver'] = 'Du hast mehr als zwei Personen zum Abholen angegeben.<br />Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab! Zusätzlich benötigte Helfer_innen können mit Fahrradanhänger o. ä. außer Sichtweite des Betriebes warten.';
 $g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diesen Betrieb geben.';
 $g_lang['menge'] = 'Abholmenge im Schnitt';
 $g_lang['verantwortlicher_must_be'] = 'Es muss mindestens einen Verantwortlichen für jeden Betrieb geben!';
@@ -106,7 +89,10 @@ $g_lang['stat_fetchcount_none'] = 'Noch keine Lebensmittel abgeholt';
 $g_lang['stat_teammember_since'] = 'Im Team seit {date}';
 $g_lang['stat_jumper_since'] = 'Springer seit {date}';
 $g_lang['stat_since_unknown'] = 'unbekannt';
-$g_lang['delete-manual-slot-warning-text'] = 'Termin wirklich löschen? \nMögliche Abholer dieser Uhrzeit werden dabei ausgetragen.';
 $g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt werden.';
 $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
-
+$g_lang['my_last_pickup'] = 'Meine letzte Abholung';
+$g_lang['prefix_Ago'] = 'Vor';
+$g_lang['days'] = 'Tagen';
+$g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
+$g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';

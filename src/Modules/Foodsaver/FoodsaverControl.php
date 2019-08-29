@@ -46,16 +46,16 @@ class FoodsaverControl extends Control
 	public function index()
 	{
 		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($bezirk = $this->regionGateway->getBezirk($_GET['bid'])) && ($this->session->may('orga') || $this->session->isBotForA(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 			if ($foodsaver = $this->model->listFoodsaver($_GET['bid'])) {
 				// add breadcrumps
-				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $bezirk['id']);
-				$this->pageHelper->addBread($bezirk['name'], '/?page=foodsaver&bid=' . $bezirk['id']);
+				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $region['id']);
+				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $region['id']);
 
 				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all)
 				$this->pageHelper->addContent(
-					$this->view->foodsaverList($foodsaver, $bezirk),
+					$this->view->foodsaverList($foodsaver, $region),
 					CNT_LEFT
 				);
 
@@ -64,15 +64,15 @@ class FoodsaverControl extends Control
 				// list inactive foodsaver
 				if ($foodsaverInactive = $this->model->listFoodsaver($_GET['bid'], true)) {
 					$this->pageHelper->addContent(
-						$this->view->foodsaverList($foodsaverInactive, $bezirk, true),
+						$this->view->foodsaverList($foodsaverInactive, $region, true),
 						CNT_RIGHT
 					);
 				}
 			}
 		} elseif (($id = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
 			$data = $this->foodsaverGateway->getOne_foodsaver($id);
-			$bids = $this->regionGateway->getFsRegionIds($id);
-			if ($data && ($this->session->isOrgaTeam() || $this->session->isBotForA($bids, false, true))) {
+			$regionIds = $this->regionGateway->getFsRegionIds($id);
+			if ($data && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
 				$this->handle_edit();
 				$data = $this->foodsaverGateway->getOne_foodsaver($id);
 
@@ -81,7 +81,7 @@ class FoodsaverControl extends Control
 				$this->dataHelper->setEditData($data);
 				$regionDetails = false;
 				if ($data['bezirk_id'] > 0) {
-					$regionDetails = $this->regionGateway->getBezirk($data['bezirk_id']);
+					$regionDetails = $this->regionGateway->getRegion($data['bezirk_id']);
 				}
 				$this->pageHelper->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 

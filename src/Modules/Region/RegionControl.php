@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
@@ -24,6 +23,7 @@ final class RegionControl extends Control
 	private $forumGateway;
 	private $fairteilerGateway;
 	private $foodsaverGateway;
+	private $forumFollowerGateway;
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */
@@ -54,20 +54,20 @@ final class RegionControl extends Control
 		FairTeilerGateway $fairteilerGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
-		Db $model,
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ImageService $imageService
 	) {
-		$this->model = $model;
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
 		$this->forumPermissions = $forumPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
 		$this->imageService = $imageService;
@@ -104,7 +104,7 @@ final class RegionControl extends Control
 		} else {
 			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
 			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
-			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&p=' . (int)$region['id'] . '&sub=statistic'];
+			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=statistic'];
 		}
 		if ($this->mayAccessApplications($region['id'])) {
 			if ($requests = $this->gateway->listRequests($region['id'])) {
@@ -230,16 +230,18 @@ final class RegionControl extends Control
 		$data = CreateForumThreadData::create();
 		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
 		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid() && $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)) {
-				$moderated = !$this->session->user('verified') || $this->region['moderated'];
-				$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $moderated);
-				$this->forumGateway->followThread($this->session->id(), $threadId);
-				if ($moderated) {
-					$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
-				}
-				$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
+		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
+				$region['id'],
+				$ambassadorForum
+			)) {
+			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+
+			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
+			if (!$postActiveWithoutModeration) {
+				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}
+			$this->routeHelper->go($this->forumService->url($region['id'], $ambassadorForum));
 		}
 
 		return $form->createView();
@@ -315,6 +317,7 @@ final class RegionControl extends Control
 		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
 		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
 		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+		$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }

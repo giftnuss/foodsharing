@@ -10,7 +10,7 @@ import {
 } from '@/script'
 import './Team.css'
 
-let $form = $('#contactform-form')
+const $form = $('#contactform-form')
 if ($form.length > 0) {
   var $email = $('#email')
 
@@ -44,7 +44,7 @@ if ($form.length > 0) {
   })
 }
 
-let $teamList = $('#team-list')
+const $teamList = $('#team-list')
 $teamList.find('.foot i').on('mouseover', function () {
   var $this = $(this)
 

@@ -228,11 +228,11 @@ test('can send and receive a message for multiple clients', t => {
 test('can send to php users', t => {
   t.timeoutAfter(10000)
   t.plan(4)
-  let sessionId = randomString.generate()
-  let userId = 1
+  const sessionId = randomString.generate()
+  const userId = 1
   addPHPSessionToRedis(userId, sessionId, err => {
     t.error(err)
-    let socket = connect(t, sessionId)
+    const socket = connect(t, sessionId)
     socket.on('someapp', data => {
       t.equal(data.m, 'foo', 'passed m param')
       t.equal(data.o, 'bar', 'passed o param')
@@ -255,11 +255,11 @@ test('can send to php users', t => {
 test('can send to api users', t => {
   t.timeoutAfter(10000)
   t.plan(4)
-  let sessionId = randomString.generate()
-  let userId = 2
+  const sessionId = randomString.generate()
+  const userId = 2
   addAPISessionToRedis(userId, sessionId, err => {
     t.error(err)
-    let socket = connect(t, sessionId, 'sessionid') // django session cookie name
+    const socket = connect(t, sessionId, 'sessionid') // django session cookie name
     socket.on('someapp', (data) => {
       t.equal(data.m, 'foo', 'passed m param')
       t.equal(data.o, 'bar', 'passed o param')
@@ -340,7 +340,7 @@ test('does not send to other users', t => {
 })
 
 function connect (t, sessionId, cookieName = 'PHPSESSID') {
-  let socket = io.connect(WS_URL, {
+  const socket = io.connect(WS_URL, {
     transports: ['websocket'],
     extraHeaders: {
       cookie: serialize(cookieName, sessionId)

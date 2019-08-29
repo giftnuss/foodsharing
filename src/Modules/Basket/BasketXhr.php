@@ -612,7 +612,8 @@ class BasketXhr extends Control
 			$pic = $this->preparePicture($data['filename']);
 		}
 
-		if (!empty($desc) && !empty($id) && ($this->basketGateway->editBasket($id, $desc, $pic, $this->session->id()))) {
+		if (!empty($desc) && !empty($id) &&
+			($this->basketGateway->editBasket($id, $desc, $pic, $basket['lat'], $basket['lon'], $this->session->id()))) {
 			return [
 				'status' => 1,
 				'script' => '

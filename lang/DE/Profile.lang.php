@@ -18,3 +18,4 @@ $g_lang['foodsaver_workgroups'] = '{gender} ist Ansprechpartner für folgende Ar
 $g_lang['foodsaver_sleeping_hat_time'] = '{name} hat eine Schlafmütze auf vom {datum_von} bis {datum_bis}';
 $g_lang['foodsaver_sleeping_hat_time_undefined'] = '{name} hat eine Schlafmütze auf unbestimmte Zeit';
 $g_lang['Never'] = 'Nie';
+$g_lang['cancel_all'] = 'Aus allen austragen';

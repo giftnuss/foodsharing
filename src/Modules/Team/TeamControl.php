@@ -2,19 +2,18 @@
 
 namespace Foodsharing\Modules\Team;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class TeamControl extends Control
 {
 	private $gateway;
 	private $contentGateway;
 
-	public function __construct(Db $model, TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
+	public function __construct(TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
 	{
 		$this->gateway = $gateway;
-		$this->model = $model;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 
@@ -55,7 +54,7 @@ class TeamControl extends Control
 				// Type b, display "Ehemalige"
 				$this->pageHelper->addBread($this->translationHelper->s('Ehemalige'), '/team/ehemalige');
 				$this->pageHelper->addTitle($this->translationHelper->s('Ehemalige'));
-				$this->displayTeamContent(1564, 54);
+				$this->displayTeamContent(RegionIDs::TEAM_ALUMNI_MEMBER, 54);
 
 				return;
 			}
@@ -67,15 +66,16 @@ class TeamControl extends Control
 
 		// Type a, display "Vorstand" and "Aktive"
 		$this->pageHelper->addContent("<div id='vorstand'>");
-		$this->displayTeamContent(1373, 39);
+		$this->displayTeamContent(RegionIDs::TEAM_BOARD_MEMBER, 39);
 		$this->pageHelper->addContent("</div><div id='aktive'>");
-		$this->displayTeamContent(1565, 53);
+		$this->displayTeamContent(RegionIDs::TEAM_ADMINISTRATION_MEMBER, 53);
 		$this->pageHelper->addContent('</div>');
 	}
 
-	private function displayTeamContent($bezirkId, $contentId): void
+	private function displayTeamContent($regionId, $contentId): void
 	{
-		if ($team = $this->gateway->getTeam($bezirkId)) {
+		if ($team = $this->gateway->getTeam($regionId)) {
+			shuffle($team);
 			$this->pageHelper->addContent($this->view->teamList($team, $this->contentGateway->get($contentId)));
 		}
 	}
