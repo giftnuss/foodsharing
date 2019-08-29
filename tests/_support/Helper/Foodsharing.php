@@ -485,7 +485,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createConversation($users, $extra_params = [])
 	{
 		$params = array_merge([
-			'locked' => 1,
+			'locked' => 0,
 			'name' => null,
 			'last' => $this->faker->dateTime(),
 			'last_foodsaver_id' => $users[0],

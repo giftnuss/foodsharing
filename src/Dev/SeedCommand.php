@@ -127,8 +127,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$I->addBezirkMember($ag_testimonials, $user2['id']);
 
-		$conv1 = $I->createConversation([$userbot['id'], $user2['id']], ['name' => 'betrieb_bla']);
-		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla']);
+		$conv1 = $I->createConversation([$userbot['id'], $user2['id']], ['name' => 'betrieb_bla', 'locked' => 1]);
+		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla', 'locked' => 1]);
 		$I->addConversationMessage($userbot['id'], $conv1['id']);
 		$I->addConversationMessage($userbot['id'], $conv2['id']);
 
@@ -172,8 +172,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->stores = [$store['id']];
 		foreach (range(0, 40) as $_) {
 			// TODO conversations are missing the other store members
-			$conv1 = $I->createConversation([$userbot['id']], ['name' => 'team']);
-			$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer']);
+			$conv1 = $I->createConversation([$userbot['id']], ['name' => 'team', 'locked' => 1]);
+			$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer', 'locked' => 1]);
 
 			$store = $I->createStore($bezirk1, $conv1['id'], $conv2['id']);
 			foreach (range(0, 5) as $_) {
