@@ -62,7 +62,7 @@ if (GET('sub') == 'wall') {
   vueApply('#vue-genderlist')
   vueApply('#vue-pickuplist')
 } else if (['botforum', 'forum'].includes(GET('sub'))) {
-  if (GET('tid') !== 'undefined') {
+  if (GET('tid') !== undefined) {
     vueRegister({
       Thread
     })

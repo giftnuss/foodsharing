@@ -8,7 +8,7 @@ import {
   GET
 } from '@/script'
 
-if (GET('a') === 'undefined') {
+if (GET('a') === undefined) {
   vueRegister({
     StoreList
   })

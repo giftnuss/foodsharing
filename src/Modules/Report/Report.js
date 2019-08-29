@@ -6,7 +6,7 @@ import { vueRegister, vueApply } from '@/vue'
 import ReportList from './components/ReportList.vue'
 import { GET } from '@/script'
 
-if (GET('a') === 'undefined') {
+if (GET('a') === undefined) {
   vueRegister({
     ReportList
   })
