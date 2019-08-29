@@ -157,7 +157,7 @@ final class MessageView extends View
 						$title = $c['name'];
 					}
 
-					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['has_unread_messages'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $title . '</span><span class="msg">' . $c['last_message'] . '</span><span class="time">' . $this->timeHelper->niceDate($c['last_message_at']->getTimestamp()) . '</span><span class="clear"></span></a></li>';
+					$list .= '<li id="convlist-' . $c['id'] . '" class="unread-' . (int)$c['has_unread_messages'] . '"><a href="#" onclick="msg.loadConversation(' . $c['id'] . ');return false;"><span class="pics">' . $pics . '</span><span class="names">' . $this->sanitizerService->plainToHtml($title) . '</span><span class="msg">' . $this->sanitizerService->plainToHtml($c['last_message']) . '</span><span class="time">' . $this->timeHelper->niceDate($c['last_message_at']->getTimestamp()) . '</span><span class="clear"></span></a></li>';
 				}
 			}
 		} else {

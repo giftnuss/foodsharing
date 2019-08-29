@@ -94,3 +94,43 @@ export const generateQueryString = params => {
     .join('&')
   return qs.length ? `?${qs}` : ''
 }
+
+function autoLink (text) {
+  var pattern = /(^|\s)((?:https?|ftp):\/\/([-A-Z0-9+\u0026@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|]))/gi
+  var currentHost = document.location.host
+
+  return text.replace(pattern, function (match, space, url, urlWithoutProto) {
+    return `${space}<a href="${url}" ${urlWithoutProto.split('/', 2)[0] !== currentHost ? ' target="_blank"' : ''}>${urlWithoutProto}</a>`
+  })
+}
+
+function nl2br (str) {
+  const breakTag = '<br>'
+  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
+}
+
+export function plainToHtml (string) {
+  const entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  }
+  return autoLink(nl2br(String(string).replace(/[&<>"'`=/]/g, function fromEntityMap (s) {
+    return entityMap[s]
+  })))
+}
+
+export function plainToHtmlAttribute (string) {
+  const entityMap = {
+    '"': '&quot'
+  }
+  return String(string).replace(/["]/g, function fromEntityMap (s) {
+    return entityMap[s]
+  }
+  )
+}

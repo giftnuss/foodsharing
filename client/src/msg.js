@@ -7,7 +7,6 @@
 import $ from 'jquery'
 import conv from '@/conv'
 import serverData from '@/server-data'
-import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
 import * as api from '@/api/conversations'
@@ -18,12 +17,13 @@ import {
   GET,
   pulseInfo,
   pulseError,
-  shuffle,
-  nl2br
+  shuffle
 } from '@/script'
 
 import {
-  dateDistanceInWords
+  dateDistanceInWords,
+  plainToHtml,
+  plainToHtmlAttribute
 } from '@/utils'
 
 const msg = {
@@ -155,7 +155,7 @@ const msg = {
     const $item = $(`#convlist-${message.cid}`)
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
-      $itemLink.children('.msg').html(message.body)
+      $itemLink.children('.msg').text(message.body)
       $itemLink.children('.time').text(dateDistanceInWords(message.time))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
@@ -226,7 +226,7 @@ const msg = {
      */
     let ownMessageClass = ''
     if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
-    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${plainToHtmlAttribute(message.fs_name)}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${plainToHtml(message.body)}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -275,12 +275,12 @@ const msg = {
     const title = `
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
-          <a title="${member.name}" href="/profile/${member.id}">
-            <img src="${img(member.avatar, 'mini')}" width="22" alt="${member.name}" />
+          <a title="${plainToHtmlAttribute(member.name)}" href="/profile/${member.id}">
+            <img src="${img(member.avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(member.name)}" />
           </a>
         `).join('')}  
       </div>
-      ${titleText}
+      ${plainToHtml(titleText)}
       <div style="clear:both;"></div>
     `
 
@@ -391,7 +391,7 @@ const msg = {
       cssclass = ' class="active"'
     }
 
-    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${names}</span><span class="msg">${conversation.body}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
+    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${plainToHtml(names)}</span><span class="msg">${plainToHtml(conversation.body)}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
 
     if (prepend != undefined) {
       msg.$convs.prepend($el)
@@ -415,11 +415,5 @@ const msg = {
     }
   }
 }
-
-/* should only initialize it in Message.js when it is webpack'd
-$(function () {
-  msg.init()
-})
-*/
 
 export default msg

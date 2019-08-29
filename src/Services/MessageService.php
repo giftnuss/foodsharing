@@ -125,8 +125,6 @@ class MessageService
 	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?int
 	{
 		$body = trim($body);
-		/* todo: we do want to get rid of this line */
-		$body = htmlentities($body);
 		if (!empty($body)) {
 			$time = Carbon::now();
 			$messageId = $this->messageGateway->addMessage($conversationId, $senderId, $body, $time);

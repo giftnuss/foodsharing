@@ -3,14 +3,16 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { GET, goTo, isMob, nl2br, pulseError } from '@/script'
+import { GET, goTo, isMob, pulseError } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
-import autoLink from '@/autoLink'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
 import * as api from '@/api/conversations'
 
+import {
+  plainToHtml
+} from '@/utils'
 const conv = {
 
   initiated: false,
@@ -129,7 +131,6 @@ const conv = {
     const key = conv.getKey(cid)
 
     conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle()
-    // $('#chat-'+cid+' .slimScrollDiv, #chat-'+cid+' ').toggle();
     if ($(`#chat-${cid} .chatboxinput`).is(':visible')) {
       conv.chatboxes[key].minimized = false
     } else {
@@ -187,8 +188,6 @@ const conv = {
    */
   scrollBottom: function (cid) {
     $(`#chat-${cid} .chatboxcontent`).slimScroll({ scrollTo: `${$('#chat-' + cid + ' .chatboxcontent').prop('scrollHeight')}px` })
-    // var el = conv.chatboxes[conv.getKey(cid)].el.children('.chatboxcontent');
-    // el.slimScroll({scrollTo : el.prop('scrollHeight') + 'px' });
   },
 
   img: function (photo, size) {
@@ -297,7 +296,7 @@ const conv = {
     let ownMessageClass = ''
     if (message.fs_id === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
@@ -322,7 +321,7 @@ const conv = {
         title = []
         for (let i = 0; i < conversation.members.length; i++) {
           if (conversation.members[i] != undefined && conversation.members[i].id != serverData.user.id) {
-            title.push(`<a href="/profile/${conversation.members[i].id}">${conversation.members[i].name}</a>`)
+            title.push(`<a href="/profile/${conversation.members[i].id}">${plainToHtml(conversation.members[i].name)}</a>`)
           }
         }
         title = title.join(', ')
@@ -356,7 +355,7 @@ const conv = {
     try {
       await api.renameConversation(cid, newName)
       const key = this.getKey(cid)
-      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${newName}`)
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${plainToHtml(newName)}`)
     } catch (e) {
       pulseError('Fehler beim Umbenennen der Unterhaltung')
       console.error(e)
@@ -389,7 +388,7 @@ const conv = {
       const name = ''
 
       var $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
-      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${name}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
+      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${plainToHtml(name)}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()
