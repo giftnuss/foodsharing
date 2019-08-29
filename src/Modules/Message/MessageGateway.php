@@ -36,7 +36,7 @@ final class MessageGateway extends BaseGateway
 	{
 		/* need to fetch a conversation with the exact set of participants. As there is no direct way to do this,
 		   the approach is to
-		   1. get the set of possible conversations by selecting all conversations where one of the users is a participant
+		   1. get the set of possible conversations by selecting all conversations where one of the users is a participant. Take care, not to select "locked" conversations, which are special and have a separated team management logic.
 		   2. comparing the participant lists of the conversations from 1 with the participant list we want to have
 		   3. in case 2 did not yield a result, creating a new conversation.
 		*/
@@ -46,7 +46,8 @@ final class MessageGateway extends BaseGateway
 			'SELECT hc.conversation_id
 			FROM fs_foodsaver_has_conversation hc 
 			LEFT JOIN fs_conversation c on hc.conversation_id = c.id
-			WHERE hc.foodsaver_id = :fsId',
+			WHERE hc.foodsaver_id = :fsId AND
+			c.locked = 0',
 			[':fsId' => $fsIds[0]]
 		);
 
