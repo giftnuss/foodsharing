@@ -533,7 +533,7 @@ class StoreModel extends Db
 	/* creates an empty team conversation for the given store */
 	public function createTeamConversation(int $storeId): int
 	{
-		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebTeam($storeId));
+		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getStoreTeam($storeId));
 		$tcid = $this->messageGateway->createConversation($teamIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);

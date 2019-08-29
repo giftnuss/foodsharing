@@ -371,7 +371,7 @@ final class MessageGateway extends BaseGateway
 		], ['ignore' => true]) > 0;
 	}
 
-	public function setConversationMembers(int $conversationId, array $userIds): bool
+	public function setConversationMembers(int $conversationId, array $userIds): void
 	{
 		if (!$userIds) {
 			/* Empty user list gets special handling */
