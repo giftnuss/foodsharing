@@ -137,10 +137,10 @@ class StoreModel extends Db
 		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
 
 		if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
-			$this->messageModel->deleteUserFromConversation($tcid, $fsId, true);
+			$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
 		}
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageModel->deleteUserFromConversation($scid, $fsId, true);
+			$this->messageGateway->deleteUserFromConversation($scid, $fsId);
 		}
 	}
 
