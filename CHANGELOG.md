@@ -4,7 +4,7 @@
 
 ## Features
 - Added Rest endpoint for nearby baskets !875 @alex.simm
-- updated bootstrap-vue to v2.0.0-rc20
+- updated bootstrap-vue to v2.0.0-rc28 @peter.toennies
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
