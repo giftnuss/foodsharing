@@ -113,14 +113,14 @@ class MessageService
 		}
 	}
 
-	public function sendMessageToUser(int $userId, int $senderId, string $body): ?int
+	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): ?int
 	{
 		$conversationId = $this->messageGateway->getOrCreateConversation([$senderId, $userId]);
 
-		return $this->sendMessage($conversationId, $senderId, $body);
+		return $this->sendMessage($conversationId, $senderId, $body, $notificationTemplate);
 	}
 
-	public function sendMessage(int $conversationId, int $senderId, string $body): ?int
+	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?int
 	{
 		$body = trim($body);
 		if (!empty($body)) {

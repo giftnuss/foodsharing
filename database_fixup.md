@@ -157,16 +157,12 @@ Stores email addresses gathered from incoming/outgoing emails that will be used 
 ## fs_conversation
 Conversation table
 
-### todo
-
 ### later todo
 get rid of API module,
 switch over to foodsharing-API backend to get rid of denormalized columns.
 By that, also stop htmlentities encoding. On the decoding side, implement time aware message body decoders.
 Denormalized fields usage: listConversations (member, last)
 remove last_foodsaver_id (unused, easy)
-remove start_foodsaver_id (unused, very easy)
-remove start (unused, very easy)
 remove heartbeat code (that is not used since we have socket.io)
 
 ## fs_email_blacklist

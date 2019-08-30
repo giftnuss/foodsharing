@@ -1470,25 +1470,25 @@ class XhrMethods
 		$storeId = (int)$data['bid'];
 		if ($this->storePermissions->mayEditStoreTeam($storeId)) {
 			$check = false;
-			$fsId = (int)$data['fsid'];
-			$tcid = $this->storeGateway->getBetriebConversation((int)$data['bid']);
-			$scid = $this->storeGateway->getBetriebConversation((int)$data['bid'], true);
+			$foodsaverId = (int)$data['fsid'];
+			$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
+			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
 			if ($data['action'] == 'toteam') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . $fsId . ' AND betrieb_id = ' . $storeId);
-				$this->messageGateway->addUserToConversation($tcid, $fsId);
-				$this->messageGateway->deleteUserFromConversation($scid, $fsId);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->messageGateway->addUserToConversation($teamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
 			} elseif ($data['action'] == 'tojumper') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . $fsId . ' AND betrieb_id = ' . $storeId);
-				$this->messageGateway->addUserToConversation($scid, $fsId);
-				$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->messageGateway->addUserToConversation($standbyTeamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
 			} elseif ($data['action'] == 'delete') {
 				$check = true;
-				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $fsId . ' AND betrieb_id = ' . $storeId);
-				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
-				$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
-				$this->messageGateway->deleteUserFromConversation($scid, $fsId);
+				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $foodsaverId . ' AND `date` > NOW()');
+				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
 			}
 
 			if ($check) {

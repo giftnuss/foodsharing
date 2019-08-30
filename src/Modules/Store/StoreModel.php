@@ -549,16 +549,16 @@ class StoreModel extends Db
 	/* creates an empty springer conversation for the given store */
 	public function createSpringerConversation(int $storeId): int
 	{
-		$springerIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
-		$scid = $this->messageGateway->createConversation($springerIds, true);
-		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
-		$this->messageGateway->renameConversation($scid, $springer_conversation_name);
+		$standbyTeamMemberIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
+		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamMemberIds, true);
+		$store = $this->storeGateway->getMyStore($this->session->id(), $storeId);
+		$standbyTeamConversationName = $this->translationHelper->sv('springer_conversation_name', $store['name']);
+		$this->messageGateway->renameConversation($standbyTeamChatId, $standbyTeamConversationName);
 		$this->update('
-				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$storeId . '
+				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$standbyTeamChatId . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		return $scid;
+		return $standbyTeamChatId;
 	}
 
 	public function addBetriebTeam(int $storeId, array $member, ?array $verantwortlicher = null)
