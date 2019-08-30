@@ -14,7 +14,7 @@ class ReportPermissions
 		$this->session = $session;
 	}
 
-	public function mayAccessReportsForRegion($regionId): bool
+	public function mayAccessReportsForRegion(int $regionId): bool
 	{
 		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
 		 * and https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
