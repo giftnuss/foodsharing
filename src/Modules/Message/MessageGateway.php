@@ -105,14 +105,15 @@ final class MessageGateway extends BaseGateway
 			$queryParams['olderThanId'] = $olderThanId;
 		}
 
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT
 				m.id,
 				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				m.`body`,
-				m.`time`
+				m.`time`,
+				m.`is_htmlentity_encoded`
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
@@ -126,6 +127,15 @@ final class MessageGateway extends BaseGateway
 
 			LIMIT :limit
 		', $queryParams);
+		$res = array_map(function ($e) {
+			if ($e['is_htmlentity_encoded']) {
+				$e['body'] = html_entity_decode($e['body']);
+			}
+
+			return $e;
+		}, $res);
+
+		return $res;
 	}
 
 	/**
@@ -139,30 +149,6 @@ final class MessageGateway extends BaseGateway
 	public function isConversationLocked(int $cid)
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'locked', ['id' => $cid]);
-	}
-
-	public function listConversationUpdates($conv_ids)
-	{
-		if ($return = $this->db->fetchAll('
-			SELECT
-				`id` AS id,
-				`last` AS time,
-				`last_message` AS body,
-				`member`
-			FROM
-				`fs_conversation`
-			WHERE
-				`id` IN(' . implode(',', array_map('intval', $conv_ids)) . ')
-		')
-		) {
-			foreach ($return as $i => $iValue) {
-				$return[$i]['member'] = unserialize($return[$i]['member']);
-			}
-
-			return $return;
-		}
-
-		return false;
 	}
 
 	/**
@@ -187,7 +173,8 @@ final class MessageGateway extends BaseGateway
 				c.`last_message`,
 				c.`last_foodsaver_id` AS last_message_author_id,
 				hc.unread as has_unread_messages,
-				c.name
+				c.name,
+				c.last_message_is_htmlentity_encoded
 
 			FROM
 				fs_conversation c,
@@ -214,6 +201,9 @@ final class MessageGateway extends BaseGateway
 		array_walk($conversations, function (&$c) {
 			$c['last_message_at'] = new \DateTime($c['last_message_at']);
 			$c['has_unread_messages'] = (bool)$c['has_unread_messages'];
+			if ($c['last_message_is_htmlentity_encoded'] == 1) {
+				$c['last_message'] = html_entity_decode($c['last_message']);
+			}
 		});
 
 		return $conversations;
@@ -311,7 +301,8 @@ final class MessageGateway extends BaseGateway
 				'last' => $lastMessageAt->toDateTimeString(),
 				'last_foodsaver_id' => $lastMessageAuthor,
 				'last_message' => $lastMessageBody,
-				'last_message_id' => $lastMessageId
+				'last_message_id' => $lastMessageId,
+				'last_message_is_htmlentity_encoded' => 0
 			],
 			['id' => $conversationId]
 		);
@@ -347,7 +338,8 @@ final class MessageGateway extends BaseGateway
 				'conversation_id' => $conversationId,
 				'foodsaver_id' => $senderId,
 				'body' => $body,
-				'time' => $sentAt->toDateTimeString()
+				'time' => $sentAt->toDateTimeString(),
+				'is_htmlentity_encoded' => 0
 			]);
 		$this->markAsUnread($conversationId, $senderId);
 		$this->updateLastConversationMessage($conversationId, $messageId, $body, $senderId, $sentAt);
