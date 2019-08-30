@@ -330,7 +330,7 @@ const msg = {
           $(window).scrollTop(position.top)
         }
       } catch (e) {
-        pulseError('Das Nachladen von Nachrichten ist fehlgeschlagne')
+        pulseError('Das Nachladen von Nachrichten ist fehlgeschlagen')
         console.error(e)
       } finally {
         msg.moreIsLoading = false
