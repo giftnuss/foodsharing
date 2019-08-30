@@ -402,7 +402,7 @@ class BasketXhr extends Control
 		if ($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
 			$msg = trim($_GET['msg']);
 			if (!empty($msg)) {
-				$this->messageService->sendMessage($fs_id, $this->session->id(), $msg, 'basket/request');
+				$this->messageService->sendMessageToUser($fs_id, $this->session->id(), $msg, 'basket/request');
 				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 				return [

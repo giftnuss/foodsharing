@@ -128,7 +128,7 @@ class MessageService
 		if (!empty($body)) {
 			$time = Carbon::now();
 			$messageId = $this->messageGateway->addMessage($conversationId, $senderId, $body, $time);
-			$this->sendNewMessageNotifications($conversationId, $senderId, $body, $time, $messageId);
+			$this->sendNewMessageNotifications($conversationId, $senderId, $body, $time, $messageId, $notificationTemplate);
 
 			return $messageId;
 		}
