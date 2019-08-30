@@ -5,9 +5,10 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Services\MessageService;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageRestController extends AbstractFOSRestController
@@ -27,8 +28,13 @@ class MessageRestController extends AbstractFOSRestController
 	 * @Rest\Get("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", description="ID of oldest already known message")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="Number of messages to return")
+	 *
+	 * @param int $conversationId
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function getConversationMessagesAction(int $conversationId, ParamFetcher $paramFetcher)
+	public function getConversationMessagesAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
@@ -42,33 +48,16 @@ class MessageRestController extends AbstractFOSRestController
 		return $this->handleView($this->view(['messages' => $messages], 200));
 	}
 
-	private function getConversationData(int $conversationId, $messagesLimit)
-	{
-		$members = $this->messageGateway->listConversationMembersWithProfile($conversationId);
-		$publicMemberInfo = function ($member) {
-			return RestNormalization::normalizeFoodsaver($member);
-		};
-		$members = array_map($publicMemberInfo, $members);
-
-		$messages = $this->messageGateway->getConversationMessages($conversationId, $messagesLimit);
-		$name = $this->messageGateway->getConversationName($conversationId);
-		$this->messageGateway->markAsRead($conversationId, $this->session->id());
-
-		$conversationData = [
-			'id' => $conversationId,
-			'name' => $name,
-			'members' => $members,
-			'messages' => $messages,
-		];
-
-		return $conversationData;
-	}
-
 	/**
 	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="messagesLimit", requirements="\d+", default="20", description="How many messages to return.")
+	 *
+	 * @param int $conversationId
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function getConversationAction(int $conversationId, ParamFetcher $paramFetcher)
+	public function getConversationAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
@@ -83,11 +72,35 @@ class MessageRestController extends AbstractFOSRestController
 		return $this->handleView($view);
 	}
 
+	private function getConversationData(int $conversationId, int $messagesLimit): array
+	{
+		$members = $this->messageGateway->listConversationMembersWithProfile($conversationId);
+		$publicMemberInfo = static function ($member) {
+			return RestNormalization::normalizeFoodsaver($member);
+		};
+		$members = array_map($publicMemberInfo, $members);
+
+		$messages = $this->messageGateway->getConversationMessages($conversationId, $messagesLimit);
+		$name = $this->messageGateway->getConversationName($conversationId);
+		$this->messageGateway->markAsRead($conversationId, $this->session->id());
+
+		return [
+			'id' => $conversationId,
+			'name' => $name,
+			'members' => $members,
+			'messages' => $messages,
+		];
+	}
+
 	/**
 	 * @Rest\Post("conversations")
 	 * @Rest\RequestParam(name="members", map=true, requirements="\d+", description="Userids of people to include in the conversation.")
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function createConversationAction(ParamFetcher $paramFetcher)
+	public function createConversationAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
@@ -108,8 +121,12 @@ class MessageRestController extends AbstractFOSRestController
 	 * @Rest\Get("conversations")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="How many conversations to return.")
 	 * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="Offset returned conversations.")
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function getConversationsAction(ParamFetcher $paramFetcher)
+	public function getConversationsAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
@@ -118,18 +135,32 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->messageGateway->listConversationsForUserIncludeProfiles($this->session->id(), $limit, $offset);
+		$conversations = $this->messageGateway->listConversationsForUserIncludeProfiles(
+			$this->session->id(),
+			$limit,
+			$offset
+		);
 
-		return $this->handleView($this->view([
-			'data' => $conversations
-		], 200));
+		return $this->handleView(
+			$this->view(
+				[
+					'data' => $conversations,
+				],
+				200
+			)
+		);
 	}
 
 	/**
 	 * @Rest\Post("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
+	 *
+	 * @param int $conversationId
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function sendMessageAction(int $conversationId, ParamFetcher $paramFetcher)
+	public function sendMessageAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
@@ -143,10 +174,16 @@ class MessageRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Patch("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="name", nullable=true, default=null)
+	 *
+	 * @param int $conversationId
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function patchConversationAction(int $conversationId, ParamFetcher $paramFetcher)
+	public function patchConversationAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
-		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId) || $this->messageGateway->isConversationLocked($conversationId)) {
+		if ($this->messageGateway->isConversationLocked($conversationId) || !$this->session->may(
+			) || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
 		}
 
@@ -160,10 +197,15 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("conversations/{conversationId}/members/{userId}", requirements={"conversationId" = "\d+", "userId" = "\d+"})
+	 *
+	 * @param int $conversationId
+	 * @param int $userId
+	 *
+	 * @return Response
 	 */
-	public function removeMemberFromConversationAction(int $conversationId, int $userId)
+	public function removeMemberFromConversationAction(int $conversationId, int $userId): Response
 	{
-		if (!$this->session->may() || $userId != $this->session->id()) {
+		if (!$this->session->may() || $userId !== $this->session->id()) {
 			/* only allow users to remove themselves from conversations */
 			throw new HttpException(403);
 		}
@@ -176,8 +218,12 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("user/{userId}/conversation")
+	 *
+	 * @param int $userId
+	 *
+	 * @return Response
 	 */
-	public function getUserConversationAction(int $userId)
+	public function getUserConversationAction(int $userId): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);

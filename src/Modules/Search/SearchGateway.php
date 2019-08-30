@@ -117,7 +117,7 @@ class SearchGateway extends BaseGateway
 		');
 	}
 
-	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver)
+	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver): array
 	{
 		$searchStr = '%' . str_replace(['_', '%'], ['\\\\_', '\\\\%'], $q) . '%';
 		$select = 'SELECT fs.id AS id, CONCAT(fs.name," ",fs.nachname) AS value ';

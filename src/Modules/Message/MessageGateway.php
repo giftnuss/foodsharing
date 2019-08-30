@@ -83,9 +83,8 @@ final class MessageGateway extends BaseGateway
 		/*
 		 * 3. No conversation found, create one
 		*/
-		$conversation_id = $this->createConversation($fsIds);
 
-		return $conversation_id;
+		return $this->createConversation($fsIds);
 	}
 
 	public function getConversationName(int $conversationId): ?string
@@ -100,7 +99,7 @@ final class MessageGateway extends BaseGateway
 			'id' => $conversation_id,
 			'limit' => $limit,
 		];
-		if (!is_null($olderThanId)) {
+		if ($olderThanId !== null) {
 			$offsetStr = 'AND m.id < :olderThanId';
 			$queryParams['olderThanId'] = $olderThanId;
 		}
@@ -217,7 +216,7 @@ final class MessageGateway extends BaseGateway
 				fs.name,
 				fs.photo,
 				fs.email,
-				fs.geschlecht,
+				fs.geschlecht AS gender,
 				fs.infomail_message
 
 			FROM
@@ -264,7 +263,7 @@ final class MessageGateway extends BaseGateway
 		return [];
 	}
 
-	private function flatten(array $array)
+	private function flatten(array $array): array
 	{
 		$return = array();
 		array_walk_recursive($array, function ($a) use (&$return) { $return[] = $a; });
@@ -294,7 +293,7 @@ final class MessageGateway extends BaseGateway
 		return $conversations;
 	}
 
-	private function updateLastConversationMessage(int $conversationId, int $lastMessageId, string $lastMessageBody, int $lastMessageAuthor, Carbon $lastMessageAt)
+	private function updateLastConversationMessage(int $conversationId, int $lastMessageId, string $lastMessageBody, int $lastMessageAuthor, Carbon $lastMessageAt): void
 	{
 		$this->db->update('fs_conversation',
 			[
@@ -308,7 +307,7 @@ final class MessageGateway extends BaseGateway
 		);
 	}
 
-	private function markAsUnread(int $conversationId, int $exceptFsId)
+	private function markAsUnread(int $conversationId, int $exceptFsId): void
 	{
 		$this->db->update('fs_foodsaver_has_conversation',
 			['unread' => 1],
@@ -318,7 +317,7 @@ final class MessageGateway extends BaseGateway
 			]);
 	}
 
-	public function markAsRead(int $conversationId, int $fsId)
+	public function markAsRead(int $conversationId, int $fsId): void
 	{
 		$this->db->update('fs_foodsaver_has_conversation',
 			['unread' => 0],
@@ -328,9 +327,9 @@ final class MessageGateway extends BaseGateway
 		);
 	}
 
-	public function addMessage(int $conversationId, int $senderId, string $body, Carbon $sentAt = null)
+	public function addMessage(int $conversationId, int $senderId, string $body, Carbon $sentAt = null): int
 	{
-		if (is_null($sentAt)) {
+		if ($sentAt === null) {
 			$sentAt = Carbon::now();
 		}
 		$messageId = $this->db->insert('fs_msg',

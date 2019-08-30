@@ -9,6 +9,7 @@ use Foodsharing\Services\SearchService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SearchRestController extends AbstractFOSRestController
@@ -27,9 +28,9 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("search/legacyindex")
 	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return Response
 	 */
-	public function getSearchLegacyIndexAction()
+	public function getSearchLegacyIndexAction(): Response
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(403);
@@ -44,8 +45,12 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("search/user")
 	 * @Rest\QueryParam(name="q", description="Search query.")
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return Response
 	 */
-	public function listUserResultsAction(ParamFetcher $paramFetcher)
+	public function listUserResultsAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(403);
@@ -53,10 +58,14 @@ class SearchRestController extends AbstractFOSRestController
 
 		$q = $paramFetcher->get('q');
 
-		$canSearchAllFoodsaver = in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs()) ||
+		$canSearchAllFoodsaver = in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs(), true) ||
 			$this->session->may('orga');
 
-		$results = $this->searchGateway->searchUserInGroups($q, $this->session->listRegionIDs(), $canSearchAllFoodsaver);
+		$results = $this->searchGateway->searchUserInGroups(
+			$q,
+			$this->session->listRegionIDs(),
+			$canSearchAllFoodsaver
+		);
 
 		return $this->handleView($this->view($results, 200));
 	}

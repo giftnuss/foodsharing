@@ -32,7 +32,7 @@ class MessageService
 		$this->webSocketSender = $webSocketSender;
 	}
 
-	private function sendNewMessageNotificationEmail(array $recipient, int $conversation_id, string $msg, array $templateData)
+	private function sendNewMessageNotificationEmail(array $recipient, int $conversation_id, string $msg, array $templateData): void
 	{
 		if (!$this->mem->userOnline($recipient['id'])) {
 			/* skip repeated notification emails in a short interval */
@@ -44,7 +44,7 @@ class MessageService
 				$sessdata[$recipient['id']] = time();
 
 				$templateData = array_merge($templateData, [
-					'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+					'anrede' => $this->translationHelper->genderWord($recipient['gender'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $recipient['name'],
 				]);
 
@@ -58,9 +58,9 @@ class MessageService
 	{
 		$data = [];
 		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
-		if (!is_null($notificationTemplate)) {
+		if ($notificationTemplate !== null) {
 			$data['emailTemplate'] = $notificationTemplate;
-		} elseif (!is_null($storeName)) {
+		} elseif ($storeName !== null) {
 			$data['emailTemplate'] = 'chat/message_store';
 			$data['storeName'] = $storeName;
 		} else {
@@ -88,7 +88,7 @@ class MessageService
 		return $data;
 	}
 
-	private function sendNewMessageNotifications(int $conversationId, int $senderId, string $body, Carbon $time, int $messageId, string $notificationTemplate = null)
+	private function sendNewMessageNotifications(int $conversationId, int $senderId, string $body, Carbon $time, int $messageId, string $notificationTemplate = null): void
 	{
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
@@ -106,23 +106,21 @@ class MessageService
 
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $sender, $body, $members, $notificationTemplate);
 			foreach ($members as $m) {
-				if ($m['id'] != $senderId) {
-					if ($m['infomail_message']) {
-						$this->sendNewMessageNotificationEmail($m, $conversationId, $body, $notificationTemplateData);
-					}
+				if (($m['id'] != $senderId) && $m['infomail_message']) {
+					$this->sendNewMessageNotificationEmail($m, $conversationId, $body, $notificationTemplateData);
 				}
 			}
 		}
 	}
 
-	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): ?int
+	public function sendMessageToUser(int $userId, int $senderId, string $body): ?int
 	{
 		$conversationId = $this->messageGateway->getOrCreateConversation([$senderId, $userId]);
 
-		return $this->sendMessage($conversationId, $senderId, $body, $notificationTemplate);
+		return $this->sendMessage($conversationId, $senderId, $body);
 	}
 
-	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?int
+	public function sendMessage(int $conversationId, int $senderId, string $body): ?int
 	{
 		$body = trim($body);
 		if (!empty($body)) {
@@ -141,14 +139,14 @@ class MessageService
 		/* only allow removing users from non-locked conversations (as "locked" means more something like "is part
 		of a synchronized user group".
 		When a user gets removed, check if the whole conversation can be removed. */
-		if (!$this->messageGateway->isConversationLocked($conversationId)) {
-			if ($this->messageGateway->deleteUserFromConversation($conversationId, $userId)) {
-				if (!$this->messageGateway->conversationHasRealMembers(($conversationId))) {
-					$this->messageGateway->deleteConversation($conversationId);
-				}
-
-				return true;
+		if (!$this->messageGateway->isConversationLocked(
+				$conversationId
+			) && $this->messageGateway->deleteUserFromConversation($conversationId, $userId)) {
+			if (!$this->messageGateway->conversationHasRealMembers(($conversationId))) {
+				$this->messageGateway->deleteConversation($conversationId);
 			}
+
+			return true;
 		}
 
 		return false;
