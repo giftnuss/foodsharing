@@ -32,14 +32,15 @@ final class MessageGateway extends BaseGateway
 
 	public function getConversationMessages(int $conversation_id, int $limit = 20, int $offset = 0): array
 	{
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT
 				m.id,
 				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				m.`body`,
-				m.`time`
+				m.`time`,
+				m.`is_htmlentity_encoded`
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
@@ -56,6 +57,16 @@ final class MessageGateway extends BaseGateway
 			'offset' => $offset,
 			'limit' => $limit,
 		]);
+
+		$res = array_map(function ($e) {
+			if ($e['is_htmlentity_encoded'] == 0) {
+				$e['body'] = htmlentities($e['body']);
+			}
+
+			return $e;
+		}, $res);
+
+		return $res;
 	}
 
 	/**
@@ -78,7 +89,8 @@ final class MessageGateway extends BaseGateway
 				`id` AS id,
 				`last` AS time,
 				`last_message` AS body,
-				`member`
+				`member`,
+				`last_message_is_htmlentity_encoded`
 			FROM
 				`fs_conversation`
 			WHERE
@@ -87,6 +99,9 @@ final class MessageGateway extends BaseGateway
 		) {
 			foreach ($return as $i => $iValue) {
 				$return[$i]['member'] = unserialize($return[$i]['member']);
+				if ($return['last_message_is_htmlentity_encoded'] == 0) {
+					$return['body'] = htmlentities($return['body']);
+				}
 			}
 
 			return $return;
@@ -97,14 +112,15 @@ final class MessageGateway extends BaseGateway
 
 	public function loadMore(int $conversation_id, int $last_message_id, int $limit = 20): array
 	{
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT
 				m.id,
 				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				m.`body`,
-				m.`time`
+				m.`time`,
+				m.`is_htmlentity_encoded`
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
@@ -118,18 +134,29 @@ final class MessageGateway extends BaseGateway
 				m.`time` DESC
 			LIMIT 0,:limit
 		', [':conv_id' => $conversation_id, ':last_msg_id' => $last_message_id, ':limit' => $limit]);
+
+		$res = array_map(function ($e) {
+			if ($e['is_htmlentity_encoded'] == 0) {
+				$e['body'] = htmlentities($e['body']);
+			}
+
+			return $e;
+		}, $res);
+
+		return $res;
 	}
 
 	public function getLastMessages($conv_id, $last_msg_id): array
 	{
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT
 				m.id,
 				fs.`id` AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				m.`body`,
-				m.`time`
+				m.`time`,
+				m.`is_htmlentity_encoded`
 			FROM
 				`fs_msg` m,
 				`fs_foodsaver` fs
@@ -142,5 +169,15 @@ final class MessageGateway extends BaseGateway
 			ORDER BY
 				m.`time` ASC
 		', [':conv_id' => (int)$conv_id, ':last_msg_id' => (int)$last_msg_id]);
+
+		$res = array_map(function ($e) {
+			if ($e['is_htmlentity_encoded'] == 0) {
+				$e['body'] = htmlentities($e['body']);
+			}
+
+			return $e;
+		}, $res);
+
+		return $res;
 	}
 }

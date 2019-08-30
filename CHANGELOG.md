@@ -1,3 +1,6 @@
+# 2019-08-30 Hotfix
+- Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
+
 # 2019-06-17 Hotfix
 - Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
 

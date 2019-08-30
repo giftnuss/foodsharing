@@ -218,7 +218,8 @@ final class MessageModel extends Db
 				c.`last_message`,
 				c.`last_foodsaver_id`,
 				hc.unread,
-				c.name
+				c.name,
+				c.`last_message_is_htmlentity_encoded`
 
 			FROM
 				fs_conversation c,
@@ -246,6 +247,9 @@ final class MessageModel extends Db
 					$this->updateDenormalizedConversationData($conversations[$i]['id']);
 				}
 				$conversations[$i]['member'] = $member;
+				if ($conversations[$i]['last_message_is_htmlentity_encoded'] == 0) {
+					$conversations[$i]['last_message'] = htmlentities($conversations[$i]['last_message']);
+				}
 			}
 
 			return $conversations;
