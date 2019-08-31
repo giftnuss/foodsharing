@@ -112,7 +112,7 @@ const msg = {
           }, 100)
           await conversationStore.loadConversations()
           const conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
-          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.bodyRaw, time: conversation.lastMessageTime })
+          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.body, time: conversation.lastMessage.sentAt })
         }
       }
     })
@@ -179,6 +179,7 @@ const msg = {
             msg.loadConversation(conversation.id)
           } catch (e) {
             pulseError('Die Nachricht konnte nicht gesendet werden')
+            console.error(e)
           }
         } else {
           pulseInfo('Du musst eine Nachricht eingeben')

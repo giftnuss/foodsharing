@@ -141,14 +141,9 @@ class MessageRestController extends AbstractFOSRestController
 			$offset
 		);
 
-		return $this->handleView(
-			$this->view(
-				[
-					'data' => $conversations,
-				],
-				200
-			)
-		);
+		return $this->handleView($this->view([
+			'conversations' => array_values($conversations)
+		], 200));
 	}
 
 	/**

@@ -4,9 +4,22 @@ namespace Foodsharing\Modules\Message;
 
 use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 final class MessageGateway extends BaseGateway
 {
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
+
+	public function __construct(Database $db, FoodsaverGateway $foodsaverGateway)
+	{
+		$this->foodsaverGateway = $foodsaverGateway;
+		parent::__construct($db);
+	}
+
 	public function mayConversation($fsId, $conversationId): bool
 	{
 		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
@@ -197,15 +210,26 @@ final class MessageGateway extends BaseGateway
 			$conversations = $this->db->fetchAll($query, [':fsId' => $fsId]);
 		}
 
-		array_walk($conversations, function (&$c) {
-			$c['last_message_at'] = new \DateTime($c['last_message_at']);
-			$c['has_unread_messages'] = (bool)$c['has_unread_messages'];
-			if ($c['last_message_is_htmlentity_encoded'] == 1) {
-				$c['last_message'] = html_entity_decode($c['last_message']);
-			}
-		});
+		$res = [];
+		foreach ($conversations as $c) {
+			$conversation = new Conversation();
+			$conversation->title = $c['name'];
+			$conversation->id = $c['id'];
+			$conversation->hasUnreadMessages = $c['has_unread_messages'];
 
-		return $conversations;
+			$message = new Message(
+				$c['last_message_is_htmlentity_encoded'] ?
+					html_entity_decode($c['last_message']) :
+					$c['last_message'],
+				$c['last_message_author_id'],
+				new \DateTime($c['last_message_at'])
+			);
+
+			$conversation->lastMessage = $message;
+			$res[$conversation->id] = $conversation;
+		}
+
+		return $res;
 	}
 
 	public function listConversationMembersWithProfile(int $conversationId): array
@@ -229,14 +253,6 @@ final class MessageGateway extends BaseGateway
 				hc.conversation_id = :conversationId AND
 				fs.deleted_at IS NULL
 		', [':conversationId' => $conversationId]);
-	}
-
-	private function getProfileForUsers(array $fsIds): array
-	{
-		return $this->db->fetchAllByCriteria(
-			'fs_foodsaver',
-			['id', 'name', 'photo', 'sleep_status'],
-			['id' => $fsIds]);
 	}
 
 	private function getMembersForConversations(array $cids): array
@@ -274,20 +290,16 @@ final class MessageGateway extends BaseGateway
 	public function listConversationsForUserIncludeProfiles(int $fsId, int $limit = null, int $offset = 0): array
 	{
 		$conversations = $this->listConversationsForUser($fsId, $limit, $offset);
-		$cids = array_column($conversations, 'id');
+		$cids = array_keys($conversations);
 		$members = $this->getMembersForConversations($cids);
 		$allUserIds = array_unique($this->flatten($members));
-		$profiles = $this->getProfileForUsers($allUserIds);
-		$indexedProfiles = [];
-		foreach ($profiles as $profile) {
-			$indexedProfiles[$profile['id']] = $profile;
-		}
-		array_walk($conversations, function (&$c) use ($members, $indexedProfiles) {
+		$profiles = $this->foodsaverGateway->getProfileForUsers($allUserIds);
+		array_walk($conversations, function ($c) use ($members, $profiles) {
 			$res = [];
-			foreach ($members[$c['id']] as $member) {
-				$res[] = $indexedProfiles[$member];
+			foreach ($members[$c->id] as $member) {
+				$res[] = $profiles[$member];
 			}
-			$c['members'] = $res;
+			$c->members = $res;
 		});
 
 		return $conversations;

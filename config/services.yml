@@ -172,3 +172,6 @@ services:
         class: Swift_Mailer
         arguments:
             - '@mailer.transport'
+
+    Foodsharing\Modules\Message\Message:
+        autowire: false

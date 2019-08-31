@@ -20,11 +20,11 @@
             {{ title }}
           </h5>
           <small class="text-muted text-right nowrap">
-            {{ conversation.lastMessageTime | dateDistanceInWords }}
+            {{ conversation.lastMessage.sentAt | dateDistanceInWords }}
           </small>
         </div>
         <p class="mb-1 text-truncate">
-          {{ conversation.lastMessage.bodyRaw }}
+          {{ conversation.lastMessage.body }}
         </p>
       </div>
     </div>
