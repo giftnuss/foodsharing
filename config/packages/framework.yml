@@ -5,6 +5,9 @@ framework:
     php_errors:
         log: true
 
+jms_serializer:
+    property_naming:
+        id: 'jms_serializer.identical_property_naming_strategy'
 
 fos_rest:
     param_fetcher_listener: true
