@@ -42,20 +42,20 @@ class RegionRestController extends AbstractFOSRestController
 	 */
 	public function joinRegionAction($regionId)
 	{
-		if (!$this->regionGateway->getBezirk($regionId)) {
+		if (!$this->regionGateway->getRegion($regionId)) {
 			throw new HttpException(404);
 		}
 		if (!$this->regionPermissions->mayJoinRegion($regionId)) {
 			throw new HttpException(403);
 		}
 
-		$region = $this->regionGateway->getBezirk($regionId);
+		$region = $this->regionGateway->getRegion($regionId);
 
 		$sessionId = $this->session->id();
 
 		$this->regionGateway->linkBezirk($sessionId, $regionId);
 
-		if (!$this->session->getCurrentBezirkId()) {
+		if (!$this->session->getCurrentRegionId()) {
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 

@@ -67,6 +67,7 @@ $g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';
+$g_lang['max_2_foodsaver'] = 'Du hast mehr als zwei Personen zum Abholen angegeben.<br />Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab! Zusätzlich benötigte Helfer_innen können mit Fahrradanhänger o. ä. außer Sichtweite des Betriebes warten.';
 $g_lang['max_3_leader'] = 'Es darf maximal drei Verantwortliche für diesen Betrieb geben.';
 $g_lang['menge'] = 'Abholmenge im Schnitt';
 $g_lang['verantwortlicher_must_be'] = 'Es muss mindestens einen Verantwortlichen für jeden Betrieb geben!';
@@ -92,4 +93,6 @@ $g_lang['may_referred_to_in_public'] = 'Dieser Betrieb darf öffentlich genannt 
 $g_lang['may_not_referred_to_in_public'] = 'Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!';
 $g_lang['my_last_pickup'] = 'Meine letzte Abholung';
 $g_lang['prefix_Ago'] = 'Vor';
-$g_lang['Days'] = 'Tagen';
+$g_lang['days'] = 'Tagen';
+$g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
+$g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';

@@ -133,7 +133,7 @@ class EmailControl extends Control
 
 			if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 				if ($data['recip_choose'] == 'bezirk') {
-					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
+					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 				} elseif ($data['recip_choose'] == 'botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllBotschafter();
@@ -167,7 +167,7 @@ class EmailControl extends Control
 					str_replace(array("\r"), '', $foodsaver);
 					$foodsaver = explode("\n", $foodsaver);
 
-					$bezirk = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
+					$bezirk = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
 
 					$count = 0;
 					foreach ($foodsaver as $i => $fs) {
@@ -206,7 +206,7 @@ class EmailControl extends Control
 					}
 				}
 			} else {
-				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentBezirkId());
+				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 				$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
 			}
 

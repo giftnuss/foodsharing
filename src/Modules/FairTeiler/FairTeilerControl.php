@@ -84,7 +84,7 @@ class FairTeilerControl extends Control
 		}
 
 		if (isset($regionId) || $regionId = $request->query->get('bid')) {
-			if ($region = $this->regionGateway->getBezirk($regionId)) {
+			if ($region = $this->regionGateway->getRegion($regionId)) {
 				$this->regionId = $regionId;
 				$this->region = $region;
 				if ((int)$region['mailbox_id'] > 0) {
@@ -107,7 +107,7 @@ class FairTeilerControl extends Control
 			}
 
 			if (!isset($this->regions[$this->fairteiler['bezirk_id']])) {
-				$this->regions[] = $this->regionGateway->getBezirk($this->fairteiler['bezirk_id']);
+				$this->regions[] = $this->regionGateway->getRegion($this->fairteiler['bezirk_id']);
 			}
 
 			$this->follower = $this->gateway->getFollower($ftid);

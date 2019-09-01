@@ -40,7 +40,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getLastFtPost($id)
+	public function getLastFairSharePointPost($fspId)
 	{
 		return $this->db->fetch(
 			'
@@ -58,12 +58,12 @@ class FairTeilerGateway extends BaseGateway
 
 			LEFT JOIN 	fs_foodsaver fs ON wp.foodsaver_id = fs.id
 
-			WHERE 		hw.fairteiler_id = :id
+			WHERE 		hw.fairteiler_id = :foodSharePointId
 
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		',
-			[':id' => $id]
+			[':foodSharePointId' => $fspId]
 		);
 	}
 
@@ -398,7 +398,7 @@ class FairTeilerGateway extends BaseGateway
 			return; //Fairteiler has been created by orga member or the ambassador himself
 		}
 
-		$region = $this->regionGateway->getBezirk($fairteiler['bezirk_id']);
+		$region = $this->regionGateway->getRegion($fairteiler['bezirk_id']);
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 

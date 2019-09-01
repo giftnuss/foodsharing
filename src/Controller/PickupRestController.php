@@ -152,7 +152,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$pickups = $this->storeGateway->getPickupSlots($storeId, Carbon::now()->sub('6 hours'));
 		$profiles = [];
-		foreach ($this->storeGateway->getBetriebTeam($storeId) as $user) {
+		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
 			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
 		}
 		foreach ($pickups as &$pickup) {

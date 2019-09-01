@@ -4,10 +4,10 @@ namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
+use Mobile_Detect;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Mobile_Detect;
 
 class LoginControl extends Control
 {
@@ -97,7 +97,7 @@ class LoginControl extends Control
 		}
 	}
 
-	private function handleLogin(Request $request)
+	private function handleLogin(Request $request): void
 	{
 		$email_address = $request->request->get('login_form')['email_address'];
 		$password = $request->request->get('login_form')['password'];
@@ -105,7 +105,8 @@ class LoginControl extends Control
 		$fs_id = $this->loginGateway->login($email_address, $password);
 
 		if ($fs_id === null) {
-			$this->flashMessageHelper->error('Falsche Zugangsdaten'); //TODO: translation file 'Wrong access data'
+			$this->flashMessageHelper->error($this->translationHelper->s('wrong_credentials'));
+
 			return;
 		}
 
@@ -115,19 +116,15 @@ class LoginControl extends Control
 			$_SESSION['mob'] = (int)$_POST['ismob'];
 		}
 
-		$mobdet = new Mobile_Detect();
-		if ($mobdet->isMobile()) {
+		$mobileDetect = new Mobile_Detect();
+		if ($mobileDetect->isMobile()) {
 			$_SESSION['mob'] = 1;
 		}
 
-		if ((isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], BASE_URL) !== false) || isset($_GET['logout'])) {
-			if (isset($_GET['ref'])) {
-				$this->routeHelper->go(urldecode($_GET['ref']));
-			}
-			$this->routeHelper->go(str_replace('/?page=login&logout', '/?page=dashboard', $_SERVER['HTTP_REFERER']));
-		} else {
-			$this->routeHelper->go('/?page=dashboard');
+		if (isset($_GET['ref'])) {
+			$this->routeHelper->go(urldecode($_GET['ref']));
 		}
+		$this->routeHelper->go('/?page=dashboard');
 	}
 
 	public function passwordReset()

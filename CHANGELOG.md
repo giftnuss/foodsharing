@@ -40,6 +40,8 @@
 - Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 - Added Rest endpoint for fair share points !1012 @dthulke
 - Add backend logic for changing basket locations !1021 @alex.simm
+- Updated the wording regarding "not more than 2 foodsavers per pickup !1029 @peter.toennies
+- Fixed bell notifications for new wallposts in stores !1030 @jofranz
 
 ## Bugfixes
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
@@ -79,6 +81,10 @@
 - Fixed broken quiz after refactoring !1017 @svenpascal
 - Verify quiz session status without having a second learning break !1018 #673 @svenpascal
 - Show message and redirect page after deleting an account !1028 #533 @alex.simm
+- Fixed the createThread call inside the ForumRestController !1031 @ctwx_ok
+- Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
+- Fixed sorting of dashboard entries on initial loading !1035 #681 @ctwx_ok
+- When logging in, referenced redirects work now. !1034 #563 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -91,6 +97,7 @@
 - Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
+- Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects

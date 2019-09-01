@@ -23,6 +23,7 @@ final class RegionControl extends Control
 	private $forumGateway;
 	private $fairteilerGateway;
 	private $foodsaverGateway;
+	private $forumFollowerGateway;
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */
@@ -53,6 +54,7 @@ final class RegionControl extends Control
 		FairTeilerGateway $fairteilerGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		RegionGateway $gateway,
@@ -65,6 +67,7 @@ final class RegionControl extends Control
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
 		$this->imageService = $imageService;
@@ -234,7 +237,7 @@ final class RegionControl extends Control
 			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
 
 			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
-			$this->forumGateway->followThread($this->session->id(), $threadId);
+			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
 			if (!$postActiveWithoutModeration) {
 				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}
