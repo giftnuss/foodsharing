@@ -72,7 +72,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fscount">
-							<i class="fas fa-walking"></i>	
+							<i class="fas fa-user-check", style="margin-left: 30px"></i>	
 						</div>
 					</div>
 					<div class="stat_text">
@@ -94,7 +94,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fetchcount">
-							<i class="fas fa-people-carry"></i>
+							<i class="fas fa-walking"></i>
 						</div>
 					</div>
 					<div class="stat_text">
@@ -105,7 +105,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon dailyfetchcount">
-							<i class="fas fa-bicycle"></i>	
+							<i class="fas fa-people-carry"></i>	
 						</div>
 					</div>
 					<div class="stat_text">
