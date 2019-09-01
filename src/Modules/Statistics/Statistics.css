@@ -18,30 +18,9 @@
 }
 
 .stat_icon {
-  display: inline-block;
-  background-image: url("/img/stat_badges.png");
-  background-repeat: no-repeat;
-  height: 96px;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  width: 96px;
-}
-
-.stat_icon.fetchcount {
-  background-position: -96px 0;
-}
-
-.stat_icon.korpcount {
-  background-position: -192px 0;
-}
-
-.stat_icon.fscount {
-  background-position: -288px 0;
-}
-
-.stat_icon.fetchweight {
-  background-position: 0 0;
+  color: #FFF;
+  font-size: 96px;
+  line-height: 220px;
 }
 
 .stat_text h4 {
