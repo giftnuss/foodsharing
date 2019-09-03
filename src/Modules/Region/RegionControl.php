@@ -94,7 +94,7 @@ final class RegionControl extends Control
 			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
 		];
 
-		if ($this->forumPermissions->mayAccessAmbassadorBoard($regionId) && !$isWorkGroup) {
+		if (!$isWorkGroup && $this->forumPermissions->mayAccessAmbassadorBoard($regionId)) {
 			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
 		}
 
@@ -103,7 +103,7 @@ final class RegionControl extends Control
 			if ($region['has_children'] === 1) {
 				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . $regionId];
 			}
-			if ($this->session->may('orga') || $this->session->isAdminFor($regionId)) {
+			if ($this->session->isAdminFor($regionId) || $this->session->may('orga')) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . $regionId];
 			}
 		} else {
