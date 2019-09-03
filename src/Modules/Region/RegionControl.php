@@ -94,7 +94,7 @@ final class RegionControl extends Control
 			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
 		];
 
-		if ($this->forumPermissions->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
+		if ($this->forumPermissions->mayAccessAmbassadorBoard($regionId) && !$isWorkGroup) {
 			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
 		}
 
@@ -103,7 +103,7 @@ final class RegionControl extends Control
 			if ($region['has_children'] === 1) {
 				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . $regionId];
 			}
-			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
+			if ($this->session->may('orga') || $this->session->isAdminFor($regionId)) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . $regionId];
 			}
 		} else {
@@ -114,9 +114,9 @@ final class RegionControl extends Control
 				$menu[] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
 			}
 		}
-		if ($this->mayAccessApplications($region['id'])) {
-			if ($requests = $this->gateway->listRequests($region['id'])) {
-				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $region['id'] . '&sub=applications'];
+		if ($this->mayAccessApplications($regionId)) {
+			if ($requests = $this->gateway->listRequests($regionId)) {
+				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=applications'];
 			}
 		}
 
