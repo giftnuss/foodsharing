@@ -59,7 +59,7 @@ module.exports = {
                   },
                   useBuiltIns: 'usage',
                   modules: 'commonjs',
-                  corejs: '2.x'
+                  corejs: '3'
                 }
               ]
             ]
