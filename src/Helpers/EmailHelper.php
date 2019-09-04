@@ -68,7 +68,7 @@ final class EmailHelper
 			if ($emailName !== '') {   // if sender information is present
 				$emailName .= ' via '; // though this is optional...
 			}
-			$emailName .= DEFAULT_EMAIL_NAME;
+			$emailName .= strtolower(DEFAULT_EMAIL_NAME);
 			$mail->setFrom(DEFAULT_EMAIL, $emailName);
 		}
 
