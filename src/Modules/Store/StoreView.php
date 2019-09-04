@@ -96,7 +96,7 @@ class StoreView extends View
 			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('edit_store'), array(
+		return $this->v_utils->v_quickform($this->translationHelper->s('betrieb'), array(
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name', ['required' => true]),
