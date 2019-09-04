@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
 $g_lang['betrieb'] = 'Betrieb';
@@ -9,7 +9,7 @@ $g_lang['str'] = 'Straße';
 $g_lang['hsnr'] = 'Hausnummer';
 $g_lang['status_date'] = 'letzte Statusänderung';
 $g_lang['bread_betrieb'] = 'Alle Betriebe';
-$g_lang['bread_edit_betrieb'] = 'Betrieb bearbeiten';
+$g_lang['edit_store'] = 'Betrieb bearbeiten';
 $g_lang['bread_new_betrieb'] = 'neuen Betrieb eintragen';
 $g_lang['betrieb_empty'] = 'Bisher wurde kein Betrieb eingetragen.';
 $g_lang['neu_betrieb'] = 'Neuen Betrieb eintragen';
