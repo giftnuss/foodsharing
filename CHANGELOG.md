@@ -103,6 +103,7 @@
 - Link in chat-message notification email now leads to corresponding conversation !1064 #703 @rastadapasta
 - Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
 - Only show food baskets on dashboards basket range list which are not timed out !1004 @jofranz
+- Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
