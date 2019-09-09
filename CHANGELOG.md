@@ -161,6 +161,8 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @fs_k
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
+- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
+
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @fs_k
