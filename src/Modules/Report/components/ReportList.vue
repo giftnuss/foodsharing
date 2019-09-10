@@ -2,9 +2,9 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">
-          {{ reports.length }}
-        </span>)
+        {{ $i18n('reports.all_reports') }} <span v-if="reports.length">
+          ({{ reports.length }})
+        </span>
       </div>
       <div
         v-if="reports.length"
