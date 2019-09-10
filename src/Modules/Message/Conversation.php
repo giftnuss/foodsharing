@@ -20,12 +20,17 @@ class Conversation
 	public $hasUnreadMessages;
 
 	/**
-	 * @var ?array
+	 * @var array
 	 */
 	public $members;
 
 	/**
-	 * @var Message
+	 * @var ?Message
 	 */
 	public $lastMessage;
+
+	/**
+	 * @var ?array
+	 */
+	public $messages;
 }

@@ -38,7 +38,8 @@ final class MessageControl extends Control
 			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
 		}
 
-		$conversations = $this->messageGateway->listConversationsForUserIncludeProfiles($this->session->id());
+		$conversations = $this->messageGateway->listConversationsForUser($this->session->id());
+
 		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
 	}
 }

@@ -105,47 +105,46 @@ final class MessageGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
 	}
 
-	public function getConversationMessages(int $conversation_id, int $limit = 20, ?int $olderThanId = null): array
+	public function getConversationMessages(int $conversation_id, int $limit = 20, ?int $olderThanId = null, int $offset = 0): array
 	{
 		$offsetStr = '';
 		$queryParams = [
 			'id' => $conversation_id,
 			'limit' => $limit,
+			'offset' => $offset
 		];
 		if ($olderThanId !== null) {
 			$offsetStr = 'AND m.id < :olderThanId';
 			$queryParams['olderThanId'] = $olderThanId;
 		}
 
-		$res = $this->db->fetchAll('
+		$messages = $this->db->fetchAll('
 			SELECT
 				m.id,
-				fs.`id` AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo,
 				m.`body`,
 				m.`time`,
+				m.`foodsaver_id`,
 				m.`is_htmlentity_encoded`
 			FROM
-				`fs_msg` m,
-				`fs_foodsaver` fs
+				`fs_msg` m
 			WHERE
-				m.foodsaver_id = fs.id
-			AND
 				m.conversation_id = :id
 			' . $offsetStr . '
 			ORDER BY
 				m.`time` DESC
-
 			LIMIT :limit
+			OFFSET :offset
 		', $queryParams);
-		$res = array_map(function ($e) {
-			if ($e['is_htmlentity_encoded']) {
-				$e['body'] = html_entity_decode($e['body']);
-			}
-
-			return $e;
-		}, $res);
+		$res = [];
+		foreach ($messages as $m) {
+			$message = new Message(
+				$m['is_htmlentity_encoded'] ? html_entity_decode($m['body']) : $m['body'],
+				$m['foodsaver_id'],
+				new \DateTime($m['time']),
+				$m['id']
+			);
+			$res[] = $message;
+		}
 
 		return $res;
 	}
@@ -171,7 +170,7 @@ final class MessageGateway extends BaseGateway
 	 *
 	 * @return array
 	 */
-	public function listConversationsForUser(int $fsId, int $limit = null, int $offset = 0)
+	private function listConversationsForUserWithoutMembers(int $fsId, int $limit = null, int $offset = 0)
 	{
 		$paginate = null;
 		if ($limit !== null) {
@@ -184,6 +183,7 @@ final class MessageGateway extends BaseGateway
 				c.`last` AS last_message_at,
 				c.`last_message`,
 				c.`last_foodsaver_id` AS last_message_author_id,
+				c.`last_message_id`,
 				hc.unread as has_unread_messages,
 				c.name,
 				c.last_message_is_htmlentity_encoded
@@ -215,14 +215,15 @@ final class MessageGateway extends BaseGateway
 			$conversation = new Conversation();
 			$conversation->title = $c['name'];
 			$conversation->id = $c['id'];
-			$conversation->hasUnreadMessages = $c['has_unread_messages'];
+			$conversation->hasUnreadMessages = (bool)$c['has_unread_messages'];
 
 			$message = new Message(
 				$c['last_message_is_htmlentity_encoded'] ?
 					html_entity_decode($c['last_message']) :
 					$c['last_message'],
 				$c['last_message_author_id'],
-				new \DateTime($c['last_message_at'])
+				new \DateTime($c['last_message_at']),
+				$c['last_message_id']
 			);
 
 			$conversation->lastMessage = $message;
@@ -255,7 +256,7 @@ final class MessageGateway extends BaseGateway
 		', [':conversationId' => $conversationId]);
 	}
 
-	private function getMembersForConversations(array $cids): array
+	public function getMembersForConversations(array $cids): array
 	{
 		if ($cids) {
 			$placeholders = $this->db->generatePlaceholders(count($cids));
@@ -270,7 +271,7 @@ final class MessageGateway extends BaseGateway
 			);
 			$indexedResult = [];
 			foreach ($results as $result) {
-				$indexedResult[$result['conversation_id']] = explode(',', $result['members']);
+				$indexedResult[$result['conversation_id']] = array_map('intval', explode(',', $result['members']));
 			}
 
 			return $indexedResult;
@@ -279,27 +280,13 @@ final class MessageGateway extends BaseGateway
 		return [];
 	}
 
-	private function flatten(array $array): array
+	public function listConversationsForUser(int $fsId, int $limit = null, int $offset = 0): array
 	{
-		$return = array();
-		array_walk_recursive($array, function ($a) use (&$return) { $return[] = $a; });
-
-		return $return;
-	}
-
-	public function listConversationsForUserIncludeProfiles(int $fsId, int $limit = null, int $offset = 0): array
-	{
-		$conversations = $this->listConversationsForUser($fsId, $limit, $offset);
+		$conversations = $this->listConversationsForUserWithoutMembers($fsId, $limit, $offset);
 		$cids = array_keys($conversations);
 		$members = $this->getMembersForConversations($cids);
-		$allUserIds = array_unique($this->flatten($members));
-		$profiles = $this->foodsaverGateway->getProfileForUsers($allUserIds);
-		array_walk($conversations, function ($c) use ($members, $profiles) {
-			$res = [];
-			foreach ($members[$c->id] as $member) {
-				$res[] = $profiles[$member];
-			}
-			$c->members = $res;
+		array_walk($conversations, function ($c) use ($members) {
+			$c->members = $members[$c->id];
 		});
 
 		return $conversations;

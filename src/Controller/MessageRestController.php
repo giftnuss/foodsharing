@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Services\MessageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -13,12 +14,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageRestController extends AbstractFOSRestController
 {
+	private $foodsaverGateway;
 	private $messageGateway;
 	private $messageService;
 	private $session;
 
-	public function __construct(MessageGateway $messageGateway, MessageService $messageService, Session $session)
+	public function __construct(FoodsaverGateway $foodsaverGateway, MessageGateway $messageGateway, MessageService $messageService, Session $session)
 	{
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->messageGateway = $messageGateway;
 		$this->messageService = $messageService;
 		$this->session = $session;
@@ -26,7 +29,7 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Get("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
-	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", description="ID of oldest already known message")
+	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", nullable=true, default=null, description="ID of oldest already known message")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="Number of messages to return")
 	 *
 	 * @param int $conversationId
@@ -41,11 +44,18 @@ class MessageRestController extends AbstractFOSRestController
 		}
 
 		$limit = (int)$paramFetcher->get('limit');
-		$olderThanID = (int)$paramFetcher->get('olderThanId');
+		$olderThanID = $paramFetcher->get('olderThanId');
+		$olderThanID = $olderThanID ? (int)$olderThanID : null;
 
 		$messages = $this->messageGateway->getConversationMessages($conversationId, $limit, $olderThanID);
+		$profileIDs = [];
+		array_walk($messages, function ($v, $k) use (&$profileIDs) {
+			$profileIDs[] = $v->authorId;
+		});
+		$profileIDs = array_unique($profileIDs);
+		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
-		return $this->handleView($this->view(['messages' => $messages], 200));
+		return $this->handleView($this->view(['messages' => $messages, 'profiles' => $profiles], 200));
 	}
 
 	/**
@@ -74,21 +84,25 @@ class MessageRestController extends AbstractFOSRestController
 
 	private function getConversationData(int $conversationId, int $messagesLimit): array
 	{
-		$members = $this->messageGateway->listConversationMembersWithProfile($conversationId);
-		$publicMemberInfo = static function ($member) {
-			return RestNormalization::normalizeFoodsaver($member);
-		};
-		$members = array_map($publicMemberInfo, $members);
-
+		$members = $this->messageGateway->getMembersForConversations([$conversationId])[$conversationId];
 		$messages = $this->messageGateway->getConversationMessages($conversationId, $messagesLimit);
 		$name = $this->messageGateway->getConversationName($conversationId);
 		$this->messageGateway->markAsRead($conversationId, $this->session->id());
+
+		$profileIDs = [];
+		array_walk($messages, function ($v, $k) use (&$profileIDs) {
+			$profileIDs[] = $v->authorId;
+		});
+		$profileIDs = array_merge($profileIDs, $members);
+		$profileIDs = array_unique($profileIDs);
+		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
 		return [
 			'id' => $conversationId,
 			'name' => $name,
 			'members' => $members,
 			'messages' => $messages,
+			'profiles' => $profiles,
 		];
 	}
 
@@ -135,7 +149,7 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->messageGateway->listConversationsForUserIncludeProfiles(
+		$conversations = $this->messageGateway->listConversationsForUser(
 			$this->session->id(),
 			$limit,
 			$offset
