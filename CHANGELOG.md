@@ -47,6 +47,7 @@
 - Add basket counters to statistics #81 !1045 @chris2up9
 - Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
 - Link avatar pics to user profile at report. !1047 @rafael
+- Link avatar pics to user profile at report. !1047 @moffer
 
 ## Bugfixes
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
