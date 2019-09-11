@@ -76,8 +76,6 @@ class EventView extends View
                 dateend_wrapper.style.display = "block";
 			}
 			
-			dateend_wrapper.classList.remove("required");
-
 			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
