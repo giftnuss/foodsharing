@@ -37,6 +37,8 @@ class AcceptanceTester extends \Codeception\Actor
 		$I->fillField('#login-email', $email);
 		$I->fillField('#login-password', $password);
 		$I->click('#topbar .btn');
+		/* digital climate strike overlay overlaps leaflet attribution, but it is fine after closing */
+		$I->setCookie('_DIGITAL_CLIMATE_STRIKE_WIDGET_CLOSED_', 'true');
 		$I->waitForActiveAPICalls();
 		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
