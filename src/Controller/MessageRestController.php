@@ -108,7 +108,7 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("conversations")
-	 * @Rest\RequestParam(name="members", map=true, requirements="\d+", description="Userids of people to include in the conversation.")
+	 * @Rest\RequestParam(name="members", map=true, requirements="\d+", description="User ids of people to include in the conversation.")
 	 *
 	 * @param ParamFetcher $paramFetcher
 	 *
@@ -122,7 +122,7 @@ class MessageRestController extends AbstractFOSRestController
 
 		$members = $paramFetcher->get('members');
 		$members[] = $this->session->id();
-		array_unique($members);
+		$members = array_unique($members);
 
 		$conversationId = $this->messageGateway->getOrCreateConversation($members);
 
@@ -226,7 +226,7 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Post("user/{userId}/conversation")
+	 * @Rest\Post("user/{userId}/conversation", requirements={"userId" = "\d+"})
 	 *
 	 * @param int $userId
 	 *

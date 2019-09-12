@@ -32,7 +32,7 @@ class MessageService
 		$this->webSocketSender = $webSocketSender;
 	}
 
-	private function sendNewMessageNotificationEmail(array $recipient, int $conversation_id, string $msg, array $templateData): void
+	private function sendNewMessageNotificationEmail(array $recipient, array $templateData): void
 	{
 		if (!$this->mem->userOnline($recipient['id'])) {
 			/* skip repeated notification emails in a short interval */
@@ -107,7 +107,7 @@ class MessageService
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $sender, $body, $members, $notificationTemplate);
 			foreach ($members as $m) {
 				if (($m['id'] != $senderId) && $m['infomail_message']) {
-					$this->sendNewMessageNotificationEmail($m, $conversationId, $body, $notificationTemplateData);
+					$this->sendNewMessageNotificationEmail($m, $notificationTemplateData);
 				}
 			}
 		}
