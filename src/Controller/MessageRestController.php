@@ -155,8 +155,17 @@ class MessageRestController extends AbstractFOSRestController
 			$offset
 		);
 
+		$profileIDs = [];
+		array_walk($conversations, function ($v, $k) use (&$profileIDs) {
+			$profileIDs = array_merge($v->members, $profileIDs);
+			$profileIDs[] = $v->lastMessage->authorId;
+		});
+		$profileIDs = array_unique($profileIDs);
+		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
+
 		return $this->handleView($this->view([
-			'conversations' => array_values($conversations)
+			'conversations' => array_values($conversations),
+			'profiles' => $profiles
 		], 200));
 	}
 
