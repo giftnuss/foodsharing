@@ -55,7 +55,7 @@ class MessageRestController extends AbstractFOSRestController
 		$profileIDs = array_unique($profileIDs);
 		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
-		return $this->handleView($this->view(['messages' => $messages, 'profiles' => $profiles], 200));
+		return $this->handleView($this->view(['messages' => $messages, 'profiles' => array_values($profiles)], 200));
 	}
 
 	/**
@@ -86,8 +86,10 @@ class MessageRestController extends AbstractFOSRestController
 	{
 		$members = $this->messageGateway->getMembersForConversations([$conversationId])[$conversationId];
 		$messages = $this->messageGateway->getConversationMessages($conversationId, $messagesLimit);
-		$name = $this->messageGateway->getConversationName($conversationId);
 		$this->messageGateway->markAsRead($conversationId, $this->session->id());
+		$conversation = $this->messageGateway->getConversationForUser($conversationId, $this->session->id());
+		$conversation->messages = $messages;
+		$conversation->members = $members;
 
 		$profileIDs = [];
 		array_walk($messages, function ($v, $k) use (&$profileIDs) {
@@ -98,11 +100,8 @@ class MessageRestController extends AbstractFOSRestController
 		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
 		return [
-			'id' => $conversationId,
-			'name' => $name,
-			'members' => $members,
-			'messages' => $messages,
-			'profiles' => $profiles,
+			'conversation' => $conversation,
+			'profiles' => array_values($profiles),
 		];
 	}
 
@@ -149,23 +148,15 @@ class MessageRestController extends AbstractFOSRestController
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
 
-		$conversations = $this->messageGateway->listConversationsForUser(
-			$this->session->id(),
-			$limit,
-			$offset
-		);
-
-		$profileIDs = [];
-		array_walk($conversations, function ($v, $k) use (&$profileIDs) {
-			$profileIDs = array_merge($v->members, $profileIDs);
-			$profileIDs[] = $v->lastMessage->authorId;
+		$data = $this->messageService->listConversationsWithProfilesForUser($this->session->id(), $limit, $offset);
+		$data['conversations'] = array_filter($data['conversations'], function ($c) {
+			/* hide conversations without a message, as this has always been the behaviour */
+			return $c->lastMessage || $c->messages;
 		});
-		$profileIDs = array_unique($profileIDs);
-		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
 		return $this->handleView($this->view([
-			'conversations' => array_values($conversations),
-			'profiles' => $profiles
+			'conversations' => array_values($data['conversations']),
+			'profiles' => array_values($data['profiles'])
 		], 200));
 	}
 

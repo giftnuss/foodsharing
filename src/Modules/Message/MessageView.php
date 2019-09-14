@@ -124,12 +124,16 @@ final class MessageView extends View
 		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), array('class' => 'ui-padding')) . '</div>';
 	}
 
-	public function conversationList(array $conversations): string
+	public function conversationList(array $conversations, array $profiles): string
 	{
 		$list = '';
 
 		if (!empty($conversations)) {
 			foreach ($conversations as $c) {
+				if (!$c->lastMessage) {
+					/* only show conversations with a message */
+					continue;
+				}
 				$pics = '';
 				$title = '';
 
@@ -144,11 +148,11 @@ final class MessageView extends View
 					}
 
 					foreach ($c->members as $m) {
-						if ($m->id == $this->session->id()) {
+						if ($m == $this->session->id()) {
 							continue;
 						}
-						$pics .= '<img src="' . $this->imageService->img($m->avatar, $size) . '" width="' . $pictureWidth . '" />';
-						$title .= ', ' . $m->name;
+						$pics .= '<img src="' . $this->imageService->img($profiles[$m]->avatar, $size) . '" width="' . $pictureWidth . '" />';
+						$title .= ', ' . $profiles[$m]->name;
 					}
 
 					if ($c->title === null) {

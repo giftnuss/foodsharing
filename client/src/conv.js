@@ -3,11 +3,12 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { GET, goTo, isMob, pulseError } from '@/script'
+import { GET, goTo, isMob, pulseError, img } from '@/script'
 import serverData from '@/server-data'
-import timeformat from '@/timeformat'
+import { dateFormat } from '@/./utils'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
+import profileStore from '@/stores/profiles'
 import * as api from '@/api/conversations'
 
 import {
@@ -51,7 +52,6 @@ const conv = {
       this.$chat = []
       this.user2Conv = []
 
-      console.log('openchats...')
       const chats = storage.get('msg-chats')
 
       if (chats != undefined) {
@@ -120,7 +120,7 @@ const conv = {
     const key = conv.getKey(data.cid)
     if (key >= 0) {
       conv.maxbox(data.cid)
-      conv.append(key, data)
+      conv.append(key, data.message)
       conv.scrollBottom(data.cid)
     }
     conversationStore.loadConversations()
@@ -188,17 +188,6 @@ const conv = {
    */
   scrollBottom: function (cid) {
     $(`#chat-${cid} .chatboxcontent`).slimScroll({ scrollTo: `${$('#chat-' + cid + ' .chatboxcontent').prop('scrollHeight')}px` })
-  },
-
-  img: function (photo, size) {
-    if (size == undefined) {
-      size = 'med'
-    }
-    if (photo && photo.length > 3) {
-      return `/images/${size}_q_${photo}`
-    } else {
-      return `/img/${size}_q_avatar.png`
-    }
   },
 
   /**
@@ -294,9 +283,9 @@ const conv = {
   * adding a class 'my-message' to current user's own messages
   */
     let ownMessageClass = ''
-    if (message.fs_id === serverData.user.id) { ownMessageClass = ' my-message' }
+    if (message.authorId === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.sentAt}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
@@ -308,7 +297,8 @@ const conv = {
     const key = this.getKey(cid)
 
     try {
-      const conversation = await api.getConversation(cid)
+      await conversationStore.loadConversation(cid)
+      const conversation = conversationStore.conversations[cid]
       conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest? Dadurch verlierst du unwiderruflich Zugriff auf alle Nachrichten in dieser Unterhaltung.')){conv.leaveConversation(${cid});}return false;">Chat verlassen</a>`)
       conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
 
@@ -316,13 +306,14 @@ const conv = {
        * first make a title with all the usernames
        */
 
-      let title = conversation.name
+      let title = conversation.title
       if (title == null) {
         title = []
-        for (let i = 0; i < conversation.members.length; i++) {
-          if (conversation.members[i] != undefined && conversation.members[i].id != serverData.user.id) {
-            title.push(`<a href="/profile/${conversation.members[i].id}">${plainToHtml(conversation.members[i].name)}</a>`)
+        for (const m of conversation.members) {
+          if (m == serverData.user.id) {
+            continue
           }
+          title.push(`<a href="/profile/${m}">${plainToHtml(profileStore.profiles[m].name)}</a>`)
         }
         title = title.join(', ')
       }

@@ -8,6 +8,7 @@ use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\WebSocketSender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Message\Message;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -54,7 +55,7 @@ class MessageService
 		}
 	}
 
-	private function getNotificationTemplateData(int $conversationId, array $sender, string $body, array $members, string $notificationTemplate = null): array
+	private function getNotificationTemplateData(int $conversationId, Message $message, array $members, string $notificationTemplate = null): array
 	{
 		$data = [];
 		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
@@ -70,8 +71,8 @@ class MessageService
 					implode(', ',
 						array_column(
 							array_filter($members,
-								function ($m) use ($sender) {
-									return $m['id'] != $sender['id'];
+								function ($m) use ($message) {
+									return $m['id'] != $message->authorId;
 								}),
 							'name'
 						)
@@ -81,54 +82,48 @@ class MessageService
 			}
 		}
 
-		$data['sender'] = $sender['name'];
-		$data['message'] = $body;
+		$data['sender'] = $this->foodsaverGateway->getFoodsaverDetails($message->authorId)['name'];
+		$data['message'] = $message->body;
 		$data['link'] = BASE_URL . '/?page=msg&cid=' . $conversationId;
 
 		return $data;
 	}
 
-	private function sendNewMessageNotifications(int $conversationId, int $senderId, string $body, Carbon $time, int $messageId, string $notificationTemplate = null): void
+	private function sendNewMessageNotifications(int $conversationId, Message $message, string $notificationTemplate = null): void
 	{
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
-			$sender = $this->foodsaverGateway->getFoodsaverDetails($senderId);
 
 			$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
-				'id' => $messageId,
 				'cid' => $conversationId,
-				'fs_id' => $senderId,
-				'fs_name' => $sender['name'],
-				'fs_photo' => $sender['photo'],
-				'body' => $body,
-				'time' => $time->toDateTimeString()
+				'message' => $message,
 			));
 
-			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $sender, $body, $members, $notificationTemplate);
+			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
-				if (($m['id'] != $senderId) && $m['infomail_message']) {
+				if (($m['id'] != $message->authorId) && $m['infomail_message']) {
 					$this->sendNewMessageNotificationEmail($m, $notificationTemplateData);
 				}
 			}
 		}
 	}
 
-	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): ?int
+	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): ?Message
 	{
 		$conversationId = $this->messageGateway->getOrCreateConversation([$senderId, $userId]);
 
 		return $this->sendMessage($conversationId, $senderId, $body, $notificationTemplate);
 	}
 
-	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?int
+	public function sendMessage(int $conversationId, int $senderId, string $body, string $notificationTemplate = null): ?Message
 	{
 		$body = trim($body);
 		if (!empty($body)) {
 			$time = Carbon::now();
-			$messageId = $this->messageGateway->addMessage($conversationId, $senderId, $body, $time);
-			$this->sendNewMessageNotifications($conversationId, $senderId, $body, $time, $messageId, $notificationTemplate);
+			$message = $this->messageGateway->addMessage($conversationId, $senderId, $body, $time);
+			$this->sendNewMessageNotifications($conversationId, $message, $notificationTemplate);
 
-			return $messageId;
+			return $message;
 		}
 
 		return null;
@@ -150,5 +145,29 @@ class MessageService
 		}
 
 		return false;
+	}
+
+	public function listConversationsWithProfilesForUser(int $userId, ?int $limit = null, int $offset = 0): array
+	{
+		$conversations = $this->messageGateway->listConversationsForUser(
+			$userId,
+			$limit,
+			$offset
+		);
+
+		$profileIDs = [];
+		array_walk($conversations, function ($v, $k) use (&$profileIDs) {
+			$profileIDs = array_merge($v->members, $profileIDs);
+			if ($v->lastMessage) {
+				$profileIDs[] = $v->lastMessage->authorId;
+			}
+		});
+		$profileIDs = array_unique($profileIDs);
+		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
+
+		return [
+			'conversations' => $conversations,
+			'profiles' => $profiles
+		];
 	}
 }

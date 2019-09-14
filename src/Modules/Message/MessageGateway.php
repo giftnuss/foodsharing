@@ -100,9 +100,15 @@ final class MessageGateway extends BaseGateway
 		return $this->createConversation($fsIds);
 	}
 
-	public function getConversationName(int $conversationId): ?string
+	public function getConversationForUser(int $conversationId, int $fsId): ?Conversation
 	{
-		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
+		/* TODO: This may return empty conversations that don't have a last message */
+		$result = $this->listConversationsForUserWithoutMembers($fsId, null, 0, $conversationId);
+		if ($result) {
+			return $result[$conversationId];
+		} else {
+			return null;
+		}
 	}
 
 	public function getConversationMessages(int $conversation_id, int $limit = 20, ?int $olderThanId = null, int $offset = 0): array
@@ -140,7 +146,7 @@ final class MessageGateway extends BaseGateway
 			$message = new Message(
 				$m['is_htmlentity_encoded'] ? html_entity_decode($m['body']) : $m['body'],
 				$m['foodsaver_id'],
-				new \DateTime($m['time']),
+				$this->db->parseDate($m['time']),
 				$m['id']
 			);
 			$res[] = $message;
@@ -170,13 +176,9 @@ final class MessageGateway extends BaseGateway
 	 *
 	 * @return array
 	 */
-	private function listConversationsForUserWithoutMembers(int $fsId, int $limit = null, int $offset = 0)
+	private function listConversationsForUserWithoutMembers(int $fsId, int $limit = null, int $offset = 0, int $cid = null): array
 	{
-		$paginate = null;
-		if ($limit !== null) {
-			$paginate = ' LIMIT :offset, :limit';
-		}
-
+		$params = [':fsId' => $fsId];
 		$query = '
 			SELECT
 				c.`id`,
@@ -196,19 +198,24 @@ final class MessageGateway extends BaseGateway
 				hc.conversation_id = c.id
 
 			AND
-				hc.foodsaver_id = :fsId
-				
-			AND
-			    c.last_message <> ""
-
+				hc.foodsaver_id = :fsId';
+		if (!is_null($cid)) {
+			$query .= '
+			AND c.id = :cid';
+			$params = array_merge($params, [':cid' => $cid]);
+		}
+		$query .= '
 			ORDER BY
 				hc.unread DESC,
 				c.`last` DESC';
-		if ($paginate) {
-			$conversations = $this->db->fetchAll($query . $paginate, [':fsId' => $fsId, ':offset' => $offset, ':limit' => $limit]);
-		} else {
-			$conversations = $this->db->fetchAll($query, [':fsId' => $fsId]);
+		if ($limit !== null) {
+			$query .= ' LIMIT :offset, :limit';
+			$params = array_merge($params, [
+				':offset' => $offset,
+				':limit' => $limit
+			]);
 		}
+		$conversations = $this->db->fetchAll($query, $params);
 
 		$res = [];
 		foreach ($conversations as $c) {
@@ -217,16 +224,18 @@ final class MessageGateway extends BaseGateway
 			$conversation->id = $c['id'];
 			$conversation->hasUnreadMessages = (bool)$c['has_unread_messages'];
 
-			$message = new Message(
-				$c['last_message_is_htmlentity_encoded'] ?
-					html_entity_decode($c['last_message']) :
-					$c['last_message'],
-				$c['last_message_author_id'],
-				new \DateTime($c['last_message_at']),
-				$c['last_message_id']
-			);
+			if ($c['last_message_id']) {
+				$message = new Message(
+					$c['last_message_is_htmlentity_encoded'] ?
+						html_entity_decode($c['last_message']) :
+						$c['last_message'],
+					$c['last_message_author_id'],
+					$this->db->parseDate($c['last_message_at']),
+					$c['last_message_id']
+				);
 
-			$conversation->lastMessage = $message;
+				$conversation->lastMessage = $message;
+			}
 			$res[$conversation->id] = $conversation;
 		}
 
@@ -296,7 +305,7 @@ final class MessageGateway extends BaseGateway
 	{
 		$this->db->update('fs_conversation',
 			[
-				'last' => $lastMessageAt->toDateTimeString(),
+				'last' => $this->db->date($lastMessageAt),
 				'last_foodsaver_id' => $lastMessageAuthor,
 				'last_message' => $lastMessageBody,
 				'last_message_id' => $lastMessageId,
@@ -326,7 +335,7 @@ final class MessageGateway extends BaseGateway
 		);
 	}
 
-	public function addMessage(int $conversationId, int $senderId, string $body, Carbon $sentAt = null): int
+	public function addMessage(int $conversationId, int $senderId, string $body, Carbon $sentAt = null): Message
 	{
 		if ($sentAt === null) {
 			$sentAt = Carbon::now();
@@ -336,13 +345,13 @@ final class MessageGateway extends BaseGateway
 				'conversation_id' => $conversationId,
 				'foodsaver_id' => $senderId,
 				'body' => $body,
-				'time' => $sentAt->toDateTimeString(),
+				'time' => $this->db->date($sentAt),
 				'is_htmlentity_encoded' => 0
 			]);
 		$this->markAsUnread($conversationId, $senderId);
 		$this->updateLastConversationMessage($conversationId, $messageId, $body, $senderId, $sentAt);
 
-		return $messageId;
+		return new Message($body, $senderId, $sentAt, $messageId);
 	}
 
 	public function deleteUserFromConversation(int $conversationId, int $userId): bool

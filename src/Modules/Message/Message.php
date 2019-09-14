@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Carbon\Carbon;
+
 class Message
 {
 	/**
@@ -14,7 +16,7 @@ class Message
 	public $body;
 
 	/**
-	 * @var \DateTime
+	 * @var Carbon
 	 */
 	public $sentAt;
 
@@ -23,7 +25,7 @@ class Message
 	 */
 	public $authorId;
 
-	public function __construct(string $body, int $authorId, \DateTime $sentAt, int $messageId)
+	public function __construct(string $body, int $authorId, Carbon $sentAt, int $messageId)
 	{
 		$this->authorId = $authorId;
 		$this->sentAt = $sentAt;

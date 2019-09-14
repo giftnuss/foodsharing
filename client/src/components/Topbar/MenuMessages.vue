@@ -48,7 +48,7 @@ export default {
 
   computed: {
     conversations () {
-      return conversationStore.conversations
+      return Array.from(conversationStore.conversations).filter(c => c.lastMessage || c.messages)
     },
     unread () {
       return conversationStore.unreadCount

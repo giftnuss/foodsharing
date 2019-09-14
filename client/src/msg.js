@@ -11,6 +11,7 @@ import autosize from 'autosize'
 import timeformat from '@/timeformat'
 import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
+import profileStore from '@/stores/profiles'
 
 import {
   img,
@@ -21,7 +22,7 @@ import {
 } from '@/script'
 
 import {
-  dateDistanceInWords,
+  dateDistanceInWords, dateFormat,
   plainToHtml,
   plainToHtmlAttribute
 } from '@/utils'
@@ -110,9 +111,9 @@ const msg = {
           setTimeout(function () {
             msg.hideLoader()
           }, 100)
-          await conversationStore.loadConversations()
-          const conversation = conversationStore.conversations.filter((el) => { return el.id === msg.conversation_id })[0]
-          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.body, time: conversation.lastMessage.sentAt })
+          /* await conversationStore.loadConversations()
+          const conversation = conversationStore.conversations[msg.conversation_id]
+          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.body, time: conversation.lastMessage.sentAt }) */
         }
       }
     })
@@ -143,11 +144,10 @@ const msg = {
    */
   push: function (message) {
     if (message.cid == msg.conversation_id) {
-      msg.appendMsg(message)
+      msg.appendMsg(message.message)
       msg.scrollBottom()
-    } else {
-      msg.updateConvList(message)
     }
+    msg.updateConvList(message)
     conversationStore.loadConversations()
   },
 
@@ -155,8 +155,8 @@ const msg = {
     const $item = $(`#convlist-${message.cid}`)
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
-      $itemLink.children('.msg').text(message.body)
-      $itemLink.children('.time').text(dateDistanceInWords(message.time))
+      $itemLink.children('.msg').text(message.message.body)
+      $itemLink.children('.time').text(dateDistanceInWords(message.message.sentAt))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
       $item.show('highlight', { color: '#F5F5B5' })
@@ -226,8 +226,9 @@ const msg = {
      * set a class 'my-message' to active user's own messages
      */
     let ownMessageClass = ''
-    if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
-    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${plainToHtmlAttribute(message.fs_name)}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${plainToHtml(message.body)}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    const author = profileStore.profiles[message.authorId]
+    if (message.authorId === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${plainToHtmlAttribute(author.name)}" href="/profile/${message.authorId}"><img height="35" src="${img(author.avatar, 'mini')}" /></a></span><span class="body">${plainToHtml(message.body)}<span class="time">${dateFormat(message.sentAt)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -262,22 +263,23 @@ const msg = {
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await api.getConversation(id)
+    await conversationStore.loadConversation(id)
+    const conversation = conversationStore.conversations[id]
 
     msg.resetConversation()
 
     const $conversation = $('#msg-conversation ul:first')
     $conversation.html('')
 
-    const otherMembers = members.filter(m => m.id != msg.fsid)
+    const otherMembers = conversation.members.filter(m => m != msg.fsid)
 
-    const titleText = name || `Unterhaltung mit ${otherMembers.map(member => member.name).join(', ')}`
+    const titleText = conversation.title || `Unterhaltung mit ${otherMembers.map(member => profileStore.profiles[member].name).join(', ')}`
 
     const title = `
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
-          <a title="${plainToHtmlAttribute(member.name)}" href="/profile/${member.id}">
-            <img src="${img(member.avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(member.name)}" />
+          <a title="${plainToHtmlAttribute(profileStore.profiles[member].name)}" href="/profile/${profileStore.profiles[member].id}">
+            <img src="${img(member.avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
           </a>
         `).join('')}  
       </div>
@@ -291,11 +293,7 @@ const msg = {
     /*
      * append messages to conversation message list
      */
-    if (messages) {
-      messages
-        .reverse()
-        .forEach(m => msg.appendMsg(m))
-    }
+    conversation.messages.reverse().forEach(m => msg.appendMsg(m))
 
     document.getElementById('compose').style.display = 'none'
     document.getElementById('right').classList.add('list-active')
