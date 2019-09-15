@@ -85,6 +85,7 @@
 - Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
 - Fixed sorting of dashboard entries on initial loading !1035 #681 @ctwx_ok
 - When logging in, referenced redirects work now. !1034 #563 @peter.toennies
+- Open link to markdown description in a new window !1050 #698 @chriswalg
 - Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
 
 ## Refactoring
