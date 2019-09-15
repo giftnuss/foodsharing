@@ -63,6 +63,7 @@
       :href="$url('wiki')"
       class="dropdown-item sub"
       target="_blank"
+      rel="noopener noreferrer nofollow"
       role="menuitem"
     >
       Wiki
