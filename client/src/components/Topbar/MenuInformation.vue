@@ -62,6 +62,7 @@
     <a
       :href="$url('wiki')"
       class="dropdown-item sub"
+      target="_blank"
       role="menuitem"
     >
       Wiki
