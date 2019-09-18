@@ -62,16 +62,12 @@ class WallPostXhr extends Control
 				return XhrResponses::PERMISSION_DENIED;
 			}
 
-			if ($fs == $this->session->id()
-				|| (!in_array($this->table, ['fairteiler', 'foodsaver']) && ($this->session->isAmbassador() || $this->session->isOrgaTeam()))
-			) {
-				if ($this->wallPostGateway->deletePost($postId)) {
-					$this->wallPostGateway->unlinkPost($postId, $this->table);
+			if ($this->wallPostGateway->deletePost($postId)) {
+				$this->wallPostGateway->unlinkPost($postId, $this->table);
 
-					return [
-						'status' => 1
-					];
-				}
+				return [
+					'status' => 1
+				];
 			}
 		}
 

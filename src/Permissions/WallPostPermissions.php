@@ -81,7 +81,7 @@ class WallPostPermissions
 		switch ($target) {
 			case 'foodsaver':
 			case 'fairteiler':
-				$result = $fsId === $targetId;
+				$result = false;
 				break;
 			case 'bezirk':
 				$result = $this->regionGateway->isAdmin($fsId, $targetId);
