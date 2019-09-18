@@ -89,6 +89,7 @@
 - Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
 - Deleting report notes now possible for Orga and report team. Writing user notes now possible for orga !1038 #537 @peter.toennies
 - Deleting report notes now possible for Orga and admins of the report team. Writing user notes now possible for orga only !1038 #537 @peter.toennies
+- Deleting report notes now possible for Orga and report team. Writing user notes now possible for orga !1038 #537 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
