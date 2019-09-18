@@ -42,7 +42,6 @@ class WallPostXhr extends Control
 			$this->view->setTable($this->table, $this->id);
 		} else {
 			echo '{status:0}';
-			exit();
 		}
 	}
 
