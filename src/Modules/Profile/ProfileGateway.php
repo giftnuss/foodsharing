@@ -308,7 +308,7 @@ final class ProfileGateway extends BaseGateway
 		return ($ret === false) ? [] : $ret;
 	}
 
-	public function getCompanies(int $fsId): array
+	public function listStoresOfFoodsaver(int $fsId): array
 	{
 		$stm = '
 			SELECT 	b.id,

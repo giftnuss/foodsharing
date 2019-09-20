@@ -62,7 +62,7 @@ final class ProfileControl extends Control
 			$this->view->userNotes(
 				$this->wallposts('usernotes', $this->foodsaver['id']),
 				true,
-				$this->profileGateway->getCompanies($this->foodsaver['id']),
+				$this->profileGateway->listStoresOfFoodsaver($this->foodsaver['id']),
 			);
 		} else {
 			$this->routeHelper->go('/profile/' . $this->foodsaver['id']);
@@ -76,7 +76,7 @@ final class ProfileControl extends Control
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				true,
-				$this->profileGateway->getCompanies($this->foodsaver['id']),
+				$this->profileGateway->listStoresOfFoodsaver($this->foodsaver['id']),
 				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
 			);
 		} else {
