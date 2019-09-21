@@ -55,5 +55,6 @@ export default {
   press: () => '/?page=content&sub=presse',
   imprint: () => '/impressum',
   donate: () => '/unterstuetzung',
-  changelog: () => '/?page=content&sub=changelog'
+  changelog: () => '/?page=content&sub=changelog',
+  reports: (regionId) => `/?page=report&bid=${regionId}`
 }

@@ -45,6 +45,7 @@
 - Updated the wording regarding "not more than 2 foodsavers per pickup !1029 @peter.toennies
 - Fixed bell notifications for new wallposts in stores !1030 @jofranz
 - The map is zoomed out in case no address is specified instead of showing the ocean !1053 @dthulke
+- A region's reports are now accessible for the ambassadors in charge via the region menus !1041 @peter.toennies
 
 ## Bugfixes
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
