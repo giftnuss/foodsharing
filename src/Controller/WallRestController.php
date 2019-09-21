@@ -48,7 +48,7 @@ class WallRestController extends AbstractFOSRestController
 	 */
 	public function getPostsAction(string $target, int $targetId): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
@@ -88,7 +88,7 @@ class WallRestController extends AbstractFOSRestController
 	 */
 	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
