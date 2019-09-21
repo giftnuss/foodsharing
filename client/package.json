@@ -11,7 +11,7 @@
     "test": "node test"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.10.2",
+    "@fortawesome/fontawesome-free": "^5.11.1",
     "autosize": "^4.0.2",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "2.0.0-rc.28",
@@ -39,7 +39,7 @@
     "socket.io-client": "^2.2.0",
     "timeago": "^1.6.7",
     "tinysort": "^3.2.5",
-    "twemoji": "^12.1.2",
+    "twemoji": "^12.1.3",
     "typeahead-address-photon": "^1.0.0",
     "typeahead-addresspicker": "^1.0.1",
     "typeface-alfa-slab-one": "^0.0.72",
@@ -88,10 +88,10 @@
     "vue-eslint-parser": "^6.0.4",
     "vue-loader": "^15.7.1",
     "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.39.3",
-    "webpack-bundle-analyzer": "^3.4.1",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0",
+    "webpack": "^4.40.2",
+    "webpack-bundle-analyzer": "^3.5.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2",
     "write-file-webpack-plugin": "^4.5.1",
     "yaml-loader": "^0.5.0"
