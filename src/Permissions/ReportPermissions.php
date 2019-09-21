@@ -23,9 +23,9 @@ class ReportPermissions
 		 *
 		 */
 		return
-			$this->session->isOrgaTeam() ||
 			$this->session->isAdminFor($regionId) ||
 			/* ToDo: Need to check that regionId is a subgroup of europe. implied for now. */
+			$this->session->isOrgaTeam() ||
 			$this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM)
 		;
 	}
