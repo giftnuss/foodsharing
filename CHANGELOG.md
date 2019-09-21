@@ -112,7 +112,7 @@
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
-- updated eslint to v6, eslint-config-standard to v14, and eslint-plugin-html to v6 @peter.toennies
+- updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
 
