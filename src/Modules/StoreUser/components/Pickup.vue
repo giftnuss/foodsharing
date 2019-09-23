@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="card-title row">
           <div :class="{col: true, 'text-truncate':true, 'font-weight-bold': isToday}">
-            {{ date | dateFormat('full-long') }}
+            {{ date | dateFormat('full-middle') }}
           </div>
           <div
             v-if="isCoordinator && !isInPast"
@@ -231,6 +231,9 @@ export default {
   ul.slots >>> .btn[disabled]:hover {
       border-color: #f1e7c9;
       cursor: default;
+  }
+  ul.slots[data-v-1dfadebe] .btn.secondary {
+    opacity: .6;
   }
   .pickup .remove {
     display: none;
