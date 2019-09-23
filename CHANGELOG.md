@@ -85,6 +85,7 @@
 - Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
 - Fixed sorting of dashboard entries on initial loading !1035 #681 @ctwx_ok
 - When logging in, referenced redirects work now. !1034 #563 @peter.toennies
+- The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
