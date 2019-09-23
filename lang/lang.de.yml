@@ -101,8 +101,8 @@ register:
   login_surname: Nachname
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
-  have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff1: Ich habe die <a href="https://foodsharing.de/?page=legal" target="_blank" rel="noopener noreferrer nofollow">Datenschutzerklrung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank" rel="noopener noreferrer nofollow">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
