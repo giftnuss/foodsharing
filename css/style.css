@@ -43,8 +43,9 @@
   top: -6px;
 }
 
-.avatar.size-50.sleepmode-1 i, .avatar.size-50.sleepmode-2 i {
+.avatar.size-50.sleepmode-1 span, .avatar.size-50.sleepmode-2 span {
   background-image: url(/img/sleep50x50.png);
+  background-repeat: no-repeat;
   left: -8px;
   position: relative;
   top: -7px;
