@@ -95,6 +95,7 @@
 - Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
 - Do not allow signing out of past pickups !1058 #633 @alex.simm
 - The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
+- Fixed occupied one-time pickups that showed up unoccupied !1059 #633 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
