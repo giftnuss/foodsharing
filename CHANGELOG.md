@@ -1,6 +1,4 @@
 # Unreleased
-- changed icons on statistic page !538 @henrikhertler
-- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
 
 ## Major changes
 
@@ -93,6 +91,7 @@
 - Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
 - Deleting report notes now possible for Orga and admins of the report team. Writing user notes now possible for orga only !1038 #537 @peter.toennies
 - The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
+- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -165,8 +164,6 @@ another release for you. Nothing big, but a lot of small. Most noticable things 
 - Ambassadors and orga-members need to be approved by store managers for pickups. !415 #225 @fs_k
 - Ambassadors of Austria are automatically included to the Austrian AMB working group @peter.toennies
 - Added logout Rest endpoint !866 @alex.simm
-- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
-
 
 ## Bugfixes
 - Orga can delete quizzes #364 !767 @fs_k
