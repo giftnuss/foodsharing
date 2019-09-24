@@ -86,6 +86,9 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		$date = $this->parsePickupDate($pickupDate);
+		if ($date < Carbon::now()) {
+			throw new HttpException(400, 'Cannot modify pickup in the past.');
+		}
 
 		if (!$this->storeGateway->removeFetcher($fsId, $storeId, $date)) {
 			throw new HttpException(400, 'Failed to remove user from pickup');

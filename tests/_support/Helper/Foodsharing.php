@@ -364,6 +364,24 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addPicker($store, $foodsaverId, $extra_params = [])
+	{
+		$date = $this->faker->date('Y-m-d H:i:s');
+		$params = array_merge([
+			'foodsaver_id' => $foodsaverId,
+			'betrieb_id' => $store,
+			'date' => $date,
+			'confirmed' => '1'
+		], $extra_params);
+
+		$params['date'] = $this->toDateTime($params['date']);
+
+		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
 	public function createWorkingGroup($name, $extra_params = [])
 	{
 		$parentId = RegionIDs::GLOBAL_WORKING_GROUPS;
