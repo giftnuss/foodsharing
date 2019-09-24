@@ -7,7 +7,7 @@
             {{ date | dateFormat('full-long') }}
           </div>
           <div
-            v-if="isCoordinator"
+            v-if="isCoordinator && !isInPast"
             class="col-2 p-0 remove"
           >
             <button
