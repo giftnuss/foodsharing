@@ -77,7 +77,7 @@ class WallPostXhr extends Control
 
 	public function update()
 	{
-		if (!$this->wallPostPermissions->mayReadWall($this->session->id(), $this->table, $this->id)) {
+		if (!$this->wallPostPermissions->mayReadWall($this->session->id() ?? 0, $this->table, $this->id)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
@@ -85,7 +85,7 @@ class WallPostXhr extends Control
 			if ($posts = $this->wallPostGateway->getPosts($this->table, $this->id)) {
 				return [
 					'status' => 1,
-					'html' => $this->view->posts($posts, $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
+					'html' => $this->view->posts($posts, $this->wallPostPermissions->mayDeleteFromWall($this->session->id() ?? 0, $this->table, $this->id))
 				];
 			}
 		} else {
