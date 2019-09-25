@@ -79,16 +79,16 @@ class WallPostPermissions
 	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
 	{
 		switch ($target) {
-			case 'foodsaver':
-			case 'fairteiler':
-			case 'event':
-				$result = false;
-				break;
 			case 'bezirk':
 				$result = $this->regionGateway->isAdmin($fsId, $targetId);
 				break;
+			case 'question':
+			case 'usernotes':
+			case 'fsreport':
+				$result = $this->mayReadWall($fsId, $target, $targetId);
+				break;
 			default:
-				$result = $fsId > 0 && $this->mayReadWall($fsId, $target, $targetId);
+				$result = false;
 				break;
 		}
 
