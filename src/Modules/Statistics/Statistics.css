@@ -82,3 +82,15 @@ table.stat_cities td h4 {
   text-align: center;
   padding-top: 20px;
 }
+
+.fa-stack {
+ width: 200px;
+ vertical-align: bottom;
+}
+.fa-stack i.far.fa-calendar.fa-stack-2x {
+ font-size: 1.4em;
+ margin-top: 12px;
+}
+.fa-stack i.fas.fa-shopping-basket.fa-stack-1x {
+ font-size: 0.7em;
+}

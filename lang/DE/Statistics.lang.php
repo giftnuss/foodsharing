@@ -10,3 +10,7 @@ $g_lang['stat_whole'] = 'Gesamtstatistik';
 $g_lang['most_active_foodsavers'] = 'Aktivste Foodsaver';
 // getStatAverageDailyFetches
 $g_lang['average_daily_fetches'] = 'Rettungseinsätze gibt es durchschnittlich pro Tag.';
+// getStatTotalBaskets
+$g_lang['total_baskets'] = 'Essenskörbe wurden insgesamt online gestellt.';
+// getStatAverageDailyBaskets
+$g_lang['average_weekly_baskets'] = 'Essenskörbe werden derzeit durschnittlich pro Woche online gestellt.';
