@@ -103,6 +103,7 @@
 - Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
 - Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
 - Fixed invisible overbooked pickups !1069 #633 @alex.simm
+- Workgroups overview optimized for mobile view #702 !1063 @chriswalg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
