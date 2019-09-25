@@ -81,6 +81,7 @@ class WallPostPermissions
 		switch ($target) {
 			case 'foodsaver':
 			case 'fairteiler':
+			case 'event':
 				$result = false;
 				break;
 			case 'bezirk':
