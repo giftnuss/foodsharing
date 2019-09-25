@@ -1007,7 +1007,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					);
 					$isAvailable =
 						$date > Carbon::now() &&
-						$date <= $to &&
+						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
 						$slot['fetcher'] > count($occupiedSlots);
 					$slots[] = [
 						'date' => $date,
