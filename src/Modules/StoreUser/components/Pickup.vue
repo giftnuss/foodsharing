@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="card-title row">
           <div :class="{col: true, 'text-truncate':true, 'font-weight-bold': isToday}">
-            {{ date | dateFormat('full-middle') }}
+            {{ date | dateFormat('full-long') }}
           </div>
           <div
             v-if="isCoordinator && !isInPast"
