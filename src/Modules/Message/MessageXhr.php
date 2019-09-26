@@ -118,33 +118,36 @@ final class MessageXhr extends Control
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 				$sessdata[$recipient['id']] = time();
 
+				$link = BASE_URL . '/?page=msg&cid=' . (int)$conversation_id;
+				$genderedTitle = $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
+
 				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
 					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], array(
-						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $genderedTitle,
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
 						'storename' => $storeName,
 						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						'link' => $link
 					));
 				} else {
 					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
 					if (count($memberNames) > 1) {
 						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+							'link' => $link
 						));
 					} else {
 						$this->emailHelper->tplMail('chat/message', $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+							'link' => $link
 						));
 					}
 				}
