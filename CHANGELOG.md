@@ -44,8 +44,7 @@
 - Fixed bell notifications for new wallposts in stores !1030 @jofranz
 - The map is zoomed out in case no address is specified instead of showing the ocean !1053 @dthulke
 - A region's reports are now accessible for the ambassadors in charge via the region menus !1041 @peter.toennies
-- Add basket counters to statistics (issue #81) !1045 @chris2up9
-- Add basket counters to statistics !1045 @chris2up9
+- Add basket counters to statistics #81 !1045 @chris2up9
 - Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
 
 ## Bugfixes
