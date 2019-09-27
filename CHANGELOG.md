@@ -46,7 +46,6 @@
 - A region's reports are now accessible for the ambassadors in charge via the region menus !1041 @peter.toennies
 - Add basket counters to statistics #81 !1045 @chris2up9
 - Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
-- Link avatar pics to user profile at report. !1047 @rafael
 - Link avatar pics to user profile at report. !1047 @moffer
 - Prevent email form from sending mails to "noreply" addresses. Blocked by a warning !1065 @jofranz
 
@@ -120,7 +119,6 @@
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
-- update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
