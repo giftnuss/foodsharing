@@ -170,6 +170,9 @@ function mb_send_message () {
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
+  } else if (an.indexOf('noreply') !== -1) {
+    $('.edit-an')[0].focus()
+    pulseInfo('Emails an "no reply" sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse')
   } else {
     ajreq('send_message', {
       mb: mbid,
