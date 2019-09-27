@@ -15,6 +15,7 @@ import {
   checkEmail
 } from '@/script'
 import './Mailbox.css'
+import i18n from '@/i18n'
 
 expose({
   mb_finishFile,
@@ -172,7 +173,7 @@ function mb_send_message () {
     pulseInfo('Du musst einen Empfänger angeben')
   } else if (an.indexOf('noreply') !== -1) {
     $('.edit-an')[0].focus()
-    pulseInfo('Emails an "no reply" sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse')
+    pulseInfo(i18n('mail.noreply_addresses_not_allowed'))
   } else {
     ajreq('send_message', {
       mb: mbid,

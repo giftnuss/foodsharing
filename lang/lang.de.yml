@@ -324,3 +324,6 @@ pickuplist:
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
+
+mail:
+  noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"
