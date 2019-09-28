@@ -192,7 +192,7 @@ export default {
       return isSameDay(this.date, new Date())
     },
     emptySlots () {
-      return this.totalSlots - this.occupiedSlots.length
+      return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
     }
   }
 }
