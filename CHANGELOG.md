@@ -105,6 +105,7 @@
 - Fixed invisible overbooked pickups !1069 #633 @alex.simm
 - Workgroups overview optimized for mobile view #702 !1063 @chriswalg
 - Bugfix for sentry issue regarding the #vue-pickuplist !1074 @ctwx_ok
+- Removed question form for data privacy !1077 #166 @chriswalg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
