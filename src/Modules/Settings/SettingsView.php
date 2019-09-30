@@ -516,8 +516,8 @@ class SettingsView extends View
 			}
 		}
 
-	});');
-
+	});'); 
+	
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
@@ -549,7 +549,6 @@ class SettingsView extends View
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
-			$oeff
 		), array('submit' => $this->translationHelper->s('save')));
 	}
 
