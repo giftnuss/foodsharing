@@ -516,8 +516,8 @@ class SettingsView extends View
 			}
 		}
 
-	});'); 
-	
+	});');
+
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
