@@ -34,9 +34,7 @@ class SearchGateway extends BaseGateway
 		}
 
 		$teaser = 'stadt';
-		if ($showDetails) {
-			$teaser = 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")';
-		}
+
 		$out['foodsaver'] = $this->searchTable(
 			'fs_foodsaver',
 			array('name', 'nachname', 'plz', 'stadt'),

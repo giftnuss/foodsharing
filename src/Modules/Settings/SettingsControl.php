@@ -276,10 +276,6 @@ class SettingsControl extends Control
 				$g_data = $_POST;
 
 				$check = true;
-				if (!isset($_POST['photo_public'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
-				}
 
 				if (empty($_POST['about_me_public'])) {
 					$check = false;
@@ -302,7 +298,7 @@ class SettingsControl extends Control
 				}
 
 				if ($check) {
-					$data = $this->dataHelper->unsetAll($_POST, array('photo_public', 'new_bezirk'));
+					$data = $this->dataHelper->unsetAll($_POST, array('new_bezirk'));
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
@@ -350,10 +346,6 @@ class SettingsControl extends Control
 							array('id' => 3, 'name' => '9-12 Stunden'),
 							array('id' => 4, 'name' => '13-15 Stunden'),
 							array('id' => 5, 'name' => '15-20 Stunden')
-						))) .
-						$this->v_utils->v_form_radio('photo_public', array('required' => true, 'values' => array(
-							array('id' => 1, 'name' => 'Ich bin einverstanden das Mein Name und Mein Foto veröffentlicht werden'),
-							array('id' => 2, 'name' => 'Bitte NUR meinen Namen veröffentlichen')
 						))) .
 						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
 										Händler, foodsharing-Freiwillge, Interessierte und die Presse

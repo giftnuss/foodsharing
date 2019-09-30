@@ -80,7 +80,6 @@ class Foodsharing extends \Codeception\Module\Db
 			'last_login' => $this->faker->dateTimeBetween('-1 years', '-1 hours'),
 			'anschrift' => $this->faker->streetName,
 			'handy' => $this->faker->phoneNumber,
-			'photo_public' => 1,
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',

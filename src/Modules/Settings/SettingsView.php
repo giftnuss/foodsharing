@@ -502,22 +502,6 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
-		if($("#photo_public").length > 0)
-		{
-			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
-			{
-
-			}
-			else
-			{
-				$e.preventDefault();
-			}
-		}
-
-	});');
-
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
