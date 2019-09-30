@@ -27,8 +27,6 @@ $I->fillField('#telefon', $phonenumber);
 $I->fillField('#handy', $mobilenumber);
 $I->fillField('#geb_datum', '1988-05-31');
 $I->fillField('#homepage', 'www.matthias-larisch.de');
-$I->fillField('#about_me_public', 'Ich mag foodsharing.');
-$I->selectOption('#about_me_public', 'Meine Daten niemandem zeigen.');
 
 $I->click('Speichern');
 $I->waitForText('Änderungen wurden gespeichert');
