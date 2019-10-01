@@ -25,7 +25,6 @@ $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
 $g_lang['about_me_public'] = 'Kurzbeschreibung von Dir';
-$g_lang['tel_public'] = 'Veröffentlichung Deiner Telefonnummer(n)';
 $g_lang['aufgaben_botschafter'] = 'Ich habe das Dokument "Aufgaben der BotschafterInnen von foodsharing gelesen und übernehme ab jetzt für diese die Verantwortlichkeit in meiner Stadt/Region/Bezirk.';
 $g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';
