@@ -17,5 +17,4 @@ Closes ___ (e.g. #230)
 - [ ] asked someone for a code review 
 - [ ] joined #foodsharing-beta channel at https://slackin.yunity.org
 - [ ] added an entry to CHANGELOG.md (description, merge request link, username(s))
-
-Please formulate a "testing task" for the [#foodsharing-beta Slack channel](https://slackin.yunity.org/) so our testers after your merge request has been merged. This gives them the chance to have a look at your work and report potential problems.
+- [ ] Once your MR has been merged, you are responsible to update the [#foodsharing-beta Slack channel](https://slackin.yunity.org/) about what has been changed here. They will test your work in different browsers, roles or other settings
