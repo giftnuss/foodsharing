@@ -8,6 +8,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -23,6 +24,7 @@ final class RegionControl extends Control
 	private $forumGateway;
 	private $fairteilerGateway;
 	private $foodsaverGateway;
+	private $forumFollowerGateway;
 	/* @var TranslatorInterface */
 	private $translator;
 	/* @var FormFactoryBuilder */
@@ -31,6 +33,7 @@ final class RegionControl extends Control
 	private $forumPermissions;
 	private $regionHelper;
 	private $imageService;
+	private $reportPermissions;
 
 	/**
 	 * @required
@@ -53,10 +56,12 @@ final class RegionControl extends Control
 		FairTeilerGateway $fairteilerGateway,
 		FoodsaverGateway $foodsaverGateway,
 		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
 		ForumService $forumService,
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
+		ReportPermissions $reportPermissions,
 		ImageService $imageService
 	) {
 		$this->gateway = $gateway;
@@ -65,8 +70,10 @@ final class RegionControl extends Control
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
+		$this->reportPermissions = $reportPermissions;
 		$this->imageService = $imageService;
 
 		parent::__construct();
@@ -80,32 +87,36 @@ final class RegionControl extends Control
 	private function regionViewData($region, $activeSubpage)
 	{
 		$isWorkGroup = $this->isWorkGroup($region);
+		$regionId = (int)$region['id'];
 		$menu = [
-			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=forum'],
-			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=events'],
-			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=members'],
+			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=forum'],
+			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=events'],
+			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
 		];
 
-		if ($this->forumPermissions->mayAccessAmbassadorBoard($region['id']) && !$isWorkGroup) {
-			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=botforum'];
+		if (!$isWorkGroup && $this->forumPermissions->mayAccessAmbassadorBoard($regionId)) {
+			$menu[] = ['name' => 'terminology.ambassador_forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=botforum'];
 		}
 
 		if ($isWorkGroup) {
-			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=wall'];
+			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=wall'];
 			if ($region['has_children'] === 1) {
-				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . (int)$region['id']];
+				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . $regionId];
 			}
-			if ($this->session->may('orga') || $this->session->isAdminFor($region['id'])) {
-				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . (int)$region['id']];
+			if ($this->session->isAdminFor($regionId) || $this->session->may('orga')) {
+				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . $regionId];
 			}
 		} else {
-			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=fairteiler'];
-			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . (int)$region['id']];
-			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . (int)$region['id'] . '&sub=statistic'];
+			$menu[] = ['name' => 'terminology.fsp', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=fairteiler'];
+			$menu[] = ['name' => 'terminology.groups', 'href' => '/?page=groups&p=' . $regionId];
+			$menu[] = ['name' => 'terminology.statistic', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=statistic'];
+			if ($this->reportPermissions->mayAccessReportsForRegion($regionId)) {
+				$menu[] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
+			}
 		}
-		if ($this->mayAccessApplications($region['id'])) {
-			if ($requests = $this->gateway->listRequests($region['id'])) {
-				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $region['id'] . '&sub=applications'];
+		if ($this->mayAccessApplications($regionId)) {
+			if ($requests = $this->gateway->listRequests($regionId)) {
+				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=applications'];
 			}
 		}
 
@@ -234,7 +245,7 @@ final class RegionControl extends Control
 			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
 
 			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
-			$this->forumGateway->followThread($this->session->id(), $threadId);
+			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
 			if (!$postActiveWithoutModeration) {
 				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}

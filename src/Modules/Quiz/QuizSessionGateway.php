@@ -22,7 +22,7 @@ class QuizSessionGateway extends BaseGateway
 			FROM fs_quiz_session
 			WHERE foodsaver_id = :fsId
 			AND quiz_id = :quizId
-		', ['fsId' => $fsId, 'quizId' => $quizId]);
+		', [':fsId' => $fsId, ':quizId' => $quizId]);
 		if ($res) {
 			foreach ($res as $r) {
 				++$out['times'];
@@ -43,7 +43,7 @@ class QuizSessionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function initQuizSession(int $fsId, int $quizId, string $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
+	public function initQuizSession(int $fsId, int $quizId, array $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
 
@@ -63,7 +63,7 @@ class QuizSessionGateway extends BaseGateway
 	  );
 	}
 
-	public function finishQuizSession(int $sessionId, string $questions, string $quizResult, float $failurePoints, int $maxFailurePoints): int
+	public function finishQuizSession(int $sessionId, array $questions, array $quizResult, float $failurePoints, int $maxFailurePoints): int
 	{
 		$quizResult = serialize($quizResult);
 		$questions = serialize($questions);
@@ -158,9 +158,9 @@ class QuizSessionGateway extends BaseGateway
 			AND
 				status = :status
 		', [
-			'quizId' => $quizId,
-			'fsId' => $fsId,
-			'status' => SessionStatus::RUNNING
+			':quizId' => $quizId,
+			':fsId' => $fsId,
+			':status' => SessionStatus::RUNNING
 		]);
 		if ($session) {
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
@@ -171,7 +171,7 @@ class QuizSessionGateway extends BaseGateway
 		return [];
 	}
 
-	public function updateQuizSession(int $sessionId, string $questions, int $quizIndex): int
+	public function updateQuizSession(int $sessionId, array $questions, int $quizIndex): int
 	{
 		$questions = serialize($questions);
 
@@ -221,6 +221,6 @@ class QuizSessionGateway extends BaseGateway
       WHERE foodsaver_id = :fsId
       AND quiz_id = :quizId
       ORDER BY time_ts DESC
-    ', ['fsId' => $fsId, 'quizId' => $quizId]);
+    ', [':fsId' => $fsId, ':quizId' => $quizId]);
 	}
 }

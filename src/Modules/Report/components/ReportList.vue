@@ -2,9 +2,9 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">
-          {{ reports.length }}
-        </span>)
+        {{ $i18n('reports.all_reports') }} <span v-if="reports.length">
+          ({{ reports.length }})
+        </span>
       </div>
       <div
         v-if="reports.length"
@@ -22,16 +22,20 @@
             slot-scope="row"
           >
             <div class="avatars">
-              <Avatar
-                :url="row.item.fs_photo"
-                :sleep-status="0"
-                :size="35"
-              />
-              <Avatar
-                :url="row.item.rp_photo"
-                :sleep-status="0"
-                :size="35"
-              />
+              <a :href="`/profile/${row.item.fs_id}`">
+                <Avatar
+                  :url="row.item.fs_photo"
+                  :sleep-status="0"
+                  :size="35"
+                />
+              </a>
+              <a :href="`/profile/${row.item.rp_id}`">
+                <Avatar
+                  :url="row.item.rp_photo"
+                  :sleep-status="0"
+                  :size="35"
+                />
+              </a>
             </div>
           </template>
 

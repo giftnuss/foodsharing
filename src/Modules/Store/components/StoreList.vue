@@ -231,7 +231,7 @@ export default {
       const regions = []
       const fields = {}
       this.stores.map(function (value) {
-        if (!regions.includes(value['region'])) regions.push(value['region'])
+        if (!regions.includes(value.region)) regions.push(value.region)
       })
       if (window.innerWidth > 800 && window.innerHeight > 600) {
         for (const key in this.fields) {

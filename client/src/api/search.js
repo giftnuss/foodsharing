@@ -44,5 +44,5 @@ export async function instantSearch (query) {
 }
 
 export async function instantSearchIndex () {
-  return mapOldResponseToNewFormat(await get(`/search/legacyindex`))
+  return mapOldResponseToNewFormat(await get('/search/legacyindex'))
 }

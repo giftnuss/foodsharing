@@ -126,7 +126,7 @@ class DashboardControl extends Control
 		$this->pageHelper->addTitle('Dashboard');
 		/* User is foodsaver */
 
-		if ($this->user['rolle'] > 0 && !$this->session->getCurrentBezirkId()) {
+		if ($this->user['rolle'] > 0 && !$this->session->getCurrentRegionId()) {
 			$this->pageHelper->addJs('becomeBezirk();');
 		}
 
@@ -178,10 +178,10 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation($this->model)))) {
 			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
@@ -543,7 +543,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
@@ -584,7 +584,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId(), array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), array('sonstige' => false))) {
 			$this->pageHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);

@@ -4,6 +4,7 @@ namespace Helper;
 
 use DateTime;
 use Faker;
+use Carbon\Carbon;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -98,12 +99,70 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createQuizTry($fs_id, $level, $status)
+	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
+		$params = [
+			'id' => $quizId,
+			'name' => 'Quiz #' . $quizId,
+			'desc' => '',
+			'maxfp' => 3,
+			'questcount' => 3,
+		];
+		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
+
+		$params['questions'] = [];
+		for ($i = 1; $i <= $questionCount; ++$i) {
+			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
+			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
+		}
+
+		return $params;
+	}
+
+	private function createQuestion(int $quizId, string $text = 'Question', int $failurePoints = 1): array
+	{
+		$params = [
+			'text' => $text,
+			'duration' => 60,
+			'wikilink' => 'wiki.foodsharing.de'
+		];
+		$questionId = $this->haveInDatabase('fs_question', $params);
+		$params['id'] = $questionId;
+
+		$this->haveInDatabase('fs_question_has_quiz', [
+			'question_id' => $questionId,
+			'quiz_id' => $quizId,
+			'fp' => $failurePoints
+		]);
+
+		$params['answers'] = [];
+		$params['answers'][] = $this->createAnswer($questionId, true);
+		$params['answers'][] = $this->createAnswer($questionId, false);
+
+		return $params;
+	}
+
+	private function createAnswer(int $questionId, bool $right = true): array
+	{
+		$params = [
+			'question_id' => $questionId,
+			'text' => 'The ' . ($right ? 'right' : 'wrong') . ' answer for question with ID ' . $questionId,
+			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
+			'right' => $right ? 1 : 0
+		];
+		$params['id'] = $this->haveInDatabase('fs_answer', $params);
+
+		return $params;
+	}
+
+	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
+	{
+		$startTime = Carbon::now()->subDays($daysAgo);
 		$v = [
 			'quiz_id' => $level,
 			'status' => $status,
-			'foodsaver_id' => $fs_id,
+			'foodsaver_id' => $fsId,
+			'time_start' => $this->toDateTime($startTime)
 		];
 		$this->haveInDatabase('fs_quiz_session', $v);
 	}
@@ -301,6 +360,24 @@ class Foodsharing extends \Codeception\Module\Db
 				throw $e;
 			}
 		}
+
+		return $params;
+	}
+
+	public function addPicker($store, $foodsaverId, $extra_params = [])
+	{
+		$date = $this->faker->date('Y-m-d H:i:s');
+		$params = array_merge([
+			'foodsaver_id' => $foodsaverId,
+			'betrieb_id' => $store,
+			'date' => $date,
+			'confirmed' => '1'
+		], $extra_params);
+
+		$params['date'] = $this->toDateTime($params['date']);
+
+		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
 
 		return $params;
 	}

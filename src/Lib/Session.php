@@ -346,7 +346,7 @@ class Session
 		return $out;
 	}
 
-	public function getCurrentBezirkId()
+	public function getCurrentRegionId()
 	{
 		if (isset($_SESSION['client']['bezirk_id'])) {
 			return $_SESSION['client']['bezirk_id'];

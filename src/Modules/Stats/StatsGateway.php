@@ -16,7 +16,7 @@ class StatsGateway extends BaseGateway
 		parent::__construct($db);
 	}
 
-	public function fetchStores(): array
+	public function fetchAllStores(): array
 	{
 		return $this->db->fetchAll('SELECT id, name, added FROM fs_betrieb');
 	}

@@ -18,9 +18,9 @@ class RegionGateway extends BaseGateway
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function getBezirk($id)
+	public function getRegion($regionId)
 	{
-		if ($id == 0) {
+		if ($regionId == 0) {
 			return null;
 		}
 
@@ -33,8 +33,8 @@ class RegionGateway extends BaseGateway
 					`parent_id`,
 					`mailbox_id`
 			FROM 	`fs_bezirk`
-			WHERE 	`id` = :id',
-			[':id' => $id]
+			WHERE 	`id` = :regionId',
+			[':regionId' => $regionId]
 		);
 	}
 
@@ -265,9 +265,9 @@ class RegionGateway extends BaseGateway
 		', ['fs_id' => $fs_id]);
 	}
 
-	public function getRegionDetails($id)
+	public function getRegionDetails($regionId)
 	{
-		$bezirk = $this->db->fetch('
+		$region = $this->db->fetch('
 			SELECT
 				b.`id`,
 				b.`name`,
@@ -306,26 +306,26 @@ class RegionGateway extends BaseGateway
 
 			WHERE 	b.`id` = :id
 			LIMIT 1
-		', ['id' => $id]);
+		', ['id' => $regionId]);
 
-		$bezirk['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($id);
-		shuffle($bezirk['botschafter']);
+		$region['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($regionId);
+		shuffle($region['botschafter']);
 
-		return $bezirk;
+		return $region;
 	}
 
-	public function getType($id)
+	public function getType($regionId)
 	{
-		$bezirkType = $this->db->fetchValue('
+		$regionType = $this->db->fetchValue('
 			SELECT
 				`type`
 			FROM 	`fs_bezirk`
 
-			WHERE 	`id` = :id
+			WHERE 	`id` = :regionId
 			LIMIT 1
-		', ['id' => $id]);
+		', ['regionId' => $regionId]);
 
-		return $bezirkType;
+		return $regionType;
 	}
 
 	public function listRequests($id)
@@ -423,15 +423,15 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function denyBezirkRequest($fsid, $regionId)
+	public function denyRegionRequest($fsId, $regionId)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
 			'bezirk_id' => $regionId,
-			'foodsaver_id' => $fsid,
+			'foodsaver_id' => $fsId,
 		]);
 	}
 
-	public function add_bezirk($data)
+	public function addRegion($data)
 	{
 		$this->db->beginTransaction();
 
@@ -463,9 +463,9 @@ class RegionGateway extends BaseGateway
 		return $id;
 	}
 
-	public function getBezirkName($bezirk_id)
+	public function getRegionName($regionId)
 	{
-		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :id', [':id' => $bezirk_id]);
+		return $this->db->fetchValue('SELECT `name` FROM `fs_bezirk` WHERE `id` = :regionId', [':regionId' => $regionId]);
 	}
 
 	public function addMember($fsId, $regionId)
@@ -518,36 +518,36 @@ class RegionGateway extends BaseGateway
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
 	}
 
-	public function genderCountRegion(int $districtId): array
+	public function genderCountRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(
 			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
 					from fs_foodsaver_has_bezirk fb
 		 			left outer join fs_foodsaver fs on fb.foodsaver_id=fs.id
-					where fb.bezirk_id = :id
+					where fb.bezirk_id = :regionId
 					and fs.deleted_at is null
 					group by geschlecht',
-			[':id' => $districtId]
+			[':regionId' => $regionId]
 		);
 	}
 
-	public function genderCountHomeRegion(int $districtId): array
+	public function genderCountHomeRegion(int $regionId): array
 	{
 		return $this->db->fetchAll(
 			'select  fs.geschlecht as gender,
 						   count(*) as NumberOfGender
 					from fs_foodsaver fs
-					where fs.bezirk_id = :id
+					where fs.bezirk_id = :regionId
 					and fs.deleted_at is null
 					group by geschlecht',
-			[':id' => $districtId]
+			[':regionId' => $regionId]
 		);
 	}
 
-	public function regionPickupsByDate(int $districtId, $dateFormat): array
+	public function regionPickupsByDate(int $regiontId, $dateFormat): array
 	{
-		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($districtId)));
+		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($regiontId)));
 
 		return $this->db->fetchAll(
 			'select 

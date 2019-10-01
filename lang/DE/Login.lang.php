@@ -41,6 +41,7 @@ $g_lang['error_birthdate'] = 'Aus datenschutz- und haftungsrechtlichen Gründen 
 
 $g_lang['activation_success'] = '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.';
 $g_lang['activation_failed'] = '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?';
+$g_lang['wrong_credentials'] = 'Falsche Zugangsdaten';
 
 $g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
 $g_lang['pass2'] = 'Passwortwiederholung';

@@ -4,9 +4,21 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 final class FoodsaverGateway extends BaseGateway
 {
+	private $forumFollowerGateway;
+
+	public function __construct(
+		Database $db,
+		ForumFollowerGateway $forumFollowerGateway
+	) {
+		parent::__construct($db);
+		$this->forumFollowerGateway = $forumFollowerGateway;
+	}
+
 	public function getFoodsaver($bezirk_id)
 	{
 		$and = ' AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
@@ -165,9 +177,9 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE fs.id = `fs_botschafter`.`foodsaver_id`
 
-			AND `fs_botschafter`.`bezirk_id` = :id
+			AND `fs_botschafter`.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
@@ -255,9 +267,9 @@ final class FoodsaverGateway extends BaseGateway
 			AS `name`,`plz`,`stadt`,`anschrift`,`photo`
 			FROM `fs_foodsaver`
 			WHERE `active` = 1
-			AND `bezirk_id` = :id
+			AND `bezirk_id` = :regionId
 			AND `lat` != "" ',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
@@ -427,6 +439,7 @@ final class FoodsaverGateway extends BaseGateway
 			}
 		}
 		$ids = implode(',', array_map('intval', $foodsaver_ids));
+		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids, false);
 		if ($ids) {
 			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($bezirk) {
@@ -770,6 +783,9 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+
+		$this->forumFollowerGateway->deleteForumSubscription($bezirk_id, $foodsaver_id);
+
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
 		if ($mainRegion_id === $bezirk_id) {
 			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);

@@ -4,10 +4,10 @@ namespace Foodsharing\Lib;
 
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Twig_Extension;
-use Twig_Filter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class TwigExtensions extends Twig_Extension
+class TwigExtensions extends AbstractExtension
 {
 	private $identificationHelper;
 	private $translationHelper;
@@ -21,15 +21,15 @@ class TwigExtensions extends Twig_Extension
 	public function getFilters()
 	{
 		return [
-			new Twig_Filter('translate', [$this, 'translateFilter']),
-			new Twig_Filter('id', [$this, 'idFilter'])
+			new TwigFilter('translate', [$this, 'translateFilter']),
+			new TwigFilter('id', [$this, 'idFilter'])
 		];
 	}
 
 	public function getFunctions()
 	{
 		return [
-			new \Twig_Function('contentMainWidth', [$this, 'contentMainWidthFunction'])
+			new \Twig\TwigFunction('contentMainWidth', [$this, 'contentMainWidthFunction'])
 		];
 	}
 

@@ -64,7 +64,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		[':id' => $storeId]);
 
 		$out['verantwortlicher'] = '';
-		if ($bezirk = $this->regionGateway->getBezirkName($out['bezirk_id'])) {
+		if ($bezirk = $this->regionGateway->getRegionName($out['bezirk_id'])) {
 			$out['bezirk'] = $bezirk;
 		}
 		if ($verantwortlich = $this->getBiebsForStore($storeId)) {
@@ -79,7 +79,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMapsBetriebe(int $regionId): array
+	public function getMapsStores(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.id,
@@ -109,7 +109,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function getMyBetriebe($fs_id, $regionId, $options = array()): array
+	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -213,7 +213,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getMyBetrieb($fs_id, $storeId): array
+	public function getMyStore($fs_id, $storeId): array
 	{
 		$out = $this->db->fetch('
 			SELECT
@@ -270,7 +270,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 		`betrieb_id` = :id
 		', [':id' => $storeId]);
 
-		$out['foodsaver'] = $this->getBetriebTeam($storeId);
+		$out['foodsaver'] = $this->getStoreTeam($storeId);
 
 		$out['springer'] = $this->getBetriebSpringer($storeId);
 
@@ -325,7 +325,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
-	public function getBetriebTeam($storeId): array
+	public function getStoreTeam($storeId): array
 	{
 		return $this->db->fetchAll('
 				SELECT 		fs.`id`,
@@ -495,6 +495,29 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		return $queryResult;
+	}
+
+	public function deleteAllDatesFromAFoodsaver(int $fs_id)
+	{
+		$storeIdsThatWillBeDeleted = $this->db->fetchAllValuesByCriteria(
+			'fs_abholer',
+			'betrieb_id',
+			[
+				'foodsaver_id' => $fs_id,
+				'date >' => $this->db->now()
+			]
+		);
+
+		$result = $this->db->delete('fs_abholer', [
+			'foodsaver_id' => $fs_id,
+			'date >' => $this->db->now()
+		]);
+
+		foreach ($storeIdsThatWillBeDeleted as $storeIdDel) {
+			$this->updateBellNotificationForBiebs($storeIdDel);
+		}
+
+		return $result;
 	}
 
 	public function removeFetcher(int $fsId, int $storeId, \DateTime $date)
@@ -695,14 +718,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	}
 
 	/* retrieves all store managers for a given region (by being store manager in a store that is part of that region, which is semantically not the same we use on platform) */
-	public function getStoreManagersOf(int $regionID): array
+	public function getStoreManagersOf(int $regionId): array
 	{
 		return $this->db->fetchAllValues('SELECT DISTINCT bt.foodsaver_id FROM `fs_bezirk_closure` c
 			INNER JOIN `fs_betrieb` b ON c.bezirk_id = b.bezirk_id
 			INNER JOIN `fs_betrieb_team` bt ON bt.betrieb_id = b.id
 			INNER JOIN `fs_foodsaver` fs ON fs.id = bt.foodsaver_id
-			WHERE c.ancestor_id = :id AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
-			[':id' => $regionID]);
+			WHERE c.ancestor_id = :regionId AND bt.verantwortlich = 1 AND fs.deleted_at IS NULL',
+			[':regionId' => $regionId]);
 	}
 
 	public function listStoresForFoodsaver($fsId)
@@ -944,18 +967,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 * @param int $storeId
 	 * @param \DateTime $from DateRange start for all slots. Now if empty.
 	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
-	 * @param \DateTime $additionalTo DateRange for onetime slots to be taken into account
+	 * @param \DateTime $oneTimeSlotTo DateRange for onetime slots to be taken into account
 	 *
 	 * @return array
 	 */
-	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $additionalTo = null): array
+	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $oneTimeSlotTo = null): array
 	{
 		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
 		$from = $from ?? Carbon::now();
-		$to = $to ?? Carbon::tomorrow()->addHour(2)->add($intervalFuturePickupSignup);
+		$extendedToDate = Carbon::tomorrow()->add($intervalFuturePickupSignup);
+		$to = $to ?? $extendedToDate;
 		$regularSlots = $this->getRegularPickups($storeId);
-		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
-		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $to);
+		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $oneTimeSlotTo);
+		$signupsTo = is_null($oneTimeSlotTo) ? null : max($to, $oneTimeSlotTo);
+		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $signupsTo);
 
 		$slots = [];
 		foreach ($regularSlots as $slot) {
@@ -983,7 +1008,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					);
 					$isAvailable =
 						$date > Carbon::now() &&
-						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
+						$date <= $extendedToDate &&
 						$slot['fetcher'] > count($occupiedSlots);
 					$slots[] = [
 						'date' => $date,

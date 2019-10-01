@@ -6,7 +6,7 @@
 - Add Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Added Rest endpoint for nearby baskets !875 @alex.simm
-- updated bootstrap-vue to v2.0.0-rc20
+- updated bootstrap-vue to v2.0.0-rc28 @peter.toennies
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
@@ -41,8 +41,18 @@
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
 - Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 - Added Rest endpoint for fair share points !1012 @dthulke
+- Add backend logic for changing basket locations !1021 @alex.simm
+- Updated the wording regarding "not more than 2 foodsavers per pickup !1029 @peter.toennies
+- Fixed bell notifications for new wallposts in stores !1030 @jofranz
+- The map is zoomed out in case no address is specified instead of showing the ocean !1053 @dthulke
+- A region's reports are now accessible for the ambassadors in charge via the region menus !1041 @peter.toennies
+- Add basket counters to statistics #81 !1045 @chris2up9
+- Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
+- Link avatar pics to user profile at report. !1047 @moffer
+- Prevent email form from sending mails to "noreply" addresses. Blocked by a warning !1065 @jofranz
 
 ## Bugfixes
+- Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
 - Fixed broken modal for forum post deletion !894 #599 @peter.toennies
@@ -69,13 +79,32 @@
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
 - Don't return outdated baskets via the REST API !1008 @dthulke
 - Fixed saving an edited quiz answer !1006 #408 @svenpascal
-- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
 - Return images attached to a wall post in the WallRestController !1013 @dthulke
 - Don't show forum updates from deleted users on dashboard !1011 #666 @alex.simm
 - Fixed role description for gender 'diverse' !1016 #674 @svenpascal
+- Fixed broken quiz after refactoring !1017 @svenpascal
+- Verify quiz session status without having a second learning break !1018 #673 @svenpascal
+- Show message and redirect page after deleting an account !1028 #533 @alex.simm
+- Fixed the createThread call inside the ForumRestController !1031 @ctwx_ok
+- Remove forum topic subscriptions when leaving group !1020 #593 @alex.simm
+- Fixed sorting of dashboard entries on initial loading !1035 #681 @ctwx_ok
+- When logging in, referenced redirects work now. !1034 #563 @peter.toennies
+- Open link to markdown description in a new window !1050 #698 @chriswalg
+- Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
+- Deleting report notes now possible for Orga and admins of the report team. Writing user notes now possible for orga only !1038 #537 @peter.toennies
+- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
+- Do not allow signing out of past pickups !1058 #633 @alex.simm
+- The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
+- Fixed occupied one-time pickups that showed up unoccupied !1059 #633 @alex.simm
+- Fixed end date not being displayed when editing existing multi-day events !277 @tihar
+- Link in chat-message notification email now leads to corresponding conversation !1064 #703 @rastadapasta
+- Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
+- Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
+- Fixed invisible overbooked pickups !1069 #633 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -87,17 +116,20 @@
 - Refactored team page. Got rid of legacy methods !974 @jofranz
 - Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
+- Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
+- Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
+- Refactored the WallPost module !1038 @peter.toennies
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
-- update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
-- updated eslint to v6, eslint-config-standard to v13, and eslint-plugin-html to v6 @peter.toennies
-- updated webpack loaders. css to v3, file to v4, null 3, url 2, and mini-css-extract-plugin to v0.8 @peter.toennies
+- updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
+- updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
+- update watch to version 1 @peter.toennies
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
@@ -510,6 +542,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
 - Enable autofill username/password for login !515 @theolampert @NerdyProjects
 - Fix display of avatars for users without avatars !520 @theolampert @NerdyProjects
+- updated corejs to v 3 !1043 @peter.toennies
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker

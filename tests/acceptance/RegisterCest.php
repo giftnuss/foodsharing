@@ -33,6 +33,8 @@ class RegisterCest
 
 		$I->wantTo('ensure I can register and will not receive newsletter by default');
 		$I->amOnPage('/');
+		/* digital climate strike overlay overlaps leaflet attribution, but it is fine after closing */
+		$I->setCookie('_DIGITAL_CLIMATE_STRIKE_WIDGET_CLOSED_', 'true');
 
 		// click signup, then press next on the first dialog
 

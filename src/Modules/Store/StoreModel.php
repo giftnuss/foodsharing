@@ -133,31 +133,6 @@ class StoreModel extends Db
 		return false;
 	}
 
-	/* delete fetch dates a user signed up for.
-	 * Either a specific fetch date (fsid, bid and date set)
-	 * or all fetch dates for a store (only fsid, bid set)
-	 * or all fetch dates for a user (only fsid set)
-	 */
-	public function deleteFetchDate($fsid, $storeId = null, $date = null)
-	{
-		if ($date !== null && $storeId !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
-			$this->storeGateway->updateBellNotificationForBiebs($storeId);
-		} elseif ($storeId !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$this->storeGateway->updateBellNotificationForBiebs($storeId);
-		} else {
-			$storeIdsThatWillBeDeleted = $this->qCol('SELECT `betrieb_id` FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-
-			foreach ($storeIdsThatWillBeDeleted as $delStoreId) {
-				$this->storeGateway->updateBellNotificationForBiebs($delStoreId);
-			}
-		}
-
-		return $result;
-	}
-
 	public function signout($storeId, $fsId)
 	{
 		$storeId = (int)$storeId;
@@ -583,7 +558,7 @@ class StoreModel extends Db
 	public function createTeamConversation($storeId)
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $storeId);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
@@ -591,7 +566,7 @@ class StoreModel extends Db
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$teamMembers = $this->storeGateway->getBetriebTeam($storeId);
+		$teamMembers = $this->storeGateway->getStoreTeam($storeId);
 		if ($teamMembers) {
 			foreach ($teamMembers as $fs) {
 				$this->messageModel->addUserToConversation($tcid, $fs['id']);
@@ -604,7 +579,7 @@ class StoreModel extends Db
 	public function createSpringerConversation($storeId)
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $storeId);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		$this->update('
@@ -623,7 +598,7 @@ class StoreModel extends Db
 
 	public function addTeamMessage($storeId, $message)
 	{
-		if ($betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $storeId)) {
+		if ($betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
 				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {

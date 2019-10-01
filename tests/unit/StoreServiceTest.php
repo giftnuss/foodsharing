@@ -112,7 +112,7 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$interval = CarbonInterval::weeks(3);
 		$store = $this->tester->createStore($this->region_id, null, null, ['prefetchtime' => $interval->totalSeconds - 360]);
 		/* that pickup is now at least some minutes too much in the future to sign up */
-		$pickup = Carbon::now()->add($interval)->microseconds(0);
+		$pickup = Carbon::tomorrow()->add($interval)->microseconds(0);
 		/* use recurring pickup here because signing up for single pickups should work indefinitely */
 		$this->tester->addRecurringPickup($store['id'], ['time' => $pickup->toTimeString(), 'dow' => $pickup->weekday(), 'fetcher' => 1]);
 		$this->expectException(DomainException::class);

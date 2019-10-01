@@ -7,7 +7,7 @@
             {{ date | dateFormat('full-long') }}
           </div>
           <div
-            v-if="isCoordinator"
+            v-if="isCoordinator && !isInPast"
             class="col-2 p-0 remove"
           >
             <button
@@ -27,8 +27,8 @@
               :key="slot.profile.id"
               :profile="slot.profile"
               :confirmed="slot.isConfirmed"
-              :allow-leave="slot.profile.id == user.id"
-              :allow-kick="isCoordinator"
+              :allow-leave="slot.profile.id == user.id && !isInPast"
+              :allow-kick="isCoordinator && !isInPast"
               :allow-confirm="isCoordinator"
               :allow-chat="slot.profile.id !== user.id"
               @leave="$refs.modal_leave.show()"
@@ -192,7 +192,7 @@ export default {
       return isSameDay(this.date, new Date())
     },
     emptySlots () {
-      return this.totalSlots - this.occupiedSlots.length
+      return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
     }
   }
 }
@@ -231,6 +231,9 @@ export default {
   ul.slots >>> .btn[disabled]:hover {
       border-color: #f1e7c9;
       cursor: default;
+  }
+  ul.slots[data-v-1dfadebe] .btn.secondary {
+    opacity: .6;
   }
   .pickup .remove {
     display: none;
