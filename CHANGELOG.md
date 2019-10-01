@@ -120,6 +120,7 @@ And we have even included some new features for you.
 - Put the footer on pages with less content at the bottom of the page !1087 #590 @chriswalg
 - Bugfix for end date being required when creating single-day event !1084 @tihar
 - Removed the obsolete and insecure foodsaver bubble for our map !1093 @peter.toennies
+- Removed forum subscriptions for people who left a district or workgroup !1071 #655 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
