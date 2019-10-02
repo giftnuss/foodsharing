@@ -8,7 +8,7 @@ class UploadsGateway extends BaseGateway
 {
 	public function getFile(string $uuid): array
 	{
-		return $this->db->fetchByCriteria('uploads', ['uuid', 'mimeType'], ['uuid' => $uuid]);
+		return $this->db->fetchByCriteria('uploads', ['uuid', 'mimetype'], ['uuid' => $uuid]);
 	}
 
 	public function addFile($userId, string $hash, int $size, string $mimeType): array

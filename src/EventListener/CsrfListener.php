@@ -42,8 +42,23 @@ class CsrfListener
 			return;
 		}
 
-		if (!$this->session->isValidCsrfHeader()) {
-			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.');
+		// WARNING: WORKAROUND
+		// TODO: Remove this before merging into master. The check above does not work, since the controller
+		//      that is in $controller is the ExceptionController and the method is "getAction"
+		if ($this->startsWith($event->getRequest()->getRequestUri(), '/api/uploads') &&
+			$event->getRequest()->getMethod() === 'GET') {
+
+			return;
 		}
+
+		if (!$this->session->isValidCsrfHeader()) {
+			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.<br>MethodAnnotation: ' . $event->getRequest()->getRequestUri());
+		}
+	}
+
+	private function startsWith($haystack, $needle)
+	{
+		$length = strlen($needle);
+		return (substr($haystack, 0, $length) === $needle);
 	}
 }

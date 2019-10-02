@@ -168,7 +168,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import "~croppie/croppie.css"
+@import "~croppie/croppie.css";
 </style>
 
 <style lang="scss" scoped>

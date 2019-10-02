@@ -38,13 +38,13 @@ class UploadsRestController extends AbstractFOSRestController
 
 	/**
 	 * @DisableCsrfProtection
-	 * @Rest\Get("uploads/{uuid}/{filename}", requirements={"uuid"="[0-9a-f\-]+", "filename"=".+"})
+	 * @Rest\Get("uploads/{uuid}", requirements={"uuid"="[0-9a-f\-]+"})
 	 * @Rest\QueryParam(name="w", requirements="\d+", default=0, description="Max image width")
 	 * @Rest\QueryParam(name="h", requirements="\d+", default=0, description="Max image height")
 	 * @Rest\QueryParam(name="q", requirements="\d+", default=0, description="Image quality (between 1 and 100")
 	 * resize behavior: fill
 	 */
-	public function getFileAction(string $uuid, string $filename, ParamFetcher $paramFetcher): void
+	public function getFileAction(string $uuid, ParamFetcher $paramFetcher): void
 	{
 		$width = $paramFetcher->get('w');
 		$height = $paramFetcher->get('h');
@@ -92,7 +92,7 @@ class UploadsRestController extends AbstractFOSRestController
 
 		// resizing of images
 		if ($doResize) {
-			if (strpos($file['mimeType'], 'image/') !== 0) {
+			if (strpos($file['mimetype'], 'image/') !== 0) {
 				throw new HttpException(400, 'resizing only possible with images');
 			}
 
@@ -113,12 +113,12 @@ class UploadsRestController extends AbstractFOSRestController
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400 * 7));
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-		$mime = explode('/', $file['mimeType']);
+		$mime = explode('/', $file['mimetype']);
 		switch ($mime[0]) {
 			case 'video':
 			case 'audio':
 			case 'image':
-				header('Content-Type: ' . $file['mimeType']);
+				header('Content-Type: ' . $file['mimetype']);
 				break;
 			case 'text':
 				header('Content-Type: text/plain');
@@ -206,7 +206,7 @@ class UploadsRestController extends AbstractFOSRestController
 			}
 		}
 		$view = $this->view([
-			'url' => '/api/uploads/' . $file['uuid'] . '/' . $filename,
+			'url' => '/api/uploads/' . $file['uuid'],
 			'uuid' => $file['uuid'],
 			'filename' => $filename,
 			'mimeType' => $mimeType,
