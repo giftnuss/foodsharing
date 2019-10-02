@@ -52,7 +52,7 @@ class CsrfListener
 		}
 
 		if (!$this->session->isValidCsrfHeader()) {
-			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.<br>MethodAnnotation: ' . $event->getRequest()->getRequestUri());
+			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.');
 		}
 	}
 
