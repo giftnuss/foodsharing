@@ -320,12 +320,26 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('terminology.statistic'));
 		$sub = $request->query->get('sub');
 		$viewData = $this->regionViewData($region, $sub);
+
 		$viewData['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
 		$viewData['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
-		$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
-		$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
-		$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
-		$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
+		$viewData['pickupData']['daily'] = 0;
+		$viewData['pickupData']['weekly'] = 0;
+		$viewData['pickupData']['monthly'] = 0;
+		$viewData['pickupData']['yearly'] = 0;
+
+		if ($region['type'] == Type::COUNTRY && $this->session->isOrgaTeam()) {
+			$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+			$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
+			$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+			$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
+		}
+		if ($region['type'] != Type::COUNTRY) {
+			$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+			$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
+			$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
+			$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
+		}
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}
 }
