@@ -104,6 +104,7 @@
 - Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
 - Fixed invisible overbooked pickups !1069 #633 @alex.simm
 - Workgroups overview optimized for mobile view #702 !1063 @chriswalg
+- Bugfix for sentry issue regarding the #vue-pickuplist !1074 @ctwx_ok
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
