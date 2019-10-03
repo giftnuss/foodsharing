@@ -244,7 +244,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-                    check = true;
+                    check = false;
 
                     if(check)
                     {
