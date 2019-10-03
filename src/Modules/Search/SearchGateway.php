@@ -33,8 +33,6 @@ class SearchGateway extends BaseGateway
 			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($region_to_search);
 		}
 
-		$teaser = 'stadt';
-
 		$out['foodsaver'] = $this->searchTable(
 			'fs_foodsaver',
 			array('name', 'nachname', 'plz', 'stadt'),
