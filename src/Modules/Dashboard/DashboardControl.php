@@ -244,10 +244,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-                    check = false;
-
-                    if(check)
-                    {
+         
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
@@ -259,7 +256,6 @@ class DashboardControl extends Control
                                 $.fancybox.close();
                             }
                         });
-                    }
                 });
             ');
 
