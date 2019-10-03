@@ -52,6 +52,7 @@
 - Adding apple-app-site-association file to allow Universal Linking in our possible apps !1082 @rastadapasta
 
 ## Bugfixes
+- restrict pickupstatistic on country level to orga !1073 @fs_k
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
