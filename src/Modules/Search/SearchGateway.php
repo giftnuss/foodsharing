@@ -42,7 +42,7 @@ class SearchGateway extends BaseGateway
 			array(
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
-				'teaser' => $teaser
+				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
 			),
 			$regions
 		);
