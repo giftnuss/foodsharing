@@ -549,6 +549,10 @@ class RegionGateway extends BaseGateway
 	{
 		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($regiontId)));
 
+		if (empty($regionIDs)){
+			$regionIDs = 99999;
+		}
+
 		return $this->db->fetchAll(
 			'select 
 						date_Format(a.date,:format) as time,
