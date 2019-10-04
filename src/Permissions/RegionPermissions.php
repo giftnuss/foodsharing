@@ -32,5 +32,4 @@ final class RegionPermissions
 
 		return false;
 	}
-
 }
