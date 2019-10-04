@@ -215,5 +215,5 @@ $(document).ready(() => {
   vueRegister({
     PickupList
   })
-  vueApply('#vue-pickuplist')
+  vueApply('#vue-pickuplist', true)
 })

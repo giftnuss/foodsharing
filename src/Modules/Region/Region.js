@@ -61,7 +61,7 @@ $(document).ready(() => {
       PickupList
     })
     vueApply('#vue-genderlist')
-    vueApply('#vue-pickuplist')
+    vueApply('#vue-pickuplist', true)
   } else if (['botforum', 'forum'].includes(GET('sub'))) {
     if (GET('tid') !== 'undefined') {
       vueRegister({
