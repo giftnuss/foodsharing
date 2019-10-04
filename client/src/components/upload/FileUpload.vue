@@ -18,7 +18,7 @@
           <img
             v-if="value"
             :src="value+'?h=100&w=100'"
-            alt="Preview Image"
+            :alt="previewAlt"
           >
         </div>
       </div>
@@ -115,6 +115,9 @@ export default {
     accept () {
       if (this.image) return 'image/*'
       else return ''
+    },
+    previewAlt () {
+      return this.$i18n('upload.preview_image')
     }
   },
   methods: {

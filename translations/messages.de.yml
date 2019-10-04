@@ -8,6 +8,7 @@ upload:
   no_image_chosen: Noch keine Datei ausgewählt
   new_neuter: Neues
   new_feminine: Neue
+  preview_image: Vorschau
   image: Bild hochladen
   file: Datei hochladen
 
