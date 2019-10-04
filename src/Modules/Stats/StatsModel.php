@@ -38,8 +38,8 @@ class StatsModel extends Db
 
 	public function getTotalKilosFetchedByFoodsaver(int $fs_id)
 	{
-		$out = 0;
-		if ($stores = $this->qOne('
+		$savedWeight = 0;
+		if ($queryResult = $this->qOne('
 			select 
 			       sum(fw.weight) as saved 
 			from fs_abholer fa
@@ -50,10 +50,10 @@ class StatsModel extends Db
 			  and fa.date < now();
 		')
 		) {
-			$out = $res;
+			$savedWeight = $queryResult;
 		}
 
-		return $out;
+		return $savedWeight;
 	}
 
 	public function getAllFoodsaverIds()
