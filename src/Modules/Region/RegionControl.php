@@ -9,6 +9,7 @@ use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\ReportPermissions;
+use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -31,6 +32,7 @@ final class RegionControl extends Control
 	private $formFactory;
 	private $forumService;
 	private $forumPermissions;
+	private $regionPermissions;
 	private $regionHelper;
 	private $imageService;
 	private $reportPermissions;
@@ -58,6 +60,7 @@ final class RegionControl extends Control
 		ForumGateway $forumGateway,
 		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
+		RegionPermissions $regionPermissions,
 		ForumService $forumService,
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
@@ -67,6 +70,7 @@ final class RegionControl extends Control
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
 		$this->forumPermissions = $forumPermissions;
+		$this->regionPermissions = $regionPermissions;
 		$this->forumGateway = $forumGateway;
 		$this->fairteilerGateway = $fairteilerGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -328,13 +332,7 @@ final class RegionControl extends Control
 		$viewData['pickupData']['monthly'] = 0;
 		$viewData['pickupData']['yearly'] = 0;
 
-		if ($region['type'] == Type::COUNTRY && $this->session->isOrgaTeam()) {
-			$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
-			$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
-			$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
-			$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
-		}
-		if ($region['type'] != Type::COUNTRY) {
+		if ($region['type'] !== Type::COUNTRY || $this->regionPermissions->mayAccessStatisticCountry()) {
 			$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
 			$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
 			$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
