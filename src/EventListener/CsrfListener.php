@@ -42,12 +42,9 @@ class CsrfListener
 			return;
 		}
 
-		// WARNING: WORKAROUND
-		// TODO: Remove this before merging into master. The check above does not work, since the controller
-		//      that is in $controller is the ExceptionController and the method is "getAction"
+		// TODO: This should refactored later to either use a whitelist or try to find a way to read the annotations.
 		if ($this->startsWith($event->getRequest()->getRequestUri(), '/api/uploads') &&
 			$event->getRequest()->getMethod() === 'GET') {
-
 			return;
 		}
 
@@ -59,6 +56,6 @@ class CsrfListener
 	private function startsWith($haystack, $needle)
 	{
 		$length = strlen($needle);
-		return (substr($haystack, 0, $length) === $needle);
+		return substr($haystack, 0, $length) === $needle;
 	}
 }
