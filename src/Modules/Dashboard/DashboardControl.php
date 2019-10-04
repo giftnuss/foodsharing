@@ -192,7 +192,7 @@ class DashboardControl extends Control
 		$val = $this->model->getValues(array('anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon'])) {
-			$this->flashMessageHelper->info('Bitte überprüfe Deine Adresse! Die Koordinaten konnten nicht ermittelt werden.');
+			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 

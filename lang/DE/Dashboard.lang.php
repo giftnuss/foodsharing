@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $g_lang;
 $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
@@ -28,3 +28,4 @@ $g_lang['all_baskets'] ='Alle Körbe auf der Karte';
 $g_lang['events_headline'] ='Nächste Events';
 $g_lang['event_headline'] ='Nächstes Event';
 $g_lang['you_were_invited'] ='Du wurdest eingeladen';
+$g_lang['please_check_address'] = 'Bitte überprüfe Deine Adresse! Die Koordinaten konnten nicht ermittelt werden.';
