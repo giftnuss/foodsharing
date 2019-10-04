@@ -179,9 +179,12 @@ class LoginXhr extends Control
 			$data['gender'] = 0;
 		}
 		$birthdate = \DateTime::createFromFormat('Y-m-d', $data['birthdate']);
+		if (!$birthdate) {
+			return $this->translationHelper->s('error_birthdate_format');
+		}
 		$min_birthdate = new \DateTime();
 		$min_birthdate->modify('-18 years');
-		if (!$birthdate || $birthdate > $min_birthdate) {
+		if ($birthdate > $min_birthdate) {
 			return $this->translationHelper->s('error_birthdate');
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');

@@ -2,6 +2,7 @@
 
 ## Features
 - Added markers for empty pickup slots in the next days to store menu (red=today or tomorrow, orange=next 3 days, yellow=next 5 days) !1106 #452 @alex.simm
+- Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
