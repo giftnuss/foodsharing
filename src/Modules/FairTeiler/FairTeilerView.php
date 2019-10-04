@@ -94,7 +94,6 @@ class FairTeilerView extends View
 			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
 			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
 			$this->vueComponent('image-upload', 'file-upload-v-form', [
-				'label' => 'Bild',
 				'inputName' => 'picture',
 				'image' => true,
 				'initialValue' => (strpos($data['picture'], '/api/uploads/') !== 0 ? '/images/' : '') . $data['picture'],
