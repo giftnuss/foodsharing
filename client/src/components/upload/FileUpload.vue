@@ -81,11 +81,17 @@
 
 <script>
 import VueCroppie from 'vue-croppie/src/VueCroppieComponent'
-import bModal from '@b/components/modal/modal'
+import { BModal, VBModal } from 'bootstrap-vue'
 import { uploadFile } from '@/api/uploads'
 
 export default {
-  components: { bModal, VueCroppie },
+  components: {
+    'b-modal': BModal,
+    VueCroppie
+  },
+  directives: {
+    'b-modal': VBModal
+  },
   props: {
     value: {
       type: String,
@@ -109,7 +115,7 @@ export default {
   computed: {
     filename () {
       if (!this.value) return false
-      let f = this.value.split('/')
+      const f = this.value.split('/')
       return f[f.length - 1]
     },
     accept () {
