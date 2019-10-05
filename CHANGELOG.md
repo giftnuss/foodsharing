@@ -16,6 +16,7 @@
     - profile settings !895 @jofranz
     - event page !915 @jofranz
     - store settings !922 @jofranz
+    - fair-share-point settings !1085 @jofranz
 - InfluxDB Metrics via UDP !882 @alangecker
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
