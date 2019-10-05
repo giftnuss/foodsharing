@@ -444,7 +444,7 @@ export default {
 
 // move the main content below the topbar
 div#main {
-  margin-top: 45px;
+  margin-top: 3.5rem;
   @media (max-width: 630px) {
       // two line topbar
       margin-top: 133px;

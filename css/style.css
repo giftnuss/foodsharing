@@ -245,7 +245,7 @@ div#main, footer .wrapper {
 }
 
 div#main {
-  min-height: 650px;
+  min-height: calc(83vh);
   padding-bottom: 40px;
 }
 
