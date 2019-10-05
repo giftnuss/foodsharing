@@ -99,7 +99,7 @@
 - Do not allow signing out of past pickups !1058 #633 @alex.simm
 - The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
 - Fixed occupied one-time pickups that showed up unoccupied !1059 #633 @alex.simm
-- Fixed end date not being displayed when editing existing multi-day events !277 @tihar
+- Fixed end date not being displayed when editing existing multi-day events !995 #277 @tihar
 - Link in chat-message notification email now leads to corresponding conversation !1064 #703 @rastadapasta
 - Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
 - Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
