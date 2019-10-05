@@ -368,7 +368,7 @@ class DashboardView extends View
 			{
 				.top_margin_on_small_screen 
 				{
-					margin-top: 3.5rem;
+					margin-top: 45px;
 				}
 			}
 		');
