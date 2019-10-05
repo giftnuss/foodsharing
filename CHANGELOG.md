@@ -110,6 +110,8 @@
 - Fixed the check for empty address data on the foodsaver dashboard !1076 @peter.toennies
 - Bugfix for empty pickup list !1078 @ctwx_ok
 - Set width 50px for user pics in region member list !1080 @chriswalg
+- Put the footer on pages with less content at the bottom of the page !1087 #590 @chriswalg
+
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
 - The page does not use fullpage anymore. New landing page !597 #393 @theolampert
