@@ -561,8 +561,7 @@ class Utils
 			<div align="center"><img src="' . $src . '" /></div>
 			<div>
 			' . $this->v_menu($menu) . '
-			</div>
-			<div style="visibility:hidden"><img src="/images/' . $original . '" /></div>';
+			</div>';
 	}
 
 	public function v_form($name, $elements, $option = array())
