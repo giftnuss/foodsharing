@@ -1,8 +1,3 @@
-# 2019-08-30 Hotfix
-- Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
-
-# 2019-06-17 Hotfix
-- Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
 # 2019-10-06
 
 Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
@@ -151,6 +146,12 @@ And we have even included some new features for you.
 - updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
+
+# 2019-08-30 Hotfix
+- Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
+
+# 2019-06-17 Hotfix
+- Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
 
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
