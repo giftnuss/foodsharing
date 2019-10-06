@@ -327,16 +327,12 @@ final class RegionControl extends Control
 
 		$viewData['genderData']['district'] = $this->gateway->genderCountRegion((int)$region['id']);
 		$viewData['genderData']['homeDistrict'] = $this->gateway->genderCountHomeRegion((int)$region['id']);
-		$viewData['pickupData']['daily'] = 0;
-		$viewData['pickupData']['weekly'] = 0;
-		$viewData['pickupData']['monthly'] = 0;
-		$viewData['pickupData']['yearly'] = 0;
 
 		if ($region['type'] !== Type::COUNTRY || $this->regionPermissions->mayAccessStatisticCountry()) {
-			$viewData['pickupData']['daily'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m-%d');
-			$viewData['pickupData']['weekly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y/%v');
-			$viewData['pickupData']['monthly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y-%m');
-			$viewData['pickupData']['yearly'] = $this->gateway->regionPickupsByDate((int)$region['id'], '%Y');
+			$viewData['pickupData']['daily'] = $this->gateway->listRegionPickupsByDate((int)$region['id'], '%Y-%m-%d');
+			$viewData['pickupData']['weekly'] = $this->gateway->listRegionPickupsByDate((int)$region['id'], '%Y/%v');
+			$viewData['pickupData']['monthly'] = $this->gateway->listRegionPickupsByDate((int)$region['id'], '%Y-%m');
+			$viewData['pickupData']['yearly'] = $this->gateway->listRegionPickupsByDate((int)$region['id'], '%Y');
 		}
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
 	}

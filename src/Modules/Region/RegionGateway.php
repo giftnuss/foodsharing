@@ -545,12 +545,12 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function regionPickupsByDate(int $regiontId, $dateFormat): array
+	public function listRegionPickupsByDate(int $regionId, string $dateFormat): array
 	{
-		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($regiontId)));
+		$regionIDs = implode(',', array_map('intval', $this->listIdsForDescendantsAndSelf($regionId)));
 
 		if (empty($regionIDs)) {
-			$regionIDs = 99999;
+			return [];
 		}
 
 		return $this->db->fetchAll(
