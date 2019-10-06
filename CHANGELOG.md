@@ -1,6 +1,6 @@
 # 2019-10-06
 
-Long time fo silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
+Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
 A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps. 
 And we have even included some new features for you.
 
