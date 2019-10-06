@@ -508,6 +508,8 @@ class SettingsControl extends Control
 	{
 		if ($email = $this->settingsGateway->getNewMail($this->session->id(), $_GET['newmail'])) {
 			$this->pageHelper->addJs("ajreq('changemail3');");
+		} else {
+			$this->flashMessageHelper->info('Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen!');
 		}
 	}
 
