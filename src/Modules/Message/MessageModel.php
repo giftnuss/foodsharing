@@ -195,7 +195,7 @@ final class MessageModel extends Db
 	}
 
 	/**
-	 * Method returns an array of all conversation from the user.
+	 * Method returns an array of all conversations from the logged in user.
 	 *
 	 * @param int $limit
 	 * @param int $offset
@@ -244,8 +244,15 @@ final class MessageModel extends Db
 				$member = @unserialize($conversations[$i]['member']);
 				// unserialize error handling
 				if ($member === false) {
-					$this->updateDenormalizedConversationData($conversations[$i]['id']);
+					$members = $this->updateDenormalizedConversationData($conversations[$i]['id']);
+					$member = $members[0];
 				}
+
+				// Strip emails from response
+				foreach ($member as $index => $value) {
+					unset($member[$index]['email']);
+				}
+
 				$conversations[$i]['member'] = $member;
 				if ($conversations[$i]['last_message_is_htmlentity_encoded'] == 0) {
 					$conversations[$i]['last_message'] = htmlentities($conversations[$i]['last_message']);
@@ -354,13 +361,14 @@ final class MessageModel extends Db
 		return false;
 	}
 
-	private function updateDenormalizedConversationData($cids = false): void
+	private function updateDenormalizedConversationData($cids = false): array
 	{
 		if ($cids === false) {
 			$cids = $this->qCol('SELECT id FROM fs_conversation');
 		} elseif (!is_array($cids)) {
 			$cids = array($cids);
 		}
+		$members = array();
 		foreach ($cids as $id) {
 			$member = $this->listConversationMembers($id);
 
@@ -377,7 +385,11 @@ final class MessageModel extends Db
 				WHERE
 					`id` = ' . (int)$id . '
 			');
+
+			$members[] = $member;
 		}
+
+		return $members;
 	}
 
 	public function setConversationMembers($cid, $fsids, $unread = false)

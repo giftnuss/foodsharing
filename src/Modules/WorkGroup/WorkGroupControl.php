@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\WorkGroup;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -17,12 +18,16 @@ class WorkGroupControl extends Control
 	 */
 	private $formFactory;
 	private $imageService;
+	private $workGroupGateway;
 
-	public function __construct(WorkGroupModel $model, WorkGroupView $view, ImageService $imageService)
-	{
-		$this->model = $model;
+	public function __construct(
+		WorkGroupView $view,
+		ImageService $imageService,
+		WorkGroupGateway $workGroupGateway
+	) {
 		$this->view = $view;
 		$this->imageService = $imageService;
+		$this->workGroupGateway = $workGroupGateway;
 
 		parent::__construct();
 	}
@@ -87,7 +92,7 @@ class WorkGroupControl extends Control
 
 	private function getSideMenuData($activeUrlPartial = null)
 	{
-		$countries = $this->model->getCountryGroups();
+		$countries = $this->workGroupGateway->getCountryGroups();
 		$bezirke = $this->session->getRegions();
 
 		$localRegions = array_filter($bezirke, function ($region) {
@@ -126,13 +131,25 @@ class WorkGroupControl extends Control
 
 	private function list(Request $request, Response $response)
 	{
-		$parent = $request->query->getInt('p', 392);
-		$myApplications = $this->model->getApplications($this->session->id());
-		$myStats = $this->model->getStats($this->session->id());
-		$groups = $this->model->listGroups($parent);
+		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
 
-		$groups = array_map(
-			function ($group) use ($myApplications, $myStats) {
+		$parent = $request->query->getInt('p', RegionIDs::GLOBAL_WORKING_GROUPS);
+		$myApplications = $this->workGroupGateway->getApplications($this->session->id());
+		$myStats = $this->workGroupGateway->getStats($this->session->id());
+		$groups = $this->getGroups($parent, $myApplications, $myStats);
+
+		$response->setContent(
+			$this->render(
+				'pages/WorkGroup/list.twig',
+				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
+			)
+		);
+	}
+
+	private function getGroups(int $parent, array $applications, array $stats): array
+	{
+		return array_map(
+			function ($group) use ($applications, $stats) {
 				return array_merge(
 					$group,
 					[
@@ -143,31 +160,20 @@ class WorkGroupControl extends Control
 							$group['leaders']
 						),
 						'image' => $group['photo'] ? 'images/' . $group['photo'] : null,
-						'appliedFor' => in_array($group['id'], $myApplications),
+						'appliedFor' => in_array($group['id'], $applications),
 						'applyMinBananaCount' => $group['banana_count'],
 						'applyMinFetchCount' => $group['fetch_count'],
 						'applyMinFoodsaverWeeks' => $group['week_num'],
-						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) && !$this->fulfillApplicationRequirements(
-								$group,
-								$myStats
-							),
+						'applicationRequirementsNotFulfilled' => ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES)
+																	&& !$this->fulfillApplicationRequirements($group, $stats),
 						'mayEdit' => $this->mayEdit($group),
 						'mayAccess' => $this->mayAccess($group),
-						'mayApply' => $this->mayApply($group, $myApplications, $myStats),
+						'mayApply' => $this->mayApply($group, $applications, $stats),
 						'mayJoin' => $this->mayJoin($group),
 					]
 				);
 			},
-			$groups
-		);
-
-		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
-
-		$response->setContent(
-			$this->render(
-				'pages/WorkGroup/list.twig',
-				['nav' => $this->getSideMenuData('=' . $parent), 'groups' => $groups]
-			)
+			$this->workGroupGateway->listGroups($parent)
 		);
 	}
 
@@ -175,7 +181,7 @@ class WorkGroupControl extends Control
 	{
 		$groupId = $request->query->getInt('id');
 
-		if ($group = $this->model->getGroup($groupId)) {
+		if ($group = $this->workGroupGateway->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
 				$this->routeHelper->go('/?page=dashboard');
 			}
@@ -190,8 +196,8 @@ class WorkGroupControl extends Control
 			if ($form->isSubmitted()) {
 				if ($form->isValid()) {
 					$data = $editWorkGroupRequest->toGroup();
-					$this->model->updateGroup($group['id'], $data);
-					$this->model->updateTeam($group['id'], $data['member'], $data['leader']);
+					$this->workGroupGateway->updateGroup($group['id'], $data);
+					$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
 					$this->flashMessageHelper->info('Änderungen gespeichert!');
 					$this->routeHelper->goSelf();
 				}

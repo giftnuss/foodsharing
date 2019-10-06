@@ -16,86 +16,88 @@ import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
 
-$('a[href=\'#signout\']').on('click', function () {
-  $('#signout_sure').dialog('open')
-  return false
-})
-
-$('#signout_sure').dialog({
-  resizable: false,
-  autoOpen: false,
-  modal: true,
-  width: 'auto',
-  buttons: [
-    {
-      text: i18n('button.yes_i_am_sure'),
-      click: function () {
-        ajax.req('bezirk', 'signout', {
-          data: $('input', this).serialize(),
-          success: function () {
-            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
-          }
-        })
-      }
-    },
-    {
-      text: i18n('button.abort'),
-      click: function () {
-        $(this).dialog('close')
-      }
-    }
-  ]
-})
-
-if (GET('sub') == 'wall') {
-  wall.init('bezirk', GET('bid'))
-} else if (GET('sub') === 'members') {
-  vueRegister({
-    MemberList
+$(document).ready(() => {
+  $('a[href=\'#signout\']').on('click', function () {
+    $('#signout_sure').dialog('open')
+    return false
   })
-  vueApply('#vue-memberlist')
-} else if (GET('sub') == 'statistic') {
-  vueRegister({
-    GenderList,
-    PickupList
-  })
-  vueApply('#vue-genderlist')
-  vueApply('#vue-pickuplist')
-} else if (['botforum', 'forum'].includes(GET('sub'))) {
-  if (GET('tid') !== 'undefined') {
-    vueRegister({
-      Thread
-    })
-    vueApply('#vue-thread')
-  } else {
-    let loadedPages = []
-    $(window).on('scroll', function () {
-      if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
-        return
-      }
 
-      var page = parseInt($('#morebutton').val()) || 1
-      for (let i = 0; i < loadedPages.length; i++) {
-        if (loadedPages[i] == page) {
-          return
+  $('#signout_sure').dialog({
+    resizable: false,
+    autoOpen: false,
+    modal: true,
+    width: 'auto',
+    buttons: [
+      {
+        text: i18n('button.yes_i_am_sure'),
+        click: function () {
+          ajax.req('bezirk', 'signout', {
+            data: $('input', this).serialize(),
+            success: function () {
+              goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+            }
+          })
+        }
+      },
+      {
+        text: i18n('button.abort'),
+        click: function () {
+          $(this).dialog('close')
         }
       }
-      loadedPages.push(page)
-      let last = $('.thread:last').attr('id')
-      if (last != undefined) {
-        ajax.req('bezirk', 'morethemes', {
-          data: {
-            bid: GET('bid'),
-            bot: GET('sub') == 'botforum' ? 1 : 0,
-            page: page,
-            last: last.split('-')[1]
-          },
-          success: function (data) {
-            $('#morebutton').val(page + 1)
-            $('.forum_threads.linklist').append(data.html)
-          }
-        })
-      }
+    ]
+  })
+
+  if (GET('sub') == 'wall') {
+    wall.init('bezirk', GET('bid'))
+  } else if (GET('sub') === 'members') {
+    vueRegister({
+      MemberList
     })
+    vueApply('#vue-memberlist')
+  } else if (GET('sub') == 'statistic') {
+    vueRegister({
+      GenderList,
+      PickupList
+    })
+    vueApply('#vue-genderlist')
+    vueApply('#vue-pickuplist', true)
+  } else if (['botforum', 'forum'].includes(GET('sub'))) {
+    if (GET('tid') !== 'undefined') {
+      vueRegister({
+        Thread
+      })
+      vueApply('#vue-thread')
+    } else {
+      const loadedPages = []
+      $(window).on('scroll', function () {
+        if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
+          return
+        }
+
+        var page = parseInt($('#morebutton').val()) || 1
+        for (let i = 0; i < loadedPages.length; i++) {
+          if (loadedPages[i] == page) {
+            return
+          }
+        }
+        loadedPages.push(page)
+        const last = $('.thread:last').attr('id')
+        if (last != undefined) {
+          ajax.req('bezirk', 'morethemes', {
+            data: {
+              bid: GET('bid'),
+              bot: GET('sub') == 'botforum' ? 1 : 0,
+              page: page,
+              last: last.split('-')[1]
+            },
+            success: function (data) {
+              $('#morebutton').val(page + 1)
+              $('.forum_threads.linklist').append(data.html)
+            }
+          })
+        }
+      })
+    }
   }
-}
+})

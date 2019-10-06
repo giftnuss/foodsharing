@@ -56,12 +56,12 @@
 <script>
 import SearchResults from './SearchResults'
 import { instantSearch, instantSearchIndex } from '@/api/search'
-import clickoutMixin from '@b/mixins/clickout'
-import listenOnRootMixin from '@b/mixins/listen-on-root'
+import clickOutMixin from 'bootstrap-vue/esm/mixins/click-out'
+import listenOnRootMixin from 'bootstrap-vue/esm/mixins/listen-on-root'
 
 export default {
   components: { SearchResults },
-  mixins: [clickoutMixin, listenOnRootMixin],
+  mixins: [clickOutMixin, listenOnRootMixin],
   data () {
     return {
       posX: 0,
@@ -69,6 +69,7 @@ export default {
       query: '',
       isOpen: false,
       isLoading: false,
+      isIndexLoaded: false,
       results: {
         stores: [],
         users: [],
@@ -91,6 +92,9 @@ export default {
   },
   watch: {
     query (query, oldQuery) {
+      if (!this.isIndexLoaded) {
+        this.fetchIndex()
+      }
       if (query.trim().length > 2) {
         this.open()
         this.delayedFetch()
@@ -108,9 +112,6 @@ export default {
   mounted () {
     // close the result box if another dropdown menu gets opened
     this.listenOnRoot('bv::dropdown::shown', this.close)
-  },
-  created () {
-    this.fetchIndex()
   },
   methods: {
     open () {
@@ -131,9 +132,9 @@ export default {
       this.isOpen = false
     },
     async fetch () {
-      let curQuery = this.query
+      const curQuery = this.query
       this.isLoading = true
-      let res = await instantSearch(curQuery)
+      const res = await instantSearch(curQuery)
       if (curQuery !== this.query) {
         // query has changed, throw away this response
         return false
@@ -142,6 +143,7 @@ export default {
       this.isLoading = false
     },
     async fetchIndex () {
+      this.isIndexLoaded = true
       this.index = await instantSearchIndex()
     },
     clickOutListener () {

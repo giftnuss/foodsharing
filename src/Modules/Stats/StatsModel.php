@@ -2,25 +2,21 @@
 
 namespace Foodsharing\Modules\Stats;
 
+use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Db\Db;
 
 class StatsModel extends Db
 {
-	private $statsService;
+	private $weightHelper;
 
-	public function __construct(StatsService $statsService)
+	public function __construct(WeightHelper $weightHelper)
 	{
-		$this->statsService = $statsService;
+		$this->weightHelper = $weightHelper;
 
 		parent::__construct();
 	}
 
-	public function getBetriebe($bezirk_id = false)
-	{
-		return $this->q('SELECT id, name, added FROM fs_betrieb');
-	}
-
-	public function getFirstFetchInBetrieb($bid, $fsid)
+	public function getFirstFetchInStore($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -31,44 +27,44 @@ class StatsModel extends Db
 					fs_abholer 
 				
 				WHERE 
-					betrieb_id = ' . $bid . ' 
+					betrieb_id = ' . $storeId . ' 
 				
 				AND 
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND 
 					`confirmed` = 1'
 		);
 	}
 
-	public function getGerettet($fsid)
+	public function getTotallyFetchedByFoodsaver(int $fs_id)
 	{
 		$out = 0;
-		if ($res = $this->q('
+		if ($stores = $this->q('
 			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 			WHERE a.betrieb_id =b.id
-			AND   foodsaver_id = ' . (int)$fsid . '
+			AND   foodsaver_id = ' . $fs_id . '
 			AND   a.`date` < NOW()
 			GROUP BY a.`betrieb_id`
 	
 	
 		')
 		) {
-			foreach ($res as $r) {
-				$out += $this->statsService->gerettet_wrapper($r['abholmenge']) * $r['anz'];
+			foreach ($stores as $s) {
+				$out += $this->weightHelper->mapIdToKilos($s['abholmenge']) * $s['anz'];
 			}
 		}
 
 		return $out;
 	}
 
-	public function getFoodsaverIds()
+	public function getAllFoodsaverIds()
 	{
 		return $this->qCol('SELECT id FROM fs_foodsaver');
 	}
 
-	public function getLastFetchInBetrieb($bid, $fsid)
+	public function getLastFetchInStore($storeId, $fsId)
 	{
 		return $this->qOne(
 			'
@@ -79,10 +75,10 @@ class StatsModel extends Db
 					fs_abholer
 	
 				WHERE
-					betrieb_id = ' . $bid . '
+					betrieb_id = ' . $storeId . '
 	
 				AND
-					foodsaver_id = ' . $fsid . '
+					foodsaver_id = ' . $fsId . '
 				AND
 					`confirmed` = 1
 				AND 
@@ -90,7 +86,7 @@ class StatsModel extends Db
 		);
 	}
 
-	public function updateBetriebStat(
+	public function updateStoreStats(
 		$betrieb_id,
 		$foodsaver_id,
 		$add_date,
@@ -112,24 +108,25 @@ class StatsModel extends Db
 		');
 	}
 
-	public function getBetriebFetchCount($bid, $fsid, $last_update, $current)
+	public function getStoreFetchCount($storeId, $fsId, $last_update, $stat_fetchcount)
 	{
 		$val = $this->qOne('
 			SELECT COUNT(foodsaver_id)
 					
 			FROM 	fs_abholer
 				
-			WHERE 	`foodsaver_id` = ' . (int)$fsid . '
-			AND 	`betrieb_id` = ' . (int)$bid . '
+			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
+			AND 	`betrieb_id` = ' . (int)$storeId . '
 			AND 	`date` > ' . $this->dateval($last_update) . '
 			AND 	`date` < NOW()
 			AND 	`confirmed` = 1
 		');
 
-		return (int)$val + (int)$current;
+		return (int)$val + (int)$stat_fetchcount;
 	}
 
-	public function getBetriebTeam($bid)
+	// method currently not used. @fs_k wants to keep it in source for now.
+	public function getBetriebTeam($storeId)
 	{
 		return $this->q('
 
@@ -149,12 +146,12 @@ class StatsModel extends Db
 				fs_betrieb_team t
 
 			WHERE 
-				t.betrieb_id = ' . (int)$bid . '
+				t.betrieb_id = ' . (int)$storeId . '
 				
 		');
 	}
 
-	public function updateStats($bezirk_id, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $fairteilercount)
+	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $fairteilercount)
 	{
 		return $this->update('
 
@@ -173,45 +170,40 @@ class StatsModel extends Db
 					`stat_fairteilercount`=' . (int)$fairteilercount . ' 
 				
 				WHERE 
-					`id` = ' . (int)$bezirk_id . '
+					`id` = ' . (int)$regionId . '
 				
 		');
 	}
 
-	public function getAllBezirke($region_id = false)
+	public function getAllRegions()
 	{
 		return $this->q('SELECT id, name, stat_last_update FROM fs_bezirk');
 	}
 
-	public function getAllBezirkeNotUpdated($region_id = false)
+	public function getFairteilerCount($region_id, $child_ids)
 	{
-		return $this->q('SELECT id, name FROM fs_bezirk WHERE DATE_SUB(CURDATE(), INTERVAL 1 DAY) >= `stat_last_update`');
-	}
-
-	public function getFairteilerCount($bezirk_id, $child_ids)
-	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 
 		return (int)$this->qOne('SELECT COUNT(id) FROM fs_fairteiler WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
 	}
 
-	public function getBetriebKoorpCount($bezirk_id, $child_ids)
+	public function getCooperatingStoresCount($region_id, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 
 		return (int)$this->qOne('SELECT COUNT(id) FROM fs_betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ') AND betrieb_status_id IN(3,5)');
 	}
 
-	public function getBetriebCount($bezirk_id, $child_ids)
+	public function getStoreCount($region_id, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 
 		return (int)$this->qOne('SELECT COUNT(id) FROM fs_betrieb WHERE bezirk_id IN(' . implode(',', $child_ids) . ')');
 	}
 
-	public function getPostCount($bezirk_id, $child_ids)
+	public function getPostCount($region_id, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 
 		$stat_post = (int)$this->qOne('
 			
@@ -237,9 +229,9 @@ class StatsModel extends Db
 		return $stat_post;
 	}
 
-	public function getBotCount($bezirk_id, $child_ids)
+	public function getBotCount($region_id, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 		$out = array();
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
@@ -255,9 +247,9 @@ class StatsModel extends Db
 		return count($out);
 	}
 
-	public function getFsCount($bezirk_id, $child_ids)
+	public function getFsCount($region_id, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
+		$child_ids[$region_id] = $region_id;
 		$out = array();
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
@@ -273,10 +265,10 @@ class StatsModel extends Db
 		return count($out);
 	}
 
-	public function getFetchWeight($bezirk_id, $last_update, $child_ids)
+	public function getFetchWeight($region_id, $last_update, $child_ids)
 	{
-		$child_ids[$bezirk_id] = $bezirk_id;
-		$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $bezirk_id));
+		$child_ids[$region_id] = $region_id;
+		$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $region_id));
 
 		$weight = 0;
 		$dat = array();
@@ -300,11 +292,11 @@ class StatsModel extends Db
 				$dat[$r['betrieb_id'] . '-' . $r['date']] = $r;
 			}
 			foreach ($dat as $r) {
-				$weight += $this->statsService->gerettet_wrapper($r['abholmenge']);
+				$weight += $this->weightHelper->mapIdToKilos($r['abholmenge']);
 			}
 		}
 
-		$current = $this->getValues(array('stat_fetchweight', 'stat_fetchcount'), 'bezirk', $bezirk_id);
+		$current = $this->getValues(array('stat_fetchweight', 'stat_fetchcount'), 'bezirk', $region_id);
 
 		return array(
 			'weight' => ($weight + (int)$current['stat_fetchweight']),

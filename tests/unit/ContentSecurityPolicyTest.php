@@ -27,15 +27,15 @@ class ContentSecurityPolicyTest extends \Codeception\Test\Unit
 	public function testPolicy(): void
 	{
 		$policy = $this->csp->generate('http://somehttphost.com', 'http://reporthere.com', true);
-		$this->assertContains('Content-Security-Policy', $policy);
-		$this->assertContains('report-uri http://reporthere.com;', $policy);
+		$this->assertStringContainsString('Content-Security-Policy', $policy);
+		$this->assertStringContainsString('report-uri http://reporthere.com;', $policy);
 	}
 
 	public function testReportOnlyPolicy(): void
 	{
 		$policy = $this->csp->generate('http://somehttphost.com', 'http://reporthere.com', true);
-		$this->assertContains('Content-Security-Policy-Report-Only', $policy);
-		$this->assertContains('report-uri http://reporthere.com;', $policy);
+		$this->assertStringContainsString('Content-Security-Policy-Report-Only', $policy);
+		$this->assertStringContainsString('report-uri http://reporthere.com;', $policy);
 	}
 
 	public function testIncludesWsForHttpHost(): void

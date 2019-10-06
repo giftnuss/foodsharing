@@ -23,13 +23,13 @@ class WallRestController extends AbstractFOSRestController
 		$this->session = $session;
 	}
 
-	private function normalizePost($post): array
+	private function normalizePost(array $post): array
 	{
 		return [
 			'id' => $post['id'],
 			'body' => $post['body'],
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'pictures' => null,
+			'pictures' => $post['gallery'] ?? null,
 			'author' => [
 				'id' => $post['foodsaver_id'],
 				'name' => $post['name'],
@@ -40,10 +40,17 @@ class WallRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Get("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
+	 *
+	 * @param string $target
+	 * @param int $targetId
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function getPostsAction($target, $targetId)
+	public function getPostsAction(string $target, int $targetId): \Symfony\Component\HttpFoundation\Response
 	{
-		$this->throwExceptionIfNotAllowedToReadWall($target, $targetId);
+		if ($this->session->id() === null || !$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
+			throw new HttpException(403);
+		}
 
 		$posts = $this->getNormalizedPosts($target, $targetId);
 
@@ -58,59 +65,61 @@ class WallRestController extends AbstractFOSRestController
 		return $this->handleView($view);
 	}
 
-	private function throwExceptionIfNotAllowedToReadWall($target, $targetId)
-	{
-		if (!$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
-			throw new HttpException(403);
-		}
-	}
-
-	private function getNormalizedPosts($target, $targetId)
+	private function getNormalizedPosts(string $target, int $targetId)
 	{
 		$posts = $this->wallPostGateway->getPosts($target, $targetId);
-		$posts = array_map(function ($value) {
+
+		return array_map(function ($value) {
 			return $this->normalizePost($value);
 		}, $posts);
-
-		return $posts;
 	}
 
 	/**
 	 * @Rest\Post("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
+	 *
+	 * @param string $target
+	 * @param int $targetId
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 *
+	 * @throws \Exception
 	 */
-	public function addPostAction($target, $targetId, ParamFetcher $paramFetcher)
+	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
-		$this->throwExceptionIfNotAllowedToWriteWall($target, $targetId);
+		if ($this->session->id() === null || !$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
+			throw new HttpException(403);
+		}
 
-		$postId = $this->getPostIdFromBodyAndAddPostToWall($paramFetcher, $target, $targetId);
+		$body = $paramFetcher->get('body');
+		$postId = $this->wallPostGateway->addPost($body, $this->session->id(), $target, $targetId);
 
 		$view = $this->view(['post' => $this->normalizePost($this->wallPostGateway->getPost($postId))], 200);
 
 		return $this->handleView($view);
 	}
 
-	private function throwExceptionIfNotAllowedToWriteWall($target, $targetId)
-	{
-		if (!$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
-			throw new HttpException(403);
-		}
-	}
-
-	private function getPostIdFromBodyAndAddPostToWall(ParamFetcher $paramFetcher, $target, $targetId)
-	{
-		$body = $paramFetcher->get('body');
-		$postId = $this->wallPostGateway->addPost($body, $this->session->id(), $target, $targetId);
-
-		return $postId;
-	}
-
 	/**
 	 * @Rest\Delete("wall/{target}/{targetId}/{id}", requirements={"targetId" = "\d+", "id" = "\d+"})
+	 *
+	 * @param string $target
+	 * @param int $targetId
+	 * @param int $id
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function delPostAction($target, $targetId, $id)
+	public function delPostAction(string $target, int $targetId, int $id): \Symfony\Component\HttpFoundation\Response
 	{
-		$this->validatePermissionsOrThrowException($target, $targetId, $id);
+		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId)) {
+			throw new HttpException(403);
+		}
+		$sessionId = $this->session->id();
+		if ($this->wallPostGateway->getFsByPost($id) != $sessionId
+			&& !$this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
+		) {
+			throw new HttpException(403);
+		}
 
 		$this->wallPostGateway->unlinkPost($id, $target);
 		$this->wallPostGateway->deletePost($id);
@@ -118,28 +127,5 @@ class WallRestController extends AbstractFOSRestController
 		$view = $this->view([], 200);
 
 		return $this->handleView($view);
-	}
-
-	private function validatePermissionsOrThrowException($target, $targetId, $id)
-	{
-		$this->throwExceptionIfPostIsNotLinkedToTarget($id, $target, $targetId);
-		$this->throwExceptionIfNotAllowedToDeletePost($id, $target, $targetId);
-	}
-
-	private function throwExceptionIfPostIsNotLinkedToTarget($id, $target, $targetId)
-	{
-		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId)) {
-			throw new HttpException(403);
-		}
-	}
-
-	private function throwExceptionIfNotAllowedToDeletePost($id, $target, $targetId)
-	{
-		$sessionId = $this->session->id();
-		if ($this->wallPostGateway->getFsByPost($id) != $sessionId
-			&& !$this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
-		) {
-			throw new HttpException(403);
-		}
 	}
 }

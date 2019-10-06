@@ -40,7 +40,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getLastFtPost($id)
+	public function getLastFairSharePointPost($fspId)
 	{
 		return $this->db->fetch(
 			'
@@ -58,12 +58,12 @@ class FairTeilerGateway extends BaseGateway
 
 			LEFT JOIN 	fs_foodsaver fs ON wp.foodsaver_id = fs.id
 
-			WHERE 		hw.fairteiler_id = :id
+			WHERE 		hw.fairteiler_id = :foodSharePointId
 
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		',
-			[':id' => $id]
+			[':foodSharePointId' => $fspId]
 		);
 	}
 
@@ -192,6 +192,50 @@ class FairTeilerGateway extends BaseGateway
 		}
 
 		return [];
+	}
+
+	public function listCloseFairteiler($loc, $distance = 30)
+	{
+		return $this->db->fetchAll(
+			'
+			SELECT
+				ft.`id`,
+				ft.`bezirk_id`,
+				ft.`name`,
+				ft.`picture`,
+				ft.`status`,
+				ft.`desc`,
+				ft.`anschrift`,
+				ft.`plz`,
+				ft.`ort`,
+				ft.`lat`,
+				ft.`lon`,
+				ft.`add_date`,
+				UNIX_TIMESTAMP(ft.`add_date`) AS time_ts,
+				ft.`add_foodsaver`,
+				(6371 * acos( cos( radians( :lat ) ) * cos( radians( ft.lat ) ) * cos( radians( ft.lon ) - radians( :lon ) ) + sin( radians( :lat1 ) ) * sin( radians( ft.lat ) ) ))
+				AS distance
+			FROM
+				`fs_fairteiler` ft
+
+			WHERE
+				ft.`status` = 1
+
+			HAVING
+				distance <= :distance
+
+			ORDER BY
+				distance ASC
+
+			LIMIT 6
+		',
+			[
+				':lat' => (float)$loc['lat'],
+				':lat1' => (float)$loc['lat'],
+				':lon' => (float)$loc['lon'],
+				':distance' => $distance,
+			]
+		);
 	}
 
 	public function follow($ft_id, $fs_id, $infotype)
@@ -354,7 +398,7 @@ class FairTeilerGateway extends BaseGateway
 			return; //Fairteiler has been created by orga member or the ambassador himself
 		}
 
-		$region = $this->regionGateway->getBezirk($fairteiler['bezirk_id']);
+		$region = $this->regionGateway->getRegion($fairteiler['bezirk_id']);
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 

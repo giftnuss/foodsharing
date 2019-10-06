@@ -5,15 +5,20 @@ namespace Foodsharing\Modules\Settings;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Quiz\QuizModel;
+use Foodsharing\Modules\Quiz\QuizGateway;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
 {
 	private $gateway;
 	private $foodsaver;
-	private $quizModel;
+	private $quizGateway;
+	private $quizSessionGateway;
 	private $contentGateway;
 	private $foodsaverGateway;
 	private $dataHelper;
@@ -23,7 +28,8 @@ class SettingsControl extends Control
 		SettingsModel $model,
 		SettingsView $view,
 		SettingsGateway $gateway,
-		QuizModel $quizModel,
+		QuizGateway $quizGateway,
+		QuizSessionGateway $quizSessionGateway,
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
 		DataHelper $dataHelper,
@@ -32,7 +38,8 @@ class SettingsControl extends Control
 		$this->model = $model;
 		$this->view = $view;
 		$this->gateway = $gateway;
-		$this->quizModel = $quizModel;
+		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->dataHelper = $dataHelper;
@@ -75,9 +82,9 @@ class SettingsControl extends Control
 		$menu[] = array('name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
 		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
 
-		if ($this->foodsaver['rolle'] == 0) {
+		if ($this->foodsaver['rolle'] == Role::FOODSHARER) {
 			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
-		} elseif ($this->foodsaver['rolle'] == 1) {
+		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
 			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
 		}
 		$menu[] = array('name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
@@ -91,48 +98,6 @@ class SettingsControl extends Control
 		}
 	}
 
-	public function up_bip()
-	{
-		if ($this->session->may() && $this->foodsaver['rolle'] > 0) {
-			if (!$this->foodsaver['verified']) {
-				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
-			} else {
-				if (($status = $this->quizModel->getQuizStatus(2)) && ($quiz = $this->quizModel->getQuiz(2))) {
-					if ((int)$this->model->qOne('SELECT COUNT(id) FROM fs_quiz_session WHERE quiz_id = 1 AND status = 1 AND foodsaver_id = ' . (int)$this->session->id()) == 0) {
-						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
-						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
-					}
-					$desc = $this->contentGateway->get(12);
-
-					// Quiz wurde noch gar nicht probiert
-					if ($status['times'] == 0) {
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-					} // quiz ist bereits bestanden
-					elseif ($status['cleared'] > 0) {
-						return $this->confirm_bip();
-					} // es läuft ein quiz weitermachen
-					elseif ($status['running'] > 0) {
-						$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-					} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-					elseif ($status['failed'] < 3) {
-						$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-					} // 3x nicht bestanden 30 Tage Lernpause
-					elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-						$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
-
-						return $this->view->pause($days_to_wait, $desc);
-					} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-					elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-						$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-					} // hat alles nichts genützt
-					else {
-						$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
-					}
-				}
-			}
-		}
-	}
-
 	public function quizsession()
 	{
 		if ($session = $this->model->getQuizSession($_GET['sid'])) {
@@ -142,34 +107,29 @@ class SettingsControl extends Control
 
 	public function up_fs()
 	{
+		$quizRole = Role::FOODSAVER;
 		if ($this->session->may()) {
-			if (($status = $this->quizModel->getQuizStatus(1)) && ($quiz = $this->quizModel->getQuiz(1))) {
-				$desc = $this->contentGateway->get(12);
+			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+				$this->handleQuizStatus($quiz, $quizRole);
+			}
+		}
+	}
 
-				// Quiz wurde noch gar nicht probiert
-				if ($status['times'] == 0) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // quiz ist bereits bestanden
-				elseif ($status['cleared'] > 0) {
-					return $this->confirm_fs();
-				} // es läuft ein quiz weitermachen
-				elseif ($status['running'] > 0) {
-					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-				elseif ($status['failed'] < 3) {
-					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-				} // 3x nicht bestanden 30 Tage Lernpause
-				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-					$this->model->updateRole(0, $this->foodsaver['rolle']);
-					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
+	public function up_bip()
+	{
+		$quizRole = Role::STORE_MANAGER;
+		if ($this->session->may() && $this->foodsaver['rolle'] > Role::FOODSHARER) {
+			if (!$this->foodsaver['verified']) {
+				$this->pageHelper->addContent($this->view->simpleContent($this->contentGateway->get(45)));
+			} else {
+				if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+					$fsId = $this->session->id();
+					if (!$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
+						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
+						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
+					}
 
-					return $this->view->pause($days_to_wait, $desc);
-				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // hat alles nichts genützt
-				else {
-					$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+					$this->handleQuizStatus($quiz, $quizRole);
 				}
 			}
 		}
@@ -177,45 +137,21 @@ class SettingsControl extends Control
 
 	public function up_bot()
 	{
-		if ($this->session->may() && $this->foodsaver['rolle'] >= 2) {
-			if (($status = $this->quizModel->getQuizStatus(3)) && ($quiz = $this->quizModel->getQuiz(3))) {
-				$desc = $this->contentGateway->get(12);
-
-				// Quiz wurde noch gar nicht probiert
-				if ($status['times'] == 0) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // es läuft ein quiz weitermachen
-				elseif ($status['running'] > 0) {
-					$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
-				} // quiz ist bereits bestanden
-				elseif ($status['cleared'] > 0) {
-					return $this->confirm_bot();
-				} // Quiz wurde shcon probiert aber noche keine 3x nicht bestanden
-				elseif ($status['failed'] < 3) {
-					$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $status['failed'], 3));
-				} // 3x nicht bestanden 30 Tage Lernpause
-				elseif ($status['failed'] == 3 && (time() - $status['last_try']) < (86400 * 30)) {
-					$days_to_wait = ((time() - $status['last_try']) - (86400 * 30) / 30);
-
-					return $this->view->pause($days_to_wait, $desc);
-				} // Lernpause vorbei noch keine weiteren 2 Fehlversuche
-				elseif ($status['failed'] >= 3 && $status['failed'] < 5 && (time() - $status['last_try']) >= (86400 * 14)) {
-					$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
-				} // hat alles nichts genützt
-				else {
-					return $this->view->quizFailed($this->contentGateway->get(13));
-				}
+		$quizRole = Role::AMBASSADOR;
+		if ($this->session->may() && $this->foodsaver['rolle'] >= Role::STORE_MANAGER) {
+			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
+				$this->handleQuizStatus($quiz, $quizRole);
 			} else {
 				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
-				case 0:
+				case Role::FOODSHARER:
 					$this->flashMessageHelper->info('Du musst erst Foodsaver werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
-				case 1:
+				case Role::FOODSAVER:
 					$this->flashMessageHelper->info('Du musst erst BetriebsverantwortlicheR werden');
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
@@ -227,9 +163,68 @@ class SettingsControl extends Control
 		}
 	}
 
+	private function handleQuizStatus(array $quiz, int $role): void
+	{
+		$fsId = $this->session->id();
+		$desc = $this->contentGateway->get(12);
+		$quizStatus = $this->quizGateway->getQuizStatus($role, $fsId);
+		switch ($quizStatus['status']) {
+			case QuizStatus::NEVER_TRIED:
+				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				break;
+
+			case QuizStatus::RUNNING:
+				$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+				break;
+
+			case QuizStatus::PASSED:
+				$this->confirmRole($role);
+				break;
+
+			case QuizStatus::FAILED:
+				$failCount = $this->quizSessionGateway->countSessions($fsId, $role, SessionStatus::FAILED);
+				$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+				break;
+
+			case QuizStatus::PAUSE:
+				if ($role == Role::FOODSAVER) {
+					$this->model->updateRole(Role::FOODSHARER, $this->foodsaver['rolle']);
+				}
+				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
+				$this->view->pause($quizStatus['wait'], $desc);
+				break;
+
+			case QuizStatus::PAUSE_ELAPSED:
+				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				break;
+
+			default:
+				$this->pageHelper->addContent($this->view->quizFailed($this->contentGateway->get(13)));
+		}
+	}
+
+	private function confirmRole(int $role): void
+	{
+		switch ($role) {
+			case Role::FOODSAVER:
+				$this->confirm_fs();
+				break;
+
+			case Role::STORE_MANAGER:
+				$this->confirm_bip();
+				break;
+
+			case Role::AMBASSADOR:
+				$this->confirm_bot();
+				break;
+
+			default:
+		}
+	}
+
 	private function confirm_fs()
 	{
-		if ($this->model->hasQuizCleared(1)) {
+		if ($this->model->hasQuizCleared(Role::FOODSAVER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
@@ -238,7 +233,7 @@ class SettingsControl extends Control
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $this->session->id());
 					if (!$this->session->may('fs')) {
-						$this->model->updateRole(1, $this->foodsaver['rolle']);
+						$this->model->updateRole(Role::FOODSAVER, $this->foodsaver['rolle']);
 					}
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Foodsaver');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
@@ -252,13 +247,13 @@ class SettingsControl extends Control
 
 	private function confirm_bip()
 	{
-		if ($this->model->hasQuizCleared(2)) {
+		if ($this->model->hasQuizCleared(Role::STORE_MANAGER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
-					$this->model->updateRole(2, $this->foodsaver['rolle']);
+					$this->model->updateRole(Role::STORE_MANAGER, $this->foodsaver['rolle']);
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
@@ -273,29 +268,18 @@ class SettingsControl extends Control
 	{
 		$this->pageHelper->addBread('Botschafter werden');
 
-		if ($this->model->hasQuizCleared(3)) {
+		if ($this->model->hasQuizCleared(Role::AMBASSADOR)) {
 			$showform = true;
-
-			$rolle = 3;
 
 			if ($this->submitted()) {
 				global $g_data;
 				$g_data = $_POST;
 
 				$check = true;
-				if (!isset($_POST['photo_public'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
-				}
 
 				if (empty($_POST['about_me_public'])) {
 					$check = false;
 					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');
-				}
-
-				if (!isset($_POST['tel_public'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
@@ -309,7 +293,7 @@ class SettingsControl extends Control
 				}
 
 				if ($check) {
-					$data = $this->dataHelper->unsetAll($_POST, array('photo_public', 'new_bezirk'));
+					$data = $this->dataHelper->unsetAll($_POST, array('new_bezirk'));
 					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
@@ -349,7 +333,7 @@ class SettingsControl extends Control
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getBezirk($this->session->getCurrentBezirkId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						$this->v_utils->v_form_select('time', array('values' => array(
 							array('id' => 1, 'name' => '3-5 Stunden'),
@@ -357,19 +341,6 @@ class SettingsControl extends Control
 							array('id' => 3, 'name' => '9-12 Stunden'),
 							array('id' => 4, 'name' => '13-15 Stunden'),
 							array('id' => 5, 'name' => '15-20 Stunden')
-						))) .
-						$this->v_utils->v_form_radio('photo_public', array('required' => true, 'values' => array(
-							array('id' => 1, 'name' => 'Ich bin einverstanden das Mein Name und Mein Foto veröffentlicht werden'),
-							array('id' => 2, 'name' => 'Bitte NUR meinen Namen veröffentlichen')
-						))) .
-						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
-										Händler, foodsharing-Freiwillge, Interessierte und die Presse
-										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . PLATFORM_MAILBOX_HOST . ')
-										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
-										hier alle Nummern an, die wir veröffentlichen dürfen und am
-										besten noch gewünschte Anrufzeiten.', 'required' => true, 'values' => array(
-							array('id' => 1, 'name' => 'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
 						))) .
 						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 
@@ -488,32 +459,6 @@ class SettingsControl extends Control
 				}
 			}
 
-			if (!empty($data['github'])) {
-				if (substr($data['github'], 0, 19) != 'https://github.com/') {
-					$data['github'] = 'https://github.com/' . $data['github'];
-				}
-
-				if (!$this->validUrl($data['github'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Mit Deiner github URL stimmt etwas nicht');
-				}
-			}
-
-			if (!empty($data['twitter'])) {
-				if (substr($data['twitter'], 0, 20) != 'https://twitter.com/') {
-					$data['twitter'] = 'https://twitter.com/' . $data['twitter'];
-				}
-
-				if (!$this->validUrl($data['twitter'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Mit Deiner twitter URL stimmt etwas nicht');
-				}
-			}
-
-			if (!empty($data['tox'])) {
-				$data['tox'] = preg_replace('/[^0-9A-Z]/', '', $data['tox']);
-			}
-
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
@@ -521,7 +466,7 @@ class SettingsControl extends Control
 				}
 
 				if (!isset($data['bezirk_id'])) {
-					$data['bezirk_id'] = $this->session->getCurrentBezirkId();
+					$data['bezirk_id'] = $this->session->getCurrentRegionId();
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					$this->session->refreshFromDatabase();
@@ -542,17 +487,11 @@ class SettingsControl extends Control
 		return true;
 	}
 
-	public function picture_box()
+	private function picture_box(): string
 	{
 		$photo = $this->foodsaverGateway->getPhoto($this->session->id());
 
-		if (!(file_exists('images/thumb_crop_' . $photo))) {
-			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png');
-		} else {
-			$p_cnt = $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
-		}
-
-		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
+		return $this->view->picture_box($photo);
 	}
 
 	private function handle_newmail()

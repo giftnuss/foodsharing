@@ -11,8 +11,7 @@ class StoreView extends View
 		return
 			'<div id="datepicker" style="height:220px;"></div>' .
 			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
-			$this->v_utils->v_form_select('fetchercount', array('values' => array(
-				array('id' => 0, 'name' => 'Termin fällt aus'),
+			$this->v_utils->v_form_select('fetchercount', array('selected' => 1, 'values' => array(
 				array('id' => 1, 'name' => '1 Abholer/in'),
 				array('id' => 2, 'name' => '2 Abholer/innen'),
 				array('id' => 3, 'name' => '3 Abholer/innen'),
@@ -58,11 +57,11 @@ class StoreView extends View
 		return $out;
 	}
 
-	public function betrieb_form($bezirk = false, $page = '', $lebensmittel_values, $chains, $categories, $status)
+	public function betrieb_form($region = false, $page = '', $lebensmittel_values, $chains, $categories, $status, $weightArray)
 	{
 		global $g_data;
 
-		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
+		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $region);
 
 		if (!isset($g_data['foodsaver'])) {
 			$g_data['foodsaver'] = array($this->session->id());
@@ -97,7 +96,7 @@ class StoreView extends View
 			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
-		return $this->v_utils->v_quickform('betrieb', array(
+		return $this->v_utils->v_quickform($this->translationHelper->s('betrieb'), array(
 			$bc,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name', ['required' => true]),
@@ -140,19 +139,12 @@ class StoreView extends View
 				array('id' => 0, 'name' => 'Nein')
 			))),
 			$this->v_utils->v_form_select('prefetchtime', array('values' => array(
+				array('id' => 604800, 'name' => '1 Woche'),
 				array('id' => 1209600, 'name' => '2 Wochen'),
 				array('id' => 1814400, 'name' => '3 Wochen'),
 				array('id' => 2419200, 'name' => '4 Wochen')
 			))),
-			$this->v_utils->v_form_select('abholmenge', ['values' => [
-				['id' => 1, 'name' => '1-3 kg'],
-				['id' => 2, 'name' => '3-5 kg'],
-				['id' => 3, 'name' => '5-10 kg'],
-				['id' => 4, 'name' => '10-20 kg'],
-				['id' => 5, 'name' => '20-30 kg'],
-				['id' => 6, 'name' => '40-50 kg'],
-				['id' => 7, 'name' => 'mehr als 50 kg']
-			]])
+			$this->v_utils->v_form_select('abholmenge', ['values' => $weightArray])
 		));
 	}
 }

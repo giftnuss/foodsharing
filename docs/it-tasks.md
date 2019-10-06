@@ -1,14 +1,16 @@
 # Die foodsharing-IT sucht HelferInnen 💻🔧
+[For the english version please click here.](it-tasks_EN.md)
+
 Lieber Interessent (w/m/d),
 
 es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
 Unsere Homepage ist das zentrale Werkzeug unserer Initiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich. 
 
-Was viele aber nicht wissen: Wir haben sehr bald **250.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **52.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
-**Dem gegenüber stehen im Schnitt etwa nur 4-5 ProgrammiererInnen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im März 2019 einen neuen Aufruf starten.
+Was viele aber nicht wissen: Wir haben mehr als **270.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **62.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
+**Dem gegenüber stehen im Schnitt etwa nur 5 ProgrammiererInnen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im Juni 2019 einen neuen Aufruf starten.
 
 ## Du hast jetzt bereits Lust bekommen?
-Melde dich gerne bei Slack https://slackin.yunity.org im Kanal/Gruppenchat **#foodsharing-dev oder sende uns eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network)** damit wir mit dir gemeinsam mögliche Aufgaben und Betätigungsfelder rund um die unten aufgelisteten Themen für dich finden können. Wenn diese beiden Kontaktwege dich abhalten, kannst du auch gerne [Peter](https://foodsharing.de/profile/116481 "Peters Profil") über die Webseite eine Nachricht schreiben. Wir sind ein tolles Team und wir haben bisher für jedeN die/der helfen wollte eine Aufgabe gefunden!
+Melde dich gerne bei Slack https://slackin.yunity.org im Kanal/Gruppenchat **#foodsharing-dev oder sende uns eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network)** damit wir mit dir gemeinsam mögliche Aufgaben und Betätigungsfelder rund um die unten aufgelisteten Themen für dich finden können. Wenn diese beiden Kontaktwege dich abhalten, kannst du auch gerne [Peter](https://foodsharing.de/profile/116481 "Peters Profil") über die Webseite eine Nachricht schreiben. Wir sind ein tolles Team und wir haben bisher für jedeN die/der helfen wollte eine Aufgabe gefunden.
 
 ## Wo sind all die Freiwilligen mit IT-Kenntnissen?
 
@@ -16,15 +18,26 @@ Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Pr
 
 ## Was benötigen wir?
 
-- ProgrammiererInnen !!!
+### ProgrammiererInnen
+- Android ProgrammiererInnen (nativ)
+- iOS-ProgrammiererInnen (nativ)
+- Web-EntwicklerInnen
+
+### Qualitätssicherung
 - Beta-TesterInnen
+- Issue-BetreuerInnen
+- Unit-Test-EntwicklerInnen
+
+### Design
 - GrafikdesignerInnen
+- Android-Frontend-DesignerInnen (Verbesserung des App-Designs)
+
+### Support
+- Webseiten-SupporterInnen (deutschsprachig)
 - IT-SupporterInnen
 - Technische Redakteure
-- Issue BetreuerInnen
-- Unit Test EntwicklerInnen
 - RecruiterInnen
-- ...
+
 
 ## Wie finden wir mehr UnterstützerInnen?
 
@@ -32,7 +45,7 @@ Frag doch einmal in Deinem Bezirk herum. Innerhalb von foodsharing, aber gerne a
 
 ## Was gibt es zu tun?
 Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgabe für dich. Mögliche Aufgaben sind unter anderem:
-- Die rund 230 derzeit gemeldeten Fehler oder Feature Wünsche angehen
+- Die rund 250 derzeit gemeldeten Fehler oder Feature Wünsche angehen
 - App für jeweils Android und iOS
 - Die vielen Botschafter und Botschafterinnen aber auch Mitglieder bei ihren IT-Problemen zu unterstützen
 - Die Plattform ins Englische transferieren
@@ -43,8 +56,8 @@ Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgab
 ## Wie kannst Du Dich einbringen?
 
 Wie schon gesagt, mach ordentlich Werbung für unsere IT und sende den Link zu diesen Informationen hier gerne weiter. Besonders schön wäre es aber natürlich, **Dich** dabei zu haben:
-1. Schau Dich doch mal auf unserem [Blog](https://devblog.foodsharing.de/index.de.html "foodsharing Entwickler Blog") um, oder in unserem [Contribution Guide](https://devdocs.foodsharing.de/contributing.html "foodsharing contributer's guide")!
-2. Sieh Dir die lange Liste unserer [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing Issues auf GitLab") an! Einige davon sind speziell für Anfänger markiert!
+1. Schau Dich doch mal auf unserem [Blog](https://devblog.foodsharing.de "foodsharing Entwickler Blog") um, oder in unserem [Contribution Guide](https://devdocs.foodsharing.network/contributing.html "foodsharing contributer's guide").
+2. Sieh Dir die lange Liste unserer [To-dos](https://gitlab.com/foodsharing-dev/foodsharing/issues "foodsharing Issues auf GitLab") an. Einige davon sind speziell für Anfänger markiert.
 3. Besonders freuen wir uns, wenn Du in unserem [Slack Chat](https://slackin.yunity.org "Programmierer Chat") vorbei schaust und wir im Kanal *#foodsharing-dev* mit Dir gemeinsam mögliche Aufgaben und Betätigungsfelder in der IT für dich finden.
 4. Wenn Du unsicher bist oder die englischen Programmiererseiten nicht verstehst, dann darfst Du uns gerne eine Mail schreiben oder auf [Peter](https://foodsharing.de/profile/116481 "Peters Profil") zukommen. Wir versuchen weiterzuhelfen.
 
@@ -52,7 +65,7 @@ Schickte uns auch gerne eine Mail an [it@foodsharing.network](mailto:it@foodshar
 
 
 ## Gibt es nicht noch 'ne nerdige Auflistung, um was es IT-technisch geht?
-Aber natürlich!
+Aber natürlich:
 
 ### Webseiten Front- und Backend
 - PHP (Symfony 4)
@@ -104,10 +117,10 @@ https://yunity.org/heartbeat
 
 Danke Dir, dass Du so lange gelesen hast. Mit einer fitten IT hätten wir so viel mehr Potential und es wäre natürlich generell toll, die vielen Aufgaben auf viele Schultern zu verteilen. Mit einem noch cooleren IT-Team können wir in guter Stimmung eigentlich alles umsetzen, was wir uns wünschen. Und man lernt nebenbei 'nen ganzen Haufen spannenden Kram. Wir freuen uns schon sehr darauf, Dich und Deine Bekannten bald im Team willkommen zu heißen.
 
-📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR! ❤️ ❤️**   
-https://devdocs.foodsharing.de/it-tasks.html  
+📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR. ❤️ ❤️**   
+https://devdocs.foodsharing.network/it-tasks.html  
 
 Herzliche Grüße von Eurem IT-Team!   
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
-(Letzte Änderung: 08.04.2019)
+(Letzte Änderung: 24.8.2019)

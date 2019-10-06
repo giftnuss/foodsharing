@@ -71,6 +71,24 @@ cd foodsharing
 ./scripts/start
 ```
 
+### Known Issues on Windows
+
+ - Changes in js, vue etc. aren't showing up
+
+In order to have the webpack-dev-server recognize changes you have to add this watchOptions block to ```client/serve.config.js```
+```
+[...]
+module.exports = {
+  [...]
+  devServer: {
+    watchOptions: {
+      poll: true
+    },
+    [...]
+```
+
+Note: Please make sure not to commit this file afterwards with your changes.
+
 ## Vagrant
 
 If you cannot use any of the above methods, then this should work with every common operation system.

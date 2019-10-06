@@ -74,9 +74,9 @@
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
             <li
               v-if="!isMobile"
-              v-b-tooltip
-              class="nav-item"
+              v-b-tooltip.hover.bottom
               title="Karte"
+              class="nav-item"
             >
               <a
                 :href="$url('map')"
@@ -111,9 +111,9 @@
         >
           <ul class="navbar-nav ml-auto">
             <li
-              v-b-tooltip
-              class="nav-item"
+              v-b-tooltip.hover.bottom
               title="Home"
+              class="nav-item"
             >
               <a
                 :href="$url('home')"
@@ -127,9 +127,9 @@
             </li>
             <li
               v-if="isMobile"
-              v-b-tooltip
-              class="nav-item"
+              v-b-tooltip.hover.bottom
               title="Karte"
+              class="nav-item"
             >
               <a
                 :href="$url('map')"
@@ -176,9 +176,7 @@
 
 <script>
 import ui from '@/stores/ui'
-import bTooltip from '@b/directives/tooltip/tooltip'
-import bCollapse from '@b/components/collapse/collapse'
-import bNavbarToggle from '@b/components/navbar/navbar-toggle'
+import { VBTooltip, BCollapse, BNavbarToggle } from 'bootstrap-vue'
 
 import MenuRegion from './MenuRegion'
 import MenuStores from './MenuStores'
@@ -197,8 +195,8 @@ import MenuLoggedout from './MenuLoggedout'
 
 export default {
   components: {
-    bCollapse,
-    bNavbarToggle,
+    BCollapse,
+    BNavbarToggle,
     MenuLoggedout,
     MenuRegion,
     MenuStores,
@@ -214,7 +212,7 @@ export default {
     Search,
     Login
   },
-  directives: { bTooltip },
+  directives: { VBTooltip },
   props: {
     fsId: {
       type: Number,
@@ -446,12 +444,11 @@ export default {
 
 // move the main content below the topbar
 div#main {
-    margin-top: 45px;
-
-    @media (max-width: 630px) {
-        // two line topbar
-        margin-top: 74px;
-    }
+  margin-top: 45px;
+  @media (max-width: 630px) {
+      // two line topbar
+      margin-top: 133px;
+  }
 }
 
 // following is applied on the initial <div> before the vue component gets injected

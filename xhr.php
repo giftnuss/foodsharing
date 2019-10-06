@@ -22,7 +22,6 @@ $csrf_whitelist = [
 	// 'addPinPost',
 	// 'childBezirke',
 	'bBubble',
-	// 'fsBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',
@@ -103,7 +102,7 @@ if (isset($_GET['f'])) {
 			die('Permission denied');
 		}
 
-		if (is_string($page) && ($page[0] == '{' || $page[0] == '[')) {
+		if (is_string($page) && (!trim($page) || $page[0] == '{' || $page[0] == '[')) {
 			// just assume it's an JSON, to prevent the browser from interpreting it as
 			// HTML, which could result in XSS possibilities
 			header('Content-Type: application/json');

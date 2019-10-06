@@ -53,7 +53,7 @@ class FoodsaverXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
-		$bezirk = $this->regionGateway->getBezirk($_GET['bid']);
+		$bezirk = $this->regionGateway->getRegion($_GET['bid']);
 		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
 
 		return array(
@@ -74,7 +74,7 @@ class FoodsaverXhr extends Control
 
 		return [
 			'status' => 1,
-			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshfoodsaver();'
+			'script' => 'pulseInfo("Foodsaver wurde entfernt");$("#fsform").html("");fsapp.refreshFoodsaver();'
 		];
 	}
 }

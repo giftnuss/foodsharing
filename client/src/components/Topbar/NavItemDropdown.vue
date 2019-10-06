@@ -27,7 +27,6 @@
     <div
       ref="menu"
       :class="menuClasses"
-      @mouseover="onMouseOver"
       @keydown="onKeydown"
     >
       <slot />
@@ -37,12 +36,12 @@
 
 <script>
 // modified version of boostrap-vue's b-nav-item-dropdown
-import idMixin from '@b/mixins/id'
-import dropdownMixin from '@b/mixins/dropdown'
-import bTooltip from '@b/components/tooltip/tooltip'
+import idMixin from 'bootstrap-vue/esm/mixins/id'
+import dropdownMixin from 'bootstrap-vue/esm/mixins/dropdown'
+import { BTooltip } from 'bootstrap-vue'
 
 export default {
-  components: { bTooltip },
+  components: { BTooltip },
   mixins: [idMixin, dropdownMixin],
   props: {
     noCaret: {

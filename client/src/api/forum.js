@@ -40,7 +40,7 @@ export function createPost (threadId, body) {
 }
 
 export function updatePost (postId, body) {
-  return put(`/forum/post`, {
+  return put('/forum/post', {
     body: body
   })
 }

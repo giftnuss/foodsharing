@@ -178,10 +178,10 @@ deploy:docs:
   dependencies:
   - build:docs
   script:
-  - rsync -avz --delete docs/dist/ "deploy@banana.foodsharing.de:docs-deploy/"
+  - rsync -avz --delete docs/dist/ "deploy@devdocs.foodsharing.network:/var/www/devdocs/htdocs/"
   environment:
     name: docs
-    url: https://devdocs.foodsharing.de
+    url: https://devdocs.foodsharing.network
   only:
   - master
   except:

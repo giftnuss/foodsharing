@@ -2,10 +2,13 @@
 
 namespace Foodsharing\Modules\Profile;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
 class ProfileXhr extends Control
@@ -13,21 +16,27 @@ class ProfileXhr extends Control
 	private $foodsaver;
 	private $storeModel;
 	private $bellGateway;
+	private $mailboxGateway;
 	private $regionGateway;
 	private $profileGateway;
+	private $storeGateway;
 
 	public function __construct(
 		ProfileView $view,
 		StoreModel $storeModel,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
-		ProfileGateway $profileGateway
+		MailboxGateway $mailboxGateway,
+		ProfileGateway $profileGateway,
+		StoreGateway $storeGateway
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
+		$this->storeGateway = $storeGateway;
 
 		parent::__construct();
 
@@ -46,7 +55,7 @@ class ProfileXhr extends Control
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
 				if ($this->session->may('orga') && (int)$fs['mailbox_id'] > 0) {
-					$this->foodsaver['mailbox'] = $this->model->getVal('name', 'mailbox', $fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
+					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($fs['mailbox_id']) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
 				/*
@@ -109,8 +118,8 @@ class ProfileXhr extends Control
 
 	public function history()
 	{
-		$bids = $this->regionGateway->getFsRegionIds($_GET['fsid']);
-		if ($this->session->may() && ($this->session->may('orga') || $this->session->isBotForA($bids, false, false))) {
+		$regionIds = $this->regionGateway->getFsRegionIds($_GET['fsid']);
+		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion($regionIds, false, false))) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);
@@ -128,29 +137,43 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function deleteFromSlot()
+	public function deleteAllDatesFromFoodsaver()
 	{
-		$betrieb = $this->storeModel->getBetriebBezirkID($_GET['bid']);
-
-		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($betrieb['bezirk_id'])) {
-			if ($this->storeModel->deleteFetchDate($_GET['fsid'], $_GET['bid'], date('Y-m-d H:i:s', $_GET['date']))) {
+		if ($this->session->isOrgaTeam()) {
+			if ($this->storeGateway->deleteAllDatesFromAFoodsaver($_GET['fsid'])) {
 				return array(
 					'status' => 1,
 					'script' => '
-					pulseSuccess("Termin gelöscht");
+					pulseSuccess("Alle Termine gelöscht");
 					reload();'
 				);
 			}
-
-			return array(
-				'status' => 1,
-				'script' => 'pulseError("Es ist ein Fehler aufgetreten!");'
-			);
 		}
 
 		return array(
 			'status' => 1,
-			'script' => 'pulseError("Du kannst nur Termine aus Deinem eigenen Bezirk löschen.");'
+			'script' => 'pulseError("Du kannst nicht alle Termine löschen!");'
+		);
+	}
+
+	public function deleteSinglePickup()
+	{
+		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
+
+		if ($this->session->isAdminFor($store['bezirk_id']) || $this->session->isOrgaTeam()) {
+			if ($this->storeGateway->removeFetcher($_GET['fsid'], $_GET['storeId'], Carbon::createFromTimestamp($_GET['date']))) {
+				return array(
+					'status' => 1,
+					'script' => '
+					pulseSuccess("Einzeltermin gelöscht");
+					reload();'
+				);
+			}
+		}
+
+		return array(
+			'status' => 1,
+			'script' => 'pulseError("Du kannst keine Einzeltermine löschen!");'
 		);
 	}
 }

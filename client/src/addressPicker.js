@@ -4,10 +4,10 @@ import PhotonAddressEngine from 'typeahead-address-photon'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
 
-let fsIcon = L.AwesomeMarkers.icon({
+const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
   markerColor: 'orange',
-  prefix: 'img'
+  prefix: 'fa'
 })
 
 let markers = L.featureGroup()
@@ -24,7 +24,7 @@ function showSelected (event, selected, map, engine) {
     icon: fsIcon,
     draggable: true
   }).on('dragend', function (event) {
-    let pos = event.target.getLatLng()
+    const pos = event.target.getLatLng()
     engine.reverseGeocode([pos.lat, pos.lng])
   }).addTo(markers)
   map.fitBounds(markers.getBounds())
@@ -33,21 +33,21 @@ function showSelected (event, selected, map, engine) {
 export function attachAddressPicker () {
   const data = [$('#lat').val(), $('#lon').val()]
   let center = [51, 12]
-  let initialZoom = 4
-  let map = L.map('map').setView(center, initialZoom)
+  const initialZoom = 4
+  const map = L.map('map').setView(center, initialZoom)
   setTimeout(() => (map.invalidateSize()), 400)
 
   L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
     zoomControl: true,
     maxZoom: 18,
-    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
+    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map)
 
-  let engine = new PhotonAddressEngine(
+  const engine = new PhotonAddressEngine(
     {
       url: 'https://photon.komoot.de',
       formatResult: function (feature) {
-        let prop = feature.properties
+        const prop = feature.properties
         return [prop.name || '', prop.street, prop.housenumber || '', prop.postcode, prop.city, prop.country].filter(Boolean).join(' ')
       },
       lang: 'de'
@@ -72,8 +72,8 @@ export function attachAddressPicker () {
   engine.bindDefaultTypeaheadEvent($('#addresspicker'))
   $(engine).bind('addresspicker:selected', function (event, selectedPlace) {
     showSelected(event, selectedPlace, map, engine)
-    let prop = selectedPlace.properties
-    let geo = selectedPlace.geometry.coordinates
+    const prop = selectedPlace.properties
+    const geo = selectedPlace.geometry.coordinates
     $('#lat').val(geo[1])
     $('#lon').val(geo[0])
     if (prop.postcode) {

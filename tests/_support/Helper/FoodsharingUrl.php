@@ -2,24 +2,26 @@
 
 namespace Helper;
 
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
 class FoodsharingUrl extends \Codeception\Module\Db
 {
-	public function storeUrl($id)
+	public function storeUrl($storeId)
 	{
-		return '/?page=fsbetrieb&id=' . (int)$id;
+		return '/?page=fsbetrieb&id=' . (int)$storeId;
 	}
 
-	public function storeEditUrl($id)
+	public function storeEditUrl($storeId)
 	{
-		return '/?page=betrieb&id=' . (int)$id . '&a=edit';
+		return '/?page=betrieb&id=' . (int)$storeId . '&a=edit';
 	}
 
-	public function storeListUrl($bid)
+	public function storeListUrl($storeId)
 	{
-		return '/?page=betrieb&bid=' . (int)$bid;
+		return '/?page=betrieb&bid=' . (int)$storeId;
 	}
 
 	public function storeNewUrl()
@@ -27,9 +29,9 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=betrieb&&a=new';
 	}
 
-	public function groupEditUrl($id)
+	public function groupEditUrl($groupId)
 	{
-		return '/?page=groups&sub=edit&id=' . (int)$id;
+		return '/?page=groups&sub=edit&id=' . (int)$groupId;
 	}
 
 	public function groupListUrl()
@@ -37,13 +39,13 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=groups';
 	}
 
-	public function forumThemeUrl($id, $bezirk_id = null)
+	public function forumThemeUrl($id, $regionId = null)
 	{
-		if (!isset($bezirk_id)) {
-			$bezirk_id = $this->grabFromDatabase('fs_bezirk_has_theme', 'bezirk_id', ['theme_id' => $id]);
+		if (!isset($regionId)) {
+			$regionId = $this->grabFromDatabase('fs_bezirk_has_theme', 'bezirk_id', ['theme_id' => $id]);
 		}
 
-		return '/?page=bezirk&bid=' . (int)$bezirk_id . '&sub=forum&tid=' . (int)$id;
+		return '/?page=bezirk&bid=' . (int)$regionId . '&sub=forum&tid=' . (int)$id;
 	}
 
 	public function forumUrl($id, $botforum = false)
@@ -88,13 +90,26 @@ class FoodsharingUrl extends \Codeception\Module\Db
 		return '/?page=settings&sub=general';
 	}
 
-	public function eventAddUrl($region)
+	public function eventAddUrl($regionId)
 	{
-		return '/?page=event&sub=add&bid=' . (int)$region;
+		return '/?page=event&sub=add&bid=' . (int)$regionId;
 	}
 
-	public function apiReportListForRegion($region)
+	public function apiReportListForRegion($regionId)
 	{
-		return 'api/report/region/' . (int)$region;
+		return 'api/report/region/' . (int)$regionId;
+	}
+
+	public function upgradeQuizUrl(int $quizRole): string
+	{
+		$result = '/?page=settings&sub=upgrade/up_';
+		switch ($quizRole) {
+			case Role::STORE_MANAGER:
+				return $result . 'bip';
+			case Role::AMBASSADOR:
+				return $result . 'bot';
+			default:
+				return $result . 'fs';
+		}
 	}
 }

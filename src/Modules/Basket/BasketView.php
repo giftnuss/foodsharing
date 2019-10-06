@@ -29,7 +29,7 @@ class BasketView extends View
 
 		$map->setSearchPanel('mapsearch');
 		$map->setMarkerCluster();
-		$map->setDefaultMarkerOptions('basket', 'green');
+		$map->setDefaultMarkerOptions('shopping-basket', 'green');
 
 		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">' . $map->render(
 			) . '</div></div>';
@@ -88,6 +88,7 @@ class BasketView extends View
 		$page->setSubTitle($this->getSubtitle($basket));
 
 		if ($wallposts) {
+			$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])), $this->translationHelper->s('warning'));
 			$page->addSection($wallposts, $this->translationHelper->s('wallboard'));
 		}
 		if ($this->session->may()) {
@@ -97,7 +98,7 @@ class BasketView extends View
 				$map = new vMap([$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
-				$map->setDefaultMarkerOptions('basket', 'green');
+				$map->setDefaultMarkerOptions('shopping-basket', 'green');
 
 				$map->setCenter($basket['lat'], $basket['lon']);
 

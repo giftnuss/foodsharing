@@ -21,14 +21,14 @@ class BellGateway extends BaseGateway
 	}
 
 	/**
-	 * @param int|int[] $foodsaver_ids
+	 * @param int|int[] $foodsavers
 	 * @param string[] $link_attributes
 	 * @param string[] $vars
 	 * @param \DateTime $expiration A DateTime object that defines when the time since when the bell will be outdated - null means it doesn't expire
 	 * @param \DateTime $time A DateTime object for the bell's time - null means current date and time
 	 */
 	public function addBell(
-		$foodsaver_ids,
+		$foodsavers,
 		string $title,
 		string $body,
 		string $icon,
@@ -39,8 +39,8 @@ class BellGateway extends BaseGateway
 		\DateTime $expiration = null,
 		\DateTime $time = null
 	): void {
-		if (!is_array($foodsaver_ids)) {
-			$foodsaver_ids = array($foodsaver_ids);
+		if (!is_array($foodsavers)) {
+			$foodsavers = array($foodsavers);
 		}
 
 		if ($link_attributes !== false) {
@@ -55,7 +55,7 @@ class BellGateway extends BaseGateway
 			$time = new \DateTime();
 		}
 
-		$bid = $this->db->insert(
+		$bellId = $this->db->insert(
 			'fs_bell',
 			[
 				'name' => $title,
@@ -70,13 +70,13 @@ class BellGateway extends BaseGateway
 			]
 		);
 
-		foreach ($foodsaver_ids as $id) {
-			if (is_array($id)) {
-				$id = $id['id'];
+		foreach ($foodsavers as $fs) {
+			if (is_array($fs)) {
+				$fs = $fs['id'];
 			}
 
-			$this->db->insert('fs_foodsaver_has_bell', ['foodsaver_id' => (int)$id, 'bell_id' => $bid, 'seen' => 0]);
-			$this->updateFoodsaverClient((int)$id);
+			$this->db->insert('fs_foodsaver_has_bell', ['foodsaver_id' => (int)$fs, 'bell_id' => $bellId, 'seen' => 0]);
+			$this->updateFoodsaverClient((int)$fs);
 		}
 	}
 
@@ -206,15 +206,15 @@ class BellGateway extends BaseGateway
 		return $this->db->exists('fs_bell', ['identifier' => $identifier]);
 	}
 
-	public function delBellForFoodsaver($id, $fsId): void
+	public function delBellForFoodsaver($bellId, $fsId): void
 	{
-		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => (int)$id]);
+		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => (int)$bellId]);
 
 		if (!$bellIsCloseable) {
 			return;
 		}
 
-		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$id, 'foodsaver_id' => (int)$fsId]);
+		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => (int)$bellId, 'foodsaver_id' => (int)$fsId]);
 		$this->updateFoodsaverClient($fsId);
 	}
 
@@ -232,10 +232,10 @@ class BellGateway extends BaseGateway
 		$this->updateMultipleFoodsaverClients($foodsaverIds);
 	}
 
-	public function setBellsAsSeen(array $bids, int $foodsaverId): void
+	public function setBellsAsSeen(array $bellIds, int $foodsaverId): void
 	{
 		$this->db->execute(
-			'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', array_map('intval', $bids)) . ') AND `foodsaver_id` =:fsId',
+			'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', array_map('intval', $bellIds)) . ') AND `foodsaver_id` =:fsId',
 			['fsId' => $foodsaverId]
 		);
 	}

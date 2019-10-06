@@ -92,12 +92,11 @@
 }
 
 .chatboxmessagecontent a {
-  color: #599022;
+  color: #533a20;
   text-decoration: none;
 }
 
 .chatboxmessagecontent a:hover {
-  color: #599022;
   text-decoration: underline;
 }
 
@@ -162,6 +161,22 @@
   height: 35px;
 }
 
+.chatboxmessage.my-message {
+  margin-left: unset;
+  margin-right: 1em;
+}
+
+.chatboxmessage.my-message .chatboxmessagefrom {
+  float: right;
+  margin: -5px -25px 0 0px;
+}
+
+.chatboxmessage.my-message .chatboxmessagecontent {
+  background: none repeat scroll 0 0 #64ae24;
+  color: #eee;
+
+}
+
 .chatboxmessagefrom .photo {
   display: block;
   margin-right: 4px;
@@ -173,7 +188,7 @@
 }
 
 .chatboxmessagecontent {
-  background: none repeat scroll 0 0 #f5f5b5;
+  background: none repeat scroll 0 0 #e1e1db;
   border-radius: 6px;
   color: #4a3520;
   display: block;
@@ -185,8 +200,12 @@
 
 .chatboxmessagecontent .time {
   display: block;
-  color: #a2986d;
+  color: #533a20;
   font-size: 11px;
+}
+
+.chatboxmessage.my-message .chatboxmessagecontent .time {
+  color: #f9f5e0;
 }
 
 .chatboxoptions {
@@ -311,12 +330,15 @@
 
 .conversation-list .msg, #conversation-list .names {
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .conversation-list .msg {
-  line-height: 20px;
+  height: 2.5em;
 }
 
 .conversation-list .names {
@@ -330,3 +352,28 @@
   color: #b4aba3;
   font-size: 11px;
 }
+
+.conversation-list .unread-1 .pics {
+  border: 1px solid black;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+ul.conversation-list li.unread-1 > a::before {
+  content: " ";
+  height: 10px;
+  width: 10px;
+  top: 0px;
+  right: 0px;
+  padding: 3px;
+  border: 2px solid #f9f5e0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  background: #f44336;
+  position: absolute;
+  color: #f9f5e0;
+  font-family: 'Open Sans', sans-serif;
+  z-index: 1;
+}
+

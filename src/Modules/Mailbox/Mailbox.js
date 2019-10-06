@@ -15,6 +15,7 @@ import {
   checkEmail
 } from '@/script'
 import './Mailbox.css'
+import i18n from '@/i18n'
 
 expose({
   mb_finishFile,
@@ -116,9 +117,9 @@ function mb_forward () {
 
 function mb_setMailbox (mb_id) {
   if ($('#edit-von').length > 0) {
-    let email = $(`#edit-von option.mb-${mb_id}`).text()
+    const email = $(`#edit-von option.mb-${mb_id}`).text()
     $(`#edit-von option.mb-${mb_id}`).remove()
-    let html = $('#edit-von').html()
+    const html = $('#edit-von').html()
     $('#edit-von').html('')
 
     $('#edit-von').html(`<option value="${mb_id}" class="mb-${mb_id}">${email}</option>${html}`)
@@ -151,7 +152,7 @@ function mb_send_message () {
     mbid = $('#edit-von').val()
   }
 
-  let attach = []
+  const attach = []
   let i = 0
   $('#et-file-list li').each(function () {
     attach[i] = {
@@ -170,6 +171,9 @@ function mb_send_message () {
   if (an.indexOf('@') == -1) {
     $('.edit-an')[0].focus()
     pulseInfo('Du musst einen Empfänger angeben')
+  } else if (an.indexOf('noreply') !== -1) {
+    $('.edit-an')[0].focus()
+    pulseInfo(i18n('mail.noreply_addresses_not_allowed'))
   } else {
     ajreq('send_message', {
       mb: mbid,
@@ -231,7 +235,7 @@ function u_addTypeHead () {
   $('.edit-an').on('typeahead:selected typeahead:autocompleted', function (e, datum) {
     window.setTimeout(() => (u_handleNewEmail(datum.value, $(this))), 100)
   }).on('blur', function () {
-    let $this = this
+    const $this = this
     if ($this.value != '' && !checkEmail($this.value)) {
       pulseError('Diese E-Mail-Adresse ist nicht korrekt')
       $this.focus()
@@ -243,10 +247,10 @@ function u_addTypeHead () {
 
 function u_handleNewEmail (email, el) {
   if (u_anHasChanged()) {
-    let availmail = []
+    const availmail = []
     let availmail_count = 0
     $('.edit-an').each(function () {
-      let $this = $(this)
+      const $this = $(this)
       if (!checkEmail($this.val()) || (availmail[$this.val()] != undefined)) {
         // $this.parent().parent().parent().remove();
       } else {

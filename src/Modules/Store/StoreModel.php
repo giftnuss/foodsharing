@@ -36,26 +36,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function addFetchDate($bid, $time, $fetchercount)
-	{
-		return $this->insert('
-			INSERT INTO `fs_fetchdate`
-			(
-				`betrieb_id`, 
-				`time`, 
-				`fetchercount`
-			) 
-			VALUES 
-			(
-				' . (int)$bid . ',
-				' . $this->dateval($time) . ',
-				' . (int)$fetchercount . '
-			)
-			ON DUPLICATE KEY UPDATE
-			`fetchercount` = ' . (int)$fetchercount . '
-		');
-	}
-
 	public function updateBetriebBezirk($betrieb_id, $bezirk_id)
 	{
 		return $this->update('UPDATE fs_betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);
@@ -94,11 +74,11 @@ class StoreModel extends Db
 		');
 	}
 
-	public function deldate($bid, $date)
+	public function deldate($storeId, $date)
 	{
-		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `date` = ' . $this->dateval($date));
+		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `date` = ' . $this->dateval($date));
 
-		return $this->del('DELETE FROM `fs_fetchdate` WHERE `betrieb_id` = ' . (int)$bid . ' AND `time` = ' . $this->dateval($date));
+		return $this->del('DELETE FROM `fs_fetchdate` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `time` = ' . $this->dateval($date));
 	}
 
 	public function listMyBetriebe()
@@ -126,14 +106,14 @@ class StoreModel extends Db
 		');
 	}
 
-	public function listUpcommingFetchDates($bid)
+	public function listUpcommingFetchDates($storeId)
 	{
 		if ($dates = $this->q('
 			SELECT 	`time`,
 					UNIX_TIMESTAMP(`time`) AS `time_ts`,
 					`fetchercount`
 			FROM 	fs_fetchdate
-			WHERE 	`betrieb_id` = ' . (int)$bid . '
+			WHERE 	`betrieb_id` = ' . (int)$storeId . '
 			AND 	`time` > NOW()
 		')
 		) {
@@ -153,47 +133,22 @@ class StoreModel extends Db
 		return false;
 	}
 
-	/* delete fetch dates a user signed up for.
-	 * Either a specific fetch date (fsid, bid and date set)
-	 * or all fetch dates for a store (only fsid, bid set)
-	 * or all fetch dates for a user (only fsid set)
-	 */
-	public function deleteFetchDate($fsid, $bid = null, $date = null)
+	public function signout($storeId, $fsId)
 	{
-		if ($date !== null && $bid !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` = ' . $this->dateval($date));
-			$this->storeGateway->updateBellNotificationForBiebs($bid);
-		} elseif ($bid !== null) {
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$bid . ' AND `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$this->storeGateway->updateBellNotificationForBiebs($bid);
-		} else {
-			$storeIdsThatWillBeDeleted = $this->qCol('SELECT `betrieb_id` FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
-			$result = $this->del('DELETE FROM `fs_abholer` WHERE `foodsaver_id` = ' . (int)$fsid . ' AND `date` > now()');
+		$storeId = (int)$storeId;
+		$fsId = (int)$fsId;
+		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' ');
+		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
 
-			foreach ($storeIdsThatWillBeDeleted as $storeId) {
-				$this->storeGateway->updateBellNotificationForBiebs($storeId);
-			}
+		if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
+			$this->messageModel->deleteUserFromConversation($tcid, $fsId, true);
 		}
-
-		return $result;
-	}
-
-	public function signout($bid, $fsid)
-	{
-		$bid = (int)$bid;
-		$fsid = (int)$fsid;
-		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' ');
-		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $bid . ' AND `foodsaver_id` = ' . $fsid . ' AND `date` > NOW()');
-
-		if ($tcid = $this->storeGateway->getBetriebConversation($bid)) {
-			$this->messageModel->deleteUserFromConversation($tcid, $fsid, true);
-		}
-		if ($scid = $this->storeGateway->getBetriebConversation($bid, true)) {
-			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$this->messageModel->deleteUserFromConversation($scid, $fsId, true);
 		}
 	}
 
-	public function getBetriebBezirkID($id)
+	public function getBetriebBezirkID($storeId)
 	{
 		$out = $this->qRow('
 			SELECT
@@ -201,7 +156,7 @@ class StoreModel extends Db
 
 			FROM 		`fs_betrieb`
 
-			WHERE 		`id` = ' . (int)$id);
+			WHERE 		`id` = ' . (int)$storeId);
 
 		return $out;
 	}
@@ -219,20 +174,7 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function get_betrieb_status()
-	{
-		$out = $this->q('
-				SELECT
-				`id`,
-				`name`
-				
-				FROM 		`fs_betrieb_status`
-				ORDER BY `name`');
-
-		return $out;
-	}
-
-	public function getOne_betrieb($id)
+	public function getOne_betrieb($storeId)
 	{
 		$out = $this->qRow('
 			SELECT
@@ -266,26 +208,26 @@ class StoreModel extends Db
 
 			FROM 		`fs_betrieb`
 
-			WHERE 		`id` = ' . (int)$id);
+			WHERE 		`id` = ' . (int)$storeId);
 
 		$out['lebensmittel'] = $this->qCol('
 				SELECT 		`lebensmittel_id`
 
 				FROM 		`fs_betrieb_has_lebensmittel`
-				WHERE 		`betrieb_id` = ' . (int)$id . '
+				WHERE 		`betrieb_id` = ' . (int)$storeId . '
 			');
 		$out['foodsaver'] = $this->qCol('
 				SELECT 		`foodsaver_id`
 
 				FROM 		`fs_betrieb_team`
-				WHERE 		`betrieb_id` = ' . (int)$id . '
+				WHERE 		`betrieb_id` = ' . (int)$storeId . '
 				AND 		`active` = 1
 			');
 
 		return $out;
 	}
 
-	public function getBetriebLeader($bid)
+	public function getBetriebLeader($storeId)
 	{
 		return $this->qCol('
 				SELECT 		t.`foodsaver_id`,
@@ -294,7 +236,7 @@ class StoreModel extends Db
 				FROM 		`fs_betrieb_team` t
 				INNER JOIN  `fs_foodsaver` fs ON fs.id = t.foodsaver_id
 
-				WHERE 		t.`betrieb_id` = ' . (int)$bid . '
+				WHERE 		t.`betrieb_id` = ' . (int)$storeId . '
 				AND 		t.active = 1
 				AND 		t.verantwortlich = 1
 				AND			fs.deleted_at IS NULL
@@ -335,6 +277,7 @@ class StoreModel extends Db
 						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
 						fs_betrieb.str,
 						fs_betrieb.hsnr,
+						CONCAT(fs_betrieb.lat,", ",fs_betrieb.lon) AS geo,
 						fs_betrieb.`betrieb_status_id`,
 						fs_bezirk.name AS bezirk_name
 
@@ -343,7 +286,6 @@ class StoreModel extends Db
 
 				WHERE 	fs_betrieb.bezirk_id = fs_bezirk.id
 				AND 	fs_betrieb.bezirk_id IN(' . implode(',', $this->regionGateway->listIdsForDescendantsAndSelf($bezirk_id)) . ')
-
 
 		');
 	}
@@ -526,62 +468,62 @@ class StoreModel extends Db
 		return $id;
 	}
 
-	public function acceptRequest($fsid, $bid)
+	public function acceptRequest($fsid, $storeId)
 	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
+		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-arequest-' . (int)$fsid);
 
-		if ($scid = $this->storeGateway->getBetriebConversation($bid, true)) {
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
 		}
 
-		if ($tcid = $this->storeGateway->getBetriebConversation($bid, false)) {
+		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
 			$this->messageModel->addUserToConversation($tcid, $fsid, true);
 		}
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 1, `stat_add_date` = NOW()
-					WHERE 		`betrieb_id` = ' . (int)$bid . '
+					WHERE 		`betrieb_id` = ' . (int)$storeId . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
 	}
 
-	public function warteRequest($fsid, $bid)
+	public function warteRequest($fsid, $storeId)
 	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
+		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
 		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-wrequest-' . (int)$fsid);
 
-		if ($scid = $this->storeGateway->getBetriebConversation($bid, true)) {
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageModel->addUserToConversation($scid, $fsid, true);
 		}
 
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 2
-					WHERE 		`betrieb_id` = ' . (int)$bid . '
+					WHERE 		`betrieb_id` = ' . (int)$storeId . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
 	}
 
-	public function denyRequest($fsid, $bid)
+	public function denyRequest($fsid, $storeId)
 	{
-		$betrieb = $this->getVal('name', 'betrieb', $bid);
+		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
 		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
-			'href' => '/?page=fsbetrieb&id=' . (int)$bid
+			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
@@ -589,12 +531,12 @@ class StoreModel extends Db
 
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`
-					WHERE 		`betrieb_id` = ' . (int)$bid . '
+					WHERE 		`betrieb_id` = ' . (int)$storeId . '
 					AND 		`foodsaver_id` = ' . (int)$fsid . '
 		');
 	}
 
-	public function teamRequest($fsid, $bid)
+	public function teamRequest($fsid, $storeId)
 	{
 		return $this->insert('
 			REPLACE INTO `fs_betrieb_team`
@@ -606,25 +548,25 @@ class StoreModel extends Db
 			)
 			VALUES
 			(
-				' . (int)$bid . ',
+				' . (int)$storeId . ',
 				' . (int)$fsid . ',
 				0,
 				0
 			)');
 	}
 
-	public function createTeamConversation($bid)
+	public function createTeamConversation($storeId)
 	{
 		$tcid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
-				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$bid . '
+				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$teamMembers = $this->storeGateway->getBetriebTeam($bid);
+		$teamMembers = $this->storeGateway->getStoreTeam($storeId);
 		if ($teamMembers) {
 			foreach ($teamMembers as $fs) {
 				$this->messageModel->addUserToConversation($tcid, $fs['id']);
@@ -634,17 +576,17 @@ class StoreModel extends Db
 		return $tcid;
 	}
 
-	public function createSpringerConversation($bid)
+	public function createSpringerConversation($storeId)
 	{
 		$scid = $this->messageModel->insertConversation(array(), true);
-		$betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid);
+		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
 		$this->update('
-				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$bid . '
+				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$springerMembers = $this->storeGateway->getBetriebSpringer($bid);
+		$springerMembers = $this->storeGateway->getBetriebSpringer($storeId);
 		if ($springerMembers) {
 			foreach ($springerMembers as $fs) {
 				$this->messageModel->addUserToConversation($scid, $fs['id']);
@@ -654,19 +596,19 @@ class StoreModel extends Db
 		return $scid;
 	}
 
-	public function addTeamMessage($bid, $message)
+	public function addTeamMessage($storeId, $message)
 	{
-		if ($betrieb = $this->storeGateway->getMyBetrieb($this->session->id(), $bid)) {
+		if ($betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
 			if (!is_null($betrieb['team_conversation_id'])) {
 				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
 			} elseif (is_null($betrieb['team_conversation_id'])) {
-				$tcid = $this->createTeamConversation($bid);
+				$tcid = $this->createTeamConversation($storeId);
 				$this->messageModel->sendMessage($tcid, $message);
 			}
 		}
 	}
 
-	public function addBetriebTeam($bid, $member, $verantwortlicher = false)
+	public function addBetriebTeam($storeId, $member, $verantwortlicher = false)
 	{
 		if (empty($member)) {
 			return false;
@@ -692,18 +634,18 @@ class StoreModel extends Db
 				$v = 1;
 			}
 			$member_ids[] = (int)$m;
-			$values[] = '(' . (int)$bid . ',' . (int)$m . ',' . $v . ',1,NOW())';
+			$values[] = '(' . (int)$storeId . ',' . (int)$m . ',' . $v . ',1,NOW())';
 		}
 
-		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . (int)$bid . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
+		$this->del('DELETE FROM `fs_betrieb_team` WHERE `betrieb_id` = ' . (int)$storeId . ' AND active = 1 AND foodsaver_id NOT IN(' . implode(',', $member_ids) . ')');
 
 		$sql = 'INSERT IGNORE INTO `fs_betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`,`stat_add_date`) VALUES ' . implode(',', $values);
 
-		if ($cid = $this->storeGateway->getBetriebConversation($bid)) {
+		if ($cid = $this->storeGateway->getBetriebConversation($storeId)) {
 			$this->messageModel->setConversationMembers($cid, $member_ids);
 		}
 
-		if ($sid = $this->storeGateway->getBetriebConversation($bid, true)) {
+		if ($sid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			foreach ($verantwortlicher as $user) {
 				$this->messageModel->addUserToConversation($sid, $user);
 			}
@@ -711,10 +653,10 @@ class StoreModel extends Db
 
 		if ($this->sql($sql)) {
 			$this->update('
-				UPDATE	`fs_betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . (int)$bid . '
+				UPDATE	`fs_betrieb_team` SET verantwortlich = 0 WHERE betrieb_id = ' . (int)$storeId . '
 			');
 			$this->update('
-				UPDATE	`fs_betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . (int)$bid . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
+				UPDATE	`fs_betrieb_team` SET verantwortlich = 1 WHERE betrieb_id = ' . (int)$storeId . ' AND foodsaver_id IN(' . implode(',', $verantwortlicher) . ')
 			');
 
 			return true;

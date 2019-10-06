@@ -12,7 +12,7 @@ const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = dev ? resolve('../assets') : resolve('../assets')
+const assetsPath = resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
@@ -38,7 +38,7 @@ plugins.push(
     // This is how the php app will know if it is a webpack-enabled module or not.
     apply (compiler) {
       compiler.hooks.emit.tapPromise('write-modules', compiler => {
-        let stats = compiler.getStats().toJson()
+        const stats = compiler.getStats().toJson()
         const data = {}
         for (const [entryName, { assets }] of Object.entries(stats.entrypoints)) {
           data[entryName] = assets.map(asset => join(stats.publicPath, asset))
@@ -118,6 +118,7 @@ module.exports = merge(webpackBase, {
         sourceMap: true
       })
     ],
+    runtimeChunk: true,
     splitChunks: {
       chunks: 'all',
       name: dev,

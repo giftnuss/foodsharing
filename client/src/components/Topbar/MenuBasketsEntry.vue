@@ -50,7 +50,7 @@
                   <div class="col nowrap text-right text-muted nhover">
                     {{ req.time | dateDistanceInWords }}
                   </div>
-                  <div class="text-right text-muted hover">
+                  <div class="col text-right text-muted hover">
                     <a
                       v-b-tooltip
                       @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
@@ -72,13 +72,13 @@
 </template>
 
 <script>
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { VBTooltip } from 'bootstrap-vue'
 import Avatar from '@/components/Avatar'
 import conv from '@/conv'
 
 export default {
   components: { Avatar },
-  directives: { bTooltip },
+  directives: { VBTooltip },
   props: {
     basket: {
       type: Object,

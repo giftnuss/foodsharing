@@ -49,7 +49,7 @@ group:
     join: Dieser Arbeitsgruppe beitreten
     safe: Änderungen speichern
   no_groups: Hier gibt es noch keine Arbeitsgruppen
-  quit_name: Team %name% verlassen
+  quit_name: Bezirk/Team %name% verlassen
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
@@ -101,8 +101,8 @@ register:
   login_surname: Nachname
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
-  have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff1: Ich habe die <a href="https://foodsharing.de/?page=legal" target="_blank" rel="noopener noreferrer nofollow">Datenschutzerklärung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank" rel="noopener noreferrer nofollow">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -131,9 +131,11 @@ terminology:
   admins: Administratoren
   wall: Pinnwand
   statistic: Statistik
+  reports: Regelverletzungen (Preview)
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
+  subgroup: Untergruppen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
@@ -152,9 +154,39 @@ no: Nein
 options: Optionen
 error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
+delete: Löschen
 
 store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
+
+pickup:
+  dates: Abholtermine
+  confirm: 'Bestätigen'
+  kick: Austragen
+  leave: Austragen
+  open_profile: Profil aufrufen
+  really_kick_user_date_title: '{name} für {date} austragen?'
+  really_leave_date_title: Für {date} austragen?
+  really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
+  really_leave_date: Du bist für diese Abholung verantwortlich. Bitte kümmere Dich eigenständig um Ersatz.
+  leave_pickup_ok: Ich habe bereits Ersatz
+  leave_pickup_message_team: Team benachrichtigen
+  leave_team_message_title: Nachricht ans Team
+  leave_team_message_template: Ihr Lieben, {date} ...
+  team_message_send_and_leave: Senden und austragen
+  team_message_success: Nachricht ans Team wurde erfolgreich versendet
+  join_title_date: Sicher?
+  really_join_date: Möchtest Du Dich verbindlich für die Abholung am {date} eintragen?
+  join_cancel: Doch nicht
+  join_agree: Ja, verbindlich eintragen
+  take_empty_slot: Hier eintragen
+  delete_title: Abholtermin löschen
+  really_delete_date: Möchtest du die Abholung am {date} wirklich löschen?
+  delete_not_empty: Aktuell sind noch Foodsaver eingetragen. Du kannst diese Aholung erst löschen, sobald sie leer ist.
+  edit_recurring_pickups: Regelmäßige Abholzeiten bearbeiten
+  add_onetime_pickup: Zusatztermin eintragen
+  slot_add: Slot hinzufügen
+  slot_remove: Slot entfernen
 
 forum:
   from: Von %name%
@@ -176,7 +208,7 @@ forum:
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
-  markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
+  markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
 
 chat:
   open_chat: Nachricht schreiben
@@ -210,6 +242,7 @@ reports:
   report_id: Meldungs-ID
   time: Zeitpunkt
   no_reports_fallback: Es sind noch keine Meldungen vorhanden
+  store: Zugeordneter Betrieb
 
 bell:
   no_bells: "Keine Benachrichtigungen"
@@ -271,7 +304,8 @@ genderlist:
   gender_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf alle Foodsaver, die dem Bezirk beigetreten sind."
   gender_home_district_table_caption: "Aufteilung des Merkmales 'Geschlecht' auf die Stammbezirk-Foodsaver"
   gender_table_header: "Geschlecht"
-  gender_divers: "divers (oder nicht gewählt)"
+  gender_divers: "divers"
+  gender_not_selected: "nicht gewählt"
   gender_male: "männlich"
   gender_female: "weiblich"
   number_table_header: "Anzahl"
@@ -281,6 +315,7 @@ pickuplist:
   day_tab: "Tag"
   week_tab: "Woche"
   month_tab: "Monat"
+  year_tab: "Jahr"
   time_table_header: "Zeitraum"
   NumberOfStores_table_header: "Anzahl Betriebe"
   NumberOfAppointments_table_header: "Anzahl Termine"
@@ -289,3 +324,6 @@ pickuplist:
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
+
+mail:
+  noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"

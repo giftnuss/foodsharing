@@ -3,12 +3,13 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { ajax, GET, goTo, isMob, nl2br } from '@/script'
+import { ajax, GET, goTo, isMob, nl2br, pulseError } from '@/script'
 import serverData from '@/server-data'
 import timeformat from '@/timeformat'
 import autoLink from '@/autoLink'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
+import { sendMessage } from '@/api/conversations'
 
 const conv = {
 
@@ -165,7 +166,7 @@ const conv = {
     conv.chatboxes[key].minimized = true
   },
 
-  checkInputKey: function (event, chatboxtextarea, cid) {
+  checkInputKey: async function (event, chatboxtextarea, cid) {
     var $ta = $(chatboxtextarea)
     var val = $ta.val().trim()
 
@@ -182,20 +183,14 @@ const conv = {
       // eslint-disable-next-line no-control-regex
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
-      ajax.req('msg', 'sendmsg', {
-        loader: false,
-        method: 'post',
-        data: {
-          c: cid,
-          b: val
-        },
-        complete: function () {
-          conv.hideLoader(cid)
-
-          // reload conversations
-          conversationStore.loadConversations()
-        }
-      })
+      try {
+        await sendMessage(cid, val)
+        conversationStore.loadConversations()
+      } catch (err) {
+        console.error(err)
+        pulseError('Beim versenden der Nachricht ist leider ein Fehler aufgetreten')
+      }
+      conv.hideLoader(cid)
     }
   },
 
@@ -301,15 +296,20 @@ const conv = {
    */
   settings: function (cid) {
     const key = this.getKey(cid)
-    this.chatboxes[key].el.children(`.chatboxhead`).children(`.settings`).toggle()
+    this.chatboxes[key].el.children('.chatboxhead').children('.settings').toggle()
   },
 
   /**
    * append an chat message to chat window with given array index attention not conversation id ;)
    */
   append: function (key, message) {
+  /**
+  * adding a class 'my-message' to current user's own messages
+  */
+    let ownMessageClass = ''
+    if (message.fs_id === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children(`.slimScrollDiv`).children(`.chatboxcontent`).append(`<div title="${message.time}" class="chatboxmessage"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**

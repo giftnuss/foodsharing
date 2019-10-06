@@ -4,9 +4,21 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 final class FoodsaverGateway extends BaseGateway
 {
+	private $forumFollowerGateway;
+
+	public function __construct(
+		Database $db,
+		ForumFollowerGateway $forumFollowerGateway
+	) {
+		parent::__construct($db);
+		$this->forumFollowerGateway = $forumFollowerGateway;
+	}
+
 	public function getFoodsaver($bezirk_id)
 	{
 		$and = ' AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
@@ -70,7 +82,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverBasics($fsid)
+	public function getFoodsaverBasics(int $fsId): array
 	{
 		if ($fs = $this->db->fetch('
 			SELECT 	fs.`name`,
@@ -86,8 +98,8 @@ final class FoodsaverGateway extends BaseGateway
 
 			FROM 	`fs_foodsaver` fs
 
-			WHERE fs.id = ' . (int)$fsid . '
-		')
+			WHERE fs.id = :fsId
+		', [':fsId' => $fsId])
 		) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
@@ -97,7 +109,7 @@ final class FoodsaverGateway extends BaseGateway
 			return $fs;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function getOne_foodsaver($id)
@@ -120,15 +132,11 @@ final class FoodsaverGateway extends BaseGateway
 				`geb_datum`,
 				`anmeldedatum`,
 				`photo`,
-				`photo_public`,
 				`about_me_public`,
 				`orgateam`,
 				`data`,
 				`rolle`,
 				`position`,
-				`tox`,
-				`github`,
-				`twitter`,
 				`homepage`
 			FROM 		`fs_foodsaver`
 			WHERE 		`id` = :id',
@@ -137,10 +145,10 @@ final class FoodsaverGateway extends BaseGateway
 
 		$bot = $this->db->fetchAll('
 			SELECT `fs_bezirk`.`name`,
-				   `fs_bezirk`.`id` 
+				   `fs_bezirk`.`id`
 			FROM `fs_bezirk`,
 				 fs_botschafter
-			WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id` 
+			WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
 			AND `fs_botschafter`.foodsaver_id = :id',
 			[':id' => $id]
 		);
@@ -168,9 +176,9 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE fs.id = `fs_botschafter`.`foodsaver_id`
 
-			AND `fs_botschafter`.`bezirk_id` = :id
+			AND `fs_botschafter`.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
@@ -257,10 +265,10 @@ final class FoodsaverGateway extends BaseGateway
 			'SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`)
 			AS `name`,`plz`,`stadt`,`anschrift`,`photo`
 			FROM `fs_foodsaver`
-			WHERE `active` = 1 
-			AND `bezirk_id` = :id 
+			WHERE `active` = 1
+			AND `bezirk_id` = :regionId
 			AND `lat` != "" ',
-			[':id' => $bezirk_id]
+			[':regionId' => $bezirk_id]
 		);
 	}
 
@@ -423,7 +431,6 @@ final class FoodsaverGateway extends BaseGateway
 	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
 	{
 		$rows_ins = 0;
-		$rows_del = 0;
 		if ($leave_admins) {
 			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . (int)$bezirk);
 			if ($admins) {
@@ -431,6 +438,7 @@ final class FoodsaverGateway extends BaseGateway
 			}
 		}
 		$ids = implode(',', array_map('intval', $foodsaver_ids));
+		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids, false);
 		if ($ids) {
 			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($bezirk) {
@@ -445,13 +453,12 @@ final class FoodsaverGateway extends BaseGateway
 		return array($rows_ins, $rows_del);
 	}
 
-	public function listActiveByRegion($id)
+	public function listFoodsaverByRegion(int $regionId)
 	{
-		return $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
-					fs.`nachname`,
 					fs.sleep_status
 
 			FROM 	`fs_foodsaver` fs,
@@ -461,10 +468,26 @@ final class FoodsaverGateway extends BaseGateway
 			AND     fs.deleted_at IS NULL
 			AND 	c.bezirk_id = :id
 			AND 	c.active = 1
-			AND 	fs.sleep_status = 0
-
 			ORDER BY fs.`name`
-		', ['id' => $id]);
+		', ['id' => $regionId]);
+
+		return array_map(function ($fs) {
+			if ($fs['photo']) {
+				$image = '/images/50_q_' . $fs['photo'];
+			} else {
+				$image = '/img/50_q_avatar.png';
+			}
+
+			return [
+				'user' => [
+					'id' => $fs['id'],
+					'name' => $fs['name'],
+					'sleep_status' => $fs['sleep_status']
+				],
+				'size' => 50,
+				'imageUrl' => $image
+			];
+		}, $res);
 	}
 
 	public function listActiveWithFullNameByRegion($id)
@@ -488,28 +511,6 @@ final class FoodsaverGateway extends BaseGateway
 			AND 	fb.bezirk_id = :id
 			AND 	fb.`active` = 1
 			AND		fs.deleted_at IS NULL
-		', ['id' => $id]);
-	}
-
-	public function listInactiveByRegion($id)
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.sleep_status
-
-			FROM 	`fs_foodsaver` fs,
-					`fs_foodsaver_has_bezirk` c
-
-			WHERE 	c.`foodsaver_id` = fs.id
-			AND     fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
-			AND 	c.active = 1
-			AND 	fs.sleep_status > 0
-
-			ORDER BY fs.`name`
 		', ['id' => $id]);
 	}
 
@@ -655,9 +656,6 @@ final class FoodsaverGateway extends BaseGateway
 			nachname = NULL,
 			anschrift = NULL,
 			telefon = NULL,
-			tox = NULL,
-			github = NULL,
-			twitter = NULL,
 			handy = NULL,
 			geb_datum = NULL,
 			deleted_at = NOW()
@@ -693,10 +691,6 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function updateProfile($fs_id, $data)
 	{
-		if (!isset($data['photo_public'])) {
-			$data['photo_public'] = 0;
-		}
-
 		$fields = [
 			'bezirk_id',
 			'plz',
@@ -708,12 +702,8 @@ final class FoodsaverGateway extends BaseGateway
 			'handy',
 			'geb_datum',
 			'about_me_public',
-			'photo_public',
 			'homepage',
-			'twitter',
-			'github',
-			'position',
-			'tox'
+			'position'
 		];
 
 		$fieldsToStripTags = [
@@ -726,10 +716,7 @@ final class FoodsaverGateway extends BaseGateway
 			'handy',
 			'about_me_public',
 			'homepage',
-			'twitter',
-			'github',
-			'position',
-			'tox'
+			'position'
 		];
 
 		$clean_data = [];
@@ -790,9 +777,21 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+
+		$this->forumFollowerGateway->deleteForumSubscription($bezirk_id, $foodsaver_id);
+
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
 		if ($mainRegion_id === $bezirk_id) {
 			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);
 		}
+	}
+
+	public function setQuizRole(int $fsId, int $quizRole): int
+	{
+		return $this->db->update(
+			'fs_foodsaver',
+			['quiz_rolle' => $quizRole],
+			['id' => $fsId]
+		);
 	}
 }

@@ -42,15 +42,20 @@ class RegionRestController extends AbstractFOSRestController
 	 */
 	public function joinRegionAction($regionId)
 	{
-		$this->validateRegionOrThrowException($regionId);
+		if (!$this->regionGateway->getRegion($regionId)) {
+			throw new HttpException(404);
+		}
+		if (!$this->regionPermissions->mayJoinRegion($regionId)) {
+			throw new HttpException(403);
+		}
 
-		$region = $this->regionGateway->getBezirk($regionId);
+		$region = $this->regionGateway->getRegion($regionId);
 
 		$sessionId = $this->session->id();
 
 		$this->regionGateway->linkBezirk($sessionId, $regionId);
 
-		if (!$this->session->getCurrentBezirkId()) {
+		if (!$this->session->getCurrentRegionId()) {
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
@@ -73,25 +78,5 @@ class RegionRestController extends AbstractFOSRestController
 		$view = $this->view([], 200);
 
 		return $this->handleView($view);
-	}
-
-	private function validateRegionOrThrowException($regionId)
-	{
-		$this->throwExceptionIfRegionDoesNotExist($regionId);
-		$this->throwExceptionIfJoiningRegionIsNotAllowed($regionId);
-	}
-
-	private function throwExceptionIfRegionDoesNotExist($regionId)
-	{
-		if (!$this->regionGateway->getBezirk($regionId)) {
-			throw new HttpException(404);
-		}
-	}
-
-	private function throwExceptionIfJoiningRegionIsNotAllowed($regionId)
-	{
-		if (!$this->regionPermissions->mayJoinRegion($regionId)) {
-			throw new HttpException(403);
-		}
 	}
 }

@@ -13,7 +13,7 @@ services:
         - [initIfCookieExists]
 
     Twig_Loader_Filesystem:
-        class: Twig_Loader_Filesystem
+        class: Twig\Loader\FilesystemLoader
         calls:
             - [addPath, ['views']]
             - [addPath, ['vendor/symfony/twig-bridge/Resources/views/']]
@@ -42,7 +42,7 @@ services:
     Twig\RuntimeLoader\ContainerRuntimeLoader:
 
     Twig_Extension_Debug:
-        class: Twig_Extension_Debug
+        class: Twig\Extension\DebugExtension
 
     Twig_Extension_Intl:
         class: Twig_Extensions_Extension_Intl
@@ -162,3 +162,13 @@ services:
             - { name: kernel.event_listener, event: kernel.controller }
         arguments:
             - "@annotation_reader"
+
+    mailer.transport:
+        class: Swift_SmtpTransport
+        arguments:
+            - !php/const MAILER_HOST
+
+    Swift_Mailer:
+        class: Swift_Mailer
+        arguments:
+            - '@mailer.transport'

@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class BlogControl extends Control
 {
@@ -125,17 +126,17 @@ class BlogControl extends Control
 
 			$this->pageHelper->addBread($this->translationHelper->s('bread_new_blog_entry'));
 
-			$bezirke = $this->session->getRegions();
+			$regions = $this->session->getRegions();
 			if (!$this->session->may('orga')) {
-				$bot_ids = $this->session->getBotBezirkIds();
-				foreach ($bezirke as $k => $v) {
-					if ($v['type'] != 7 || !in_array($v['id'], $bot_ids)) {
-						unset($bezirke[$k]);
+				$bot_ids = $this->session->getMyAmbassadorRegionIds();
+				foreach ($regions as $k => $v) {
+					if ($v['type'] != Type::WORKING_GROUP || !in_array($v['id'], $bot_ids)) {
+						unset($regions[$k]);
 					}
 				}
 			}
 
-			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke, true));
+			$this->pageHelper->addContent($this->view->blog_entry_form($regions, true));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
@@ -172,9 +173,9 @@ class BlogControl extends Control
 			$this->pageHelper->addBread($this->translationHelper->s('bread_edit_blog_entry'));
 
 			$this->dataHelper->setEditData($data);
-			$bezirke = $this->session->getRegions();
+			$regions = $this->session->getRegions();
 
-			$this->pageHelper->addContent($this->view->blog_entry_form($bezirke));
+			$this->pageHelper->addContent($this->view->blog_entry_form($regions));
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 				$this->routeHelper->pageLink('blog', 'back_to_overview')

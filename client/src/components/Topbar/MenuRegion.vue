@@ -101,6 +101,14 @@
         >
           <i class="fas fa-address-card" />Ausweise
         </a>
+        <a
+          v-if="region.isBot"
+          :href="$url('reports', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
+        </a>
       </b-collapse>
     </div>
     <div
@@ -118,15 +126,13 @@
   </b-nav-item-dropdown>
 </template>
 <script>
-import bCollapse from '@b/components/collapse/collapse'
-import bNavItemDropdown from '@b/components/nav//nav-item-dropdown'
-import bToggle from '@b/directives/toggle/toggle'
+import { BCollapse, BNavItemDropdown, VBToggle } from 'bootstrap-vue'
 
 import { becomeBezirk } from '@/script'
 
 export default {
-  components: { bCollapse, bNavItemDropdown },
-  directives: { bToggle },
+  components: { BCollapse, BNavItemDropdown },
+  directives: { VBToggle },
   props: {
     regions: {
       type: Array,

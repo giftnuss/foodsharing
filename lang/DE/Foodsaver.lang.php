@@ -59,3 +59,4 @@ $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
 $g_lang['inactive'] = 'Inaktive ';
 $g_lang['fs_in'] = 'Foodsaver in ';
 $g_lang['fs_list_not_logged_for_6_months'] = ', die sich 6 Monate nicht eingeloggt haben.';
+$g_lang['warning_of_address_change'] = '<b>Warnung bzgl. Adressänderung</b><br>Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den <a href="/?page=settings&sub=general">Einstellungen</a> ändert.';
