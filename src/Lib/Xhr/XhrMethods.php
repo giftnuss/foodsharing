@@ -365,18 +365,6 @@ class XhrMethods
 		return json_encode(array('status' => 0));
 	}
 
-	public function xhr_fsBubble($data)
-	{
-		if ($b = $this->foodsaverGateway->getOne_foodsaver($data['id'])) {
-			return json_encode(array(
-				'status' => 1,
-				'html' => $this->xhrViewUtils->fsBubble($b)
-			));
-		}
-
-		return json_encode(array('status' => 0));
-	}
-
 	public function xhr_loadMarker($data)
 	{
 		$out = array();

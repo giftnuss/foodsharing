@@ -114,6 +114,7 @@
 - Set width 50px for user pics in region member list !1080 @chriswalg
 - Put the footer on pages with less content at the bottom of the page !1087 #590 @chriswalg
 - Bugfix for end date being required when creating single-day event !1084 @tihar
+- Removed the obsolete and insecure foodsaver bubble for our map !1093 @peter.toennies
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
