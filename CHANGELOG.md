@@ -49,6 +49,7 @@
 - Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
 - Link avatar pics to user profile at report. !1047 @moffer
 - Prevent email form from sending mails to "noreply" addresses. Blocked by a warning !1065 @jofranz
+- Adding apple-app-site-association file to allow Universal Linking in our possible apps !1082 @rastadapasta
 
 ## Bugfixes
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
