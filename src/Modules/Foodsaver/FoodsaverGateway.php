@@ -651,7 +651,7 @@ final class FoodsaverGateway extends BaseGateway
 			lon = NULL,
 			photo = NULL,
 			email = NULL,
-			passwd = NULL,
+			password = NULL,
 			name = NULL,
 			nachname = NULL,
 			anschrift = NULL,

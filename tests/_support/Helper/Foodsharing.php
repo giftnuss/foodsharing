@@ -85,7 +85,9 @@ class Foodsharing extends \Codeception\Module\Db
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
 			'token' => uniqid()
 		], $extra_params);
-		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
+		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
+			'time_cost' => 1
+		]);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
