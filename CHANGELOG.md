@@ -1,3 +1,6 @@
+# 2019-10-07 Hotfix
+- nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
+
 # 2019-10-06
 
 Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
@@ -13,7 +16,7 @@ And we have even included some new features for you.
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
-- pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
+- pickup list includes now stores in sub-districts, year added, divers separated !906 @fs_k
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 - Added active foodsaver and jumper count to store popup on map !920 #620 @fs_k
@@ -57,7 +60,7 @@ And we have even included some new features for you.
 - Adding apple-app-site-association file to allow Universal Linking in our possible apps !1082 @rastadapasta
 
 ## Bugfixes
-- restrict pickupstatistic on country level to orga !1073 @fs_k
+- restrict pickup statistic on country level to orga !1073 @fs_k
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
@@ -153,6 +156,7 @@ And we have even included some new features for you.
 # 2019-06-17 Hotfix
 - Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
 
+    
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
@@ -171,7 +175,7 @@ The frontend does not yet follow that behaviour (showing pickup slots always for
 
 # 2019-05-17
 Hey again,
-another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
+another release for you. Nothing big, but a lot of small. Most noticeable things will be changed email templates as well as more buttons which properly work on mobile now.
 
 ## Major changes
 

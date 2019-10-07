@@ -415,6 +415,8 @@ class BasketGateway extends BaseGateway
 			'
 			SELECT
 				b.id,
+			    b.time,
+			    UNIX_TIMESTAMP(b.`time`) AS time_ts,
 				b.picture,
 				b.description,
 				b.lat,
@@ -425,10 +427,14 @@ class BasketGateway extends BaseGateway
 					cos(radians(b.lon) - radians(:lon)) +
 					sin(radians(:lat1)) *
 					sin(radians(b.lat)))) AS distance,
-				b.until
+				b.until,
+				fs.name AS fs_name
 			FROM
-				fs_basket b
+				fs_basket b,
+				fs_foodsaver fs	
 			WHERE
+				b.foodsaver_id = fs.id	
+			AND
 				b.status = :status
 			AND
 				foodsaver_id != :fs_id
