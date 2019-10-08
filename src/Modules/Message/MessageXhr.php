@@ -73,7 +73,14 @@ final class MessageXhr extends Control
 		$id = (int)$_GET['id'];
 		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
 			$xhr = new Xhr();
-			$xhr->addData('member', $member);
+			// $xhr->addData('member', $member);
+			$xhr->addData('member', array_map(function ($m) {
+				return [
+					'id' => $m['id'],
+					'name' => $m['name'],
+					'photo' => $m['photo']
+				];
+			}, $member));
 			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
 			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
@@ -236,6 +243,17 @@ final class MessageXhr extends Control
 			// At some point there should always the raw input handled, which the user has entered
 			// and served over a proper API endpoint
 
+			$conversations = array_map(function ($c) {
+				$c['member'] = array_map(function ($m) {
+					return [
+						'id' => $m['id'],
+						'name' => $m['name'],
+						'photo' => $m['photo']
+					];
+				}, $c['member']);
+
+				return $c;
+			}, $conversations);
 			if (isset($_GET['raw']) && $_GET['raw']) {
 				$xhr->addData('convs', array_map(function ($c) {
 					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
@@ -245,6 +263,13 @@ final class MessageXhr extends Control
 					if (isset($c['last_message'])) {
 						$c['last_message'] = html_entity_decode($c['last_message']);
 					}
+					$c['member'] = array_map(function ($m) {
+						return [
+							'id' => $m['id'],
+							'name' => $m['name'],
+							'photo' => $m['photo']
+						];
+					}, $c['member']);
 
 					return $c;
 				}, $conversations));
