@@ -1,5 +1,6 @@
-# 2019-10-07 Hotfix
+# 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
+- remove email and gender from some responses in MessageXhr.php !1098
 
 # 2019-10-06
 
