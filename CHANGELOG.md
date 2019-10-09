@@ -1,3 +1,8 @@
+# Unreleased
+
+## Bugfixes
+- fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
+
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
 - remove email and gender from some responses in MessageXhr.php !1098
