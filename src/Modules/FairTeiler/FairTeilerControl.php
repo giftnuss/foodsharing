@@ -383,7 +383,7 @@ class FairTeilerControl extends Control
 
 	private function mayEdit(): bool
 	{
-		return $this->session->isAdminFor($this->regionId) ||
+		return (isset($this->regionId) && $this->session->isAdminFor($this->regionId)) ||
 			$this->session->isOrgaTeam() ||
 			(
 				isset($this->follower['all'][$this->session->id()]) &&
