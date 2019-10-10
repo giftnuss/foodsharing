@@ -455,7 +455,7 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
-					$this->flashMessageHelper->error('Mit Deiner Homepage URL stimmt etwas nicht');
+					$this->flashMessageHelper->error('Mit Deiner Homepage-URL stimmt etwas nicht');
 				}
 			}
 
