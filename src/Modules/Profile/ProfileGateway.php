@@ -44,7 +44,6 @@ final class ProfileGateway extends BaseGateway
 					fs.`geb_datum`,
 					fs.`anmeldedatum`,
 					fs.`photo`,
-					fs.`photo_public`,
 					fs.`about_me_public`,
 					fs.`orgateam`,
 					fs.`data`,
@@ -104,6 +103,7 @@ final class ProfileGateway extends BaseGateway
 				WHERE 	r.rater_id = fs.id
 				AND 	r.foodsaver_id = :fs_id
 				AND 	r.ratingtype = 2
+				ORDER BY time DESC
 		';
 		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id]);
 

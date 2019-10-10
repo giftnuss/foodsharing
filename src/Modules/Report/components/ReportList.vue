@@ -2,9 +2,9 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        {{ $i18n('reports.all_reports') }} (<span v-if="reports.length">
-          {{ reports.length }}
-        </span>)
+        {{ $i18n('reports.all_reports') }} <span v-if="reports.length">
+          ({{ reports.length }})
+        </span>
       </div>
       <div
         v-if="reports.length"
@@ -22,16 +22,20 @@
             slot-scope="row"
           >
             <div class="avatars">
-              <Avatar
-                :url="row.item.fs_photo"
-                :sleep-status="0"
-                :size="35"
-              />
-              <Avatar
-                :url="row.item.rp_photo"
-                :sleep-status="0"
-                :size="35"
-              />
+              <a :href="`/profile/${row.item.fs_id}`">
+                <Avatar
+                  :url="row.item.fs_photo"
+                  :sleep-status="0"
+                  :size="35"
+                />
+              </a>
+              <a :href="`/profile/${row.item.rp_id}`">
+                <Avatar
+                  :url="row.item.rp_photo"
+                  :sleep-status="0"
+                  :size="35"
+                />
+              </a>
             </div>
           </template>
 
@@ -51,20 +55,24 @@
             slot-scope="row"
           >
             <div class="report">
-              <p><strong>{{ $i18n('reports.report_id') }}:</strong> {{ row.item.rp_id }}</p>
-              <p><strong>{{ $i18n('reports.time') }}:</strong> {{ row.item.time }}</p>
+              <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>
+              <p><strong>{{ $i18n('reports.time') }}</strong>: {{ row.item.time }}</p>
+              <p v-if="row.item.betrieb_id !== 0">
+                <strong>{{ $i18n('reports.store') }}</strong>: <a :href="`/?page=fsbetrieb&id=${row.item.betrieb_id}`">
+                  {{ row.item.betrieb_name }}</a> ({{ row.item.betrieb_id }})
+              </p>
               <p>
-                <strong>{{ $i18n('reports.about') }}</strong><a :href="`/profile/${row.item.fs_id}`">
+                <strong>{{ $i18n('reports.about') }}</strong>:<a :href="`/profile/${row.item.fs_id}`">
                   {{ row.item.fs_name }} {{ row.item.fs_nachname }}
-                </a>
+                </a> ({{ row.item.fs_id }})
               </p>
               <p>
-                <strong>{{ $i18n('reports.from') }}:</strong><a :href="`/profile/${row.item.rp_id}`">
+                <strong>{{ $i18n('reports.from') }}</strong>:<a :href="`/profile/${row.item.rp_id}`">
                   {{ row.item.rp_name }} {{ row.item.rp_nachname }}
-                </a>
+                </a> ({{ row.item.rp_id }})
               </p>
-              <p><strong>{{ $i18n('reports.reason') }}:</strong> {{ row.item.tvalue }}</p>
-              <p><strong>{{ $i18n('reports.message') }}:</strong> {{ row.item.msg }}</p>
+              <p><strong>{{ $i18n('reports.reason') }}</strong>: {{ row.item.tvalue }}</p>
+              <p><strong>{{ $i18n('reports.message') }}</strong>: {{ row.item.msg }}</p>
             </div>
           </template>
         </b-table>
@@ -88,15 +96,14 @@
 </template>
 
 <script>
-import bTable from '@b/components/table/table'
-import bPagination from '@b/components/pagination/pagination'
-import bButton from '@b/components/button/button'
+
+import { BTable, BPagination, BButton } from 'bootstrap-vue'
 import * as api from '@/api/report'
 
 import Avatar from '@/components/Avatar'
 
 export default {
-  components: { Avatar, bTable, bPagination, bButton },
+  components: { Avatar, BTable, BPagination, BButton },
   props: {
     regionId: {
       type: String,

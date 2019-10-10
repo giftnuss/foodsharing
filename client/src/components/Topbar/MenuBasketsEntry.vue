@@ -72,13 +72,13 @@
 </template>
 
 <script>
-import bTooltip from '@b/directives/tooltip/tooltip'
+import { VBTooltip } from 'bootstrap-vue'
 import Avatar from '@/components/Avatar'
 import conv from '@/conv'
 
 export default {
   components: { Avatar },
-  directives: { bTooltip },
+  directives: { VBTooltip },
   props: {
     basket: {
       type: Object,

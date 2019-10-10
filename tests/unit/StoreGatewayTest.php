@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 class StoreGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -66,7 +68,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$fetcher = 2;
 		$fsid = $this->foodsaver['id'];
 		$this->tester->addRecurringPickup($store['id'], ['time' => $time, 'dow' => $dow, 'fetcher' => $fetcher]);
-		$regularSlots = $this->gateway->getRegularPickupSlots($store['id']);
+		$regularSlots = $this->gateway->getRegularPickups($store['id']);
 		$this->assertEquals([
 			[
 				'dow' => 3,
@@ -74,7 +76,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'fetcher' => $fetcher
 			]
 		], $regularSlots);
-		$this->gateway->addFetcher($fsid, $store['id'], new DateTime($datetime));
+		$this->gateway->addFetcher($fsid, $store['id'], new Carbon($datetime));
 		$fetcherList = $this->gateway->listFetcher($store['id'], [$datetime]);
 
 		$this->assertEquals([
@@ -91,17 +93,16 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testGetIrregularPickupDate()
 	{
 		$store = $this->tester->createStore($this->region_id);
-		$date = '2018-07-19 12:35:00';
-		$expectedIsoDate = '2018-07-19T12:35:00Z';
+		$expectedIsoDate = '2018-07-19T10:35:00Z';
 		$fetcher = 1;
-		$internalDate = DateTime::createFromFormat(DATE_ATOM, $expectedIsoDate);
-		$this->assertEquals($internalDate->format('Y-m-d H:i:s'), $date);
+		$internalDate = Carbon::createFromFormat(DATE_ATOM, $expectedIsoDate);
+		$date = $internalDate->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
 		$this->tester->addPickup($store['id'], ['time' => $date, 'fetchercount' => $fetcher]);
-		$irregularSlots = $this->gateway->getSinglePickupSlots($store['id'], $internalDate);
+		$irregularSlots = $this->gateway->getOnetimePickups($store['id'], $internalDate);
 
 		$this->assertEquals([
 			[
-			'date' => $date,
+			'date' => $internalDate->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s'),
 			'fetcher' => $fetcher
 		]
 		], $irregularSlots);
@@ -110,13 +111,25 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testIsInTeam()
 	{
 		$store = $this->tester->createStore($this->region_id);
-		$this->assertFalse(
-			$this->gateway->isInTeam($this->foodsaver['id'], $store['id'])
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::NoMember,
+			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $store['id'])
 		);
 
 		$this->tester->addStoreTeam($store['id'], $this->foodsaver['id']);
-		$this->assertTrue(
-			$this->gateway->isInTeam($this->foodsaver['id'], $store['id'])
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Member,
+			$this->gateway->getUserTeamStatus($this->foodsaver['id'], $store['id'])
+		);
+
+		$coordinator = $this->tester->createStoreCoordinator();
+		$this->tester->addStoreTeam($store['id'], $coordinator['id'], true);
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::Coordinator,
+			$this->gateway->getUserTeamStatus($coordinator['id'], $store['id'])
+		);
+
+		$waiter = $this->tester->createFoodsaver();
+		$this->tester->addStoreTeam($store['id'], $waiter['id'], false, true);
+		$this->assertEquals(\Foodsharing\Modules\Store\TeamStatus::WaitingList,
+			$this->gateway->getUserTeamStatus($waiter['id'], $store['id'])
 		);
 	}
 
@@ -124,7 +137,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	{
 		$store = $this->tester->createStore($this->region_id);
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [],
@@ -137,7 +150,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->addStoreTeam($store['id'], $this->foodsaver['id']);
 
 		$this->assertEquals(
-			$this->gateway->getMyBetriebe($this->foodsaver['id'], $this->region_id),
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [$this->storeData($store, 'team')],
@@ -146,5 +159,23 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'sonstige' => [],
 			]
 		);
+	}
+
+	public function testUpdateExpiredBellsRemovesBellIfNoUnconfirmedFetchesAreInTheFuture()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$foodsaver = $this->tester->createFoodsaver();
+
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new Carbon('1970-01-01'), );
+
+		$this->tester->updateInDatabase(
+			'fs_bell',
+			['expiration' => '1970-01-01'],
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
+		); // outdate bell notification
+
+		$this->gateway->updateExpiredBells();
+
+		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 	}
 }

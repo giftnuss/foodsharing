@@ -20,7 +20,7 @@ class StatsmanControl extends ConsoleControl
 		$betriebe = $this->model->q('SELECT id FROM fs_betrieb');
 		foreach ($betriebe as $b) {
 			$q = $this->model->insert('INSERT INTO fs_stat_abholmengen
-						   SELECT b.id, a.`date`, m.menge
+						   SELECT b.id, a.`date`, m.weight
 						   FROM fs_betrieb b
 						   INNER JOIN fs_abholer a ON a.betrieb_id = b.id
 						   INNER JOIN fs_abholmengen m ON m.id = b.abholmenge

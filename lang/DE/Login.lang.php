@@ -21,7 +21,7 @@ $g_lang['login_location'] = 'Deine Adresse';
 $g_lang['login_surname'] = 'Nachname';
 $g_lang['login_phone_info'] = 'Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen';
 $g_lang['have_read_the_legal_stuff1'] = 'Ich habe die Datenschutzerklärung zur Kenntnis genommen';
-$g_lang['have_read_the_legal_stuff2'] = 'Ich habe die <a href="http://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen';
+$g_lang['have_read_the_legal_stuff2'] = 'Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen';
 $g_lang['prev'] = 'zur&uuml;ck';
 $g_lang['next'] = 'weiter';
 $g_lang['finish'] = 'Anmeldung absenden';
@@ -41,6 +41,7 @@ $g_lang['error_birthdate'] = 'Aus datenschutz- und haftungsrechtlichen Gründen 
 
 $g_lang['activation_success'] = '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt Mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.';
 $g_lang['activation_failed'] = '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?';
+$g_lang['wrong_credentials'] = 'Falsche Zugangsdaten';
 
 $g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
 $g_lang['pass2'] = 'Passwortwiederholung';

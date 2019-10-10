@@ -93,11 +93,13 @@ const activity = {
   append: function (up) {
     var quickreply = ''
 
-    if (up.quickreply != undefined) {
+    if (up.quickreply !== undefined) {
       quickreply = `<span class="qr"><img src="${activity.user.avatar}" /><textarea data-load="0" data-url="${up.quickreply}" name="quickreply" class="quickreply noninit" placeholder="Schreibe eine Antwort..."></textarea><span class="loader" style="display:none;"><i class="fas fa-spinner fa-spin"></i></span></span>`
     }
 
-    activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${$.timeago(up.time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
+    if (up.time !== null) {
+      activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${$.timeago(up.time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
+    }
   },
 
   initQuickreply: function () {
@@ -185,7 +187,7 @@ const activity = {
 
       $('#activity-option-form input[type=\'checkbox\']').each(function () {
         if (!this.checked) {
-          let $el = $(this)
+          const $el = $(this)
           activity.listOptions.push({ index: $el.attr('name'), id: $el.val() })
         }
       })

@@ -1,4 +1,4 @@
-<?php 
+<?php
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
 $g_lang['betrieb'] = 'Betrieb';
@@ -9,9 +9,8 @@ $g_lang['str'] = 'Straße';
 $g_lang['hsnr'] = 'Hausnummer';
 $g_lang['status_date'] = 'letzte Statusänderung';
 $g_lang['bread_betrieb'] = 'Alle Betriebe';
-$g_lang['bread_edit_betrieb'] = 'Betrieb bearbeiten';
-$g_lang['bread_new_betrieb'] = 'neuen Betrieb eintragen';
-$g_lang['betrieb_empty'] = 'Bisher wurde kein Betrieb eingetragen.';
+$g_lang['edit_store'] = 'Betrieb bearbeiten';
+$g_lang['add_new_store'] = 'Neuen Betrieb eintragen';
 $g_lang['neu_betrieb'] = 'Neuen Betrieb eintragen';
 $g_lang['delete_sure'] = 'Soll {var} wirklich unwiderruflich gelöscht werden?';
 $g_lang['ansprechpartner'] = 'Betriebsansprechpartner (Filialleiter etc.)';
@@ -42,3 +41,4 @@ $g_lang['no_member'] = 'Du bist gar kein Mitglied in diesem Betrieb';
 $g_lang['signout_error_admin'] = 'Du bist verantwortlich für diesen Betrieb und kannst Dich nicht löschen!';
 $g_lang['team_conversation_name'] = 'Team {var}';
 $g_lang['springer_conversation_name'] = 'Springer {var}';
+$g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Betriebs im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';

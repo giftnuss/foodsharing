@@ -22,3 +22,23 @@ Still, try to be aware of what you are touching:
   * When refactoring, take one step at a time. A lot of old code uses `strip_tags` as a basic Cross Site Scripting prevention method, it is hidden behind `strval`. Keep it when moving code.
   * Always be aware what type of data is held in a variable: Plain text, HTML text, markdown? The old code does mostly not do this and is not even aware of the type when outputting it to the user. Still, when you want to change that behaviour, you must be aware of every single instance of that string used over the platform (e.g. it might be stored to the database or session and retrieved at other places). If in doubt, first try to leave that behaviour exactly as you found it and refactor as a separate step
 
+### REST API Endpoints
+In the [issue #511](https://gitlab.com/foodsharing-dev/foodsharing/issues/511) some rules for creation of REST API Endpoints are formulated.
+For general explanation about REST, see [request types](requests.md).
+
+1. english only
+1. use "normalizer" methods to transform gateway/db data into api responses
+1. **camel case** for keys (`regionId` instead of `region_id`)
+1. **prefixes** for booleans (`isPublic` instead of `public`)
+1. `GET` requests should never change data
+1. use *Permission* classes for permission checks
+1. never use *Model* classes
+1. regions and working groups are both 'groups'
+1. name keys always as specific as possible (`createdAt` instead of `time`,  `author` instead of `user`)
+1. integers should also be send as an integer, not as a string
+1. Standardize date and time: [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601). Use the `DATE_ATOM` PHP DateTime formatter.
+
+More not-yet-implemented ideas include:
+1. Add API versioning (to allow introducing breaking api changes in the future without immediately breaking the apps) ([not yet](https://gitlab.com/foodsharing-dev/foodsharing/issues/511#note_173339753), hopefully coming at some point)
+1. Standardize pagination (e.g. fixed query param names, return total number of items, either via envelope or header)
+1. [Automatically generated documentation](https://gitlab.com/foodsharing-dev/foodsharing/issues/511#note_173339753) for REST API

@@ -2,56 +2,64 @@
 
 namespace Foodsharing\Permissions;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Event\EventGateway;
-use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class WallPostPermissions
 {
 	private $regionGateway;
 	private $eventGateway;
-	private $fairteilerGateway;
+	private $eventPermission;
+	private $session;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		EventGateway $eventGateway,
-		FairteilerGateway $fairteilerGateway
+		EventPermissions $eventPermissions,
+		Session $session
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->eventGateway = $eventGateway;
-		$this->fairteilerGateway = $fairteilerGateway;
+		$this->eventPermission = $eventPermissions;
+		$this->session = $session;
 	}
 
-	public function mayReadWall($fsId, $target, $targetId)
+	public function mayReadWall(int $fsId, string $target, int $targetId): bool
 	{
 		switch ($target) {
 			case 'bezirk':
-				return $fsId && $this->regionGateway->hasMember($fsId, $targetId);
+				$result = $fsId && $this->regionGateway->hasMember($fsId, $targetId);
+				break;
 			case 'event':
-				/* ToDo merge with access logic inside event */
 				$event = $this->eventGateway->getEventWithInvites($targetId);
 
-				return $fsId && ($event['public'] || isset($event['invites']['may'][$fsId]));
+				$result = $this->eventPermission->mayCommentInEvent($event);
+				break;
 			case 'fairteiler':
-				return true;
+				$result = true;
+				break;
 			case 'question':
-				return $fsId && $this->regionGateway->hasMember($fsId, 341);
+				$result = $fsId && $this->regionGateway->hasMember($fsId, RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
+				break;
 			case 'usernotes':
-				return $fsId && $this->regionGateway->hasMember($fsId, 432);
+			case 'fsreport':
+				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
+				break;
 			default:
-				return $fsId > 0;
+				$result = $fsId > 0;
+				break;
 		}
+
+		return $result;
 	}
 
-	public function mayWriteWall($fsId, $target, $targetId)
+	public function mayWriteWall(int $fsId, string $target, int $targetId): bool
 	{
-		if (!$fsId) {
-			return false;
-		}
-
 		switch ($target) {
 			case 'foodsaver':
-				return $fsId == $targetId;
+				return $fsId === $targetId;
 			case 'question':
 				return $fsId > 0;
 			default:
@@ -62,27 +70,28 @@ class WallPostPermissions
 	/**
 	 * method describing _global_ deletion access to walls. Every author is always allowed to remove their own posts.
 	 *
-	 * @param $fsId
-	 * @param $target
-	 * @param $targetId
+	 * @param int $fsId
+	 * @param string $target
+	 * @param int $targetId
+	 *
+	 * @return bool
 	 */
-	public function mayDeleteFromWall($fsId, $target, $targetId)
+	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
 	{
-		if (!$fsId) {
-			return false;
+		switch ($target) {
+			case 'bezirk':
+				$result = $this->regionGateway->isAdmin($fsId, $targetId);
+				break;
+			case 'question':
+			case 'usernotes':
+			case 'fsreport':
+				$result = $this->mayReadWall($fsId, $target, $targetId);
+				break;
+			default:
+				$result = false;
+				break;
 		}
 
-		switch ($target) {
-			case 'foodsaver':
-				return $fsId == $targetId;
-			case 'bezirk':
-				return $this->regionGateway->isAdmin($fsId, $targetId);
-			case 'question':
-				return $this->mayReadWall($fsId, $target, $targetId);
-			case 'usernotes':
-				return $this->mayReadWall($fsId, $target, $targetId);
-			default:
-				return false;
-		}
+		return $result;
 	}
 }

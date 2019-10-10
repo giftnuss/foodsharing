@@ -1,11 +1,6 @@
-FROM orchardup/mysql
+FROM mariadb:10.3.15
 
-RUN echo Europe/Berlin > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
-
-COPY docker/conf/db/relaxed.cnf /etc/mysql/my.cnf
-RUN chmod 644 /etc/mysql/my.cnf
-
-COPY docker/conf/db/run-tmpfs /mysql/run-tmpfs
-CMD ["/mysql/run-tmpfs"]
+COPY docker/conf/db/ci.cnf /etc/mysql/mariadb.conf.d/ci.cnf
+RUN chmod 644 /etc/mysql/mariadb.conf.d/ci.cnf
 
 COPY migrations /app/migrations

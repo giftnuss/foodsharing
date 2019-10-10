@@ -3,9 +3,20 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
+	private $forumFollowerGateway;
+
+	public function __construct(
+		Database $db,
+		ForumFollowerGateway $forumFollowerGateway
+	) {
+		parent::__construct($db);
+		$this->forumFollowerGateway = $forumFollowerGateway;
+	}
+
 	// Thread-related
 
 	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0, $threads_per_page = 15)
@@ -108,27 +119,27 @@ class ForumGateway extends BaseGateway
 		', ['thread_id' => $thread_id]);
 	}
 
-	public function addThread($fs_id, $bezirk_id, $title, $body, $bot_theme = false, $active)
+	public function addThread($foodsaverId, $regionId, $title, $body, $isActive, $ambassadorForum = false)
 	{
-		$bot_theme_v = $bot_theme ? 1 : 0;
-		$thread_id = $this->db->insert('fs_theme', [
-			'foodsaver_id' => $fs_id,
+		$isAmbassadorForum = $ambassadorForum ? 1 : 0;
+		$threadId = $this->db->insert('fs_theme', [
+			'foodsaver_id' => $foodsaverId,
 			'name' => $title,
 			'time' => date('Y-m-d H:i:s'),
-			'active' => $active,
+			'active' => $isActive,
 		]);
 
-		$this->followThread($fs_id, $thread_id);
+		$this->forumFollowerGateway->followThread($foodsaverId, $threadId);
 
 		$this->db->insert('fs_bezirk_has_theme', [
-			'bezirk_id' => $bezirk_id,
-			'theme_id' => $thread_id,
-			'bot_theme' => $bot_theme_v
+			'bezirk_id' => $regionId,
+			'theme_id' => $threadId,
+			'bot_theme' => $isAmbassadorForum
 		]);
 
-		$this->addPost($fs_id, $thread_id, $body);
+		$this->addPost($foodsaverId, $threadId, $body);
 
-		return $thread_id;
+		return $threadId;
 	}
 
 	public function activateThread($thread_id)
@@ -142,30 +153,6 @@ class ForumGateway extends BaseGateway
 		$this->db->delete('fs_theme', ['id' => $thread_id]);
 	}
 
-	public function getThreadFollower($fs_id, $thread_id)
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.name,
-					fs.geschlecht,
-					fs.email
-
-			FROM 	fs_foodsaver fs,
-					fs_theme_follower tf
-			WHERE 	tf.foodsaver_id = fs.id
-			AND 	tf.theme_id = :theme_id
-			AND 	tf.foodsaver_id != :fs_id
-			AND		fs.deleted_at IS NULL
-		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
-	}
-
-	public function isFollowing($fsId, $threadId)
-	{
-		return $this->db->exists(
-			'fs_theme_follower',
-			['theme_id' => $threadId, 'foodsaver_id' => $fsId]
-		);
-	}
-
 	public function getBotThreadStatus($thread_id)
 	{
 		return $this->db->fetch('
@@ -175,22 +162,6 @@ class ForumGateway extends BaseGateway
 					fs_bezirk_has_theme ht
 			WHERE   ht.theme_id = :theme_id
 		', ['theme_id' => $thread_id]);
-	}
-
-	public function followThread($fs_id, $thread_id)
-	{
-		return $this->db->insertIgnore(
-			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 1]
-		);
-	}
-
-	public function unfollowThread($fs_id, $thread_id)
-	{
-		return $this->db->delete(
-			'fs_theme_follower',
-			['theme_id' => $thread_id, 'foodsaver_id' => $fs_id]
-		);
 	}
 
 	public function stickThread($thread_id)

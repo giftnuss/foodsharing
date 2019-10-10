@@ -32,7 +32,7 @@ final class NotificationService
 	public function newFairteilerPost(int $fairteilerId)
 	{
 		if ($ft = $this->fairteilerGateway->getFairteiler($fairteilerId)) {
-			$post = $this->fairteilerGateway->getLastFtPost($fairteilerId);
+			$post = $this->fairteilerGateway->getLastFairSharePointPost($fairteilerId);
 			if ($followers = $this->fairteilerGateway->getEmailFollower($fairteilerId)) {
 				$body = nl2br($post['body']);
 

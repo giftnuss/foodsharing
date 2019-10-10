@@ -27,10 +27,13 @@ class StatisticsControl extends Control
 		$this->pageHelper->addBread($content['title']);
 
 		$stat_total = $this->statisticsGateway->listTotalStat();
+		$stat_total['totalBaskets'] = $this->statisticsGateway->countAllBaskets();
+		$stat_total['avgWeeklyBaskets'] = $this->statisticsGateway->avgWeeklyBaskets();
+
 		$stat_cities = $this->statisticsGateway->listStatCities();
 		$stat_fs = $this->statisticsGateway->listStatFoodsaver();
 
-		$this->pageHelper->addContent($this->view->getStatTotal($stat_total, $this->statisticsGateway->countAllFoodsharers()), CNT_TOP);
+		$this->pageHelper->addContent($this->view->getStatTotal($stat_total, $this->statisticsGateway->countAllFoodsharers(), $this->statisticsGateway->avgDailyFetchCount()), CNT_TOP);
 		$this->pageHelper->addContent($this->view->getStatCities($stat_cities), CNT_LEFT);
 		$this->pageHelper->addContent($this->view->getStatFoodsaver($stat_fs), CNT_RIGHT);
 

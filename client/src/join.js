@@ -40,8 +40,8 @@ var join = {
       const mapEL = document.getElementById('map')
       if (mapEL) {
         initializeMap(mapEL, (result) => {
-          let prop = result.properties
-          let geo = result.geometry.coordinates
+          const prop = result.properties
+          const geo = result.geometry.coordinates
           $('#join_lat').val(geo[1])
           $('#join_lon').val(geo[0])
           $('#join_plz').val(prop.postcode)
@@ -103,7 +103,7 @@ var join = {
     }
   },
   step: function (step) {
-    if (join.currentStep >= step || join.stepCheck(step)) {
+    if (join.currentStep >= step || join.stepCheck()) {
       $('.step').hide()
       $(`.step${step}`).show()
       $('.linklist.join li').removeClass('active').children('a').children('i').remove()
@@ -115,64 +115,54 @@ var join = {
       join.currentStep = step
     }
   },
-  stepCheck: function (step) {
-    switch (join.currentStep) {
-      case 1:
-        // trim whitespace from email for validation and submission
-        $('#login_email').val($('#login_email').val().trim())
-
-        if ($('#login_name').val() === '') {
-          pulseInfo('Bitte Gib einen Benutzernamen ein')
-          $('#login_name').trigger('select')
+  stepCheck: function () {
+    if (join.currentStep === 1) {
+      $('#login_email').val($('#login_email').val().trim())
+      if ($('#login_name').val() === '') {
+        pulseInfo('Bitte Gib einen Benutzernamen ein')
+        $('#login_name').trigger('select')
+        return false
+      }
+      if (!$('#login_email')['0'].validity.valid) {
+        pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht')
+        $('#login_email').trigger('select')
+        return false
+      }
+      const birthdate = new Date($('#birthdate').val())
+      const now = new Date()
+      let diff = now.getFullYear() - birthdate.getFullYear()
+      if (birthdate.getMonth() > now.getMonth()) {
+        diff--
+      } else {
+        if (birthdate.getMonth() === now.getMonth()) {
+          if (birthdate.getDay() > now.getDay()) { diff-- }
+        }
+      }
+      if (diff < 18) {
+        pulseInfo('Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.')
+        return false
+      }
+      if ($('#login_passwd1').val().length < 8) {
+        pulseInfo('Dein Passwort muss mindestens 8 Zeichen lang sein')
+        $('#login_passwd1').trigger('select')
+        return false
+      }
+      if ($('#login_passwd1').val() !== $('#login_passwd2').val()) {
+        pulseInfo('Deine Passwörter stimmen nicht überein')
+        $('#login_passwd1').trigger('select')
+        return false
+      }
+      if (join.isLoading) {
+        pulseInfo('Bitte warte bis Dein Foto hochgeladen ist')
+        return false
+      }
+      if ($('#join_avatar_error').val() === '0' && $('#join_avatar').val() === '') {
+        if (!window.confirm('Du hast kein Foto hochgeladen. Beachte, dass ein passbildähnliches Foto benötigt wird, wenn du später auch als Foodsaver aktiv werden möchtest. Ohne Foto fortfahren?')) {
           return false
         }
-        if (!$('#login_email')['0'].validity.valid) {
-          pulseError('Mit Deiner E-Mail-Adresse stimmt etwas nicht')
-          $('#login_email').trigger('select')
-          return false
-        }
-        let birthdate = new Date($('#birthdate').val())
-        let now = new Date()
-        let diff = now.getFullYear() - birthdate.getFullYear()
-        if (birthdate.getMonth() > now.getMonth()) {
-          diff--
-        } else {
-          if (birthdate.getMonth() === now.getMonth()) {
-            if (birthdate.getDay() > now.getDay()) { diff-- }
-          }
-        }
-        if (diff < 18) {
-          pulseInfo('Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing.de mitzumachen.')
-          return false
-        }
-
-        if ($('#login_passwd1').val().length < 8) {
-          pulseInfo('Dein Passwort muss mindestens 8 Zeichen lang sein')
-          $('#login_passwd1').trigger('select')
-          return false
-        }
-
-        if ($('#login_passwd1').val() !== $('#login_passwd2').val()) {
-          pulseInfo('Deine Passwörter stimmen nicht überein')
-          $('#login_passwd1').trigger('select')
-          return false
-        }
-
-        if (join.isLoading) {
-          pulseInfo('Bitte warte bis Dein Foto hochgeladen ist')
-          return false
-        }
-
-        if ($('#join_avatar_error').val() === '0' && $('#join_avatar').val() === '') {
-          if (!window.confirm('Du hast kein Foto hochgeladen. Beachte, dass ein passbildähnliches Foto benötigt wird, wenn du später auch als Foodsaver aktiv werden möchtest. Ohne Foto fortfahren?')) {
-            return false
-          }
-        }
-        return true
-
-      default:
-        return true
-    }
+      }
+      return true
+    } else { return true }
   }
 }
 

@@ -108,6 +108,12 @@ class SettingsView extends View
 
 			$("#schlafmtzenfunktion-form").on("submit", function(ev){
 				ev.preventDefault();
+				if ($("#sleep_status").val() == 1 ){
+					if ($("#daterange_from").val() == "" || $("#daterange_to").val() == "" ){
+						pulseError("' . $this->translationHelper->s('sleep_mode_date_missing') . '");
+						return;
+					}
+				}
 				ajax.req("settings","sleepmode",{
 					method:"post",
 					data: {
@@ -496,51 +502,19 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
-		if($("#photo_public").length > 0)
-		{
-			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
-			{
-
-			}
-			else
-			{
-				$e.preventDefault();
-			}
-		}
-
-	});');
-
-		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-		)));
-
-		if ($this->session->may('bot')) {
-			$oeff = '<input type="hidden" name="photo_public" value="1" />';
-		}
 		$bezirkchoose = '';
 		$position = '';
-		$communications = $this->v_utils->v_form_text('homepage') .
-			$this->v_utils->v_form_text('tox', array('desc' => $this->translationHelper->s('tox_desc')));
+		$communications = $this->v_utils->v_form_text('homepage');
 
 		if ($this->session->may('orga')) {
 			$bezirk = array('id' => 0, 'name' => false);
-			if ($b = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId())) {
+			if ($b = $this->regionGateway->getRegion($this->session->getCurrentRegionId())) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
 			}
 
 			$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
-
 			$position = $this->v_utils->v_form_text('position');
-
-			$communications .=
-				$this->v_utils->v_form_text('twitter') .
-				$this->v_utils->v_form_text('github');
 		}
 
 		$g_data['ort'] = $g_data['stadt'];
@@ -559,7 +533,6 @@ class SettingsView extends View
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
-			$oeff
 		), array('submit' => $this->translationHelper->s('save')));
 	}
 
@@ -698,5 +671,18 @@ class SettingsView extends View
 		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
+	}
+
+	public function picture_box($photo): string
+	{
+		$p_cnt = $this->v_utils->v_info($this->translationHelper->s('photo_should_be_usable'));
+
+		if (!file_exists('images/thumb_crop_' . $photo)) {
+			$p_cnt .= $this->v_utils->v_photo_edit('img/portrait.png');
+		} else {
+			$p_cnt .= $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
+		}
+
+		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
 	}
 }

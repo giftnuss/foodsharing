@@ -34,7 +34,5 @@ class ReportGatewayTest extends \Codeception\Test\Unit
 		$reportAgainstUser = $this->tester->addReport($adminInChild['id'], $foodsaverInChild['id']);
 		$result = $this->gateway->getReportsByReporteeRegions([$this->childRegion['id'], $this->childChildRegion['id']], null, true);
 		$this->tester->assertCount(2, $result);
-		var_dump($result);
-		ob_flush();
 	}
 }

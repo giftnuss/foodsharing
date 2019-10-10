@@ -19,8 +19,8 @@ import { get } from './base'
 
 function mapOldResponseToNewFormat (data) {
   const mapping = {
-    'Foodsaver': 'users',
-    'Bezirk': 'regions',
+    Foodsaver: 'users',
+    Bezirk: 'regions',
     'Kooperationsbetrieb/e': 'stores',
     'Deine Gruppen': 'myGroups',
     'Deine Betriebe': 'myStores',
@@ -28,7 +28,7 @@ function mapOldResponseToNewFormat (data) {
     'Menschen die Du kennst': 'myBuddies'
   }
   return data.reduce((o, el) => {
-    let key = mapping[el.title]
+    const key = mapping[el.title]
     o[key] = el.result.map(i => ({
       id: i.id || parseInt(i.href.match(/id=(.*?)(&|$)/)[1]),
       name: i.name,
@@ -44,5 +44,5 @@ export async function instantSearch (query) {
 }
 
 export async function instantSearchIndex () {
-  return mapOldResponseToNewFormat(await get(`/search/legacyindex`))
+  return mapOldResponseToNewFormat(await get('/search/legacyindex'))
 }

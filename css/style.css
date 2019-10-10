@@ -145,6 +145,14 @@
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 }
 
+.my-message a {
+  color: #f1e7c9;
+}
+
+.my-message a:hover {
+  color: #533a20;
+}
+
 textarea {
   resize: none;
 }
@@ -237,7 +245,7 @@ div#main, footer .wrapper {
 }
 
 div#main {
-  min-height: 650px;
+  min-height: calc(83vh);
   padding-bottom: 40px;
 }
 
@@ -987,6 +995,7 @@ ul.linklist li > a {
   text-decoration: none !important;
   color: #533a20;
   font-weight: lighter;
+  position: relative;
 }
 
 ul.linklist li > a span.title {
@@ -1002,7 +1011,7 @@ ul.linklist li > a.active {
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
   background-color: #64ae24;
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .updatepost {
@@ -1323,7 +1332,6 @@ a.light {
   text-decoration: none;
   color: #533a22;
 }
-
 
 .calendar {
   display: block;

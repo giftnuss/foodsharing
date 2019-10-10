@@ -45,7 +45,11 @@ class MapControl extends Control
 		$this->pageHelper->addJs('u_init_map();');
 
 		if ($center) {
-			$this->pageHelper->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
+			if ($center['lat'] == 0 && $center['lon'] == 0) {
+				$this->pageHelper->addJs('u_map.fitBounds([[46.0, 4.0],[55.0, 17.0]]);');
+			} else {
+				$this->pageHelper->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
+			}
 		}
 
 		$this->pageHelper->addJs('map.initMarker(' . $jsarr . ');');

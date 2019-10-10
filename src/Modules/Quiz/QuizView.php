@@ -3,6 +3,8 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizView extends View
 {
@@ -20,14 +22,14 @@ class QuizView extends View
 		$this->pageHelper->addJs('
 			$(".usersessionlink").parent().parent().on("click", function(){
 				goTo($(this).children("td").children(".usersessionlink").attr("href"));
-			});		
+			});
 		');
 
 		foreach ($sessions as $s) {
 			$status = '<span style="color:orange;">Quiz läuft</span>';
-			if ($s['min_status'] == 1) {
+			if ($s['min_status'] == SessionStatus::PASSED) {
 				$status = '<span style="color:green">bestanden</span>';
-			} elseif ($s['max_status'] == 2) {
+			} elseif ($s['max_status'] == SessionStatus::FAILED) {
 				$status = '<span style="color:red;">durchgefallen</span>';
 			}
 
@@ -58,7 +60,9 @@ class QuizView extends View
 		$out = '';
 
 		/*
-		 * [0] => Array
+		 * Example:
+		 *
+		  [0] => Array
 			(
 				[id] => 9
 				[fp] => 0.00
@@ -84,9 +88,9 @@ class QuizView extends View
 		$rows = array();
 		foreach ($sessions as $key => $s) {
 			$status = '<span style="color:orange;">Quiz läuft</span>';
-			if ($s['status'] == 1) {
+			if ($s['status'] == SessionStatus::PASSED) {
 				$status = '<span style="color:green">bestanden</span>';
-			} elseif ($s['status'] == 2) {
+			} elseif ($s['status'] == SessionStatus::FAILED) {
 				$status = '<span style="color:red;">durchgefallen</span>';
 			}
 
@@ -288,18 +292,18 @@ class QuizView extends View
 		</p>';
 	}
 
-	public function result($explains, $fp, $maxfp)
+	public function result($explains, $failurePoints, $maxFailurePoints)
 	{
 		$valid = 'Sorry, diesmal hat es nicht geklappt.';
 		$bg = '#ED563D';
-		if ($fp < $maxfp) {
+		if ($failurePoints < $maxFailurePoints) {
 			$valid = 'Herzlichen Glückwunsch! Bestanden.';
 			$bg = '#48A21C';
 		}
 		$out = '
 		<div style="font-size:16px;font-weight:bold;margin-bottom:15px;background-color:' . $bg . ';padding:15px;border-radius:10px;line-height:30px;text-align:center;color:#fff;">
 		' . $valid . '<br />
-		<span style="font-size:13px;">' . $fp . ' von maximal ' . $maxfp . ' Fehlerpunkten</span>
+		<span style="font-size:13px;">' . $failurePoints . ' von maximal ' . $maxFailurePoints . ' Fehlerpunkten</span>
 		</div>';
 
 		$out .= '
@@ -332,17 +336,17 @@ class QuizView extends View
 		</div>
 		<p style="text-align:center;">';
 
-		if ($fp < $maxfp) {
+		if ($failurePoints < $maxFailurePoints) {
 			switch ($this->session->get('quiz-id')) {
-				case 1:
+				case Role::FOODSAVER:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
 					break;
 
-				case 2:
+				case Role::STORE_MANAGER:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen.</a>';
 					break;
 
-				case 3:
+				case Role::AMBASSADOR:
 					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen.</a>';
 					break;
 
@@ -357,7 +361,7 @@ class QuizView extends View
 		return $out;
 	}
 
-	public function initQuiz($quiz, $page)
+	public function initQuizPage(array $page): string
 	{
 		return '<h1>' . $page['title'] . '</h1>' . $page['body'];
 	}
@@ -370,8 +374,8 @@ class QuizView extends View
 					heightStyle: "content",
 					animate: 200,
 					collapsible: true,
-					autoHeight: false, 
-    				active: false 
+					autoHeight: false,
+    				active: false
 				});
 				setTimeout(function(){
 					$("#questions").css("opacity",1);
@@ -394,10 +398,10 @@ class QuizView extends View
 					<p style="margin-top:15px;">
 						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:' . (int)$q['id'] . '});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:' . (int)$q['id'] . '});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$quiz_id . '});return false;">Frage bearbeiten</a> <a class="button" href="/?page=quiz&sub=wall&id=' . (int)$q['id'] . '">Kommentare</a>
 					</p>') . '
-					
+
 					' . $this->v_utils->v_input_wrapper('Antworten', $answers) . '
 
-					
+
 				 </div>';
 			}
 			$out .= '
@@ -409,28 +413,30 @@ class QuizView extends View
 		return $this->v_utils->v_field($this->v_utils->v_info('Noch keine Fragen zu diesem Quiz'), 'Fragen');
 	}
 
-	public function answerSidebar($answers, $quiz_id)
+	public function answerSidebar(array $answers): string
 	{
-		if (!empty($answers)) {
-			$out = '<ul class="linklist">';
-			foreach ($answers as $a) {
-				$ampel = 'ampel ampel-gruen';
-				if ($a['right'] == 0) {
-					$ampel = 'ampel ampel-rot';
-				} elseif ($a['right'] == 2) {
-					$ampel = '';
-				}
-				$out .= '
-				<li>
-					<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-						<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
-						<span style="clear:both;"></span>
-					</a>
-				</li>';
-			}
-			$out .= '</ul>';
-
-			return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
+		if (empty($answers)) {
+			return '';
 		}
+
+		$out = '<ul class="linklist">';
+		foreach ($answers as $a) {
+			$ampel = 'ampel ampel-gruen';
+			if ($a['right'] == 0) {
+				$ampel = 'ampel ampel-rot';
+			} elseif ($a['right'] == 2) {
+				$ampel = '';
+			}
+			$out .= '
+			<li>
+			<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
+			<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
+			<span style="clear:both;"></span>
+			</a>
+			</li>';
+		}
+		$out .= '</ul>';
+
+		return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
 	}
 }

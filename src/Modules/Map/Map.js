@@ -28,30 +28,27 @@ expose({
   u_loadDialog
 })
 
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa'
+
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'orange',
-  prefix: 'img'
+  markerColor: 'orange'
 })
 const bkIcon = L.AwesomeMarkers.icon({
-  icon: 'basket',
-  markerColor: 'green',
-  prefix: 'img'
+  icon: 'shopping-basket',
+  markerColor: 'green'
 })
 const botIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
-  markerColor: 'red',
-  prefix: 'img'
+  markerColor: 'red'
 })
 const bIcon = L.AwesomeMarkers.icon({
-  icon: 'store',
-  markerColor: 'brown',
-  prefix: 'img'
+  icon: 'shopping-cart',
+  markerColor: 'darkred'
 })
 const fIcon = L.AwesomeMarkers.icon({
   icon: 'recycle',
-  markerColor: 'yellow',
-  prefix: 'img'
+  markerColor: 'beige'
 })
 
 const map = {
@@ -68,7 +65,7 @@ const map = {
     expose({ u_map }) // need to re-expose it as it is just a variable
 
     L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>'
+      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(u_map)
 
     this.initiated = true
@@ -136,8 +133,8 @@ function u_loadDialog (purl) {
   $('#b_content').dialog('open')
   const pos = $('#topbar .container').offset()
   $('#b_content').parent().css({
-    'left': `${pos.left}px`,
-    'top': '80px'
+    left: `${pos.left}px`,
+    top: '80px'
   })
 
   if (purl != undefined) {
@@ -209,10 +206,7 @@ function loadMarker (types, loader) {
           const fsid = (el.layer.options.id)
           const type = el.layer.options.type
 
-          if (type === 'fs') {
-            url = `/xhr.php?f=fsBubble&id=${fsid}`
-            showLoader()
-          } else if (type === 'bk') {
+          if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
             url = `/xhr.php?f=bBubble&id=${fsid}`

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Buddy;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
@@ -13,11 +12,10 @@ class BuddyXhr extends Control
 	private $gateway;
 	private $imageService;
 
-	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, Db $model, ImageService $imageService)
+	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, ImageService $imageService)
 	{
 		$this->gateway = $gateway;
 		$this->bellGateway = $bellGateway;
-		$this->model = $model;
 		$this->imageService = $imageService;
 
 		parent::__construct();

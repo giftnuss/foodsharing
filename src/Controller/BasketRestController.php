@@ -113,7 +113,7 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_BASKET_DISTANCE);
 		}
 
-		$baskets = $this->gateway->listCloseBaskets($this->session->id(), $location, $distance);
+		$baskets = $this->gateway->listNearbyBasketsByDistance($this->session->id(), $location, $distance);
 		$baskets = array_map(function ($b) {
 			$basket = $this->gateway->getBasket((int)$b[self::ID]);
 
@@ -204,6 +204,8 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(404, 'Basket does not exist.');
 		} elseif ($basket[self::STATUS] == Status::DELETED_PICKED_UP) {
 			throw new HttpException(404, 'Basket was already picked up.');
+		} elseif ($basket['until_ts'] < time()) {
+			throw new HttpException(404, 'Basket is expired.');
 		}
 
 		$basket = $this->normalizeBasket($basket);
@@ -345,6 +347,46 @@ final class BasketRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Updates the description of an existing basket. The description must not be empty. If the location
+	 * is not given or invalid it falls back to the user's home. Returns the updated basket.
+	 *
+	 * @Rest\Put("baskets/{basketId}", requirements={"basketId" = "\d+"})
+	 * @Rest\RequestParam(name="description", nullable=false)
+	 * @Rest\RequestParam(name="lat", nullable=true)
+	 * @Rest\RequestParam(name="lon", nullable=true)
+	 *
+	 * @param int $basketId ID of an existing basket
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function editBasketAction(int $basketId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
+		$basket = $this->findEditableBasket($basketId);
+
+		// prepare and check description
+		$description = trim(strip_tags($paramFetcher->get(self::DESCRIPTION)));
+		if (empty($description)) {
+			throw new HttpException(400, 'The description must not be empty.');
+		}
+
+		$location = $this->fetchLocationOrUserHome($paramFetcher, [self::LAT => $basket[self::LAT], self::LON => $basket[self::LON]]);
+
+		//update basket
+		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
+			$location[self::LON], $this->session->id());
+
+		$basket = $this->gateway->getBasket($basketId);
+		$data = $this->normalizeBasket($basket);
+
+		return $this->handleView($this->view(['basket' => $data], 200));
+	}
+
+	/**
 	 * Sets a new picture for this basket.
 	 *
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
@@ -388,7 +430,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		//update basket
 		$basket[self::PICTURE] = $picname;
-		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $this->session->id());
+		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $basket[self::LAT], $basket[self::LON], $this->session->id());
 
 		$data = $this->normalizeBasket($basket);
 
@@ -415,7 +457,7 @@ final class BasketRestController extends AbstractFOSRestController
 		if (isset($basket[self::PICTURE])) {
 			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
-			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $this->session->id());
+			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $basket[self::LAT], $basket[self::LON], $this->session->id());
 		}
 
 		$basket = $this->normalizeBasket($basket);
@@ -446,17 +488,34 @@ final class BasketRestController extends AbstractFOSRestController
 		return $basket;
 	}
 
-	private function fetchLocationOrUserHome($paramFetcher): array
+	/**
+	 * Returns a location from the param fetcher in the 'lat' and 'lon' fields. If none
+	 * is given, it returns the default location or the user's home address, if the default
+	 * location is null.
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 * @param array $defaultLocation a fallback value or null
+	 *
+	 * @return array the location
+	 *
+	 * @throws \HttpException if no location and no default location were given and the user's
+	 * home address is not set
+	 */
+	private function fetchLocationOrUserHome(ParamFetcher $paramFetcher, array $defaultLocation = null): array
 	{
 		$lat = $paramFetcher->get(self::LAT);
 		$lon = $paramFetcher->get(self::LON);
-		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, 0.0, 180.0)) {
-			// find user's location
-			$loc = $this->session->getLocation();
-			$lat = $loc[self::LAT];
-			$lon = $loc[self::LON];
-			if ($lat === 0 && $lon === 0) {
-				throw new HttpException(400, 'The user profile has no address.');
+		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
+			if ($defaultLocation !== null) {
+				return $defaultLocation;
+			} else {
+				// find user's location
+				$loc = $this->session->getLocation();
+				$lat = $loc[self::LAT];
+				$lon = $loc[self::LON];
+				if ($lat === 0 && $lon === 0) {
+					throw new HttpException(400, 'The user profile has no address.');
+				}
 			}
 		}
 

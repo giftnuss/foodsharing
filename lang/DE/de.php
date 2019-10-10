@@ -26,9 +26,6 @@ $g_lang['edit'] = 'bearbeiten';
 $g_lang['desc'] = 'Beschreibung';
 $g_lang['groups'] = 'Gruppen';
 $g_lang['dates'] = 'Termine';
-$g_lang['delete_post'] = 'Beitrag löschen';
-$g_lang['delete_post_sure'] = 'Soll der Beitrag wirklich gelöscht werden?';
-$g_lang['delete_sure_title'] = 'Wirklich löschen?';
 $g_lang['sure'] = 'Ja, ich bin mir sicher.';
 $g_lang['pass_generator'] = 'Foodsaver-Ausweisgenerator';
 $g_lang['choose_foodsaver'] = 'W&auml;hle die Foodsaver aus, denen Du einen Ausweis drucken willst';
@@ -143,26 +140,33 @@ $g_lang['day'] = 'Tag';
 $g_lang['tomorrow'] = 'Morgen';
 $g_lang['today'] = 'Heute';
 $g_lang['no_bezirk_choosen'] = 'Noch kein Bezirk gewählt';
-$g_lang['rolle_0_0'] = 'Foodsharer';
-$g_lang['rolle_0_1'] = 'Foodsharer';
-$g_lang['rolle_0_2'] = 'Foodsharer';
+
 $g_lang['rolle'] = 'Benutzerrolle';
 
-$g_lang['rolle_1_0'] = 'Foodsaver';
+$g_lang['rolle_0_0'] = 'Foodsharer/in';
+$g_lang['rolle_0_1'] = 'Foodsharer';
+$g_lang['rolle_0_2'] = 'Foodsharerin';
+$g_lang['rolle_0_3'] = 'Foodsharer/in';
+
+$g_lang['rolle_1_0'] = 'Foodsaver/in';
 $g_lang['rolle_1_1'] = 'Foodsaver';
 $g_lang['rolle_1_2'] = 'Foodsaverin';
+$g_lang['rolle_1_3'] = 'Foodsaver/in';
 
-$g_lang['rolle_2_0'] = 'Betriebsverantwortliche/r Foodsaver';
+$g_lang['rolle_2_0'] = 'Betriebsverantwortliche/r Foodsaver/in';
 $g_lang['rolle_2_1'] = 'Betriebsverantwortlicher Foodsaver';
 $g_lang['rolle_2_2'] = 'Betriebsverantwortliche Foodsaverin';
+$g_lang['rolle_2_3'] = 'Betriebsverantwortliche/r Foodsaver/in';
 
 $g_lang['rolle_3_0'] = 'Botschafter/in';
 $g_lang['rolle_3_1'] = 'Botschafter';
 $g_lang['rolle_3_2'] = 'Botschafterin';
+$g_lang['rolle_3_3'] = 'Botschafter/in';
 
 $g_lang['rolle_4_0'] = 'Orgamensch';
 $g_lang['rolle_4_1'] = 'Orgamensch';
 $g_lang['rolle_4_2'] = 'Orgamensch';
+$g_lang['rolle_4_3'] = 'Orgamensch';
 
 $g_lang['betrieb_status_6'] = 'Spendet an Tafel etc. und wirft nichts weg.';
 $g_lang['betrieb_status_5'] = 'Betrieb kooperiert bereits.';
@@ -173,7 +177,6 @@ $g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt.';
 $g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 
-$g_lang['photo_public'] = 'Kontaktaufnahme durch andere Foodsaver';
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
 $g_lang['to_team_page'] = 'Zur Teamseite';
 $g_lang['status'] = 'Aktueller Status';

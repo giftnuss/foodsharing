@@ -56,6 +56,10 @@ sudo rm -rf ./cache/dev
 ```
 or even `sudo rm -rf cache`.
 
+## Restart, clean and delete cache - Quick and dirty ;-)
+
+ `./scripts/stop && sudo rm -rf cache && sudo ./scripts/clean && ./scripts/start` 
+
 ## Database and email access
 
 The local website gives you database access so that you can directly view and modify what is written in the database.

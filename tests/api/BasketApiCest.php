@@ -3,6 +3,7 @@
 namespace api;
 
 use Codeception\Util\HttpCode as Http;
+use Faker;
 
 /**
  * Tests for the basket api.
@@ -10,6 +11,7 @@ use Codeception\Util\HttpCode as Http;
 class BasketApiCest
 {
 	private $user;
+	private $faker;
 
 	private const EMAIL = 'email';
 	private const API_BASKETS = 'api/baskets';
@@ -19,6 +21,7 @@ class BasketApiCest
 	public function _before(\ApiTester $I)
 	{
 		$this->user = $I->createFoodsaver();
+		$this->faker = Faker\Factory::create('de_DE');
 	}
 
 	public function getBasket(\ApiTester $I)
@@ -29,6 +32,18 @@ class BasketApiCest
 		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
+	}
+
+	public function getOutdatedBasket(\ApiTester $I)
+	{
+		$basket = $I->createFoodbasket($this->user[self::ID], 241, [
+			'time' => $this->faker->dateTime($max = '-2 days'),
+			'until' => $this->faker->dateTime($max = '-1 day')
+		]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
+		$I->seeResponseCodeIs(Http::NOT_FOUND);
 	}
 
 	public function removeExistingBasket(\ApiTester $I)
@@ -145,5 +160,34 @@ class BasketApiCest
 		$I->login($this->user[self::EMAIL]);
 		$I->sendDELETE(self::API_BASKETS . '/' . $basket[self::ID] . '/picture');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+	}
+
+	public function editBasket(\ApiTester $I)
+	{
+		$testDescription = 'lorem ipsum';
+		$lat = 12.34;
+		$lon = 56.78;
+		$basket = $I->createFoodbasket($this->user[self::ID]);
+
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], ['description' => '']);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], [
+			'description' => $testDescription, 'lat' => $lat, 'lon' => $lon
+		]);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'description' => $testDescription
+		]);
+		$I->assertEquals($lat, $I->grabDataFromResponseByJsonPath('basket.lat')[0], '', 0.1);
+		$I->assertEquals($lon, $I->grabDataFromResponseByJsonPath('basket.lon')[0], '', 0.1);
+
+		$I->sendPUT(self::API_BASKETS . '/' . $basket[self::ID], [
+			'description' => $testDescription
+		]);
+		$I->assertEquals($lat, $I->grabDataFromResponseByJsonPath('basket.lat')[0], '', 0.1);
+		$I->assertEquals($lon, $I->grabDataFromResponseByJsonPath('basket.lon')[0], '', 0.1);
 	}
 }

@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import bFormCheckbox from '@b/components/form-checkbox/form-checkbox'
+import { BFormCheckbox } from 'bootstrap-vue'
 
 export default {
-  components: { bFormCheckbox },
+  components: { BFormCheckbox },
   props: {
     isFollowing: {
       type: Boolean,

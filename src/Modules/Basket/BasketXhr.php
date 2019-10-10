@@ -291,7 +291,7 @@ class BasketXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['choords']) && $basket = $this->basketGateway->listCloseBaskets(
+		if (isset($_GET['choords']) && $basket = $this->basketGateway->listNearbyBasketsByDistance(
 				$this->session->id(),
 				[
 					'lat' => $_GET['choords'][0],
@@ -614,7 +614,8 @@ class BasketXhr extends Control
 			$pic = $this->preparePicture($data['filename']);
 		}
 
-		if (!empty($desc) && !empty($id) && ($this->basketGateway->editBasket($id, $desc, $pic, $this->session->id()))) {
+		if (!empty($desc) && !empty($id) &&
+			($this->basketGateway->editBasket($id, $desc, $pic, $basket['lat'], $basket['lon'], $this->session->id()))) {
 			return [
 				'status' => 1,
 				'script' => '

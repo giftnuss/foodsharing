@@ -3,9 +3,9 @@
 namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Stats\StatsService;
 use Foodsharing\Services\ImageService;
 
 class ViewUtils
@@ -14,37 +14,23 @@ class ViewUtils
 	 * @var Utils
 	 */
 	private $viewUtils;
-
-	private $statsService;
 	private $session;
 	private $imageService;
 	private $translationHelper;
+	private $weightHelper;
 
 	public function __construct(
 		Utils $viewUtils,
-		StatsService $statsService,
 		Session $session,
 		ImageService $imageService,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		WeightHelper $weightHelper
 	) {
 		$this->viewUtils = $viewUtils;
-		$this->statsService = $statsService;
+		$this->weightHelper = $weightHelper;
 		$this->session = $session;
 		$this->imageService = $imageService;
 		$this->translationHelper = $translationHelper;
-	}
-
-	public function fsBubble($fs)
-	{
-		return '<div style="height:80px;overflow:hidden;width:200px;">
-				<div style="margin-right:10px;float:left;margin-bottom:33px">
-					<a href="/profile/' . (int)$fs['id'] . '">
-							<img src="' . $this->imageService->img($fs['photo']) . '">
-					</a>
-				</div>
-				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/' . (int)$fs['id'] . '">' . $fs['name'] . '</a></h1>
-				<div style="clear:both;"></div>
-			</div>';
 	}
 
 	public function bBubble($b)
@@ -72,10 +58,13 @@ class ViewUtils
 		$besonderheiten = '';
 
 		$count_info = '';
+		$activeFoodSaver = count($b['foodsaver']);
+		$jumperFoodSaver = count($b['springer']);
+		$count_info .= '<div>Es sind <strong>' . $activeFoodSaver . '</strong> Aktive und <strong>' . $jumperFoodSaver . '</strong> Springer im Team</div>';
 		$pickup_count = (int)$b['pickup_count'];
 		if ($pickup_count > 0) {
-			$count_info = '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
-			$fetch_weight = round(floatval(($pickup_count * $this->statsService->gerettet_wrapper($b['abholmenge']))), 2);
+			$count_info .= '<div>Bei diesem Betrieb wurde <strong>' . $pickup_count . '<span style="white-space:nowrap">&thinsp;</span>x</strong> abgeholt</div>';
+			$fetch_weight = round(floatval(($pickup_count * $this->weightHelper->mapIdToKilos($b['abholmenge']))), 2);
 			$count_info .= '<div">Es wurden <strong>' . $fetch_weight . '<span style="white-space:nowrap">&thinsp;</span>kg</strong> gerettet</div>';
 		}
 

@@ -27,14 +27,14 @@ set('default_timeout', 600);
 
 // Hosts
 host('beta')
-	->hostname('banana.foodsharing.de')
+	->hostname('dragonfruit.foodsharing.network')
 	->user('deploy')
-	->set('deploy_path', '~/beta-deploy');
+	->set('deploy_path', '/var/www/beta');
 
 host('production')
-	->hostname('banana.foodsharing.de')
+	->hostname('dragonfruit.foodsharing.network')
 	->user('deploy')
-	->set('deploy_path', '~/production-deploy');
+	->set('deploy_path', '/var/www/production');
 
 // Tasks
 desc('Create the revision information');

@@ -12,7 +12,7 @@ class BlogView extends View
 		foreach ($data as $d) {
 			$row_tmp = array();
 
-			if ($this->session->isOrgaTeam() || $this->session->isAdminFor($d['bezirk_id'])) {
+			if ($this->session->isAdminFor($d['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
 			} else {
 				$row_tmp[] = array('cnt' => $this->translationHelper->s('status_' . $d['active']));

@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Bell;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 
@@ -10,10 +9,9 @@ class BellXhr extends Control
 {
 	private $gateway;
 
-	public function __construct(Db $model, BellGateway $gateway)
+	public function __construct(BellGateway $gateway)
 	{
 		$this->gateway = $gateway;
-		$this->model = $model;
 
 		parent::__construct();
 	}

@@ -34,7 +34,7 @@ class vMap extends vCore
 		$this->defaultMarkerOptions = [
 			'color' => 'orange',
 			'icon' => 'smile',
-			'prefix' => 'img'
+			'prefix' => 'fa'
 		];
 		$this->marker = array();
 	}
@@ -44,7 +44,7 @@ class vMap extends vCore
 		$this->searchpanel = $val;
 	}
 
-	public function setDefaultMarkerOptions($icon, $color, $prefix = 'img')
+	public function setDefaultMarkerOptions(string $icon, string $color, string $prefix = 'fa'): void
 	{
 		$this->defaultMarkerOptions = [
 			'icon' => $icon,
