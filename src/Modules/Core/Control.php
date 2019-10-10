@@ -207,7 +207,7 @@ abstract class Control
 		return false;
 	}
 
-	public function wallposts($table, $id)
+	public function wallposts($table, $id): string
 	{
 		$this->pageHelper->addJsFunc('
 			function u_delPost(id, module, wallId)

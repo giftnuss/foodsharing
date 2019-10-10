@@ -7,6 +7,7 @@
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
+- Reduced complexity of the profile module !1037 @peter.toennies
 
 ## Dev/Test/CI stuff
 
