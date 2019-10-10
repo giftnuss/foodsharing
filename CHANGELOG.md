@@ -7,6 +7,7 @@
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
+- Reduced complexity of the profile module !1037 @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -150,7 +151,6 @@ And we have even included some new features for you.
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 - Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
-- Reduced complexity of the profile module !1037 @peter.toennies
 - Refactored the WallPost module !1038 @peter.toennies
 
 ## Dev/Test/CI stuff
