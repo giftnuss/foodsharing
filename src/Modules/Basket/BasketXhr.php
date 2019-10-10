@@ -291,7 +291,7 @@ class BasketXhr extends Control
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['choords']) && $basket = $this->basketGateway->listCloseBaskets(
+		if (isset($_GET['choords']) && $basket = $this->basketGateway->listNearbyBasketsByDistance(
 				$this->session->id(),
 				[
 					'lat' => $_GET['choords'][0],

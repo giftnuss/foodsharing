@@ -132,7 +132,6 @@ final class FoodsaverGateway extends BaseGateway
 				`geb_datum`,
 				`anmeldedatum`,
 				`photo`,
-				`photo_public`,
 				`about_me_public`,
 				`orgateam`,
 				`data`,
@@ -652,7 +651,7 @@ final class FoodsaverGateway extends BaseGateway
 			lon = NULL,
 			photo = NULL,
 			email = NULL,
-			passwd = NULL,
+			password = NULL,
 			name = NULL,
 			nachname = NULL,
 			anschrift = NULL,
@@ -692,10 +691,6 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function updateProfile($fs_id, $data)
 	{
-		if (!isset($data['photo_public'])) {
-			$data['photo_public'] = 0;
-		}
-
 		$fields = [
 			'bezirk_id',
 			'plz',
@@ -707,7 +702,6 @@ final class FoodsaverGateway extends BaseGateway
 			'handy',
 			'geb_datum',
 			'about_me_public',
-			'photo_public',
 			'homepage',
 			'position'
 		];

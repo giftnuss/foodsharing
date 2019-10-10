@@ -33,19 +33,6 @@ class ViewUtils
 		$this->translationHelper = $translationHelper;
 	}
 
-	public function fsBubble($fs)
-	{
-		return '<div style="height:80px;overflow:hidden;width:200px;">
-				<div style="margin-right:10px;float:left;margin-bottom:33px">
-					<a href="/profile/' . (int)$fs['id'] . '">
-							<img src="' . $this->imageService->img($fs['photo']) . '">
-					</a>
-				</div>
-				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/' . (int)$fs['id'] . '">' . $fs['name'] . '</a></h1>
-				<div style="clear:both;"></div>
-			</div>';
-	}
-
 	public function bBubble($b)
 	{
 		$button = '';

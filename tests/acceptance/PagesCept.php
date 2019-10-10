@@ -4,8 +4,6 @@ $I = new AcceptanceTester($scenario);
 $I->wantTo('ensure various pages work');
 
 $I->amOnPage('/');
-/* digital climate strike overlay overlaps leaflet attribution, but it is fine after closing */
-$I->setCookie('_DIGITAL_CLIMATE_STRIKE_WIDGET_CLOSED_', 'true');
 $I->see('Lebensmittel');
 
 $I->amOnPage('/essenskoerbe');

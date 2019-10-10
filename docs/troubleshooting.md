@@ -58,7 +58,7 @@ or even `sudo rm -rf cache`.
 
 ## Restart, clean and delete cache - Quick and dirty ;-)
 
- `./scripts/stop && sudo rm -rf cache . && ./scripts/clean && ./scripts/start` 
+ `./scripts/stop && sudo rm -rf cache && sudo ./scripts/clean && ./scripts/start` 
 
 ## Database and email access
 

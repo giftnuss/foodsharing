@@ -1,6 +1,27 @@
 # Unreleased
-- changed icons on statistic page !538 @henrikhertler
+
+## Features
+
+## Bugfixes
+- fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
+
+## Refactoring
+- Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
+
+## Dev/Test/CI stuff
+
+# 2019-10-08 Hotfix
+- nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
+- remove email and gender from some responses in MessageXhr.php !1098
+
+# 2019-10-06
+
+Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
+A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps. 
+And we have even included some new features for you.
+
 ## Major changes
+- New pick-up list
 
 ## Features
 - Added Rest endpoint for nearby baskets !875 @alex.simm
@@ -8,7 +29,7 @@
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
-- pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
+- pickup list includes now stores in sub-districts, year added, divers separated !906 @fs_k
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 - Added active foodsaver and jumper count to store popup on map !920 #620 @fs_k
@@ -16,6 +37,7 @@
     - profile settings !895 @jofranz
     - event page !915 @jofranz
     - store settings !922 @jofranz
+    - fair-share-point settings !1085 @jofranz
 - InfluxDB Metrics via UDP !882 @alangecker
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
@@ -42,8 +64,16 @@
 - Add backend logic for changing basket locations !1021 @alex.simm
 - Updated the wording regarding "not more than 2 foodsavers per pickup !1029 @peter.toennies
 - Fixed bell notifications for new wallposts in stores !1030 @jofranz
+- The map is zoomed out in case no address is specified instead of showing the ocean !1053 @dthulke
+- A region's reports are now accessible for the ambassadors in charge via the region menus !1041 @peter.toennies
+- Add basket counters to statistics #81 !1045 @chris2up9
+- Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
+- Link avatar pics to user profile at report. !1047 @moffer
+- Prevent email form from sending mails to "noreply" addresses. Blocked by a warning !1065 @jofranz
+- Adding apple-app-site-association file to allow Universal Linking in our possible apps !1082 @rastadapasta
 
 ## Bugfixes
+- restrict pickup statistic on country level to orga !1073 @fs_k
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
@@ -71,7 +101,7 @@
 - Passport generation is now reliable working with all genders. !997 #665 @mr-kenhoff
 - Don't return outdated baskets via the REST API !1008 @dthulke
 - Fixed saving an edited quiz answer !1006 #408 @svenpascal
-- Fixed hidden attribution-line on main map !980 #661 @mri-kenhoff
+- Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Added contact form email information to email body/text as a workaround to make it possible for people to reply !979 @jofranz
@@ -87,6 +117,26 @@
 - When logging in, referenced redirects work now. !1034 #563 @peter.toennies
 - Open link to markdown description in a new window !1050 #698 @chriswalg
 - Open wiki.foodsharing.de in top menu bar in new window !1051 @chriswalg
+- Deleting report notes now possible for Orga and admins of the report team. Writing user notes now possible for orga only !1038 #537 @peter.toennies
+- Fix appearance of event accept/decline buttons on small screens !1027 #640 @petersielie
+- Do not allow signing out of past pickups !1058 #633 @alex.simm
+- The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
+- Fixed occupied one-time pickups that showed up unoccupied !1059 #633 @alex.simm
+- Fixed end date not being displayed when editing existing multi-day events !995 #277 @tihar
+- Link in chat-message notification email now leads to corresponding conversation !1064 #703 @rastadapasta
+- Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
+- Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
+- Fixed invisible overbooked pickups !1069 #633 @alex.simm
+- Workgroups overview optimized for mobile view #702 !1063 @chriswalg
+- Bugfix for sentry issue regarding the #vue-pickuplist !1074 @ctwx_ok
+- Removed question form for data privacy !1077 #166 @chriswalg
+- Fixed the check for empty address data on the foodsaver dashboard !1076 @peter.toennies
+- Bugfix for empty pickup list !1078 @ctwx_ok
+- Set width 50px for user pics in region member list !1080 @chriswalg
+- Put the footer on pages with less content at the bottom of the page !1087 #590 @chriswalg
+- Bugfix for end date being required when creating single-day event !1084 @tihar
+- Removed the obsolete and insecure foodsaver bubble for our map !1093 @peter.toennies
+- Removed forum subscriptions for people who left a district or workgroup !1071 #655 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -101,19 +151,25 @@
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
 - Use new storePermissions instead of chaining previous permission checks in stores !990 @jofranz
 - Reduced complexity of the profile module !1037 @peter.toennies
+- Refactored the WallPost module !1038 @peter.toennies
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
-- update null-loader to version 2 @peter.toennies
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
-- updated eslint to v6, eslint-config-standard to v14, and eslint-plugin-html to v6 @peter.toennies
+- updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
 
+# 2019-08-30 Hotfix
+- Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
+
+# 2019-06-17 Hotfix
+- Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
+    
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
@@ -131,7 +187,7 @@ The frontend does not yet follow that behaviour (showing pickup slots always for
 
 # 2019-05-17
 Hey again,
-another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
+another release for you. Nothing big, but a lot of small. Most noticeable things will be changed email templates as well as more buttons which properly work on mobile now.
 
 ## Major changes
 
@@ -521,6 +577,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - Groups in the menu are also keyboard navigatable !515 #314 @theolampert @NerdyProjects
 - Enable autofill username/password for login !515 @theolampert @NerdyProjects
 - Fix display of avatars for users without avatars !520 @theolampert @NerdyProjects
+- updated corejs to v 3 !1043 @peter.toennies
 
 ## Refactoring
 - removed global $g_body_class variable !451 @alangecker

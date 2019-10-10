@@ -12,7 +12,7 @@ const glob = require('glob')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = dev ? resolve('../assets') : resolve('../assets')
+const assetsPath = resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
@@ -118,6 +118,7 @@ module.exports = merge(webpackBase, {
         sourceMap: true
       })
     ],
+    runtimeChunk: true,
     splitChunks: {
       chunks: 'all',
       name: dev,

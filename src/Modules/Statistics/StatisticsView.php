@@ -72,7 +72,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fscount">
-							<i class="fas fa-user-check", style="margin-left: 30px"></i>	
+							<i class="fas fa-user-check", style="margin-left: 30px"></i>
 						</div>
 					</div>
 					<div class="stat_text">
@@ -83,7 +83,7 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon fscount2">
-							<i class="fas fa-users"></i>	
+							<i class="fas fa-users"></i>
 						</div>
 					</div>
 					<div class="stat_text">
@@ -105,12 +105,37 @@ class StatisticsView extends View
 			<div class="stat_item">
 					<div class="stat_badge">
 						<div class="stat_icon dailyfetchcount">
-							<i class="fas fa-people-carry"></i>	
+							<i class="fas fa-people-carry"></i>
 						</div>
 					</div>
 					<div class="stat_text">
 						<h4>' . number_format($avgDailyFetchCount, 0, ',', '.') . '</h4>
 						<p>' . $this->translationHelper->s('average_daily_fetches') . '</p>
+					</div>
+			</div><br />
+			<div class="stat_item">
+				<div class="stat_badge">
+					<div class="stat_icon totalbaskets">
+						<i class="fas fa-shopping-basket"></i>
+					</div>
+				</div>
+					<div class="stat_text">
+						<h4>' . number_format($stat['totalBaskets'], 0, ',', '.') . '</h4>
+						<p>' . $this->translationHelper->s('total_baskets') . '</p>
+					</div>
+			</div>
+			<div class="stat_item">
+				<div class="stat_badge">
+					<div class="stat_icon avgWeeklyBaskets">
+            <span class="fa-stack">
+              <i class="far fa-calendar fa-stack-2x"></i>
+              <i class="fas fa-shopping-basket fa-stack-1x fa-stack-sm"></i>
+            </span>
+          </div>
+				</div>
+					<div class="stat_text">
+						<h4>' . number_format($stat['avgWeeklyBaskets'], 0, ',', '.') . '</h4>
+						<p>' . $this->translationHelper->s('average_weekly_baskets') . '</p>
 					</div>
 			</div><br />
 		</div>', $this->translationHelper->s('stat_whole'));

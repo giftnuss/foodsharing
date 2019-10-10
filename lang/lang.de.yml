@@ -101,8 +101,8 @@ register:
   login_surname: Nachname
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
   forgotten_password: Passwort vergessen?
-  have_read_the_legal_stuff1: Ich habe die Datenschutzerklärung zur Kenntnis genommen
-  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank">Rechtsvereinbarung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff1: Ich habe die <a href="https://foodsharing.de/?page=legal" target="_blank" rel="noopener noreferrer nofollow">Datenschutzerklärung</a> zur Kenntnis genommen
+  have_read_the_legal_stuff2: Ich habe die <a href="https://wiki.foodsharing.de/Rechtsvereinbarung" target="_blank" rel="noopener noreferrer nofollow">Rechtsvereinbarung</a> zur Kenntnis genommen
   prev: zur&uumlck
   next: weiter
   finish: Anmeldung absenden
@@ -131,6 +131,7 @@ terminology:
   admins: Administratoren
   wall: Pinnwand
   statistic: Statistik
+  reports: Regelverletzungen (Preview)
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
@@ -323,3 +324,6 @@ pickuplist:
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
+
+mail:
+  noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"

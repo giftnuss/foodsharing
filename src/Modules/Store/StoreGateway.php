@@ -967,18 +967,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 * @param int $storeId
 	 * @param \DateTime $from DateRange start for all slots. Now if empty.
 	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
-	 * @param \DateTime $additionalTo DateRange for onetime slots to be taken into account
+	 * @param \DateTime $oneTimeSlotTo DateRange for onetime slots to be taken into account
 	 *
 	 * @return array
 	 */
-	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $additionalTo = null): array
+	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $oneTimeSlotTo = null): array
 	{
 		$intervalFuturePickupSignup = $this->getFutureRegularPickupInterval($storeId);
 		$from = $from ?? Carbon::now();
-		$to = $to ?? Carbon::tomorrow()->addHour(2)->add($intervalFuturePickupSignup);
+		$extendedToDate = Carbon::tomorrow()->add($intervalFuturePickupSignup);
+		$to = $to ?? $extendedToDate;
 		$regularSlots = $this->getRegularPickups($storeId);
-		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $additionalTo);
-		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $to);
+		$onetimeSlots = $this->getOnetimePickupsForRange($storeId, $from, $oneTimeSlotTo);
+		$signupsTo = is_null($oneTimeSlotTo) ? null : max($to, $oneTimeSlotTo);
+		$signups = $this->getPickupSignupsForDateRange($storeId, $from, $signupsTo);
 
 		$slots = [];
 		foreach ($regularSlots as $slot) {
@@ -1006,7 +1008,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					);
 					$isAvailable =
 						$date > Carbon::now() &&
-						$date < Carbon::now()->add($intervalFuturePickupSignup) &&
+						$date <= $extendedToDate &&
 						$slot['fetcher'] > count($occupiedSlots);
 					$slots[] = [
 						'date' => $date,

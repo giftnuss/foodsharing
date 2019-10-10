@@ -227,7 +227,11 @@
       "avatar_url": "https://assets.gitlab-static.net/uploads/-/system/user/avatar/2772224/avatar.png?width=90",
       "profile": "https://gitlab.com/jofranz",
       "contributions": [
-        "code"
+        "code",
+        "ideas",
+        "question",
+        "bug",
+        "board"
       ]
     },
     {

@@ -103,4 +103,16 @@ class PickupApiCest
 		$I->sendGET('api/stores/' . $this->store['id'] . '/pickups');
 		$I->seeResponseCodeIs(HttpCode::FORBIDDEN);
 	}
+
+	public function cannotSignOutOfPastPickup(\ApiTester $I)
+	{
+		$pickupBaseDate = Carbon::now()->sub('2 days');
+		$pickupBaseDate->hours(14)->minutes(45)->seconds(0);
+		$I->addPickup($this->store['id'], ['time' => $pickupBaseDate, 'fetchercount' => 2]);
+		$I->addPicker($this->store['id'], $this->user['id'], ['date' => $pickupBaseDate]);
+
+		$I->login($this->user['email']);
+		$I->sendDELETE('api/stores/' . $this->store['id'] . '/pickups/' . $pickupBaseDate->toIso8601String() . '/' . $this->user['id']);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+	}
 }

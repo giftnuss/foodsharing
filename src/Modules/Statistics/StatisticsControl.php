@@ -27,6 +27,9 @@ class StatisticsControl extends Control
 		$this->pageHelper->addBread($content['title']);
 
 		$stat_total = $this->statisticsGateway->listTotalStat();
+		$stat_total['totalBaskets'] = $this->statisticsGateway->countAllBaskets();
+		$stat_total['avgWeeklyBaskets'] = $this->statisticsGateway->avgWeeklyBaskets();
+
 		$stat_cities = $this->statisticsGateway->listStatCities();
 		$stat_fs = $this->statisticsGateway->listStatFoodsaver();
 

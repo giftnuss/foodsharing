@@ -279,7 +279,7 @@ class XhrMethods
 	{
 		if ($this->session->may()) {
 			$this->mem->delPageCache('/?page=dashboard', $this->session->id());
-			$fields = $this->dataHelper->unsetAll($data, array('photo_public', 'lat', 'lon', 'stadt', 'plz', 'anschrift'));
+			$fields = $this->dataHelper->unsetAll($data, array('lat', 'lon', 'stadt', 'plz', 'anschrift'));
 
 			if ($this->model->updateFields($fields, 'fs_foodsaver', $this->session->id())) {
 				return $this->xhr_out();
@@ -360,18 +360,6 @@ class XhrMethods
 					)
 				));
 			}
-		}
-
-		return json_encode(array('status' => 0));
-	}
-
-	public function xhr_fsBubble($data)
-	{
-		if ($b = $this->foodsaverGateway->getOne_foodsaver($data['id'])) {
-			return json_encode(array(
-				'status' => 1,
-				'html' => $this->xhrViewUtils->fsBubble($b)
-			));
 		}
 
 		return json_encode(array('status' => 0));

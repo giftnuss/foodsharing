@@ -80,13 +80,14 @@ class Foodsharing extends \Codeception\Module\Db
 			'last_login' => $this->faker->dateTimeBetween('-1 years', '-1 hours'),
 			'anschrift' => $this->faker->streetName,
 			'handy' => $this->faker->phoneNumber,
-			'photo_public' => 1,
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
 			'token' => uniqid()
 		], $extra_params);
-		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
+		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
+			'time_cost' => 1
+		]);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
@@ -360,6 +361,24 @@ class Foodsharing extends \Codeception\Module\Db
 				throw $e;
 			}
 		}
+
+		return $params;
+	}
+
+	public function addPicker($store, $foodsaverId, $extra_params = [])
+	{
+		$date = $this->faker->date('Y-m-d H:i:s');
+		$params = array_merge([
+			'foodsaver_id' => $foodsaverId,
+			'betrieb_id' => $store,
+			'date' => $date,
+			'confirmed' => '1'
+		], $extra_params);
+
+		$params['date'] = $this->toDateTime($params['date']);
+
+		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
 
 		return $params;
 	}

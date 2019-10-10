@@ -69,7 +69,7 @@ class SettingsXhr extends Control
 
 				return array(
 					'status' => 1,
-					'script' => 'pulseInfo(\'Gehe jetzt zu Deinem <strong>neuen</strong> E-Mail-Postfach um die Adresse zu bestätigen!\',{sticky:true});'
+					'script' => 'pulseInfo(\'Gehe jetzt zu Deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!\',{sticky:true});'
 				);
 			}
 		} else {

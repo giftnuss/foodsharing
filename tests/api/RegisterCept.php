@@ -39,8 +39,6 @@ $I->seeInDatabase('fs_foodsaver', [
 	'nachname' => $last_name,
 	'newsletter' => 1,
 	'geb_datum' => $birthdate,
-	'passwd' => null, // no md5 password
-	'fs_password' => null, // no sha1 password
 	'anschrift' => 'Kantstraße 5a',
 	'plz' => '12345'
 ]);

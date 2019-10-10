@@ -28,7 +28,6 @@ $I->fillField('#handy', $mobilenumber);
 $I->fillField('#geb_datum', '1988-05-31');
 $I->fillField('#homepage', 'www.matthias-larisch.de');
 $I->fillField('#about_me_public', 'Ich mag foodsharing.');
-$I->selectOption('#about_me_public', 'Meine Daten niemandem zeigen.');
 
 $I->click('Speichern');
 $I->waitForText('Änderungen wurden gespeichert');
@@ -44,7 +43,6 @@ $I->seeInField('#handy', $mobilenumber);
 $I->seeInField('#geb_datum', '1988-05-31');
 $I->seeInField('#homepage', 'http://www.matthias-larisch.de');
 $I->seeInField('#about_me_public', 'Ich mag foodsharing.');
-$I->seeOptionIsSelected('#photo_public-wrapper', 'Meine Daten niemandem zeigen.');
 
 $I->fillField('#homepage', 'https://www.matthias-larisch.de');
 $I->click('Speichern');

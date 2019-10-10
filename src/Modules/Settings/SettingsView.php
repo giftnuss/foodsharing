@@ -502,32 +502,6 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
-		if($("#photo_public").length > 0)
-		{
-			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
-			{
-
-			}
-			else
-			{
-				$e.preventDefault();
-			}
-		}
-
-	});');
-
-		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-		)));
-
-		if ($this->session->may('bot')) {
-			$oeff = '<input type="hidden" name="photo_public" value="1" />';
-		}
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
@@ -559,7 +533,6 @@ class SettingsView extends View
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
-			$oeff
 		), array('submit' => $this->translationHelper->s('save')));
 	}
 

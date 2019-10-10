@@ -76,7 +76,7 @@ class StoreControl extends Control
 				$this->handle_add($this->session->id());
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
-				$this->pageHelper->addBread($this->translationHelper->s('bread_new_betrieb'));
+				$this->pageHelper->addBread($this->translationHelper->s('add_new_store'));
 
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
@@ -101,7 +101,7 @@ class StoreControl extends Control
 			*/
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
-			$this->pageHelper->addBread($this->translationHelper->s('bread_edit_betrieb'));
+			$this->pageHelper->addBread($this->translationHelper->s('edit_store'));
 			$data = $this->model->getOne_betrieb($id);
 
 			$this->pageHelper->addTitle($data['name']);
