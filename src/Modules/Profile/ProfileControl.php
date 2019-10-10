@@ -43,7 +43,7 @@ final class ProfileControl extends Control
 				$this->view->setData($this->foodsaver);
 
 				if ($this->uriStr(3) === 'notes') {
-					$this->organisationTeamNotes();
+					$this->orgaTeamNotes();
 				} else {
 					$this->profile();
 				}
@@ -55,7 +55,7 @@ final class ProfileControl extends Control
 		}
 	}
 
-	private function organisationTeamNotes(): void
+	private function orgaTeamNotes(): void
 	{
 		$this->pageHelper->addBread($this->foodsaver['name'], '/profile/' . $this->foodsaver['id']);
 		if ($this->session->may('orga')) {

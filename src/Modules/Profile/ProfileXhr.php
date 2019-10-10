@@ -97,7 +97,7 @@ class ProfileXhr extends Control
 				'status' => 1,
 				'comment' => $comment,
 				'title' => 'Nachricht hinterlassen',
-				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . (int)$foodsharerId . ');',
+				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
 			];
 		}
 

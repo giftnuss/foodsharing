@@ -307,16 +307,20 @@ class ProfileView extends View
 		$out = '
 			<ul class="linklist history">';
 
-		$curDate = 0;
+		$curDate = '';
 		foreach ($history as $h) {
-			if ($curDate != $h['date']) {
+			if ($curDate !== $h['date']) {
 				$out = $this->renderTypeOfHistoryEntry($changeType, $h, $out);
 
 				$curDate = $h['date'];
 			}
 
-			if ($h['bot_id'] !== null) {
-				$out .= '
+			$out = $h['bot_id'] === null
+				? $out . '<li>
+					Es liegt keine Information &uuml;ber den Ersteller vor
+				</li>
+				'
+				: $out . '
 				<li>
 					<a class="corner-all" href="/profile/' . (int)$h['bot_id'] . '">
 						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
@@ -324,16 +328,10 @@ class ProfileView extends View
 						<span class="c"></span>
 					</a>
 				</li>';
-			} else {
-				$out .= '
-				<li>
-					Es liegt keine Information &uuml;ber den Ersteller vor
-				</li>';
-			}
 		}
 		$out .= '
 		</ul>';
-		if ($curDate == 0) {
+		if ($curDate === '') {
 			$out = $this->translationHelper->s('no_data');
 		}
 
@@ -649,11 +647,11 @@ class ProfileView extends View
 				switch ($h['change_status']) {
 					case 0:
 						$class = 'unverify';
-						$typeOfChange = $this->translationHelper->s('verified');
+						$typeOfChange = $this->translationHelper->s('de_verified');
 						break;
 					case 1:
 						$class = 'verify';
-						$typeOfChange = $this->translationHelper->s('de_verified');
+						$typeOfChange = $this->translationHelper->s('verified');
 						break;
 					default:
 						break;
@@ -663,11 +661,11 @@ class ProfileView extends View
 					) . ' durch:</li>';
 				break;
 			case 1:
-				if ($h['bot_id'] !== null) {
-					$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
-				} else {
-					$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
-				}
+				$out = $h['bot_id'] === null
+					? $out . '<li class="title">' . $this->timeHelper->niceDate(
+						$h['date_ts']
+					) . '</li>'
+					: $out . '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . ' durch:</li>';
 				break;
 			default:
 				break;
