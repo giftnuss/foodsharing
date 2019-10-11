@@ -4,7 +4,13 @@
     no-caret
   >
     <template slot="button-content">
-      <i class="fas fa-shopping-cart" />
+      <span>
+        <i class="fas fa-shopping-cart" />
+        <i
+          :style="circleStyle(globalPickupStatus)"
+          class="fas fa-circle fa-stack-1x fa-sup"
+        />
+      </span>
     </template>
     <div
       v-for="store in stores"
@@ -16,24 +22,8 @@
         class="dropdown-item text-truncate"
       >
         <i
-          v-if="store.pickupStatus == 1"
+          :style="circleStyle(store.pickupStatus)"
           class="fas fa-circle"
-          style="color: yellow;"
-        />
-        <i
-          v-else-if="store.pickupStatus == 2"
-          class="fas fa-circle"
-          style="color: orange;"
-        />
-        <i
-          v-else-if="store.pickupStatus == 3"
-          class="fas fa-circle"
-          style="color: red;"
-        />
-        <i
-          v-else
-          class="fas fa-circle"
-          style="color: white; filter: alpha(opacity=0);"
         />
         {{ store.name }}
       </a>
@@ -67,10 +57,34 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    globalPickupStatus () {
+      let status = 0
+      for (const store of this.stores) {
+        status = Math.max(status, store.pickupStatus)
+      }
+      return status
+    }
+  },
+  methods: {
+    circleStyle (pickupStatus) {
+      const colors = ['yellow', 'orange', 'red']
+      return {
+        color: colors[pickupStatus - 1],
+        visibility: pickupStatus > 0 ? 'visible' : 'hidden'
+      }
+    }
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+  .fa-stack {
+    vertical-align: bottom;
+  }
+  .fa-sup {
+    margin: -.5em 0px 0px .5em;
+    text-shadow: 0 0 1px black;
+  }
 </style>
