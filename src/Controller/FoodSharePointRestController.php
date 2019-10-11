@@ -3,7 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -11,9 +11,9 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Rest controller for fair share points.
+ * Rest controller for food share points.
  */
-final class FairSharePointRestController extends AbstractFOSRestController
+final class FoodSharePointRestController extends AbstractFOSRestController
 {
 	private $gateway;
 	private $imageService;
@@ -22,7 +22,7 @@ final class FairSharePointRestController extends AbstractFOSRestController
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const MAX_FSP_DISTANCE = 50;
 
-	public function __construct(FairTeilerGateway $gateway, ImageService $imageService, Session $session)
+	public function __construct(FoodSharePointGateway $gateway, ImageService $imageService, Session $session)
 	{
 		$this->gateway = $gateway;
 		$this->imageService = $imageService;
@@ -30,12 +30,12 @@ final class FairSharePointRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Returns a list of fair share points close to a given location. If the location is not valid the user's
+	 * Returns a list of food share points close to a given location. If the location is not valid the user's
 	 * home location is used. The distance is measured in kilometers.
 	 *
-	 * Returns 200 and a list of fair share points, 400 if the distance is out of range, or 401 if not logged in.
+	 * Returns 200 and a list of food share points, 400 if the distance is out of range, or 401 if not logged in.
 	 *
-	 * @Rest\Get("fairSharePoints/nearby")
+	 * @Rest\Get("foodSharePoints/nearby")
 	 * @Rest\QueryParam(name="lat", nullable=true)
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
@@ -44,7 +44,7 @@ final class FairSharePointRestController extends AbstractFOSRestController
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function listNearbyFairSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	public function listNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
@@ -56,38 +56,38 @@ final class FairSharePointRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_FSP_DISTANCE);
 		}
 
-		$fsps = $this->gateway->listCloseFairteiler($location, $distance);
+		$fsps = $this->gateway->listNearbyFoodSharePoints($location, $distance);
 		$fsps = array_map(function ($fsp) {
-			return $this->normalizeFairSharePoint($fsp);
+			return $this->normalizeFoodSharePoint($fsp);
 		}, $fsps);
 
 		return $this->handleView($this->view($fsps, 200));
 	}
 
 	/**
-	 * Returns details of the fair share point with the given ID. Returns 200 and the
-	 * fair share point, 500 if the fair share point does not exist, or 401 if not logged in.
+	 * Returns details of the food share point with the given ID. Returns 200 and the
+	 * food share point, 500 if the food share point does not exist, or 401 if not logged in.
 	 *
-	 * @Rest\Get("fairSharePoints/{fairSharePointId}", requirements={"fairSharePointId" = "\d+"})
+	 * @Rest\Get("foodSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
 	 *
-	 * @param int $fairSharePointId
+	 * @param int $foodSharePointId
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function getFairSharePointAction(int $fairSharePointId): \Symfony\Component\HttpFoundation\Response
+	public function getFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
-		$fairSharePoint = $this->gateway->getFairteiler($fairSharePointId);
-		if (!$fairSharePoint || $fairSharePoint['status'] !== 1) {
-			throw new HttpException(404, 'FairSharePoint does not exist or was deleted.');
+		$foodSharePoint = $this->gateway->getFoodSharePoint($foodSharePointId);
+		if (!$foodSharePoint || $foodSharePoint['status'] !== 1) {
+			throw new HttpException(404, 'Food share point does not exist or was deleted.');
 		}
 
-		$fairSharePoint = $this->normalizeFairSharePoint($fairSharePoint);
+		$foodSharePoint = $this->normalizeFoodSharePoint($foodSharePoint);
 
-		return $this->handleView($this->view($fairSharePoint, 200));
+		return $this->handleView($this->view($foodSharePoint, 200));
 	}
 
 	private function fetchLocationOrUserHome($paramFetcher): array
@@ -117,13 +117,13 @@ final class FairSharePointRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Normalizes the details of a fair share point for the Rest response.
+	 * Normalizes the details of a food share point for the Rest response.
 	 *
-	 * @param array $fspData the fair share point data
+	 * @param array $fspData the food share point data
 	 *
 	 * @return array
 	 */
-	private function normalizeFairSharePoint(array $data): array
+	private function normalizeFoodSharePoint(array $data): array
 	{
 		// set main properties
 		$fsp = [

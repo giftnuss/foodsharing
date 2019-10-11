@@ -1,8 +1,8 @@
 <?php
 
-use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
-class FairTeilerGatewayTest extends \Codeception\Test\Unit
+class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 {
 	/**
 	 * @var \UnitTester
@@ -10,7 +10,7 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	protected $tester;
 
 	/**
-	 * @var FairTeilerGateway
+	 * @var FoodSharePointGateway
 	 */
 	private $gateway;
 
@@ -27,7 +27,7 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	/**
 	 * @var array
 	 */
-	private $fairteiler;
+	private $foodSharePoint;
 
 	/**
 	 * @var array
@@ -36,11 +36,11 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(FairTeilerGateway::class);
+		$this->gateway = $this->tester->get(FoodSharePointGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->otherFoodsaver = $this->tester->createFoodsaver();
 		$this->bezirk = $this->tester->createRegion('peter');
-		$this->fairteiler = $this->tester->createFairteiler($this->foodsaver['id'], $this->bezirk['id'], [
+		$this->foodSharePoint = $this->tester->createFoodSharePoint($this->foodsaver['id'], $this->bezirk['id'], [
 			'picture' => 'picture/cat.jpg'
 		]);
 	}
@@ -50,15 +50,15 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
 			'name' => 'asdf',
-			'desc' => $this->fairteiler['desc'],
-			'anschrift' => $this->fairteiler['anschrift'],
-			'plz' => $this->fairteiler['plz'],
-			'ort' => $this->fairteiler['ort'],
-			'lat' => $this->fairteiler['lat'],
-			'lon' => $this->fairteiler['lon'],
+			'desc' => $this->foodSharePoint['desc'],
+			'anschrift' => $this->foodSharePoint['anschrift'],
+			'plz' => $this->foodSharePoint['plz'],
+			'ort' => $this->foodSharePoint['ort'],
+			'lat' => $this->foodSharePoint['lat'],
+			'lon' => $this->foodSharePoint['lon'],
 			'picture' => null
 			];
-		$response = $this->gateway->updateFairteiler($this->fairteiler['id'], $data);
+		$response = $this->gateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);
 		$this->assertTrue($response);
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
@@ -67,20 +67,20 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	{
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
-			'name' => $this->fairteiler['name'],
-			'desc' => $this->fairteiler['desc'],
-			'anschrift' => $this->fairteiler['anschrift'],
-			'plz' => $this->fairteiler['plz'],
-			'ort' => $this->fairteiler['ort'],
-			'lat' => $this->fairteiler['lat'],
-			'lon' => $this->fairteiler['lon'],
+			'name' => $this->foodSharePoint['name'],
+			'desc' => $this->foodSharePoint['desc'],
+			'anschrift' => $this->foodSharePoint['anschrift'],
+			'plz' => $this->foodSharePoint['plz'],
+			'ort' => $this->foodSharePoint['ort'],
+			'lat' => $this->foodSharePoint['lat'],
+			'lon' => $this->foodSharePoint['lon'],
 			'picture' => null
 		];
-		$response = $this->gateway->updateFairteiler(
-			$this->fairteiler['id'], $data
+		$response = $this->gateway->updateFoodSharePoint(
+			$this->foodSharePoint['id'], $data
 		);
 		$this->assertTrue($response);
-		$this->tester->seeInDatabase('fs_fairteiler', ['name' => $this->fairteiler['name']]);
+		$this->tester->seeInDatabase('fs_fairteiler', ['name' => $this->foodSharePoint['name']]);
 	}
 
 	public function testUpdateFairteilerDoesNotStripTags()
@@ -90,17 +90,17 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
 			'name' => 'asdf<script>',
-			'desc' => $this->fairteiler['desc'],
-			'anschrift' => $this->fairteiler['anschrift'],
-			'plz' => $this->fairteiler['plz'],
-			'ort' => $this->fairteiler['ort'],
-			'lat' => $this->fairteiler['lat'],
-			'lon' => $this->fairteiler['lon'],
+			'desc' => $this->foodSharePoint['desc'],
+			'anschrift' => $this->foodSharePoint['anschrift'],
+			'plz' => $this->foodSharePoint['plz'],
+			'ort' => $this->foodSharePoint['ort'],
+			'lat' => $this->foodSharePoint['lat'],
+			'lon' => $this->foodSharePoint['lon'],
 			'picture' => null
 		];
 
-		$response = $this->gateway->updateFairteiler(
-			$this->fairteiler['id'],
+		$response = $this->gateway->updateFoodSharePoint(
+			$this->foodSharePoint['id'],
 			$data
 		);
 		$this->assertTrue($response);
@@ -111,7 +111,7 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	public function testUpdateFairteilerThrowsIfIDNotFound()
 	{
 		$this->expectException(\Exception::class);
-		$this->gateway->updateFairteiler(
+		$this->gateway->updateFoodSharePoint(
 			99999999, []
 		);
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
@@ -120,20 +120,20 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	public function testFollow()
 	{
 		$params = [
-			'fairteiler_id' => $this->fairteiler['id'],
+			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->otherFoodsaver['id'],
 			'infotype' => 1,
 			'type' => 1
 		];
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', $params);
-		$this->gateway->follow($this->fairteiler['id'], $this->otherFoodsaver['id'], 1);
+		$this->gateway->follow($this->foodSharePoint['id'], $this->otherFoodsaver['id'], 1);
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
 	}
 
 	public function testFollowDoesNotOverwriteExistingType()
 	{
 		$params = [
-			'fairteiler_id' => $this->fairteiler['id'],
+			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
 			'infotype' => 1,
 			'type' => 2
@@ -142,7 +142,7 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 		// Our foodsaver is an admin of the fairteiler so already has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
 
-		$this->gateway->follow($this->fairteiler['id'], $this->foodsaver['id'], 1);
+		$this->gateway->follow($this->foodSharePoint['id'], $this->foodsaver['id'], 1);
 
 		// They should keep their type 2 (meaning admin)
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
@@ -155,27 +155,27 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 	{
 		// Our foodsaver is an admin of the fairteiler so has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', [
-			'fairteiler_id' => $this->fairteiler['id'],
+			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
 			'infotype' => 1,
 			'type' => 2
 		]);
 
-		$this->gateway->unfollow($this->fairteiler['id'], $this->foodsaver['id']);
+		$this->gateway->unfollow($this->foodSharePoint['id'], $this->foodsaver['id']);
 
 		// There are now no follow entries for this fairteiler/foodsaver combination
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', [
-			'fairteiler_id' => $this->fairteiler['id'],
+			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
 		]);
 	}
 
 	public function testGetFairteiler()
 	{
-		$fairteiler = $this->gateway->getFairteiler($this->fairteiler['id']);
-		$this->assertEquals($fairteiler['id'], $this->fairteiler['id']);
-		$this->assertEquals($fairteiler['picture'], 'picture/cat.jpg');
-		$this->assertEquals($fairteiler['pic'], [
+		$foodSharePoint = $this->gateway->getFoodSharePoint($this->foodSharePoint['id']);
+		$this->assertEquals($foodSharePoint['id'], $this->foodSharePoint['id']);
+		$this->assertEquals($foodSharePoint['picture'], 'picture/cat.jpg');
+		$this->assertEquals($foodSharePoint['pic'], [
 			'thumb' => 'images/picture/crop_1_60_cat.jpg',
 			'head' => 'images/picture/crop_0_528_cat.jpg',
 			'orig' => 'images/picture/cat.jpg'
@@ -187,15 +187,15 @@ class FairTeilerGatewayTest extends \Codeception\Test\Unit
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
 			'name' => 'my nice new fairteiler',
-			'desc' => $this->fairteiler['desc'],
-			'anschrift' => $this->fairteiler['anschrift'],
-			'plz' => $this->fairteiler['plz'],
-			'ort' => $this->fairteiler['ort'],
-			'lat' => $this->fairteiler['lat'],
-			'lon' => $this->fairteiler['lon'],
+			'desc' => $this->foodSharePoint['desc'],
+			'anschrift' => $this->foodSharePoint['anschrift'],
+			'plz' => $this->foodSharePoint['plz'],
+			'ort' => $this->foodSharePoint['ort'],
+			'lat' => $this->foodSharePoint['lat'],
+			'lon' => $this->foodSharePoint['lon'],
 			'picture' => 'picture/cat.jpg'
 		];
-		$id = $this->gateway->addFairteiler(
+		$id = $this->gateway->addFoodSharePoint(
 			$this->foodsaver['id'],
 			$data
 		);

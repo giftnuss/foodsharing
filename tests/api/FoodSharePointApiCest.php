@@ -6,15 +6,15 @@ use Codeception\Util\HttpCode as Http;
 use Faker;
 
 /**
- * Tests for the fair share point api.
+ * Tests for the food share point api.
  */
-class FairSharePointApiCest
+class FoodSharePointApiCest
 {
 	private $user;
 	private $faker;
 
 	private const EMAIL = 'email';
-	private const API_FSPS = 'api/fairSharePoints';
+	private const API_FSPS = 'api/foodSharePoints';
 	private const ID = 'id';
 	private const TEST_PICTURE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR4nGNiAAAABgADNjd8qAAAAABJRU5ErkJggg==';
 
@@ -24,9 +24,9 @@ class FairSharePointApiCest
 		$this->faker = Faker\Factory::create('de_DE');
 	}
 
-	public function getFairSharePoint(\ApiTester $I)
+	public function getFoodSharePoint(\ApiTester $I)
 	{
-		$fsp = $I->createFairteiler($this->user[self::ID], 241);
+		$fsp = $I->createFoodSharePoint($this->user[self::ID], 241);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendGET(self::API_FSPS . '/' . $fsp[self::ID]);
@@ -34,9 +34,9 @@ class FairSharePointApiCest
 		$I->seeResponseIsJson();
 	}
 
-	public function listNearbyFairSharePoints(\ApiTester $I)
+	public function listNearbyFoodSharePoints(\ApiTester $I)
 	{
-		$I->createFairteiler($this->user[self::ID], 241);
+		$I->createFoodSharePoint($this->user[self::ID], 241);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendGET(self::API_FSPS . '/nearby?distance=30');

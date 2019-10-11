@@ -14,7 +14,7 @@ import {
 import { expose } from '@/utils'
 import { GET } from '@/browser'
 
-import './FairTeiler.css'
+import './FoodSharePoint.css'
 
 expose({
   pictureCrop,

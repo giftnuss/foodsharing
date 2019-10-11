@@ -140,9 +140,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$theme = $I->addForumTheme($bezirk1, $userbot['id']);
 		$I->addForumThemePost($theme['id'], $user2['id']);
 
-		$fairteiler = $I->createFairteiler($userbot['id'], $bezirk1);
-		$I->addFairteilerFollower($user2['id'], $fairteiler['id']);
-		$I->addFairteilerPost($userbot['id'], $fairteiler['id']);
+		$foodSharePoint = $I->createFoodSharePoint($userbot['id'], $bezirk1);
+		$I->addFoodSharePointFollower($user2['id'], $foodSharePoint['id']);
+		$I->addFoodSharePointPost($userbot['id'], $foodSharePoint['id']);
 
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
@@ -195,17 +195,17 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln('Created foodbaskets');
 
-		// create fairteiler
+		// create food share point
 		foreach ($this->getRandomIDOfArray($this->foodsavers, 50) as $user) {
-			$fairteiler = $I->createFairteiler($user, $bezirk1);
+			$foodSharePoint = $I->createFoodSharePoint($user, $bezirk1);
 			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $follower) {
 				if ($user !== $follower) {
-					$I->addFairteilerFollower($follower, $fairteiler['id']);
+					$I->addFoodSharePointFollower($follower, $foodSharePoint['id']);
 				}
-				$I->addFairteilerPost($follower, $fairteiler['id']);
+				$I->addFoodSharePointPost($follower, $foodSharePoint['id']);
 			}
 		}
-		$this->output->writeln('Created fairteilers');
+		$this->output->writeln('Created food share points');
 
 		foreach (range(0, 20) as $_) {
 			$I->addBlogPost($userbot['id'], $bezirk1);

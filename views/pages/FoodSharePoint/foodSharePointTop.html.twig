@@ -1,0 +1,9 @@
+{% embed 'components/field.twig' with {'title': food_share_point.name, 'classes': ['ui-padding']} %}
+    {% block content %}
+        {%  if food_share_point.picture %}
+            <div class="ft-head ui-corner-bottom" style="height:150px;background-image:url({{ food_share_point.pic.head }})"></div>
+        {% else %}
+            <div class="ft-head ui-corner-bottom"></div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

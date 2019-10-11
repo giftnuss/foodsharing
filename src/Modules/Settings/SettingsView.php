@@ -149,13 +149,13 @@ class SettingsView extends View
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
 
-	public function settingsInfo($fairteiler, $threads)
+	public function settingsInfo($foodSharePoint, $threads)
 	{
 		global $g_data;
 		$out = '';
 
-		if ($fairteiler) {
-			foreach ($fairteiler as $ft) {
+		if ($foodSharePoint) {
+			foreach ($foodSharePoint as $ft) {
 				$disabled = false;
 				if ($ft['type'] == 2) {
 					$disabled = true;
@@ -169,12 +169,12 @@ class SettingsView extends View
 
 				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
 				$out .= $this->v_utils->v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_fairteiler', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_fairteiler_desc', $ft['name']),
+					'label' => $this->translationHelper->sv('follow_fair_share_point', $ft['name']),
+					'desc' => $this->translationHelper->sv('follow_fair_share_point_desc', $ft['name']),
 					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_fairteiler_mail')),
-						array('id' => 2, 'name' => $this->translationHelper->s('follow_fairteiler_alert')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_fairteiler_none'))
+						array('id' => 1, 'name' => $this->translationHelper->s('follow_fair_share_point_mail')),
+						array('id' => 2, 'name' => $this->translationHelper->s('follow_fair_share_point_alert')),
+						array('id' => 0, 'name' => $this->translationHelper->s('follow_fair_share_point_none'))
 					),
 					'disabled' => $disabled
 				));
