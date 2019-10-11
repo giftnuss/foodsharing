@@ -15,6 +15,26 @@
         role="menuitem"
         class="dropdown-item text-truncate"
       >
+        <i
+          v-if="store.pickupStatus == 1"
+          class="fas fa-circle"
+          style="color: yellow;"
+        />
+        <i
+          v-else-if="store.pickupStatus == 2"
+          class="fas fa-circle"
+          style="color: orange;"
+        />
+        <i
+          v-else-if="store.pickupStatus == 3"
+          class="fas fa-circle"
+          style="color: red;"
+        />
+        <i
+          v-else
+          class="fas fa-circle"
+          style="color: white; filter: alpha(opacity=0);"
+        />
         {{ store.name }}
       </a>
     </div>

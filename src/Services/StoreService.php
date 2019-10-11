@@ -67,6 +67,55 @@ class StoreService
 		return false;
 	}
 
+	/**
+	 * Returns the time of the next available pickup slot or null if none is available up to the
+	 * given maximum date.
+	 *
+	 * @param int $storeId
+	 * @param Carbon $maxDate end of date range
+	 *
+	 * @return \DateTime the slot's time or null
+	 */
+	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?\DateTime
+	{
+		if ($maxDate < Carbon::now()) {
+			return null;
+		}
+
+		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, Carbon::now(), $maxDate, $maxDate);
+
+		$minimumDate = null;
+		foreach ($pickupSlots as $slot) {
+			if ($slot['isAvailable'] && (is_null($minimumDate) || $slot['date'] < $minimumDate)) {
+				$minimumDate = $slot['date'];
+			}
+		}
+
+		return $minimumDate;
+	}
+
+	/**
+	 * Returns the available pickup status of a store: 1, 2, or 3 if there is a free pickup slot in the next day,
+	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days.
+	 *
+	 * @param int $storeId
+	 *
+	 * @return int
+	 */
+	public function getAvailablePickupStatus(int $storeId): int
+	{
+		$availableDate = $this->getNextAvailablePickupTime($storeId, Carbon::now()->addDays(5));
+		if (is_null($availableDate)) {
+			return 0;
+		} elseif ($availableDate < Carbon::now()->addDay()) {
+			return 3;
+		} elseif ($availableDate < Carbon::now()->addDays(3)) {
+			return 2;
+		} else {
+			return 1;
+		}
+	}
+
 	public function joinPickup(int $storeId, Carbon $date, int $fsId, int $issuerId = null): bool
 	{
 		$confirmed = $this->pickupIsPreconfirmed($storeId, $issuerId);
