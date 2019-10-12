@@ -15,7 +15,6 @@ $g_lang['delete'] = 'Fair-Teiler löschen';
 $g_lang['delete_sure'] = 'Möchtest Du wirklich den Fair-Teiler {var} löschen?';
 $g_lang['delete_success'] = 'Fair-Teiler wurde gelöscht';
 $g_lang['back'] = 'zurück';
-$g_lang['bezirk_chooser'] = 'Fair-Teiler in Deinen Bezirken';
 $g_lang['add_fairteiler'] = 'Fair-Teiler eintragen';
 $g_lang['fairteiler_add_success'] = 'Fair-Teiler wurde erfolgreich eingetragen';
 $g_lang['fairteiler_prepare_success'] = 'Fair-Teiler wurde vorgeschlagen. Ein Botschafter muss jetzt noch Deinen Vorschlag bestätigen.';

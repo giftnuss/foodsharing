@@ -185,9 +185,9 @@ class FairTeilerView extends View
 	{
 		$items = array();
 		if ($this->session->isAdminFor($bezirk_id) || $this->session->isOrgaTeam()) {
-			$items[] = array('name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=add');
 		} else {
-			$items[] = array('name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=addFt');
+			$items[] = array('name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=add');
 		}
 
 		return $this->v_utils->v_menu($items, 'Optionen');

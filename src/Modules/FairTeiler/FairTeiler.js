@@ -26,6 +26,6 @@ $('#wall-submit').on('mousedown', function () {
 })
 
 const sub = GET('sub')
-if (sub === 'addFt' || sub === 'edit') {
+if (sub === 'add' || sub === 'edit') {
   attachAddressPicker()
 }
