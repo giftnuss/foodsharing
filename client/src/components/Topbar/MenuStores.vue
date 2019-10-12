@@ -23,6 +23,7 @@
       >
         <i
           :style="circleStyle(store.pickupStatus)"
+          style="margin-left: -1.5em;"
           class="fas fa-circle"
         />
         {{ store.name }}
@@ -86,5 +87,6 @@ export default {
   .fa-sup {
     margin: -.5em 0px 0px .5em;
     text-shadow: 0 0 1px black;
+    font-size: 1em !important;
   }
 </style>

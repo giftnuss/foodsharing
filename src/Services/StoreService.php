@@ -69,14 +69,16 @@ class StoreService
 
 	/**
 	 * Returns the time of the next available pickup slot or null if none is available up to the
-	 * given maximum date.
+	 * given maximum date. If a foodsaver ID is provided only pickup times for which the foodsaver is not already
+	 * signed up are considered.
 	 *
 	 * @param int $storeId
 	 * @param Carbon $maxDate end of date range
+	 * @param int $foodsaverId
 	 *
 	 * @return \DateTime the slot's time or null
 	 */
-	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?\DateTime
+	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate, int $foodsaverId = null): ?\DateTime
 	{
 		if ($maxDate < Carbon::now()) {
 			return null;
@@ -87,7 +89,12 @@ class StoreService
 		$minimumDate = null;
 		foreach ($pickupSlots as $slot) {
 			if ($slot['isAvailable'] && (is_null($minimumDate) || $slot['date'] < $minimumDate)) {
-				$minimumDate = $slot['date'];
+				if (is_null($foodsaverId) || empty(array_filter($pickupSlots[0]['occupiedSlots'],
+						function ($e) use ($foodsaverId) {
+							return $e['foodsaverId'] === $foodsaverId;
+						}))) {
+					$minimumDate = $slot['date'];
+				}
 			}
 		}
 
@@ -96,20 +103,22 @@ class StoreService
 
 	/**
 	 * Returns the available pickup status of a store: 1, 2, or 3 if there is a free pickup slot in the next day,
-	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days.
+	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days. If a foodsaver
+	 * ID is provided only pickup times for which the foodsaver is not already signed up are considered.
 	 *
 	 * @param int $storeId
+	 * @param int $foodsaverId
 	 *
 	 * @return int
 	 */
-	public function getAvailablePickupStatus(int $storeId): int
+	public function getAvailablePickupStatus(int $storeId, int $foodsaverId = null): int
 	{
-		$availableDate = $this->getNextAvailablePickupTime($storeId, Carbon::now()->addDays(5));
+		$availableDate = $this->getNextAvailablePickupTime($storeId, Carbon::tomorrow()->addDays(5), $foodsaverId);
 		if (is_null($availableDate)) {
 			return 0;
-		} elseif ($availableDate < Carbon::now()->addDay()) {
+		} elseif ($availableDate < Carbon::tomorrow()->addDay()) {
 			return 3;
-		} elseif ($availableDate < Carbon::now()->addDays(3)) {
+		} elseif ($availableDate < Carbon::tomorrow()->addDays(3)) {
 			return 2;
 		} else {
 			return 1;
