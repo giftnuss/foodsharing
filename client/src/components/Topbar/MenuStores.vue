@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     circleStyle (pickupStatus) {
-      const colors = ['yellow', 'orange', 'red']
+      const colors = ['#f2cd00', '#f4922f', '#dc3545']
       return {
         color: colors[pickupStatus - 1],
         visibility: pickupStatus > 0 ? 'visible' : 'hidden'

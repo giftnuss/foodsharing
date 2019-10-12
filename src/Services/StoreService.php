@@ -10,6 +10,11 @@ class StoreService
 {
 	private $storeGateway;
 	const MAX_SLOTS_PER_PICKUP = 10;
+	// status constants for getAvailablePickupStatus
+	const STATUS_RED_TODAY_TOMORROW = 3;
+	const STATUS_ORANGE_3_DAYS = 2;
+	const STATUS_YELLOW_5_DAYS = 1;
+	const STATUS_GREEN = 0;
 
 	public function __construct(StoreGateway $storeGateway)
 	{
@@ -115,13 +120,13 @@ class StoreService
 	{
 		$availableDate = $this->getNextAvailablePickupTime($storeId, Carbon::tomorrow()->addDays(5), $foodsaverId);
 		if (is_null($availableDate)) {
-			return 0;
+			return self::STATUS_GREEN;
 		} elseif ($availableDate < Carbon::tomorrow()->addDay()) {
-			return 3;
+			return self::STATUS_RED_TODAY_TOMORROW;
 		} elseif ($availableDate < Carbon::tomorrow()->addDays(3)) {
-			return 2;
+			return self::STATUS_ORANGE_3_DAYS;
 		} else {
-			return 1;
+			return self::STATUS_YELLOW_5_DAYS;
 		}
 	}
 
