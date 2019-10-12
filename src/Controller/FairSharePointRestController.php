@@ -56,7 +56,7 @@ final class FairSharePointRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_FSP_DISTANCE);
 		}
 
-		$fsps = $this->gateway->listCloseFairteiler($location, $distance);
+		$fsps = $this->gateway->listNearbyFoodSharePoints($location, $distance);
 		$fsps = array_map(function ($fsp) {
 			return $this->normalizeFairSharePoint($fsp);
 		}, $fsps);

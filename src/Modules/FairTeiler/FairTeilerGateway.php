@@ -19,7 +19,7 @@ class FairTeilerGateway extends BaseGateway
 		$this->bellGateway = $bellGateway;
 	}
 
-	public function getEmailFollower($id)
+	public function getEmailFollower(int $id): array
 	{
 		return $this->db->fetchAll(
 			'
@@ -40,7 +40,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getLastFairSharePointPost($fspId)
+	public function getLastFairSharePointPost(int $fspId): array
 	{
 		return $this->db->fetch(
 			'
@@ -67,12 +67,12 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function updateVerantwortliche($id, $bfoodsaver)
+	public function updateResponsibles(int $id, $bfoodsaver): void
 	{
 		$values = array();
 
 		foreach ($bfoodsaver as $fs) {
-			$values[] = '(' . (int)$id . ',' . (int)$fs . ',2,1)';
+			$values[] = '(' . $id . ',' . (int)$fs . ',2,1)';
 		}
 
 		$this->db->update('fs_fairteiler_follower', ['type' => 1], ['fairteiler_id' => $id]);
@@ -92,7 +92,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getInfoFollowerIds($id)
+	public function getInfoFollowerIds(int $id): array
 	{
 		return $this->db->fetchAllValues(
 			'
@@ -108,9 +108,9 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function listFairteiler($bezirk_ids)
+	public function listFairteiler(array $regionIds): array
 	{
-		if (!$bezirk_ids) {
+		if (!$regionIds) {
 			return [];
 		}
 		if ($fairteiler = $this->db->fetchAll(
@@ -119,7 +119,7 @@ class FairTeilerGateway extends BaseGateway
 					`name`,
 					`picture`
 			FROM 	`fs_fairteiler`
-			WHERE 	`bezirk_id` IN( ' . implode(',', $bezirk_ids) . ' )
+			WHERE 	`bezirk_id` IN( ' . implode(',', $regionIds) . ' )
 			AND 	`status` = 1
 			ORDER BY `name`
 		'
@@ -142,9 +142,9 @@ class FairTeilerGateway extends BaseGateway
 		return [];
 	}
 
-	public function listFairteilerNested($bezirk_ids = [])
+	public function listFairteilerNested(array $regionIds = []): array
 	{
-		if (!empty($bezirk_ids) && ($fairteiler = $this->db->fetchAll(
+		if (!empty($regionIds) && ($fairteiler = $this->db->fetchAll(
 				'
 			SELECT 	ft.`id`,
 					ft.`name`,
@@ -156,7 +156,7 @@ class FairTeilerGateway extends BaseGateway
 					`fs_bezirk` bz
 
 			WHERE 	ft.bezirk_id = bz.id
-			AND 	ft.`bezirk_id` IN(' . implode(',', $bezirk_ids) . ')
+			AND 	ft.`bezirk_id` IN(' . implode(',', $regionIds) . ')
 			AND 	ft.`status` = 1
 			ORDER BY ft.`name`
 		'
@@ -164,28 +164,28 @@ class FairTeilerGateway extends BaseGateway
 		) {
 			$out = array();
 
-			foreach ($fairteiler as $key => $ft) {
+			foreach ($fairteiler as $ft) {
 				if (!isset($out[$ft['bezirk_id']])) {
-					$out[$ft['bezirk_id']] = array(
+					$out[$ft['bezirk_id']] = [
 						'id' => $ft['bezirk_id'],
 						'name' => $ft['bezirk_name'],
-						'fairteiler' => array(),
-					);
+						'fairteiler' => [],
+					];
 				}
 				$pic = false;
 				if (!empty($ft['picture'])) {
-					$pic = array(
+					$pic = [
 						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
 						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
 						'orig' => 'images/' . ($ft['picture']),
-					);
+					];
 				}
-				$out[$ft['bezirk_id']]['fairteiler'][] = array(
+				$out[$ft['bezirk_id']]['fairteiler'][] = [
 					'id' => $ft['id'],
 					'name' => $ft['name'],
 					'picture' => $ft['picture'],
 					'pic' => $pic,
-				);
+				];
 			}
 
 			return $out;
@@ -194,7 +194,7 @@ class FairTeilerGateway extends BaseGateway
 		return [];
 	}
 
-	public function listCloseFairteiler($loc, $distance = 30)
+	public function listNearbyFoodSharePoints(array $location, int $distance = 30): array
 	{
 		return $this->db->fetchAll(
 			'
@@ -217,46 +217,42 @@ class FairTeilerGateway extends BaseGateway
 				AS distance
 			FROM
 				`fs_fairteiler` ft
-
 			WHERE
 				ft.`status` = 1
-
 			HAVING
 				distance <= :distance
-
 			ORDER BY
-				distance ASC
-
+				distance
 			LIMIT 6
 		',
 			[
-				':lat' => (float)$loc['lat'],
-				':lat1' => (float)$loc['lat'],
-				':lon' => (float)$loc['lon'],
+				':lat' => (float)$location['lat'],
+				':lat1' => (float)$location['lat'],
+				':lon' => (float)$location['lon'],
 				':distance' => $distance,
 			]
 		);
 	}
 
-	public function follow($ft_id, $fs_id, $infotype)
+	public function follow(int $foodSharePointId, int $foodsaverId, $infoType): void
 	{
 		$this->db->insertIgnore(
 			'fs_fairteiler_follower',
 			[
-				'fairteiler_id' => $ft_id,
-				'foodsaver_id' => $fs_id,
+				'fairteiler_id' => $foodSharePointId,
+				'foodsaver_id' => $foodsaverId,
 				'type' => 1,
-				'infotype' => $infotype,
+				'infotype' => $infoType,
 			]
 		);
 	}
 
-	public function unfollow($ft_id, $fs_id)
+	public function unfollow(int $foodSharePointId, int $foodsaverId): int
 	{
-		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id]);
+		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $foodSharePointId, 'foodsaver_id' => $foodsaverId]);
 	}
 
-	public function getFollower($id)
+	public function getFollower(int $foodSharePointId): array
 	{
 		$follower = $this->db->fetchAll(
 			'
@@ -273,54 +269,54 @@ class FairTeilerGateway extends BaseGateway
 			AND 	ff.fairteiler_id = :id
 
 		',
-			[':id' => $id]
+			[':id' => $foodSharePointId]
 		);
 		$normal = [];
-		$verantwortliche = [];
+		$responsibles = [];
 		$all = [];
 		foreach ($follower as $f) {
 			if ($f['type'] == 1) {
 				$normal[] = $f;
 				$all[$f['id']] = 'follow';
 			} elseif ($f['type'] == 2) {
-				$verantwortliche[] = $f;
+				$responsibles[] = $f;
 				$all[$f['id']] = 'verantwortlich';
 			}
 		}
 
 		return [
 			'follow' => $normal,
-			'verantwortlich' => $verantwortliche,
+			'verantwortlich' => $responsibles,
 			'all' => $all,
 		];
 	}
 
-	public function acceptFairteiler($id)
+	public function acceptFairteiler(int $foodSharePointId): void
 	{
-		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
-		$this->removeBellNotificationForNewFairteiler($id);
+		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $foodSharePointId]);
+		$this->removeBellNotificationForNewFairteiler($foodSharePointId);
 	}
 
-	public function updateFairteiler($id, $data)
+	public function updateFairteiler(int $foodSharePointId, array $data): bool
 	{
-		$this->db->requireExists('fs_fairteiler', ['id' => $id]);
-		$this->db->update('fs_fairteiler', $data, ['id' => $id]);
+		$this->db->requireExists('fs_fairteiler', ['id' => $foodSharePointId]);
+		$this->db->update('fs_fairteiler', $data, ['id' => $foodSharePointId]);
 
 		return true;
 	}
 
-	public function deleteFairteiler($id)
+	public function deleteFairteiler(int $foodSharePointId): int
 	{
-		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $id]);
+		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $foodSharePointId]);
 
-		$result = $this->db->delete('fs_fairteiler', ['id' => $id]);
+		$result = $this->db->delete('fs_fairteiler', ['id' => $foodSharePointId]);
 
-		$this->removeBellNotificationForNewFairteiler($id);
+		$this->removeBellNotificationForNewFairteiler($foodSharePointId);
 
 		return $result;
 	}
 
-	public function getFairteiler($id)
+	public function getFairteiler(int $foodSharePointId): array
 	{
 		if ($ft = $this->db->fetch(
 			'
@@ -350,38 +346,38 @@ class FairTeilerGateway extends BaseGateway
 			ON 	ft.add_foodsaver = fs.id
 			WHERE 	ft.id = :id
 		',
-			[':id' => $id]
+			[':id' => $foodSharePointId]
 		)
 		) {
 			$ft['pic'] = false;
 			if (!empty($ft['picture'])) {
-				$ft['pic'] = array(
+				$ft['pic'] = [
 					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
 					'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
 					'orig' => 'images/' . ($ft['picture']),
-				);
+				];
 			}
 
 			return $ft;
 		}
 
-		return false;
+		return [];
 	}
 
-	public function addFairteiler($fs_id, $data)
+	public function addFairteiler(int $foodsaverId, array $data): int
 	{
 		$db_data = array_merge(
 			$data,
 			[
 				'add_date' => date('Y-m-d H:i:s'),
-				'add_foodsaver' => $fs_id,
+				'add_foodsaver' => $foodsaverId,
 			]
 		);
 		$ft_id = $this->db->insert('fs_fairteiler', $db_data);
 		if ($ft_id) {
 			$this->db->insert(
 				'fs_fairteiler_follower',
-				['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id, 'type' => 2]
+				['fairteiler_id' => $ft_id, 'foodsaver_id' => $foodsaverId, 'type' => 2]
 			);
 
 			$this->sendBellNotificationForNewFairteiler($ft_id);
@@ -390,9 +386,9 @@ class FairTeilerGateway extends BaseGateway
 		return $ft_id;
 	}
 
-	private function sendBellNotificationForNewFairteiler(int $fairteilerId): void
+	private function sendBellNotificationForNewFairteiler(int $foodSharePointId): void
 	{
-		$fairteiler = $this->getFairteiler($fairteilerId);
+		$fairteiler = $this->getFairteiler($foodSharePointId);
 
 		if ($fairteiler['status'] === 1) {
 			return; //Fairteiler has been created by orga member or the ambassador himself
@@ -407,9 +403,9 @@ class FairTeilerGateway extends BaseGateway
 			'sharepoint_activate_title',
 			'sharepoint_activate',
 			'img img-recycle yellow',
-			['href' => '/?page=fairteiler&sub=check&id=' . $fairteilerId],
+			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $fairteiler['name']],
-			'new-fairteiler-' . $fairteilerId,
+			'new-fairteiler-' . $foodSharePointId,
 			0
 		);
 	}

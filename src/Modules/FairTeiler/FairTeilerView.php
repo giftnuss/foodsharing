@@ -6,36 +6,36 @@ use Foodsharing\Modules\Core\View;
 
 class FairTeilerView extends View
 {
-	private $bezirk_id;
-	private $bezirk;
-	private $bezirke;
+	private $regionId;
+	private $region;
+	private $regions;
 
 	private $fairteiler;
 	private $follower;
 
-	public function setBezirke($bezirke)
+	public function setRegions(array $regions): void
 	{
-		$this->bezirke = $bezirke;
+		$this->regions = $regions;
 	}
 
-	public function setBezirk($bezirk)
+	public function setRegion($region): void
 	{
-		$this->bezirk = $bezirk;
-		$this->bezirk_id = $bezirk['id'];
+		$this->region = $region;
+		$this->regionId = $region['id'];
 	}
 
-	public function setFairteiler($fairteiler, $follower)
+	public function setFairteiler($fairteiler, $follower): void
 	{
 		$this->fairteiler = $fairteiler;
 		$this->follower = $follower;
 	}
 
-	public function fairteilerHead()
+	public function fairteilerHead(): string
 	{
 		return $this->twig->render('pages/Fairteiler/fairteilerTop.html.twig', ['fairteiler' => $this->fairteiler]);
 	}
 
-	public function checkFairteiler($ft)
+	public function checkFairteiler($ft): string
 	{
 		$htmlEscapedName = htmlspecialchars($ft['name']);
 		$content = '';
@@ -55,7 +55,7 @@ class FairTeilerView extends View
 		return $this->v_utils->v_field($content, $ft['name'] . ' freischalten', array('class' => 'ui-padding'));
 	}
 
-	public function address()
+	public function address(): string
 	{
 		return $this->v_utils->v_field(
 			$this->v_utils->v_input_wrapper('Anschrift', $this->fairteiler['anschrift']) .
@@ -65,7 +65,7 @@ class FairTeilerView extends View
 		);
 	}
 
-	public function fairteilerForm($data = false)
+	public function fairteilerForm($data = false): string
 	{
 		$title = $this->translationHelper->s('new_fairteiler');
 
@@ -89,26 +89,30 @@ class FairTeilerView extends View
 		}
 		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
-		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', array(
-			$this->v_utils->v_form_select('bezirk_id', array('values' => $this->bezirke, 'selected' => $data['bezirk_id'], 'required' => true)),
-			$this->v_utils->v_form_text('name', array('value' => $data['name'], 'required' => true)),
-			$this->v_utils->v_form_textarea('desc', array('value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
-			$this->v_utils->v_form_picture('picture', array('pic' => $data['picture'], 'resize' => array(528, 60), 'crop' => array((528 / 170), 1))),
+		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
+			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]
+			),
+			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
+			$this->v_utils->v_form_textarea('desc', ['value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true]
+			),
+			$this->v_utils->v_form_picture('picture', ['pic' => $data['picture'], 'resize' => [528, 60], 'crop' => [(528 / 170), 1]]
+			),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,
-		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
+		], ['submit' => $this->translationHelper->s('save')]
+		), $title, array('class' => 'ui-padding'));
 	}
 
-	public function wallposts()
+	public function wallposts(): void
 	{
 	}
 
-	public function options($items)
+	public function options(array $items): string
 	{
 		return $this->v_utils->v_menu($items, 'Optionen');
 	}
 
-	public function followHidden()
+	public function followHidden(): string
 	{
 		$this->pageHelper->addJsFunc('
 			function u_follow()
@@ -144,7 +148,7 @@ class FairTeilerView extends View
 		';
 	}
 
-	public function follower()
+	public function follower(): string
 	{
 		$out = '';
 
@@ -158,22 +162,22 @@ class FairTeilerView extends View
 		return $out;
 	}
 
-	public function desc()
+	public function desc(): string
 	{
 		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->translationHelper->s('desc'), array('class' => 'ui-padding'));
 	}
 
-	public function listFairteiler($bezirke)
+	public function listFairteiler(array $regions): string
 	{
 		$content = '';
 		$count = 0;
-		foreach ($bezirke as $bezirk) {
+		foreach ($regions as $bezirk) {
 			$count += count($bezirk['fairteiler']);
 			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $bezirk, 'fairteiler' => $bezirk['fairteiler']]);
 		}
 
-		if ($this->bezirk_id > 0) {
-			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+		if ($this->regionId > 0) {
+			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_fairteiler', $this->region['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->region['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		} else {
 			$this->pageHelper->addContent($this->topbar($this->translationHelper->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
 		}
@@ -181,13 +185,13 @@ class FairTeilerView extends View
 		return $content;
 	}
 
-	public function ftOptions($bezirk_id)
+	public function ftOptions(int $regionId): string
 	{
 		$items = array();
-		if ($this->session->isAdminFor($bezirk_id) || $this->session->isOrgaTeam()) {
-			$items[] = array('name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=add');
+		if ($this->session->isAdminFor($regionId) || $this->session->isOrgaTeam()) {
+			$items[] = ['name' => 'Fair-Teiler eintragen', 'href' => '/?page=fairteiler&bid=' . $regionId . '&sub=add'];
 		} else {
-			$items[] = array('name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . (int)$bezirk_id . '&sub=add');
+			$items[] = ['name' => 'Fair-Teiler vorschlagen', 'href' => '/?page=fairteiler&bid=' . $regionId . '&sub=add'];
 		}
 
 		return $this->v_utils->v_menu($items, 'Optionen');

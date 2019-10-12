@@ -49,6 +49,38 @@ class FairTeilerControl extends Control
 		parent::__construct();
 	}
 
+	public function index(Request $request): void
+	{
+		$this->setup($request);
+		$this->pageHelper->addBread($this->translationHelper->s('your_fairteiler'), '/?page=fairteiler');
+		if ($this->regionId > 0) {
+			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
+		}
+		if (!$request->query->has('sub')) {
+			$items = array();
+			if ($this->regions = $this->session->getRegions()) {
+				foreach ($this->regions as $r) {
+					$items[] = ['name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']];
+				}
+			}
+
+			if ($this->regionId === 0) {
+				$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
+			} else {
+				$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($this->regionId);
+			}
+
+			if ($this->fairteiler = $this->foodSharePointGateway->listFairteilerNested($regionIds)) {
+				$this->pageHelper->addContent($this->view->listFairteiler($this->fairteiler));
+			} else {
+				$this->pageHelper->addContent(
+					$this->v_utils->v_info($this->translationHelper->s('no_fairteiler_available'))
+				);
+			}
+			$this->pageHelper->addContent($this->view->ftOptions($this->regionId), CNT_RIGHT);
+		}
+	}
+
 	private function setup(Request $request): void
 	{
 		if ($request->query->has('uri') && $foodSharePointId = $this->uriInt(2)) {
@@ -123,8 +155,8 @@ class FairTeilerControl extends Control
 				$this->delete();
 			}
 		}
-		$this->view->setBezirke($this->regions);
-		$this->view->setBezirk($this->region);
+		$this->view->setRegions($this->regions);
+		$this->view->setRegion($this->region);
 	}
 
 	private function handleFollowUnfollow($foodSharePointId, int $foodSharerId, $follow, $infoType): bool
@@ -159,38 +191,6 @@ class FairTeilerControl extends Control
 			],
 			false
 		);
-	}
-
-	public function index(Request $request): void
-	{
-		$this->setup($request);
-		$this->pageHelper->addBread($this->translationHelper->s('your_fairteiler'), '/?page=fairteiler');
-		if ($this->regionId > 0) {
-			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
-		}
-		if (!$request->query->has('sub')) {
-			$items = array();
-			if ($this->regions = $this->session->getRegions()) {
-				foreach ($this->regions as $r) {
-					$items[] = ['name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']];
-				}
-			}
-
-			if ($this->regionId === 0) {
-				$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
-			} else {
-				$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($this->regionId);
-			}
-
-			if ($this->fairteiler = $this->foodSharePointGateway->listFairteilerNested($regionIds)) {
-				$this->pageHelper->addContent($this->view->listFairteiler($this->fairteiler));
-			} else {
-				$this->pageHelper->addContent(
-					$this->v_utils->v_info($this->translationHelper->s('no_fairteiler_available'))
-				);
-			}
-			$this->pageHelper->addContent($this->view->ftOptions($this->regionId), CNT_RIGHT);
-		}
 	}
 
 	public function edit(Request $request): void
@@ -379,7 +379,7 @@ class FairTeilerControl extends Control
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
 				$responsible = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
-				$this->foodSharePointGateway->updateVerantwortliche($this->fairteiler['id'], $responsible);
+				$this->foodSharePointGateway->updateResponsibles($this->fairteiler['id'], $responsible);
 
 				return $this->foodSharePointGateway->updateFairteiler($this->fairteiler['id'], $data);
 			}
