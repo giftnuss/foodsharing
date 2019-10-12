@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\FoodSharePointPermissions;
 use Foodsharing\Services\SanitizerService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,6 +25,7 @@ class FairTeilerControl extends Control
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $identificationHelper;
+	private $foodSharePointPermissions;
 
 	public function __construct(
 		FairTeilerView $view,
@@ -32,7 +34,8 @@ class FairTeilerControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		Db $model,
 		SanitizerService $sanitizerService,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		FoodSharePointPermissions $foodSharePointPermissions
 	) {
 		$this->view = $view;
 		$this->foodSharePointGateway = $foodSharePointGateway;
@@ -41,6 +44,7 @@ class FairTeilerControl extends Control
 		$this->model = $model;
 		$this->sanitizerService = $sanitizerService;
 		$this->identificationHelper = $identificationHelper;
+		$this->foodSharePointPermissions = $foodSharePointPermissions;
 
 		parent::__construct();
 	}
@@ -51,10 +55,9 @@ class FairTeilerControl extends Control
 			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $foodSharePointId);
 		}
 
-		/*
-		 * allowed only for logged in users
-		 */
-		if (!$this->session->may() && $request->query->has('sub') && $request->query->get('sub') !== 'ft') {
+		if (!$this->foodSharePointPermissions->maySeeFoodSharePointLists()
+			&& $request->query->has('sub')
+			&& $request->query->get('sub') !== 'ft') {
 			$this->routeHelper->goLogin();
 		}
 
@@ -88,7 +91,7 @@ class FairTeilerControl extends Control
 		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
 			$infoType = $request->query->get('infotype', 2);
-			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id(), $follow, $infoType)) {
+			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id() ?? 0, $follow, $infoType)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
 			}
@@ -116,9 +119,7 @@ class FairTeilerControl extends Control
 				'
 			);
 
-			if ($request->query->has('delete') && ($this->session->isAdminFor(
-						$this->regionId
-					) || $this->session->isOrgaTeam())) {
+			if ($request->query->has('delete') && $this->foodSharePointPermissions->mayDeleteFoodSharePointOfRegion($this->regionId)) {
 				$this->delete();
 			}
 		}
@@ -169,8 +170,8 @@ class FairTeilerControl extends Control
 		}
 		if (!$request->query->has('sub')) {
 			$items = array();
-			if ($regions = $this->session->getRegions()) {
-				foreach ($regions as $r) {
+			if ($this->regions = $this->session->getRegions()) {
+				foreach ($this->regions as $r) {
 					$items[] = ['name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']];
 				}
 			}
@@ -181,8 +182,8 @@ class FairTeilerControl extends Control
 				$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($this->regionId);
 			}
 
-			if ($fairteiler = $this->foodSharePointGateway->listFairteilerNested($regionIds)) {
-				$this->pageHelper->addContent($this->view->listFairteiler($fairteiler));
+			if ($this->fairteiler = $this->foodSharePointGateway->listFairteilerNested($regionIds)) {
+				$this->pageHelper->addContent($this->view->listFairteiler($this->fairteiler));
 			} else {
 				$this->pageHelper->addContent(
 					$this->v_utils->v_info($this->translationHelper->s('no_fairteiler_available'))
@@ -194,7 +195,7 @@ class FairTeilerControl extends Control
 
 	public function edit(Request $request): void
 	{
-		if (!$this->mayEdit()) {
+		if (!$this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
 		}
 		$this->pageHelper->addBread(
@@ -220,7 +221,7 @@ class FairTeilerControl extends Control
 			],
 		];
 
-		if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
+		if ($this->foodSharePointPermissions->mayDeleteFoodSharePointOfRegion($this->regionId)) {
 			$items[] = [
 				'name' => $this->translationHelper->s('delete'),
 				'click' => 'if(confirm(\'' . $this->translationHelper->sv(
@@ -246,7 +247,7 @@ class FairTeilerControl extends Control
 	public function check(Request $request): void
 	{
 		if ($ft = $this->fairteiler) {
-			if ($this->session->isAdminFor($ft['bezirk_id']) || $this->session->isOrgaTeam()) {
+			if ($this->foodSharePointPermissions->mayApproveFoodSharePointCreation($ft['bezirk_id'])) {
 				if ($request->query->has('agree')) {
 					if ($request->query->get('agree')) {
 						$this->accept();
@@ -312,10 +313,10 @@ class FairTeilerControl extends Control
 			</div>'
 		);
 
-		if ($this->session->may()) {
+		if ($this->foodSharePointPermissions->mayFollow()) {
 			$items = array();
 
-			if ($this->mayEdit()) {
+			if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 				$items[] = [
 					'name' => $this->translationHelper->s('edit'),
 					'href' => '/?page=fairteiler&bid=' . $this->regionId . '&sub=edit&id=' . $this->fairteiler['id'],
@@ -346,7 +347,7 @@ class FairTeilerControl extends Control
 
 		if ($request->request->get('form_submit') === 'fairteiler') {
 			if ($this->handelAdd($request)) {
-				if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
+				if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('fairteiler_add_success'));
 				} else {
 					$this->flashMessageHelper->info($this->translationHelper->s('fairteiler_prepare_success'));
@@ -374,7 +375,7 @@ class FairTeilerControl extends Control
 
 	private function handleEditFt(Request $request): bool
 	{
-		if ($this->mayEdit()) {
+		if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
 				$responsible = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
@@ -424,7 +425,7 @@ class FairTeilerControl extends Control
 		$data = $this->prepareInput($request);
 		if ($this->validateInput($data)) {
 			$status = 0;
-			if ($this->session->isAdminFor($this->regionId) || $this->session->isOrgaTeam()) {
+			if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
 				$status = 1;
 			}
 			$data['status'] = $status;
@@ -438,15 +439,5 @@ class FairTeilerControl extends Control
 	private function isFollower(): bool
 	{
 		return isset($this->follower['all'][$this->session->id()]);
-	}
-
-	private function mayEdit(): bool
-	{
-		return (isset($this->regionId) && $this->session->isAdminFor($this->regionId)) ||
-			$this->session->isOrgaTeam() ||
-			(
-				isset($this->follower['all'][$this->session->id()]) &&
-				$this->follower['all'][$this->session->id()] === 'verantwortlich'
-			);
 	}
 }
