@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Added markers for empty pickup slots in the next days to store menu !1106 #452 @alex.simm
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
