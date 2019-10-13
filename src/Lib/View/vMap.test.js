@@ -18,7 +18,7 @@ describe('vMap', () => {
       defaultMarkerOptions: {
         color: 'orange',
         icon: 'smile',
-        prefix: 'img'
+        prefix: 'fa'
       }
     }
 

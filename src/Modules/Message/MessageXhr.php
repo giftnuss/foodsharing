@@ -73,7 +73,14 @@ final class MessageXhr extends Control
 		$id = (int)$_GET['id'];
 		if ($this->mayConversation($id) && $member = $this->model->listConversationMembers($id)) {
 			$xhr = new Xhr();
-			$xhr->addData('member', $member);
+			// $xhr->addData('member', $member);
+			$xhr->addData('member', array_map(function ($m) {
+				return [
+					'id' => $m['id'],
+					'name' => $m['name'],
+					'photo' => $m['photo']
+				];
+			}, $member));
 			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
 			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
@@ -118,33 +125,36 @@ final class MessageXhr extends Control
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
 				$sessdata[$recipient['id']] = time();
 
+				$link = BASE_URL . '/?page=msg&cid=' . (int)$conversation_id;
+				$genderedTitle = $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
+
 				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
 					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], array(
-						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $genderedTitle,
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
 						'storename' => $storeName,
 						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+						'link' => $link
 					));
 				} else {
 					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
 					if (count($memberNames) > 1) {
 						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+							'link' => $link
 						));
 					} else {
 						$this->emailHelper->tplMail('chat/message', $recipient['email'], array(
-							'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
-							'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
+							'link' => $link
 						));
 					}
 				}
@@ -233,6 +243,17 @@ final class MessageXhr extends Control
 			// At some point there should always the raw input handled, which the user has entered
 			// and served over a proper API endpoint
 
+			$conversations = array_map(function ($c) {
+				$c['member'] = array_map(function ($m) {
+					return [
+						'id' => $m['id'],
+						'name' => $m['name'],
+						'photo' => $m['photo']
+					];
+				}, $c['member']);
+
+				return $c;
+			}, $conversations);
 			if (isset($_GET['raw']) && $_GET['raw']) {
 				$xhr->addData('convs', array_map(function ($c) {
 					$c['last'] = $c['last'] ? str_replace(' ', 'T', $c['last']) : null;
@@ -242,6 +263,13 @@ final class MessageXhr extends Control
 					if (isset($c['last_message'])) {
 						$c['last_message'] = html_entity_decode($c['last_message']);
 					}
+					$c['member'] = array_map(function ($m) {
+						return [
+							'id' => $m['id'],
+							'name' => $m['name'],
+							'photo' => $m['photo']
+						];
+					}, $c['member']);
 
 					return $c;
 				}, $conversations));

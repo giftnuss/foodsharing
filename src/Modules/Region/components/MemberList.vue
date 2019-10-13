@@ -71,6 +71,7 @@
             <img
               :src="data.value"
               :alt="$i18n('terminology.profile_picture')"
+              class="user_pic_width"
             >
           </div>
         </template>

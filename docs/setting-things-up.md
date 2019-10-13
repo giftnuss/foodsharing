@@ -97,8 +97,18 @@ As it currently always runs a new container using docker-compose, it will take s
 ### Using PHPstorm
 
 If you happen to use PHPstorm you can add `php-cs-fixer` to those settings as well:
-<div align="center"><img src="images/setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"</div>
+<div align="center"><img src="images/setting-things-up-phpstorm-php-cs-fixer.png" alt="PHPstorm enable php-cs-fixer"/></div>
 <div align="center"><img src="images/setting-things-up-phpstorm-inspections.png" alt="PHPstorm inspections"></div>
+
+### Using VSCode
+
+You can use the [php cs fixer](https://marketplace.visualstudio.com/items?itemName=junstyle.php-cs-fixer) Extension. It should work right after a restart. To fix a file right click on it and select
+
+<div align="center"><img src="images/setting-things-up-vscode-php-cs-fix-file.png" alt="VSCode PHP CS Fixer dialog"></div>
+
+You can even configure it to fix your code style after saving a file under: **Settings>PHP CS Fixer>Execute PHP CS Fixer on save** for not commiting any non-fixed code.
+
+*Note: You need PHP installed locally for this.*
 
 ## Editorconfig
 

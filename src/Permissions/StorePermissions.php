@@ -176,4 +176,15 @@ class StorePermissions
 	{
 		return $this->mayDoPickup($storeId);
 	}
+
+	public function mayChatWithRegularTeam(array $store): bool
+	{
+		return (!$store['jumper'] || $store['verantwortlich'])
+			&& $store['team_conversation_id'] !== null;
+	}
+
+	public function mayChatWithJumperWaitingTeam(array $store): bool
+	{
+		return $store['verantwortlich'] && $store['springer_conversation_id'] !== null;
+	}
 }

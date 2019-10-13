@@ -2,6 +2,8 @@
 
 namespace Helper;
 
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
@@ -96,5 +98,18 @@ class FoodsharingUrl extends \Codeception\Module\Db
 	public function apiReportListForRegion($regionId)
 	{
 		return 'api/report/region/' . (int)$regionId;
+	}
+
+	public function upgradeQuizUrl(int $quizRole): string
+	{
+		$result = '/?page=settings&sub=upgrade/up_';
+		switch ($quizRole) {
+			case Role::STORE_MANAGER:
+				return $result . 'bip';
+			case Role::AMBASSADOR:
+				return $result . 'bot';
+			default:
+				return $result . 'fs';
+		}
 	}
 }

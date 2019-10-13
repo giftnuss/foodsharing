@@ -181,3 +181,7 @@ div.event {
   margin-top: -40px !important;
   color: #4a3520 !important;
 }
+
+.user_pic_width {
+  width: 50px; 
+}

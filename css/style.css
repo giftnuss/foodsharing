@@ -245,7 +245,7 @@ div#main, footer .wrapper {
 }
 
 div#main {
-  min-height: 650px;
+  min-height: calc(83vh);
   padding-bottom: 40px;
 }
 
@@ -442,11 +442,6 @@ li.placeholder {
   list-style: none;
 }
 
-.xv_set h3 {
-  font-size: 16px;
-  font-weight: normal;
-}
-
 .xv_row span.xv_label {
   font-weight: bold;
   display: block;
@@ -494,10 +489,6 @@ div.xv_left ul li a {
   text-align: center;
   margin-top: 4px;
   font-weight: lighter;
-}
-
-div.xv_set {
-  margin-bottom: 15px;
 }
 
 div.xv_left ul li a:hover {

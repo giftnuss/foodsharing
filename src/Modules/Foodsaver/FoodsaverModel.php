@@ -64,12 +64,12 @@ class FoodsaverModel extends Db
 		');
 	}
 
-	public function update_foodsaver($id, $data, StoreModel $storeModel)
+	public function update_foodsaver($fsId, $data, StoreModel $storeModel)
 	{
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
 
 		if (!isset($data['bezirk_id'])) {
-			$data['bezirk_id'] = $this->session->getCurrentBezirkId();
+			$data['bezirk_id'] = $this->session->getCurrentRegionId();
 		}
 
 		$orga = '';
@@ -87,30 +87,30 @@ class FoodsaverModel extends Db
 				$quiz_rolle = '`quiz_rolle` = 0,';
 				$verified = '`verified` = 0,';
 
-				$bids = $this->q('
+				$storeIds = $this->q('
 					SELECT 	bt.betrieb_id as id
 					FROM 	fs_betrieb_team bt
-					WHERE 	bt.foodsaver_id = ' . (int)$id . '
+					WHERE 	bt.foodsaver_id = ' . (int)$fsId . '
 				');
 				//Delete from Companies
-				foreach ($bids as $b) {
-					$storeModel->signout($b, $id);
+				foreach ($storeIds as $storeId) {
+					$storeModel->signout($storeId, $fsId);
 				}
 
 				//Delete Bells for Foodsaver
 				$this->del('
 					DELETE FROM  `fs_foodsaver_has_bell`
-					WHERE 		`foodsaver_id` = ' . (int)$id . '
+					WHERE 		`foodsaver_id` = ' . (int)$fsId . '
 				');
 				// Delete from Bezirke and Working Groups
 				$this->del('
 					DELETE FROM  `fs_foodsaver_has_bezirk`
-					WHERE 		`foodsaver_id` = ' . (int)$id . '
+					WHERE 		`foodsaver_id` = ' . (int)$fsId . '
 				');
 				//Delete from Bezirke and Working Groups (when Admin)
 				$this->del('
 					DELETE FROM  `fs_botschafter`
-					WHERE 		`foodsaver_id` = ' . (int)$id . '
+					WHERE 		`foodsaver_id` = ' . (int)$fsId . '
 				');
 
 				//Block Person for Quiz
@@ -124,7 +124,7 @@ class FoodsaverModel extends Db
 					)
 					VALUES
 					(
-						' . (int)$id . ',
+						' . (int)$fsId . ',
 						1,
 						2,
 						now()
@@ -168,6 +168,6 @@ class FoodsaverModel extends Db
 				' . $verified . '
 				`geb_datum` =  ' . $this->dateval($data['geb_datum']) . '
 
-		WHERE 	`id` = ' . (int)$id);
+		WHERE 	`id` = ' . (int)$fsId);
 	}
 }

@@ -703,7 +703,7 @@ class Utils
 		if (isset($_GET['bid'])) {
 			$bid = '&bid=' . (int)$_GET['bid'];
 		} else {
-			$bid = $this->session->getCurrentBezirkId();
+			$bid = $this->session->getCurrentRegionId();
 		}
 
 		$out = '';

@@ -18,30 +18,9 @@
 }
 
 .stat_icon {
-  display: inline-block;
-  background-image: url("/img/stat_badges.png");
-  background-repeat: no-repeat;
-  height: 96px;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  width: 96px;
-}
-
-.stat_icon.fetchcount {
-  background-position: -96px 0;
-}
-
-.stat_icon.korpcount {
-  background-position: -192px 0;
-}
-
-.stat_icon.fscount {
-  background-position: -288px 0;
-}
-
-.stat_icon.fetchweight {
-  background-position: 0 0;
+  color: #FFF;
+  font-size: 96px;
+  line-height: 220px;
 }
 
 .stat_text h4 {
@@ -102,4 +81,16 @@ table.stat_cities td h4 {
 #stat_whole {
   text-align: center;
   padding-top: 20px;
+}
+
+.fa-stack {
+ width: 200px;
+ vertical-align: bottom;
+}
+.fa-stack i.far.fa-calendar.fa-stack-2x {
+ font-size: 1.4em;
+ margin-top: 12px;
+}
+.fa-stack i.fas.fa-shopping-basket.fa-stack-1x {
+ font-size: 0.7em;
 }

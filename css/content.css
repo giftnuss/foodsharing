@@ -91,6 +91,57 @@ input, textarea, select, option {
   margin-bottom: 5px;
 }
 
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.col {
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+.col-md-auto {
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: 100%;
+}
+
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.activity-feed-content-buttons a {
+  display: inline-block;
+  margin-top: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+}
+
+@media only screen and (max-width: 355px) {
+  .row.activity-feed-content-buttons {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .col.mr-2, .col-md-auto.mr-2 {
+    margin-right: 0 !important;
+  }
+}
+
 .post.event {
   padding-top: 10px;
 }

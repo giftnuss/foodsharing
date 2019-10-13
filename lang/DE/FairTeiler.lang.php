@@ -32,3 +32,4 @@ $g_lang['infotype_email'] = 'über eine E-Mail Benachrichtigung';
 $g_lang['infotype_alert'] = 'nur über interne Infomeldungen';
 $g_lang['desc_desc'] = 'Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist. Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.';
 $g_lang['bfoodsaver'] = 'Verantwortliche Foodsaver';
+$g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Fair-Teilers im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';

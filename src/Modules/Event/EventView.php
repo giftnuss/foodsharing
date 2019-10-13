@@ -60,13 +60,24 @@ class EventView extends View
 				}
 			});
 			
-			var dateend_wrapper = document.getElementById("dateend-wrapper");		
-			dateend_wrapper.style.display = "none";
+			var dateend_wrapper = document.getElementById("dateend-wrapper");	
 			
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
+               
+            dateend_wrapper.style.display = "none";
+
+            var dateend = new Date(document.getElementById("dateend").value.split(" ")[0]);
+			var datestart = new Date(document.getElementById("date").value.split(" ")[0]);
+			datestart.setDate(datestart.getDate() + 1);
+			
+   			if(dateend >= datestart)
+			{
+                document.getElementById("addend").checked = true;
+                dateend_wrapper.style.display = "block";
+			}
 			
 			dateend_wrapper.classList.remove("required");
-
+			
 			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
