@@ -2,16 +2,14 @@
 
 namespace Foodsharing\Modules\Statsman;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Console\ConsoleControl;
 
 class StatsmanControl extends ConsoleControl
 {
 	private $statsmanGateway;
 
-	public function __construct(Db $model, StatsmanGateway $statsmanGateway)
+	public function __construct(StatsmanGateway $statsmanGateway)
 	{
-		$this->model = $model;
 		$this->statsmanGateway = $statsmanGateway;
 		parent::__construct();
 	}
@@ -28,21 +26,6 @@ class StatsmanControl extends ConsoleControl
 		echo "\ndone";
 	}
 
-	private function get_parent_bezirke(): array
-	{
-		$region_parents = array();
-		$parents = $this->model->q('SELECT bezirk_id, GROUP_CONCAT(ancestor_id) AS parents FROM fs_bezirk_closure WHERE ancestor_id != 0 GROUP BY bezirk_id');
-		foreach ($parents as $p) {
-			$a = explode(',', $p['parents']);
-			if (!is_array($a)) {
-				$a = [$a];
-			}
-			$region_parents[$p['bezirk_id']] = $a;
-		}
-
-		return $region_parents;
-	}
-
 	public function out_bezirk_stat(): void
 	{
 		// array of arrays -> [bezirk_id] = array(parent1, parent2, ..)
@@ -51,13 +34,7 @@ class StatsmanControl extends ConsoleControl
 		$region_yw_sum = array();
 		$region_yw_cnt = array();
 		$all_yw = array();
-		$q = $this->model->q('
-			SELECT b.id, b.name, YEARWEEK( m.`date` ) AS yw, SUM( m.abholmenge ) AS total, COUNT( m.abholmenge) AS cnt
-			FROM fs_bezirk b
-			INNER JOIN fs_betrieb btr ON ( btr.bezirk_id = b.id ) 
-			INNER JOIN fs_stat_abholmengen m ON ( m.betrieb_id = btr.id ) 
-			GROUP BY b.id, YEARWEEK( m.`date` ) 
-			ORDER BY b.name');
+		$q = $this->statsmanGateway->listRegionFetchQuantities();
 		foreach ($q as $line) {
 			$all_yw[$line['yw']] = true;
 			foreach ($region_parents[$line['id']] as $bzid) {
@@ -71,8 +48,8 @@ class StatsmanControl extends ConsoleControl
 				$region_yw_cnt[$bzid][$line['yw']] += $line['cnt'];
 			}
 		}
-		$fp = fopen('stat_out.txt', 'w');
-		$fpc = fopen('stat_cnt.txt', 'w');
+		$fp = fopen('stat_out.txt', 'wb');
+		$fpc = fopen('stat_cnt.txt', 'wb');
 		fwrite($fp, 'bezirk');
 		fwrite($fpc, 'bezirk');
 		$yws = array_keys($all_yw);
@@ -84,18 +61,8 @@ class StatsmanControl extends ConsoleControl
 		fwrite($fp, "\n");
 		fwrite($fpc, "\n");
 
-		$region_names = array();
-		$q = $this->model->q("
-			SELECT b.id, b.type, group_concat(b.name ORDER BY a.depth DESC SEPARATOR ' -> ') AS path
-			FROM fs_bezirk_closure d
-			JOIN fs_bezirk_closure a ON (a.bezirk_id = d.bezirk_id)
-			JOIN fs_bezirk b ON (b.id = a.ancestor_id)
-			WHERE d.ancestor_id = 741 AND d.bezirk_id != d.ancestor_id
-			GROUP BY d.bezirk_id
-			HAVING b.`type` != 7
-			ORDER BY path");
+		$q = $this->statsmanGateway->listRegionClosures();
 		foreach ($q as $line) {
-			$region_names[$line['id']] = $line['path'];
 			echo $line['path'];
 			fwrite($fp, '"' . $line['path'] . '"');
 			fwrite($fpc, '"' . $line['path'] . '"');
@@ -118,32 +85,25 @@ class StatsmanControl extends ConsoleControl
 		fclose($fpc);
 	}
 
+	private function get_parent_bezirke(): array
+	{
+		$region_parents = array();
+		$parents = $this->statsmanGateway->listRegionParents();
+		foreach ($parents as $parent) {
+			$a = explode(',', $parent['parents']);
+			if (!is_array($a)) {
+				$a = [$a];
+			}
+			$region_parents[$parent['bezirk_id']] = $a;
+		}
+
+		return $region_parents;
+	}
+
 	public function out_fs_by_bezirk_age(): void
 	{
 		$fp = fopen('stat_fs_bezirk.csv', 'wb');
-		$foodsaver = $this->model->q("
-				SELECT
-				COUNT(*) AS cnt,
-				CASE
-				WHEN age < 18 THEN 'unknown'
-				WHEN age >=18 AND age <=25 THEN '18-25'
-				WHEN age >=26 AND age <=33 THEN '26-33'
-				WHEN age >=34 AND age <=41 THEN '34-41'
-				WHEN age >=42 AND age <=49 THEN '42-49'
-				WHEN age >=50 AND age <=57 THEN '50-57'
-				WHEN age >=58 AND age <=65 THEN '58-65'
-				WHEN age >=66 AND age <=73 THEN '66-73'
-				WHEN age >=74 AND age < 200 THEN '74+'
-				WHEN age >= 200 THEN 'invalid'
-				WHEN age IS NULL THEN 'unknown'
-				END AS ageband, geschlecht, bezirk_id
-				FROM
-				(
-				 SELECT DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(geb_datum, '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(geb_datum, '00-%m-%d')) AS age,
-				 id, geschlecht, bezirk_id FROM fs_foodsaver WHERE rolle >= 1 AND bezirk_id >= 1
-				) AS tbl
-				GROUP BY ageband, geschlecht, bezirk_id
-				");
+		$foodsaver = $this->statsmanGateway->listFoodsaversByAgeBands();
 		$parents = $this->get_parent_bezirke();
 		$ages = array();
 		foreach ($foodsaver as $fs) {
@@ -164,15 +124,7 @@ class StatsmanControl extends ConsoleControl
 		fwrite($fp, implode(',', $ageBands));
 		fwrite($fp, "\n");
 
-		$q = $this->model->q("
-			SELECT b.id, b.type, group_concat(b.name ORDER BY a.depth DESC SEPARATOR ' -> ') AS path
-			FROM fs_bezirk_closure d
-			JOIN fs_bezirk_closure a ON (a.bezirk_id = d.bezirk_id)
-			JOIN fs_bezirk b ON (b.id = a.ancestor_id)
-			WHERE d.ancestor_id = 741 AND d.bezirk_id != d.ancestor_id
-			GROUP BY d.bezirk_id
-			HAVING b.type != 7
-			ORDER BY path");
+		$q = $this->statsmanGateway->listRegionClosures();
 		foreach ($q as $line) {
 			echo $line['path'];
 			fwrite($fp, '"' . $line['path'] . '"');
@@ -193,14 +145,7 @@ class StatsmanControl extends ConsoleControl
 	public function out_fs_by_bezirk_register(): void
 	{
 		$fp = fopen('stat_fs_bezirk_register.csv', 'wb');
-		$foodsaver = $this->model->q('
-				SELECT
-				COUNT(id) AS cnt,
-				YEARWEEK(anmeldedatum) AS yw, bezirk_id
-				FROM
-				fs_foodsaver WHERE rolle >= 1 AND bezirk_id >= 1
-				GROUP BY yw, bezirk_id
-				');
+		$foodsaver = $this->statsmanGateway->listFoodsaversByRegionRegistration();
 		$parents = $this->get_parent_bezirke();
 		$all_yw = array();
 		$ages = array();
@@ -214,37 +159,7 @@ class StatsmanControl extends ConsoleControl
 				$ages[$parent][$fs['yw']] = $cnt + $fs['cnt'];
 			}
 		}
-		fwrite($fp, 'bezirk,');
-		$yws = array_keys($all_yw);
-		sort($yws);
-		foreach ($yws as $yw) {
-			fwrite($fp, ",$yw");
-		}
-		fwrite($fp, "\n");
-
-		$q = $this->model->q("
-			SELECT b.id, b.type, group_concat(b.name ORDER BY a.depth DESC SEPARATOR ' -> ') AS path
-			FROM fs_bezirk_closure d
-			JOIN fs_bezirk_closure a ON (a.bezirk_id = d.bezirk_id)
-			JOIN fs_bezirk b ON (b.id = a.ancestor_id)
-			WHERE d.ancestor_id = 741 AND d.bezirk_id != d.ancestor_id
-			GROUP BY d.bezirk_id
-			HAVING b.`type` != 7
-			ORDER BY path");
-		foreach ($q as $line) {
-			echo $line['path'];
-			fwrite($fp, '"' . $line['path'] . '"');
-			foreach ($yws as $yw) {
-				$sum = 0;
-				if (array_key_exists($line['id'], $ages)
-					&& array_key_exists($yw, $ages[$line['id']])
-				) {
-					$sum = $ages[$line['id']][$yw];
-				}
-				fwrite($fp, ",$sum");
-			}
-			fwrite($fp, "\n");
-		}
+		$this->writeResultsToFile($fp, $all_yw, $ages);
 	}
 
 	public function out_betriebe_eintrag(): void
@@ -254,12 +169,7 @@ class StatsmanControl extends ConsoleControl
 		// 2 dimensional array [bezirk_id][yearweek] = sum
 		$region_yw_cnt = array();
 		$all_yw = array();
-		$q = $this->model->q('
-			SELECT b.id, b.name, YEARWEEK( btr.added ) AS yw, COUNT(btr.id) AS cnt
-			FROM fs_bezirk b
-			INNER JOIN fs_betrieb btr ON ( btr.bezirk_id = b.id ) 
-			WHERE btr.betrieb_status_id = 3
-			GROUP BY b.id, YEARWEEK( btr.added )');
+		$q = $this->statsmanGateway->listStoresByAddition();
 		foreach ($q as $line) {
 			$all_yw[$line['yw']] = true;
 			foreach ($region_parents[$line['id']] as $bzid) {
@@ -272,7 +182,18 @@ class StatsmanControl extends ConsoleControl
 			}
 		}
 		$fp = fopen('betriebe_added.txt', 'wb');
-		fwrite($fp, 'bezirk');
+		$this->writeResultsToFile($fp, $all_yw, $region_yw_cnt);
+		fclose($fp);
+	}
+
+	/**
+	 * @param $fp
+	 * @param array $all_yw
+	 * @param array $data
+	 */
+	private function writeResultsToFile($fp, array $all_yw, array $data): void
+	{
+		fwrite($fp, 'bezirk,');
 		$yws = array_keys($all_yw);
 		sort($yws);
 		foreach ($yws as $yw) {
@@ -280,31 +201,20 @@ class StatsmanControl extends ConsoleControl
 		}
 		fwrite($fp, "\n");
 
-		$region_names = array();
-		$q = $this->model->q("
-			SELECT b.id, b.type, group_concat(b.name ORDER BY a.depth DESC SEPARATOR ' -> ') AS path
-			FROM fs_bezirk_closure d
-			JOIN fs_bezirk_closure a ON (a.bezirk_id = d.bezirk_id)
-			JOIN fs_bezirk b ON (b.id = a.ancestor_id)
-			WHERE d.ancestor_id = 741 AND d.bezirk_id != d.ancestor_id
-			GROUP BY d.bezirk_id
-			HAVING b.`type` != 7
-			ORDER BY path");
+		$q = $this->statsmanGateway->listRegionClosures();
 		foreach ($q as $line) {
-			$region_names[$line['id']] = $line['path'];
 			echo $line['path'];
 			fwrite($fp, '"' . $line['path'] . '"');
 			foreach ($yws as $yw) {
-				$cnt = 0;
-				if (array_key_exists($line['id'], $region_yw_cnt)
-					&& array_key_exists($yw, $region_yw_cnt[$line['id']])
+				$sum = 0;
+				if (array_key_exists($line['id'], $data)
+					&& array_key_exists($yw, $data[$line['id']])
 				) {
-					$cnt = $region_yw_cnt[$line['id']][$yw];
+					$sum = $data[$line['id']][$yw];
 				}
-				fwrite($fp, ",$cnt");
+				fwrite($fp, ",$sum");
 			}
 			fwrite($fp, "\n");
 		}
-		fclose($fp);
 	}
 }
