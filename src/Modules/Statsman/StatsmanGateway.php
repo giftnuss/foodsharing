@@ -3,8 +3,10 @@
 namespace Foodsharing\Modules\Statsman;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 
 class StatsmanGateway extends BaseGateway
 {
@@ -57,7 +59,8 @@ class StatsmanGateway extends BaseGateway
 			WHERE d.ancestor_id = :region_europe AND d.bezirk_id != d.ancestor_id
 			GROUP BY d.bezirk_id
 			HAVING b.`type` != :working_group
-			ORDER BY path", [':working_group' => Type::WORKING_GROUP, ':region_europe' => RegionIDs::EUROPE]);
+			ORDER BY path",
+			[':working_group' => Type::WORKING_GROUP, ':region_europe' => RegionIDs::EUROPE]);
 	}
 
 	public function listFoodsaversByAgeBands(): array
@@ -81,10 +84,10 @@ class StatsmanGateway extends BaseGateway
 				FROM
 				(
 				 SELECT DATE_FORMAT(NOW(), '%Y') - DATE_FORMAT(geb_datum, '%Y') - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(geb_datum, '00-%m-%d')) AS age,
-				 id, geschlecht, bezirk_id FROM fs_foodsaver WHERE rolle >= 1 AND bezirk_id >= 1
+				 id, geschlecht, bezirk_id FROM fs_foodsaver WHERE rolle >= :foodsaver_role AND bezirk_id >= 1
 				) AS tbl
-				GROUP BY ageband, geschlecht, bezirk_id
-				");
+				GROUP BY ageband, geschlecht, bezirk_id",
+			[':foodsaver_role' => Role::FOODSAVER]);
 	}
 
 	public function listFoodsaversByRegionRegistration(): array
@@ -94,9 +97,9 @@ class StatsmanGateway extends BaseGateway
 				COUNT(id) AS cnt,
 				YEARWEEK(anmeldedatum) AS yw, bezirk_id
 				FROM
-				fs_foodsaver WHERE rolle >= 1 AND bezirk_id >= 1
-				GROUP BY yw, bezirk_id
-				');
+				fs_foodsaver WHERE rolle >= :foodsaver_role AND bezirk_id >= 1
+				GROUP BY yw, bezirk_id',
+			[':foodsaver_role' => Role::FOODSAVER]);
 	}
 
 	public function listStoresByAddition(): array
@@ -105,7 +108,8 @@ class StatsmanGateway extends BaseGateway
 			SELECT b.id, b.name, YEARWEEK( btr.added ) AS yw, COUNT(btr.id) AS cnt
 			FROM fs_bezirk b
 			INNER JOIN fs_betrieb btr ON ( btr.bezirk_id = b.id ) 
-			WHERE btr.betrieb_status_id = 3
-			GROUP BY b.id, YEARWEEK( btr.added )');
+			WHERE btr.betrieb_status_id = :cooperationStatus
+			GROUP BY b.id, YEARWEEK( btr.added )',
+			[':cooperationStatus' => CooperationStatus::IN_COOPERATION]);
 	}
 }
