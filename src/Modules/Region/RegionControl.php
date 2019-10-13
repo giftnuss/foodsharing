@@ -228,8 +228,8 @@ final class RegionControl extends Control
 
 	private function foodSharePoint(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('food_share_point_edit'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
-		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point_edit'));
+		$this->pageHelper->addBread($this->translationHelper->s('food_share_point'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
 		$viewdata['food_share_point'] = $this->foodSharePointGateway->listFoodSharePoints($bezirk_ids);

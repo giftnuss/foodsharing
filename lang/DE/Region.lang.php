@@ -11,6 +11,7 @@ $g_lang['sure'] = 'Ja, ich bin mir sicher.';
 $g_lang['signout'] = 'Austragen';
 $g_lang['new_food_share_point'] = 'Neuer Fair-Teiler';
 $g_lang['list_food_share_point'] = 'Alle Fair-Teiler in {var}';
+$g_lang['food_share_point'] = 'Fair-Teiler';
 $g_lang['no_food_share_point_available'] = 'Noch keine Fair-Teiler eingetragen';
 
 $g_lang['older_themes'] = 'ältere Themen';
