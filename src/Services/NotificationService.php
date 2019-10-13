@@ -31,7 +31,7 @@ final class NotificationService
 
 	public function newFoodSharePointPost(int $foodSharePointId)
 	{
-		if ($ft = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId)) {
+		if ($foodSharePoint = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId)) {
 			$post = $this->foodSharePointGateway->getLastFoodSharePointPost($foodSharePointId);
 			if ($followers = $this->foodSharePointGateway->getEmailFollower($foodSharePointId)) {
 				$body = nl2br($post['body']);
@@ -53,7 +53,7 @@ final class NotificationService
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$foodSharePointId,
 						'name' => $f['name'],
 						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'fairteiler' => $ft['name'],
+						'fairteiler' => $foodSharePoint['name'],
 						'post' => $body
 					));
 				}
@@ -67,7 +67,7 @@ final class NotificationService
 					'ft_update',
 					'img img-recycle yellow',
 					array('href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId),
-					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
+					array('name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
 					'fairteiler-' . $foodSharePointId
 				);
 			}

@@ -35,24 +35,24 @@ class FoodSharePointView extends View
 		return $this->twig->render('pages/FoodSharePoint/foodSharePointTop.html.twig', ['food_share_point' => $this->foodSharePoint]);
 	}
 
-	public function checkFoodSharePoint($ft)
+	public function checkFoodSharePoint($foodSharePoint)
 	{
-		$htmlEscapedName = htmlspecialchars($ft['name']);
+		$htmlEscapedName = htmlspecialchars($foodSharePoint['name']);
 		$content = '';
-		if ($ft['pic']) {
-			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
+		if ($foodSharePoint['pic']) {
+			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $foodSharePoint['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
 		}
 
 		$content .= $this->v_utils->v_input_wrapper('Adresse', '
-		' . $ft['anschrift'] . '<br />
-		' . $ft['plz'] . ' ' . $ft['ort']);
+		' . $foodSharePoint['anschrift'] . '<br />
+		' . $foodSharePoint['plz'] . ' ' . $foodSharePoint['ort']);
 
-		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($ft['desc']));
+		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($foodSharePoint['desc']));
 
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $ft['time_ts']));
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$ft['fs_id'] . '">' . $ft['fs_name'] . ' ' . $ft['fs_nachname'] . '</a>');
+		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $foodSharePoint['time_ts']));
+		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$foodSharePoint['fs_id'] . '">' . $foodSharePoint['fs_name'] . ' ' . $foodSharePoint['fs_nachname'] . '</a>');
 
-		return $this->v_utils->v_field($content, $ft['name'] . ' freischalten', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $foodSharePoint['name'] . ' freischalten', array('class' => 'ui-padding'));
 	}
 
 	public function address()

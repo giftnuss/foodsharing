@@ -155,9 +155,9 @@ class SettingsView extends View
 		$out = '';
 
 		if ($foodSharePoint) {
-			foreach ($foodSharePoint as $ft) {
+			foreach ($foodSharePoint as $fsp) {
 				$disabled = false;
-				if ($ft['type'] == 2) {
+				if ($fsp['type'] == 2) {
 					$disabled = true;
 				}
 
@@ -167,14 +167,14 @@ class SettingsView extends View
 					});
 				');
 
-				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_fair_share_point', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_fair_share_point_desc', $ft['name']),
+				$g_data['fairteiler_' . $fsp['id']] = $fsp['infotype'];
+				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], array(
+					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
+					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
 					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_fair_share_point_mail')),
-						array('id' => 2, 'name' => $this->translationHelper->s('follow_fair_share_point_alert')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_fair_share_point_none'))
+						array('id' => 1, 'name' => $this->translationHelper->s('follow_food_share_point_mail')),
+						array('id' => 2, 'name' => $this->translationHelper->s('follow_food_share_point_alert')),
+						array('id' => 0, 'name' => $this->translationHelper->s('follow_food_share_point_none'))
 					),
 					'disabled' => $disabled
 				));
@@ -182,11 +182,11 @@ class SettingsView extends View
 		}
 
 		if ($threads) {
-			foreach ($threads as $ft) {
-				$g_data['thread_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('thread_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_thread', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_thread_desc', $ft['name']),
+			foreach ($threads as $fsp) {
+				$g_data['thread_' . $fsp['id']] = $fsp['infotype'];
+				$out .= $this->v_utils->v_form_radio('thread_' . $fsp['id'], array(
+					'label' => $this->translationHelper->sv('follow_thread', $fsp['name']),
+					'desc' => $this->translationHelper->sv('follow_thread_desc', $fsp['name']),
 					'values' => array(
 						array('id' => 1, 'name' => $this->translationHelper->s('follow_thread_mail')),
 						array('id' => 0, 'name' => $this->translationHelper->s('follow_thread_none'))

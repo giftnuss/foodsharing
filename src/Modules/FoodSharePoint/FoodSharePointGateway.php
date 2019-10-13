@@ -125,13 +125,13 @@ class FoodSharePointGateway extends BaseGateway
 		'
 		)
 		) {
-			foreach ($foodSharePoint as $key => $ft) {
-				$foodSharePoint[$key]['pic'] = false;
-				if (!empty($ft['picture'])) {
-					$foodSharePoint[$key]['pic'] = array(
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-						'orig' => 'images/' . ($ft['picture']),
+			foreach ($foodSharePoint as $fspKey => $fspValue) {
+				$foodSharePoint[$fspKey]['pic'] = false;
+				if (!empty($fspValue['picture'])) {
+					$foodSharePoint[$fspKey]['pic'] = array(
+						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fspValue['picture']),
+						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fspValue['picture']),
+						'orig' => 'images/' . ($fspValue['picture']),
 					);
 				}
 			}
@@ -164,26 +164,26 @@ class FoodSharePointGateway extends BaseGateway
 		) {
 			$out = array();
 
-			foreach ($foodSharePoint as $key => $ft) {
-				if (!isset($out[$ft['bezirk_id']])) {
-					$out[$ft['bezirk_id']] = array(
-						'id' => $ft['bezirk_id'],
-						'name' => $ft['bezirk_name'],
+			foreach ($foodSharePoint as $fsp) {
+				if (!isset($out[$fsp['bezirk_id']])) {
+					$out[$fsp['bezirk_id']] = array(
+						'id' => $fsp['bezirk_id'],
+						'name' => $fsp['bezirk_name'],
 						'fairteiler' => array(),
 					);
 				}
 				$pic = false;
-				if (!empty($ft['picture'])) {
+				if (!empty($fsp['picture'])) {
 					$pic = array(
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-						'orig' => 'images/' . ($ft['picture']),
+						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fsp['picture']),
+						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fsp['picture']),
+						'orig' => 'images/' . ($fsp['picture']),
 					);
 				}
-				$out[$ft['bezirk_id']]['fairteiler'][] = array(
-					'id' => $ft['id'],
-					'name' => $ft['name'],
-					'picture' => $ft['picture'],
+				$out[$fsp['bezirk_id']]['fairteiler'][] = array(
+					'id' => $fsp['id'],
+					'name' => $fsp['name'],
+					'picture' => $fsp['picture'],
 					'pic' => $pic,
 				);
 			}
@@ -238,12 +238,12 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function follow($ft_id, $fs_id, $infotype)
+	public function follow($food_share_point_id, $fs_id, $infotype)
 	{
 		$this->db->insertIgnore(
 			'fs_fairteiler_follower',
 			[
-				'fairteiler_id' => $ft_id,
+				'fairteiler_id' => $food_share_point_id,
 				'foodsaver_id' => $fs_id,
 				'type' => 1,
 				'infotype' => $infotype,
@@ -251,9 +251,9 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function unfollow($ft_id, $fs_id)
+	public function unfollow($food_share_point_id, $fs_id)
 	{
-		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id]);
+		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $food_share_point_id, 'foodsaver_id' => $fs_id]);
 	}
 
 	public function getFollower($id)
@@ -298,7 +298,7 @@ class FoodSharePointGateway extends BaseGateway
 	public function acceptFoodSharePoint($id)
 	{
 		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $id]);
-		$this->removeBellNotificationForNewFairteiler($id);
+		$this->removeBellNotificationForNewFoodSharePoint($id);
 	}
 
 	public function updateFoodSharePoint($id, $data)
@@ -315,14 +315,14 @@ class FoodSharePointGateway extends BaseGateway
 
 		$result = $this->db->delete('fs_fairteiler', ['id' => $id]);
 
-		$this->removeBellNotificationForNewFairteiler($id);
+		$this->removeBellNotificationForNewFoodSharePoint($id);
 
 		return $result;
 	}
 
 	public function getFoodSharePoint($id)
 	{
-		if ($ft = $this->db->fetch(
+		if ($foodSharePoint = $this->db->fetch(
 			'
 			SELECT 	ft.id,
 					ft.`bezirk_id`,
@@ -353,16 +353,16 @@ class FoodSharePointGateway extends BaseGateway
 			[':id' => $id]
 		)
 		) {
-			$ft['pic'] = false;
-			if (!empty($ft['picture'])) {
-				$ft['pic'] = array(
-					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-					'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-					'orig' => 'images/' . ($ft['picture']),
+			$foodSharePoint['pic'] = false;
+			if (!empty($foodSharePoint['picture'])) {
+				$foodSharePoint['pic'] = array(
+					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $foodSharePoint['picture']),
+					'head' => 'images/' . str_replace('/', '/crop_0_528_', $foodSharePoint['picture']),
+					'orig' => 'images/' . ($foodSharePoint['picture']),
 				);
 			}
 
-			return $ft;
+			return $foodSharePoint;
 		}
 
 		return false;
@@ -377,17 +377,17 @@ class FoodSharePointGateway extends BaseGateway
 				'add_foodsaver' => $fs_id,
 			]
 		);
-		$ft_id = $this->db->insert('fs_fairteiler', $db_data);
-		if ($ft_id) {
+		$food_share_point_id = $this->db->insert('fs_fairteiler', $db_data);
+		if ($food_share_point_id) {
 			$this->db->insert(
 				'fs_fairteiler_follower',
-				['fairteiler_id' => $ft_id, 'foodsaver_id' => $fs_id, 'type' => 2]
+				['fairteiler_id' => $food_share_point_id, 'foodsaver_id' => $fs_id, 'type' => 2]
 			);
 
-			$this->sendBellNotificationForNewFairteiler($ft_id);
+			$this->sendBellNotificationForNewFairteiler($food_share_point_id);
 		}
 
-		return $ft_id;
+		return $food_share_point_id;
 	}
 
 	private function sendBellNotificationForNewFairteiler(int $foodSharePointId): void
@@ -414,7 +414,7 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	private function removeBellNotificationForNewFairteiler(int $foodSharePointId): void
+	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void
 	{
 		$identifier = 'new-fairteiler-' . $foodSharePointId;
 		if (!$this->bellGateway->bellWithIdentifierExists($identifier)) {

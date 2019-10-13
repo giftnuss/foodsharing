@@ -4,7 +4,6 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
-use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -15,17 +14,15 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 final class FoodSharePointRestController extends AbstractFOSRestController
 {
-	private $gateway;
-	private $imageService;
+	private $foodSharePointGateway;
 	private $session;
 
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const MAX_FSP_DISTANCE = 50;
 
-	public function __construct(FoodSharePointGateway $gateway, ImageService $imageService, Session $session)
+	public function __construct(FoodSharePointGateway $foodSharePointGateway, Session $session)
 	{
-		$this->gateway = $gateway;
-		$this->imageService = $imageService;
+		$this->foodSharePointGateway = $foodSharePointGateway;
 		$this->session = $session;
 	}
 
@@ -56,7 +53,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_FSP_DISTANCE);
 		}
 
-		$fsps = $this->gateway->listNearbyFoodSharePoints($location, $distance);
+		$fsps = $this->foodSharePointGateway->listNearbyFoodSharePoints($location, $distance);
 		$fsps = array_map(function ($fsp) {
 			return $this->normalizeFoodSharePoint($fsp);
 		}, $fsps);
@@ -99,7 +96,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
-		$foodSharePoint = $this->gateway->getFoodSharePoint($foodSharePointId);
+		$foodSharePoint = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId);
 		if (!$foodSharePoint || $foodSharePoint['status'] !== 1) {
 			throw new HttpException(404, 'Food share point does not exist or was deleted.');
 		}

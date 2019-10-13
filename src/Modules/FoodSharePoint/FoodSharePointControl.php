@@ -45,23 +45,23 @@ class FoodSharePointControl extends Control
 		parent::__construct();
 	}
 
-	private function handleFollowUnfollow($ftid, $fsid, $follow, $infotype)
+	private function handleFollowUnfollow($foodSharePointId, $fsid, $follow, $infotype)
 	{
 		if (is_null($follow)) {
 			return false;
 		}
 
 		if ($follow == 1 && in_array($infotype, [1, 2])) {
-			$this->gateway->follow($ftid, $fsid, $infotype);
+			$this->gateway->follow($foodSharePointId, $fsid, $infotype);
 		} else {
-			$this->gateway->unfollow($ftid, $fsid);
+			$this->gateway->unfollow($foodSharePointId, $fsid);
 		}
 	}
 
 	private function setup(Request $request)
 	{
-		if ($request->query->has('uri') && $ftid = $this->uriInt(2)) {
-			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $ftid);
+		if ($request->query->has('uri') && $foodSharePointId = $this->uriInt(2)) {
+			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $foodSharePointId);
 		}
 
 		/*
@@ -74,8 +74,8 @@ class FoodSharePointControl extends Control
 		$this->foodSharePoint = false;
 		$this->follower = false;
 		$this->regions = $this->getRealRegions();
-		if ($ftid = $request->query->get('id')) {
-			$this->foodSharePoint = $this->gateway->getFoodSharePoint($ftid);
+		if ($foodSharePointId = $request->query->get('id')) {
+			$this->foodSharePoint = $this->gateway->getFoodSharePoint($foodSharePointId);
 
 			if (!$this->foodSharePoint) {
 				$this->routeHelper->go('/?page=fairteiler');
@@ -98,10 +98,10 @@ class FoodSharePointControl extends Control
 			$this->region = null;
 		}
 
-		if ($ftid) {
+		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
 			$infotype = $request->query->get('infotype', 2);
-			if ($this->handleFollowUnfollow($ftid, $this->session->id(), $follow, $infotype)) {
+			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id(), $follow, $infotype)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
 			}
@@ -110,7 +110,7 @@ class FoodSharePointControl extends Control
 				$this->regions[] = $this->regionGateway->getRegion($this->foodSharePoint['bezirk_id']);
 			}
 
-			$this->follower = $this->gateway->getFollower($ftid);
+			$this->follower = $this->gateway->getFollower($foodSharePointId);
 
 			$this->view->setFoodSharePoint($this->foodSharePoint, $this->follower);
 
@@ -242,8 +242,8 @@ class FoodSharePointControl extends Control
 
 	public function check(Request $request)
 	{
-		if ($ft = $this->foodSharePoint) {
-			if ($this->session->isAdminFor($ft['bezirk_id']) || $this->session->isOrgaTeam()) {
+		if ($foodSharePoint = $this->foodSharePoint) {
+			if ($this->session->isAdminFor($foodSharePoint['bezirk_id']) || $this->session->isOrgaTeam()) {
 				if ($request->query->has('agree')) {
 					if ($request->query->get('agree')) {
 						$this->accept();
@@ -251,10 +251,10 @@ class FoodSharePointControl extends Control
 						$this->delete();
 					}
 				}
-				$this->pageHelper->addContent($this->view->checkFoodSharePoint($ft));
+				$this->pageHelper->addContent($this->view->checkFoodSharePoint($foodSharePoint));
 				$this->pageHelper->addContent($this->view->menu(array(
-					array('href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=1', 'name' => 'Fair-Teiler freischalten'),
-					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$ft['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
+					array('href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=1', 'name' => 'Fair-Teiler freischalten'),
+					array('click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}', 'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=0', 'name' => 'Fair-Teiler ablehnen')
 				), array('title' => 'Optionen')), CNT_RIGHT);
 			} else {
 				$this->routeHelper->goPage('fairteiler');

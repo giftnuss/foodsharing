@@ -151,7 +151,7 @@ class StatsModel extends Db
 		');
 	}
 
-	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointcount)
+	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
 	{
 		return $this->update('
 
@@ -167,7 +167,7 @@ class StatsModel extends Db
 					`stat_korpcount`=' . (int)$korpcount . ',
 					`stat_botcount`=' . (int)$botcount . ',
 					`stat_fscount`=' . (int)$fscount . ',
-					`stat_fairteilercount`=' . (int)$foodSharePointcount . ' 
+					`stat_fairteilercount`=' . (int)$foodSharePointCount . ' 
 				
 				WHERE 
 					`id` = ' . (int)$regionId . '
