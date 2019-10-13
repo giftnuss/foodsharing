@@ -13,15 +13,15 @@ final class BlogPermissions
 		$this->session = $session;
 	}
 
-	public function mayAdd(int $bezirkId): bool
+	public function mayAdd(int $regionId): bool
 	{
-		return $this->session->isOrgaTeam() || $this->session->isAdminFor($bezirkId);
+		return $this->session->isOrgaTeam() || $this->session->isAdminFor($regionId);
 	}
 
-	public function mayEdit($val): bool
+	public function mayEdit($authorOfPost): bool
 	{
-		if ($val) {
-			if ($this->session->id() == $val['foodsaver_id'] || $this->session->isAdminFor($val['bezirk_id'])) {
+		if ($authorOfPost) {
+			if ($this->session->id() == $authorOfPost['foodsaver_id'] || $this->session->isAdminFor($authorOfPost['bezirk_id'])) {
 				return true;
 			}
 		}
