@@ -79,7 +79,7 @@ if ($('#mapsearch').length > 0) {
   $('#map-latLng').on('change', function () {
     console.log()
 
-    ajax.req('basket', 'closeBaskets', {
+    ajax.req('basket', 'nearbyBaskets', {
       data: {
         coordinates: JSON.parse($('#map-latLng').val())
       },

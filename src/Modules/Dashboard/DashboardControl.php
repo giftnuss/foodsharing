@@ -179,7 +179,7 @@ class DashboardControl extends Control
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
-			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);

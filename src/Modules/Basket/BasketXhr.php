@@ -55,7 +55,7 @@ class BasketXhr extends Control
 			'bubble' => true,
 			'login' => true,
 			'basketCoordinates' => true,
-			'closeBaskets' => true,
+			'nearbyBaskets' => true,
 		];
 
 		if (!isset($allowed[$_GET['m']]) && !$this->session->may()) {
@@ -288,7 +288,7 @@ class BasketXhr extends Control
 		$img->saveChanges();
 	}
 
-	public function closeBaskets(): void
+	public function nearbyBaskets(): void
 	{
 		$xhr = new Xhr();
 

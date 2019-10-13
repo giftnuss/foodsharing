@@ -49,7 +49,7 @@ class DashboardView extends View
 		));
 	}
 
-	public function closeBaskets($baskets)
+	public function nearbyBaskets($baskets)
 	{
 		$out = '<ul class="linklist baskets">';
 		foreach ($baskets as $b) {

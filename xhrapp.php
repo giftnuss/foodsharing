@@ -42,7 +42,7 @@ $csrf_whitelist = [
 	// 'Basket::newBasket',
 	// 'Basket::publish',
 	// 'Basket::resizePic',
-	// 'Basket::closeBaskets',
+	// 'Basket::nearbyBaskets',
 	// 'Basket::bubble',
 	// 'Basket::fsBubble',
 	// 'Basket::request',

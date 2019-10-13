@@ -182,7 +182,7 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function getRequest(int $basket_id, int $foodsaver_id, $my_own_foodsaver_id): array
+	public function getRequest(int $basket_id, int $foodsaver_id_requester, $foodsaver_id_offerer): array
 	{
 		$stm = '		
 				SELECT
@@ -192,27 +192,20 @@ class BasketGateway extends BaseGateway
 					fs.id AS fs_id,
 					fs.geschlecht AS fs_gender,
 					b.id		
-		
 				FROM
 					fs_basket_anfrage a,
 					fs_basket b,
-					fs_foodsaver fs
-		
+					fs_foodsaver fs		
 				WHERE
-					a.basket_id = b.id
-		
+					a.basket_id = b.id		
 				AND
-					a.`status` IN(:status_unread,:status_read)
-		
+					a.`status` IN(:status_unread,:status_read)		
 				AND
-					a.foodsaver_id = fs.id
-		
+					a.foodsaver_id = fs.id		
 				AND
-					b.foodsaver_id = :foodsaver_id
-				
+					b.foodsaver_id = :foodsaver_id				
 				AND
-					a.foodsaver_id = :fs_id
-				
+					a.foodsaver_id = :fs_id				
 				AND
 					a.basket_id = :basket_id		
 				';
@@ -222,8 +215,8 @@ class BasketGateway extends BaseGateway
 			[
 				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
 				':status_read' => Status::REQUESTED_MESSAGE_READ,
-				':foodsaver_id' => $my_own_foodsaver_id,
-				':fs_id' => $foodsaver_id,
+				':foodsaver_id' => $foodsaver_id_offerer,
+				':fs_id' => $foodsaver_id_requester,
 				':basket_id' => $basket_id,
 			]
 		);
