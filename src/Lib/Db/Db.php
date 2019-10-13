@@ -241,21 +241,4 @@ class Db
 
 		return $this->values[$field . '-' . $table . '-' . $id];
 	}
-
-	/**
-	 * @deprecated use db->update instead
-	 */
-	public function updateFields($fields, $table, $id)
-	{
-		$sql = array();
-		foreach ($fields as $k => $f) {
-			if (preg_replace('/[^0-9]/', '', $f) == $f) {
-				$sql[] = '`' . $k . '`=' . (int)$f;
-			} else {
-				$sql[] = '`' . $k . '`=' . $this->strval($f);
-			}
-		}
-
-		return $this->update('UPDATE `' . $table . '` SET ' . implode(',', $sql) . ' WHERE `id` = ' . (int)$id);
-	}
 }
