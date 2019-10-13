@@ -65,6 +65,25 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * DEPRECATED: Wrapper for listNearbyFoodSharePointsAction. Provides endpoint on old url.
+	 *
+	 * @Rest\Get("fairSharePoints/nearby")
+	 * @Rest\QueryParam(name="lat", nullable=true)
+	 * @Rest\QueryParam(name="lon", nullable=true)
+	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
+	 *
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @deprecated Old naming scheme, remove this when all clients are updated
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function oldListNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	{
+		return $this->listNearbyFoodSharePointsAction($paramFetcher);
+	}
+
+	/**
 	 * Returns details of the food share point with the given ID. Returns 200 and the
 	 * food share point, 500 if the food share point does not exist, or 401 if not logged in.
 	 *
@@ -88,6 +107,22 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 		$foodSharePoint = $this->normalizeFoodSharePoint($foodSharePoint);
 
 		return $this->handleView($this->view($foodSharePoint, 200));
+	}
+
+	/**
+	 * DEPRECATED: Wrapper for getFoodSharePointAction. Provides endpoint on old url.
+	 *
+	 * @Rest\Get("fairSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
+	 *
+	 * @param int $foodSharePointId
+	 *
+	 * @deprecated Old naming scheme, remove this when all clients are updated
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function oldGetFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
+	{
+		return $this->getFoodSharePointAction($foodSharePointId);
 	}
 
 	private function fetchLocationOrUserHome($paramFetcher): array
