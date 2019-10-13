@@ -81,7 +81,7 @@ if ($('#mapsearch').length > 0) {
 
     ajax.req('basket', 'closeBaskets', {
       data: {
-        choords: JSON.parse($('#map-latLng').val())
+        coordinates: JSON.parse($('#map-latLng').val())
       },
       success: function (ret) {
         if (ret.baskets != undefined) {
