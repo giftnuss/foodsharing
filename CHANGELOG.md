@@ -8,6 +8,7 @@
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
+- refactored blog from model to gateway !789 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 
@@ -249,7 +250,6 @@ another release for you. Nothing big, but a lot of small. Most noticeable things
 - Refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
 - handle pickup signups via rest api !783 @NerdyProjects
-- refactored blog from model to gateway !789 #9 @peter.toennies
 - removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Handle pickup signups via rest api !783 @NerdyProjects
 - Removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
