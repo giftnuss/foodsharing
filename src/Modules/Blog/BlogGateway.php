@@ -178,7 +178,7 @@ final class BlogGateway extends BaseGateway
 				'name' => strip_tags($this->$data['name']),
 				'teaser' => strip_tags($this->$data['teaser']),
 				'body' => $this->$data['body'],
-				'time' => $this->$data['time'],
+				'time' => strip_tags($this->$data['time']),
 				'picture' => strip_tags($this->$data['picture']),
 				'active' => $active
 			]
