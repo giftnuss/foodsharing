@@ -794,4 +794,25 @@ final class FoodsaverGateway extends BaseGateway
 			['id' => $fsId]
 		);
 	}
+
+	public function loadFoodsaver(int $foodsaverId): array
+	{
+		return $this->db->fetch('
+			SELECT
+				id,
+				name,
+				nachname,
+				photo,
+				rolle,
+				geschlecht,
+				last_login
+			FROM
+				fs_foodsaver
+			WHERE
+				id = :fsId
+            AND
+                deleted_at IS NULL
+		',
+			[':fsId' => $foodsaverId]);
+	}
 }

@@ -34,7 +34,7 @@ class FoodsaverXhr extends Control
 		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($foodsaver = $this->model->loadFoodsaver($_GET['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->loadFoodsaver($_GET['id'])) {
 			$html = $this->view->foodsaverForm($foodsaver);
 
 			return array(
