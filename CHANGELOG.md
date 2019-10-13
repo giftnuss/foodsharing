@@ -249,8 +249,6 @@ another release for you. Nothing big, but a lot of small. Most noticeable things
 - Removed the geoClean and LostRegion modules !756 #103 @peter.toennies
 - Refactored profile from model to gateway !782 #9 @peter.toennies
 - Forbid to signup for non-existant pickups !783 @NerdyProjects
-- handle pickup signups via rest api !783 @NerdyProjects
-- removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Handle pickup signups via rest api !783 @NerdyProjects
 - Removed the library class Func.php !716 !750 !776 !784 !797 @peter.toennies
 - Get rid of any infomail setting related redis "caching" as all information was already available fresh from the database !812 @NerdyProjects
