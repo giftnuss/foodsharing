@@ -90,21 +90,14 @@ class FairTeilerView extends View
 		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
-			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]
-			),
+			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
 			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
-			$this->v_utils->v_form_textarea('desc', ['value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true]
-			),
-			$this->v_utils->v_form_picture('picture', ['pic' => $data['picture'], 'resize' => [528, 60], 'crop' => [(528 / 170), 1]]
-			),
+			$this->v_utils->v_form_textarea('desc', ['value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true]),
+			$this->v_utils->v_form_picture('picture', ['pic' => $data['picture'], 'resize' => [528, 60], 'crop' => [(528 / 170), 1]]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,
 		], ['submit' => $this->translationHelper->s('save')]
 		), $title, array('class' => 'ui-padding'));
-	}
-
-	public function wallposts(): void
-	{
 	}
 
 	public function options(array $items): string
@@ -171,9 +164,9 @@ class FairTeilerView extends View
 	{
 		$content = '';
 		$count = 0;
-		foreach ($regions as $bezirk) {
-			$count += count($bezirk['fairteiler']);
-			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $bezirk, 'fairteiler' => $bezirk['fairteiler']]);
+		foreach ($regions as $region) {
+			$count += count($region['fairteiler']);
+			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $region, 'fairteiler' => $region['fairteiler']]);
 		}
 
 		if ($this->regionId > 0) {

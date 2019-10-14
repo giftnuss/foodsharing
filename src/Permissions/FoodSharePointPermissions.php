@@ -14,8 +14,8 @@ class FoodSharePointPermissions
 	}
 
 	/*
- * allowed only for logged in users
- */
+	* allowed only for logged in users
+	 */
 	public function maySeeFoodSharePointLists(): bool
 	{
 		return $this->session->may();

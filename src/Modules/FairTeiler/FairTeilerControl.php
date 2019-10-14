@@ -379,7 +379,7 @@ class FairTeilerControl extends Control
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
 				$responsible = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
-				$this->foodSharePointGateway->updateResponsibles($this->fairteiler['id'], $responsible);
+				$this->foodSharePointGateway->updateFSPManagers($this->fairteiler['id'], $responsible);
 
 				return $this->foodSharePointGateway->updateFairteiler($this->fairteiler['id'], $data);
 			}

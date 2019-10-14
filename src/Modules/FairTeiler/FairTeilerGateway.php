@@ -67,7 +67,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function updateResponsibles(int $id, $bfoodsaver): void
+	public function updateFSPManagers(int $id, $bfoodsaver): void
 	{
 		$values = array();
 
@@ -272,21 +272,21 @@ class FairTeilerGateway extends BaseGateway
 			[':id' => $foodSharePointId]
 		);
 		$normal = [];
-		$responsibles = [];
+		$fspManagers = [];
 		$all = [];
 		foreach ($follower as $f) {
 			if ($f['type'] == 1) {
 				$normal[] = $f;
 				$all[$f['id']] = 'follow';
 			} elseif ($f['type'] == 2) {
-				$responsibles[] = $f;
+				$fspManagers[] = $f;
 				$all[$f['id']] = 'verantwortlich';
 			}
 		}
 
 		return [
 			'follow' => $normal,
-			'verantwortlich' => $responsibles,
+			'verantwortlich' => $fspManagers,
 			'all' => $all,
 		];
 	}
