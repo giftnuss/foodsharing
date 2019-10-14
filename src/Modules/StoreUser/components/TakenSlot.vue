@@ -10,6 +10,7 @@
       <Avatar
         :url="profile.avatar"
         :size="35"
+        :class="{pending: !confirmed, confirmed:confirmed}"
       />
       <i :class="{slotstatus: true, 'fas fa-hourglass-half': !confirmed, 'fas fa-check': confirmed}" />
     </template>
@@ -101,10 +102,16 @@ export default {
     margin-left: -5px;
   }
 
+/* For slotstatus pending */
   .fa-hourglass-half {
     color: var(--danger);
   }
 
+  .pending {
+    opacity: 0.5;
+  }
+
+/* For slotstatus confirmed */
   .fa-check {
     color: var(--green);
   }
