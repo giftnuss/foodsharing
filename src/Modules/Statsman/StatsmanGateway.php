@@ -110,6 +110,6 @@ class StatsmanGateway extends BaseGateway
 			INNER JOIN fs_betrieb btr ON ( btr.bezirk_id = b.id ) 
 			WHERE btr.betrieb_status_id = :cooperationStatus
 			GROUP BY b.id, YEARWEEK( btr.added )',
-			[':cooperationStatus' => CooperationStatus::IN_COOPERATION]);
+			[':cooperationStatus' => CooperationStatus::COOPERATION_STARTING]);
 	}
 }
