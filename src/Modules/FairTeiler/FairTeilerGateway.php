@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\FairTeiler;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FairTeilerGateway extends BaseGateway
@@ -75,7 +76,7 @@ class FairTeilerGateway extends BaseGateway
 			$values[] = '(' . $id . ',' . (int)$fs . ',2,1)';
 		}
 
-		$this->db->update('fs_fairteiler_follower', ['type' => 1], ['fairteiler_id' => $id]);
+		$this->db->update('fs_fairteiler_follower', ['type' => FollowerType::FOLLOWER], ['fairteiler_id' => $id]);
 
 		$this->db->execute(
 			'
@@ -241,7 +242,7 @@ class FairTeilerGateway extends BaseGateway
 			[
 				'fairteiler_id' => $foodSharePointId,
 				'foodsaver_id' => $foodsaverId,
-				'type' => 1,
+				'type' => FollowerType::FOLLOWER,
 				'infotype' => $infoType,
 			]
 		);
@@ -275,18 +276,18 @@ class FairTeilerGateway extends BaseGateway
 		$fspManagers = [];
 		$all = [];
 		foreach ($follower as $f) {
-			if ($f['type'] == 1) {
+			if ($f['type'] === FollowerType::FOLLOWER) {
 				$normal[] = $f;
 				$all[$f['id']] = 'follow';
-			} elseif ($f['type'] == 2) {
+			} elseif ($f['type'] === FollowerType::FOOD_SHARE_POINT_MANAGER) {
 				$fspManagers[] = $f;
-				$all[$f['id']] = 'verantwortlich';
+				$all[$f['id']] = 'fsp_manager';
 			}
 		}
 
 		return [
 			'follow' => $normal,
-			'verantwortlich' => $fspManagers,
+			'fsp_manager' => $fspManagers,
 			'all' => $all,
 		];
 	}
@@ -377,7 +378,7 @@ class FairTeilerGateway extends BaseGateway
 		if ($ft_id) {
 			$this->db->insert(
 				'fs_fairteiler_follower',
-				['fairteiler_id' => $ft_id, 'foodsaver_id' => $foodsaverId, 'type' => 2]
+				['fairteiler_id' => $ft_id, 'foodsaver_id' => $foodsaverId, 'type' => FollowerType::FOOD_SHARE_POINT_MANAGER]
 			);
 
 			$this->sendBellNotificationForNewFairteiler($ft_id);

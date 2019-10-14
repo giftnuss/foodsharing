@@ -231,7 +231,7 @@ class FairTeilerControl extends Control
 			];
 		}
 
-		$data['bfoodsaver'] = $this->follower['verantwortlich'];
+		$data['bfoodsaver'] = $this->follower['fsp_manager'];
 
 		foreach ($data['bfoodsaver'] as $key => $fs) {
 			$data['bfoodsaver'][$key]['name'] = $fs['name'] . ' ' . $fs['nachname'];

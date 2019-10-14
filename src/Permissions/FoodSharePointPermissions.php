@@ -47,7 +47,7 @@ class FoodSharePointPermissions
 			$this->session->isOrgaTeam() ||
 			(
 				isset($follower['all'][$this->session->id()]) &&
-				$follower['all'][$this->session->id()] === 'verantwortlich'
+				$follower['all'][$this->session->id()] === 'fsp_manager'
 			);
 	}
 }
