@@ -87,7 +87,7 @@ class FairTeilerControl extends Control
 			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $foodSharePointId);
 		}
 
-		if (!$this->foodSharePointPermissions->maySeeFoodSharePointLists()
+		if (!$this->foodSharePointPermissions->maySeeFoodSharePointSubPage()
 			&& $request->query->has('sub')
 			&& $request->query->get('sub') !== 'ft') {
 			$this->routeHelper->goLogin();
