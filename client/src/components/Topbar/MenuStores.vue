@@ -4,13 +4,11 @@
     no-caret
   >
     <template slot="button-content">
-      <span>
-        <i class="fas fa-shopping-cart" />
-        <i
-          :style="circleStyle(globalPickupStatus)"
-          class="fas fa-circle fa-stack-1x fa-sup"
-        />
-      </span>
+      <i class="fas fa-shopping-cart" />
+      <span
+        v-if="globalPickupStatus>0"
+        :class="'badge badge-pill '+badgeClass(globalPickupStatus)"
+      >&nbsp;</span>
     </template>
     <div
       v-for="store in stores"
@@ -21,11 +19,10 @@
         role="menuitem"
         class="dropdown-item text-truncate"
       >
-        <i
-          :style="circleStyle(store.pickupStatus)"
-          style="margin-left: -1.5em;"
-          class="fas fa-circle"
-        />
+        <span
+          :class="'badge badge-pill '+badgeClass(store.pickupStatus)"
+          :style="badgeVisibility(store.pickupStatus)"
+        >&nbsp;</span>
         {{ store.name }}
       </a>
     </div>
@@ -69,10 +66,12 @@ export default {
     }
   },
   methods: {
-    circleStyle (pickupStatus) {
-      const colors = ['#f2cd00', '#f4922f', '#dc3545']
+    badgeClass (pickupStatus) {
+      const classes = ['badge-info', 'badge-info', 'badge-warning', 'badge-danger']
+      return classes[pickupStatus]
+    },
+    badgeVisibility (pickupStatus) {
       return {
-        color: colors[pickupStatus - 1],
         visibility: pickupStatus > 0 ? 'visible' : 'hidden'
       }
     }
@@ -81,12 +80,10 @@ export default {
 </script>
 
 <style lang="scss">
-  .fa-stack {
-    vertical-align: bottom;
+  .badge {
+    margin-left: -1.8em;
   }
-  .fa-sup {
-    margin: -.5em 0px 0px .5em;
-    text-shadow: 0 0 1px black;
-    font-size: 1em !important;
+  .bootstrap .badge-info {
+    background-color: #f5f5b5;
   }
 </style>
