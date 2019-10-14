@@ -14,6 +14,8 @@
 - Removed hidden profile pic in settings !1090 @chriswalg
 - Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
  
+- Automatically relogin after joining work group !1113 #125 @alex.simm 
+
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
