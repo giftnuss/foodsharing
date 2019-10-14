@@ -94,7 +94,7 @@ class StoreService
 		$minimumDate = null;
 		foreach ($pickupSlots as $slot) {
 			if ($slot['isAvailable'] && (is_null($minimumDate) || $slot['date'] < $minimumDate)) {
-				if (is_null($foodsaverId) || empty(array_filter($pickupSlots[0]['occupiedSlots'],
+				if (is_null($foodsaverId) || empty(array_filter($slot['occupiedSlots'],
 						function ($e) use ($foodsaverId) {
 							return $e['foodsaverId'] === $foodsaverId;
 						}))) {

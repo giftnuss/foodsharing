@@ -517,7 +517,7 @@ class Session
 			$_SESSION['client']['betriebe'] = array();
 			foreach ($r as $rr) {
 				// add info about the next free pickup slot to the store
-				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id'], $fs['id']);
+				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}
