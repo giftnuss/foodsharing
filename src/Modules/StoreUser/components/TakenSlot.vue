@@ -11,7 +11,7 @@
         :url="profile.avatar"
         :size="35"
       />
-      <span :class="{slotstatus: true, pending: !confirmed, confirmed: confirmed}" />
+      <i :class="{slotstatus: true, 'fas fa-hourglass-half': !confirmed, 'fas fa-check': confirmed}" />
     </template>
     <b-dropdown-item :href="`/profile/${profile.id}`">
       <i class="fa fa-user mr-1" /> {{ $i18n('pickup.open_profile') }}
@@ -96,13 +96,16 @@ export default {
     width: 16px;
     height: 16px;
   }
-  .pending {
-    background-image: url(/img/pending.png);
-  }
-  .confirmed {
-    background-image: url(/img/check.png);
-  }
+
   .fa {
     margin-left: -5px;
+  }
+
+  .fa-hourglass-half {
+    color: var(--danger);
+  }
+
+  .fa-check {
+    color: var(--green);
   }
 </style>
