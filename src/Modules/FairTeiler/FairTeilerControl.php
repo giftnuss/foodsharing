@@ -87,7 +87,8 @@ class FairTeilerControl extends Control
 			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $foodSharePointId);
 		}
 
-		if (!$this->foodSharePointPermissions->maySeeFoodSharePointSubPage()
+		// allowed only for logged in users
+		if (!$this->session->may()
 			&& $request->query->has('sub')
 			&& $request->query->get('sub') !== 'ft') {
 			$this->routeHelper->goLogin();
@@ -378,8 +379,8 @@ class FairTeilerControl extends Control
 		if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
-				$responsible = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
-				$this->foodSharePointGateway->updateFSPManagers($this->fairteiler['id'], $responsible);
+				$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
+				$this->foodSharePointGateway->updateFSPManagers($this->fairteiler['id'], $fspManager);
 
 				return $this->foodSharePointGateway->updateFairteiler($this->fairteiler['id'], $data);
 			}

@@ -68,11 +68,11 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function updateFSPManagers(int $id, $bfoodsaver): void
+	public function updateFSPManagers(int $id, $fspManager): void
 	{
 		$values = array();
 
-		foreach ($bfoodsaver as $fs) {
+		foreach ($fspManager as $fs) {
 			$values[] = '(' . $id . ',' . (int)$fs . ',2,1)';
 		}
 
@@ -93,7 +93,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getInfoFollowerIds(int $id): array
+	public function getInfoFollowerIds(int $fspId): array
 	{
 		return $this->db->fetchAllValues(
 			'
@@ -105,7 +105,7 @@ class FairTeilerGateway extends BaseGateway
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :id
 		',
-			[':id' => $id]
+			[':id' => $fspId]
 		);
 	}
 

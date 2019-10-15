@@ -13,14 +13,6 @@ class FoodSharePointPermissions
 		$this->session = $session;
 	}
 
-	/*
-	* allowed only for logged in users
-	 */
-	public function maySeeFoodSharePointSubPage(): bool
-	{
-		return $this->session->may();
-	}
-
 	public function mayDeleteFoodSharePointOfRegion(int $regionId): bool
 	{
 		return $this->session->isAdminFor($regionId) || $this->session->isOrgaTeam();
