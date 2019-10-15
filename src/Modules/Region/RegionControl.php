@@ -118,6 +118,12 @@ final class RegionControl extends Control
 				$menu[] = ['name' => 'terminology.reports', 'href' => '/?page=report&bid=' . $regionId];
 			}
 		}
+
+		if ($this->forumPermissions->mayPostToRegion($regionId, false)) {
+			$regionOrGroupString = $isWorkGroup ? 'AG-Postfach' : 'Bezirks-Postfach';
+			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
+		}
+
 		if ($this->mayAccessApplications($regionId)) {
 			if ($requests = $this->gateway->listRequests($regionId)) {
 				$menu[] = ['name' => $this->translator->trans('group.applications') . ' (' . count($requests) . ')', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=applications'];
