@@ -83,12 +83,8 @@ final class ProfileControl extends Control
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				false,
-				false,
-				false,
-				false,
-				null,
-				null,
-				$this->foodsaver['id'] == $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : null
+				[],
+				$this->foodsaver['id'] === $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : []
 			);
 		}
 	}
