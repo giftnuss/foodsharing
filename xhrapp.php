@@ -45,10 +45,7 @@ $csrf_whitelist = [
 	// 'Basket::nearbyBaskets',
 	// 'Basket::bubble',
 	// 'Basket::fsBubble',
-	// 'Basket::request',
-	// 'Basket::sendreqmessage', // used by the legacy fs app
 	// 'Basket::infobar',
-	// 'Basket::answer',
 	// 'Basket::removeRequest',
 	// 'Basket::removeBasket',
 	// 'Basket::editBasket',

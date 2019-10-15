@@ -15,7 +15,6 @@ use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
-	private $status;
 	private $basketGateway;
 	private $messageModel;
 	private $timeHelper;
@@ -35,16 +34,6 @@ class BasketXhr extends Control
 		$this->basketGateway = $basketGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-
-		$this->status = [
-			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
-			'gelesen' => Status::REQUESTED_MESSAGE_READ,
-			'abgeholt' => Status::DELETED_PICKED_UP,
-			'abgelehnt' => Status::DENIED,
-			'nicht_gekommen' => Status::NOT_PICKED_UP,
-			'wall_follow' => Status::FOLLOWED,
-			'angeklickt' => Status::REQUESTED,
-		];
 
 		parent::__construct();
 
@@ -367,69 +356,6 @@ class BasketXhr extends Control
 		return $dia->xhrout();
 	}
 
-	public function request()
-	{
-		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
-			$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED, $this->session->id());
-			$dia = new XhrDialog();
-			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
-			$dia->addOpt('width', '90%');
-			$dia->noOverflow();
-			$dia->addContent($this->view->contactTitle($basket));
-
-			$contact_type = [1];
-
-			if (!empty($basket['contact_type'])) {
-				$contact_type = explode(':', $basket['contact_type']);
-			}
-
-			if (in_array(2, $contact_type)) {
-				$dia->addContent($this->view->contactNumber($basket));
-			}
-			if (in_array(1, $contact_type)) {
-				$dia->addContent($this->view->contactMsg());
-				$dia->addButton(
-					$this->translationHelper->s('send_request'),
-					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});'
-				);
-			}
-
-			return $dia->xhrout();
-		}
-	}
-
-	public function sendreqmessage(): array
-	{
-		if ($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			$msg = strip_tags($_GET['msg']);
-			$msg = trim($msg);
-			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $msg);
-				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
-
-				return [
-					'status' => 1,
-					'script' => '
-						if($(".xhrDialog").length > 0){
-							$(".xhrDialog").dialog("close");
-						}
-						pulseInfo("' . $this->translationHelper->s('sent_request') . '");',
-				];
-			}
-
-			return [
-				'status' => 1,
-				'script' => 'pulseError("' . $this->translationHelper->s('basket_error_message') . '");',
-			];
-		}
-
-		return [
-			'status' => 1,
-			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
-		];
-	}
-
 	public function infobar(): void
 	{
 		// TODO: rewrite this to an proper API endpoint
@@ -472,21 +398,6 @@ class BasketXhr extends Control
 		}, $baskets));
 
 		$xhr->send();
-	}
-
-	public function answer()
-	{
-		$basketId = (int)$_GET['id'];
-		$fsId = (int)$_GET['fid'];
-
-		if (($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) && $id == $this->session->id()) {
-			$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
-
-			return [
-				'status' => 1,
-				'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
-			];
-		}
 	}
 
 	public function removeRequest()
@@ -534,7 +445,6 @@ class BasketXhr extends Control
 				$this->translationHelper->s('continue'),
 				'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
 			);
-
 			return $dia->xhrout();
 		}
 	}
