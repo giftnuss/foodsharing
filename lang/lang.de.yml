@@ -20,6 +20,9 @@ group:
   photo: Foto
   applications: Bewerbungen
   applications_for: Bewerbungen für %name%
+  mail_link_title:
+    workgroup: AG-Postfach
+    region: Bezirks-Postfach
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)

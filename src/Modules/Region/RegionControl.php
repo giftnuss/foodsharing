@@ -120,7 +120,7 @@ final class RegionControl extends Control
 		}
 
 		if ($this->session->isAdminFor($regionId)) {
-			$regionOrGroupString = $isWorkGroup ? 'AG-Postfach' : 'Bezirks-Postfach';
+			$regionOrGroupString = $isWorkGroup ? $this->translator->trans('group.mail_link_title.workgroup') : $this->translator->trans('group.mail_link_title.region');
 			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
 		}
 
