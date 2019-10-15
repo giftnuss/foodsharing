@@ -91,7 +91,7 @@ class BasketView extends View
 			$page->addSection($wallposts, $this->translationHelper->s('wallboard'));
 		}
 		if ($this->session->may()) {
-			$page->addSectionRight($this->userBox($basket), $this->translationHelper->s('provider'));
+			$page->addSectionRight($this->userBox($basket, $requests), $this->translationHelper->s('provider'));
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
 				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', array('count' => count($requests))));
@@ -165,10 +165,17 @@ class BasketView extends View
 		return $subtitle;
 	}
 
-	private function userBox(array $basket): string
+	private function userBox(array $basket, array $requests): string
 	{
 		if ($basket['fs_id'] != $this->session->id()) {
-			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_request') . '</a>	</div>';
+			$hasRequested = $requests && count($requests) > 0;
+			$request = $this->vueComponent('vue-requestbasketform', 'request-form', [
+				'basketId' => $basket['id'],
+				'hasRequested' => $hasRequested,
+				'requestCount' => $basket['request_count'],
+				'mobileNumber' => !empty($basket['handy']) ? $basket['handy'] : null,
+				'landlineNumber' => !empty($basket['tel']) ? $basket['tel'] : null
+			]);
 		} else {
 			$request = '
 				<div class="ui-padding-bottom">

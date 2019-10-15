@@ -9,6 +9,9 @@ import './Basket.css'
 
 import { addMarker, clearCluster, commitCluster } from '@php/Lib/View/vMap'
 
+import { vueApply, vueRegister } from '@/vue'
+import RequestForm from './components/RequestForm'
+
 const mapsearch = {
   lat: null,
   lon: null,
@@ -91,3 +94,10 @@ if ($('#mapsearch').length > 0) {
     })
   })
 }
+
+$(document).ready(() => {
+  vueRegister({
+    RequestForm
+  })
+  vueApply('#vue-requestbasketform', true)
+})
