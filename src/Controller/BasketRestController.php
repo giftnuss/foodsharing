@@ -7,6 +7,7 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
 use Foodsharing\Services\BasketService;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\MessageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -21,6 +22,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private $gateway;
 	private $service;
 	private $imageService;
+	private $messageService;
 	private $session;
 
 	// literal constants
@@ -45,11 +47,12 @@ final class BasketRestController extends AbstractFOSRestController
 	private const SIZES = [800 => '', 450 => 'medium-', 200 => 'thumb-', 75 => '75x75-', 50 => '50x50-'];
 	private const MAX_BASKET_DISTANCE = 50;
 
-	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, Session $session)
+	public function __construct(BasketGateway $gateway, BasketService $service, ImageService $imageService, MessageService $messageService, Session $session)
 	{
 		$this->gateway = $gateway;
 		$this->service = $service;
 		$this->imageService = $imageService;
+		$this->messageService = $messageService;
 		$this->session = $session;
 	}
 
@@ -463,6 +466,69 @@ final class BasketRestController extends AbstractFOSRestController
 		$basket = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
+	}
+
+	/**
+	 * Requests a basket.
+	 *
+	 * @Rest\Post("baskets/{basketId}/request", requirements={"basketId" = "\d+"})
+	 * @Rest\RequestParam(name="message", nullable=false)
+	 *
+	 * @param int $basketId ID of an existing basket
+	 * @param ParamFetcher $paramFetcher
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function requestBasketAction(int $basketId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
+		$message = trim(strip_tags($paramFetcher->get('message')));
+
+		if (empty($message)) {
+			throw new HttpException(400, 'The request message should not be empty.');
+		}
+
+		$basket = $this->gateway->getBasket($basketId);
+
+		// TODO check basket state
+		if (!$basket) {
+			throw new HttpException(404, 'The basket is not available anymore.');
+		}
+
+		// TODO check for existing request (is it already requested or even rejected?)
+
+		$basketCreatorId = $basket['foodsaver_id'];
+		// Send the message to the creator
+		$this->messageService->sendMessageToUser($basketCreatorId, $this->session->id(), $message, 'basket/request');
+		// TODO define initial request permission
+		$this->gateway->setStatus($basketId, Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
+
+		return $this->getBasketAction($basketId);
+	}
+
+	/**
+	 * Withdraw a basket request.
+	 *
+	 * @Rest\Post("baskets/{basketId}/withdraw", requirements={"basketId" = "\d+"})
+	 *
+	 * @param int $basketId ID of an existing basket
+	 *
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function withdrawBasketRequestAction(int $basketId): \Symfony\Component\HttpFoundation\Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401, self::NOT_LOGGED_IN);
+		}
+
+		// TODO check for existing request (is it already requested or even rejected?)
+
+		$this->gateway->setStatus($basketId, Status::DELETED_OTHER_REASON, $this->session->id());
+
+		return $this->getBasketAction($basketId);
 	}
 
 	/**
