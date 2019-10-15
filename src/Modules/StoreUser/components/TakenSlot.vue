@@ -12,7 +12,7 @@
         :size="35"
         :class="{pending: !confirmed, confirmed:confirmed}"
       />
-      <i :class="{slotstatus: true, 'fas fa-hourglass-half': !confirmed, 'fas fa-check': confirmed}" />
+      <i :class="{slotstatus: true, 'far fa-clock': !confirmed, 'fas fa-check': confirmed}" />
     </template>
     <b-dropdown-item :href="`/profile/${profile.id}`">
       <i class="fa fa-user mr-1" /> {{ $i18n('pickup.open_profile') }}
@@ -103,7 +103,7 @@ export default {
   }
 
 /* For slotstatus pending */
-  .fa-hourglass-half {
+  .fa-clock {
     color: var(--danger);
   }
 
