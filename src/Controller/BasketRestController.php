@@ -238,7 +238,8 @@ final class BasketRestController extends AbstractFOSRestController
 			'until' => (int)$basketData['until_ts'],
 			self::LAT => (float)$basketData[self::LAT],
 			self::LON => (float)$basketData[self::LON],
-			'creator' => $creator
+			'creator' => $creator,
+			'requestCount' => $basketData['request_count']
 		];
 
 		// add phone numbers if contact_type includes telephone
