@@ -119,7 +119,7 @@ final class RegionControl extends Control
 			}
 		}
 
-		if ($this->forumPermissions->mayPostToRegion($regionId, false)) {
+		if ($this->session->isAdminFor($regionId)) {
 			$regionOrGroupString = $isWorkGroup ? 'AG-Postfach' : 'Bezirks-Postfach';
 			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
 		}
