@@ -93,6 +93,10 @@ class BasketView extends View
 		if ($this->session->may()) {
 			$page->addSectionRight($this->userBox($basket), $this->translationHelper->s('provider'));
 
+			if ($basket['fs_id'] == $this->session->id() && $requests) {
+				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', array('count' => count($requests))));
+			}
+
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
 				$map = new vMap([$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
@@ -102,10 +106,6 @@ class BasketView extends View
 				$map->setCenter($basket['lat'], $basket['lon']);
 
 				$page->addSectionRight($map->render(), 'Wo?');
-			}
-
-			if ($basket['fs_id'] == $this->session->id() && $requests) {
-				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', array('count' => count($requests))));
 			}
 		} else {
 			$page->addSectionRight(
