@@ -15,7 +15,7 @@ use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RegionControl extends Control
 {
