@@ -198,4 +198,33 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 		$this->assertEquals($soonDate->format('Y-m-d H:i:s'), $bellDate);
 	}
+
+	public function testNextAvailablePickupTime()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
+		$maxDate = $date->add('1 day');
+		$dow = $date->weekday();
+		$fetcher = 1;
+
+		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+		$this->assertEquals($this->service->getNextAvailablePickupTime($store['id'], $maxDate, $this->foodsaver['id']), $date);
+
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
+		$this->assertNull($this->service->getNextAvailablePickupTime($store['id'], $maxDate, $this->foodsaver['id']));
+	}
+
+	public function testAvailablePickupStatus()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
+		$dow = $date->weekday();
+		$fetcher = 1;
+
+		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+		$this->assertEquals($this->service->getAvailablePickupStatus($store['id'], $this->foodsaver['id']), 2);
+
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
+		$this->assertEquals($this->service->getAvailablePickupStatus($store['id'], $this->foodsaver['id']), 0);
+	}
 }

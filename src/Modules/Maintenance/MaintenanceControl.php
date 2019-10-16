@@ -303,7 +303,7 @@ class MaintenanceControl extends ConsoleControl
 	{
 		self::info('master bezirk update');
 		/* Master Bezirke */
-		if ($foodasver = $this->model->q('
+		if ($foodsaver = $this->model->q('
 				SELECT
 				b.`id`,
 				b.`name`,
@@ -320,7 +320,7 @@ class MaintenanceControl extends ConsoleControl
 
 		')
 		) {
-			foreach ($foodasver as $fs) {
+			foreach ($foodsaver as $fs) {
 				if (!$this->model->qRow('SELECT bezirk_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
 					if ((int)$fs['master'] > 0) {
 						$this->model->insert('

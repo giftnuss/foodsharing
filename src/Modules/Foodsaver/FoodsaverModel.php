@@ -41,29 +41,6 @@ class FoodsaverModel extends Db
 		');
 	}
 
-	public function loadFoodsaver($fsid)
-	{
-		return $this->qRow('
-			SELECT
-				id,
-				name,
-				nachname,
-				photo,
-				rolle,
-				geschlecht,
-				last_login
-
-			FROM
-				fs_foodsaver
-
-			WHERE
-				id = ' . (int)$fsid . '
-
-            AND
-                deleted_at IS NULL
-		');
-	}
-
 	public function update_foodsaver($fsId, $data, StoreModel $storeModel)
 	{
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');

@@ -7,6 +7,7 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\StorePermissions;
@@ -82,7 +83,8 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($region, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$chosenRegion = ($regionId > 0 && $this->regionGateway->getType($regionId) <= Type::REGION) ? $region : null;
+				$this->pageHelper->addContent($this->view->betrieb_form($chosenRegion, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $regionId)

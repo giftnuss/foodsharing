@@ -81,7 +81,10 @@ final class ProfileControl extends Control
 			);
 		} else {
 			$this->view->profile(
-				$this->wallposts('foodsaver', $this->foodsaver['id'])
+				$this->wallposts('foodsaver', $this->foodsaver['id']),
+				false,
+				[],
+				$this->foodsaver['id'] === $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : []
 			);
 		}
 	}

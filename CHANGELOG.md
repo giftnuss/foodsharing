@@ -1,13 +1,21 @@
 # Unreleased
 
 ## Features
+- Added markers for empty pickup slots in the next days to store menu (red=today or tomorrow, orange=next 3 days, yellow=next 5 days) !1106 #452 @alex.simm
+- Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
+- Add email shortcut to regions and workgroup side menu !1118 @jofranz
+- Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
+- Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
+- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm 
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
+- refactored blog from model to gateway !789 #9 @peter.toennies
+- refactored statsman from model to gateway !1111 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
 

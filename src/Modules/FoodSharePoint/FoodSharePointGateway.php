@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Modules\FairTeiler;
+namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
@@ -8,7 +8,7 @@ use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Region\RegionGateway;
 
-class FairTeilerGateway extends BaseGateway
+class FoodSharePointGateway extends BaseGateway
 {
 	private $regionGateway;
 	private $bellGateway;
@@ -41,7 +41,7 @@ class FairTeilerGateway extends BaseGateway
 		);
 	}
 
-	public function getLastFairSharePointPost(int $fspId): array
+	public function getLastFoodSharePointPost(int $fspId): array
 	{
 		return $this->db->fetch(
 			'
@@ -114,7 +114,7 @@ class FairTeilerGateway extends BaseGateway
 		if (!$regionIds) {
 			return [];
 		}
-		if ($fairteiler = $this->db->fetchAll(
+		if ($foodSharePoint = $this->db->fetchAll(
 			'
 			SELECT 	`id`,
 					`name`,
@@ -126,26 +126,26 @@ class FairTeilerGateway extends BaseGateway
 		'
 		)
 		) {
-			foreach ($fairteiler as $key => $ft) {
-				$fairteiler[$key]['pic'] = false;
-				if (!empty($ft['picture'])) {
-					$fairteiler[$key]['pic'] = array(
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-						'orig' => 'images/' . ($ft['picture']),
+			foreach ($foodSharePoint as $fspKey => $fspValue) {
+				$foodSharePoint[$fspKey]['pic'] = false;
+				if (!empty($fspValue['picture'])) {
+					$foodSharePoint[$fspKey]['pic'] = array(
+						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fspValue['picture']),
+						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fspValue['picture']),
+						'orig' => 'images/' . ($fspValue['picture']),
 					);
 				}
 			}
 
-			return $fairteiler;
+			return $foodSharePoint;
 		}
 
 		return [];
 	}
 
-	public function listFairteilerNested(array $regionIds = []): array
+	public function listFoodSharePointsNested(array $regionIds = []): array
 	{
-		if (!empty($regionIds) && ($fairteiler = $this->db->fetchAll(
+		if (!empty($regionIds) && ($foodSharePoint = $this->db->fetchAll(
 				'
 			SELECT 	ft.`id`,
 					ft.`name`,
@@ -174,17 +174,17 @@ class FairTeilerGateway extends BaseGateway
 					];
 				}
 				$pic = false;
-				if (!empty($ft['picture'])) {
+				if (!empty($fsp['picture'])) {
 					$pic = [
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-						'orig' => 'images/' . ($ft['picture']),
+						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fsp['picture']),
+						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fsp['picture']),
+						'orig' => 'images/' . ($fsp['picture']),
 					];
 				}
-				$out[$ft['bezirk_id']]['fairteiler'][] = [
-					'id' => $ft['id'],
-					'name' => $ft['name'],
-					'picture' => $ft['picture'],
+				$out[$fsp['bezirk_id']]['fairteiler'][] = [
+					'id' => $fsp['id'],
+					'name' => $fsp['name'],
+					'picture' => $fsp['picture'],
 					'pic' => $pic,
 				];
 			}
@@ -292,13 +292,13 @@ class FairTeilerGateway extends BaseGateway
 		];
 	}
 
-	public function acceptFairteiler(int $foodSharePointId): void
+	public function acceptFoodSharePoint(int $foodSharePointId): void
 	{
 		$this->db->update('fs_fairteiler', ['status' => 1], ['id' => $foodSharePointId]);
-		$this->removeBellNotificationForNewFairteiler($foodSharePointId);
+		$this->removeBellNotificationForNewFoodSharePoint($foodSharePointId);
 	}
 
-	public function updateFairteiler(int $foodSharePointId, array $data): bool
+	public function updateFoodSharePoint(int $foodSharePointId, array $data): bool
 	{
 		$this->db->requireExists('fs_fairteiler', ['id' => $foodSharePointId]);
 		$this->db->update('fs_fairteiler', $data, ['id' => $foodSharePointId]);
@@ -306,20 +306,20 @@ class FairTeilerGateway extends BaseGateway
 		return true;
 	}
 
-	public function deleteFairteiler(int $foodSharePointId): int
+	public function deleteFoodSharePoint(int $foodSharePointId): int
 	{
 		$this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $foodSharePointId]);
 
 		$result = $this->db->delete('fs_fairteiler', ['id' => $foodSharePointId]);
 
-		$this->removeBellNotificationForNewFairteiler($foodSharePointId);
+		$this->removeBellNotificationForNewFoodSharePoint($foodSharePointId);
 
 		return $result;
 	}
 
-	public function getFairteiler(int $foodSharePointId): array
+	public function getFoodSharePoint(int $foodSharePointId): array
 	{
-		if ($ft = $this->db->fetch(
+		if ($foodSharePoint = $this->db->fetch(
 			'
 			SELECT 	ft.id,
 					ft.`bezirk_id`,
@@ -350,22 +350,22 @@ class FairTeilerGateway extends BaseGateway
 			[':id' => $foodSharePointId]
 		)
 		) {
-			$ft['pic'] = false;
-			if (!empty($ft['picture'])) {
-				$ft['pic'] = [
-					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $ft['picture']),
-					'head' => 'images/' . str_replace('/', '/crop_0_528_', $ft['picture']),
-					'orig' => 'images/' . ($ft['picture']),
+			$foodSharePoint['pic'] = false;
+			if (!empty($foodSharePoint['picture'])) {
+				$foodSharePoint['pic'] = [
+					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $foodSharePoint['picture']),
+					'head' => 'images/' . str_replace('/', '/crop_0_528_', $foodSharePoint['picture']),
+					'orig' => 'images/' . ($foodSharePoint['picture']),
 				];
 			}
 
-			return $ft;
+			return $foodSharePoint;
 		}
 
 		return [];
 	}
 
-	public function addFairteiler(int $foodsaverId, array $data): int
+	public function addFoodSharePoint(int $foodsaverId, array $data): int
 	{
 		$db_data = array_merge(
 			$data,
@@ -374,28 +374,28 @@ class FairTeilerGateway extends BaseGateway
 				'add_foodsaver' => $foodsaverId,
 			]
 		);
-		$ft_id = $this->db->insert('fs_fairteiler', $db_data);
-		if ($ft_id) {
+		$food_share_point_id = $this->db->insert('fs_fairteiler', $db_data);
+		if ($food_share_point_id) {
 			$this->db->insert(
 				'fs_fairteiler_follower',
-				['fairteiler_id' => $ft_id, 'foodsaver_id' => $foodsaverId, 'type' => FollowerType::FOOD_SHARE_POINT_MANAGER]
+				['fairteiler_id' => $food_share_point_id, 'foodsaver_id' => $foodsaverId, 'type' => FollowerType::FOOD_SHARE_POINT_MANAGER]
 			);
 
-			$this->sendBellNotificationForNewFairteiler($ft_id);
+			$this->sendBellNotificationForNewFairteiler($food_share_point_id);
 		}
 
-		return $ft_id;
+		return $food_share_point_id;
 	}
 
 	private function sendBellNotificationForNewFairteiler(int $foodSharePointId): void
 	{
 		$fairteiler = $this->getFairteiler($foodSharePointId);
 
-		if ($fairteiler['status'] === 1) {
-			return; //Fairteiler has been created by orga member or the ambassador himself
+		if ($foodSharePoint['status'] === 1) {
+			return; //FoodSharePoint has been created by orga member or the ambassador himself
 		}
 
-		$region = $this->regionGateway->getRegion($fairteiler['bezirk_id']);
+		$region = $this->regionGateway->getRegion($foodSharePoint['bezirk_id']);
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 
@@ -405,15 +405,15 @@ class FairTeilerGateway extends BaseGateway
 			'sharepoint_activate',
 			'img img-recycle yellow',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
-			['bezirk' => $region['name'], 'name' => $fairteiler['name']],
+			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
 			'new-fairteiler-' . $foodSharePointId,
 			0
 		);
 	}
 
-	private function removeBellNotificationForNewFairteiler(int $fairteilerId): void
+	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void
 	{
-		$identifier = 'new-fairteiler-' . $fairteilerId;
+		$identifier = 'new-fairteiler-' . $foodSharePointId;
 		if (!$this->bellGateway->bellWithIdentifierExists($identifier)) {
 			return;
 		}
