@@ -16,6 +16,7 @@
 - Reduced complexity of the profile module !1037 @peter.toennies
 - refactored blog from model to gateway !789 #9 @peter.toennies
 - refactored statsman from model to gateway !1111 #9 @peter.toennies
+- refactrored the food share point module !1108 !1105 @peter.toennies
 
 ## Dev/Test/CI stuff
 
