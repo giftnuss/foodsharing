@@ -435,6 +435,10 @@ class BasketXhr extends Control
 								'id' => RequestStatus::DELETED_OTHER_REASON,
 								'name' => $this->translationHelper->s('basket_deleted_other_reason'),
 							],
+							[
+								'id' => RequestStatus::DENIED,
+								'name' => 'Ich möchte diese Anfrage ablehnen.',
+							],
 						],
 						'selected' => RequestStatus::DELETED_PICKED_UP,
 					]
