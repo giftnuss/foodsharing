@@ -5,6 +5,7 @@
 - Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
 - Add email shortcut to regions and workgroup side menu !1118 @jofranz
 - Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
+- Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
