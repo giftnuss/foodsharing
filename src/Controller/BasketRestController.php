@@ -488,14 +488,14 @@ final class BasketRestController extends AbstractFOSRestController
 		$basket = $this->gateway->getBasket($basketId);
 		$this->verifyBasketIsAvailable($basket);
 
-		// TODO check basket state
-		if (!$basket) {
-			throw new HttpException(404, 'The basket is not available anymore.');
+		$basketCreatorId = $basket['foodsaver_id'];
+
+		// check for existing request
+		$request = $this->gateway->getRequest($basketId, $this->session->id(), $basketCreatorId);
+		if ($request && $request[self::STATUS] == RequestStatus::DENIED) {
+			throw new HttpException(403, 'Your request was denied by the basket creator.');
 		}
 
-		// TODO check for existing request (is it already requested or even rejected?)
-
-		$basketCreatorId = $basket['foodsaver_id'];
 		// Send the message to the creator
 		$this->messageService->sendMessageToUser($basketCreatorId, $this->session->id(), $message, 'basket/request');
 		$this->gateway->setStatus($basketId, RequestStatus::REQUESTED_MESSAGE_UNREAD, $this->session->id());
@@ -518,7 +518,16 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
-		// TODO check for existing request (is it already requested or even rejected?)
+		$basket = $this->gateway->getBasket($basketId);
+		$this->verifyBasketIsAvailable($basket);
+
+		$basketCreatorId = $basket['foodsaver_id'];
+
+		// check for existing request
+		$request = $this->gateway->getRequest($basketId, $this->session->id(), $basketCreatorId);
+		if (!$request || !($request[self::STATUS] == RequestStatus::REQUESTED_MESSAGE_UNREAD || $request[self::STATUS] == RequestStatus::REQUESTED_MESSAGE_READ)) {
+			throw new HttpException(400, 'There is no active basket request which can be withdrawn.');
+		}
 
 		$this->gateway->setStatus($basketId, RequestStatus::DELETED_OTHER_REASON, $this->session->id());
 
