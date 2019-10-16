@@ -171,8 +171,8 @@ class BasketView extends View
 			$hasRequested = $requests && count($requests) > 0;
 			$request = $this->vueComponent('vue-requestbasketform', 'request-form', [
 				'basketId' => $basket['id'],
-				'hasRequested' => $hasRequested,
-				'requestCount' => $basket['request_count'],
+				'initialHasRequested' => $hasRequested,
+				'initialRequestCount' => $basket['request_count'],
 				'mobileNumber' => !empty($basket['handy']) ? $basket['handy'] : null,
 				'landlineNumber' => !empty($basket['tel']) ? $basket['tel'] : null
 			]);

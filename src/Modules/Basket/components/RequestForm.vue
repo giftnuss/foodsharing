@@ -93,11 +93,11 @@ export default {
       type: Number,
       default: null
     },
-    hasRequested: {
+    initialHasRequested: {
       type: Boolean,
       default: false
     },
-    requestCount: {
+    initialRequestCount: {
       type: Number,
       default: null
     },
@@ -113,7 +113,9 @@ export default {
   data () {
     return {
       isLoading: false,
-      requestMessage: ''
+      requestMessage: '',
+      hasRequested: this.initialHasRequested,
+      requestCount: this.initialRequestCount
     }
   },
   _interval: null,
