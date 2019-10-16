@@ -6,8 +6,9 @@
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
-- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm 
-
+- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
+- Removed hidden profile pic in settings !1090 @chriswalg
+ 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
@@ -142,7 +143,6 @@ And we have even included some new features for you.
 - Bugfix for end date being required when creating single-day event !1084 @tihar
 - Removed the obsolete and insecure foodsaver bubble for our map !1093 @peter.toennies
 - Removed forum subscriptions for people who left a district or workgroup !1071 #655 @alex.simm
-- Removed hidden profile pic in settings !1090 @chriswalg
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
