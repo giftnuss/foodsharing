@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\Basket\Status;
 
 class BasketControl extends Control
 {

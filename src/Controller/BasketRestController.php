@@ -4,7 +4,8 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\Basket\Status as BasketStatus;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Services\BasketService;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\MessageService;
@@ -202,15 +203,7 @@ final class BasketRestController extends AbstractFOSRestController
 		}
 
 		$basket = $this->gateway->getBasket($basketId);
-
-		if (!$basket || $basket[self::STATUS] == Status::DELETED_OTHER_REASON) {
-			throw new HttpException(404, 'Basket does not exist.');
-		} elseif ($basket[self::STATUS] == Status::DELETED_PICKED_UP) {
-			throw new HttpException(404, 'Basket was already picked up.');
-		} elseif ($basket['until_ts'] < time()) {
-			throw new HttpException(404, 'Basket is expired.');
-		}
-
+		$this->verifyBasketIsAvailable($basket);
 		$basket = $this->normalizeBasket($basket);
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
@@ -493,6 +486,7 @@ final class BasketRestController extends AbstractFOSRestController
 		}
 
 		$basket = $this->gateway->getBasket($basketId);
+		$this->verifyBasketIsAvailable($basket);
 
 		// TODO check basket state
 		if (!$basket) {
@@ -504,8 +498,7 @@ final class BasketRestController extends AbstractFOSRestController
 		$basketCreatorId = $basket['foodsaver_id'];
 		// Send the message to the creator
 		$this->messageService->sendMessageToUser($basketCreatorId, $this->session->id(), $message, 'basket/request');
-		// TODO define initial request permission
-		$this->gateway->setStatus($basketId, Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
+		$this->gateway->setStatus($basketId, RequestStatus::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 		return $this->getBasketAction($basketId);
 	}
@@ -527,7 +520,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		// TODO check for existing request (is it already requested or even rejected?)
 
-		$this->gateway->setStatus($basketId, Status::DELETED_OTHER_REASON, $this->session->id());
+		$this->gateway->setStatus($basketId, RequestStatus::DELETED_OTHER_REASON, $this->session->id());
 
 		return $this->getBasketAction($basketId);
 	}
@@ -544,15 +537,28 @@ final class BasketRestController extends AbstractFOSRestController
 	{
 		$basket = $this->gateway->getBasket($basketId);
 
-		if (!$basket || $basket[self::STATUS] === Status::DELETED_OTHER_REASON
-			|| $basket[self::STATUS] === Status::DELETED_PICKED_UP) {
-			throw new HttpException(404, 'Basket does not exist or was deleted.');
-		}
+		$this->verifyBasketIsAvailable($basket);
 		if ($basket['fs_id'] !== $this->session->id()) {
 			throw new HttpException(401, 'You are not the owner of the basket.');
 		}
 
 		return $basket;
+	}
+
+	/**
+	 * Verifies that the basket was not deleted and is not expired. Otherwise this
+	 * method throw an appropriate HttpException
+	 *
+	 * @param ?array $basket the basket object
+	 */
+	private function verifyBasketIsAvailable(?array $basket): void {
+		if (!$basket || $basket[self::STATUS] == BasketStatus::DELETED_OTHER_REASON) {
+			throw new HttpException(404, 'Basket does not exist.');
+		} elseif ($basket[self::STATUS] == BasketStatus::DELETED_PICKED_UP) {
+			throw new HttpException(404, 'Basket was already picked up.');
+		} elseif ($basket['until_ts'] < time()) {
+			throw new HttpException(404, 'Basket is expired.');
+		}
 	}
 
 	/**

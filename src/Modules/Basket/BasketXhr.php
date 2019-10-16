@@ -8,7 +8,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Services\ImageService;
@@ -424,19 +424,19 @@ class BasketXhr extends Control
 					[
 						'values' => [
 							[
-								'id' => Status::DELETED_PICKED_UP,
+								'id' => RequestStatus::DELETED_PICKED_UP,
 								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
 							],
 							[
-								'id' => Status::NOT_PICKED_UP,
+								'id' => RequestStatus::NOT_PICKED_UP,
 								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
 							],
 							[
-								'id' => Status::DELETED_OTHER_REASON,
+								'id' => RequestStatus::DELETED_OTHER_REASON,
 								'name' => $this->translationHelper->s('basket_deleted_other_reason'),
 							],
 						],
-						'selected' => Status::DELETED_PICKED_UP,
+						'selected' => RequestStatus::DELETED_PICKED_UP,
 					]
 				)
 			);
