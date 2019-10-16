@@ -7,11 +7,11 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\Store\StoreStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -259,7 +259,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED)) {
+				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
@@ -277,7 +277,7 @@ class StoreUserControl extends Control
 				}
 
 				if (!$store['jumper']) {
-					if ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED) {
+					if ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED) {
 					} else {
 						$bt = '';
 						$storeStateName = '';

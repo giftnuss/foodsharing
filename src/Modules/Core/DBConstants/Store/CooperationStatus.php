@@ -1,8 +1,15 @@
 <?php
 
-namespace Foodsharing\Modules\Store;
+// table `fs_betrieb`
 
-class StoreStatus
+namespace Foodsharing\Modules\Core\DBConstants\Store;
+
+/**
+ * column `betrieb_status_id`
+ * status of the cooperation between foodsharing and a store
+ * INT(10)          UNSIGNED NOT NULL.
+ */
+class CooperationStatus
 {
 	// see db/sql: SELECT * FROM fs_betrieb_status
 
