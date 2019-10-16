@@ -449,6 +449,7 @@ class BasketXhr extends Control
 				$this->translationHelper->s('continue'),
 				'ajreq(\'finishRequest\',{app:\'basket\',id:' . (int)$_GET['id'] . ',fid:' . (int)$_GET['fid'] . ',sk:$(\'#fetchstate-wrapper input:checked\').val()});'
 			);
+
 			return $dia->xhrout();
 		}
 	}

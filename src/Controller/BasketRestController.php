@@ -554,11 +554,12 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Verifies that the basket was not deleted and is not expired. Otherwise this
-	 * method throw an appropriate HttpException
+	 * method throws an appropriate HttpException.
 	 *
 	 * @param ?array $basket the basket object
 	 */
-	private function verifyBasketIsAvailable(?array $basket): void {
+	private function verifyBasketIsAvailable(?array $basket): void
+	{
 		if (!$basket || $basket[self::STATUS] == BasketStatus::DELETED_OTHER_REASON) {
 			throw new HttpException(404, 'Basket does not exist.');
 		} elseif ($basket[self::STATUS] == BasketStatus::DELETED_PICKED_UP) {
