@@ -2,17 +2,18 @@
   <div
     :class="{disabledLoading: isLoading}"
   >
-    <div>
-      <p
+    <div class="ui-padding-bottom">
+      <h5>Kontakt:</h5>
+      <span
         v-if="mobileNumber"
       >
         {{ $i18n('handy') }}: <a v-bind:href="'tel:' + mobileNumber">{{ mobileNumber }}</a>
-      </p>
-      <p
+      </span>
+      <span
         v-if="landlineNumber"
       >
         {{ $i18n('tel') }}: {{ landlineNumber }}
-      </p>
+      </span>
     </div>
     <div>
       <div
@@ -52,9 +53,9 @@
       </div>
     </div>
     <div>
-      <p>
+      <span>
         Bereits <strong>{{ requestCount }}</strong> Anfragen
-      </p>
+      </span>
     </div>
     <b-modal
       ref="modal_request"
