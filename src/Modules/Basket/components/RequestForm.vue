@@ -3,7 +3,7 @@
     :class="{disabledLoading: isLoading}"
   >
     <div class="ui-padding-bottom">
-      <h5>Kontakt:</h5>
+      <h5>{{ $i18n('contact_info') }}:</h5>
       <span
         v-if="mobileNumber"
       >
@@ -24,7 +24,7 @@
           class="button button-big"
           href="#"
         >
-          Nachricht schreiben
+          {{ $i18n('open_chat') }}
         </a>
       </div>
       <div
@@ -36,7 +36,7 @@
           class="button button-big"
           href="#"
         >
-          Anfrage zurückziehen
+          {{ $i18n('withdraw_request') }}
         </a>
       </div>
       <div
@@ -53,15 +53,22 @@
       </div>
     </div>
     <div>
-      <span>
-        Bereits <strong>{{ requestCount }}</strong> Anfragen
+      <span v-if="requestCount == 0">
+        {{ $i18n('no_requests') }}
       </span>
+      <span v-if="requestCount == 1">
+        {{ $i18n('one_request') }}
+      </span>
+      <span
+        v-if="requestCount > 1"
+        v-html="$i18n('n_requests', { count: requestCount })"
+      />
     </div>
     <b-modal
       ref="modal_request"
-      :title="'Essenskorb anfragen'"
-      :cancel-title="'Abbrechen'"
-      :ok-title="'Anfragen'"
+      :title="$i18n('basket_request')"
+      :cancel-title="$i18n('button.abort')"
+      :ok-title="$i18n('send_request')"
       @ok="request(requestMessage)"
       modal-class="bootstrap"
     >
@@ -76,7 +83,8 @@
 <script>
 
 import { requestBasket, withdrawBasketRequest } from '@/api/baskets'
-import { pulseError } from '@/script'
+import { pulseSuccess, pulseError } from '@/script'
+import i18n from '@/i18n'
 
 export default {
   props: {
@@ -119,13 +127,14 @@ export default {
         var response = await requestBasket(this.basketId, message)
         this.requestCount = response.basket.requestCount
         this.hasRequested = true
+        pulseSuccess(i18n('sent_request'))
       } catch (e) {
-        if (e.code == 400) {
-          pulseError('Dein Anfragetext sollte nicht leer sein.')
-        } else if (e.code == 403) {
-          pulseError('Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.')
-        } else if (e.code == 404) {
-          pulseError('Der Essenskorb existiert nicht mehr.')
+        if (e.code === 400) {
+          pulseError(i18n('request_empty_message_error'))
+        } else if (e.code === 403) {
+          pulseError(i18n('request_denied_error'))
+        } else if (e.code === 404) {
+          pulseError(i18n('request_basket_404_error'))
         } else {
           pulseError('Request basket failed: ' + e)
         }
@@ -138,9 +147,10 @@ export default {
         var response = await withdrawBasketRequest(this.basketId)
         this.requestCount = response.basket.requestCount
         this.hasRequested = false
+        pulseSuccess(i18n('withdrawed_request'))
       } catch (e) {
-        if (e.code == 404) {
-          pulseError('Der Essenskorb existiert nicht mehr.')
+        if (e.code === 404) {
+          pulseError(i18n('request_basket_404_error'))
         } else {
           pulseError('Withdrawing basket request failed: ' + e)
         }

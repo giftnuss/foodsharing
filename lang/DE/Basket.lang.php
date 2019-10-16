@@ -22,12 +22,22 @@ $g_lang['until'] = 'Gültig bis';
 $g_lang['update_at'] = 'Geändert am';
 $g_lang['basket_near'] = 'In Deiner Nähe';
 
-$g_lang['no_requests'] = 'bisher keine Anfragen';
-$g_lang['one_request'] = 'eine Anfrage';
+$g_lang['contact_info'] = 'Kontakt';
+$g_lang['open_chat'] = 'Nachricht schreiben';
+
+$g_lang['no_requests'] = 'Bisher keine Anfragen';
+$g_lang['one_request'] = 'Bereits eine Anfrage';
+$g_lang['n_requests'] = 'Bereits <strong>{count}</strong> Anfragen';
 $g_lang['req_count'] = '{count} Anfragen';
 $g_lang['send_request'] = 'Anfrage absenden';
 $g_lang['sent_request'] = 'Anfrage wurde versendet';
+$g_lang['withdraw_request'] = 'Anfrage zurückziehen';
+$g_lang['withdrawed_request'] = 'Anfrage wurde zurückgezogen';
 $g_lang['finish_request'] = 'Danke Dir! Der Vorgang ist abgeschlossen.';
+
+$g_lang['request_empty_message_error'] = 'Dein Anfragetext darf nicht leer sein.';
+$g_lang['request_denied_error'] = 'Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.';
+$g_lang['request_basket_404_error'] = 'Der Essenskorb existiert nicht mehr.';
 
 $g_lang['baskets'] = 'Essenskörbe';
 $g_lang['basket'] = 'Essenskorb';
@@ -54,6 +64,7 @@ $g_lang['basket_publish_error_address'] = 'Bitte gib in Deinem Profil eine Adres
 $g_lang['basket_deleted_picked_up'] = 'Ja, {gender} hat den Korb abgeholt.';
 $g_lang['basket_not_picked_up'] = 'Nein, {gender} ist leider nicht wie verabredet erschienen.';
 $g_lang['basket_deleted_other_reason'] = 'Die Lebensmittel wurden von jemand anderem abgeholt.';
+$g_lang['basket_request_deny'] = 'Ich möchte diese Anfrage ablehnen.';
 $g_lang['basket_not_active'] = 'Essenskorb ist jetzt nicht mehr aktiv!';
 $g_lang['basket_picked_up'] = '<b>Dieser Essenskorb ist leider nicht mehr verfügbar!</b> <br><br> Bist Du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen oder stelle selbst einen Essenskorb ein!<br><br>Auf unserer Karte findest Du gegebenenfalls weitere Essenksörbe in Deiner Gegend.';
 
