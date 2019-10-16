@@ -120,7 +120,15 @@ export default {
         this.requestCount = response.basket.requestCount
         this.hasRequested = true
       } catch (e) {
-        pulseError('Request basket failed: ' + e)
+        if (e.code == 400) {
+          pulseError('Dein Anfragetext sollte nicht leer sein.')
+        } else if (e.code == 403) {
+          pulseError('Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.')
+        } else if (e.code == 404) {
+          pulseError('Der Essenskorb existiert nicht mehr.')
+        } else {
+          pulseError('Request basket failed: ' + e)
+        }
       }
       this.isLoading = false
     },
@@ -131,7 +139,11 @@ export default {
         this.requestCount = response.basket.requestCount
         this.hasRequested = false
       } catch (e) {
-        pulseError('Withdrawing basket request failed: ' + e)
+        if (e.code == 404) {
+          pulseError('Der Essenskorb existiert nicht mehr.')
+        } else {
+          pulseError('Withdrawing basket request failed: ' + e)
+        }
       }
       this.isLoading = false
     }
