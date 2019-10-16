@@ -15,7 +15,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
 {
-	private $gateway;
+	private $settingsGateway;
 	private $foodsaver;
 	private $quizGateway;
 	private $quizSessionGateway;
@@ -27,7 +27,7 @@ class SettingsControl extends Control
 	public function __construct(
 		SettingsModel $model,
 		SettingsView $view,
-		SettingsGateway $gateway,
+		SettingsGateway $settingsGateway,
 		QuizGateway $quizGateway,
 		QuizSessionGateway $quizSessionGateway,
 		ContentGateway $contentGateway,
@@ -37,7 +37,7 @@ class SettingsControl extends Control
 	) {
 		$this->model = $model;
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->settingsGateway = $settingsGateway;
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
@@ -264,7 +264,7 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function confirm_bot()
+	private function confirm_bot(): void
 	{
 		$this->pageHelper->addBread('Botschafter werden');
 
@@ -293,15 +293,15 @@ class SettingsControl extends Control
 				}
 
 				if ($check) {
-					$data = $this->dataHelper->unsetAll($_POST, array('new_bezirk'));
-					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
+					$data = $this->dataHelper->unsetAll($_POST, ['new_bezirk']);
+					$this->foodsaverGateway->updateProfile($this->session->id(), $data);
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
 						$this->translationHelper->s('upgrade_request_send'),
-						array(
+						[
 							'class' => 'ui-padding'
-						)
+						]
 					));
 
 					$g_data = array();
@@ -462,7 +462,7 @@ class SettingsControl extends Control
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
-					$this->gateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
+					$this->settingsGateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}
 
 				if (!isset($data['bezirk_id'])) {
