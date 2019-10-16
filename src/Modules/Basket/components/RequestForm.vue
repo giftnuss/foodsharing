@@ -73,6 +73,7 @@
       modal-class="bootstrap"
     >
       <b-form-textarea
+        id="contactmessage"
         v-model="requestMessage"
         rows="4"
       />

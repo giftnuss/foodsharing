@@ -53,6 +53,7 @@ $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->click('Essenskorb bearbeiten');
 $I->waitForText('Essenskorb bearbeiten');
+$I->waitForElement('#description');
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
 $I->waitForText('Geändert am');
