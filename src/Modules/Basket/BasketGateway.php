@@ -240,6 +240,39 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
+	public function getRequestStatus(int $basket_id, int $foodsaver_id_requester, int $foodsaver_id_offerer): array
+	{
+		$stm = '		
+				SELECT
+					a.`status`	
+		
+				FROM
+					fs_basket_anfrage a,
+					fs_basket b
+		
+				WHERE
+					a.basket_id = b.id
+		
+				AND
+					b.foodsaver_id = :foodsaver_id_offerer
+				
+				AND
+					a.foodsaver_id = :foodsaver_id_requester
+				
+				AND
+					a.basket_id = :basket_id		
+				';
+
+		return $this->db->fetch(
+			$stm,
+			[
+				':foodsaver_id_offerer' => $foodsaver_id_offerer,
+				':foodsaver_id_requester' => $foodsaver_id_requester,
+				':basket_id' => $basket_id,
+			]
+		);
+	}
+
 	public function listUpdates(int $foodsaverId): array
 	{
 		$stm = '
