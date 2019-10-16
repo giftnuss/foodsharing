@@ -1,13 +1,13 @@
 .ft-head {
   height: 80px;
   width: 100%;
-  background-image: url(/img/fairteiler_head.jpg);
+  background-image: url(/img/foodSharePointHead.jpg);
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* fairteilerlist */
-ul.fairteilerlist li a span.image {
+/* food share point list */
+ul.food-share-point-list li a span.image {
   display: block;
   width: 60px;
   height: 60px;
@@ -17,7 +17,7 @@ ul.fairteilerlist li a span.image {
   background-repeat: no-repeat;
 }
 
-ul.fairteilerlist li a span.image.noimage {
+ul.food-share-point-list li a span.image.noimage {
   background-color: #ffffff;
 }
 

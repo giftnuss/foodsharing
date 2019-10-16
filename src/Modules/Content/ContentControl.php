@@ -235,7 +235,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fairteilerrettung(): void
+	public function foodSharePointRescue(): void
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
 			$this->pageHelper->addBread($cnt['title']);

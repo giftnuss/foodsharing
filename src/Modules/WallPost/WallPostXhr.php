@@ -155,7 +155,7 @@ class WallPostXhr extends Control
 			}
 			if ($this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
 				if ($this->table === 'fairteiler') {
-					$this->notificationService->newFairteilerPost($this->id);
+					$this->notificationService->newFoodSharePointPost($this->id);
 				}
 
 				return [

@@ -32,11 +32,11 @@ $g_lang['upgrade_bot_success'] = 'Danke Dir für Deine Motivation mehr Verantwor
 $g_lang['upgrade_request_send'] = 'Anfrage erfolgreich versendet!';
 $g_lang['account_option'] = 'Account-Optionen';
 $g_lang['settings'] = 'Einstellungen';
-$g_lang['follow_fairteiler'] = 'Updates vom Fair-Teiler "{var}"';
-$g_lang['follow_fairteiler_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
-$g_lang['follow_fairteiler_mail'] = 'über eine E-Mail-Benachrichtigung';
-$g_lang['follow_fairteiler_alert'] = 'nur über interne Infomeldungen';
-$g_lang['follow_fairteiler_none'] = 'gar nicht mehr';
+$g_lang['follow_food_share_point'] = 'Updates vom Fair-Teiler "{var}"';
+$g_lang['follow_food_share_point_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
+$g_lang['follow_food_share_point_mail'] = 'über eine E-Mail-Benachrichtigung';
+$g_lang['follow_food_share_point_alert'] = 'nur über interne Infomeldungen';
+$g_lang['follow_food_share_point_none'] = 'gar nicht mehr';
 
 $g_lang['follow_thread'] = 'Über das Forenthema "{var}" auf dem Laufenden bleiben?';
 $g_lang['follow_thread_mail'] = 'Ja, ich möchte per E-Mail über neue Posts informiert werden.';

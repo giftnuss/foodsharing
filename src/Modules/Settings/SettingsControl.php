@@ -396,32 +396,32 @@ class SettingsControl extends Control
 			if ($_POST['infomail_message'] != 1) {
 				$infomail = 0;
 			}
-			$unfollow_fairteiler = array();
+			$unfollow_food_share_point = array();
 			$unfollow_thread = array();
 			foreach ($_POST as $key => $p) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
-					$ft = (int)substr($key, 11);
-					if ($ft > 0) {
+					$foodSharePoint = (int)substr($key, 11);
+					if ($foodSharePoint > 0) {
 						if ($p == 0) {
-							$unfollow_fairteiler[] = $ft;
+							$unfollow_food_share_point[] = $foodSharePoint;
 						} elseif ($p < 4) {
-							$this->model->updateFollowFairteiler($ft, $p);
+							$this->model->updateFollowFairteiler($foodSharePoint, $p);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
-					$ft = (int)substr($key, 7);
-					if ($ft > 0) {
+					$foodSharePoint = (int)substr($key, 7);
+					if ($foodSharePoint > 0) {
 						if ($p == 0) {
-							$unfollow_thread[] = $ft;
+							$unfollow_thread[] = $foodSharePoint;
 						} elseif ($p < 4) {
-							$this->model->updateFollowThread($ft, $p);
+							$this->model->updateFollowThread($foodSharePoint, $p);
 						}
 					}
 				}
 			}
 
-			if (!empty($unfollow_fairteiler)) {
-				$this->model->unfollowFairteiler($unfollow_fairteiler);
+			if (!empty($unfollow_food_share_point)) {
+				$this->model->unfollowFairteiler($unfollow_food_share_point);
 			}
 			if (!empty($unfollow_thread)) {
 				$this->model->unfollowThread($unfollow_thread);
@@ -435,10 +435,10 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$fairteiler = $this->model->getFairteiler();
+		$foodSharePoint = $this->model->getFoodSharePoint();
 		$threads = $this->model->getForumThreads();
 
-		$this->pageHelper->addContent($this->view->settingsInfo($fairteiler, $threads));
+		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));
 	}
 
 	public function handle_edit()
