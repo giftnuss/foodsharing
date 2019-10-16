@@ -52,7 +52,7 @@ class FoodSharePointControl extends Control
 	public function index(Request $request): void
 	{
 		$this->setup($request);
-		$this->pageHelper->addBread($this->translationHelper->s('your_fairteiler'), '/?page=fairteiler');
+		$this->pageHelper->addBread($this->translationHelper->s('your_food_share_point'), '/?page=fairteiler');
 		if ($this->regionId > 0) {
 			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
 		}
@@ -70,11 +70,11 @@ class FoodSharePointControl extends Control
 				$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($this->regionId);
 			}
 
-			if ($this->fairteiler = $this->foodSharePointGateway->listFairteilerNested($regionIds)) {
-				$this->pageHelper->addContent($this->view->listFairteiler($this->fairteiler));
+			if ($this->foodSharePoint = $this->foodSharePointGateway->listFoodSharePointsNested($regionIds)) {
+				$this->pageHelper->addContent($this->view->listFoodSharePoints($this->foodSharePoint));
 			} else {
 				$this->pageHelper->addContent(
-					$this->v_utils->v_info($this->translationHelper->s('no_fairteiler_available'))
+					$this->v_utils->v_info($this->translationHelper->s('no_food_share_point_available'))
 				);
 			}
 			$this->pageHelper->addContent($this->view->ftOptions($this->regionId), CNT_RIGHT);
@@ -98,7 +98,7 @@ class FoodSharePointControl extends Control
 		$this->follower = false;
 		$this->regions = $this->getRealRegions();
 		if ($foodSharePointId = $request->query->get('id')) {
-			$this->fairteiler = $this->foodSharePointGateway->getFairteiler($foodSharePointId);
+			$this->foodSharePoint = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId);
 
 			if (!$this->foodSharePoint) {
 				$this->routeHelper->go('/?page=fairteiler');
@@ -197,7 +197,7 @@ class FoodSharePointControl extends Control
 	public function edit(Request $request): void
 	{
 		if (!$this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
-			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+			$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->foodSharePoint['id']);
 		}
 		$this->pageHelper->addBread(
 			$this->foodSharePoint['name'],
@@ -284,14 +284,14 @@ class FoodSharePointControl extends Control
 
 	private function accept(): void
 	{
-		$this->foodSharePointGateway->acceptFairteiler($this->fairteiler['id']);
+		$this->foodSharePointGateway->acceptFoodSharePoint($this->foodSharePoint['id']);
 		$this->flashMessageHelper->info('Fair-Teiler ist jetzt aktiv');
-		$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->fairteiler['id']);
+		$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->foodSharePoint['id']);
 	}
 
 	private function delete(): void
 	{
-		if ($this->foodSharePointGateway->deleteFairteiler($this->fairteiler['id'])) {
+		if ($this->foodSharePointGateway->deleteFoodSharePoint($this->foodSharePoint['id'])) {
 			$this->flashMessageHelper->info($this->translationHelper->s('delete_success'));
 			$this->routeHelper->go('/?page=fairteiler&bid=' . $this->regionId);
 		}
@@ -380,9 +380,9 @@ class FoodSharePointControl extends Control
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
 				$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
-				$this->foodSharePointGateway->updateFSPManagers($this->fairteiler['id'], $fspManager);
+				$this->foodSharePointGateway->updateFSPManagers($this->foodSharePoint['id'], $fspManager);
 
-				return $this->foodSharePointGateway->updateFairteiler($this->fairteiler['id'], $data);
+				return $this->foodSharePointGateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);
 			}
 
 			return false;

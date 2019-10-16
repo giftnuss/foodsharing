@@ -68,15 +68,15 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function updateFSPManagers(int $id, $fspManager): void
+	public function updateFSPManagers(int $fspId, $fspManager): void
 	{
 		$values = array();
 
 		foreach ($fspManager as $fs) {
-			$values[] = '(' . $id . ',' . (int)$fs . ',2,1)';
+			$values[] = '(' . $fspId . ',' . (int)$fs . ',2,1)';
 		}
 
-		$this->db->update('fs_fairteiler_follower', ['type' => FollowerType::FOLLOWER], ['fairteiler_id' => $id]);
+		$this->db->update('fs_fairteiler_follower', ['type' => FollowerType::FOLLOWER], ['fairteiler_id' => $fspId]);
 
 		$this->db->execute(
 			'
@@ -109,7 +109,7 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function listFairteiler(array $regionIds): array
+	public function listFoodSharePoints(array $regionIds): array
 	{
 		if (!$regionIds) {
 			return [];
@@ -165,11 +165,11 @@ class FoodSharePointGateway extends BaseGateway
 		) {
 			$out = array();
 
-			foreach ($fairteiler as $ft) {
-				if (!isset($out[$ft['bezirk_id']])) {
-					$out[$ft['bezirk_id']] = [
-						'id' => $ft['bezirk_id'],
-						'name' => $ft['bezirk_name'],
+			foreach ($foodSharePoint as $fsp) {
+				if (!isset($out[$fsp['bezirk_id']])) {
+					$out[$fsp['bezirk_id']] = [
+						'id' => $fsp['bezirk_id'],
+						'name' => $fsp['bezirk_name'],
 						'fairteiler' => [],
 					];
 				}
@@ -381,15 +381,15 @@ class FoodSharePointGateway extends BaseGateway
 				['fairteiler_id' => $food_share_point_id, 'foodsaver_id' => $foodsaverId, 'type' => FollowerType::FOOD_SHARE_POINT_MANAGER]
 			);
 
-			$this->sendBellNotificationForNewFairteiler($food_share_point_id);
+			$this->sendBellNotificationForNewFoodSharePoint($food_share_point_id);
 		}
 
 		return $food_share_point_id;
 	}
 
-	private function sendBellNotificationForNewFairteiler(int $foodSharePointId): void
+	private function sendBellNotificationForNewFoodSharePoint(int $foodSharePointId): void
 	{
-		$fairteiler = $this->getFairteiler($foodSharePointId);
+		$foodSharePoint = $this->getFoodSharePoint($foodSharePointId);
 
 		if ($foodSharePoint['status'] === 1) {
 			return; //FoodSharePoint has been created by orga member or the ambassador himself
