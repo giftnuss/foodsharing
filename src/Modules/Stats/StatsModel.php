@@ -40,14 +40,14 @@ class StatsModel extends Db
 	{
 		$savedWeight = 0;
 		if ($queryResult = $this->qOne('
-			select 
-			       sum(fw.weight) as saved 
-			from fs_abholer fa
+			SELECT 
+			       sum(fw.weight) AS saved 
+			FROM fs_abholer fa
 				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
 				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
-			where
+			WHERE
 			      fa.foodsaver_id = ' . $fs_id . '
-			  and fa.date < now();
+			  AND fa.date < now();
 		')
 		) {
 			$savedWeight = $queryResult;
