@@ -273,6 +273,7 @@ class RegionGateway extends BaseGateway
 				b.`name`,
 				b.`email`,
 				b.`email_name`,
+				b.`mailbox_id`,
 				b.`type`,
 				b.`stat_fetchweight`,
 				b.`stat_fetchcount`,
