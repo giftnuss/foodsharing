@@ -129,10 +129,10 @@ class FoodSharePointGateway extends BaseGateway
 		'
 		)
 		) {
-			foreach ($foodSharePoint as $fspKEy => $fspValue) {
-				$foodSharePoints[$fspKEy]['pic'] = false;
+			foreach ($foodSharePoint as $fspKey => $fspValue) {
+				$foodSharePoints[$fspKey]['pic'] = false;
 				if (!empty($fspValue['picture'])) {
-					$foodSharePoints[$fspKEy]['pic'] = $this->getPicturePaths($fspValue['picture']);
+					$foodSharePoints[$fspKey]['pic'] = $this->getPicturePaths($fspValue['picture']);
 				}
 			}
 
