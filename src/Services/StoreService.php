@@ -5,6 +5,7 @@ namespace Foodsharing\Services;
 use Carbon\Carbon;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 
 class StoreService
 {
@@ -74,7 +75,8 @@ class StoreService
 
 	/**
 	 * Returns the time of the next available pickup slot or null if none is available up to the
-	 * given maximum date.
+	 * given maximum date. Also returns null if the cooperation status is not active (neither COOPERATION_STARTING
+	 * nor COOPERATION_ESTABLISHED).
 	 *
 	 * @param int $storeId
 	 * @param Carbon $maxDate end of date range
@@ -84,6 +86,11 @@ class StoreService
 	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?\DateTime
 	{
 		if ($maxDate < Carbon::now()) {
+			return null;
+		}
+
+		$storeStatus = $this->storeGateway->getCooperationStatus($storeId);
+		if ($storeStatus !== CooperationStatus::COOPERATION_STARTING && $storeStatus !== CooperationStatus::COOPERATION_ESTABLISHED) {
 			return null;
 		}
 
