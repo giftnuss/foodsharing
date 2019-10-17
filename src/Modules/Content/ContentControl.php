@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Content;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\ContentId;
 use Parsedown;
 
 class ContentControl extends Control
@@ -107,7 +108,7 @@ class ContentControl extends Control
 
 	public function partner(): void
 	{
-		if ($cnt = $this->contentGateway->get(10)) {
+		if ($cnt = $this->contentGateway->get(ContentId::PARTNER_PAGE_10)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
@@ -117,7 +118,7 @@ class ContentControl extends Control
 
 	public function unterstuetzung(): void
 	{
-		if ($cnt = $this->contentGateway->get(42)) {
+		if ($cnt = $this->contentGateway->get(ContentId::SUPPORT_FOODSHARING_PAGE_42)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
