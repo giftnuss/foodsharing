@@ -7,7 +7,6 @@ use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\Message;
 use Foodsharing\Modules\Message\MessageModel;
 
 class MessageService
@@ -16,7 +15,6 @@ class MessageService
 	private $foodsaverGateway;
 	private $mem;
 	private $translationHelper;
-	private $webSocketSender;
 	private $legacyDb;
 	private $messageModel;
 
@@ -33,7 +31,7 @@ class MessageService
 	public function sendMessageToUser(int $userId, int $senderId, string $body, string $notificationTemplate = null): void
 	{
 		$this->messageModel->message($userId, $body);
-		$this->sendMailNotification($senderId, $userId, $body, 'basket/request');
+		$this->sendMailNotification($senderId, $userId, $body, $notificationTemplate);
 	}
 
 	private function sendMailNotification(int $senderId, int $recipientId, string $message, string $notificationTemplate = null): void
