@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Content;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\Region\ContentId;
 use Parsedown;
 
 class ContentControl extends Control
