@@ -43,6 +43,8 @@
 - refactrored the food share point module !1108 !1105 @peter.toennies
 - Removed broken nightly bell deletion maintenance script !1180 @dthulke
 - Uniform foodsharing colors on the whole page #75 !1174 @chriswalg
+- statistic kilo code refactoring !999 @jofranz
+- statistic kilo calculation optimized in sql !999 @fs_k
 
 ## Dev/Test/CI stuff
 
