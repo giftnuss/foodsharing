@@ -267,9 +267,15 @@ class MailboxView extends View
 			open: function (event, ui) {
 		    	$("#message-editor").css("overflow", "hidden");
 				$("#message-editor").dialog("option",{
-				$(".edit-body").css({
-							"height" : auto
+					height: ($( window ).height()-40)
+				});
+				var height = ($("#message-editor").height()-100);
+				if(height > 50)
+				{
+					$(".edit-body").css({
+							"height" : height+"px"
 					});
+				}
 				u_addTypeHead();
 
 		  	}
@@ -294,9 +300,6 @@ class MailboxView extends View
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">
-					<div class="buttonbar">
-						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->translationHelper->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->translationHelper->s('abort') . '</a>
-					</div>
 					<table class="header">
 						<tr>
 							<td class="label">' . $this->translationHelper->s('von') . '</td>
@@ -316,6 +319,9 @@ class MailboxView extends View
 					<tr>
 						<td class="et-left"><textarea class="edit-body" id="edit-body"></textarea></td>
 						<td class="et-right">
+						<div class="buttonbar">
+						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->translationHelper->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->translationHelper->s('abort') . '</a>
+					</div>
 								<div class="wrapper">
 									<div class="et-filebox">
 										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
