@@ -267,15 +267,9 @@ class MailboxView extends View
 			open: function (event, ui) {
 		    	$("#message-editor").css("overflow", "hidden");
 				$("#message-editor").dialog("option",{
-					height: ($( window ).height()-40)
-				});
-				var height = ($("#message-editor").height()-100);
-				if(height > 50)
-				{
-					$(".edit-body").css({
-							"height" : height+"px"
+				$(".edit-body").css({
+							"height" : auto
 					});
-				}
 				u_addTypeHead();
 
 		  	}
