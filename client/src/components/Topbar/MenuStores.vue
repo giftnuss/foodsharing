@@ -22,9 +22,16 @@
         <span
           :class="'badge badge-pill '+badgeClass(store.pickupStatus)"
           :style="badgeVisibility(store.pickupStatus)"
+          :id="`store_marker_${store.id}`"
         >&nbsp;</span>
         {{ store.name }}
       </a>
+      <b-tooltip
+        v-if="store.pickupStatus>0"
+        :target="`store_marker_${store.id}`"
+      >
+        {{ $i18n(tooltipId(store.pickupStatus)) }}
+      </b-tooltip>
     </div>
     <div
       v-if="stores.length && mayAddStore"
@@ -49,9 +56,11 @@
 </template>
 <script>
 import NavItemDropdown from './NavItemDropdown'
+import { BTooltip } from 'bootstrap-vue'
 export default {
   components: {
-    NavItemDropdown
+    NavItemDropdown,
+    BTooltip
   },
   props: {
     stores: {
@@ -81,6 +90,10 @@ export default {
       return {
         visibility: pickupStatus > 0 ? 'visible' : 'hidden'
       }
+    },
+    tooltipId (pickupStatus) {
+      const ids = ['store.tooltip_yellow', 'store.tooltip_orange', 'store.tooltip_red']
+      return ids[pickupStatus - 1]
     }
   }
 }
