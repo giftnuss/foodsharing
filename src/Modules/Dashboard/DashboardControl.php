@@ -160,7 +160,6 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
-		$this->pageHelper->addContent($this->view->becomeFoodsaver());
 
 		$this->pageHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
@@ -174,7 +173,9 @@ class DashboardControl extends Control
 			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
-		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
+
+		$this->pageHelper->addContent($this->view->becomeFoodsaver());
 
 		$this->view->updates();
 
@@ -242,7 +243,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-         
+
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
