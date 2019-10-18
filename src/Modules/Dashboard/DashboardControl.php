@@ -160,7 +160,6 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
-
 		$this->pageHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$cnt = $this->contentGateway->get(33);
