@@ -216,6 +216,7 @@ $g_lang['new_message'] = 'Neue Nachricht';
 $g_lang['access_error'] = 'Du hast nicht die nötigen Rechte, dies zu tun.';
 $g_lang['register'] = 'Registrieren';
 $g_lang['daterange'] = 'Zeitraum';
+$g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter';
 $g_lang['rv_accept'] = 'Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.';
 $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren!';
 $g_lang['regions'] = 'Bezirke';
