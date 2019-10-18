@@ -75,7 +75,6 @@ class ProfileView extends View
 			</div>';
 	}
 
-	// AMB functionality
 	private function fetchDates(array $fetchDates): string
 	{
 		$out = '<div class="ui-padding" id="double">';
