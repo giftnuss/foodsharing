@@ -12,6 +12,7 @@
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
 - Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
 - Removed hidden profile pic in settings !1090 @chriswalg
+- Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
  
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
