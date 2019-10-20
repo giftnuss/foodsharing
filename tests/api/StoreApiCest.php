@@ -43,6 +43,15 @@ class StoreApiCest
 		$I->seeInDatabase('fs_betrieb_notiz', ['text' => 'Lorem ipsum.']);
 	}
 
+	public function addStorePostReturns403IfNotInTeam(\ApiTester $I): void
+	{
+		$I->login($this->user[self::EMAIL]);
+
+		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => 'Lorem ipsum.']);
+
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+	}
+
 	public function addStorePostReturns403IfNotLoggedIn(\ApiTester $I): void
 	{
 		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => 'Lorem ipsum.']);
