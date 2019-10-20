@@ -69,10 +69,6 @@ class StoreRestController extends AbstractFOSRestController
 			throw new AccessDeniedHttpException();
 		}
 
-		if ($this->session->get('last_pinPost') && (time() - $this->session->get('last_pinPost')) < 2) {
-			return $this->handleView($this->view([], 403)); // status code?
-		}
-
 		$text = $paramFetcher->get('text');
 		$this->storeGateway->add_betrieb_notiz([
 			'foodsaver_id' => $this->session->id(),
@@ -98,8 +94,6 @@ class StoreRestController extends AbstractFOSRestController
 			],
 			'store-wallpost-' . $storeId
 		);
-
-		$_SESSION['last_pinPost'] = time(); // questionable mechanism
 
 		return $this->handleView($this->view([], 200));
 	}
