@@ -75,7 +75,10 @@ $(document).ready(() => {
 
   $('div#pinnwand form').on('submit', function (e) {
     e.preventDefault()
-    if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
+    const postTextArea = $('div#pinnwand form textarea')
+    if (postTextArea.val() !== postTextArea.attr('title')) {
+      const submitButton = $('#comment-post')
+      submitButton.prop('disabled', true)
       const storeId = GET('id')
       $.ajax({
         dataType: 'json',
@@ -86,8 +89,15 @@ $(document).ready(() => {
           // update posts list
           u_updatePosts()
           // Reset input field
-          const textArea = $('div#pinnwand form textarea')
-          textArea.val(textArea.attr('title'))
+          postTextArea.val(postTextArea.attr('title'))
+          // enable disabled submit button again
+          submitButton.prop('disabled', false)
+        },
+        error: function (error) {
+          // enable disabled submit button again also in case of error
+          submitButton.prop('disabled', false)
+          // handle error
+          pulseError(error.responseJSON.message)
         }
       })
     }
