@@ -63,10 +63,10 @@ class StoreModel extends Db
 				a.betrieb_id = ' . (int)$betrieb_id . '
 	
 			AND
-				a.date >= ' . $this->dateVal($from) . '
+				a.date >= ' . $this->dateval($from) . '
 	
 			AND
-				a.date <= ' . $this->dateVal($to) . '
+				a.date <= ' . $this->dateval($to) . '
 	
 			ORDER BY
 				a.date

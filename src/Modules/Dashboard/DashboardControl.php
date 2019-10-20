@@ -178,7 +178,7 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation($this->model)))) {
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
 			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
@@ -189,28 +189,16 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
+		$val = $this->model->getValues(array('anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
 
-		if (empty($val['lat']) || empty($val['lon']) ||
-			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
-		) {
-			$this->flashMessageHelper->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+		if (empty($val['lat']) || empty($val['lon'])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 
 		global $g_data;
 		$g_data = $val;
 		$elements = array();
-
-		if ($val['photo_public'] == 0) {
-			$g_data['photo_public'] = 1;
-			$elements[] = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-				array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-				array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-				array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-			)));
-		}
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->pageHelper->addJs('
@@ -254,19 +242,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-                    check = true;
-
-                    if($("input[name=\'photo_public\']:checked").val()==4)
-                    {
-                        $("input[name=\'photo_public\']")[0].focus();
-                        check = false;
-                        if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
-                        {
-                            check = true;
-                        }
-                    }
-                    if(check)
-                    {
+         
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
@@ -278,7 +254,6 @@ class DashboardControl extends Control
                                 $.fancybox.close();
                             }
                         });
-                    }
                 });
             ');
 

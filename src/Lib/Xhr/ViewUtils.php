@@ -33,19 +33,6 @@ class ViewUtils
 		$this->translationHelper = $translationHelper;
 	}
 
-	public function fsBubble($fs)
-	{
-		return '<div style="height:80px;overflow:hidden;width:200px;">
-				<div style="margin-right:10px;float:left;margin-bottom:33px">
-					<a href="/profile/' . (int)$fs['id'] . '">
-							<img src="' . $this->imageService->img($fs['photo']) . '">
-					</a>
-				</div>
-				<h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/' . (int)$fs['id'] . '">' . $fs['name'] . '</a></h1>
-				<div style="clear:both;"></div>
-			</div>';
-	}
-
 	public function bBubble($b)
 	{
 		$button = '';
@@ -119,21 +106,5 @@ class ViewUtils
 	</select>';
 
 		return $out;
-	}
-
-	public function set($rows, $title = '')
-	{
-		$out = '
-	<div class="xv_set">
-		<h3>' . $title . '</h3>';
-		foreach ($rows as $r) {
-			$out .= '
-		<div class="xv_row">
-			<span class="xv_label">' . $r['name'] . '</span><span class="xv_val">' . $r['val'] . '</span>
-		</div>';
-		}
-
-		return $out . '
-	</div>';
 	}
 }

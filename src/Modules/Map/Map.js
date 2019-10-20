@@ -206,10 +206,7 @@ function loadMarker (types, loader) {
           const fsid = (el.layer.options.id)
           const type = el.layer.options.type
 
-          if (type === 'fs') {
-            url = `/xhr.php?f=fsBubble&id=${fsid}`
-            showLoader()
-          } else if (type === 'bk') {
+          if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
             url = `/xhr.php?f=bBubble&id=${fsid}`

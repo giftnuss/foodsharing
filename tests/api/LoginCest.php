@@ -27,19 +27,9 @@ class LoginCest
 		$I->seeHtml();
 		$I->seeRegExp('~.*' . $example[1] . '.*~i');
 
-		// initially old md5 password is stored
-		$I->assertNotEmpty($user['passwd']);
-
-		// password got replaced after login
 		$I->seeInDatabase('fs_foodsaver', [
-			'email' => $user['email'],
-			'passwd' => null, // md5
-			'fs_password' => null // sha1
+			'email' => $user['email']
 		]);
-
-		// new hash is valid
-		$newHash = $I->grabFromDatabase('fs_foodsaver', 'password', ['email' => $user['email']]);
-		$I->assertTrue(password_verify($pass, $newHash));
 	}
 
 	/**
@@ -62,13 +52,5 @@ class LoginCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeHtml();
 		$I->seeResponseContains('Falsche Zugangsdaten');
-
-		// password is not updated
-		$I->seeInDatabase('fs_foodsaver', [
-			'email' => $user['email'],
-			'passwd' => $user['passwd'], // md5
-			'password' => null, // bcrypt
-			'fs_password' => null // sha1
-		]);
 	}
 }

@@ -33,3 +33,8 @@ In PHPstorm this is how you select it: use the corresponding plugin:
 
 For the editorconfig file format there are super nice inspections in PHPstorm (under Editor-Inspections after searching for editorconfig). Leave them all in. The more annoying, the better.
 
+### VSCode
+
+<div align="center"><img src="images/codestyle-editorconfig-for-vscode.png" alt="EditorConfig Plugin for VSCode"></div>
+
+To use EditorConfig, install the official [EditorConfig for VSCode](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) Extension. It will automatically use the proper .editorconfig file from the repository.

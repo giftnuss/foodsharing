@@ -73,8 +73,8 @@ div.post textarea {
   height: 165px;
 }
 
-/* fairteilerlist */
-ul.fairteilerlist li a span.image {
+/* food share point list */
+ul.food-share-point-list li a span.image {
   display: block;
   width: 60px;
   height: 60px;
@@ -84,11 +84,11 @@ ul.fairteilerlist li a span.image {
   background-repeat: no-repeat;
 }
 
-ul.fairteilerlist li a span.image.noimage {
+ul.food-share-point-list li a span.image.noimage {
   background-color: #ffffff;
 }
 
-ul.fairteilerlist li a span.clear {
+ul.food-share-point-list li a span.clear {
   display: block;
   clear: both;
 }
@@ -180,4 +180,8 @@ div.event {
   margin-left: 37px !important;
   margin-top: -40px !important;
   color: #4a3520 !important;
+}
+
+.user_pic_width {
+  width: 50px;
 }

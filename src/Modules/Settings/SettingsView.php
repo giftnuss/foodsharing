@@ -149,15 +149,15 @@ class SettingsView extends View
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
 
-	public function settingsInfo($fairteiler, $threads)
+	public function settingsInfo($foodSharePoint, $threads)
 	{
 		global $g_data;
 		$out = '';
 
-		if ($fairteiler) {
-			foreach ($fairteiler as $ft) {
+		if ($foodSharePoint) {
+			foreach ($foodSharePoint as $fsp) {
 				$disabled = false;
-				if ($ft['type'] == 2) {
+				if ($fsp['type'] == 2) {
 					$disabled = true;
 				}
 
@@ -167,14 +167,14 @@ class SettingsView extends View
 					});
 				');
 
-				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_fairteiler', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_fairteiler_desc', $ft['name']),
+				$g_data['fairteiler_' . $fsp['id']] = $fsp['infotype'];
+				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], array(
+					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
+					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
 					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_fairteiler_mail')),
-						array('id' => 2, 'name' => $this->translationHelper->s('follow_fairteiler_alert')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_fairteiler_none'))
+						array('id' => 1, 'name' => $this->translationHelper->s('follow_food_share_point_mail')),
+						array('id' => 2, 'name' => $this->translationHelper->s('follow_food_share_point_alert')),
+						array('id' => 0, 'name' => $this->translationHelper->s('follow_food_share_point_none'))
 					),
 					'disabled' => $disabled
 				));
@@ -182,11 +182,11 @@ class SettingsView extends View
 		}
 
 		if ($threads) {
-			foreach ($threads as $ft) {
-				$g_data['thread_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('thread_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_thread', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_thread_desc', $ft['name']),
+			foreach ($threads as $fsp) {
+				$g_data['thread_' . $fsp['id']] = $fsp['infotype'];
+				$out .= $this->v_utils->v_form_radio('thread_' . $fsp['id'], array(
+					'label' => $this->translationHelper->sv('follow_thread', $fsp['name']),
+					'desc' => $this->translationHelper->sv('follow_thread_desc', $fsp['name']),
 					'values' => array(
 						array('id' => 1, 'name' => $this->translationHelper->s('follow_thread_mail')),
 						array('id' => 0, 'name' => $this->translationHelper->s('follow_thread_none'))
@@ -507,32 +507,6 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
-		if($("#photo_public").length > 0)
-		{
-			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
-			{
-
-			}
-			else
-			{
-				$e.preventDefault();
-			}
-		}
-
-	});');
-
-		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-		)));
-
-		if ($this->session->may('bot')) {
-			$oeff = '<input type="hidden" name="photo_public" value="1" />';
-		}
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
@@ -564,7 +538,6 @@ class SettingsView extends View
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
-			$oeff
 		), array('submit' => $this->translationHelper->s('save')));
 	}
 

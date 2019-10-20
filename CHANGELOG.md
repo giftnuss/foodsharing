@@ -1,6 +1,38 @@
 # Unreleased
 
+## Features
+- Added markers for empty pickup slots in the next days to store menu (red=today or tomorrow, orange=next 3 days, yellow=next 5 days) !1106 #452 @alex.simm
+- Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
+- Add email shortcut to regions and workgroup side menu !1118 @jofranz
+- Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
+- Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
+- Add amount of foodsavers to in-/active lists in region foodsaver menu !1117 @jofranz
+
+## Bugfixes
+- fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
+- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
+- Removed hidden profile pic in settings !1090 @chriswalg
+ 
+## Refactoring
+- Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
+- Reduced complexity of the profile module !1037 @peter.toennies
+- refactored blog from model to gateway !789 #9 @peter.toennies
+- refactored statsman from model to gateway !1111 #9 @peter.toennies
+
+## Dev/Test/CI stuff
+
+# 2019-10-08 Hotfix
+- nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
+- remove email and gender from some responses in MessageXhr.php !1098
+
+# 2019-10-06
+
+Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
+A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps. 
+And we have even included some new features for you.
+
 ## Major changes
+- New pick-up list
 
 ## Features
 - Add Web Push Notifications #336 !734 @janopae
@@ -10,7 +42,7 @@
 - Added Rest endpoint for the current user's profile !880 @dthulke
 - improved the region join selector text #562 @peter.toennies
 - Allow subgroups to groups !904 @fs_k
-- pickup list includes now stores in subdistricts, year added, divers separated !906 @fs_k
+- pickup list includes now stores in sub-districts, year added, divers separated !906 @fs_k
 - Added a city-column to the store list table, added row-details on mobile devices, stores now ordered by name #456 !679 @tihar
 - Added yellow info box with a warning not to change the address fields. Visible for orga/bot in "edit profile" menu !911 @jofranz
 - Added active foodsaver and jumper count to store popup on map !920 #620 @fs_k
@@ -18,6 +50,7 @@
     - profile settings !895 @jofranz
     - event page !915 @jofranz
     - store settings !922 @jofranz
+    - fair-share-point settings !1085 @jofranz
 - InfluxDB Metrics via UDP !882 @alangecker
 - Added average daily fetch count to statistics page !900 @chris2up9
 - Use SwiftMailer for outgoing emails !925 @NerdyProjects
@@ -50,8 +83,10 @@
 - Placed event buttons correctly for mobile on dashboard #640 !1044 @henrikhertler
 - Link avatar pics to user profile at report. !1047 @moffer
 - Prevent email form from sending mails to "noreply" addresses. Blocked by a warning !1065 @jofranz
+- Adding apple-app-site-association file to allow Universal Linking in our possible apps !1082 @rastadapasta
 
 ## Bugfixes
+- restrict pickup statistic on country level to orga !1073 @fs_k
 - Profile button "remove from all slots" is now only enabled for orga !968 #362 @fs_k
 - Fixed a bug in MessageModel.php which caused that conversation members were sometimes not returned !878 @dthulke
 - Direct links are referring to correct location when using the nav bar login !864 @YasminBucher
@@ -100,11 +135,21 @@
 - Do not allow signing out of past pickups !1058 #633 @alex.simm
 - The avatar sleeping mode in forum is visible now. !1055 #679 @chriswalg
 - Fixed occupied one-time pickups that showed up unoccupied !1059 #633 @alex.simm
-- Fixed end date not being displayed when editing existing multi-day events !277 @tihar
+- Fixed end date not being displayed when editing existing multi-day events !995 #277 @tihar
 - Link in chat-message notification email now leads to corresponding conversation !1064 #703 @rastadapasta
 - Improve the readability of the data protection agreement during registration #652 !1056 @chriswalg
 - Only show food baskets which are not timed out on dashboards basket range and latest list !1004 @jofranz @peter.toennies
 - Fixed invisible overbooked pickups !1069 #633 @alex.simm
+- Workgroups overview optimized for mobile view #702 !1063 @chriswalg
+- Bugfix for sentry issue regarding the #vue-pickuplist !1074 @ctwx_ok
+- Removed question form for data privacy !1077 #166 @chriswalg
+- Fixed the check for empty address data on the foodsaver dashboard !1076 @peter.toennies
+- Bugfix for empty pickup list !1078 @ctwx_ok
+- Set width 50px for user pics in region member list !1080 @chriswalg
+- Put the footer on pages with less content at the bottom of the page !1087 #590 @chriswalg
+- Bugfix for end date being required when creating single-day event !1084 @tihar
+- Removed the obsolete and insecure foodsaver bubble for our map !1093 @peter.toennies
+- Removed forum subscriptions for people who left a district or workgroup !1071 #655 @alex.simm
 
 ## Refactoring
 - Refactored profile from WorkGroupModel to WorkGroupGateway !898 #9 @svenpascal
@@ -131,6 +176,12 @@
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
 
+# 2019-08-30 Hotfix
+- Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
+
+# 2019-06-17 Hotfix
+- Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
+    
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
@@ -148,7 +199,7 @@ The frontend does not yet follow that behaviour (showing pickup slots always for
 
 # 2019-05-17
 Hey again,
-another release for you. Nothing big, but a lot of small. Most noticable things will be changed email templates as well as more buttons which properly work on mobile now.
+another release for you. Nothing big, but a lot of small. Most noticeable things will be changed email templates as well as more buttons which properly work on mobile now.
 
 ## Major changes
 

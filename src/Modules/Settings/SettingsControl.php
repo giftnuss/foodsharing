@@ -15,7 +15,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
 {
-	private $gateway;
+	private $settingsGateway;
 	private $foodsaver;
 	private $quizGateway;
 	private $quizSessionGateway;
@@ -27,7 +27,7 @@ class SettingsControl extends Control
 	public function __construct(
 		SettingsModel $model,
 		SettingsView $view,
-		SettingsGateway $gateway,
+		SettingsGateway $settingsGateway,
 		QuizGateway $quizGateway,
 		QuizSessionGateway $quizSessionGateway,
 		ContentGateway $contentGateway,
@@ -37,7 +37,7 @@ class SettingsControl extends Control
 	) {
 		$this->model = $model;
 		$this->view = $view;
-		$this->gateway = $gateway;
+		$this->settingsGateway = $settingsGateway;
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
@@ -264,7 +264,7 @@ class SettingsControl extends Control
 		}
 	}
 
-	private function confirm_bot()
+	private function confirm_bot(): void
 	{
 		$this->pageHelper->addBread('Botschafter werden');
 
@@ -276,19 +276,10 @@ class SettingsControl extends Control
 				$g_data = $_POST;
 
 				$check = true;
-				if (!isset($_POST['photo_public'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Dein Foto veröffentlichen dürfen.');
-				}
 
 				if (empty($_POST['about_me_public'])) {
 					$check = false;
 					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');
-				}
-
-				if (!isset($_POST['tel_public'])) {
-					$check = false;
-					$this->flashMessageHelper->error('Du musst zustimmen, dass wir Deine Telefonnummer veröffentlichen.');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
@@ -302,15 +293,15 @@ class SettingsControl extends Control
 				}
 
 				if ($check) {
-					$data = $this->dataHelper->unsetAll($_POST, array('photo_public', 'new_bezirk'));
-					$this->model->updateFields($data, 'fs_foodsaver', $this->session->id());
+					$data = $this->dataHelper->unsetAll($_POST, ['new_bezirk']);
+					$this->foodsaverGateway->updateProfile($this->session->id(), $data);
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
 						$this->translationHelper->s('upgrade_request_send'),
-						array(
+						[
 							'class' => 'ui-padding'
-						)
+						]
 					));
 
 					$g_data = array();
@@ -350,19 +341,6 @@ class SettingsControl extends Control
 							array('id' => 3, 'name' => '9-12 Stunden'),
 							array('id' => 4, 'name' => '13-15 Stunden'),
 							array('id' => 5, 'name' => '15-20 Stunden')
-						))) .
-						$this->v_utils->v_form_radio('photo_public', array('required' => true, 'values' => array(
-							array('id' => 1, 'name' => 'Ich bin einverstanden das Mein Name und Mein Foto veröffentlicht werden'),
-							array('id' => 2, 'name' => 'Bitte NUR meinen Namen veröffentlichen')
-						))) .
-						$this->v_utils->v_form_checkbox('tel_public', array('desc' => 'Neben Deinem vollem Namen (und eventuell Foto) ist es für
-										Händler, foodsharing-Freiwillge, Interessierte und die Presse
-										einfacher und direkter, Dich neben der für Deine
-										Region/Stadt/Bezirk zugewiesenen Botschafter-E-Mail-Adresse (z. B. mainz@' . PLATFORM_MAILBOX_HOST . ')
-										über Deine Festnetz- bzw. Handynummer zu erreichen. Bitte gib
-										hier alle Nummern an, die wir veröffentlichen dürfen und am
-										besten noch gewünschte Anrufzeiten.', 'required' => true, 'values' => array(
-							array('id' => 1, 'name' => 'Ich bin einverstanden, dass meine Telefonnummer veröffentlicht wird.')
 						))) .
 						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
 
@@ -418,32 +396,32 @@ class SettingsControl extends Control
 			if ($_POST['infomail_message'] != 1) {
 				$infomail = 0;
 			}
-			$unfollow_fairteiler = array();
+			$unfollow_food_share_point = array();
 			$unfollow_thread = array();
 			foreach ($_POST as $key => $p) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
-					$ft = (int)substr($key, 11);
-					if ($ft > 0) {
+					$foodSharePoint = (int)substr($key, 11);
+					if ($foodSharePoint > 0) {
 						if ($p == 0) {
-							$unfollow_fairteiler[] = $ft;
+							$unfollow_food_share_point[] = $foodSharePoint;
 						} elseif ($p < 4) {
-							$this->model->updateFollowFairteiler($ft, $p);
+							$this->model->updateFollowFairteiler($foodSharePoint, $p);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
-					$ft = (int)substr($key, 7);
-					if ($ft > 0) {
+					$foodSharePoint = (int)substr($key, 7);
+					if ($foodSharePoint > 0) {
 						if ($p == 0) {
-							$unfollow_thread[] = $ft;
+							$unfollow_thread[] = $foodSharePoint;
 						} elseif ($p < 4) {
-							$this->model->updateFollowThread($ft, $p);
+							$this->model->updateFollowThread($foodSharePoint, $p);
 						}
 					}
 				}
 			}
 
-			if (!empty($unfollow_fairteiler)) {
-				$this->model->unfollowFairteiler($unfollow_fairteiler);
+			if (!empty($unfollow_food_share_point)) {
+				$this->model->unfollowFairteiler($unfollow_food_share_point);
 			}
 			if (!empty($unfollow_thread)) {
 				$this->model->unfollowThread($unfollow_thread);
@@ -457,10 +435,10 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$fairteiler = $this->model->getFairteiler();
+		$foodSharePoint = $this->model->getFoodSharePoint();
 		$threads = $this->model->getForumThreads();
 
-		$this->pageHelper->addContent($this->view->settingsInfo($fairteiler, $threads));
+		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));
 	}
 
 	public function handle_edit()
@@ -477,14 +455,14 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
-					$this->flashMessageHelper->error('Mit Deiner Homepage URL stimmt etwas nicht');
+					$this->flashMessageHelper->error('Mit Deiner Homepage-URL stimmt etwas nicht');
 				}
 			}
 
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
-					$this->gateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
+					$this->settingsGateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}
 
 				if (!isset($data['bezirk_id'])) {

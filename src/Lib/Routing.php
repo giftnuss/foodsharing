@@ -16,7 +16,7 @@ class Routing
 		'email' => 'Email',
 		'event' => 'Event',
 		'faq' => 'FAQAdmin',
-		'fairteiler' => 'FairTeiler',
+		'fairteiler' => 'FoodSharePoint',
 		'foodsaver' => 'Foodsaver',
 		'index' => 'Index',
 		'listFaq' => 'FAQList',

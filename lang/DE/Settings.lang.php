@@ -1,6 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['photo_public'] = 'Veröffentlichung Deines Namens und Deines Fotos';
 $g_lang['photo_should_be_usable'] = 'Dein Gesicht sollte auf dem Profilfoto <a href="https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto">erkennbar</a> sein, da es, wenn Du mal <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> wirst, für den Foodsharing-<a href="https://wiki.foodsharing.de/Ausweis">Ausweis</a> verwendet wird.';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
@@ -25,12 +24,7 @@ $g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine in
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
-$g_lang['photo_public'] = 'Um eine
-								möglichst flüssige Koordination zu ermöglichen, werden die Namen
-								und das Foto von den BotschafterInnen von foodsharing
-								veröffentlicht.';
 $g_lang['about_me_public'] = 'Kurzbeschreibung von Dir';
-$g_lang['tel_public'] = 'Veröffentlichung Deiner Telefonnummer(n)';
 $g_lang['aufgaben_botschafter'] = 'Ich habe das Dokument "Aufgaben der BotschafterInnen von foodsharing gelesen und übernehme ab jetzt für diese die Verantwortlichkeit in meiner Stadt/Region/Bezirk.';
 $g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';
@@ -38,11 +32,11 @@ $g_lang['upgrade_bot_success'] = 'Danke Dir für Deine Motivation mehr Verantwor
 $g_lang['upgrade_request_send'] = 'Anfrage erfolgreich versendet!';
 $g_lang['account_option'] = 'Account-Optionen';
 $g_lang['settings'] = 'Einstellungen';
-$g_lang['follow_fairteiler'] = 'Updates vom Fair-Teiler "{var}"';
-$g_lang['follow_fairteiler_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
-$g_lang['follow_fairteiler_mail'] = 'über eine E-Mail-Benachrichtigung';
-$g_lang['follow_fairteiler_alert'] = 'nur über interne Infomeldungen';
-$g_lang['follow_fairteiler_none'] = 'gar nicht mehr';
+$g_lang['follow_food_share_point'] = 'Updates vom Fair-Teiler "{var}"';
+$g_lang['follow_food_share_point_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
+$g_lang['follow_food_share_point_mail'] = 'über eine E-Mail-Benachrichtigung';
+$g_lang['follow_food_share_point_alert'] = 'nur über interne Infomeldungen';
+$g_lang['follow_food_share_point_none'] = 'gar nicht mehr';
 
 $g_lang['follow_thread'] = 'Über das Forenthema "{var}" auf dem Laufenden bleiben?';
 $g_lang['follow_thread_mail'] = 'Ja, ich möchte per E-Mail über neue Posts informiert werden.';

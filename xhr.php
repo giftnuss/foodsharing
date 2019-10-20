@@ -22,7 +22,6 @@ $csrf_whitelist = [
 	// 'addPinPost',
 	// 'childBezirke',
 	'bBubble',
-	// 'fsBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',

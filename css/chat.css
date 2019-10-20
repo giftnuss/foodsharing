@@ -92,12 +92,11 @@
 }
 
 .chatboxmessagecontent a {
-  color: #f1e7c9;
+  color: #533a20;
   text-decoration: none;
 }
 
 .chatboxmessagecontent a:hover {
-  color: #533a20;
   text-decoration: underline;
 }
 

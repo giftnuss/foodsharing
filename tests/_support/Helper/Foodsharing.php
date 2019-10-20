@@ -80,13 +80,14 @@ class Foodsharing extends \Codeception\Module\Db
 			'last_login' => $this->faker->dateTimeBetween('-1 years', '-1 hours'),
 			'anschrift' => $this->faker->streetName,
 			'handy' => $this->faker->phoneNumber,
-			'photo_public' => 1,
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
 			'token' => uniqid()
 		], $extra_params);
-		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
+		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
+			'time_cost' => 1
+		]);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
@@ -565,7 +566,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createFairteiler($user, $bezirk, $extra_params = [])
+	public function createFoodSharePoint($user, $bezirk, $extra_params = [])
 	{
 		$params = array_merge([
 			'bezirk_id' => $bezirk,
@@ -584,17 +585,17 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$id = $this->haveInDatabase('fs_fairteiler', $params);
 
-		$this->addFairteilerAdmin($user, $id);
+		$this->addFoodSharePointAdmin($user, $id);
 
 		$params['id'] = $id;
 
 		return $params;
 	}
 
-	public function addFairteilerFollower($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointFollower($user, $foodSharePoint, $extra_params = [])
 	{
 		$params = array_merge([
-			'fairteiler_id' => $fairteiler,
+			'fairteiler_id' => $foodSharePoint,
 			'foodsaver_id' => $user,
 			'type' => 1,
 			'infotype' => 1,
@@ -604,16 +605,16 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function addFairteilerAdmin($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointAdmin($user, $foodSharePoint, $extra_params = [])
 	{
-		return $this->addFairteilerFollower($user, $fairteiler, array_merge($extra_params, ['type' => 2]));
+		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => 2]));
 	}
 
-	public function addFairteilerPost($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointPost($user, $foodSharePoint, $extra_params = [])
 	{
 		$post = $this->createWallpost($user, $extra_params);
 		$this->haveInDatabase('fs_fairteiler_has_wallpost', [
-			'fairteiler_id' => $fairteiler,
+			'fairteiler_id' => $foodSharePoint,
 			'wallpost_id' => $post['id'],
 		]);
 

@@ -20,6 +20,9 @@ group:
   photo: Foto
   applications: Bewerbungen
   applications_for: Bewerbungen für %name%
+  mail_link_title:
+    workgroup: AG-Postfach
+    region: Bezirks-Postfach
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
@@ -217,7 +220,7 @@ wall:
   name: Pinnwand
   message_placeholder: Nachricht schreiben...
 
-fairteiler:
+food_share_point:
   all_at: Alle Fair-Teiler in %name%
   n_in_region: '{0} Keine Fair-Teiler in %name%| {1} Ein Fair-Teiler in %name%| [2, Inf[ %count% Fair-Teiler in %name%'
   add_new: Neuer Fair-Teiler

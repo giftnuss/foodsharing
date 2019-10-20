@@ -177,7 +177,6 @@ $g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt.';
 $g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 
-$g_lang['photo_public'] = 'Kontaktaufnahme durch andere Foodsaver';
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
 $g_lang['to_team_page'] = 'Zur Teamseite';
 $g_lang['status'] = 'Aktueller Status';

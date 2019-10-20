@@ -79,7 +79,7 @@ services:
             - ['addResource', ['yml', 'lang/lang.de.yml', 'de', 'messages']]
             - ['setFallbackLocales', [['de']]]
 
-    Symfony\Component\Translation\TranslatorInterface: '@translator'
+    Symfony\Contracts\Translation\TranslatorInterface: '@translator'
 
     markdown.nohtml:
         class: \Parsedown
