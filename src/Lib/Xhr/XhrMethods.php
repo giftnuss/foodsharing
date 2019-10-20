@@ -165,6 +165,14 @@ class XhrMethods
 		}
 	}
 
+	/**
+	 * Method for receiving store posts. Used on the store page to fetch the feed. Returns the store posts as
+	 * prerendered HTML. As soon as the store feed frontend is redone in Vue.js, this method should be replaced by
+	 * a GET action on the stores/{id}/posts REST resource (add an action method in StoreRestController).
+	 *
+	 * @param array $data: ['bid' => storeId] - an array only containing the storeId under the key 'bid'.
+	 * @return false|string - prerendered HTML of the store feed (if string)
+	 */
 	public function xhr_getPinPost($data)
 	{
 		$this->incLang('Store');
