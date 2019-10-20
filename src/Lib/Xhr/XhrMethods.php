@@ -1057,6 +1057,7 @@ class XhrMethods
 		}
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
+		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
 		$this->bellGateway->addBell($team, 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		), array(
