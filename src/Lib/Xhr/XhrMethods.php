@@ -290,42 +290,6 @@ class XhrMethods
 		}
 	}
 
-	public function xhr_addPinPost($data)
-	{
-		$storeId = (int)$data['bid'];
-		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		if (isset($_SESSION['last_pinPost'])) {
-			if ((time() - $_SESSION['last_pinPost']) < 2) {
-				return $this->xhr_getPinPost($data);
-			}
-		}
-		if ($this->storeGateway->add_betrieb_notiz(array(
-			'foodsaver_id' => $this->session->id(),
-			'betrieb_id' => $storeId,
-			'text' => $data['text'],
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 0,
-			'last' => 1
-		))
-		) {
-			$betrieb = $this->model->getVal('name', 'betrieb', $storeId);
-			$teamArray = explode(',', $data['team']);
-
-			$this->bellGateway->addBell($teamArray, 'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
-				'href' => '/?page=fsbetrieb&id=' . $storeId
-			), array(
-				'user' => $this->session->user('name'),
-				'name' => $betrieb
-			), 'store-wallpost-' . $storeId);
-			$_SESSION['last_pinPost'] = time();
-
-			return $this->xhr_getPinPost($data);
-		}
-	}
-
 	public function xhr_childBezirke($data)
 	{
 		if (isset($data['parent'])) {
@@ -1084,7 +1048,8 @@ class XhrMethods
 			}
 		}
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-		$this->bellGateway->addBell($data['team'], 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+		$team = $this->storeGateway->getStoreTeam($data['bid']);
+		$this->bellGateway->addBell($team, 'store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		), array(
 			'user' => $this->session->user('name'),

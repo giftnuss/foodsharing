@@ -74,7 +74,6 @@ class StoreUserControl extends Control
 				'id' => (int)$store['id'],
 				'name' => $store['name'],
 				'bezirk_id' => (int)$store['bezirk_id'],
-				'team_js' => $store['team_js'],
 				'verantwortlich' => $store['verantwortlich'],
 				'prefetchtime' => $store['prefetchtime']
 			];
@@ -221,7 +220,6 @@ class StoreUserControl extends Control
 										<div align="right">
 											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->translationHelper->s('send') . '" />
 										</div>
-										<input type="hidden" name="bid" value="' . (int)$store['id'] . '" />
 									</form>
 								</div>
 
@@ -270,8 +268,7 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
-							$this->v_utils->v_form_hidden('bid', 0),
-							'<input type="hidden" name="team" value="' . $store['team_js'] . '" />'
+							$this->v_utils->v_form_hidden('bid', 0)
 						),
 						$this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => $width));
 				}

@@ -20,8 +20,6 @@ import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import '@/tablesorter'
 
-import { store } from '@/server-data'
-
 import {
   u_updatePosts,
   u_betrieb_sign_out,
@@ -78,15 +76,18 @@ $(document).ready(() => {
   $('div#pinnwand form').on('submit', function (e) {
     e.preventDefault()
     if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
+      const storeId = GET('id')
       $.ajax({
         dataType: 'json',
         data: $('div#pinnwand form').serialize(),
-        url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
-        success: function (data) {
-          if (data.status == 1) {
-            $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
-            $('#pinnwand .posts').html(data.html)
-          }
+        method: 'POST',
+        url: `/api/stores/${storeId}/posts`,
+        success: function () {
+          // Reset input field
+          const textArea = $('div#pinnwand form textarea')
+          textArea.val(textArea.attr('title'))
+          // update posts list
+          u_updatePosts()
         }
       })
     }
