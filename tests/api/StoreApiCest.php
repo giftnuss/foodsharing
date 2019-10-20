@@ -30,4 +30,22 @@ class StoreApiCest
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 	}
+
+	public function addStorePostPersistsStoreInDatabase(\ApiTester $I): void
+	{
+		$I->login($this->user[self::EMAIL]);
+		$newWallPost = ['text' => 'Lorem ipsum.'];
+		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', $newWallPost);
+
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->seeInDatabase('fs_betrieb_notiz', ['text' => 'Lorem ipsum.']);
+	}
+
+	public function addStorePostReturns403IfNotLoggedIn(\ApiTester $I): void
+	{
+		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', ['text' => 'Lorem ipsum.']);
+
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+	}
 }
