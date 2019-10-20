@@ -83,11 +83,11 @@ $(document).ready(() => {
         method: 'POST',
         url: `/api/stores/${storeId}/posts`,
         success: function () {
+          // update posts list
+          u_updatePosts()
           // Reset input field
           const textArea = $('div#pinnwand form textarea')
           textArea.val(textArea.attr('title'))
-          // update posts list
-          u_updatePosts()
         }
       })
     }
