@@ -33,6 +33,7 @@ class StoreApiCest
 
 	public function addStorePostPersistsStoreInDatabase(\ApiTester $I): void
 	{
+		$I->addStoreTeam($this->store[self::ID], $this->user[self::ID]);
 		$I->login($this->user[self::EMAIL]);
 		$newWallPost = ['text' => 'Lorem ipsum.'];
 		$I->sendPOST(self::API_STORES . '/' . $this->store[self::ID] . '/posts', $newWallPost);
