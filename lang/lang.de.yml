@@ -171,7 +171,7 @@ store:
   all_of_my_stores: Alle meine Betriebe
   tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
   tooltip_orange: Offene Abholungen in den nächsten drei Tagen
-  tooltip_red: Offene Abholungen in den nächsten 24 Stunden
+  tooltip_red: Offene Abholungen heute oder morgen
 
 pickup:
   dates: Abholtermine
