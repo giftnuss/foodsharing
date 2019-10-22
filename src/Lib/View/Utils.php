@@ -987,7 +987,7 @@ class Utils
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
 		$out = '
-			<input type="hidden" name="' . $id . '" id="' . $id . '" value="" /><div id="' . $id . '-preview">' . $thumb . '</div>
+			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
 			<span id="' . $id . '-opener">' . $this->translationHelper->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
