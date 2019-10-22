@@ -23,5 +23,5 @@ class Status
 	/* unused, removed in code, might still be in DB */
 	public const FOLLOWED = 9;
 	/* request pop up opened */
-	public const REQESTED = 10;
+	public const REQUESTED = 10;
 }

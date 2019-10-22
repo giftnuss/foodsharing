@@ -26,9 +26,8 @@ $g_lang['contact_info'] = 'Kontakt';
 $g_lang['open_chat'] = 'Nachricht schreiben';
 
 $g_lang['no_requests'] = 'Bisher keine Anfragen';
-$g_lang['one_request'] = 'Bereits eine Anfrage';
-$g_lang['n_requests'] = 'Bereits <strong>{count}</strong> Anfragen';
-$g_lang['req_count'] = '{count} Anfragen';
+$g_lang['n_requests'] = 'Bisherige Anfragen: <strong>{count}</strong>';
+$g_lang['req_count'] = 'Anfragen {count}';
 $g_lang['send_request'] = 'Anfrage absenden';
 $g_lang['sent_request'] = 'Anfrage wurde versendet';
 $g_lang['withdraw_request'] = 'Anfrage zurückziehen';

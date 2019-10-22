@@ -81,7 +81,7 @@ $nick->does(function (AcceptanceTester $I) use ($id, $picker) {
 });
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
-$I->waitForText('1 Anfrage');
+$I->waitForText('Anfragen 1');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');

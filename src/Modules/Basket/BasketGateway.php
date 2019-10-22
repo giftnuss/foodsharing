@@ -98,29 +98,21 @@ class BasketGateway extends BaseGateway
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
 				fs.sleep_status,
-				COUNT(a.foodsaver_id) AS request_count
-				
+				COUNT(a.foodsaver_id) AS request_count				
 			FROM
 				fs_basket b
-
 			INNER JOIN
 				fs_foodsaver fs
-
 			ON
-				b.foodsaver_id = fs.id
-			
+				b.foodsaver_id = fs.id			
 			AND
 				b.id = :id
-
 			LEFT OUTER JOIN
 				fs_basket_anfrage a
-
 			ON
-				a.`status` IN(:status_unread,:status_read) 
-
+				a.`status` IN(:status_unread,:status_read)
 			AND
 				a.basket_id = b.id
-
 			' . $status_sql . '				
 		';
 		$basket = $this->db->fetch($stm, [
@@ -244,21 +236,16 @@ class BasketGateway extends BaseGateway
 	{
 		$stm = '		
 				SELECT
-					a.`status`	
-		
+					a.`status`			
 				FROM
 					fs_basket_anfrage a,
-					fs_basket b
-		
+					fs_basket b		
 				WHERE
-					a.basket_id = b.id
-		
+					a.basket_id = b.id		
 				AND
 					b.foodsaver_id = :foodsaver_id_offerer
-				
 				AND
 					a.foodsaver_id = :foodsaver_id_requester
-				
 				AND
 					a.basket_id = :basket_id		
 				';

@@ -56,11 +56,8 @@
       <span v-if="requestCount == 0">
         {{ $i18n('no_requests') }}
       </span>
-      <span v-if="requestCount == 1">
-        {{ $i18n('one_request') }}
-      </span>
       <span
-        v-if="requestCount > 1"
+        v-if="requestCount > 0"
         v-html="$i18n('n_requests', { count: requestCount })"
       />
     </div>
