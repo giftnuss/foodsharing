@@ -69,7 +69,7 @@ class Mem
 		if (MEM_ENABLED) {
 			$this->ensureConnected();
 
-			return $this->cache->delete($key);
+			return $this->cache->del($key);
 		}
 
 		return false;
