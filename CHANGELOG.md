@@ -21,7 +21,7 @@
 - refactored statsman from model to gateway !1111 #9 @peter.toennies
 
 ## Dev/Test/CI stuff
-- Updated duplicated delete() method to avoid deprecation error crashes in sentry !1137 @jofranz
+- Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
 
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
