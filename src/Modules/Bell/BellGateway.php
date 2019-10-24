@@ -221,8 +221,9 @@ class BellGateway extends BaseGateway
 	public function delBellsByIdentifier($identifier): void
 	{
 		$foodsaverIds = $this->db->fetchAllValues(
-			'SELECT `foodsaver_id`
+			'SELECT DISTINCT `foodsaver_id`
 			FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
+			ON `fs_foodsaver_has_bell`.bell_id = `fs_bell`.id
 			WHERE `identifier` = :identifier',
 			[':identifier' => $identifier]
 		);
