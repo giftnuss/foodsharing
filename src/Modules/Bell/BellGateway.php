@@ -222,8 +222,8 @@ class BellGateway extends BaseGateway
 	{
 		$foodsaverIds = $this->db->fetchAllValues(
 			'SELECT `foodsaver_id`
-            FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
-            WHERE `identifier` = :identifier',
+			FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
+			WHERE `identifier` = :identifier',
 			[':identifier' => $identifier]
 		);
 
