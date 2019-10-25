@@ -85,7 +85,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Ich m&#xF6;chte jetzt das Foodsaver-Quiz machen und Foodsaver werden!</a></strong>
+			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver werden!</a></strong>
 	   </div>';
 	}
 
