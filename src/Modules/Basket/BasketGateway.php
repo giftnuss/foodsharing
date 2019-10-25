@@ -203,9 +203,9 @@ class BasketGateway extends BaseGateway
 				AND
 					a.foodsaver_id = fs.id		
 				AND
-					b.foodsaver_id = :foodsaver_id				
+					b.foodsaver_id = :foodsaver_id_offerer				
 				AND
-					a.foodsaver_id = :fs_id				
+					a.foodsaver_id = :foodsaver_id_requester				
 				AND
 					a.basket_id = :basket_id		
 				';
@@ -215,8 +215,8 @@ class BasketGateway extends BaseGateway
 			[
 				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
 				':status_read' => Status::REQUESTED_MESSAGE_READ,
-				':foodsaver_id' => $foodsaver_id_offerer,
-				':fs_id' => $foodsaver_id_requester,
+				':foodsaver_id_offerer' => $foodsaver_id_offerer,
+				':foodsaver_id_requester' => $foodsaver_id_requester,
 				':basket_id' => $basket_id,
 			]
 		);
