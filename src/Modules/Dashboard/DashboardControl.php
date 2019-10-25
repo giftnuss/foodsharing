@@ -312,7 +312,7 @@ class DashboardControl extends Control
 				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		}
 
-		$bezirk_exists = ($me['bezirk_name'] == null) ? ('<p>' . $pickup_text . 'Bitte wähle einen Stammbezirk aus.' . '</p>') : ('<p>' . $pickup_text . ' Dein Stammbezirk ist ' . $me['bezirk_name'] . '.</p>');
+		$home_district_text = ($me['bezirk_name'] == null) ? ('<p>' . $pickup_text . $this->translationHelper->s('please_choose_your_home_district') . '</p>') : ('<p>' . $pickup_text . $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.</p>');
 
 		$this->pageHelper->addContent(
 				'
@@ -324,7 +324,7 @@ class DashboardControl extends Control
 					<div class="ui-padding">
 						<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
 						<h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
-							$bezirk_exists
+						$home_district_text
 						. '<div style="clear:both;"></div>
 					</div>
 				</a>
