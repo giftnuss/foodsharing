@@ -13,6 +13,7 @@
 - Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
 - Removed hidden profile pic in settings !1090 @chriswalg
 - Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
+- When answering a long e-mail, the send and cancel button disappeared. The buttons moved next to fileupload #404 !1127 @chriswalg
  
 - Automatically relogin after joining work group !1113 #125 @alex.simm 
 
