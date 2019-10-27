@@ -1,7 +1,7 @@
 <?php
 global $g_lang;
 $g_lang['photo_should_be_usable'] = 'Dein Gesicht sollte auf dem Profilfoto <a href="https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto">erkennbar</a> sein, da es, wenn Du mal <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> wirst, für den Foodsharing-<a href="https://wiki.foodsharing.de/Ausweis">Ausweis</a> verwendet wird.';
-$g_lang['profile_description_text_info'] = 'Bitte fülle dieses Feld nur aus, wenn Du darauf hingewiesen wurdest.';
+$g_lang['profile_description_text_info'] = 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/team. Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 $g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wiederhergestellt werden';

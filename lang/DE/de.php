@@ -36,6 +36,7 @@ $g_lang['attachement'] = 'Anhang';
 $g_lang['email_pass'] = 'Passwort';
 $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
 $g_lang['about_me_public'] = 'Kurzbeschreibung';
+$g_lang['about_me_public_profile'] = 'Über sich selbst';
 $g_lang['autokennzeichen_id'] = 'Autokennzeichen Deiner Stadt/Region';
 $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
