@@ -67,6 +67,11 @@ cd foodsharing
 Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([direct link](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe)) and
 [Git for Windows](https://git-scm.com/download/win).
 
+## Windows 10 or lower 
+
+Follow this instruction [Docker Toolbox for Windows] (https://docs.docker.com/toolbox/toolbox_install_windows/) and install
+[Git for Windows](https://git-scm.com/download/win).
+
 There is a graphical user interface to administrate the repo, which is recommended for Git beginners.
 
 But you can use the Git Bash shell just like in Linux to clone it:
