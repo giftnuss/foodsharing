@@ -164,6 +164,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
 - Correct title for map page !1276 @chris2up9
+- about_me_public is shown on profile !1145 @fs_k 
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
 - Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
 - Removed hidden profile pic in settings !1090 @chriswalg

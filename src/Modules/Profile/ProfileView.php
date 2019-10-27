@@ -588,9 +588,7 @@ class ProfileView extends View
 	 */
 	private function renderAboutMePublicInformation(array $infos): array
 	{
-		if ($this->foodsaver['about_me_public'])
-		{
-
+		if ($this->foodsaver['about_me_public']) {
 			$infos[] = [
 				'name' => $this->translationHelper->s('about_me_public_profile'),
 				'val' => $this->foodsaver['about_me_public'],
