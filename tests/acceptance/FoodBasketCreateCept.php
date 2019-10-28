@@ -51,9 +51,12 @@ $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 
 //Check update of the foodbasket
 $I->amOnPage($I->foodBasketInfoUrl($id));
+$I->waitForActiveAPICalls();
+$I->waitForElementNotVisible('#fancybox-loading');
 $I->click('Essenskorb bearbeiten');
-$I->waitForText('Essenskorb bearbeiten');
-$I->waitForElement('#description');
+$I->waitForElementNotVisible('#fancybox-loading', 3);
+$I->waitForText('Essenskorb bearbeiten', 3);
+$I->waitForText('Essenskorb veröffentlichen', 3);
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
 $I->waitForText('Geändert am');
@@ -67,22 +70,23 @@ $I->seeInDatabase('fs_basket', [
 $picker = $I->createFoodsaver();
 
 $nick = $I->haveFriend('nick');
-$nick->does(
-	static function (AcceptanceTester $I) use ($id, $picker) {
-		$I->login($picker['email']);
-		$I->amOnPage($I->foodBasketInfoUrl($id));
+$nick->does(function (AcceptanceTester $I) use ($id, $picker) {
+	$I->login($picker['email']);
+	$I->amOnPage($I->foodBasketInfoUrl($id));
 
-		$I->waitForText('Essenskorb anfragen');
-		$I->click('Essenskorb anfragen');
-		$I->waitForText('Anfrage absenden');
-		$I->fillField('#contactmessage', 'Hi friend, can I have the basket please?');
-		$I->click('Anfrage absenden');
+	$I->waitForText('Essenskorb anfragen');
+	$I->click('Essenskorb anfragen');
+	$I->waitForText('Anfrage absenden');
+	$I->fillField('#contactmessage', 'Hi friend, can I have the basket please?');
+	$I->click('Anfrage absenden');
 
-		$I->waitForText('Anfrage wurde versendet');
-	});
+	$I->waitForText('Anfrage wurde versendet');
+});
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
-$I->waitForText('Anfragen 1');
+$I->waitForActiveAPICalls();
+$I->waitForElementNotVisible('#fancybox-loading');
+$I->waitForText('1 Anfrage');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');
@@ -90,7 +94,7 @@ $I->waitForText('Hi friend, can I have');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->moveMouseOver(['css' => '.topbar-baskets .food-basket-create-test-class']);
-$I->click('button[title="Essenskorbanfrage abschließen"]');
+$I->click('button[title="Essensanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
 $I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 2);
