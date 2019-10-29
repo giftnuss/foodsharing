@@ -169,12 +169,23 @@ class BasketView extends View
 	{
 		if ($basket['fs_id'] != $this->session->id()) {
 			$hasRequested = $requests && count($requests) > 0;
-			$request = $this->vueComponent('vue-requestbasketform', 'request-form', [
+
+			if (!empty($basket['contact_type'])) {
+				$contact_type = explode(':', $basket['contact_type']);
+			} else {
+				$contact_type = [];
+			}
+			$allowContactByMessage = in_array(1, $contact_type);
+			$allowContactByPhone = in_array(2, $contact_type);
+
+			$request = $this->vueComponent('vue-BasketRequestForm', 'request-form', [
 				'basketId' => $basket['id'],
+				'basketCreatorId' => $basket['foodsaver_id'],
 				'initialHasRequested' => $hasRequested,
 				'initialRequestCount' => $basket['request_count'],
-				'mobileNumber' => !empty($basket['handy']) ? $basket['handy'] : null,
-				'landlineNumber' => !empty($basket['tel']) ? $basket['tel'] : null
+				'mobileNumber' => ($allowContactByPhone && !empty($basket['handy'])) ? $basket['handy'] : null,
+				'landlineNumber' => ($allowContactByPhone && !empty($basket['tel'])) ? $basket['tel'] : null,
+				'allowRequestByMessage' => $allowContactByMessage
 			]);
 		} else {
 			$request = '
@@ -308,35 +319,6 @@ class BasketView extends View
 		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705, 'value' => $basket['description']));
 
 		return $out . $this->v_utils->v_form_hidden('basket_id', $basket['id']);
-	}
-
-	public function contactMsg(): string
-	{
-		return $this->v_utils->v_form_textarea('contactmessage');
-	}
-
-	public function contactTitle(array $basket): string
-	{
-		return '<img src="' . $this->imageService->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
-		<p>' . $this->translationHelper->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
-		<div style="clear:both;"></div>';
-	}
-
-	public function contactNumber(array $basket): string
-	{
-		$out = '';
-		$content = '';
-		if (!empty($basket['tel'])) {
-			$content .= ('<tr><td>' . $this->translationHelper->s('telefon') . ': &nbsp;</td><td>' . $basket['tel'] . '</td></tr>');
-		}
-		if (!empty($basket['handy'])) {
-			$content .= ('<tr><td>' . $this->translationHelper->s('handy') . ': &nbsp;</td><td>' . $basket['handy'] . '</td></tr>');
-		}
-		if (!empty($content)) {
-			$out .= $this->v_utils->v_input_wrapper($this->translationHelper->s('phone_contact'), '<table>' . $content . '</table>');
-		}
-
-		return $out;
 	}
 
 	public function fsBubble(array $basket): string

@@ -15,12 +15,15 @@
         {{ $i18n('tel') }}: {{ landlineNumber }}
       </span>
     </div>
-    <div>
+    <div
+      v-if="allowRequestByMessage"
+    >
       <div
         v-if="hasRequested"
         class="ui-padding-bottom"
       >
         <a
+          @click="openChat"
           class="button button-big"
           href="#"
         >
@@ -51,15 +54,15 @@
           {{ $i18n('basket_request') }}
         </a>
       </div>
-    </div>
-    <div>
-      <span v-if="requestCount == 0">
-        {{ $i18n('no_requests') }}
-      </span>
-      <span
-        v-if="requestCount > 0"
-        v-html="$i18n('n_requests', { count: requestCount })"
-      />
+      <div>
+        <span v-if="requestCount == 0">
+          {{ $i18n('no_requests') }}
+        </span>
+        <span
+          v-if="requestCount > 0"
+          v-html="$i18n('n_requests', { count: requestCount })"
+        />
+      </div>
     </div>
     <b-modal
       ref="modal_request"
@@ -80,13 +83,20 @@
 
 <script>
 
+import { BFormTextarea, BModal } from 'bootstrap-vue'
+
 import { requestBasket, withdrawBasketRequest } from '@/api/baskets'
 import { pulseSuccess, pulseError } from '@/script'
 import i18n from '@/i18n'
+import conv from '@/conv'
 
 export default {
   props: {
     basketId: {
+      type: Number,
+      default: null
+    },
+    basketCreatorId: {
       type: Number,
       default: null
     },
@@ -105,6 +115,10 @@ export default {
     landlineNumber: {
       type: String,
       default: null
+    },
+    allowRequestByMessage: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -156,6 +170,9 @@ export default {
         }
       }
       this.isLoading = false
+    },
+    openChat () {
+      conv.userChat(this.basketCreatorId)
     }
   }
 }
