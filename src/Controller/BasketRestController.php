@@ -166,7 +166,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		// add requests, if there are any in the updates
 		foreach ($updates as $update) {
-			if ((int)$update[self::ID] == $basket[self::ID]) {
+			if ((int)$update[self::ID] === $basket[self::ID]) {
 				$basket[self::REQUESTS][] = $this->normalizeRequest($update);
 				$basket[self::UPDATED_AT] = max($basket[self::UPDATED_AT], (int)$update[self::TIME_TS]);
 			}
@@ -498,7 +498,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		// check for existing request
 		$requestStatus = $this->gateway->getRequestStatus($basketId, $this->session->id(), $basketCreatorId);
-		if ($requestStatus && $requestStatus[self::STATUS] == RequestStatus::DENIED) {
+		if ($requestStatus && $requestStatus[self::STATUS] === RequestStatus::DENIED) {
 			throw new HttpException(403, 'Your request was denied by the basket creator.');
 		}
 
@@ -531,7 +531,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		// Check that there is an existing active request. If not, there is nothing to withdraw and nothing to be done.
 		$requestStatus = $this->gateway->getRequestStatus($basketId, $this->session->id(), $basketCreatorId);
-		if ($requestStatus && ($requestStatus[self::STATUS] == RequestStatus::REQUESTED_MESSAGE_UNREAD || $requestStatus[self::STATUS] == RequestStatus::REQUESTED_MESSAGE_READ)) {
+		if ($requestStatus && ($requestStatus[self::STATUS] === RequestStatus::REQUESTED_MESSAGE_UNREAD || $requestStatus[self::STATUS] === RequestStatus::REQUESTED_MESSAGE_READ)) {
 			$this->gateway->setStatus($basketId, RequestStatus::DELETED_OTHER_REASON, $this->session->id());
 		}
 
@@ -566,11 +566,11 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	private function verifyBasketIsAvailable(?array $basket): void
 	{
-		if (!$basket || $basket[self::STATUS] == BasketStatus::DELETED_OTHER_REASON) {
+		if (!$basket || $basket[self::STATUS] === BasketStatus::DELETED_OTHER_REASON) {
 			throw new HttpException(404, 'Basket does not exist.');
 		}
 
-		if ($basket[self::STATUS] == BasketStatus::DELETED_PICKED_UP) {
+		if ($basket[self::STATUS] === BasketStatus::DELETED_PICKED_UP) {
 			throw new HttpException(404, 'Basket was already picked up.');
 		}
 
