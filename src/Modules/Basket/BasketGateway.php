@@ -68,7 +68,7 @@ class BasketGateway extends BaseGateway
 	 * @param int $id the basket's id
 	 * @param int|bool $status a basket status or false
 	 *
-	 * @return array|bool the details of the basket or false
+	 * @return array the details of the basket or an empty array
 	 */
 	public function getBasket($id, $status = false)
 	{
@@ -123,7 +123,7 @@ class BasketGateway extends BaseGateway
 
 		//check if the first fetch succeeded
 		if (empty($basket) || !isset($basket['foodsaver_id']) || !isset($basket['fsf_id'])) {
-			return false;
+			return [];
 		}
 
 		$stm = '
