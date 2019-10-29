@@ -255,7 +255,7 @@ class ActivityModel extends Db
 						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $$forumTypeString
+						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
 					]
 				];
 			}

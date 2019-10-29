@@ -5,7 +5,7 @@ export async function getUpdates (pagenumber) {
 }
 
 export async function getOptionListings () {
-  return (await get(`/../xhrapp.php?app=activity&m=getoptionlist`)).data.listings
+  return (await get('/../xhrapp.php?app=activity&m=getoptionlist')).data.listings
 }
 
 export async function saveOptionListings (options) {
