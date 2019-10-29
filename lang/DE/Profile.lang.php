@@ -1,8 +1,8 @@
 <?php
 global $g_lang;
 
-$g_lang['write_teaser'] = 'Schreibe etwas auf deine Pinnwand...';
-$g_lang['attach_image'] = 'Statusbilder  hochladen';
+$g_lang['write_teaser'] = 'Schreibe etwas auf Deine Pinnwand...';
+$g_lang['attach_image'] = 'Statusbilder hochladen';
 $g_lang['send'] = 'Beitrag absenden';
 $g_lang['mailbox'] = 'Interne Mailbox';
 $g_lang['last_login'] = 'Letzter Login';
@@ -18,3 +18,10 @@ $g_lang['foodsaver_workgroups'] = '{gender} ist Ansprechpartner für folgende Ar
 $g_lang['foodsaver_sleeping_hat_time'] = '{name} hat eine Schlafmütze auf vom {datum_von} bis {datum_bis}';
 $g_lang['foodsaver_sleeping_hat_time_undefined'] = '{name} hat eine Schlafmütze auf unbestimmte Zeit';
 $g_lang['Never'] = 'Nie';
+$g_lang['cancel_all'] = 'Aus allen austragen';
+$g_lang['notes'] = 'Notizen';
+$g_lang['notes_about'] = 'Notizen über {name}';
+$g_lang['stores'] = 'Betriebe ({count})';
+$g_lang['no_data'] = 'Es liegen keine Daten vor';
+$g_lang['verified'] = 'Verifiziert';
+$g_lang['de_verified'] = 'Entverifiziert';

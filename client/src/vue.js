@@ -11,7 +11,7 @@ Vue.filter('dateFormat', dateFormat)
 Vue.filter('dateDistanceInWords', dateDistanceInWords)
 
 Vue.filter('i18n', (key, variables = {}) => {
-  console.warn(`i18n as a vue filter is deprecated. use i18n() as a vue functions`)
+  console.warn('i18n as a vue filter is deprecated. use i18n() as a vue functions')
   return i18n(key, variables)
 })
 Vue.prototype.$i18n = (key, variables = {}) => {
@@ -33,13 +33,16 @@ export function vueRegister (components) {
   }
 }
 
-export function vueApply (selector) {
+export function vueApply (selector, disableElNotFoundException = false) {
   let elements = document.querySelectorAll(selector)
 
   // querySelectorAll().forEach() is broken in iOS 9
   elements = Array.from(elements)
 
   if (!elements.length) {
+    if (disableElNotFoundException) {
+      return
+    }
     throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
   }
   elements.forEach((el, index) => {

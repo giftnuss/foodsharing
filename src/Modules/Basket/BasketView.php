@@ -8,18 +8,18 @@ use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
 {
-	public function find($baskets, $location)
+	public function find(array $baskets, $location): void
 	{
 		$page = new vPage($this->translationHelper->s('baskets'), $this->findMap($location));
 
 		if ($baskets) {
-			$page->addSectionRight($this->closeBaskets($baskets), $this->translationHelper->s('basket_near'));
+			$page->addSectionRight($this->nearbyBaskets($baskets), $this->translationHelper->s('basket_near'));
 		}
 
 		$page->render();
 	}
 
-	private function findMap($location)
+	private function findMap($location): string
 	{
 		$map = new vMap($location);
 
@@ -29,13 +29,13 @@ class BasketView extends View
 
 		$map->setSearchPanel('mapsearch');
 		$map->setMarkerCluster();
-		$map->setDefaultMarkerOptions('basket', 'green');
+		$map->setDefaultMarkerOptions('shopping-basket', 'green');
 
 		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">' . $map->render(
 			) . '</div></div>';
 	}
 
-	public function closeBaskets($baskets)
+	public function nearbyBaskets(array $baskets): string
 	{
 		$out = '
 		<ul class="linklist" id="cbasketlist">';
@@ -60,23 +60,22 @@ class BasketView extends View
 					</a>
 				</li>';
 		}
-		$out .= '
+
+		return $out . '
 		</ul>
 		<div style="text-align:center;">
 			<a class="button" href="/karte?load=baskets">' . $this->translationHelper->s('basket_on_map') . '</a>
 		</div>';
-
-		return $out;
 	}
 
-	public function basket($basket, $wallposts, $requests)
+	public function basket(array $basket, $wallposts, $requests): void
 	{
 		$page = new vPage(
 			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
 		
 		<div class="pure-g">
 		    <div class="pure-u-1 pure-u-md-1-3">
-				' . $this->pageImg($basket['picture']) . '	
+				' . $this->pageImg($basket['picture'] ?? '') . '	
 			</div>
 		    <div class="pure-u-1 pure-u-md-2-3">
 				<p>' . nl2br($basket['description']) . '</p>
@@ -98,7 +97,7 @@ class BasketView extends View
 				$map = new vMap([$basket['lat'], $basket['lon']]);
 				$map->addMarker($basket['lat'], $basket['lon']);
 
-				$map->setDefaultMarkerOptions('basket', 'green');
+				$map->setDefaultMarkerOptions('shopping-basket', 'green');
 
 				$map->setCenter($basket['lat'], $basket['lon']);
 
@@ -119,7 +118,7 @@ class BasketView extends View
 		$page->render();
 	}
 
-	public function basketTaken($basket)
+	public function basketTaken(array $basket): void
 	{
 		$page = new vPage(
 			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
@@ -134,7 +133,7 @@ class BasketView extends View
 		$page->render();
 	}
 
-	public function requests($requests)
+	public function requests(array $requests): string
 	{
 		$out = '
 		<ul class="linklist conversation-list">';
@@ -148,13 +147,11 @@ class BasketView extends View
 				) . '</span><span class="clear"></span></a></li>';
 		}
 
-		$out .= '
+		return $out . '
 		</ul>';
-
-		return $out;
 	}
 
-	private function getSubtitle($basket)
+	private function getSubtitle(array $basket): string
 	{
 		$subtitle = '<p>' . $this->translationHelper->s('create_at') . ' <strong>' . $this->timeHelper->niceDate(
 				$basket['time_ts']
@@ -168,7 +165,7 @@ class BasketView extends View
 		return $subtitle;
 	}
 
-	private function userBox($basket)
+	private function userBox(array $basket): string
 	{
 		if ($basket['fs_id'] != $this->session->id()) {
 			$request = '<div><a class="button button-big" href="#" onclick="ajreq(\'request\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_request') . '</a>	</div>';
@@ -195,7 +192,7 @@ class BasketView extends View
 			$request;
 	}
 
-	private function pageImg($img): string
+	private function pageImg(string $img): string
 	{
 		if ($img != '') {
 			return '<img class="basket-img" src="/images/basket/medium-' . $img . '" />';
@@ -204,7 +201,7 @@ class BasketView extends View
 		return '<img class="basket-img" src="/img/foodloob.gif" />';
 	}
 
-	public function basketForm($foodsaver): string
+	public function basketForm(array $foodsaver): string
 	{
 		$out = '';
 
@@ -284,29 +281,26 @@ class BasketView extends View
 			]
 		);
 
-		$out .= $this->v_utils->v_form_checkbox(
-			'food_art',
-			[
-				'values' => [
-					['id' => 1, 'name' => 'sind Bio'],
-					['id' => 2, 'name' => 'sind vegetarisch'],
-					['id' => 3, 'name' => 'sind vegan'],
-					['id' => 4, 'name' => 'sind glutenfrei'],
-				],
-			]
-		);
-
-		return $out;
+		return $out . $this->v_utils->v_form_checkbox(
+				'food_art',
+				[
+					'values' => [
+						['id' => 1, 'name' => 'sind Bio'],
+						['id' => 2, 'name' => 'sind vegetarisch'],
+						['id' => 3, 'name' => 'sind vegan'],
+						['id' => 4, 'name' => 'sind glutenfrei'],
+					],
+				]
+			);
 	}
 
-	public function basketEditForm($basket): string
+	public function basketEditForm(array $basket): string
 	{
 		$out = '';
 
 		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705, 'value' => $basket['description']));
-		$out .= $this->v_utils->v_form_hidden('basket_id', $basket['id']);
 
-		return $out;
+		return $out . $this->v_utils->v_form_hidden('basket_id', $basket['id']);
 	}
 
 	public function contactMsg(): string
@@ -314,14 +308,14 @@ class BasketView extends View
 		return $this->v_utils->v_form_textarea('contactmessage');
 	}
 
-	public function contactTitle($basket): string
+	public function contactTitle(array $basket): string
 	{
 		return '<img src="' . $this->imageService->img($basket['fs_photo']) . '" style="float:left;margin-right:15px;" />
 		<p>' . $this->translationHelper->sv('foodsaver_contact', array('name' => $basket['fs_name'])) . '</p>
 		<div style="clear:both;"></div>';
 	}
 
-	public function contactNumber($basket): string
+	public function contactNumber(array $basket): string
 	{
 		$out = '';
 		$content = '';
@@ -338,7 +332,7 @@ class BasketView extends View
 		return $out;
 	}
 
-	public function fsBubble($basket)
+	public function fsBubble(array $basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
@@ -352,7 +346,7 @@ class BasketView extends View
 			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->translationHelper->s('basket_request_on_page') . '</a></div>';
 	}
 
-	public function bubbleNoUser($basket): string
+	public function bubbleNoUser(array $basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
@@ -365,7 +359,7 @@ class BasketView extends View
 		';
 	}
 
-	public function bubble($basket): string
+	public function bubble(array $basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {

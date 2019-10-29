@@ -40,7 +40,7 @@ class BasketControl extends Control
 
 	public function find(): void
 	{
-		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
+		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation());
 		$this->view->find($baskets, $this->session->getLocation());
 	}
 
@@ -55,9 +55,9 @@ class BasketControl extends Control
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] === Status::REQUESTED_MESSAGE_READ) {
+		if ($basket['status'] === Status::REQUESTED_MESSAGE_READ && $basket['until_ts'] >= time()) {
 			$this->view->basket($basket, $wallPosts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] === Status::DENIED || $basket['status'] === Status::DELETED_OTHER_REASON) {
+		} elseif ($basket['status'] === Status::DELETED_OTHER_REASON || $basket['status'] === Status::DENIED || $basket['until_ts'] <= time()) {
 			$this->view->basketTaken($basket);
 		}
 	}

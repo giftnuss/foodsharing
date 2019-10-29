@@ -1,16 +1,16 @@
 <?php
 
-namespace Foodsharing\Modules\FairTeiler;
+namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Core\View;
 
-class FairTeilerView extends View
+class FoodSharePointView extends View
 {
 	private $bezirk_id;
 	private $bezirk;
 	private $bezirke;
 
-	private $fairteiler;
+	private $foodSharePoint;
 	private $follower;
 
 	public function setBezirke($bezirke)
@@ -24,54 +24,54 @@ class FairTeilerView extends View
 		$this->bezirk_id = $bezirk['id'];
 	}
 
-	public function setFairteiler($fairteiler, $follower)
+	public function setFoodSharePoint($foodSharePoint, $follower)
 	{
-		$this->fairteiler = $fairteiler;
+		$this->foodSharePoint = $foodSharePoint;
 		$this->follower = $follower;
 	}
 
-	public function fairteilerHead()
+	public function foodSharePointHead()
 	{
-		return $this->twig->render('pages/Fairteiler/fairteilerTop.html.twig', ['fairteiler' => $this->fairteiler]);
+		return $this->twig->render('pages/FoodSharePoint/foodSharePointTop.html.twig', ['food_share_point' => $this->foodSharePoint]);
 	}
 
-	public function checkFairteiler($ft)
+	public function checkFoodSharePoint($foodSharePoint)
 	{
-		$htmlEscapedName = htmlspecialchars($ft['name']);
+		$htmlEscapedName = htmlspecialchars($foodSharePoint['name']);
 		$content = '';
-		if ($ft['pic']) {
-			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $ft['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
+		if ($foodSharePoint['pic']) {
+			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $foodSharePoint['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
 		}
 
 		$content .= $this->v_utils->v_input_wrapper('Adresse', '
-		' . $ft['anschrift'] . '<br />
-		' . $ft['plz'] . ' ' . $ft['ort']);
+		' . $foodSharePoint['anschrift'] . '<br />
+		' . $foodSharePoint['plz'] . ' ' . $foodSharePoint['ort']);
 
-		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($ft['desc']));
+		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($foodSharePoint['desc']));
 
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $ft['time_ts']));
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$ft['fs_id'] . '">' . $ft['fs_name'] . ' ' . $ft['fs_nachname'] . '</a>');
+		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $foodSharePoint['time_ts']));
+		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$foodSharePoint['fs_id'] . '">' . $foodSharePoint['fs_name'] . ' ' . $foodSharePoint['fs_nachname'] . '</a>');
 
-		return $this->v_utils->v_field($content, $ft['name'] . ' freischalten', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $foodSharePoint['name'] . ' freischalten', array('class' => 'ui-padding'));
 	}
 
 	public function address()
 	{
 		return $this->v_utils->v_field(
-			$this->v_utils->v_input_wrapper('Anschrift', $this->fairteiler['anschrift']) .
-			$this->v_utils->v_input_wrapper('PLZ / Ort', $this->fairteiler['plz'] . ' ' . $this->fairteiler['ort']),
+			$this->v_utils->v_input_wrapper('Anschrift', $this->foodSharePoint['anschrift']) .
+			$this->v_utils->v_input_wrapper('PLZ / Ort', $this->foodSharePoint['plz'] . ' ' . $this->foodSharePoint['ort']),
 			'Adresse',
 			array('class' => 'ui-padding')
 		);
 	}
 
-	public function fairteilerForm($data = false)
+	public function foodSharePointForm($data = false)
 	{
-		$title = $this->translationHelper->s('new_fairteiler');
+		$title = $this->translationHelper->s('new_food_share_point');
 
 		$tagselect = '';
 		if ($data) {
-			$title = $this->translationHelper->sv('edit_fairteiler_name', $this->fairteiler['name']);
+			$title = $this->translationHelper->sv('edit_food_share_point_name', $this->foodSharePoint['name']);
 
 			$tagselect = $this->v_utils->v_form_tagselect('bfoodsaver', array('valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']));
 			$this->pageHelper->addJs('
@@ -119,7 +119,7 @@ class FairTeilerView extends View
 		$this->pageHelper->addJs('
 			$("#follow-hidden").dialog({
 				modal: true,
-				title: "' . $this->translationHelper->sv('infotype_title', $this->sanitizerService->jsSafe($this->fairteiler['name'], '"')) . '",
+				title: "' . $this->translationHelper->sv('infotype_title', $this->sanitizerService->jsSafe($this->foodSharePoint['name'], '"')) . '",
 				autoOpen: false,
 				width: 500,
 				resizable: false,
@@ -160,28 +160,32 @@ class FairTeilerView extends View
 
 	public function desc()
 	{
-		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->fairteiler['desc']) . '</p>', $this->translationHelper->s('desc'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field('<p>' . $this->sanitizerService->markdownToHtml($this->foodSharePoint['desc']) . '</p>', $this->translationHelper->s('desc'), array('class' => 'ui-padding'));
 	}
 
-	public function listFairteiler($bezirke)
+	public function listFoodSharePoints($bezirke)
 	{
 		$content = '';
 		$count = 0;
 		foreach ($bezirke as $bezirk) {
 			$count += count($bezirk['fairteiler']);
-			$content .= $this->twig->render('partials/listFairteilerForRegion.html.twig', ['region' => $bezirk, 'fairteiler' => $bezirk['fairteiler']]);
+			$content .= $this->twig->render('partials/listFoodSharePointsForRegion.html.twig', ['region' => $bezirk, 'food_share_point' => $bezirk['fairteiler']]);
 		}
 
 		if ($this->bezirk_id > 0) {
-			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_fairteiler', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_food_share_point', $this->bezirk['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->bezirk['name'] . ' und allen Unterbezirken',
+				'<img src="/img/foodSharePointThumb.png" />'
+			), CNT_TOP);
 		} else {
-			$this->pageHelper->addContent($this->topbar($this->translationHelper->s('your_fairteiler'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist', '<img src="/img/fairteiler_thumb.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->topbar($this->translationHelper->s('your_food_share_point'), 'Es gibt ' . $count . ' Fair-Teiler in allen Bezirken in denen Du aktiv bist',
+				'<img src="/img/foodSharePointThumb.png" />'
+			), CNT_TOP);
 		}
 
 		return $content;
 	}
 
-	public function ftOptions($bezirk_id)
+	public function foodSharePointOptions($bezirk_id)
 	{
 		$items = array();
 		if ($this->session->isAdminFor($bezirk_id) || $this->session->isOrgaTeam()) {

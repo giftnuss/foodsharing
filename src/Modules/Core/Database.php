@@ -418,7 +418,7 @@ class Database
 			}
 
 			if (is_array($v) && empty($v)) {
-				$params[] = 'false'; // an empty array means that the WHERE clause will be false
+				$params[] = 'false '; // an empty array means that the WHERE clause will be false
 				continue;
 			}
 

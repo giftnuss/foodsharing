@@ -27,7 +27,7 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 	/**
 	 * @var array
 	 */
-	private $fairteiler;
+	private $foodSharePoint;
 
 	/**
 	 * @var array

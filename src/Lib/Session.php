@@ -19,6 +19,7 @@ use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\StoreService;
 
 class Session
 {
@@ -29,6 +30,7 @@ class Session
 	private $regionGateway;
 	private $buddyGateway;
 	private $storeGateway;
+	private $storeService;
 	private $db;
 	private $initialized = false;
 	private $routeHelper;
@@ -42,6 +44,7 @@ class Session
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
+		StoreService $storeService,
 		Db $db,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
@@ -53,6 +56,7 @@ class Session
 		$this->regionGateway = $regionGateway;
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
+		$this->storeService = $storeService;
 		$this->db = $db;
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
@@ -346,7 +350,7 @@ class Session
 		return $out;
 	}
 
-	public function getCurrentBezirkId()
+	public function getCurrentRegionId()
 	{
 		if (isset($_SESSION['client']['bezirk_id'])) {
 			return $_SESSION['client']['bezirk_id'];
@@ -512,6 +516,8 @@ class Session
 		if ($r = $this->storeGateway->listStoresForFoodsaver($fs['id'])) {
 			$_SESSION['client']['betriebe'] = array();
 			foreach ($r as $rr) {
+				// add info about the next free pickup slot to the store
+				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}

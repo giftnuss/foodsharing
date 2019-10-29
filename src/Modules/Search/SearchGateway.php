@@ -33,10 +33,6 @@ class SearchGateway extends BaseGateway
 			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($region_to_search);
 		}
 
-		$teaser = 'stadt';
-		if ($showDetails) {
-			$teaser = 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")';
-		}
 		$out['foodsaver'] = $this->searchTable(
 			'fs_foodsaver',
 			array('name', 'nachname', 'plz', 'stadt'),
@@ -44,7 +40,7 @@ class SearchGateway extends BaseGateway
 			array(
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
-				'teaser' => $teaser
+				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
 			),
 			$regions
 		);

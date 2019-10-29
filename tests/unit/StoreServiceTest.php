@@ -112,7 +112,7 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$interval = CarbonInterval::weeks(3);
 		$store = $this->tester->createStore($this->region_id, null, null, ['prefetchtime' => $interval->totalSeconds - 360]);
 		/* that pickup is now at least some minutes too much in the future to sign up */
-		$pickup = Carbon::now()->add($interval)->microseconds(0);
+		$pickup = Carbon::tomorrow()->add($interval)->microseconds(0);
 		/* use recurring pickup here because signing up for single pickups should work indefinitely */
 		$this->tester->addRecurringPickup($store['id'], ['time' => $pickup->toTimeString(), 'dow' => $pickup->weekday(), 'fetcher' => 1]);
 		$this->expectException(DomainException::class);
@@ -142,7 +142,7 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$this->assertFalse($this->service->joinPickup($store['id'], new Carbon('2150-01-01 00:00:00'), $foodsaver['id']));
 		$this->assertFalse($this->service->joinPickup($store['id'], new Carbon('2150-01-02 00:00:00'), $foodsaver['id']));
 
-		// As we can't cange the NOW() time in the database for the test, we have to move one fetch date to the past:
+		// As we can't change the NOW() time in the database for the test, we have to move one fetch date to the past:
 		$this->tester->updateInDatabase(
 			'fs_abholer',
 			['date' => '1970-01-01 00:00:00'],
@@ -197,5 +197,34 @@ class StoreServiceTest extends \Codeception\Test\Unit
 
 		$bellDate = $this->tester->grabFromDatabase('fs_bell', 'time', ['identifier' => 'store-fetch-unconfirmed-' . $store['id']]);
 		$this->assertEquals($soonDate->format('Y-m-d H:i:s'), $bellDate);
+	}
+
+	public function testNextAvailablePickupTime()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
+		$maxDate = $date->add('1 day');
+		$dow = $date->weekday();
+		$fetcher = 1;
+
+		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+		$this->assertEquals($this->service->getNextAvailablePickupTime($store['id'], $maxDate, $this->foodsaver['id']), $date);
+
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
+		$this->assertNull($this->service->getNextAvailablePickupTime($store['id'], $maxDate, $this->foodsaver['id']));
+	}
+
+	public function testAvailablePickupStatus()
+	{
+		$store = $this->tester->createStore($this->region_id);
+		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
+		$dow = $date->weekday();
+		$fetcher = 1;
+
+		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => $fetcher]);
+		$this->assertEquals($this->service->getAvailablePickupStatus($store['id'], $this->foodsaver['id']), 2);
+
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
+		$this->assertEquals($this->service->getAvailablePickupStatus($store['id'], $this->foodsaver['id']), 0);
 	}
 }

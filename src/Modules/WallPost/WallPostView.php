@@ -9,13 +9,13 @@ class WallPostView extends View
 	private $table;
 	private $wallId;
 
-	public function setTable($table, $wallId)
+	public function setTable(string $table, int $wallId): void
 	{
 		$this->table = $table;
 		$this->wallId = $wallId;
 	}
 
-	public function posts($posts, $mayDelete)
+	public function posts(array $posts, bool $mayDelete): string
 	{
 		/*
 		 [0] => Array
@@ -36,7 +36,7 @@ class WallPostView extends View
 			<tbody>';
 		$odd = 'odd';
 		foreach ($posts as $p) {
-			if ($odd == 'odd') {
+			if ($odd === 'odd') {
 				$odd = 'even';
 			} else {
 				$odd = 'odd';
@@ -74,16 +74,14 @@ class WallPostView extends View
 						' . $gallery . '
 					</span>
 					<div class="foot">
-						<span class="time">' . $this->timeHelper->niceDate($p['time_ts'], false) . ' von ' . $p['name'] . '</span>' . $del . '
+						<span class="time">' . $this->timeHelper->niceDate($p['time_ts']) . ' von ' . $p['name'] . '</span>' . $del . '
 					</div>
 					</td>
 				</tr>';
 		}
 
-		$out .= '
+		return $out . '
 			</tbody>
 		</table>';
-
-		return $out;
 	}
 }

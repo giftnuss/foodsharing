@@ -10,7 +10,7 @@ import { expose } from '@/utils'
 import $ from 'jquery'
 import {
   ajax,
-  pulseError,
+  pulseError, pulseInfo,
   showLoader,
   hideLoader,
   GET
@@ -49,157 +49,115 @@ expose({
   u_timetableAction
 })
 
-$('.cb-verantwortlicher').on('click', function () {
-  if ($('.cb-verantwortlicher:checked').length >= 4) {
-    pulseError(i18n('max_3_leader'))
-    return false
-  }
-})
-
-$('#team-form').on('submit', function (ev) {
-  if ($('.cb-verantwortlicher:checked').length == 0) {
-    pulseError(i18n('verantwortlicher_must_be'))
-    ev.preventDefault()
-    return false
-  }
-})
-
-$('#comment-post').hide()
-
-$('div#pinnwand form textarea').on('focus', function () {
-  $('#comment-post').show()
-})
-
-$('div#pinnwand form input.submit').button().on('keydown', function (event) {
-  $('div#pinnwand form').trigger('submit')
-})
-
-$('div#pinnwand form').on('submit', function (e) {
-  e.preventDefault()
-  if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
-    $.ajax({
-      dataType: 'json',
-      data: $('div#pinnwand form').serialize(),
-      url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
-      success: function (data) {
-        if (data.status == 1) {
-          $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
-          $('#pinnwand .posts').html(data.html)
-        }
-      }
-    })
-  }
-})
-
-$('#signout_shure').dialog({
-  autoOpen: false,
-  modal: true,
-  buttons: [
-    {
-      text: $('#signout_shure .sure').text(),
-      click: function () {
-        showLoader()
-
-        ajax.req('betrieb', 'signout', {
-          data: { id: GET('id') },
-          success: function () {
-
-          }
-        })
-      }
-    },
-    {
-      text: $('#signout_shure .abort').text(),
-      click: function () {
-        $('#signout_shure').dialog('close')
-      }
+$(document).ready(() => {
+  $('.cb-verantwortlicher').on('click', function () {
+    if ($('.cb-verantwortlicher:checked').length >= 4) {
+      pulseError(i18n('max_3_leader'))
+      return false
     }
-  ]
-})
-
-$('#delete_shure').dialog({
-  autoOpen: false,
-  modal: true,
-  buttons: [
-    {
-      text: $('#delete_shure .sure').text(),
-      click: function () {
-        showLoader()
-        const pid = $(this).data('pid')
-        $.ajax({
-          url: '/xhr.php?f=delBPost',
-          data: { pid: pid },
-          success: function (ret) {
-            if (ret == 1) {
-              $(`.bpost-${pid}`).remove()
-              $('#delete_shure').dialog('close')
-            }
-          },
-          complete: function () {
-            hideLoader()
-          }
-        })
-      }
-    },
-    {
-      text: $('#delete_shure .abort').text(),
-      click: function () {
-        $('#delete_shure').dialog('close')
-      }
-    }
-  ]
-})
-
-$('#changeStatus').button().on('click', () => {
-  $('#changeStatus-hidden').dialog({
-    title: i18n('change_status'),
-    modal: true
   })
-})
 
-$('.nft-remove').button({
-  text: false,
-  icons: {
-    primary: 'ui-icon-minus'
-  }
-}).on('click', function () {
-  const $this = $(this)
-  $this.parent().parent().remove()
-})
+  $('#team-form').on('submit', function (ev) {
+    if ($('.cb-verantwortlicher:checked').length == 0) {
+      pulseError(i18n('verantwortlicher_must_be'))
+      ev.preventDefault()
+      return false
+    }
+  })
 
-addContextMenu('.context-team', 160, createMenu)
-addContextMenu('.context-jumper', 95, createJumperMenu)
+  $('#comment-post').hide()
 
-$('.timetable').on('keyup', '.fetchercount', function () {
-  if (this.value != '') {
-    let val = parseInt(`0${this.value}`, 10)
-    if (val == 0) {
-      val = 1
-    } else if (val > 2) {
-      pulseError('Du hast mehrere Personen zum Abholen angegeben.<br />In der Regel sollten <strong>nur so viele Abholer wie nötig</strong> zu einem Betrieb gehen. Zu viele Abholer führten schon oft zum Ende einer Kooperation. <br />Zur Not geht einer von Euch mit Auto oder Anhänger vor und Ihr trefft Euch außer Reichweite vom Betrieb.', {
-        sticky: true
+  $('div#pinnwand form textarea').on('focus', function () {
+    $('#comment-post').show()
+  })
+
+  $('div#pinnwand form input.submit').button().on('keydown', function (event) {
+    $('div#pinnwand form').trigger('submit')
+  })
+
+  $('div#pinnwand form').on('submit', function (e) {
+    e.preventDefault()
+    if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
+      $.ajax({
+        dataType: 'json',
+        data: $('div#pinnwand form').serialize(),
+        url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
+        success: function (data) {
+          if (data.status == 1) {
+            $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
+            $('#pinnwand .posts').html(data.html)
+          }
+        }
       })
     }
-    this.value = val
-  }
-})
-
-$('#nft-add').button({
-  text: false
-}).on('click', function () {
-  $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
-  let clname = 'odd'
-  $('table.timetable tbody tr').each(function () {
-    if (clname == 'odd') {
-      clname = 'even'
-    } else {
-      clname = 'odd'
-    }
-
-    const $this = $(this)
-    $this.removeClass('odd even')
-    $this.addClass(clname)
   })
+
+  $('#signout_shure').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: [
+      {
+        text: $('#signout_shure .sure').text(),
+        click: function () {
+          showLoader()
+
+          ajax.req('betrieb', 'signout', {
+            data: { id: GET('id') },
+            success: function () {
+
+            }
+          })
+        }
+      },
+      {
+        text: $('#signout_shure .abort').text(),
+        click: function () {
+          $('#signout_shure').dialog('close')
+        }
+      }
+    ]
+  })
+
+  $('#delete_shure').dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: [
+      {
+        text: $('#delete_shure .sure').text(),
+        click: function () {
+          showLoader()
+          const pid = $(this).data('pid')
+          $.ajax({
+            url: '/xhr.php?f=delBPost',
+            data: { pid: pid },
+            success: function (ret) {
+              if (ret == 1) {
+                $(`.bpost-${pid}`).remove()
+                $('#delete_shure').dialog('close')
+              }
+            },
+            complete: function () {
+              hideLoader()
+            }
+          })
+        }
+      },
+      {
+        text: $('#delete_shure .abort').text(),
+        click: function () {
+          $('#delete_shure').dialog('close')
+        }
+      }
+    ]
+  })
+
+  $('#changeStatus').button().on('click', () => {
+    $('#changeStatus-hidden').dialog({
+      title: i18n('change_status'),
+      modal: true
+    })
+  })
+
   $('.nft-remove').button({
     text: false,
     icons: {
@@ -209,9 +167,53 @@ $('#nft-add').button({
     const $this = $(this)
     $this.parent().parent().remove()
   })
-})
 
-vueRegister({
-  PickupList
+  addContextMenu('.context-team', 160, createMenu)
+  addContextMenu('.context-jumper', 95, createJumperMenu)
+
+  $('.timetable').on('keyup', '.fetchercount', function () {
+    if (this.value != '') {
+      let val = parseInt(`0${this.value}`, 10)
+      if (val == 0) {
+        val = 1
+      } else if (val > 2) {
+        pulseInfo(i18n('max_2_foodsaver'), {
+          sticky: true
+        })
+      }
+      this.value = val
+    }
+  })
+
+  $('#nft-add').button({
+    text: false
+  }).on('click', function () {
+    $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
+    let clname = 'odd'
+    $('table.timetable tbody tr').each(function () {
+      if (clname == 'odd') {
+        clname = 'even'
+      } else {
+        clname = 'odd'
+      }
+
+      const $this = $(this)
+      $this.removeClass('odd even')
+      $this.addClass(clname)
+    })
+    $('.nft-remove').button({
+      text: false,
+      icons: {
+        primary: 'ui-icon-minus'
+      }
+    }).on('click', function () {
+      const $this = $(this)
+      $this.parent().parent().remove()
+    })
+  })
+
+  vueRegister({
+    PickupList
+  })
+  vueApply('#vue-pickuplist', true)
 })
-vueApply('#vue-pickuplist')

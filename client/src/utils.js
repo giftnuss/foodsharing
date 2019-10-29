@@ -48,7 +48,7 @@ export function dateFormat (date, format = 'full-long') {
       } else if (dateFnsIsSameYear(date, new Date())) {
         return dateFormat(date, 'dddd, Do MMM, HH:mm [Uhr]')
       } else {
-        return dateFormat(date, 'dddd, Do MMM YYYY, HH:mm [Uhr]')
+        return dateFormat(date, 'dd, Do MMM YYYY, HH:mm [Uhr]')
       }
     case 'full-short':
       if (dateFnsIsSameYear(date, new Date())) {

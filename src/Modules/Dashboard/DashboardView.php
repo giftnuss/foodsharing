@@ -15,7 +15,7 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht am ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
+					<span class="t">veröffentlicht: ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
@@ -42,7 +42,7 @@ class DashboardView extends View
 		));
 	}
 
-	public function closeBaskets($baskets)
+	public function nearbyBaskets($baskets)
 	{
 		$out = '<ul class="linklist baskets">';
 		foreach ($baskets as $b) {
@@ -356,6 +356,16 @@ class DashboardView extends View
 
 	public function u_invites($invites)
 	{
+		$this->pageHelper->addStyle('
+			@media (max-width: 410px)
+			{
+				.top_margin_on_small_screen 
+				{
+					margin-top: 45px;
+				}
+			}
+		');
+
 		$out = '';
 		foreach ($invites as $i) {
 			$out .= '
@@ -366,16 +376,18 @@ class DashboardView extends View
 				</a>
 						
 				
-				<div class="activity_feed_content">
+				<div class="container activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-	
-					<div>
-						<a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a> <a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a> <a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a>
+			
+					<div class="row activity-feed-content-buttons">
+						<div class="col mr-2"><a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a></div>
+						<div class="col-md-auto mr-2"><a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a></div>
+						<div class="col-md-auto"><a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a></div>
 					</div>
 				</div>
 				

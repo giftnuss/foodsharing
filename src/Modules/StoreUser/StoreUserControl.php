@@ -7,11 +7,11 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\Store\StoreStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -64,7 +64,7 @@ class StoreUserControl extends Control
 			$this->pageHelper->addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 
-			$store = $this->storeGateway->getMyBetrieb($this->session->id(), $_GET['id']);
+			$store = $this->storeGateway->getMyStore($this->session->id(), $_GET['id']);
 
 			if (!$store) {
 				$this->routeHelper->goPage();
@@ -161,7 +161,7 @@ class StoreUserControl extends Control
 					if ($fs['id'] === $this->session->id() && $fs['last_fetch'] != null) {
 						$lastFetchDate = Carbon::createFromTimestamp($fs['last_fetch']);
 						$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastFetchDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
-								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('Days') . ')');
+								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('days') . ')');
 						break;
 					}
 				}
@@ -178,21 +178,21 @@ class StoreUserControl extends Control
 				/* options menu */
 				$menu = array();
 
-				if (!$store['jumper'] || $this->session->may('orga')) {
-					if (!is_null($store['team_conversation_id'])) {
-						$menu[] = array('name' => 'Nachricht ans Team', 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
-					}
-					if ($store['verantwortlich'] && !is_null($store['springer_conversation_id'])) {
-						$menu[] = array('name' => 'Nachricht an Springer', 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
-					}
+				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
+					$menu[] = array('name' => $this->translationHelper->s('chat_with_regular_team'), 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');');
 				}
-				if ($store['verantwortlich'] || $this->session->may('orga')) {
+
+				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
+					$menu[] = array('name' => $this->translationHelper->s('chat_with_jumper_waiting_team'), 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');');
+				}
+
+				if ($this->storePermissions->mayEditStore($store['id'])) {
 					$menu[] = array('name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$store['id'] . '});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $store['id']);
 					$menu[] = array('name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});');
 					$menu[] = array('name' => $this->translationHelper->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$store['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;');
 				}
-				if (!$store['verantwortlich'] || $this->session->isOrgaTeam() || $this->session->isAmbassador()) {
+				if (!$store['verantwortlich'] || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
 					$menu[] = array('name' => $this->translationHelper->s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$store['id'] . ');return false;');
 				}
 
@@ -210,7 +210,7 @@ class StoreUserControl extends Control
 					CNT_LEFT,
 				);
 
-				if (!$store['jumper'] || $this->session->may('orga')) {
+				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
 					$this->pageHelper->addJs('u_updatePosts();');
 					$this->pageHelper->addContent($this->v_utils->v_field('
 							<div id="pinnwand">
@@ -259,7 +259,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED)) {
+				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
@@ -277,7 +277,7 @@ class StoreUserControl extends Control
 				}
 
 				if (!$store['jumper']) {
-					if ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED) {
+					if ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED) {
 					} else {
 						$bt = '';
 						$storeStateName = '';
@@ -311,8 +311,8 @@ class StoreUserControl extends Control
 				array('href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new'))
 			), 'Aktionen'), CNT_RIGHT);
 
-			$region = $this->regionGateway->getBezirk($this->session->getCurrentBezirkId());
-			$stores = $this->storeGateway->getMyBetriebe($this->session->id(), $this->session->getCurrentBezirkId());
+			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
+			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['verantwortlich'], $this->translationHelper->s('you_responsible'), true));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));
 			$this->pageHelper->addContent($this->view->u_betriebList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name'])), false));

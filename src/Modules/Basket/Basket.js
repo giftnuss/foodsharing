@@ -79,9 +79,9 @@ if ($('#mapsearch').length > 0) {
   $('#map-latLng').on('change', function () {
     console.log()
 
-    ajax.req('basket', 'closeBaskets', {
+    ajax.req('basket', 'nearbyBaskets', {
       data: {
-        choords: JSON.parse($('#map-latLng').val())
+        coordinates: JSON.parse($('#map-latLng').val())
       },
       success: function (ret) {
         if (ret.baskets != undefined) {

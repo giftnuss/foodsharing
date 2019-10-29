@@ -43,7 +43,7 @@ class BasketXhr extends Control
 			'abgelehnt' => Status::DENIED,
 			'nicht_gekommen' => Status::NOT_PICKED_UP,
 			'wall_follow' => Status::FOLLOWED,
-			'angeklickt' => Status::REQESTED,
+			'angeklickt' => Status::REQUESTED,
 		];
 
 		parent::__construct();
@@ -55,7 +55,7 @@ class BasketXhr extends Control
 			'bubble' => true,
 			'login' => true,
 			'basketCoordinates' => true,
-			'closeBaskets' => true,
+			'nearbyBaskets' => true,
 		];
 
 		if (!isset($allowed[$_GET['m']]) && !$this->session->may()) {
@@ -63,7 +63,8 @@ class BasketXhr extends Control
 				[
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translationHelper->s('not_login_hint') . '");',
-				]
+				],
+				JSON_THROW_ON_ERROR
 			);
 			exit();
 		}
@@ -287,15 +288,15 @@ class BasketXhr extends Control
 		$img->saveChanges();
 	}
 
-	public function closeBaskets()
+	public function nearbyBaskets(): void
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['choords']) && $basket = $this->basketGateway->listCloseBaskets(
+		if (isset($_GET['coordinates']) && $basket = $this->basketGateway->listNearbyBasketsByDistance(
 				$this->session->id(),
 				[
-					'lat' => $_GET['choords'][0],
-					'lon' => $_GET['choords'][1],
+					'lat' => $_GET['coordinates'][0],
+					'lon' => $_GET['coordinates'][1],
 				]
 			)) {
 			$xhr->addData('baskets', $basket);
@@ -344,7 +345,7 @@ class BasketXhr extends Control
 		];
 	}
 
-	public function fsBubble($basket)
+	public function fsBubble($basket): array
 	{
 		$dia = new XhrDialog();
 
@@ -369,7 +370,7 @@ class BasketXhr extends Control
 	public function request()
 	{
 		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
-			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
+			$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED, $this->session->id());
 			$dia = new XhrDialog();
 			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
 			$dia->addOpt('width', '90%');
@@ -397,7 +398,7 @@ class BasketXhr extends Control
 		}
 	}
 
-	public function sendreqmessage()
+	public function sendreqmessage(): array
 	{
 		if ($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
 			$msg = strip_tags($_GET['msg']);
@@ -478,15 +479,13 @@ class BasketXhr extends Control
 		$basketId = (int)$_GET['id'];
 		$fsId = (int)$_GET['fid'];
 
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
-			if ($id == $this->session->id()) {
-				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
+		if (($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) && $id == $this->session->id()) {
+			$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
 
-				return array(
-					'status' => 1,
-					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
-				);
-			}
+			return [
+				'status' => 1,
+				'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
+			];
 		}
 	}
 
@@ -614,7 +613,8 @@ class BasketXhr extends Control
 			$pic = $this->preparePicture($data['filename']);
 		}
 
-		if (!empty($desc) && !empty($id) && ($this->basketGateway->editBasket($id, $desc, $pic, $this->session->id()))) {
+		if (!empty($desc) && !empty($id) &&
+			($this->basketGateway->editBasket($id, $desc, $pic, $basket['lat'], $basket['lon'], $this->session->id()))) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -659,7 +659,7 @@ class BasketXhr extends Control
 		];
 	}
 
-	private function preparePicture($filename): string
+	private function preparePicture(string $filename): string
 	{
 		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename);
 		if (!empty($pic) && file_exists('tmp/' . $pic)) {

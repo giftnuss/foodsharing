@@ -1,11 +1,11 @@
 <?php
 
-class FairTeilerCest
+class FoodSharePointCest
 {
 	private $testBezirk;
 	private $responsible;
 	private $user;
-	private $fairTeiler;
+	private $foodSharePoint;
 
 	public function _before(AcceptanceTester $I)
 	{
@@ -15,7 +15,7 @@ class FairTeilerCest
 		$I->addBezirkAdmin($this->testBezirk['id'], $this->responsible['id']);
 		$this->otherBot = $I->createAmbassador(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->addBezirkAdmin($this->testBezirk['id'], $this->otherBot['id']);
-		$this->fairTeiler = $I->createFairteiler($this->responsible['id'], $this->testBezirk['id']);
+		$this->foodSharePoint = $I->createFoodSharePoint($this->responsible['id'], $this->testBezirk['id']);
 	}
 
 	/**
@@ -24,23 +24,23 @@ class FairTeilerCest
 	 * */
 	public function canSeeFairTeilerInList(AcceptanceTester $I)
 	{
-		$I->amOnPage($I->fairTeilerRegionListUrl($this->testBezirk['id']));
-		$I->waitForText($this->fairTeiler['name']);
-		$I->click($this->fairTeiler['name']);
-		$I->waitForText(explode("\n", $this->fairTeiler['anschrift'])[0]);
+		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
+		$I->waitForText($this->foodSharePoint['name']);
+		$I->click($this->foodSharePoint['name']);
+		$I->waitForText(explode("\n", $this->foodSharePoint['anschrift'])[0]);
 	}
 
 	public function redirectForGetPage(AcceptanceTester $I)
 	{
-		$I->amOnPage($I->fairTeilerGetUrlShort($this->fairTeiler['id']));
-		$I->waitForText(explode("\n", $this->fairTeiler['anschrift'])[0]);
-		$I->seeCurrentUrlEquals($I->fairTeilerGetUrl($this->fairTeiler['id']));
+		$I->amOnPage($I->foodSharePointGetUrlShort($this->foodSharePoint['id']));
+		$I->waitForText(explode("\n", $this->foodSharePoint['anschrift'])[0]);
+		$I->seeCurrentUrlEquals($I->foodSharePointGetUrl($this->foodSharePoint['id']));
 	}
 
-	public function createFairTeiler(AcceptanceTester $I)
+	public function createFoodSharePoint(AcceptanceTester $I)
 	{
 		$I->login($this->responsible['email']);
-		$I->amOnPage($I->fairTeilerRegionListUrl($this->testBezirk['id']));
+		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
 		$I->waitForText('Fair-Teiler eintragen');
 		$I->click('Fair-Teiler eintragen');
 		$I->waitForText('In welchem Bezirk');
@@ -56,7 +56,7 @@ class FairTeilerCest
 		$I->click('Speichern');
 		$I->waitForText('wurde erfolgreich eingetragen');
 		$id = $I->grabFromDatabase('fs_fairteiler', 'id', ['name' => 'The greatest fairsharepoint']);
-		$I->amOnPage($I->fairTeilerGetUrl($id));
+		$I->amOnPage($I->foodSharePointGetUrl($id));
 		$I->waitForText('Kantstraße 20');
 	}
 
@@ -64,7 +64,7 @@ class FairTeilerCest
 	{
 		$user = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->login($this->responsible['email']);
-		$I->amOnPage($I->fairTeilerEditUrl($this->fairTeiler['id']));
+		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']));
 		$I->waitForText('Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist');
 		$I->fillField('#name', 'Der BESTE fairshare point!');
 		$I->addInTagSelect($user['name'], '#bfoodsaver');
@@ -79,11 +79,11 @@ class FairTeilerCest
 	 * @example["responsible", true]
 	 * @example["otherBot", true]
 	 */
-	public function mayEditFairTeiler(AcceptanceTester $I, \Codeception\Example $example)
+	public function mayEditFoodSharePoint(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$user = $this->{$example[0]};
 		$I->login($user['email']);
-		$I->amOnPage($I->fairTeilerEditUrl($this->fairTeiler['id']));
+		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']));
 		if ($example[1]) {
 			$I->waitForText('Schreibe hier ein paar');
 		} else {
@@ -92,13 +92,13 @@ class FairTeilerCest
 		}
 	}
 
-	public function mayNotEditFairTeilerWrongBid(AcceptanceTester $I)
+	public function mayNotEditFoodSharePointWrongBid(AcceptanceTester $I)
 	{
 		$region = $I->createRegion('another funny region');
 		$bot = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
 		$I->addBezirkAdmin($region['id'], $bot['id']);
 		$I->login($bot['email']);
-		$I->amOnPage($I->fairTeilerEditUrl($this->fairTeiler['id']) . '&bid=' . $region['id']);
+		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']) . '&bid=' . $region['id']);
 		/* does not get edit view although region admin of another region (regression) */
 		$I->waitForText('Beachte, dass Deine Beiträge');
 	}

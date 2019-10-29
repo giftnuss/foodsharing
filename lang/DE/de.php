@@ -36,7 +36,7 @@ $g_lang['email'] = 'E-Mail-Adresse';
 $g_lang['attachement'] = 'Anhang';
 $g_lang['email_pass'] = 'Passwort';
 $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
-$g_lang['about_me_public'] = 'Kurzbeschreibung von Dir';
+$g_lang['about_me_public'] = 'Kurzbeschreibung';
 $g_lang['autokennzeichen_id'] = 'Autokennzeichen Deiner Stadt/Region';
 $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
@@ -140,26 +140,33 @@ $g_lang['day'] = 'Tag';
 $g_lang['tomorrow'] = 'Morgen';
 $g_lang['today'] = 'Heute';
 $g_lang['no_bezirk_choosen'] = 'Noch kein Bezirk gewählt';
-$g_lang['rolle_0_0'] = 'Foodsharer';
-$g_lang['rolle_0_1'] = 'Foodsharer';
-$g_lang['rolle_0_2'] = 'Foodsharer';
+
 $g_lang['rolle'] = 'Benutzerrolle';
 
-$g_lang['rolle_1_0'] = 'Foodsaver';
+$g_lang['rolle_0_0'] = 'Foodsharer/in';
+$g_lang['rolle_0_1'] = 'Foodsharer';
+$g_lang['rolle_0_2'] = 'Foodsharerin';
+$g_lang['rolle_0_3'] = 'Foodsharer/in';
+
+$g_lang['rolle_1_0'] = 'Foodsaver/in';
 $g_lang['rolle_1_1'] = 'Foodsaver';
 $g_lang['rolle_1_2'] = 'Foodsaverin';
+$g_lang['rolle_1_3'] = 'Foodsaver/in';
 
-$g_lang['rolle_2_0'] = 'Betriebsverantwortliche/r Foodsaver';
+$g_lang['rolle_2_0'] = 'Betriebsverantwortliche/r Foodsaver/in';
 $g_lang['rolle_2_1'] = 'Betriebsverantwortlicher Foodsaver';
 $g_lang['rolle_2_2'] = 'Betriebsverantwortliche Foodsaverin';
+$g_lang['rolle_2_3'] = 'Betriebsverantwortliche/r Foodsaver/in';
 
 $g_lang['rolle_3_0'] = 'Botschafter/in';
 $g_lang['rolle_3_1'] = 'Botschafter';
 $g_lang['rolle_3_2'] = 'Botschafterin';
+$g_lang['rolle_3_3'] = 'Botschafter/in';
 
 $g_lang['rolle_4_0'] = 'Orgamensch';
 $g_lang['rolle_4_1'] = 'Orgamensch';
 $g_lang['rolle_4_2'] = 'Orgamensch';
+$g_lang['rolle_4_3'] = 'Orgamensch';
 
 $g_lang['betrieb_status_6'] = 'Spendet an Tafel etc. und wirft nichts weg.';
 $g_lang['betrieb_status_5'] = 'Betrieb kooperiert bereits.';
@@ -170,7 +177,6 @@ $g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt.';
 $g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
 $g_lang['specials'] = 'Besonderheiten';
 
-$g_lang['photo_public'] = 'Kontaktaufnahme durch andere Foodsaver';
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
 $g_lang['to_team_page'] = 'Zur Teamseite';
 $g_lang['status'] = 'Aktueller Status';
@@ -210,6 +216,7 @@ $g_lang['new_message'] = 'Neue Nachricht';
 $g_lang['access_error'] = 'Du hast nicht die nötigen Rechte, dies zu tun.';
 $g_lang['register'] = 'Registrieren';
 $g_lang['daterange'] = 'Zeitraum';
+$g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter';
 $g_lang['rv_accept'] = 'Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.';
 $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren!';
 $g_lang['regions'] = 'Bezirke';

@@ -561,8 +561,7 @@ class Utils
 			<div align="center"><img src="' . $src . '" /></div>
 			<div>
 			' . $this->v_menu($menu) . '
-			</div>
-			<div style="visibility:hidden"><img src="/images/' . $original . '" /></div>';
+			</div>';
 	}
 
 	public function v_form($name, $elements, $option = array())
@@ -703,7 +702,7 @@ class Utils
 		if (isset($_GET['bid'])) {
 			$bid = '&bid=' . (int)$_GET['bid'];
 		} else {
-			$bid = $this->session->getCurrentBezirkId();
+			$bid = $this->session->getCurrentRegionId();
 		}
 
 		$out = '';
@@ -988,7 +987,7 @@ class Utils
 			$thumb = '<img src="images/' . str_replace('/', '/thumb_', $pic) . '" />';
 		}
 		$out = '
-			<input type="hidden" name="' . $id . '" id="' . $id . '" value="" /><div id="' . $id . '-preview">' . $thumb . '</div>
+			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
 			<span id="' . $id . '-opener">' . $this->translationHelper->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);

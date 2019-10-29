@@ -101,6 +101,14 @@
         >
           <i class="fas fa-address-card" />Ausweise
         </a>
+        <a
+          v-if="region.isBot"
+          :href="$url('reports', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
+        </a>
       </b-collapse>
     </div>
     <div

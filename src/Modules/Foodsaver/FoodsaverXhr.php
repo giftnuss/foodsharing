@@ -34,7 +34,7 @@ class FoodsaverXhr extends Control
 		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($foodsaver = $this->model->loadFoodsaver($_GET['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->loadFoodsaver($_GET['id'])) {
 			$html = $this->view->foodsaverForm($foodsaver);
 
 			return array(
@@ -53,7 +53,7 @@ class FoodsaverXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
-		$bezirk = $this->regionGateway->getBezirk($_GET['bid']);
+		$bezirk = $this->regionGateway->getRegion($_GET['bid']);
 		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
 
 		return array(

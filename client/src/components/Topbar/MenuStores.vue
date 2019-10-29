@@ -5,6 +5,10 @@
   >
     <template slot="button-content">
       <i class="fas fa-shopping-cart" />
+      <span
+        v-if="globalPickupStatus>0"
+        :class="'badge badge-pill '+badgeClass(globalPickupStatus)"
+      >&nbsp;</span>
     </template>
     <div
       v-for="store in stores"
@@ -15,6 +19,10 @@
         role="menuitem"
         class="dropdown-item text-truncate"
       >
+        <span
+          :class="'badge badge-pill '+badgeClass(store.pickupStatus)"
+          :style="badgeVisibility(store.pickupStatus)"
+        >&nbsp;</span>
         {{ store.name }}
       </a>
     </div>
@@ -47,10 +55,35 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    globalPickupStatus () {
+      let status = 0
+      for (const store of this.stores) {
+        status = Math.max(status, store.pickupStatus)
+      }
+      return status
+    }
+  },
+  methods: {
+    badgeClass (pickupStatus) {
+      const classes = ['badge-info', 'badge-info', 'badge-warning', 'badge-danger']
+      return classes[pickupStatus]
+    },
+    badgeVisibility (pickupStatus) {
+      return {
+        visibility: pickupStatus > 0 ? 'visible' : 'hidden'
+      }
+    }
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+  .badge {
+    margin-left: -1.8em;
+  }
+  .bootstrap .badge-info {
+    background-color: #f5f5b5;
+  }
 </style>

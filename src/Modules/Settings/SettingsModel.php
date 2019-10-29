@@ -187,7 +187,7 @@ class SettingsModel extends Db
 		return $out;
 	}
 
-	public function getFairteiler()
+	public function getFoodSharePoint()
 	{
 		return $this->q('
 			SELECT 	ft.id,
