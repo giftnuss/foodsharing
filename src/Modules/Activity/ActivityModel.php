@@ -33,14 +33,13 @@ class ActivityModel extends Db
 		$out = [];
 
 		foreach ($updates as $u) {
-			$smTitle = '';
 			$title = 'Termin: ' . $u['name'];
 
 			$out[] = [
 				'attr' => [
 				'href' => '/profile/' . $u['fs_id']
 				],
-				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a><small>' . $smTitle . '</small>',
+				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a>',
 				'desc' => $this->textPrepare($u['body']),
 				'time' => $u['time'],
 				'icon' => $this->imageService->img($u['fs_photo'], 50),
@@ -67,21 +66,18 @@ class ActivityModel extends Db
 			$out = [];
 
 			foreach ($updates as $u) {
-				$smTitle = '';
 				$title = 'Essenskorb #' . $u['basket_id'];
 
 				$out[] = [
-					'type' => 'foodbasket',
-					'data' => [
-						'fs_id' => $u['fs_id'],
-						'fs_name' => $u['fs_name'],
-						'basked_id' => $u['basket_id'],
-						'desc' => $u['body'],
-						'time' => $u['time'],
-						'icon' => $this->imageService->img($u['fs_photo'], 50),
-						'time_ts' => $u['time_ts'],
-						'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
-					]
+					'attr' => [
+						'href' => '/profile/' . $u['fs_id']
+					],
+					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a>',
+					'desc' => $this->textPrepare($u['body']),
+					'time' => $u['time'],
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
+					'time_ts' => $u['time_ts'],
+					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
 				];
 			}
 
@@ -130,18 +126,14 @@ class ActivityModel extends Db
 				}
 
 				$out[] = [
-					'type' => 'friendWall',
-					'data' => [
-						'fs_id' => $u['fs_id'],
-						'fs_name' => $u['fs_name'],
-						'poster_id' => $u['poster_id'],
-						'poster_name' => $u['poster_name'],
-						'desc' => $u['body'],
-						'time' => $u['time'],
-						'icon' => $this->imageService->img($u['fs_photo'], 50),
-						'time_ts' => $u['time_ts'],
-						'gallery' => $u['gallery']
-					]
+					'attr' => [
+						'href' => '/profile/' . $u['fs_id']
+					],
+					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
+					'desc' => $this->textPrepare($u['body']),
+					'time' => $u['time'],
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
+					'time_ts' => $u['time_ts']
 				];
 			}
 
