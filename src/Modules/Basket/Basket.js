@@ -99,5 +99,5 @@ $(document).ready(() => {
   vueRegister({
     RequestForm
   })
-  vueApply('#vue-requestbasketform', true)
+  vueApply('#vue-BasketRequestForm')
 })
