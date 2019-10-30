@@ -144,7 +144,7 @@ final class MessageModel extends Db
 			$sql = '
 				SELECT
 					DISTINCT fs.id AS id,
-					CONCAT(fs.name," ",fs.nachname," (",fs.id) AS value
+					CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value
 
 				FROM
 					fs_foodsaver fs,
