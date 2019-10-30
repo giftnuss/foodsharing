@@ -20,11 +20,12 @@ class SearchGateway extends BaseGateway
 	 * Searches the given term in the database of regions, foodsavers and companies.
 	 *
 	 * @param string $q Query string / search term
-	 * @param int $region_to_search Optional region id to limit search to
+	 * @param bool $showDetails show detailed address info if true. Show only city if false
+	 * @param bool $region_to_search Optional region id to limit search to
 	 *
 	 * @return array Array of regions, foodsavers and stores containing the search term
 	 */
-	public function search($q, $showDetails, $region_to_search = false): array
+	public function search($q, bool $showDetails, $region_to_search = false): array
 	{
 		$out = array();
 
