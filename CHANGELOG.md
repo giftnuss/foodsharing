@@ -7,6 +7,7 @@
 - Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
 - Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
 - Add amount of foodsavers to in-/active lists in region foodsaver menu !1117 @jofranz
+- Add foodsaver id to store team search results when manually adding a foodsaver #660 !1150 @jofranz
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
