@@ -882,7 +882,7 @@ class Utils
 		$post = '';
 
 		if (isset($option['valueOptions'])) {
-			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 0}';
+			$source = 'autocompleteOptions: {source: ' . json_encode($option['valueOptions']) . ',minLength: 4}';
 		}
 
 		$this->pageHelper->addJs('
