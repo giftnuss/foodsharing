@@ -91,6 +91,7 @@ import i18n from '@/i18n'
 import conv from '@/conv'
 
 export default {
+  components: { BFormTextarea, BModal },
   props: {
     basketId: {
       type: Number,
