@@ -11,6 +11,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class ForumService
 {
@@ -171,6 +172,11 @@ class ForumService
 
 	private function notifyUsersNewThread($region, $threadId, $ambassadorForum)
 	{
+		$regionType = $this->regionGateway->getType($region['id']);
+		if (!$ambassadorForum && $regionType != Type::COUNTRY && $regionType != Type::FEDERAL_STATE) {
+			return;
+		}
+
 		$theme = $this->model->getValues(array('foodsaver_id', 'name', 'last_post_id'), 'theme', $threadId);
 		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
 
