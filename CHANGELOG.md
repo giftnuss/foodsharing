@@ -19,6 +19,7 @@
 - Automatically relogin after joining work group !1113 #125 @alex.simm
 - Disable possibility to show stores for foodsharers #132 !1146 @jofranz 
 - Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
+- Increase search min length in store and fsp team management list #396 !1151 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
