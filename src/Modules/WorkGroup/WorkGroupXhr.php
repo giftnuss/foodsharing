@@ -52,9 +52,11 @@ class WorkGroupXhr extends Control
 			if ($group && $group['apply_type'] == ApplyType::OPEN) {
 				$this->workGroupGateway->addToGroup($_GET['id'], $this->session->id());
 
+				$url = urlencode('/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall');
+
 				return array(
 					'status' => 1,
-					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall");'
+					'script' => 'goTo("/?page=relogin&url=' . $url . '");'
 				);
 			}
 		}

@@ -276,7 +276,7 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		return $this->db->fetchAll('
 			SELECT	DISTINCT fs.`id`,
-					CONCAT(fs.`name`," ",fs.`nachname` ) AS value
+					CONCAT(fs.`name`," ",fs.`nachname`," (",fs.`id`,")") AS value
 
 			FROM 	fs_foodsaver fs,
 					fs_foodsaver_has_bezirk hb

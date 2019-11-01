@@ -105,7 +105,7 @@ final class RegionControl extends Control
 		if ($isWorkGroup) {
 			$menu[] = ['name' => 'terminology.wall', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=wall'];
 			if ($region['has_children'] === 1) {
-				$menu[] = ['name' => 'terminology.subgroup', 'href' => '/?page=groups&p=' . $regionId];
+				$menu[] = ['name' => 'terminology.subgroups', 'href' => '/?page=groups&p=' . $regionId];
 			}
 			if ($this->session->isAdminFor($regionId) || $this->session->may('orga')) {
 				$menu[] = ['name' => 'Gruppe verwalten', 'href' => '/?page=groups&sub=edit&id=' . $regionId];

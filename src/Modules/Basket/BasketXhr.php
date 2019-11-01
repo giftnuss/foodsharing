@@ -8,14 +8,13 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
-	private $status;
 	private $basketGateway;
 	private $messageModel;
 	private $timeHelper;
@@ -36,16 +35,6 @@ class BasketXhr extends Control
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
 
-		$this->status = [
-			'ungelesen' => Status::REQUESTED_MESSAGE_UNREAD,
-			'gelesen' => Status::REQUESTED_MESSAGE_READ,
-			'abgeholt' => Status::DELETED_PICKED_UP,
-			'abgelehnt' => Status::DENIED,
-			'nicht_gekommen' => Status::NOT_PICKED_UP,
-			'wall_follow' => Status::FOLLOWED,
-			'angeklickt' => Status::REQESTED,
-		];
-
 		parent::__construct();
 
 		/*
@@ -55,7 +44,7 @@ class BasketXhr extends Control
 			'bubble' => true,
 			'login' => true,
 			'basketCoordinates' => true,
-			'closeBaskets' => true,
+			'nearbyBaskets' => true,
 		];
 
 		if (!isset($allowed[$_GET['m']]) && !$this->session->may()) {
@@ -63,7 +52,8 @@ class BasketXhr extends Control
 				[
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translationHelper->s('not_login_hint') . '");',
-				]
+				],
+				JSON_THROW_ON_ERROR
 			);
 			exit();
 		}
@@ -287,15 +277,15 @@ class BasketXhr extends Control
 		$img->saveChanges();
 	}
 
-	public function closeBaskets()
+	public function nearbyBaskets(): void
 	{
 		$xhr = new Xhr();
 
-		if (isset($_GET['choords']) && $basket = $this->basketGateway->listNearbyBasketsByDistance(
+		if (isset($_GET['coordinates']) && $basket = $this->basketGateway->listNearbyBasketsByDistance(
 				$this->session->id(),
 				[
-					'lat' => $_GET['choords'][0],
-					'lon' => $_GET['choords'][1],
+					'lat' => $_GET['coordinates'][0],
+					'lon' => $_GET['coordinates'][1],
 				]
 			)) {
 			$xhr->addData('baskets', $basket);
@@ -344,7 +334,7 @@ class BasketXhr extends Control
 		];
 	}
 
-	public function fsBubble($basket)
+	public function fsBubble($basket): array
 	{
 		$dia = new XhrDialog();
 
@@ -364,69 +354,6 @@ class BasketXhr extends Control
 		$dia->addJs('$(".fsbutton").button();');
 
 		return $dia->xhrout();
-	}
-
-	public function request()
-	{
-		if ($basket = $this->basketGateway->getBasket($_GET['id'])) {
-			$this->basketGateway->setStatus($_GET['id'], Status::REQESTED, $this->session->id());
-			$dia = new XhrDialog();
-			$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
-			$dia->addOpt('width', '90%');
-			$dia->noOverflow();
-			$dia->addContent($this->view->contactTitle($basket));
-
-			$contact_type = [1];
-
-			if (!empty($basket['contact_type'])) {
-				$contact_type = explode(':', $basket['contact_type']);
-			}
-
-			if (in_array(2, $contact_type)) {
-				$dia->addContent($this->view->contactNumber($basket));
-			}
-			if (in_array(1, $contact_type)) {
-				$dia->addContent($this->view->contactMsg());
-				$dia->addButton(
-					$this->translationHelper->s('send_request'),
-					'ajreq(\'sendreqmessage\',{appost:0,app:\'basket\',id:' . (int)$_GET['id'] . ',msg:$(\'#contactmessage\').val()});'
-				);
-			}
-
-			return $dia->xhrout();
-		}
-	}
-
-	public function sendreqmessage()
-	{
-		if ($fs_id = $this->model->getVal('foodsaver_id', 'basket', $_GET['id'])) {
-			$msg = strip_tags($_GET['msg']);
-			$msg = trim($msg);
-			if (!empty($msg)) {
-				$this->messageModel->message($fs_id, $msg);
-				$this->mailMessage($this->session->id(), $fs_id, $msg, 'basket/request');
-				$this->basketGateway->setStatus($_GET['id'], Status::REQUESTED_MESSAGE_UNREAD, $this->session->id());
-
-				return [
-					'status' => 1,
-					'script' => '
-						if($(".xhrDialog").length > 0){
-							$(".xhrDialog").dialog("close");
-						}
-						pulseInfo("' . $this->translationHelper->s('sent_request') . '");',
-				];
-			}
-
-			return [
-				'status' => 1,
-				'script' => 'pulseError("' . $this->translationHelper->s('basket_error_message') . '");',
-			];
-		}
-
-		return [
-			'status' => 1,
-			'script' => 'pulseError("' . $this->translationHelper->s('error_default') . '");',
-		];
 	}
 
 	public function infobar(): void
@@ -473,23 +400,6 @@ class BasketXhr extends Control
 		$xhr->send();
 	}
 
-	public function answer()
-	{
-		$basketId = (int)$_GET['id'];
-		$fsId = (int)$_GET['fid'];
-
-		if ($id = $this->model->getVal('foodsaver_id', 'basket', $basketId)) {
-			if ($id == $this->session->id()) {
-				$this->basketGateway->setStatus($basketId, Status::REQUESTED_MESSAGE_READ, $fsId);
-
-				return array(
-					'status' => 1,
-					'script' => 'chat(' . $fsId . ');basketStore.loadBaskets();',
-				);
-			}
-		}
-	}
-
 	public function removeRequest()
 	{
 		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], $this->session->id())) {
@@ -514,19 +424,23 @@ class BasketXhr extends Control
 					[
 						'values' => [
 							[
-								'id' => Status::DELETED_PICKED_UP,
+								'id' => RequestStatus::DELETED_PICKED_UP,
 								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
 							],
 							[
-								'id' => Status::NOT_PICKED_UP,
+								'id' => RequestStatus::NOT_PICKED_UP,
 								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
 							],
 							[
-								'id' => Status::DELETED_OTHER_REASON,
+								'id' => RequestStatus::DELETED_OTHER_REASON,
 								'name' => $this->translationHelper->s('basket_deleted_other_reason'),
 							],
+							[
+								'id' => RequestStatus::DENIED,
+								'name' => $this->translationHelper->s('basket_request_deny'),
+							],
 						],
-						'selected' => Status::DELETED_PICKED_UP,
+						'selected' => RequestStatus::DELETED_PICKED_UP,
 					]
 				)
 			);
@@ -660,7 +574,7 @@ class BasketXhr extends Control
 		];
 	}
 
-	private function preparePicture($filename): string
+	private function preparePicture(string $filename): string
 	{
 		$pic = preg_replace('/[^a-z0-9\.]/', '', $filename);
 		if (!empty($pic) && file_exists('tmp/' . $pic)) {

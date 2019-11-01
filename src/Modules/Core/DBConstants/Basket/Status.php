@@ -1,11 +1,11 @@
 <?php
 
-// table fs_basket_anfrage
+// table fs_basket
 
-namespace Foodsharing\Modules\Core\DBConstants\BasketRequests;
+namespace Foodsharing\Modules\Core\DBConstants\Basket;
 
 /**
- * The current status of food basket requests
+ * The current status of food basket
  * TINYINT(2) UNSIGNED | DEFAULT NULL.
  */
 class Status

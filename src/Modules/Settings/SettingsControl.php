@@ -142,7 +142,7 @@ class SettingsControl extends Control
 			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
 				$this->handleQuizStatus($quiz, $quizRole);
 			} else {
-				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support:<a href=mailto:' . SUPPORT_EMAIL . '"">' . SUPPORT_EMAIL . '</a>'));
+				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support: <a href=mailto:' . SUPPORT_EMAIL . '>' . SUPPORT_EMAIL . '</a>'));
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {

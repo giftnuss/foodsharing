@@ -6,33 +6,6 @@ use Foodsharing\Modules\Core\View;
 
 final class MessageView extends View
 {
-	public function top(): string
-	{
-		return '
-		<div class="welcome ui-padding margin-bottom ui-corner-all">
-
-			<div class="welcome_profile_image">
-				<a onclick="profile(56);return false;" href="#">
-					<img width="50" height="50" src="/img/message.png" alt="' . $this->translationHelper->s('messages') . '" class="image_online">
-				</a>
-			</div>
-			<div class="welcome_profile_name">
-				<div class="user_display_name">
-					' . $this->translationHelper->s('your_messages') . '
-				</div>
-				<div class="welcome_quick_link">
-
-					<div class="clear"></div>
-				</div>
-			</div>
-			<div class="welcome_profile_survived v-desktop">
-				<a class="button" href="#">' . $this->translationHelper->s('new_message') . '</a>
-			</div>
-
-			<div class="clear"></div>
-		</div>';
-	}
-
 	public function leftMenu(): string
 	{
 		return $this->menu(array(

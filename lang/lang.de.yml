@@ -138,7 +138,7 @@ terminology:
   fsp: Fair-Teiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
-  subgroup: Untergruppen
+  subgroups: Untergruppen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'

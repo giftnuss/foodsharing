@@ -53,6 +53,7 @@ $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->click('Essenskorb bearbeiten');
 $I->waitForText('Essenskorb bearbeiten');
+$I->waitForElement('#description');
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
 $I->waitForText('Geändert am');
@@ -80,7 +81,7 @@ $nick->does(function (AcceptanceTester $I) use ($id, $picker) {
 });
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
-$I->waitForText('1 Anfrage');
+$I->waitForText('Anfragen 1');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');

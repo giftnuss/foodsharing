@@ -142,7 +142,7 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$this->assertFalse($this->service->joinPickup($store['id'], new Carbon('2150-01-01 00:00:00'), $foodsaver['id']));
 		$this->assertFalse($this->service->joinPickup($store['id'], new Carbon('2150-01-02 00:00:00'), $foodsaver['id']));
 
-		// As we can't cange the NOW() time in the database for the test, we have to move one fetch date to the past:
+		// As we can't change the NOW() time in the database for the test, we have to move one fetch date to the past:
 		$this->tester->updateInDatabase(
 			'fs_abholer',
 			['date' => '1970-01-01 00:00:00'],

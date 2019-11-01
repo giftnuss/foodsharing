@@ -72,7 +72,7 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 		$this->assertIsArray($result);
 
 		//non-existing basket
-		$this->assertEquals(false, $this->gateway->getBasket(99999));
+		$this->assertEquals([], $this->gateway->getBasket(99999));
 	}
 
 	public function testListNewestBaskets()

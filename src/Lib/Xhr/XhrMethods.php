@@ -372,7 +372,7 @@ class XhrMethods
 		if (isset($data['types']) && is_array($data['types'])) {
 			$out['status'] = 1;
 			foreach ($data['types'] as $t) {
-				if ($t == 'betriebe') {
+				if ($t == 'betriebe' && $this->session->may('fs')) {
 					$team_status = array();
 					$nkoorp = '';
 					if (isset($data['options']) && is_array($data['options'])) {

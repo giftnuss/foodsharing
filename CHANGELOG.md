@@ -6,10 +6,21 @@
 - Add email shortcut to regions and workgroup side menu !1118 @jofranz
 - Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
 - Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
+- Add amount of foodsavers to in-/active lists in region foodsaver menu !1117 @jofranz
+- Add foodsaver id to store team search results when manually adding a foodsaver #660 !1150 @jofranz
+- Add foodsaver id to search results when starting a new chat #660 !1149 @jofranz
+- The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
-- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm 
+- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
+- Removed hidden profile pic in settings !1090 @chriswalg
+- Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
+- When answering a long e-mail, the send and cancel button disappeared. The buttons moved next to fileupload #404 !1127 @chriswalg
+- Automatically relogin after joining work group !1113 #125 @alex.simm
+- Disable possibility to show stores for foodsharers #132 !1146 @jofranz 
+- Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
+- Increase search min length in store and fsp team management list #396 !1151 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
@@ -19,6 +30,7 @@
 - refactrored the food share point module !1108 !1105 @peter.toennies
 
 ## Dev/Test/CI stuff
+- Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
 
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
@@ -172,6 +184,7 @@ And we have even included some new features for you.
 - updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
+- add caching for volumes in dev mode !1075 
 
 # 2019-08-30 Hotfix
 - Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects

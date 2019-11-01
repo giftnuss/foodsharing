@@ -160,8 +160,6 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
-		$this->pageHelper->addContent($this->view->becomeFoodsaver());
-
 		$this->pageHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$cnt = $this->contentGateway->get(33);
@@ -174,12 +172,14 @@ class DashboardControl extends Control
 			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
-		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
+
+		$this->pageHelper->addContent($this->view->becomeFoodsaver());
 
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
-			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
@@ -242,7 +242,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-         
+
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
