@@ -120,6 +120,9 @@ final class RegionXhr extends Control
 			return array('status' => 1);
 		}
 
-		return array('status' => 0);
+		return [
+			'status' => 0,
+			'script' => 'pulseInfo("Du kannst dich nicht löschen");'
+		];
 	}
 }
