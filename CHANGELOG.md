@@ -30,6 +30,7 @@
 - Admins of newsletter workgroup (331) now have access to the newsletter module additional to orga members !1235 !1256 @jofranz
 - Show a error message, if changing a mail address failed !1091 @chriswalg
 - Add info about limitations of nightly slot warnings !1275 @jofranz
+- Send an email to the amb and group workgroups (AGs) if the last admin/amb leaves a workgroup/region !1153 @jofranz
 
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
