@@ -77,7 +77,7 @@ class FoodSharePointControl extends Control
 					$this->v_utils->v_info($this->translationHelper->s('no_food_share_point_available'))
 				);
 			}
-			$this->pageHelper->addContent($this->view->ftOptions($this->regionId), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->foodSharePointOptions($this->regionId), CNT_RIGHT);
 		}
 	}
 

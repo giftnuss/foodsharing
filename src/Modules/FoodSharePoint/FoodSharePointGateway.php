@@ -103,9 +103,9 @@ class FoodSharePointGateway extends BaseGateway
 					`fs_foodsaver` fs
 
 			WHERE 	ff.foodsaver_id = fs.id
-			AND 	ff.fairteiler_id = :id
+			AND 	ff.fairteiler_id = :fspId
 		',
-			[':id' => $fspId]
+			[':fspId' => $fspId]
 		);
 	}
 
@@ -267,10 +267,10 @@ class FoodSharePointGateway extends BaseGateway
 			FROM 	fs_foodsaver fs,
 					fs_fairteiler_follower ff
 			WHERE 	ff.foodsaver_id = fs.id
-			AND 	ff.fairteiler_id = :id
+			AND 	ff.fairteiler_id = :foodSharePointId
 
 		',
-			[':id' => $foodSharePointId]
+			[':foodSharePointId' => $foodSharePointId]
 		);
 		$normal = [];
 		$fspManagers = [];
@@ -345,9 +345,9 @@ class FoodSharePointGateway extends BaseGateway
 
 
 			ON 	ft.add_foodsaver = fs.id
-			WHERE 	ft.id = :id
+			WHERE 	ft.id = :foodSharePointId
 		',
-			[':id' => $foodSharePointId]
+			[':foodSharePointId' => $foodSharePointId]
 		)
 		) {
 			$foodSharePoint['pic'] = false;
