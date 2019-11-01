@@ -17,6 +17,7 @@ final class RegionXhr extends Control
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
+	private $regionGateway;
 
 	public function __construct(
 		RegionGateway $regionGateway,
@@ -25,7 +26,8 @@ final class RegionXhr extends Control
 		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		RegionGateway $regionGateway
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -34,6 +36,7 @@ final class RegionXhr extends Control
 		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
+		$this->regionGateway = $regionGateway;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
@@ -114,15 +117,29 @@ final class RegionXhr extends Control
 	public function signout(): array
 	{
 		$data = $_GET;
-		if ($this->session->mayBezirk($data['bid']) && !$this->session->isAdminFor($data['bid'])) {
-			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
+		$groupId = (int)$data['bid'];
+		unset($data);
 
-			return array('status' => 1);
+		if ($this->session->mayBezirk($groupId)) {
+			$wasAdminForThisGroup = $this->session->isAdminFor($groupId);
+			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
+
+			if ($wasAdminForThisGroup && count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
+				$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network'];
+				$groupName = $this->regionGateway->getRegionName($groupId);
+				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'groupName' => $groupName]);
+
+				$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
+					'gruppenname' => $groupName,
+					'message' => $messageText,
+					'username' => $this->session->user('name'),
+					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
+				], $this->session->user('email'));
+			}
+
+			return ['status' => 1];
 		}
 
-		return [
-			'status' => 0,
-			'script' => 'pulseInfo("Du kannst dich nicht löschen");'
-		];
+		return ['status' => 0];
 	}
 }
