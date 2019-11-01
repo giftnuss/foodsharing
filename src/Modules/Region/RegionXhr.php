@@ -114,7 +114,7 @@ final class RegionXhr extends Control
 	public function signout(): array
 	{
 		$data = $_GET;
-		if ($this->session->mayBezirk($data['bid'])) {
+		if ($this->session->mayBezirk($data['bid']) && !$this->session->isAdminFor($data['bid'])) {
 			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
 
 			return array('status' => 1);
