@@ -26,5 +26,5 @@ $g_lang['online'] = 'Multilokal auf mumble.foodsharing.de';
 $g_lang['mumble_room'] = 'In welchem mumble Konferenzraum treffen wir uns?';
 $g_lang['dateend'] = 'Enddatum';
 $g_lang['post_could_not_saved'] = 'Post konnte nicht gespeichert werden.';
-$g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br>Die ID lautet: {groupId}';
+$g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';
 $g_lang['redirect_to_forum_no_workgroup'] = 'Für Regionen gibt es keine Pinnwand. Du wurdest zum Forum weitergeleitet.';
