@@ -127,7 +127,9 @@ final class RegionXhr extends Control
 			if ($wasAdminForThisGroup && count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
 				$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network'];
 				$groupName = $this->regionGateway->getRegionName($groupId);
-				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'groupName' => $groupName]);
+				$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
+				$idStructure = implode('<br>', $idStructure);
+				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructure' => $idStructure, 'groupName' => $groupName]);
 
 				$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
 					'gruppenname' => $groupName,
