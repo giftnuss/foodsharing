@@ -19,6 +19,16 @@ And make sure you have
 [Docker Compose](https://docs.docker.com/compose/install/) (at least version 1.6.0)
 installed too (often comes with Docker).
 
+The current version of Fedora 31 switched to using cgroupsV2 by default, which is not yet supported.
+
+To disable v2 cgroups, run: 
+
+```
+sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+```
+And restart your machine.
+
+
 If you cannot connect to Docker with your local user, then you may want to add yourself to the Docker group:
 
 ```
