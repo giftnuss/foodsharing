@@ -96,8 +96,12 @@ if ($('#mapsearch').length > 0) {
 }
 
 $(document).ready(() => {
-  vueRegister({
-    RequestForm
-  })
-  vueApply('#vue-BasketRequestForm')
+  // Container only exists if the current user is not the basket offerer
+  var requestFormContainerId = 'vue-BasketRequestForm'
+  if (document.getElementById(requestFormContainerId)) {
+    vueRegister({
+      RequestForm
+    })
+    vueApply('#' + requestFormContainerId)
+  }
 })
