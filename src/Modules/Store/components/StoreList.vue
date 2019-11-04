@@ -156,7 +156,7 @@ export default {
   },
   data () {
     return {
-      sortBy: 'name',
+      sortBy: 'added',
       currentPage: 1,
       perPage: 20,
       filterText: '',
