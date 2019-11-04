@@ -128,8 +128,14 @@ final class RegionXhr extends Control
 				$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network'];
 				$groupName = $this->regionGateway->getRegionName($groupId);
 				$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
-				$idStructure = implode('<br>', $idStructure);
-				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructure' => $idStructure, 'groupName' => $groupName]);
+
+				$idStructureList = [];
+				foreach ($idStructure as $id) {
+					$idStructureList[] = '' . $id . '  -  ' . $this->regionGateway->getRegionName($id) . '';
+ 				}
+				$idStructureList = implode('<br>', $idStructureList);
+
+				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, '$idStructureList' => $idStructureList, 'groupName' => $groupName]);
 
 				$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
 					'gruppenname' => $groupName,
