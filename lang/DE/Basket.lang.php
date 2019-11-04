@@ -73,4 +73,3 @@ $g_lang['basket_picked_up'] = '<b>Dieser Essenskorb ist leider nicht mehr verfü
 $g_lang['basket_detail_login_hint'] = 'Für detaillierte Infos musst Du eingeloggt sein. Bist Du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen!';
 $g_lang['basket_on_map'] = 'Alle Körbe auf der Karte';
 $g_lang['not_login_hint'] = 'Du bist nicht eingeloggt, vielleicht ist Deine Session abgelaufen, bitte logge Dich ein und sende Deine Anfrage erneut ab.';
-$g_lang['warning'] = 'Warnung';

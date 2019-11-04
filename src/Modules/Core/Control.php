@@ -333,10 +333,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		/* disable food basket comments during migration period (max. 3 weeks after release) until there are no pre existing baskets with comments left.
-		 * #todo @jo remove this check and food basket comment section entirely afterwards
-		 */
-		if ($this->session->may() && $table != 'basket') {
+		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>

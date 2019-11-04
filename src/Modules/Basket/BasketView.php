@@ -68,7 +68,7 @@ class BasketView extends View
 		</div>';
 	}
 
-	public function basket(array $basket, $wallposts, $requests): void
+	public function basket(array $basket, $requests): void
 	{
 		$page = new vPage(
 			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
@@ -86,10 +86,8 @@ class BasketView extends View
 
 		$page->setSubTitle($this->getSubtitle($basket));
 
-		if ($wallposts) {
-			$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])), $this->translationHelper->s('warning'));
-			$page->addSection($wallposts, $this->translationHelper->s('wallboard'));
-		}
+		$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])));
+
 		if ($this->session->may()) {
 			$page->addSectionRight($this->userBox($basket, $requests), $this->translationHelper->s('provider'));
 
