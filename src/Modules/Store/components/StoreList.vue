@@ -52,6 +52,7 @@
           :current-page="currentPage"
           :per-page="perPage"
           :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
           :items="storesFiltered"
           small
           hover
@@ -157,6 +158,7 @@ export default {
   data () {
     return {
       sortBy: 'added',
+      sortDesc: 'true',
       currentPage: 1,
       perPage: 20,
       filterText: '',
