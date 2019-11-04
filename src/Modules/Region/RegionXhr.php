@@ -132,7 +132,7 @@ final class RegionXhr extends Control
 				$idStructureList = [];
 				foreach ($idStructure as $id) {
 					$idStructureList[] = '' . $id . '  -  ' . $this->regionGateway->getRegionName($id) . '';
- 				}
+				}
 				$idStructureList = implode('<br>', $idStructureList);
 
 				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, '$idStructureList' => $idStructureList, 'groupName' => $groupName]);
