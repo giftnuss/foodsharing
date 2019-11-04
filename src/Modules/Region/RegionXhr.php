@@ -121,29 +121,7 @@ final class RegionXhr extends Control
 		unset($data);
 
 		if ($this->session->mayBezirk($groupId)) {
-			$wasAdminForThisGroup = $this->session->isAdminFor($groupId);
 			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-
-			if ($wasAdminForThisGroup && count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
-				$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network'];
-				$groupName = $this->regionGateway->getRegionName($groupId);
-				$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
-
-				$idStructureList = [];
-				foreach ($idStructure as $id) {
-					$idStructureList[] = '' . $id . '  -  ' . $this->regionGateway->getRegionName($id) . '';
-				}
-				$idStructureList = implode('<br>', $idStructureList);
-
-				$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, '$idStructureList' => $idStructureList, 'groupName' => $groupName]);
-
-				$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
-					'gruppenname' => $groupName,
-					'message' => $messageText,
-					'username' => $this->session->user('name'),
-					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-				], $this->session->user('email'));
-			}
 
 			return ['status' => 1];
 		}

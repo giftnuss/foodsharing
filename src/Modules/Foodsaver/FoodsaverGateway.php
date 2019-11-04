@@ -12,21 +12,25 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Services\NotificationService;
 
 final class FoodsaverGateway extends BaseGateway
 {
 	private $dataHelper;
 	private $forumFollowerGateway;
+	private $notificationService;
 
 	public function __construct(
 		Database $db,
 		DataHelper $dataHelper,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		NotificationService $notificationService
 	) {
 		parent::__construct($db);
 
 		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
+		$this->notificationService = $notificationService;
 	}
 
 	public function getFoodsaversByRegion(int $regionId, bool $hideRecentlyOnline = false): array
@@ -770,6 +774,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 
+		$this->notificationService->sendEmailIfLastAdminLeftGroup($bezirk_id);
 		$this->forumFollowerGateway->deleteForumSubscription($regionId, $fsId);
 
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $fsId]);
