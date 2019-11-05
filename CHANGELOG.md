@@ -24,6 +24,7 @@
 - Increase search min length in store and fsp team management list #396 !1151 @jofranz
 - Do not initialise ReportList vue component if it is not shown !1159 @dthulke
 - Ensures quiz break message after three failures inbetween 30 days #736 !1162 @svenpascal
+- Prevent forum thread email sending to countries and federal states !1160 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
