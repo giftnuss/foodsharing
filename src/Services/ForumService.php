@@ -183,9 +183,9 @@ class ForumService
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 
 		if ($ambassadorForum) {
-			$foodsaver = $this->foodsaverGateway->getBotschafter($region['id']);
+			$recipients = $this->foodsaverGateway->getBotschafter($region['id']);
 		} else {
-			$foodsaver = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
+			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
 		}
 
 		$data = [
@@ -195,7 +195,7 @@ class ForumService
 			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
-		$this->notificationMail($foodsaver,
+		$this->notificationMail($recipients,
 			$ambassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
 	}
 
