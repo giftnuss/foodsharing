@@ -238,3 +238,5 @@ $g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
 $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';
+
+$g_lang['no_email_to_states'] = 'Für dieses Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.';

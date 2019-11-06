@@ -12,6 +12,7 @@ use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Helpers\FlashMessageHelper;
 
 class ForumService
 {
@@ -26,6 +27,7 @@ class ForumService
 	private $sanitizerService;
 	private $emailHelper;
 	private $translationHelper;
+	private $flashMessageHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -37,7 +39,8 @@ class ForumService
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		FlashMessageHelper $flashMessageHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -49,6 +52,7 @@ class ForumService
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->flashMessageHelper = $flashMessageHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -174,6 +178,8 @@ class ForumService
 	{
 		$regionType = $this->regionGateway->getType($regionData['id']);
 		if (!$isAmbassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('no_email_to_states'));
+
 			return;
 		}
 
