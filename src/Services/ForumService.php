@@ -107,7 +107,7 @@ class ForumService
 		if (!$isActive) {
 			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
-			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
+			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
 		}
 
 		return $threadId;
@@ -118,7 +118,7 @@ class ForumService
 		$this->forumGateway->activateThread($threadId);
 		/* TODO: this needs proper first activation handling */
 		if ($region) {
-			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
+			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
 		}
 	}
 
@@ -170,10 +170,10 @@ class ForumService
 		}
 	}
 
-	private function notifyUsersNewThread(array $region, int $threadId, bool $ambassadorForum)
+	private function notifyMembersOfForumAboutNewThreadViaMail(array $regionData, int $threadId, bool $isAmbassadorForum)
 	{
-		$regionType = $this->regionGateway->getType($region['id']);
-		if (!$ambassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
+		$regionType = $this->regionGateway->getType($regionData['id']);
+		if (!$isAmbassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
 			return;
 		}
 
@@ -182,21 +182,21 @@ class ForumService
 
 		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
 
-		if ($ambassadorForum) {
-			$recipients = $this->foodsaverGateway->getBotschafter($region['id']);
+		if ($isAmbassadorForum) {
+			$recipients = $this->foodsaverGateway->getBotschafter($regionData['id']);
 		} else {
-			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
+			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($regionData['id']);
 		}
 
 		$data = [
-			'bezirk' => $region['name'],
+			'bezirk' => $regionData['name'],
 			'poster' => $poster,
 			'thread' => $theme['name'],
-			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
+			'link' => BASE_URL . $this->url($regionData['id'], $isAmbassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
 		$this->notificationMail($recipients,
-			$ambassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
+			$isAmbassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
 	}
 
 	public function addReaction($fsId, $postId, $key)
