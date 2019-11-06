@@ -170,7 +170,7 @@ class ForumService
 		}
 	}
 
-	private function notifyUsersNewThread($region, $threadId, $ambassadorForum)
+	private function notifyUsersNewThread(array $region, int $threadId, bool $ambassadorForum)
 	{
 		$regionType = $this->regionGateway->getType($region['id']);
 		if (!$ambassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
