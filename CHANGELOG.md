@@ -11,6 +11,7 @@
 - Add foodsaver id to search results when starting a new chat #660 !1149 @jofranz
 - The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
 - Add fs id to food share point admin management search results #660 !1152 @jofranz
+- Sort the stores-list by the added-on date as default !1161 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
