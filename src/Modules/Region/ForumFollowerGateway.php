@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
 {
-	public function getThreadFollower($fs_id, $thread_id)
+	public function getThreadEmailFollower($fs_id, $thread_id)
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.name,
@@ -20,6 +20,7 @@ class ForumFollowerGateway extends BaseGateway
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
 			AND		fs.deleted_at IS NULL
+			AND		tf.email_notification = 1
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
@@ -49,9 +50,9 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function followThread($fs_id, $thread_id)
+	public function followThreadByEmail($fs_id, $thread_id)
 	{
-		return $this->db->insertIgnore(
+		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
 			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::EMAIL]
 		);
@@ -69,18 +70,15 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function unfollowThread(int $fsId, int $threadId): int
+	public function followThreadByBell($fs_id, $thread_id)
 	{
-		return $this->db->delete(
+		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $threadId
-			]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => 1]
 		);
 	}
 
-	public function unfollowThreads(int $fsId, array $threadIds): int
+	public function deleteAllThreadSubscriptionTypes(int $fsId, array $threadIds): int
 	{
 		return $this->db->delete(
 			'fs_theme_follower',
@@ -88,6 +86,22 @@ class ForumFollowerGateway extends BaseGateway
 				'foodsaver_id' => $fsId,
 				'theme_id' => $threadIds
 			]
+		);
+	}
+
+	public function unfollowThreadByEmail($fs_id, $thread_id)
+	{
+		return $this->db->insertOrUpdate(
+			'fs_theme_follower',
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 0]
+		);
+	}
+
+	public function unfollowThreadByBell($fs_id, $thread_id)
+	{
+		return $this->db->insertOrUpdate(
+			'fs_theme_follower',
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => 0]
 		);
 	}
 

@@ -23,7 +23,13 @@
             class="btn btn-sm btn-secondary ml-2"
             @click="toggleFollow"
           >
-            {{ $i18n(isFollowing ? 'forum.unfollow' : 'forum.follow') }}
+            {{ $i18n(isFollowing ? 'forum.unfollow.email' : 'forum.follow.email') }}
+          </a>
+          <a
+            @click="toggleFollowBell"
+            class="btn btn-sm btn-secondary ml-2"
+          >
+            {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
           </a>
           <a
             v-if="mayModerate"
@@ -75,6 +81,7 @@
         :created-at="new Date(post.createdAt)"
         @delete="deletePost(post)"
         @toggleFollow="toggleFollow"
+        @toggleFollowBell="toggleFollowBell"
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
         @reply="reply"
@@ -146,6 +153,7 @@ export default {
       mayModerate: false,
       mayDelete: false,
       isFollowing: true,
+      isFollowingBell: true,
 
       isLoading: false,
       loadingPosts: [],
@@ -180,7 +188,8 @@ export default {
           isActive: res.isActive,
           mayModerate: res.mayModerate,
           mayDelete: res.mayDelete,
-          isFollowing: res.isFollowing
+          isFollowing: res.isFollowing,
+          isFollowingBell: res.isFollowingBell
         })
         this.isLoading = false
       } catch (err) {
@@ -249,13 +258,28 @@ export default {
       this.isFollowing = targetState
       try {
         if (targetState) {
-          await api.followThread(this.id)
+          await api.followThreadByEmail(this.id)
         } else {
-          await api.unfollowThread(this.id)
+          await api.unfollowThreadByEmail(this.id)
         }
       } catch (err) {
         // failed? undo it
         this.isFollowing = !targetState
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async toggleFollowBell () {
+      const targetState = !this.isFollowingBell
+      this.isFollowingBell = targetState
+      try {
+        if (targetState) {
+          await api.followThreadByBell(this.id)
+        } else {
+          await api.unfollowThreadByBell(this.id)
+        }
+      } catch (err) {
+        // failed? undo it
+        this.isFollowingBell = !targetState
         pulseError(i18n('error_unexpected'))
       }
     },

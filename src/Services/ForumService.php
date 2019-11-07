@@ -63,9 +63,9 @@ class ForumService
 		return $url;
 	}
 
-	public function notifyParticipantsViaBell($threadId, $authorId, $postId)
+	public function notifyFollowersViaBell($threadId, $authorId, $postId)
 	{
-		$posts = $this->forumGateway->listPosts($threadId);
+		$posts = $this->forumGateway->listBellSubscriptions($threadId);
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
@@ -94,8 +94,8 @@ class ForumService
 	{
 		$rawBody = $body;
 		$pid = $this->forumGateway->addPost($fsId, $threadId, $body);
-		$this->notifyFollowersNewPost($threadId, $rawBody, $fsId, $pid);
-		$this->notifyParticipantsViaBell($threadId, $fsId, $pid);
+		$this->notifyFollowersViaMail($threadId, $rawBody, $fsId, $pid);
+		$this->notifyFollowersViaBell($threadId, $fsId, $pid);
 
 		return $pid;
 	}
@@ -140,9 +140,9 @@ class ForumService
 		}
 	}
 
-	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
+	public function notifyFollowersViaMail($threadId, $rawPostBody, $postFrom, $postId)
 	{
-		if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $threadId)) {
+		if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$posterName = $this->foodsaverGateway->getFoodsaverName($this->session->id());
 			$data = [

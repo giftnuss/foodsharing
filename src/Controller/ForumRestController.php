@@ -210,25 +210,48 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Post("forum/thread/{threadId}/follow", requirements={"threadId" = "\d+"})
+	 * @Rest\Post("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
-	public function followThreadAction($threadId)
+	public function followThreadByEmailAction($threadId)
 	{
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
 		}
-
-		$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
+		$this->forumFollowerGateway->followThreadByEmail($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
 	}
 
 	/**
-	 * @Rest\Delete("forum/thread/{threadId}/follow", requirements={"threadId" = "\d+"})
+	 * @Rest\Post("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
-	public function unfollowThreadAction($threadId)
+	public function followThreadByBellAction($threadId)
 	{
-		$this->forumFollowerGateway->unfollowThread($this->session->id(), $threadId);
+		if (!$this->forumPermissions->mayAccessThread($threadId)) {
+			throw new HttpException(403);
+		}
+
+		$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);
+
+		return $this->handleView($this->view([]));
+	}
+
+	/**
+	 * @Rest\Delete("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
+	 */
+	public function unfollowThreadByEmailAction($threadId)
+	{
+		$this->forumFollowerGateway->unfollowThreadByEmail($this->session->id(), $threadId);
+
+		return $this->handleView($this->view([]));
+	}
+
+	/**
+	 * @Rest\Delete("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
+	 */
+	public function unfollowThreadByBellAction($threadId)
+	{
+		$this->forumFollowerGateway->unfollowThreadByBell($this->session->id(), $threadId);
 
 		return $this->handleView($this->view([]));
 	}

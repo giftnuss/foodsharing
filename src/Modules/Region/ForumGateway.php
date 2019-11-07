@@ -129,7 +129,8 @@ class ForumGateway extends BaseGateway
 			'active' => $isActive,
 		]);
 
-		$this->forumFollowerGateway->followThread($foodsaverId, $threadId);
+		$this->forumFollowerGateway->followThreadByEmail($foodsaverId, $threadId);
+		$this->forumFollowerGateway->followThreadByBell($foodsaverId, $threadId);
 
 		$this->db->insert('fs_bezirk_has_theme', [
 			'bezirk_id' => $regionId,
@@ -294,6 +295,26 @@ class ForumGateway extends BaseGateway
 		$posts = $this->db->fetchAll(
 			$this->getPostSelect() . ' 
 			WHERE 		p.theme_id = :threadId
+
+			ORDER BY 	p.`time`
+		', ['threadId' => $threadId]);
+		$postIds = array_column($posts, 'id');
+		$reactions = $this->getReactionsForPosts($postIds);
+		$mergeReactions = function ($post) use ($reactions) {
+			$post['reactions'] = $reactions[$post['id']];
+
+			return $post;
+		};
+
+		return array_map($mergeReactions, $posts);
+	}
+
+	public function listBellSubscriptions($threadId)
+	{
+		$posts = $this->db->fetchAll(
+			$this->getPostSelect() . ' 
+			WHERE 		p.theme_id = :threadId
+			AND			p.`bell_notification` = 1
 
 			ORDER BY 	p.`time`
 		', ['threadId' => $threadId]);

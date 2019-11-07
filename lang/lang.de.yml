@@ -237,8 +237,12 @@ forum:
   thread_is_inactive: Thema inaktiv!
   thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
   placeholder_answer: Antworten...
-  unfollow: Thema entfolgen
-  follow: Thema folgen
+  unfollow:
+    bell: Glocke entfolgen
+    email: Mail entfolgen
+  follow:
+    bell: Glocke FOLGEN
+    email: Email FOLGEN
   stick: Thema fixieren
   unstick: Fixierung aufheben
   delete_post: Beitrag löschen
