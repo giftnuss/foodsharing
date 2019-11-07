@@ -233,7 +233,7 @@ forum:
   from: Von %name%
   threads: Themen
   new_thread: Neues Thema verfassen
-  subscribe_thread: Möchtest Du über dieses Thema auf dem Laufenden gehalten werden?
+  subscribe_thread_email: Möchtest Du per E-Mail über dieses Thema auf dem Laufenden gehalten werden?
   thread_is_inactive: Thema inaktiv!
   thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
   placeholder_answer: Antworten...

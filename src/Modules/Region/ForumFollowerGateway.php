@@ -55,12 +55,39 @@ class ForumFollowerGateway extends BaseGateway
 		', ['theme_id' => $thread_id]);
 	}
 
-	public function isFollowing($fsId, $threadId)
+	public function getThreadParticipants($thread_id)
+	{
+		return $this->db->fetchAll('
+			SELECT 	DISTINCT fs.id AS author_id
+
+			FROM 	fs_foodsaver fs,
+					fs_theme_post tp
+			WHERE 	tp.foodsaver_id = fs.id
+			AND 	tp.theme_id = :theme_id
+			AND		fs.deleted_at IS NULL
+		', ['theme_id' => $thread_id]);
+	}
+
+	public function isFollowingEmail($fsId, $threadId)
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
-			['theme_id' => $threadId, 'foodsaver_id' => $fsId]
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'infotype' => 1]
 		);
+	}
+
+	public function receivesBell($fsId, $threadId)
+	{
+		$fsIsPartOfConversation = $this->getThreadParticipants($threadId);
+		$fsIsPartOfConversation = array_column($fsIsPartOfConversation, 'author_id');
+		$fsIsPartOfConversation = in_array($fsId, $fsIsPartOfConversation);
+
+		$notificationToggleIsActive = $this->db->exists(
+			'fs_theme_follower',
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'bell_notification' => 1]
+		);
+
+		return $fsIsPartOfConversation || $notificationToggleIsActive;
 	}
 
 	public function followThreadByEmail($fs_id, $thread_id)

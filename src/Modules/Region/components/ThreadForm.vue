@@ -18,10 +18,10 @@
         <div class="row">
           <div class="col ml-2 pt-2">
             <b-form-checkbox
-              :checked="isFollowing"
+              :checked="isFollowingEmail"
               @change="$emit('toggleFollow')"
             >
-              {{ $i18n('forum.subscribe_thread') }}
+              {{ $i18n('forum.subscribe_thread_email') }}
             </b-form-checkbox>
           </div>
           <div class="col-auto text-right">
@@ -45,7 +45,7 @@ import { BFormCheckbox } from 'bootstrap-vue'
 export default {
   components: { BFormCheckbox },
   props: {
-    isFollowing: {
+    isFollowingEmail: {
       type: Boolean,
       default: false
     }

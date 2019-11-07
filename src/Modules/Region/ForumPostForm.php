@@ -14,7 +14,7 @@ class ForumPostForm extends AbstractType
 	{
 		$builder
 			->add('body', TextareaType::class, ['label' => 'forum.placeholder_answer'])
-			->add('subscribe', ChoiceType::class, ['label' => 'forum.subscribe_thread', 'choices' => [
+			->add('subscribe', ChoiceType::class, ['label' => 'forum.subscribe_thread_email', 'choices' => [
 				'yes' => 1,
 				'no' => 0
 			], 'expanded' => true])

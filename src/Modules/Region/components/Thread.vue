@@ -23,7 +23,7 @@
             class="btn btn-sm btn-secondary ml-2"
             @click="toggleFollow"
           >
-            {{ $i18n(isFollowing ? 'forum.unfollow.email' : 'forum.follow.email') }}
+            {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
           </a>
           <a
             @click="toggleFollowBell"
@@ -103,7 +103,7 @@
     </div>
     <ThreadForm
       ref="form"
-      :is-following="isFollowing"
+      :is-following="isFollowingEmail"
       :error-message="errorMessage"
       @submit="createPost"
       @toggleFollow="toggleFollow"
@@ -152,7 +152,7 @@ export default {
       isActive: true,
       mayModerate: false,
       mayDelete: false,
-      isFollowing: true,
+      isFollowingEmail: true,
       isFollowingBell: true,
 
       isLoading: false,
@@ -188,7 +188,7 @@ export default {
           isActive: res.isActive,
           mayModerate: res.mayModerate,
           mayDelete: res.mayDelete,
-          isFollowing: res.isFollowing,
+          isFollowingEmail: res.isFollowingEmail,
           isFollowingBell: res.isFollowingBell
         })
         this.isLoading = false
@@ -254,8 +254,8 @@ export default {
       }
     },
     async toggleFollow () {
-      const targetState = !this.isFollowing
-      this.isFollowing = targetState
+      const targetState = !this.isFollowingEmail
+      this.isFollowingEmail = targetState
       try {
         if (targetState) {
           await api.followThreadByEmail(this.id)
@@ -264,7 +264,7 @@ export default {
         }
       } catch (err) {
         // failed? undo it
-        this.isFollowing = !targetState
+        this.isFollowingEmail = !targetState
         pulseError(i18n('error_unexpected'))
       }
     },

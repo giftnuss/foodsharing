@@ -65,7 +65,11 @@ class ForumService
 
 	public function notifyFollowersViaBell($threadId, $authorId, $postId)
 	{
-		$posts = $this->forumFollowerGateway->getThreadBellFollower($threadId);
+		$actualSubscriptions = $this->forumFollowerGateway->getThreadBellFollower($threadId);
+		$defaultSubscriptions = $this->forumFollowerGateway->getThreadParticipants($threadId);
+
+		$allRecipients = array_replace($defaultSubscriptions, $actualSubscriptions);
+
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
@@ -75,7 +79,7 @@ class ForumService
 		$removeAuthorFsId = function ($id) use ($authorId) {
 			return $id != $authorId;
 		};
-		$fsIds = array_map($getFsId, $posts);
+		$fsIds = array_map($getFsId, $allRecipients);
 		$fsIds = array_filter($fsIds, $removeAuthorFsId);
 		$fsIds = array_unique($fsIds);
 
@@ -142,7 +146,7 @@ class ForumService
 
 	public function notifyFollowersViaMail($threadId, $rawPostBody, $postFrom, $postId)
 	{
-		if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($this->session->id(), $threadId)) {
+		if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($postFrom, $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$posterName = $this->foodsaverGateway->getFoodsaverName($this->session->id());
 			$data = [
