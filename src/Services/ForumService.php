@@ -65,7 +65,7 @@ class ForumService
 
 	public function notifyFollowersViaBell($threadId, $authorId, $postId)
 	{
-		$posts = $this->forumGateway->listBellSubscriptions($threadId);
+		$posts = $this->forumFollowerGateway->getThreadBellFollower($threadId);
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 

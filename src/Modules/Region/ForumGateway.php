@@ -309,26 +309,6 @@ class ForumGateway extends BaseGateway
 		return array_map($mergeReactions, $posts);
 	}
 
-	public function listBellSubscriptions($threadId)
-	{
-		$posts = $this->db->fetchAll(
-			$this->getPostSelect() . ' 
-			WHERE 		p.theme_id = :threadId
-			AND			p.`bell_notification` = 1
-
-			ORDER BY 	p.`time`
-		', ['threadId' => $threadId]);
-		$postIds = array_column($posts, 'id');
-		$reactions = $this->getReactionsForPosts($postIds);
-		$mergeReactions = function ($post) use ($reactions) {
-			$post['reactions'] = $reactions[$post['id']];
-
-			return $post;
-		};
-
-		return array_map($mergeReactions, $posts);
-	}
-
 	public function getPost($postId)
 	{
 		return $this->db->fetch(
