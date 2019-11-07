@@ -20,7 +20,7 @@ class ForumFollowerGateway extends BaseGateway
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
 			AND		fs.deleted_at IS NULL
-			AND		tf.email_notification = 1
+			AND		tf.infotype = 1
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
