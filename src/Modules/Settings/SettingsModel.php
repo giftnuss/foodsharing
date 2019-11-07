@@ -24,22 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getFoodSharePoint()
-	{
-		return $this->q('
-			SELECT 	ft.id,
-					ft.name,
-					ff.infotype,
-					ff.`type`
-
-			FROM 	`fs_fairteiler_follower` ff,
-					`fs_fairteiler` ft
-
-			WHERE 	ff.fairteiler_id = ft.id
-			AND 	ff.foodsaver_id = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function addNewMail($email, $token)
 	{
 		return $this->insert('

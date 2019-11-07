@@ -100,7 +100,7 @@ class SettingsControl extends Control
 
 	public function quizsession()
 	{
-		if ($session = $this->gateway->getQuizSession($_GET['sid'])) {
+		if ($session = $this->gateway->getQuizSession($_GET['sid'], $this->session->id())) {
 			$this->pageHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}
@@ -435,7 +435,7 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$foodSharePoint = $this->model->getFoodSharePoint();
+		$foodSharePoint = $this->gateway->getFoodSharePoint($this->session->id());
 		$threads = $this->model->getForumThreads();
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));

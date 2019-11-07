@@ -58,10 +58,9 @@ class SettingsGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	final public function getQuizSession(int $sessionId): array
+	final public function getQuizSession(int $sessionId, int $fsId): array
 	{
-		$fsId = $this->session->id();
-		if ($session = $this->getQuizSession($sessionId, $fsId)) {
+		if ($session = $this->getQuizSessionForFs($sessionId, $fsId)) {
 			$tmp = array();
 			$session['try_count'] = getQuizSessionTryCount($fsId, $session['quiz_id']);
 
@@ -134,7 +133,7 @@ class SettingsGateway extends BaseGateway
 		return [];
 	}
 
-	private function getQuizSession(int $sessionId, int $fsId): array
+	private function getQuizSessionForFs(int $sessionId, int $fsId): array
 	{
 		return $this->db->fetch('
 			SELECT
@@ -151,7 +150,6 @@ class SettingsGateway extends BaseGateway
 
 			WHERE
 				`id` = :sessionId
-
 			AND
 				`foodsaver_id` = :fsId
 		', [':sessionId' => $sessionId, ':fsId' => $fsId]);
@@ -168,7 +166,6 @@ class SettingsGateway extends BaseGateway
 
 			WHERE
 				foodsaver_id = :fsId
-
 			AND
 				`quiz_id` = :quizId
 		', [':fsId' => $fsId, ':quizId' => $quizId]);
@@ -215,4 +212,25 @@ class SettingsGateway extends BaseGateway
 
 		return $out;
 	}
+
+	public function getFoodSharePoint(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				ft.id,
+				ft.name,
+				ff.infotype,
+				ff.`type`
+
+			FROM
+				`fs_fairteiler_follower` ff,
+				`fs_fairteiler` ft
+
+			WHERE
+				ff.fairteiler_id = ft.id
+			AND
+				ff.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+	}
+
 }
