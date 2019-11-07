@@ -1,6 +1,7 @@
 <?php
 
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizCest
 {
@@ -44,5 +45,18 @@ class QuizCest
 
 		$questionText = $this->quizzes[$quizRole]['questions'][0]['text'];
 		$I->waitForText($questionText);
+	}
+
+	public function mustPauseAfterThreeFailures(AcceptanceTester $I)
+	{
+		foreach (range(1, 3) as $i) {
+			$I->createQuizTry($this->foodsharer['id'], Role::FOODSAVER, SessionStatus::FAILED, 29);
+		}
+
+		$I->login($this->foodsharer['email']);
+		$I->amOnPage($I->upgradeQuizUrl(Role::FOODSAVER));
+		$I->waitForPageBody();
+
+		$I->see('Du hast das Quiz 3x nicht bestanden');
 	}
 }
