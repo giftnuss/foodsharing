@@ -388,9 +388,9 @@ class SettingsControl extends Control
 	{
 		global $g_data;
 		if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'settingsinfo') {
-			$nl = 1;
+			$newsletter = 1;
 			if ($_POST['newsletter'] != 1) {
-				$nl = 0;
+				$newsletter = 0;
 			}
 			$infomail = 1;
 			if ($_POST['infomail_message'] != 1) {
@@ -427,7 +427,7 @@ class SettingsControl extends Control
 				$this->model->unfollowThread($unfollow_thread);
 			}
 
-			if ($this->model->saveInfoSettings($nl, $infomail)) {
+			if ($this->settingsGateway->saveInfoSettings($this->session->id(), $newsletter, $infomail)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 			}
 		}

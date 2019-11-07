@@ -26,6 +26,16 @@ class SettingsGateway extends BaseGateway
 		}
 	}
 
+	public function saveInfoSettings(int $fsId, int $newsletter, int $infomail): int
+	{
+		return $this->db->update(
+			'fs_foodsaver',
+			[
+				'newsletter' => $newsletter,
+				'infomail_message' => $infomail
+			],
+			['id' => $fsId]
+		);
 	public function unsubscribeNewsletter(string $email)
 	{
 		$this->db->update('fs_foodsaver', ['newsletter' => 0], ['email' => $email]);

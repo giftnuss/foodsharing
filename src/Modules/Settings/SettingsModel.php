@@ -24,16 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function saveInfoSettings($newsletter, $infomail)
-	{
-		return $this->update('
-			UPDATE 	`fs_foodsaver`
-			SET 	`newsletter` = ' . (int)$newsletter . ',
-					`infomail_message` = ' . (int)$infomail . '
-			WHERE 	`id` = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function getSleepData()
 	{
 		return $this->qRow('
