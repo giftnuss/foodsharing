@@ -24,48 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	/*
-	 * in the session are only the failed answers stored in so now we get all the right answers an fill out the array
-	 */
-	private function addRightAnswers($indexList, $fullList)
-	{
-		$out = array();
-
-		$number = 0;
-
-		foreach ($indexList as $id => $value) {
-			++$number;
-			if (!isset($fullList[$id])) {
-				if ($question = $this->quizGateway->getQuestion($id)) {
-					$answers = array();
-					if ($qanswers = $this->quizGateway->getAnswers($id)) {
-						foreach ($qanswers as $a) {
-							$answers[$a['id']] = $a;
-							$answers[$a['id']]['user_say'] = $a['right'];
-						}
-					}
-					$out[$id] = array(
-						'id' => $id,
-						'text' => $question['text'],
-						'duration' => $question['duration'],
-						'wikilink' => $question['wikilink'],
-						'fp' => $question['fp'],
-						'answers' => $answers,
-						'number' => $number,
-						'percent' => 0,
-						'userfp' => 0,
-						'userduration' => 10,
-						'noco' => 0
-					);
-				}
-			} else {
-				$out[$id] = $fullList[$id];
-			}
-		}
-
-		return $out;
-	}
-
 	public function getFoodSharePoint()
 	{
 		return $this->q('
