@@ -93,7 +93,7 @@ class SettingsControl extends Control
 
 	public function sleeping()
 	{
-		if ($sleep = $this->model->getSleepData()) {
+		if ($sleep = $this->gateway->getSleepData($this->session->id())) {
 			$this->pageHelper->addContent($this->view->sleepMode($sleep));
 		}
 	}

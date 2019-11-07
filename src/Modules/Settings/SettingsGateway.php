@@ -40,4 +40,21 @@ class SettingsGateway extends BaseGateway
 	{
 		$this->db->update('fs_foodsaver', ['newsletter' => 0], ['email' => $email]);
 	}
+
+	public function getSleepData(int $fsId): array
+	{
+		return $this->db->fetch('
+			SELECT
+				sleep_status,
+				sleep_from,
+				sleep_until,
+				sleep_msg
+
+			FROM
+				fs_foodsaver
+
+			WHERE
+				id = :fsId
+		', [':fsId' => $fsId]);
+	}
 }

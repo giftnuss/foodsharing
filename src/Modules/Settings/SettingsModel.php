@@ -24,23 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getSleepData()
-	{
-		return $this->qRow('
-			SELECT
-				sleep_status,
-				sleep_from,
-				sleep_until,
-				sleep_msg
-
-			FROM
-				fs_foodsaver
-
-			WHERE
-				id = ' . (int)$this->session->id() . '
-		');
-	}
-
 	final public function getQuizSession($sid)
 	{
 		$sql = '
