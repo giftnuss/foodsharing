@@ -19,10 +19,11 @@
 - Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
 - When answering a long e-mail, the send and cancel button disappeared. The buttons moved next to fileupload #404 !1127 @chriswalg
 - Automatically relogin after joining work group !1113 #125 @alex.simm
-- Disable possibility to show stores for foodsharers #132 !1146 @jofranz 
+- Disable possibility to show stores for foodsharers #132 !1146 @jofranz
 - Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
 - Increase search min length in store and fsp team management list #396 !1151 @jofranz
 - Do not initialise ReportList vue component if it is not shown !1159 @dthulke
+- Ensures quiz break message after three failures inbetween 30 days #736 !1162 @svenpascal
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
@@ -40,8 +41,8 @@
 
 # 2019-10-06
 
-Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
-A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps. 
+Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time.
+A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps.
 And we have even included some new features for you.
 
 ## Major changes
@@ -186,14 +187,14 @@ And we have even included some new features for you.
 - updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
-- add caching for volumes in dev mode !1075 
+- add caching for volumes in dev mode !1075
 
 # 2019-08-30 Hotfix
 - Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
 
 # 2019-06-17 Hotfix
 - Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
-    
+
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
