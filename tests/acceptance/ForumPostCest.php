@@ -59,7 +59,7 @@ class ForumPostCest
 		$I->waitForActiveAPICalls();
 		$this->waitForPostButtons($I, true, false, $example[2]);
 
-		$followButton = \Codeception\Util\Locator::contains('.btn', 'folgen');
+		$followButton = \Codeception\Util\Locator::contains('.btn', 'FOLGEN');
 		$I->waitForElement($followButton);
 		$I->click($followButton);
 		$this->waitForPostButtons($I, false, false, $example[2]);
@@ -76,10 +76,10 @@ class ForumPostCest
 	private function waitForPostButtons(AcceptanceTester $I, $follow, $unfollow, $stickUnstick)
 	{
 		if ($follow) {
-			$I->waitForText('Thema folgen', 3);
+			$I->waitForText('Email FOLGEN', 3);
 		}
 		if ($unfollow) {
-			$I->waitForText('Thema entfolgen', 3);
+			$I->waitForText('Mail entfolgen', 3);
 		}
 		if ($stickUnstick) {
 			$I->see('fixieren', '.btn');
