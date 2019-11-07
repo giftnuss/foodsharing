@@ -191,7 +191,7 @@ class SettingsControl extends Control
 					$this->model->updateRole(Role::FOODSHARER, $this->foodsaver['rolle']);
 				}
 				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
-				$this->view->pause($quizStatus['wait'], $desc);
+				$this->pageHelper->addContent($this->view->pause($quizStatus['wait'], $desc));
 				break;
 
 			case QuizStatus::PAUSE_ELAPSED:
