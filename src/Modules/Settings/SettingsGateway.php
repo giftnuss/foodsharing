@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsGateway extends BaseGateway
 {
@@ -16,11 +17,11 @@ class SettingsGateway extends BaseGateway
 	 *
 	 * @param QuizGateway $quizGateway
 	 */
-	public function __construct(QuizGateway $quizGateway)
+	public function __construct(Database $db, QuizGateway $quizGateway)
 	{
-		$this->quizGateway = $quizGateway;
+		parent::__construct($db);
 
-		parent::__construct();
+		$this->quizGateway = $quizGateway;
 	}
 
 	public function logChangedSetting($fsId, $old, $new, $logChangedKeys, $changerId = null)
