@@ -57,7 +57,7 @@ class SettingsXhr extends Control
 				);
 			}
 			$token = bin2hex(random_bytes(16));
-			$this->model->addNewMail($_GET['email'], $token);
+			$this->settingsGateway->addNewMail($this->session->id(), $_GET['email'], $token);
 			// anrede name link
 
 			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {

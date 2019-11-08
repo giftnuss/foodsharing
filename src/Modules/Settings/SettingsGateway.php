@@ -233,4 +233,16 @@ class SettingsGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
+	public function addNewMail(int $fsId, string $email, string $token): int
+	{
+		return $this->db->insertOrUpdate(
+			'fs_mailchange',
+			[
+				'foodsaver_id' => $fsId,
+				'newmail' => strip_tags($email),
+				'time' => $this->db->now(),
+				'token' => strip_tags($token)
+			]
+		);
+	}
 }

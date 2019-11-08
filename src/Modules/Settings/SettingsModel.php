@@ -24,26 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function addNewMail($email, $token)
-	{
-		return $this->insert('
-			REPLACE INTO `fs_mailchange`
-			(
-				`foodsaver_id`,
-				`newmail`,
-				`time`,
-				`token`
-			)
-			VALUES
-			(
-				' . (int)$this->session->id() . ',
-				' . $this->strval($email) . ',
-				NOW(),
-				' . $this->strval($token) . '
-			)
-		');
-	}
-
 	public function abortChangemail()
 	{
 		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());

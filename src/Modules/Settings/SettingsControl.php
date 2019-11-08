@@ -93,14 +93,14 @@ class SettingsControl extends Control
 
 	public function sleeping()
 	{
-		if ($sleep = $this->gateway->getSleepData($this->session->id())) {
+		if ($sleep = $this->settingsGateway->getSleepData($this->session->id())) {
 			$this->pageHelper->addContent($this->view->sleepMode($sleep));
 		}
 	}
 
 	public function quizsession()
 	{
-		if ($session = $this->gateway->getQuizSession($_GET['sid'], $this->session->id())) {
+		if ($session = $this->settingsGateway->getQuizSession($_GET['sid'], $this->session->id())) {
 			$this->pageHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}
@@ -435,7 +435,7 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$foodSharePoint = $this->gateway->getFoodSharePoint($this->session->id());
+		$foodSharePoint = $this->settingsGateway->getFoodSharePoint($this->session->id());
 		$threads = $this->model->getForumThreads();
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));
