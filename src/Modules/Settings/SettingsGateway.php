@@ -369,5 +369,4 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
-
 }
