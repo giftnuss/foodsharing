@@ -294,7 +294,7 @@ class SettingsGateway extends BaseGateway
 
 	private function deleteMailChanges(int $fsId): int
 	{
-		return $this->db->delele('fs_mailchange', ['foodsaver_id' => $fsId]);
+		return $this->db->delete('fs_mailchange', ['foodsaver_id' => $fsId]);
 	}
 
 	public function getMailchange(int $fsId): string
