@@ -26,7 +26,6 @@ class SettingsControl extends Control
 	private $regionGateway;
 
 	public function __construct(
-		SettingsModel $model,
 		SettingsView $view,
 		SettingsGateway $settingsGateway,
 		QuizGateway $quizGateway,
@@ -36,7 +35,6 @@ class SettingsControl extends Control
 		DataHelper $dataHelper,
 		RegionGateway $regionGateway
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->settingsGateway = $settingsGateway;
 		$this->quizGateway = $quizGateway;
@@ -56,7 +54,7 @@ class SettingsControl extends Control
 			$this->handle_newmail();
 		}
 
-		$this->foodsaver = $this->model->getValues(array('rolle', 'email', 'name', 'nachname', 'geschlecht', 'verified'), 'foodsaver', $this->session->id());
+		$this->foodsaver = $this->foodsaverGateway->getFoodsaverDetails($this->session->id());
 
 		if (!isset($_GET['sub'])) {
 			$this->routeHelper->go('/?page=settings&sub=general');

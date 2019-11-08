@@ -54,7 +54,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFoodsaverDetails($fs_id): array
+	public function getFoodsaverDetails(int $fsId): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -79,7 +79,7 @@ final class FoodsaverGateway extends BaseGateway
 				'privacy_policy_accepted_date',
 				'privacy_notice_accepted_date'
 			],
-			['id' => $fs_id]
+			['id' => $fsId]
 		);
 	}
 
