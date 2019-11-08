@@ -331,7 +331,7 @@ class SettingsGateway extends BaseGateway
 			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
-				'fairteiler_id' => $fspId
+				'fairteiler_id' => $foodSharePointId
 			]
 		);
 	}
