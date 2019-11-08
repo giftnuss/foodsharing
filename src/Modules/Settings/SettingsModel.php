@@ -24,23 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getFsCount($regionId)
-	{
-		return (int)$this->qOne('
-			SELECT
-				COUNT(hb.foodsaver_id)
-
-			FROM
-				fs_foodsaver_has_bezirk hb
-
-			WHERE
-				hb.bezirk_id = ' . (int)$regionId . '
-
-			AND
-				hb.active = 1
-		');
-	}
-
 	public function getNewMail($token)
 	{
 		return $this->qOne('SELECT newmail FROM fs_mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->session->id());

@@ -174,7 +174,7 @@ class SettingsGateway extends BaseGateway
 		', [':sessionId' => $sessionId, ':fsId' => $fsId]);
 	}
 
-	private function getQuizSessionTryCount(int $fsId, int $quizId): string
+	private function getQuizSessionTryCount(int $fsId, int $quizId): int
 	{
 		return $this->db->fetchValue('
 			SELECT
