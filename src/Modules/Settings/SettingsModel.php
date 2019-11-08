@@ -24,15 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function unfollowFairteiler($unfollow)
-	{
-		return $this->del('
-			DELETE FROM 	`fs_fairteiler_follower`
-			WHERE 	foodsaver_id = ' . (int)$this->session->id() . '
-			AND 	fairteiler_id IN(' . implode(',', $unfollow) . ')
-		');
-	}
-
 	public function getFsCount($regionId)
 	{
 		return (int)$this->qOne('

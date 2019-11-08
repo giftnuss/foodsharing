@@ -348,6 +348,17 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
+	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
+	{
+		return $this->db->delete(
+			'fs_fairteiler_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $fspIds
+			]
+		);
+	}
+
 	public function unfollowThreads(int $fsId, array $themeIds): int
 	{
 		return $this->db->delete(
