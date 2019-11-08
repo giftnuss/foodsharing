@@ -24,24 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function hasQuizCleared($quiz_id)
-	{
-		if ($res = $this->qOne('
-				SELECT COUNT(foodsaver_id) AS `count`
-				FROM fs_quiz_session
-				WHERE foodsaver_id =' . (int)$this->session->id() . '
-				AND quiz_id = ' . (int)$quiz_id . '
-				AND `status` = 1
-			')
-		) {
-			if ($res > 0) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public function updateSleepMode($status, $from, $to, $msg)
 	{
 		return $this->update('

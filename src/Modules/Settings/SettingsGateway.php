@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsGateway extends BaseGateway

@@ -225,14 +225,14 @@ class SettingsControl extends Control
 
 	private function confirm_fs()
 	{
-		if ($this->model->hasQuizCleared(Role::FOODSAVER)) {
+		$fsId = $this->session->id();
+		if ($this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->session->set('hastodoquiz', false);
-					$fsId = $this->session->id();
 					$this->mem->delPageCache('/?page=dashboard', $fsId);
 					if (!$this->session->may('fs')) {
 						$this->settingsGateway->updateRole($fsId, Role::FOODSAVER, $this->foodsaver['rolle']);
@@ -249,13 +249,14 @@ class SettingsControl extends Control
 
 	private function confirm_bip()
 	{
-		if ($this->model->hasQuizCleared(Role::STORE_MANAGER)) {
+		$fsId = $this->session->id();
+		if ($this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
-					$this->settingsGateway->updateRole($this->session->id(), Role::STORE_MANAGER, $this->foodsaver['rolle']);
+					$this->settingsGateway->updateRole($fsId, Role::STORE_MANAGER, $this->foodsaver['rolle']);
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
@@ -269,8 +270,8 @@ class SettingsControl extends Control
 	private function confirm_bot(): void
 	{
 		$this->pageHelper->addBread('Botschafter werden');
-
-		if ($this->model->hasQuizCleared(Role::AMBASSADOR)) {
+		$fsId = $this->session->id();
+		if ($this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
 			$showform = true;
 
 			if ($this->submitted()) {
@@ -296,7 +297,7 @@ class SettingsControl extends Control
 
 				if ($check) {
 					$data = $this->dataHelper->unsetAll($_POST, ['new_bezirk']);
-					$this->foodsaverGateway->updateProfile($this->session->id(), $data);
+					$this->foodsaverGateway->updateProfile($fsId, $data);
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
