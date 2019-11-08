@@ -125,7 +125,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->otherFoodsaver['id'],
 			'infotype' => InfoType::EMAIL,
-			'type' => FollowerType::FOLLOWER;
+			'type' => FollowerType::FOLLOWER
 		];
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', $params);
 		$this->gateway->follow($this->foodSharePoint['id'], $this->otherFoodsaver['id'], 1);
