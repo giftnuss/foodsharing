@@ -437,7 +437,7 @@ class SettingsControl extends Control
 		}
 		$this->pageHelper->addBread($this->translationHelper->s('settings_info'));
 
-		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
+		$g_data = $this->foodsaverGateway->getSubscriptions($fsId);
 
 		$foodSharePoints = $this->settingsGateway->listFoodSharePoints($fsId);
 		$threads = $this->settingsGateway->getForumThreads($fsId);

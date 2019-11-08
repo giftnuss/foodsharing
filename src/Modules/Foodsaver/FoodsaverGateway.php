@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Foodsaver;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 final class FoodsaverGateway extends BaseGateway
@@ -341,7 +342,7 @@ final class FoodsaverGateway extends BaseGateway
 		}
 		$where = "WHERE rolle >= $min_rolle";
 		if ($newsletter !== false) {
-			$where = "WHERE newsletter = 1 AND rolle >= $min_rolle";
+			$where = "WHERE newsletter = " . InfoType::EMAIL . " AND rolle >= $min_rolle";
 		}
 
 		return $this->db->fetchAll('
@@ -766,7 +767,7 @@ final class FoodsaverGateway extends BaseGateway
 			[':fsId' => $foodsaverId]);
 	}
 
-	public function getFoodsaverAddress($foodsaverId)
+	public function getFoodsaverAddress(int $foodsaverId): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -778,6 +779,18 @@ final class FoodsaverGateway extends BaseGateway
 				'anschrift',
 			],
 			['id' => $foodsaverId]
+		);
+	}
+
+	public function getSubscriptions(int $fsId): array
+    {
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			[
+				'infomail_message',
+				'newsletter'
+			],
+			['id' => $fsId]
 		);
 	}
 }
