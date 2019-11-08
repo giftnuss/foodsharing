@@ -369,4 +369,14 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
+
+	public function getNewMail(int $fsId, string $token): string
+	{
+		return $this->db->fetchValue('
+			SELECT newmail
+			FROM fs_mailchange
+			WHERE `token` = :token
+				AND foodsaver_id = :fsId
+		', [':fsId' => $fsId, ':token' => strip_tags($token)]);
+	}
 }

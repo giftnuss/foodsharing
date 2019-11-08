@@ -24,11 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getNewMail($token)
-	{
-		return $this->qOne('SELECT newmail FROM fs_mailchange WHERE `token` = ' . $this->strval($token) . ' AND foodsaver_id = ' . (int)$this->session->id());
-	}
-
 	public function updateRole($role_id, $current_role)
 	{
 		if ($role_id > $current_role) {

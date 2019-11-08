@@ -498,7 +498,7 @@ class SettingsControl extends Control
 
 	private function handle_newmail()
 	{
-		if ($email = $this->model->getNewMail($_GET['newmail'])) {
+		if ($email = $this->settingsGateway->getNewMail($this->session->id(), $_GET['newmail'])) {
 			$this->pageHelper->addJs("ajreq('changemail3');");
 		}
 	}
