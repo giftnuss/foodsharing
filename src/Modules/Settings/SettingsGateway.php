@@ -324,11 +324,11 @@ class SettingsGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infotype): int
+	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infoType): int
 	{
 		return $this->db->update(
 			'fs_fairteiler_follower',
-			['infotype' => $infotype],
+			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
 				'fairteiler_id' => $fspId

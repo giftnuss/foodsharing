@@ -7,6 +7,8 @@ use Faker;
 use Carbon\Carbon;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -612,8 +614,8 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'fairteiler_id' => $foodSharePoint,
 			'foodsaver_id' => $user,
-			'type' => 1,
-			'infotype' => 1,
+			'type' => FollowerType::FOLLOWER,
+			'infotype' => InfoType::EMAIL,
 		], $extra_params);
 		$this->haveInDatabase('fs_fairteiler_follower', $params);
 

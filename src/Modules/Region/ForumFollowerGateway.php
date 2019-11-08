@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
 {
@@ -34,7 +35,7 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->insertIgnore(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 1]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::EMAIL]
 		);
 	}
 

@@ -6,6 +6,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
@@ -35,9 +36,9 @@ class FoodSharePointGateway extends BaseGateway
 
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :id
-			AND 	ff.infotype = 1
+			AND 	ff.infotype = :infoType
 		',
-			[':id' => $id]
+			[':id' => $id, ':infoType' => InfoType::EMAIL]
 		);
 	}
 
@@ -73,10 +74,19 @@ class FoodSharePointGateway extends BaseGateway
 		$values = array();
 
 		foreach ($fspManager as $fs) {
-			$values[] = '(' . $fspId . ',' . (int)$fs . ',2,1)';
+			$values[] = '(' .
+				$fspId . ',' .
+				(int)$fs . ',' .
+				FollowerType::FOOD_SHARE_POINT_MANAGER . ',' .
+				InfoType::EMAIL .
+			')';
 		}
 
-		$this->db->update('fs_fairteiler_follower', ['type' => FollowerType::FOLLOWER], ['fairteiler_id' => $fspId]);
+		$this->db->update(
+			'fs_fairteiler_follower',
+			['type' => FollowerType::FOLLOWER],
+			['fairteiler_id' => $fspId]
+		);
 
 		$this->db->execute(
 			'

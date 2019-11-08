@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -124,7 +125,7 @@ class FoodSharePointControl extends Control
 
 		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
-			$infoType = $request->query->get('infotype', 2);
+			$infoType = $request->query->get('infotype', InfoType::ALERT);
 			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id() ?? 0, $follow, $infoType)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
@@ -167,7 +168,7 @@ class FoodSharePointControl extends Control
 			return false;
 		}
 
-		if ($follow === 1 && in_array($infoType, [1, 2], true)) {
+		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::ALERT], true)) {
 			$this->foodSharePointGateway->follow($foodSharePointId, $foodSharerId, $infoType);
 		} else {
 			$this->foodSharePointGateway->unfollow($foodSharePointId, $foodSharerId);

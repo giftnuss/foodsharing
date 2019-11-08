@@ -1,6 +1,8 @@
 <?php
 
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 {
@@ -122,8 +124,8 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$params = [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->otherFoodsaver['id'],
-			'infotype' => 1,
-			'type' => 1
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOLLOWER;
 		];
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', $params);
 		$this->gateway->follow($this->foodSharePoint['id'], $this->otherFoodsaver['id'], 1);
@@ -135,8 +137,8 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$params = [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
-			'infotype' => 1,
-			'type' => 2
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOOD_SHARE_POINT_MANAGER
 		];
 
 		// Our foodsaver is an admin of the fairteiler so already has a type 2 entry
@@ -157,8 +159,8 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_fairteiler_follower', [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
-			'infotype' => 1,
-			'type' => 2
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOOD_SHARE_POINT_MANAGER
 		]);
 
 		$this->gateway->unfollow($this->foodSharePoint['id'], $this->foodsaver['id']);

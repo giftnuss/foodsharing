@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -399,23 +400,23 @@ class SettingsControl extends Control
 			}
 			$unfollow_food_share_point = array();
 			$unfollow_thread = array();
-			foreach ($_POST as $key => $p) {
+			foreach ($_POST as $key => $infotype) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
 					$foodSharePointId = (int)substr($key, 11);
 					if ($foodSharePointId > 0) {
-						if ($p == 0) {
+						if ($infotype == InfoType::NONE) {
 							$unfollow_food_share_point[] = $foodSharePointId;
-						} elseif ($p < 4) {
-							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $p);
+						} elseif ($infotype < 4) {
+							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $infotype);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
 					$foodSharePointId = (int)substr($key, 7);
 					if ($foodSharePointId > 0) {
-						if ($p == 0) {
+						if ($infotype == InfoType::NONE) {
 							$unfollow_thread[] = $foodSharePointId;
-						} elseif ($p < 4) {
-							$this->model->updateFollowThread($foodSharePointId, $p);
+						} elseif ($infotype < 4) {
+							$this->model->updateFollowThread($foodSharePointId, $infotype);
 						}
 					}
 				}
