@@ -6,6 +6,23 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class SettingsGateway extends BaseGateway
 {
+	/**
+	 * @var QuizGateway
+	 */
+	private $quizGateway;
+
+	/**
+	 * SettingsGateway constructor.
+	 *
+	 * @param QuizGateway $quizGateway
+	 */
+	public function __construct(QuizGateway $quizGateway)
+	{
+		$this->quizGateway = $quizGateway;
+
+		parent::__construct();
+	}
+
 	public function logChangedSetting($fsId, $old, $new, $logChangedKeys, $changerId = null)
 	{
 		if (!$changerId) {
@@ -116,7 +133,7 @@ class SettingsGateway extends BaseGateway
 					unset($session['quiz_result'][$k]['user']);
 				}
 
-				if ($quiz = $this->getValues(array('name', 'desc'), 'quiz', $session['quiz_id'])) {
+				if ($quiz = $this->getQuiz($session['quiz_id'])) {
 					$session = array_merge($quiz, $session);
 					unset($session['quiz_questions']);
 
@@ -169,6 +186,18 @@ class SettingsGateway extends BaseGateway
 			AND
 				`quiz_id` = :quizId
 		', [':fsId' => $fsId, ':quizId' => $quizId]);
+	}
+
+	private function getQuiz(int $quizId): array
+	{
+		return $this->db->fetchByCriteria(
+			'quiz',
+			[
+				'name',
+				'desc'
+			],
+			['id' => $quizId]
+		);
 	}
 
 	/*
