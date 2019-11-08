@@ -244,7 +244,7 @@ class SettingsGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getFoodSharePoint(int $fsId): array
+	public function listFoodSharePoints(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -254,12 +254,11 @@ class SettingsGateway extends BaseGateway
 				ff.`type`
 
 			FROM
-				`fs_fairteiler_follower` ff,
-				`fs_fairteiler` ft
+				`fs_fairteiler_follower` ff
+				LEFT JOIN `fs_fairteiler` ft
+				ON ff.fairteiler_id = ft.id
 
 			WHERE
-				ff.fairteiler_id = ft.id
-			AND
 				ff.foodsaver_id = :fsId
 		', [':fsId' => $fsId]);
 	}
@@ -323,5 +322,17 @@ class SettingsGateway extends BaseGateway
 			WHERE
 				tf.foodsaver_id = :fsId
 		', [':fsId' => $fsId]);
+	}
+
+	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infotype): int
+	{
+		return $this->db->update(
+			'fs_fairteiler_follower',
+			['infotype' => $infotype],
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $fspId
+			]
+		);
 	}
 }

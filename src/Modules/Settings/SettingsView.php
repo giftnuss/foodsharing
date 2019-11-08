@@ -149,13 +149,13 @@ class SettingsView extends View
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
 
-	public function settingsInfo($foodSharePoint, $threads)
+	public function settingsInfo($foodSharePoints, $threads)
 	{
 		global $g_data;
 		$out = '';
 
-		if ($foodSharePoint) {
-			foreach ($foodSharePoint as $fsp) {
+		if ($foodSharePoints) {
+			foreach ($foodSharePoints as $fsp) {
 				$disabled = false;
 				if ($fsp['type'] == 2) {
 					$disabled = true;

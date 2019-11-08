@@ -24,16 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function updateFollowFairteiler($fid, $infotype)
-	{
-		return $this->update('
-			UPDATE 		`fs_fairteiler_follower`
-			SET 		`infotype` = ' . (int)$infotype . '
-			WHERE 		`fairteiler_id` = ' . (int)$fid . '
-			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function updateFollowThread($themeId, $infotype)
 	{
 		return $this->update('

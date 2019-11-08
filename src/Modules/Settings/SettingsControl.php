@@ -401,21 +401,21 @@ class SettingsControl extends Control
 			$unfollow_thread = array();
 			foreach ($_POST as $key => $p) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
-					$foodSharePoint = (int)substr($key, 11);
-					if ($foodSharePoint > 0) {
+					$foodSharePointId = (int)substr($key, 11);
+					if ($foodSharePointId > 0) {
 						if ($p == 0) {
-							$unfollow_food_share_point[] = $foodSharePoint;
+							$unfollow_food_share_point[] = $foodSharePointId;
 						} elseif ($p < 4) {
-							$this->model->updateFollowFairteiler($foodSharePoint, $p);
+							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $p);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
-					$foodSharePoint = (int)substr($key, 7);
-					if ($foodSharePoint > 0) {
+					$foodSharePointId = (int)substr($key, 7);
+					if ($foodSharePointId > 0) {
 						if ($p == 0) {
-							$unfollow_thread[] = $foodSharePoint;
+							$unfollow_thread[] = $foodSharePointId;
 						} elseif ($p < 4) {
-							$this->model->updateFollowThread($foodSharePoint, $p);
+							$this->model->updateFollowThread($foodSharePointId, $p);
 						}
 					}
 				}
@@ -436,10 +436,10 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$foodSharePoint = $this->settingsGateway->getFoodSharePoint($fsId);
+		$foodSharePoints = $this->settingsGateway->listFoodSharePoints($fsId);
 		$threads = $this->settingsGateway->getForumThreads($fsId);
 
-		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));
+		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoints, $threads));
 	}
 
 	public function handle_edit()
