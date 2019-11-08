@@ -62,7 +62,7 @@ class SettingsGateway extends BaseGateway
 	{
 		if ($session = $this->getQuizSessionForFs($sessionId, $fsId)) {
 			$tmp = array();
-			$session['try_count'] = getQuizSessionTryCount($fsId, $session['quiz_id']);
+			$session['try_count'] = $this->getQuizSessionTryCount($fsId, $session['quiz_id']);
 
 			/*
 			 * First of all sort the question array and get all questions_ids etc to calculate the result
