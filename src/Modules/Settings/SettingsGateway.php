@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Settings;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsGateway extends BaseGateway
@@ -402,8 +401,8 @@ class SettingsGateway extends BaseGateway
 				'sleep_until' => $to,
 				'sleep_msg' => strip_tags($msg)
 			],
- 			['id' => $fsId]
- 		);
+			['id' => $fsId]
+		);
 	}
 
 	public function storeApiToken(int $fsId, string $token): void
