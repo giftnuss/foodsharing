@@ -386,6 +386,7 @@ class SettingsControl extends Control
 
 	public function info()
 	{
+		$fsId = $this->session->id();
 		global $g_data;
 		if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'settingsinfo') {
 			$newsletter = 1;
@@ -427,7 +428,7 @@ class SettingsControl extends Control
 				$this->model->unfollowThread($unfollow_thread);
 			}
 
-			if ($this->settingsGateway->saveInfoSettings($this->session->id(), $newsletter, $infomail)) {
+			if ($this->settingsGateway->saveInfoSettings($fsId, $newsletter, $infomail)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
 			}
 		}
@@ -435,8 +436,8 @@ class SettingsControl extends Control
 
 		$g_data = $this->model->getValues(array('infomail_message', 'newsletter'), 'foodsaver', $this->session->id());
 
-		$foodSharePoint = $this->settingsGateway->getFoodSharePoint($this->session->id());
-		$threads = $this->model->getForumThreads();
+		$foodSharePoint = $this->settingsGateway->getFoodSharePoint($fsId);
+		$threads = $this->settingsGateway->getForumThreads($fsId);
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoint, $threads));
 	}

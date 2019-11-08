@@ -24,21 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getForumThreads()
-	{
-		return $this->q('
-			SELECT 	th.id,
-					th.name,
-					tf.infotype
-
-			FROM 	`fs_theme_follower` tf,
-					`fs_theme` th
-
-			WHERE 	tf.theme_id = th.id
-			AND 	tf.foodsaver_id = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function updateFollowFairteiler($fid, $infotype)
 	{
 		return $this->update('
