@@ -2,15 +2,10 @@
 
 class SettingsCest
 {
-	// private $model;
-	// private $gateway;
-
 	private $foodsaver;
 
 	protected function _before(AcceptanceTester $I)
 	{
-		// $this->gateway = $this->tester->get(\Foodsharing\Modules\Settings\SettingsGateway::class);
-		// $this->model = $this->tester->get(\Foodsharing\Modules\Settings\SettingsModel::class);
 	}
 
 	/**
