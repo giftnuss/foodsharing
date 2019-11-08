@@ -24,13 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function updateRole($role_id, $current_role)
-	{
-		if ($role_id > $current_role) {
-			$this->update('UPDATE fs_foodsaver SET `rolle` = ' . (int)$role_id . ' WHERE id = ' . (int)$this->session->id());
-		}
-	}
-
 	public function hasQuizCleared($quiz_id)
 	{
 		if ($res = $this->qOne('
