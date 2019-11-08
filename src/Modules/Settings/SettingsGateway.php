@@ -405,4 +405,15 @@ class SettingsGateway extends BaseGateway
  			['id' => $fsId]
  		);
 	}
+
+	public function storeApiToken(int $fsId, string $token): void
+	{
+		$this->db->insert(
+			'fs_apitoken',
+			[
+				'foodsaver_id' => $fsId,
+				'token' => $token
+			]
+		);
+	}
 }

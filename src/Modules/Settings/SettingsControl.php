@@ -511,18 +511,18 @@ class SettingsControl extends Control
 	}
 
 	/** Creates and saves a new API token for given user
-	 * @param $fs Foodsaver ID
+	 * @param $fsId Foodsaver ID
 	 *
 	 * @return false in case of error or weak algorithm, generated token otherwise
 	 */
-	private function generate_api_token($fs)
+	private function generate_api_token(int $fsId): string
 	{
 		$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
 		if (!$strong || $token === false) {
 			return false;
 		}
 
-		$this->model->insert('INSERT INTO fs_apitoken (foodsaver_id, token) VALUES (' . (int)$fs . ', "' . $token . '")');
+		$this->settingsGateway->storeApiToken($fsId, $token);
 
 		return $token;
 	}
