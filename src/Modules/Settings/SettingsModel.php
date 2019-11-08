@@ -23,21 +23,4 @@ class SettingsModel extends Db
 
 		parent::__construct();
 	}
-
-	public function updateSleepMode($status, $from, $to, $msg)
-	{
-		return $this->update('
- 			UPDATE
- 				fs_foodsaver
-
- 			SET
- 				`sleep_status` = ' . (int)$status . ',
- 				`sleep_from` = ' . $this->dateval($from) . ',
- 				`sleep_until` = ' . $this->dateval($to) . ',
- 				`sleep_msg` = ' . $this->strval($msg) . '
-
- 			WHERE
- 				id = ' . (int)$this->session->id() . '
- 		');
-	}
 }

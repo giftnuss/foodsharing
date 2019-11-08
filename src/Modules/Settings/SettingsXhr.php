@@ -164,7 +164,7 @@ class SettingsXhr extends Control
 		if (isset($states[$_POST['status']])) {
 			$status = (int)$_POST['status'];
 
-			$this->model->updateSleepMode($status, $from, $to, $msg);
+			$this->settingsGateway->updateSleepMode($this->session->id(), $status, $from, $to, $msg);
 
 			$xhr->setStatus(1);
 		}

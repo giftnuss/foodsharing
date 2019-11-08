@@ -391,4 +391,18 @@ class SettingsGateway extends BaseGateway
 			);
 		}
 	}
+
+	public function updateSleepMode(int $fsId, int $status, string $from, string $to, string $msg): int
+	{
+		return $this->db->update(
+			'fs_foodsaver',
+			[
+				'sleep_status' => $status,
+				'sleep_from' => $from,
+				'sleep_until' => $to,
+				'sleep_msg' => strip_tags($msg)
+			],
+ 			['id' => $fsId]
+ 		);
+	}
 }
