@@ -97,7 +97,7 @@ class SettingsXhr extends Control
 
 	public function abortchangemail()
 	{
-		$this->model->abortChangemail();
+		$this->settingsGateway->abortChangemail($this->session->id());
 	}
 
 	public function changemail4()

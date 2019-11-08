@@ -276,4 +276,10 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
+
+	public function abortChangemail(int $fsId): int
+	{
+		return $this->db->delele('fs_mailchange', ['foodsaver_id' => $fsId]);
+	}
+
 }

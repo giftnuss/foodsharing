@@ -24,11 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function abortChangemail()
-	{
-		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
-	}
-
 	public function changeMail($email)
 	{
 		$this->del('DELETE FROM `fs_mailchange` WHERE foodsaver_id = ' . (int)$this->session->id());
