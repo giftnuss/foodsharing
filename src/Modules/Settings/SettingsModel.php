@@ -24,15 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function unfollowThread($unfollow)
-	{
-		return $this->del('
-			DELETE FROM 	`fs_theme_follower`
-			WHERE 	foodsaver_id = ' . (int)$this->session->id() . '
-			AND 	theme_id IN(' . implode(',', $unfollow) . ')
-		');
-	}
-
 	public function unfollowFairteiler($unfollow)
 	{
 		return $this->del('

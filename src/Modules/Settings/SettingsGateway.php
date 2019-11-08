@@ -347,4 +347,16 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
+
+	public function unfollowThreads(int $fsId, array $themeIds): int
+	{
+		return $this->db->delete(
+			'fs_theme_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $themeIds
+			]
+		);
+	}
+
 }
