@@ -333,6 +333,7 @@ final class FoodsaverGateway extends BaseGateway
 			);
 	}
 
+	public function getAllEmailFoodsaver($newsletter = false, $only_foodsaver = true)
 	{
 		if ($only_foodsaver) {
 			$min_rolle = Role::FOODSAVER;
