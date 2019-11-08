@@ -335,4 +335,16 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
+
+	public function updateFollowThread(int $fsId, int $themeId, int $infoType): int
+	{
+		return $this->db->update(
+			'fs_theme_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $themeId
+			]
+		);
+	}
 }

@@ -400,23 +400,23 @@ class SettingsControl extends Control
 			}
 			$unfollow_food_share_point = array();
 			$unfollow_thread = array();
-			foreach ($_POST as $key => $infotype) {
+			foreach ($_POST as $key => $infoType) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
 					$foodSharePointId = (int)substr($key, 11);
 					if ($foodSharePointId > 0) {
-						if ($infotype == InfoType::NONE) {
+						if ($infoType == InfoType::NONE) {
 							$unfollow_food_share_point[] = $foodSharePointId;
-						} elseif ($infotype < 4) {
-							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $infotype);
+						} elseif ($infoType < 4) {
+							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $infoType);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
-					$foodSharePointId = (int)substr($key, 7);
-					if ($foodSharePointId > 0) {
-						if ($infotype == InfoType::NONE) {
-							$unfollow_thread[] = $foodSharePointId;
-						} elseif ($infotype < 4) {
-							$this->model->updateFollowThread($foodSharePointId, $infotype);
+					$themeId = (int)substr($key, 7);
+					if ($themeId > 0) {
+						if ($infoType == InfoType::NONE) {
+							$unfollow_thread[] = $themeId;
+						} elseif ($infoType < 4) {
+							$this->settingsGateway->updateFollowThread($fsId, $themeId, $infoType);
 						}
 					}
 				}

@@ -24,16 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function updateFollowThread($themeId, $infotype)
-	{
-		return $this->update('
-			UPDATE 		`fs_theme_follower`
-			SET 		`infotype` = ' . (int)$infotype . '
-			WHERE 		`theme_id` = ' . (int)$themeId . '
-			AND 		`foodsaver_id` = ' . (int)$this->session->id() . '
-		');
-	}
-
 	public function unfollowThread($unfollow)
 	{
 		return $this->del('
