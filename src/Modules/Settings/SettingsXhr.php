@@ -82,7 +82,7 @@ class SettingsXhr extends Control
 
 	public function changemail3()
 	{
-		if ($email = $this->model->getMailchange()) {
+		if ($email = $this->settingsGateway->getMailchange($this->session->id())) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 
@@ -106,7 +106,7 @@ class SettingsXhr extends Control
 		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $fsId)) {
 			$did = strip_tags($_GET['did']);
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
-				if ($email = $this->model->getMailchange()) {
+				if ($email = $this->settingsGateway->getMailchange($fsId)) {
 					if ($this->settingsGateway->changeMail($fsId, $email) > 0) {
 						$this->settingsGateway->logChangedSetting($fsId, ['email' => $this->session->user('email')], ['email' => $email], ['email']);
 

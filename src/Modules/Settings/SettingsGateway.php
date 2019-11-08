@@ -297,4 +297,13 @@ class SettingsGateway extends BaseGateway
 	{
 		return $this->db->delele('fs_mailchange', ['foodsaver_id' => $fsId]);
 	}
+
+	public function getMailchange(int $fsId): string
+	{
+		return $this->db->fetchValue('
+			SELECT `newmail`
+			FROM fs_mailchange
+			WHERE foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+	}
 }

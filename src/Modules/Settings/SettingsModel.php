@@ -24,11 +24,6 @@ class SettingsModel extends Db
 		parent::__construct();
 	}
 
-	public function getMailchange()
-	{
-		return $this->qOne('SELECT `newmail` FROM fs_mailchange WHERE foodsaver_id = ' . (int)$this->session->id());
-	}
-
 	public function getForumThreads()
 	{
 		return $this->q('
