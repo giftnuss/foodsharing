@@ -174,7 +174,7 @@ class SettingsGateway extends BaseGateway
 	/*
 	 * In the session are only the failed answers stored in so now we get all the right answers and fill out the array
 	 */
-	private function addRightAnswers($indexList, $fullList)
+	private function addRightAnswers(array $indexList, array $fullList): array
 	{
 		$out = array();
 
