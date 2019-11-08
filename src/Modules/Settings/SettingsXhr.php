@@ -102,12 +102,13 @@ class SettingsXhr extends Control
 
 	public function changemail4()
 	{
-		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $this->session->id())) {
+		$fsId = $this->session->id();
+		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $fsId)) {
 			$did = strip_tags($_GET['did']);
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->model->getMailchange()) {
-					if ($this->model->changeMail($email)) {
-						$this->settingsGateway->logChangedSetting($this->session->id(), ['email' => $this->session->user('email')], ['email' => $email], ['email']);
+					if ($this->settingsGateway->changeMail($fsId, $email) > 0) {
+						$this->settingsGateway->logChangedSetting($fsId, ['email' => $this->session->user('email')], ['email' => $email], ['email']);
 
 						return array(
 							'status' => 1,
