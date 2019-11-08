@@ -15,9 +15,8 @@ class SettingsXhr extends Control
 	private $loginGateway;
 	private $settingsGateway;
 
-	public function __construct(SettingsModel $model, SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
+	public function __construct(SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
@@ -60,7 +59,7 @@ class SettingsXhr extends Control
 			$this->settingsGateway->addNewMail($this->session->id(), $_GET['email'], $token);
 			// anrede name link
 
-			if ($fs = $this->model->getValues(array('name', 'geschlecht'), 'foodsaver', $this->session->id())) {
+			if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
 				$this->emailHelper->tplMail('user/change_email', $_GET['email'], array(
 					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'name' => $fs['name'],
@@ -103,7 +102,7 @@ class SettingsXhr extends Control
 	public function changemail4()
 	{
 		$fsId = $this->session->id();
-		if ($fs = $this->model->getValues(array('email'), 'foodsaver', $fsId)) {
+		if ($fs = $this->foodsaverGateway->getFoodsaverDetails($fsId)) {
 			$did = strip_tags($_GET['did']);
 			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
 				if ($email = $this->settingsGateway->getMailchange($fsId)) {
