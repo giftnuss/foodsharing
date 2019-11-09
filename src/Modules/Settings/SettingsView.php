@@ -217,13 +217,11 @@ class SettingsView extends View
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
 		if ($session['fp'] <= $session['maxfp']) {
-			$subtitle = 'Bestanden!';
 			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
 		} else {
 			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden.</p>');
-			$subtitle = 'Leider nicht bestanden';
 		}
-		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', '', '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -255,7 +253,7 @@ class SettingsView extends View
 
 			switch ($session['quiz_id']) {
 				/*
-				 * failed Foodsaver
+				 * failed foodsaver
 				 */
 				case 1:
 					if ($try_count == 1) {
@@ -268,7 +266,7 @@ class SettingsView extends View
 					break;
 
 				/*
-				 * failed Bieb
+				 * failed store manager
 				*/
 				case 2:
 					if ($try_count == 1) {
@@ -282,7 +280,7 @@ class SettingsView extends View
 					break;
 
 				/*
-				 * failed Bot
+				 * failed AMB
 				*/
 				case 3:
 					if ($try_count == 1) {
@@ -328,7 +326,6 @@ class SettingsView extends View
 
 			$cnt .= $this->v_utils->v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" href="' . $r['wikilink'] . '">' . $r['wikilink'] . '</a>');
 
-			$answers = '';
 			$right_answers = '';
 			$wrong_answers = '';
 			$neutral_answers = '';
@@ -341,18 +338,14 @@ class SettingsView extends View
 				++$ai;
 				$right = 'red';
 
-				$smilie = 'fa-frown-o';
-
 				if ($a['user_say']) {
 					$noclicked = false;
 				}
 
-				$atext = '';
 				if (!$r['noco'] && $r['percent'] == 100) {
 					$atext = '';
 					$right = 'red';
 				} elseif ($a['user_say'] == true && $a['right'] == 1 && !$r['noco']) {
-					$atext = '';
 					$right = 'green';
 					if ($a['right']) {
 						$atext = ' ist richtig!';
@@ -374,8 +367,6 @@ class SettingsView extends View
 						$sort_right = 'false';
 					}
 				}
-
-				//$atext .= '<pre>'.print_r($r,true).'</pre>';
 
 				if ($sort_right == 'right') {
 					$right_answers .= '
@@ -420,11 +411,9 @@ class SettingsView extends View
 				$cnt .= $this->v_utils->v_input_wrapper('Antworten', $wrong_answers . $right_answers, false, array('collapse' => true));
 			} else {
 				if (!empty($right_answers)) {
-					//$cnt .= $this->v_utils->v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
 					$cnt .= $this->v_utils->v_input_wrapper('Richtige Antworten', $right_answers, false, array('collapse' => true));
 				}
 				if (!empty($wrong_answers)) {
-					//$cnt .= $this->v_utils->v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
 					$cnt .= $this->v_utils->v_input_wrapper('Falsche Antworten', $wrong_answers, false, array('collapse' => true));
 				}
 				if (!empty($neutral_answers)) {
@@ -435,14 +424,14 @@ class SettingsView extends View
 			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . $this->v_utils->v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">Absenden</a>', false, array('collapse' => true)) . '</div>';
 
 			/*
-			 * If the question was a joke question lets diplay it to the user!
+			 * If the question was a joke question lets display it to the user!
 			 */
 			if ($was_a_joke) {
 				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="far fa-smile"></i>';
 			}
 
 			/*
-			 * If the question is k.o. quetsion and the user has error display a message to the user
+			 * If the question is k.o. question and the user has error display a message to the user
 			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
 				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
