@@ -251,49 +251,12 @@ class SettingsView extends View
 			 */
 			$content_id = false;
 
-			switch ($session['quiz_id']) {
-				/*
-				 * failed foodsaver
-				 */
-				case 1:
-					if ($try_count == 1) {
-						$content_id = 19;
-					} elseif ($try_count == 2) {
-						$content_id = 20;
-					} elseif ($try_count > 2) {
-						$content_id = 21;
-					}
-					break;
-
-				/*
-				 * failed store manager
-				*/
-				case 2:
-					if ($try_count == 1) {
-						$content_id = 22;
-					} elseif ($try_count == 2) {
-						$content_id = 23;
-					} elseif ($try_count > 2) {
-						$content_id = 24;
-					}
-
-					break;
-
-				/*
-				 * failed AMB
-				*/
-				case 3:
-					if ($try_count == 1) {
-						$content_id = 25;
-					} elseif ($try_count == 2) {
-						$content_id = 26;
-					} elseif ($try_count > 2) {
-						$content_id = 27;
-					}
-					break;
-
-				default:
-					break;
+			if ($try_count == 1) {
+				$content_id = 19;
+			} elseif ($try_count == 2) {
+				$content_id = 20;
+			} elseif ($try_count > 2) {
+				$content_id = 21;
 			}
 
 			if ($content_id) {
