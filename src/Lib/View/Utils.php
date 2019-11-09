@@ -1161,7 +1161,6 @@ class Utils
 		if ($id === false) {
 			$id = $this->identificationHelper->id('input');
 		}
-		$class = '';
 		$star = '';
 		$error_msg = '';
 		$check = $this->jsValidate($option, $id, $label);
