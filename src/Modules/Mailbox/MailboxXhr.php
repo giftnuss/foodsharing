@@ -195,7 +195,7 @@ class MailboxXhr extends Control
 				// save message to sent folder
 				$this->mailboxGateway->saveMessage(
 					$mailboxId,
-					2,
+					2, //sent folder
 					json_encode([
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $message['mailbox'],
@@ -211,7 +211,7 @@ class MailboxXhr extends Control
 					$html,
 					date('Y-m-d H:i:s'),
 					'',
-					1
+					1 // mark read
 				);
 
 				$this->mailboxGateway->setRead($message['id'], 1);
