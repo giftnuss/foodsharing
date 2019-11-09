@@ -70,6 +70,9 @@
 - Removed unused clearAbholer() method, which would falsely remove all fetches from a user which need to stay for documentary reason !1216 @jofranz
 - Replaced REPLACE INTO queries with prepared statements !1124 #757 @alex.simm
 - Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
+- statistic kilo code refactoring !999 @jofranz
+- statistic kilo calculation optimized in sql !999 @fs_k
+- Replace SettingsModel by SettingsGateway !1163 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 
