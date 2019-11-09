@@ -25,7 +25,7 @@ class SettingsGateway extends BaseGateway
 		$this->quizGateway = $quizGateway;
 	}
 
-	public function logChangedSetting($fsId, $old, $new, $logChangedKeys, $changerId = null)
+	public function logChangedSetting(int $fsId, array $old, array $new, array $logChangedKeys, int $changerId = null): void
 	{
 		if (!$changerId) {
 			$changerId = $fsId;
