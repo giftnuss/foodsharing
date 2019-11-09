@@ -521,7 +521,7 @@ class SettingsView extends View
 
 		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt weiter beantworten!</a></p>';
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] '-Quiz fortführen', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . '-Quiz fortführen', array('class' => 'ui-padding'));
 
 		return $out;
 	}
