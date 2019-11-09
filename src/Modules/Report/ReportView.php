@@ -54,9 +54,6 @@ class ReportView extends View
 					'id' => 10,
 					'name' => 'Häufiges kurzfristiges Absagen der Abholungen'],
 				[
-					'id' => 11,
-					'name' => 'Ignoriert Kontaktaufnahme'],
-				[
 					'id' => 12,
 					'name' => 'Schmeißt gerettete Lebensmittel weg'],
 				[
