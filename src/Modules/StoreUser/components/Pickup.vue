@@ -68,6 +68,8 @@
       :ok-title="$i18n('pickup.join_agree')"
       @ok="$emit('join', date)"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
     >
       {{ $i18n('pickup.really_join_date', {'date': $dateFormat(date, 'full-long')}) }}
     </b-modal>
@@ -79,6 +81,8 @@
       @ok="$emit('leave', date)"
       @cancel="$refs.modal_team_message.show()"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
     >
       <p>{{ $i18n('pickup.really_leave_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
     </b-modal>
@@ -89,6 +93,8 @@
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id })"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
     >
       <p>{{ $i18n('pickup.really_kick_user_date', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name}) }}</p>
     </b-modal>
@@ -99,6 +105,8 @@
       :ok-title="$i18n('pickup.team_message_send_and_leave')"
       @ok="$emit('team-message', teamMessage); $emit('leave', date)"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
     >
       <b-form-textarea
         v-model="teamMessage"
