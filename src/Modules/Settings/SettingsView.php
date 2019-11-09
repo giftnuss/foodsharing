@@ -221,7 +221,7 @@ class SettingsView extends View
 		} else {
 			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden.</p>');
 		}
-		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', '', '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . '-Quiz', '', '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
