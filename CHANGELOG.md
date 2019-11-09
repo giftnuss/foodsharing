@@ -29,6 +29,7 @@
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
 - Change the close icon in pickup slot message to a better position #731 !1172 @chriswalg
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
+- Fixed FoodSharePoint deletion problem #642 !1167 @alex.simm
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
