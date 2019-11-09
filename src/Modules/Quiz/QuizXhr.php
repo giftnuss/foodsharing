@@ -388,8 +388,6 @@ class QuizXhr extends Control
 
 		$dia->addOpt('width', 720);
 
-		$content_id = 36;
-
 		$dia->addAbortButton();
 
 		if ($this->session->get('hastodoquiz-id') == Role::FOODSAVER) {
@@ -400,7 +398,7 @@ class QuizXhr extends Control
 			$dia->addButton('Jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 		}
 
-		$content = $this->contentGateway->get($content_id);
+		$content = $this->contentGateway->get(36);
 		$dia->setTitle($content['title']);
 		$dia->addContent($content['body']);
 
@@ -414,20 +412,17 @@ class QuizXhr extends Control
 			if (!$this->quizGateway->hasPassedQuiz($this->session->id(), $nextRole)) {
 				$dia = new XhrDialog();
 				$dia->addOpt('width', 720);
-				$content_id = 18;
 				$dia->addAbortButton();
 
 				if ($nextRole == Role::FOODSAVER) {
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Foodsaver bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_fs\');');
 				} elseif ($nextRole == Role::STORE_MANAGER) {
-					$content_id = 34;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Betriebsverantwortliche/r bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bip\');');
 				} elseif ($nextRole == Role::AMBASSADOR) {
-					$content_id = 35;
 					$dia->addButton('Ja, ich möchte jetzt mit dem Quiz meine Rolle als Botschafter*In bestätigen.', 'goTo(\'/?page=settings&sub=upgrade/up_bot\');');
 				}
 
-				$content = $this->contentGateway->get($content_id);
+				$content = $this->contentGateway->get(18);
 				$dia->setTitle($content['title']);
 				$dia->addContent($content['body']);
 

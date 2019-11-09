@@ -180,7 +180,7 @@ class QuizControl extends Control
 			$this->pageHelper->addBread('Auswertung');
 			$slogan = 'Klausurfragen für ' . $quiz['name'];
 
-			$this->pageHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . ' Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . '-Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 		}
 	}
 
