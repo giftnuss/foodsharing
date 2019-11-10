@@ -818,7 +818,7 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner {
 }
 
 .ui-tabs .ui-tabs-nav li a:hover {
-    color: #ffffff;
+    color: var(--white);
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
@@ -883,7 +883,7 @@ body .ui-tooltip {
 
 .ui-widget-content {
     border: 0 none;
-    background: var(--fs-white);
+    background: var(--white);
     color: #1e1b1d
 }
 

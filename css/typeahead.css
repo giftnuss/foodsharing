@@ -13,7 +13,7 @@ span.twitter-typeahead .tt-dropdown-menu {
   list-style: none;
   font-size: 14px;
   text-align: left;
-  background-color: #ffffff;
+  background-color: var(--white);
   border: 1px solid #cccccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
@@ -33,7 +33,7 @@ span.twitter-typeahead .tt-suggestion {
 span.twitter-typeahead .tt-suggestion.tt-cursor,
 span.twitter-typeahead .tt-suggestion:hover,
 span.twitter-typeahead .tt-suggestion:focus {
-  color: #ffffff;
+  color: var(--white);
   text-decoration: none;
   outline: 0;
   background-color: #337ab7;

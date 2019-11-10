@@ -930,7 +930,7 @@ class QuizXhr extends Control
 							$atext = 'Richtig! Diese Antwort stimmt.';
 						}
 						$bg = 'var(--fs-green)';
-						$color = '#ffffff';
+						$color = 'var(--white)';
 					} // Antwort richtig, weil nicht angeklickt
 					else {
 						if ($a['right'] == 0) {
@@ -939,7 +939,7 @@ class QuizXhr extends Control
 							$atext = 'Auch diese Antwort wäre richtig gewesen.';
 						}
 						$bg = '#E74955';
-						$color = '#ffffff';
+						$color = 'var(--white)';
 					}
 
 					$out[] = array(

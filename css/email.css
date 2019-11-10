@@ -27,16 +27,16 @@ a:hover {
 a.button {
   display: inline-block;
   padding: 6px 16px;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--white);
   background-color: var(--fs-brown);
-  color: #ffffff !important;
+  color: var(--white) !important;
   font-weight: bold;
   border-radius: 8px;
 }
 
 a.button:hover {
   border: 1px solid var(--fs-brown);
-  background-color: #ffffff;
+  background-color: var(--white);
   color: var(--fs-brown) !important;
   text-decoration: none !important;
 }
@@ -45,5 +45,5 @@ a.button:hover {
   padding: 10px;
   border-top: 1px solid var(--fs-brown);
   border-bottom: 1px solid var(--fs-brown);
-  background-color: #ffffff;
+  background-color: var(--white);
 }

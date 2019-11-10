@@ -2,7 +2,7 @@
   width: 85%;
   padding: 6px;
   border-radius: 6px;
-  background-color: #ffffff;
+  background-color: var(--white);
   border: 1px solid #dedede;
   margin-bottom: 10px;
 }

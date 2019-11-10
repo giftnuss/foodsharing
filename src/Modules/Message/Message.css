@@ -61,7 +61,7 @@ border-radius: 4px;
 
 #msg-conversation span.body {
   border-radius: 6px;
-  background: none repeat scroll 0 0 #ffffff;
+  background: none repeat scroll 0 0 var(--white);
   margin-left: 50px;
   min-height: 35px;
   padding: 6px;
@@ -85,7 +85,7 @@ border-radius: 4px;
   position: absolute;
   border-style: solid;
   border-width: 8px 9px 8px 0;
-  border-color: transparent #ffffff;
+  border-color: transparent var(--white);
   display: block;
   width: 0;
   z-index: 1;

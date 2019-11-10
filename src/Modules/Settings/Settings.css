@@ -21,7 +21,7 @@
 }
 
 .answer label {
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 #quizwrapper .answer label {
@@ -48,7 +48,7 @@
 }
 
 .question {
-  color: #ffffff;
+  color: var(--white);
   font-weight: bold;
   position: relative;
   width: 96%;

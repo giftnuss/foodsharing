@@ -46,7 +46,7 @@
 }
 
 .records-table tbody td {
-  background-color: #ffffff;
+  background-color: var(--white);
   border-bottom: 1px solid #dddddd;
   border-left: 1px dotted #d7cdbd;
   cursor: default;
@@ -62,20 +62,20 @@
 
 .records-table tr.selected td {
   background-color: var(--fs-brown);
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 .records-table tr.selected td a, .records-table tr.selected td span {
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 .records-table tr.unfocused td {
   background: none repeat scroll 0 0 #4db0d2 !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 .records-table tr.unfocused td a, .records-table tr.unfocused td span {
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 .records-table tr.deleted td, .records-table tr.deleted td a {
@@ -133,7 +133,7 @@
 }
 
 .edit-body {
-  background-color: #ffffff;
+  background-color: var(--white);
   margin-top: 10px;
   padding: 5px;
   border: 0;
@@ -182,7 +182,7 @@ span.status.answer-1 {
 }
 
 #mailattch {
-  background-color: #ffffff;
+  background-color: var(--white);
   overflow: auto;
   margin-top: 10px;
   height: 23px;
@@ -218,7 +218,7 @@ span.status.answer-1 {
 
 #mailattch ul li a:hover {
   background-color: var(--fs-brown);
-  color: #ffffff;
+  color: var(--white);
 }
 
 span.dynatree-folder a {

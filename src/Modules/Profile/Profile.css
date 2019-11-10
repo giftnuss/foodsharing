@@ -9,13 +9,13 @@
 }
 
 .verify {
-  color: #ffffff;
+  color: var(--white);
   font-weight: bold;
   background-color: var(--fs-green);
 }
 
 .unverify {
-  color: #ffffff;
+  color: var(--white);
   font-weight: bold;
   background-color: red;
 }

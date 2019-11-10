@@ -66,7 +66,7 @@
 
 .linklist.join li.active a, .linklist.join li.active a:hover {
   background-color: var(--fs-green) !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 .linklist.join li a:hover {
@@ -135,7 +135,7 @@
 #joinform .iamchooser a.active i {
   background-color: var(--fs-green) !important;
   border-color: var(--fs-green) !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 #joinform .avatar .container {

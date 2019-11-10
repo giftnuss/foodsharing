@@ -18,7 +18,7 @@ div.tablesort-wrapper {
   table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 
     background-color: var(--fs-brown);
-    color: #ffffff;
+    color: var(--white);
     border: 0 solid #fffffe;
     padding: 8px;
   }
@@ -59,16 +59,16 @@ div.tablesort-wrapper {
   }
 
   table.tablesorter tbody tr.odd td {
-    background-color: #ffffff;
+    background-color: var(--white);
   }
 
   table.tablesorter tbody tr:hover td {
     background-color: var(--fs-brown);
-    color: #ffffff !important;
+    color: var(--white) !important;
   }
 
   table.tablesorter tbody tr:hover td a {
-    color: #ffffff !important;
+    color: var(--white) !important;
   }
 
   table.tablesorter tbody tr ul.toolbar {
@@ -80,7 +80,7 @@ div.tablesort-wrapper {
 
   div.pager {
     background-color: var(--fs-brown);
-    color: #ffffff;
+    color: var(--white);
     margin: 10px;
     padding: 10px;
   }

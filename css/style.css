@@ -69,7 +69,7 @@
 }
 
 .top {
-  background-color: #ffffff;
+  background-color: var(--white);
   padding: 15px;
   margin-bottom: 15px;
 }
@@ -94,7 +94,7 @@
 }
 
 .bubble {
-  background-color: #ffffff !important;
+  background-color: var(--white) !important;
   padding: 8px !important;
   position: absolute !important;
   width: 250px !important;
@@ -105,7 +105,7 @@
 }
 
 .bubble-right:after {
-  border-color: transparent #ffffff !important;
+  border-color: transparent var(--white) !important;
   border-style: solid !important;
   border-width: 7px 7px 7px 0 !important;
   content: "" !important;
@@ -233,7 +233,7 @@ label.wrapper-label.required:after {
 
 select {
   padding: 7px;
-  background-color: #ffffff;
+  background-color: var(--white);
 }
 
 .margin-bottom {
@@ -426,12 +426,12 @@ div.msg-inside.error i {
 
 div#pulse-success {
   background-color: #64ae24 !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 div#pulse-error {
   background-color: #e74955 !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 div#pulse-info {
@@ -548,7 +548,7 @@ ul.team li a .infos .item {
 }
 
 ul.team li a:hover .infos .item {
-  color: #ffffff;
+  color: var(--white);
 }
 
 ul.team li a .avatar {
@@ -561,9 +561,9 @@ ul.team li a {
   margin: 0;
   display: block;
   padding: 5px;
-  background-color: #ffffff;
+  background-color: var(--white);
   height: 35px;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 ul.team li a.verantwortlich {
@@ -768,7 +768,7 @@ ul.imglist li a img {
 }
 
 div.input-wrapper.today {
-  background-color: #ffffff;
+  background-color: var(--white);
   margin-left: -10px;
   margin-right: -10px;
   padding-left: 10px;
@@ -949,7 +949,7 @@ ul.linklist li > a.more {
   background-color: #64ae24;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  color: #ffffff;
+  color: var(--white);
   display: block;
   font-size: 12px;
   font-weight: bold;
@@ -985,7 +985,7 @@ ul.linklist li > a.active {
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
   background-color: #64ae24;
-  color: #ffffff;
+  color: var(--white);
 }
 
 .updatepost {
@@ -1057,7 +1057,7 @@ div.statdisplay .item {
   margin-right: 8px;
   border-radius: 8px;
   background-color: #64ae24;
-  color: #ffffff;
+  color: var(--white);
   text-align: center;
   width: 62px;
 }
@@ -1188,7 +1188,7 @@ span.verified {
 }
 
 .scroller .track {
-  background-color: #ffffff;
+  background-color: var(--white);
   height: 100%;
   width: 8px;
   position: relative;
@@ -1268,7 +1268,7 @@ span.verified {
   text-decoration: none;
   padding: 6px;
   border-radius: 40px;
-  background: #ffffff;
+  background: var(--white);
 }
 
 .vouch-banana span {
@@ -1321,7 +1321,7 @@ a.light {
   background-color: #e07a0b !important;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  color: #ffffff !important;
+  color: var(--white) !important;
   display: block;
   font-size: 13px;
   font-weight: bold;
@@ -1409,7 +1409,7 @@ a.moreswaplink:hover {
 a.preview-thumb {
   display: block;
   float: left;
-  border: 3px solid #ffffff;
+  border: 3px solid var(--white);
   margin: 3px;
   width: 60px;
   height: 60px;
@@ -1463,7 +1463,7 @@ td.load {
 
 
 .ui-button, .button {
-  color: #ffffff !important;
+  color: var(--white) !important;
   background-color: #64ae24;
   border-radius: 6px;
   border: 0 none;
@@ -1615,7 +1615,7 @@ footer .linklist li a:hover {
 
 .vidlink img {
   padding: 0;
-  border: 10px solid #ffffff;
+  border: 10px solid var(--white);
   width: 100%;
   box-sizing: border-box;
   height: auto;

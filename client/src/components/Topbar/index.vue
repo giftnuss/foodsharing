@@ -285,7 +285,7 @@ export default {
     // logo
     .navbar-brand {
         font-family: 'Alfa Slab One',serif;
-        color: #ffffff;
+        color: var(--white);
         margin-right: 0;
         font-size: 1.1rem;
         span {

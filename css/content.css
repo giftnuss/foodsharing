@@ -224,7 +224,7 @@ textarea {
 
 a.linkrow:hover {
   background: url(/css/images/ui-bg_highlight-soft_40_407B35_1x100.png) repeat-x scroll 50% 50% #407b35;
-  color: #ffffff;
+  color: var(--white);
 }
 
 a.linkrow {
@@ -432,7 +432,7 @@ i {
   display: inline-block;
   background-color: #cd071e;
   text-align: center;
-  color: #ffffff;
+  color: var(--white);
   width: 24px;
   height: 24px;
   line-height: 24px;
