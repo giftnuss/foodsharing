@@ -38,6 +38,7 @@
 - refactored statsman from model to gateway !1111 #9 @peter.toennies
 - refactrored the food share point module !1108 !1105 @peter.toennies
 - Removed broken nightly bell deletion maintenance script !1180 @dthulke
+- Uniform foodsharing colors on the whole page #75 !1174 @chriswalg
 
 ## Dev/Test/CI stuff
 
