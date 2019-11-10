@@ -10,7 +10,7 @@ table.tablesorter th {
 	background-color: #6E6E6E;
 }
 table.tablesorter td {
-	color: var(--fs-white);
+	color: #FFF;
 	padding: 5px;
 }
 table.tablesorter .even {
@@ -22,9 +22,9 @@ table.tablesorter .odd {
 table.tablesorter .header {
 	background-image: url(bg.png);
 	background-repeat: no-repeat;
-	border-left: 1px solid var(--fs-white);
+	border-left: 1px solid #FFF;
 	border-right: 1px solid #000;
-	border-top: 1px solid var(--fs-white);
+	border-top: 1px solid #FFF;
 	padding-left: 30px;
 	padding-top: 8px;
 	height: auto;
