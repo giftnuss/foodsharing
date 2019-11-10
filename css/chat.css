@@ -13,7 +13,7 @@
 }
 
 .chatboxhead {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
   padding: 0;
   color: #ffffff;
 
@@ -61,7 +61,7 @@
 }
 
 .chatboxhead .settings li .optinput i {
-  color: #4a3520;
+  color: var(--fs-brown);
   cursor: pointer;
   font-size: 20px;
   margin-left: -21px;
@@ -70,7 +70,7 @@
 }
 
 .chatboxhead .settings li .optinput i:hover {
-  color: #46891b;
+  color: var(--fs-green);
 }
 
 .chatboxhead .settings li input {
@@ -148,7 +148,7 @@
 
 .chatboxinfo {
   margin-left: -1em;
-  color: #4a3520;
+  color: var(--fs-brown);
   font-size: 12px;
 }
 
@@ -190,7 +190,7 @@
 .chatboxmessagecontent {
   background: none repeat scroll 0 0 #e1e1db;
   border-radius: 6px;
-  color: #4a3520;
+  color: var(--fs-brown);
   display: block;
   font-size: 12px;
   line-height: 1.28;
@@ -298,7 +298,7 @@
 }
 
 .conversation-list .icon .img.brown {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
 }
 
 .conversation-list .icon .img.orange {
@@ -310,7 +310,7 @@
 }
 
 .conversation-list .icon .img.green {
-  background-color: #599022;
+  background-color: var(--fs-green);
 }
 
 .conversation-list li > a {

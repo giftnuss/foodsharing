@@ -352,7 +352,7 @@ class DashboardControl extends Control
 			}
 			#activity ul.linklist li span a
 			{
-				color:#46891b !important;
+				color:var(--fs-green) !important;
 			}
 			#activity span.n i.fa
 			{
@@ -369,7 +369,7 @@ class DashboardControl extends Control
 			#activity ul.linklist li span a:hover
 			{
 				text-decoration:underline !important;
-				color:#46891b !important;
+				color:var(--fs-green) !important;
 			}
 
 			#activity ul.linklist li

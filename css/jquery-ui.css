@@ -827,7 +827,7 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner {
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active a:hover {
-    color: #4a911c;
+    color: var(--fs-green);
     cursor: default;
 }
 
@@ -954,17 +954,17 @@ body .ui-tooltip {
 .ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {
     border: 1px solid #f8893f;
     background: #fee4bd url(/css/images/ui-bg_highlight-hard_65_fee4bd_1x100.png) 50% top repeat-x;
-    color: #592003
+    color: var(--fs-brown)
 }
 
 .ui-state-error a, .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-    color: #592003
+    color: var(--fs-brown)
 }
 
 .ui-state-error-text, .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text {
-    color: #592003
+    color: var(--fs-brown)
 }
 
 .ui-priority-primary, .ui-widget-content .ui-priority-primary,

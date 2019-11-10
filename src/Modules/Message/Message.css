@@ -41,7 +41,7 @@ border-radius: 4px;
 }
 
 #msg-conversation div.loader i {
-  color: #4a3520;
+  color: var(--fs-brown);
   font-size: 20px;
 }
 
@@ -66,7 +66,7 @@ border-radius: 4px;
   min-height: 35px;
   padding: 6px;
   position: relative;
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 #msg-conversation li.my-message span.body {
@@ -205,7 +205,7 @@ ul.conversation-list > li.unread-1 {
   }
 
   #msg-conversation-title {
-    color: #4a3520;
+    color: var(--fs-brown);
   }
 
   #msg-conversation-wrapper {

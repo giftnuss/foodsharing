@@ -1,3 +1,10 @@
+:root {
+  --fs-brown: #533a20;
+  --fs-green: #64ae24;
+  --fs-beige: #f1e7c9;
+  --fs-white: #F9F5E0;
+}
+
 .avatar, .avatar > i {
   display: inline-block;
   background-repeat: no-repeat;
@@ -146,7 +153,7 @@
 }
 
 .my-message a {
-  color: #f1e7c9;
+  color: var(--fs-beige);
 }
 
 .my-message a:hover {
@@ -174,16 +181,16 @@ q:before, q:after {
 
 .odd {
   background-color: #fffffe;
-  border-bottom: 1px solid #f1e7c9;
+  border-bottom: 1px solid var(--fs-beige);
 }
 
 .even {
   background-color: #fffffe;
-  border-bottom: 1px solid #f1e7c9;
+  border-bottom: 1px solid var(--fs-beige);
 }
 
 body {
-  background-color: #f1e7c9;
+  background-color: var(--fs-beige);
 }
 
 .float_right {
@@ -429,7 +436,7 @@ div#pulse-error {
 
 div#pulse-info {
   background-color: #f7e9cf !important;
-  color: #654934 !important;
+  color: var(--fs-brown) !important;
 }
 
 div.pulse-msg p {
@@ -746,7 +753,7 @@ ul.imglist li a {
   margin: 0;
   display: block;
   padding: 4px;
-  background-color: #f1e7c9;
+  background-color: var(--fs-beige);
   height: 35px;
   border-radius: 3px;
   text-decoration: none;
@@ -1015,7 +1022,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .post a {
-  color: #599022;
+  color: var(--fs-green);
   text-decoration: none;
 }
 
@@ -1572,7 +1579,7 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
 }
 
 footer .inside {
-  color: #f1e7c9;
+  color: var(--fs-beige);
 }
 
 footer .imglink {
@@ -1593,7 +1600,7 @@ footer .wrapper {
 
 footer .linklist li a {
   background-color: #533a20;
-  color: #f1e7c9 !important;
+  color: var(--fs-beige) !important;
 }
 
 footer .linklist li a:hover {
@@ -1672,6 +1679,6 @@ footer .linklist li a:hover {
   footer ul.linklist {
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #f1e7c9;
+    border-bottom: 1px solid var(--fs-beige);
   }
 }
