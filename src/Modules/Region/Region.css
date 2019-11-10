@@ -30,13 +30,13 @@ span.thread_title {
 .last_post {
   float: right;
   padding: 7px !important;
-  background-color: var(--white) !important;
+  background-color: #ffffff !important;
   color: #4a3522 !important;
   width: 170px;
 }
 
 .last_post span {
-  background-color: var(--white) !important;
+  background-color: #ffffff !important;
   color: #4a3522 !important;
   font-size: 12px;
 }
@@ -66,7 +66,7 @@ div.post div.xv_left ul li a {
 
 div.post div.xv_left ul li a:hover {
   background-color: var(--fs-brown);
-  color: var(--white);
+  color: #ffffff;
 }
 
 div.post textarea {
@@ -85,7 +85,7 @@ ul.food-share-point-list li a span.image {
 }
 
 ul.food-share-point-list li a span.image.noimage {
-  background-color: var(--white);
+  background-color: #ffffff;
 }
 
 ul.food-share-point-list li a span.clear {
@@ -136,7 +136,7 @@ div.event {
   border: 1px solid #2b400c;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  color: var(--white);
+  color: #ffffff;
   display: block;
   font-size: 13px;
   font-weight: bold;

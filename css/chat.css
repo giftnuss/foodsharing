@@ -9,13 +9,13 @@
 
 .chatbox .slimScrollDiv {
   padding: 0 0 15px 0;
-  background-color: var(--white);
+  background-color: #ffffff;
 }
 
 .chatboxhead {
   background-color: var(--fs-brown);
   padding: 0;
-  color: var(--white);
+  color: #ffffff;
 
   border-right: 1px solid #b39985;
   border-left: 1px solid #b39985;
@@ -30,12 +30,12 @@
 }
 
 .linklist.linkbubble {
-  background-color: var(--white);
+  background-color: #ffffff;
   padding: 3px;
 }
 
 .linklist.linkbubble:after {
-  border-color: var(--white) transparent;
+  border-color: #ffffff transparent;
   border-style: solid;
   border-width: 0 7px 8px;
   box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.35);
@@ -110,13 +110,13 @@
   border-left: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
   border-bottom: 1px solid #eeeeee;
-  background-color: var(--white);
+  background-color: #ffffff;
   overflow-x: hidden;
 }
 
 .chatboxinput {
   padding: 5px;
-  background-color: var(--white);
+  background-color: #ffffff;
   border-left: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
@@ -234,7 +234,7 @@
 
 .chatboxtitle {
   padding: 7px;
-  color: var(--white);
+  color: #ffffff;
   display: block;
   float: left;
   width: 205px;
@@ -248,7 +248,7 @@
   margin-right: 3px;
   position: relative;
   top: -1px;
-  color: var(--white);
+  color: #ffffff;
 }
 
 .chatboxtitle, .chatboxtitle:hover, .chatboxtitle:active, .chatboxtitle:focus {
@@ -257,7 +257,7 @@
 
 .chatboxtitle:hover {
   text-decoration: none;
-  color: var(--white);
+  color: #ffffff;
 }
 
 .conversation-list .pics {

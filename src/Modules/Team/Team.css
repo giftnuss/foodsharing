@@ -1,5 +1,5 @@
 #team-user {
-  background-color: var(--white);
+  background-color: #ffffff;
   padding: 30px;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -45,7 +45,7 @@
 }
 
 #team-list li a {
-  background-color: var(--white);
+  background-color: #ffffff;
   padding: 20px;
   text-align: center;
 }
@@ -104,7 +104,7 @@
 }
 
 #team-list a:hover .img {
-  background-color: var(--white);
+  background-color: #ffffff;
 }
 
 #team-list .foot, #team-user .foot {
@@ -144,7 +144,7 @@
 
 .foot i {
   color: #533a24;
-  background-color: var(--white);
+  background-color: #ffffff;
   font-size: 17px;
   padding: 8px;
   border-radius: 20px;

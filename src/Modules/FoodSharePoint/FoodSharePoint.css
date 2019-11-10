@@ -18,7 +18,7 @@ ul.food-share-point-list li a span.image {
 }
 
 ul.food-share-point-list li a span.image.noimage {
-  background-color: var(--white);
+  background-color: #ffffff;
 }
 
 span.clear {

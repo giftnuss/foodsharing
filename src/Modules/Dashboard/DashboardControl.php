@@ -312,7 +312,7 @@ class DashboardControl extends Control
 				height:32px;
 				width:32px;
 				margin-right:-35px;
-				border-right:1px solid var(--white);
+				border-right:1px solid #ffffff;
 				border-top-left-radius: 3px;
 				border-bottom-left-radius: 3px;
 			}
@@ -331,7 +331,7 @@ class DashboardControl extends Control
 
 			#activity ul.linklist li span.qr .loader
 			{
-				background-color: var(--white);
+				background-color: #ffffff;
 				position: relative;
 				text-align: left;
 				top: -10px;
@@ -375,7 +375,7 @@ class DashboardControl extends Control
 			#activity ul.linklist li
 			{
 				margin-bottom:10px;
-				background-color:var(--white);
+				background-color:#ffffff;
 				padding:10px;
 				border-radius: 6px;
 			}

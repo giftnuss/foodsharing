@@ -45,7 +45,7 @@ div#main {
 }
 
 .ajax-loader {
-  background-color: var(--white);
+  background-color: #ffffff;
   border-radius: 10px 10px 10px 10px;
   left: 50%;
   margin-left: -21px;

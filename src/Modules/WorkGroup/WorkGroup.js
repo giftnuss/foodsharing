@@ -115,7 +115,7 @@ $('#work_group_form_photo-link').fancybox({
         height: 500,
         maxWidth: 2000,
         maxHeight: 2000,
-        fillColor: 'var(--white)',
+        fillColor: '#ffffff',
         imageSmoothingQuality: 'high'
       }).toBlob((blob) => {
         const formData = new window.FormData()
