@@ -18,7 +18,7 @@
 }
 
 .stat_icon {
-  color: #FFF;
+  color: var(--fs-white);
   font-size: 96px;
   line-height: 220px;
 }

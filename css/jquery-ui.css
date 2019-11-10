@@ -883,7 +883,7 @@ body .ui-tooltip {
 
 .ui-widget-content {
     border: 0 none;
-    background: #FFFFFE;
+    background: var(--fs-white);
     color: #1e1b1d
 }
 
@@ -904,7 +904,7 @@ body .ui-tooltip {
 
 .ui-state-default, .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-    border: 0px solid #FFF;
+    border: 0px solid var(--fs-white);
     background-color: #64ae24;
     font-weight: normal;
     color: #fff
@@ -917,7 +917,7 @@ body .ui-tooltip {
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover,
 .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-    border: 0px solid #FFF;
+    border: 0px solid var(--fs-white);
     background-color: #64AB36;
 }
 
@@ -929,7 +929,7 @@ body .ui-tooltip {
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
     border: 1px solid #e0cfc2;
-    background-color: #FFFFFE;
+    background-color: var(--fs-white);
     font-weight: normal;
     color: #4A911C
 }
@@ -1800,7 +1800,7 @@ body .ui-tooltip {
 .ui-datepicker-inline {
     width: 243px;
     border: 0 !important;
-    background-color: #FFF !important;
+    background-color: var(--fs-white) !important;
 }
 
 .ui-datepicker-inline .ui-state-active {
