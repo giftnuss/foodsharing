@@ -27,6 +27,7 @@
 - Prevent forum thread email sending to countries and federal states !1160 @jofranz
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
 - Change the close icon in pickup slot message to a better position #731 !1172 @chriswalg
+- Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
