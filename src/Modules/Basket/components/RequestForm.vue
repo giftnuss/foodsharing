@@ -71,6 +71,8 @@
       :ok-title="$i18n('send_request')"
       @ok="request(requestMessage)"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
     >
       <b-form-textarea
         id="contactmessage"
