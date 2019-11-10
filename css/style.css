@@ -538,7 +538,7 @@ ul.team li a .infos .item {
   font-size: 11px;
   text-decoration: none;
   display: block;
-  color: #645242;
+  color: var(--fs-brown);
   line-height: 11px;
   margin-bottom: 2px;
   height: 11px;
@@ -657,7 +657,7 @@ div.foot {
   text-align: left;
   font-size: 11px;
   padding: 12px 0 5px 8px;
-  color: #645242;
+  color: var(--fs-brown);
 }
 
 div.foot span.dot {
@@ -1001,11 +1001,11 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 
 .updatepost div.post {
   margin-left: 60px;
-  color: #645242;
+  color: var(--fs-brown);
 }
 
 .activity_feed_content_link {
-  border-left: 2px solid #645242;
+  border-left: 2px solid var(--fs-brown);
   padding-left: 10px;
   margin-top: 15px;
   font-size: 13px;
