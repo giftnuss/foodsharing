@@ -1,9 +1,5 @@
 <?php
 
-use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
-use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
-
 class QuizGatewayTest extends \Codeception\Test\Unit
 {
 	protected $tester;

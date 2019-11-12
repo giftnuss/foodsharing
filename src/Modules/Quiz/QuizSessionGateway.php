@@ -9,13 +9,13 @@ class QuizSessionGateway extends BaseGateway
 {
 	private $quizGateway;
 
-	public function __construct(Database $db, QuizGateway $quizGateway )
+	public function __construct(Database $db, QuizGateway $quizGateway)
 	{
 		parent::__construct($db);
 
 		$this->quizGateway = $quizGateway;
 	}
-	
+
 	public function initQuizSession(int $fsId, int $quizId, array $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
@@ -249,8 +249,8 @@ class QuizSessionGateway extends BaseGateway
 
 		return $out;
 	}
-	
-/**
+
+	/**
 	 *	Determines a user's current quiz status.
 	 *
 	 *	@param int $quizId Quiz level/role
