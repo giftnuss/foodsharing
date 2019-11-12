@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Dev;
 
+use Carbon\Carbon;
+use Codeception\CustomCommandInterface;
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
 use Symfony\Component\Console\Command\Command;
-use Codeception\CustomCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Carbon\Carbon;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -218,6 +218,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		foreach (range(0, 3) as $_) {
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
+		}
+
+		foreach (range(1, 3) as $quizRole) {
+			$I->createQuiz($quizRole, 3);
 		}
 	}
 }

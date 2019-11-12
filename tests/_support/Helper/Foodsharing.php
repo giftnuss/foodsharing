@@ -5,6 +5,7 @@ namespace Helper;
 use DateTime;
 use Faker;
 use Carbon\Carbon;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -103,10 +104,15 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
+		$roles = [
+			Role::FOODSAVER => 'Foodsaver',
+			Role::STORE_MANAGER => 'Store Manager',
+			Role::AMBASSADOR => 'Ambassador'
+		];
 		$params = [
 			'id' => $quizId,
 			'name' => 'Quiz #' . $quizId,
-			'desc' => '',
+			'desc' => 'Werde ' . $roles[$quizId] . ' mit diesem Quiz.',
 			'maxfp' => 0,
 			'questcount' => $questionCount,
 		];
@@ -114,7 +120,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$params['questions'] = [];
 		for ($i = 1; $i <= $questionCount; ++$i) {
-			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
+			$questionText = 'Frage #' . $i . ' für Quiz #' . $params['id'];
 			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
 		}
 
@@ -148,8 +154,8 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$params = [
 			'question_id' => $questionId,
-			'text' => 'The ' . ($right ? 'right' : 'wrong') . ' answer for question with ID ' . $questionId,
-			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
+			'text' => ($right ? 'Richtige' : 'Falsche') . ' Antwort',
+			'explanation' => 'Diese Antwort ist '. ($right ? 'richtig' : 'falsch') . '.',
 			'right' => $right ? 1 : 0
 		];
 		$params['id'] = $this->haveInDatabase('fs_answer', $params);
