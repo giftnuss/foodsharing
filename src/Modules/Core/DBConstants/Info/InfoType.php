@@ -1,5 +1,7 @@
 <?php
 
+// tables fs_fairteiler_follower, fs_theme_follower
+
 namespace Foodsharing\Modules\Core\DBConstants\Info;
 
 /**
