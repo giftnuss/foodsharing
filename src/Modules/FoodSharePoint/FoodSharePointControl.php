@@ -125,7 +125,7 @@ class FoodSharePointControl extends Control
 
 		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
-			$infoType = $request->query->get('infotype', InfoType::ALERT);
+			$infoType = $request->query->get('infotype', InfoType::BELL);
 			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id() ?? 0, $follow, $infoType)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
@@ -168,7 +168,7 @@ class FoodSharePointControl extends Control
 			return false;
 		}
 
-		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::ALERT], true)) {
+		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
 			$this->foodSharePointGateway->follow($foodSharePointId, $foodSharerId, $infoType);
 		} else {
 			$this->foodSharePointGateway->unfollow($foodSharePointId, $foodSharerId);

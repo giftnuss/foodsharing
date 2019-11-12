@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class FoodSharePointView extends View
 {
@@ -125,7 +126,7 @@ class FoodSharePointView extends View
 						goTo("' . $this->routeHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
-			});		
+			});
 		');
 
 		global $g_data;
@@ -134,8 +135,8 @@ class FoodSharePointView extends View
 		return '
 			<div id="follow-hidden">
 				' . $this->v_utils->v_form_radio('infotype', array('desc' => $this->translationHelper->s('infotype_desc'), 'values' => array(
-				array('id' => 1, 'name' => $this->translationHelper->s('infotype_email')),
-				array('id' => 2, 'name' => $this->translationHelper->s('infotype_alert'))
+				array('id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('infotype_email')),
+				array('id' => InfoType::BELL, 'name' => $this->translationHelper->s('infotype_bell'))
 			))) . '
 			</div>
 		';

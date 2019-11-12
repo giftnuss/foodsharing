@@ -9,5 +9,5 @@ class InfoType
 {
 	public const NONE = 0;
 	public const EMAIL = 1;
-	public const ALERT = 2;
+	public const BELL = 2;
 }

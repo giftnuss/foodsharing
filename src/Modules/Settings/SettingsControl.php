@@ -406,7 +406,7 @@ class SettingsControl extends Control
 					if ($foodSharePointId > 0) {
 						if ($infoType == InfoType::NONE) {
 							$fspIdsToUnfollow[] = $foodSharePointId;
-						} elseif ($infoType < 4) {
+						} elseif (in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
 							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $infoType);
 						}
 					}
@@ -415,7 +415,7 @@ class SettingsControl extends Control
 					if ($themeId > 0) {
 						if ($infoType == InfoType::NONE) {
 							$threadIdsToUnfollow[] = $themeId;
-						} elseif ($infoType < 4) {
+						} elseif (in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
 							$this->settingsGateway->updateFollowThread($fsId, $themeId, $infoType);
 						}
 					}
