@@ -1,7 +1,6 @@
 <?php
 
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizCest
 {

@@ -157,7 +157,8 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function letUserFailQuiz(array $user, int $daysAgo, int $times) {
+	public function letUserFailQuiz(array $user, int $daysAgo, int $times)
+	{
 		$level = $user['rolle'] + 1;
 		foreach (range(1, $times) as $i) {
 			$this->createQuizTry($user['id'], $level, SessionStatus::FAILED, $daysAgo);
