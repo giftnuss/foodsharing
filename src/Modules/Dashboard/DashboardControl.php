@@ -11,6 +11,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizGateway;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -28,7 +29,7 @@ class DashboardControl extends Control
 	private $profileGateway;
 	private $sanitizerService;
 	private $imageService;
-	private $quizGateway;
+	private $quizSessionGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -42,7 +43,7 @@ class DashboardControl extends Control
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
-		QuizGateway $quizGateway
+		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -55,7 +56,7 @@ class DashboardControl extends Control
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
-		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 
 		parent::__construct();
 
@@ -89,9 +90,9 @@ class DashboardControl extends Control
 
 		$fsId = $this->session->id();
 		if (
-			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
-			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
-			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
+			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 

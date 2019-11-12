@@ -91,13 +91,6 @@ class QuizGateway extends BaseGateway
 		return $quiz ? $quiz['name'] : '';
 	}
 
-	public function hasPassedQuiz(int $fsId, int $quizId): bool
-	{
-		$passedCount = $this->quizSessionGateway->countSessions($fsId, $quizId, SessionStatus::PASSED);
-
-		return $passedCount > 0;
-	}
-
 	public function setFsQuizRole(int $fsId, int $quizRole): int
 	{
 		return $this->db->update(

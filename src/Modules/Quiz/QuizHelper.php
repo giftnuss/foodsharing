@@ -8,13 +8,13 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class QuizHelper
 {
-	private $quizGateway;
+	private $quizSessionGateway;
 	private $storeGateway;
 	private $foodsaverGateway;
 
-	public function __construct(QuizGateway $quizGateway, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(QuizSessionGateway $quizSessionGateway, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
 	{
-		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 	}
@@ -29,7 +29,7 @@ class QuizHelper
 	public function refreshFsQuizRole(int $fsId): int
 	{
 		foreach ([Role::AMBASSADOR, Role::STORE_MANAGER, Role::FOODSAVER] as $quizRole) {
-			if ($this->quizGateway->hasPassedQuiz($fsId, $quizRole)) {
+			if ($this->quizSessionGateway->hasPassedQuiz($fsId, $quizRole)) {
 				return $this->foodsaverGateway->setQuizRole($fsId, $quizRole);
 			}
 		}
@@ -42,11 +42,11 @@ class QuizHelper
 		$doesManageStores = (int)$this->storeGateway->getStoreCountForBieb($fsId) > 0;
 		$doesRepresentRegions = (int)$this->foodsaverGateway->getBezirkCountForBotschafter($fsId) > 0;
 
-		if ($fsRole == Role::FOODSAVER && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
+		if ($fsRole == Role::FOODSAVER && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 			return Role::FOODSAVER;
-		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
+		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
 			return Role::STORE_MANAGER;
-		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
+		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
 			return Role::AMBASSADOR;
 		}
 

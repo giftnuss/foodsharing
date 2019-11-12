@@ -384,6 +384,13 @@ class QuizSessionGateway extends BaseGateway
 		);
 	}
 
+	public function hasPassedQuiz(int $fsId, int $quizId): bool
+	{
+		$passedCount = $this->countSessions($fsId, $quizId, SessionStatus::PASSED);
+
+		return $passedCount > 0;
+	}
+
 	/**
 	 * Returns the number of sessions matching the given foodsaver Id, quiz Id, and session status.
 	 * If sessionStatus is null, all status types are counted.
@@ -409,7 +416,6 @@ class QuizSessionGateway extends BaseGateway
 			$criteria
 		);
 	}
-
 
 	public function getLastTry(int $fsId, int $quizId): int
 	{

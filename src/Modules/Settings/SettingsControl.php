@@ -127,7 +127,7 @@ class SettingsControl extends Control
 			} else {
 				if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
 					$fsId = $this->session->id();
-					if (!$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
+					if (!$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
@@ -228,7 +228,7 @@ class SettingsControl extends Control
 	private function confirm_fs()
 	{
 		$fsId = $this->session->id();
-		if ($this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
+		if ($this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
@@ -252,7 +252,7 @@ class SettingsControl extends Control
 	private function confirm_bip()
 	{
 		$fsId = $this->session->id();
-		if ($this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
+		if ($this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
@@ -273,7 +273,7 @@ class SettingsControl extends Control
 	{
 		$this->pageHelper->addBread('Botschafter werden');
 		$fsId = $this->session->id();
-		if ($this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
+		if ($this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
 			$showform = true;
 
 			if ($this->submitted()) {
