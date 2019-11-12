@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Settings;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Quiz\QuizGateway;
+use DateTime;
 
 class SettingsGateway extends BaseGateway
 {
@@ -34,7 +35,7 @@ class SettingsGateway extends BaseGateway
 		foreach ($logChangedKeys as $k) {
 			if (array_key_exists($k, $new) && $new[$k] != $old[$k]) {
 				$this->db->insert('fs_foodsaver_change_history', [
-					'date' => date(\DateTime::ISO8601),
+					'date' => date(DateTime::ISO8601),
 					'fs_id' => $fsId,
 					'changer_id' => $changerId,
 					'object_name' => $k,
@@ -47,8 +48,7 @@ class SettingsGateway extends BaseGateway
 
 	public function saveInfoSettings(int $fsId, int $newsletter, int $infomail): int
 	{
-		return $this->db->update(
-			'fs_foodsaver',
+		return $this->db->update('fs_foodsaver',
 			[
 				'newsletter' => $newsletter,
 				'infomail_message' => $infomail
@@ -62,79 +62,34 @@ class SettingsGateway extends BaseGateway
 
 	public function getSleepData(int $fsId): array
 	{
-		return $this->db->fetch('
-			SELECT
-				sleep_status,
-				sleep_from,
-				sleep_until,
-				sleep_msg
-
-			FROM
-				fs_foodsaver
-
-			WHERE
-				id = :fsId
-		', [':fsId' => $fsId]);
-	}
-
-	private function getQuiz(int $quizId): array
-	{
-		return $this->db->fetchByCriteria(
-			'quiz',
+		return $this->db->fetchByCriteria('fs_foodsaver',
 			[
-				'name',
-				'desc'
+				'sleep_status',
+				'sleep_from',
+				'sleep_until',
+				'sleep_msg'
 			],
-			['id' => $quizId]
+			['id' => $fsId]
 		);
 	}
 
-	/*
-	 * In the session are only the failed answers stored in so now we get all the right answers and fill out the array
-	 */
-	private function addRightAnswers(array $indexList, array $fullList): array
+	public function updateSleepMode(int $fsId, int $status, string $from, string $to, string $msg): int
 	{
-		$out = array();
-
-		$number = 0;
-
-		foreach ($indexList as $id => $value) {
-			++$number;
-			if (!isset($fullList[$id])) {
-				if ($question = $this->quizGateway->getQuestion($id)) {
-					$answers = array();
-					if ($qanswers = $this->quizGateway->getAnswers($id)) {
-						foreach ($qanswers as $a) {
-							$answers[$a['id']] = $a;
-							$answers[$a['id']]['user_say'] = $a['right'];
-						}
-					}
-					$out[$id] = array(
-						'id' => $id,
-						'text' => $question['text'],
-						'duration' => $question['duration'],
-						'wikilink' => $question['wikilink'],
-						'fp' => $question['fp'],
-						'answers' => $answers,
-						'number' => $number,
-						'percent' => 0,
-						'userfp' => 0,
-						'userduration' => 10,
-						'noco' => 0
-					);
-				}
-			} else {
-				$out[$id] = $fullList[$id];
-			}
-		}
-
-		return $out;
+		return $this->db->update('fs_foodsaver',
+			[
+				'sleep_status' => $status,
+				'sleep_from' => $from,
+				'sleep_until' => $to,
+				'sleep_msg' => strip_tags($msg)
+			],
+			['id' => $fsId]
+		);
 	}
+
 
 	public function addNewMail(int $fsId, string $email, string $token): int
 	{
-		return $this->db->insertOrUpdate(
-			'fs_mailchange',
+		return $this->db->insertOrUpdate('fs_mailchange',
 			[
 				'foodsaver_id' => $fsId,
 				'newmail' => strip_tags($email),
@@ -144,35 +99,68 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function abortChangemail(int $fsId): int
-	{
-		return $this->deleteMailChanges($fsId);
-	}
-
 	public function changeMail(int $fsId, string $email): int
 	{
 		$this->deleteMailChanges($fsId);
 
-		return $this->db->update(
-			'fs_foodsaver',
+		return $this->db->update('fs_foodsaver',
 			['email' => strip_tags($email)],
 			['id' => $fsId]
 		);
 	}
 
-	private function deleteMailChanges(int $fsId): int
+	public function abortChangemail(int $fsId): int
 	{
-		return $this->db->delete('fs_mailchange', ['foodsaver_id' => $fsId]);
+		return $this->deleteMailChanges($fsId);
 	}
 
-	public function getMailchange(int $fsId): string
+	private function deleteMailChanges(int $fsId): int
 	{
-		return $this->db->fetchValue('
-			SELECT `newmail`
-			FROM fs_mailchange
-			WHERE foodsaver_id = :fsId
-		', [':fsId' => $fsId]);
+		return $this->db->delete('fs_mailchange',
+			['foodsaver_id' => $fsId]
+		);
 	}
+
+	public function getMailChange(int $fsId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_mailchange',
+			'newmail',
+			['foodsaver_id' => $fsId]
+		);
+	}
+
+	public function getNewMail(int $fsId, string $token): string
+	{
+		return $this->db->fetchValueByCriteria('fs_mailchange',
+			'newmail',
+			[
+				'token' => strip_tags($token),
+				'foodsaver_id' => $fsId
+			]
+		);
+	}
+
+	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infoType): int
+	{
+		return $this->db->update('fs_fairteiler_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $foodSharePointId
+			]
+		);
+	}
+
+	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
+	{
+		return $this->db->delete('fs_fairteiler_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $fspIds
+			]
+		);
+	}
+
 
 	public function getForumThreads(int $fsId): array
 	{
@@ -192,37 +180,13 @@ class SettingsGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infoType): int
-	{
-		return $this->db->update(
-			'fs_fairteiler_follower',
-			['infotype' => $infoType],
-			[
-				'foodsaver_id' => $fsId,
-				'fairteiler_id' => $foodSharePointId
-			]
-		);
-	}
-
 	public function updateFollowThread(int $fsId, int $themeId, int $infoType): int
 	{
-		return $this->db->update(
-			'fs_theme_follower',
+		return $this->db->update('fs_theme_follower',
 			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
 				'theme_id' => $themeId
-			]
-		);
-	}
-
-	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
-	{
-		return $this->db->delete(
-			'fs_fairteiler_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'fairteiler_id' => $fspIds
 			]
 		);
 	}
@@ -238,45 +202,19 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function getNewMail(int $fsId, string $token): string
-	{
-		return $this->db->fetchValue('
-			SELECT newmail
-			FROM fs_mailchange
-			WHERE `token` = :token
-				AND foodsaver_id = :fsId
-		', [':fsId' => $fsId, ':token' => strip_tags($token)]);
-	}
-
-	public function updateRole(int $fsId, int $roleId, int $currentRole): void
+	public function updateRole(int $fsId, int $newRoleId, int $currentRole): void
 	{
 		if ($roleId > $currentRole) {
-			$this->db->update(
-				'fs_foodsaver',
-				['rolle' => $roleId],
+			$this->db->update('fs_foodsaver',
+				['rolle' => $newRoleId],
 				['id' => $fsId]
 			);
 		}
 	}
 
-	public function updateSleepMode(int $fsId, int $status, string $from, string $to, string $msg): int
-	{
-		return $this->db->update(
-			'fs_foodsaver',
-			[
-				'sleep_status' => $status,
-				'sleep_from' => $from,
-				'sleep_until' => $to,
-				'sleep_msg' => strip_tags($msg)
-			],
-			['id' => $fsId]
-		);
-	}
-
 	public function storeApiToken(int $fsId, string $token): void
 	{
-		$this->db->insert(
-			'fs_apitoken',
+		$this->db->insert('fs_apitoken',
 			[
 				'foodsaver_id' => $fsId,
 				'token' => $token

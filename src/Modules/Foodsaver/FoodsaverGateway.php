@@ -314,6 +314,14 @@ final class FoodsaverGateway extends BaseGateway
 		return array();
 	}
 
+	public function getEmailAddress(int $fsId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver',
+			'email',
+			['id' => $fsId]
+		);
+	}
+
 	public function getEmailAdressen($region_ids)
 	{
 		$placeholders = $this->db->generatePlaceholders(count($region_ids));

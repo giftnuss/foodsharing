@@ -81,7 +81,7 @@ class SettingsXhr extends Control
 
 	public function changemail3()
 	{
-		if ($email = $this->settingsGateway->getMailchange($this->session->id())) {
+		if ($email = $this->settingsGateway->getMailChange($this->session->id())) {
 			$dia = new XhrDialog();
 			$dia->setTitle('E-Mail-Adresse ändern');
 
@@ -102,10 +102,10 @@ class SettingsXhr extends Control
 	public function changemail4()
 	{
 		$fsId = $this->session->id();
-		if ($fs = $this->foodsaverGateway->getFoodsaverDetails($fsId)) {
+		if ($email = $this->foodsaverGateway->getEmailAddress($fsId)) {
 			$did = strip_tags($_GET['did']);
-			if ($this->loginGateway->checkClient($fs['email'], $_GET['pw'])) {
-				if ($email = $this->settingsGateway->getMailchange($fsId)) {
+			if ($this->loginGateway->checkClient($email, $_GET['pw'])) {
+				if ($email = $this->settingsGateway->getMailChange($fsId)) {
 					if ($this->settingsGateway->changeMail($fsId, $email) > 0) {
 						$this->settingsGateway->logChangedSetting($fsId, ['email' => $this->session->user('email')], ['email' => $email], ['email']);
 
