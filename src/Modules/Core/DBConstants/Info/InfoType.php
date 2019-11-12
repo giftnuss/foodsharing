@@ -5,7 +5,7 @@
 namespace Foodsharing\Modules\Core\DBConstants\Info;
 
 /**
- * following type for a food share points or threats etc.
+ * Following type for food share points or threats.
  */
 class InfoType
 {
