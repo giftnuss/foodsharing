@@ -101,6 +101,13 @@ class SettingsControl extends Control
 		}
 	}
 
+	public function quizsession()
+	{
+		if ($session = $this->model->getQuizSession($_GET['sid'])) {
+			$this->pageHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
+		}
+	}
+
 	public function up_fs()
 	{
 		$quizRole = Role::FOODSAVER;
