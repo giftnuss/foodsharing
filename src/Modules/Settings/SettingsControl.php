@@ -415,7 +415,7 @@ class SettingsControl extends Control
 						if ($infoType == InfoType::NONE) {
 							$fspIdsToUnfollow[] = $foodSharePointId;
 						} elseif (in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
-							$this->settingsGateway->updateFollowFoodSharePoint($fsId, $foodSharePointId, $infoType);
+							$this->foodSharePointGateway->updateInfoType($fsId, $foodSharePointId, $infoType);
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
@@ -431,7 +431,7 @@ class SettingsControl extends Control
 			}
 
 			if (!empty($fspIdsToUnfollow)) {
-				$this->settingsGateway->unfollowFoodSharePoints($fsId, $fspIdsToUnfollow);
+				$this->foodSharePointGateway->unfollowFoodSharePoints($fsId, $fspIdsToUnfollow);
 			}
 			if (!empty($threadIdsToUnfollow)) {
 				$this->forumFollowerGateway->unfollowThreads($fsId, $threadIdsToUnfollow);

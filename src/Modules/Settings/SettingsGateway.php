@@ -144,29 +144,6 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infoType): int
-	{
-		return $this->db->update(
-			'fs_fairteiler_follower',
-			['infotype' => $infoType],
-			[
-				'foodsaver_id' => $fsId,
-				'fairteiler_id' => $foodSharePointId
-			]
-		);
-	}
-
-	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
-	{
-		return $this->db->delete(
-			'fs_fairteiler_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'fairteiler_id' => $fspIds
-			]
-		);
-	}
-
 	public function getForumThreads(int $fsId): array
 	{
 		return $this->db->fetchAll('

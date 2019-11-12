@@ -258,9 +258,38 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function unfollow(int $foodSharePointId, int $foodsaverId): int
+	public function unfollow(int $fsId, int $fspId): int
 	{
-		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $foodSharePointId, 'foodsaver_id' => $foodsaverId]);
+		return $this->db->delete(
+			'fs_fairteiler_follower',
+			[
+				'fairteiler_id' => $fspId,
+				'foodsaver_id' => $fsId
+			]
+		);
+	}
+
+	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
+	{
+		return $this->db->delete(
+			'fs_fairteiler_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $fspIds
+			]
+		);
+	}
+
+	public function updateInfoType(int $fsId, int $fspId, int $infoType): int
+	{
+		return $this->db->update(
+			'fs_fairteiler_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $fspId
+			]
+		);
 	}
 
 	public function getFollower(int $foodSharePointId): array
