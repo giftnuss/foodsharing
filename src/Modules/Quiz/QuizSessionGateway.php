@@ -82,7 +82,7 @@ class QuizSessionGateway extends BaseGateway
 		);
 	}
 
-	public function getSessions(int $quizId): array
+	public function listSessions(int $quizId): array
 	{
 		return $this->db->fetchAll('
 				SELECT
