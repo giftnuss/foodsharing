@@ -314,6 +314,17 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
+	private function getQuiz(int $quizId): array
+	{
+		return $this->db->fetchByCriteria('quiz',
+			[
+				'name',
+				'desc'
+			],
+			['id' => $quizId]
+		);
+	}
+
 	/*
 	 * In the session are only the failed answers stored in so now we get all the right answers and fill out the array
 	 */
