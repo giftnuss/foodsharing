@@ -17,6 +17,7 @@
 - Save mail quickreplies to sent folder #611 !1166 @alex.simm
 - Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
 - Basket rest endpoint returns the list of requests to show them in the app !1169 @dthulke
+- Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker

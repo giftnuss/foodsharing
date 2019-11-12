@@ -1,13 +1,12 @@
 import '@/core'
 import '@/globals'
+import i18n from '@/i18n'
 
 import './Index.scss'
 
 const video = document.querySelector('.vidlink')
-const videoHref = video.getAttribute('href')
 video.addEventListener('click', (event) => {
-  event.preventDefault()
-  video.innerHTML = `
-    <iframe width="100%" height="315" src="${videoHref}" frameborder="0" allowfullscreen></iframe>
-  `
+  if (!confirm(i18n('index.confirm_open_video'))) {
+    event.preventDefault()
+  }
 })
