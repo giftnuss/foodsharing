@@ -16,21 +16,18 @@ class QuizGateway extends BaseGateway
 {
 	private $bellGateway;
 	private $foodsaverGateway;
-	private $quizSessionGateway;
 	private $wallPostGateway;
 
 	public function __construct(
 		Database $db,
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
-		QuizSessionGateway $quizSessionGateway,
 		WallPostGateway $wallPostGateway
 	) {
 		parent::__construct($db);
 
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->quizSessionGateway = $quizSessionGateway;
 		$this->wallPostGateway = $wallPostGateway;
 	}
 
@@ -89,15 +86,6 @@ class QuizGateway extends BaseGateway
 		$quiz = $this->getQuiz($quizId);
 
 		return $quiz ? $quiz['name'] : '';
-	}
-
-	public function setFsQuizRole(int $fsId, int $quizRole): int
-	{
-		return $this->db->update(
-			'fs_foodsaver',
-			['quiz_rolle' => $quizRole],
-			['id' => $fsId]
-		);
 	}
 
 	public function addQuestion(int $quizId, string $text, int $failurePoints, int $duration): int
