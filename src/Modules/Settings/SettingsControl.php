@@ -13,6 +13,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class SettingsControl extends Control
@@ -25,6 +26,7 @@ class SettingsControl extends Control
 	private $foodsaverGateway;
 	private $foodSharePointGateway;
 	private $dataHelper;
+	private $forumFollowerGateway;
 	private $regionGateway;
 
 	public function __construct(
@@ -36,6 +38,7 @@ class SettingsControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		FoodSharePointGateway $foodSharePointGateway,
 		DataHelper $dataHelper,
+		ForumFollowerGateway $forumFollowerGateway,
 		RegionGateway $regionGateway
 	) {
 		$this->view = $view;
@@ -46,6 +49,7 @@ class SettingsControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->foodSharePointGateway = $foodSharePointGateway;
 		$this->dataHelper = $dataHelper;
+		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->regionGateway = $regionGateway;
 
 		parent::__construct();
@@ -420,7 +424,7 @@ class SettingsControl extends Control
 						if ($infoType == InfoType::NONE) {
 							$threadIdsToUnfollow[] = $themeId;
 						} elseif (in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
-							$this->settingsGateway->updateFollowThread($fsId, $themeId, $infoType);
+							$this->forumFollowerGateway->updateInfoType($fsId, $themeId, $infoType);
 						}
 					}
 				}
@@ -430,7 +434,7 @@ class SettingsControl extends Control
 				$this->settingsGateway->unfollowFoodSharePoints($fsId, $fspIdsToUnfollow);
 			}
 			if (!empty($threadIdsToUnfollow)) {
-				$this->settingsGateway->unfollowThreads($fsId, $threadIdsToUnfollow);
+				$this->forumFollowerGateway->unfollowThreads($fsId, $threadIdsToUnfollow);
 			}
 
 			if ($this->settingsGateway->saveInfoSettings($fsId, $newsletter, $infomail)) {

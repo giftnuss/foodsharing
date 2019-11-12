@@ -39,11 +39,25 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function unfollowThread($fs_id, $thread_id)
+	public function unfollowThread(int $fsId, int $threadId): int
 	{
 		return $this->db->delete(
 			'fs_theme_follower',
-			['theme_id' => $thread_id, 'foodsaver_id' => $fs_id]
+			[
+				'theme_id' => $thread_id,
+				'foodsaver_id' => $fs_id
+			]
+		);
+	}
+
+	public function unfollowThreads(int $fsId, array $threadIds): int
+	{
+		return $this->db->delete(
+			'fs_theme_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $threadIds
+			]
 		);
 	}
 

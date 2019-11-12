@@ -2,25 +2,19 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use DateTime;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Quiz\QuizGateway;
-use DateTime;
 
 class SettingsGateway extends BaseGateway
 {
-	/**
-	 * @var QuizGateway
-	 */
 	private $quizGateway;
 
-	/**
-	 * SettingsGateway constructor.
-	 *
-	 * @param QuizGateway $quizGateway
-	 */
-	public function __construct(Database $db, QuizGateway $quizGateway)
-	{
+	public function __construct(
+		Database $db,
+		QuizGateway $quizGateway
+	) {
 		parent::__construct($db);
 
 		$this->quizGateway = $quizGateway;
@@ -34,21 +28,25 @@ class SettingsGateway extends BaseGateway
 		/* the logic is not exactly matching the update mechanism but should be close enough to get all changes... */
 		foreach ($logChangedKeys as $k) {
 			if (array_key_exists($k, $new) && $new[$k] != $old[$k]) {
-				$this->db->insert('fs_foodsaver_change_history', [
-					'date' => date(DateTime::ISO8601),
-					'fs_id' => $fsId,
-					'changer_id' => $changerId,
-					'object_name' => $k,
-					'old_value' => $old[$k],
-					'new_value' => $new[$k]
-				]);
+				$this->db->insert(
+					'fs_foodsaver_change_history',
+					[
+						'date' => date(DateTime::ISO8601),
+						'fs_id' => $fsId,
+						'changer_id' => $changerId,
+						'object_name' => $k,
+						'old_value' => $old[$k],
+						'new_value' => $new[$k]
+					]
+				);
 			}
 		}
 	}
 
 	public function saveInfoSettings(int $fsId, int $newsletter, int $infomail): int
 	{
-		return $this->db->update('fs_foodsaver',
+		return $this->db->update(
+			'fs_foodsaver',
 			[
 				'newsletter' => $newsletter,
 				'infomail_message' => $infomail
@@ -62,7 +60,8 @@ class SettingsGateway extends BaseGateway
 
 	public function getSleepData(int $fsId): array
 	{
-		return $this->db->fetchByCriteria('fs_foodsaver',
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
 			[
 				'sleep_status',
 				'sleep_from',
@@ -75,7 +74,8 @@ class SettingsGateway extends BaseGateway
 
 	public function updateSleepMode(int $fsId, int $status, string $from, string $to, string $msg): int
 	{
-		return $this->db->update('fs_foodsaver',
+		return $this->db->update(
+			'fs_foodsaver',
 			[
 				'sleep_status' => $status,
 				'sleep_from' => $from,
@@ -88,7 +88,8 @@ class SettingsGateway extends BaseGateway
 
 	public function addNewMail(int $fsId, string $email, string $token): int
 	{
-		return $this->db->insertOrUpdate('fs_mailchange',
+		return $this->db->insertOrUpdate(
+			'fs_mailchange',
 			[
 				'foodsaver_id' => $fsId,
 				'newmail' => strip_tags($email),
@@ -102,7 +103,8 @@ class SettingsGateway extends BaseGateway
 	{
 		$this->deleteMailChanges($fsId);
 
-		return $this->db->update('fs_foodsaver',
+		return $this->db->update(
+			'fs_foodsaver',
 			['email' => strip_tags($email)],
 			['id' => $fsId]
 		);
@@ -115,14 +117,16 @@ class SettingsGateway extends BaseGateway
 
 	private function deleteMailChanges(int $fsId): int
 	{
-		return $this->db->delete('fs_mailchange',
+		return $this->db->delete(
+			'fs_mailchange',
 			['foodsaver_id' => $fsId]
 		);
 	}
 
 	public function getMailChange(int $fsId): string
 	{
-		return $this->db->fetchValueByCriteria('fs_mailchange',
+		return $this->db->fetchValueByCriteria(
+			'fs_mailchange',
 			'newmail',
 			['foodsaver_id' => $fsId]
 		);
@@ -130,7 +134,8 @@ class SettingsGateway extends BaseGateway
 
 	public function getNewMail(int $fsId, string $token): string
 	{
-		return $this->db->fetchValueByCriteria('fs_mailchange',
+		return $this->db->fetchValueByCriteria(
+			'fs_mailchange',
 			'newmail',
 			[
 				'token' => strip_tags($token),
@@ -141,7 +146,8 @@ class SettingsGateway extends BaseGateway
 
 	public function updateFollowFoodSharePoint(int $fsId, int $foodSharePointId, int $infoType): int
 	{
-		return $this->db->update('fs_fairteiler_follower',
+		return $this->db->update(
+			'fs_fairteiler_follower',
 			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
@@ -152,7 +158,8 @@ class SettingsGateway extends BaseGateway
 
 	public function unfollowFoodSharePoints(int $fsId, array $fspIds): int
 	{
-		return $this->db->delete('fs_fairteiler_follower',
+		return $this->db->delete(
+			'fs_fairteiler_follower',
 			[
 				'foodsaver_id' => $fsId,
 				'fairteiler_id' => $fspIds
@@ -178,32 +185,11 @@ class SettingsGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function updateFollowThread(int $fsId, int $themeId, int $infoType): int
-	{
-		return $this->db->update('fs_theme_follower',
-			['infotype' => $infoType],
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $themeId
-			]
-		);
-	}
-
-	public function unfollowThreads(int $fsId, array $themeIds): int
-	{
-		return $this->db->delete(
-			'fs_theme_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $themeIds
-			]
-		);
-	}
-
 	public function updateRole(int $fsId, int $newRoleId, int $currentRole): void
 	{
 		if ($newRoleId > $currentRole) {
-			$this->db->update('fs_foodsaver',
+			$this->db->update(
+				'fs_foodsaver',
 				['rolle' => $newRoleId],
 				['id' => $fsId]
 			);
@@ -212,7 +198,8 @@ class SettingsGateway extends BaseGateway
 
 	public function storeApiToken(int $fsId, string $token): void
 	{
-		$this->db->insert('fs_apitoken',
+		$this->db->insert(
+			'fs_apitoken',
 			[
 				'foodsaver_id' => $fsId,
 				'token' => $token
