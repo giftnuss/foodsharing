@@ -67,10 +67,10 @@ class QuizCest
 		$I->click('Quiz mit Zeitlimit');
 		$I->waitForText('Jetzt geht es los');
 		$I->click('Quiz starten');
-		$I->waitForText('Question #1');
-		$I->selectOption('#qanswers', 'The wrong answer');
+		$I->waitForText('Frage #1');
+		$I->selectOption('#qanswers', 'Falsche Antwort');
 		$I->click('Weiter');
-		$I->waitForText('This answer is wrong');
+		$I->waitForText('Diese Antwort ist falsch');
 		$I->click('nächste Frage');
 		$I->waitForText('nicht bestanden');
 
