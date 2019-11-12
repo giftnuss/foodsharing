@@ -114,7 +114,7 @@ class QuizSessionGateway extends BaseGateway
 			', [':quizId' => $quizId]);
 	}
 
-	public function getUserSessions(int $fsId): array
+	public function listUserSessions(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
