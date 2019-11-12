@@ -103,7 +103,7 @@ class SettingsControl extends Control
 
 	public function quizsession()
 	{
-		if ($session = $this->quizSessionGateway->getQuizSessionInfos($_GET['sid'], $this->session->id())) {
+		if ($session = $this->quizSessionGateway->getExtendedUserSession($_GET['sid'], $this->session->id())) {
 			$this->pageHelper->addContent($this->view->quizSession($session, $session['try_count'], $this->contentGateway));
 		}
 	}

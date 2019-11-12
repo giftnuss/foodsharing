@@ -139,7 +139,7 @@ class QuizSessionGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	final public function getQuizSessionInfos(int $sessionId, int $fsId): array
+	final public function getExtendedUserSession(int $sessionId, int $fsId): array
 	{
 		if ($session = $this->getQuizSessionForFs($sessionId, $fsId)) {
 			$tmp = array();
