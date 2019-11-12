@@ -39,6 +39,18 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
+	public function updateInfoType(int $fsId, int $themeId, int $infoType): int
+	{
+		return $this->db->update(
+			'fs_theme_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $themeId
+			]
+		);
+	}
+	
 	public function unfollowThread(int $fsId, int $threadId): int
 	{
 		return $this->db->delete(
