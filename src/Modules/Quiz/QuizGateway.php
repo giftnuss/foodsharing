@@ -237,7 +237,7 @@ class QuizGateway extends BaseGateway
 		if ($questions) {
 			foreach ($questions as $key => $q) {
 				$questions[$key]['answers'] = $this->getAnswers($q['id']);
-				$questions[$key]['comment_count'] = $this->getCommentCount($q['id']);
+				$questions[$key]['comment_count'] = $this->countComments($q['id']);
 			}
 
 			return $questions;
@@ -246,13 +246,12 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	private function getCommentCount(int $questionId): int
+	private function countComments(int $questionId): int
 	{
-		return $this->db->fetchValue('
-			SELECT COUNT(question_id)
-			FROM fs_question_has_wallpost
-			WHERE question_id = :questionId
-		', [':questionId' => $questionId]);
+		return $this->db->count(
+			'fs_question_has_wallpost',
+			['question_id' => $questionId]
+		);
 	}
 
 	public function getRightQuestions(int $quizId): array
