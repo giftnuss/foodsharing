@@ -172,7 +172,7 @@
 }
 
 .chatboxmessage.my-message .chatboxmessagecontent {
-  background: none repeat scroll 0 0 #64ae24;
+  background: none repeat scroll 0 0 var(--fs-green);
   color: #eee;
 
 }

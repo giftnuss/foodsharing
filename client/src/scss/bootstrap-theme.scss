@@ -1,5 +1,5 @@
 $primary: #533a20;
-$secondary: #64ae24;
+$secondary: var(--fs-green);
 $card-spacer-x: 8px;
 $card-spacer-y: 6px;
 $card-border-width: 0;
@@ -114,9 +114,9 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
         }
         }
     }
-   
+
    // exception to text-truncate class for message dropdown
-   
+
     .scroll-container > a > .row p.text-truncate {
         text-overflow: ellipsis;
         white-space: normal;

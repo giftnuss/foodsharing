@@ -139,12 +139,12 @@
 }
 
 .ui-widget-content a, a {
-  color: #64ae24;
+  color: var(--fs-green);
   text-decoration: none;
 }
 
 .ui-widget-content a:hover, a:hover {
-  color: #64ae24;
+  color: var(--fs-green);
   text-decoration: underline;
 }
 
@@ -416,7 +416,7 @@ div.msg-inside.error a:hover {
 }
 
 div.msg-inside.success, div.msg-inside.success a {
-  background-color: #64ae24 !important;
+  background-color: var(--fs-green) !important;
   color: #fff !important;
 }
 
@@ -425,7 +425,7 @@ div.msg-inside.error i {
 }
 
 div#pulse-success {
-  background-color: #64ae24 !important;
+  background-color: var(--fs-green) !important;
   color: #ffffff !important;
 }
 
@@ -946,7 +946,7 @@ ul.linklist li span.i img {
 }
 
 ul.linklist li > a.more {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   color: #ffffff;
@@ -984,7 +984,7 @@ ul.linklist li > a.active {
 }
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   color: #ffffff;
 }
 
@@ -1056,7 +1056,7 @@ div.statdisplay .item {
   padding: 0 5px 0 5px;
   margin-right: 8px;
   border-radius: 8px;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   color: #ffffff;
   text-align: center;
   width: 62px;
@@ -1393,7 +1393,7 @@ a.moreswaplink {
   text-align: center;
   color: #fff;
   font-weight: bold;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   text-decoration: none;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -1402,7 +1402,7 @@ a.moreswaplink {
 }
 
 a.moreswaplink:hover {
-  background-color: #6ba149;
+  background-color: var(--fs-green);
   text-decoration: none;
 }
 
@@ -1464,7 +1464,7 @@ td.load {
 
 .ui-button, .button {
   color: #ffffff !important;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   border-radius: 6px;
   border: 0 none;
   text-decoration: none;
@@ -1485,7 +1485,7 @@ td.load {
 }
 
 .ui-button:hover, .button:hover {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   opacity: 0.8;
   text-decoration: none !important;
 }
@@ -1622,7 +1622,7 @@ footer .linklist li a:hover {
 }
 
 .vidlink:hover img {
-  border: 10px solid #64ae24;
+  border: 10px solid var(--fs-green);
 }
 
 .vmap {
