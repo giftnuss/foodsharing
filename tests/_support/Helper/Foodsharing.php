@@ -5,6 +5,7 @@ namespace Helper;
 use DateTime;
 use Faker;
 use Carbon\Carbon;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -106,8 +107,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'id' => $quizId,
 			'name' => 'Quiz #' . $quizId,
 			'desc' => '',
-			'maxfp' => 3,
-			'questcount' => 3,
+			'maxfp' => 0,
+			'questcount' => $questionCount,
 		];
 		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
 
@@ -154,6 +155,13 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['id'] = $this->haveInDatabase('fs_answer', $params);
 
 		return $params;
+	}
+
+	public function letUserFailQuiz(array $user, int $daysAgo, int $times) {
+		$level = $user['rolle'] + 1;
+		foreach (range(1, $times) as $i) {
+			$this->createQuizTry($user['id'], $level, SessionStatus::FAILED, $daysAgo);
+		}
 	}
 
 	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void

@@ -49,14 +49,33 @@ class QuizCest
 
 	public function mustPauseAfterThreeFailures(AcceptanceTester $I)
 	{
-		foreach (range(1, 3) as $i) {
-			$I->createQuizTry($this->foodsharer['id'], Role::FOODSAVER, SessionStatus::FAILED, 29);
-		}
+		$I->letUserFailQuiz($this->foodsharer, 29, 3);
 
 		$I->login($this->foodsharer['email']);
 		$I->amOnPage($I->upgradeQuizUrl(Role::FOODSAVER));
 		$I->waitForPageBody();
 
 		$I->see('Du hast das Quiz 3x nicht bestanden');
+	}
+
+	public function userIsDisqualifiedAfterFailingFiveTimes(AcceptanceTester $I)
+	{
+		$I->letUserFailQuiz($this->foodsharer, 31, 4);
+
+		$I->login($this->foodsharer['email']);
+		$I->amOnPage($I->upgradeQuizUrl(Role::FOODSAVER));
+		$I->waitForPageBody();
+		$I->click('Quiz mit Zeitlimit');
+		$I->waitForText('Jetzt geht es los');
+		$I->click('Quiz starten');
+		$I->waitForText('Question #1');
+		$I->selectOption('#qanswers', 'The wrong answer');
+		$I->click('Weiter');
+		$I->waitForText('This answer is wrong');
+		$I->click('nächste Frage');
+		$I->waitForText('nicht bestanden');
+
+		$I->dontSee('Diesmal hat es leider nicht geklappt');
+		$I->see('Du hast es leider nicht geschafft');
 	}
 }
