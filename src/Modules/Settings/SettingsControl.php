@@ -170,7 +170,7 @@ class SettingsControl extends Control
 	{
 		$fsId = $this->session->id();
 		$desc = $this->contentGateway->get(12);
-		$quizStatus = $this->quizGateway->getQuizStatus($role, $fsId);
+		$quizStatus = $this->quizSessionGateway->getQuizStatus($role, $fsId);
 		switch ($quizStatus['status']) {
 			case QuizStatus::NEVER_TRIED:
 				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));

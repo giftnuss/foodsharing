@@ -43,4 +43,95 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 		$data['status'] = SessionStatus::FAILED;
 		$this->tester->seeInDatabase('fs_quiz_session', $data);
 	}
+
+	public function testFoodsharerHasNeverTriedQuiz()
+	{
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::NEVER_TRIED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerHasRunningQuizSession()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::RUNNING);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::RUNNING, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerHasPassedQuiz()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::PASSED);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::PASSED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerFailedQuizOnce()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::FAILED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerFailedTwice()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 2);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::FAILED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerIsPaused()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 3);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::PAUSE, $quizStatus['status']);
+		$this->tester->assertEquals(30, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerIsPausedForOneMoreDay()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 3, 29);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::PAUSE, $quizStatus['status']);
+		$this->tester->assertEquals(1, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerHasAForthTry()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 3, 30);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::PAUSE_ELAPSED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerHasAFifthTry()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 4);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::PAUSE_ELAPSED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	public function testFoodsharerGetsDisqualifiedAfterFifthFailure()
+	{
+		$this->foodsharerTriesQuiz(SessionStatus::FAILED, 5);
+		$quizStatus = $this->foodsharerQuizStatus();
+		$this->tester->assertEquals(QuizStatus::DISQUALIFIED, $quizStatus['status']);
+		$this->tester->assertEquals(0, $quizStatus['wait']);
+	}
+
+	private function foodsharerTriesQuiz(int $status, int $times = 1, int $daysAgo = 0): void
+	{
+		foreach (range(1, $times) as $i) {
+			$this->tester->createQuizTry($this->foodsharer['id'], Role::FOODSAVER, $status, $daysAgo);
+		}
+	}
+
+	private function foodsharerQuizStatus(): array
+	{
+		return $this->gateway->getQuizStatus(Role::FOODSAVER, $this->foodsharer['id']);
+	}
 }

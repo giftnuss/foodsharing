@@ -73,7 +73,13 @@ class QuizGateway extends BaseGateway
 	{
 		return $this->db->fetchByCriteria(
 			'fs_quiz',
-			['id', 'name', 'desc', 'maxfp', 'questcount'],
+			[
+				'id',
+				'name',
+				'desc',
+				'maxfp',
+				'questcount'
+			],
 			['id' => $id]
 		);
 	}
@@ -83,42 +89,6 @@ class QuizGateway extends BaseGateway
 		$quiz = $this->getQuiz($quizId);
 
 		return $quiz ? $quiz['name'] : '';
-	}
-
-	/**
-	 *	Determines a user's current quiz status.
-	 *
-	 *	@param int $quizId Quiz level/role
-	 *	@param int $fsId Foodsaver ID
-	 *
-	 *	@return array indicates the status of type DBConstants\Quiz\QuizStatus ('status') and a possible waiting time in days ('wait')
-	 */
-	public function getQuizStatus(int $quizId, int $fsId): array
-	{
-		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
-		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
-
-		$result = ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
-
-		$now = Carbon::now();
-		if ($quizSessionStatus['times'] == 0) {
-			$result['status'] = QuizStatus::NEVER_TRIED;
-		} elseif ($quizSessionStatus['running'] > 0) {
-			$result['status'] = QuizStatus::RUNNING;
-		} elseif ($quizSessionStatus['passed'] > 0) {
-			$result['status'] = QuizStatus::PASSED;
-		} elseif ($quizSessionStatus['failed'] < 3) {
-			$result['status'] = QuizStatus::FAILED;
-		} elseif ($quizSessionStatus['failed'] == 3 && $now->isBefore($pauseEnd)) {
-			$result['status'] = QuizStatus::PAUSE;
-			$result['wait'] = $now->diffInDays($pauseEnd);
-		} elseif ($quizSessionStatus['failed'] == 3 && $now->greaterThanOrEqualTo($pauseEnd)) {
-			$result['status'] = QuizStatus::PAUSE_ELAPSED;
-		} elseif ($quizSessionStatus['failed'] == 4) {
-			$result['status'] = QuizStatus::PAUSE_ELAPSED;
-		}
-
-		return $result;
 	}
 
 	public function hasPassedQuiz(int $fsId, int $quizId): bool

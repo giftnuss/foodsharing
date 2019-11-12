@@ -7,47 +7,21 @@ use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizSessionGateway extends BaseGateway
 {
-	public function collectQuizStatus(int $quizId, int $fsId): array
+	private $quizGateway;
+
+	public function __construct(Database $db, QuizGateway $quizGateway )
 	{
-		$out = array(
-			'passed' => 0,
-			'running' => 0,
-			'failed' => 0,
-			'last_try' => 0,
-			'times' => 0
-		);
+		parent::__construct($db);
 
-		$res = $this->db->fetchAll('
-			SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
-			FROM fs_quiz_session
-			WHERE foodsaver_id = :fsId
-			AND quiz_id = :quizId
-		', [':fsId' => $fsId, ':quizId' => $quizId]);
-		if ($res) {
-			foreach ($res as $r) {
-				++$out['times'];
-				if ($r['time_ts'] > $out['last_try']) {
-					$out['last_try'] = $r['time_ts'];
-				}
-
-				if ($r['status'] == SessionStatus::RUNNING) {
-					++$out['running'];
-				} elseif ($r['status'] == SessionStatus::PASSED) {
-					++$out['passed'];
-				} elseif ($r['status'] == SessionStatus::FAILED) {
-					++$out['failed'];
-				}
-			}
-		}
-
-		return $out;
+		$this->quizGateway = $quizGateway;
 	}
-
+	
 	public function initQuizSession(int $fsId, int $quizId, array $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
 		$questions = serialize($questions);
 
-		return $this->db->insert('fs_quiz_session',
+		return $this->db->insert(
+			'fs_quiz_session',
 			[
 				'foodsaver_id' => $fsId,
 				'quiz_id' => $quizId,
@@ -141,7 +115,7 @@ class QuizSessionGateway extends BaseGateway
 
 	final public function getExtendedUserSession(int $sessionId, int $fsId): array
 	{
-		if ($session = $this->getQuizSessionForFs($sessionId, $fsId)) {
+		if ($session = $this->getUserSession($sessionId, $fsId)) {
 			$tmp = array();
 			$session['try_count'] = $this->countSessions($fsId, $session['quiz_id']);
 
@@ -197,7 +171,7 @@ class QuizSessionGateway extends BaseGateway
 					unset($session['quiz_result'][$k]['user']);
 				}
 
-				if ($quiz = $this->getQuiz($session['quiz_id'])) {
+				if ($quiz = $this->quizGateway->getQuiz($session['quiz_id'])) {
 					$session = array_merge($quiz, $session);
 					unset($session['quiz_questions']);
 
@@ -214,9 +188,10 @@ class QuizSessionGateway extends BaseGateway
 		return [];
 	}
 
-	private function getQuizSessionForFs(int $sessionId, int $fsId): array
+	private function getUserSession(int $sessionId, int $fsId): array
 	{
-		return $this->db->fetchByCriteria('fs_quiz_session',
+		return $this->db->fetchByCriteria(
+			'fs_quiz_session',
 			[
 				'quiz_id',
 				'status',
@@ -230,17 +205,6 @@ class QuizSessionGateway extends BaseGateway
 				'id' => $sessionId,
 				'foodsaver_id' => $fsId
 			]
-		);
-	}
-
-	private function getQuiz(int $quizId): array
-	{
-		return $this->db->fetchByCriteria('quiz',
-			[
-				'name',
-				'desc'
-			],
-			['id' => $quizId]
 		);
 	}
 
@@ -286,29 +250,94 @@ class QuizSessionGateway extends BaseGateway
 		return $out;
 	}
 	
+/**
+	 *	Determines a user's current quiz status.
+	 *
+	 *	@param int $quizId Quiz level/role
+	 *	@param int $fsId Foodsaver ID
+	 *
+	 *	@return array indicates the status of type DBConstants\Quiz\QuizStatus ('status') and a possible waiting time in days ('wait')
+	 */
+	public function getQuizStatus(int $quizId, int $fsId): array
+	{
+		$quizSessionStatus = $this->collectQuizStatus($quizId, $fsId);
+		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
+
+		$result = ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
+
+		$now = Carbon::now();
+		if ($quizSessionStatus['times'] == 0) {
+			$result['status'] = QuizStatus::NEVER_TRIED;
+		} elseif ($quizSessionStatus['running'] > 0) {
+			$result['status'] = QuizStatus::RUNNING;
+		} elseif ($quizSessionStatus['passed'] > 0) {
+			$result['status'] = QuizStatus::PASSED;
+		} elseif ($quizSessionStatus['failed'] < 3) {
+			$result['status'] = QuizStatus::FAILED;
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->isBefore($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE;
+			$result['wait'] = $now->diffInDays($pauseEnd);
+		} elseif ($quizSessionStatus['failed'] == 3 && $now->greaterThanOrEqualTo($pauseEnd)) {
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
+		} elseif ($quizSessionStatus['failed'] == 4) {
+			$result['status'] = QuizStatus::PAUSE_ELAPSED;
+		}
+
+		return $result;
+	}
+
+	public function collectQuizStatus(int $quizId, int $fsId): array
+	{
+		$out = array(
+			'passed' => 0,
+			'running' => 0,
+			'failed' => 0,
+			'last_try' => 0,
+			'times' => 0
+		);
+
+		$res = $this->db->fetchAll('
+			SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
+			FROM fs_quiz_session
+			WHERE foodsaver_id = :fsId
+			AND quiz_id = :quizId
+		', [':fsId' => $fsId, ':quizId' => $quizId]);
+		if ($res) {
+			foreach ($res as $r) {
+				++$out['times'];
+				if ($r['time_ts'] > $out['last_try']) {
+					$out['last_try'] = $r['time_ts'];
+				}
+
+				if ($r['status'] == SessionStatus::RUNNING) {
+					++$out['running'];
+				} elseif ($r['status'] == SessionStatus::PASSED) {
+					++$out['passed'];
+				} elseif ($r['status'] == SessionStatus::FAILED) {
+					++$out['failed'];
+				}
+			}
+		}
+
+		return $out;
+	}
+
 	public function getRunningSession(int $quizId, int $fsId): array
 	{
-		$session = $this->db->fetch('
-			SELECT
-				id,
-				quiz_index,
-				quiz_questions,
-				easymode
-
-			FROM
-				fs_quiz_session
-
-			WHERE
-				quiz_id = :quizId
-			AND
-				foodsaver_id = :fsId
-			AND
-				status = :status
-		', [
-			':quizId' => $quizId,
-			':fsId' => $fsId,
-			':status' => SessionStatus::RUNNING
-		]);
+		$session = $this->db->fetchByCriteria(
+			'fs_quiz_session',
+			[
+				'id',
+				'quiz_index',
+				'quiz_questions',
+				'easymode'
+			],
+			[
+				'quiz_id' => $quizId,
+				'foodsaver_id' => $fsId,
+				'status' => SessionStatus::RUNNING
+			]
+		);
 		if ($session) {
 			$session['quiz_questions'] = unserialize($session['quiz_questions']);
 
@@ -348,7 +377,11 @@ class QuizSessionGateway extends BaseGateway
 	{
 		$deletionLimit = 1;
 
-		return $this->db->delete('fs_quiz_session', ['id' => $sessionId], $deletionLimit);
+		return $this->db->delete(
+			'fs_quiz_session',
+			['id' => $sessionId],
+			$deletionLimit
+		);
 	}
 
 	/**
@@ -371,18 +404,22 @@ class QuizSessionGateway extends BaseGateway
 			$criteria['status'] = $sessionStatus;
 		}
 
-		return $this->db->count('fs_quiz_session', $criteria);
+		return $this->db->count(
+			'fs_quiz_session',
+			$criteria
+		);
 	}
 
 
 	public function getLastTry(int $fsId, int $quizId): int
 	{
 		return $this->db->fetchValue('
-      SELECT UNIX_TIMESTAMP(`time_start`) AS time_ts
-      FROM fs_quiz_session
-      WHERE foodsaver_id = :fsId
-      AND quiz_id = :quizId
-      ORDER BY time_ts DESC
-    ', [':fsId' => $fsId, ':quizId' => $quizId]);
+			SELECT UNIX_TIMESTAMP(`time_start`) AS time_ts
+			FROM fs_quiz_session
+			WHERE foodsaver_id = :fsId
+			AND quiz_id = :quizId
+			ORDER BY time_ts DESC
+		  ', [':fsId' => $fsId, ':quizId' => $quizId]
+		);
 	}
 }
