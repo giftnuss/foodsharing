@@ -202,7 +202,7 @@ class SettingsGateway extends BaseGateway
 
 	public function updateRole(int $fsId, int $newRoleId, int $currentRole): void
 	{
-		if ($roleId > $currentRole) {
+		if ($newRoleId > $currentRole) {
 			$this->db->update('fs_foodsaver',
 				['rolle' => $newRoleId],
 				['id' => $fsId]
