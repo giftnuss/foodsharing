@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizSessionGateway extends BaseGateway
