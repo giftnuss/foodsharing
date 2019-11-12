@@ -86,7 +86,6 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-
 	public function addNewMail(int $fsId, string $email, string $token): int
 	{
 		return $this->db->insertOrUpdate('fs_mailchange',
@@ -160,7 +159,6 @@ class SettingsGateway extends BaseGateway
 			]
 		);
 	}
-
 
 	public function getForumThreads(int $fsId): array
 	{
