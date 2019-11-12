@@ -10,6 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -22,6 +23,7 @@ class SettingsControl extends Control
 	private $quizSessionGateway;
 	private $contentGateway;
 	private $foodsaverGateway;
+	private $foodSharePointGateway;
 	private $dataHelper;
 	private $regionGateway;
 
@@ -32,6 +34,7 @@ class SettingsControl extends Control
 		QuizSessionGateway $quizSessionGateway,
 		ContentGateway $contentGateway,
 		FoodsaverGateway $foodsaverGateway,
+		FoodSharePointGateway $foodSharePointGateway,
 		DataHelper $dataHelper,
 		RegionGateway $regionGateway
 	) {
@@ -41,6 +44,7 @@ class SettingsControl extends Control
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->foodSharePointGateway = $foodSharePointGateway;
 		$this->dataHelper = $dataHelper;
 		$this->regionGateway = $regionGateway;
 
@@ -430,7 +434,7 @@ class SettingsControl extends Control
 
 		$g_data = $this->foodsaverGateway->getSubscriptions($fsId);
 
-		$foodSharePoints = $this->settingsGateway->listFoodSharePoints($fsId);
+		$foodSharePoints = $this->foodSharePointGateway->listFoodsaversFoodSharePoints($fsId);
 		$threads = $this->settingsGateway->getForumThreads($fsId);
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoints, $threads));

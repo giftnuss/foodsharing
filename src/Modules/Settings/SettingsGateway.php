@@ -131,25 +131,6 @@ class SettingsGateway extends BaseGateway
 		return $out;
 	}
 
-	public function listFoodSharePoints(int $fsId): array
-	{
-		return $this->db->fetchAll('
-			SELECT
-				ft.id,
-				ft.name,
-				ff.infotype,
-				ff.`type`
-
-			FROM
-				`fs_fairteiler_follower` ff
-				LEFT JOIN `fs_fairteiler` ft
-				ON ff.fairteiler_id = ft.id
-
-			WHERE
-				ff.foodsaver_id = :fsId
-		', [':fsId' => $fsId]);
-	}
-
 	public function addNewMail(int $fsId, string $email, string $token): int
 	{
 		return $this->db->insertOrUpdate(
