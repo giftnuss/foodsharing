@@ -40,7 +40,7 @@ class ForumFollowerGateway extends BaseGateway
 				tf.foodsaver_id = :fsId
 		', [':fsId' => $fsId]);
 	}
-	
+
 	public function isFollowing($fsId, $threadId)
 	{
 		return $this->db->exists(

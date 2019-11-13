@@ -144,17 +144,6 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function updateRole(int $fsId, int $newRoleId, int $currentRole): void
-	{
-		if ($newRoleId > $currentRole) {
-			$this->db->update(
-				'fs_foodsaver',
-				['rolle' => $newRoleId],
-				['id' => $fsId]
-			);
-		}
-	}
-
 	public function storeApiToken(int $fsId, string $token): void
 	{
 		$this->db->insert(

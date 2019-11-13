@@ -754,6 +754,18 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function increaseRole(int $fsId, int $newRoleId): void
+	{
+		$this->db->update(
+			'fs_foodsaver',
+			['rolle' => $newRoleId],
+			[
+				'id' => $fsId,
+				'rolle <' => $newRoleId
+			]
+		);
+	}
+	
 	public function loadFoodsaver(int $foodsaverId): array
 	{
 		return $this->db->fetch('
@@ -771,8 +783,7 @@ final class FoodsaverGateway extends BaseGateway
 				id = :fsId
             AND
                 deleted_at IS NULL
-		',
-			[':fsId' => $foodsaverId]);
+		', [':fsId' => $foodsaverId]);
 	}
 
 	public function getFoodsaverAddress(int $foodsaverId): array
