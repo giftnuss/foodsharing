@@ -46,8 +46,8 @@ class QuizControl extends Control
 	public function index()
 	{
 		// quiz&a=delete&id=9
-		if ($id = $this->identificationHelper->getActionId('delete')) {
-			$this->quizSessionGateway->deleteSession($id);
+		if ($quizSessionId = $this->identificationHelper->getActionId('delete')) {
+			$this->quizSessionGateway->deleteSession($quizSessionId);
 			$this->goBack();
 		}
 
@@ -56,19 +56,21 @@ class QuizControl extends Control
 
 		$topbtn = '';
 		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
-		if (!isset($_GET['sub']) && isset($_GET['id']) && (int)$_GET['id'] > 0) {
-			if ($name = $this->quizGateway->getQuizName($_GET['id'])) {
-				$this->pageHelper->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
-				$topbtn = ' - ' . $name;
-				$slogan = 'Klausurfragen für ' . $name;
-			}
-			$this->listQuestions($_GET['id']);
-		}
-
 		if (!isset($_GET['sub'])) {
-			if (!isset($_GET['id'])) {
+			if (isset($_GET['id'])) {
+				$quizId = (int)$_GET['id'];
+				if ($quizId > 0) {
+					if ($name = $this->quizGateway->getQuizName($quizId)) {
+						$this->pageHelper->addBread($name, '/?page=quiz&id=' . $quizId);
+						$topbtn = ' - ' . $name;
+						$slogan = 'Klausurfragen für ' . $name;
+					}
+					$this->listQuestions($_GET['id']);
+				}
+			} else {
 				$this->routeHelper->go('/?page=quiz&id=1');
 			}
+
 			$this->pageHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->pageHelper->addContent($this->view->listQuiz($this->quizGateway->listQuiz()), CNT_LEFT);
 			$this->pageHelper->addContent($this->view->quizMenu(), CNT_LEFT);
@@ -79,6 +81,17 @@ class QuizControl extends Control
 	{
 		header('Location: ' . $_SERVER['HTTP_REFERER']);
 		exit();
+	}
+
+	private function listQuestions($quizId)
+	{
+		$quizButtons = $this->view->quizbuttons($quizId);
+		$this->pageHelper->addContent($quizButtons);
+
+		$questions = $this->quizGateway->listQuestions($quizId);
+		$this->pageHelper->addContent($this->view->listQuestions($questions, $quizId));
+
+		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $quizButtons);
 	}
 
 	public function wall()
@@ -150,7 +163,7 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		if ($this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
+		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
 			$this->pageHelper->addContent($this->getSessionDetailTopbarContent($fs), CNT_TOP);
 
@@ -171,15 +184,16 @@ class QuizControl extends Control
 
 	public function sessions()
 	{
-		$quizId = (int)$_GET['id'];
-		if ($quiz = $this->quizGateway->getQuiz($quizId)) {
+		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
 			$this->pageHelper->addContent($this->getSessionListContent($quiz));
-			$this->pageHelper->addBread($quiz['name'], '/?page=quiz&id=' . $quizId);
-			$this->pageHelper->addBread('Auswertung');
+			
+			$quizName = $quiz['name'];
+			$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $quiz['id']);
 
+			$this->pageHelper->addBread('Auswertung');
 			$topbarContent = $this->view->topbar(
-				'Auswertung für ' . $quiz['name'] . '-Quiz',
-				'Klausurfragen für ' . $quiz['name'],
+				'Auswertung für ' . $quizName . '-Quiz',
+				'Klausurfragen für ' . $quizName,
 				'<img src="/img/quiz.png" />'
 			);
 			$this->pageHelper->addContent($topbarContent, CNT_TOP);
@@ -193,16 +207,5 @@ class QuizControl extends Control
 		}
 
 		return $this->view->noSessions($quiz);
-	}
-
-	public function listQuestions($quizId)
-	{
-		$quizButtons = $this->view->quizbuttons($quizId);
-		$this->pageHelper->addContent($quizButtons);
-
-		$questions = $this->quizGateway->listQuestions($quizId);
-		$this->pageHelper->addContent($this->view->listQuestions($questions, $quizId));
-
-		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $quizButtons);
 	}
 }
