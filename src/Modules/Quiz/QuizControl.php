@@ -190,12 +190,14 @@ class QuizControl extends Control
 		return $this->view->noSessions($quiz);
 	}
 
-	public function listQuestions($quiz_id)
+	public function listQuestions($quizId)
 	{
-		$this->pageHelper->addContent($this->view->quizbuttons($quiz_id));
+		$quizButtons = $this->view->quizbuttons($quizId);
+		$this->pageHelper->addContent($quizButtons);
 
-		$this->pageHelper->addContent($this->view->listQuestions($this->quizGateway->listQuestions($quiz_id), $quiz_id));
+		$questions = $this->quizGateway->listQuestions($quizId);
+		$this->pageHelper->addContent($this->view->listQuestions($questions, $quizId));
 
-		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $this->view->quizbuttons($quiz_id));
+		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $quizButtons);
 	}
 }
