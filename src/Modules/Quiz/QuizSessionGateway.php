@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Quiz;
 use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
-use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
@@ -141,42 +140,30 @@ class QuizSessionGateway extends BaseGateway
 			if (!empty($session['quiz_result'])) {
 				$session['quiz_result'] = unserialize($session['quiz_result']);
 
-				foreach ($session['quiz_result'] as $k => $quizResult) {
-					$session['quiz_result'][$k]['user'] = $tmp[$quizResult['id']];
+				foreach ($session['quiz_result'] as $quizKey => $quizResult) {
+					$user = $tmp[$quizResult['id']];
+					$session['quiz_result'][$quizKey]['user'] = $user;
 
-					foreach ($quizResult['answers'] as $k2 => $v2) {
-						$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::WRONG;
-						if ($v2['right'] == AnswerRating::CORRECT) {
-							$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::CORRECT;
-						}
-						if ($v2['right'] == AnswerRating::NEUTRAL) {
-							$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::NEUTRAL;
-						}
-						$session['quiz_result'][$k]['answers'][$k2]['user_say'] = false;
-						if (isset($session['quiz_result'][$k]['user']['answers'][$v2['id']])) {
-							$session['quiz_result'][$k]['answers'][$k2]['user_say'] = true;
-						}
+					foreach ($quizResult['answers'] as $answerKey => $answer) {
+						$session['quiz_result'][$quizKey]['answers'][$answerKey]['right'] = $answer['right'];
+
+						$isAnswerGiven = isset($user['answers'][$answer['id']]);
+						$session['quiz_result'][$quizKey]['answers'][$answerKey]['user_say'] = $isAnswerGiven;
 					}
-					if (!isset($session['quiz_result'][$k]['user']['userduration'])) {
-						$session['quiz_result'][$k]['userduration'] = $session['quiz_result'][$k]['user']['duration'];
-					} else {
-						$session['quiz_result'][$k]['userduration'] = $session['quiz_result'][$k]['user']['userduration'];
-					}
-					if (!isset($session['quiz_result'][$k]['user']['noco'])) {
-						$session['quiz_result'][$k]['noco'] = false;
-					} else {
-						$session['quiz_result'][$k]['noco'] = $session['quiz_result'][$k]['user']['noco'];
-					}
-					unset($session['quiz_result'][$k]['user']);
+
+					$duration = isset($user['userduration']) ? $user['userduration'] : $user['duration'];
+					$session['quiz_result'][$quizKey]['userduration'] = $duration;
+
+					$noco = isset($user['noco']) ? $user['noco'] : false;
+					$session['quiz_result'][$quizKey]['noco'] = $noco;
+
+					unset($session['quiz_result'][$quizKey]['user']);
 				}
 
 				if ($quiz = $this->quizGateway->getQuiz($session['quiz_id'])) {
 					$session = array_merge($quiz, $session);
 					unset($session['quiz_questions']);
 
-					/*
-					 * Add questions they're complete right answered
-					 */
 					$session['quiz_result'] = $this->addRightAnswers($tmp, $session['quiz_result']);
 
 					return $session;
