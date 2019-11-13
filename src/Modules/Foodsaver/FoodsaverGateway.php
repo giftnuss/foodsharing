@@ -754,7 +754,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function riseRoleLevel(int $fsId, int $newRoleId): void
+	public function riseRole(int $fsId, int $newRoleId): void
 	{
 		$this->db->update(
 			'fs_foodsaver',

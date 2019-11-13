@@ -195,7 +195,7 @@ class SettingsControl extends Control
 
 			case QuizStatus::PAUSE:
 				if ($role == Role::FOODSAVER) {
-					$this->foodsaverGateway->riseRoleLevel($fsId, Role::FOODSHARER);
+					$this->foodsaverGateway->riseRole($fsId, Role::FOODSHARER);
 				}
 				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
 				$this->pageHelper->addContent($this->view->pause($quizStatus['wait'], $desc));
@@ -241,7 +241,7 @@ class SettingsControl extends Control
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $fsId);
 					if (!$this->session->may('fs')) {
-						$this->foodsaverGateway->riseRoleLevel($fsId, Role::FOODSAVER);
+						$this->foodsaverGateway->riseRole($fsId, Role::FOODSAVER);
 					}
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Foodsaver');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
@@ -262,7 +262,7 @@ class SettingsControl extends Control
 					$check = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
-					$this->foodsaverGateway->riseRoleLevel($fsId, Role::STORE_MANAGER);
+					$this->foodsaverGateway->riseRole($fsId, Role::STORE_MANAGER);
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
