@@ -26,7 +26,7 @@ class QuizCest
 	 * @example["foodsharer", "Werde Foodsaver", "Quiz ohne Zeitlimit"]
 	 * @example["foodsaver", "Werde Betriebsverantwortliche", "Quiz jetzt starten"]
 	 */
-	private function canStartQuiz(AcceptanceTester $I, \Codeception\Example $example)
+	public function canStartQuiz(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
 		$I->amOnPage($I->settingsUrl());
@@ -46,7 +46,7 @@ class QuizCest
 		$I->waitForText($questionText);
 	}
 
-	private function mustPauseAfterThreeFailures(AcceptanceTester $I)
+	public function mustPauseAfterThreeFailures(AcceptanceTester $I)
 	{
 		$I->letUserFailQuiz($this->foodsharer, 29, 3);
 
