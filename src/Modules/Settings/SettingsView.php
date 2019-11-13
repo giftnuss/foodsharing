@@ -251,12 +251,14 @@ class SettingsView extends View
 			 */
 			$content_id = false;
 
-			if ($try_count == 1) {
-				$content_id = 19;
-			} elseif ($try_count == 2) {
-				$content_id = 20;
+			if ($try_count > 4) {
+				$content_id = 13;
 			} elseif ($try_count > 2) {
 				$content_id = 21;
+			} elseif ($try_count == 2) {
+				$content_id = 20;
+			} elseif ($try_count == 1) {
+				$content_id = 19;
 			}
 
 			if ($content_id) {
