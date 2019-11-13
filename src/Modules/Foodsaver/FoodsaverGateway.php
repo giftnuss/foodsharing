@@ -61,10 +61,11 @@ final class FoodsaverGateway extends BaseGateway
 		if ($showOnlyInactive) {
 			$oldestActiveDate = Carbon::now()->subMonths(6)->format('Y-m-d H:i:s');
 			$onlyInactiveClause = '
-				AND (	fs.last_login < "' . $oldestActiveDate . '"
-					 OR	fs.last_login IS NULL
-					)
-			';
+					AND (
+							fs.last_login < "' . $oldestActiveDate . '"
+							OR
+							fs.last_login IS NULL
+						)';
 		}
 
 		return $this->db->fetchAll('
@@ -77,7 +78,7 @@ final class FoodsaverGateway extends BaseGateway
 			 
 		    FROM	fs_foodsaver fs
 					LEFT JOIN fs_foodsaver_has_bezirk hb
-					ON fs.id = hb.foodsaver_id
+						ON fs.id = hb.foodsaver_id
 
 		    WHERE	fs.deleted_at IS NULL
 					AND	hb.bezirk_id = :regionId'
