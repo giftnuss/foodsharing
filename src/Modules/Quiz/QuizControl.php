@@ -84,37 +84,46 @@ class QuizControl extends Control
 	public function wall()
 	{
 		$questionId = (int)$_GET['id'];
-		if ($q = $this->quizGateway->getQuestion($questionId)) {
-			if ($name = $this->quizGateway->getQuizName($q['quiz_id'])) {
-				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $questionId);
+		if ($question = $this->quizGateway->getQuestion($questionId)) {
+			if ($quizName = $this->quizGateway->getQuizName($question['quiz_id'])) {
+				$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $questionId);
 			}
-			$this->pageHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
-			$this->pageHelper->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addBread('Frage  #' . $questionId, '/?page=quiz&sub=wall&id=' . $questionId);
+			
+			$topbarContent = $this->getWallTopbarContent($question);
+			$this->pageHelper->addContent($topbarContent, CNT_TOP);
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
-			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($q['id'])), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($questionId)), CNT_RIGHT);
 		}
+	}
+	
+	private function getWallTopbarContent($question)
+	{
+		return $this->view->topbar(
+			'Quizfrage  #' . (int)$question['id'],
+			'<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$question['id'] . ',qid:' . (int)$question['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $question['text'] . '<p><strong>' . $question['fp'] . ' Fehlerpunkte, ' . $question['duration'] . ' Sekunden zum Antworten</strong></p>',
+			'<img src="/img/quiz.png" />'
+		);
 	}
 
 	public function edit()
 	{
-		if ($quiz = $this->quizGateway->getQuiz($_GET['qid'])) {
+		$quizId = (int)$_GET['qid'];
+		if ($quiz = $this->quizGateway->getQuiz($quizId)) {
 			if ($this->isSubmitted()) {
-				$name = strip_tags($_POST['name']);
-				$name = trim($name);
-
-				$desc = $_POST['desc'];
-				$desc = trim($desc);
-
-				$maxFailurePoints = (int)$_POST['maxfp'];
-				$questionCount = (int)$_POST['questcount'];
-
+				$name = trim(strip_tags($_POST['name']));
 				if (!empty($name)) {
-					if ($id = $this->quizGateway->updateQuiz($_GET['qid'], $name, $desc, $maxFailurePoints, $questionCount)) {
+					$desc = trim($_POST['desc']);
+					$maxFailurePoints = (int)$_POST['maxfp'];
+					$questionCount = (int)$_POST['questcount'];
+
+					if ($updatedQuizId = $this->quizGateway->updateQuiz($quizId, $name, $desc, $maxFailurePoints, $questionCount)) {
 						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
-						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
+						$this->routeHelper->go('/?page=quiz&id=' . (int)$updatedQuizId);
 					}
 				}
 			}
+
 			$this->dataHelper->setEditData($quiz);
 			$this->pageHelper->addContent($this->view->quizForm());
 		}
@@ -123,19 +132,15 @@ class QuizControl extends Control
 	public function newquiz()
 	{
 		if ($this->isSubmitted()) {
-			$name = strip_tags($_POST['name']);
-			$name = trim($name);
-
-			$desc = $_POST['desc'];
-			$desc = trim($desc);
-
-			$maxFailurePoints = (int)$_POST['maxfp'];
-			$questionCount = (int)$_POST['questcount'];
-
+			$name = trim(strip_tags($_POST['name']));
 			if (!empty($name)) {
-				if ($id = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
+				$desc = trim($_POST['desc']);
+				$maxFailurePoints = (int)$_POST['maxfp'];
+				$questionCount = (int)$_POST['questcount'];
+
+				if ($quizId = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
 					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
-					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
+					$this->routeHelper->go('/?page=quiz&id=' . (int)$quizId);
 				}
 			}
 		}
