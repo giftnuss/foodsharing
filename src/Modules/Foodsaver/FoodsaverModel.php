@@ -8,39 +8,6 @@ use Foodsharing\Modules\Store\StoreModel;
 
 class FoodsaverModel extends Db
 {
-	public function listFoodsaver($bezirk_id, $showOnlyInactive = false)
-	{
-		return $this->q('
-		    SELECT
-			fs.id,
-			fs.name,
-			fs.nachname,
-			fs.photo,
-			fs.sleep_status,
-			CONCAT("#",fs.id) AS href
-			 
-		    FROM
-			fs_foodsaver fs,
-			fs_foodsaver_has_bezirk hb
-			 
-		    WHERE
-			fs.id = hb.foodsaver_id
-			 
-		    AND
-			fs.deleted_at IS NULL
-
-		    AND
-			hb.bezirk_id = ' . (int)$bezirk_id .
-			($showOnlyInactive ? '
-		    AND (
-			fs.last_login <  "' . (new DateTime('NOW -6 MONTH'))->format('Y-m-d H:i:s') . '"
-		    OR
-			fs.last_login IS NULL)' : '') . '
-		    ORDER BY
-			fs.name ASC
-		');
-	}
-
 	public function update_foodsaver($fsId, $data, StoreModel $storeModel)
 	{
 		$data['anmeldedatum'] = date('Y-m-d H:i:s');
