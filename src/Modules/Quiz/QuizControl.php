@@ -147,7 +147,7 @@ class QuizControl extends Control
 	{
 		if ($this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->pageHelper->addContent($this->getTopbarContent($fs), CNT_TOP);
+			$this->pageHelper->addContent($this->getSessionDetailTopbarContent($fs), CNT_TOP);
 
 			if ($sessions = $this->quizSessionGateway->getUserSessions($fs['id'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
@@ -155,7 +155,7 @@ class QuizControl extends Control
 		}
 	}
 
-	private function getTopbarContent($fs)
+	private function getSessionDetailTopbarContent($fs)
 	{
 		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
 		$subtitle = $this->translationHelper->s('rolle_' . $fs['rolle'] . '_' . $fs['geschlecht']);
@@ -166,18 +166,28 @@ class QuizControl extends Control
 
 	public function sessions()
 	{
-		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
-			if ($sessions = $this->quizSessionGateway->getSessions($_GET['id'])) {
-				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
-			} else {
-				$this->pageHelper->addContent($this->view->noSessions($quiz));
-			}
-			$this->pageHelper->addBread($quiz['name'], '/?page=quiz&id=' . (int)$_GET['id']);
+		$quizId = (int)$_GET['id'];
+		if ($quiz = $this->quizGateway->getQuiz($quizId)) {
+			$this->pageHelper->addContent($this->getSessionListContent($quiz));
+			$this->pageHelper->addBread($quiz['name'], '/?page=quiz&id=' . $quizId);
 			$this->pageHelper->addBread('Auswertung');
-			$slogan = 'Klausurfragen für ' . $quiz['name'];
 
-			$this->pageHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . '-Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
+			$topbarContent = $this->view->topbar(
+				'Auswertung für ' . $quiz['name'] . '-Quiz',
+				'Klausurfragen für ' . $quiz['name'],
+				'<img src="/img/quiz.png" />'
+			);
+			$this->pageHelper->addContent($topbarContent, CNT_TOP);
 		}
+	}
+
+	private function getSessionListContent(array $quiz): string
+	{
+		if ($sessions = $this->quizSessionGateway->getSessions($quiz['id'])) {
+			return $this->view->sessionList($sessions, $quiz);
+		}
+
+		return $this->view->noSessions($quiz);
 	}
 
 	public function listQuestions($quiz_id)
