@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Quiz;
 use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
@@ -144,12 +145,12 @@ class QuizSessionGateway extends BaseGateway
 					$session['quiz_result'][$k]['user'] = $tmp[$quizResult['id']];
 
 					foreach ($quizResult['answers'] as $k2 => $v2) {
-						$session['quiz_result'][$k]['answers'][$k2]['right'] = 0;
-						if ($v2['right'] == 1) {
-							$session['quiz_result'][$k]['answers'][$k2]['right'] = 1;
+						$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::WRONG;
+						if ($v2['right'] == AnswerRating::CORRECT) {
+							$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::CORRECT;
 						}
-						if ($v2['right'] == 2) {
-							$session['quiz_result'][$k]['answers'][$k2]['right'] = 2;
+						if ($v2['right'] == AnswerRating::NEUTRAL) {
+							$session['quiz_result'][$k]['answers'][$k2]['right'] = AnswerRating::NEUTRAL;
 						}
 						$session['quiz_result'][$k]['answers'][$k2]['user_say'] = false;
 						if (isset($session['quiz_result'][$k]['user']['answers'][$v2['id']])) {

@@ -13,6 +13,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -310,7 +311,7 @@ class SettingsView extends View
 				if (!$r['noco'] && $r['percent'] == 100) {
 					$atext = '';
 					$right = 'red';
-				} elseif ($a['user_say'] == true && $a['right'] == 1 && !$r['noco']) {
+				} elseif ($a['user_say'] == true && $a['right'] == AnswerRating::CORRECT && !$r['noco']) {
 					$right = 'green';
 					if ($a['right']) {
 						$atext = ' ist richtig!';
@@ -319,7 +320,7 @@ class SettingsView extends View
 						$atext = ' ist falsch. Das hast Du richtig erkannt!';
 						$sort_right = 'right';
 					}
-				} elseif ($a['right'] == 2) {
+				} elseif ($a['right'] == AnswerRating::NEUTRAL) {
 					$atext = ' ist neutral und daher ohne Wertung.';
 					$right = 'neutral';
 					$sort_right = 'neutral';
