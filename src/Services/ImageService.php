@@ -170,9 +170,6 @@ final class ImageService
 				case Role::AMBASSADOR:
 					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
 					break;
-				case Role::ORGA:
-					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
-					break;
 				default:
 					break;
 			}
