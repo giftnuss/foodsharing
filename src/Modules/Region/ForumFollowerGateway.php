@@ -74,8 +74,8 @@ class ForumFollowerGateway extends BaseGateway
 		return $this->db->delete(
 			'fs_theme_follower',
 			[
-				'theme_id' => $thread_id,
-				'foodsaver_id' => $fs_id
+				'foodsaver_id' => $fsId,
+				'theme_id' => $threadId
 			]
 		);
 	}
