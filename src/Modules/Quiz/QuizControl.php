@@ -145,27 +145,23 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		$fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid']);
-		if ($fs) {
+		if ($this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->pageHelper->addContent(
-				$this->view->topbar(
-					'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'],
-					$this->getRolle($fs['geschlecht'], $fs['rolle']),
-					$this->imageService->avatar($fs)
-				),
-				CNT_TOP
-			);
+			$this->pageHelper->addContent($this->getTopbarContent($fs), CNT_TOP);
 
-			if ($sessions = $this->quizSessionGateway->getUserSessions($_GET['fsid'])) {
+			if ($sessions = $this->quizSessionGateway->getUserSessions($fs['id'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
 	}
 
-	private function getRolle($gender_id, $rolle_id)
+	private function getTopbarContent($fs)
 	{
-		return $this->translationHelper->s('rolle_' . $rolle_id . '_' . $gender_id);
+		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
+		$subtitle = $this->translationHelper->s('rolle_' . $fs['rolle'] . '_' . $fs['geschlecht']);
+		$icon = $this->imageService->avatar($fs);
+
+		return $this->view->topbar($title, $subtitle, $icon);
 	}
 
 	public function sessions()
