@@ -4,22 +4,9 @@ namespace Foodsharing\Modules\Settings;
 
 use DateTime;
 use Foodsharing\Modules\Core\BaseGateway;
-use Foodsharing\Modules\Core\Database;
-use Foodsharing\Modules\Quiz\QuizGateway;
 
 class SettingsGateway extends BaseGateway
 {
-	private $quizGateway;
-
-	public function __construct(
-		Database $db,
-		QuizGateway $quizGateway
-	) {
-		parent::__construct($db);
-
-		$this->quizGateway = $quizGateway;
-	}
-
 	public function logChangedSetting(int $fsId, array $old, array $new, array $logChangedKeys, int $changerId = null): void
 	{
 		if (!$changerId) {
