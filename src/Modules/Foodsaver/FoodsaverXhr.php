@@ -14,13 +14,11 @@ class FoodsaverXhr extends Control
 	private $sanitizerService;
 
 	public function __construct(
-		FoodsaverModel $model,
 		FoodsaverView $view,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
 		FoodsaverGateway $foodsaverGateway
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;

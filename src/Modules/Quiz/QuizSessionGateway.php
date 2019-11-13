@@ -416,4 +416,19 @@ class QuizSessionGateway extends BaseGateway
 		  ', [':fsId' => $fsId, ':quizId' => $quizId]
 		);
 	}
+
+	public function blockUserForQuiz(int $fsId, int $quizId)
+	{
+		for ($i = 1; $i <= 7; ++$i) {
+			$this->db->insertIgnore(
+				'fs_quiz_session',
+				[
+					'foodsaver_id' => $fsId,
+					'quiz_id' => $quizId,
+					'status' => SessionStatus::FAILED,
+					'time_start' => $this->db->now()
+				]
+			);
+		}
+	}
 }

@@ -7,18 +7,23 @@ use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 final class FoodsaverGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
+	private $quizSessionGateway;
 
 	public function __construct(
 		Database $db,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		QuizSessionGateway $quizSessionGateway
 	) {
 		parent::__construct($db);
+
 		$this->forumFollowerGateway = $forumFollowerGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
 	public function getFoodsaver($bezirk_id)
@@ -750,7 +755,7 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	/**
-	 * set option is an key value store each var is avalable in the user session.
+	 * set option is an key value store each var is available in the user session.
 	 *
 	 * @param string $key
 	 * @param $val
@@ -821,7 +826,85 @@ final class FoodsaverGateway extends BaseGateway
 		', [':fsId' => $foodsaverId]);
 	}
 
-	public function getFoodsaverAddress(int $foodsaverId): array
+	public function updateFoodsaver(int $fsId, array $data, StoreModel $storeModel): int
+	{
+		$updateData = [
+			'bezirk_id' => $data['bezirk_id'],
+			'plz' => strip_tags(trim($data['plz'])),
+			'stadt' => strip_tags(trim($data['stadt'])),
+			'lat' => strip_tags(trim($data['lat'])),
+			'lon' => strip_tags(trim($data['lon'])),
+			'name' => strip_tags($data['name']),
+			'nachname' => strip_tags($data['nachname']),
+			'anschrift' => strip_tags($data['anschrift']),
+			'telefon' => strip_tags($data['telefon']),
+			'handy' => strip_tags($data['handy']),
+			'geschlecht' => $data['geschlecht'],
+			'geb_datum' => $data['geb_datum']
+		];
+
+		if (isset($data['position'])) {
+			$updateData['position'] = strip_tags($data['position']);
+		}
+
+		if (isset($data['email'])) {
+			$updateData['email'] = strip_tags($data['email']);
+		}
+
+		if (isset($data['orgateam'])) {
+			$updateData['orgateam'] = $data['orgateam'];
+		}
+
+		if (isset($data['rolle'])) {
+			$updateData['rolle'] = $data['rolle'];
+			if ($data['rolle'] == Role::FOODSHARER && $data['is_orgateam']) {
+				$data['bezirk_id'] = 0;
+				$updateData['quiz_rolle'] = Role::FOODSHARER;
+				$updateData['verified'] = 0;
+
+				$this->signOutFromStores($fsId, $storeModel);
+
+				//Delete Bells for Foodsaver
+				$this->db->delete(
+					'fs_foodsaver_has_bell',
+					['foodsaver_id' => $fsId]
+				);
+				// Delete from Bezirke and Working Groups
+				$this->db->delete(
+					'fs_foodsaver_has_bezirk',
+					['foodsaver_id' => $fsId]
+				);
+				//Delete from Bezirke and Working Groups (when Admin)
+				$this->db->delete(
+					'fs_botschafter',
+					['foodsaver_id' => $fsId]
+				);
+
+				$this->quizSessionGateway->blockUserForQuiz($fsId, Role::FOODSAVER);
+			}
+		}
+
+		return $this->db->update(
+			'fs_foodsaver',
+			$updateData,
+			['id' => $fsId]
+		);
+	}
+
+	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
+	{
+		$storeIds = $this->db->fetchAll('
+			SELECT 	bt.betrieb_id as id
+			FROM 	fs_betrieb_team bt
+			WHERE 	bt.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+
+		//Delete from Companies
+		foreach ($storeIds as $storeId) {
+			$storeModel->signout($storeId, $fsId);
+		}
+	}
+	public function getFoodsaverAddress($foodsaverId)
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',

@@ -19,7 +19,6 @@ class FoodsaverControl extends Control
 	private $dataHelper;
 
 	public function __construct(
-		FoodsaverModel $model,
 		FoodsaverView $view,
 		StoreModel $storeModel,
 		SettingsGateway $settingsGateway,
@@ -28,7 +27,6 @@ class FoodsaverControl extends Control
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->settingsGateway = $settingsGateway;
@@ -101,6 +99,7 @@ class FoodsaverControl extends Control
 
 		if ($this->submitted()) {
 			if ($this->session->isOrgaTeam()) {
+				$g_data['is_orgateam'] = true;
 				if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 					$g_data['orgateam'] = 1;
 				}
@@ -109,11 +108,17 @@ class FoodsaverControl extends Control
 				unset($g_data['email'], $g_data['rolle']);
 			}
 
-			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($_GET['id'])) {
+			$fsId = $_GET['id'];
+			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($fsId)) {
 				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
-				$this->settingsGateway->logChangedSetting($_GET['id'], $oldFs, $g_data, $logChangedFields, $this->session->id());
+				$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $logChangedFields, $this->session->id());
 			}
-			if ($this->model->update_foodsaver($_GET['id'], $g_data, $this->storeModel)) {
+
+			if (!isset($g_data['bezirk_id'])) {
+				$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
+			}
+
+			if ($this->foodsaverGateway->updateFoodsaver($fsId, $g_data, $this->storeModel)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 			} else {
 				$this->flashMessageHelper->error($this->translationHelper->s('error'));
