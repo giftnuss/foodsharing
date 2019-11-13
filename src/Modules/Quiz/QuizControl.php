@@ -58,15 +58,7 @@ class QuizControl extends Control
 		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
 		if (!isset($_GET['sub'])) {
 			if (isset($_GET['id'])) {
-				$quizId = (int)$_GET['id'];
-				if ($quizId > 0) {
-					if ($name = $this->quizGateway->getQuizName($quizId)) {
-						$this->pageHelper->addBread($name, '/?page=quiz&id=' . $quizId);
-						$topbtn = ' - ' . $name;
-						$slogan = 'Klausurfragen für ' . $name;
-					}
-					$this->listQuestions($_GET['id']);
-				}
+				$this->listQuiz($_GET['id']);
 			} else {
 				$this->routeHelper->go('/?page=quiz&id=1');
 			}
@@ -81,6 +73,18 @@ class QuizControl extends Control
 	{
 		header('Location: ' . $_SERVER['HTTP_REFERER']);
 		exit();
+	}
+
+	private function listQuiz($quizId): void
+	{
+		if ($quizId > 0) {
+			if ($name = $this->quizGateway->getQuizName($quizId)) {
+				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $quizId);
+				$topbtn = ' - ' . $name;
+				$slogan = 'Klausurfragen für ' . $name;
+			}
+			$this->listQuestions($quizId);
+		}
 	}
 
 	private function listQuestions($quizId)
