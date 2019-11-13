@@ -106,14 +106,14 @@ class QuizControl extends Control
 				$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $questionId);
 			}
 			$this->pageHelper->addBread('Frage  #' . $questionId, '/?page=quiz&sub=wall&id=' . $questionId);
-			
+
 			$topbarContent = $this->getWallTopbarContent($question);
 			$this->pageHelper->addContent($topbarContent, CNT_TOP);
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
 			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($questionId)), CNT_RIGHT);
 		}
 	}
-	
+
 	private function getWallTopbarContent($question)
 	{
 		return $this->view->topbar(
@@ -190,7 +190,7 @@ class QuizControl extends Control
 	{
 		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
 			$this->pageHelper->addContent($this->getSessionListContent($quiz));
-			
+
 			$quizName = $quiz['name'];
 			$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $quiz['id']);
 

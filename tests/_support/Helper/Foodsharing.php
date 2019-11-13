@@ -155,7 +155,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = [
 			'question_id' => $questionId,
 			'text' => ($right ? 'Richtige' : 'Falsche') . ' Antwort',
-			'explanation' => 'Diese Antwort ist '. ($right ? 'richtig' : 'falsch') . '.',
+			'explanation' => 'Diese Antwort ist ' . ($right ? 'richtig' : 'falsch') . '.',
 			'right' => $right ? 1 : 0
 		];
 		$params['id'] = $this->haveInDatabase('fs_answer', $params);
