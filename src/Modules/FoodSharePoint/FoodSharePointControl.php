@@ -171,7 +171,7 @@ class FoodSharePointControl extends Control
 		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
 			$this->foodSharePointGateway->follow($foodSharePointId, $foodSharerId, $infoType);
 		} else {
-			$this->foodSharePointGateway->unfollow($foodSharePointId, $foodSharerId);
+			$this->foodSharePointGateway->unfollow($foodSharerId, $foodSharePointId);
 		}
 
 		return true;

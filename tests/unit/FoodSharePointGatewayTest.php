@@ -42,9 +42,11 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->otherFoodsaver = $this->tester->createFoodsaver();
 		$this->bezirk = $this->tester->createRegion('peter');
-		$this->foodSharePoint = $this->tester->createFoodSharePoint($this->foodsaver['id'], $this->bezirk['id'], [
-			'picture' => 'picture/cat.jpg'
-		]);
+		$this->foodSharePoint = $this->tester->createFoodSharePoint(
+			$this->foodsaver['id'],
+			$this->bezirk['id'],
+			['picture' => 'picture/cat.jpg']
+		);
 	}
 
 	public function testUpdateFairteiler()
@@ -163,7 +165,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 			'type' => FollowerType::FOOD_SHARE_POINT_MANAGER
 		]);
 
-		$this->gateway->unfollow($this->foodSharePoint['id'], $this->foodsaver['id']);
+		$this->gateway->unfollow($this->foodsaver['id'], $this->foodSharePoint['id']);
 
 		// There are now no follow entries for this fairteiler/foodsaver combination
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', [
