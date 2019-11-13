@@ -10,6 +10,7 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 
 	private $gateway;
 
+	private $foodsharer;
 	private $foodsaver;
 	/**
 	 * @var array
@@ -20,6 +21,7 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Quiz\QuizSessionGateway::class);
 
+		$this->foodsharer = $this->tester->createFoodsharer();
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->basketsIds = [];
 		foreach (range(1, 3) as $quizId) {

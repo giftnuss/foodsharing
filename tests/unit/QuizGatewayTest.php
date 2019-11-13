@@ -6,14 +6,12 @@ class QuizGatewayTest extends \Codeception\Test\Unit
 
 	private $gateway;
 
-	private $foodsharer;
 	private $foodsaver;
 
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Quiz\QuizGateway::class);
 
-		$this->foodsharer = $this->tester->createFoodsharer();
 		$this->foodsaver = $this->tester->createFoodsaver();
 
 		foreach (range(1, 3) as $quizId) {
