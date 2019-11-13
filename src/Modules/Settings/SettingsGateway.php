@@ -144,24 +144,6 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function getForumThreads(int $fsId): array
-	{
-		return $this->db->fetchAll('
-			SELECT
-				th.id,
-				th.name,
-				tf.infotype
-
-			FROM
-				`fs_theme_follower` tf
-				LEFT JOIN `fs_theme` th
-				ON tf.theme_id = th.id
-
-			WHERE
-				tf.foodsaver_id = :fsId
-		', [':fsId' => $fsId]);
-	}
-
 	public function updateRole(int $fsId, int $newRoleId, int $currentRole): void
 	{
 		if ($newRoleId > $currentRole) {

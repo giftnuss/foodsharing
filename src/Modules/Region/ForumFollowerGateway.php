@@ -23,6 +23,24 @@ class ForumFollowerGateway extends BaseGateway
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
+	public function getForumThreads(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				th.id,
+				th.name,
+				tf.infotype
+
+			FROM
+				`fs_theme_follower` tf
+				LEFT JOIN `fs_theme` th
+				ON tf.theme_id = th.id
+
+			WHERE
+				tf.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+	}
+	
 	public function isFollowing($fsId, $threadId)
 	{
 		return $this->db->exists(
@@ -50,7 +68,7 @@ class ForumFollowerGateway extends BaseGateway
 			]
 		);
 	}
-	
+
 	public function unfollowThread(int $fsId, int $threadId): int
 	{
 		return $this->db->delete(

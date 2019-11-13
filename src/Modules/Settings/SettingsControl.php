@@ -446,7 +446,7 @@ class SettingsControl extends Control
 		$g_data = $this->foodsaverGateway->getSubscriptions($fsId);
 
 		$foodSharePoints = $this->foodSharePointGateway->listFoodsaversFoodSharePoints($fsId);
-		$threads = $this->settingsGateway->getForumThreads($fsId);
+		$threads = $this->forumFollowerGateway->getForumThreads($fsId);
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoints, $threads));
 	}
