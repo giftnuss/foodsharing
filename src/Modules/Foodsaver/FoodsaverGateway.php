@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
+use Foodsharing\Modules\Store\StoreModel;
 
 final class FoodsaverGateway extends BaseGateway
 {
