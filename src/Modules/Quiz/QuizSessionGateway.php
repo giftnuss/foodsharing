@@ -2,8 +2,10 @@
 
 namespace Foodsharing\Modules\Quiz;
 
+use Carbon\Carbon;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizSessionGateway extends BaseGateway
@@ -19,8 +21,6 @@ class QuizSessionGateway extends BaseGateway
 
 	public function initQuizSession(int $fsId, int $quizId, array $questions, int $maxFailurePoints, int $questionCount, int $easyMode = 0): int
 	{
-		$questions = serialize($questions);
-
 		return $this->db->insert(
 			'fs_quiz_session',
 			[
@@ -28,7 +28,7 @@ class QuizSessionGateway extends BaseGateway
 				'quiz_id' => $quizId,
 				'status' => SessionStatus::RUNNING,
 				'quiz_index' => 0,
-				'quiz_questions' => $questions,
+				'quiz_questions' => serialize($questions),
 				'time_start' => $this->db->now(),
 				'fp' => 0,
 				'maxfp' => $maxFailurePoints,
@@ -40,14 +40,11 @@ class QuizSessionGateway extends BaseGateway
 
 	public function finishQuizSession(int $sessionId, array $questions, array $quizResult, float $failurePoints, int $maxFailurePoints): int
 	{
-		$quizResult = serialize($quizResult);
-		$questions = serialize($questions);
-
 		return $this->db->update(
 			'fs_quiz_session',
 			[
-				'quiz_result' => $quizResult,
-				'quiz_questions' => $questions,
+				'quiz_result' => serialize($quizResult),
+				'quiz_questions' => serialize($questions),
 				'time_end' => $this->db->now(),
 				'status' => ($failurePoints <= $maxFailurePoints) ? SessionStatus::PASSED : SessionStatus::FAILED,
 				'fp' => $failurePoints,
@@ -310,12 +307,17 @@ class QuizSessionGateway extends BaseGateway
 					$out['last_try'] = $r['time_ts'];
 				}
 
-				if ($r['status'] == SessionStatus::RUNNING) {
-					++$out['running'];
-				} elseif ($r['status'] == SessionStatus::PASSED) {
-					++$out['passed'];
-				} elseif ($r['status'] == SessionStatus::FAILED) {
-					++$out['failed'];
+				switch ($r['status']) {
+					case SessionStatus::RUNNING:
+						++$out['running'];
+						break;
+					case SessionStatus::PASSED:
+						++$out['passed'];
+						break;
+					case SessionStatus::FAILED:
+						++$out['failed'];
+						break;
+					default:
 				}
 			}
 		}
@@ -350,12 +352,10 @@ class QuizSessionGateway extends BaseGateway
 
 	public function updateQuizSession(int $sessionId, array $questions, int $quizIndex): int
 	{
-		$questions = serialize($questions);
-
 		return $this->db->update(
 			'fs_quiz_session',
 			[
-				'quiz_questions' => $questions,
+				'quiz_questions' => serialize($questions),
 				'quiz_index' => $quizIndex
 			],
 			['id' => $sessionId]
