@@ -105,9 +105,9 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
 		$roles = [
-			Role::FOODSAVER => 'Foodsaver',
-			Role::STORE_MANAGER => 'Store Manager',
-			Role::AMBASSADOR => 'Ambassador'
+			Role::FOODSAVER => 'Foodsaver/in',
+			Role::STORE_MANAGER => 'Betriebsverantwortliche/r',
+			Role::AMBASSADOR => 'Botschafter/in'
 		];
 		$params = [
 			'id' => $quizId,
