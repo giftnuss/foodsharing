@@ -14,7 +14,7 @@ use Foodsharing\Modules\Store\StoreModel;
 final class FoodsaverGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
-   	private $quizSessionGateway;
+	private $quizSessionGateway;
 
 	public function __construct(
 		Database $db,
