@@ -23,18 +23,7 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getFoodsaver(int $regionId): array
 	{
-		$and = ' AND 		fb.`bezirk_id` = ' . $regionId . '';
-		if (is_array($regionId)) {
-			if (is_array(end($regionId))) {
-				$tmp = $regionId;
-				$regionId = array();
-				foreach ($tmp as $b) {
-					$regionId[$b['id']] = $b['id'];
-				}
-			}
-
-			$and = ' AND 		fb.`bezirk_id` IN(' . implode(',', $regionId) . ')';
-		}
+		$and = $regionId ? ' AND fb.`bezirk_id` = ' . $regionId : '';
 
 		return $this->db->fetchAll('
 			SELECT 		fs.id,
@@ -51,7 +40,7 @@ final class FoodsaverGateway extends BaseGateway
 						`fs_foodsaver` fs
 
 			WHERE 		fb.foodsaver_id = fs.id
-			AND			fs.deleted_at IS NULL ' . $and
+			AND			fs.deleted_at IS NULL' . $and
 		);
 	}
 
