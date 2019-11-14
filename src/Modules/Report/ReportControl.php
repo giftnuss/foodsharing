@@ -25,6 +25,10 @@ class ReportControl extends Control
 	public function index(Request $request, Response $response): void
 	{
 		if (isset($_GET['bid'])) {
+			$this->pageHelper->addContent($this->v_utils->v_info('<b>Während einer langen Probephase konnten Probleme dieser Funktion leider nicht entdeckt werden. Diese Funktion wird deshalb auf Wunsch der AG Meldegruppe ( <a href="mailto:meldungen@foodsharing.network">meldungen@foodsharing.network</a> ) vorübergehend deaktiviert.<br><br><br>Um sie nach einer Ausarbeitung durch die IT wieder zu aktivieren, benötigen wir die Unterstützung weiterer ProgrammiererInnen aus Deinem Bezirk:<br><br><a href="https://devdocs.foodsharing.network/it-tasks.html">https://devdocs.foodsharing.network/it-tasks.html</a> oder <a href="mailto:it@foodsharing.network">it@foodsharing.network</a></b>'));
+
+			return;
+
 			$this->byRegion($_GET['bid'], $response);
 		} else {
 			if (!isset($_GET['sub'])) {
