@@ -625,20 +625,14 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFsAutocomplete(mixed $regionIds): array
+	public function getFsAutocomplete(array $regions): array
 	{
-		$and = '';
-		if (is_array($regionIds)) {
-			if (is_array(end($regionIds))) {
-				$tmp = $regionIds;
-				$regionIds = [];
-				foreach ($tmp as $region) {
-					$regionIds[$region['id']] = $region['id'];
-				}
+		if (is_array(end($regions))) {
+			$tmp = [];
+			foreach ($regions as $r) {
+				$tmp[] = $r['id'];
 			}
-			$and = 'AND fb.`bezirk_id` IN(' . implode(',', $regionIds) . ')';
-		} else {
-			$and = 'AND fb.`bezirk_id` = ' . (int)$regionIds . '';
+			$regions = $tmp;
 		}
 
 		return $this->db->fetchAll('
@@ -647,10 +641,11 @@ final class FoodsaverGateway extends BaseGateway
 						CONCAT(fs.`name`, " ", fs.`nachname`, " (",fs.`id`,")") AS value
 
 			FROM 	`fs_foodsaver` fs
-					LEFT JOIN fs_foodsaver_has_bezirk fb,
+					LEFT JOIN fs_foodsaver_has_bezirk fb
 						ON fs.id = fb.foodsaver_id
 
-			WHERE 	fs.deleted_at IS NULL ' . $and
+			WHERE 	fs.deleted_at IS NULL
+					AND fb.`bezirk_id` IN(' . implode(',', $regions) . ')'
 		);
 	}
 
