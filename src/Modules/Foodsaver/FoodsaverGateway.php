@@ -50,6 +50,41 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function listFoodsaver(int $regionId, bool $showOnlyInactive = false): array
+	{
+		$onlyInactiveClause = '';
+		if ($showOnlyInactive) {
+			$oldestActiveDate = Carbon::now()->subMonths(6)->format('Y-m-d H:i:s');
+			$onlyInactiveClause = '
+				AND (
+						fs.last_login < "' . $oldestActiveDate . '"
+						OR
+						fs.last_login IS NULL
+					)
+			';
+		}
+
+		return $this->db->fetchAll('
+		    SELECT	fs.id,
+					fs.name,
+					fs.nachname,
+					fs.photo,
+					fs.sleep_status,
+					CONCAT("#",fs.id) AS href
+			 
+		    FROM	fs_foodsaver fs
+					LEFT JOIN fs_foodsaver_has_bezirk hb
+						ON fs.id = hb.foodsaver_id
+
+		    WHERE	fs.deleted_at IS NULL
+					AND	hb.bezirk_id = :regionId'
+					. $onlyInactiveClause . '
+		    
+			ORDER BY fs.name ASC
+		',
+		[':regionId' => $regionId]);
+	}
+
 	public function getFoodsaverDetails(int $fsId): array
 	{
 		return $this->db->fetchByCriteria(
