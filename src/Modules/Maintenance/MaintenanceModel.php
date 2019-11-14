@@ -6,15 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function listOldBellIds($days = 7)
-	{
-		return $this->qCol('
-			SELECT id
-			FROM `fs_bell`
-			WHERE `time` <= NOW( ) - INTERVAL ' . (int)$days . ' DAY
-		');
-	}
-
 	public function setFoodsaverInactive($fsids)
 	{
 		return $this->update('UPDATE fs_foodsaver SET sleep_status = 2 WHERE id IN(' . implode(',', $fsids) . ')');

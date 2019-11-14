@@ -62,11 +62,6 @@ class MaintenanceControl extends ConsoleControl
 		$this->memcacheUserInfo();
 
 		/*
-		 * delete old bells
-		 */
-		$this->deleteBells();
-
-		/*
 		 * delete unused images
 		 */
 		$this->deleteImages();
@@ -226,14 +221,6 @@ class MaintenanceControl extends ConsoleControl
 	{
 		$count = $this->maintenanceGateway->deactivateOldBaskets();
 		self::info($count . ' old foodbaskets deactivated');
-	}
-
-	private function deleteBells()
-	{
-		if ($ids = $this->model->listOldBellIds()) {
-			$this->maintenanceGateway->deleteBells($ids);
-			self::info(count($ids) . ' old bells deleted');
-		}
 	}
 
 	private function deleteUnconfirmedFetchDates()
