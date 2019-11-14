@@ -35,6 +35,9 @@
 ## Dev/Test/CI stuff
 - Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
 
+# 2019-11-14 Hotfix
+- disabled the new report list on region level @peter.toennies @jofranz
+
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
 - remove email and gender from some responses in MessageXhr.php !1098
