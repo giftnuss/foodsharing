@@ -470,10 +470,10 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	c.`foodsaver_id` = fs.id
 			AND     fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
+			AND 	c.bezirk_id = :regionId
 			AND 	c.active = 1
 			ORDER BY fs.`name`
-		', ['id' => $regionId]);
+		', [':regionId' => $regionId]);
 
 		return array_map(function ($fs) {
 			if ($fs['photo']) {
