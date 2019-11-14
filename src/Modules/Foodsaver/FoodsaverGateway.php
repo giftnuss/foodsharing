@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Carbon\Carbon;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -466,22 +467,22 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$rows_ins = 0;
 		if ($leaveAdmins) {
-			$admins = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $regionId]);
+			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . $regionId);
 			if ($admins) {
 				$fsIds = array_merge($fsIds, $admins);
 			}
 		}
-		$commaSeparatedFsIds = implode(',', array_map('intval', $fsIds));
+		$ids = implode(',', array_map('intval', $fsIds));
 		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $fsIds, false);
-		if ($commaSeparatedFsIds) {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $commaSeparatedFsIds . ')')->rowCount();
+		if ($ids) {
+			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($regionId) {
 				return '(' . $id . ',' . $regionId . ',1,NOW())';
 			}, $fsIds);
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
 		} else {
-			$rows_del = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId)->rowCount();
 		}
 
 		return array($rows_ins, $rows_del);
@@ -569,17 +570,16 @@ final class FoodsaverGateway extends BaseGateway
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
 	public function getBotIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
 	{
-		$typeCondition = '';
+		$where_type = '';
 		if (!$includeRegionAmbassador) {
-			$typeCondition = ' AND bz.type = ' . Type::WORKING_GROUP;
+			$where_type = 'bz.type = ' . Type::WORKING_GROUP;
 		} elseif (!$includeGroupAmbassador) {
-			$typeCondition = ' AND bz.type <> ' . Type::WORKING_GROUP;
+			$where_type = 'bz.type <> ' . Type::WORKING_GROUP;
 		}
 
 		return $this->db->fetchAllValues('
-			SELECT DISTINCT
+			SELECT DISTINCT 
 					bot.foodsaver_id
-
 			FROM	`fs_bezirk_closure` c
 					LEFT JOIN `fs_bezirk` bz
 						ON bz.id = c.bezirk_id
@@ -587,14 +587,10 @@ final class FoodsaverGateway extends BaseGateway
 							ON bot.bezirk_id = c.bezirk_id
 							INNER JOIN `fs_foodsaver` fs
 								ON fs.id = bot.foodsaver_id
-
-			WHERE	c.ancestor_id = :regionId
-					AND fs.deleted_at IS NULL
-					:typeCondition
-		', [
-			':regionId' => $regionId,
-			':typeCondition' => $typeCondition
-		]);
+			WHERE	c.ancestor_id = ' . $regionId . ''
+				. ' AND fs.deleted_at IS NULL'
+				. ' AND ' . $where_type
+		);
 	}
 
 	public function del_foodsaver(int $fsId): void
