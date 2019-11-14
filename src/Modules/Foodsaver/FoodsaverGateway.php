@@ -432,26 +432,26 @@ final class FoodsaverGateway extends BaseGateway
 		return $out;
 	}
 
-	public function updateGroupMembers(int $regionId, array $foodsaverIds, bool $leaveAdmins): array
+	public function updateGroupMembers(int $regionId, array $fsIds, bool $leaveAdmins): array
 	{
 		$rows_ins = 0;
 		if ($leaveAdmins) {
 			$admins = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $regionId]);
 			if ($admins) {
-				$foodsaverIds = array_merge($foodsaverIds, $admins);
+				$fsIds = array_merge($fsIds, $admins);
 			}
 		}
-		$fsIds = implode(',', array_map('intval', $foodsaverIds));
-		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $foodsaverIds, false);
-		if ($fsIds) {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $fsIds . ')')->rowCount();
+		$commaSeparatedFsIds = implode(',', array_map('intval', $fsIds));
+		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $fsIds, false);
+		if ($commaSeparatedFsIds) {
+			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $commaSeparatedFsIds . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($regionId) {
 				return '(' . $id . ',' . $regionId . ',1,NOW())';
-			}, $foodsaverIds);
+			}, $fsIds);
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
 		} else {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId)->rowCount();
+			$rows_del = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
 		}
 
 		return array($rows_ins, $rows_del);
@@ -627,6 +627,14 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getFsAutocomplete(array $regionIds): array
 	{
+		if (is_array(end($regionIds))) {
+			$tmp = $regionIds;
+			$regionIds = [];
+			foreach ($tmp as $region) {
+				$regionIds[$region['id']] = $region['id'];
+			}
+		}
+
 		return $this->db->fetchAll('
 			SELECT DISTINCT
 						fs.id,
@@ -638,8 +646,7 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	fs.deleted_at IS NULL
 					AND fb.`bezirk_id` IN (:regionIds)
-		', ['regionIds' => implode(',', $regionIds)]
-		);
+		', [':regionIds' => implode(',', $regionIds)]);
 	}
 
 	public function updateProfile(int $fsId, array $data): bool
