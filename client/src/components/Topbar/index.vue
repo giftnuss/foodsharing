@@ -12,6 +12,7 @@
           <a
             :href="$url('home')"
             class="navbar-brand mr-2"
+            aria-label="Dashboard"
           >
             food<span>shar<span>i</span>ng</span>
           </a>
@@ -81,6 +82,7 @@
               <a
                 :href="$url('map')"
                 class="nav-link"
+                aria-label="Karte"
               >
                 <i class="fas fa-map-marker-alt" />
                 <span v-if="!loggedIn || !hasFsRole">
@@ -118,6 +120,7 @@
               <a
                 :href="$url('home')"
                 class="nav-link"
+                aria-label="Startseite"
               >
                 <i class="fas fa-home" />
                 <span class="d-md-none">

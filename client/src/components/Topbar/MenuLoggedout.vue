@@ -9,6 +9,7 @@
         v-b-tooltip.hover.bottom
         class="nav-link"
         title="Karte"
+        aria-label="Karte"
       >
         <i class="fas fa-map-marker-alt" />
       </a>

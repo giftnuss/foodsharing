@@ -30,6 +30,7 @@
       v-else
       no-caret
       class="user"
+      tooltip="Dein Account"
       right
     >
       <template slot="button-content">

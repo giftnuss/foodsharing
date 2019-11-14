@@ -56,6 +56,7 @@
       @click="submit"
       href="#"
       class="btn btn-secondary btn-sm"
+      aria-label="Anmelden"
     >
       <i class="fas fa-arrow-right" />
     </button>
@@ -63,6 +64,7 @@
       v-else
       @click="submit"
       class="btn btn-light btn-sm loadingButton"
+      aria-label="Anmelden"
     >
       <img src="/img/469.gif">
     </button>

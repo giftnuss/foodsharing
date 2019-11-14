@@ -9,8 +9,10 @@
     >
       <div class="input-group-prepend">
         <label
+          id="searchfield-label"
           class="input-group-text text-primary"
           for="searchfield"
+          aria-label="Suche"
         >
           <img
             v-if="isLoading"
@@ -28,8 +30,8 @@
         type="text"
         class="form-control text-primary"
         placeholder="Suche..."
-        aria-label="Suche"
-        aria-describedby="basic-addon1"
+        aria-labelledby="searchfield-label"
+        aria-placeholder=""
       >
     </div>
     <div
