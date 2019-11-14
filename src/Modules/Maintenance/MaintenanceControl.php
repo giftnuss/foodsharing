@@ -139,13 +139,13 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Switzerland BOT group');
-		$chBots = $this->foodsaverGateway->getBotIds(106);
-		$counts = $this->foodsaverGateway->updateGroupMembers(1763, $chBots, true);
+		$chBots = $this->foodsaverGateway->getBotIds(RegionIDs::SWITZERLAND);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::SWITZERLAND_BOT_GROUP, $chBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Austria BOT group');
-		$aBots = $this->foodsaverGateway->getBotIds(63);
-		$counts = $this->foodsaverGateway->updateGroupMembers(761, $aBots, true);
+		$aBots = $this->foodsaverGateway->getBotIds(RegionIDs::AUSTRIA);
+		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::AUSTRIA_BOT_GROUP, $aBots, true);
 		self::info('+' . $counts[0] . ', -' . $counts[1]);
 
 		self::info('updating Zürich BIEB group');
