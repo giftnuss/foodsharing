@@ -7,18 +7,24 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
+use Foodsharing\Modules\Store\StoreModel;
 
 final class FoodsaverGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
+   	private $quizSessionGateway;
 
 	public function __construct(
 		Database $db,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		QuizSessionGateway $quizSessionGateway
 	) {
 		parent::__construct($db);
+
 		$this->forumFollowerGateway = $forumFollowerGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
 	public function getFoodsaver(int $regionId): array
@@ -709,7 +715,7 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	/**
-	 * set option is an key value store each var is avalable in the user session.
+	 * set option is an key value store each var is available in the user session.
 	 *
 	 * @param string $key
 	 * @param $val
