@@ -625,14 +625,20 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getFsAutocomplete(array $regionIds): array
+	public function getFsAutocomplete(mixed $regionIds): array
 	{
-		if (is_array(end($regionIds))) {
-			$tmp = $regionIds;
-			$regionIds = [];
-			foreach ($tmp as $region) {
-				$regionIds[$region['id']] = $region['id'];
+		$and = '';
+		if (is_array($regionIds)) {
+			if (is_array(end($regionIds))) {
+				$tmp = $regionIds;
+				$regionIds = [];
+				foreach ($tmp as $region) {
+					$regionIds[$region['id']] = $region['id'];
+				}
 			}
+			$and = 'AND fb.`bezirk_id` IN(' . implode(',', $regionIds) . ')';
+		} else {
+			$and = 'AND fb.`bezirk_id` = ' . (int)$regionIds . '';
 		}
 
 		return $this->db->fetchAll('
@@ -644,9 +650,8 @@ final class FoodsaverGateway extends BaseGateway
 					LEFT JOIN fs_foodsaver_has_bezirk fb,
 						ON fs.id = fb.foodsaver_id
 
-			WHERE 	fs.deleted_at IS NULL
-					AND fb.`bezirk_id` IN (:regionIds)
-		', [':regionIds' => implode(',', $regionIds)]);
+			WHERE 	fs.deleted_at IS NULL ' . $and
+		);
 	}
 
 	public function updateProfile(int $fsId, array $data): bool
