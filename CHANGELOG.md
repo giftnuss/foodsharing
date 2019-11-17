@@ -1,3 +1,7 @@
+# 2019-11-17 Hotfix
+- Prevent forum thread email sending to countries and federal states !1160 @jofranz
+- Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
+
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
 - Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
