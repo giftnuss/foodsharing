@@ -38,6 +38,8 @@
 
 ## Dev/Test/CI stuff
 
+- add dependency scanning GitLab CI configuration !1183 @nicksellen
+
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
 - Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
