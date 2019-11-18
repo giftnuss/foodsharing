@@ -19,7 +19,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Foodsaver\FoodsaverGateway::class);
-		
+
 		$this->foodsaver = $this->tester->createFoodsaver();
 
 		$this->region = $this->tester->createRegion('TestRegion');
@@ -54,51 +54,55 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			'mypicture.png'
 		);
 	}
-	
-	public function testUpdateGroupMembersByAdditionWhileLeavingAdmin() {
+
+	public function testUpdateGroupMembersByAdditionWhileLeavingAdmin()
+	{
 		$regionId = $this->region['id'];
 		$newFoodsaver = $this->tester->createFoodsaver();
-		
+
 		$fsIds = [$newFoodsaver['id'], $this->regionMember['id']];
 		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, true);
-		
+
 		$this->tester->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $newFoodsaver['id'], 'bezirk_id' => $regionId]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
 		$this->tester->assertEquals(1, $updates['inserts'], 'Wrong number of inserts for!');
 		$this->tester->assertEquals(0, $updates['deletions'], 'Wrong number of deletions!');
 	}
-	
-	public function testUpdateGroupMembersByAdditionWhileNotLeavingAdmin() {
+
+	public function testUpdateGroupMembersByAdditionWhileNotLeavingAdmin()
+	{
 		$regionId = $this->region['id'];
 		$newFoodsaver = $this->tester->createFoodsaver();
-		
+
 		$fsIds = [$newFoodsaver['id'], $this->regionMember['id']];
 		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, false);
-		
+
 		$this->tester->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $newFoodsaver['id'], 'bezirk_id' => $regionId]);
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
 		$this->tester->assertEquals(1, $updates['inserts'], 'Wrong number of inserts!');
 		$this->tester->assertEquals(1, $updates['deletions'], 'Wrong number of deletions!');
 	}
-	
-	public function testUpdateGroupMembersByDeletionWhileLeavingAdmin() {
+
+	public function testUpdateGroupMembersByDeletionWhileLeavingAdmin()
+	{
 		$regionId = $this->region['id'];
 
 		$fsIds = [];
 		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, true);
-		
+
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionMember['id'], 'bezirk_id' => $regionId]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
 		$this->tester->assertEquals(0, $updates['inserts'], 'Wrong number of inserts!');
 		$this->tester->assertEquals(1, $updates['deletions'], 'Wrong number of deletions!');
 	}
-	
-	public function testUpdateGroupMembersByDeletionWhileNotLeavingAdmin() {
+
+	public function testUpdateGroupMembersByDeletionWhileNotLeavingAdmin()
+	{
 		$regionId = $this->region['id'];
 
 		$fsIds = [];
 		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, false);
-		
+
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionMember['id'], 'bezirk_id' => $regionId]);
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
 		$this->tester->assertEquals(0, $updates['inserts'], 'Wrong number of inserts!');
