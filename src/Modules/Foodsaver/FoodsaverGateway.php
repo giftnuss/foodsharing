@@ -473,19 +473,37 @@ final class FoodsaverGateway extends BaseGateway
 
 		$updateCounts = ['inserts' => 0, 'deletions' => 0];
 		if ($fsIds) {
-			$commaSeparatedFsIds = implode(',', array_map('intval', $fsIds));
-			if ($commaSeparatedFsIds) {
-				$updateCounts['deletions'] = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $commaSeparatedFsIds . ')')->rowCount();
-			}
-
-			$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $fsIds, false);
-
+			$updateCounts['deletions'] = $this->deleteGroupMembers($regionId, $fsIds);
 			$updateCounts['inserts'] = $this->insertGroupMembers($regionId, $fsIds);
 		} else {
-			$updateCounts['deletions'] = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+			$updateCounts['deletions'] = $this->deleteGroupMembers($regionId);
 		}
 
 		return $updateCounts;
+	}
+
+	private function deleteGroupMembers(int $regionId, array $remainingMemberIds = []): int
+	{
+		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $remainingMemberIds, false);
+
+		if ($remainingMemberIds) {
+			$delCount = 0;
+			$preGroupMembers = $this->db->fetchAllValuesByCriteria(
+				'fs_foodsaver_has_bezirk', 'foodsaver_id', ['bezirk_id' => $regionId]
+			);
+			foreach ($preGroupMembers as $fsId) {
+				if (!in_array($fsId, $remainingMemberIds)) {
+					$delCount += $this->db->delete(
+						'fs_foodsaver_has_bezirk',
+						['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]
+					);
+				}
+			}
+
+			return $delCount;
+		}
+
+		return $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
 	}
 
 	private function insertGroupMembers(int $regionId, array $fsIds): int
