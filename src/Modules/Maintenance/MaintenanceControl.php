@@ -126,42 +126,42 @@ class MaintenanceControl extends ConsoleControl
 		$hh_biebs = $this->storeGateway->getStoreManagersOf(31);
 		$hh_biebs[] = 3166;   // Gerard Roscoe
 		$counts = $this->foodsaverGateway->updateGroupMembers(826, $hh_biebs, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Europe Bot group');
 		$bots = $this->foodsaverGateway->getBotIds(RegionIDs::EUROPE);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::EUROPE_BOT_GROUP, $bots, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating berlin bieb austausch');
 		$berlin_biebs = $this->storeGateway->getStoreManagersOf(47);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1057, $berlin_biebs, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Switzerland BOT group');
 		$chBots = $this->foodsaverGateway->getBotIds(RegionIDs::SWITZERLAND);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::SWITZERLAND_BOT_GROUP, $chBots, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Austria BOT group');
 		$aBots = $this->foodsaverGateway->getBotIds(RegionIDs::AUSTRIA);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::AUSTRIA_BOT_GROUP, $aBots, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Zürich BIEB group');
 		$zuerich_biebs = $this->storeGateway->getStoreManagersOf(108);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1313, $zuerich_biebs, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Wien BIEB group');
 		$wien_biebs = $this->storeGateway->getStoreManagersOf(13);
 		$counts = $this->foodsaverGateway->updateGroupMembers(707, $wien_biebs, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Graz BIEB group');
 		$graz_biebs = $this->storeGateway->getStoreManagersOf(149);
 		$counts = $this->foodsaverGateway->updateGroupMembers(1655, $graz_biebs, true);
-		self::info('+' . $counts[0] . ', -' . $counts[1]);
+		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 	}
 
 	private function sleepingMode()

@@ -465,27 +465,46 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function updateGroupMembers(int $regionId, array $fsIds, bool $leaveAdmins): array
 	{
-		$rows_ins = 0;
 		if ($leaveAdmins) {
-			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . $regionId);
-			if ($admins) {
+			if ($admins = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $regionId])) {
 				$fsIds = array_merge($fsIds, $admins);
 			}
 		}
-		$ids = implode(',', array_map('intval', $fsIds));
-		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $fsIds, false);
-		if ($ids) {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
-			$insert_strings = array_map(function ($id) use ($regionId) {
-				return '(' . $id . ',' . $regionId . ',1,NOW())';
-			}, $fsIds);
-			$insert_values = implode(',', $insert_strings);
-			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
+
+		$updateCounts = ['inserts' => 0, 'deletions' => 0];
+		if ($fsIds) {
+			$commaSeparatedFsIds = implode(',', array_map('intval', $fsIds));
+			if ($commaSeparatedFsIds) {
+				$updateCounts['deletions'] = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId . ' AND foodsaver_id NOT IN (' . $commaSeparatedFsIds . ')')->rowCount();
+			}
+
+			$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $fsIds, false);
+
+			$updateCounts['inserts'] = $this->insertGroupMembers($regionId, $fsIds);
 		} else {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $regionId)->rowCount();
+			$updateCounts['deletions'] = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
 		}
 
-		return array($rows_ins, $rows_del);
+		return $updateCounts;
+	}
+
+	private function insertGroupMembers(int $regionId, array $fsIds): int
+	{
+		$before = $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+
+		foreach ($fsIds as $fsId) {
+			$this->db->insertIgnore(
+				'fs_foodsaver_has_bezirk',
+				[
+					'foodsaver_id' => $fsId,
+					'bezirk_id' => $regionId,
+					'active' => 1,
+					'added' => $this->db->now()
+				]
+			);
+		}
+
+		return $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]) - $before;
 	}
 
 	public function listFoodsaverByRegion(int $regionId): array
