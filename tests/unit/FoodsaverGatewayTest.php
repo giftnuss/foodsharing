@@ -109,7 +109,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetRegionBotsEmailList()
 	{
-		$regions = [0 => $this->region['id']];
+		$regions = [0 => $this->region['id'], 1 => 0];
 
 		$emails = $this->gateway->getEmailBotFromBezirkList($regions);
 
@@ -122,7 +122,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetRegionFoodsaversEmailList()
 	{
-		$regions = [0 => $this->region['id']];
+		$regions = [0 => $this->region['id'], 1 => 0];
 
 		$emails = $this->gateway->getEmailFoodSaverFromBezirkList($regions);
 
