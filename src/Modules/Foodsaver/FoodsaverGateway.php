@@ -332,12 +332,12 @@ final class FoodsaverGateway extends BaseGateway
 
 		if (strlen($term) > 2) {
 			$out = $this->db->fetchAll('
-				SELECT		`id`,
-							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
-				FROM 		fs_foodsaver
-				WHERE 		((`name` LIKE :term
-				OR 			`nachname` LIKE :term2))
-				AND			deleted_at IS NULL
+				SELECT	`id`,
+						CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
+				FROM 	fs_foodsaver
+				WHERE 	((`name` LIKE :term
+							OR	`nachname` LIKE :term2))
+						AND	deleted_at IS NULL
 			', [':term' => $term, ':term2' => $term]);
 
 			return $out;
