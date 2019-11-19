@@ -87,8 +87,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$regionId = $this->region['id'];
 
-		$fsIds = [];
-		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, true);
+		$updates = $this->gateway->updateGroupMembers($regionId, [], true);
 
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionMember['id'], 'bezirk_id' => $regionId]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
@@ -100,12 +99,40 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$regionId = $this->region['id'];
 
-		$fsIds = [];
-		$updates = $this->gateway->updateGroupMembers($regionId, $fsIds, false);
+		$updates = $this->gateway->updateGroupMembers($regionId, [], false);
 
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionMember['id'], 'bezirk_id' => $regionId]);
 		$this->tester->dontSeeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $this->regionAdmin['id'], 'bezirk_id' => $regionId]);
 		$this->tester->assertEquals(0, $updates['inserts'], 'Wrong number of inserts!');
 		$this->tester->assertEquals(2, $updates['deletions'], 'Wrong number of deletions!');
+	}
+
+	public function testGetRegionBotsEmailList()
+	{
+		$regions = [0 => $this->region['id']];
+
+		$emails = $this->gateway->getEmailBotFromBezirkList($regions);
+
+		$this->tester->assertIsArray($emails);
+		$this->tester->assertCount(1, $emails);
+		$bot = $this->regionAdmin;
+		$this->tester->assertArrayHasKey($bot['id'], $emails);
+		$this->tester->assertEquals($bot['email'], $emails[$bot['id']]['email']);
+	}
+
+	public function testGetRegionFoodsaversEmailList()
+	{
+		$regions = [0 => $this->region['id']];
+
+		$emails = $this->gateway->getEmailFoodSaverFromBezirkList($regions);
+
+		$this->tester->assertIsArray($emails);
+		$this->tester->assertCount(2, $emails);
+		$bot = $this->regionAdmin;
+		$this->tester->assertArrayHasKey($bot['id'], $emails);
+		$this->tester->assertEquals($bot['email'], $emails[$bot['id']]['email']);
+		$fs = $this->regionMember;
+		$this->tester->assertArrayHasKey($fs['id'], $emails);
+		$this->tester->assertEquals($fs['email'], $emails[$fs['id']]['email']);
 	}
 }
