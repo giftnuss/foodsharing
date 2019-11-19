@@ -391,11 +391,11 @@ final class FoodsaverGateway extends BaseGateway
 	public function getEmailBotFromBezirkList(array $regions): array
 	{
 		$regionIds = array_filter(
-			array_map('intval', $regions), function($id) {
+			array_map('intval', $regions), function ($id) {
 				return $id > 0;
 			}
 		);
-		
+
 		$foodsaver = $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`name`,
@@ -422,7 +422,7 @@ final class FoodsaverGateway extends BaseGateway
 	public function getEmailFoodSaverFromBezirkList(array $regions): array
 	{
 		$regionIds = array_filter(
-			array_map('intval', $regions), function($id) {
+			array_map('intval', $regions), function ($id) {
 				return $id > 0;
 			}
 		);
