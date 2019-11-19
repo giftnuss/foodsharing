@@ -11,6 +11,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	 * @var \Foodsharing\Modules\Foodsaver\FoodsaverGateway
 	 */
 	private $gateway;
+	private $foodsharer;
 	private $foodsaver;
 	private $region;
 	private $regionMember;
@@ -20,7 +21,8 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Foodsaver\FoodsaverGateway::class);
 
-		$this->foodsaver = $this->tester->createFoodsaver();
+		$this->foodsharer = $this->tester->createFoodsharer();
+		$this->foodsaver = $this->tester->createFoodsaver(null, ['newsletter' => 1]);
 
 		$this->region = $this->tester->createRegion('TestRegion');
 		$this->regionMember = $this->tester->createFoodsaver();
@@ -134,5 +136,62 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$fs = $this->regionMember;
 		$this->tester->assertArrayHasKey($fs['id'], $emails);
 		$this->tester->assertEquals($fs['email'], $emails[$fs['id']]['email']);
+	}
+
+	public function testGetAllEmailFromFoodsaversIgnoringNewsletters()
+	{
+		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
+		$expectedResult = [];
+		foreach ($foodsavers as $fs) {
+			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		$emails = $this->gateway->getAllEmailFoodsaver(false, false);
+		
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+	
+	public function testGetAllEmailFromFoodsaversWithNewsletters()
+	{
+		$foodsavers = [$this->foodsaver];
+		$expectedResult = [];
+		foreach ($foodsavers as $fs) {
+			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		$emails = $this->gateway->getAllEmailFoodsaver(true, false);
+		
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+	
+	public function testGetAllEmailFromOnlyFoodsavers()
+	{
+		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
+		$expectedResult = [];
+		foreach ($foodsavers as $fs) {
+			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		$emails = $this->gateway->getAllEmailFoodsaver();
+		
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+	
+	private function serializeEmails(array $email): array
+	{
+		$out = [];
+		foreach ($email as $e) {
+			$out[] = serialize($e);
+		}
+		return $out;
 	}
 }
