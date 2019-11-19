@@ -420,18 +420,11 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getEmailFoodSaverFromBezirkList(array $regions): array
 	{
-		$list = [];
-		foreach ($regions as $i => $regionId) {
-			if ($regionId > 0) {
-				$list[$regionId] = $regionId;
+		$regionIds = array_filter(
+			array_map('intval', $regions), function($id) {
+				return $id > 0;
 			}
-		}
-		ksort($list);
-
-		$query = [];
-		foreach ($list as $regionId) {
-			$query[] = (int)$regionId;
-		}
+		);
 
 		$foodsaver = $this->db->fetchAll('
 			SELECT 			fs.`id`,
@@ -444,11 +437,11 @@ final class FoodsaverGateway extends BaseGateway
 					`fs_foodsaver_has_bezirk` b
 
 			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id` IN(' . implode(',', $query) . ')
+			AND		b.`bezirk_id` IN(' . implode(',', $regionIds) . ')
 			AND		fs.deleted_at IS NULL;
 		');
 
-		$out = array();
+		$out = [];
 		foreach ($foodsaver as $fs) {
 			$out[$fs['id']] = $fs;
 		}
