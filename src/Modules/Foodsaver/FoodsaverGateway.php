@@ -374,17 +374,18 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getAllEmailFoodsaver(bool $newsletter = false, bool $onlyFoodsaver = true): array
 	{
-		$where = 'WHERE rolle >= ' . ($onlyFoodsaver ? Role::FOODSAVER : Role::FOODSHARER);
-		if ($newsletter) {
-			$where .= ' AND newsletter = 1';
-		}
-
 		return $this->db->fetchAll('
-				SELECT 	`id`,`email`
-				FROM `fs_foodsaver`
-				' . $where . ' AND active = 1
-				AND	deleted_at IS NULL
-		');
+			SELECT	`id`,
+					`email`
+			FROM	`fs_foodsaver`
+			WHERE	active = 1
+					AND	deleted_at IS NULL
+					AND rolle >= :role
+					AND newsletter >= :newsletter
+		', [
+			':role' => $onlyFoodsaver ? Role::FOODSAVER : Role::FOODSHARER,
+			':newsletter' => $newsletter ? 1 : 0
+		]);
 	}
 
 	public function getEmailBotFromBezirkList(array $regions): array
