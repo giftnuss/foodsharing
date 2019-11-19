@@ -396,19 +396,19 @@ final class FoodsaverGateway extends BaseGateway
 		);
 		
 		$foodsaver = $this->db->fetchAll('
-			SELECT 			fs.`id`,
-							fs.`name`,
-							fs.`nachname`,
-							fs.`geschlecht`,
-							fs.`email`
+			SELECT 	fs.`id`,
+					fs.`name`,
+					fs.`nachname`,
+					fs.`geschlecht`,
+					fs.`email`
 
-			FROM 	`fs_foodsaver` fs,
-					`fs_botschafter` b
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN `fs_botschafter` b
+						ON b.foodsaver_id = fs.id
 
-			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id`  IN(' . implode(',', $regionIds) . ')
-			AND		fs.deleted_at IS NULL;
-		');
+			WHERE 	b.`bezirk_id`  IN(:regionIds)
+					AND	fs.deleted_at IS NULL;
+		', [':regionIds' => implode(',', $regionIds)]);
 
 		$out = [];
 		foreach ($foodsaver as $fs) {
@@ -427,19 +427,19 @@ final class FoodsaverGateway extends BaseGateway
 		);
 
 		$foodsaver = $this->db->fetchAll('
-			SELECT 			fs.`id`,
-							fs.`name`,
-							fs.`nachname`,
-							fs.`geschlecht`,
-							fs.`email`
+			SELECT 	fs.`id`,
+					fs.`name`,
+					fs.`nachname`,
+					fs.`geschlecht`,
+					fs.`email`
 
-			FROM 	`fs_foodsaver` fs,
-					`fs_foodsaver_has_bezirk` b
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN `fs_foodsaver_has_bezirk` b
+						ON b.foodsaver_id = fs.id
 
-			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id` IN(' . implode(',', $regionIds) . ')
-			AND		fs.deleted_at IS NULL;
-		');
+			WHERE 	b.`bezirk_id` IN(:regionIds)
+					AND	fs.deleted_at IS NULL;
+		', [':regionIds' => implode(',', $regionIds)]);
 
 		$out = [];
 		foreach ($foodsaver as $fs) {
