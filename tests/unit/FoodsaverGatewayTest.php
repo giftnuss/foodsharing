@@ -23,15 +23,14 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Foodsaver\FoodsaverGateway::class);
 
-		$this->foodsharer = $this->tester->createFoodsharer();
+		$this->foodsharer = $this->tester->createFoodsharer(null, ['newsletter' => 1]);
 		$this->foodsaver = $this->tester->createFoodsaver(null, ['newsletter' => 1]);
 
 		$this->region = $this->tester->createRegion('TestRegion');
-		$this->regionMember = $this->tester->createFoodsaver();
-		$this->tester->addBezirkMember($this->region['id'], $this->regionMember['id']);
-		$this->regionAdmin = $this->tester->createAmbassador();
-		$this->tester->addBezirkMember($this->region['id'], $this->regionAdmin['id']);
-		$this->tester->addBezirkAdmin($this->region['id'], $this->regionAdmin['id']);
+		$regionId = $this->region['id'];
+		$this->regionMember = $this->tester->createFoodsaver(null, ['bezirk_id' => $regionId]);
+		$this->regionAdmin = $this->tester->createAmbassador(null, ['bezirk_id' => $regionId]);
+		$this->tester->addBezirkAdmin($regionId, $this->regionAdmin['id']);
 	}
 
 	public function testUpdateProfile()
@@ -149,11 +148,8 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetAllEmailAddresses()
 	{
-		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
-		$expectedResult = [];
-		foreach ($foodsavers as $fs) {
-			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
-		}
+		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
+		$expectedResult = $this->expectedEmailResult($foodsavers);
 
 		$emails = $this->gateway->getAllEmailAddresses();
 
@@ -165,11 +161,8 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetAllEmailAddressesFromNewsletterSubscribers()
 	{
-		$foodsavers = [$this->foodsaver];
-		$expectedResult = [];
-		foreach ($foodsavers as $fs) {
-			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
-		}
+		$foodsavers = [$this->foodsharer, $this->foodsaver];
+		$expectedResult = $this->expectedEmailResult($foodsavers);
 
 		$emails = $this->gateway->getAllEmailAddressesFromNewsletterSubscribers();
 
@@ -179,15 +172,12 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailAddressesIncludeFoodsharers()
+	public function testGetAllEmailAddressesFromNewsletterSubscribersExcludeFoodsharers()
 	{
-		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
-		$expectedResult = [];
-		foreach ($foodsavers as $fs) {
-			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
-		}
+		$foodsavers = [$this->foodsaver];
+		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSHARER);
+		$emails = $this->gateway->getAllEmailAddressesFromNewsletterSubscribers(Role::FOODSAVER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -198,12 +188,10 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	public function testGetAllEmailAddressesExcludeFoodsharers()
 	{
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
-		$expectedResult = [];
-		foreach ($foodsavers as $fs) {
-			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
-		}
+		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSAVER);
+		$criteria = ['rolle >=' => Role::FOODSAVER];
+		$emails = $this->gateway->getAllEmailAddresses($criteria);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -211,15 +199,13 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailAddressesFromOnlyFoodsharersAndStoreManagers()
+	public function testGetAllEmailAddressesFromStoreManagersOrBelow()
 	{
-		$foodsavers = [$this->foodsaver, $this->regionMember];
-		$expectedResult = [];
-		foreach ($foodsavers as $fs) {
-			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
-		}
+		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionMember];
+		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSAVER, Role::STORE_MANAGER);
+		$criteria = ['rolle <=' => Role::STORE_MANAGER];
+		$emails = $this->gateway->getAllEmailAddresses($criteria);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -227,10 +213,33 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	private function serializeEmails(array $email): array
+	public function testGetAllEmailAddressesFromRegion()
+	{
+		$foodsavers = [$this->regionAdmin, $this->regionMember];
+		$expectedResult = $this->expectedEmailResult($foodsavers);
+
+		$emails = $this->gateway->getAllEmailAddressesByMainRegions([$this->region['id']]);
+
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+
+	private function expectedEmailResult(array $foodsavers): array
 	{
 		$out = [];
-		foreach ($email as $e) {
+		foreach ($foodsavers as $fs) {
+			$out[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		return $out;
+	}
+
+	private function serializeEmails(array $emails): array
+	{
+		$out = [];
+		foreach ($emails as $e) {
 			$out[] = serialize($e);
 		}
 

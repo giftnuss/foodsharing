@@ -351,30 +351,20 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
 	}
 
-	public function getAllEmailAddressesByRegions(array $regionIds): array
+	public function getAllEmailAddressesByMainRegions(array $regionIds): array
 	{
-		return $this->db->fetchAllByCriteria(
-			'fs_foodsaver',
-			[
-				'id',
-				'name',
-				'nachname',
-				'email',
-				'geschlecht'
-			],
-			[
-				'deleted_at' => null,
-				'bezirk_id' => $regionIds
-			]
-		);
+		return $this->getAllEmailAddresses(['bezirk_id' => $regionIds]);
 	}
 
-	public function getAllEmailAddressesFromNewsletterSubscribers(int $minFsRole = Role::FOODSAVER, int $maxFsRole = Role::ORGA): array
+	public function getAllEmailAddressesFromNewsletterSubscribers(int $minFsRole = Role::FOODSHARER): array
 	{
-		return $this->getAllEmailAddresses(true, $minFsRole, $maxFsRole);
+		return $this->getAllEmailAddresses([
+			'newsletter' => 1,
+			'rolle >=' => $minFsRole
+		]);
 	}
 
-	public function getAllEmailAddresses(bool $newsletter = false, int $minFsRole = Role::FOODSAVER, int $maxFsRole = Role::ORGA): array
+	public function getAllEmailAddresses(int $minFsRole = Role::FOODSHARER, array $criteria = []): array
 	{
 		return $this->db->fetchAllByCriteria(
 			'fs_foodsaver',
@@ -382,13 +372,11 @@ final class FoodsaverGateway extends BaseGateway
 				'id',
 				'email'
 			],
-			[
+			array_merge([
 				'active' => 1,
 				'deleted_at' => null,
-				'rolle >=' => $minFsRole,
-				'rolle <=' => $maxFsRole,
-				'newsletter >=' => $newsletter ? 1 : 0
-			]
+				'rolle >=' => $minFsRole
+			], $criteria)
 		);
 	}
 
