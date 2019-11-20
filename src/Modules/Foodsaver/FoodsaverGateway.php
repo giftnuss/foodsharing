@@ -257,26 +257,6 @@ final class FoodsaverGateway extends BaseGateway
 		');
 	}
 
-	public function getAllFoodsaverNoBotschafter(): array
-	{
-		$foodsaver = $this->getAllFoodsaver();
-		$out = array();
-
-		$botschafter = $this->getAllBotschafter();
-		$bot = array();
-		foreach ($botschafter as $b) {
-			$bot[$b['id']] = true;
-		}
-
-		foreach ($foodsaver as $fs) {
-			if (!isset($bot[$fs['id']])) {
-				$out[] = $fs;
-			}
-		}
-
-		return $out;
-	}
-
 	public function getOrgateam(): array
 	{
 		return $this->db->fetchAll('
