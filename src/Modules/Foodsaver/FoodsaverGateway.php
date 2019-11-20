@@ -419,7 +419,7 @@ final class FoodsaverGateway extends BaseGateway
 
 		return $this->useIdAsIndex($foodsavers);
 	}
-	
+
 	private function useIdAsIndex(array $data): array
 	{
 		$out = [];
