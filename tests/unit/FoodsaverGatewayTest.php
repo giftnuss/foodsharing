@@ -138,6 +138,13 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertEquals($fs['email'], $emails[$fs['id']]['email']);
 	}
 
+	public function testGetFoodsaversEmailAddress()
+	{
+		$email = $this->gateway->getEmailAddress($this->foodsaver['id']);
+
+		$this->tester->assertEquals($this->foodsaver['email'], $email);
+	}
+
 	public function testGetAllEmailFromFoodsaversIgnoringNewsletters()
 	{
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];

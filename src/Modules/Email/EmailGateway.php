@@ -163,9 +163,4 @@ class EmailGateway extends BaseGateway
 			['newsletter' => 1, 'rolle' => 0, 'active' => 1, 'deleted_at' => null]
 		);
 	}
-
-	public function getEmailAddressOfFoodsaver(int $fsId)
-	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
-	}
 }

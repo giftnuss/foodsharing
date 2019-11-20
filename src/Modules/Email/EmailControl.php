@@ -94,7 +94,7 @@ class EmailControl extends Control
 
 		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
-		$g_data['testemail'] = $this->emailGateway->getEmailAddressOfFoodsaver($this->session->id());
+		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 
 		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
 
