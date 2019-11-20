@@ -139,7 +139,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertEquals($fs['email'], $emails[$fs['id']]['email']);
 	}
 
-	public function testGetFoodsaversEmailAddress()
+	public function testGetSingleEmailAddress()
 	{
 		$email = $this->gateway->getEmailAddress($this->foodsaver['id']);
 
@@ -190,8 +190,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$criteria = ['rolle >=' => Role::FOODSAVER];
-		$emails = $this->gateway->getAllEmailAddresses($criteria);
+		$emails = $this->gateway->getAllEmailAddresses(Role::FOODSAVER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -204,8 +203,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$criteria = ['rolle <=' => Role::STORE_MANAGER];
-		$emails = $this->gateway->getAllEmailAddresses($criteria);
+		$emails = $this->gateway->getAllEmailAddresses(Role::FOODSHARER, Role::STORE_MANAGER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
