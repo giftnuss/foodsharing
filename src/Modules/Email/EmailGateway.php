@@ -154,13 +154,4 @@ class EmailGateway extends BaseGateway
 			AND 	e.email_id = :mail_id
 		', [':mail_id' => $mail_id]);
 	}
-
-	public function listNewsletterOnlyFoodsharer(): array
-	{
-		return $this->db->fetchAllByCriteria(
-			'fs_foodsaver',
-			['id', 'email'],
-			['newsletter' => 1, 'rolle' => 0, 'active' => 1, 'deleted_at' => null]
-		);
-	}
 }
