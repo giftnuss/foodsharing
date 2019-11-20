@@ -351,23 +351,23 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
 	}
 
-	public function getAllEmailAddressesByMainRegions(array $regionIds): array
+	public function getEmailAddressesFromMainRegions(array $regionIds): array
 	{
-		return $this->getAllEmailAddresses(Role::FOODSHARER, Role::ORGA, ['bezirk_id' => $regionIds]);
+		return $this->getEmailAddresses(Role::FOODSHARER, Role::ORGA, ['bezirk_id' => $regionIds]);
 	}
 
-	public function getAllEmailAddressesFromNewsletterSubscribers(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
+	public function getNewsletterSubscribersEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
-		return $this->getAllEmailAddresses(
+		return $this->getEmailAddresses(
 			$minRole,
 			$maxRole,
 			['newsletter' => 1]
 		);
 	}
 
-	public function getAllEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
+	public function getEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
-		return $this->db->fetchAllByCriteria(
+		$foodsavers = $this->db->fetchAllByCriteria(
 			'fs_foodsaver',
 			[
 				'id',
@@ -380,65 +380,51 @@ final class FoodsaverGateway extends BaseGateway
 				'rolle <=' => $maxRole
 			], $criteria)
 		);
+
+		return $this->useIdAsIndex($foodsavers);
 	}
 
-	public function getEmailBotFromBezirkList(array $regions): array
+	public function getRegionAmbassadorsEmailAddresses(array $regionIds): array
 	{
-		$regionIds = array_filter(
-			array_map('intval', $regions), function ($id) {
-				return $id > 0;
-			}
-		);
-
-		$foodsaver = $this->db->fetchAll('
+		$foodsavers = $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.`geschlecht`,
 					fs.`email`
 
 			FROM 	`fs_foodsaver` fs
 					INNER JOIN `fs_botschafter` b
 						ON b.foodsaver_id = fs.id
 
-			WHERE 	b.`bezirk_id`  IN(:regionIds)
-					AND	fs.deleted_at IS NULL;
-		', [':regionIds' => implode(',', $regionIds)]);
+			WHERE 	fs.deleted_at IS NULL
+					AND b.`bezirk_id` > 0
+					AND	b.`bezirk_id` IN(:regionIds)
+		', [':regionIds' => implode(',', array_map('intval', $regionIds))]);
 
-		$out = [];
-		foreach ($foodsaver as $fs) {
-			$out[$fs['id']] = $fs;
-		}
-
-		return $out;
+		return $this->useIdAsIndex($foodsavers);
 	}
 
-	public function getEmailFoodSaverFromBezirkList(array $regions): array
+	public function getEmailAddressesFromRegions(array $regionIds): array
 	{
-		$regionIds = array_filter(
-			array_map('intval', $regions), function ($id) {
-				return $id > 0;
-			}
-		);
-
-		$foodsaver = $this->db->fetchAll('
+		$foodsavers = $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.`geschlecht`,
 					fs.`email`
 
 			FROM 	`fs_foodsaver` fs
 					INNER JOIN `fs_foodsaver_has_bezirk` b
 						ON b.foodsaver_id = fs.id
 
-			WHERE 	b.`bezirk_id` IN(:regionIds)
-					AND	fs.deleted_at IS NULL;
-		', [':regionIds' => implode(',', $regionIds)]);
+			WHERE 	fs.deleted_at IS NULL
+					AND b.`bezirk_id` > 0
+					AND	b.`bezirk_id` IN(:regionIds)
+		', [':regionIds' => implode(',', array_map('intval', $regionIds))]);
 
+		return $this->useIdAsIndex($foodsavers);
+	}
+	
+	private function useIdAsIndex(array $data): array
+	{
 		$out = [];
-		foreach ($foodsaver as $fs) {
-			$out[$fs['id']] = $fs;
+		foreach ($data as $d) {
+			$out[$d['id']] = $d;
 		}
 
 		return $out;

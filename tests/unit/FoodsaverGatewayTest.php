@@ -114,7 +114,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$regions = [0 => $this->region['id'], 1 => 0];
 
-		$emails = $this->gateway->getEmailBotFromBezirkList($regions);
+		$emails = $this->gateway->getRegionAmbassadorsEmailAddresses($regions);
 
 		$this->tester->assertIsArray($emails);
 		$this->tester->assertCount(1, $emails);
@@ -127,7 +127,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$regions = [0 => $this->region['id'], 1 => 0];
 
-		$emails = $this->gateway->getEmailFoodSaverFromBezirkList($regions);
+		$emails = $this->gateway->getEmailAddressesFromRegions($regions);
 
 		$this->tester->assertIsArray($emails);
 		$this->tester->assertCount(2, $emails);
@@ -135,7 +135,6 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertArrayHasKey($bot['id'], $emails);
 		$this->tester->assertEquals($bot['email'], $emails[$bot['id']]['email']);
 		$fs = $this->regionMember;
-		$this->tester->assertArrayHasKey($fs['id'], $emails);
 		$this->tester->assertEquals($fs['email'], $emails[$fs['id']]['email']);
 	}
 
@@ -151,7 +150,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses();
+		$emails = $this->gateway->getEmailAddresses();
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -164,7 +163,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsharer, $this->foodsaver];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddressesFromNewsletterSubscribers();
+		$emails = $this->gateway->getNewsletterSubscribersEmailAddresses();
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -177,7 +176,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsaver];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddressesFromNewsletterSubscribers(Role::FOODSAVER);
+		$emails = $this->gateway->getNewsletterSubscribersEmailAddresses(Role::FOODSAVER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -190,7 +189,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses(Role::FOODSAVER);
+		$emails = $this->gateway->getEmailAddresses(Role::FOODSAVER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -203,7 +202,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddresses(Role::FOODSHARER, Role::STORE_MANAGER);
+		$emails = $this->gateway->getEmailAddresses(Role::FOODSHARER, Role::STORE_MANAGER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -216,7 +215,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = [$this->regionAdmin, $this->regionMember];
 		$expectedResult = $this->expectedEmailResult($foodsavers);
 
-		$emails = $this->gateway->getAllEmailAddressesByMainRegions([$this->region['id']]);
+		$emails = $this->gateway->getEmailAddressesFromMainRegions([$this->region['id']]);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -228,7 +227,10 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$out = [];
 		foreach ($foodsavers as $fs) {
-			$out[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+			$out[] = serialize([
+				'id' => $fs['id'],
+				'email' => $fs['email']
+			]);
 		}
 
 		return $out;
