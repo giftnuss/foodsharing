@@ -369,6 +369,11 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function getAllEmailAddressesFromNewsletterSubscribers(int $minFsRole = Role::FOODSAVER, int $maxFsRole = Role::ORGA): array
+	{
+		return $this->getAllEmailAddresses(true, $minFsRole, $maxFsRole);
+	}
+
 	public function getAllEmailAddresses(bool $newsletter = false, int $minFsRole = Role::FOODSAVER, int $maxFsRole = Role::ORGA): array
 	{
 		return $this->db->fetchAll('
