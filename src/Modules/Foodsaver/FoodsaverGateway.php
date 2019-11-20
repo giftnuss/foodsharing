@@ -369,7 +369,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getAllEmailAddresses(bool $newsletter = false, bool $includeFoodsharers = false): array
+	public function getAllEmailAddresses(bool $newsletter = false, int $minFsRole = Role::FOODSAVER): array
 	{
 		return $this->db->fetchAll('
 			SELECT	`id`,
@@ -377,10 +377,10 @@ final class FoodsaverGateway extends BaseGateway
 			FROM	`fs_foodsaver`
 			WHERE	active = 1
 					AND	deleted_at IS NULL
-					AND rolle >= :role
+					AND rolle >= :minRole
 					AND newsletter >= :newsletter
 		', [
-			':role' => $includeFoodsharers ? Role::FOODSHARER : Role::FOODSAVER,
+			':minRole' => $minFsRole,
 			':newsletter' => $newsletter ? 1 : 0
 		]);
 	}

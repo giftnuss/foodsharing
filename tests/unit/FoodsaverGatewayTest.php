@@ -187,7 +187,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailAddresses(false, true);
+		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSHARER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -203,7 +203,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailAddresses();
+		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSAVER);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
