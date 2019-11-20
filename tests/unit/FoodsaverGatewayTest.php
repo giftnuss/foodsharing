@@ -211,6 +211,22 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
+	public function testGetAllEmailAddressesFromOnlyFoodsharersAndStoreManagers()
+	{
+		$foodsavers = [$this->foodsaver, $this->regionMember];
+		$expectedResult = [];
+		foreach ($foodsavers as $fs) {
+			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		$emails = $this->gateway->getAllEmailAddresses(false, Role::FOODSAVER, Role::STORE_MANAGER);
+
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+
 	private function serializeEmails(array $email): array
 	{
 		$out = [];
