@@ -376,20 +376,20 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getAllEmailAddresses(bool $newsletter = false, int $minFsRole = Role::FOODSAVER, int $maxFsRole = Role::ORGA): array
 	{
-		return $this->db->fetchAll('
-			SELECT	`id`,
-					`email`
-			FROM	`fs_foodsaver`
-			WHERE	active = 1
-					AND	deleted_at IS NULL
-					AND rolle >= :minRole
-					AND rolle <= :maxRole
-					AND newsletter >= :newsletter
-		', [
-			':minRole' => $minFsRole,
-			':maxRole' => $maxFsRole,
-			':newsletter' => $newsletter ? 1 : 0
-		]);
+		return $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			[
+				'id',
+				'email'
+			],
+			[
+				'active' => 1,
+				'deleted_at' => null,
+				'rolle >=' => $minFsRole,
+				'rolle <=' => $maxFsRole,
+				'newsletter >=' => $newsletter ? 1 : 0
+			]
+		);
 	}
 
 	public function getEmailBotFromBezirkList(array $regions): array
