@@ -138,7 +138,7 @@ class EmailControl extends Control
 			if ($this->session->isAmbassador() || $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 				if ($data['recip_choose'] == 'bezirk') {
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
-					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
+					$foodsaver = $this->foodsaverGateway->getAllEmailAddressesByRegions($region_ids);
 				} elseif ($data['recip_choose'] == 'botschafter') {
 					$foodsaver = $this->foodsaverGateway->getAllBotschafter();
 				} elseif ($data['recip_choose'] == 'orgateam') {
@@ -147,11 +147,11 @@ class EmailControl extends Control
 			}
 			if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 				if ($data['recip_choose'] == 'all') {
-					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver();
+					$foodsaver = $this->foodsaverGateway->getAllEmailAddresses();
 				} elseif ($data['recip_choose'] == 'newsletter') {
-					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true);
+					$foodsaver = $this->foodsaverGateway->getAllEmailAddresses(true);
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
-					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, true);
+					$foodsaver = $this->foodsaverGateway->getAllEmailAddresses(true, true);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
 					$foodsaver = $this->emailGateway->listNewsletterOnlyFoodsharer();
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
@@ -211,7 +211,7 @@ class EmailControl extends Control
 				}
 			} else {
 				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
-				$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
+				$foodsaver = $this->foodsaverGateway->getAllEmailAddressesByRegions($region_ids);
 			}
 
 			if (!empty($foodsaver)) {

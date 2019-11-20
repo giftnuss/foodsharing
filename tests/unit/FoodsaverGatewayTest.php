@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+
 class FoodsaverGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -145,7 +147,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertEquals($this->foodsaver['email'], $email);
 	}
 
-	public function testGetAllEmailFromFoodsaversIgnoringNewsletters()
+	public function testGetAllEmailAddresses()
 	{
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = [];
@@ -153,7 +155,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver();
+		$emails = $this->gateway->getAllEmailAddresses();
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -161,7 +163,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailFromFoodsaversWithNewsletters()
+	public function testGetAllEmailAddressesFromNewsletterSubscribers()
 	{
 		$foodsavers = [$this->foodsaver];
 		$expectedResult = [];
@@ -169,7 +171,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver(true);
+		$emails = $this->gateway->getAllEmailAddresses(true);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -177,7 +179,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailFromFoodsaversIncludeFoodsharers()
+	public function testGetAllEmailAddressesIncludeFoodsharers()
 	{
 		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = [];
@@ -185,7 +187,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver(false, true);
+		$emails = $this->gateway->getAllEmailAddresses(false, true);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -193,7 +195,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailFromFoodsaversExcludeFoodsharers()
+	public function testGetAllEmailAddressesExcludeFoodsharers()
 	{
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = [];
@@ -201,7 +203,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver();
+		$emails = $this->gateway->getAllEmailAddresses();
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);

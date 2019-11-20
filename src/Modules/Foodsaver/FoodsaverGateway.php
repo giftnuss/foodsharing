@@ -346,15 +346,12 @@ final class FoodsaverGateway extends BaseGateway
 		return [];
 	}
 
-	public function getEmailAdressen(array $regionIds): array
 	public function getEmailAddress(int $fsId): string
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver',
-			'email',
-			['id' => $fsId]
-		);
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
 	}
 
+	public function getAllEmailAddressesByRegions(array $regionIds): array
 	{
 		return $this->db->fetchAllByCriteria(
 			'fs_foodsaver',
@@ -372,12 +369,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function getEmailAddress(int $fsId): string
-	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
-	}
-
-	public function getAllEmailFoodsaver(bool $newsletter = false, bool $includeFoodsharers = false): array
+	public function getAllEmailAddresses(bool $newsletter = false, bool $includeFoodsharers = false): array
 	{
 		return $this->db->fetchAll('
 			SELECT	`id`,
