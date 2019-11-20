@@ -140,13 +140,13 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetAllEmailFromFoodsaversIgnoringNewsletters()
 	{
-		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
+		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = [];
 		foreach ($foodsavers as $fs) {
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver(false, false);
+		$emails = $this->gateway->getAllEmailFoodsaver();
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -162,7 +162,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
 		}
 
-		$emails = $this->gateway->getAllEmailFoodsaver(true, false);
+		$emails = $this->gateway->getAllEmailFoodsaver(true);
 
 		$this->tester->assertCount(count($expectedResult), $emails);
 		$result = $this->serializeEmails($emails);
@@ -170,7 +170,23 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
 	}
 
-	public function testGetAllEmailFromOnlyFoodsavers()
+	public function testGetAllEmailFromFoodsaversIncludeFoodsharers()
+	{
+		$foodsavers = [$this->foodsharer, $this->foodsaver, $this->regionAdmin, $this->regionMember];
+		$expectedResult = [];
+		foreach ($foodsavers as $fs) {
+			$expectedResult[] = serialize(['id' => $fs['id'], 'email' => $fs['email']]);
+		}
+
+		$emails = $this->gateway->getAllEmailFoodsaver(false, true);
+
+		$this->tester->assertCount(count($expectedResult), $emails);
+		$result = $this->serializeEmails($emails);
+		$intersection = array_intersect($expectedResult, $result);
+		$this->tester->assertCount(count($foodsavers), $intersection, 'Result does not match expactations: ' . serialize($result));
+	}
+
+	public function testGetAllEmailFromFoodsaversExcludeFoodsharers()
 	{
 		$foodsavers = [$this->foodsaver, $this->regionAdmin, $this->regionMember];
 		$expectedResult = [];

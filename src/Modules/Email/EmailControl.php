@@ -151,7 +151,7 @@ class EmailControl extends Control
 				} elseif ($data['recip_choose'] == 'newsletter') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true);
 				} elseif ($data['recip_choose'] == 'newsletter_all') {
-					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, false);
+					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver(true, true);
 				} elseif ($data['recip_choose'] == 'newsletter_only_foodsharer') {
 					$foodsaver = $this->emailGateway->listNewsletterOnlyFoodsharer();
 				} elseif ($data['recip_choose'] == 'all_no_botschafter') {
