@@ -198,7 +198,6 @@ And we have even included some new features for you.
 - Refactored the WallPost module !1038 @peter.toennies
 - statistic kilo code refactoring !999 @jofranz
 - statistic kilo calculation optimized !999 @fs_k
-- statistic KG calculation optimized !999 @fs_k
 
 ## Dev/Test/CI stuff
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
