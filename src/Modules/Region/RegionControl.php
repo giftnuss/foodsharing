@@ -199,6 +199,7 @@ final class RegionControl extends Control
 				break;
 			case 'wall':
 				if (!$this->isWorkGroup($region)) {
+					$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
 					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
 				} else {
 					$this->wall($request, $response, $region);
