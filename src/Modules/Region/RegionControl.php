@@ -198,7 +198,12 @@ final class RegionControl extends Control
 				$this->forum($request, $response, $region, false);
 				break;
 			case 'wall':
-				$this->wall($request, $response, $region);
+				// if accessing URL "&sub=wall" from other than a workgroup, then redirect to the forum
+				if (!$this->isWorkGroup($region)) {
+					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
+				} else {
+					$this->wall($request, $response, $region);
+				}	
 				break;
 			case 'fairteiler':
 				$this->foodSharePoint($request, $response, $region);
