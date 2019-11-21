@@ -1,11 +1,9 @@
 {% extends 'pages/Region/baseRegion.twig' %}
 
 {% block main %}
-    {% if region.isWorkGroup %}
-        {% embed 'components/field.twig' with {'title': 'wall.name'|trans()} %}
-            {% block content %}
-                {% include 'partials/wall.twig' with wall only %}
-            {% endblock %}
-        {% endembed %}
-    {% endif %}
+    {% embed 'components/field.twig' with {'title': 'wall.name'|trans()} %}
+        {% block content %}
+            {% include 'partials/wall.twig' with wall only %}
+        {% endblock %}
+    {% endembed %}
 {% endblock %}
