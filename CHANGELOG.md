@@ -12,6 +12,7 @@
 - Add foodsaver id to search results when starting a new chat #660 !1149 @jofranz
 - The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
 - Add fs id to food share point admin management search results #660 !1152 @jofranz
+- Warn basket users without location data and inform them why it makes sense to provide those in order to use baskets on the website !1143 @jofranz
 - Sort the stores-list by the added-on date as default !1161 @treee111
 - Save mail quickreplies to sent folder #611 !1166 @alex.simm
 - Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
