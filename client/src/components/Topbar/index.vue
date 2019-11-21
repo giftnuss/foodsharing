@@ -11,8 +11,8 @@
         <div id="topbar-navleft">
           <a
             :href="$url('home')"
+            :aria-label="$i18n('home.title')"
             class="navbar-brand mr-2"
-            aria-label="Dashboard"
           >
             food<span>shar<span>i</span>ng</span>
           </a>
@@ -36,6 +36,7 @@
         <div id="topbar-navleft">
           <a
             :href="$url('dashboard')"
+            :aria-label="$i18n('dashboard.title')"
             class="navbar-brand"
           >
             food<span>shar<span>i</span>ng</span>
@@ -51,10 +52,10 @@
               >
                 <i class="fas fa-rocket" />
                 <small v-if="isMobile">
-                  Werde Foodsaver*in
+                  {{ $i18n('foodsaver.upgrade_to') }}
                 </small>
                 <span v-else>
-                  Werde Foodsaver*in
+                  {{ $i18n('foodsaver.upgrade_to') }}
                 </span>
               </a>
             </li>
@@ -81,12 +82,12 @@
             >
               <a
                 :href="$url('map')"
+                :aria-label="$i18n('map.title')"
                 class="nav-link"
-                aria-label="Karte"
               >
                 <i class="fas fa-map-marker-alt" />
                 <span v-if="!loggedIn || !hasFsRole">
-                  Karte
+                  {{ $i18n('map.title') }}
                 </span>
               </a>
             </li>
@@ -119,19 +120,19 @@
             >
               <a
                 :href="$url('home')"
+                :aria-label="$i18n('home.title')"
                 class="nav-link"
-                aria-label="Startseite"
               >
                 <i class="fas fa-home" />
                 <span class="d-md-none">
-                  Startseite
+                  {{ $i18n('home.title') }}
                 </span>
               </a>
             </li>
             <li
               v-if="isMobile"
               v-b-tooltip.hover.bottom
-              title="Karte"
+              :title="$i18n('map.title')"
               class="nav-item"
             >
               <a
@@ -140,7 +141,7 @@
               >
                 <i class="fas fa-map-marker-alt" />
                 <span class="d-md-none">
-                  Karte
+                  {{ $i18n('map.title') }}
                 </span>
               </a>
             </li>

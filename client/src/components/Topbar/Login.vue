@@ -20,11 +20,11 @@
         id="login-email"
         v-model="email"
         @keydown.enter="submit"
+        :placeholder="$i18n('login.email_address')"
+        :aria-label="$i18n('login.email_address')"
         type="email"
         name="login-email"
         class="form-control text-primary"
-        placeholder="E-Mail"
-        aria-label="E-Mail"
       >
     </div>
     <div
@@ -44,27 +44,27 @@
         id="login-password"
         v-model="password"
         @keydown.enter="submit"
+        :placeholder="$i18n('login.password')"
+        :aria-label="$i18n('login.password')"
         type="password"
         name="login-password"
         class="form-control text-primary"
-        placeholder="Passwort"
-        aria-label="Passwort"
       >
     </div>
     <button
       v-if="!isLoading "
       @click="submit"
+      :aria-label="$i18n('login.login_button_label')"
       href="#"
       class="btn btn-secondary btn-sm"
-      aria-label="Anmelden"
     >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
       @click="submit"
+      :aria-label="$i18n('login.login_button_label')"
       class="btn btn-light btn-sm loadingButton"
-      aria-label="Anmelden"
     >
       <img src="/img/469.gif">
     </button>
@@ -75,6 +75,7 @@
 import { login } from '@/api/user'
 
 import { pulseError, pulseSuccess } from '@/script'
+import i18n from '@/i18n'
 import serverData from '@/server-data'
 
 export default {
@@ -89,17 +90,17 @@ export default {
   methods: {
     async submit () {
       if (!this.email) {
-        pulseError('Bitte gib Deine E-Mail-Adresse an!')
+        pulseError(i18n('login.error_no_email'))
         return
       }
       if (!this.password) {
-        pulseError('Bitte gib Dein Passwort an!')
+        pulseError(i18n('login.error_no_password'))
         return
       }
       this.isLoading = true
       try {
         const user = await login(this.email, this.password)
-        pulseSuccess(`<b>Wunderschönen Tag Dir, ${user.name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.`)
+        pulseSuccess(i18n('login.success', { user_name: user.name }))
 
         const urlParams = new URLSearchParams(window.location.search)
 
@@ -111,7 +112,7 @@ export default {
       } catch (err) {
         this.isLoading = false
         if (err.code && err.code === 401) {
-          pulseError('E-Mail-Adresse oder Passwort sind falsch')
+          pulseError(i18n('login.error_no_auth'))
           setTimeout(() => {
             window.location = '/?page=login&ref=%2F%3Fpage%3Ddashboard'
           }, 2000)

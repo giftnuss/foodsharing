@@ -2,13 +2,13 @@
   <nav-item-dropdown
     ref="dropdown"
     :no-caret="!showLabel"
-    tooltip="Essenskörbe"
+    :tooltip="$i18n('basket.title')"
     class="topbar-baskets"
   >
     <template slot="button-content">
       <i class="fas fa-shopping-basket" />
       <span v-if="showLabel">
-        Essenskörbe
+        {{ $i18n('basket.title') }}
       </span>
     </template>
     <div class="list-group">
@@ -16,7 +16,7 @@
         v-if="!baskets.length"
         class="dropdown-header"
       >
-        Du hast keine Essenskörbe eingetragen
+        {{ $i18n('basket.my_list_empty') }}
       </p>
       <div
         v-else
@@ -34,14 +34,14 @@
           :href="$url('baskets')"
           class="btn btn-sm btn-secondary"
         >
-          Alle Essenskörbe
+          {{ $i18n('basket.all') }}
         </a>
         <a
           @click="openBasketCreationForm"
           href="#"
           class="btn btn-sm btn-secondary"
         >
-          Essenskorb anlegen
+          {{ $i18n('basket.add') }}
         </a>
       </div>
     </div>

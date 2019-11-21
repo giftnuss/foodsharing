@@ -10,9 +10,9 @@
       <div class="input-group-prepend">
         <label
           id="searchfield-label"
+          :aria-label="$i18n('search.title')"
           class="input-group-text text-primary"
           for="searchfield"
-          aria-label="Suche"
         >
           <img
             v-if="isLoading"
@@ -27,9 +27,9 @@
       <input
         id="searchfield"
         v-model="query"
+        :placeholder="$i18n('search.placeholder')"
         type="text"
         class="form-control text-primary"
-        placeholder="Suche..."
         aria-labelledby="searchfield-label"
         aria-placeholder=""
       >
