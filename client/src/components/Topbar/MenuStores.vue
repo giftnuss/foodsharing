@@ -20,7 +20,7 @@
         class="dropdown-item text-truncate"
       >
         <span
-          :class="'badge badge-pill '+badgeClass(store.pickupStatus)"
+          :class="'fas fa-circle '+statusClass(store.pickupStatus)"
           :style="badgeVisibility(store.pickupStatus)"
           :id="`store_marker_${store.id}`"
         >&nbsp;</span>
@@ -86,6 +86,10 @@ export default {
       const classes = ['badge-info', 'badge-info', 'badge-warning', 'badge-danger']
       return classes[pickupStatus]
     },
+    statusClass (pickupStatus) {
+      const classes = ['status-info', 'status-info', 'status-warning', 'status-danger']
+      return classes[pickupStatus]
+    },
     badgeVisibility (pickupStatus) {
       return {
         visibility: pickupStatus > 0 ? 'visible' : 'hidden'
@@ -105,5 +109,15 @@ export default {
   }
   .bootstrap .badge-info {
     background-color: #f5f5b5;
+  }
+
+  .status-info {
+    color: #f5f5b5;
+  }
+  .status-warning {
+    color: #ffc107;
+  }
+  .status-danger {
+    color: #dc3545;
   }
 </style>

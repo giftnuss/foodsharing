@@ -47,6 +47,7 @@
 - Fix database method which prevents newsletter sending #754 !1198 @jofranz
 - Improved SQL query which caused that the team of large work groups could not be updated anymore #726 !1199 @dthulke
 - Show events on dashboard which started one/more days in the past and are ongoing !1215 @treee111
+- Use font awesome icons for store status indicators to avoid that they disappear when the store name is too long #742 !1190 @dthulke
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
