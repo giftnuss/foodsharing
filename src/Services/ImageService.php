@@ -163,8 +163,6 @@ final class ImageService
 					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
 					break;
 				case Role::STORE_MANAGER:
-					$bg = 'box-sizing:border-box;border:3px solid #599022;';
-				case 2:
 					$bg = 'box-sizing:border-box;border:3px solid var(--fs-green);';
 					break;
 				case Role::AMBASSADOR:
