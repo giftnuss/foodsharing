@@ -36,7 +36,7 @@ class QuizCest
 		$quizRole = $this->{$example[0]}['rolle'] + 1;
 		$I->seeCurrentUrlEquals($I->upgradeQuizUrl($quizRole));
 
-		$I->waitForText('Du musst noch das Quiz bestehen!');
+		$I->waitForText('Jetzt gilt es noch das Quiz zu bestehen!');
 		$I->click($example[2]);
 
 		$quizName = $this->quizzes[$quizRole]['name'];

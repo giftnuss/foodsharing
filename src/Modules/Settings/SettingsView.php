@@ -542,7 +542,7 @@ class SettingsView extends View
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] . 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
 	}
@@ -620,7 +620,7 @@ class SettingsView extends View
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
 	}
