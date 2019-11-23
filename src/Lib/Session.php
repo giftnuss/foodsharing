@@ -513,7 +513,7 @@ class Session
 			}
 		}
 		$_SESSION['client']['betriebe'] = false;
-		if ($r = $this->storeGateway->listStoresForFoodsaver($fs['id'])) {
+		if ($r = $this->storeGateway->listFilteredStoresForFoodsaver($fs['id'])) {
 			$_SESSION['client']['betriebe'] = array();
 			foreach ($r as $rr) {
 				// add info about the next free pickup slot to the store

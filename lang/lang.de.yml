@@ -161,6 +161,8 @@ delete: Löschen
 
 store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
+  add_new_store: Neuen Betrieb anlegen
+  all_of_my_stores: Alle meine Betriebe
 
 pickup:
   dates: Abholtermine
