@@ -20,6 +20,7 @@
 - Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
 - Redirect from Walls of NON-workgoups to the forum !1186 @treee111
 - Redirect from walls of NON-workgoups to the forum !1186 @treee111
+- Redirect from walls of NON-workgoups (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum !1186 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
