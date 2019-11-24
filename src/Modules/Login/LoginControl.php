@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Mobile_Detect;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -18,9 +17,8 @@ class LoginControl extends Control
 
 	private $loginGateway;
 
-	public function __construct(Db $model, LoginView $view, LoginGateway $loginGateway)
+	public function __construct(LoginView $view, LoginGateway $loginGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 
@@ -42,7 +40,7 @@ class LoginControl extends Control
 		$this->pageHelper->addTitle('Newsletter Abmeldung');
 		$this->pageHelper->addBread('Newsletter Abmeldung');
 		if (isset($_GET['e']) && $this->emailHelper->validEmail($_GET['e'])) {
-			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
+			$this->loginGateway->unsubscribeNewsletter($_GET['e']);
 			$this->pageHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
 	}

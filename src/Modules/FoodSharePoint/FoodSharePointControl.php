@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\FoodSharePointPermissions;
 use Foodsharing\Services\SanitizerService;
@@ -23,6 +23,7 @@ class FoodSharePointControl extends Control
 	private $foodSharePointGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
+	private $mailboxGateway;
 	private $sanitizerService;
 	private $identificationHelper;
 	private $foodSharePointPermissions;
@@ -32,7 +33,7 @@ class FoodSharePointControl extends Control
 		FoodSharePointGateway $foodSharePointGateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
-		Db $model,
+		MailboxGateway $mailboxGateway,
 		SanitizerService $sanitizerService,
 		IdentificationHelper $identificationHelper,
 		FoodSharePointPermissions $foodSharePointPermissions
@@ -41,7 +42,7 @@ class FoodSharePointControl extends Control
 		$this->foodSharePointGateway = $foodSharePointGateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->model = $model;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->identificationHelper = $identificationHelper;
 		$this->foodSharePointPermissions = $foodSharePointPermissions;
@@ -111,7 +112,7 @@ class FoodSharePointControl extends Control
 				$this->regionId = $regionId;
 				$this->region = $region;
 				if ((int)$region['mailbox_id'] > 0) {
-					$this->region['urlname'] = $this->model->getVal('name', 'mailbox', $region['mailbox_id']);
+					$this->region['urlname'] = $this->mailboxGateway->getMailboxname($region['mailbox_id']);
 				} else {
 					$this->region['urlname'] = $this->identificationHelper->id($this->region['name']);
 				}
