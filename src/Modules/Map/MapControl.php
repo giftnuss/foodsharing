@@ -21,8 +21,9 @@ class MapControl extends Control
 		$this->pageHelper->addTitle($this->translationHelper->s('map'));
 		$this->setTemplate('map');
 
-		if($this->session->id())
+		if ($this->session->id()) {
 			$center = $this->mapGateway->getFoodsaverLocation($this->session->id());
+		}
 		$this->pageHelper->addContent($this->view->mapControl(), CNT_TOP);
 
 		$jsarr = '';
