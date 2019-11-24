@@ -58,6 +58,7 @@
 - Replaced some hardcoded sql with prepared statements !1207 #757 @alex.simm
 - Removed some dead code !1213 @svenpascal
 - Remove food basket pinboard frontend from !969 entirely !1203 @jofranz
+- Refactored database access from controllers to gateways !1192 #9 @alex.simm
 
 ## Dev/Test/CI stuff
 
