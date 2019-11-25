@@ -29,11 +29,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function updateBetriebBezirk($betrieb_id, $bezirk_id)
-	{
-		return $this->update('UPDATE fs_betrieb SET bezirk_id = ' . (int)$bezirk_id . ' WHERE id = ' . (int)$betrieb_id);
-	}
-
 	public function getFetchHistory($betrieb_id, $from, $to)
 	{
 		return $this->q('

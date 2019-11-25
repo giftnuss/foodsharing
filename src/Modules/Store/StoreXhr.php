@@ -255,7 +255,7 @@ class StoreXhr extends Control
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
 				if ($this->storePermissions->mayEditStore($b['id']) && (int)$b['v'] > 0) {
-					$this->model->updateBetriebBezirk($b['id'], $b['v']);
+					$this->storeGateway->updateStoreRegion($b['id'], $b['v']);
 				}
 			}
 		}

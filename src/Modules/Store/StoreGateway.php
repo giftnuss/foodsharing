@@ -956,6 +956,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
+	public function updateStoreRegion(int $storeId, int $regionId): int
+	{
+		return $this->db->update(
+			'fs_betrieb',
+			['bezirk_id' => $regionId],
+			['id' => $storeId]
+		);
+	}
+
 	public function updateExpiredBells(): void
 	{
 		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-fetch-unconfirmed-%');

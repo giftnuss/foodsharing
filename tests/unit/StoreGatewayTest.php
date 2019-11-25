@@ -168,12 +168,21 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->updateInDatabase(
 			'fs_bell',
 			['expiration' => '1970-01-01'],
-			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
+			['identifier' => 'store-fetch-unconfirmed-' . $this->store['id']]
 		); // outdate bell notification
 
 		$this->gateway->updateExpiredBells();
 
 		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $this->store['id']]);
+	}
+
+	public function testUpdateStoreRegion()
+	{
+		$newRegion = $this->tester->createRegion();
+
+		$updates = $this->gateway->updateStoreRegion($this->store['id'], $newRegion['id']);
+
+		$this->tester->seeInDatabase('fs_betrieb', ['bezirk_id' => $newRegion['id'], 'id' => $this->store['id']]);
 	}
 
 	public function testGetNoTeamConversation()
