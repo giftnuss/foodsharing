@@ -531,4 +531,9 @@ class MailboxGateway extends BaseGateway
 			return 0;
 		}
 	}
+
+	public function getAttachment(int $messageId)
+	{
+		return $this->db->fetchByCriteria('fs_mailbox_message', ['mailbox_id', 'attach'], ['id' => $messageId]);
+	}
 }

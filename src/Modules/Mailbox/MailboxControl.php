@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Services\SanitizerService;
@@ -14,13 +13,11 @@ class MailboxControl extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-		Db $model,
 		MailboxView $view,
 		SanitizerService $sanitizerService,
 		MailboxGateway $mailboxGateway,
 		MailboxPermissions $mailboxPermissions
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
 		$this->mailboxGateway = $mailboxGateway;
@@ -32,7 +29,7 @@ class MailboxControl extends Control
 	public function dlattach()
 	{
 		if (isset($_GET['mid'], $_GET['i'])) {
-			if ($m = $this->model->getValues(array('mailbox_id', 'attach'), 'mailbox_message', $_GET['mid'])) {
+			if ($m = $this->mailboxGateway->getAttachment($_GET['mid'])) {
 				if ($this->mailboxPermissions->mayMailbox($m['mailbox_id'])) {
 					if ($attach = json_decode($m['attach'], true)) {
 						if (isset($attach[(int)$_GET['i']])) {
