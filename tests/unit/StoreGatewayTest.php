@@ -168,7 +168,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->updateInDatabase(
 			'fs_bell',
 			['expiration' => '1970-01-01'],
-			['identifier' => 'store-fetch-unconfirmed-' . $this->store['id']]
+			['identifier' => 'store-fetch-unconfirmed-' . $store['id']]
 		); // outdate bell notification
 
 		$this->gateway->updateExpiredBells();
