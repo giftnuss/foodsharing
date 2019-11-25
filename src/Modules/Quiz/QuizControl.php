@@ -81,7 +81,7 @@ class QuizControl extends Control
 			if ($name = $this->quizGateway->getQuizName($quizId)) {
 				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $quizId);
 				$topbtn = ' - ' . $name;
-				$slogan = 'Klausurfragen für ' . $name;
+				$slogan = 'Quizfragen für ' . $name;
 			}
 			$this->listQuestions($quizId);
 		}
@@ -197,7 +197,7 @@ class QuizControl extends Control
 			$this->pageHelper->addBread('Auswertung');
 			$topbarContent = $this->view->topbar(
 				'Auswertung für ' . $quizName . '-Quiz',
-				'Klausurfragen für ' . $quizName,
+				'Quizfragen für ' . $quizName,
 				'<img src="/img/quiz.png" />'
 			);
 			$this->pageHelper->addContent($topbarContent, CNT_TOP);
