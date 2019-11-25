@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
@@ -99,7 +100,6 @@ class FoodsaverControl extends Control
 
 		if ($this->submitted()) {
 			if ($this->session->isOrgaTeam()) {
-				$g_data['is_orgateam'] = true;
 				if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 					$g_data['orgateam'] = 1;
 				}
@@ -118,12 +118,24 @@ class FoodsaverControl extends Control
 				$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
 			}
 
-			if ($this->foodsaverGateway->updateFoodsaver($fsId, $g_data, $this->storeModel)) {
+			if ($this->updateFoodsaver($fsId, $g_data)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 			} else {
 				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
 		}
+	}
+
+	private function updateFoodsaver(int $fsId, array $data): int
+	{
+		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
+		if ($updateResult) {
+			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->isOrgaTeam()) {
+				$updateResult = $this->foodsaverGateway->downgradePermanently($fsId, $this->storeModel);
+			}
+		}
+
+		return $updateResult;
 	}
 
 	private function picture_box()

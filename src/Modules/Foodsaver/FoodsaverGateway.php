@@ -825,7 +825,7 @@ final class FoodsaverGateway extends BaseGateway
 		', [':fsId' => $foodsaverId]);
 	}
 
-	public function updateFoodsaver(int $fsId, array $data, StoreModel $storeModel): int
+	public function updateFoodsaver(int $fsId, array $data): int
 	{
 		$updateData = [
 			'bezirk_id' => $data['bezirk_id'],
@@ -854,40 +854,32 @@ final class FoodsaverGateway extends BaseGateway
 			$updateData['orgateam'] = $data['orgateam'];
 		}
 
-		if (isset($data['rolle'])) {
-			$updateData['rolle'] = $data['rolle'];
-			if ($data['rolle'] == Role::FOODSHARER && $data['is_orgateam']) {
-				$data['bezirk_id'] = 0;
-				$updateData['quiz_rolle'] = Role::FOODSHARER;
-				$updateData['verified'] = 0;
-
-				$this->signOutFromStores($fsId, $storeModel);
-
-				//Delete Bells for Foodsaver
-				$this->db->delete(
-					'fs_foodsaver_has_bell',
-					['foodsaver_id' => $fsId]
-				);
-				// Delete from Bezirke and Working Groups
-				$this->db->delete(
-					'fs_foodsaver_has_bezirk',
-					['foodsaver_id' => $fsId]
-				);
-				//Delete from Bezirke and Working Groups (when Admin)
-				$this->db->delete(
-					'fs_botschafter',
-					['foodsaver_id' => $fsId]
-				);
-
-				$this->quizSessionGateway->blockUserForQuiz($fsId, Role::FOODSAVER);
-			}
-		}
-
 		return $this->db->update(
 			'fs_foodsaver',
 			$updateData,
 			['id' => $fsId]
 		);
+	}
+
+	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
+	{
+		$this->signOutFromStores($fsId, $storeModel);
+
+		//Delete Bells for Foodsaver
+		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);
+		// Delete from Bezirke and Working Groups
+		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $fsId]);
+		//Delete from Bezirke and Working Groups (when Admin)
+		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
+
+		$this->quizSessionGateway->blockUserForQuiz($fsId, Role::FOODSAVER);
+
+		$fsUpdateData['rolle'] = Role::FOODSHARER;
+		$fsUpdateData['bezirk_id'] = 0;
+		$fsUpdateData['quiz_rolle'] = Role::FOODSHARER;
+		$fsUpdateData['verified'] = 0;
+
+		return $this->db->update('fs_foodsaver', $fsUpdateData, ['id' => $fsId]);
 	}
 
 	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
