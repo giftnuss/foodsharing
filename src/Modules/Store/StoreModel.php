@@ -29,42 +29,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function getFetchHistory($betrieb_id, $from, $to)
-	{
-		return $this->q('
-			SELECT
-				fs.id,
-				fs.name,
-				fs.nachname,
-				fs.photo,
-				a.date,
-				UNIX_TIMESTAMP(a.date) AS date_ts
-
-			FROM
-				fs_foodsaver fs,
-				fs_abholer a
-
-			WHERE
-				a.foodsaver_id = fs.id
-
-			AND
-				a.betrieb_id = ' . (int)$betrieb_id . '
-
-			AND
-				a.date >= ' . $this->dateval($from) . '
-
-			AND
-				a.date <= ' . $this->dateval($to) . '
-
-			AND
-				a.confirmed = 1
-
-			ORDER BY
-				a.date
-
-		');
-	}
-
 	public function deldate($storeId, $date)
 	{
 		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `date` = ' . $this->dateval($date));

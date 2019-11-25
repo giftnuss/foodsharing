@@ -785,6 +785,33 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
+	public function getFetchHistory(int $storeId, string $from, string $to): array
+	{
+		return $this->db->fetchAll('
+			SELECT	fs.id,
+					fs.name,
+					fs.nachname,
+					fs.photo,
+					a.date,
+					UNIX_TIMESTAMP(a.date) AS date_ts
+
+			FROM	fs_foodsaver fs
+					INNER JOIN fs_abholer a
+						ON a.foodsaver_id = fs.id
+	
+			WHERE	a.betrieb_id = :storeId
+					AND a.date >= :from
+					AND a.date <= :to
+	
+			ORDER BY a.date
+		',
+		[
+			':storeId' => $storeId,
+			':from' => $from,
+			':to' => $to
+		]);
+	}
+
 	public function getRegularPickup(int $storeId, int $dow, string $time): ?int
 	{
 		try {

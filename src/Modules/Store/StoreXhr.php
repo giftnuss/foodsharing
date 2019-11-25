@@ -93,7 +93,7 @@ class StoreXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		if ($history = $this->model->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
+		if ($history = $this->storeGateway->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -125,7 +125,7 @@ class StoreXhr extends Control
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
 					maxDate: "0",
-					
+
 					onClose: function( selectedDate ) {
 						$( "#' . $id . '_to" ).datepicker( "option", "minDate", selectedDate );
 					}
@@ -138,30 +138,30 @@ class StoreXhr extends Control
 						$( "#' . $id . '_from" ).datepicker( "option", "maxDate", selectedDate );
 					}
 				});
-				
+
 				$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
 				$( "#' . $id . '_from" ).datepicker("show");
-				
-				
+
+
 				$(window).on("resize", function(){
 					$("#' . $dia->getId() . '").dialog("option",{
 						height:($(window).height()-40)
 					});
 				});
-				
+
 				$("#daterange_submit").on("click", function(ev){
 					ev.preventDefault();
-				
+
 					var date = $( "#' . $id . '_from" ).datepicker("getDate");
-					
+
 					var from = "";
 					var to = "";
-					
+
 					if(date !== null)
 					{
 						from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 						date = $( "#' . $id . '_to" ).datepicker("getDate");
-					
+
 						if(date === null)
 						{
 							to = from;
@@ -177,7 +177,7 @@ class StoreXhr extends Control
 								to = to + " " + "23:59:59"
 							}
 						}
-				
+
 						ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . $storeId . '});
 					}
 					else
@@ -185,7 +185,7 @@ class StoreXhr extends Control
 						alert("Du musst erst ein Datum ausw&auml;hlen ;)");
 					}
 				});
-				
+
 		');
 
 		if ($this->session->isMob()) {
@@ -216,17 +216,17 @@ class StoreXhr extends Control
 		$dia->addButton('Speichern', 'saveDate();');
 
 		$dia->addJs('
-				
+
 			function saveDate()
 			{
 				var date = $("#datepicker").datepicker( "getDate" );
-				
+
 				date = date.getFullYear() + "-" +
 				    ("00" + (date.getMonth()+1)).slice(-2) + "-" +
-				    ("00" + date.getDate()).slice(-2) + " " + 
-				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" + 
+				    ("00" + date.getDate()).slice(-2) + " " +
+				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" +
 				    ("00" + $("select[name=\'time[min]\']").val()).slice(-2) + ":00";
-				
+
 				if($("#fetchercount").val() >= 0)
 				{
 					ajreq("savedate",{
@@ -241,10 +241,10 @@ class StoreXhr extends Control
 					pulseError("Du musst noch die Anzahl der Abholer/innen auswählen");
 				}
 			}
-				
+
 			$("#datepicker").datepicker({
 				minDate: new Date()
-			});	
+			});
 		');
 
 		return $dia->xhrout();
@@ -300,14 +300,14 @@ class StoreXhr extends Control
 					$dia->addJs('
 						$("#savebetriebetoselect").on("click", function(ev){
 							ev.preventDefault();
-							
+
 							var saveArr = new Array();
-							
+
 							$("#betriebetoselect select.input.select").each(function(){
 								var $this = $(this);
 								var value = parseInt($this.val());
 								var id = parseInt($this.attr("id").split("b_")[1]);
-							
+
 								if(id > 0 && value > 0)
 								{
 									saveArr.push({
@@ -316,7 +316,7 @@ class StoreXhr extends Control
 									});
 								}
 							});
-							
+
 							if(saveArr.length > 0)
 							{
 								ajax.req("betrieb","savebezirkids",{
@@ -327,7 +327,7 @@ class StoreXhr extends Control
 									}
 								});
 							}
-						});		
+						});
 					');
 					$dia->addContent($cnt);
 					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translationHelper->s('save') . '</a>'));
