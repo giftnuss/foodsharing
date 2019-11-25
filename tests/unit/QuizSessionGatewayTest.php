@@ -136,5 +136,18 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 	private function foodsharerQuizStatus(): array
 	{
 		return $this->gateway->getQuizStatus(Role::FOODSAVER, $this->foodsharer['id']);
+	public function testBlockUserForQuiz()
+	{
+		$this->gateway->blockUserForQuiz($this->foodsaver['id'], Role::FOODSAVER);
+
+		$this->tester->seeNumRecords(
+			7,
+			'fs_quiz_session',
+			[
+				'foodsaver_id' => $this->foodsaver['id'],
+				'quiz_id' => Role::FOODSAVER,
+				'status' => SessionStatus::FAILED
+			]
+		);
 	}
 }
