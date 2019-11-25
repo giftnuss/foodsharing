@@ -50,6 +50,7 @@
 ## Dev/Test/CI stuff
 
 - add dependency scanning GitLab CI configuration !1183 @nicksellen
+- adds error infos to the exception of an unpreperable query !1195 @dthulke
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
