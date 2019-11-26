@@ -2,16 +2,10 @@
 
 namespace Foodsharing\Modules\Console;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 
 class ConsoleControl
 {
-	/**
-	 * @var Db
-	 */
-	protected $model;
-
 	/**
 	 * @var Mem
 	 */

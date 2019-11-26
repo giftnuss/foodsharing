@@ -8,6 +8,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
+	private $model;
 	private $storeGateway;
 	private $regionGateway;
 	private $statsGateway;

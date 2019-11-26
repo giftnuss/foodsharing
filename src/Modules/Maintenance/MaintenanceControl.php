@@ -14,6 +14,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
 {
+	private $model;
 	private $bellGateway;
 	private $storeGateway;
 	private $foodsaverGateway;

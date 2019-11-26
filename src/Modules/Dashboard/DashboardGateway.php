@@ -23,4 +23,18 @@ class DashboardGateway extends BaseGateway
 				WHERE id = :id
 			', [':id' => $id]);
 	}
+
+	/**
+	 * Returns the number of stores from the list of store IDs that are not assigned to a district.
+	 *
+	 * @param $storeIds
+	 *
+	 * @return int
+	 */
+	public function countStoresWithoutDistrict($storeIds): int
+	{
+		return (int)$this->db->fetchValue('SELECT COUNT(*) FROM fs_betrieb WHERE id IN('
+			. implode(',', $storeIds)
+			. ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)');
+	}
 }

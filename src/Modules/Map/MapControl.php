@@ -38,7 +38,7 @@ class MapControl extends Control
 		);
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
-			$center = $this->mapGateway->getStoreLocation((int)$_GET['bid']);
+			$center = $this->mapGateway->getStoreLocation($_GET['bid']);
 
 			$this->pageHelper->addJs('
 				u_loadDialog("/xhr.php?f=bBubble&id=' . (int)$_GET['bid'] . '");

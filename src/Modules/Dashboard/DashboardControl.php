@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -39,7 +38,6 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		Db $model,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
@@ -53,7 +51,6 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
-		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
@@ -189,7 +186,7 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
+		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
@@ -268,7 +265,7 @@ class DashboardControl extends Control
 		}
 
 		/*
-		 * check is there are Betrieb not ordered to an bezirk
+		 * check if there are stores not ordered to a bezirk
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
 			$ids = array();
@@ -276,7 +273,7 @@ class DashboardControl extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($bids = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+				if ($this->dashboardGateway->countStoresWithoutDistrict($ids) > 0) {
 					$this->pageHelper->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}

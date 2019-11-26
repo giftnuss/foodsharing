@@ -13,12 +13,12 @@ class MapGateway extends BaseGateway
 		parent::__construct($db);
 	}
 
-	public function getStoreLocation(int $storeId)
+	public function getStoreLocation(int $storeId): array
 	{
 		return $this->db->fetchByCriteria('fs_betrieb', ['lat', 'lon'], ['id' => $storeId]);
 	}
 
-	public function getFoodsaverLocation(int $foodsaverId)
+	public function getFoodsaverLocation(int $foodsaverId): array
 	{
 		return $this->db->fetchByCriteria('fs_foodsaver', ['lat', 'lon'], ['id' => $foodsaverId]);
 	}

@@ -764,4 +764,19 @@ final class FoodsaverGateway extends BaseGateway
 		',
 			[':fsId' => $foodsaverId]);
 	}
+
+	public function getFoodsaverAddress($foodsaverId)
+	{
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			[
+				'plz',
+				'stadt',
+				'lat',
+				'lon',
+				'anschrift',
+			],
+			['id' => $foodsaverId]
+		);
+	}
 }
