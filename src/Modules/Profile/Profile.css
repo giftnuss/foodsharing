@@ -11,7 +11,7 @@
 .verify {
   color: #ffffff;
   font-weight: bold;
-  background-color: #46891b;
+  background-color: var(--fs-green);
 }
 
 .unverify {
@@ -73,11 +73,11 @@ div.statdisplay .item {
 
 #double ul {
   width: 100%;
-  border-top: 1px solid #f1e7c9;
+  border-top: 1px solid var(--fs-beige);
 }
 
 #double ul li {
-  border-bottom: 1px solid #f1e7c9;
+  border-bottom: 1px solid var(--fs-beige);
 }
 
 .disabled {

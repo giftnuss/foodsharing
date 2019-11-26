@@ -46,8 +46,8 @@ class QuizControl extends Control
 	public function index()
 	{
 		// quiz&a=delete&id=9
-		if ($id = $this->identificationHelper->getActionId('delete')) {
-			$this->quizSessionGateway->deleteSession($id);
+		if ($quizSessionId = $this->identificationHelper->getActionId('delete')) {
+			$this->quizSessionGateway->deleteSession($quizSessionId);
 			$this->goBack();
 		}
 
@@ -56,19 +56,13 @@ class QuizControl extends Control
 
 		$topbtn = '';
 		$slogan = 'Quiz-Fragen für Foodsaver, Betriebsverantwortliche & Botschafter';
-		if (!isset($_GET['sub']) && isset($_GET['id']) && (int)$_GET['id'] > 0) {
-			if ($name = $this->quizGateway->getQuizName($_GET['id'])) {
-				$this->pageHelper->addBread($name, '/?page=quiz&id=' . (int)$_GET['id']);
-				$topbtn = ' - ' . $name;
-				$slogan = 'Klausurfragen für ' . $name;
-			}
-			$this->listQuestions($_GET['id']);
-		}
-
 		if (!isset($_GET['sub'])) {
-			if (!isset($_GET['id'])) {
+			if (isset($_GET['id'])) {
+				$this->listQuiz($_GET['id']);
+			} else {
 				$this->routeHelper->go('/?page=quiz&id=1');
 			}
+
 			$this->pageHelper->addContent($this->view->topbar('Quiz' . $topbtn, $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
 			$this->pageHelper->addContent($this->view->listQuiz($this->quizGateway->listQuiz()), CNT_LEFT);
 			$this->pageHelper->addContent($this->view->quizMenu(), CNT_LEFT);
@@ -81,40 +75,72 @@ class QuizControl extends Control
 		exit();
 	}
 
+	private function listQuiz($quizId): void
+	{
+		if ($quizId > 0) {
+			if ($name = $this->quizGateway->getQuizName($quizId)) {
+				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $quizId);
+				$topbtn = ' - ' . $name;
+				$slogan = 'Quizfragen für ' . $name;
+			}
+			$this->listQuestions($quizId);
+		}
+	}
+
+	private function listQuestions($quizId)
+	{
+		$quizButtons = $this->view->quizbuttons($quizId);
+		$this->pageHelper->addContent($quizButtons);
+
+		$questions = $this->quizGateway->listQuestions($quizId);
+		$this->pageHelper->addContent($this->view->listQuestions($questions, $quizId));
+
+		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $quizButtons);
+	}
+
 	public function wall()
 	{
 		$questionId = (int)$_GET['id'];
-		if ($q = $this->quizGateway->getQuestion($questionId)) {
-			if ($name = $this->quizGateway->getQuizName($q['quiz_id'])) {
-				$this->pageHelper->addBread($name, '/?page=quiz&id=' . $questionId);
+		if ($question = $this->quizGateway->getQuestion($questionId)) {
+			if ($quizName = $this->quizGateway->getQuizName($question['quiz_id'])) {
+				$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $questionId);
 			}
-			$this->pageHelper->addBread('Frage  #' . $q['id'], '/?page=quiz&sub=wall&id=' . (int)$q['id']);
-			$this->pageHelper->addContent($this->view->topbar('Quizfrage  #' . $q['id'], '<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$q['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $q['text'] . '<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>', '<img src="/img/quiz.png" />'), CNT_TOP);
+			$this->pageHelper->addBread('Frage  #' . $questionId, '/?page=quiz&sub=wall&id=' . $questionId);
+
+			$topbarContent = $this->getWallTopbarContent($question);
+			$this->pageHelper->addContent($topbarContent, CNT_TOP);
 			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('question', $questionId), 'Kommentare'), CNT_MAIN);
-			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($q['id'])), CNT_RIGHT);
+			$this->pageHelper->addContent($this->view->answerSidebar($this->quizGateway->getAnswers($questionId)), CNT_RIGHT);
 		}
+	}
+
+	private function getWallTopbarContent($question)
+	{
+		return $this->view->topbar(
+			'Quizfrage  #' . (int)$question['id'],
+			'<a style="float:right;color:#FFF;font-size:13px;margin-top:-20px;" href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$question['id'] . ',qid:' . (int)$question['quiz_id'] . '});return false;">Frage bearbeiten</a>' . $question['text'] . '<p><strong>' . $question['fp'] . ' Fehlerpunkte, ' . $question['duration'] . ' Sekunden zum Antworten</strong></p>',
+			'<img src="/img/quiz.png" />'
+		);
 	}
 
 	public function edit()
 	{
-		if ($quiz = $this->quizGateway->getQuiz($_GET['qid'])) {
+		$quizId = (int)$_GET['qid'];
+		if ($quiz = $this->quizGateway->getQuiz($quizId)) {
 			if ($this->isSubmitted()) {
-				$name = strip_tags($_POST['name']);
-				$name = trim($name);
-
-				$desc = $_POST['desc'];
-				$desc = trim($desc);
-
-				$maxFailurePoints = (int)$_POST['maxfp'];
-				$questionCount = (int)$_POST['questcount'];
-
+				$name = trim(strip_tags($_POST['name']));
 				if (!empty($name)) {
-					if ($id = $this->quizGateway->updateQuiz($_GET['qid'], $name, $desc, $maxFailurePoints, $questionCount)) {
+					$desc = trim($_POST['desc']);
+					$maxFailurePoints = (int)$_POST['maxfp'];
+					$questionCount = (int)$_POST['questcount'];
+
+					if ($updatedQuizId = $this->quizGateway->updateQuiz($quizId, $name, $desc, $maxFailurePoints, $questionCount)) {
 						$this->flashMessageHelper->info('Quiz wurde erfolgreich geändert!');
-						$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
+						$this->routeHelper->go('/?page=quiz&id=' . (int)$updatedQuizId);
 					}
 				}
 			}
+
 			$this->dataHelper->setEditData($quiz);
 			$this->pageHelper->addContent($this->view->quizForm());
 		}
@@ -123,19 +149,15 @@ class QuizControl extends Control
 	public function newquiz()
 	{
 		if ($this->isSubmitted()) {
-			$name = strip_tags($_POST['name']);
-			$name = trim($name);
-
-			$desc = $_POST['desc'];
-			$desc = trim($desc);
-
-			$maxFailurePoints = (int)$_POST['maxfp'];
-			$questionCount = (int)$_POST['questcount'];
-
+			$name = trim(strip_tags($_POST['name']));
 			if (!empty($name)) {
-				if ($id = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
+				$desc = trim($_POST['desc']);
+				$maxFailurePoints = (int)$_POST['maxfp'];
+				$questionCount = (int)$_POST['questcount'];
+
+				if ($quizId = $this->quizGateway->addQuiz($name, $desc, $maxFailurePoints, $questionCount)) {
 					$this->flashMessageHelper->info('Quiz wurde erfolgreich angelegt!');
-					$this->routeHelper->go('/?page=quiz&id=' . (int)$id);
+					$this->routeHelper->go('/?page=quiz&id=' . (int)$quizId);
 				}
 			}
 		}
@@ -145,51 +167,49 @@ class QuizControl extends Control
 
 	public function sessiondetail()
 	{
-		$fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid']);
-		if ($fs) {
+		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
-			$this->pageHelper->addContent(
-				$this->view->topbar(
-					'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'],
-					$this->getRolle($fs['geschlecht'], $fs['rolle']),
-					$this->imageService->avatar($fs)
-				),
-				CNT_TOP
-			);
+			$this->pageHelper->addContent($this->getSessionDetailTopbarContent($fs), CNT_TOP);
 
-			if ($sessions = $this->quizSessionGateway->getUserSessions($_GET['fsid'])) {
+			if ($sessions = $this->quizSessionGateway->getUserSessions($fs['id'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
 	}
 
-	private function getRolle($gender_id, $rolle_id)
+	private function getSessionDetailTopbarContent($fs)
 	{
-		return $this->translationHelper->s('rolle_' . $rolle_id . '_' . $gender_id);
+		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
+		$subtitle = $this->translationHelper->s('rolle_' . $fs['rolle'] . '_' . $fs['geschlecht']);
+		$icon = $this->imageService->avatar($fs);
+
+		return $this->view->topbar($title, $subtitle, $icon);
 	}
 
 	public function sessions()
 	{
 		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
-			if ($sessions = $this->quizSessionGateway->getSessions($_GET['id'])) {
-				$this->pageHelper->addContent($this->view->sessionList($sessions, $quiz));
-			} else {
-				$this->pageHelper->addContent($this->view->noSessions($quiz));
-			}
-			$this->pageHelper->addBread($quiz['name'], '/?page=quiz&id=' . (int)$_GET['id']);
-			$this->pageHelper->addBread('Auswertung');
-			$slogan = 'Klausurfragen für ' . $quiz['name'];
+			$this->pageHelper->addContent($this->getSessionListContent($quiz));
 
-			$this->pageHelper->addContent($this->view->topbar('Auswertung für ' . $quiz['name'] . '-Quiz', $slogan, '<img src="/img/quiz.png" />'), CNT_TOP);
+			$quizName = $quiz['name'];
+			$this->pageHelper->addBread($quizName, '/?page=quiz&id=' . $quiz['id']);
+
+			$this->pageHelper->addBread('Auswertung');
+			$topbarContent = $this->view->topbar(
+				'Auswertung für ' . $quizName . '-Quiz',
+				'Quizfragen für ' . $quizName,
+				'<img src="/img/quiz.png" />'
+			);
+			$this->pageHelper->addContent($topbarContent, CNT_TOP);
 		}
 	}
 
-	public function listQuestions($quiz_id)
+	private function getSessionListContent(array $quiz): string
 	{
-		$this->pageHelper->addContent($this->view->quizbuttons($quiz_id));
+		if ($sessions = $this->quizSessionGateway->getSessions($quiz['id'])) {
+			return $this->view->sessionList($sessions, $quiz);
+		}
 
-		$this->pageHelper->addContent($this->view->listQuestions($this->quizGateway->listQuestions($quiz_id), $quiz_id));
-
-		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $this->view->quizbuttons($quiz_id));
+		return $this->view->noSessions($quiz);
 	}
 }

@@ -10,6 +10,7 @@ use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreGateway extends BaseGateway implements BellUpdaterInterface
@@ -728,7 +729,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':regionId' => $regionId]);
 	}
 
-	public function listStoresForFoodsaver($fsId)
+	public function listFilteredStoresForFoodsaver($fsId)
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.`id`,
@@ -738,10 +739,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb` b
 
 			WHERE 	bt.betrieb_id = b.id
-			AND 	bt.`foodsaver_id` = :id
+			AND 	bt.`foodsaver_id` = :fsId
 			AND 	bt.active = 1
+			AND 	b.betrieb_status_id NOT IN (:doesNotWantToWorkWithUs, :givesToOtherCharity)
 			ORDER BY b.name',
-			[':id' => $fsId]
+			[
+				':fsId' => $fsId,
+				':doesNotWantToWorkWithUs' => CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US,
+				':givesToOtherCharity' => CooperationStatus::GIVES_TO_OTHER_CHARITY
+			]
 		);
 	}
 

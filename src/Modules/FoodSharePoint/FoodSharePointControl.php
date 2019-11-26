@@ -225,9 +225,8 @@ class FoodSharePointControl extends Control
 		if ($this->foodSharePointPermissions->mayDeleteFoodSharePointOfRegion($this->regionId)) {
 			$items[] = [
 				'name' => $this->translationHelper->s('delete'),
-				'click' => 'if(confirm(\'' . $this->translationHelper->sv(
-						'delete_sure',
-						$this->foodSharePoint['name']
+				'click' => 'if(confirm(\'' . $this->translationHelper->s(
+						'delete_sure'
 					) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id'] . '&delete=1\');}return false;',
 			];
 		}

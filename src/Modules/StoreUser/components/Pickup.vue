@@ -224,7 +224,7 @@ export default {
     margin: 2px;
     width: 35px;
     height: 35px;
-    border-color: #f1e7c9;
+    border-color: var(--fs-beige);
     border-width: 3px;
   }
   ul.slots >>> .btn.filled {
@@ -237,7 +237,7 @@ export default {
       border-color: #533a20
   }
   ul.slots >>> .btn[disabled]:hover {
-      border-color: #f1e7c9;
+      border-color: var(--fs-beige);
       cursor: default;
   }
   ul.slots[data-v-1dfadebe] .btn.secondary {

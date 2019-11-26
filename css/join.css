@@ -34,7 +34,7 @@
 
 #joinform .right h3 {
   font-size: 16px;
-  color: #4a3520;
+  color: var(--fs-brown);
   margin-bottom: 30px;
 }
 
@@ -61,16 +61,16 @@
 .linklist.join li.active a:hover {
   background-color: transparent;
   cursor: default;
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
 }
 
 .linklist.join li.active a, .linklist.join li.active a:hover {
-  background-color: #46891b !important;
+  background-color: var(--fs-green) !important;
   color: #ffffff !important;
 }
 
 .linklist.join li a:hover {
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
   background-color: #aaa174;
 }
 
@@ -102,7 +102,7 @@
 .iamchooser a i {
   border: 3px solid transparent;
   border-radius: 45px;
-  color: #4a3520;
+  color: var(--fs-brown);
   display: inline-block;
   font-size: 50px;
   height: 80px;
@@ -112,7 +112,7 @@
 }
 
 .iamchooser span {
-  color: #4a3520;
+  color: var(--fs-brown);
   font-weight: bold;
   margin-top: 30px;
   font-size: 16px;
@@ -123,23 +123,23 @@
 }
 
 #joinform .iamchooser a:hover span {
-  color: #46891b;
+  color: var(--fs-green);
 }
 
 #joinform .iamchooser a:hover i {
   text-decoration: none;
-  color: #4a3520;
-  border: 3px solid #5ab946;
+  color: var(--fs-brown);
+  border: 3px solid var(--fs-green);
 }
 
 #joinform .iamchooser a.active i {
-  background-color: #46891b !important;
-  border-color: #46891b !important;
+  background-color: var(--fs-green) !important;
+  border-color: var(--fs-green) !important;
   color: #ffffff !important;
 }
 
 #joinform .avatar .container {
-  border: 3px solid #4a3520;
+  border: 3px solid var(--fs-brown);
   display: inline-block;
   height: 80px;
   line-height: 107px;
@@ -150,7 +150,7 @@
 }
 
 #joinform .avatar form .container span {
-  color: #4a3520;
+  color: var(--fs-brown);
   font-size: 60px;
 }
 
@@ -183,7 +183,7 @@
 #joinform .element-wrapper h4 {
   font-weight: normal;;
   font-size: 12px;
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 #joinform .avatar {
@@ -195,11 +195,11 @@
 .leaflet-control-attribution.leaflet-control {
   font-size: 9px !important;
   background-color: rgba(255, 255, 255, 0.5);
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
 }
 
 .leaflet-control-attribution.leaflet-control a {
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
 }
 
 .leaflet-top {
@@ -223,7 +223,7 @@
   text-align: center;
   font-size: 44px;
   line-height: 365px;
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
 }
 
 #joinready {

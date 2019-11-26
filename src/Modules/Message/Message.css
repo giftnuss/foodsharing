@@ -41,7 +41,7 @@ border-radius: 4px;
 }
 
 #msg-conversation div.loader i {
-  color: #4a3520;
+  color: var(--fs-brown);
   font-size: 20px;
 }
 
@@ -66,11 +66,11 @@ border-radius: 4px;
   min-height: 35px;
   padding: 6px;
   position: relative;
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 #msg-conversation li.my-message span.body {
-  background: none repeat scroll 0 0 #64ae24;
+  background: none repeat scroll 0 0 var(--fs-green);
   margin-left: 0px;
   margin-right: 50px;
   color: #eee;
@@ -95,7 +95,7 @@ border-radius: 4px;
 
 #msg-conversation li.my-message span.body:after {
   border-width: 8px 0 8px 9px;
-  border-color: transparent #64ae24;
+  border-color: transparent var(--fs-green);
   left: unset;
   right: -9px;
 }
@@ -205,7 +205,7 @@ ul.conversation-list > li.unread-1 {
   }
 
   #msg-conversation-title {
-    color: #4a3520;
+    color: var(--fs-brown);
   }
 
   #msg-conversation-wrapper {

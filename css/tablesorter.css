@@ -5,31 +5,31 @@ div.tablesort-wrapper {
     margin-left: -1px;
     margin-right: -1px;
   }
-  
+
   table.tablesorter {
     text-align: left;
     width: 100%;
   }
-  
+
   table.tablesorter thead {
-    background-color: #4a3520;
+    background-color: var(--fs-brown);
   }
-  
+
   table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-  
-    background-color: #4a3520;
+
+    background-color: var(--fs-brown);
     color: #ffffff;
     border: 0 solid #fffffe;
     padding: 8px;
   }
-  
+
   table.tablesorter thead tr .header {
     /*background-image: url(~img/bg.gif); MISSING */
     background-repeat: no-repeat;
     background-position: center right;
     cursor: pointer;
   }
-  
+
   table.tablesorter tbody td {
     color: #3d3d3d;
     padding-top: 12px;
@@ -40,33 +40,33 @@ div.tablesort-wrapper {
     vertical-align: middle;
     height: 50px;
   }
-  
+
   table.tablesorter tbody tr.odd td {
     background-color: #f0f0f6;
   }
-  
+
   table.tablesorter thead tr .headerSortUp {
     /*background-image: url(~img/asc.gif); MISSING */
   }
-  
+
   table.tablesorter thead tr .headerSortDown {
     /*background-image: url(~img/desc.gif); MISSING */
   }
 
-  
+
   table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
     background-color: #4a3522;
   }
-  
+
   table.tablesorter tbody tr.odd td {
     background-color: #ffffff;
   }
-  
+
   table.tablesorter tbody tr:hover td {
-    background-color: #4a3520;
+    background-color: var(--fs-brown);
     color: #ffffff !important;
   }
-  
+
   table.tablesorter tbody tr:hover td a {
     color: #ffffff !important;
   }
@@ -79,23 +79,22 @@ div.tablesort-wrapper {
   }
 
   div.pager {
-    background-color: #4a3520;
+    background-color: var(--fs-brown);
     color: #ffffff;
     margin: 10px;
     padding: 10px;
   }
-  
+
   .pagesize-wrapper {
     float: right;
   }
-  
+
   .pagedisplay2 {
     margin: 0 5px;
   }
-  
+
   .ui-button.ui-state-active {
     border: 0 !important;
   }
-  
+
   /* TABLESORTER END */
-  

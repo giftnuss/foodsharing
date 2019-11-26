@@ -10,6 +10,7 @@ export default {
   statistic: (regionId) => `/?page=bezirk&bid=${regionId}&sub=statistic`,
   events: (regionId) => `/?page=bezirk&bid=${regionId}&sub=events`,
   stores: (regionId) => `/?page=betrieb&bid=${regionId}`,
+  storeList: () => '/?page=fsbetrieb',
   storeAdd: (regionId = null) => regionId ? `/?page=betrieb&a=new&bid=${regionId}` : '/?page=betrieb&a=new',
   workingGroups: (regionId = null) => regionId ? `/?page=groups&p=${regionId}` : '/?page=groups',
   workingGroupEdit: (groupId) => `/?page=groups&sub=edit&id=${groupId}`,

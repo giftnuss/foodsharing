@@ -5,6 +5,8 @@ namespace Helper;
 use DateTime;
 use Faker;
 use Carbon\Carbon;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -102,18 +104,23 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
+		$roles = [
+			Role::FOODSAVER => 'Foodsaver/in',
+			Role::STORE_MANAGER => 'Betriebsverantwortliche/r',
+			Role::AMBASSADOR => 'Botschafter/in'
+		];
 		$params = [
 			'id' => $quizId,
 			'name' => 'Quiz #' . $quizId,
-			'desc' => '',
-			'maxfp' => 3,
-			'questcount' => 3,
+			'desc' => 'Werde ' . $roles[$quizId] . ' mit diesem Quiz.',
+			'maxfp' => 0,
+			'questcount' => $questionCount,
 		];
 		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
 
 		$params['questions'] = [];
 		for ($i = 1; $i <= $questionCount; ++$i) {
-			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
+			$questionText = 'Frage #' . $i . ' für Quiz #' . $params['id'];
 			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
 		}
 
@@ -147,13 +154,21 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$params = [
 			'question_id' => $questionId,
-			'text' => 'The ' . ($right ? 'right' : 'wrong') . ' answer for question with ID ' . $questionId,
-			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
+			'text' => ($right ? 'Richtige' : 'Falsche') . ' Antwort',
+			'explanation' => 'Diese Antwort ist ' . ($right ? 'richtig' : 'falsch') . '.',
 			'right' => $right ? 1 : 0
 		];
 		$params['id'] = $this->haveInDatabase('fs_answer', $params);
 
 		return $params;
+	}
+
+	public function letUserFailQuiz(array $user, int $daysAgo, int $times)
+	{
+		$level = $user['rolle'] + 1;
+		foreach (range(1, $times) as $i) {
+			$this->createQuizTry($user['id'], $level, SessionStatus::FAILED, $daysAgo);
+		}
 	}
 
 	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
@@ -244,7 +259,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'ueberzeugungsarbeit' => 0,
 			'presse' => 0,
 			'sticker' => 0,
-			'abholmenge' => $this->faker->numberBetween(0, 70),
+			'abholmenge' => $this->faker->numberBetween(0, 7),
 			'team_status' => 1,
 			'prefetchtime' => 1209600,
 

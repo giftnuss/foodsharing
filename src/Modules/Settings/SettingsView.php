@@ -251,12 +251,14 @@ class SettingsView extends View
 			 */
 			$content_id = false;
 
-			if ($try_count == 1) {
-				$content_id = 19;
-			} elseif ($try_count == 2) {
-				$content_id = 20;
+			if ($try_count > 4) {
+				$content_id = 13;
 			} elseif ($try_count > 2) {
 				$content_id = 21;
+			} elseif ($try_count == 2) {
+				$content_id = 20;
+			} elseif ($try_count == 1) {
+				$content_id = 19;
 			}
 
 			if ($content_id) {
@@ -517,11 +519,11 @@ class SettingsView extends View
 
 		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem. Deine Sitzung wurde gespeichert. Du kannst jederzeit die Beantwortung fortführen.');
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], $quiz['desc']);
+		$out .= $quiz['desc'];
 
 		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt weiter beantworten!</a></p>';
 
-		$out = $this->v_utils->v_field($out, 'Quiz fortführen', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . '-Quiz fortführen', array('class' => 'ui-padding'));
 
 		return $out;
 	}
@@ -534,7 +536,7 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], $quiz['desc']);
+		$out .= $quiz['desc'];
 
 		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
 
@@ -542,7 +544,7 @@ class SettingsView extends View
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
 	}
@@ -611,7 +613,7 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], nl2br($quiz['desc']));
+		$out .= nl2br($quiz['desc']);
 
 		if ($quiz['id'] == 1) {
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
@@ -620,7 +622,7 @@ class SettingsView extends View
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', array('class' => 'ui-padding'));
 
 		return $out;
 	}

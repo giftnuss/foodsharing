@@ -170,7 +170,8 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))) {
+		$mailboxId = $this->mailboxGateway->getMailboxId($_GET['mid']);
+		if ($this->mailboxPermissions->mayMailbox($mailboxId)) {
 			$message = $this->mailboxGateway->getMessage($_GET['mid']);
 			$sender = @json_decode($message['sender'], true);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
@@ -188,9 +189,33 @@ class MailboxXhr extends Control
 				$mail->setSubject($subject);
 				$html = nl2br($body);
 				$mail->setHTMLBody($html);
-				$plainBody = $this->sanitizerService->htmlToPlain($html);
 				$mail->setBody($body);
 				$mail->send();
+
+				// save message to sent folder
+				$this->mailboxGateway->saveMessage(
+					$mailboxId,
+					2, //sent folder
+					json_encode([
+						'host' => PLATFORM_MAILBOX_HOST,
+						'mailbox' => $message['mailbox'],
+						'personal' => $this->session->user('name')
+					]),
+					json_encode([[
+						'personal' => $sender['personal'],
+						'mailbox' => $sender['mailbox'],
+						'host' => $sender['host']
+					]]),
+					$subject,
+					$body,
+					$html,
+					date('Y-m-d H:i:s'),
+					'',
+					1 // mark read
+				);
+
+				$this->mailboxGateway->setRead($message['id'], 1);
+				$this->mailboxGateway->setAnswered($message['id']);
 
 				echo json_encode(array(
 					'status' => 1,

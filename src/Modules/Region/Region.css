@@ -23,7 +23,7 @@ span.thread_title {
   font-size: 15px;
   margin-top: 15px !important;
   margin-left: 5px !important;
-  color: #4a3520;
+  color: var(--fs-brown);
   width: 55%;
 }
 
@@ -61,11 +61,11 @@ div.post div.xv_left {
 }
 
 div.post div.xv_left ul li a {
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 div.post div.xv_left ul li a:hover {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
   color: #ffffff;
 }
 
@@ -179,7 +179,7 @@ div.event {
 .user_pic .avatar span.bubble {
   margin-left: 37px !important;
   margin-top: -40px !important;
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
 }
 
 .user_pic_width {

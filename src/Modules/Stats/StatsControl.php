@@ -31,7 +31,7 @@ class StatsControl extends ConsoleControl
 
 		if ($allFsIds = $this->model->getAllFoodsaverIds()) {
 			foreach ($allFsIds as $fsid) {
-				$stat_gerettet = $this->model->getTotallyFetchedByFoodsaver($fsid);
+				$totalKilosFetchedByFoodsaver = $this->model->getTotalKilosFetchedByFoodsaver($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
 					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
 				);
@@ -67,7 +67,7 @@ class StatsControl extends ConsoleControl
 					'
 						UPDATE fs_foodsaver
 
-						SET 	stat_fetchweight = ' . (float)$stat_gerettet . ',
+						SET 	stat_fetchweight = ' . (float)$totalKilosFetchedByFoodsaver . ',
 						stat_fetchcount = ' . (int)$stat_fetchcount . ',
 						stat_postcount = ' . (int)$stat_post . ',
 						stat_buddycount = ' . (int)$stat_buddycount . ',

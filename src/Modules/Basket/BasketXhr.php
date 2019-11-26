@@ -8,6 +8,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
@@ -19,6 +20,7 @@ class BasketXhr extends Control
 	private $messageModel;
 	private $timeHelper;
 	private $imageService;
+	private $foodsaverGateway;
 
 	public function __construct(
 		Db $model,
@@ -26,7 +28,8 @@ class BasketXhr extends Control
 		BasketGateway $basketGateway,
 		MessageModel $messageModel,
 		TimeHelper $timeHelper,
-		ImageService $imageService
+		ImageService $imageService,
+		FoodsaverGateway $foodsaverGateway
 	) {
 		$this->model = $model;
 		$this->messageModel = $messageModel;
@@ -34,6 +37,7 @@ class BasketXhr extends Control
 		$this->basketGateway = $basketGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
+		$this->foodsaverGateway = $foodsaverGateway;
 
 		parent::__construct();
 
@@ -74,13 +78,25 @@ class BasketXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($this->translationHelper->s('basket_offer'));
 
+		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+
+		if (empty($basketProvider['lat']) || empty($basketProvider['lon'])) {
+			$dia->addContent($this->v_utils->v_info(
+				$this->translationHelper->s('basket_publish_error_address'),
+				$this->translationHelper->s('basket_reference'))
+			);
+			$dia->addButton($this->translationHelper->s('go_to_settings'), 'goTo(\'/?page=settings&sub=general\');');
+
+			return $dia->xhrout();
+		}
+
+		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+
 		$dia->addContent($this->v_utils->v_info($this->translationHelper->s('basket_reference_info'), $this->translationHelper->s('basket_reference')));
 
 		$dia->addPictureField('picture');
 
-		$foodsaver = $this->model->getValues(['telefon', 'handy'], 'foodsaver', $this->session->id());
-
-		$dia->addContent($this->view->basketForm($foodsaver));
+		$dia->addContent($this->view->basketForm($basketProvider));
 
 		$dia->addJs(
 			'
@@ -127,6 +143,7 @@ class BasketXhr extends Control
 	public function publish(): array
 	{
 		$data = false;
+		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
 
 		parse_str($_GET['data'], $data);
 
@@ -146,24 +163,6 @@ class BasketXhr extends Control
 
 		if (isset($data['filename'])) {
 			$pic = $this->preparePicture($data['filename']);
-		}
-
-		$lat = 0;
-		$lon = 0;
-
-		$location_type = 0;
-
-		if ($location_type == 0) {
-			$fs = $this->model->getValues(['lat', 'lon'], 'foodsaver', $this->session->id());
-			$lat = $fs['lat'];
-			$lon = $fs['lon'];
-		}
-
-		if ($lat == 0 && $lon == 0) {
-			return [
-				'status' => 1,
-				'script' => 'pulseInfo("' . $this->translationHelper->s('basket_publish_error_address') . '");',
-			];
 		}
 
 		$contact_type = 1;
@@ -195,9 +194,9 @@ class BasketXhr extends Control
 				$tel,
 				$contact_type,
 				$weight,
-				$location_type,
-				$lat,
-				$lon,
+				0,
+				(float)$basketProvider['lat'],
+				(float)$basketProvider['lon'],
 				$lifetime,
 				$this->session->user('bezirk_id'),
 				$this->session->id()

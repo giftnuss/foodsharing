@@ -7,12 +7,22 @@
 - Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
 - Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
 - Add amount of foodsavers to in-/active lists in region foodsaver menu !1117 @jofranz
+- Add "Termin"/"Date" and bot/amb "forum"/"board" as dashboard post type !1148 @jofranz
 - Add foodsaver id to store team search results when manually adding a foodsaver #660 !1150 @jofranz
 - Add foodsaver id to search results when starting a new chat #660 !1149 @jofranz
 - The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
 - Add fs id to food share point admin management search results #660 !1152 @jofranz
+- Warn basket users without location data and inform them why it makes sense to provide those in order to use baskets on the website !1143 @jofranz
 - Sort the stores-list by the added-on date as default !1161 @treee111
 - Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups !1186 @treee111
+- Save mail quickreplies to sent folder #611 !1166 @alex.simm
+- Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
+- Basket rest endpoint returns the list of requests to show them in the app !1169 @dthulke
+- Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
+- Redirect from Walls of NON-workgoups to the forum !1186 @treee111
+- Redirect from walls of NON-workgoups to the forum !1186 @treee111
+- Redirect from walls of NON-workgoups (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum !1186 @treee111
+- Redirect from walls of NON-workgoups like regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum, because no wall exists !1186 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
@@ -30,6 +40,8 @@
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
 - Change the close icon in pickup slot message to a better position #731 !1172 @chriswalg
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
+- Fixed FoodSharePoint deletion problem #642 !1167 @alex.simm
+- Show correct message immediatly after failing the 5th quiz try #729 !1176 @svenpascal
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
@@ -38,14 +50,19 @@
 - refactored statsman from model to gateway !1111 #9 @peter.toennies
 - refactrored the food share point module !1108 !1105 @peter.toennies
 - Removed broken nightly bell deletion maintenance script !1180 @dthulke
+- Uniform foodsharing colors on the whole page #75 !1174 @chriswalg
+- statistic kilo code refactoring !999 @jofranz
+- statistic kilo calculation optimized in sql !999 @fs_k
 
 ## Dev/Test/CI stuff
 
 - add dependency scanning GitLab CI configuration !1183 @nicksellen
+- adds error infos to the exception of an unpreperable query !1195 @dthulke
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
 - Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
+- Added docker toolbox download link for windows users in dev docs !733 @lebe1
 
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies

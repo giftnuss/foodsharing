@@ -36,7 +36,14 @@
       role="menuitem"
       class="dropdown-item"
     >
-      <small><i class="fas fa-plus" /> Neuen Betrieb anlegen</small>
+      <small><i class="fas fa-plus" /> {{ $i18n('store.add_new_store') }} </small>
+    </a>
+    <a
+      :href="$url('storeList')"
+      role="menuitem"
+      class="dropdown-item"
+    >
+      <small><i class="fas fa-list" /> {{ $i18n('store.all_of_my_stores') }} </small>
     </a>
   </nav-item-dropdown>
 </template>

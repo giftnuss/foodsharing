@@ -105,7 +105,7 @@ class StoreView extends View
 			$this->v_utils->v_form_select('kette_id', array('add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe bis maximal 3 Filialen ansprechen, niemals Filialen einer größeren Kette ansprechen! Betriebskettenregeln beachten!')),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', array('add' => true, 'values' => $categories)),
 
-			$this->v_utils->v_form_select('betrieb_status_id', array('values' => $status)),
+			$this->v_utils->v_form_select('betrieb_status_id', array('values' => $status, 'desc' => $this->v_utils->v_info($this->translationHelper->s('store_status_impact_explanation')))),
 
 			$this->v_utils->v_form_text('ansprechpartner'),
 			$this->v_utils->v_form_text('telefon'),

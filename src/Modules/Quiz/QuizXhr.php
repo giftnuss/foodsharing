@@ -561,14 +561,14 @@ class QuizXhr extends Control
 				// get the question
 				if ($question = $this->quizGateway->getQuestion($questions[$quizIndex]['id'])) {
 					// get possible answers
-					$comment_aswers = '';
+					$comment_answers = '';
 					if ($answers = $this->quizGateway->getAnswers($question['id'])) {
 						// random sorting for the answers
 						shuffle($answers);
 
 						$x = 1;
 						foreach ($answers as $a) {
-							$comment_aswers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', $this->sanitizerService->tt($a['text'], 25)) . "\n";
+							$comment_answers .= $x . '. Frage #' . $a['id'] . ' => ' . preg_replace('/[^a-zA-Z0-9\ \.]/', '', $this->sanitizerService->tt($a['text'], 25)) . "\n";
 							++$x;
 						}
 
@@ -599,7 +599,7 @@ class QuizXhr extends Control
 						$dia->addButton('Weiter', 'questcheckresult();return false;');
 						$dia->addButton('Pause', 'ajreq(\'pause\',{app:\'quiz\',sid:\'' . $session_id . '\'});');
 
-						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fas fa-spinner fa-spin"></i> \')');
+						$dia->addButton('nächste Frage', 'ajreq(\'next\',{app:\'quiz\',qid:' . (int)$question['id'] . ',commentanswers:"' . $this->sanitizerService->jsSafe($comment_answers) . '"});$(".quiz-questiondialog .ui-dialog-buttonset .ui-button").button( "option", "disabled", true );$(".quiz-questiondialog .ui-dialog-buttonset .ui-button span").prepend(\'<i class="fas fa-spinner fa-spin"></i> \')');
 
 						/*
 						 * add next() Button
@@ -717,7 +717,7 @@ class QuizXhr extends Control
 									special = 0;
 								}
 								clearInterval(counter);
-								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->sanitizerService->jsSafe($comment_aswers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
+								ajreq(\'next\',{answer:$(\'.qanswers\').serialize(),noco:$(\'.nocheck:checked\').length,app:\'quiz\',commentanswers:"' . $this->sanitizerService->jsSafe($comment_answers) . '",comment:$(\'#quizusercomment\').val(),qid:' . (int)$question['id'] . ',special:special});
 							}
 
 							function breaknext()
@@ -929,7 +929,7 @@ class QuizXhr extends Control
 						} else {
 							$atext = 'Richtig! Diese Antwort stimmt.';
 						}
-						$bg = '#599022';
+						$bg = 'var(--fs-green)';
 						$color = '#ffffff';
 					} // Antwort richtig, weil nicht angeklickt
 					else {

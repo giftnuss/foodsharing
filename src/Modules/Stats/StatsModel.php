@@ -36,27 +36,24 @@ class StatsModel extends Db
 		);
 	}
 
-	public function getTotallyFetchedByFoodsaver(int $fs_id)
+	public function getTotalKilosFetchedByFoodsaver(int $fs_id)
 	{
-		$out = 0;
-		if ($stores = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
-			FROM   `fs_abholer` a,
-			       `fs_betrieb` b
-			WHERE a.betrieb_id =b.id
-			AND   foodsaver_id = ' . $fs_id . '
-			AND   a.`date` < NOW()
-			GROUP BY a.`betrieb_id`
-	
-	
+		$savedWeight = 0;
+		if ($queryResult = $this->qOne('
+			SELECT 
+			       sum(fw.weight) AS saved 
+			FROM fs_abholer fa
+				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
+				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
+			WHERE
+			      fa.foodsaver_id = ' . $fs_id . '
+			  AND fa.date < now();
 		')
 		) {
-			foreach ($stores as $s) {
-				$out += $this->weightHelper->mapIdToKilos($s['abholmenge']) * $s['anz'];
-			}
+			$savedWeight = $queryResult;
 		}
 
-		return $out;
+		return $savedWeight;
 	}
 
 	public function getAllFoodsaverIds()

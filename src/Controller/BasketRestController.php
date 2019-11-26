@@ -99,6 +99,7 @@ final class BasketRestController extends AbstractFOSRestController
 	/**
 	 * Returns a list of baskets close to a given location. If the location is not valid the user's
 	 * home location is used. The distance is measured in kilometers.
+	 * Does not include baskets created by the current user.
 	 *
 	 * Returns 200 and a list of baskets, 400 if the distance is out of range, or 401 if not logged in.
 	 *
@@ -126,8 +127,12 @@ final class BasketRestController extends AbstractFOSRestController
 		$baskets = $this->gateway->listNearbyBasketsByDistance($this->session->id(), $location, $distance);
 		$baskets = array_map(function ($b) {
 			$basket = $this->gateway->getBasket((int)$b[self::ID]);
+			$request = $this->gateway->getRequest($basket[self::ID], $this->session->id(), $basket['foodsaver_id']);
+			if ($request) {
+				$request = [$request];
+			}
 
-			return $this->normalizeBasket($basket);
+			return $this->normalizeBasket($basket, $request);
 		}, $baskets);
 
 		return $this->handleView($this->view(['baskets' => $baskets], 200));
@@ -210,7 +215,15 @@ final class BasketRestController extends AbstractFOSRestController
 
 		$basket = $this->gateway->getBasket($basketId);
 		$this->verifyBasketIsAvailable($basket);
-		$basket = $this->normalizeBasket($basket);
+		if ($basket['fs_id'] == $this->session->id()) {
+			$requests = $this->gateway->listRequests($basketId, $this->session->id());
+		} else {
+			$requests = $this->gateway->getRequest($basketId, $this->session->id(), $basket['foodsaver_id']);
+			if ($requests) {
+				$requests = [$requests];
+			}
+		}
+		$basket = $this->normalizeBasket($basket, $requests);
 
 		return $this->handleView($this->view(['basket' => $basket], 200));
 	}
@@ -222,7 +235,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @return array
 	 */
-	private function normalizeBasket(array $basketData): array
+	private function normalizeBasket(array $basketData, array $updates = []): array
 	{
 		// set main properties
 		$creator = RestNormalization::normalizeFoodsaver($basketData, 'fs_');
@@ -238,7 +251,8 @@ final class BasketRestController extends AbstractFOSRestController
 			self::LAT => (float)$basketData[self::LAT],
 			self::LON => (float)$basketData[self::LON],
 			'creator' => $creator,
-			'requestCount' => $basketData['request_count']
+			'requestCount' => $basketData['request_count'],
+			self::REQUESTS => []
 		];
 
 		// add phone numbers if contact_type includes telephone
@@ -251,6 +265,14 @@ final class BasketRestController extends AbstractFOSRestController
 		}
 		$basket[self::TEL] = $tel;
 		$basket[self::MOBILE_NUMBER] = $handy;
+
+		// add requests, if there are any in the updates
+		foreach ($updates as $update) {
+			if ((int)$update[self::ID] === $basket[self::ID]) {
+				$basket[self::REQUESTS][] = $this->normalizeRequest($update);
+				$basket[self::UPDATED_AT] = max($basket[self::UPDATED_AT], (int)$update[self::TIME_TS]);
+			}
+		}
 
 		return $basket;
 	}
@@ -308,10 +330,7 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'Unable to create the basket.');
 		}
 
-		// return the created basket
-		$basket = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $basket], 200));
+		return $this->getBasketAction($basket[self::ID]);
 	}
 
 	/**
@@ -383,10 +402,7 @@ final class BasketRestController extends AbstractFOSRestController
 		$this->gateway->editBasket($basketId, $description, $basket[self::PICTURE], $location[self::LAT],
 			$location[self::LON], $this->session->id());
 
-		$basket = $this->gateway->getBasket($basketId);
-		$data = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $data], 200));
+		return $this->getBasketAction($basketId);
 	}
 
 	/**
@@ -435,9 +451,7 @@ final class BasketRestController extends AbstractFOSRestController
 		$basket[self::PICTURE] = $picname;
 		$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], $picname, $basket[self::LAT], $basket[self::LON], $this->session->id());
 
-		$data = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $data], 200));
+		return $this->getBasketAction($basketId);
 	}
 
 	/**
@@ -463,9 +477,7 @@ final class BasketRestController extends AbstractFOSRestController
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $basket[self::LAT], $basket[self::LON], $this->session->id());
 		}
 
-		$basket = $this->normalizeBasket($basket);
-
-		return $this->handleView($this->view(['basket' => $basket], 200));
+		return $this->getBasketAction($basketId);
 	}
 
 	/**
