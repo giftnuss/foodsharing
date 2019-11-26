@@ -29,33 +29,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function listUpcommingFetchDates($storeId)
-	{
-		if ($dates = $this->q('
-			SELECT 	`time`,
-					UNIX_TIMESTAMP(`time`) AS `time_ts`,
-					`fetchercount`
-			FROM 	fs_fetchdate
-			WHERE 	`betrieb_id` = ' . (int)$storeId . '
-			AND 	`time` > NOW()
-		')
-		) {
-			$out = [];
-			foreach ($dates as $d) {
-				$out[date('Y-m-d H-i', $d['time_ts'])] = [
-					'time' => date('H:i:s', $d['time_ts']),
-					'fetcher' => $d['fetchercount'],
-					'additional' => true,
-					'datetime' => $d['time']
-				];
-			}
-
-			return $out;
-		}
-
-		return false;
-	}
-
 	public function signout($storeId, $fsId)
 	{
 		$storeId = (int)$storeId;
