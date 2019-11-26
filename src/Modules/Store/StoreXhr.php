@@ -74,7 +74,7 @@ class StoreXhr extends Control
 		}
 
 		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
-			$this->model->deldate($storeId, $_GET['time']);
+			$this->storeGateway->deldate($storeId, $_GET['time']);
 
 			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
 

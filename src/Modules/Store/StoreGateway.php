@@ -498,6 +498,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $queryResult;
 	}
 
+	public function deleteDate(int $storeId, string $date): void
+	{
+		$this->db->delete('fs_abholer', ['betrieb_id' => $storeId, 'date' => $date]);
+		$this->db->delete('fs_fetchdate', ['betrieb_id' => $storeId, 'time' => $date]);
+	}
+
 	public function deleteAllDatesFromAFoodsaver(int $fs_id)
 	{
 		$storeIdsThatWillBeDeleted = $this->db->fetchAllValuesByCriteria(

@@ -29,13 +29,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function deldate($storeId, $date)
-	{
-		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `date` = ' . $this->dateval($date));
-
-		return $this->del('DELETE FROM `fs_fetchdate` WHERE `betrieb_id` = ' . (int)$storeId . ' AND `time` = ' . $this->dateval($date));
-	}
-
 	public function listMyBetriebe()
 	{
 		return $this->q('
