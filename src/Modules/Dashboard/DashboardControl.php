@@ -265,7 +265,7 @@ class DashboardControl extends Control
 		}
 
 		/*
-		 * check if there are stores not ordered to a bezirk
+		 * check if there are stores not bound to a region
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
 			$ids = array();
