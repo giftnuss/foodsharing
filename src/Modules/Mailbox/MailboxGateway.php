@@ -232,9 +232,9 @@ class MailboxGateway extends BaseGateway
 		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
 			if ($email_name) {
 				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->db->fetchValueByCriteria(
+			} elseif ($email_name = $this->db->fetchByCriteria(
 				'fs_bezirk',
-				'email_name',
+				['email_name'],
 				['mailbox_id' => $mb_id]
 			)) {
 				$mb['email_name'] = $email_name;
