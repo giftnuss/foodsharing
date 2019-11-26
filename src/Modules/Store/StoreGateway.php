@@ -345,6 +345,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $out;
 	}
 
+	public function getStoreRegionId(int $storeId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_betrieb',
+			'bezirk_id',
+			['id' => $storeId]
+		);
+	}
+
 	public function getStoreTeam($storeId): array
 	{
 		return $this->db->fetchAll('

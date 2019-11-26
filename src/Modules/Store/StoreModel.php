@@ -44,19 +44,6 @@ class StoreModel extends Db
 		}
 	}
 
-	public function getBetriebBezirkID($storeId)
-	{
-		$out = $this->qRow('
-			SELECT
-			`bezirk_id`
-
-			FROM 		`fs_betrieb`
-
-			WHERE 		`id` = ' . (int)$storeId);
-
-		return $out;
-	}
-
 	public function get_betrieb_kategorie()
 	{
 		$out = $this->q('

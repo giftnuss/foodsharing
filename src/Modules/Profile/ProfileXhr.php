@@ -9,14 +9,12 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 
 class ProfileXhr extends Control
 {
 	private $foodsaver;
-	private $storeModel;
 	private $bellGateway;
 	private $mailboxGateway;
 	private $regionGateway;
@@ -27,7 +25,6 @@ class ProfileXhr extends Control
 
 	public function __construct(
 		ProfileView $view,
-		StoreModel $storeModel,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
 		MailboxGateway $mailboxGateway,
@@ -37,7 +34,6 @@ class ProfileXhr extends Control
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
-		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
@@ -147,7 +143,7 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
-		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
+		$store = $this->storeGateway->getStoreRegionId($_GET['storeId']);
 
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
 			if ($this->storeGateway->removeFetcher(
