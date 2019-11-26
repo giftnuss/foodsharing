@@ -19,10 +19,7 @@
 - Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
 - Basket rest endpoint returns the list of requests to show them in the app !1169 @dthulke
 - Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
-- Redirect from Walls of NON-workgoups to the forum !1186 @treee111
-- Redirect from walls of NON-workgoups to the forum !1186 @treee111
-- Redirect from walls of NON-workgoups (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum !1186 @treee111
-- Redirect from walls of NON-workgoups like regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum, because no wall exists !1186 @treee111
+- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups !1186 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
