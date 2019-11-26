@@ -25,4 +25,9 @@ class SettingsGateway extends BaseGateway
 			}
 		}
 	}
+
+	public function unsubscribeNewsletter(string $email)
+	{
+		$this->db->update('fs_foodsaver', ['newsletter' => 0], ['email' => $email]);
+	}
 }

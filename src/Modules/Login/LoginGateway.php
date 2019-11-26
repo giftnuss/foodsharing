@@ -195,9 +195,4 @@ class LoginGateway extends BaseGateway
 
 		return false;
 	}
-
-	public function unsubscribeNewsletter(string $email)
-	{
-		$this->db->update('fs_foodsaver', ['newsletter' => 0], ['email' => $email]);
-	}
 }
