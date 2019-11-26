@@ -221,33 +221,38 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		try {
-			$email_name = $this->db->fetchValue(
-				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
-				[':mb_id' => $mb_id]
-			);
-		} catch (Exception $e) {
-			$email_name = '';
-		}
 		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
-			if ($email_name) {
-				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->db->fetchByCriteria(
-				'fs_bezirk',
-				['email_name'],
-				['mailbox_id' => $mb_id]
-			)) {
-				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->db->fetchValue(
-				'SELECT email_name FROM fs_mailbox_member WHERE mailbox_id = :mb_id AND email_name != "" LIMIT 1',
-				[':mb_id' => $mb_id]
-			)) {
-				$mb['email_name'] = $email_name;
-			} else {
-				$mb['email_name'] = '';
+			$mb['email_name'] = '';
+			try {
+				$mb['email_name'] = $this->db->fetchValue(
+					'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
+					[':mb_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
 			}
 
-			return $mb;
+			try {
+				$mb['email_name'] = $this->db->fetchValueByCriteria(
+					'fs_bezirk',
+					'email_name',
+					['mailbox_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
+			}
+
+			try {
+				$mb['email_name'] = $this->db->fetchValue(
+					'SELECT email_name FROM fs_mailbox_member WHERE mailbox_id = :mb_id AND email_name != "" LIMIT 1',
+					[':mb_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
+			}
 		}
 
 		return false;
