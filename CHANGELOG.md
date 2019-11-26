@@ -12,7 +12,7 @@
 - The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
 - Add fs id to food share point admin management search results #660 !1152 @jofranz
 - Sort the stores-list by the added-on date as default !1161 @treee111
-- Redirect from walls of NON-workgoups like regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum, because no wall exists !1186 @treee111
+- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups !1186 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
