@@ -5,14 +5,14 @@ namespace Foodsharing\Services;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
 class SearchService
 {
 	private $buddyGateway;
 	private $workGroupGateway;
-	private $storeModel;
+	private $storeGateway;
 	private $regionGateway;
 	private $session;
 	private $sanitizerService;
@@ -21,7 +21,7 @@ class SearchService
 	public function __construct(
 		BuddyGateway $buddyGateway,
 		WorkGroupGateway $workGroupGateway,
-		StoreModel $storeModel,
+		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
 		Session $session,
 		SanitizerService $sanitizerService,
@@ -29,7 +29,7 @@ class SearchService
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupGateway = $workGroupGateway;
-		$this->storeModel = $storeModel;
+		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
@@ -37,16 +37,17 @@ class SearchService
 	}
 
 	/**
-	 * Method to generate search Index for instant seach.
+	 * Method to generate search Index for instant search.
 	 */
 	public function generateIndex($fsId)
 	{
+		$userId = $this->session->id();
 		$index = [];
 
 		/*
 		 * Buddies Load persons in the index array that connected with the user
 		*/
-		if ($buddies = $this->buddyGateway->listBuddies($this->session->id())) {
+		if ($buddies = $this->buddyGateway->listBuddies($userId)) {
 			$result = [];
 			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';
@@ -102,7 +103,7 @@ class SearchService
 		/*
 		 * Betriebe load food stores connected to the user in the array
 		*/
-		if ($betriebe = $this->storeModel->listMyBetriebe()) {
+		if ($betriebe = $this->storeGateway->listMyBetriebe($userId)) {
 			$result = [];
 			foreach ($betriebe as $b) {
 				$result[] = [
@@ -123,7 +124,7 @@ class SearchService
 		/*
 		 * Bezirke load Bezirke connected to the user in the array
 		*/
-		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($this->session->id());
+		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($userId);
 		$result = [];
 		foreach ($bezirke as $b) {
 			$result[] = [

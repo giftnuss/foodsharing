@@ -112,7 +112,26 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function getMyStores($fs_id, $regionId, $options = []): array
+	public function listMyStores(int $fsId): array
+	{
+		return $this->fetchAll('
+			SELECT 	b.id,
+					b.name,
+					b.plz,
+					b.stadt,
+					b.str,
+					b.hsnr
+
+			FROM	fs_betrieb b,
+					INNER JOIN fs_betrieb_team t
+					ON b.id = t.betrieb_id
+
+			WHERE	t.foodsaver_id = :fsId
+					AND	t.active = 1
+		', [':fsId' => $fsId]);
+	}
+
+	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -804,11 +823,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			FROM	fs_foodsaver fs
 					INNER JOIN fs_abholer a
 						ON a.foodsaver_id = fs.id
-	
+
 			WHERE	a.betrieb_id = :storeId
 					AND a.date >= :from
 					AND a.date <= :to
-	
+
 			ORDER BY a.date
 		',
 		[

@@ -29,31 +29,6 @@ class StoreModel extends Db
 		parent::__construct();
 	}
 
-	public function listMyBetriebe()
-	{
-		return $this->q('
-			SELECT 	b.id,
-					b.name,
-					b.plz,
-					b.stadt,
-					b.str,
-					b.hsnr
-
-			FROM
-				fs_betrieb b,
-				fs_betrieb_team t
-
-			WHERE
-				b.id = t.betrieb_id
-
-			AND
-				t.foodsaver_id = ' . $this->session->id() . '
-
-			AND
-				t.active = 1
-		');
-	}
-
 	public function listUpcommingFetchDates($storeId)
 	{
 		if ($dates = $this->q('
