@@ -114,7 +114,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function listMyStores(int $fsId): array
 	{
-		return $this->fetchAll('
+		return $this->db->fetchAll('
 			SELECT 	b.id,
 					b.name,
 					b.plz,
