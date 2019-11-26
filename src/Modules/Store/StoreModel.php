@@ -44,19 +44,6 @@ class StoreModel extends Db
 		}
 	}
 
-	public function get_betrieb_kategorie()
-	{
-		$out = $this->q('
-				SELECT
-				`id`,
-				`name`
-
-				FROM 		`fs_betrieb_kategorie`
-				ORDER BY `name`');
-
-		return $out;
-	}
-
 	public function getOne_betrieb($storeId)
 	{
 		$out = $this->qRow('
