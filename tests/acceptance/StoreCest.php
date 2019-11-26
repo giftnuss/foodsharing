@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use Codeception\Util\Locator;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 
 class StoreCest
 {
@@ -15,7 +17,7 @@ class StoreCest
 		$this->region = $I->createRegion();
 		$regionId = $this->region['id'];
 
-		$this->store = $I->createStore($regionId);
+		$this->store = $I->createStore($regionId, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
 
 		$this->foodsaver = $I->createFoodsaver();
 		$I->addBezirkMember($regionId, $this->foodsaver['id']);
