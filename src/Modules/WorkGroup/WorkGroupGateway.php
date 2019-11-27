@@ -54,14 +54,23 @@ class WorkGroupGateway extends BaseGateway
 		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $memberIds, false);
 
 		if ($memberIds) {
+			$currentMemberIds = $this->db->fetchAllValuesByCriteria(
+				'fs_foodsaver_has_bezirk',
+				'foodsaver_id',
+				[
+					'bezirk_id' => $regionId,
+					'active' => 1
+				]
+			);
+
+			$deletedMemberIds = array_diff($currentMemberIds, $memberIds);
+
 			// delete all members if they're not in the submitted array
-			$this->db->execute('
-				DELETE
-				FROM	`fs_foodsaver_has_bezirk`
-				WHERE	`bezirk_id` = ' . $regionId . '
-				AND		`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')
-				AND		`active` = 1
-			');
+			foreach ($deletedMemberIds as $m) {
+				$this->db->delete('fs_foodsaver_has_bezirk', [
+					'foodsaver_id' => $m
+				]);
+			}
 
 			// insert new members
 			foreach ($memberIds as $m) {
