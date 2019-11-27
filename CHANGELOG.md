@@ -39,6 +39,7 @@
 - Fixed FoodSharePoint deletion problem #642 !1168 @alex.simm
 - Show correct message immediately after failing the 5th quiz try #729 !1176 @svenpascal
 - Narrow down permissions to not allow ambassadors calling newsletter sending xhr methods !1197 @jofranz
+- Fix database method which prevents newsletter sending #754 !1198 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
