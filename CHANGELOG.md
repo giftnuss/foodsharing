@@ -33,7 +33,6 @@
 - Ensures quiz break message after three failures inbetween 30 days #736 !1162 @svenpascal
 - Prevent forum thread email sending to countries and federal states !1160 @jofranz
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
-- Change the close icon in pickup slot message to a better position #731 !1172 @chriswalg
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
 - Fixed FoodSharePoint deletion problem #642 !1167 @alex.simm
 - Show correct message immediatly after failing the 5th quiz try #729 !1176 @svenpascal
