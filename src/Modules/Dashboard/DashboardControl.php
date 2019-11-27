@@ -268,12 +268,12 @@ class DashboardControl extends Control
 		 * check if there are stores not bound to a region
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$ids = array();
+			$storeIds = array();
 			foreach ($_SESSION['client']['verantwortlich'] as $b) {
-				$ids[] = (int)$b['betrieb_id'];
+				$storeIds[] = (int)$b['betrieb_id'];
 			}
-			if (!empty($ids)) {
-				if ($this->dashboardGateway->countStoresWithoutDistrict($ids) > 0) {
+			if (!empty($storeIds)) {
+				if ($this->dashboardGateway->countStoresWithoutDistrict($storeIds) > 0) {
 					$this->pageHelper->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}

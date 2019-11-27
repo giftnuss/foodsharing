@@ -29,7 +29,7 @@ class MailboxControl extends Control
 	public function dlattach()
 	{
 		if (isset($_GET['mid'], $_GET['i'])) {
-			if ($m = $this->mailboxGateway->getAttachment($_GET['mid'])) {
+			if ($m = $this->mailboxGateway->getAttachmentFileInfo($_GET['mid'])) {
 				if ($this->mailboxPermissions->mayMailbox($m['mailbox_id'])) {
 					if ($attach = json_decode($m['attach'], true)) {
 						if (isset($attach[(int)$_GET['i']])) {

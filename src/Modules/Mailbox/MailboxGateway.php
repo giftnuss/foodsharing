@@ -532,7 +532,13 @@ class MailboxGateway extends BaseGateway
 		}
 	}
 
-	public function getAttachment(int $messageId)
+	/**
+	 * Returns the mailbox ID and attachment info for the message ID. The attachment info is a json encoded list that
+	 * contains 'filename', 'origname', and 'mime' for each attachment.
+	 * @param int $messageId
+	 * @return array
+	 */
+	public function getAttachmentFileInfo(int $messageId)
 	{
 		return $this->db->fetchByCriteria('fs_mailbox_message', ['mailbox_id', 'attach'], ['id' => $messageId]);
 	}
