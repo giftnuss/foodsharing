@@ -34,8 +34,8 @@
 - Prevent forum thread email sending to countries and federal states !1160 @jofranz
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
-- Fixed FoodSharePoint deletion problem #642 !1167 @alex.simm
-- Show correct message immediatly after failing the 5th quiz try #729 !1176 @svenpascal
+- Fixed FoodSharePoint deletion problem #642 !1168 @alex.simm
+- Show correct message immediately after failing the 5th quiz try #729 !1176 @svenpascal
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
@@ -52,11 +52,11 @@
 
 - add dependency scanning GitLab CI configuration !1183 @nicksellen
 - adds error infos to the exception of an unpreperable query !1195 @dthulke
+- Added docker toolbox download link for windows users in dev docs #733 !1147 @lebe1
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
 - Updated duplicated delete() method to avoid deprecation error crashes in sentry !1141 @jofranz
-- Added docker toolbox download link for windows users in dev docs !733 @lebe1
 
 # 2019-10-08 Hotfix
 - nearby baskets on dashboard were missing foodsaver name and creation time @peter.toennies
