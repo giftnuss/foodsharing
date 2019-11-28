@@ -14,6 +14,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\ImageService;
@@ -168,11 +169,11 @@ class SettingsView extends View
 				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], array(
 					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
 					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
-					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_food_share_point_mail')),
-						array('id' => 2, 'name' => $this->translationHelper->s('follow_food_share_point_alert')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_food_share_point_none'))
-					),
+					'values' => [
+						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_food_share_point_mail')],
+						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_alert')],
+						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_food_share_point_none')]
+					],
 					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
 				));
 			}
@@ -184,10 +185,10 @@ class SettingsView extends View
 				$out .= $this->v_utils->v_form_radio('thread_' . $fsp['id'], array(
 					'label' => $this->translationHelper->sv('follow_thread', $fsp['name']),
 					'desc' => $this->translationHelper->sv('follow_thread_desc', $fsp['name']),
-					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_thread_mail')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_thread_none'))
-					)
+					'values' => [
+						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_thread_mail')],
+						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_thread_none')]
+					]
 				));
 			}
 		}
@@ -195,17 +196,17 @@ class SettingsView extends View
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', array(
 			$this->v_utils->v_form_radio('newsletter', array(
 				'desc' => $this->translationHelper->s('newsletter_desc'),
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no')),
-					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
-				)
+				'values' => [
+					['id' => 0, 'name' => $this->translationHelper->s('no')],
+					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+				]
 			)),
 			$this->v_utils->v_form_radio('infomail_message', array(
 				'desc' => $this->translationHelper->s('infomail_message_desc'),
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no')),
-					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
-				)
+				'values' => [
+					['id' => 0, 'name' => $this->translationHelper->s('no')],
+					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+				]
 			)),
 			$out
 		), array('submit' => $this->translationHelper->s('save'))), $this->translationHelper->s('settings_info'), array('class' => 'ui-padding'));
