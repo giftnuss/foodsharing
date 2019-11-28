@@ -320,13 +320,6 @@ class StoreUserView extends View
 		return $this->v_utils->v_field($table, $title);
 	}
 
-	public function format_db_date($date): string
-	{
-		$part = explode('-', $date);
-
-		return (int)$part[2] . '. ' . $this->translationHelper->s('month_' . (int)$part[1]);
-	}
-
 	public function u_form_abhol_table($zeiten = false, $option = array())
 	{
 		$out = '
