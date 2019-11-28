@@ -624,7 +624,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function addFoodSharePointAdmin($user, $foodSharePoint, $extra_params = [])
 	{
-		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => 2]));
+		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => FollowerType::FOOD_SHARE_POINT_MANAGER]));
 	}
 
 	public function addFoodSharePointPost($user, $foodSharePoint, $extra_params = [])
