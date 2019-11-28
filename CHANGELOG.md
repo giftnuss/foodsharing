@@ -38,7 +38,6 @@
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
 - Fixed FoodSharePoint deletion problem #642 !1168 @alex.simm
 - Show correct message immediately after failing the 5th quiz try #729 !1176 @svenpascal
-- Fixed FoodSharePoint deletion problem #642 !1167 @alex.simm
 - Narrow down permissions to not allow ambassadors calling newsletter sending xhr methods !1197 @jofranz
 
 ## Refactoring
