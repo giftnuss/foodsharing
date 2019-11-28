@@ -13,6 +13,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\ImageService;
@@ -157,11 +158,6 @@ class SettingsView extends View
 
 		if ($foodSharePoints) {
 			foreach ($foodSharePoints as $fsp) {
-				$disabled = false;
-				if ($fsp['type'] == 2) {
-					$disabled = true;
-				}
-
 				$this->pageHelper->addJs('
 					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
@@ -177,7 +173,7 @@ class SettingsView extends View
 						array('id' => 2, 'name' => $this->translationHelper->s('follow_food_share_point_alert')),
 						array('id' => 0, 'name' => $this->translationHelper->s('follow_food_share_point_none'))
 					),
-					'disabled' => $disabled
+					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
 				));
 			}
 		}
