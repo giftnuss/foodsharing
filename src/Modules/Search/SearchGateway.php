@@ -22,6 +22,7 @@ class SearchGateway extends BaseGateway
 	 * @param string $q Query string / search term
 	 * @param bool $showDetails show detailed address info if true. Show only city if false
 	 * @param array $regionToSearch Optional region id to limit search to
+	 *
 	 * @return array Array of regions, foodsavers and stores containing the search term
 	 */
 	public function search(string $q, bool $showDetails, array $regionToSearch = []): array
