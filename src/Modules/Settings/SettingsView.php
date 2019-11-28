@@ -13,6 +13,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
@@ -59,15 +60,15 @@ class SettingsView extends View
 	{
 		$this->dataHelper->setEditData($sleep);
 
-		if ($sleep['sleep_status'] != 1) {
+		if ($sleep['sleep_status'] != SleepStatus::TEMP) {
 			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');
 		}
 
-		if ($sleep['sleep_status'] == 0) {
+		if ($sleep['sleep_status'] == SleepStatus::NONE) {
 			$this->pageHelper->addJs('$("#sleep_msg-wrapper").hide();');
 		}
 
-		if ($sleep['sleep_status'] == 1) {
+		if ($sleep['sleep_status'] == SleepStatus::TEMP) {
 			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_from']);
 			if ($date === false) {
 				$date = new DateTime();
@@ -137,11 +138,11 @@ class SettingsView extends View
 			$this->v_utils->v_info($this->translationHelper->s('sleepmode_info')),
 			$this->v_utils->v_info($this->translationHelper->s('sleepmode_show')),
 			$this->v_utils->v_form_select('sleep_status', array(
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no_sleepmode')),
-					array('id' => 1, 'name' => $this->translationHelper->s('temp_sleepmode')),
-					array('id' => 2, 'name' => $this->translationHelper->s('full_sleepmode'))
-				)
+				'values' => [
+					['id' => SleepStatus::NONE, 'name' => $this->translationHelper->s('no_sleepmode')],
+					['id' => SleepStatus::TEMP, 'name' => $this->translationHelper->s('temp_sleepmode')],
+					['id' => SleepStatus::FULL, 'name' => $this->translationHelper->s('full_sleepmode')]
+				]
 			)),
 			$this->v_utils->v_form_daterange(),
 			$this->v_utils->v_form_textarea('sleep_msg', array(
