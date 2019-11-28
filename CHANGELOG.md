@@ -54,6 +54,7 @@
 - statistic kilo code refactoring !999 @jofranz
 - statistic kilo calculation optimized in sql !999 @fs_k
 - Removed unused xhr_out method !1208 #132 @alex.simm
+- Introduce content id constants for content pages !1200 @jofranz
 
 ## Dev/Test/CI stuff
 
