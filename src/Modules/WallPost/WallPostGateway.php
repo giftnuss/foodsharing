@@ -8,7 +8,6 @@ class WallPostGateway extends BaseGateway
 {
 	private $targets = [
 		'application',
-		'basket',
 		'bezirk',
 		'event',
 		'fairteiler',
