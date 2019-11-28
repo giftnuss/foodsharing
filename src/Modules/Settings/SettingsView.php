@@ -172,7 +172,7 @@ class SettingsView extends View
 					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
 					'values' => [
 						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_food_share_point_mail')],
-						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_alert')],
+						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_bell')],
 						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_food_share_point_none')]
 					],
 					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
