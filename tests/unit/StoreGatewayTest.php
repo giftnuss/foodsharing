@@ -166,7 +166,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$store = $this->tester->createStore($this->region_id);
 		$foodsaver = $this->tester->createFoodsaver();
 
-		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new Carbon('1970-01-01'), );
+		$this->gateway->addFetcher($foodsaver['id'], $store['id'], new Carbon('1970-01-01'));
 
 		$this->tester->updateInDatabase(
 			'fs_bell',
