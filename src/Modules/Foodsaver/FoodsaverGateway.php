@@ -884,7 +884,7 @@ final class FoodsaverGateway extends BaseGateway
 
 	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
 	{
-		$storeIds = $this->db->fetchAll('
+		$storeIds = $this->db->fetchAllValues('
 			SELECT 	bt.betrieb_id as id
 			FROM 	fs_betrieb_team bt
 			WHERE 	bt.foodsaver_id = :fsId
