@@ -168,8 +168,8 @@ class FoodSharePointControl extends Control
 			return false;
 		}
 
-		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
-			$this->foodSharePointGateway->follow($foodSharePointId, $foodSharerId, $infoType);
+		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], false)) {
+			$this->foodSharePointGateway->follow($foodSharerId, $foodSharePointId, $infoType);
 		} else {
 			$this->foodSharePointGateway->unfollow($foodSharerId, $foodSharePointId);
 		}

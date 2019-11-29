@@ -245,7 +245,7 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function follow(int $foodSharePointId, int $foodsaverId, $infoType): void
+	public function follow(int $foodsaverId, int $foodSharePointId, int $infoType): void
 	{
 		$this->db->insertIgnore(
 			'fs_fairteiler_follower',
