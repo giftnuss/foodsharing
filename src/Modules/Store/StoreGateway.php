@@ -438,6 +438,23 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':betrieb_id' => $storeId]);
 	}
 
+	public function getStoreManager(int $storeId): array
+	{
+		return $this->db->fetchAllValues('
+				SELECT 	t.`foodsaver_id`,
+						t.`verantwortlich`
+
+				FROM 	`fs_betrieb_team` t
+						INNER JOIN  `fs_foodsaver` fs
+							ON fs.id = t.foodsaver_id
+
+				WHERE 	t.`betrieb_id` = :storeId
+						AND t.active = 1
+						AND t.verantwortlich = 1
+						AND fs.deleted_at IS NULL
+		', [':storeId' => $storeId]);
+	}
+
 	public function getAllStoreManagers(): array
 	{
 		$verant = $this->db->fetchAll('

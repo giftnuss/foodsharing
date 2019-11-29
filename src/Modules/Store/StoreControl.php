@@ -85,7 +85,7 @@ class StoreControl extends Control
 				$this->pageHelper->addBread($this->translationHelper->s('add_new_store'));
 
 				if (isset($_GET['id'])) {
-					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
+					$g_data['foodsaver'] = $this->storeGateway->getStoreManager($_GET['id']);
 				}
 
 				$chosenRegion = ($regionId > 0 && $this->regionGateway->getType($regionId) <= Type::REGION) ? $region : null;
@@ -121,7 +121,7 @@ class StoreControl extends Control
 
 				$region = $this->model->getValues(['id', 'name'], 'bezirk', $data['bezirk_id']);
 				if (isset($_GET['id'])) {
-					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
+					$g_data['foodsaver'] = $this->storeGateway->getStoreManager($_GET['id']);
 				}
 
 				$this->pageHelper->addContent($this->view->betrieb_form($region, '', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->storeGateway->getStoreCategories(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));

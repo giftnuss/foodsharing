@@ -185,7 +185,8 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_betrieb', ['bezirk_id' => $newRegion['id'], 'id' => $this->store['id']]);
 	}
 
-	public function testDeleteDate() {
+	public function testDeleteDate()
+	{
 		$storeId = $this->store['id'];
 		$date = Carbon::now();
 		$this->tester->haveInDatabase('fs_abholer', ['betrieb_id' => $storeId, 'date' => $date]);

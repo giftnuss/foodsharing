@@ -97,22 +97,6 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function getBetriebLeader($storeId)
-	{
-		return $this->qCol('
-				SELECT 		t.`foodsaver_id`,
-							t.`verantwortlich`
-
-				FROM 		`fs_betrieb_team` t
-				INNER JOIN  `fs_foodsaver` fs ON fs.id = t.foodsaver_id
-
-				WHERE 		t.`betrieb_id` = ' . (int)$storeId . '
-				AND 		t.active = 1
-				AND 		t.verantwortlich = 1
-				AND			fs.deleted_at IS NULL
-		');
-	}
-
 	public function getBasics_lebensmittel()
 	{
 		return $this->q('
