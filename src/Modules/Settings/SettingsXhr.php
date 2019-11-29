@@ -6,6 +6,7 @@ use DateTime;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 
@@ -144,9 +145,9 @@ class SettingsXhr extends Control
 		$msg = '';
 
 		$states = array(
-			0 => true, // normal available
-			1 => true, // not available for a while
-			2 => true // not available unsure how long
+			SleepStatus::NONE => true,
+			SleepStatus::TEMP => true,
+			SleepStatus::FULL => true
 		);
 
 		if (isset($_POST['from']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['from'])) {
