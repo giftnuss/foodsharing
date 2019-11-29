@@ -108,7 +108,7 @@ class SettingsCest
 	{
 		$selector = $this->createSelector('fairteiler_' . $this->foodSharePoint['id']);
 
-		$I->login($this->foodsaver['email']);
+		$I->login($this->fspAdmin['email']);
 		$I->amOnPage('/?page=settings&sub=info');
 		$I->waitForPageBody();
 		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
