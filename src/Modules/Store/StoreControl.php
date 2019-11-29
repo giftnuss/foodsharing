@@ -9,6 +9,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\StorePermissions;
@@ -143,8 +144,8 @@ class StoreControl extends Control
 				return [
 					'id' => (int)$store['id'],
 					'name' => $store['name'],
-					// status 3 and 5 are the same (in cooperation), always return 3
-					'status' => $store['betrieb_status_id'] == 5 ? 3 : (int)$store['betrieb_status_id'],
+					// status COOPERATION_STARTING and COOPERATION_ESTABLISHED are the same (in cooperation), always return COOPERATION_STARTING
+					'status' => $store['betrieb_status_id'] == CooperationStatus::COOPERATION_ESTABLISHED ? CooperationStatus::COOPERATION_STARTING : (int)$store['betrieb_status_id'],
 					'added' => $store['added'],
 					'region' => $store['bezirk_name'],
 					'address' => $store['anschrift'],
