@@ -22,7 +22,7 @@ class SearchHelper
 		return $this->searchGateway->search(
 			$q,
 			$this->session->may('orga'),
-			$isAdmin ? [] : $this->session->getCurrentRegionId()
+			$isAdmin ? [] : (array)$this->session->getCurrentRegionId()
 		);
 	}
 }
