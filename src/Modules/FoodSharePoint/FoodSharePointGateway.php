@@ -153,6 +153,25 @@ class FoodSharePointGateway extends BaseGateway
 		return [];
 	}
 
+	public function listFoodsaversFoodSharePoints(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				ft.id,
+				ft.name,
+				ff.infotype,
+				ff.`type`
+
+			FROM
+				`fs_fairteiler_follower` ff
+				LEFT JOIN `fs_fairteiler` ft
+				ON ff.fairteiler_id = ft.id
+
+			WHERE
+				ff.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+	}
+
 	public function listFoodSharePointsNested(array $regionIds = []): array
 	{
 		if (!empty($regionIds) && ($foodSharePoint = $this->db->fetchAll(
