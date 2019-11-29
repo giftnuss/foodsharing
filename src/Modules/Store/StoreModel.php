@@ -97,16 +97,6 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function getBasics_lebensmittel()
-	{
-		return $this->q('
-			SELECT 	 	`id`,
-						`name`
-
-			FROM 		`fs_lebensmittel`
-			ORDER BY `name`');
-	}
-
 	public function getBasics_kette()
 	{
 		return $this->q('

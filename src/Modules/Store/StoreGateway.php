@@ -364,6 +364,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		');
 	}
 
+	public function getBasics_food()
+	{
+		return $this->db->fetchAll('
+			SELECT 	`id`,
+					`name`
+			FROM 	`fs_lebensmittel`
+			ORDER BY `name`
+		');
+	}
+
 	public function getStoreTeam($storeId): array
 	{
 		return $this->db->fetchAll('
@@ -977,10 +987,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		return $this->db->count('fs_abholer', ['betrieb_id' => $storeId, 'confirmed' => 0, 'date >' => $this->db->now()]);
 	}
-
-	/*
-	 * Private methods
-	 */
 
 	private function getOne_kette($id): array
 	{
