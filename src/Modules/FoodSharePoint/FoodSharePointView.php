@@ -134,10 +134,16 @@ class FoodSharePointView extends View
 
 		return '
 			<div id="follow-hidden">
-				' . $this->v_utils->v_form_radio('infotype', array('desc' => $this->translationHelper->s('infotype_desc'), 'values' => array(
-				array('id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('infotype_email')),
-				array('id' => InfoType::BELL, 'name' => $this->translationHelper->s('infotype_bell'))
-			))) . '
+				' . $this->v_utils->v_form_radio(
+					'infotype',
+					[
+						'desc' => $this->translationHelper->s('infotype_desc'),
+						'values' => [
+							['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('infotype_email')],
+							['id' => InfoType::BELL, 'name' => $this->translationHelper->s('infotype_bell')]
+						]
+					]
+				) . '
 			</div>
 		';
 	}

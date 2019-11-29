@@ -4,14 +4,18 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class SettingsCest
 {
-	private $foodsaver;
+	private $region;
 	private $foodSharePoint;
+
+	private $fspAdmin;
+	private $foodsaver;
 
 	public function _before(AcceptanceTester $I)
 	{
 		$this->foodsaver = $I->createFoodsaver();
-		$region = $I->createRegion();
-		$this->foodSharePoint = $I->createFoodSharePoint($this->foodsaver['id'], $region['id']);
+		$this->fspAdmin = $I->createFoodsaver();
+		$this->region = $I->createRegion();
+		$this->foodSharePoint = $I->createFoodSharePoint($this->fspAdmin['id'], $this->region['id']);
 	}
 
 	/**
@@ -41,6 +45,37 @@ class SettingsCest
 		$I->seeOptionIsSelected($selector, $targetValue);
 	}
 
+	public function userCanFollowAFoodsharepoint(AcceptanceTester $I)
+	{
+		$newFsp = $I->createFoodSharePoint($this->fspAdmin['id'], $this->region['id']);
+
+		$I->login($this->foodsaver['email']);
+		$I->amOnPage($I->foodSharePointGetUrl($newFsp['id']));
+		$I->waitForPageBody();
+		$I->click('Diesem Fair-Teiler folgen');
+		$I->waitForText($newFsp['name'] . ' folgen');
+		$I->click('Speichern');
+		$I->waitForPageBody();
+
+		$I->see('Fair-Teiler nicht mehr folgen');
+		$I->amOnPage('/?page=settings&sub=info');
+		$I->waitForPageBody();
+		$I->see('Updates vom Fair-Teiler "' . $newFsp['name'] . '"');
+	}
+
+	public function userCanUnfollowAFoodsharepoint(AcceptanceTester $I)
+	{
+		$I->addFoodSharePointFollower($this->foodsaver['id'], $this->foodSharePoint['id']);
+
+		$I->login($this->foodsaver['email']);
+		$I->amOnPage($I->foodSharePointGetUrl($this->foodSharePoint['id']));
+		$I->waitForPageBody();
+		$I->click('Fair-Teiler nicht mehr folgen');
+		$I->waitForPageBody();
+
+		$I->see('Diesem Fair-Teiler folgen');
+	}
+
 	/**
 	 * @param AcceptanceTester $I
 	 * @param \Codeception\Example $example
@@ -52,10 +87,9 @@ class SettingsCest
 	{
 		$targetValue = $example[0];
 		$selector = $this->createSelector('fairteiler_' . $this->foodSharePoint['id']);
-		$follower = $I->createFoodsaver();
-		$I->addFoodSharePointFollower($follower['id'], $this->foodSharePoint['id']);
+		$I->addFoodSharePointFollower($this->foodsaver['id'], $this->foodSharePoint['id']);
 
-		$I->login($follower['email']);
+		$I->login($this->foodsaver['email']);
 		$I->amOnPage('/?page=settings&sub=info');
 		$I->waitForPageBody();
 		$I->seeOptionIsSelected($selector, InfoType::EMAIL);

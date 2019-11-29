@@ -162,13 +162,13 @@ class FoodSharePointControl extends Control
 		$this->view->setRegion($this->region);
 	}
 
-	private function handleFollowUnfollow($foodSharePointId, int $foodSharerId, $follow, $infoType): bool
+	private function handleFollowUnfollow($foodSharePointId, int $foodSharerId, $follow, int $infoType): bool
 	{
 		if ($follow === null) {
 			return false;
 		}
 
-		if ($follow === 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], false)) {
+		if ($follow == 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], false)) {
 			$this->foodSharePointGateway->follow($foodSharerId, $foodSharePointId, $infoType);
 		} else {
 			$this->foodSharePointGateway->unfollow($foodSharerId, $foodSharePointId);
