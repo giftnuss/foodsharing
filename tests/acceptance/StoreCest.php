@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Codeception\Util\Locator;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 
 class StoreCest
