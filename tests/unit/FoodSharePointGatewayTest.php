@@ -146,7 +146,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		// Our foodsaver is an admin of the fairteiler so already has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
 
-		$this->gateway->follow($this->foodSharePoint['id'], $this->foodsaver['id'], 1);
+		$this->gateway->follow($this->foodsaver['id'], $this->foodSharePoint['id'], InfoType::EMAIL);
 
 		// They should keep their type 2 (meaning admin)
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
