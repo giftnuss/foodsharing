@@ -354,7 +354,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function getStoreCategories()
+	public function getStoreCategories(): array
 	{
 		return $this->db->fetchAll('
 			SELECT	`id`,
@@ -364,12 +364,22 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		');
 	}
 
-	public function getBasics_food()
+	public function getBasics_food(): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	`id`,
 					`name`
 			FROM 	`fs_lebensmittel`
+			ORDER BY `name`
+		');
+	}
+
+	public function getBasics_chain(): array
+	{
+		return $this->db->fetchAll('
+			SELECT	`id`,
+					`name`
+			FROM 	`fs_kette`
 			ORDER BY `name`
 		');
 	}

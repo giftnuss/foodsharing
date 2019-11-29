@@ -97,16 +97,6 @@ class StoreModel extends Db
 		return $out;
 	}
 
-	public function getBasics_kette()
-	{
-		return $this->q('
-			SELECT 	 	`id`,
-						`name`
-
-			FROM 		`fs_kette`
-			ORDER BY `name`');
-	}
-
 	public function listBetriebReq($bezirk_id)
 	{
 		return $this->q('
