@@ -206,18 +206,13 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$maxDate = $date->add('1 day');
 		$dow = $date->weekday();
 
-		// stores without cooperation should always result in null
-		$store = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::NO_CONTACT]);
+		// stores should result is a non-null date if there are free slots available
+		$store = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
 		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => 1]);
-		$this->assertNull($this->service->getNextAvailablePickupTime($store['id'], $maxDate, $this->foodsaver['id']));
+		$this->assertEquals($this->service->getNextAvailablePickupTime($store['id'], $maxDate), $date);
 
-		// stores with cooperation should result is a non-null date if there are free slots available
-		$store2 = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
-		$this->tester->addRecurringPickup($store2['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => 1]);
-		$this->assertEquals($this->service->getNextAvailablePickupTime($store2['id'], $maxDate, $this->foodsaver['id']), $date);
-
-		$this->tester->addCollector($this->foodsaver['id'], $store2['id'], ['date' => $date]);
-		$this->assertNull($this->service->getNextAvailablePickupTime($store2['id'], $maxDate, $this->foodsaver['id']));
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
+		$this->assertNull($this->service->getNextAvailablePickupTime($store['id'], $maxDate));
 	}
 
 	public function testAvailablePickupStatus()
@@ -225,17 +220,12 @@ class StoreServiceTest extends \Codeception\Test\Unit
 		$date = Carbon::now()->add('2 days')->hours(16)->minutes(30)->seconds(0)->microseconds(0);
 		$dow = $date->weekday();
 
-		// stores without cooperation should have status == 0
-		$store = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::NO_CONTACT]);
+		// stores should have status != 0 if free slots are available
+		$store = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
 		$this->tester->addRecurringPickup($store['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => 1]);
+		$this->assertEquals($this->service->getAvailablePickupStatus($store['id']), 2);
+
+		$this->tester->addCollector($this->foodsaver['id'], $store['id'], ['date' => $date]);
 		$this->assertEquals($this->service->getAvailablePickupStatus($store['id']), 0);
-
-		// stores with cooperatin should have status != 0 if free slots are available
-		$store2 = $this->tester->createStore($this->region_id, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
-		$this->tester->addRecurringPickup($store2['id'], ['time' => '16:30:00', 'dow' => $dow, 'fetcher' => 1]);
-		$this->assertEquals($this->service->getAvailablePickupStatus($store2['id']), 2);
-
-		$this->tester->addCollector($this->foodsaver['id'], $store2['id'], ['date' => $date]);
-		$this->assertEquals($this->service->getAvailablePickupStatus($store2['id']), 0);
 	}
 }

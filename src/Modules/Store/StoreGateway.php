@@ -1076,15 +1076,4 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				FROM `fs_betrieb_status`
 				ORDER BY `name`');
 	}
-
-	public function getCooperationStatus(int $storeId)
-	{
-		$out = $this->db->fetch('
-		SELECT		`fs_betrieb`.`betrieb_status_id`
-		FROM 		`fs_betrieb`
-		WHERE 		`fs_betrieb`.`id` = :id',
-			[':id' => $storeId]);
-
-		return $out['betrieb_status_id'];
-	}
 }
