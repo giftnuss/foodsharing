@@ -14,12 +14,11 @@
 - Add fs id to food share point admin management search results #660 !1152 @jofranz
 - Warn basket users without location data and inform them why it makes sense to provide those in order to use baskets on the website !1143 @jofranz
 - Sort the stores-list by the added-on date as default !1161 @treee111
-- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups !1186 @treee111
+- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups #750 !1186 @treee111
 - Save mail quickreplies to sent folder #611 !1166 @alex.simm
 - Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
 - Basket rest endpoint returns the list of requests to show them in the app !1169 @dthulke
 - Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
-- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups #750 !1186 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
