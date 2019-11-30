@@ -428,26 +428,26 @@ final class FoodsaverGateway extends BaseGateway
 		return $out;
 	}
 
-	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
+	public function updateGroupMembers(int $bezirk, array $foodsaver_ids, bool $leave_admins)
 	{
 		$rows_ins = 0;
 		if ($leave_admins) {
-			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . (int)$bezirk);
+			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . $bezirk);
 			if ($admins) {
 				$foodsaver_ids = array_merge($foodsaver_ids, $admins);
 			}
 		}
 		$ids = implode(',', array_map('intval', $foodsaver_ids));
-		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids, false);
+		$this->forumFollowerGateway->deleteForumSubscriptions($bezirk, $foodsaver_ids, false);
 		if ($ids) {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
+			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . $bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
 			$insert_strings = array_map(function ($id) use ($bezirk) {
 				return '(' . $id . ',' . $bezirk . ',1,NOW())';
 			}, $foodsaver_ids);
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
 		} else {
-			$rows_del = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => (int)$bezirk]);
+			$rows_del = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk]);
 		}
 
 		return array($rows_ins, $rows_del);
@@ -556,7 +556,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->db->execute('
 			INSERT INTO fs_foodsaver_archive
 			(
-				SELECT * FROM fs_foodsaver WHERE id = ' . (int)$id . '
+				SELECT * FROM fs_foodsaver WHERE id = ' . $id . '
 			)
 		');
 
@@ -566,7 +566,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->db->delete('fs_botschafter', ['foodsaver_id' => $id]);
 		$this->db->execute('
             DELETE FROM fs_buddy
-            WHERE foodsaver_id = ' . (int)$id . ' OR buddy_id = ' . (int)$id . '
+            WHERE foodsaver_id = ' . (int)$id . ' OR buddy_id = ' . $id . '
         ');
 		$this->db->delete('fs_email_status', ['foodsaver_id' => $id]);
 		$this->db->delete('fs_fairteiler_follower', ['foodsaver_id' => $id]);
@@ -579,7 +579,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->db->delete('fs_mailchange', ['foodsaver_id' => $id]);
 		$this->db->execute('
             DELETE FROM fs_pass_gen
-            WHERE foodsaver_id = ' . (int)$id . ' OR bot_id = ' . (int)$id . '
+            WHERE foodsaver_id = ' . (int)$id . ' OR bot_id = ' . $id . '
         ');
 		$this->db->delete('fs_pass_request', ['foodsaver_id' => $id]);
 		$this->db->delete('fs_quiz_session', ['foodsaver_id' => $id]);
