@@ -795,7 +795,7 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
+		if ($this->session->isOrgaTeam()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);

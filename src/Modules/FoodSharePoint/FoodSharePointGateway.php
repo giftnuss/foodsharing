@@ -109,7 +109,7 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function listFoodSharePoints(array $regionIds): array
+	public function listActiveFoodSharePoints(array $regionIds): array
 	{
 		if (!$regionIds) {
 			return [];

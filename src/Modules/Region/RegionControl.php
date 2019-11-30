@@ -7,6 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\RegionPermissions;
@@ -36,6 +37,7 @@ final class RegionControl extends Control
 	private $regionHelper;
 	private $imageService;
 	private $reportPermissions;
+	private $mailboxGateway;
 
 	/**
 	 * @required
@@ -65,7 +67,8 @@ final class RegionControl extends Control
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ReportPermissions $reportPermissions,
-		ImageService $imageService
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -79,6 +82,7 @@ final class RegionControl extends Control
 		$this->regionHelper = $regionHelper;
 		$this->reportPermissions = $reportPermissions;
 		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 
 		parent::__construct();
 	}
@@ -121,6 +125,10 @@ final class RegionControl extends Control
 
 		if ($this->session->isAdminFor($regionId)) {
 			$regionOrGroupString = $isWorkGroup ? $this->translator->trans('group.mail_link_title.workgroup') : $this->translator->trans('group.mail_link_title.region');
+			if ($regionMailInfo = $this->mailboxGateway->getNewCount([$region['mailbox_id']])) {
+				$regionOrGroupString .= ' (' . $regionMailInfo[0]['count'] . ')';
+			}
+
 			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
 		}
 
@@ -243,7 +251,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
-		$viewdata['food_share_point'] = $this->foodSharePointGateway->listFoodSharePoints($bezirk_ids);
+		$viewdata['food_share_point'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 

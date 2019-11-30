@@ -75,13 +75,19 @@ legal:
   not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
 
 login:
-  form_title: Login
+  form_title: Anmelden
   email_address: E-Mail-Adresse
   password: Passwort
   forgotten_password_label: Passwort vergessen?
-  login_button_label: Login
+  login_button_label: Anmelden
+  error_no_email: Bitte gib Deine E-Mail-Adresse an!
+  error_no_password: Bitte gib Dein Passwort an!
+  error_no_auth: E-Mail-Adresse oder Passwort sind falsch
+  success: <b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.
+  logout: Logout
 
 register:
+  topbar: Mach mit!
   register_button_label: Registrieren
   login_success: Prima! Jetzt bist Du eingeloggt
   login_failed: Diese Zugangdsdaten stimmen leider so nicht.
@@ -163,6 +169,9 @@ store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
   add_new_store: Neuen Betrieb anlegen
   all_of_my_stores: Alle meine Betriebe
+  tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
+  tooltip_orange: Offene Abholungen in den nächsten drei Tagen
+  tooltip_red: Offene Abholungen heute oder morgen
 
 pickup:
   dates: Abholtermine
@@ -328,10 +337,34 @@ pickuplist:
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
+  your_account: Dein Account
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
+  upgrade_to: Werde Foodsaver*in
 
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"
 
 index:
   confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
+
+map:
+  title: Karte
+
+profile:
+  title: Profil
+
+search:
+  title: Suche
+  placeholder: Suche...
+
+dashboard:
+  title: Dashboard
+
+home:
+  title: Startseite
+
+basket:
+  title: Essenskörbe
+  my_list_empty: Du hast keine Essenskörbe eingetragen
+  all: Alle Essenskörbe
+  add: Essenskorb anlegen

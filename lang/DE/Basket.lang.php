@@ -27,6 +27,7 @@ $g_lang['open_chat'] = 'Nachricht schreiben';
 
 $g_lang['no_requests'] = 'Bisher keine Anfragen';
 $g_lang['n_requests'] = 'Bisherige Anfragen: <strong>{count}</strong>';
+$g_lang['basket_requested_by'] = 'angefragt von';
 $g_lang['req_count'] = 'Anfragen {count}';
 $g_lang['send_request'] = 'Anfrage absenden';
 $g_lang['sent_request'] = 'Anfrage wurde versendet';
@@ -52,6 +53,7 @@ $g_lang['basket_publish'] = 'Essenskorb veröffentlichen';
 $g_lang['to_basket'] = 'zum Essenskorb';
 $g_lang['basket_foodsaver'] = 'Essenskorb von {name}';
 $g_lang['basket_foodsaver_close'] = 'Essenskorbanfrage von {name} abschließen';
+$g_lang['basket_request_close'] = 'Essenskorbanfrage abschließen';
 $g_lang['basket_error'] = 'Essenskorb konnte nicht geladen werden.';
 $g_lang['basket_error_message'] = 'Du hast keine Nachricht eingegeben';
 $g_lang['basket_publish_error'] = 'Es gab einen Fehler. Der Essenskorb konnte nicht veröffentlicht werden.';
