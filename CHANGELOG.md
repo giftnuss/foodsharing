@@ -55,6 +55,7 @@
 - statistic kilo calculation optimized in sql !999 @fs_k
 - Removed unused xhr_out method !1208 #132 @alex.simm
 - Introduce content id constants for content pages !1200 @jofranz
+- Replaced some hardcoded sql with prepared statements !1207 #757 @alex.simm
 
 ## Dev/Test/CI stuff
 

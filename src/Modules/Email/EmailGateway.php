@@ -8,24 +8,13 @@ class EmailGateway extends BaseGateway
 {
 	public function setEmailStatus($mail_id, $foodsaver, $status)
 	{
-		$query = '';
+		$data = ['email_id' => (int)$mail_id];
 		if (is_array($foodsaver)) {
-			$query = array();
-			foreach ($foodsaver as $fs) {
-				$query[] = '`foodsaver_id` = ' . (int)$fs['id'];
-			}
-
-			$query = implode(' OR ', $query);
+			$data['foodsaver_id'] = array_map('intval', $foodsaver);
 		} else {
-			$query = '`foodsaver_id` = ' . (int)$foodsaver;
+			$data['foodsaver_id'] = $foodsaver;
 		}
-
-		$this->db->execute('
-			UPDATE 	`fs_email_status`
-			SET 	`status` = ' . (int)$status . '
-			WHERE 	`email_id` = ' . (int)$mail_id . '
-			AND 	(' . $query . ')
-		');
+		$this->db->update('fs_email_status', ['status' => (int)$status], $data);
 	}
 
 	public function getMailsLeft($mail_id)

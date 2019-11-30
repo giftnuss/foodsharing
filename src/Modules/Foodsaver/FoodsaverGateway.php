@@ -447,7 +447,7 @@ final class FoodsaverGateway extends BaseGateway
 			$insert_values = implode(',', $insert_strings);
 			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
 		} else {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk)->rowCount();
+			$rows_del = $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => (int)$bezirk]);
 		}
 
 		return array($rows_ins, $rows_del);
@@ -549,7 +549,7 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE c.ancestor_id = ' . (int)$bezirk . ' AND fs.deleted_at IS NULL AND ' . $where_type);
 	}
 
-	public function del_foodsaver($id)
+	public function del_foodsaver(int $id)
 	{
 		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $id]);
 
@@ -560,106 +560,55 @@ final class FoodsaverGateway extends BaseGateway
 			)
 		');
 
-		$this->db->execute('
-            DELETE FROM fs_apitoken
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_application_has_wallpost
-            WHERE application_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_basket_anfrage
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_botschafter
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
+		$this->db->delete('fs_apitoken', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_application_has_wallpost', ['application_id' => $id]);
+		$this->db->delete('fs_basket_anfrage', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_botschafter', ['foodsaver_id' => $id]);
 		$this->db->execute('
             DELETE FROM fs_buddy
             WHERE foodsaver_id = ' . (int)$id . ' OR buddy_id = ' . (int)$id . '
         ');
-		$this->db->execute('
-            DELETE FROM fs_email_status
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_fairteiler_follower
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_bell
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_bezirk
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_contact
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_event
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_wallpost
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_mailbox_member
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_mailchange
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
+		$this->db->delete('fs_email_status', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_fairteiler_follower', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_foodsaver_has_contact', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_foodsaver_has_event', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_foodsaver_has_wallpost', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_mailbox_member', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_mailchange', ['foodsaver_id' => $id]);
 		$this->db->execute('
             DELETE FROM fs_pass_gen
             WHERE foodsaver_id = ' . (int)$id . ' OR bot_id = ' . (int)$id . '
         ');
-		$this->db->execute('
-            DELETE FROM fs_pass_request
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_quiz_session
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_rating
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_theme_follower
-            WHERE foodsaver_id = ' . (int)$id . '
-		');
+		$this->db->delete('fs_pass_request', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_quiz_session', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_rating', ['foodsaver_id' => $id]);
+		$this->db->delete('fs_theme_follower', ['foodsaver_id' => $id]);
 
 		// remove bananas given by this user
-		$this->db->execute('
-            DELETE FROM fs_rating
-            WHERE rater_id = ' . (int)$id . '
-		');
+		$this->db->delete('fs_rating', ['rater_id' => $id]);
 
-		$this->db->execute('UPDATE fs_foodsaver SET verified = 0,
-			rolle = 0,
-			plz = NULL,
-			stadt = NULL,
-			lat = NULL,
-			lon = NULL,
-			photo = NULL,
-			email = NULL,
-			password = NULL,
-			name = NULL,
-			nachname = NULL,
-			anschrift = NULL,
-			telefon = NULL,
-			handy = NULL,
-			geb_datum = NULL,
-			deleted_at = NOW()
-			WHERE id = ' . (int)$id);
+		$this->db->update('fs_foodsaver',
+			[
+				'verified' => 0,
+				'rolle' => 0,
+				'plz' => null,
+				'stadt' => null,
+				'lat' => null,
+				'lon' => null,
+				'photo' => null,
+				'email' => null,
+				'password' => null,
+				'name' => null,
+				'nachname' => null,
+				'anschrift' => null,
+				'telefon' => null,
+				'handy' => null,
+				'geb_datum' => null,
+				'deleted_at' => $this->db->now()
+			],
+			['id' => $id]);
 	}
 
 	public function getFsAutocomplete($bezirk_id)
