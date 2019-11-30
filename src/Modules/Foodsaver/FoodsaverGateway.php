@@ -583,10 +583,10 @@ final class FoodsaverGateway extends BaseGateway
         ');
 		$this->db->delete('fs_pass_request', ['foodsaver_id' => $id]);
 		$this->db->delete('fs_quiz_session', ['foodsaver_id' => $id]);
-		$this->db->delete('fs_rating', ['foodsaver_id' => $id]);
 		$this->db->delete('fs_theme_follower', ['foodsaver_id' => $id]);
 
-		// remove bananas given by this user
+		// remove bananas given to or by this user
+		$this->db->delete('fs_rating', ['foodsaver_id' => $id]);
 		$this->db->delete('fs_rating', ['rater_id' => $id]);
 
 		$this->db->update('fs_foodsaver',
