@@ -6,15 +6,14 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class EmailGateway extends BaseGateway
 {
-	public function setEmailStatus(int $mail_id, $foodsaver, int $status)
+	public function setEmailStatus(int $mail_id, array $foodsaver, int $status)
 	{
-		$data = ['email_id' => $mail_id];
-		if (is_array($foodsaver)) {
-			$data['foodsaver_id'] = array_map('intval', $foodsaver);
-		} else {
-			$data['foodsaver_id'] = $foodsaver;
-		}
-		$this->db->update('fs_email_status', ['status' => $status], $data);
+		$this->db->update('fs_email_status', ['status' => $status],
+			[
+				'email_id' => $mail_id,
+				'foodsaver_id' => array_map('intval', $foodsaver)
+			]
+		);
 	}
 
 	public function getMailsLeft($mail_id)

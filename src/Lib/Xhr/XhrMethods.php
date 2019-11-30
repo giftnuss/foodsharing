@@ -839,9 +839,9 @@ class XhrMethods
 				}
 
 				if (!$check) {
-					$this->emailGateway->setEmailStatus($mail['id'], $fs['id'], 3);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 3);
 				} else {
-					$this->emailGateway->setEmailStatus($mail['id'], $fs['id'], 2);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 2);
 				}
 			}
 
