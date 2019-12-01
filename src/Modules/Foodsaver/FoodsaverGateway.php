@@ -601,7 +601,7 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE   fs.deleted_at IS NULL
 			AND 	c.bezirk_id = :regionId
 		',
-		    [':regionId' => $regionId]
+			[':regionId' => $regionId]
 		);
 	}
 
@@ -698,10 +698,7 @@ final class FoodsaverGateway extends BaseGateway
 		   [':fsId' => $fsId]
 		);
 
-		$this->db->insert(
-			'fs_foodsaver_archive',
-			$foodsaver
-		);
+		$this->db->insert('fs_foodsaver_archive', $foodsaver);
 	}
 
 	public function getFsAutocomplete(array $regions): array
