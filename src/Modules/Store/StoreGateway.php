@@ -40,7 +40,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getBetrieb($storeId): array
 	{
 		$out = $this->db->fetch('
-		SELECT		`id`,
+            SELECT  `id`,
 					plz,
 					`fs_betrieb`.bezirk_id,
 					`fs_betrieb`.kette_id,
@@ -61,10 +61,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb`.team_status,
 					`kette_id`
 
-		FROM 		`fs_betrieb`
+            FROM    `fs_betrieb`
 
-		WHERE 		`fs_betrieb`.`id` = :id',
-		[':id' => $storeId]);
+            WHERE   `fs_betrieb`.`id` = :id', [':id' => $storeId]);
 
 		$out['verantwortlicher'] = '';
 		if ($bezirk = $this->regionGateway->getRegionName($out['bezirk_id'])) {
@@ -85,8 +84,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getMapsStores(int $regionId): array
 	{
 		return $this->db->fetchAll('
-			SELECT 	b.id,
-					b.betrieb_status_id,
+            SELECT 	b.id,
+                    b.betrieb_status_id,
 					b.plz,
 					b.`lat`,
 					b.`lon`,
@@ -101,15 +100,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					k.logo
 
 			FROM 	fs_betrieb b
-			LEFT JOIN fs_kette k ON b.kette_id = k.id
+                    LEFT JOIN fs_kette k
+                    ON b.kette_id = k.id
 
-			WHERE 	b.bezirk_id = :bezirk_id
-
-			AND b.`lat` != ""',
-			[
-				':bezirk_id' => $regionId
-			]
-		);
+			WHERE   b.bezirk_id = :bezirk_id
+			AND     b.`lat` != ""', [':bezirk_id' => $regionId]);
 	}
 
 	public function listMyStores(int $fsId): array
@@ -127,7 +122,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					ON b.id = t.betrieb_id
 
 			WHERE	t.foodsaver_id = :fsId
-					AND	t.active = 1
+			AND     t.active = 1
 		', [':fsId' => $fsId]);
 	}
 
@@ -157,8 +152,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						fs_betrieb_team
 
 				WHERE 	fs_betrieb.id = fs_betrieb_team.betrieb_id
-
-				AND 	fs_betrieb_team.foodsaver_id = :fs_id
+                AND 	fs_betrieb_team.foodsaver_id = :fs_id
 
 				ORDER BY fs_betrieb_team.verantwortlich DESC, fs_betrieb.name ASC
 		', [':fs_id' => $fs_id]);
@@ -198,8 +192,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
 			$out['sonstige'] = [];
-			$betriebe = $this->db->fetchAll(
-		'SELECT 		b.id,
+			$betriebe = $this->db->fetchAll('
+                SELECT  b.id,
 						b.betrieb_status_id,
 						b.plz,
 						b.kette_id,
@@ -222,6 +216,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 				WHERE 	b.bezirk_id = bz.id
 				AND 	bezirk_id IN(' . $placeholders . ')
+
 				ORDER BY bz.name DESC',
 			$child_region_ids);
 
@@ -239,43 +234,43 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$out = $this->db->fetch('
 			SELECT
-			b.`id`,
-			b.`betrieb_status_id`,
-			b.`bezirk_id`,
-			b.`plz`,
-			b.`stadt`,
-			b.`lat`,
-			b.`lon`,
-			b.`kette_id`,
-			b.`betrieb_kategorie_id`,
-			b.`name`,
-			b.`str`,
-			b.`hsnr`,
-			b.`status_date`,
-			b.`status`,
-			b.`ansprechpartner`,
-			b.`telefon`,
-			b.`fax`,
-			b.`email`,
-			b.`begin`,
-			b.`besonderheiten`,
-			b.`public_info`,
-			b.`public_time`,
-			b.`ueberzeugungsarbeit`,
-			b.`presse`,
-			b.`sticker`,
-			b.`abholmenge`,
-			b.`team_status`,
-			b.`prefetchtime`,
-			b.`team_conversation_id`,
-			b.`springer_conversation_id`,
-			count(DISTINCT(a.date)) AS pickup_count
+        			b.`id`,
+        			b.`betrieb_status_id`,
+        			b.`bezirk_id`,
+        			b.`plz`,
+        			b.`stadt`,
+        			b.`lat`,
+        			b.`lon`,
+        			b.`kette_id`,
+        			b.`betrieb_kategorie_id`,
+        			b.`name`,
+        			b.`str`,
+        			b.`hsnr`,
+        			b.`status_date`,
+        			b.`status`,
+        			b.`ansprechpartner`,
+        			b.`telefon`,
+        			b.`fax`,
+        			b.`email`,
+        			b.`begin`,
+        			b.`besonderheiten`,
+        			b.`public_info`,
+        			b.`public_time`,
+        			b.`ueberzeugungsarbeit`,
+        			b.`presse`,
+        			b.`sticker`,
+        			b.`abholmenge`,
+        			b.`team_status`,
+        			b.`prefetchtime`,
+        			b.`team_conversation_id`,
+        			b.`springer_conversation_id`,
+        			count(DISTINCT(a.date)) AS pickup_count
 
-			FROM 		`fs_betrieb` b
-			LEFT JOIN   `fs_abholer` a
-			ON a.betrieb_id = b.id
+			FROM 	`fs_betrieb` b
+        			LEFT JOIN   `fs_abholer` a
+        			ON a.betrieb_id = b.id
 
-			WHERE 		b.`id` = :id
+			WHERE 	b.`id` = :id
 			GROUP BY b.`id`',
 			[':id' => $storeId]
 		);
@@ -1001,15 +996,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	private function getOne_kette($id): array
 	{
 		return $this->db->fetch('
-			SELECT
-			`id`,
-			`name`,
-			`logo`
+			SELECT   `id`,
+			         `name`,
+			         `logo`
 
-			FROM 		`fs_kette`
+			FROM     `fs_kette`
 
-			WHERE 		`id` = :id',
-			[':id' => $id]);
+			WHERE    `id` = :id', [':id' => $id]);
 	}
 
 	/**
@@ -1184,11 +1177,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getStoreStateList()
 	{
 		return $this->db->fetchAll('
-				SELECT
-				`id`,
-				`name`
-				FROM `fs_betrieb_status`
-				ORDER BY `name`');
+			SELECT  `id`,
+			        `name`
+			FROM    `fs_betrieb_status`
+			ORDER BY `name`
+        ');
 	}
 
 	public function setStoreTeamStatus(int $storeId, int $teamStatus)
