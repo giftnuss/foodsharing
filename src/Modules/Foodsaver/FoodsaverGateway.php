@@ -585,7 +585,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function listAmbassadorsByRegion(int $fsId): array
+	public function listAmbassadorsByRegion(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
@@ -595,13 +595,13 @@ final class FoodsaverGateway extends BaseGateway
 					fs.sleep_status
 
 			FROM 	`fs_foodsaver` fs
-					`INNER JOIN fs_botschafter` c
+					INNER JOIN `fs_botschafter` c
 			        ON c.`foodsaver_id` = fs.id
 
 			WHERE   fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
+			AND 	c.bezirk_id = :regionId
 		',
-			['id' => $fsId]
+		    [':regionId' => $regionId]
 		);
 	}
 
