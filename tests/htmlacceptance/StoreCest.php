@@ -4,23 +4,21 @@ class StoreCest
 {
 	private $bezirk_id = 241;
 
-	private function createStoreAndUsers()
+	public function _before(HtmlAcceptanceTester $I)
 	{
-		$I = $this->tester;
+		$this->createStoreAndUsers($I);
+	}
+
+	private function createStoreAndUsers(HtmlAcceptanceTester $I)
+	{
 		$this->store = $I->createStore($this->bezirk_id);
 		$this->storeCoordinator = $I->createStoreCoordinator(null, ['bezirk_id' => $this->bezirk_id]);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
 	}
 
-	private function loginAsCoordinator()
-	{
-		$I = $this->tester;
-		$I->login($this->storeCoordinator['email']);
-	}
-
 	public function WillKeepApproxPickupTime(\HtmlAcceptanceTester $I)
 	{
-		$this->loginAsCoordinator();
+		$I->login($this->storeCoordinator['email']);
 
 		// Check original value
 		$I->amOnPage('/?page=betrieb&a=edit&id=' . $this->store['id']);
@@ -33,11 +31,5 @@ class StoreCest
 		// Check the page again to make sure our option was saved
 		$I->amOnPage('/?page=betrieb&a=edit&id=' . $this->store['id']);
 		$I->see('morgens', '#public_time option[selected]');
-	}
-
-	public function _before(HtmlAcceptanceTester $I)
-	{
-		$this->tester = $I;
-		$this->createStoreAndUsers();
 	}
 }
