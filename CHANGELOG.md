@@ -57,6 +57,7 @@
 - Introduce content id constants for content pages !1200 @jofranz
 - Replaced some hardcoded sql with prepared statements !1207 #757 @alex.simm
 - Removed some dead code !1213 @svenpascal
+- Remove food basket pinboard frontend from !969 entirely !1203 @jofranz
 
 ## Dev/Test/CI stuff
 
