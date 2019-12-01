@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 
 class ContentControl extends Control
 {

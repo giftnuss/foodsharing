@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Modules\Content;
+namespace Foodsharing\Modules\Core\DBConstants\Content;
 
 /*
  *
