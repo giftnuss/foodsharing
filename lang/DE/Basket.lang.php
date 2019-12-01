@@ -60,7 +60,7 @@ $g_lang['basket_publish_error'] = 'Es gab einen Fehler. Der Essenskorb konnte ni
 $g_lang['basket_publish_error_desc'] = 'Bitte gib eine Beschreibung ein!';
 $g_lang['basket_publish_error_permission'] = 'Sie haben keine Rechte den Essenskorb zu bearbeiten.';
 $g_lang['basket_publish_thank_you'] = 'Danke Dir! Der Essenskorb wurde veröffentlicht!';
-$g_lang['basket_publish_error_address'] = '<br>Bitte gib Deine Adresse in den <a href="?page=settings&sub=general">Einstellungen</a> an, um einen Essenskorb über die Webseite anbieten zu können.<br><br>Diese wird benötigt, um einen Essenskorb mittels Pinnadel auf der Karte darzustellen.<br><br>Die Postanschrift Deiner Adresse ist dabei für EssenskorbnutzerInnen nicht sichtbar.';
+$g_lang['basket_publish_error_address'] = '<br>Bitte gib Deine Adresse in den <a href="/?page=settings&sub=general">Einstellungen</a> an, um einen Essenskorb über die Webseite anbieten zu können.<br><br>Diese wird benötigt, um einen Essenskorb mittels Pinnadel auf der Karte darzustellen.<br><br>Die Postanschrift Deiner Adresse ist dabei für EssenskorbnutzerInnen nicht sichtbar.';
 $g_lang['go_to_settings'] = 'Zu den Einstellungen';
 
 $g_lang['basket_deleted_picked_up'] = 'Ja, {gender} hat den Korb abgeholt.';
