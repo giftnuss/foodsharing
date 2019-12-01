@@ -32,9 +32,7 @@ $csp = $container->get(ContentSecurityPolicy::class);
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
-if (defined('CSP_REPORT_URI')) {
-	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
-}
+header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 
 require_once 'lib/inc.php';
 

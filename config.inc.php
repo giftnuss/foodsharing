@@ -46,8 +46,12 @@ if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
 }
 
+if (!defined('CSP_REPORT_URI')) {
+	define('CSP_REPORT_URI', null);
+}
+
 if (!defined('CSP_REPORT_ONLY')) {
-	define('CSP_REPORT_ONLY', true);
+	define('CSP_REPORT_ONLY', false);
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');
