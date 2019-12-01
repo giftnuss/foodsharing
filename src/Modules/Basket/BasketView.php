@@ -86,9 +86,9 @@ class BasketView extends View
 
 		$page->setSubTitle($this->getSubtitle($basket));
 
-		$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])));
-
 		if ($this->session->may()) {
+			$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])));
+
 			$page->addSectionRight($this->userBox($basket, $requests), $this->translationHelper->s('provider'));
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
@@ -106,7 +106,7 @@ class BasketView extends View
 				$page->addSectionRight($map->render(), 'Wo?');
 			}
 		} else {
-			$page->addSectionRight(
+			$page->addSection(
 				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translationHelper->s('reference')),
 				false,
 				array('wrapper' => false)
