@@ -282,7 +282,10 @@ class XhrMethods
 			$fields = $this->dataHelper->unsetAll($data, ['lat', 'lon', 'stadt', 'plz', 'anschrift']);
 
 			if ($this->foodsaverGateway->updateProfile($this->session->id(), $fields)) {
-				return $this->xhr_out();
+				return json_encode(array(
+					'status' => 1,
+					'script' => ''
+				));
 			}
 		}
 	}
@@ -710,14 +713,6 @@ class XhrMethods
 		$image->saveChanges();
 
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
-	}
-
-	public function xhr_out($js = '')
-	{
-		return json_encode(array(
-			'status' => 1,
-			'script' => $js
-		));
 	}
 
 	public function xhr_getRecip($data)
@@ -1406,7 +1401,10 @@ class XhrMethods
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
 
-			return $this->xhr_out('pulseInfo("' . $this->translationHelper->s('edit_success') . '");');
+			return json_encode(array(
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('edit_success') . '");'
+			));
 		}
 	}
 
