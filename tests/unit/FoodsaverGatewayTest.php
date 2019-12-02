@@ -263,7 +263,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetFoodsaversWithoutAmbassadors()
 	{
-	    $foodsavers = $this->gateway->getAllFoodsaverNoBotschafter();
+	    $foodsavers = $this->gateway->getFoodsaversWithoutAmbassadors();
 
 	    $this->tester->assertCount(1, $foodsavers);
 	    $this->tester->assertEquals($this->regionMember['id'], $foodsavers[0]['id']);

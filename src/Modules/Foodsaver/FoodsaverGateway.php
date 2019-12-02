@@ -185,7 +185,7 @@ final class FoodsaverGateway extends BaseGateway
 		return [];
 	}
 	
-	public function getAllFoodsaverNoBotschafter(): array
+	public function getFoodsaversWithoutAmbassadors(): array
 	{
 	    $foodsavers = $this->getActiveFoodsavers();
 	    $ambassadors = $this->getActiveAmbassadors();
