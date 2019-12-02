@@ -265,10 +265,10 @@ final class FoodsaverGateway extends BaseGateway
             AND     fs.`active` = 1
         ',
 	        [':regType' => Type::WORKING_GROUP]
-	        );
+	    );
 	}
 	
-	public function getBezirkCountForBotschafter(int $fsId): int
+	public function getAmbassadorsNumberOfRegions(int $fsId): int
 	{
 		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
 	}
