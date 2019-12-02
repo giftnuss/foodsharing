@@ -106,12 +106,7 @@ final class FoodsaverGateway extends BaseGateway
 	    return $this->db->fetchAll('
 			SELECT 	fs.id,
 					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-					fs.`name` AS vorname,
-					fs.`anschrift`,
 					fs.`email`,
-					fs.`telefon`,
-					fs.`handy`,
-					fs.`plz`,
 					fs.`geschlecht`
 	        
 		    FROM	fs_foodsaver fs
