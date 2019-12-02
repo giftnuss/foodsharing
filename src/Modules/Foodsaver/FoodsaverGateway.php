@@ -560,7 +560,7 @@ final class FoodsaverGateway extends BaseGateway
 		}, $res);
 	}
 
-	public function listActiveWithFullNameByRegion(int $fsId): array
+	public function listActiveWithFullNameByRegion(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.id,
@@ -581,7 +581,7 @@ final class FoodsaverGateway extends BaseGateway
 			AND 	fb.`active` = 1
 			AND		fs.deleted_at IS NULL
 		',
-			['id' => $fsId]
+			['id' => $regionId]
 		);
 	}
 
