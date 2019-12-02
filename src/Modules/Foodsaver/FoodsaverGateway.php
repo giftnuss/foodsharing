@@ -28,7 +28,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function getFoodsavers(int $regionId): array
+	public function getFoodsavers(int $regionId = 0): array
 	{
 		$and = $regionId ? ' AND fb.`bezirk_id` = ' . $regionId : '';
 
@@ -141,7 +141,35 @@ final class FoodsaverGateway extends BaseGateway
 
 		return [];
 	}
-
+	
+	public function getAllFoodsaverNoBotschafter(): array
+	{
+	    $foodsavers = $this->getActiveFoodsavers();
+	    $ambassadors = $this->getActiveAmbassadors();
+	    
+	    return array_udiff($foodsavers, $ambassadors, function (array $fs, array $amb) {
+	        return $fs['id'] == $amb['id'];
+	    });
+	}
+	
+	private function getActiveFoodsavers(): array
+	{
+	    return $this->db->fetchAll('
+			SELECT 		fs.id,
+						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+						fs.`anschrift`,
+						fs.`email`,
+						fs.`telefon`,
+						fs.`handy`,
+						fs.plz
+	        
+			FROM 		`fs_foodsaver` fs
+	        
+			WHERE		fs.deleted_at IS NULL
+            AND fs.`active` = 1
+		');
+	}
+	
 	public function getOne_foodsaver(int $fsId): array
 	{
 		$out = $this->db->fetch('
@@ -216,71 +244,33 @@ final class FoodsaverGateway extends BaseGateway
 			[':regionId' => $regionId]
 		);
 	}
-
-	public function getBezirkCountForBotschafter(int $fsId): int
-	{
-		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
-	}
-
+	
 	public function getActiveAmbassadors(): array
 	{
-		return $this->db->fetchAll('
+	    return $this->db->fetchAll('
 			SELECT  fs.`id`,
 					fs.`name`,
 					fs.`nachname`,
 					fs.`geschlecht`,
 					fs.`email`
-
+	        
 			FROM 	`fs_foodsaver` fs
-                    JOIN `fs_fs_botschafter` amb
-                    ON fs.id = amb.id
+                    JOIN `fs_botschafter` amb
+                    ON fs.id = amb.foodsaver_id
                         LEFT JOIN `fs_bezirk` reg
                         ON amb.bezirk_id = reg.id
-
+	        
 			WHERE	reg.type != :regType
 			AND     fs.deleted_at IS NULL
             AND     fs.`active` = 1
         ',
-		    [':regType' => Type::WORKING_GROUP]
-		);
+	        [':regType' => Type::WORKING_GROUP]
+	        );
 	}
-
-	public function getAllFoodsaver(): array
+	
+	public function getBezirkCountForBotschafter(int $fsId): int
 	{
-		return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.plz
-
-			FROM 		`fs_foodsaver` fs
-
-			WHERE		fs.deleted_at IS NULL
-            AND fs.`active` = 1
-		');
-	}
-
-	public function getAllFoodsaverNoBotschafter(): array
-	{
-		$foodsaver = $this->getAllFoodsaver();
-		$out = [];
-
-		$ambassadors = $this->getActiveAmbassadors();
-		$bot = [];
-		foreach ($ambassadors as $a) {
-			$bot[$a['id']] = true;
-		}
-
-		foreach ($foodsaver as $fs) {
-			if (!isset($bot[$fs['id']])) {
-				$out[] = $fs;
-			}
-		}
-
-		return $out;
+		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
 	}
 
 	public function getOrgateam(): array
