@@ -208,26 +208,6 @@ final class FoodsaverGateway extends BaseGateway
 		');
 	}
 	
-	public function listAmbassadorsByRegion(int $regionId): array
-	{
-	    return $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.sleep_status
-	        
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_botschafter` c
-			        ON c.`foodsaver_id` = fs.id
-	        
-			WHERE   fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :regionId
-		', [
-            ':regionId' => $regionId
-        ]);
-    }
-	
 	public function getFoodsaver(int $fsId): array
 	{
 		$out = $this->db->fetchByCriteria('fs_foodsaver', [
@@ -279,23 +259,24 @@ final class FoodsaverGateway extends BaseGateway
             ':fsId' => $fsId
         ]);
     }
-
-	public function getAmbassadors(int $regionId): array
+    
+    public function getAmbassadors(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`email`,
 					fs.`name`,
 					fs.`name` AS `vorname`,
 					fs.`nachname`,
 					fs.`photo`,
+					fs.`email`,
 					fs.`geschlecht`
+					fs.`sleep_status`
 
 			FROM    `fs_foodsaver` fs
-			        INNER JOIN `fs_botschafter`
-                    ON fs.id = `fs_botschafter`.`foodsaver_id`
+			        INNER JOIN `fs_botschafter` amb
+                    ON fs.id = amb.`foodsaver_id`
 
-			WHERE   `fs_botschafter`.`bezirk_id` = :regionId
+			WHERE   amb.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL
         ', [
             ':regionId' => $regionId
