@@ -47,14 +47,15 @@ class FoodsaverControl extends Control
 		// check bezirk_id and permissions
 		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
-			if ($foodsaver = $this->foodsaverGateway->listFoodsaver($_GET['bid'])) {
+		    $regionId = $region['id'];
+            if ($foodsavers = $this->foodsaverGateway->listFoodsaver($regionId)) {
 				// add breadcrumps
-				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $region['id']);
-				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $region['id']);
+				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
+				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
 
 				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all)
 				$this->pageHelper->addContent(
-					$this->view->foodsaverList($foodsaver, $region),
+					$this->view->foodsaverList($foodsavers, $region),
 					CNT_LEFT
 				);
 
@@ -68,26 +69,29 @@ class FoodsaverControl extends Control
 					);
 				}
 			}
-		} elseif (($id = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
-			$data = $this->foodsaverGateway->getOne_foodsaver($id);
-			$regionIds = $this->regionGateway->getFsRegionIds($id);
-			if ($data && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
+		} elseif (($fsId = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
+			$fs = $this->foodsaverGateway->getOne_foodsaver($fsId);
+			$regionIds = $this->regionGateway->getFsRegionIds($fsId);
+			if ($fs && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
 				$this->handle_edit();
-				$data = $this->foodsaverGateway->getOne_foodsaver($id);
+				$fs = $this->foodsaverGateway->getOne_foodsaver($fsId);
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_foodsaver'), '/?page=foodsaver');
 				$this->pageHelper->addBread($this->translationHelper->s('bread_edit_foodsaver'));
-				$this->dataHelper->setEditData($data);
-				$regionDetails = false;
-				if ($data['bezirk_id'] > 0) {
-					$regionDetails = $this->regionGateway->getRegion($data['bezirk_id']);
-				}
-				$this->pageHelper->addContent($this->view->foodsaver_form($data['name'] . ' ' . $data['nachname'] . ' bearbeiten', $regionDetails));
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/profile/' . $data['id'], 'name' => $this->translationHelper->s('back_to_profile')),
-					array('click' => 'fsapp.confirmDeleteUser(' . $data['id'] . ')', 'name' => $this->translationHelper->s('delete_account'))
-				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+				$this->dataHelper->setEditData($fs);
+
+				$regionDetails = $fs['bezirk_id'] > 0 ? $this->regionGateway->getRegion($fs['bezirk_id']) : false;
+				$this->pageHelper->addContent($this->view->foodsaver_form($fs['name'] . ' ' . $fs['nachname'] . ' bearbeiten', $regionDetails));
+
+				$this->pageHelper->addContent($this->v_utils->v_field(
+				    $this->v_utils->v_menu([
+					   ['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
+					   ['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
+				    ]),
+				    $this->translationHelper->s('actions')),
+				    CNT_RIGHT
+				);
 			}
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));
