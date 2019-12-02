@@ -47,12 +47,13 @@ class FoodsaverXhr extends Control
 	 */
 	public function foodsaverrefresh()
 	{
-		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+		$regionId = $_GET['bid'];
+        if (!$this->session->may('orga') && !$this->session->isAdminFor($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$foodsaver = $this->foodsaverGateway->listFoodsaversByRegion($_GET['bid']);
-		$bezirk = $this->regionGateway->getRegion($_GET['bid']);
-		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
+		$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($regionId);
+		$region = $this->regionGateway->getRegion($regionId);
+		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $$region), "'");
 
 		return array(
 			'status' => 1,

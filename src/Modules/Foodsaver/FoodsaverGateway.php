@@ -28,31 +28,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function getFoodsaversByRegion(int $regionId): array
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.id,
-					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-					fs.`name` AS vorname,
-					fs.`anschrift`,
-					fs.`email`,
-					fs.`telefon`,
-					fs.`handy`,
-					fs.`plz`,
-					fs.`geschlecht`
-
-		    FROM	fs_foodsaver fs
-            	    INNER JOIN fs_foodsaver_has_bezirk fsreg
-            	    ON fs.id = fsreg.foodsaver_id
-
-		    WHERE   fs.deleted_at IS NULL
-		    AND 	fsreg.bezirk_id = :regionId
-		 ', [
-            ':regionId' => $regionId
-        ]);
-	}
-
-	public function listFoodsaversByRegion(int $regionId, bool $hideRecentlyOnline = false): array
+	public function getFoodsaversByRegion(int $regionId, bool $hideRecentlyOnline = false): array
 	{
 		$onlyInactiveClause = '';
 		if ($hideRecentlyOnline) {
