@@ -907,11 +907,8 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$this->signOutFromStores($fsId, $storeModel);
 
-		// Delete Bells for Foodsaver
 		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);
-		// Delete from Bezirke and Working Groups
 		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $fsId]);
-		// Delete from Bezirke and Working Groups (when Admin)
 		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
 
 		$this->quizSessionGateway->blockUserForQuiz($fsId, Role::FOODSAVER);
