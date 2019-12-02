@@ -52,8 +52,8 @@ class FoodsaverXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($regionId);
-		$region = $this->regionGateway->getRegion($regionId);
-		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $$region), "'");
+		$regionData = $this->regionGateway->getRegion($regionId);
+		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $$regionData), "'");
 
 		return array(
 			'status' => 1,
