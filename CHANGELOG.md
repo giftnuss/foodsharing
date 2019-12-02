@@ -63,6 +63,7 @@
 - adds error infos to the exception of an unpreperable query !1195 @dthulke
 - Added docker toolbox download link for windows users in dev docs #733 !1147 @lebe1
 - Remove hotUpdateChunkFilename config option workaround !1202 @jofranz @nicksellen
+- Fix DebugBar !1212 @nicksellen
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
