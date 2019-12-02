@@ -470,7 +470,7 @@ class SettingsControl extends Control
 			}
 
 			if ($check) {
-			    if ($oldFs = $this->foodsaverGateway->getFoodsaver($this->session->id())) {
+				if ($oldFs = $this->foodsaverGateway->getFoodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
 					$this->settingsGateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}

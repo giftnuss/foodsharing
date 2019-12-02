@@ -248,17 +248,18 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 
 	public function testGetActiveAmbassadors()
 	{
-	    $foodsavers = $this->gateway->getActiveAmbassadors();
+		$inactiveAmbassador = $this->tester->createAmbassador(null, ['active' => 0]);
 
-	    $this->tester->assertCount(1, $foodsavers);
-	    $this->tester->assertEquals($this->regionAdmin['id'], $foodsavers[0]['id']);
+		$foodsavers = $this->gateway->getActiveAmbassadors();
+
+		$this->tester->assertCount(1, $foodsavers);
+		$this->tester->assertEquals($this->regionAdmin['id'], $foodsavers[0]['id']);
 	}
 
 	public function testGetFoodsaversWithoutAmbassadors()
 	{
-	    $foodsavers = $this->gateway->getFoodsaversWithoutAmbassadors();
+		$foodsavers = $this->gateway->getFoodsaversWithoutAmbassadors();
 
-	    $this->tester->assertCount(1, $foodsavers);
-	    $this->tester->assertEquals($this->regionMember['id'], $foodsavers[0]['id']);
+		$this->tester->assertCount(3, $foodsavers);
 	}
 }

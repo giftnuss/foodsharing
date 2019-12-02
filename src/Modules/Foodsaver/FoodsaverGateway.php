@@ -57,13 +57,13 @@ final class FoodsaverGateway extends BaseGateway
 		    
 			ORDER BY fs.name ASC
 		', [
-            ':regionId' => $regionId
-        ]);
-    }
-	
+			':regionId' => $regionId
+		]);
+	}
+
 	public function listActiveFoodsaversByRegion(int $regionId): array
 	{
-	    $res = $this->db->fetchAll('
+		$res = $this->db->fetchAll('
 			SELECT 	fs.`id`,
 					fs.`photo`,
 					fs.`name`,
@@ -79,31 +79,31 @@ final class FoodsaverGateway extends BaseGateway
 	        
 			ORDER BY fs.`name`
 		', [
-            ':regionId' => $regionId
-        ]);
-	    
-	    return array_map(function ($fs) {
-	        if ($fs['photo']) {
-	            $image = '/images/50_q_' . $fs['photo'];
-	        } else {
-	            $image = '/img/50_q_avatar.png';
-	        }
-	        
-	        return [
-	            'user' => [
-	                'id' => $fs['id'],
-	                'name' => $fs['name'],
-	                'sleep_status' => $fs['sleep_status']
-	            ],
-	            'size' => 50,
-	            'imageUrl' => $image
-	        ];
-	    }, $res);
+			':regionId' => $regionId
+		]);
+
+		return array_map(function ($fs) {
+			if ($fs['photo']) {
+				$image = '/images/50_q_' . $fs['photo'];
+			} else {
+				$image = '/img/50_q_avatar.png';
+			}
+
+			return [
+				'user' => [
+					'id' => $fs['id'],
+					'name' => $fs['name'],
+					'sleep_status' => $fs['sleep_status']
+				],
+				'size' => 50,
+				'imageUrl' => $image
+			];
+		}, $res);
 	}
-	
+
 	public function listActiveWithFullNameByRegion(int $regionId): array
 	{
-	    return $this->db->fetchAll('
+		return $this->db->fetchAll('
 			SELECT 	fs.id,
 					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
 					fs.`email`,
@@ -117,9 +117,9 @@ final class FoodsaverGateway extends BaseGateway
 			AND 	fsreg.active = 1
 			AND 	fsreg.bezirk_id = :regionId
 		', [
-            ':regionId' => $regionId
-        ]);
-    }
+			':regionId' => $regionId
+		]);
+	}
 
 	public function getFoodsaverDetails(int $fsId): array
 	{
@@ -146,32 +146,32 @@ final class FoodsaverGateway extends BaseGateway
 				'privacy_policy_accepted_date',
 				'privacy_notice_accepted_date'
 			], [
-            'id' => $fsId
-        ]);
-    }
+			'id' => $fsId
+		]);
+	}
 
 	public function getFoodsaverBasics(int $fsId): array
 	{
-	    $fs = $this->db->fetchByCriteria('fs_foodsaver', [
-            'id',
-            'name',
-            'nachname',
-            'bezirk_id',
-            'rolle',
-            'photo',
-            'geschlecht',
-            'stat_fetchweight',
-            'stat_fetchcount',
-            'sleep_status'
-        ], [
-            'id' => $fsId
-        ]);
-        if ($fs) {
+		$fs = $this->db->fetchByCriteria('fs_foodsaver', [
+			'id',
+			'name',
+			'nachname',
+			'bezirk_id',
+			'rolle',
+			'photo',
+			'geschlecht',
+			'stat_fetchweight',
+			'stat_fetchcount',
+			'sleep_status'
+		], [
+			'id' => $fsId
+		]);
+		if ($fs) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
 				$fs['bezirk_name'] = $this->db->fetchValueByCriteria('fs_bezirk', 'name', [
-                    'id' => $fs['bezirk_id']
-                ]);
+					'id' => $fs['bezirk_id']
+				]);
 			}
 
 			return $fs;
@@ -179,20 +179,20 @@ final class FoodsaverGateway extends BaseGateway
 
 		return [];
 	}
-	
+
 	public function getFoodsaversWithoutAmbassadors(): array
 	{
-	    $foodsavers = $this->getActiveFoodsavers();
-	    $ambassadors = $this->getActiveAmbassadors();
-	    
-	    return array_udiff($foodsavers, $ambassadors, function (array $fs, array $amb) {
-	        return $fs['id'] == $amb['id'];
-	    });
+		$foodsavers = $this->getActiveFoodsavers();
+		$ambassadors = $this->getActiveAmbassadors();
+
+		return array_udiff($foodsavers, $ambassadors, function (array $fs, array $amb) {
+			return $fs['id'] - $amb['id'];
+		});
 	}
-	
+
 	private function getActiveFoodsavers(): array
 	{
-	    return $this->db->fetchAll('
+		return $this->db->fetchAll('
 			SELECT  fs.id,
 					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
 					fs.`anschrift`,
@@ -207,35 +207,35 @@ final class FoodsaverGateway extends BaseGateway
             AND     fs.`active` = 1
 		');
 	}
-	
+
 	public function getFoodsaver(int $fsId): array
 	{
 		$out = $this->db->fetchByCriteria('fs_foodsaver', [
-            'id',
-            'bezirk_id',
-            'plz',
-            'stadt',
-            'lat',
-            'lon',
-            'email',
-            'name',
-            'nachname',
-            'anschrift',
-            'telefon',
-            'handy',
-            'geschlecht',
-            'geb_datum',
-            'anmeldedatum',
-            'photo',
-            'about_me_public',
-            'orgateam',
-            'data',
-            'rolle',
-            'position',
-            'homepage'
-        ], [
-            'id' => $fsId
-        ]);
+			'id',
+			'bezirk_id',
+			'plz',
+			'stadt',
+			'lat',
+			'lon',
+			'email',
+			'name',
+			'nachname',
+			'anschrift',
+			'telefon',
+			'handy',
+			'geschlecht',
+			'geb_datum',
+			'anmeldedatum',
+			'photo',
+			'about_me_public',
+			'orgateam',
+			'data',
+			'rolle',
+			'position',
+			'homepage'
+		], [
+			'id' => $fsId
+		]);
 
 		if ($bot = $this->getAmbassadorsRegions($fsId)) {
 			$out['botschafter'] = $bot;
@@ -243,10 +243,10 @@ final class FoodsaverGateway extends BaseGateway
 
 		return $out;
 	}
-	
+
 	private function getAmbassadorsRegions(int $fsId): int
-    {
-        return $this->db->fetchAll('
+	{
+		return $this->db->fetchAll('
 			SELECT   reg.`name`,
                      reg.`id`
 	        
@@ -256,11 +256,11 @@ final class FoodsaverGateway extends BaseGateway
 	        
 			WHERE    amb.foodsaver_id = :fsId
         ', [
-            ':fsId' => $fsId
-        ]);
-    }
-    
-    public function getAmbassadors(int $regionId): array
+			':fsId' => $fsId
+		]);
+	}
+
+	public function getAmbassadors(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
@@ -279,33 +279,33 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE   amb.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL
         ', [
-            ':regionId' => $regionId
-        ]);
-    }
-	
+			':regionId' => $regionId
+		]);
+	}
+
 	public function getActiveAmbassadors(): array
 	{
-	    return $this->db->fetchAll('
+		return $this->db->fetchAll('
 			SELECT  fs.`id`,
 					fs.`name`,
 					fs.`nachname`,
 					fs.`geschlecht`,
 					fs.`email`
-	        
+            
 			FROM 	`fs_foodsaver` fs
                     JOIN `fs_botschafter` amb
                     ON fs.id = amb.foodsaver_id
                         LEFT JOIN `fs_bezirk` reg
                         ON amb.bezirk_id = reg.id
-	        
+            
 			WHERE	reg.type != :regType
 			AND     fs.deleted_at IS NULL
             AND     fs.`active` = 1
         ', [
-            ':regType' => Type::WORKING_GROUP
-        ]);
-    }
-	
+			':regType' => Type::WORKING_GROUP
+		]);
+	}
+
 	public function getAmbassadorsNumberOfRegions(int $fsId): int
 	{
 		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
@@ -344,9 +344,9 @@ final class FoodsaverGateway extends BaseGateway
 			AND     `bezirk_id` = :regionId
 			AND     `lat` != ""
         ', [
-            ':regionId' => $regionId
-        ]);
-    }
+			':regionId' => $regionId
+		]);
+	}
 
 	public function xhrGetTagFsAll(array $regionIds): array
 	{
@@ -362,9 +362,9 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE 	hb.bezirk_id IN(:regionIds)
 			AND		fs.deleted_at IS NULL
 		', [
-            ':regionIds' => implode(',', $regionIds)
-        ]);
-    }
+			':regionIds' => implode(',', $regionIds)
+		]);
+	}
 
 	public function xhrGetFoodsaver(array $data): array
 	{
@@ -388,9 +388,9 @@ final class FoodsaverGateway extends BaseGateway
 						OR	`nachname` LIKE :term2)
 				AND     deleted_at IS NULL
 			', [
-                ':term' => $term,
-                ':term2' => $term
-            ]);
+				':term' => $term,
+				':term2' => $term
+			]);
 
 			return $out;
 		}
@@ -411,9 +411,9 @@ final class FoodsaverGateway extends BaseGateway
 	public function getNewsletterSubscribersEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
 		return $this->getEmailAddresses($minRole, $maxRole, [
-            'newsletter' => 1
-        ]);
-    }
+			'newsletter' => 1
+		]);
+	}
 
 	public function getEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
@@ -448,8 +448,8 @@ final class FoodsaverGateway extends BaseGateway
             AND     b.`bezirk_id` > 0
 			AND     b.`bezirk_id` IN(:regionIds)
 		', [
-            ':regionIds' => implode(',', array_map('intval', $regionIds))
-        ]);
+			':regionIds' => implode(',', array_map('intval', $regionIds))
+		]);
 
 		return $this->useIdAsIndex($foodsavers);
 	}
@@ -468,8 +468,8 @@ final class FoodsaverGateway extends BaseGateway
 			AND     b.`bezirk_id` > 0
 			AND     b.`bezirk_id` IN(:regionIds)
 		', [
-            ':regionIds' => implode(',', array_map('intval', $regionIds))
-        ]);
+			':regionIds' => implode(',', array_map('intval', $regionIds))
+		]);
 
 		return $this->useIdAsIndex($foodsavers);
 	}
@@ -541,10 +541,10 @@ final class FoodsaverGateway extends BaseGateway
 				]
 			);
 		}
-        $current = $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+		$current = $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
 
-        return $current - $before;
-    }
+		return $current - $before;
+	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
 	public function getBotIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
@@ -572,8 +572,8 @@ final class FoodsaverGateway extends BaseGateway
 			AND		c.ancestor_id = :regionId
 			AND		fs.deleted_at IS NULL
 		', [
-            ':regionId' => $regionId
-        ]);
+			':regionId' => $regionId
+		]);
 	}
 
 	public function deleteFoodsaver(int $fsId): void
@@ -625,9 +625,9 @@ final class FoodsaverGateway extends BaseGateway
 				'geb_datum' => null,
 				'deleted_at' => $this->db->now()
 			], [
-            'id' => $fsId
-        ]);
-    }
+			'id' => $fsId
+		]);
+	}
 
 	private function archiveFoodsaver(int $fsId): void
 	{
@@ -636,8 +636,8 @@ final class FoodsaverGateway extends BaseGateway
             FROM    fs_foodsaver
             WHERE   id = :fsId
         ', [
-            ':fsId' => $fsId
-        ]);
+			':fsId' => $fsId
+		]);
 
 		$this->db->insert('fs_foodsaver_archive', $foodsaver);
 	}
@@ -699,13 +699,13 @@ final class FoodsaverGateway extends BaseGateway
 		$clean_data = [];
 		foreach ($fields as $field) {
 			if (array_key_exists($field, $data)) {
-                $clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
-            }
-        }
+				$clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
+			}
+		}
 
 		$this->db->update('fs_foodsaver', $clean_data, [
-            'id' => $fsId
-        ]);
+			'id' => $fsId
+		]);
 
 		return true;
 	}
@@ -713,11 +713,11 @@ final class FoodsaverGateway extends BaseGateway
 	public function updatePhoto(int $fsId, string $photo): void
 	{
 		$this->db->update('fs_foodsaver', [
-            'photo' => strip_tags($photo)
-        ], [
-            'id' => $fsId
-        ]);
-    }
+			'photo' => strip_tags($photo)
+		], [
+			'id' => $fsId
+		]);
+	}
 
 	public function getPhoto(int $fsId): string
 	{
@@ -749,10 +749,10 @@ final class FoodsaverGateway extends BaseGateway
 		$options[$key] = $val;
 
 		return $this->db->update('fs_foodsaver', [
-            'option' => serialize($options)
-        ], [
-            'id' => $fsId
-        ]);
+			'option' => serialize($options)
+		], [
+			'id' => $fsId
+		]);
 	}
 
 	public function deleteFromRegion(int $regionId, int $fsId): void
@@ -765,21 +765,21 @@ final class FoodsaverGateway extends BaseGateway
 		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $fsId]);
 		if ($mainRegion_id === $regionId) {
 			$this->db->update('fs_foodsaver', [
-                'bezirk_id' => 0
-            ], [
-                'id' => $fsId
-            ]);
-        }
+				'bezirk_id' => 0
+			], [
+				'id' => $fsId
+			]);
+		}
 	}
 
 	public function setQuizRole(int $fsId, int $quizRole): int
 	{
 		return $this->db->update('fs_foodsaver', [
-            'quiz_rolle' => $quizRole
-        ], [
-            'id' => $fsId
-        ]);
-    }
+			'quiz_rolle' => $quizRole
+		], [
+			'id' => $fsId
+		]);
+	}
 
 	public function riseRole(int $fsId, int $newRoleId): void
 	{
@@ -809,8 +809,8 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE   id = :fsId
             AND     deleted_at IS NULL
 		', [
-            ':fsId' => $foodsaverId
-        ]);
+			':fsId' => $foodsaverId
+		]);
 	}
 
 	public function updateFoodsaver(int $fsId, array $data): int
@@ -843,8 +843,8 @@ final class FoodsaverGateway extends BaseGateway
 		}
 
 		return $this->db->update('fs_foodsaver', $updateData, [
-            'id' => $fsId
-        ]);
+			'id' => $fsId
+		]);
 	}
 
 	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
@@ -862,10 +862,10 @@ final class FoodsaverGateway extends BaseGateway
 		$fsUpdateData['quiz_rolle'] = Role::FOODSHARER;
 		$fsUpdateData['verified'] = 0;
 
-        return $this->db->update('fs_foodsaver', $fsUpdateData, [
-            'id' => $fsId
-        ]);
-    }
+		return $this->db->update('fs_foodsaver', $fsUpdateData, [
+			'id' => $fsId
+		]);
+	}
 
 	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
 	{
@@ -874,8 +874,8 @@ final class FoodsaverGateway extends BaseGateway
 			FROM 	fs_betrieb_team bt
 			WHERE 	bt.foodsaver_id = :fsId
 		', [
-            ':fsId' => $fsId
-        ]);
+			':fsId' => $fsId
+		]);
 
 		// Delete from Companies
 		foreach ($storeIds as $storeId) {

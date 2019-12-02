@@ -184,7 +184,7 @@ class ForumService
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($isAmbassadorForum) {
-		    $recipients = $this->foodsaverGateway->getAmbassadors($regionData['id']);
+			$recipients = $this->foodsaverGateway->getAmbassadors($regionData['id']);
 		} else {
 			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($regionData['id']);
 		}

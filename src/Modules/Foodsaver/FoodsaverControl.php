@@ -47,8 +47,8 @@ class FoodsaverControl extends Control
 		// check bezirk_id and permissions
 		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
-		    $regionId = $region['id'];
-		    if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
+			$regionId = $region['id'];
+			if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
 				// add breadcrumps
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
@@ -70,7 +70,7 @@ class FoodsaverControl extends Control
 				}
 			}
 		} elseif (($fsId = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
-		    $fs = $this->foodsaverGateway->getFoodsaver($fsId);
+			$fs = $this->foodsaverGateway->getFoodsaver($fsId);
 			$regionIds = $this->regionGateway->getFsRegionIds($fsId);
 			if ($fs && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
 				$this->handle_edit();
@@ -85,12 +85,12 @@ class FoodsaverControl extends Control
 				$this->pageHelper->addContent($this->view->foodsaver_form($fs['name'] . ' ' . $fs['nachname'] . ' bearbeiten', $regionDetails));
 
 				$this->pageHelper->addContent($this->v_utils->v_field(
-				    $this->v_utils->v_menu([
+					$this->v_utils->v_menu([
 					   ['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
 					   ['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
-				    ]),
-				    $this->translationHelper->s('actions')),
-				    CNT_RIGHT
+					]),
+					$this->translationHelper->s('actions')),
+					CNT_RIGHT
 				);
 			}
 		} else {

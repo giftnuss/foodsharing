@@ -48,7 +48,7 @@ class FoodsaverXhr extends Control
 	public function foodsaverrefresh()
 	{
 		$regionId = $_GET['bid'];
-        if (!$this->session->may('orga') && !$this->session->isAdminFor($regionId)) {
+		if (!$this->session->may('orga') && !$this->session->isAdminFor($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($regionId);
