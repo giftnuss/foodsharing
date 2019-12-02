@@ -223,7 +223,7 @@ final class FoodsaverGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getBotschafter(int $regionId): array
+	public function getAmbassadors(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
