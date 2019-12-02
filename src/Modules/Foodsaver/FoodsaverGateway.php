@@ -71,17 +71,83 @@ final class FoodsaverGateway extends BaseGateway
 					CONCAT("#",fs.id) AS href
 			 
 		    FROM	fs_foodsaver fs
-					INNER JOIN fs_foodsaver_has_bezirk hb
-					ON fs.id = hb.foodsaver_id
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
 
 		    WHERE   fs.deleted_at IS NULL
-			AND     hb.bezirk_id = :regionId'
+			AND     fsreg.bezirk_id = :regionId'
 					. $onlyInactiveClause . '
 		    
 			ORDER BY fs.name ASC
-		',
-		[':regionId' => $regionId]);
+		', [
+            ':regionId' => $regionId
+        ]);
+    }
+	
+	public function listFoodsaverByRegion(int $regionId): array
+	{
+	    $res = $this->db->fetchAll('
+			SELECT 	fs.`id`,
+					fs.`photo`,
+					fs.`name`,
+					fs.sleep_status
+	        
+		    FROM	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
+	        
+			WHERE   fs.deleted_at IS NULL
+			AND 	fsreg.active = 1
+			AND 	fsreg.bezirk_id = :regionId
+	        
+			ORDER BY fs.`name`
+		', [
+            ':regionId' => $regionId
+        ]);
+	    
+	    return array_map(function ($fs) {
+	        if ($fs['photo']) {
+	            $image = '/images/50_q_' . $fs['photo'];
+	        } else {
+	            $image = '/img/50_q_avatar.png';
+	        }
+	        
+	        return [
+	            'user' => [
+	                'id' => $fs['id'],
+	                'name' => $fs['name'],
+	                'sleep_status' => $fs['sleep_status']
+	            ],
+	            'size' => 50,
+	            'imageUrl' => $image
+	        ];
+	    }, $res);
 	}
+	
+	public function listActiveWithFullNameByRegion(int $regionId): array
+	{
+	    return $this->db->fetchAll('
+			SELECT 	fs.id,
+					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+					fs.`name` AS vorname,
+					fs.`anschrift`,
+					fs.`email`,
+					fs.`telefon`,
+					fs.`handy`,
+					fs.`plz`,
+					fs.`geschlecht`
+	        
+		    FROM	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
+	        
+			WHERE   fs.deleted_at IS NULL
+			AND 	fsreg.active = 1
+			AND 	fsreg.bezirk_id = :regionId
+		', [
+            ':regionId' => $regionId
+        ]);
+    }
 
 	public function getFoodsaverDetails(int $fsId): array
 	{
@@ -155,44 +221,19 @@ final class FoodsaverGateway extends BaseGateway
 	private function getActiveFoodsavers(): array
 	{
 	    return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.plz
-	        
-			FROM 		`fs_foodsaver` fs
-	        
-			WHERE		fs.deleted_at IS NULL
-            AND fs.`active` = 1
-		');
-	}
-	
-	public function listActiveWithFullNameByRegion(int $regionId): array
-	{
-	    return $this->db->fetchAll('
-			SELECT 	fs.id,
+			SELECT  fs.id,
 					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-					fs.`name` AS vorname,
 					fs.`anschrift`,
 					fs.`email`,
 					fs.`telefon`,
 					fs.`handy`,
-					fs.`plz`,
-					fs.`geschlecht`
+					fs.plz
 	        
-			FROM 	fs_foodsaver_has_bezirk fb
-					INNER JOIN `fs_foodsaver` fs
-			        ON fb.foodsaver_id = fs.id
+			FROM 	`fs_foodsaver` fs
 	        
-			WHERE  	fb.bezirk_id = :regionId
-			AND 	fb.`active` = 1
-			AND		fs.deleted_at IS NULL
-		',
-	        [':regionId' => $regionId]
-	    );
+			WHERE	fs.deleted_at IS NULL
+            AND     fs.`active` = 1
+		');
 	}
 	
 	public function listAmbassadorsByRegion(int $regionId): array
@@ -555,44 +596,6 @@ final class FoodsaverGateway extends BaseGateway
 		}
 
 		return $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]) - $before;
-	}
-
-	public function listFoodsaverByRegion(int $regionId): array
-	{
-		$res = $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.sleep_status
-
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_foodsaver_has_bezirk` c
-			        ON c.`foodsaver_id` = fs.id
-
-			WHERE   fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :regionId
-			AND 	c.active = 1
-
-			ORDER BY fs.`name`
-		', [':regionId' => $regionId]);
-
-		return array_map(function ($fs) {
-			if ($fs['photo']) {
-				$image = '/images/50_q_' . $fs['photo'];
-			} else {
-				$image = '/img/50_q_avatar.png';
-			}
-
-			return [
-				'user' => [
-					'id' => $fs['id'],
-					'name' => $fs['name'],
-					'sleep_status' => $fs['sleep_status']
-				],
-				'size' => 50,
-				'imageUrl' => $image
-			];
-		}, $res);
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
