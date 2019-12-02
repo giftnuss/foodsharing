@@ -28,33 +28,34 @@ final class FoodsaverGateway extends BaseGateway
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function getFoodsavers(int $regionId = 0): array
+	public function getFoodsaversByRegion(int $regionId): array
 	{
-		$and = $regionId ? ' AND fb.`bezirk_id` = ' . $regionId : '';
-
 		return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`name` AS vorname,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.`plz`,
-						fs.`geschlecht`
+			SELECT 	fs.id,
+					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+					fs.`name` AS vorname,
+					fs.`anschrift`,
+					fs.`email`,
+					fs.`telefon`,
+					fs.`handy`,
+					fs.`plz`,
+					fs.`geschlecht`
 
-			FROM 		fs_foodsaver_has_bezirk fb
-						INNER JOIN `fs_foodsaver` fs
-			            ON fb.foodsaver_id = fs.id
+		    FROM	fs_foodsaver fs
+            	    INNER JOIN fs_foodsaver_has_bezirk fsreg
+            	    ON fs.id = fsreg.foodsaver_id
 
-			WHERE		fs.deleted_at IS NULL' . $and
-		);
+		    WHERE   fs.deleted_at IS NULL
+		    AND 	fsreg.bezirk_id = :regionId
+		 ', [
+            ':regionId' => $regionId
+        ]);
 	}
 
-	public function listFoodsaversByRegion(int $regionId, bool $showOnlyInactive = false): array
+	public function listFoodsaversByRegion(int $regionId, bool $hideRecentlyOnline = false): array
 	{
 		$onlyInactiveClause = '';
-		if ($showOnlyInactive) {
+		if ($hideRecentlyOnline) {
 			$oldestActiveDate = Carbon::now()->subMonths(6)->format('Y-m-d H:i:s');
 			$onlyInactiveClause = '
 				AND (fs.last_login < "' . $oldestActiveDate . '"
@@ -749,17 +750,14 @@ final class FoodsaverGateway extends BaseGateway
 
 		$clean_data = [];
 		foreach ($fields as $field) {
-			if (!array_key_exists($field, $data)) {
-				continue;
-			}
-			$clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
-		}
+			if (array_key_exists($field, $data)) {
+                $clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
+            }
+        }
 
-		$this->db->update(
-			'fs_foodsaver',
-			$clean_data,
-			['id' => $fsId]
-		);
+		$this->db->update('fs_foodsaver', $clean_data, [
+            'id' => $fsId
+        ]);
 
 		return true;
 	}
