@@ -53,7 +53,7 @@ class FoodsaverXhr extends Control
 		}
 		$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($regionId);
 		$regionData = $this->regionGateway->getRegion($regionId);
-		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $$regionData), "'");
+		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $regionData), "'");
 
 		return array(
 			'status' => 1,
