@@ -948,11 +948,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$storeId = substr($bell['identifier'], strlen('store-fetch-unconfirmed-'));
 			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
 			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
+			$nextUnconfirmedFetchTime = $this->getNextUnconfirmedFetchTime($storeId);
 
 			$newMessageData = [
 				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
-				'time' => $this->getNextUnconfirmedFetchTime($storeId),
-				'expiration' => $this->getNextUnconfirmedFetchTime($storeId)
+				'time' => $nextUnconfirmedFetchTime,
+				'expiration' => $nextUnconfirmedFetchTime
 			];
 
 			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
