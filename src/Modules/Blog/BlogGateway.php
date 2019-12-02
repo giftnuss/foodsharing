@@ -186,7 +186,7 @@ final class BlogGateway extends BaseGateway
 
 		$foodsaver = array();
 		$orgateam = $this->foodsaverGateway->getOrgateam();
-		$botschafter = $this->foodsaverGateway->getBotschafter($data['bezirk_id']);
+		$botschafter = $this->foodsaverGateway->getAmbassadors($data['bezirk_id']);
 
 		foreach ($orgateam as $o) {
 			$foodsaver[$o['id']] = $o;
