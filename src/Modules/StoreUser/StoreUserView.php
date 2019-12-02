@@ -110,12 +110,9 @@ class StoreUserView extends View
 	{
 		$id = $this->identificationHelper->id('team');
 		$out = '<ul id="' . $id . '" class="team">';
-		$jssaver = array();
 		$sleeper = '';
 
 		foreach ($betrieb['foodsaver'] as $fs) {
-			$jssaver[] = (int)$fs['id'];
-
 			$class = '';
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
@@ -188,8 +185,6 @@ class StoreUserView extends View
 
 		if ($betrieb['springer']) {
 			foreach ($betrieb['springer'] as $fs) {
-				$jssaver[] = (int)$fs['id'];
-
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
 				if ($betrieb['verantwortlich'] || $this->session->isAdminFor($betrieb['bezirk_id']) || $this->session->isOrgaTeam()) {

@@ -183,8 +183,6 @@ class View
 			shuffle($foodsaver);
 		}
 		foreach ($foodsaver as $fs) {
-			$jssaver[] = (int)$fs['id'];
-
 			$photo = $this->imageService->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
