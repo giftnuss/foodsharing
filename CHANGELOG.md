@@ -22,6 +22,7 @@
 - Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
 - Improves usability of the topbar using screen readers !1179 @dthulke
 - Change "impressum" in newsletter footer to new fs postal address !1205 @jofranz
+- Show events on dashboard which started one/more days in the past and are ongoing !1215 @treee111
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
