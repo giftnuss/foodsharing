@@ -280,7 +280,7 @@ class MaintenanceControl extends ConsoleControl
 
 	private function memcacheUserInfo()
 	{
-	    $admins = $this->foodsaverGateway->getWorkGroupAmbassadorIds(0);
+		$admins = $this->foodsaverGateway->getWorkGroupAmbassadorIds(0);
 		if (!$admins) {
 			$admins = array();
 		}

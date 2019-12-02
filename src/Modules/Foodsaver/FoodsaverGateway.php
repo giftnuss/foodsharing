@@ -269,7 +269,7 @@ final class FoodsaverGateway extends BaseGateway
 					fs.`nachname`,
 					fs.`photo`,
 					fs.`email`,
-					fs.`geschlecht`
+					fs.`geschlecht`,
 					fs.`sleep_status`
 
 			FROM    `fs_foodsaver` fs
