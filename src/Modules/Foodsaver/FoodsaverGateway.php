@@ -311,18 +311,18 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
 	}
 
-    public function getOrgateam(): array
-    {
-        return $this->db->fetchAllByCriteria('fs_foodsaver', [
-            'id',
-            'name',
-            'nachname',
-            'geschlecht',
-            'email'
-        ], [
-            'orgateam' => 1
-        ]);
-    }
+	public function getOrgateam(): array
+	{
+		return $this->db->fetchAllByCriteria('fs_foodsaver', [
+			'id',
+			'name',
+			'nachname',
+			'geschlecht',
+			'email'
+		], [
+			'orgateam' => 1
+		]);
+	}
 
 	public function getFsMap(int $regionId): array
 	{
