@@ -180,28 +180,26 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getFoodsaverBasics(int $fsId): array
 	{
-		if ($fs = $this->db->fetch('
-			SELECT 	fs.`name`,
-					fs.nachname,
-					fs.bezirk_id,
-					fs.rolle,
-					fs.photo,
-					fs.geschlecht,
-					fs.stat_fetchweight,
-					fs.stat_fetchcount,
-					fs.sleep_status,
-					fs.id
-
-			FROM 	`fs_foodsaver` fs
-
-			WHERE fs.id = :fsId
-		', [
-            ':fsId' => $fsId
-        ])
-		) {
+	    $fs = $this->db->fetchByCriteria('fs_foodsaver', [
+            'id',
+            'name',
+            'nachname',
+            'bezirk_id',
+            'rolle',
+            'photo',
+            'geschlecht',
+            'stat_fetchweight',
+            'stat_fetchcount',
+            'sleep_status'
+        ], [
+            'id' => $fsId
+        ]);
+        if ($fs) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
-				$fs['bezirk_name'] = $this->db->fetchValueByCriteria('fs_bezirk', 'name', ['id' => $fs['bezirk_id']]);
+				$fs['bezirk_name'] = $this->db->fetchValueByCriteria('fs_bezirk', 'name', [
+                    'id' => $fs['bezirk_id']
+                ]);
 			}
 
 			return $fs;
