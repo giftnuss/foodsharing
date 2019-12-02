@@ -51,7 +51,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function listFoodsaver(int $regionId, bool $showOnlyInactive = false): array
+	public function listFoodsaversByRegion(int $regionId, bool $showOnlyInactive = false): array
 	{
 		$onlyInactiveClause = '';
 		if ($showOnlyInactive) {

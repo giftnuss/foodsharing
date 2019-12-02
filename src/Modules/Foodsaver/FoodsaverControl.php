@@ -48,7 +48,7 @@ class FoodsaverControl extends Control
 		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
 			// permission granted so we can load the foodsavers
 		    $regionId = $region['id'];
-            if ($foodsavers = $this->foodsaverGateway->listFoodsaver($regionId)) {
+		    if ($foodsavers = $this->foodsaverGateway->listFoodsaversByRegion($regionId)) {
 				// add breadcrumps
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
@@ -62,7 +62,7 @@ class FoodsaverControl extends Control
 				$this->pageHelper->addContent($this->view->foodsaverForm());
 
 				// list inactive foodsaver
-				if ($foodsaverInactive = $this->foodsaverGateway->listFoodsaver($_GET['bid'], true)) {
+				if ($foodsaverInactive = $this->foodsaverGateway->listFoodsaversByRegion($_GET['bid'], true)) {
 					$this->pageHelper->addContent(
 						$this->view->foodsaverList($foodsaverInactive, $region, true),
 						CNT_RIGHT
