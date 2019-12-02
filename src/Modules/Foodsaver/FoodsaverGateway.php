@@ -230,35 +230,31 @@ final class FoodsaverGateway extends BaseGateway
 	
 	public function getFoodsaver(int $fsId): array
 	{
-		$out = $this->db->fetch('
-			SELECT  `id`,
-				    `bezirk_id`,
-    				`plz`,
-    				`stadt`,
-    				`lat`,
-    				`lon`,
-    				`email`,
-    				`name`,
-    				`nachname`,
-    				`anschrift`,
-    				`telefon`,
-    				`handy`,
-    				`geschlecht`,
-    				`geb_datum`,
-    				`anmeldedatum`,
-    				`photo`,
-    				`about_me_public`,
-    				`orgateam`,
-    				`data`,
-    				`rolle`,
-    				`position`,
-    				`homepage`
-
-			FROM    `fs_foodsaver`
-
-			WHERE 	`id` = :fsId
-        ', [
-            ':fsId' => $fsId
+		$out = $this->db->fetchByCriteria('fs_foodsaver', [
+            'id',
+            'bezirk_id',
+            'plz',
+            'stadt',
+            'lat',
+            'lon',
+            'email',
+            'name',
+            'nachname',
+            'anschrift',
+            'telefon',
+            'handy',
+            'geschlecht',
+            'geb_datum',
+            'anmeldedatum',
+            'photo',
+            'about_me_public',
+            'orgateam',
+            'data',
+            'rolle',
+            'position',
+            'homepage'
+        ], [
+            'id' => $fsId
         ]);
 
 		if ($bot = $this->getAmbassadorsRegions($fsId)) {
