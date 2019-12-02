@@ -246,13 +246,6 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		return $out;
 	}
 
-	public function testGetActiveFoodsavers()
-	{
-	    $foodsavers = $this->gateway->getActiveFoodsavers();
-
-	    $this->tester->assertCount(4, $foodsavers);
-	}
-
 	public function testGetActiveAmbassadors()
 	{
 	    $foodsavers = $this->gateway->getActiveAmbassadors();
