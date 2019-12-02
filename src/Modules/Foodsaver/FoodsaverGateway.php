@@ -635,7 +635,7 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
-	public function del_foodsaver(int $fsId): void
+	public function deleteFoodsaver(int $fsId): void
 	{
 		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $fsId]);
 

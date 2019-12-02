@@ -111,7 +111,7 @@ class UserRestController extends AbstractFOSRestController
 		if ($userId === $this->session->id()) {
 			$this->session->logout();
 		}
-		$this->foodsaverGateway->del_foodsaver($userId);
+		$this->foodsaverGateway->deleteFoodsaver($userId);
 
 		return $this->handleView($this->view());
 	}
