@@ -69,10 +69,10 @@ class FoodsaverControl extends Control
 					);
 				}
 			}
-		} elseif (($fsId = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
+		} elseif (($fsId = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->may('orga'))) {
 			$fs = $this->foodsaverGateway->getFoodsaver($fsId);
 			$regionIds = $this->regionGateway->getFsRegionIds($fsId);
-			if ($fs && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
+			if ($fs && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->may('orga'))) {
 				$this->handle_edit();
 				$fs = $this->foodsaverGateway->getFoodsaver($fsId);
 
@@ -103,7 +103,7 @@ class FoodsaverControl extends Control
 		global $g_data;
 
 		if ($this->submitted()) {
-			if ($this->session->isOrgaTeam()) {
+		    if ($this->session->may('orga')) {
 				if (isset($g_data['orgateam']) && is_array($g_data['orgateam']) && $g_data['orgateam'][0] == 1) {
 					$g_data['orgateam'] = 1;
 				}
@@ -134,7 +134,7 @@ class FoodsaverControl extends Control
 	{
 		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
 		if ($updateResult) {
-			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->isOrgaTeam()) {
+			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
 				$updateResult = $this->foodsaverGateway->downgradePermanently($fsId, $this->storeModel);
 			}
 		}
