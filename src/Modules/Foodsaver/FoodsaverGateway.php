@@ -267,14 +267,14 @@ final class FoodsaverGateway extends BaseGateway
 	private function getAmbassadorsRegions(int $fsId): int
     {
         return $this->db->fetchAll('
-			SELECT   `fs_bezirk`.`name`,
-                     `fs_bezirk`.`id`
+			SELECT   reg.`name`,
+                     reg.`id`
 	        
-			FROM     fs_bezirk
-				     INNER JOIN fs_botschafter
-                     ON `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
+			FROM     fs_bezirk reg
+				     INNER JOIN fs_botschafter amb
+                     ON amb.`bezirk_id` = reg.`id`
 	        
-			WHERE    `fs_botschafter`.foodsaver_id = :fsId
+			WHERE    amb.foodsaver_id = :fsId
         ', [
             ':fsId' => $fsId
         ]);
