@@ -129,7 +129,7 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Europe Bot group');
-		$bots = $this->foodsaverGateway->getBotIds(RegionIDs::EUROPE);
+		$bots = $this->foodsaverGateway->getRegionAmbassadorIds(RegionIDs::EUROPE);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::EUROPE_BOT_GROUP, $bots, true);
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
@@ -139,12 +139,12 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Switzerland BOT group');
-		$chBots = $this->foodsaverGateway->getBotIds(RegionIDs::SWITZERLAND);
+		$chBots = $this->foodsaverGateway->getRegionAmbassadorIds(RegionIDs::SWITZERLAND);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::SWITZERLAND_BOT_GROUP, $chBots, true);
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
 		self::info('updating Austria BOT group');
-		$aBots = $this->foodsaverGateway->getBotIds(RegionIDs::AUSTRIA);
+		$aBots = $this->foodsaverGateway->getRegionAmbassadorIds(RegionIDs::AUSTRIA);
 		$counts = $this->foodsaverGateway->updateGroupMembers(RegionIDs::AUSTRIA_BOT_GROUP, $aBots, true);
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 
@@ -280,7 +280,7 @@ class MaintenanceControl extends ConsoleControl
 
 	private function memcacheUserInfo()
 	{
-		$admins = $this->foodsaverGateway->getBotIds(0, false, true);
+	    $admins = $this->foodsaverGateway->getWorkGroupAmbassadorIds(0);
 		if (!$admins) {
 			$admins = array();
 		}

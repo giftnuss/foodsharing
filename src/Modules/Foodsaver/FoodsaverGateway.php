@@ -546,32 +546,44 @@ final class FoodsaverGateway extends BaseGateway
 		return $current - $before;
 	}
 
-	/* retrieves the list of all bots for given bezirk or sub bezirk */
-	public function getBotIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
+	public function getWorkGroupAmbassadorIds(int $workGroupId): array
 	{
-		$where_type = '';
+	    return $this->getAmbassadorIds($workGroupId, false, true);
+	}
+
+	public function getRegionAmbassadorIds(int $regionId): array
+	{
+	    return $this->getAmbassadorIds($regionId);
+	}
+
+	/* retrieves the list of all bots for given bezirk or sub bezirk */
+	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
+	{
+		$regTypeCondition = '';
 		if (!$includeRegionAmbassador) {
-			$where_type = 'bz.type = ' . Type::WORKING_GROUP;
+			$regTypeCondition = 'reg.type = ' . Type::WORKING_GROUP;
 		} elseif (!$includeGroupAmbassador) {
-			$where_type = 'bz.type <> ' . Type::WORKING_GROUP;
+			$regTypeCondition = 'reg.type != ' . Type::WORKING_GROUP;
 		}
 
 		return $this->db->fetchAllValues('
 			SELECT DISTINCT 
 					bot.foodsaver_id
 
-			FROM	`fs_bezirk_closure` c
-					LEFT JOIN `fs_bezirk` bz
-					ON bz.id = c.bezirk_id
-						INNER JOIN `fs_botschafter` bot
-						ON bot.bezirk_id = c.bezirk_id
+			FROM	`fs_bezirk_closure` rc
+					LEFT JOIN `fs_bezirk` reg
+					ON rc.bezirk_id = reg.id
+						INNER JOIN `fs_botschafter` amb
+						ON rc.bezirk_id = amb.bezirk_id
 							INNER JOIN `fs_foodsaver` fs
-							ON fs.id = bot.foodsaver_id
+							ON amb.foodsaver_id = fs.id
 
-			WHERE	' . $where_type . '
-			AND		c.ancestor_id = :regionId
+			WHERE ' . $regTypeCondition . '
+			AND		(rc.ancestor_id = :ancestorId
+                    OR rc.bezirk_id = :regionId)
 			AND		fs.deleted_at IS NULL
 		', [
+			':ancestorId' => $regionId,
 			':regionId' => $regionId
 		]);
 	}
