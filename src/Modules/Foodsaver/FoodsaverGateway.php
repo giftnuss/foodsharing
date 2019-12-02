@@ -222,33 +222,27 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
 	}
 
-	public function getAllBotschafter(): array
+	public function getActiveAmbassadors(): array
 	{
-		$ambassadorIds = $this->db->fetchAllValues('
-            SELECT  foodsaver_id
-
-            FROM    `fs_fs_botschafter` b
-                    LEFT JOIN `fs_bezirk` bz
-                    ON b.bezirk_id = bz.id
-
-            WHERE   bz.type != :type
-        ',
-			[':type' => Type::WORKING_GROUP]
-		);
-
 		return $this->db->fetchAll('
-			SELECT   fs.`id`,
-					 fs.`name`,
-					 fs.`nachname`,
-					 fs.`geschlecht`,
-					 fs.`email`
+			SELECT  fs.`id`,
+					fs.`name`,
+					fs.`nachname`,
+					fs.`geschlecht`,
+					fs.`email`
 
-			FROM 	 `fs_foodsaver` fs
+			FROM 	`fs_foodsaver` fs
+                    JOIN `fs_fs_botschafter` amb
+                    ON fs.id = amb.id
+                        LEFT JOIN `fs_bezirk` reg
+                        ON amb.bezirk_id = reg.id
 
-			WHERE	 fs.id IN (' . implode(',', $ambassadorIds) . ')
-			AND      fs.deleted_at IS NULL
-            AND      fs.`active` = 1
-        ');
+			WHERE	reg.type != :regType
+			AND     fs.deleted_at IS NULL
+            AND     fs.`active` = 1
+        ',
+		    [':regType' => Type::WORKING_GROUP]
+		);
 	}
 
 	public function getAllFoodsaver(): array
@@ -272,12 +266,12 @@ final class FoodsaverGateway extends BaseGateway
 	public function getAllFoodsaverNoBotschafter(): array
 	{
 		$foodsaver = $this->getAllFoodsaver();
-		$out = array();
+		$out = [];
 
-		$botschafter = $this->getAllBotschafter();
-		$bot = array();
-		foreach ($botschafter as $b) {
-			$bot[$b['id']] = true;
+		$ambassadors = $this->getActiveAmbassadors();
+		$bot = [];
+		foreach ($ambassadors as $a) {
+			$bot[$a['id']] = true;
 		}
 
 		foreach ($foodsaver as $fs) {

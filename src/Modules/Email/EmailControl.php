@@ -141,7 +141,7 @@ class EmailControl extends Control
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 					$foodsaver = $this->foodsaverGateway->getEmailAddressesFromMainRegions($region_ids);
 				} elseif ($data['recip_choose'] == 'botschafter') {
-					$foodsaver = $this->foodsaverGateway->getAllBotschafter();
+					$foodsaver = $this->foodsaverGateway->getActiveAmbassadors();
 				} elseif ($data['recip_choose'] == 'orgateam') {
 					$foodsaver = $this->foodsaverGateway->getOrgateam();
 				}
@@ -161,7 +161,7 @@ class EmailControl extends Control
 					$foodsaver = $this->storeGateway->getAllStoreManagers();
 				} elseif ($data['recip_choose'] == 'storemanagers_and_ambs') {
 					$foodsaver1 = $this->storeGateway->getAllStoreManagers();
-					$foodsaver2 = $this->foodsaverGateway->getAllBotschafter();
+					$foodsaver2 = $this->foodsaverGateway->getActiveAmbassadors();
 					$tmp = array_merge($foodsaver1, $foodsaver2);
 					$foodsaver = array();
 					foreach ($tmp as $t) {
