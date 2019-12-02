@@ -84,7 +84,7 @@ final class FoodsaverGateway extends BaseGateway
         ]);
     }
 	
-	public function listFoodsaverByRegion(int $regionId): array
+	public function listActiveFoodsaversByRegion(int $regionId): array
 	{
 	    $res = $this->db->fetchAll('
 			SELECT 	fs.`id`,
