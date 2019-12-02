@@ -28,7 +28,7 @@ final class FoodsaverGateway extends BaseGateway
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function getFoodsaver(int $regionId): array
+	public function getFoodsavers(int $regionId): array
 	{
 		$and = $regionId ? ' AND fb.`bezirk_id` = ' . $regionId : '';
 

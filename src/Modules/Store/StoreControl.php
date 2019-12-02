@@ -223,7 +223,7 @@ class StoreControl extends Control
 					));
 				}
 
-				$foodsaver = $this->foodsaverGateway->getFoodsaver($g_data['bezirk_id']);
+				$foodsaver = $this->foodsaverGateway->getFoodsavers($g_data['bezirk_id']);
 
 				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
