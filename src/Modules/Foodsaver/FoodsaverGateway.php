@@ -244,7 +244,7 @@ final class FoodsaverGateway extends BaseGateway
 		return $out;
 	}
 
-	private function getAmbassadorsRegions(int $fsId): int
+	private function getAmbassadorsRegions(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT   reg.`name`,
@@ -548,12 +548,12 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getWorkGroupAmbassadorIds(int $workGroupId): array
 	{
-	    return $this->getAmbassadorIds($workGroupId, false, true);
+		return $this->getAmbassadorIds($workGroupId, false, true);
 	}
 
 	public function getRegionAmbassadorIds(int $regionId): array
 	{
-	    return $this->getAmbassadorIds($regionId);
+		return $this->getAmbassadorIds($regionId);
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
