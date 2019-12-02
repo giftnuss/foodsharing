@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  Foodsharing\Debug\DebugBar:
+    class: Foodsharing\Debug\EnabledDebugBar
+
+  PDO:
+    alias: DebugBar\DataCollector\PDO\TraceablePDO
+
+  DebugBar\DataCollector\PDO\TraceablePDO:
+    arguments:
+    - '@RealPDO'
