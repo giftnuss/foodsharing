@@ -377,7 +377,7 @@ class SettingsControl extends Control
 	{
 		$this->handle_edit();
 
-		$data = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$data = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		$this->dataHelper->setEditData($data);
 
@@ -470,7 +470,7 @@ class SettingsControl extends Control
 			}
 
 			if ($check) {
-				if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($this->session->id())) {
+			    if ($oldFs = $this->foodsaverGateway->getFoodsaver($this->session->id())) {
 					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
 					$this->settingsGateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}

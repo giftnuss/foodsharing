@@ -36,7 +36,7 @@ class ReportXhr extends Control
 		parent::__construct();
 
 		if (isset($_GET['fsid'])) {
-			$this->foodsaver = $this->foodsaverGateway->getOne_foodsaver($_GET['fsid']);
+		    $this->foodsaver = $this->foodsaverGateway->getFoodsaver($_GET['fsid']);
 			$this->view->setFoodsaver($this->foodsaver);
 		}
 	}

@@ -70,11 +70,11 @@ class FoodsaverControl extends Control
 				}
 			}
 		} elseif (($fsId = $this->identificationHelper->getActionId('edit')) && ($this->session->isAmbassador() || $this->session->isOrgaTeam())) {
-			$fs = $this->foodsaverGateway->getOne_foodsaver($fsId);
+		    $fs = $this->foodsaverGateway->getFoodsaver($fsId);
 			$regionIds = $this->regionGateway->getFsRegionIds($fsId);
 			if ($fs && ($this->session->isAmbassadorForRegion($regionIds, false, true) || $this->session->isOrgaTeam())) {
 				$this->handle_edit();
-				$fs = $this->foodsaverGateway->getOne_foodsaver($fsId);
+				$fs = $this->foodsaverGateway->getFoodsaver($fsId);
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_foodsaver'), '/?page=foodsaver');
 				$this->pageHelper->addBread($this->translationHelper->s('bread_edit_foodsaver'));
@@ -113,7 +113,7 @@ class FoodsaverControl extends Control
 			}
 
 			$fsId = $_GET['id'];
-			if ($oldFs = $this->foodsaverGateway->getOne_foodsaver($fsId)) {
+			if ($oldFs = $this->foodsaverGateway->getFoodsaver($fsId)) {
 				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
 				$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $logChangedFields, $this->session->id());
 			}

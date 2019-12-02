@@ -467,8 +467,8 @@ abstract class Control
 			if (!$this->mem->userIsActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
-					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
+					$foodsaver = $this->foodsaverGateway->getFoodsaver($recip_id);
+					$sender = $this->foodsaverGateway->getFoodsaver($sender_id);
 
 					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

@@ -170,7 +170,52 @@ final class FoodsaverGateway extends BaseGateway
 		');
 	}
 	
-	public function getOne_foodsaver(int $fsId): array
+	public function listActiveWithFullNameByRegion(int $regionId): array
+	{
+	    return $this->db->fetchAll('
+			SELECT 	fs.id,
+					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+					fs.`name` AS vorname,
+					fs.`anschrift`,
+					fs.`email`,
+					fs.`telefon`,
+					fs.`handy`,
+					fs.`plz`,
+					fs.`geschlecht`
+	        
+			FROM 	fs_foodsaver_has_bezirk fb
+					INNER JOIN `fs_foodsaver` fs
+			        ON fb.foodsaver_id = fs.id
+	        
+			WHERE  	fb.bezirk_id = :regionId
+			AND 	fb.`active` = 1
+			AND		fs.deleted_at IS NULL
+		',
+	        [':regionId' => $regionId]
+	    );
+	}
+	
+	public function listAmbassadorsByRegion(int $regionId): array
+	{
+	    return $this->db->fetchAll('
+			SELECT 	fs.`id`,
+					fs.`photo`,
+					fs.`name`,
+					fs.`nachname`,
+					fs.sleep_status
+	        
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN `fs_botschafter` c
+			        ON c.`foodsaver_id` = fs.id
+	        
+			WHERE   fs.deleted_at IS NULL
+			AND 	c.bezirk_id = :regionId
+		',
+	        [':regionId' => $regionId]
+	    );
+	}
+	
+	public function getFoodsaver(int $fsId): array
 	{
 		$out = $this->db->fetch('
 			SELECT  `id`,
@@ -198,30 +243,33 @@ final class FoodsaverGateway extends BaseGateway
 
 			FROM    `fs_foodsaver`
 
-			WHERE 	`id` = :id
+			WHERE 	`id` = :fsId
         ',
-			[':id' => $fsId]
+			[':fsId' => $fsId]
 		);
 
-		$bot = $this->db->fetchAll('
-			SELECT   `fs_bezirk`.`name`,
-                     `fs_bezirk`.`id`
-
-			FROM     fs_bezirk
-				     INNER JOIN fs_botschafter
-                     ON `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
-
-			WHERE    `fs_botschafter`.foodsaver_id = :id
-        ',
-			[':id' => $fsId]
-		);
-
-		if ($bot) {
+		if ($bot = $this->getAmbassadorsRegions($fsId)) {
 			$out['botschafter'] = $bot;
 		}
 
 		return $out;
 	}
+	
+	private function getAmbassadorsRegions(int $fsId): int
+    {
+        return $this->db->fetchAll('
+			SELECT   `fs_bezirk`.`name`,
+                     `fs_bezirk`.`id`
+	        
+			FROM     fs_bezirk
+				     INNER JOIN fs_botschafter
+                     ON `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
+	        
+			WHERE    `fs_botschafter`.foodsaver_id = :fsId
+        ', [
+            ':fsId' => $fsId
+        ]);
+    }
 
 	public function getAmbassadors(int $regionId): array
 	{
@@ -240,10 +288,10 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE   `fs_botschafter`.`bezirk_id` = :regionId
 			AND		fs.deleted_at IS NULL
-        ',
-			[':regionId' => $regionId]
-		);
-	}
+        ', [
+            ':regionId' => $regionId
+        ]);
+    }
 	
 	public function getActiveAmbassadors(): array
 	{
@@ -263,10 +311,10 @@ final class FoodsaverGateway extends BaseGateway
 			WHERE	reg.type != :regType
 			AND     fs.deleted_at IS NULL
             AND     fs.`active` = 1
-        ',
-	        [':regType' => Type::WORKING_GROUP]
-	    );
-	}
+        ', [
+            ':regType' => Type::WORKING_GROUP
+        ]);
+    }
 	
 	public function getAmbassadorsNumberOfRegions(int $fsId): int
 	{
@@ -545,51 +593,6 @@ final class FoodsaverGateway extends BaseGateway
 				'imageUrl' => $image
 			];
 		}, $res);
-	}
-
-	public function listActiveWithFullNameByRegion(int $regionId): array
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.id,
-					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-					fs.`name` AS vorname,
-					fs.`anschrift`,
-					fs.`email`,
-					fs.`telefon`,
-					fs.`handy`,
-					fs.`plz`,
-					fs.`geschlecht`
-
-			FROM 	fs_foodsaver_has_bezirk fb
-					INNER JOIN `fs_foodsaver` fs
-			        ON fb.foodsaver_id = fs.id
-
-			WHERE  	fb.bezirk_id = :id
-			AND 	fb.`active` = 1
-			AND		fs.deleted_at IS NULL
-		',
-			['id' => $regionId]
-		);
-	}
-
-	public function listAmbassadorsByRegion(int $regionId): array
-	{
-		return $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.sleep_status
-
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_botschafter` c
-			        ON c.`foodsaver_id` = fs.id
-
-			WHERE   fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :regionId
-		',
-			[':regionId' => $regionId]
-		);
 	}
 
 	/* retrieves the list of all bots for given bezirk or sub bezirk */

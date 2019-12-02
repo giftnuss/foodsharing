@@ -75,7 +75,7 @@ class BasketXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($this->translationHelper->s('basket_offer'));
 
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		if (empty($basketProvider['lat']) || empty($basketProvider['lon'])) {
 			$dia->addContent($this->v_utils->v_info(
@@ -87,7 +87,7 @@ class BasketXhr extends Control
 			return $dia->xhrout();
 		}
 
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		$dia->addContent($this->v_utils->v_info($this->translationHelper->s('basket_reference_info'), $this->translationHelper->s('basket_reference')));
 
@@ -140,7 +140,7 @@ class BasketXhr extends Control
 	public function publish(): array
 	{
 		$data = false;
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		parse_str($_GET['data'], $data);
 

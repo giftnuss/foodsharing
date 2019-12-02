@@ -61,8 +61,8 @@ class MessageService
 				if (!isset($_SESSION['lastMailMessage'][$recipientId]) || (time(
 						) - $_SESSION['lastMailMessage'][$recipientId]) > 600) {
 					$_SESSION['lastMailMessage'][$recipientId] = time();
-					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recipientId);
-					$sender = $this->foodsaverGateway->getOne_foodsaver($senderId);
+					$foodsaver = $this->foodsaverGateway->getFoodsaver($recipientId);
+					$sender = $this->foodsaverGateway->getFoodsaver($senderId);
 
 					$this->emailHelper->tplMail(
 						$notificationTemplate,
