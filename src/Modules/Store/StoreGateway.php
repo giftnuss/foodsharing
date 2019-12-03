@@ -575,14 +575,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function clearAbholer($storeId): int
-	{
-		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $storeId]);
-		$this->updateBellNotificationForBiebs($storeId);
-
-		return $result;
-	}
-
 	public function confirmFetcher($fsid, $storeId, $date): int
 	{
 		$result = $this->db->update(
