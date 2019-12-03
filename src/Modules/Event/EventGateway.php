@@ -197,7 +197,7 @@ class EventGateway extends BaseGateway
 			ON
 				e.id = fe.event_id AND fe.foodsaver_id = :fs_id
 			WHERE
-				e.end >= CURRENT_TIMESTAMP()
+				e.end >= CURDATE()
 			AND
 				((e.public = 1 AND (fe.status IS NULL OR fe.status <> 3))
 				OR
