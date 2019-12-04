@@ -125,7 +125,7 @@ final class RegionControl extends Control
 
 		if ($this->session->isAdminFor($regionId)) {
 			$regionOrGroupString = $isWorkGroup ? $this->translator->trans('group.mail_link_title.workgroup') : $this->translator->trans('group.mail_link_title.region');
-			if ($regionMailInfo = $this->mailboxGateway->getNewCount([$region['mailbox_id']])) {
+			if ($regionMailInfo = $this->mailboxGateway->getNewCount([['id' => $region['mailbox_id']]])) {
 				$regionOrGroupString .= ' (' . $regionMailInfo[0]['count'] . ')';
 			}
 
