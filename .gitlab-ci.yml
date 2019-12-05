@@ -4,7 +4,7 @@ include:
 .defaults: &defaults
   tags:
   - shared
-  image: registry.gitlab.com/foodsharing-dev/images/ci:1.8
+  image: registry.gitlab.com/foodsharing-dev/images/ci:2
 
 
 .ssh: &ssh
@@ -58,8 +58,7 @@ triage:
   - ruby
 
 outdated:
-  # just something with bash in it really...
-  image: ruby:2.6-alpine
+  <<: *defaults
   stage: outdated
   script:
   - ./scripts/outdated-notify
