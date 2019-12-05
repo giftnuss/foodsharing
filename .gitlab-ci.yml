@@ -61,6 +61,8 @@ outdated:
   <<: *defaults
   stage: outdated
   script:
+  # unfortunately "composer outdated -D" only works if you have installed the dependencies :/
+  - composer install --verbose --prefer-dist --no-progress --no-interaction --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
   - ./scripts/outdated-notify
   only:
     refs:
@@ -68,9 +70,8 @@ outdated:
     variables:
     - $SCHEDULED_JOB == "outdated"
   tags:
-  - shared
-  - linux
-  - ruby
+  # run on our server where we likely have the image already
+  - non-shared
 
 build:backend-chat:
   <<: *defaults
