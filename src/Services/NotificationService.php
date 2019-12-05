@@ -86,7 +86,7 @@ final class NotificationService
 		}
 	}
 
-	public function sendEmailIfLastAdminLeftGroup($groupId)
+	public function sendEmailIfLastAdminLeftGroup($groupId): void
 	{
 		$wasAdminForThisGroup = $this->session->isAdminFor($groupId);
 
