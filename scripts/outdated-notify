@@ -12,7 +12,10 @@ if [ -z "$SLACK_WEBHOOK_URL" ]; then
 fi
 
 json_escape () {
-    printf '%s' "$1" | php -r 'echo json_encode(file_get_contents("php://stdin"));'
+    # clearly not a very thorough json escaping ... ;)
+    local text="$1"
+    text=${text//\"/\\\"} # escape double quotes
+    printf '"%s"' "$text"
 }
 
 send_to_slack () {
