@@ -17,7 +17,6 @@ final class RegionXhr extends Control
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
-	private $regionGateway;
 
 	public function __construct(
 		RegionGateway $regionGateway,
@@ -26,8 +25,7 @@ final class RegionXhr extends Control
 		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
-		ForumFollowerGateway $forumFollowerGateway,
-		RegionGateway $regionGateway
+		ForumFollowerGateway $forumFollowerGateway
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -36,7 +34,6 @@ final class RegionXhr extends Control
 		$this->forumPermissions = $forumPermissions;
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
-		$this->regionGateway = $regionGateway;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
