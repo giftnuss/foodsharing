@@ -36,6 +36,7 @@ include:
 
 stages:
 - triage
+- outdated
 - build
 - test
 - deploy
@@ -46,6 +47,17 @@ triage:
   script:
   - gem install gitlab-triage
   - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
+  only:
+  - schedules
+  tags:
+  - shared
+
+outdated:
+  # just something with bash in it really...
+  image: ruby:2.6-alpine
+  stage: outdated
+  script:
+  - ./scripts/outdated-notify
   only:
   - schedules
   tags:

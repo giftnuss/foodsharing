@@ -68,6 +68,7 @@
 - Added docker toolbox download link for windows users in dev docs #733 !1147 @lebe1
 - Remove hotUpdateChunkFilename config option workaround !1202 @jofranz @nicksellen
 - Fix DebugBar !1212 @nicksellen
+- Add scheduled CI job to print outdated dependencies to slack !1221 @nicksellen
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
