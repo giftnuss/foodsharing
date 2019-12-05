@@ -67,6 +67,7 @@
 - Refactored database access from controllers to gateways !1192 #9 @alex.simm
 - Removed unused clearAbholer() method, which would falsely remove all fetches from a user which need to stay for documentary reason !1216 @jofranz
 - Replaced REPLACE INTO queries with prepared statements !1124 #757 @alex.simm
+- Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
 
 ## Dev/Test/CI stuff
 
