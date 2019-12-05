@@ -115,7 +115,7 @@ final class MessageModel extends Db
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
 		if ($this->session->may('orga') || (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke']))) {
 			$sql = '
-                SELECT 
+                SELECT DISTINCT
                     fs.id AS id,
                     CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value
                     
