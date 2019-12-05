@@ -54,12 +54,15 @@ triage:
     - $SCHEDULED_JOB == "triage"
   tags:
   - shared
+  - linux
 
 outdated:
   # just something with bash in it really...
   image: ruby:2.6-alpine
   stage: outdated
   script:
+  - ls -la
+  - pwd
   - ./scripts/outdated-notify
   only:
     refs:
@@ -68,6 +71,7 @@ outdated:
     - $SCHEDULED_JOB == "outdated"
   tags:
   - shared
+  - linux
 
 build:backend-chat:
   <<: *defaults
