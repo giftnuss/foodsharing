@@ -14,11 +14,11 @@
       Politik
     </h3>
     <a
-      :href="$url('fasten')"
+      :href="$url('fsstaedte')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Verschwendungsfasten
+      foodsharing-Städte
     </a>
     <a
       :href="$url('claims')"

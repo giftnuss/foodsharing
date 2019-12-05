@@ -31,7 +31,7 @@ export default {
 
   mission: () => '/ueber-uns',
   claims: () => '/?page=content&sub=forderungen',
-  fasten: () => '/?page=content&sub=fasten',
+  fsstaedte: () => '/?page=content&sub=fsstaedte',
   leeretonne: () => '/?page=content&sub=leeretonne',
   academy: () => '/?page=content&sub=academy',
   workshops: () => '/?page=content&sub=workshops',

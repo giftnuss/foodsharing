@@ -319,7 +319,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fasten(): void
+	public function fsstaedte(): void
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
 			$this->pageHelper->addBread($cnt['title']);
