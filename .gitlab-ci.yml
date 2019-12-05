@@ -48,7 +48,10 @@ triage:
   - gem install gitlab-triage
   - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
   only:
-  - schedules
+    refs:
+    - schedules
+    variables:
+    - $SCHEDULED_JOB == "triage"
   tags:
   - shared
 
@@ -59,7 +62,10 @@ outdated:
   script:
   - ./scripts/outdated-notify
   only:
-  - schedules
+    refs:
+    - schedules
+    variables:
+    - $SCHEDULED_JOB == "outdated"
   tags:
   - shared
 
