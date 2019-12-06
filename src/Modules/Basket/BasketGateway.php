@@ -414,25 +414,13 @@ class BasketGateway extends BaseGateway
 			$appost = 0;
 		}
 
-		$stm = '
-			REPLACE INTO `fs_basket_anfrage`
-			(
-				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
-			) 
-			VALUES 
-			(
-				:foodsaver_id, :basket_id, :status, NOW(), :appost
-			)	
-		';
-		$this->db->execute(
-			$stm,
-			[
-				':foodsaver_id' => $foodsaverId,
-				':basket_id' => $basket_id,
-				':status' => $status,
-				':appost' => $appost,
-			]
-		);
+		$this->db->insertOrUpdate('fs_basket_anfrage', [
+			'foodsaver_id' => $foodsaverId,
+			'basket_id' => $basket_id,
+			'status' => $status,
+			'time' => $this->db->now(),
+			'appost' => $appost
+		]);
 	}
 
 	public function getAmountOfFoodBaskets(int $fs_id): int

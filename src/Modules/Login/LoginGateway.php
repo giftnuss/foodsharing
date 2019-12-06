@@ -164,19 +164,11 @@ class LoginGateway extends BaseGateway
 		)) {
 			$key = bin2hex(random_bytes(16));
 
-			$this->db->execute('
-			REPLACE INTO 	`fs_pass_request`
-			(
-				`foodsaver_id`,
-				`name`,
-				`time`
-			)
-			VALUES
-			(
-				:fs_id,
-				:key,
-				NOW()
-			)', [':fs_id' => (int)$fs['id'], ':key' => strip_tags($key)]);
+			$this->db->insertOrUpdate('fs_pass_request', [
+				'foodsaver_id' => $fs['id'],
+				'name' => strip_tags($key),
+				'time' => $this->db->now()
+			]);
 
 			if ($mail) {
 				$vars = [

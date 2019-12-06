@@ -358,24 +358,14 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function linkBezirk($fsid, $regionId, $active = 1)
+	public function linkBezirk(int $foodsaverId, int $regionId, int $active = 1)
 	{
-		$this->db->execute('
-			REPLACE INTO `fs_foodsaver_has_bezirk`
-			(
-				`bezirk_id`,
-				`foodsaver_id`,
-				`added`,
-				`active`
-			)
-			VALUES
-			(
-				' . (int)$regionId . ',
-				' . (int)$fsid . ',
-				NOW(),
-				' . (int)$active . '
-			)
-		');
+		$this->db->insertOrUpdate('fs_foodsaver_has_bezirk', [
+			'bezirk_id' => $regionId,
+			'foodsaver_id' => $foodsaverId,
+			'added' => $this->db->now(),
+			'active' => $active
+		]);
 	}
 
 	public function update_bezirkNew($id, $data)

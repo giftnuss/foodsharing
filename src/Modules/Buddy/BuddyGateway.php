@@ -44,28 +44,28 @@ class BuddyGateway extends BaseGateway
 		return false;
 	}
 
-	public function buddyRequest($buddyId, $fsId): bool
+	public function buddyRequest(int $buddyId, int $foodsaverId): bool
 	{
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:foodsaver_id, :buddy_id, 0)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $foodsaverId,
+			'buddy_id' => $buddyId,
+			'confirmed' => 0
+		]);
 
 		return true;
 	}
 
-	public function confirmBuddy($buddyId, $fsId): void
+	public function confirmBuddy(int $buddyId, int $foodsaverId): void
 	{
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:foodsaver_id, :buddy_id, 1)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:buddy_id, :foodsaver_id, 1)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $foodsaverId,
+			'buddy_id' => $buddyId,
+			'confirmed' => 1
+		]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $buddyId,
+			'buddy_id' => $foodsaverId,
+			'confirmed' => 1
+		]);
 	}
 }
