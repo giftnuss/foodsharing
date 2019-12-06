@@ -557,17 +557,10 @@ final class FoodsaverGateway extends BaseGateway
 	/* retrieves the list of all bots for given bezirk or sub bezirk */
 	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
 	{
-		$regTypeCondition = '';
-		if (!$includeRegionAmbassador) {
-			$regTypeCondition = 'reg.type = ' . Type::WORKING_GROUP;
-		} elseif (!$includeGroupAmbassador) {
-			$regTypeCondition = 'reg.type != ' . Type::WORKING_GROUP;
-		}
-
-		return $this->db->fetchAllValues('
-			SELECT DISTINCT 
+	    $sql = '
+			SELECT DISTINCT
 					bot.foodsaver_id
-
+	        
 			FROM	`fs_bezirk_closure` rc
 					LEFT JOIN `fs_bezirk` reg
 					ON rc.bezirk_id = reg.id
@@ -575,12 +568,20 @@ final class FoodsaverGateway extends BaseGateway
 						ON rc.bezirk_id = amb.bezirk_id
 							INNER JOIN `fs_foodsaver` fs
 							ON amb.foodsaver_id = fs.id
-
-			WHERE ' . $regTypeCondition . '
-			AND		(rc.ancestor_id = :ancestorId
+	        
+			WHERE  (rc.ancestor_id = :ancestorId
                     OR rc.bezirk_id = :regionId)
 			AND		fs.deleted_at IS NULL
-		', [
+		';
+	    
+		if (!$includeRegionAmbassador) {
+		    $sql .= ' AND reg.type = ' . Type::WORKING_GROUP;
+		} elseif (!$includeGroupAmbassador) {
+		    $sql .= ' AND reg.type != ' . Type::WORKING_GROUP;
+		}
+
+		return $this->db->fetchAllValues(
+		    $sql, [
 			':ancestorId' => $regionId,
 			':regionId' => $regionId
 		]);
