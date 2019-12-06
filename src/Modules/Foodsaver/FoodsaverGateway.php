@@ -544,9 +544,9 @@ final class FoodsaverGateway extends BaseGateway
 		return $current - $before;
 	}
 
-	public function getWorkGroupAmbassadorIds(int $workGroupId): array
+	public function getAllWorkGroupAmbassadorIds(): array
 	{
-		return $this->getAmbassadorIds($workGroupId, false, true);
+		return $this->getAmbassadorIds(0, false, true);
 	}
 
 	public function getRegionAmbassadorIds(int $regionId): array
