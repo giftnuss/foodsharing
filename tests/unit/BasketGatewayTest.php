@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
+
 class BasketGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -90,5 +92,11 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 				50
 			)
 		);
+	}
+
+	public function testSetBasketStatus()
+	{
+		$this->gateway->setStatus($this->basketIds[0], RequestStatus::REQUESTED, $this->foodsaver['id']);
+		$this->assertEquals(RequestStatus::REQUESTED, $this->gateway->getBasket($this->basketIds[0])['status']);
 	}
 }
