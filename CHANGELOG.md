@@ -65,6 +65,7 @@
 - Remove food basket pinboard frontend from !969 entirely !1203 @jofranz
 - Refactored database access from controllers to gateways !1192 #9 @alex.simm
 - Removed unused clearAbholer() method, which would falsely remove all fetches from a user which need to stay for documentary reason !1216 @jofranz
+- Replaced REPLACE INTO queries with prepared statements !1124 #757 @alex.simm
 
 ## Dev/Test/CI stuff
 

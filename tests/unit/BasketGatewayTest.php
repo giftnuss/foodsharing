@@ -96,7 +96,8 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 
 	public function testSetBasketStatus()
 	{
-		$this->gateway->setStatus($this->basketIds[0], RequestStatus::REQUESTED, $this->foodsaver['id']);
-		$this->assertEquals(RequestStatus::REQUESTED, $this->gateway->getBasket($this->basketIds[0])['status']);
+		$this->gateway->setStatus($this->basketIds[0], RequestStatus::REQUESTED, $this->otherFoodsaver['id']);
+		$request = $this->gateway->getRequestStatus($this->basketIds[0], $this->otherFoodsaver['id'], $this->foodsaver['id']);
+		$this->assertEquals(RequestStatus::REQUESTED, $request['status']);
 	}
 }
