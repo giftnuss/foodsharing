@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Buddy;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 
 class BuddyGateway extends BaseGateway
 {
@@ -19,10 +20,10 @@ class BuddyGateway extends BaseGateway
 		
 			WHERE 	b.buddy_id = fs.id
 			AND 	b.foodsaver_id = :foodsaver_id
-			AND 	b.confirmed = 1
+			AND 	b.confirmed = :buddy_id
 		';
 
-		return $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
+		return $this->db->fetchAll($stm, [':foodsaver_id' => $fsId, ':buddy_id' => BuddyId::BUDDY]);
 	}
 
 	public function listBuddyIds($fsId): array
@@ -49,7 +50,7 @@ class BuddyGateway extends BaseGateway
 		$this->db->insertOrUpdate('fs_buddy', [
 			'foodsaver_id' => $foodsaverId,
 			'buddy_id' => $buddyId,
-			'confirmed' => 0
+			'confirmed' => BuddyId::REQUESTED
 		]);
 
 		return true;
@@ -60,12 +61,12 @@ class BuddyGateway extends BaseGateway
 		$this->db->insertOrUpdate('fs_buddy', [
 			'foodsaver_id' => $foodsaverId,
 			'buddy_id' => $buddyId,
-			'confirmed' => 1
+			'confirmed' => BuddyId::BUDDY
 		]);
 		$this->db->insertOrUpdate('fs_buddy', [
 			'foodsaver_id' => $buddyId,
 			'buddy_id' => $foodsaverId,
-			'confirmed' => 1
+			'confirmed' => BuddyId::BUDDY
 		]);
 	}
 }
