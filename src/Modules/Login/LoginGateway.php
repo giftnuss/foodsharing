@@ -166,7 +166,7 @@ class LoginGateway extends BaseGateway
 
 			$this->db->insertOrUpdate('fs_pass_request', [
 				'foodsaver_id' => $fs['id'],
-				'name' => strip_tags($key),
+				'name' => $key,
 				'time' => $this->db->now()
 			]);
 
