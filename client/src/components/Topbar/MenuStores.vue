@@ -104,8 +104,8 @@ export default {
 </script>
 
 <style lang="scss">
-  .badge {
-    margin-left: -1.8em;
+  .fa-circle {
+    margin-left: -1em;
   }
   .bootstrap .badge-info {
     background-color: #f5f5b5;
