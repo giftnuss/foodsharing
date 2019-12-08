@@ -888,7 +888,6 @@ final class FoodsaverGateway extends BaseGateway
 			':fsId' => $fsId
 		]);
 
-		// Delete from Companies
 		foreach ($storeIds as $storeId) {
 			$storeModel->signout($storeId, $fsId);
 		}
