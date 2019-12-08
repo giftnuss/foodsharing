@@ -507,9 +507,9 @@ final class FoodsaverGateway extends BaseGateway
 
 		if ($remainingMemberIds) {
 			$delCount = 0;
-			$preGroupMembers = $this->db->fetchAllValuesByCriteria(
-				'fs_foodsaver_has_bezirk', 'foodsaver_id', ['bezirk_id' => $regionId]
-			);
+            $preGroupMembers = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bezirk', 'foodsaver_id', [
+                'bezirk_id' => $regionId
+            ]);
 			foreach ($preGroupMembers as $fsId) {
 				if (!in_array($fsId, $remainingMemberIds)) {
 					$delCount += $this->db->delete(
@@ -641,17 +641,13 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	private function archiveFoodsaver(int $fsId): void
-	{
-		$foodsaver = $this->db->fetch('
-            SELECT  *
-            FROM    fs_foodsaver
-            WHERE   id = :fsId
-        ', [
-			':fsId' => $fsId
-		]);
+    {
+        $foodsaver = $this->db->fetchByCriteria('fs_foodsaver', '*', [
+            'id' => $fsId
+        ]);
 
-		$this->db->insert('fs_foodsaver_archive', $foodsaver);
-	}
+        $this->db->insert('fs_foodsaver_archive', $foodsaver);
+    }
 
 	public function getFsAutocomplete(array $regions): array
 	{
@@ -806,23 +802,20 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function loadFoodsaver(int $foodsaverId): array
 	{
-		return $this->db->fetch('
-			SELECT  id,
-				    name,
-				    nachname,
-				    photo,
-				    rolle,
-				    geschlecht,
-				    last_login
+        return $this->db->fetchByCriteria('fs_foodsaver', [
+            id,
+            name,
+            nachname,
+            photo,
+            rolle,
+            geschlecht,
+            last_login
+        ], [
 
-			FROM    fs_foodsaver
-
-			WHERE   id = :fsId
-            AND     deleted_at IS NULL
-		', [
-			':fsId' => $foodsaverId
-		]);
-	}
+            'id' => $foodsaverId,
+            'deleted_at' => null
+        ]);
+    }
 
 	public function updateFoodsaver(int $fsId, array $data): int
 	{
@@ -880,19 +873,16 @@ final class FoodsaverGateway extends BaseGateway
 
 	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
 	{
-		$storeIds = $this->db->fetchAllValues('
-			SELECT 	bt.betrieb_id as id
-			FROM 	fs_betrieb_team bt
-			WHERE 	bt.foodsaver_id = :fsId
-		', [
-			':fsId' => $fsId
-		]);
+        $storeIds = $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'betrieb_id', [
+            'bt.foodsaver_id' => $fsId
+        ]);
 
 		foreach ($storeIds as $storeId) {
 			$storeModel->signout($storeId, $fsId);
 		}
 	}
-	public function getFoodsaverAddress($foodsaverId)
+
+	public function getFoodsaverAddress(int $foodsaverId): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
