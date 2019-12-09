@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use DateTime;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class SettingsGateway extends BaseGateway
@@ -18,7 +17,7 @@ class SettingsGateway extends BaseGateway
 				$this->db->insert(
 					'fs_foodsaver_change_history',
 					[
-						'date' => date(DateTime::ISO8601),
+						'date' => date(\DateTime::ISO8601),
 						'fs_id' => $fsId,
 						'changer_id' => $changerId,
 						'object_name' => $k,
@@ -40,6 +39,8 @@ class SettingsGateway extends BaseGateway
 			],
 			['id' => $fsId]
 		);
+	}
+
 	public function unsubscribeNewsletter(string $email)
 	{
 		$this->db->update('fs_foodsaver', ['newsletter' => 0], ['email' => $email]);
