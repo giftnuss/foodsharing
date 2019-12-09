@@ -559,7 +559,7 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		$sql = '
 			SELECT DISTINCT
-					bot.foodsaver_id
+					amb.foodsaver_id
 	        
 			FROM	`fs_bezirk_closure` rc
 					LEFT JOIN `fs_bezirk` reg
