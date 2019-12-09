@@ -802,7 +802,7 @@ final class FoodsaverGateway extends BaseGateway
 	}
 
 	public function getSubscriptions(int $fsId): array
-    {
+	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
 			[
