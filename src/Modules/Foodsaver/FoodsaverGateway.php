@@ -873,7 +873,7 @@ final class FoodsaverGateway extends BaseGateway
 	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
 	{
 		$storeIds = $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'betrieb_id', [
-			'bt.foodsaver_id' => $fsId
+			'foodsaver_id' => $fsId
 		]);
 
 		foreach ($storeIds as $storeId) {
