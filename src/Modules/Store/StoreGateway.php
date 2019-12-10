@@ -12,6 +12,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
+use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 
@@ -106,9 +107,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			WHERE   b.bezirk_id = :regionId
 			AND     b.`lat` != ""
         ', [
-            ':regionId' => $regionId
-        ]);
-    }
+			':regionId' => $regionId
+		]);
+	}
 
 	public function listMyStores(int $fsId): array
 	{
@@ -125,11 +126,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					ON b.id = t.betrieb_id
 
 			WHERE	t.foodsaver_id = :fsId
-			AND     t.active = 1
+			AND     t.active = :membershipStatus
 		', [
-            ':fsId' => $fsId
-        ]);
-    }
+			':fsId' => $fsId,
+			':membershipStatus' => MembershipStatus::MEMBER
+		]);
+	}
 
 	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
@@ -161,8 +163,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			ORDER BY t.verantwortlich DESC, s.name ASC
 		', [
-            ':fs_id' => $fs_id
-        ]);
+			':fs_id' => $fs_id
+		]);
 
 		$out = [];
 		$out['verantwortlich'] = [];
@@ -176,11 +178,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			foreach ($betriebe as $b) {
 				$already_in[$b['id']] = true;
 				if ($b['verantwortlich'] == 0) {
-					if ($b['active'] == 0) {
+					if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
 						$out['anfrage'][] = $b;
-					} elseif ($b['active'] == 1) {
+					} elseif ($b['active'] == MembershipStatus::MEMBER) {
 						$out['team'][] = $b;
-					} elseif ($b['active'] == 2) {
+					} elseif ($b['active'] == MembershipStatus::JUMPER) {
 						$out['waitspringer'][] = $b;
 					}
 				} else {
@@ -311,9 +313,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = :id
-				AND 		t.active = 0
+				AND 		t.active = :membershipStatus
 				AND			fs.deleted_at IS NULL
-		', [':id' => $storeId]);
+		', [
+			':id' => $storeId,
+			':membershipStatus' => MembershipStatus::APPLIED_FOR_TEAM
+		]);
 
 		$out['verantwortlich'] = false;
 		$foodsaver = [];
@@ -414,10 +419,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = :id
-				AND 		t.active  = 1
+				AND 		t.active  = :membershipStatus
 				AND			fs.deleted_at IS NULL
 				ORDER BY 	t.`stat_fetchcount` DESC
-		', [':id' => $storeId]);
+		', [
+			':id' => $storeId,
+			':membershipStatus' => MembershipStatus::MEMBER
+		]);
 	}
 
 	public function getBetriebSpringer($storeId): array
@@ -443,21 +451,24 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 				WHERE 		fs.id = t.foodsaver_id
 				AND 		`betrieb_id` = :id
-				AND 		t.active  = 2
+				AND 		t.active  = :membershipStatus
 				AND			fs.deleted_at IS NULL
-		', [':id' => $storeId]);
+		', [
+			':id' => $storeId,
+			':membershipStatus' => MembershipStatus::JUMPER
+		]);
 	}
 
 	public function getBiebsForStore($storeId)
 	{
-		return $this->db->fetchAll(
-			'
+		return $this->db->fetchAll('
 			SELECT 	`foodsaver_id` as id
 			FROM fs_betrieb_team
 			WHERE `betrieb_id` = :betrieb_id
 			AND verantwortlich = 1
-			AND `active` = 1',
-			[':betrieb_id' => $storeId]);
+			AND `active` = :membershipStatus
+        ',
+			[':betrieb_id' => $storeId, ':membershipStatus' => MembershipStatus::MEMBER]);
 	}
 
 	public function getStoreManager(int $storeId): array
@@ -471,10 +482,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 							ON fs.id = t.foodsaver_id
 
 				WHERE 	t.`betrieb_id` = :storeId
-						AND t.active = 1
+						AND t.active = :membershipStatus
 						AND t.verantwortlich = 1
 						AND fs.deleted_at IS NULL
-		', [':storeId' => $storeId]);
+		', [
+			':storeId' => $storeId,
+			':membershipStatus' => MembershipStatus::MEMBER
+		]);
 	}
 
 	public function getAllStoreManagers(): array
@@ -535,22 +549,23 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
-		$result = $this->db->fetchByCriteria('fs_betrieb_team',
-			['active', 'verantwortlich'],
-			[
-				'betrieb_id' => $storeId,
-				'foodsaver_id' => $userId,
-			]);
+		$result = $this->db->fetchByCriteria('fs_betrieb_team', [
+			'active',
+			'verantwortlich'
+		], [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId
+		]);
 		if (!$result) {
 			return TeamStatus::NoMember;
 		} else {
-			if ($result['verantwortlich'] && $result['active'] == 1) {
+			if ($result['verantwortlich'] && $result['active'] == MembershipStatus::MEMBER) {
 				return TeamStatus::Coordinator;
 			} else {
 				switch ($result['active']) {
-					case 2:
+					case MembershipStatus::JUMPER:
 						return TeamStatus::WaitingList;
-					case 1:
+					case MembershipStatus::MEMBER:
 						return TeamStatus::Member;
 					default:
 						return TeamStatus::Applied;
