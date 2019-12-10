@@ -133,7 +133,7 @@ class ForumRestController extends AbstractFOSRestController
 		$posts = $this->forumGateway->listPosts($threadId);
 
 		$thread['isFollowingEmail'] = $this->forumFollowerGateway->isFollowingEmail($this->session->id(), $threadId);
-		$thread['isFollowingBell'] = $this->forumFollowerGateway->receivesBell($this->session->id(), $threadId);
+		$thread['isFollowingBell'] = $this->forumFollowerGateway->isFollowingBell($this->session->id(), $threadId);
 		$thread['mayModerate'] = $this->forumPermissions->mayModerate($threadId);
 		$thread['posts'] = array_map(function ($post) {
 			return $this->normalizePost($post);
