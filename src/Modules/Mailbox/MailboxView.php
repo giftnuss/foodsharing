@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\View;
 
 class MailboxView extends View
@@ -177,7 +178,7 @@ class MailboxView extends View
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->translationHelper->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->translationHelper->s('answer') . '</a>
+						<a href="#" onclick="mb_moveto(' . MailboxFolder::FOLDER_TRASH . ');return false;" class="button">' . $this->translationHelper->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->translationHelper->s('answer') . '</a>
 					</div>
 					<table class="header">
 						<tr>

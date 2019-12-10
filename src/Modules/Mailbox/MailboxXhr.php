@@ -193,7 +193,7 @@ class MailboxXhr extends Control
 				// save message to sent folder
 				$this->mailboxGateway->saveMessage(
 					$mailboxId,
-					2, //sent folder
+					MailboxFolder::FOLDER_SENT, //sent folder
 					json_encode([
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $message['mailbox'],
@@ -314,7 +314,7 @@ class MailboxXhr extends Control
 
 				if ($this->mailboxGateway->saveMessage(
 					$_POST['mb'],
-					2,
+					MailboxFolder::FOLDER_SENT,
 					json_encode(array(
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $mailbox['name'],
