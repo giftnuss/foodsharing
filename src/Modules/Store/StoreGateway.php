@@ -476,9 +476,11 @@ r
 			WHERE `betrieb_id` = :betrieb_id
 			AND verantwortlich = 1
 			AND `active` = :membershipStatus
-        ',
-			[':betrieb_id' => $storeId, ':membershipStatus' => MembershipStatus::MEMBER]);
-	}
+        ', [
+            ':betrieb_id' => $storeId,
+            ':membershipStatus' => MembershipStatus::MEMBER
+        ]);
+    }
 
 	public function getStoreManager(int $storeId): array
 	{
@@ -862,11 +864,12 @@ r
 			        ON bt.betrieb_id = b.id
 
 			WHERE   bt.`foodsaver_id` = :fsId
-			AND 	bt.active = 1
+			AND 	bt.active = :membershipStatus
 			AND 	b.betrieb_status_id NOT IN (:doesNotWantToWorkWithUs, :givesToOtherCharity)
 			ORDER BY b.name
 		', [
 			':fsId' => $fsId,
+            ':membershipStatus' => MembershipStatus::MEMBER,
 			':doesNotWantToWorkWithUs' => CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US,
 			':givesToOtherCharity' => CooperationStatus::GIVES_TO_OTHER_CHARITY
 		]);
