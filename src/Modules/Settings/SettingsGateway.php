@@ -132,7 +132,7 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function storeApiToken(int $fsId, string $token): void
+	public function saveApiToken(int $fsId, string $token): void
 	{
 		$this->db->insert(
 			'fs_apitoken',

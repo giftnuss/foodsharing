@@ -516,9 +516,10 @@ class SettingsControl extends Control
 		/* This needs to be here for routing of upgrade/ to work. Do not remove! */
 	}
 
-	/** Creates and saves a new API token for given user
-	 * @param $fsId Foodsaver ID
+	/**
+	 * Creates and saves a new API token for given user
 	 *
+	 * @param $fsId int Foodsaver ID
 	 * @return false in case of error or weak algorithm, generated token otherwise
 	 */
 	private function generate_api_token(int $fsId): string
@@ -528,7 +529,7 @@ class SettingsControl extends Control
 			return false;
 		}
 
-		$this->settingsGateway->storeApiToken($fsId, $token);
+		$this->settingsGateway->saveApiToken($fsId, $token);
 
 		return $token;
 	}
