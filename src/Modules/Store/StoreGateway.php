@@ -103,9 +103,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
                     LEFT JOIN fs_kette k
                     ON b.kette_id = k.id
 
-			WHERE   b.bezirk_id = :bezirk_id
-			AND     b.`lat` != ""', [':bezirk_id' => $regionId]);
-	}
+			WHERE   b.bezirk_id = :regionId
+			AND     b.`lat` != ""
+        ', [
+            ':regionId' => $regionId
+        ]);
+    }
 
 	public function listMyStores(int $fsId): array
 	{
@@ -123,39 +126,43 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			WHERE	t.foodsaver_id = :fsId
 			AND     t.active = 1
-		', [':fsId' => $fsId]);
-	}
+		', [
+            ':fsId' => $fsId
+        ]);
+    }
 
 	public function getMyStores($fs_id, $regionId, $options = array()): array
 	{
 		$betriebe = $this->db->fetchAll('
-			SELECT 	fs_betrieb.id,
-						`fs_betrieb`.betrieb_status_id,
-						fs_betrieb.plz,
-						fs_betrieb.kette_id,
+			SELECT 	s.id,
+					s.betrieb_status_id,
+					s.plz,
+					s.kette_id,
 
-						fs_betrieb.ansprechpartner,
-						fs_betrieb.fax,
-						fs_betrieb.telefon,
-						fs_betrieb.email,
+					s.ansprechpartner,
+					s.fax,
+					s.telefon,
+					s.email,
 
-						fs_betrieb.betrieb_kategorie_id,
-						fs_betrieb.name,
-						CONCAT(fs_betrieb.str," ",fs_betrieb.hsnr) AS anschrift,
-						fs_betrieb.str,
-						fs_betrieb.hsnr,
-						fs_betrieb.`betrieb_status_id`,
-						fs_betrieb_team.verantwortlich,
-						fs_betrieb_team.active
+					s.betrieb_kategorie_id,
+					s.name,
+					CONCAT(s.str," ",s.hsnr) AS anschrift,
+					s.str,
+					s.hsnr,
+					s.`betrieb_status_id`,
+					t.verantwortlich,
+					t.active
 
-				FROM 	fs_betrieb,
-						fs_betrieb_team
+			FROM 	fs_betrieb s
+					INNER JOIN fs_betrieb_team t
+			        ON s.id = t.betrieb_id
 
-				WHERE 	fs_betrieb.id = fs_betrieb_team.betrieb_id
-                AND 	fs_betrieb_team.foodsaver_id = :fs_id
+            WHERE 	t.foodsaver_id = :fs_id
 
-				ORDER BY fs_betrieb_team.verantwortlich DESC, fs_betrieb.name ASC
-		', [':fs_id' => $fs_id]);
+			ORDER BY t.verantwortlich DESC, s.name ASC
+		', [
+            ':fs_id' => $fs_id
+        ]);
 
 		$out = [];
 		$out['verantwortlich'] = [];
