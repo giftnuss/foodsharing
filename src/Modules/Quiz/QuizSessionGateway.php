@@ -369,13 +369,7 @@ class QuizSessionGateway extends BaseGateway
 
 	public function deleteSession(int $sessionId): int
 	{
-		$deletionLimit = 1;
-
-		return $this->db->delete(
-			'fs_quiz_session',
-			['id' => $sessionId],
-			$deletionLimit
-		);
+		return $this->db->delete('fs_quiz_session', ['id' => $sessionId]);
 	}
 
 	public function hasPassedQuiz(int $fsId, int $quizId): bool
