@@ -385,7 +385,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		');
 	}
 
-	public function getBasics_food(): array
+	public function getBasics_groceries(): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	`id`,
