@@ -125,7 +125,7 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->storeGateway->getStoreManager($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($region, '', $this->storeGateway->getBasics_food(), $this->storeGateway->getBasics_chain(), $this->storeGateway->getStoreCategories(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$this->pageHelper->addContent($this->view->betrieb_form($region, '', $this->storeGateway->getBasics_groceries(), $this->storeGateway->getBasics_chain(), $this->storeGateway->getStoreCategories(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 			} else {
 				$this->flashMessageHelper->info('Diesen Betrieb kannst Du nicht bearbeiten');
 			}
