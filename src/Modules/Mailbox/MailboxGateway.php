@@ -544,4 +544,28 @@ class MailboxGateway extends BaseGateway
 	{
 		return $this->db->fetchByCriteria('fs_mailbox_message', ['mailbox_id', 'attach'], ['id' => $messageId]);
 	}
+
+	/**
+	 * Returns the folder of the mail with this message ID.
+	 *
+	 * @param int $messageId
+	 *
+	 * @return array
+	 */
+	public function getMailFolder(int $messageId): int
+	{
+		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'folder', ['id' => $messageId]);
+	}
+
+	/**
+	 * Returns the HTML body of the mail with this message ID.
+	 *
+	 * @param int $messageId
+	 *
+	 * @return string
+	 */
+	public function getMessageHtmlBody(int $messageId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'body_html', ['id' => $messageId]);
+	}
 }

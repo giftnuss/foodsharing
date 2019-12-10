@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -18,14 +18,12 @@ class MailboxXhr extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-		Db $model,
 		MailboxView $view,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
 		MailboxGateway $mailboxGateway,
 		MailboxPermissions $mailboxPermissions
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
@@ -151,9 +149,9 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
+		$folder = $this->mailboxGateway->getMailFolder($_GET['mid']);
 
-		if ($folder == 3) {
+		if ($folder == MailboxFolder::FOLDER_TRASH) {
 			$this->mailboxGateway->deleteMessage($_GET['mid']);
 		} else {
 			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
@@ -353,7 +351,7 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
+		$html = $this->mailboxGateway->getMessageHtmlBody($_GET['id']);
 
 		if (strpos(strtolower($html), '<body') === false) {
 			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';
