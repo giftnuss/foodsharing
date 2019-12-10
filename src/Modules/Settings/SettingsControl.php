@@ -284,24 +284,24 @@ class SettingsControl extends Control
 				global $g_data;
 				$g_data = $_POST;
 
-				$check = true;
-
+				$isDataComplete = true;
+                
 				if (empty($_POST['about_me_public'])) {
-					$check = false;
+					$isDataComplete = false;
 					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
-					$check = false;
+					$isDataComplete = false;
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				}
 
-				if ((int)$_POST['bezirk'] == 0) {
-					$check = false;
+				if (empty((int)$_POST['bezirk'])) {
+					$isDataComplete = false;
 					$this->flashMessageHelper->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
 				}
 
-				if ($check) {
+				if ($isDataComplete) {
 					$data = $this->dataHelper->unsetAll($_POST, ['new_bezirk']);
 					$this->foodsaverGateway->updateProfile($fsId, $data);
 
