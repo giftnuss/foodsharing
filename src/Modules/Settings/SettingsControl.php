@@ -285,7 +285,7 @@ class SettingsControl extends Control
 				$g_data = $_POST;
 
 				$isDataComplete = true;
-                
+
 				if (empty($_POST['about_me_public'])) {
 					$isDataComplete = false;
 					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');

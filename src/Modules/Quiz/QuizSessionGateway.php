@@ -181,22 +181,22 @@ class QuizSessionGateway extends BaseGateway
 
 	private function collectQuestionsWithAnswers(array $quizQuestions): array
 	{
-	    $out = [];
+		$out = [];
 
-	    foreach ($quizQuestions as $quizQuestion) {
-	        $out[$quizQuestion['id']] = $quizQuestion;
-	        $answers = [];
-	        if (isset($quizQuestion['answers'])) {
-	            foreach ($quizQuestion['answers'] as $answer) {
-	                $answers[$answer] = $answer;
-	            }
-	        }
-	        if (!empty($answers)) {
-	            $out[$quizQuestion['id']]['answers'] = $answers;
-	        }
-	    }
+		foreach ($quizQuestions as $quizQuestion) {
+			$out[$quizQuestion['id']] = $quizQuestion;
+			$answers = [];
+			if (isset($quizQuestion['answers'])) {
+				foreach ($quizQuestion['answers'] as $answer) {
+					$answers[$answer] = $answer;
+				}
+			}
+			if (!empty($answers)) {
+				$out[$quizQuestion['id']]['answers'] = $answers;
+			}
+		}
 
-        return $out;
+		return $out;
 	}
 
 	/*
