@@ -114,40 +114,25 @@ class QuizSessionGateway extends BaseGateway
 	final public function getExtendedUserSession(int $sessionId, int $fsId): array
 	{
 		if ($session = $this->getUserSession($sessionId, $fsId)) {
-			$tmp = array();
+			$questions = [];
 			$session['try_count'] = $this->countSessions($fsId, $session['quiz_id']);
 
-			/*
-			 * First of all sort the question array and get all questions_ids etc to calculate the result
-			 */
 			if (!empty($session['quiz_questions'])) {
 				$session['quiz_questions'] = unserialize($session['quiz_questions']);
-
-				foreach ($session['quiz_questions'] as $quizQuestion) {
-					$tmp[$quizQuestion['id']] = $quizQuestion;
-					$ttmp = array();
-					if (isset($quizQuestion['answers'])) {
-						foreach ($quizQuestion['answers'] as $answer) {
-							$ttmp[$answer] = $answer;
-						}
-					}
-					if (!empty($ttmp)) {
-						$tmp[$quizQuestion['id']]['answers'] = $ttmp;
-					}
-				}
+				$questions = $this->collectQuestionsWithAnswers($session['quiz_questions']);
 			}
 
 			if (!empty($session['quiz_result'])) {
 				$session['quiz_result'] = unserialize($session['quiz_result']);
 
 				foreach ($session['quiz_result'] as $quizKey => $quizResult) {
-					$user = $tmp[$quizResult['id']];
+					$user = $questions[$quizResult['id']];
 					$session['quiz_result'][$quizKey]['user'] = $user;
 
-					foreach ($quizResult['answers'] as $answerKey => $answer) {
-						$session['quiz_result'][$quizKey]['answers'][$answerKey]['right'] = $answer['right'];
+					foreach ($quizResult['answers'] as $answerKey => $givenAnswer) {
+						$session['quiz_result'][$quizKey]['answers'][$answerKey]['right'] = $givenAnswer['right'];
 
-						$isAnswerGiven = isset($user['answers'][$answer['id']]);
+						$isAnswerGiven = isset($user['answers'][$givenAnswer['id']]);
 						$session['quiz_result'][$quizKey]['answers'][$answerKey]['user_say'] = $isAnswerGiven;
 					}
 
@@ -164,7 +149,7 @@ class QuizSessionGateway extends BaseGateway
 					$session = array_merge($quiz, $session);
 					unset($session['quiz_questions']);
 
-					$session['quiz_result'] = $this->addRightAnswers($tmp, $session['quiz_result']);
+					$session['quiz_result'] = $this->addRightAnswers($questions, $session['quiz_result']);
 
 					return $session;
 				}
@@ -192,6 +177,26 @@ class QuizSessionGateway extends BaseGateway
 				'foodsaver_id' => $fsId
 			]
 		);
+	}
+
+	private function collectQuestionsWithAnswers(array $quizQuestions): array
+	{
+	    $out = [];
+
+	    foreach ($quizQuestions as $quizQuestion) {
+	        $out[$quizQuestion['id']] = $quizQuestion;
+	        $answers = [];
+	        if (isset($quizQuestion['answers'])) {
+	            foreach ($quizQuestion['answers'] as $answer) {
+	                $answers[$answer] = $answer;
+	            }
+	        }
+	        if (!empty($answers)) {
+	            $out[$quizQuestion['id']]['answers'] = $answers;
+	        }
+	    }
+
+        return $out;
 	}
 
 	/*
