@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -11,6 +10,7 @@ use Foodsharing\Permissions\ForumPermissions;
 final class RegionXhr extends Control
 {
 	private $responses;
+	private $regionGateway;
 	private $foodsaverGateway;
 	private $forumGateway;
 	private $forumFollowerGateway;
@@ -19,7 +19,7 @@ final class RegionXhr extends Control
 	private $twig;
 
 	public function __construct(
-		Db $model,
+		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		RegionHelper $regionHelper,
@@ -27,7 +27,7 @@ final class RegionXhr extends Control
 		FoodsaverGateway $foodsaverGateway,
 		ForumFollowerGateway $forumFollowerGateway
 	) {
-		$this->model = $model;
+		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
@@ -72,11 +72,11 @@ final class RegionXhr extends Control
 			$body = $_POST['msg'];
 
 			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
-				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
+				&& $bezirk = $this->regionGateway->getRegion($_GET['bid'])
 			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
-						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
+						$theme = $this->forumGateway->getThreadInfo($_GET['tid']);
 
 						foreach ($follower as $f) {
 							$this->emailHelper->tplMail('forum/answer', $f['email'], array(

@@ -812,4 +812,12 @@ final class FoodsaverGateway extends BaseGateway
 			['id' => $fsId]
 		);
 	}
+
+	/**
+	 * Returns the first name of the foodsaver.
+	 */
+	public function getFoodsaverName($foodsaverId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId]);
+	}
 }
