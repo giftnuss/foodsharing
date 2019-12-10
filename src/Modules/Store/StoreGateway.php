@@ -133,7 +133,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function getMyStores($fs_id, $regionId, $options = array()): array
+	public function getMyStores($fsId, $regionId, $options = []): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	s.id,
@@ -159,11 +159,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					INNER JOIN fs_betrieb_team t
 			        ON s.id = t.betrieb_id
 
-            WHERE 	t.foodsaver_id = :fs_id
+            WHERE 	t.foodsaver_id = :fsId
 
 			ORDER BY t.verantwortlich DESC, s.name ASC
 		', [
-			':fs_id' => $fs_id
+			':fsId' => $fsId
 		]);
 
 		$out = [];
@@ -423,7 +423,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				FROM 		`fs_betrieb_team` t
 							INNER JOIN `fs_foodsaver` fs
 				     		ON fs.id = t.foodsaver_id
-r
+
 				WHERE	    `betrieb_id` = :id
 				AND 		t.active  = :membershipStatus
 				AND			fs.deleted_at IS NULL
@@ -545,7 +545,7 @@ r
 			            ON bt.foodsaver_id = b.foodsaver_id
 
 			WHERE 	bt.verantwortlich = 1
-		r	AND		b.`bezirk_id` IN(' . $placeholders . ')
+			AND		b.`bezirk_id` IN(' . $placeholders . ')
 			AND		fs.deleted_at IS NULL
 		', $region_ids);
 
