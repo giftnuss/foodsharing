@@ -334,6 +334,8 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
 - Refactored region gateway to use more prepared statements !1297 @alex.simm
+- Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
+- Some refactorings from StoreModel to StoreGateway !1196 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 
