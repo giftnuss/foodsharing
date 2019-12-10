@@ -63,28 +63,19 @@ class ForumService
 		return $url;
 	}
 
-	public function notifyFollowersViaBell($threadId, $authorId, $postId)
+	public function notifyFollowersViaBell($threadId, $authorId, $postId): void
 	{
-		$actualSubscriptions = $this->forumFollowerGateway->getThreadBellFollower($threadId);
-		$defaultSubscriptions = $this->forumFollowerGateway->getThreadParticipants($threadId);
+		$subscribedFs = $this->forumFollowerGateway->getThreadBellFollower($threadId, $authorId);
 
-		$allRecipients = array_replace($defaultSubscriptions, $actualSubscriptions);
+		if (empty($subscribedFs)) {
+			return;
+		}
 
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
-		$getFsId = function ($post) {
-			return $post['author_id'];
-		};
-		$removeAuthorFsId = function ($id) use ($authorId) {
-			return $id != $authorId;
-		};
-		$fsIds = array_map($getFsId, $allRecipients);
-		$fsIds = array_filter($fsIds, $removeAuthorFsId);
-		$fsIds = array_unique($fsIds);
-
 		$this->bellGateway->addBell(
-			$fsIds,
+			array_column($subscribedFs, 'id'),
 			'forum_answer_title',
 			'forum_answer',
 			'fas fa-comments',
@@ -144,7 +135,7 @@ class ForumService
 		}
 	}
 
-	public function notifyFollowersViaMail($threadId, $rawPostBody, $postFrom, $postId)
+	public function notifyFollowersViaMail($threadId, $rawPostBody, $postFrom, $postId): void
 	{
 		if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($postFrom, $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);

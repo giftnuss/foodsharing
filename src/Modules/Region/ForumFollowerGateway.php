@@ -40,11 +40,12 @@ class ForumFollowerGateway extends BaseGateway
 			WHERE
 				tf.foodsaver_id = :fsId
 		', [':fsId' => $fsId]);
+	}
 
-	public function getThreadBellFollower($thread_id)
+	public function getThreadBellFollower($thread_id, $fs_id)
 	{
 		return $this->db->fetchAll('
-			SELECT 	fs.id AS author_id
+			SELECT 	DISTINCT fs.id AS id
 
 			FROM 	fs_foodsaver fs,
 					fs_theme_follower tf
@@ -52,7 +53,9 @@ class ForumFollowerGateway extends BaseGateway
 			AND 	tf.theme_id = :theme_id
 			AND		fs.deleted_at IS NULL
 			AND		tf.bell_notification = 1
-		', ['theme_id' => $thread_id]);
+			AND		fs.deleted_at IS NULL
+			AND		fs.id != :fsId
+		', [':theme_id' => $thread_id, ':fsId' => $fs_id]);
 	}
 
 	public function isFollowingEmail($fsId, $threadId)
