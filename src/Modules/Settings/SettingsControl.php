@@ -411,7 +411,7 @@ class SettingsControl extends Control
 			foreach ($_POST as $key => $infoType) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
 					$foodSharePointId = (int)substr($key, 11);
-					if ($foodSharePointId > 0) {
+					if (!empty($foodSharePointId)) {
 						if ($infoType == InfoType::NONE) {
 							$fspIdsToUnfollow[] = $foodSharePointId;
 						} else {
@@ -420,7 +420,7 @@ class SettingsControl extends Control
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
 					$themeId = (int)substr($key, 7);
-					if ($themeId > 0) {
+					if (!empty($themeId)) {
 						if ($infoType == InfoType::NONE) {
 							$threadIdsToUnfollow[] = $themeId;
 						} else {
