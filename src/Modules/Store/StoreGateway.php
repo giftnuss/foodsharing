@@ -40,7 +40,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function getBetrieb($storeId): array
 	{
-		$out = $this->db->fetch('
+		$result = $this->db->fetch('
             SELECT  `id`,
 					plz,
 					`fs_betrieb`.bezirk_id,
@@ -66,20 +66,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
             WHERE   `fs_betrieb`.`id` = :id', [':id' => $storeId]);
 
-		$out['verantwortlicher'] = '';
-		if ($bezirk = $this->regionGateway->getRegionName($out['bezirk_id'])) {
-			$out['bezirk'] = $bezirk;
+		$result['verantwortlicher'] = '';
+		if ($bezirk = $this->regionGateway->getRegionName($result['bezirk_id'])) {
+			$result['bezirk'] = $bezirk;
 		}
 		if ($verantwortlich = $this->getBiebsForStore($storeId)) {
-			$out['verantwortlicher'] = $verantwortlich;
+			$result['verantwortlicher'] = $verantwortlich;
 		}
-		if ($kette = $this->getOne_kette($out['kette_id'])) {
-			$out['kette'] = $kette;
+		if ($kette = $this->getOne_kette($result['kette_id'])) {
+			$result['kette'] = $kette;
 		}
 
-		$out['notizen'] = $this->getBetriebNotiz($storeId);
+		$result['notizen'] = $this->getBetriebNotiz($storeId);
 
-		return $out;
+		return $result;
 	}
 
 	public function getMapsStores(int $regionId): array
@@ -166,11 +166,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			':fsId' => $fsId
 		]);
 
-		$out = [];
-		$out['verantwortlich'] = [];
-		$out['team'] = [];
-		$out['waitspringer'] = [];
-		$out['anfrage'] = [];
+		$result = [];
+		$result['verantwortlich'] = [];
+		$result['team'] = [];
+		$result['waitspringer'] = [];
+		$result['anfrage'] = [];
 
 		$already_in = [];
 
@@ -179,14 +179,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				$already_in[$b['id']] = true;
 				if ($b['verantwortlich'] == 0) {
 					if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
-						$out['anfrage'][] = $b;
+						$result['anfrage'][] = $b;
 					} elseif ($b['active'] == MembershipStatus::MEMBER) {
-						$out['team'][] = $b;
+						$result['team'][] = $b;
 					} elseif ($b['active'] == MembershipStatus::JUMPER) {
-						$out['waitspringer'][] = $b;
+						$result['waitspringer'][] = $b;
 					}
 				} else {
-					$out['verantwortlich'][] = $b;
+					$result['verantwortlich'][] = $b;
 				}
 			}
 		}
@@ -200,7 +200,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
-			$out['sonstige'] = [];
+			$result['sonstige'] = [];
 			$betriebe = $this->db->fetchAll('
                 SELECT  b.id,
 						b.betrieb_status_id,
@@ -231,17 +231,17 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			foreach ($betriebe as $b) {
 				if (!isset($already_in[$b['id']])) {
-					$out['sonstige'][] = $b;
+					$result['sonstige'][] = $b;
 				}
 			}
 		}
 
-		return $out;
+		return $result;
 	}
 
 	public function getMyStore($fs_id, $storeId): array
 	{
-		$out = $this->db->fetch('
+		$result = $this->db->fetch('
 			SELECT
         			b.`id`,
         			b.`betrieb_status_id`,
@@ -276,86 +276,94 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
         			count(DISTINCT(a.date)) AS pickup_count
 
 			FROM 	`fs_betrieb` b
-        			LEFT JOIN   `fs_abholer` a
+        			LEFT JOIN `fs_abholer` a
         			ON a.betrieb_id = b.id
 
-			WHERE 	b.`id` = :id
+			WHERE 	b.`id` = :storeId
 
 			GROUP BY b.`id`
         ', [
-            ':id' => $storeId
-        ]);
-		if (!$out) {
-			return $out;
-		}
-
-		$out['lebensmittel'] = $this->db->fetchAll('
-				SELECT 		l.`id`,
-							l.name
-
-				FROM 		`fs_betrieb_has_lebensmittel` hl
-							INNER JOIN `fs_lebensmittel` l
-				            ON l.id = hl.lebensmittel_id
-
-				WHERE 		`betrieb_id` = :id
-		', [
-            ':id' => $storeId
-        ]);
-
-		$out['foodsaver'] = $this->getStoreTeam($storeId);
-
-		$out['springer'] = $this->getBetriebSpringer($storeId);
-
-		$out['requests'] = $this->db->fetchAll('
-				SELECT 		fs.`id`,
-							fs.photo,
-							CONCAT(fs.name," ",fs.nachname) AS name,
-							name as vorname,
-							fs.sleep_status,
-							fs.verified
-
-				FROM 		`fs_betrieb_team` t
-							INNER JOIN `fs_foodsaver` fs
-				            ON fs.id = t.foodsaver_id
-
-				WHERE 		`betrieb_id` = :id
-				AND 		t.active = :membershipStatus
-				AND			fs.deleted_at IS NULL
-		', [
-			':id' => $storeId,
-			':membershipStatus' => MembershipStatus::APPLIED_FOR_TEAM
+			':storeId' => $storeId
 		]);
 
-		$out['verantwortlich'] = false;
-		$foodsaver = [];
-		$out['team'] = [];
-		$out['jumper'] = false;
+		if ($result) {
+			$result['lebensmittel'] = $this->getGroceries($storeId);
+			$result['foodsaver'] = $this->getStoreTeam($storeId);
+			$result['springer'] = $this->getBetriebSpringer($storeId);
+			$result['requests'] = $this->getApplications($storeId);
+			$result['verantwortlich'] = false;
+			$result['team_js'] = [];
+			$result['team'] = [];
+			$result['jumper'] = false;
 
-		if (!empty($out['springer'])) {
-			foreach ($out['springer'] as $v) {
-				if ($v['id'] == $fs_id) {
-					$out['jumper'] = true;
-				}
-			}
-		}
-
-		if (!empty($out['foodsaver'])) {
-			$out['team'] = [];
-			foreach ($out['foodsaver'] as $v) {
-				$foodsaver[$v['id']] = $v['name'];
-				$out['team'][] = ['id' => $v['id'], 'value' => $v['name']];
-				if ($v['verantwortlich'] == 1) {
-					$out['verantwortlicher'] = $v['id'];
+			if (!empty($result['springer'])) {
+				foreach ($result['springer'] as $v) {
 					if ($v['id'] == $fs_id) {
-				r		$out['verantwortlich'] = true;
+						$result['jumper'] = true;
 					}
 				}
 			}
-		} else {
-			$out['foodsaver'] = [];
+
+			if (!empty($result['foodsaver'])) {
+				$result['team'] = [];
+				foreach ($result['foodsaver'] as $v) {
+					$result['team_js'][] = $v['id'];
+					$result['team'][] = [
+						'id' => $v['id'],
+						'value' => $v['name']
+					];
+					if ($v['verantwortlich'] == 1) {
+						$result['verantwortlicher'] = $v['id'];
+						if ($v['id'] == $fs_id) {
+							$result['verantwortlich'] = true;
+						}
+					}
+				}
+			} else {
+				$result['foodsaver'] = [];
+			}
+			$result['team_js'] = implode(',', $result['team_js']);
 		}
 
-		return $out;
+		return $result;
+	}
+
+	private function getGroceries(int $storeId): array
+	{
+		return $this->db->fetchAll('
+        	SELECT  l.`id`,
+        			l.name
+
+        	FROM 	`fs_betrieb_has_lebensmittel` hl
+        			INNER JOIN `fs_lebensmittel` l
+        	        ON l.id = hl.lebensmittel_id
+
+        	WHERE 	`betrieb_id` = :storeId
+        ', [
+			':storeId' => $storeId
+		]);
+	}
+
+	private function getApplications(int $storeId): array
+	{
+		return $this->db->fetchAll('
+			SELECT 		fs.`id`,
+						fs.photo,
+						CONCAT(fs.name," ",fs.nachname) AS name,
+						name as vorname,
+						fs.sleep_status
+
+			FROM 		`fs_betrieb_team` t
+						INNER JOIN `fs_foodsaver` fs
+			            ON fs.id = t.foodsaver_id
+
+			WHERE 		`betrieb_id` = :storeId
+			AND 		t.active = :membershipStatus
+			AND			fs.deleted_at IS NULL
+		', [
+			':storeId' => $storeId,
+			':membershipStatus' => MembershipStatus::APPLIED_FOR_TEAM
+		]);
 	}
 
 	public function getStoreRegionId(int $storeId): array
@@ -400,35 +408,35 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getStoreTeam($storeId): array
 	{
 		return $this->db->fetchAll('
-				SELECT 		fs.`id`,
-							fs.`verified`,
-							fs.`active`,
-							fs.`telefon`,
-							fs.`handy`,
-							fs.photo,
-							fs.quiz_rolle,
-							fs.rolle,
-							CONCAT(fs.name," ",fs.nachname) AS name,
-							name as vorname,
-							t.`verantwortlich`,
-							t.`stat_last_update`,
-							t.`stat_fetchcount`,
-							t.`stat_first_fetch`,
-							t.`stat_add_date`,
-							UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
-							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
-							fs.sleep_status
+				SELECT  fs.`id`,
+						fs.`verified`,
+						fs.`active`,
+						fs.`telefon`,
+						fs.`handy`,
+						fs.photo,
+						fs.quiz_rolle,
+						fs.rolle,
+						CONCAT(fs.name," ",fs.nachname) AS name,
+						name as vorname,
+						t.`verantwortlich`,
+						t.`stat_last_update`,
+						t.`stat_fetchcount`,
+						t.`stat_first_fetch`,
+						t.`stat_add_date`,
+						UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
+						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+						fs.sleep_status
 
 
-				FROM 		`fs_betrieb_team` t
-							INNER JOIN `fs_foodsaver` fs
-				     		ON fs.id = t.foodsaver_id
+				FROM 	`fs_betrieb_team` t
+						INNER JOIN `fs_foodsaver` fs
+				     	ON fs.id = t.foodsaver_id
 
-				WHERE	    `betrieb_id` = :id
-				AND 		t.active  = :membershipStatus
-				AND			fs.deleted_at IS NULL
+				WHERE	`betrieb_id` = :id
+				AND 	t.active  = :membershipStatus
+				AND		fs.deleted_at IS NULL
 
-				ORDER BY 	t.`stat_fetchcount` DESC
+				ORDER BY t.`stat_fetchcount` DESC
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::MEMBER
@@ -438,28 +446,28 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getBetriebSpringer($storeId): array
 	{
 		return $this->db->fetchAll('
-				SELECT 		fs.`id`,
-							fs.`active`,
-							fs.`telefon`,
-							fs.`handy`,
-							fs.photo,
-							fs.rolle,
-							CONCAT(fs.name," ",fs.nachname) AS name,
-							name as vorname,
-							t.`verantwortlich`,
-							t.`stat_last_update`,
-							t.`stat_fetchcount`,
-							t.`stat_first_fetch`,
-							UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
-							fs.sleep_status
+				SELECT  fs.`id`,
+						fs.`active`,
+						fs.`telefon`,
+						fs.`handy`,
+						fs.photo,
+						fs.rolle,
+						CONCAT(fs.name," ",fs.nachname) AS name,
+						name as vorname,
+						t.`verantwortlich`,
+						t.`stat_last_update`,
+						t.`stat_fetchcount`,
+						t.`stat_first_fetch`,
+						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+						fs.sleep_status
 
-				FROM 		`fs_betrieb_team` t
-							INNER JOIN `fs_foodsaver` fs
-				            ON fs.id = t.foodsaver_id
+				FROM 	`fs_betrieb_team` t
+						INNER JOIN `fs_foodsaver` fs
+				        ON fs.id = t.foodsaver_id
 
-				WHERE 		`betrieb_id` = :id
-				AND 		t.active  = :membershipStatus
-				AND			fs.deleted_at IS NULL
+				WHERE 	`betrieb_id` = :id
+				AND 	t.active  = :membershipStatus
+				AND		fs.deleted_at IS NULL
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::JUMPER
@@ -477,25 +485,25 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND verantwortlich = 1
 			AND `active` = :membershipStatus
         ', [
-            ':betrieb_id' => $storeId,
-            ':membershipStatus' => MembershipStatus::MEMBER
-        ]);
-    }
+			':betrieb_id' => $storeId,
+			':membershipStatus' => MembershipStatus::MEMBER
+		]);
+	}
 
 	public function getStoreManager(int $storeId): array
 	{
 		return $this->db->fetchAllValues('
-				SELECT 	t.`foodsaver_id`,
-						t.`verantwortlich`
+			SELECT 	t.`foodsaver_id`,
+					t.`verantwortlich`
 
-				FROM 	`fs_betrieb_team` t
-						INNER JOIN  `fs_foodsaver` fs
-						ON fs.id = t.foodsaver_id
+			FROM 	`fs_betrieb_team` t
+					INNER JOIN  `fs_foodsaver` fs
+					ON fs.id = t.foodsaver_id
 
-				WHERE 	t.`betrieb_id` = :storeId
-						AND t.active = :membershipStatus
-						AND t.verantwortlich = 1
-						AND fs.deleted_at IS NULL
+			WHERE 	t.`betrieb_id` = :storeId
+					AND t.active = :membershipStatus
+					AND t.verantwortlich = 1
+					AND fs.deleted_at IS NULL
 		', [
 			':storeId' => $storeId,
 			':membershipStatus' => MembershipStatus::MEMBER
@@ -516,12 +524,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND		fs.deleted_at IS NULL
 		');
 
-		$out = [];
+		$result = [];
 		foreach ($verant as $v) {
-			$out[$v['id']] = $v;
+			$result[$v['id']] = $v;
 		}
 
-		return $out;
+		return $result;
 	}
 
 	public function getStoreCountForBieb($fs_id)
@@ -549,12 +557,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND		fs.deleted_at IS NULL
 		', $region_ids);
 
-		$out = [];
+		$result = [];
 		foreach ($verant as $v) {
-			$out[$v['id']] = $v;
+			$result[$v['id']] = $v;
 		}
 
-		return $out;
+		return $result;
 	}
 
 	public function getUserTeamStatus(int $userId, int $storeId): int
@@ -566,9 +574,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'betrieb_id' => $storeId,
 			'foodsaver_id' => $userId
 		]);
-		if (!$result) {
-			return TeamStatus::NoMember;
-		} else {
+
+		if ($result) {
 			if ($result['verantwortlich'] && $result['active'] == MembershipStatus::MEMBER) {
 				return TeamStatus::Coordinator;
 			} else {
@@ -582,11 +589,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				}
 			}
 		}
+
+		return TeamStatus::NoMember;
 	}
 
 	public function addFetcher(int $fsId, int $storeId, \DateTime $date, bool $confirmed = false): int
 	{
-		$queryResult = $this->db->insertIgnore('fs_abholer', [
+		$result = $this->db->insertIgnore('fs_abholer', [
 			'foodsaver_id' => $fsId,
 			'betrieb_id' => $storeId,
 			'date' => $this->db->date($date),
@@ -597,7 +606,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$this->updateBellNotificationForStoreManagers($storeId, true);
 		}
 
-		return $queryResult;
+		return $result;
 	}
 
 	public function deleteDate(int $storeId, string $date): void
@@ -727,18 +736,18 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getAbholzeiten($storeId)
 	{
 		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $storeId])) {
-			$out = [];
+			$result = [];
 			foreach ($res as $r) {
-				$out[$r['dow'] . '-' . $r['time']] = [
+				$result[$r['dow'] . '-' . $r['time']] = array(
 					'dow' => $r['dow'],
 					'time' => $r['time'],
 					'fetcher' => $r['fetcher']
 				];
 			}
 
-			ksort($out);
+			ksort($result);
 
-			return $out;
+			return $result;
 		}
 
 		return false;
@@ -820,13 +829,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND     fs.`active` = 1
 			AND     fs.deleted_at IS NULL
         ', [
-            ':id' => $storeId
-        ]);
+			':id' => $storeId
+		]);
 	}
 
 	/**
 	 * retrieves all store managers for a given region (by being store manager in a store that is part of that region,
-	 * which is semantically not the same we use on platform)
+	 * which is semantically not the same we use on platform).
 	 */
 	public function getStoreManagersOf(int $regionId): array
 	{
@@ -846,9 +855,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
             AND     bt.verantwortlich = 1
             AND     fs.deleted_at IS NULL
         ', [
-            ':regionId' => $regionId
-        ]);
-    }
+			':regionId' => $regionId
+		]);
+	}
 
 	/**
 	 * @return StoreForTopbarMenu[]
@@ -934,20 +943,20 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			ORDER BY a.date
 		', [
-            ':storeId' => $storeId,
-            ':from' => $from,
-            ':to' => $to
-        ]);
+			':storeId' => $storeId,
+			':from' => $from,
+			':to' => $to
+		]);
 	}
 
 	public function getRegularPickup(int $storeId, int $dow, string $time): ?int
 	{
 		try {
 			return $this->db->fetchValueByCriteria('fs_abholzeiten', 'fetcher', [
-                'betrieb_id' => $storeId,
-                'dow' => $dow,
-                'time' => $time
-            ]);
+				'betrieb_id' => $storeId,
+				'dow' => $dow,
+				'time' => $time
+			]);
 		} catch (\Exception $e) {
 			return null;
 		}
@@ -956,13 +965,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getRegularPickups(int $storeId)
 	{
 		return $this->db->fetchAllByCriteria('fs_abholzeiten', [
-            'time',
-            'dow',
-            'fetcher'
-        ], [
-            'betrieb_id' => $storeId
-        ]);
-    }
+			'time',
+			'dow',
+			'fetcher'
+		], [
+			'betrieb_id' => $storeId
+		]);
+	}
 
 	public function getOnetimePickups(int $storeId, \DateTimeInterface $date)
 	{
@@ -972,9 +981,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getOnetimePickupsForRange(int $storeId, \DateTimeInterface $from, ?\DateTimeInterface $to)
 	{
 		$condition = [
-            'betrieb_id' => $storeId,
-            'time >=' => $this->db->date($from)
-        ];
+			'betrieb_id' => $storeId,
+			'time >=' => $this->db->date($from)
+		];
 		if ($to) {
 			$condition = array_merge($condition,
 				[
@@ -983,36 +992,36 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			);
 		}
 		$result = $this->db->fetchAllByCriteria('fs_fetchdate', [
-            'time',
-            'fetchercount'
-        ], $condition);
+			'time',
+			'fetchercount'
+		], $condition);
 
 		return array_map(function ($e) {
-            return [
-                'date' => $this->db->parseDate($e['time']),
-                'fetcher' => $e['fetchercount']
-            ];
-        }, $result);
-    }
+			return [
+				'date' => $this->db->parseDate($e['time']),
+				'fetcher' => $e['fetchercount']
+			];
+		}, $result);
+	}
 
 	public function addOnetimePickup(int $storeId, \DateTimeInterface $date, int $slots)
 	{
-        $this->db->insert('fs_fetchdate', [
-            'betrieb_id' => $storeId,
-            'time' => $this->db->date($date),
-            'fetchercount' => $slots
-        ]);
-    }
+		$this->db->insert('fs_fetchdate', [
+			'betrieb_id' => $storeId,
+			'time' => $this->db->date($date),
+			'fetchercount' => $slots
+		]);
+	}
 
 	public function updateOnetimePickupTotalSlots(int $storeId, \DateTimeInterface $date, int $slots): bool
 	{
 		return $this->db->update('fs_fetchdate', [
-            'fetchercount' => $slots
-        ], [
-            'betrieb_id' => $storeId,
-            'time' => $this->db->date($date)
-        ]) === 1;
-    }
+			'fetchercount' => $slots
+		], [
+			'betrieb_id' => $storeId,
+			'time' => $this->db->date($date)
+		]) === 1;
+	}
 
 	public function getFutureRegularPickupInterval(int $storeId): CarbonInterval
 	{
@@ -1032,9 +1041,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
             AND     `confirmed` = 0
             AND `date` > :date
         ', [
-            ':storeId' => $storeId,
-            ':date' => $this->db->now()
-        ]);
+			':storeId' => $storeId,
+			':date' => $this->db->now()
+		]);
 
 		return new \DateTime($date);
 	}
@@ -1055,9 +1064,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			WHERE    `id` = :id
         ', [
-            ':id' => $id
-        ]);
-    }
+			':id' => $id
+		]);
+	}
 
 	/**
 	 * Returns the store comment with the specified ID.
@@ -1089,9 +1098,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			WHERE    `betrieb_id` = :storeId
         ', [
-            ':storeId' => $storeId
-        ]);
-    }
+			':storeId' => $storeId
+		]);
+	}
 
 	/**
 	 * @return int[]
@@ -1099,18 +1108,18 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	private function getResponsibleFoodsavers(int $storeId): array
 	{
 		return $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'foodsaver_id', [
-            'betrieb_id' => $storeId,
-            'verantwortlich' => 1
-        ]);
+			'betrieb_id' => $storeId,
+			'verantwortlich' => 1
+		]);
 	}
 
 	public function updateStoreRegion(int $storeId, int $regionId): int
 	{
 		return $this->db->update('fs_betrieb', [
-            'bezirk_id' => $regionId
-        ], [
-            'id' => $storeId
-        ]);
+			'bezirk_id' => $regionId
+		], [
+			'id' => $storeId
+		]);
 	}
 
 	public function updateExpiredBells(): void
