@@ -19,7 +19,6 @@ $csrf_whitelist = [
 	// 'getPinPost',
 	// 'activeSwitch',
 	// 'grabInfo',
-	// 'addPinPost',
 	// 'childBezirke',
 	'bBubble',
 	// 'loadMarker',
