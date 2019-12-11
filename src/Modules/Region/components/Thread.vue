@@ -18,27 +18,33 @@
         <div class="row text-truncate ml-1 pt-1 mr-3 font-weight-bold">
           {{ title }}
         </div>
-        <div class="row mr-1 pt-2 flex-row-reverse">
-          <a
-            class="btn btn-sm btn-secondary ml-2"
-            @click="toggleFollowEmail"
-          >
-            {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
-          </a>
-          <a
-            class="btn btn-sm btn-secondary ml-2"
-            @click="toggleFollowBell"
-          >
-            {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
-          </a>
-          <a
-            v-if="mayModerate"
-            class="btn btn-sm btn-secondary"
-            @click="toggleStickyness"
-          >
-            {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
-          </a>
-        </div>
+      </div>
+      <div class="col-auto pt-2 float-right">
+        <b-form-checkbox
+          v-model="isFollowingEmail"
+          name="check-button"
+          switch
+          @click="$emit('toggleFollowEmail')"
+        >
+          {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+        </b-form-checkbox>
+        <b-form-checkbox
+          v-model="isFollowingBell"
+          name="check-button"
+          switch
+          @click="$emit('toggleFollowBell')"
+        >
+          {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+        </b-form-checkbox>
+        <b-form-checkbox
+          v-if="mayModerate"
+          v-model="isSticky"
+          name="check-button"
+          switch
+          @click="$emit('toggleStickyness')"
+        >
+          {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+        </b-form-checkbox>
       </div>
       <div
         v-if="!isActive && mayModerate"
@@ -356,5 +362,9 @@ export default {
 <style lang="scss" scoped>
 .card-body > .alert {
   margin-bottom: 0;
+}
+
+.bootstrap .custom-switch {
+    padding-left: 3.5rem;
 }
 </style>

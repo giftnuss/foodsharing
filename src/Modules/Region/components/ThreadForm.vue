@@ -17,21 +17,27 @@
       <div class="card-footer">
         <div class="row">
           <div class="col-auto">
-            <button
-              class="btn btn-secondary"
+            <b-form-checkbox
+              v-model="isFollowingBell"
+              name="check-button"
+              switch
               @click="$emit('toggleFollowBell')"
             >
               {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
-            </button>
-            <button
-              class="btn btn-secondary"
+            </b-form-checkbox>
+            <b-form-checkbox
+              v-model="isFollowingEmail"
+              name="check-button"
+              switch
               @click="$emit('toggleFollowEmail')"
             >
               {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
-            </button>
+            </b-form-checkbox>
+          </div>
+          <div class="col">
             <button
               :disabled="!text.trim()"
-              class="btn btn-secondary"
+              class="btn btn-primary float-right"
               @click="submit"
             >
               Senden
