@@ -84,19 +84,19 @@ class StoreUserView extends View
 		$this->pageHelper->addJs('$("#dialog_requests").dialog("open");');
 	}
 
-	public function u_innerRow($contentType, $store)
+	public function u_innerRow($contentType, $storeData)
 	{
 		$out = '';
-		if ($store[$contentType] != '') {
-			$store[$contentType] = trim($store[$contentType]);
-			nl2br($store[$contentType]);
+		if ($storeData[$contentType] != '') {
+			$storeData[$contentType] = trim($storeData[$contentType]);
+			nl2br($storeData[$contentType]);
 
-			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($store[$contentType], '1234567890')) {
-				$phoneNumber = preg_replace('/[^0-9\+]/', '', $store[$contentType]);
+			if (($contentType == 'telefon' || $contentType == 'handy') && strpbrk($storeData[$contentType], '1234567890')) {
+				$phoneNumber = preg_replace('/[^0-9\+]/', '', $storeData[$contentType]);
 
-				$content = '<a href="tel:' . $phoneNumber . '">' . $store[$contentType] . '</a>';
+				$content = '<a href="tel:' . $phoneNumber . '">' . $storeData[$contentType] . '</a>';
 			} else {
-				$content = $store[$contentType];
+				$content = $storeData[$contentType];
 			}
 
 			$out = '<div class="innerRow"><span class="label">' . $this->translationHelper->s($contentType) . '</span>
@@ -106,18 +106,18 @@ class StoreUserView extends View
 		return $out;
 	}
 
-	public function u_team($store)
+	public function u_team($storeData)
 	{
 		$id = $this->identificationHelper->id('team');
 		$out = '<ul id="' . $id . '" class="team">';
 		$sleeper = '';
 
-		foreach ($store['foodsaver'] as $fs) {
+		foreach ($storeData['foodsaver'] as $fs) {
 			$class = '';
 			$click = 'profile(' . (int)$fs['id'] . ');';
 			if ($fs['verantwortlich'] == 1) {
 				$class .= ' verantwortlich';
-			} elseif ($store['verantwortlich'] || $this->session->isAdminFor($store['bezirk_id']) || $this->session->isOrgaTeam()) {
+			} elseif ($storeData['verantwortlich'] || $this->session->isAdminFor($storeData['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$class .= ' context-team';
 				$click = '';
 			}
@@ -146,7 +146,7 @@ class StoreUserView extends View
 
 			//date at which user was added
 			$memberSince = '';
-			if ($store['verantwortlich']) {
+			if ($storeData['verantwortlich']) {
 				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
 						? date('d.m.Y', $fs['add_date'])
 						: '(' . $this->translationHelper->s('stat_since_unknown') . ')';
@@ -183,11 +183,11 @@ class StoreUserView extends View
 			}
 		}
 
-		if ($store['springer']) {
-			foreach ($store['springer'] as $fs) {
+		if ($storeData['springer']) {
+			foreach ($storeData['springer'] as $fs) {
 				$class = '';
 				$click = 'profile(' . (int)$fs['id'] . ');';
-				if ($store['verantwortlich'] || $this->session->isAdminFor($store['bezirk_id']) || $this->session->isOrgaTeam()) {
+				if ($storeData['verantwortlich'] || $this->session->isAdminFor($storeData['bezirk_id']) || $this->session->isOrgaTeam()) {
 					$class .= ' context-jumper';
 					$click = '';
 				}
@@ -240,13 +240,13 @@ class StoreUserView extends View
 
 		$out .= $sleeper . '</ul><div style="clear:both"></div>';
 
-		if ($store['verantwortlich']) {
+		if ($storeData['verantwortlich']) {
 			$this->pageHelper->addJs('
 			$("#team_status").on("change", function(){
 				var val = $(this).val();
 				showLoader();
 				$.ajax({
-					url: "/xhr.php?f=bteamstatus&bid=' . (int)$store['id'] . '&status=" + val,
+					url: "/xhr.php?f=bteamstatus&bid=' . (int)$storeData['id'] . '&status=" + val,
 					success: function(){
 						hideLoader();
 					}
@@ -254,7 +254,7 @@ class StoreUserView extends View
 			});
 		');
 			global $g_data;
-			$g_data['team_status'] = $store['team_status'];
+			$g_data['team_status'] = $storeData['team_status'];
 
 			$out .= '
 			<div class="ui-padding">' .
