@@ -19,7 +19,7 @@
           {{ title }}
         </div>
       </div>
-      <div class="col-auto pt-2 float-right">
+      <div class="pt-2 pb-2 rounded">
         <b-form-checkbox
           v-model="isFollowingEmail"
           name="check-button"
@@ -365,6 +365,10 @@ export default {
 }
 
 .bootstrap .custom-switch {
-    padding-left: 3.5rem;
+  padding-left: 3.5rem;
+}
+
+.bootstrap .custom-control {
+  display: inline-block;
 }
 </style>
