@@ -22,7 +22,7 @@ class FoodSharePointCest
 	 * @param AcceptanceTester $I
 	 *
 	 * */
-	public function canSeeFairTeilerInList(AcceptanceTester $I)
+	public function canSeeFoodSharePointInList(AcceptanceTester $I)
 	{
 		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
 		$I->waitForText($this->foodSharePoint['name']);
@@ -60,7 +60,7 @@ class FoodSharePointCest
 		$I->waitForText('Kantstraße 20');
 	}
 
-	public function editFairTeiler(AcceptanceTester $I)
+	public function editFoodSharePoint(AcceptanceTester $I)
 	{
 		$user = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->login($this->responsible['email']);
