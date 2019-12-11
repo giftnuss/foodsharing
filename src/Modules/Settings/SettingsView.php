@@ -181,11 +181,11 @@ class SettingsView extends View
 		}
 
 		if ($threads) {
-			foreach ($threads as $fsp) {
-				$g_data['thread_' . $fsp['id']] = $fsp['infotype'];
-				$out .= $this->v_utils->v_form_radio('thread_' . $fsp['id'], array(
-					'label' => $this->translationHelper->sv('follow_thread', $fsp['name']),
-					'desc' => $this->translationHelper->sv('follow_thread_desc', $fsp['name']),
+			foreach ($threads as $thread) {
+				$g_data['thread_' . $thread['id']] = $thread['infotype'];
+				$out .= $this->v_utils->v_form_radio('thread_' . $thread['id'], array(
+					'label' => $this->translationHelper->sv('follow_thread', $thread['name']),
+					'desc' => $this->translationHelper->sv('follow_thread_desc', $thread['name']),
 					'values' => [
 						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_thread_mail')],
 						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_thread_none')]
