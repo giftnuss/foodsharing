@@ -552,7 +552,7 @@ class MailboxGateway extends BaseGateway
 	 *
 	 * @return int
 	 */
-	public function getMailFolder(int $messageId): int
+	public function getMailFolderId(int $messageId): int
 	{
 		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'folder', ['id' => $messageId]);
 	}

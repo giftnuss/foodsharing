@@ -4,7 +4,6 @@ namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -21,7 +20,6 @@ class ForumService
 	private $foodsaverGateway;
 	private $bellGateway;
 	private $forumFollowerGateway;
-	/* @var Db */
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
@@ -142,12 +140,12 @@ class ForumService
 	{
 		if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
-			$poster = $this->foodsaverGateway->getFoodsaverName($this->session->id());
+			$posterName = $this->foodsaverGateway->getFoodsaverName($this->session->id());
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
 				'thread' => $info['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $poster
+				'poster' => $posterName
 			];
 			$this->notificationMail($follower, 'forum/answer', $data);
 		}
@@ -156,14 +154,14 @@ class ForumService
 	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
 	{
 		$theme = $this->forumGateway->getThread($threadId);
-		$poster = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
+		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
 				'thread' => $theme['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $poster,
+				'poster' => $posterName,
 				'bezirk' => $region['name'],
 			];
 
@@ -183,7 +181,7 @@ class ForumService
 		$theme = $this->forumGateway->getThread($threadId);
 		$body = $this->forumGateway->getPost($theme['last_post_id'])['body'];
 
-		$poster = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
+		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($isAmbassadorForum) {
 			$recipients = $this->foodsaverGateway->getBotschafter($regionData['id']);
@@ -193,7 +191,7 @@ class ForumService
 
 		$data = [
 			'bezirk' => $regionData['name'],
-			'poster' => $poster,
+			'poster' => $posterName,
 			'thread' => $theme['title'],
 			'link' => BASE_URL . $this->url($regionData['id'], $isAmbassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),

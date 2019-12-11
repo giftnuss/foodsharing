@@ -149,7 +149,7 @@ class MailboxXhr extends Control
 		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$folder = $this->mailboxGateway->getMailFolder($_GET['mid']);
+		$folder = $this->mailboxGateway->getMailFolderId($_GET['mid']);
 
 		if ($folder == MailboxFolder::FOLDER_TRASH) {
 			$this->mailboxGateway->deleteMessage($_GET['mid']);
@@ -193,7 +193,7 @@ class MailboxXhr extends Control
 				// save message to sent folder
 				$this->mailboxGateway->saveMessage(
 					$mailboxId,
-					MailboxFolder::FOLDER_SENT, //sent folder
+					MailboxFolder::FOLDER_SENT,
 					json_encode([
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $message['mailbox'],
