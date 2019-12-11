@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\View;
 
 class ProfileView extends View
@@ -229,7 +230,7 @@ class ProfileView extends View
 		}
 
 		$infos[] = [
-			'name' => ($this->foodsaver['rolle'] > 0) ? 'Foodsaver ID' : 'Foodsharer ID',
+			'name' => ($this->foodsaver['rolle'] > Role::FOODSHARER) ? 'Foodsaver ID' : 'Foodsharer ID',
 			'val' => $this->foodsaver['id']
 		];
 
