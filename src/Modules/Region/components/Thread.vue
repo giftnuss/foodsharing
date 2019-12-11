@@ -315,6 +315,7 @@ export default {
 
       try {
         await api.createPost(this.id, body)
+        await api.followThreadByBell(this.id)
         await this.reload()
       } catch (err) {
         const index = this.posts.indexOf(dummyPost)
