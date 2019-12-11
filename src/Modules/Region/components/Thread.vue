@@ -21,13 +21,13 @@
         <div class="row mr-1 pt-2 flex-row-reverse">
           <a
             class="btn btn-sm btn-secondary ml-2"
-            @click="toggleFollow"
+            @click="toggleFollowEmail"
           >
             {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
           </a>
           <a
-            @click="toggleFollowBell"
             class="btn btn-sm btn-secondary ml-2"
+            @click="toggleFollowBell"
           >
             {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
           </a>
@@ -80,7 +80,7 @@
         :is-loading="loadingPosts.indexOf(post.id) != -1"
         :created-at="new Date(post.createdAt)"
         @delete="deletePost(post)"
-        @toggleFollow="toggleFollow"
+        @toggleFollowEmail="toggleFollowEmail"
         @toggleFollowBell="toggleFollowBell"
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
@@ -103,10 +103,12 @@
     </div>
     <ThreadForm
       ref="form"
-      :is-following="isFollowingEmail"
+      :is-following-email="isFollowingEmail"
+      :is-following-bell="isFollowingBell"
       :error-message="errorMessage"
       @submit="createPost"
-      @toggleFollow="toggleFollow"
+      @toggleFollowEmail="toggleFollowEmail"
+      @toggleFollowBell="toggleFollowBell"
     />
 
     <b-modal
@@ -253,7 +255,7 @@ export default {
         }
       }
     },
-    async toggleFollow () {
+    async toggleFollowEmail () {
       const targetState = !this.isFollowingEmail
       this.isFollowingEmail = targetState
       try {

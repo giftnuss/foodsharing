@@ -16,15 +16,19 @@
       </div>
       <div class="card-footer">
         <div class="row">
-          <div class="col ml-2 pt-2">
-            <b-form-checkbox
-              :checked="isFollowingEmail"
-              @change="$emit('toggleFollow')"
+          <div class="col-auto">
+            <button
+              class="btn btn-secondary"
+              @click="$emit('toggleFollowBell')"
             >
-              {{ $i18n('forum.subscribe_thread_email') }}
-            </b-form-checkbox>
-          </div>
-          <div class="col-auto text-right">
+              {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+            </button>
+            <button
+              class="btn btn-secondary"
+              @click="$emit('toggleFollowEmail')"
+            >
+              {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+            </button>
             <button
               :disabled="!text.trim()"
               class="btn btn-secondary"
@@ -40,12 +44,14 @@
 </template>
 
 <script>
-import { BFormCheckbox } from 'bootstrap-vue'
 
 export default {
-  components: { BFormCheckbox },
   props: {
     isFollowingEmail: {
+      type: Boolean,
+      default: false
+    },
+    isFollowingBell: {
       type: Boolean,
       default: false
     }
