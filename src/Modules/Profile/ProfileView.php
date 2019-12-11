@@ -33,11 +33,7 @@ class ProfileView extends View
 			$this->photo($profileVisitorMayAdminThisFoodsharer)
 		);
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may(
-				'orga'
-			)) {
-			$page->addSectionLeft($this->sideInfos(), 'Infos');
-		}
+		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($profileVisitorMayAdminThisFoodsharer && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
@@ -228,9 +224,14 @@ class ProfileView extends View
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
 			$infos[] = [
 				'name' => 'Abholquote',
-				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%',
+				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
 			];
 		}
+
+		$infos[] = [
+			'name' => ($this->foodsaver['rolle'] > 0) ? 'Foodsaver ID' : 'Foodsharer ID',
+			'val' => $this->foodsaver['id']
+		];
 
 		$out = '';
 		foreach ($infos as $info) {
