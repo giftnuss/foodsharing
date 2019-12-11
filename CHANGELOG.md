@@ -25,6 +25,7 @@
 - Show events on dashboard which started one/more days in the past and are ongoing !1215 @treee111
 - Allow to configure site to send CSP headers without a report-uri !1210 @nicksellen
 - Increase workgroup application limit numbers !1218 @jofranz
+- Show foodsharer id in profile for everyone !1232 @jofranz
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
