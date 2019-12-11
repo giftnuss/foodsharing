@@ -155,13 +155,13 @@ class ForumService
 
 	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
 	{
-		$theme = $this->forumGateway->getValues(array('foodsaver_id', 'name'), 'theme', $threadId);
-		$poster = $this->foodsaverGateway->getFoodsaverName($theme['foodsaver_id']);
+		$theme = $this->forumGateway->getThread($threadId);
+		$poster = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $theme['name'],
+				'thread' => $theme['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $poster,
 				'bezirk' => $region['name'],

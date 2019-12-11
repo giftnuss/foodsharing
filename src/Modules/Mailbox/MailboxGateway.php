@@ -550,7 +550,7 @@ class MailboxGateway extends BaseGateway
 	 *
 	 * @param int $messageId
 	 *
-	 * @return array
+	 * @return int
 	 */
 	public function getMailFolder(int $messageId): int
 	{
