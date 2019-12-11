@@ -41,7 +41,7 @@ $g_lang['follow_food_share_point_none'] = 'gar nicht mehr';
 
 $g_lang['follow_thread'] = 'Über das Forenthema "{var}" auf dem Laufenden bleiben?';
 $g_lang['follow_thread_mail'] = 'Ja, ich möchte per E-Mail über neue Posts informiert werden.';
-$g_lang['follow_thread_none'] = 'Bitte nicht mehr über neue Posts informieren.';
+$g_lang['follow_thread_none'] = 'Bitte nicht mehr per E-Mail über neue Posts informieren.';
 $g_lang['follow_thread_desc'] = '';
 
 $g_lang['newmail'] = 'Gib hier Deine neue E-Mail-Adresse ein';
