@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -75,14 +76,14 @@ final class BlogGateway extends BaseGateway
 				b.`body`,
 				b.`time`,
 				b.`picture`,
-				CONCAT(fs.name," ",fs.nachname) AS fs_name	
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
 			FROM
 				`fs_blog_entry` b,
-				`fs_foodsaver` fs	
+				`fs_foodsaver` fs
 			WHERE
-				b.foodsaver_id = fs.id	
+				b.foodsaver_id = fs.id
 			AND
-				b.`active` = 1	
+				b.`active` = 1
 			AND
 				b.id = :fs_id',
 		[':fs_id' => $id]);
@@ -94,7 +95,7 @@ final class BlogGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			'
-			SELECT 	 	
+			SELECT
 				b.`id`,
 				b.`name`,
 				b.`time`,
@@ -103,16 +104,16 @@ final class BlogGateway extends BaseGateway
 				b.`teaser`,
 				b.`time`,
 				b.`picture`,
-				CONCAT(fs.name," ",fs.nachname) AS fs_name		
-			FROM 
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
+			FROM
 				`fs_blog_entry` b,
-				`fs_foodsaver` fs		
-			WHERE 
-				b.foodsaver_id = fs.id				
+				`fs_foodsaver` fs
+			WHERE
+				b.foodsaver_id = fs.id
 			AND
-				b.`active` = 1		
-			ORDER BY 
-				b.`id` DESC				
+				b.`active` = 1
+			ORDER BY
+				b.`id` DESC
 			LIMIT :page,10',
 			[':page' => $page]
 		);
@@ -131,9 +132,9 @@ final class BlogGateway extends BaseGateway
 						`time`,
 						UNIX_TIMESTAMP(`time`) AS time_ts,
 						`active`,
-						`bezirk_id`		
-			FROM 		`fs_blog_entry`	
-			' . $not . '	
+						`bezirk_id`
+			FROM 		`fs_blog_entry`
+			' . $not . '
 			ORDER BY `id` DESC');
 	}
 
@@ -156,8 +157,8 @@ final class BlogGateway extends BaseGateway
 			`body`,
 			`time`,
 			UNIX_TIMESTAMP(`time`) AS time_ts,
-			`picture`			
-			FROM 		`fs_blog_entry`			
+			`picture`
+			FROM 		`fs_blog_entry`
 			WHERE 		`id` = :fs_id',
 			[':fs_id' => $id]
 		);
@@ -195,8 +196,7 @@ final class BlogGateway extends BaseGateway
 			$foodsaver[$b['id']] = $b;
 		}
 
-		$this->bellGateway->addBell(
-			$foodsaver,
+		$bellData = BellData::create(
 			'blog_new_check_title',
 			'blog_new_check',
 			'fas fa-bullhorn',
@@ -208,6 +208,7 @@ final class BlogGateway extends BaseGateway
 			],
 			'blog-check-' . $id
 		);
+		$this->bellGateway->addBell($foodsaver, $bellData);
 
 		return $id;
 	}

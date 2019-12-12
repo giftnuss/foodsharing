@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -61,8 +62,7 @@ class RegionRestController extends AbstractFOSRestController
 
 		$bots = $this->foodsaverGateway->getBotschafter($regionId);
 		$foodsaver = $this->session->get('user');
-		$this->bellGateway->addBell(
-			$bots,
+		$bellData = BellData::create(
 			'new_foodsaver_title',
 			$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
 			$this->imageService->img($foodsaver['photo'], 50),
@@ -74,6 +74,7 @@ class RegionRestController extends AbstractFOSRestController
 			'new-fs-' . $sessionId,
 			true
 		);
+		$this->bellGateway->addBell($bots, $bellData);
 
 		$view = $this->view([], 200);
 

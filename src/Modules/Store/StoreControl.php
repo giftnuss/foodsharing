@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\WeightHelper;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -223,12 +224,13 @@ class StoreControl extends Control
 
 				$foodsaver = $this->foodsaverGateway->getFoodsaver($g_data['bezirk_id']);
 
-				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
+				$bellData = BellData::create('store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				), array(
 					'user' => $this->session->user('name'),
 					'name' => $g_data['name']
 				), 'store-new-' . (int)$id);
+				$this->bellGateway->addBell($foodsaver, $bellData);
 
 				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_add_success'));
 

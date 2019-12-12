@@ -26,33 +26,25 @@ class BellXhr extends Control
 		$xhr = new Xhr();
 		$bells = $this->gateway->listBells($this->session->id(), 20);
 
-		if (!empty($rbells)) {
-			if ($bells) {
-				$bells = array_merge($rbells, $bells);
-			} else {
-				$bells = $rbells;
-			}
-		}
-
 		// $xhr->addData('aaa', $bells);
-		$xhr->addData('list', array_map(function ($bell) {
-			if (isset($bell['attr']['onclick'])) {
-				preg_match('/profile\((.*?)\)/', $bell['attr']['onclick'], $matches);
+		$xhr->addData('list', array_map(function (BellData $bell) {
+			if (isset($bell->link_attributes['onclick'])) {
+				preg_match('/profile\((.*?)\)/', $bell->link_attributes['onclick'], $matches);
 				if ($matches) {
-					$bell['attr']['href'] = '/profile/' . $matches[1];
+					$bell->link_attributes['href'] = '/profile/' . $matches[1];
 				}
 			}
 
 			return [
-				'id' => $bell['id'],
-				'key' => $bell['body'],
-				'href' => $bell['attr']['href'],
-				'payload' => $bell['vars'],
-				'icon' => $bell['icon'][0] != '/' ? $bell['icon'] : null,
-				'image' => $bell['icon'][0] == '/' ? $bell['icon'] : null,
-				'createdAt' => str_replace(' ', 'T', $bell['time']),
-				'isRead' => (bool)$bell['seen'],
-				'isCloseable' => (bool)$bell['closeable']
+				'id' => $bell->id,
+				'key' => $bell->body,
+				'href' => $bell->link_attributes['href'],
+				'payload' => $bell->vars,
+				'icon' => $bell->icon[0] != '/' ? $bell->icon : null,
+				'image' => $bell->icon[0] == '/' ? $bell->icon : null,
+				'createdAt' => $bell->time->format('Y-m-d\TH:i:s'),
+				'isRead' => $bell->seen, // TODO: this property is not part of the BellData class, but it gets added when the BellData is created from the database array
+				'isCloseable' => $bell->closeable
 			];
 		}, $bells));
 

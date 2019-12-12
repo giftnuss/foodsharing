@@ -4,6 +4,7 @@ namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
@@ -61,8 +62,7 @@ final class NotificationService
 
 			if ($followers = $this->foodSharePointGateway->getInfoFollowerIds($foodSharePointId)) {
 				$followersWithoutPostAuthor = array_diff($followers, [$post['fs_id']]);
-				$this->bellGateway->addBell(
-					$followersWithoutPostAuthor,
+				$bellData = BellData::create(
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
@@ -70,6 +70,7 @@ final class NotificationService
 					array('name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
 					'fairteiler-' . $foodSharePointId
 				);
+				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
 			}
 		}
 	}

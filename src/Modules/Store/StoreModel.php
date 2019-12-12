@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;
@@ -51,26 +52,26 @@ class StoreModel extends Db
 				fs.photo,
 				a.date,
 				UNIX_TIMESTAMP(a.date) AS date_ts
-	
+
 			FROM
 				fs_foodsaver fs,
 				fs_abholer a
-	
+
 			WHERE
 				a.foodsaver_id = fs.id
-	
+
 			AND
 				a.betrieb_id = ' . (int)$betrieb_id . '
-	
+
 			AND
 				a.date >= ' . $this->dateval($from) . '
-	
+
 			AND
 				a.date <= ' . $this->dateval($to) . '
-	
+
 			ORDER BY
 				a.date
-	
+
 		');
 	}
 
@@ -94,13 +95,13 @@ class StoreModel extends Db
 			FROM
 				fs_betrieb b,
 				fs_betrieb_team t
-				
+
 			WHERE
 				b.id = t.betrieb_id
-				
+
 			AND
 				t.foodsaver_id = ' . $this->session->id() . '
-				
+
 			AND
 				t.active = 1
 		');
@@ -167,7 +168,7 @@ class StoreModel extends Db
 				SELECT
 				`id`,
 				`name`
-				
+
 				FROM 		`fs_betrieb_kategorie`
 				ORDER BY `name`');
 
@@ -474,12 +475,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-arequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
@@ -501,12 +503,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-wrequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageModel->addUserToConversation($scid, $fsid, true);
@@ -524,12 +527,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		), array(
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		), 'store-drequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`

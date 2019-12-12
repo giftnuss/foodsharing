@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Maintenance;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -206,8 +207,7 @@ class MaintenanceControl extends ConsoleControl
 	private function infoToBotsUserDeactivated($foodsaver)
 	{
 		if ($botschafer = $this->model->getUserBotschafter($foodsaver['id'])) {
-			$this->bellGateway->addBell(
-				$botschafer,
+			$bellData = BellData::create(
 				'fs_sleepmode_title',
 				'fs_sleepmode',
 				'fas fa-user',
@@ -215,6 +215,7 @@ class MaintenanceControl extends ConsoleControl
 				array('name' => $foodsaver['name'], 'nachname' => $foodsaver['nachname'], 'id' => $foodsaver['id']),
 				'fs-sleep' . (int)$foodsaver['id']
 			);
+			$this->bellGateway->addBell($botschafer, $bellData);
 		}
 	}
 
