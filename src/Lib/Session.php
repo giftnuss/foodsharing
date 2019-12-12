@@ -138,10 +138,14 @@ class Session
 	public function logout()
 	{
 		$this->mem->logout($this->id());
-		$this->set('user', false);
-		fAuthorization::destroyUserInfo();
-		$this->setAuthLevel('guest');
-		$this->destroy();
+		try {
+			$this->set('user', false);
+			fAuthorization::destroyUserInfo();
+			$this->setAuthLevel('guest');
+			$this->destroy();
+		} catch (Exception $e) {
+			// ignore if the user was already logged out
+		}
 	}
 
 	public function user($index)
