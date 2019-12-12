@@ -242,7 +242,7 @@ forum:
     email: Mail entfolgen
   follow:
     bell: Glocke FOLGEN
-    email: Email FOLGEN
+    email: Mail FOLGEN
   stick: Thema fixieren
   unstick: Fixierung aufheben
   delete_post: Beitrag löschen
