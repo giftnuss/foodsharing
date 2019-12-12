@@ -10,6 +10,7 @@ use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Permissions\FAQPermissions;
+use Foodsharing\Permissions\StorePermissions;
 
 final class PageHelper
 {
@@ -39,6 +40,7 @@ final class PageHelper
 	private $mailboxPermissions;
 	private $faqPermissions;
 	private $quizPermissions;
+	private $storePermissions;
 
 	public function __construct(
 		Session $session,
@@ -50,7 +52,8 @@ final class PageHelper
 		IdentificationHelper $identificationHelper,
 		FAQPermissions $faqPermissions,
 		MailboxPermissions $mailboxPermissions,
-		QuizPermissions $quizPermissions
+		QuizPermissions $quizPermissions,
+		StorePermissions $storePermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -75,6 +78,7 @@ final class PageHelper
 		$this->faqPermissions = $faqPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
+		$this->storePermissions = $storePermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -234,7 +238,7 @@ final class PageHelper
 					'editBlog' => $this->session->mayEditBlog(),
 					'editQuiz' => $this->quizPermissions->mayEditQuiz(),
 					'handleReports' => $this->session->mayHandleReports(),
-					'addStore' => $this->session->may('bieb'),
+					'addStore' => $this->storePermissions->mayCreateStore(),
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
 					'editFAQ' => $this->faqPermissions->mayEditFAQ()
 				],
