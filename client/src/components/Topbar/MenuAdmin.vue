@@ -57,7 +57,7 @@ export default {
           label: this.$i18n('menu.reports')
         })
       }
-      if (this.may.handleRegions) {
+      if (this.may.administrateRegionGroupTool) {
         items.push({
           url: '/?page=region',
           icon: 'fas fa-map',
