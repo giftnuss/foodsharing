@@ -59,12 +59,7 @@ class FoodSharePointControl extends Control
 			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
 		}
 		if (!$request->query->has('sub')) {
-			$items = array();
-			if ($this->regions = $this->session->getRegions()) {
-				foreach ($this->regions as $r) {
-					$items[] = ['name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']];
-				}
-			}
+			$this->regions = $this->session->getRegions();
 
 			if ($this->regionId === 0) {
 				$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
