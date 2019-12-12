@@ -65,7 +65,7 @@ class FoodSharePointGateway extends BaseGateway
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		',
-		    [':foodSharePointId' => $foodSharePointId]
+			[':foodSharePointId' => $foodSharePointId]
 		);
 	}
 
@@ -75,7 +75,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		foreach ($fspManager as $fs) {
 			$values[] = '(' .
-			 	$foodSharePointId . ',' .
+				$foodSharePointId . ',' .
 				(int)$fs . ',' .
 				FollowerType::FOOD_SHARE_POINT_MANAGER . ',' .
 				InfoType::EMAIL .
@@ -85,7 +85,7 @@ class FoodSharePointGateway extends BaseGateway
 		$this->db->update(
 			'fs_fairteiler_follower',
 			['type' => FollowerType::FOLLOWER],
-		    ['fairteiler_id' => $foodSharePointId]
+			['fairteiler_id' => $foodSharePointId]
 		);
 
 		$this->db->execute(
@@ -115,7 +115,7 @@ class FoodSharePointGateway extends BaseGateway
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :foodSharePointId
 		',
-		    [':foodSharePointId' => $foodSharePointId]
+			[':foodSharePointId' => $foodSharePointId]
 		);
 	}
 
@@ -282,7 +282,7 @@ class FoodSharePointGateway extends BaseGateway
 		return $this->db->delete(
 			'fs_fairteiler_follower',
 			[
-			    'fairteiler_id' => $foodSharePointId,
+				'fairteiler_id' => $foodSharePointId,
 				'foodsaver_id' => $fsId
 			]
 		);
@@ -294,7 +294,7 @@ class FoodSharePointGateway extends BaseGateway
 			'fs_fairteiler_follower',
 			[
 				'foodsaver_id' => $fsId,
-			    'fairteiler_id' => $foodSharePointIds
+				'fairteiler_id' => $foodSharePointIds
 			]
 		);
 	}
@@ -306,7 +306,7 @@ class FoodSharePointGateway extends BaseGateway
 			['infotype' => $infoType],
 			[
 				'foodsaver_id' => $fsId,
-			    'fairteiler_id' => $foodSharePointId
+				'fairteiler_id' => $foodSharePointId
 			]
 		);
 	}

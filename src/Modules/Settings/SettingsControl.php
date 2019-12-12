@@ -525,13 +525,12 @@ class SettingsControl extends Control
 	 */
 	private function generate_api_token(int $fsId): string
 	{
-		$token = bin2hex(openssl_random_pseudo_bytes(10, $strong));
-		if (!$strong || $token === false) {
-			return false;
+		if ($token = bin2hex(openssl_random_pseudo_bytes(10))) {
+			$this->settingsGateway->saveApiToken($fsId, $token);
+
+			return $token;
 		}
 
-		$this->settingsGateway->saveApiToken($fsId, $token);
-
-		return $token;
+		return false;
 	}
 }
