@@ -22,28 +22,37 @@
       <div class="pt-2 pb-2 rounded">
         <b-form-checkbox
           v-model="isFollowingEmail"
-          name="check-button"
           switch
           @click="$emit('toggleFollowEmail')"
         >
-          {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+          <a
+            @click="toggleFollowEmail"
+          >
+            {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+          </a>
         </b-form-checkbox>
         <b-form-checkbox
           v-model="isFollowingBell"
-          name="check-button"
           switch
           @click="$emit('toggleFollowBell')"
         >
-          {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+          <a
+            @click="toggleFollowBell"
+          >
+            {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+          </a>
         </b-form-checkbox>
         <b-form-checkbox
           v-if="mayModerate"
           v-model="isSticky"
-          name="check-button"
           switch
           @click="$emit('toggleStickyness')"
         >
-          {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+          <a
+            @click="toggleStickyness"
+          >
+            {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+          </a>
         </b-form-checkbox>
       </div>
       <div
