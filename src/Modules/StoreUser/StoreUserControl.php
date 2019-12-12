@@ -304,9 +304,14 @@ class StoreUserControl extends Control
 			}
 		} else {
 			$this->pageHelper->addBread('Deine Betriebe');
-			$this->pageHelper->addContent($this->v_utils->v_menu(array(
-				array('href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new'))
-			), 'Aktionen'), CNT_RIGHT);
+
+			if ($this->storePermissions->mayCreateStore()) {
+				$this->pageHelper->addContent($this->v_utils->v_menu(
+					[
+						['href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new')]
+					],
+					'Aktionen'), CNT_RIGHT);
+			}
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
 			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());

@@ -73,7 +73,7 @@ class StoreControl extends Control
 			$region = array('name' => 'kompletter Datenbank');
 		}
 		if ($this->identificationHelper->getAction('new')) {
-			if ($this->session->may('bieb')) {
+			if ($this->storePermissions->mayCreateStore()) {
 				$this->handle_add($this->session->id());
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
@@ -132,10 +132,12 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=betrieb');
 
-			if ($this->session->may('bieb')) {
-				$this->pageHelper->addContent($this->v_utils->v_menu(array(
-					array('href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen')
-				), 'Aktionen'), CNT_RIGHT);
+			if ($this->storePermissions->mayCreateStore()) {
+				$this->pageHelper->addContent($this->v_utils->v_menu(
+					[
+						['href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen']
+					],
+					'Aktionen'), CNT_RIGHT);
 			}
 
 			$stores = $this->model->listBetriebReq($regionId);
