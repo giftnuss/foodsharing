@@ -5,6 +5,7 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 final class RegionPermissions
 {
@@ -22,6 +23,11 @@ final class RegionPermissions
 		$type = $this->regionGateway->getType($regionId);
 
 		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
+	}
+
+	public function mayAdministrateRegionGroupTool()
+	{
+		return $this->session->may('orga') || $this->session->mayGroup(RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP);
 	}
 
 	public function mayAccessStatisticCountry(): bool

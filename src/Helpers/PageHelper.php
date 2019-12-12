@@ -68,7 +68,8 @@ final class PageHelper
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
 		RegionPermissions $regionPermissions,
-		NewsletterEmailPermissions $newsletterEmailPermissions
+		NewsletterEmailPermissions $newsletterEmailPermissions,
+		RegionPermissions $regionPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -263,7 +264,8 @@ final class PageHelper
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
 					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
 					'editContent' => $this->contentPermissions->mayEditContent(),
-					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()
+					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
+					'handleRegions' => $this->regionPermissions->mayAdministrateRegionGroupTool()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,

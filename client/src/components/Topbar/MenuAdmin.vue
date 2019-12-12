@@ -36,15 +36,6 @@ export default {
     items () {
       // TODO: replace hard coded links with $url()
       const items = []
-      if (this.isOrgaTeam) {
-        items.push(...[
-          {
-            url: '/?page=region',
-            icon: 'fas fa-map',
-            label: this.$i18n('menu.manage_regions')
-          }
-        ])
-      }
       if (this.may.administrateBlog) {
         items.push({
           url: '/?page=blog&sub=manage',
@@ -64,6 +55,13 @@ export default {
           url: '/?page=report&sub=uncom',
           icon: 'fas fa-exclamation',
           label: this.$i18n('menu.reports')
+        })
+      }
+      if (this.may.handleRegions) {
+        items.push({
+          url: '/?page=region',
+          icon: 'fas fa-map',
+          label: this.$i18n('menu_manage_regions')
         })
       }
       if (this.may.administrateNewsletterEmail) {
