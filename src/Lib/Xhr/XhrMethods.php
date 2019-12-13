@@ -63,28 +63,7 @@ class XhrMethods
 	/**
 	 * XhrMethods constructor.
 	 *
-	 * @param Mem $mem
-	 * @param Session $session
-	 * @param Db $model
-	 * @param Utils $viewUtils
-	 * @param ViewUtils $xhrViewUtils
-	 * @param StoreModel $storeModel
-	 * @param MessageModel $messageModel
-	 * @param RegionGateway $regionGateway
-	 * @param ForumGateway $forumGateway
-	 * @param BellGateway $bellGateway
-	 * @param StoreGateway $storeGateway
-	 * @param StorePermissions $storePermissions
-	 * @param FoodsaverGateway $foodsaverGateway
-	 * @param EmailGateway $emailGateway
-	 * @param MailboxGateway $mailboxGateway
-	 * @param ImageManager $imageManager
-	 * @param SanitizerService $sanitizerService
-	 * @param EmailHelper $emailHelper
-	 * @param ImageService $imageService
-	 * @param IdentificationHelper $identificationHelper
-	 * @param DataHelper $dataHelper
-	 * @param TranslationHelper $translationHelper
+	 * @param $model
 	 */
 	public function __construct(
 		Mem $mem,
