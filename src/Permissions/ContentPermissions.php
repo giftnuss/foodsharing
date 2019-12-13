@@ -13,7 +13,8 @@ final class ContentPermissions
 		$this->session = $session;
 	}
 
-	public function mayEditContent() {
+	public function mayEditContent()
+	{
 		return $this->session->may('orga');
 	}
 }

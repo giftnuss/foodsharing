@@ -51,11 +51,6 @@ export default {
             url: '/?page=email',
             icon: 'fas fa-envelope',
             label: this.$i18n('menu_email')
-          },
-          {
-            url: '/?page=content',
-            icon: 'fas fa-file-alt',
-            label: this.$i18n('menu_content')
           }
         ])
       }
@@ -92,6 +87,13 @@ export default {
           url: '/?page=faq',
           icon: 'fas fa-question',
           label: this.$i18n('menu_faq')
+        })
+      }
+      if (this.may.editContent) {
+        items.push({
+          url: '/?page=content',
+          icon: 'fas fa-file-alt',
+          label: this.$i18n('menu_content')
         })
       }
 

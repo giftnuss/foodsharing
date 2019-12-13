@@ -4,6 +4,7 @@ namespace Foodsharing\Helpers;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\ContentPermissions;
 use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -41,6 +42,7 @@ final class PageHelper
 	private $faqPermissions;
 	private $quizPermissions;
 	private $storePermissions;
+	private $contentPermissions;
 
 	public function __construct(
 		Session $session,
@@ -53,7 +55,8 @@ final class PageHelper
 		FAQPermissions $faqPermissions,
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
-		StorePermissions $storePermissions
+		StorePermissions $storePermissions,
+		ContentPermissions $contentPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -78,6 +81,7 @@ final class PageHelper
 		$this->faqPermissions = $faqPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
+		$this->contentPermissions = $contentPermissions;
 		$this->storePermissions = $storePermissions;
 	}
 
@@ -240,7 +244,8 @@ final class PageHelper
 					'handleReports' => $this->session->mayHandleReports(),
 					'addStore' => $this->storePermissions->mayCreateStore(),
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
-					'editFAQ' => $this->faqPermissions->mayEditFAQ()
+					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
+					'editContent' => $this->contentPermissions->mayEditContent()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,
