@@ -7,23 +7,27 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
 use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
+use Foodsharing\Permissions\ContentPermissions;
 
 class ContentControl extends Control
 {
 	private $contentGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $contentPermissions;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		ContentPermissions $contentPermissions
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->contentPermissions = $contentPermissions;
 
 		parent::__construct();
 	}
@@ -31,7 +35,7 @@ class ContentControl extends Control
 	public function index(): void
 	{
 		if (!isset($_GET['sub'])) {
-			if (!$this->session->may('orga')) {
+			if (!$this->contentPermissions->mayEditContent()) {
 				$this->routeHelper->go('/');
 			}
 			$this->model;
