@@ -16,7 +16,6 @@ final class EmailHelper
 	 * @var InfluxMetrics
 	 */
 	private $metrics;
-	private $emailTemplateAdminGateway;
 	private $sanitizerService;
 	private $twig;
 
