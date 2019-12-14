@@ -6,6 +6,7 @@ use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\SanitizerService;
 
 class ReportXhr extends Control
@@ -15,19 +16,22 @@ class ReportXhr extends Control
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $timeHelper;
+	private $reportPermissions;
 
 	public function __construct(
 		ReportGateway $reportGateway,
 		ReportView $view,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		ReportPermissions $reportPermissions
 	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
+		$this->reportPermissions = $reportPermissions;
 
 		parent::__construct();
 
@@ -39,7 +43,7 @@ class ReportXhr extends Control
 
 	public function loadReport(): ?array
 	{
-		if ($this->session->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
+		if ($this->reportPermissions->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
@@ -83,7 +87,7 @@ class ReportXhr extends Control
 
 	public function comReport(): ?array
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
 			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
@@ -96,7 +100,7 @@ class ReportXhr extends Control
 
 	public function delReport(): ?array
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
 			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 

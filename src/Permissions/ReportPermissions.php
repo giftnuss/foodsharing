@@ -34,4 +34,10 @@ class ReportPermissions
 	{
 		return $this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM);
 	}
+
+	public function mayHandleReports()
+	{
+		// group "Regelverletzungen/Meldungen"
+		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
+	}
 }

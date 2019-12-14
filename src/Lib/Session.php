@@ -549,6 +549,10 @@ class Session
 		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see ReportPermissions::mayHandleReports()
+	 */
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
