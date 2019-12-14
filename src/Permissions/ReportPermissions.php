@@ -26,13 +26,13 @@ class ReportPermissions
 			$this->session->isAdminFor($regionId) ||
 			/* ToDo: Need to check that regionId is a subgroup of europe. implied for now. */
 			$this->session->isOrgaTeam() ||
-			$this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM)
+			$this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM)
 		;
 	}
 
 	public function mayAccessReportsForSubRegions(): bool
 	{
-		return $this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM);
+		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
 	public function mayHandleReports()
