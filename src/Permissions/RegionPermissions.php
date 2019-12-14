@@ -27,7 +27,7 @@ final class RegionPermissions
 
 	public function mayAdministrateRegionGroupTool()
 	{
-		return $this->session->may('orga') || $this->session->mayGroup(RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP);
+		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP);
 	}
 
 	public function mayAccessStatisticCountry(): bool
