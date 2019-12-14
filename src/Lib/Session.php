@@ -190,12 +190,6 @@ class Session
 		return false;
 	}
 
-	// this is the old versin from Func (which had the same name as the method above)
-	public function mayLegacy(): bool
-	{
-		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
-	}
-
 	public function getLocation()
 	{
 		if (!$this->initialized) {

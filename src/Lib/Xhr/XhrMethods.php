@@ -273,7 +273,7 @@ class XhrMethods
 			'blog_entry' => true
 		);
 
-		if ($this->session->mayLegacy()) {
+		if ($this->session->may()) {
 			if (isset($allowed[$data['t']])) {
 				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
 					return 1;
@@ -690,7 +690,7 @@ class XhrMethods
 
 	public function xhr_getRecip($data)
 	{
-		if ($this->session->mayLegacy()) {
+		if ($this->session->may()) {
 			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
 
 			return json_encode($fs);
