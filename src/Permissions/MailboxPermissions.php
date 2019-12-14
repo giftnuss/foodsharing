@@ -37,4 +37,14 @@ class MailboxPermissions
 
 		return false;
 	}
+
+	public function mayManageMailboxes()
+	{
+		return $this->session->may('orga');
+	}
+
+	public function mayAddMailboxes()
+	{
+		return $this->mayManageMailboxes();
+	}
 }

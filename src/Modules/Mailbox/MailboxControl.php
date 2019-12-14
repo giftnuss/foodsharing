@@ -83,7 +83,7 @@ class MailboxControl extends Control
 		$this->pageHelper->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
 		$this->pageHelper->addBread('Neue Mailbox');
 
-		if ($this->session->isOrgaTeam()) {
+		if ($this->mailboxPermissions->mayAddMailboxes()) {
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->mailboxGateway->filterName($_POST['name'])) {
 					if ($this->mailboxGateway->addMailbox($mailbox, 1)) {
@@ -102,7 +102,7 @@ class MailboxControl extends Control
 	public function manage()
 	{
 		$this->pageHelper->addBread('Mailbox Manager');
-		if ($this->session->isOrgaTeam()) {
+		if ($this->mailboxPermissions->mayManageMailboxes()) {
 			if (isset($_POST['mbid'])) {
 				global $g_data;
 
@@ -118,7 +118,7 @@ class MailboxControl extends Control
 
 			if ($boxes = $this->mailboxGateway->getMemberBoxes()) {
 				$this->pageHelper->addJs('
-							
+
 				');
 				foreach ($boxes as $b) {
 					global $g_data;

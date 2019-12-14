@@ -58,11 +58,6 @@ export default {
             label: this.$i18n('menu_faq')
           },
           {
-            url: '/?page=mailbox&a=manage',
-            icon: 'far fa-envelope',
-            label: this.$i18n('menu_mailbox_manage')
-          },
-          {
             url: '/?page=content',
             icon: 'fas fa-file-alt',
             label: this.$i18n('menu_content')
@@ -88,6 +83,13 @@ export default {
           url: '/?page=report&sub=uncom',
           icon: 'fas fa-exclamation',
           label: this.$i18n('menu_reports')
+        })
+      }
+      if (this.may.manageMailboxes) {
+        items.push({
+          url: '/?page=mailbox&a=manage',
+          icon: 'far fa-envelope',
+          label: this.$i18n('menu_mailbox_manage')
         })
       }
 

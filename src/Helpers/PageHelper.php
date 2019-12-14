@@ -7,6 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
+use Foodsharing\Permissions\MailboxPermissions;
 
 final class PageHelper
 {
@@ -33,6 +34,7 @@ final class PageHelper
 	public $jsData = [];
 	private $twig;
 	private $identificationHelper;
+	private $mailboxPermissions;
 
 	public function __construct(
 		Session $session,
@@ -41,7 +43,8 @@ final class PageHelper
 		Environment $twig,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		MailboxPermissions $mailboxPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -63,6 +66,7 @@ final class PageHelper
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->mailboxPermissions = $mailboxPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -223,6 +227,7 @@ final class PageHelper
 					'editQuiz' => $this->session->mayEditQuiz(),
 					'handleReports' => $this->session->mayHandleReports(),
 					'addStore' => $this->session->may('bieb'),
+					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,
