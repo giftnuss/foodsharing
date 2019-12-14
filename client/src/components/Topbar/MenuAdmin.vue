@@ -53,11 +53,6 @@ export default {
             label: this.$i18n('menu_email')
           },
           {
-            url: '/?page=faq',
-            icon: 'fas fa-question',
-            label: this.$i18n('menu_faq')
-          },
-          {
             url: '/?page=content',
             icon: 'fas fa-file-alt',
             label: this.$i18n('menu_content')
@@ -90,6 +85,13 @@ export default {
           url: '/?page=mailbox&a=manage',
           icon: 'far fa-envelope',
           label: this.$i18n('menu_mailbox_manage')
+        })
+      }
+      if (this.may.editFAQ) {
+        items.push({
+          url: '/?page=faq',
+          icon: 'fas fa-question',
+          label: this.$i18n('menu_faq')
         })
       }
 

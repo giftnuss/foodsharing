@@ -72,6 +72,7 @@
 - Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
 - Replace SettingsModel by SettingsGateway !1163 #9 @svenpascal
 - Moved mayHandleReports() to ReportPermissions class with deprecation in Session class !1241 @jofranz
+- Introduce very basic permissions for FAQ editing. Removes the topbar menu entry if false. For now this only replaces orga permissions in accessing the FAQ admin tool !1245 @jofranz
 - Introduce mayManageMailboxes() permissions. Removed the entry from the menu if permission is false. !1244 @jofranz
 - Moved database access from RegionXhr, MailboxXhr, and ForumService to gateways !1228 #9 @alex.simm
 

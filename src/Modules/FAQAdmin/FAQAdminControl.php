@@ -5,27 +5,31 @@ namespace Foodsharing\Modules\FAQAdmin;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\FAQPermissions;
 
 class FAQAdminControl extends Control
 {
 	private $faqGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $faqPermissions;
 
 	public function __construct(
 		FAQAdminView $view,
 		FAQGateway $faqGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		FAQPermissions $faqPermissions
 	) {
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->faqPermissions = $faqPermissions;
 
 		parent::__construct();
 
-		if (!$this->session->may('orga')) {
+		if (!$this->faqPermissions->mayEditFAQ()) {
 			$this->routeHelper->goLogin();
 		}
 	}
