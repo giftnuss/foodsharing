@@ -32,6 +32,7 @@ use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Foodsharing\Permissions\RegionPermissions;
 
 class XhrMethods
 {
@@ -58,6 +59,7 @@ class XhrMethods
 	private $dataHelper;
 	private $translationHelper;
 	private $newsletterEmailPermissions;
+	private $regionPermission;
 	private $notificationService;
 
 	/**
@@ -89,7 +91,8 @@ class XhrMethods
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
 		NewsletterEmailPermissions $newsletterEmailPermissions,
-		NotificationService $notificationService
+		NotificationService $notificationService,
+		RegionPermissions $regionPermission
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -114,6 +117,7 @@ class XhrMethods
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->regionPermission = $regionPermission;
 		$this->notificationService = $notificationService;
 	}
 
@@ -991,7 +995,7 @@ class XhrMethods
 
 	public function xhr_update_newbezirk($data)
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->regionPermission->mayAdministrateRegions()) {
 			$data['name'] = strip_tags($data['name']);
 			$data['name'] = str_replace(['/', '"', "'", '.', ';'], '', $data['name']);
 			$data['has_children'] = 0;
@@ -1090,7 +1094,7 @@ class XhrMethods
 	public function xhr_getBezirk($data)
 	{
 		global $g_data;
-		if (!$this->session->may('orga')) {
+		if (!($this->session->may('orga') || $this->regionPermission->mayAdministrateRegions())) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
@@ -1338,7 +1342,7 @@ class XhrMethods
 
 	public function xhr_saveBezirk($data)
 	{
-		if ($this->session->may('orga')) {
+		if ($this->session->may('orga') || $this->regionPermission->mayAdministrateRegions()) {
 			global $g_data;
 			$g_data = $data;
 
