@@ -25,6 +25,9 @@ class BasketView extends View
 
 		if (is_array($location)) {
 			$map->setCenter($location['lat'], $location['lon']);
+		} else {
+			$map->setCenter(50.89, 10.13);
+			$map->setZoom(6);
 		}
 
 		$map->setSearchPanel('mapsearch');

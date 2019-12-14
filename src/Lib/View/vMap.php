@@ -58,6 +58,11 @@ class vMap extends vCore
 		$this->center = array($lat, $lng);
 	}
 
+	public function setZoom(int $zoom)
+	{
+		$this->zoom = $zoom;
+	}
+
 	public function setMarkerCluster($val = true)
 	{
 		$this->markercluster = $val;
