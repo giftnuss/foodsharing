@@ -91,7 +91,7 @@ class BellGateway extends BaseGateway
 	 * @param $fsId
 	 * @param string $limit
 	 *
-	 * @return BellData[]
+	 * @return BellDTOForList[]
 	 */
 	public function listBells($fsId, $limit = '')
 	{
@@ -107,7 +107,6 @@ class BellGateway extends BaseGateway
 				b.`vars`,
 				b.`attr`,
 				b.`icon`,
-				b.`identifier`,
 				b.`time`,
 				hb.seen,
 				b.closeable
@@ -131,7 +130,7 @@ class BellGateway extends BaseGateway
 			return [];
 		}
 
-		return BellData::createArrayFromDatatabaseRows($rows);
+		return BellDTOForList::createArrayFromDatatabaseRows($rows);
 	}
 
 	/**
@@ -147,28 +146,21 @@ class BellGateway extends BaseGateway
 	/**
 	 * @param string $identifier - can contain SQL wildcards
 	 *
-	 * @return BellData[]
+	 * @return BellDTOForExpirationUpdates[]
 	 */
 	public function getExpiredByIdentifier(string $identifier): array
 	{
 		$bells = $this->db->fetchAll('
             SELECT
                 `id`,
-				`name`,
-				`body`,
-				`vars`,
-				`attr`,
-				`icon`,
-				`identifier`,
-				`time`,
-				`closeable`
+				`identifier`
             FROM `fs_bell`
             WHERE `identifier` LIKE :identifier
             AND `expiration` < NOW()',
 			[':identifier' => $identifier]
 		);
 
-		return BellData::createArrayFromDatatabaseRows($bells);
+		return BellDTOForExpirationUpdates::createArrayFromDatatabaseRows($bells);
 	}
 
 	public function bellWithIdentifierExists(string $identifier): bool

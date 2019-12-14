@@ -11,14 +11,6 @@ namespace Foodsharing\Modules\Bell;
 class BellData
 {
 	/**
-	 * @var int|null
-	 *
-	 * Whenever BellGateway's methods retrieve BellData from the database or persist it, the row's id will be
-	 * persisted here
-	 */
-	public $id;
-
-	/**
 	 * @var string
 	 *
 	 * This title will be shown as a heading whenever the bell will be displayed. You should use translation keys here,
@@ -41,8 +33,8 @@ class BellData
 	/**
 	 * @var string
 	 *
-	 * This string will be used to display an icon next to the bell in the frontend. Supported are relative and
-	 * absolute urls to images, as well as CSS classes (such as fontawesome classes).
+	 * This string will be used to display an icon next to the bell in the frontend. Supported are relative urls to
+	 * images, as well as CSS classes (such as fontawesome classes).
 	 */
 	public $icon;
 
@@ -125,37 +117,5 @@ class BellData
 		$bell->time = $time;
 
 		return $bell;
-	}
-
-	/**
-	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
-	 *
-	 * @return BellData[] - BellData objects with with unserialized $ball->vars and $bell->attr
-	 */
-	public static function createArrayFromDatatabaseRows(array $databaseRows): array
-	{
-		$output = [];
-		foreach ($databaseRows as $row) {
-			$bellData = new BellData();
-
-			$bellData->id = $row['id'] ?? null;
-			$bellData->title = $row['name'] ?? null;
-			$bellData->body = $row['body'] ?? null;
-			$bellData->icon = $row['icon'] ?? null;
-			$bellData->link_attributes = isset($row['attr']) ? unserialize($row['attr'], array('allowed_classes' => false)) : null;
-			$bellData->vars = $row['vars'] ? unserialize($row['vars'], array('allowed_classes' => false)) : null;
-			$bellData->identifier = $row['identifier'] ?? null;
-			$bellData->closeable = $row['closeable'] ?? null;
-			$bellData->expiration = isset($row['expiration']) ? new \DateTime($row['expiration']) : null;
-			$bellData->time = $row['time'] ? new \DateTime($row['time']) : null;
-
-			if (isset($row['seen'])) { // TODO: This property does not really belong into BellData, because it belongs to a foodsaver, but sometimes it get's fetched from the database as well
-				$bellData->seen = $row['seen'];
-			}
-
-			$output[] = $bellData;
-		}
-
-		return $output;
 	}
 }
