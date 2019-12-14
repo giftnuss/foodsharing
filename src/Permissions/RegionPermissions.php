@@ -25,7 +25,7 @@ final class RegionPermissions
 		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
 	}
 
-	public function mayAdministrateRegionGroupTool()
+	public function mayAdministrateRegions()
 	{
 		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP);
 	}

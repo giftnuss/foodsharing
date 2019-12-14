@@ -265,7 +265,7 @@ final class PageHelper
 					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
 					'editContent' => $this->contentPermissions->mayEditContent(),
 					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
-					'administrateRegions' => $this->regionPermissions->mayAdministrateRegionGroupTool()
+					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,

@@ -22,7 +22,7 @@ class RegionAdminXhr extends Control
 
 	public function masterupdate()
 	{
-		if (!$this->regionPermissions->mayAdministrateRegionGroupTool()) {
+		if (!$this->regionPermissions->mayAdministrateRegions()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($bezirke = $this->regionGateway->listIdsForDescendantsAndSelf($_GET['id'])) {
