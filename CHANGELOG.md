@@ -76,7 +76,7 @@
 - Move mayEditQuiz() from session to own permission class with deprecation in Session class. Added some example implementations. !1242 @jofranz
 - Introduce mayManageMailboxes() permissions. Removed the entry from the menu if permission is false. !1244 @jofranz
 - Moved database access from RegionXhr, MailboxXhr, and ForumService to gateways !1228 #9 @alex.simm
-- Removed Xhr method for posting store wall posts (xhr_addPinPost) and made it part of the REST API (POST on /api/stores/{id}/posts}. !1138 #719 @janopae
+- Removed Xhr method for posting store wall posts (xhr_addPinPost) and made it part of the REST API (POST on /api/stores/{id}/posts}. !1226 #719 @janopae
 
 ## Dev/Test/CI stuff
 
