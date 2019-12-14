@@ -559,6 +559,10 @@ class Session
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see QuizPermissions::mayEditQuiz()
+	 */
 	public function mayEditQuiz()
 	{
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);

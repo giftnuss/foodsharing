@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
@@ -16,6 +17,7 @@ class QuizControl extends Control
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
+	private $quizPermissions;
 
 	public function __construct(
 		QuizView $view,
@@ -24,7 +26,8 @@ class QuizControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		QuizPermissions $quizPermissions
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
@@ -33,12 +36,13 @@ class QuizControl extends Control
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->quizPermissions = $quizPermissions;
 
 		parent::__construct();
 
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();
-		} elseif (!$this->session->mayEditQuiz()) {
+		} elseif (!$this->quizPermissions->mayEditQuiz()) {
 			$this->routeHelper->go('/');
 		}
 	}
