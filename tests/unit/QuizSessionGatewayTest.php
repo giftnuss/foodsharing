@@ -136,6 +136,8 @@ class QuizSessionGatewayTest extends \Codeception\Test\Unit
 	private function foodsharerQuizStatus(): array
 	{
 		return $this->gateway->getQuizStatus(Role::FOODSAVER, $this->foodsharer['id']);
+	}
+
 	public function testBlockUserForQuiz()
 	{
 		$this->gateway->blockUserForQuiz($this->foodsaver['id'], Role::FOODSAVER);
