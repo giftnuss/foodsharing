@@ -422,7 +422,7 @@ class EmailControl extends Control
 
 			return $html;
 		} catch (Exception $e) {
-			if ($_SESSION['client']['group']['admin'] === true && $this->session->mayGroupKeyword('admin')) {
+			if ($_SESSION['client']['group']['admin'] === true && $this->session->isSiteAdmin()) {
 				echo $e->getMessage();
 				die();
 			}

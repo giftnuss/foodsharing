@@ -354,7 +354,7 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public function mayGroupKeyword(string $group): bool
+	private function isInUserGroup(string $group): bool
 	{
 		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
@@ -363,9 +363,13 @@ class Session
 		return false;
 	}
 
+	public function isSiteAdmin() {
+		return $this->isInUserGroup('admin');
+	}
+
 	public function isOrgaTeam()
 	{
-		return $this->mayGroupKeyword('orgateam');
+		return $this->isInUserGroup('orgateam');
 	}
 
 	public function isAmbassador(): bool
