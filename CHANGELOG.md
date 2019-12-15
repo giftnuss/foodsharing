@@ -28,6 +28,7 @@
 - Show foodsharer id in profile for everyone !1232 @jofranz
 - Menu entry for newsletter email sending is only active if mayAdministrateNewsletterEmail() permission is true !1235 @jofranz
 - Admins of newsletter workgroup (331) now have access to the newsletter module additional to orga members !1235 @jofranz
+- Show a error message, if changing a mail address failed !1091 @chriswalg
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
