@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Services\FoodsaverService;
 
 class FoodsaverControl extends Control
 {
@@ -16,6 +17,7 @@ class FoodsaverControl extends Control
 	private $settingsGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
+	private $foodsaverService;
 	private $identificationHelper;
 	private $dataHelper;
 
@@ -25,6 +27,7 @@ class FoodsaverControl extends Control
 		SettingsGateway $settingsGateway,
 		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
+		FoodsaverService $foodsaverService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {
@@ -33,6 +36,7 @@ class FoodsaverControl extends Control
 		$this->settingsGateway = $settingsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->foodsaverService = $foodsaverService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 
@@ -135,7 +139,7 @@ class FoodsaverControl extends Control
 		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
 		if ($updateResult) {
 			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
-				$updateResult = $this->foodsaverGateway->downgradePermanently($fsId, $this->storeModel);
+				$updateResult = $this->foodsaverService->downgradePermanently($fsId, $this->storeModel);
 			}
 		}
 
