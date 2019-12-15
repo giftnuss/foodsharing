@@ -363,7 +363,8 @@ class Session
 		return false;
 	}
 
-	public function isSiteAdmin() {
+	public function isSiteAdmin()
+	{
 		return $this->isInUserGroup('admin');
 	}
 
