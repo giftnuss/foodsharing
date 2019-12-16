@@ -116,20 +116,21 @@ class FoodsaverControl extends Control
 				unset($g_data['email'], $g_data['rolle']);
 			}
 
-			$fsId = $_GET['id'];
-			if ($oldFs = $this->foodsaverGateway->getFoodsaver($fsId)) {
-				$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
-				$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $logChangedFields, $this->session->id());
-			}
+			if (isset($_GET['id']) && $fsId = $_GET['id']) {
+				if ($oldFs = $this->foodsaverGateway->getFoodsaver($fsId)) {
+					$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
+					$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $logChangedFields, $this->session->id());
+				}
 
-			if (!isset($g_data['bezirk_id'])) {
-				$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
-			}
+				if (!isset($g_data['bezirk_id'])) {
+					$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
+				}
 
-			if ($this->updateFoodsaver($fsId, $g_data)) {
-				$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
-			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				if ($this->updateFoodsaver($fsId, $g_data)) {
+					$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+				} else {
+					$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				}
 			}
 		}
 	}
