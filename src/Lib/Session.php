@@ -564,13 +564,13 @@ class Session
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 	}
 
-	public function mayEditBlog()
+	public function isAdminForAWorkGroup()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->may('orga') || in_array($this->id(), unserialize($all_group_admins));
+			return in_array($this->id(), unserialize($all_group_admins));
 		}
 
-		return $this->may('orga');
+		return false;
 	}
 
 	public function isVerified()

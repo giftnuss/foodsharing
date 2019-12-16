@@ -54,7 +54,7 @@ export default {
           }
         ])
       }
-      if (this.may.editBlog) {
+      if (this.may.administrateBlog) {
         items.push({
           url: '/?page=blog&sub=manage',
           icon: 'far fa-newspaper',

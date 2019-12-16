@@ -76,6 +76,7 @@
 - Introduce very basic permissions for FAQ editing. Removes the topbar menu entry if false. For now this only replaces orga permissions in accessing the FAQ admin tool !1245 @jofranz
 - Move mayEditQuiz() from session to own permission class with deprecation in Session class. Added some example implementations. !1242 @jofranz
 - Introduce permissions for content administration. For now there are no additional permissions given. Removed the entry from the menu if permission is false !1243 @jofranz
+- Introduce mayAdministrateBlog() permission in BlogPermissions.php and use it for current permission checks. It rebuilds previous behaviour. Removes the topbar entry from the menu if permission is false !1246 @jofranz
 - Introduce mayManageMailboxes() permissions. Removed the entry from the menu if permission is false. !1244 @jofranz
 - Introduce store creation permissions and use it for at three different places where a store button is shown. Also use it at before showing store creating page !1237 @jofranz
 - Moved database access from RegionXhr, MailboxXhr, and ForumService to gateways !1228 #9 @alex.simm

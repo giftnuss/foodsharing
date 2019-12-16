@@ -4,6 +4,7 @@ namespace Foodsharing\Helpers;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Permissions\ContentPermissions;
 use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\ImageService;
@@ -38,6 +39,7 @@ final class PageHelper
 	public $jsData = [];
 	private $twig;
 	private $identificationHelper;
+	private $blogPermissions;
 	private $mailboxPermissions;
 	private $faqPermissions;
 	private $quizPermissions;
@@ -56,7 +58,8 @@ final class PageHelper
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
 		StorePermissions $storePermissions,
-		ContentPermissions $contentPermissions
+		ContentPermissions $contentPermissions,
+		BlogPermissions $blogPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -79,6 +82,7 @@ final class PageHelper
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->faqPermissions = $faqPermissions;
+		$this->blogPermissions = $blogPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
 		$this->contentPermissions = $contentPermissions;
@@ -239,7 +243,7 @@ final class PageHelper
 				'hasFsRole' => $this->session->may('fs'),
 				'isOrgaTeam' => $this->session->isOrgaTeam(),
 				'may' => [
-					'editBlog' => $this->session->mayEditBlog(),
+					'administrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
 					'editQuiz' => $this->quizPermissions->mayEditQuiz(),
 					'handleReports' => $this->session->mayHandleReports(),
 					'addStore' => $this->storePermissions->mayCreateStore(),

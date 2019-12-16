@@ -81,7 +81,7 @@ class BlogControl extends Control
 
 	public function manage()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->pageHelper->addBread($this->translationHelper->s('manage_blog'));
 			$title = 'Blog Artikel';
 
@@ -104,7 +104,7 @@ class BlogControl extends Control
 
 	public function post()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			if (isset($_GET['id'])) {
 				if ($post = $this->blogGateway->getOne_blog_entry($_GET['id'])) {
 					if ($post['active'] == 1) {
@@ -120,7 +120,7 @@ class BlogControl extends Control
 
 	public function add()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->handle_add();
 
 			$this->pageHelper->addBread($this->translationHelper->s('bread_new_blog_entry'));
@@ -150,7 +150,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if ($this->session->mayEditBlog() && $this->submitted()) {
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
@@ -165,7 +165,7 @@ class BlogControl extends Control
 
 	public function edit()
 	{
-		if ($this->session->mayEditBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
 			$this->pageHelper->addBread($this->translationHelper->s('bread_blog_entry'), '/?page=blog&sub=manage');
@@ -188,7 +188,7 @@ class BlogControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->session->mayEditBlog() && $this->submitted()) {
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
 			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
