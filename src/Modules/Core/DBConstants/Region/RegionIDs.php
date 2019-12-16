@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Core\DBConstants\Region;
 
 class RegionIDs
 {
+	public const NEWSLETTER_WORK_GROUP = 331;
 	public const QUIZ_AND_REGISTRATION_WORK_GROUP = 341;
 	public const GLOBAL_WORKING_GROUPS = 392;
 	public const EUROPE_REPORT_TEAM = 432;

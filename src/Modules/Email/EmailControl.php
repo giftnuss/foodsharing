@@ -13,6 +13,7 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\SanitizerService;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 class EmailControl extends Control
 {
@@ -24,6 +25,7 @@ class EmailControl extends Control
 	private $mailboxGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $newsletterEmailPermissions;
 
 	public function __construct(
 		StoreGateway $storeGateway,
@@ -33,7 +35,8 @@ class EmailControl extends Control
 		SanitizerService $sanitizerService,
 		MailboxGateway $mailboxGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -43,10 +46,11 @@ class EmailControl extends Control
 		$this->mailboxGateway = $mailboxGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 
 		parent::__construct();
 
-		if (!$this->session->may('orga')) {
+		if (!$this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 			$this->routeHelper->go('/');
 		}
 	}
@@ -61,7 +65,7 @@ class EmailControl extends Control
 		}
 
 		$recip = '';
-		if ($this->session->isOrgaTeam()) {
+		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 			$recip = $this->v_utils->v_form_recip_chooser();
 		} elseif ($this->session->isAmbassador()) {
 			$recip = $this->v_utils->v_form_recip_chooser_mini();
@@ -131,7 +135,7 @@ class EmailControl extends Control
 
 			$foodsaver = array();
 
-			if ($this->session->isAmbassador() || $this->session->isOrgaTeam()) {
+			if ($this->session->isAmbassador() || $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 				if ($data['recip_choose'] == 'bezirk') {
 					$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 					$foodsaver = $this->foodsaverGateway->getEmailAdressen($region_ids);
@@ -141,7 +145,7 @@ class EmailControl extends Control
 					$foodsaver = $this->foodsaverGateway->getOrgateam();
 				}
 			}
-			if ($this->session->isOrgaTeam()) {
+			if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 				if ($data['recip_choose'] == 'all') {
 					$foodsaver = $this->foodsaverGateway->getAllEmailFoodsaver();
 				} elseif ($data['recip_choose'] == 'newsletter') {

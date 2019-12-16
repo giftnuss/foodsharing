@@ -13,6 +13,7 @@ use Twig\Environment;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Permissions\FAQPermissions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 final class PageHelper
 {
@@ -45,6 +46,7 @@ final class PageHelper
 	private $quizPermissions;
 	private $storePermissions;
 	private $contentPermissions;
+	private $newsletterEmailPermissions;
 
 	public function __construct(
 		Session $session,
@@ -59,7 +61,8 @@ final class PageHelper
 		QuizPermissions $quizPermissions,
 		StorePermissions $storePermissions,
 		ContentPermissions $contentPermissions,
-		BlogPermissions $blogPermissions
+		BlogPermissions $blogPermissions,
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -87,6 +90,7 @@ final class PageHelper
 		$this->quizPermissions = $quizPermissions;
 		$this->contentPermissions = $contentPermissions;
 		$this->storePermissions = $storePermissions;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -249,7 +253,8 @@ final class PageHelper
 					'addStore' => $this->storePermissions->mayCreateStore(),
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
 					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
-					'editContent' => $this->contentPermissions->mayEditContent()
+					'editContent' => $this->contentPermissions->mayEditContent(),
+					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,
