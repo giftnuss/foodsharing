@@ -56,6 +56,7 @@
 - Fix error when logging out while not logged in !1240 #753 @alex.simm
 - Prevent exception for orga users if a deleted user profile is visited @jofranz 
 - Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
+- Remove "Aktionen"-column from list of user stores !1252 @koenvg
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
