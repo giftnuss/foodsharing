@@ -13,11 +13,11 @@ class FoodsaverService
 	private $quizSessionGateway;
 
 	public function __construct(
-		FoodsaverGateway $buddyGateway,
-		QuizSessionGateway $workGroupGateway
+		FoodsaverGateway $foodsaverGateway,
+		QuizSessionGateway $quizSessionGateway
 	) {
-		$this->buddyGateway = $buddyGateway;
-		$this->workGroupGateway = $workGroupGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
 	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
