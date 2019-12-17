@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Carbon\Carbon;
 use Exception;
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -13,14 +14,17 @@ use Foodsharing\Modules\Store\StoreModel;
 
 final class FoodsaverGateway extends BaseGateway
 {
+	private $dataHelper;
 	private $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
+		DataHelper $dataHelper,
 		ForumFollowerGateway $forumFollowerGateway
 	) {
 		parent::__construct($db);
 
+		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 	}
 
@@ -425,7 +429,7 @@ final class FoodsaverGateway extends BaseGateway
 			], $criteria)
 		);
 
-		return $this->useIdAsIndex($foodsavers);
+		return $this->dataHelper->useIdAsIndex($foodsavers);
 	}
 
 	public function getRegionAmbassadorsEmailAddresses(array $regionIds): array
@@ -445,7 +449,7 @@ final class FoodsaverGateway extends BaseGateway
 			':regionIds' => implode(',', array_map('intval', $regionIds))
 		]);
 
-		return $this->useIdAsIndex($foodsavers);
+		return $this->dataHelper->useIdAsIndex($foodsavers);
 	}
 
 	public function getEmailAddressesFromRegions(array $regionIds): array
@@ -465,17 +469,7 @@ final class FoodsaverGateway extends BaseGateway
 			':regionIds' => implode(',', array_map('intval', $regionIds))
 		]);
 
-		return $this->useIdAsIndex($foodsavers);
-	}
-
-	private function useIdAsIndex(array $data): array
-	{
-		$out = [];
-		foreach ($data as $d) {
-			$out[$d['id']] = $d;
-		}
-
-		return $out;
+		return $this->dataHelper->useIdAsIndex($foodsavers);
 	}
 
 	public function updateGroupMembers(int $regionId, array $fsIds, bool $leaveAdmins): array
