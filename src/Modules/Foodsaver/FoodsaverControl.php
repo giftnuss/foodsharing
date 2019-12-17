@@ -48,8 +48,8 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-		$regionId = isset($_GET['bid']) ? (int)$_GET['bid'] : 0;
-		if ($region = $this->regionGateway->getRegion($regionId) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion([$regionId], false, true))) {
+		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
+			$regionId = $region['id'];
 			if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
