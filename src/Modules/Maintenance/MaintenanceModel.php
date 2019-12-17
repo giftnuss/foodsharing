@@ -6,26 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function listFoodsaverInactiveSince($days)
-	{
-		return $this->q('
-			SELECT 
-				`id`,
-				`name`,
-				`nachname`,
-				`email`,
-				`geschlecht`
-
-			FROM 
-				fs_foodsaver
-				
-			WHERE 
-				sleep_status = 0
-			AND
-				`last_login` < "' . date('Y-m-d H:i:s', (time() - (84400 * $days))) . '"
-		');
-	}
-
 	public function getStoreManagersWhichWillBeAlerted()
 	{
 		$dow = (int)date('w');
