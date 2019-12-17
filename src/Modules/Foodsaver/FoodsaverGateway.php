@@ -537,7 +537,7 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getAllWorkGroupAmbassadorIds(): array
 	{
-	    return $this->getAmbassadorIds(RegionIDs::NONE, false, true);
+		return $this->getAmbassadorIds(RegionIDs::NONE, false, true);
 	}
 
 	public function getRegionAmbassadorIds(int $regionId): array
@@ -550,11 +550,12 @@ final class FoodsaverGateway extends BaseGateway
 	 *
 	 * Because the region data model holds both, <i>regions</i> <b>and</b> <i>work groups</i>,
 	 * one can decide which one to query via flag parameters.
-	 * 
+	 *
 	 * @param int $regionId The region ID
-	 * @param bool $includeRegionAmbassador "Real" regions shall be queried. 
+	 * @param bool $includeRegionAmbassador "Real" regions shall be queried
 	 * @param bool $includeGroupAmbassador Work groups shall be queried. If <code>$includeRegionAmbassador</code> is <code>false</code>,
 	 *     this is implicitely handled as <code>true</code>.
+	 *
 	 * @return array
 	 */
 	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
@@ -728,7 +729,7 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function getPhoto(int $fsId): string
+	public function getPhotoFileName(int $fsId): string
 	{
 		if ($photo = $this->db->fetchValueByCriteria('fs_foodsaver', 'photo', ['id' => $fsId])) {
 			return $photo;

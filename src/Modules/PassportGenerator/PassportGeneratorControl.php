@@ -202,7 +202,7 @@ final class PassportGeneratorControl extends Control
 				// QRCODE,L : QR-CODE Low error correction
 				$pdf->write2DBarcode('https://foodsharing.de/profile/' . $fs_id, 'QRCODE,L', 70.5 + $x, 43 + $y, 20, 20, $style, 'N');
 
-				if ($photo = $this->foodsaverGateway->getPhoto($fs_id)) {
+				if ($photo = $this->foodsaverGateway->getPhotoFileName($fs_id)) {
 					if (file_exists('images/crop_' . $photo)) {
 						$pdf->Image('images/crop_' . $photo, 14 + $x, 29.7 + $y, 24);
 					} elseif (file_exists('images/' . $photo)) {

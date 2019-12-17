@@ -144,7 +144,7 @@ class FoodsaverControl extends Control
 
 	private function picture_box()
 	{
-		$photo = $this->foodsaverGateway->getPhoto($_GET['id']);
+	    $photo = $this->foodsaverGateway->getPhotoFileName($_GET['id']);
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);
