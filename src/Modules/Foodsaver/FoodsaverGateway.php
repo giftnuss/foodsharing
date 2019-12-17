@@ -9,6 +9,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
@@ -536,7 +537,7 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function getAllWorkGroupAmbassadorIds(): array
 	{
-		return $this->getAmbassadorIds(0, false, true);
+	    return $this->getAmbassadorIds(RegionIDs::NONE, false, true);
 	}
 
 	public function getRegionAmbassadorIds(int $regionId): array
@@ -544,7 +545,18 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->getAmbassadorIds($regionId);
 	}
 
-	/* retrieves the list of all bots for given bezirk or sub bezirk */
+	/**
+	 * Retrieves the list of all ambassador for a given region or district.
+	 *
+	 * Because the region data model holds both, <i>regions</i> <b>and</b> <i>work groups</i>,
+	 * one can decide which one to query via flag parameters.
+	 * 
+	 * @param int $regionId The region ID
+	 * @param bool $includeRegionAmbassador "Real" regions shall be queried. 
+	 * @param bool $includeGroupAmbassador Work groups shall be queried. If <code>$includeRegionAmbassador</code> is <code>false</code>,
+	 *     this is implicitely handled as <code>true</code>.
+	 * @return array
+	 */
 	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
 	{
 		$sql = '
