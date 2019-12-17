@@ -113,8 +113,8 @@ class FoodsaverControl extends Control
 
 			if (isset($_GET['id']) && $fsId = (int) $_GET['id']) {
 				if ($oldFs = $this->foodsaverGateway->getFoodsaver($fsId)) {
-					$logChangedFields = array('name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam');
-					$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $logChangedFields, $this->session->id());
+					$changedFields = ['name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam'];
+					$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $changedFields, $this->session->id());
 				}
 
 				if (!isset($g_data['bezirk_id'])) {
