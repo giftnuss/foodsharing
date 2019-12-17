@@ -122,32 +122,6 @@ class StatsModel extends Db
 		return (int)$val + (int)$stat_fetchcount;
 	}
 
-	// method currently not used. @fs_k wants to keep it in source for now.
-	public function getBetriebTeam($storeId)
-	{
-		return $this->q('
-
-			SELECT 
-				t.stat_last_update,
-				t.`stat_fetchcount`,
-				t.`stat_first_fetch`,
-				t.`stat_last_fetch`,
-				UNIX_TIMESTAMP(t.`stat_first_fetch`) AS first_fetch_ts,
-				t.`stat_add_date`,
-				UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date_ts,
-				t.foodsaver_id,
-				t.verantwortlich,
-				t.active
-				
-			FROM 
-				fs_betrieb_team t
-
-			WHERE 
-				t.betrieb_id = ' . (int)$storeId . '
-				
-		');
-	}
-
 	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
 	{
 		return $this->update('
