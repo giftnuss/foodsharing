@@ -173,45 +173,6 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 	}
 
-	private function sleepingMode()
-	{
-		/*
-		 * get foodsaver which are more than 30 days inactive; set to sleeping mode and send email
-		 */
-
-		self::info('sleeping mode');
-
-		$inactive_fsids = array();
-		if ($foodsaver = $this->model->listFoodsaverInactiveSince(30)) {
-			foreach ($foodsaver as $fs) {
-				$inactive_fsids[$fs['id']] = $fs['id'];
-				$this->emailHelper->tplMail('user/sleeping_automated', $fs['email'], array(
-					'name' => $fs['name'],
-					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
-				));
-
-				$this->infoToBotsUserDeactivated($fs);
-			}
-			$this->model->setFoodsaverInactive($inactive_fsids);
-
-			self::info(count($inactive_fsids) . ' user going to sleep..');
-		}
-
-		/*
-		 * get all foodsavers if they haven't logged in since 14 days and send a wake-up email
-		 */
-		if ($foodsaver = $this->model->listFoodsaverInactiveSince(14)) {
-			foreach ($foodsaver as $fs) {
-				$this->emailHelper->tplMail('user/sleeping_warning', $fs['email'], array(
-					'name' => $fs['name'],
-					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht'])
-				));
-			}
-
-			self::info(count($foodsaver) . ' get a wakeup email..');
-		}
-	}
-
 	private function infoToBotsUserDeactivated($foodsaver)
 	{
 		if ($botschafer = $this->model->getUserBotschafter($foodsaver['id'])) {
