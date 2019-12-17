@@ -499,7 +499,7 @@ class SettingsControl extends Control
 
 	private function picture_box(): string
 	{
-	    $photo = $this->foodsaverGateway->getPhotoFileName($this->session->id());
+		$photo = $this->foodsaverGateway->getPhotoFileName($this->session->id());
 
 		return $this->view->picture_box($photo);
 	}

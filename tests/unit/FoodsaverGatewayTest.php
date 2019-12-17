@@ -53,7 +53,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 	{
 		$this->gateway->updatePhoto($this->foodsaver['id'], 'mypicture.png');
 		$this->tester->assertEquals(
-		    $this->gateway->getPhotoFileName($this->foodsaver['id']),
+			$this->gateway->getPhotoFileName($this->foodsaver['id']),
 			'mypicture.png'
 		);
 	}

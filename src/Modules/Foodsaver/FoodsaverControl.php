@@ -135,7 +135,7 @@ class FoodsaverControl extends Control
 		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
 		if ($updateResult) {
 			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
-			    $updateResult = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fsId, $this->storeModel);
+				$updateResult = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fsId, $this->storeModel);
 			}
 		}
 
@@ -144,7 +144,7 @@ class FoodsaverControl extends Control
 
 	private function picture_box()
 	{
-	    $photo = $this->foodsaverGateway->getPhotoFileName($_GET['id']);
+		$photo = $this->foodsaverGateway->getPhotoFileName($_GET['id']);
 
 		if (!(file_exists('images/thumb_crop_' . $photo))) {
 			$p_cnt = $this->v_utils->v_photo_edit('img/portrait.png', (int)$_GET['id']);
