@@ -292,7 +292,7 @@ class MailboxGateway extends BaseGateway
 			$insert = array();
 
 			foreach ($foodsaver as $fs) {
-				$insert[] = '(' . $mbid . ',' . (int)$fs . ',' . strip_tags($g_data['email_name']) . ')';
+				$insert[] = '(' . $mbid . ',' . (int)$fs . ',\'' . strip_tags($g_data['email_name']) . '\')';
 			}
 
 			$this->db->execute('
