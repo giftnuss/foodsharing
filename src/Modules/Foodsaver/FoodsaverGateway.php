@@ -302,9 +302,9 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function getAmbassadorsNumberOfRegions(int $fsId): int
+	public function isAdminForAnyGroupOrRegion(int $fsId): bool
 	{
-		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]);
+		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]) > 0;
 	}
 
 	public function getOrgateam(): array

@@ -40,13 +40,12 @@ class QuizHelper
 	public function nextQuizTodo(int $fsId, int $fsRole): int
 	{
 		$doesManageStores = (int)$this->storeGateway->getStoreCountForBieb($fsId) > 0;
-		$doesRepresentRegions = (int)$this->foodsaverGateway->getAmbassadorsNumberOfRegions($fsId) > 0;
 
 		if ($fsRole == Role::FOODSAVER && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
 			return Role::FOODSAVER;
 		} elseif (($fsRole > Role::FOODSAVER || $doesManageStores) && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) {
 			return Role::STORE_MANAGER;
-		} elseif (($fsRole > Role::STORE_MANAGER || $doesRepresentRegions) && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
+		} elseif (($fsRole > Role::STORE_MANAGER || $this->foodsaverGateway->isAdminForAnyGroupOrRegion($fsId)) && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR)) {
 			return Role::AMBASSADOR;
 		}
 
