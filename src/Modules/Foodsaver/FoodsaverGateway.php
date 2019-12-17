@@ -294,11 +294,11 @@ final class FoodsaverGateway extends BaseGateway
                         LEFT JOIN `fs_bezirk` reg
                         ON amb.bezirk_id = reg.id
             
-			WHERE	reg.type != :regType
+			WHERE	reg.type != :excludedRegionType
 			AND     fs.deleted_at IS NULL
             AND     fs.`active` = 1
         ', [
-			':regType' => Type::WORKING_GROUP
+			':excludedRegionType' => Type::WORKING_GROUP
 		]);
 	}
 
