@@ -472,9 +472,9 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
-	public function updateGroupMembers(int $regionId, array $fsIds, bool $leaveAdmins): array
+	public function updateGroupMembers(int $regionId, array $fsIds, bool $keepAdmins): array
 	{
-		if ($leaveAdmins) {
+		if ($keepAdmins) {
 			if ($admins = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $regionId])) {
 				$fsIds = array_merge($fsIds, $admins);
 			}
