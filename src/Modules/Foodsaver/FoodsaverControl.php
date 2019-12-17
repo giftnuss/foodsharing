@@ -48,16 +48,12 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-		// check bezirk_id and permissions
-		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
-			// permission granted so we can load the foodsavers
-			$regionId = $region['id'];
+	    $regionId = (int) $_GET['bid'];
+	    if ($region = $this->regionGateway->getRegion($regionId) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion([$regionId], false, true))) {
 			if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
-				// add breadcrumps
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
 
-				// list fooodsaver ($inactive can be 1 or 0, 1 means that it shows only the inactive ones and not all)
 				$this->pageHelper->addContent(
 					$this->view->foodsaverList($foodsavers, $region),
 					CNT_LEFT
@@ -65,10 +61,9 @@ class FoodsaverControl extends Control
 
 				$this->pageHelper->addContent($this->view->foodsaverForm());
 
-				// list inactive foodsaver
-				if ($foodsaverInactive = $this->foodsaverGateway->getFoodsaversByRegion($_GET['bid'], true)) {
+				if ($inactiveFoodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId, true)) {
 					$this->pageHelper->addContent(
-						$this->view->foodsaverList($foodsaverInactive, $region, true),
+						$this->view->foodsaverList($inactiveFoodsavers, $region, true),
 						CNT_RIGHT
 					);
 				}
