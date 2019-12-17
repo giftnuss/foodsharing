@@ -344,16 +344,6 @@ class MaintenanceControl extends ConsoleControl
 		}
 	}
 
-	public function quizrole()
-	{
-		$foodsaver = $this->model->q('SELECT id FROM fs_foodsaver WHERE rolle > ' . Role::FOODSHARER);
-		if ($foodsaver) {
-			foreach ($foodsaver as $fs) {
-				$this->quizHelper->refreshFsQuizRole($fs['id']);
-			}
-		}
-	}
-
 	private function wakeupSleepingUsers()
 	{
 		$this->model->update('
