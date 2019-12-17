@@ -48,8 +48,8 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-	    $regionId = (int) $_GET['bid'];
-	    if ($region = $this->regionGateway->getRegion($regionId) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion([$regionId], false, true))) {
+		$regionId = (int)$_GET['bid'];
+		if ($region = $this->regionGateway->getRegion($regionId) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion([$regionId], false, true))) {
 			if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=foodsaver&bid=' . $regionId);
@@ -111,7 +111,7 @@ class FoodsaverControl extends Control
 				unset($g_data['email'], $g_data['rolle']);
 			}
 
-			if (isset($_GET['id']) && $fsId = (int) $_GET['id']) {
+			if (isset($_GET['id']) && $fsId = (int)$_GET['id']) {
 				if ($oldFs = $this->foodsaverGateway->getFoodsaver($fsId)) {
 					$changedFields = ['name', 'nachname', 'stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum', 'rolle', 'orgateam'];
 					$this->settingsGateway->logChangedSetting($fsId, $oldFs, $g_data, $changedFields, $this->session->id());
