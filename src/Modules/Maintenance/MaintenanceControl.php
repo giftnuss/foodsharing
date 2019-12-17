@@ -173,21 +173,6 @@ class MaintenanceControl extends ConsoleControl
 		self::info('+' . $counts['inserts'] . ', -' . $counts['deletions']);
 	}
 
-	private function infoToBotsUserDeactivated($foodsaver)
-	{
-		if ($botschafer = $this->model->getUserBotschafter($foodsaver['id'])) {
-			$this->bellGateway->addBell(
-				$botschafer,
-				'fs_sleepmode_title',
-				'fs_sleepmode',
-				'fas fa-user',
-				array('href' => '#', 'onclick' => 'profile(' . $foodsaver['id'] . ');return false;'),
-				array('name' => $foodsaver['name'], 'nachname' => $foodsaver['nachname'], 'id' => $foodsaver['id']),
-				'fs-sleep' . (int)$foodsaver['id']
-			);
-		}
-	}
-
 	private function deactivateBaskets()
 	{
 		$count = $this->maintenanceGateway->deactivateOldBaskets();
