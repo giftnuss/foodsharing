@@ -429,7 +429,7 @@ final class FoodsaverGateway extends BaseGateway
 			], $criteria)
 		);
 
-		return $this->dataHelper->useIdAsIndex($foodsavers);
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
 	public function getRegionAmbassadorsEmailAddresses(array $regionIds): array
@@ -449,7 +449,7 @@ final class FoodsaverGateway extends BaseGateway
 			':regionIds' => implode(',', array_map('intval', $regionIds))
 		]);
 
-		return $this->dataHelper->useIdAsIndex($foodsavers);
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
 	public function getEmailAddressesFromRegions(array $regionIds): array
@@ -469,7 +469,7 @@ final class FoodsaverGateway extends BaseGateway
 			':regionIds' => implode(',', array_map('intval', $regionIds))
 		]);
 
-		return $this->dataHelper->useIdAsIndex($foodsavers);
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
 	public function updateGroupMembers(int $regionId, array $fsIds, bool $leaveAdmins): array
