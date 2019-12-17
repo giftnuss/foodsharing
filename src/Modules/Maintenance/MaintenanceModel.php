@@ -6,30 +6,6 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function getUserBotschafter($fsid)
-	{
-		return $this->q('
-			SELECT 
-				fs.id,
-				fs.name,
-				fs.email
-				
-			FROM 
-				fs_foodsaver_has_bezirk hb,
-				fs_botschafter b,
-				fs_foodsaver fs
-				
-			WHERE 
-				b.foodsaver_id = fs.id
-				
-			AND 
-				b.bezirk_id = hb.bezirk_id
-				
-			AND
-				hb.foodsaver_id = ' . (int)$fsid . '
-		');
-	}
-
 	public function listFoodsaverInactiveSince($days)
 	{
 		return $this->q('
