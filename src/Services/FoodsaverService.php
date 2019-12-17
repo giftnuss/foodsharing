@@ -20,7 +20,7 @@ class FoodsaverService
 		$this->quizSessionGateway = $quizSessionGateway;
 	}
 
-	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
+	public function downgradeAndBlockForQuizPermanently(int $fsId, StoreModel $storeModel): int
 	{
 		$this->quizSessionGateway->blockUserForQuiz($fsId, Role::FOODSAVER);
 

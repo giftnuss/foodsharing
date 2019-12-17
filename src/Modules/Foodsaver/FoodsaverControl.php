@@ -135,7 +135,7 @@ class FoodsaverControl extends Control
 		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
 		if ($updateResult) {
 			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
-				$updateResult = $this->foodsaverService->downgradePermanently($fsId, $this->storeModel);
+			    $updateResult = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fsId, $this->storeModel);
 			}
 		}
 
