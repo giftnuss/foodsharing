@@ -342,7 +342,7 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function xhrGetTagFsAll(array $regionIds): array
+	public function xhrGetFoodsaversOfRegionsForTagSelect(array $regionIds): array
 	{
 		return $this->db->fetchAll('
 			SELECT DISTINCT
