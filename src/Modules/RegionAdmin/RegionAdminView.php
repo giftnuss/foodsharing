@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\View;
 
 class RegionAdminView extends View
@@ -142,14 +143,12 @@ class RegionAdminView extends View
 
 		$this->pageHelper->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
-		$zoom = 6;
-		$lat = '51.303145';
-		$lon = '10.235595';
+		$lon = MapConstants::CENTER_GERMANY_LON;
 
 		$this->pageHelper->addJs('
-	 	var ' . $id . '_center = L.latLng(' . $lat . ',' . $lon . ');
+	 	var ' . $id . '_center = L.latLng(' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . ');
 		var ' . $id . '_options = {
-		  \'zoom\': ' . $zoom . ',
+		  \'zoom\': ' . MapConstants::ZOOM_COUNTRY . ',
 		  \'center\': ' . $id . '_center,
 		};
 		

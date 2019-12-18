@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Basket;
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 
 class BasketView extends View
 {
@@ -26,8 +27,8 @@ class BasketView extends View
 		if (is_array($location)) {
 			$map->setCenter($location['lat'], $location['lon']);
 		} else {
-			$map->setCenter(50.89, 10.13);
-			$map->setZoom(6);
+			$map->setCenter(MapConstants::CENTER_GERMANY_LAT, MapConstants::CENTER_GERMANY_LON);
+			$map->setZoom(MapConstants::ZOOM_COUNTRY);
 		}
 
 		$map->setSearchPanel('mapsearch');
