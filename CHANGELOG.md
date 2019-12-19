@@ -57,6 +57,7 @@
 - Prevent exception for orga users if a deleted user profile is visited @jofranz 
 - Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
 - Remove "Aktionen"-column from list of user stores !1252 @koenvg
+- Fix wrong may group use. Admins of EUROPE_REPORT_TEAM (region/workgroup id: 432) now actually have reports permissions on a level with orga !1250 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
