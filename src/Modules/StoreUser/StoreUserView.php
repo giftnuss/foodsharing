@@ -270,7 +270,7 @@ class StoreUserView extends View
 		return $out;
 	}
 
-	public function u_StoreList($storeData, $title)
+	public function u_storeList($storeData, $title)
 	{
 		if (empty($storeData)) {
 			return '';

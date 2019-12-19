@@ -315,9 +315,9 @@ class StoreUserControl extends Control
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
 			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
-			$this->pageHelper->addContent($this->view->u_StoreList($stores['verantwortlich'], $this->translationHelper->s('you_responsible')));
-			$this->pageHelper->addContent($this->view->u_StoreList($stores['team'], $this->translationHelper->s('you_fetcher')));
-			$this->pageHelper->addContent($this->view->u_StoreList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name']))));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['verantwortlich'], $this->translationHelper->s('you_responsible')));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['team'], $this->translationHelper->s('you_fetcher')));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name']))));
 		}
 	}
 
