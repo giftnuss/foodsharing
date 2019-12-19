@@ -897,7 +897,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $id]);
 	}
 
-	private function getBetriebNotiz($storeId): array
+	public function getBetriebNotiz($storeId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -1065,5 +1065,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				`name`
 				FROM `fs_betrieb_status`
 				ORDER BY `name`');
+	}
+
+	public function setStoreTeamStatus(int $storeId, int $teamStatus)
+	{
+		$this->db->update('fs_betrieb', ['team_status' => $teamStatus], ['id' => $storeId]);
 	}
 }

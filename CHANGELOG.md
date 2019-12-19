@@ -88,6 +88,7 @@
 - Removed Xhr method for posting store wall posts (xhr_addPinPost) and made it part of the REST API (POST on /api/stores/{id}/posts}. !1226 #719 @janopae
 - Removed mayLegacy function from session !1248 @alex.simm
 - Introduce NewsletterEmailPermissions class for mayAdministrateNewsletterEmail() permission checks !1235 @jofranz
+- Removed SQL statements from Session, BasketXhr, and XhrMethods !1247 #9 @alex.simm
 
 ## Dev/Test/CI stuff
 

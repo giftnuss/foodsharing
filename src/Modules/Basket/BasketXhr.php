@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
@@ -23,7 +22,6 @@ class BasketXhr extends Control
 	private $foodsaverGateway;
 
 	public function __construct(
-		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
 		MessageModel $messageModel,
@@ -31,7 +29,6 @@ class BasketXhr extends Control
 		ImageService $imageService,
 		FoodsaverGateway $foodsaverGateway
 	) {
-		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;

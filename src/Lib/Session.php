@@ -8,7 +8,6 @@ use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
@@ -31,7 +30,6 @@ class Session
 	private $buddyGateway;
 	private $storeGateway;
 	private $storeService;
-	private $db;
 	private $initialized = false;
 	private $routeHelper;
 	private $translationHelper;
@@ -45,7 +43,6 @@ class Session
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
 		StoreService $storeService,
-		Db $db,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
@@ -57,7 +54,6 @@ class Session
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->storeService = $storeService;
-		$this->db = $db;
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
@@ -199,8 +195,8 @@ class Session
 		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->id());
-			$this->set('g_location', $loc);
+			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
+			$this->set('g_location', ['lat' => $loc['lat'], 'lon' => $loc['lon']]);
 		}
 
 		return $loc;

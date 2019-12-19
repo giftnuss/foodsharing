@@ -13,6 +13,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -302,14 +303,10 @@ class XhrMethods
 	public function xhr_childBezirke($data)
 	{
 		if (isset($data['parent'])) {
-			$sql = ' AND 		`type` != 7';
-			if ($this->session->isOrgaTeam()) {
-				$sql = '';
-			}
-			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . (int)$data['parent'] . $sql . ' ORDER BY `name`')) {
+			if ($children = $this->regionGateway->getBezirkByParent((int)$data['parent'], $this->session->isOrgaTeam())) {
 				return json_encode(array(
 					'status' => 1,
-					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
+					'html' => $this->xhrViewUtils->childBezirke($children, $data['parent'])
 				));
 			}
 
@@ -783,7 +780,7 @@ class XhrMethods
 				exit();
 			}
 
-			$this->emailGateway->setEmailStatus($mail['id'], $recip, 1);
+			$this->emailGateway->setEmailStatus($mail['id'], $recip, EmailStatus::STATUS_INITIALISED);
 
 			foreach ($recip as $fs) {
 				$anrede = 'Liebe/r';
@@ -812,9 +809,9 @@ class XhrMethods
 				}
 
 				if (!$check) {
-					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 3);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], EmailStatus::STATUS_INVALID_MAIL);
 				} else {
-					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 2);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], EmailStatus::STATUS_SENT);
 				}
 			}
 
@@ -1095,14 +1092,12 @@ class XhrMethods
 
 	public function xhr_bteamstatus($data)
 	{
-		$status = (int)$_GET['status'];
+		$teamStatus = (int)$_GET['status'];
 		$storeId = (int)$_GET['bid'];
-		if ($this->storePermissions->mayEditStore($storeId) && $status >= 0 && $status <= 2) {
-			return $this->model->update('
-			UPDATE `fs_betrieb`
-			SET 	`team_status` = ' . $status . '
-			WHERE 	`id` = ' . $storeId . '
-		');
+		if ($this->storePermissions->mayEditStore($storeId) && in_array($teamStatus,
+				range(\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::CLOSED,
+				\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::OPEN_SEARCHING))) {
+			$this->storeGateway->setStoreTeamStatus($storeId, $teamStatus);
 		}
 	}
 
@@ -1390,8 +1385,8 @@ class XhrMethods
 
 	public function xhr_delBPost($data)
 	{
-		$fsid = $this->model->getVal('foodsaver_id', 'betrieb_notiz', $data['pid']);
-		if ($fsid == $this->session->id() || $this->session->isOrgaTeam()) {
+		$foodsaverId = $this->storeGateway->getBetriebNotiz($data['pid'])['foodsaver_id'];
+		if ($foodsaverId == $this->session->id() || $this->session->isOrgaTeam()) {
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;
@@ -1417,8 +1412,9 @@ class XhrMethods
 
 	public function xhr_abortEmail($data)
 	{
-		if ($this->session->id() == $this->model->getVal('foodsaver_id', 'send_email', $data['id'])) {
-			$this->model->update('UPDATE fs_email_status SET status = 4 WHERE email_id = ' . (int)$data['id']);
+		$mailOwnerId = $this->emailGateway->getOne_send_email($data['id'])['foodsaver_id'];
+		if ($this->session->id() == $mailOwnerId) {
+			$this->emailGateway->setEmailStatus($data['id'], $mailOwnerId, EmailStatus::STATUS_CANCELED);
 		}
 	}
 
