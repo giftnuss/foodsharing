@@ -270,7 +270,7 @@ class StoreUserView extends View
 		return $out;
 	}
 
-	public function u_betriebList($storeData, $title, $verantwortlich)
+	public function u_storeList($storeData, $title)
 	{
 		if (empty($storeData)) {
 			return '';
@@ -292,10 +292,6 @@ class StoreUserView extends View
 				$storeRows[$i][] = array('cnt' => $store['bezirk_name']);
 				$isRegion = true;
 			}
-
-			if ($verantwortlich) {
-				$storeRows[$i][] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $store['id'], 'types' => array('edit'), 'confirmMsg' => 'Soll ' . $store['name'] . ' wirklich unwiderruflich gel&ouml;scht werden?')));
-			}
 		}
 
 		$head = array(
@@ -305,9 +301,6 @@ class StoreUserView extends View
 			array('name' => 'Status', 'width' => 50));
 		if ($isRegion) {
 			$head[] = array('name' => 'Region');
-		}
-		if ($verantwortlich) {
-			$head[] = array('name' => 'Aktionen', 'sort' => false, 'width' => 30);
 		}
 
 		$table = $this->v_utils->v_tablesorter($head, $storeRows);

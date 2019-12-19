@@ -33,7 +33,7 @@ final class ProfileControl extends Control
 		if ($id = $this->uriInt(2)) {
 			$this->profileGateway->setFsId((int)$id);
 			$data = $this->profileGateway->getData($this->session->id());
-			if ($data && $data['deleted_at'] === null) {
+			if ($data && ($data['deleted_at'] === null || $this->session->may('orga'))) {
 				$this->foodsaver = $data;
 				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
 				$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
@@ -48,7 +48,6 @@ final class ProfileControl extends Control
 					$this->profile();
 				}
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('fs_profile_does_not_exist_anymore'));
 				$this->routeHelper->goPage('dashboard');
 			}
 		} else {

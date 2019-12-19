@@ -261,7 +261,7 @@ export default {
   },
   computed: {
     someAdminRights () {
-      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes || this.may.administrateNewsletterEmail
+      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes
     },
     isMobile () {
       return this.ui.wSM || this.ui.wXS

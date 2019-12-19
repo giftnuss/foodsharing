@@ -19,10 +19,6 @@ class ReportControl extends Control
 		$this->imageService = $imageService;
 
 		parent::__construct();
-
-		if (!$this->session->may()) {
-			$this->routeHelper->goLogin();
-		}
 	}
 
 	// Request is needed here, even if not used inside the method.

@@ -25,4 +25,3 @@ $g_lang['stores'] = 'Betriebe ({count})';
 $g_lang['no_data'] = 'Es liegen keine Daten vor';
 $g_lang['verified'] = 'Verifiziert';
 $g_lang['de_verified'] = 'Entverifiziert';
-$g_lang['fs_profile_does_not_exist_anymore'] = 'Dieses Nutzerprofil gibt es nicht oder nicht mehr';
