@@ -68,7 +68,8 @@ class WorkGroupGateway extends BaseGateway
 			// delete all members if they're not in the submitted array
 			foreach ($deletedMemberIds as $m) {
 				$this->db->delete('fs_foodsaver_has_bezirk', [
-					'foodsaver_id' => $m
+					'foodsaver_id' => $m,
+					'bezirk_id' => $regionId
 				]);
 			}
 
