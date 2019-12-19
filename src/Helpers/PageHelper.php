@@ -12,6 +12,7 @@ use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
@@ -45,6 +46,7 @@ final class PageHelper
 	private $mailboxPermissions;
 	private $faqPermissions;
 	private $quizPermissions;
+    private $reportPermissions;
 	private $storePermissions;
 	private $contentPermissions;
 	private $newsletterEmailPermissions;
@@ -61,6 +63,7 @@ final class PageHelper
 		FAQPermissions $faqPermissions,
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
+        ReportPermissions $reportPermissions,
 		StorePermissions $storePermissions,
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
@@ -91,6 +94,7 @@ final class PageHelper
 		$this->blogPermissions = $blogPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
+        $this->reportPermissions = $reportPermissions;
 		$this->contentPermissions = $contentPermissions;
 		$this->storePermissions = $storePermissions;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
@@ -254,7 +258,7 @@ final class PageHelper
 				'may' => [
 					'administrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
 					'editQuiz' => $this->quizPermissions->mayEditQuiz(),
-					'handleReports' => $this->session->mayHandleReports(),
+					'handleReports' => $this->reportPermissions->mayHandleReports(),
 					'addStore' => $this->storePermissions->mayCreateStore(),
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
 					'editFAQ' => $this->faqPermissions->mayEditFAQ(),

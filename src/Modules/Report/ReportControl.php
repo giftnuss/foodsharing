@@ -6,11 +6,13 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Foodsharing\Permissions\ReportPermissions;
 
 class ReportControl extends Control
 {
 	private $reportGateway;
 	private $imageService;
+    private $reportPermissions;
 
 	public function __construct(ReportGateway $reportGateway, ReportView $view, ImageService $imageService)
 	{
@@ -19,6 +21,8 @@ class ReportControl extends Control
 		$this->imageService = $imageService;
 
 		parent::__construct();
+
+        $this->reportPermissions = new ReportPermissions($this->session);
 
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();
@@ -38,7 +42,7 @@ class ReportControl extends Control
 			if (!isset($_GET['sub'])) {
 				$this->routeHelper->go('/?page=report&sub=uncom');
 			}
-			if ($this->session->mayHandleReports()) {
+			if ($this->reportPermissions->mayHandleReports()) {
 				$this->pageHelper->addBread('Meldungen', '/?page=report');
 			} else {
 				$this->routeHelper->go('/?page=dashboard');
@@ -55,7 +59,7 @@ class ReportControl extends Control
 
 	public function uncom(): void
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->pageHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(0)) {
@@ -67,7 +71,7 @@ class ReportControl extends Control
 
 	public function com(): void
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->pageHelper->addContent($this->view->statsMenu($this->reportGateway->getReportStats()), CNT_LEFT);
 
 			if ($reports = $this->reportGateway->getReports(1)) {
@@ -79,7 +83,7 @@ class ReportControl extends Control
 
 	public function foodsaver(): void
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			if ($foodsaver = $this->reportGateway->getReportedSaver($_GET['id'])) {
 				$this->pageHelper->addBread(
 					'Meldungen',
