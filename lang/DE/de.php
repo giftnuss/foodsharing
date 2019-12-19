@@ -103,6 +103,7 @@ $g_lang['attention'] = 'Achtung';
 $g_lang['normal'] = 'Normal';
 $g_lang['mailboxes'] = 'E-Mail-Postfächer';
 $g_lang['mailbox_name'] = 'Mailbox-Name';
+$g_lang['mailchange_failed'] = 'Die Aktivierung Deiner neuen E-Mail-Adresse ist fehlgeschlagen! Bitte versuche es erneut!';
 $g_lang['card'] = 'Karte';
 $g_lang['month_1'] = 'Januar';
 $g_lang['month_2'] = 'Februar';

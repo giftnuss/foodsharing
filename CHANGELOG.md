@@ -26,6 +26,9 @@
 - Allow to configure site to send CSP headers without a report-uri !1210 @nicksellen
 - Increase workgroup application limit numbers !1218 @jofranz
 - Show foodsharer id in profile for everyone !1232 @jofranz
+- Menu entry for newsletter email sending is only active if mayAdministrateNewsletterEmail() permission is true !1235 @jofranz
+- Admins of newsletter workgroup (331) now have access to the newsletter module additional to orga members !1235 @jofranz
+- Show a error message, if changing a mail address failed !1091 @chriswalg
 
 ## Bugfixes
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
@@ -51,7 +54,8 @@
 - Use font awesome icons for store status indicators to avoid that they disappear when the store name is too long #742 !1190 @dthulke
 - Avoid duplicate names in user autocomplete !1223 @dthulke
 - Fix error when logging out while not logged in !1240 #753 @alex.simm
-- Remove "Aktionen"-column from list of user stores !1252 @koenvg
+- Prevent exception for orga users if a deleted user profile is visited @jofranz 
+- Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
@@ -83,6 +87,7 @@
 - Moved database access from RegionXhr, MailboxXhr, and ForumService to gateways !1228 #9 @alex.simm
 - Removed Xhr method for posting store wall posts (xhr_addPinPost) and made it part of the REST API (POST on /api/stores/{id}/posts}. !1226 #719 @janopae
 - Removed mayLegacy function from session !1248 @alex.simm
+- Introduce NewsletterEmailPermissions class for mayAdministrateNewsletterEmail() permission checks !1235 @jofranz
 
 ## Dev/Test/CI stuff
 

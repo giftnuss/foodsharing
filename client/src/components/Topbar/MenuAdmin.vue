@@ -46,11 +46,6 @@ export default {
             url: '/?page=region',
             icon: 'fas fa-map',
             label: this.$i18n('menu_manage_regions')
-          },
-          {
-            url: '/?page=email',
-            icon: 'fas fa-envelope',
-            label: this.$i18n('menu_email')
           }
         ])
       }
@@ -73,6 +68,13 @@ export default {
           url: '/?page=report&sub=uncom',
           icon: 'fas fa-exclamation',
           label: this.$i18n('menu_reports')
+        })
+      }
+      if (this.may.administrateNewsletterEmail) {
+        items.push({
+          url: '/?page=email',
+          icon: 'fas fa-envelope',
+          label: this.$i18n('menu_email')
         })
       }
       if (this.may.manageMailboxes) {
