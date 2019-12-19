@@ -696,7 +696,7 @@ class XhrMethods
 
 	public function xhr_addPhoto($data)
 	{
-		if (!$this->session->id()) {
+		if (!$this->session->may()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 

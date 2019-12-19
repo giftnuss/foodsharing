@@ -117,7 +117,7 @@ class WorkGroupXhr extends Control
 
 	public function sendtogroup()
 	{
-		if (!$this->session->id()) {
+		if (!$this->session->may()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 

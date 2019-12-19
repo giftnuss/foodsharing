@@ -91,6 +91,7 @@
 - Removed mayLegacy function from session !1248 @alex.simm
 - Introduce NewsletterEmailPermissions class for mayAdministrateNewsletterEmail() permission checks !1235 @jofranz
 - Removed SQL statements from Session, BasketXhr, and XhrMethods !1247 #9 @alex.simm
+- Switched use of Session::id to Session::may !1257 @pfaufisch
 
 ## Dev/Test/CI stuff
 
