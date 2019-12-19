@@ -18,7 +18,7 @@ class QuizXhr extends Control
 	private $quizSessionGateway;
 	private $sanitizerService;
 	private $dataHelper;
-    private $quizPermissions;
+	private $quizPermissions;
 
 	public function __construct(
 		QuizGateway $quizGateway,
@@ -37,7 +37,7 @@ class QuizXhr extends Control
 
 		parent::__construct();
 
-        $quizPermissions = new QuizPermissions($this->session);
+		$quizPermissions = new QuizPermissions($this->session);
 	}
 
 	public function hideinfo()

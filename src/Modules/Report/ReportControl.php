@@ -12,7 +12,7 @@ class ReportControl extends Control
 {
 	private $reportGateway;
 	private $imageService;
-    private $reportPermissions;
+	private $reportPermissions;
 
 	public function __construct(ReportGateway $reportGateway, ReportView $view, ImageService $imageService)
 	{
@@ -22,7 +22,7 @@ class ReportControl extends Control
 
 		parent::__construct();
 
-        $this->reportPermissions = new ReportPermissions($this->session);
+		$this->reportPermissions = new ReportPermissions($this->session);
 
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();

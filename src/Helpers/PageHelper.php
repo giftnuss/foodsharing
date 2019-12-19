@@ -46,7 +46,7 @@ final class PageHelper
 	private $mailboxPermissions;
 	private $faqPermissions;
 	private $quizPermissions;
-    private $reportPermissions;
+	private $reportPermissions;
 	private $storePermissions;
 	private $contentPermissions;
 	private $newsletterEmailPermissions;
@@ -63,7 +63,7 @@ final class PageHelper
 		FAQPermissions $faqPermissions,
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
-        ReportPermissions $reportPermissions,
+		ReportPermissions $reportPermissions,
 		StorePermissions $storePermissions,
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
@@ -94,7 +94,7 @@ final class PageHelper
 		$this->blogPermissions = $blogPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
-        $this->reportPermissions = $reportPermissions;
+		$this->reportPermissions = $reportPermissions;
 		$this->contentPermissions = $contentPermissions;
 		$this->storePermissions = $storePermissions;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
