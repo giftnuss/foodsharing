@@ -96,22 +96,53 @@ class MailboxView extends View
 		';
 	}
 
-	public function listMessages($messages)
+	/**
+	 * Converts an array with a mail sender/recipient from the database to a string.
+	 *
+	 * @param array $mailAddress
+	 *
+	 * @return string
+	 */
+	private function createMailAddressString(array $mailAddress): string
+	{
+		if (isset($mailAddress['personal'])) {
+			return $mailAddress['personal'];
+		} elseif (isset($mailAddress['host'])) {
+			return $mailAddress['mailbox'] . '@' . $mailAddress['host'];
+		} else {
+			return $mailAddress['mailbox'];
+		}
+	}
+
+	public function listMessages(array $messages, int $folder, string $currentMailboxName)
 	{
 		$out = '';
 
 		foreach ($messages as $m) {
-			$von = json_decode($m['sender'], true);
-
-			$von_str = $von['mailbox'];
-			if (isset($von['host'])) {
-				$von_str = $von['mailbox'] . '@' . $von['host'];
+			// create from/to text depending on the folder
+			$fromToAddresses = [];
+			switch ($folder) {
+				case MailboxFolder::FOLDER_INBOX:
+					$fromToAddresses = [json_decode($m['sender'], true)];
+					break;
+				case MailboxFolder::FOLDER_SENT:
+					$fromToAddresses = json_decode($m['to'], true);
+					break;
+				case MailboxFolder::FOLDER_TRASH:
+					$from = json_decode($m['sender'], true);
+					if ($this->createMailAddressString($from) == $currentMailboxName) {
+						// mail was sent
+						$fromToAddresses = json_decode($m['to'], true);
+					} else {
+						// mail was received
+						$fromToAddresses = [$from];
+					}
+					break;
 			}
-			$to = json_decode($m['to']);
-
-			if (isset($von['personal'])) {
-				$von_str = $von['personal'];
-			}
+			$mappedAddresses = array_map(function ($a) {
+				return $this->createMailAddressString($a);
+			}, $fromToAddresses);
+			$fromToText = implode(', ', $mappedAddresses);
 
 			$attach_class = 'none';
 			if (!empty($m['attach'])) {
@@ -128,7 +159,7 @@ class MailboxView extends View
 			$out .= '
 				<tr id="message-' . $m['id'] . '" class="message ' . $status . '">
 					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
-					<td class="from"><a href="#" onclick="return false;" title="' . $von_str . '">' . $von_str . '</a></td>
+					<td class="from"><a href="#" onclick="return false;" title="' . $fromToText . '">' . $fromToText . '</a></td>
 
 					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
 					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>

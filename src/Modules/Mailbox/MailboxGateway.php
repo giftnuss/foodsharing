@@ -155,18 +155,8 @@ class MailboxGateway extends BaseGateway
 		return $this->db->update('fs_mailbox_message', ['read' => $read], ['id' => $mail_id]);
 	}
 
-	public function listMessages(int $mailbox_id, $folder = 'inbox')
+	public function listMessages(int $mailbox_id, int $folder): array
 	{
-		$farray = array(
-			'inbox' => 1,
-			'sent' => 2,
-			'trash' => 3,
-		);
-
-		if (!isset($farray[$folder])) {
-			return false;
-		}
-
 		return $this->db->fetchAll(
 			'
 			SELECT 	`id`,
@@ -184,7 +174,7 @@ class MailboxGateway extends BaseGateway
 			AND 	folder = :farray_folder				
 			ORDER BY `time` DESC
 		',
-			[':mailbox_id' => $mailbox_id, ':farray_folder' => (int)$farray[$folder]]
+			[':mailbox_id' => $mailbox_id, ':farray_folder' => $folder]
 		);
 	}
 

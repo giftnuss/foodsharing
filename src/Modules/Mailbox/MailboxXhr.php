@@ -95,30 +95,49 @@ class MailboxXhr extends Control
 			$this->mem->set('mailbox_refresh', $cur_time);
 		}
 
+		// convert folder string to int
+		$farray = array(
+			'inbox' => MailboxFolder::FOLDER_INBOX,
+			'sent' => MailboxFolder::FOLDER_SENT,
+			'trash' => MailboxFolder::FOLDER_TRASH,
+		);
+
+		if (!isset($farray[$_GET['folder']])) {
+			return array(
+				'status' => 1,
+				'html' => $this->view->noMessage(),
+				'append' => '#messagelist tbody'
+			);
+		}
+		$folder = $farray[$_GET['folder']];
+
 		$mb_id = (int)$_GET['mb'];
 		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
 			$this->mailboxGateway->mailboxActivity($mb_id);
-			if ($messages = $this->mailboxGateway->listMessages($mb_id, $_GET['folder'])) {
-				$nc_js = '';
-				if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
-					if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
-						foreach ($newcount as $nc) {
-							$nc_js .= '
+			$messages = $this->mailboxGateway->listMessages($mb_id, $folder);
+			$nc_js = '';
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
+				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
+					foreach ($newcount as $nc) {
+						$nc_js .= '
 								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
-						}
 					}
 				}
-				$vontext = 'Von';
-				if ($_GET['folder'] == 'sent') {
-					$vontext = 'An';
-				}
+			}
+			$fromToTitles = [
+				MailboxFolder::FOLDER_INBOX => 'Von',
+				MailboxFolder::FOLDER_SENT => 'An',
+				MailboxFolder::FOLDER_TRASH => 'Von/An'
+			];
+			$mailbox = $this->mailboxGateway->getMailbox($mb_id);
+			$currentMailboxName = isset($mailbox['email_name']) ? $mailbox['email_name'] : $mailbox['name'];
 
-				return array(
-					'status' => 1,
-					'html' => $this->view->listMessages($messages),
-					'append' => '#messagelist tbody',
-					'script' => '
-						$("#messagelist .from a:first").text("' . $vontext . '");
+			return array(
+				'status' => 1,
+				'html' => $this->view->listMessages($messages, $folder, $currentMailboxName),
+				'append' => '#messagelist tbody',
+				'script' => '
+						$("#messagelist .from a:first").text("' . $fromToTitles[$folder] . '");
 						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
@@ -133,13 +152,6 @@ class MailboxXhr extends Control
 						$("#messagelist tbody td").disableSelection();
 						' . $nc_js . '
 					'
-				);
-			}
-
-			return array(
-				'status' => 1,
-				'html' => $this->view->noMessage(),
-				'append' => '#messagelist tbody'
 			);
 		}
 	}
