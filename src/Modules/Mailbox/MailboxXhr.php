@@ -115,6 +115,14 @@ class MailboxXhr extends Control
 		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
 			$this->mailboxGateway->mailboxActivity($mb_id);
 			$messages = $this->mailboxGateway->listMessages($mb_id, $folder);
+			if (!$messages) {
+				return array(
+					'status' => 1,
+					'html' => $this->view->noMessage(),
+					'append' => '#messagelist tbody'
+				);
+			}
+
 			$nc_js = '';
 			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
