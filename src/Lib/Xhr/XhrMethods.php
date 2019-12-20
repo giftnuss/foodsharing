@@ -30,6 +30,7 @@ use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 class XhrMethods
 {
@@ -55,6 +56,7 @@ class XhrMethods
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $newsletterEmailPermissions;
 
 	/**
 	 * XhrMethods constructor.
@@ -83,7 +85,8 @@ class XhrMethods
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -107,6 +110,7 @@ class XhrMethods
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 	}
 
 	public function xhr_verify($data)
@@ -760,7 +764,7 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);

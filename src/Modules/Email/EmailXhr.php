@@ -3,12 +3,21 @@
 namespace Foodsharing\Modules\Email;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 class EmailXhr extends Control
 {
+	private $newsletterEmailPermissions;
+
+	public function __construct(NewsletterEmailPermissions $newsletterEmailPermissions)
+	{
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		parent::__construct();
+	}
+
 	public function testmail()
 	{
-		if (!$this->session->may('orga')) {
+		if (!$this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 			return false;
 		}
 
