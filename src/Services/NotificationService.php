@@ -86,22 +86,19 @@ final class NotificationService
 		}
 	}
 
-	public function sendEmailIfLastAdminLeftGroup($groupId): void
+	public function sendEmailIfGroupHasNoAdmin($groupId): void
 	{
-		$wasAdminForThisGroup = $this->session->isAdminFor($groupId);
-
-		if ($wasAdminForThisGroup && count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
+		if (count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
 			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
 			$groupName = $this->regionGateway->getRegionName($groupId);
 			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
 
-			$idStructureList = [];
-			foreach ($idStructure as $id) {
-				$idStructureList[] = '' . $id . '  -  ' . $this->regionGateway->getRegionName($id) . '';
+			$idStructureList = '';
+			foreach ($idStructure as $key => $id) {
+				$idStructureList .= str_repeat('---', $key + 1) . '> <b>' . $id . '</b>  -  ' . $this->regionGateway->getRegionName($id) . '<br>';
 			}
-			$idStructureList = implode('<br>', $idStructureList);
 
-			$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, '$idStructureList' => $idStructureList, 'groupName' => $groupName]);
+			$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructureList' => $idStructureList, 'groupName' => $groupName]);
 
 			$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
 				'gruppenname' => $groupName,
