@@ -141,7 +141,7 @@ class MailboxView extends View
 			}
 			$mappedAddresses = array_map(function ($a) {
 				return $this->createMailAddressString($a);
-			}, $fromToAddresses);
+			}, array_filter($fromToAddresses));
 			$fromToText = implode(', ', $mappedAddresses);
 
 			$attach_class = 'none';
