@@ -91,7 +91,7 @@ final class NotificationService
 		$wasAdminForThisGroup = $this->session->isAdminFor($groupId);
 
 		if ($wasAdminForThisGroup && count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
-			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network'];
+			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
 			$groupName = $this->regionGateway->getRegionName($groupId);
 			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
 
