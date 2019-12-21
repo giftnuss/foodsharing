@@ -60,6 +60,7 @@
 - Fix wrong may group use. Admins of EUROPE_REPORT_TEAM (region/workgroup id: 432) now actually have reports permissions on a level with orga !1250 @jofranz
 - !1199 fix: Remove group members only from specific group instead of all groups and regions !1258 @jofranz
 - Show correct from/to information in mailboxes !1239 #603 @alex.simm
+- Redesign for chatbox and messages page !1265 @chriswalg
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
