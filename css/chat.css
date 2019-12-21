@@ -92,7 +92,7 @@
 }
 
 .chatboxmessagecontent a {
-  color: #533a20;
+  color: var(--fs-green);
   text-decoration: none;
 }
 
@@ -172,8 +172,8 @@
 }
 
 .chatboxmessage.my-message .chatboxmessagecontent {
-  background: none repeat scroll 0 0 var(--fs-green);
-  color: #eee;
+  background: none repeat scroll 0 0 var(--fs-beige);
+  color: var(--fs-brown);
 
 }
 
@@ -200,12 +200,12 @@
 
 .chatboxmessagecontent .time {
   display: block;
-  color: #533a20;
+  color: var(--fs-brown);
   font-size: 11px;
 }
 
 .chatboxmessage.my-message .chatboxmessagecontent .time {
-  color: #f9f5e0;
+  color: var(--fs-brown);
 }
 
 .chatboxoptions {

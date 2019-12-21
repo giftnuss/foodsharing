@@ -153,11 +153,11 @@
 }
 
 .my-message a {
-  color: var(--fs-beige);
+  color: var(--fs-green);
 }
 
 .my-message a:hover {
-  color: #533a20;
+  text-decoration: underline;
 }
 
 textarea {

@@ -18,7 +18,7 @@
 #msg-conversation {
   height: 100px;
   overflow: auto;
-  background-color: #dbd7d1;
+  background-color: #fff;
 }
 
 #conversation-list li.active {
@@ -56,12 +56,12 @@ border-radius: 4px;
 }
 
 #msg-conversation li.my-message span.time {
-  color: #eee;
+  color: var(--fs-brown);
 }
 
 #msg-conversation span.body {
   border-radius: 6px;
-  background: none repeat scroll 0 0 #ffffff;
+  background: none repeat scroll 0 0 #e1e1db;
   margin-left: 50px;
   min-height: 35px;
   padding: 6px;
@@ -70,10 +70,10 @@ border-radius: 4px;
 }
 
 #msg-conversation li.my-message span.body {
-  background: none repeat scroll 0 0 var(--fs-green);
+  background: none repeat scroll 0 0 var(--fs-beige);
   margin-left: 0px;
   margin-right: 50px;
-  color: #eee;
+  color: var(--fs-brown);
 }
 
 #msg-conversation li.my-message span.img {
