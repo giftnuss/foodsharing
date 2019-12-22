@@ -123,9 +123,9 @@ final class RegionXhr extends Control
 			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
 			$this->notificationService->sendEmailIfGroupHasNoAdmin($groupId);
 
-			return ['status' => 1];
+			return $this->responses->success();
 		}
 
-		return ['status' => 0];
+		return $this->responses->fail_generic();
 	}
 }
