@@ -199,8 +199,8 @@ class Database
 		}, $fullData);
 
 		$query = sprintf(
-			'INSERT %s INTO %s (%s) VALUES %s %s',
-			$options['ignore'] ? 'IGNORE' : '',
+			'INSERT %s INTO %s (%s) VALUES (%s) %s',
+			 $options['ignore'] ? 'IGNORE' : '',
 			$this->getQuotedName($table),
 			implode(', ', $columns),
 			implode(', ', $rowsPlaceholders),
