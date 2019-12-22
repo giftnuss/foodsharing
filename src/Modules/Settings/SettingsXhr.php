@@ -59,7 +59,7 @@ class SettingsXhr extends Control
 		if ($this->emailHelper->isFoodsharingEmailAddress($emailAddress)) {
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->translationHelper->s('sleep_mode_date_missing') . '");'
+				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_illegal_domain') . '");'
 			);
 		}
 		if ($this->foodsaverGateway->emailExists($emailAddress)) {
