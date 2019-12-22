@@ -749,7 +749,7 @@ final class FoodsaverGateway extends BaseGateway
 	 * @param string $key
 	 * @param $val
 	 */
-	public function setOption(int $fsId, string $key, string $val): int
+	public function setOption(int $fsId, string $key, $val): int
 	{
 		$options = [];
 		if ($opt = $this->db->fetchValueByCriteria('fs_foodsaver', 'option', ['id' => $fsId])) {
