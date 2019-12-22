@@ -26,6 +26,7 @@ use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\NotificationService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,6 +58,7 @@ class XhrMethods
 	private $dataHelper;
 	private $translationHelper;
 	private $newsletterEmailPermissions;
+	private $notificationService;
 
 	/**
 	 * XhrMethods constructor.
@@ -86,7 +88,8 @@ class XhrMethods
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
-		NewsletterEmailPermissions $newsletterEmailPermissions
+		NewsletterEmailPermissions $newsletterEmailPermissions,
+		NotificationService $notificationService
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -111,6 +114,7 @@ class XhrMethods
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->notificationService = $notificationService;
 	}
 
 	public function xhr_verify($data)
@@ -1374,6 +1378,7 @@ class XhrMethods
 			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
+			$this->notificationService->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
 
 			return json_encode(array(
 				'status' => 1,
