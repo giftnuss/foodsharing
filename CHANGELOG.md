@@ -62,6 +62,7 @@
 - Show correct from/to information in mailboxes !1239 #603 @alex.simm
 - Redesign for chatbox and messages page !1265 @chriswalg
 - Center basket map on Germany if logged out !1249 #740 @alex.simm
+- Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
 
 ## Refactoring
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
