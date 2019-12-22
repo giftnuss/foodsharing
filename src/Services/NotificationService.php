@@ -86,7 +86,7 @@ final class NotificationService
 		}
 	}
 
-	public function sendEmailIfGroupHasNoAdmin($groupId): void
+	public function sendEmailIfGroupHasNoAdmin(int $groupId): void
 	{
 		if (count($this->foodsaverGateway->getBotschafter($groupId)) < 1) {
 			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
