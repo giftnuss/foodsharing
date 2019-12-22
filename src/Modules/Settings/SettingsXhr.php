@@ -49,33 +49,39 @@ class SettingsXhr extends Control
 
 	public function changemail2()
 	{
-		if ($this->emailHelper->validEmail($_GET['email'])) {
-			if ($this->foodsaverGateway->emailExists($_GET['email'])) {
-				return array(
-					'status' => 1,
-					'script' => 'pulseError("Diese E-Mail-Adresse benutzt bereits jemand anderes.");'
-				);
-			}
-			$token = bin2hex(random_bytes(16));
-			$this->settingsGateway->addNewMail($this->session->id(), $_GET['email'], $token);
-			// anrede name link
-
-			if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
-				$this->emailHelper->tplMail('user/change_email', $_GET['email'], array(
-					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'name' => $fs['name'],
-					'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
-				));
-
-				return array(
-					'status' => 1,
-					'script' => 'pulseInfo(\'Gehe jetzt zu Deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!\',{sticky:true});'
-				);
-			}
-		} else {
+		$emailAddress = $_GET['email'];
+		if (!$this->emailHelper->validEmail($emailAddress)) {
 			return array(
 				'status' => 1,
-				'script' => 'pulseInfo(\'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.\');'
+				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_invalid') . '");'
+			);
+		}
+		if ($this->emailHelper->isFoodsharingEmailAddress($emailAddress)) {
+			return array(
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('sleep_mode_date_missing') . '");'
+			);
+		}
+		if ($this->foodsaverGateway->emailExists($emailAddress)) {
+			return array(
+				'status' => 1,
+				'script' => 'pulseError("' . $this->translationHelper->s('newmail_in_use') . '");'
+			);
+		}
+
+		$token = bin2hex(random_bytes(16));
+		$this->settingsGateway->addNewMail($this->session->id(), $emailAddress, $token);
+
+		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
+			$this->emailHelper->tplMail('user/change_email', $_GET['email'], array(
+				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+				'name' => $fs['name'],
+				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
+			));
+
+			return array(
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_sent') . '",{sticky:true});'
 			);
 		}
 	}

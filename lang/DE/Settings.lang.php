@@ -45,6 +45,10 @@ $g_lang['follow_thread_none'] = 'Bitte nicht mehr per E-Mail über neue Posts in
 $g_lang['follow_thread_desc'] = '';
 
 $g_lang['newmail'] = 'Gib hier Deine neue E-Mail-Adresse ein';
+$g_lang['newmail_illegal_domain'] = 'Bitte verwende eine andere E-Mail-Adresse, damit Du Dein Passwort jederzeit wiederherstellen kannst.';
+$g_lang['newmail_invalid'] = 'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.';
+$g_lang['newmail_in_use'] = 'Diese E-Mail-Adresse benutzt bereits jemand anderes.';
+$g_lang['newmail_sent'] = 'Gehe jetzt zu Deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!';
 $g_lang['passcheck'] = 'Bestätige die Änderung bitte mit Deinem Passwort';
 $g_lang['sleep_mode_saved'] = 'Die Einstellungen wurden gespeichert';
 $g_lang['sleep_mode_date_missing'] = 'Bitte gib für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!';

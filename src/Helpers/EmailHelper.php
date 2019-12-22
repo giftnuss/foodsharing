@@ -120,6 +120,14 @@ final class EmailHelper
 		return false;
 	}
 
+	public function isFoodsharingEmailAddress(string $email): bool
+	{
+		$mailParts = explode('@', $email);
+		$domain = end($mailParts);
+
+		return in_array($domain, MAILBOX_OWN_DOMAINS, true);
+	}
+
 	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
 	{
 		if ($bezirk === false) {
