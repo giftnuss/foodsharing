@@ -9,19 +9,22 @@ use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Modules\Mails\MailsGateway;
 
 class SettingsXhr extends Control
 {
 	private $foodsaverGateway;
 	private $loginGateway;
 	private $settingsGateway;
+	private $mailsGateway;
 
-	public function __construct(SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway)
+	public function __construct(SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway, MailsGateway $mailsGateway)
 	{
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
+		$this->mailsGateway = $mailsGateway;
 
 		parent::__construct();
 
@@ -73,7 +76,8 @@ class SettingsXhr extends Control
 		$this->settingsGateway->addNewMail($this->session->id(), $emailAddress, $token);
 
 		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
-			$this->emailHelper->tplMail('user/change_email', $_GET['email'], array(
+			$this->mailsGateway->removeBounceForMail($emailAddress);
+			$this->emailHelper->tplMail('user/change_email', $emailAddress, array(
 				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 				'name' => $fs['name'],
 				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
