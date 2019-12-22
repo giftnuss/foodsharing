@@ -233,3 +233,4 @@ $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';
 
 $g_lang['no_email_to_states'] = 'Für dieses Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.';
+$g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';
