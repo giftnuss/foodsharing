@@ -596,10 +596,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						fs.photo,
 						a.date,
 						a.confirmed
-	
+
 				FROM 	`fs_abholer` a,
 						`fs_foodsaver` fs
-	
+
 				WHERE 	a.foodsaver_id = fs.id
 				AND 	a.betrieb_id = ?
 				AND  	a.date IN(' . $placeholders . ')
@@ -697,7 +697,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getTeamleader($storeId): array
 	{
 		return $this->db->fetch(
-		'SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  
+		'SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name
 				FROM fs_betrieb_team t, fs_foodsaver fs
 				WHERE t.foodsaver_id = fs.id
 				AND `betrieb_id` = :id
@@ -860,7 +860,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
 	{
 		$date = $this->db->fetchValue(
-			'SELECT MIN(`date`) 
+			'SELECT MIN(`date`)
 					   FROM `fs_abholer`
 					   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
 			[':storeId' => $storeId]
@@ -871,12 +871,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	private function getUnconfirmedFetchesCount(int $storeId)
 	{
-		return $this->db->fetchValue(
-			'SELECT COUNT(`betrieb_id`)
-            FROM `fs_abholer`                                                   
-            WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
-			[':storeId' => $storeId]
-		);
+		return $this->db->count('fs_abholer', ['betrieb_id' => $storeId, 'confirmed' => 0, 'date' => '> NOW()']);
 	}
 
 	/*
