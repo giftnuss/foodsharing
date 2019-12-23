@@ -196,7 +196,6 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
 - Refactored region gateway to use more prepared statements !1297 @alex.simm
 - Refactored FoodsaverModel to FoodsaverGateway !1178 !1266 #9 @svenpascal
-- Refactored FoodsaverModel to FoodsaverGateway !1178 #9 @svenpascal
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 
 ## Dev/Test/CI stuff
