@@ -1389,8 +1389,8 @@ class XhrMethods
 
 	public function xhr_delBPost($data)
 	{
-		$foodsaverId = $this->storeGateway->getBetriebNotiz($data['pid'])['foodsaver_id'];
-		if ($foodsaverId == $this->session->id() || $this->session->isOrgaTeam()) {
+		$foodsaverId = $this->storeGateway->getStoreComment($data['pid'])['foodsaver_id'];
+		if ($foodsaverId === $this->session->id() || $this->session->isOrgaTeam()) {
 			$this->storeGateway->deleteBPost($data['pid']);
 
 			return 1;

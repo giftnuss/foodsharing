@@ -897,7 +897,29 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $id]);
 	}
 
-	public function getBetriebNotiz($storeId): array
+	/**
+	 * Returns the store comment with the specified ID.
+	 *
+	 * @param int $commentId
+	 *
+	 * @return array
+	 */
+	public function getStoreComment(int $commentId): array
+	{
+		return $this->db->fetchByCriteria('fs_betrieb_notiz',
+			['id', 'foodsaver_id', 'betrieb_id', 'text', 'zeit'],
+			['id' => $commentId]
+		);
+	}
+
+	/**
+	 * Returns all comments for a given store.
+	 *
+	 * @param $storeId
+	 *
+	 * @return array
+	 */
+	private function getBetriebNotiz($storeId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
