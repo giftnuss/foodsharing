@@ -29,6 +29,7 @@
 - Menu entry for newsletter email sending is only active if mayAdministrateNewsletterEmail() permission is true !1235 @jofranz
 - Admins of newsletter workgroup (331) now have access to the newsletter module additional to orga members !1235 !1256 @jofranz
 - Show a error message, if changing a mail address failed !1091 @chriswalg
+- Add info about limitations of nightly slot warnings !1275 @jofranz
 
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
