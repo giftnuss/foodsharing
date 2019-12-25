@@ -871,7 +871,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	private function getUnconfirmedFetchesCount(int $storeId)
 	{
-		return $this->db->count('fs_abholer', ['betrieb_id' => $storeId, 'confirmed' => 0, 'date' => '> NOW()']);
+		return $this->db->count('fs_abholer', ['betrieb_id' => $storeId, 'confirmed' => 0, 'date >' => $this->db->now()]);
 	}
 
 	/*
