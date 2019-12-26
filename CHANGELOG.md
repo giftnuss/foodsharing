@@ -31,6 +31,7 @@
 - Show a error message, if changing a mail address failed !1091 @chriswalg
 
 ## Bugfixes
+- fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
 - Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
 - Removed hidden profile pic in settings !1090 @chriswalg
