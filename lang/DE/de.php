@@ -39,7 +39,6 @@ $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
 $g_lang['about_me_public'] = 'Kurzbeschreibung';
 $g_lang['autokennzeichen_id'] = 'Autokennzeichen Deiner Stadt/Region';
 $g_lang['telefon'] = 'Festnetznummer';
-$g_lang['handy'] = 'Handynummer';
 $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)';
 $g_lang['geschlecht'] = 'Geschlecht';
 $g_lang['recip_all'] = 'Alle Foodsaver weltweit';
@@ -224,18 +223,10 @@ $g_lang['regions'] = 'Bezirke';
 $g_lang['buddywalls'] = 'Pinnwände von Bekannten';
 $g_lang['user_add_success'] = 'Prima! Dein Account wurde angelegt!';
 
-$g_lang['menu_manage_regions'] = 'Bezirke verwalten';
-$g_lang['menu_quiz'] = 'Quiz verwalten';
-$g_lang['menu_reports'] = 'Meldungen';
 $g_lang['menu_all_fs'] = 'Alle Foodsaver';
 $g_lang['menu_all_store'] = 'Alle Betriebe';
-$g_lang['menu_email'] = 'E-Mail-Verteiler';
-$g_lang['menu_faq'] = 'FAQs verwalten';
 $g_lang['menu_foodtypes'] = 'Lebensmitteltypen verwalten';
-$g_lang['menu_content'] = 'Inhalte bearbeiten';
-$g_lang['menu_mailbox_manage'] = 'Mailboxen verwalten';
 $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
-$g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
 $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';

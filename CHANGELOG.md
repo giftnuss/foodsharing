@@ -65,6 +65,7 @@
 - Center basket map on Germany if logged out !1249 #740 @alex.simm
 - Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
 - Fix adding members to mailboxes by orga !1255 #677 @alex.simm
+- Fix missing translations for MenuBasketsEntry. !1271 #761 @ctwx_ok
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 @Caluera

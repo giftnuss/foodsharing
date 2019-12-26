@@ -368,3 +368,30 @@ basket:
   my_list_empty: Du hast keine Essenskörbe eingetragen
   all: Alle Essenskörbe
   add: Essenskorb anlegen
+  no_requests: Bisher keine Anfragen
+  requested_by: angefragt von
+  request_close: Essenskorbanfrage abschließen
+  request: Essenskorb anfragen
+  withdraw_request: Anfrage zurückziehen
+  n_requests: 'Bisherige Anfragen: <strong>{count}</strong>'
+  send_request: Anfrage absenden
+  sent_request: Anfrage wurde versendet
+  withdrawn_request: Anfrage wurde zurückgezogen
+  request_empty: Dein Anfragetext darf nicht leer sein.
+  not_found: Der Essenskorb existiert nicht mehr.
+  request_denied: Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.
+
+personal_data:
+  label: Kontakt
+  mobile: Handynummer
+  landline: Festnetztelefon
+
+menu:
+  manage_regions: Bezirke verwalten
+  blog: Blogbeiträge bearbeiten
+  quiz: Quiz verwalten
+  reports: Meldungen
+  email: E-Mail-Verteiler
+  manage_mailboxes: Mailboxen verwalten
+  faq: FAQs verwalten
+  content: Inhalte bearbeiten

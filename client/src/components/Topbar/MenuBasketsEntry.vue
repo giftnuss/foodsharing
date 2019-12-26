@@ -15,13 +15,13 @@
           v-if="!basket.requests.length"
           class="text-muted"
         >
-          {{ $i18n('no_requests') }}
+          {{ $i18n('basket.no_requests') }}
         </small>
         <h5
           v-if="basket.requests.length"
           class="text-muted mb-1 pl-2"
         >
-          {{ $i18n('basket_requested_by') }}
+          {{ $i18n('basket.requested_by') }}
         </h5>
         <div
           v-if="basket.requests.length"
@@ -54,7 +54,7 @@
                     <a
                       v-b-tooltip
                       @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
-                      :title="$i18n('basket_request_close')"
+                      :title="$i18n('basket.request_close')"
                       href="#"
                       class="m-1 btn btn-sm btn-secondary"
                     >
