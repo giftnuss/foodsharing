@@ -83,14 +83,24 @@ class FoodsaverControl extends Control
 				$regionDetails = $fs['bezirk_id'] > 0 ? $this->regionGateway->getRegion($fs['bezirk_id']) : false;
 				$this->pageHelper->addContent($this->view->foodsaver_form($fs['name'] . ' ' . $fs['nachname'] . ' bearbeiten', $regionDetails));
 
-				$this->pageHelper->addContent($this->v_utils->v_field(
-					$this->v_utils->v_menu([
-					   ['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-					   ['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
-					]),
-					$this->translationHelper->s('actions')),
+				if ($this->session->may('orga')) {
+					$this->pageHelper->addContent($this->v_utils->v_field(
+						$this->v_utils->v_menu([
+						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
+						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
+						]),
+						$this->translationHelper->s('actions')),
 					CNT_RIGHT
 				);
+				} elseif ($this->session->isAmbassadorForRegion($regionIds, false, true)) {
+					$this->pageHelper->addContent($this->v_utils->v_field(
+						$this->v_utils->v_menu([
+					   ['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
+						]),
+						$this->translationHelper->s('actions')),
+					CNT_RIGHT
+				);
+				}
 			}
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du hast leider keine Berechtigung für diesen Bezirk'));

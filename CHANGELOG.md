@@ -67,6 +67,7 @@
 - Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
 - Fix adding members to mailboxes by orga !1255 #677 @alex.simm
 - Fix missing translations for MenuBasketsEntry. !1271 #761 @ctwx_ok
+- disable delete account buttons for non-orga users !1279 @Caluera 
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 @Caluera
