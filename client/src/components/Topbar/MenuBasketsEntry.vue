@@ -43,7 +43,7 @@
                 />
               </div>
               <div class="col-10 pt-1">
-                <div class="row">
+                <div class="row food-basket-create-test-class">
                   <h6 class="col text-truncate mb-1">
                     {{ req.user.name }}
                   </h6>
