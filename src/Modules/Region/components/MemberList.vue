@@ -64,25 +64,23 @@
         class="foto-table"
       >
         <template
-          slot="imageUrl"
-          slot-scope="data"
+          v-slot:cell(imageUrl)="row"
         >
           <div>
             <img
-              :src="data.value"
+              :src="row.value"
               :alt="$i18n('terminology.profile_picture')"
               class="user_pic_width"
             >
           </div>
         </template>
         <template
-          slot="user.name"
-          slot-scope="{ item: { user } }"
+          v-slot:cell(userName)="row"
         >
           <a
-            :href="$url('profile', user.id)"
+            :href="$url('profile', row.item.user.id)"
           >
-            {{ user.name }}
+            {{ row.item.user.name }}
           </a>
         </template>
       </b-table>
@@ -124,18 +122,19 @@ export default {
       currentPage: 1,
       perPage: 20,
       filterText: '',
-      fields: {
-        imageUrl: {
-          label: '',
+      fields: [
+        {
+          key: 'imageUrl',
           sortable: false,
+          label: '',
           class: 'foto-column'
-        },
-        'user.name': {
+        }, {
+          key: 'userName',
           label: this.$i18n('group.name'),
           sortable: false,
           class: 'align-middle'
         }
-      }
+      ]
     }
   },
   computed: {

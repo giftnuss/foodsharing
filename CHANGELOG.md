@@ -104,6 +104,7 @@
 - Removed SQL statements from Session, BasketXhr, and XhrMethods + fix !1261 !1247 #9 @alex.simm
 - Switched use of Session::id to Session::may !1257 @pfaufisch
 - Refactored FoodsaverModel to FoodsaverGateway !1178 !1266 #9 @svenpascal
+- Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
 
 ## Dev/Test/CI stuff
 
