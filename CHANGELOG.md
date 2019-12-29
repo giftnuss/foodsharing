@@ -197,6 +197,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Refactored region gateway to use more prepared statements !1297 @alex.simm
 - Refactored FoodsaverModel to FoodsaverGateway !1178 !1266 #9 @svenpascal
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
+- Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm 
 
 ## Dev/Test/CI stuff
 
