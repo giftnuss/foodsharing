@@ -71,6 +71,7 @@
 - repaired link to profile in the very first pinwall post #512 !1281 @Caluera
 - Disallow foodsharing email addresses to be used as password restore addresses !1268 #744 @alex.simm 
 - Remove email addresses from the bounce list before sending a confirmation mail !1268 #756 @alex.simm 
+- Move map control elements on small devices #695 !1286 @lea.mzw
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 @Caluera
