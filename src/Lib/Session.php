@@ -151,17 +151,18 @@ class Session
 
 	public function getRouteOverride()
 	{
-		$ppVersion = $this->legalGateway->getPpVersion();
-		$pnVersion = $this->legalGateway->getPnVersion();
-		if ($this->id() &&
-			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
-				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
-			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
-				return null;
-			}
+		if ($this->may()) {
+			$ppVersion = $this->legalGateway->getPpVersion();
+			$pnVersion = $this->legalGateway->getPnVersion();
+			if (($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
+				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion)) {
+				/* Allow Settings page, otherwise redirect to legal page */
+				if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
+					return null;
+				}
 
-			return LegalControl::class;
+				return LegalControl::class;
+			}
 		}
 
 		return null;
