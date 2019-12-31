@@ -2,13 +2,21 @@
 
 namespace Foodsharing\Helpers;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Legal\LegalControl;
+use Foodsharing\Modules\Legal\LegalGateway;
+
 final class RouteHelper
 {
 	private $translationHelper;
+	private $legalGateway;
+	private $session;
 
-	public function __construct(TranslationHelper $translationHelper)
+	public function __construct(Session $session, TranslationHelper $translationHelper, LegalGateway $legalGateway)
 	{
 		$this->translationHelper = $translationHelper;
+		$this->legalGateway = $legalGateway;
+		$this->session = $session;
 	}
 
 	public function go(string $url): void
@@ -93,5 +101,24 @@ final class RouteHelper
 		$str = substr($str, 1);
 		// adds http:// if not existing
 		return preg_replace('`href=\"www`', 'href="http://www', $str);
+	}
+
+	public function getRouteOverride()
+	{
+		if ($this->session->may()) {
+			$ppVersion = $this->legalGateway->getPpVersion();
+			$pnVersion = $this->legalGateway->getPnVersion();
+			if (($ppVersion && $ppVersion != $this->session->user('privacy_policy_accepted_date')) ||
+				($pnVersion && $this->session->user('rolle') >= 2 && $this->session->user('privacy_notice_accepted_date') != $pnVersion)) {
+				/* Allow Settings page, otherwise redirect to legal page */
+				if (in_array($this->getPage(), ['settings', 'logout'])) {
+					return null;
+				}
+
+				return LegalControl::class;
+			}
+		}
+
+		return null;
 	}
 }

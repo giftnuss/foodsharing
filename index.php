@@ -71,7 +71,7 @@ if ($session->may()) {
 
 $app = $routeHelper->getPage();
 
-if (($class = $session->getRouteOverride()) === null) {
+if (($class = $routeHelper->getRouteOverride()) === null) {
 	$class = Routing::getClassName($app, 'Control');
 	try {
 		$obj = $container->get(ltrim($class, '\\'));
