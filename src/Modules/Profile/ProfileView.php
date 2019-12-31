@@ -47,7 +47,8 @@ class ProfileView extends View
 
 	public function profile(
 		string $wallPosts,
-		bool $profileVisitorMayAdminThisFoodsharer = false,
+		bool $profileVisitorMayAdminThisFoodsharer,
+		bool $profileVisitorMaySeeHistory,
 		array $userCompanies = [],
 		array $fetchDates = []
 	): void {
@@ -63,7 +64,7 @@ class ProfileView extends View
 		}
 
 		$page->addSectionLeft(
-			$this->photo($profileVisitorMayAdminThisFoodsharer)
+			$this->photo($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory)
 		);
 
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
@@ -149,9 +150,9 @@ class ProfileView extends View
 				</div>';
 	}
 
-	private function photo(bool $profileVisitorMayAdminThisFoodsharer): string
+	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
 	{
-		$menu = $this->profileMenu($profileVisitorMayAdminThisFoodsharer);
+		$menu = $this->profileMenu($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory);
 
 		$sleep_info = '';
 		$online = '';
@@ -171,7 +172,7 @@ class ProfileView extends View
 				' . $menu;
 	}
 
-	private function profileMenu(bool $profileVisitorMayAdminThisFoodsharer): string
+	private function profileMenu(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
 	{
 		$opt = '';
 
@@ -183,7 +184,7 @@ class ProfileView extends View
 			$name = $name[0];
 			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
 		}
-		if ($profileVisitorMayAdminThisFoodsharer) {
+		if ($profileVisitorMaySeeHistory) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
@@ -318,6 +319,7 @@ class ProfileView extends View
 	public function userNotes(
 		string $notes,
 		bool $profileVisitorMayAdminThisFoodsharer,
+		bool $profileVisitorMaySeeHistory,
 		array $userCompanies
 	): void {
 		$page = new vPage(
@@ -326,7 +328,7 @@ class ProfileView extends View
 		);
 		$page->setBread($this->translationHelper->s('notes'));
 
-		$page->addSectionLeft($this->photo($profileVisitorMayAdminThisFoodsharer));
+		$page->addSectionLeft($this->photo($profileVisitorMayAdminThisFoodsharer, $profileVisitorMaySeeHistory));
 		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($this->session->may('orga')) {

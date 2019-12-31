@@ -10,6 +10,7 @@ use Foodsharing\Permissions\FAQPermissions;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -47,6 +48,7 @@ final class PageHelper
 	private $storePermissions;
 	private $contentPermissions;
 	private $newsletterEmailPermissions;
+	private $regionPermissions;
 
 	public function __construct(
 		Session $session,
@@ -62,6 +64,7 @@ final class PageHelper
 		StorePermissions $storePermissions,
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
+		RegionPermissions $regionPermissions,
 		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->content_main = '';
@@ -91,6 +94,7 @@ final class PageHelper
 		$this->contentPermissions = $contentPermissions;
 		$this->storePermissions = $storePermissions;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->regionPermissions = $regionPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -224,7 +228,7 @@ final class PageHelper
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id']), 'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($region['id'])]);
 				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {

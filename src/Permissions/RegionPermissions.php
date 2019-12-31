@@ -32,4 +32,14 @@ final class RegionPermissions
 
 		return false;
 	}
+
+	public function mayHandleFoodsaverRegionMenu($regionId): bool
+	{
+		return $this->session->isAdminFor($regionId);
+	}
+
+	public function mayDeleteFoodsaverFromRegion($regionId): bool
+	{
+		return $this->mayHandleFoodsaverRegionMenu($regionId);
+	}
 }

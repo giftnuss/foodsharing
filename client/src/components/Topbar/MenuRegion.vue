@@ -87,7 +87,7 @@
           <i class="fas fa-chart-bar" />Statistik
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"

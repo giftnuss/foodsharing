@@ -78,6 +78,7 @@ final class ProfileControl extends Control
 			$this->view->userNotes(
 				$this->wallposts('usernotes', $this->foodsaver['id']),
 				true,
+				$this->profilePermissions->maySeeHistory($this->foodsaver['id']),
 				$this->profileGateway->listStoresOfFoodsaver($this->foodsaver['id']),
 			);
 		} else {
@@ -87,11 +88,11 @@ final class ProfileControl extends Control
 
 	public function profile(): void
 	{
-		$regionIDs = $this->regionGateway->getFsRegionIds($this->foodsaver['id']);
-		if ($this->session->isAmbassadorForRegion($regionIDs, false, true) || $this->session->isOrgaTeam()) {
+		if ($this->profilePermissions->mayAdministrateUserProfile($this->foodsaver['id'], $this->foodsaver['bezirk_id'])) {
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				true,
+				$this->profilePermissions->maySeeHistory($this->foodsaver['id']),
 				$this->profileGateway->listStoresOfFoodsaver($this->foodsaver['id']),
 				$this->profileGateway->getNextDates($this->foodsaver['id'], 50)
 			);
@@ -99,6 +100,7 @@ final class ProfileControl extends Control
 			$this->view->profile(
 				$this->wallposts('foodsaver', $this->foodsaver['id']),
 				false,
+				$this->profilePermissions->maySeeHistory($this->foodsaver['id']),
 				[],
 				$this->foodsaver['id'] === $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : []
 			);

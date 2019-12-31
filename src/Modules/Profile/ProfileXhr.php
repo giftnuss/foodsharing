@@ -113,11 +113,7 @@ class ProfileXhr extends Control
 
 	public function history(): array
 	{
-		$regionIds = $this->regionGateway->getFsRegionIds($_GET['fsid']);
-		if ($this->session->may() && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(
-					$regionIds,
-					false
-				))) {
+		if ($this->profilePermissions->maySeeHistory($_GET['fsid'])) {
 			$dia = new XhrDialog();
 			if ($_GET['type'] == 0) {
 				$history = $this->profileGateway->getVerifyHistory($_GET['fsid']);
