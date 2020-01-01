@@ -55,7 +55,7 @@ class MaintenanceModel extends Db
 		');
 	}
 
-	public function getAlertBetriebeAdmins()
+	public function getStoreManagersWhichWillBeAlerted()
 	{
 		$dow = (int)date('w');
 
@@ -64,7 +64,7 @@ class MaintenanceModel extends Db
 			$dow_tomorrow = 0;
 		}
 
-		$sql = '
+		$store_query = '
 			SELECT 
 				DISTINCT z.betrieb_id
 
@@ -92,14 +92,14 @@ class MaintenanceModel extends Db
 			)
 		';
 
-		if ($betriebe = $this->q($sql)) {
+		if ($stores_in_range = $this->q($store_query)) {
 			$bids = array();
 
-			foreach ($betriebe as $b) {
-				$bids[(int)$b['betrieb_id']] = (int)$b['betrieb_id'];
+			foreach ($stores_in_range as $store) {
+				$bids[(int)$store['betrieb_id']] = (int)$store['betrieb_id'];
 			}
 
-			$sql2 = '
+			$fetcher_query = '
 				SELECT
 					DISTINCT b.id
 				
@@ -122,9 +122,9 @@ class MaintenanceModel extends Db
 					a.date <= CURRENT_DATE() + INTERVAL 2 DAY --full next day as CURRENT_DATE is always 00:00
 			';
 
-			if ($betrieb_has_fetcher = $this->q($sql2)) {
-				foreach ($betrieb_has_fetcher as $bb) {
-					unset($bids[$bb['id']]);
+			if ($store_has_fetcher = $this->q($fetcher_query)) {
+				foreach ($store_has_fetcher as $store_fetcher) {
+					unset($bids[$store_fetcher['id']]);
 				}
 			}
 
