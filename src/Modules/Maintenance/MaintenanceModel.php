@@ -88,11 +88,7 @@ class MaintenanceModel extends Db
 					z.time >= NOW()
 				)
 				OR
-				(
-					z.dow = ' . (int)$dow_tomorrow . '
-					AND
-					z.time < "15:00:00"
-				)
+					z.dow = ' . (int)$dow_tomorrow . ' --full next day
 			)
 		';
 
@@ -102,8 +98,6 @@ class MaintenanceModel extends Db
 			foreach ($betriebe as $b) {
 				$bids[(int)$b['betrieb_id']] = (int)$b['betrieb_id'];
 			}
-
-			$date_tomorrow_end = date('Y-m-d', time() + 86400) . ' 15:00:00';
 
 			$sql2 = '
 				SELECT
@@ -125,7 +119,7 @@ class MaintenanceModel extends Db
 				AND
 					a.date >= NOW()
 				AND
-					a.date <= "' . $date_tomorrow_end . '"
+					a.date <= CURRENT_DATE() + INTERVAL 2 DAY --full next day as CURRENT_DATE is always 00:00
 			';
 
 			if ($betrieb_has_fetcher = $this->q($sql2)) {
