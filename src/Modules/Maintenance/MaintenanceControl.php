@@ -363,7 +363,7 @@ class MaintenanceControl extends ConsoleControl
 
 	public function betriebFetchWarning()
 	{
-		if ($foodsaver = $this->model->getAlertBetriebeAdmins()) {
+		if ($foodsaver = $this->model->getStoreManagersWhichWillBeAlerted()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], array(
