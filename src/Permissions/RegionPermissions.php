@@ -5,7 +5,6 @@ namespace Foodsharing\Permissions;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 final class RegionPermissions
 {
@@ -27,7 +26,7 @@ final class RegionPermissions
 
 	public function mayAdministrateRegions()
 	{
-		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP);
+		return $this->session->may('orga');
 	}
 
 	public function mayAccessStatisticCountry(): bool
