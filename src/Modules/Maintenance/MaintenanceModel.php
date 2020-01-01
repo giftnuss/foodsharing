@@ -59,9 +59,9 @@ class MaintenanceModel extends Db
 	{
 		$dow = (int)date('w');
 
-		$dow2 = $dow + 1;
-		if ($dow2 == 7) {
-			$dow2 = 0;
+		$dow_tomorrow = $dow + 1;
+		if ($dow_tomorrow == 7) {
+			$dow_tomorrow = 0;
 		}
 
 		$sql = '
@@ -89,7 +89,7 @@ class MaintenanceModel extends Db
 				)
 				OR
 				(
-					z.dow = ' . (int)$dow2 . '
+					z.dow = ' . (int)$dow_tomorrow . '
 					AND
 					z.time < "15:00:00"
 				)
@@ -103,11 +103,7 @@ class MaintenanceModel extends Db
 				$bids[(int)$b['betrieb_id']] = (int)$b['betrieb_id'];
 			}
 
-			$date1 = date('Y-m-d') . ' 15:00:00';
-			$date1_end = date('Y-m-d') . ' 23:59:59';
-
-			$date2 = date('Y-m-d', time() + 86400) . ' 00:00:00';
-			$date2_end = date('Y-m-d', time() + 86400) . ' 15:00:00';
+			$date_tomorrow_end = date('Y-m-d', time() + 86400) . ' 15:00:00';
 
 			$sql2 = '
 				SELECT
@@ -125,21 +121,11 @@ class MaintenanceModel extends Db
 						
 				AND 
 					b.id IN(' . implode(',', $bids) . ')
-							
-				AND 
-				(
-					(
-						a.date >= "' . $date1 . '"
-						AND
-						a.date <= "' . $date1_end . '"
-					)
-					OR
-					(
-						a.date >= "' . $date2 . '"
-						AND
-						a.date <= "' . $date2_end . '"
-					)
-				)
+
+				AND
+					a.date >= NOW()
+				AND
+					a.date <= "' . $date_tomorrow_end . '"
 			';
 
 			if ($betrieb_has_fetcher = $this->q($sql2)) {
