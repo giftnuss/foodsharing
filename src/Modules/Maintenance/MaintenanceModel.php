@@ -101,21 +101,13 @@ class MaintenanceModel extends Db
 
 			$fetcher_query = '
 				SELECT
-					DISTINCT b.id
-				
+					DISTINCT a.betrieb_id
 				FROM
-					fs_betrieb b,
 					fs_abholer a
-				
-				WHERE
-					a.betrieb_id = b.id
-						
-				AND 
+				WHERE 
 					a.confirmed = 1
-						
 				AND 
-					b.id IN(' . implode(',', $bids) . ')
-
+					a.betrieb_id IN(' . implode(',', $bids) . ')
 				AND
 					a.date >= NOW()
 				AND
