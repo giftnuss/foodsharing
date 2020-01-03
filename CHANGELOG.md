@@ -67,10 +67,10 @@
 - Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
 - Fix adding members to mailboxes by orga !1255 #677 @alex.simm
 - Fix missing translations for MenuBasketsEntry. !1271 #761 @ctwx_ok
-- disable delete account buttons for non-orga users !1279 @Caluera 
+- disable delete account buttons for non-orga users !1279 @Caluera
 - repaired link to profile in the very first pinwall post #512 !1281 @Caluera
-- Disallow foodsharing email addresses to be used as password restore addresses !1268 #744 @alex.simm 
-- Remove email addresses from the bounce list before sending a confirmation mail !1268 #756 @alex.simm 
+- Disallow foodsharing email addresses to be used as password restore addresses !1268 #744 @alex.simm
+- Remove email addresses from the bounce list before sending a confirmation mail !1268 #756 @alex.simm
 - Move map control elements on small devices #695 !1286 @lea.mzw
 
 ## Refactoring
@@ -109,6 +109,7 @@
 - Switched use of Session::id to Session::may !1257 @pfaufisch
 - Refactored FoodsaverModel to FoodsaverGateway !1178 !1266 #9 @svenpascal
 - Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
+- Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 
 ## Dev/Test/CI stuff
 
