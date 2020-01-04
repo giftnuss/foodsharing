@@ -60,8 +60,7 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-		$regionId = $_GET['bid'];
-		if (isset($regionId) && $this->regionPermissions->mayHandleFoodsaverRegionMenu($regionId)) {
+		if ((isset($_GET['bid']) && $regionId = $_GET['bid']) && $this->regionPermissions->mayHandleFoodsaverRegionMenu($regionId)) {
 			if ($region = $this->regionGateway->getRegion($regionId)) {
 				if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
 					$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);
