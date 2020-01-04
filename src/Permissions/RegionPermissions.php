@@ -26,7 +26,7 @@ final class RegionPermissions
 
 	public function mayAccessStatisticCountry(): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 
