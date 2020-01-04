@@ -22,7 +22,7 @@ class ProfilePermissions
 			return false;
 		}
 
-		if ($regionId != 0 && $this->session->isAdminFor($regionId)) {
+		if ($regionId !== 0 && $this->session->isAdminFor($regionId)) {
 			return  true;
 		}
 
