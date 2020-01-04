@@ -39,6 +39,7 @@ $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
 $g_lang['about_me_public'] = 'Kurzbeschreibung';
 $g_lang['autokennzeichen_id'] = 'Autokennzeichen Deiner Stadt/Region';
 $g_lang['telefon'] = 'Festnetznummer';
+$g_lang['handy'] = 'Handynummer';
 $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)';
 $g_lang['geschlecht'] = 'Geschlecht';
 $g_lang['recip_all'] = 'Alle Foodsaver weltweit';
