@@ -23,7 +23,7 @@ class ProfilePermissions
 		}
 
 		if ($regionId !== 0 && $this->session->isAdminFor($regionId)) {
-			return  true;
+			return true;
 		}
 
 		if ($this->session->may('orga')) {
