@@ -31,6 +31,7 @@ class ProfilePermissions
 		}
 
 		$regionIds = $this->regionGateway->getFsRegionIds($foodsaverId);
+
 		return $this->session->isAmbassadorForRegion($regionIds, false, true);
 	}
 
