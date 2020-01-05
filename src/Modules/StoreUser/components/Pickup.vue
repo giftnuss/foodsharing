@@ -220,8 +220,8 @@ export default {
     display: inline-block;
     padding: 2px;
     margin: 2px;
-    width: 35px;
-    height: 35px;
+    width: 41px;
+    height: 41px;
     color: var(--fs-brown);
     border-color: var(--fs-beige);
     border-width: 3px;

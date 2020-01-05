@@ -27,44 +27,43 @@
           v-if="basket.requests.length"
           class="requests list-group"
         >
-          <a
-            v-for="req in basket.requests"
-            :key="req.id"
-            href="#"
-            class="list-group-item list-group-item-action p-1 request"
-            @click.prevent="openChat(req.user.id, $event)"
-          >
-            <div class="row pl-1 align-items-center">
-              <div class="col-1 text-right pt-1">
+          <b-list-group>
+            <b-list-group-item
+              v-for="req in basket.requests"
+              :key="req.id"
+              @click.prevent="openChat(req.user.id, $event)"
+              href="#"
+              class="flex-column align-items-start"
+              style="padding: 5px;"
+            >
+              <div
+                class="d-flex w-100 align-items-center"
+                style="height:30px;"
+              >
                 <avatar
                   :url="req.user.avatar"
-                  :size="20"
+                  :size="35"
                   :sleep-status="req.user.sleepStatus"
                 />
-              </div>
-              <div class="col-10 pt-1">
-                <div class="row food-basket-create-test-class">
-                  <h6 class="col text-truncate mb-1">
-                    {{ req.user.name }}
-                  </h6>
-                  <div class="col nowrap text-right text-muted nhover">
-                    {{ req.time | dateDistanceInWords }}
-                  </div>
-                  <div class="col text-right text-muted hover">
-                    <a
-                      v-b-tooltip
-                      :title="$i18n('basket.request_close')"
-                      href="#"
-                      class="m-1 btn btn-sm btn-secondary"
-                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
-                    >
-                      <i class="fas fa-times" />
-                    </a>
-                  </div>
+                <div
+                  class="d-flex"
+                  style="flex-flow:column; margin: 0 auto 0 5px;"
+                >
+                  <span>{{ req.user.name }}</span>
+                  <small>{{ req.time | dateDistanceInWords }}</small>
                 </div>
+                <a
+                  v-b-tooltip
+                  @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
+                  :title="$i18n('basket.request_close')"
+                  href="#"
+                  class="m-1 btn btn-sm btn-secondary"
+                >
+                  <i class="fas fa-times" />
+                </a>
               </div>
-            </div>
-          </a>
+            </b-list-group-item>
+          </b-list-group>
         </div>
       </div>
     </div>
