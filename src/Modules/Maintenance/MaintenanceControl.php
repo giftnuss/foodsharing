@@ -11,6 +11,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Bell\BellUpdateTrigger;
 
 class MaintenanceControl extends ConsoleControl
 {
@@ -22,6 +23,7 @@ class MaintenanceControl extends ConsoleControl
 	private $translationHelper;
 	private $maintenanceGateway;
 	private $quizHelper;
+	private $bellUpdateTrigger;
 
 	public function __construct(
 		MaintenanceModel $model,
@@ -31,7 +33,8 @@ class MaintenanceControl extends ConsoleControl
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
 		MaintenanceGateway $maintenanceGateway,
-		QuizHelper $quizHelper
+		QuizHelper $quizHelper,
+		BellUpdateTrigger $bellUpdateTrigger
 	) {
 		$this->model = $model;
 		$this->bellGateway = $bellGateway;
@@ -41,6 +44,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->translationHelper = $translationHelper;
 		$this->maintenanceGateway = $maintenanceGateway;
 		$this->quizHelper = $quizHelper;
+		$this->bellUpdateTrigger = $bellUpdateTrigger;
 
 		parent::__construct();
 	}
@@ -106,6 +110,11 @@ class MaintenanceControl extends ConsoleControl
 		 * sleeping users, where the time period of sleepiness ended
 		 */
 		$this->wakeupSleepingUsers();
+
+		/*
+		 * updates outdated bells with passed expiration date
+		 */
+		$this->bellUpdateTrigger->triggerUpdate();
 	}
 
 	public function rebuildBezirkClosure()
