@@ -90,7 +90,7 @@ $I->waitForText('Hi friend, can I have');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->moveMouseOver(['css' => '.topbar-baskets .food-basket-create-test-class']);
-$I->click('a[title="Essenskorbanfrage abschließen"]');
+$I->click('button[title="Essenskorbanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
 $I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 2);

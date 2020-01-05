@@ -31,7 +31,7 @@
             :key="req.id"
             @click.prevent="openChat(req.user.id, $event)"
             href="#"
-            class="d-flex w-100 align-items-center"
+            class="d-flex w-100 align-items-center food-basket-create-test-class"
           >
             <avatar
               :url="req.user.avatar"
