@@ -18,7 +18,7 @@ class EmailGateway extends BaseGateway
 
 	public function getMailsLeft($mail_id)
 	{
-		return $this->db->count('fs_email_status', ['email_id' => ' . (int)$mail_id . ', 'status' => 0]);
+		return $this->db->count('fs_email_status', ['email_id' => $mail_id, 'status' => 0]);
 	}
 
 	public function getMailNext($mail_id)

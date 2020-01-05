@@ -75,7 +75,7 @@
 - Move map control elements on small devices #695 !1286 @lea.mzw
 
 ## Refactoring
-- refactored to use count() instead of more complicated expressions !1273 @Caluera
+- refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
 - refactored blog from model to gateway !789 #9 @peter.toennies
