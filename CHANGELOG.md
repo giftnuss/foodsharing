@@ -32,6 +32,7 @@
 - Add info about limitations of nightly slot warnings !1275 @jofranz
 - Send an email to the amb and group workgroups (AGs) if the last admin/amb leaves a workgroup/region !1153 @jofranz
 - Updated foodsharing etikette for registration process !1295 @chris2up9
+- Refactored and changed time range for store fetch warning mails for store manager to today + tomorrow instead of 15:00 limit !1289 @jofranz
 
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
