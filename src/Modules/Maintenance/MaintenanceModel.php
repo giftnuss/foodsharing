@@ -88,7 +88,7 @@ class MaintenanceModel extends Db
 					z.time >= NOW()
 				)
 				OR
-					z.dow = ' . (int)$dow_tomorrow . ' --full next day
+					z.dow = ' . (int)$dow_tomorrow . '
 			)
 		';
 
@@ -111,7 +111,7 @@ class MaintenanceModel extends Db
 				AND
 					a.date >= NOW()
 				AND
-					a.date <= CURRENT_DATE() + INTERVAL 2 DAY --full next day as CURRENT_DATE is always 00:00
+					a.date <= CURRENT_DATE() + INTERVAL 2 DAY
 			';
 
 			if ($store_has_fetcher = $this->q($fetcher_query)) {
