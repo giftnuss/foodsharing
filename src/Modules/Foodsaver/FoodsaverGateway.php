@@ -358,11 +358,9 @@ final class FoodsaverGateway extends BaseGateway
 					INNER JOIN fs_foodsaver_has_bezirk hb
 			        ON hb.foodsaver_id = fs.id
 
-			WHERE 	hb.bezirk_id IN(:regionIds)
+			WHERE 	hb.bezirk_id IN(' . implode(',', $regionIds) . ')
 			AND		fs.deleted_at IS NULL
-		', [
-			':regionIds' => implode(',', $regionIds)
-		]);
+		');
 	}
 
 	public function xhrGetFoodsaver(array $data): array
@@ -445,10 +443,8 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	fs.deleted_at IS NULL
             AND     b.`bezirk_id` > 0
-			AND     b.`bezirk_id` IN(:regionIds)
-		', [
-			':regionIds' => implode(',', array_map('intval', $regionIds))
-		]);
+			AND     b.`bezirk_id` IN(' . implode(',', array_map('intval', $regionIds)) . ')
+		');
 
 		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
@@ -465,10 +461,8 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	fs.deleted_at IS NULL
 			AND     b.`bezirk_id` > 0
-			AND     b.`bezirk_id` IN(:regionIds)
-		', [
-			':regionIds' => implode(',', array_map('intval', $regionIds))
-		]);
+			AND     b.`bezirk_id` IN(' . implode(',', array_map('intval', $regionIds)) . ')
+		');
 
 		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
