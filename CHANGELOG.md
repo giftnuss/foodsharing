@@ -67,7 +67,7 @@
 - Redesign for chatbox and messages page !1265 @chriswalg
 - Center basket map on Germany if logged out !1249 #740 @alex.simm
 - Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
-- Fix adding members to mailboxes by orga !1255 #677 @alex.simm
+- Fix adding members to mailboxes by orga !1255 !1302 #677 @alex.simm
 - Fix missing translations for MenuBasketsEntry. !1271 #761 @ctwx_ok
 - disable delete account buttons for non-orga users !1279 @Caluera
 - repaired link to profile in the very first pinwall post #512 !1281 @Caluera

@@ -114,11 +114,25 @@ class MailboxView extends View
 		}
 	}
 
+	/**
+	 * Removes leading and trailing quotation marks and replaces escaped quotation marks.
+	 */
+	private function fixQuotation(string $json): string
+	{
+		$trimmed = trim($json, '"');
+
+		return str_replace('\"', '"', $trimmed);
+	}
+
 	public function listMessages(array $messages, int $folder, string $currentMailboxName)
 	{
 		$out = '';
 
 		foreach ($messages as $m) {
+			// fix wrong quotation that can occur in some data sets
+			$m['from'] = $this->fixQuotation($m['from']);
+			$m['to'] = $this->fixQuotation($m['to']);
+
 			// create from/to text depending on the folder
 			$fromToAddresses = [];
 			switch ($folder) {
@@ -139,10 +153,17 @@ class MailboxView extends View
 					}
 					break;
 			}
-			$mappedAddresses = array_map(function ($a) {
-				return $this->createMailAddressString($a);
-			}, array_filter($fromToAddresses));
-			$fromToText = implode(', ', $mappedAddresses);
+
+			// safety check: if json_decode fails it might return null or a string
+			if (!is_null($fromToAddresses) && is_array($fromToAddresses)) {
+				$mappedAddresses = array_map(function ($a) {
+					return $this->createMailAddressString($a);
+				}, array_filter($fromToAddresses));
+
+				$fromToText = implode(', ', $mappedAddresses);
+			} else {
+				$fromToText = '';
+			}
 
 			$attach_class = 'none';
 			if (!empty($m['attach'])) {
