@@ -103,22 +103,35 @@ final class RouteHelper
 		return preg_replace('`href=\"www`', 'href="http://www', $str);
 	}
 
-	public function getRouteOverride()
+	public function getLegalControlIfNecessary(): ?string
 	{
-		if ($this->session->may()) {
-			$ppVersion = $this->legalGateway->getPpVersion();
-			$pnVersion = $this->legalGateway->getPnVersion();
-			if (($ppVersion && $ppVersion != $this->session->user('privacy_policy_accepted_date')) ||
-				($pnVersion && $this->session->user('rolle') >= 2 && $this->session->user('privacy_notice_accepted_date') != $pnVersion)) {
-				/* Allow Settings page, otherwise redirect to legal page */
-				if (in_array($this->getPage(), ['settings', 'logout'])) {
-					return null;
-				}
-
-				return LegalControl::class;
-			}
+		if ($this->session->may() && !$this->legalRequirementsMetByUser() && !$this->onSettingsOrLogoutPage()) {
+			return LegalControl::class;
 		}
 
 		return null;
+	}
+
+	private function legalRequirementsMetByUser(): bool
+	{
+		$privacyPolicyVersion = $this->legalGateway->getPpVersion();
+		$privacyNoticeVersion = $this->legalGateway->getPnVersion();
+
+		return $this->usersPrivacyPolicyUpToDate($privacyPolicyVersion) && $this->usersPrivacyNoticeUpToDate($privacyNoticeVersion);
+	}
+
+	private function usersPrivacyPolicyUpToDate(string $privacyPolicyVersion): bool
+	{
+		return $privacyPolicyVersion && $privacyPolicyVersion == $this->session->user('privacy_policy_accepted_date');
+	}
+
+	private function usersPrivacyNoticeUpToDate(string $privacyNoticeVersion): bool
+	{
+		return $privacyNoticeVersion && ($this->session->user('rolle') < 2 || $this->session->user('privacy_notice_accepted_date') == $privacyNoticeVersion);
+	}
+
+	private function onSettingsOrLogoutPage(): bool
+	{
+		return in_array($this->getPage(), ['settings', 'logout']);
 	}
 }

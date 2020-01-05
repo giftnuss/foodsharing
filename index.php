@@ -71,14 +71,10 @@ if ($session->may()) {
 
 $app = $routeHelper->getPage();
 
-if (($class = $routeHelper->getRouteOverride()) === null) {
-	$class = Routing::getClassName($app, 'Control');
-	try {
-		$obj = $container->get(ltrim($class, '\\'));
-	} catch (ServiceNotFoundException $e) {
-	}
-} else {
-	$obj = $container->get(ltrim($class, '\\'));
+$controller = $routeHelper->getLegalControlIfNecessary() ?? Routing::getClassName($app, 'Control');
+try {
+	$obj = $container->get(ltrim($controller, '\\'));
+} catch (ServiceNotFoundException $e) {
 }
 
 if (isset($obj)) {
