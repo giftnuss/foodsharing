@@ -32,7 +32,7 @@ class RegionGateway extends BaseGateway
 
 	public function getOne_bezirk(int $regionId): array
 	{
-		$out = $this->db->fetchAllByCriteria('fs_bezirk',
+		$out = $this->db->fetchByCriteria('fs_bezirk',
 			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
 			['id' => (int)$regionId]
 		);
@@ -56,7 +56,7 @@ class RegionGateway extends BaseGateway
 
 	public function getMailBezirk(int $id): array
 	{
-		return $this->db->fetchAllByCriteria('fs_bezirk',
+		return $this->db->fetchByCriteria('fs_bezirk',
 			['id', 'name', 'email', 'email_name', 'email_pass'],
 			['id' => $id]
 		);
