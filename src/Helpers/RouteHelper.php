@@ -105,7 +105,7 @@ final class RouteHelper
 
 	public function getLegalControlIfNecessary(): ?string
 	{
-		if ($this->session->may() && !$this->legalRequirementsMetByUser() && !$this->onSettingsOrLogoutPage()) {
+		if ($this->session->may() && !$this->onSettingsOrLogoutPage() && !$this->legalRequirementsMetByUser()) {
 			return LegalControl::class;
 		}
 
@@ -114,20 +114,24 @@ final class RouteHelper
 
 	private function legalRequirementsMetByUser(): bool
 	{
-		$privacyPolicyVersion = $this->legalGateway->getPpVersion();
-		$privacyNoticeVersion = $this->legalGateway->getPnVersion();
-
-		return $this->usersPrivacyPolicyUpToDate($privacyPolicyVersion) && $this->usersPrivacyNoticeUpToDate($privacyNoticeVersion);
+		return $this->usersPrivacyPolicyUpToDate() && $this->usersPrivacyNoticeUpToDate();
 	}
 
-	private function usersPrivacyPolicyUpToDate(string $privacyPolicyVersion): bool
+	private function usersPrivacyPolicyUpToDate(): bool
 	{
+		$privacyPolicyVersion = $this->legalGateway->getPpVersion();
+
 		return $privacyPolicyVersion && $privacyPolicyVersion == $this->session->user('privacy_policy_accepted_date');
 	}
 
-	private function usersPrivacyNoticeUpToDate(string $privacyNoticeVersion): bool
+	private function usersPrivacyNoticeUpToDate(): bool
 	{
-		return $privacyNoticeVersion && ($this->session->user('rolle') < 2 || $this->session->user('privacy_notice_accepted_date') == $privacyNoticeVersion);
+		if ($this->session->user('rolle') < 2) {
+			return true;
+		}
+		$privacyNoticeVersion = $this->legalGateway->getPnVersion();
+
+		return $privacyNoticeVersion && $privacyNoticeVersion == $this->session->user('privacy_notice_accepted_date');
 	}
 
 	private function onSettingsOrLogoutPage(): bool
