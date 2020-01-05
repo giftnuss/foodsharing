@@ -165,6 +165,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
+- Refactored region gateway to use more prepared statements !1297 @alex.simm
 
 ## Dev/Test/CI stuff
 
