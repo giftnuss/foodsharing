@@ -34,7 +34,7 @@ class RegionGateway extends BaseGateway
 	{
 		$out = $this->db->fetchByCriteria('fs_bezirk',
 			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
-			['id' => (int)$regionId]
+			['id' => $regionId]
 		);
 		$out['botschafter'] = $this->db->fetchAll('
 				SELECT 		`fs_foodsaver`.`id`,
@@ -54,17 +54,17 @@ class RegionGateway extends BaseGateway
 		return $out;
 	}
 
-	public function getMailBezirk(int $id): array
+	public function getMailBezirk(int $regionId): array
 	{
 		return $this->db->fetchByCriteria('fs_bezirk',
 			['id', 'name', 'email', 'email_name', 'email_pass'],
-			['id' => $id]
+			['id' => $regionId]
 		);
 	}
 
-	public function listRegionsIncludingParents(array $region_id): array
+	public function listRegionsIncludingParents(array $regionId): array
 	{
-		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $region_id)) . ')';
+		$stm = 'SELECT DISTINCT ancestor_id FROM `fs_bezirk_closure` WHERE bezirk_id IN (' . implode(',', array_map('intval', $regionId)) . ')';
 
 		return $this->db->fetchAllValues($stm);
 	}
@@ -79,7 +79,7 @@ class RegionGateway extends BaseGateway
 			ORDER BY `name`');
 	}
 
-	public function listRegionsForFoodsaver(int $fsId): array
+	public function listRegionsForFoodsaver(int $foodsaverId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.`id`,
@@ -95,14 +95,14 @@ class RegionGateway extends BaseGateway
 			AND 	hb.active = 1
 
 			ORDER BY b.name',
-			[':id' => $fsId]
+			[':id' => $foodsaverId]
 		);
 	}
 
-	public function getBezirkByParent(int $parent_id, bool $include_orga = false): array
+	public function getBezirkByParent(int $parentId, bool $includeOrga = false): array
 	{
 		$sql = 'AND 		`type` != 7';
-		if ($include_orga) {
+		if ($includeOrga) {
 			$sql = '';
 		}
 
@@ -119,14 +119,14 @@ class RegionGateway extends BaseGateway
 			AND id != 0
 			' . $sql . '
 			ORDER BY 	`name`',
-			[':id' => $parent_id]
+			[':id' => $parentId]
 		);
 	}
 
-	public function listIdsForFoodsaverWithDescendants(int $fs_id): array
+	public function listIdsForFoodsaverWithDescendants(int $foodsaverId): array
 	{
 		$bezirk_ids = [];
-		foreach ($this->listForFoodsaver($fs_id) as $bezirk) {
+		foreach ($this->listForFoodsaver($foodsaverId) as $bezirk) {
 			$bezirk_ids += $this->listIdsForDescendantsAndSelf($bezirk['id']);
 		}
 
@@ -134,28 +134,28 @@ class RegionGateway extends BaseGateway
 	}
 
 	/**
-	 * @param $fsId
+	 * @param $foodsaverId
 	 * @param $regionId
 	 *
 	 * @return bool true when the given user is active (an accepted member) in the given region
 	 */
-	public function hasMember(int $fsId, int $regionId): bool
+	public function hasMember(int $foodsaverId, int $regionId): bool
 	{
-		return $this->db->exists('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId, 'active' => 1]);
+		return $this->db->exists('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $foodsaverId, 'active' => 1]);
 	}
 
 	/**
-	 * @param $fsId
+	 * @param $foodsaverId
 	 * @param $regionId
 	 *
 	 * @return bool true when the given user is an admin/ambassador for the given group/region
 	 */
-	public function isAdmin(int $fsId, int $regionId): bool
+	public function isAdmin(int $foodsaverId, int $regionId): bool
 	{
-		return $this->db->exists('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
+		return $this->db->exists('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $foodsaverId]);
 	}
 
-	public function listForFoodsaver(int $fs_id): array
+	public function listForFoodsaver(int $foodsaverId): array
 	{
 		$values = $this->db->fetchAll(
 			'
@@ -171,7 +171,7 @@ class RegionGateway extends BaseGateway
 			AND 	hb.active = 1
 
 			ORDER BY b.name',
-			[':fs_id' => $fs_id]
+			[':fs_id' => $foodsaverId]
 		);
 
 		$output = [];
@@ -182,10 +182,10 @@ class RegionGateway extends BaseGateway
 		return $output;
 	}
 
-	public function getFsRegionIds(int $foodsaver_id): array
+	public function getFsRegionIds(int $foodsaverId): array
 	{
 		return $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bezirk', 'bezirk_id',
-			['foodsaver_id' => $foodsaver_id]
+			['foodsaver_id' => $foodsaverId]
 		);
 	}
 
@@ -205,7 +205,7 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function listForFoodsaverExceptWorkingGroups(int $fs_id): array
+	public function listForFoodsaverExceptWorkingGroups(int $foodsaverId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -229,7 +229,7 @@ class RegionGateway extends BaseGateway
 
 			ORDER BY
 				b.`name`
-		', ['fs_id' => $fs_id]);
+		', ['fs_id' => $foodsaverId]);
 	}
 
 	public function getRegionDetails(int $regionId): array
@@ -282,9 +282,9 @@ class RegionGateway extends BaseGateway
 		return $region;
 	}
 
-	public function getType(int $regionId)
+	public function getType(int $regionId): int
 	{
-		return $this->db->fetchValueByCriteria('fs_bezirk', 'type', ['id' => $regionId]);
+		return (int)$this->db->fetchValueByCriteria('fs_bezirk', 'type', ['id' => $regionId]);
 	}
 
 	public function listRequests(int $regionId): array
@@ -302,17 +302,17 @@ class RegionGateway extends BaseGateway
 					`fs_foodsaver` fs
 
 			WHERE 	fb.foodsaver_id = fs.id
-			AND 	fb.bezirk_id = :id
+			AND 	fb.bezirk_id = :regionId
 			AND 	fb.active = 0
-		', ['id' => $regionId]);
+		', ['regionId' => $regionId]);
 	}
 
-	public function acceptBezirkRequest(int $fsid, int $regionId): bool
+	public function acceptBezirkRequest(int $foodsaverId, int $regionId): bool
 	{
 		return $this->db->update(
 			'fs_foodsaver_has_bezirk',
 					['active' => 1, 'add' => date('Y-m-d H:i:s')],
-					['bezirk_id' => $regionId, 'foodsaver_id' => $fsid]
+					['bezirk_id' => $regionId, 'foodsaver_id' => $foodsaverId]
 		) > 0;
 	}
 
@@ -371,11 +371,11 @@ class RegionGateway extends BaseGateway
 		$this->db->commit();
 	}
 
-	public function denyRegionRequest(int $fsId, int $regionId)
+	public function denyRegionRequest(int $foodsaverId, int $regionId)
 	{
 		$this->db->delete('fs_foodsaver_has_bezirk', [
 			'bezirk_id' => $regionId,
-			'foodsaver_id' => $fsId,
+			'foodsaver_id' => $foodsaverId,
 		]);
 	}
 
@@ -416,10 +416,10 @@ class RegionGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_bezirk', 'name', ['id' => $regionId]);
 	}
 
-	public function addMember(int $fsId, int $regionId)
+	public function addMember(int $foodsaverId, int $regionId)
 	{
 		$this->db->insertIgnore('fs_foodsaver_has_bezirk', [
-			'foodsaver_id' => $fsId,
+			'foodsaver_id' => $foodsaverId,
 			'bezirk_id' => $regionId,
 			'active' => 1,
 			'added' => $this->db->now()
@@ -431,7 +431,7 @@ class RegionGateway extends BaseGateway
 		return $this->db->fetchValueByCriteria('fs_bezirk', 'master', ['id' => $regionId]);
 	}
 
-	public function listRegionsForBotschafter(int $fsId): array
+	public function listRegionsForBotschafter(int $foodsaverId): array
 	{
 		return $this->db->fetchAll(
 	'SELECT 	`fs_botschafter`.`bezirk_id`,
@@ -447,14 +447,14 @@ class RegionGateway extends BaseGateway
 			WHERE 	`fs_bezirk`.`id` = `fs_botschafter`.`bezirk_id`
 
 			AND 	`fs_botschafter`.`foodsaver_id` = :id',
-			[':id' => $fsId]
+			[':id' => $foodsaverId]
 		);
 	}
 
-	public function addOrUpdateMember(int $fsId, int $regionId): bool
+	public function addOrUpdateMember(int $foodsaverId, int $regionId): bool
 	{
 		return $this->db->insertOrUpdate('fs_foodsaver_has_bezirk', [
-			'foodsaver_id' => $fsId,
+			'foodsaver_id' => $foodsaverId,
 			'bezirk_id' => $regionId,
 			'active' => 1,
 			'added' => $this->db->now()
