@@ -204,7 +204,6 @@ And we have even included some new features for you.
 - Moved "forum-title-buttons" into the second line #591 !949 @chriswalg
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
-- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
 - It is now possible for every foodsaver to see and join a pre existing event links of a district or working group. This foodsaver only needs to be part of this specific group where the event was created #273 !912 @jofranz
 - Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
