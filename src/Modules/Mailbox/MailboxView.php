@@ -205,6 +205,14 @@ class MailboxView extends View
 			$body = nl2br($mail['body']);
 		}
 
+		$fullToString = implode(', ', $an_str);
+		$foldButton = '';
+		$shortToString = $fullToString;
+		if (strlen($fullToString) > 100) {
+			$shortToString = substr($fullToString, 0, 100) . ' ...';
+			$foldButton = '<a onclick="mb_foldRecipients(\'' . $fullToString . '\', \'' . $shortToString . '\');return false;" href="#"><i class="fas fa-sort-down fa-lg" id="mail-fold-icon"></i></a>';
+		}
+
 		return '
 			<div class="popbox">
 				<div class="message-top">
@@ -217,8 +225,8 @@ class MailboxView extends View
 							<td class="data"><a onclick="mb_mailto(\'' . $von['mailbox'] . '@' . $von['host'] . '\');return false;" href="#" title="' . $von['mailbox'] . '@' . $von['host'] . '">' . $von_str . '</a></td>
 						</tr>
 						<tr>
-							<td class="label">' . $this->translationHelper->s('an') . '</td>
-							<td class="data">' . implode(', ', $an_str) . '</td>
+							<td class="label">' . $this->translationHelper->s('an') . ' ' . $foldButton . '</td>
+							<td class="data" id="mail-to-list" data-folded="true">' . $shortToString . '</td>
 						</tr>
 						<tr>
 							<td class="label">' . $this->translationHelper->s('date') . '</td>
