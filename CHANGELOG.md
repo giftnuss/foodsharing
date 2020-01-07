@@ -74,6 +74,7 @@
 - Disallow foodsharing email addresses to be used as password restore addresses !1268 #744 @alex.simm
 - Remove email addresses from the bounce list before sending a confirmation mail !1268 #756 @alex.simm
 - Move map control elements on small devices #695 !1286 @lea.mzw
+- Move bellupdatetrigger() to maintenance class only executing it nightly. Accidentally fixes the date distance to a unconfirmed slot which was reseted every 5 minutes before !1300 @jofranz
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
