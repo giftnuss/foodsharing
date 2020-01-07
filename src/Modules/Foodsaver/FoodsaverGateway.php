@@ -358,7 +358,7 @@ final class FoodsaverGateway extends BaseGateway
 					INNER JOIN fs_foodsaver_has_bezirk hb
 			        ON hb.foodsaver_id = fs.id
 
-			WHERE 	hb.bezirk_id IN(' . implode(',', $regionIds) . ')
+			WHERE 	hb.bezirk_id IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
 			AND		fs.deleted_at IS NULL
 		');
 	}
@@ -443,7 +443,7 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	fs.deleted_at IS NULL
             AND     b.`bezirk_id` > 0
-			AND     b.`bezirk_id` IN(' . implode(',', array_map('intval', $regionIds)) . ')
+			AND     b.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
 		');
 
 		return $this->dataHelper->useIdAsKey($foodsavers);
@@ -461,7 +461,7 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	fs.deleted_at IS NULL
 			AND     b.`bezirk_id` > 0
-			AND     b.`bezirk_id` IN(' . implode(',', array_map('intval', $regionIds)) . ')
+			AND     b.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
 		');
 
 		return $this->dataHelper->useIdAsKey($foodsavers);
@@ -666,7 +666,7 @@ final class FoodsaverGateway extends BaseGateway
 					ON fs.id = fb.foodsaver_id
 
 			WHERE 	fs.deleted_at IS NULL
-			AND		fb.`bezirk_id` IN(' . implode(',', $regions) . ')'
+			AND		fb.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regions) . ')'
 		);
 	}
 

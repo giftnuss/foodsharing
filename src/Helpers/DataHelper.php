@@ -60,4 +60,15 @@ class DataHelper
 
 		return $out;
 	}
+
+	/**
+	 * Creates a comma separated string of IDs.
+	 * 
+	 * @param array $ids The IDs (may be of type <code>int</code> of <code>string</code>).
+	 * @return string
+	 */
+	public function commaSeparatedIds(array $ids): string
+	{
+	    return implode(',', array_map('intval', $ids));
+	}
 }
