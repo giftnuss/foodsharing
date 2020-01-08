@@ -4,6 +4,8 @@ namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class RegionGateway extends BaseGateway
@@ -20,7 +22,7 @@ class RegionGateway extends BaseGateway
 
 	public function getRegion(int $regionId): ?array
 	{
-		if ($regionId == 0) {
+		if ($regionId == RegionIDs::ROOT) {
 			return null;
 		}
 
@@ -101,7 +103,7 @@ class RegionGateway extends BaseGateway
 
 	public function getBezirkByParent(int $parentId, bool $includeOrga = false): array
 	{
-		$sql = 'AND 		`type` != 7';
+		$sql = 'AND 		`type` != ' . Type::WORKING_GROUP;
 		if ($includeOrga) {
 			$sql = '';
 		}
@@ -116,10 +118,13 @@ class RegionGateway extends BaseGateway
 				`master`
 			FROM 		`fs_bezirk`
 			WHERE 		`parent_id` = :id
-			AND id != 0
+			AND id != :rootId
 			' . $sql . '
 			ORDER BY 	`name`',
-			[':id' => $parentId]
+			[
+				':rootId' => RegionIDs::ROOT,
+				':id' => $parentId
+			]
 		);
 	}
 
@@ -191,7 +196,7 @@ class RegionGateway extends BaseGateway
 
 	public function listIdsForDescendantsAndSelf(int $regionId, bool $includeSelf = true): array
 	{
-		if ($regionId == 0) {
+		if ($regionId == RegionIDs::ROOT) {
 			return [];
 		}
 		if ($includeSelf) {
@@ -222,14 +227,17 @@ class RegionGateway extends BaseGateway
 				hb.bezirk_id = b.id
 
 			AND
-				hb.`foodsaver_id` = :fs_id
+				hb.`foodsaver_id` = :foodsaverId
 
 			AND
-				b.`type` != 7
+				b.`type` != :workGroupType
 
 			ORDER BY
 				b.`name`
-		', ['fs_id' => $foodsaverId]);
+		', [
+			':foodsaverId' => $foodsaverId,
+			':workGroupType' => Type::WORKING_GROUP
+		]);
 	}
 
 	public function getRegionDetails(int $regionId): array
@@ -344,7 +352,7 @@ class RegionGateway extends BaseGateway
 
 		$this->db->beginTransaction();
 
-		if ((int)$data['parent_id'] > 0) {
+		if ((int)$data['parent_id'] > RegionIDs::ROOT) {
 			$this->db->update('fs_bezirk', ['has_children' => 1], ['id' => $data['parent_id']]);
 		}
 
