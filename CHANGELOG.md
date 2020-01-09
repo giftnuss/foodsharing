@@ -31,6 +31,7 @@
 - Show a error message, if changing a mail address failed !1091 @chriswalg
 - Add info about limitations of nightly slot warnings !1275 @jofranz
 - Send an email to the amb and group workgroups (AGs) if the last admin/amb leaves a workgroup/region !1153 @jofranz
+- Updated foodsharing etikette for registration process !1295 @chris2up9
 
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
