@@ -130,7 +130,7 @@ class MailboxView extends View
 
 		foreach ($messages as $m) {
 			// fix wrong quotation that can occur in some data sets
-			$m['from'] = $this->fixQuotation($m['from']);
+			$m['sender'] = $this->fixQuotation($m['sender']);
 			$m['to'] = $this->fixQuotation($m['to']);
 
 			// create from/to text depending on the folder
