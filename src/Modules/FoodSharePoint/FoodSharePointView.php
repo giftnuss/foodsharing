@@ -153,7 +153,7 @@ class FoodSharePointView extends View
 		$out = '';
 
 		if (!empty($this->follower['fsp_manager'])) {
-			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['fsp_manager'], array('scroller' => false)), 'verantwortliche Foodsaver');
+			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['fsp_manager'], array('scroller' => false)), $this->translationHelper->s('contact_fsp'));
 		}
 		if (!empty($this->follower['follow'])) {
 			$out .= $this->v_utils->v_field($this->fsAvatarList($this->follower['follow'], array('height' => 700)), $this->translationHelper->s('follower'));
