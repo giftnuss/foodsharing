@@ -1,13 +1,13 @@
 <template>
   <nav-item-dropdown
     :no-caret="!displayArrow"
+    :tooltip="$i18n('menu.tooltips.contact')"
     right
-    tooltip="Kontakt"
   >
     <template slot="button-content">
       <i class="fas fa-envelope" />
       <span v-if="displayText">
-        Kontakt
+        {{ $i18n('menu.tooltips.contact') }}
       </span>
     </template>
     <a

@@ -27,8 +27,8 @@
       </a>
     </div>
     <nav-item-dropdown
+      :tooltip="$i18n('menu.tooltips.your_account')"
       v-else
-      :tooltip="$i18n('foodsaver.your_account')"
       no-caret
       class="user"
       right

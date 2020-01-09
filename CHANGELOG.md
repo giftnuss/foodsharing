@@ -77,6 +77,7 @@
 - Move bellupdatetrigger() to maintenance class only executing it nightly. Accidentally fixes the date distance to a unconfirmed slot which was reseted every 5 minutes before !1300 @jofranz
 - Made the list of recipients of a mail foldable to avoid unreadable mails !1280 #65 @alex.simm
 - Name change of regarding fairsharepoint contact person to "Ansprechpartner" !1305 @fs_k
+- Fixed broken tooltips. !1304
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera

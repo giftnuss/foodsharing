@@ -6,24 +6,17 @@
       :id="`dropdown_${_uid}`"
       :class="toggleClasses"
       :aria-expanded="visible ? 'true' : 'false'"
-      :aria-label="tooltip"
+      :title="tooltip"
       @click="buttonClick"
       @mouseover="() => hover = true"
       @mouseout="() => hover = false"
       @keydown="buttonClick"
+      v-b-tooltip
       href="#"
       aria-haspopup="true"
     >
       <slot name="button-content" />
     </a>
-    <b-tooltip
-      ref="tooltip"
-      :target="`dropdown_${_uid}`"
-      :show="hover && !visible"
-      :triggers="[]"
-    >
-      {{ tooltip }}
-    </b-tooltip>
     <div
       ref="menu"
       :class="menuClasses"
@@ -38,10 +31,8 @@
 // modified version of boostrap-vue's b-nav-item-dropdown
 import idMixin from 'bootstrap-vue/esm/mixins/id'
 import dropdownMixin from 'bootstrap-vue/esm/mixins/dropdown'
-import { BTooltip } from 'bootstrap-vue'
 
 export default {
-  components: { BTooltip },
   mixins: [idMixin, dropdownMixin],
   props: {
     noCaret: {

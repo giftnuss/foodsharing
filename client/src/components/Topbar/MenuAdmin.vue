@@ -1,13 +1,13 @@
 <template>
   <nav-item-dropdown
-    tooltip="Administration"
+    :tooltip="$i18n('menu.tooltips.administration')"
     right
     no-caret
   >
     <template slot="button-content">
       <i class="fas fa-cog" />
       <span class="d-md-none">
-        Administration
+        {{ $i18n('menu.tooltips.administration') }}
       </span>
     </template>
     <a

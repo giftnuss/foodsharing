@@ -1,6 +1,6 @@
 <template>
   <nav-item-dropdown
-    tooltip="Deine Betriebe"
+    :tooltip="$i18n('menu.tooltips.your_stores')"
     no-caret
   >
     <template slot="button-content">

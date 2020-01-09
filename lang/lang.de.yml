@@ -337,7 +337,6 @@ pickuplist:
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
 
 foodsaver:
-  your_account: Dein Account
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
   upgrade_to: Werde Foodsaver*in
 
@@ -395,3 +394,14 @@ menu:
   manage_mailboxes: Mailboxen verwalten
   faq: FAQs verwalten
   content: Inhalte bearbeiten
+  tooltips:
+    activities: Aktionen
+    infos: Infos
+    messages: Nachrichten
+    your_groups: Deine Gruppen
+    groups: Gruppenübersicht
+    your_account: Dein Account
+    your_stores: Deine Betriebe
+    administration: Administration
+    notifications: Benachrichtigungen
+    contact: Kontakt
