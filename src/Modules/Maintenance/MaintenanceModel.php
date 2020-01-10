@@ -81,7 +81,7 @@ class MaintenanceModel extends Db
 				(
 					z.dow = ' . (int)$dow . '
 					AND
-					z.time >= NOW()
+					z.time ' . date('h:i:s') . '
 				)
 				OR
 					z.dow = ' . (int)$dow_tomorrow . '
