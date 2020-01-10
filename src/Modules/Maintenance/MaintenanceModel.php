@@ -58,11 +58,7 @@ class MaintenanceModel extends Db
 	public function getStoreManagersWhichWillBeAlerted()
 	{
 		$dow = (int)date('w');
-
-		$dow_tomorrow = $dow + 1;
-		if ($dow_tomorrow == 7) {
-			$dow_tomorrow = 0;
-		}
+		$dow_tomorrow = ($dow + 1) % 7;
 
 		$store_query = '
 			SELECT 
