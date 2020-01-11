@@ -143,13 +143,15 @@ class MailboxView extends View
 					$fromToAddresses = json_decode($m['to'], true);
 					break;
 				case MailboxFolder::FOLDER_TRASH:
-					$from = json_decode($m['sender'], true);
-					if ($this->createMailAddressString($from) == $currentMailboxName) {
-						// mail was sent
-						$fromToAddresses = json_decode($m['to'], true);
-					} else {
-						// mail was received
-						$fromToAddresses = [$from];
+					$from = json_decode($m['sender'], true); // returns null or the input string if parsing fails
+					if (!is_null($from) && is_array($from)) {
+						if ($this->createMailAddressString($from) == $currentMailboxName) {
+							// mail was sent
+							$fromToAddresses = json_decode($m['to'], true);
+						} else {
+							// mail was received
+							$fromToAddresses = [$from];
+						}
 					}
 					break;
 			}
