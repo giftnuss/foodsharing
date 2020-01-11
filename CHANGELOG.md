@@ -136,6 +136,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Temporarily disable pickup slot markers for production release !1307 @jofranz
 
 ## Refactoring
+- Optimize database access for legal queries !1292 @CarolineFischer
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies
