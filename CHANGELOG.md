@@ -100,7 +100,7 @@
 - Refactored database access from controllers to gateways !1192 #9 @alex.simm
 - Removed unused clearAbholer() method, which would falsely remove all fetches from a user which need to stay for documentary reason !1216 @jofranz
 - Replaced REPLACE INTO queries with prepared statements !1124 #757 @alex.simm
-- Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
+- Renamed "Verschwendungsfasten" to "foodsharing-Städte" !1222 @D0nPiano
 - Replace SettingsModel by SettingsGateway !1163 #9 @svenpascal
 - Moved mayHandleReports() to ReportPermissions class with deprecation in Session class !1241 @jofranz
 - Introduce very basic permissions for FAQ editing. Removes the topbar menu entry if false. For now this only replaces orga permissions in accessing the FAQ admin tool !1245 @jofranz
