@@ -57,8 +57,12 @@ class LegalControl extends Control
 					$this->gateway->downgradeToFoodsaver($this->session->id());
 				}
 				/* need to reload session cache. TODO: This should be further abstracted */
-				$this->session->refreshFromDatabase();
-				$this->routeHelper->goSelf();
+				try {
+					$this->session->refreshFromDatabase();
+					$this->routeHelper->goSelf();
+				} catch (\Exception $e) {
+					$this->routeHelper->goPage('logout');
+				}
 			}
 		}
 		$response->setContent($this->render('pages/Legal/page.twig', [

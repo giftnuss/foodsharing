@@ -388,10 +388,11 @@ class Session
 		if (!$this->initialized) {
 			$this->init($rememberMe);
 		}
+
 		$this->refreshFromDatabase($fs_id);
 	}
 
-	public function refreshFromDatabase($fs_id = null)
+	public function refreshFromDatabase($fs_id = null): void
 	{
 		$this->checkInitialized();
 
@@ -402,7 +403,7 @@ class Session
 		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
-			$this->routeHelper->goPage('logout');
+			throw new \Exception('Foodsaver details not found in database.');
 		}
 		$this->set('g_location', [
 			'lat' => $fs['lat'],
