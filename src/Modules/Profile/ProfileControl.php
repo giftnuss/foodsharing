@@ -14,7 +14,7 @@ final class ProfileControl extends Control
 	private $profileGateway;
 	private $basketGateway;
 	private $reportPermissions;
-	
+
 	public function __construct(
 		ProfileView $view,
 		RegionGateway $regionGateway,
