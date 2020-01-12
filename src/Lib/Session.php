@@ -11,6 +11,9 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Legal\LegalControl;
+use Foodsharing\Modules\Legal\LegalGateway;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -23,6 +26,8 @@ class Session
 	private $quizHelper;
 	private $regionGateway;
 	private $storeGateway;
+	private $loginGateway;
+	private $storeService;
 	private $initialized = false;
 
 	private const ROLE_KEYS = [
@@ -40,7 +45,11 @@ class Session
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		StoreGateway $storeGateway
+		StoreGateway $storeGateway,
+		LoginGateway $loginGateway,
+		StoreService $storeService,
+		RouteHelper $routeHelper,
+		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -48,6 +57,10 @@ class Session
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
+		$this->loginGateway = $loginGateway;
+		$this->storeService = $storeService;
+		$this->routeHelper = $routeHelper;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -146,6 +159,30 @@ class Session
 		return $user[$index];
 	}
 
+	public function isActivated($fsId)
+	{
+		return $this->loginGateway->isActivated($fsId);
+	}
+
+	public function getRouteOverride()
+	{
+		$ppVersion = $this->legalGateway->getPpVersion();
+		$pnVersion = $this->legalGateway->getPnVersion();
+		if ($this->id() &&
+			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
+				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
+			/* Allow Settings page, otherwise redirect to legal page */
+			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
+				return null;
+			}
+
+			return LegalControl::class;
+		}
+
+		return null;
+	}
+
+	public function id()
 	public function id(): ?int
 	{
 		if (!$this->initialized) {

@@ -10,6 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -25,6 +26,7 @@ class DashboardControl extends Control
 	private StoreGateway $storeGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private EventGateway $eventGateway;
+	private LoginGateway $loginGateway;
 	private \Twig\Environment $twig;
 	private ProfileGateway $profileGateway;
 	private Sanitizer $sanitizerService;
@@ -39,6 +41,7 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
+		LoginGateway $loginGateway,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
@@ -52,6 +55,7 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
+		$this->loginGateway = $loginGateway;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
@@ -85,6 +89,9 @@ class DashboardControl extends Control
 		}
 
 		$fsId = $this->session->id();
+		if (!$this->session->isActivated($fsId)) {
+			$this->pageHelper->addContent($this->v_utils->v_error($this->translationHelper->s('mail_activation_error_body'), $this->translationHelper->s('mail_activation_error_title')));
+		}
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
 			($is_bieb && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
@@ -139,6 +146,15 @@ class DashboardControl extends Control
 		} else {
 			$this->dashFoodsharer();
 		}
+	}
+
+	public function activate()
+	{
+		$fsId = $this->session->id();
+		$this->loginGateway->newEmailActivation($fsId);
+
+		$this->flashMessageHelper->info($this->translationHelper->s('activation_mail_sent'));
+		$this->routeHelper->goPage('dashboard');
 	}
 
 	/**

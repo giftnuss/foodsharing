@@ -47,6 +47,13 @@ class LoginGateway extends BaseGateway
 		return null;
 	}
 
+	public function isActivated($fsId): bool
+	{
+		$isActivated = $this->db->fetchValueByCriteria('fs_foodsaver', 'active', ['id' => $fsId]);
+
+		return $isActivated === 1;
+	}
+
 	/**
 	 * Check given email and password combination,
 	 * update password if old-style one is detected.
@@ -143,6 +150,28 @@ class LoginGateway extends BaseGateway
 			],
 			['id' => (int)$fsid]
 		);
+	}
+
+	public function newEmailActivation($fsId): void
+	{
+		$data = $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			['email', 'token', 'name', 'geschlecht', 'active'],
+			['id' => $fsId]
+		);
+
+		// Don't send a mail if mail adress is already confirmed
+		if ($data['active'] === 1) {
+			return;
+		}
+
+		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($data['token']);
+
+		$this->emailHelper->tplMail('user/join', $data['email'], [
+			'name' => $data['name'],
+			'link' => $activationUrl,
+			'anrede' => $this->translationHelper->s('anrede_' . $data['geschlecht'])
+		]);
 	}
 
 	public function addPassRequest(string $email, bool $mail = true)
