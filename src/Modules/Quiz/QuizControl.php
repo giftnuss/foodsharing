@@ -210,7 +210,7 @@ class QuizControl extends Control
 
 	private function getSessionListContent(array $quiz): string
 	{
-		if ($sessions = $this->quizSessionGateway->getSessions($quiz['id'])) {
+		if ($sessions = $this->quizSessionGateway->listSessions($quiz['id'])) {
 			return $this->view->sessionList($sessions, $quiz);
 		}
 

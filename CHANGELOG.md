@@ -52,7 +52,7 @@
 - Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
 - Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
 - Fixed FoodSharePoint deletion problem #642 !1168 @alex.simm
-- Show correct message immediately after failing the 5th quiz try #729 !1176 @svenpascal
+- Show correct message immediately after failing the 5th quiz try #729 !1176 !1313 @svenpascal @chriswalg
 - Narrow down permissions to not allow ambassadors calling newsletter sending xhr methods !1197 @jofranz
 - Fix database method which prevents newsletter sending #754 !1198 @jofranz
 - Improved SQL query which caused that the team of large work groups could not be updated anymore #726 !1199 @dthulke
