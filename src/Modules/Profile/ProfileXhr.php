@@ -68,7 +68,6 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
-		echo("RATE");
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];
