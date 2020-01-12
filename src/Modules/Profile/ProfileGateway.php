@@ -3,21 +3,18 @@
 namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 final class ProfileGateway extends BaseGateway
 {
 	private $fs_id;
-	private $session;
 	private $mem;
 
-	public function __construct(Database $db, Mem $mem, Session $session)
+	public function __construct(Database $db, Mem $mem)
 	{
 		parent::__construct($db);
 		$this->mem = $mem;
-		$this->session = $session;
 	}
 
 	public function setFsId(int $id): void
@@ -25,7 +22,7 @@ final class ProfileGateway extends BaseGateway
 		$this->fs_id = $id;
 	}
 
-	public function getData(int $fsId): array
+	public function getData(int $fsId, bool $mayHandleReports): array
 	{
 		$stm = '
 			SELECT 	fs.`id`,
@@ -118,7 +115,7 @@ final class ProfileGateway extends BaseGateway
 		$data['foodsaver'] = false;
 		$data['orga'] = false;
 
-		if ($this->session->mayHandleReports()) {
+		if ($mayHandleReports) {
 			$data['violation_count'] = $this->getViolationCount($this->fs_id);
 			$data['note_count'] = $this->getNotesCount($this->fs_id);
 		}
@@ -196,13 +193,13 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function rate(int $fsId, int $rate, int $type = 1, string $message = ''): int
+	public function rate(int $fsId, int $rate, int $type = 1, string $message = '', int $sessionId): int
 	{
 		return $this->db->insert(
 			'fs_rating',
 			[
 				'foodsaver_id' => $fsId,
-				'rater_id' => $this->session->id(),
+				'rater_id' => $sessionId,
 				'rating' => $rate,
 				'ratingtype' => $type,
 				'msg' => $message,
@@ -211,12 +208,12 @@ final class ProfileGateway extends BaseGateway
 		);
 	}
 
-	public function getRateMessage(int $fsId)
+	public function getRateMessage(int $fsId, int $sessionId)
 	{
 		return $this->db->fetchValueByCriteria(
 			'fs_rating',
 			'msg',
-			['foodsaver_id' => $fsId, 'rater_id' => $this->session->id()]
+			['foodsaver_id' => $fsId, 'rater_id' => $sessionId]
 		);
 	}
 
@@ -315,13 +312,13 @@ final class ProfileGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 	}
 
-	public function buddyStatus(int $fsId)
+	public function buddyStatus(int $fsId, int $sessionId)
 	{
 		try {
 			if (($status = $this->db->fetchValueByCriteria(
 					'fs_buddy',
 					'confirmed',
-					['foodsaver_id' => $this->session->id(), 'buddy_id' => $fsId]
+					['foodsaver_id' => $sessionId, 'buddy_id' => $fsId]
 				)) !== []) {
 				return $status;
 			}
