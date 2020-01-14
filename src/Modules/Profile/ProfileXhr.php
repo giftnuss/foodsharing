@@ -74,7 +74,7 @@ class ProfileXhr extends Control
 
 		$foodsharerId = (int)$_GET['id'];
 
-		if ($foodsharerId <= 0) {
+		if ($foodsharerId > 0) {
 			$type = (int)$_GET['type'];
 
 			$message = '';
