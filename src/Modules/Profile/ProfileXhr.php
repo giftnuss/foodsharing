@@ -67,10 +67,6 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
-		return [
-				'status' => 1,
-				'script' => 'pulseError("asdf");',
-		];
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];
