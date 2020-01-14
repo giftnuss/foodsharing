@@ -35,8 +35,7 @@ final class ProfileControl extends Control
 		}
 
 		if ($id = $this->uriInt(2)) {
-			$this->profileGateway->setFsId((int)$id);
-			$data = $this->profileGateway->getData($this->session->id(), $this->reportPermissions->mayHandleReports());
+			$data = $this->profileGateway->getData($id, $this->session->id(), $this->reportPermissions->mayHandleReports());
 			if ($data && $data['deleted_at'] === null) {
 				$this->foodsaver = $data;
 				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $this->session->id());
