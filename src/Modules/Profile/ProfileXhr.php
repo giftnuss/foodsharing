@@ -67,6 +67,10 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
+		return [
+				'status' => 1,
+				'script' => 'pulseError("asdf");',
+		];
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];
@@ -74,7 +78,7 @@ class ProfileXhr extends Control
 
 		$foodsharerId = (int)$_GET['id'];
 
-		if ($foodsharerId > 0) {
+		if ($foodsharerId <= 0) {
 			$type = (int)$_GET['type'];
 
 			$message = '';
