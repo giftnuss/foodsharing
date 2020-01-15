@@ -92,7 +92,7 @@ class ProfileXhr extends Control
 			$this->profileGateway->rate($foodsharerId, $rate, $type, $message, $this->session->id());
 
 			$comment = '';
-			if ($msg = $this->profileGateway->getRateMessage($foodsharerId)) {
+			if ($msg = $this->profileGateway->getRateMessage($foodsharerId, $this->session->id())) {
 				$comment = $msg;
 			}
 
