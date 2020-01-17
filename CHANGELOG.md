@@ -62,6 +62,8 @@
 - Fix error when logging out while not logged in !1240 #753 @alex.simm
 - Prevent exception for orga users if a deleted user profile is visited @jofranz
 - Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
+- Added missing login and permission check for mailbox page, making sure only BIEBs can see the mailbox #771 and #769 !1260 @pfaufisch
+- Added missing login and permission check for mailbox page !1260 @pfaufisch
 - Remove "Aktionen"-column from list of user stores !1252 @koenvg
 - Fix wrong may group use. Admins of EUROPE_REPORT_TEAM (region/workgroup id: 432) now actually have reports permissions on a level with orga !1250 @jofranz
 - !1199 fix: Remove group members only from specific group instead of all groups and regions !1258 @jofranz

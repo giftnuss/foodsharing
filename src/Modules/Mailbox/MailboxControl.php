@@ -24,6 +24,14 @@ class MailboxControl extends Control
 		$this->mailboxPermissions = $mailboxPermissions;
 
 		parent::__construct();
+
+		if (!$this->session->may()) {
+			$this->routeHelper->goLogin();
+		}
+
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
+			$this->pageHelper->addContent($this->v_utils->v_info($this->translationHelper->s('bieb_quiz_required')));
+		}
 	}
 
 	public function dlattach()
@@ -128,6 +136,9 @@ class MailboxControl extends Control
 			}
 
 			$this->pageHelper->addContent($this->view->manageOpt(), CNT_LEFT);
+		} else {
+			$this->flashMessageHelper->error($this->translationHelper->s('access_error'));
+			$this->routeHelper->goPage('dashboard');
 		}
 	}
 }
