@@ -141,6 +141,7 @@ $g_lang['day'] = 'Tag';
 $g_lang['tomorrow'] = 'Morgen';
 $g_lang['today'] = 'Heute';
 $g_lang['no_bezirk_choosen'] = 'Noch kein Bezirk gewählt';
+$g_lang['bieb_quiz_required'] = 'Du musst <a href="https://wiki.foodsharing.de/Betriebsverantwortliche*r">Betriebsverantworliche*r</a> sein, um auf E-Mail-Postfächer zugreifen zu können. Löse hier das <a href="/?page=settings&sub=upgrade/up_bieb">Quiz für Betriebsverantwortliche</a>, wenn du bereit bist.';
 
 $g_lang['rolle'] = 'Benutzerrolle';
 

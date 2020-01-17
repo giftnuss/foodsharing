@@ -35,7 +35,7 @@ class MailboxXhr extends Control
 
 	public function attach()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		// is filesize (10MB) and filetype allowed?
@@ -80,7 +80,7 @@ class MailboxXhr extends Control
 
 	public function loadmails()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$last_refresh = (int)$this->mem->get('mailbox_refresh');
@@ -124,7 +124,7 @@ class MailboxXhr extends Control
 			}
 
 			$nc_js = '';
-			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->mailboxPermissions->mayHaveMailbox())) {
 				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 					foreach ($newcount as $nc) {
 						$nc_js .= '
@@ -166,7 +166,7 @@ class MailboxXhr extends Control
 
 	public function move()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$folder = $this->mailboxGateway->getMailFolderId($_GET['mid']);
@@ -185,7 +185,7 @@ class MailboxXhr extends Control
 
 	public function quickreply()
 	{
-		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+		if (!isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$mailboxId = $this->mailboxGateway->getMailboxId($_GET['mid']);
@@ -252,7 +252,7 @@ class MailboxXhr extends Control
 
 	public function send_message()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		/*
@@ -368,7 +368,7 @@ class MailboxXhr extends Control
 
 	public function fmail()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$html = $this->mailboxGateway->getMessageHtmlBody($_GET['id']);
@@ -388,7 +388,7 @@ class MailboxXhr extends Control
 
 	public function loadMail()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id']))) {

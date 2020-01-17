@@ -18,6 +18,10 @@ class MailboxPermissions
 
 	public function mayMessage(int $mid): bool
 	{
+		if (!$this->mayHaveMailbox()) {
+			return false;
+		}
+
 		if ($mailbox_id = $this->mailboxGateway->getMailboxId($mid)) {
 			return $this->mayMailbox($mailbox_id);
 		}
@@ -46,5 +50,10 @@ class MailboxPermissions
 	public function mayAddMailboxes()
 	{
 		return $this->mayManageMailboxes();
+	}
+
+	public function mayHaveMailbox()
+	{
+		return $this->session->may('bieb');
 	}
 }
