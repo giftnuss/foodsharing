@@ -121,6 +121,7 @@
 - Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
+- Remove Sessions from Gateway-Classes !1314 @panschk
 
 ## Dev/Test/CI stuff
 
