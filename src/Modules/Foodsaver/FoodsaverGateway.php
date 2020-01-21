@@ -842,6 +842,10 @@ final class FoodsaverGateway extends BaseGateway
 			$updateData['orgateam'] = $data['orgateam'];
 		}
 
+		if (isset($data['rolle'])) {
+			$updateData['rolle'] = $data['rolle'];
+		}
+
 		return $this->db->update('fs_foodsaver', $updateData, [
 			'id' => $fsId
 		]);

@@ -142,6 +142,9 @@ class FoodsaverControl extends Control
 
 	private function updateFoodsaver(int $fsId, array $data): int
 	{
+		if (!$this->session->may('orga') && isset($data['rolle'])) {
+			unset($data['rolle']);
+		}
 		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
 		if ($updateResult) {
 			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
