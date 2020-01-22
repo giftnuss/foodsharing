@@ -43,8 +43,8 @@
             slot-scope="row"
           >
             <b-button
-              @click.stop="row.toggleDetails"
               size="sm"
+              @click.stop="row.toggleDetails"
             >
               {{ row.detailsShowing ? 'Hide' : 'Show' }}
             </b-button>

@@ -37,9 +37,9 @@
           {{ $i18n('basket.all') }}
         </a>
         <a
-          @click="openBasketCreationForm"
           href="#"
           class="btn btn-sm btn-secondary"
+          @click="openBasketCreationForm"
         >
           {{ $i18n('basket.add') }}
         </a>

@@ -15,15 +15,15 @@
           </a>
           <a
             v-if="!wXS"
-            @click="openChat"
             class="btn btn-sm btn-outline-primary"
+            @click="openChat"
           >
             <i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}
           </a>
         </div>
         <div
-          v-html="body"
           class="col-sm-9"
+          v-html="body"
         />
       </div>
       <div class="card-footer">

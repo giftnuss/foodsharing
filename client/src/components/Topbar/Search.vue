@@ -35,8 +35,8 @@
       >
     </div>
     <div
-      id="search-results"
       v-if="isOpen"
+      id="search-results"
       :style="resultsStyle"
       class="dropdown-menu"
     >

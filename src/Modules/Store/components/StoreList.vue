@@ -37,10 +37,10 @@
           <div class="col">
             <button
               v-b-tooltip.hover
-              @click="clearFilter"
               type="button"
               class="btn btn-sm"
               title="Filter leeren"
+              @click="clearFilter"
             >
               <i class="fas fa-times" />
             </button>
@@ -80,8 +80,8 @@
             v-slot:cell(actions)="row"
           >
             <b-button
-              @click.stop="row.toggleDetails"
               size="sm"
+              @click.stop="row.toggleDetails"
             >
               {{ row.detailsShowing ? 'x' : 'Details' }}
             </b-button>

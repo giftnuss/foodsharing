@@ -20,9 +20,9 @@
         class="dropdown-item text-truncate"
       >
         <span
+          :id="`store_marker_${store.id}`"
           :class="'fas fa-circle '+statusClass(store.pickupStatus)"
           :style="badgeVisibility(store.pickupStatus)"
-          :id="`store_marker_${store.id}`"
         >&nbsp;</span>
         {{ store.name }}
       </a>

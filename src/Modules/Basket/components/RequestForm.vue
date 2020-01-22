@@ -7,7 +7,7 @@
       <span
         v-if="mobileNumber"
       >
-        {{ $i18n('personal_data.mobile') }}: <a v-bind:href="'tel:' + mobileNumber">{{ mobileNumber }}</a>
+        {{ $i18n('personal_data.mobile') }}: <a :href="'tel:' + mobileNumber">{{ mobileNumber }}</a>
       </span>
       <span
         v-if="landlineNumber"
@@ -23,9 +23,9 @@
         class="ui-padding-bottom"
       >
         <a
-          @click="openChat"
           class="button button-big"
           href="#"
+          @click="openChat"
         >
           {{ $i18n('chat.open_chat') }}
         </a>
@@ -35,9 +35,9 @@
         class="ui-padding-bottom"
       >
         <a
-          @click="withdraw"
           class="button button-big"
           href="#"
+          @click="withdraw"
         >
           {{ $i18n('basket.withdraw_request') }}
         </a>
@@ -47,9 +47,9 @@
         class="ui-padding-bottom"
       >
         <a
-          @click="$refs.modal_request.show()"
           class="button button-big"
           href="#"
+          @click="$refs.modal_request.show()"
         >
           {{ $i18n('basket.request') }}
         </a>
@@ -69,10 +69,10 @@
       :title="$i18n('basket.request')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('basket.send_request')"
-      @ok="request(requestMessage)"
       modal-class="bootstrap"
       header-class="d-flex"
       content-class="pr-3 pt-3"
+      @ok="request(requestMessage)"
     >
       <b-form-textarea
         id="contactmessage"

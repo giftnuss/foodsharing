@@ -30,9 +30,9 @@
           <a
             v-for="req in basket.requests"
             :key="req.time"
-            @click.prevent="openChat(req.user.id, $event)"
             href="#"
             class="list-group-item list-group-item-action p-1 request"
+            @click.prevent="openChat(req.user.id, $event)"
           >
             <div class="row pl-1 align-items-center">
               <div class="col-1 text-right pt-1">
@@ -53,10 +53,10 @@
                   <div class="col text-right text-muted hover">
                     <a
                       v-b-tooltip
-                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
                       :title="$i18n('basket.request_close')"
                       href="#"
                       class="m-1 btn btn-sm btn-secondary"
+                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
                     >
                       <i class="fas fa-times" />
                     </a>

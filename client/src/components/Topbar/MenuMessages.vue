@@ -1,5 +1,6 @@
 <template>
   <nav-item-dropdown
+    ref="dropdown"
     :tooltip="$i18n('menu.tooltips.messages')"
     no-caret
     right

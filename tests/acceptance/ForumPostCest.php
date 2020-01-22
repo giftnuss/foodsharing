@@ -236,7 +236,7 @@ class ForumPostCest
 		$I->waitForActiveAPICalls();
 
 		$I->seeCurrentUrlMatches('~' . $I->forumUrl($this->{$example[1]}['id']) . '&tid=(\d+)~');
-		$I->click('a[title="Beitrag löschen"]');
+		$I->click('a[data-original-title="Beitrag löschen"]');
 		$I->canSee('Beitrag löschen');
 		$confirmButton = \Codeception\Util\Locator::contains('.btn', 'Ja, ich bin mir sicher');
 		$I->waitForElementVisible($confirmButton);

@@ -1,8 +1,8 @@
 <template>
   <form
     id="login-form"
-    @submit.prevent
     class="form-inline my-2 my-lg-0 flex-grow-1"
+    @submit.prevent
   >
     <div
       ref="inputgroup"
@@ -19,12 +19,12 @@
       <input
         id="login-email"
         v-model="email"
-        @keydown.enter="submit"
         :placeholder="$i18n('login.email_address')"
         :aria-label="$i18n('login.email_address')"
         type="email"
         name="login-email"
         class="form-control text-primary"
+        @keydown.enter="submit"
       >
     </div>
     <div
@@ -43,28 +43,28 @@
       <input
         id="login-password"
         v-model="password"
-        @keydown.enter="submit"
         :placeholder="$i18n('login.password')"
         :aria-label="$i18n('login.password')"
         type="password"
         name="login-password"
         class="form-control text-primary"
+        @keydown.enter="submit"
       >
     </div>
     <button
       v-if="!isLoading "
-      @click="submit"
       :aria-label="$i18n('login.login_button_label')"
       href="#"
       class="btn btn-secondary btn-sm"
+      @click="submit"
     >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
-      @click="submit"
       :aria-label="$i18n('login.login_button_label')"
       class="btn btn-light btn-sm loadingButton"
+      @click="submit"
     >
       <img src="/img/469.gif">
     </button>
