@@ -11,18 +11,21 @@ use FOS\RestBundle\Request\ParamFetcher;
 use Mobile_Detect;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Foodsharing\Permissions\ProfilePermissions;
 
 class UserRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $loginGateway;
 	private $foodsaverGateway;
+	private $profilePermissions;
 
-	public function __construct(Session $session, LoginGateway $loginGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(Session $session, LoginGateway $loginGateway, FoodsaverGateway $foodsaverGateway, ProfilePermissions $profilePermissions)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->profilePermissions = $profilePermissions;
 	}
 
 	/**
@@ -100,7 +103,7 @@ class UserRestController extends AbstractFOSRestController
 	 */
 	public function deleteUserAction(int $userId): Response
 	{
-		if ($userId !== $this->session->id() && !$this->session->may('orga')) {
+		if ($userId !== $this->session->id() && !$this->profilePermissions->mayDeleteUser()) {
 			throw new HttpException(403);
 		}
 

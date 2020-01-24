@@ -44,4 +44,9 @@ class ProfilePermissions
 	{
 		return $this->session->id() == $foodsharerId || $this->session->isOrgaTeam();
 	}
+
+	public function mayDeleteUser(): bool
+	{
+		return $this->session->may('orga');
+	}
 }

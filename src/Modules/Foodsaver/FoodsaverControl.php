@@ -94,7 +94,7 @@ class FoodsaverControl extends Control
 				$regionDetails = $fs['bezirk_id'] > 0 ? $this->regionGateway->getRegion($fs['bezirk_id']) : false;
 				$this->pageHelper->addContent($this->view->foodsaver_form($fs['name'] . ' ' . $fs['nachname'] . ' bearbeiten', $regionDetails));
 
-				if ($this->session->may('orga')) {
+				if ($this->profilePermissions->mayDeleteUser()) {
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_menu([
 						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
