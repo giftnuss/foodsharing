@@ -59,7 +59,8 @@
           responsive
         >
           <template
-            v-slot:cell(status)="row"
+            slot="status"
+            slot-scope="row"
             :v-if="isMobile"
           >
             <div class="text-center">
@@ -67,7 +68,8 @@
             </div>
           </template>
           <template
-            v-slot:cell(name)="row"
+            slot="name"
+            slot-scope="row"
           >
             <a
               :href="$url('store', row.item.id)"
@@ -77,7 +79,8 @@
             </a>
           </template>
           <template
-            v-slot:cell(actions)="row"
+            slot="actions"
+            slot-scope="row"
           >
             <b-button
               size="sm"
@@ -87,7 +90,8 @@
             </b-button>
           </template>
           <template
-            v-slot:cell(row-details)="row"
+            slot="row-details"
+            slot-scope="row"
           >
             <b-card>
               <div class="details">
@@ -159,54 +163,45 @@ export default {
       perPage: 20,
       filterText: '',
       filterStatus: null,
-      fields: [
-        {
-          key: 'status',
+      fields: {
+        status: {
           label: 'Status',
           tdClass: 'status',
           sortable: true
         },
-        {
-          key: 'name',
+        name: {
           label: 'Name',
           sortable: true
         },
-        {
-          key: 'address',
+        address: {
           label: 'Straße',
           sortable: true
         },
-        {
-          key: 'zipcode',
+        zipcode: {
           label: 'PLZ',
           sortable: true
         },
-        {
-          key: 'city',
+        city: {
           label: 'Ort',
           sortable: true
         },
-        {
-          key: 'added',
+        added: {
           label: 'Eingetragen',
           sortable: true
         },
-        {
-          key: 'region',
+        region: {
           label: 'Bezirk',
           sortable: true
         },
-        {
-          key: 'geo',
+        geo: {
           label: 'geo',
           sortable: false
         },
-        {
-          key: 'actions',
+        actions: {
           label: '',
           sortable: false
         }
-      ],
+      },
       statusOptions: [
         { value: null, text: 'Status' },
         { value: 1, text: 'Noch kein Kontakt' },
@@ -236,21 +231,21 @@ export default {
     },
     fieldsFiltered: function () {
       const regions = []
-      const fields = []
+      const fields = {}
       this.stores.map(function (value) {
         if (!regions.includes(value.region)) regions.push(value.region)
       })
-
-      const displayableFields = (window.innerWidth > 800 && window.innerHeight > 600)
-        ? ['region', 'geo', 'actions']
-        : ['region', 'geo', 'address', 'added', 'zipcode']
-
-      this.fields.forEach(field => {
-        if ((field.key === 'region' && regions.length > 1) ||
-              !displayableFields.includes(field.key)) {
-          fields.push(field)
+      if (window.innerWidth > 800 && window.innerHeight > 600) {
+        for (const key in this.fields) {
+          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
+          else if (key !== 'region' && key !== 'geo' && key !== 'actions') fields[key] = this.fields[key]
         }
-      })
+      } else {
+        for (const key in this.fields) {
+          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
+          else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added' && key !== 'zipcode') fields[key] = this.fields[key]
+        }
+      }
 
       return fields
     }

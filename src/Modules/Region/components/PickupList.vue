@@ -148,33 +148,28 @@ export default {
       currentPageMonthly: 1,
       currentPageYearly: 1,
       perPage: 14,
-      fields: [
-        {
-          key: 'time',
+      fields: {
+        time: {
           label: this.$i18n('pickuplist.time_table_header'),
           sortable: true
         },
-        {
-          key: 'NumberOfStores',
+        NumberOfStores: {
           label: this.$i18n('pickuplist.NumberOfStores_table_header'),
           sortable: true
         },
-        {
-          key: 'NumberOfAppointments',
+        NumberOfAppointments: {
           label: this.$i18n('pickuplist.NumberOfAppointments_table_header'),
           sortable: true
         },
-        {
-          key: 'NumberOfSlots',
+        NumberOfSlots: {
           label: this.$i18n('pickuplist.NumberOfSlots_table_header'),
           sortable: true
         },
-        {
-          key: 'NumberOfFoodsavers',
+        NumberOfFoodsavers: {
           label: this.$i18n('pickuplist.NumberOfFoodSavers_table_header'),
           sortable: true
         }
-      ]
+      }
     }
   }
 }

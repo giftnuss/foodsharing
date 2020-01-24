@@ -18,7 +18,8 @@
           responsive
         >
           <template
-            v-slot:cell(avatar)="row"
+            slot="avatar"
+            slot-scope="row"
           >
             <div class="avatars">
               <a :href="`/profile/${row.item.fs_id}`">
@@ -50,7 +51,8 @@
             </b-button>
           </template>
           <template
-            v-slot:cell(row-details)="row"
+            slot="row-details"
+            slot-scope="row"
           >
             <div class="report">
               <p><strong>{{ $i18n('reports.report_id') }}</strong>: {{ row.item.id }}</p>
@@ -117,51 +119,42 @@ export default {
       currentPage: 1,
       perPage: 50,
       reports: [],
-      fields: [
-        {
-          key: 'avatar',
+      fields: {
+        avatar: {
           label: ''
         },
-        {
-          key: 'fs_stadt',
+        fs_stadt: {
           label: this.$i18n('reports.city'),
           sortable: true
         },
-        {
-          key: 'time',
+        time: {
           label: this.$i18n('reports.time'),
           sortable: true
         },
-        {
-          key: 'fs_name',
+        fs_name: {
           label: this.$i18n('reports.about_first_name'),
           sortable: true
         },
-        {
-          key: 'fs_nachname',
+        fs_nachname: {
           label: this.$i18n('reports.about_last_name'),
           sortable: true
         },
-        {
-          key: 'rp_name',
+        rp_name: {
           label: this.$i18n('reports.from_first_name'),
           sortable: true
         },
-        {
-          key: 'rp_nachname',
+        rp_nachname: {
           label: this.$i18n('reports.from_last_name'),
           sortable: true
         },
-        {
-          key: 'b_name',
+        b_name: {
           label: this.$i18n('reports.region'),
           sortable: true
         },
-        {
-          key: 'actions',
+        actions: {
           label: ''
         }
-      ]
+      }
     }
   },
   async created () {

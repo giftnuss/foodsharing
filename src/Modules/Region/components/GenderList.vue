@@ -80,9 +80,8 @@ export default {
     return {
       sortBy: 'gender',
       sortDesc: true,
-      fields: [
-        {
-          key: 'gender',
+      fields: {
+        gender: {
           label: this.$i18n('genderlist.gender_table_header'),
           formatter: item => {
             switch (item) {
@@ -100,12 +99,11 @@ export default {
           },
           sortable: true
         },
-        {
-          key: 'NumberOfGender',
+        NumberOfGender: {
           label: this.$i18n('genderlist.number_table_header'),
           sortable: true
         }
-      ]
+      }
     }
   }
 }
