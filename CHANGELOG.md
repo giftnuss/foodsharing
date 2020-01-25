@@ -83,6 +83,7 @@
 - Name change of regarding fairsharepoint contact person to "Ansprechpartner" !1305 @fs_k
 - Fixed broken tooltips !1304 @ctwx_ok
 - Fix error message when downgrading a foodsaver and do only downgrade if user role has decreased !1323 @pfaufisch @jofranz
+- Temporarily disable pickup slot markers for production release !1307 @jofranz
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
