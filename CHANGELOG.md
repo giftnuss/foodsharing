@@ -1,7 +1,6 @@
 # Unreleased
 
 ## Features
-- Added markers for empty pickup slots in the next days to store menu (red=today or tomorrow, orange=next 3 days, yellow=next 5 days) !1106 #452 @alex.simm
 - Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
 - Add email shortcut to regions and workgroup side menu !1118 @jofranz
 - Add email count to menu shortcut to make it easier for workgroup and region admins to respond to unanswered mails !1124 @jofranz
