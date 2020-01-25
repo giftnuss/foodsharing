@@ -417,7 +417,13 @@ class QuizSessionGateway extends BaseGateway
 		);
 	}
 
-	public function blockUserForQuiz(int $fsId, int $quizId)
+	/**
+	 * Adds seven missed quiz entries for specified user, effectively blocking the user from doing that quiz again.
+	 *
+	 * @param int $fsId FS that will be blocked
+	 * @param int $quizId Quiz for which FS will be blocked
+	 */
+	public function blockUserForQuiz(int $fsId, int $quizId): void
 	{
 		for ($i = 1; $i <= 7; ++$i) {
 			$this->db->insertIgnore(

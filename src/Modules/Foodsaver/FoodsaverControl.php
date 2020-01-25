@@ -131,28 +131,30 @@ class FoodsaverControl extends Control
 					$g_data['bezirk_id'] = $this->session->getCurrentRegionId();
 				}
 
-				if ($this->updateFoodsaver($fsId, $g_data)) {
+				if ($this->updateFoodsaver($oldFs, $g_data)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
 				} else {
-					$this->flashMessageHelper->error($this->translationHelper->s('error'));
+					$this->flashMessageHelper->error($this->translationHelper->s('foodsaver_edit_failure'));
 				}
 			}
 		}
 	}
 
-	private function updateFoodsaver(int $fsId, array $data): int
+	private function updateFoodsaver(array $fs, array $data): bool
 	{
-		if (!$this->session->may('orga') && isset($data['rolle'])) {
+		if (!$this->session->may('orga')) {
 			unset($data['rolle']);
 		}
-		$updateResult = $this->foodsaverGateway->updateFoodsaver($fsId, $data);
-		if ($updateResult) {
-			if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $this->session->may('orga')) {
-				$updateResult = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fsId, $this->storeModel);
-			}
+
+		if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $data['rolle'] < $fs['rolle']) {
+			$downgradedRows = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fs['id'], $this->storeModel);
+		} else {
+			$downgradedRows = 0;
 		}
 
-		return $updateResult;
+		$updatedRows = $this->foodsaverGateway->updateFoodsaver($fs['id'], $data);
+
+		return $downgradedRows > 0 || $updatedRows > 0;
 	}
 
 	private function picture_box()

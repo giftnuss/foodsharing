@@ -82,6 +82,7 @@
 - Made the list of recipients of a mail foldable to avoid unreadable mails !1280 #65 @alex.simm
 - Name change of regarding fairsharepoint contact person to "Ansprechpartner" !1305 @fs_k
 - Fixed broken tooltips !1304 @ctwx_ok
+- Fix error message when downgrading a foodsaver and do only downgrade if user role has decreased !1323 @pfaufisch @jofranz
 
 ## Refactoring
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
