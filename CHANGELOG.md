@@ -1,4 +1,6 @@
-# Unreleased
+# 2020-01-25
+Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
+
 
 ## Features
 - Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
