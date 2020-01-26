@@ -348,7 +348,8 @@ class Database
 	{
 		$statement = $this->pdo->prepare($query);
 		if (!$statement) {
-			throw new \Exception("Query '$query' can't be prepared.");
+			$errorInfo = $this->pdo->errorInfo();
+			throw new \Exception("Query '$query' can't be prepared. Error info: " . implode(', ', $errorInfo));
 		}
 
 		$params = $this->dehierarchizeArray($params);
@@ -418,7 +419,7 @@ class Database
 			}
 
 			if (is_array($v) && empty($v)) {
-				$params[] = 'false'; // an empty array means that the WHERE clause will be false
+				$params[] = 'false '; // an empty array means that the WHERE clause will be false
 				continue;
 			}
 

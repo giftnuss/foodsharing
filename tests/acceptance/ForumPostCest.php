@@ -197,7 +197,10 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->moderatedTestBezirk['id']));
 		$I->see($title);
 		/* There should have been notification mails - they are missing... */
-		//$I->expectNumMails(3); /* Number of users in region, all should have gotten an email */
+		/* ...missing because thread activation currently doesn't send emails :( */
+		/* Number of users in region, all (3) should get an email as soon as it is implemented */
+		/* Well. We can check against 0 until it is implemented to not forget this test later on :) */
+		$I->expectNumMails(0);
 	}
 
 	/**

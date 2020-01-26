@@ -1,24 +1,24 @@
 <template>
   <nav-item-dropdown
     :no-caret="!displayArrow"
-    tooltip="Aktionen"
+    :tooltip="$i18n('menu.tooltips.activities')"
     right
   >
     <template slot="button-content">
       <i class="fas fa-bullhorn" />
       <span v-if="displayText">
-        Aktionen
+        {{ $i18n('menu.tooltips.activities') }}
       </span>
     </template>
     <h3 class="dropdown-header">
       Politik
     </h3>
     <a
-      :href="$url('fasten')"
+      :href="$url('fsstaedte')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Verschwendungsfasten
+      foodsharing-Städte
     </a>
     <a
       :href="$url('claims')"

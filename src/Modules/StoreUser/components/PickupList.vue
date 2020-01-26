@@ -18,18 +18,18 @@
               <button
                 v-if="isCoordinator"
                 v-b-tooltip
-                @click="loadEditRecurringPickupModal"
                 :title="$i18n('pickup.edit_recurring_pickups')"
                 class="btn btn-secondary btn-sm"
+                @click="loadEditRecurringPickupModal"
               >
                 <i class="fa fa-pen" />
               </button>
               <button
                 v-if="isCoordinator"
                 v-b-tooltip
-                @click="loadAddPickupModal"
                 :title="$i18n('pickup.add_onetime_pickup')"
                 class="btn btn-secondary btn-sm"
+                @click="loadAddPickupModal"
               >
                 <i class="fa fa-plus" />
               </button>
@@ -43,11 +43,12 @@
       >
         <template v-for="pickup in pickups">
           <Pickup
-            v-bind="pickup"
             :key="pickup.date.valueOf()"
+            v-bind="pickup"
             :store-id="storeId"
             :is-coordinator="isCoordinator"
             :user="user"
+            class="mb-2"
             @leave="leave"
             @kick="kick"
             @join="join"
@@ -56,7 +57,6 @@
             @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
             @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
             @team-message="sendTeamMessage"
-            class="mb-2"
           />
         </template>
       </div>

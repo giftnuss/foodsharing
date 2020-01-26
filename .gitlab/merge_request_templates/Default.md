@@ -10,6 +10,20 @@ Closes ___ (e.g. #230)
 
 ## Links to related issues
 
+Any relevant links (issues, documentation, slack discussions).
+
+## How to test
+
+Steps a reviewer can take to verify that this MR does what it says it does e.g.
+
+1. Checkout branch locally
+2. Login as foodsaver
+3. ...
+
+## Screenshots (if applicable)
+
+Any relevant screenshots if this is a design / frontend change
+
 ## Checklist
 
 - [ ] added a test, or explain why one is not needed/possible...

@@ -4,7 +4,7 @@ namespace Foodsharing\Lib;
 
 class ContentSecurityPolicy
 {
-	public function generate(string $httpHost, string $reportUri, bool $reportOnly): string
+	public function generate(string $httpHost, string $reportUri = null, bool $reportOnly = false): string
 	{
 		$none = "'none'";
 		$self = "'self'";
@@ -47,11 +47,14 @@ class ContentSecurityPolicy
 			],
 			'frame-ancestors' => [
 				$none
-			],
-			'report-uri' => [
-				$reportUri
 			]
 		];
+
+		if ($reportUri) {
+			$policy['report-uri'] = [
+				$reportUri
+			];
+		}
 
 		$value = '';
 		foreach ($policy as $key => $values) {

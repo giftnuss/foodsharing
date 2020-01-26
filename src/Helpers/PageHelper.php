@@ -4,9 +4,16 @@ namespace Foodsharing\Helpers;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\BlogPermissions;
+use Foodsharing\Permissions\ContentPermissions;
+use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
+use Foodsharing\Permissions\MailboxPermissions;
+use Foodsharing\Permissions\FAQPermissions;
+use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 final class PageHelper
 {
@@ -33,6 +40,13 @@ final class PageHelper
 	public $jsData = [];
 	private $twig;
 	private $identificationHelper;
+	private $blogPermissions;
+	private $mailboxPermissions;
+	private $faqPermissions;
+	private $quizPermissions;
+	private $storePermissions;
+	private $contentPermissions;
+	private $newsletterEmailPermissions;
 
 	public function __construct(
 		Session $session,
@@ -41,7 +55,14 @@ final class PageHelper
 		Environment $twig,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		FAQPermissions $faqPermissions,
+		MailboxPermissions $mailboxPermissions,
+		QuizPermissions $quizPermissions,
+		StorePermissions $storePermissions,
+		ContentPermissions $contentPermissions,
+		BlogPermissions $blogPermissions,
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -63,6 +84,13 @@ final class PageHelper
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->faqPermissions = $faqPermissions;
+		$this->blogPermissions = $blogPermissions;
+		$this->mailboxPermissions = $mailboxPermissions;
+		$this->quizPermissions = $quizPermissions;
+		$this->contentPermissions = $contentPermissions;
+		$this->storePermissions = $storePermissions;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -219,10 +247,14 @@ final class PageHelper
 				'hasFsRole' => $this->session->may('fs'),
 				'isOrgaTeam' => $this->session->isOrgaTeam(),
 				'may' => [
-					'editBlog' => $this->session->mayEditBlog(),
-					'editQuiz' => $this->session->mayEditQuiz(),
+					'administrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
+					'editQuiz' => $this->quizPermissions->mayEditQuiz(),
 					'handleReports' => $this->session->mayHandleReports(),
-					'addStore' => $this->session->may('bieb'),
+					'addStore' => $this->storePermissions->mayCreateStore(),
+					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
+					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
+					'editContent' => $this->contentPermissions->mayEditContent(),
+					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,

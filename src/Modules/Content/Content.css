@@ -45,7 +45,7 @@ div.partner h4 {
 }
 
 .faq h3 {
-  color: #46891b;
+  color: var(--fs-green);
   font-family: "Alfa Slab One", serif;
   font-size: 25px;
   font-weight: normal;
@@ -59,7 +59,7 @@ div.partner h4 {
 
   .shortcode-spacer-1 {
     display: block;
-    border-bottom: 1px solid #f1e7c9;
+    border-bottom: 1px solid var(--fs-beige);
   }
 
   .news-post img {

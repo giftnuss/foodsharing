@@ -35,7 +35,7 @@ class ChatCest
 		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
 		$I->waitForText('is anyone there for', 20, '.chatboxcontent');
 
-		$I->expectNumMails(1);
+		$I->expectNumMails(1, 5);
 		$mail = $I->getMails()[0];
 		$I->assertContains('is anyone there for the email?', $mail->text);
 		$I->assertContains($this->foodsaver1['name'], $mail->subject);

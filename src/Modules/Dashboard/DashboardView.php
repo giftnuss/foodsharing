@@ -15,11 +15,11 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht am ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
+					<span class="t">veröffentlicht: ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
-	
+
 			</li>';
 		}
 
@@ -49,7 +49,7 @@ class DashboardView extends View
 		));
 	}
 
-	public function closeBaskets($baskets)
+	public function nearbyBaskets($baskets)
 	{
 		$out = '<ul class="linklist baskets">';
 		foreach ($baskets as $b) {
@@ -62,7 +62,7 @@ class DashboardView extends View
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
-	
+
 			</li>';
 		}
 
@@ -85,7 +85,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
+			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver werden!</a></strong>
 	   </div>';
 	}
 
@@ -161,7 +161,7 @@ class DashboardView extends View
 				function u_anfrage_action(key,el)
 				{
 					val = $(el).children("input:first").val().split(":::");
-					
+
 					if(key == "deny")
 					{
 						u_sign_out(val[0],val[1],el);
@@ -171,7 +171,7 @@ class DashboardView extends View
 						u_gotoMap(val[0],val[1],el);
 					}
 				}
-	
+
 				function u_sign_out(fsid,bid,el)
 					{
 						var item = $(el);
@@ -191,17 +191,17 @@ class DashboardView extends View
 								}
 							},
 							complete:function(){hideLoader();}
-						});	
-					}	
-	
+						});
+					}
+
 				function u_gotoMap(fsid,betriebid,el)
 					{
 						var item = $(el);
 						showLoader();
 						var baseUrl = "?page=map&bid=";
 						window.location.href = baseUrl+betriebid;
-						
-					}	
+
+					}
 			');
 			$this->pageHelper->addJs('
 				function createSignoutMenu() {
@@ -215,27 +215,27 @@ class DashboardView extends View
 						}
 					};
 				}
-			
+
 				$("#store-request").on("click", function(e){
 					var $this = $(this);
 					$this.data("runCallbackThingie", createSignoutMenu);
 					var _offset = $this.offset(),
 						position = {
-							x: _offset.left - 30, 
+							x: _offset.left - 30,
 							y: _offset.top - 97
 						}
 					$this.contextMenu(position);
 				});
-	
+
 				$.contextMenu({
 					selector: "#store-request",
 					trigger: "none",
 					build: function($trigger, e) {
 						return $trigger.data("runCallbackThingie")();
 					}
-				});		
-				
-				
+				});
+
+
 			');
 			$list = '
 			<ul class="linklist">';
@@ -295,13 +295,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['post_body'] . '
 					</div>
-	
+
 				</div>
-				
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -318,13 +318,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['post_body'] . '
 					</div>
-	
+
 				</div>
-			
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -341,13 +341,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['text'] . '
 					</div>
-	
+
 				</div>
-			
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -366,7 +366,7 @@ class DashboardView extends View
 		$this->pageHelper->addStyle('
 			@media (max-width: 410px)
 			{
-				.top_margin_on_small_screen 
+				.top_margin_on_small_screen
 				{
 					margin-top: 45px;
 				}
@@ -381,8 +381,8 @@ class DashboardView extends View
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
-						
-				
+
+
 				<div class="container activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
@@ -390,14 +390,14 @@ class DashboardView extends View
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-			
+
 					<div class="row activity-feed-content-buttons">
 						<div class="col mr-2"><a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a></div>
 						<div class="col-md-auto mr-2"><a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a></div>
 						<div class="col-md-auto"><a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a></div>
 					</div>
 				</div>
-				
+
 				<div class="clear"></div>
 			</div>
 			';
@@ -416,7 +416,7 @@ class DashboardView extends View
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
-			
+
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
@@ -424,12 +424,12 @@ class DashboardView extends View
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-	
+
 					<div>
-						<a href="/?page=event&id=' . (int)$i['id'] . '" class="button">Zum Event</a> 
+						<a href="/?page=event&id=' . (int)$i['id'] . '" class="button">Zum Event</a>
 					</div>
 				</div>
-			
+
 				<div class="clear"></div>
 			</div>
 			';

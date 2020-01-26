@@ -12,9 +12,9 @@
           >
             <button
               v-b-tooltip.hover
-              @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
               :title="$i18n('pickup.delete_title')"
               class="btn btn-sm p-0"
+              @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
               <i class="fa fa-times" />
             </button>
@@ -37,9 +37,9 @@
             />
             <EmptySlot
               v-for="n in emptySlots"
+              :key="n"
               :allow-join="!isUserParticipant && isAvailable && n == 1"
               :allow-remove="isCoordinator && n == emptySlots && !isInPast"
-              :key="n"
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
             />
@@ -66,8 +66,10 @@
       :title="$i18n('pickup.join_title_date', {'date': $dateFormat(date, 'full-long')})"
       :cancel-title="$i18n('pickup.join_cancel')"
       :ok-title="$i18n('pickup.join_agree')"
-      @ok="$emit('join', date)"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="$emit('join', date)"
     >
       {{ $i18n('pickup.really_join_date', {'date': $dateFormat(date, 'full-long')}) }}
     </b-modal>
@@ -76,9 +78,11 @@
       :title="$i18n('pickup.really_leave_date_title', {'date': $dateFormat(date, 'full-long')})"
       :cancel-title="$i18n('pickup.leave_pickup_message_team')"
       :ok-title="$i18n('pickup.leave_pickup_ok')"
+      modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
       @ok="$emit('leave', date)"
       @cancel="$refs.modal_team_message.show()"
-      modal-class="bootstrap"
     >
       <p>{{ $i18n('pickup.really_leave_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
     </b-modal>
@@ -87,8 +91,10 @@
       :title="$i18n('pickup.really_kick_user_date_title', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name})"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
-      @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id })"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="$emit('kick', { 'date': date, 'fsId': activeSlot.profile.id })"
     >
       <p>{{ $i18n('pickup.really_kick_user_date', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name}) }}</p>
     </b-modal>
@@ -97,8 +103,10 @@
       :title="$i18n('pickup.leave_team_message_title')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('pickup.team_message_send_and_leave')"
-      @ok="$emit('team-message', teamMessage); $emit('leave', date)"
       modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="$emit('team-message', teamMessage); $emit('leave', date)"
     >
       <b-form-textarea
         v-model="teamMessage"
@@ -118,8 +126,8 @@
       :title="$i18n('pickup.delete_title')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('delete')"
-      @ok="$emit('delete', date)"
       modal-class="bootstrap"
+      @ok="$emit('delete', date)"
     >
       <p>{{ $i18n('pickup.really_delete_date', {'date': $dateFormat(date, 'full-long')}) }}</p>
     </b-modal>
@@ -216,7 +224,7 @@ export default {
     margin: 2px;
     width: 35px;
     height: 35px;
-    border-color: #f1e7c9;
+    border-color: var(--fs-beige);
     border-width: 3px;
   }
   ul.slots >>> .btn.filled {
@@ -229,7 +237,7 @@ export default {
       border-color: #533a20
   }
   ul.slots >>> .btn[disabled]:hover {
-      border-color: #f1e7c9;
+      border-color: var(--fs-beige);
       cursor: default;
   }
   ul.slots[data-v-1dfadebe] .btn.secondary {

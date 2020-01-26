@@ -235,9 +235,12 @@ class BellGateway extends BaseGateway
 
 	public function setBellsAsSeen(array $bellIds, int $foodsaverId): void
 	{
-		$this->db->execute(
-			'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', array_map('intval', $bellIds)) . ') AND `foodsaver_id` =:fsId',
-			['fsId' => $foodsaverId]
+		$this->db->update('fs_foodsaver_has_bell',
+			['seen' => 1],
+			[
+				'bell_id' => array_map('intval', $bellIds),
+				'foodsaver_id' => $foodsaverId
+			]
 		);
 	}
 

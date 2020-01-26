@@ -2,32 +2,35 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
+use Foodsharing\Services\NotificationService;
 
 final class RegionXhr extends Control
 {
 	private $responses;
+	private $regionGateway;
 	private $foodsaverGateway;
 	private $forumGateway;
 	private $forumFollowerGateway;
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
+	private $notificationService;
 
 	public function __construct(
-		Db $model,
+		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
 		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		NotificationService $notificationService
 	) {
-		$this->model = $model;
+		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
@@ -35,6 +38,7 @@ final class RegionXhr extends Control
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
+		$this->notificationService = $notificationService;
 
 		parent::__construct();
 	}
@@ -72,11 +76,11 @@ final class RegionXhr extends Control
 			$body = $_POST['msg'];
 
 			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
-				&& $bezirk = $this->model->getValues(array('id', 'name'), 'bezirk', $_GET['bid'])
+				&& $bezirk = $this->regionGateway->getRegion($_GET['bid'])
 			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
-						$theme = $this->model->getVal('name', 'theme', $_GET['tid']);
+						$theme = $this->forumGateway->getThreadInfo($_GET['tid']);
 
 						foreach ($follower as $f) {
 							$this->emailHelper->tplMail('forum/answer', $f['email'], array(
@@ -113,13 +117,15 @@ final class RegionXhr extends Control
 
 	public function signout(): array
 	{
-		$data = $_GET;
-		if ($this->session->mayBezirk($data['bid'])) {
-			$this->foodsaverGateway->deleteFromRegion($data['bid'], $this->session->id());
+		$groupId = (int)$_GET['bid'];
 
-			return array('status' => 1);
+		if ($this->session->mayBezirk($groupId)) {
+			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
+			$this->notificationService->sendEmailIfGroupHasNoAdmin($groupId);
+
+			return $this->responses->success();
 		}
 
-		return array('status' => 0);
+		return $this->responses->fail_generic();
 	}
 }

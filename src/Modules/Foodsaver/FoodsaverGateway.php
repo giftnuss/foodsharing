@@ -2,58 +2,127 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Carbon\Carbon;
 use Exception;
+use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
+use Foodsharing\Modules\Store\StoreModel;
 
 final class FoodsaverGateway extends BaseGateway
 {
+	private $dataHelper;
 	private $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
+		DataHelper $dataHelper,
 		ForumFollowerGateway $forumFollowerGateway
 	) {
 		parent::__construct($db);
+
+		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 	}
 
-	public function getFoodsaver($bezirk_id)
+	public function getFoodsaversByRegion(int $regionId, bool $hideRecentlyOnline = false): array
 	{
-		$and = ' AND 		fb.`bezirk_id` = ' . (int)$bezirk_id . '';
-		if (is_array($bezirk_id)) {
-			if (is_array(end($bezirk_id))) {
-				$tmp = $bezirk_id;
-				$bezirk_id = array();
-				foreach ($tmp as $b) {
-					$bezirk_id[$b['id']] = $b['id'];
-				}
-			}
-
-			$and = ' AND 		fb.`bezirk_id` IN(' . implode(',', $bezirk_id) . ')';
+		$onlyInactiveClause = '';
+		if ($hideRecentlyOnline) {
+			$oldestActiveDate = Carbon::now()->subMonths(6)->format('Y-m-d H:i:s');
+			$onlyInactiveClause = '
+				AND (fs.last_login < "' . $oldestActiveDate . '"
+					OR fs.last_login IS NULL)
+			';
 		}
 
 		return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`name` AS vorname,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.`plz`,
-						fs.`geschlecht`
+		    SELECT	fs.id,
+					fs.name,
+					fs.nachname,
+					fs.photo,
+					fs.sleep_status,
+					CONCAT("#",fs.id) AS href
 
-			FROM 		fs_foodsaver_has_bezirk fb,
-						`fs_foodsaver` fs
+		    FROM	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
 
-			WHERE 		fb.foodsaver_id = fs.id
-			AND			fs.deleted_at IS NULL ' . $and
-		);
+		    WHERE   fs.deleted_at IS NULL
+			AND     fsreg.bezirk_id = :regionId'
+					. $onlyInactiveClause . '
+
+			ORDER BY fs.name ASC
+		', [
+			':regionId' => $regionId
+		]);
 	}
 
-	public function getFoodsaverDetails($fs_id): array
+	public function listActiveFoodsaversByRegion(int $regionId): array
+	{
+		$res = $this->db->fetchAll('
+			SELECT 	fs.`id`,
+					fs.`photo`,
+					fs.`name`,
+					fs.sleep_status
+
+		    FROM	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
+
+			WHERE   fs.deleted_at IS NULL
+			AND 	fsreg.active = 1
+			AND 	fsreg.bezirk_id = :regionId
+
+			ORDER BY fs.`name`
+		', [
+			':regionId' => $regionId
+		]);
+
+		return array_map(function ($fs) {
+			if ($fs['photo']) {
+				$image = '/images/50_q_' . $fs['photo'];
+			} else {
+				$image = '/img/50_q_avatar.png';
+			}
+
+			return [
+				'user' => [
+					'id' => $fs['id'],
+					'name' => $fs['name'],
+					'sleep_status' => $fs['sleep_status']
+				],
+				'size' => 50,
+				'imageUrl' => $image
+			];
+		}, $res);
+	}
+
+	public function listActiveWithFullNameByRegion(int $regionId): array
+	{
+		return $this->db->fetchAll('
+			SELECT 	fs.id,
+					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+					fs.`email`,
+					fs.`geschlecht`
+
+		    FROM	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk fsreg
+					ON fs.id = fsreg.foodsaver_id
+
+			WHERE   fs.deleted_at IS NULL
+			AND 	fsreg.active = 1
+			AND 	fsreg.bezirk_id = :regionId
+		', [
+			':regionId' => $regionId
+		]);
+	}
+
+	public function getFoodsaverDetails(int $fsId): array
 	{
 		return $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -77,33 +146,33 @@ final class FoodsaverGateway extends BaseGateway
 				'geschlecht',
 				'privacy_policy_accepted_date',
 				'privacy_notice_accepted_date'
-			],
-			['id' => $fs_id]
-		);
+			], [
+			'id' => $fsId
+		]);
 	}
 
 	public function getFoodsaverBasics(int $fsId): array
 	{
-		if ($fs = $this->db->fetch('
-			SELECT 	fs.`name`,
-					fs.nachname,
-					fs.bezirk_id,
-					fs.rolle,
-					fs.photo,
-					fs.geschlecht,
-					fs.stat_fetchweight,
-					fs.stat_fetchcount,
-					fs.sleep_status,
-					fs.id
-
-			FROM 	`fs_foodsaver` fs
-
-			WHERE fs.id = :fsId
-		', [':fsId' => $fsId])
-		) {
+		$fs = $this->db->fetchByCriteria('fs_foodsaver', [
+			'id',
+			'name',
+			'nachname',
+			'bezirk_id',
+			'rolle',
+			'photo',
+			'geschlecht',
+			'stat_fetchweight',
+			'stat_fetchcount',
+			'sleep_status'
+		], [
+			'id' => $fsId
+		]);
+		if ($fs) {
 			$fs['bezirk_name'] = '';
 			if ($fs['bezirk_id'] > 0) {
-				$fs['bezirk_name'] = $this->db->fetchValueByCriteria('fs_bezirk', 'name', ['id' => $fs['bezirk_id']]);
+				$fs['bezirk_name'] = $this->db->fetchValueByCriteria('fs_bezirk', 'name', [
+					'id' => $fs['bezirk_id']
+				]);
 			}
 
 			return $fs;
@@ -112,181 +181,189 @@ final class FoodsaverGateway extends BaseGateway
 		return [];
 	}
 
-	public function getOne_foodsaver($id)
+	public function getFoodsaversWithoutAmbassadors(): array
 	{
-		$out = $this->db->fetch('
-			SELECT
-				`id`,
-				`bezirk_id`,
-				`plz`,
-				`stadt`,
-				`lat`,
-				`lon`,
-				`email`,
-				`name`,
-				`nachname`,
-				`anschrift`,
-				`telefon`,
-				`handy`,
-				`geschlecht`,
-				`geb_datum`,
-				`anmeldedatum`,
-				`photo`,
-				`about_me_public`,
-				`orgateam`,
-				`data`,
-				`rolle`,
-				`position`,
-				`homepage`
-			FROM 		`fs_foodsaver`
-			WHERE 		`id` = :id',
-			[':id' => $id]
-		);
+		$foodsavers = $this->getActiveFoodsavers();
+		$ambassadors = $this->getActiveAmbassadors();
 
-		$bot = $this->db->fetchAll('
-			SELECT `fs_bezirk`.`name`,
-				   `fs_bezirk`.`id`
-			FROM `fs_bezirk`,
-				 fs_botschafter
-			WHERE `fs_botschafter`.`bezirk_id` = `fs_bezirk`.`id`
-			AND `fs_botschafter`.foodsaver_id = :id',
-			[':id' => $id]
-		);
+		return array_udiff($foodsavers, $ambassadors, function (array $fs, array $amb) {
+			return $fs['id'] - $amb['id'];
+		});
+	}
 
-		if ($bot) {
+	private function getActiveFoodsavers(): array
+	{
+		return $this->db->fetchAll('
+			SELECT  fs.id,
+					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
+					fs.`anschrift`,
+					fs.`email`,
+					fs.`telefon`,
+					fs.`handy`,
+					fs.plz
+
+			FROM 	`fs_foodsaver` fs
+
+			WHERE	fs.deleted_at IS NULL
+            AND     fs.`active` = 1
+		');
+	}
+
+	public function getFoodsaver(int $fsId): array
+	{
+		$out = $this->db->fetchByCriteria('fs_foodsaver', [
+			'id',
+			'bezirk_id',
+			'plz',
+			'stadt',
+			'lat',
+			'lon',
+			'email',
+			'name',
+			'nachname',
+			'anschrift',
+			'telefon',
+			'handy',
+			'geschlecht',
+			'geb_datum',
+			'anmeldedatum',
+			'photo',
+			'about_me_public',
+			'orgateam',
+			'data',
+			'rolle',
+			'position',
+			'homepage'
+		], [
+			'id' => $fsId
+		]);
+
+		if ($bot = $this->getAmbassadorsRegions($fsId)) {
 			$out['botschafter'] = $bot;
 		}
 
 		return $out;
 	}
 
-	public function getBotschafter($bezirk_id): array
+	private function getAmbassadorsRegions(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT   reg.`name`,
+                     reg.`id`
+
+			FROM     fs_bezirk reg
+				     INNER JOIN fs_botschafter amb
+                     ON amb.`bezirk_id` = reg.`id`
+
+			WHERE    amb.foodsaver_id = :fsId
+        ', [
+			':fsId' => $fsId
+		]);
+	}
+
+	public function getAmbassadors(int $regionId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`email`,
 					fs.`name`,
 					fs.`name` AS `vorname`,
 					fs.`nachname`,
 					fs.`photo`,
-					fs.`geschlecht`
+					fs.`email`,
+					fs.`geschlecht`,
+					fs.`sleep_status`
 
-			FROM `fs_foodsaver` fs,
-			`fs_botschafter`
+			FROM    `fs_foodsaver` fs
+			        INNER JOIN `fs_botschafter` amb
+                    ON fs.id = amb.`foodsaver_id`
 
-			WHERE fs.id = `fs_botschafter`.`foodsaver_id`
-
-			AND `fs_botschafter`.`bezirk_id` = :regionId
-			AND		fs.deleted_at IS NULL',
-			[':regionId' => $bezirk_id]
-		);
+			WHERE   amb.`bezirk_id` = :regionId
+			AND		fs.deleted_at IS NULL
+        ', [
+			':regionId' => $regionId
+		]);
 	}
 
-	public function getBezirkCountForBotschafter($fs_id): int
-	{
-		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fs_id]);
-	}
-
-	public function getAllBotschafter()
+	public function getActiveAmbassadors(): array
 	{
 		return $this->db->fetchAll('
-			SELECT 		fs.`id`,
-						fs.`name`,
-						fs.`nachname`,
-						fs.`geschlecht`,
-						fs.`email`
+			SELECT  fs.`id`,
+					fs.`name`,
+					fs.`nachname`,
+					fs.`geschlecht`,
+					fs.`email`
 
-			FROM 		`fs_foodsaver` fs
-			WHERE		fs.id
-			IN			(SELECT foodsaver_id
-						FROM `fs_fs_botschafter` b
-						LEFT JOIN `fs_bezirk` bz
-						ON b.bezirk_id = bz.id
-						WHERE bz.type != 7
-						)
-			AND		fs.deleted_at IS NULL'
-		);
+			FROM 	`fs_foodsaver` fs
+                    JOIN `fs_botschafter` amb
+                    ON fs.id = amb.foodsaver_id
+                        LEFT JOIN `fs_bezirk` reg
+                        ON amb.bezirk_id = reg.id
+
+			WHERE	reg.type != :excludedRegionType
+			AND     fs.deleted_at IS NULL
+            AND     fs.`active` = 1
+        ', [
+			':excludedRegionType' => Type::WORKING_GROUP
+		]);
 	}
 
-	public function getAllFoodsaver()
+	public function isAdminForAnyGroupOrRegion(int $fsId): bool
+	{
+		return $this->db->count('fs_botschafter', ['foodsaver_id' => $fsId]) > 0;
+	}
+
+	public function getOrgateam(): array
+	{
+		return $this->db->fetchAllByCriteria('fs_foodsaver', [
+			'id',
+			'name',
+			'nachname',
+			'geschlecht',
+			'email'
+		], [
+			'orgateam' => 1
+		]);
+	}
+
+	public function getFsMap(int $regionId): array
 	{
 		return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-						fs.`anschrift`,
-						fs.`email`,
-						fs.`telefon`,
-						fs.`handy`,
-						fs.plz
+            SELECT  `id`,
+                    `lat`,
+                    `lon`,
+                    CONCAT(`name`," ",`nachname`) AS `name`,
+                    `plz`,
+                    `stadt`,
+                    `anschrift`,
+                    `photo`
 
-			FROM 		`fs_foodsaver` fs
-			WHERE		fs.deleted_at IS NULL AND fs.`active` = 1
-		');
+			FROM    `fs_foodsaver`
+
+			WHERE   `active` = 1
+			AND     `bezirk_id` = :regionId
+			AND     `lat` != ""
+        ', [
+			':regionId' => $regionId
+		]);
 	}
 
-	public function getAllFoodsaverNoBotschafter()
-	{
-		$foodsaver = $this->getAllFoodsaver();
-		$out = array();
-
-		$botschafter = $this->getAllBotschafter();
-		$bot = array();
-		foreach ($botschafter as $b) {
-			$bot[$b['id']] = true;
-		}
-
-		foreach ($foodsaver as $fs) {
-			if (!isset($bot[$fs['id']])) {
-				$out[] = $fs;
-			}
-		}
-
-		return $out;
-	}
-
-	public function getOrgateam()
+	public function xhrGetFoodsaversOfRegionsForTagSelect(array $regionIds): array
 	{
 		return $this->db->fetchAll('
-			SELECT 		`id`,
-						`name`,
-						`nachname`,
-						`geschlecht`,
-						`email`
+			SELECT DISTINCT
+					fs.`id`,
+					CONCAT(fs.`name`," ",fs.`nachname`," (",fs.`id`,")") AS value
 
-			FROM 		`fs_foodsaver`
+			FROM 	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk hb
+			        ON hb.foodsaver_id = fs.id
 
-			WHERE 		`orgateam` = 1
-		');
-	}
-
-	public function getFsMap($bezirk_id)
-	{
-		return $this->db->fetchAll(
-			'SELECT `id`,`lat`,`lon`,CONCAT(`name`," ",`nachname`)
-			AS `name`,`plz`,`stadt`,`anschrift`,`photo`
-			FROM `fs_foodsaver`
-			WHERE `active` = 1
-			AND `bezirk_id` = :regionId
-			AND `lat` != "" ',
-			[':regionId' => $bezirk_id]
-		);
-	}
-
-	public function xhrGetTagFsAll($bezirk_ids): array
-	{
-		return $this->db->fetchAll('
-			SELECT	DISTINCT fs.`id`,
-					CONCAT(fs.`name`," ",fs.`nachname` ) AS value
-
-			FROM 	fs_foodsaver fs,
-					fs_foodsaver_has_bezirk hb
-			WHERE 	hb.foodsaver_id = fs.id
-			AND 	hb.bezirk_id IN(' . implode(',', $bezirk_ids) . ')
+			WHERE 	hb.bezirk_id IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
 			AND		fs.deleted_at IS NULL
 		');
 	}
 
-	public function xhrGetFoodsaver($data): array
+	public function xhrGetFoodsaver(array $data): array
 	{
 		if (isset($data['bid'])) {
 			throw new Exception('filterung by bezirkIds is not supported anymore');
@@ -299,397 +376,301 @@ final class FoodsaverGateway extends BaseGateway
 
 		if (strlen($term) > 2) {
 			$out = $this->db->fetchAll('
-				SELECT		`id`,
-							CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
-				FROM 		fs_foodsaver
-				WHERE 		((`name` LIKE :term
-				OR 			`nachname` LIKE :term2))
-				AND			deleted_at IS NULL
-			', [':term' => $term, ':term2' => $term]);
+				SELECT	`id`,
+						CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
+
+				FROM 	fs_foodsaver
+
+				WHERE 	(`name` LIKE :term
+						OR	`nachname` LIKE :term2)
+				AND     deleted_at IS NULL
+			', [
+				':term' => $term,
+				':term2' => $term
+			]);
 
 			return $out;
 		}
 
-		return array();
+		return [];
 	}
 
-	public function getEmailAdressen($region_ids)
+	public function getEmailAddress(int $fsId): string
 	{
-		$placeholders = $this->db->generatePlaceholders(count($region_ids));
-
-		return $this->db->fetchAll('
-				SELECT 	`id`,
-						`name`,
-						`nachname`,
-						`email`,
-						`geschlecht`
-
-				FROM 	`fs_foodsaver`
-
-				WHERE 	`bezirk_id` IN(' . $placeholders . ')
-				AND		deleted_at IS NULL',
-				$region_ids
-			);
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
 	}
 
-	public function getAllEmailFoodsaver($newsletter = false, $only_foodsaver = true)
+	public function getEmailAddressesFromMainRegions(array $regionIds): array
 	{
-		if ($only_foodsaver) {
-			$min_rolle = 1;
-		} else {
-			$min_rolle = 0;
-		}
-		$where = "WHERE rolle >= $min_rolle";
-		if ($newsletter !== false) {
-			$where = "WHERE newsletter = 1 AND rolle >= $min_rolle";
-		}
-
-		return $this->db->fetchAll('
-				SELECT 	`id`,`email`
-				FROM `fs_foodsaver`
-				' . $where . ' AND active = 1
-				AND	deleted_at IS NULL
-		');
+		return $this->getEmailAddresses(Role::FOODSHARER, Role::ORGA, ['bezirk_id' => $regionIds]);
 	}
 
-	public function getEmailBotFromBezirkList($bezirklist)
+	public function getNewsletterSubscribersEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
-		$list = array();
-		foreach ($bezirklist as $i => $b) {
-			if ($b > 0) {
-				$list[$b] = $b;
-			}
-		}
-		ksort($list);
-
-		$query = array();
-		foreach ($list as $b) {
-			$query[] = (int)$b;
-		}
-
-		$foodsaver = $this->db->fetchAll('
-			SELECT 			fs.`id`,
-							fs.`name`,
-							fs.`nachname`,
-							fs.`geschlecht`,
-							fs.`email`
-
-			FROM 	`fs_foodsaver` fs,
-					`fs_botschafter` b
-
-			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id`  IN(' . implode(',', $query) . ')
-			AND		fs.deleted_at IS NULL;
-		');
-
-		$out = array();
-		foreach ($foodsaver as $fs) {
-			$out[$fs['id']] = $fs;
-		}
-
-		return $out;
+		return $this->getEmailAddresses($minRole, $maxRole, [
+			'newsletter' => 1
+		]);
 	}
 
-	public function getEmailFoodSaverFromBezirkList($bezirklist)
+	public function getEmailAddresses(int $minRole = Role::FOODSHARER, int $maxRole = Role::ORGA, array $criteria = []): array
 	{
-		$list = array();
-		foreach ($bezirklist as $i => $b) {
-			if ($b > 0) {
-				$list[$b] = $b;
-			}
-		}
-		ksort($list);
+		$foodsavers = $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			[
+				'id',
+				'email'
+			],
+			array_merge([
+				'active' => 1,
+				'deleted_at' => null,
+				'rolle >=' => $minRole,
+				'rolle <=' => $maxRole
+			], $criteria)
+		);
 
-		$query = array();
-		foreach ($list as $b) {
-			$query[] = (int)$b;
-		}
-
-		$foodsaver = $this->db->fetchAll('
-			SELECT 			fs.`id`,
-							fs.`name`,
-							fs.`nachname`,
-							fs.`geschlecht`,
-							fs.`email`
-
-			FROM 	`fs_foodsaver` fs,
-					`fs_foodsaver_has_bezirk` b
-
-			WHERE 	b.foodsaver_id = fs.id
-			AND		b.`bezirk_id` IN(' . implode(',', $query) . ')
-			AND		fs.deleted_at IS NULL;
-		');
-
-		$out = array();
-		foreach ($foodsaver as $fs) {
-			$out[$fs['id']] = $fs;
-		}
-
-		return $out;
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
-	public function updateGroupMembers($bezirk, $foodsaver_ids, $leave_admins)
+	public function getRegionAmbassadorsEmailAddresses(array $regionIds): array
 	{
-		$rows_ins = 0;
-		if ($leave_admins) {
-			$admins = $this->db->fetchAllValues('SELECT foodsaver_id FROM `fs_botschafter` b WHERE b.bezirk_id = ' . (int)$bezirk);
-			if ($admins) {
-				$foodsaver_ids = array_merge($foodsaver_ids, $admins);
-			}
-		}
-		$ids = implode(',', array_map('intval', $foodsaver_ids));
-		$this->forumFollowerGateway->deleteForumSubscriptions((int)$bezirk, $foodsaver_ids, false);
-		if ($ids) {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk . ' AND foodsaver_id NOT IN (' . $ids . ')')->rowCount();
-			$insert_strings = array_map(function ($id) use ($bezirk) {
-				return '(' . $id . ',' . $bezirk . ',1,NOW())';
-			}, $foodsaver_ids);
-			$insert_values = implode(',', $insert_strings);
-			$rows_ins = $this->db->execute('INSERT IGNORE INTO `fs_foodsaver_has_bezirk` (foodsaver_id, bezirk_id, active, added) VALUES ' . $insert_values)->rowCount();
-		} else {
-			$rows_del = $this->db->execute('DELETE FROM `fs_foodsaver_has_bezirk` WHERE bezirk_id = ' . (int)$bezirk)->rowCount();
-		}
-
-		return array($rows_ins, $rows_del);
-	}
-
-	public function listFoodsaverByRegion(int $regionId)
-	{
-		$res = $this->db->fetchAll('
+		$foodsavers = $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.sleep_status
+					fs.`email`
 
-			FROM 	`fs_foodsaver` fs,
-					`fs_foodsaver_has_bezirk` c
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN `fs_botschafter` b
+					ON b.foodsaver_id = fs.id
 
-			WHERE 	c.`foodsaver_id` = fs.id
-			AND     fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
-			AND 	c.active = 1
-			ORDER BY fs.`name`
-		', ['id' => $regionId]);
+			WHERE 	fs.deleted_at IS NULL
+            AND     b.`bezirk_id` > 0
+			AND     b.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
+		');
 
-		return array_map(function ($fs) {
-			if ($fs['photo']) {
-				$image = '/images/50_q_' . $fs['photo'];
-			} else {
-				$image = '/img/50_q_avatar.png';
-			}
-
-			return [
-				'user' => [
-					'id' => $fs['id'],
-					'name' => $fs['name'],
-					'sleep_status' => $fs['sleep_status']
-				],
-				'size' => 50,
-				'imageUrl' => $image
-			];
-		}, $res);
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
-	public function listActiveWithFullNameByRegion($id)
+	public function getEmailAddressesFromRegions(array $regionIds): array
 	{
-		return $this->db->fetchAll('
-
-			SELECT 	fs.id,
-					CONCAT(fs.`name`, " ", fs.`nachname`) AS `name`,
-					fs.`name` AS vorname,
-					fs.`anschrift`,
-					fs.`email`,
-					fs.`telefon`,
-					fs.`handy`,
-					fs.`plz`,
-					fs.`geschlecht`
-
-			FROM 	fs_foodsaver_has_bezirk fb,
-					`fs_foodsaver` fs
-
-			WHERE 	fb.foodsaver_id = fs.id
-			AND 	fb.bezirk_id = :id
-			AND 	fb.`active` = 1
-			AND		fs.deleted_at IS NULL
-		', ['id' => $id]);
-	}
-
-	public function listAmbassadorsByRegion($id)
-	{
-		return $this->db->fetchAll('
+		$foodsavers = $this->db->fetchAll('
 			SELECT 	fs.`id`,
-					fs.`photo`,
-					fs.`name`,
-					fs.`nachname`,
-					fs.sleep_status
+					fs.`email`
 
-			FROM 	`fs_foodsaver` fs,
-					`fs_botschafter` c
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN `fs_foodsaver_has_bezirk` b
+					ON b.foodsaver_id = fs.id
 
-			WHERE 	c.`foodsaver_id` = fs.id
-			AND     fs.deleted_at IS NULL
-			AND 	c.bezirk_id = :id
-		', ['id' => $id]);
+			WHERE 	fs.deleted_at IS NULL
+			AND     b.`bezirk_id` > 0
+			AND     b.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
+		');
+
+		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
-	/* retrieves the list of all bots for given bezirk or sub bezirk */
-	public function getBotIds($bezirk, $include_bezirk_bot = true, $include_group_bot = false)
+	public function updateGroupMembers(int $regionId, array $fsIds, bool $keepAdmins): array
 	{
-		$where_type = '';
-		if (!$include_bezirk_bot) {
-			$where_type = 'bz.type = 7';
-		} elseif (!$include_group_bot) {
-			$where_type = 'bz.type <> 7';
+		if ($keepAdmins) {
+			if ($admins = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $regionId])) {
+				$fsIds = array_merge($fsIds, $admins);
+			}
 		}
 
-		return $this->db->fetchAllValues('SELECT DISTINCT bot.foodsaver_id FROM `fs_bezirk_closure` c
-			LEFT JOIN `fs_bezirk` bz ON bz.id = c.bezirk_id
-			INNER JOIN `fs_botschafter` bot ON bot.bezirk_id = c.bezirk_id
-			INNER JOIN `fs_foodsaver` fs ON fs.id = bot.foodsaver_id
-			WHERE c.ancestor_id = ' . (int)$bezirk . ' AND fs.deleted_at IS NULL AND ' . $where_type);
+		$updateCounts = ['inserts' => 0, 'deletions' => 0];
+		if ($fsIds) {
+			$updateCounts['deletions'] = $this->deleteGroupMembers($regionId, $fsIds);
+			$updateCounts['inserts'] = $this->insertGroupMembers($regionId, $fsIds);
+		} else {
+			$updateCounts['deletions'] = $this->deleteGroupMembers($regionId);
+		}
+
+		return $updateCounts;
 	}
 
-	public function del_foodsaver($id)
+	private function deleteGroupMembers(int $regionId, array $remainingMemberIds = []): int
 	{
-		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $id]);
+		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $remainingMemberIds, false);
 
-		$this->db->execute('
-			INSERT INTO fs_foodsaver_archive
-			(
-				SELECT * FROM fs_foodsaver WHERE id = ' . (int)$id . '
-			)
-		');
-
-		$this->db->execute('
-            DELETE FROM fs_apitoken
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_application_has_wallpost
-            WHERE application_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_basket_anfrage
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_botschafter
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_buddy
-            WHERE foodsaver_id = ' . (int)$id . ' OR buddy_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_email_status
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_fairteiler_follower
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_bell
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_bezirk
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_contact
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_event
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_foodsaver_has_wallpost
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_mailbox_member
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_mailchange
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_pass_gen
-            WHERE foodsaver_id = ' . (int)$id . ' OR bot_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_pass_request
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_quiz_session
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_rating
-            WHERE foodsaver_id = ' . (int)$id . '
-        ');
-		$this->db->execute('
-            DELETE FROM fs_theme_follower
-            WHERE foodsaver_id = ' . (int)$id . '
-		');
-
-		// remove bananas given by this user
-		$this->db->execute('
-            DELETE FROM fs_rating
-            WHERE rater_id = ' . (int)$id . '
-		');
-
-		$this->db->execute('UPDATE fs_foodsaver SET verified = 0,
-			rolle = 0,
-			plz = NULL,
-			stadt = NULL,
-			lat = NULL,
-			lon = NULL,
-			photo = NULL,
-			email = NULL,
-			passwd = NULL,
-			name = NULL,
-			nachname = NULL,
-			anschrift = NULL,
-			telefon = NULL,
-			handy = NULL,
-			geb_datum = NULL,
-			deleted_at = NOW()
-			WHERE id = ' . (int)$id);
-	}
-
-	public function getFsAutocomplete($bezirk_id)
-	{
-		$and = 'AND fb.`bezirk_id` = ' . (int)$bezirk_id . '';
-		if (is_array($bezirk_id)) {
-			if (is_array(end($bezirk_id))) {
-				$tmp = $bezirk_id;
-				$bezirk_id = array();
-				foreach ($tmp as $b) {
-					$bezirk_id[$b['id']] = $b['id'];
+		if ($remainingMemberIds) {
+			$delCount = 0;
+			$preGroupMembers = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bezirk', 'foodsaver_id', [
+				'bezirk_id' => $regionId
+			]);
+			foreach ($preGroupMembers as $fsId) {
+				if (!in_array($fsId, $remainingMemberIds)) {
+					$delCount += $this->db->delete(
+						'fs_foodsaver_has_bezirk',
+						['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]
+					);
 				}
 			}
 
-			$and = 'AND fb.`bezirk_id` IN(' . implode(',', $bezirk_id) . ')';
+			return $delCount;
+		}
+
+		return $this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+	}
+
+	private function insertGroupMembers(int $regionId, array $fsIds): int
+	{
+		$before = $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+		foreach ($fsIds as $fsId) {
+			$this->db->insertIgnore(
+				'fs_foodsaver_has_bezirk',
+				[
+					'foodsaver_id' => $fsId,
+					'bezirk_id' => $regionId,
+					'active' => 1,
+					'added' => $this->db->now()
+				]
+			);
+		}
+		$current = $this->db->count('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId]);
+
+		return $current - $before;
+	}
+
+	public function getAllWorkGroupAmbassadorIds(): array
+	{
+		return $this->getAmbassadorIds(RegionIDs::ROOT, false, true);
+	}
+
+	public function getRegionAmbassadorIds(int $regionId): array
+	{
+		return $this->getAmbassadorIds($regionId);
+	}
+
+	/**
+	 * Retrieves the list of all ambassador for a given region or district.
+	 *
+	 * Because the region data model holds both, <i>regions</i> <b>and</b> <i>work groups</i>,
+	 * one can decide which one to query via flag parameters.
+	 *
+	 * @param int $regionId The region ID
+	 * @param bool $includeRegionAmbassador "Real" regions shall be queried
+	 * @param bool $includeGroupAmbassador Work groups shall be queried. If <code>$includeRegionAmbassador</code> is <code>false</code>,
+	 *     this is implicitely handled as <code>true</code>.
+	 *
+	 * @return array
+	 */
+	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
+	{
+		$sql = '
+			SELECT DISTINCT
+					amb.foodsaver_id
+
+			FROM	`fs_bezirk_closure` rc
+					LEFT JOIN `fs_bezirk` reg
+					ON rc.bezirk_id = reg.id
+						INNER JOIN `fs_botschafter` amb
+						ON rc.bezirk_id = amb.bezirk_id
+							INNER JOIN `fs_foodsaver` fs
+							ON amb.foodsaver_id = fs.id
+
+			WHERE  (rc.ancestor_id = :ancestorId
+                    OR rc.bezirk_id = :regionId)
+			AND		fs.deleted_at IS NULL
+		';
+
+		if (!$includeRegionAmbassador) {
+			$sql .= ' AND reg.type = ' . Type::WORKING_GROUP;
+		} elseif (!$includeGroupAmbassador) {
+			$sql .= ' AND reg.type != ' . Type::WORKING_GROUP;
+		}
+
+		return $this->db->fetchAllValues(
+			$sql, [
+			':ancestorId' => $regionId,
+			':regionId' => $regionId
+		]);
+	}
+
+	public function deleteFoodsaver(int $fsId): void
+	{
+		$this->db->update('fs_foodsaver', ['password' => null, 'deleted_at' => $this->db->now()], ['id' => $fsId]);
+
+		$this->archiveFoodsaver($fsId);
+
+		$this->db->delete('fs_apitoken', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_application_has_wallpost', ['application_id' => $fsId]);
+		$this->db->delete('fs_basket_anfrage', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_buddy', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_buddy', ['buddy_id' => $fsId]);
+		$this->db->delete('fs_email_status', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_fairteiler_follower', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_contact', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_event', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_wallpost', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_mailbox_member', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_mailchange', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_pass_gen', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_pass_gen', ['bot_id' => $fsId]);
+		$this->db->delete('fs_pass_request', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_quiz_session', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_rating', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_rating', ['rater_id' => $fsId]);
+		$this->db->delete('fs_theme_follower', ['foodsaver_id' => $fsId]);
+
+		$this->db->update(
+			'fs_foodsaver',
+			[
+				'verified' => 0,
+				'rolle' => 0,
+				'plz' => null,
+				'stadt' => null,
+				'lat' => null,
+				'lon' => null,
+				'photo' => null,
+				'email' => null,
+				'password' => null,
+				'name' => null,
+				'nachname' => null,
+				'anschrift' => null,
+				'telefon' => null,
+				'handy' => null,
+				'geb_datum' => null,
+				'deleted_at' => $this->db->now()
+			], [
+			'id' => $fsId
+		]);
+	}
+
+	private function archiveFoodsaver(int $fsId): void
+	{
+		$foodsaver = $this->db->fetchByCriteria('fs_foodsaver', '*', [
+			'id' => $fsId
+		]);
+
+		$this->db->insert('fs_foodsaver_archive', $foodsaver);
+	}
+
+	public function getFsAutocomplete(array $regions): array
+	{
+		if (is_array(end($regions))) {
+			$tmp = [];
+			foreach ($regions as $r) {
+				$tmp[] = $r['id'];
+			}
+			$regions = $tmp;
 		}
 
 		return $this->db->fetchAll('
-			SELECT 		fs.id,
-						CONCAT(fs.`name`, " ", fs.`nachname`) AS `value`
+			SELECT DISTINCT
+						fs.id,
+						CONCAT(fs.`name`, " ", fs.`nachname`, " (",fs.`id`,")") AS value
 
-			FROM 		fs_foodsaver_has_bezirk fb,
-						`fs_foodsaver` fs
+			FROM 	`fs_foodsaver` fs
+					INNER JOIN fs_foodsaver_has_bezirk fb
+					ON fs.id = fb.foodsaver_id
 
-			WHERE 		fb.foodsaver_id = fs.id
-			AND			fs.deleted_at IS NULL ' . $and
+			WHERE 	fs.deleted_at IS NULL
+			AND		fb.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regions) . ')'
 		);
 	}
 
-	public function updateProfile($fs_id, $data)
+	public function updateProfile(int $fsId, array $data): bool
 	{
 		$fields = [
 			'bezirk_id',
@@ -721,77 +702,216 @@ final class FoodsaverGateway extends BaseGateway
 
 		$clean_data = [];
 		foreach ($fields as $field) {
-			if (!array_key_exists($field, $data)) {
-				continue;
+			if (array_key_exists($field, $data)) {
+				$clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
 			}
-			$clean_data[$field] = in_array($field, $fieldsToStripTags, true) ? strip_tags($data[$field]) : $data[$field];
 		}
 
-		$this->db->update(
-			'fs_foodsaver',
-			$clean_data,
-			['id' => $fs_id]
-		);
+		$this->db->update('fs_foodsaver', $clean_data, [
+			'id' => $fsId
+		]);
 
 		return true;
 	}
 
-	public function updatePhoto($fs_id, $photo)
+	public function updatePhoto(int $fsId, string $photo): void
 	{
-		$this->db->update(
-			'fs_foodsaver',
-			['photo' => strip_tags($photo)],
-			['id' => $fs_id]
-	);
+		$this->db->update('fs_foodsaver', [
+			'photo' => strip_tags($photo)
+		], [
+			'id' => $fsId
+		]);
 	}
 
-	public function getPhoto($fs_id)
+	public function getPhotoFileName(int $fsId): string
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'photo', ['id' => $fs_id]);
+		if ($photo = $this->db->fetchValueByCriteria('fs_foodsaver', 'photo', ['id' => $fsId])) {
+			return $photo;
+		}
+
+		return '';
 	}
 
-	public function emailExists($email)
+	public function emailExists(string $email): bool
 	{
 		return $this->db->exists('fs_foodsaver', ['email' => $email]);
 	}
 
 	/**
-	 * set option is an key value store each var is avalable in the user session.
+	 * set option is an key value store each var is available in the user session.
 	 *
 	 * @param string $key
 	 * @param $val
 	 */
-	public function setOption($fs_id, $key, $val)
+	public function setOption(int $fsId, string $key, $val): int
 	{
-		$options = array();
-		if ($opt = $this->db->fetchValueByCriteria('fs_foodsaver', 'option', ['id' => $fs_id])) {
+		$options = [];
+		if ($opt = $this->db->fetchValueByCriteria('fs_foodsaver', 'option', ['id' => $fsId])) {
 			$options = unserialize($opt);
 		}
 
 		$options[$key] = $val;
 
-		return $this->db->update('fs_foodsaver', ['option' => serialize($options)], ['id' => $fs_id]);
+		return $this->db->update('fs_foodsaver', [
+			'option' => serialize($options)
+		], [
+			'id' => $fsId
+		]);
 	}
 
-	public function deleteFromRegion(int $bezirk_id, int $foodsaver_id): void
+	public function deleteFromRegion(int $regionId, int $fsId): void
 	{
-		$this->db->delete('fs_botschafter', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
-		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $bezirk_id, 'foodsaver_id' => $foodsaver_id]);
+		$this->db->delete('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 
-		$this->forumFollowerGateway->deleteForumSubscription($bezirk_id, $foodsaver_id);
+		$this->forumFollowerGateway->deleteForumSubscription($regionId, $fsId);
 
-		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $foodsaver_id]);
-		if ($mainRegion_id === $bezirk_id) {
-			$this->db->update('fs_foodsaver', ['bezirk_id' => 0], ['id' => $foodsaver_id]);
+		$mainRegion_id = $this->db->fetchValueByCriteria('fs_foodsaver', 'bezirk_id', ['id' => $fsId]);
+		if ($mainRegion_id === $regionId) {
+			$this->db->update('fs_foodsaver', [
+				'bezirk_id' => 0
+			], [
+				'id' => $fsId
+			]);
 		}
 	}
 
 	public function setQuizRole(int $fsId, int $quizRole): int
 	{
-		return $this->db->update(
+		return $this->db->update('fs_foodsaver', [
+			'quiz_rolle' => $quizRole
+		], [
+			'id' => $fsId
+		]);
+	}
+
+	public function riseRole(int $fsId, int $newRoleId): void
+	{
+		$this->db->update(
 			'fs_foodsaver',
-			['quiz_rolle' => $quizRole],
+			['rolle' => $newRoleId],
+			[
+				'id' => $fsId,
+				'rolle <' => $newRoleId
+			]
+		);
+	}
+
+	public function loadFoodsaver(int $foodsaverId): array
+	{
+		return $this->db->fetchByCriteria('fs_foodsaver', [
+			'id',
+			'name',
+			'nachname',
+			'photo',
+			'rolle',
+			'geschlecht',
+			'last_login'
+		], [
+			'id' => $foodsaverId,
+			'deleted_at' => null
+		]);
+	}
+
+	public function updateFoodsaver(int $fsId, array $data): int
+	{
+		$updateData = [
+			'bezirk_id' => $data['bezirk_id'],
+			'plz' => strip_tags(trim($data['plz'])),
+			'stadt' => strip_tags(trim($data['stadt'])),
+			'lat' => strip_tags(trim($data['lat'])),
+			'lon' => strip_tags(trim($data['lon'])),
+			'name' => strip_tags($data['name']),
+			'nachname' => strip_tags($data['nachname']),
+			'anschrift' => strip_tags($data['anschrift']),
+			'telefon' => strip_tags($data['telefon']),
+			'handy' => strip_tags($data['handy']),
+			'geschlecht' => $data['geschlecht'],
+			'geb_datum' => $data['geb_datum']
+		];
+
+		if (isset($data['position'])) {
+			$updateData['position'] = strip_tags($data['position']);
+		}
+
+		if (isset($data['email'])) {
+			$updateData['email'] = strip_tags($data['email']);
+		}
+
+		if (isset($data['orgateam'])) {
+			$updateData['orgateam'] = $data['orgateam'];
+		}
+
+		if (isset($data['rolle'])) {
+			$updateData['rolle'] = $data['rolle'];
+		}
+
+		return $this->db->update('fs_foodsaver', $updateData, [
+			'id' => $fsId
+		]);
+	}
+
+	public function downgradePermanently(int $fsId, StoreModel $storeModel): int
+	{
+		$this->signOutFromStores($fsId, $storeModel);
+
+		$this->db->delete('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['foodsaver_id' => $fsId]);
+		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
+
+		$fsUpdateData['rolle'] = Role::FOODSHARER;
+		$fsUpdateData['bezirk_id'] = 0;
+		$fsUpdateData['quiz_rolle'] = Role::FOODSHARER;
+		$fsUpdateData['verified'] = 0;
+
+		return $this->db->update('fs_foodsaver', $fsUpdateData, [
+			'id' => $fsId
+		]);
+	}
+
+	private function signOutFromStores(int $fsId, StoreModel $storeModel): void
+	{
+		$storeIds = $this->db->fetchAllValuesByCriteria('fs_betrieb_team', 'betrieb_id', [
+			'foodsaver_id' => $fsId
+		]);
+
+		foreach ($storeIds as $storeId) {
+			$storeModel->signout($storeId, $fsId);
+		}
+	}
+
+	public function getFoodsaverAddress(int $foodsaverId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			[
+				'plz',
+				'stadt',
+				'lat',
+				'lon',
+				'anschrift',
+			],
+			['id' => $foodsaverId]
+		);
+	}
+
+	public function getSubscriptions(int $fsId): array
+	{
+		return $this->db->fetchByCriteria(
+			'fs_foodsaver',
+			[
+				'infomail_message',
+				'newsletter'
+			],
 			['id' => $fsId]
 		);
+	}
+
+	/**
+	 * Returns the first name of the foodsaver.
+	 */
+	public function getFoodsaverName($foodsaverId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId]);
 	}
 }

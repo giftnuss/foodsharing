@@ -4,31 +4,32 @@ namespace Foodsharing\Modules\FAQAdmin;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Permissions\FAQPermissions;
 
 class FAQAdminControl extends Control
 {
 	private $faqGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $faqPermissions;
 
 	public function __construct(
-		Db $model,
 		FAQAdminView $view,
 		FAQGateway $faqGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		FAQPermissions $faqPermissions
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->faqGateway = $faqGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->faqPermissions = $faqPermissions;
 
 		parent::__construct();
 
-		if (!$this->session->may('orga')) {
+		if (!$this->faqPermissions->mayEditFAQ()) {
 			$this->routeHelper->goLogin();
 		}
 	}
@@ -79,6 +80,8 @@ class FAQAdminControl extends Control
 					$sort[$d['faq_kategorie_id']][] = $d;
 				}
 
+				$categoryData = $this->faqGateway->getBasics_faq_category();
+				$mappedData = array_combine(array_column($categoryData, 'id'), array_column($categoryData, 'name'));
 				foreach ($sort as $key => $data) {
 					$rows = array();
 					foreach ($data as $d) {
@@ -93,7 +96,7 @@ class FAQAdminControl extends Control
 						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
 					), $rows);
 
-					$this->pageHelper->addContent($this->v_utils->v_field($table, $this->model->getVal('name', 'faq_category', $key)));
+					$this->pageHelper->addContent($this->v_utils->v_field($table, $mappedData[$key]));
 				}
 			} else {
 				$this->flashMessageHelper->info($this->translationHelper->s('faq_empty'));
@@ -126,7 +129,7 @@ class FAQAdminControl extends Control
 
 		if ($this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
-			if ($this->model->add_faq($g_data)) {
+			if ($this->faqGateway->add_faq($g_data)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('faq_add_success'));
 				$this->routeHelper->goPage();
 			} else {

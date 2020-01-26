@@ -1,7 +1,138 @@
-# 2019-11-17 Hotfix
-- Prevent forum thread email sending to countries and federal states !1160 @jofranz
-- Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
+# 2020-01-25
+Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
+
+
+## Features
+- Adds a proper error messages if users specify their birthday in the wrong format !1114 @dthulke
+- Add email shortcut to regions and workgroup side menu !1118 @jofranz
+- Add email count to menu shortcut to make it easier for workgroup and region admins to respond to unanswered mails !1124 @jofranz
+- Changed slot icons for pending (transparent again) and comfirmed to font awesome !1116 @chriswalg
+- Enable pickup-list for foodsavers own profile in profile view which was only visible for ambassadors/"BOTs" before. !1122 @jofranz
+- Add amount of foodsavers to in-/active lists in region foodsaver menu !1117 @jofranz
+- Add "Termin"/"Date" and bot/amb "forum"/"board" as dashboard post type !1148 @jofranz
+- Add foodsaver id to store team search results when manually adding a foodsaver #660 !1150 @jofranz
+- Add foodsaver id to search results when starting a new chat #660 !1149 @jofranz
+- The number of active basket requests are shown and baskets request can be withdrawn and rejected by the basket provider !1121 #710 @dthulke
+- Add fs id to food share point admin management search results #660 !1152 @jofranz
+- Warn basket users without location data and inform them why it makes sense to provide those in order to use baskets on the website !1143 @jofranz
+- Sort the stores-list by the added-on date as default !1161 @treee111
+- Redirect from a wall of regions (e.g. "Deutschland", "Arbeitsgruppen Überregional") to the forum.  Walls only exist for workgroups #750 !1186 @treee111
+- Save mail quickreplies to sent folder #611 !1166 @alex.simm
+- Filter not cooperating stores ("does not want to cooperate" and "gives to (other) charity") out of dropdown menu list #323 !1144 @jofranz
+- Basket rest endpoint returns the list of requests to show them in the app !1169 @dthulke
+- Open video on start page in external tab to avoid csp issues #617 !1177 @dthulke
+- Improves usability of the topbar using screen readers !1179 @dthulke
+- Change "impressum" in newsletter footer to new fs postal address !1205 @jofranz
+- Show events on dashboard which started one/more days in the past and are ongoing !1215 @treee111
+- Allow to configure site to send CSP headers without a report-uri !1210 @nicksellen
+- Increase workgroup application limit numbers !1218 @jofranz
+- Show foodsharer id in profile for everyone !1232 @jofranz
+- Menu entry for newsletter email sending is only active if mayAdministrateNewsletterEmail() permission is true !1235 @jofranz
+- Admins of newsletter workgroup (331) now have access to the newsletter module additional to orga members !1235 !1256 @jofranz
+- Show a error message, if changing a mail address failed !1091 @chriswalg
+- Add info about limitations of nightly slot warnings !1275 @jofranz
+- Send an email to the amb and group workgroups (AGs) if the last admin/amb leaves a workgroup/region !1153 @jofranz
+- Updated foodsharing etikette for registration process !1295 @chris2up9
+- Refactored and changed time range for store fetch warning mails for store manager to today + tomorrow instead of 15:00 limit !1289 @jofranz
+
+## Bugfixes
+- fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
+- Correct title for map page !1276 @chris2up9
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
+- Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
+- Removed hidden profile pic in settings !1090 @chriswalg
+- Add previously uploaded picture to the edit form for food share points !1136 #727 @alex.simm
+- When answering a long e-mail, the send and cancel button disappeared. The buttons moved next to fileupload #404 !1127 @chriswalg
+- Automatically relogin after joining work group !1113 #125 @alex.simm
+- Disable possibility to show stores for foodsharers #132 !1146 @jofranz
+- Fixes SQL query in helper method to delete bells. This may has caused errors when approving slots #712 !1142 @dthulke
+- Increase search min length in store and fsp team management list #396 !1151 @jofranz
+- Do not initialise ReportList vue component if it is not shown !1159 @dthulke
+- Ensures quiz break message after three failures inbetween 30 days #736 !1162 @svenpascal
+- Prevent forum thread email sending to countries and federal states !1160 @jofranz
+- Prefetchtime is now correctly stored when creating a new store !1170 @dthulke
+- Change the close icon in pickup slot message and food basket request form to a better position  #731 !1172 @chriswalg
+- Fixed FoodSharePoint deletion problem #642 !1168 @alex.simm
+- Show correct message immediately after failing the 5th quiz try #729 !1176 !1313 @svenpascal @chriswalg
+- Narrow down permissions to not allow ambassadors calling newsletter sending xhr methods !1197 @jofranz
+- Fix database method which prevents newsletter sending #754 !1198 @jofranz
+- Improved SQL query which caused that the team of large work groups could not be updated anymore #726 !1199 @dthulke
+- Show events on dashboard which started one/more days in the past and are ongoing !1215 @treee111
+- Use font awesome icons for store status indicators to avoid that they disappear when the store name is too long #742 !1190 @dthulke
+- Avoid duplicate names in user autocomplete !1223 @dthulke
+- Fix error when logging out while not logged in !1240 #753 @alex.simm
+- Prevent exception for orga users if a deleted user profile is visited @jofranz
+- Added missing login check for local reports page. Previously there was an empty table with no data !1238 @jofranz
+- Added missing login and permission check for mailbox page, making sure only BIEBs can see the mailbox #771 and #769 !1260 @pfaufisch
+- Added missing login and permission check for mailbox page !1260 @pfaufisch
+- Remove "Aktionen"-column from list of user stores !1252 @koenvg
+- Fix wrong may group use. Admins of EUROPE_REPORT_TEAM (region/workgroup id: 432) now actually have reports permissions on a level with orga !1250 @jofranz
+- !1199 fix: Remove group members only from specific group instead of all groups and regions !1258 @jofranz
+- Show correct from/to information in mailboxes !1239 #603 @alex.simm
+- Redesign for chatbox and messages page !1265 @chriswalg
+- Center basket map on Germany if logged out !1249 #740 @alex.simm
+- Show correct from/to information in mailboxes !1264 !1239 #603 @alex.simm
+- Fix adding members to mailboxes by orga !1255 !1302 !1308 #677 @alex.simm
+- Fix missing translations for MenuBasketsEntry. !1271 #761 @ctwx_ok
+- disable delete account buttons for non-orga users !1279 @Caluera
+- repaired link to profile in the very first pinwall post #512 !1281 @Caluera
+- Disallow foodsharing email addresses to be used as password restore addresses !1268 #744 @alex.simm
+- Remove email addresses from the bounce list before sending a confirmation mail !1268 #756 @alex.simm
+- Move map control elements on small devices #695 !1286 @lea.mzw
+- Move bellupdatetrigger() to maintenance class only executing it nightly. Accidentally fixes the date distance to a unconfirmed slot which was reseted every 5 minutes before !1300 @jofranz
+- Made the list of recipients of a mail foldable to avoid unreadable mails !1280 #65 @alex.simm
+- Name change of regarding fairsharepoint contact person to "Ansprechpartner" !1305 @fs_k
+- Fixed broken tooltips !1304 @ctwx_ok
+- Fix error message when downgrading a foodsaver and do only downgrade if user role has decreased !1323 @pfaufisch @jofranz
+- Temporarily disable pickup slot markers for production release !1307 @jofranz
+
+## Refactoring
+- refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
+- Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
+- Reduced complexity of the profile module !1037 @peter.toennies
+- refactored blog from model to gateway !789 #9 @peter.toennies
+- refactored statsman from model to gateway !1111 #9 @peter.toennies
+- refactrored the food share point module !1108 !1105 @peter.toennies
+- Removed broken nightly bell deletion maintenance script !1180 @dthulke
+- Uniform foodsharing colors on the whole page #75 !1174 @chriswalg
+- statistic kilo code refactoring !999 @jofranz
+- statistic kilo calculation optimized in sql !999 @fs_k
+- Removed unused xhr_out method !1208 #132 @alex.simm
+- Introduce content id constants for content pages !1200 @jofranz
+- Replaced some hardcoded sql with prepared statements !1207 #757 @alex.simm
+- Removed some dead code !1213 @svenpascal
+- Remove food basket pinboard frontend from !969 entirely !1203 @jofranz
+- Refactored database access from controllers to gateways !1192 #9 @alex.simm
+- Removed unused clearAbholer() method, which would falsely remove all fetches from a user which need to stay for documentary reason !1216 @jofranz
+- Replaced REPLACE INTO queries with prepared statements !1124 #757 @alex.simm
+- Renamed "Verschwendungsfasten" to "foodsharing-Städte" !1222 @D0nPiano
+- Replace SettingsModel by SettingsGateway !1163 #9 @svenpascal
+- Moved mayHandleReports() to ReportPermissions class with deprecation in Session class !1241 @jofranz
+- Introduce very basic permissions for FAQ editing. Removes the topbar menu entry if false. For now this only replaces orga permissions in accessing the FAQ admin tool !1245 @jofranz
+- Move mayEditQuiz() from session to own permission class with deprecation in Session class. Added some example implementations. !1242 @jofranz
+- Introduce permissions for content administration. For now there are no additional permissions given. Removed the entry from the menu if permission is false !1243 @jofranz
+- Introduce mayAdministrateBlog() permission in BlogPermissions.php and use it for current permission checks. It rebuilds previous behaviour. Removes the topbar entry from the menu if permission is false !1246 @jofranz
+- Introduce mayManageMailboxes() permissions. Removed the entry from the menu if permission is false. !1244 @jofranz
+- Introduce store creation permissions and use it for at three different places where a store button is shown. Also use it at before showing store creating page !1237 @jofranz
+- Moved database access from RegionXhr, MailboxXhr, and ForumService to gateways !1228 #9 @alex.simm
+- Removed Xhr method for posting store wall posts (xhr_addPinPost) and made it part of the REST API (POST on /api/stores/{id}/posts}. !1226 #719 @janopae
+- Removed mayLegacy function from session !1248 @alex.simm
+- Introduce NewsletterEmailPermissions class for mayAdministrateNewsletterEmail() permission checks !1235 @jofranz
+- Removed SQL statements from Session, BasketXhr, and XhrMethods + fix !1261 !1247 #9 @alex.simm
+- Switched use of Session::id to Session::may !1257 @pfaufisch
+- Refactored FoodsaverModel to FoodsaverGateway !1178 !1266 !1299 #9 @svenpascal
+- Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
+- Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
+- Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
+
+## Dev/Test/CI stuff
+
+- add dependency scanning GitLab CI configuration !1183 @nicksellen
+- adds error infos to the exception of an unpreperable query !1195 @dthulke
+- Added docker toolbox download link for windows users in dev docs #733 !1147 @lebe1
+- Remove hotUpdateChunkFilename config option workaround !1202 @jofranz @nicksellen
+- Fix DebugBar !1212 @nicksellen
+- Add scheduled CI job to print outdated dependencies to slack !1221 @nicksellen
 
 # 2019-11-14 Hotfix
 - disabled the new report list on region level @peter.toennies @jofranz
@@ -13,8 +144,8 @@
 
 # 2019-10-06
 
-Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time. 
-A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps. 
+Long time of silence from the IT, you might think. And yes, the last release is four month ago. But we have been busy all the time.
+A lot is getting cleaner in the background and we are continuously improving the connection between our homepage and our two native apps.
 And we have even included some new features for you.
 
 ## Major changes
@@ -85,7 +216,6 @@ And we have even included some new features for you.
 - Moved "forum-title-buttons" into the second line #591 !949 @chriswalg
 - Fixed order of event invites on the dashboard !938 #608 @peter.toennies
 - Walls do now show 60 comments instead of 30 !940 #630 @peter.toennies
-- Show Warning and prevent save if sleeping timespan has no complete date given #632 !957
 - It is now possible for every foodsaver to see and join a pre existing event links of a district or working group. This foodsaver only needs to be part of this specific group where the event was created #273 !912 @jofranz
 - Fixed scroller maxHeight for fair-share-points and AMB foodsaver list !972 @jofranz
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
@@ -159,6 +289,7 @@ And we have even included some new features for you.
 - updated eslint to v6, eslint-config-standard to v14, eslint-plugin-node to v10, and eslint-plugin-html to v6 @peter.toennies
 - updated webpack loaders. sass to v8, eslint to v3, style to v1, css to v3, file to v4, null to v3, url to v2, and mini-css-extract-plugin to v0.8 @peter.toennies
 - update watch to version 1 @peter.toennies
+- add caching for volumes in dev mode !1075
 
 # 2019-08-30 Hotfix
 - Handle chat messages according to their stored encoding be ready for !887 @NerdyProjects
@@ -166,11 +297,9 @@ And we have even included some new features for you.
 # 2019-06-17 Hotfix
 - Have unique single additional pickups to comply with current master backend !934 @NerdyProjects
 
-    
 # 2019-06-09 Hotfix
 - InfluxDB Metrics via UDP !882 @alangecker
 - Allow receiving emails with an empty body for the internal mailing system @NerdyProjects
-- Updated deployment for new production server
 - Updated deployment for new production server @alangecker @NerdyProjects
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects

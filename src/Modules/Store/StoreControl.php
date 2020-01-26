@@ -7,6 +7,7 @@ use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\StorePermissions;
@@ -72,7 +73,7 @@ class StoreControl extends Control
 			$region = array('name' => 'kompletter Datenbank');
 		}
 		if ($this->identificationHelper->getAction('new')) {
-			if ($this->session->may('bieb')) {
+			if ($this->storePermissions->mayCreateStore()) {
 				$this->handle_add($this->session->id());
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
@@ -82,7 +83,8 @@ class StoreControl extends Control
 					$g_data['foodsaver'] = $this->model->getBetriebLeader($_GET['id']);
 				}
 
-				$this->pageHelper->addContent($this->view->betrieb_form($region, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
+				$chosenRegion = ($regionId > 0 && $this->regionGateway->getType($regionId) <= Type::REGION) ? $region : null;
+				$this->pageHelper->addContent($this->view->betrieb_form($chosenRegion, 'betrieb', $this->model->getBasics_lebensmittel(), $this->model->getBasics_kette(), $this->model->get_betrieb_kategorie(), $this->storeGateway->getStoreStateList(), $this->weightHelper->getWeightListEntries()));
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
 					array('name' => $this->translationHelper->s('back_to_overview'), 'href' => '/?page=fsbetrieb&bid=' . $regionId)
@@ -130,10 +132,12 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=betrieb');
 
-			if ($this->session->may('bieb')) {
-				$this->pageHelper->addContent($this->v_utils->v_menu(array(
-					array('href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen')
-				), 'Aktionen'), CNT_RIGHT);
+			if ($this->storePermissions->mayCreateStore()) {
+				$this->pageHelper->addContent($this->v_utils->v_menu(
+					[
+						['href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen']
+					],
+					'Aktionen'), CNT_RIGHT);
 			}
 
 			$stores = $this->model->listBetriebReq($regionId);
@@ -219,7 +223,7 @@ class StoreControl extends Control
 					));
 				}
 
-				$foodsaver = $this->foodsaverGateway->getFoodsaver($g_data['bezirk_id']);
+				$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($g_data['bezirk_id']);
 
 				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', array(
 					'href' => '/?page=fsbetrieb&id=' . (int)$id

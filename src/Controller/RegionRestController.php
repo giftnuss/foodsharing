@@ -59,7 +59,7 @@ class RegionRestController extends AbstractFOSRestController
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
-		$bots = $this->foodsaverGateway->getBotschafter($regionId);
+		$bots = $this->foodsaverGateway->getAmbassadors($regionId);
 		$foodsaver = $this->session->get('user');
 		$this->bellGateway->addBell(
 			$bots,

@@ -273,6 +273,7 @@ class RegionGateway extends BaseGateway
 				b.`name`,
 				b.`email`,
 				b.`email_name`,
+				b.`mailbox_id`,
 				b.`type`,
 				b.`stat_fetchweight`,
 				b.`stat_fetchcount`,
@@ -308,7 +309,7 @@ class RegionGateway extends BaseGateway
 			LIMIT 1
 		', ['id' => $regionId]);
 
-		$region['botschafter'] = $this->foodsaverGateway->listAmbassadorsByRegion($regionId);
+		$region['botschafter'] = $this->foodsaverGateway->getAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
 		return $region;
@@ -357,24 +358,14 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function linkBezirk($fsid, $regionId, $active = 1)
+	public function linkBezirk(int $foodsaverId, int $regionId, int $active = 1)
 	{
-		$this->db->execute('
-			REPLACE INTO `fs_foodsaver_has_bezirk`
-			(
-				`bezirk_id`,
-				`foodsaver_id`,
-				`added`,
-				`active`
-			)
-			VALUES
-			(
-				' . (int)$regionId . ',
-				' . (int)$fsid . ',
-				NOW(),
-				' . (int)$active . '
-			)
-		');
+		$this->db->insertOrUpdate('fs_foodsaver_has_bezirk', [
+			'bezirk_id' => $regionId,
+			'foodsaver_id' => $foodsaverId,
+			'added' => $this->db->now(),
+			'active' => $active
+		]);
 	}
 
 	public function update_bezirkNew($id, $data)

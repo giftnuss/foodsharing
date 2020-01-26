@@ -33,8 +33,8 @@ class ActivityModel extends Db
 		$out = [];
 
 		foreach ($updates as $u) {
-			$smTitle = '';
-			$title = 'Termin: ' . $u['name'];
+			$smTitle = 'Termin';
+			$title = $u['name'];
 
 			$out[] = [
 				'attr' => [
@@ -230,13 +230,13 @@ class ActivityModel extends Db
 			$out = [];
 			foreach ($updates as $u) {
 				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
+				$forumTypePostfix = $u['bot_theme'] === 1 ? 'BOT-Forum' : 'Forum';
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 				$out[] = [
 					'attr' => [
 						'href' => $url
 					],
-					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $ambPrefix . ' ' . $u['bezirk_name'] . '</small>',
+					'title' => '<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="' . $url . '">' . $u['name'] . '</a> <small>' . $u['bezirk_name'] . ' ' . $forumTypePostfix . '</small>',
 					'desc' => $this->textPrepare($u['post_body']),
 					'time' => $u['update_time'],
 					'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
@@ -255,12 +255,13 @@ class ActivityModel extends Db
 	{
 		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = [];
+			$smTitle = 'Betrieb';
 			foreach ($ret as $r) {
 				$out[] = [
 					'attr' => [
 						'href' => '/?page=fsbetrieb&id=' . $r['betrieb_id']
 					],
-					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a>',
+					'title' => '<a href="/profile/' . $r['foodsaver_id'] . '">' . $r['foodsaver_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/?page=fsbetrieb&id=' . $r['betrieb_id'] . '">' . $r['betrieb_name'] . '</a><small>' . $smTitle . '</small>',
 					'desc' => $this->textPrepare($r['text']),
 					'time' => $r['update_time'],
 					'icon' => $this->imageService->img($r['foodsaver_photo'], 50),

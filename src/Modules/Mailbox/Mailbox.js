@@ -34,7 +34,8 @@ expose({
   checkEmail,
   u_handleNewEmail,
   u_addTypeHead,
-  setAutocompleteAddresses
+  setAutocompleteAddresses,
+  mb_foldRecipients
 })
 
 function mb_finishFile (newname) {
@@ -287,4 +288,19 @@ function u_anHasChanged () {
   } else {
     return false
   }
+}
+
+function mb_foldRecipients (fullString, shortString) {
+  const button = $('#mail-fold-icon')
+  const label = $('#mail-to-list')
+
+  if (label.data('folded') === true) {
+    label.html(fullString)
+  } else {
+    label.html(shortString)
+  }
+
+  button.toggleClass('fa-sort-down')
+  button.toggleClass('fa-sort-up')
+  label.data('folded', !label.data('folded'))
 }

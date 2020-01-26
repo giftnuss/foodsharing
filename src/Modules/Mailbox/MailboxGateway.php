@@ -155,18 +155,8 @@ class MailboxGateway extends BaseGateway
 		return $this->db->update('fs_mailbox_message', ['read' => $read], ['id' => $mail_id]);
 	}
 
-	public function listMessages(int $mailbox_id, $folder = 'inbox')
+	public function listMessages(int $mailbox_id, int $folder): array
 	{
-		$farray = array(
-			'inbox' => 1,
-			'sent' => 2,
-			'trash' => 3,
-		);
-
-		if (!isset($farray[$folder])) {
-			return false;
-		}
-
 		return $this->db->fetchAll(
 			'
 			SELECT 	`id`,
@@ -184,7 +174,7 @@ class MailboxGateway extends BaseGateway
 			AND 	folder = :farray_folder				
 			ORDER BY `time` DESC
 		',
-			[':mailbox_id' => $mailbox_id, ':farray_folder' => (int)$farray[$folder]]
+			[':mailbox_id' => $mailbox_id, ':farray_folder' => $folder]
 		);
 	}
 
@@ -221,33 +211,38 @@ class MailboxGateway extends BaseGateway
 
 	public function getMailbox(int $mb_id)
 	{
-		try {
-			$email_name = $this->db->fetchValue(
-				'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
-				[':mb_id' => $mb_id]
-			);
-		} catch (Exception $e) {
-			$email_name = '';
-		}
 		if ($mb = $this->db->fetchByCriteria('fs_mailbox', ['name'], ['id' => $mb_id])) {
-			if ($email_name) {
-				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->db->fetchValueByCriteria(
-				'fs_bezirk',
-				'email_name',
-				['mailbox_id' => $mb_id]
-			)) {
-				$mb['email_name'] = $email_name;
-			} elseif ($email_name = $this->db->fetchValue(
-				'SELECT email_name FROM fs_mailbox_member WHERE mailbox_id = :mb_id AND email_name != "" LIMIT 1',
-				[':mb_id' => $mb_id]
-			)) {
-				$mb['email_name'] = $email_name;
-			} else {
-				$mb['email_name'] = '';
+			$mb['email_name'] = '';
+			try {
+				$mb['email_name'] = $this->db->fetchValue(
+					'SELECT CONCAT(name," ", nachname) FROM fs_foodsaver WHERE mailbox_id = :mb_id',
+					[':mb_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
 			}
 
-			return $mb;
+			try {
+				$mb['email_name'] = $this->db->fetchValueByCriteria(
+					'fs_bezirk',
+					'email_name',
+					['mailbox_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
+			}
+
+			try {
+				$mb['email_name'] = $this->db->fetchValue(
+					'SELECT email_name FROM fs_mailbox_member WHERE mailbox_id = :mb_id AND email_name != "" LIMIT 1',
+					[':mb_id' => $mb_id]
+				);
+
+				return $mb;
+			} catch (Exception $e) {
+			}
 		}
 
 		return false;
@@ -297,7 +292,7 @@ class MailboxGateway extends BaseGateway
 			$insert = array();
 
 			foreach ($foodsaver as $fs) {
-				$insert[] = '(' . $mbid . ',' . (int)$fs . ',' . strip_tags($g_data['email_name']) . ')';
+				$insert[] = '(' . $mbid . ',' . (int)$fs . ',\'' . strip_tags($g_data['email_name']) . '\')';
 			}
 
 			$this->db->execute('
@@ -525,5 +520,42 @@ class MailboxGateway extends BaseGateway
 		} catch (Exception $e) {
 			return 0;
 		}
+	}
+
+	/**
+	 * Returns the mailbox ID and attachment info for the message ID. The attachment info is a json encoded list that
+	 * contains 'filename', 'origname', and 'mime' for each attachment.
+	 *
+	 * @param int $messageId
+	 *
+	 * @return array
+	 */
+	public function getAttachmentFileInfo(int $messageId)
+	{
+		return $this->db->fetchByCriteria('fs_mailbox_message', ['mailbox_id', 'attach'], ['id' => $messageId]);
+	}
+
+	/**
+	 * Returns the folder of the mail with this message ID.
+	 *
+	 * @param int $messageId
+	 *
+	 * @return int
+	 */
+	public function getMailFolderId(int $messageId): int
+	{
+		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'folder', ['id' => $messageId]);
+	}
+
+	/**
+	 * Returns the HTML body of the mail with this message ID.
+	 *
+	 * @param int $messageId
+	 *
+	 * @return string
+	 */
+	public function getMessageHtmlBody(int $messageId): string
+	{
+		return $this->db->fetchValueByCriteria('fs_mailbox_message', 'body_html', ['id' => $messageId]);
 	}
 }

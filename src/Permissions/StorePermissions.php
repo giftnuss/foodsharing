@@ -90,6 +90,11 @@ class StorePermissions
 		return $this->mayReadStoreWall($storeId);
 	}
 
+	public function mayCreateStore()
+	{
+		return $this->session->may('bieb');
+	}
+
 	public function mayEditStore(int $storeId): bool
 	{
 		$fsId = $this->session->id();

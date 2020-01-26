@@ -32,9 +32,7 @@ $csp = $container->get(ContentSecurityPolicy::class);
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
-if (defined('CSP_REPORT_URI')) {
-	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
-}
+header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 
 require_once 'lib/inc.php';
 
@@ -55,12 +53,11 @@ $session = $container->get(Session::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
-if (DebugBar::isEnabled()) {
-	$pageHelper->addHead(DebugBar::renderHead());
-}
+/* @var $debug DebugBar */
+$debug = $container->get(DebugBar::class);
 
-if (DebugBar::isEnabled()) {
-	$pageHelper->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+if ($debug->isEnabled()) {
+	$pageHelper->addHead($debug->renderHead());
 }
 
 if ($session->may()) {
@@ -103,8 +100,18 @@ if (isset($obj)) {
 $page = $response->getContent();
 $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
+	if ($debug->isEnabled()) {
+		$response->setContent(str_replace(
+			'</body>',
+			$debug->renderContent() . '</body>',
+			$response->getContent()
+		));
+	}
 	$response->send();
 } else {
+	if ($debug->isEnabled()) {
+		$pageHelper->addContent($debug->renderContent(), CNT_BOTTOM);
+	}
 	/* @var $twig \Twig\Environment */
 	$twig = $container->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());

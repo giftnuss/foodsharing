@@ -124,19 +124,19 @@
 }
 
 .carpet-roll h3 {
-  color: #64ae24;
+  color: var(--fs-green);
   font-size: 2.5em;
   line-height: 1.75em;
   font-weight: normal;
   font-family: "Alfa Slab One", serif;
   letter-spacing: 0.4px;
-  border-bottom: 4px solid #64ae24;
+  border-bottom: 4px solid var(--fs-green);
   margin: 1rem 0 0 0;
   display: inline;
 }
 
 .carpet-roll .button {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   font-size: 150%;
   font-family: "Alfa Slab One", serif;
   font-weight: normal !important;
@@ -165,7 +165,7 @@
   margin: 0 auto;
   color: white;
   text-align: center;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   transition: transform 0.2s ease;
 }
 

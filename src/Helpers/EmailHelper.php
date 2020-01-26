@@ -16,7 +16,6 @@ final class EmailHelper
 	 * @var InfluxMetrics
 	 */
 	private $metrics;
-	private $emailTemplateAdminGateway;
 	private $sanitizerService;
 	private $twig;
 
@@ -68,7 +67,7 @@ final class EmailHelper
 			if ($emailName !== '') {   // if sender information is present
 				$emailName .= ' via '; // though this is optional...
 			}
-			$emailName .= DEFAULT_EMAIL_NAME;
+			$emailName .= strtolower(DEFAULT_EMAIL_NAME);
 			$mail->setFrom(DEFAULT_EMAIL, $emailName);
 		}
 
@@ -119,6 +118,14 @@ final class EmailHelper
 		}
 
 		return false;
+	}
+
+	public function isFoodsharingEmailAddress(string $email): bool
+	{
+		$mailParts = explode('@', $email);
+		$domain = end($mailParts);
+
+		return in_array($domain, MAILBOX_OWN_DOMAINS, true);
 	}
 
 	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)

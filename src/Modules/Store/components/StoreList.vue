@@ -37,10 +37,10 @@
           <div class="col">
             <button
               v-b-tooltip.hover
-              @click="clearFilter"
               type="button"
               class="btn btn-sm"
               title="Filter leeren"
+              @click="clearFilter"
             >
               <i class="fas fa-times" />
             </button>
@@ -52,6 +52,7 @@
           :current-page="currentPage"
           :per-page="perPage"
           :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
           :items="storesFiltered"
           small
           hover
@@ -82,8 +83,8 @@
             slot-scope="row"
           >
             <b-button
-              @click.stop="row.toggleDetails"
               size="sm"
+              @click.stop="row.toggleDetails"
             >
               {{ row.detailsShowing ? 'x' : 'Details' }}
             </b-button>
@@ -156,7 +157,8 @@ export default {
   },
   data () {
     return {
-      sortBy: 'name',
+      sortBy: 'added',
+      sortDesc: true,
       currentPage: 1,
       perPage: 20,
       filterText: '',
@@ -244,6 +246,7 @@ export default {
           else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added' && key !== 'zipcode') fields[key] = this.fields[key]
         }
       }
+
       return fields
     }
   },

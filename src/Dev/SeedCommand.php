@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Dev;
 
+use Carbon\Carbon;
+use Codeception\CustomCommandInterface;
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
 use Symfony\Component\Console\Command\Command;
-use Codeception\CustomCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Carbon\Carbon;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -140,9 +140,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$theme = $I->addForumTheme($bezirk1, $userbot['id']);
 		$I->addForumThemePost($theme['id'], $user2['id']);
 
-		$fairteiler = $I->createFairteiler($userbot['id'], $bezirk1);
-		$I->addFairteilerFollower($user2['id'], $fairteiler['id']);
-		$I->addFairteilerPost($userbot['id'], $fairteiler['id']);
+		$foodSharePoint = $I->createFoodSharePoint($userbot['id'], $bezirk1);
+		$I->addFoodSharePointFollower($user2['id'], $foodSharePoint['id']);
+		$I->addFoodSharePointPost($userbot['id'], $foodSharePoint['id']);
 
 		// create users and collect their ids in a list
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
@@ -195,17 +195,17 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln('Created foodbaskets');
 
-		// create fairteiler
+		// create food share point
 		foreach ($this->getRandomIDOfArray($this->foodsavers, 50) as $user) {
-			$fairteiler = $I->createFairteiler($user, $bezirk1);
+			$foodSharePoint = $I->createFoodSharePoint($user, $bezirk1);
 			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $follower) {
 				if ($user !== $follower) {
-					$I->addFairteilerFollower($follower, $fairteiler['id']);
+					$I->addFoodSharePointFollower($follower, $foodSharePoint['id']);
 				}
-				$I->addFairteilerPost($follower, $fairteiler['id']);
+				$I->addFoodSharePointPost($follower, $foodSharePoint['id']);
 			}
 		}
-		$this->output->writeln('Created fairteilers');
+		$this->output->writeln('Created food share points');
 
 		foreach (range(0, 20) as $_) {
 			$I->addBlogPost($userbot['id'], $bezirk1);
@@ -218,6 +218,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		foreach (range(0, 3) as $_) {
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
+		}
+
+		foreach (range(1, 3) as $quizRole) {
+			$I->createQuiz($quizRole, 3);
 		}
 	}
 }

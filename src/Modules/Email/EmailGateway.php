@@ -6,31 +6,19 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class EmailGateway extends BaseGateway
 {
-	public function setEmailStatus($mail_id, $foodsaver, $status)
+	public function setEmailStatus(int $mail_id, array $foodsaver, int $status)
 	{
-		$query = '';
-		if (is_array($foodsaver)) {
-			$query = array();
-			foreach ($foodsaver as $fs) {
-				$query[] = '`foodsaver_id` = ' . (int)$fs['id'];
-			}
-
-			$query = implode(' OR ', $query);
-		} else {
-			$query = '`foodsaver_id` = ' . (int)$foodsaver;
-		}
-
-		$this->db->execute('
-			UPDATE 	`fs_email_status`
-			SET 	`status` = ' . (int)$status . '
-			WHERE 	`email_id` = ' . (int)$mail_id . '
-			AND 	(' . $query . ')
-		');
+		$this->db->update('fs_email_status', ['status' => $status],
+			[
+				'email_id' => $mail_id,
+				'foodsaver_id' => array_map('intval', $foodsaver)
+			]
+		);
 	}
 
 	public function getMailsLeft($mail_id)
 	{
-		return $this->db->fetchValue('SELECT COUNT(`email_id`) FROM `fs_email_status` WHERE `email_id` = ' . (int)$mail_id . ' AND `status` = 0');
+		return $this->db->count('fs_email_status', ['email_id' => $mail_id, 'status' => 0]);
 	}
 
 	public function getMailNext($mail_id)
@@ -165,19 +153,5 @@ class EmailGateway extends BaseGateway
 			WHERE 	e.foodsaver_id = fs.id
 			AND 	e.email_id = :mail_id
 		', [':mail_id' => $mail_id]);
-	}
-
-	public function listNewsletterOnlyFoodsharer(): array
-	{
-		return $this->db->fetchAllByCriteria(
-			'fs_foodsaver',
-			['id', 'email'],
-			['newsletter' => 1, 'rolle' => 0, 'active' => 1, 'deleted_at' => null]
-		);
-	}
-
-	public function getEmailAddressOfFoodsaver(int $fsId)
-	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);
 	}
 }

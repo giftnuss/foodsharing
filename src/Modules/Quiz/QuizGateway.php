@@ -2,13 +2,10 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Carbon\Carbon;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
-use Foodsharing\Modules\Core\DBConstants\Quiz\QuizStatus;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\WallPost\WallPostGateway;
 
@@ -16,21 +13,18 @@ class QuizGateway extends BaseGateway
 {
 	private $bellGateway;
 	private $foodsaverGateway;
-	private $quizSessionGateway;
 	private $wallPostGateway;
 
 	public function __construct(
 		Database $db,
 		BellGateway $bellGateway,
 		FoodsaverGateway $foodsaverGateway,
-		QuizSessionGateway $quizSessionGateway,
 		WallPostGateway $wallPostGateway
 	) {
 		parent::__construct($db);
 
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->quizSessionGateway = $quizSessionGateway;
 		$this->wallPostGateway = $wallPostGateway;
 	}
 
@@ -73,7 +67,13 @@ class QuizGateway extends BaseGateway
 	{
 		return $this->db->fetchByCriteria(
 			'fs_quiz',
-			['id', 'name', 'desc', 'maxfp', 'questcount'],
+			[
+				'id',
+				'name',
+				'desc',
+				'maxfp',
+				'questcount'
+			],
 			['id' => $id]
 		);
 	}
@@ -83,58 +83,6 @@ class QuizGateway extends BaseGateway
 		$quiz = $this->getQuiz($quizId);
 
 		return $quiz ? $quiz['name'] : '';
-	}
-
-	/**
-	 *	Determines a user's current quiz status.
-	 *
-	 *	@param int $quizId Quiz level/role
-	 *	@param int $fsId Foodsaver ID
-	 *
-	 *	@return array indicates the status of type DBConstants\Quiz\QuizStatus ('status') and a possible waiting time in days ('wait')
-	 */
-	public function getQuizStatus(int $quizId, int $fsId): array
-	{
-		$quizSessionStatus = $this->quizSessionGateway->collectQuizStatus($quizId, $fsId);
-		$pauseEnd = Carbon::createFromTimestamp($quizSessionStatus['last_try'])->addDays(30);
-
-		$result = ['status' => QuizStatus::DISQUALIFIED, 'wait' => 0];
-
-		$now = Carbon::now();
-		if ($quizSessionStatus['times'] == 0) {
-			$result['status'] = QuizStatus::NEVER_TRIED;
-		} elseif ($quizSessionStatus['running'] > 0) {
-			$result['status'] = QuizStatus::RUNNING;
-		} elseif ($quizSessionStatus['passed'] > 0) {
-			$result['status'] = QuizStatus::PASSED;
-		} elseif ($quizSessionStatus['failed'] < 3) {
-			$result['status'] = QuizStatus::FAILED;
-		} elseif ($quizSessionStatus['failed'] == 3 && $now->isBefore($pauseEnd)) {
-			$result['status'] = QuizStatus::PAUSE;
-			$result['wait'] = $now->diffInDays($pauseEnd);
-		} elseif ($quizSessionStatus['failed'] == 3 && $now->greaterThanOrEqualTo($pauseEnd)) {
-			$result['status'] = QuizStatus::PAUSE_ELAPSED;
-		} elseif ($quizSessionStatus['failed'] == 4) {
-			$result['status'] = QuizStatus::PAUSE_ELAPSED;
-		}
-
-		return $result;
-	}
-
-	public function hasPassedQuiz(int $fsId, int $quizId): bool
-	{
-		$passedCount = $this->quizSessionGateway->countSessions($fsId, $quizId, SessionStatus::PASSED);
-
-		return $passedCount > 0;
-	}
-
-	public function setFsQuizRole(int $fsId, int $quizRole): int
-	{
-		return $this->db->update(
-			'fs_foodsaver',
-			['quiz_rolle' => $quizRole],
-			['id' => $fsId]
-		);
 	}
 
 	public function addQuestion(int $quizId, string $text, int $failurePoints, int $duration): int
@@ -289,7 +237,7 @@ class QuizGateway extends BaseGateway
 		if ($questions) {
 			foreach ($questions as $key => $q) {
 				$questions[$key]['answers'] = $this->getAnswers($q['id']);
-				$questions[$key]['comment_count'] = $this->getCommentCount($q['id']);
+				$questions[$key]['comment_count'] = $this->countComments($q['id']);
 			}
 
 			return $questions;
@@ -298,13 +246,12 @@ class QuizGateway extends BaseGateway
 		return [];
 	}
 
-	private function getCommentCount(int $questionId): int
+	private function countComments(int $questionId): int
 	{
-		return $this->db->fetchValue('
-			SELECT COUNT(question_id)
-			FROM fs_question_has_wallpost
-			WHERE question_id = :questionId
-		', [':questionId' => $questionId]);
+		return $this->db->count(
+			'fs_question_has_wallpost',
+			['question_id' => $questionId]
+		);
 	}
 
 	public function getRightQuestions(int $quizId): array
@@ -409,7 +356,7 @@ class QuizGateway extends BaseGateway
 	private function handleUserComment(int $questionId, int $commentId, string $comment): bool
 	{
 		if ($commentId > 0) {
-			if ($quizAMBs = $this->foodsaverGateway->getBotschafter(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
+			if ($quizAMBs = $this->foodsaverGateway->getAmbassadors(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
 				$this->bellGateway->addBell(
 					$quizAMBs,
 					'new_quiz_comment_title',

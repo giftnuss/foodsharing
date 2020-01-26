@@ -1,6 +1,6 @@
 <template>
   <nav-item-dropdown
-    tooltip="Benachrichtigungen"
+    :tooltip="$i18n('menu.tooltips.notifications')"
     no-caret
     right
     class="topbar-bells"

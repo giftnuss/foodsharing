@@ -36,27 +36,24 @@ class StatsModel extends Db
 		);
 	}
 
-	public function getTotallyFetchedByFoodsaver(int $fs_id)
+	public function getTotalKilosFetchedByFoodsaver(int $fs_id)
 	{
-		$out = 0;
-		if ($stores = $this->q('
-			SELECT COUNT(a.`betrieb_id`) AS anz, a.betrieb_id, b.abholmenge
-			FROM   `fs_abholer` a,
-			       `fs_betrieb` b
-			WHERE a.betrieb_id =b.id
-			AND   foodsaver_id = ' . $fs_id . '
-			AND   a.`date` < NOW()
-			GROUP BY a.`betrieb_id`
-	
-	
+		$savedWeight = 0;
+		if ($queryResult = $this->qOne('
+			SELECT 
+			       sum(fw.weight) AS saved 
+			FROM fs_abholer fa
+				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
+				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
+			WHERE
+			      fa.foodsaver_id = ' . $fs_id . '
+			  AND fa.date < now();
 		')
 		) {
-			foreach ($stores as $s) {
-				$out += $this->weightHelper->mapIdToKilos($s['abholmenge']) * $s['anz'];
-			}
+			$savedWeight = $queryResult;
 		}
 
-		return $out;
+		return $savedWeight;
 	}
 
 	public function getAllFoodsaverIds()
@@ -125,33 +122,7 @@ class StatsModel extends Db
 		return (int)$val + (int)$stat_fetchcount;
 	}
 
-	// method currently not used. @fs_k wants to keep it in source for now.
-	public function getBetriebTeam($storeId)
-	{
-		return $this->q('
-
-			SELECT 
-				t.stat_last_update,
-				t.`stat_fetchcount`,
-				t.`stat_first_fetch`,
-				t.`stat_last_fetch`,
-				UNIX_TIMESTAMP(t.`stat_first_fetch`) AS first_fetch_ts,
-				t.`stat_add_date`,
-				UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date_ts,
-				t.foodsaver_id,
-				t.verantwortlich,
-				t.active
-				
-			FROM 
-				fs_betrieb_team t
-
-			WHERE 
-				t.betrieb_id = ' . (int)$storeId . '
-				
-		');
-	}
-
-	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $fairteilercount)
+	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
 	{
 		return $this->update('
 
@@ -167,7 +138,7 @@ class StatsModel extends Db
 					`stat_korpcount`=' . (int)$korpcount . ',
 					`stat_botcount`=' . (int)$botcount . ',
 					`stat_fscount`=' . (int)$fscount . ',
-					`stat_fairteilercount`=' . (int)$fairteilercount . ' 
+					`stat_fairteilercount`=' . (int)$foodSharePointCount . ' 
 				
 				WHERE 
 					`id` = ' . (int)$regionId . '

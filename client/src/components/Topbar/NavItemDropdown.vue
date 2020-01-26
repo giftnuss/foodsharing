@@ -2,28 +2,27 @@
 <template>
   <li :class="dropdownClasses">
     <a
-      ref="toggle"
       :id="`dropdown_${_uid}`"
+      ref="toggle"
       :class="toggleClasses"
       :aria-expanded="visible ? 'true' : 'false'"
       :aria-label="tooltip"
+      href="#"
+      aria-haspopup="true"
       @click="buttonClick"
       @mouseover="() => hover = true"
       @mouseout="() => hover = false"
       @keydown="buttonClick"
-      href="#"
-      aria-haspopup="true"
     >
       <slot name="button-content" />
     </a>
     <b-tooltip
       ref="tooltip"
+      :title="tooltip"
       :target="`dropdown_${_uid}`"
       :show="hover && !visible"
       :triggers="[]"
-    >
-      {{ tooltip }}
-    </b-tooltip>
+    />
     <div
       ref="menu"
       :class="menuClasses"

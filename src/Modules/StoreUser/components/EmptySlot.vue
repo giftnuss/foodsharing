@@ -3,9 +3,9 @@
     <button
       v-if="allowJoin && !allowRemove"
       v-b-tooltip
-      @click="$emit('join')"
       :title="$i18n('pickup.take_empty_slot')"
       class="btn"
+      @click="$emit('join')"
     >
       <i class="fa fa-question" />
     </button>
@@ -13,11 +13,11 @@
     <button
       v-else-if="allowRemove && !allowJoin"
       v-b-tooltip
+      :title="$i18n('pickup.slot_remove')"
+      class="btn"
       @click="$emit('remove')"
       @mouseover="hover = true"
       @mouseout="hover = false"
-      :title="$i18n('pickup.slot_remove')"
-      class="btn"
     >
       <i :class="`fa ${hover ? 'fa-times' : 'fa-question'}`" />
     </button>

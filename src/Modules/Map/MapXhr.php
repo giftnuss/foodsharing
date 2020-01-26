@@ -2,15 +2,13 @@
 
 namespace Foodsharing\Modules\Map;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class MapXhr extends Control
 {
-	public function __construct(Db $model, MapView $view)
+	public function __construct(MapView $view)
 	{
 		$this->view = $view;
-		$this->model = $model;
 
 		parent::__construct();
 	}

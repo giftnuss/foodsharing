@@ -9,6 +9,9 @@ import './Basket.css'
 
 import { addMarker, clearCluster, commitCluster } from '@php/Lib/View/vMap'
 
+import { vueApply, vueRegister } from '@/vue'
+import RequestForm from './components/RequestForm'
+
 const mapsearch = {
   lat: null,
   lon: null,
@@ -79,9 +82,9 @@ if ($('#mapsearch').length > 0) {
   $('#map-latLng').on('change', function () {
     console.log()
 
-    ajax.req('basket', 'closeBaskets', {
+    ajax.req('basket', 'nearbyBaskets', {
       data: {
-        choords: JSON.parse($('#map-latLng').val())
+        coordinates: JSON.parse($('#map-latLng').val())
       },
       success: function (ret) {
         if (ret.baskets != undefined) {
@@ -91,3 +94,14 @@ if ($('#mapsearch').length > 0) {
     })
   })
 }
+
+$(document).ready(() => {
+  // Container only exists if the current user is not the basket offerer
+  var requestFormContainerId = 'vue-BasketRequestForm'
+  if (document.getElementById(requestFormContainerId)) {
+    vueRegister({
+      RequestForm
+    })
+    vueApply('#' + requestFormContainerId)
+  }
+})

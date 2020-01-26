@@ -207,7 +207,7 @@ abstract class Control
 		return false;
 	}
 
-	public function wallposts($table, $id)
+	public function wallposts($table, $id): string
 	{
 		$this->pageHelper->addJsFunc('
 			function u_delPost(id, module, wallId)
@@ -333,10 +333,7 @@ abstract class Control
 		');
 		$posthtml = '';
 
-		/* disable food basket comments during migration period (max. 3 weeks after release) until there are no pre existing baskets with comments left.
-		 * #todo @jo remove this check and food basket comment section entirely afterwards
-		 */
-		if ($this->session->may() && $table != 'basket') {
+		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
 				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
@@ -470,8 +467,8 @@ abstract class Control
 			if (!$this->mem->userIsActive($recip_id)) {
 				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
 					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recip_id);
-					$sender = $this->foodsaverGateway->getOne_foodsaver($sender_id);
+					$foodsaver = $this->foodsaverGateway->getFoodsaver($recip_id);
+					$sender = $this->foodsaverGateway->getFoodsaver($sender_id);
 
 					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
 						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),

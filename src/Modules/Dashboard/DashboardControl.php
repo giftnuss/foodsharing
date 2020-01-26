@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -11,7 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
-use Foodsharing\Modules\Quiz\QuizGateway;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -29,7 +28,7 @@ class DashboardControl extends Control
 	private $profileGateway;
 	private $sanitizerService;
 	private $imageService;
-	private $quizGateway;
+	private $quizSessionGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -39,12 +38,11 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		Db $model,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
-		QuizGateway $quizGateway
+		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -53,12 +51,11 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
-		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
-		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 
 		parent::__construct();
 
@@ -92,9 +89,9 @@ class DashboardControl extends Control
 
 		$fsId = $this->session->id();
 		if (
-			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
-			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
-			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
+			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 
@@ -160,8 +157,6 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
-		$this->pageHelper->addContent($this->view->becomeFoodsaver());
-
 		$this->pageHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$cnt = $this->contentGateway->get(33);
@@ -174,12 +169,14 @@ class DashboardControl extends Control
 			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 		), $cnt['body']);
 
-		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
+
+		$this->pageHelper->addContent($this->view->becomeFoodsaver());
 
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
-			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
@@ -189,7 +186,7 @@ class DashboardControl extends Control
 
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
+		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
@@ -242,7 +239,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-         
+
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
@@ -268,15 +265,15 @@ class DashboardControl extends Control
 		}
 
 		/*
-		 * check is there are Betrieb not ordered to an bezirk
+		 * check if there are stores not bound to a region
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$ids = array();
+			$storeIds = array();
 			foreach ($_SESSION['client']['verantwortlich'] as $b) {
-				$ids[] = (int)$b['betrieb_id'];
+				$storeIds[] = (int)$b['betrieb_id'];
 			}
-			if (!empty($ids)) {
-				if ($bids = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+			if (!empty($storeIds)) {
+				if ($this->dashboardGateway->countStoresWithoutDistrict($storeIds) > 0) {
 					$this->pageHelper->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}
@@ -352,7 +349,7 @@ class DashboardControl extends Control
 			}
 			#activity ul.linklist li span a
 			{
-				color:#46891b !important;
+				color:var(--fs-green) !important;
 			}
 			#activity span.n i.fa
 			{
@@ -369,7 +366,7 @@ class DashboardControl extends Control
 			#activity ul.linklist li span a:hover
 			{
 				text-decoration:underline !important;
-				color:#46891b !important;
+				color:var(--fs-green) !important;
 			}
 
 			#activity ul.linklist li

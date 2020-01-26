@@ -63,10 +63,10 @@ class StoreModel extends Db
 				a.betrieb_id = ' . (int)$betrieb_id . '
 	
 			AND
-				a.date >= ' . $this->dateVal($from) . '
+				a.date >= ' . $this->dateval($from) . '
 	
 			AND
-				a.date <= ' . $this->dateVal($to) . '
+				a.date <= ' . $this->dateval($to) . '
 	
 			ORDER BY
 				a.date
@@ -390,7 +390,8 @@ class StoreModel extends Db
 			`ueberzeugungsarbeit`,
 			`presse`,
 			`sticker`,
-      `abholmenge`
+			`abholmenge`,
+			`prefetchtime`
 			)
 			VALUES
 			(
@@ -419,7 +420,8 @@ class StoreModel extends Db
 			' . (int)$data['ueberzeugungsarbeit'] . ',
 			' . (int)$data['presse'] . ',
 			' . (int)$data['sticker'] . ',
-      ' . (int)$data['abholmenge'] . '
+			' . (int)$data['abholmenge'] . ',
+			' . (int)$data['prefetchtime'] . '
 			)');
 
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {

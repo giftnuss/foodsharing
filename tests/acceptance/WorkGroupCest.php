@@ -77,12 +77,7 @@ class WorkGroupCest
 		$I->amOnPage($I->groupListUrl());
 		$I->clickWithLeftButton(Locator::contains('.groups .field .head', $group['name']));
 		$I->click('Dieser Arbeitsgruppe beitreten');
-		/* We have a bug here: We need to relogin to join the Group. As I will not fix major bugs with this commit,
-		 * I leave this to a later bugfixer and just test the bugged behaviour :-)
-		 */
-		//$I->waitUrlEquals($I->forumUrl($group['id']));
-		$I->logout();
-		$I->login($this->{$example[0]}['email']);
+		$I->waitForText('Pinnwand');
 		$I->amOnPage($I->forumUrl($group['id']));
 		$I->see($group['name']);
 		$I->see('Noch keine Themen gepostet');

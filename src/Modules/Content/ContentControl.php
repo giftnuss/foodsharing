@@ -6,23 +6,28 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Parsedown;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
+use Foodsharing\Permissions\ContentPermissions;
 
 class ContentControl extends Control
 {
 	private $contentGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $contentPermissions;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		ContentPermissions $contentPermissions
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->contentPermissions = $contentPermissions;
 
 		parent::__construct();
 	}
@@ -30,7 +35,7 @@ class ContentControl extends Control
 	public function index(): void
 	{
 		if (!isset($_GET['sub'])) {
-			if (!$this->session->may('orga')) {
+			if (!$this->contentPermissions->mayEditContent()) {
 				$this->routeHelper->go('/');
 			}
 			$this->model;
@@ -107,7 +112,7 @@ class ContentControl extends Control
 
 	public function partner(): void
 	{
-		if ($cnt = $this->contentGateway->get(10)) {
+		if ($cnt = $this->contentGateway->get(ContentId::PARTNER_PAGE_10)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
@@ -117,7 +122,7 @@ class ContentControl extends Control
 
 	public function unterstuetzung(): void
 	{
-		if ($cnt = $this->contentGateway->get(42)) {
+		if ($cnt = $this->contentGateway->get(ContentId::SUPPORT_FOODSHARING_PAGE_42)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
@@ -235,7 +240,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fairteilerrettung(): void
+	public function foodSharePointRescue(): void
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -318,7 +323,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fasten(): void
+	public function fsstaedte(): void
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
 			$this->pageHelper->addBread($cnt['title']);

@@ -8,7 +8,6 @@ use Flourish\fImage;
 use Flourish\fSession;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
@@ -19,6 +18,7 @@ use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Services\StoreService;
 
 class Session
 {
@@ -29,7 +29,7 @@ class Session
 	private $regionGateway;
 	private $buddyGateway;
 	private $storeGateway;
-	private $db;
+	private $storeService;
 	private $initialized = false;
 	private $routeHelper;
 	private $translationHelper;
@@ -42,7 +42,7 @@ class Session
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
-		Db $db,
+		StoreService $storeService,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
@@ -53,7 +53,7 @@ class Session
 		$this->regionGateway = $regionGateway;
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
-		$this->db = $db;
+		$this->storeService = $storeService;
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
@@ -133,11 +133,13 @@ class Session
 
 	public function logout()
 	{
-		$this->mem->logout($this->id());
-		$this->set('user', false);
-		fAuthorization::destroyUserInfo();
-		$this->setAuthLevel('guest');
-		$this->destroy();
+		if ($this->initialized) {
+			$this->mem->logout($this->id());
+			$this->set('user', false);
+			fAuthorization::destroyUserInfo();
+			$this->setAuthLevel('guest');
+			$this->destroy();
+		}
 	}
 
 	public function user($index)
@@ -186,12 +188,6 @@ class Session
 		return false;
 	}
 
-	// this is the old versin from Func (which had the same name as the method above)
-	public function mayLegacy(): bool
-	{
-		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
-	}
-
 	public function getLocation()
 	{
 		if (!$this->initialized) {
@@ -199,8 +195,8 @@ class Session
 		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->id());
-			$this->set('g_location', $loc);
+			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
+			$this->set('g_location', ['lat' => $loc['lat'], 'lon' => $loc['lon']]);
 		}
 
 		return $loc;
@@ -358,7 +354,7 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public function mayGroup(string $group): bool
+	private function isInUserGroup(string $group): bool
 	{
 		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
@@ -367,9 +363,14 @@ class Session
 		return false;
 	}
 
+	public function isSiteAdmin()
+	{
+		return $this->isInUserGroup('admin');
+	}
+
 	public function isOrgaTeam()
 	{
-		return $this->mayGroup('orgateam');
+		return $this->isInUserGroup('orgateam');
 	}
 
 	public function isAmbassador(): bool
@@ -509,9 +510,15 @@ class Session
 			}
 		}
 		$_SESSION['client']['betriebe'] = false;
-		if ($r = $this->storeGateway->listStoresForFoodsaver($fs['id'])) {
+		if ($r = $this->storeGateway->listFilteredStoresForFoodsaver($fs['id'])) {
 			$_SESSION['client']['betriebe'] = array();
 			foreach ($r as $rr) {
+				// add info about the next free pickup slot to the store
+
+				//temporarily disable pickup slot markers for production release
+				//$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
+				$rr['pickupStatus'] = 0; // STATUS_GREEN (no color) = 0
+
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}
@@ -543,24 +550,32 @@ class Session
 		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see ReportPermissions::mayHandleReports()
+	 */
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see QuizPermissions::mayEditQuiz()
+	 */
 	public function mayEditQuiz()
 	{
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 	}
 
-	public function mayEditBlog()
+	public function isAdminForAWorkGroup()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->may('orga') || in_array($this->id(), unserialize($all_group_admins));
+			return in_array($this->id(), unserialize($all_group_admins));
 		}
 
-		return $this->may('orga');
+		return false;
 	}
 
 	public function isVerified()

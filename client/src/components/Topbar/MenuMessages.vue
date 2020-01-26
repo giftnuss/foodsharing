@@ -1,7 +1,7 @@
 <template>
   <nav-item-dropdown
     ref="dropdown"
-    tooltip="Nachrichten"
+    :tooltip="$i18n('menu.tooltips.messages')"
     no-caret
     right
     class="topbar-messages"
@@ -66,9 +66,9 @@ export default {
 </script>
 
 <style lang="scss">
-.topbar-messages {
+  .topbar-messages {
     .dropdown-menu {
-        padding: 0;
+      padding: 0;
     }
-}
+  }
 </style>

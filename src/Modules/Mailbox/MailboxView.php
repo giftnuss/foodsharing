@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\View;
 
 class MailboxView extends View
@@ -95,21 +96,75 @@ class MailboxView extends View
 		';
 	}
 
-	public function listMessages($messages)
+	/**
+	 * Converts an array with a mail sender/recipient from the database to a string.
+	 *
+	 * @param array $mailAddress
+	 *
+	 * @return string
+	 */
+	private function createMailAddressString(array $mailAddress): string
+	{
+		if (isset($mailAddress['personal'])) {
+			return $mailAddress['personal'];
+		} elseif (isset($mailAddress['host'])) {
+			return $mailAddress['mailbox'] . '@' . $mailAddress['host'];
+		} else {
+			return $mailAddress['mailbox'];
+		}
+	}
+
+	/**
+	 * Removes leading and trailing quotation marks and replaces escaped quotation marks.
+	 */
+	private function fixQuotation(string $json): string
+	{
+		$trimmed = trim($json, '"');
+
+		return str_replace('\"', '"', $trimmed);
+	}
+
+	public function listMessages(array $messages, int $folder, string $currentMailboxName)
 	{
 		$out = '';
 
 		foreach ($messages as $m) {
-			$von = json_decode($m['sender'], true);
+			// fix wrong quotation that can occur in some data sets
+			$m['sender'] = $this->fixQuotation($m['sender']);
+			$m['to'] = $this->fixQuotation($m['to']);
 
-			$von_str = $von['mailbox'];
-			if (isset($von['host'])) {
-				$von_str = $von['mailbox'] . '@' . $von['host'];
+			// create from/to text depending on the folder
+			$fromToAddresses = [];
+			switch ($folder) {
+				case MailboxFolder::FOLDER_INBOX:
+					$fromToAddresses = [json_decode($m['sender'], true)];
+					break;
+				case MailboxFolder::FOLDER_SENT:
+					$fromToAddresses = json_decode($m['to'], true);
+					break;
+				case MailboxFolder::FOLDER_TRASH:
+					$from = json_decode($m['sender'], true); // returns null or the input string if parsing fails
+					if (!is_null($from) && is_array($from)) {
+						if ($this->createMailAddressString($from) == $currentMailboxName) {
+							// mail was sent
+							$fromToAddresses = json_decode($m['to'], true);
+						} else {
+							// mail was received
+							$fromToAddresses = [$from];
+						}
+					}
+					break;
 			}
-			$to = json_decode($m['to']);
 
-			if (isset($von['personal'])) {
-				$von_str = $von['personal'];
+			// safety check: if json_decode fails it might return null or a string
+			if (!is_null($fromToAddresses) && is_array($fromToAddresses)) {
+				$mappedAddresses = array_map(function ($a) {
+					return $this->createMailAddressString($a);
+				}, array_filter($fromToAddresses));
+
+				$fromToText = implode(', ', $mappedAddresses);
+			} else {
+				$fromToText = '';
 			}
 
 			$attach_class = 'none';
@@ -127,7 +182,7 @@ class MailboxView extends View
 			$out .= '
 				<tr id="message-' . $m['id'] . '" class="message ' . $status . '">
 					<td class="subject"><span class="status ' . $status . '">&nbsp;</span> ' . $m['subject'] . '</td>
-					<td class="from"><a href="#" onclick="return false;" title="' . $von_str . '">' . $von_str . '</a></td>
+					<td class="from"><a href="#" onclick="return false;" title="' . $fromToText . '">' . $fromToText . '</a></td>
 
 					<td class="date">' . $this->timeHelper->niceDateShort($m['time_ts']) . '</td>
 					<td class="attachment"><span class="status a-' . $attach_class . '">&nbsp;</span></td>
@@ -173,11 +228,19 @@ class MailboxView extends View
 			$body = nl2br($mail['body']);
 		}
 
+		$fullToString = implode(', ', $an_str);
+		$foldButton = '';
+		$shortToString = $fullToString;
+		if (strlen($fullToString) > 100) {
+			$shortToString = substr($fullToString, 0, 100) . ' ...';
+			$foldButton = '<a onclick="mb_foldRecipients(\'' . $fullToString . '\', \'' . $shortToString . '\');return false;" href="#"><i class="fas fa-sort-down fa-lg" id="mail-fold-icon"></i></a>';
+		}
+
 		return '
 			<div class="popbox">
 				<div class="message-top">
 					<div class="buttonbar">
-						<a href="#" onclick="mb_moveto(3);return false;" class="button">' . $this->translationHelper->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->translationHelper->s('answer') . '</a>
+						<a href="#" onclick="mb_moveto(' . MailboxFolder::FOLDER_TRASH . ');return false;" class="button">' . $this->translationHelper->s('move_to_trash') . '</a> <a href="#" onclick="mb_answer();return false;" class="button">' . $this->translationHelper->s('answer') . '</a>
 					</div>
 					<table class="header">
 						<tr>
@@ -185,8 +248,8 @@ class MailboxView extends View
 							<td class="data"><a onclick="mb_mailto(\'' . $von['mailbox'] . '@' . $von['host'] . '\');return false;" href="#" title="' . $von['mailbox'] . '@' . $von['host'] . '">' . $von_str . '</a></td>
 						</tr>
 						<tr>
-							<td class="label">' . $this->translationHelper->s('an') . '</td>
-							<td class="data">' . implode(', ', $an_str) . '</td>
+							<td class="label">' . $this->translationHelper->s('an') . ' ' . $foldButton . '</td>
+							<td class="data" id="mail-to-list" data-folded="true">' . $shortToString . '</td>
 						</tr>
 						<tr>
 							<td class="label">' . $this->translationHelper->s('date') . '</td>
@@ -300,9 +363,6 @@ class MailboxView extends View
 		<div id="message-editor">
 			<div class="popbox">
 				<div class="message-top">
-					<div class="buttonbar">
-						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->translationHelper->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->translationHelper->s('abort') . '</a>
-					</div>
 					<table class="header">
 						<tr>
 							<td class="label">' . $this->translationHelper->s('von') . '</td>
@@ -322,6 +382,9 @@ class MailboxView extends View
 					<tr>
 						<td class="et-left"><textarea class="edit-body" id="edit-body"></textarea></td>
 						<td class="et-right">
+						<div class="buttonbar">
+						<a href="#" onclick="mb_send_message();return false;" class="button">' . $this->translationHelper->s('send') . '</a> <a onclick="$(\'#message-editor\').dialog(\'close\');return false;" href="#" class="button">' . $this->translationHelper->s('abort') . '</a>
+					</div>
 								<div class="wrapper">
 									<div class="et-filebox">
 										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">

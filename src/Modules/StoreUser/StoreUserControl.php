@@ -7,11 +7,11 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\Store\StoreStatus;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -74,7 +74,6 @@ class StoreUserControl extends Control
 				'id' => (int)$store['id'],
 				'name' => $store['name'],
 				'bezirk_id' => (int)$store['bezirk_id'],
-				'team_js' => $store['team_js'],
 				'verantwortlich' => $store['verantwortlich'],
 				'prefetchtime' => $store['prefetchtime']
 			];
@@ -133,7 +132,7 @@ class StoreUserControl extends Control
 						'team',
 
 						[
-							$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetTagFsAll($this->session->listRegionIDs())]
+							$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
 							),
 							$verantwortlich_select
 						],
@@ -221,7 +220,6 @@ class StoreUserControl extends Control
 										<div align="right">
 											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->translationHelper->s('send') . '" />
 										</div>
-										<input type="hidden" name="bid" value="' . (int)$store['id'] . '" />
 									</form>
 								</div>
 
@@ -259,7 +257,7 @@ class StoreUserControl extends Control
 					</div>
 ');
 
-				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED)) {
+				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
 					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
 				}
 
@@ -270,14 +268,13 @@ class StoreUserControl extends Control
 
 					$this->pageHelper->hiddenDialog('abholen',
 						array($this->view->u_form_abhol_table($pickup_dates),
-							$this->v_utils->v_form_hidden('bid', 0),
-							'<input type="hidden" name="team" value="' . $store['team_js'] . '" />'
+							$this->v_utils->v_form_hidden('bid', 0)
 						),
 						$this->translationHelper->s('add_fetchtime'), array('reload' => true, 'width' => $width));
 				}
 
 				if (!$store['jumper']) {
-					if ($store['betrieb_status_id'] === StoreStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === StoreStatus::COOPERATION_ESTABLISHED) {
+					if ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED) {
 					} else {
 						$bt = '';
 						$storeStateName = '';
@@ -307,15 +304,20 @@ class StoreUserControl extends Control
 			}
 		} else {
 			$this->pageHelper->addBread('Deine Betriebe');
-			$this->pageHelper->addContent($this->v_utils->v_menu(array(
-				array('href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new'))
-			), 'Aktionen'), CNT_RIGHT);
+
+			if ($this->storePermissions->mayCreateStore()) {
+				$this->pageHelper->addContent($this->v_utils->v_menu(
+					[
+						['href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new')]
+					],
+					'Aktionen'), CNT_RIGHT);
+			}
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
 			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
-			$this->pageHelper->addContent($this->view->u_betriebList($stores['verantwortlich'], $this->translationHelper->s('you_responsible'), true));
-			$this->pageHelper->addContent($this->view->u_betriebList($stores['team'], $this->translationHelper->s('you_fetcher'), false));
-			$this->pageHelper->addContent($this->view->u_betriebList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name'])), false));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['verantwortlich'], $this->translationHelper->s('you_responsible')));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['team'], $this->translationHelper->s('you_fetcher')));
+			$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', array('name' => $region['name']))));
 		}
 	}
 

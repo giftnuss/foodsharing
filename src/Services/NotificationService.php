@@ -5,35 +5,47 @@ namespace Foodsharing\Services;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
-use Foodsharing\Modules\FairTeiler\FairTeilerGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Lib\Session;
 
 final class NotificationService
 {
 	private $bellGateway;
-	private $fairteilerGateway;
+	private $foodSharePointGateway;
 	private $sanitizerService;
 	private $emailHelper;
 	private $translationHelper;
+	private $regionGateway;
+	private $foodsaverGateway;
+	private $session;
 
 	public function __construct(
 		BellGateway $bellGateway,
-		FairTeilerGateway $fairTeilerGateway,
+		FoodSharePointGateway $foodSharePoint,
 		SanitizerService $sanitizerService,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		RegionGateway $regionGateway,
+		Session $session,
+		FoodsaverGateway $foodsaverGateway
 	) {
 		$this->bellGateway = $bellGateway;
-		$this->fairteilerGateway = $fairTeilerGateway;
+		$this->foodSharePointGateway = $foodSharePoint;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->regionGateway = $regionGateway;
+		$this->session = $session;
+		$this->foodsaverGateway = $foodsaverGateway;
 	}
 
-	public function newFairteilerPost(int $fairteilerId)
+	public function newFoodSharePointPost(int $foodSharePointId)
 	{
-		if ($ft = $this->fairteilerGateway->getFairteiler($fairteilerId)) {
-			$post = $this->fairteilerGateway->getLastFairSharePointPost($fairteilerId);
-			if ($followers = $this->fairteilerGateway->getEmailFollower($fairteilerId)) {
+		if ($foodSharePoint = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId)) {
+			$post = $this->foodSharePointGateway->getLastFoodSharePointPost($foodSharePointId);
+			if ($followers = $this->foodSharePointGateway->getEmailFollower($foodSharePointId)) {
 				$body = nl2br($post['body']);
 
 				if (!empty($post['attach'])) {
@@ -49,28 +61,51 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->emailHelper->tplMail('fairSharePoint/new_message', $f['email'], array(
-						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId,
+					$this->emailHelper->tplMail('foodSharePoint/new_message', $f['email'], array(
+						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$foodSharePointId,
 						'name' => $f['name'],
 						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'fairteiler' => $ft['name'],
+						'fairteiler' => $foodSharePoint['name'],
 						'post' => $body
 					));
 				}
 			}
 
-			if ($followers = $this->fairteilerGateway->getInfoFollowerIds($fairteilerId)) {
+			if ($followers = $this->foodSharePointGateway->getInfoFollowerIds($foodSharePointId)) {
 				$followersWithoutPostAuthor = array_diff($followers, [$post['fs_id']]);
 				$this->bellGateway->addBell(
 					$followersWithoutPostAuthor,
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
-					array('href' => '/?page=fairteiler&sub=ft&id=' . (int)$fairteilerId),
-					array('name' => $ft['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
-					'fairteiler-' . (int)$fairteilerId
+					array('href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId),
+					array('name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
+					'fairteiler-' . $foodSharePointId
 				);
 			}
+		}
+	}
+
+	public function sendEmailIfGroupHasNoAdmin(int $groupId): void
+	{
+		if (count($this->foodsaverGateway->getAmbassadors($groupId)) < 1) {
+			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
+			$groupName = $this->regionGateway->getRegionName($groupId);
+			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
+
+			$idStructureList = '';
+			foreach ($idStructure as $key => $id) {
+				$idStructureList .= str_repeat('---', $key + 1) . '> <b>' . $id . '</b>  -  ' . $this->regionGateway->getRegionName($id) . '<br>';
+			}
+
+			$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructureList' => $idStructureList, 'groupName' => $groupName]);
+
+			$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
+				'gruppenname' => $groupName,
+				'message' => $messageText,
+				'username' => $this->session->user('name'),
+				'userprofile' => BASE_URL . '/profile/' . $this->session->id()
+			], $this->session->user('email'));
 		}
 	}
 }

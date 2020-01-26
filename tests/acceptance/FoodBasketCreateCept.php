@@ -53,6 +53,7 @@ $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->click('Essenskorb bearbeiten');
 $I->waitForText('Essenskorb bearbeiten');
+$I->waitForElement('#description');
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
 $I->waitForText('Geändert am');
@@ -80,7 +81,7 @@ $nick->does(function (AcceptanceTester $I) use ($id, $picker) {
 });
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
-$I->waitForText('1 Anfrage');
+$I->waitForText('Anfragen 1');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');
@@ -88,7 +89,7 @@ $I->waitForText('Hi friend, can I have');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->moveMouseOver(['css' => '.topbar-baskets .requests > a'], 5, 5);
-$I->click('a[data-original-title="Essensanfrage abschließen"]');
+$I->click('a[data-original-title="Essenskorbanfrage abschließen"]');
 $I->waitForText('Essenskorbanfrage von ' . $picker['name'] . ' abschließen');
 $I->see('Hat alles gut geklappt?');
 $I->seeOptionIsSelected('#fetchstate-wrapper input[name=fetchstate]', 2);

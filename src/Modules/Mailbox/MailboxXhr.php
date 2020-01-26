@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Services\SanitizerService;
 
@@ -18,14 +18,12 @@ class MailboxXhr extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-		Db $model,
 		MailboxView $view,
 		SanitizerService $sanitizerService,
 		TimeHelper $timeHelper,
 		MailboxGateway $mailboxGateway,
 		MailboxPermissions $mailboxPermissions
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
@@ -37,7 +35,7 @@ class MailboxXhr extends Control
 
 	public function attach()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		// is filesize (10MB) and filetype allowed?
@@ -82,7 +80,7 @@ class MailboxXhr extends Control
 
 	public function loadmails()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$last_refresh = (int)$this->mem->get('mailbox_refresh');
@@ -97,30 +95,57 @@ class MailboxXhr extends Control
 			$this->mem->set('mailbox_refresh', $cur_time);
 		}
 
+		// convert folder string to int
+		$farray = array(
+			'inbox' => MailboxFolder::FOLDER_INBOX,
+			'sent' => MailboxFolder::FOLDER_SENT,
+			'trash' => MailboxFolder::FOLDER_TRASH,
+		);
+
+		if (!isset($farray[$_GET['folder']])) {
+			return array(
+				'status' => 1,
+				'html' => $this->view->noMessage(),
+				'append' => '#messagelist tbody'
+			);
+		}
+		$folder = $farray[$_GET['folder']];
+
 		$mb_id = (int)$_GET['mb'];
 		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
 			$this->mailboxGateway->mailboxActivity($mb_id);
-			if ($messages = $this->mailboxGateway->listMessages($mb_id, $_GET['folder'])) {
-				$nc_js = '';
-				if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
-					if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
-						foreach ($newcount as $nc) {
-							$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
-						}
-					}
-				}
-				$vontext = 'Von';
-				if ($_GET['folder'] == 'sent') {
-					$vontext = 'An';
-				}
-
+			$messages = $this->mailboxGateway->listMessages($mb_id, $folder);
+			if (!$messages) {
 				return array(
 					'status' => 1,
-					'html' => $this->view->listMessages($messages),
-					'append' => '#messagelist tbody',
-					'script' => '
-						$("#messagelist .from a:first").text("' . $vontext . '");
+					'html' => $this->view->noMessage(),
+					'append' => '#messagelist tbody'
+				);
+			}
+
+			$nc_js = '';
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->mailboxPermissions->mayHaveMailbox())) {
+				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
+					foreach ($newcount as $nc) {
+						$nc_js .= '
+								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
+					}
+				}
+			}
+			$fromToTitles = [
+				MailboxFolder::FOLDER_INBOX => 'Von',
+				MailboxFolder::FOLDER_SENT => 'An',
+				MailboxFolder::FOLDER_TRASH => 'Von/An'
+			];
+			$mailbox = $this->mailboxGateway->getMailbox($mb_id);
+			$currentMailboxName = isset($mailbox['email_name']) ? $mailbox['email_name'] : $mailbox['name'];
+
+			return array(
+				'status' => 1,
+				'html' => $this->view->listMessages($messages, $folder, $currentMailboxName),
+				'append' => '#messagelist tbody',
+				'script' => '
+						$("#messagelist .from a:first").text("' . $fromToTitles[$folder] . '");
 						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
@@ -135,25 +160,18 @@ class MailboxXhr extends Control
 						$("#messagelist tbody td").disableSelection();
 						' . $nc_js . '
 					'
-				);
-			}
-
-			return array(
-				'status' => 1,
-				'html' => $this->view->noMessage(),
-				'append' => '#messagelist tbody'
 			);
 		}
 	}
 
 	public function move()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$folder = $this->model->getVal('folder', 'mailbox_message', $_GET['mid']);
+		$folder = $this->mailboxGateway->getMailFolderId($_GET['mid']);
 
-		if ($folder == 3) {
+		if ($folder == MailboxFolder::FOLDER_TRASH) {
 			$this->mailboxGateway->deleteMessage($_GET['mid']);
 		} else {
 			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
@@ -167,10 +185,11 @@ class MailboxXhr extends Control
 
 	public function quickreply()
 	{
-		if (!$this->session->may('bieb') || !isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
+		if (!isset($_GET['mid']) || !$this->mailboxPermissions->mayMessage($_GET['mid'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['mid']))) {
+		$mailboxId = $this->mailboxGateway->getMailboxId($_GET['mid']);
+		if ($this->mailboxPermissions->mayMailbox($mailboxId)) {
 			$message = $this->mailboxGateway->getMessage($_GET['mid']);
 			$sender = @json_decode($message['sender'], true);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
@@ -188,9 +207,33 @@ class MailboxXhr extends Control
 				$mail->setSubject($subject);
 				$html = nl2br($body);
 				$mail->setHTMLBody($html);
-				$plainBody = $this->sanitizerService->htmlToPlain($html);
 				$mail->setBody($body);
 				$mail->send();
+
+				// save message to sent folder
+				$this->mailboxGateway->saveMessage(
+					$mailboxId,
+					MailboxFolder::FOLDER_SENT,
+					json_encode([
+						'host' => PLATFORM_MAILBOX_HOST,
+						'mailbox' => $message['mailbox'],
+						'personal' => $this->session->user('name')
+					]),
+					json_encode([[
+						'personal' => $sender['personal'],
+						'mailbox' => $sender['mailbox'],
+						'host' => $sender['host']
+					]]),
+					$subject,
+					$body,
+					$html,
+					date('Y-m-d H:i:s'),
+					'',
+					1 // mark read
+				);
+
+				$this->mailboxGateway->setRead($message['id'], 1);
+				$this->mailboxGateway->setAnswered($message['id']);
 
 				echo json_encode(array(
 					'status' => 1,
@@ -209,7 +252,7 @@ class MailboxXhr extends Control
 
 	public function send_message()
 	{
-		if (!$this->session->may('bieb')) {
+		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		/*
@@ -291,7 +334,7 @@ class MailboxXhr extends Control
 
 				if ($this->mailboxGateway->saveMessage(
 					$_POST['mb'],
-					2,
+					MailboxFolder::FOLDER_SENT,
 					json_encode(array(
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $mailbox['name'],
@@ -325,10 +368,10 @@ class MailboxXhr extends Control
 
 	public function fmail()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$html = $this->model->getVal('body_html', 'mailbox_message', $_GET['id']);
+		$html = $this->mailboxGateway->getMessageHtmlBody($_GET['id']);
 
 		if (strpos(strtolower($html), '<body') === false) {
 			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';
@@ -345,7 +388,7 @@ class MailboxXhr extends Control
 
 	public function loadMail()
 	{
-		if (!$this->session->may('bieb') || !$this->mailboxPermissions->mayMessage($_GET['id'])) {
+		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->mailboxPermissions->mayMailbox($this->mailboxGateway->getMailboxId($_GET['id']))) {

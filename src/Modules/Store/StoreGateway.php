@@ -10,6 +10,7 @@ use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreGateway extends BaseGateway implements BellUpdaterInterface
@@ -292,7 +293,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		$out['verantwortlich'] = false;
 		$foodsaver = array();
-		$out['team_js'] = array();
 		$out['team'] = array();
 		$out['jumper'] = false;
 
@@ -307,7 +307,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		if (!empty($out['foodsaver'])) {
 			$out['team'] = array();
 			foreach ($out['foodsaver'] as $v) {
-				$out['team_js'][] = $v['id'];
 				$foodsaver[$v['id']] = $v['name'];
 				$out['team'][] = array('id' => $v['id'], 'value' => $v['name']);
 				if ($v['verantwortlich'] == 1) {
@@ -320,7 +319,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		} else {
 			$out['foodsaver'] = array();
 		}
-		$out['team_js'] = implode(',', $out['team_js']);
 
 		return $out;
 	}
@@ -574,14 +572,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function clearAbholer($storeId): int
-	{
-		$result = $this->db->delete('fs_abholer', ['betrieb_id' => $storeId]);
-		$this->updateBellNotificationForBiebs($storeId);
-
-		return $result;
-	}
-
 	public function confirmFetcher($fsid, $storeId, $date): int
 	{
 		$result = $this->db->update(
@@ -606,10 +596,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						fs.photo,
 						a.date,
 						a.confirmed
-	
+
 				FROM 	`fs_abholer` a,
 						`fs_foodsaver` fs
-	
+
 				WHERE 	a.foodsaver_id = fs.id
 				AND 	a.betrieb_id = ?
 				AND  	a.date IN(' . $placeholders . ')
@@ -707,7 +697,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getTeamleader($storeId): array
 	{
 		return $this->db->fetch(
-		'SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name  
+		'SELECT 	fs.`id`,CONCAT(fs.name," ",nachname) AS name
 				FROM fs_betrieb_team t, fs_foodsaver fs
 				WHERE t.foodsaver_id = fs.id
 				AND `betrieb_id` = :id
@@ -728,7 +718,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':regionId' => $regionId]);
 	}
 
-	public function listStoresForFoodsaver($fsId)
+	public function listFilteredStoresForFoodsaver($fsId)
 	{
 		return $this->db->fetchAll('
 			SELECT 	b.`id`,
@@ -738,10 +728,15 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					`fs_betrieb` b
 
 			WHERE 	bt.betrieb_id = b.id
-			AND 	bt.`foodsaver_id` = :id
+			AND 	bt.`foodsaver_id` = :fsId
 			AND 	bt.active = 1
+			AND 	b.betrieb_status_id NOT IN (:doesNotWantToWorkWithUs, :givesToOtherCharity)
 			ORDER BY b.name',
-			[':id' => $fsId]
+			[
+				':fsId' => $fsId,
+				':doesNotWantToWorkWithUs' => CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US,
+				':givesToOtherCharity' => CooperationStatus::GIVES_TO_OTHER_CHARITY
+			]
 		);
 	}
 
@@ -865,7 +860,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	private function getNextUnconfirmedFetchTime(int $storeId): \DateTime
 	{
 		$date = $this->db->fetchValue(
-			'SELECT MIN(`date`) 
+			'SELECT MIN(`date`)
 					   FROM `fs_abholer`
 					   WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
 			[':storeId' => $storeId]
@@ -876,12 +871,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	private function getUnconfirmedFetchesCount(int $storeId)
 	{
-		return $this->db->fetchValue(
-			'SELECT COUNT(`betrieb_id`)
-            FROM `fs_abholer`                                                   
-            WHERE `betrieb_id` = :storeId AND `confirmed` = 0 AND `date` > NOW()',
-			[':storeId' => $storeId]
-		);
+		return $this->db->count('fs_abholer', ['betrieb_id' => $storeId, 'confirmed' => 0, 'date >' => $this->db->now()]);
 	}
 
 	/*
@@ -902,6 +892,28 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':id' => $id]);
 	}
 
+	/**
+	 * Returns the store comment with the specified ID.
+	 *
+	 * @param int $commentId
+	 *
+	 * @return array
+	 */
+	public function getStoreComment(int $commentId): array
+	{
+		return $this->db->fetchByCriteria('fs_betrieb_notiz',
+			['id', 'foodsaver_id', 'betrieb_id', 'text', 'zeit'],
+			['id' => $commentId]
+		);
+	}
+
+	/**
+	 * Returns all comments for a given store.
+	 *
+	 * @param $storeId
+	 *
+	 * @return array
+	 */
 	private function getBetriebNotiz($storeId): array
 	{
 		return $this->db->fetchAll('
@@ -942,11 +954,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$storeId = substr($bell['identifier'], strlen('store-fetch-unconfirmed-'));
 			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
 			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
+			$nextUnconfirmedFetchTime = $this->getNextUnconfirmedFetchTime($storeId);
 
 			$newMessageData = [
 				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
-				'time' => $this->getNextUnconfirmedFetchTime($storeId),
-				'expiration' => $this->getNextUnconfirmedFetchTime($storeId)
+				'time' => $nextUnconfirmedFetchTime,
+				'expiration' => $nextUnconfirmedFetchTime
 			];
 
 			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
@@ -1069,5 +1082,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				`name`
 				FROM `fs_betrieb_status`
 				ORDER BY `name`');
+	}
+
+	public function setStoreTeamStatus(int $storeId, int $teamStatus)
+	{
+		$this->db->update('fs_betrieb', ['team_status' => $teamStatus], ['id' => $storeId]);
 	}
 }
