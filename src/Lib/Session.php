@@ -514,10 +514,7 @@ class Session
 			$_SESSION['client']['betriebe'] = array();
 			foreach ($r as $rr) {
 				// add info about the next free pickup slot to the store
-
-				//temporarily disable pickup slot markers for production release
-				//$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
-				$rr['pickupStatus'] = 0; // STATUS_GREEN (no color) = 0
+				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
 
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}

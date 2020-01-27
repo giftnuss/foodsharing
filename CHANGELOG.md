@@ -3,6 +3,7 @@
 ## Major changes
 
 ## Features
+- Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 
 ## Bugfixes
 
