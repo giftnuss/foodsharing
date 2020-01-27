@@ -56,7 +56,7 @@ class ProfileXhr extends Control
 						) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
-				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
+				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $this->session->id());
 
 				$this->view->setData($this->foodsaver);
 			} else {
