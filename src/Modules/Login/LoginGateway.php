@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Services\LoginService;
 use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
@@ -14,16 +15,19 @@ class LoginGateway extends BaseGateway
 	private LegalGateway $legalGateway;
 	private EmailHelper $emailHelper;
 	private TranslatorInterface $translator;
+	private $loginService;
 
 	public function __construct(
 		Database $db,
 		LegalGateway $legalGateway,
 		EmailHelper $emailHelper,
-		TranslatorInterface $translator
+		TranslatorInterface $translator,
+		LoginService $loginService
 	) {
 		$this->legalGateway = $legalGateway;
 		$this->emailHelper = $emailHelper;
 		$this->translator = $translator;
+		$this->loginService = $loginService;
 
 		parent::__construct($db);
 	}
@@ -165,7 +169,15 @@ class LoginGateway extends BaseGateway
 			return;
 		}
 
-		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($data['token']);
+		// Check existing token
+		if ($this->loginService->validateTokenLimit($data['token'])) {
+			$token = $this->loginService->generateMailActivationToken();
+			$this->db->update('fs_foodsaver', ['token' => $token], ['id' => $fsId]);
+		} else {
+			return;
+		}
+
+		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
 		$this->emailHelper->tplMail('user/join', $data['email'], [
 			'name' => $data['name'],
