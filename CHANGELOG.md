@@ -8,6 +8,7 @@
 ## Bugfixes
 
 ## Refactoring
+- Improve mayEditStore() to fail faster !1311 @jofranz
 
 ## Dev/Test/CI stuff
 

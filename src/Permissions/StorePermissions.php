@@ -102,6 +102,10 @@ class StorePermissions
 			return false;
 		}
 
+		if (!$this->session->may('bieb')) {
+			return false;
+		}
+
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
