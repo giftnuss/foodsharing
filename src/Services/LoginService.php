@@ -7,14 +7,20 @@ class LoginService
 	private const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
 
 	/**
-	 * @param int $count
+	 * @param string $oldToken
 	 *
 	 * @return string
 	 */
-	public function generateMailActivationToken(int $count = 1): string
+	public function generateMailActivationToken(string $oldToken): string
 	{
-		$token = bin2hex(random_bytes(12));
+		$tokenData = $this->extractTokenData($oldToken);
 		$date = date('Ymd');
+
+		if ($tokenData['date'] === $date) {
+			$count = $tokenData['count'] + 1;
+		}
+
+		$token = bin2hex(random_bytes(12));
 
 		return base64_encode($token . '+' . $date . '-' .  $count);
 	}
