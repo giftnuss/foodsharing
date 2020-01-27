@@ -25,6 +25,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\NotificationService;
@@ -32,7 +33,6 @@ use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Foodsharing\Permissions\RegionPermissions;
 
 class XhrMethods
 {
