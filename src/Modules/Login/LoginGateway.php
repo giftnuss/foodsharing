@@ -170,8 +170,9 @@ class LoginGateway extends BaseGateway
 		}
 
 		// Check existing token
-		if ($this->loginService->validateTokenLimit($data['token'])) {
-			$token = $this->loginService->generateMailActivationToken($data['token']);
+		$tokenData = $this->loginService->validateTokenLimit($data['token']);
+		if ($tokenData['isValid']) {
+			$token = $this->loginService->generateMailActivationToken($tokenData['count']);
 			$this->db->update('fs_foodsaver', ['token' => $token], ['id' => $fsId]);
 		} else {
 			return;

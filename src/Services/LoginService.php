@@ -7,39 +7,48 @@ class LoginService
 	private const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
 
 	/**
-	 * @param string $oldToken
+	 * @param int $count
 	 *
 	 * @return string
 	 */
-	public function generateMailActivationToken(string $oldToken): string
+	public function generateMailActivationToken(int $count = 1): string
 	{
-		$tokenData = $this->extractTokenData($oldToken);
-		$date = date('Ymd');
-
-		if ($tokenData['date'] === $date) {
-			$count = $tokenData['count'] + 1;
-		}
-
 		$token = bin2hex(random_bytes(12));
+		$data = [
+			't' => $token,
+			'd' => date('Ymd'),
+			'c' => $count,
+		];
 
-		return base64_encode($token . '+' . $date . '-' .  $count);
+		return base64_encode(json_encode($data));
 	}
 
 	/**
 	 * @param string $token
 	 * @param int $limit
 	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function validateTokenLimit($token, $limit = self::ACTIVATION_MAIL_LIMIT_PER_DAY): bool
+	public function validateTokenLimit($token, $limit = self::ACTIVATION_MAIL_LIMIT_PER_DAY): array
 	{
 		$tokenData = $this->extractTokenData($token);
 
 		if ($tokenData['count'] > $limit && $tokenData['date'] === date('Ymd')) {
-			return false;
+			$isValid = false;
+		} else {
+			$isValid = true;
 		}
 
-		return true;
+		if ($tokenData['date'] === date('Ymd')) {
+			$tokenData['count'] = $tokenData['count'] + 1;
+		} else {
+			$tokenData['count'] = 1;
+		}
+
+		return [
+			'isValid' => $isValid,
+			'count' => $tokenData['count'],
+		];
 	}
 
 	/**
@@ -49,23 +58,19 @@ class LoginService
 	 */
 	private function extractTokenData(string $token): array
 	{
-		$string = base64_decode($token);
-		preg_match("/\+(\d*)-/", $string, $matches);
-		$date = $matches[1];
-
 		// Old style tokens should return valid data
-		if ($matches[1] === null) {
+		if (strlen($token) <= 24) {
 			return [
-				"date" => date("Ymd"),
-				"count" => 1,
+				'date' => date('Ymd'),
+				'count' => 0,
 			];
 		}
 
-		$count = substr($string, strpos($string, "-") + 1);
+		$data = json_decode(base64_decode($token), true);
 
 		return [
-			"date" => $date,
-			"count" => $count,
+			'date' => $data['d'],
+			'count' => $data['c'],
 		];
 	}
 }
