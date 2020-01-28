@@ -48,7 +48,7 @@ class MaintenanceModel extends Db
 
 			$fetcher_query = '
 				SELECT
-					DISTINCT a.betrieb_id
+					DISTINCT a.betrieb_id AS id
 				FROM
 					fs_abholer a
 				WHERE 
