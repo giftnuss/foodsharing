@@ -4,7 +4,7 @@ namespace Foodsharing\Services;
 
 class LoginService
 {
-	private const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
+	public const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
 
 	/**
 	 * @param int $count
