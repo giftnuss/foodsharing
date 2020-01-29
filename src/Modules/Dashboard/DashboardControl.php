@@ -151,9 +151,13 @@ class DashboardControl extends Control
 	public function activate()
 	{
 		$fsId = $this->session->id();
-		$this->loginGateway->newEmailActivation($fsId);
 
-		$this->flashMessageHelper->info($this->translationHelper->s('activation_mail_sent'));
+		if ($this->loginGateway->newEmailActivation($fsId)) {
+			$this->flashMessageHelper->info($this->translationHelper->s('activation_mail_sent'));
+		} else {
+			$this->flashMessageHelper->error($this->translationHelper->s('activation_mail_failure'));
+		}
+
 		$this->routeHelper->goPage('dashboard');
 	}
 

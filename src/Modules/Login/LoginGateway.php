@@ -156,7 +156,7 @@ class LoginGateway extends BaseGateway
 		);
 	}
 
-	public function newEmailActivation($fsId): void
+	public function newEmailActivation($fsId): bool
 	{
 		$data = $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -166,7 +166,7 @@ class LoginGateway extends BaseGateway
 
 		// Don't send a mail if mail adress is already confirmed
 		if ($data['active'] === 1) {
-			return;
+			return false;
 		}
 
 		// Check existing token
@@ -175,7 +175,7 @@ class LoginGateway extends BaseGateway
 			$token = $this->loginService->generateMailActivationToken($tokenData['count']);
 			$this->db->update('fs_foodsaver', ['token' => $token], ['id' => $fsId]);
 		} else {
-			return;
+			return false;
 		}
 
 		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
@@ -185,6 +185,8 @@ class LoginGateway extends BaseGateway
 			'link' => $activationUrl,
 			'anrede' => $this->translationHelper->s('anrede_' . $data['geschlecht'])
 		]);
+
+		return true;
 	}
 
 	public function addPassRequest(string $email, bool $mail = true)
