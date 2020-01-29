@@ -342,6 +342,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
 - TagEdit color correction when hovering #867 !1514 @ChrisOelmueller
 - Fixed outgoing mails not displaying line breaks !1317 @pfaufisch
+- Check if mail addresses are verified, allow sending out new verification mails #564 !1334 @pfaufisch
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae
