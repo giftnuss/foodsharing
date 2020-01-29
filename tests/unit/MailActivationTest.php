@@ -20,28 +20,16 @@ class MailActivationTest extends \Codeception\Test\Unit
      */
     private $service;
 
-	/**
-	 * @var array
-	 */
-	private $foodsaver;
-
-	/**
-	 * @var array
-	 */
-	private $inactiveFoodsaver;
-
 	protected function _before()
 	{
         $this->gateway = $this->tester->get(LoginGateway::class);
         $this->service = $this->tester->get(LoginService::class);
-        $this->foodsaver = $this->tester->createFoodsaver(['active' => 1]);
-        $this->inactiveFoodsaver = $this->tester->createFoodsaver(['active' => 0, 'token' => 'faketoken', 'email' => 'test@example.com']);
     }
     
     public function testGenerateActivationToken()
     {
         $token = $this->service->generateMailActivationToken(1);
-        $data = base64_decode($token);
+        $data = json_decode(base64_decode($token), true);
         $this->assertArrayHasKey('t', $data);
         $this->assertArrayHasKey('c', $data);
         $this->assertArrayHasKey('d', $data);
@@ -55,6 +43,6 @@ class MailActivationTest extends \Codeception\Test\Unit
         $token = $this->service->generateMailActivationToken($count);
         $validation = $this->service->validateTokenLimit($token);
         $this->assertTrue($validation['isValid'] === false);
-        $this->assertTrue($validation['count'] === $count);
+        $this->assertTrue($validation['count'] === $count + 1);
     }
 }
