@@ -371,7 +371,7 @@ class MailboxXhr extends Control
 		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$html = $this->mailboxGateway->getMessageHtmlBody($_GET['id']);
+		$html = nl2br($this->mailboxGateway->getMessageHtmlBody($_GET['id']));
 
 		if (strpos(strtolower($html), '<body') === false) {
 			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';

@@ -7,6 +7,7 @@
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
+- Fixed outgoing mails not displaying line breaks !1317 @pfaufisch
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
