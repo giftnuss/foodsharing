@@ -100,8 +100,8 @@
     flex-wrap: wrap;
   }
   .campaignimg {
-    padding-top: 60px;
-    height: 60vh;
+    padding-top: 132px;
+    height: 30vh;
   }
   .campaigntext {
     padding-top: 0px;
@@ -109,6 +109,12 @@
   }
   .campaigntext, .campaignimg {
     width: 100%;
+  }
+  .campaigntext h2 {
+    font-size: 1.7em;
+  }
+  .campaigntext h3 {
+    font-size: 1.2em;
   }
 }
 

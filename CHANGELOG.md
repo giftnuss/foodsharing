@@ -8,6 +8,13 @@
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
 - Fixed outgoing mails not displaying line breaks !1317 @pfaufisch
+- Improved the banner on welcome page for mobile devices !1329 @chriswalg
+
+## Refactoring
+- Improve mayEditStore() to fail faster !1311 @jofranz
+
+## Bugfixes
+- Improved the banner on welcome page for mobile devices !1329 @chriswalg
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
