@@ -172,6 +172,9 @@ store:
   tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
   tooltip_orange: Offene Abholungen in den nächsten drei Tagen
   tooltip_red: Offene Abholungen heute oder morgen
+  allStoresOfRegion: Alle Betriebe aus dem Bezirk
+  addNewStoresButton: Neuen Betrieb eintragen
+  noStores: Es sind noch keine Betriebe eingetragen
 
 pickup:
   dates: Abholtermine

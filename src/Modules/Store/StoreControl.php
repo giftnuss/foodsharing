@@ -132,14 +132,6 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=betrieb');
 
-			if ($this->storePermissions->mayCreateStore()) {
-				$this->pageHelper->addContent($this->v_utils->v_menu(
-					[
-						['href' => '/?page=betrieb&a=new&bid=' . (int)$regionId, 'name' => 'Neuen Betrieb eintragen']
-					],
-					'Aktionen'), CNT_RIGHT);
-			}
-
 			$stores = $this->model->listBetriebReq($regionId);
 
 			$storesMapped = array_map(function ($store) {
@@ -159,6 +151,8 @@ class StoreControl extends Control
 
 			$this->pageHelper->addContent($this->view->vueComponent('vue-storelist', 'store-list', [
 				'regionName' => $region['name'],
+				'regionId' => $regionId,
+				'showCreateStore' => $this->storePermissions->mayCreateStore(),
 				'stores' => $storesMapped
 			]));
 		}

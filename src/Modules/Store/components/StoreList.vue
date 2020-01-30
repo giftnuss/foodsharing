@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }}
+        {{ $i18n('store.allStoresOfRegion') }} {{ regionName }}
         <span>
           {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
         </span>
@@ -44,6 +44,18 @@
             >
               <i class="fas fa-times" />
             </button>
+          </div>
+          <div
+            v-bind:regionId="regionId"
+            v-if="showCreateStore"
+            class="col"
+          >
+            <a
+              :href="$url('storeAdd', regionId)"
+              class="btn btn-sm btn-secondary btn-block"
+            >
+              {{ $i18n('store.addNewStoresButton') }}
+            </a>
           </div>
         </div>
 
@@ -123,7 +135,7 @@
         v-else
         class="card-body"
       >
-        Es sind noch keine Betriebe eingetragen
+        {{ $i18n('store.noStores') }}
       </div>
     </div>
   </div>
@@ -153,6 +165,14 @@ export default {
     stores: {
       type: Array,
       default: () => []
+    },
+    regionId: {
+      type: Number,
+      default: 0
+    },
+    showCreateStore: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
