@@ -38,7 +38,6 @@
     "popper.js": "^1.16.0",
     "raven-js": "^3.27.2",
     "socket.io-client": "^2.3.0",
-    "timeago": "^1.6.7",
     "tinysort": "^3.2.5",
     "twemoji": "^12.1.4",
     "typeahead-address-photon": "^1.0.0",

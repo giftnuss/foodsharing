@@ -6,6 +6,7 @@
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 
 ## Bugfixes
+- Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
