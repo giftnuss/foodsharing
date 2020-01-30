@@ -22,6 +22,8 @@
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 @jofranz @Caluera
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
+- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
+- Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
 
 ## Bugfixes
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
