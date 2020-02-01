@@ -14,12 +14,6 @@
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 
-## Bugfixes
-- Improved the banner on welcome page for mobile devices !1329 @chriswalg
-
-## Refactoring
-- Improve mayEditStore() to fail faster !1311 @jofranz
-
 ## Dev/Test/CI stuff
 
 # 2020-01-26
