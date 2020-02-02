@@ -17,12 +17,6 @@
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
 - Remove moment.js dependency. !1303 #678 @ctwx_ok
 - Moved the button for new stores to vue store list !1282 !1339 @chriswalg
-
-## Bugfixes
-- Improved the banner on welcome page for mobile devices !1329 @chriswalg
-
-## Refactoring
-- Improve mayEditStore() to fail faster !1311 @jofranz
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
 
 ## Dev/Test/CI stuff
