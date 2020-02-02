@@ -18,4 +18,12 @@ class MaintenanceGateway extends BaseGateway
 	{
 		return $this->db->delete('fs_abholer', ['confirmed' => 0, 'date <' => $this->db->now()]);
 	}
+
+	public function wakeupSleepingUsers()
+	{
+		return $this->db->update(
+			'fs_foodsaver',
+			['sleep_status' => 0],
+			['sleep_status' => 1, 'sleep_until >' => 0, 'sleep_until <' => $this->db->now()]);
+	}
 }

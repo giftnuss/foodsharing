@@ -324,17 +324,8 @@ class MaintenanceControl extends ConsoleControl
 
 	private function wakeupSleepingUsers()
 	{
-		$this->model->update('
-			UPDATE
-				fs_foodsaver
-			SET
-				sleep_status = 0
-			WHERE
-				sleep_status = 1
-			AND
-				sleep_until > 0
-			AND
-				sleep_until < CURDATE()
-		');
+		self::info('wake up sleeping users...');
+		$count = $this->maintenanceGateway->wakeupSleepingUsers();
+		self::success($count . ' users woken up');
 	}
 }
