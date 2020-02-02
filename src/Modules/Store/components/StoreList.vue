@@ -46,8 +46,8 @@
             </button>
           </div>
           <div
+            v-bind:regionId="regionId"
             v-if="showCreateStore"
-            :regionId="regionId"
             class="col"
           >
             <a
