@@ -133,9 +133,21 @@
       </div>
       <div
         v-else
-        class="card-body"
+        class="card-body d-flex justify-content-center"
       >
         {{ $i18n('store.noStores') }}
+        <div
+          v-if="showCreateStore"
+          :regionId="regionId"
+          class="col"
+        >
+          <a
+            :href="$url('storeAdd', regionId)"
+            class="btn btn-sm btn-secondary btn-block"
+          >
+            {{ $i18n('store.addNewStoresButton') }}
+          </a>
+        </div>
       </div>
     </div>
   </div>
