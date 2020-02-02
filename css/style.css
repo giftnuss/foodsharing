@@ -1631,12 +1631,6 @@ footer .linklist li a:hover {
   background-color: #fff
 }
 
-.step2 .vmap {
-  width: 300px;
-  height: 150px;
-  background-color: #fff
-}
-
 @media (max-width: 1025px) {
 
   .post div.xv_left ul {

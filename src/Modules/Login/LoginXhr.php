@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Login;
 use Exception;
 use Flourish\fImage;
 use Flourish\fUpload;
-use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -123,7 +122,6 @@ class LoginXhr extends Control
 	private function joinValidate($data)
 	{
 		/*
-		 [iam] => org
 		[name] => Peter
 		[email] => peter@pan.de
 		[pw] => 12345
@@ -138,18 +136,6 @@ class LoginXhr extends Control
 		*/
 
 		$check = true;
-
-		$data['type'] = 0;
-
-		if ($data['iam'] == 'org') {
-			$data['type'] = 1;
-		}
-
-		if (isset($data['avatar']) && $data['avatar'] != '') {
-			$data['avatar'] = $this->resizeAvatar($data['avatar']);
-		} else {
-			$data['avatar'] = '';
-		}
 
 		$data['name'] = strip_tags($data['name']);
 		$data['name'] = trim($data['name']);
@@ -178,6 +164,7 @@ class LoginXhr extends Control
 		if ($data['gender'] > 2 || $data['gender'] < 0) {
 			$data['gender'] = 0;
 		}
+
 		$birthdate = \DateTime::createFromFormat('Y-m-d', $data['birthdate']);
 		if (!$birthdate) {
 			return $this->translationHelper->s('error_birthdate_format');
@@ -189,16 +176,6 @@ class LoginXhr extends Control
 		}
 		$data['birthdate'] = $birthdate->format('Y-m-d');
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
-		$data['lat'] = (float)$data['lat'] ?? null;
-		$data['lon'] = (float)$data['lon'] ?? null;
-		$data['str'] = strip_tags($data['str'] ?? null);
-		$data['plz'] = preg_replace('[^0-9]', '', $data['plz'] ?? null) . '';
-		$data['city'] = strip_tags($data['city'] ?? null);
-		$data['city'] = trim($data['city']);
-		$data['country'] = strip_tags($data['country'] ?? null);
-		$data['country'] = strtolower($data['country']);
-		$data['country'] = trim($data['country']);
-		$data['nr'] = htmlspecialchars($data['nr']) ?? null;
 
 		$data['newsletter'] = (int)$data['newsletter'];
 		if (!in_array($data['newsletter'], array(0, 1), true)) {
@@ -206,48 +183,6 @@ class LoginXhr extends Control
 		}
 
 		return $data;
-	}
-
-	/**
-	 * Fancy ajax registration formular.
-	 */
-	public function join()
-	{
-		if (!$this->session->may()) {
-			$dia = new XhrDialog();
-
-			$dia->setTitle($this->translationHelper->s('join'));
-
-			$email = '';
-			$pass = '';
-			if (isset($_GET['p'], $_GET['e'])) {
-				if ($this->emailHelper->validEmail($_GET['e'])) {
-					$email = strip_tags($_GET['e']);
-				}
-				$pass = strip_tags($_GET['p']);
-			}
-
-			$datenschutz = $this->contentGateway->get(28);
-			$rechtsvereinbarung = $this->contentGateway->get(29);
-
-			$rechtsvereinbarung['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $rechtsvereinbarung['body']));
-			$datenschutz['body'] = strip_tags(str_replace(array('<br>', '<br />', '<p>', '</p>'), "\n", $datenschutz['body']));
-
-			$dia->addContent($this->view->join($email, $pass, $datenschutz, $rechtsvereinbarung));
-			$dia->addOpt('height', 420);
-			$dia->addOpt('width', 700);
-
-			$dia->setResizeable(false);
-
-			$dia->addJsBefore('
-
-				var date = new Date();
-				$("<link>").attr("rel","stylesheet").attr("type","text/css").attr("href","/css/join.css?" + date.getTime()).appendTo("head");
-				join.init();
-			');
-
-			return $dia->xhrout();
-		}
 	}
 
 	private function resizeAvatar($img)

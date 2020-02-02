@@ -4,6 +4,7 @@
 
 ## Features
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
+- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch

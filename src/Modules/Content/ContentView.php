@@ -82,8 +82,7 @@ class ContentView extends View
 			<h5><span>5</span> Mach Vorschläge</h5>
 			<p>Wir wollen uns weiterentwickeln, immer besser werden. Dazu brauchen wir Euch mit vielen guten Ideen und Tipps. Die schickt Ihr an <a href="mailto:info@foodsharing.de">info@foodsharing.de</a></p>
 			</div>', 'foodsharing Etikette', array('class' => 'ui-padding')) . '
-			<p class="buttons"><br><a href="#" style="font-size:180%;" onclick="ajreq(\'join\',{app:\'login\'});return false;" class="button">Jetzt registrieren!</a><br></p>
-			' . '
+			<p class="buttons"><br><a href="?page=foodsaver&a=register" style="font-size:180%;" class="button">Jetzt registrieren!</a><br></p>
 		</div>
 		';
 	}

@@ -87,7 +87,6 @@ class LoginGateway extends BaseGateway
 	public function insertNewUser(array $data, string $token): int
 	{
 		/*
-				 [iam] => org
 				[name] => Peter
 				[email] => peter@pan.de
 				[pw] => 12345
@@ -105,24 +104,18 @@ class LoginGateway extends BaseGateway
 			'fs_foodsaver',
 			[
 				'rolle' => 0,
-				'type' => (int)$data['type'],
 				'active' => 0,
-				'plz' => strip_tags($data['plz']),
 				'email' => strip_tags($data['email']),
 				'password' => strip_tags($this->password_hash($data['pw'])),
 				'name' => strip_tags($data['name']),
 				'nachname' => strip_tags($data['surname']),
-				'anschrift' => strip_tags($data['str'] . ' ' . trim($data['nr'])),
 				'geb_datum' => strip_tags($data['birthdate']),
 				'handy' => strip_tags($data['mobile_phone']),
 				'newsletter' => (int)$data['newsletter'],
 				'geschlecht' => (int)$data['gender'],
 				'anmeldedatum' => $this->db->now(),
-				'stadt' => strip_tags($data['city']),
-				'lat' => strip_tags($data['lat']),
-				'lon' => strip_tags($data['lon']),
 				'token' => strip_tags($token),
-				'photo' => strip_tags($data['avatar']),
+				'beta' => 1
 			]
 		);
 	}
