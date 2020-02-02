@@ -28,7 +28,6 @@ export default {
   basket: (basketId) => `/essenskoerbe/${basketId}`,
   baskets: () => '/essenskoerbe',
   upgradeToFs: () => '/?page=settings&sub=upgrade/up_fs',
-
   mission: () => '/ueber-uns',
   claims: () => '/?page=content&sub=forderungen',
   fsstaedte: () => '/?page=content&sub=fsstaedte',
@@ -57,5 +56,6 @@ export default {
   imprint: () => '/impressum',
   donate: () => '/unterstuetzung',
   changelog: () => '/?page=content&sub=changelog',
-  reports: (regionId) => `/?page=report&bid=${regionId}`
+  reports: (regionId) => `/?page=report&bid=${regionId}`,
+  login: () => '/?page=login'
 }
