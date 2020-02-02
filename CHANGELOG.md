@@ -13,6 +13,7 @@
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
+- Restructure the definition of the Region ID constants. !1325 @theFeiter
 
 ## Dev/Test/CI stuff
 

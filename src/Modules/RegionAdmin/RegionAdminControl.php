@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\RegionAdmin;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class RegionAdminControl extends Control
 {
@@ -40,7 +41,7 @@ class RegionAdminControl extends Control
 
 		$bezirke = $this->regionGateway->getBasics_bezirk();
 
-		array_unshift($bezirke, array('id' => '0', 'name' => 'Ohne `Eltern` Bezirk'));
+		array_unshift($bezirke, array('id' => RegionIDs::ROOT, 'name' => 'Ohne `Eltern` Bezirk'));
 
 		$this->pageHelper->hiddenDialog('newbezirk', array(
 			$this->v_utils->v_form_text('Name'),

@@ -9,6 +9,7 @@ use Codeception\Lib\ModuleContainer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {
@@ -95,10 +96,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 	{
 		$I = $this->helper;
 		$bezirk1 = '241'; // this is called 'Göttingen'
-		$bezirk_vorstand = '1373';
-		$ag_aktive = '1565';
-		$ag_testimonials = '1564';
-		$ag_quiz = '341';
+		$bezirk_vorstand = RegionIDs::TEAM_BOARD_MEMBER;
+		$ag_aktive = RegionIDs::TEAM_ADMINISTRATION_MEMBER;
+		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
+		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$password = 'user';
 
 		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $bezirk1]);
