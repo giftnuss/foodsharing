@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Mobile_Detect;
@@ -18,12 +19,14 @@ class LoginControl extends Control
 
 	private $loginGateway;
 	private $settingsGateway;
+	private $contentGateway;
 
-	public function __construct(LoginView $view, LoginGateway $loginGateway, SettingsGateway $settingsGateway)
+	public function __construct(LoginView $view, LoginGateway $loginGateway, ContentGateway $contentGateway, SettingsGateway $settingsGateway)
 	{
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}

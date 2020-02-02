@@ -8,6 +8,7 @@ dependency_scanning:
 .defaults: &defaults
   tags:
   - shared
+  - linux
   image: registry.gitlab.com/foodsharing-dev/images/ci:2
 
 
