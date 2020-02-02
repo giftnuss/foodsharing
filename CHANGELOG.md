@@ -18,6 +18,7 @@
 - Remove moment.js dependency. !1303 #678 @ctwx_ok
 - Moved the button for new stores to vue store list !1282 !1339 @chriswalg
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
+- Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
