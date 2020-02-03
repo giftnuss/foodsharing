@@ -199,7 +199,7 @@ class MailboxXhr extends Control
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
-				if ($sender['personal']) {
+				if (!empty($sender['personal'])) {
 					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
 				} else {
 					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host']);
