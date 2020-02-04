@@ -199,7 +199,7 @@ class MailboxXhr extends Control
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
-				if ($sender['personal']) {
+				if (!empty($sender['personal'])) {
 					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host'], $sender['personal']);
 				} else {
 					$mail->addRecipient($sender['mailbox'] . '@' . $sender['host']);
@@ -371,7 +371,11 @@ class MailboxXhr extends Control
 		if (!$this->mailboxPermissions->mayMessage($_GET['id'])) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$html = nl2br($this->mailboxGateway->getMessageHtmlBody($_GET['id']));
+		$html = $this->mailboxGateway->getMessageHtmlBody($_GET['id']);
+		if ($html === strip_tags($html)) {
+			// Convert line breaks to brs only in non-html mails
+			$html = nl2br($html);
+		}
 
 		if (strpos(strtolower($html), '<body') === false) {
 			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';

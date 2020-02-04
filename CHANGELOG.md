@@ -8,8 +8,11 @@
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
-- Fixed outgoing mails not displaying line breaks !1317 @pfaufisch
+- Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
 - Improved the banner on welcome page for mobile devices !1329 @chriswalg
+- Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
+- Fix small bug in sending quickreply messages without personal field !1321 @alex.simm
+
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz

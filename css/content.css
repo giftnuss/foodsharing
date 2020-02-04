@@ -449,3 +449,7 @@ i {
   font-size: 17px;
   color: #fff;
 }
+
+.page-fsbetrieb .element-wrapper {
+  word-break: break-word;
+}
