@@ -419,7 +419,7 @@ class RegionGateway extends BaseGateway
 		return $id;
 	}
 
-	public function getRegionName(int $regionId)
+	public function getRegionName(int $regionId): string
 	{
 		return $this->db->fetchValueByCriteria('fs_bezirk', 'name', ['id' => $regionId]);
 	}
@@ -434,7 +434,7 @@ class RegionGateway extends BaseGateway
 		]);
 	}
 
-	public function getMasterId(int $regionId)
+	public function getMasterId(int $regionId): int
 	{
 		return $this->db->fetchValueByCriteria('fs_bezirk', 'master', ['id' => $regionId]);
 	}
