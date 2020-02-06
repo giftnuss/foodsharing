@@ -175,11 +175,11 @@ final class BlogGateway extends BaseGateway
 			[
 				'bezirk_id' => (int)$data['bezirk_id'],
 				'foodsaver_id' => (int)$data['foodsaver_id'],
-				'name' => strip_tags($this->$data['name']),
-				'teaser' => strip_tags($this->$data['teaser']),
-				'body' => $this->$data['body'],
-				'time' => strip_tags($this->$data['time']),
-				'picture' => strip_tags($this->$data['picture']),
+				'name' => strip_tags($data['name']),
+				'teaser' => strip_tags($data['teaser']),
+				'body' => $data['body'],
+				'time' => strip_tags($data['time']),
+				'picture' => strip_tags($data['picture']),
 				'active' => $active
 			]
 		);
