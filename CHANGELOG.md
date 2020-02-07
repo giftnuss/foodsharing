@@ -20,6 +20,7 @@
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
 - Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
 - Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
+- Fix small bug in sending quickreply messages without personal field !1321 !1367 @alex.simm
 
 - Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 
