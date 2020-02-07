@@ -24,6 +24,7 @@
 - Moved the button for new stores to vue store list !1282 !1339 @chriswalg
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
 - Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
+- Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
