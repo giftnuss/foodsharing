@@ -39,6 +39,7 @@
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
 - Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
 - Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm 
+- Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
