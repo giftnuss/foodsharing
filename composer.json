@@ -36,7 +36,7 @@
     "ext-zlib": "*",
     "ddeboer/imap": "1.8.0",
     "doctrine/annotations": "1.8.0",
-    "doctrine/cache": "1.8.0",
+    "doctrine/cache": "1.10.0",
     "erusev/parsedown": "1.7.3",
     "exercise/htmlpurifier-bundle": "2.0.4",
     "filp/whoops": "2.5.0",
