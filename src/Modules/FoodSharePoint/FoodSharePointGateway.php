@@ -74,12 +74,12 @@ class FoodSharePointGateway extends BaseGateway
 		$values = array();
 
 		foreach ($fspManager as $fs) {
-			$values[] = '(' .
-				$foodSharePointId . ',' .
-				(int)$fs . ',' .
-				FollowerType::FOOD_SHARE_POINT_MANAGER . ',' .
-				InfoType::EMAIL .
-			')';
+			$values[] = [
+				'fairteiler_id' => $foodSharePointId,
+				'foodsaver_id' => (int)$fs,
+				'type' => FollowerType::FOOD_SHARE_POINT_MANAGER,
+				'infotype' => InfoType::EMAIL
+			];
 		}
 
 		$this->db->update(
@@ -88,19 +88,7 @@ class FoodSharePointGateway extends BaseGateway
 			['fairteiler_id' => $foodSharePointId]
 		);
 
-		$this->db->execute(
-			'
-				REPLACE INTO `fs_fairteiler_follower`
-				(
-					`fairteiler_id`,
-					`foodsaver_id`,
-					`type`,
-					`infotype`
-				)
-				VALUES
-				' . implode(',', $values) . '
-		'
-		);
+		$this->db->insertOrUpdateMultiple('fs_fairteiler_follower', $values);
 	}
 
 	public function getInfoFollowerIds(int $foodSharePointId): array

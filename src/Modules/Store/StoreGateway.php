@@ -280,7 +280,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 							fs.photo,
 							CONCAT(fs.name," ",fs.nachname) AS name,
 							name as vorname,
-							fs.sleep_status
+							fs.sleep_status,
+							fs.verified
 
 				FROM 		`fs_betrieb_team` t,
 							`fs_foodsaver` fs

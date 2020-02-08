@@ -5,6 +5,8 @@
 ## Features
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 - Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
+- Redirect to login page after login failed !1342 @chriswalg
+- Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
@@ -12,7 +14,7 @@
 - Improved the banner on welcome page for mobile devices !1329 @chriswalg
 - Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
 - Fix small bug in sending quickreply messages without personal field !1321 @alex.simm
-
+- Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
@@ -22,6 +24,7 @@
 - Moved the button for new stores to vue store list !1282 !1339 @chriswalg
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
 - Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
+- Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

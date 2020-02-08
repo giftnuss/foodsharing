@@ -292,15 +292,14 @@ class MailboxGateway extends BaseGateway
 			$insert = array();
 
 			foreach ($foodsaver as $fs) {
-				$insert[] = '(' . $mbid . ',' . (int)$fs . ',\'' . strip_tags($g_data['email_name']) . '\')';
+				$insert[] = [
+					'mailbox_id' => $mbid,
+					'foodsaver_id' => (int)$fs,
+					'email_name' => '\'' . strip_tags($g_data['email_name']) . '\''
+				];
 			}
 
-			$this->db->execute('
-				INSERT INTO `fs_mailbox_member`
-				(`mailbox_id`,`foodsaver_id`,`email_name`)
-				VALUES
-				' . implode(',', $insert) . '		
-			');
+			$this->db->insertMultiple('fs_mailbox_member', $insert);
 
 			return true;
 		}

@@ -86,23 +86,16 @@ class EmailGateway extends BaseGateway
 			'attach' => $attach_db
 		]);
 
-		$query = array();
+		$values = array();
 		foreach ($foodsaver as $fs) {
-			$query[] = '(' . (int)$email_id . ',' . (int)$fs['id'] . ',0)';
+			$values[] = [
+				'email_id' => (int)$email_id,
+				'foodsaver_id' => (int)$fs['id'],
+				'status' => 0
+			];
 		}
 
-		/*
-		 * Array
-		(
-			[0] => (33,56,0)
-			[1] => (33,146,0)
-		)
-		 */
-		$this->db->execute('
-			INSERT INTO `fs_email_status` (`email_id`,`foodsaver_id`,`status`)
-			VALUES
-			' . implode(',', $query) . ';
-		');
+		$this->db->insertMultiple('fs_email_status', $values);
 	}
 
 	public function getSendMails($fs_id)
