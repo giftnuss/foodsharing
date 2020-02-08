@@ -51,7 +51,7 @@
     "maximebf/debugbar": "1.15.0",
     "mobiledetect/mobiledetectlib": "2.8.34",
     "nesbot/carbon": "2.25.1",
-    "sensio/framework-extra-bundle": "5.4.1",
+    "sensio/framework-extra-bundle": "5.5.3",
     "sentry/sentry": "<2.0.0",
     "setasign/fpdi-tcpdf": "2.2.0",
     "swiftmailer/swiftmailer": "6.2.1",
