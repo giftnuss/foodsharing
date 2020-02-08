@@ -159,7 +159,7 @@ class Session
 		return $user[$index];
 	}
 
-	public function isActivated($fsId)
+	public function isActivated(int $fsId): bool
 	{
 		return $this->loginGateway->isActivated($fsId);
 	}
