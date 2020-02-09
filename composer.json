@@ -67,8 +67,8 @@
     "symfony/twig-bridge": "4.4.4",
     "symfony/validator": "4.4.4",
     "symfony/yaml": "4.4.4",
-    "twig/extensions": "1.5.4",
-    "twig/twig": "2.12.3",
+    "twig/intl-extra": "3.0.1",
+    "twig/twig": "3.0.1",
     "voku/bounce-mail-handler": "6.0.1"
   },
   "autoload": {

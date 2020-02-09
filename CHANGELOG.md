@@ -8,6 +8,7 @@
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update mkdirp to version 1 @peter.toennies
+- update twig to version 3 @peter.toennies
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
