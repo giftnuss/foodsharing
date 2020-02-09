@@ -106,8 +106,6 @@ class MailsControl extends ConsoleControl
 
 					if (!$mb_ids) {
 						$this->emailHelper->libmail(false, $msg->getFrom(), 'Unbekannte Email-Adresse', 'Die Email-Adresse ' . $msg->getTo() . ' ist nicht bekannt.');
-
-						$mb_ids = $this->mailsGateway->getMailboxIds(array('lost'));
 						++$stats['unknown-recipient'];
 					} else {
 						try {
