@@ -83,6 +83,8 @@ class ReportXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return null;
 	}
 
 	public function comReport(): ?array
@@ -96,6 +98,8 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function delReport(): ?array
@@ -109,6 +113,8 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function reportDialog(): array
