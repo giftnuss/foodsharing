@@ -2,13 +2,13 @@
 
 namespace Helper;
 
+use Carbon\Carbon;
 use DateTime;
 use Faker;
-use Carbon\Carbon;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
-use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -358,7 +358,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addRecurringPickup($store, $extra_params = [])
 	{
 		$hours = $this->faker->numberBetween(0, 23);
-		$minutes = $this->faker->randomElement($array = array('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'));
+		$minutes = $this->faker->randomElement($array = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']);
 
 		$params = array_merge([
 			'betrieb_id' => $store,
@@ -443,7 +443,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)
 		SELECT t.ancestor_id, ?, t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ?
-		UNION ALL SELECT ?, ?, 0', array($v['id'], $parentId, $v['id'], $v['id']));
+		UNION ALL SELECT ?, ?, 0', [$v['id'], $parentId, $v['id'], $v['id']]);
 
 		return $v;
 	}

@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Profile;
 use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
-use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 
 class ProfileView extends View
@@ -252,8 +252,6 @@ class ProfileView extends View
 	 *  - in store (the shopping basket used for stores)
 	 *  - Springer = waiting list (a coffee mug).
 	 *
-	 * @param array $userCompanies
-	 *
 	 * @return string: HTML with the list
 	 */
 	private function sideInfosCompanies(array $userCompanies): string
@@ -348,9 +346,6 @@ class ProfileView extends View
 		$this->foodsaver = $data;
 	}
 
-	/**
-	 * @return array
-	 */
 	private function renderStatistics(): array
 	{
 		$fetchWeight = '';
@@ -392,9 +387,6 @@ class ProfileView extends View
 		return [$fetchWeight, $fetchCount, $foodBasketCount, $postCount];
 	}
 
-	/**
-	 * @return string
-	 */
 	private function renderBananas(): string
 	{
 		if ($this->session->may('fs')) {
@@ -472,9 +464,6 @@ class ProfileView extends View
 		return $bananaCountButton;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function renderInformation(): string
 	{
 		$infos = [];
@@ -491,11 +480,6 @@ class ProfileView extends View
 		return $out;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderAmbassadorInformation(array $infos): array
 	{
 		$ambassador = [];
@@ -523,12 +507,6 @@ class ProfileView extends View
 		return [$ambassador, $infos];
 	}
 
-	/**
-	 * @param array $ambassador
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderFoodsaverInformation(array $ambassador, array $infos): array
 	{
 		if ($this->foodsaver['foodsaver']) {
@@ -565,11 +543,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderOrgaTeamMemberInformation(array $infos): array
 	{
 		if ($this->foodsaver['orga']) {
@@ -600,11 +573,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderSleepingHatInformation(array $infos): array
 	{
 		switch ($this->foodsaver['sleep_status']) {
@@ -637,13 +605,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param int $changeType
-	 * @param array $h
-	 * @param string $out
-	 *
-	 * @return string
-	 */
 	private function renderTypeOfHistoryEntry(int $changeType, array $h, string $out): string
 	{
 		switch ($changeType) {

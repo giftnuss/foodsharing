@@ -45,8 +45,6 @@ class WorkGroupCest
 	 * It is actually not really defined if foodsharer should be able to participate in groups or not.
 	 * They don't get the menu item but they can use groups.
 	 *
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["regionMember", true]
 	 * @example["unconnectedFoodsaver", true]
 	 * @example["foodsharer", true]
@@ -66,8 +64,6 @@ class WorkGroupCest
 	 * It is actually not really defined if foodsharer should be able to participate in groups or not.
 	 * They don't get the menu item but they can use groups.
 	 *
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["unconnectedFoodsaver", "testGroup"]
 	 */
 	public function canJoinGlobalGroup(AcceptanceTester $I, \Codeception\Example $example)
@@ -103,7 +99,6 @@ class WorkGroupCest
 	}
 
 	/**
-	 * @param \Codeception\Example $example
 	 * @example["unconnectedFoodsaver"]
 	 * @example["regionMember"]
 	 */

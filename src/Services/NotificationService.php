@@ -4,11 +4,11 @@ namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Lib\Session;
 
 final class NotificationService
 {
@@ -61,13 +61,13 @@ final class NotificationService
 				}
 
 				foreach ($followers as $f) {
-					$this->emailHelper->tplMail('foodSharePoint/new_message', $f['email'], array(
+					$this->emailHelper->tplMail('foodSharePoint/new_message', $f['email'], [
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$foodSharePointId,
 						'name' => $f['name'],
 						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'fairteiler' => $foodSharePoint['name'],
 						'post' => $body
-					));
+					]);
 				}
 			}
 
@@ -78,8 +78,8 @@ final class NotificationService
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
-					array('href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId),
-					array('name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)),
+					['href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId],
+					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)],
 					'fairteiler-' . $foodSharePointId
 				);
 			}

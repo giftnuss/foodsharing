@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Lib\View\vMap;
 use Foodsharing\Lib\View\vPage;
-use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
+use Foodsharing\Modules\Core\View;
 
 class BasketView extends View
 {
@@ -96,7 +96,7 @@ class BasketView extends View
 			$page->addSectionRight($this->userBox($basket, $requests), $this->translationHelper->s('provider'));
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
-				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', array('count' => count($requests))));
+				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', ['count' => count($requests)]));
 			}
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
@@ -113,7 +113,7 @@ class BasketView extends View
 			$page->addSection(
 				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translationHelper->s('reference')),
 				false,
-				array('wrapper' => false)
+				['wrapper' => false]
 			);
 		}
 
@@ -199,15 +199,15 @@ class BasketView extends View
 		}
 
 		return $this->fsAvatarList(
-				array(
-					array(
+				[
+					[
 						'id' => $basket['fs_id'],
 						'name' => $basket['fs_name'],
 						'photo' => $basket['fs_photo'],
 						'sleep_status' => $basket['sleep_status'],
-					),
-				),
-				array('height' => 600, 'scroller' => false)
+					],
+				],
+				['height' => 600, 'scroller' => false]
 			) .
 			$request;
 	}
@@ -225,7 +225,7 @@ class BasketView extends View
 	{
 		$out = '';
 
-		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705));
+		$out .= $this->v_utils->v_form_textarea('description', ['maxlength' => 1705]);
 
 		$values = [
 			['id' => 0.25, 'name' => '250 g'],
@@ -270,7 +270,7 @@ class BasketView extends View
 		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
 		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
-		$lifetimeNames = $this->translationHelper->sv('lifetime_options', array());
+		$lifetimeNames = $this->translationHelper->sv('lifetime_options', []);
 		$out .= $this->v_utils->v_form_select(
 			'lifetime',
 			[
@@ -318,7 +318,7 @@ class BasketView extends View
 	{
 		$out = '';
 
-		$out .= $this->v_utils->v_form_textarea('description', array('maxlength' => 1705, 'value' => $basket['description']));
+		$out .= $this->v_utils->v_form_textarea('description', ['maxlength' => 1705, 'value' => $basket['description']]);
 
 		return $out . $this->v_utils->v_form_hidden('basket_id', $basket['id']);
 	}

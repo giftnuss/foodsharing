@@ -33,8 +33,6 @@ class LoginControl extends Control
 
 	/**
 	 * @required
-	 *
-	 * @param FormFactoryBuilder $formFactory
 	 */
 	public function setFormFactory(FormFactoryBuilder $formFactory): void
 	{
@@ -76,10 +74,10 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-				$params = array(
+				$params = [
 					'action' => $action,
 					'form' => $form->createView(),
-				);
+				];
 
 				$response->setContent($this->render('pages/Login/page.twig', $params));
 			}

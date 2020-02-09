@@ -203,7 +203,7 @@ class StatsModel extends Db
 	public function getBotCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = array();
+		$out = [];
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
 			FROM 	fs_botschafter fb
@@ -221,7 +221,7 @@ class StatsModel extends Db
 	public function getFsCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = array();
+		$out = [];
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
 			FROM 	fs_foodsaver_has_bezirk fb
@@ -242,7 +242,7 @@ class StatsModel extends Db
 		$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $region_id));
 
 		$weight = 0;
-		$dat = array();
+		$dat = [];
 		if ($res = $this->q('
 			SELECT 	a.betrieb_id, 
 					a.`date`,
@@ -267,11 +267,11 @@ class StatsModel extends Db
 			}
 		}
 
-		$current = $this->getValues(array('stat_fetchweight', 'stat_fetchcount'), 'bezirk', $region_id);
+		$current = $this->getValues(['stat_fetchweight', 'stat_fetchcount'], 'bezirk', $region_id);
 
-		return array(
+		return [
 			'weight' => ($weight + (int)$current['stat_fetchweight']),
 			'count' => (count($dat) + (int)$current['stat_fetchcount'])
-		);
+		];
 	}
 }

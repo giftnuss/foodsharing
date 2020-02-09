@@ -311,7 +311,7 @@ class FoodSharePointControl extends Control
 		);
 
 		if ($this->foodSharePointPermissions->mayFollow()) {
-			$items = array();
+			$items = [];
 
 			if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 				$items[] = [

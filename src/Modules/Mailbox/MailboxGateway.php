@@ -64,7 +64,7 @@ class MailboxGateway extends BaseGateway
 			$mails = array_merge($mails, $contacts);
 		}
 
-		return $mails ? $mails : array();
+		return $mails ? $mails : [];
 	}
 
 	public function addMailbox(string $name, int $member = 0): int
@@ -74,7 +74,7 @@ class MailboxGateway extends BaseGateway
 
 	public function getNewCount(array $boxes): array
 	{
-		$barr = array();
+		$barr = [];
 		foreach ($boxes as $b) {
 			$barr[] = $b['id'];
 		}
@@ -289,7 +289,7 @@ class MailboxGateway extends BaseGateway
 		if ($mbid > 0) {
 			$this->db->delete('fs_mailbox_member', ['mailbox_id' => $mbid]);
 
-			$insert = array();
+			$insert = [];
 
 			foreach ($foodsaver as $fs) {
 				$insert[] = [
@@ -337,8 +337,8 @@ class MailboxGateway extends BaseGateway
 	{
 		if ($isAmbassador) {
 			$mailboxAdminRegions = $this->getMailboxAdminRegions($fsId);
-			$selectedRegions = array();
-			$mBoxes = array();
+			$selectedRegions = [];
+			$mBoxes = [];
 			foreach ($mailboxAdminRegions as $region) {
 				$selectedRegions[] = (int)$region;
 			}
@@ -525,8 +525,6 @@ class MailboxGateway extends BaseGateway
 	 * Returns the mailbox ID and attachment info for the message ID. The attachment info is a json encoded list that
 	 * contains 'filename', 'origname', and 'mime' for each attachment.
 	 *
-	 * @param int $messageId
-	 *
 	 * @return array
 	 */
 	public function getAttachmentFileInfo(int $messageId)
@@ -536,10 +534,6 @@ class MailboxGateway extends BaseGateway
 
 	/**
 	 * Returns the folder of the mail with this message ID.
-	 *
-	 * @param int $messageId
-	 *
-	 * @return int
 	 */
 	public function getMailFolderId(int $messageId): int
 	{
@@ -548,10 +542,6 @@ class MailboxGateway extends BaseGateway
 
 	/**
 	 * Returns the HTML body of the mail with this message ID.
-	 *
-	 * @param int $messageId
-	 *
-	 * @return string
 	 */
 	public function getMessageHtmlBody(int $messageId): string
 	{

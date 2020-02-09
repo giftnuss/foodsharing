@@ -4,13 +4,13 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Services\FoodsaverService;
-use Foodsharing\Modules\Content\ContentGateway;
 
 class FoodsaverControl extends Control
 {
@@ -52,7 +52,7 @@ class FoodsaverControl extends Control
 	 */
 	public function index()
 	{
-		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion(array($_GET['bid']), false, true))) {
+		if (isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid'])) && ($this->session->may('orga') || $this->session->isAmbassadorForRegion([$_GET['bid']], false, true))) {
 			$regionId = $region['id'];
 			if ($foodsavers = $this->foodsaverGateway->getFoodsaversByRegion($regionId)) {
 				$this->pageHelper->addBread('Foodsaver', '/?page=foodsaver&bid=' . $regionId);

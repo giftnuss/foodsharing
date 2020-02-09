@@ -69,12 +69,6 @@ class WallPostPermissions
 
 	/**
 	 * method describing _global_ deletion access to walls. Every author is always allowed to remove their own posts.
-	 *
-	 * @param int $fsId
-	 * @param string $target
-	 * @param int $targetId
-	 *
-	 * @return bool
 	 */
 	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
 	{

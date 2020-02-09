@@ -18,13 +18,13 @@ class MapXhr extends Control
 		$lat = (float)$_GET['lat'];
 		$lon = (float)$_GET['lon'];
 
-		$this->session->set('blocation', array(
+		$this->session->set('blocation', [
 			'lat' => $lat,
 			'lon' => $lon
-		));
+		]);
 
-		return array(
+		return [
 			'status' => 1
-		);
+		];
 	}
 }

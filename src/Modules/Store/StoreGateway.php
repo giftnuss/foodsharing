@@ -110,7 +110,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function getMyStores($fs_id, $regionId, $options = array()): array
+	public function getMyStores($fs_id, $regionId, $options = []): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	fs_betrieb.id,
@@ -142,13 +142,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				ORDER BY fs_betrieb_team.verantwortlich DESC, fs_betrieb.name ASC
 		', [':fs_id' => $fs_id]);
 
-		$out = array();
-		$out['verantwortlich'] = array();
-		$out['team'] = array();
-		$out['waitspringer'] = array();
-		$out['anfrage'] = array();
+		$out = [];
+		$out['verantwortlich'] = [];
+		$out['team'] = [];
+		$out['waitspringer'] = [];
+		$out['anfrage'] = [];
 
-		$already_in = array();
+		$already_in = [];
 
 		if (is_array($betriebe)) {
 			foreach ($betriebe as $b) {
@@ -176,7 +176,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
-			$out['sonstige'] = array();
+			$out['sonstige'] = [];
 			$betriebe = $this->db->fetchAll(
 		'SELECT 		b.id,
 						b.betrieb_status_id,
@@ -293,8 +293,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		', [':id' => $storeId]);
 
 		$out['verantwortlich'] = false;
-		$foodsaver = array();
-		$out['team'] = array();
+		$foodsaver = [];
+		$out['team'] = [];
 		$out['jumper'] = false;
 
 		if (!empty($out['springer'])) {
@@ -306,10 +306,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		if (!empty($out['foodsaver'])) {
-			$out['team'] = array();
+			$out['team'] = [];
 			foreach ($out['foodsaver'] as $v) {
 				$foodsaver[$v['id']] = $v['name'];
-				$out['team'][] = array('id' => $v['id'], 'value' => $v['name']);
+				$out['team'][] = ['id' => $v['id'], 'value' => $v['name']];
 				if ($v['verantwortlich'] == 1) {
 					$out['verantwortlicher'] = $v['id'];
 					if ($v['id'] == $fs_id) {
@@ -318,7 +318,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				}
 			}
 		} else {
-			$out['foodsaver'] = array();
+			$out['foodsaver'] = [];
 		}
 
 		return $out;
@@ -413,7 +413,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND		fs.deleted_at IS NULL
 		');
 
-		$out = array();
+		$out = [];
 		foreach ($verant as $v) {
 			$out[$v['id']] = $v;
 		}
@@ -446,7 +446,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			AND		fs.deleted_at IS NULL
 		', $region_ids);
 
-		$out = array();
+		$out = [];
 		foreach ($verant as $v) {
 			$out[$v['id']] = $v;
 		}
@@ -617,13 +617,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getAbholzeiten($storeId)
 	{
 		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $storeId])) {
-			$out = array();
+			$out = [];
 			foreach ($res as $r) {
-				$out[$r['dow'] . '-' . $r['time']] = array(
+				$out[$r['dow'] . '-' . $r['time']] = [
 					'dow' => $r['dow'],
 					'time' => $r['time'],
 					'fetcher' => $r['fetcher']
-				);
+				];
 			}
 
 			ksort($out);
@@ -653,13 +653,13 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$this->db->delete('fs_betrieb_notiz', ['id' => $last['id']]);
 		}
 
-		$this->add_betrieb_notiz(array(
+		$this->add_betrieb_notiz([
 			'foodsaver_id' => $fs_id,
 			'betrieb_id' => $storeId,
 			'text' => 'status_msg_' . (int)$status,
 			'zeit' => date('Y-m-d H:i:s'),
 			'milestone' => 3
-		));
+		]);
 
 		return $this->db->update(
 			'fs_betrieb',
@@ -895,10 +895,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	/**
 	 * Returns the store comment with the specified ID.
-	 *
-	 * @param int $commentId
-	 *
-	 * @return array
 	 */
 	public function getStoreComment(int $commentId): array
 	{
@@ -912,8 +908,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 * Returns all comments for a given store.
 	 *
 	 * @param $storeId
-	 *
-	 * @return array
 	 */
 	private function getBetriebNotiz($storeId): array
 	{
@@ -978,12 +972,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	}
 
 	/**
-	 * @param int $storeId
 	 * @param \DateTime $from DateRange start for all slots. Now if empty.
 	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
 	 * @param \DateTime $oneTimeSlotTo DateRange for onetime slots to be taken into account
-	 *
-	 * @return array
 	 */
 	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $oneTimeSlotTo = null): array
 	{

@@ -9,7 +9,7 @@ class TeamGateway extends BaseGateway
 {
 	public function getTeam($region_id = RegionIDs::TEAM_BOARD_MEMBER): array
 	{
-		$out = array();
+		$out = [];
 		$stm = '
 				SELECT 
 					fs.id, 
@@ -79,11 +79,6 @@ class TeamGateway extends BaseGateway
 
 	/**
 	 * Function to check and block an IP address.
-	 *
-	 * @param int $durationSeconds
-	 * @param string $context
-	 *
-	 * @return bool
 	 */
 	public function isABlockedIP(int $durationSeconds, string $context): bool
 	{

@@ -29,7 +29,7 @@ class ApplicationControl extends Control
 
 		$this->bezirk = false;
 		if ($bezirk = $this->gateway->getRegion($this->bezirk_id)) {
-			$big = array(Type::BIG_CITY => 1, Type::FEDERAL_STATE => 1, Type::COUNTRY => 1);
+			$big = [Type::BIG_CITY => 1, Type::FEDERAL_STATE => 1, Type::COUNTRY => 1];
 			if (isset($big[$bezirk['type']])) {
 				$this->mode = 'big';
 			} elseif ($bezirk['type'] == Type::WORKING_GROUP) {

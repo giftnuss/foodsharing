@@ -32,7 +32,7 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), ['class' => 'ui-padding']);
 	}
 
 	public function getStatTotal($stat, int $foodsharerCount, int $avgDailyFetchCount)
@@ -167,6 +167,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('most_active_foodsavers'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('most_active_foodsavers'), ['class' => 'ui-padding']);
 	}
 }

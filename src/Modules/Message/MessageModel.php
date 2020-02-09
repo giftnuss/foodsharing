@@ -8,7 +8,7 @@ final class MessageModel extends Db
 {
 	public function user2conv($fsid)
 	{
-		return $this->addConversation(array($fsid => $fsid));
+		return $this->addConversation([$fsid => $fsid]);
 	}
 
 	/**
@@ -110,7 +110,7 @@ final class MessageModel extends Db
 
 	public function findConnectedPeople($term)
 	{
-		$out = array();
+		$out = [];
 
 		// for orga and bot-welcome team, allow to contact everyone who is foodsaver
 		if ($this->session->may('orga') || (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && in_array(813, $_SESSION['client']['bezirke']))) {
@@ -136,7 +136,7 @@ final class MessageModel extends Db
 			}
 		} elseif (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke']) && count($_SESSION['client']['bezirke']) > 0) {
 			// add user to regions and groups
-			$ids = array();
+			$ids = [];
 			foreach ($_SESSION['client']['bezirke'] as $i => $bezirk) {
 				$ids[] = $bezirk['id'];
 			}
@@ -196,9 +196,6 @@ final class MessageModel extends Db
 
 	/**
 	 * Method returns an array of all conversations from the logged in user.
-	 *
-	 * @param int $limit
-	 * @param int $offset
 	 *
 	 * @return array
 	 */
@@ -362,9 +359,9 @@ final class MessageModel extends Db
 		if ($cids === false) {
 			$cids = $this->qCol('SELECT id FROM fs_conversation');
 		} elseif (!is_array($cids)) {
-			$cids = array($cids);
+			$cids = [$cids];
 		}
-		$members = array();
+		$members = [];
 		foreach ($cids as $id) {
 			$member = $this->listConversationMembers($id);
 
@@ -401,7 +398,7 @@ final class MessageModel extends Db
 			} else {
 				$ids = implode(',', $fsids);
 				$this->del('DELETE FROM `fs_foodsaver_has_conversation` WHERE conversation_id = ' . (int)$cid . ' AND foodsaver_id NOT IN (' . $ids . ')');
-				$values = array();
+				$values = [];
 				foreach ($fsids as $user) {
 					$values[] = '(' . (int)$cid . ', ' . (int)$user . ', ' . $ur . ')';
 				}
@@ -464,7 +461,7 @@ final class MessageModel extends Db
 			/*
 			 * last add all recipients to this conversation
 			 */
-			$values = array();
+			$values = [];
 			unset($recipients[(int)$this->session->id()]);
 			foreach ($recipients as $r) {
 				$values[] = '(' . (int)$r . ',' . (int)$cid . ',' . $ur . ')';
@@ -489,7 +486,7 @@ final class MessageModel extends Db
 
 	public function add_message($data): bool
 	{
-		if ($cid = $this->addConversation(array($data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']), false, false)) {
+		if ($cid = $this->addConversation([$data['sender_id'] => $data['sender_id'], $data['recip_id'] => $data['recip_id']], false, false)) {
 			$this->sendMessage($cid, $data['msg'], $data['sender_id']);
 
 			return true;

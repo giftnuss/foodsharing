@@ -4,7 +4,7 @@ namespace Foodsharing\Lib\View;
 
 class vCore
 {
-	public static $ids = array();
+	public static $ids = [];
 
 	public function id($id)
 	{

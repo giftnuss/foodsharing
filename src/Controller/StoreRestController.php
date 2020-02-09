@@ -37,10 +37,6 @@ class StoreRestController extends AbstractFOSRestController
 	 * store, 404 if the store does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("stores/{storeId}", requirements={"basketId" = "\d+"})
-	 *
-	 * @param int $storeId
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function getStoreAction(int $storeId): Response
 	{

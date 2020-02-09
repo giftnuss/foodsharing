@@ -4,8 +4,8 @@ function convertId($text)
 {
 	$text = strtolower($text);
 	str_replace(
-		array('ä', 'ö', 'ü', 'ß', ' '),
-		array('ae', 'oe', 'ue', 'ss', '_'),
+		['ä', 'ö', 'ü', 'ß', ' '],
+		['ae', 'oe', 'ue', 'ss', '_'],
 		$text
 	);
 

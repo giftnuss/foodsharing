@@ -160,12 +160,12 @@ class EventGateway extends BaseGateway
 				fe.event_id = :event_id
 		', [':event_id' => $event_id]);
 
-		$out = array(
-			'invited' => array(),
-			'accepted' => array(),
-			'maybe' => array(),
-			'may' => array()
-		);
+		$out = [
+			'invited' => [],
+			'accepted' => [],
+			'maybe' => [],
+			'may' => []
+		];
 		foreach ($invites as $i) {
 			$out['may'][$i['id']] = true;
 			if ($i['status'] == InvitationStatus::INVITED) {
@@ -341,7 +341,7 @@ class EventGateway extends BaseGateway
 			AND 	`active` = 1
 		')
 		) {
-			$invited = array();
+			$invited = [];
 			if ($inv = $this->db->fetchAllValues(
 				'
 				SELECT `foodsaver_id` FROM `fs_foodsaver_has_event`

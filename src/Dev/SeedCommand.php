@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use Codeception\CustomCommandInterface;
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class SeedCommand extends Command implements CustomCommandInterface
 {

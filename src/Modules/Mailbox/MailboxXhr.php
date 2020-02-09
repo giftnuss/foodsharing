@@ -96,18 +96,18 @@ class MailboxXhr extends Control
 		}
 
 		// convert folder string to int
-		$farray = array(
+		$farray = [
 			'inbox' => MailboxFolder::FOLDER_INBOX,
 			'sent' => MailboxFolder::FOLDER_SENT,
 			'trash' => MailboxFolder::FOLDER_TRASH,
-		);
+		];
 
 		if (!isset($farray[$_GET['folder']])) {
-			return array(
+			return [
 				'status' => 1,
 				'html' => $this->view->noMessage(),
 				'append' => '#messagelist tbody'
-			);
+			];
 		}
 		$folder = $farray[$_GET['folder']];
 
@@ -116,11 +116,11 @@ class MailboxXhr extends Control
 			$this->mailboxGateway->mailboxActivity($mb_id);
 			$messages = $this->mailboxGateway->listMessages($mb_id, $folder);
 			if (!$messages) {
-				return array(
+				return [
 					'status' => 1,
 					'html' => $this->view->noMessage(),
 					'append' => '#messagelist tbody'
-				);
+				];
 			}
 
 			$nc_js = '';
@@ -140,7 +140,7 @@ class MailboxXhr extends Control
 			$mailbox = $this->mailboxGateway->getMailbox($mb_id);
 			$currentMailboxName = isset($mailbox['email_name']) ? $mailbox['email_name'] : $mailbox['name'];
 
-			return array(
+			return [
 				'status' => 1,
 				'html' => $this->view->listMessages($messages, $folder, $currentMailboxName),
 				'append' => '#messagelist tbody',
@@ -160,7 +160,7 @@ class MailboxXhr extends Control
 						$("#messagelist tbody td").disableSelection();
 						' . $nc_js . '
 					'
-			);
+			];
 		}
 	}
 
@@ -177,10 +177,10 @@ class MailboxXhr extends Control
 			$this->mailboxGateway->move($_GET['mid'], $_GET['f']);
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => '$("tr#message-' . (int)$_GET['mid'] . '").remove();$("#message-body").dialog("close");'
-		);
+		];
 	}
 
 	public function quickreply()
@@ -193,7 +193,7 @@ class MailboxXhr extends Control
 			$message = $this->mailboxGateway->getMessage($_GET['mid']);
 			$sender = @json_decode($message['sender'], true);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
-				$subject = 'Re: ' . trim(str_replace(array('Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'), '', $message['subject']));
+				$subject = 'Re: ' . trim(str_replace(['Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'], '', $message['subject']));
 
 				$body = strip_tags($_POST['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
 
@@ -235,18 +235,18 @@ class MailboxXhr extends Control
 				$this->mailboxGateway->setRead($message['id'], 1);
 				$this->mailboxGateway->setAnswered($message['id']);
 
-				echo json_encode(array(
+				echo json_encode([
 					'status' => 1,
 					'message' => 'Spitze! Die E-Mail wurde versendet.'
-				));
+				]);
 				exit();
 			}
 		}
 
-		echo json_encode(array(
+		echo json_encode([
 			'status' => 0,
 			'message' => 'Die E-Mail konnte nicht gesendet werden.'
-		));
+		]);
 		exit();
 	}
 
@@ -264,10 +264,10 @@ class MailboxXhr extends Control
 
 		if ($last = (int)$this->mem->user($this->session->id(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'pulseError("Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...");'
-				);
+				];
 			}
 		}
 
@@ -276,33 +276,33 @@ class MailboxXhr extends Control
 		if ($this->mailboxPermissions->mayMailbox($_POST['mb'])) {
 			if ($mailbox = $this->mailboxGateway->getMailbox($_POST['mb'])) {
 				$an = explode(';', $_POST['an']);
-				$tmp = array();
+				$tmp = [];
 				foreach ($an as $a) {
 					$tmp[$a] = $a;
 				}
 				$an = $tmp;
 				if (count($an) > 100) {
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseError("Zu viele Empfänger");'
-					);
+					];
 				}
 				$attach = false;
 
 				if (isset($_POST['attach']) && is_array($_POST['attach'])) {
-					$attach = array();
+					$attach = [];
 					foreach ($_POST['attach'] as $a) {
 						if (isset($a['name'], $a['tmp'])) {
-							$tmp = str_replace(array('/', '\\'), '', $a['tmp']);
+							$tmp = str_replace(['/', '\\'], '', $a['tmp']);
 							$name = strtolower($a['name']);
-							str_replace(array('ä', 'ö', 'ü', 'ß', ' '), array('ae', 'oe', 'ue', 'ss', '_'), $name);
+							str_replace(['ä', 'ö', 'ü', 'ß', ' '], ['ae', 'oe', 'ue', 'ss', '_'], $name);
 							$name = preg_replace('/[^a-z0-9\-\.]/', '', $name);
 
 							if (file_exists('data/mailattach/tmp/' . $tmp)) {
-								$attach[] = array(
+								$attach[] = [
 									'path' => 'data/mailattach/tmp/' . $tmp,
 									'name' => $name
-								);
+								];
 							}
 						}
 					}
@@ -310,36 +310,36 @@ class MailboxXhr extends Control
 
 				$this->libPlainMail(
 					$an,
-					array(
+					[
 						'email' => $mailbox['name'] . '@' . PLATFORM_MAILBOX_HOST,
 						'name' => $mailbox['email_name']
-					),
+					],
 					$_POST['sub'],
 					$_POST['body'],
 					$attach
 				);
 
-				$to = array();
+				$to = [];
 				foreach ($an as $a) {
 					if ($this->emailHelper->validEmail($a)) {
 						$t = explode('@', $a);
 
-						$to[] = array(
+						$to[] = [
 							'personal' => $a,
 							'mailbox' => $t[0],
 							'host' => $t[1]
-						);
+						];
 					}
 				}
 
 				if ($this->mailboxGateway->saveMessage(
 					$_POST['mb'],
 					MailboxFolder::FOLDER_SENT,
-					json_encode(array(
+					json_encode([
 						'host' => PLATFORM_MAILBOX_HOST,
 						'mailbox' => $mailbox['name'],
 						'personal' => $mailbox['email_name']
-					)),
+					]),
 					json_encode($to),
 					$_POST['sub'],
 					$_POST['body'],
@@ -380,8 +380,8 @@ class MailboxXhr extends Control
 		if (strpos(strtolower($html), '<body') === false) {
 			$html = '<html><head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana,sans-serif;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style></head><body>' . $html . '</body></html>';
 		} else {
-			$html = str_replace(array('<body', '<BODY', '<Body'), '<body', $html);
-			$html = str_replace(array('<head>', '<HEAD>', '<Head>'), '<head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
+			$html = str_replace(['<body', '<BODY', '<Body'], '<body', $html);
+			$html = str_replace(['<head>', '<HEAD>', '<Head>'], '<head><style type="text/css">html{height:100%;background-color: white;}body,div,h1,h2,h3,h4,h5,h6,td,th,p{font-family:Arial,Helvetica,Verdana;}body,div,td,th,p{font-size:13px;}body{margin:0;padding:0;}</style>', $html);
 		}
 
 		// $html = str_replace('href="mailto:', 'onclick="parent.mb_new_message(this.href.replace(\'mailto:\',\'\'));return false;" href="mailto:', $html);
@@ -403,7 +403,7 @@ class MailboxXhr extends Control
 				$mail['attach'] = json_decode($mail['attach'], true);
 			}
 
-			return array(
+			return [
 				'status' => 1,
 				'html' => $this->view->message($mail),
 				'append' => '#message-body',
@@ -429,7 +429,7 @@ class MailboxXhr extends Control
 				});
 				$("#message-body").dialog("open");
 				$("tr#message-' . (int)$_GET['id'] . ' .read-0,tr#message-' . (int)$_GET['id'] . '").addClass("read-1").removeClass("read-0");'
-			);
+			];
 		}
 	}
 
@@ -469,7 +469,7 @@ class MailboxXhr extends Control
 
 		$mail->setSubject($subject);
 
-		$message = str_replace(array('<br>', '<br/>', '<br />', '<p>', '</p>', '</p>'), "\r\n", $message);
+		$message = str_replace(['<br>', '<br/>', '<br />', '<p>', '</p>', '</p>'], "\r\n", $message);
 		$message = strip_tags($message);
 
 		$html = nl2br($message);
@@ -492,7 +492,7 @@ class MailboxXhr extends Control
 			$ext = explode('.', $filename);
 			$ext = end($ext);
 			$ext = strtolower($ext);
-			$notallowed = array(
+			$notallowed = [
 				'php' => true,
 				'html' => true,
 				'htm' => true,
@@ -501,8 +501,8 @@ class MailboxXhr extends Control
 				'php3' => true,
 				'php2' => true,
 				'php1' => true
-			);
-			$notallowed_mime = array();
+			];
+			$notallowed_mime = [];
 
 			if (!isset($notallowed[$ext]) && !isset($notallowed_mime[$mime])) {
 				return true;

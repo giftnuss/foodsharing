@@ -72,10 +72,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Get("baskets")
 	 * @Rest\QueryParam(name="type", requirements="(mine|coordinates)", default="mine")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function listBasketsAction(ParamFetcher $paramFetcher): Response
 	{
@@ -107,10 +103,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="lat", nullable=true)
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function listNearbyBasketsAction(ParamFetcher $paramFetcher): Response
 	{
@@ -155,8 +147,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 *
 	 * @param array $basketData basket data
 	 * @param array $updates list of updates
-	 *
-	 * @return array
 	 */
 	private function normalizeMyBasket(array $basketData, array $updates = []): array
 	{
@@ -182,10 +172,6 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Normalizes a basket request.
-	 *
-	 * @param array $request
-	 *
-	 * @return array
 	 */
 	private function normalizeRequest(array $request): array
 	{
@@ -202,10 +188,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * basket, 500 if the basket does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("baskets/{basketId}", requirements={"basketId" = "\d+"})
-	 *
-	 * @param int $basketId
-	 *
-	 * @return Response
 	 */
 	public function getBasketAction(int $basketId): Response
 	{
@@ -232,8 +214,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * Normalizes the details of a basket for the Rest response.
 	 *
 	 * @param array $basketData the basket data
-	 *
-	 * @return array
 	 */
 	private function normalizeBasket(array $basketData, array $updates = []): array
 	{
@@ -290,10 +270,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="lifetime", nullable=true, default=7)
 	 * @Rest\RequestParam(name="lat", nullable=true)
 	 * @Rest\RequestParam(name="lon", nullable=true)
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function addBasketAction(ParamFetcher $paramFetcher): Response
 	{
@@ -348,10 +324,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * 401 if not logged in.
 	 *
 	 * @Rest\Delete("baskets/{basketId}", requirements={"basketId" = "\d+"})
-	 *
-	 * @param int $basketId
-	 *
-	 * @return Response|null
 	 */
 	public function removeBasketAction(int $basketId): ?Response
 	{
@@ -378,9 +350,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="lon", nullable=true)
 	 *
 	 * @param int $basketId ID of an existing basket
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function editBasketAction(int $basketId, ParamFetcher $paramFetcher): Response
 	{
@@ -411,9 +380,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\Put("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId ID of an existing basket
-	 * @param Request $request
-	 *
-	 * @return Response
 	 */
 	public function setPictureAction(int $basketId, Request $request): Response
 	{
@@ -460,8 +426,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\Delete("baskets/{basketId}/picture", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId ID of an existing basket
-	 *
-	 * @return Response
 	 */
 	public function removePictureAction(int $basketId): Response
 	{
@@ -487,9 +451,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="message", nullable=false)
 	 *
 	 * @param int $basketId ID of an existing basket
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function requestBasketAction(int $basketId, ParamFetcher $paramFetcher): Response
 	{
@@ -527,8 +488,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * @Rest\Post("baskets/{basketId}/withdraw", requirements={"basketId" = "\d+"})
 	 *
 	 * @param int $basketId ID of an existing basket
-	 *
-	 * @return Response
 	 */
 	public function withdrawBasketRequestAction(int $basketId): Response
 	{
@@ -573,8 +532,6 @@ final class BasketRestController extends AbstractFOSRestController
 	/**
 	 * Verifies that the basket was not deleted and is not expired. Otherwise this
 	 * method throws an appropriate HttpException.
-	 *
-	 * @param array $basket
 	 */
 	private function verifyBasketIsAvailable(array $basket): void
 	{
@@ -596,7 +553,6 @@ final class BasketRestController extends AbstractFOSRestController
 	 * is given, it returns the default location or the user's home address, if the default
 	 * location is null.
 	 *
-	 * @param ParamFetcher $paramFetcher
 	 * @param array $defaultLocation a fallback value or null
 	 *
 	 * @return array the location

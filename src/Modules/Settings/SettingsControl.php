@@ -75,27 +75,27 @@ class SettingsControl extends Control
 	{
 		$this->pageHelper->addBread('Einstellungen', '/?page=settings');
 
-		$menu = array(
-			array('name' => $this->translationHelper->s('settings_general'), 'href' => '/?page=settings&sub=general'),
-			array('name' => $this->translationHelper->s('settings_info'), 'href' => '/?page=settings&sub=info')
-		);
+		$menu = [
+			['name' => $this->translationHelper->s('settings_general'), 'href' => '/?page=settings&sub=general'],
+			['name' => $this->translationHelper->s('settings_info'), 'href' => '/?page=settings&sub=info']
+		];
 
-		$menu[] = array('name' => $this->translationHelper->s('bcard'), 'href' => '/?page=bcard');
+		$menu[] = ['name' => $this->translationHelper->s('bcard'), 'href' => '/?page=bcard'];
 		//$menu[] = array('name' => $this->translationHelper->s('calendar'), 'href' => '/?page=settings&sub=calendar');
 
-		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('settings'), 'active' => $this->getSub())), CNT_LEFT);
+		$this->pageHelper->addContent($this->view->menu($menu, ['title' => $this->translationHelper->s('settings'), 'active' => $this->getSub()]), CNT_LEFT);
 
-		$menu = array();
-		$menu[] = array('name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping');
-		$menu[] = array('name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;');
+		$menu = [];
+		$menu[] = ['name' => $this->translationHelper->s('sleeping_user'), 'href' => '/?page=settings&sub=sleeping'];
+		$menu[] = ['name' => 'E-Mail-Adresse ändern', 'click' => 'ajreq(\'changemail\');return false;'];
 
 		if ($this->foodsaver['rolle'] == Role::FOODSHARER) {
-			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs');
+			$menu[] = ['name' => 'Werde ' . $this->translationHelper->s('rolle_1_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_fs'];
 		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
-			$menu[] = array('name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip');
+			$menu[] = ['name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip'];
 		}
-		$menu[] = array('name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount');
-		$this->pageHelper->addContent($this->view->menu($menu, array('title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub())), CNT_LEFT);
+		$menu[] = ['name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount'];
+		$this->pageHelper->addContent($this->view->menu($menu, ['title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub()]), CNT_LEFT);
 	}
 
 	public function sleeping()
@@ -313,7 +313,7 @@ class SettingsControl extends Control
 						]
 					));
 
-					$g_data = array();
+					$g_data = [];
 					$showform = false;
 				}
 			}
@@ -341,27 +341,27 @@ class SettingsControl extends Control
 				$this->pageHelper->addContent(
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
-					$this->v_utils->v_form('upBotsch', array($this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), array('label' => 'In welcher Region möchtest Du Botschafter werden?')) .
+					$this->v_utils->v_form('upBotsch', [$this->v_utils->v_field(
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), ['label' => 'In welcher Region möchtest Du Botschafter werden?']) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
-						$this->v_utils->v_form_select('time', array('values' => array(
-							array('id' => 1, 'name' => '3-5 Stunden'),
-							array('id' => 2, 'name' => '5-8 Stunden'),
-							array('id' => 3, 'name' => '9-12 Stunden'),
-							array('id' => 4, 'name' => '13-15 Stunden'),
-							array('id' => 5, 'name' => '15-20 Stunden')
-						))) .
-						$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.')),
+						$this->v_utils->v_form_select('time', ['values' => [
+							['id' => 1, 'name' => '3-5 Stunden'],
+							['id' => 2, 'name' => '5-8 Stunden'],
+							['id' => 3, 'name' => '9-12 Stunden'],
+							['id' => 4, 'name' => '13-15 Stunden'],
+							['id' => 5, 'name' => '15-20 Stunden']
+						]]) .
+						$this->v_utils->v_form_textarea('about_me_public', ['desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.']),
 
 						'Botschafter werden',
 
-						array('class' => 'ui-padding')
+						['class' => 'ui-padding']
 					),
 
-						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', array('required' => true, 'values' => array(
-								array('id' => 1, 'name' => $this->translationHelper->s('rv_accept'))
-							))), $rv['title'], array('class' => 'ui-padding'))
-					), array('submit' => 'Antrag auf Botschafterrolle verbindlich absenden'))
+						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', ['required' => true, 'values' => [
+								['id' => 1, 'name' => $this->translationHelper->s('rv_accept')]
+							]]), $rv['title'], ['class' => 'ui-padding'])
+					], ['submit' => 'Antrag auf Botschafterrolle verbindlich absenden'])
 				);
 			}
 		}
@@ -406,8 +406,8 @@ class SettingsControl extends Control
 			if ($_POST['infomail_message'] != 1) {
 				$infomail = 0;
 			}
-			$fspIdsToUnfollow = array();
-			$threadIdsToUnfollow = array();
+			$fspIdsToUnfollow = [];
+			$threadIdsToUnfollow = [];
 			foreach ($_POST as $key => $infoType) {
 				if (substr($key, 0, 11) == 'fairteiler_') {
 					$foodSharePointId = (int)substr($key, 11);
@@ -471,7 +471,7 @@ class SettingsControl extends Control
 
 			if ($check) {
 				if ($oldFs = $this->foodsaverGateway->getFoodsaver($this->session->id())) {
-					$logChangedFields = array('stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum');
+					$logChangedFields = ['stadt', 'plz', 'anschrift', 'telefon', 'handy', 'geschlecht', 'geb_datum'];
 					$this->settingsGateway->logChangedSetting($this->session->id(), $oldFs, $data, $logChangedFields);
 				}
 

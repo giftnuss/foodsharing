@@ -9,7 +9,7 @@ dependency_scanning:
   tags:
   - shared
   - linux
-  image: registry.gitlab.com/foodsharing-dev/images/ci:2
+  image: registry.gitlab.com/foodsharing-dev/images/ci:3
 
 
 .ssh: &ssh

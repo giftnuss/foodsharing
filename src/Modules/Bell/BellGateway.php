@@ -40,7 +40,7 @@ class BellGateway extends BaseGateway
 		\DateTime $time = null
 	): void {
 		if (!is_array($foodsavers)) {
-			$foodsavers = array($foodsavers);
+			$foodsavers = [$foodsavers];
 		}
 
 		if ($link_attributes !== false) {
@@ -266,11 +266,11 @@ class BellGateway extends BaseGateway
 	{
 		foreach ($bells as $i => $iValue) {
 			if (!empty($bells[$i]['vars'])) {
-				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], array('allowed_classes' => false));
+				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], ['allowed_classes' => false]);
 			}
 
 			if (!empty($bells[$i]['attr'])) {
-				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], array('allowed_classes' => false));
+				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], ['allowed_classes' => false]);
 			}
 		}
 

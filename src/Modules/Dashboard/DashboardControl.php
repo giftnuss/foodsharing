@@ -3,8 +3,8 @@
 namespace Foodsharing\Modules\Dashboard;
 
 use Foodsharing\Modules\Basket\BasketGateway;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
@@ -103,13 +103,13 @@ class DashboardControl extends Control
 		if ($check) {
 			$cnt = $this->contentGateway->get(33);
 
-			$cnt['body'] = str_replace(array(
+			$cnt['body'] = str_replace([
 				'{NAME}',
 				'{ANREDE}'
-			), array(
+			], [
 				$this->session->user('name'),
 				$this->translationHelper->s('anrede_' . $this->session->user('gender'))
-			), $cnt['body']);
+			], $cnt['body']);
 
 			if ($this->session->option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
@@ -141,7 +141,7 @@ class DashboardControl extends Control
 		$subtitle = $this->translationHelper->s('no_saved_food');
 
 		if ($this->user['stat_fetchweight'] > 0) {
-			$subtitle = $this->translationHelper->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
+			$subtitle = $this->translationHelper->sv('saved_food', ['weight' => $this->user['stat_fetchweight']]);
 		}
 
 		$this->pageHelper->addContent(
@@ -161,13 +161,13 @@ class DashboardControl extends Control
 
 		$cnt = $this->contentGateway->get(33);
 
-		$cnt['body'] = str_replace(array(
+		$cnt['body'] = str_replace([
 			'{NAME}',
 			'{ANREDE}'
-		), array(
+		], [
 			$this->session->user('name'),
 			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
-		), $cnt['body']);
+		], $cnt['body']);
 
 		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
 
@@ -195,7 +195,7 @@ class DashboardControl extends Control
 
 		global $g_data;
 		$g_data = $val;
-		$elements = array();
+		$elements = [];
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->pageHelper->addJs('
@@ -228,7 +228,7 @@ class DashboardControl extends Control
 		}
 
 		if (!empty($elements)) {
-			$out = $this->v_utils->v_form('grabInfo', $elements, array('submit' => 'Speichern'));
+			$out = $this->v_utils->v_form('grabInfo', $elements, ['submit' => 'Speichern']);
 
 			$this->pageHelper->addJs('
                 $("#grab-info-link").fancybox({
@@ -268,7 +268,7 @@ class DashboardControl extends Control
 		 * check if there are stores not bound to a region
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$storeIds = array();
+			$storeIds = [];
 			foreach ($_SESSION['client']['verantwortlich'] as $b) {
 				$storeIds[] = (int)$b['betrieb_id'];
 			}
@@ -496,10 +496,10 @@ class DashboardControl extends Control
 			$orga .= '
 		</ul>';
 
-			$out = $this->v_utils->v_field($out, 'Deine Bezirke', array('class' => 'ui-padding'));
+			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding']);
 
 			if ($orgacheck) {
-				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
+				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding']);
 			}
 
 			$this->pageHelper->addContent($out, CNT_RIGHT);
@@ -550,7 +550,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), ['sonstige' => false])) {
 			$this->pageHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);

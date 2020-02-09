@@ -36,10 +36,6 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="lat", nullable=true)
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function listNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
@@ -69,11 +65,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="lon", nullable=true)
 	 * @Rest\QueryParam(name="distance", nullable=false, requirements="\d+")
 	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
 	 * @deprecated Old naming scheme, remove this when all clients are updated
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function oldListNearbyFoodSharePointsAction(ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
@@ -85,10 +77,6 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * food share point, 500 if the food share point does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("foodSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
-	 *
-	 * @param int $foodSharePointId
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function getFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
 	{
@@ -111,11 +99,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Get("fairSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
 	 *
-	 * @param int $foodSharePointId
-	 *
 	 * @deprecated Old naming scheme, remove this when all clients are updated
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function oldGetFoodSharePointAction(int $foodSharePointId): \Symfony\Component\HttpFoundation\Response
 	{
@@ -152,8 +136,6 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	 * Normalizes the details of a food share point for the Rest response.
 	 *
 	 * @param array $fspData the food share point data
-	 *
-	 * @return array
 	 */
 	private function normalizeFoodSharePoint(array $data): array
 	{

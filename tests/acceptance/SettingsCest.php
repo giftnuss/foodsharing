@@ -19,8 +19,6 @@ class SettingsCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["newsletter", false]
 	 * @example["newsletter", true]
 	 * @example["infomail_message", false]
@@ -77,8 +75,6 @@ class SettingsCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example[0, "NONE"]
 	 * @example[1, "EMAIL"]
 	 * @example[2, "BELL"]

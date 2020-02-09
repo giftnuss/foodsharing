@@ -89,13 +89,13 @@ function is_allowed($img)
 	$img['name'] = strtolower($img['name']);
 	$img['type'] = strtolower($img['type']);
 
-	$allowed = array('jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true);
+	$allowed = ['jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true];
 
 	$filename = $img['name'];
 	$parts = explode('.', $filename);
 	$ext = end($parts);
 
-	$allowed_mime = array('image/gif' => true, 'image/jpeg' => true, 'image/png' => true);
+	$allowed_mime = ['image/gif' => true, 'image/jpeg' => true, 'image/png' => true];
 
 	if (!isset($allowed[$ext])) {
 		return false;

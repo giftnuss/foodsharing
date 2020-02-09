@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\FlashMessageHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
@@ -413,10 +413,10 @@ abstract class Control
 	public function getPostTime($name)
 	{
 		if (isset($_POST[$name]['hour'], $_POST[$name]['min'])) {
-			return array(
+			return [
 				'hour' => (int)$_POST[$name]['hour'],
 				'min' => (int)$_POST[$name]['min']
-			);
+			];
 		}
 
 		return false;
@@ -461,7 +461,7 @@ abstract class Control
 		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
+				$_SESSION['lastMailMessage'] = [];
 			}
 
 			if (!$this->mem->userIsActive($recip_id)) {
@@ -470,13 +470,13 @@ abstract class Control
 					$foodsaver = $this->foodsaverGateway->getFoodsaver($recip_id);
 					$sender = $this->foodsaverGateway->getFoodsaver($sender_id);
 
-					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
+					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], [
 						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 						'sender' => $sender['name'],
 						'name' => $foodsaver['name'],
 						'message' => $msg,
 						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
-					));
+					]);
 				}
 			}
 		}

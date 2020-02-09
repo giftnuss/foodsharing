@@ -1,8 +1,8 @@
 <?php
 
-use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
 class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 {

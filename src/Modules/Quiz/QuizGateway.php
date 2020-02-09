@@ -256,7 +256,7 @@ class QuizGateway extends BaseGateway
 
 	public function getRightQuestions(int $quizId): array
 	{
-		$out = array();
+		$out = [];
 		$questions = $this->getQuestions($quizId);
 		if ($questions) {
 			foreach ($questions as $q) {
@@ -264,7 +264,7 @@ class QuizGateway extends BaseGateway
 				$out[$questionId] = $q;
 				$answers = $this->getAnswers($questionId);
 				if ($answers) {
-					$out[$questionId]['answers'] = array();
+					$out[$questionId]['answers'] = [];
 					foreach ($answers as $a) {
 						$out[$questionId]['answers'][$a['id']] = $a;
 					}
