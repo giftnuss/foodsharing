@@ -82,14 +82,14 @@ if (($class = $session->getRouteOverride()) === null) {
 }
 
 if (isset($obj)) {
-	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+	if (isset($_GET['a']) && is_callable([$obj, $_GET['a']])) {
 		$meth = $_GET['a'];
 		$obj->$meth($request, $response);
 	} else {
 		$obj->index($request, $response);
 	}
 	$sub = $sub = $obj->getSubFunc();
-	if ($sub !== false && is_callable(array($obj, $sub))) {
+	if ($sub !== false && is_callable([$obj, $sub])) {
 		$obj->$sub($request, $response);
 	}
 } else {

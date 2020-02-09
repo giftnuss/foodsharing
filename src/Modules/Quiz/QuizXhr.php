@@ -61,16 +61,16 @@ class QuizXhr extends Control
 					if ($id > 0) {
 						$this->flashMessageHelper->info('Frage wurde angelegt');
 
-						return array(
+						return [
 							'status' => 1,
 							'script' => 'goTo("/?page=quiz&id=' . (int)$_GET['qid'] . '&fid=' . (int)$id . '");'
-						);
+						];
 					}
 				} else {
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseError("Du solltest eine Frage angeben ;)");'
-					);
+					];
 				}
 			}
 		}
@@ -81,10 +81,10 @@ class QuizXhr extends Control
 		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->quizGateway->deleteQuestion($_GET['id']);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$(".question-' . (int)$_GET['id'] . '").remove();$("#questions").accordion("refresh");pulseInfo("Frage gelöscht!");'
-			);
+			];
 		}
 	}
 
@@ -93,10 +93,10 @@ class QuizXhr extends Control
 		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
 			$this->quizGateway->deleteAnswer($_GET['id']);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$("#answer-' . (int)$_GET['id'] . '").remove();pulseInfo("Antwort gelöscht!");'
-			);
+			];
 		}
 	}
 
@@ -117,16 +117,16 @@ class QuizXhr extends Control
 
 				if (!empty($text) && in_array($right, [AnswerRating::WRONG, AnswerRating::CORRECT, AnswerRating::NEUTRAL])) {
 					if ($id = $this->quizGateway->addAnswer($_GET['qid'], $text, $exp, $right)) {
-						return array(
+						return [
 							'status' => 1,
 							'script' => 'pulseInfo("Antwort wurde angelegt");$("#answerlist-' . (int)$_GET['qid'] . '").append(\'<li class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
-						);
+						];
 					}
 				} else {
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-					);
+					];
 				}
 			}
 		}
@@ -143,16 +143,16 @@ class QuizXhr extends Control
 				if (!empty($text) && in_array($right, [AnswerRating::WRONG, AnswerRating::CORRECT, AnswerRating::NEUTRAL])) {
 					$this->quizGateway->updateAnswer($_GET['id'], $text, $exp, $right);
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseInfo("Antwort wurde geändert");$("#answer-' . (int)$_GET['id'] . '").replaceWith(\'<li id="answer-' . (int)$_GET['id'] . '" class="right-' . (int)$right . '">' . $this->sanitizerService->jsSafe(nl2br(strip_tags($text))) . '</li>\');$( "#questions" ).accordion( "refresh" );'
-					);
+					];
 				}
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-				);
+				];
 			}
 		}
 	}
@@ -270,10 +270,10 @@ class QuizXhr extends Control
 		if ($this->session->may()) {
 			$this->quizSessionGateway->abortSession($_GET['sid'], $this->session->id());
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("Quiz wurde abgebrochen");reload();'
-			);
+			];
 		}
 	}
 
@@ -431,9 +431,9 @@ class QuizXhr extends Control
 			}
 		}
 
-		return array(
+		return [
 			'status' => 0
-		);
+		];
 	}
 
 	public function addcomment()
@@ -441,10 +441,10 @@ class QuizXhr extends Control
 		if ($this->session->may() && !empty($_GET['comment']) && (int)$_GET['id'] > 0) {
 			$this->quizGateway->addUserComment((int)$_GET['id'], $this->session->id(), $_GET['comment']);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("Kommentar wurde gespeichert");$("#qcomment-' . (int)$_GET['id'] . '").hide();'
-			);
+			];
 		}
 	}
 
@@ -493,7 +493,7 @@ class QuizXhr extends Control
 				 * parse the anser parameter
 				 */
 				$answers = urldecode($_GET['answer']);
-				$params = array();
+				$params = [];
 				parse_str($_GET['answer'], $params);
 
 				/*
@@ -835,10 +835,10 @@ class QuizXhr extends Control
 					++$quizIndex;
 					$this->session->set('quiz-index', $quizIndex);
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseError("Diese Frage hat keine Antworten. Überspringe...");ajreq("next",{app:"quiz"});'
-					);
+					];
 				}
 			} else {
 				return $this->quizResult();
@@ -848,10 +848,10 @@ class QuizXhr extends Control
 		++$quizIndex;
 		$this->session->set('quiz-index', $quizIndex);
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseError("Es ist ein Fehler aufgetreten. Frage wird übersprungen.");ajreq("next",{app:"quiz"});'
-		);
+		];
 	}
 
 	private function quizResult()
@@ -863,7 +863,7 @@ class QuizXhr extends Control
 		if ($quiz = $this->quizGateway->getQuiz($this->session->get('quiz-id'))) {
 			if ($questions = $this->session->get('quiz-questions')) {
 				if ($rightQuestions = $this->quizGateway->getRightQuestions($this->session->get('quiz-id'))) {
-					$explains = array();
+					$explains = [];
 					$failurePoints = 0;
 					$question_number = 0;
 					foreach ($questions as $q_key => $q) {
@@ -873,7 +873,7 @@ class QuizXhr extends Control
 						foreach ($valid['explain'] as $e) {
 							if (!isset($explains[$q['id']])) {
 								$explains[$q['id']] = $rightQuestions[$q['id']];
-								$explains[$q['id']]['explains'] = array();
+								$explains[$q['id']]['explains'] = [];
 							}
 							$explains[$q['id']]['explains'][] = $e;
 							$explains[$q['id']]['number'] = $question_number;
@@ -885,18 +885,18 @@ class QuizXhr extends Control
 
 				$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $failurePoints, $quiz['maxfp']);
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)$this->session->get('quiz-session') . '");'
-				);
+				];
 			}
 		}
 	}
 
 	private function resultNew($question, $diaId)
 	{
-		$uanswers = array();
-		$out = array();
+		$uanswers = [];
+		$out = [];
 
 		if (isset($question['answers']) && is_array($question['answers'])) {
 			foreach ($question['answers'] as $a) {
@@ -943,18 +943,18 @@ class QuizXhr extends Control
 						$color = '#ffffff';
 					}
 
-					$out[] = array(
+					$out[] = [
 						'id' => $a['id'],
 						'exp' => nl2br($a['explanation']),
 						'bg' => $bg,
 						'atext' => $atext,
 						'color' => $color
-					);
+					];
 				}
 			}
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => '
 				$(".ui-dialog-titlebar-close").show();
@@ -981,7 +981,7 @@ class QuizXhr extends Control
 				}
 
 			'
-		);
+		];
 	}
 
 	public function pause()
@@ -1015,14 +1015,14 @@ class QuizXhr extends Control
 
 	private function validateAnswer($rightQuestions, $question)
 	{
-		$explains = array();
+		$explains = [];
 
 		$wrongAnswers = 0;
 		$checkCount = 0;
 
 		$everything_false = true;
 
-		$useranswers = array();
+		$useranswers = [];
 		if (isset($question['answers']) && is_array($question['answers'])) {
 			$useranswers = $question['answers'];
 		}
@@ -1081,11 +1081,11 @@ class QuizXhr extends Control
 			$percent = '0';
 		}
 
-		return array(
+		return [
 			'fp' => $failurePoints,
 			'explain' => $explains,
 			'percent' => $percent
-		);
+		];
 	}
 
 	private function getRandomQuestions($quiz_id, $count = 6)
@@ -1099,7 +1099,7 @@ class QuizXhr extends Control
 				$summe += $failurePoints;
 			}
 
-			$out = array();
+			$out = [];
 			// Prozentanteil von jeder Fragenart
 			foreach ($questionCounts as $failurePoints => $failurePoints) {
 				$percent = round($this->percentFrom($summe, $failurePoints));
@@ -1155,16 +1155,16 @@ class QuizXhr extends Control
 					$this->quizGateway->updateQuestion($_GET['id'], $_GET['qid'], $text, $failurePoints, $duration, $wikiLink);
 					$this->flashMessageHelper->info('Frage wurde geändert');
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'reload();'
-					);
+					];
 				}
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'pulseError("Du solltest einen Text angeben ;)");'
-				);
+				];
 			}
 		}
 	}

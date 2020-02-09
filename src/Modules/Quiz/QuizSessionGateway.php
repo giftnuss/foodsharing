@@ -204,7 +204,7 @@ class QuizSessionGateway extends BaseGateway
 	 */
 	private function addRightAnswers(array $indexList, array $fullList): array
 	{
-		$out = array();
+		$out = [];
 
 		$number = 0;
 
@@ -212,14 +212,14 @@ class QuizSessionGateway extends BaseGateway
 			++$number;
 			if (!isset($fullList[$id])) {
 				if ($question = $this->quizGateway->getQuestion($id)) {
-					$answers = array();
+					$answers = [];
 					if ($qanswers = $this->quizGateway->getAnswers($id)) {
 						foreach ($qanswers as $a) {
 							$answers[$a['id']] = $a;
 							$answers[$a['id']]['user_say'] = $a['right'];
 						}
 					}
-					$out[$id] = array(
+					$out[$id] = [
 						'id' => $id,
 						'text' => $question['text'],
 						'duration' => $question['duration'],
@@ -231,7 +231,7 @@ class QuizSessionGateway extends BaseGateway
 						'userfp' => 0,
 						'userduration' => 10,
 						'noco' => 0
-					);
+					];
 				}
 			} else {
 				$out[$id] = $fullList[$id];
@@ -279,13 +279,13 @@ class QuizSessionGateway extends BaseGateway
 
 	public function collectQuizStatus(int $quizId, int $fsId): array
 	{
-		$out = array(
+		$out = [
 			'passed' => 0,
 			'running' => 0,
 			'failed' => 0,
 			'last_try' => 0,
 			'times' => 0
-		);
+		];
 
 		$res = $this->db->fetchAll('
 			SELECT foodsaver_id, `status`, UNIX_TIMESTAMP(`time_start`) AS time_ts
@@ -382,12 +382,6 @@ class QuizSessionGateway extends BaseGateway
 	/**
 	 * Returns the number of sessions matching the given foodsaver Id, quiz Id, and session status.
 	 * If sessionStatus is null, all status types are counted.
-	 *
-	 * @param int $fsId
-	 * @param int $quizId
-	 * @param int|null $sessionStatus
-	 *
-	 * @return int
 	 */
 	public function countSessions(int $fsId, int $quizId, int $sessionStatus = null): int
 	{

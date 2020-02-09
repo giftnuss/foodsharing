@@ -18,10 +18,6 @@ class FoodSharePointCest
 		$this->foodSharePoint = $I->createFoodSharePoint($this->responsible['id'], $this->testBezirk['id']);
 	}
 
-	/**
-	 * @param AcceptanceTester $I
-	 *
-	 * */
 	public function canSeeFoodSharePointInList(AcceptanceTester $I)
 	{
 		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
@@ -74,7 +70,6 @@ class FoodSharePointCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
 	 * @example["user", false]
 	 * @example["responsible", true]
 	 * @example["otherBot", true]

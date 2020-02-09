@@ -6,14 +6,14 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Permissions\ContentPermissions;
+use Foodsharing\Permissions\FAQPermissions;
+use Foodsharing\Permissions\MailboxPermissions;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
-use Foodsharing\Permissions\MailboxPermissions;
-use Foodsharing\Permissions\FAQPermissions;
-use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Permissions\NewsletterEmailPermissions;
 
 final class PageHelper
 {
@@ -71,7 +71,7 @@ final class PageHelper
 		$this->content_top = '';
 		$this->content_overtop = '';
 		$this->add_css = '';
-		$this->bread = array();
+		$this->bread = [];
 		$this->hidden = '';
 		$this->js_func = '';
 		$this->js = '';
@@ -289,7 +289,7 @@ final class PageHelper
 	private function getMessages(): void
 	{
 		if (!isset($_SESSION['msg'])) {
-			$_SESSION['msg'] = array();
+			$_SESSION['msg'] = [];
 		}
 		if (isset($_SESSION['msg']['error']) && !empty($_SESSION['msg']['error'])) {
 			$msg = '';
@@ -312,9 +312,9 @@ final class PageHelper
 			}
 			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
-		$_SESSION['msg']['info'] = array();
-		$_SESSION['msg']['success'] = array();
-		$_SESSION['msg']['error'] = array();
+		$_SESSION['msg']['info'] = [];
+		$_SESSION['msg']['success'] = [];
+		$_SESSION['msg']['error'] = [];
 	}
 
 	private function getContent(int $positionCode = CNT_MAIN): string
@@ -417,7 +417,7 @@ final class PageHelper
 		$this->hidden .= $html;
 	}
 
-	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = array()): void
+	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = []): void
 	{
 		$width = '';
 		if (isset($option['width'])) {

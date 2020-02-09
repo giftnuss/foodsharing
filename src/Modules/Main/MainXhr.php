@@ -27,12 +27,12 @@ class MainXhr extends Control
 			$inid = strip_tags($_POST['inid']);
 			$upload = new fUpload();
 			$upload->setMIMETypes(
-				array(
+				[
 					'image/gif',
 					'image/jpeg',
 					'image/pjpeg',
 					'image/png'
-				),
+				],
 				$this->translationHelper->s('no_image')
 			);
 			try {

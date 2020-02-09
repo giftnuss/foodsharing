@@ -76,7 +76,6 @@ class StoreService
 	 * Returns the time of the next available pickup slot or null if none is available up to the
 	 * given maximum date.
 	 *
-	 * @param int $storeId
 	 * @param Carbon $maxDate end of date range
 	 *
 	 * @return \DateTime the slot's time or null
@@ -102,10 +101,6 @@ class StoreService
 	/**
 	 * Returns the available pickup status of a store: 1, 2, or 3 if there is a free pickup slot in the next day,
 	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days.
-	 *
-	 * @param int $storeId
-	 *
-	 * @return int
 	 */
 	public function getAvailablePickupStatus(int $storeId): int
 	{

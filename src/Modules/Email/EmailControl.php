@@ -13,8 +13,8 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Services\SanitizerService;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Services\SanitizerService;
 
 class EmailControl extends Control
 {
@@ -80,24 +80,24 @@ class EmailControl extends Control
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
-		$this->pageHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', array(
+		$this->pageHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', [
 			$this->v_utils->v_field(
 				$recip .
-				$this->v_utils->v_form_select('mailbox_id', array('values' => $boxes, 'required' => true)) .
-				$this->v_utils->v_form_text('subject', array('required' => true)) .
+				$this->v_utils->v_form_select('mailbox_id', ['values' => $boxes, 'required' => true]) .
+				$this->v_utils->v_form_text('subject', ['required' => true]) .
 				$this->v_utils->v_form_file('attachement'),
 
 				$this->translationHelper->s('mailing_list'),
-				array('class' => 'ui-padding')
+				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', array('nowrapper' => true, 'type' => 'email')), $this->translationHelper->s('message'))
-		), array('submit' => 'Zum Senden Vorbereiten')));
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', ['nowrapper' => true, 'type' => 'email']), $this->translationHelper->s('message'))
+		], ['submit' => 'Zum Senden Vorbereiten']));
 
 		$this->pageHelper->addStyle('#testemail{width:91%;}');
 
 		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 
-		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', array('class' => 'ui-padding')), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', ['class' => 'ui-padding']), CNT_RIGHT);
 
 		$this->pageHelper->addJs("$('#rightmenu').menu();");
 		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->translationHelper->s('personal_styling_desc') . '</div>', $this->translationHelper->s('personal_styling')), CNT_RIGHT);
@@ -134,7 +134,7 @@ class EmailControl extends Control
 
 			$data = $this->dataHelper->getPostData();
 
-			$foodsaver = array();
+			$foodsaver = [];
 
 			if ($this->session->isAmbassador() || $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 				if ($data['recip_choose'] == 'bezirk') {
@@ -163,13 +163,13 @@ class EmailControl extends Control
 					$foodsaver1 = $this->storeGateway->getAllStoreManagers();
 					$foodsaver2 = $this->foodsaverGateway->getActiveAmbassadors();
 					$tmp = array_merge($foodsaver1, $foodsaver2);
-					$foodsaver = array();
+					$foodsaver = [];
 					foreach ($tmp as $t) {
 						$foodsaver[$t['id']] = $t;
 					}
 				} elseif ($data['recip_choose'] == 'manual') {
 					$foodsaver = $data['recip_choosemanual'];
-					str_replace(array("\r"), '', $foodsaver);
+					str_replace(["\r"], '', $foodsaver);
 					$foodsaver = explode("\n", $foodsaver);
 
 					$bezirk = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
@@ -199,7 +199,7 @@ class EmailControl extends Control
 
 					$this->flashMessageHelper->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
 
-					$foodsaver = array();
+					$foodsaver = [];
 				} elseif ($data['recip_choose'] == 'filialbez') {
 					// TODO can probably be removed
 					$foodsaver = $this->storeGateway->getEmailBiepBez($data['recip_choose-choose']);
@@ -218,11 +218,11 @@ class EmailControl extends Control
 			if (!empty($foodsaver)) {
 				$attach = $this->handleAttach('attachement');
 
-				$out = array();
+				$out = [];
 				foreach ($foodsaver as $fs) {
 					$out[$fs['id']] = $fs;
 				}
-				$foodsaver = array();
+				$foodsaver = [];
 				foreach ($out as $o) {
 					$foodsaver[] = $o;
 				}
@@ -247,13 +247,13 @@ class EmailControl extends Control
 			$new_name = bin2hex(random_bytes(16)) . $dateiendung;
 			move_uploaded_file($datei, './data/attach/' . $new_name);
 
-			return array(
+			return [
 				'name' => $datein,
 				'path' => './data/attach/' . $new_name,
 				'uname' => $new_name,
 				'mime' => mime_content_type('./data/attach/' . $new_name),
 				'size' => $size
-			);
+			];
 		}
 
 		return false;

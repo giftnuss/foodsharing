@@ -101,7 +101,7 @@ class MailsControl extends ConsoleControl
 					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$mb_ids = $this->mailsGateway->getMailboxIds(array('lost'));
+						$mb_ids = $this->mailsGateway->getMailboxIds(['lost']);
 						++$stats['unknown-recipient'];
 					}
 
@@ -132,7 +132,7 @@ class MailsControl extends ConsoleControl
 							}
 						}
 
-						$attach = array();
+						$attach = [];
 						foreach ($msg->getAttachments() as $a) {
 							$filename = $a->getFilename();
 							if ($this->attach_allow($filename, null)) {
@@ -268,7 +268,7 @@ class MailsControl extends ConsoleControl
 			$ext = explode('.', $filename);
 			$ext = end($ext);
 			$ext = strtolower($ext);
-			$notallowed = array(
+			$notallowed = [
 				'php' => true,
 				'html' => true,
 				'htm' => true,
@@ -277,8 +277,8 @@ class MailsControl extends ConsoleControl
 				'php3' => true,
 				'php2' => true,
 				'php1' => true
-			);
-			$notallowed_mime = array();
+			];
+			$notallowed_mime = [];
 
 			if (!isset($notallowed[$ext]) && !isset($notallowed_mime[$mime])) {
 				return true;
@@ -378,10 +378,10 @@ class MailsControl extends ConsoleControl
 			$name = $email;
 		}
 
-		return array(
+		return [
 			'personal' => $name,
 			'mailbox' => $p[0],
 			'host' => $p[1]
-		);
+		];
 	}
 }

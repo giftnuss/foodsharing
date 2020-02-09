@@ -9,7 +9,7 @@ class MailboxView extends View
 {
 	public function folder($boxes)
 	{
-		$children = array();
+		$children = [];
 		$lat_js = '';
 		foreach ($boxes as $i => $b) {
 			$expand = '';
@@ -58,33 +58,33 @@ class MailboxView extends View
 
 	public function manageMemberBox($box)
 	{
-		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, array(
-			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], array('label' => $this->translationHelper->s('mailbox_member'), 'xhr' => 'Recip')),
+		return $this->v_utils->v_quickform($box['name'] . '@' . PLATFORM_MAILBOX_HOST, [
+			$this->v_utils->v_form_tagselect('foodsaver_' . $box['id'], ['label' => $this->translationHelper->s('mailbox_member'), 'xhr' => 'Recip']),
 			$this->v_utils->v_input_wrapper($this->translationHelper->s('email_name'), '<input type="text" value="' . $box['email_name'] . '" name="email_name" class="input text value">'),
 			$this->v_utils->v_form_hidden('mbid', $box['id'])
-		), array('submit' => $this->translationHelper->s('save')));
+		], ['submit' => $this->translationHelper->s('save')]);
 	}
 
 	public function mailboxform()
 	{
-		return $this->v_utils->v_quickform($this->translationHelper->s('new_mailbox'), array(
-			$this->v_utils->v_form_text('name', array('desc' => $this->translationHelper->s('mailbox_name_desc')))
-		), array('submit' => $this->translationHelper->s('save')));
+		return $this->v_utils->v_quickform($this->translationHelper->s('new_mailbox'), [
+			$this->v_utils->v_form_text('name', ['desc' => $this->translationHelper->s('mailbox_name_desc')])
+		], ['submit' => $this->translationHelper->s('save')]);
 	}
 
 	public function manageOpt()
 	{
-		return $this->v_utils->v_menu(array(
-			array('name' => $this->translationHelper->s('new_mailbox'), 'href' => '/?page=mailbox&a=newbox')
-		), $this->translationHelper->s('options'));
+		return $this->v_utils->v_menu([
+			['name' => $this->translationHelper->s('new_mailbox'), 'href' => '/?page=mailbox&a=newbox']
+		], $this->translationHelper->s('options'));
 	}
 
 	public function options()
 	{
-		return $this->v_utils->v_menu(array(
-			array('name' => $this->translationHelper->s('refresh'), 'click' => 'mb_refresh();return false;'),
-			array('name' => $this->translationHelper->s('new_message'), 'click' => 'mb_new_message();return false;')
-		), $this->translationHelper->s('options'));
+		return $this->v_utils->v_menu([
+			['name' => $this->translationHelper->s('refresh'), 'click' => 'mb_refresh();return false;'],
+			['name' => $this->translationHelper->s('new_message'), 'click' => 'mb_new_message();return false;']
+		], $this->translationHelper->s('options'));
 	}
 
 	public function noMessage()
@@ -98,10 +98,6 @@ class MailboxView extends View
 
 	/**
 	 * Converts an array with a mail sender/recipient from the database to a string.
-	 *
-	 * @param array $mailAddress
-	 *
-	 * @return string
 	 */
 	private function createMailAddressString(array $mailAddress): string
 	{
@@ -204,7 +200,7 @@ class MailboxView extends View
 		}
 
 		$an = json_decode($mail['to'], true);
-		$an_str = array();
+		$an_str = [];
 		if (is_array($an)) {
 			foreach ($an as $a) {
 				$an_str[] = $a['mailbox'] . '@' . $a['host'];
@@ -280,7 +276,7 @@ class MailboxView extends View
 			PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL .
 			'----------- ' . $this->translationHelper->sv('message_from', date('j.m.Y H:i', $ts)) . ' Uhr -----------' .
 			PHP_EOL . PHP_EOL .
-			PHP_EOL . '> ' . str_replace(array("\r", "\n"), array('', PHP_EOL . '> '), $plain);
+			PHP_EOL . '> ' . str_replace(["\r", "\n"], ['', PHP_EOL . '> '], $plain);
 	}
 
 	public function folderlist($mailboxes, $mailadresses)
@@ -388,7 +384,7 @@ class MailboxView extends View
 								<div class="wrapper">
 									<div class="et-filebox">
 										<form method="post" target="et-upload" action="/xhrapp.php?app=mailbox&m=attach" enctype="multipart/form-data">
-											' . $this->v_utils->v_form_file('et-attach', array('btlabel' => $this->translationHelper->s('attach_file'))) . '
+											' . $this->v_utils->v_form_file('et-attach', ['btlabel' => $this->translationHelper->s('attach_file')]) . '
 										</form>
 									</div>
 

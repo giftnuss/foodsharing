@@ -38,7 +38,7 @@ class LoginCest
 	public function checkInvalidLogin(\ApiTester $I, \Codeception\Example $example)
 	{
 		$pass = sq('pass');
-		$user = call_user_func(array($I, $example[0]), $pass);
+		$user = call_user_func([$I, $example[0]], $pass);
 
 		$I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 

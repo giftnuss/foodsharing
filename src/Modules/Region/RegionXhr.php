@@ -55,12 +55,12 @@ final class RegionXhr extends Control
 			$viewdata['region']['id'] = $regionId;
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
 
-			return array(
+			return [
 				'status' => 1,
-				'data' => array(
+				'data' => [
 					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
-				)
-			);
+				]
+			];
 		}
 	}
 
@@ -83,7 +83,7 @@ final class RegionXhr extends Control
 						$theme = $this->forumGateway->getThreadInfo($_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->emailHelper->tplMail('forum/answer', $f['email'], array(
+							$this->emailHelper->tplMail('forum/answer', $f['email'], [
 								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
@@ -91,14 +91,14 @@ final class RegionXhr extends Control
 								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
-							));
+							]);
 						}
 					}
 
-					echo json_encode(array(
+					echo json_encode([
 						'status' => 1,
 						'message' => 'Prima! Deine Antwort wurde gespeichert.'
-					));
+					]);
 					exit();
 				}
 			}
@@ -108,10 +108,10 @@ final class RegionXhr extends Control
 			 */
 		}
 
-		echo json_encode(array(
+		echo json_encode([
 			'status' => 0,
 			'message' => $this->translationHelper->s('post_could_not_saved')
-		));
+		]);
 		exit();
 	}
 

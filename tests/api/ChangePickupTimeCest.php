@@ -10,18 +10,17 @@ class ChangePickupTimeCest
 {
 	/**
 	 * @param ApiTester $I
-	 * @param \Codeception\Example $example
 	 *
 	 * @example ["createStoreCoordinator", true]
 	 */
 	public function createRequestSucceeds(\ApiTester $I, \Codeception\Example $example)
 	{
 		$store = $I->createStore(1);
-		$user = call_user_func(array($I, $example[0]));
+		$user = call_user_func([$I, $example[0]]);
 		$I->addStoreTeam($store['id'], $user['id'], true);
 
 		$I->login($user['email']);
-		$request = array(
+		$request = [
 			'f' => 'update_abholen',
 			'newfetchtime[]' => 0,
 			'nfttime[hour][]' => 20,
@@ -38,7 +37,7 @@ class ChangePickupTimeCest
 			'bid' => $store['id'],
 			'team' => $user['id'],
 			'id' => 1
-		);
+		];
 
 		$I->sendGET('/xhr.php', $request);
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);

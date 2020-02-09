@@ -37,30 +37,30 @@ class BusinessCardControl extends Control
 				$this->flashMessageHelper->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
 				$this->routeHelper->go('/?page=settings');
 			}
-			$sel_data = array();
+			$sel_data = [];
 			if ($data['bot']) {
 				foreach ($data['bot'] as $b) {
-					$sel_data[] = array(
+					$sel_data[] = [
 						'id' => 'bot:' . $b['id'],
 						'name' => $this->translationHelper->sv('bot_for', $b['name'])
-					);
+					];
 				}
 			}
 
 			if ($data['sm']) {
 				foreach ($data['sm'] as $fs) {
-					$sel_data[] = array(
+					$sel_data[] = [
 						'id' => 'sm:' . $fs['id'],
 						'name' => $this->translationHelper->sv('sm_for', $fs['name'])
-					);
+					];
 				}
 			}
 			if ($data['fs']) {
 				foreach ($data['fs'] as $fs) {
-					$sel_data[] = array(
+					$sel_data[] = [
 						'id' => 'fs:' . $fs['id'],
 						'name' => $this->translationHelper->sv('fs_for', $fs['name'])
-					);
+					];
 				}
 			}
 

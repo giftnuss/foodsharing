@@ -37,12 +37,12 @@ class LoginXhr extends Control
 		try {
 			$uploader = new fUpload();
 			$uploader->setMIMETypes(
-				array(
+				[
 					'image/gif',
 					'image/jpeg',
 					'image/pjpeg',
 					'image/png'
-				),
+				],
 				$this->translationHelper->s('upload_no_image')
 			);
 			$uploader->setMaxSize('5MB');
@@ -82,10 +82,10 @@ class LoginXhr extends Control
 	{
 		$data = $this->joinValidate($_POST);
 		if (!is_array($data)) {
-			echo json_encode(array(
+			echo json_encode([
 				'status' => 0,
 				'error' => $data
-			));
+			]);
 			exit();
 		}
 
@@ -93,22 +93,22 @@ class LoginXhr extends Control
 		if ($id = $this->loginGateway->insertNewUser($data, $token)) {
 			$activationUrl = BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
-			$this->emailHelper->tplMail('user/join', $data['email'], array(
+			$this->emailHelper->tplMail('user/join', $data['email'], [
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
-			));
+			]);
 
-			echo json_encode(array(
+			echo json_encode([
 				'status' => 1
-			));
+			]);
 			exit();
 		}
 
-		echo json_encode(array(
+		echo json_encode([
 			'status' => 0,
 			'error' => $this->translationHelper->s('error')
-		));
+		]);
 		exit();
 	}
 
@@ -178,7 +178,7 @@ class LoginXhr extends Control
 		$data['mobile_phone'] = strip_tags($data['mobile_phone'] ?? null);
 
 		$data['newsletter'] = (int)$data['newsletter'];
-		if (!in_array($data['newsletter'], array(0, 1), true)) {
+		if (!in_array($data['newsletter'], [0, 1], true)) {
 			$data['newsletter'] = 0;
 		}
 
@@ -267,10 +267,10 @@ class LoginXhr extends Control
 			'[0-9])|1212)))$/';
 
 		// Init array of variables to false
-		$valid = array('format' => false,
+		$valid = ['format' => false,
 			'nanpa' => false,
 			'ext' => false,
-			'all' => false);
+			'all' => false];
 
 		//Check data against the format analyzer
 		if (preg_match($format_pattern, $phone, $matchset)) {
@@ -284,10 +284,10 @@ class LoginXhr extends Control
 		}
 
 		//Set array of new components
-		$components = array('ac' => $matchset[1], //area code
+		$components = ['ac' => $matchset[1], //area code
 			'xc' => $matchset[2], //exchange code
 			'sn' => $matchset[3] //subscriber number
-		);
+		];
 		//              $components =   array ( 'ac' => $matchset[1], //area code
 		//                                              'xc' => $matchset[2], //exchange code
 		//                                              'sn' => $matchset[3], //subscriber number
@@ -295,9 +295,9 @@ class LoginXhr extends Control
 		//                                              );
 
 		//Set array of number variants
-		$numbers = array('original' => $matchset[0],
+		$numbers = ['original' => $matchset[0],
 			'stripped' => substr(preg_replace('[\D]', '', $matchset[0]), 0, 10)
-		);
+		];
 
 		//Now let's check the first ten digits against NANPA standards
 		if (preg_match($nanpa_pattern, $numbers['stripped'])) {

@@ -74,7 +74,7 @@ class EmailGateway extends BaseGateway
 
 		$attach_db = '';
 		if ($attach !== false) {
-			$attach_db = json_encode(array($attach));
+			$attach_db = json_encode([$attach]);
 		}
 
 		$email_id = $this->db->insert('fs_send_email', [
@@ -86,7 +86,7 @@ class EmailGateway extends BaseGateway
 			'attach' => $attach_db
 		]);
 
-		$values = array();
+		$values = [];
 		foreach ($foodsaver as $fs) {
 			$values[] = [
 				'email_id' => (int)$email_id,

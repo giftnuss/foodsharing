@@ -21,8 +21,6 @@ class QuizCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["foodsharer", "Werde Foodsaver", "Quiz ohne Zeitlimit"]
 	 * @example["foodsaver", "Werde Betriebsverantwortliche", "Quiz jetzt starten"]
 	 */

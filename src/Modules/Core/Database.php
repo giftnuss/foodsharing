@@ -31,11 +31,7 @@ class Database
 	 * Returns the first row.
 	 * Provide table name, column names and criteria.
 	 *
-	 * @param string $table
 	 * @param mixed  $column_names
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -46,11 +42,7 @@ class Database
 	 * Returns all rows.
 	 * Provide table name, column names and criteria.
 	 *
-	 * @param string $table
 	 * @param mixed $column_names
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchAllByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -60,12 +52,6 @@ class Database
 	/**
 	 * Returns the named column.
 	 * Provide table name, desired column and criteria.
-	 *
-	 * @param string $table
-	 * @param string $column
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchAllValuesByCriteria(string $table, string $column, array $criteria = []): array
 	{
@@ -75,10 +61,6 @@ class Database
 	/**
 	 * Returns the value of a named column in the first row of the result.
 	 * Provide table name, desired column and criteria.
-	 *
-	 * @param string $table
-	 * @param string $column
-	 * @param array  $criteria
 	 *
 	 * @return mixed
 	 */
@@ -113,7 +95,6 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data names of the columns and the row's entries as key-value pairs
-	 * @param array $options
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -130,7 +111,6 @@ class Database
 	 * @param string $table the table's name
 	 * @param array $keys names of the columns that correspond to the values
 	 * @param array $values 2-dim array with names of the columns and the row's entries as key-value pairs for each row
-	 * @param array $options
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -151,7 +131,6 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data names of the columns and the row's entries as key-value pairs
-	 * @param array $options
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -167,7 +146,6 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data 2-dim array with names of the columns and the row's entries as key-value pairs for each row
-	 * @param array $options
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -201,7 +179,7 @@ class Database
 
 		// fill unset keys with null values
 		$nullArray = array_fill_keys($keys, null);
-		$fullData = array();
+		$fullData = [];
 		foreach ($data as $row) {
 			$fullData[] = array_merge($nullArray, $row);
 		}
@@ -239,9 +217,7 @@ class Database
 	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
-			throw new \InvalidArgumentException(
-				"Query update can't be prepared without data."
-			);
+			throw new \InvalidArgumentException("Query update can't be prepared without data.");
 		}
 
 		$set = [];
@@ -409,8 +385,6 @@ class Database
 	 *
 	 * @param array $array some array
 	 * @param bool $keepKeys whether the new array should use the previous keys
-	 *
-	 * @return array
 	 */
 	private function dehierarchizeArray(array $array, bool $keepKeys = true): array
 	{

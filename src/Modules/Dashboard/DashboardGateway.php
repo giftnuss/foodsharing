@@ -28,8 +28,6 @@ class DashboardGateway extends BaseGateway
 	 * Returns the number of stores from the list of store IDs that are not assigned to a district.
 	 *
 	 * @param $storeIds
-	 *
-	 * @return int
 	 */
 	public function countStoresWithoutDistrict($storeIds): int
 	{

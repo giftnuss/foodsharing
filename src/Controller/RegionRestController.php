@@ -66,11 +66,11 @@ class RegionRestController extends AbstractFOSRestController
 			'new_foodsaver_title',
 			$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
 			$this->imageService->img($foodsaver['photo'], 50),
-			array('href' => '/profile/' . (int)$sessionId . ''),
-			array(
+			['href' => '/profile/' . (int)$sessionId . ''],
+			[
 				'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 				'bezirk' => $region['name']
-			),
+			],
 			'new-fs-' . $sessionId,
 			true
 		);

@@ -26,8 +26,8 @@ final class TranslationHelper
 	{
 		global $g_lang;
 		if (is_array($var)) {
-			$search = array();
-			$replace = array();
+			$search = [];
+			$replace = [];
 			foreach ($var as $key => $value) {
 				$search[] = '{' . $key . '}';
 				$replace[] = $value;

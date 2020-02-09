@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Foodsharing\Services\ImageService;
 
 class ReportControl extends Control
 {

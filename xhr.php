@@ -4,8 +4,8 @@ use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
-use Symfony\Component\DependencyInjection\Container;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';

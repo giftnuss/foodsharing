@@ -36,7 +36,7 @@ if (file_exists($revision_filename)) {
 if (defined('SENTRY_URL')) {
 	$client = new Raven_Client(SENTRY_URL);
 	$client->install();
-	$client->tags_context(array('FS_ENV' => $FS_ENV));
+	$client->tags_context(['FS_ENV' => $FS_ENV]);
 	if (defined('SRC_REVISION')) {
 		$client->setRelease(SRC_REVISION);
 	}

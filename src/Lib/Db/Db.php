@@ -32,7 +32,7 @@ class Db
 
 	public function __construct()
 	{
-		$this->values = array();
+		$this->values = [];
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Db
 	 */
 	public function qCol($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
 				$out[] = $row[0];
@@ -204,7 +204,7 @@ class Db
 	 */
 	public function q($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {

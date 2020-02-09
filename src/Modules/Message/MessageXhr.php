@@ -81,12 +81,12 @@ final class MessageXhr extends Control
 					'photo' => $m['photo']
 				];
 			}, $member));
-			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			$xhr->addData('conversation', $this->model->getValues(['name'], 'conversation', $id));
 			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
 			}
 
-			$this->model->setAsRead(array((int)$_GET['id']));
+			$this->model->setAsRead([(int)$_GET['id']]);
 
 			$xhr->send();
 		}
@@ -119,7 +119,7 @@ final class MessageXhr extends Control
 
 		if (!$this->mem->userOnline($recipient['id'])) {
 			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = array();
+				$sessdata = [];
 			}
 
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
@@ -129,33 +129,33 @@ final class MessageXhr extends Control
 				$genderedTitle = $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
 
 				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
-					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], array(
+					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], [
 						'anrede' => $genderedTitle,
 						'sender' => $this->session->user('name'),
 						'name' => $recipient['name'],
 						'storename' => $storeName,
 						'message' => $msg,
 						'link' => $link
-					));
+					]);
 				} else {
 					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
 					if (count($memberNames) > 1) {
-						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], array(
+						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], [
 							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'chatname' => implode(', ', $memberNames),
 							'message' => $msg,
 							'link' => $link
-						));
+						]);
 					} else {
-						$this->emailHelper->tplMail('chat/message', $recipient['email'], array(
+						$this->emailHelper->tplMail('chat/message', $recipient['email'], [
 							'anrede' => $genderedTitle,
 							'sender' => $this->session->user('name'),
 							'name' => $recipient['name'],
 							'message' => $msg,
 							'link' => $link
-						));
+						]);
 					}
 				}
 			}
@@ -187,7 +187,7 @@ final class MessageXhr extends Control
 					if ($member = $this->model->listConversationMembers($_POST['c'])) {
 						$user_ids = array_column($member, 'id');
 
-						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
+						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', [
 							'id' => $message_id,
 							'cid' => (int)$_POST['c'],
 							'fs_id' => $this->session->id(),
@@ -195,7 +195,7 @@ final class MessageXhr extends Control
 							'fs_photo' => $this->session->user('photo'),
 							'body' => $body,
 							'time' => date('Y-m-d H:i:s')
-						));
+						]);
 
 						foreach ($member as $m) {
 							if ($m['id'] != $this->session->id()) {
@@ -207,14 +207,14 @@ final class MessageXhr extends Control
 						}
 					}
 
-					$xhr->addData('msg', array(
+					$xhr->addData('msg', [
 						'id' => $message_id,
 						'body' => $body,
 						'time' => date('Y-m-d H:i:s'),
 						'fs_photo' => $this->session->user('photo'),
 						'fs_name' => $this->session->user('name'),
 						'fs_id' => $this->session->id()
-					));
+					]);
 					$xhr->send();
 				}
 			}
@@ -282,16 +282,12 @@ final class MessageXhr extends Control
 
 	/**
 	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array.
-	 *
-	 * @param int $conversation_id
-	 *
-	 * @return bool
 	 */
 	private function mayConversation(int $conversation_id): bool
 	{
 		// first get the session array
 		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = array();
+			$ids = [];
 		}
 
 		// check if the conversation in stored in the session
@@ -346,7 +342,7 @@ final class MessageXhr extends Control
 			/*
 			 * Make all ids to int and remove doubles check its not 0
 			 */
-			$recip = array();
+			$recip = [];
 			foreach ($_POST['recip'] as $r) {
 				if ((int)$r > 0) {
 					$recip[(int)$r] = (int)$r;
@@ -403,7 +399,7 @@ final class MessageXhr extends Control
 			$conversationKeys = array_flip($conversationIDs);
 
 			$this->model->setAsRead($conversationIDs);
-			$return = array();
+			$return = [];
 			/*
 			 * check is a new message there for active conversation?
 			 */
@@ -416,10 +412,10 @@ final class MessageXhr extends Control
 				$return['convs'] = $conversations;
 			}
 
-			return array(
+			return [
 				'data' => $return,
 				'script' => 'msg.pushArrived(ajax.data);'
-			);
+			];
 		}
 
 		return false;
@@ -435,7 +431,7 @@ final class MessageXhr extends Control
 			exit();
 		}
 
-		echo json_encode(array());
+		echo json_encode([]);
 		exit();
 	}
 }

@@ -128,7 +128,7 @@ class ReportXhr extends Control
 			$storeId = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', ['desc' => $this->translationHelper->s('reportmessage_desc')]));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
 		$dialog->addOpt('width', '$(window).width()*0.9', false);

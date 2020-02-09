@@ -37,7 +37,7 @@ class vMap extends vCore
 			'icon' => 'smile',
 			'prefix' => 'fa'
 		];
-		$this->marker = array();
+		$this->marker = [];
 	}
 
 	public function setSearchPanel($val)
@@ -56,7 +56,7 @@ class vMap extends vCore
 
 	public function setCenter($lat, $lng)
 	{
-		$this->center = array($lat, $lng);
+		$this->center = [$lat, $lng];
 	}
 
 	public function setZoom(int $zoom)

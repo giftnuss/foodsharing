@@ -197,7 +197,7 @@ class ReportView extends View
 			});
 		');
 
-		$rows = array();
+		$rows = [];
 		foreach ($reports as $r) {
 			$rows[] = [
 				['cnt' => '<input type="hidden" class="rid" name="rid" value="' . $r['id'] . '"><span class="photo"><a title="' . $r['fs_name'] . ' ' . $r['fs_nachname'] . '" href="/profile/' . (int)$r['fs_id'] . '"><img id="miniq-' . $r['fs_id'] . '" src="' . $this->imageService->img($r['fs_photo']) . '" /></a></span>'],

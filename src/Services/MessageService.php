@@ -53,7 +53,7 @@ class MessageService
 		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recipientId);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
+				$_SESSION['lastMailMessage'] = [];
 			}
 
 			// Only send message if the user is not currently logged in

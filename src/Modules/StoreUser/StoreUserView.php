@@ -46,7 +46,7 @@ class StoreUserView extends View
 
 	public function u_getVerantwortlicher($storeData)
 	{
-		$out = array();
+		$out = [];
 		foreach ($storeData['foodsaver'] as $fs) {
 			if ($fs['verantwortlich'] == 1) {
 				$out[] = $fs;
@@ -79,7 +79,7 @@ class StoreUserView extends View
 
 		$out .= '</table>';
 
-		$this->pageHelper->hiddenDialog('requests', array($out));
+		$this->pageHelper->hiddenDialog('requests', [$out]);
 		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","title","Anfragen für ' . $this->sanitizerService->jsSafe($storeData['name'], '"') . '");');
 		$this->pageHelper->addJs('$("#dialog_requests").dialog("option","buttons",{});');
 		$this->pageHelper->addJs('$("#dialog_requests").dialog("open");');
@@ -138,11 +138,11 @@ class StoreUserView extends View
 			}
 
 			if ((int)$fs['last_fetch'] > 0) {
-				$last = $this->translationHelper->sv('stat_fetchcount', array(
+				$last = $this->translationHelper->sv('stat_fetchcount', [
 					'date' => date('d.m.Y', $fs['last_fetch'])
-				));
+				]);
 			} else {
-				$last = $this->translationHelper->sv('stat_fetchcount_none', array());
+				$last = $this->translationHelper->sv('stat_fetchcount_none', []);
 			}
 
 			//date at which user was added
@@ -151,9 +151,9 @@ class StoreUserView extends View
 				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
 						? date('d.m.Y', $fs['add_date'])
 						: '(' . $this->translationHelper->s('stat_since_unknown') . ')';
-				$memberSince = $this->translationHelper->sv('stat_teammember_since', array(
+				$memberSince = $this->translationHelper->sv('stat_teammember_since', [
 					'date' => $addedAt
-				));
+				]);
 			}
 
 			$onclick = ' onclick="' . $click . 'return false;"';
@@ -206,9 +206,9 @@ class StoreUserView extends View
 				$addedAt = (!is_null($fs['add_date']) && $fs['add_date'] > 0)
 						? date('d.m.Y', $fs['add_date'])
 						: '(' . $this->translationHelper->s('stat_since_unknown') . ')';
-				$jumperSince = $this->translationHelper->sv('stat_jumper_since', array(
+				$jumperSince = $this->translationHelper->sv('stat_jumper_since', [
 					'date' => $addedAt
-				));
+				]);
 
 				$onclick = ' onclick="' . $click . 'return false;"';
 				$href = '#';
@@ -259,13 +259,13 @@ class StoreUserView extends View
 
 			$out .= '
 			<div class="ui-padding">' .
-				$this->v_utils->v_form_select('team_status', array(
-					'values' => array(
-						array('id' => 0, 'name' => 'Team ist voll'),
-						array('id' => 1, 'name' => 'HelferInnen gesucht'),
-						array('id' => 2, 'name' => 'Es werden dringend HelferInnen gesucht!')
-					)
-				)) . '</div>';
+				$this->v_utils->v_form_select('team_status', [
+					'values' => [
+						['id' => 0, 'name' => 'Team ist voll'],
+						['id' => 1, 'name' => 'HelferInnen gesucht'],
+						['id' => 2, 'name' => 'Es werden dringend HelferInnen gesucht!']
+					]
+				]) . '</div>';
 		}
 
 		return $out;
@@ -278,30 +278,30 @@ class StoreUserView extends View
 		}
 
 		$isRegion = false;
-		$storeRows = array();
+		$storeRows = [];
 		foreach ($storeData as $i => $store) {
 			$status = $this->v_utils->v_getStatusAmpel($store['betrieb_status_id']);
 
-			$storeRows[$i] = array(
-				array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $store['id'] . '">' . $store['name'] . '</a>'),
-				array('cnt' => $store['str'] . ' ' . $store['hsnr']),
-				array('cnt' => $store['plz']),
-				array('cnt' => $status)
-			);
+			$storeRows[$i] = [
+				['cnt' => '<a class="linkrow ui-corner-all" href="/?page=fsbetrieb&id=' . $store['id'] . '">' . $store['name'] . '</a>'],
+				['cnt' => $store['str'] . ' ' . $store['hsnr']],
+				['cnt' => $store['plz']],
+				['cnt' => $status]
+			];
 
 			if (isset($store['bezirk_name'])) {
-				$storeRows[$i][] = array('cnt' => $store['bezirk_name']);
+				$storeRows[$i][] = ['cnt' => $store['bezirk_name']];
 				$isRegion = true;
 			}
 		}
 
-		$head = array(
-			array('name' => 'Name', 'width' => 180),
-			array('name' => 'Anschrift'),
-			array('name' => 'Postleitzahl', 'width' => 90),
-			array('name' => 'Status', 'width' => 50));
+		$head = [
+			['name' => 'Name', 'width' => 180],
+			['name' => 'Anschrift'],
+			['name' => 'Postleitzahl', 'width' => 90],
+			['name' => 'Status', 'width' => 50]];
 		if ($isRegion) {
-			$head[] = array('name' => 'Region');
+			$head[] = ['name' => 'Region'];
 		}
 
 		$table = $this->v_utils->v_tablesorter($head, $storeRows);
@@ -309,7 +309,7 @@ class StoreUserView extends View
 		return $this->v_utils->v_field($table, $title);
 	}
 
-	public function u_form_abhol_table($allDates = false, $option = array())
+	public function u_form_abhol_table($allDates = false, $option = [])
 	{
 		$out = '
 		<table class="timetable">

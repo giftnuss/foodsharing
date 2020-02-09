@@ -47,8 +47,6 @@ class ForumPostCest
 	// tests
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["ambassador", "thread_ambassador_user", true]
 	 * @example["foodsaver", "thread_ambassador_user", false]
 	 * @example["ambassador", "thread_user_ambassador", true]
@@ -139,8 +137,6 @@ class ForumPostCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["unverifiedFoodsaver", "testBezirk"]
 	 * @example["foodsaver", "bigTestBezirk"]
 	 * @example["foodsaver", "moderatedTestBezirk"]
@@ -159,8 +155,6 @@ class ForumPostCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["ambassador", "thread_ambassador_user", true]
 	 */
 	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, \Codeception\Example $example)
@@ -204,8 +198,6 @@ class ForumPostCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["foodsaver", "bigTestBezirk"]
 	 */
 	public function DeleteLastPostAndGetRedirectedToForum(AcceptanceTester $I, \Codeception\Example $example)

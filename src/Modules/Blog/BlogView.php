@@ -8,28 +8,28 @@ class BlogView extends View
 {
 	public function listArticle($data)
 	{
-		$rows = array();
+		$rows = [];
 		foreach ($data as $d) {
-			$row_tmp = array();
+			$row_tmp = [];
 
 			if ($this->session->isAdminFor($d['bezirk_id']) || $this->session->isOrgaTeam()) {
-				$row_tmp[] = array('cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active']));
+				$row_tmp[] = ['cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active'])];
 			} else {
-				$row_tmp[] = array('cnt' => $this->translationHelper->s('status_' . $d['active']));
+				$row_tmp[] = ['cnt' => $this->translationHelper->s('status_' . $d['active'])];
 			}
-			$row_tmp[] = array('cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>');
-			$row_tmp[] = array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>');
-			$row_tmp[] = array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name']))));
+			$row_tmp[] = ['cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>'];
+			$row_tmp[] = ['cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'];
+			$row_tmp[] = ['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])])];
 
 			$rows[] = $row_tmp;
 		}
 
-		$theads = array();
+		$theads = [];
 
-		$theads[] = array('name' => $this->translationHelper->s('status'), 'sort' => false, 'width' => 140);
-		$theads[] = array('name' => $this->translationHelper->s('date'), 'width' => 80);
-		$theads[] = array('name' => $this->translationHelper->s('name'));
-		$theads[] = array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50);
+		$theads[] = ['name' => $this->translationHelper->s('status'), 'sort' => false, 'width' => 140];
+		$theads[] = ['name' => $this->translationHelper->s('date'), 'width' => 80];
+		$theads[] = ['name' => $this->translationHelper->s('name')];
+		$theads[] = ['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50];
 
 		$table = $this->v_utils->v_tablesorter($theads, $rows);
 
@@ -96,27 +96,27 @@ class BlogView extends View
 			$this->pageHelper->addContent($this->v_utils->v_field(
 				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
 				'Status',
-				array('class' => 'ui-padding')
+				['class' => 'ui-padding']
 			), CNT_LEFT);
 		}
 		if (is_array($bezirke) && count($bezirke) > 1) {
-			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', array('values' => $bezirke));
+			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $bezirke]);
 		} elseif (is_array($bezirke)) {
 			$bezirk = end($bezirke);
 			$title = 'Neuer Artikel für ' . $bezirk['name'];
 			$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
 		}
 
-		return $this->v_utils->v_form('test', array(
+		return $this->v_utils->v_form('test', [
 			$this->v_utils->v_field(
 				$bezirkchoose .
-				$this->v_utils->v_form_text('name') . $this->v_utils->v_form_textarea('teaser', array('style' => 'height:75px;')) .
-				$this->v_utils->v_form_picture('picture', array('resize' => array(250, 528), 'crop' => array((250 / 135), (528 / 170)))),
+				$this->v_utils->v_form_text('name') . $this->v_utils->v_form_textarea('teaser', ['style' => 'height:75px;']) .
+				$this->v_utils->v_form_picture('picture', ['resize' => [250, 528], 'crop' => [(250 / 135), (528 / 170)]]),
 
 				$title,
-				array('class' => 'ui-padding')
+				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('nowrapper' => true, 'public_content' => true)), 'Inhalt')
-		));
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', ['nowrapper' => true, 'public_content' => true]), 'Inhalt')
+		]);
 	}
 }

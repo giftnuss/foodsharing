@@ -36,7 +36,7 @@ final class MessageControl extends Control
 
 		$conversations = $this->model->listConversations();
 		if ($conversations) {
-			$ids = array();
+			$ids = [];
 			foreach ($conversations as $c) {
 				$ids[$c['id']] = true;
 			}

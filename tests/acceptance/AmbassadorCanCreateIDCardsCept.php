@@ -4,7 +4,7 @@ function convertRegionName($name)
 {
 	$name = strtolower($name);
 
-	$name = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $name);
+	$name = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $name);
 	$name = preg_replace('/[^a-zA-Z]/', '', $name);
 
 	return $name;

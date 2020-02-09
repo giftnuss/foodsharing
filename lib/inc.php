@@ -33,7 +33,7 @@ require_once 'lang/DE/de.php';
 error_reporting(E_ALL);
 
 if (isset($_GET['logout'])) {
-	$_SESSION['client'] = array();
+	$_SESSION['client'] = [];
 	unset($_SESSION['client']);
 }
 
@@ -69,4 +69,4 @@ $pageHelper->addHidden('<div id="uploadPhoto"><form method="post" enctype="multi
 
 $pageHelper->addHidden('<div id="fs-profile"></div>');
 
-$pageHelper->addHidden('<div id="fs-profile-rate-comment">' . $viewUtils->v_form_textarea('fs-profile-rate-msg', array('desc' => '...')) . '</div>');
+$pageHelper->addHidden('<div id="fs-profile-rate-comment">' . $viewUtils->v_form_textarea('fs-profile-rate-msg', ['desc' => '...']) . '</div>');

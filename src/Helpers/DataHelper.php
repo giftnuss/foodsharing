@@ -16,7 +16,7 @@ class DataHelper
 			return $_POST;
 		}
 
-		return array();
+		return [];
 	}
 
 	public function getValue($id)
@@ -32,7 +32,7 @@ class DataHelper
 
 	public function unsetAll($array, $fields): array
 	{
-		$out = array();
+		$out = [];
 		foreach ($fields as $f) {
 			if (isset($array[$f])) {
 				$out[$f] = $array[$f];
@@ -65,8 +65,6 @@ class DataHelper
 	 * Creates a comma separated string of IDs.
 	 *
 	 * @param array $ids the IDs (may be of type <code>int</code> of <code>string</code>)
-	 *
-	 * @return string
 	 */
 	public function commaSeparatedIds(array $ids): string
 	{

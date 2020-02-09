@@ -3,15 +3,15 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Helpers\FlashMessageHelper;
 
 class ForumService
 {

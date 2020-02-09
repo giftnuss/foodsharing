@@ -70,10 +70,10 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 
 	public function getAssets()
 	{
-		return array(
+		return [
 			'css' => 'widgets/sqlqueries/widget.css',
 			'js' => 'widgets/sqlqueries/widget.js'
-		);
+		];
 	}
 
 	private function formatQueryStr($str)

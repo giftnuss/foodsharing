@@ -81,7 +81,7 @@ class ContentView extends View
 			<p>In vielen Städten gibt es Fair-Teiler an denen Lebensmittel geteilt werden. Ihr könnt euch dort oder an anderen neutralen Orten treffen zum Teilen treffen. Wenn ihr Lebensmittel übergeben oder übernehmen wollt, seid bitte zuverlässig und pünktlich, lasst keinen im "Regen" stehen.</p>
 			<h5><span>5</span> Mach Vorschläge</h5>
 			<p>Wir wollen uns weiterentwickeln, immer besser werden. Dazu brauchen wir Euch mit vielen guten Ideen und Tipps. Die schickt Ihr an <a href="mailto:info@foodsharing.de">info@foodsharing.de</a></p>
-			</div>', 'foodsharing Etikette', array('class' => 'ui-padding')) . '
+			</div>', 'foodsharing Etikette', ['class' => 'ui-padding']) . '
 			<p class="buttons"><br><a href="?page=foodsaver&a=register" style="font-size:180%;" class="button">Jetzt registrieren!</a><br></p>
 		</div>
 		';
@@ -89,12 +89,12 @@ class ContentView extends View
 
 	public function ratgeber()
 	{
-		$accordion = new vAccordion(array(
+		$accordion = new vAccordion([
 			'collapsible' => true,
 			'active' => false,
 			'heightStyle' => 'content',
 			'animate' => false
-		));
+		]);
 
 		$accordion->addPanel('Kühlschrank-Management', '
         <p>Amerikanische Studien haben ergeben, dass es im Kühlschrank oft mikrobiologisch belasteter ist als auf der Toilette. Reinigen allein hilft da nicht unbedingt, auch die Aufbewahrung der Lebensmittel und die richtige Wahl der Reinigungsmittel sowie der Reinigungsintervall sind von entscheidender Bedeutung. Klar ist, dass Küchenlappen und Tücher, die mehrere Tage benutzt wurden, den Kühlschrank eher schmutziger machen als sauber, da sie ideale Vermehrungsbedingungen für Mikroorganismen darstellen (feucht, warm, Nahrung, viel Zeit sich zu vermehren...). Wischtücher müssen mindestens bei 60<span style="white-space:nowrap">&thinsp;</span>°C waschbar sein, besser heißer. Hier sollte man also frisch gewaschene benutzen. </p>

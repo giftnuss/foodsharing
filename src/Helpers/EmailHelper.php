@@ -36,19 +36,19 @@ final class EmailHelper
 		$unsubscribe = $this->twig->render('emailTemplates/general/unsubscribe.html.twig', []);
 
 		if ($email !== false && $token !== false) {
-			$unsubscribe = $this->twig->render('emailTemplates/general/unsubscribe_newsletter.html.twig', array('TOKEN' => $token, 'EMAIL' => $email));
+			$unsubscribe = $this->twig->render('emailTemplates/general/unsubscribe_newsletter.html.twig', ['TOKEN' => $token, 'EMAIL' => $email]);
 		}
 
 		$message = preg_replace('/(<[^>]+) style=".*?"/i', '$1', $message);
 
-		$search = array('<a', '<td', '<li');
-		$replace = array('<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"');
+		$search = ['<a', '<td', '<li'];
+		$replace = ['<a style="color:#F36933"', '<td style="font-size:13px;font-family:Arial;color:#31210C;"', '<li style="margin-bottom:11px"'];
 		$message = str_replace($search, $replace, $message);
 
-		return $this->twig->render('emailTemplates/general/body.html.twig', array('MESSAGE' => $message, 'UNSUBSCRIBE' => $unsubscribe));
+		return $this->twig->render('emailTemplates/general/body.html.twig', ['MESSAGE' => $message, 'UNSUBSCRIBE' => $unsubscribe]);
 	}
 
-	public function tplMail($tpl_id, $to, $var = array(), $from_email = false)
+	public function tplMail($tpl_id, $to, $var = [], $from_email = false)
 	{
 		$mail = new AsyncMail($this->mem);
 
@@ -74,10 +74,10 @@ final class EmailHelper
 		$locale = 'de-de';
 		$tpl_prefix = 'emailTemplates/' . $tpl_id . '.' . $locale;
 		$var = array_change_key_case($var, CASE_UPPER);
-		$message = array(
+		$message = [
 			'subject' => $this->twig->render($tpl_prefix . '.subject.twig', $var),
 			'body' => $this->twig->render($tpl_prefix . '.body.html.twig', $var)
-		);
+		];
 
 		$htmlBody = $this->emailBodyTpl($message['body']);
 		$mail->setHTMLBody($htmlBody);
@@ -131,15 +131,15 @@ final class EmailHelper
 	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
 	{
 		if ($bezirk === false) {
-			$bezirk = array(
+			$bezirk = [
 				'email' => DEFAULT_EMAIL,
 				'email_name' => DEFAULT_EMAIL_NAME
-			);
+			];
 		} elseif (!is_array($bezirk)) {
-			$bezirk = array(
+			$bezirk = [
 				'email' => $bezirk,
 				'email_name' => $bezirk
-			);
+			];
 		} else {
 			if (!$this->validEmail($bezirk['email'])) {
 				$bezirk['email'] = EMAIL_PUBLIC;

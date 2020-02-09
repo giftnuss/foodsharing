@@ -8,8 +8,8 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
@@ -549,8 +549,6 @@ final class FoodsaverGateway extends BaseGateway
 	 * @param bool $includeRegionAmbassador "Real" regions shall be queried
 	 * @param bool $includeGroupAmbassador Work groups shall be queried. If <code>$includeRegionAmbassador</code> is <code>false</code>,
 	 *     this is implicitely handled as <code>true</code>.
-	 *
-	 * @return array
 	 */
 	private function getAmbassadorIds(int $regionId, bool $includeRegionAmbassador = true, bool $includeGroupAmbassador = false): array
 	{
@@ -740,7 +738,6 @@ final class FoodsaverGateway extends BaseGateway
 	/**
 	 * set option is an key value store each var is available in the user session.
 	 *
-	 * @param string $key
 	 * @param $val
 	 */
 	public function setOption(int $fsId, string $key, $val): int

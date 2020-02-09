@@ -8,7 +8,7 @@ final class PassportGeneratorView extends View
 {
 	public function passTable(array $region): string
 	{
-		$data = array();
+		$data = [];
 
 		foreach ($region['foodsaver'] as $fs) {
 			$last = '<span style="display:none">a0</span> <a href="#" class="dateclick linkrow ui-corner-all"> - ' . $this->translationHelper->s('never_generated') . ' - </a>';

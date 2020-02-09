@@ -56,14 +56,14 @@ final class PassportGeneratorGateway extends BaseGateway
 		';
 		$req = $this->db->fetchAll($stm);
 
-		$out = array();
+		$out = [];
 		foreach ($req as $r) {
 			if (!isset($out[$r['bezirk_id']])) {
-				$out[$r['bezirk_id']] = array(
+				$out[$r['bezirk_id']] = [
 					'id' => $r['bezirk_id'],
 					'bezirk' => $r['bezirk_name'],
-					'foodsaver' => array()
-				);
+					'foodsaver' => []
+				];
 			}
 			$out[$r['bezirk_id']]['foodsaver'][] = $r;
 		}

@@ -54,10 +54,10 @@ class WorkGroupXhr extends Control
 
 				$url = urlencode('/?page=bezirk&bid=' . (int)$_GET['id'] . '&sub=wall');
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'goTo("/?page=relogin&url=' . $url . '");'
-				);
+				];
 			}
 		}
 
@@ -67,7 +67,7 @@ class WorkGroupXhr extends Control
 	public function applysend()
 	{
 		if (isset($_GET['f'])) {
-			$output = array();
+			$output = [];
 			parse_str($_GET['f'], $output);
 			if (!empty($output)) {
 				$groupId = $_GET['id'];
@@ -84,24 +84,24 @@ class WorkGroupXhr extends Control
 							$zeit = strip_tags($output['zeit']);
 							$zeit = substr($zeit, 0, 300);
 
-							$content = array(
+							$content = [
 								'Motivation:' . "\n===========\n" . trim($motivation),
 								'Fähigkeiten:' . "\n============\n" . trim($fahig),
 								'Erfahrung:' . "\n==========\n" . trim($erfahrung),
 								'Zeit:' . "\n=====\n" . trim($zeit)
-							);
+							];
 
 							$this->workGroupGateway->groupApply($groupId, $fsId, implode("\n\n", $content));
 
-							$this->emailHelper->libmail(array(
+							$this->emailHelper->libmail([
 								'email' => $fs['email'],
 								'email_name' => $fs['name']
-							), $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
+							], $groupmail, 'Bewerbung für ' . $group['name'], nl2br($fs['name'] . ' möchte gerne in der Arbeitsgruppe ' . $group['name'] . ' mitmachen.' . "\n\n" . implode("\n\n", $content)));
 
-							return array(
+							return [
 								'status' => 1,
 								'script' => 'pulseInfo("Bewerbung wurde abgeschickt!");$("#' . preg_replace('/[^a-z0-9\-]/', '', $_GET['d']) . '").dialog("close");'
-							);
+							];
 						}
 					}
 				}
@@ -127,19 +127,19 @@ class WorkGroupXhr extends Control
 
 			if (!empty($message)) {
 				$userMail = $this->session->user('email');
-				$recipients = array($group['email'], $userMail);
+				$recipients = [$group['email'], $userMail];
 
-				$this->emailHelper->tplMail('general/workgroup_contact', $recipients, array(
+				$this->emailHelper->tplMail('general/workgroup_contact', $recipients, [
 					'gruppenname' => $group['name'],
 					'message' => $message,
 					'username' => $this->session->user('name'),
 					'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-						), $userMail);
+						], $userMail);
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'pulseInfo("Nachricht wurde versendet!");'
-				);
+				];
 			}
 		}
 

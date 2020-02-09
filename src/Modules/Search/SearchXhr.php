@@ -19,25 +19,25 @@ class SearchXhr extends Control
 	{
 		if ($this->session->may('fs')) {
 			if ($res = $this->helper->search($_GET['s'])) {
-				$out = array();
+				$out = [];
 				foreach ($res as $key => $value) {
 					if (count($value) > 0) {
-						$out[] = array(
+						$out[] = [
 							'title' => $this->translationHelper->s($key),
 							'result' => $value
-						);
+						];
 					}
 				}
 
-				return array(
+				return [
 					'data' => $out,
 					'status' => 1
-				);
+				];
 			}
 		}
 
-		return array(
+		return [
 			'status' => 0
-		);
+		];
 	}
 }

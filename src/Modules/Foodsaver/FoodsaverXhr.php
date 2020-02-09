@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Services\SanitizerService;
 use Foodsharing\Services\NotificationService;
+use Foodsharing\Services\SanitizerService;
 
 class FoodsaverXhr extends Control
 {
@@ -39,10 +39,10 @@ class FoodsaverXhr extends Control
 		if ($foodsaver = $this->foodsaverGateway->loadFoodsaver($_GET['id'])) {
 			$html = $this->view->foodsaverForm($foodsaver);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$("#fsform").html(\'' . $this->sanitizerService->jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
-			);
+			];
 		}
 	}
 
@@ -59,10 +59,10 @@ class FoodsaverXhr extends Control
 		$regionData = $this->regionGateway->getRegion($regionId);
 		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $regionData), "'");
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => '$("#foodsaverlist").replaceWith(\'' . $html . '\');fsapp.init();'
-		);
+		];
 	}
 
 	/**
