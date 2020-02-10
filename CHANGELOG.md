@@ -9,6 +9,7 @@
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update mkdirp to version 1 @peter.toennies
 - update twig to version 3 @peter.toennies
+- Added number of food share points to statistics !1351 #81 @alex.simm
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
