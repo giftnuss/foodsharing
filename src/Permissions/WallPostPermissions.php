@@ -29,6 +29,9 @@ class WallPostPermissions
 	public function mayReadWall(int $fsId, string $target, int $targetId): bool
 	{
 		switch ($target) {
+			case 'foodsaver':
+				$result = $fsId > 0;
+				break;
 			case 'bezirk':
 				$result = $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 				break;
