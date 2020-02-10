@@ -48,7 +48,7 @@ class WallPostPermissions
 				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
 				break;
 			default:
-				$result = $fsId > 0;
+				$result = false;
 				break;
 		}
 
