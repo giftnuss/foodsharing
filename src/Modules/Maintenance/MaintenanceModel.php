@@ -40,7 +40,7 @@ class MaintenanceModel extends Db
 		';
 
 		if ($stores_in_range = $this->q($store_query)) {
-			$bids = array();
+			$bids = [];
 
 			foreach ($stores_in_range as $store) {
 				$bids[(int)$store['betrieb_id']] = (int)$store['betrieb_id'];
