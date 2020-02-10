@@ -27,6 +27,7 @@
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
 - Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
+- Remove Sessions from Gateway-Classes !1314 @panschk
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -157,7 +158,6 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
-- Remove Sessions from Gateway-Classes !1314 @panschk
 
 ## Dev/Test/CI stuff
 
