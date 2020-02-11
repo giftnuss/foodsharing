@@ -17,6 +17,7 @@
 - Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
 - Fix small bug in sending quickreply messages without personal field !1321 @alex.simm
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
+- Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz

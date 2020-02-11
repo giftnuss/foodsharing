@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Stats;
 
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class StatsModel extends Db
 {
@@ -205,9 +206,10 @@ class StatsModel extends Db
 		$child_ids[$region_id] = $region_id;
 		$out = [];
 		if ($foodsaver = $this->q('
-			SELECT 	fb.foodsaver_id AS id
-			FROM 	fs_botschafter fb
-			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
+			SELECT 	amb.foodsaver_id AS id
+			FROM 	fs_botschafter amb JOIN fs_bezirk region ON amb.bezirk_id = region.id
+			WHERE 	amb.bezirk_id IN(' . implode(',', $child_ids) . ')
+			AND NOT	region.type = ' . Type::WORKING_GROUP . '
 		')
 		) {
 			foreach ($foodsaver as $fs) {
