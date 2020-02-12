@@ -33,7 +33,7 @@ class WallPostPermissions
 				$result = $fsId > 0;
 				break;
 			case 'bezirk':
-				$result = $this->regionGateway->hasMember($fsId, $targetId) || $this->session->may('orga');
+				$result = $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 				break;
 			case 'event':
 				$event = $this->eventGateway->getEventWithInvites($targetId);
