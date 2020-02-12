@@ -21,6 +21,7 @@
 - Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
 - Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
 
+- Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
