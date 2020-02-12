@@ -37,6 +37,7 @@
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
 - Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
+- Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm 
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
