@@ -105,7 +105,10 @@ class MailsControl extends ConsoleControl
 					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$this->emailHelper->libmail(false, $msg->getFrom(), 'Unbekannte Email-Adresse', 'Die Email-Adresse ' . $msg->getTo() . ' ist nicht bekannt.');
+						// send auto-reply message
+						if (!empty($msg->getFrom()) && $msg->getFrom()->getFullAddress() != DEFAULT_EMAIL) {
+							$this->emailHelper->tplMail('general/invalid_email_address', $msg->getFrom(), ['address' => $msg->getTo()]);
+						}
 						++$stats['unknown-recipient'];
 					} else {
 						try {
