@@ -7,6 +7,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -42,9 +43,9 @@ final class NewsletterRestController extends AbstractFOSRestController
      * send newsletters, or 500 if the email address is invalid.
      *
      * @Rest\Post("newsletter/test")
-     * @Rest\QueryParam(name="address")
-     * @Rest\QueryParam(name="subject")
-     * @Rest\QueryParam(name="message")
+     * @Rest\RequestParam(name="address")
+     * @Rest\RequestParam(name="subject")
+     * @Rest\RequestParam(name="message")
      */
     public function sendTestEmailAction(ParamFetcher $paramFetcher): Response
     {
