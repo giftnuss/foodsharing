@@ -18,7 +18,9 @@ import L from 'leaflet'
 
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import 'mapbox-gl-leaflet'
 
+import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
 
 let u_map = null
@@ -59,16 +61,17 @@ const map = {
     storage.setPrefix('map')
 
     if (storage.get('center') != undefined && storage.get('zoom') != undefined) {
-      u_map = L.map('map').setView(storage.get('center'), storage.get('zoom'))
+      u_map = L.map('map', { maxZoom: 20 }).setView(storage.get('center'), storage.get('zoom'))
     } else {
-      u_map = L.map('map').setView([50.89, 10.13], 6)
+      u_map = L.map('map', { maxZoom: 20 }).setView([50.89, 10.13], 6)
     }
 
     expose({ u_map }) // need to re-expose it as it is just a variable
 
-    L.tileLayer(MAP_TILES_URL, {
-      attribution: MAP_ATTRIBUTION
+    L.mapboxGL({
+      style: MAP_TILES_URL
     }).addTo(u_map)
+    u_map.attributionControl.setPrefix(MAP_ATTRIBUTION)
 
     this.initiated = true
 

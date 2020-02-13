@@ -153,9 +153,11 @@ class RegionAdminView extends View
 		};
 		
 		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-    L.tileLayer(MAP_TILES_URL, {
-	  attribution: MAP_ATTRIBUTION
-    }).addTo(' . $id . '_map);
+
+		L.mapboxGL({
+		  style: MAP_TILES_URL
+		}).addTo(' . $id . '_map);
+		' . $id . '_map.attributionControl.setPrefix(MAP_ATTRIBUTION);
 	');
 	}
 }

@@ -3,6 +3,8 @@ import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
+import 'mapbox-gl-leaflet'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import { MAP_TILES_URL, MAP_GEOCODING_ATTRIBUTION } from '@/consts'
 
 const fsIcon = L.AwesomeMarkers.icon({
@@ -35,14 +37,13 @@ export function attachAddressPicker () {
   const data = [$('#lat').val(), $('#lon').val()]
   let center = [51, 12]
   const initialZoom = 4
-  const map = L.map('map').setView(center, initialZoom)
+  const map = L.map('map', { maxZoom: 18 }).setView(center, initialZoom)
   setTimeout(() => (map.invalidateSize()), 400)
 
-  L.tileLayer(MAP_TILES_URL, {
-    zoomControl: true,
-    maxZoom: 18,
-    attribution: MAP_GEOCODING_ATTRIBUTION
+  L.mapboxGL({
+    style: MAP_TILES_URL
   }).addTo(map)
+  map.attributionControl.setPrefix(MAP_GEOCODING_ATTRIBUTION)
 
   const engine = new PhotonAddressEngine(
     {
