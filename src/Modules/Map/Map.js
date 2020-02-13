@@ -12,6 +12,8 @@ import { showLoader, hideLoader, goTo, ajreq, sleepmode } from '@/script'
 
 import storage from '@/storage'
 
+import { MAP_TILES_URL, MAP_ATTRIBUTION } from '@/consts'
+
 import L from 'leaflet'
 
 import 'leaflet.awesome-markers'
@@ -64,8 +66,8 @@ const map = {
 
     expose({ u_map }) // need to re-expose it as it is just a variable
 
-    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    L.tileLayer(MAP_TILES_URL, {
+      attribution: MAP_ATTRIBUTION
     }).addTo(u_map)
 
     this.initiated = true
