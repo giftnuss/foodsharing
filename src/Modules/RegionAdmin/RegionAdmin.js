@@ -8,6 +8,7 @@ import 'jquery-dynatree'
 import 'leaflet'
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import { MAP_TILES_URL, MAP_ATTRIBUTION } from '@/consts'
 import { goTo, img, pulseError, pulseSuccess } from '@/script'
 import { expose } from '@/utils'
 import './RegionAdmin.css'
@@ -15,7 +16,9 @@ import { deleteGroup } from '@/api/groups'
 
 expose({
   img,
-  deleteActiveGroup
+  deleteActiveGroup,
+  MAP_TILES_URL,
+  MAP_ATTRIBUTION
 })
 
 async function deleteActiveGroup () {

@@ -7,6 +7,8 @@ import 'leaflet.markercluster'
 import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
 
+import { MAP_TILES_URL, MAP_GEOCODING_ATTRIBUTION } from '@/consts'
+
 export let map
 export let clusterGroup
 let defaultMarker
@@ -36,8 +38,8 @@ export async function initializeMap (el, cb = null) {
     .map(el)
     .setView(center, zoom)
 
-  L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+  L.tileLayer(MAP_TILES_URL, {
+    attribution: MAP_GEOCODING_ATTRIBUTION
   }).addTo(map)
 
   clearCluster()
