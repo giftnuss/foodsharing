@@ -490,7 +490,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 
 		if (!$confirmed) {
-			$this->updateBellNotificationForBiebs($storeId, true);
+			$this->updateBellNotificationForStoreManagers($storeId, true);
 		}
 
 		return $queryResult;
@@ -513,7 +513,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 
 		foreach ($storeIdsThatWillBeDeleted as $storeIdDel) {
-			$this->updateBellNotificationForBiebs($storeIdDel);
+			$this->updateBellNotificationForStoreManagers($storeIdDel);
 		}
 
 		return $result;
@@ -526,7 +526,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			'betrieb_id' => $storeId,
 			'date' => $this->db->date($date)
 		]);
-		$this->updateBellNotificationForBiebs($storeId);
+		$this->updateBellNotificationForStoreManagers($storeId);
 
 		return $deletedRows;
 	}
@@ -536,7 +536,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 * if an older notification exists, that has already been marked as read,
 	 * it can be marked as unread again while updating it
 	 */
-	public function updateBellNotificationForBiebs(int $storeId, bool $markNotificationAsUnread = false): void
+	public function updateBellNotificationForStoreManagers(int $storeId, bool $markNotificationAsUnread = false): void
 	{
 		$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
 		$messageIdentifier = 'store-fetch-unconfirmed-' . $storeId;
@@ -581,7 +581,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['foodsaver_id' => $fsid, 'betrieb_id' => $storeId, 'date' => $this->db->date($date)]
 		);
 
-		$this->updateBellNotificationForBiebs($storeId);
+		$this->updateBellNotificationForStoreManagers($storeId);
 
 		return $result;
 	}
@@ -947,17 +947,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		foreach ($expiredBells as $bell) {
 			$storeId = substr($bell['identifier'], strlen('store-fetch-unconfirmed-'));
-			$storeName = $this->db->fetchValueByCriteria('fs_betrieb', 'name', ['id' => $storeId]);
-			$newMessageCount = $this->getUnconfirmedFetchesCount($storeId);
-			$nextUnconfirmedFetchTime = $this->getNextUnconfirmedFetchTime($storeId);
-
-			$newMessageData = [
-				'vars' => ['betrieb' => $storeName, 'count' => $newMessageCount],
-				'time' => $nextUnconfirmedFetchTime,
-				'expiration' => $nextUnconfirmedFetchTime
-			];
-
-			$this->bellGateway->updateBell($bell['id'], $newMessageData, false, false);
+			$this->updateBellNotificationForStoreManagers($storeId);
 		}
 	}
 

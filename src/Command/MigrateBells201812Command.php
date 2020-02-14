@@ -43,7 +43,7 @@ class MigrateBells201812Command extends Command
 
 		//update all store bells
 		foreach ($storeIds as $storeId) {
-			$this->storeGateway->updateBellNotificationForBiebs($storeId);
+			$this->storeGateway->updateBellNotificationForStoreManagers($storeId);
 		}
 	}
 }
