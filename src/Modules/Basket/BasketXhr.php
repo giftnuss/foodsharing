@@ -371,6 +371,7 @@ class BasketXhr extends Control
 				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
 				'requests' => []
 			];
+			$id = 0;
 			foreach ($updates as $update) {
 				if ((int)$update['id'] == $basket['id']) {
 					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
@@ -381,6 +382,7 @@ class BasketXhr extends Control
 							'avatar' => $update['fs_photo'],
 							'sleepStatus' => $update['sleep_status'],
 						],
+						'id' => ++$id, // required for Vue's v-for key parameter
 						'description' => $update['description'],
 						'time' => $time,
 					];

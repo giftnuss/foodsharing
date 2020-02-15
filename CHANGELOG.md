@@ -34,6 +34,7 @@
 - Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
+- Update date-fns to version 2.9.0 !1042 @chriswalg
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

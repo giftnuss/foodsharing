@@ -1,5 +1,5 @@
-import differenceInCalendarYears from 'date-fns/difference_in_calendar_years'
-import isValid from 'date-fns/is_valid'
+import differenceInCalendarYears from 'date-fns/differenceInCalendarYears'
+import isValid from 'date-fns/isValid'
 
 export function ageCheck (value) {
   const age = differenceInCalendarYears(new Date(), new Date(value))

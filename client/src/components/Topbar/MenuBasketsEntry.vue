@@ -29,7 +29,7 @@
         >
           <a
             v-for="req in basket.requests"
-            :key="req.time"
+            :key="req.id"
             href="#"
             class="list-group-item list-group-item-action p-1 request"
             @click.prevent="openChat(req.user.id, $event)"
