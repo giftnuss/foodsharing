@@ -6,11 +6,6 @@ class LoginService
 {
 	public const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
 
-	/**
-	 * @param int $count
-	 *
-	 * @return string
-	 */
 	public function generateMailActivationToken(int $count = 1): string
 	{
 		$token = bin2hex(random_bytes(12));
@@ -26,8 +21,6 @@ class LoginService
 	/**
 	 * @param string $token
 	 * @param int $limit
-	 *
-	 * @return array
 	 */
 	public function validateTokenLimit($token, $limit = self::ACTIVATION_MAIL_LIMIT_PER_DAY): array
 	{
