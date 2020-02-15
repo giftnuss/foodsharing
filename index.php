@@ -16,15 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
-/* @var $request Request */
+/* @var Request $request */
 $request = Request::createFromGlobals();
 $response = new Response('--');
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
-/* @var $csp ContentSecurityPolicy */
+/* @var ContentSecurityPolicy $csp */
 $csp = $container->get(ContentSecurityPolicy::class);
 
 // Security headers :)
@@ -36,24 +36,24 @@ header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPO
 
 require_once 'lib/inc.php';
 
-/* @var $mem Mem */
+/* @var Mem $mem */
 $mem = $container->get(Mem::class);
 
-/* @var $view_utils Utils */
+/* @var Utils $view_utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $routeHelper RouteHelper */
+/* @var RouteHelper $routeHelper */
 $routeHelper = $container->get(RouteHelper::class);
 
-/* @var $pageHelper PageHelper */
+/* @var PageHelper $pageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
-/* @var $session Session */
+/* @var Session $session */
 $session = $container->get(Session::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
-/* @var $debug DebugBar */
+/* @var DebugBar $debug */
 $debug = $container->get(DebugBar::class);
 
 if ($debug->isEnabled()) {
@@ -112,7 +112,7 @@ if ($isUsingResponse) {
 	if ($debug->isEnabled()) {
 		$pageHelper->addContent($debug->renderContent(), CNT_BOTTOM);
 	}
-	/* @var $twig \Twig\Environment */
+	/* @var \Twig\Environment $twig */
 	$twig = $container->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 }

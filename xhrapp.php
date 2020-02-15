@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Container;
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
@@ -141,7 +141,7 @@ if (isset($_GET['app'], $_GET['m'])) {
 	require_once 'config.inc.php';
 	require_once 'lang/DE/de.php';
 
-	/* @var $session \Foodsharing\Lib\Session */
+	/* @var \Foodsharing\Lib\Session $session */
 	$session = $container->get(Session::class);
 	$session->initIfCookieExists();
 

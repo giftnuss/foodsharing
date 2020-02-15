@@ -12,7 +12,7 @@ class FoodsharingUI extends \Codeception\Module
 	/**
 	 * Searches for a value in a tagselect and marks it.
 	 *
-	 * @param $value string to search for and click on, first element will be used if multiple turn up
+	 * @param string $value to search for and click on, first element will be used if multiple turn up
 	 * @param string $tagEditId the ID of the tagselect itself
 	 */
 	public function addInTagSelect($value, $tagEditInSelector, $tagEditId = 'tagedit')

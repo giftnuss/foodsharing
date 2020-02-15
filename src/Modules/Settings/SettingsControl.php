@@ -521,7 +521,7 @@ class SettingsControl extends Control
 	/**
 	 * Creates and saves a new API token for given user.
 	 *
-	 * @param $fsId int Foodsaver ID
+	 * @param int $fsId Foodsaver ID
 	 *
 	 * @return false in case of error or weak algorithm, generated token otherwise
 	 */

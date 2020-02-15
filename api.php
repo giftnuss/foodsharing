@@ -10,8 +10,8 @@ require_once 'config.inc.php';
 require_once 'lang/DE/de.php';
 
 /** Checks the validity of an API token
- * @param $fs Foodsaver ID
- * @param $key API token
+ * @param Foodsaver $fs ID
+ * @param API $key token
  *
  * @return true or False depending on validity
  */
@@ -142,11 +142,11 @@ $fs = $_GET['fs'];
 $key = $_GET['key'];
 $opts = $_GET['opts'];
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
-/* @var $model Db */
+/* @var Db $model */
 $model = $container->get(Db::class);
 
 if (!check_api_token($fs, $key, $model)) {
