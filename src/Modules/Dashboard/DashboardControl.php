@@ -10,11 +10,11 @@ use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\LoginService;
 use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
@@ -26,7 +26,7 @@ class DashboardControl extends Control
 	private StoreGateway $storeGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private EventGateway $eventGateway;
-	private LoginGateway $loginGateway;
+	private LoginService $loginService;
 	private \Twig\Environment $twig;
 	private ProfileGateway $profileGateway;
 	private Sanitizer $sanitizerService;
@@ -41,7 +41,7 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		LoginGateway $loginGateway,
+		LoginService $loginService,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
@@ -55,7 +55,7 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
-		$this->loginGateway = $loginGateway;
+		$this->loginService = $loginService;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;

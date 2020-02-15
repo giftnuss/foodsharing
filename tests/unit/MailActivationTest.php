@@ -1,7 +1,7 @@
 <?php
 
 use Foodsharing\Modules\Login\LoginGateway;
-use Foodsharing\Services\LoginService;
+use Foodsharing\Utility\LoginService;
 
 class MailActivationTest extends \Codeception\Test\Unit
 {

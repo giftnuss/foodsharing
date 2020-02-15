@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Login;
 
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
-use Foodsharing\Services\LoginService;
 use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
@@ -156,7 +155,7 @@ class LoginGateway extends BaseGateway
 		);
 	}
 
-	public function newEmailActivation($fsId): bool
+	public function getMailActivationData(int $fsId): array
 	{
 		$data = $this->db->fetchByCriteria(
 			'fs_foodsaver',
@@ -164,29 +163,12 @@ class LoginGateway extends BaseGateway
 			['id' => $fsId]
 		);
 
-		// Don't send a mail if mail adress is already confirmed
-		if ($data['active'] === 1) {
-			return false;
-		}
+		return $data;
+	}
 
-		// Check existing token
-		$tokenData = $this->loginService->validateTokenLimit($data['token']);
-		if ($tokenData['isValid']) {
-			$token = $this->loginService->generateMailActivationToken($tokenData['count']);
-			$this->db->update('fs_foodsaver', ['token' => $token], ['id' => $fsId]);
-		} else {
-			return false;
-		}
-
-		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
-
-		$this->emailHelper->tplMail('user/join', $data['email'], [
-			'name' => $data['name'],
-			'link' => $activationUrl,
-			'anrede' => $this->translationHelper->s('anrede_' . $data['geschlecht'])
-		]);
-
-		return true;
+	public function updateMailActivationToken(int $fsId, string $token): int
+	{
+		return $this->db->update('fs_foodsaver', ['token' => $token], ['id' => $fsId]);
 	}
 
 	public function addPassRequest(string $email, bool $mail = true)

@@ -12,7 +12,6 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Legal\LegalControl;
-use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -27,8 +26,9 @@ class Session
 	private $regionGateway;
 	private $storeGateway;
 	private $loginGateway;
-	private $storeService;
 	private $initialized = false;
+	private $legalGateway;
+	private $routeHelper;
 
 	private const ROLE_KEYS = [
 		Role::FOODSHARER => 'user',
@@ -47,8 +47,6 @@ class Session
 		RegionGateway $regionGateway,
 		StoreGateway $storeGateway,
 		LoginGateway $loginGateway,
-		StoreService $storeService,
-		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
@@ -58,8 +56,6 @@ class Session
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
 		$this->loginGateway = $loginGateway;
-		$this->storeService = $storeService;
-		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -182,7 +178,6 @@ class Session
 		return null;
 	}
 
-	public function id()
 	public function id(): ?int
 	{
 		if (!$this->initialized) {
