@@ -84,8 +84,8 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @param $forumId integer which forum to return threads for (maps to regions/groups)
-	 * @param $forumSubId integer each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
+	 * @param int $forumId which forum to return threads for (maps to regions/groups)
+	 * @param int $forumSubId each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
 	 * So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads)
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
 	 */

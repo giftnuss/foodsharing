@@ -147,19 +147,20 @@ class BusinessCardControl extends Control
 				$pdf->SetFont('Ubuntu-L', '', 6);
 			}
 
-			$pdf->Text(48.5 + $x, 35.2 + $y, $data['subtitle']);
+			$pdf->SetXY(48.5 + $x, 35.2 + $y);
+			$pdf->MultiCell(50, 12, $data['subtitle'], 0, 'L');
 
 			$pdf->SetTextColor(0, 0, 0);
-			$pdf->Text(52.3 + $x, 46.1 + $y, $data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']);
-
+			$pdf->Text(52.3 + $x, 44.8 + $y, $data['anschrift']);
+			$pdf->Text(52.3 + $x, 47.8 + $y, $data['plz'] . ' ' . $data['stadt']);
 			$tel = $data['handy'];
 			if (empty($tel)) {
 				$tel = $data['telefon'];
 			}
 
-			$pdf->Text(52.3 + $x, 51.3 + $y, $tel);
-			$pdf->Text(52.3 + $x, 55.9 + $y, $data['email']);
-			$pdf->Text(52.3 + $x, 61.3 + $y, BASE_URL);
+			$pdf->Text(52.3 + $x, 51.8 + $y, $tel);
+			$pdf->Text(52.3 + $x, 56.2 + $y, $data['email']);
+			$pdf->Text(52.3 + $x, 61.6 + $y, BASE_URL);
 			if ($x == 0) {
 				$x += 91;
 			} else {

@@ -26,7 +26,7 @@ class ReportRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @param $regionId integer for which region the reports should be returned
+	 * @param int $regionId for which region the reports should be returned
 	 * @Rest\Get("report/region/{regionId}", requirements={"regionId" = "\d+"})
 	 */
 	public function listReportsForRegionAction(int $regionId): \Symfony\Component\HttpFoundation\Response

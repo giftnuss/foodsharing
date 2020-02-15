@@ -22,6 +22,7 @@
 - Fix small bug in sending quickreply messages without personal field !1321 !1347 @alex.simm
 - Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 - Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
+- Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
@@ -36,6 +37,7 @@
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
+- fix some doc annotations !1361 @\_fridtjof_
 
 # 2020-01-26
 Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
@@ -163,6 +165,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Updated dependencies and fixed broken templates !1272 !1283 @ctwx_ok
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
+- Refactored region gateway to use more prepared statements !1297 @alex.simm
 
 ## Dev/Test/CI stuff
 
