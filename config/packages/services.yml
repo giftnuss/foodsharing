@@ -45,7 +45,7 @@ services:
         class: Twig\Extension\DebugExtension
 
     Twig_Extension_Intl:
-        class: Twig_Extensions_Extension_Intl
+        class: Twig\Extra\Intl\IntlExtension
 
     Symfony\Bridge\Twig\Extension\TranslationExtension:
         class: Symfony\Bridge\Twig\Extension\TranslationExtension

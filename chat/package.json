@@ -16,7 +16,7 @@
   "dependencies": {
     "cookie": "^0.4.0",
     "randomstring": "^1.1.5",
-    "redis": "^3.0.0",
+    "redis": "^3.0.2",
     "socket.io": "^2.3.0",
     "url": "^0.11.0"
   },
@@ -27,7 +27,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "socket.io-client": "^2.3.0",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.0",

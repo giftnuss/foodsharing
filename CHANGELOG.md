@@ -8,14 +8,20 @@
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update mkdirp to version 1 @peter.toennies
+- update twig to version 3 @peter.toennies
+- Added number of food share points to statistics !1351 #81 @alex.simm
 
 ## Bugfixes
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
 - Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
 - Improved the banner on welcome page for mobile devices !1329 @chriswalg
 - Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
-- Fix small bug in sending quickreply messages without personal field !1321 @alex.simm
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
+- Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
+- Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
+- Fix small bug in sending quickreply messages without personal field !1321 !1347 @alex.simm
+- Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
+- Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
@@ -26,6 +32,7 @@
 - Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
 - Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
+- Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

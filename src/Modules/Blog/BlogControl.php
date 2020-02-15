@@ -189,7 +189,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
-			$data = $this->model->getValues(['time', 'foodsaver_id'], 'blog_entry', $_GET['id']);
+			$data = $this->blogGateway->getOne_blog_entry($_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];

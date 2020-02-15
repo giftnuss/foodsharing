@@ -8,7 +8,7 @@
             <li>
                 <a href="/?page=event&id={{ event.id }}">
                         <span class="calendar" style="margin-right:10px;">
-                            <span class="month">{{ event.start_ts|localizeddate('none', 'none', NULL, NULL, 'MMMM') }}</span>
+                            <span class="month">{{ event.start_ts|format_date(pattern='MMMM') }}</span>
                             <span class="day">{{ event.start_ts|date('d') }}</span>
                         </span>
                     <span class="title">{{ event.name }}</span><br />

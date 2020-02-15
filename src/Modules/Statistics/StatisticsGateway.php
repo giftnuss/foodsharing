@@ -113,4 +113,9 @@ class StatisticsGateway extends BaseGateway
 		// divide number of fetches by time difference
 		return (int)($basketCount / $diffWeeks);
 	}
+
+	public function countActiveFoodSharePoints(): int
+	{
+		return $this->db->count('fs_fairteiler', ['status' => 1]);
+	}
 }
