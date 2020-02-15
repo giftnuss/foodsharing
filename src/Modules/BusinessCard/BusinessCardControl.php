@@ -148,7 +148,7 @@ class BusinessCardControl extends Control
 			}
 
 			$pdf->SetXY(48.5 + $x, 35.2 + $y);
-			$pdf->MultiCell(50, 12, $data['subtitle'], 0, "L");
+			$pdf->MultiCell(50, 12, $data['subtitle'], 0, 'L');
 
 			$pdf->SetTextColor(0, 0, 0);
 			$pdf->Text(52.3 + $x, 44.8 + $y, $data['anschrift']);
