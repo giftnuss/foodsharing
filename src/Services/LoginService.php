@@ -33,11 +33,7 @@ class LoginService
 	{
 		$tokenData = $this->extractTokenData($token);
 
-		if ($tokenData['count'] > $limit && $tokenData['date'] === date('Ymd')) {
-			$isValid = false;
-		} else {
-			$isValid = true;
-		}
+		$isValid = ($tokenData['count'] <= $limit || $tokenData['date'] !== date('Ymd'));
 
 		if ($tokenData['date'] === date('Ymd')) {
 			$tokenData['count'] = $tokenData['count'] + 1;
