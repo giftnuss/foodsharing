@@ -23,6 +23,7 @@
 - Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
 - Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
 - Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
+- Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
