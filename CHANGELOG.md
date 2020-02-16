@@ -66,6 +66,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - New function for deleting store wall posts via rest !1390 #9 @alex.simm
+- Get rid of /upload.php !1365 @\_fridtjof_
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
