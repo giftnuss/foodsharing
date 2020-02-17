@@ -104,7 +104,7 @@ services:
     expose:
       - 3306
     ports:
-      - 23306:3306
+      - "127.0.0.1:23306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Europe/Berlin
@@ -150,7 +150,7 @@ services:
       PMA_PASSWORD: root
     restart: always
     ports:
-      - 28081:80
+      - "127.0.0.1:28081:80"
     volumes:
       - /sessions
 
@@ -166,7 +166,7 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_test_maildev
     ports:
-      - 28084:80
+      - "127.0.0.1:28084:80"
 
   influxdb:
     container_name: foodsharing_test_influxdb
@@ -174,8 +174,8 @@ services:
     command: >
       influxd -config /etc/influxdb/influxdb.toml
     ports:
-    - 28086:8086
-    - 28089:8089/udp
+    - "127.0.0.1:28086:8086"
+    - "127.0.0.1:28089:8089/udp"
     environment:
       INFLUXDB_ADMIN_ENABLED: "true"
       INFLUXDB_DB: "foodsharing"
