@@ -29,8 +29,7 @@
     </div>
     <div
       ref="inputgroup"
-      class="input-group input-group-sm mr-2 my-1
-"
+      class="input-group input-group-sm mr-2 my-1"
     >
       <div class="input-group-prepend">
         <label
