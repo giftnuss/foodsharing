@@ -63,12 +63,12 @@ $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
 $I->click('Team bearbeiten');
-$I->waitForElement('.tagedit-list');
+$I->waitForElement('.tagedit-list', 5);
 $I->addInTagSelect($bibB['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverA['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverB['name'], '#foodsaver');
 $I->click('Speichern', '#team-form');
-$I->waitForElementNotVisible('#team-form');
+$I->waitForElementNotVisible('#team-form', 5);
 
 /* Mark another coordinator */
 $I->click('Team bearbeiten');
@@ -78,7 +78,7 @@ $I->click('Speichern', '#team-form');
 /* Edit the store to see that team does not change */
 $I->amOnPage($I->storeEditUrl($storeId));
 $I->click('Senden');
-$I->waitForText('Änderungen wurden gespeichert');
+$I->see('Änderungen wurden gespeichert');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));
@@ -91,7 +91,7 @@ $I->see($foodsaverB['name'] . ' ' . $foodsaverB['nachname'], '.team');
 $I->click('Team bearbeiten');
 $I->removeFromTagSelect($bibB['name'] . ' ' . $bibB['nachname']);
 $I->click('Speichern', '#team-form');
-$I->waitForText('Änderungen wurden gespeichert.');
+$I->see('Änderungen wurden gespeichert.');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));

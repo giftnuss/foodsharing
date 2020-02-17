@@ -150,8 +150,8 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->dontSee($title);
 		$mail = $I->getMails()[0];
-		$I->assertContains($title, $mail->text);
-		$I->assertContains('tigt werden', $mail->subject);
+		$I->assertStringContainsString($title, $mail->text);
+		$I->assertStringContainsString('tigt werden', $mail->subject);
 	}
 
 	/**
@@ -173,8 +173,8 @@ class ForumPostCest
 		$title = 'moderated thread to be activated';
 		$this->_createThread($I, $this->moderatedTestBezirk['id'], $title);
 		$mail = $I->getMails()[0];
-		$I->assertContains($title, $mail->text);
-		$I->assertContains('tigt werden', $mail->subject);
+		$I->assertStringContainsString($title, $mail->text);
+		$I->assertStringContainsString('tigt werden', $mail->subject);
 		$I->assertRegExp('/http:\/\/.*bezirk.*&amp;tid=[0-9]+/', $mail->html, 'mail should contain a link to thread');
 		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
 		$link = html_entity_decode($matches[1]);

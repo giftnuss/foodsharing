@@ -4,6 +4,7 @@ class FoodSharePointCest
 {
 	private $testBezirk;
 	private $responsible;
+	private $otherBot;
 	private $user;
 	private $foodSharePoint;
 
@@ -37,14 +38,14 @@ class FoodSharePointCest
 	{
 		$I->login($this->responsible['email']);
 		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
-		$I->waitForText('Fair-Teiler eintragen');
+		$I->waitForText('Fair-Teiler eintragen', 10);
 		$I->click('Fair-Teiler eintragen');
 		$I->waitForText('In welchem Bezirk');
 		$I->selectOption('#bezirk_id', $this->testBezirk['id']);
 		$I->fillField('#name', 'The greatest fairsharepoint');
 		$I->fillField('#desc', 'Blablabla if you come here be hungry!');
 		$I->unlockAllInputFields();
-		$I->fillField('#anschrift', 'Kantstraße 20');
+		$I->fillField('#anschrift', 'Kantstrasse 20');
 		$I->fillField('#plz', '04808');
 		$I->fillField('#ort', 'Wurzen');
 		$I->fillFieldJs('#lat', '1.23');
@@ -53,7 +54,7 @@ class FoodSharePointCest
 		$I->waitForText('wurde erfolgreich eingetragen');
 		$id = $I->grabFromDatabase('fs_fairteiler', 'id', ['name' => 'The greatest fairsharepoint']);
 		$I->amOnPage($I->foodSharePointGetUrl($id));
-		$I->waitForText('Kantstraße 20');
+		$I->waitForText('Kantstrasse 20', 10);
 	}
 
 	public function editFoodSharePoint(AcceptanceTester $I)

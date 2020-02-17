@@ -67,18 +67,19 @@ $I->seeInDatabase('fs_basket', [
 $picker = $I->createFoodsaver();
 
 $nick = $I->haveFriend('nick');
-$nick->does(function (AcceptanceTester $I) use ($id, $picker) {
-	$I->login($picker['email']);
-	$I->amOnPage($I->foodBasketInfoUrl($id));
+$nick->does(
+	static function (AcceptanceTester $I) use ($id, $picker) {
+		$I->login($picker['email']);
+		$I->amOnPage($I->foodBasketInfoUrl($id));
 
-	$I->waitForText('Essenskorb anfragen');
-	$I->click('Essenskorb anfragen');
-	$I->waitForText('Anfrage absenden');
-	$I->fillField('#contactmessage', 'Hi friend, can I have the basket please?');
-	$I->click('Anfrage absenden');
+		$I->waitForText('Essenskorb anfragen');
+		$I->click('Essenskorb anfragen');
+		$I->waitForText('Anfrage absenden');
+		$I->fillField('#contactmessage', 'Hi friend, can I have the basket please?');
+		$I->click('Anfrage absenden');
 
-	$I->waitForText('Anfrage wurde versendet');
-});
+		$I->waitForText('Anfrage wurde versendet');
+	});
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->waitForText('Anfragen 1');

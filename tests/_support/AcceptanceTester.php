@@ -1,6 +1,5 @@
 <?php
 
-use Codeception\Actor;
 use Codeception\Lib\Friend;
 
 /**
@@ -19,7 +18,7 @@ use Codeception\Lib\Friend;
  *
  * @SuppressWarnings(PHPMD)
  */
-class AcceptanceTester extends Actor
+class AcceptanceTester extends Codeception\Actor
 {
 	use _generated\AcceptanceTesterActions;
 	use \Codeception\Lib\Actor\Shared\Friend;
@@ -62,7 +61,7 @@ class AcceptanceTester extends Actor
 	public function seeMatches($regexp, $selector = 'html')
 	{
 		$text = $this->grabTextFrom($selector);
-		$this->doAssertRegExp($regexp, $text);
+		$this->assertRegExp($regexp, $text);
 	}
 
 	public function waitForActiveAPICalls($timeout = 60)

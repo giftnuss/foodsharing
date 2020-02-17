@@ -10,7 +10,7 @@ $foodsaver = $I->createFoodsaver(null, ['name' => 'fs', 'nachname' => 'one']);
 $I->login($foodsaver['email']);
 
 $I->amOnPage('/?page=settings');
-$I->waitForElement('#telefon');
+$I->waitForElement('#telefon', 10);
 
 /*
  * This part should check geocoding. Apparently, the Typeahead autocompletion does not come up in selenium. Help appreciated.
@@ -30,7 +30,7 @@ $I->fillField('#homepage', 'www.matthias-larisch.de');
 $I->fillField('#about_me_public', 'Ich mag foodsharing.');
 
 $I->click('Speichern');
-$I->waitForText('Änderungen wurden gespeichert');
+$I->see('Änderungen wurden gespeichert');
 $I->waitForPageBody();
 /*
  * There is no way to change these without typeahead/geocode. Maybe some complaining users are right? :)
@@ -46,7 +46,7 @@ $I->seeInField('#about_me_public', 'Ich mag foodsharing.');
 
 $I->fillField('#homepage', 'https://www.matthias-larisch.de');
 $I->click('Speichern');
-$I->waitForText('Änderungen wurden gespeichert');
+$I->see('Änderungen wurden gespeichert');
 $I->seeInField('#homepage', 'https://www.matthias-larisch.de');
 
 /* I have no picture - that is the default */
@@ -54,7 +54,7 @@ $I->seeElement('//img[@src="img/portrait.png"]');
 
 $I->click('Neues Foto hochladen');
 $I->attachFile('//input[@type="file"][@name="uploadpic"]', 'avatar-300px.png');
-$I->waitForElement('#fotoupload-save');
+$I->waitForElement('#fotoupload-save', 10);
 $I->clickWithLeftButton('#fotoupload-save');
 /* Now I have a picture and should not see the default */
 $I->dontSeeElement('//img[@src="img/portrait.png"]');
