@@ -10,7 +10,7 @@ services:
     container_name: foodsharing_test_web
     image: registry.gitlab.com/foodsharing-dev/images/web:1.8
     ports:
-      - 28080:8080
+      - "127.0.0.1:28080:8080"
     expose:
       - 8080
     depends_on:
