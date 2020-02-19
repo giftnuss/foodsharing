@@ -5,12 +5,10 @@ namespace Foodsharing\Modules\Basket;
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\WebSocketSender;
-
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
-
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;

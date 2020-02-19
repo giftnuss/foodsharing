@@ -1,8 +1,8 @@
 <?php
 
 use Codeception\Test\Unit;
-use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Modules\Message\MessageGateway;
 
 class MessageGatewayTest extends Unit
 {

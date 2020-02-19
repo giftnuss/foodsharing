@@ -1,7 +1,7 @@
 <?php
 
-use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
+use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 
 class PushNotificationGatewayTest extends \Codeception\Test\Unit
 {

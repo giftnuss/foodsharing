@@ -201,7 +201,6 @@ class SettingsView extends View
 						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
 			),
 			$this->v_utils->v_form_radio('newsletter', [
-
 				'desc' => $this->translationHelper->s('newsletter_desc'),
 				'values' => [
 					['id' => 0, 'name' => $this->translationHelper->s('no')],
