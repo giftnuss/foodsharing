@@ -79,7 +79,7 @@ export default {
   data () {
     return {
       sortBy: 'gender',
-      sortDesc: 'true',
+      sortDesc: true,
       fields: {
         gender: {
           label: this.$i18n('genderlist.gender_table_header'),

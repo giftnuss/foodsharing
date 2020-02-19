@@ -81,11 +81,7 @@ module.exports = merge(webpackBase, {
       filename: 'js/[name].[hash].js',
       chunkFilename: 'js/[id].[chunkhash].js'
     }),
-    publicPath: '/assets/',
-
-    // See https://github.com/ctrlplusb/react-universally/pull/566#issuecomment-373292166
-    // TODO: find somewhere to set the multiStep option from https://github.com/webpack/webpack/issues/6693
-    hotUpdateChunkFilename: '[hash].hot-update.js'
+    publicPath: '/assets/'
   },
   module: {
     rules: [

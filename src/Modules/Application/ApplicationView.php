@@ -17,10 +17,10 @@ class ApplicationView extends View
 
 	public function applicationMenu($application)
 	{
-		return $this->v_utils->v_menu(array(
-			array('click' => 'ajreq(\'accept\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'),
-			array('click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein')
-		), 'Bewerbung annehmen');
+		return $this->v_utils->v_menu([
+			['click' => 'ajreq(\'accept\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Ja'],
+			['click' => 'ajreq(\'decline\',{bid:' . (int)$this->bezirk_id . ',fid:' . (int)$application['id'] . '});return false;', 'name' => 'Nein']
+		], 'Bewerbung annehmen');
 	}
 
 	public function application($application)
@@ -32,7 +32,7 @@ class ApplicationView extends View
 		$cnt = $this->v_utils->v_input_wrapper($application['name'], $cnt);
 		$cnt .= '<div class="clear"></div>';
 
-		$out .= $this->v_utils->v_field($cnt, 'Motivations-Text', array('class' => 'ui-padding'));
+		$out .= $this->v_utils->v_field($cnt, 'Motivations-Text', ['class' => 'ui-padding']);
 
 		return $out;
 	}

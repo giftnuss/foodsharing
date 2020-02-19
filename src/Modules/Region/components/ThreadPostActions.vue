@@ -28,8 +28,8 @@
         <a
           v-for="(symbol, key) in emojis"
           :key="key"
-          @click="giveEmoji(key)"
           class="btn"
+          @click="giveEmoji(key)"
         >
           <Emoji :name="key" />
         </a>
@@ -40,17 +40,17 @@
 
     <!-- non emoji button -->
     <a
-      @click="$emit('reply')"
       class="btn btn-sm btn-secondary"
+      @click="$emit('reply')"
     >
       {{ $i18n('button.answer') }}
     </a>
     <a
       v-if="mayDelete"
       v-b-tooltip.hover
-      @click="$refs.confirmDelete.show()"
       title="Beitrag löschen"
       class="btn btn-sm btn-secondary"
+      @click="$refs.confirmDelete.show()"
     >
       <i class="fas fa-trash-alt" />
     </a>
@@ -66,13 +66,13 @@
 
     <!-- delete confirm modal -->
     <b-modal
-      ref="confirmDelete"
       v-if="mayDelete"
+      ref="confirmDelete"
       :title="$i18n('forum.delete_post')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
-      @ok="$emit('delete')"
       modal-class="bootstrap"
+      @ok="$emit('delete')"
     >
       <p>{{ $i18n('really_delete') }}</p>
     </b-modal>

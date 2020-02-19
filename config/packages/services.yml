@@ -5,8 +5,8 @@ services:
         public: true
 
     Foodsharing\:
-        resource: '../src/*'
-        exclude: '../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php,Modules/PushNotification/Notification}'
+        resource: '../../src/*'
+        exclude: '../../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php,Modules/PushNotification/Notification}'
 
     Foodsharing\Lib\Session:
         calls:
@@ -45,7 +45,7 @@ services:
         class: Twig\Extension\DebugExtension
 
     Twig_Extension_Intl:
-        class: Twig_Extensions_Extension_Intl
+        class: Twig\Extra\Intl\IntlExtension
 
     Symfony\Bridge\Twig\Extension\TranslationExtension:
         class: Symfony\Bridge\Twig\Extension\TranslationExtension
@@ -130,13 +130,19 @@ services:
       calls:
         - [query, ['SET NAMES "utf8mb4"']]
 
+    Foodsharing\Debug\DebugBar:
+        class: Foodsharing\Debug\DisabledDebugBar
+
     PDO:
-      class: PDO
-      arguments:
+        alias: RealPDO
+
+    RealPDO:
+        class: PDO
+        arguments:
         - !php/const DSN
         - !php/const DB_USER
         - !php/const DB_PASS
-      calls:
+        calls:
         - [ setAttribute, [!php/const PDO::ATTR_EMULATE_PREPARES, false]]
         - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
 

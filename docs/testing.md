@@ -54,7 +54,7 @@ of the commands may change with the test driver (PhantomJS, Firefox, Chromium, e
 ```
 $I->amOnPage
 ```
-uses Webdriver GET command and waits for the HTML body of the page to be loaded (JavaScript onload handler fired),
+uses WebDriver GET command and waits for the HTML body of the page to be loaded (JavaScript onload handler fired),
 but nothing else.
 
 ```
@@ -71,3 +71,15 @@ $I->waitForPageBody()
 ```
 can be used to wait for the static page load to be done.
 It does also not wait for any javascript executed etc.
+
+### HtmlAcceptanceTests
+
+Acceptance tests using the `HtmlAcceptanceTester` class are run in *PhpBrowser*. Those tests run on a lower level then WebDriver. They can only test a page's HTML content. Therefore features like JavaScript are not available, but tests run faster.
+
+From [Codeception documentation](https://codeception.com/docs/03-AcceptanceTests):
+
+| | `HtmlAcceptanceTester` | `AcceptanceTester`
+|-|------------------------|--------------------
+|JavaScript | No | Yes
+|`see`/`seeElement` checks if text is… | …present in the HTML source | …actually visible to the user
+|Speed | Fast | Slow

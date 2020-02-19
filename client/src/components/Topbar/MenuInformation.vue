@@ -1,13 +1,13 @@
 <template>
   <nav-item-dropdown
     :no-caret="!displayArrow"
-    tooltip="Infos"
+    :tooltip="$i18n('menu.tooltips.infos')"
     right
   >
     <template slot="button-content">
       <i class="fas fa-info " />
       <span v-if="displayText">
-        Infos
+        {{ $i18n('menu.tooltips.infos') }}
       </span>
     </template>
     <h3 class="dropdown-header">

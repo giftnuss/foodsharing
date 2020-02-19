@@ -3,10 +3,11 @@
 namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
@@ -19,12 +20,11 @@ class ForumService
 	private $foodsaverGateway;
 	private $bellGateway;
 	private $forumFollowerGateway;
-	/* @var Db */
-	private $model;
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
 	private $translationHelper;
+	private $flashMessageHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -32,22 +32,22 @@ class ForumService
 		ForumGateway $forumGateway,
 		ForumFollowerGateway $forumFollowerGateway,
 		Session $session,
-		Db $model,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		FlashMessageHelper $flashMessageHelper
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->session = $session;
-		$this->model = $model;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->flashMessageHelper = $flashMessageHelper;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -106,7 +106,7 @@ class ForumService
 		if (!$isActive) {
 			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
-			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
+			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
 		}
 
 		return $threadId;
@@ -117,7 +117,7 @@ class ForumService
 		$this->forumGateway->activateThread($threadId);
 		/* TODO: this needs proper first activation handling */
 		if ($region) {
-			$this->notifyUsersNewThread($region, $threadId, $ambassadorForum);
+			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
 		}
 	}
 
@@ -140,12 +140,12 @@ class ForumService
 	{
 		if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
-			$poster = $this->model->getVal('name', 'foodsaver', $this->session->id());
+			$posterName = $this->foodsaverGateway->getFoodsaverName($this->session->id());
 			$data = [
 				'link' => BASE_URL . $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId),
 				'thread' => $info['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $poster
+				'poster' => $posterName
 			];
 			$this->notificationMail($follower, 'forum/answer', $data);
 		}
@@ -153,15 +153,15 @@ class ForumService
 
 	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
 	{
-		$theme = $this->model->getValues(array('foodsaver_id', 'name'), 'theme', $threadId);
-		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
+		$theme = $this->forumGateway->getThread($threadId);
+		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
-		if ($foodsaver = $this->foodsaverGateway->getBotschafter($region['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->getAmbassadors($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $theme['name'],
+				'thread' => $theme['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
-				'poster' => $poster,
+				'poster' => $posterName,
 				'bezirk' => $region['name'],
 			];
 
@@ -169,28 +169,35 @@ class ForumService
 		}
 	}
 
-	private function notifyUsersNewThread($region, $threadId, $ambassadorForum)
+	private function notifyMembersOfForumAboutNewThreadViaMail(array $regionData, int $threadId, bool $isAmbassadorForum)
 	{
-		$theme = $this->model->getValues(array('foodsaver_id', 'name', 'last_post_id'), 'theme', $threadId);
-		$body = $this->model->getVal('body', 'theme_post', $theme['last_post_id']);
+		$regionType = $this->regionGateway->getType($regionData['id']);
+		if (!$isAmbassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('no_email_to_states'));
 
-		$poster = $this->model->getVal('name', 'foodsaver', $theme['foodsaver_id']);
+			return;
+		}
 
-		if ($ambassadorForum) {
-			$foodsaver = $this->foodsaverGateway->getBotschafter($region['id']);
+		$theme = $this->forumGateway->getThread($threadId);
+		$body = $this->forumGateway->getPost($theme['last_post_id'])['body'];
+
+		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
+
+		if ($isAmbassadorForum) {
+			$recipients = $this->foodsaverGateway->getAmbassadors($regionData['id']);
 		} else {
-			$foodsaver = $this->foodsaverGateway->listActiveWithFullNameByRegion($region['id']);
+			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($regionData['id']);
 		}
 
 		$data = [
-			'bezirk' => $region['name'],
-			'poster' => $poster,
-			'thread' => $theme['name'],
-			'link' => BASE_URL . $this->url($region['id'], $ambassadorForum, $threadId),
+			'bezirk' => $regionData['name'],
+			'poster' => $posterName,
+			'thread' => $theme['title'],
+			'link' => BASE_URL . $this->url($regionData['id'], $isAmbassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
-		$this->notificationMail($foodsaver,
-			$ambassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
+		$this->notificationMail($recipients,
+			$isAmbassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
 	}
 
 	public function addReaction($fsId, $postId, $key)

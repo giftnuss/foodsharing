@@ -26,7 +26,7 @@ class Mem
 	{
 		if (MEM_ENABLED) {
 			$this->ensureConnected();
-			$options = array();
+			$options = [];
 			if ($ttl > 0) {
 				$options['ex'] = $ttl;
 			}
@@ -46,7 +46,7 @@ class Mem
 	public function queueWork($type, $data)
 	{
 		if (MEM_ENABLED) {
-			$e = serialize(array('type' => $type, 'data' => $data));
+			$e = serialize(['type' => $type, 'data' => $data]);
 			$this->ensureConnected();
 
 			return $this->cache->lPush('workqueue', $e);
@@ -69,7 +69,7 @@ class Mem
 		if (MEM_ENABLED) {
 			$this->ensureConnected();
 
-			return $this->cache->delete($key);
+			return $this->cache->del($key);
 		}
 
 		return false;
@@ -87,7 +87,7 @@ class Mem
 
 	public function userAppend($id, $key, $value)
 	{
-		$out = array();
+		$out = [];
 		if ($val = $this->user($id, $key)) {
 			if (is_array($val)) {
 				$out = $val;
@@ -115,14 +115,14 @@ class Mem
 	{
 		$this->ensureConnected();
 
-		return $this->cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		return $this->cache->sAdd(join(':', ['php', 'user', $fs_id, 'sessions']), $session_id);
 	}
 
 	public function userRemoveSession($fs_id, $session_id)
 	{
 		$this->ensureConnected();
 
-		return $this->cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		return $this->cache->sRem(join(':', ['php', 'user', $fs_id, 'sessions']), $session_id);
 	}
 
 	public function getPageCache($fsId)

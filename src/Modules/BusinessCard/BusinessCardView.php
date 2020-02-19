@@ -34,8 +34,8 @@ class BusinessCardView extends View
 			});		
 		');
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('options'), array(
-				$this->v_utils->v_form_select('opt', array('desc' => $this->translationHelper->s('opt_desc'), 'values' => $selectedData))
-			), array('submit' => 'Visitenkarten erstellen'));
+		return $this->v_utils->v_quickform($this->translationHelper->s('options'), [
+				$this->v_utils->v_form_select('opt', ['desc' => $this->translationHelper->s('opt_desc'), 'values' => $selectedData])
+			], ['submit' => 'Visitenkarten erstellen']);
 	}
 }

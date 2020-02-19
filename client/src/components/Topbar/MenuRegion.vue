@@ -116,10 +116,10 @@
       class="dropdown-divider"
     />
     <a
-      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
+      @click="joinRegionDialog"
     >
       <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
     </a>

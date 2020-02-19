@@ -1,6 +1,7 @@
 <?php
 global $g_lang;
 $g_lang['photo_should_be_usable'] = 'Dein Gesicht sollte auf dem Profilfoto <a href="https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto">erkennbar</a> sein, da es, wenn Du mal <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> wirst, für den Foodsharing-<a href="https://wiki.foodsharing.de/Ausweis">Ausweis</a> verwendet wird.';
+$g_lang['profile_description_text_info'] = 'Bitte fülle dieses Feld nur aus, wenn Du darauf hingewiesen wurdest.';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 $g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wiederhergestellt werden';
@@ -11,7 +12,7 @@ $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 
 $g_lang['position_search'] = 'Adresssuche';
-$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenksörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
+$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenskörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
 $g_lang['settings_general'] = 'Deine Angaben';
 $g_lang['settings_info'] = 'Benachrichtigungen';
 $g_lang['settings_mumble'] = 'Mumble-Einstellungen';
@@ -24,7 +25,7 @@ $g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine in
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
-$g_lang['about_me_public'] = 'Kurzbeschreibung von Dir';
+$g_lang['about_me_public'] = 'Kurzbeschreibung';
 $g_lang['aufgaben_botschafter'] = 'Ich habe das Dokument "Aufgaben der BotschafterInnen von foodsharing gelesen und übernehme ab jetzt für diese die Verantwortlichkeit in meiner Stadt/Region/Bezirk.';
 $g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';
@@ -35,15 +36,19 @@ $g_lang['settings'] = 'Einstellungen';
 $g_lang['follow_food_share_point'] = 'Updates vom Fair-Teiler "{var}"';
 $g_lang['follow_food_share_point_desc'] = 'Du folgst allen Informationen des Fair-Teilers "{var}" . Auf welche Art möchtest Du diese Benachrichtigungen bekommen?';
 $g_lang['follow_food_share_point_mail'] = 'über eine E-Mail-Benachrichtigung';
-$g_lang['follow_food_share_point_alert'] = 'nur über interne Infomeldungen';
+$g_lang['follow_food_share_point_bell'] = 'nur über interne Infomeldungen';
 $g_lang['follow_food_share_point_none'] = 'gar nicht mehr';
 
 $g_lang['follow_thread'] = 'Über das Forenthema "{var}" auf dem Laufenden bleiben?';
 $g_lang['follow_thread_mail'] = 'Ja, ich möchte per E-Mail über neue Posts informiert werden.';
-$g_lang['follow_thread_none'] = 'Bitte nicht mehr über neue Posts informieren.';
+$g_lang['follow_thread_none'] = 'Bitte nicht mehr per E-Mail über neue Posts informieren.';
 $g_lang['follow_thread_desc'] = '';
 
 $g_lang['newmail'] = 'Gib hier Deine neue E-Mail-Adresse ein';
+$g_lang['newmail_illegal_domain'] = 'Bitte verwende eine andere E-Mail-Adresse, damit Du Dein Passwort jederzeit wiederherstellen kannst.';
+$g_lang['newmail_invalid'] = 'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.';
+$g_lang['newmail_in_use'] = 'Diese E-Mail-Adresse benutzt bereits jemand anderes.';
+$g_lang['newmail_sent'] = 'Gehe jetzt zu Deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!';
 $g_lang['passcheck'] = 'Bestätige die Änderung bitte mit Deinem Passwort';
 $g_lang['sleep_mode_saved'] = 'Die Einstellungen wurden gespeichert';
 $g_lang['sleep_mode_date_missing'] = 'Bitte gib für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!';

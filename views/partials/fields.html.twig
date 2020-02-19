@@ -12,7 +12,7 @@
 {% endblock picture_upload_widget %}
 
 {% block form_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="input-wrapper" id="{{ id }}-wrapper">
             {{ form_label(form, null, { 'label_attr': { 'class': 'wrapper-label ui-widget'}}) }}
             {{ form_errors(form) }}
@@ -21,7 +21,7 @@
             </div>
             <div style="clear:both;"></div>
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_row %}
 
 

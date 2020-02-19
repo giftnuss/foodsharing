@@ -182,16 +182,7 @@ final class ProfileGateway extends BaseGateway
 
 	private function getViolationCount(int $fsId): int
 	{
-		$stm = '
-			SELECT
-				COUNT(r.id)
-			FROM
-	            `fs_report` r
-			WHERE
-				r.foodsaver_id = :fs_id
-		';
-
-		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
+		return (int)$this->db->count('fs_report', ['foodsaver_id' => $fsId]);
 	}
 
 	private function getNotesCount(int $fsId): int

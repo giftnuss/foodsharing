@@ -33,7 +33,7 @@ define('EMAIL_PUBLIC_NAME', 'foodsharing-Freiwillige');
 define('NOREPLY_EMAIL_HOST', 'foodsharing.de');
 define('PLATFORM_MAILBOX_HOST', 'foodsharing.network');
 
-define('MAILBOX_OWN_DOMAINS', array('foodsharing.network', 'lebensmittelretten.de', 'foodsharing.de'));
+define('MAILBOX_OWN_DOMAINS', ['foodsharing.network', 'lebensmittelretten.de', 'foodsharing.de']);
 
 define('MAILER_HOST', 'maildev');
 define('MEM_ENABLED', true);

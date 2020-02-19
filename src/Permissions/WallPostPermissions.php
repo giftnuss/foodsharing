@@ -29,6 +29,9 @@ class WallPostPermissions
 	public function mayReadWall(int $fsId, string $target, int $targetId): bool
 	{
 		switch ($target) {
+			case 'foodsaver':
+				$result = $fsId > 0;
+				break;
 			case 'bezirk':
 				$result = $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 				break;
@@ -48,7 +51,7 @@ class WallPostPermissions
 				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
 				break;
 			default:
-				$result = $fsId > 0;
+				$result = false;
 				break;
 		}
 
@@ -69,12 +72,6 @@ class WallPostPermissions
 
 	/**
 	 * method describing _global_ deletion access to walls. Every author is always allowed to remove their own posts.
-	 *
-	 * @param int $fsId
-	 * @param string $target
-	 * @param int $targetId
-	 *
-	 * @return bool
 	 */
 	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
 	{

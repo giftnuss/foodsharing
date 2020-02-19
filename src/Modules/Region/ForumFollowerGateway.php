@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
 {
@@ -22,6 +23,24 @@ class ForumFollowerGateway extends BaseGateway
 		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
 	}
 
+	public function getForumThreads(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				th.id,
+				th.name,
+				tf.infotype
+
+			FROM
+				`fs_theme_follower` tf
+				LEFT JOIN `fs_theme` th
+				ON tf.theme_id = th.id
+
+			WHERE
+				tf.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
+	}
+
 	public function isFollowing($fsId, $threadId)
 	{
 		return $this->db->exists(
@@ -34,15 +53,41 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->insertIgnore(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 1]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::EMAIL]
 		);
 	}
 
-	public function unfollowThread($fs_id, $thread_id)
+	public function updateInfoType(int $fsId, int $themeId, int $infoType): int
+	{
+		return $this->db->update(
+			'fs_theme_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $themeId
+			]
+		);
+	}
+
+	public function unfollowThread(int $fsId, int $threadId): int
 	{
 		return $this->db->delete(
 			'fs_theme_follower',
-			['theme_id' => $thread_id, 'foodsaver_id' => $fs_id]
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $threadId
+			]
+		);
+	}
+
+	public function unfollowThreads(int $fsId, array $threadIds): int
+	{
+		return $this->db->delete(
+			'fs_theme_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'theme_id' => $threadIds
+			]
 		);
 	}
 

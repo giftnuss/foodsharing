@@ -61,7 +61,7 @@
 }
 
 .records-table tr.selected td {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
   color: #ffffff !important;
 }
 
@@ -118,7 +118,7 @@
   overflow: auto;
   margin-top: 10px;
   padding: 5px;
-  box-shadow: inset 0 0 3px #4a3520;
+  box-shadow: inset 0 0 3px var(--fs-brown);
   background-image: url(/img/icon-mail/attach-loader.gif);
   background-repeat: no-repeat;
   background-position: center;
@@ -137,7 +137,7 @@
   margin-top: 10px;
   padding: 5px;
   border: 0;
-  box-shadow: inset 0 0 3px #4a3520;
+  box-shadow: inset 0 0 3px var(--fs-brown);
   font-size: 14px;
 }
 
@@ -187,7 +187,7 @@ span.status.answer-1 {
   margin-top: 10px;
   height: 23px;
   padding: 5px;
-  box-shadow: inset 0 0 3px #4a3520;
+  box-shadow: inset 0 0 3px var(--fs-brown);
 }
 
 #mailattch ul {
@@ -217,7 +217,7 @@ span.status.answer-1 {
 }
 
 #mailattch ul li a:hover {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
   color: #ffffff;
 }
 

@@ -6,74 +6,12 @@ use Foodsharing\Lib\Db\Db;
 
 class MaintenanceModel extends Db
 {
-	public function listOldBellIds($days = 7)
-	{
-		return $this->qCol('
-			SELECT id
-			FROM `fs_bell`
-			WHERE `time` <= NOW( ) - INTERVAL ' . (int)$days . ' DAY
-		');
-	}
-
-	public function setFoodsaverInactive($fsids)
-	{
-		return $this->update('UPDATE fs_foodsaver SET sleep_status = 2 WHERE id IN(' . implode(',', $fsids) . ')');
-	}
-
-	public function getUserBotschafter($fsid)
-	{
-		return $this->q('
-			SELECT 
-				fs.id,
-				fs.name,
-				fs.email
-				
-			FROM 
-				fs_foodsaver_has_bezirk hb,
-				fs_botschafter b,
-				fs_foodsaver fs
-				
-			WHERE 
-				b.foodsaver_id = fs.id
-				
-			AND 
-				b.bezirk_id = hb.bezirk_id
-				
-			AND
-				hb.foodsaver_id = ' . (int)$fsid . '
-		');
-	}
-
-	public function listFoodsaverInactiveSince($days)
-	{
-		return $this->q('
-			SELECT 
-				`id`,
-				`name`,
-				`nachname`,
-				`email`,
-				`geschlecht`
-
-			FROM 
-				fs_foodsaver
-				
-			WHERE 
-				sleep_status = 0
-			AND
-				`last_login` < "' . date('Y-m-d H:i:s', (time() - (84400 * $days))) . '"
-		');
-	}
-
-	public function getAlertBetriebeAdmins()
+	public function getStoreManagersWhichWillBeAlerted()
 	{
 		$dow = (int)date('w');
+		$dow_tomorrow = ($dow + 1) % 7;
 
-		$dow2 = $dow + 1;
-		if ($dow2 == 7) {
-			$dow2 = 0;
-		}
-
-		$sql = '
+		$store_query = '
 			SELECT 
 				DISTINCT z.betrieb_id
 
@@ -94,66 +32,38 @@ class MaintenanceModel extends Db
 				(
 					z.dow = ' . (int)$dow . '
 					AND
-					z.time >= "15:00:00"
+					z.time >= "' . date('H:i:s') . '"
 				)
 				OR
-				(
-					z.dow = ' . (int)$dow2 . '
-					AND
-					z.time < "15:00:00"
-				)
+					z.dow = ' . (int)$dow_tomorrow . '
 			)
 		';
 
-		if ($betriebe = $this->q($sql)) {
-			$bids = array();
+		if ($stores_in_range = $this->q($store_query)) {
+			$bids = [];
 
-			foreach ($betriebe as $b) {
-				$bids[(int)$b['betrieb_id']] = (int)$b['betrieb_id'];
+			foreach ($stores_in_range as $store) {
+				$bids[(int)$store['betrieb_id']] = (int)$store['betrieb_id'];
 			}
 
-			$date1 = date('Y-m-d') . ' 15:00:00';
-			$date1_end = date('Y-m-d') . ' 23:59:59';
-
-			$date2 = date('Y-m-d', time() + 86400) . ' 00:00:00';
-			$date2_end = date('Y-m-d', time() + 86400) . ' 15:00:00';
-
-			$sql2 = '
+			$fetcher_query = '
 				SELECT
-					DISTINCT b.id
-				
+					DISTINCT a.betrieb_id AS id
 				FROM
-					fs_betrieb b,
 					fs_abholer a
-				
-				WHERE
-					a.betrieb_id = b.id
-						
-				AND 
+				WHERE 
 					a.confirmed = 1
-						
 				AND 
-					b.id IN(' . implode(',', $bids) . ')
-							
-				AND 
-				(
-					(
-						a.date >= "' . $date1 . '"
-						AND
-						a.date <= "' . $date1_end . '"
-					)
-					OR
-					(
-						a.date >= "' . $date2 . '"
-						AND
-						a.date <= "' . $date2_end . '"
-					)
-				)
+					a.betrieb_id IN(' . implode(',', $bids) . ')
+				AND
+					a.date >= NOW()
+				AND
+					a.date <= CURRENT_DATE() + INTERVAL 2 DAY
 			';
 
-			if ($betrieb_has_fetcher = $this->q($sql2)) {
-				foreach ($betrieb_has_fetcher as $bb) {
-					unset($bids[$bb['id']]);
+			if ($store_has_fetcher = $this->q($fetcher_query)) {
+				foreach ($store_has_fetcher as $store_fetcher) {
+					unset($bids[$store_fetcher['id']]);
 				}
 			}
 

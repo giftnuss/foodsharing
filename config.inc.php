@@ -36,7 +36,7 @@ if (file_exists($revision_filename)) {
 if (defined('SENTRY_URL')) {
 	$client = new Raven_Client(SENTRY_URL);
 	$client->install();
-	$client->tags_context(array('FS_ENV' => $FS_ENV));
+	$client->tags_context(['FS_ENV' => $FS_ENV]);
 	if (defined('SRC_REVISION')) {
 		$client->setRelease(SRC_REVISION);
 	}
@@ -46,8 +46,12 @@ if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
 	define('RAVEN_JAVASCRIPT_CONFIG', getenv('RAVEN_JAVASCRIPT_CONFIG'));
 }
 
+if (!defined('CSP_REPORT_URI')) {
+	define('CSP_REPORT_URI', null);
+}
+
 if (!defined('CSP_REPORT_ONLY')) {
-	define('CSP_REPORT_ONLY', true);
+	define('CSP_REPORT_ONLY', false);
 }
 
 define('FPDF_FONTPATH', __DIR__ . '/lib/font/');

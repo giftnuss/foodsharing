@@ -2,7 +2,7 @@
   <div class="container bootstrap">
     <div class="card mb-3 rounded">
       <div class="card-header text-white bg-primary">
-        Alle Betriebe aus dem Bezirk {{ regionName }}
+        {{ $i18n('store.allStoresOfRegion') }} {{ regionName }}
         <span>
           {{ $i18n('memberlist.some_in_all', {some: storesFiltered.length, all: stores.length}) }}
         </span>
@@ -37,21 +37,34 @@
           <div class="col">
             <button
               v-b-tooltip.hover
-              @click="clearFilter"
               type="button"
               class="btn btn-sm"
               title="Filter leeren"
+              @click="clearFilter"
             >
               <i class="fas fa-times" />
             </button>
           </div>
+          <div
+            v-if="showCreateStore"
+            :regionId="regionId"
+            class="col"
+          >
+            <a
+              :href="$url('storeAdd', regionId)"
+              class="btn btn-sm btn-secondary btn-block"
+            >
+              {{ $i18n('store.addNewStoresButton') }}
+            </a>
+          </div>
         </div>
-
         <b-table
+          id="store-list"
           :fields="fieldsFiltered"
           :current-page="currentPage"
           :per-page="perPage"
           :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
           :items="storesFiltered"
           small
           hover
@@ -82,8 +95,8 @@
             slot-scope="row"
           >
             <b-button
-              @click.stop="row.toggleDetails"
               size="sm"
+              @click.stop="row.toggleDetails"
             >
               {{ row.detailsShowing ? 'x' : 'Details' }}
             </b-button>
@@ -114,22 +127,34 @@
             v-model="currentPage"
             :total-rows="storesFiltered.length"
             :per-page="perPage"
+            aria-controls="store-list"
             class="my-0"
           />
         </div>
       </div>
       <div
         v-else
-        class="card-body"
+        class="card-body d-flex justify-content-center"
       >
-        Es sind noch keine Betriebe eingetragen
+        {{ $i18n('store.noStores') }}
+        <div
+          v-if="showCreateStore"
+          :regionId="regionId"
+          class="col"
+        >
+          <a
+            :href="$url('storeAdd', regionId)"
+            class="btn btn-sm btn-secondary btn-block"
+          >
+            {{ $i18n('store.addNewStoresButton') }}
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import {
   BTable,
   BPagination,
@@ -138,7 +163,6 @@ import {
   BButton,
   BCard
 } from 'bootstrap-vue'
-
 import StoreStatusIcon from './StoreStatusIcon.vue'
 
 export default {
@@ -152,11 +176,20 @@ export default {
     stores: {
       type: Array,
       default: () => []
+    },
+    regionId: {
+      type: Number,
+      default: 0
+    },
+    showCreateStore: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      sortBy: 'name',
+      sortBy: 'added',
+      sortDesc: true,
       currentPage: 1,
       perPage: 20,
       filterText: '',
@@ -244,6 +277,7 @@ export default {
           else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added' && key !== 'zipcode') fields[key] = this.fields[key]
         }
       }
+
       return fields
     }
   },

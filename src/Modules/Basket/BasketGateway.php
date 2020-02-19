@@ -3,7 +3,8 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\BaseGateway;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\Basket\Status as BasketStatus;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 
 class BasketGateway extends BaseGateway
 {
@@ -15,7 +16,7 @@ class BasketGateway extends BaseGateway
 			WHERE status = :status
 			';
 
-		return $this->db->fetchAll($stm, [':status' => Status::REQUESTED_MESSAGE_READ]);
+		return $this->db->fetchAll($stm, [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
 	}
 
 	public function addBasket(
@@ -27,8 +28,8 @@ class BasketGateway extends BaseGateway
 		$location_type,
 		$lat,
 		$lon,
-		$lifetime, //in seconds
-		$bezirk_id,
+		$lifeTimeInSeconds,
+		$region_id,
 		$fsId
 	): int {
 		$appost = 1;
@@ -41,7 +42,7 @@ class BasketGateway extends BaseGateway
 			'fs_basket',
 			[
 				'foodsaver_id' => $fsId,
-				'status' => Status::REQUESTED_MESSAGE_READ,
+				'status' => BasketStatus::REQUESTED_MESSAGE_READ,
 				'time' => date('Y-m-d H:i:s'),
 				'description' => strip_tags($desc),
 				'picture' => strip_tags($pic),
@@ -52,9 +53,9 @@ class BasketGateway extends BaseGateway
 				'weight' => (float)$weight,
 				'lat' => (float)$lat,
 				'lon' => (float)$lon,
-				'bezirk_id' => (int)$bezirk_id,
+				'bezirk_id' => (int)$region_id,
 				'appost' => $appost,
-				'until' => date('Y-m-d', time() + $lifetime),
+				'until' => date('Y-m-d', time() + $lifeTimeInSeconds),
 			]
 		);
 	}
@@ -67,7 +68,7 @@ class BasketGateway extends BaseGateway
 	 * @param int $id the basket's id
 	 * @param int|bool $status a basket status or false
 	 *
-	 * @return array|bool the details of the basket or false
+	 * @return array the details of the basket or an empty array
 	 */
 	public function getBasket($id, $status = false)
 	{
@@ -96,24 +97,33 @@ class BasketGateway extends BaseGateway
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
-				fs.sleep_status
-				
+				fs.sleep_status,
+				COUNT(a.foodsaver_id) AS request_count				
 			FROM
-				fs_basket b,
+				fs_basket b
+			INNER JOIN
 				fs_foodsaver fs
-				
-			WHERE 
-				b.foodsaver_id = fs.id
-			
+			ON
+				b.foodsaver_id = fs.id			
 			AND
 				b.id = :id
+			LEFT OUTER JOIN
+				fs_basket_anfrage a
+			ON
+				a.`status` IN(:status_unread,:status_read)
+			AND
+				a.basket_id = b.id
 			' . $status_sql . '				
 		';
-		$basket = $this->db->fetch($stm, [':id' => $id]);
+		$basket = $this->db->fetch($stm, [
+			':id' => $id,
+			':status_unread' => RequestStatus::REQUESTED_MESSAGE_UNREAD,
+			':status_read' => RequestStatus::REQUESTED_MESSAGE_READ
+		]);
 
 		//check if the first fetch succeeded
 		if (empty($basket) || !isset($basket['foodsaver_id']) || !isset($basket['fsf_id'])) {
-			return false;
+			return [];
 		}
 
 		$stm = '
@@ -138,7 +148,7 @@ class BasketGateway extends BaseGateway
 		return $basket;
 	}
 
-	public function listRequests($basket_id, $id): array
+	public function listRequests(int $basket_id, $foodsaver_id): array
 	{
 		$stm = '		
 				SELECT
@@ -174,15 +184,15 @@ class BasketGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
-				':status_read' => Status::REQUESTED_MESSAGE_READ,
-				':foodsaver_id' => $id,
+				':status_unread' => RequestStatus::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => RequestStatus::REQUESTED_MESSAGE_READ,
+				':foodsaver_id' => $foodsaver_id,
 				':basket_id' => $basket_id,
 			]
 		);
 	}
 
-	public function getRequest($basket_id, $fs_id, $id): array
+	public function getRequest(int $basket_id, int $foodsaver_id_requester, $foodsaver_id_offerer): array
 	{
 		$stm = '		
 				SELECT
@@ -192,27 +202,20 @@ class BasketGateway extends BaseGateway
 					fs.id AS fs_id,
 					fs.geschlecht AS fs_gender,
 					b.id		
-		
 				FROM
 					fs_basket_anfrage a,
 					fs_basket b,
-					fs_foodsaver fs
-		
+					fs_foodsaver fs		
 				WHERE
-					a.basket_id = b.id
-		
+					a.basket_id = b.id		
 				AND
-					a.`status` IN(:status_unread,:status_read)
-		
+					a.`status` IN(:status_unread,:status_read)		
 				AND
-					a.foodsaver_id = fs.id
-		
+					a.foodsaver_id = fs.id		
 				AND
-					b.foodsaver_id = :foodsaver_id
-				
+					b.foodsaver_id = :foodsaver_id_offerer				
 				AND
-					a.foodsaver_id = :fs_id
-				
+					a.foodsaver_id = :foodsaver_id_requester				
 				AND
 					a.basket_id = :basket_id		
 				';
@@ -220,16 +223,44 @@ class BasketGateway extends BaseGateway
 		return $this->db->fetch(
 			$stm,
 			[
-				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
-				':status_read' => Status::REQUESTED_MESSAGE_READ,
-				':foodsaver_id' => $id,
-				':fs_id' => $fs_id,
+				':status_unread' => RequestStatus::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => RequestStatus::REQUESTED_MESSAGE_READ,
+				':foodsaver_id_offerer' => $foodsaver_id_offerer,
+				':foodsaver_id_requester' => $foodsaver_id_requester,
 				':basket_id' => $basket_id,
 			]
 		);
 	}
 
-	public function listUpdates($fsId): array
+	public function getRequestStatus(int $basket_id, int $foodsaver_id_requester, int $foodsaver_id_offerer): array
+	{
+		$stm = '		
+				SELECT
+					a.`status`			
+				FROM
+					fs_basket_anfrage a,
+					fs_basket b		
+				WHERE
+					a.basket_id = b.id		
+				AND
+					b.foodsaver_id = :foodsaver_id_offerer
+				AND
+					a.foodsaver_id = :foodsaver_id_requester
+				AND
+					a.basket_id = :basket_id		
+				';
+
+		return $this->db->fetch(
+			$stm,
+			[
+				':foodsaver_id_offerer' => $foodsaver_id_offerer,
+				':foodsaver_id_requester' => $foodsaver_id_requester,
+				':basket_id' => $basket_id,
+			]
+		);
+	}
+
+	public function listUpdates(int $foodsaverId): array
 	{
 		$stm = '
 			SELECT 
@@ -265,14 +296,14 @@ class BasketGateway extends BaseGateway
 		return $this->db->fetchAll(
 			$stm,
 			[
-				':status_unread' => Status::REQUESTED_MESSAGE_UNREAD,
-				':status_read' => Status::REQUESTED_MESSAGE_READ,
-				':foodsaver_id' => $fsId,
+				':status_unread' => RequestStatus::REQUESTED_MESSAGE_UNREAD,
+				':status_read' => RequestStatus::REQUESTED_MESSAGE_READ,
+				':foodsaver_id' => $foodsaverId,
 			]
 		);
 	}
 
-	public function getUpdateCount($id): int
+	public function getUpdateCount(int $foodsaverId): int
 	{
 		$stm = '
 				SELECT COUNT(a.basket_id)
@@ -284,11 +315,11 @@ class BasketGateway extends BaseGateway
 
 		return (int)$this->db->fetchValue(
 			$stm,
-			[':status' => Status::REQUESTED_MESSAGE_UNREAD, ':foodsaver_id' => $id]
+			[':status' => RequestStatus::REQUESTED_MESSAGE_UNREAD, ':foodsaver_id' => $foodsaverId]
 		);
 	}
 
-	public function addTypes($basket_id, $types): void
+	public function addTypes(int $basket_id, array $types): void
 	{
 		if (!empty($types)) {
 			foreach ($types as $type) {
@@ -297,7 +328,7 @@ class BasketGateway extends BaseGateway
 		}
 	}
 
-	public function addKind($basket_id, $kinds): void
+	public function addKind(int $basket_id, array $kinds): void
 	{
 		if (!empty($kinds)) {
 			foreach ($kinds as $kind) {
@@ -306,15 +337,15 @@ class BasketGateway extends BaseGateway
 		}
 	}
 
-	public function removeBasket($id, $fsId): int
+	public function removeBasket(int $basketId, int $foodsaverId): int
 	{
 		return $this->db->update(
 			'fs_basket',
 			[
-				'status' => Status::DELETED_OTHER_REASON,
+				'status' => BasketStatus::DELETED_OTHER_REASON,
 				'update' => date('Y-m-d H:i:s')
 			],
-			['id' => $id, 'foodsaver_id' => $fsId]
+			['id' => $basketId, 'foodsaver_id' => $foodsaverId]
 		);
 	}
 
@@ -339,7 +370,7 @@ class BasketGateway extends BaseGateway
 		);
 	}
 
-	public function listMyBaskets($fsId): array
+	public function listMyBaskets(int $foodsaverId): array
 	{
 		$stm = '
 			SELECT 
@@ -359,14 +390,14 @@ class BasketGateway extends BaseGateway
 				';
 		if ($baskets = $this->db->fetchAll(
 			$stm,
-			[':foodsaver_id' => $fsId, ':status' => Status::REQUESTED_MESSAGE_READ]
+			[':foodsaver_id' => $foodsaverId, ':status' => BasketStatus::REQUESTED_MESSAGE_READ]
 		)
 		) {
 			foreach ($baskets as $key => $b) {
 				$stm = 'SELECT COUNT(foodsaver_id) FROM fs_basket_anfrage WHERE basket_id = :basket_id AND status < :status';
 				$baskets[$key]['req_count'] = $this->db->fetchValue(
 					$stm,
-					[':basket_id' => $b['id'], ':status' => Status::REQESTED]
+					[':basket_id' => $b['id'], ':status' => RequestStatus::REQUESTED]
 				);
 			}
 
@@ -376,32 +407,20 @@ class BasketGateway extends BaseGateway
 		return [];
 	}
 
-	public function setStatus($basket_id, $status, $fsId): void
+	public function setStatus(int $basket_id, int $status, int $foodsaverId): void
 	{
 		$appost = 1;
 		if (isset($_REQUEST['appost']) && '0' === $_REQUEST['appost']) {
 			$appost = 0;
 		}
 
-		$stm = '
-			REPLACE INTO `fs_basket_anfrage`
-			(
-				`foodsaver_id`, `basket_id`, `status`, `time`,`appost`
-			) 
-			VALUES 
-			(
-				:foodsaver_id, :basket_id, :status, NOW(), :appost
-			)	
-		';
-		$this->db->execute(
-			$stm,
-			[
-				':foodsaver_id' => $fsId,
-				':basket_id' => $basket_id,
-				':status' => $status,
-				':appost' => $appost,
-			]
-		);
+		$this->db->insertOrUpdate('fs_basket_anfrage', [
+			'foodsaver_id' => $foodsaverId,
+			'basket_id' => $basket_id,
+			'status' => $status,
+			'time' => $this->db->now(),
+			'appost' => $appost
+		]);
 	}
 
 	public function getAmountOfFoodBaskets(int $fs_id): int
@@ -409,7 +428,7 @@ class BasketGateway extends BaseGateway
 		return $this->db->count('fs_basket', ['foodsaver_id' => $fs_id]);
 	}
 
-	public function listNearbyBasketsByDistance($fs_id, $gps_coordinate, int $distance_km = 30): array
+	public function listNearbyBasketsByDistance($foodsaver_id, $gps_coordinate, int $distance_km = 30): array
 	{
 		return $this->db->fetchAll(
 			'
@@ -450,8 +469,8 @@ class BasketGateway extends BaseGateway
 				':lat' => (float)$gps_coordinate['lat'],
 				':lat1' => (float)$gps_coordinate['lat'],
 				':lon' => (float)$gps_coordinate['lon'],
-				':status' => Status::REQUESTED_MESSAGE_READ,
-				':fs_id' => $fs_id,
+				':status' => BasketStatus::REQUESTED_MESSAGE_READ,
+				':fs_id' => $foodsaver_id,
 				':distance' => $distance_km,
 			]
 		);
@@ -487,6 +506,6 @@ class BasketGateway extends BaseGateway
 				id DESC	
 			LIMIT
 				0, 10	
-		', [':status' => Status::REQUESTED_MESSAGE_READ]);
+		', [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
 	}
 }

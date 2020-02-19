@@ -6,38 +6,11 @@ use Foodsharing\Modules\Core\View;
 
 final class MessageView extends View
 {
-	public function top(): string
-	{
-		return '
-		<div class="welcome ui-padding margin-bottom ui-corner-all">
-
-			<div class="welcome_profile_image">
-				<a onclick="profile(56);return false;" href="#">
-					<img width="50" height="50" src="/img/message.png" alt="' . $this->translationHelper->s('messages') . '" class="image_online">
-				</a>
-			</div>
-			<div class="welcome_profile_name">
-				<div class="user_display_name">
-					' . $this->translationHelper->s('your_messages') . '
-				</div>
-				<div class="welcome_quick_link">
-
-					<div class="clear"></div>
-				</div>
-			</div>
-			<div class="welcome_profile_survived v-desktop">
-				<a class="button" href="#">' . $this->translationHelper->s('new_message') . '</a>
-			</div>
-
-			<div class="clear"></div>
-		</div>';
-	}
-
 	public function leftMenu(): string
 	{
-		return $this->menu(array(
-			array('name' => $this->translationHelper->s('new_message'), 'click' => 'msg.compose();return false;')
-		));
+		return $this->menu([
+			['name' => $this->translationHelper->s('new_message'), 'click' => 'msg.compose();return false;']
+		]);
 	}
 
 	public function compose(): string
@@ -48,7 +21,7 @@ final class MessageView extends View
 
 		$content .= $this->v_utils->v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->translationHelper->s('send') . '</a>');
 
-		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), array('class' => 'ui-padding')) . '</div>';
+		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), ['class' => 'ui-padding']) . '</div>';
 	}
 
 	public function conversationList(array $conversations): string
@@ -108,7 +81,7 @@ final class MessageView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					' . $this->v_utils->v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->translationHelper->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
+					' . $this->v_utils->v_form_textarea('msg_answer', ['style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->translationHelper->s('write_something')]) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 				</form>
 			</div>';
 

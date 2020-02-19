@@ -100,12 +100,12 @@ final class MessageXhr extends Control
 					'photo' => $m['photo']
 				];
 			}, $member));
-			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			$xhr->addData('conversation', $this->model->getValues(['name'], 'conversation', $id));
 			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
 			}
 
-			$this->model->setAsRead(array((int)$_GET['id']));
+			$this->model->setAsRead([(int)$_GET['id']]);
 
 			$xhr->send();
 		}
@@ -164,7 +164,7 @@ final class MessageXhr extends Control
 		$members = $this->model->listConversationMembers($conversationId);
 		$userIds = array_column($members, 'id');
 
-		$this->webSocketSender->sendSockMulti($userIds, 'conv', 'push', array(
+		$this->webSocketSender->sendSockMulti($userIds, 'conv', 'push', [
 			'id' => $message_id,
 			'cid' => (int)$conversationId,
 			'fs_id' => $this->session->id(),
@@ -172,7 +172,7 @@ final class MessageXhr extends Control
 			'fs_photo' => $this->session->user('photo'),
 			'body' => $body,
 			'time' => date('Y-m-d H:i:s')
-		));
+		]);
 
 		foreach ($members as $member) {
 			if ($member['id'] == $this->session->id()) {
@@ -206,14 +206,14 @@ final class MessageXhr extends Control
 			}
 		}
 
-		$xhr->addData('msg', array(
+		$xhr->addData('msg', [
 			'id' => $message_id,
 			'body' => $body,
 			'time' => date('Y-m-d H:i:s'),
 			'fs_photo' => $this->session->user('photo'),
 			'fs_name' => $this->session->user('name'),
 			'fs_id' => $this->session->id()
-		));
+		]);
 		$xhr->send();
 	}
 
@@ -276,16 +276,12 @@ final class MessageXhr extends Control
 
 	/**
 	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array.
-	 *
-	 * @param int $conversation_id
-	 *
-	 * @return bool
 	 */
 	private function mayConversation(int $conversation_id): bool
 	{
 		// first get the session array
 		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = array();
+			$ids = [];
 		}
 
 		// check if the conversation in stored in the session
@@ -340,7 +336,7 @@ final class MessageXhr extends Control
 			/*
 			 * Make all ids to int and remove doubles check its not 0
 			 */
-			$recip = array();
+			$recip = [];
 			foreach ($_POST['recip'] as $r) {
 				if ((int)$r > 0) {
 					$recip[(int)$r] = (int)$r;
@@ -397,7 +393,7 @@ final class MessageXhr extends Control
 			$conversationKeys = array_flip($conversationIDs);
 
 			$this->model->setAsRead($conversationIDs);
-			$return = array();
+			$return = [];
 			/*
 			 * check is a new message there for active conversation?
 			 */
@@ -410,10 +406,10 @@ final class MessageXhr extends Control
 				$return['convs'] = $conversations;
 			}
 
-			return array(
+			return [
 				'data' => $return,
 				'script' => 'msg.pushArrived(ajax.data);'
-			);
+			];
 		}
 
 		return false;
@@ -429,7 +425,7 @@ final class MessageXhr extends Control
 			exit();
 		}
 
-		echo json_encode(array());
+		echo json_encode([]);
 		exit();
 	}
 
@@ -440,7 +436,7 @@ final class MessageXhr extends Control
 		 */
 		if ($this->mem->user($recipient['id'], 'infomail')) {
 			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = array();
+				$sessdata = [];
 			}
 
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
@@ -448,14 +444,14 @@ final class MessageXhr extends Control
 
 				$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
 
-				$this->emailHelper->tplMail(30, $recipient['email'], array(
+				$this->emailHelper->tplMail(30, $recipient['email'], [
 					'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 					'sender' => $this->session->user('name'),
 					'name' => $recipient['name'],
 					'chatname' => $chatname,
 					'message' => $msg,
-					'link' => BASE_URL . '/?page=msg&uc=' . (int)$this->session->id() . 'cid=' . (int)$conversation_id
-				));
+					'link' => BASE_URL . '/?page=msg&cid=' . (int)$conversation_id
+				]);
 			}
 
 			$_SESSION['lastMailMessage'] = $sessdata;

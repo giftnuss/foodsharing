@@ -1,8 +1,8 @@
 <template>
   <a
     :class="classes"
-    @click="openChat"
     href="#"
+    @click="openChat"
   >
     <div class="row">
       <div class="col-2">

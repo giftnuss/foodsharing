@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Profile;
 use Carbon\Carbon;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 
@@ -33,11 +34,7 @@ class ProfileView extends View
 			$this->photo($profileVisitorMayAdminThisFoodsharer)
 		);
 
-		if ($this->foodsaver['stat_buddycount'] > 0 || $this->foodsaver['stat_fetchcount'] > 0 || $this->session->may(
-				'orga'
-			)) {
-			$page->addSectionLeft($this->sideInfos(), 'Infos');
-		}
+		$page->addSectionLeft($this->sideInfos(), 'Infos');
 
 		if ($profileVisitorMayAdminThisFoodsharer && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
@@ -75,7 +72,6 @@ class ProfileView extends View
 			</div>';
 	}
 
-	// AMB functionality
 	private function fetchDates(array $fetchDates): string
 	{
 		$out = '<div class="ui-padding" id="double">';
@@ -132,7 +128,7 @@ class ProfileView extends View
 			$online = '<div style="margin-top:10px;">' . $this->v_utils->v_info(
 					$this->foodsaver['name'] . ' ist online!',
 					false,
-					'<i class="fas fa-circle" style="color:#5ab946;"></i>'
+					'<i class="fas fa-circle" style="color:var(--fs-green);"></i>'
 				) . '</div>';
 		}
 
@@ -229,9 +225,14 @@ class ProfileView extends View
 		if ($this->foodsaver['stat_fetchcount'] > 0) {
 			$infos[] = [
 				'name' => 'Abholquote',
-				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%',
+				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
 			];
 		}
+
+		$infos[] = [
+			'name' => ($this->foodsaver['rolle'] > Role::FOODSHARER) ? 'Foodsaver ID' : 'Foodsharer ID',
+			'val' => $this->foodsaver['id']
+		];
 
 		$out = '';
 		foreach ($infos as $info) {
@@ -250,8 +251,6 @@ class ProfileView extends View
 	 *  - waiting for approval (a question mark)
 	 *  - in store (the shopping basket used for stores)
 	 *  - Springer = waiting list (a coffee mug).
-	 *
-	 * @param array $userCompanies
 	 *
 	 * @return string: HTML with the list
 	 */
@@ -347,9 +346,6 @@ class ProfileView extends View
 		$this->foodsaver = $data;
 	}
 
-	/**
-	 * @return array
-	 */
 	private function renderStatistics(): array
 	{
 		$fetchWeight = '';
@@ -391,9 +387,6 @@ class ProfileView extends View
 		return [$fetchWeight, $fetchCount, $foodBasketCount, $postCount];
 	}
 
-	/**
-	 * @return string
-	 */
 	private function renderBananas(): string
 	{
 		if ($this->session->may('fs')) {
@@ -471,9 +464,6 @@ class ProfileView extends View
 		return $bananaCountButton;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function renderInformation(): string
 	{
 		$infos = [];
@@ -490,11 +480,6 @@ class ProfileView extends View
 		return $out;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderAmbassadorInformation(array $infos): array
 	{
 		$ambassador = [];
@@ -522,12 +507,6 @@ class ProfileView extends View
 		return [$ambassador, $infos];
 	}
 
-	/**
-	 * @param array $ambassador
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderFoodsaverInformation(array $ambassador, array $infos): array
 	{
 		if ($this->foodsaver['foodsaver']) {
@@ -564,11 +543,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderOrgaTeamMemberInformation(array $infos): array
 	{
 		if ($this->foodsaver['orga']) {
@@ -599,11 +573,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 	private function renderSleepingHatInformation(array $infos): array
 	{
 		switch ($this->foodsaver['sleep_status']) {
@@ -636,13 +605,6 @@ class ProfileView extends View
 		return $infos;
 	}
 
-	/**
-	 * @param int $changeType
-	 * @param array $h
-	 * @param string $out
-	 *
-	 * @return string
-	 */
 	private function renderTypeOfHistoryEntry(int $changeType, array $h, string $out): string
 	{
 		switch ($changeType) {

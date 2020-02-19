@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Team;
 
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\SanitizerService;
 
 class TeamXhr extends Control

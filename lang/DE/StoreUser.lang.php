@@ -95,3 +95,4 @@ $g_lang['prefix_Ago'] = 'Vor';
 $g_lang['days'] = 'Tagen';
 $g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
 $g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';
+$g_lang['user_is_verified'] = 'Nutzer*in ist verifiziert';

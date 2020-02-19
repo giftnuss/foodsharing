@@ -74,10 +74,10 @@ final class RouteHelper
 			$action = '&a=' . $action;
 		}
 
-		return array('href' => '/?page=' . $page . $action, 'name' => $this->translationHelper->s($id));
+		return ['href' => '/?page=' . $page . $action, 'name' => $this->translationHelper->s($id)];
 	}
 
-	public function autolink(string $str, array $attributes = array())
+	public function autolink(string $str, array $attributes = [])
 	{
 		$attributes['target'] = '_blank';
 		$attrs = '';

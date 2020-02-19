@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
+
 class BasketGatewayTest extends \Codeception\Test\Unit
 {
 	/**
@@ -72,7 +74,7 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 		$this->assertIsArray($result);
 
 		//non-existing basket
-		$this->assertEquals(false, $this->gateway->getBasket(99999));
+		$this->assertEquals([], $this->gateway->getBasket(99999));
 	}
 
 	public function testListNewestBaskets()
@@ -90,5 +92,12 @@ class BasketGatewayTest extends \Codeception\Test\Unit
 				50
 			)
 		);
+	}
+
+	public function testSetBasketStatus()
+	{
+		$this->gateway->setStatus($this->basketIds[0], RequestStatus::REQUESTED, $this->otherFoodsaver['id']);
+		$request = $this->gateway->getRequestStatus($this->basketIds[0], $this->otherFoodsaver['id'], $this->foodsaver['id']);
+		$this->assertEquals(RequestStatus::REQUESTED, $request['status']);
 	}
 }

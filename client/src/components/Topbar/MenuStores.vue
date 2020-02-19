@@ -1,6 +1,6 @@
 <template>
   <nav-item-dropdown
-    tooltip="Deine Betriebe"
+    :tooltip="$i18n('menu.tooltips.your_stores')"
     no-caret
   >
     <template slot="button-content">
@@ -20,11 +20,18 @@
         class="dropdown-item text-truncate"
       >
         <span
-          :class="'badge badge-pill '+badgeClass(store.pickupStatus)"
+          :id="`store_marker_${store.id}`"
+          :class="'fas fa-circle '+statusClass(store.pickupStatus)"
           :style="badgeVisibility(store.pickupStatus)"
         >&nbsp;</span>
         {{ store.name }}
       </a>
+      <b-tooltip
+        v-if="store.pickupStatus>0"
+        :target="`store_marker_${store.id}`"
+      >
+        {{ $i18n(tooltipId(store.pickupStatus)) }}
+      </b-tooltip>
     </div>
     <div
       v-if="stores.length && mayAddStore"
@@ -36,15 +43,24 @@
       role="menuitem"
       class="dropdown-item"
     >
-      <small><i class="fas fa-plus" /> Neuen Betrieb anlegen</small>
+      <small><i class="fas fa-plus" /> {{ $i18n('store.add_new_store') }} </small>
+    </a>
+    <a
+      :href="$url('storeList')"
+      role="menuitem"
+      class="dropdown-item"
+    >
+      <small><i class="fas fa-list" /> {{ $i18n('store.all_of_my_stores') }} </small>
     </a>
   </nav-item-dropdown>
 </template>
 <script>
 import NavItemDropdown from './NavItemDropdown'
+import { BTooltip } from 'bootstrap-vue'
 export default {
   components: {
-    NavItemDropdown
+    NavItemDropdown,
+    BTooltip
   },
   props: {
     stores: {
@@ -70,20 +86,38 @@ export default {
       const classes = ['badge-info', 'badge-info', 'badge-warning', 'badge-danger']
       return classes[pickupStatus]
     },
+    statusClass (pickupStatus) {
+      const classes = ['status-info', 'status-info', 'status-warning', 'status-danger']
+      return classes[pickupStatus]
+    },
     badgeVisibility (pickupStatus) {
       return {
         visibility: pickupStatus > 0 ? 'visible' : 'hidden'
       }
+    },
+    tooltipId (pickupStatus) {
+      const ids = ['store.tooltip_yellow', 'store.tooltip_orange', 'store.tooltip_red']
+      return ids[pickupStatus - 1]
     }
   }
 }
 </script>
 
-<style lang="scss">
-  .badge {
-    margin-left: -1.8em;
+<style lang="scss" scoped>
+  .fa-circle {
+    margin-left: -1em;
   }
   .bootstrap .badge-info {
     background-color: #f5f5b5;
+  }
+
+  .status-info {
+    color: #f5f5b5;
+  }
+  .status-warning {
+    color: #ffc107;
+  }
+  .status-danger {
+    color: #dc3545;
   }
 </style>

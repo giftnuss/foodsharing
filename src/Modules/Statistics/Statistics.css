@@ -8,7 +8,7 @@
 
 .stat_badge {
   display: inline-block;
-  background-color: #599022;
+  background-color: var(--fs-green);
   border-radius: 300px;
   height: 220px;
   line-height: 300px;
@@ -33,7 +33,7 @@
 
 .stat_text, .stat_text h4, .stat_text p {
   text-align: center;
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 .stat_text h4 {
@@ -75,7 +75,7 @@ table.stat_cities td h4 {
   font-size: 22px;
   line-height: 24px;
   font-weight: normal;
-  color: #599022;
+  color: var(--fs-green);
 }
 
 #stat_whole {

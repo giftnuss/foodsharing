@@ -29,11 +29,11 @@ class ActivityXhr extends Control
 		/*
 		 * get ids to not display from options
 		 */
-		$hidden_ids = array(
-			'bezirk' => array(),
-			'mailbox' => array(),
-			'buddywall' => array()
-		);
+		$hidden_ids = [
+			'bezirk' => [],
+			'mailbox' => [],
+			'buddywall' => []
+		];
 
 		if ($sesOptions = $this->session->option('activity-listings')) {
 			foreach ($sesOptions as $o) {
@@ -54,7 +54,7 @@ class ActivityXhr extends Control
 		 * get forum updates
 		 */
 		if (isset($_GET['options'])) {
-			$options = array();
+			$options = [];
 			foreach ($_GET['options'] as $o) {
 				if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
 					$options[$o['index'] . '-' . $o['id']] = [
@@ -71,11 +71,11 @@ class ActivityXhr extends Control
 			$this->session->setOption('activity-listings', $options, $this->model);
 		}
 
-		$hidden_ids = array(
-			'bezirk' => array(),
-			'mailbox' => array(),
-			'buddywall' => array()
-		);
+		$hidden_ids = [
+			'bezirk' => [],
+			'mailbox' => [],
+			'buddywall' => []
+		];
 
 		if ($sesOptions = $this->session->option('activity-listings')) {
 			foreach ($sesOptions as $o) {
@@ -94,15 +94,15 @@ class ActivityXhr extends Control
 		]);
 
 		if (isset($_GET['listings'])) {
-			$listings = array(
-				'groups' => array(),
-				'regions' => array(),
-				'mailboxes' => array(),
-				'stores' => array(),
-				'buddywalls' => array()
-			);
+			$listings = [
+				'groups' => [],
+				'regions' => [],
+				'mailboxes' => [],
+				'stores' => [],
+				'buddywalls' => []
+			];
 
-			$option = array();
+			$option = [];
 
 			if ($list = $this->session->option('activity-listings')) {
 				$option = $list;

@@ -8,7 +8,7 @@ class IdentificationHelper
 
 	public function __construct()
 	{
-		$this->ids = array();
+		$this->ids = [];
 	}
 
 	public function getGetId($name)
@@ -38,8 +38,8 @@ class IdentificationHelper
 	{
 		$text = strtolower($text);
 		str_replace(
-			array('ä', 'ö', 'ü', 'ß', ' '),
-			array('ae', 'oe', 'ue', 'ss', '_'),
+			['ä', 'ö', 'ü', 'ß', ' '],
+			['ae', 'oe', 'ue', 'ss', '_'],
 			$text
 		);
 		$out = preg_replace('/[^a-z0-9_]/', '', $text);

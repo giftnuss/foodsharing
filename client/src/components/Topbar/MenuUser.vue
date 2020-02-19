@@ -9,25 +9,26 @@
         role="menuitem"
         class="nav-link"
       >
-        <i class="fas fa-address-card" /> Profil
+        <i class="fas fa-address-card" /> {{ $i18n('profile.title') }}
       </a>
       <a
         :href="$url('settings')"
         role="menuitem"
         class="nav-link"
       >
-        <i class="fas fa-cog" /> Einstellungen
+        <i class="fas fa-cog" /> {{ $i18n('settings') }}
       </a>
       <a
         :href="$url('logout')"
         role="menuitem"
         class="nav-link"
       >
-        <i class="fas fa-power-off" /> Logout
+        <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
     </div>
     <nav-item-dropdown
       v-else
+      :tooltip="$i18n('menu.tooltips.your_account')"
       no-caret
       class="user"
       right
@@ -40,27 +41,29 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <i class="fas fa-address-card" /> Profil
+        <i class="fas fa-address-card" /> {{ $i18n('profile.title') }}
       </a>
       <a
         :href="$url('settings')"
         role="menuitem"
         class="dropdown-item"
       >
-        <i class="fas fa-cog" /> Einstellungen
+        <i class="fas fa-cog" /> {{ $i18n('settings') }}
       </a>
       <a
         :href="$url('logout')"
         role="menuitem"
         class="dropdown-item"
       >
-        <i class="fas fa-power-off" /> Logout
+        <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
     </nav-item-dropdown>
   </div>
 </template>
 <script>
+
 import NavItemDropdown from './NavItemDropdown'
+
 export default {
   components: {
     NavItemDropdown

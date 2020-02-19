@@ -2,9 +2,10 @@
 import $ from 'jquery'
 import tinysort from 'tinysort'
 import 'magnific-popup'
-import 'timeago/jquery.timeago'
 import timeformat from '@/timeformat'
 import { ajax, pulseError, pulseInfo } from '@/script'
+import { dateDistanceInWords } from '@/utils'
+import dateFnsParseISO from 'date-fns/parseISO'
 
 const activity = {
 
@@ -98,7 +99,8 @@ const activity = {
     }
 
     if (up.time !== null) {
-      activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${$.timeago(up.time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
+      var time = dateFnsParseISO(up.time)
+      activity.$container.append(`<li data-ts="${up.time}"><span class="i"><img width="50" src="${up.icon}" /></span><span class="n">${up.title}</span><span class="t">${up.desc}</span>${quickreply}<span class="time"><i class="far fa-clock"></i> ${dateDistanceInWords(time)} <i class="fas fa-angle-right"></i> ${timeformat.nice(up.time)}</span><span class="c"></span></li>`)
     }
   },
 
