@@ -11,6 +11,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use ReflectionClass;
 
 abstract class Control
@@ -51,6 +52,16 @@ abstract class Control
 	private $twig;
 
 	/**
+	 * @var Db
+	 */
+	private $legacyDb;
+
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
+
+	/**
 	 * @var InfluxMetrics
 	 */
 	private $metrics;
@@ -81,6 +92,8 @@ abstract class Control
 		$this->mem = $container->get(Mem::class);
 		$this->session = $container->get(Session::class);
 		$this->v_utils = $container->get(Utils::class);
+		$this->legacyDb = $container->get(Db::class);
+		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageHelper = $container->get(PageHelper::class);
 		$this->emailHelper = $container->get(EmailHelper::class);
