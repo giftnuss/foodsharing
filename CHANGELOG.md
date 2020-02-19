@@ -25,6 +25,7 @@
 - Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
 - Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
 - Fix broken bell menu caused by missing date conversion !1364 @dthulke
+- Strip whitespaces from email addresses before sending them !1372 #802 @alex.simm
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
