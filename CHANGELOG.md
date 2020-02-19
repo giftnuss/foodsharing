@@ -11,6 +11,7 @@
 - Added number of food share points to statistics !1351 #81 @alex.simm
 
 ## Bugfixes
+- On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
 - Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
 - Improved the banner on welcome page for mobile devices !1329 @chriswalg

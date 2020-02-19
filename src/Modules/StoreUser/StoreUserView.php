@@ -156,6 +156,13 @@ class StoreUserView extends View
 				]);
 			}
 
+			if ($this->session->isMob()) {
+				$mouseOverInfoMobile = '<span class="item">' . $last . '</span>';
+				$mouseOverInfoMobile .= '<span class="item">' . $memberSince . '</span>';
+			} else {
+				$mouseOverInfoMobile = '';
+			}
+
 			$onclick = ' onclick="' . $click . 'return false;"';
 			$href = '#';
 			if ($number !== false && $this->session->isMob()) {
@@ -169,6 +176,7 @@ class StoreUserView extends View
 						' . $this->imageService->avatar($fs) . '
 						<span class="infos">
 							<span class="item"><strong>' . $fs['name'] . '</strong> <span style="float:right">(' . $fs['stat_fetchcount'] . ')</span></span>
+							' . $mouseOverInfoMobile . '
 							' . $tel . '
 						</span>
 					</a>
