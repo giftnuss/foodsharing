@@ -33,7 +33,7 @@ class ProfileRestController extends AbstractFOSRestController
 		}
 
 		$fs_id = $this->session->id();
-		$profile = $this->profileGateway->getData($fs_id, $fs_id, $this->reportPermissions->mayHandleReports());
+		$profile = $this->profileGateway->getData($fs_id, -1, $this->reportPermissions->mayHandleReports());
 
 		return $this->handleView($this->view([
 			'id' => $profile['id'],

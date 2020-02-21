@@ -16,6 +16,11 @@ final class ProfileGateway extends BaseGateway
 		$this->mem = $mem;
 	}
 
+	/**
+	 * @param int $fsId id of the foodsaver we want the info from
+	 * @param int $raterId id of foodsaver doing the "rating" (Banana) on a given foodsaver. Pass -1 to prevent loading of rater information
+	 * @param bool $mayHandleReports info such as nb. of violations is only retrieved if this is true
+	 */
 	public function getData(int $fsId, int $raterId, bool $mayHandleReports): array
 	{
 		$stm = '
@@ -67,43 +72,22 @@ final class ProfileGateway extends BaseGateway
 		) {
 			return [];
 		}
+		$data['online'] = $this->mem->userIsActive((int)$fsId);
 
 		$data['bouched'] = false;
 		$data['bananen'] = false;
+		if ($raterId != -1) {
+			$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :rater_id AND foodsaver_id = :fs_id AND ratingtype = 2';
 
-		$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :rater_id AND foodsaver_id = :fs_id AND ratingtype = 2';
-
-		try {
-			if ($this->db->fetchValue($stm, [':rater_id' => $raterId, ':fs_id' => $fsId])) {
-				$data['bouched'] = true;
+			try {
+				if ($this->db->fetchValue($stm, [':rater_id' => $raterId, ':fs_id' => $fsId])) {
+					$data['bouched'] = true;
+				}
+			} catch (\Exception $e) {
+				// has to be caught until we can check whether a to be fetched value does really exist.
 			}
-		} catch (\Exception $e) {
-			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
-		$data['online'] = $this->mem->userIsActive((int)$fsId);
-
-		$stm = '
-				SELECT 	fs.id,
-						fs.name,
-						fs.photo,
-						r.`msg`,
-						r.`time`,
-						UNIX_TIMESTAMP(r.`time`) AS time_ts
-				FROM 	`fs_foodsaver` fs,
-						 `fs_rating` r
-				WHERE 	r.rater_id = fs.id
-				AND 	r.foodsaver_id = :fs_id
-				AND 	r.ratingtype = 2
-				ORDER BY time DESC
-		';
-		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
-
-		if (!$data['bananen']) {
-			$data['bananen'] = [];
-		}
-
-		$this->db->update('fs_foodsaver', ['stat_bananacount' => count($data['bananen'])], ['id' => $fsId]);
-		$data['stat_bananacount'] = count($data['bananen']);
+		$this->loadBananas($data, $fsId);
 
 		$data['botschafter'] = false;
 		$data['foodsaver'] = false;
@@ -166,6 +150,39 @@ final class ProfileGateway extends BaseGateway
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @param array $data pass by reference with "&" --> otherwise the array will only be changed in scope of the method
+	 * @param int $fsId the foodsaver id for which bananas should be loaded
+	 */
+	private function loadBananas(array &$data, int $fsId)
+	{
+		$stm = '
+					SELECT 	fs.id,
+							fs.name,
+							fs.photo,
+							r.`msg`,
+							r.`time`,
+							UNIX_TIMESTAMP(r.`time`) AS time_ts
+					FROM 	`fs_foodsaver` fs,
+							 `fs_rating` r
+					WHERE 	r.rater_id = fs.id
+					AND 	r.foodsaver_id = :fs_id
+					AND 	r.ratingtype = 2
+					ORDER BY time DESC
+			';
+		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
+		$bananaCountNew = count($data['bananen']);
+
+		if ($data['stat_bananacount'] != $bananaCountNew) {
+			$this->db->update('fs_foodsaver', ['stat_bananacount' => $bananaCountNew], ['id' => $fsId]);
+			$data['stat_bananacount'] = $bananaCountNew;
+		}
+
+		if (!$data['bananen']) {
+			$data['bananen'] = [];
+		}
 	}
 
 	private function getViolationCount(int $fsId): int
