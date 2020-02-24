@@ -431,30 +431,25 @@ final class MessageXhr extends Control
 
 	private function convMessage($recipient, $conversation_id, $msg)
 	{
-		/*
-		 * only send email if the user want to retrieve emails
-		 */
-		if ($this->mem->user($recipient['id'], 'infomail')) {
-			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = [];
-			}
-
-			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
-				$sessdata[$recipient['id']] = time();
-
-				$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
-
-				$this->emailHelper->tplMail(30, $recipient['email'], [
-					'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'sender' => $this->session->user('name'),
-					'name' => $recipient['name'],
-					'chatname' => $chatname,
-					'message' => $msg,
-					'link' => BASE_URL . '/?page=msg&cid=' . (int)$conversation_id
-				]);
-			}
-
-			$_SESSION['lastMailMessage'] = $sessdata;
+		if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+			$sessdata = [];
 		}
+
+		if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+			$sessdata[$recipient['id']] = time();
+
+			$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
+
+			$this->emailHelper->tplMail('chat/message', $recipient['email'], [
+				'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+				'sender' => $this->session->user('name'),
+				'name' => $recipient['name'],
+				'chatname' => $chatname,
+				'message' => $msg,
+				'link' => BASE_URL . '/?page=msg&cid=' . (int)$conversation_id
+			]);
+		}
+
+		$_SESSION['lastMailMessage'] = $sessdata;
 	}
 }
