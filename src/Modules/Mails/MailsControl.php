@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
@@ -15,13 +16,15 @@ class MailsControl extends ConsoleControl
 	private $mailer;
 	private $metrics;
 	private $routeHelper;
+	private $emailHelper;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
 		Database $database,
 		InfluxMetrics $metrics,
 		\Swift_Mailer $mailer,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		EmailHelper $emailHelper
 	) {
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
@@ -30,6 +33,7 @@ class MailsControl extends ConsoleControl
 		$this->mailer = $mailer;
 		$this->metrics = $metrics;
 		$this->routeHelper = $routeHelper;
+		$this->emailHelper = $emailHelper;
 		parent::__construct();
 	}
 
@@ -101,11 +105,12 @@ class MailsControl extends ConsoleControl
 					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$mb_ids = $this->mailsGateway->getMailboxIds(['lost']);
+						// send auto-reply message
+						if (!empty($msg->getFrom()) && $msg->getFrom()->getFullAddress() != DEFAULT_EMAIL) {
+							$this->emailHelper->tplMail('general/invalid_email_address', $msg->getFrom(), ['address' => $msg->getTo()]);
+						}
 						++$stats['unknown-recipient'];
-					}
-
-					if ($mb_ids) {
+					} else {
 						try {
 							$html = $msg->getBodyHtml();
 						} catch (\Exception $e) {

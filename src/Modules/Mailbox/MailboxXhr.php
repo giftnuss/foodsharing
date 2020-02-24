@@ -274,7 +274,8 @@ class MailboxXhr extends Control
 				$an = explode(';', $_POST['an']);
 				$tmp = [];
 				foreach ($an as $a) {
-					$tmp[$a] = $a;
+					$trimmed = trim($a);
+					$tmp[$trimmed] = $trimmed;
 				}
 				$an = $tmp;
 				if (count($an) > 100) {

@@ -25,6 +25,7 @@
 - Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
 - Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
 - Fix broken bell menu caused by missing date conversion !1364 @dthulke
+- Strip whitespaces from email addresses before sending them !1372 #802 @alex.simm
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
@@ -38,6 +39,7 @@
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
 - Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
 - Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm 
+- Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
