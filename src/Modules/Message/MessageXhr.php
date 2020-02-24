@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -20,9 +20,9 @@ final class MessageXhr extends Control
 	 */
 	private $foodsaverGateway;
 	/**
-	 * @var WebSocketSender
+	 * @var WebSocketConnection
 	 */
-	private $webSocketSender;
+	private $webSocketConnection;
 	/**
 	 * @var PushNotificationGateway
 	 */
@@ -34,14 +34,14 @@ final class MessageXhr extends Control
 		MessageGateway $messageGateway,
 		FoodsaverGateway $foodsaverGateway,
 		PushNotificationGateway $pushNotificationGateway,
-		WebSocketSender $webSocketSender
+		WebSocketConnection $webSocketConnection
 	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->pushNotificationGateway = $pushNotificationGateway;
-		$this->webSocketSender = $webSocketSender;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 
@@ -164,7 +164,7 @@ final class MessageXhr extends Control
 		$members = $this->model->listConversationMembers($conversationId);
 		$userIds = array_column($members, 'id');
 
-		$this->webSocketSender->sendSockMulti($userIds, 'conv', 'push', [
+		$this->webSocketConnection->sendSockMulti($userIds, 'conv', 'push', [
 			'id' => $message_id,
 			'cid' => (int)$conversationId,
 			'fs_id' => $this->session->id(),
@@ -181,7 +181,7 @@ final class MessageXhr extends Control
 
 			$this->mem->userAppend($member['id'], 'msg-update', (int)$conversationId);
 
-			if ($this->webSocketSender->isUserOnline($member['id'])) {
+			if ($this->webSocketConnection->isUserOnline($member['id'])) {
 				continue; // don't send E-Mail or Push Notifications for users who are online
 			}
 			/*

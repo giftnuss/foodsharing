@@ -5,11 +5,11 @@ namespace Foodsharing\Lib;
 /**
  * This class is for handling connections to our WebSocket server.
  *
- * Because it has to handle many connections at the same time, it is written in JavaScript/Node.js and not in PHP.
+ * Because it has to handle many connections at the same time, the server written in JavaScript/Node.js and not in PHP.
  * For historical reasons, the docker container containing our WebSocket server has been called "chat". You can find a
  * brief description of its API in chat/server.js.
  */
-class WebSocketSender
+class WebSocketConnection
 {
 	public function sendSock(int $fsid, string $app, string $method, array $options): void
 	{

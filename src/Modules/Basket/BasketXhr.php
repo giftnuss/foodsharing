@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
@@ -21,7 +21,7 @@ class BasketXhr extends Control
 	private $messageModel;
 	private $timeHelper;
 	private $imageService;
-	private $webSocketSender;
+	private $webSocketConnection;
 
 	public function __construct(
 		BasketView $view,
@@ -30,7 +30,7 @@ class BasketXhr extends Control
 		MessageModel $messageModel,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		WebSocketSender $webSocketSender
+		WebSocketConnection $webSocketConnection
 	) {
 		$this->messageModel = $messageModel;
 		$this->view = $view;
@@ -38,7 +38,7 @@ class BasketXhr extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-		$this->webSocketSender = $webSocketSender;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 

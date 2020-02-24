@@ -5,7 +5,7 @@ namespace Foodsharing\Services;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
@@ -16,7 +16,7 @@ class MessageService
 	private $translationHelper;
 	private $legacyDb;
 	private $messageModel;
-	private $webSocketSender;
+	private $webSocketConnection;
 
 	public function __construct(
 		EmailHelper $emailHelper,
@@ -24,14 +24,14 @@ class MessageService
 		TranslationHelper $translationHelper,
 		Db $legacyDb,
 		MessageModel $messageModel,
-		WebSocketSender $webSocketSender
+		WebSocketConnection $webSocketConnection
 	) {
 		$this->emailHelper = $emailHelper;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->translationHelper = $translationHelper;
 		$this->legacyDb = $legacyDb;
 		$this->messageModel = $messageModel;
-		$this->webSocketSender = $webSocketSender;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	public function sendMessageToUser(
@@ -57,7 +57,7 @@ class MessageService
 			}
 
 			// Only send message if the user is not currently logged in
-			if (!$this->webSocketSender->isUserOnline($recipientId)) {
+			if (!$this->webSocketConnection->isUserOnline($recipientId)) {
 				if (!isset($_SESSION['lastMailMessage'][$recipientId]) || (time(
 						) - $_SESSION['lastMailMessage'][$recipientId]) > 600) {
 					$_SESSION['lastMailMessage'][$recipientId] = time();
