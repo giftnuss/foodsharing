@@ -156,7 +156,7 @@ final class ProfileGateway extends BaseGateway
 	 * @param array $data pass by reference with "&" --> otherwise the array will only be changed in scope of the method
 	 * @param int $fsId the foodsaver id for which bananas should be loaded
 	 */
-	private function loadBananas(array &$data, int $fsId)
+	private function loadBananas(array &$data, int $fsId): void
 	{
 		$stm = '
 					SELECT 	fs.id,
@@ -323,7 +323,7 @@ final class ProfileGateway extends BaseGateway
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 	}
 
-	public function buddyStatus(int $fsId, int $sessionId)
+	public function buddyStatus(int $fsId, int $sessionId): int
 	{
 		try {
 			if (($status = $this->db->fetchValueByCriteria(
