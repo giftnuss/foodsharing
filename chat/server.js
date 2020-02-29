@@ -130,18 +130,21 @@ const inputServer = http.createServer((req, res) => {
     if (userId === null) {
       res.writeHead(400)
       res.end('Parameter u must be specified and be a foodsaver id.')
+      return
     }
 
     fetchSessionIdsForUser(userId, (err, sessionIds) => {
       if (err) {
         res.writeHead(500)
         res.end('Error matching the user id to a session.')
+        return
       }
 
       res.writeHead(200)
       for (const sessionId of sessionIds) {
         if (sessionId in connectedClients) {
           res.end('true') // there is at least one session for userId
+          return
         }
       }
       res.end('false') // there's no session for userId
