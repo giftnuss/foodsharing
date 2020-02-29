@@ -42,8 +42,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * Returns a string that identifies subscriptions that will be handled by this handler. It will be used in the
-	 * database but also in the URL of the REST api.
+	 * @see PushNotificationHandlerInterface::getTypeIdentifier()
 	 */
 	public static function getTypeIdentifier(): string
 	{
@@ -51,10 +50,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * Gets an array with subscription strings in the format they were saved in the database and sends the
-	 * $messasge to all of these clients.
-	 *
-	 * @var array - an array with subscription strings in JSON format
+	 * @var string[] an array with subscription strings in JSON format
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
@@ -131,6 +127,13 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		return json_encode($payloadArray);
 	}
 
+	/**
+	 * Crops the payload body, so the payload doesn't exceed the safe string length for WebPush payloads.
+	 *
+	 * @param array $payload a payload array containing at least a 'body' key (because this is what will be cropped)
+	 *
+	 * @return array Payload that definitely has a sendable length
+	 */
 	private function cropPayload(array $payload): array
 	{
 		$overlappingChars = Utils::safeStrlen(json_encode($payload)) - Encryption::MAX_PAYLOAD_LENGTH;
