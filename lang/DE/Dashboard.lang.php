@@ -1,5 +1,4 @@
 <?php
-
 global $g_lang;
 $g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv';
 $g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';

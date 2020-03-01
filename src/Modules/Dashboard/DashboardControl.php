@@ -315,25 +315,25 @@ class DashboardControl extends Control
 		$home_district_text = ($me['bezirk_name'] == null) ? ('<p>' . $pickup_text . $this->translationHelper->s('please_choose_your_home_district') . '</p>') : ('<p>' . $pickup_text . $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.</p>');
 
 		$this->pageHelper->addContent(
-				'
-			<div class="pure-u-1 ui-padding-bottom">
-			<ul id="conten-top"  class="top corner-all linklist" >
-			<li>
+			'
+		<div class="pure-u-1 ui-padding-bottom">
+		<ul id="conten-top"  class="top corner-all linklist" >
+		<li>
 
-				<a href="profile/' . $me['id'] . '">
-					<div class="ui-padding">
-						<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
-						<h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
-						$home_district_text
-						. '<div style="clear:both;"></div>
-					</div>
-				</a>
-			</li>
-			</ul>
-			</div>',
+            <a href="profile/' . $me['id'] . '">
+                <div class="ui-padding">
+                    <div class="img">' . $this->imageService->avatar($me, 50) . '</div>
+                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
+					$home_district_text
+					. '<div style="clear:both;"></div>
+                </div>
+            </a>
+		</li>
+		</ul>
+		</div>',
 
-				CNT_TOP
-			);
+			CNT_TOP
+		);
 
 		// Advertisement for Push Notifications
 		$this->pageHelper->addContent(
