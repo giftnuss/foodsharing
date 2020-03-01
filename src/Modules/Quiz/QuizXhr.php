@@ -8,8 +8,8 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
-use Foodsharing\Services\SanitizerService;
 use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
 {

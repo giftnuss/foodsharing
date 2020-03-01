@@ -12,7 +12,6 @@ use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
