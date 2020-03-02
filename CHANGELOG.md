@@ -35,6 +35,7 @@
 - Fix "Mobile: can't apply to stores, window cut off" #765 !1357 @panschk
 - Don't include unconfirmed slots into statistics and fetch history !1360 @caluera
 - Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
+- Fix missing region id bug for food share points !1375 @alex.simm
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
