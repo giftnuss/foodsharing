@@ -12,6 +12,7 @@
 ### Contributing
   - [Einführung in Git und unser Arbeiten](contributing_DE.md)
   - [Making and submitting changes](contributing.md)
+  - [getting to know our codebase](codebase.md)
   - [Code style](codestyle.md)
   - [Testing](testing.md)
   - [Code quality and review](code-review.md)
