@@ -1,3 +1,5 @@
+[German long version for this file.](https://devdocs.foodsharing.network/contributing_DE.html)
+
 # Contributing
 
 If you have any questions please reach out to us via slack: [yunity slack](https://slackin.yunity.org/) and join the #foodsharing-dev channel.
