@@ -1,4 +1,4 @@
-[English short version this file.](https://devdocs.foodsharing.network/contributing.html)
+[English short version of this file.](https://devdocs.foodsharing.network/contributing.html)
 
 # Was du hier findest:
 * [Wie du unserem Projekt beitrittst,](#wie-du-unserem-projekt-beitrittst)
