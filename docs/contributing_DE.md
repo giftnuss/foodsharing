@@ -181,5 +181,3 @@ Wenn Du nur einen Test ausführen willst, gib den Pfad zu diesem Test als Argume
 z.B: `./Skripten/Tests/Abnahme/LoginCept.php`.
 
 [Ausführlicheres zu Tests findest du hier.](https://devdocs.foodsharing.network/testing.html)
-
-## Test
