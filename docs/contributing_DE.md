@@ -72,7 +72,7 @@ TL/DR: Branch erstellen -> ein oder mehrere commits machen -> pushen -> MR erste
 git pull
 git checkout -b 123-fix-for-issue-123`
 
-(Erstellt den Branch 123-fix-for-issue-123. Es ist gut, wenn du die Issue-Zahl vorne an deinen Branch setzt, damit wir sehen können, wozu er gehört. Du kannst gerne genauer beschreiben, worum es geht: `git checkout -b 123-make-devdocs-contributing-a-german-text`)
+(Erstellt den Branch 123-fix-for-issue-123. Es ist gut, wenn du die Issue-Zahl vorne an deinen Branch setzt, damit wir sehen können, wozu er gehört. Du kannst gerne genauer beschreiben, worum es geht: `git checkout -b 812-1-make-devdocs-contributing-a-german-text`)
 
 Anschließend an Dateien arbeiten.
 
