@@ -479,8 +479,12 @@ class SettingsControl extends Control
 					$data['bezirk_id'] = $this->session->getCurrentRegionId();
 				}
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
-					$this->session->refreshFromDatabase();
-					$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+					try {
+						$this->session->refreshFromDatabase();
+						$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+					} catch (\Exception $e) {
+						$this->routeHelper->goPage('logout');
+					}
 				} else {
 					$this->flashMessageHelper->error($this->translationHelper->s('error'));
 				}

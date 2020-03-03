@@ -38,14 +38,14 @@
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
 - Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
-- Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm 
+- Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
 - fix some doc annotations !1361 @\_fridtjof_
 - update mkdirp to version 1 @peter.toennies
-- update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 #1369 @peter.toennies
+- update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 !1369 @peter.toennies
 
 # 2020-01-26
 Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
@@ -136,6 +136,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Temporarily disable pickup slot markers for production release !1307 @jofranz
 
 ## Refactoring
+- Optimize database access for legal queries !1292 @CarolineFischer
 - refactored to use count() instead of more complicated expressions !1273 !1296 @Caluera
 - Removed support for old passwords stored in sha1 or md5, since we switched to Argon2 now almost 2 years ago. !1095 @alangecker
 - Reduced complexity of the profile module !1037 @peter.toennies

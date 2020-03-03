@@ -6,15 +6,12 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Legal\LegalControl;
-use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -23,7 +20,6 @@ use Foodsharing\Services\StoreService;
 class Session
 {
 	private $mem;
-	private $legalGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
 	private $regionGateway;
@@ -31,30 +27,25 @@ class Session
 	private $storeGateway;
 	private $storeService;
 	private $initialized = false;
-	private $routeHelper;
 	private $translationHelper;
 
 	public function __construct(
 		Mem $mem,
-		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
 		StoreService $storeService,
-		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
-		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->storeService = $storeService;
-		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -147,24 +138,6 @@ class Session
 		$user = $this->get('user');
 
 		return $user[$index];
-	}
-
-	public function getRouteOverride()
-	{
-		$ppVersion = $this->legalGateway->getPpVersion();
-		$pnVersion = $this->legalGateway->getPnVersion();
-		if ($this->id() &&
-			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
-				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
-			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
-				return null;
-			}
-
-			return LegalControl::class;
-		}
-
-		return null;
 	}
 
 	public function id()
@@ -387,10 +360,11 @@ class Session
 		if (!$this->initialized) {
 			$this->init($rememberMe);
 		}
+
 		$this->refreshFromDatabase($fs_id);
 	}
 
-	public function refreshFromDatabase($fs_id = null)
+	public function refreshFromDatabase($fs_id = null): void
 	{
 		$this->checkInitialized();
 
@@ -400,7 +374,7 @@ class Session
 
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
-			$this->routeHelper->goPage('logout');
+			throw new \Exception('Foodsaver details not found in database.');
 		}
 		$this->set('g_location', [
 			'lat' => $fs['lat'],
