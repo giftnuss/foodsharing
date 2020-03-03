@@ -2,11 +2,11 @@
 * [The architecture is not clear to me. Could you explain the basic layout?](#basic-layout)
 * [How do you start?](#getting-started)
 * [What are our technical constraints? (such as server, storage. memory and communication interfaces)](#technical-constraints)
-* [Are there visual guidelines? (User interface, colors, buttons, etc.)](#visual guidelines)
+* [Are there visual guidelines? (User interface, colors, buttons, etc.)](#visual-guidelines)
 * [What are the security parameters? (i.e. how the website will ensure secure access control and transactions)](#security-parameters)
 * [So if we break the homepage down into its parts - how is it structured?](#structure)
 * [What is the relationship between karrot and foodsharing currently?](#karrot)
-* [it-tasks lists a number of tech stuff we use on the page. How is their relationship to each other / what do we use them for?](#our tech)
+* [it-tasks lists a number of tech stuff we use on the page. How is their relationship to each other / what do we use them for?](#our-tech)
 * [Who can I ask for help with what? Who is part of the team with which focus and which skills? (volunteer list)](#helping-hands)
 
 # Basic layout
