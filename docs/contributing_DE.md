@@ -1,15 +1,15 @@
 [English short version this file.](https://devdocs.foodsharing.network/contributing.html)
 
 # Was du hier findest:
-* [Wie du unserem Projekt beitrittst,](#markdown-Wie-du-unserem-Projekt-beitrittst)
-* [wie du einen Starter Task findest,](#markdown-Wie-du-einen-Starter-Task-findest:)
-* [Tutorial-Empfehlungen für den Umgang mit Git,](#markdown-Tutorials)
-* [auf welchen Ebenen Git funktioniert,](#markdown-Auf-welchen-Ebenen-Git-funktioniert)
-* [wie ein Workflow aussehen kann](#markdown-workflow), (TL/DR: Branch erstellen -> ein oder mehrere commits machen -> pushen -> MR erstellen)
-* [was es zum Merge Request (MR) zu sagen gibt,](#markdown-Was-es-zum-Merge-Request-zu-sagen-gibt)
-* [wie dein MR schließlich bestätigt und am Ende zum Master hinzugefügt wird.](#markdown-Merge-in-den-Master)
-* [Weiteres zu issues](#markdown-Ein-issue-anlegen)
-* [Weiteres zu Tests](#markdown-Testen)
+* [Wie du unserem Projekt beitrittst,](#wie-du-unserem-projekt-beitrittst)
+* [wie du einen Starter Task findest,](#wie-du-einen-starter-task-findest)
+* [Tutorial-Empfehlungen für den Umgang mit Git,](#tutorials)
+* [auf welchen Ebenen Git funktioniert,](#auf-welchen-ebenen-git-funktioniert)
+* [wie ein Workflow aussehen kann](#workflow), (TL/DR: Branch erstellen -> ein oder mehrere commits machen -> pushen -> MR erstellen)
+* [was es zum Merge Request (MR) zu sagen gibt,](#was-es-zum-merge-request-zu-sagen-gibt)
+* [wie dein MR schließlich bestätigt und am Ende zum Master hinzugefügt wird.](#merge-in-den-master)
+* [Weiteres zu issues](#ein-issue-anlegen)
+* [Weiteres zu Tests](#testen)
 
 ## Wie du unserem Projekt beitrittst
 In der foodsharing-IT organisieren wir unsere Arbeit über slack (slackin.yunity.org). Dafür musst du dir ein Konto bei Slack mit einer funktionierenden Mailadresse anlegen.Im Kanal #foodsharing-dev (auf slackin.yunity.org) besprechen wir, was zu tun ist. Sag da am besten auf englisch Hallo und stell dich dem Team vor - mit deinen Skills und woran du gern arbeiten würdest.
@@ -24,7 +24,7 @@ Als Mitglied auf Gitlab kannst du
 
 Zum Mitarbeiten brauchst du dann noch deine lokale Programmierumgebung (https://devdocs.foodsharing.network/getting-the-code.html).
 
-## Wie du einen Starter Task findest:
+## Wie du einen Starter Task findest
 
 Mit welcher Aufgabe du anfangen könntest, hängt natürlich von den Vorkenntnisse ab. Frag am besten in Slack nach, was ein guter starter task wäre.
 
@@ -181,3 +181,5 @@ Wenn Du nur einen Test ausführen willst, gib den Pfad zu diesem Test als Argume
 z.B: `./Skripten/Tests/Abnahme/LoginCept.php`.
 
 [Ausführlicheres zu Tests findest du hier.](https://devdocs.foodsharing.network/testing.html)
+
+## Test

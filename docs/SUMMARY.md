@@ -1,7 +1,7 @@
 # Summary
 
 - [Overview](README.md)
-- [Aufruf zur UnterstÅtzung (DE)](it-tasks.md)
+- [Aufruf zur Unterst√ºtzung (DE)](it-tasks.md)
 - [Call for contribution (EN)](it-tasks_EN.md)
 
 ### Getting started
@@ -10,7 +10,7 @@
   - [Setting things up](setting-things-up.md)
 
 ### Contributing
-  - [EinfÅhrung in Git und unser Arbeiten](contributing_DE.md)
+  - [Einf√ºhrung in Git und unser Arbeiten](contributing_DE.md)
   - [Making and submitting changes](contributing.md)
   - [Code style](codestyle.md)
   - [Testing](testing.md)
