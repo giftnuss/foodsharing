@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49d94c15a1a0ebf7bb930b653eba279c",
+    "content-hash": "57d05dbaeec24a9cbf9b6e886ef33f9e",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -2386,16 +2386,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.30.0",
+            "version": "2.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "912dff66d2690ca66abddb9b291a1df5f371d3b4"
+                "reference": "bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/912dff66d2690ca66abddb9b291a1df5f371d3b4",
-                "reference": "912dff66d2690ca66abddb9b291a1df5f371d3b4",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d",
+                "reference": "bbc0ab53f41a4c6f223c18efcdbd9bc725eb5d2d",
                 "shasum": ""
             },
             "require": {
@@ -2452,7 +2452,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2020-02-07T15:25:46+00:00"
+            "time": "2020-03-01T11:11:58+00:00"
         },
         {
             "name": "psr/cache",
@@ -2894,21 +2894,21 @@
         },
         {
             "name": "setasign/fpdi-tcpdf",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI-TCPDF.git",
-                "reference": "95778baea02e5da76acb9f6dc1c946be380a22d8"
+                "reference": "f6711a95cba64db16e1a63e1b6195827a2150c93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI-TCPDF/zipball/95778baea02e5da76acb9f6dc1c946be380a22d8",
-                "reference": "95778baea02e5da76acb9f6dc1c946be380a22d8",
+                "url": "https://api.github.com/repos/Setasign/FPDI-TCPDF/zipball/f6711a95cba64db16e1a63e1b6195827a2150c93",
+                "reference": "f6711a95cba64db16e1a63e1b6195827a2150c93",
                 "shasum": ""
             },
             "require": {
-                "setasign/fpdi": "^2.2",
-                "tecnickcom/tcpdf": "^6.2"
+                "setasign/fpdi": "^2.3",
+                "tecnickcom/tcpdf": "^6.3.5"
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
@@ -2929,7 +2929,7 @@
                 "fpdi",
                 "pdf"
             ],
-            "time": "2019-01-30T14:39:33+00:00"
+            "time": "2020-02-19T11:40:30+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3272,16 +3272,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v4.4.4",
+            "version": "v4.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "20236471058bbaa9907382500fc14005c84601f0"
+                "reference": "a980d87a659648980d89193fd8b7a7ca89d97d21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/20236471058bbaa9907382500fc14005c84601f0",
-                "reference": "20236471058bbaa9907382500fc14005c84601f0",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/a980d87a659648980d89193fd8b7a7ca89d97d21",
+                "reference": "a980d87a659648980d89193fd8b7a7ca89d97d21",
                 "shasum": ""
             },
             "require": {
@@ -3324,7 +3324,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-25T12:44:29+00:00"
+            "time": "2020-02-23T14:41:43+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3401,22 +3401,22 @@
         },
         {
             "name": "symfony/error-handler",
-            "version": "v4.4.4",
+            "version": "v4.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "d2721499ffcaf246a743e01cdf6696d3d5dd74c1"
+                "reference": "89aa4b9ac6f1f35171b8621b24f60477312085be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/d2721499ffcaf246a743e01cdf6696d3d5dd74c1",
-                "reference": "d2721499ffcaf246a743e01cdf6696d3d5dd74c1",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/89aa4b9ac6f1f35171b8621b24f60477312085be",
+                "reference": "89aa4b9ac6f1f35171b8621b24f60477312085be",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3",
                 "psr/log": "~1.0",
-                "symfony/debug": "^4.4",
+                "symfony/debug": "^4.4.5",
                 "symfony/var-dumper": "^4.4|^5.0"
             },
             "require-dev": {
@@ -3453,7 +3453,7 @@
             ],
             "description": "Symfony ErrorHandler Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-27T09:48:47+00:00"
+            "time": "2020-02-26T11:45:31+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -7721,16 +7721,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.13",
+            "version": "0.12.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d74fb5ce1ab9f24a7128db90e99dec82440975c3"
+                "reference": "37bdd26a80235d0f9045b49f4151102b7831cbe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d74fb5ce1ab9f24a7128db90e99dec82440975c3",
-                "reference": "d74fb5ce1ab9f24a7128db90e99dec82440975c3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/37bdd26a80235d0f9045b49f4151102b7831cbe2",
+                "reference": "37bdd26a80235d0f9045b49f4151102b7831cbe2",
                 "shasum": ""
             },
             "require": {
@@ -7756,7 +7756,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2020-03-02T13:08:55+00:00"
+            "time": "2020-03-02T22:29:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8161,12 +8161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5f81a65d531dc88975b8fe32331cfb8a79c34fe3"
+                "reference": "f0eca1ac3194cc94726f0bb366672f38629272b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5f81a65d531dc88975b8fe32331cfb8a79c34fe3",
-                "reference": "5f81a65d531dc88975b8fe32331cfb8a79c34fe3",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f0eca1ac3194cc94726f0bb366672f38629272b4",
+                "reference": "f0eca1ac3194cc94726f0bb366672f38629272b4",
                 "shasum": ""
             },
             "conflict": {
@@ -8217,8 +8217,8 @@
                 "ezsystems/ezplatform-admin-ui": ">=1.3,<1.3.5|>=1.4,<1.4.6",
                 "ezsystems/ezplatform-admin-ui-assets": ">=4,<4.2",
                 "ezsystems/ezplatform-user": ">=1,<1.0.1",
-                "ezsystems/ezpublish-kernel": ">=5.3,<5.3.12.1|>=5.4,<5.4.13.1|>=6,<6.7.9.1|>=6.8,<6.13.5.1|>=7,<7.2.4.1|>=7.3,<7.3.2.1",
-                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.12.3|>=2011,<2017.12.4.3|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3",
+                "ezsystems/ezpublish-kernel": ">=5.3,<5.3.12.1|>=5.4,<5.4.14.1|>=6,<6.7.9.1|>=6.8,<6.13.6.2|>=7,<7.2.4.1|>=7.3,<7.3.2.1|>=7.5,<7.5.6.2",
+                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.14.1|>=2011,<2017.12.7.2|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3|>=2019.3,<2019.3.4.2",
                 "ezsystems/repository-forms": ">=2.3,<2.3.2.1",
                 "ezyang/htmlpurifier": "<4.1.1",
                 "firebase/php-jwt": "<2",
@@ -8413,7 +8413,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2020-03-02T07:11:48+00:00"
+            "time": "2020-03-03T17:52:54+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

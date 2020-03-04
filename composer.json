@@ -25,11 +25,11 @@
     "jakub-onderka/php-console-highlighter": "0.4.0",
     "jakub-onderka/php-parallel-lint": "1.0.0",
     "mashape/unirest-php": "3.0.4",
-    "phpstan/phpstan": "0.12.13",
+    "phpstan/phpstan": "0.12.14",
     "phpunit/phpunit": "9.0.1",
     "roave/security-advisories": "dev-master",
     "sebastian/diff": "4.0.0",
-    "symfony/debug": "4.4.4"
+    "symfony/debug": "4.4.5"
   },
   "require": {
     "ext-dom": "*",
@@ -59,10 +59,10 @@
     "jms/serializer-bundle": "3.5.0",
     "maximebf/debugbar": "1.16.1",
     "mobiledetect/mobiledetectlib": "2.8.34",
-    "nesbot/carbon": "2.30.0",
+    "nesbot/carbon": "2.31.0",
     "sensio/framework-extra-bundle": "5.5.3",
     "sentry/sentry": "<2.0.0",
-    "setasign/fpdi-tcpdf": "2.2.0",
+    "setasign/fpdi-tcpdf": "2.3.0",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/config": "4.4.5",
     "symfony/console": "4.4.5",
