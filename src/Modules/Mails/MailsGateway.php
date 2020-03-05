@@ -76,4 +76,9 @@ class MailsGateway extends BaseGateway
 
 		return false;
 	}
+
+	public function removeBounceForMail($email)
+	{
+		$this->db->delete('fs_email_bounces', ['email' => $email]);
+	}
 }

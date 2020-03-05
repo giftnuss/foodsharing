@@ -2,9 +2,13 @@
 
 namespace Helper;
 
+use Carbon\Carbon;
 use DateTime;
 use Faker;
-use Carbon\Carbon;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -85,7 +89,9 @@ class Foodsharing extends \Codeception\Module\Db
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
 			'token' => uniqid()
 		], $extra_params);
-		$params['passwd'] = $this->encryptMd5($params['email'], $pass);
+		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
+			'time_cost' => 1
+		]);
 		$params['geb_datum'] = $this->toDateTime($params['geb_datum']);
 		$params['last_login'] = $this->toDateTime($params['last_login']);
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
@@ -100,18 +106,23 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function createQuiz(int $quizId, int $questionCount = 1): array
 	{
+		$roles = [
+			Role::FOODSAVER => 'Foodsaver/in',
+			Role::STORE_MANAGER => 'Betriebsverantwortliche/r',
+			Role::AMBASSADOR => 'Botschafter/in'
+		];
 		$params = [
 			'id' => $quizId,
 			'name' => 'Quiz #' . $quizId,
-			'desc' => '',
-			'maxfp' => 3,
-			'questcount' => 3,
+			'desc' => 'Werde ' . $roles[$quizId] . ' mit diesem Quiz.',
+			'maxfp' => 0,
+			'questcount' => $questionCount,
 		];
 		$params['id'] = $this->haveInDatabase('fs_quiz', $params);
 
 		$params['questions'] = [];
 		for ($i = 1; $i <= $questionCount; ++$i) {
-			$questionText = 'Question #' . $i . ' for quiz with ID ' . $params['id'];
+			$questionText = 'Frage #' . $i . ' für Quiz #' . $params['id'];
 			$params['questions'][] = $this->createQuestion($params['id'], $questionText);
 		}
 
@@ -145,13 +156,21 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$params = [
 			'question_id' => $questionId,
-			'text' => 'The ' . ($right ? 'right' : 'wrong') . ' answer for question with ID ' . $questionId,
-			'explanation' => 'This answer is ' . ($right ? 'right' : 'wrong'),
+			'text' => ($right ? 'Richtige' : 'Falsche') . ' Antwort',
+			'explanation' => 'Diese Antwort ist ' . ($right ? 'richtig' : 'falsch') . '.',
 			'right' => $right ? 1 : 0
 		];
 		$params['id'] = $this->haveInDatabase('fs_answer', $params);
 
 		return $params;
+	}
+
+	public function letUserFailQuiz(array $user, int $daysAgo, int $times)
+	{
+		$level = $user['rolle'] + 1;
+		foreach (range(1, $times) as $i) {
+			$this->createQuizTry($user['id'], $level, SessionStatus::FAILED, $daysAgo);
+		}
 	}
 
 	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
@@ -242,7 +261,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'ueberzeugungsarbeit' => 0,
 			'presse' => 0,
 			'sticker' => 0,
-			'abholmenge' => $this->faker->numberBetween(0, 70),
+			'abholmenge' => $this->faker->numberBetween(0, 7),
 			'team_status' => 1,
 			'prefetchtime' => 1209600,
 
@@ -339,7 +358,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addRecurringPickup($store, $extra_params = [])
 	{
 		$hours = $this->faker->numberBetween(0, 23);
-		$minutes = $this->faker->randomElement($array = array('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'));
+		$minutes = $this->faker->randomElement($array = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']);
 
 		$params = array_merge([
 			'betrieb_id' => $store,
@@ -424,7 +443,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)
 		SELECT t.ancestor_id, ?, t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ?
-		UNION ALL SELECT ?, ?, 0', array($v['id'], $parentId, $v['id'], $v['id']));
+		UNION ALL SELECT ?, ?, 0', [$v['id'], $parentId, $v['id'], $v['id']]);
 
 		return $v;
 	}
@@ -564,7 +583,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createFairteiler($user, $bezirk, $extra_params = [])
+	public function createFoodSharePoint($user, $bezirk, $extra_params = [])
 	{
 		$params = array_merge([
 			'bezirk_id' => $bezirk,
@@ -583,36 +602,36 @@ class Foodsharing extends \Codeception\Module\Db
 
 		$id = $this->haveInDatabase('fs_fairteiler', $params);
 
-		$this->addFairteilerAdmin($user, $id);
+		$this->addFoodSharePointAdmin($user, $id);
 
 		$params['id'] = $id;
 
 		return $params;
 	}
 
-	public function addFairteilerFollower($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointFollower($user, $foodSharePoint, $extra_params = [])
 	{
 		$params = array_merge([
-			'fairteiler_id' => $fairteiler,
+			'fairteiler_id' => $foodSharePoint,
 			'foodsaver_id' => $user,
-			'type' => 1,
-			'infotype' => 1,
+			'type' => FollowerType::FOLLOWER,
+			'infotype' => InfoType::EMAIL,
 		], $extra_params);
 		$this->haveInDatabase('fs_fairteiler_follower', $params);
 
 		return $params;
 	}
 
-	public function addFairteilerAdmin($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointAdmin($user, $foodSharePoint, $extra_params = [])
 	{
-		return $this->addFairteilerFollower($user, $fairteiler, array_merge($extra_params, ['type' => 2]));
+		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => FollowerType::FOOD_SHARE_POINT_MANAGER]));
 	}
 
-	public function addFairteilerPost($user, $fairteiler, $extra_params = [])
+	public function addFoodSharePointPost($user, $foodSharePoint, $extra_params = [])
 	{
 		$post = $this->createWallpost($user, $extra_params);
 		$this->haveInDatabase('fs_fairteiler_has_wallpost', [
-			'fairteiler_id' => $fairteiler,
+			'fairteiler_id' => $foodSharePoint,
 			'wallpost_id' => $post['id'],
 		]);
 

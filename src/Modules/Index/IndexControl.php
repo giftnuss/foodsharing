@@ -8,11 +8,9 @@ use Foodsharing\Modules\Core\Control;
 class IndexControl extends Control
 {
 	private $contentGateway;
-	private $indexGateway;
 
-	public function __construct(IndexGateway $indexGateway, IndexView $view, ContentGateway $contentGateway)
+	public function __construct(IndexView $view, ContentGateway $contentGateway)
 	{
-		$this->indexGateway = $indexGateway;
 		parent::__construct();
 		$this->contentGateway = $contentGateway;
 		$this->view = $view;
@@ -21,14 +19,6 @@ class IndexControl extends Control
 	public function index()
 	{
 		$this->pageHelper->addTitle('Rette mit!');
-
-		$gerettet = (int)$this->indexGateway->getFetchedWeight();
-
-		if ($gerettet == 0) {
-			$gerettet = 762338;
-		}
-
-		$gerettet = round($gerettet, 0);
 
 		$host = $_SERVER['HTTP_HOST'] ?? BASE_URL;
 		if (strpos($host, 'foodsharing.at') !== false) {

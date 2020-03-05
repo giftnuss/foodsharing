@@ -2,14 +2,14 @@
 
 import $ from 'jquery'
 
-import { hideLoader, showLoader, reload, chat, ajreq, profile } from '@/script'
+import { hideLoader, showLoader, reload, chat, ajreq, profile, GET } from '@/script'
 
 import { store } from '@/server-data'
 
 export function u_updatePosts () {
   $.ajax({
     dataType: 'json',
-    data: $('div#pinnwand form').serialize(),
+    data: { bid: GET('id') },
     url: '/xhr.php?f=getPinPost',
     success: function (data) {
       if (data.status == 1) {

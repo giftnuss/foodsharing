@@ -52,7 +52,7 @@ class SanitizerService
 	public function handleTagSelect(string $identifier): void
 	{
 		global $g_data;
-		$recip = array();
+		$recip = [];
 		if (isset($g_data[$identifier]) && is_array($g_data[$identifier])) {
 			foreach ($g_data[$identifier] as $key => $r) {
 				if ($key != '') {

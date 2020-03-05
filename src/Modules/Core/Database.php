@@ -31,11 +31,7 @@ class Database
 	 * Returns the first row.
 	 * Provide table name, column names and criteria.
 	 *
-	 * @param string $table
 	 * @param mixed  $column_names
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -46,11 +42,7 @@ class Database
 	 * Returns all rows.
 	 * Provide table name, column names and criteria.
 	 *
-	 * @param string $table
 	 * @param mixed $column_names
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchAllByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -60,12 +52,6 @@ class Database
 	/**
 	 * Returns the named column.
 	 * Provide table name, desired column and criteria.
-	 *
-	 * @param string $table
-	 * @param string $column
-	 * @param array  $criteria
-	 *
-	 * @return array
 	 */
 	public function fetchAllValuesByCriteria(string $table, string $column, array $criteria = []): array
 	{
@@ -75,10 +61,6 @@ class Database
 	/**
 	 * Returns the value of a named column in the first row of the result.
 	 * Provide table name, desired column and criteria.
-	 *
-	 * @param string $table
-	 * @param string $column
-	 * @param array  $criteria
 	 *
 	 * @return mixed
 	 */
@@ -108,9 +90,35 @@ class Database
 		return $this->fetchValue($query, array_values($criteria));
 	}
 
+	/**
+	 * Inserts or updates one row in a table.
+	 *
+	 * @param string $table the table's name
+	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 *
+	 * @return int the number of inserted or updated rows
+	 *
+	 * @throws \Exception
+	 */
 	public function insertOrUpdate(string $table, array $data, array $options = []): int
 	{
 		return $this->insert($table, $data, array_merge($options, ['update' => true]));
+	}
+
+	/**
+	 * Inserts or updates multiple rows in a table.
+	 *
+	 * @param string $table the table's name
+	 * @param array $keys names of the columns that correspond to the values
+	 * @param array $values 2-dim array with names of the columns and the row's entries as key-value pairs for each row
+	 *
+	 * @return int the number of inserted or updated rows
+	 *
+	 * @throws \Exception
+	 */
+	public function insertOrUpdateMultiple(string $table, array $data, array $options = []): int
+	{
+		return $this->insertMultiple($table, $data, array_merge($options, ['update' => true]));
 	}
 
 	public function insertIgnore(string $table, array $data, array $options = []): int
@@ -118,8 +126,37 @@ class Database
 		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
 	}
 
+	/**
+	 * Inserts one row into a table.
+	 *
+	 * @param string $table the table's name
+	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 *
+	 * @return int the number of inserted or updated rows
+	 *
+	 * @throws \Exception
+	 */
 	public function insert(string $table, array $data, array $options = []): int
 	{
+		return $this->insertMultiple($table, [$data], $options);
+	}
+
+	/**
+	 * Inserts multiple rows into a table.
+	 *
+	 * @param string $table the table's name
+	 * @param array $data 2-dim array with names of the columns and the row's entries as key-value pairs for each row
+	 *
+	 * @return int the number of inserted or updated rows
+	 *
+	 * @throws \Exception
+	 */
+	public function insertMultiple(string $table, array $data, array $options = []): int
+	{
+		if (empty($data)) {
+			return 0;
+		}
+
 		$options = array_merge([
 			'update' => false,
 			'ignore' => false,
@@ -129,10 +166,23 @@ class Database
 			throw new \Exception('Can not handle ignore and update at the same time, choose one');
 		}
 
+		// find all keys in data
+		$keys = [];
+		foreach ($data as $row) {
+			$keys = array_merge($keys, $row);
+		}
+		$keys = array_keys($keys);
 		$columns = array_map(
 			[$this, 'getQuotedName'],
-			array_keys($data)
+			$keys
 		);
+
+		// fill unset keys with null values
+		$nullArray = array_fill_keys($keys, null);
+		$fullData = [];
+		foreach ($data as $row) {
+			$fullData[] = array_merge($nullArray, $row);
+		}
 
 		$updateStatement = '';
 		if ($options['update']) {
@@ -143,16 +193,23 @@ class Database
 			$updateStatement = sprintf('ON DUPLICATE KEY UPDATE %s', $updateValues);
 		}
 
+		// create placeholders per data set
+		$rowsPlaceholders = array_map(function ($row) {
+			return '(' . $this->generatePlaceholders(count($row)) . ')';
+		}, $fullData);
+
 		$query = sprintf(
-			'INSERT %s INTO %s (%s) VALUES (%s) %s',
-			 $options['ignore'] ? 'IGNORE' : '',
+			'INSERT %s INTO %s (%s) VALUES %s %s',
+			$options['ignore'] ? 'IGNORE' : '',
 			$this->getQuotedName($table),
 			implode(', ', $columns),
-			implode(', ', array_fill(0, count($data), '?')),
+			implode(', ', $rowsPlaceholders),
 			$updateStatement
 		);
 
-		$this->preparedQuery($query, array_values($data));
+		// flatten values array
+		$flattened = $this->dehierarchizeArray($fullData, false);
+		$this->preparedQuery($query, array_values($flattened));
 
 		return (int)$this->pdo->lastInsertId();
 	}
@@ -160,9 +217,7 @@ class Database
 	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
-			throw new \InvalidArgumentException(
-				"Query update can't be prepared without data."
-			);
+			throw new \InvalidArgumentException("Query update can't be prepared without data.");
 		}
 
 		$set = [];
@@ -324,21 +379,30 @@ class Database
 	// === private methods ===
 
 	/**
-	 * dehierarchize array – e.g. turn ['a', ['b', 'c'], 'd'] into ['a', 'b', 'c', 'd'].
+	 * Dehierarchizes an array. If the keys are not kept this turns ['a', ['b', 'c'], 'd'] into
+	 * ['a', 'b', 'c', 'd']. When keeping keys, it is possible that keys are overridden, i.e. this
+	 * turns ['a' => 1, ['a' => 2, 'b' => 3], 'c' => 4] into ['a' => 2, 'b' => 3, 'c' => 4].
 	 *
 	 * @param array $array some array
-	 *
-	 * @return array
+	 * @param bool $keepKeys whether the new array should use the previous keys
 	 */
-	private function dehierarchizeArray(array $array): array
+	private function dehierarchizeArray(array $array, bool $keepKeys = true): array
 	{
-		foreach ($array as $index => $value) {
+		$out = [];
+
+		foreach ($array as $key => $value) {
 			if (is_array($value)) {
-				array_splice($array, $index, 1, $value);
+				$out = array_merge($out, $this->dehierarchizeArray($value, $keepKeys));
+			} else {
+				if ($keepKeys) {
+					$out = array_merge($out, [$key => $value]);
+				} else {
+					$out[] = $value;
+				}
 			}
 		}
 
-		return $array;
+		return $out;
 	}
 
 	/**
@@ -348,7 +412,8 @@ class Database
 	{
 		$statement = $this->pdo->prepare($query);
 		if (!$statement) {
-			throw new \Exception("Query '$query' can't be prepared.");
+			$errorInfo = $this->pdo->errorInfo();
+			throw new \Exception("Query '$query' can't be prepared. Error info: " . implode(', ', $errorInfo));
 		}
 
 		$params = $this->dehierarchizeArray($params);
@@ -418,7 +483,7 @@ class Database
 			}
 
 			if (is_array($v) && empty($v)) {
-				$params[] = 'false'; // an empty array means that the WHERE clause will be false
+				$params[] = 'false '; // an empty array means that the WHERE clause will be false
 				continue;
 			}
 

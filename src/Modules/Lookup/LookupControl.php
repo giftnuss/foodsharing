@@ -60,7 +60,7 @@ class LookupControl extends ConsoleControl
 			$olderThan->sub(new \DateInterval('P6M'));
 			if ($date < $olderThan) {
 				$this->info('Deleted user ' . $fs['id']);
-				$this->foodsaverGateway->del_foodsaver($fs['id']);
+				$this->foodsaverGateway->deleteFoodsaver($fs['id']);
 			}
 		}
 	}

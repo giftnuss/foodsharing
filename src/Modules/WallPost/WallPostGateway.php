@@ -8,7 +8,6 @@ class WallPostGateway extends BaseGateway
 {
 	private $targets = [
 		'application',
-		'basket',
 		'bezirk',
 		'event',
 		'fairteiler',
@@ -95,13 +94,13 @@ class WallPostGateway extends BaseGateway
 			if (!empty($w['attach'])) {
 				$data = json_decode($w['attach'], true);
 				if (isset($data['image'])) {
-					$gallery = array();
+					$gallery = [];
 					foreach ($data['image'] as $img) {
-						$gallery[] = array(
+						$gallery[] = [
 							'image' => 'images/wallpost/' . $img['file'],
 							'medium' => 'images/wallpost/medium_' . $img['file'],
 							'thumb' => 'images/wallpost/thumb_' . $img['file']
-						);
+						];
 					}
 					$posts[$key]['gallery'] = $gallery;
 				}
@@ -129,12 +128,6 @@ class WallPostGateway extends BaseGateway
 	}
 
 	/**
-	 * @param string $message
-	 * @param int $fsId
-	 * @param string $target
-	 * @param int $targetId
-	 * @param string $attach
-	 *
 	 * @return int id of inserted wallpost
 	 *
 	 * @throws \Exception

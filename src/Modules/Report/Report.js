@@ -7,8 +7,12 @@ import ReportList from './components/ReportList.vue'
 import { GET } from '@/script'
 
 if (GET('a') === 'undefined') {
-  vueRegister({
-    ReportList
-  })
-  vueApply('#vue-reportlist')
+  // The container for the report list only exists if a region specific page is requested
+  var reportListContainerId = 'vue-reportlist'
+  if (document.getElementById(reportListContainerId)) {
+    vueRegister({
+      ReportList
+    })
+    vueApply('#' + reportListContainerId)
+  }
 }

@@ -75,10 +75,6 @@ final class PickupRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
-	 *
-	 * @param int $storeId
-	 * @param string $pickupDate
-	 * @param int $fsId
 	 */
 	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId)
 	{

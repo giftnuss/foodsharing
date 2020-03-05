@@ -1,0 +1,10 @@
+{% import 'partials/menu.twig' as sidenav %}
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {%  include 'partials/listFoodSharePointsForRegion.html.twig' with {'region': region, 'food_share_point': food_share_point} %}
+{% endblock %}
+
+{% block right %}
+    {{ sidenav.menu_tree({'items': {'href': '/?page=fairteiler&bid=' ~ region.id ~ '&sub=add', 'name': 'food_share_point.add_new'|trans() }}, 'options'|trans) }}
+{% endblock %}

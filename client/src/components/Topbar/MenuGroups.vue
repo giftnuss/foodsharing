@@ -2,7 +2,7 @@
   <div>
     <nav-item-dropdown
       v-if="workingGroups.length"
-      tooltip="Deine Gruppen"
+      :tooltip="$i18n('menu.tooltips.your_groups')"
       no-caret
     >
       <template slot="button-content">
@@ -80,18 +80,20 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <small><i class="fas fa-users" /> Gruppenübersicht</small>
+        <small><i class="fas fa-users" /> {{ $i18n('menu.tooltips.groups') }}</small>
       </a>
     </nav-item-dropdown>
     <li
       v-else
+      v-b-tooltip
+      :title="$i18n('menu.tooltips.groups')"
       class="nav-item"
     >
       <a
         v-b-tooltip
+        :title="$i18n('menu.tooltips.groups')"
         :href="$url('workingGroups')"
         class="nav-link"
-        title="Gruppenübersicht"
       >
         <i class="fas fa-users" />
       </a>

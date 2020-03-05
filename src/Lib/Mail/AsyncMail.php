@@ -17,25 +17,25 @@ class AsyncMail
 	public function __construct(Mem $mem)
 	{
 		$this->mem = $mem;
-		$this->data = array(
-			'recipients' => array(),
-			'attachments' => array(),
-			'from' => array(DEFAULT_EMAIL, DEFAULT_EMAIL_NAME),
+		$this->data = [
+			'recipients' => [],
+			'attachments' => [],
+			'from' => [DEFAULT_EMAIL, DEFAULT_EMAIL_NAME],
 			'body' => '',
 			'html' => false,
 			'subject' => DEFAULT_EMAIL_NAME,
 			'identifier' => '',
-			'queuedAt' => new \DateTime());
+			'queuedAt' => new \DateTime()];
 	}
 
 	public function addRecipient($email, $name = null)
 	{
-		$this->data['recipients'][] = array($email, $name);
+		$this->data['recipients'][] = [$email, $name];
 	}
 
 	public function setFrom($email, $name = null)
 	{
-		$this->data['from'] = array($email, $name);
+		$this->data['from'] = [$email, $name];
 	}
 
 	public function setBody($body)
@@ -45,7 +45,7 @@ class AsyncMail
 
 	public function setSubject($subject)
 	{
-		$subject = str_replace(array('\n'), ' ', $subject);
+		$subject = str_replace(['\n'], ' ', $subject);
 		$this->data['subject'] = $subject;
 	}
 
@@ -62,13 +62,13 @@ class AsyncMail
 		}
 
 		if (file_exists($file)) {
-			$this->data['attachments'][] = array($file, $name);
+			$this->data['attachments'][] = [$file, $name];
 		}
 	}
 
 	public function clearRecipients()
 	{
-		return $this->data['recipients'] = array();
+		return $this->data['recipients'] = [];
 	}
 
 	public function setIdentifier($identifier)

@@ -10,8 +10,6 @@ class StoreUserCest
 	}
 
 	/**
-	 * @param HtmlAcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example[1, "1-3 kg"]
 	 * @example[2, "3-5 kg"]
 	 * @example[3, "5-10 kg"]
@@ -32,8 +30,6 @@ class StoreUserCest
 	}
 
 	/**
-	 * @param HtmlAcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example[0, "private"]
 	 * @example[1, "public"]
 	 */

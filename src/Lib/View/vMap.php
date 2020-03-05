@@ -3,6 +3,7 @@
 namespace Foodsharing\Lib\View;
 
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 
 class vMap extends vCore
 {
@@ -24,11 +25,11 @@ class vMap extends vCore
 		$this->model = $container->get(Db::class);
 
 		if (!$center) {
-			$center = [50.89, 10.13];
+			$center = [MapConstants::CENTER_GERMANY_LAT, MapConstants::CENTER_GERMANY_LON];
 		}
 		$this->center = $center;
 
-		$this->zoom = 13;
+		$this->zoom = MapConstants::ZOOM_CITY;
 		$this->markercluster = false;
 		$this->searchpanel = false;
 		$this->defaultMarkerOptions = [
@@ -36,7 +37,7 @@ class vMap extends vCore
 			'icon' => 'smile',
 			'prefix' => 'fa'
 		];
-		$this->marker = array();
+		$this->marker = [];
 	}
 
 	public function setSearchPanel($val)
@@ -55,7 +56,12 @@ class vMap extends vCore
 
 	public function setCenter($lat, $lng)
 	{
-		$this->center = array($lat, $lng);
+		$this->center = [$lat, $lng];
+	}
+
+	public function setZoom(int $zoom)
+	{
+		$this->zoom = $zoom;
 	}
 
 	public function setMarkerCluster($val = true)

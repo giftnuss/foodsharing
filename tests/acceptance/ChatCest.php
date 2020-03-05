@@ -32,13 +32,13 @@ class ChatCest
 
 		// write a message to them
 		$I->fillField('.chatboxtextarea', 'is anyone there for the email?');
-		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
+		$I->pressKey('.chatboxtextarea', Facebook\WebDriver\WebDriverKeys::ENTER);
 		$I->waitForText('is anyone there for', 20, '.chatboxcontent');
 
-		$I->expectNumMails(1);
+		$I->expectNumMails(1, 5);
 		$mail = $I->getMails()[0];
-		$I->assertContains('is anyone there for the email?', $mail->text);
-		$I->assertContains($this->foodsaver1['name'], $mail->subject);
+		$I->assertStringContainsString('is anyone there for the email?', $mail->text);
+		$I->assertStringContainsString($this->foodsaver1['name'], $mail->subject);
 	}
 
 	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)
@@ -52,7 +52,7 @@ class ChatCest
 
 		// write a message to them
 		$I->fillField('.chatboxtextarea', 'is anyone there?');
-		$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
+		$I->pressKey('.chatboxtextarea', Facebook\WebDriver\WebDriverKeys::ENTER);
 		$I->waitForText('is anyone there?', 20, '.chatboxcontent');
 
 		$I->seeInDatabase('fs_msg', [
@@ -77,7 +77,7 @@ class ChatCest
 
 			// write a nice reply
 			$I->fillField('.chatboxtextarea', 'yes! I am here!');
-			$I->pressKey('.chatboxtextarea', WebDriverKeys::ENTER);
+			$I->pressKey('.chatboxtextarea', Facebook\WebDriver\WebDriverKeys::ENTER);
 		});
 
 		$I->waitForText('yes! I am here!', 10, '.chatboxcontent');

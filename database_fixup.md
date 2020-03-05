@@ -203,7 +203,7 @@ Null broken entries (should still be listable in map)
 add foreign key relationship to *fs_bezirk*
 
 ## fs_fairteiler_follower
-Links follower/responsible to fairsharepoints
+Links follower/responsible to food share points
 
 ### todo
 Remove broken entries

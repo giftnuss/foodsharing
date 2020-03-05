@@ -17,7 +17,7 @@ services:
       - app
       - chat
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # main php app
   #------------------------------------
@@ -38,9 +38,9 @@ services:
       - redis
       - mailqueuerunner
     volumes:
-      - ../:/app
-      - selenium_downloads:/downloads
-      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ../:/app:delegated
+      - selenium_downloads:/downloads:cached
+      - /dev/null:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
     environment:
       FS_ENV: test
       REDIS_HOST: redis
@@ -50,13 +50,13 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
     user: "${UID}"
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # php mail queue runner
   #------------------------------------
@@ -75,14 +75,14 @@ services:
       - redis:redis
       - db:db
     volumes:
-      - ../:/app
+      - ../:/app:delegated
     environment:
       FS_ENV: test
       REDIS_HOST: redis
 
   chat:
     container_name: foodsharing_test_chat
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:
@@ -93,7 +93,7 @@ services:
       - 1337
       - 1338
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # mysql
   #------------------------------------
@@ -111,14 +111,14 @@ services:
     tmpfs:
       - /var/lib/mysql-tmpfs
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # redis
   #------------------------------------
 
   redis:
     container_name: foodsharing_test_redis
-    image: redis:5.0-stretch
+    image: redis:5.0.7-alpine
     expose:
       - 6379
 
@@ -136,7 +136,7 @@ services:
     expose:
       - 4444
     volumes:
-      - selenium_downloads:/home/seluser/Downloads
+      - selenium_downloads:/home/seluser/Downloads:cached
 
   # phpmyadmin
   #------------------------------------
@@ -180,8 +180,8 @@ services:
       INFLUXDB_ADMIN_ENABLED: "true"
       INFLUXDB_DB: "foodsharing"
     volumes:
-    - influxdb:/var/lib/influxdb
-    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+    - influxdb:/var/lib/influxdb:cached
+    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
 
 volumes:

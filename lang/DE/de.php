@@ -36,7 +36,7 @@ $g_lang['email'] = 'E-Mail-Adresse';
 $g_lang['attachement'] = 'Anhang';
 $g_lang['email_pass'] = 'Passwort';
 $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
-$g_lang['about_me_public'] = 'Kurzbeschreibung von Dir';
+$g_lang['about_me_public'] = 'Kurzbeschreibung';
 $g_lang['autokennzeichen_id'] = 'Autokennzeichen Deiner Stadt/Region';
 $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
@@ -103,6 +103,7 @@ $g_lang['attention'] = 'Achtung';
 $g_lang['normal'] = 'Normal';
 $g_lang['mailboxes'] = 'E-Mail-Postfächer';
 $g_lang['mailbox_name'] = 'Mailbox-Name';
+$g_lang['mailchange_failed'] = 'Die Aktivierung Deiner neuen E-Mail-Adresse ist fehlgeschlagen! Bitte versuche es erneut!';
 $g_lang['card'] = 'Karte';
 $g_lang['month_1'] = 'Januar';
 $g_lang['month_2'] = 'Februar';
@@ -140,6 +141,7 @@ $g_lang['day'] = 'Tag';
 $g_lang['tomorrow'] = 'Morgen';
 $g_lang['today'] = 'Heute';
 $g_lang['no_bezirk_choosen'] = 'Noch kein Bezirk gewählt';
+$g_lang['bieb_quiz_required'] = 'Du musst <a href="https://wiki.foodsharing.de/Betriebsverantwortliche*r">Betriebsverantworliche*r</a> sein, um auf E-Mail-Postfächer zugreifen zu können. Löse hier das <a href="/?page=settings&sub=upgrade/up_bieb">Quiz für Betriebsverantwortliche</a>, wenn du bereit bist.';
 
 $g_lang['rolle'] = 'Benutzerrolle';
 
@@ -216,24 +218,20 @@ $g_lang['new_message'] = 'Neue Nachricht';
 $g_lang['access_error'] = 'Du hast nicht die nötigen Rechte, dies zu tun.';
 $g_lang['register'] = 'Registrieren';
 $g_lang['daterange'] = 'Zeitraum';
+$g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter';
 $g_lang['rv_accept'] = 'Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.';
 $g_lang['not_rv_accepted'] = 'Du musst die Rechtsvereinbarung akzeptieren!';
 $g_lang['regions'] = 'Bezirke';
 $g_lang['buddywalls'] = 'Pinnwände von Bekannten';
 $g_lang['user_add_success'] = 'Prima! Dein Account wurde angelegt!';
 
-$g_lang['menu_manage_regions'] = 'Bezirke verwalten';
-$g_lang['menu_quiz'] = 'Quiz verwalten';
-$g_lang['menu_reports'] = 'Meldungen';
 $g_lang['menu_all_fs'] = 'Alle Foodsaver';
 $g_lang['menu_all_store'] = 'Alle Betriebe';
-$g_lang['menu_email'] = 'E-Mail-Verteiler';
-$g_lang['menu_faq'] = 'FAQs verwalten';
 $g_lang['menu_foodtypes'] = 'Lebensmitteltypen verwalten';
-$g_lang['menu_content'] = 'Inhalte bearbeiten';
-$g_lang['menu_mailbox_manage'] = 'Mailboxen verwalten';
 $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
-$g_lang['menu_blog'] = 'Blogbeiträge bearbeiten';
 
 $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';
+
+$g_lang['no_email_to_states'] = 'Für dieses Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.';
+$g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';

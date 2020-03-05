@@ -1,7 +1,7 @@
 <?php
 
-use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
+use Foodsharing\Modules\Bell\BellUpdateTrigger;
 
 class BellUpdateTriggerTest extends \Codeception\Test\Unit
 {

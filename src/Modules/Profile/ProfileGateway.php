@@ -25,7 +25,7 @@ final class ProfileGateway extends BaseGateway
 		$this->fs_id = $id;
 	}
 
-	public function getData(int $fsId)
+	public function getData(int $fsId): array
 	{
 		$stm = '
 			SELECT 	fs.`id`,
@@ -74,7 +74,7 @@ final class ProfileGateway extends BaseGateway
 			';
 		if (($data = $this->db->fetch($stm, [':fs_id' => $this->fs_id])) === []
 		) {
-			return false;
+			return [];
 		}
 
 		$data['bouched'] = false;
@@ -108,7 +108,7 @@ final class ProfileGateway extends BaseGateway
 		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $this->fs_id]);
 
 		if (!$data['bananen']) {
-			$data['bananen'] = array();
+			$data['bananen'] = [];
 		}
 
 		$this->db->update('fs_foodsaver', ['stat_bananacount' => count($data['bananen'])], ['id' => (int)$this->fs_id]);
@@ -119,8 +119,8 @@ final class ProfileGateway extends BaseGateway
 		$data['orga'] = false;
 
 		if ($this->session->mayHandleReports()) {
-			$data['violation_count'] = (int)$this->getViolationCount($this->fs_id);
-			$data['note_count'] = (int)$this->getNotesCount($this->fs_id);
+			$data['violation_count'] = $this->getViolationCount($this->fs_id);
+			$data['note_count'] = $this->getNotesCount($this->fs_id);
 		}
 
 		$stm = '
@@ -167,14 +167,19 @@ final class ProfileGateway extends BaseGateway
 
 		$data['pic'] = false;
 		if (!empty($data['photo']) && file_exists('images/' . $data['photo'])) {
-			$data['pic'] = array(
+			$data['pic'] = [
 				'original' => 'images/' . $data['photo'],
 				'medium' => 'images/130_q_' . $data['photo'],
-				'mini' => 'images/50_q_' . $data['photo']
-			);
+				'mini' => 'images/50_q_' . $data['photo'],
+			];
 		}
 
 		return $data;
+	}
+
+	private function getViolationCount(int $fsId): int
+	{
+		return (int)$this->db->count('fs_report', ['foodsaver_id' => $fsId]);
 	}
 
 	private function getNotesCount(int $fsId): int
@@ -191,21 +196,7 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	private function getViolationCount(int $fsId): int
-	{
-		$stm = '
-			SELECT
-				COUNT(r.id)
-			FROM
-	            `fs_report` r
-			WHERE
-				r.foodsaver_id = :fs_id
-		';
-
-		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
-	}
-
-	public function rate(int $fsId, int $rate, int $type = 1, string $message = '')
+	public function rate(int $fsId, int $rate, int $type = 1, string $message = ''): int
 	{
 		return $this->db->insert(
 			'fs_rating',
@@ -304,43 +295,24 @@ final class ProfileGateway extends BaseGateway
 		';
 		$ret = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 
-		return ($ret === false) ? array() : $ret;
+		return ($ret === false) ? [] : $ret;
 	}
 
-	public function getCompanies(int $fsId): array
+	public function listStoresOfFoodsaver(int $fsId): array
 	{
 		$stm = '
 			SELECT 	b.id,
 					b.name,
 					bt.verantwortlich,
 					bt.active
-
 			FROM 	fs_betrieb_team bt,
 					fs_betrieb b
-
 			WHERE 	bt.betrieb_id = b.id
-			AND
-					bt.foodsaver_id = :fs_id
-			ORDER BY b.name ASC
+			AND		bt.foodsaver_id = :fs_id
+			ORDER BY b.name
 		';
 
 		return $this->db->fetchAll($stm, [':fs_id' => $fsId]);
-	}
-
-	public function getCompaniesCount(int $fsId)
-	{
-		$stm = '
-			SELECT 	count(b.id)
-
-			FROM 	fs_betrieb_team bt,
-					fs_betrieb b
-
-			WHERE 	bt.betrieb_id = b.id
-			AND
-					bt.foodsaver_id = :fs_id
-		';
-
-		return $this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
 	public function buddyStatus(int $fsId)

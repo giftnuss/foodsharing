@@ -16,6 +16,11 @@ class Db
 	private $values;
 
 	/**
+	 * @var DebugBar
+	 */
+	private $debug;
+
+	/**
 	 * @var Mem
 	 */
 	protected $mem;
@@ -27,7 +32,15 @@ class Db
 
 	public function __construct()
 	{
-		$this->values = array();
+		$this->values = [];
+	}
+
+	/**
+	 * @required
+	 */
+	public function setDebug(DebugBar $debug)
+	{
+		$this->debug = $debug;
 	}
 
 	/**
@@ -65,9 +78,9 @@ class Db
 
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
-			DebugBar::addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
+			$this->debug->addQuery($query, $duration, false, $this->mysqli->errno, $this->mysqli->error);
 		} else {
-			DebugBar::addQuery($query, $duration, true);
+			$this->debug->addQuery($query, $duration, true);
 		}
 
 		return $res;
@@ -94,7 +107,7 @@ class Db
 	 */
 	public function qCol($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
 				$out[] = $row[0];
@@ -191,7 +204,7 @@ class Db
 	 */
 	public function q($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {
@@ -240,22 +253,5 @@ class Db
 		}
 
 		return $this->values[$field . '-' . $table . '-' . $id];
-	}
-
-	/**
-	 * @deprecated use db->update instead
-	 */
-	public function updateFields($fields, $table, $id)
-	{
-		$sql = array();
-		foreach ($fields as $k => $f) {
-			if (preg_replace('/[^0-9]/', '', $f) == $f) {
-				$sql[] = '`' . $k . '`=' . (int)$f;
-			} else {
-				$sql[] = '`' . $k . '`=' . $this->strval($f);
-			}
-		}
-
-		return $this->update('UPDATE `' . $table . '` SET ' . implode(',', $sql) . ' WHERE `id` = ' . (int)$id);
 	}
 }

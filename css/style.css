@@ -1,3 +1,10 @@
+:root {
+  --fs-brown: #533a20;
+  --fs-green: #64ae24;
+  --fs-beige: #f1e7c9;
+  --fs-white: #F9F5E0;
+}
+
 .avatar, .avatar > i {
   display: inline-block;
   background-repeat: no-repeat;
@@ -132,12 +139,12 @@
 }
 
 .ui-widget-content a, a {
-  color: #64ae24;
+  color: var(--fs-green);
   text-decoration: none;
 }
 
 .ui-widget-content a:hover, a:hover {
-  color: #64ae24;
+  color: var(--fs-green);
   text-decoration: underline;
 }
 
@@ -146,11 +153,11 @@
 }
 
 .my-message a {
-  color: #f1e7c9;
+  color: var(--fs-green);
 }
 
 .my-message a:hover {
-  color: #533a20;
+  text-decoration: underline;
 }
 
 textarea {
@@ -174,16 +181,16 @@ q:before, q:after {
 
 .odd {
   background-color: #fffffe;
-  border-bottom: 1px solid #f1e7c9;
+  border-bottom: 1px solid var(--fs-beige);
 }
 
 .even {
   background-color: #fffffe;
-  border-bottom: 1px solid #f1e7c9;
+  border-bottom: 1px solid var(--fs-beige);
 }
 
 body {
-  background-color: #f1e7c9;
+  background-color: var(--fs-beige);
 }
 
 .float_right {
@@ -409,7 +416,7 @@ div.msg-inside.error a:hover {
 }
 
 div.msg-inside.success, div.msg-inside.success a {
-  background-color: #64ae24 !important;
+  background-color: var(--fs-green) !important;
   color: #fff !important;
 }
 
@@ -418,7 +425,7 @@ div.msg-inside.error i {
 }
 
 div#pulse-success {
-  background-color: #64ae24 !important;
+  background-color: var(--fs-green) !important;
   color: #ffffff !important;
 }
 
@@ -429,7 +436,7 @@ div#pulse-error {
 
 div#pulse-info {
   background-color: #f7e9cf !important;
-  color: #654934 !important;
+  color: var(--fs-brown) !important;
 }
 
 div.pulse-msg p {
@@ -440,11 +447,6 @@ div.pulse-msg p {
 
 li.placeholder {
   list-style: none;
-}
-
-.xv_set h3 {
-  font-size: 16px;
-  font-weight: normal;
 }
 
 .xv_row span.xv_label {
@@ -496,10 +498,6 @@ div.xv_left ul li a {
   font-weight: lighter;
 }
 
-div.xv_set {
-  margin-bottom: 15px;
-}
-
 div.xv_left ul li a:hover {
   background-color: #533a20;
   color: #fff;
@@ -540,7 +538,7 @@ ul.team li a .infos .item {
   font-size: 11px;
   text-decoration: none;
   display: block;
-  color: #645242;
+  color: var(--fs-brown);
   line-height: 11px;
   margin-bottom: 2px;
   height: 11px;
@@ -659,7 +657,7 @@ div.foot {
   text-align: left;
   font-size: 11px;
   padding: 12px 0 5px 8px;
-  color: #645242;
+  color: var(--fs-brown);
 }
 
 div.foot span.dot {
@@ -755,7 +753,7 @@ ul.imglist li a {
   margin: 0;
   display: block;
   padding: 4px;
-  background-color: #f1e7c9;
+  background-color: var(--fs-beige);
   height: 35px;
   border-radius: 3px;
   text-decoration: none;
@@ -767,30 +765,6 @@ ul.imglist li a:hover {
 
 ul.imglist li a img {
   border-radius: 3px;
-}
-
-ul.imglist li.unconfirmed a img {
-  opacity: 0.4;
-  filter: alpha(opacity=40);
-}
-
-ul.imglist li.unconfirmed a:hover img {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-
-ul.imglist li a span {
-  display: block;
-  position: relative;
-  top: -15px;
-  right: -21px;
-  width: 16px;
-  height: 16px;
-  background-image: url(/img/check.png);
-}
-
-ul.imglist li.unconfirmed a span {
-  background-image: url(/img/pending.png);
 }
 
 div.input-wrapper.today {
@@ -972,7 +946,7 @@ ul.linklist li span.i img {
 }
 
 ul.linklist li > a.more {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   color: #ffffff;
@@ -1010,7 +984,7 @@ ul.linklist li > a.active {
 }
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   color: #ffffff;
 }
 
@@ -1027,11 +1001,11 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 
 .updatepost div.post {
   margin-left: 60px;
-  color: #645242;
+  color: var(--fs-brown);
 }
 
 .activity_feed_content_link {
-  border-left: 2px solid #645242;
+  border-left: 2px solid var(--fs-brown);
   padding-left: 10px;
   margin-top: 15px;
   font-size: 13px;
@@ -1048,7 +1022,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .post a {
-  color: #599022;
+  color: var(--fs-green);
   text-decoration: none;
 }
 
@@ -1082,7 +1056,7 @@ div.statdisplay .item {
   padding: 0 5px 0 5px;
   margin-right: 8px;
   border-radius: 8px;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   color: #ffffff;
   text-align: center;
   width: 62px;
@@ -1419,7 +1393,7 @@ a.moreswaplink {
   text-align: center;
   color: #fff;
   font-weight: bold;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   text-decoration: none;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -1428,7 +1402,7 @@ a.moreswaplink {
 }
 
 a.moreswaplink:hover {
-  background-color: #6ba149;
+  background-color: var(--fs-green);
   text-decoration: none;
 }
 
@@ -1490,7 +1464,7 @@ td.load {
 
 .ui-button, .button {
   color: #ffffff !important;
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   border-radius: 6px;
   border: 0 none;
   text-decoration: none;
@@ -1511,7 +1485,7 @@ td.load {
 }
 
 .ui-button:hover, .button:hover {
-  background-color: #64ae24;
+  background-color: var(--fs-green);
   opacity: 0.8;
   text-decoration: none !important;
 }
@@ -1605,7 +1579,7 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
 }
 
 footer .inside {
-  color: #f1e7c9;
+  color: var(--fs-beige);
 }
 
 footer .imglink {
@@ -1626,7 +1600,7 @@ footer .wrapper {
 
 footer .linklist li a {
   background-color: #533a20;
-  color: #f1e7c9 !important;
+  color: var(--fs-beige) !important;
 }
 
 footer .linklist li a:hover {
@@ -1648,18 +1622,12 @@ footer .linklist li a:hover {
 }
 
 .vidlink:hover img {
-  border: 10px solid #64ae24;
+  border: 10px solid var(--fs-green);
 }
 
 .vmap {
   width: 100%;
   height: 450px;
-  background-color: #fff
-}
-
-.step2 .vmap {
-  width: 300px;
-  height: 150px;
   background-color: #fff
 }
 
@@ -1705,6 +1673,6 @@ footer .linklist li a:hover {
   footer ul.linklist {
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #f1e7c9;
+    border-bottom: 1px solid var(--fs-beige);
   }
 }

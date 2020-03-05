@@ -15,7 +15,7 @@ services:
       - app
       - chat
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # main php app
   #------------------------------------
@@ -36,8 +36,8 @@ services:
       - mailqueuerunner
       - influxdb
     volumes:
-      - ../:/app
-      - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini
+      - ../:/app:delegated
+      - ${PWD}/docker/conf/app/php.dev.ini:/usr/local/etc/php/conf.d/dev-config.ini:cached
     environment:
       FS_ENV: dev
 
@@ -46,15 +46,15 @@ services:
 
   client:
     container_name: foodsharing_dev_client
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     ports:
       - "18080:18080"
     command: sh -c "yarn && yarn dev"
     working_dir: /app/client
     user: "${UID}"
     volumes:
-      - ../:/app
-      - client-node-modules:/app/client/node_modules
+      - ../:/app:delegated
+      - client-node-modules:/app/client/node_modules:cached
     environment:
       HOST: 0.0.0.0
       PROXY_TARGET: http://web:8080
@@ -76,7 +76,7 @@ services:
       - redis:redis
       - db:db
     volumes:
-      - ../:/app
+      - ../:/app:delegated
     environment:
       FS_ENV: dev
 
@@ -86,7 +86,7 @@ services:
   chat:
     container_name: foodsharing_dev_chat
     command: sh -c "yarn && node server.js 0.0.0.0"
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     working_dir: /app/chat
     depends_on:
       - redis
@@ -99,8 +99,8 @@ services:
       - 11337:1337
       - 11338:1338
     volumes:
-      - ../:/app
-      - chat-node-modules:/app/node_modules
+      - ../:/app:delegated
+      - chat-node-modules:/app/node_modules:cached
 
   # mysql
   #------------------------------------
@@ -116,16 +116,16 @@ services:
       MYSQL_ROOT_PASSWORD: root
       TZ: Europe/Berlin
     volumes:
-      - ../:/app
+      - ../:/app:delegated
 
   # redis
   #------------------------------------
 
   redis:
     container_name: foodsharing_dev_redis
-    image: redis:5.0-stretch
+    image: redis:5.0.7-alpine
     ports:
-        - 16379:6379
+      - 16379:6379
     expose:
       - 6379
 
@@ -143,7 +143,7 @@ services:
     ports:
       - 18081:80
     volumes:
-      - ${PWD}/docker/conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ${PWD}/docker/conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:cached
       - /sessions
 
   # maildev
@@ -167,22 +167,22 @@ services:
     command: >
       influxd -config /etc/influxdb/influxdb.toml
     ports:
-    - 8083:8083
-    - 18089:8089/udp
-    - 18086:8086
+      - 8083:8083
+      - 18089:8089/udp
+      - 18086:8086
     environment:
       INFLUXDB_ADMIN_ENABLED: "true"
       INFLUXDB_DB: "foodsharing"
     volumes:
-    - influxdb:/var/lib/influxdb
-    - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml
+      - influxdb:/var/lib/influxdb:cached
+      - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
   grafana:
     image: grafana/grafana:latest
     ports:
-    - 4000:3000
+      - 4000:3000
     volumes:
-    - grafana:/var/lib/grafana
+      - grafana:/var/lib/grafana:cached
 
 
 

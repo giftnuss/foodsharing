@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
 use Foodsharing\Lib\Xhr\Xhr;
-use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\StorePermissions;
@@ -58,10 +58,10 @@ class StoreXhr extends Control
 			if ($this->storeService->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
 				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
 
-				return array(
+				return [
 					'status' => 1,
 					'script' => 'reload();'
-				);
+				];
 			}
 		}
 	}
@@ -78,10 +78,10 @@ class StoreXhr extends Control
 
 			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'reload();'
-			);
+			];
 		}
 	}
 
@@ -94,7 +94,7 @@ class StoreXhr extends Control
 		}
 
 		if ($history = $this->model->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => '
 				$("daterange_from").datepicker("close");
@@ -102,7 +102,7 @@ class StoreXhr extends Control
 					
 				$("#daterange_content").html(\'' . $this->sanitizerService->jsSafe($this->view->fetchlist($history)) . '\');
 					'
-			);
+			];
 		}
 	}
 
@@ -261,13 +261,13 @@ class StoreXhr extends Control
 			}
 		}
 
-		return array('status' => 1);
+		return ['status' => 1];
 	}
 
 	public function setbezirkids()
 	{
 		if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$ids = array();
+			$ids = [];
 			foreach ($_SESSION['client']['verantwortlich'] as $b) {
 				$ids[] = (int)$b['betrieb_id'];
 			}
@@ -291,10 +291,10 @@ class StoreXhr extends Control
 					$cnt = '
 					<div id="betriebetoselect">';
 					foreach ($betriebe as $b) {
-						$cnt .= $this->v_utils->v_form_select('b_' . $b['id'], array(
+						$cnt .= $this->v_utils->v_form_select('b_' . $b['id'], [
 							'label' => $b['name'] . ', ' . $b['str'] . ' ' . $b['hsnr'],
 							'values' => $bezirks
-						));
+						]);
 					}
 					$cnt .= '
 					</div>';

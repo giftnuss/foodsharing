@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Foodsharing\Services\ImageService;
 
 class ReportControl extends Control
 {
@@ -19,12 +19,20 @@ class ReportControl extends Control
 		$this->imageService = $imageService;
 
 		parent::__construct();
+
+		if (!$this->session->may()) {
+			$this->routeHelper->goLogin();
+		}
 	}
 
 	// Request is needed here, even if not used inside the method.
 	public function index(Request $request, Response $response): void
 	{
 		if (isset($_GET['bid'])) {
+			$this->pageHelper->addContent($this->v_utils->v_info('<b>Während einer langen Probephase konnten Probleme dieser Funktion leider nicht entdeckt werden. Diese Funktion wird deshalb auf Wunsch der AG Meldegruppe ( <a href="mailto:meldungen@foodsharing.network">meldungen@foodsharing.network</a> ) vorübergehend deaktiviert.<br><br><br>Um sie nach einer Ausarbeitung durch die IT wieder zu aktivieren, benötigen wir die Unterstützung weiterer ProgrammiererInnen aus Deinem Bezirk:<br><br><a href="https://devdocs.foodsharing.network/it-tasks.html">https://devdocs.foodsharing.network/it-tasks.html</a> oder <a href="mailto:it@foodsharing.network">it@foodsharing.network</a></b>'));
+
+			return;
+
 			$this->byRegion($_GET['bid'], $response);
 		} else {
 			if (!isset($_GET['sub'])) {

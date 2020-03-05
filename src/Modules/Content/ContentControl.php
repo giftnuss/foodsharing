@@ -5,6 +5,8 @@ namespace Foodsharing\Modules\Content;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
+use Foodsharing\Permissions\ContentPermissions;
 use Parsedown;
 
 class ContentControl extends Control
@@ -12,17 +14,20 @@ class ContentControl extends Control
 	private $contentGateway;
 	private $identificationHelper;
 	private $dataHelper;
+	private $contentPermissions;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		ContentPermissions $contentPermissions
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->contentPermissions = $contentPermissions;
 
 		parent::__construct();
 	}
@@ -30,7 +35,7 @@ class ContentControl extends Control
 	public function index(): void
 	{
 		if (!isset($_GET['sub'])) {
-			if (!$this->session->may('orga')) {
+			if (!$this->contentPermissions->mayEditContent()) {
 				$this->routeHelper->go('/');
 			}
 			$this->model;
@@ -43,9 +48,9 @@ class ContentControl extends Control
 
 				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('content_deleted'));
@@ -62,9 +67,9 @@ class ContentControl extends Control
 
 				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
 					$this->pageHelper->addBread($cnt['title']);
@@ -78,36 +83,36 @@ class ContentControl extends Control
 				$this->pageHelper->addBread($this->translationHelper->s('content_bread'), '/?page=content');
 
 				if ($data = $this->contentGateway->list()) {
-					$rows = array();
+					$rows = [];
 					foreach ($data as $d) {
-						$rows[] = array(
-							array('cnt' => $d['id']),
-							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])))
-							));
+						$rows[] = [
+							['cnt' => $d['id']],
+							['cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'],
+							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])])
+							]];
 					}
 
-					$table = $this->v_utils->v_tablesorter(array(
-						array('name' => 'ID', 'width' => 30),
-						array('name' => $this->translationHelper->s('name')),
-						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
-					), $rows);
+					$table = $this->v_utils->v_tablesorter([
+						['name' => 'ID', 'width' => 30],
+						['name' => $this->translationHelper->s('name')],
+						['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50]
+					], $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
 					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
 				}
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content'))
-				)), 'Aktionen'), CNT_RIGHT);
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+					['href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content')]
+				]), 'Aktionen'), CNT_RIGHT);
 			}
 		}
 	}
 
 	public function partner(): void
 	{
-		if ($cnt = $this->contentGateway->get(10)) {
+		if ($cnt = $this->contentGateway->get(ContentId::PARTNER_PAGE_10)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
@@ -117,7 +122,7 @@ class ContentControl extends Control
 
 	public function unterstuetzung(): void
 	{
-		if ($cnt = $this->contentGateway->get(42)) {
+		if ($cnt = $this->contentGateway->get(ContentId::SUPPORT_FOODSHARING_PAGE_42)) {
 			$this->pageHelper->addBread($cnt['title']);
 			$this->pageHelper->addTitle($cnt['title']);
 
@@ -235,7 +240,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fairteilerrettung(): void
+	public function foodSharePointRescue(): void
 	{
 		if ($cnt = $this->contentGateway->get(49)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -250,7 +255,7 @@ class ContentControl extends Control
 		$this->pageHelper->addBread('F.A.Q');
 		$this->pageHelper->addTitle('F.A.Q.');
 
-		$cat_ids = array(1, 6, 7);
+		$cat_ids = [1, 6, 7];
 		if ($this->session->may('fs')) {
 			$cat_ids[] = 2;
 			$cat_ids[] = 4;
@@ -318,7 +323,7 @@ class ContentControl extends Control
 		}
 	}
 
-	public function fasten(): void
+	public function fsstaedte(): void
 	{
 		if ($cnt = $this->contentGateway->get(66)) {
 			$this->pageHelper->addBread($cnt['title']);
@@ -354,16 +359,16 @@ class ContentControl extends Control
 
 	private function content_form($title = 'Content Management')
 	{
-		return $this->v_utils->v_form('faq', array(
+		return $this->v_utils->v_form('faq', [
 			$this->v_utils->v_field(
-				$this->v_utils->v_form_text('name', array('required' => true)) .
-				$this->v_utils->v_form_text('title', array('required' => true)),
+				$this->v_utils->v_form_text('name', ['required' => true]) .
+				$this->v_utils->v_form_text('title', ['required' => true]),
 
 				$title,
-				array('class' => 'ui-padding')
+				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('public_content' => true, 'nowrapper' => true)), 'Inhalt')
-		), array('submit' => $this->translationHelper->s('save')));
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', ['public_content' => true, 'nowrapper' => true]), 'Inhalt')
+		], ['submit' => $this->translationHelper->s('save')]);
 	}
 
 	private function handle_edit(): void

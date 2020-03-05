@@ -8,6 +8,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
+	private $model;
 	private $storeGateway;
 	private $regionGateway;
 	private $statsGateway;
@@ -31,7 +32,7 @@ class StatsControl extends ConsoleControl
 
 		if ($allFsIds = $this->model->getAllFoodsaverIds()) {
 			foreach ($allFsIds as $fsid) {
-				$stat_gerettet = $this->model->getTotallyFetchedByFoodsaver($fsid);
+				$totalKilosFetchedByFoodsaver = $this->model->getTotalKilosFetchedByFoodsaver($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
 					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
 				);
@@ -67,7 +68,7 @@ class StatsControl extends ConsoleControl
 					'
 						UPDATE fs_foodsaver
 
-						SET 	stat_fetchweight = ' . (float)$stat_gerettet . ',
+						SET 	stat_fetchweight = ' . (float)$totalKilosFetchedByFoodsaver . ',
 						stat_fetchcount = ' . (int)$stat_fetchcount . ',
 						stat_postcount = ' . (int)$stat_post . ',
 						stat_buddycount = ' . (int)$stat_buddycount . ',
@@ -105,14 +106,14 @@ class StatsControl extends ConsoleControl
 
 			if ($team = $this->storeGateway->getStoreTeam($storeId)) {
 				foreach ($team as $fs) {
-					$newdata = array(
+					$newdata = [
 						'stat_first_fetch' => $fs['stat_first_fetch'],
 						'foodsaver_id' => $fs['id'],
 						'betrieb_id' => $storeId,
 						'verantwortlich' => $fs['verantwortlich'],
 						'stat_fetchcount' => $fs['stat_fetchcount'],
 						'stat_last_fetch' => null,
-					);
+					];
 
 					/* first_fetch */
 					if ($first_fetch = $this->model->getFirstFetchInStore($storeId, $fs['id'])) {

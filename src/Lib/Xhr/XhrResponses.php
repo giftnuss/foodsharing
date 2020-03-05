@@ -13,13 +13,13 @@ class XhrResponses
 
 	public function fail_generic()
 	{
-		return array('status' => 0);
+		return ['status' => 0];
 	}
 
 	public function success()
 	{
-		return array(
+		return [
 			'status' => 1
-		);
+		];
 	}
 }

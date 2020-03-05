@@ -16,6 +16,7 @@
   - [Testing](testing.md)
   - [Code quality and review](code-review.md)
   - [Troubleshooting](troubleshooting.md)
+  - [Beta Testing (DE)](beta-testing-de.md)
 
 ### References
   - [Scripts](scripts.md)

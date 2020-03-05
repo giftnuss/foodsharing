@@ -2,8 +2,9 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Settings\SettingsGateway;
 use Mobile_Detect;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,20 +18,21 @@ class LoginControl extends Control
 	private $formFactory;
 
 	private $loginGateway;
+	private $settingsGateway;
+	private $contentGateway;
 
-	public function __construct(Db $model, LoginView $view, LoginGateway $loginGateway)
+	public function __construct(LoginView $view, LoginGateway $loginGateway, ContentGateway $contentGateway, SettingsGateway $settingsGateway)
 	{
-		$this->model = $model;
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
+		$this->settingsGateway = $settingsGateway;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
 
 	/**
 	 * @required
-	 *
-	 * @param FormFactoryBuilder $formFactory
 	 */
 	public function setFormFactory(FormFactoryBuilder $formFactory): void
 	{
@@ -42,7 +44,7 @@ class LoginControl extends Control
 		$this->pageHelper->addTitle('Newsletter Abmeldung');
 		$this->pageHelper->addBread('Newsletter Abmeldung');
 		if (isset($_GET['e']) && $this->emailHelper->validEmail($_GET['e'])) {
-			$this->model->update('UPDATE `fs_' . "foodsaver` SET newsletter=0 WHERE email='" . $this->model->safe($_GET['e']) . "'");
+			$this->settingsGateway->unsubscribeNewsletter($_GET['e']);
 			$this->pageHelper->addContent($this->v_utils->v_info('Du wirst nun keine weiteren Newsletter von uns erhalten', 'Erfolg!'));
 		}
 	}
@@ -72,10 +74,10 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-				$params = array(
+				$params = [
 					'action' => $action,
 					'form' => $form->createView(),
-				);
+				];
 
 				$response->setContent($this->render('pages/Login/page.twig', $params));
 			}

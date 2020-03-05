@@ -142,7 +142,7 @@ export default {
   data () {
     return {
       sortBy: 'time',
-      sortDesc: 'true',
+      sortDesc: true,
       currentPageDaily: 1,
       currentPageWeekly: 1,
       currentPageMonthly: 1,
