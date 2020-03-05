@@ -42,7 +42,8 @@ class Routing
 		'fsbetrieb' => 'StoreUser',
 		'team' => 'Team',
 		'wallpost' => 'WallPost',
-		'groups' => 'WorkGroup'];
+		'groups' => 'WorkGroup',
+		'store' => 'Store'];
 
 	public static $fqcnPrefix = '\\Foodsharing\\Modules\\';
 

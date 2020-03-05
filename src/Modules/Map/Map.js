@@ -8,7 +8,7 @@ import $ from 'jquery'
 import { getBrowserLocation, expose } from '@/utils'
 import { GET } from '@/browser'
 
-import { showLoader, hideLoader, goTo, ajreq, sleepmode } from '@/script'
+import { showLoader, hideLoader, goTo, ajreq } from '@/script'
 
 import storage from '@/storage'
 
@@ -203,7 +203,6 @@ function loadMarker (types, loader) {
         markers = null
 
         markers = L.markerClusterGroup({ maxClusterRadius: 50 })
-        let url = ''
         markers.on('click', function (el) {
           const fsid = (el.layer.options.id)
           const type = el.layer.options.type
@@ -211,35 +210,10 @@ function loadMarker (types, loader) {
           if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
-            url = `/xhr.php?f=bBubble&id=${fsid}`
-            u_loadDialog()
+            ajreq('bubble', { app: 'store', id: fsid })
           } else if (type === 'f') {
             const bid = (el.layer.options.bid)
             goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
-          }
-          if (url != '') {
-            $.ajax({
-              url: url,
-              dataType: 'json',
-              success: function (data) {
-                if (data.status === 1) {
-                  if (type === 'fs') {
-                    const popup = new L.Popup({ offset: new L.Point(1, -35) })
-                    popup.setLatLng(el.latlng)
-                    popup.setContent(data.html)
-                    u_map.openPopup(popup)
-                  } else if (type === 'b') {
-                    u_setDialogData(data)
-                    sleepmode.init()
-                  }
-                }
-              },
-              complete: function () {
-                if (loader) {
-                  hideLoader()
-                }
-              }
-            })
           }
         })
 

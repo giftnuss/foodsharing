@@ -20,7 +20,7 @@ $csrf_whitelist = [
 	// 'activeSwitch',
 	// 'grabInfo',
 	// 'childBezirke',
-	'bBubble',
+	// 'bBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',

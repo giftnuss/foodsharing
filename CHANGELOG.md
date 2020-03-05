@@ -27,6 +27,7 @@
 - Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
 - Fix broken bell menu caused by missing date conversion !1364 @dthulke
 - Strip whitespaces from email addresses before sending them !1372 #802 @alex.simm
+- Fix "Mobile: can't apply to stores, window cut off" #765 !1357 @panschk
 
 ## Refactoring
 - Improve mayEditStore() to fail faster !1311 @jofranz
