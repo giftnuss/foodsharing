@@ -1,9 +1,10 @@
 <?php
 
-use function Sentry\configureScope;
-use function Sentry\init;
+use Sentry\Severity;
 use Sentry\State\Hub;
 use Sentry\State\Scope;
+use function Sentry\configureScope;
+use function Sentry\init;
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
@@ -40,15 +41,19 @@ if (file_exists($revision_filename)) {
  */
 
 if (defined('SENTRY_URL')) {
-	init(['dsn' => SENTRY_URL]);
+	init([
+		'dsn' => SENTRY_URL,
+		'release' => SRC_REVISION,
+		'environment' => $FS_ENV
+	]);
 
-	configureScope(function (Scope $scope): void {
-		$scope->setTag(FS_ENV, '$FS_ENV');
-		//$scope->setLevel(Sentry\Severity::debug());
-	});
+	configureScope(
+		static function (Scope $scope): void {
+			$scope->setTag(FS_ENV, 'FS_ENV');
+			$scope->setLevel(Severity::warning());
+		});
 	if (defined('SRC_REVISION')) {
 		$options = Hub::getCurrent()->getClient()->getOptions();
-		$options->setRelease(SRC_REVISION);
 	}
 }
 

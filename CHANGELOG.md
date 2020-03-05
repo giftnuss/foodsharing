@@ -47,6 +47,7 @@
 - fix some doc annotations !1361 @\_fridtjof_
 - update mkdirp to version 1 @peter.toennies
 - update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 !1369 @peter.toennies
+- updated sentry to version 2 @peter.toennies
 
 # 2020-01-26
 Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
@@ -335,7 +336,6 @@ And we have even included some new features for you.
 - enable functional tests (symfony kernel running inside conception; for limits see inside tests/functional folder) !884 @NerdyProjects
 - Use BSD tools in scripts/clean instead of GNU tools for Unix (macOS/OSX) bash. !889 @svenpascal
 - updated codeception to version 3 @peter.toennies
-- updated sentry to versin 2 @peter.toennies
 - remove verbose output of bounce mail processing and mail fetcher, add bounce mail stats to influx db @NerdyProjects
 - remove progressbar from cron scripts !919 @NerdyProjects
 - include rules from !511 in devdocs @flukx
@@ -746,7 +746,7 @@ IE11, Safari and slightly older androids should work again, although I can only 
 - fix wrong usage of region ID lists for post permissions !503 #308 @peter.toennies
 - Fix fairteiler/blog picture upload by exposing necessary javascript methods #307 @NerdyProjects
 - Admins of Workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
-- Do not rely on $\_SERVER['HTTP\_HOST'] being set #263 !510 @NerdyProjects
+- Do not rely on $\_SERVER\['HTTP\_HOST'\] being set #263 !510 @NerdyProjects
 - Admins of workgroups are called admins again instead of ambassadors !513 #264 @NerdyProjects
 - Map legend now more usable in mobile view !215 #119 @michi-zuri
 - Fix joining regions from subpages like profile not possible !509 #300 @NerdyProjects
