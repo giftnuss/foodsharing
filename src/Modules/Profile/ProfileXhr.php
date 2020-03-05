@@ -22,7 +22,7 @@ class ProfileXhr extends Control
 	private $profileGateway;
 	private $storeGateway;
 	private $reportPermissions;
-	
+
 	public function __construct(
 		ProfileView $view,
 		StoreModel $storeModel,
@@ -41,7 +41,7 @@ class ProfileXhr extends Control
 		$this->profileGateway = $profileGateway;
 		$this->storeGateway = $storeGateway;
 		$this->reportPermissions = $reportPermissions;
-		
+
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
@@ -68,7 +68,7 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
-		echo("RATE");
+		echo 'RATE';
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];

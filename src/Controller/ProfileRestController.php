@@ -4,10 +4,10 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Permissions\ReportPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Foodsharing\Permissions\ReportPermissions;
 
 class ProfileRestController extends AbstractFOSRestController
 {
