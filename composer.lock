@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57d05dbaeec24a9cbf9b6e886ef33f9e",
+    "content-hash": "8261515bc99ecaf536c85686d3b4db6a",
     "packages": [
         {
             "name": "ddeboer/imap",
@@ -764,16 +764,16 @@
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "2.7.1",
+            "version": "2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "affb4fe1eb079b9b659656bd548b7089c0a04fb2"
+                "reference": "22fbbc35a2964564bfde765007655174262315c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/affb4fe1eb079b9b659656bd548b7089c0a04fb2",
-                "reference": "affb4fe1eb079b9b659656bd548b7089c0a04fb2",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/22fbbc35a2964564bfde765007655174262315c9",
+                "reference": "22fbbc35a2964564bfde765007655174262315c9",
                 "shasum": ""
             },
             "require": {
@@ -863,7 +863,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2020-02-24T09:04:31+00:00"
+            "time": "2020-03-04T21:18:53+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -6575,16 +6575,16 @@
         },
         {
             "name": "codeception/module-webdriver",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-webdriver.git",
-                "reference": "aa7c2d6baaaebc99fbb000386f05096dbe2c9b7f"
+                "reference": "3af8c381b556709934f1ae2c59a00e56ce6a43ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/aa7c2d6baaaebc99fbb000386f05096dbe2c9b7f",
-                "reference": "aa7c2d6baaaebc99fbb000386f05096dbe2c9b7f",
+                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/3af8c381b556709934f1ae2c59a00e56ce6a43ea",
+                "reference": "3af8c381b556709934f1ae2c59a00e56ce6a43ea",
                 "shasum": ""
             },
             "require": {
@@ -6626,7 +6626,7 @@
                 "browser-testing",
                 "codeception"
             ],
-            "time": "2020-02-15T19:59:06+00:00"
+            "time": "2020-03-04T08:06:05+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",
@@ -7442,16 +7442,16 @@
         },
         {
             "name": "php-webdriver/webdriver",
-            "version": "1.8.1",
+            "version": "1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-webdriver/php-webdriver.git",
-                "reference": "262ea0d209c292e0330be1041424887bbbffef04"
+                "reference": "3308a70be084d6d7fd1ee5787b4c2e6eb4b70aab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-webdriver/php-webdriver/zipball/262ea0d209c292e0330be1041424887bbbffef04",
-                "reference": "262ea0d209c292e0330be1041424887bbbffef04",
+                "url": "https://api.github.com/repos/php-webdriver/php-webdriver/zipball/3308a70be084d6d7fd1ee5787b4c2e6eb4b70aab",
+                "reference": "3308a70be084d6d7fd1ee5787b4c2e6eb4b70aab",
                 "shasum": ""
             },
             "require": {
@@ -7503,7 +7503,7 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2020-02-17T08:14:38+00:00"
+            "time": "2020-03-04T14:40:12+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
