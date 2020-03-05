@@ -61,7 +61,7 @@
     "mobiledetect/mobiledetectlib": "2.8.34",
     "nesbot/carbon": "2.31.0",
     "sensio/framework-extra-bundle": "5.5.3",
-    "sentry/sentry": "<2.0.0",
+    "sentry/sdk": "^2.1.0",
     "setasign/fpdi-tcpdf": "2.3.0",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/config": "4.4.5",
