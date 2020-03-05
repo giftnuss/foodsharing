@@ -4,8 +4,8 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Profile\ProfileGateway;
-use Foodsharing\Permissions\ReportPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -13,13 +13,11 @@ class ProfileRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $profileGateway;
-	private $reportPermissions;
 
-	public function __construct(Session $session, ProfileGateway $profileGateway, ReportPermissions $reportPermissions)
+	public function __construct(Session $session, ProfileGateway $profileGateway)
 	{
 		$this->session = $session;
 		$this->profileGateway = $profileGateway;
-		$this->reportPermissions = $reportPermissions;
 	}
 
 	/**
@@ -33,7 +31,7 @@ class ProfileRestController extends AbstractFOSRestController
 
 		$fs_id = $this->session->id();
 		$this->profileGateway->setFsId($fs_id);
-		$profile = $this->profileGateway->getData($fs_id, $this->reportPermissions->mayHandleReports());
+		$profile = $this->profileGateway->getData($fs_id);
 
 		return $this->handleView($this->view([
 			'id' => $profile['id'],

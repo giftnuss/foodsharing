@@ -10,7 +10,6 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Permissions\ReportPermissions;
 
 class ProfileXhr extends Control
 {
@@ -21,7 +20,6 @@ class ProfileXhr extends Control
 	private $regionGateway;
 	private $profileGateway;
 	private $storeGateway;
-	private $reportPermissions;
 
 	public function __construct(
 		ProfileView $view,
@@ -30,8 +28,7 @@ class ProfileXhr extends Control
 		RegionGateway $regionGateway,
 		MailboxGateway $mailboxGateway,
 		ProfileGateway $profileGateway,
-		StoreGateway $storeGateway,
-		ReportPermissions $reportPermissions
+		StoreGateway $storeGateway
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
@@ -40,13 +37,12 @@ class ProfileXhr extends Control
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
 		$this->storeGateway = $storeGateway;
-		$this->reportPermissions = $reportPermissions;
 
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
 			$this->profileGateway->setFsId($_GET['id']);
-			$fs = $this->profileGateway->getData($_GET['id'], $reportPermissions->mayHandleReports());
+			$fs = $this->profileGateway->getData($_GET['id']);
 
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
@@ -68,7 +64,6 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
-		echo 'RATE';
 		$rate = 1;
 		if (isset($_GET['rate'])) {
 			$rate = (int)$_GET['rate'];
@@ -91,7 +86,7 @@ class ProfileXhr extends Control
 				];
 			}
 
-			$this->profileGateway->rate($foodsharerId, $rate, $type, $message, $this->session->id());
+			$this->profileGateway->rate($foodsharerId, $rate, $type, $message);
 
 			$comment = '';
 			if ($msg = $this->profileGateway->getRateMessage($foodsharerId)) {
