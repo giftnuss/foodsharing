@@ -1,10 +1,9 @@
 <?php
 
-use Sentry\Severity;
-use Sentry\State\Hub;
-use Sentry\State\Scope;
 use function Sentry\configureScope;
 use function Sentry\init;
+use Sentry\Severity;
+use Sentry\State\Scope;
 
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
@@ -49,12 +48,8 @@ if (defined('SENTRY_URL')) {
 
 	configureScope(
 		static function (Scope $scope): void {
-			$scope->setTag(FS_ENV, 'FS_ENV');
 			$scope->setLevel(Severity::warning());
 		});
-	if (defined('SRC_REVISION')) {
-		$options = Hub::getCurrent()->getClient()->getOptions();
-	}
 }
 
 if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
