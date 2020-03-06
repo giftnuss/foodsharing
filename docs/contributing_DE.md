@@ -161,7 +161,7 @@ Und dann ... Zeit für eine neue Aufgabe ...?
 Wenn dir etwas an der foodsharing-Webseite aufgefallen ist: prüf bitte, ob das auf beta.foodsharing.de und www.foodsharing.de auftaucht. 
 * www und beta = es ist ein unbearbeitetes Verhalten = prüf bitte, ob das Issue bereits bei GitLab eingetragen ist: [issues](https://gitlab.com/foodsharing-dev/foodsharing/issues) ... wenn es noch nicht existiert: **leg das issue bitte mit möglichst genauen Informationen an**
 * www und nicht beta = wir haben uns schon drum gekümmert
-* nicht wwww aber beta = wir haben es verursacht = **bitte im Slack-Beta-Kanal melden**
+* nicht www aber beta = wir haben es verursacht = **bitte im Slack-Beta-Kanal melden**
 
 ## Testen
 
