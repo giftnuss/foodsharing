@@ -28,8 +28,7 @@
     "phpstan/phpstan": "0.12.14",
     "phpunit/phpunit": "9.0.1",
     "roave/security-advisories": "dev-master",
-    "sebastian/diff": "4.0.0",
-    "symfony/debug": "4.4.5"
+    "sebastian/diff": "4.0.0"
   },
   "require": {
     "ext-dom": "*",
@@ -61,12 +60,13 @@
     "mobiledetect/mobiledetectlib": "2.8.34",
     "nesbot/carbon": "2.31.0",
     "sensio/framework-extra-bundle": "5.5.3",
-    "sentry/sdk": "^2.1.0",
+    "sentry/sdk": "2.1.0",
     "setasign/fpdi-tcpdf": "2.3.0",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/config": "4.4.5",
     "symfony/console": "4.4.5",
     "symfony/dependency-injection": "4.4.5",
+    "symfony/error-handler": "4.4.5",
     "symfony/expression-language": "4.4.5",
     "symfony/form": "4.4.5",
     "symfony/framework-bundle": "4.4.5",
@@ -89,6 +89,11 @@
   "autoload-dev": {
     "psr-4": {
       "Foodsharing\\": "tests/"
+    }
+  },
+  "extra": {
+    "symfony": {
+      "require": "4.4.*"
     }
   }
 }
