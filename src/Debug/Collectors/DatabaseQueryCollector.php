@@ -15,7 +15,7 @@ use DebugBar\DataCollector\Renderable;
  */
 class DatabaseQueryCollector extends DataCollector implements Renderable, AssetProvider
 {
-	private $queries = [];
+	private array $queries = [];
 
 	public function addQuery($query)
 	{
