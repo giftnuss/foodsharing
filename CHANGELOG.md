@@ -101,6 +101,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
 - Refactored store infos to vue js !1406 @chriswalg
 - Moved profile Rest endpoint to user controller !1374 @alex.simm
+- Removed the two deprecated functions from Session.php !1259 @koenvg
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -254,7 +255,6 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
 - Refactored region gateway to use more prepared statements !1297 @alex.simm
-- Removed the two deprecated functions from Session.php !1259 @koenvg
 
 ## Dev/Test/CI stuff
 

@@ -14,15 +14,18 @@ class ReportControl extends Control
 	private $imageService;
 	private $reportPermissions;
 
-	public function __construct(ReportGateway $reportGateway, ReportView $view, ImageService $imageService)
+	public function __construct(
+		ReportGateway $reportGateway,
+		ReportView $view,
+		ImageService $imageService,
+		ReportPermissions $reportPermissions)
 	{
 		$this->reportGateway = $reportGateway;
 		$this->view = $view;
 		$this->imageService = $imageService;
+		$this->reportPermissions = $reportPermissions;
 
 		parent::__construct();
-
-		$this->reportPermissions = new ReportPermissions($this->session);
 
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();

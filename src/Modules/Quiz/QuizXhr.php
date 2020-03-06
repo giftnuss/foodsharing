@@ -26,7 +26,8 @@ class QuizXhr extends Control
 		QuizView $view,
 		ContentGateway $contentGateway,
 		SanitizerService $sanitizerService,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		QuizPermissions $quizPermissions
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
@@ -34,10 +35,9 @@ class QuizXhr extends Control
 		$this->contentGateway = $contentGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->dataHelper = $dataHelper;
+		$this->quizPermissions = $quizPermissions;
 
 		parent::__construct();
-
-		$quizPermissions = new QuizPermissions($this->session);
 	}
 
 	public function hideinfo()
