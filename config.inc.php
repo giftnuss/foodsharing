@@ -36,7 +36,7 @@ if (file_exists($revision_filename)) {
 }
 
 /*
- * Configure Raven (sentry.io client) for remote error reporting
+ * Configure Sentry for remote error reporting
  */
 
 if (defined('SENTRY_URL')) {

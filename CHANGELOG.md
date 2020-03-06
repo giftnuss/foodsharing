@@ -50,6 +50,7 @@
 - updated sentry to version 2 @peter.toennies
 - update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 #1369 @peter.toennies
 - Less ports are exposed to the dev computer's network now !1367 @\_fridtjof_
+- replace raven by the newest sentry JS SDK @peter.toennies
 
 # 2020-01-26
 Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.

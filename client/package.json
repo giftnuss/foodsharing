@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "@sentry/browser": "^5.13.2",
+    "@sentry/integrations": "^5.13.2",
     "autosize": "^4.0.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "2.0.0-rc.28",
@@ -36,7 +38,6 @@
     "node-sass": "^4.13.1",
     "object-path": "^0.11.4",
     "popper.js": "^1.16.1",
-    "raven-js": "^3.27.2",
     "socket.io-client": "^2.3.0",
     "tinysort": "^3.2.7",
     "twemoji": "^12.1.5",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "@sentry/webpack-plugin": "^1.10.0",
     "@vue/test-utils": "^1.0.0-beta.31",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
