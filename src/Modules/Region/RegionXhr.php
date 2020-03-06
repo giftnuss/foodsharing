@@ -116,17 +116,4 @@ final class RegionXhr extends Control
 		]);
 		exit();
 	}
-
-	public function signout(): array
-	{
-		$groupId = (int)$_GET['bid'];
-
-		if ($this->session->mayBezirk($groupId)) {
-			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-
-			return $this->responses->success();
-		}
-
-		return $this->responses->fail_generic();
-	}
 }

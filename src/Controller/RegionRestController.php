@@ -9,6 +9,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\NotificationService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Swagger\Annotations as SWG;
@@ -22,6 +23,7 @@ class RegionRestController extends AbstractFOSRestController
 	private $regionPermissions;
 	private $session;
 	private $imageService;
+	private $notificationService;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -29,14 +31,17 @@ class RegionRestController extends AbstractFOSRestController
 		RegionPermissions $regionPermissions,
 		RegionGateway $regionGateway,
 		Session $session,
-		ImageService $imageService
-	) {
+		ImageService $imageService,
+		NotificationService $notificationService
+	)
+	{
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionPermissions = $regionPermissions;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 		$this->imageService = $imageService;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -80,6 +85,21 @@ class RegionRestController extends AbstractFOSRestController
 		$view = $this->view([], 200);
 
 		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
+	 */
+	public function leaveRegionAction($regionId)
+	{
+		if (!$this->session->may() || !$this->session->mayBezirk($regionId)) {
+			throw new HttpException(401);
+		}
+
+		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
+		$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
+
+		return $this->handleView($this->view([], 200));
 	}
 
 	/**

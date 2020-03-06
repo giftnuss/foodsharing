@@ -15,6 +15,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
+import { leave } from '@/api/regions'
 
 $(document).ready(() => {
   $('a[href=\'#signout\']').on('click', function () {
@@ -30,13 +31,9 @@ $(document).ready(() => {
     buttons: [
       {
         text: i18n('button.yes_i_am_sure'),
-        click: function () {
-          ajax.req('bezirk', 'signout', {
-            data: $('input', this).serialize(),
-            success: function () {
-              goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
-            }
-          })
+        click: async function () {
+          await leave($('input', this).serialize())
+          goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
         }
       },
       {
