@@ -158,14 +158,14 @@ final class PickupRestController extends AbstractFOSRestController
 		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
 		$profiles = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
+			$profiles[$user['id']] = RestNormalization::normalizeUser($user);
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				if (isset($profiles[$slot['foodsaverId']])) {
 					$slot['profile'] = $profiles[$slot['foodsaverId']];
 				} else {
-					$slot['profile'] = RestNormalization::normalizeFoodsaver($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
+					$slot['profile'] = RestNormalization::normalizeUser($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
 				}
 				unset($slot['foodsaverId']);
 			}

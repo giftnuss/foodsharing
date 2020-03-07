@@ -78,7 +78,7 @@ class MessageRestController extends AbstractFOSRestController
 
 		$members = $this->model->listConversationMembers($conversationId);
 		$publicMemberInfo = function ($member) {
-			return RestNormalization::normalizeFoodsaver($member);
+			return RestNormalization::normalizeUser($member);
 		};
 		$members = array_map($publicMemberInfo, $members);
 

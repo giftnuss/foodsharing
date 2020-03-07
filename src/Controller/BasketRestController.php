@@ -175,7 +175,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	private function normalizeRequest(array $request): array
 	{
-		$user = RestNormalization::normalizeFoodsaver($request, 'fs_');
+		$user = RestNormalization::normalizeUser($request, 'fs_');
 
 		return [
 			'user' => $user,
@@ -218,7 +218,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private function normalizeBasket(array $basketData, array $updates = []): array
 	{
 		// set main properties
-		$creator = RestNormalization::normalizeFoodsaver($basketData, 'fs_');
+		$creator = RestNormalization::normalizeUser($basketData, 'fs_');
 		$basket = [
 			self::ID => (int)$basketData[self::ID],
 			self::STATUS => (int)$basketData[self::STATUS],

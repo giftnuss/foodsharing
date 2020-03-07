@@ -62,10 +62,10 @@ class ForumRestController extends AbstractFOSRestController
 		if (isset($thread['post_time'])) {
 			$normalizedThread['lastPost']['createdAt'] = str_replace(' ', 'T', $thread['post_time']);
 			$normalizedThread['lastPost']['body'] = $this->sanitizerService->markdownToHtml($thread['post_body']);
-			$normalizedThread['lastPost']['author'] = RestNormalization::normalizeFoodsaver($thread, 'foodsaver_');
+			$normalizedThread['lastPost']['author'] = RestNormalization::normalizeUser($thread, 'foodsaver_');
 		}
 		if (isset($thread['creator_name'])) {
-			$normalizedThread['creator'] = RestNormalization::normalizeFoodsaver($thread, 'creator_');
+			$normalizedThread['creator'] = RestNormalization::normalizeUser($thread, 'creator_');
 		}
 
 		return $normalizedThread;
@@ -77,7 +77,7 @@ class ForumRestController extends AbstractFOSRestController
 			'id' => $post['id'],
 			'body' => $this->sanitizerService->markdownToHtml($post['body']),
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'author' => RestNormalization::normalizeFoodsaver($post, 'author_'),
+			'author' => RestNormalization::normalizeUser($post, 'author_'),
 			'reactions' => $post['reactions'] ?: new \ArrayObject(),
 			'mayDelete' => $this->forumPermissions->mayDeletePost($post)
 		];
