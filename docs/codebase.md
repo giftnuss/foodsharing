@@ -52,7 +52,6 @@ A: The server has 32G of memory, currently. Server stats:
 The current email load is high, we get spam-flagged a lot, so in the future we'll work towards sending less email. 
 (E-mail handling: we have currently more than one server for mails.)
 When we use a third party service, we sometimes run into problems (photon, map tiles).
-And though the code is open source, changes are not entirely up to everyone. (Some issues can only be seen by selected people, also merges to master happen only if certain devs agree.) 
 
 # visual guidelines
 Q: Are there visual guidelines? (User interface, colors, buttons, etc.)
