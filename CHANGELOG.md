@@ -92,6 +92,7 @@
 - Reimplement footer in vue !1437 @ChrisOelmueller
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
 - Refactored store infos to vue js !1406 @chriswalg
+- Moved profile Rest endpoint to user controller !1374 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
