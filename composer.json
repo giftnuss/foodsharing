@@ -19,7 +19,7 @@
     "codeception/module-rest": "1.2.0",
     "codeception/module-sequence": "1.0.0",
     "codeception/module-symfony": "1.0.0",
-    "codeception/module-webdriver": "1.0.4",
+    "codeception/module-webdriver": "1.0.5",
     "friendsofphp/php-cs-fixer": "2.16.1",
     "fzaninotto/faker": "1.9.1",
     "jakub-onderka/php-console-highlighter": "0.4.0",

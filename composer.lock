@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c745db8fe2560aabde284d4580047008",
+    "content-hash": "fc90386f17d867c3d5271f650a629de1",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -7461,16 +7461,16 @@
         },
         {
             "name": "codeception/module-webdriver",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-webdriver.git",
-                "reference": "3af8c381b556709934f1ae2c59a00e56ce6a43ea"
+                "reference": "cfeadb39170aa80e6fe244de6a130453edd79fe9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/3af8c381b556709934f1ae2c59a00e56ce6a43ea",
-                "reference": "3af8c381b556709934f1ae2c59a00e56ce6a43ea",
+                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/cfeadb39170aa80e6fe244de6a130453edd79fe9",
+                "reference": "cfeadb39170aa80e6fe244de6a130453edd79fe9",
                 "shasum": ""
             },
             "require": {
@@ -7512,7 +7512,7 @@
                 "browser-testing",
                 "codeception"
             ],
-            "time": "2020-03-04T08:06:05+00:00"
+            "time": "2020-03-06T08:39:02+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",
