@@ -754,6 +754,20 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function updateThePrivacyPolicyDate()
+	{
+		$lastModified = $this->grabFromDatabase('fs_content', 'last_mod', ['name' => 'datenschutz']);
+		$beforeLastModified = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($lastModified)));
+		$this->updateInDatabase('fs_content', ['last_mod' => $beforeLastModified], ['name' => 'datenschutz']);
+
+		return $lastModified;
+	}
+
+	public function resetThePrivacyPolicyDate($lastModified)
+	{
+		$this->updateInDatabase('fs_content', ['last_mod' => $lastModified], ['name' => 'datenschutz']);
+	}
+
 	// =================================================================================================================
 	// private methods
 	// =================================================================================================================
