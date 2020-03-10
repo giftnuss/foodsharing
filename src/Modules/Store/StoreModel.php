@@ -67,6 +67,9 @@ class StoreModel extends Db
 	
 			AND
 				a.date <= ' . $this->dateval($to) . '
+			
+			AND
+				a.confirmed = 1
 	
 			ORDER BY
 				a.date
