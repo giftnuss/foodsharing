@@ -9,7 +9,8 @@
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies
 - Added number of food share points to statistics !1351 #81 @alex.simm
-- Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke 
+- Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
+- Orgas are now able to delete wallposts for foodshare points !1359 @ pfaufisch
 
 ## Bugfixes
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
