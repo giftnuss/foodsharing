@@ -1,66 +1,55 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-envelope"
+    v-b-tooltip="$i18n('menu.tooltips.contact')"
     :no-caret="!displayArrow"
-    :tooltip="$i18n('menu.tooltips.contact')"
     right
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-envelope" />
-      <span v-if="displayText">
-        {{ $i18n('menu.tooltips.contact') }}
-      </span>
+      <span class="sr-only">{{ $i18n('menu.tooltips.contact') }}</span>
+      <span v-if="displayText">{{ $i18n('menu.tooltips.contact') }}</span>
     </template>
-    <a
+    <b-dropdown-item
       v-if="displayMailbox"
       :href="$url('mailbox')"
-      class="dropdown-item"
-      role="menuitem"
     >
       E-Mail-Postfach
-    </a>
-    <div
+    </b-dropdown-item>
+    <b-dropdown-divider
       v-if="displayMailbox"
-      class="dropdown-divider"
     />
-    <a
+    <b-dropdown-item
       :href="$url('contact')"
-      class="dropdown-item"
-      role="menuitem"
     >
-      Kontakt
-    </a>
-    <a
+      {{ $i18n('menu.tooltips.contact') }}
+    </b-dropdown-item>
+    <b-dropdown-item
       :href="$url('donate')"
-      class="dropdown-item"
-      role="menuitem"
     >
       Spenden
-    </a>
-    <a
+    </b-dropdown-item>
+    <b-dropdown-item
       :href="$url('press')"
-      class="dropdown-item"
-      role="menuitem"
     >
       Presse
-    </a>
-    <a
+    </b-dropdown-item>
+    <b-dropdown-item
       :href="$url('infosCompany')"
-      class="dropdown-item"
-      role="menuitem"
     >
       Für Unternehmen
-    </a>
-    <a
+    </b-dropdown-item>
+    <b-dropdown-item
       :href="$url('imprint')"
-      class="dropdown-item"
-      role="menuitem"
     >
       Impressum
-    </a>
-    <div class="dropdown-divider" />
-    <h3 class="dropdown-header">
+    </b-dropdown-item>
+    <b-dropdown-divider />
+    <b-dropdown-header
+      id="dropdown-header-groups"
+    >
       Ortsgruppen
-    </h3>
+    </b-dropdown-header>
     <a
       :href="$url('communitiesGermany')"
       class="dropdown-item sub"
@@ -89,13 +78,14 @@
     >
       International
     </a>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
+
+import { BDropdownDivider, BDropdownItem, BNavItemDropdown } from 'bootstrap-vue'
 
 export default {
-  components: { NavItemDropdown },
+  components: { BDropdownDivider, BDropdownItem, BNavItemDropdown },
   props: {
     displayArrow: {
       type: Boolean,

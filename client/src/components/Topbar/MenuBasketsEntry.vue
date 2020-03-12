@@ -9,7 +9,7 @@
       </div>
       <div class="col-10">
         <div class="text-truncate">
-          <b>{{ basket.description }}</b>
+          <strong>{{ basket.description }}</strong>
         </div>
         <small
           v-if="!basket.requests.length"

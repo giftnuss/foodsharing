@@ -1,11 +1,12 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-baskets"
     ref="dropdown"
+    v-b-tooltip="$i18n('basket.title')"
     :no-caret="!showLabel"
-    :tooltip="$i18n('basket.title')"
     class="topbar-baskets"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-shopping-basket" />
       <span v-if="showLabel">
         {{ $i18n('basket.title') }}
@@ -45,20 +46,16 @@
         </a>
       </div>
     </div>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import MenuBasketsEntry from './MenuBasketsEntry'
 import basketStore from '@/stores/baskets'
 
 import { ajreq } from '@/script'
 
 export default {
-  components: {
-    NavItemDropdown,
-    MenuBasketsEntry
-  },
+  components: { MenuBasketsEntry },
   props: {
     showLabel: {
       type: Boolean,

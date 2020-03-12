@@ -11,12 +11,11 @@
             class="col-2 p-0 remove"
           >
             <button
-              v-b-tooltip.hover
-              :title="$i18n('pickup.delete_title')"
+              v-b-tooltip.hover="$i18n('pickup.delete_title')"
               class="btn btn-sm p-0"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
-              <i class="fa fa-times" />
+              <i class="fas fa-times" />
             </button>
           </div>
         </div>
@@ -32,7 +31,7 @@
               :allow-confirm="isCoordinator"
               :allow-chat="slot.profile.id !== user.id"
               @leave="$refs.modal_leave.show()"
-              @kick="activeSlot = slot; $refs.modal_kick.show()"
+              @kick="activeSlot = slot, $refs.modal_kick.show()"
               @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
             />
             <EmptySlot
@@ -43,19 +42,14 @@
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
             />
-            <li
+            <button
               v-if="isCoordinator && totalSlots < 10 && !isInPast"
+              v-b-tooltip.hover="$i18n('pickup.slot_add')"
+              class="btn secondary"
               @click="$emit('add-slot', date)"
             >
-              <button
-                v-b-tooltip.hover
-                :title="$i18n('pickup.slot_add')"
-                type="button"
-                class="btn secondary"
-              >
-                <i class="fa fa-plus" />
-              </button>
-            </li>
+              <i class="fas fa-plus" />
+            </button>
           </ul>
         </p>
       </div>

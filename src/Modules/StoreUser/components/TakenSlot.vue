@@ -1,12 +1,10 @@
 <template>
-  <nav-item-dropdown
-    :tooltip="profile.name"
-    extra-toggle-classes="btn p-0 filled"
-    size="sm"
+  <b-dropdown
+    v-b-tooltip="profile.name"
     no-caret
-    variant="primary"
+    toggle-class="btn p-0 filled"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <Avatar
         :url="profile.avatar"
         :size="35"
@@ -15,45 +13,42 @@
       <i :class="{slotstatus: true, 'far fa-clock': !confirmed, 'fas fa-check': confirmed}" />
     </template>
     <b-dropdown-item :href="`/profile/${profile.id}`">
-      <i class="fa fa-user mr-1" /> {{ $i18n('pickup.open_profile') }}
+      <i class="fas fa-user" /> {{ $i18n('pickup.open_profile') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="allowChat"
       @click="openChat"
     >
-      <i class="fa fa-comment mr-1" /> {{ $i18n('chat.open_chat') }}
+      <i class="fas fa-comment" /> {{ $i18n('chat.open_chat') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="!confirmed && allowConfirm"
       @click="$emit('confirm', profile.id)"
     >
-      <i class="fa fa-check mr-1" /> {{ $i18n('pickup.confirm') }}
+      <i class="fas fa-check" /> {{ $i18n('pickup.confirm') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="allowLeave"
       @click="$emit('leave')"
     >
-      <i class="fa fa-times-circle mr-1" /> {{ $i18n('pickup.leave') }}
+      <i class="fa fa-times-circle" /> {{ $i18n('pickup.leave') }}
     </b-dropdown-item>
     <b-dropdown-item
       v-if="allowKick && !allowLeave"
       @click="$emit('kick', profile.id)"
     >
-      <i class="fa fa-times-circle mr-1" /> {{ $i18n('pickup.kick') }}
+      <i class="fas fa-times-circle" /> {{ $i18n('pickup.kick') }}
     </b-dropdown-item>
-  </nav-item-dropdown>
+  </b-dropdown>
 </template>
 
 <script>
 import Avatar from '@/components/Avatar'
-// import bDropdown from '@b/components/dropdown/dropdown'
-// use custom navItemDropdown for now, better tooltip support and look...
-import NavItemDropdown from '@/components/Topbar/NavItemDropdown'
-import { BDropdownItem } from 'bootstrap-vue'
+import { BDropdown, BDropdownItem } from 'bootstrap-vue'
 import conv from '@/conv'
 
 export default {
-  components: { Avatar, NavItemDropdown, BDropdownItem },
+  components: { Avatar, BDropdown, BDropdownItem },
   props: {
     profile: {
       type: Object,
@@ -96,10 +91,6 @@ export default {
     right: 0;
     width: 16px;
     height: 16px;
-  }
-
-  .fa {
-    margin-left: -5px;
   }
 
 /* For slotstatus pending */
