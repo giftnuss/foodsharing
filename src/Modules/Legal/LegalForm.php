@@ -12,8 +12,8 @@ class LegalForm extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('privacy_policy', CheckboxType::class, ['label' => 'legal.agree_privacy_policy', 'required' => true])
-			->add('privacy_notice', ChoiceType::class, ['label' => 'legal.agree_privacy_notice',
+			->add('privacyPolicyAcknowledged', CheckboxType::class, ['label' => 'legal.agree_privacy_policy', 'required' => true])
+			->add('privacyNoticeAcknowledged', ChoiceType::class, ['label' => 'legal.agree_privacy_notice',
 				'choices' => [
 					'legal.privacy_notice_agree.select' => [
 						'legal.privacy_notice_agree.acknowledge' => true,

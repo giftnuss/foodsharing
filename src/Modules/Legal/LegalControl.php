@@ -53,7 +53,7 @@ class LegalControl extends Control
 			if ($form->isValid()) {
 				$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
 				if ($privacyNoticeNeccessary) {
-					if ($data->privacy_notice) {
+					if ($data->privacyNoticeAcknowledged) {
 						$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
 						$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
 					} else {
@@ -71,9 +71,9 @@ class LegalControl extends Control
 			}
 		}
 		$response->setContent($this->render('pages/Legal/page.twig', [
-			'privacy_policy' => $this->gateway->getPp(),
-			'show_privacy_notice' => $privacyNoticeNeccessary,
-			'privacy_notice' => $this->gateway->getPn(),
+			'privacyPolicyContent' => $this->gateway->getPp(),
+			'privacyNoticeContent' => $this->gateway->getPn(),
+			'showPrivacyNotice' => $privacyNoticeNeccessary,
 			'form' => $form->createView()]));
 	}
 }
