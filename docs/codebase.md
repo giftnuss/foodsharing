@@ -12,7 +12,7 @@
 # Basic layout
 Q: The architecture is not clear to me. Could you explain the basic layout?
 
-A: The main architecture goals came from this book "[Modernizing Legacy Applications In PHP](https://leanpub.com/mlaphp)", although we deviate in some place
+A: The main architecture goals came from this book "[Modernizing Legacy Applications In PHP](https://leanpub.com/mlaphp)", although we deviate in some place. There is also a great [1h video](https://www.youtube.com/watch?v=65NrzJ_5j58) describing rough details about what the book is talking about.
 
 A few current architecture goals would be:
 
@@ -75,13 +75,11 @@ We're aiming for a point, where you get only the data you're requesting (Current
 # Structure
 Q: So if we break the homepage down into its parts - how is it structured?
 
-A: func.php was full of random functions, that dealt with pickups, stores, etc. It got replaced and splitted into separate classes by Peter Tönnies working remotely during 2019 hackweek. They can be found in `/src/Helpers/`.
+A: Most of our functions can be found in `/src/Helpers/`.
 
 Book: https://leanpub.com/mlaphp
 
-There is also a great [1h video](https://www.youtube.com/watch?v=65NrzJ_5j58) describing rough details about what the book is talking about.
-
-We still have some of the functions that bit by bit get replaced during refactoring. We hope at some point, we can take away the 'shell' and enjoy the fresh independent functions. (Without the 'you changed something, now my button is gone'-support tickets.)
+We still have some of the functions that bit by bit get replaced during refactoring.
 
 # karrot
 Q: What is the relationship between [kar](http://karrot.world)[rot](https://github.com/yunity) and foodsharing currently?
