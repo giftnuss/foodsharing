@@ -36,10 +36,10 @@ class LegalControl extends Control
 	public function index(Request $request, Response $response)
 	{
 		$data = new LegalData();
-		$data->privacy_policy_date = $this->gateway->getPpVersion();
-		$data->privacy_policy = $this->session->user('privacy_policy_accepted_date') == $data->privacy_policy_date;
-		$data->privacy_notice_date = $this->gateway->getPnVersion();
-		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $data->privacy_notice_date ? 1 : 0;
+		$privacyPolicyDate = $this->gateway->getPpVersion();
+		$privacyNoticeDate = $this->gateway->getPnVersion();
+		$data->privacy_policy = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
+		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate ? 1 : 0;
 		$show_privacy_notice = $this->session->user('rolle') >= 2;
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
 		if (!$show_privacy_notice) {
@@ -48,9 +48,9 @@ class LegalControl extends Control
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {
-				$this->gateway->agreeToPp($this->session->id(), $data->privacy_policy_date);
+				$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
 				if ($data->privacy_notice == 1) {
-					$this->gateway->agreeToPn($this->session->id(), $data->privacy_notice_date);
+					$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
 					$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
 				} elseif ($data->privacy_notice == 2) {
 					/* ToDo: This is to be properly abstracted... */
