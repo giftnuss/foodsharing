@@ -44,9 +44,7 @@ class LegalControl extends Control
 		$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
 
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
-		if (!$privacyNoticeNeccessary) {
-			$form->remove('privacy_notice');
-		}
+
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted()) {
