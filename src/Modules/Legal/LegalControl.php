@@ -47,27 +47,25 @@ class LegalControl extends Control
 
 		$form->handleRequest($request);
 
-		if ($form->isSubmitted()) {
-			if ($form->isValid()) {
-				$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
-				if ($privacyNoticeNeccessary) {
-					if ($data->isPrivacyNoticeAcknowledged()) {
-						$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
-						$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
-					} else {
-						/* ToDo: This is to be properly abstracted... */
-						$this->gateway->downgradeToFoodsaver($this->session->id());
-					}
-				}
-				/* need to reload session cache. TODO: This should be further abstracted */
-				try {
-					$this->session->refreshFromDatabase();
-					$this->routeHelper->goSelf();
-				} catch (\Exception $e) {
-					$this->routeHelper->goPage('logout');
+		if ($form->isSubmitted() && $form->isValid()) {
+			$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
+			if ($privacyNoticeNeccessary) {
+				if ($data->isPrivacyNoticeAcknowledged()) {
+					$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
+					$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
+				} else {
+					$this->gateway->downgradeToFoodsaver($this->session->id());
 				}
 			}
+
+			try {
+				$this->session->refreshFromDatabase();
+				$this->routeHelper->goSelf();
+			} catch (\Exception $e) {
+				$this->routeHelper->goPage('logout');
+			}
 		}
+
 		$response->setContent($this->render('pages/Legal/page.twig', [
 			'privacyPolicyContent' => $this->gateway->getPp(),
 			'privacyNoticeContent' => $this->gateway->getPn(),
