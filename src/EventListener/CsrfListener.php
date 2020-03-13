@@ -3,27 +3,23 @@
 namespace Foodsharing\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Session;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class CsrfListener
 {
 	private $reader;
 	private $session;
 
-	/**
-	 * @param Reader $reader
-	 * @param Session $session
-	 */
 	public function __construct(Reader $reader, Session $session)
 	{
 		$this->reader = $reader;
 		$this->session = $session;
 	}
 
-	public function onKernelController(FilterControllerEvent $event)
+	public function onKernelController(ControllerEvent $event)
 	{
 		if (!is_array($controllers = $event->getController())) {
 			return;
