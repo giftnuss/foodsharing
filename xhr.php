@@ -20,7 +20,7 @@ $csrf_whitelist = [
 	// 'activeSwitch',
 	// 'grabInfo',
 	// 'childBezirke',
-	'bBubble',
+	// 'bBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',
@@ -52,18 +52,18 @@ $csrf_whitelist = [
 	// 'bcontext'
 ];
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
-/* @var $session Session */
+/* @var Session $session */
 $session = $container->get(Session::class);
 $session->initIfCookieExists();
 
-/* @var $mem Mem */
+/* @var Mem $mem */
 $mem = $container->get(Mem::class);
 
-/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+/* @var \Foodsharing\Modules\Core\InfluxMetrics $influxdb */
 $influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
 if (isset($g_page_cache)) {
@@ -84,7 +84,7 @@ if (isset($_GET['f'])) {
 		}
 	}
 
-	/* @var $xhr XhrMethods */
+	/* @var XhrMethods $xhr */
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {

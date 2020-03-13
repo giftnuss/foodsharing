@@ -97,7 +97,7 @@ class EmailControl extends Control
 
 		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 
-		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="ajreq(\'testmail\',{email:$(\'#testemail\').val(),subject:$(\'#subject\').val(),message:$(\'#message\').tinymce().getContent()},\'post\');return false;">Test-Mail senden</a>'), 'Newsletter Testen', ['class' => 'ui-padding']), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="trySendTestEmail();return false;">Test-Mail senden</a>'), 'Newsletter Testen', ['class' => 'ui-padding']), CNT_RIGHT);
 
 		$this->pageHelper->addJs("$('#rightmenu').menu();");
 		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->translationHelper->s('personal_styling_desc') . '</div>', $this->translationHelper->s('personal_styling')), CNT_RIGHT);

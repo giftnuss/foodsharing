@@ -25,7 +25,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function clear()
 	{
-		$this->driver->executeQuery('
+		$this->_getDriver()->executeQuery('
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_foodsaver_has_bezirk;
 			DELETE FROM fs_foodsaver_has_conversation;
@@ -52,7 +52,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function clearTable($table)
 	{
-		$this->driver->deleteQueryByCriteria($table, []);
+		$this->_getDriver()->deleteQueryByCriteria($table, []);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Foodsharing extends \Codeception\Module\Db
 	 * @param string pass to set as foodsharer password
 	 * @param array extra_params override params
 	 *
-	 * @return an array with all the foodsaver fields
+	 * @return array with all the foodsaver fields
 	 */
 	public function createFoodsharer($pass = null, $extra_params = [])
 	{
@@ -440,7 +440,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$mailbox = $this->createMailbox('region-' . $v['id']);
 		$this->updateInDatabase('fs_bezirk', ['mailbox_id' => $mailbox['id']], ['id' => $v['id']]);
 		/* Add to closure table for hierarchies */
-		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
+		$this->_getDriver()->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)
 		SELECT t.ancestor_id, ?, t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ?
 		UNION ALL SELECT ?, ?, 0', [$v['id'], $parentId, $v['id'], $v['id']]);
@@ -764,7 +764,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));
 		$this_post_date = new DateTime($post['time']);
 		if ($last_post_date >= $this_post_date) {
-			$this->driver->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
+			$this->_getDriver()->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
 		}
 	}
 

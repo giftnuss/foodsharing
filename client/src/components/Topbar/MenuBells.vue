@@ -37,6 +37,7 @@ import MenuBellsEntry from './MenuBellsEntry'
 import bellStore from '@/stores/bells'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
+import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
   components: {
@@ -45,7 +46,10 @@ export default {
   },
   computed: {
     bells () {
-      return bellStore.bells
+      return bellStore.bells.map(bell => {
+        bell.createdAt = dateFnsParseISO(bell.createdAt)
+        return bell
+      })
     },
     unread () {
       return bellStore.unreadCount

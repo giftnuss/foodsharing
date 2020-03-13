@@ -58,8 +58,8 @@
             </a>
           </div>
         </div>
-
         <b-table
+          id="store-list"
           :fields="fieldsFiltered"
           :current-page="currentPage"
           :per-page="perPage"
@@ -127,6 +127,7 @@
             v-model="currentPage"
             :total-rows="storesFiltered.length"
             :per-page="perPage"
+            aria-controls="store-list"
             class="my-0"
           />
         </div>
@@ -154,7 +155,6 @@
 </template>
 
 <script>
-
 import {
   BTable,
   BPagination,
@@ -163,7 +163,6 @@ import {
   BButton,
   BCard
 } from 'bootstrap-vue'
-
 import StoreStatusIcon from './StoreStatusIcon.vue'
 
 export default {

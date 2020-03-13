@@ -417,3 +417,7 @@ menu:
     administration: Administration
     notifications: Benachrichtigungen
     contact: Kontakt
+
+newsletter:
+  test_email_sent: E-Mail wurde versendet!
+  test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!

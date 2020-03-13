@@ -34,7 +34,7 @@ class StatsControl extends ConsoleControl
 			foreach ($allFsIds as $fsid) {
 				$totalKilosFetchedByFoodsaver = $this->model->getTotalKilosFetchedByFoodsaver($fsid);
 				$stat_fetchcount = (int)$this->model->qOne(
-					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW()'
+					'SELECT COUNT(foodsaver_id) FROM fs_abholer WHERE foodsaver_id = ' . (int)$fsid . ' AND `date` < NOW() AND confirmed = 1'
 				);
 				$stat_post = (int)$this->model->qOne(
 					'SELECT COUNT(id) FROM fs_theme_post WHERE foodsaver_id = ' . (int)$fsid

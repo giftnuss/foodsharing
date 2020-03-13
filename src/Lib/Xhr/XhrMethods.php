@@ -324,28 +324,6 @@ class XhrMethods
 		}
 	}
 
-	public function xhr_bBubble($data)
-	{
-		if ($this->session->may('fs')) {
-			$storeId = (int)$data['id'];
-			if ($b = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
-				$teamStatus = $this->storeGateway->getUserTeamStatus($this->session->id(), $storeId);
-				$b['inTeam'] = $teamStatus > TeamStatus::Applied;
-				$b['pendingRequest'] = $teamStatus == TeamStatus::Applied;
-
-				return json_encode([
-					'status' => 1,
-					'html' => $this->xhrViewUtils->bBubble($b),
-					'betrieb' => [
-						'name' => $b['name']
-					]
-				]);
-			}
-		}
-
-		return json_encode(['status' => 0]);
-	}
-
 	public function xhr_loadMarker($data)
 	{
 		$out = [];

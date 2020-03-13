@@ -165,6 +165,6 @@ function install-chat-dependencies() {
 
   # have to do run, not exec, as container will not start until
   # node_modules is installed, this will run up a fresh container and
-  # just run npm install
+  # just run yarn
   run-in-container chat yarn
 }

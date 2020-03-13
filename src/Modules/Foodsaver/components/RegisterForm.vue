@@ -454,7 +454,7 @@ export default {
   },
   methods: {
     customFormatter (birthdate) {
-      return format(new Date(birthdate), 'YYYY-MM-DD')
+      return format(new Date(birthdate), 'yyyy-MM-dd')
     },
     async submit () {
       this.isLoading = true

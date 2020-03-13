@@ -10,7 +10,7 @@ services:
     container_name: foodsharing_test_web
     image: registry.gitlab.com/foodsharing-dev/images/web:1.8
     ports:
-      - 28080:8080
+      - "127.0.0.1:28080:8080"
     expose:
       - 8080
     depends_on:
@@ -50,7 +50,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -82,7 +82,7 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
-    image: node:12.3.1-stretch
+    image: node:13.8.0-stretch
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:
@@ -104,7 +104,7 @@ services:
     expose:
       - 3306
     ports:
-      - 23306:3306
+      - "127.0.0.1:23306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       TZ: Europe/Berlin
@@ -118,7 +118,7 @@ services:
 
   redis:
     container_name: foodsharing_test_redis
-    image: redis:5.0-stretch
+    image: redis:5.0.7-alpine
     expose:
       - 6379
 
@@ -150,7 +150,7 @@ services:
       PMA_PASSWORD: root
     restart: always
     ports:
-      - 28081:80
+      - "127.0.0.1:28081:80"
     volumes:
       - /sessions
 
@@ -166,7 +166,7 @@ services:
     image: djfarrelly/maildev
     container_name: foodsharing_test_maildev
     ports:
-      - 28084:80
+      - "127.0.0.1:28084:80"
 
   influxdb:
     container_name: foodsharing_test_influxdb
@@ -174,8 +174,8 @@ services:
     command: >
       influxd -config /etc/influxdb/influxdb.toml
     ports:
-    - 28086:8086
-    - 28089:8089/udp
+    - "127.0.0.1:28086:8086"
+    - "127.0.0.1:28089:8089/udp"
     environment:
       INFLUXDB_ADMIN_ENABLED: "true"
       INFLUXDB_DB: "foodsharing"

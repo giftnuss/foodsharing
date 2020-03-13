@@ -10,17 +10,17 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Symfony\Component\DependencyInjection\Container;
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 
-/* @var $session Session */
+/* @var Session $session */
 $session = $container->get(Session::class);
 $session->initIfCookieExists();
 
-/* @var $mem Mem */
+/* @var Mem $mem */
 $mem = $container->get(Mem::class);
 
-/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+/* @var \Foodsharing\Modules\Core\InfluxMetrics $influxdb */
 $influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
 if (isset($g_page_cache)) {
@@ -40,22 +40,22 @@ if (isset($_GET['logout'])) {
 $content_left_width = 5;
 $content_right_width = 6;
 
-/* @var $dataHelper DataHelper */
+/* @var DataHelper $dataHelper */
 $dataHelper = $container->get(DataHelper::class);
 
-/* @var $pageHelper PageHelper */
+/* @var PageHelper $pageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
-/* @var $identificationHelper IdentificationHelper */
+/* @var IdentificationHelper $identificationHelper */
 $identificationHelper = $container->get(IdentificationHelper::class);
 
-/* @var $viewUtils Utils */
+/* @var Utils $viewUtils */
 $viewUtils = $container->get(Utils::class);
 
 $g_template = 'default';
 $g_data = $dataHelper->getPostData();
 
-/* @var $db Db */
+/* @var Db $db */
 $db = $container->get(Db::class);
 
 $pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');

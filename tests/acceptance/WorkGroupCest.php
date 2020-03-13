@@ -93,7 +93,7 @@ class WorkGroupCest
 		$I->see($admin['name'], '#work_group_form_administrators');
 		$I->removeFromTagSelect($user['name'], 'work_group_form_members');
 		$I->click('Änderungen speichern');
-		$I->waitForText('Änderungen gespeichert');
+		$I->see('Änderungen gespeichert');
 		$I->dontSee($user['name'], '#work_group_form_members');
 		$I->see($admin['name'], '#work_group_form_administrators');
 	}

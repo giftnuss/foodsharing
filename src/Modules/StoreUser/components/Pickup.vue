@@ -139,8 +139,9 @@
 import { BFormTextarea, BModal, VBTooltip } from 'bootstrap-vue'
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
-import dateFnsCompareAsc from 'date-fns/compare_asc'
-import isSameDay from 'date-fns/is_same_day'
+import dateFnsCompareAsc from 'date-fns/compareAsc'
+import dateFnsIsSameDay from 'date-fns/isSameDay'
+import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
@@ -194,10 +195,10 @@ export default {
       }) !== -1
     },
     isInPast () {
-      return dateFnsCompareAsc(new Date(), this.date) >= 1
+      return dateFnsCompareAsc(new Date(), dateFnsParseISO(this.date)) >= 1
     },
     isToday () {
-      return isSameDay(this.date, new Date())
+      return dateFnsIsSameDay(dateFnsParseISO(this.date), new Date())
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)

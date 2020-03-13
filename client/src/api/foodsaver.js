@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 
 export async function register (data) {
   return new Promise((resolve, reject) => {
-    const birthdateFormat = format(new Date(data.birthdate), 'YYYY-MM-DD')
+    const birthdateFormat = format(new Date(data.birthdate), 'yyyy-MM-dd')
     $.ajax({
       url: '/xhrapp.php?app=login&m=joinsubmit',
       data: {

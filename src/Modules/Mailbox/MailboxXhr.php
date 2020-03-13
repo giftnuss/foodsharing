@@ -219,11 +219,7 @@ class MailboxXhr extends Control
 						'mailbox' => $message['mailbox'],
 						'personal' => $this->session->user('name')
 					]),
-					json_encode([[
-						'personal' => $sender['personal'],
-						'mailbox' => $sender['mailbox'],
-						'host' => $sender['host']
-					]]),
+					json_encode([$sender]),
 					$subject,
 					$body,
 					$html,
@@ -278,7 +274,8 @@ class MailboxXhr extends Control
 				$an = explode(';', $_POST['an']);
 				$tmp = [];
 				foreach ($an as $a) {
-					$tmp[$a] = $a;
+					$trimmed = trim($a);
+					$tmp[$trimmed] = $trimmed;
 				}
 				$an = $tmp;
 				if (count($an) > 100) {

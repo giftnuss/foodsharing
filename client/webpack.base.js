@@ -4,10 +4,19 @@ const shims = require('./shims')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WriteFilePlugin = require('write-file-webpack-plugin')
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const plugins = [
   new VueLoaderPlugin(),
-  new WriteFilePlugin() // to write files to filesystem when using webpack-dev-server
+  new WriteFilePlugin(), // to write files to filesystem when using webpack-dev-server
+  new SentryCliPlugin({
+    include: '.',
+    ignoreFile: '.sentrycliignore',
+    ignore: ['node_modules', 'webpack.base.js'],
+    configFile: 'sentry.properties',
+    dryRun: true,
+    release: process.env.NODE_ENV
+  })
 ]
 
 const production = process.env.NODE_ENV === 'production'
