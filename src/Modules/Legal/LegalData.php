@@ -13,11 +13,7 @@ class LegalData
 	public $privacy_policy;
 
 	/**
-	 * @Assert\Type("integer")
-	 * @Assert\Range(
-	 *   min = 0,
-	 *   max = 2
-	 *     )
+	 * @Assert\Type("boolean")
 	 */
 	public $privacy_notice;
 }

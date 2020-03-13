@@ -14,6 +14,12 @@ class LegalForm extends AbstractType
 		$builder
 			->add('privacy_policy', CheckboxType::class, ['label' => 'legal.agree_privacy_policy', 'required' => true])
 			->add('privacy_notice', ChoiceType::class, ['label' => 'legal.agree_privacy_notice',
-				'choices' => ['legal.privacy_notice_agree.select' => 0, 'legal.privacy_notice_agree.acknowledge' => 1, 'legal.privacy_notice_agree.not_acknowledge' => 2], ]);
+				'choices' => [
+					'legal.privacy_notice_agree.select' => [
+						'legal.privacy_notice_agree.acknowledge' => true,
+						'legal.privacy_notice_agree.not_acknowledge' => false
+					]
+				]
+			]);
 	}
 }

@@ -38,23 +38,28 @@ class LegalControl extends Control
 		$data = new LegalData();
 		$privacyPolicyDate = $this->gateway->getPpVersion();
 		$privacyNoticeDate = $this->gateway->getPnVersion();
+		$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
+
 		$data->privacy_policy = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
-		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate ? 1 : 0;
-		$show_privacy_notice = $this->session->user('rolle') >= 2;
+		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
-		if (!$show_privacy_notice) {
+		if (!$privacyNoticeNeccessary) {
 			$form->remove('privacy_notice');
 		}
 		$form->handleRequest($request);
+
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {
 				$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
-				if ($data->privacy_notice == 1) {
-					$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
-					$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
-				} elseif ($data->privacy_notice == 2) {
-					/* ToDo: This is to be properly abstracted... */
-					$this->gateway->downgradeToFoodsaver($this->session->id());
+				if ($privacyNoticeNeccessary) {
+					if ($data->privacy_notice) {
+						$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
+						$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
+					} else {
+						/* ToDo: This is to be properly abstracted... */
+						$this->gateway->downgradeToFoodsaver($this->session->id());
+					}
 				}
 				/* need to reload session cache. TODO: This should be further abstracted */
 				try {
@@ -67,7 +72,7 @@ class LegalControl extends Control
 		}
 		$response->setContent($this->render('pages/Legal/page.twig', [
 			'privacy_policy' => $this->gateway->getPp(),
-			'show_privacy_notice' => $show_privacy_notice,
+			'show_privacy_notice' => $privacyNoticeNeccessary,
 			'privacy_notice' => $this->gateway->getPn(),
 			'form' => $form->createView()]));
 	}
