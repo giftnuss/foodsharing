@@ -12,8 +12,8 @@
       <file-upload
         :value="value"
         :image="image"
-        @change="onFileChange"
         :resize="resize"
+        @change="onFileChange"
       />
       <input
         :name="inputName"

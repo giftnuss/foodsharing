@@ -3,11 +3,11 @@
   <div class="bootstrap ">
     <input
       ref="uploadElement"
-      @change="onFileChange"
       :accept="accept"
       name="imagefile[]"
       class="d-none"
       type="file"
+      @change="onFileChange"
     >
     <div
       v-if="image"
@@ -33,8 +33,8 @@
           {{ $i18n('upload.no_image_yet') }}
         </div>
         <button
-          @click.prevent="openUploadDialog"
           :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
+          @click.prevent="openUploadDialog"
         >
           <span v-if="value">{{ $i18n('upload.new_neuter') }} </span>{{ $i18n('upload.image') }}
         </button>
@@ -51,8 +51,8 @@
         {{ $i18n('upload.no_image_chosen') }}
       </div>
       <button
-        @click.prevent="openUploadDialog"
         :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
+        @click.prevent="openUploadDialog"
       >
         <span v-if="value">{{ $i18n('upload.new_feminine') }} </span>{{ $i18n('upload.file') }}
       </button>
@@ -61,11 +61,11 @@
     <b-modal
       ref="upload-modal"
       :static="true"
-      @ok="cropImage"
       size="lg"
       title="Bild ausschneiden"
       modal-class="bootstrap"
       hide-header-close
+      @ok="cropImage"
     >
       <div class="resize-container">
         <vue-croppie

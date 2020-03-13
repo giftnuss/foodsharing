@@ -104,10 +104,11 @@ class FoodSharePointView extends View
 				'desc' => $this->translator->trans('fsp.descLabel') . '<br>' . $this->translator->trans('info.md'),
 				'required' => true,
 			]),
-			$this->v_utils->v_form_picture('picture', [
-				'pic' => $data['picture'],
+			$this->vueComponent('image-upload', 'file-upload-v-form', [
+				'inputName' => 'picture',
+				'image' => true,
+				'initialValue' => (strpos($data['picture'], '/api/uploads/') !== 0 ? '/images/' : '') . $data['picture'],
 				'resize' => [528, 60],
-				'crop' => [(528 / 170), 1],
 			]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,

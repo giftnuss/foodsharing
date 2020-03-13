@@ -135,8 +135,6 @@ class UploadsRestController extends AbstractFOSRestController
 	 * @Rest\Post("uploads")
 	 * @Rest\RequestParam(name="filename")
 	 * @Rest\RequestParam(name="body")
-	 *
-	 * @return Response
 	 */
 	public function uploadFileAction(ParamFetcher $paramFetcher): Response
 	{
