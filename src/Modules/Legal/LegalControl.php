@@ -70,6 +70,7 @@ class LegalControl extends Control
 			'privacyPolicyContent' => $this->gateway->getPp(),
 			'privacyNoticeContent' => $this->gateway->getPn(),
 			'showPrivacyNotice' => $privacyNoticeNeccessary,
+			'loggedIn' => $this->session->may(),
 			'form' => $form->createView()]));
 	}
 }
