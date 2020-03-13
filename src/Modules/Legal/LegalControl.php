@@ -35,13 +35,13 @@ class LegalControl extends Control
 
 	public function index(Request $request, Response $response)
 	{
-		$data = new LegalData();
 		$privacyPolicyDate = $this->gateway->getPpVersion();
 		$privacyNoticeDate = $this->gateway->getPnVersion();
 		$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
 
-		$data->privacy_policy = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
-		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+		$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
+		$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+		$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
 
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
 		if (!$privacyNoticeNeccessary) {
@@ -53,7 +53,7 @@ class LegalControl extends Control
 			if ($form->isValid()) {
 				$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
 				if ($privacyNoticeNeccessary) {
-					if ($data->privacyNoticeAcknowledged) {
+					if ($data->isPrivacyNoticeAcknowledged()) {
 						$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
 						$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
 					} else {
