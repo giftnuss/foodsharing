@@ -314,7 +314,7 @@ class EventGateway extends BaseGateway
 	/**
 	 * Sets the invitation status for multiple foodsavers.
 	 *
-	 * @throws \Exception
+	 * @throws \Exception if the database query fails (which should usually not happen)
 	 */
 	public function addInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
 	{
