@@ -233,6 +233,9 @@ export default {
   ul.slots >>> .btn.filled {
     overflow: hidden;
   }
+  ul.slots >>> .btn.btn-secondary {
+    background-color: var(--fs-beige);
+  }
   ul.slots >>> .btn[disabled] {
     opacity: 0.5;
     color: var(--fs-brown);

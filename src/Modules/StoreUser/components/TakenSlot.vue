@@ -8,9 +8,11 @@
       <Avatar
         :url="profile.avatar"
         :size="35"
-        :class="{pending: !confirmed, confirmed:confirmed}"
+        :class="{pending: !confirmed, confirmed: confirmed}"
       />
-      <i :class="{slotstatus: true, 'far fa-clock': !confirmed, 'fas fa-check': confirmed}" />
+      <div :class="{'slotstatus': true, pending: !confirmed, confirmed: confirmed}">
+        <i :class="{'slotstatus-icon fas': true, 'fa-clock': !confirmed, 'fa-check-circle': confirmed}" />
+      </div>
     </template>
     <b-dropdown-item :href="`/profile/${profile.id}`">
       <i class="fas fa-user" /> {{ $i18n('pickup.open_profile') }}
@@ -85,25 +87,32 @@ export default {
 
 <style scoped>
   .slotstatus {
-    display: block;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 16px;
-    height: 16px;
+    top: 0px;
+    right: 2px;
+    height: 12px;
+    width: 12px;
+    transform: rotate(45deg);
+    opacity: 0.8;
+    background-color: var(--fs-beige);
+    box-shadow: 0 0 2px 0px var(--fs-brown);
   }
-
-/* For slotstatus pending */
-  .fa-clock {
+  .slotstatus.pending {
     color: var(--danger);
   }
-
-  .pending {
-    opacity: 0.5;
+  .slotstatus.confirmed {
+    color: var(--fs-green);
   }
-
-/* For slotstatus confirmed */
-  .fa-check {
-    color: var(--green);
+  .avatarDiv.pending {
+    opacity: 0.4;
+  }
+  /* Check / Clock inside the statuspatch */
+  .slotstatus-icon {
+    position: absolute;
+    display: inline-block;
+    bottom: 1px;
+    right: 1px;
+    transform: rotate(-45deg);
+    font-size: 10px;
   }
 </style>
