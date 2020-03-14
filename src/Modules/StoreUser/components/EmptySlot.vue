@@ -12,6 +12,8 @@
       v-else-if="allowRemove && !allowJoin"
       v-b-tooltip="$i18n('pickup.slot_remove')"
       class="btn"
+      @mouseover="hover = true"
+      @mouseout="hover = false"
       @click="$emit('remove')"
     >
       <i :class="`fas ${hover ? 'fa-times' : 'fa-question'}`" />
