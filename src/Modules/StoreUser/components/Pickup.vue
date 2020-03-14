@@ -12,7 +12,7 @@
           >
             <button
               v-b-tooltip.hover="$i18n('pickup.delete_title')"
-              class="btn btn-sm"
+              :class="{'btn btn-sm': true, 'cannot-delete': occupiedSlots.length > 0}"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
               <i class="fas fa-times" />
@@ -247,5 +247,8 @@ export default {
   }
   .pickup:hover .delete-pickup {
     display: block;
+  }
+  .pickup .delete-pickup .btn.cannot-delete {
+    color: var(--fs-beige);
   }
 </style>
