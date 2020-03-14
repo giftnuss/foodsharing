@@ -459,12 +459,16 @@ export default {
 }
 
 #topbar {
-  height: 40px;
+  height: 37px;
   @media (max-width: 992px) {
-      height: 45px;
+    height: 45px;
   }
   @media (max-width: 415px) {
+    height: 130px;
+
+    &.loggedIn {
       height: 80px;
+    }
   }
 }
 </style>
