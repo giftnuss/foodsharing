@@ -214,29 +214,32 @@ export default {
   }
 
   ul.slots >>> .btn {
+    position: initial;
     display: inline-block;
-    padding: 4px;
+    padding: 2px;
     margin: 2px;
     width: 35px;
     height: 35px;
+    color: var(--fs-brown);
     border-color: var(--fs-beige);
     border-width: 3px;
+  }
+  ul.slots >>> .btn:hover {
+    border-color: var(--fs-brown);
+  }
+  ul.slots >>> .btn:focus {
+    box-shadow: none;
   }
   ul.slots >>> .btn.filled {
     overflow: hidden;
   }
-  ul.slots >>> .btn.secondary {
-    opacity: 0.3;
-  }
-  ul.slots >>> .btn:hover {
-      border-color: #533a20
+  ul.slots >>> .btn[disabled] {
+    opacity: 0.5;
+    color: var(--fs-brown);
   }
   ul.slots >>> .btn[disabled]:hover {
-      border-color: var(--fs-beige);
-      cursor: default;
-  }
-  ul.slots[data-v-1dfadebe] .btn.secondary {
-    opacity: .6;
+    border-color: var(--fs-beige);
+    cursor: default;
   }
   /* Display deletion button only when hovering pickup date */
   .pickup .delete-pickup {
