@@ -446,11 +446,6 @@ export default {
     }
 }
 
-// move the main content below the topbar
-div#main {
-  margin-top: 5px;
-}
-
 // following is applied on the initial <div> before the vue component gets injected
 // it shows an brown bar as a placeholder for the actual topbar
 #vue-topbar {
@@ -464,9 +459,12 @@ div#main {
 }
 
 #topbar {
-  height: 50px;
-  @media (max-width: 630px) {
-      height: 75px;
+  height: 40px;
+  @media (max-width: 992px) {
+      height: 45px;
+  }
+  @media (max-width: 415px) {
+      height: 80px;
   }
 }
 </style>
