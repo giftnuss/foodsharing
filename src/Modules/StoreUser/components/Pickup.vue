@@ -2,24 +2,24 @@
   <div>
     <div class="card pickup">
       <div class="card-body">
-        <div class="card-title row">
-          <div :class="{col: true, 'text-truncate':true, 'font-weight-bold': isToday}">
+        <div class="card-title">
+          <div :class="{'text-truncate':true, 'font-weight-bold': isToday}">
             {{ date | dateFormat('full-long') }}
           </div>
           <div
             v-if="isCoordinator && !isInPast"
-            class="col-2 p-0 remove"
+            class="delete-pickup"
           >
             <button
               v-b-tooltip.hover="$i18n('pickup.delete_title')"
-              class="btn btn-sm p-0"
+              class="btn btn-sm"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
               <i class="fas fa-times" />
             </button>
           </div>
         </div>
-        <p class="card-text clearfix">
+        <p class="card-text">
           <ul class="slots">
             <TakenSlot
               v-for="slot in occupiedSlots"
@@ -207,12 +207,10 @@ export default {
   ul.slots {
     padding: 0;
     margin: 0 0 5px;
-    float: left;
-    list-style: none;
   }
 
-  ul.slots li {
-    float: left;
+  ul.slots div {
+    display: inline-block;
   }
 
   ul.slots >>> .btn {
@@ -240,11 +238,14 @@ export default {
   ul.slots[data-v-1dfadebe] .btn.secondary {
     opacity: .6;
   }
-  .pickup .remove {
+  /* Display deletion button only when hovering pickup date */
+  .pickup .delete-pickup {
     display: none;
-    margin-top: -0.1rem;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
-  .pickup:hover .remove {
+  .pickup:hover .delete-pickup {
     display: block;
   }
 </style>
