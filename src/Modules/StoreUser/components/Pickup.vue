@@ -42,14 +42,16 @@
               @join="$refs.modal_join.show()"
               @remove="$emit('remove-slot', date)"
             />
-            <button
-              v-if="isCoordinator && totalSlots < 10 && !isInPast"
-              v-b-tooltip.hover="$i18n('pickup.slot_add')"
-              class="btn secondary"
-              @click="$emit('add-slot', date)"
-            >
-              <i class="fas fa-plus" />
-            </button>
+            <div class="add-pickup-slot">
+              <button
+                v-if="isCoordinator && totalSlots < 10 && !isInPast"
+                v-b-tooltip.hover="$i18n('pickup.slot_add')"
+                class="btn secondary"
+                @click="$emit('add-slot', date)"
+              >
+                <i class="fas fa-plus" />
+              </button>
+            </div>
           </ul>
         </p>
       </div>
