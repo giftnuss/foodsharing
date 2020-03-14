@@ -26,6 +26,7 @@
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
 
 ## Bugfixes
+- Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
 - Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
 - Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
