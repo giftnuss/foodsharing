@@ -19,7 +19,8 @@
     <b-dropdown
       v-else-if="allowJoin && allowRemove"
       no-caret
-      toggle-class="btn p-1 filled"
+      toggle-class="btn filled"
+      variant="tertiary"
     >
       <template v-slot:button-content>
         <i class="fas fa-question" />
