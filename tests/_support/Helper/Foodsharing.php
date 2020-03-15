@@ -173,7 +173,7 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
+	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0)
 	{
 		$startTime = Carbon::now()->subDays($daysAgo);
 		$v = [

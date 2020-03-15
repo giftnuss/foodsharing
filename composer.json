@@ -10,7 +10,7 @@
   },
   "require-dev": {
     "codeception/c3": "2.4.1",
-    "codeception/codeception": "4.1.1",
+    "codeception/codeception": "4.1.2",
     "codeception/module-asserts": "1.1.1",
     "codeception/module-cli": "1.0.2",
     "codeception/module-db": "1.0.1",
@@ -61,7 +61,7 @@
     "nesbot/carbon": "2.31.0",
     "sensio/framework-extra-bundle": "5.5.3",
     "sentry/sdk": "2.1.0",
-    "setasign/fpdi-tcpdf": "2.3.0",
+    "setasign/fpdi": "2.3.1",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/config": "4.4.5",
     "symfony/console": "4.4.5",
@@ -76,6 +76,7 @@
     "symfony/twig-bridge": "4.4.5",
     "symfony/validator": "4.4.5",
     "symfony/yaml": "4.4.5",
+    "tecnickcom/tcpdf": "6.3.5",
     "twig/intl-extra": "3.0.3",
     "twig/twig": "3.0.3",
     "voku/bounce-mail-handler": "6.0.1"
