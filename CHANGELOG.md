@@ -1,3 +1,63 @@
+# Unreleased
+
+## Major changes
+
+## Features
+- Re-enable pickup slot markers after production release !1331 !1307 @jofranz
+- Refactored register form to multi step pages in vue !1099 !1309 !1370 @chriswalg @moffer
+- Redirect to login page after login failed !1342 @chriswalg
+- Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
+- update twig to version 3 @peter.toennies
+- Added number of food share points to statistics !1351 #81 @alex.simm
+- Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
+- Orgas are now able to delete wallposts for foodshare points !1359 @ pfaufisch
+- Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
+
+## Bugfixes
+- On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
+- Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
+- Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
+- Improved the banner on welcome page for mobile devices !1329 @chriswalg
+- Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
+- Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
+- Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
+- Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
+- Fix small bug in sending quickreply messages without personal field !1321 !1347 @alex.simm
+- Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
+- Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
+- Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
+- Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
+- Fix broken bell menu caused by missing date conversion !1364 @dthulke
+- Strip whitespaces from email addresses before sending them !1372 #802 @alex.simm
+- Fix "Mobile: can't apply to stores, window cut off" #765 !1357 @panschk
+- Don't include unconfirmed slots into statistics and fetch history !1360 @caluera
+- Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
+
+## Refactoring
+- Improve mayEditStore() to fail faster !1311 @jofranz
+- Moved the button for new stores to vue store list !1282 @chriswalg
+- Restructure the definition of the Region ID constants. !1325 @theFeiter
+- Remove moment.js dependency. !1303 #678 @ctwx_ok
+- Moved the button for new stores to vue store list !1282 !1339 @chriswalg
+- Refactored wakeupSleepingUsers to MaintenanceGateway !1301 @Caluera
+- Removed obsolete jsonp warning code in xhrapp !1319 #777 @alex.simm
+- Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
+- Remove Sessions from Gateway-Classes !1314 @panschk
+- Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
+- Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
+- Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm
+- Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
+
+## Dev/Test/CI stuff
+- Add "linux" tag for finding CI servers !1332 @nicksellen
+- fix some doc annotations !1361 @\_fridtjof_
+- update mkdirp to version 1 @peter.toennies
+- update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 !1369 @peter.toennies
+- updated sentry to version 2 @peter.toennies
+- update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 #1369 @peter.toennies
+- Less ports are exposed to the dev computer's network now !1367 @\_fridtjof_
+- replace raven by the newest sentry JS SDK @peter.toennies
+
 # 2020-01-26
 Another release from your lovely dev Team. A lot of changes have been done "under the hood" that will help developers with modernization of the codebase and to improve the website further. A lot of old code has been removed, restructured and database access has been improved. Some nightly maintanance have been optimized. A more user friendly overview of the new improvements can be found here: https://foodsharing.de/?page=bezirk&bid=741&sub=forum&tid=98018 accessable for every foodsaver.
 
