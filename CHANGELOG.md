@@ -10,7 +10,7 @@
 - update twig to version 3 @peter.toennies
 - Added number of food share points to statistics !1351 #81 @alex.simm
 - Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
-- Orgas are now able to delete wallposts for foodshare points !1359 @ pfaufisch
+- Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
 
 ## Bugfixes
