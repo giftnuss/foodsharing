@@ -4,7 +4,9 @@ namespace Foodsharing\Modules\Profile;
 
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 
 final class ProfileControl extends Control
@@ -13,20 +15,26 @@ final class ProfileControl extends Control
 	private $regionGateway;
 	private $profileGateway;
 	private $basketGateway;
+	private $mailboxGateway;
 	private $reportPermissions;
+	private $profilePermissions;
 
 	public function __construct(
 		ProfileView $view,
 		RegionGateway $regionGateway,
 		ProfileGateway $profileGateway,
 		BasketGateway $basketGateway,
-		ReportPermissions $reportPermissions
+		MailboxGateway $mailboxGateway,
+		ReportPermissions $reportPermissions,
+		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
 		$this->profileGateway = $profileGateway;
 		$this->regionGateway = $regionGateway;
 		$this->basketGateway = $basketGateway;
+		$this->mailboxGateway = $mailboxGateway;
 		$this->reportPermissions = $reportPermissions;
+		$this->profilePermissions = $profilePermissions;
 
 		parent::__construct();
 
@@ -42,6 +50,10 @@ final class ProfileControl extends Control
 				$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
 						$this->foodsaver['id']
 					);
+				if ((int)$this->foodsaver['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($id)) {
+					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($this->foodsaver['mailbox_id'])
+						. '@' . PLATFORM_MAILBOX_HOST;
+				}
 
 				$this->view->setData($this->foodsaver);
 

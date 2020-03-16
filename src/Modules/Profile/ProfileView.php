@@ -3,15 +3,47 @@
 namespace Foodsharing\Modules\Profile;
 
 use Carbon\Carbon;
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
 use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\ProfilePermissions;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
 
 class ProfileView extends View
 {
 	private $foodsaver;
+	private $profilePermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		SanitizerService $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageService $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		ProfilePermissions $profilePermissions
+	) {
+		parent::__construct($twig, $viewUtils, $session, $sanitizerService, $pageHelper, $timeHelper, $imageService,
+			$routeHelper, $identificationHelper, $dataHelper, $translationHelper);
+
+		$this->profilePermissions = $profilePermissions;
+	}
 
 	public function profile(
 		string $wallPosts,
@@ -205,14 +237,16 @@ class ProfileView extends View
 						$this->foodsaver['email']
 					) . '">' . $this->foodsaver['email'] . '</a>',
 			];
-			if (isset($this->foodsaver['mailbox'])) {
-				$infos[] = [
-					'name' => $this->translationHelper->s('mailbox'),
-					'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
-							$this->foodsaver['mailbox']
-						) . '">' . $this->foodsaver['mailbox'] . '</a>',
-				];
-			}
+		}
+
+		if (isset($this->foodsaver['mailbox']) && $this->profilePermissions->maySeeEmailAddress($this->foodsaver['id'])) {
+			$url = $this->session->id() == $this->foodsaver['id']
+				? '/?page=mailbox'
+				: '/?page=mailbox&mailto=' . urlencode($this->foodsaver['mailbox']);
+			$infos[] = [
+				'name' => $this->translationHelper->s('mailbox'),
+				'val' => '<a href="' . $url . '">' . $this->foodsaver['mailbox'] . '</a>',
+			];
 		}
 
 		if ($this->foodsaver['stat_buddycount'] > 0) {

@@ -13,6 +13,8 @@
 - Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
 - Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
+- Orgas are now able to delete wallposts for foodshare points !1359 @ pfaufisch
+- Show internal email address on user's own profile !1386 #465 @alex.simm
 
 ## Bugfixes
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
