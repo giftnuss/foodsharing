@@ -17,8 +17,10 @@ class RegisterCest
 		$this->first_name = sq('first_name');
 		$this->last_name = sq('last_name');
 		$this->password = sq('password');
-		$this->birthdate = '1983-04-27';
-		$this->mobile_number = '+491773231323';
+		$this->birthdate = '27.08.1983';
+		$this->birthdateUSFormat = '1983-08-27';
+		$this->mobile_number = '1773231323';
+		$this->mobile_country_code = '+49';
 	}
 
 	public function _after()
@@ -53,22 +55,23 @@ class RegisterCest
 		$I->click('weiter');
 
 		$I->waitForElementVisible('#step3', 4);
-		$I->fillField('input[class=form-control]', $this->birthdate);
+		$I->fillField('.vdp-datepicker > div:nth-child(1) > input:nth-child(2)', $this->birthdate);
 		$I->click('weiter');
 
 		$I->waitForElementVisible('#step4', 4);
-		$I->fillField('#form4.mobile', $this->mobile_number);
+		// open country selector
+		$I->executeJS("$('.select-country-container input').click()");
+		// choose german country code
+		$I->executeJS("$('.vue-recycle-scroller__item-view button')[0].click()");
+		$I->fillField('input[class=input-tel__input]', $this->mobile_number);
 		$I->click('weiter');
 
 		// tick all the check boxes
 
 		$I->waitForElementVisible('#step5', 4);
-		$I->checkOption('#form5.join_legal1');
-		$I->checkOption('#form5.join_legal2');
-		$I->seeElement('#step5 > div > div.custom-control.custom-checkbox > label');
-		$I->seeCheckboxIsChecked('#form5.subscribeNewsletter');
-		$I->click('#step5 > div > div.custom-control.custom-checkbox > label');
-		$I->dontSeeCheckboxIsChecked('#form5.subscribeNewsletter');
+		$I->executeJS("$('#acceptGdpr').click()");
+		$I->executeJS("$('#acceptLegal').click()");
+		$I->executeJS("$('#subscribeNewsletter').click()");
 		$I->click('Anmeldung absenden');
 
 		// we are signed up!
@@ -91,23 +94,9 @@ class RegisterCest
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
-			'geb_datum' => $this->birthdate,
+			'geb_datum' => $this->birthdateUSFormat,
 			'newsletter' => 0,
-			'handy' => $this->mobile_number
-		]);
-
-		$I->waitForText('Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.');
-		$I->checkOption('#legal_form_privacy_policy');
-		$I->click('Einstellungen übernehmen');
-		$I->waitForText('Willkommen ' . $this->first_name . '!');
-
-		$I->seeInDatabase('fs_foodsaver', [
-			'email' => $this->stripped_email,
-			'name' => $this->first_name,
-			'nachname' => $this->last_name,
-			'handy' => $this->mobile_number,
-			'geb_datum' => $this->birthdate,
-			'newsletter' => 0
+			'handy' => $this->mobile_country_code . $this->mobile_number
 		]);
 	}
 }

@@ -46,9 +46,10 @@
     "typeface-alfa-slab-one": "^0.0.72",
     "underscore": "^1.9.2",
     "vue": "^2.6.11",
-    "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.5",
-    "whatwg-fetch": "^3.0.0"
+    "@sum.cumo/vue-datepicker": "^1.1.0",
+    "whatwg-fetch": "^3.0.0",
+    "vue-phone-number-input": "^1.1.6"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

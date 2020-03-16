@@ -4,7 +4,7 @@
 
 ## Features
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
-- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
+- Refactored register form to multi step pages in vue !1099 !1309 !1370 @chriswalg @moffer
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies

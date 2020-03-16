@@ -142,9 +142,4 @@ class FoodsaverView extends View
 
 		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
 	}
-
-	public function registerForm($legal)
-	{
-		return $this->vueComponent('register-form', 'RegisterForm', ['legal' => $legal]);
-	}
 }

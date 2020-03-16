@@ -33,6 +33,7 @@ class Routing
 		'quiz' => 'Quiz',
 		'bezirk' => 'Region',
 		'region' => 'RegionAdmin',
+		'register' => 'Register',
 		'relogin' => 'Relogin',
 		'report' => 'Report',
 		'search' => 'Search',

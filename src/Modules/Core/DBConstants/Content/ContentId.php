@@ -14,4 +14,6 @@ class ContentId
 {
 	public const PARTNER_PAGE_10 = 10;
 	public const SUPPORT_FOODSHARING_PAGE_42 = 42;
+	public const PRIVACY_POLICY_CONTENT = 28;
+	public const PRIVACY_NOTICE_CONTENT = 64;
 }
