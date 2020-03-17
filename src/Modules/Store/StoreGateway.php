@@ -490,6 +490,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
+	/**
+	 * Returns all managers of a store.
+	 * @param int $storeId
+	 * @return array
+	 */
 	public function getStoreManager(int $storeId): array
 	{
 		return $this->db->fetchAllValues('

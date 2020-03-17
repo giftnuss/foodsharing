@@ -103,7 +103,7 @@ class SearchService
 		/*
 		 * Betriebe load food stores connected to the user in the array
 		*/
-		if ($betriebe = $this->storeGateway->listMyBetriebe($userId)) {
+		if ($betriebe = $this->storeGateway->listMyStores($userId)) {
 			$result = [];
 			foreach ($betriebe as $b) {
 				$result[] = [
