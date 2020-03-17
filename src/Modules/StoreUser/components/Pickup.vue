@@ -205,8 +205,10 @@ export default {
 
 <style scoped>
   ul.slots {
+    display: flex;
     padding: 0;
     margin: 0 0 5px;
+    flex-wrap: wrap;
   }
 
   ul.slots div {

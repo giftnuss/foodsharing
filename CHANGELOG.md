@@ -8,7 +8,7 @@
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies
-- update bootstrap-vue to version 2.6 #807 !1382 @ctwx_ok @peter.toennies
+- update bootstrap-vue to version 2.7 #807 !1382 @ctwx_ok @peter.toennies
 - Added number of food share points to statistics !1351 #81 @alex.simm
 - Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke 
 
