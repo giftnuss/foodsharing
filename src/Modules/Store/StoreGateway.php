@@ -738,7 +738,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $storeId])) {
 			$result = [];
 			foreach ($res as $r) {
-				$result[$r['dow'] . '-' . $r['time']] = array(
+				$result[$r['dow'] . '-' . $r['time']] = [
 					'dow' => $r['dow'],
 					'time' => $r['time'],
 					'fetcher' => $r['fetcher']
