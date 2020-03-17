@@ -492,8 +492,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	/**
 	 * Returns all managers of a store.
-	 * @param int $storeId
-	 * @return array
 	 */
 	public function getStoreManager(int $storeId): array
 	{
@@ -883,7 +881,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			ORDER BY b.name
 		', [
 			':fsId' => $fsId,
-            ':membershipStatus' => MembershipStatus::MEMBER,
+			':membershipStatus' => MembershipStatus::MEMBER,
 			':doesNotWantToWorkWithUs' => CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US,
 			':givesToOtherCharity' => CooperationStatus::GIVES_TO_OTHER_CHARITY
 		]);
