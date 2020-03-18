@@ -61,7 +61,7 @@
 - update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 #1369 @peter.toennies
 - Less ports are exposed to the dev computer's network now !1367 @\_fridtjof_
 - replace raven by the newest sentry JS SDK @peter.toennies
-
+- update loader-utils to version 2, url-loader to version 4, and file-loader to version 6 @peter.toennies
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
