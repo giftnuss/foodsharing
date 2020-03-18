@@ -44,8 +44,9 @@ export default {
   computed: {
     bells () {
       return bellStore.bells.map(bell => {
-        bell.createdAt = dateFnsParseISO(bell.createdAt)
-        return bell
+        var newBell = Object.assign({}, bell)
+        newBell.createdAt = dateFnsParseISO(bell.createdAt)
+        return newBell
       })
     },
     unread () {
