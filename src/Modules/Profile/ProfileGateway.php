@@ -16,11 +16,6 @@ final class ProfileGateway extends BaseGateway
 		$this->webSocketConnection = $webSocketConnection;
 	}
 
-	public function setFsId(int $id): void
-	{
-		$this->fs_id = $id;
-	}
-
 	/**
 	 * @param int $fsId id of the foodsaver we want the info from
 	 * @param int $raterId id of foodsaver doing the "rating" (Banana) on a given foodsaver. Pass -1 to prevent loading of rater information
