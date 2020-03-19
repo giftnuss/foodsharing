@@ -103,15 +103,14 @@ class FoodSharePointControl extends Control
 			$regionId = $this->foodSharePoint['bezirk_id'];
 		}
 
-		if (isset($regionId) || $regionId = $request->query->get('bid')) {
-			if ($region = $this->regionGateway->getRegion($regionId)) {
-				$this->regionId = $regionId;
-				$this->region = $region;
-				if ((int)$region['mailbox_id'] > 0) {
-					$this->region['urlname'] = $this->mailboxGateway->getMailboxname($region['mailbox_id']);
-				} else {
-					$this->region['urlname'] = $this->identificationHelper->id($this->region['name']);
-				}
+		if ((isset($regionId) || $regionId = $request->query->get('bid'))
+				&& $region = $this->regionGateway->getRegion($regionId)) {
+			$this->regionId = $regionId;
+			$this->region = $region;
+			if ((int)$region['mailbox_id'] > 0) {
+				$this->region['urlname'] = $this->mailboxGateway->getMailboxname($region['mailbox_id']);
+			} else {
+				$this->region['urlname'] = $this->identificationHelper->id($this->region['name']);
 			}
 		} else {
 			$this->regionId = 0;

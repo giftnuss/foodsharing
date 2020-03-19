@@ -200,10 +200,10 @@ final class PageHelper
 			];
 		}
 
-		$ravenConfig = null;
+		$sentryConfig = null;
 
 		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
-			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
+			$sentryConfig = RAVEN_JAVASCRIPT_CONFIG;
 		}
 
 		return array_merge($this->jsData, [
@@ -211,7 +211,7 @@ final class PageHelper
 			'page' => $this->routeHelper->getPage(),
 			'subPage' => $this->routeHelper->getSubPage(),
 			'location' => $location,
-			'ravenConfig' => $ravenConfig,
+			'ravenConfig' => $sentryConfig,
 			'translations' => $this->translationHelper->getTranslations(),
 			'isDev' => getenv('FS_ENV') === 'dev'
 		]);

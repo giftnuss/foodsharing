@@ -6,13 +6,6 @@ import 'jquery-dynatree'
 import i18n from '@/i18n'
 import { deleteUser } from '@/api/user'
 import './Foodsaver.css'
-import { vueApply, vueRegister } from '@/vue'
-import RegisterForm from './components/RegisterForm.vue'
-
-vueRegister({
-  RegisterForm
-})
-vueApply('#register-form')
 
 const fsapp = {
   init: function () {

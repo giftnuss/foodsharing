@@ -3,33 +3,28 @@
 namespace Foodsharing\Modules\Legal;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 
 class LegalGateway extends BaseGateway
 {
-	/* Privacy Policy */
-	const PP_CONTENT = 28;
-
-	/* Privacy notice */
-	const PN_CONTENT = 64;
-
 	public function getPpVersion()
 	{
-		return $this->db->fetchValue('SELECT `last_mod` FROM fs_content WHERE id = :content_id', [':content_id' => self::PP_CONTENT]);
+		return $this->db->fetchValue('SELECT `last_mod` FROM fs_content WHERE id = :content_id', [':content_id' => ContentId::PRIVACY_POLICY_CONTENT]);
 	}
 
 	public function getPp()
 	{
-		return $this->db->fetchValue('SELECT `body` FROM fs_content WHERE id = :content_id', ['content_id' => self::PP_CONTENT]);
+		return $this->db->fetchValue('SELECT `body` FROM fs_content WHERE id = :content_id', ['content_id' => ContentId::PRIVACY_POLICY_CONTENT]);
 	}
 
 	public function getPnVersion()
 	{
-		return $this->db->fetchValue('SELECT `last_mod` FROM fs_content WHERE id = :content_id', [':content_id' => self::PN_CONTENT]);
+		return $this->db->fetchValue('SELECT `last_mod` FROM fs_content WHERE id = :content_id', [':content_id' => ContentId::PRIVACY_NOTICE_CONTENT]);
 	}
 
 	public function getPn()
 	{
-		return $this->db->fetchValue('SELECT `body` FROM fs_content WHERE id = :content_id', ['content_id' => self::PN_CONTENT]);
+		return $this->db->fetchValue('SELECT `body` FROM fs_content WHERE id = :content_id', ['content_id' => ContentId::PRIVACY_NOTICE_CONTENT]);
 	}
 
 	public function agreeToPp($fsId, $ppVersion)

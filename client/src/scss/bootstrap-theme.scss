@@ -135,8 +135,6 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
     }
 }
 
-
-
 // some components get created outside the scope (e.g. tooltip)
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/modal";
@@ -144,14 +142,6 @@ $navbar-dark-hover-color: rgba(#ffffff, 1) ;
 
 .modal {
     text-align: left; // sometimes modals are created inside a different aligned element
-}
-
-// override conflicting fs styles for the bootstrap tooltips
-.tooltip > .arrow {
-    margin-left: 7px;
-    &::after {
-        display: none;
-    }
 }
 
 // bring jquery-ui 'ui-front' elements in front of bootstrap elements

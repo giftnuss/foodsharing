@@ -49,6 +49,7 @@ class StatsModel extends Db
 			WHERE
 			      fa.foodsaver_id = ' . $fs_id . '
 			  AND fa.date < now();
+			  AND fa.confirmed = 1
 		')
 		) {
 			$savedWeight = $queryResult;

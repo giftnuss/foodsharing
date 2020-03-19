@@ -1,31 +1,27 @@
 <template>
-  <nav-item-dropdown
-    :tooltip="$i18n('menu.tooltips.administration')"
+  <b-nav-item-dropdown
+    id="dropdown-admin"
+    v-b-tooltip="$i18n('menu.tooltips.administration')"
     right
     no-caret
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-cog" />
       <span class="d-md-none">
         {{ $i18n('menu.tooltips.administration') }}
       </span>
     </template>
-    <a
+    <b-dropdown-item
       v-for="item in items"
       :key="item.url"
       :href="item.url"
-      class="dropdown-item"
     >
       <i :class="item.icon" /> {{ item.label }}
-    </a>
-  </nav-item-dropdown>
+    </b-dropdown-item>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 export default {
-  components: {
-    NavItemDropdown
-  },
   props: {
     isOrgaTeam: {
       type: Boolean,

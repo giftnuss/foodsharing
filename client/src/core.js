@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 
-import '@/raven'
+import '@/sentry'
 
 import '@/style'
 

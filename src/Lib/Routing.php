@@ -33,6 +33,7 @@ class Routing
 		'quiz' => 'Quiz',
 		'bezirk' => 'Region',
 		'region' => 'RegionAdmin',
+		'register' => 'Register',
 		'relogin' => 'Relogin',
 		'report' => 'Report',
 		'search' => 'Search',
@@ -42,7 +43,8 @@ class Routing
 		'fsbetrieb' => 'StoreUser',
 		'team' => 'Team',
 		'wallpost' => 'WallPost',
-		'groups' => 'WorkGroup'];
+		'groups' => 'WorkGroup',
+		'store' => 'Store'];
 
 	public static $fqcnPrefix = '\\Foodsharing\\Modules\\';
 

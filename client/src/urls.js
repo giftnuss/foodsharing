@@ -39,6 +39,7 @@ export default {
   transparency: () => '/?page=content&sub=transparency',
   contact: () => '/?page=content&sub=contact',
   dataprivacy: () => '/?page=legal',
+  legal_agreement: () => 'https://wiki.foodsharing.de/Rechtsvereinbarung',
   partner: () => '/partner',
   statistics: () => '/statistik',
   infosCompany: () => '/fuer-unternehmen',
