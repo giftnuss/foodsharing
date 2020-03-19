@@ -84,7 +84,7 @@ outdated:
 
 build:backend-chat:
   <<: *defaults
-  image: node:13.8.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - (cd chat && yarn && yarn lint)
@@ -101,7 +101,7 @@ build:backend-chat:
 
 build:frontend:
   <<: *defaults
-  image: node:13.8.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn test && yarn build)
@@ -141,7 +141,7 @@ build:backend:
 
 build:docs:
   <<: *defaults
-  image: node:13.8.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - yarn global add gitbook-cli
