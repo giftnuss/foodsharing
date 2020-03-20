@@ -33,8 +33,7 @@ class ProfileXhr extends Control
 		MailboxGateway $mailboxGateway,
 		ProfileGateway $profileGateway,
 		StoreGateway $storeGateway,
-		ReportPermissions $reportPermissions,
-		ProfilePermissions $profilePermissions
+		ReportPermissions $reportPermissions
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
