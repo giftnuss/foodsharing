@@ -10,7 +10,7 @@ import 'jquery-migrate'
 import { initialize, ajreq } from '@/script'
 
 import 'jquery-ui'
-
+import registerServiceWorker from '@/registerServiceWorker'
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.ui.position'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
@@ -30,6 +30,7 @@ import socket from '@/socket'
 import { getCsrfToken } from '@/api/base'
 
 initialize()
+registerServiceWorker()
 
 $('#fs-profile-rate-comment').dialog({
   modal: true,

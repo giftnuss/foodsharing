@@ -91,6 +91,28 @@ const parseRequestURL = (req) => {
   return new URL(req.url, 'http://localhost')
 }
 
+/**
+ * API of this server
+ * This server supports GET-Requests on
+ * - /
+ *  Sends a message to clients.
+ *  arguments:
+ *    c: int (optional) - the session id the message should be sent to
+ *    u: int (optional) - the foodsaver id the message should be sent to
+ *    us: comma-separated list of ints (optional) - the foodsaver ids the message should be sent to if it should be sent to multiple foodsavers
+ *    Either one of c, u or us is required.
+ *    a: string (required) - the frontend component the message should be sent to, e. g. 'conv' or 'bell'
+ *    o: json-encoded array (required) - options for the frontend component that should receive the message
+ *
+ *  - /stats
+ *    Will return a JSON object containing the number of connections, the number of registrations and the number of sessions,
+ *    e. g. {connections: 24, registrations: 42, sessions: 34}
+ *
+ *  - /is-connected
+ *    Returns "true" if the specified foodsaver has an open connection to the websocket and "false" if not.
+ *    arguments:
+ *      u: int (required) - foodsaver id
+ */
 const inputServer = http.createServer((req, res) => {
   const url = parseRequestURL(req)
   if (url.pathname === '/stats') {
@@ -101,6 +123,33 @@ const inputServer = http.createServer((req, res) => {
       sessions: Object.keys(connectedClients).length
     }))
     return
+  }
+
+  if (url.pathname === '/is-connected') {
+    const userId = url.searchParams.get('u')
+    if (userId === null) {
+      res.writeHead(400)
+      res.end('Parameter u must be specified and be a foodsaver id.')
+      return
+    }
+
+    fetchSessionIdsForUser(userId, (err, sessionIds) => {
+      if (err) {
+        res.writeHead(500)
+        res.end('Error matching the user id to a session.')
+        return
+      }
+
+      res.writeHead(200)
+      for (const sessionId of sessionIds) {
+        if (sessionId in connectedClients) {
+          res.end('true') // there is at least one session for userId
+          return
+        }
+      }
+      res.end('false') // there's no session for userId
+    })
+    return // avoid res.end() to be called later on in this function before the callback resolves
   }
 
   const sessionId = url.searchParams.get('c')

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Lib\Xhr\XhrResponses;
@@ -16,25 +17,28 @@ use Foodsharing\Services\ImageService;
 class BasketXhr extends Control
 {
 	private $basketGateway;
+	private $foodsaverGateway;
 	private $messageModel;
 	private $timeHelper;
 	private $imageService;
-	private $foodsaverGateway;
+	private $webSocketConnection;
 
 	public function __construct(
 		BasketView $view,
 		BasketGateway $basketGateway,
+		FoodsaverGateway $foodsaverGateway,
 		MessageModel $messageModel,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		FoodsaverGateway $foodsaverGateway
+		WebSocketConnection $webSocketConnection
 	) {
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-		$this->foodsaverGateway = $foodsaverGateway;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 
@@ -97,15 +101,15 @@ class BasketXhr extends Control
 
 		$dia->addJs(
 			'
-				
+
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
-		
+
 		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
-				$("#handy-wrapper").show();	
+				$("#handy-wrapper").show();
 			}
 			else
 			{
@@ -113,7 +117,7 @@ class BasketXhr extends Control
 				$("#handy-wrapper").hide();
 			}
 		});
-				
+
 		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{

@@ -465,6 +465,12 @@ class DashboardControl extends Control
 			CNT_TOP
 		);
 
+		// Advertisement for Push Notifications
+		$this->pageHelper->addContent(
+			$this->twig->render('partials/pushNotificationBanner.twig'),
+			CNT_TOP
+		);
+
 		/*
 		 * Nächste Termine
 		*/

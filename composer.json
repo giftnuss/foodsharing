@@ -54,6 +54,7 @@
     "hirak/prestissimo": "0.3.10",
     "html2text/html2text": "4.2.1",
     "influxdb/influxdb-php": "1.15.0",
+    "minishlink/web-push": "5.2.4",
     "intervention/image": "2.5.1",
     "jms/serializer-bundle": "3.5.0",
     "maximebf/debugbar": "1.16.1",

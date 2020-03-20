@@ -195,6 +195,11 @@ class SettingsView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', [
+			$this->v_utils->v_input_wrapper(
+				$this->translationHelper->s('push_notifications'),
+				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
+						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
+			),
 			$this->v_utils->v_form_radio('newsletter', [
 				'desc' => $this->translationHelper->s('newsletter_desc'),
 				'values' => [

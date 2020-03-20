@@ -3,6 +3,8 @@
 ## Major changes
 
 ## Features
+- Add Web Push Notifications #336 !734 @janopae
+- Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 - Refactored register form to multi step pages in vue !1099 !1309 !1370 @chriswalg @moffer
 - Redirect to login page after login failed !1342 @chriswalg
@@ -41,6 +43,9 @@
 - Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
 
 ## Refactoring
+- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
+and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
+are welcomed to check the E-Mails generated for missed chat messages. @janopae 
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
@@ -458,6 +463,7 @@ another release for you. Nothing big, but a lot of small. Most noticeable things
 - Completely replaced flourish fDate with Carbon time in niceDate() and ProfileView details for AMBs !835 @jofranz
 - Renamed some variables in StoreUserControl.php from German to English. !862 @svenpascal
 - Extracted method mentionPublicly($id) in StoreUserControl.php to improve functions’ level of abstraction. !862 @svenpascal
+
 
 ## Dev/Test/CI stuff
 - Adjust devdocs to being open source !823 @flukx

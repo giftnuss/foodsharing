@@ -1,6 +1,6 @@
 <div class="border">
 <p>{{ MESSAGE|raw }}</p>
-<p>-- Von: {{ SENDER }}</p>
+<p>-- Von: {{ SENDER }} {% if CHATNAME != SENDER %} an {{ CHATNAME }}{% endif %}</p>
 </div>
 <p></p>
 <p><a href="{{ LINK }}" target="_blank" class="button">Antworten</a></p>

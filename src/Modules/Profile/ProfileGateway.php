@@ -2,18 +2,18 @@
 
 namespace Foodsharing\Modules\Profile;
 
-use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 final class ProfileGateway extends BaseGateway
 {
-	private $mem;
+	private $webSocketConnection;
 
-	public function __construct(Database $db, Mem $mem)
+	public function __construct(Database $db, WebSocketConnection $webSocketConnection)
 	{
 		parent::__construct($db);
-		$this->mem = $mem;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	/**
@@ -72,7 +72,7 @@ final class ProfileGateway extends BaseGateway
 		) {
 			return [];
 		}
-		$data['online'] = $this->mem->userIsActive((int)$fsId);
+		$data['online'] = $this->webSocketConnection->isUserOnline($fsId);
 
 		$data['bouched'] = false;
 		$data['bananen'] = false;
