@@ -1,7 +1,6 @@
 .campaign {
-  height: 100vh;
   width: 100%;
-  position: absolute;
+  position: initial;
   top: 0;
   left: 0;
   display: flex;
@@ -77,8 +76,7 @@
 }
 
 .header {
-  padding: 41px 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -93,14 +91,10 @@
 }
 
 @media (max-aspect-ratio: 9/10) {
-  .header {
-    height: 130vh;
-  }
   .campaign {
     flex-wrap: wrap;
   }
   .campaignimg {
-    padding-top: 132px;
     height: 30vh;
   }
   .campaigntext {
@@ -181,7 +175,6 @@
 }
 
 .section {
-  min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
