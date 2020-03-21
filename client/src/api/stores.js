@@ -29,3 +29,7 @@ export async function setPickupSlots (storeId, pickupDate, totalSlots) {
   const date = pickupDate.toISOString()
   return patch(`/stores/${storeId}/pickups/${date}`, { totalSlots: totalSlots })
 }
+
+export async function deleteStorePost (postId) {
+  return remove(`/stores/posts/${postId}`)
+}

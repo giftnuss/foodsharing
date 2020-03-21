@@ -65,6 +65,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
+- New function for deleting store wall posts via rest !1390 #9 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

@@ -1370,18 +1370,6 @@ class XhrMethods
 		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
 
-	public function xhr_delBPost($data)
-	{
-		$foodsaverId = $this->storeGateway->getStoreComment($data['pid'])['foodsaver_id'];
-		if ($foodsaverId === $this->session->id() || $this->session->isOrgaTeam()) {
-			$this->storeGateway->deleteBPost($data['pid']);
-
-			return 1;
-		}
-
-		return 0;
-	}
-
 	public function xhr_delPost($data)
 	{
 		$fsId = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
