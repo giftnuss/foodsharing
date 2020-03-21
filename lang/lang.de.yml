@@ -240,7 +240,7 @@ forum:
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
   markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
-  inform_per_email: Forenmitglieder per E-Mail über diesen Beitrag informieren, nur in unmoderierten Foren möglich 
+  inform_per_email: Forenmitglieder per E-Mail über diesen Beitrag informieren, nur in unmoderierten Foren möglich
 
 chat:
   open_chat: Nachricht schreiben
@@ -482,3 +482,12 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
+
+storestatusicon:
+ nocontact: Es besteht noch kein Kontakt
+ inprogress: Verhandlungen laufen
+ cooperating: Betrieb kooperiert bereits
+ nocooperation: Will nicht kooperieren
+ nowaste: Spendet an Tafel etc. und wirft nichts weg
+ unclear: Status unklar
+

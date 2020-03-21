@@ -93,6 +93,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Removed unused delPost xhr function !1417 @alex.simm
 - Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm 
 - Reimplement footer in vue !1437 @ChrisOelmueller
+- redirected the refs from storestatusicon.vue to lang.de.yml !1392 #824 @jonathan_b
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
