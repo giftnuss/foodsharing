@@ -113,6 +113,7 @@ build:frontend:
     expire_in: 1 week
     paths:
     - assets
+    - sw.js
   except:
   - schedules
 
