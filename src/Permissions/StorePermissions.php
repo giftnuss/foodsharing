@@ -92,7 +92,7 @@ class StorePermissions
 
 	public function mayDeleteStoreWallPost(int $postId): bool
 	{
-		return $this->session->isOrgaTeam()
+		return $this->session->may('orga')
 			|| $this->storeGateway->getStoreComment($postId)['foodsaver_id'] === $this->session->id();
 	}
 
