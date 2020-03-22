@@ -491,3 +491,6 @@ storestatusicon:
  nowaste: Spendet an Tafel etc. und wirft nichts weg
  unclear: Status unklar
 
+pickuplist:
+ tooslow: Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.
+ tryagain: Versuche es nach einem Neuladen einfach noch mal!
