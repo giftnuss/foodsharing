@@ -57,6 +57,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Update date-fns to version 2.9.0 !1042 !1363 @chriswalg
 - Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
+- Redesigned the option to delete FS account if not agreeing with privacy policy. !1318 @thefeiter
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 
 ## Dev/Test/CI stuff

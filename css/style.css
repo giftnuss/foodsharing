@@ -1675,3 +1675,9 @@ footer .linklist li a:hover {
     border-bottom: 1px solid var(--fs-beige);
   }
 }
+
+
+.button.danger {
+  background-color: var(--danger);
+  white-space: nowrap;
+}
