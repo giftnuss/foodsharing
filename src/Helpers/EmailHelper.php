@@ -100,15 +100,17 @@ final class EmailHelper
 
 		$mail->setSubject($message['subject']);
 
+		$num_recipients = 1;
 		if (is_iterable($to)) {
 			foreach ($to as $recipient) {
 				$mail->addRecipient($recipient);
 			}
+			$num_recipients = count($to);
 		} else {
 			$mail->addRecipient($to);
 		}
 		$mail->send();
-		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => 1]);
+		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => $num_recipients]);
 	}
 
 	public function validEmail(string $email): bool
@@ -173,5 +175,6 @@ final class EmailHelper
 		}
 
 		$mail->send();
+		$this->metrics->addPoint('outgoing_email', ['template' => 'libmail'], ['count' => 1]);
 	}
 }

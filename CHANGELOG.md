@@ -2,6 +2,7 @@
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - More accurate email rate limiting !1419 @jofranz
 - Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 !1432 @chriswalg
+- Improve the statistics for outgoing mail in grafana !1395 #64 @dthulke
 
 
 # 2020-03-26 Hotfix 
