@@ -12,6 +12,7 @@
 <script>
 
 import { VBTooltip } from 'bootstrap-vue'
+import i18n from '@/i18n'
 
 export default {
   directives: { VBTooltip },

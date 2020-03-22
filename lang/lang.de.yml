@@ -353,6 +353,14 @@ pickuplist:
   NumberOfAppointments_table_header: "Anzahl Termine"
   NumberOfSlots_table_header: "Anzahl Abhol-Slots"
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
+  tooslow: Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.
+  tryagain: Versuche es nach einem Neuladen einfach noch mal!
+  error_loadingPickup: "Abholslots laden fehlgeschlagen: "
+  error_leave: "Verlassen fehlgeschlagen: "
+  error_kick: "Entfernen fehlgeschlagen: "
+  error_changeSlotCount: "Änderung der Slotanzahl fehlgeschlagen: "
+  error_confirm: "Bestätigung fehlgeschlagen: "
+  error_whileSending: Fehler während dem Senden der Nachricht
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
@@ -494,3 +502,4 @@ storestatusicon:
 pickuplist:
  tooslow: Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.
  tryagain: Versuche es nach einem Neuladen einfach noch mal!
+ unclear: Status unklar
