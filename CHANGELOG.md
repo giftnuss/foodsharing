@@ -15,7 +15,6 @@
 - Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
 - Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
-- Orgas are now able to delete wallposts for foodshare points !1359 @ pfaufisch
 - Show internal email address on user's own profile !1386 #465 @alex.simm
 
 ## Bugfixes
@@ -44,7 +43,7 @@
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
 and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
-are welcomed to check the E-Mails generated for missed chat messages. @janopae 
+are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
