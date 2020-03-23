@@ -33,10 +33,10 @@ exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs
 exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 exec-in-container app vendor/bin/codecept run "$@"
 
-echo "Running chat tests"
-run-in-container chat 'npm run lint && npm test'
-
-echo "Running client js tests"
+echo "Running JS tests"
 run-in-container client 'yarn && yarn lint && yarn test'
+
+echo "Running chat tests"
+run-in-container chat 'yarn && yarn lint && yarn test'
 
 echo "Done!"
