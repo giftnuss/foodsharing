@@ -34,7 +34,7 @@ function log-header() {
 }
 
 function dc() {
-  $dir/docker-compose "$@"
+  "$dir"/docker-compose "$@"
 }
 
 function sql-query() {
@@ -55,31 +55,31 @@ function sql-dump() {
 function exec-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc exec -T --user $(id -u):$(id -g) "$container" sh -c "HOME=./ $command"
 }
 
 function exec-in-container-with-image-user() {
   local container=$1; shift;
   local command=$@;
-  dc exec -T $container sh -c "HOME=./ $command"
+  dc exec -T "$container" sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) "$container" sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
   local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports $container sh -c "HOME=./ $command"
+  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports "$container" sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
   local container=$1; shift;
   local command=$@;
-  dc exec --user root -T $container sh -c "$command"
+  dc exec --user root -T "$container" sh -c "$command"
 }
 
 function run-in-container-asroot() {
@@ -90,7 +90,7 @@ function run-in-container-asroot() {
   # --rm : remove the container after executing the command
   # sh -c "..." : what is executed in the container: a shell that
   # interprets "..."
-  dc run --rm --no-deps --user root $container sh -c "$command"
+  dc run --rm --no-deps --user root "$container" sh -c "$command"
 }
 
 function dropdb() {
@@ -138,11 +138,11 @@ function migratedb() {
   # -q: only display numeric IDs
   docker cp $dest $(dc ps -q db):/app/$dest
 
-  sql-file $database $dest
+  sql-file "$database" $dest
 
   dest=migrations/_reload_data.sql
   echo "set foreign_key_checks=0;" > $dest
-  for T in `sql-query foodsharing "SHOW TABLES;" | tail -n+2`; do
+  for T in $(sql-query foodsharing "SHOW TABLES;" | tail -n+2); do
     echo "TRUNCATE TABLE $T;" >> $dest
   done
   sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> $dest
@@ -156,15 +156,4 @@ function purge-db() {
 
 function wait-for-mysql() {
   exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent --execute='select 1' >/dev/null 2>&1; do sleep 1; done"
-}
-
-function install-chat-dependencies() {
-  # TODO: move this into scripts/mkdirs when MR#97 is merged
-  run-in-container-asroot chat \
-    "mkdir --parents node_modules && chown --recursive $(id -u):$(id -g) node_modules"
-
-  # have to do run, not exec, as container will not start until
-  # node_modules is installed, this will run up a fresh container and
-  # just run yarn
-  run-in-container chat yarn
 }
