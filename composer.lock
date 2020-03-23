@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f87d73178f51b1ffa91957e300921777",
+    "content-hash": "cda06dbd135f3e5ce2b60ec97f587491",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2337,16 +2337,16 @@
         },
         {
             "name": "jms/serializer",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/serializer.git",
-                "reference": "0e286681396d8139406e596c6c802d37ab0b2124"
+                "reference": "e82527ceddedf8dd988a4ce900f4b14fedf4d6f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/0e286681396d8139406e596c6c802d37ab0b2124",
-                "reference": "0e286681396d8139406e596c6c802d37ab0b2124",
+                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/e82527ceddedf8dd988a4ce900f4b14fedf4d6f2",
+                "reference": "e82527ceddedf8dd988a4ce900f4b14fedf4d6f2",
                 "shasum": ""
             },
             "require": {
@@ -2387,7 +2387,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.5-dev"
+                    "dev-master": "3.6-dev"
                 }
             },
             "autoload": {
@@ -2418,7 +2418,7 @@
                 "serialization",
                 "xml"
             ],
-            "time": "2020-02-22T21:06:01+00:00"
+            "time": "2020-03-21T20:26:09+00:00"
         },
         {
             "name": "jms/serializer-bundle",
@@ -2830,16 +2830,16 @@
         },
         {
             "name": "paragonie/sodium_compat",
-            "version": "v1.12.2",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/sodium_compat.git",
-                "reference": "3b953109fdfc821c1979bc829c8b7421721fef82"
+                "reference": "bbade402cbe84c69b718120911506a3aa2bae653"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/3b953109fdfc821c1979bc829c8b7421721fef82",
-                "reference": "3b953109fdfc821c1979bc829c8b7421721fef82",
+                "url": "https://api.github.com/repos/paragonie/sodium_compat/zipball/bbade402cbe84c69b718120911506a3aa2bae653",
+                "reference": "bbade402cbe84c69b718120911506a3aa2bae653",
                 "shasum": ""
             },
             "require": {
@@ -2908,7 +2908,7 @@
                 "secret-key cryptography",
                 "side-channel resistant"
             ],
-            "time": "2019-12-30T03:11:08+00:00"
+            "time": "2020-03-20T21:48:09+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -8372,16 +8372,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "9.0.0",
+            "version": "9.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "8dc5bf6e6a9c011a1030136115697d512edcdc23"
+                "reference": "cf5954ca7cbe9ac6eddd3c9e9ce866c27ec8b906"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/8dc5bf6e6a9c011a1030136115697d512edcdc23",
-                "reference": "8dc5bf6e6a9c011a1030136115697d512edcdc23",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/cf5954ca7cbe9ac6eddd3c9e9ce866c27ec8b906",
+                "reference": "cf5954ca7cbe9ac6eddd3c9e9ce866c27ec8b906",
                 "shasum": ""
             },
             "require": {
@@ -8412,7 +8412,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2020-02-07T17:19:08+00:00"
+            "time": "2020-03-20T07:44:37+00:00"
         },
         {
             "name": "codeception/stub",
@@ -9419,16 +9419,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.17",
+            "version": "0.12.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b2c37bda79fdb11d801ce208ce391cffc0f572e6"
+                "reference": "1ce27fe29c8660a27926127d350d53d80c4d4286"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b2c37bda79fdb11d801ce208ce391cffc0f572e6",
-                "reference": "b2c37bda79fdb11d801ce208ce391cffc0f572e6",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1ce27fe29c8660a27926127d350d53d80c4d4286",
+                "reference": "1ce27fe29c8660a27926127d350d53d80c4d4286",
                 "shasum": ""
             },
             "require": {
@@ -9454,7 +9454,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2020-03-17T15:39:11+00:00"
+            "time": "2020-03-22T16:51:47+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

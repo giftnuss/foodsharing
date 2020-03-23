@@ -99,7 +99,7 @@
             </b-button>
           </template>
           <template
-            v-slot:cell(row-details)="row"
+            v-slot:row-details="row"
           >
             <b-card>
               <div class="details">
