@@ -4,5 +4,10 @@ export FS_ENV=dev
 
 set -o errexit
 
-$(dirname "$0")/lint-php
-$(dirname "$0")/lint-js
+dir=$(dirname "$0")
+
+# shellcheck source=./lint-php
+source "$dir"/lint-php
+
+# shellcheck source=./lint-js
+source "$dir"/lint-js

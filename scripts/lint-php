@@ -4,7 +4,10 @@ export FS_ENV=dev
 
 set -o errexit
 
-source $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
+
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 echo "Linting php with php-cs-fixer"
 run-in-container app vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose

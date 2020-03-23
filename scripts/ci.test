@@ -6,13 +6,14 @@ set -o errexit
 
 dir=$(dirname "$0")
 
-source $dir/inc.sh
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 echo $SECONDS seconds elapsed
 
 if [ "x" != "x$CI_BUILD_TOKEN" ]; then
   log-header "Logging into docker registry"
   SECONDS=0
-  docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" registry.gitlab.com
   echo $SECONDS seconds elapsed
 fi
 
@@ -21,13 +22,13 @@ SECONDS=0
 
 pids=()
 
-for name in app chat web db influxdb; do
+for name in app chat client web db influxdb; do
   dc build $name &
   pids+=($!)
 done
 
 for pid in "${pids[@]}"; do
-  wait $pid
+  wait "$pid"
 done
 
 echo $SECONDS seconds elapsed
@@ -52,7 +53,7 @@ sql-query mysql 'drop database if exists foodsharing; create database foodsharin
 
 migratedb foodsharing
 
-$dir/mkdirs
+"$dir"/mkdirs
 echo $SECONDS seconds elapsed
 
 log-header "Running tests"

@@ -22,7 +22,7 @@ MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 # BASH_SOURCE is an array with the filenames of the files that were called to get here
 # so BASH_SOURCE[0] is the filename (with path) of this file
 # different to $0 when this file is sourced with "." or source as in many of the scripts
-dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 function log-header() {
   # print a log header, take one argument as the printed title
@@ -49,42 +49,42 @@ function sql-file() {
 }
 
 function sql-dump() {
-  dc exec -T db mysqldump --password=$MYSQL_PASSWORD foodsharing "$@"
+  dc exec -T db mysqldump --password="$MYSQL_PASSWORD" foodsharing "$@"
 }
 
 function exec-in-container() {
   local container=$1; shift;
-  local command=$@;
-  dc exec -T --user $(id -u):$(id -g) "$container" sh -c "HOME=./ $command"
+  local command=$*;
+  dc exec -T --user "$(id -u)":"$(id -g)" "$container" sh -c "HOME=./ $command"
 }
 
 function exec-in-container-with-image-user() {
   local container=$1; shift;
-  local command=$@;
+  local command=$*;
   dc exec -T "$container" sh -c "HOME=./ $command"
 }
 
 function run-in-container() {
   local container=$1; shift;
-  local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) "$container" sh -c "HOME=./ $command"
+  local command=$*;
+  dc run --rm --no-deps --user "$(id -u)":"$(id -g)" "$container" sh -c "HOME=./ $command"
 }
 
 function run-in-container-with-service-ports() {
   local container=$1; shift;
-  local command=$@;
-  dc run --rm --no-deps --user $(id -u):$(id -g) --service-ports "$container" sh -c "HOME=./ $command"
+  local command=$*;
+  dc run --rm --no-deps --user "$(id -u)":"$(id -g)" --service-ports "$container" sh -c "HOME=./ $command"
 }
 
 function exec-in-container-asroot() {
   local container=$1; shift;
-  local command=$@;
+  local command=$*;
   dc exec --user root -T "$container" sh -c "$command"
 }
 
 function run-in-container-asroot() {
   local container=$1; shift;
-  local command=$@;
+  local command=$*;
   # run : create a new container to execute the command
   # --user root : set the user who executes the command
   # --rm : remove the container after executing the command
@@ -136,7 +136,7 @@ function migratedb() {
   # manually copy the generated migration file into the container
   # dc ps = docker container ls: list containers
   # -q: only display numeric IDs
-  docker cp $dest $(dc ps -q db):/app/$dest
+  docker cp $dest "$(dc ps -q db)":/app/$dest
 
   sql-file "$database" $dest
 
@@ -147,7 +147,7 @@ function migratedb() {
   done
   sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> $dest
   echo "set foreign_key_checks=1;" >> $dest
-  docker cp $dest $(dc ps -q app):/app/$dest
+  docker cp $dest "$(dc ps -q app)":/app/$dest
 }
 
 function purge-db() {
