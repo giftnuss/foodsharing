@@ -50,7 +50,7 @@ services:
 
   client:
     container_name: foodsharing_test_client
-    image: node:13.10.1-stretch
+    image: node:13.10.1-alpine
     # We don't run anything long running in here yet - build is run via ./scripts/build-assets
     command: 'true'
     working_dir: /app/client
@@ -82,7 +82,7 @@ services:
 
   chat:
     container_name: foodsharing_test_chat
-    image: node:13.10.1-stretch
+    image: node:13.10.1-alpine
     command: sh -c "yarn && node server.js 0.0.0.0"
     working_dir: /app/chat
     depends_on:
