@@ -72,7 +72,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Less ports are exposed to the dev computer's network now !1367 @\_fridtjof_
 - replace raven by the newest sentry JS SDK @peter.toennies
 - update loader-utils to version 2, url-loader to version 4, and file-loader to version 6 @peter.toennies
-- improve the statistics for outgoing mail in grafana !1395 @dthulke
+- improve the statistics for outgoing mail in grafana !1395 #64 @dthulke
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
