@@ -8,10 +8,11 @@ ul.dynatree-container
 	white-space: nowrap;
 	padding: 3px;
 	margin: 0; /* issue 201 */
-	/*background-color: white;*/
-	/*border: 1px dotted gray;*/
+	background-color: white;
+	border: 1px dotted gray;
 	overflow: auto;
-	height: 100%; /* issue 263 */
+/*	height: 100%; /* issue 263, 470 */
+	min-height: 0%;
 }
 
 ul.dynatree-container ul
@@ -80,7 +81,7 @@ span.dynatree-drag-helper-img,
 	vertical-align: top;
 	background-repeat: no-repeat;
 	background-position: left;
-	background-image: url("icons.png");
+	background-image: url("icons.gif");
 	background-position: 0 0;
 }
 
@@ -262,7 +263,8 @@ span.dynatree-node
 {
 /*	display: -moz-inline-box; /* issue 133, 165, 172, 192. removed for issue 221*/
 /*	-moz-box-align: start; /* issue 221 */
-/*  display: inline-block; /* Required to make a span sizeable */
+	display: inline-block; /* issue 373 Required to make a span sizeable */
+	vertical-align: top;
 }
 
 
@@ -280,7 +282,9 @@ ul.dynatree-container a
 
 ul.dynatree-container a:hover
 {
-	
+/*	text-decoration: underline; */
+	background-color: #F2F7FD; /* light blue */
+	border-color: #B8D6FB; /* darker light blue */
 }
 
 span.dynatree-node a
@@ -288,8 +292,8 @@ span.dynatree-node a
 	font-size: 10pt; /* required for IE, quirks mode */
 	display: inline-block; /* Better alignment, when title contains <br> */
 /*	vertical-align: top;*/
-
-	padding: 1px 5px;
+	padding-left: 3px;
+	padding-right: 3px; /* Otherwise italic font will be outside bounds */
 	/*	line-height: 16px; /* should be the same as img height, in case 16 px */
 }
 span.dynatree-folder a
@@ -314,14 +318,13 @@ span.dynatree-expanded a
 span.dynatree-selected a
 {
 	color: green;
-	/*font-style: italic;*/
+	font-style: italic;
 }
 
-span.dynatree-active a {
-    background-color: #4A3520 !important;
-    border-radius: 4px 4px 4px 4px;
-    color: #FFFFFF !important;
-    padding: 1px 5px;
+span.dynatree-active a
+{
+	background-color: #3169C6 !important;
+	color: white !important; /* @ IE6 */
 }
 
 /*******************************************************************************
