@@ -44,6 +44,7 @@
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
 and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
 are welcomed to check the E-Mails generated for missed chat messages. @janopae
+are welcomed to check the E-Mails generated for missed chat messages. @janopae 
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
@@ -59,6 +60,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 - Redesigned the option to delete FS account if not agreeing with privacy policy. !1318 @thefeiter
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
+- Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
