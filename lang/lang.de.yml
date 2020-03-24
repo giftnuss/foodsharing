@@ -422,3 +422,22 @@ menu:
 newsletter:
   test_email_sent: E-Mail wurde versendet!
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
+
+storelist:
+ entered: "Eingetragen:"
+ status: Status
+ name: Name
+ address: Straße
+ addressdata: Anschrift
+ zipcode: PLZ
+ city: Ort
+ added: Eingetragen
+ region: Bezirk
+ geo: geo
+ nocontact: Noch kein Kontakt
+ inprogress: Verhandlungen laufen
+ cooperating: In Kooperation
+ notcooperating: Will nicht kooperieren
+ nowaste: Wirft nichts weg
+ emptyfilters: Filter leeren
+ map: Karte
