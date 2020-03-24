@@ -43,7 +43,8 @@ if (defined('SENTRY_URL')) {
 	init([
 		'dsn' => SENTRY_URL,
 		'release' => SRC_REVISION,
-		'environment' => $FS_ENV
+		'environment' => $FS_ENV,
+		'send_default_pii' => true
 	]);
 
 	configureScope(
