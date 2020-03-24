@@ -60,6 +60,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 - Redesigned the option to delete FS account if not agreeing with privacy policy. !1318 @thefeiter
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
+- redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 
 ## Dev/Test/CI stuff

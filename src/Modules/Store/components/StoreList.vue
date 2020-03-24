@@ -39,7 +39,7 @@
               v-b-tooltip.hover
               type="button"
               class="btn btn-sm"
-              title="Filter leeren"
+              :title="$i18n('storelist.emptyfilters')"
               @click="clearFilter"
             >
               <i class="fas fa-times" />
@@ -104,16 +104,16 @@
             <b-card>
               <div class="details">
                 <p>
-                  <strong>Anschrift:</strong><br>
+                  <strong>{{ $i18n('storelist.addressdata') }}</strong><br>
                   {{ row.item.address }} <a
                     :href="mapLink(row.item)"
                     class="nav-link details-nav"
-                    title="Karte"
+                    :title="$i18n('storelist.map')"
                   >
                     <i class="fas fa-map-marker-alt" />
                   </a><br> {{ row.item.zipcode }} {{ row.item.city }}
                 </p>
-                <p><strong>Eingetragen:</strong> {{ row.item.added }}</p>
+                <p><strong>{{ $i18n('storelist.entered') }}</strong> {{ row.item.added }}</p>
               </div>
             </b-card>
           </template>
@@ -160,6 +160,7 @@ import {
   BCard
 } from 'bootstrap-vue'
 import StoreStatusIcon from './StoreStatusIcon.vue'
+import i18n from '@/i18n'
 
 export default {
   components: { BCard, BTable, BButton, BPagination, BFormSelect, StoreStatusIcon },
@@ -193,43 +194,43 @@ export default {
       fields: [
         {
           key: 'status',
-          label: 'Status',
+          label: i18n('storelist.status'),
           tdClass: 'status',
           sortable: true
         },
         {
           key: 'name',
-          label: 'Name',
+          label: i18n('storelist.name'),
           sortable: true
         },
         {
           key: 'address',
-          label: 'Straße',
+          label: i18n('storelist.address'),
           sortable: true
         },
         {
           key: 'zipcode',
-          label: 'PLZ',
+          label: i18n('storelist.zipcode'),
           sortable: true
         },
         {
           key: 'city',
-          label: 'Ort',
+          label: i18n('storelist.city'),
           sortable: true
         },
         {
           key: 'added',
-          label: 'Eingetragen',
+          label: i18n('storelist.added'),
           sortable: true
         },
         {
           key: 'region',
-          label: 'Bezirk',
+          label: i18n('storelist.region'),
           sortable: true
         },
         {
           key: 'geo',
-          label: 'geo',
+          label: i18n('storelist.geo'),
           sortable: false
         },
         {
@@ -240,11 +241,11 @@ export default {
       ],
       statusOptions: [
         { value: null, text: 'Status' },
-        { value: 1, text: 'Noch kein Kontakt' },
-        { value: 2, text: 'Verhandlungen laufen' },
-        { value: 3, text: 'In Kooperation' },
-        { value: 4, text: 'Will nicht kooperieren' },
-        { value: 6, text: 'Wirft nichts weg' }
+        { value: 1, text: i18n('storelist.nocontact') },
+        { value: 2, text: i18n('storelist.inprogress') },
+        { value: 3, text: i18n('storelist.cooperating') },
+        { value: 4, text: i18n('storelist.notcooperating') },
+        { value: 6, text: i18n('storelist.nowaste') }
       ]
     }
   },
