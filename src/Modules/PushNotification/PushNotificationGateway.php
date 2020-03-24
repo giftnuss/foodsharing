@@ -23,7 +23,7 @@ class PushNotificationGateway extends BaseGateway
 	public function addSubscription(int $foodsaverId, string $subscriptionData, string $type): int
 	{
 		if (!$this->hasHandlerFor($type)) {
-			throw new \InvalidArgumentException("There is no handler reqistered to handle {$type}.");
+			throw new \InvalidArgumentException("There is no handler registered to handle {$type}.");
 		}
 
 		return $this->db->insert('fs_push_notification_subscription', [
