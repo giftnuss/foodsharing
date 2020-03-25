@@ -34,7 +34,9 @@ const sendToUser = (userId, channel, method, payload) => {
 
 const sendToSession = (sessionId, channel, method, payload) => {
   for (const connection of connectionsForSession(sessionId)) {
-    connection.emit(channel, { m: method, o: payload })
+    if (channel != null) {
+      connection.emit(channel, { m: method, o: payload })
+    }
   }
 }
 
