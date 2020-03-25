@@ -58,6 +58,7 @@ services:
     environment:
       HOST: 0.0.0.0
       PROXY_TARGET: http://web:8080
+      NPM_CONFIG_CACHE: "/tmp/.npm-cache"
 
   # php mail queue runner
   #------------------------------------
