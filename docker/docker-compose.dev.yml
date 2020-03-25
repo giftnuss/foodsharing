@@ -51,7 +51,7 @@ services:
       - 18080:18080
     command: sh -c "yarn && yarn dev"
     working_dir: /app/client
-    user: "${UID}"
+    user: "node"
     volumes:
       - ../:/app:delegated
       - client-node-modules:/app/client/node_modules:cached
