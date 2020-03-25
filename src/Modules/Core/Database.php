@@ -28,6 +28,21 @@ class Database
 	// === high-level methods that build SQL internally ===
 
 	/**
+	 * Returns the row identified by $id.
+	 * Assumption: the id field is actually called 'id'.
+	 *
+	 * @param string $table table name
+	 * @param array $column_names column names
+	 * @param int $id record ID
+	 *
+	 * @return array
+	 */
+	public function fetchById(string $table, $column_names, $id)
+	{
+		return $this->fetchByCriteria($table, $column_names, ['id' => $id]);
+	}
+
+	/**
 	 * Returns the first row.
 	 * Provide table name, column names and criteria.
 	 *
@@ -56,6 +71,23 @@ class Database
 	public function fetchAllValuesByCriteria(string $table, string $column, array $criteria = []): array
 	{
 		return $this->fetchAllValues(...$this->generateSelectStatement($table, [$column], $criteria));
+	}
+
+	// TODO: don't return arrays in the fetchValue* methods.
+
+	/**
+	 * Returns the named column row identified by $id.
+	 * Assumption: the id field is actually called 'id'.
+	 *
+	 * @param string $table table name
+	 * @param string $column_name column name the value is contained in
+	 * @param int $id record ID
+	 *
+	 * @return array
+	 */
+	public function fetchValueById(string $table, $column_name, $id)
+	{
+		return $this->fetchValueByCriteria($table, $column_name, ['id' => $id]);
 	}
 
 	/**
