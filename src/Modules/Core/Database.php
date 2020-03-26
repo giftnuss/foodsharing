@@ -469,8 +469,18 @@ class Database
 	 */
 	private function preparedQuery($query, $params)
 	{
-		$statement = $this->pdo->prepare($query);
-		if (!$statement) {
+		try {
+			// Depending on the PDO's error handling, when the query can't be prepared,
+			// this will either throw a PDOException, or return false.
+			// to cover both cases, either throw an exception ourselves,
+			// or catch the PDOException and attach it to a new exception.
+			$statement = $this->pdo->prepare($query);
+		} catch (\PDOException $exception) {
+			throw new \Exception("Query '$query' can't be prepared.", $exception);
+		}
+		if ($statement === false) {
+			// PDO did not throw an exception, but returned false.
+			// For consistency, we throw one ourselves.
 			$errorInfo = $this->pdo->errorInfo();
 			throw new \Exception("Query '$query' can't be prepared. Error info: " . implode(', ', $errorInfo));
 		}
