@@ -562,7 +562,7 @@ class Database
 	 * @param array $array some array
 	 * @param bool $keepKeys whether the new array should use the previous keys
 	 *
-	 * @return array dehierarchized array
+	 * @return array flattened array
 	 */
 	private function flattenArray(array $array, bool $keepKeys = true): array
 	{
