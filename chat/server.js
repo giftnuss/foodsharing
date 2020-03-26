@@ -156,6 +156,11 @@ const inputServer = http.createServer((req, res) => {
 
   const sessionId = url.searchParams.get('c')
   const app = url.searchParams.get('a')
+  if (app === null) {
+    res.writeHead(400)
+    res.end('Parameter a must be specified.')
+    return
+  }
   const method = url.searchParams.get('m')
   const options = url.searchParams.get('o')
   const userId = url.searchParams.get('u')
