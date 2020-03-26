@@ -1,5 +1,6 @@
 # 2020-03-26 Hotfix 
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
+- Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 
 
 # 2020-03-16 Hotfix
