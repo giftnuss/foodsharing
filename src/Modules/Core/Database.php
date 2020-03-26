@@ -364,7 +364,7 @@ class Database
 	{
 		if (empty($criteria)) {
 			// It is VERY VERY unlikely that we want to delete ALL ROWS from a table.
-			throw new \Exception('Tried to delete all rows from a table!\n' . 'If this is intentional, use deleteAll() instead!');
+			throw new \Exception('Tried to delete all rows from a table! If this was intentional, write a raw query using Database::execute');
 		}
 		$where = $this->generateWhereClause($criteria);
 		/** @noinspection SqlWithoutWhere can not happen because empty criteria will raise an Exception */
@@ -374,28 +374,6 @@ class Database
 		}
 
 		return $this->preparedQuery($query, array_values($criteria))->rowCount();
-	}
-
-	/**
-	 * BE EXTRA CAREFUL!
-	 * Deletes all rows from a table.
-	 *
-	 * @param string $table table descriptor
-	 * @param int $limit limits the number of rows to delete, if greater than 0
-	 *
-	 * @return int number of deleted rows
-	 *
-	 * @throws \Exception
-	 */
-	public function deleteAll(string $table, int $limit = 0): int
-	{
-		/** @noinspection SqlWithoutWhere this is intentional */
-		$query = 'DELETE FROM ' . $this->getQuotedName($table);
-		if ($limit > 0) {
-			$query .= ' LIMIT ' . $limit;
-		}
-
-		return $this->preparedQuery($query, [])->rowCount();
 	}
 
 	// === methods that accept SQL statements ===
