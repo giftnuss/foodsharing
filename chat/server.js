@@ -33,10 +33,9 @@ const sendToUser = (userId, channel, method, payload) => {
 }
 
 const sendToSession = (sessionId, channel, method, payload) => {
+  if (!channel) return console.error('channel argument is required')
   for (const connection of connectionsForSession(sessionId)) {
-    if (channel != null) {
-      connection.emit(channel, { m: method, o: payload })
-    }
+    connection.emit(channel, { m: method, o: payload })
   }
 }
 
