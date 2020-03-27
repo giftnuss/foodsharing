@@ -87,7 +87,7 @@ final class RegionXhr extends Control
 								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
-								'thread' => $theme,
+								'thread' => $theme['title'],
 								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')

@@ -40,6 +40,7 @@
 - Set height for topbar and reduces the height of div#main. Now is the broadcast message completely readable !1383 @chriswalg
 - Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
+- Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
