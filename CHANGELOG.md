@@ -75,6 +75,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - replace raven by the newest sentry JS SDK @peter.toennies
 - update loader-utils to version 2, url-loader to version 4, and file-loader to version 6 @peter.toennies
 - improve the statistics for outgoing mail in grafana !1395 #64 @dthulke
+- Update sentry javascript SDK from 5.15.2 to 5.15.4 because it was broken. !1402 @chriswalg
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
