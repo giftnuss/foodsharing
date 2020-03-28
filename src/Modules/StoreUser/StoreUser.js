@@ -34,6 +34,7 @@ import {
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
+import StoreInfos from './components/StoreInfos'
 import { deleteStorePost } from '@/api/stores'
 
 expose({
@@ -220,7 +221,9 @@ $(document).ready(() => {
   })
 
   vueRegister({
-    PickupList
+    PickupList,
+    StoreInfos
   })
   vueApply('#vue-pickuplist', true)
+  vueApply('#vue-storeinfos')
 })

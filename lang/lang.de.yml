@@ -189,6 +189,15 @@ store:
   allStoresOfRegion: Alle Betriebe aus dem Bezirk
   addNewStoresButton: Neuen Betrieb eintragen
   noStores: Es sind noch keine Betriebe eingetragen
+  particularities: Besonderheiten
+  average_collection_quantity: Abholmenge im Schnitt
+  weight: kg
+  attribution: Namensnennung
+  may_referred_to_in_public: Dieser Betrieb darf öffentlich genannt werden.
+  may_not_referred_to_in_public: Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!
+  address: Adresse
+  my_last_pickup: Meine letzte Abholung
+
 
 pickup:
   dates: Abholtermine
