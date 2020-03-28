@@ -25,8 +25,10 @@ class ContentSecurityPolicy
 				$this->websocketUrlFor($httpHost),
 				'https://sentry.io',
 				'https://photon.komoot.de',
+				'https://maps.geoapify.com',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
-				'blob:'
+				'blob:',
+				'ws:'
 			],
 			'img-src' => [
 				$self,
@@ -47,6 +49,13 @@ class ContentSecurityPolicy
 			],
 			'frame-ancestors' => [
 				$none
+			],
+			'worker-src' => [
+				$self,
+				'blob:'
+			],
+			'child-src' => [
+				'blob:'
 			]
 		];
 
