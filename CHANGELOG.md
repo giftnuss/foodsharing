@@ -64,6 +64,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
+- Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
