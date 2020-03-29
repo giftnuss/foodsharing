@@ -106,10 +106,10 @@ class FoodsaverControl extends Control
 				}
 				$this->pageHelper->addContent($this->v_utils->v_field(
 					$this->v_utils->v_menu([
-				   ['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
+						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
 					]),
 					$this->translationHelper->s('actions')),
-				CNT_RIGHT
+					CNT_RIGHT
 				);
 			}
 		} else {

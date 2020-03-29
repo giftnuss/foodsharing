@@ -33,12 +33,12 @@ final class RegionPermissions
 		return false;
 	}
 
-	public function mayHandleFoodsaverRegionMenu($regionId): bool
+	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
 	{
 		return $this->session->isAmbassadorForRegion([$regionId], false, false);
 	}
 
-	public function mayDeleteFoodsaverFromRegion($regionId): bool
+	public function mayDeleteFoodsaverFromRegion(int $regionId): bool
 	{
 		return $this->mayHandleFoodsaverRegionMenu($regionId);
 	}

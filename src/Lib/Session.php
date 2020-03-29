@@ -561,6 +561,13 @@ class Session
 		return false;
 	}
 
+	/**
+	 * Checks if the current user is an ambassador for one of the regions in the list of region IDs.
+	 *
+	 * @param $regionIds list of region IDs
+	 * @param bool $include_groups if working group should be included in the check
+	 * @param bool $include_parent_regions if the parent regions should be included in the check
+	 */
 	public function isAmbassadorForRegion($regionIds, $include_groups = true, $include_parent_regions = false): bool
 	{
 		if (is_array($regionIds) && count($regionIds) && $this->isAmbassador()) {

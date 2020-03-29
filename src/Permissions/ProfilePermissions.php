@@ -35,7 +35,7 @@ class ProfilePermissions
 		return $this->session->isAmbassadorForRegion($regionIds, false, true);
 	}
 
-	public function maySeeHistory($fsId): bool
+	public function maySeeHistory(int $fsId): bool
 	{
 		return $this->mayAdministrateUserProfile($fsId);
 	}
