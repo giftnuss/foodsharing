@@ -655,7 +655,7 @@ class Database
 	 * Quotes an identifier using SQL syntax.
 	 * For convenience, dots are excluded from quoting to allow for specifying the table a field is in.
 	 *
-	 * Example: "fs_bezirk.name" turns into "`fs_bezirk`.`name`".
+	 * Example: "fs_bezirk.name" turns into "\`fs_bezirk\`.\`name\`".
 	 *
 	 * @param string $name An unquoted SQL identifier
 	 *
