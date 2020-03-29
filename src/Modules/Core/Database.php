@@ -28,10 +28,35 @@ class Database
 	// === high-level methods that build SQL internally ===
 
 	/**
-	 * Returns the first row.
-	 * Provide table name, column names and criteria.
+	 * Returns the row identified by $id.
 	 *
-	 * @param mixed  $column_names
+	 * {@internal Assumption: the id field is actually called 'id'}
+	 *
+	 * @param string $table table name
+	 * @param array|string $column_names either one column name, "*" for all columns
+	 *                                   or an array of multiple names
+	 * @param int $id record ID
+	 *
+	 * @return array
+	 *
+	 * @throws \Exception
+	 */
+	public function fetchById(string $table, $column_names, $id)
+	{
+		return $this->fetchByCriteria($table, $column_names, ['id' => $id]);
+	}
+
+	/**
+	 * Returns the columns specified in $column_names for the first rows matching $criteria.
+	 *
+	 * @param string $table table name
+	 * @param array|string $column_names either one column name, "*" for all columns
+	 *                                   or an array of multiple names
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return array an array containing the first row
+	 *
+	 * @throws \Exception
 	 */
 	public function fetchByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -39,10 +64,16 @@ class Database
 	}
 
 	/**
-	 * Returns all rows.
-	 * Provide table name, column names and criteria.
+	 * Returns the columns specified in $column_names for all rows matching $criteria.
 	 *
-	 * @param mixed $column_names
+	 * @param string $table table name
+	 * @param array|string $column_names either one column name, "*" for all columns
+	 *                                     or an array of multiple names
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return array rows with the specified columns
+	 *
+	 * @throws \Exception
 	 */
 	public function fetchAllByCriteria(string $table, $column_names, array $criteria = []): array
 	{
@@ -50,8 +81,15 @@ class Database
 	}
 
 	/**
-	 * Returns the named column.
-	 * Provide table name, desired column and criteria.
+	 * Returns the named column for rows matching $criteria.
+	 *
+	 * @param string $table table name
+	 * @param string $column column name the value is contained in
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return array all values of the named column
+	 *
+	 * @throws \Exception
 	 */
 	public function fetchAllValuesByCriteria(string $table, string $column, array $criteria = []): array
 	{
@@ -59,29 +97,81 @@ class Database
 	}
 
 	/**
+	 * Returns a named column of the row identified by $id.
+	 *
+	 * {@internal Assumption: the id field is actually called 'id'.}
+	 *
+	 * @param string $table table name
+	 * @param string $column_name column name the value is contained in
+	 * @param int $id record ID
+	 *
+	 * @return mixed the value for the specified column
+	 *
+	 * @throws \Exception if there is no row identified by $id
+	 */
+	public function fetchValueById(string $table, $column_name, $id)
+	{
+		return $this->fetchValueByCriteria($table, $column_name, ['id' => $id]);
+	}
+
+	/**
 	 * Returns the value of a named column in the first row of the result.
 	 * Provide table name, desired column and criteria.
 	 *
-	 * @return mixed
+	 * @param string $table the table's name
+	 * @param string $column the name of the column to be returned
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return mixed the first row's value for the specified column
+	 *
+	 * @throws \Exception if there were no results
 	 */
 	public function fetchValueByCriteria(string $table, string $column, array $criteria = [])
 	{
 		return $this->fetchValue(...$this->generateSelectStatement($table, [$column], $criteria));
 	}
 
-	public function exists($table, array $criteria): bool
+	/**
+	 * Checks if any rows exist in $table that match $criteria.
+	 *
+	 * @param string $table the table's name
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return bool whether any rows exist
+	 *
+	 * @throws \Exception
+	 */
+	public function exists(string $table, array $criteria): bool
 	{
 		return $this->count($table, $criteria) > 0;
 	}
 
-	public function requireExists($table, array $criteria)
+	/**
+	 * Checks if any rows exist in $table that match $criteria and throws an Exception if it does not.
+	 *
+	 * @param string $table the table's name
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @throws \Exception if no rows matching $criteria exist
+	 */
+	public function requireExists(string $table, array $criteria)
 	{
 		if (!$this->exists($table, $criteria)) {
 			throw new \Exception('No matching records found for criteria ' . json_encode($criteria) . ' in table ' . $table);
 		}
 	}
 
-	public function count($table, array $criteria): int
+	/**
+	 * Count the rows in $table that match $criteria.
+	 *
+	 * @param string $table the table's name
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()}
+	 *
+	 * @return int count of the rows matching $criteria
+	 *
+	 * @throws \Exception
+	 */
+	public function count(string $table, array $criteria): int
 	{
 		$where = $this->generateWhereClause($criteria);
 
@@ -95,6 +185,7 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 * @param array $options unused. Setting 'ignore' will raise an exception ({@see Database::insertMultiple()})
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -109,8 +200,8 @@ class Database
 	 * Inserts or updates multiple rows in a table.
 	 *
 	 * @param string $table the table's name
-	 * @param array $keys names of the columns that correspond to the values
-	 * @param array $values 2-dim array with names of the columns and the row's entries as key-value pairs for each row
+	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 * @param array $options unused. Setting 'ignore' will raise an exception ({@see Database::insertMultiple()})
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -121,6 +212,15 @@ class Database
 		return $this->insertMultiple($table, $data, array_merge($options, ['update' => true]));
 	}
 
+	/**
+	 * @param string $table the table's name
+	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 * @param array $options unused. Setting 'update' will raise an exception ({@see Database::insertMultiple()})
+	 *
+	 * @return int the number of inserted or updated rows
+	 *
+	 * @throws \Exception
+	 */
 	public function insertIgnore(string $table, array $data, array $options = []): int
 	{
 		return $this->insert($table, $data, array_merge($options, ['ignore' => true]));
@@ -131,6 +231,7 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data names of the columns and the row's entries as key-value pairs
+	 * @param array $options {@see Database::insertMultiple()}
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -146,6 +247,9 @@ class Database
 	 *
 	 * @param string $table the table's name
 	 * @param array $data 2-dim array with names of the columns and the row's entries as key-value pairs for each row
+	 * @param array $options Key 'update': set to true to add a ON DUPLICATE KEY UPDATE clause to the end of the INSERT statement
+	 *                       Key 'ignore': set to true to add IGNORE to the INSERT statement
+	 *                       'update' and 'ignore' are exclusive of each other
 	 *
 	 * @return int the number of inserted or updated rows
 	 *
@@ -208,12 +312,23 @@ class Database
 		);
 
 		// flatten values array
-		$flattened = $this->dehierarchizeArray($fullData, false);
+		$flattened = $this->flattenArray($fullData, false);
 		$this->preparedQuery($query, array_values($flattened));
 
 		return (int)$this->pdo->lastInsertId();
 	}
 
+	/**
+	 * Update rows selected from $table according to $criteria with $data.
+	 *
+	 * @param string $table table to update
+	 * @param array $data map of column => value
+	 * @param array $criteria optional criteria to limit which rows are updated
+	 *
+	 * @return int number of rows updated
+	 *
+	 * @throws \Exception
+	 */
 	public function update(string $table, array $data, array $criteria = []): int
 	{
 		if (empty($data)) {
@@ -243,11 +358,16 @@ class Database
 	 *
 	 * @return int number of deleted rows
 	 *
-	 * @throws \Exception
+	 * @throws \Exception if no criteria are supplied, which would lead to all rows being deleted!
 	 */
 	public function delete(string $table, array $criteria, int $limit = 0): int
 	{
+		if (empty($criteria)) {
+			// It is VERY VERY unlikely that we want to delete ALL ROWS from a table.
+			throw new \Exception('Tried to delete all rows from a table! If this was intentional, write a raw query using Database::execute');
+		}
 		$where = $this->generateWhereClause($criteria);
+		/** @noinspection SqlWithoutWhere can not happen because empty criteria will raise an Exception */
 		$query = 'DELETE FROM ' . $this->getQuotedName($table) . ' ' . $where;
 		if ($limit > 0) {
 			$query .= ' LIMIT ' . $limit;
@@ -261,8 +381,12 @@ class Database
 	/**
 	 * Returns the first row.
 	 *
-	 * @param string $query SQL select statement to prepare and execute
+	 * @param string $query SQL SELECT statement to prepare and execute
 	 * @param array $params parameters for prepared statement
+	 *
+	 * @return array values of the first row
+	 *
+	 * @throws \Exception if the query is malformed
 	 */
 	public function fetch(string $query, array $params = []): array
 	{
@@ -278,8 +402,12 @@ class Database
 	/**
 	 * Returns all rows.
 	 *
-	 * @param string $query SQL select statement to prepare and execute
+	 * @param string $query SQL SELECT statement to prepare and execute
 	 * @param array $params parameters for prepared statement
+	 *
+	 * @return array rows returned by the statement
+	 *
+	 * @throws \Exception if the query is malformed
 	 */
 	public function fetchAll(string $query, array $params = []): array
 	{
@@ -292,10 +420,14 @@ class Database
 	}
 
 	/**
-	 * Returns the first column.
+	 * Returns the first column for all rows returned by $query.
 	 *
-	 * @param string $query SQL select statement to prepare and execute
+	 * @param string $query SQL SELECT statement to prepare and execute
 	 * @param array $params parameters for prepared statement
+	 *
+	 * @return array all values of the first column that were returned
+	 *
+	 * @throws \Exception if the query is malformed
 	 */
 	public function fetchAllValues(string $query, array $params = []): array
 	{
@@ -310,12 +442,15 @@ class Database
 	/**
 	 * Returns the value of the first column of the first row.
 	 *
-	 * @param string $query SQL select statement to prepare and execute
+	 * @param string $query SQL SELECT statement to prepare and execute
 	 * @param array $params parameters for prepared statement
+	 *
+	 * @return mixed the value of the first column of the first row
+	 *
+	 * @throws \Exception if the query is malformed, or if there were no results
 	 */
 	public function fetchValue(string $query, array $params = [])
 	{
-		// throw new \Exception('query ' . $query . ', params ' . json_encode($params));
 		$out = $this->preparedQuery($query, $params)->fetchAll();
 		if ($out === false || count($out) === 0) {
 			throw new \Exception('Expected one or more results, but none was returned.');
@@ -325,11 +460,23 @@ class Database
 	}
 
 	/**
-	 * @deprecated Use more specific methods if possible
+	 * Executes a raw query.
+	 * Make sure to use placeholders when inserting values dynamically!
+	 *
+	 * @param string $query query to be executed
+	 * @param array $params parameter values: either an array,
+	 *                        or a map of placeholder names to their values.
+	 *                        Example: [':placeholder' => 10] or [10, "abcdef"] without placeholder names
+	 *
+	 * @return \PDOStatement the result of the query execution
+	 *
+	 * @throws \Exception if the query is malformed
+	 *
 	 * @see Database::update()
 	 * @see Database::delete()
+	 * @deprecated Use more specific methods if possible
 	 */
-	public function execute($query, $params = [])
+	public function execute(string $query, array $params = []): \PDOStatement
 	{
 		return $this->preparedQuery($query, $params);
 	}
@@ -339,7 +486,9 @@ class Database
 	/**
 	 * Generates comma separated question marks for use with SQLs IN() operator.
 	 *
-	 * @param int $length - number of question marks to be generated
+	 * @param int $length number of question marks to be generated
+	 *
+	 * @return string string of comma separated question marks
 	 */
 	public function generatePlaceholders($length): string
 	{
@@ -351,6 +500,11 @@ class Database
 		return $this->pdo->quote($string);
 	}
 
+	/**
+	 * Use this where you would normally use NOW() in an SQL query.
+	 *
+	 * @return string the current time
+	 */
 	public function now(): string
 	{
 		return date('Y-m-d H:i:s');
@@ -379,20 +533,22 @@ class Database
 	// === private methods ===
 
 	/**
-	 * Dehierarchizes an array. If the keys are not kept this turns ['a', ['b', 'c'], 'd'] into
+	 * Flattens an array. If the keys are not kept this turns ['a', ['b', 'c'], 'd'] into
 	 * ['a', 'b', 'c', 'd']. When keeping keys, it is possible that keys are overridden, i.e. this
 	 * turns ['a' => 1, ['a' => 2, 'b' => 3], 'c' => 4] into ['a' => 2, 'b' => 3, 'c' => 4].
 	 *
 	 * @param array $array some array
 	 * @param bool $keepKeys whether the new array should use the previous keys
+	 *
+	 * @return array flattened array
 	 */
-	private function dehierarchizeArray(array $array, bool $keepKeys = true): array
+	private function flattenArray(array $array, bool $keepKeys = true): array
 	{
 		$out = [];
 
 		foreach ($array as $key => $value) {
 			if (is_array($value)) {
-				$out = array_merge($out, $this->dehierarchizeArray($value, $keepKeys));
+				$out = array_merge($out, $this->flattenArray($value, $keepKeys));
 			} else {
 				if ($keepKeys) {
 					$out = array_merge($out, [$key => $value]);
@@ -406,17 +562,40 @@ class Database
 	}
 
 	/**
-	 * @throws \Exception
+	 * Prepares and executes a query.
+	 *
+	 * @param string $query the query to prepare and execute
+	 * @param array $params parameter values: either an array,
+	 *                        or a map of placeholder names to their values.
+	 *                        Example: [':placeholder' => 10] or [10, "abcdef"] without placeholder names
+	 *
+	 * @return \PDOStatement the result of the query execution
+	 *
+	 * @throws \Exception if the PDO does not accept the $query
 	 */
-	private function preparedQuery($query, $params)
+	private function preparedQuery(string $query, array $params): \PDOStatement
 	{
-		$statement = $this->pdo->prepare($query);
-		if (!$statement) {
+		try {
+			// Depending on the PDO's error handling, when the query can't be prepared,
+			// this will either throw a PDOException, or return false.
+			// to cover both cases, either throw an exception ourselves,
+			// or catch the PDOException and attach it to a new exception.
+			$statement = $this->pdo->prepare($query);
+		} catch (\PDOException $exception) {
+			throw new \Exception("Query '$query' can't be prepared.", $exception);
+		}
+		if ($statement === false) {
+			// PDO did not throw an exception, but returned false.
+			// For consistency, we throw one ourselves.
 			$errorInfo = $this->pdo->errorInfo();
 			throw new \Exception("Query '$query' can't be prepared. Error info: " . implode(', ', $errorInfo));
 		}
 
-		$params = $this->dehierarchizeArray($params);
+		/**
+		 * for IN-style ({@see Database::generateWhereClause()}) criteria,
+		 * their values are an array, which have to be flattened for positional parameter insertion.
+		 */
+		$params = $this->flattenArray($params);
 
 		foreach ($params as $param => $value) {
 			if (is_bool($value)) {
@@ -440,6 +619,17 @@ class Database
 		return $statement;
 	}
 
+	/**
+	 * Generates a SELECT statement for a table, a set of columns and criteria.
+	 *
+	 * @param string $table A full table name
+	 * @param array|string $column_names either one column name, "*" for all columns or an array of multiple names
+	 * @param array $criteria optional criteria ({@see Database::generateWhereClause()})
+	 *
+	 * @return array an array containing the generated query, and an array of parameters
+	 *
+	 * @throws \Exception if $column_names is neither an array nor a string
+	 */
 	private function generateSelectStatement(string $table, $column_names, array $criteria)
 	{
 		$where = $this->generateWhereClause($criteria);
@@ -461,11 +651,42 @@ class Database
 		return [$query, $params];
 	}
 
+	/**
+	 * Quotes an identifier using SQL syntax.
+	 * For convenience, dots are excluded from quoting to allow for specifying the table a field is in.
+	 *
+	 * Example: "fs_bezirk.name" turns into "\`fs_bezirk\`.\`name\`".
+	 *
+	 * @param string $name An unquoted SQL identifier
+	 *
+	 * @return string A quoted SQL identifier
+	 */
 	private function getQuotedName(string $name): string
 	{
 		return '`' . str_replace('.', '`.`', $name) . '`';
 	}
 
+	/**
+	 * Generates a WHERE clause (for use in a prepared statement) from an array of criteria,
+	 * which will be joined with AND operators.
+	 * Instead of directly inserting the values, positional parameter placeholders are generated.
+	 *
+	 * The most basic format for criteria is $field => $value.
+	 * Example: ['name' => 'Berlin'] evaluates to "WHERE `name` = ?".
+	 *
+	 * There are some special variants:
+	 * - If a value is an empty array, the corresponding expression will simple become 'false'.
+	 * - If a value is an array containing values, an 'IN (...)' expression
+	 *   is generated with an appropriate amount of placeholders.
+	 * - A value of PHP's 'null' will be translated into 'IS NULL'.
+	 * - If the field name ends with an SQL operator specified in getSupportedOperators(),
+	 *   that operator will be used instead of '='.
+	 *   Example: ['banana_count >=' => 10]
+	 *
+	 * @param array $criteria A map of column names to values, see full PHPDoc for details
+	 *
+	 * @return string WHERE clause with positional parameter placeholders
+	 */
 	private function generateWhereClause(array &$criteria): string
 	{
 		if (empty($criteria)) {

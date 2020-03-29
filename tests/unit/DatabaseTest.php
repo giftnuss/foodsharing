@@ -128,11 +128,11 @@ class DatabaseTest extends \Codeception\Test\Unit
 		$this->assertEquals(1, $this->db->count('fs_quiz_session', $params));
 	}
 
-	public function testDehierarchizeArray()
+	public function testFlattenArray()
 	{
 		// use reflection to access private function
 		$class = new ReflectionClass($this->db);
-		$method = $class->getMethod('dehierarchizeArray');
+		$method = $class->getMethod('flattenArray');
 		$method->setAccessible(true);
 
 		// without keys
