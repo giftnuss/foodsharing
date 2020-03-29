@@ -9,13 +9,7 @@
         class="container"
       >
         <div id="topbar-navleft">
-          <a
-            :href="$url('home')"
-            :aria-label="$i18n('home.title')"
-            class="navbar-brand mr-2"
-          >
-            food<span>shar<span>i</span>ng</span>
-          </a>
+          <Logo />
           <login v-if="!isMobile" />
           <menu-loggedout
             v-if="isMobile"
@@ -34,14 +28,7 @@
         class="container"
       >
         <div id="topbar-navleft">
-          <a
-            :href="$url('dashboard')"
-            :aria-label="$i18n('dashboard.title')"
-            class="navbar-brand"
-          >
-            food<span>shar<span>i</span>ng</span>
-          </a>
-          <ul class="navbar-nav flex-row no-collapse">
+          <Logo class="small" />
             <li
               v-if="!hasFsRole"
               class="nav-item ml-2"
@@ -196,6 +183,7 @@ import MenuUser from './MenuUser'
 import Search from './Search'
 import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
+import Logo from './Logo'
 
 export default {
   components: {
@@ -214,7 +202,8 @@ export default {
     MenuBells,
     MenuUser,
     Search,
-    Login
+    Login,
+    Logo
   },
   directives: { VBTooltip },
   props: {
@@ -284,36 +273,6 @@ export default {
 
     .container {
         max-width: 1000px;
-    }
-
-    // logo
-    .navbar-brand {
-        font-family: 'Alfa Slab One',serif;
-        color: #ffffff;
-        margin-right: 0;
-        font-size: 1.1rem;
-        span {
-            color: #64ae25;
-        }
-        span span {
-            position: relative;
-            &:hover::before {
-                content: '♥';
-                color: red;
-                position: absolute;
-                font-size: 0.5em;
-                margin-top: -0.04em;
-                margin-left: -0.085em;
-            }
-        }
-    }
-    @media (max-width: 680px) {
-        & .navbar-brand {
-            font-size: 0.9rem;
-        }
-        &.loggedIn .navbar-brand {
-            font-size: 0.4rem;
-        }
     }
 
     @media (max-width: 630px) {
