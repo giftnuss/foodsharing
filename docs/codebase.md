@@ -49,7 +49,7 @@ A: The server has 32G of memory, currently. Server stats:
 * [munin](https://dragonfruit-admin.foodsharing.network/munin/system-week.html)
 * [grafana](https://grafana.yunity.org/?orgId=1) (only avaiable for a few people)
 
-The current email load is high, we get spam-flagged a lot, so in the future we'll work towards sending less email. 
+The current email load is high, we get spam-flagged a lot, so in the future we need to introduce (more) granular email settings to users. 
 (E-mail handling: we have currently more than one server for mails.)
 When we use a third party service, we sometimes run into problems (photon, map tiles).
 
