@@ -29,6 +29,7 @@ class StatsmanGateway extends BaseGateway
 						   INNER JOIN fs_abholer a ON a.betrieb_id = b.id
 						   INNER JOIN fs_fetchweight m ON m.id = b.abholmenge
 						   WHERE b.id = ' . $storeId . '
+						   AND a.confirmed = 1
 						   GROUP BY a.`date`'
 		);
 	}

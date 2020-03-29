@@ -2,10 +2,53 @@
 
 namespace Foodsharing\Modules\Store;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Helpers\WeightHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
 
 class StoreView extends View
 {
+	private $weightHelper;
+
+	public function __construct(
+			\Twig\Environment $twig,
+			Utils $viewUtils,
+			Session $session,
+			SanitizerService $sanitizerService,
+			PageHelper $pageHelper,
+			TimeHelper $timeHelper,
+			ImageService $imageService,
+			RouteHelper $routeHelper,
+			IdentificationHelper $identificationHelper,
+			DataHelper $dataHelper,
+			TranslationHelper $translationHelper,
+			WeightHelper $weightHelper
+			) {
+		$this->weightHelper = $weightHelper;
+		parent::__construct(
+						$twig,
+						$viewUtils,
+						$session,
+						$sanitizerService,
+						$pageHelper,
+						$timeHelper,
+						$imageService,
+						$routeHelper,
+						$identificationHelper,
+						$dataHelper,
+						$translationHelper
+						);
+	}
+
 	public function dateForm()
 	{
 		return
@@ -146,5 +189,54 @@ class StoreView extends View
 			]]),
 			$this->v_utils->v_form_select('abholmenge', ['values' => $weightArray])
 		]);
+	}
+
+	public function bubble(array $store): string
+	{
+		$b = $store;
+		$verantwortlich = '<ul class="linklist">';
+		foreach ($b['foodsaver'] as $fs) {
+			if ($fs['verantwortlich'] == 1) {
+				$verantwortlich .= '
+			<li><a style="background-color:transparent;" href="/profile/' . (int)$fs['id'] . '">' . $this->imageService->avatar($fs, 50) . '</a></li>';
+			}
+		}
+		$verantwortlich .= '</ul>';
+
+		$besonderheiten = '';
+
+		$count_info = '';
+		$activeFoodSaver = count($b['foodsaver']);
+		$jumperFoodSaver = count($b['springer']);
+		$count_info .= '<div>' . $this->translationHelper->sv('store_info', ['active' => $activeFoodSaver, 'jumper' => $jumperFoodSaver]) . '</div>';
+		$pickup_count = (int)$b['pickup_count'];
+		if ($pickup_count > 0) {
+			$count_info .= '<div>' . $this->translationHelper->sv('store_info_pickupcount', ['pickupCount' => $pickup_count]) . '</div>';
+			$fetch_weight = round(floatval(($pickup_count * $this->weightHelper->mapIdToKilos($b['abholmenge']))), 2);
+			$count_info .= '<div>' . $this->translationHelper->sv('store_info_pickupweight', ['fetch_weight' => $fetch_weight]) . '</div>';
+		}
+
+		$time = strtotime($b['begin']);
+		if ($time > 0) {
+			$count_info .= '<div> ' . $this->translationHelper->sv('store_info_cooperation', ['startTime' => $this->translationHelper->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time)]) . '</div>';
+		}
+
+		if ((int)$b['public_time'] != 0) {
+			$b['public_info'] .= '<div>' . $this->translationHelper->sv('store_info_freq', ['freq' => $this->translationHelper->s('pubbtime_' . (int)$b['public_time'])]) . '</div>';
+		}
+
+		if (!empty($b['public_info'])) {
+			$besonderheiten = $this->v_utils->v_input_wrapper($this->translationHelper->s('info'), $b['public_info'], 'bcntspecial');
+		}
+
+		$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
+		$html = $this->v_utils->v_input_wrapper($this->translationHelper->s('status'), $status . '<span class="bstatus">' . $this->translationHelper->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
+			' . $this->v_utils->v_input_wrapper($this->translationHelper->s('foodsaver'), $verantwortlich, 'bcntverantwortlich') . '
+			' . $besonderheiten . '
+			<div class="ui-padding">
+				' . $this->v_utils->v_info('' . $this->translationHelper->s('team_status_' . $b['team_status']) . '') . '
+			</div>';
+
+		return $html;
 	}
 }

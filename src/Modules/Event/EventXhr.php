@@ -112,7 +112,7 @@ class EventXhr extends Control
 		}
 		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->addInviteStatus(
 				$_GET['id'],
-				$this->session->id(),
+				[$this->session->id()],
 				$_GET['s']
 			)) {
 			return [

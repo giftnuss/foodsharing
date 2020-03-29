@@ -50,6 +50,11 @@ class WallPostPermissions
 			case 'fsreport':
 				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
 				break;
+			case 'application':
+				// Uses Session::isAdminForAWorkGroup() instead of the more appropriate and specific Session::isAdminFor() since
+				// there's no good way to pass the required region id at the moment
+				$result = $fsId && $this->session->isAdminForAWorkGroup();
+				break;
 			default:
 				$result = false;
 				break;
@@ -83,6 +88,9 @@ class WallPostPermissions
 			case 'usernotes':
 			case 'fsreport':
 				$result = $this->mayReadWall($fsId, $target, $targetId);
+				break;
+			case 'fairteiler':
+				$result = $this->session->may('orga');
 				break;
 			default:
 				$result = false;

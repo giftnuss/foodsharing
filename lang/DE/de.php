@@ -233,5 +233,29 @@ $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
 $g_lang['changelog'] = 'Changelog';
 $g_lang['wallboard'] = 'Pinnwand';
 
+$g_lang['you'] = 'Du';
+$g_lang['store'] = 'Betrieb';
+$g_lang['message_notification_unnamed_conversation'] = '{var} hat dir geschrieben.';
+$g_lang['message_notification_named_conversation']	= '{foodsaver} hat dir in {conversation} geschrieben.';
+
+$g_lang['error_ajax'] = 'Das hat leider nicht geklappt. Vielleicht funktioniert deine Internetverbindung gerade nicht. Lade die Seite neu und probiere es noch mal.';
+
+$g_lang['push_notifications'] = 'Push-Benachrichtigungen';
+$g_lang['push_notifications_not_supported'] = 'Dein Browser unterstützt leider keine Push-Benarichtigungen.';
+$g_lang['push_notifications_denied_by_user'] = 'Du hast das Anzeigen von Push-Benachrichtigungen durch foodsharing in deinem Browser abgelehnt. Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für foodsharing und lade die Seite neu.';
+$g_lang['push_notifications_activation_explanation'] = 'Wenn du Push-Benachrichtigungen für dieses Gerät aktivierst, werden Chat-Nachrichten zukünftig direkt an dein Gerät zugestellt, auch dann, wenn du nicht eingeloggt bist. Dein Gerät zeigt dann eine entprechende Benachrichtigung bzw. reagiert mit einem Ton oder einer Vibration.';
+$g_lang['push_notifications_activation_button_text'] = 'Push-Benachrichtigungen aktivieren';
+$g_lang['push_notifications_activation_success'] = 'Push-Benachrichtigungen erfolgreich aktiviert';
+$g_lang['push_notifications_deactivation_explanation'] = 'Auf diesem Gerät sind die Push-Benachrichtigungen von foodsharing eingeschaltet. Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig nicht mehr direkt an dein Gerät zugestellt. Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist und reagiert auch nicht mehr mit einem Ton oder einer Vibration.';
+$g_lang['push_notifications_deactivation_button_text'] = 'Push-Benachrichtigungen deaktivieren';
+$g_lang['push_notifications_deactivation_success'] = 'Push-Benachrichtigungen erfolgreich deaktivert';
+
+$g_lang['push_notifications_banner_heading'] = 'Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen.';
+$g_lang['push_notifications_banner_text'] = 'Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren.';
 $g_lang['no_email_to_states'] = 'Für dieses Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.';
 $g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';
+
+$g_lang['registration'] = 'Registrieren';
+$g_lang['you_are_already_register_please_logg_out_if_you_want_to_register_again'] = 'Du bist bereits registriert. Bitte logge Dich aus, wenn du dich erneut registrieren möchtest.';
+
+

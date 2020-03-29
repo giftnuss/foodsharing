@@ -10,6 +10,8 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Permissions\ProfilePermissions;
+use Foodsharing\Permissions\ReportPermissions;
 
 class ProfileXhr extends Control
 {
@@ -20,6 +22,8 @@ class ProfileXhr extends Control
 	private $regionGateway;
 	private $profileGateway;
 	private $storeGateway;
+	private $reportPermissions;
+	private $profilePermissions;
 
 	public function __construct(
 		ProfileView $view,
@@ -28,7 +32,9 @@ class ProfileXhr extends Control
 		RegionGateway $regionGateway,
 		MailboxGateway $mailboxGateway,
 		ProfileGateway $profileGateway,
-		StoreGateway $storeGateway
+		StoreGateway $storeGateway,
+		ReportPermissions $reportPermissions,
+		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
@@ -37,23 +43,24 @@ class ProfileXhr extends Control
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
 		$this->storeGateway = $storeGateway;
+		$this->reportPermissions = $reportPermissions;
+		$this->profilePermissions = $profilePermissions;
 
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
-			$this->profileGateway->setFsId($_GET['id']);
-			$fs = $this->profileGateway->getData($_GET['id']);
+			$fs = $this->profileGateway->getData($_GET['id'], $this->session->id(), $reportPermissions->mayHandleReports());
 
 			if (isset($fs['id'])) {
 				$this->foodsaver = $fs;
 				$this->foodsaver['mailbox'] = false;
-				if ((int)$fs['mailbox_id'] > 0 && $this->session->may('orga')) {
+				if ((int)$fs['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($fs['id'])) {
 					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname(
 							$fs['mailbox_id']
 						) . '@' . PLATFORM_MAILBOX_HOST;
 				}
 
-				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id']);
+				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $this->session->id());
 
 				$this->view->setData($this->foodsaver);
 			} else {
@@ -86,10 +93,10 @@ class ProfileXhr extends Control
 				];
 			}
 
-			$this->profileGateway->rate($foodsharerId, $rate, $type, $message);
+			$this->profileGateway->rate($foodsharerId, $rate, $type, $message, $this->session->id());
 
 			$comment = '';
-			if ($msg = $this->profileGateway->getRateMessage($foodsharerId)) {
+			if ($msg = $this->profileGateway->getRateMessage($foodsharerId, $this->session->id())) {
 				$comment = $msg;
 			}
 

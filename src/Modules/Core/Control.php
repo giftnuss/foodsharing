@@ -153,7 +153,6 @@ abstract class Control
 				}
 			}
 		}
-		$this->mem->updateActivity($this->session->id());
 		$this->metrics->addPageStatData(['controller' => $className]);
 	}
 
@@ -454,32 +453,6 @@ abstract class Control
 		}
 
 		return false;
-	}
-
-	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
-	{
-		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
-		if ((int)$info > 0) {
-			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = [];
-			}
-
-			if (!$this->mem->userIsActive($recip_id)) {
-				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
-					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->foodsaverGateway->getFoodsaver($recip_id);
-					$sender = $this->foodsaverGateway->getFoodsaver($sender_id);
-
-					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], [
-						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $sender['name'],
-						'name' => $foodsaver['name'],
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
-					]);
-				}
-			}
-		}
 	}
 
 	public function appout($data)

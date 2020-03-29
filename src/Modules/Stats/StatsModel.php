@@ -48,7 +48,8 @@ class StatsModel extends Db
 				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
 			WHERE
 			      fa.foodsaver_id = ' . $fs_id . '
-			  AND fa.date < now();
+			  AND fa.date < now()
+			  AND fa.confirmed = 1
 		')
 		) {
 			$savedWeight = $queryResult;

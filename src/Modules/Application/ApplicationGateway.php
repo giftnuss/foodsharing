@@ -7,8 +7,6 @@ use Foodsharing\Modules\Core\BaseGateway;
 class ApplicationGateway extends BaseGateway
 {
 	private const STATUS_ACTIVE = 1;
-	private const STATUS_TENTATIVE = 10;
-	private const STATUS_DENIED = 20;
 
 	public function getApplication($regionId, $fsId)
 	{
@@ -37,14 +35,9 @@ class ApplicationGateway extends BaseGateway
 		$this->updateActivityStatus($regionId, $foodsaverId, self::STATUS_ACTIVE);
 	}
 
-	public function deferApplication($regionId, $foodsaverId): void
-	{
-		$this->updateActivityStatus($regionId, $foodsaverId, self::STATUS_TENTATIVE);
-	}
-
 	public function denyApplication($regionId, $foodsaverId): void
 	{
-		$this->updateActivityStatus($regionId, $foodsaverId, self::STATUS_DENIED);
+		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => (int)$regionId, 'foodsaver_id' => (int)$foodsaverId]);
 	}
 
 	private function updateActivityStatus($regionId, $foodsaverId, $value): int

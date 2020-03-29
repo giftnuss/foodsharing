@@ -39,7 +39,7 @@
               v-b-tooltip.hover
               type="button"
               class="btn btn-sm"
-              title="Filter leeren"
+              :title="$i18n('storelist.emptyfilters')"
               @click="clearFilter"
             >
               <i class="fas fa-times" />
@@ -71,8 +71,7 @@
           responsive
         >
           <template
-            slot="status"
-            slot-scope="row"
+            v-slot:cell(status)="row"
             :v-if="isMobile"
           >
             <div class="text-center">
@@ -80,8 +79,7 @@
             </div>
           </template>
           <template
-            slot="name"
-            slot-scope="row"
+            v-slot:cell(name)="row"
           >
             <a
               :href="$url('store', row.item.id)"
@@ -91,8 +89,7 @@
             </a>
           </template>
           <template
-            slot="actions"
-            slot-scope="row"
+            v-slot:cell(actions)="row"
           >
             <b-button
               size="sm"
@@ -102,22 +99,21 @@
             </b-button>
           </template>
           <template
-            slot="row-details"
-            slot-scope="row"
+            v-slot:row-details="row"
           >
             <b-card>
               <div class="details">
                 <p>
-                  <strong>Anschrift:</strong><br>
+                  <strong>{{ $i18n('storelist.addressdata') }}</strong><br>
                   {{ row.item.address }} <a
                     :href="mapLink(row.item)"
                     class="nav-link details-nav"
-                    title="Karte"
+                    :title="$i18n('storelist.map')"
                   >
                     <i class="fas fa-map-marker-alt" />
                   </a><br> {{ row.item.zipcode }} {{ row.item.city }}
                 </p>
-                <p><strong>Eingetragen:</strong> {{ row.item.added }}</p>
+                <p><strong>{{ $i18n('storelist.entered') }}</strong> {{ row.item.added }}</p>
               </div>
             </b-card>
           </template>
@@ -164,6 +160,7 @@ import {
   BCard
 } from 'bootstrap-vue'
 import StoreStatusIcon from './StoreStatusIcon.vue'
+import i18n from '@/i18n'
 
 export default {
   components: { BCard, BTable, BButton, BPagination, BFormSelect, StoreStatusIcon },
@@ -194,52 +191,61 @@ export default {
       perPage: 20,
       filterText: '',
       filterStatus: null,
-      fields: {
-        status: {
-          label: 'Status',
+      fields: [
+        {
+          key: 'status',
+          label: i18n('storelist.status'),
           tdClass: 'status',
           sortable: true
         },
-        name: {
-          label: 'Name',
+        {
+          key: 'name',
+          label: i18n('storelist.name'),
           sortable: true
         },
-        address: {
-          label: 'Straße',
+        {
+          key: 'address',
+          label: i18n('storelist.address'),
           sortable: true
         },
-        zipcode: {
-          label: 'PLZ',
+        {
+          key: 'zipcode',
+          label: i18n('storelist.zipcode'),
           sortable: true
         },
-        city: {
-          label: 'Ort',
+        {
+          key: 'city',
+          label: i18n('storelist.city'),
           sortable: true
         },
-        added: {
-          label: 'Eingetragen',
+        {
+          key: 'added',
+          label: i18n('storelist.added'),
           sortable: true
         },
-        region: {
-          label: 'Bezirk',
+        {
+          key: 'region',
+          label: i18n('storelist.region'),
           sortable: true
         },
-        geo: {
-          label: 'geo',
+        {
+          key: 'geo',
+          label: i18n('storelist.geo'),
           sortable: false
         },
-        actions: {
+        {
+          key: 'actions',
           label: '',
           sortable: false
         }
-      },
+      ],
       statusOptions: [
         { value: null, text: 'Status' },
-        { value: 1, text: 'Noch kein Kontakt' },
-        { value: 2, text: 'Verhandlungen laufen' },
-        { value: 3, text: 'In Kooperation' },
-        { value: 4, text: 'Will nicht kooperieren' },
-        { value: 6, text: 'Wirft nichts weg' }
+        { value: 1, text: i18n('storelist.nocontact') },
+        { value: 2, text: i18n('storelist.inprogress') },
+        { value: 3, text: i18n('storelist.cooperating') },
+        { value: 4, text: i18n('storelist.notcooperating') },
+        { value: 6, text: i18n('storelist.nowaste') }
       ]
     }
   },
@@ -262,21 +268,20 @@ export default {
     },
     fieldsFiltered: function () {
       const regions = []
-      const fields = {}
+      const fields = []
       this.stores.map(function (value) {
         if (!regions.includes(value.region)) regions.push(value.region)
       })
-      if (window.innerWidth > 800 && window.innerHeight > 600) {
-        for (const key in this.fields) {
-          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
-          else if (key !== 'region' && key !== 'geo' && key !== 'actions') fields[key] = this.fields[key]
+      const displayableFields = (window.innerWidth > 800 && window.innerHeight > 600)
+        ? ['region', 'geo', 'actions']
+        : ['region', 'geo', 'address', 'added', 'zipcode']
+
+      this.fields.forEach(field => {
+        if ((field.key === 'region' && regions.length > 1) ||
+          !displayableFields.includes(field.key)) {
+          fields.push(field)
         }
-      } else {
-        for (const key in this.fields) {
-          if (key === 'region' && regions.length > 1) fields[key] = this.fields[key]
-          else if (key !== 'region' && key !== 'geo' && key !== 'address' && key !== 'added' && key !== 'zipcode') fields[key] = this.fields[key]
-        }
-      }
+      })
 
       return fields
     }

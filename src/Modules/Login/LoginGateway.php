@@ -6,16 +6,19 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Legal\LegalGateway;
 
 class LoginGateway extends BaseGateway
 {
 	private $emailHelper;
 	private $translationHelper;
+	private $legalGateway;
 
-	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db)
+	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db, LegalGateway $legalGateway)
 	{
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->legalGateway = $legalGateway;
 
 		parent::__construct($db);
 	}
@@ -114,6 +117,8 @@ class LoginGateway extends BaseGateway
 				'newsletter' => (int)$data['newsletter'],
 				'geschlecht' => (int)$data['gender'],
 				'anmeldedatum' => $this->db->now(),
+				'privacy_notice_accepted_date' => $this->legalGateway->getPnVersion(),
+				'privacy_policy_accepted_date' => $this->legalGateway->getPpVersion(),
 				'token' => strip_tags($token),
 				'beta' => 1
 			]

@@ -125,7 +125,7 @@ services:
 
   redis:
     container_name: foodsharing_ci_redis
-    image: redis:5.0-stretch
+    image: redis:5.0.8-alpine
     expose:
       - 6379
 

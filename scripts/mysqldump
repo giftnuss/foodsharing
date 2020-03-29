@@ -2,6 +2,9 @@
 
 set -o errexit
 
-source $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
 
-exec-in-container-asroot db mysqldump -p$MYSQL_PASSWORD foodsharing "$@"
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
+
+exec-in-container-asroot db mysqldump -p"$MYSQL_PASSWORD" foodsharing "$@"

@@ -195,6 +195,11 @@ class SettingsView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', [
+			$this->v_utils->v_input_wrapper(
+				$this->translationHelper->s('push_notifications'),
+				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
+						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
+			),
 			$this->v_utils->v_form_radio('newsletter', [
 				'desc' => $this->translationHelper->s('newsletter_desc'),
 				'values' => [
@@ -445,7 +450,7 @@ class SettingsView extends View
 	public function delete_account(int $fsId)
 	{
 		$content =
-			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
+			'<button type="button" id="delete-account" class="button danger" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
 		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->translationHelper->s('reference'));
 
 		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);

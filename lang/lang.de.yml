@@ -60,7 +60,8 @@ group:
 legal:
   pp: Datenschutzerklärung
   acknowledge: Nimmst du die Vereinbarung zur Kenntnis?
-  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.
+  not_acknowledge_pp_description: Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebene Datenschutzerklärung zur Kenntnis nehmen.
+  dont_agree: Ich bin nicht einverstanden mit der Verarbeitung meiner Daten und
   agree_privacy_policy: Ich habe die Datenschutzvereinbarung zur Kenntnis genommen.
   delete_account: Ich möchte meinen Account löschen.
   actions:
@@ -96,11 +97,11 @@ register:
   login_failed: Diese Zugangdsdaten stimmen leider so nicht.
   mail_hint: WICHTIG - Achte auf korrekte Schreibweise!
   requiredFields: Pflichteingabe
-  birthdate_hint: Nähere Information findest du in der Datenschutzerklärung in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver.
+  birthdate_hint: Nähere Information findest du in der <a href="?page=legal" target="_blank">Datenschutzerklärung</a> in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver.
   login_email: Deine E-Mail-Adresse
   email_required: Eine E-Mail-Adresse wird benötigt.
   email_invalid: Die E-Mail-Adresse ist ungültig.
-  login_passwd1: Passwort
+  login_passwd1: Passwort (mind. 8 Zeichen)
   login_passwd2: Passwortwiederholung
   password_required: Es wird ein Passwort benötigt.
   password_minLength: Das Passwort muss mindestens aus 8 Zeichen bestehen.
@@ -134,7 +135,7 @@ register:
   error_name: Bitte gib einen Namen ein
   error_email: Mit Deiner E-Mail-Adresse stimmt etwas nicht
   error_passwd: Dein Passwort muss mindestens 8 Zeichen lang sein
-  error_birthdate: Beispiel 2001-03-25 (JJJJ-MM-DD). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
+  error_birthdate: Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
   activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
   pass1: Dein neues gewünschtes Passwort
@@ -421,3 +422,22 @@ menu:
 newsletter:
   test_email_sent: E-Mail wurde versendet!
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
+
+storelist:
+ entered: "Eingetragen:"
+ status: Status
+ name: Name
+ address: Straße
+ addressdata: Anschrift
+ zipcode: PLZ
+ city: Ort
+ added: Eingetragen
+ region: Bezirk
+ geo: geo
+ nocontact: Noch kein Kontakt
+ inprogress: Verhandlungen laufen
+ cooperating: In Kooperation
+ notcooperating: Will nicht kooperieren
+ nowaste: Wirft nichts weg
+ emptyfilters: Filter leeren
+ map: Karte

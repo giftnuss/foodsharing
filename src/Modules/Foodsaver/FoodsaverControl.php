@@ -174,21 +174,4 @@ class FoodsaverControl extends Control
 
 		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
 	}
-
-	public function register()
-	{
-		if ($this->session->may()) {
-			$this->flashMessageHelper->info($this->translationHelper->s('you_are_already_register_please_logg_out_if_you_want_to_register_again'));
-			$this->routeHelper->go('/?page=dashboard');
-		} else {
-			$this->pageHelper->addBread('Registrieren');
-			$this->pageHelper->addTitle('Registrieren');
-
-			$legal = $this->contentGateway->get(28);
-			$legal['body'] = html_entity_decode($legal['body']);
-			$legal['body'] = strip_tags(str_replace(['<p>', '<br>'], '', $legal['body']));
-			$legal['body'] = strip_tags(str_replace(['<br />', '</p>'], "\n", $legal['body']));
-			$this->pageHelper->addContent($this->view->registerForm($legal['body']));
-		}
-	}
 }

@@ -1,10 +1,11 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-bullhorn"
+    v-b-tooltip="$i18n('menu.tooltips.activities')"
     :no-caret="!displayArrow"
-    :tooltip="$i18n('menu.tooltips.activities')"
     right
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-bullhorn" />
       <span v-if="displayText">
         {{ $i18n('menu.tooltips.activities') }}
@@ -58,13 +59,11 @@
     >
       foodsharing Festival
     </a>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { NavItemDropdown },
   props: {
     displayArrow: {
       type: Boolean,

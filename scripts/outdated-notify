@@ -21,13 +21,16 @@ json_escape () {
 send_to_slack () {
   local title="$1"
   local content="$2"
-  local text="$(printf '*%s*\n\n```\n%s\n```\n' "$title" "$content")"
-  local escaped=$(json_escape "$text")
-  local payload=$(printf '{
+  text="$(printf "*%s*\n\n``$(\n%s'\n')``\n" "$title" "$content")"
+  local text
+  escaped=$(json_escape "$text")
+  local escaped
+  payload=$(printf '{
     "username": "Outdated Bot",
     "channel": "#fs-outdated",
     "text": %s
   }' "$escaped")
+  local payload
   echo "Posting: $title"
   curl \
     -X POST \
@@ -39,14 +42,14 @@ send_to_slack () {
 
 composer_outdated () {
   local dir="$1"
-  echo "$(cd "$dir" && composer outdated -D)"
+  cd "$dir" && composer outdated -D
 }
 
 yarn_outdated () {
   local dir="$1"
-  echo "$(cd "$dir" && yarn outdated | egrep -v '<red|yellow|green>|Color legend')"
+  cd "$dir" && yarn outdated | grep -E -v '<red|yellow|green>|Color legend'
 }
 
-send_to_slack 'Outdated PHP dependencies' "$(composer_outdated "$basedir")"
-send_to_slack 'Outdated Javascript dependencies (`client/`)' "$(yarn_outdated "$basedir/client")"
-send_to_slack 'Outdated Javascript dependencies (`chat/`)' "$(yarn_outdated "$basedir/chat")"
+send_to_slack "Outdated PHP dependencies" "$(composer_outdated "$basedir")"
+send_to_slack "Outdated Javascript dependencies ($(client/))" "$(yarn_outdated "$basedir/client")"
+send_to_slack "Outdated Javascript dependencies ($(chat/))" "$(yarn_outdated "$basedir/chat")"

@@ -20,7 +20,7 @@ $csrf_whitelist = [
 	// 'activeSwitch',
 	// 'grabInfo',
 	// 'childBezirke',
-	'bBubble',
+	// 'bBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',
@@ -75,7 +75,6 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-$mem->updateActivity($session->id());
 if (isset($_GET['f'])) {
 	if (!in_array($action, $csrf_whitelist)) {
 		if (!$session->isValidCsrfHeader()) {

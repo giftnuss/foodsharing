@@ -372,7 +372,6 @@ class Session
 			$fs_id = $this->id();
 		}
 
-		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
 			throw new \Exception('Foodsaver details not found in database.');
