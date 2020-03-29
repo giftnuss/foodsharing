@@ -197,7 +197,8 @@ store:
   may_not_referred_to_in_public: Bitte diesen Betrieb niemals öffentlich (z.<span style="white-space:nowrap">&thinsp;</span>B. bei Essenskörben, Facebook oder Presseanfragen) nennen!
   address: Adresse
   my_last_pickup: Meine letzte Abholung
-
+  days: Tagen
+  days_before: vor
 
 pickup:
   dates: Abholtermine

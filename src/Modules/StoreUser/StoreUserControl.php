@@ -149,13 +149,13 @@ class StoreUserControl extends Control
 				foreach ($store['foodsaver'] as $fs) {
 					if ($fs['id'] === $this->session->id() && $fs['last_fetch'] != null) {
 						$lastFetchDate = Carbon::createFromTimestamp($fs['last_fetch']);
-						/*$info .= $this->v_utils->v_input_wrapper($this->translationHelper->s('my_last_pickup'), $lastFetchDate->format('d.m.Y') . ' (' . $this->translationHelper->s('prefix_Ago')
-								. ' ' . Carbon::now()->diff($lastFetchDate)->days . ' ' . $this->translationHelper->s('days') . ')');*/
 						break;
 					}
 				}
 
-				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', ['particularitiesDescription' => $store['besonderheiten'], 'lastFetchDate' => $lastFetchDate, 'street' => $store['str'], 'housenumber' => $store['hsnr'], 'postcode' => $store['plz'], 'city' => $store['stadt'], 'storeTitle' => $store['name'], 'collectionQuantity' => $store['abholmenge'], 'press' => $store['presse']]), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', ['particularitiesDescription' => $store['besonderheiten'],
+				'lastFetchDate' => $lastFetchDate, 'street' => $store['str'], 'housenumber' => $store['hsnr'], 'postcode' => $store['plz'], 'city' => $store['stadt'],
+				'storeTitle' => $store['name'], 'collectionQuantity' => $store['abholmenge'], 'press' => $store['presse']]), CNT_RIGHT);
 
 				/* options menu */
 				$menu = [];

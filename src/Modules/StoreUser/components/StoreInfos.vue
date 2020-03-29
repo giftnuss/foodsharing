@@ -58,13 +58,16 @@
           class="wrapper-label ui-widget"
           for="input"
         > {{ $i18n('store.my_last_pickup') }}</label>
-        {{ lastFetchDate }}
+        {{ formatLastFetchDate() }} ({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { format } from 'date-fns'
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
+
 export default {
   props: {
     particularitiesDescription: {
@@ -103,6 +106,15 @@ export default {
   data () {
     return {
       press: 0
+    }
+  },
+  methods: {
+    formatLastFetchDate () {
+      return format(new Date(this.lastFetchDate), 'dd.MM.yyyy')
+    },
+
+    distanceInDays () {
+      return differenceInCalendarDays(new Date(), new Date(this.lastFetchDate))
     }
   }
 }
