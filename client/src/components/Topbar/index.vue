@@ -3,7 +3,10 @@
     id="topbar"
     :class="{bootstrap:true, loggedIn}"
   >
-    <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
+    <b-navbar
+      toggleable="md"
+      class="navbar fixed-top navbar-expand-md navbar-dark bg-primary "
+    >
       <div
         v-if="!loggedIn"
         class="container"
@@ -29,6 +32,7 @@
       >
         <div id="topbar-navleft">
           <Logo class="small" />
+          <b-navbar-nav class="flex-row no-collapse">
             <li
               v-if="!hasFsRole"
               class="nav-item ml-2"
@@ -80,7 +84,7 @@
             </li>
             <menu-messages v-if="isMobile" />
             <menu-bells v-if="isMobile" />
-          </ul>
+          </b-navbar-nav>
           <b-navbar-toggle
             v-if="!hasFsRole"
             target="nav_collapse"
@@ -99,7 +103,7 @@
           id="nav_collapse"
           is-nav
         >
-          <ul class="navbar-nav ml-auto">
+          <b-navbar-nav class="ml-auto">
             <li
               v-b-tooltip.hover.bottom
               title="Home"
@@ -158,10 +162,10 @@
               :avatar="image"
               :is-mobile="isMobile"
             />
-          </ul>
+          </b-navbar-nav>
         </b-collapse>
       </div>
-    </div>
+    </b-navbar>
   </div>
 </template>
 
@@ -284,6 +288,11 @@ export default {
         align-items: center;
     }
     .navbar-collapse.collapse, .navbar-collapse.collapsing {
+        &.show {
+          // Only when menu is shown. Fixes problem that list of dropdown items is to long.
+          max-height: 70vh;
+          overflow: auto;
+        }
         .navbar-nav {
             align-items: start;
         }
