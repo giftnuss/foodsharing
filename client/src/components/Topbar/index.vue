@@ -11,6 +11,7 @@
         <div id="topbar-navleft">
           <a
             :href="$url('home')"
+            :aria-label="$i18n('home.title')"
             class="navbar-brand mr-2"
           >
             food<span>shar<span>i</span>ng</span>
@@ -35,6 +36,7 @@
         <div id="topbar-navleft">
           <a
             :href="$url('dashboard')"
+            :aria-label="$i18n('dashboard.title')"
             class="navbar-brand"
           >
             food<span>shar<span>i</span>ng</span>
@@ -50,10 +52,10 @@
               >
                 <i class="fas fa-rocket" />
                 <small v-if="isMobile">
-                  Werde Foodsaver*in
+                  {{ $i18n('foodsaver.upgrade_to') }}
                 </small>
                 <span v-else>
-                  Werde Foodsaver*in
+                  {{ $i18n('foodsaver.upgrade_to') }}
                 </span>
               </a>
             </li>
@@ -80,11 +82,12 @@
             >
               <a
                 :href="$url('map')"
+                :aria-label="$i18n('map.title')"
                 class="nav-link"
               >
                 <i class="fas fa-map-marker-alt" />
                 <span v-if="!loggedIn || !hasFsRole">
-                  Karte
+                  {{ $i18n('map.title') }}
                 </span>
               </a>
             </li>
@@ -117,18 +120,19 @@
             >
               <a
                 :href="$url('home')"
+                :aria-label="$i18n('home.title')"
                 class="nav-link"
               >
                 <i class="fas fa-home" />
                 <span class="d-md-none">
-                  Startseite
+                  {{ $i18n('home.title') }}
                 </span>
               </a>
             </li>
             <li
               v-if="isMobile"
               v-b-tooltip.hover.bottom
-              title="Karte"
+              :title="$i18n('map.title')"
               class="nav-item"
             >
               <a
@@ -137,7 +141,7 @@
               >
                 <i class="fas fa-map-marker-alt" />
                 <span class="d-md-none">
-                  Karte
+                  {{ $i18n('map.title') }}
                 </span>
               </a>
             </li>
@@ -257,7 +261,7 @@ export default {
   },
   computed: {
     someAdminRights () {
-      return this.isOrgaTeam || this.may.editBlog || this.may.editQuiz || this.may.handleReports
+      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes || this.may.administrateNewsletterEmail
     },
     isMobile () {
       return this.ui.wSM || this.ui.wXS
@@ -442,15 +446,6 @@ export default {
     }
 }
 
-// move the main content below the topbar
-div#main {
-  margin-top: 45px;
-  @media (max-width: 630px) {
-      // two line topbar
-      margin-top: 133px;
-  }
-}
-
 // following is applied on the initial <div> before the vue component gets injected
 // it shows an brown bar as a placeholder for the actual topbar
 #vue-topbar {
@@ -461,5 +456,15 @@ div#main {
     height: 37px;
     width: 100%;
     z-index: 1200;
+}
+
+#topbar {
+  height: 37px;
+  @media (max-width: 992px) {
+      height: 45px;
+  }
+  @media (max-width: 415px) {
+      height: 80px;
+  }
 }
 </style>

@@ -9,19 +9,19 @@
       </div>
       <div class="col-10">
         <div class="text-truncate">
-          <b>{{ basket.description }}</b>
+          <strong>{{ basket.description }}</strong>
         </div>
         <small
           v-if="!basket.requests.length"
           class="text-muted"
         >
-          Bisher keine Anfragen erhalten
+          {{ $i18n('basket.no_requests') }}
         </small>
         <h5
           v-if="basket.requests.length"
           class="text-muted mb-1 pl-2"
         >
-          angefragt von
+          {{ $i18n('basket.requested_by') }}
         </h5>
         <div
           v-if="basket.requests.length"
@@ -29,10 +29,10 @@
         >
           <a
             v-for="req in basket.requests"
-            :key="req.time"
-            @click.prevent="openChat(req.user.id, $event)"
+            :key="req.id"
             href="#"
             class="list-group-item list-group-item-action p-1 request"
+            @click.prevent="openChat(req.user.id, $event)"
           >
             <div class="row pl-1 align-items-center">
               <div class="col-1 text-right pt-1">
@@ -43,7 +43,7 @@
                 />
               </div>
               <div class="col-10 pt-1">
-                <div class="row">
+                <div class="row food-basket-create-test-class">
                   <h6 class="col text-truncate mb-1">
                     {{ req.user.name }}
                   </h6>
@@ -53,10 +53,10 @@
                   <div class="col text-right text-muted hover">
                     <a
                       v-b-tooltip
-                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
+                      :title="$i18n('basket.request_close')"
                       href="#"
                       class="m-1 btn btn-sm btn-secondary"
-                      title="Essensanfrage abschließen"
+                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
                     >
                       <i class="fas fa-times" />
                     </a>

@@ -58,10 +58,10 @@
 
 <script>
 
-import { BTable, BTabs, BTab } from 'bootstrap-vue'
+import { BCard, BTable, BTabs, BTab } from 'bootstrap-vue'
 
 export default {
-  components: { BTable, BTabs, BTab },
+  components: { BCard, BTable, BTabs, BTab },
   props: {
     regionName: {
       type: String,
@@ -79,9 +79,10 @@ export default {
   data () {
     return {
       sortBy: 'gender',
-      sortDesc: 'true',
-      fields: {
-        gender: {
+      sortDesc: true,
+      fields: [
+        {
+          key: 'gender',
           label: this.$i18n('genderlist.gender_table_header'),
           formatter: item => {
             switch (item) {
@@ -99,11 +100,12 @@ export default {
           },
           sortable: true
         },
-        NumberOfGender: {
+        {
+          key: 'NumberOfGender',
           label: this.$i18n('genderlist.number_table_header'),
           sortable: true
         }
-      }
+      ]
     }
   }
 }

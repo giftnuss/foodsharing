@@ -1,0 +1,180 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Foodsharing\:
+        resource: '../../src/*'
+        exclude: '../../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php,Modules/PushNotification/Notification}'
+
+    Foodsharing\Lib\Session:
+        calls:
+        - [initIfCookieExists]
+
+    Twig_Loader_Filesystem:
+        class: Twig\Loader\FilesystemLoader
+        calls:
+            - [addPath, ['views']]
+            - [addPath, ['vendor/symfony/twig-bridge/Resources/views/']]
+
+    Twig\Environment:
+        arguments:
+            - '@Twig_Loader_Filesystem'
+            -
+                cache: 'cache/.views-cache'
+                debug: '@=constant("FS_ENV")!="prod"'
+                strict_variables: true
+        calls:
+            - [addRuntimeLoader, ['@Twig\RuntimeLoader\ContainerRuntimeLoader']]
+            - [addExtension, ['@Symfony\Bridge\Twig\Extension\TranslationExtension']]
+            - [addExtension, ['@Symfony\Bridge\Twig\Extension\FormExtension']]
+            - [addExtension, ['@Twig_Extension_Debug']]
+            - [addExtension, ['@Twig_Extension_Intl']]
+            - [addExtension, ['@Foodsharing\Lib\TwigExtensions']]
+            - [addExtension, ['@Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension']]
+
+    Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension: ~
+
+    Twig:
+        alias: Twig\Environment
+
+    Twig\RuntimeLoader\ContainerRuntimeLoader:
+
+    Twig_Extension_Debug:
+        class: Twig\Extension\DebugExtension
+
+    Twig_Extension_Intl:
+        class: Twig\Extra\Intl\IntlExtension
+
+    Symfony\Bridge\Twig\Extension\TranslationExtension:
+        class: Symfony\Bridge\Twig\Extension\TranslationExtension
+        arguments:
+            - '@translator'
+
+    Symfony\Bridge\Twig\Extension\FormExtension:
+
+    twig.form_engine:
+        class: Symfony\Bridge\Twig\Form\TwigRendererEngine
+        arguments: [['Form/form_div_layout.html.twig', 'partials/fields.html.twig']]
+
+    Symfony\Component\Form\FormRenderer:
+        class: Symfony\Component\Form\FormRenderer
+        arguments: ['@twig.form_engine']
+
+    translator.xliff_file_loader:
+        class: Symfony\Component\Translation\Loader\XliffFileLoader
+
+    translator.yaml_file_loader:
+        class: Symfony\Component\Translation\Loader\YamlFileLoader
+
+    translator:
+        class: Symfony\Component\Translation\Translator
+        arguments:
+            - 'de'
+        calls:
+            - ['addLoader', ['xlf', '@translator.xliff_file_loader']]
+            - ['addLoader', ['yml', '@translator.yaml_file_loader']]
+            - ['addResource', ['xlf', 'vendor/symfony/validator/Resources/translations/validators.de.xlf', 'de', 'messages']]
+            - ['addResource', ['yml', 'lang/lang.de.yml', 'de', 'messages']]
+            - ['setFallbackLocales', [['de']]]
+
+    Symfony\Contracts\Translation\TranslatorInterface: '@translator'
+
+    markdown.nohtml:
+        class: \Parsedown
+        calls:
+            - ['setSafeMode', [true]]
+            - ['setMarkupEscaped', [false]]
+            - ['setBreaksEnabled', [true]]
+
+    Parsedown: '@markdown.nohtml'
+
+    HTMLPurifier: '@exercise_html_purifier.default'
+
+    validator.builder:
+        class: Symfony\Component\Validator\ValidatorBuilder
+        factory: 'Symfony\Component\Validator\Validation::createValidatorBuilder'
+        calls:
+            - [setTranslator, ['@translator']]
+            - [setTranslationDomain, ['messages']]
+            - [enableAnnotationMapping]
+
+    validator:
+        class: Symfony\Component\Validator\Validator\ValidatorInterface
+        factory: "validator.builder:getValidator"
+
+    Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension:
+
+    Symfony\Component\Form\Extension\Validator\ValidatorExtension:
+        arguments:
+            - "@=service('validator')"
+
+    Symfony\Component\Form\FormFactoryBuilder:
+        factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]
+        calls:
+            - [addExtension, ['@Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension']]
+            - [addExtension, ['@Symfony\Component\Form\Extension\Validator\ValidatorExtension']]
+
+    Intervention\Image\ImageManager:
+        arguments:
+            - driver: 'imagick'
+
+    mysqli:
+      class: mysqli
+      arguments:
+        - !php/const DB_HOST
+        - !php/const DB_USER
+        - !php/const DB_PASS
+        - !php/const DB_DB
+      calls:
+        - [query, ['SET NAMES "utf8mb4"']]
+
+    Foodsharing\Debug\DebugBar:
+        class: Foodsharing\Debug\DisabledDebugBar
+
+    PDO:
+        alias: RealPDO
+
+    RealPDO:
+        class: PDO
+        arguments:
+        - !php/const DSN
+        - !php/const DB_USER
+        - !php/const DB_PASS
+        calls:
+        - [ setAttribute, [!php/const PDO::ATTR_EMULATE_PREPARES, false]]
+        - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
+
+    InfluxDB\Database:
+        factory: ['InfluxDB\Client', 'fromdsn']
+        arguments:
+            - !php/const INFLUX_DSN
+
+    BounceMailHandler\BounceMailHandler:
+        properties:
+            mailhost: !php/const BOUNCE_IMAP_HOST
+            mailboxUserName: !php/const BOUNCE_IMAP_USER
+            mailboxPassword: !php/const BOUNCE_IMAP_PASS
+            port: !php/const BOUNCE_IMAP_PORT
+            service: 'imap'
+            serviceOption: 'tls'
+            boxname: 'INBOX'
+            maxMessages: 10000
+            verbose: 0
+
+    Foodsharing\EventListener\CsrfListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
+        arguments:
+            - "@annotation_reader"
+
+    mailer.transport:
+        class: Swift_SmtpTransport
+        arguments:
+            - !php/const MAILER_HOST
+
+    Swift_Mailer:
+        class: Swift_Mailer
+        arguments:
+            - '@mailer.transport'

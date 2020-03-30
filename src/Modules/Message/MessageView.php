@@ -8,9 +8,9 @@ final class MessageView extends View
 {
 	public function leftMenu(): string
 	{
-		return $this->menu(array(
-			array('name' => $this->translationHelper->s('new_message'), 'click' => 'msg.compose();return false;')
-		));
+		return $this->menu([
+			['name' => $this->translationHelper->s('new_message'), 'click' => 'msg.compose();return false;']
+		]);
 	}
 
 	public function compose(): string
@@ -21,7 +21,7 @@ final class MessageView extends View
 
 		$content .= $this->v_utils->v_input_wrapper(false, '<a class="button" id="compose_submit" href="#">' . $this->translationHelper->s('send') . '</a>');
 
-		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), array('class' => 'ui-padding')) . '</div>';
+		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), ['class' => 'ui-padding']) . '</div>';
 	}
 
 	public function conversationList(array $conversations): string
@@ -81,7 +81,7 @@ final class MessageView extends View
 		$out .= '
 			<div id="msg-control">
 				<form>
-					' . $this->v_utils->v_form_textarea('msg_answer', array('style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->translationHelper->s('write_something'))) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
+					' . $this->v_utils->v_form_textarea('msg_answer', ['style' => 'width: 88%;', 'nolabel' => true, 'placeholder' => $this->translationHelper->s('write_something')]) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 				</form>
 			</div>';
 

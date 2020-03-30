@@ -223,7 +223,7 @@ class WallPostXhr extends Control
 				' . $init . '
 			}
 		</script>
-				
+
 		</head><body onload="init();"></body></html>';
 
 		exit();

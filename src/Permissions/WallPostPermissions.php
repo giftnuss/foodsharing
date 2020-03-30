@@ -29,6 +29,9 @@ class WallPostPermissions
 	public function mayReadWall(int $fsId, string $target, int $targetId): bool
 	{
 		switch ($target) {
+			case 'foodsaver':
+				$result = $fsId > 0;
+				break;
 			case 'bezirk':
 				$result = $fsId && $this->regionGateway->hasMember($fsId, $targetId);
 				break;
@@ -47,8 +50,13 @@ class WallPostPermissions
 			case 'fsreport':
 				$result = $fsId && ($this->regionGateway->hasMember($fsId, RegionIDs::EUROPE_REPORT_TEAM) || $this->session->isOrgaTeam());
 				break;
+			case 'application':
+				// Uses Session::isAdminForAWorkGroup() instead of the more appropriate and specific Session::isAdminFor() since
+				// there's no good way to pass the required region id at the moment
+				$result = $fsId && $this->session->isAdminForAWorkGroup();
+				break;
 			default:
-				$result = $fsId > 0;
+				$result = false;
 				break;
 		}
 
@@ -69,12 +77,6 @@ class WallPostPermissions
 
 	/**
 	 * method describing _global_ deletion access to walls. Every author is always allowed to remove their own posts.
-	 *
-	 * @param int $fsId
-	 * @param string $target
-	 * @param int $targetId
-	 *
-	 * @return bool
 	 */
 	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
 	{
@@ -86,6 +88,9 @@ class WallPostPermissions
 			case 'usernotes':
 			case 'fsreport':
 				$result = $this->mayReadWall($fsId, $target, $targetId);
+				break;
+			case 'fairteiler':
+				$result = $this->session->may('orga');
 				break;
 			default:
 				$result = false;

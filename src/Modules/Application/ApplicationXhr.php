@@ -22,10 +22,10 @@ class ApplicationXhr extends Control
 			$this->gateway->acceptApplication($_GET['bid'], $_GET['fid']);
 			$this->flashMessageHelper->info('Bewerbung angenommen');
 
-			return array(
+			return [
 					'status' => 1,
 					'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
-				);
+				];
 		}
 	}
 
@@ -36,10 +36,10 @@ class ApplicationXhr extends Control
 
 			$this->flashMessageHelper->info('Bewerbung abgelehnt');
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'goTo("/?page=bezirk&bid=' . (int)$_GET['bid'] . '");'
-			);
+			];
 		}
 	}
 }

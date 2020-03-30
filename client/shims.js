@@ -58,13 +58,6 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'timeago/jquery.timeago': {
-    disableAMD: true,
-    imports: {
-      jQuery: 'jquery'
-    }
-  },
-
   'corejs-typeahead': {
     dependencies: [
       'css/typeahead.css'

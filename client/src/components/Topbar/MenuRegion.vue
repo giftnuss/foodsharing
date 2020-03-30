@@ -1,9 +1,10 @@
 <template>
   <b-nav-item-dropdown
+    id="dropdown-region"
     ref="dropdown"
     class="regionMenu"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <span class="regionName text-truncate">
         {{ activeRegion ? activeRegion.name : 'Bezirke' }}
       </span>
@@ -116,10 +117,10 @@
       class="dropdown-divider"
     />
     <a
-      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
+      @click="joinRegionDialog"
     >
       <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
     </a>

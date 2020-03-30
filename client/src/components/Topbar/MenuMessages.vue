@@ -1,12 +1,13 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-messages"
     ref="dropdown"
-    tooltip="Nachrichten"
+    v-b-tooltip="$i18n('menu.tooltips.messages')"
     no-caret
     right
     class="topbar-messages"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-comments" />
       <span
         v-if="unread"
@@ -33,18 +34,14 @@
         <i class="fas fa-comments" /> Alle Nachrichten
       </a>
     </div>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import MenuMessagesEntry from './MenuMessagesEntry'
 import conversationStore from '@/stores/conversations'
 
 export default {
-  components: {
-    NavItemDropdown,
-    MenuMessagesEntry
-  },
+  components: { MenuMessagesEntry },
 
   computed: {
     conversations () {
@@ -66,9 +63,9 @@ export default {
 </script>
 
 <style lang="scss">
-.topbar-messages {
+  .topbar-messages {
     .dropdown-menu {
-        padding: 0;
+      padding: 0;
     }
-}
+  }
 </style>

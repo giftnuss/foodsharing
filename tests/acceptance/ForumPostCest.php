@@ -47,8 +47,6 @@ class ForumPostCest
 	// tests
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["ambassador", "thread_ambassador_user", true]
 	 * @example["foodsaver", "thread_ambassador_user", false]
 	 * @example["ambassador", "thread_user_ambassador", true]
@@ -139,8 +137,6 @@ class ForumPostCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["unverifiedFoodsaver", "testBezirk"]
 	 * @example["foodsaver", "bigTestBezirk"]
 	 * @example["foodsaver", "moderatedTestBezirk"]
@@ -154,13 +150,11 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->{$example[1]}['id']));
 		$I->dontSee($title);
 		$mail = $I->getMails()[0];
-		$I->assertContains($title, $mail->text);
-		$I->assertContains('tigt werden', $mail->subject);
+		$I->assertStringContainsString($title, $mail->text);
+		$I->assertStringContainsString('tigt werden', $mail->subject);
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["ambassador", "thread_ambassador_user", true]
 	 */
 	public function newThreadByAmbassadorWillNotBeModerated(AcceptanceTester $I, \Codeception\Example $example)
@@ -179,8 +173,8 @@ class ForumPostCest
 		$title = 'moderated thread to be activated';
 		$this->_createThread($I, $this->moderatedTestBezirk['id'], $title);
 		$mail = $I->getMails()[0];
-		$I->assertContains($title, $mail->text);
-		$I->assertContains('tigt werden', $mail->subject);
+		$I->assertStringContainsString($title, $mail->text);
+		$I->assertStringContainsString('tigt werden', $mail->subject);
 		$I->assertRegExp('/http:\/\/.*bezirk.*&amp;tid=[0-9]+/', $mail->html, 'mail should contain a link to thread');
 		preg_match('/http:\/\/.*?\/(.*?)"/', $mail->html, $matches);
 		$link = html_entity_decode($matches[1]);
@@ -197,12 +191,13 @@ class ForumPostCest
 		$I->amOnPage($I->forumUrl($this->moderatedTestBezirk['id']));
 		$I->see($title);
 		/* There should have been notification mails - they are missing... */
-		//$I->expectNumMails(3); /* Number of users in region, all should have gotten an email */
+		/* ...missing because thread activation currently doesn't send emails :( */
+		/* Number of users in region, all (3) should get an email as soon as it is implemented */
+		/* Well. We can check against 0 until it is implemented to not forget this test later on :) */
+		$I->expectNumMails(0);
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["foodsaver", "bigTestBezirk"]
 	 */
 	public function DeleteLastPostAndGetRedirectedToForum(AcceptanceTester $I, \Codeception\Example $example)
@@ -233,7 +228,7 @@ class ForumPostCest
 		$I->waitForActiveAPICalls();
 
 		$I->seeCurrentUrlMatches('~' . $I->forumUrl($this->{$example[1]}['id']) . '&tid=(\d+)~');
-		$I->click('a[data-original-title="Beitrag löschen"]');
+		$I->click('a[title="Beitrag löschen"]');
 		$I->canSee('Beitrag löschen');
 		$confirmButton = \Codeception\Util\Locator::contains('.btn', 'Ja, ich bin mir sicher');
 		$I->waitForElementVisible($confirmButton);

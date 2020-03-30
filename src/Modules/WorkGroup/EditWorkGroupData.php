@@ -32,7 +32,7 @@ class EditWorkGroupData
 	 * @Assert\Type("integer")
 	 * @Assert\Range(
 	 *     min = 0,
-	 *     max = 10,
+	 *     max = 20,
 	 *     minMessage = "group.application_requirements.banana_count_errors.min",
 	 *     maxMessage = "group.application_requirements.banana_count_errors.max"
 	 * )
@@ -43,7 +43,7 @@ class EditWorkGroupData
 	 * @Assert\Type("integer")
 	 * @Assert\Range(
 	 *     min = 0,
-	 *     max = 10
+	 *     max = 100
 	 * )
 	 */
 	public $fetchCount;

@@ -2,27 +2,46 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
+use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 
 final class MessageXhr extends Control
 {
-	private $messageGateway;
-	private $storeGateway;
 	/**
-	 * @var WebSocketSender
+	 * @var MessageGateway
 	 */
-	private $webSocketSender;
+	private $messageGateway;
+	/**
+	 * @var FoodsaverGateway
+	 */
+	private $foodsaverGateway;
+	/**
+	 * @var WebSocketConnection
+	 */
+	private $webSocketConnection;
+	/**
+	 * @var PushNotificationGateway
+	 */
+	private $pushNotificationGateway;
 
-	public function __construct(MessageModel $model, MessageView $view, MessageGateway $messageGateway, StoreGateway $storeGateway, WebSocketSender $webSocketSender)
-	{
+	public function __construct(
+		MessageModel $model,
+		MessageView $view,
+		MessageGateway $messageGateway,
+		FoodsaverGateway $foodsaverGateway,
+		PushNotificationGateway $pushNotificationGateway,
+		WebSocketConnection $webSocketConnection
+	) {
 		$this->model = $model;
 		$this->view = $view;
 		$this->messageGateway = $messageGateway;
-		$this->storeGateway = $storeGateway;
-		$this->webSocketSender = $webSocketSender;
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->pushNotificationGateway = $pushNotificationGateway;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 
@@ -81,12 +100,12 @@ final class MessageXhr extends Control
 					'photo' => $m['photo']
 				];
 			}, $member));
-			$xhr->addData('conversation', $this->model->getValues(array('name'), 'conversation', $id));
+			$xhr->addData('conversation', $this->model->getValues(['name'], 'conversation', $id));
 			if ($msgs = $this->messageGateway->getConversationMessages($id)) {
 				$xhr->addData('messages', $msgs);
 			}
 
-			$this->model->setAsRead(array((int)$_GET['id']));
+			$this->model->setAsRead([(int)$_GET['id']]);
 
 			$xhr->send();
 		}
@@ -111,58 +130,6 @@ final class MessageXhr extends Control
 		}
 	}
 
-	private function convMessage($recipient, $conversation_id, $msg)
-	{
-		/*
-		 * only send email if the user is not online
-		 */
-
-		if (!$this->mem->userOnline($recipient['id'])) {
-			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = array();
-			}
-
-			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
-				$sessdata[$recipient['id']] = time();
-
-				$link = BASE_URL . '/?page=msg&cid=' . (int)$conversation_id;
-				$genderedTitle = $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r');
-
-				if ($storeName = $this->storeGateway->getStoreNameByConversationId($conversation_id)) {
-					$this->emailHelper->tplMail('chat/message_store', $recipient['email'], array(
-						'anrede' => $genderedTitle,
-						'sender' => $this->session->user('name'),
-						'name' => $recipient['name'],
-						'storename' => $storeName,
-						'message' => $msg,
-						'link' => $link
-					));
-				} else {
-					$memberNames = $this->messageGateway->getConversationMemberNamesExcept($conversation_id, $recipient['id']);
-					if (count($memberNames) > 1) {
-						$this->emailHelper->tplMail('chat/message_group', $recipient['email'], array(
-							'anrede' => $genderedTitle,
-							'sender' => $this->session->user('name'),
-							'name' => $recipient['name'],
-							'chatname' => implode(', ', $memberNames),
-							'message' => $msg,
-							'link' => $link
-						));
-					} else {
-						$this->emailHelper->tplMail('chat/message', $recipient['email'], array(
-							'anrede' => $genderedTitle,
-							'sender' => $this->session->user('name'),
-							'name' => $recipient['name'],
-							'message' => $msg,
-							'link' => $link
-						));
-					}
-				}
-			}
-			$_SESSION['lastMailMessage'] = $sessdata;
-		}
-	}
-
 	/**
 	 * ajax call to send a message to an conversation.
 	 *
@@ -172,54 +139,81 @@ final class MessageXhr extends Control
 	public function sendmsg(): void
 	{
 		$xhr = new Xhr();
-		if ($this->mayConversation($_POST['c'])) {
-			$this->session->noWrite();
+		$conversationId = $_POST['c'];
 
-			if (isset($_POST['b'])) {
-				$body = trim($_POST['b']);
-				$body = htmlentities($body);
-				if (!empty($body) && $message_id = $this->model->sendMessage($_POST['c'], $body)) {
-					$xhr->setStatus(1);
+		if (!$this->mayConversation($conversationId)) {
+			http_response_code(403);
 
-					/*
-					 * for not so db intensive polling store updates in memcache if the recipients are online
-					*/
-					if ($member = $this->model->listConversationMembers($_POST['c'])) {
-						$user_ids = array_column($member, 'id');
+			return;
+		}
+		$this->session->noWrite();
 
-						$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
-							'id' => $message_id,
-							'cid' => (int)$_POST['c'],
-							'fs_id' => $this->session->id(),
-							'fs_name' => $this->session->user('name'),
-							'fs_photo' => $this->session->user('photo'),
-							'body' => $body,
-							'time' => date('Y-m-d H:i:s')
-						));
+		$body = trim($_POST['b'] ?? '');
+		$body = htmlentities($body);
+		$message_id = $this->model->sendMessage($conversationId, $body);
+		if (empty($body) || $message_id === false) {
+			http_response_code(400);
 
-						foreach ($member as $m) {
-							if ($m['id'] != $this->session->id()) {
-								$this->mem->userAppend($m['id'], 'msg-update', (int)$_POST['c']);
-								if ($m['infomail_message']) {
-									$this->convMessage($m, $_POST['c'], $body);
-								}
-							}
-						}
-					}
+			return;
+		}
+		$xhr->setStatus(1);
 
-					$xhr->addData('msg', array(
-						'id' => $message_id,
-						'body' => $body,
-						'time' => date('Y-m-d H:i:s'),
-						'fs_photo' => $this->session->user('photo'),
-						'fs_name' => $this->session->user('name'),
-						'fs_id' => $this->session->id()
-					));
-					$xhr->send();
-				}
+		/*
+		 * for not so db intensive polling store updates in memcache if the recipients are online
+		*/
+		$members = $this->model->listConversationMembers($conversationId);
+		$userIds = array_column($members, 'id');
+
+		$this->webSocketConnection->sendSockMulti($userIds, 'conv', 'push', [
+			'id' => $message_id,
+			'cid' => (int)$conversationId,
+			'fs_id' => $this->session->id(),
+			'fs_name' => $this->session->user('name'),
+			'fs_photo' => $this->session->user('photo'),
+			'body' => $body,
+			'time' => date('Y-m-d H:i:s')
+		]);
+
+		foreach ($members as $member) {
+			if ($member['id'] == $this->session->id()) {
+				continue; // don't notify the user who sent the notification
+			}
+
+			$this->mem->userAppend($member['id'], 'msg-update', (int)$conversationId);
+
+			if ($this->webSocketConnection->isUserOnline($member['id'])) {
+				continue; // don't send E-Mail or Push Notifications for users who are online
+			}
+			/*
+			 * send Push Notification
+			 *
+			 */
+			$pushNotification = new MessagePushNotification(
+				$this->session->user('name'),
+				html_entity_decode($body),
+				new \DateTime(),
+				$conversationId,
+				count($members) > 2 ? $this->messageGateway->getProperConversationNameForFoodsaver($member['id'], $conversationId) : null
+			);
+
+			$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($member['id'], $pushNotification);
+
+			/*
+			 * send an E-Mail notification
+			 */
+			if ($member['infomail_message']) {
+				$this->convMessage($member, $conversationId, $body);
 			}
 		}
-		$xhr->addMessage($this->translationHelper->s('error'), 'error');
+
+		$xhr->addData('msg', [
+			'id' => $message_id,
+			'body' => $body,
+			'time' => date('Y-m-d H:i:s'),
+			'fs_photo' => $this->session->user('photo'),
+			'fs_name' => $this->session->user('name'),
+			'fs_id' => $this->session->id()
+		]);
 		$xhr->send();
 	}
 
@@ -282,16 +276,12 @@ final class MessageXhr extends Control
 
 	/**
 	 * Method to check that the user is part of an conversation and has access, to reduce database querys we store conversation_ids in an array.
-	 *
-	 * @param int $conversation_id
-	 *
-	 * @return bool
 	 */
 	private function mayConversation(int $conversation_id): bool
 	{
 		// first get the session array
 		if (!($ids = $this->session->get('msg_conversations'))) {
-			$ids = array();
+			$ids = [];
 		}
 
 		// check if the conversation in stored in the session
@@ -346,7 +336,7 @@ final class MessageXhr extends Control
 			/*
 			 * Make all ids to int and remove doubles check its not 0
 			 */
-			$recip = array();
+			$recip = [];
 			foreach ($_POST['recip'] as $r) {
 				if ((int)$r > 0) {
 					$recip[(int)$r] = (int)$r;
@@ -403,7 +393,7 @@ final class MessageXhr extends Control
 			$conversationKeys = array_flip($conversationIDs);
 
 			$this->model->setAsRead($conversationIDs);
-			$return = array();
+			$return = [];
 			/*
 			 * check is a new message there for active conversation?
 			 */
@@ -416,10 +406,10 @@ final class MessageXhr extends Control
 				$return['convs'] = $conversations;
 			}
 
-			return array(
+			return [
 				'data' => $return,
 				'script' => 'msg.pushArrived(ajax.data);'
-			);
+			];
 		}
 
 		return false;
@@ -435,7 +425,31 @@ final class MessageXhr extends Control
 			exit();
 		}
 
-		echo json_encode(array());
+		echo json_encode([]);
 		exit();
+	}
+
+	private function convMessage($recipient, $conversation_id, $msg)
+	{
+		if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+			$sessdata = [];
+		}
+
+		if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+			$sessdata[$recipient['id']] = time();
+
+			$chatname = $this->messageGateway->getProperConversationNameForFoodsaver($recipient['id'], $conversation_id);
+
+			$this->emailHelper->tplMail('chat/message', $recipient['email'], [
+				'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+				'sender' => $this->session->user('name'),
+				'name' => $recipient['name'],
+				'chatname' => $chatname,
+				'message' => $msg,
+				'link' => BASE_URL . '/?page=msg&cid=' . (int)$conversation_id
+			]);
+		}
+
+		$_SESSION['lastMailMessage'] = $sessdata;
 	}
 }

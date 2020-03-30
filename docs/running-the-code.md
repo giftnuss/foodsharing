@@ -19,6 +19,16 @@ And make sure you have
 [Docker Compose](https://docs.docker.com/compose/install/) (at least version 1.6.0)
 installed too (often comes with Docker).
 
+The current version of Fedora 31 switched to using cgroupsV2 by default, which is not yet supported.
+
+To disable v2 cgroups, run: 
+
+```
+sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+```
+And restart your machine.
+
+
 If you cannot connect to Docker with your local user, then you may want to add yourself to the Docker group:
 
 ```
@@ -52,10 +62,22 @@ cd foodsharing
 ./scripts/start
 ```
 
-## Windows 10 Pro or higher
+## Windows 
+
+If you are using Windows 10 Pro or higher go with this link:
 
 Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([direct link](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe)) and
 [Git for Windows](https://git-scm.com/download/win).
+
+If you are using Windows 10 Home or lower follow this instruction:
+
+Install [Docker Toolbox for Windows] (https://docs.docker.com/toolbox/toolbox_install_windows/) and [Git for Windows](https://git-scm.com/download/win).
+
+It is important to grant docker access to C: (in the graphical docker interface: settings -> resources -> filesharing -> mark C, apply and restart)
+
+You can test your docker in the command shell (e.g. cmd or powershell) with the command ```docker --version```. If it shows something, you're good to go.
+
+Restart your Windows now.
 
 There is a graphical user interface to administrate the repo, which is recommended for Git beginners.
 
@@ -65,13 +87,29 @@ But you can use the Git Bash shell just like in Linux to clone it:
 git clone git@gitlab.com:foodsharing-dev/foodsharing.git foodsharing
 ```
 
+After this command, your files will be found in the folder ```%UserProfile%\foodsharing```
+
 To start the containers, use the Git Bash shell:
 ```
 cd foodsharing
 ./scripts/start
 ```
 
+The first time you run the start script, which takes a lot of time, you probably have to give the windows firewall the OK to let Docker work. 
+
 ### Known Issues on Windows
+
+ - general
+
+If something is wrong, please check in your task manager under "performance" if the virtualisation is activated and troubleshoot if necessary.
+
+ - ```[RuntimeException]```
+
+If you get a ```[RuntimeException]```, let ```./scripts/start``` run again and again and maybe even again until it's done.
+
+ - yarn lint
+
+There is a known bug concerning yarn, see: https://github.com/yarnpkg/yarn/issues/7187 and https://github.com/yarnpkg/yarn/issues/7732 and https://github.com/yarnpkg/yarn/issues/7551
 
  - Changes in js, vue etc. aren't showing up
 

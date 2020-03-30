@@ -32,10 +32,10 @@ class Xhr
 	public function __construct()
 	{
 		// set default data
-		$this->messages = array();
+		$this->messages = [];
 		$this->script = '';
 		$this->status = 1;
-		$this->data = array();
+		$this->data = [];
 	}
 
 	/**
@@ -71,10 +71,10 @@ class Xhr
 	 */
 	public function addMessage($msg, $type = 'info')
 	{
-		$this->messages[] = array(
+		$this->messages[] = [
 			'type' => $type,
 			'text' => $msg
-		);
+		];
 	}
 
 	/**
@@ -93,11 +93,11 @@ class Xhr
 	public function send()
 	{
 		header('content-type: application/json; charset=utf-8');
-		$out = array(
+		$out = [
 			'status' => $this->status,
 			'data' => $this->data,
 			'script' => $this->script
-		);
+		];
 
 		if (!empty($this->messages)) {
 			$out['msg'] = $this->messages;

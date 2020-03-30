@@ -28,4 +28,9 @@ final class BlogPermissions
 
 		return false;
 	}
+
+	public function mayAdministrateBlog()
+	{
+		return $this->session->isAdminForAWorkGroup() || $this->session->may('orga');
+	}
 }

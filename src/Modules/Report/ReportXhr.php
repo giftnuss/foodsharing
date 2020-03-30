@@ -6,6 +6,7 @@ use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\SanitizerService;
 
 class ReportXhr extends Control
@@ -15,31 +16,34 @@ class ReportXhr extends Control
 	private $foodsaverGateway;
 	private $sanitizerService;
 	private $timeHelper;
+	private $reportPermissions;
 
 	public function __construct(
 		ReportGateway $reportGateway,
 		ReportView $view,
 		FoodsaverGateway $foodsaverGateway,
 		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper
+		TimeHelper $timeHelper,
+		ReportPermissions $reportPermissions
 	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
+		$this->reportPermissions = $reportPermissions;
 
 		parent::__construct();
 
 		if (isset($_GET['fsid'])) {
-			$this->foodsaver = $this->foodsaverGateway->getOne_foodsaver($_GET['fsid']);
+			$this->foodsaver = $this->foodsaverGateway->getFoodsaver($_GET['fsid']);
 			$this->view->setFoodsaver($this->foodsaver);
 		}
 	}
 
 	public function loadReport(): ?array
 	{
-		if ($this->session->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
+		if ($this->reportPermissions->mayHandleReports() && $report = $this->reportGateway->getReport($_GET['id'])) {
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
@@ -79,11 +83,13 @@ class ReportXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return null;
 	}
 
 	public function comReport(): ?array
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->confirmReport($_GET['id']);
 			$this->flashMessageHelper->info('Meldung wurde bestätigt!');
 
@@ -92,11 +98,13 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function delReport(): ?array
 	{
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			$this->reportGateway->delReport($_GET['id']);
 			$this->flashMessageHelper->info('Meldung wurde gelöscht!');
 
@@ -105,6 +113,8 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function reportDialog(): array
@@ -124,7 +134,7 @@ class ReportXhr extends Control
 			$storeId = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', ['desc' => $this->translationHelper->s('reportmessage_desc')]));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
 		$dialog->addOpt('width', '$(window).width()*0.9', false);

@@ -11,7 +11,7 @@ class LoginView extends View
 	{
 		$map = new vMap();
 		$map->setSearchPanel('login_location');
-		$params = array(
+		$params = [
 			'date_min' => date('Y-m-d', strtotime('-120 years')),
 			'date_max' => date('Y-m-d', strtotime('-18 years')),
 			'datenschutz' => $datenschutz,
@@ -19,7 +19,7 @@ class LoginView extends View
 			'pass' => $pass,
 			'email' => $email,
 			'map' => $map->render()
-		);
+		];
 
 		return $this->twig->render('pages/Register/RegisterForm.twig', $params);
 	}
@@ -27,10 +27,10 @@ class LoginView extends View
 	public function passwordRequest()
 	{
 		if (!$this->session->may()) {
-			$params = array(
+			$params = [
 				'email' => $this->translationHelper->s('login_email'),
 				'action' => $_SERVER['REQUEST_URI']
-			);
+			];
 
 			return $this->twig->render('pages/ForgotPassword/ForgotPasswordForm.twig', $params);
 		}
@@ -48,7 +48,7 @@ class LoginView extends View
 				' . $this->v_utils->v_form_submit($this->translationHelper->s('save'), 'submitted') . '
 			</form>';
 
-		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', ['class' => 'ui-padding']);
 	}
 
 	public function success($msg, $title = false)

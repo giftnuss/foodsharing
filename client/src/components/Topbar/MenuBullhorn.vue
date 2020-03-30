@@ -1,24 +1,25 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-bullhorn"
+    v-b-tooltip="$i18n('menu.tooltips.activities')"
     :no-caret="!displayArrow"
-    tooltip="Aktionen"
     right
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-bullhorn" />
       <span v-if="displayText">
-        Aktionen
+        {{ $i18n('menu.tooltips.activities') }}
       </span>
     </template>
     <h3 class="dropdown-header">
       Politik
     </h3>
     <a
-      :href="$url('fasten')"
+      :href="$url('fsstaedte')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Verschwendungsfasten
+      foodsharing-Städte
     </a>
     <a
       :href="$url('claims')"
@@ -58,13 +59,11 @@
     >
       foodsharing Festival
     </a>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { NavItemDropdown },
   props: {
     displayArrow: {
       type: Boolean,

@@ -8,7 +8,8 @@ set -o errexit
 
 dir=$(dirname "$0")
 
-source $dir/inc.sh
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 # directories used by the application
 

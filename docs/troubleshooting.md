@@ -60,6 +60,8 @@ or even `sudo rm -rf cache`.
 
  `./scripts/stop && sudo rm -rf cache && sudo ./scripts/clean && ./scripts/start` 
 
+This deletes and restarts the docker containers.
+
 ## Database and email access
 
 The local website gives you database access so that you can directly view and modify what is written in the database.

@@ -1,5 +1,5 @@
 import { get, patch, post, remove } from './base'
-import parse from 'date-fns/parse'
+import dateFnsParseISO from 'date-fns/parseISO'
 
 export async function joinPickup (storeId, pickupDate, fsId) {
   const date = pickupDate.toISOString()
@@ -11,7 +11,7 @@ export async function listPickups (storeId) {
 
   return res.pickups.map(c => ({
     ...c,
-    date: parse(c.date)
+    date: dateFnsParseISO(c.date)
   }))
 }
 

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import moment from 'moment'
+import dateFnsParseISO from 'date-fns/parseISO'
 import { getConversationList } from '@/api/conversations'
 
 export default new Vue({
@@ -17,7 +17,7 @@ export default new Vue({
       this.conversations = res.map(c => ({
         id: parseInt(c.id),
         title: c.name,
-        lastMessageTime: moment(c.last).toDate(),
+        lastMessageTime: dateFnsParseISO(c.last),
         members: c.member.length ? c.member.map((m) => ({
           id: parseInt(m.id, 10),
           name: m.name,

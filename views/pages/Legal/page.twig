@@ -11,7 +11,8 @@
         {% block content %}
             {{ 'legal.not_acknowledge_pp_description'|trans }}
             {{ form_row(form.privacy_policy) }}
-            <a href="/?page=settings&sub=deleteaccount">{{ 'legal.delete_account'|trans }}</a>
+            {{ 'legal.dont_agree'|trans }}
+            <a href="/?page=settings&sub=deleteaccount" class="button danger">{{ 'legal.delete_account'|trans }}</a>
         {% endblock %}
     {% endembed %}
     {% if show_privacy_notice %}

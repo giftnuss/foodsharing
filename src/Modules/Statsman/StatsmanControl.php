@@ -31,9 +31,9 @@ class StatsmanControl extends ConsoleControl
 		// array of arrays -> [bezirk_id] = array(parent1, parent2, ..)
 		$region_parents = $this->get_parent_bezirke();
 		// 2 dimensional array [bezirk_id][yearweek] = sum
-		$region_yw_sum = array();
-		$region_yw_cnt = array();
-		$all_yw = array();
+		$region_yw_sum = [];
+		$region_yw_cnt = [];
+		$all_yw = [];
 		$q = $this->statsmanGateway->listRegionFetchQuantities();
 		foreach ($q as $line) {
 			$all_yw[$line['yw']] = true;
@@ -87,7 +87,7 @@ class StatsmanControl extends ConsoleControl
 
 	private function get_parent_bezirke(): array
 	{
-		$region_parents = array();
+		$region_parents = [];
 		$parents = $this->statsmanGateway->listRegionParents();
 		foreach ($parents as $parent) {
 			$a = explode(',', $parent['parents']);
@@ -105,7 +105,7 @@ class StatsmanControl extends ConsoleControl
 		$fp = fopen('stat_fs_bezirk.csv', 'wb');
 		$foodsaver = $this->statsmanGateway->listFoodsaversByAgeBands();
 		$parents = $this->get_parent_bezirke();
-		$ages = array();
+		$ages = [];
 		foreach ($foodsaver as $fs) {
 			foreach ($parents[$fs['bezirk_id']] as $parent) {
 				$cnt = $ages[$parent][$fs['ageband']][$fs['geschlecht']];
@@ -147,8 +147,8 @@ class StatsmanControl extends ConsoleControl
 		$fp = fopen('stat_fs_bezirk_register.csv', 'wb');
 		$foodsaver = $this->statsmanGateway->listFoodsaversByRegionRegistration();
 		$parents = $this->get_parent_bezirke();
-		$all_yw = array();
-		$ages = array();
+		$all_yw = [];
+		$ages = [];
 		foreach ($foodsaver as $fs) {
 			$all_yw[$fs['yw']] = true;
 			foreach ($parents[$fs['bezirk_id']] as $parent) {
@@ -167,8 +167,8 @@ class StatsmanControl extends ConsoleControl
 		// array of arrays -> [bezirk_id] = array(parent1, parent2, ..)
 		$region_parents = $this->get_parent_bezirke();
 		// 2 dimensional array [bezirk_id][yearweek] = sum
-		$region_yw_cnt = array();
-		$all_yw = array();
+		$region_yw_cnt = [];
+		$all_yw = [];
 		$q = $this->statsmanGateway->listStoresByAddition();
 		foreach ($q as $line) {
 			$all_yw[$line['yw']] = true;
@@ -188,8 +188,6 @@ class StatsmanControl extends ConsoleControl
 
 	/**
 	 * @param $fp
-	 * @param array $all_yw
-	 * @param array $data
 	 */
 	private function writeResultsToFile($fp, array $all_yw, array $data): void
 	{

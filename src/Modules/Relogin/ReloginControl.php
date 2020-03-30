@@ -8,13 +8,18 @@ class ReloginControl extends Control
 {
 	public function index()
 	{
-		$this->session->refreshFromDatabase();
-		if (isset($_GET['url']) && !empty($_GET['url'])) {
-			$url = urldecode($_GET['url']);
-			if (substr($url, 0, 4) !== 'http') {
-				$this->routeHelper->go($url);
+		try {
+			$this->session->refreshFromDatabase();
+
+			if (isset($_GET['url']) && !empty($_GET['url'])) {
+				$url = urldecode($_GET['url']);
+				if (substr($url, 0, 4) !== 'http') {
+					$this->routeHelper->go($url);
+				}
 			}
+			$this->routeHelper->go('/?page=dashboard');
+		} catch (\Exception $e) {
+			$this->routeHelper->goPage('logout');
 		}
-		$this->routeHelper->go('/?page=dashboard');
 	}
 }

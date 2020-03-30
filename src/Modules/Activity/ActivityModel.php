@@ -231,8 +231,7 @@ class ActivityModel extends Db
 			$out = [];
 			foreach ($updates as $u) {
 				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-				$ambPrefix = $u['bot_theme'] === 1 ? 'BOT' : '';
-
+				$forumTypePostfix = $u['bot_theme'] === 1 ? 'BOT-Forum' : 'Forum';
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
 
 				$out[] = [
@@ -242,7 +241,7 @@ class ActivityModel extends Db
 						'fs_name' => $u['foodsaver_name'],
 						'forum_href' => $url,
 						'forum_name' => $u['name'],
-						'region_name' => $ambPrefix . ' ' . $u['bezirk_name'],
+						'region_name' => $forumTypePostfix . ' ' . $u['bezirk_name'],
 						'desc' => $u['post_body'],
 						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),

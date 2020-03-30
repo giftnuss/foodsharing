@@ -56,7 +56,7 @@ final class BlogGateway extends BaseGateway
 	{
 		$val = false;
 		try {
-			$val = $this->db->fetchByCriteria('blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id]);
+			$val = $this->db->fetchByCriteria('fs_blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id]);
 		} catch (\Exception $e) {
 			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
@@ -75,14 +75,14 @@ final class BlogGateway extends BaseGateway
 				b.`body`,
 				b.`time`,
 				b.`picture`,
-				CONCAT(fs.name," ",fs.nachname) AS fs_name	
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
 			FROM
 				`fs_blog_entry` b,
-				`fs_foodsaver` fs	
+				`fs_foodsaver` fs
 			WHERE
-				b.foodsaver_id = fs.id	
+				b.foodsaver_id = fs.id
 			AND
-				b.`active` = 1	
+				b.`active` = 1
 			AND
 				b.id = :fs_id',
 		[':fs_id' => $id]);
@@ -94,7 +94,7 @@ final class BlogGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			'
-			SELECT 	 	
+			SELECT
 				b.`id`,
 				b.`name`,
 				b.`time`,
@@ -103,16 +103,16 @@ final class BlogGateway extends BaseGateway
 				b.`teaser`,
 				b.`time`,
 				b.`picture`,
-				CONCAT(fs.name," ",fs.nachname) AS fs_name		
-			FROM 
+				CONCAT(fs.name," ",fs.nachname) AS fs_name
+			FROM
 				`fs_blog_entry` b,
-				`fs_foodsaver` fs		
-			WHERE 
-				b.foodsaver_id = fs.id				
+				`fs_foodsaver` fs
+			WHERE
+				b.foodsaver_id = fs.id
 			AND
-				b.`active` = 1		
-			ORDER BY 
-				b.`id` DESC				
+				b.`active` = 1
+			ORDER BY
+				b.`id` DESC
 			LIMIT :page,10',
 			[':page' => $page]
 		);
@@ -131,9 +131,9 @@ final class BlogGateway extends BaseGateway
 						`time`,
 						UNIX_TIMESTAMP(`time`) AS time_ts,
 						`active`,
-						`bezirk_id`		
-			FROM 		`fs_blog_entry`	
-			' . $not . '	
+						`bezirk_id`
+			FROM 		`fs_blog_entry`
+			' . $not . '
 			ORDER BY `id` DESC');
 	}
 
@@ -156,8 +156,8 @@ final class BlogGateway extends BaseGateway
 			`body`,
 			`time`,
 			UNIX_TIMESTAMP(`time`) AS time_ts,
-			`picture`			
-			FROM 		`fs_blog_entry`			
+			`picture`
+			FROM 		`fs_blog_entry`
 			WHERE 		`id` = :fs_id',
 			[':fs_id' => $id]
 		);
@@ -175,18 +175,18 @@ final class BlogGateway extends BaseGateway
 			[
 				'bezirk_id' => (int)$data['bezirk_id'],
 				'foodsaver_id' => (int)$data['foodsaver_id'],
-				'name' => strip_tags($this->$data['name']),
-				'teaser' => strip_tags($this->$data['teaser']),
-				'body' => $this->$data['body'],
-				'time' => strip_tags($this->$data['time']),
-				'picture' => strip_tags($this->$data['picture']),
+				'name' => strip_tags($data['name']),
+				'teaser' => strip_tags($data['teaser']),
+				'body' => $data['body'],
+				'time' => strip_tags($data['time']),
+				'picture' => strip_tags($data['picture']),
 				'active' => $active
 			]
 		);
 
-		$foodsaver = array();
+		$foodsaver = [];
 		$orgateam = $this->foodsaverGateway->getOrgateam();
-		$botschafter = $this->foodsaverGateway->getBotschafter($data['bezirk_id']);
+		$botschafter = $this->foodsaverGateway->getAmbassadors($data['bezirk_id']);
 
 		foreach ($orgateam as $o) {
 			$foodsaver[$o['id']] = $o;

@@ -14,11 +14,11 @@ class vAccordion
 	 */
 	private $pageHelper;
 
-	public function __construct($option = array())
+	public function __construct($option = [])
 	{
 		global $container;
 		$this->pageHelper = $container->get(PageHelper::class);
-		$this->panels = array();
+		$this->panels = [];
 
 		$this->id = 'acc-' . uniqid();
 		$this->options = $option;
@@ -26,10 +26,10 @@ class vAccordion
 
 	public function addPanel($title, $content)
 	{
-		$this->panels[] = array(
+		$this->panels[] = [
 			'title' => $title,
 			'content' => $content
-		);
+		];
 	}
 
 	public function render()

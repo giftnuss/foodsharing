@@ -2,22 +2,22 @@
 
 namespace Foodsharing\Modules\Bell;
 
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
 	/**
-	 * @var WebSocketSender
+	 * @var WebSocketConnection
 	 */
-	private $webSocketSender;
+	private $webSocketConnection;
 
-	public function __construct(Database $db, WebSocketSender $webSocketSender)
+	public function __construct(Database $db, WebSocketConnection $webSocketConnection)
 	{
 		parent::__construct($db);
 
-		$this->webSocketSender = $webSocketSender;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class BellGateway extends BaseGateway
 		\DateTime $time = null
 	): void {
 		if (!is_array($foodsavers)) {
-			$foodsavers = array($foodsavers);
+			$foodsavers = [$foodsavers];
 		}
 
 		if ($link_attributes !== false) {
@@ -221,9 +221,10 @@ class BellGateway extends BaseGateway
 	public function delBellsByIdentifier($identifier): void
 	{
 		$foodsaverIds = $this->db->fetchAllValues(
-			'SELECT `foodsaver_id`
-            FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
-            WHERE `identifier` = :identifier',
+			'SELECT DISTINCT `foodsaver_id`
+			FROM `fs_foodsaver_has_bell` JOIN `fs_bell`
+			ON `fs_foodsaver_has_bell`.bell_id = `fs_bell`.id
+			WHERE `identifier` = :identifier',
 			[':identifier' => $identifier]
 		);
 
@@ -234,15 +235,18 @@ class BellGateway extends BaseGateway
 
 	public function setBellsAsSeen(array $bellIds, int $foodsaverId): void
 	{
-		$this->db->execute(
-			'UPDATE `fs_foodsaver_has_bell` SET `seen` = 1 WHERE `bell_id` IN (' . implode(',', array_map('intval', $bellIds)) . ') AND `foodsaver_id` =:fsId',
-			['fsId' => $foodsaverId]
+		$this->db->update('fs_foodsaver_has_bell',
+			['seen' => 1],
+			[
+				'bell_id' => array_map('intval', $bellIds),
+				'foodsaver_id' => $foodsaverId
+			]
 		);
 	}
 
 	private function updateFoodsaverClient(int $foodsaverId): void
 	{
-		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'update', []);
+		$this->webSocketConnection->sendSock($foodsaverId, 'bell', 'update', []);
 	}
 
 	/**
@@ -250,7 +254,7 @@ class BellGateway extends BaseGateway
 	 */
 	private function updateMultipleFoodsaverClients(array $foodsaverIds): void
 	{
-		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'update', []);
+		$this->webSocketConnection->sendSockMulti($foodsaverIds, 'bell', 'update', []);
 	}
 
 	/**
@@ -262,11 +266,11 @@ class BellGateway extends BaseGateway
 	{
 		foreach ($bells as $i => $iValue) {
 			if (!empty($bells[$i]['vars'])) {
-				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], array('allowed_classes' => false));
+				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], ['allowed_classes' => false]);
 			}
 
 			if (!empty($bells[$i]['attr'])) {
-				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], array('allowed_classes' => false));
+				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], ['allowed_classes' => false]);
 			}
 		}
 

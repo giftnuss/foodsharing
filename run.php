@@ -5,7 +5,7 @@ use Symfony\Component\DependencyInjection\Container;
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 

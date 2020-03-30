@@ -1,3 +1,43 @@
+#button-pushnotifications {
+  display: inline-block;
+}
+
+#close-top-banner-pushnotifications {
+  font-size: 25pt;
+  margin-left: auto;
+  color: #533a20;
+}
+
+#close-top-banner-pushnotifications:hover {
+  color: #1c130b;
+}
+.top-banner-pushnotifications {
+  max-height: 500px; /* Needed for the transition, as CSS can not animate transistion from automated values and I want to animate height */
+  transition: transform 0.1s, max-height 0.5s, padding 0.2s 0.3s;
+}
+
+.top-banner-pushnotifications-closed {
+  transform: scale(1,0);
+  max-height: 0;
+  padding: 0;
+}
+
+.top-banner-flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.pushnotifications-icon {
+  fill: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+@media all and (max-width: 575.99px) {
+  .pushnotifications-icon {
+    display: none;
+  }
+}
 #activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
 
 #activity ul.linklist li span.qr
@@ -57,7 +97,7 @@
 }
 #activity ul.linklist li span a
 {
-    color:#46891b !important;
+    color:var(--fs-green) !important;
 }
 #activity span.n i.fa
 {
@@ -74,7 +114,7 @@
 #activity ul.linklist li span a:hover
 {
     text-decoration:underline !important;
-    color:#46891b !important;
+    color:var(--fs-green) !important;
 }
 
 #activity ul.linklist li

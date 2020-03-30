@@ -5,11 +5,12 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
-use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
+use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Permissions\ForumPermissions;
-use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -36,6 +37,7 @@ final class RegionControl extends Control
 	private $regionHelper;
 	private $imageService;
 	private $reportPermissions;
+	private $mailboxGateway;
 
 	/**
 	 * @required
@@ -65,7 +67,8 @@ final class RegionControl extends Control
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ReportPermissions $reportPermissions,
-		ImageService $imageService
+		ImageService $imageService,
+		MailboxGateway $mailboxGateway
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -79,6 +82,7 @@ final class RegionControl extends Control
 		$this->regionHelper = $regionHelper;
 		$this->reportPermissions = $reportPermissions;
 		$this->imageService = $imageService;
+		$this->mailboxGateway = $mailboxGateway;
 
 		parent::__construct();
 	}
@@ -121,6 +125,10 @@ final class RegionControl extends Control
 
 		if ($this->session->isAdminFor($regionId)) {
 			$regionOrGroupString = $isWorkGroup ? $this->translator->trans('group.mail_link_title.workgroup') : $this->translator->trans('group.mail_link_title.region');
+			if ($regionMailInfo = $this->mailboxGateway->getNewCount([['id' => $region['mailbox_id']]])) {
+				$regionOrGroupString .= ' (' . $regionMailInfo[0]['count'] . ')';
+			}
+
 			$menu[] = ['name' => $regionOrGroupString, 'href' => '/?page=mailbox'];
 		}
 
@@ -198,7 +206,12 @@ final class RegionControl extends Control
 				$this->forum($request, $response, $region, false);
 				break;
 			case 'wall':
-				$this->wall($request, $response, $region);
+				if (!$this->isWorkGroup($region)) {
+					$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
+					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
+				} else {
+					$this->wall($request, $response, $region);
+				}
 				break;
 			case 'fairteiler':
 				$this->foodSharePoint($request, $response, $region);
@@ -238,7 +251,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
-		$viewdata['food_share_point'] = $this->foodSharePointGateway->listFoodSharePoints($bezirk_ids);
+		$viewdata['food_share_point'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 
@@ -317,7 +330,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
-		$viewdata['region']['members'] = $this->foodsaverGateway->listFoodsaverByRegion($region['id']);
+		$viewdata['region']['members'] = $this->foodsaverGateway->listActiveFoodsaversByRegion($region['id']);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
 

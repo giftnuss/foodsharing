@@ -16,15 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
 
-/* @var $request Request */
+/* @var Request $request */
 $request = Request::createFromGlobals();
 $response = new Response('--');
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
-/* @var $csp ContentSecurityPolicy */
+/* @var ContentSecurityPolicy $csp */
 $csp = $container->get(ContentSecurityPolicy::class);
 
 // Security headers :)
@@ -32,35 +32,32 @@ $csp = $container->get(ContentSecurityPolicy::class);
 header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 
-if (defined('CSP_REPORT_URI')) {
-	header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
-}
+header($csp->generate($request->getSchemeAndHttpHost(), CSP_REPORT_URI, CSP_REPORT_ONLY));
 
 require_once 'lib/inc.php';
 
-/* @var $mem Mem */
+/* @var Mem $mem */
 $mem = $container->get(Mem::class);
 
-/* @var $view_utils Utils */
+/* @var Utils $view_utils */
 $view_utils = $container->get(Utils::class);
 
-/* @var $routeHelper RouteHelper */
+/* @var RouteHelper $routeHelper */
 $routeHelper = $container->get(RouteHelper::class);
 
-/* @var $pageHelper PageHelper */
+/* @var PageHelper $pageHelper */
 $pageHelper = $container->get(PageHelper::class);
 
-/* @var $session Session */
+/* @var Session $session */
 $session = $container->get(Session::class);
 
 $g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
 
-if (DebugBar::isEnabled()) {
-	$pageHelper->addHead(DebugBar::renderHead());
-}
+/* @var DebugBar $debug */
+$debug = $container->get(DebugBar::class);
 
-if (DebugBar::isEnabled()) {
-	$pageHelper->addContent(DebugBar::renderContent(), CNT_BOTTOM);
+if ($debug->isEnabled()) {
+	$pageHelper->addHead($debug->renderHead());
 }
 
 if ($session->may()) {
@@ -74,25 +71,21 @@ if ($session->may()) {
 
 $app = $routeHelper->getPage();
 
-if (($class = $session->getRouteOverride()) === null) {
-	$class = Routing::getClassName($app, 'Control');
-	try {
-		$obj = $container->get(ltrim($class, '\\'));
-	} catch (ServiceNotFoundException $e) {
-	}
-} else {
-	$obj = $container->get(ltrim($class, '\\'));
+$controller = $routeHelper->getLegalControlIfNecessary() ?? Routing::getClassName($app, 'Control');
+try {
+	$obj = $container->get(ltrim($controller, '\\'));
+} catch (ServiceNotFoundException $e) {
 }
 
 if (isset($obj)) {
-	if (isset($_GET['a']) && is_callable(array($obj, $_GET['a']))) {
+	if (isset($_GET['a']) && is_callable([$obj, $_GET['a']])) {
 		$meth = $_GET['a'];
 		$obj->$meth($request, $response);
 	} else {
 		$obj->index($request, $response);
 	}
 	$sub = $sub = $obj->getSubFunc();
-	if ($sub !== false && is_callable(array($obj, $sub))) {
+	if ($sub !== false && is_callable([$obj, $sub])) {
 		$obj->$sub($request, $response);
 	}
 } else {
@@ -103,9 +96,19 @@ if (isset($obj)) {
 $page = $response->getContent();
 $isUsingResponse = $page !== '--';
 if ($isUsingResponse) {
+	if ($debug->isEnabled()) {
+		$response->setContent(str_replace(
+			'</body>',
+			$debug->renderContent() . '</body>',
+			$response->getContent()
+		));
+	}
 	$response->send();
 } else {
-	/* @var $twig \Twig\Environment */
+	if ($debug->isEnabled()) {
+		$pageHelper->addContent($debug->renderContent(), CNT_BOTTOM);
+	}
+	/* @var \Twig\Environment $twig */
 	$twig = $container->get(\Twig\Environment::class);
 	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 }

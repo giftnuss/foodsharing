@@ -9,8 +9,8 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\SanitizerService;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -84,12 +84,10 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @param $forumId integer which forum to return threads for (maps to regions/groups)
-	 * @param $forumSubId integer each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
+	 * @param int $forumId which forum to return threads for (maps to regions/groups)
+	 * @param int $forumSubId each region/group as another namespace to separate different forums with the same base id (region/group id, here: forumId).
 	 * So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads)
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function listThreadsAction(int $forumId, int $forumSubId): \Symfony\Component\HttpFoundation\Response
 	{

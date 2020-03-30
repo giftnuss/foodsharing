@@ -8,7 +8,7 @@ class Maildev extends \Codeception\Module
 
 	public function getMails()
 	{
-		$headers = array('Accept' => 'application/json');
+		$headers = ['Accept' => 'application/json'];
 
 		return \Unirest\Request::get($this->config['url'] . '/email', $headers)->body;
 	}

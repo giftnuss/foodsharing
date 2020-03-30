@@ -1,11 +1,12 @@
 <template>
   <div>
-    <nav-item-dropdown
+    <b-nav-item-dropdown
       v-if="workingGroups.length"
-      tooltip="Deine Gruppen"
+      id="dropdown-groups"
+      v-b-tooltip="$i18n('menu.tooltips.your_groups')"
       no-caret
     >
-      <template slot="button-content">
+      <template v-slot:button-content>
         <i class="fas fa-users" />
       </template>
       <div
@@ -80,18 +81,20 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <small><i class="fas fa-users" /> Gruppenübersicht</small>
+        <small><i class="fas fa-users" /> {{ $i18n('menu.tooltips.groups') }}</small>
       </a>
-    </nav-item-dropdown>
+    </b-nav-item-dropdown>
     <li
       v-else
+      v-b-tooltip
+      :title="$i18n('menu.tooltips.groups')"
       class="nav-item"
     >
       <a
         v-b-tooltip
+        :title="$i18n('menu.tooltips.groups')"
         :href="$url('workingGroups')"
         class="nav-link"
-        title="Gruppenübersicht"
       >
         <i class="fas fa-users" />
       </a>
@@ -100,10 +103,9 @@
 </template>
 <script>
 import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
-import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { BCollapse, NavItemDropdown },
+  components: { BCollapse },
   directives: { VBToggle, VBTooltip },
   props: {
     workingGroups: {

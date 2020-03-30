@@ -26,7 +26,7 @@ class SearchRestController extends AbstractFOSRestController
 	 */
 	public function getSearchLegacyIndexAction()
 	{
-		if (!$this->session->id()) {
+		if (!$this->session->may()) {
 			throw new HttpException(403);
 		}
 		$data = $this->searchService->generateIndex($this->session->id());

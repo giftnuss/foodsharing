@@ -9,6 +9,8 @@
     >
       <div class="input-group-prepend">
         <label
+          id="searchfield-label"
+          :aria-label="$i18n('search.title')"
           class="input-group-text text-primary"
           for="searchfield"
         >
@@ -25,16 +27,16 @@
       <input
         id="searchfield"
         v-model="query"
+        :placeholder="$i18n('search.placeholder')"
         type="text"
         class="form-control text-primary"
-        placeholder="Suche..."
-        aria-label="Suche"
-        aria-describedby="basic-addon1"
+        aria-labelledby="searchfield-label"
+        aria-placeholder=""
       >
     </div>
     <div
-      id="search-results"
       v-if="isOpen"
+      id="search-results"
       :style="resultsStyle"
       class="dropdown-menu"
     >

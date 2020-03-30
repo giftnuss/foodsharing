@@ -1,14 +1,15 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-baskets"
     ref="dropdown"
+    v-b-tooltip="$i18n('basket.title')"
     :no-caret="!showLabel"
-    tooltip="Essenskörbe"
     class="topbar-baskets"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-shopping-basket" />
       <span v-if="showLabel">
-        Essenskörbe
+        {{ $i18n('basket.title') }}
       </span>
     </template>
     <div class="list-group">
@@ -16,7 +17,7 @@
         v-if="!baskets.length"
         class="dropdown-header"
       >
-        Du hast keine Essenskörbe eingetragen
+        {{ $i18n('basket.my_list_empty') }}
       </p>
       <div
         v-else
@@ -34,31 +35,27 @@
           :href="$url('baskets')"
           class="btn btn-sm btn-secondary"
         >
-          Alle Essenskörbe
+          {{ $i18n('basket.all') }}
         </a>
         <a
-          @click="openBasketCreationForm"
           href="#"
           class="btn btn-sm btn-secondary"
+          @click="openBasketCreationForm"
         >
-          Essenskorb anlegen
+          {{ $i18n('basket.add') }}
         </a>
       </div>
     </div>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import MenuBasketsEntry from './MenuBasketsEntry'
 import basketStore from '@/stores/baskets'
 
 import { ajreq } from '@/script'
 
 export default {
-  components: {
-    NavItemDropdown,
-    MenuBasketsEntry
-  },
+  components: { MenuBasketsEntry },
   props: {
     showLabel: {
       type: Boolean,

@@ -4,7 +4,7 @@ namespace Foodsharing\Lib;
 
 class ContentSecurityPolicy
 {
-	public function generate(string $httpHost, string $reportUri, bool $reportOnly): string
+	public function generate(string $httpHost, string $reportUri = null, bool $reportOnly = false): string
 	{
 		$none = "'none'";
 		$self = "'self'";
@@ -25,8 +25,10 @@ class ContentSecurityPolicy
 				$this->websocketUrlFor($httpHost),
 				'https://sentry.io',
 				'https://photon.komoot.de',
+				'https://maps.geoapify.com',
 				'https://search.mapzen.com', // only used in u_loadCoords, gets hopefully replaces soon
-				'blob:'
+				'blob:',
+				'ws:'
 			],
 			'img-src' => [
 				$self,
@@ -48,10 +50,20 @@ class ContentSecurityPolicy
 			'frame-ancestors' => [
 				$none
 			],
-			'report-uri' => [
-				$reportUri
+			'worker-src' => [
+				$self,
+				'blob:'
+			],
+			'child-src' => [
+				'blob:'
 			]
 		];
+
+		if ($reportUri) {
+			$policy['report-uri'] = [
+				$reportUri
+			];
+		}
 
 		$value = '';
 		foreach ($policy as $key => $values) {
