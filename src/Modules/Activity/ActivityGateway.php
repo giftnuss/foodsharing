@@ -148,13 +148,13 @@ class ActivityGateway extends BaseGateway
 			if (!empty($w['attach'])) {
 				$data = json_decode($w['attach'], true);
 				if (isset($data['image'])) {
-					$gallery = array();
+					$gallery = [];
 					foreach ($data['image'] as $img) {
-						$gallery[] = array(
+						$gallery[] = [
 							'image' => 'images/wallpost/' . $img['file'],
 							'medium' => 'images/wallpost/medium_' . $img['file'],
 							'thumb' => 'images/wallpost/thumb_' . $img['file']
-						);
+						];
 					}
 					$posts[$key]['gallery'] = $gallery;
 				}

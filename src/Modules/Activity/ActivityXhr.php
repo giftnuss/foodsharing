@@ -201,7 +201,7 @@ class ActivityXhr extends Control
 	public function setOptionList(): void
 	{
 		if (isset($_GET['options'])) {
-			$options = array();
+			$options = [];
 			foreach ($_GET['options'] as $o) {
 				if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
 					$options[$o['index'] . '-' . $o['id']] = [
@@ -231,15 +231,15 @@ class ActivityXhr extends Control
 
 		$xhr = new Xhr();
 
-		$listings = array(
-			'groups' => array(),
-			'regions' => array(),
-			'mailboxes' => array(),
-			'stores' => array(),
-			'buddywalls' => array()
-		);
+		$listings = [
+			'groups' => [],
+			'regions' => [],
+			'mailboxes' => [],
+			'stores' => [],
+			'buddywalls' => []
+		];
 
-		$option = array();
+		$option = [];
 
 		if ($list = $this->session->option('activity-listings')) {
 			$option = $list;

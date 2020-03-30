@@ -43,14 +43,14 @@
           </p>
         </div>
         <a
-          @click="saveOptionListings"
           class="button"
+          @click="saveOptionListings"
         >
           Einstellungen speichern
         </a>
         <a
-          @click="$emit('close')"
           class="button cancel-button"
+          @click="$emit('close')"
         >
           Abbrechen
         </a>

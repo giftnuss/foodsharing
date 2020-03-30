@@ -8,8 +8,8 @@
         :data="el.data"
       />
       <infinite-loading
-        @infinite="infiniteHandler"
         spinner="waveDots"
+        @infinite="infiniteHandler"
       />
     </ul>
   </div>

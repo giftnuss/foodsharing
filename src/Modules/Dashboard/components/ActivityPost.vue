@@ -102,10 +102,10 @@
       <textarea
         v-if="!qrLoading"
         v-model="quickreplyValue"
-        @keyup.enter="sendQuickreply"
         name="quickreply"
         class="quickreply"
         placeholder="Schreibe eine Antwort..."
+        @keyup.enter="sendQuickreply"
       />
       <span
         v-else
@@ -127,9 +127,9 @@ import serverData from '@/server-data'
 import { sendQuickreply } from '@/api/dashboard'
 import { pulseInfo } from '@/script'
 import timeformat from '@/timeformat'
-import 'timeago/jquery.timeago'
+import { dateDistanceInWords } from '@/utils'
+import dateFnsParseISO from 'date-fns/parseISO'
 import Markdown from '@/components/Markdown/Markdown'
-import $ from 'jquery'
 
 export default {
   components: { Markdown },
@@ -167,7 +167,7 @@ export default {
       return timeformat.nice(this.data.time)
     },
     timeago () {
-      return $.timeago(this.data.time)
+      return dateDistanceInWords(dateFnsParseISO(this.data.time))
     }
   },
   methods: {

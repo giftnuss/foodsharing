@@ -16,6 +16,8 @@
 - Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
 - Show internal email address on user's own profile !1386 #465 @alex.simm
+- - Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
+- Link Avatar pictures on dashboard to profiles !464 @D0nPiano
 
 ## Bugfixes
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
@@ -65,6 +67,8 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
+- recreate Dashboard update-overview with vue components @D0nPiano 
+- changed ActivityModel to return data without HTML or JS @D0nPiano
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -278,8 +282,6 @@ And we have even included some new features for you.
 - Team list in store view is now collapsed on mobile as it was with pinboard comments already !983 @jofranz
 - Added Rest endpoint to edit baskets !992 @alex.simm
 - Graz BIEBs automatically added nightly to their working group !987 @peter.toennies
-- Added thumbs of pictures posted on friends walls to dashboard !454 @D0nPiano
-- Link Avatar pictures on dashboard to profiles !464 @D0nPiano
 - Added reference to OpenStreetMap to the map attribution #661 !1009 @dthulke
 - Added Rest endpoint for fair share points !1012 @dthulke
 - Add backend logic for changing basket locations !1021 @alex.simm
@@ -366,8 +368,6 @@ And we have even included some new features for you.
 - Refactored conversations API and related javascript !592 @theolampert
 - Converted nightly maintenance methods deactivateOldBaskets() and deleteUnconfirmedFetchDates() into gateway !976 @jofranz
 - Refactored team page. Got rid of legacy methods !974 @jofranz
-- recreate Dashboard update-overview with vue components @D0nPiano 
-- changed ActivityModel to return data without HTML or JS @D0nPiano
 - Refactored fetch weight menu handling and moved weight methods into a helper class !1002 @jofranz
 - Refactored QuizModel into a QuizGateway !998 #9 @svenpascal
 - Refactored pickup slot deletion methods, kicked out duplicated code/vars and deleted not used code !968 @jofranz
@@ -542,7 +542,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - Added profile status infos for store and pickup entries for ambassadors !705 @jofranz
 - Scale down font size on passports for long names !685 @NerdyProjects
 - CSRF protection for API requests !715 @alangecker
-- Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - Disabled caching searchindex for uptodate results !727 @NerdyProjects
 
 ## Bugfixes
@@ -576,8 +575,6 @@ We are very proud to finally release foodsharing with an **AGPLv3** licence, mak
 - trigger fairteiler wallpost notifications in backend !700 @NerdyProjects
 - use API endpoint to delete users to avoid CSRF problems !717 @NerdyProjects
 - use API endpoint to delete regions/workgroups to avoid CSRF problems !719 @NerdyProjects
-- removed unused php,js and css code !720 @alangecker
-- user normalisation in conversations API endpoint
 - Refactored loop for avatar placement in event view. Added amount as a parameter !718 @jofranz
 - removed unused php, js and css code !720 @alangecker
 - user normalisation in conversations API endpoint @alex.simm

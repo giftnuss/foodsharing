@@ -5,43 +5,43 @@
       <span class="option">
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'])}"
-          @click="displayAll"
           class="wide"
+          @click="displayAll"
         >
           Alle
         </a>
         <div class="headerDivider" />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"
-          @click="displayOne('forum')"
           class="fa-fw fas fa-comments"
+          @click="displayOne('forum')"
         />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"
-          @click="displayOne('foodbasket')"
           class="fa-fw fas fa-shopping-basket"
+          @click="displayOne('foodbasket')"
         />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"
-          @click="displayOne('friendWall')"
           class="fa-fw fas fa-user"
+          @click="displayOne('friendWall')"
         />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"
-          @click="displayOne('mailbox')"
           class="fa-fw fas fa-envelope"
+          @click="displayOne('mailbox')"
         />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"
-          @click="displayOne('store')"
           class="fa-fw fas fa-shopping-cart"
+          @click="displayOne('store')"
         />
         <div class="headerDivider" />
         <a
           id="activity-option"
           :class="{'active': showListings}"
-          @click="toggleOptionListings"
           class="fas fa-cog"
+          @click="toggleOptionListings"
         />
       </span>
     </div>

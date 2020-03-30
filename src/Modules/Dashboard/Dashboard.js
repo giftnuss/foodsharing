@@ -4,7 +4,6 @@ import '@/globals'
 import { vueRegister, vueApply } from '@/vue'
 import ActivityOverview from './components/ActivityOverview'
 
-import activity from '@/activity'
 import './Dashboard.css'
 
 import i18n from '@/i18n'
