@@ -1143,9 +1143,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 			FROM	fs_betrieb
 
-			WHERE	team_conversation_id = ?
-			OR		springer_conversation_id = ?
-		', [$id, $id]);
+            WHERE   team_conversation_id = :teamId
+            OR      springer_conversation_id = :jumperId
+        ', [
+			':teamId' => $id,
+			':jumperId' => $id
+		]);
 
 		return $store;
 	}
