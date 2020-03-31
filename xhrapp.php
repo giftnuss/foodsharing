@@ -18,7 +18,6 @@ $container = initializeContainer();
 	NEVER ADD SOMETING TO THIS LIST!
 */
 $csrf_whitelist = [
-	// 'Activity::loadMore',
 	// 'Activity::load',
 	// 'Application::accept',
 	// 'Application::decline',

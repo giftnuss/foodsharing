@@ -24,30 +24,6 @@ class ActivityXhr extends Control
 		parent::__construct();
 	}
 
-	public function loadMore(): void
-	{
-		/*
-		 * get ids to not display from options
-		 */
-		$hidden_ids = [
-			'bezirk' => [],
-			'mailbox' => [],
-			'buddywall' => []
-		];
-
-		if ($sesOptions = $this->session->option('activity-listings')) {
-			foreach ($sesOptions as $o) {
-				if (isset($hidden_ids[$o['index']])) {
-					$hidden_ids[$o['index']][$o['id']] = true;
-				}
-			}
-		}
-
-		$xhr = new Xhr();
-		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, $_GET['page']));
-		$xhr->send();
-	}
-
 	public function load(): void
 	{
 		/*
