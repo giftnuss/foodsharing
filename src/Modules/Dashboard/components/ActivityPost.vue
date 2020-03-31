@@ -84,11 +84,11 @@
         </span>
         <a
           v-if="isTruncatable"
-          @click="isTxtShortend = !isTxtShortend"
+          @click="isTruncatedText = !isTruncatedText"
         >
-          {{ isTxtShortend ? 'alles zeigen' : 'weniger' }}
+          {{ isTruncatedText ? 'alles zeigen' : 'weniger' }}
           <i
-            :class="{ 'fa-rotate-180': !isTxtShortend }"
+            :class="{ 'fa-rotate-180': !isTruncatedText }"
             class="fas fa-angle-down"
           />
         </a>
@@ -145,7 +145,7 @@ export default {
   },
   data () {
     return {
-      isTxtShortend: true,
+      isTruncatedText: true,
       qrLoading: false,
       user_id: serverData.user.id,
       user_avatar: serverData.user.avatar.mini,
@@ -157,7 +157,7 @@ export default {
       return this.data.desc.split(' ').length > 18
     },
     truncatedText () {
-      if (this.isTruncatable && this.isTxtShortend) {
+      if (this.isTruncatable && this.isTruncatedText) {
         return this.data.desc.split(' ').splice(0, 12).join(' ') + '...'
       } else {
         return this.data.desc
