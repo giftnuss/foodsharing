@@ -50,7 +50,7 @@ export default {
       if (res.length) {
         this.page += 1
         res.sort((a, b) => {
-          return b.data.time_ts - a.data.time_ts
+          return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
         })
         this.updates.push(...res)
         $state.loaded()
@@ -62,7 +62,7 @@ export default {
       this.page = 0
       this.updates = await getUpdates(this.page)
       this.updates.sort((a, b) => {
-        return b.data.time_ts - a.data.time_ts
+        return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
       })
     }
   }
