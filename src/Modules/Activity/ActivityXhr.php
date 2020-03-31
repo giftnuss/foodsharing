@@ -91,7 +91,7 @@ class ActivityXhr extends Control
 		}
 
 		$xhr = new Xhr();
-		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, 0));
+		$xhr->addData('updates', $this->buildUpdateData($hidden_ids, $page));
 		$xhr->addData('user', [
 			'id' => $this->session->id(),
 			'name' => $this->session->user('name'),
