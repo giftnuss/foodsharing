@@ -51,6 +51,7 @@ class ActivityModel extends Db
 		return $out;
 	}
 
+	// basket wall updates were removed and could be replaced by yet not used food share point updates
 	public function loadBasketWallUpdates(int $page): array
 	{
 		$updates = [];

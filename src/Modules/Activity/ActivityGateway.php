@@ -8,6 +8,7 @@ class ActivityGateway extends BaseGateway
 {
 	private const ITEMS_PER_PAGE = 10;
 
+	// basket wall updates were removed and could be replaced by yet not used food share point updates
 	public function fetchAllBasketWallUpdates(int $fsId, int $page): array
 	{
 		$stm = '
@@ -56,6 +57,7 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
+	// basket wall updates were removed and could be replaced by yet not used food share point updates
 	public function fetchAllWallpostsFromFoodBaskets(int $fsId, int $page): array
 	{
 		$stm = '
