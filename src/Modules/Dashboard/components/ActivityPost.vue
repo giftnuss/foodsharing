@@ -42,9 +42,9 @@
       </a>
       <a
         v-else-if="type == 'foodbasket'"
-        :href="'/essenskoerbe/' + data.basked_id"
+        :href="'/essenskoerbe/' + data.basket_id"
       >
-        {{ "Essenskorb #" + data.basked_id }}
+        {{ "Essenskorb #" + data.basket_id }}
       </a>
       <a
         v-else-if="type == 'mailbox'"
