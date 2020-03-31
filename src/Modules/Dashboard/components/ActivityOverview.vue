@@ -4,7 +4,7 @@
       Updates-Übersicht
       <span class="option">
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'])}"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'friendWall', 'event'])}"
           class="wide"
           @click="displayAll"
         >
@@ -17,9 +17,9 @@
           @click="displayOne('forum')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodbasket'])}"
-          class="fa-fw fas fa-shopping-basket"
-          @click="displayOne('foodbasket')"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['event'])}"
+          class="fa-fw far fa-calendar-alt"
+          @click="displayOne('event')"
         />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"
@@ -71,7 +71,7 @@ export default {
   props: {},
   data () {
     return {
-      displayedTypes: ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'],
+      displayedTypes: ['store', 'forum', 'mailbox', 'friendWall', 'event'],
       showListings: false
     }
   },
@@ -81,7 +81,7 @@ export default {
       // this.showListings = false
     },
     displayAll: function () {
-      this.displayedTypes = ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket']
+      this.displayedTypes = ['store', 'forum', 'mailbox', 'friendWall', 'event']
     },
     toggleOptionListings: function () {
       this.showListings = !this.showListings

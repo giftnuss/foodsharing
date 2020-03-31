@@ -41,10 +41,10 @@
         {{ data.forum_name }}
       </a>
       <a
-        v-else-if="type == 'foodbasket'"
-        :href="'/essenskoerbe/' + data.basket_id"
+        v-else-if="type == 'event'"
+        :href="'?page=event&id=' + data.event_id"
       >
-        {{ "Essenskorb #" + data.basket_id }}
+        {{ data.event_name }}
       </a>
       <a
         v-else-if="type == 'mailbox'"

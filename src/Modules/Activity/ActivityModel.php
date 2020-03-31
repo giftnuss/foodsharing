@@ -33,18 +33,22 @@ class ActivityModel extends Db
 		$out = [];
 
 		foreach ($updates as $u) {
-			$title = 'Termin: ' . $u['name'];
+			$replyUrl = '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id'];
 
 			$out[] = [
-				'attr' => [
-				'href' => '/profile/' . $u['fs_id']
-				],
-				'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fa fa-angle-right"></i> <a href="?page=event&id=' . $u['event_id'] . '">' . $title . '</a>',
-				'desc' => $this->textPrepare($u['body']),
-				'time' => $u['time'],
-				'icon' => $this->imageService->img($u['fs_photo'], 50),
-				'time_ts' => $u['time_ts'],
-				'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=event&id=' . (int)$u['event_id']
+				'type' => 'event',
+				'data' => [
+					'desc' => $u['body'],
+					'event_id' => $u['event_id'],
+					'event_name' => 'Termin: ' . $u['name'],
+					'fs_id' => $u['fs_id'],
+					'fs_name' => $u['fs_name'],
+					'icon' => $this->imageService->img($u['fs_photo'], 50),
+					'source_name' => 'Termin',
+					'time' => $u['time'],
+					'time_ts' => $u['time_ts'],
+					'quickreply' => $replyUrl
+				]
 			];
 		}
 
