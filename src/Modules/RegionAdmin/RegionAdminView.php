@@ -62,7 +62,6 @@ class RegionAdminView extends View
 						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
 						    ' . $id . '_infowindow.openOn(' . $id . '_map);
 						  });
-						  ' . $id . '_map.fitBounds(' . $id . '_bounds);
 						}
     				}
     				if(data.betriebe != undefined && data.betriebe.length > 0)
@@ -98,10 +97,11 @@ class RegionAdminView extends View
 						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
 						    ' . $id . '_infowindow.openOn(' . $id . '_map);
 						  });
-						  ' . $id . '_map.fitBounds(' . $id . '_bounds);
 						}
 					}
-			
+					if (' . $id . '_bounds.isValid()) {
+						' . $id . '_map.fitBounds(' . $id . '_bounds);
+					}
 				},
 				complete: function(){
 					hideLoader();
