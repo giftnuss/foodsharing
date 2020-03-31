@@ -1370,21 +1370,6 @@ class XhrMethods
 		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
 
-	public function xhr_delPost($data)
-	{
-		$fsId = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
-		$bezirkType = $this->regionGateway->getType($bezirkId);
-
-		if ($fsId == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP) || $this->session->isOrgaTeam()) {
-			$this->forumGateway->deletePost($data['pid']);
-
-			return 1;
-		}
-
-		return 0;
-	}
-
 	public function xhr_abortEmail($data)
 	{
 		$mailOwnerId = $this->emailGateway->getOne_send_email($data['id'])['foodsaver_id'];
