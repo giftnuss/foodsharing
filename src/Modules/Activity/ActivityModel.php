@@ -216,7 +216,15 @@ class ActivityModel extends Db
 			foreach ($updates as $u) {
 				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
 				$forumTypePostfix = $u['bot_theme'] === 1 ? 'BOT-Forum' : 'Forum';
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id'] . '&sub=' . $forumTypeString . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '#tpost-' . (int)$u['last_post_id'];
+				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id']
+					. '&sub=' . $forumTypeString
+					. '&tid=' . (int)$u['id']
+					. '&pid=' . (int)$u['last_post_id']
+					. '#tpost-' . (int)$u['last_post_id'];
+				$replyUrl = '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id']
+					. '&tid=' . (int)$u['id']
+					. '&pid=' . (int)$u['last_post_id']
+					. '&sub=' . $forumTypeString;
 
 				$out[] = [
 					'type' => 'forum',
@@ -230,7 +238,7 @@ class ActivityModel extends Db
 						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
 						'time_ts' => $u['update_time_ts'],
-						'quickreply' => '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id'] . '&tid=' . (int)$u['id'] . '&pid=' . (int)$u['last_post_id'] . '&sub=' . $forumTypeString
+						'quickreply' => $replyUrl
 					]
 				];
 			}
