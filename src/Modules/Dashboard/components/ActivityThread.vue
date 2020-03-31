@@ -21,7 +21,6 @@ import ActivityPost from './ActivityPost'
 import InfiniteLoading from 'vue-infinite-loading'
 
 /* TODOs
-- sort updates by time
 - make cog work again
 */
 
