@@ -64,9 +64,6 @@
       <small v-else-if="data.mailbox_name && data.sender_email != data.mailbox_name">
         {{ data.mailbox_name }}
       </small>
-      <small v-else-if="type == 'friendWall' && user_id == data.fs_id">
-        Deine Pinnwand
-      </small>
     </span>
     <span class="t">
       <span class="txt">

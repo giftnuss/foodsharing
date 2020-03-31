@@ -120,21 +120,23 @@ class ActivityModel extends Db
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 			$out = [];
 			foreach ($updates as $u) {
-				$smTitle = $u['fs_name'] . 's Status';
-
 				if ($u['fs_id'] === $this->session->id()) {
 					$smTitle = 'Deine Pinnwand';
+				} else {
+					$smTitle = $u['fs_name'] . 's Status';
 				}
 
 				$out[] = [
-					'attr' => [
-						'href' => '/profile/' . $u['fs_id']
-					],
-					'title' => '<a href="/profile/' . $u['poster_id'] . '">' . $u['poster_name'] . '</a> <small>' . $smTitle . '</small>',
-					'desc' => $this->textPrepare($u['body']),
-					'time' => $u['time'],
-					'icon' => $this->imageService->img($u['fs_photo'], 50),
-					'time_ts' => $u['time_ts']
+					'type' => 'friendWall',
+					'data' => [
+						'desc' => $u['body'],
+						'icon' => $this->imageService->img($u['fs_photo'], 50),
+						'fs_id' => $u['fs_id'],
+						'fs_name' => $u['fs_name'],
+						'region_name' => $smTitle, // a bit of a hack right now
+						'time' => $u['time'],
+						'time_ts' => $u['time_ts']
+					]
 				];
 			}
 
