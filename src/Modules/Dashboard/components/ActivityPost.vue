@@ -115,8 +115,8 @@
       </span>
     </span>
     <span class="time">
-      <i class="far fa-clock" /> {{ timeago }}
-      <i class="fas fa-angle-right" /> {{ formatedTime }}
+      <i class="far fa-clock" /> {{ when | dateDistanceInWords }}
+      <i class="fas fa-angle-right" /> {{ when | dateFormat('full-short') }}
     </span>
     <span class="c" />
   </li>
@@ -126,8 +126,6 @@
 import serverData from '@/server-data'
 import { sendQuickreply } from '@/api/dashboard'
 import { pulseInfo } from '@/script'
-import timeformat from '@/timeformat'
-import { dateDistanceInWords } from '@/utils'
 import dateFnsParseISO from 'date-fns/parseISO'
 import Markdown from '@/components/Markdown/Markdown'
 
@@ -163,11 +161,8 @@ export default {
         return this.data.desc
       }
     },
-    formatedTime () {
-      return timeformat.nice(this.data.time)
-    },
-    timeago () {
-      return dateDistanceInWords(dateFnsParseISO(this.data.time))
+    when () {
+      return dateFnsParseISO(this.data.time)
     }
   },
   methods: {

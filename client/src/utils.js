@@ -52,9 +52,9 @@ export function dateFormat (date, format = 'full-long') {
       }
     case 'full-short':
       if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, 'cc, dd. MMM, HH:mm')
+        return dateFormat(date, 'ccc dd.MM., HH:mm')
       } else {
-        return dateFormat(date, 'cc, dd. MMM yy, HH:mm')
+        return dateFormat(date, 'ccc dd.MM.yyyy, HH:mm')
       }
     default:
       return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
