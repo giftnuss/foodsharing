@@ -493,7 +493,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	/**
 	 * Returns all managers of a store.
 	 */
-	public function getStoreManager(int $storeId): array
+	public function getStoreManagers(int $storeId): array
 	{
 		return $this->db->fetchAllValues('
 			SELECT 	t.`foodsaver_id`,
@@ -759,12 +759,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getBetriebConversation($storeId, $springerConversation = false)
 	{
 		if ($springerConversation) {
-			$ccol = 'springer_conversation_id';
+			$chatType = 'springer_conversation_id';
 		} else {
-			$ccol = 'team_conversation_id';
+			$chatType = 'team_conversation_id';
 		}
 
-		return $this->db->fetchValueByCriteria('fs_betrieb', $ccol, ['id' => $storeId]);
+		return $this->db->fetchValueByCriteria('fs_betrieb', $chatType, ['id' => $storeId]);
 	}
 
 	public function changeBetriebStatus($fs_id, $storeId, $status): int
