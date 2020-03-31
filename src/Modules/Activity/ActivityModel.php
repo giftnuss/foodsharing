@@ -165,16 +165,6 @@ class ActivityModel extends Db
 				foreach ($updates as $u) {
 					$sender = @json_decode($u['sender'], true);
 
-					$from = 'E-Mail';
-
-					if ($sender !== null) {
-						if (isset($sender['from']) && !empty($sender['from'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['personal'], 22) . '</a>';
-						} elseif (isset($sender['mailbox'])) {
-							$from = '<a title="' . $sender['mailbox'] . '@' . $sender['host'] . '" href="/?page=mailbox&mailto=' . urlencode($sender['mailbox'] . '@' . $sender['host']) . '">' . $this->ttt($sender['mailbox'] . '@' . $sender['host'], 22) . '</a>';
-						}
-					}
-
 					$out[] = [
 						'type' => 'mailbox',
 						'data' => [
@@ -196,15 +186,6 @@ class ActivityModel extends Db
 		}
 
 		return [];
-	}
-
-	private function ttt($str, $length = 160)
-	{
-		if (strlen($str) > $length) {
-			$str = substr($str, 0, ($length - 4)) . '...';
-		}
-
-		return $str;
 	}
 
 	public function loadForumUpdates(int $page, array $hidden_ids): array
