@@ -133,7 +133,7 @@ class ActivityModel extends Db
 						'icon' => $this->imageService->img($u['fs_photo'], 50),
 						'fs_id' => $u['fs_id'],
 						'fs_name' => $u['fs_name'],
-						'region_name' => $smTitle, // a bit of a hack right now
+						'source_name' => $smTitle,
 						'time' => $u['time'],
 						'time_ts' => $u['time_ts']
 					]
@@ -225,7 +225,7 @@ class ActivityModel extends Db
 						'fs_name' => $u['foodsaver_name'],
 						'forum_href' => $url,
 						'forum_name' => $u['name'],
-						'region_name' => $forumTypePostfix . ' ' . $u['bezirk_name'],
+						'source_name' => $forumTypePostfix . ' ' . $u['bezirk_name'],
 						'desc' => $u['post_body'],
 						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),

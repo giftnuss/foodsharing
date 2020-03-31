@@ -58,8 +58,8 @@
       >
         {{ data.store_name }}
       </a>
-      <small v-if="data.region_name">
-        {{ data.region_name }}
+      <small v-if="data.source_name">
+        {{ data.source_name }}
       </small>
       <small v-else-if="data.mailbox_name && data.sender_email != data.mailbox_name">
         {{ data.mailbox_name }}
