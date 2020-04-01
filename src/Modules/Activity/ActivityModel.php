@@ -137,6 +137,7 @@ class ActivityModel extends Db
 						'icon' => $this->imageService->img($u['fs_photo'], 50),
 						'fs_id' => $u['fs_id'],
 						'fs_name' => $u['fs_name'],
+						'gallery' => $u['gallery'] ?? [],
 						'source_name' => $smTitle,
 						'time' => $u['time'],
 						'time_ts' => $u['time_ts']
