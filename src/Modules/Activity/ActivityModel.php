@@ -43,6 +43,7 @@ class ActivityModel extends Db
 					'event_name' => 'Termin: ' . $u['name'],
 					'fs_id' => $u['fs_id'],
 					'fs_name' => $u['fs_name'],
+					'gallery' => $u['gallery'] ?? [],
 					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'source_name' => 'Termin',
 					'time' => $u['time'],

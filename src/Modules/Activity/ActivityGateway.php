@@ -278,6 +278,7 @@ class ActivityGateway extends BaseGateway
 				e.name,
 				w.body,
 				w.time,
+				w.attach,
 				UNIX_TIMESTAMP(w.time) AS time_ts,
 				fs.id AS fs_id,
 				fs.name AS fs_name,
@@ -299,7 +300,7 @@ class ActivityGateway extends BaseGateway
 			LIMIT :start_item_index, :items_per_page
 		';
 
-		return $this->db->fetchAll(
+		$events = $this->db->fetchAll(
 			$stm,
 			[
 				':foodsaver_id' => $fsId,
@@ -307,6 +308,8 @@ class ActivityGateway extends BaseGateway
 				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
+
+		return $this->_prepareImageGallery($events);
 	}
 
 	private function _prepareImageGallery(array $updateData): array
