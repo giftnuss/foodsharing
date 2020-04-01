@@ -371,6 +371,9 @@ search:
 
 dashboard:
   title: Dashboard
+  activity_filter_info: Hier kannst Du einstellen, welche Updates auf Deiner Startseite angezeigt werden sollen.
+  empty_section: "Du hast noch keine {type}"
+  save_selection: Einstellungen speichern
 
 home:
   title: Startseite

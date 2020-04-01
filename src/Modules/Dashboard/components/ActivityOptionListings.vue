@@ -5,9 +5,9 @@
       class="pure-form pure-form-stacked"
     >
       <fieldset :class="{disabledLoading: isLoading}">
-        <h3>Updates Blockieren</h3>
         <div class="msg-inside info">
-          <i class="fas fa-info-circle" /> Hier kannst Du einstellen, welche Updates auf Deiner Startseite nicht angezeigt werden sollen.
+          <i class="fas fa-info-circle" />
+          <span> {{ $i18n('dashboard.activity_filter_info') }} </span>
         </div>
         <div
           v-for="listing in listings"
@@ -38,7 +38,7 @@
               v-if="listing.items.length === 0"
               class="info-italic"
             >
-              Du hast noch keine {{ listing.name }}
+              {{ $i18n('dashboard.empty_section', {type: listing.name}) }}
             </label>
           </p>
         </div>
@@ -46,13 +46,13 @@
           class="button"
           @click="saveOptionListings"
         >
-          Einstellungen speichern
+          {{ $i18n('dashboard.save_selection') }}
         </a>
         <a
           class="button cancel-button"
           @click="$emit('close')"
         >
-          Abbrechen
+          {{ $i18n('button.abort') }}
         </a>
       </fieldset>
     </form>
