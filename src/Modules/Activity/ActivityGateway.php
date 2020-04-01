@@ -143,7 +143,10 @@ class ActivityGateway extends BaseGateway
 
 		$posts = $this->db->fetchAll(
 			$stm,
-			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE]
+			[
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE
+			]
 		);
 
 		foreach ($posts as $key => $w) {
@@ -193,7 +196,10 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE]
+			[
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE
+			]
 		);
 	}
 
@@ -225,7 +231,7 @@ class ActivityGateway extends BaseGateway
 			WHERE 		t.last_post_id = p.id
 			AND 		p.foodsaver_id = fs.id
 			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id IN(' . implode(',', $regionIds) . ')
+			AND 		bt.bezirk_id IN(:regions_to_fetch)
 			AND 		bt.bot_theme = :bot_theme_id
 			AND 		bt.bezirk_id = b.id
 			AND 		t.active = 1
@@ -237,7 +243,12 @@ class ActivityGateway extends BaseGateway
 
 		return $this->db->fetchAll(
 			$stm,
-			[':start_item_index' => $page * self::ITEMS_PER_PAGE, ':items_per_page' => self::ITEMS_PER_PAGE, ':bot_theme_id' => $isAmbassadorTheme ? 1 : 0]
+			[
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
+				':regions_to_fetch' => implode(',', $regionIds),
+				':bot_theme_id' => $isAmbassadorTheme ? 1 : 0
+			]
 		);
 	}
 

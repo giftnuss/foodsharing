@@ -212,7 +212,8 @@ class ActivityModel extends Db
 
 		$updates = $this->activityGateway->fetchAllForumUpdates($region_ids, $page, false);
 		if ($ambassadorIds = $this->session->getMyAmbassadorRegionIds()) {
-			$updates = array_merge($updates, $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true));
+			$botPosts = $this->activityGateway->fetchAllForumUpdates($ambassadorIds, $page, true);
+			$updates = array_merge($updates, $botPosts);
 		}
 
 		if (!empty($updates)) {
