@@ -56,41 +56,35 @@ class ActivityModel extends Db
 		return $out;
 	}
 
-	// basket wall updates were removed and could be replaced by yet not used food share point updates
-	public function loadBasketWallUpdates(int $page): array
+	public function loadFoodSharePointWallUpdates(int $page): array
 	{
-		$updates = [];
-		if ($up = $this->activityGateway->fetchAllBasketWallUpdates($this->session->id(), $page)) {
-			$updates = $up;
-		}
+		$updates = $this->activityGateway->fetchAllFoodSharePointWallUpdates($this->session->id(), $page);
+		$out = [];
 
-		if ($up = $this->activityGateway->fetchAllWallpostsFromFoodBaskets($this->session->id(), $page)) {
-			$updates = array_merge($updates, $up);
-		}
+		foreach ($updates as $u) {
+			// This would send updates to all subscribers, is it really needed?
+			$replyUrl = '/xhrapp.php?app=wallpost&m=quickreply&table=fairteiler&id=' . (int)$u['fsp_id'];
 
-		if (!empty($updates)) {
-			$out = [];
-
-			foreach ($updates as $u) {
-				$title = 'Essenskorb #' . $u['basket_id'];
-
-				$out[] = [
-					'attr' => [
-						'href' => '/profile/' . $u['fs_id']
-					],
-					'title' => '<a href="/profile/' . $u['fs_id'] . '">' . $u['fs_name'] . '</a> <i class="fas fa-angle-right"></i> <a href="/essenskoerbe/' . $u['basket_id'] . '">' . $title . '</a>',
-					'desc' => $this->textPrepare($u['body']),
-					'time' => $u['time'],
+			$out[] = [
+				'type' => 'foodsharepoint',
+				'data' => [
+					'desc' => $u['body'],
+					'fsp_id' => $u['fsp_id'],
+					'fsp_name' => $u['name'],
+					'fs_id' => $u['fs_id'],
+					'fs_name' => $u['fs_name'],
+					'gallery' => $u['gallery'] ?? [],
 					'icon' => $this->imageService->img($u['fs_photo'], 50),
-					'time_ts' => $u['time_ts'],
-					'quickreply' => '/xhrapp.php?app=wallpost&m=quickreply&table=basket&id=' . (int)$u['basket_id']
-				];
-			}
-
-			return $out;
+					'region_id' => $u['region_id'],
+					'source_name' => 'Fairteiler ' . $u['fsp_location'],
+					'time' => $u['time'],
+					'time_ts' => $u['time_ts']
+				]
+					// 'quickreply' => $replyUrl
+			];
 		}
 
-		return [];
+		return $out;
 	}
 
 	private function textPrepare($txt): ?string

@@ -29,7 +29,7 @@ export default {
   props: {
     displayedTypes: {
       type: Array,
-      default: () => { return ['store', 'forum', 'mailbox', 'friendWall', 'foodbasket'] }
+      default: () => { return ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'foodbasket'] }
     }
   },
   data () {

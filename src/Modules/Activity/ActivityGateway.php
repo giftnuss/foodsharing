@@ -108,6 +108,46 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
+	public function fetchAllFoodSharePointWallUpdates(int $fsId, int $page): array
+	{
+		$stm = '
+			SELECT
+				w.id,
+				f.name,
+				f.bezirk_id AS region_id,
+				f.ort AS fsp_location,
+				w.body,
+				w.time,
+				w.attach,
+				UNIX_TIMESTAMP(w.time) AS time_ts,
+				fs.id AS fs_id,
+				fs.name AS fs_name,
+				fs.photo AS fs_photo,
+				f.id AS fsp_id
+			FROM
+				fs_fairteiler_follower ff
+				left outer join fs_fairteiler f on ff.fairteiler_id = f.id
+				left outer join fs_fairteiler_has_wallpost hw on hw.fairteiler_id = f.id
+				left outer join fs_wallpost w on hw.wallpost_id = w.id
+				left outer join fs_foodsaver fs on w.foodsaver_id = fs.id
+			WHERE
+				ff.foodsaver_id = :foodsaver_id
+			ORDER BY w.id DESC
+			LIMIT :start_item_index, :items_per_page
+		';
+
+		$posts = $this->db->fetchAll(
+			$stm,
+			[
+				':foodsaver_id' => $fsId,
+				':start_item_index' => $page * self::ITEMS_PER_PAGE,
+				':items_per_page' => self::ITEMS_PER_PAGE,
+			]
+		);
+
+		return $this->_prepareImageGallery($posts);
+	}
+
 	public function fetchAllFriendWallUpdates(array $buddyIds, int $page): array
 	{
 		$stm = '

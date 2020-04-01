@@ -41,6 +41,12 @@
         {{ data.forum_name }}
       </a>
       <a
+        v-else-if="type == 'foodsharepoint'"
+        :href="'?page=fairteiler&sub=ft&bid=' + data.region_id + '&id=' + data.fsp_id"
+      >
+        {{ data.fsp_name }}
+      </a>
+      <a
         v-else-if="type == 'event'"
         :href="'?page=event&id=' + data.event_id"
       >
