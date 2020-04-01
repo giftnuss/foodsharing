@@ -149,24 +149,7 @@ class ActivityGateway extends BaseGateway
 			]
 		);
 
-		foreach ($posts as $key => $w) {
-			if (!empty($w['attach'])) {
-				$data = json_decode($w['attach'], true);
-				if (isset($data['image'])) {
-					$gallery = [];
-					foreach ($data['image'] as $img) {
-						$gallery[] = [
-							'image' => 'images/wallpost/' . $img['file'],
-							'medium' => 'images/wallpost/medium_' . $img['file'],
-							'thumb' => 'images/wallpost/thumb_' . $img['file']
-						];
-					}
-					$posts[$key]['gallery'] = $gallery;
-				}
-			}
-		}
-
-		return $posts;
+		return $this->_prepareImageGallery($posts);
 	}
 
 	public function fetchAllMailboxUpdates(array $mb_ids, int $page): array
@@ -324,5 +307,28 @@ class ActivityGateway extends BaseGateway
 				':items_per_page' => self::ITEMS_PER_PAGE,
 			]
 		);
+	}
+
+	private function _prepareImageGallery(array $updateData): array
+	{
+		foreach ($updateData as $key => $w) {
+			if (empty($w['attach'])) {
+				continue;
+			}
+			$data = json_decode($w['attach'], true);
+			$imgData = $data['image'] ?? [];
+
+			$gallery = [];
+			foreach ($imgData as $img) {
+				$gallery[] = [
+					'image' => 'images/wallpost/' . $img['file'],
+					'medium' => 'images/wallpost/medium_' . $img['file'],
+					'thumb' => 'images/wallpost/thumb_' . $img['file']
+				];
+			}
+			$updateData[$key]['gallery'] = $gallery;
+		}
+
+		return $updateData;
 	}
 }
