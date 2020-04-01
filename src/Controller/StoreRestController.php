@@ -93,4 +93,20 @@ class StoreRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * Deletes a post from the wall of a store.
+	 *
+	 * @Rest\Delete("stores/posts/{postId}")
+	 */
+	public function deleteStorePostAction(int $postId)
+	{
+		if (!$this->storePermissions->mayDeleteStoreWallPost($postId)) {
+			throw new AccessDeniedHttpException();
+		}
+
+		$this->storeGateway->deleteBPost($postId);
+
+		return $this->handleView($this->view([], 200));
+	}
 }

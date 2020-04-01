@@ -37,7 +37,7 @@
 - Don't include unconfirmed slots into statistics and fetch history !1360 @caluera
 - Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
 - Fix missing region id bug for food share points !1375 @alex.simm
-- Set height for topbar and reduces the height of div#main. Now is the broadcast message completely readable !1383 @chriswalg
+- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 @chriswalg
 - Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 - Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
@@ -64,6 +64,9 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
+- Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
+- New function for deleting store wall posts via rest !1390 #9 @alex.simm
+- Get rid of /upload.php !1365 @\_fridtjof_
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

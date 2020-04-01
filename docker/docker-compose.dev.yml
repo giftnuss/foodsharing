@@ -50,11 +50,11 @@ services:
     ports:
       - 18080:18080
     command: sh -c "yarn && yarn dev"
-    working_dir: /app/client
+    working_dir: /home/node/app/client
     user: "node"
     volumes:
-      - ../:/app:delegated
-      - client-node-modules:/app/client/node_modules:cached
+      - ../:/home/node/app:delegated
+      - client-node-modules:/home/node/app/client/node_modules:cached
     environment:
       HOST: 0.0.0.0
       PROXY_TARGET: http://web:8080

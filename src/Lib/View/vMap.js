@@ -3,6 +3,9 @@ import $ from 'jquery'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import 'mapbox-gl-leaflet'
+
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
@@ -35,12 +38,13 @@ export async function initializeMap (el, cb = null) {
   })
 
   map = L
-    .map(el)
+    .map(el, { maxZoom: 20 })
     .setView(center, zoom)
 
-  L.tileLayer(MAP_TILES_URL, {
-    attribution: MAP_GEOCODING_ATTRIBUTION
+  L.mapboxGL({
+    style: MAP_TILES_URL
   }).addTo(map)
+  map.attributionControl.setPrefix(MAP_GEOCODING_ATTRIBUTION)
 
   clearCluster()
 
