@@ -323,13 +323,15 @@ class ActivityGateway extends BaseGateway
 				fs.id AS fs_id,
 				fs.name AS fs_name,
 				fs.photo AS fs_photo,
+				b.name AS event_region,
 				e.id AS event_id
 			FROM
 				fs_foodsaver_has_event fhe
 				left outer join fs_event e on fhe.event_id = e.id
-				left outer join fs_event_has_wallpost hw on hw.event_id= e.id
-				left outer join fs_wallpost w on hw.wallpost_id=w.id
-				left outer join fs_foodsaver fs on w.foodsaver_id=fs.id
+				left outer join fs_event_has_wallpost hw on hw.event_id = e.id
+				left outer join fs_wallpost w on hw.wallpost_id = w.id
+				left outer join fs_foodsaver fs on w.foodsaver_id = fs.id
+				left outer join fs_bezirk b on e.bezirk_id = b.id
 			WHERE
 				fhe.foodsaver_id = :foodsaver_id
 			AND

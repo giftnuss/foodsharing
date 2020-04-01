@@ -40,12 +40,12 @@ class ActivityModel extends Db
 				'data' => [
 					'desc' => $u['body'],
 					'event_id' => $u['event_id'],
-					'event_name' => 'Termin: ' . $u['name'],
+					'event_name' => $u['name'],
 					'fs_id' => $u['fs_id'],
 					'fs_name' => $u['fs_name'],
 					'gallery' => $u['gallery'] ?? [],
 					'icon' => $this->imageService->img($u['fs_photo'], 50),
-					'source_name' => 'Termin',
+					'source' => $u['event_region'],
 					'time' => $u['time'],
 					'time_ts' => $u['time_ts'],
 					'quickreply' => $replyUrl
@@ -76,7 +76,7 @@ class ActivityModel extends Db
 					'gallery' => $u['gallery'] ?? [],
 					'icon' => $this->imageService->img($u['fs_photo'], 50),
 					'region_id' => $u['region_id'],
-					'source_name' => 'Fairteiler ' . $u['fsp_location'],
+					'source' => $u['fsp_location'],
 					'time' => $u['time'],
 					'time_ts' => $u['time_ts']
 				]
@@ -119,21 +119,18 @@ class ActivityModel extends Db
 		if ($updates = $this->activityGateway->fetchAllFriendWallUpdates($bids, $page)) {
 			$out = [];
 			foreach ($updates as $u) {
-				if ($u['fs_id'] === $this->session->id()) {
-					$smTitle = 'Deine Pinnwand';
-				} else {
-					$smTitle = $u['fs_name'] . 's Status';
-				}
+				$is_own = $u['fs_id'] === $this->session->id();
 
 				$out[] = [
 					'type' => 'friendWall',
 					'data' => [
 						'desc' => $u['body'],
-						'icon' => $this->imageService->img($u['fs_photo'], 50),
 						'fs_id' => $u['fs_id'],
 						'fs_name' => $u['fs_name'],
 						'gallery' => $u['gallery'] ?? [],
-						'source_name' => $smTitle,
+						'icon' => $this->imageService->img($u['fs_photo'], 50),
+						'is_own' => $is_own ? '_own' : null,
+						'source' => $u['fs_name'],
 						'time' => $u['time'],
 						'time_ts' => $u['time_ts']
 					]
@@ -215,8 +212,10 @@ class ActivityModel extends Db
 		if (!empty($updates)) {
 			$out = [];
 			foreach ($updates as $u) {
-				$forumTypeString = $u['bot_theme'] === 1 ? 'botforum' : 'forum';
-				$forumTypePostfix = $u['bot_theme'] === 1 ? 'BOT-Forum' : 'Forum';
+				$is_bot = $u['bot_theme'] === 1;
+
+				$forumTypeString = $is_bot ? 'botforum' : 'forum';
+
 				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id']
 					. '&sub=' . $forumTypeString
 					. '&tid=' . (int)$u['id']
@@ -230,14 +229,15 @@ class ActivityModel extends Db
 				$out[] = [
 					'type' => 'forum',
 					'data' => [
+						'desc' => $u['post_body'],
 						'fs_id' => (int)$u['foodsaver_id'],
 						'fs_name' => $u['foodsaver_name'],
 						'forum_href' => $url,
 						'forum_name' => $u['name'],
-						'source_name' => $forumTypePostfix . ' ' . $u['bezirk_name'],
-						'desc' => $u['post_body'],
-						'time' => $u['update_time'],
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
+						'source' => $u['bezirk_name'],
+						'is_bot' => $is_bot ? '_bot' : null,
+						'time' => $u['update_time'],
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => $replyUrl
 					]

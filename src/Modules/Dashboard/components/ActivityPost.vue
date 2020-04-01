@@ -50,7 +50,7 @@
         v-else-if="type == 'event'"
         :href="'?page=event&id=' + data.event_id"
       >
-        {{ data.event_name }}
+        {{ $i18n('dashboard.event_title', {title: data.event_name}) }}
       </a>
       <a
         v-else-if="type == 'mailbox'"
@@ -66,6 +66,9 @@
       </a>
       <small v-if="data.source_name">
         {{ data.source_name }}
+      </small>
+      <small v-else-if="data.source">
+        {{ $i18n(translationKey, [data.source]) }}
       </small>
       <small v-else-if="data.mailbox_name && data.sender_email != data.mailbox_name">
         {{ data.mailbox_name }}
@@ -163,6 +166,9 @@ export default {
       } else {
         return this.data.desc
       }
+    },
+    translationKey () {
+      return 'dashboard.source_' + this.type + (this.data.is_own || this.data.is_bot || '')
     },
     when () {
       return dateFnsParseISO(this.data.time)
