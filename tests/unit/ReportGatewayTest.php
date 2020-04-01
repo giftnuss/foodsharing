@@ -28,7 +28,7 @@ class ReportGatewayTest extends \Codeception\Test\Unit
 		$foodsaverInChild = $this->tester->createFoodsaver(null, ['bezirk_id' => $this->childRegion['id']]);
 		$randomFoodsaver = $this->tester->createFoodsaver();
 		$adminInChild = $this->tester->createFoodsaver(null, ['bezirk_id' => $this->childRegion['id']]);
-		$this->tester->addBezirkAdmin($this->childRegion['id'], $adminInChild['id']);
+		$this->tester->addRegionAdmin($this->childRegion['id'], $adminInChild['id']);
 		$reportAgainstAmb = $this->tester->addReport($foodsaverInChild['id'], $adminInChild['id']);
 		$anotherReportAgainstAmb = $this->tester->addReport($randomFoodsaver['id'], $adminInChild['id']);
 		$reportAgainstUser = $this->tester->addReport($adminInChild['id'], $foodsaverInChild['id']);

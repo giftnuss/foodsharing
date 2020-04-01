@@ -30,7 +30,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$regionId = $this->region['id'];
 		$this->regionMember = $this->tester->createFoodsaver(null, ['bezirk_id' => $regionId]);
 		$this->regionAdmin = $this->tester->createAmbassador(null, ['bezirk_id' => $regionId]);
-		$this->tester->addBezirkAdmin($regionId, $this->regionAdmin['id']);
+		$this->tester->addRegionAdmin($regionId, $this->regionAdmin['id']);
 	}
 
 	public function testUpdateProfile()

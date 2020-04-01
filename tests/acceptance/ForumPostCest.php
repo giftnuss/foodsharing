@@ -29,11 +29,11 @@ class ForumPostCest
 		$this->ambassador = $I->createAmbassador(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$this->foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$this->unverifiedFoodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id'], 'verified' => false]);
-		$I->addBezirkAdmin($this->testBezirk['id'], $this->ambassador['id']);
-		$I->addBezirkAdmin($this->bigTestBezirk['id'], $this->ambassador['id']);
-		$I->addBezirkAdmin($this->moderatedTestBezirk['id'], $this->ambassador['id']);
-		$I->addBezirkMember($this->bigTestBezirk['id'], $this->foodsaver['id']);
-		$I->addBezirkMember($this->moderatedTestBezirk['id'], $this->foodsaver['id']);
+		$I->addRegionAdmin($this->testBezirk['id'], $this->ambassador['id']);
+		$I->addRegionAdmin($this->bigTestBezirk['id'], $this->ambassador['id']);
+		$I->addRegionAdmin($this->moderatedTestBezirk['id'], $this->ambassador['id']);
+		$I->addRegionMember($this->bigTestBezirk['id'], $this->foodsaver['id']);
+		$I->addRegionMember($this->moderatedTestBezirk['id'], $this->foodsaver['id']);
 	}
 
 	private function createPosts(AcceptanceTester $I)

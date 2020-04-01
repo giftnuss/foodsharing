@@ -6,8 +6,8 @@ $I->wantTo('add a foodsaver to a working group by seeing their ID in the tag sel
 $group = $I->createWorkingGroup('a test group');
 $foodsaver = $I->createFoodsaver(null, ['name' => 'WorkingGroupTestUser', 'nachname' => 'lastNameOfThat']);
 $admin = $I->createFoodsaver();
-$I->addBezirkMember($group['id'], $admin['id']);
-$I->addBezirkAdmin($group['id'], $admin['id']);
+$I->addRegionMember($group['id'], $admin['id']);
+$I->addRegionAdmin($group['id'], $admin['id']);
 
 $I->login($admin['email']);
 $I->amOnPage($I->groupEditUrl($group['id']));

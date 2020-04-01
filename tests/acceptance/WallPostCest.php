@@ -10,7 +10,7 @@ class WallPostCest
 	{
 		$this->testGroup = $I->createWorkingGroup('a top group');
 		$this->regionMember = $I->createFoodsaver();
-		$I->addBezirkMember($this->testGroup['id'], $this->regionMember['id']);
+		$I->addRegionMember($this->testGroup['id'], $this->regionMember['id']);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();
 	}
 

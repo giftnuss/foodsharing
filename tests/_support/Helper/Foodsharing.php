@@ -97,7 +97,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		if ($params['bezirk_id']) {
-			$this->addBezirkMember($params['bezirk_id'], $id);
+			$this->addRegionMember($params['bezirk_id'], $id);
 		}
 		$params['id'] = $id;
 
@@ -448,7 +448,7 @@ class Foodsharing extends \Codeception\Module\Db
 		return $v;
 	}
 
-	public function addBezirkAdmin($region_id, $fs_id)
+	public function addRegionAdmin($region_id, $fs_id)
 	{
 		$v = [
 			'bezirk_id' => $region_id,
@@ -457,11 +457,11 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->haveInDatabase('fs_botschafter', $v);
 	}
 
-	public function addBezirkMember($region_id, $fs_id, $is_active = true)
+	public function addRegionMember($region_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
 			array_map(function ($x) use ($region_id, $is_active) {
-				$this->addBezirkMember($region_id, $x, $is_active);
+				$this->addRegionMember($region_id, $x, $is_active);
 			}, $fs_id);
 		} else {
 			$v = [

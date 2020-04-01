@@ -17,7 +17,7 @@ $I->wantTo('create an id card for a foodsaver');
 $regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegionId]);
 $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
 $ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
-$I->addBezirkAdmin($testRegionId, $ambassador['id']);
+$I->addRegionAdmin($testRegionId, $ambassador['id']);
 
 $I->login($ambassador['email']);
 

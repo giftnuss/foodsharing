@@ -6,7 +6,7 @@ $I->wantTo('Verify, unverify and see verification history of a foodsaver');
 
 $foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $testRegionId]);
 $ambassador = $I->createAmbassador(null, ['name' => 'Bot', 'bezirk_id' => $testRegionId]);
-$I->addBezirkAdmin($testRegionId, $ambassador['id']);
+$I->addRegionAdmin($testRegionId, $ambassador['id']);
 
 /* define xpath locator
 1. //a[contains(text(), "%s")]     look a the link with the foodsavers' name:

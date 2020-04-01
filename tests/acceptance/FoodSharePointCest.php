@@ -13,9 +13,9 @@ class FoodSharePointCest
 		$this->testBezirk = $I->createRegion('MyFunnyBezirk');
 		$this->user = $I->createFoodsharer(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$this->responsible = $I->createAmbassador(null, ['bezirk_id' => $this->testBezirk['id']]);
-		$I->addBezirkAdmin($this->testBezirk['id'], $this->responsible['id']);
+		$I->addRegionAdmin($this->testBezirk['id'], $this->responsible['id']);
 		$this->otherBot = $I->createAmbassador(null, ['bezirk_id' => $this->testBezirk['id']]);
-		$I->addBezirkAdmin($this->testBezirk['id'], $this->otherBot['id']);
+		$I->addRegionAdmin($this->testBezirk['id'], $this->otherBot['id']);
 		$this->foodSharePoint = $I->createFoodSharePoint($this->responsible['id'], $this->testBezirk['id']);
 	}
 
@@ -92,7 +92,7 @@ class FoodSharePointCest
 	{
 		$region = $I->createRegion('another funny region');
 		$bot = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
-		$I->addBezirkAdmin($region['id'], $bot['id']);
+		$I->addRegionAdmin($region['id'], $bot['id']);
 		$I->login($bot['email']);
 		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']) . '&bid=' . $region['id']);
 		/* does not get edit view although region admin of another region (regression) */

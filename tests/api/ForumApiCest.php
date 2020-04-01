@@ -13,7 +13,7 @@ class ForumApiCest
 		$this->tester = $I;
 		$this->user = $I->createFoodsaver();
 		$this->region = $I->createRegion();
-		$I->addBezirkMember($this->region['id'], $this->user['id']);
+		$I->addRegionMember($this->region['id'], $this->user['id']);
 		$this->thread = $I->addForumTheme($this->region['id'], $this->user['id']);
 		$this->faker = Faker\Factory::create('de_DE');
 	}

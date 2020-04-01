@@ -14,9 +14,9 @@ class FoodsaverCest
 		$this->region = $I->createRegion();
 		$regionId = $this->region['id'];
 		$this->foodsharer = $I->createFoodsharer();
-		$I->addBezirkMember($regionId, $this->foodsharer['id']);
+		$I->addRegionMember($regionId, $this->foodsharer['id']);
 		$this->orga = $I->createOrga();
-		$I->addBezirkAdmin($regionId, $this->orga['id']);
+		$I->addRegionAdmin($regionId, $this->orga['id']);
 	}
 
 	public function downgradeFoodsharerPermanently(AcceptanceTester $I)
