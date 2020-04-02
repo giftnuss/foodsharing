@@ -388,9 +388,7 @@ div.pulse-msg {
 div.msg-inside {
   border-radius: 6px;
   padding: 15px 15px 15px 30px;
-
   background-color: #f5f5b5;
-  margin-bottom: 15px;
 }
 
 div.msg-inside i {

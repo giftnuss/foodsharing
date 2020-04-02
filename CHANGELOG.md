@@ -39,7 +39,7 @@
 - Don't include unconfirmed slots into statistics and fetch history !1360 @caluera
 - Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
 - Fix missing region id bug for food share points !1375 @alex.simm
-- Set height for topbar and reduces the height of div#main. Now is the broadcast message completely readable !1383 @chriswalg
+- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 @chriswalg
 - Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 - Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
@@ -69,12 +69,16 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - recreate Dashboard update-overview with vue components @D0nPiano 
 - changed ActivityModel to return data without HTML or JS @D0nPiano
+- New function for deleting store wall posts via rest !1390 #9 @alex.simm
+- Get rid of /upload.php !1365 @\_fridtjof_
+- Removed unused delPost xhr function !1417 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
 - fix some doc annotations !1361 @\_fridtjof_
 - update mkdirp to version 1 @peter.toennies
 - update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 !1369 @peter.toennies
+- added german contributing guide and english FAQs to devdocs !1376 @Jonathan_B
 - updated sentry to version 2 @peter.toennies
 - update codeception to version 4, phpunit to version 9, and sebastian/diff to version 4 #1369 @peter.toennies
 - Less ports are exposed to the dev computer's network now !1367 @\_fridtjof_

@@ -34,6 +34,7 @@ import {
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
+import { deleteStorePost } from '@/api/stores'
 
 expose({
   u_updatePosts,
@@ -135,22 +136,17 @@ $(document).ready(() => {
     buttons: [
       {
         text: $('#delete_shure .sure').text(),
-        click: function () {
+        click: async function () {
           showLoader()
           const pid = $(this).data('pid')
-          $.ajax({
-            url: '/xhr.php?f=delBPost',
-            data: { pid: pid },
-            success: function (ret) {
-              if (ret == 1) {
-                $(`.bpost-${pid}`).remove()
-                $('#delete_shure').dialog('close')
-              }
-            },
-            complete: function () {
-              hideLoader()
-            }
-          })
+          try {
+            await deleteStorePost(pid)
+            $(`.bpost-${pid}`).remove()
+            $('#delete_shure').dialog('close')
+          } catch (e) {
+            pulseError(i18n('error_unexpected'))
+          }
+          hideLoader()
         }
       },
       {

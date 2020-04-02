@@ -543,7 +543,7 @@ class Utils
 
 					</div>
 					<a href="#" style="display:none" id="' . $id . '-save">Speichern</a>
-					<iframe name="' . $id . '-frame" src="upload.php" width="1" height="1" style="visibility:hidden;"></iframe>
+					<iframe name="' . $id . '-frame" src="" width="1" height="1" style="visibility:hidden;"></iframe>
 				</div>');
 
 		if (isset($_GET['pinit'])) {
