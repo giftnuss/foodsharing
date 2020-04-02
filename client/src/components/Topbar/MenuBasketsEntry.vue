@@ -29,9 +29,9 @@
           <b-list-group-item
             v-for="req in basket.requests"
             :key="req.id"
-            @click.prevent="openChat(req.user.id, $event)"
             href="#"
             class="d-flex w-100 align-items-center food-basket-create-test-class"
+            @click.prevent="openChat(req.user.id, $event)"
           >
             <avatar
               :url="req.user.avatar"
@@ -45,9 +45,9 @@
             <b-button
               v-b-tooltip
               :title="$i18n('basket.request_close')"
-              @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
               size="sm"
               variant="secondary"
+              @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
             >
               <i class="fas fa-times" />
             </b-button>
