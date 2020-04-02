@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class ActivityGateway extends BaseGateway
 {
-	private const ITEMS_PER_PAGE = 10;
+	private const ITEMS_PER_PAGE = 3;
 
 	// basket wall updates were removed and could be replaced by yet not used food share point updates
 	public function fetchAllBasketWallUpdates(int $fsId, int $page): array
