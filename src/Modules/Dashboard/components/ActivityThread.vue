@@ -10,7 +10,24 @@
       <infinite-loading
         spinner="waveDots"
         @infinite="infiniteHandler"
-      />
+      >
+        <li
+          slot="no-results"
+          class="activity-item"
+        >
+          <span>
+            {{ $i18n('dashboard.no_updates') }}
+          </span>
+        </li>
+        <li
+          slot="no-more"
+          class="activity-item"
+        >
+          <span>
+            {{ $i18n('dashboard.no_more_updates') }}
+          </span>
+        </li>
+      </infinite-loading>
     </ul>
   </div>
 </template>
