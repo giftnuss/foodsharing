@@ -52,7 +52,7 @@
     "vue": "^2.6.11",
     "vue-phone-number-input": "^1.1.6",
     "vuelidate": "^0.7.5",
-    "vue-infinite-loading": "^2.4.3",
+    "vue-infinite-loading": "^2.4.5",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
