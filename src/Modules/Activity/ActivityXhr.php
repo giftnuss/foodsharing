@@ -47,11 +47,8 @@ class ActivityXhr extends Control
 			$this->session->setOption('activity-listings', $options, $this->model);
 		}
 
-		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
-		} else {
-			$page = 0;
-		}
+		$page = $_GET['page'] ?? 0;
+
 		$hidden_ids = [
 			'bezirk' => [],
 			'mailbox' => [],
@@ -168,7 +165,11 @@ class ActivityXhr extends Control
 		/*
 			* listings mailboxes
 		*/
-		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
+		if ($boxes = $this->mailboxGateway->getBoxes(
+				$this->session->isAmbassador(),
+				$this->session->id(),
+				$this->session->may('bieb'))
+			) {
 			foreach ($boxes as $b) {
 				$checked = true;
 				$mailboxId = 'mailbox-' . $b['id'];
