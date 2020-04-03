@@ -37,16 +37,12 @@ import { getUpdates } from '@/api/dashboard'
 import ActivityPost from './ActivityPost'
 import InfiniteLoading from 'vue-infinite-loading'
 
-/* TODOs
-- make cog work again
-*/
-
 export default {
   components: { ActivityPost, InfiniteLoading },
   props: {
     displayedTypes: {
       type: Array,
-      default: () => { return ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'foodbasket'] }
+      default: () => { return ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event'] }
     }
   },
   data () {
