@@ -83,10 +83,11 @@ export default {
   methods: {
     displayOne: function (type) {
       this.displayedTypes = [type]
-      // this.showListings = false
+      this.$refs.thread.resetInfinity()
     },
     displayAll: function () {
       this.displayedTypes = ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event']
+      this.$refs.thread.resetInfinity()
     },
     toggleOptionListings: function () {
       this.showListings = !this.showListings

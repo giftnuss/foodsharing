@@ -2,12 +2,13 @@
   <div>
     <ul class="linklist">
       <ActivityPost
-        v-for="(el, index) in filteredUpdates"
+        v-for="(el, index) in hideUnwanted(updates)"
         :key="index"
         :type="el.type"
         :data="el.data"
       />
       <infinite-loading
+        ref="infiniteLoading"
         spinner="waveDots"
         @infinite="infiniteHandler"
       >
@@ -51,15 +52,19 @@ export default {
       page: 0
     }
   },
-  computed: {
-    filteredUpdates: function () {
-      return this.updates.filter(a => this.displayedTypes.indexOf(a.type) !== -1)
-    }
-  },
   methods: {
+    resetInfinity () {
+      // from https://github.com/PeachScript/vue-infinite-loading/issues/123#issuecomment-357129636
+      // this causes the loader to start looking for data again, when in completed state
+      this.$refs.infiniteLoading.stateChanger.reset()
+    },
+    hideUnwanted (updates) {
+      return updates.filter(a => this.displayedTypes.indexOf(a.type) !== -1)
+    },
     async infiniteHandler ($state) {
       var res = await getUpdates(this.page)
-      if (res.length) {
+      var filtered = this.hideUnwanted(res)
+      if (filtered.length) {
         this.page += 1
         res.sort((a, b) => {
           return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
@@ -67,6 +72,7 @@ export default {
         this.updates.push(...res)
         $state.loaded()
       } else {
+        $state.loaded()
         $state.complete()
       }
     },
