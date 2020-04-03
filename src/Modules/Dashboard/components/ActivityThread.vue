@@ -2,7 +2,7 @@
   <div>
     <ul class="linklist">
       <ActivityPost
-        v-for="(el, index) in hideUnwanted(updates)"
+        v-for="(el, index) in filteredUpdates"
         :key="index"
         :type="el.type"
         :data="el.data"
@@ -55,32 +55,22 @@ export default {
       page: 0
     }
   },
+  computed: {
+    filteredUpdates: function () {
+      return this.updates.filter(a => this.displayedTypes.indexOf(a.type) !== -1)
+    }
+  },
   methods: {
-    hideUnwanted (updates) {
-      return updates.filter(a => this.displayedTypes.indexOf(a.type) !== -1)
-    },
-    delay (howLong) {
-      return new Promise(resolve => setTimeout(resolve, howLong))
-    },
     async infiniteHandler ($state) {
       var res = await getUpdates(this.page)
-      var filtered = this.hideUnwanted(res)
-      if (filtered.length) {
+      if (res.length) {
         this.page += 1
         res.sort((a, b) => {
           return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
         })
         this.updates.push(...res)
-        await this.delay(1000)
-        $state.loaded()
-      } else if (res.length) {
-        // There are more results, but the next page would be
-        // empty with the current filter settings... ??? WHAT TO DO ???
-        // ugly solution right now: wait for a longer duration, then retry
-        await this.delay(60 * 1000) // 1 min
         $state.loaded()
       } else {
-        $state.loaded()
         $state.complete()
       }
     },

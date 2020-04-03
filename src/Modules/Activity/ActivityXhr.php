@@ -213,12 +213,12 @@ class ActivityXhr extends Control
 	private function buildUpdateData(array $hidden_ids, int $page): array
 	{
 		return array_merge(
-			// $this->model->loadForumUpdates($page, $hidden_ids['bezirk']),
+			$this->model->loadForumUpdates($page, $hidden_ids['bezirk']),
 			$this->model->loadStoreUpdates($page),
-			// $this->model->loadMailboxUpdates($page, $hidden_ids['mailbox']),
+			$this->model->loadMailboxUpdates($page, $hidden_ids['mailbox']),
 			$this->model->loadFoodSharePointWallUpdates($page),
-			// $this->model->loadFriendWallUpdates($page, $hidden_ids['buddywall']),
-			// $this->model->loadEventWallUpdates($page)
+			$this->model->loadFriendWallUpdates($page, $hidden_ids['buddywall']),
+			$this->model->loadEventWallUpdates($page)
 		);
 	}
 }
