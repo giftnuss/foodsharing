@@ -204,11 +204,6 @@ class ActivityModel extends Db
 
 				$forumTypeString = $is_bot ? 'botforum' : 'forum';
 
-				$url = '/?page=bezirk&bid=' . (int)$u['bezirk_id']
-					. '&sub=' . $forumTypeString
-					. '&tid=' . (int)$u['id']
-					. '&pid=' . (int)$u['last_post_id']
-					. '#tpost-' . (int)$u['last_post_id'];
 				$replyUrl = '/xhrapp.php?app=bezirk&m=quickreply&bid=' . (int)$u['bezirk_id']
 					. '&tid=' . (int)$u['id']
 					. '&pid=' . (int)$u['last_post_id']
@@ -220,11 +215,14 @@ class ActivityModel extends Db
 						'desc' => $u['post_body'],
 						'fs_id' => (int)$u['foodsaver_id'],
 						'fs_name' => $u['foodsaver_name'],
-						'forum_href' => $url,
 						'forum_name' => $u['name'],
+						'forum_post' => (int)$u['last_post_id'],
+						'forum_topic' => (int)$u['id'],
+						'forum_type' => $forumTypeString,
 						'icon' => $this->imageService->img($u['foodsaver_photo'], 50),
-						'source' => $u['bezirk_name'],
 						'is_bot' => $is_bot ? '_bot' : null,
+						'region_id' => (int)$u['bezirk_id'],
+						'source' => $u['bezirk_name'],
 						'time' => $u['update_time'],
 						'time_ts' => $u['update_time_ts'],
 						'quickreply' => $replyUrl

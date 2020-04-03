@@ -20,7 +20,7 @@
     <span class="n">
       <a
         v-if="data.fs_id"
-        :href="'/profile/' + data.fs_id"
+        :href="link"
       >
         {{ data.fs_name }}
       </a>
@@ -36,19 +36,19 @@
       />
       <a
         v-if="type == 'forum'"
-        :href="data.forum_href"
+        :href="dashboardContentLink"
       >
         {{ data.forum_name }}
       </a>
       <a
         v-else-if="type == 'foodsharepoint'"
-        :href="'?page=fairteiler&sub=ft&bid=' + data.region_id + '&id=' + data.fsp_id"
+        :href="dashboardContentLink"
       >
         {{ data.fsp_name }}
       </a>
       <a
         v-else-if="type == 'event'"
-        :href="'?page=event&id=' + data.event_id"
+        :href="dashboardContentLink"
       >
         {{ $i18n('dashboard.event_title', {title: data.event_name}) }}
       </a>
@@ -80,7 +80,7 @@
           <a
             v-for="img in data.gallery"
             :key="img.thumb"
-            :href="'profile/' + data.fs_id + '/#wallposts'"
+            :href="dashboardContentLink"
           >
             <img :src="img.thumb">
           </a>
@@ -157,6 +157,24 @@ export default {
     }
   },
   computed: {
+    dashboardContentLink () {
+      switch (this.type) {
+        case 'event':
+          return '?page=event&id=' + this.data.event_id
+        case 'foodsharepoint':
+          return '?page=fairteiler&sub=ft&bid=' + this.data.region_id + '&id=' + this.data.fsp_id
+        case 'friendWall':
+          return '/profile/' + this.data.fs_id
+        case 'forum':
+          return ('/?page=bezirk&bid=' + this.data.region_id +
+            '&sub=' + this.data.forum_type +
+            '&tid=' + this.data.forum_topic +
+            '&pid=' + this.data.forum_post +
+            '#tpost-' + this.data.forum_post)
+        default:
+          return '#'
+      }
+    },
     isTruncatable () {
       return this.data.desc.split(' ').length > 18
     },
