@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
-import urls from '@/urls'
+import { url } from '@/urls'
 import { dateFormat, dateDistanceInWords } from '@/utils'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -21,13 +21,7 @@ Vue.prototype.$i18n = (key, variables = {}) => {
 }
 Vue.prototype.$dateFormat = dateFormat
 
-Vue.prototype.$url = (key, ...params) => {
-  if (!urls[key]) {
-    console.error(new Error(`Vue.$url() Error: url key '${key}' does not exist`))
-    return '#'
-  }
-  return urls[key](...params)
-}
+Vue.prototype.$url = url
 
 export function vueRegister (components) {
   for (const key in components) {

@@ -45,7 +45,7 @@
           <i class="far fa-comment-dots" />Bot-Forum
         </a>
         <a
-          :href="$url('fairteiler', region.id)"
+          :href="$url('foodsharepoints', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >

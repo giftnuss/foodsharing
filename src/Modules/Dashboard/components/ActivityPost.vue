@@ -3,7 +3,7 @@
     <span class="i">
       <a
         v-if="data.fs_id"
-        :href="'/profile/' + data.fs_id"
+        :href="$url('profile', data.fs_id)"
       >
         <img
           :src="data.icon"
@@ -20,7 +20,7 @@
     <span class="n">
       <a
         v-if="data.fs_id"
-        :href="link"
+        :href="$url('profile', data.fs_id)"
       >
         {{ data.fs_name }}
       </a>
@@ -132,6 +132,7 @@
 import serverData from '@/server-data'
 import { sendQuickreply } from '@/api/dashboard'
 import { pulseInfo } from '@/script'
+import { url } from '@/urls'
 import dateFnsParseISO from 'date-fns/parseISO'
 import Markdown from '@/components/Markdown/Markdown'
 
@@ -160,17 +161,13 @@ export default {
     dashboardContentLink () {
       switch (this.type) {
         case 'event':
-          return '?page=event&id=' + this.data.event_id
+          return url('event', this.data.event_id)
         case 'foodsharepoint':
-          return '?page=fairteiler&sub=ft&bid=' + this.data.region_id + '&id=' + this.data.fsp_id
+          return url('foodsharepoint', this.data.region_id, this.data.fsp_id)
         case 'friendWall':
-          return '/profile/' + this.data.fs_id
+          return url('profile', this.data.fs_id)
         case 'forum':
-          return ('/?page=bezirk&bid=' + this.data.region_id +
-            '&sub=' + this.data.forum_type +
-            '&tid=' + this.data.forum_topic +
-            '&pid=' + this.data.forum_post +
-            '#tpost-' + this.data.forum_post)
+          return url('forum', this.data.region_id, (this.data.forum_type === 'botforum'), this.data.forum_topic, this.data.forum_post)
         default:
           return '#'
       }
