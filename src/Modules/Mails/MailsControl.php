@@ -18,6 +18,13 @@ class MailsControl extends ConsoleControl
 	private $routeHelper;
 	private $emailHelper;
 
+	/*
+	 * todo move this to config file as a constant if this becomes a permanent solution
+	 * until then we need to be able to configure this rather flexible in here
+	 * 45,11 mails/minute = 1330 milli seconds between mails
+	 * */
+	private $DELAY_MICRO_SECONDS_BETWEEN_MAILS = 1330000;
+
 	public function __construct(
 		MailsGateway $mailsGateway,
 		Database $database,
@@ -45,9 +52,7 @@ class MailsControl extends ConsoleControl
 			$elem = $this->mem->cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
 			if ($elem !== false && $e = unserialize($elem)) {
 				if ($e['type'] == 'email') {
-					$res = $this->handleEmail($e['data']);
-					// very basic email rate limit
-					usleep(100000);
+					$res = $this->handleEmailRateLimited($e['data']);
 				} else {
 					$res = false;
 				}
@@ -293,7 +298,7 @@ class MailsControl extends ConsoleControl
 		return false;
 	}
 
-	public function handleEmail($data)
+	public function handleEmailRateLimited($data)
 	{
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new \Swift_Message();
@@ -321,7 +326,7 @@ class MailsControl extends ConsoleControl
 				$file = $email->attach(\Swift_Attachment::fromPath($a[0]));
 			}
 		}
-		$has_recip = false;
+		$mailCount = 0;
 		foreach ($data['recipients'] as $r) {
 			$r[0] = strtolower($r[0]);
 			self::info('To: ' . $r[0]);
@@ -332,12 +337,12 @@ class MailsControl extends ConsoleControl
 			}
 			if (!$this->mailsGateway->emailIsBouncing($r[0])) {
 				$email->addTo($r[0], $r[1]);
-				$has_recip = true;
+				++$mailCount;
 			} else {
 				self::error('bouncing address');
 			}
 		}
-		if (!$has_recip) {
+		if ($mailCount < 1) {
 			return true;
 		}
 
@@ -371,6 +376,8 @@ class MailsControl extends ConsoleControl
 				break;
 			}
 		}
+		// rate limiting
+		usleep($mailCount * $this->DELAY_MICRO_SECONDS_BETWEEN_MAILS);
 
 		return true;
 	}
