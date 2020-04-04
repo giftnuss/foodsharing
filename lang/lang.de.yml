@@ -145,6 +145,7 @@ register:
 terminology:
   forum: Forum
   events: Termine
+  stores: Betriebe
   ambassador_forum: BotschafterInnenforum
   ambassadors: Botschafter
   admins: Administratoren
@@ -155,6 +156,7 @@ terminology:
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
   subgroups: Untergruppen
+  mailboxes: Mailboxen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
   n_ambassadors: 'Ein(e) BotschafterIn|%count% BotschafterInnen'
@@ -371,10 +373,17 @@ search:
 
 dashboard:
   title: Dashboard
-  updates_title: Updates-Übersicht
+  updates_title_all: "Updates-Übersicht"
+  updates_title_some: "Updates-Übersicht ({0})"
   display_all: Alle
   no_updates: "Keine Updates"
-  no_more_updates: "Das war's!"
+  no_more_updates_all: "Das war's!"
+  no_more_updates_event: "Keine weiteren Termine"
+  no_more_updates_foodsharepoint: "Keine weiteren Fairteiler-Posts"
+  no_more_updates_forum: "Keine weiteren Foren-Einträge"
+  no_more_updates_friendWall: "Keine weiteren Status-Meldungen"
+  no_more_updates_mailbox: "Keine weiteren Mailbox-Nachrichten"
+  no_more_updates_store: "Keine weiteren Betriebs-Infos"
   activity_filter_info: Hier kannst Du einstellen, welche Updates auf Deiner Startseite angezeigt werden sollen.
   empty_section: "Du hast noch keine {type}"
   event_title: "Termin: {title}"

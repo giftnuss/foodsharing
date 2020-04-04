@@ -25,7 +25,7 @@
           class="activity-item"
         >
           <span>
-            {{ $i18n('dashboard.no_more_updates') }}
+            {{ $i18n('dashboard.no_more_updates_' + currentFilter) }}
           </span>
         </li>
       </infinite-loading>
@@ -51,6 +51,16 @@ export default {
     return {
       updates: [],
       page: 0
+    }
+  },
+  computed: {
+    currentFilter () {
+      if (this.displayedTypes.length === 1) {
+        return this.displayedTypes[0]
+      } else {
+        // this assumes that no other filter enables more than one type!
+        return 'all'
+      }
     }
   },
   methods: {

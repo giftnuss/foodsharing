@@ -1,7 +1,12 @@
 <template>
   <div class="activity-container">
     <div class="head ui-widget-header ui-rectangular-bottom activities">
-      {{ $i18n('dashboard.updates_title') }}
+      <span v-if="currentFilterDescription">
+        {{ $i18n('dashboard.updates_title_some', [$i18n(currentFilterDescription)]) }}
+      </span>
+      <span v-else>
+        {{ $i18n('dashboard.updates_title_all') }}
+      </span>
       <div class="dashboard-options">
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(allTypes)}"
@@ -85,6 +90,25 @@ export default {
     return {
       displayedTypes: this.allTypes,
       showListings: false
+    }
+  },
+  computed: {
+    currentFilterDescription () {
+      if (this.displayedTypes.length === 1) {
+        switch (this.displayedTypes[0]) {
+          case 'event': return 'terminology.events'
+          case 'forum': return 'terminology.forum'
+          case 'foodsharepoint': return 'terminology.fsp'
+          case 'friendWall': return 'terminology.wall'
+          case 'mailbox': return 'terminology.mailboxes'
+          case 'store': return 'terminology.stores'
+          default:
+            return null
+        }
+      } else {
+        // this assumes that no other filter enables more than one type!
+        return null
+      }
     }
   },
   methods: {
