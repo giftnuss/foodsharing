@@ -4,7 +4,7 @@
       {{ $i18n('dashboard.updates_title') }}
       <div class="dashboard-options">
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event'])}"
+          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(allTypes)}"
           class="wide"
           @click="displayAll"
         >
@@ -71,13 +71,19 @@
 <script>
 import ActivityThread from './ActivityThread'
 import ActivityOptionListings from './ActivityOptionListings'
+import { allFilterTypes } from './ActivityFilter'
 
 export default {
   components: { ActivityThread, ActivityOptionListings },
-  props: {},
+  props: {
+    allTypes: {
+      type: Array,
+      default: () => { return allFilterTypes }
+    }
+  },
   data () {
     return {
-      displayedTypes: ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event'],
+      displayedTypes: this.allTypes,
       showListings: false
     }
   },
@@ -87,7 +93,7 @@ export default {
       this.$refs.thread.resetInfinity()
     },
     displayAll: function () {
-      this.displayedTypes = ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event']
+      this.displayedTypes = this.allTypes
       this.$refs.thread.resetInfinity()
     },
     toggleOptionListings: function () {

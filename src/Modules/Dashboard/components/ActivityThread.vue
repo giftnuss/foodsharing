@@ -36,6 +36,7 @@
 <script>
 import { getUpdates } from '@/api/dashboard'
 import ActivityPost from './ActivityPost'
+import { allFilterTypes } from './ActivityFilter'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -43,7 +44,7 @@ export default {
   props: {
     displayedTypes: {
       type: Array,
-      default: () => { return ['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event'] }
+      default: () => { return allFilterTypes }
     }
   },
   data () {
