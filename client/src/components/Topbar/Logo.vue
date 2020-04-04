@@ -9,7 +9,6 @@
 </template>
 <script>
 export default {
-  props: { small: { type: Boolean } }
 }
 </script>
 <style lang="scss" scoped>

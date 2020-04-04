@@ -44,6 +44,7 @@
 - Fixes the marker loading in the region admin tool !1415 @dthulke
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
+- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
