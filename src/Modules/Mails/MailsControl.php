@@ -346,10 +346,7 @@ class MailsControl extends ConsoleControl
 			return true;
 		}
 
-		$max_try = 2;
-		$sended = false;
-		while (!$sended) {
-			--$max_try;
+		for ($max_try = 2; $max_try > 0; --$max_try) {
 			try {
 				self::info('send email tries remaining ' . ($max_try));
 				$this->mailer->getTransport()->ping();
@@ -363,8 +360,6 @@ class MailsControl extends ConsoleControl
 					}
 				}
 
-				return true;
-				$sended = true;
 				break;
 			} catch (\Exception $e) {
 				self::error('email send error: ' . $e->getMessage());
@@ -373,7 +368,6 @@ class MailsControl extends ConsoleControl
 
 			if ($max_try == 0) {
 				return false;
-				break;
 			}
 		}
 		// rate limiting
