@@ -78,4 +78,4 @@ const url = (key, ...params) => {
   return urls[key](...params)
 }
 
-export { urls, url }
+export { url, urls }

@@ -1,4 +1,4 @@
-import router from '@/urls'
+import { urls } from '@/urls'
 
 self.addEventListener('push', function (event) {
   if (!(self.Notification && self.Notification.permission === 'granted')) {
@@ -19,7 +19,7 @@ self.addEventListener('notificationclick', function (event) {
   if (event.notification.data.action) {
     const page = event.notification.data.action.page
     const params = event.notification.data.action.params
-    const url = router[page](...params)
+    const url = urls[page](...params)
     self.clients.openWindow(url)
   }
 })
