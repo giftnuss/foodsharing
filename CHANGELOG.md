@@ -42,6 +42,7 @@
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 - Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
 - Fixes the marker loading in the region admin tool !1415 @dthulke
+- Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
