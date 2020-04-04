@@ -9,43 +9,43 @@
       </span>
       <div class="dashboard-options">
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(allTypes)}"
+          :class="{'active': isActiveFilter()}"
           class="wide"
-          @click="displayAll"
+          @click="filter()"
         >
           <!-- For alignment, make sure there is no additional whitespace inside the span! -->
           <span>{{ $i18n('dashboard.display_all') }}</span>
         </a>
         <div class="header-divider" />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"
+          :class="{'active': isActiveFilter('forum')}"
           class="fa-fw fas fa-comments"
-          @click="displayOne('forum')"
+          @click="filter('forum')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['event'])}"
+          :class="{'active': isActiveFilter('event')}"
           class="fa-fw far fa-calendar-alt"
-          @click="displayOne('event')"
+          @click="filter('event')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['friendWall'])}"
+          :class="{'active': isActiveFilter('friendWall')}"
           class="fa-fw fas fa-user"
-          @click="displayOne('friendWall')"
+          @click="filter('friendWall')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['foodsharepoint'])}"
+          :class="{'active': isActiveFilter('foodsharepoint')}"
           class="fa-fw fas fa-recycle"
-          @click="displayOne('foodsharepoint')"
+          @click="filter('foodsharepoint')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['mailbox'])}"
+          :class="{'active': isActiveFilter('mailbox')}"
           class="fa-fw fas fa-envelope"
-          @click="displayOne('mailbox')"
+          @click="filter('mailbox')"
         />
         <a
-          :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store'])}"
+          :class="{'active': isActiveFilter('store')}"
           class="fa-fw fas fa-shopping-cart"
-          @click="displayOne('store')"
+          @click="filter('store')"
         />
         <div class="header-divider" />
         <a
@@ -77,6 +77,7 @@
 import ActivityThread from './ActivityThread'
 import ActivityOptionListings from './ActivityOptionListings'
 import { allFilterTypes } from './ActivityFilter'
+import _ from 'underscore'
 
 export default {
   components: { ActivityThread, ActivityOptionListings },
@@ -112,16 +113,17 @@ export default {
     }
   },
   methods: {
-    displayOne: function (type) {
-      this.displayedTypes = [type]
-      this.$refs.thread.resetInfinity()
-    },
-    displayAll: function () {
-      this.displayedTypes = this.allTypes
+    filter: function (category = null) {
+      const categories = category ? [category] : this.allTypes
+      this.displayedTypes = categories
       this.$refs.thread.resetInfinity()
     },
     toggleOptionListings: function () {
       this.showListings = !this.showListings
+    },
+    isActiveFilter: function (category = null) {
+      const categories = category ? [category] : this.allTypes
+      return _.isEqual(categories, this.displayedTypes)
     }
   }
 }
