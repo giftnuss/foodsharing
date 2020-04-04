@@ -507,7 +507,7 @@ class ProfileView extends View
 		$infos = $this->renderFoodsaverInformation($ambassador, $infos);
 		$infos = $this->renderOrgaTeamMemberInformation($infos);
 		$infos = $this->renderSleepingHatInformation($infos);
-		$infos = $this->renderAboutMePublicInformation($infos);
+		$infos = $this->renderAboutMeInternalInformation($infos);
 
 		$out = '';
 		foreach ($infos as $info) {
@@ -580,29 +580,17 @@ class ProfileView extends View
 		return $infos;
 	}
 
-
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
-	private function renderAboutMePublicInformation(array $infos): array
+	private function renderAboutMeInternalInformation(array $infos): array
 	{
-		if ($this->foodsaver['about_me_public']) {
+		if ($this->foodsaver['about_me_intern']) {
 			$infos[] = [
-				'name' => $this->translationHelper->s('about_me_public_profile'),
-				'val' => $this->foodsaver['about_me_public'],
+				'name' => $this->translationHelper->s('about_me_intern_profile'),
+				'val' => $this->foodsaver['about_me_intern'],
 			];
 		}
 
 		return $infos;
 	}
-
-	/**
-	 * @param array $infos
-	 *
-	 * @return array
-	 */
 
 	private function renderOrgaTeamMemberInformation(array $infos): array
 	{
