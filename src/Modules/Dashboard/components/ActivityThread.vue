@@ -77,11 +77,9 @@ export default {
       }
     },
     async reloadData () {
+      this.resetInfinity()
       this.page = 0
-      this.updates = await getUpdates(this.page)
-      this.updates.sort((a, b) => {
-        return (b.time_ts || b.data.time_ts) - (a.time_ts || a.data.time_ts)
-      })
+      this.updates = []
     }
   }
 }
