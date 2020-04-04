@@ -49,7 +49,7 @@
     "typeface-alfa-slab-one": "^0.0.72",
     "underscore": "^1.9.2",
     "vue": "^2.6.11",
-    "vue-phone-number-input": "^1.1.6",
+    "vue-tel-input": "^4.3.0",
     "vuelidate": "^0.7.5",
     "whatwg-fetch": "^3.0.0"
   },

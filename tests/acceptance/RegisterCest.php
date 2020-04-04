@@ -19,8 +19,8 @@ class RegisterCest
 		$this->password = sq('password');
 		$this->birthdate = '27.08.1983';
 		$this->birthdateUSFormat = '1983-08-27';
-		$this->mobile_number = '1773231323';
-		$this->mobile_country_code = '+49';
+		$this->mobile_number = '177 3231323';
+		$this->mobile_country_code = '+49 ';
 	}
 
 	public function _after()
@@ -59,11 +59,7 @@ class RegisterCest
 		$I->click('weiter');
 
 		$I->waitForElementVisible('#step4', 4);
-		// open country selector
-		$I->executeJS("$('.select-country-container input').click()");
-		// choose german country code
-		$I->executeJS("$('.vue-recycle-scroller__item-view button')[0].click()");
-		$I->fillField('input[class=input-tel__input]', $this->mobile_number);
+		$I->fillField('input[class=vti__input]', $this->mobile_number);
 		$I->click('weiter');
 
 		// tick all the check boxes

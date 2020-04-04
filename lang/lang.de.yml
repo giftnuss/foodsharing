@@ -117,6 +117,8 @@ register:
   lastname_required: Bitte gib deinen Nachnamen ein.
   lastname_minLength: Der Nachname muss aus mindestens 2 Zeichen bestehen.
   login_phone_info: Es kann hilfreich sein, Deine Telefonnummer mit anderen Foodsharern zu teilen
+  phone_example: Beispiel +4917912345678
+  phone_not_valid: Die eingegebene Telefonnummer ist nicht gültig.
   forgotten_password: Passwort vergessen?
   have_read_the_legal_stuff1: Ich habe die
   have_read_the_legal_stuff2: zur Kenntnis genommen
