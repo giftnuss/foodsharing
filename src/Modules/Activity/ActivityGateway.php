@@ -145,7 +145,7 @@ class ActivityGateway extends BaseGateway
 			]
 		);
 
-		return $this->_prepareImageGallery($posts);
+		return $this->prepareImageGallery($posts);
 	}
 
 	public function fetchAllFriendWallUpdates(array $buddyIds, int $page): array
@@ -189,7 +189,7 @@ class ActivityGateway extends BaseGateway
 			]
 		);
 
-		return $this->_prepareImageGallery($posts);
+		return $this->prepareImageGallery($posts);
 	}
 
 	public function fetchAllMailboxUpdates(array $mb_ids, int $page): array
@@ -351,10 +351,10 @@ class ActivityGateway extends BaseGateway
 			]
 		);
 
-		return $this->_prepareImageGallery($events);
+		return $this->prepareImageGallery($events);
 	}
 
-	private function _prepareImageGallery(array $updateData): array
+	private function prepareImageGallery(array $updateData): array
 	{
 		foreach ($updateData as $key => $w) {
 			if (empty($w['attach'])) {
