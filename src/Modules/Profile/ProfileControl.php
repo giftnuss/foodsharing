@@ -25,7 +25,8 @@ final class ProfileControl extends Control
 		ProfileGateway $profileGateway,
 		BasketGateway $basketGateway,
 		MailboxGateway $mailboxGateway,
-		ReportPermissions $reportPermissions
+		ReportPermissions $reportPermissions,
+		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
 		$this->profileGateway = $profileGateway;
