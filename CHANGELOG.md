@@ -64,6 +64,7 @@
 - Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
 - Make the description clearer for the mail option when opening new thread !1453 @Caluera
 - Fix issues introduced with push notifications #831 #841 #857 !1442 !1443 !1444 !1445 !1446 @janopae
+- Short Description is shown on profile and purpose of both self descriptions is made clear in settings !1145 #656 @fs_k @Caluera
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae 
@@ -164,8 +165,6 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 ## Bugfixes
 - fixed page crash when as ambassador on region -> foodsaver clicking on one foodsaver !1278 @Caluera
 - Correct title for map page !1276 @chris2up9
-- about_me_public is shown on profile !1145 @fs_k 
-- Short Description is shown on profile !1145 @fs_k 
 - fixed the jpeg image detection in the flourish library, leading to people not being able to login anymore !1100 @alangecker
 - Set initial region in new store form to undefined if it is a larger region or country !1112 #418 @alex.simm
 - Removed hidden profile pic in settings !1090 @chriswalg
