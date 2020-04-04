@@ -1,16 +1,17 @@
 <template>
   <div class="activity-container">
-    <div class="head ui-widget-header ui-rectangular-bottom">
-      Updates-Übersicht
-      <span class="option">
+    <div class="head ui-widget-header ui-rectangular-bottom activities">
+      {{ $i18n('dashboard.updates_title') }}
+      <div class="dashboard-options">
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['store', 'forum', 'mailbox', 'foodsharepoint', 'friendWall', 'event'])}"
           class="wide"
           @click="displayAll"
         >
-          Alle
+          <!-- For alignment, make sure there is no additional whitespace inside the span! -->
+          <span>{{ $i18n('dashboard.display_all') }}</span>
         </a>
-        <div class="headerDivider" />
+        <div class="header-divider" />
         <a
           :class="{'active': JSON.stringify(displayedTypes) === JSON.stringify(['forum'])}"
           class="fa-fw fas fa-comments"
@@ -41,18 +42,18 @@
           class="fa-fw fas fa-shopping-cart"
           @click="displayOne('store')"
         />
-        <div class="headerDivider" />
+        <div class="header-divider" />
         <a
           id="activity-option"
           :class="{'active': showListings}"
           class="fas fa-cog"
           @click="toggleOptionListings"
         />
-      </span>
+      </div>
     </div>
     <div
       v-if="showListings"
-      class="ui-widget-content corner-bottom margin-bottom ui-padding"
+      class="ui-widget-content corner-bottom margin-bottom ui-padding options-content"
     >
       <ActivityOptionListings
         @close="showListings = false"
@@ -100,27 +101,48 @@ export default {
 .activity-container {
   margin-bottom: 1em;
 }
-.headerDivider {
-     border-left: 1px solid #cfcfcf;
-     height: 15px;
-     width: 1px;
-     display: inline-block;
-     vertical-align: middle;
-     margin: 0 6px;
+
+.activities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-.option {
+
+.dashboard-options {
   cursor: pointer;
-}
-.option .active {
-  color: #4A3520;
-  background-color: white;
-}
-.option .wide {
-  height: inherit;
-  width: inherit;
-  border-radius: 4px;
-}
-.option .wide.active {
-  padding: 4px;
+
+  > a {
+    padding: 2px;
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover,
+    &.active {
+      color: var(--fs-brown);
+      background-color: var(--fs-white);
+    }
+
+    &.wide {
+      border-radius: 4px;
+
+      span {
+        padding: 2px 4px;
+        font-weight: bolder;
+      }
+    }
+  }
+
+  .header-divider {
+    border-left: 1px solid var(--fs-beige);
+    height: 18px;
+    width: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 6px;
+  }
 }
 </style>
