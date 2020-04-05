@@ -48,13 +48,13 @@ export function dateFormat (date, format = 'full-long') {
       } else if (dateFnsIsSameYear(date, new Date())) {
         return dateFormat(date, "cccc, do MMM, HH:mm 'Uhr'")
       } else {
-        return dateFormat(date, "cccc, do MMM yyyy, HH:mm 'Uhr'")
+        return dateFormat(date, "cccccc, do MMM yyyy, HH:mm 'Uhr'")
       }
     case 'full-short':
       if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, 'ccc dd.MM., HH:mm')
+        return dateFormat(date, 'cccccc, d. MMM, HH:mm')
       } else {
-        return dateFormat(date, 'ccc dd.MM.yyyy, HH:mm')
+        return dateFormat(date, 'cccccc, d.M.yyyy, HH:mm')
       }
     default:
       return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
