@@ -38,7 +38,7 @@ class ActivityModel extends Db
 			$out[] = [
 				'type' => 'event',
 				'data' => [
-					'desc' => $u['body'],
+					'desc' => $u['body'] ?? '',
 					'event_id' => $u['event_id'],
 					'event_name' => $u['name'],
 					'fs_id' => $u['fs_id'],
@@ -68,7 +68,7 @@ class ActivityModel extends Db
 			$out[] = [
 				'type' => 'foodsharepoint',
 				'data' => [
-					'desc' => $u['body'],
+					'desc' => $u['body'] ?? '',
 					'fsp_id' => $u['fsp_id'],
 					'fsp_name' => $u['name'],
 					'fs_id' => $u['fs_id'],
@@ -112,7 +112,7 @@ class ActivityModel extends Db
 				$out[] = [
 					'type' => 'friendWall',
 					'data' => [
-						'desc' => $u['body'],
+						'desc' => $u['body'] ?? '',
 						'fs_id' => $u['fs_id'],
 						'fs_name' => $u['fs_name'],
 						'gallery' => $u['gallery'] ?? [],
@@ -157,7 +157,7 @@ class ActivityModel extends Db
 							'mailbox_id' => $u['id'],
 							'subject' => $u['subject'],
 							'mailbox_name' => $u['mb_name'] . '@' . PLATFORM_MAILBOX_HOST,
-							'desc' => $u['body'],
+							'desc' => $u['body'] ?? '',
 							'time' => $u['time'],
 							'icon' => '/img/mailbox-50x50.png',
 							'time_ts' => $u['time_ts'],
@@ -212,7 +212,7 @@ class ActivityModel extends Db
 				$out[] = [
 					'type' => 'forum',
 					'data' => [
-						'desc' => $u['post_body'],
+						'desc' => $u['post_body'] ?? '',
 						'fs_id' => (int)$u['foodsaver_id'],
 						'fs_name' => $u['foodsaver_name'],
 						'forum_name' => $u['name'],
@@ -244,7 +244,7 @@ class ActivityModel extends Db
 				$out[] = [
 					'type' => 'store',
 					'data' => [
-						'desc' => $r['text'],
+						'desc' => $r['text'] ?? '',
 						'fs_id' => $r['foodsaver_id'],
 						'fs_name' => $r['foodsaver_name'],
 						'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
