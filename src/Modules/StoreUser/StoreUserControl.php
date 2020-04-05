@@ -153,9 +153,9 @@ class StoreUserControl extends Control
 					}
 				}
 
-				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', ['particularitiesDescription' => $store['besonderheiten'],
-				'lastFetchDate' => $lastFetchDate, 'street' => $store['str'], 'housenumber' => $store['hsnr'], 'postcode' => $store['plz'], 'city' => $store['stadt'],
-				'storeTitle' => $store['name'], 'collectionQuantity' => $store['abholmenge'], 'press' => $store['presse']]), CNT_RIGHT);
+				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', ['particularitiesDescription' => $particularitiesDescription = $store['besonderheiten'],
+						'lastFetchDate' => $lastFetchDate, 'street' => $store['str'], 'housenumber' => $store['hsnr'], 'postcode' => $store['plz'], 'city' => $store['stadt'],
+						'storeTitle' => $store['name'], 'collectionQuantity' => $this->weightHelper->getFetchWeightName($store['abholmenge']), 'press' => $store['presse']]), CNT_RIGHT);
 
 				/* options menu */
 				$menu = [];

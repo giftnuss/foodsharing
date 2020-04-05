@@ -8,55 +8,55 @@
     </div>
     <div class="ui-widget ui-widget-content corner-bottom margin-bottom ui-padding">
       <div
-        id="input-wrapper"
+        id="inputAdress"
         class="input-wrapper"
       >
         <label
           class="wrapper-label ui-widget"
-          for="input"
+          for="labelInputAdress"
         > {{ $i18n('store.address') }}</label>
         {{ street }} <br>
         {{ postcode }} {{ city }}
       </div>
       <div
-        id="input-wrapper"
+        id="inputParticularities"
         class="input-wrapper"
       >
         <label
           class="wrapper-label ui-widget"
-          for="input"
+          for="labelInputParticularities"
         > {{ $i18n('store.particularities') }}</label>
         {{ particularitiesDescription }}
       </div>
       <div
-        id="input-wrapper"
+        id="inputAverageCollectionQuantity"
         class="input-wrapper"
       >
         <label
           class="wrapper-label ui-widget"
-          for="input"
+          for="labelInputAverageCollectionQuantity"
         > {{ $i18n('store.average_collection_quantity') }}</label>
-        {{ collectionQuantity }} {{ $i18n('store.weight') }}
+        {{ collectionQuantity }}
       </div>
       <div
-        id="input-wrapper"
+        id="inputAttribution"
         class="input-wrapper"
       >
         <label
           class="wrapper-label ui-widget"
-          for="input"
+          for="labelInputAttribution"
         > {{ $i18n('store.attribution') }}</label>
         <span v-if="press = 1">{{ $i18n('store.may_referred_to_in_public') }}</span>
         <span v-else>{{ $i18n('store.may_not_referred_to_in_public') }}</span>
       </div>
       <div
         v-if="lastFetchDate !=null"
-        id="input-wrapper"
+        id="inputMyLastPickup"
         class="input-wrapper"
       >
         <label
           class="wrapper-label ui-widget"
-          for="input"
+          for="labelInputMyLastPickup"
         > {{ $i18n('store.my_last_pickup') }}</label>
         {{ formatLastFetchDate() }} ({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})
       </div>
@@ -75,8 +75,8 @@ export default {
       default: ''
     },
     collectionQuantity: {
-      type: Number,
-      default: null
+      type: String,
+      default: ''
     },
     storeTitle: {
       type: String,
