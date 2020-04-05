@@ -229,36 +229,32 @@ class ActivityGateway extends BaseGateway
 	public function fetchAllForumUpdates(array $regionIds, int $page, $isAmbassadorTheme = false): array
 	{
 		$stm = '
-			SELECT 		t.id,
-						t.name,
-						t.`time`,
-						UNIX_TIMESTAMP(t.`time`) AS time_ts,
-						fs.id AS foodsaver_id,
-						fs.name AS foodsaver_name,
-						fs.photo AS foodsaver_photo,
-						fs.sleep_status,
-						p.body AS post_body,
-						p.`time` AS update_time,
-						UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
-						t.last_post_id,
-						bt.bezirk_id,
-						b.name AS bezirk_name,
-						bt.bot_theme
+			SELECT	t.id,
+					t.name,
+					t.`time`,
+					UNIX_TIMESTAMP(t.`time`) AS time_ts,
+					fs.id AS foodsaver_id,
+					fs.name AS foodsaver_name,
+					fs.photo AS foodsaver_photo,
+					fs.sleep_status,
+					p.body AS post_body,
+					p.`time` AS update_time,
+					UNIX_TIMESTAMP(p.`time`) AS update_time_ts,
+					t.last_post_id,
+					bt.bezirk_id,
+					b.name AS bezirk_name,
+					bt.bot_theme
 
-			FROM 		fs_theme t,
-						fs_theme_post p,
-						fs_bezirk_has_theme bt,
-						fs_foodsaver fs,
-						fs_bezirk b
+			FROM            fs_theme t
+			LEFT OUTER JOIN fs_theme_post p ON p.id = t.last_post_id
+			LEFT OUTER JOIN	fs_bezirk_has_theme bt ON bt.theme_id = t.id
+			LEFT OUTER JOIN	fs_foodsaver fs ON fs.id = p.foodsaver_id
+			LEFT OUTER JOIN	fs_bezirk b ON b.id = bt.bezirk_id
 
-			WHERE 		t.last_post_id = p.id
-			AND 		p.foodsaver_id = fs.id
-			AND 		bt.theme_id = t.id
-			AND 		bt.bezirk_id IN(:regions_to_fetch)
-			AND 		bt.bot_theme = :bot_theme_id
-			AND 		bt.bezirk_id = b.id
-			AND 		t.active = 1
-			AND 		fs.deleted_at IS NULL
+			WHERE	t.active = 1
+			AND 	bt.bezirk_id IN ( ' . implode(',', $regionIds) . ' )
+			AND 	bt.bot_theme = :bot_theme_id
+			AND 	fs.deleted_at IS NULL
 
 			ORDER BY t.last_post_id DESC
 			LIMIT :start_item_index, :items_per_page
@@ -269,7 +265,6 @@ class ActivityGateway extends BaseGateway
 			[
 				':start_item_index' => $page * self::ITEMS_PER_PAGE,
 				':items_per_page' => self::ITEMS_PER_PAGE,
-				':regions_to_fetch' => implode(',', $regionIds),
 				':bot_theme_id' => $isAmbassadorTheme ? 1 : 0
 			]
 		);
