@@ -6,7 +6,7 @@
 - Add Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
-- Refactored register form to multi step pages in vue !1099 !1309 !1370 @chriswalg @moffer
+- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 @chriswalg @moffer
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies
@@ -47,6 +47,10 @@
 - Fixed bug in email template rendering during when quickreplying to forum topics !1403 @alex.simm
 - Links in shortened dashboard updates no longer invalid due to cut-off #691 !735 @D0nPiano @ChrisOelmueller
 - Now possible to have many disabled sources of dashboard updates #365 !735 @D0nPiano @ChrisOelmueller
+- Fixes the marker loading in the region admin tool !1415 @dthulke
+- Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
+- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
+- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications

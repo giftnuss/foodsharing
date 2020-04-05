@@ -3,7 +3,12 @@
   <div
     :style="style"
     :class="{avatarDiv: true, sleeping: sleepStatus, sleeping35: size === 35, sleeping50: size === 50, sleeping130: size === 130}"
-  />
+  >
+    <img
+      :src="avatarUrl"
+      style="height:100%"
+    >
+  </div>
 </template>
 
 <script>
@@ -45,9 +50,8 @@ export default {
     },
     style () {
       return {
-        width: `${this.size}px`,
-        height: `${this.size}px`,
-        backgroundImage: `url(${this.avatarUrl})`
+        height: '100%',
+        width: 'auto'
       }
     }
   }
@@ -69,8 +73,8 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
-  top: 0;
-  left: 10%;
+  top: -10%;
+  left: -10%;
 }
 .sleeping35::after {
   background-image: url('/img/sleep35x35.png');

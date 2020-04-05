@@ -3,69 +3,56 @@
     :href="$url('basket', basket.id)"
     class="list-group-item list-group-item-action"
   >
-    <div class="row">
-      <div class="col-2 pl-2">
-        <img src="/img/basket.png">
-      </div>
-      <div class="col-10">
-        <div class="text-truncate">
-          <strong>{{ basket.description }}</strong>
-        </div>
+    <div class="row basket-entry">
+      <img
+        style="height:100%"
+        src="/img/basket.png"
+      >
+      <div class="basket-info-box">
+        <h5 class="basket-title text-truncate">{{ basket.description }}</h5>
         <small
           v-if="!basket.requests.length"
           class="text-muted"
         >
           {{ $i18n('basket.no_requests') }}
         </small>
-        <h5
-          v-if="basket.requests.length"
-          class="text-muted mb-1 pl-2"
-        >
-          {{ $i18n('basket.requested_by') }}
-        </h5>
         <div
           v-if="basket.requests.length"
-          class="requests list-group"
+          class="text-muted"
         >
-          <a
+          {{ $i18n('basket.requested_by') }}
+        </div>
+        <b-list-group
+          v-if="basket.requests.length"
+          class="requests"
+        >
+          <b-list-group-item
             v-for="req in basket.requests"
             :key="req.id"
             href="#"
-            class="list-group-item list-group-item-action p-1 request"
+            class="d-flex w-100 align-items-center food-basket-create-test-class"
             @click.prevent="openChat(req.user.id, $event)"
           >
-            <div class="row pl-1 align-items-center">
-              <div class="col-1 text-right pt-1">
-                <avatar
-                  :url="req.user.avatar"
-                  :size="20"
-                  :sleep-status="req.user.sleepStatus"
-                />
-              </div>
-              <div class="col-10 pt-1">
-                <div class="row food-basket-create-test-class">
-                  <h6 class="col text-truncate mb-1">
-                    {{ req.user.name }}
-                  </h6>
-                  <div class="col nowrap text-right text-muted nhover">
-                    {{ req.time | dateDistanceInWords }}
-                  </div>
-                  <div class="col text-right text-muted hover">
-                    <a
-                      v-b-tooltip
-                      :title="$i18n('basket.request_close')"
-                      href="#"
-                      class="m-1 btn btn-sm btn-secondary"
-                      @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
-                    >
-                      <i class="fas fa-times" />
-                    </a>
-                  </div>
-                </div>
-              </div>
+            <avatar
+              :url="req.user.avatar"
+              :size="35"
+              :sleep-status="req.user.sleepStatus"
+            />
+            <div class="d-flex flex-column basket-entry-request">
+              <span>{{ req.user.name }}</span>
+              <small>{{ req.time | dateDistanceInWords }}</small>
             </div>
-          </a>
-        </div>
+            <b-button
+              v-b-tooltip
+              :title="$i18n('basket.request_close')"
+              size="sm"
+              variant="secondary"
+              @click.prevent.stop="openRemoveDialog(req.user.id, $event)"
+            >
+              <i class="fas fa-times" />
+            </b-button>
+          </b-list-group-item>
+        </b-list-group>
       </div>
     </div>
   </a>
@@ -97,37 +84,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h5 {
-    font-size: 0.8em;
-}
-.requests {
-    h6 {
-        font-size: 1em;
-        font-weight: bold;
-
+.basket-entry {
+  flex-flow: row;
+  .basket-title {
+    margin-bottom: 0;
+  }
+  .basket-info-box {
+    margin: 0 10px;
+    width: 100%;
+    overflow: hidden;
+    .list-group-item {
+      padding: 5px;
     }
-    div {
-        font-size: 0.9em;
-    }
-
+  }
+  .basket-entry-request {
+    margin: 0 auto 0 5px;
+  }
 }
-.request .btn {
-    padding: 0 0.2rem;
-    position: absolute;
-    right: 1.2em;
-    top: -0.3em;
-}
-.request .hover {
-    display: none;
-}
-
-.request:hover .nhover {
-    display: none;
-}
-.request:hover .hover {
-    display: block;
-}
-.nowrap {
-    white-space: nowrap;
+.requests div {
+  font-size: 0.9em;
 }
 </style>
