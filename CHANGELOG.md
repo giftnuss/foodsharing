@@ -48,7 +48,7 @@
 - Links in shortened dashboard updates no longer invalid due to cut-off #691 !735 @D0nPiano @ChrisOelmueller
 - Now possible to have many disabled sources of dashboard updates #365 !735 @D0nPiano @ChrisOelmueller
 - Fixes the marker loading in the region admin tool !1415 @dthulke
-- Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
+- Adjusted picture sizes of slots, thread posts and of menubasket. !1298 !1423 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 

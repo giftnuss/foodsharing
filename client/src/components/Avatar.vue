@@ -1,8 +1,8 @@
 
 <template>
   <div
-    :style="style"
-    :class="{avatarDiv: true, sleeping: sleepStatus, sleeping35: size === 35, sleeping50: size === 50, sleeping130: size === 130}"
+    class="avatar"
+    :class="{ 'auto-scale': autoScale, sleeping: sleepStatus, sleeping35: size === 35, sleeping50: size === 50, sleeping130: size === 130}"
   >
     <img
       :src="avatarUrl"
@@ -26,6 +26,10 @@ export default {
     sleepStatus: {
       type: Number,
       default: 0
+    },
+    autoScale: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -47,19 +51,13 @@ export default {
       } else {
         return '/img/' + prefix + 'avatar.png'
       }
-    },
-    style () {
-      return {
-        height: '100%',
-        width: 'auto'
-      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.avatarDiv {
+.avatar {
   position: relative;
   // margin: auto;
   display: inline-block;
@@ -84,5 +82,9 @@ export default {
 }
 .sleeping130::after {
   background-image: url('/img/sleep130x130.png');
+}
+.auto-scale {
+  height: 100%;
+  width: auto;
 }
 </style>
