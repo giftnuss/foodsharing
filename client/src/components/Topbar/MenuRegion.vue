@@ -34,7 +34,7 @@
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="far fa-comment" />Forum
+          <i class="far fa-comment-alt" />Forum
         </a>
         <a
           v-if="region.isBot"

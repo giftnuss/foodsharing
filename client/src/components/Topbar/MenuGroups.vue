@@ -42,7 +42,7 @@
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="far fa-comment" /> Forum
+            <i class="far fa-comment-alt" /> Forum
           </a>
           <a
             :href="$url('wall', group.id)"

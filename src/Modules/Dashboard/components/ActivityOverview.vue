@@ -19,7 +19,7 @@
         <div class="header-divider" />
         <a
           :class="{'active': isActiveFilter('forum')}"
-          class="fa-fw fas fa-comments"
+          class="fa-fw fas fa-comment-alt"
           @click="filter('forum')"
         />
         <a
