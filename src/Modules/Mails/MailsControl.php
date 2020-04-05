@@ -366,7 +366,7 @@ class MailsControl extends ConsoleControl
 				self::error(print_r($data, true));
 			}
 
-			if ($max_try < 0) {
+			if ($max_try == 1) {
 				return false;
 			}
 		}
