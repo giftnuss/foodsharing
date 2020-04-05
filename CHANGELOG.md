@@ -16,7 +16,7 @@
 - Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
 - Show internal email address on user's own profile !1386 #465 @alex.simm
-- Dashboard updates can be filtered !735 @D0nPiano @ChrisOelmueller
+- Dashboard updates can be filtered !735 !1424 @D0nPiano @ChrisOelmueller
 - Updates from events + foodsharepoints displayed on dashboard !735 #227 #588 @D0nPiano @ChrisOelmueller
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
@@ -80,8 +80,8 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
-- recreate Dashboard update-overview with vue components !735 @D0nPiano @ChrisOelmueller
-- changed ActivityModel to return data without HTML or JS !735 @D0nPiano @ChrisOelmueller
+- recreate Dashboard update-overview with vue components !735 !1424 @D0nPiano @ChrisOelmueller
+- changed ActivityModel to return data without HTML or JS !735 !1424 @D0nPiano @ChrisOelmueller
 - New function for deleting store wall posts via rest !1390 #9 @alex.simm
 - Get rid of /upload.php !1365 @\_fridtjof_
 - Removed unused delPost xhr function !1417 @alex.simm
