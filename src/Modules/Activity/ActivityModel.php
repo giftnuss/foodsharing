@@ -244,13 +244,14 @@ class ActivityModel extends Db
 				$out[] = [
 					'type' => 'store',
 					'data' => [
+						'desc' => $r['text'],
 						'fs_id' => $r['foodsaver_id'],
 						'fs_name' => $r['foodsaver_name'],
+						'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
+						'source' => $r['region_name'],
 						'store_id' => $r['betrieb_id'],
 						'store_name' => $r['betrieb_name'],
-						'desc' => $r['text'],
 						'time' => $r['update_time'],
-						'icon' => $this->imageService->img($r['foodsaver_photo'], 50),
 						'time_ts' => $r['update_time_ts']
 					]
 				];

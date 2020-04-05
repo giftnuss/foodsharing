@@ -278,8 +278,23 @@ class ActivityGateway extends BaseGateway
 	public function fetchAllStoreUpdates(int $fsId, int $page): array
 	{
 		$stm = '
-			SELECT 	n.id, n.milestone, n.`text` , n.`zeit` AS update_time, UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts, fs.name AS foodsaver_name, fs.sleep_status, fs.id AS foodsaver_id, fs.photo AS foodsaver_photo, b.id AS betrieb_id, b.name AS betrieb_name
-			FROM 	fs_betrieb_notiz n, fs_foodsaver fs, fs_betrieb b, fs_betrieb_team bt
+			SELECT 	n.id,
+					n.milestone,
+					n.`text`,
+					n.`zeit` AS update_time,
+					UNIX_TIMESTAMP( n.`zeit` ) AS update_time_ts,
+					fs.name AS foodsaver_name,
+					fs.sleep_status,
+					fs.id AS foodsaver_id,
+					fs.photo AS foodsaver_photo,
+					b.id AS betrieb_id,
+					b.name AS betrieb_name,
+					b.stadt AS region_name
+
+			FROM 	fs_betrieb_notiz n,
+					fs_foodsaver fs,
+					fs_betrieb_team bt,
+					fs_betrieb b
 
 			WHERE 	n.foodsaver_id = fs.id
 			AND 	n.betrieb_id = b.id

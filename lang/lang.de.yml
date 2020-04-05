@@ -397,6 +397,7 @@ dashboard:
   source_forum: "Forum {0}"
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
+  source_store: "Betriebe {0}"
 
 home:
   title: Startseite
