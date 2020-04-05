@@ -12,7 +12,9 @@
         class="container"
       >
         <div id="topbar-navleft">
-          <Logo />
+          <Logo
+            :link-url="$url('home')"
+          />
           <login v-if="!isMobile" />
           <menu-loggedout
             v-if="isMobile"
@@ -31,7 +33,10 @@
         class="container"
       >
         <div id="topbar-navleft">
-          <Logo class="small" />
+          <Logo
+            :link-url="$url('dashboard')"
+            class="small"
+          />
           <b-navbar-nav class="flex-row no-collapse">
             <li
               v-if="!hasFsRole"

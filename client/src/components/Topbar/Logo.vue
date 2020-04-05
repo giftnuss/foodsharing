@@ -1,6 +1,6 @@
 <template>
   <a
-    :href="$url('home')"
+    :href="linkUrl"
     :aria-label="$i18n('home.title')"
     class="navbar-brand mr-2"
   >
@@ -9,6 +9,12 @@
 </template>
 <script>
 export default {
+  props: {
+    linkUrl: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -20,15 +26,17 @@ export default {
     span {
         color: #64ae25;
     }
-    span span {
+    span {
         position: relative;
-        &:hover::before {
-            content: '♥';
-            color: red;
-            position: absolute;
-            font-size: 0.5em;
-            margin-top: -0.04em;
-            margin-left: -0.085em;
+        &:hover {
+            span::before {
+                content: '♥';
+                color: red;
+                position: absolute;
+                font-size: 0.5em;
+                margin-top: -0.04em;
+                margin-left: -0.085em;
+            }
         }
     }
     @media (max-width: 680px) {
