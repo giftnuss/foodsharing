@@ -311,8 +311,11 @@ class DashboardControl extends Control
 			$pickup_text = 'Du hast <strong style="white-space:nowrap">' . $pickups . ' x</strong> Lebensmittel abgeholt und damit <strong style="white-space:nowrap">' .
 				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
 		}
-
-		$home_district_text = ($me['bezirk_name'] == null) ? ('<p>' . $pickup_text . $this->translationHelper->s('please_choose_your_home_district') . '</p>') : ('<p>' . $pickup_text . $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.</p>');
+		if ($me['bezirk_name'] == null) {
+			$home_district_text = '<a href="javascript:becomeBezirk()" >' . $this->translationHelper->s('please_choose_your_home_district') . '</a>';
+		} else {
+			$home_district_text = $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'];
+		}
 
 		$this->pageHelper->addContent(
 			'
@@ -320,14 +323,19 @@ class DashboardControl extends Control
 		<ul id="conten-top"  class="top corner-all linklist" >
 		<li>
 
-            <a href="profile/' . $me['id'] . '">
-                <div class="ui-padding">
-                    <div class="img">' . $this->imageService->avatar($me, 50) . '</div>
-                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
-					$home_district_text
-					. '<div style="clear:both;"></div>
-                </div>
-            </a>
+            
+			<div class="ui-padding">
+				<a href="profile/' . $me['id'] . '">
+					<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
+				</a>
+				<h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
+				'<p>' . $pickup_text .
+				$home_district_text
+				. '</p>'
+				. '<div style="clear:both;"></div>
+				
+            </div>
+            
 		</li>
 		</ul>
 		</div>',
