@@ -103,8 +103,8 @@ export default {
   .slotstatus.confirmed {
     color: var(--fs-green);
   }
-  .avatarDiv.pending {
-    opacity: 0.4;
+  .avatar.pending {
+    opacity: 0.33;
   }
   /* Check / Clock inside the statuspatch */
   .slotstatus-icon {
