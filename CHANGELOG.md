@@ -61,6 +61,7 @@
 - Fix link of top-left icon in navbar and make the hover-heart appear more often !1421 #853 @alex.simm 
 - fixed arrow handling !1408 @jonathan_b
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke
+- Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
