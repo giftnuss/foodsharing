@@ -155,7 +155,7 @@ class StoreUserControl extends Control
 
 				$this->pageHelper->addContent($this->view->vueComponent('vue-storeinfos', 'store-infos', ['particularitiesDescription' => $particularitiesDescription = $store['besonderheiten'],
 						'lastFetchDate' => $lastFetchDate, 'street' => $store['str'], 'housenumber' => $store['hsnr'], 'postcode' => $store['plz'], 'city' => $store['stadt'],
-						'storeTitle' => $store['name'], 'collectionQuantity' => $this->weightHelper->getFetchWeightName($store['abholmenge']), 'press' => $store['presse']]), CNT_RIGHT);
+						'storeTitle' => $store['name'], 'collectionQuantity' => $this->weightHelper->getFetchWeightName($store['abholmenge']), 'press' => $this->mentionPublicly($store['presse'])]), CNT_RIGHT);
 
 				/* options menu */
 				$menu = [];
@@ -189,7 +189,7 @@ class StoreUserControl extends Control
 						$store['name'] . '-Team',
 						($this->session->isMob() && count($store['foodsaver']) > 8) ? ['class' => 'moreswap moreswap-height-280'] : []
 					),
-					CNT_LEFT,
+					CNT_LEFT
 				);
 
 				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
@@ -302,5 +302,18 @@ class StoreUserControl extends Control
 			$this->pageHelper->addContent($this->view->u_storeList($stores['team'], $this->translationHelper->s('you_fetcher')));
 			$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', ['name' => $region['name']])));
 		}
+	}
+
+	private function mentionPublicly(int $id)
+	{
+		if ($id === 0) {
+			return $this->translationHelper->s('may_not_referred_to_in_public');
+		}
+
+		if ($id === 1) {
+			return $this->translationHelper->s('may_referred_to_in_public');
+		}
+
+		return false;
 	}
 }

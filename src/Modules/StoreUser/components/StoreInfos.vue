@@ -46,7 +46,7 @@
           class="wrapper-label ui-widget"
           for="labelInputAttribution"
         > {{ $i18n('store.attribution') }}</label>
-        <span v-if="press = 1">{{ $i18n('store.may_referred_to_in_public') }}</span>
+        <span v-if="press === 'may_referred_to_in_public'">{{ $i18n('store.may_referred_to_in_public') }}</span>
         <span v-else>{{ $i18n('store.may_not_referred_to_in_public') }}</span>
       </div>
       <div
@@ -58,7 +58,7 @@
           class="wrapper-label ui-widget"
           for="labelInputMyLastPickup"
         > {{ $i18n('store.my_last_pickup') }}</label>
-        {{ formatLastFetchDate() }} ({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})
+        {{ formatLastFetchDate() }} <span v-if="distanceInDays > 1">({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})</span>
       </div>
     </div>
   </div>
@@ -101,11 +101,10 @@ export default {
     lastFetchDate: {
       type: Date,
       default: null
-    }
-  },
-  data () {
-    return {
-      press: 0
+    },
+    press: {
+      type: String,
+      default: 'may_not_referred_to_in_public'
     }
   },
   methods: {
