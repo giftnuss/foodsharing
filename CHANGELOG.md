@@ -51,6 +51,7 @@
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 !1423 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
+- Fix registration link on login page !1425 #856 @alex.simm
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
