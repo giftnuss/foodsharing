@@ -309,12 +309,13 @@ class DashboardControl extends Control
 		$pickup_text = '';
 		if ($pickups > 0) {
 			$pickup_text = 'Du hast <strong style="white-space:nowrap">' . $pickups . ' x</strong> Lebensmittel abgeholt und damit <strong style="white-space:nowrap">' .
-				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
+				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet. ';
 		}
 		if ($me['bezirk_name'] == null) {
-			$home_district_text = '<a href="javascript:becomeBezirk()" >' . $this->translationHelper->s('please_choose_your_home_district') . '</a>';
+			$home_district_text = '</p>' .
+			'<p>' . '<a  class="button" href="javascript:becomeBezirk()" >' . $this->translationHelper->s('please_choose_your_home_district') . '</a>';
 		} else {
-			$home_district_text = $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'];
+			$home_district_text = $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.';
 		}
 
 		$this->pageHelper->addContent(
