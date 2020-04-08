@@ -1,3 +1,9 @@
+# 2020-04-09 Hotfix
+- Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
+- More accurate email rate limiting !1419 @jofranz
+- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 @chriswalg
+
+
 # 2020-03-26 Hotfix 
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
