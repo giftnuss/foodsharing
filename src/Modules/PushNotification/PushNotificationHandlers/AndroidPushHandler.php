@@ -94,12 +94,11 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 				    			's' => $serialNumber
 				    		]];
 
-				// use key 'http' even if you send the request to https://...
 				$requestJson = json_encode($data);
 				$this->logger->error("requestJson is: " . $requestJson);
 				$this->logger->error("content length is: " . strlen($requestJson));
 				// TODO move this somewhere else
-				$fcm_key = "";
+				$fcm_key = "AAAAIoVAv9Y:APA91bFybj8_BXrQOI5GXzKjFAGlvxJMf_CcTD70k8i8kc4ngLsbvXW6R6sDBoCpwYMgiWWX6rpyYob6QbW2w_tmliIlrgOEijPRBVPGIxuY0yWvbFcchZLINQGFwGLi8gGykwdXvu8N";
 				$options = array(
 				    'http' => array(
 				        'header'  => "Content-Type: application/json\r\nAuthorization: key=" . $fcm_key . "\r\n" . sprintf('Content-Length: %d', strlen($requestJson)) . "\r\n",
