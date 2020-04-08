@@ -255,19 +255,17 @@ final class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 
-	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
+	private function handleNewThreadForm(Request $request, $region, $ambassadorForum, $postActiveWithoutModeration)
 	{
 		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
-		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
+		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
 				$region['id'],
 				$ambassadorForum
 			)) {
-			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
-
-			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration, $data->sendMail);
 			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
 			if (!$postActiveWithoutModeration) {
 				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
@@ -292,7 +290,9 @@ final class RegionControl extends Control
 			$viewdata['thread'] = ['id' => $tid];
 			$viewdata['posts'] = [];
 		} elseif ($request->query->has('newthread')) {
-			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum);
+			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
 		}

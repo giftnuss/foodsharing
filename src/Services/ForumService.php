@@ -100,13 +100,17 @@ class ForumService
 		return $pid;
 	}
 
-	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $isActive)
+	public function createThread($fsId, $title, $body, $region, $ambassadorForum, $isActive, $sendMail)
 	{
 		$threadId = $this->forumGateway->addThread($fsId, $region['id'], $title, $body, $isActive, $ambassadorForum);
 		if (!$isActive) {
 			$this->notifyAdminsModeratedThread($region, $threadId, $body);
 		} else {
-			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
+			if ($sendMail) {
+				$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
+			} else {
+				$this->flashMessageHelper->info($this->translationHelper->s('new_thread_without_email'));
+			}
 		}
 
 		return $threadId;
@@ -176,6 +180,8 @@ class ForumService
 			$this->flashMessageHelper->info($this->translationHelper->s('no_email_to_states'));
 
 			return;
+		} else {
+			$this->flashMessageHelper->info($this->translationHelper->s('new_thread_with_email'));
 		}
 
 		$theme = $this->forumGateway->getThread($threadId);

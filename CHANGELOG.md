@@ -20,6 +20,8 @@
 - Updates from events + foodsharepoints displayed on dashboard !735 #227 #588 @D0nPiano @ChrisOelmueller
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
+- Add option for new forum threads in unmoderated fora to send mail or not !1233 @jofranz @Caluera
+- Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
 
 ## Bugfixes
 - On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
