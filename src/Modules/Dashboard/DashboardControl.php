@@ -308,8 +308,7 @@ class DashboardControl extends Control
 		// special case: stat_fetchcount and stat_fetchweight are correlated, each pickup increases both count and weight
 		$pickup_text = '';
 		if ($pickups > 0) {
-			$pickup_text = 'Du hast <strong style="white-space:nowrap">' . $pickups . ' x</strong> Lebensmittel abgeholt und damit <strong style="white-space:nowrap">' .
-				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet. ';
+			$pickup_text = $this->translationHelper->sv('you_saved_times_weight', ['pickups' => $pickups, 'weight' => number_format($gerettet, 0, ',', '.')]);
 		}
 		if ($me['bezirk_name'] == null) {
 			$home_district_text = '</p>' .
@@ -329,11 +328,11 @@ class DashboardControl extends Control
 				<a href="profile/' . $me['id'] . '">
 					<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
 				</a>
-				<h3 class "corner-all">Hallo ' . $me['name'] . '</h3>' .
-				'<p>' . $pickup_text .
-				$home_district_text
-				. '</p>'
-				. '<div style="clear:both;"></div>
+				<h3 class "corner-all">' . $this->translationHelper->sv('greeting', ['name' => $me['name']]) . '</h3>
+				<p>'
+					. $pickup_text . $home_district_text .
+				'</p>
+				<div style="clear:both;"></div>
 				
             </div>
             
