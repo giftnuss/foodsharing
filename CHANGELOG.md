@@ -347,7 +347,7 @@ And we have even included some new features for you.
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
-- Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Fixed fancybox loading (apple) and navigation sprites !977 #644 !1433 #717 @jofranz @ChrisOelmueller
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
