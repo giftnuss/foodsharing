@@ -66,7 +66,7 @@ cd foodsharing
 
 If you are using Windows 10 Pro or higher go with this link:
 
-Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([direct link](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe)) and
+Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([direct link](https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe)) and
 [Git for Windows](https://git-scm.com/download/win).
 
 If you are using Windows 10 Home or lower follow this instruction:
