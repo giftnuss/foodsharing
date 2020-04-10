@@ -105,7 +105,7 @@
         <b-navbar-toggle
           v-if="hasFsRole"
           target="nav_collapse"
-          class="ml-2"
+          class="ml-2 pr-1"
         />
 
         <b-collapse
@@ -459,11 +459,22 @@ export default {
 }
 
 #topbar {
-  height: 37px;
-  @media (max-width: 992px) {
-    height: 45px;
+  @media (max-width: 823px) {
+    height: 90px;
+
+    &.loggedIn {
+      height: 37px;
+    }
   }
-  @media (max-width: 415px) {
+
+  @media (min-width: 993px) {
+    height: 45px;
+
+    &.loggedIn {
+      height: 37px;
+    }
+  }
+  @media (max-height: 320px), (max-width: 415px) {
     height: 130px;
 
     &.loggedIn {
