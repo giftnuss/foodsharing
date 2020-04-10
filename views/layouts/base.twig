@@ -143,7 +143,9 @@
         {% endblock full %}
 
         {% block footer %}
-            {% include 'partials/footer.twig' %}
+            <footer>
+                {{ footer | raw }}
+            </footer>
         {% endblock %}
 
         <noscript>

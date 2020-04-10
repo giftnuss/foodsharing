@@ -128,6 +128,8 @@ final class PageHelper
 
 		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
+		$footer = $this->getFooter();
+
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->bread,
@@ -138,9 +140,8 @@ final class PageHelper
 			'hidden' => $this->hidden,
 			'isMob' => $this->session->isMob(),
 			'broadcast_message' => $g_broadcast_message,
-			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
+			'footer' => $footer,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
-			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
 			'content' => [
 				'main' => [
 					'html' => $this->getContent(CNT_MAIN),
@@ -271,6 +272,23 @@ final class PageHelper
 			[
 				'id' => 'vue-topbar',
 				'component' => 'topbar',
+				'props' => $params,
+			]
+		);
+	}
+
+	private function getFooter(): string
+	{
+		$params = [
+			'isFsDotAt' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
+			'srcRevision' => defined('SRC_REVISION') ? SRC_REVISION : null,
+		];
+
+		return $this->twig->render(
+			'partials/vue-wrapper.twig',
+			[
+				'id' => 'vue-footer',
+				'component' => 'Footer',
 				'props' => $params,
 			]
 		);
