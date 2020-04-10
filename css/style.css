@@ -68,7 +68,7 @@
   opacity: 1;
 }
 
-.top {
+.top:not(.arrow) {
   background-color: #ffffff;
   color: #533a20;
   padding: 15px;
@@ -1216,6 +1216,11 @@ span.verified {
   bottom: -16px;
 }
 
+.arrow.top {
+  top: -16px;
+  bottom: auto;
+}
+
 .arrow.left {
   left: 20%;
 }
@@ -1227,7 +1232,6 @@ span.verified {
   top: -20px;
   width: 25px;
   height: 25px;
-  box-shadow: 6px 5px 9px -9px black;
   transform: rotate(45deg);
 }
 
