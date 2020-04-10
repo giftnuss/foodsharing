@@ -320,9 +320,8 @@ class DashboardControl extends Control
 		$this->pageHelper->addContent(
 			'
 		<div class="pure-u-1 ui-padding-bottom">
-		<ul id="conten-top"  class="top corner-all linklist" >
+		<ul class="content-top corner-all linklist">
 		<li>
-
             
 			<div class="ui-padding">
 				<a href="profile/' . $me['id'] . '">

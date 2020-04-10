@@ -76,7 +76,7 @@ class View
 		}
 
 		return '
-		<div class="top corner-all">
+		<div class="content-top corner-all">
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
