@@ -16,7 +16,7 @@
         role="menuitem"
         class="nav-link"
       >
-        <i class="fas fa-cog" /> {{ $i18n('settings') }}
+        <i class="fas fa-cog" /> {{ $i18n('menu.your_settings') }}
       </a>
       <a
         :href="$url('logout')"
@@ -48,7 +48,7 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <i class="fas fa-cog" /> {{ $i18n('settings') }}
+        <i class="fas fa-cog" /> {{ $i18n('menu.your_settings') }}
       </a>
       <a
         :href="$url('logout')"

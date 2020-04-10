@@ -445,6 +445,7 @@ menu:
     administration: Administration
     notifications: Benachrichtigungen
     contact: Kontakt
+  your_settings: Deine Daten/Einstellungen
 
 newsletter:
   test_email_sent: E-Mail wurde versendet!
