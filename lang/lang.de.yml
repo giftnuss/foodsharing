@@ -447,6 +447,19 @@ menu:
     contact: Kontakt
   your_settings: Deine Daten/Einstellungen
 
+footer:
+  team: Team
+  imprint: Impressum
+  dataprivacy: Datenschutz
+  faq: FAQ
+  guide: Ratgeber
+  infosCompany: Unternehmen
+  partner: Partner
+  statistics: Statistik
+  donate: Unterstützen
+  thanksHoster: Vielen Dank an unseren Öko-Hoster
+  version: "Version: {version}"
+
 newsletter:
   test_email_sent: E-Mail wurde versendet!
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!

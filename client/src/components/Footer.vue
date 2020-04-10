@@ -5,23 +5,35 @@
         <ul>
           <li>
             <a
-              href="/team"
-            >Team</a>
+              :href="$url('team')"
+              :aria-label="$i18n('footer.team')"
+            >
+              {{ $i18n('footer.team') }}
+            </a>
           </li>
           <li>
             <a
-              href="/impressum"
-            >Impressum</a>
+              :href="$url('imprint')"
+              :aria-label="$i18n('footer.imprint')"
+            >
+              {{ $i18n('footer.imprint') }}
+            </a>
           </li>
           <li>
             <a
-              href="/?page=legal"
-            >Datenschutz</a>
+              :href="$url('dataprivacy')"
+              :aria-label="$i18n('footer.dataprivacy')"
+            >
+              {{ $i18n('footer.dataprivacy') }}
+            </a>
           </li>
           <li>
             <a
-              href="/faq"
-            >F.A.Q.</a>
+              :href="$url('faq')"
+              :aria-label="$i18n('footer.faq')"
+            >
+              {{ $i18n('footer.faq') }}
+            </a>
           </li>
         </ul>
       </div>
@@ -29,23 +41,35 @@
         <ul>
           <li>
             <a
-              href="/ratgeber"
-            >Ratgeber</a>
+              :href="$url('guide')"
+              :aria-label="$i18n('footer.guide')"
+            >
+              {{ $i18n('footer.guide') }}
+            </a>
           </li>
           <li>
             <a
-              href="/fuer-unternehmen"
-            >Unternehmen</a>
+              :href="$url('infosCompany')"
+              :aria-label="$i18n('footer.infosCompany')"
+            >
+              {{ $i18n('footer.infosCompany') }}
+            </a>
           </li>
           <li>
             <a
-              href="/partner"
-            >Partner</a>
+              :href="$url('partner')"
+              :aria-label="$i18n('footer.partner')"
+            >
+              {{ $i18n('footer.partner') }}
+            </a>
           </li>
           <li>
             <a
-              href="/statistik"
-            >Statistik</a>
+              :href="$url('statistics')"
+              :aria-label="$i18n('footer.statistics')"
+            >
+              {{ $i18n('footer.statistics') }}
+            </a>
           </li>
         </ul>
       </div>
@@ -53,8 +77,11 @@
         <ul>
           <li>
             <a
-              href="/unterstuetzung"
-            >Unterstützen</a>
+              :href="$url('donate')"
+              :aria-label="$i18n('footer.donate')"
+            >
+              {{ $i18n('footer.donate') }}
+            </a>
           </li>
           <li>
             <form
@@ -120,7 +147,7 @@
 
       <div class="footerbox thanks">
         <h6 class="heading">
-          Vielen Dank an unseren Öko-Hoster
+          {{ $i18n('footer.thanksHoster') }}
         </h6>
         <a
           class="imglink"
@@ -140,7 +167,7 @@
         class="rev-link"
       >
         <a :href="revisionLink">
-          Version: {{ srcRevision }}
+          {{ $i18n('footer.version', {version: srcRevision}) }}
         </a>
       </span>
       <span
