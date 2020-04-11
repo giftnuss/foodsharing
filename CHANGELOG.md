@@ -60,7 +60,6 @@
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 - Fix link of top-left icon in navbar and make the hover-heart appear more often !1421 #853 @alex.simm 
 - fixed arrow handling !1408 @jonathan_b
-- Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
 
 ## Refactoring
