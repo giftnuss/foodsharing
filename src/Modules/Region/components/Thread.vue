@@ -19,7 +19,7 @@
           {{ title }}
         </div>
       </div>
-      <div class="pt-2 pb-2 rounded">
+      <div class="pt-2 pb-2 rounded toggle-status">
         <b-form-checkbox
           v-model="isFollowingEmail"
           switch
@@ -373,11 +373,17 @@ export default {
   margin-bottom: 0;
 }
 
-.bootstrap .custom-switch {
+::v-deep .toggle-status .custom-switch {
   padding-left: 3.5rem;
 }
 
-.bootstrap .custom-control {
+::v-deep .toggle-status .custom-control {
   display: inline-block;
+  /* from bootstrap min-height */
+  line-height: 1.5rem;
+
+  .custom-control-label {
+    line-height: unset;
+  }
 }
 </style>

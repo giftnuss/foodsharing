@@ -16,7 +16,7 @@
       </div>
       <div class="card-footer">
         <div class="row">
-          <div class="col-auto">
+          <div class="col-auto toggle-status">
             <b-form-checkbox
               v-model="isFollowingBell"
               name="check-button"
