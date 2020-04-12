@@ -3,9 +3,9 @@
         {% block content %}
             {% include 'partials/info.twig' with {'msg': 'forum.thread_is_inactive_description'} %}
             <div class="ui-padding" style="text-align:center;">
-                <a class="button" href="{{ activate_url }}">{{ 'forum.activate_thread'|trans }}</a>
+                <a class="button" href="{{ activate_url }}">{{ 'forum.thread.activate'|trans }}</a>
                 <a class="button" href="{{ delete_url }}"
-                   onclick="if(!confirm('{{ 'really_delete'|trans }}')){return false;}">{{ 'forum.delete_thread'|trans }}</a>
+                   onclick="if(!confirm('{{ 'really_delete'|trans }}')){return false;}">{{ 'forum.thread.delete'|trans }}</a>
             </div>
         {% endblock %}
     {% endembed %}

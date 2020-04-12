@@ -233,24 +233,21 @@ forum:
   from: Von %name%
   threads: Themen
   new_thread: Neues Thema verfassen
-  subscribe_thread_email: Möchtest Du per E-Mail über dieses Thema auf dem Laufenden gehalten werden?
   thread_is_inactive: Thema inaktiv!
   thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
-  placeholder_answer: Antworten...
-  unfollow:
-    bell: Glocke entfolgen
-    email: Mail entfolgen
   follow:
-    bell: Glocke FOLGEN
-    email: Mail FOLGEN
-  stick: Thema fixieren
-  unstick: Fixierung aufheben
-  delete_post: Beitrag löschen
-  thread_title: Titel
-  post_body: Nachricht
-  activate_thread: Thema aktivieren
-  delete_thread: Thema löschen
+    bell: Glocke folgen
+    email: Mail folgen
+  post:
+    delete: Beitrag löschen
+    body: Nachricht
+  thread:
+    activate: Thema aktivieren
+    delete: Thema löschen
+    stick: Thema fixieren
+    title: Titel
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
+  no_posts: Bisher keine Beiträge vorhanden
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
   markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'

@@ -28,7 +28,7 @@
           <a
             @click="toggleFollowEmail"
           >
-            {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+            {{ $i18n('forum.follow.email') }}
           </a>
         </b-form-checkbox>
         <b-form-checkbox
@@ -39,7 +39,7 @@
           <a
             @click="toggleFollowBell"
           >
-            {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+            {{ $i18n('forum.follow.bell') }}
           </a>
         </b-form-checkbox>
         <b-form-checkbox
@@ -51,7 +51,7 @@
           <a
             @click="toggleStickyness"
           >
-            {{ $i18n(isSticky ? 'forum.unstick' : 'forum.stick') }}
+            {{ $i18n('forum.thread.stick') }}
           </a>
         </b-form-checkbox>
       </div>
@@ -69,13 +69,13 @@
             class="btn btn-secondary btn-sm"
             @click="activateThread"
           >
-            <i class="fas fa-check" /> {{ $i18n('forum.activate_thread') }}
+            <i class="fas fa-check" /> {{ $i18n('forum.thread.activate') }}
           </button>
           <button
             class="btn btn-secondary btn-sm"
             @click="$refs.deleteModal.show()"
           >
-            <i class="fas fa-trash-alt" /> {{ $i18n('forum.delete_thread') }}
+            <i class="fas fa-trash-alt" /> {{ $i18n('forum.thread.delete') }}
           </button>
         </div>
       </div>
@@ -107,7 +107,7 @@
       class="alert alert-warning"
       role="alert"
     >
-      Bisher keine Beiträge vorhanden
+      {{ $i18n('forum.no_posts') }}
     </div>
     <div
       v-if="errorMessage"
@@ -128,7 +128,7 @@
 
     <b-modal
       ref="deleteModal"
-      :title="$i18n('forum.delete_thread')"
+      :title="$i18n('forum.thread.delete')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="deleteThread"

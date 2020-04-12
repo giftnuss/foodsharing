@@ -23,7 +23,7 @@
               switch
               @click="$emit('toggleFollowBell')"
             >
-              {{ $i18n(isFollowingBell ? 'forum.unfollow.bell' : 'forum.follow.bell') }}
+              {{ $i18n('forum.follow.bell') }}
             </b-form-checkbox>
             <b-form-checkbox
               v-model="isFollowingEmail"
@@ -31,7 +31,7 @@
               switch
               @click="$emit('toggleFollowEmail')"
             >
-              {{ $i18n(isFollowingEmail ? 'forum.unfollow.email' : 'forum.follow.email') }}
+              {{ $i18n('forum.follow.email') }}
             </b-form-checkbox>
           </div>
           <div class="col">
@@ -40,7 +40,7 @@
               class="btn btn-primary float-right"
               @click="submit"
             >
-              Senden
+              {{ $i18n('button.send') }}
             </button>
           </div>
         </div>
