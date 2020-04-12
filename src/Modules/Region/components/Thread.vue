@@ -21,38 +21,32 @@
       </div>
       <div class="pt-2 pb-2 rounded toggle-status">
         <b-form-checkbox
-          v-model="isFollowingEmail"
-          class="email"
-          switch
-          @click="$emit('toggleFollowEmail')"
-        >
-          <a
-            @click="toggleFollowEmail"
-          >
-            {{ $i18n('forum.follow.email') }}
-          </a>
-        </b-form-checkbox>
-        <b-form-checkbox
           v-model="isFollowingBell"
           class="bell"
           switch
-          @click="$emit('toggleFollowBell')"
+          @change="toggleFollowBell"
         >
-          <a
-            @click="toggleFollowBell"
-          >
+          <a>
             {{ $i18n('forum.follow.bell') }}
+          </a>
+        </b-form-checkbox>
+        <b-form-checkbox
+          v-model="isFollowingEmail"
+          class="email"
+          switch
+          @change="toggleFollowEmail"
+        >
+          <a>
+            {{ $i18n('forum.follow.email') }}
           </a>
         </b-form-checkbox>
         <b-form-checkbox
           v-if="mayModerate"
           v-model="isSticky"
           switch
-          @click="$emit('toggleStickyness')"
+          @change="toggleStickyness"
         >
-          <a
-            @click="toggleStickyness"
-          >
+          <a>
             {{ $i18n('forum.thread.stick') }}
           </a>
         </b-form-checkbox>
@@ -97,8 +91,6 @@
         :is-loading="loadingPosts.indexOf(post.id) != -1"
         :created-at="new Date(post.createdAt)"
         @delete="deletePost(post)"
-        @toggleFollowEmail="toggleFollowEmail"
-        @toggleFollowBell="toggleFollowBell"
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
         @reply="reply"
@@ -120,12 +112,8 @@
     </div>
     <ThreadForm
       ref="form"
-      :is-following-email="isFollowingEmail"
-      :is-following-bell="isFollowingBell"
       :error-message="errorMessage"
       @submit="createPost"
-      @toggleFollowEmail="toggleFollowEmail"
-      @toggleFollowBell="toggleFollowBell"
     />
 
     <b-modal
