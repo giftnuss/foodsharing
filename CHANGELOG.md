@@ -1,53 +1,11 @@
 # 2020-04-09 Hotfix
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - More accurate email rate limiting !1419 @jofranz
-- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 @chriswalg
+- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 !1432 @chriswalg
 
 
 # 2020-03-26 Hotfix 
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
-- Re-enable pickup slot markers after production release !1331 !1307 @jofranz
-- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 @chriswalg @moffer
-- Redirect to login page after login failed !1342 @chriswalg
-- Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
-- update twig to version 3 @peter.toennies
-- update bootstrap-vue to version 2.7 #807 !1382 @ctwx_ok @peter.toennies
-- Added number of food share points to statistics !1351 #81 @alex.simm
-- Switch the tile server from maps.wikimedia.org to MapTiler !1355 @dthulke
-- Orgas are now able to delete wallposts for foodshare points !1359 @pfaufisch
-- Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
-- Show internal email address on user's own profile !1386 #465 @alex.simm
-- Dashboard updates can be filtered !735 !1424 @D0nPiano @ChrisOelmueller
-- Updates from events + foodsharepoints displayed on dashboard !735 #227 #588 @D0nPiano @ChrisOelmueller
-- Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
-- Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
-- Add option for new forum threads in unmoderated fora to send mail or not !1233 @jofranz @Caluera
-- Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
-- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
-- Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
-
-## Bugfixes
-- On Mobile last pickup and member since information is shown on team list in stores #788 !1335 @fs_k
-- Date strings on Dashboard are now displayed in correct language #606 !1316 @pfaufisch
-- Fixed mails not displaying line breaks !1317 !1344 @pfaufisch
-- Improved the banner on welcome page for mobile devices !1329 @chriswalg
-- Makes a break with longer words so that e.g. links in the store description don't come across the page #715 !1269 @chriswalg
-- Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
-- Region statistics for ambassadors do not include workgroup admins anymore #778 !1341 @Caluera
-- Fix bug preventing publishing, editing and deleting of blog posts !1349 @pfaufisch
-- Fix small bug in sending quickreply messages without personal field !1321 !1347 @alex.simm
-- Fix WallpostPermissions now deny read access by default #352 !1353 @pfaufisch
-- Fixed mailboxes not beeing generated for some users !1356 #705 @kheyer
-- Resolve "If name of the district or adress is too long on the business card, this is cut off or goes over the edge" #700 !1362 @chriswalg @kheyer
-- Fixed Dashboard to display activity stream after date-fns update !1366 @pfaufisch
-- Fix broken bell menu caused by missing date conversion !1364 @dthulke
-- Strip whitespaces from email addresses before sending them !1372 #802 @alex.simm
-- Fix "Mobile: can't apply to stores, window cut off" #765 !1357 @panschk
-- Don't include unconfirmed slots into statistics and fetch history !1360 @caluera
-- Fix reapplication not possible after beeing denied once !1277 #767 @chris2up9
-- Fix missing region id bug for food share points !1375 @alex.simm
-- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 !1432 @chriswalg
-- Fixes crash in the date formatting logic when updating the list of bells !1388 @dthulke
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 
 
