@@ -14,12 +14,13 @@
           @keyup.ctrl.enter="submit"
         />
       </div>
-      <div class="card-footer">
+      <div class="card-footer below">
         <div class="row">
           <div class="col-auto toggle-status">
             <b-form-checkbox
               v-model="isFollowingBell"
               name="check-button"
+              class="bell"
               switch
               @click="$emit('toggleFollowBell')"
             >
@@ -28,6 +29,7 @@
             <b-form-checkbox
               v-model="isFollowingEmail"
               name="check-button"
+              class="email"
               switch
               @click="$emit('toggleFollowEmail')"
             >

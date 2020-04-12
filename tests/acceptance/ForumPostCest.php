@@ -55,36 +55,84 @@ class ForumPostCest
 	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$I->login($this->{$example[0]}['email']);
+
+		// FOLLOW FORUM THREAD BY MAIL
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
 		$I->waitForActiveAPICalls();
 		$this->waitForPostButtons($I, true, false, $example[2]);
 
-		$followButton = \Codeception\Util\Locator::contains('.btn', 'FOLGEN');
-		$I->waitForElement($followButton);
-		$I->click($followButton);
+		$followMailSwitch = '.below .toggle-status .email'; // Mail folgen
+		$I->waitForElement($followMailSwitch);
+		$I->click($followMailSwitch);
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
 		$I->waitForActiveAPICalls();
 
-		$unfollowButton = \Codeception\Util\Locator::contains('.btn', 'entfolgen');
-		$I->waitForElement($unfollowButton);
-		$I->click($unfollowButton);
-		$this->waitForPostButtons($I, false, false, $example[2]);
+		$followMailSwitch = '.above .toggle-status .email'; // Mail folgen
+		$I->waitForElement($followMailSwitch);
+		$I->click($followMailSwitch);
+		$this->waitForPostButtons($I, true, false, $example[2]);
+
+		// FOLLOW FORUM THREAD BY BELL
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->waitForActiveAPICalls();
+
+		$followBellSwitch = '.above .toggle-status .bell'; // Glocke folgen
+		$I->waitForElement($followBellSwitch);
+		$I->click($followBellSwitch);
+		$this->waitForPostButtons($I, true, true, $example[2]);
+
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->waitForActiveAPICalls();
+
+		$followBellSwitch = '.below .toggle-status .bell'; // Glocke folgen
+		$I->waitForElement($followBellSwitch);
+		$I->click($followBellSwitch);
+		$this->waitForPostButtons($I, true, false, $example[2]);
+
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$I->waitForActiveAPICalls();
 	}
 
-	private function waitForPostButtons(AcceptanceTester $I, $follow, $unfollow, $stickUnstick)
+	private function waitForPostButtons(AcceptanceTester $I, $followMail, $followBell, $stickUnstick)
 	{
-		if ($follow) {
-			$I->waitForText('Email FOLGEN', 3);
-		}
-		if ($unfollow) {
-			$I->waitForText('Mail entfolgen', 3);
-		}
-		if ($stickUnstick) {
-			$I->see('fixieren', '.btn');
+		$I->waitForText('Mail folgen', 3);
+		$I->seeNumberOfElements(['css' => '.toggle-status .email'], 2);
+		if ($followMail) {
+			// mail switch should be enabled
+			$followMailSwitch = ['css' => '.above .toggle-status .email'];
+			$I->seeCheckboxIsChecked($followMailSwitch);
+			$followMailSwitch = ['css' => '.below .toggle-status .email'];
+			$I->seeCheckboxIsChecked($followMailSwitch);
 		} else {
-			$I->dontSee('fixieren', '.btn');
+			// mail switch should be disabled
+		}
+
+		$I->waitForText('Glocke folgen', 3);
+		$I->seeNumberOfElements(['css' => '.toggle-status .bell'], 2);
+		// $I->seeElement($followBellSwitch, $switch);
+		if ($followBell) {
+			// bell switch should be enabled
+			$followBellSwitch = ['css' => '.above .toggle-status .bell'];
+			$I->seeCheckboxIsChecked($followBellSwitch);
+			$followBellSwitch = ['css' => '.below .toggle-status .bell'];
+			$I->seeCheckboxIsChecked($followBellSwitch);
+		} else {
+			// bell switch should be disabled
+			$I->dontSeeCheckboxIsChecked($followBellSwitch);
+		}
+
+		if ($stickUnstick) {
+			$I->waitForText('Thema fixieren', 3);
+			$I->seeNumberOfElements(['css' => '.toggle-status .sticky'], 1);
+		// sticky switch should be enabled
+			// seeCheckboxIsChecked(...) ?
+		} else {
+			// Either
+			// sticky switch should be disabled
+			// or invisible?
+			// $I->dontSeeElement(...)?
 		}
 	}
 
@@ -103,10 +151,10 @@ class ForumPostCest
 			$I->see($title, '#thread-' . $this->thread_ambassador_user['id'] . ' + #thread-' . $this->thread_user_ambassador['id']);
 		});
 
-		$stickButton = \Codeception\Util\Locator::contains('.btn', 'fixieren');
-		$I->waitForElement($stickButton);
-		$I->click($stickButton);
-		$I->waitForElementNotVisible($stickButton);
+		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
+		$I->waitForElement($stickySwitch);
+		$I->click($stickySwitch);
+		// $I->waitForElementNotVisible($stickySwitch);
 		$nick->does(function (AcceptanceTester $I) {
 			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk['id']));
@@ -114,10 +162,10 @@ class ForumPostCest
 			$I->see($title, '#thread-' . $this->thread_user_ambassador['id'] . ' + #thread-' . $this->thread_ambassador_user['id']);
 		});
 
-		$unstickButton = \Codeception\Util\Locator::contains('.btn', 'Fixierung aufheben');
-		$I->waitForElementVisible($unstickButton);
-		$I->click($unstickButton);
-		$I->waitForElementNotVisible($unstickButton);
+		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
+		$I->waitForElementVisible($stickySwitch);
+		$I->click($stickySwitch);
+		// $I->waitForElementNotVisible($stickySwitch);
 		$nick->does(function (AcceptanceTester $I) {
 			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk['id']));

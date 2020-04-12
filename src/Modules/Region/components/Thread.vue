@@ -12,7 +12,7 @@
 
     <div
       v-if="regionId"
-      class="card rounded"
+      class="card rounded above"
     >
       <div class="card-header text-white bg-primary">
         <div class="row text-truncate ml-1 pt-1 mr-3 font-weight-bold">
@@ -22,6 +22,7 @@
       <div class="pt-2 pb-2 rounded toggle-status">
         <b-form-checkbox
           v-model="isFollowingEmail"
+          class="email"
           switch
           @click="$emit('toggleFollowEmail')"
         >
@@ -33,6 +34,7 @@
         </b-form-checkbox>
         <b-form-checkbox
           v-model="isFollowingBell"
+          class="bell"
           switch
           @click="$emit('toggleFollowBell')"
         >
