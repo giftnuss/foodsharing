@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Info\FollowStatus;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
@@ -20,8 +21,8 @@ class ForumFollowerGateway extends BaseGateway
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
 			AND		fs.deleted_at IS NULL
-			AND		tf.infotype = 1
-		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
+			AND		tf.infotype = :infotype_email
+		', [':theme_id' => $thread_id, ':fs_id' => $fs_id, ':infotype_email' => InfoType::EMAIL]);
 	}
 
 	public function getForumThreads(int $fsId): array
@@ -52,17 +53,17 @@ class ForumFollowerGateway extends BaseGateway
 			WHERE 	tf.foodsaver_id = fs.id
 			AND 	tf.theme_id = :theme_id
 			AND		fs.deleted_at IS NULL
-			AND		tf.bell_notification = 1
+			AND		tf.bell_notification = :followstatus_enabled
 			AND		fs.deleted_at IS NULL
 			AND		fs.id != :fsId
-		', [':theme_id' => $thread_id, ':fsId' => $fs_id]);
+		', [':theme_id' => $thread_id, ':fsId' => $fs_id, ':followstatus_enabled' => FollowStatus::ENABLED]);
 	}
 
 	public function isFollowingEmail($fsId, $threadId)
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
-			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'infotype' => 1]
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'infotype' => InfoType::EMAIL]
 		);
 	}
 
@@ -70,7 +71,7 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
-			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'bell_notification' => 1]
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'bell_notification' => FollowStatus::ENABLED]
 		);
 	}
 
@@ -98,7 +99,7 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => 1]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::ENABLED]
 		);
 	}
 
@@ -117,7 +118,7 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => 0]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::NONE]
 		);
 	}
 
@@ -125,7 +126,7 @@ class ForumFollowerGateway extends BaseGateway
 	{
 		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => 0]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::DISABLED]
 		);
 	}
 
