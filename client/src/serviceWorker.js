@@ -5,14 +5,13 @@ self.addEventListener('push', function (event) {
     return
   }
 
-  const sendNotification = (title, options) => {
-    return self.registration.showNotification(title, options)
+  if (!event.data) {
+    return;
   }
 
-  if (event.data) {
-    const data = event.data.json()
-    event.waitUntil(sendNotification(data.title, data.options))
-  }
+  const data = event.data.json()
+  event.waitUntil(self.registration.showNotification(data.title, data.options))
+
 })
 
 self.addEventListener('notificationclick', function (event) {
