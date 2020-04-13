@@ -24,6 +24,7 @@
 - Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
 - Make it possible to unfollow forum bells #271 !1191 @jofranz @chriswalg @ChrisOelmueller @moffer
+- Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 !1438 @jofranz @alex.simm
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer

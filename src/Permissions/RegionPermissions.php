@@ -35,7 +35,7 @@ final class RegionPermissions
 
 	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
 	{
-		return $this->session->isAmbassadorForRegion([$regionId], false, false);
+		return $this->session->may('orga') || $this->session->isAmbassadorForRegion([$regionId], false, false);
 	}
 
 	public function mayDeleteFoodsaverFromRegion(int $regionId): bool
