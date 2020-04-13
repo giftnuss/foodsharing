@@ -46,7 +46,7 @@
           class="wrapper-label ui-widget"
           for="labelInputAttribution"
         > {{ $i18n('store.attribution') }}</label>
-        <span v-if="press === 'may_referred_to_in_public'">{{ $i18n('store.may_referred_to_in_public') }}</span>
+        <span v-if="allowedToMentionInPublic">{{ $i18n('store.may_referred_to_in_public') }}</span>
         <span v-else>{{ $i18n('store.may_not_referred_to_in_public') }}</span>
       </div>
       <div
@@ -103,8 +103,13 @@ export default {
       default: null
     },
     press: {
-      type: String,
-      default: 'may_not_referred_to_in_public'
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    allowedToMentionInPublic () {
+      return this.press === 1
     }
   },
   methods: {
