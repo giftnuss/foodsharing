@@ -58,7 +58,7 @@
           class="wrapper-label ui-widget"
           for="labelInputMyLastPickup"
         > {{ $i18n('store.my_last_pickup') }}</label>
-        {{ formatLastFetchDate() }} <span v-if="distanceInDays > 1">({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})</span>
+        {{ formatLastFetchDate() }} <span v-if="distanceInDays() > 1">({{ $i18n('store.days_before') }} {{ distanceInDays() }} {{ $i18n('store.days') }})</span>
       </div>
     </div>
   </div>
