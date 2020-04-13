@@ -1,4 +1,5 @@
 import { urls } from '@/urls'
+import { subscribeForPushNotifications } from "@/pushNotifications";
 
 self.addEventListener('push', function (event) {
   if (!(self.Notification && self.Notification.permission === 'granted')) {
@@ -21,6 +22,12 @@ self.addEventListener('notificationclick', function (event) {
     const url = urls[page](...params)
     self.clients.openWindow(url)
   }
+})
+
+// Time to time, browsers decide to reset their push subscription data. Then all old subscriptions become invalid, and we need to register a new one.
+self.addEventListener('pushsubscriptionchange', function (event) {
+  event.waitUntil(subscribeForPushNotifications(event.oldSubscription.options))
+  // we don't need to care about the old subscription on the server, it's going to get removed automatically as soon as the server realizes it's invalid
 })
 
 // Ensure new workers to replace old ones...

@@ -1,12 +1,16 @@
 import * as ajax from '@/api/base'
 
-async function subscribeForPushNotifications () {
-  const applicationServerKey = (await ajax.get('/pushnotification/webpush/server-information')).key
+/**
+ * @param {PushSubscriptionOptions} [options] – You can save a request if you provide the application server key.
+ */
+async function subscribeForPushNotifications (options = { userVisibleOnly: true, applicationServerKey: null }) {
+  if (options.applicationServerKey === null) {
+    options.applicationServerKey = urlBase64ToUint8Array((await ajax.get('/pushnotification/webpush/server-information')).key)
+  }
+
   const serviceWorkerRegistration = await navigator.serviceWorker.ready
-  const subscription = await serviceWorkerRegistration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(applicationServerKey)
-  })
+  const subscription = await serviceWorkerRegistration.pushManager.subscribe(options)
+
   return sendPushSubscriptionToServer(subscription)
 }
 
