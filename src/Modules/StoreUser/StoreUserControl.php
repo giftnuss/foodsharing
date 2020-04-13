@@ -303,17 +303,4 @@ class StoreUserControl extends Control
 			$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', ['name' => $region['name']])));
 		}
 	}
-
-	private function mentionPublicly(int $id)
-	{
-		if ($id === 0) {
-			return $this->translationHelper->s('may_not_referred_to_in_public');
-		}
-
-		if ($id === 1) {
-			return $this->translationHelper->s('may_referred_to_in_public');
-		}
-
-		return false;
-	}
 }
