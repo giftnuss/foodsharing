@@ -54,90 +54,96 @@ class ForumPostCest
 	 */
 	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
 	{
+		$followMailSwitch = '.above .toggle-status .email'; // per Mail folgen
+		$followBellSwitch = '.above .toggle-status .bell'; // per Glocke folgen
+
 		$I->login($this->{$example[0]}['email']);
 
 		// FOLLOW FORUM THREAD BY MAIL
 		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
-		$I->waitForActiveAPICalls();
-		$this->waitForPostButtons($I, true, false, $example[2]);
-
-		$followMailSwitch = '.below .toggle-status .email'; // Mail folgen
-		$I->waitForElement($followMailSwitch);
-		$I->click($followMailSwitch);
 		$this->waitForPostButtons($I, false, false, $example[2]);
 
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
-		$I->waitForActiveAPICalls();
-
-		$followMailSwitch = '.above .toggle-status .email'; // Mail folgen
 		$I->waitForElement($followMailSwitch);
 		$I->click($followMailSwitch);
 		$this->waitForPostButtons($I, true, false, $example[2]);
 
-		// FOLLOW FORUM THREAD BY BELL
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
-		$I->waitForActiveAPICalls();
-
-		$followBellSwitch = '.above .toggle-status .bell'; // Glocke folgen
 		$I->waitForElement($followBellSwitch);
 		$I->click($followBellSwitch);
 		$this->waitForPostButtons($I, true, true, $example[2]);
 
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		// Simulate page reload
 		$I->waitForActiveAPICalls();
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$this->waitForPostButtons($I, true, true, $example[2]);
 
-		$followBellSwitch = '.below .toggle-status .bell'; // Glocke folgen
+		$I->waitForElement($followMailSwitch);
+		$I->click($followMailSwitch);
+		$this->waitForPostButtons($I, false, true, $example[2]);
+
 		$I->waitForElement($followBellSwitch);
 		$I->click($followBellSwitch);
-		$this->waitForPostButtons($I, true, false, $example[2]);
+		$this->waitForPostButtons($I, false, false, $example[2]);
 
-		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		// Simulate page reload
 		$I->waitForActiveAPICalls();
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$this->waitForPostButtons($I, false, false, $example[2]);
+
+		$I->waitForElement($followBellSwitch);
+		$I->click($followBellSwitch);
+		$this->waitForPostButtons($I, false, true, $example[2]);
+
+		// Simulate page reload
+		$I->waitForActiveAPICalls();
+		$I->amOnPage($I->forumThemeUrl($this->{$example[1]}['id'], null));
+		$this->waitForPostButtons($I, false, true, $example[2]);
 	}
 
 	private function waitForPostButtons(AcceptanceTester $I, $followMail, $followBell, $stickUnstick)
 	{
-		$I->waitForText('Mail folgen', 3);
-		$I->seeNumberOfElements(['css' => '.toggle-status .email'], 2);
+		$followMailText = 'als E-Mail';
+		$followBellText = 'als Glocke';
+		$stickyText = 'Thema fixieren';
+
+		$followMailSwitch = '.above .toggle-status .email';
+		$followBellSwitch = '.above .toggle-status .bell';
+		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
+		$switchOn = ' a.enabled';
+		$switchOff = ' a:not(.enabled)';
+
+		$I->waitForActiveAPICalls();
+		$I->waitForText($followMailText, 3);
+		$I->seeNumberOfElements($followMailSwitch, 1);
 		if ($followMail) {
 			// mail switch should be enabled
-			$followMailSwitch = ['css' => '.above .toggle-status .email'];
-			$I->seeCheckboxIsChecked($followMailSwitch);
-			$followMailSwitch = ['css' => '.below .toggle-status .email'];
-			$I->seeCheckboxIsChecked($followMailSwitch);
+			$I->seeNumberOfElements($followMailSwitch . $switchOn, 1);
 		} else {
 			// mail switch should be disabled
+			$I->seeNumberOfElements($followMailSwitch . $switchOff, 1);
 		}
 
-		$I->waitForText('Glocke folgen', 3);
-		$I->seeNumberOfElements(['css' => '.toggle-status .bell'], 2);
-		// $I->seeElement($followBellSwitch, $switch);
+		$I->waitForText($followBellText, 3);
+		$I->seeNumberOfElements($followBellSwitch, 1);
 		if ($followBell) {
 			// bell switch should be enabled
-			$followBellSwitch = ['css' => '.above .toggle-status .bell'];
-			$I->seeCheckboxIsChecked($followBellSwitch);
-			$followBellSwitch = ['css' => '.below .toggle-status .bell'];
-			$I->seeCheckboxIsChecked($followBellSwitch);
+			$I->seeNumberOfElements($followBellSwitch . $switchOn, 1);
 		} else {
 			// bell switch should be disabled
-			$I->dontSeeCheckboxIsChecked($followBellSwitch);
+			$I->seeNumberOfElements($followBellSwitch . $switchOff, 1);
 		}
 
 		if ($stickUnstick) {
-			$I->waitForText('Thema fixieren', 3);
-			$I->seeNumberOfElements(['css' => '.toggle-status .sticky'], 1);
-		// sticky switch should be enabled
-			// seeCheckboxIsChecked(...) ?
+			$I->waitForText($stickyText, 3);
+			$I->seeNumberOfElements($stickySwitch, 1);
 		} else {
-			// Either
-			// sticky switch should be disabled
-			// or invisible?
-			// $I->dontSeeElement(...)?
+			$I->dontSee($stickyText);
 		}
 	}
 
 	public function StickUnstickPost(AcceptanceTester $I)
 	{
+		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
+
 		$I->login($this->ambassador['email']);
 		$I->amOnPage($I->forumThemeUrl($this->thread_user_ambassador['id'], null));
 		$I->waitForActiveAPICalls();
@@ -151,27 +157,29 @@ class ForumPostCest
 			$I->see($title, '#thread-' . $this->thread_ambassador_user['id'] . ' + #thread-' . $this->thread_user_ambassador['id']);
 		});
 
-		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
 		$I->waitForElement($stickySwitch);
 		$I->click($stickySwitch);
-		// $I->waitForElementNotVisible($stickySwitch);
+
 		$nick->does(function (AcceptanceTester $I) {
+			$I->waitForActiveAPICalls();
 			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk['id']));
 			$title = $this->thread_ambassador_user['name'];
 			$I->see($title, '#thread-' . $this->thread_user_ambassador['id'] . ' + #thread-' . $this->thread_ambassador_user['id']);
 		});
 
-		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
 		$I->waitForElementVisible($stickySwitch);
+		$I->waitForActiveAPICalls();
 		$I->click($stickySwitch);
-		// $I->waitForElementNotVisible($stickySwitch);
+
 		$nick->does(function (AcceptanceTester $I) {
 			$I->wait(2);
 			$I->amOnPage($I->forumUrl($this->testBezirk['id']));
 			$title = $this->thread_user_ambassador['name'];
 			$I->see($title, '#thread-' . $this->thread_ambassador_user['id'] . ' + #thread-' . $this->thread_user_ambassador['id']);
+			$I->waitForActiveAPICalls();
 		});
+		$I->waitForActiveAPICalls();
 	}
 
 	private function _createThread(AcceptanceTester $I, $regionId, $title, $emailPossible, $sendEmail = true)
@@ -189,6 +197,7 @@ class ForumPostCest
 			$I->selectOption('#forum_create_thread_form_sendMail_0', 'Nein');
 		}
 		$I->click('Senden');
+		$I->waitForActiveAPICalls();
 	}
 
 	/**

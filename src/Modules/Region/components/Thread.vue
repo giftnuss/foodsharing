@@ -49,6 +49,7 @@
           <b-form-checkbox
             v-if="mayModerate"
             v-model="isSticky"
+            class="sticky"
             switch
             @change="toggleStickyness"
           >
