@@ -21,44 +21,13 @@
           </h6>
         </div>
       </div>
-      <div class="rounded toggle-status p-2 mb-2">
-        <span class="legend font-italic">
-          {{ $i18n('forum.follow.header') }}
-        </span>
-        <div class="d-inline-block">
-          <b-form-checkbox
-            v-model="isFollowingBell"
-            class="bell"
-            switch
-            @change="toggleFollowBell"
-          >
-            <a :class="{'text-strike': true, 'enabled': isFollowingBell}">
-              {{ $i18n('forum.follow.bell') }}
-            </a>
-          </b-form-checkbox>
-          <b-form-checkbox
-            v-model="isFollowingEmail"
-            class="email"
-            switch
-            @change="toggleFollowEmail"
-          >
-            <a :class="{'text-strike': true, 'enabled': isFollowingEmail}">
-              {{ $i18n('forum.follow.email') }}
-            </a>
-          </b-form-checkbox>
-          <b-form-checkbox
-            v-if="mayModerate"
-            v-model="isSticky"
-            class="sticky"
-            switch
-            @change="toggleStickyness"
-          >
-            <a :class="{'text-bold enabled': isSticky}">
-              {{ $i18n('forum.thread.stick') }}
-            </a>
-          </b-form-checkbox>
-        </div>
-      </div>
+      <ThreadActions
+        :is-following-bell="isFollowingBell"
+        :is-following-email="isFollowingEmail"
+        :is-sticky="isSticky"
+        :thread-id="id"
+        :show-sticky="mayModerate"
+      />
       <div
         v-if="!isActive && mayModerate"
         class="card-body mb-2"
@@ -107,6 +76,19 @@
         @reply="reply"
       />
     </div>
+
+    <div
+      v-if="regionId"
+      class="card rounded below"
+    >
+      <ThreadActions
+        :is-following-bell="isFollowingBell"
+        :is-following-email="isFollowingEmail"
+        :is-sticky="isSticky"
+        :thread-id="id"
+      />
+    </div>
+
     <div
       v-if="!isLoading && !errorMessage && !posts.length"
       class="alert alert-warning"
@@ -143,8 +125,9 @@
 
 import { BModal } from 'bootstrap-vue'
 
-import ThreadPost from './ThreadPost'
+import ThreadActions from './ThreadActions'
 import ThreadForm from './ThreadForm'
+import ThreadPost from './ThreadPost'
 import * as api from '@/api/forum'
 import { pulseError } from '@/script'
 import i18n from '@/i18n'
@@ -152,7 +135,7 @@ import { user } from '@/server-data'
 import { GET } from '@/browser'
 
 export default {
-  components: { BModal, ThreadPost, ThreadForm },
+  components: { BModal, ThreadActions, ThreadForm, ThreadPost },
   props: {
     id: {
       type: Number,
@@ -271,51 +254,6 @@ export default {
         }
       }
     },
-    async toggleFollowEmail () {
-      const targetState = !this.isFollowingEmail
-      this.isFollowingEmail = targetState
-      try {
-        if (targetState) {
-          await api.followThreadByEmail(this.id)
-        } else {
-          await api.unfollowThreadByEmail(this.id)
-        }
-      } catch (err) {
-        // failed? undo it
-        this.isFollowingEmail = !targetState
-        pulseError(i18n('error_unexpected'))
-      }
-    },
-    async toggleFollowBell () {
-      const targetState = !this.isFollowingBell
-      this.isFollowingBell = targetState
-      try {
-        if (targetState) {
-          await api.followThreadByBell(this.id)
-        } else {
-          await api.unfollowThreadByBell(this.id)
-        }
-      } catch (err) {
-        // failed? undo it
-        this.isFollowingBell = !targetState
-        pulseError(i18n('error_unexpected'))
-      }
-    },
-    async toggleStickyness () {
-      const targetState = !this.isSticky
-      this.isSticky = targetState
-      try {
-        if (targetState) {
-          await api.stickThread(this.id)
-        } else {
-          await api.unstickThread(this.id)
-        }
-      } catch (err) {
-        // failed? undo it
-        this.isSticky = !targetState
-        pulseError(i18n('error_unexpected'))
-      }
-    },
     async createPost (body) {
       this.errorMessage = null
       const dummyPost = {
@@ -372,28 +310,5 @@ export default {
 <style lang="scss" scoped>
 .card-body > .alert {
   margin-bottom: 0;
-}
-
-.bootstrap .toggle-status {
-  a.text-bold.enabled {
-    font-weight: bold;
-  }
-  a.text-strike:not(.enabled) {
-    text-decoration: line-through;
-  }
-}
-
-::v-deep .toggle-status .custom-switch {
-  padding-left: 3rem;
-}
-
-::v-deep .toggle-status .custom-control {
-  display: inline-block;
-  /* from bootstrap min-height */
-  line-height: 1.5rem;
-
-  .custom-control-label {
-    line-height: unset;
-  }
 }
 </style>

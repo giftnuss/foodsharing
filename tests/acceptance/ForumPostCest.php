@@ -55,7 +55,7 @@ class ForumPostCest
 	public function SeePostButtonsAndClickFollowUnfollow(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$followMailSwitch = '.above .toggle-status .email'; // per Mail folgen
-		$followBellSwitch = '.above .toggle-status .bell'; // per Glocke folgen
+		$followBellSwitch = '.below .toggle-status .bell'; // per Glocke folgen
 
 		$I->login($this->{$example[0]}['email']);
 
@@ -101,18 +101,15 @@ class ForumPostCest
 
 	private function waitForPostButtons(AcceptanceTester $I, $followMail, $followBell, $stickUnstick)
 	{
-		$followMailText = 'als E-Mail';
-		$followBellText = 'als Glocke';
-		$stickyText = 'Thema fixieren';
-
 		$followMailSwitch = '.above .toggle-status .email';
-		$followBellSwitch = '.above .toggle-status .bell';
+		$followBellSwitch = '.below .toggle-status .bell';
 		$stickySwitch = '.above .toggle-status .sticky'; // Thema fixieren
 		$switchOn = ' a.enabled';
 		$switchOff = ' a:not(.enabled)';
+		$stickyText = 'Thema fixieren';
 
 		$I->waitForActiveAPICalls();
-		$I->waitForText($followMailText, 3);
+		$I->waitForElement($followMailSwitch);
 		$I->seeNumberOfElements($followMailSwitch, 1);
 		if ($followMail) {
 			// mail switch should be enabled
@@ -122,7 +119,7 @@ class ForumPostCest
 			$I->seeNumberOfElements($followMailSwitch . $switchOff, 1);
 		}
 
-		$I->waitForText($followBellText, 3);
+		$I->waitForElement($followBellSwitch);
 		$I->seeNumberOfElements($followBellSwitch, 1);
 		if ($followBell) {
 			// bell switch should be enabled
