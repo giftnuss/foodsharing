@@ -233,17 +233,19 @@ forum:
   from: Von %name%
   threads: Themen
   new_thread: Neues Thema verfassen
-  thread_is_inactive: Thema inaktiv!
-  thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
   follow:
-    bell: Glocke folgen
-    email: Mail folgen
+    header: "Benachrichtigung bei neuen Antworten:"
+    bell: "als Glocke"
+    email: "als E-Mail"
   post:
     delete: Beitrag löschen
     body: Nachricht
   thread:
     activate: Thema aktivieren
     delete: Thema löschen
+    inactive: |
+      Dieses Thema ist noch nicht aktiv.
+      Hier kannst du es freischalten und alle Foodsaver darüber informieren.
     stick: Thema fixieren
     title: Titel
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.

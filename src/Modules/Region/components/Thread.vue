@@ -15,52 +15,62 @@
       class="card rounded above"
     >
       <div class="card-header text-white bg-primary">
-        <div class="row text-truncate ml-1 pt-1 mr-3 font-weight-bold">
-          {{ title }}
+        <div class="row m-1 pt-2">
+          <h6 class="text-truncate">
+            {{ title }}
+          </h6>
         </div>
       </div>
-      <div class="pt-2 pb-2 rounded toggle-status">
-        <b-form-checkbox
-          v-model="isFollowingBell"
-          class="bell"
-          switch
-          @change="toggleFollowBell"
-        >
-          <a>
-            {{ $i18n('forum.follow.bell') }}
-          </a>
-        </b-form-checkbox>
-        <b-form-checkbox
-          v-model="isFollowingEmail"
-          class="email"
-          switch
-          @change="toggleFollowEmail"
-        >
-          <a>
-            {{ $i18n('forum.follow.email') }}
-          </a>
-        </b-form-checkbox>
-        <b-form-checkbox
-          v-if="mayModerate"
-          v-model="isSticky"
-          switch
-          @change="toggleStickyness"
-        >
-          <a>
-            {{ $i18n('forum.thread.stick') }}
-          </a>
-        </b-form-checkbox>
+      <div class="rounded toggle-status p-2 mb-2">
+        <span class="legend font-italic">
+          {{ $i18n('forum.follow.header') }}
+        </span>
+        <div class="d-inline-block">
+          <b-form-checkbox
+            v-model="isFollowingBell"
+            class="bell"
+            switch
+            @change="toggleFollowBell"
+          >
+            <a :class="{'text-strike': true, 'enabled': isFollowingBell}">
+              {{ $i18n('forum.follow.bell') }}
+            </a>
+          </b-form-checkbox>
+          <b-form-checkbox
+            v-model="isFollowingEmail"
+            class="email"
+            switch
+            @change="toggleFollowEmail"
+          >
+            <a :class="{'text-strike': true, 'enabled': isFollowingEmail}">
+              {{ $i18n('forum.follow.email') }}
+            </a>
+          </b-form-checkbox>
+          <b-form-checkbox
+            v-if="mayModerate"
+            v-model="isSticky"
+            switch
+            @change="toggleStickyness"
+          >
+            <a :class="{'text-bold enabled': isSticky}">
+              {{ $i18n('forum.thread.stick') }}
+            </a>
+          </b-form-checkbox>
+        </div>
       </div>
       <div
         v-if="!isActive && mayModerate"
-        class="card-body"
+        class="card-body mb-2"
       >
         <div
-          class="alert alert-warning"
+          class="alert alert-warning mb-2"
           role="alert"
         >
-          {{ $i18n('forum.thread_is_inactive_description') }}
-          <hr>
+          <span>
+            {{ $i18n('forum.thread.inactive') }}
+          </span>
+        </div>
+        <div>
           <button
             class="btn btn-secondary btn-sm"
             @click="activateThread"
@@ -68,7 +78,7 @@
             <i class="fas fa-check" /> {{ $i18n('forum.thread.activate') }}
           </button>
           <button
-            class="btn btn-secondary btn-sm"
+            class="btn btn-danger btn-sm float-right"
             @click="$refs.deleteModal.show()"
           >
             <i class="fas fa-trash-alt" /> {{ $i18n('forum.thread.delete') }}
@@ -363,8 +373,17 @@ export default {
   margin-bottom: 0;
 }
 
+.bootstrap .toggle-status {
+  a.text-bold.enabled {
+    font-weight: bold;
+  }
+  a.text-strike:not(.enabled) {
+    text-decoration: line-through;
+  }
+}
+
 ::v-deep .toggle-status .custom-switch {
-  padding-left: 3.5rem;
+  padding-left: 3rem;
 }
 
 ::v-deep .toggle-status .custom-control {
