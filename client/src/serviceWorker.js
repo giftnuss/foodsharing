@@ -1,5 +1,5 @@
 import { urls } from '@/urls'
-import { subscribeForPushNotifications } from "@/pushNotifications";
+import { subscribeForPushNotifications } from '@/pushNotifications'
 
 self.addEventListener('push', function (event) {
   if (!self.Notification || self.Notification.permission !== 'granted') {
