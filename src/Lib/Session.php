@@ -564,7 +564,7 @@ class Session
 	/**
 	 * Checks if the current user is an ambassador for one of the regions in the list of region IDs.
 	 *
-	 * @param $regionIds list of region IDs
+	 * @param array $regionIds list of region IDs
 	 * @param bool $include_groups if working group should be included in the check
 	 * @param bool $include_parent_regions if the parent regions should be included in the check
 	 */
