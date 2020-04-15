@@ -59,11 +59,6 @@ class MessagePushNotification extends PushNotification
 		return $this->sender;
 	}
 
-	public function getBody(): string
-	{
-		return $this->body;
-	}
-
 	public function getTime(): \DateTime
 	{
 		return $this->time;
@@ -80,9 +75,18 @@ class MessagePushNotification extends PushNotification
 	}
 
 	/**
-	 * This will probably never be used as MessagePushNotification is the first of its kind, but you never know.
+	 * This is not only the fall back body, but the actual body of the message. Because message bodies can't be
+	 * translated, the TranslationHelper is not needed and defaults to null.
 	 */
-	public function getFallbackString(TranslationHelper $translationHelper): string
+	public function getBody(TranslationHelper $translationHelper = null): string
+	{
+		return $this->body;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getTitle(TranslationHelper $translationHelper): string
 	{
 		if ($this->getConversationName() !== null) {
 			return $translationHelper->sv(

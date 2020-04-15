@@ -119,7 +119,9 @@ class WebPushHandler implements PushNotificationHandlerInterface
 				);
 			}
 		} else {
-			$payloadArray['title'] = $notification->getFallbackString($this->translationHelper);
+			// Seems to be a PushNotification type we don't know, but luckily we can fall back on a simple text notification with just title and body
+			$payloadArray['title'] = $notification->getTitle($this->translationHelper);
+			$payloadArray['body'] = $notification->getBody($this->translationHelper);
 		}
 
 		$payloadArray = $this->cropPayload($payloadArray);
