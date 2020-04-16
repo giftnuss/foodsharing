@@ -15,5 +15,6 @@ abstract class PushNotification
 	 * client (or the handler) then can fall back on.
 	 */
 	abstract public function getTitle(TranslatorInterface $translator): string;
+
 	abstract public function getBody(TranslatorInterface $translator): string;
 }

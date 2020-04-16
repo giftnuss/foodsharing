@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\PushNotification\Notification;
 
-use Foodsharing\Helpers\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
