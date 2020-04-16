@@ -5,7 +5,7 @@
     </span>
     <div class="d-inline-block">
       <b-form-checkbox
-        v-model="isFollowingBell"
+        :checked="isFollowingBell"
         class="bell"
         switch
         @change="toggleFollowBell"
@@ -15,7 +15,7 @@
         </a>
       </b-form-checkbox>
       <b-form-checkbox
-        v-model="isFollowingEmail"
+        :checked="isFollowingEmail"
         class="email"
         switch
         @change="toggleFollowEmail"
@@ -26,7 +26,7 @@
       </b-form-checkbox>
       <b-form-checkbox
         v-if="showSticky"
-        v-model="isSticky"
+        :checked="isSticky"
         class="sticky"
         switch
         @change="toggleStickyness"
@@ -56,8 +56,7 @@ export default {
   },
   methods: {
     async toggleFollowBell () {
-      const targetState = !this.isFollowingBell
-      this.isFollowingBell = targetState
+      let targetState = !this.isFollowingBell
       try {
         if (targetState) {
           await api.followThreadByBell(this.threadId)
@@ -67,13 +66,14 @@ export default {
         // this.$emit('update:bell')
       } catch (err) {
         // failed? undo it
-        this.isFollowingBell = !targetState
+        targetState = !targetState
         pulseError(i18n('error_unexpected'))
+      } finally {
+        this.$emit('update:isFollowingBell', targetState)
       }
     },
     async toggleFollowEmail () {
-      const targetState = !this.isFollowingEmail
-      this.isFollowingEmail = targetState
+      let targetState = !this.isFollowingEmail
       try {
         if (targetState) {
           await api.followThreadByEmail(this.threadId)
@@ -83,13 +83,14 @@ export default {
         // this.$emit('update:email')
       } catch (err) {
         // failed? undo it
-        this.isFollowingEmail = !targetState
+        targetState = !targetState
         pulseError(i18n('error_unexpected'))
+      } finally {
+        this.$emit('update:isFollowingEmail', targetState)
       }
     },
     async toggleStickyness () {
-      const targetState = !this.isSticky
-      this.isSticky = targetState
+      let targetState = !this.isSticky
       try {
         if (targetState) {
           await api.stickThread(this.threadId)
@@ -99,8 +100,10 @@ export default {
         // this.$emit('update:sticky')
       } catch (err) {
         // failed? undo it
-        this.isSticky = !targetState
+        targetState = !targetState
         pulseError(i18n('error_unexpected'))
+      } finally {
+        this.$emit('update:isSticky', targetState)
       }
     }
   }

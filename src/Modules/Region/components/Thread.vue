@@ -22,9 +22,9 @@
         </div>
       </div>
       <ThreadActions
-        :is-following-bell="isFollowingBell"
-        :is-following-email="isFollowingEmail"
-        :is-sticky="isSticky"
+        :is-following-bell.sync="isFollowingBell"
+        :is-following-email.sync="isFollowingEmail"
+        :is-sticky.sync="isSticky"
         :thread-id="id"
         :show-sticky="mayModerate"
       />
@@ -82,9 +82,9 @@
       class="card rounded below"
     >
       <ThreadActions
-        :is-following-bell="isFollowingBell"
-        :is-following-email="isFollowingEmail"
-        :is-sticky="isSticky"
+        :is-following-bell.sync="isFollowingBell"
+        :is-following-email.sync="isFollowingEmail"
+        :is-sticky.sync="isSticky"
         :thread-id="id"
       />
     </div>
