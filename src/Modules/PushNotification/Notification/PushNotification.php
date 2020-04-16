@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\PushNotification\Notification;
 
-use Foodsharing\Helpers\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class PushNotification
 {
@@ -14,6 +14,6 @@ abstract class PushNotification
 	 * PushNotification class, every PushNotification must be able to render a title and a body itself, on which the
 	 * client (or the handler) then can fall back on.
 	 */
-	abstract public function getTitle(TranslationHelper $translationHelper): string;
-	abstract public function getBody(TranslationHelper $translationHelper): string;
+	abstract public function getTitle(TranslatorInterface $translator): string;
+	abstract public function getBody(TranslatorInterface $translator): string;
 }

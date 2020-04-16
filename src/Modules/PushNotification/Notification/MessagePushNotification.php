@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\PushNotification\Notification;
 
-use Foodsharing\Helpers\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This push notification class is to be used for notifications about messages in a conversation. Push notification
@@ -76,28 +76,28 @@ class MessagePushNotification extends PushNotification
 
 	/**
 	 * This is not only the fall back body, but the actual body of the message. Because message bodies can't be
-	 * translated, the TranslationHelper is not needed and defaults to null.
+	 * translated, the Translator is not needed and defaults to null.
 	 */
-	public function getBody(TranslationHelper $translationHelper = null): string
+	public function getBody(TranslatorInterface $translator = null): string
 	{
 		return $this->body;
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritdoc}
 	 */
-	public function getTitle(TranslationHelper $translationHelper): string
+	public function getTitle(TranslatorInterface $translator): string
 	{
 		if ($this->getConversationName() !== null) {
-			return $translationHelper->sv(
-				'message_notification_named_conversation',
-				['foodsaver' => $this->getSender(), 'conversation' => $this->getConversationName()]
+			return $translator->trans(
+				'chat.notification_named_conversation',
+				['{foodsaver}' => $this->getSender(), '{conversation}' => $this->getConversationName()]
 			);
 		}
 
-		return $translationHelper->sv(
-			'message_notification_unnamed_conversation',
-			$this->getSender()
+		return $translator->trans(
+			'chat.notification_unnamed_conversation',
+			['{foodsaver}' => $this->getSender()]
 		);
 	}
 }
