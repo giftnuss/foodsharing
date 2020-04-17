@@ -111,7 +111,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
 			'name' => 'Bot',
-			'bezirk_id' => $bezirk1,
+			'bezirk_id' => $region1,
 			'about_me_intern' => 'hello!'
 		]);
 		$this->writeUser($userbot, $password, 'ambassador');
