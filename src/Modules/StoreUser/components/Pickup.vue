@@ -137,7 +137,6 @@ import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
 import dateFnsCompareAsc from 'date-fns/compareAsc'
 import dateFnsIsSameDay from 'date-fns/isSameDay'
-import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
@@ -149,7 +148,7 @@ export default {
     },
     date: {
       type: Date,
-      default: null
+      required: true
     },
     isAvailable: {
       type: Boolean,
@@ -191,10 +190,10 @@ export default {
       }) !== -1
     },
     isInPast () {
-      return dateFnsCompareAsc(new Date(), dateFnsParseISO(this.date)) >= 1
+      return dateFnsCompareAsc(new Date(), this.date) >= 1
     },
     isToday () {
-      return dateFnsIsSameDay(dateFnsParseISO(this.date), new Date())
+      return dateFnsIsSameDay(this.date, new Date())
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
