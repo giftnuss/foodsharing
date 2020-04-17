@@ -78,7 +78,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 - Remove Sessions from Gateway-Classes !1314 @panschk
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
-- Update date-fns to version 2.9.0 !1042 !1363 !1422 @chriswalg @ChrisOelmueller
+- Update date-fns to version 2.9.0 !1042 !1363 !1422 !1447 @chriswalg @ChrisOelmueller
 - Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 - Redesigned the option to delete FS account if not agreeing with privacy policy. !1318 @thefeiter
