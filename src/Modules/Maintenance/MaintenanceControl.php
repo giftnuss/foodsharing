@@ -85,7 +85,7 @@ class MaintenanceControl extends ConsoleControl
 		 *
 		 * it gets crashed by some updates sometimes, workaround: Rebuild every day
 		 */
-		$this->rebuildBezirkClosure();
+		$this->rebuildRegionClosure();
 
 		/*
 		 * Master Bezirk Update
@@ -97,7 +97,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * Delete old blocked ips
 		 */
-		$this->maintenanceGateway->deleteOldIpBlocks();
+		$this->deleteOldIpBlocks();
 
 		/*
 		 * There may be some groups where people should automatically be added
@@ -116,16 +116,11 @@ class MaintenanceControl extends ConsoleControl
 		$this->bellUpdateTrigger->triggerUpdate();
 	}
 
-	public function rebuildBezirkClosure()
+	public function rebuildRegionClosure()
 	{
-		$this->model->sql('DELETE FROM fs_bezirk_closure');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.id, a.id, 0 FROM fs_bezirk AS a WHERE a.parent_id > 0');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 0');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 1');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 2');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 3');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 4');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 5');
+		self::info('rebuilding region closure...');
+		$this->maintenanceGateway->rebuildRegionClosure();
+		self::success('OK');
 	}
 
 	private function updateSpecialGroupMemberships()
@@ -327,5 +322,12 @@ class MaintenanceControl extends ConsoleControl
 		self::info('wake up sleeping users...');
 		$count = $this->maintenanceGateway->wakeupSleepingUsers();
 		self::success($count . ' users woken up');
+	}
+
+	private function deleteOldIpBlocks()
+	{
+		self::info('deleting old blocked IPs...');
+		$count = $this->maintenanceGateway->deleteOldIpBlocks();
+		self::success($count . ' entries deleted');
 	}
 }

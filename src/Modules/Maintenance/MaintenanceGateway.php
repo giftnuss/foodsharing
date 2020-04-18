@@ -129,8 +129,41 @@ class MaintenanceGateway extends BaseGateway
 		return [];
 	}
 
-	public function deleteOldIpBlocks()
+	/**
+	 * Deletes all outdated entries from the blocked IPs.
+	 *
+	 * @return the number of deleted entries
+	 */
+	public function deleteOldIpBlocks(): int
 	{
-		return $this->db->execute('DELETE FROM `fs_ipblock` WHERE UNIX_TIMESTAMP(NOW()) > UNIX_TIMESTAMP(start)+duration ');
+		return $this->db->execute('DELETE FROM `fs_ipblock` WHERE UNIX_TIMESTAMP(NOW()) > UNIX_TIMESTAMP(start)+duration ')->rowCount();
+	}
+
+	/**
+	 * Rebuilds the 'fs_bezirk_closure' table.
+	 */
+	public function rebuildRegionClosure(): void
+	{
+		$this->db->execute('DELETE FROM fs_bezirk_closure');
+		$this->db->execute('
+			INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth)
+			SELECT a.id, a.id, 0
+			FROM fs_bezirk
+			AS a
+			WHERE a.parent_id > 0'
+		);
+		for ($depth = 0; $depth < 6; ++$depth) {
+			$this->db->execute('
+				INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth)
+				SELECT a.bezirk_id, b.parent_id, a.depth+1
+				FROM fs_bezirk_closure
+				AS a
+				JOIN fs_bezirk
+				AS b
+				ON b.id = a.ancestor_id
+				WHERE b.parent_id IS NOT NULL
+				AND a.depth = ' . $depth
+			);
+		}
 	}
 }
