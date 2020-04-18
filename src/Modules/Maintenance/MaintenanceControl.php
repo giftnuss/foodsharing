@@ -97,7 +97,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * Delete old blocked ips
 		 */
-		$this->model->deleteOldIpBlocks();
+		$this->maintenanceGateway->deleteOldIpBlocks();
 
 		/*
 		 * There may be some groups where people should automatically be added
@@ -308,7 +308,7 @@ class MaintenanceControl extends ConsoleControl
 
 	public function betriebFetchWarning()
 	{
-		if ($foodsaver = $this->model->getStoreManagersWhichWillBeAlerted()) {
+		if ($foodsaver = $this->maintenanceGateway->getStoreManagersWhichWillBeAlerted()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], [
