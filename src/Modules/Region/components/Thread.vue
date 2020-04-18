@@ -278,7 +278,7 @@ export default {
       this.errorMessage = null
       const dummyPost = {
         id: -1,
-        time: new Date(),
+        createdAt: new Date(),
         body: body,
         reactions: {},
         author: {
