@@ -144,6 +144,7 @@ class MaintenanceGateway extends BaseGateway
 	 */
 	public function rebuildRegionClosure(): void
 	{
+		$this->db->beginTransaction();
 		$this->db->execute('DELETE FROM fs_bezirk_closure');
 		$this->db->execute('
 			INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth)
@@ -165,5 +166,6 @@ class MaintenanceGateway extends BaseGateway
 				AND a.depth = ' . $depth
 			);
 		}
+		$this->db->commit();
 	}
 }
