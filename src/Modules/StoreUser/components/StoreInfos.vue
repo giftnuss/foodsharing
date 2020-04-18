@@ -26,9 +26,9 @@
         <div class="desc-block-title ui-widget">
           {{ $i18n('store.particularities') }}
         </div>
-        <div class="store-particularities">
-          {{ particularitiesDescription }}
-        </div>
+        <!-- no whitespace between the tags, since it is formatted as pre-line -->
+        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
+        <div class="store-particularities">{{ particularitiesDescription }}</div>
       </div>
       <div
         id="inputAverageCollectionQuantity"
@@ -135,13 +135,22 @@ export default {
   display: inline-block;
 
   .desc-block {
+    max-width: 100%;
     padding-top: 0;
     padding-bottom: 6px;
     margin-bottom: 9px;
+    /* Safari / Edge compat: */
+    overflow-wrap: break-word;
+    /* Desired behavior: */
+    overflow-wrap: anywhere;
 
     &:last-child {
       border-bottom: 0;
       margin-bottom: 0;
+    }
+
+    .store-particularities {
+      white-space: pre-line;
     }
   }
 
