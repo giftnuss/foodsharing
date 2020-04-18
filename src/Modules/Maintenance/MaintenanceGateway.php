@@ -27,47 +27,50 @@ class MaintenanceGateway extends BaseGateway
 			['sleep_status' => 1, 'sleep_until >' => 0, 'sleep_until <' => $this->db->now()]);
 	}
 
-	public function getStoreManagersWhichWillBeAlerted()
+	/**
+	 * Returns the managers for all stores that have pickup free slots in the next two days.
+	 */
+	public function getStoreManagersWhichWillBeAlerted(): array
 	{
 		$dow = (int)date('w');
-		$dow_tomorrow = ($dow + 1) % 7;
+		$dowTomorrow = ($dow + 1) % 7;
 
-		$store_query = '
+		// find all stores with pickup slots today or tomorrow
+		$storesInRange = $this->db->fetchAll('
 			SELECT
 				DISTINCT z.betrieb_id
-
 			FROM
 				fs_abholzeiten z
-
 			LEFT JOIN
 				fs_betrieb b
-
 			ON
 				z.betrieb_id = b.id
-
 			WHERE
 				b.betrieb_status_id IN(3,5)
-
 			AND
 			(
 				(
-					z.dow = ' . (int)$dow . '
+					z.dow = :dow
 					AND
-					z.time >= "' . date('H:i:s') . '"
+					z.time >= :time
 				)
 				OR
-					z.dow = ' . (int)$dow_tomorrow . '
+					z.dow = :dowTomorrow
 			)
-		';
+		', [
+			':dow' => $dow,
+			':time' => date('H:i:s'),
+			':dowTomorrow' => $dowTomorrow
+		]);
 
-		if ($stores_in_range = $this->db->fetchAll($store_query)) {
-			$bids = [];
-
-			foreach ($stores_in_range as $store) {
-				$bids[(int)$store['betrieb_id']] = (int)$store['betrieb_id'];
+		if (!empty($storesInRange)) {
+			$storeIds = [];
+			foreach ($storesInRange as $store) {
+				$storeIds[(int)$store['betrieb_id']] = (int)$store['betrieb_id'];
 			}
 
-			$fetcher_query = '
+			// remove all stores from the list that have someone who will pickup
+			$storeWithFetcher = $this->db->fetchAll('
 				SELECT
 					DISTINCT a.betrieb_id AS id
 				FROM
@@ -75,20 +78,21 @@ class MaintenanceGateway extends BaseGateway
 				WHERE
 					a.confirmed = 1
 				AND
-					a.betrieb_id IN(' . implode(',', $bids) . ')
+					a.betrieb_id IN(:storeIds)
 				AND
 					a.date >= NOW()
 				AND
 					a.date <= CURRENT_DATE() + INTERVAL 2 DAY
-			';
+			', [
+				':storeIds' => implode(',', $storeIds)
+			]);
 
-			if ($store_has_fetcher = $this->db->fetchAll($fetcher_query)) {
-				foreach ($store_has_fetcher as $store_fetcher) {
-					unset($bids[$store_fetcher['id']]);
-				}
+			foreach ($storeWithFetcher as $s) {
+				unset($storeIds[$s['id']]);
 			}
 
-			if (!empty($bids)) {
+			// return the managers for all remaining stores in the list
+			if (!empty($storeIds)) {
 				return $this->db->fetchAll('
 					SELECT
 						fs.id AS fs_id,
@@ -116,11 +120,13 @@ class MaintenanceGateway extends BaseGateway
 						bt.verantwortlich = 1
 
 					AND
-						b.id IN(' . implode(',', $bids) . ')');
+						b.id IN(:storeIds)', [
+						':storeIds' => implode(',', $storeIds)
+					]);
 			}
 		}
 
-		return false;
+		return [];
 	}
 
 	public function deleteOldIpBlocks()
