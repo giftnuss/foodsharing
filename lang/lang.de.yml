@@ -165,6 +165,7 @@ terminology:
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
   profile_picture: 'Profilbild'
+  regions: Bezirke
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -382,15 +383,19 @@ mail:
 index:
   confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
 
-map:
-  title: Karte
-
 profile:
   title: Profil
 
 search:
   title: Suche
   placeholder: Suche...
+  noresults: Es konnten keine Ergebnisse gefunden werden
+  mybuddies: Meine Buddies
+  mygroups: Meine Gruppen
+  mystores: Meine Betriebe
+  myregions: Meine Bezirke
+  groups: Gruppen
+  persons: Personen
 
 dashboard:
   title: Dashboard
@@ -419,6 +424,7 @@ dashboard:
 
 home:
   title: Startseite
+  home: Home
 
 basket:
   title: Essenskörbe
@@ -452,9 +458,10 @@ menu:
   manage_mailboxes: Mailboxen verwalten
   faq: FAQs verwalten
   content: Inhalte bearbeiten
-  tooltips:
+  entry:
     activities: Aktionen
     infos: Infos
+    all_messages: Alle Nachrichten
     messages: Nachrichten
     your_groups: Deine Gruppen
     groups: Gruppenübersicht
@@ -463,6 +470,48 @@ menu:
     administration: Administration
     notifications: Benachrichtigungen
     contact: Kontakt
+    politics: Politik
+    fscities: foodsharing-Städte
+    demands: Forderungen
+    pastcampaigns: Vergangene Kampagnen
+    education: Bildung
+    academy: Akademie
+    talksandworkshops: Vorträge und Workshops
+    fsfestival: foodsharing Festival
+    mailbox: E-Mail-Postfach
+    donate: Spenden
+    press: Presse
+    forcompanies: Für Unternehmen
+    imprint: Impressum
+    regionalgroups: Ortsgruppen
+    Germany: Deutschland
+    Austria: Österreich
+    Swiss: Schweiz
+    international: International
+    forum: Forum
+    BOTforum: Bot-Forum
+    wall: Pinnwand
+    events: Termine
+    members: Mitglieder
+    workingGroupEdit: Gruppe verwalten
+    aboutUs: Über uns
+    mission: Mission
+    fundamentals: Grundsätze
+    blog: Blog
+    team: Team
+    partners: Partner
+    background: Hintergrund
+    faq: F.A.Q.
+    wiki: Wiki
+    guide: Ratgeber
+    statistics: Statistik
+    transparency: Transparenz
+    dataprivacy: Datenschutz
+    changelog: Changelog
+    stores: Betriebe
+    fs: Foodsaver
+    ids: Ausweise
+    joinregion: Einem Bezirk beitreten
   your_settings: Deine Daten/Einstellungen
 
 footer:
@@ -508,3 +557,6 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
+
+menubells:
+ no_bells: Du hast derzeit keine Benachrichtigungen

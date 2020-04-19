@@ -1,63 +1,63 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-information"
-    v-b-tooltip="$i18n('menu.tooltips.infos')"
+    v-b-tooltip="$i18n('menu.entry.infos')"
     :no-caret="!displayArrow"
     right
   >
     <template v-slot:button-content>
       <i class="fas fa-info " />
       <span v-if="displayText">
-        {{ $i18n('menu.tooltips.infos') }}
+        {{ $i18n('menu.entry.infos') }}
       </span>
     </template>
     <h3 class="dropdown-header">
-      Über uns
+      {{ $i18n('menu.entry.aboutUs') }}
     </h3>
     <a
       :href="$url('mission')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Mission
+      {{ $i18n('menu.entry.mission') }}
     </a>
     <a
       :href="$url('grundsaetze')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Grundsätze
+      {{ $i18n('menu.entry.fundamentals') }}
     </a>
     <a
       :href="$url('blog')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Blog
+      {{ $i18n('menu.entry.blog') }}
     </a>
     <a
       :href="$url('team')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Team
+      {{ $i18n('menu.entry.team') }}
     </a>
     <a
       :href="$url('partner')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Partner
+      {{ $i18n('menu.entry.partners') }}
     </a>
     <h3 class="dropdown-header">
-      Hintergrund
+      {{ $i18n('menu.entry.background') }}
     </h3>
     <a
       :href="$url('faq')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      F.A.Q.
+      {{ $i18n('menu.entry.faq') }}
     </a>
     <a
       :href="$url('wiki')"
@@ -66,42 +66,42 @@
       rel="noopener noreferrer nofollow"
       role="menuitem"
     >
-      Wiki
+      {{ $i18n('menu.entry.wiki') }}
     </a>
     <a
       :href="$url('guide')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Ratgeber
+      {{ $i18n('menu.entry.guide') }}
     </a>
     <a
       :href="$url('statistics')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Statistik
+      {{ $i18n('menu.entry.statistics') }}
     </a>
     <a
       :href="$url('transparency')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Transparenz
+      {{ $i18n('menu.entry.transparency') }}
     </a>
     <a
       :href="$url('dataprivacy')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Datenschutz
+      {{ $i18n('menu.entry.dataprivacy') }}
     </a>
     <a
       :href="$url('changelog')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Changelog
+      {{ $i18n('menu.entry.changelog') }}
     </a>
   </b-nav-item-dropdown>
 </template>

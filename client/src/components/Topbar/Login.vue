@@ -118,7 +118,7 @@ export default {
             window.location = this.$url('login')
           }, 2000)
         } else {
-          pulseError('Unknown error')
+          pulseError(i18n('error_unexpected'))
           throw err
         }
       }
