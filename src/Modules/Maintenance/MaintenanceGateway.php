@@ -3,28 +3,45 @@
 namespace Foodsharing\Modules\Maintenance;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Basket\Status;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 
 class MaintenanceGateway extends BaseGateway
 {
+	/**
+	 * Sets the status of all outdated baskets to {@link Status::DELETED_OTHER_REASON}.
+	 *
+	 * @return int the number of changed baskets
+	 */
 	public function deactivateOldBaskets(): int
 	{
 		return $this->db->update(
 			'fs_basket',
-			['status' => 6],
-			['status' => 1, 'until <' => $this->db->now()]);
+			['status' => Status::DELETED_OTHER_REASON],
+			['status' => Status::REQUESTED_MESSAGE_READ, 'until <' => $this->db->now()]);
 	}
 
+	/**
+	 * Deletes all unconfirmed fetch dates in the past.
+	 *
+	 * @return int the number of deleted entries
+	 */
 	public function deleteUnconfirmedFetchDates(): int
 	{
 		return $this->db->delete('fs_abholer', ['confirmed' => 0, 'date <' => $this->db->now()]);
 	}
 
+	/**
+	 * Removes the temporary sleep status from users if it is outdated.
+	 *
+	 * @return int the number of users that were changed
+	 */
 	public function wakeupSleepingUsers()
 	{
 		return $this->db->update(
 			'fs_foodsaver',
-			['sleep_status' => 0],
-			['sleep_status' => 1, 'sleep_until >' => 0, 'sleep_until <' => $this->db->now()]);
+			['sleep_status' => SleepStatus::NONE],
+			['sleep_status' => SleepStatus::TEMP, 'sleep_until >' => 0, 'sleep_until <' => $this->db->now()]);
 	}
 
 	/**
@@ -132,7 +149,7 @@ class MaintenanceGateway extends BaseGateway
 	/**
 	 * Deletes all outdated entries from the blocked IPs.
 	 *
-	 * @return the number of deleted entries
+	 * @return int the number of deleted entries
 	 */
 	public function deleteOldIpBlocks(): int
 	{
