@@ -21,7 +21,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * The destination of the bell when clicked on. Will be put in the href attribute of the a tag sourrounding the
+	 * The destination of the bell when clicked on. Will be put in the href attribute of the a tag surrounding the
 	 * notification.
 	 */
 	public $href;
@@ -49,7 +49,7 @@ class BellDTOForList
 	 *
 	 * @see BellData::$icon
 	 *
-	 * A realtive URL to an image to be used as an icon.
+	 * A relative URL to an image to be used as an icon.
 	 *
 	 * Only one of $image and $icon are supported. Whether the $icon ot the $image property is used when converting from
 	 * a database array or a BellData object will be determined by whether the BellData::$icon attribute starts with '/'.
@@ -62,7 +62,7 @@ class BellDTOForList
 	 * @see BellData::$time
 	 *
 	 * The time of the bell – usually the creation time, but some bells use different times for this attribute.
-	 * The time is formatted as a string of the date and the time, separated by a T. To format a date accordingly
+	 * The time is formatted as a string of the date and the time, separated by a 'T'. To format a date accordingly
 	 * using PHP's DateTime functionality, use the following format string: 'Y-m-d\TH:i:s'
 	 */
 	public $createdAt;
@@ -85,7 +85,7 @@ class BellDTOForList
 	/**
 	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
 	 *
-	 * @return BellData[] - BellData objects with with unserialized $ball->vars and $bell->attr
+	 * @return BellDTOForList[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
 	public static function createArrayFromDatatabaseRows(array $databaseRows): array
 	{
