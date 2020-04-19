@@ -28,7 +28,7 @@
     </div>
     <b-nav-item-dropdown
       v-else
-      v-b-tooltip="$i18n('menu.tooltips.your_account')"
+      v-b-tooltip="$i18n('menu.entry.your_account')"
       no-caret
       class="user"
       right

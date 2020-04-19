@@ -1,7 +1,7 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-bullhorn"
-    v-b-tooltip="$i18n('menu.tooltips.activities')"
+    v-b-tooltip="$i18n('menu.entry.activities')"
     :no-caret="!displayArrow"
     right
   >

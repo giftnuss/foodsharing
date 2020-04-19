@@ -1,14 +1,14 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-admin"
-    v-b-tooltip="$i18n('menu.tooltips.administration')"
+    v-b-tooltip="$i18n('menu.entry.administration')"
     right
     no-caret
   >
     <template v-slot:button-content>
       <i class="fas fa-cog" />
       <span class="d-md-none">
-        {{ $i18n('menu.tooltips.administration') }}
+        {{ $i18n('menu.entry.administration') }}
       </span>
     </template>
     <b-dropdown-item
