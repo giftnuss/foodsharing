@@ -55,22 +55,22 @@ class SearchService
 					$img = $this->imageService->img($b['photo']);
 				}
 
-				$result[] = array(
+				$result[] = [
 					'name' => $b['name'] . ' ' . $b['nachname'],
 					'teaser' => '',
 					'img' => $img,
 					'click' => 'chat(\'' . $b['id'] . '\');',
 					'id' => $b['id'],
-					'search' => array(
+					'search' => [
 						$b['name'], $b['nachname']
-					)
-				);
+					]
+				];
 			}
-			$index[] = array(
+			$index[] = [
 				'title' => 'Menschen die Du kennst',
 				'key' => 'buddies',
 				'result' => $result
-			);
+			];
 		}
 
 		/*
@@ -83,20 +83,20 @@ class SearchService
 				if (!empty($b['photo'])) {
 					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
 				}
-				$result[] = array(
+				$result[] = [
 					'name' => $b['name'],
 					'teaser' => $this->sanitizerService->tt($b['teaser'], 65),
 					'img' => $img,
 					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-					'search' => array(
+					'search' => [
 						$b['name']
-					)
-				);
+					]
+				];
 			}
-			$index[] = array(
+			$index[] = [
 				'title' => 'Deine Gruppen',
 				'result' => $result
-			);
+			];
 		}
 
 		/*
@@ -105,19 +105,19 @@ class SearchService
 		if ($betriebe = $this->storeModel->listMyBetriebe()) {
 			$result = [];
 			foreach ($betriebe as $b) {
-				$result[] = array(
+				$result[] = [
 					'name' => $b['name'],
 					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
 					'href' => '/?page=fsbetrieb&id=' . $b['id'],
-					'search' => array(
+					'search' => [
 						$b['name'], $b['str']
-					)
-				);
+					]
+				];
 			}
-			$index[] = array(
+			$index[] = [
 				'title' => 'Deine Betriebe',
 				'result' => $result
-			);
+			];
 		}
 
 		/*
@@ -126,20 +126,20 @@ class SearchService
 		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($this->session->id());
 		$result = [];
 		foreach ($bezirke as $b) {
-			$result[] = array(
+			$result[] = [
 				'name' => $b['name'],
 				'teaser' => '',
 				'img' => false,
 				'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
-				'search' => array(
+				'search' => [
 					$b['name']
-				)
-			);
+				]
+			];
 		}
-		$index[] = array(
+		$index[] = [
 			'title' => 'Deine Bezirke',
 			'result' => $result
-		);
+		];
 
 		return $index;
 	}

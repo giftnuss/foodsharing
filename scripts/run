@@ -4,7 +4,10 @@ export FS_ENV=dev
 
 set -e
 
-. $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
 
-PARAMS="$@"
-dc exec -T --user 33:33 app sh -c "HOME=./ php -f run.php $PARAMS"
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
+
+PARAMS=( "$@" );
+dc exec -T --user 33:33 app sh -c "HOME=./ php -f run.php" "${PARAMS[@]}"

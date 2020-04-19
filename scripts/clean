@@ -8,24 +8,25 @@ dir=$(dirname "$0")
 
 base_dir=$(cd "$dir/.." && pwd)
 
-source $dir/inc.sh
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 echo "Removing local node_modules"
-(cd $dir && rm -rf node_modules)
+(cd "$dir" && rm -rf node_modules)
 
 echo "Removing containers"
-$dir/rm
-FS_ENV=test $dir/rm
+"$dir"/rm
+FS_ENV=$(test "$dir"/rm)
 
 echo "Removing directories"
 
 rm -rf \
-  $base_dir/images/basket \
-  $base_dir/data/attach \
-  $base_dir/data/mailattach \
-  $base_dir/data/pass \
-  $base_dir/data/visite \
-  $base_dir/cache/searchindex \
-  $base_dir/tmp
+  "$base_dir"/images/basket \
+  "$base_dir"/data/attach \
+  "$base_dir"/data/mailattach \
+  "$base_dir"/data/pass \
+  "$base_dir"/data/visite \
+  "$base_dir"/cache/searchindex \
+  "$base_dir"/tmp
 
 echo "All clean!"

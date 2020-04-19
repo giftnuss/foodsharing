@@ -4,40 +4,41 @@ namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Lib\Db\Db;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
-use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
-use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
 	private $basketGateway;
+	private $foodsaverGateway;
 	private $messageModel;
 	private $timeHelper;
 	private $imageService;
-	private $foodsaverGateway;
+	private $webSocketConnection;
 
 	public function __construct(
-		Db $model,
 		BasketView $view,
 		BasketGateway $basketGateway,
+		FoodsaverGateway $foodsaverGateway,
 		MessageModel $messageModel,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		FoodsaverGateway $foodsaverGateway
+		WebSocketConnection $webSocketConnection
 	) {
-		$this->model = $model;
 		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-		$this->foodsaverGateway = $foodsaverGateway;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 
@@ -78,7 +79,7 @@ class BasketXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($this->translationHelper->s('basket_offer'));
 
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		if (empty($basketProvider['lat']) || empty($basketProvider['lon'])) {
 			$dia->addContent($this->v_utils->v_info(
@@ -90,7 +91,7 @@ class BasketXhr extends Control
 			return $dia->xhrout();
 		}
 
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		$dia->addContent($this->v_utils->v_info($this->translationHelper->s('basket_reference_info'), $this->translationHelper->s('basket_reference')));
 
@@ -100,15 +101,15 @@ class BasketXhr extends Control
 
 		$dia->addJs(
 			'
-				
+
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
-		
+
 		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
-				$("#handy-wrapper").show();	
+				$("#handy-wrapper").show();
 			}
 			else
 			{
@@ -116,7 +117,7 @@ class BasketXhr extends Control
 				$("#handy-wrapper").hide();
 			}
 		});
-				
+
 		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
@@ -143,7 +144,7 @@ class BasketXhr extends Control
 	public function publish(): array
 	{
 		$data = false;
-		$basketProvider = $this->foodsaverGateway->getOne_foodsaver($this->session->id());
+		$basketProvider = $this->foodsaverGateway->getFoodsaver($this->session->id());
 
 		parse_str($_GET['data'], $data);
 
@@ -202,7 +203,7 @@ class BasketXhr extends Control
 				$this->session->id()
 			))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
-				$types = array();
+				$types = [];
 				foreach ($data['food_type'] as $foodType) {
 					if ((int)$foodType > 0) {
 						$types[] = (int)$foodType;
@@ -213,7 +214,7 @@ class BasketXhr extends Control
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
-				$kinds = array();
+				$kinds = [];
 				foreach ($data['food_art'] as $foodKind) {
 					if ((int)$foodKind > 0) {
 						$kinds[] = (int)$foodKind;
@@ -306,7 +307,7 @@ class BasketXhr extends Control
 					$dia->setTitle($this->translationHelper->s('basket'));
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
-					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
+					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', ['name' => $basket['fs_name']]));
 					$dia->addContent($this->view->bubble($basket));
 				}
 
@@ -374,6 +375,7 @@ class BasketXhr extends Control
 				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
 				'requests' => []
 			];
+			$id = 0;
 			foreach ($updates as $update) {
 				if ((int)$update['id'] == $basket['id']) {
 					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
@@ -384,6 +386,7 @@ class BasketXhr extends Control
 							'avatar' => $update['fs_photo'],
 							'sleepStatus' => $update['sleep_status'],
 						],
+						'id' => ++$id, // required for Vue's v-for key parameter
 						'description' => $update['description'],
 						'time' => $time,
 					];
@@ -405,7 +408,7 @@ class BasketXhr extends Control
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
-			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', array('name' => $request['fs_name'])));
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', ['name' => $request['fs_name']]));
 			$gender = $this->translationHelper->genderWord(
 				$request['fs_gender'],
 				'er',
@@ -424,11 +427,11 @@ class BasketXhr extends Control
 						'values' => [
 							[
 								'id' => RequestStatus::DELETED_PICKED_UP,
-								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_deleted_picked_up', ['gender' => $gender]),
 							],
 							[
 								'id' => RequestStatus::NOT_PICKED_UP,
-								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_not_picked_up', ['gender' => $gender]),
 							],
 							[
 								'id' => RequestStatus::DELETED_OTHER_REASON,

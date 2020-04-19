@@ -12,6 +12,7 @@
 <script>
 
 import { VBTooltip } from 'bootstrap-vue'
+import i18n from '@/i18n'
 
 export default {
   directives: { VBTooltip },
@@ -25,18 +26,18 @@ export default {
     description () {
       switch (this.status) {
         case 1:
-          return 'Es besteht noch kein Kontakt'
+          return i18n('storestatusicon.nocontact')
         case 2:
-          return 'Verhandlungen laufen'
+          return i18n('storestatusicon.inprogress')
         case 3:
         case 5:
-          return 'Betrieb kooperiert bereits'
+          return i18n('storestatusicon.cooperating')
         case 4:
-          return 'Will nicht kooperieren'
+          return i18n('storestatusicon.nocooperation')
         case 6:
-          return 'Spendet an Tafel etc. und wirft nichts weg'
+          return i18n('storestatusicon.nowaste')
         default:
-          return 'Status unklar'
+          return i18n('storestatusicon.unclear')
       }
     }
   }

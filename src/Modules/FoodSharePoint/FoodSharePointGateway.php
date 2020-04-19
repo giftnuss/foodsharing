@@ -7,6 +7,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
@@ -36,13 +37,13 @@ class FoodSharePointGateway extends BaseGateway
 
 			WHERE 	ff.foodsaver_id = fs.id
 			AND 	ff.fairteiler_id = :id
-			AND 	ff.infotype = 1
+			AND 	ff.infotype = :infoType
 		',
-			[':id' => $id]
+			[':id' => $id, ':infoType' => InfoType::EMAIL]
 		);
 	}
 
-	public function getLastFoodSharePointPost(int $fspId): array
+	public function getLastFoodSharePointPost(int $foodSharePointId): array
 	{
 		return $this->db->fetch(
 			'
@@ -65,36 +66,33 @@ class FoodSharePointGateway extends BaseGateway
 			ORDER BY 	wp.id DESC
 			LIMIT 1
 		',
-			[':foodSharePointId' => $fspId]
+			[':foodSharePointId' => $foodSharePointId]
 		);
 	}
 
-	public function updateFSPManagers(int $fspId, $fspManager): void
+	public function updateFSPManagers(int $foodSharePointId, $fspManager): void
 	{
-		$values = array();
+		$values = [];
 
 		foreach ($fspManager as $fs) {
-			$values[] = '(' . $fspId . ',' . (int)$fs . ',2,1)';
+			$values[] = [
+				'fairteiler_id' => $foodSharePointId,
+				'foodsaver_id' => (int)$fs,
+				'type' => FollowerType::FOOD_SHARE_POINT_MANAGER,
+				'infotype' => InfoType::EMAIL
+			];
 		}
 
-		$this->db->update('fs_fairteiler_follower', ['type' => FollowerType::FOLLOWER], ['fairteiler_id' => $fspId]);
-
-		$this->db->execute(
-			'
-				REPLACE INTO `fs_fairteiler_follower`
-				(
-					`fairteiler_id`,
-					`foodsaver_id`,
-					`type`,
-					`infotype`
-				)
-				VALUES
-				' . implode(',', $values) . '
-		'
+		$this->db->update(
+			'fs_fairteiler_follower',
+			['type' => FollowerType::FOLLOWER],
+			['fairteiler_id' => $foodSharePointId]
 		);
+
+		$this->db->insertOrUpdateMultiple('fs_fairteiler_follower', $values);
 	}
 
-	public function getInfoFollowerIds(int $fspId): array
+	public function getInfoFollowerIds(int $foodSharePointId): array
 	{
 		return $this->db->fetchAllValues(
 			'
@@ -104,9 +102,9 @@ class FoodSharePointGateway extends BaseGateway
 					`fs_foodsaver` fs
 
 			WHERE 	ff.foodsaver_id = fs.id
-			AND 	ff.fairteiler_id = :fspId
+			AND 	ff.fairteiler_id = :foodSharePointId
 		',
-			[':fspId' => $fspId]
+			[':foodSharePointId' => $foodSharePointId]
 		);
 	}
 
@@ -115,7 +113,7 @@ class FoodSharePointGateway extends BaseGateway
 		if (!$regionIds) {
 			return [];
 		}
-		if ($foodSharePoint = $this->db->fetchAll(
+		if ($foodSharePoints = $this->db->fetchAll(
 			'
 			SELECT 	`id`,
 					`name`,
@@ -127,21 +125,40 @@ class FoodSharePointGateway extends BaseGateway
 		'
 		)
 		) {
-			foreach ($foodSharePoint as $fspKey => $fspValue) {
-				$foodSharePoint[$fspKey]['pic'] = false;
+			foreach ($foodSharePoints as $fspKey => $fspValue) {
+				$foodSharePoints[$fspKey]['pic'] = false;
 				if (!empty($fspValue['picture'])) {
-					$foodSharePoint[$fspKey]['pic'] = array(
+					$foodSharePoints[$fspKey]['pic'] = [
 						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fspValue['picture']),
 						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fspValue['picture']),
 						'orig' => 'images/' . ($fspValue['picture']),
-					);
+					];
 				}
 			}
 
-			return $foodSharePoint;
+			return $foodSharePoints;
 		}
 
 		return [];
+	}
+
+	public function listFoodsaversFoodSharePoints(int $fsId): array
+	{
+		return $this->db->fetchAll('
+			SELECT
+				ft.id,
+				ft.name,
+				ff.infotype,
+				ff.`type`
+
+			FROM
+				`fs_fairteiler_follower` ff
+				LEFT JOIN `fs_fairteiler` ft
+				ON ff.fairteiler_id = ft.id
+
+			WHERE
+				ff.foodsaver_id = :fsId
+		', [':fsId' => $fsId]);
 	}
 
 	public function listFoodSharePointsNested(array $regionIds = []): array
@@ -164,7 +181,7 @@ class FoodSharePointGateway extends BaseGateway
 		'
 			))
 		) {
-			$out = array();
+			$out = [];
 
 			foreach ($foodSharePoint as $fsp) {
 				if (!isset($out[$fsp['bezirk_id']])) {
@@ -236,7 +253,7 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function follow(int $foodSharePointId, int $foodsaverId, $infoType): void
+	public function follow(int $foodsaverId, int $foodSharePointId, int $infoType): void
 	{
 		$this->db->insertIgnore(
 			'fs_fairteiler_follower',
@@ -249,9 +266,38 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function unfollow(int $foodSharePointId, int $foodsaverId): int
+	public function unfollow(int $fsId, int $foodSharePointId): int
 	{
-		return $this->db->delete('fs_fairteiler_follower', ['fairteiler_id' => $foodSharePointId, 'foodsaver_id' => $foodsaverId]);
+		return $this->db->delete(
+			'fs_fairteiler_follower',
+			[
+				'fairteiler_id' => $foodSharePointId,
+				'foodsaver_id' => $fsId
+			]
+		);
+	}
+
+	public function unfollowFoodSharePoints(int $fsId, array $foodSharePointIds): int
+	{
+		return $this->db->delete(
+			'fs_fairteiler_follower',
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $foodSharePointIds
+			]
+		);
+	}
+
+	public function updateInfoType(int $fsId, int $foodSharePointId, int $infoType): int
+	{
+		return $this->db->update(
+			'fs_fairteiler_follower',
+			['infotype' => $infoType],
+			[
+				'foodsaver_id' => $fsId,
+				'fairteiler_id' => $foodSharePointId
+			]
+		);
 	}
 
 	public function getFollower(int $foodSharePointId): array

@@ -1,9 +1,10 @@
 <template>
-  <nav-item-dropdown
-    tooltip="Deine Betriebe"
+  <b-nav-item-dropdown
+    id="dropdown-stores"
+    v-b-tooltip="$i18n('menu.tooltips.your_stores')"
     no-caret
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-shopping-cart" />
       <span
         v-if="globalPickupStatus>0"
@@ -20,9 +21,9 @@
         class="dropdown-item text-truncate"
       >
         <span
+          :id="`store_marker_${store.id}`"
           :class="'fas fa-circle '+statusClass(store.pickupStatus)"
           :style="badgeVisibility(store.pickupStatus)"
-          :id="`store_marker_${store.id}`"
         >&nbsp;</span>
         {{ store.name }}
       </a>
@@ -52,16 +53,12 @@
     >
       <small><i class="fas fa-list" /> {{ $i18n('store.all_of_my_stores') }} </small>
     </a>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import { BTooltip } from 'bootstrap-vue'
 export default {
-  components: {
-    NavItemDropdown,
-    BTooltip
-  },
+  components: { BTooltip },
   props: {
     stores: {
       type: Array,

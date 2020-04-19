@@ -1,11 +1,12 @@
 <template>
-  <nav-item-dropdown
-    tooltip="Benachrichtigungen"
+  <b-nav-item-dropdown
+    id="dropdown-bells"
+    v-b-tooltip="$i18n('menu.tooltips.notifications')"
     no-caret
     right
     class="topbar-bells"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-bell" />
       <span
         v-if="unread"
@@ -29,23 +30,24 @@
         @bellClick="onBellClick"
       />
     </div>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 import MenuBellsEntry from './MenuBellsEntry'
 import bellStore from '@/stores/bells'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
+import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
-  components: {
-    NavItemDropdown,
-    MenuBellsEntry
-  },
+  components: { MenuBellsEntry },
   computed: {
     bells () {
-      return bellStore.bells
+      return bellStore.bells.map(bell => {
+        var newBell = Object.assign({}, bell)
+        newBell.createdAt = dateFnsParseISO(bell.createdAt)
+        return newBell
+      })
     },
     unread () {
       return bellStore.unreadCount

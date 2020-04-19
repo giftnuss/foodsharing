@@ -69,6 +69,9 @@ class StoreModel extends Db
 			AND
 				a.date <= ' . $this->dateval($to) . '
 
+			AND
+				a.confirmed = 1
+
 			ORDER BY
 				a.date
 
@@ -118,14 +121,14 @@ class StoreModel extends Db
 			AND 	`time` > NOW()
 		')
 		) {
-			$out = array();
+			$out = [];
 			foreach ($dates as $d) {
-				$out[date('Y-m-d H-i', $d['time_ts'])] = array(
+				$out[date('Y-m-d H-i', $d['time_ts'])] = [
 					'time' => date('H:i:s', $d['time_ts']),
 					'fetcher' => $d['fetchercount'],
 					'additional' => true,
 					'datetime' => $d['time']
-				);
+				];
 			}
 
 			return $out;
@@ -475,12 +478,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = BellData::create('store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_accept_title', 'store_request_accept', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-arequest-' . (int)$fsid);
+		], 'store-arequest-' . (int)$fsid);
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
@@ -503,12 +506,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = BellData::create('store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-wrequest-' . (int)$fsid);
+		], 'store-wrequest-' . (int)$fsid);
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
@@ -527,12 +530,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = BellData::create('store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+		$bellData = BellData::create('store_request_deny_title', 'store_request_deny', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-drequest-' . (int)$fsid);
+		], 'store-drequest-' . (int)$fsid);
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		return $this->update('
@@ -563,7 +566,7 @@ class StoreModel extends Db
 
 	public function createTeamConversation($storeId)
 	{
-		$tcid = $this->messageModel->insertConversation(array(), true);
+		$tcid = $this->messageModel->insertConversation([], true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
@@ -584,7 +587,7 @@ class StoreModel extends Db
 
 	public function createSpringerConversation($storeId)
 	{
-		$scid = $this->messageModel->insertConversation(array(), true);
+		$scid = $this->messageModel->insertConversation([], true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
 		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
@@ -620,19 +623,19 @@ class StoreModel extends Db
 			return false;
 		}
 		if (!$verantwortlicher) {
-			$verantwortlicher = array(
+			$verantwortlicher = [
 				$this->session->id() => true
-			);
+			];
 		}
 
-		$tmp = array();
+		$tmp = [];
 		foreach ($verantwortlicher as $vv) {
 			$tmp[$vv] = $vv;
 		}
 		$verantwortlicher = $tmp;
 
-		$values = array();
-		$member_ids = array();
+		$values = [];
+		$member_ids = [];
 
 		foreach ($member as $m) {
 			$v = 0;

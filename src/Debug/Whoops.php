@@ -4,6 +4,8 @@ namespace Foodsharing\Debug;
 
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
+use Whoops\Util\Misc;
 
 /**
  * A static helper class to register a Whoops error handler.
@@ -11,21 +13,15 @@ use Whoops\Handler\PrettyPageHandler;
  */
 class Whoops
 {
-	public static $handler;
-
-	public static function register()
+	public static function register(): void
 	{
-		$run = new \Whoops\Run();
-		$handler = new PrettyPageHandler();
-		$handler->setPageTitle('Whoops! There was a problem.');
+		$whoops = new Run();
+		$whoops->pushHandler(new PrettyPageHandler());
 
-		$run->pushHandler($handler);
-
-		if (\Whoops\Util\Misc::isAjaxRequest()) {
-			$run->pushHandler(new JsonResponseHandler());
+		if (Misc::isAjaxRequest()) {
+			$whoops->pushHandler(new JsonResponseHandler());
 		}
 
-		$run->register();
-		self::$handler = $handler;
+		$whoops->register();
 	}
 }

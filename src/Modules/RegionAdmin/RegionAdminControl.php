@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\RegionAdmin;
 
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class RegionAdminControl extends Control
@@ -40,15 +41,15 @@ class RegionAdminControl extends Control
 
 		$bezirke = $this->regionGateway->getBasics_bezirk();
 
-		array_unshift($bezirke, array('id' => '0', 'name' => 'Ohne `Eltern` Bezirk'));
+		array_unshift($bezirke, ['id' => RegionIDs::ROOT, 'name' => 'Ohne `Eltern` Bezirk']);
 
-		$this->pageHelper->hiddenDialog('newbezirk', array(
+		$this->pageHelper->hiddenDialog('newbezirk', [
 			$this->v_utils->v_form_text('Name'),
 			$this->v_utils->v_form_text('email'),
-			$this->v_utils->v_form_select('parent_id', array('values' => $bezirke))
-		), 'Neuer Bezirk');
+			$this->v_utils->v_form_select('parent_id', ['values' => $bezirke])
+		], 'Neuer Bezirk');
 
-		$this->pageHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', array('class' => 'ui-padding')), CNT_LEFT);
+		$this->pageHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', ['class' => 'ui-padding']), CNT_LEFT);
 		$this->pageHelper->addContent($this->v_utils->v_field($this->view->v_bezirk_tree($id) . '
 				<div id="bezirk-buttons" class="bootstrap">
 					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility:hidden;" onclick="deleteActiveGroup()">' . $this->translationHelper->s('group.delete') . '</button>

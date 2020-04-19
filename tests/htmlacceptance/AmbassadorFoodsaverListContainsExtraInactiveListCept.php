@@ -1,20 +1,20 @@
 <?php
 
-$testRegion = 241;
+$testRegionId = 241;
 $I = new HtmlAcceptanceTester($scenario);
 $I->wantTo('see that the foodsaver list for a bezirk contains a second list with inactive foodsavers');
 
-$regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'last_login' => null, 'bezirk_id' => $testRegion]);
-$inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00', 'bezirk_id' => $testRegion]);
-$activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegion]);
-$ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegion]);
+$regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegionId]);
+$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'last_login' => null, 'bezirk_id' => $testRegionId]);
+$inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 'saver2', 'photo' => 'does-not-exist.jpg', 'last_login' => '2017-01-01 00:00:00', 'bezirk_id' => $testRegionId]);
+$activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegionId]);
+$ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegionId]);
 $unrelatedFoodsaver = $I->createFoodsaver(null, ['name' => 'unrelated-fs']);
-$I->addBezirkAdmin($testRegion, $ambassador['id']);
+$I->addRegionAdmin($testRegionId, $ambassador['id']);
 
 $I->login($ambassador['email']);
 
-$I->amOnPage('/?page=foodsaver&bid=' . $testRegion);
+$I->amOnPage('/?page=foodsaver&bid=' . $testRegionId);
 $I->see('Foodsaver in Göttingen', '#foodsaverlist');
 $I->see('fs-a', '#foodsaverlist');
 $I->see('fs-i', '#foodsaverlist');

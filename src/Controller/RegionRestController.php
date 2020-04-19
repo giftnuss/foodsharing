@@ -60,17 +60,17 @@ class RegionRestController extends AbstractFOSRestController
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
-		$bots = $this->foodsaverGateway->getBotschafter($regionId);
+		$bots = $this->foodsaverGateway->getAmbassadors($regionId);
 		$foodsaver = $this->session->get('user');
 		$bellData = BellData::create(
 			'new_foodsaver_title',
 			$foodsaver['verified'] ? 'new_foodsaver_verified' : 'new_foodsaver',
 			$this->imageService->img($foodsaver['photo'], 50),
-			array('href' => '/profile/' . (int)$sessionId . ''),
-			array(
+			['href' => '/profile/' . (int)$sessionId . ''],
+			[
 				'name' => $foodsaver['name'] . ' ' . $foodsaver['nachname'],
 				'bezirk' => $region['name']
-			),
+			],
 			'new-fs-' . $sessionId,
 			true
 		);

@@ -142,34 +142,39 @@ export default {
   data () {
     return {
       sortBy: 'time',
-      sortDesc: 'true',
+      sortDesc: true,
       currentPageDaily: 1,
       currentPageWeekly: 1,
       currentPageMonthly: 1,
       currentPageYearly: 1,
       perPage: 14,
-      fields: {
-        time: {
+      fields: [
+        {
+          key: 'time',
           label: this.$i18n('pickuplist.time_table_header'),
           sortable: true
         },
-        NumberOfStores: {
+        {
+          key: 'NumberOfStores',
           label: this.$i18n('pickuplist.NumberOfStores_table_header'),
           sortable: true
         },
-        NumberOfAppointments: {
+        {
+          key: 'NumberOfAppointments',
           label: this.$i18n('pickuplist.NumberOfAppointments_table_header'),
           sortable: true
         },
-        NumberOfSlots: {
+        {
+          key: 'NumberOfSlots',
           label: this.$i18n('pickuplist.NumberOfSlots_table_header'),
           sortable: true
         },
-        NumberOfFoodsavers: {
+        {
+          key: 'NumberOfFoodsavers',
           label: this.$i18n('pickuplist.NumberOfFoodSavers_table_header'),
           sortable: true
         }
-      }
+      ]
     }
   }
 }

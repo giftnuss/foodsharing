@@ -1,19 +1,19 @@
 <template>
-  <nav-item-dropdown
+  <b-nav-item-dropdown
+    id="dropdown-information"
+    v-b-tooltip="$i18n('menu.tooltips.infos')"
     :no-caret="!displayArrow"
-    tooltip="Infos"
     right
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <i class="fas fa-info " />
       <span v-if="displayText">
-        Infos
+        {{ $i18n('menu.tooltips.infos') }}
       </span>
     </template>
     <h3 class="dropdown-header">
       Über uns
     </h3>
-
     <a
       :href="$url('mission')"
       class="dropdown-item sub"
@@ -103,13 +103,11 @@
     >
       Changelog
     </a>
-  </nav-item-dropdown>
+  </b-nav-item-dropdown>
 </template>
 <script>
-import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { NavItemDropdown },
   props: {
     wXS: {
       type: Boolean,

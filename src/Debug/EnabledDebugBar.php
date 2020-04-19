@@ -13,10 +13,10 @@ use Foodsharing\Debug\Collectors\PrettierPDOCollector;
 
 class EnabledDebugBar implements DebugBar
 {
-	/* @var $queryCollector DatabaseQueryCollector */
+	/* @var DatabaseQueryCollector $queryCollector */
 	private $queryCollector;
 
-	/* @var $bar StandardDebugBar */
+	/* @var StandardDebugBar $bar */
 	private $bar;
 
 	public function __construct(TraceablePDO $traceablePDO)

@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\ImageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Foodsharing\Services\ImageService;
 
 class ReportControl extends Control
 {
@@ -19,6 +19,10 @@ class ReportControl extends Control
 		$this->imageService = $imageService;
 
 		parent::__construct();
+
+		if (!$this->session->may()) {
+			$this->routeHelper->goLogin();
+		}
 	}
 
 	// Request is needed here, even if not used inside the method.

@@ -6,6 +6,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\ImageService;
 
 class QuizControl extends Control
@@ -16,6 +17,7 @@ class QuizControl extends Control
 	private $imageService;
 	private $identificationHelper;
 	private $dataHelper;
+	private $quizPermissions;
 
 	public function __construct(
 		QuizView $view,
@@ -24,7 +26,8 @@ class QuizControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		QuizPermissions $quizPermissions
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
@@ -33,12 +36,13 @@ class QuizControl extends Control
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
+		$this->quizPermissions = $quizPermissions;
 
 		parent::__construct();
 
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();
-		} elseif (!$this->session->mayEditQuiz()) {
+		} elseif (!$this->quizPermissions->mayEditQuiz()) {
 			$this->routeHelper->go('/');
 		}
 	}
@@ -171,7 +175,7 @@ class QuizControl extends Control
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
 			$this->pageHelper->addContent($this->getSessionDetailTopbarContent($fs), CNT_TOP);
 
-			if ($sessions = $this->quizSessionGateway->getUserSessions($fs['id'])) {
+			if ($sessions = $this->quizSessionGateway->listUserSessions($_GET['fsid'])) {
 				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
 			}
 		}
@@ -206,7 +210,7 @@ class QuizControl extends Control
 
 	private function getSessionListContent(array $quiz): string
 	{
-		if ($sessions = $this->quizSessionGateway->getSessions($quiz['id'])) {
+		if ($sessions = $this->quizSessionGateway->listSessions($quiz['id'])) {
 			return $this->view->sessionList($sessions, $quiz);
 		}
 

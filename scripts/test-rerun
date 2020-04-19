@@ -8,7 +8,10 @@ export FS_ENV=test
 
 set -o errexit
 
-source $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
+
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 echo "Running tests"
 exec-in-container-asroot selenium "find /home/seluser/Downloads -type f -print0 | xargs -r -n 1 -0 rm"
@@ -16,8 +19,10 @@ exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-
 exec-in-container app vendor/bin/codecept run "$@"
 
 if [ $# -eq 0 ]; then
+  echo "Running js tests"
+  run-in-container client 'yarn lint && yarn test'
   echo "Running chat tests"
-  run-in-container chat 'npm run lint && npm test'
+  run-in-container chat 'yarn lint && yarn test'
 fi
 
 echo "Done!"

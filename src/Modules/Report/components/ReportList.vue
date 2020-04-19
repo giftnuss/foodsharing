@@ -44,8 +44,8 @@
             slot-scope="row"
           >
             <b-button
-              @click.stop="row.toggleDetails"
               size="sm"
+              @click.stop="row.toggleDetails"
             >
               {{ row.detailsShowing ? 'Hide' : 'Show' }}
             </b-button>
@@ -119,42 +119,52 @@ export default {
       currentPage: 1,
       perPage: 50,
       reports: [],
-      fields: {
-        avatar: {
+      fields: [
+        {
+          key: 'avatar',
+
           label: ''
         },
-        fs_stadt: {
+        {
+          key: 'fs_stadt',
           label: this.$i18n('reports.city'),
           sortable: true
         },
-        time: {
+        {
+          key: 'time',
           label: this.$i18n('reports.time'),
           sortable: true
         },
-        fs_name: {
+        {
+          key: 'name',
           label: this.$i18n('reports.about_first_name'),
           sortable: true
         },
-        fs_nachname: {
+        {
+          key: 'fs_nachname',
           label: this.$i18n('reports.about_last_name'),
           sortable: true
         },
-        rp_name: {
+        {
+          key: 'rp_name',
           label: this.$i18n('reports.from_first_name'),
           sortable: true
         },
-        rp_nachname: {
+        {
+          key: 'rp_nachname',
           label: this.$i18n('reports.from_last_name'),
           sortable: true
         },
-        b_name: {
+        {
+          key: 'b_name',
           label: this.$i18n('reports.region'),
           sortable: true
         },
-        actions: {
+        {
+          key: 'actions',
           label: ''
         }
-      }
+      ]
     }
   },
   async created () {

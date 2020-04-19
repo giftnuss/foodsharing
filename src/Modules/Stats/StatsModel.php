@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Stats;
 
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Db\Db;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
 class StatsModel extends Db
 {
@@ -47,7 +48,8 @@ class StatsModel extends Db
 				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
 			WHERE
 			      fa.foodsaver_id = ' . $fs_id . '
-			  AND fa.date < now();
+			  AND fa.date < now()
+			  AND fa.confirmed = 1
 		')
 		) {
 			$savedWeight = $queryResult;
@@ -120,32 +122,6 @@ class StatsModel extends Db
 		');
 
 		return (int)$val + (int)$stat_fetchcount;
-	}
-
-	// method currently not used. @fs_k wants to keep it in source for now.
-	public function getBetriebTeam($storeId)
-	{
-		return $this->q('
-
-			SELECT 
-				t.stat_last_update,
-				t.`stat_fetchcount`,
-				t.`stat_first_fetch`,
-				t.`stat_last_fetch`,
-				UNIX_TIMESTAMP(t.`stat_first_fetch`) AS first_fetch_ts,
-				t.`stat_add_date`,
-				UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date_ts,
-				t.foodsaver_id,
-				t.verantwortlich,
-				t.active
-				
-			FROM 
-				fs_betrieb_team t
-
-			WHERE 
-				t.betrieb_id = ' . (int)$storeId . '
-				
-		');
 	}
 
 	public function updateStats($regionId, $fetchweight, $fetchcount, $postcount, $betriebcount, $korpcount, $botcount, $fscount, $foodSharePointCount)
@@ -229,11 +205,12 @@ class StatsModel extends Db
 	public function getBotCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = array();
+		$out = [];
 		if ($foodsaver = $this->q('
-			SELECT 	fb.foodsaver_id AS id
-			FROM 	fs_botschafter fb
-			WHERE 	fb.bezirk_id IN(' . implode(',', $child_ids) . ')
+			SELECT 	amb.foodsaver_id AS id
+			FROM 	fs_botschafter amb JOIN fs_bezirk region ON amb.bezirk_id = region.id
+			WHERE 	amb.bezirk_id IN(' . implode(',', $child_ids) . ')
+			AND NOT	region.type = ' . Type::WORKING_GROUP . '
 		')
 		) {
 			foreach ($foodsaver as $fs) {
@@ -247,7 +224,7 @@ class StatsModel extends Db
 	public function getFsCount($region_id, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$out = array();
+		$out = [];
 		if ($foodsaver = $this->q('
 			SELECT 	fb.foodsaver_id AS id
 			FROM 	fs_foodsaver_has_bezirk fb
@@ -268,7 +245,7 @@ class StatsModel extends Db
 		$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $region_id));
 
 		$weight = 0;
-		$dat = array();
+		$dat = [];
 		if ($res = $this->q('
 			SELECT 	a.betrieb_id, 
 					a.`date`,
@@ -293,11 +270,11 @@ class StatsModel extends Db
 			}
 		}
 
-		$current = $this->getValues(array('stat_fetchweight', 'stat_fetchcount'), 'bezirk', $region_id);
+		$current = $this->getValues(['stat_fetchweight', 'stat_fetchcount'], 'bezirk', $region_id);
 
-		return array(
+		return [
 			'weight' => ($weight + (int)$current['stat_fetchweight']),
 			'count' => (count($dat) + (int)$current['stat_fetchcount'])
-		);
+		];
 	}
 }

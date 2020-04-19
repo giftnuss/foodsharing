@@ -9,7 +9,7 @@ class TeamGateway extends BaseGateway
 {
 	public function getTeam($region_id = RegionIDs::TEAM_BOARD_MEMBER): array
 	{
-		$out = array();
+		$out = [];
 		$stm = '
 				SELECT 
 					fs.id, 
@@ -67,11 +67,11 @@ class TeamGateway extends BaseGateway
                         fb.foodsaver_id = fs.id
                     WHERE
                         fb.foodsaver_id = :id AND(
-                            fb.bezirk_id = 1564 OR fb.bezirk_id = 1565 OR fb.bezirk_id = 1373
+                            fb.bezirk_id = :id_1 OR fb.bezirk_id = :id_2 OR fb.bezirk_id = :id_3
                         )
                     LIMIT 1
 		';
-		if ($user = $this->db->fetch($stm, [':id' => (int)$id])
+		if ($user = $this->db->fetch($stm, [':id' => (int)$id, ':id_1' => RegionIDs::TEAM_ALUMNI_MEMBER, ':id_2' => RegionIDs::TEAM_ADMINISTRATION_MEMBER, ':id_3' => RegionIDs::TEAM_BOARD_MEMBER])
 		) {
 			return $user;
 		}
@@ -79,11 +79,6 @@ class TeamGateway extends BaseGateway
 
 	/**
 	 * Function to check and block an IP address.
-	 *
-	 * @param int $durationSeconds
-	 * @param string $context
-	 *
-	 * @return bool
 	 */
 	public function isABlockedIP(int $durationSeconds, string $context): bool
 	{

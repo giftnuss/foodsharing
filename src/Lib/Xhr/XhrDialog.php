@@ -36,13 +36,13 @@ class XhrDialog
 		$this->viewUtils = $container->get(Utils::class);
 		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->id = 'd-' . uniqid();
-		$this->buttons = array();
-		$this->options = array();
+		$this->buttons = [];
+		$this->options = [];
 		$this->script = '';
 		$this->content = '';
 		$this->scriptBefore = '';
-		$this->onopen = array();
-		$this->classnames = array();
+		$this->onopen = [];
+		$this->classnames = [];
 		$this->sanitizerService = $container->get(SanitizerService::class);
 
 		if ($title !== false) {
@@ -104,10 +104,10 @@ class XhrDialog
 
 	public function addAbortButton($text = 'Abbrechen')
 	{
-		$this->buttons[] = array(
+		$this->buttons[] = [
 			'text' => $text,
 			'click' => '$("#' . $this->id . '").dialog("close");'
-		);
+		];
 	}
 
 	public function onOpen($js)
@@ -117,10 +117,10 @@ class XhrDialog
 
 	public function addButton($text, $click)
 	{
-		$this->buttons[] = array(
+		$this->buttons[] = [
 			'text' => $text,
 			'click' => $click
-		);
+		];
 	}
 
 	public function setResizeable($val = true)
@@ -189,7 +189,7 @@ class XhrDialog
 
 	public function xhrout()
 	{
-		$buttons = array();
+		$buttons = [];
 		foreach ($this->buttons as $b) {
 			$buttons[] = '{"text":\'' . $b['text'] . '\',click:function(){' . $b['click'] . '}}';
 		}
@@ -202,7 +202,7 @@ class XhrDialog
 			$this->addOpt('open', 'function( event, ui ) {' . implode(' ', $this->onopen) . '}', false);
 		}
 
-		$options = array();
+		$options = [];
 		foreach ($this->options as $opt => $value) {
 			$options[] = $opt . ':' . $value;
 		}
@@ -212,7 +212,7 @@ class XhrDialog
 			$classjs = '$("#' . $this->id . '").parent().addClass("' . implode(' ', $this->classnames) . '")';
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => '
 				' . $this->scriptBefore . '
@@ -233,6 +233,6 @@ class XhrDialog
 				dialogs.add("' . $this->id . '");
 				' . $classjs . '
 				'
-		);
+		];
 	}
 }

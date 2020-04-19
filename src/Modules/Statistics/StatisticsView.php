@@ -32,10 +32,10 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('active_cities'), ['class' => 'ui-padding']);
 	}
 
-	public function getStatTotal($stat, int $foodsharerCount, int $avgDailyFetchCount)
+	public function getStatTotal($stat, int $foodsharerCount, int $avgDailyFetchCount, int $foodSharePointsCount)
 	{
 		/*
 		 *  fetchweight,
@@ -138,6 +138,17 @@ class StatisticsView extends View
 						<p>' . $this->translationHelper->s('average_weekly_baskets') . '</p>
 					</div>
 			</div><br />
+			<div class="stat_item">
+					<div class="stat_badge">
+						<div class="stat_icon fetchweight">
+							<i class="fas fa-recycle"></i>
+						</div>
+					</div>
+					<div class="stat_text">
+						<h4>' . number_format($foodSharePointsCount, 0, ',', '.') . '</h4>
+						<p>FairTeiler werden zum Tausch von Lebensmitteln genutzt.</p>
+					</div>
+			</div>
 		</div>', $this->translationHelper->s('stat_whole'));
 	}
 
@@ -167,6 +178,6 @@ class StatisticsView extends View
 		$out .= '
 		</table>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('most_active_foodsavers'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('most_active_foodsavers'), ['class' => 'ui-padding']);
 	}
 }

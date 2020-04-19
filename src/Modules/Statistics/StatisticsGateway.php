@@ -82,6 +82,7 @@ class StatisticsGateway extends BaseGateway
 			WHERE
 				CAST(`date` as date) > DATE_ADD(CURDATE(), INTERVAL -100 DAY) AND
 				CAST(`date` as date) < CURDATE()
+				AND fs_abholer.confirmed = 1
 	  ';
 		$fetchCount = (int)$this->db->fetch($q)['fetchCount'];
 		// time range to average over in days
@@ -112,5 +113,10 @@ class StatisticsGateway extends BaseGateway
 		$basketCount = (int)$this->db->fetchValue($q, [':diffWeeks' => $diffWeeks]);
 		// divide number of fetches by time difference
 		return (int)($basketCount / $diffWeeks);
+	}
+
+	public function countActiveFoodSharePoints(): int
+	{
+		return $this->db->count('fs_fairteiler', ['status' => 1]);
 	}
 }

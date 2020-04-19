@@ -30,7 +30,7 @@ class BuddyXhr extends Control
 			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . (int)$_GET['id']);
 			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->session->id());
 
-			$buddy_ids = array();
+			$buddy_ids = [];
 			if ($b = $this->session->get('buddy-ids')) {
 				$buddy_ids = $b;
 			}
@@ -39,10 +39,10 @@ class BuddyXhr extends Control
 
 			$this->session->set('buddy-ids', $buddy_ids);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt Ihr Euch!");'
-			);
+			];
 		}
 
 		if ($this->gateway->buddyRequest($_GET['id'], $this->session->id())) {
@@ -57,19 +57,19 @@ class BuddyXhr extends Control
 			$bellData->icon = $this->imageService->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
-			$bellData->link_attributes = array('href' => '/profile/' . (int)$this->session->id() . '');
+			$bellData->link_attributes = ['href' => '/profile/' . (int)$this->session->id() . ''];
 
 			// variables for the language strings
-			$bellData->vars = array('name' => $this->session->user('name'));
+			$bellData->vars = ['name' => $this->session->user('name')];
 
 			$bellData->identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
 
 			$this->bellGateway->addBell($_GET['id'], $bellData);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$(".buddyRequest").remove();pulseInfo("Anfrage versendet!");'
-			);
+			];
 		}
 	}
 
@@ -77,9 +77,9 @@ class BuddyXhr extends Control
 	{
 		$this->gateway->removeRequest($_GET['id'], $this->session->id());
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseInfo("Anfrage gelöscht");$(".buddyreq-' . (int)$_GET['id'] . '").remove();'
-		);
+		];
 	}
 }

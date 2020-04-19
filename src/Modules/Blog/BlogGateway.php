@@ -57,7 +57,7 @@ final class BlogGateway extends BaseGateway
 	{
 		$val = false;
 		try {
-			$val = $this->db->fetchByCriteria('blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id]);
+			$val = $this->db->fetchByCriteria('fs_blog_entry', ['bezirk_id', 'foodsaver_id'], ['id' => $article_id]);
 		} catch (\Exception $e) {
 			// has to be caught until we can check whether a to be fetched value does really exist.
 		}
@@ -176,18 +176,18 @@ final class BlogGateway extends BaseGateway
 			[
 				'bezirk_id' => (int)$data['bezirk_id'],
 				'foodsaver_id' => (int)$data['foodsaver_id'],
-				'name' => strip_tags($this->$data['name']),
-				'teaser' => strip_tags($this->$data['teaser']),
-				'body' => $this->$data['body'],
-				'time' => strip_tags($this->$data['time']),
-				'picture' => strip_tags($this->$data['picture']),
+				'name' => strip_tags($data['name']),
+				'teaser' => strip_tags($data['teaser']),
+				'body' => $data['body'],
+				'time' => strip_tags($data['time']),
+				'picture' => strip_tags($data['picture']),
 				'active' => $active
 			]
 		);
 
-		$foodsaver = array();
+		$foodsaver = [];
 		$orgateam = $this->foodsaverGateway->getOrgateam();
-		$botschafter = $this->foodsaverGateway->getBotschafter($data['bezirk_id']);
+		$botschafter = $this->foodsaverGateway->getAmbassadors($data['bezirk_id']);
 
 		foreach ($orgateam as $o) {
 			$foodsaver[$o['id']] = $o;

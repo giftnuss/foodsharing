@@ -1,9 +1,10 @@
 <template>
   <b-nav-item-dropdown
+    id="dropdown-region"
     ref="dropdown"
     class="regionMenu"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <span class="regionName text-truncate">
         {{ activeRegion ? activeRegion.name : 'Bezirke' }}
       </span>
@@ -33,7 +34,7 @@
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="far fa-comment" />Forum
+          <i class="far fa-comment-alt" />Forum
         </a>
         <a
           v-if="region.isBot"
@@ -44,7 +45,7 @@
           <i class="far fa-comment-dots" />Bot-Forum
         </a>
         <a
-          :href="$url('fairteiler', region.id)"
+          :href="$url('foodsharepoints', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
@@ -86,7 +87,7 @@
           <i class="fas fa-chart-bar" />Statistik
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
@@ -116,10 +117,10 @@
       class="dropdown-divider"
     />
     <a
-      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
+      @click="joinRegionDialog"
     >
       <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
     </a>

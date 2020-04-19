@@ -10,7 +10,7 @@ class WallPostCest
 	{
 		$this->testGroup = $I->createWorkingGroup('a top group');
 		$this->regionMember = $I->createFoodsaver();
-		$I->addBezirkMember($this->testGroup['id'], $this->regionMember['id']);
+		$I->addRegionMember($this->testGroup['id'], $this->regionMember['id']);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();
 	}
 
@@ -21,8 +21,6 @@ class WallPostCest
 	// tests
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["regionMember", true]
 	 * @example["unconnectedFoodsaver", false]
 	 */
@@ -37,14 +35,13 @@ class WallPostCest
 			$I->click('Senden');
 			$I->waitForElement('.bpost');
 			$I->see($wallPostText);
-			$I->seeInDatabase('fs_wallpost', array('body' => $wallPostText, 'foodsaver_id' => $this->{$example[0]}['id']));
+			$I->seeInDatabase('fs_wallpost', ['body' => $wallPostText, 'foodsaver_id' => $this->{$example[0]}['id']]);
 		} else {
 			$I->dontSee('Pinnwand');
 		}
 	}
 
 	/**
-	 * @param AcceptanceTester $I
 	 * @param \Codeception\Example $example
 	 */
 	public function cannotAddEmptyWallPost(AcceptanceTester $I)
@@ -54,6 +51,6 @@ class WallPostCest
 		$I->fillField('#wallpost-text', '');
 		$I->click('Senden');
 		$I->waitForPageBody();
-		$I->dontSeeInDatabase('fs_wallpost', array('body' => '', 'foodsaver_id' => $this->regionMember['id']));
+		$I->dontSeeInDatabase('fs_wallpost', ['body' => '', 'foodsaver_id' => $this->regionMember['id']]);
 	}
 }

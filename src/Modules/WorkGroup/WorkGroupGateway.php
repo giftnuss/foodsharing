@@ -6,17 +6,21 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
+use Foodsharing\Services\NotificationService;
 
 class WorkGroupGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
+	private $notificationService;
 
 	public function __construct(
 		Database $db,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		NotificationService $notificationService
 	) {
 		parent::__construct($db);
 		$this->forumFollowerGateway = $forumFollowerGateway;
+		$this->notificationService = $notificationService;
 	}
 
 	/*
@@ -31,7 +35,7 @@ class WorkGroupGateway extends BaseGateway
 			AND		`foodsaver_id` = :foodsaver_id
 		', [':active' => 1, ':foodsaver_id' => $fsId]);
 		if ($ret) {
-			$out = array();
+			$out = [];
 			foreach ($ret as $gid) {
 				$out[$gid] = $gid;
 			}
@@ -39,15 +43,11 @@ class WorkGroupGateway extends BaseGateway
 			return $out;
 		}
 
-		return array();
+		return [];
 	}
 
 	/**
 	 * Updates Group Members and Group-Admins.
-	 *
-	 * @param int $regionId
-	 * @param array $memberIds
-	 * @param array $leaderIds
 	 */
 	public function updateTeam(int $regionId, array $memberIds, array $leaderIds): void
 	{
@@ -68,7 +68,8 @@ class WorkGroupGateway extends BaseGateway
 			// delete all members if they're not in the submitted array
 			foreach ($deletedMemberIds as $m) {
 				$this->db->delete('fs_foodsaver_has_bezirk', [
-					'foodsaver_id' => $m
+					'foodsaver_id' => $m,
+					'bezirk_id' => $regionId
 				]);
 			}
 
@@ -112,15 +113,12 @@ class WorkGroupGateway extends BaseGateway
 			}
 		} else {
 			$this->emptyLeader($regionId);
+			$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 		}
 	}
 
 	/**
 	 * Delete all Leaders from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyLeader(int $regionId): int
 	{
@@ -129,10 +127,6 @@ class WorkGroupGateway extends BaseGateway
 
 	/**
 	 * Delete all members from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyMember(int $regionId): int
 	{

@@ -5,6 +5,8 @@ namespace Foodsharing\Modules\Foodsaver;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Services\NotificationService;
 use Foodsharing\Services\SanitizerService;
 
 class FoodsaverXhr extends Control
@@ -12,35 +14,42 @@ class FoodsaverXhr extends Control
 	private $foodsaverGateway;
 	private $regionGateway;
 	private $sanitizerService;
+	private $regionPermissions;
+	private $notificationService;
 
 	public function __construct(
-		FoodsaverModel $model,
 		FoodsaverView $view,
 		RegionGateway $regionGateway,
 		SanitizerService $sanitizerService,
-		FoodsaverGateway $foodsaverGateway
+		RegionPermissions $regionPermissions,
+		FoodsaverGateway $foodsaverGateway,
+		NotificationService $notificationService
 	) {
-		$this->model = $model;
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->regionPermissions = $regionPermissions;
+		$this->notificationService = $notificationService;
 
 		parent::__construct();
 	}
 
 	public function loadFoodsaver()
 	{
-		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+		$regionId = $_GET['bid'];
+		if (!$this->regionPermissions->mayHandleFoodsaverRegionMenu($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		if ($foodsaver = $this->foodsaverGateway->loadFoodsaver($_GET['id'])) {
+
+		$foodsaverId = $_GET['id'];
+		if ($foodsaver = $this->foodsaverGateway->loadFoodsaver($foodsaverId)) {
 			$html = $this->view->foodsaverForm($foodsaver);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$("#fsform").html(\'' . $this->sanitizerService->jsSafe($html) . '\');$(".button").button();$(".avatarlink img").load(function(){$(".avatarlink img").fadeIn();});'
-			);
+			];
 		}
 	}
 
@@ -49,17 +58,18 @@ class FoodsaverXhr extends Control
 	 */
 	public function foodsaverrefresh()
 	{
-		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+		$regionId = $_GET['bid'];
+		if (!$this->regionPermissions->mayHandleFoodsaverRegionMenu($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$foodsaver = $this->model->listFoodsaver($_GET['bid']);
-		$bezirk = $this->regionGateway->getRegion($_GET['bid']);
-		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $bezirk), "'");
+		$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($regionId);
+		$regionData = $this->regionGateway->getRegion($regionId);
+		$html = $this->sanitizerService->jsSafe($this->view->foodsaverList($foodsaver, $regionData), "'");
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => '$("#foodsaverlist").replaceWith(\'' . $html . '\');fsapp.init();'
-		);
+		];
 	}
 
 	/**
@@ -67,10 +77,13 @@ class FoodsaverXhr extends Control
 	 */
 	public function deleteFromRegion()
 	{
-		if (!$this->session->may('orga') && !$this->session->isAdminFor($_GET['bid'])) {
+		$regionId = $_GET['bid'];
+		$foodsaverId = $_GET['id'];
+		if (!$this->regionPermissions->mayDeleteFoodsaverFromRegion($regionId)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$this->foodsaverGateway->deleteFromRegion($_GET['bid'], $_GET['id']);
+		$this->foodsaverGateway->deleteFromRegion($regionId, $foodsaverId);
+		$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 
 		return [
 			'status' => 1,

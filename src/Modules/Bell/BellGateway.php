@@ -2,28 +2,28 @@
 
 namespace Foodsharing\Modules\Bell;
 
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
 	/**
-	 * @var WebSocketSender
+	 * @var WebSocketConnection
 	 */
-	private $webSocketSender;
+	private $webSocketConnection;
 
-	public function __construct(Database $db, WebSocketSender $webSocketSender)
+	public function __construct(Database $db, WebSocketConnection $webSocketConnection)
 	{
 		parent::__construct($db);
 
-		$this->webSocketSender = $webSocketSender;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	public function addBell($foodsavers, BellData $bellData): void
 	{
 		if (!is_array($foodsavers)) {
-			$foodsavers = array($foodsavers);
+			$foodsavers = [$foodsavers];
 		}
 
 		$bellId = $this->db->insert(
@@ -208,7 +208,7 @@ class BellGateway extends BaseGateway
 
 	private function updateFoodsaverClient(int $foodsaverId): void
 	{
-		$this->webSocketSender->sendSock($foodsaverId, 'bell', 'update', []);
+		$this->webSocketConnection->sendSock($foodsaverId, 'bell', 'update', []);
 	}
 
 	/**
@@ -216,6 +216,6 @@ class BellGateway extends BaseGateway
 	 */
 	private function updateMultipleFoodsaverClients(array $foodsaverIds): void
 	{
-		$this->webSocketSender->sendSockMulti($foodsaverIds, 'bell', 'update', []);
+		$this->webSocketConnection->sendSockMulti($foodsaverIds, 'bell', 'update', []);
 	}
 }

@@ -5,7 +5,7 @@ namespace Foodsharing\Services;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Lib\Db\Mem;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\MessageModel;
 
@@ -13,25 +13,25 @@ class MessageService
 {
 	private $emailHelper;
 	private $foodsaverGateway;
-	private $mem;
 	private $translationHelper;
 	private $legacyDb;
 	private $messageModel;
+	private $webSocketConnection;
 
 	public function __construct(
 		EmailHelper $emailHelper,
 		FoodsaverGateway $foodsaverGateway,
-		Mem $mem,
 		TranslationHelper $translationHelper,
 		Db $legacyDb,
-		MessageModel $messageModel
+		MessageModel $messageModel,
+		WebSocketConnection $webSocketConnection
 	) {
 		$this->emailHelper = $emailHelper;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->mem = $mem;
 		$this->translationHelper = $translationHelper;
 		$this->legacyDb = $legacyDb;
 		$this->messageModel = $messageModel;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	public function sendMessageToUser(
@@ -53,16 +53,16 @@ class MessageService
 		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recipientId);
 		if ((int)$info > 0) {
 			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
+				$_SESSION['lastMailMessage'] = [];
 			}
 
 			// Only send message if the user is not currently logged in
-			if (!$this->mem->userIsActive($recipientId)) {
+			if (!$this->webSocketConnection->isUserOnline($recipientId)) {
 				if (!isset($_SESSION['lastMailMessage'][$recipientId]) || (time(
 						) - $_SESSION['lastMailMessage'][$recipientId]) > 600) {
 					$_SESSION['lastMailMessage'][$recipientId] = time();
-					$foodsaver = $this->foodsaverGateway->getOne_foodsaver($recipientId);
-					$sender = $this->foodsaverGateway->getOne_foodsaver($senderId);
+					$foodsaver = $this->foodsaverGateway->getFoodsaver($recipientId);
+					$sender = $this->foodsaverGateway->getFoodsaver($senderId);
 
 					$this->emailHelper->tplMail(
 						$notificationTemplate,

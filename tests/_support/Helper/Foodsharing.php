@@ -2,10 +2,12 @@
 
 namespace Helper;
 
+use Carbon\Carbon;
 use DateTime;
 use Faker;
-use Carbon\Carbon;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -23,7 +25,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function clear()
 	{
-		$this->driver->executeQuery('
+		$this->_getDriver()->executeQuery('
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_foodsaver_has_bezirk;
 			DELETE FROM fs_foodsaver_has_conversation;
@@ -50,7 +52,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function clearTable($table)
 	{
-		$this->driver->deleteQueryByCriteria($table, []);
+		$this->_getDriver()->deleteQueryByCriteria($table, []);
 	}
 
 	/**
@@ -59,7 +61,7 @@ class Foodsharing extends \Codeception\Module\Db
 	 * @param string pass to set as foodsharer password
 	 * @param array extra_params override params
 	 *
-	 * @return an array with all the foodsaver fields
+	 * @return array with all the foodsaver fields
 	 */
 	public function createFoodsharer($pass = null, $extra_params = [])
 	{
@@ -95,7 +97,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['anmeldedatum'] = $this->toDateTime($params['anmeldedatum']);
 		$id = $this->haveInDatabase('fs_foodsaver', $params);
 		if ($params['bezirk_id']) {
-			$this->addBezirkMember($params['bezirk_id'], $id);
+			$this->addRegionMember($params['bezirk_id'], $id);
 		}
 		$params['id'] = $id;
 
@@ -171,7 +173,7 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 	}
 
-	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0): void
+	public function createQuizTry(int $fsId, int $level, int $status, int $daysAgo = 0)
 	{
 		$startTime = Carbon::now()->subDays($daysAgo);
 		$v = [
@@ -356,7 +358,7 @@ class Foodsharing extends \Codeception\Module\Db
 	public function addRecurringPickup($store, $extra_params = [])
 	{
 		$hours = $this->faker->numberBetween(0, 23);
-		$minutes = $this->faker->randomElement($array = array('00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'));
+		$minutes = $this->faker->randomElement($array = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']);
 
 		$params = array_merge([
 			'betrieb_id' => $store,
@@ -438,15 +440,15 @@ class Foodsharing extends \Codeception\Module\Db
 		$mailbox = $this->createMailbox('region-' . $v['id']);
 		$this->updateInDatabase('fs_bezirk', ['mailbox_id' => $mailbox['id']], ['id' => $v['id']]);
 		/* Add to closure table for hierarchies */
-		$this->driver->executeQuery('INSERT INTO `fs_bezirk_closure`
+		$this->_getDriver()->executeQuery('INSERT INTO `fs_bezirk_closure`
 		(ancestor_id, bezirk_id, depth)
 		SELECT t.ancestor_id, ?, t.depth+1 FROM `fs_bezirk_closure` AS t WHERE t.bezirk_id = ?
-		UNION ALL SELECT ?, ?, 0', array($v['id'], $parentId, $v['id'], $v['id']));
+		UNION ALL SELECT ?, ?, 0', [$v['id'], $parentId, $v['id'], $v['id']]);
 
 		return $v;
 	}
 
-	public function addBezirkAdmin($region_id, $fs_id)
+	public function addRegionAdmin($region_id, $fs_id)
 	{
 		$v = [
 			'bezirk_id' => $region_id,
@@ -455,11 +457,11 @@ class Foodsharing extends \Codeception\Module\Db
 		$this->haveInDatabase('fs_botschafter', $v);
 	}
 
-	public function addBezirkMember($region_id, $fs_id, $is_active = true)
+	public function addRegionMember($region_id, $fs_id, $is_active = true)
 	{
 		if (is_array($fs_id)) {
 			array_map(function ($x) use ($region_id, $is_active) {
-				$this->addBezirkMember($region_id, $x, $is_active);
+				$this->addRegionMember($region_id, $x, $is_active);
 			}, $fs_id);
 		} else {
 			$v = [
@@ -612,8 +614,8 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'fairteiler_id' => $foodSharePoint,
 			'foodsaver_id' => $user,
-			'type' => 1,
-			'infotype' => 1,
+			'type' => FollowerType::FOLLOWER,
+			'infotype' => InfoType::EMAIL,
 		], $extra_params);
 		$this->haveInDatabase('fs_fairteiler_follower', $params);
 
@@ -622,7 +624,7 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function addFoodSharePointAdmin($user, $foodSharePoint, $extra_params = [])
 	{
-		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => 2]));
+		return $this->addFoodSharePointFollower($user, $foodSharePoint, array_merge($extra_params, ['type' => FollowerType::FOOD_SHARE_POINT_MANAGER]));
 	}
 
 	public function addFoodSharePointPost($user, $foodSharePoint, $extra_params = [])
@@ -752,6 +754,20 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function updateThePrivacyPolicyDate()
+	{
+		$lastModified = $this->grabFromDatabase('fs_content', 'last_mod', ['name' => 'datenschutz']);
+		$beforeLastModified = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($lastModified)));
+		$this->updateInDatabase('fs_content', ['last_mod' => $beforeLastModified], ['name' => 'datenschutz']);
+
+		return $lastModified;
+	}
+
+	public function resetThePrivacyPolicyDate($lastModified)
+	{
+		$this->updateInDatabase('fs_content', ['last_mod' => $lastModified], ['name' => 'datenschutz']);
+	}
+
 	// =================================================================================================================
 	// private methods
 	// =================================================================================================================
@@ -762,7 +778,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$last_post_date = new DateTime($this->grabFromDatabase('fs_theme_post', 'time', ['id' => $last_post_id]));
 		$this_post_date = new DateTime($post['time']);
 		if ($last_post_date >= $this_post_date) {
-			$this->driver->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
+			$this->_getDriver()->executeQuery('UPDATE fs_theme SET last_post_id = ? WHERE id = ?', [$post['id'], $theme_id]);
 		}
 	}
 

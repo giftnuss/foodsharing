@@ -8,22 +8,24 @@
         <div class="col-sm-3 avatarSide text-center">
           <a :href="$url('profile', author.id)">
             <Avatar
+              style="margin-bottom: 5px"
               :url="author.avatar"
               :sleep-status="author.sleepStatus"
               :size="130"
+              :auto-scale="false"
             />
           </a>
           <a
             v-if="!wXS"
-            @click="openChat"
             class="btn btn-sm btn-outline-primary"
+            @click="openChat"
           >
             <i class="fas fa-comments" /> {{ $i18n('chat.open_chat') }}
           </a>
         </div>
         <div
-          v-html="body"
           class="col-sm-9"
+          v-html="body"
         />
       </div>
       <div class="card-footer">

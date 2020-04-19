@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -58,12 +59,7 @@ class FoodSharePointControl extends Control
 			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
 		}
 		if (!$request->query->has('sub')) {
-			$items = array();
-			if ($this->regions = $this->session->getRegions()) {
-				foreach ($this->regions as $r) {
-					$items[] = ['name' => $r['name'], 'href' => '/?page=fairteiler&bid=' . $r['id']];
-				}
-			}
+			$this->regions = $this->session->getRegions();
 
 			if ($this->regionId === 0) {
 				$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
@@ -107,15 +103,14 @@ class FoodSharePointControl extends Control
 			$regionId = $this->foodSharePoint['bezirk_id'];
 		}
 
-		if (isset($regionId) || $regionId = $request->query->get('bid')) {
-			if ($region = $this->regionGateway->getRegion($regionId)) {
-				$this->regionId = $regionId;
-				$this->region = $region;
-				if ((int)$region['mailbox_id'] > 0) {
-					$this->region['urlname'] = $this->mailboxGateway->getMailboxname($region['mailbox_id']);
-				} else {
-					$this->region['urlname'] = $this->identificationHelper->id($this->region['name']);
-				}
+		if ((isset($regionId) || $regionId = $request->query->get('bid'))
+				&& $region = $this->regionGateway->getRegion($regionId)) {
+			$this->regionId = $regionId;
+			$this->region = $region;
+			if ((int)$region['mailbox_id'] > 0) {
+				$this->region['urlname'] = $this->mailboxGateway->getMailboxname($region['mailbox_id']);
+			} else {
+				$this->region['urlname'] = $this->identificationHelper->id($this->region['name']);
 			}
 		} else {
 			$this->regionId = 0;
@@ -124,7 +119,7 @@ class FoodSharePointControl extends Control
 
 		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
-			$infoType = $request->query->get('infotype', 2);
+			$infoType = $request->query->get('infotype', InfoType::BELL);
 			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id() ?? 0, $follow, $infoType)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
@@ -161,16 +156,16 @@ class FoodSharePointControl extends Control
 		$this->view->setRegion($this->region);
 	}
 
-	private function handleFollowUnfollow($foodSharePointId, int $foodSharerId, $follow, $infoType): bool
+	private function handleFollowUnfollow(int $foodSharePointId, int $foodSharerId, $follow, int $infoType): bool
 	{
 		if ($follow === null) {
 			return false;
 		}
 
-		if ($follow === 1 && in_array($infoType, [1, 2], true)) {
-			$this->foodSharePointGateway->follow($foodSharePointId, $foodSharerId, $infoType);
+		if ($follow == 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
+			$this->foodSharePointGateway->follow($foodSharerId, $foodSharePointId, $infoType);
 		} else {
-			$this->foodSharePointGateway->unfollow($foodSharePointId, $foodSharerId);
+			$this->foodSharePointGateway->unfollow($foodSharerId, $foodSharePointId);
 		}
 
 		return true;
@@ -315,7 +310,7 @@ class FoodSharePointControl extends Control
 		);
 
 		if ($this->foodSharePointPermissions->mayFollow()) {
-			$items = array();
+			$items = [];
 
 			if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 				$items[] = [

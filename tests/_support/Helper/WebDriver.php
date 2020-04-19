@@ -10,15 +10,6 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 class WebDriver extends \Codeception\Module\WebDriver
 {
 	/**
-	 * Same as assertRegExp but makes it available inside AcceptanceTester
-	 * (not sure why it isn't anyway... there might be a better way).
-	 */
-	public function doAssertRegExp($regexp, $text)
-	{
-		return $this->assertRegExp($regexp, $text);
-	}
-
-	/**
 	 * Checks if the element is REALLY visible in the current viewport.
 	 * The available standard WebDriver actions only check if an element is
 	 * somewhere in th DOM, but not nessecarily if it's visible.

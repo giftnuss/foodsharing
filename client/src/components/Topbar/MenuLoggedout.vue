@@ -5,8 +5,8 @@
   >
     <li class="nav-item">
       <a
-        :href="$url('map')"
         v-b-tooltip.hover.bottom
+        :href="$url('map')"
         :title="$i18n('map.title')"
         :aria-label="$i18n('map.title')"
         class="nav-link"

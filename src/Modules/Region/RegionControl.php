@@ -5,12 +5,12 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
-use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Permissions\ForumPermissions;
-use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
 use Symfony\Component\Form\FormFactoryBuilder;
@@ -255,19 +255,17 @@ final class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 
-	private function handleNewThreadForm(Request $request, $region, $ambassadorForum)
+	private function handleNewThreadForm(Request $request, $region, $ambassadorForum, $postActiveWithoutModeration)
 	{
 		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
-		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data);
+		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
 				$region['id'],
 				$ambassadorForum
 			)) {
-			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
-
-			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration, $data->sendMail);
 			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
 			if (!$postActiveWithoutModeration) {
 				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
@@ -292,7 +290,9 @@ final class RegionControl extends Control
 			$viewdata['thread'] = ['id' => $tid];
 			$viewdata['posts'] = [];
 		} elseif ($request->query->has('newthread')) {
-			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum);
+			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
+			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
 		}
@@ -330,7 +330,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('group.members'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
-		$viewdata['region']['members'] = $this->foodsaverGateway->listFoodsaverByRegion($region['id']);
+		$viewdata['region']['members'] = $this->foodsaverGateway->listActiveFoodsaversByRegion($region['id']);
 		$response->setContent($this->render('pages/Region/members.twig', $viewdata));
 	}
 

@@ -1,5 +1,7 @@
 'use strict'
 
+// TODO: request is deprecated and should be replaced with node's http.get function
+// See: https://github.com/request/request/issues/3142
 const request = require('request')
 const redis = require('redis')
 const randomString = require('randomstring')
@@ -363,6 +365,8 @@ function register (socket, callback) {
 }
 
 function sendMessage (params, callback) {
+  // TODO: request is deprecated and should be replaced with node's http.get function
+  // See: https://github.com/request/request/issues/3142
   request(HTTP_URL, { qs: params }, (err) => {
     if (err) return callback(err)
     callback()
@@ -370,6 +374,8 @@ function sendMessage (params, callback) {
 }
 
 function fetchStats (callback) {
+  // TODO: request is deprecated and should be replaced with node's http.get function
+  // See: https://github.com/request/request/issues/3142
   request(`${HTTP_URL}/stats`, (err, response, body) => {
     if (err) return callback(err)
     try {

@@ -17,9 +17,9 @@ class ReportApiCest
 		$this->region = $I->createRegion(null, $this->parentRegion['id']);
 		$this->subRegion = $I->createRegion(null, $this->region['id']);
 		$this->ambassador = $I->createAmbassador(null, ['bezirk_id' => $this->region['id']]);
-		$I->addBezirkAdmin($this->region['id'], $this->ambassador['id']);
+		$I->addRegionAdmin($this->region['id'], $this->ambassador['id']);
 		$this->parentAmbassador = $I->createAmbassador(null, ['bezirk_id' => $this->parentRegion['id']]);
-		$I->addBezirkAdmin($this->parentRegion['id'], $this->parentAmbassador['id']);
+		$I->addRegionAdmin($this->parentRegion['id'], $this->parentAmbassador['id']);
 		$this->foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
 		$this->subRegionFoodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->subRegion['id']]);
 		$this->foodsharer = $I->createFoodsharer();
@@ -104,7 +104,7 @@ class ReportApiCest
 	public function reportTeamCanAccessReports(\ApiTester $I)
 	{
 		$fs = $I->createFoodsaver();
-		$I->addBezirkMember(Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM, $fs['id']);
+		$I->addRegionMember(Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM, $fs['id']);
 		$I->login($fs['email']);
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);

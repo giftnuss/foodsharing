@@ -26,10 +26,20 @@ final class RegionPermissions
 
 	public function mayAccessStatisticCountry(): bool
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->session->may('orga')) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
+	{
+		return $this->session->isAmbassadorForRegion([$regionId], false, false);
+	}
+
+	public function mayDeleteFoodsaverFromRegion(int $regionId): bool
+	{
+		return $this->mayHandleFoodsaverRegionMenu($regionId);
 	}
 }

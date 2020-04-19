@@ -14,6 +14,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellData;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -24,8 +25,10 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\Store\TeamStatus;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\NotificationService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,6 +58,8 @@ class XhrMethods
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $newsletterEmailPermissions;
+	private $notificationService;
 
 	/**
 	 * XhrMethods constructor.
@@ -83,7 +88,9 @@ class XhrMethods
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		NewsletterEmailPermissions $newsletterEmailPermissions,
+		NotificationService $notificationService
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -107,6 +114,8 @@ class XhrMethods
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->notificationService = $notificationService;
 	}
 
 	public function xhr_verify($data)
@@ -116,9 +125,9 @@ class XhrMethods
 		if ($this->session->isAmbassadorForRegion($regions, false, true) || $this->session->isOrgaTeam()) {
 			if ($countver = $this->model->qOne('SELECT COUNT(*) FROM fs_verify_history WHERE date BETWEEN NOW()- INTERVAL 20 SECOND AND now() AND bot_id = ' . $this->session->id())) {
 				if ($countver > 10) {
-					return json_encode(array(
+					return json_encode([
 						'status' => 0
-					));
+					]);
 				}
 			}
 
@@ -131,9 +140,9 @@ class XhrMethods
 		');
 
 			if ($countFetch > 0) {
-				return json_encode(array(
+				return json_encode([
 					'status' => 0
-				));
+				]);
 			}
 
 			if ($this->model->update('UPDATE `fs_foodsaver` SET `verified` = ' . (int)$data['v'] . ' WHERE `id` = ' . (int)$data['fid'])) {
@@ -155,17 +164,26 @@ class XhrMethods
 		');
 				$this->bellGateway->delBellsByIdentifier('new-fs-' . (int)$data['fid']);
 
-				return json_encode(array(
+				return json_encode([
 					'status' => 1
-				));
+				]);
 			}
 		} else {
-			return json_encode(array(
+			return json_encode([
 				'status' => 0
-			));
+			]);
 		}
 	}
 
+	/**
+	 * Method for receiving store posts. Used on the store page to fetch the feed. Returns the store posts as
+	 * prerendered HTML. As soon as the store feed frontend is redone in Vue.js, this method should be replaced by
+	 * a GET action on the stores/{id}/posts REST resource (add an action method in StoreRestController).
+	 *
+	 * @param array $data: ['bid' => storeId] - an array only containing the storeId under the key 'bid'
+	 *
+	 * @return false|string - prerendered HTML of the store feed (if string)
+	 */
 	public function xhr_getPinPost($data)
 	{
 		$this->incLang('Store');
@@ -219,7 +237,7 @@ class XhrMethods
 
 						$msg = '
 					<div class="milestone">
-						<a href="/profile/"' . (int)$wallpost['fsid'] . '">' . $wallpost['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $wallpost['zeit'])) . '
+						<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $wallpost['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $wallpost['zeit'])) . '
 					</div>';
 
 						$pic = 'img/milestone.png';
@@ -242,16 +260,16 @@ class XhrMethods
 					</tr>';
 				}
 
-				return json_encode(array(
+				return json_encode([
 					'status' => 1,
 					'html' => $html . '</table>'
-				));
+				]);
 			}
 		}
 
-		return json_encode(array(
+		return json_encode([
 			'status' => 0
-		));
+		]);
 	}
 
 	private function format_dt($ts)
@@ -261,11 +279,11 @@ class XhrMethods
 
 	public function xhr_activeSwitch($data)
 	{
-		$allowed = array(
+		$allowed = [
 			'blog_entry' => true
-		);
+		];
 
-		if ($this->session->mayLegacy()) {
+		if ($this->session->may()) {
 			if (isset($allowed[$data['t']])) {
 				if ($this->model->update('UPDATE `fs_' . $data['t'] . '` SET `active` = ' . (int)$data['value'] . ' WHERE `id` = ' . (int)$data['id'])) {
 					return 1;
@@ -283,104 +301,39 @@ class XhrMethods
 			$fields = $this->dataHelper->unsetAll($data, ['lat', 'lon', 'stadt', 'plz', 'anschrift']);
 
 			if ($this->foodsaverGateway->updateProfile($this->session->id(), $fields)) {
-				return json_encode(array(
+				return json_encode([
 					'status' => 1,
 					'script' => ''
-				));
+				]);
 			}
-		}
-	}
-
-	public function xhr_addPinPost($data)
-	{
-		$storeId = (int)$data['bid'];
-		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		if (isset($_SESSION['last_pinPost'])) {
-			if ((time() - $_SESSION['last_pinPost']) < 2) {
-				return $this->xhr_getPinPost($data);
-			}
-		}
-		if ($this->storeGateway->add_betrieb_notiz(array(
-			'foodsaver_id' => $this->session->id(),
-			'betrieb_id' => $storeId,
-			'text' => $data['text'],
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 0,
-			'last' => 1
-		))
-		) {
-			$betrieb = $this->model->getVal('name', 'betrieb', $storeId);
-			$teamArray = explode(',', $data['team']);
-			$bellData = BellData::create(
-				'store_wallpost_title', 'store_wallpost', 'img img-store brown', array(
-					'href' => '/?page=fsbetrieb&id=' . $storeId
-				), array(
-					'user' => $this->session->user('name'),
-					'name' => $betrieb
-				), 'store-wallpost-' . $storeId
-			);
-
-			$this->bellGateway->addBell($teamArray, $bellData);
-			$_SESSION['last_pinPost'] = time();
-
-			return $this->xhr_getPinPost($data);
 		}
 	}
 
 	public function xhr_childBezirke($data)
 	{
 		if (isset($data['parent'])) {
-			$sql = ' AND 		`type` != 7';
-			if ($this->session->isOrgaTeam()) {
-				$sql = '';
-			}
-			if ($childs = $this->model->q('SELECT `id`,`parent_id`,`has_children`,`name`,`type` FROM `fs_bezirk` WHERE `parent_id` = ' . (int)$data['parent'] . $sql . ' ORDER BY `name`')) {
-				return json_encode(array(
+			if ($children = $this->regionGateway->getBezirkByParent((int)$data['parent'], $this->session->isOrgaTeam())) {
+				return json_encode([
 					'status' => 1,
-					'html' => $this->xhrViewUtils->childBezirke($childs, $data['parent'])
-				));
+					'html' => $this->xhrViewUtils->childBezirke($children, $data['parent'])
+				]);
 			}
 
-			return json_encode(array(
+			return json_encode([
 				'status' => 0
-			));
+			]);
 		}
-	}
-
-	public function xhr_bBubble($data)
-	{
-		if ($this->session->may('fs')) {
-			$storeId = (int)$data['id'];
-			if ($b = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
-				$teamStatus = $this->storeGateway->getUserTeamStatus($this->session->id(), $storeId);
-				$b['inTeam'] = $teamStatus > TeamStatus::Applied;
-				$b['pendingRequest'] = $teamStatus == TeamStatus::Applied;
-
-				return json_encode(array(
-					'status' => 1,
-					'html' => $this->xhrViewUtils->bBubble($b),
-					'betrieb' => array(
-						'name' => $b['name']
-					)
-				));
-			}
-		}
-
-		return json_encode(array('status' => 0));
 	}
 
 	public function xhr_loadMarker($data)
 	{
-		$out = array();
+		$out = [];
 		$out['status'] = 0;
 		if (isset($data['types']) && is_array($data['types'])) {
 			$out['status'] = 1;
 			foreach ($data['types'] as $t) {
 				if ($t == 'betriebe' && $this->session->may('fs')) {
-					$team_status = array();
+					$team_status = [];
 					$nkoorp = '';
 					if (isset($data['options']) && is_array($data['options'])) {
 						foreach ($data['options'] as $opt) {
@@ -519,11 +472,11 @@ class XhrMethods
 				if ($_GET['crop'] == 1) {
 					$func = 'pictureCrop';
 				} elseif (isset($_POST['resize'])) {
-					return $this->pictureResize(array(
+					return $this->pictureResize([
 						'img' => $newname,
 						'id' => $id,
 						'resize' => $_POST['resize']
-					));
+					]);
 				}
 
 				return '<html><head></head><body onload="parent.' . $func . '(\'' . $id . '\',\'' . $newname . '\');"></body></html>';
@@ -721,7 +674,7 @@ class XhrMethods
 
 	public function xhr_getRecip($data)
 	{
-		if ($this->session->mayLegacy()) {
+		if ($this->session->may()) {
 			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
 
 			return json_encode($fs);
@@ -730,7 +683,7 @@ class XhrMethods
 
 	public function xhr_addPhoto($data)
 	{
-		if (!$this->session->id()) {
+		if (!$this->session->may()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
@@ -794,7 +747,7 @@ class XhrMethods
 
 	public function xhr_continueMail($data)
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()) {
 			$mail_id = (int)$data['id'];
 
 			$mail = $this->emailGateway->getOne_send_email($mail_id);
@@ -807,14 +760,14 @@ class XhrMethods
 			$mailbox = $this->mailboxGateway->getMailbox((int)$mail['mailbox_id']);
 			$mailbox['email'] = $mailbox['name'] . '@' . NOREPLY_EMAIL_HOST;
 
-			$sender = $this->model->getValues(array('geschlecht', 'name'), 'foodsaver', $this->session->id());
+			$sender = $this->model->getValues(['geschlecht', 'name'], 'foodsaver', $this->session->id());
 
 			if (empty($recip)) {
-				return json_encode(array('status' => 2, 'comment' => 'Es wurden alle E-Mails verschickt'));
+				return json_encode(['status' => 2, 'comment' => 'Es wurden alle E-Mails verschickt']);
 				exit();
 			}
 
-			$this->emailGateway->setEmailStatus($mail['id'], $recip, 1);
+			$this->emailGateway->setEmailStatus($mail['id'], $recip, EmailStatus::STATUS_INITIALISED);
 
 			foreach ($recip as $fs) {
 				$anrede = 'Liebe/r';
@@ -826,8 +779,8 @@ class XhrMethods
 					$anrede = 'Liebe/r';
 				}
 
-				$search = array('{NAME}', '{ANREDE}', '{EMAIL}');
-				$replace = array($fs['name'], $anrede, $fs['email']);
+				$search = ['{NAME}', '{ANREDE}', '{EMAIL}'];
+				$replace = [$fs['name'], $anrede, $fs['email']];
 
 				$attach = false;
 				if (!empty($mail['attach'])) {
@@ -843,9 +796,9 @@ class XhrMethods
 				}
 
 				if (!$check) {
-					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 3);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], EmailStatus::STATUS_INVALID_MAIL);
 				} else {
-					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], 2);
+					$this->emailGateway->setEmailStatus($mail['id'], [$fs['id']], EmailStatus::STATUS_SENT);
 				}
 			}
 
@@ -855,7 +808,7 @@ class XhrMethods
 				sleep(2);
 			}
 
-			return json_encode(array('left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . $fs['email'] . ')'));
+			return json_encode(['left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . $fs['email'] . ')']);
 		}
 
 		return 0;
@@ -932,13 +885,13 @@ class XhrMethods
 		$img['name'] = strtolower($img['name']);
 		$img['type'] = strtolower($img['type']);
 
-		$allowed = array('jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true);
+		$allowed = ['jpg' => true, 'jpeg' => true, 'png' => true, 'gif' => true];
 
 		$filename = $img['name'];
 		$parts = explode('.', $filename);
 		$ext = end($parts);
 
-		$allowed_mime = array('image/gif' => true, 'image/jpeg' => true, 'image/png' => true);
+		$allowed_mime = ['image/gif' => true, 'image/jpeg' => true, 'image/png' => true];
 
 		if (isset($allowed[$ext])) {
 			return true;
@@ -1041,7 +994,7 @@ class XhrMethods
 	{
 		if ($this->session->isOrgaTeam()) {
 			$data['name'] = strip_tags($data['name']);
-			$data['name'] = str_replace(array('/', '"', "'", '.', ';'), '', $data['name']);
+			$data['name'] = str_replace(['/', '"', "'", '.', ';'], '', $data['name']);
 			$data['has_children'] = 0;
 			$data['email_pass'] = '';
 			$data['email_name'] = 'foodsharing ' . $data['name'];
@@ -1050,10 +1003,10 @@ class XhrMethods
 				if ($out = $this->regionGateway->addRegion($data)) {
 					$this->model->update('UPDATE fs_bezirk SET has_children = 1 WHERE `id` = ' . (int)$data['parent_id']);
 
-					return json_encode(array(
+					return json_encode([
 						'status' => 1,
 						'script' => '$("#tree").dynatree("getTree").reload();pulseInfo("' . $data['name'] . ' wurde angelegt");'
-					));
+					]);
 				}
 			}
 		}
@@ -1088,36 +1041,38 @@ class XhrMethods
 			}
 		}
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
-		$bellData = BellData::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', array(
+		$team = $this->storeGateway->getStoreTeam($data['bid']);
+		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
+		$bellData = BellData::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-time-' . (int)$data['bid']);
-		$this->bellGateway->addBell($data['team'], $bellData);
+		], 'store-time-' . (int)$data['bid']);
+		$this->bellGateway->addBell($team, $bellData);
 
-		return json_encode(array('status' => 1));
+		return json_encode(['status' => 1]);
 	}
 
 	public function xhr_bezirkTree($data)
 	{
 		if ($bezirk = $this->regionGateway->getBezirkByParent($data['p'], $this->session->isOrgaTeam())) {
-			$out = array();
+			$out = [];
 			foreach ($bezirk as $b) {
 				$hc = false;
 				if ($b['has_children'] == 1) {
 					$hc = true;
 				}
-				$out[] = array(
+				$out[] = [
 					'title' => $b['name'],
 					'isLazy' => $hc,
 					'isFolder' => $hc,
 					'ident' => $b['id'],
 					'type' => $b['type']
-				);
+				];
 			}
 		} else {
-			$out = array('status' => 0);
+			$out = ['status' => 0];
 		}
 
 		return json_encode($out);
@@ -1125,14 +1080,12 @@ class XhrMethods
 
 	public function xhr_bteamstatus($data)
 	{
-		$status = (int)$_GET['status'];
+		$teamStatus = (int)$_GET['status'];
 		$storeId = (int)$_GET['bid'];
-		if ($this->storePermissions->mayEditStore($storeId) && $status >= 0 && $status <= 2) {
-			return $this->model->update('
-			UPDATE `fs_betrieb`
-			SET 	`team_status` = ' . $status . '
-			WHERE 	`id` = ' . $storeId . '
-		');
+		if ($this->storePermissions->mayEditStore($storeId) && in_array($teamStatus,
+				range(\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::CLOSED,
+				\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::OPEN_SEARCHING))) {
+			$this->storeGateway->setStoreTeamStatus($storeId, $teamStatus);
 		}
 	}
 
@@ -1149,7 +1102,7 @@ class XhrMethods
 			$g_data['mailbox_name'] = $mbname;
 		}
 
-		$out = array();
+		$out = [];
 		$out['status'] = 1;
 		$id = $this->identificationHelper->id('botschafter');
 
@@ -1166,13 +1119,13 @@ class XhrMethods
 		$inputs = '<div id="' . $id . '">' . $inputs . '</div>';
 
 		$cats = $this->regionGateway->getBasics_bezirk();
-		$out['html'] = $this->v_utils->v_form('bezirkForm', array(
+		$out['html'] = $this->v_utils->v_form('bezirkForm', [
 				$this->v_utils->v_form_hidden('bezirk_id', (int)$data['id']),
-				$this->v_utils->v_form_select('parent_id', array('values' => $cats)),
-				$this->v_utils->v_form_select('master', array('label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats)),
+				$this->v_utils->v_form_select('parent_id', ['values' => $cats]),
+				$this->v_utils->v_form_select('master', ['label' => 'Master-Bezirk', 'desc' => 'Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde', 'values' => $cats]),
 				$this->v_utils->v_form_text('name'),
 				$this->v_utils->v_form_text('mailbox_name', ['desc' => 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.']),
-				$this->v_utils->v_form_text('email_name', array('label' => 'Absendername')),
+				$this->v_utils->v_form_text('email_name', ['label' => 'Absendername']),
 				$this->v_utils->v_form_select(
 					'type',
 					[
@@ -1190,8 +1143,8 @@ class XhrMethods
 					]
 				),
 				$this->v_utils->v_input_wrapper($this->translationHelper->s($id), $inputs, $id)
-			), array('submit' => $this->translationHelper->s('save'))) .
-			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'region\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', array('desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen'));
+			], ['submit' => $this->translationHelper->s('save')]) .
+			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'region\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', ['desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen']);
 
 		$out['script'] = '
 		$("#bezirkform-form").off("submit");
@@ -1278,7 +1231,7 @@ class XhrMethods
 		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
 			$this->regionGateway->acceptBezirkRequest($data['fsid'], $data['bid']);
 
-			return json_encode(array('status' => 1));
+			return json_encode(['status' => 1]);
 		}
 	}
 
@@ -1287,7 +1240,7 @@ class XhrMethods
 		if ($this->session->isAdminFor($data['bid']) || $this->session->isOrgaTeam()) {
 			$this->regionGateway->denyRegionRequest($data['fsid'], $data['bid']);
 
-			return json_encode(array('status' => 1));
+			return json_encode(['status' => 1]);
 		}
 	}
 
@@ -1298,12 +1251,12 @@ class XhrMethods
 
 			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
 
-			return json_encode(array('status' => 1, 'msg' => $msg));
+			return json_encode(['status' => 1, 'msg' => $msg]);
 		}
 
 		$msg = 'Es ist ein Fehler aufgetreten!';
 
-		return json_encode(array('status' => 0, 'msg' => $msg));
+		return json_encode(['status' => 0, 'msg' => $msg]);
 	}
 
 	public function xhr_acceptRequest($data)
@@ -1313,18 +1266,18 @@ class XhrMethods
 		}
 		$this->storeModel->acceptRequest($data['fsid'], $data['bid']);
 
-		$this->storeGateway->add_betrieb_notiz(array(
+		$this->storeGateway->add_betrieb_notiz([
 			'foodsaver_id' => $data['fsid'],
 			'betrieb_id' => $data['bid'],
 			'text' => '{ACCEPT_REQUEST}',
 			'zeit' => date('Y-m-d H:i:s'),
 			'milestone' => 2
-		));
+		]);
 
 		$bezirk_id = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
 		$this->regionGateway->linkBezirk($data['fsid'], $bezirk_id);
 
-		return json_encode(array('status' => 1));
+		return json_encode(['status' => 1]);
 	}
 
 	public function xhr_warteRequest($data)
@@ -1335,7 +1288,7 @@ class XhrMethods
 
 		$this->storeModel->warteRequest($data['fsid'], $data['bid']);
 
-		return json_encode(array('status' => 1));
+		return json_encode(['status' => 1]);
 	}
 
 	public function xhr_betriebRequest($data)
@@ -1352,19 +1305,19 @@ class XhrMethods
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
 			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
-			$bellData = BellData::create('store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$bellData = BellData::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
-			), array(
+			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
-			), 'store-request-' . (int)$data['id']);
+			], 'store-request-' . (int)$data['id']);
 			$this->bellGateway->addBell($biebs, $bellData);
 		} else {
 			$msg = 'Für diesen Betrieb gibt es noch keinen Verantwortlichen. Die Botschafter wurden informiert.';
 
-			$botsch = array();
+			$botsch = [];
 			$add = '';
-			if ($b = $this->foodsaverGateway->getBotschafter($bezirk_id)) {
+			if ($b = $this->foodsaverGateway->getAmbassadors($bezirk_id)) {
 				foreach ($b as $bb) {
 					$botsch[] = $bb['id'];
 				}
@@ -1373,18 +1326,18 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$bellData = BellData::create('store_new_request_title', 'store_new_request', 'img img-store brown', array(
+			$bellData = BellData::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
-			), array(
+			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
-			), 'store-request-' . (int)$data['id']);
+			], 'store-request-' . (int)$data['id']);
 			$this->bellGateway->addBell($botsch, $bellData);
 		}
 
 		$this->storeModel->teamRequest($this->session->id(), $data['id']);
 
-		return json_encode(array('status' => $status, 'msg' => $msg));
+		return json_encode(['status' => $status, 'msg' => $msg]);
 	}
 
 	public function xhr_saveBezirk($data)
@@ -1407,11 +1360,12 @@ class XhrMethods
 			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
+			$this->notificationService->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
 
-			return json_encode(array(
+			return json_encode([
 				'status' => 1,
 				'script' => 'pulseInfo("' . $this->translationHelper->s('edit_success') . '");'
-			));
+			]);
 		}
 	}
 
@@ -1420,37 +1374,11 @@ class XhrMethods
 		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
 
-	public function xhr_delBPost($data)
-	{
-		$fsid = $this->model->getVal('foodsaver_id', 'betrieb_notiz', $data['pid']);
-		if ($fsid == $this->session->id() || $this->session->isOrgaTeam()) {
-			$this->storeGateway->deleteBPost($data['pid']);
-
-			return 1;
-		}
-
-		return 0;
-	}
-
-	public function xhr_delPost($data)
-	{
-		$fsId = $this->model->getVal('foodsaver_id', 'theme_post', $data['pid']);
-		$bezirkId = $this->forumGateway->getRegionForPost($data['pid']);
-		$bezirkType = $this->regionGateway->getType($bezirkId);
-
-		if ($fsId == $this->session->id() || ($this->session->isAdminFor($bezirkId) && $bezirkType == Type::WORKING_GROUP) || $this->session->isOrgaTeam()) {
-			$this->forumGateway->deletePost($data['pid']);
-
-			return 1;
-		}
-
-		return 0;
-	}
-
 	public function xhr_abortEmail($data)
 	{
-		if ($this->session->id() == $this->model->getVal('foodsaver_id', 'send_email', $data['id'])) {
-			$this->model->update('UPDATE fs_email_status SET status = 4 WHERE email_id = ' . (int)$data['id']);
+		$mailOwnerId = $this->emailGateway->getOne_send_email($data['id'])['foodsaver_id'];
+		if ($this->session->id() == $mailOwnerId) {
+			$this->emailGateway->setEmailStatus($data['id'], $mailOwnerId, EmailStatus::STATUS_CANCELED);
 		}
 	}
 
@@ -1479,9 +1407,9 @@ class XhrMethods
 			}
 
 			if ($check) {
-				return json_encode(array(
+				return json_encode([
 					'status' => 1
-				));
+				]);
 			}
 		}
 	}

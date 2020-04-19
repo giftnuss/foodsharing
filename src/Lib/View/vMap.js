@@ -3,9 +3,14 @@ import $ from 'jquery'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import 'mapbox-gl-leaflet'
+
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
+
+import { MAP_TILES_URL, MAP_GEOCODING_ATTRIBUTION } from '@/consts'
 
 export let map
 export let clusterGroup
@@ -33,12 +38,13 @@ export async function initializeMap (el, cb = null) {
   })
 
   map = L
-    .map(el)
+    .map(el, { maxZoom: 20 })
     .setView(center, zoom)
 
-  L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+  L.mapboxGL({
+    style: MAP_TILES_URL
   }).addTo(map)
+  map.attributionControl.setPrefix(MAP_GEOCODING_ATTRIBUTION)
 
   clearCluster()
 

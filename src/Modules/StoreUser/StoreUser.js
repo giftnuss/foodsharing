@@ -20,8 +20,6 @@ import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import '@/tablesorter'
 
-import { store } from '@/server-data'
-
 import {
   u_updatePosts,
   u_betrieb_sign_out,
@@ -36,6 +34,8 @@ import {
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
+import StoreInfos from './components/StoreInfos'
+import { deleteStorePost } from '@/api/stores'
 
 expose({
   u_updatePosts,
@@ -77,16 +77,29 @@ $(document).ready(() => {
 
   $('div#pinnwand form').on('submit', function (e) {
     e.preventDefault()
-    if ($('div#pinnwand form textarea').val() != $('div#pinnwand form textarea').attr('title')) {
+    const postTextArea = $('div#pinnwand form textarea')
+    if (postTextArea.val() !== postTextArea.attr('title')) {
+      const submitButton = $('#comment-post')
+      submitButton.prop('disabled', true)
+      const storeId = GET('id')
       $.ajax({
         dataType: 'json',
         data: $('div#pinnwand form').serialize(),
-        url: `/xhr.php?f=addPinPost&team=${store.team_js}`,
-        success: function (data) {
-          if (data.status == 1) {
-            $('div#pinnwand form textarea').val($('div#pinnwand form textarea').attr('title'))
-            $('#pinnwand .posts').html(data.html)
-          }
+        method: 'POST',
+        url: `/api/stores/${storeId}/posts`,
+        success: function () {
+          // update posts list
+          u_updatePosts()
+          // Reset input field
+          postTextArea.val(postTextArea.attr('title'))
+          // enable disabled submit button again
+          submitButton.prop('disabled', false)
+        },
+        error: function (error) {
+          // enable disabled submit button again also in case of error
+          submitButton.prop('disabled', false)
+          // handle error
+          pulseError(error.responseJSON.message)
         }
       })
     }
@@ -124,22 +137,17 @@ $(document).ready(() => {
     buttons: [
       {
         text: $('#delete_shure .sure').text(),
-        click: function () {
+        click: async function () {
           showLoader()
           const pid = $(this).data('pid')
-          $.ajax({
-            url: '/xhr.php?f=delBPost',
-            data: { pid: pid },
-            success: function (ret) {
-              if (ret == 1) {
-                $(`.bpost-${pid}`).remove()
-                $('#delete_shure').dialog('close')
-              }
-            },
-            complete: function () {
-              hideLoader()
-            }
-          })
+          try {
+            await deleteStorePost(pid)
+            $(`.bpost-${pid}`).remove()
+            $('#delete_shure').dialog('close')
+          } catch (e) {
+            pulseError(i18n('error_unexpected'))
+          }
+          hideLoader()
         }
       },
       {
@@ -213,7 +221,9 @@ $(document).ready(() => {
   })
 
   vueRegister({
-    PickupList
+    PickupList,
+    StoreInfos
   })
   vueApply('#vue-pickuplist', true)
+  vueApply('#vue-storeinfos')
 })

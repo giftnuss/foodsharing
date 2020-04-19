@@ -1,8 +1,8 @@
 <template>
   <form
     id="login-form"
-    @submit.prevent
     class="form-inline my-2 my-lg-0 flex-grow-1"
+    @submit.prevent
   >
     <div
       ref="inputgroup"
@@ -19,18 +19,17 @@
       <input
         id="login-email"
         v-model="email"
-        @keydown.enter="submit"
         :placeholder="$i18n('login.email_address')"
         :aria-label="$i18n('login.email_address')"
         type="email"
         name="login-email"
         class="form-control text-primary"
+        @keydown.enter="submit"
       >
     </div>
     <div
       ref="inputgroup"
-      class="input-group input-group-sm mr-2 my-1
-"
+      class="input-group input-group-sm mr-2 my-1"
     >
       <div class="input-group-prepend">
         <label
@@ -43,28 +42,28 @@
       <input
         id="login-password"
         v-model="password"
-        @keydown.enter="submit"
         :placeholder="$i18n('login.password')"
         :aria-label="$i18n('login.password')"
         type="password"
         name="login-password"
         class="form-control text-primary"
+        @keydown.enter="submit"
       >
     </div>
     <button
       v-if="!isLoading "
-      @click="submit"
       :aria-label="$i18n('login.login_button_label')"
       href="#"
       class="btn btn-secondary btn-sm"
+      @click="submit"
     >
       <i class="fas fa-arrow-right" />
     </button>
     <button
       v-else
-      @click="submit"
       :aria-label="$i18n('login.login_button_label')"
       class="btn btn-light btn-sm loadingButton"
+      @click="submit"
     >
       <img src="/img/469.gif">
     </button>
@@ -91,10 +90,12 @@ export default {
     async submit () {
       if (!this.email) {
         pulseError(i18n('login.error_no_email'))
+        window.location = this.$url('login')
         return
       }
       if (!this.password) {
         pulseError(i18n('login.error_no_password'))
+        window.location = this.$url('login')
         return
       }
       this.isLoading = true
@@ -114,7 +115,7 @@ export default {
         if (err.code && err.code === 401) {
           pulseError(i18n('login.error_no_auth'))
           setTimeout(() => {
-            window.location = '/?page=login&ref=%2F%3Fpage%3Ddashboard'
+            window.location = this.$url('login')
           }, 2000)
         } else {
           pulseError('Unknown error')

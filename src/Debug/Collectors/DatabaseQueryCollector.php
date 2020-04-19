@@ -24,26 +24,26 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 
 	public function collect()
 	{
-		$queries = [];
-		$totalExecTime = 0;
+		$localQueries = [];
+		$totalExecTimeInSeconds = 0;
 		foreach ($this->queries as $q) {
-			list($sql, $duration, $success, $error_code, $error_message) = $q;
-			$queries[] = [
-				'sql' => self::formatQueryStr($sql),
-				'duration' => $duration,
-				'duration_str' => $this->formatDuration($duration),
+			[$sql, $durationInSeconds, $success, $error_code, $error_message] = $q;
+			$localQueries[] = [
+				'sql' => $this->formatQueryStr($sql),
+				'duration' => $durationInSeconds,
+				'duration_str' => $this->getDataFormatter()->formatDuration($durationInSeconds),
 				'is_success' => $success,
 				'error_code' => $error_code,
 				'error_message' => $error_message
 			];
-			$totalExecTime += $duration;
+			$totalExecTimeInSeconds += $durationInSeconds;
 		}
 
 		return [
-			'nb_statements' => count($queries),
-			'accumulated_duration' => $totalExecTime,
-			'accumulated_duration_str' => $this->formatDuration($totalExecTime),
-			'statements' => $queries
+			'nb_statements' => count($localQueries),
+			'accumulated_duration' => $totalExecTimeInSeconds,
+			'accumulated_duration_str' => $this->getDataFormatter()->formatDuration($totalExecTimeInSeconds),
+			'statements' => $localQueries
 		];
 	}
 
@@ -70,10 +70,10 @@ class DatabaseQueryCollector extends DataCollector implements Renderable, AssetP
 
 	public function getAssets()
 	{
-		return array(
+		return [
 			'css' => 'widgets/sqlqueries/widget.css',
 			'js' => 'widgets/sqlqueries/widget.js'
-		);
+		];
 	}
 
 	private function formatQueryStr($str)

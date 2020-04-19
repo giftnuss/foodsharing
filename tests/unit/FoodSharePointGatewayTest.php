@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 
 class FoodSharePointGatewayTest extends \Codeception\Test\Unit
@@ -40,12 +42,14 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->otherFoodsaver = $this->tester->createFoodsaver();
 		$this->bezirk = $this->tester->createRegion('peter');
-		$this->foodSharePoint = $this->tester->createFoodSharePoint($this->foodsaver['id'], $this->bezirk['id'], [
-			'picture' => 'picture/cat.jpg'
-		]);
+		$this->foodSharePoint = $this->tester->createFoodSharePoint(
+			$this->foodsaver['id'],
+			$this->bezirk['id'],
+			['picture' => 'picture/cat.jpg']
+		);
 	}
 
-	public function testUpdateFairteiler()
+	public function testUpdateFoodSharePoint()
 	{
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
@@ -63,7 +67,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
 
-	public function testUpdateFairteilerReturnsTrueIfNothingChanged()
+	public function testUpdateFoodSharePointReturnsTrueIfNothingChanged()
 	{
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
@@ -83,7 +87,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_fairteiler', ['name' => $this->foodSharePoint['name']]);
 	}
 
-	public function testUpdateFairteilerDoesNotStripTags()
+	public function testUpdateFoodSharePointDoesNotStripTags()
 	{
 		/* strip_tags happens in the controller in this case */
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
@@ -108,7 +112,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->tester->dontSeeInDatabase('fs_fairteiler', ['name' => 'asdf']);
 	}
 
-	public function testUpdateFairteilerThrowsIfIDNotFound()
+	public function testUpdateFoodSharePointThrowsIfIDNotFound()
 	{
 		$this->expectException(\Exception::class);
 		$this->gateway->updateFoodSharePoint(
@@ -122,11 +126,11 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$params = [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->otherFoodsaver['id'],
-			'infotype' => 1,
-			'type' => 1
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOLLOWER
 		];
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', $params);
-		$this->gateway->follow($this->foodSharePoint['id'], $this->otherFoodsaver['id'], 1);
+		$this->gateway->follow($this->otherFoodsaver['id'], $this->foodSharePoint['id'], InfoType::EMAIL);
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
 	}
 
@@ -135,14 +139,14 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$params = [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
-			'infotype' => 1,
-			'type' => 2
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOOD_SHARE_POINT_MANAGER
 		];
 
-		// Our foodsaver is an admin of the fairteiler so already has a type 2 entry
+		// Our foodsaver is an admin of the food share point so already has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
 
-		$this->gateway->follow($this->foodSharePoint['id'], $this->foodsaver['id'], 1);
+		$this->gateway->follow($this->foodsaver['id'], $this->foodSharePoint['id'], InfoType::EMAIL);
 
 		// They should keep their type 2 (meaning admin)
 		$this->tester->seeInDatabase('fs_fairteiler_follower', $params);
@@ -153,24 +157,24 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 
 	public function testUnfollow()
 	{
-		// Our foodsaver is an admin of the fairteiler so has a type 2 entry
+		// Our foodsaver is an admin of the food share point so has a type 2 entry
 		$this->tester->seeInDatabase('fs_fairteiler_follower', [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
-			'infotype' => 1,
-			'type' => 2
+			'infotype' => InfoType::EMAIL,
+			'type' => FollowerType::FOOD_SHARE_POINT_MANAGER
 		]);
 
-		$this->gateway->unfollow($this->foodSharePoint['id'], $this->foodsaver['id']);
+		$this->gateway->unfollow($this->foodsaver['id'], $this->foodSharePoint['id']);
 
-		// There are now no follow entries for this fairteiler/foodsaver combination
+		// There are now no follow entries for this food share point/foodsaver combination
 		$this->tester->dontSeeInDatabase('fs_fairteiler_follower', [
 			'fairteiler_id' => $this->foodSharePoint['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
 		]);
 	}
 
-	public function testGetFairteiler()
+	public function testGetFoodSharePoint()
 	{
 		$foodSharePoint = $this->gateway->getFoodSharePoint($this->foodSharePoint['id']);
 		$this->assertEquals($foodSharePoint['id'], $this->foodSharePoint['id']);
@@ -182,11 +186,11 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		]);
 	}
 
-	public function testAddFairTeiler()
+	public function testAddFoodSharePoint()
 	{
 		$data = [
 			'bezirk_id' => $this->bezirk['id'],
-			'name' => 'my nice new fairteiler',
+			'name' => 'my nice new food share point',
 			'desc' => $this->foodSharePoint['desc'],
 			'anschrift' => $this->foodSharePoint['anschrift'],
 			'plz' => $this->foodSharePoint['plz'],
@@ -203,7 +207,7 @@ class FoodSharePointGatewayTest extends \Codeception\Test\Unit
 		$this->assertGreaterThanOrEqual(0, $id);
 
 		$this->tester->seeInDatabase('fs_fairteiler', [
-			'name' => 'my nice new fairteiler'
+			'name' => 'my nice new food share point'
 		]);
 
 		$this->tester->seeInDatabase('fs_fairteiler_follower', [

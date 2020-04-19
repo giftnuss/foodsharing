@@ -6,16 +6,12 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Legal\LegalControl;
-use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -24,41 +20,32 @@ use Foodsharing\Services\StoreService;
 class Session
 {
 	private $mem;
-	private $legalGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
 	private $regionGateway;
 	private $buddyGateway;
 	private $storeGateway;
 	private $storeService;
-	private $db;
 	private $initialized = false;
-	private $routeHelper;
 	private $translationHelper;
 
 	public function __construct(
 		Mem $mem,
-		LegalGateway $legalGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
 		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
 		StoreService $storeService,
-		Db $db,
-		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
-		$this->legalGateway = $legalGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
 		$this->storeService = $storeService;
-		$this->db = $db;
-		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -95,7 +82,7 @@ class Session
 		}
 
 		fAuthorization::setAuthLevels(
-			array(
+			[
 				'admin' => 100,
 				'orga' => 70,
 				'bot' => 60,
@@ -105,7 +92,7 @@ class Session
 				'user_unauth' => 20,
 				'presse' => 15,
 				'guest' => 10
-			)
+			]
 		);
 
 		fSession::open();
@@ -126,22 +113,24 @@ class Session
 		fAuthorization::setLoginPage('/?page=login');
 		fAuthorization::setUserAuthLevel($role);
 		fAuthorization::setUserACLs(
-			array(
-				'posts' => array('*'),
-				'users' => array('add', 'edit', 'delete'),
-				'groups' => array('add'),
-				'*' => array('list')
-			)
+			[
+				'posts' => ['*'],
+				'users' => ['add', 'edit', 'delete'],
+				'groups' => ['add'],
+				'*' => ['list']
+			]
 		);
 	}
 
 	public function logout()
 	{
-		$this->mem->logout($this->id());
-		$this->set('user', false);
-		fAuthorization::destroyUserInfo();
-		$this->setAuthLevel('guest');
-		$this->destroy();
+		if ($this->initialized) {
+			$this->mem->logout($this->id());
+			$this->set('user', false);
+			fAuthorization::destroyUserInfo();
+			$this->setAuthLevel('guest');
+			$this->destroy();
+		}
 	}
 
 	public function user($index)
@@ -149,24 +138,6 @@ class Session
 		$user = $this->get('user');
 
 		return $user[$index];
-	}
-
-	public function getRouteOverride()
-	{
-		$ppVersion = $this->legalGateway->getPpVersion();
-		$pnVersion = $this->legalGateway->getPnVersion();
-		if ($this->id() &&
-			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
-				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
-			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
-				return null;
-			}
-
-			return LegalControl::class;
-		}
-
-		return null;
 	}
 
 	public function id()
@@ -190,12 +161,6 @@ class Session
 		return false;
 	}
 
-	// this is the old versin from Func (which had the same name as the method above)
-	public function mayLegacy(): bool
-	{
-		return isset($_SESSION['client']) && (int)$_SESSION['client']['id'] > 0;
-	}
-
 	public function getLocation()
 	{
 		if (!$this->initialized) {
@@ -203,8 +168,8 @@ class Session
 		}
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
-			$loc = $this->db->getValues(array('lat', 'lon'), 'foodsaver', $this->id());
-			$this->set('g_location', $loc);
+			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
+			$this->set('g_location', ['lat' => $loc['lat'], 'lon' => $loc['lon']]);
 		}
 
 		return $loc;
@@ -212,10 +177,10 @@ class Session
 
 	public function setLocation($lat, $lng)
 	{
-		$this->set('g_location', array(
+		$this->set('g_location', [
 			'lat' => $lat,
 			'lon' => $lng
-		));
+		]);
 	}
 
 	public function destroy()
@@ -258,10 +223,10 @@ class Session
 	public function addMsg($message, $type, $title = null)
 	{
 		$this->checkInitialized();
-		$msg = fSession::get('g_message', array());
+		$msg = fSession::get('g_message', []);
 
 		if (!isset($msg[$type])) {
-			$msg[$type] = array();
+			$msg[$type] = [];
 		}
 
 		if (!$title) {
@@ -270,7 +235,7 @@ class Session
 			$title = ' ';
 		}
 
-		$msg[$type][] = array('msg' => $message, 'title' => $title);
+		$msg[$type][] = ['msg' => $message, 'title' => $title];
 		fSession::set('g_message', $msg);
 	}
 
@@ -295,7 +260,7 @@ class Session
 
 	public function getMyAmbassadorRegionIds()
 	{
-		$out = array();
+		$out = [];
 		if (isset($_SESSION['client']['botschafter']) && is_array($_SESSION['client']['botschafter'])) {
 			foreach ($_SESSION['client']['botschafter'] as $b) {
 				$out[] = $b['bezirk_id'];
@@ -324,7 +289,7 @@ class Session
 
 	public function getMyBetriebIds()
 	{
-		$out = array();
+		$out = [];
 		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
 			foreach ($_SESSION['client']['betriebe'] as $b) {
 				$out[] = $b['id'];
@@ -340,7 +305,7 @@ class Session
 
 	public function listRegionIDs(): array
 	{
-		$out = array();
+		$out = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
 				$out[] = $region['id'];
@@ -362,7 +327,7 @@ class Session
 		$_SESSION['client']['photo'] = $file;
 	}
 
-	public function mayGroup(string $group): bool
+	private function isInUserGroup(string $group): bool
 	{
 		if (isset($_SESSION['client']['group'][$group])) {
 			return true;
@@ -371,9 +336,14 @@ class Session
 		return false;
 	}
 
+	public function isSiteAdmin()
+	{
+		return $this->isInUserGroup('admin');
+	}
+
 	public function isOrgaTeam()
 	{
-		return $this->mayGroup('orgateam');
+		return $this->isInUserGroup('orgateam');
 	}
 
 	public function isAmbassador(): bool
@@ -390,10 +360,11 @@ class Session
 		if (!$this->initialized) {
 			$this->init($rememberMe);
 		}
+
 		$this->refreshFromDatabase($fs_id);
 	}
 
-	public function refreshFromDatabase($fs_id = null)
+	public function refreshFromDatabase($fs_id = null): void
 	{
 		$this->checkInitialized();
 
@@ -401,15 +372,14 @@ class Session
 			$fs_id = $this->id();
 		}
 
-		$this->mem->updateActivity($fs_id);
 		$fs = $this->foodsaverGateway->getFoodsaverDetails($fs_id);
 		if (!$fs) {
-			$this->routeHelper->goPage('logout');
+			throw new \Exception('Foodsaver details not found in database.');
 		}
-		$this->set('g_location', array(
+		$this->set('g_location', [
 			'lat' => $fs['lat'],
 			'lon' => $fs['lon']
-		));
+		]);
 
 		$hastodo_id = $this->quizHelper->refreshQuizData($fs_id, $fs['rolle']);
 		$hastodo = $hastodo_id > 0;
@@ -443,7 +413,7 @@ class Session
 		fAuthorization::setUserToken($fs['id']);
 		$this->setAuthLevel($this->rolleWrapInt($fs['rolle']));
 
-		$this->set('user', array(
+		$this->set('user', [
 			'name' => $fs['name'],
 			'nachname' => $fs['nachname'],
 			'photo' => $fs['photo'],
@@ -457,7 +427,7 @@ class Session
 			'gender' => $fs['geschlecht'],
 			'privacy_policy_accepted_date' => $fs['privacy_policy_accepted_date'],
 			'privacy_notice_accepted_date' => $fs['privacy_notice_accepted_date']
-		));
+		]);
 		$this->set('buddy-ids', $fs['buddys']);
 
 		/*
@@ -476,14 +446,14 @@ class Session
 		}
 
 		$_SESSION['login'] = true;
-		$_SESSION['client'] = array(
+		$_SESSION['client'] = [
 			'id' => $fs['id'],
 			'bezirk_id' => $fs['bezirk_id'],
-			'group' => array('member' => true),
+			'group' => ['member' => true],
 			'photo' => $fs['photo'],
 			'rolle' => (int)$fs['rolle'],
 			'verified' => (int)$fs['verified']
-		);
+		];
 		if ($fs['admin'] == 1) {
 			$_SESSION['client']['group']['admin'] = true;
 		}
@@ -502,22 +472,23 @@ class Session
 			}
 
 			if ($r = $this->regionGateway->listRegionsForFoodsaver($fs['id'])) {
-				$_SESSION['client']['bezirke'] = array();
+				$_SESSION['client']['bezirke'] = [];
 				foreach ($r as $rr) {
-					$_SESSION['client']['bezirke'][$rr['id']] = array(
+					$_SESSION['client']['bezirke'][$rr['id']] = [
 						'id' => $rr['id'],
 						'name' => $rr['name'],
 						'type' => $rr['type']
-					);
+					];
 				}
 			}
 		}
 		$_SESSION['client']['betriebe'] = false;
 		if ($r = $this->storeGateway->listFilteredStoresForFoodsaver($fs['id'])) {
-			$_SESSION['client']['betriebe'] = array();
+			$_SESSION['client']['betriebe'] = [];
 			foreach ($r as $rr) {
 				// add info about the next free pickup slot to the store
 				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
+
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}
@@ -532,14 +503,14 @@ class Session
 
 	private function rolleWrapInt($roleInt)
 	{
-		$roles = array(
+		$roles = [
 			0 => 'user',
 			1 => 'fs',
 			2 => 'bieb',
 			3 => 'bot',
 			4 => 'orga',
 			5 => 'admin'
-		);
+		];
 
 		return $roles[$roleInt];
 	}
@@ -549,24 +520,32 @@ class Session
 		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see ReportPermissions::mayHandleReports()
+	 */
 	public function mayHandleReports()
 	{
 		// group "Regelverletzungen/Meldungen"
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
+	/**
+	 * @deprecated Please use permission class in permission folder:
+	 * @see QuizPermissions::mayEditQuiz()
+	 */
 	public function mayEditQuiz()
 	{
 		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
 	}
 
-	public function mayEditBlog()
+	public function isAdminForAWorkGroup()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
-			return $this->may('orga') || in_array($this->id(), unserialize($all_group_admins));
+			return in_array($this->id(), unserialize($all_group_admins));
 		}
 
-		return $this->may('orga');
+		return false;
 	}
 
 	public function isVerified()
@@ -582,6 +561,13 @@ class Session
 		return false;
 	}
 
+	/**
+	 * Checks if the current user is an ambassador for one of the regions in the list of region IDs.
+	 *
+	 * @param $regionIds list of region IDs
+	 * @param bool $include_groups if working group should be included in the check
+	 * @param bool $include_parent_regions if the parent regions should be included in the check
+	 */
 	public function isAmbassadorForRegion($regionIds, $include_groups = true, $include_parent_regions = false): bool
 	{
 		if (is_array($regionIds) && count($regionIds) && $this->isAmbassador()) {

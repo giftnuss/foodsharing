@@ -10,6 +10,10 @@ Run the tests with:
 
 You will need to have initialized everything once (with `./scripts/start`), but you do not need to have the main containers running to run the tests as it uses it's own cluster of docker containers.
 
+After running the test, you can stop it with ```FS_ENV=test ./scripts/stop```. If you don't, the docker containers keep running and need resources.
+With this, you can set the FS_ENV environment variable to test, so they operate on the test environment.
+Also it is possible to add this in the config file. Maybe some day this info gets added. :-)
+
 After you have run the tests once, you can use `./scripts/test-rerun` which will run faster. It assumes that the containers have already been created and initialized, but otherwise is the same.
 
 So far, end to end testing is working nicely (called acceptance tests in codeception).

@@ -6,8 +6,8 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\BlogPermissions;
 
 class BlogControl extends Control
 {
@@ -81,7 +81,7 @@ class BlogControl extends Control
 
 	public function manage()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->pageHelper->addBread($this->translationHelper->s('manage_blog'));
 			$title = 'Blog Artikel';
 
@@ -93,25 +93,25 @@ class BlogControl extends Control
 				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_empty'));
 			}
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+				[
 					'href' => '/?page=blog&sub=add',
 					'name' => $this->translationHelper->s('new_article')
-				)
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+				]
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		}
 	}
 
 	public function post()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			if (isset($_GET['id'])) {
 				if ($post = $this->blogGateway->getOne_blog_entry($_GET['id'])) {
 					if ($post['active'] == 1) {
 						$this->pageHelper->addTitle($post['name']);
 						$this->pageHelper->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
 						$this->pageHelper->addContent($this->view->topbar($post['name'], $this->timeHelper->niceDate($post['time_ts'])));
-						$this->pageHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
+						$this->pageHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], ['class' => 'ui-padding']));
 					}
 				}
 			}
@@ -120,7 +120,7 @@ class BlogControl extends Control
 
 	public function add()
 	{
-		if ($this->session->mayEditBlog()) {
+		if ($this->blogPermissions->mayAdministrateBlog()) {
 			$this->handle_add();
 
 			$this->pageHelper->addBread($this->translationHelper->s('bread_new_blog_entry'));
@@ -137,9 +137,9 @@ class BlogControl extends Control
 
 			$this->pageHelper->addContent($this->view->blog_entry_form($regions, true));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
 			$this->flashMessageHelper->info('Du darfst keine Artikel erstellen!');
 			$this->routeHelper->goPage();
@@ -150,7 +150,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 
-		if ($this->session->mayEditBlog() && $this->submitted()) {
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
 			$g_data['foodsaver_id'] = $this->session->id();
 			$g_data['time'] = date('Y-m-d H:i:s');
 
@@ -165,7 +165,7 @@ class BlogControl extends Control
 
 	public function edit()
 	{
-		if ($this->session->mayEditBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->blogPermissions->mayEdit($this->blogGateway->getAuthorOfPost($_GET['id'])) && ($data = $this->blogGateway->getOne_blog_entry($_GET['id']))) {
 			$this->handle_edit();
 
 			$this->pageHelper->addBread($this->translationHelper->s('bread_blog_entry'), '/?page=blog&sub=manage');
@@ -176,9 +176,9 @@ class BlogControl extends Control
 
 			$this->pageHelper->addContent($this->view->blog_entry_form($regions));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
 			$this->flashMessageHelper->info('Diesen Artikel kannst Du nicht bearbeiten');
 			$this->routeHelper->goPage();
@@ -188,8 +188,8 @@ class BlogControl extends Control
 	private function handle_edit()
 	{
 		global $g_data;
-		if ($this->session->mayEditBlog() && $this->submitted()) {
-			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
+		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
+			$data = $this->blogGateway->getOne_blog_entry($_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];

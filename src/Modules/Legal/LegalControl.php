@@ -35,36 +35,42 @@ class LegalControl extends Control
 
 	public function index(Request $request, Response $response)
 	{
-		$data = new LegalData();
-		$data->privacy_policy_date = $this->gateway->getPpVersion();
-		$data->privacy_policy = $this->session->user('privacy_policy_accepted_date') == $data->privacy_policy_date;
-		$data->privacy_notice_date = $this->gateway->getPnVersion();
-		$data->privacy_notice = $this->session->user('privacy_notice_accepted_date') == $data->privacy_notice_date ? 1 : 0;
-		$show_privacy_notice = $this->session->user('rolle') >= 2;
+		$privacyPolicyDate = $this->gateway->getPpVersion();
+		$privacyNoticeDate = $this->gateway->getPnVersion();
+		$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
+
+		$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
+		$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+		$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
+
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
-		if (!$show_privacy_notice) {
-			$form->remove('privacy_notice');
-		}
+
 		$form->handleRequest($request);
-		if ($form->isSubmitted()) {
-			if ($form->isValid()) {
-				$this->gateway->agreeToPp($this->session->id(), $data->privacy_policy_date);
-				if ($data->privacy_notice == 1) {
-					$this->gateway->agreeToPn($this->session->id(), $data->privacy_notice_date);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
+			if ($privacyNoticeNeccessary) {
+				if ($data->isPrivacyNoticeAcknowledged()) {
+					$this->gateway->agreeToPn($this->session->id(), $privacyNoticeDate);
 					$this->emailHelper->tplMail('user/privacy_notice', $this->session->user('email'), ['vorname' => $this->session->user('name')]);
-				} elseif ($data->privacy_notice == 2) {
-					/* ToDo: This is to be properly abstracted... */
+				} else {
 					$this->gateway->downgradeToFoodsaver($this->session->id());
 				}
-				/* need to reload session cache. TODO: This should be further abstracted */
+			}
+
+			try {
 				$this->session->refreshFromDatabase();
 				$this->routeHelper->goSelf();
+			} catch (\Exception $e) {
+				$this->routeHelper->goPage('logout');
 			}
 		}
+
 		$response->setContent($this->render('pages/Legal/page.twig', [
-			'privacy_policy' => $this->gateway->getPp(),
-			'show_privacy_notice' => $show_privacy_notice,
-			'privacy_notice' => $this->gateway->getPn(),
+			'privacyPolicyContent' => $this->gateway->getPp(),
+			'privacyNoticeContent' => $this->gateway->getPn(),
+			'showPrivacyNotice' => $privacyNoticeNeccessary,
+			'loggedIn' => $this->session->may(),
 			'form' => $form->createView()]));
 	}
 }

@@ -3,25 +3,34 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class StoreRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $storeGateway;
+	private $storePermissions;
+	private $bellGateway;
 
 	// literal constants
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const ID = 'id';
 
-	public function __construct(Session $session, StoreGateway $storeGateway)
+	public function __construct(Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, BellGateway $bellGateway)
 	{
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
+		$this->storePermissions = $storePermissions;
+		$this->bellGateway = $bellGateway;
 	}
 
 	/**
@@ -29,10 +38,6 @@ class StoreRestController extends AbstractFOSRestController
 	 * store, 404 if the store does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("stores/{storeId}", requirements={"basketId" = "\d+"})
-	 *
-	 * @param int $storeId
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function getStoreAction(int $storeId): Response
 	{
@@ -49,5 +54,61 @@ class StoreRestController extends AbstractFOSRestController
 		$store = RestNormalization::normalizeStore($store);
 
 		return $this->handleView($this->view(['store' => $store], 200));
+	}
+
+	/**
+	 * @Rest\Post("stores/{storeId}/posts")
+	 * @Rest\RequestParam(name="text")
+	 */
+	public function addStorePostAction(int $storeId, ParamFetcher $paramFetcher)
+	{
+		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
+			throw new AccessDeniedHttpException();
+		}
+
+		$text = $paramFetcher->get('text');
+		$this->storeGateway->add_betrieb_notiz([
+			'foodsaver_id' => $this->session->id(),
+			'betrieb_id' => $storeId,
+			'text' => $text,
+			'zeit' => date('Y-m-d H:i:s'),
+			'milestone' => 0,
+			'last' => 1
+		]);
+
+		$storeName = $this->storeGateway->getBetrieb($storeId)['name'];
+		$team = $this->storeGateway->getStoreTeam($storeId);
+
+		$bellData = BellData::create(
+			'store_wallpost_title',
+			'store_wallpost',
+			'img img-store brown',
+			['href' => '/?page=fsbetrieb&id=' . $storeId],
+			[
+				'user' => $this->session->user('name'),
+				'name' => $storeName
+			],
+			'store-wallpost-' . $storeId
+		);
+
+		$this->bellGateway->addBell($team, $bellData);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Deletes a post from the wall of a store.
+	 *
+	 * @Rest\Delete("stores/posts/{postId}")
+	 */
+	public function deleteStorePostAction(int $postId)
+	{
+		if (!$this->storePermissions->mayDeleteStoreWallPost($postId)) {
+			throw new AccessDeniedHttpException();
+		}
+
+		$this->storeGateway->deleteBPost($postId);
+
+		return $this->handleView($this->view([], 200));
 	}
 }
