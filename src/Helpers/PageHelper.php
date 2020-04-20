@@ -68,8 +68,7 @@ final class PageHelper
 		ContentPermissions $contentPermissions,
 		BlogPermissions $blogPermissions,
 		RegionPermissions $regionPermissions,
-		NewsletterEmailPermissions $newsletterEmailPermissions,
-		RegionPermissions $regionPermissions
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
