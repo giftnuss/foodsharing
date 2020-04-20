@@ -2,7 +2,7 @@
 
 class StoreUserCest
 {
-	public function _before(HtmlAcceptanceTester $I)
+	public function _before(AcceptanceTester $I)
 	{
 		$this->bezirk_id = $I->createRegion('A region I test with');
 		$this->storeCoordinator = $I->createStoreCoordinator(null, ['bezirk_id' => $this->bezirk_id['id']]);
@@ -18,7 +18,7 @@ class StoreUserCest
 	 * @example[6, "40-50 kg"]
 	 * @example[7, "mehr als 50 kg"]
 	 */
-	public function SeeTheFetchedQuantity(HtmlAcceptanceTester $I, \Codeception\Example $example)
+	public function SeeTheFetchedQuantity(AcceptanceTester $I, \Codeception\Example $example)
 	{
 		$this->store = $I->createStore($this->bezirk_id['id'], null, null, ['abholmenge' => $example[0]]);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
@@ -33,7 +33,7 @@ class StoreUserCest
 	 * @example[0, "private"]
 	 * @example[1, "public"]
 	 */
-	public function SeeStoreMentioning(HtmlAcceptanceTester $I, \Codeception\Example $example): void
+	public function SeeStoreMentioning(AcceptanceTester $I, \Codeception\Example $example): void
 	{
 		$this->store = $I->createStore($this->bezirk_id['id'], null, null, ['presse' => $example[0]]);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);

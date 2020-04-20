@@ -19,7 +19,8 @@ And make sure you have
 [Docker Compose](https://docs.docker.com/compose/install/) (at least version 1.6.0)
 installed too (often comes with Docker).
 
-The current version of Fedora 31 switched to using cgroupsV2 by default, which is not yet supported.
+### Fedora 31 
+Switched to using cgroupsV2 by default, which is not yet supported from docker.
 
 To disable v2 cgroups, run: 
 
@@ -28,6 +29,12 @@ sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
 ```
 And restart your machine.
 
+### Fedora 32 or Debian 10
+Some distributions use as default firewall backend nftables. Docker currently only supports iptables. The containers cannot establish network connections with each other.
+
+**Workaround:** You have to set the entry `FirewallBackend = iptables` in /etc/firewalld/firewalld.conf. 
+
+After a restart the services firewalld and docker it should work.
 
 If you cannot connect to Docker with your local user, then you may want to add yourself to the Docker group:
 

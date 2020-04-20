@@ -131,11 +131,15 @@ class DashboardControl extends Control
 			$this->dashFoodsaver();
 		} else {
 			// foodsharer dashboard
-			$this->dashFs();
+			$this->dashFoodsharer();
 		}
 	}
 
-	private function dashFs()
+	/**
+	 * Simple dashboard that is only rendered for foodsharers (users who haven't done the quiz yet and can only create
+	 * food baskets and so on).
+	 */
+	private function dashFoodsharer()
 	{
 		$this->setContentWidth(8, 8);
 		$subtitle = $this->translationHelper->s('no_saved_food');
@@ -154,6 +158,12 @@ class DashboardControl extends Control
 					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
 				]
 			]),
+			CNT_TOP
+		);
+
+		// Advertisement for Push Notifications
+		$this->pageHelper->addContent(
+			$this->twig->render('partials/pushNotificationBanner.twig'),
 			CNT_TOP
 		);
 
@@ -184,6 +194,9 @@ class DashboardControl extends Control
 		}
 	}
 
+	/**
+	 * Dashboard for all users except for foodsharers (they get a simpler one –  @see DashboardControl::dashFoodsharer() ).
+	 */
 	private function dashFoodsaver()
 	{
 		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
@@ -322,7 +335,7 @@ class DashboardControl extends Control
 		<div class="pure-u-1 ui-padding-bottom">
 		<ul class="content-top corner-all linklist">
 		<li>
-            
+
 			<div class="ui-padding">
 				<a href="profile/' . $me['id'] . '">
 					<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
@@ -332,9 +345,9 @@ class DashboardControl extends Control
 					. $pickup_text . $home_district_text .
 				'</p>
 				<div style="clear:both;"></div>
-				
+
             </div>
-            
+
 		</li>
 		</ul>
 		</div>',

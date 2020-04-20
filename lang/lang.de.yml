@@ -165,6 +165,7 @@ terminology:
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
   profile_picture: 'Profilbild'
+  regions: Bezirke
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -189,6 +190,15 @@ store:
   allStoresOfRegion: Alle Betriebe aus dem Bezirk
   addNewStoresButton: Neuen Betrieb eintragen
   noStores: Es sind noch keine Betriebe eingetragen
+  particularities: Besonderheiten
+  average_collection_quantity: Abholmenge im Schnitt
+  attribution: Namensnennung
+  may_referred_to_in_public: Dieser Betrieb darf öffentlich genannt werden.
+  may_not_referred_to_in_public: Bitte diesen Betrieb niemals öffentlich (z.B. bei Essenskörben, Facebook oder Presseanfragen) nennen!
+  address: Adresse
+  my_last_pickup: Meine letzte Abholung
+  days: Tagen
+  days_before: vor
 
 pickup:
   dates: Abholtermine
@@ -355,6 +365,15 @@ pickuplist:
   NumberOfAppointments_table_header: "Anzahl Termine"
   NumberOfSlots_table_header: "Anzahl Abhol-Slots"
   NumberOfFoodSavers_table_header: "Anzahl Foodsaver"
+  tooslow: Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.
+  tryagain: Versuche es nach einem neu laden einfach noch mal.
+  error_loadingPickup: "Abholslots laden fehlgeschlagen: "
+  error_leave: "Verlassen fehlgeschlagen: "
+  error_kick: "Entfernen fehlgeschlagen: "
+  error_changeSlotCount: "Ändern der Slotanzahl fehlgeschlagen: "
+  error_confirm: "Bestätigung fehlgeschlagen: "
+  error_whileSending: Fehler während dem Senden der Nachricht
+  unclear: Status unklar
 
 foodsaver:
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
@@ -366,15 +385,19 @@ mail:
 index:
   confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
 
-map:
-  title: Karte
-
 profile:
   title: Profil
 
 search:
   title: Suche
   placeholder: Suche...
+  noresults: Es konnten keine Ergebnisse gefunden werden
+  mybuddies: Meine Buddies
+  mygroups: Meine Gruppen
+  mystores: Meine Betriebe
+  myregions: Meine Bezirke
+  groups: Gruppen
+  persons: Personen
 
 dashboard:
   title: Dashboard
@@ -403,6 +426,7 @@ dashboard:
 
 home:
   title: Startseite
+  home: Home
 
 basket:
   title: Essenskörbe
@@ -436,9 +460,10 @@ menu:
   manage_mailboxes: Mailboxen verwalten
   faq: FAQs verwalten
   content: Inhalte bearbeiten
-  tooltips:
+  entry:
     activities: Aktionen
     infos: Infos
+    all_messages: Alle Nachrichten
     messages: Nachrichten
     your_groups: Deine Gruppen
     groups: Gruppenübersicht
@@ -447,11 +472,74 @@ menu:
     administration: Administration
     notifications: Benachrichtigungen
     contact: Kontakt
+    politics: Politik
+    fscities: foodsharing-Städte
+    demands: Forderungen
+    pastcampaigns: Vergangene Kampagnen
+    education: Bildung
+    academy: Akademie
+    talksandworkshops: Vorträge und Workshops
+    fsfestival: foodsharing Festival
+    mailbox: E-Mail-Postfach
+    donate: Spenden
+    press: Presse
+    forcompanies: Für Unternehmen
+    imprint: Impressum
+    regionalgroups: Ortsgruppen
+    Germany: Deutschland
+    Austria: Österreich
+    Swiss: Schweiz
+    international: International
+    forum: Forum
+    BOTforum: Bot-Forum
+    wall: Pinnwand
+    events: Termine
+    members: Mitglieder
+    workingGroupEdit: Gruppe verwalten
+    aboutUs: Über uns
+    mission: Mission
+    fundamentals: Grundsätze
+    blog: Blog
+    team: Team
+    partners: Partner
+    background: Hintergrund
+    faq: F.A.Q.
+    wiki: Wiki
+    guide: Ratgeber
+    statistics: Statistik
+    transparency: Transparenz
+    dataprivacy: Datenschutz
+    changelog: Changelog
+    stores: Betriebe
+    fs: Foodsaver
+    ids: Ausweise
+    joinregion: Einem Bezirk beitreten
   your_settings: Deine Daten/Einstellungen
+
+footer:
+  team: Team
+  imprint: Impressum
+  dataprivacy: Datenschutz
+  faq: FAQ
+  guide: Ratgeber
+  infosCompany: Unternehmen
+  partner: Partner
+  statistics: Statistik
+  donate: Unterstützen
+  thanksHoster: Vielen Dank an unseren Öko-Hoster
+  version: "Version: {version}"
 
 newsletter:
   test_email_sent: E-Mail wurde versendet!
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
+
+storestatusicon:
+  nocontact: Es besteht noch kein Kontakt
+  inprogress: Verhandlungen laufen
+  cooperating: Betrieb kooperiert bereits
+  nocooperation: Will nicht kooperieren
+  nowaste: Spendet an Tafel etc. und wirft nichts weg
+  unclear: Status unklar
 
 storelist:
  entered: "Eingetragen:"
@@ -471,7 +559,9 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
-
 push_notifications:
   test_notification_title: 'Push-Benachrigungen aktiviert'
   test_notification_body: 'Super, das scheint geklappt zu haben :)'
+
+menubells:
+ no_bells: Du hast derzeit keine Benachrichtigungen

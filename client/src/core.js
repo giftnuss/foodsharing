@@ -23,6 +23,7 @@ import '@/join'
 
 import '@/menu'
 import '@/becomeBezirk'
+import '@/footer'
 
 import serverData from '@/server-data'
 

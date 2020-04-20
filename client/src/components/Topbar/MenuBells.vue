@@ -1,7 +1,7 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-bells"
-    v-b-tooltip="$i18n('menu.tooltips.notifications')"
+    v-b-tooltip="$i18n('menu.entry.notifications')"
     no-caret
     right
     class="topbar-bells"
@@ -20,7 +20,7 @@
         v-if="!bells.length"
         class="list-group-item text-muted"
       >
-        Du hast derzeit keine Benachrichtigungen
+        {{ $i18n('menubells.no_bells') }}
       </small>
       <menu-bells-entry
         v-for="bell in bells"

@@ -1,20 +1,20 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-envelope"
-    v-b-tooltip="$i18n('menu.tooltips.contact')"
+    v-b-tooltip="$i18n('menu.entry.contact')"
     :no-caret="!displayArrow"
     right
   >
     <template v-slot:button-content>
       <i class="fas fa-envelope" />
-      <span class="sr-only">{{ $i18n('menu.tooltips.contact') }}</span>
-      <span v-if="displayText">{{ $i18n('menu.tooltips.contact') }}</span>
+      <span class="sr-only">{{ $i18n('menu.entry.contact') }}</span>
+      <span v-if="displayText">{{ $i18n('menu.entry.contact') }}</span>
     </template>
     <b-dropdown-item
       v-if="displayMailbox"
       :href="$url('mailbox')"
     >
-      E-Mail-Postfach
+      {{ $i18n('menu.entry.mailbox') }}
     </b-dropdown-item>
     <b-dropdown-divider
       v-if="displayMailbox"
@@ -22,61 +22,61 @@
     <b-dropdown-item
       :href="$url('contact')"
     >
-      {{ $i18n('menu.tooltips.contact') }}
+      {{ $i18n('menu.entry.contact') }}
     </b-dropdown-item>
     <b-dropdown-item
       :href="$url('donate')"
     >
-      Spenden
+      {{ $i18n('menu.entry.donate') }}
     </b-dropdown-item>
     <b-dropdown-item
       :href="$url('press')"
     >
-      Presse
+      {{ $i18n('menu.entry.press') }}
     </b-dropdown-item>
     <b-dropdown-item
       :href="$url('infosCompany')"
     >
-      Für Unternehmen
+      {{ $i18n('menu.entry.forcompanies') }}
     </b-dropdown-item>
     <b-dropdown-item
       :href="$url('imprint')"
     >
-      Impressum
+      {{ $i18n('menu.entry.imprint') }}
     </b-dropdown-item>
     <b-dropdown-divider />
     <b-dropdown-header
       id="dropdown-header-groups"
     >
-      Ortsgruppen
+      {{ $i18n('menu.entry.regionalgroups') }}
     </b-dropdown-header>
     <a
       :href="$url('communitiesGermany')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Deutschland
+      {{ $i18n('menu.entry.Germany') }}
     </a>
     <a
       :href="$url('communitiesAustria')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Österreich
+      {{ $i18n('menu.entry.Austria') }}
     </a>
     <a
       :href="$url('communitiesSwitzerland')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      Schweiz
+      {{ $i18n('menu.entry.Swiss') }}
     </a>
     <a
       :href="$url('international')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      International
+      {{ $i18n('menu.entry.international') }}
     </a>
   </b-nav-item-dropdown>
 </template>

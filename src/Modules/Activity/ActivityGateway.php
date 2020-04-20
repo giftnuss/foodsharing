@@ -131,6 +131,8 @@ class ActivityGateway extends BaseGateway
 				left outer join fs_wallpost w on hw.wallpost_id = w.id
 				left outer join fs_foodsaver fs on w.foodsaver_id = fs.id
 			WHERE
+				w.id IS NOT NULL
+			AND
 				ff.foodsaver_id = :foodsaver_id
 			ORDER BY w.id DESC
 			LIMIT :start_item_index, :items_per_page
@@ -171,6 +173,8 @@ class ActivityGateway extends BaseGateway
 				fs_foodsaver poster
 			ON w.foodsaver_id = poster.id
 			WHERE
+				w.id IS NOT NULL
+			AND
 				w.id = hw.wallpost_id
 			AND
 				hw.foodsaver_id = fs.id
@@ -343,6 +347,8 @@ class ActivityGateway extends BaseGateway
 				left outer join fs_foodsaver fs on w.foodsaver_id = fs.id
 				left outer join fs_bezirk b on e.bezirk_id = b.id
 			WHERE
+				w.id IS NOT NULL
+			AND
 				fhe.foodsaver_id = :foodsaver_id
 			AND
 				e.end > now()

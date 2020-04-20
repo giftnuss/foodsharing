@@ -17,7 +17,7 @@
 - Limit forum notifications to users logged in last 6 months #64 !1385 @fs_k
 - Show internal email address on user's own profile !1386 #465 @alex.simm
 - Dashboard updates can be filtered !735 !1424 @D0nPiano @ChrisOelmueller
-- Updates from events + foodsharepoints displayed on dashboard !735 #227 #588 @D0nPiano @ChrisOelmueller
+- Updates from events + foodsharepoints displayed on dashboard !735 !1441 #227 #588 @D0nPiano @ChrisOelmueller
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 @jofranz @Caluera
@@ -85,6 +85,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
+- redirected hardcoded German strings from topbar to lang.de.yml !1410 #824 @jonathan_b 
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - recreate Dashboard update-overview with vue components !735 !1424 @D0nPiano @ChrisOelmueller
 - changed ActivityModel to return data without HTML or JS !735 !1424 @D0nPiano @ChrisOelmueller
@@ -92,6 +93,9 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Get rid of /upload.php !1365 @\_fridtjof_
 - Removed unused delPost xhr function !1417 @alex.simm
 - Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm 
+- Reimplement footer in vue !1437 @ChrisOelmueller
+- redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
+- Refactored store infos to vue js !1406 @chriswalg
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -109,6 +113,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - added information in devdocs @jonathan_b
 - replace all uses of npm by yarn !1397 @peter.toennies
 - improve PHP Database documentation, add new convenience methods and make delete safer !1399 @\_fridtjof_
+- Added a workaround to devdocs for fedora 32 or debian 10 and docker !1439 @chriswalg
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz

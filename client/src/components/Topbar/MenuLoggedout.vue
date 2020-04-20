@@ -7,8 +7,8 @@
       <a
         v-b-tooltip.hover.bottom
         :href="$url('map')"
-        :title="$i18n('map.title')"
-        :aria-label="$i18n('map.title')"
+        :title="$i18n('storelist.map')"
+        :aria-label="$i18n('storelist.map')"
         class="nav-link"
       >
         <i class="fas fa-map-marker-alt" />
