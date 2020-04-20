@@ -3,7 +3,7 @@
 ## Major changes
 
 ## Features
-- Add Web Push Notifications #336 !734 @janopae
+- Introduce Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 - Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 @chriswalg @moffer
@@ -67,6 +67,9 @@
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae 
+- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
+and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
+are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
