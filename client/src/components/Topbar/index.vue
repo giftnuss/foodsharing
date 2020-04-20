@@ -72,8 +72,7 @@
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
             <li
               v-if="!isMobile"
-              v-b-tooltip.hover.bottom
-              title="$i18n('storelist.map')"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
@@ -110,8 +109,7 @@
         >
           <b-navbar-nav class="ml-auto">
             <li
-              v-b-tooltip.hover.bottom
-              title="$i18n('home.home')"
+              v-b-tooltip.hover="$i18n('home.home')"
               class="nav-item"
             >
               <a
@@ -127,8 +125,7 @@
             </li>
             <li
               v-if="isMobile"
-              v-b-tooltip.hover.bottom
-              :title="$i18n('storelist.map')"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
