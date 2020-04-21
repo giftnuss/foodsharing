@@ -29,6 +29,11 @@ class GroupRestController extends AbstractFOSRestController
 	 */
 	public function deleteGroupAction(int $groupId)
 	{
+		/*
+		* In some of these calls orga is still being checked against additionally, as this REST call is used with different modules but those modules don't have own permission classes yet.
+		* Even tho orga is yet the only condition of mayAdministrateRegions().
+		* This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
+		* */
 		if (!($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions())) {
 			throw new HttpException(403);
 		}

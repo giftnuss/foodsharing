@@ -1094,6 +1094,12 @@ class XhrMethods
 	public function xhr_getBezirk($data)
 	{
 		global $g_data;
+
+		/*
+		 * In some of these calls orga is still being checked against additionally, as this xhr methods are used with different modules but those modules don't have own permission classes yet.
+		 * Even tho orga is yet the only condition of mayAdministrateRegions().
+		 * This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
+		 * */
 		if (!($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions())) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
@@ -1342,6 +1348,11 @@ class XhrMethods
 
 	public function xhr_saveBezirk($data)
 	{
+		/*
+		* In some of these calls orga is still being checked against additionally, as this xhr methods are used with different modules but those modules don't have own permission classes yet.
+		* Even tho orga is yet the only condition of mayAdministrateRegions().
+		* This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
+		* */
 		if ($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions()) {
 			global $g_data;
 			$g_data = $data;
