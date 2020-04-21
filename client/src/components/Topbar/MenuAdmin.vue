@@ -23,10 +23,6 @@
 <script>
 export default {
   props: {
-    isOrgaTeam: {
-      type: Boolean,
-      default: false
-    },
     may: {
       type: Object,
       default: () => {}
