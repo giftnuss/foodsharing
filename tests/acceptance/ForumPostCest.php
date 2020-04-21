@@ -134,7 +134,7 @@ class ForumPostCest
 		$I->fillField('#forum_create_thread_form_body', 'TestThreadPost');
 		$I->deleteAllMails();
 		if (!$emailPossible) {
-			$I->dontSee('Forenmitglieder wenn möglich per E-Mail über diesen Beitrag informieren');
+			$I->dontSee('Alle Forenmitglieder über die Erstellung dieses neuen Themas per E-Mail informieren');
 		} elseif ($sendEmail) {
 			$I->selectOption('#forum_create_thread_form_sendMail_1', 'Ja');
 		} else {
