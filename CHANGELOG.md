@@ -63,6 +63,7 @@
 - fixed arrow handling !1408 @jonathan_b
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
 - Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
+- Make the description clearer for the mail option when opening new thread !1453 @Caluera
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
