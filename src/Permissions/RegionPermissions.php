@@ -24,7 +24,7 @@ final class RegionPermissions
 		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
 	}
 
-	public function mayAdministrateRegions()
+	public function mayAdministrateRegions(): bool
 	{
 		return $this->session->may('orga');
 	}
