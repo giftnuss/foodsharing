@@ -160,7 +160,7 @@ class ForumService
 		$theme = $this->forumGateway->getThread($threadId);
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
-		if ($foodsaver = $this->foodsaverGateway->getAmbassadors($region['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
 				'thread' => $theme['title'],
@@ -190,7 +190,7 @@ class ForumService
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($isAmbassadorForum) {
-			$recipients = $this->foodsaverGateway->getAmbassadors($regionData['id']);
+			$recipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionData['id']);
 		} else {
 			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($regionData['id']);
 		}
