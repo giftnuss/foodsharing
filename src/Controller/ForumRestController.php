@@ -12,6 +12,7 @@ use Foodsharing\Services\SanitizerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ForumRestController extends AbstractFOSRestController
@@ -89,7 +90,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads)
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
 	 */
-	public function listThreadsAction(int $forumId, int $forumSubId): \Symfony\Component\HttpFoundation\Response
+	public function listThreadsAction(int $forumId, int $forumSubId): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
@@ -117,7 +118,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("forum/thread/{threadId}", requirements={"threadId" = "\d+"})
 	 */
-	public function getThreadAction($threadId)
+	public function getThreadAction(int $threadId): SymfonyResponse
 	{
 		$thread = $this->forumGateway->getThread($threadId);
 
@@ -150,7 +151,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @Rest\Post("forum/thread/{threadId}/posts", requirements={"threadId" = "\d+"})
 	 * @Rest\RequestParam(name="body")
 	 */
-	public function createPostAction($threadId, ParamFetcher $paramFetcher)
+	public function createPostAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayPostToThread($threadId)) {
 			throw new HttpException(403);
@@ -167,7 +168,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="title")
 	 * @Rest\RequestParam(name="body")
 	 */
-	public function createThreadAction($forumId, $forumSubId, ParamFetcher $paramFetcher)
+	public function createThreadAction(int $forumId, int $forumSubId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
@@ -188,7 +189,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="isSticky", nullable=true, default=null)
 	 * @Rest\RequestParam(name="isActive", nullable=true, default=null)
 	 */
-	public function patchThreadAction($threadId, ParamFetcher $paramFetcher)
+	public function patchThreadAction(int $threadId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayModerate($threadId)) {
 			throw new HttpException(403);
@@ -213,7 +214,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
-	public function followThreadByEmailAction($threadId)
+	public function followThreadByEmailAction(int $threadId): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
@@ -226,7 +227,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
-	public function followThreadByBellAction($threadId)
+	public function followThreadByBellAction(int $threadId): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayAccessThread($threadId)) {
 			throw new HttpException(403);
@@ -240,7 +241,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("forum/thread/{threadId}/follow/email", requirements={"threadId" = "\d+"})
 	 */
-	public function unfollowThreadByEmailAction($threadId)
+	public function unfollowThreadByEmailAction(int $threadId): SymfonyResponse
 	{
 		$this->forumFollowerGateway->unfollowThreadByEmail($this->session->id(), $threadId);
 
@@ -250,7 +251,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("forum/thread/{threadId}/follow/bell", requirements={"threadId" = "\d+"})
 	 */
-	public function unfollowThreadByBellAction($threadId)
+	public function unfollowThreadByBellAction(int $threadId): SymfonyResponse
 	{
 		$this->forumFollowerGateway->unfollowThreadByBell($this->session->id(), $threadId);
 
@@ -260,7 +261,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("forum/post/{postId}", requirements={"postId" = "\d+"})
 	 */
-	public function deletePostAction($postId)
+	public function deletePostAction(int $postId): SymfonyResponse
 	{
 		$post = $this->forumGateway->getPost($postId);
 		if (!$post) {
@@ -278,7 +279,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
-	public function addReactionAction($postId, $emoji)
+	public function addReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
 		$threadId = $this->forumGateway->getThreadForPost($postId);
 
@@ -294,7 +295,7 @@ class ForumRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("forum/post/{postId}/reaction/{emoji}", requirements={"postId" = "\d+", "emoji" = "\w+"})
 	 */
-	public function deleteReactionAction($postId, $emoji)
+	public function deleteReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
 		$this->forumService->removeReaction($this->session->id(), $postId, $emoji);
 
