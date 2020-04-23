@@ -53,8 +53,6 @@
 - Now possible to have many disabled sources of dashboard updates #365 !735 @D0nPiano @ChrisOelmueller
 - Fixes the marker loading in the region admin tool !1415 @dthulke
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 !1423 #735 @moffer
-- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
-- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 - Fix registration link on login page !1425 #856 @alex.simm
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
@@ -65,10 +63,7 @@
 - Make the description clearer for the mail option when opening new thread !1453 @Caluera
 
 ## Refactoring
-- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
-and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
-are welcomed to check the E-Mails generated for missed chat messages. @janopae
-are welcomed to check the E-Mails generated for missed chat messages. @janopae 
+- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae 
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
