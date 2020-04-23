@@ -136,17 +136,15 @@ export default {
 
   .desc-block {
     max-width: 100%;
-    padding-top: 0;
-    padding-bottom: 6px;
-    margin-bottom: 9px;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
     /* Safari / Edge compat: */
     overflow-wrap: break-word;
     /* Desired behavior: */
     overflow-wrap: anywhere;
 
     &:last-child {
-      border-bottom: 0;
-      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
     .store-particularities {
@@ -155,10 +153,13 @@ export default {
   }
 
   .desc-block-title {
-    padding-top: 0;
-    padding-bottom: 3px;
-    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    background-color: var(--fs-beige);
+    color: var(--fs-brown);
     font-weight: bolder;
+    text-align: center;
   }
 }
 </style>
