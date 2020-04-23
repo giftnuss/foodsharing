@@ -110,6 +110,7 @@
 - replace all uses of npm by yarn !1397 @peter.toennies
 - improve PHP Database documentation, add new convenience methods and make delete safer !1399 @\_fridtjof_
 - Added a workaround to devdocs for fedora 32 or debian 10 and docker !1439 @chriswalg
+- added information on our Workflow and how to solve Merge Conflicts in devdocs @jonathan_b
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz

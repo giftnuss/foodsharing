@@ -3,6 +3,9 @@
 During development everyone knows the moments when the code shows exactly what you want but the computer just does something different.
 Some strategies how to find or avoid errors are collected here.
 
+## Nightly scripts
+With ```./scripts/docker-compose run --rm --no-deps app php -f run.php Maintenance daily``` you can call the nightly scripts.
+
 ## Test artifacts
 
 During the Gitlab CI tests are run at every push.
