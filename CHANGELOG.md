@@ -62,6 +62,7 @@
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
 - Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
 - Make the description clearer for the mail option when opening new thread !1453 @Caluera
+- Fix issues introduced with push notifications #831 #841 #857 !1442 !1443 !1444 !1445 !1446 @janopae
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae 
