@@ -16,6 +16,7 @@ tests/_output/*vendor
 tests/_support/_generated/
 .composer
 chat/.npm
+chat/dist
 api/**
 .php_cs.cache
 .php_cs_cache_local

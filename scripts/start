@@ -14,6 +14,7 @@ source "$dir"/inc.sh
 
 # volume is created as root-owned
 run-in-container-asroot client "chown -R node:node /home/node/app/client/node_modules"
+run-in-container-asroot chat "chown -R node:node node_modules"
 
 echo "Bringing up containers"
 # dc is defined in inc.sh and starts docker-compose with following arguments

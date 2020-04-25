@@ -86,9 +86,10 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
-    command: sh -c "yarn && node server.js 0.0.0.0"
     image: node:13.10.1-alpine
     working_dir: /app/chat
+    command: sh -c "yarn && npx tsc && node dist/server.js 0.0.0.0"
+    user: "node"
     depends_on:
       - redis
     environment:

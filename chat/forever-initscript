@@ -29,21 +29,21 @@
 # https://gist.github.com/3748766
 # https://github.com/hectorcorrea/hectorcorrea.com/blob/master/etc/forever-initd-hectorcorrea.sh
 # https://www.exratione.com/2011/07/running-a-nodejs-server-as-a-service-using-forever/
- 
+
 # Source function library. Note that this isn't used here, but remains to be
 # uncommented by those who want to edit this script to add more functionality.
 # Note that this is Ubuntu-specific. The scripts and script location are different on
 # RPM-based distributions.
 # . /lib/lsb/init-functions
- 
-# The example environment variables below assume that Node.js is 
-# installed into /home/node/local/node by building from source as outlined 
+
+# The example environment variables below assume that Node.js is
+# installed into /home/node/local/node by building from source as outlined
 # here:
 # https://www.exratione.com/2011/07/running-a-nodejs-server-as-a-service-using-forever/
 #
-# It should be easy enough to adapt to the paths to be appropriate to a 
+# It should be easy enough to adapt to the paths to be appropriate to a
 # package installation, but note that the packages available for Ubuntu in
-# the default repositories are far behind the times. Most users will be 
+# the default repositories are far behind the times. Most users will be
 # building from source to get a more recent Node.js version.
 #
 # An application name to display in echo text.
@@ -66,11 +66,11 @@ RUN_AS_USER=www-data
 NODE_BIN_DIR=/usr/bin
 NODE_PATH=/var/www/chat/src/node_modules
 APPLICATION_DIRECTORY=/var/www/chat/src/
-APPLICATION_START=server.js
+APPLICATION_START=dist/server.js
 PIDFILE=/var/www/chat/chat.pid
 LOGFILE=/var/www/chat/chat.log
 OUTFILE=/var/www/chat/chat.out
-ERRFILE=/var/www/chat/src/chat.err 
+ERRFILE=/var/www/chat/src/chat.err
 
 # Add node to the path for situations in which the environment is passed.
 PATH=$NODE_BIN_DIR:$PATH
@@ -78,7 +78,7 @@ PATH=$NODE_BIN_DIR:$PATH
 # application process forked by Forever. It will not see any of the other
 # variables defined in this script.
 export NODE_PATH=$NODE_PATH
- 
+
 start() {
     echo "Starting $NAME..."
     # We're calling forever directly without using start-stop-daemon for the
@@ -88,7 +88,7 @@ start() {
     #
     # The minUptime and spinSleepTime settings stop Forever from thrashing if
     # the application fails immediately on launch. This is generally necessary to
-    # avoid loading development servers to the point of failure every time 
+    # avoid loading development servers to the point of failure every time
     # someone makes an error in application initialization code, or bringing down
     # production servers the same way if a database or other critical service
     # suddenly becomes inaccessible.
@@ -100,7 +100,7 @@ start() {
 	# NOTE: We need to cd (as the ghost user account) so that ghost picks up the config file
 	if [ -f $PIDFILE ]; then
 		echo -e "\n\e[1;31mAbort!\e[0;31m Server \"$NAME\" already running!\e[0m\n       pidfile: $PIDFILE";
-	else 
+	else
     	su - $RUN_AS_USER -c "export NODE_ENV=production; cd $APPLICATION_DIRECTORY ; forever --uid "$NAME" --pidFile $PIDFILE --sourceDir $APPLICATION_DIRECTORY \
         -s -a -n 0 -l $LOGFILE -o $OUTFILE -e $ERRFILE --minUptime 5000 --spinSleepTime 2000 \
         start $APPLICATION_START &"
@@ -109,7 +109,7 @@ start() {
 	fi
 	echo ""
 }
- 
+
 stop() {
     if [ -f $PIDFILE ]; then
         echo "Shutting down $NAME..."
@@ -125,13 +125,13 @@ stop() {
         RETVAL=0
     fi
 }
- 
+
 restart() {
     echo -e "\e[1;33mRestarting $NAME\e[0m\n"
     stop
     start
 }
- 
+
 status() {
     echo "Status for $NAME:"
     # This is taking the lazy way out on status, as it will return a list of
@@ -141,10 +141,10 @@ status() {
     # On Ubuntu, this isn't even necessary. To find out whether the service is
     # running, use "service my-application status" which bypasses this script
     # entirely provided you used the service utility to start the process.
-	forever list -p $APPLICATION_DIRECTORY 
+	forever list -p $APPLICATION_DIRECTORY
     RETVAL=$?
 }
- 
+
 case "$1" in
     start)
         start

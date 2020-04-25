@@ -3,7 +3,6 @@
 const http = require('http')
 const { parse: parseCookie } = require('cookie')
 const { readFile } = require('fs')
-const { URL } = require('url')
 const connectSocketIO = require('socket.io')
 const redis = require('redis')
 
@@ -16,7 +15,7 @@ const redisClient = redis.createClient({
   port: process.env.REDIS_PORT || 6379
 })
 
-const sessionIdsScriptFilename = `${__dirname}/session-ids.lua`
+const sessionIdsScriptFilename = `${__dirname}/../session-ids.lua`
 let sessionIdsScriptSHA
 
 const connectedClients = {}

@@ -88,7 +88,6 @@ services:
 
   chat:
     container_name: foodsharing_ci_chat
-    command: sh -c "yarn && node server.js 0.0.0.0"
     build:
       context: ../chat
       dockerfile: docker/Dockerfile.chat.ci

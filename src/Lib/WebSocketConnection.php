@@ -7,7 +7,7 @@ namespace Foodsharing\Lib;
  *
  * Because it has to handle many connections at the same time, the server written in JavaScript/Node.js and not in PHP.
  * For historical reasons, the docker container containing our WebSocket server has been called "chat". You can find a
- * brief description of its API in chat/server.js.
+ * brief description of its API in chat/src/server.ts.
  */
 class WebSocketConnection
 {

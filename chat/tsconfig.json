@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "dist"
+  },
+  "files": [
+    "src/server.ts"
+  ]
+}
