@@ -18,7 +18,7 @@ vueApply('#activity-overview')
 
 // Push Notification Banner
 const pushnotificationsBanner = document.querySelector('#top-banner-pushnotifications')
-if (('PushManager' in window) && (Notification.permission === 'default') && !document.cookie.includes('pushNotificationBannerClosed=true')) {
+if (('serviceWorker' in navigator) && ('PushManager' in window) && (Notification.permission === 'default') && !document.cookie.includes('pushNotificationBannerClosed=true')) {
   pushnotificationsBanner.style.display = ''
 
   const pushnotificationsButton = document.querySelector('#button-pushnotifications')
