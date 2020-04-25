@@ -160,6 +160,7 @@
 - Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
 - CSS adjustments for foodbasket page, mobile dashboard view with columns !1494 @ChrisOelmueller
 - Port WebSocket server ("chat") to TypeScript and refactor it in an object oriented way !1470 @janopae 
+- Leaving regions is done by new Rest endpoint !1459 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
