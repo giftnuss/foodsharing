@@ -12,7 +12,7 @@ import { showLoader, hideLoader, goTo, ajreq } from '@/script'
 
 import storage from '@/storage'
 
-import { MAP_TILES_URL, MAP_ATTRIBUTION } from '@/consts'
+import { initMap } from '@/mapUtils'
 
 import L from 'leaflet'
 
@@ -60,18 +60,11 @@ const map = {
   init: function () {
     storage.setPrefix('map')
 
-    if (storage.get('center') != undefined && storage.get('zoom') != undefined) {
-      u_map = L.map('map', { maxZoom: 20 }).setView(storage.get('center'), storage.get('zoom'))
-    } else {
-      u_map = L.map('map', { maxZoom: 20 }).setView([50.89, 10.13], 6)
-    }
+    const center = storage.get('center', [50.89, 10.13])
+    const zoom = storage.get('zoom', 6)
+    u_map = initMap('map', center, zoom)
 
     expose({ u_map }) // need to re-expose it as it is just a variable
-
-    L.mapboxGL({
-      style: MAP_TILES_URL
-    }).addTo(u_map)
-    u_map.attributionControl.setPrefix(MAP_ATTRIBUTION)
 
     this.initiated = true
 

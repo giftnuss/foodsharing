@@ -10,7 +10,7 @@ import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
 import 'mapbox-gl-leaflet'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { MAP_TILES_URL, MAP_ATTRIBUTION } from '@/consts'
+import { initMap } from '@/mapUtils'
 import { goTo, img, pulseError, pulseSuccess } from '@/script'
 import { expose } from '@/utils'
 import './RegionAdmin.css'
@@ -19,8 +19,7 @@ import { deleteGroup } from '@/api/groups'
 expose({
   img,
   deleteActiveGroup,
-  MAP_TILES_URL,
-  MAP_ATTRIBUTION
+  initMap
 })
 
 async function deleteActiveGroup () {

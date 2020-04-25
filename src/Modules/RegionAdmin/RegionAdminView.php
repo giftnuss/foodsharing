@@ -146,18 +146,10 @@ class RegionAdminView extends View
 		$lon = MapConstants::CENTER_GERMANY_LON;
 
 		$this->pageHelper->addJs('
-	 	var ' . $id . '_center = L.latLng(' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . ');
-		var ' . $id . '_options = {
-		  \'zoom\': ' . MapConstants::ZOOM_COUNTRY . ',
-		  \'center\': ' . $id . '_center,
-		};
+	 	var ' . $id . '_center = [' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . '];
+		var ' . $id . '_zoom = ' . MapConstants::ZOOM_COUNTRY . ';
 		
-		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-
-		L.mapboxGL({
-		  style: MAP_TILES_URL
-		}).addTo(' . $id . '_map);
-		' . $id . '_map.attributionControl.setPrefix(MAP_ATTRIBUTION);
+		var ' . $id . '_map = initMap(document.getElementById("' . $id . '_map"), ' . $id . '_center, ' . $id . '_zoom);
 	');
 	}
 }

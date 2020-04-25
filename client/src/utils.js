@@ -94,3 +94,14 @@ export const generateQueryString = params => {
     .join('&')
   return qs.length ? `?${qs}` : ''
 }
+
+export function isWebGLSupported () {
+  // https://stackoverflow.com/a/22953053
+  try {
+    var canvas = document.createElement('canvas')
+    return !!window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+  } catch (e) {
+    return false
+  }
+}
