@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Bell\DTO;
 
-use Foodsharing\Modules\Bell\DTO\Bell;
-
 class BellForExpirationUpdates
 {
 	/**

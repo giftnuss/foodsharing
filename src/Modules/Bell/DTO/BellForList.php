@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Bell\DTO;
 
-use Foodsharing\Modules\Bell\DTO\Bell;
-
 /**
  * A Data Transfer Object to contain all data of a bell to be displayed in the bell list in the frontend.
  */
