@@ -192,7 +192,7 @@ class ProfileView extends View
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
 
-		if ($reportPermissions->mayHandleReports()) {
+		if ($this->$reportPermissions->mayHandleReports()) {
 			if (isset($this->foodsaver['note_count'])) {
 				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv(
 						'notes_count',
