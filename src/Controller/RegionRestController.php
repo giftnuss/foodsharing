@@ -33,8 +33,7 @@ class RegionRestController extends AbstractFOSRestController
 		Session $session,
 		ImageService $imageService,
 		NotificationService $notificationService
-	)
-	{
+	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionPermissions = $regionPermissions;

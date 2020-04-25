@@ -15,7 +15,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
-import { leave } from '@/api/regions'
+import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
   $('a[href=\'#signout\']').on('click', function () {
@@ -32,7 +32,7 @@ $(document).ready(() => {
       {
         text: i18n('button.yes_i_am_sure'),
         click: async function () {
-          await leave($('input', this).serialize())
+          await leaveRegion($('input', this).serialize())
           goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
         }
       },

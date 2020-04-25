@@ -4,7 +4,7 @@ export function join (regionId) {
   return post(`/region/${regionId}/join`)
 }
 
-export function leave (regionId) {
+export function leaveRegion (regionId) {
   return post(`/region/${regionId}/leave`)
 }
 
