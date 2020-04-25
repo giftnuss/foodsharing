@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -196,7 +196,7 @@ final class BlogGateway extends BaseGateway
 			$foodsaver[$b['id']] = $b;
 		}
 
-		$bellData = BellData::create(
+		$bellData = BellDTO::create(
 			'blog_new_check_title',
 			'blog_new_check',
 			'fas fa-bullhorn',

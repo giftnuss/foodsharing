@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\WeightHelper;
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -220,7 +220,7 @@ class StoreControl extends Control
 
 				$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($g_data['bezirk_id']);
 
-				$bellData = BellData::create('store_new_title', 'store_new', 'img img-store brown', [
+				$bellData = BellDTO::create('store_new_title', 'store_new', 'img img-store brown', [
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				], [
 					'user' => $this->session->user('name'),

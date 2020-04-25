@@ -12,7 +12,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellData::$body
+	 * @see BellDTO::$body
 	 *
 	 * The body is called "key" in the frontend
 	 */
@@ -29,7 +29,7 @@ class BellDTOForList
 	/**
 	 * @var array<string,string>
 	 *
-	 * @see BellData::$vars
+	 * @see BellDTO::$vars
 	 *
 	 * The translation key variables ("vars") will be transferred as "payload" to the frontend.
 	 */
@@ -38,7 +38,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellData::$icon
+	 * @see BellDTO::$icon
 	 *
 	 * A CSS class of the bell's icon. Must be one or multiple CSS classes.
 	 */
@@ -47,7 +47,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellData::$icon
+	 * @see BellDTO::$icon
 	 *
 	 * A relative URL to an image to be used as an icon.
 	 *
@@ -59,7 +59,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellData::$time
+	 * @see BellDTO::$time
 	 *
 	 * The time of the bell – usually the creation time, but some bells use different times for this attribute.
 	 * The time is formatted as a string of the date and the time, separated by a 'T'. To format a date accordingly
@@ -70,7 +70,7 @@ class BellDTOForList
 	/**
 	 * @var bool
 	 *
-	 * @see BellData::$closeable
+	 * @see BellDTO::$closeable
 	 */
 	public $isCloseable;
 

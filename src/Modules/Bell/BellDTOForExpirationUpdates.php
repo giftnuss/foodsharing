@@ -12,14 +12,14 @@ class BellDTOForExpirationUpdates
 	/**
 	 * @var string
 	 *
-	 * @see BellData::$identifier
+	 * @see BellDTO::$identifier
 	 */
 	public $identifier;
 
 	/**
 	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
 	 *
-	 * @return BellData[] - BellData objects with with unserialized $ball->vars and $bell->attr
+	 * @return BellDTO[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
 	public static function createArrayFromDatatabaseRows(array $databaseRows): array
 	{

@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -358,7 +358,7 @@ class QuizGateway extends BaseGateway
 	{
 		if ($commentId > 0) {
 			if ($quizAMBs = $this->foodsaverGateway->getAdminsOrAmbassadors(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
-				$bellData = BellData::create(
+				$bellData = BellDTO::create(
 					'new_quiz_comment_title',
 					'new_quiz_comment',
 					'fas fa-question-circle',

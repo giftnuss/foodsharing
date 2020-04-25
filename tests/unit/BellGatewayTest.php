@@ -27,7 +27,7 @@ class BellGatewayTest extends \Codeception\Test\Unit
 	{
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
-		$bellData = \Foodsharing\Modules\Bell\BellData::create(
+		$bellData = \Foodsharing\Modules\Bell\BellDTO::create(
 			'first bell title',
 			$this->faker->text(50),
 			'',
@@ -108,7 +108,7 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
 
-		$bellData = \Foodsharing\Modules\Bell\BellData::create(
+		$bellData = \Foodsharing\Modules\Bell\BellDTO::create(
 			'title',
 			$this->faker->text(50),
 			'some-icon',

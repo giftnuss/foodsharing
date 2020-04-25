@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\PassportGenerator;
 
 use Endroid\QrCode\QrCode;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
@@ -132,7 +132,7 @@ final class PassportGeneratorControl extends Control
 				if (empty($foodsaver['photo'])) {
 					$noPhoto[] = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
 
-					$bellData = BellData::create(
+					$bellData = BellDTO::create(
 						'passgen_failed_title',
 						'passgen_failed',
 						'fas fa-camera',

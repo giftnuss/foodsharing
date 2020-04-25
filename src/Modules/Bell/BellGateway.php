@@ -20,7 +20,7 @@ class BellGateway extends BaseGateway
 		$this->webSocketConnection = $webSocketConnection;
 	}
 
-	public function addBell($foodsavers, BellData $bellData): void
+	public function addBell($foodsavers, BellDTO $bellData): void
 	{
 		if (!is_array($foodsavers)) {
 			$foodsavers = [$foodsavers];

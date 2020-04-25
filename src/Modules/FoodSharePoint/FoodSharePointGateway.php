@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\FoodSharePoint;
 
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
@@ -446,7 +446,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 
-		$bellData = BellData::create(
+		$bellData = BellDTO::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
 			'img img-recycle yellow',

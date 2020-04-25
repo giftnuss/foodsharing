@@ -6,7 +6,7 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Bell\BellData;
+use Foodsharing\Modules\Bell\BellDTO;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -75,7 +75,7 @@ class ForumService
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
-		$bellData = BellData::create(
+		$bellData = BellDTO::create(
 			'forum_answer_title',
 			'forum_answer',
 			'fas fa-comments',
