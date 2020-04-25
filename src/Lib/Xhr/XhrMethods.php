@@ -12,7 +12,7 @@ use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Modules\Bell\BellDTO;
+use Foodsharing\Modules\Bell\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -1043,7 +1043,7 @@ class XhrMethods
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
 		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
-		$bellData = BellDTO::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', [
+		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		], [
 			'user' => $this->session->user('name'),
@@ -1305,7 +1305,7 @@ class XhrMethods
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
 			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
-			$bellData = BellDTO::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
@@ -1326,7 +1326,7 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$bellData = BellDTO::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),

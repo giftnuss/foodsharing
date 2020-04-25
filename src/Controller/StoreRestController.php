@@ -3,7 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Bell\BellDTO;
+use Foodsharing\Modules\Bell\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\StorePermissions;
@@ -79,7 +79,7 @@ class StoreRestController extends AbstractFOSRestController
 		$storeName = $this->storeGateway->getBetrieb($storeId)['name'];
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
-		$bellData = BellDTO::create(
+		$bellData = Bell::create(
 			'store_wallpost_title',
 			'store_wallpost',
 			'img img-store brown',

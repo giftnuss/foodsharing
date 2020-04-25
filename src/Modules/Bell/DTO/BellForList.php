@@ -5,14 +5,14 @@ namespace Foodsharing\Modules\Bell;
 /**
  * A Data Transfer Object to contain all data of a bell to be displayed in the bell list in the frontend.
  */
-class BellDTOForList
+class BellForList
 {
 	public $id;
 
 	/**
 	 * @var string
 	 *
-	 * @see BellDTO::$body
+	 * @see Bell::$body
 	 *
 	 * The body is called "key" in the frontend
 	 */
@@ -29,7 +29,7 @@ class BellDTOForList
 	/**
 	 * @var array<string,string>
 	 *
-	 * @see BellDTO::$vars
+	 * @see Bell::$vars
 	 *
 	 * The translation key variables ("vars") will be transferred as "payload" to the frontend.
 	 */
@@ -38,7 +38,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellDTO::$icon
+	 * @see Bell::$icon
 	 *
 	 * A CSS class of the bell's icon. Must be one or multiple CSS classes.
 	 */
@@ -47,7 +47,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellDTO::$icon
+	 * @see Bell::$icon
 	 *
 	 * A relative URL to an image to be used as an icon.
 	 *
@@ -59,7 +59,7 @@ class BellDTOForList
 	/**
 	 * @var string
 	 *
-	 * @see BellDTO::$time
+	 * @see Bell::$time
 	 *
 	 * The time of the bell – usually the creation time, but some bells use different times for this attribute.
 	 * The time is formatted as a string of the date and the time, separated by a 'T'. To format a date accordingly
@@ -70,7 +70,7 @@ class BellDTOForList
 	/**
 	 * @var bool
 	 *
-	 * @see BellDTO::$closeable
+	 * @see Bell::$closeable
 	 */
 	public $isCloseable;
 
@@ -85,13 +85,13 @@ class BellDTOForList
 	/**
 	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
 	 *
-	 * @return BellDTOForList[] - BellData objects with with unserialized $ball->vars and $bell->attr
+	 * @return BellForList[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
 	public static function createArrayFromDatatabaseRows(array $databaseRows): array
 	{
 		$output = [];
 		foreach ($databaseRows as $row) {
-			$bellDTO = new BellDTOForList();
+			$bellDTO = new BellForList();
 
 			// This onclick-to-href conversion is probably not needed anymore
 			if (isset($row['attr']['onclick'])) {

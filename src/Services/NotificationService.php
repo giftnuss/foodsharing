@@ -4,7 +4,7 @@ namespace Foodsharing\Services;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Modules\Bell\BellDTO;
+use Foodsharing\Modules\Bell\Bell;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -74,7 +74,7 @@ final class NotificationService
 
 			if ($followers = $this->foodSharePointGateway->getInfoFollowerIds($foodSharePointId)) {
 				$followersWithoutPostAuthor = array_diff($followers, [$post['fs_id']]);
-				$bellData = BellDTO::create(
+				$bellData = Bell::create(
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',

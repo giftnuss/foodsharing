@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Buddy;
 
-use Foodsharing\Modules\Bell\BellDTO;
+use Foodsharing\Modules\Bell\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
@@ -46,7 +46,7 @@ class BuddyXhr extends Control
 		}
 
 		if ($this->gateway->buddyRequest($_GET['id'], $this->session->id())) {
-			$bellData = new BellDTO();
+			$bellData = new Bell();
 			// language string for title
 			$bellData->title = 'buddy_request_title';
 

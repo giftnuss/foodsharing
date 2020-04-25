@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Bell;
 
-class BellDTOForExpirationUpdates
+class BellForExpirationUpdates
 {
 	/**
 	 * @var int
@@ -12,20 +12,19 @@ class BellDTOForExpirationUpdates
 	/**
 	 * @var string
 	 *
-	 * @see BellDTO::$identifier
+	 * @see Bell::$identifier
 	 */
 	public $identifier;
 
 	/**
 	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
-	 *
-	 * @return BellDTO[] - BellData objects with with unserialized $ball->vars and $bell->attr
+	 * @return Bell[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
 	public static function createArrayFromDatatabaseRows(array $databaseRows): array
 	{
 		$output = [];
 		foreach ($databaseRows as $row) {
-			$bellDTO = new BellDTOForExpirationUpdates();
+			$bellDTO = new BellForExpirationUpdates();
 
 			$bellDTO->id = $row['id'];
 			$bellDTO->identifier = $row['identifier'];

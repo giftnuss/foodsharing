@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Modules\Bell\BellDTO;
+use Foodsharing\Modules\Bell\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -559,7 +559,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			];
 			$this->bellGateway->updateBell($oldBellId, $data, $markNotificationAsUnread);
 		} elseif ($messageCount > 0 && !$oldBellExists) {
-			$bellData = BellDTO::create(
+			$bellData = Bell::create(
 				'betrieb_fetch_title',
 				'betrieb_fetch',
 				'img img-store brown',

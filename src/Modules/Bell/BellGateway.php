@@ -20,7 +20,7 @@ class BellGateway extends BaseGateway
 		$this->webSocketConnection = $webSocketConnection;
 	}
 
-	public function addBell($foodsavers, BellDTO $bellData): void
+	public function addBell($foodsavers, Bell $bellData): void
 	{
 		if (!is_array($foodsavers)) {
 			$foodsavers = [$foodsavers];
@@ -91,7 +91,7 @@ class BellGateway extends BaseGateway
 	 * @param $fsId
 	 * @param string $limit
 	 *
-	 * @return BellDTOForList[]
+	 * @return BellForList[]
 	 */
 	public function listBells($fsId, $limit = '')
 	{
@@ -130,7 +130,7 @@ class BellGateway extends BaseGateway
 			return [];
 		}
 
-		return BellDTOForList::createArrayFromDatatabaseRows($rows);
+		return BellForList::createArrayFromDatatabaseRows($rows);
 	}
 
 	/**
@@ -146,7 +146,7 @@ class BellGateway extends BaseGateway
 	/**
 	 * @param string $identifier - can contain SQL wildcards
 	 *
-	 * @return BellDTOForExpirationUpdates[]
+	 * @return BellForExpirationUpdates[]
 	 */
 	public function getExpiredByIdentifier(string $identifier): array
 	{
@@ -160,7 +160,7 @@ class BellGateway extends BaseGateway
 			[':identifier' => $identifier]
 		);
 
-		return BellDTOForExpirationUpdates::createArrayFromDatatabaseRows($bells);
+		return BellForExpirationUpdates::createArrayFromDatatabaseRows($bells);
 	}
 
 	public function bellWithIdentifierExists(string $identifier): bool

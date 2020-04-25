@@ -8,7 +8,7 @@ namespace Foodsharing\Modules\Bell;
  * does it contain any access logic. You can see it more like a Data Transfer Object (DTO) used to pass a bell's data
  * between parts of the application in a unified format.
  */
-class BellDTO
+class Bell
 {
 	/**
 	 * @var string
@@ -104,8 +104,8 @@ class BellDTO
 		int $closeable = 1,
 		\DateTime $expiration = null,
 		\DateTime $time = null
-	): BellDTO {
-		$bell = new BellDTO();
+	): Bell {
+		$bell = new Bell();
 		$bell->title = $title;
 		$bell->body = $body;
 		$bell->icon = $icon;
