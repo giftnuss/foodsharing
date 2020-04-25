@@ -18,6 +18,7 @@ class BellForExpirationUpdates
 
 	/**
 	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
+	 *
 	 * @return Bell[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
 	public static function createArrayFromDatatabaseRows(array $databaseRows): array
