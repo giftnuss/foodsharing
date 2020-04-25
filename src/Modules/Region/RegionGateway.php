@@ -284,7 +284,7 @@ class RegionGateway extends BaseGateway
 			LIMIT 1
 		', ['id' => $regionId]);
 
-		$region['botschafter'] = $this->foodsaverGateway->getAmbassadors($regionId);
+		$region['botschafter'] = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
 		return $region;

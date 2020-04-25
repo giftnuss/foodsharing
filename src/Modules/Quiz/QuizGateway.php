@@ -357,7 +357,7 @@ class QuizGateway extends BaseGateway
 	private function handleUserComment(int $questionId, int $commentId, string $comment): bool
 	{
 		if ($commentId > 0) {
-			if ($quizAMBs = $this->foodsaverGateway->getAmbassadors(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
+			if ($quizAMBs = $this->foodsaverGateway->getAdminsOrAmbassadors(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
 				$bellData = BellData::create(
 					'new_quiz_comment_title',
 					'new_quiz_comment',

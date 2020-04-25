@@ -165,6 +165,7 @@ terminology:
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
   profile_picture: 'Profilbild'
+  regions: Bezirke
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -232,24 +233,27 @@ forum:
   from: Von %name%
   threads: Themen
   new_thread: Neues Thema verfassen
-  subscribe_thread: Möchtest Du über dieses Thema auf dem Laufenden gehalten werden?
-  thread_is_inactive: Thema inaktiv!
-  thread_is_inactive_description: Dieses Thema ist noch nicht aktiv. Hier hast Du die Möglichkeit das Thema zu akzeptieren und alle Foodsaver darüber zu informieren.
-  placeholder_answer: Antworten...
-  unfollow: Thema entfolgen
-  follow: Thema folgen
-  stick: Thema fixieren
-  unstick: Fixierung aufheben
-  delete_post: Beitrag löschen
-  thread_title: Titel
-  post_body: Nachricht
-  activate_thread: Thema aktivieren
-  delete_thread: Thema löschen
+  follow:
+    header: "Benachrichtigung bei neuen Antworten:"
+    bell: "als Glocke"
+    email: "als E-Mail"
+  post:
+    delete: Beitrag löschen
+    body: Nachricht
+  thread:
+    activate: Thema aktivieren
+    delete: Thema löschen
+    inactive: |
+      Dieses Thema ist noch nicht aktiv.
+      Hier kannst du es freischalten und alle Foodsaver darüber informieren.
+    stick: Thema fixieren
+    title: Titel
   hold_back_for_moderation: Das Thema wurde gespeichert und wird veröffentlicht sobald ein Botschafter es bestätigt.
+  no_posts: Bisher keine Beiträge vorhanden
   no_threads: Noch keine Themen gepostet
   sending_error: Beim Senden ist ein Fehler aufgetreten
   markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
-  inform_per_email: Forenmitglieder per E-Mail über diesen Beitrag informieren, nur in unmoderierten Foren möglich
+  inform_per_email: Alle Forenmitglieder über die Erstellung dieses neuen Themas per E-Mail informieren, nur in unmoderierten Foren möglich
 
 chat:
   open_chat: Nachricht schreiben
@@ -382,15 +386,19 @@ mail:
 index:
   confirm_open_video: "Möchtest du das Video auf youtube.com ansehen? Das Video wird in einem neuen Tab geöffnet."
 
-map:
-  title: Karte
-
 profile:
   title: Profil
 
 search:
   title: Suche
   placeholder: Suche...
+  noresults: Es konnten keine Ergebnisse gefunden werden
+  mybuddies: Meine Buddies
+  mygroups: Meine Gruppen
+  mystores: Meine Betriebe
+  myregions: Meine Bezirke
+  groups: Gruppen
+  persons: Personen
 
 dashboard:
   title: Dashboard
@@ -419,6 +427,7 @@ dashboard:
 
 home:
   title: Startseite
+  home: Home
 
 basket:
   title: Essenskörbe
@@ -452,9 +461,10 @@ menu:
   manage_mailboxes: Mailboxen verwalten
   faq: FAQs verwalten
   content: Inhalte bearbeiten
-  tooltips:
+  entry:
     activities: Aktionen
     infos: Infos
+    all_messages: Alle Nachrichten
     messages: Nachrichten
     your_groups: Deine Gruppen
     groups: Gruppenübersicht
@@ -463,6 +473,48 @@ menu:
     administration: Administration
     notifications: Benachrichtigungen
     contact: Kontakt
+    politics: Politik
+    fscities: foodsharing-Städte
+    demands: Forderungen
+    pastcampaigns: Vergangene Kampagnen
+    education: Bildung
+    academy: Akademie
+    talksandworkshops: Vorträge und Workshops
+    fsfestival: foodsharing Festival
+    mailbox: E-Mail-Postfach
+    donate: Spenden
+    press: Presse
+    forcompanies: Für Unternehmen
+    imprint: Impressum
+    regionalgroups: Ortsgruppen
+    Germany: Deutschland
+    Austria: Österreich
+    Swiss: Schweiz
+    international: International
+    forum: Forum
+    BOTforum: Bot-Forum
+    wall: Pinnwand
+    events: Termine
+    members: Mitglieder
+    workingGroupEdit: Gruppe verwalten
+    aboutUs: Über uns
+    mission: Mission
+    fundamentals: Grundsätze
+    blog: Blog
+    team: Team
+    partners: Partner
+    background: Hintergrund
+    faq: F.A.Q.
+    wiki: Wiki
+    guide: Ratgeber
+    statistics: Statistik
+    transparency: Transparenz
+    dataprivacy: Datenschutz
+    changelog: Changelog
+    stores: Betriebe
+    fs: Foodsaver
+    ids: Ausweise
+    joinregion: Einem Bezirk beitreten
   your_settings: Deine Daten/Einstellungen
 
 footer:
@@ -508,3 +560,6 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
+
+menubells:
+ no_bells: Du hast derzeit keine Benachrichtigungen

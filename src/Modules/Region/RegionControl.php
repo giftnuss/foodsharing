@@ -266,7 +266,10 @@ final class RegionControl extends Control
 				$ambassadorForum
 			)) {
 			$threadId = $this->forumService->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration, $data->sendMail);
-			$this->forumFollowerGateway->followThread($this->session->id(), $threadId);
+
+			$this->forumFollowerGateway->followThreadByEmail($this->session->id(), $threadId);
+			$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);
+
 			if (!$postActiveWithoutModeration) {
 				$this->flashMessageHelper->info($this->translator->trans('forum.hold_back_for_moderation'));
 			}

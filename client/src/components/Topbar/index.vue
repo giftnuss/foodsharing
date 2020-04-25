@@ -72,18 +72,17 @@
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
             <li
               v-if="!isMobile"
-              v-b-tooltip.hover.bottom
-              title="Karte"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
                 :href="$url('map')"
-                :aria-label="$i18n('map.title')"
+                :aria-label="$i18n('storelist.map')"
                 class="nav-link"
               >
                 <i class="fas fa-map-marker-alt" />
                 <span v-if="!loggedIn || !hasFsRole">
-                  {{ $i18n('map.title') }}
+                  {{ $i18n('storelist.map') }}
                 </span>
               </a>
             </li>
@@ -110,8 +109,7 @@
         >
           <b-navbar-nav class="ml-auto">
             <li
-              v-b-tooltip.hover.bottom
-              title="Home"
+              v-b-tooltip.hover="$i18n('home.home')"
               class="nav-item"
             >
               <a
@@ -127,8 +125,7 @@
             </li>
             <li
               v-if="isMobile"
-              v-b-tooltip.hover.bottom
-              :title="$i18n('map.title')"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
@@ -137,7 +134,7 @@
               >
                 <i class="fas fa-map-marker-alt" />
                 <span class="d-md-none">
-                  {{ $i18n('map.title') }}
+                  {{ $i18n('storelist.map') }}
                 </span>
               </a>
             </li>

@@ -1,7 +1,7 @@
 <template>
   <b-nav-item-dropdown
     id="dropdown-stores"
-    v-b-tooltip="$i18n('menu.tooltips.your_stores')"
+    v-b-tooltip="$i18n('menu.entry.your_stores')"
     no-caret
   >
     <template v-slot:button-content>

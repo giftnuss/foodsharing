@@ -1317,7 +1317,7 @@ class XhrMethods
 
 			$botsch = [];
 			$add = '';
-			if ($b = $this->foodsaverGateway->getAmbassadors($bezirk_id)) {
+			if ($b = $this->foodsaverGateway->getAdminsOrAmbassadors($bezirk_id)) {
 				foreach ($b as $bb) {
 					$botsch[] = $bb['id'];
 				}

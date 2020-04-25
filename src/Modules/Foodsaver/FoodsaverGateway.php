@@ -262,7 +262,7 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function getAmbassadors(int $regionId): array
+	public function getAdminsOrAmbassadors(int $groupId): array
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.`id`,
@@ -278,11 +278,10 @@ final class FoodsaverGateway extends BaseGateway
 			        INNER JOIN `fs_botschafter` amb
                     ON fs.id = amb.`foodsaver_id`
 
-			WHERE   amb.`bezirk_id` = :regionId
-			AND		fs.deleted_at IS NULL
-        ', [
-			':regionId' => $regionId
-		]);
+			WHERE amb.`bezirk_id` = :regionId
+			AND		fs.deleted_at IS NULL',
+			[':regionId' => $groupId]
+		);
 	}
 
 	public function getActiveAmbassadors(): array

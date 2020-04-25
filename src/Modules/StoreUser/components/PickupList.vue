@@ -41,24 +41,23 @@
         :class="{disabledLoading: isLoading}"
         class="card-body"
       >
-        <template v-for="pickup in pickups">
-          <Pickup
-            :key="pickup.date.valueOf()"
-            v-bind="pickup"
-            :store-id="storeId"
-            :is-coordinator="isCoordinator"
-            :user="user"
-            class="mb-2"
-            @leave="leave"
-            @kick="kick"
-            @join="join"
-            @confirm="confirm"
-            @delete="setSlots(pickup.date, 0)"
-            @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
-            @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
-            @team-message="sendTeamMessage"
-          />
-        </template>
+        <Pickup
+          v-for="pickup in pickups"
+          :key="pickup.date.valueOf()"
+          v-bind="pickup"
+          :store-id="storeId"
+          :is-coordinator="isCoordinator"
+          :user="user"
+          class="mb-2"
+          @leave="leave"
+          @kick="kick"
+          @join="join"
+          @confirm="confirm"
+          @delete="setSlots(pickup.date, 0)"
+          @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
+          @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
+          @team-message="sendTeamMessage"
+        />
       </div>
     </div>
   </div>

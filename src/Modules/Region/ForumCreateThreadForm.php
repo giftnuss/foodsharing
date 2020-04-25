@@ -14,8 +14,8 @@ class ForumCreateThreadForm extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-			->add('title', TextType::class, ['label' => 'forum.thread_title'])
-			->add('body', TextareaType::class, ['label' => 'forum.post_body'])
+			->add('title', TextType::class, ['label' => 'forum.thread.title'])
+			->add('body', TextareaType::class, ['label' => 'forum.post.body'])
 		;
 		if ($options['postActiveWithoutModeration']) {
 			$builder

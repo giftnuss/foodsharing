@@ -1,21 +1,34 @@
 import * as ajax from '@/api/base'
 
-async function subscribeForPushNotifications () {
-  const applicationServerKey = (await ajax.get('/pushnotification/webpush/server-information')).key
+/**
+ * @param {PushSubscriptionOptions} [options] – You can save a request if you provide the application server key.
+ * @return {Promise<any>} - A promise resolving to the server's response (usually empty)
+ */
+export async function subscribeForPushNotifications (options = { userVisibleOnly: true, applicationServerKey: null }) {
+  if (options.applicationServerKey === null) {
+    options.applicationServerKey = urlBase64ToUint8Array((await ajax.get('/pushnotification/webpush/server-information')).key)
+  }
+
   const serviceWorkerRegistration = await navigator.serviceWorker.ready
-  const subscription = await serviceWorkerRegistration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(applicationServerKey)
-  })
+  const subscription = await serviceWorkerRegistration.pushManager.subscribe(options)
+
   return sendPushSubscriptionToServer(subscription)
 }
 
-async function unsubscribeFromPushNotifications () {
+/**
+ * @return {Promise<boolean>}
+ */
+export async function unsubscribeFromPushNotifications () {
   const serviceWorkerRegistration = await navigator.serviceWorker.ready
   const subscription = await serviceWorkerRegistration.pushManager.getSubscription()
+
   return subscription.unsubscribe()
 }
 
+/**
+ * @param {PushSubscription} subscription
+ * @return {Promise<{}|*|undefined>}
+ */
 function sendPushSubscriptionToServer (subscription) {
   const key = subscription.getKey('p256dh')
   const token = subscription.getKey('auth')
@@ -29,6 +42,10 @@ function sendPushSubscriptionToServer (subscription) {
   })
 }
 
+/**
+ * @param {String} base64String
+ * @return {Uint8Array}
+ */
 function urlBase64ToUint8Array (base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4)
   const base64 = (base64String + padding)
@@ -43,5 +60,3 @@ function urlBase64ToUint8Array (base64String) {
   }
   return outputArray
 }
-
-export { subscribeForPushNotifications, unsubscribeFromPushNotifications }

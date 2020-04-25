@@ -25,7 +25,7 @@ class RestNormalization
 	 * @param array $data the foodsaver data from the database
 	 * @param string $prefix a prefix for the entries in the data array
 	 */
-	public static function normalizeFoodsaver(array $data, string $prefix = ''): array
+	public static function normalizeUser(array $data, string $prefix = ''): array
 	{
 		//sleep_status is used with and without prefix
 		$sleepStatus = self::getSleepStatus($data, $prefix);
@@ -35,6 +35,28 @@ class RestNormalization
 			'name' => $data[$prefix . 'name'],
 			'avatar' => $data[$prefix . 'photo'] ?? null,
 			'sleepStatus' => $sleepStatus,
+		];
+	}
+
+	/**
+	 * Normalises the detailed profile of a user.
+	 *
+	 * @param array $data user profile data
+	 */
+	public static function normaliseUserDetails(array $data): array
+	{
+		return [
+			'id' => $data['id'],
+			'firstname' => $data['name'],
+			'lastname' => $data['nachname'],
+			'address' => $data['anschrift'],
+			'city' => $data['stadt'],
+			'postcode' => $data['plz'],
+			'lat' => $data['lat'],
+			'lon' => $data['lon'],
+			'email' => $data['email'],
+			'landline' => $data['telefon'],
+			'mobile' => $data['handy'],
 		];
 	}
 

@@ -434,7 +434,10 @@ class SettingsControl extends Control
 				$this->foodSharePointGateway->unfollowFoodSharePoints($fsId, $fspIdsToUnfollow);
 			}
 			if (!empty($threadIdsToUnfollow)) {
-				$this->forumFollowerGateway->unfollowThreads($fsId, $threadIdsToUnfollow);
+				$fsId = $this->session->id();
+				foreach ($threadIdsToUnfollow as $singleThreadId) {
+					$this->forumFollowerGateway->unfollowThreadByEmail($fsId, $singleThreadId);
+				}
 			}
 
 			if ($this->settingsGateway->saveInfoSettings($fsId, $newsletter, $infomail)) {

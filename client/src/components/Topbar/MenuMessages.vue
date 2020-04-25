@@ -2,7 +2,7 @@
   <b-nav-item-dropdown
     id="dropdown-messages"
     ref="dropdown"
-    v-b-tooltip="$i18n('menu.tooltips.messages')"
+    v-b-tooltip="$i18n('menu.entry.messages')"
     no-caret
     right
     class="topbar-messages"
@@ -31,7 +31,7 @@
         :href="$url('conversations')"
         class="btn btn-sm btn-secondary"
       >
-        <i class="fas fa-comments" /> Alle Nachrichten
+        <i class="fas fa-comments" /> {{ $i18n('menu.entry.all_messages') }}
       </a>
     </div>
   </b-nav-item-dropdown>

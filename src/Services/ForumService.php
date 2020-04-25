@@ -64,21 +64,16 @@ class ForumService
 		return $url;
 	}
 
-	public function notifyParticipantsViaBell($threadId, $authorId, $postId)
+	public function notifyFollowersViaBell($threadId, $authorId, $postId): void
 	{
-		$posts = $this->forumGateway->listPosts($threadId);
+		$subscribedFs = $this->forumFollowerGateway->getThreadBellFollower($threadId, $authorId);
+
+		if (empty($subscribedFs)) {
+			return;
+		}
+
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
-
-		$getFsId = function ($post) {
-			return $post['author_id'];
-		};
-		$removeAuthorFsId = function ($id) use ($authorId) {
-			return $id != $authorId;
-		};
-		$fsIds = array_map($getFsId, $posts);
-		$fsIds = array_filter($fsIds, $removeAuthorFsId);
-		$fsIds = array_unique($fsIds);
 
 		$bellData = BellData::create(
 			'forum_answer_title',
@@ -88,15 +83,15 @@ class ForumService
 			['user' => $this->session->user('name'), 'forum' => $regionName],
 			'forum-post-' . $postId
 		);
-		$this->bellGateway->addBell($fsIds, $bellData);
+		$this->bellGateway->addBell(array_column($subscribedFs, 'id'), $bellData);
 	}
 
 	public function addPostToThread($fsId, $threadId, $body)
 	{
 		$rawBody = $body;
 		$pid = $this->forumGateway->addPost($fsId, $threadId, $body);
-		$this->notifyFollowersNewPost($threadId, $rawBody, $fsId, $pid);
-		$this->notifyParticipantsViaBell($threadId, $fsId, $pid);
+		$this->notifyFollowersViaMail($threadId, $rawBody, $fsId, $pid);
+		$this->notifyFollowersViaBell($threadId, $fsId, $pid);
 
 		return $pid;
 	}
@@ -141,9 +136,9 @@ class ForumService
 		}
 	}
 
-	public function notifyFollowersNewPost($threadId, $rawPostBody, $postFrom, $postId)
+	public function notifyFollowersViaMail($threadId, $rawPostBody, $postFrom, $postId): void
 	{
-		if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $threadId)) {
+		if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($postFrom, $threadId)) {
 			$info = $this->forumGateway->getThreadInfo($threadId);
 			$posterName = $this->foodsaverGateway->getFoodsaverName($this->session->id());
 			$data = [
@@ -161,7 +156,7 @@ class ForumService
 		$theme = $this->forumGateway->getThread($threadId);
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
-		if ($foodsaver = $this->foodsaverGateway->getAmbassadors($region['id'])) {
+		if ($foodsaver = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
 				'thread' => $theme['title'],
@@ -191,7 +186,7 @@ class ForumService
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
 
 		if ($isAmbassadorForum) {
-			$recipients = $this->foodsaverGateway->getAmbassadors($regionData['id']);
+			$recipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionData['id']);
 		} else {
 			$recipients = $this->foodsaverGateway->listActiveWithFullNameByRegion($regionData['id']);
 		}

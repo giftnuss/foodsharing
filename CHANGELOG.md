@@ -20,10 +20,10 @@
 - Updates from events + foodsharepoints displayed on dashboard !735 !1441 #227 #588 @D0nPiano @ChrisOelmueller
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
-- Add option for new forum threads in unmoderated fora to send mail or not !1233 @jofranz @Caluera
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
 - Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
+- Make it possible to unfollow forum bells #271 !1191 @jofranz @chriswalg @ChrisOelmueller @moffer
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
@@ -54,20 +54,18 @@
 - Now possible to have many disabled sources of dashboard updates #365 !735 @D0nPiano @ChrisOelmueller
 - Fixes the marker loading in the region admin tool !1415 @dthulke
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 !1423 #735 @moffer
-- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 @moffer
-- Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 - Fix registration link on login page !1425 #856 @alex.simm
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
 - Fix link of top-left icon in navbar and make the hover-heart appear more often !1421 #853 @alex.simm 
 - fixed arrow handling !1408 @jonathan_b
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
+- Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
+- Make the description clearer for the mail option when opening new thread !1453 @Caluera
+- Fix issues introduced with push notifications #831 #841 #857 !1442 !1443 !1444 !1445 !1446 @janopae
 
 ## Refactoring
-- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications
-and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers
-are welcomed to check the E-Mails generated for missed chat messages. @janopae
-are welcomed to check the E-Mails generated for missed chat messages. @janopae 
+- Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae 
 - Improve mayEditStore() to fail faster !1311 @jofranz
 - Moved the button for new stores to vue store list !1282 @chriswalg
 - Restructure the definition of the Region ID constants. !1325 @theFeiter
@@ -78,13 +76,14 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Add function to database class that allows inserting multiple rows !1267 #757 @alex.simm
 - Remove Sessions from Gateway-Classes !1314 @panschk
 - Exchange nightly not fully working bell update check with the daily/reliable method !1312 @jofranz
-- Update date-fns to version 2.9.0 !1042 !1363 !1422 @chriswalg @ChrisOelmueller
+- Update date-fns to version 2.9.0 !1042 !1363 !1422 !1447 @chriswalg @ChrisOelmueller
 - Moved newsletter test functionality from Xhr to Rest API !1354 @alex.simm
 - Removed lost@foodsharing address and added sending a reply email if an address was not found #510 !1346 @alex.simm
 - Redesigned the option to delete FS account if not agreeing with privacy policy. !1318 @thefeiter
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
+- redirected hardcoded German strings from topbar to lang.de.yml !1410 #824 @jonathan_b 
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - recreate Dashboard update-overview with vue components !735 !1424 @D0nPiano @ChrisOelmueller
 - changed ActivityModel to return data without HTML or JS !735 !1424 @D0nPiano @ChrisOelmueller
@@ -95,6 +94,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - Reimplement footer in vue !1437 @ChrisOelmueller
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
 - Refactored store infos to vue js !1406 @chriswalg
+- Moved profile Rest endpoint to user controller !1374 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -113,6 +113,7 @@ are welcomed to check the E-Mails generated for missed chat messages. @janopae
 - replace all uses of npm by yarn !1397 @peter.toennies
 - improve PHP Database documentation, add new convenience methods and make delete safer !1399 @\_fridtjof_
 - Added a workaround to devdocs for fedora 32 or debian 10 and docker !1439 @chriswalg
+- added information on our Workflow and how to solve Merge Conflicts in devdocs @jonathan_b
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz
@@ -344,7 +345,7 @@ And we have even included some new features for you.
 - Show Warning and prevent save if sleeping timespan has no complete date given #632 !957 @fs_k
 - Fixed and moved ipIsBlocked method which is used on the team page contact form. Added minutes to warning message !974 @jofranz
 - Enable ambassador's new threads by default. #614 !967 @ctwx_ok
-- Fixed fancybox loading (apple) and navigation sprites !977 #644 @jofranz
+- Fixed fancybox loading (apple) and navigation sprites !977 #644 !1433 #717 @jofranz @ChrisOelmueller
 - Updates from the regional "bot-forum" / ambassador board are now shown on dashboard #40 !994 @jofranz
 - Fixed hidden attribution-line on main map !980 #661 @mr-kenhoff
 - Fixed date display for chats in the top bar overlay. !988 @ctwx_ok
