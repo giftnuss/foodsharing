@@ -19,11 +19,11 @@ class StoreCest
 		$this->store = $I->createStore($regionId, null, null, ['betrieb_status_id' => CooperationStatus::COOPERATION_ESTABLISHED]);
 
 		$this->foodsaver = $I->createFoodsaver();
-		$I->addBezirkMember($regionId, $this->foodsaver['id']);
+		$I->addRegionMember($regionId, $this->foodsaver['id']);
 		$I->addStoreTeam($this->store['id'], $this->foodsaver['id']);
 
 		$this->storeCoordinator = $I->createStoreCoordinator();
-		$I->addBezirkMember($regionId, $this->storeCoordinator['id']);
+		$I->addRegionMember($regionId, $this->storeCoordinator['id']);
 		$I->addStoreTeam($this->store['id'], $this->storeCoordinator['id'], true);
 	}
 
