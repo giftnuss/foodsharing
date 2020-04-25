@@ -88,7 +88,7 @@ final class NotificationService
 
 	public function sendEmailIfGroupHasNoAdmin(int $groupId): void
 	{
-		if (count($this->foodsaverGateway->getAmbassadors($groupId)) < 1) {
+		if (count($this->foodsaverGateway->getAdminsOrAmbassadors($groupId)) < 1) {
 			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
 			$groupName = $this->regionGateway->getRegionName($groupId);
 			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);

@@ -16,6 +16,7 @@
   - [Code style](codestyle.md)
   - [Testing](testing.md)
   - [Code quality and review](code-review.md)
+  - [Rebase](rebase.md)
   - [Troubleshooting](troubleshooting.md)
   - [Beta Testing (DE)](beta-testing-de.md)
 

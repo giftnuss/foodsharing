@@ -7,6 +7,8 @@
 * [auf welchen Ebenen Git funktioniert,](#auf-welchen-ebenen-git-funktioniert)
 * [wie ein Workflow aussehen kann](#workflow), (TL/DR: Branch erstellen -> ein oder mehrere commits machen -> pushen -> MR erstellen)
 * [was es zum Merge Request (MR) zu sagen gibt,](#was-es-zum-merge-request-zu-sagen-gibt)
+* [Wie du selbst einen Rebase machst](#wie-du-selbst-einen-rebase-machst)
+* [Wie du mit Rebase-Konflikten in unseren Abhängigkeiten umgehst](#wie-du-mit-rebase-konflikten-in-unseren-abhängigkeiten-umgehst)
 * [wie dein MR schließlich bestätigt und am Ende zum Master hinzugefügt wird.](#merge-in-den-master)
 * [Weiteres zu issues](#ein-issue-anlegen)
 * [Weiteres zu Tests](#testen)
@@ -36,7 +38,7 @@ Ordne dich bitte dem Issue zu, das du bearbeitest. (rechts oben im issue: assign
 Tutorial-Empfehlungen für den Umgang mit Git
 
 * Für die basics: http://rogerdudler.github.io/git-guide/
-* Für Rebases etc.: http://think-like-a-git.net
+* Für Rebases etc.: http://think-like-a-git.net, https://git-scm.com/doc und https://learngitbranching.js.org/
 
 ## Auf welchen Ebenen Git funktioniert
 
@@ -68,9 +70,11 @@ Wenn du Probleme hast, frag am besten jemand im Kanal, ob er/sie dir helfen kann
 Ein Workflow kann so aussehen:
 TL/DR: Branch erstellen -> ein oder mehrere commits machen -> pushen -> MR erstellen
 
-`git checkout master
+```
+git checkout master
 git pull
-git checkout -b 123-fix-for-issue-123`
+git checkout -b 123-fix-for-issue-123
+```
 
 (Erstellt den Branch 123-fix-for-issue-123. Es ist gut, wenn du die Issue-Zahl vorne an deinen Branch setzt, damit wir sehen können, wozu er gehört. Du kannst gerne genauer beschreiben, worum es geht: `git checkout -b 812-1-make-devdocs-contributing-a-german-text`)
 
@@ -92,8 +96,10 @@ Damit überprüfst du deinen Code style.
 `./scripts/test`
 Damit lässt du lokal die Tests durchlaufen. Für spätere Wiederholungstests nutze: `./scripts/test-rerun` (viel schneller!)
 
-`git commit -m "Changed something in EditedFile.php"
-git push --set-upstream origin 123-fix-for-issue-123`
+```
+git commit -m "Changed something in EditedFile.php"
+git push --set-upstream origin 123-fix-for-issue-123
+```
 
 (Bündelt die Änderungen mit der öffentlichen Notiz "..." und lädt sie hoch. Es kann sein, dass ein Kommando vorschlägt, das noch zu geben ist.
 
@@ -101,30 +107,36 @@ Insbesondere bietet es sich hier an, einen MR für den branch zu erstellen und i
 
 Anschließend weiterarbeiten
 
-`git add src/AnotherFile.php
+```
+git add src/AnotherFile.php
 git commit -m "Changed something in AnotherFile.php"
-git push` 
+git push
+```
+
 // This works now// 
 
 Wenn du das Changelog bearbeitet hast:
 
-`git add CHANGELOG.md
+```
+git add CHANGELOG.md
 git commit -m "Updated Changelog"
-git push` 
+git push
+```
 
 (Nach git push kann man als Kommando `-o ci.skip` hinzufügen. Das überspringt Tests, was etwas Energie spart. Tests sind am Ende allerdings wichtig, wenn alle Dateien fertig sind.)
 
 Wenn du fertig bist:
 
-`git checkout master
+```
+git checkout master
 git pull
 git checkout 123-fix-for-issue-123
 git rebase master
 // Depening of the age of your branch and other changes, this will just work or require some more work (follow instructions by git)
 
 git push -f 
-// force push will overwrite changes on origin, since rebasing changed the history of your branch`
-
+// force push will overwrite changes on origin, since rebasing changed the history of your branch
+```
 
 ## Was es zum Merge Request zu sagen gibt
 
@@ -139,6 +151,35 @@ Je übersichtlicher und besser beschrieben der Merge Request (MR) ist, desto ein
 * Gib dem MR noch ein paar Label, die ihn einordnen. Insbesondere ein "state"-Label hilft zu sehen, ob der MR fertig ist.
 
 Unten im MR kann dieser diskutiert werden. Anmerkungen am Code kannst du am besten unter "Changes" direkt an der entsprechenden Zeile einfügen.
+
+## Wie du einen Rebase machst
+
+1. Du holst Dir mit ```git checkout master``` und ```git pull``` die aktuellen Änderungen vom master Branch.
+2. Wechsele danach wieder mit ```git checkout BRANCHNAME``` in deinen branch.
+3. ```git rebase master``` ist der Befehl deiner Wahl. (Den Unterschied zwischen rebase und merge findest du hier: https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+	
+Falls du das Programm phpstorm nutzt, klickst du rechts unten auf deinen Branchnamen. Dadurch geht ein Menü auf, in dem du den Master auswählst und anklickst: "checkout and rebase onto current".
+	
+4. Sollte das rebasen zu kompliziert sein oder nicht funktionieren: **Fallen lassen wie eine heiße Kartoffel** ;-) mit dem Befehl ``` "git rebase --abort" ``` Führe stattdessen ein merge durch, da dies einfacher ist, da nur die Änderungen von master branch eingefügt werden. Hierzu kannst du den Befehl 
+```git merge master``` anwenden.
+	
+In phpstorm gibt es zwei Menüpunkte unter dem obigen: "Merge into current". Du findest unten rechts eine Möglichkeit, dir die Versionsunterschiede anzeigen zu lassen. Mit dem Zauberstab-Knopf oben kannst du konfliktfreie Änderungen automatisch vornehmen lassen. "ours" und "theirs" entspricht den Pfeilen am Diff-Rand. (... Hier könnte jemand irgendwann Screenshots einfügen ...)
+	
+5. Danach kannst du mit einem ```git commit``` und ```git push``` die Änderungen hochladen, wenn du alle Konflikte bereinigt bekommst.
+	
+## Wie du mit Rebase-Konflikten in unseren Abhängigkeiten umgehst 
+	
+(https://stackoverrun.com/de/q/11809185)
+	
+Hast du in deinem Branch Änderungen an der composer.json und / oder client/packages.json durchgeführt und gleichzeitig hat jemand auch an diesen Dateien Änderungen in den master gemergt, kommt es in composer.lock und yarn.lock zu einem Konflikt.
+	
+	1. Führe den Befehl ```git checkout master -- chat/yarn.lock, client/yarn.lock or composer.lock``` aus
+	2. Danach loggst du Dich mit ```./scripts/docker-compose run --rm client sh``` in den Docker-Container "Client" ein.
+	3. Führe darin den Befehl ```yarn``` aus und beende mit ```exit```, wenn dieser fertig ist. (bzw. für composer wäre es ```./scripts/composer install```)
+	4. Danach kannst du mit einem ```git add chat/yarn.lock, client/yarn.lock or composer.lock``` und ```git rebase --continue``` den Rebase fortsetzen. 
+	
+(Auf der [Rebase-Seite](rebase.md) gibt es auch ein Beispiel.)
+
 
 ## Merge in den Master
 

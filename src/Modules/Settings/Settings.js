@@ -48,6 +48,11 @@ refreshPushNotificationSettings()
 
 async function refreshPushNotificationSettings () {
   const pushNotificationsLabel = document.querySelector('#push-notification-label')
+
+  if (!pushNotificationsLabel) {
+    return // we seem to be on some settings page that doesn't contain no push notification settings
+  }
+
   const pushNotificationsButton = document.querySelector('#push-notification-button')
 
   if (!('PushManager' in window)) {
