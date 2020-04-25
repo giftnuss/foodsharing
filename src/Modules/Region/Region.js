@@ -32,7 +32,7 @@ $(document).ready(() => {
       {
         text: i18n('button.yes_i_am_sure'),
         click: async function () {
-          await leaveRegion($('input', this).serialize())
+          await leaveRegion($('input', this).val())
           goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
         }
       },
