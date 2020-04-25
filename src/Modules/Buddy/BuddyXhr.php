@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Buddy;
 
-use Foodsharing\Modules\Bell\Bell;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;

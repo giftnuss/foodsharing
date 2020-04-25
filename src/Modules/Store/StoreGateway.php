@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Modules\Bell\Bell;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;

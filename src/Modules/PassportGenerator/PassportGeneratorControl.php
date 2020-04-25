@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\PassportGenerator;
 
 use Endroid\QrCode\QrCode;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Modules\Bell\Bell;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;

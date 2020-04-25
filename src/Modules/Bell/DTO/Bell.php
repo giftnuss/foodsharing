@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Modules\Bell;
+namespace Foodsharing\Modules\Bell\DTO;
 
 /**
  * Class that represents the data of a bell notification, in a format in which it can be sent to foodsavers or be

@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Blog;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Bell\Bell;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;

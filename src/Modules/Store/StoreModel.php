@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Store;
 
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
-use Foodsharing\Modules\Bell\Bell;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Message\MessageModel;

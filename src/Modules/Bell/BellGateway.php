@@ -3,6 +3,9 @@
 namespace Foodsharing\Modules\Bell;
 
 use Foodsharing\Lib\WebSocketConnection;
+use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Bell\DTO\BellForExpirationUpdates;
+use Foodsharing\Modules\Bell\DTO\BellForList;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
