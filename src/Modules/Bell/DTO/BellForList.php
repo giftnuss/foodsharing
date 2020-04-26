@@ -81,39 +81,4 @@ class BellForList
 	 * as 'seen'.
 	 */
 	public $isRead;
-
-	/**
-	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
-	 *
-	 * @return BellForList[] - BellData objects with with unserialized $ball->vars and $bell->attr
-	 */
-	public static function createArrayFromDatatabaseRows(array $databaseRows): array
-	{
-		$output = [];
-		foreach ($databaseRows as $row) {
-			$bellDTO = new BellForList();
-
-			// This onclick-to-href conversion is probably not needed anymore
-			if (isset($row['attr']['onclick'])) {
-				preg_match('/profile\((.*?)\)/', $row['attr']['onclick'], $matches);
-				if ($matches) {
-					$row['attr']['href'] = '/profile/' . $matches[1];
-				}
-			}
-
-			$bellDTO->id = $row['id'];
-			$bellDTO->key = $row['body'];
-			$bellDTO->payload = unserialize($row['vars'], ['allowed_classes' => false]);
-			$bellDTO->href = unserialize($row['attr'], ['allowed_classes' => false])['href'];
-			$bellDTO->icon = $row['icon'][0] != '/' ? $row['icon'] : null;
-			$bellDTO->image = $row['icon'][0] == '/' ? $row['icon'] : null;
-			$bellDTO->createdAt = (new \DateTime($row['time']))->format('Y-m-d\TH:i:s');
-			$bellDTO->isRead = $row['seen'];
-			$bellDTO->isCloseable = $row['closeable'];
-
-			$output[] = $bellDTO;
-		}
-
-		return $output;
-	}
 }
