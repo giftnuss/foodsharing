@@ -53,7 +53,7 @@ gitbook serve docs --port 4001
 ```
 This makes the current devdocs available via `localhost:4001` in your browser.
 
-**It is updated at every change of the files. You need to send the `gitbook serve docs --port 4001` again when you save a changed file**
+**It is updated at every change of the files. You do not need to send the `gitbook serve docs --port 4001` again when you save a changed file**
 
 It would be nice to have a docker setup (to avoid the local `yarn` dependency). Please document it here if you set it up.
 
