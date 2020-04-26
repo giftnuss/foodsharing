@@ -7,6 +7,9 @@ use Codeception\CustomCommandInterface;
 use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
+use Helper\Foodsharing;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,15 +18,23 @@ class SeedCommand extends Command implements CustomCommandInterface
 {
 	use \Codeception\Command\Shared\Config;
 
+	/**
+	 * @var Foodsharing
+	 */
 	protected $helper;
 
 	/**
-	 * @var \Symfony\Component\Console\Output\OutputInterface
+	 * @var OutputInterface
 	 */
 	protected $output;
 
 	protected $foodsavers = [];
 	protected $stores = [];
+
+	/**
+	 * @var WorkGroupGateway
+	 */
+	protected $workGroupGateway;
 
 	/**
 	 * returns the name of the command.
@@ -102,11 +113,15 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$password = 'user';
 
+		// Create users
 		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $region1]);
 		$this->writeUser($user1, $password, 'foodsharer');
 
 		$user2 = $I->createFoodsaver($password, ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $region1]);
 		$this->writeUser($user2, $password, 'foodsaver');
+
+		$user3 = $I->createStoreCoordinator($password, ['email' => 'user3@example.com', 'name' => 'Three', 'bezirk_id' => $region1]);
+		$this->writeUser($user3, $password, 'store coordinator');
 
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
@@ -119,6 +134,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $region1]);
 		$this->writeUser($userorga, $password, 'orga');
 
+		// Add users to region
 		$I->addRegionAdmin($region1, $userbot['id']);
 		$I->addRegionMember($ag_quiz, $userbot['id']);
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
@@ -128,13 +144,24 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$I->addRegionMember($ag_testimonials, $user2['id']);
 
-		$conv1 = $I->createConversation([$userbot['id'], $user2['id']], ['name' => 'betrieb_bla']);
+		// Make ambassador responsible for all work groups in the region
+		$workGroupsIds = $I->grabColumnFromDatabase('fs_bezirk', 'id', ['parent_id' => $region1, 'type' => Type::WORKING_GROUP]);
+		foreach ($workGroupsIds as $id) {
+			$I->addRegionMember($id, $userbot['id']);
+			$I->addRegionAdmin($id, $userbot['id']);
+		}
+
+		// Create store team conversations
+		$conv1 = $I->createConversation([$userbot['id'], $user2['id'], $user3['id']], ['name' => 'betrieb_bla']);
 		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla']);
+		$I->addConversationMessage($user3['id'], $conv1['id']);
 		$I->addConversationMessage($userbot['id'], $conv1['id']);
 		$I->addConversationMessage($userbot['id'], $conv2['id']);
 
+		// Create a store and add team members
 		$store = $I->createStore($region1, $conv1['id'], $conv2['id'], ['betrieb_status_id' => 5]);
 		$I->addStoreTeam($store['id'], $user2['id']);
+		$I->addStoreTeam($store['id'], $user3['id'], true);
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
 
