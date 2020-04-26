@@ -181,7 +181,7 @@ class UserRestController extends AbstractFOSRestController
 	 * Tests if an email address is valid for registration. Returns 200 if the email address is valid or 400 if it is
 	 * invalid.
 	 *
-	 * @Rest\Get("user/validemail")
+	 * @Rest\Post("user/validemail")
 	 * @Rest\RequestParam(name="email", nullable=false)
 	 */
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response

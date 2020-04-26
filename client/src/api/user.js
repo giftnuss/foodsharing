@@ -1,4 +1,4 @@
-import { get, post, remove } from './base'
+import { post, remove } from './base'
 
 export function login (email, password) {
   return post('/user/login', { email, password })
@@ -9,5 +9,5 @@ export function deleteUser (id) {
 }
 
 export async function testRegisterEmail (email) {
-  return get('/user/validemail', { email: email })
+  return post('/user/validemail', { email: email })
 }
