@@ -174,6 +174,7 @@ class UserRestController extends AbstractFOSRestController
 	 */
 	public function registerUserAction(ParamFetcher $paramFetcher): Response
 	{
+		return $this->handleView($this->view([], 200));
 	}
 
 	/**
