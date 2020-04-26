@@ -18,7 +18,7 @@
         type="email"
         name="email"
         class="form-control"
-        @input="update"
+        @blur="update"
       >
       <div
         v-if="$v.email.$error && !isValid.isMailValid"
