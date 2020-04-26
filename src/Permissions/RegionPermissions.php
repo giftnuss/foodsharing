@@ -24,6 +24,11 @@ final class RegionPermissions
 		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
 	}
 
+	public function mayAdministrateRegions(): bool
+	{
+		return $this->session->may('orga');
+	}
+
 	public function mayAccessStatisticCountry(): bool
 	{
 		if ($this->session->may('orga')) {
@@ -35,7 +40,7 @@ final class RegionPermissions
 
 	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
 	{
-		return $this->session->isAmbassadorForRegion([$regionId], false, false);
+		return $this->session->isAmbassadorForRegion([$regionId], false, false) || $this->session->may('orga');
 	}
 
 	public function mayDeleteFoodsaverFromRegion(int $regionId): bool

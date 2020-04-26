@@ -40,6 +40,7 @@ final class ProfileGateway extends BaseGateway
 					fs.`geb_datum`,
 					fs.`anmeldedatum`,
 					fs.`photo`,
+					fs.`about_me_intern`,
 					fs.`about_me_public`,
 					fs.`orgateam`,
 					fs.`data`,

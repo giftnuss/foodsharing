@@ -115,6 +115,21 @@ class SettingsCest
 		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
 	}
 
+	public function canEditInternalSelfDescription(AcceptanceTester $I)
+	{
+		$newSelfDesc = 'This is a new self description!';
+		$I->login($this->foodsaver['email']);
+		$I->amOnPage('/?page=settings&sub=general');
+		$I->waitForPageBody();
+		$I->fillField('#about_me_intern', $newSelfDesc);
+		$I->click('Speichern');
+		$I->waitForPageBody();
+
+		$I->amOnPage('/profile/' . $this->foodsaver['id']);
+		$I->waitForPageBody();
+		$I->see($newSelfDesc);
+	}
+
 	private function createSelector(string $field)
 	{
 		return '#' . $field . '-wrapper input[name="' . $field . '"]';

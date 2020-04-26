@@ -8,6 +8,7 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
+use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Services\SanitizerService;
 
 class QuizXhr extends Control
@@ -17,6 +18,7 @@ class QuizXhr extends Control
 	private $quizSessionGateway;
 	private $sanitizerService;
 	private $dataHelper;
+	private $quizPermissions;
 
 	public function __construct(
 		QuizGateway $quizGateway,
@@ -24,7 +26,8 @@ class QuizXhr extends Control
 		QuizView $view,
 		ContentGateway $contentGateway,
 		SanitizerService $sanitizerService,
-		DataHelper $dataHelper
+		DataHelper $dataHelper,
+		QuizPermissions $quizPermissions
 	) {
 		$this->view = $view;
 		$this->quizGateway = $quizGateway;
@@ -32,6 +35,7 @@ class QuizXhr extends Control
 		$this->contentGateway = $contentGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->dataHelper = $dataHelper;
+		$this->quizPermissions = $quizPermissions;
 
 		parent::__construct();
 	}
@@ -50,7 +54,7 @@ class QuizXhr extends Control
 	[fp] => fdgh
 )
 		 */
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['fp'], $_GET['qid'])) {
 				$failurePoints = (int)$_GET['fp'];
 				$text = strip_tags($_GET['text']);
@@ -78,7 +82,7 @@ class QuizXhr extends Control
 
 	public function delquest()
 	{
-		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->quizPermissions->mayEditQuiz() && isset($_GET['id'])) {
 			$this->quizGateway->deleteQuestion($_GET['id']);
 
 			return [
@@ -90,7 +94,7 @@ class QuizXhr extends Control
 
 	public function delanswer()
 	{
-		if ($this->session->mayEditQuiz() && isset($_GET['id'])) {
+		if ($this->quizPermissions->mayEditQuiz() && isset($_GET['id'])) {
 			$this->quizGateway->deleteAnswer($_GET['id']);
 
 			return [
@@ -109,7 +113,7 @@ class QuizXhr extends Control
 		text	458
 		 */
 
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['qid'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -134,7 +138,7 @@ class QuizXhr extends Control
 
 	public function updateansw()
 	{
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			if (isset($_GET['text'], $_GET['right'], $_GET['id'])) {
 				$text = strip_tags($_GET['text']);
 				$exp = strip_tags($_GET['explanation']);
@@ -159,7 +163,7 @@ class QuizXhr extends Control
 
 	public function editanswer()
 	{
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			if ($answer = $this->quizGateway->getAnswer($_GET['id'])) {
 				$this->dataHelper->setEditData($answer);
 				$dia = new XhrDialog();
@@ -236,7 +240,7 @@ class QuizXhr extends Control
 
 	public function editquest()
 	{
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			if ($quest = $this->quizGateway->getQuestion($_GET['id'])) {
 				$this->dataHelper->setEditData($quest);
 				$dia = new XhrDialog();
@@ -1139,7 +1143,7 @@ class QuizXhr extends Control
 
 	public function updatequest()
 	{
-		if ($this->session->mayEditQuiz()) {
+		if ($this->quizPermissions->mayEditQuiz()) {
 			/*
 			 *   [id] => 10
 				 [text] => test

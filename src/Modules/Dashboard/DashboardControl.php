@@ -155,7 +155,7 @@ class DashboardControl extends Control
 				'avatar' => [
 					'user' => $this->user,
 					'size' => 50,
-					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
+					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/foodsharepoint50x50.png')
 				]
 			]),
 			CNT_TOP

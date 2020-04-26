@@ -11,13 +11,13 @@ const storage = {
     val = JSON.stringify({ v: val })
     window.localStorage.setItem(storage.prefix + key, val)
   },
-  get: function (key) {
+  get: function (key, def = undefined) {
     let val = window.localStorage.getItem(storage.prefix + key)
     if (val != undefined) {
       val = JSON.parse(val)
       return val.v
     }
-    return val
+    return def
   },
   del: function (key) {
     window.localStorage.removeItem(storage.prefix + key)
