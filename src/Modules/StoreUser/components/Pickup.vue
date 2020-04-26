@@ -1,60 +1,61 @@
 <template>
   <div>
-    <div class="card pickup">
-      <div class="card-body">
-        <div class="card-title">
-          <div :class="{'text-truncate':true, 'font-weight-bold': isToday}">
+    <div class="pickup">
+      <div class="pickup-title">
+        <div :class="{'pickup-date': true, 'today': isToday && !isInPast}">
+          <span>
             {{ date | dateFormat('full-long') }}
-          </div>
+          </span>
           <div
             v-if="isCoordinator && !isInPast"
             class="delete-pickup"
           >
             <button
               v-b-tooltip.hover="$i18n('pickup.delete_title')"
-              :class="{'btn btn-sm': true, 'cannot-delete': occupiedSlots.length > 0}"
+              class="btn btn-sm"
+              :class="{'cannot-delete': occupiedSlots.length > 0}"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
-              <i class="fas fa-times" />
+              <i class="fas fa-trash-alt" />
             </button>
           </div>
         </div>
-        <p class="card-text">
-          <ul class="slots">
-            <TakenSlot
-              v-for="slot in occupiedSlots"
-              :key="slot.profile.id"
-              :profile="slot.profile"
-              :confirmed="slot.isConfirmed"
-              :allow-leave="slot.profile.id == user.id && !isInPast"
-              :allow-kick="isCoordinator && !isInPast"
-              :allow-confirm="isCoordinator"
-              :allow-chat="slot.profile.id !== user.id"
-              @leave="$refs.modal_leave.show()"
-              @kick="activeSlot = slot, $refs.modal_kick.show()"
-              @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
-            />
-            <EmptySlot
-              v-for="n in emptySlots"
-              :key="n"
-              :allow-join="!isUserParticipant && isAvailable && n == 1"
-              :allow-remove="isCoordinator && n == emptySlots && !isInPast"
-              @join="$refs.modal_join.show()"
-              @remove="$emit('remove-slot', date)"
-            />
-            <div class="add-pickup-slot">
-              <button
-                v-if="isCoordinator && totalSlots < 10 && !isInPast"
-                v-b-tooltip.hover="$i18n('pickup.slot_add')"
-                class="btn secondary"
-                @click="$emit('add-slot', date)"
-              >
-                <i class="fas fa-plus" />
-              </button>
-            </div>
-          </ul>
-        </p>
       </div>
+      <p class="pickup-text">
+        <ul class="slots">
+          <TakenSlot
+            v-for="slot in occupiedSlots"
+            :key="slot.profile.id"
+            :profile="slot.profile"
+            :confirmed="slot.isConfirmed"
+            :allow-leave="slot.profile.id == user.id && !isInPast"
+            :allow-kick="isCoordinator && !isInPast"
+            :allow-confirm="isCoordinator"
+            :allow-chat="slot.profile.id !== user.id"
+            @leave="$refs.modal_leave.show()"
+            @kick="activeSlot = slot, $refs.modal_kick.show()"
+            @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
+          />
+          <EmptySlot
+            v-for="n in emptySlots"
+            :key="n"
+            :allow-join="!isUserParticipant && isAvailable && n == 1"
+            :allow-remove="isCoordinator && n == emptySlots && !isInPast"
+            @join="$refs.modal_join.show()"
+            @remove="$emit('remove-slot', date)"
+          />
+          <div class="add-pickup-slot">
+            <button
+              v-if="isCoordinator && totalSlots < 10 && !isInPast"
+              v-b-tooltip.hover="$i18n('pickup.slot_add')"
+              class="btn secondary"
+              @click="$emit('add-slot', date)"
+            >
+              <i class="fas fa-plus" />
+            </button>
+          </div>
+        </ul>
+      </p>
     </div>
     <b-modal
       ref="modal_join"
@@ -202,60 +203,90 @@ export default {
 }
 </script>
 
-<style scoped>
-  ul.slots {
-    display: flex;
-    padding: 0;
-    margin: 0 0 5px;
-    flex-wrap: wrap;
-  }
+<style lang="scss" scoped>
+.pickup {
+  position: relative;
+}
 
-  ul.slots div {
+.pickup-date {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+  font-weight: bolder;
+  text-align: center;
+  color: var(--fs-brown);
+  background-color: var(--fs-beige);
+
+  &.today {
+    margin-left: -10px;
+    margin-right: -10px;
+    border-left: 10px solid var(--fs-brown);
+    border-right: 10px solid var(--fs-brown);
+  }
+}
+
+.pickup ul.slots {
+  display: flex;
+  padding: 0;
+  margin: 0 0 5px;
+  flex-wrap: wrap;
+
+  div {
     display: inline-block;
   }
 
-  ul.slots >>> .btn {
+  /deep/ .btn {
     position: initial;
     display: inline-block;
-    padding: 2px;
     margin: 2px;
-    width: 41px;
-    height: 41px;
+    margin-left: 1px;
+    width: 50px;
+    height: 50px;
     color: var(--fs-brown);
+    background-color: var(--fs-white);
     border-color: var(--fs-beige);
-    border-width: 3px;
+    border-width: 2px;
+
+    &:hover {
+      border-color: var(--fs-brown);
+    }
+    &:focus {
+      box-shadow: none;
+    }
+    &.filled {
+      overflow: hidden;
+      border-width: 0;
+    }
+    &.btn-secondary {
+      background-color: var(--fs-beige);
+    }
+    &[disabled] {
+      opacity: 1;
+    }
+    &[disabled]:hover {
+      border-color: var(--fs-beige);
+      cursor: default;
+    }
   }
-  ul.slots >>> .btn:hover {
-    border-color: var(--fs-brown);
+}
+
+/* Display deletion button only when hovering pickup date */
+.pickup .delete-pickup {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--fs-brown);
+  background-color: var(--fs-beige);
+  opacity: 0.75;
+
+  .btn {
+    padding: 3px 5px;
+    line-height: 1.38;
   }
-  ul.slots >>> .btn:focus {
-    box-shadow: none;
-  }
-  ul.slots >>> .btn.filled {
-    overflow: hidden;
-  }
-  ul.slots >>> .btn.btn-secondary {
-    background-color: var(--fs-beige);
-  }
-  ul.slots >>> .btn[disabled] {
-    opacity: 0.5;
-    color: var(--fs-brown);
-  }
-  ul.slots >>> .btn[disabled]:hover {
-    border-color: var(--fs-beige);
-    cursor: default;
-  }
-  /* Display deletion button only when hovering pickup date */
-  .pickup .delete-pickup {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  .pickup:hover .delete-pickup {
-    display: block;
-  }
-  .pickup .delete-pickup .btn.cannot-delete {
-    color: var(--fs-beige);
-  }
+}
+
+.pickup:hover .delete-pickup {
+  display: block;
+}
 </style>

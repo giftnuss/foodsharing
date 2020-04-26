@@ -70,8 +70,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  .empty-slot {
-    display: inline-block;
-  }
+<style lang="scss" scoped>
+.empty-slot {
+  display: inline-block;
+}
 </style>
