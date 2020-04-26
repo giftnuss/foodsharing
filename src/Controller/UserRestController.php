@@ -160,6 +160,23 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Registers a new user.
+	 *
+	 * @Rest\Put("user")
+	 * @Rest\RequestParam(name="name")
+	 * @Rest\RequestParam(name="surname")
+	 * @Rest\RequestParam(name="email")
+	 * @Rest\RequestParam(name="pw")
+	 * @Rest\RequestParam(name="birthdate")
+	 * @Rest\RequestParam(name="mobile_phone")
+	 * @Rest\RequestParam(name="gender")
+	 * @Rest\RequestParam(name="newsletter")
+	 */
+	public function registerUserAction(ParamFetcher $paramFetcher): Response
+	{
+	}
+
+	/**
 	 * Tests if an email address is valid for registration. Returns 200 if the email address is valid or 400 if it is
 	 * invalid.
 	 *
