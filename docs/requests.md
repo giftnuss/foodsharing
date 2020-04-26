@@ -39,7 +39,7 @@ chat/socket.io -> nodejs server, in chat/server.js. There is documentation for a
   <!-- - php server tells websocket that there is a new message -->
   <!-- - nodejs-server sends message to all open connections of all sessions of all users -->
 
-## REST API
+# REST API
 
 The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony).
 <!-- TODO: good link to intro/ tutorial -->
@@ -72,10 +72,10 @@ This json contains data. Errors use the [error codes of http-requests](https://e
 While reading and writing code a (basic) [manual](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html)
 and an [annotation overview](https://symfony.com/doc/master/bundles/FOSRestBundle/annotations-reference.html) will help.
 
-## Services
+# Services
 
 In `/src/Services` we have services.
 
-## Sockets
+# Sockets
 
 In `/src/Sockets`, we have sockets. We use them to reduce the use of [`func.inc.php`](php.md).
