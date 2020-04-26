@@ -14,7 +14,7 @@ The devdocs should also be of help to anyone that got stuck while working on the
 
 ## Contributing to the devdocs
 
-Anyone can contribute to the devdocs. The git project folder is called `docs`.
+Anyone can contribute to the devdocs. The git project directory is called `docs`.
 
 The devdocs are based on the following principles:
 
@@ -44,9 +44,7 @@ Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitboo
 
 The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.network).
 To see your changes, you can build the devdocs locally.
-You need to have `nodejs` and `yarn` installed on your system. On Windows: After every install you might have to close and reopen the powershell so yarn is recognized as a command. Then go to the main directory `/` folder and
-
-Run
+You need to have `nodejs` and `yarn` installed on your system. On Windows: After every install you might have to close and reopen the powershell so yarn is recognized as a command. Then go to the main directory `/` and run
 ```
 yarn global add gitbook-cli
 gitbook install docs
