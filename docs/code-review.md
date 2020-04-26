@@ -37,6 +37,7 @@ For general explanation about REST, see [request types](requests.md).
 1. name keys always as specific as possible (`createdAt` instead of `time`,  `author` instead of `user`)
 1. integers should also be send as an integer, not as a string
 1. Standardize date and time: [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601). Use the `DATE_ATOM` PHP DateTime formatter.
+1. Add a message to exceptions. (e.g. `throw new HttpException(404, 'This region with id ' . $regionId . ' does not exist.');`)
 
 More not-yet-implemented ideas include:
 1. Add API versioning (to allow introducing breaking api changes in the future without immediately breaking the apps) ([not yet](https://gitlab.com/foodsharing-dev/foodsharing/issues/511#note_173339753), hopefully coming at some point)
