@@ -44,7 +44,7 @@ Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitboo
 
 The devdocs are built at every change on the master branch and published [here](https://devdocs.foodsharing.network).
 To see your changes, you can build the devdocs locally.
-You need to have `nodejs` and `yarn` installed on your system. On Windows: After every install you might have to close and reopen the powershell so yarn is recognized as a command. Then go to the /docs folder and
+You need to have `nodejs` and `yarn` installed on your system. On Windows: After every install you might have to close and reopen the powershell so yarn is recognized as a command. Then go to the main directory `/` folder and
 
 Run
 ```
@@ -53,7 +53,7 @@ gitbook install docs
 cd ..
 gitbook serve docs --port 4001
 ```
-This makes the current devdocs avaiable via `localhost:4001` in your browser.
+This makes the current devdocs available via `localhost:4001` in your browser.
 
 **It is updated at every change of the files. You need to send the `gitbook serve docs --port 4001` again when you save a changed file**
 
