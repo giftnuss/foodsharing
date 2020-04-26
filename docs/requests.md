@@ -67,7 +67,7 @@ Then they somehow react to the request, usually with a Database query via the ap
 
 During running php, the comments get translated to convoluted php code.
 REST also takes care of the translation from php data structures to json.
-This json contains data. Errors use the error codes of http-requests.
+This json contains data. Errors use the [error codes of http-requests](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes).
 
 While reading and writing code a (basic) [manual](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html)
 and an [annotation overview](https://symfony.com/doc/master/bundles/FOSRestBundle/annotations-reference.html) will help.
