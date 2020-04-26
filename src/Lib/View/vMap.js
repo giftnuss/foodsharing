@@ -10,7 +10,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
 
-import { MAP_TILES_URL, MAP_GEOCODING_ATTRIBUTION } from '@/consts'
+import { initMap } from '@/mapUtils'
 
 export let map
 export let clusterGroup
@@ -37,14 +37,7 @@ export async function initializeMap (el, cb = null) {
     prefix: defaultMarkerOptions.prefix
   })
 
-  map = L
-    .map(el, { maxZoom: 20 })
-    .setView(center, zoom)
-
-  L.mapboxGL({
-    style: MAP_TILES_URL
-  }).addTo(map)
-  map.attributionControl.setPrefix(MAP_GEOCODING_ATTRIBUTION)
+  map = initMap(el, center, zoom)
 
   clearCluster()
 

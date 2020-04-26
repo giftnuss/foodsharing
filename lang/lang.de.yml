@@ -567,5 +567,5 @@ menubells:
  no_bells: Du hast derzeit keine Benachrichtigungen
 
 push_notifications:
-  test_notification_title: 'Push-Benachrigungen aktiviert'
+  test_notification_title: 'Push-Benachrichtigungen aktiviert'
   test_notification_body: 'Super, das scheint geklappt zu haben :)'

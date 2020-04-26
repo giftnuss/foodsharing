@@ -9,7 +9,6 @@ use Flourish\fSession;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
-use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
@@ -520,25 +519,6 @@ class Session
 		return isset($_SESSION['client']['bezirke'][$regionId]) || $this->isAdminFor($regionId) || $this->isOrgaTeam();
 	}
 
-	/**
-	 * @deprecated Please use permission class in permission folder:
-	 * @see ReportPermissions::mayHandleReports()
-	 */
-	public function mayHandleReports()
-	{
-		// group "Regelverletzungen/Meldungen"
-		return $this->may('orga') || $this->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
-	}
-
-	/**
-	 * @deprecated Please use permission class in permission folder:
-	 * @see QuizPermissions::mayEditQuiz()
-	 */
-	public function mayEditQuiz()
-	{
-		return $this->may('orga') || $this->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP);
-	}
-
 	public function isAdminForAWorkGroup()
 	{
 		if ($all_group_admins = $this->mem->get('all_global_group_admins')) {
@@ -564,7 +544,7 @@ class Session
 	/**
 	 * Checks if the current user is an ambassador for one of the regions in the list of region IDs.
 	 *
-	 * @param $regionIds list of region IDs
+	 * @param array $regionIds list of region IDs
 	 * @param bool $include_groups if working group should be included in the check
 	 * @param bool $include_parent_regions if the parent regions should be included in the check
 	 */

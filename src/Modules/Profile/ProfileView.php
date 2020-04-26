@@ -17,6 +17,7 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Permissions\ProfilePermissions;
+use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 
@@ -24,6 +25,7 @@ class ProfileView extends View
 {
 	private $foodsaver;
 	private $profilePermissions;
+	private $reportPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -37,12 +39,14 @@ class ProfileView extends View
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
-		ProfilePermissions $profilePermissions
+		ProfilePermissions $profilePermissions,
+		ReportPermissions $reportPermissions
 	) {
 		parent::__construct($twig, $viewUtils, $session, $sanitizerService, $pageHelper, $timeHelper, $imageService,
 			$routeHelper, $identificationHelper, $dataHelper, $translationHelper);
 
 		$this->profilePermissions = $profilePermissions;
+		$this->reportPermissions = $reportPermissions;
 	}
 
 	public function profile(
@@ -189,7 +193,7 @@ class ProfileView extends View
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:0});"><i class="fas fa-file-alt fa-fw"></i>Verifizierungshistorie</a></li>';
 		}
 
-		if ($this->session->mayHandleReports()) {
+		if ($this->reportPermissions->mayHandleReports()) {
 			if (isset($this->foodsaver['note_count'])) {
 				$opt .= '<li><a href="/profile/' . (int)$this->foodsaver['id'] . '/notes/"><i class="far fa-file-alt fa-fw"></i>' . $this->translationHelper->sv(
 						'notes_count',
@@ -507,6 +511,7 @@ class ProfileView extends View
 		$infos = $this->renderFoodsaverInformation($ambassador, $infos);
 		$infos = $this->renderOrgaTeamMemberInformation($infos);
 		$infos = $this->renderSleepingHatInformation($infos);
+		$infos = $this->renderAboutMeInternalInformation($infos);
 
 		$out = '';
 		foreach ($infos as $info) {
@@ -574,6 +579,18 @@ class ProfileView extends View
 					'val' => implode(', ', $fsHomeDistrict),
 				];
 			}
+		}
+
+		return $infos;
+	}
+
+	private function renderAboutMeInternalInformation(array $infos): array
+	{
+		if ($this->foodsaver['about_me_intern']) {
+			$infos[] = [
+				'name' => $this->translationHelper->s('about_me_intern_profile'),
+				'val' => $this->foodsaver['about_me_intern'],
+			];
 		}
 
 		return $infos;

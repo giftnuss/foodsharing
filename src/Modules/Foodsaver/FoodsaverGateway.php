@@ -229,6 +229,7 @@ final class FoodsaverGateway extends BaseGateway
 			'geb_datum',
 			'anmeldedatum',
 			'photo',
+			'about_me_intern',
 			'about_me_public',
 			'orgateam',
 			'data',
@@ -680,6 +681,7 @@ final class FoodsaverGateway extends BaseGateway
 			'telefon',
 			'handy',
 			'geb_datum',
+			'about_me_intern',
 			'about_me_public',
 			'homepage',
 			'position'
@@ -693,6 +695,7 @@ final class FoodsaverGateway extends BaseGateway
 			'anschrift',
 			'telefon',
 			'handy',
+			'about_me_intern',
 			'about_me_public',
 			'homepage',
 			'position'
