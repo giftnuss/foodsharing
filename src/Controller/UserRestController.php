@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Controller;
 
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -25,6 +26,7 @@ class UserRestController extends AbstractFOSRestController
 	private $reportPermissions;
 	private $userPermissions;
 	private $profilePermissions;
+	private $emailHelper;
 
 	public function __construct(
 		Session $session,
@@ -33,7 +35,8 @@ class UserRestController extends AbstractFOSRestController
 		ProfileGateway $profileGateway,
 		ReportPermissions $reportPermissions,
 		UserPermissions $userPermissions,
-		ProfilePermissions $profilePermissions)
+		ProfilePermissions $profilePermissions,
+		EmailHelper $emailHelper)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
@@ -42,6 +45,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->reportPermissions = $reportPermissions;
 		$this->userPermissions = $userPermissions;
 		$this->profilePermissions = $profilePermissions;
+		$this->emailHelper = $emailHelper;
 	}
 
 	/**
@@ -153,6 +157,21 @@ class UserRestController extends AbstractFOSRestController
 		$this->session->logout();
 
 		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Tests if an email address is valid for registration. Returns 200 if the email address is valid or 400 if it is
+	 * invalid.
+	 *
+	 * @Rest\Get("user/validemail")
+	 * @Rest\RequestParam(name="email", nullable=false)
+	 */
+	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
+	{
+		$email = $paramFetcher->get('email');
+		$result = (!empty($email) && $this->emailHelper->validEmail($email)) ? 200 : 400;
+
+		return $this->handleView($this->view([], $result));
 	}
 
 	/**
