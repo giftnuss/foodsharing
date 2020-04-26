@@ -36,4 +36,51 @@ class RegionApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 		$I->seeResponseIsJson();
 	}
+
+	public function canJoinRegionTwice(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
+		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+	}
+
+	public function canNotLeaveRegionWithoutLogin(\ApiTester $I)
+	{
+		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseIsJson();
+	}
+
+	public function canNotLeaveRegionWithoutJoiningFirst(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseIsJson();
+	}
+
+	public function canLeaveRegionExactlyOnce(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
+		$I->seeResponseIsJson();
+		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseIsJson();
+	}
+
+	public function canNotLeaveDifferentRegionThanJoined(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
+		$I->sendPOST('api/region/999999/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseIsJson();
+	}
 }
