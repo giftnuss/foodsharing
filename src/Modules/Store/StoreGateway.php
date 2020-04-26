@@ -947,7 +947,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$expiredBells = $this->bellGateway->getExpiredByIdentifier('store-fetch-unconfirmed-%');
 
 		foreach ($expiredBells as $bell) {
-			$storeId = substr($bell['identifier'], strlen('store-fetch-unconfirmed-'));
+			$storeId = substr($bell->identifier, strlen('store-fetch-unconfirmed-'));
 			$this->updateBellNotificationForStoreManagers($storeId);
 		}
 	}
