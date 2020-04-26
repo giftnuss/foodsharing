@@ -1,8 +1,16 @@
 :root {
-  --fs-brown: #533a20;
-  --fs-green: #64ae24;
-  --fs-beige: #f1e7c9;
-  --fs-white: #F9F5E0;
+  --warning-rgb: 255, 193,  7; /* bootstrap default, #ffc107 */
+  --danger-rgb:  220,  53, 69; /* bootstrap default, #dc3545 */
+
+  --fs-brown-rgb:  83,  58,  32;
+  --fs-green-rgb: 100, 174,  36;
+  --fs-beige-rgb: 241, 231, 201;
+  --fs-white-rgb: 249, 245, 224;
+
+  --fs-brown: rgb(var(--fs-brown-rgb)); /* #533a20 */
+  --fs-green: rgb(var(--fs-green-rgb)); /* #64ae24 */
+  --fs-beige: rgb(var(--fs-beige-rgb)); /* #f1e7c9 */
+  --fs-white: rgb(var(--fs-white-rgb)); /* #f9f5e0 */
 }
 
 .avatar, .avatar > i {

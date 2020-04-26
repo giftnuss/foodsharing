@@ -242,8 +242,8 @@ export default {
     margin-left: 1px;
     width: 50px;
     height: 50px;
-    color: var(--fs-brown);
-    background-color: var(--fs-white);
+    color: rgba(var(--fs-brown-rgb), 0.75);
+    background-color: rgba(var(--fs-white-rgb), 0.5);
     border-color: var(--fs-beige);
     border-width: 2px;
 
