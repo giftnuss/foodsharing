@@ -18,14 +18,15 @@
         type="email"
         name="email"
         class="form-control"
-        @input="$emit('update:email', $event.target.value)"
+        @input="update"
       >
       <div
-        v-if="$v.email.$error"
+        v-if="$v.email.$error && !isValid.isMailValid"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
         <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
+        <span v-if="!isValid.isMailValid">{{ $i18n('register.error_email') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -105,12 +106,14 @@
 
 <script>
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { testRegisterEmail } from '@/api/user'
 
 export default {
   props: { email: { type: String, default: '' }, password: { type: String, default: '' } },
   data () {
     return {
-      confirmPassword: ''
+      confirmPassword: '',
+      isMailValid: false
     }
   },
   validations: {
@@ -118,12 +121,27 @@ export default {
     password: { required, minLength: minLength(8) },
     confirmPassword: { required, sameAsPassword: sameAs('password') }
   },
-
+  computed: {
+    isValid () {
+      return !this.$v.$invalid || this.isMailValid === true
+    }
+  },
   methods: {
     redirect () {
       this.$v.$touch()
-      if (!this.$v.$invalid) {
+      if (this.isValid) {
         this.$emit('next')
+      }
+    },
+    async update ($event, isMailValid) {
+      console.log('update')
+      if ($event.target.value !== '') {
+        console.log('testRegisterEMail: ', $event.target.value)
+        await testRegisterEmail($event.target.value).then(isMailValid = false)
+      }
+      if (isMailValid !== false) {
+        console.log('update event email: ', $event.target.value)
+        this.$emit('update:email', $event.target.value)
       }
     }
   }
