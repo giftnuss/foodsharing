@@ -13,6 +13,7 @@ use Foodsharing\Services\NotificationService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RegionRestController extends AbstractFOSRestController
@@ -87,12 +88,15 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Removes the current user from a region. Returns 200 on success or 403 if not logged in or if the user is not a
+	 * member of that region.
+	 *
 	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
 	 */
 	public function leaveRegionAction($regionId)
 	{
 		if (!$this->session->may() || !$this->session->mayBezirk($regionId)) {
-			throw new HttpException(401);
+			throw new AccessDeniedHttpException();
 		}
 
 		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
