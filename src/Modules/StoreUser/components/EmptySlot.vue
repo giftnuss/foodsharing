@@ -21,7 +21,7 @@
     <b-dropdown
       v-else-if="allowJoin && allowRemove"
       no-caret
-      toggle-class="btn filled"
+      toggle-class="btn p-0"
       variant="tertiary"
     >
       <template v-slot:button-content>
