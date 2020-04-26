@@ -29,6 +29,7 @@
     - [icons](icons.md)
   - [Databases](database.md)
   - [Tests](tests.md)
+  - [Refactoring](refactor.md)
   - [Glossary](GLOSSARY.md)
 
 - [About the devdocs](about-devdocs.md)
