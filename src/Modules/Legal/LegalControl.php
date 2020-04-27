@@ -37,11 +37,16 @@ class LegalControl extends Control
 	{
 		$privacyPolicyDate = $this->gateway->getPpVersion();
 		$privacyNoticeDate = $this->gateway->getPnVersion();
-		$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
 
-		$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
-		$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
-		$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
+		if ($this->session->id()) {
+			$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
+			$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
+			$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+			$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
+		} else {
+			$privacyNoticeNeccessary = false;
+			$data = new LegalData(false, true);
+		}
 
 		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
 

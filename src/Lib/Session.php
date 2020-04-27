@@ -163,8 +163,9 @@ class Session
 	public function getLocation()
 	{
 		if (!$this->initialized) {
-			return false;
+			return ['lat' => null, 'lon' => null];
 		}
+
 		$loc = fSession::get('g_location', false);
 		if (!$loc) {
 			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
