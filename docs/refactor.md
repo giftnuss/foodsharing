@@ -28,18 +28,7 @@ Request handling is explained in the [here](requests.md) and more about Rest API
 
 ## Back-End
 
-The back-end code is structured like this:
-
-| Class       | Purpose              | Comment                        |
-| --------    | --------             | --------                       |
-| Control     | Action Logic         | Things that are neither database interaction nor presentation logic      | 
-| Permission  | Permission Checks    | What kind of user may do what? |
-| Service     | ?                    |            |
-| Helper      | ?                    |            |
-
-
-
-A bit more explanation can be found [here](php.md).
+Some explanation can be found [here](php.md).
 
 Helper classes could be used to put some functions unorganized there. Please think about if there might not be a better class to put it. Some parts might be better in Service classes. (If in doubt, please ask the team.)
 
@@ -47,15 +36,6 @@ Helper classes could be used to put some functions unorganized there. Please thi
 ## Database Access
 
 Currently there are SQL statements in ```*Model``` classes, in XhrMethods and in ```*Gateway``` classes.
+More information can be found [here](php.md#newer-code-structure).
 
 [Issue #9](https://gitlab.com/foodsharing-dev/foodsharing/-/issues/9)  tracks the refactor procress of moving everything to ```*Gateway``` classes. 
-
-
-## Data Transfer Object (DTO)
-
-There are different array representations used in the foodsharing code, sometimes even describing the same data. DTO classes can be used to bring more structure into this. They also help with **clearing up which parameters are expected when and what types they have**. 
-
-For data conversion from the database into arrays, there can be static functions used.
-
-There should be a uniform naming convention for them. Currently we don't have one. An example can be found in the Bell module, currently in this [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). If there is agreement on them, please add it here.
-
