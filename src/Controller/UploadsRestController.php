@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Controller;
 
+use Exception;
 use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Uploads\UploadsGateway;
@@ -29,6 +30,16 @@ class UploadsRestController extends AbstractFOSRestController
 	 */
 	private $session;
 
+	private const MIN_WIDTH = 16;
+	private const MAX_WIDTH = 800;
+	private const MIN_HEIGHT = 16;
+	private const MAX_HEIGHT = 500;
+	private const MIN_QUALITY = 1;
+	private const MAX_QUALITY = 100;
+	private const DEFAULT_QUALITY = 80;
+	private const MAX_UPLOAD_FILE_SIZE_LOGGED_IN = 1.5 * 1024 * 1024;
+	private const MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024;
+
 	public function __construct(UploadsGateway $uploadsGateway, UploadsService $uploadsService, Session $session)
 	{
 		$this->uploadsGateway = $uploadsGateway;
@@ -37,12 +48,14 @@ class UploadsRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Returns the file with the requested UUID. Width and height must both be given or can be set both to 0 to
+	 * indicate no resizing.
+	 *
 	 * @DisableCsrfProtection
 	 * @Rest\Get("uploads/{uuid}", requirements={"uuid"="[0-9a-f\-]+"})
 	 * @Rest\QueryParam(name="w", requirements="\d+", default=0, description="Max image width")
 	 * @Rest\QueryParam(name="h", requirements="\d+", default=0, description="Max image height")
-	 * @Rest\QueryParam(name="q", requirements="\d+", default=0, description="Image quality (between 1 and 100")
-	 * resize behavior: fill
+	 * @Rest\QueryParam(name="q", requirements="\d+", default=0, description="Image quality (between 1 and 100)")
 	 */
 	public function getFileAction(string $uuid, ParamFetcher $paramFetcher): void
 	{
@@ -56,17 +69,18 @@ class UploadsRestController extends AbstractFOSRestController
 			die();
 		}
 
-		if ($height && $height < 16) {
-			throw new HttpException(400, 'minium height is 16 pixel');
+		// check parameters
+		if ($height && $height < self::MIN_HEIGHT) {
+			throw new HttpException(400, 'minium height is ' . self::MIN_HEIGHT . ' pixel');
 		}
-		if ($height && $height > 500) {
-			throw new HttpException(400, 'maximum height is 500 pixel');
+		if ($height && $height > self::MAX_HEIGHT) {
+			throw new HttpException(400, 'maximum height is ' . self::MAX_HEIGHT . ' pixel');
 		}
-		if ($width && $width < 16) {
-			throw new HttpException(400, 'minium width is 16 pixel');
+		if ($width && $width < self::MIN_WIDTH) {
+			throw new HttpException(400, 'minium width is ' . self::MIN_WIDTH . ' pixel');
 		}
-		if ($width && $width > 800) {
-			throw new HttpException(400, 'maximum width is 800 pixel');
+		if ($width && $width > self::MAX_WIDTH) {
+			throw new HttpException(400, 'maximum width is ' . self::MAX_WIDTH . ' pixel');
 		}
 
 		if (($height && !$width) || ($width && !$height)) {
@@ -76,12 +90,13 @@ class UploadsRestController extends AbstractFOSRestController
 		if ($quality && !$doResize) {
 			throw new HttpException(400, 'quality parameter only allowed while resizing');
 		}
-		if ($quality && ($quality < 1 || $quality > 100)) {
-			throw new HttpException(400, 'quality needs to be between 1 and 100');
+		if ($quality && ($quality < self::MIN_QUALITY || $quality > self::MAX_QUALITY)) {
+			throw new HttpException(400, 'quality needs to be between ' . self::MIN_QUALITY . ' and ' . self::MAX_QUALITY);
 		}
 
-		$file = $this->uploadsGateway->getFile($uuid);
-		if (!$file) {
+		try {
+			$mimetype = $this->uploadsGateway->getMimeType($uuid);
+		} catch (Exception $e) {
 			throw new HttpException(404, 'file not found');
 		}
 
@@ -92,12 +107,12 @@ class UploadsRestController extends AbstractFOSRestController
 
 		// resizing of images
 		if ($doResize) {
-			if (strpos($file['mimetype'], 'image/') !== 0) {
+			if (strpos($mimetype, 'image/') !== 0) {
 				throw new HttpException(400, 'resizing only possible with images');
 			}
 
 			if (!$quality) {
-				$quality = 80;
+				$quality = self::DEFAULT_QUALITY;
 			}
 
 			$originalFilename = $filename;
@@ -108,17 +123,18 @@ class UploadsRestController extends AbstractFOSRestController
 			}
 		}
 
+		// write response
 		header('Pragma: public');
 		header('Cache-Control: max-age=' . (86400 * 7));
 		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400 * 7));
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-		$mime = explode('/', $file['mimetype']);
+		$mime = explode('/', $mimetype);
 		switch ($mime[0]) {
 			case 'video':
 			case 'audio':
 			case 'image':
-				header('Content-Type: ' . $file['mimetype']);
+				header('Content-Type: ' . $mimetype);
 				break;
 			case 'text':
 				header('Content-Type: text/plain');
@@ -138,33 +154,29 @@ class UploadsRestController extends AbstractFOSRestController
 	 */
 	public function uploadFileAction(ParamFetcher $paramFetcher): Response
 	{
-		if ($this->session->id()) {
-			$MAX_UPLOAD_FILE_SIZE = 1.5 * 1024 * 1024; // max 1.5 MB
-		} else {
-			$MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024; // max 300 kB for non logged-in users
-		}
-
-		$MAX_BASE64_SIZE = 4 * ($MAX_UPLOAD_FILE_SIZE / 3);
-
 		$filename = $paramFetcher->get('filename');
-		$body_encoded = $paramFetcher->get('body');
+		$bodyEncoded = $paramFetcher->get('body');
 
+		// check uploaded body
 		if (!$filename) {
 			throw new HttpException(400, 'no filename provided');
 		}
-		if (!$body_encoded) {
+		if (!$bodyEncoded) {
 			throw new HttpException(400, 'no body provided');
 		}
 
-		if (strlen($body_encoded) > $MAX_BASE64_SIZE) {
-			throw new HttpException(413, 'file is bigger than ' . round($MAX_UPLOAD_FILE_SIZE / 1024 / 1024, 1) . ' MB');
+		$maxSize = $this->session->id() ? self::MAX_UPLOAD_FILE_SIZE_LOGGED_IN : self::MAX_UPLOAD_FILE_SIZE;
+		$maxBase64Size = 4 * ($maxSize / 3);
+		if (strlen($bodyEncoded) > $maxBase64Size) {
+			throw new HttpException(413, 'file is bigger than ' . round($maxSize / 1024 / 1024, 1) . ' MB');
 		}
 
-		$body = base64_decode($body_encoded, true);
+		$body = base64_decode($bodyEncoded, true);
 		if (!$body) {
 			throw new HttpException(400, 'invalid body');
 		}
 
+		// save to temp file
 		$tempfile = tempnam(sys_get_temp_dir(), 'fs_upload');
 		file_put_contents($tempfile, $body);
 
@@ -195,7 +207,6 @@ class UploadsRestController extends AbstractFOSRestController
 			}
 
 			// JPEG? strip exif data!
-			// https://gitlab.com/foodsharing-dev/foodsharing/issues/375
 			if ($mimeType === 'image/jpeg') {
 				$this->uploadsService->stripImageExifData($tempfile, $path);
 			} else {

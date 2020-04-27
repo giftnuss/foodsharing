@@ -2,16 +2,26 @@
 
 namespace Foodsharing\Modules\Uploads;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class UploadsGateway extends BaseGateway
 {
-	public function getFile(string $uuid): array
+	/**
+	 * Returns the mimetype of the file with the specified UUID. Throws an exception if the file does not exist.
+	 *
+	 * @throws Exception
+	 */
+	public function getMimeType(string $uuid): string
 	{
-		return $this->db->fetchByCriteria('uploads', ['uuid', 'mimetype'], ['uuid' => $uuid]);
+		return $this->db->fetchValueByCriteria('uploads', 'mimetype', ['uuid' => $uuid]);
 	}
 
-	public function addFile($userId, string $hash, int $size, string $mimeType): array
+	/**
+	 * Makes sure a file is listed in the database. If it does not yet exist, it will be created. If it does exist, the
+	 * uploaded and access timestamps will be updated. Returns the UUID and a 'isReuploaded' flag.
+	 */
+	public function addFile(int $userId, string $hash, int $size, string $mimeType): array
 	{
 		// same file already uploaded?
 		if ($res = $this->db->fetchByCriteria('uploads', ['uuid'], ['sha256hash' => $hash])) {
@@ -45,6 +55,9 @@ class UploadsGateway extends BaseGateway
 		];
 	}
 
+	/**
+	 * Updates the last access timestamp of the file with the specified UUID.
+	 */
 	public function touchFile(string $uuid): void
 	{
 		$this->db->update('uploads', ['lastaccess_at' => $this->db->now()], ['uuid' => $uuid]);

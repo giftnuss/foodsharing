@@ -42,7 +42,7 @@ class CsrfListener
 			return;
 		}
 
-		// TODO: This should refactored later to either use a whitelist or try to find a way to read the annotations.
+		// TODO: This should be refactored later to either use a whitelist or try to find a way to read the annotations.
 		if ($this->startsWith($event->getRequest()->getRequestUri(), '/api/uploads') &&
 			$event->getRequest()->getMethod() === 'GET') {
 			return;
