@@ -25,8 +25,10 @@
         :is-following-bell.sync="isFollowingBell"
         :is-following-email.sync="isFollowingEmail"
         :is-sticky.sync="isSticky"
-        :thread-id="id"
         :show-sticky="mayModerate"
+        @toggle:follow-bell="updateFollowBell"
+        @toggle:follow-email="updateFollowEmail"
+        @toggle:sticky="updateStickyness"
       />
       <div
         v-if="!isActive && mayModerate"
@@ -82,10 +84,12 @@
       class="card rounded below"
     >
       <ThreadActions
-        :is-following-bell.sync="isFollowingBell"
-        :is-following-email.sync="isFollowingEmail"
-        :is-sticky.sync="isSticky"
-        :thread-id="id"
+        :is-following-bell="isFollowingBell"
+        :is-following-email="isFollowingEmail"
+        :is-sticky="isSticky"
+        @toggle:follow-bell="updateFollowBell"
+        @toggle:follow-email="updateFollowEmail"
+        @toggle:sticky="updateStickyness"
       />
     </div>
 
@@ -203,7 +207,45 @@ export default {
         }
       }
     },
-
+    async updateFollowBell () {
+      const targetState = !this.isFollowingBell
+      try {
+        if (targetState) {
+          await api.followThreadByBell(this.id)
+        } else {
+          await api.unfollowThreadByBell(this.id)
+        }
+        this.isFollowingBell = targetState
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async updateFollowEmail () {
+      const targetState = !this.isFollowingEmail
+      try {
+        if (targetState) {
+          await api.followThreadByEmail(this.id)
+        } else {
+          await api.unfollowThreadByEmail(this.id)
+        }
+        this.isFollowingEmail = targetState
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
+    async updateStickyness () {
+      const targetState = !this.isSticky
+      try {
+        if (targetState) {
+          await api.stickThread(this.id)
+        } else {
+          await api.unstickThread(this.id)
+        }
+        this.isSticky = targetState
+      } catch (err) {
+        pulseError(i18n('error_unexpected'))
+      }
+    },
     async deletePost (post) {
       this.loadingPosts.push(post.id)
 
