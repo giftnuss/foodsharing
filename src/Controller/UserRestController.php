@@ -187,7 +187,7 @@ class UserRestController extends AbstractFOSRestController
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
 	{
 		$email = $paramFetcher->get('email');
-		if (empty($email) || !$this->emailHelper->validEmail($email)) {
+		if (empty($email) || !$this->emailHelper->validEmail($email) || $this->emailHelper->isFoodsharingEmailAddress($email)) {
 			return $this->handleView($this->view([], 400));
 		}
 
