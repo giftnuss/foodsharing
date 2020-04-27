@@ -49,7 +49,7 @@ class RegionApiCest
 	public function canNotLeaveRegionWithoutLogin(\ApiTester $I)
 	{
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 		$I->seeResponseIsJson();
 	}
 
@@ -57,21 +57,20 @@ class RegionApiCest
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 		$I->seeResponseIsJson();
 	}
 
-	public function canLeaveRegionExactlyOnce(\ApiTester $I)
+	public function canLeaveRegion(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
+
+		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
-		$I->seeResponseIsJson();
-		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
 		$I->seeResponseIsJson();
 	}
 
@@ -80,7 +79,7 @@ class RegionApiCest
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
 		$I->sendPOST('api/region/999999/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::UNAUTHORIZED);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
 		$I->seeResponseIsJson();
 	}
 }

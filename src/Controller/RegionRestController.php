@@ -88,14 +88,15 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Removes the current user from a region. Returns 200 on success or 403 if not logged in or if the user is not a
-	 * member of that region.
+	 * Removes the current user from a region. Returns 403 if not logged in or 200 if the user was removed from the
+	 * region or was not a member of that region. That means that after a 200 result the user will definitely not be
+	 * a member of that region anymore.
 	 *
 	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
 	 */
 	public function leaveRegionAction($regionId)
 	{
-		if (!$this->session->may() || !$this->session->mayBezirk($regionId)) {
+		if (!$this->session->may()) {
 			throw new AccessDeniedHttpException();
 		}
 
