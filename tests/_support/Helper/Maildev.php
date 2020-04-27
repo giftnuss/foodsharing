@@ -16,7 +16,7 @@ class Maildev extends \Codeception\Module
 
 	public function getMails()
 	{
-		return $this->client->get('/email')->getBody();
+		return json_decode($this->client->get('/email')->getBody());
 	}
 
 	public function _before(\Codeception\TestInterface $test)
