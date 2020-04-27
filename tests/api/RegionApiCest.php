@@ -53,11 +53,11 @@ class RegionApiCest
 		$I->seeResponseIsJson();
 	}
 
-	public function canNotLeaveRegionWithoutJoiningFirst(\ApiTester $I)
+	public function canLeaveRegionWithoutJoiningFirst(\ApiTester $I)
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 	}
 
