@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       confirmPassword: '',
-      isMailValid: false
+      isMailValid: true
     }
   },
   validations: {
