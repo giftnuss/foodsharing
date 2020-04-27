@@ -21,12 +21,12 @@
         @blur="update"
       >
       <div
-        v-if="$v.email.$error && !isValid.isMailValid"
+        v-if="$v.email.$error || !isMailValid"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
         <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
-        <span v-if="!isValid.isMailValid">{{ $i18n('register.error_email') }}</span>
+        <span v-if="!isMailValid">{{ $i18n('register.error_email') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -123,25 +123,35 @@ export default {
   },
   computed: {
     isValid () {
-      return !this.$v.$invalid || this.isMailValid === true
+      return this.isMailValid && !this.$v.$invalid
     }
   },
   methods: {
     redirect () {
       this.$v.$touch()
+      console.log('isMailValid: ', this.isMailValid)
+      console.log('this.$v.$invalid: ', !this.$v.$invalid)
+      console.log('isValid: ', this.isValid)
       if (this.isValid) {
         this.$emit('next')
       }
     },
     async update ($event, isMailValid) {
-      console.log('update')
-      if ($event.target.value !== '') {
-        console.log('testRegisterEMail: ', $event.target.value)
-        await testRegisterEmail($event.target.value).then(isMailValid = false)
-      }
-      if (isMailValid !== false) {
-        console.log('update event email: ', $event.target.value)
-        this.$emit('update:email', $event.target.value)
+      console.log('update event email: ', $event.target.value)
+      this.$emit('update:email', $event.target.value)
+      try {
+        console.log('testRegisterEmail:', $event.target.value)
+        await testRegisterEmail($event.target.value)
+        this.isMailValid = true
+      } catch (err) {
+        if (err.code && err.code === 400) {
+          this.isMailValid = false
+        } else {
+          this.isMailValid = false
+          throw err
+        }
+        console.log('err.code: ', err.code)
+        return this.isMailValid
       }
     }
   }
