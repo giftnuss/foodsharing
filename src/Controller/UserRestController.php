@@ -160,24 +160,6 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Registers a new user.
-	 *
-	 * @Rest\Put("user")
-	 * @Rest\RequestParam(name="name")
-	 * @Rest\RequestParam(name="surname")
-	 * @Rest\RequestParam(name="email")
-	 * @Rest\RequestParam(name="pw")
-	 * @Rest\RequestParam(name="birthdate")
-	 * @Rest\RequestParam(name="mobile_phone")
-	 * @Rest\RequestParam(name="gender")
-	 * @Rest\RequestParam(name="newsletter")
-	 */
-	public function registerUserAction(ParamFetcher $paramFetcher): Response
-	{
-		return $this->handleView($this->view([], 200));
-	}
-
-	/**
 	 * Tests if an email address is valid for registration. Returns 200 if the email address is valid or 400 if it is
 	 * invalid or is already used.
 	 *
@@ -187,13 +169,19 @@ class UserRestController extends AbstractFOSRestController
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
 	{
 		$email = $paramFetcher->get('email');
-		if (empty($email) || !$this->emailHelper->validEmail($email) || $this->emailHelper->isFoodsharingEmailAddress($email)) {
-			return $this->handleView($this->view([], 400));
+		if (!$this->isEmailValidForRegistering($email)) {
+			throw new HttpException(400, 'email is not valid');
 		}
 
-		$exists = $this->foodsaverGateway->emailExists($email);
+		return $this->handleView($this->view([], 200));
+	}
 
-		return $this->handleView($this->view([], $exists ? 400 : 200));
+	private function isEmailValidForRegistering(string $email): bool
+	{
+		return !empty($email)
+			&& $this->emailHelper->validEmail($email)
+			&& !$this->emailHelper->isFoodsharingEmailAddress($email)
+			&& !$this->foodsaverGateway->emailExists($email);
 	}
 
 	/**

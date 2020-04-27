@@ -8,6 +8,6 @@ export function deleteUser (id) {
   return remove(`/user/${id}`)
 }
 
-export async function testRegisterEmail (email) {
+export function testRegisterEmail (email) {
   return post('/user/validemail', { email: email })
 }
