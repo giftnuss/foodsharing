@@ -21,7 +21,7 @@ class UploadsGateway extends BaseGateway
 	 * Makes sure a file is listed in the database. If it does not yet exist, it will be created. If it does exist, the
 	 * uploaded and access timestamps will be updated. Returns the UUID and a 'isReuploaded' flag.
 	 */
-	public function addFile(int $userId, string $hash, int $size, string $mimeType): array
+	public function addFile($userId, string $hash, int $size, string $mimeType): array
 	{
 		// same file already uploaded?
 		if ($res = $this->db->fetchByCriteria('uploads', ['uuid'], ['sha256hash' => $hash])) {

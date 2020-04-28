@@ -192,7 +192,7 @@ class FoodSharePointGateway extends BaseGateway
 				}
 				$pic = false;
 				if (!empty($fsp['picture'])) {
-					$foodSharePoints[$fsp]['pic'] = $this->getPicturePaths($fsp['picture']);
+					$pic = $this->getPicturePaths($fsp['picture']);
 				}
 				$out[$fsp['bezirk_id']]['fairteiler'][] = [
 					'id' => $fsp['id'],
@@ -458,6 +458,15 @@ class FoodSharePointGateway extends BaseGateway
 		$this->bellGateway->delBellsByIdentifier($identifier);
 	}
 
+	/**
+	 * Returns the URL paths for the 'thumb', 'head', and 'orig' version of the picture. This differentiates between
+	 * newer files, which are requested via rest API, and older files, which are requested directly with their file
+	 * path.
+	 *
+	 * @param string $picture a picture file's name
+	 *
+	 * @return array URL paths for the 'thumb', 'head', 'orig' version
+	 */
 	private function getPicturePaths(string $picture): array
 	{
 		if (strpos($picture, '/api/uploads/') === 0) {
