@@ -160,8 +160,8 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Tests if an email address is valid for registration. Returns 200 if the email address is valid or 400 if it is
-	 * invalid or is already used.
+	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
+	 * and a 'valid' parameter that indicates if the email address can be used for registration.
 	 *
 	 * @Rest\Post("user/validemail")
 	 * @Rest\RequestParam(name="email", nullable=false)
@@ -169,27 +169,18 @@ class UserRestController extends AbstractFOSRestController
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
 	{
 		$email = $paramFetcher->get('email');
-		if (!$this->isEmailValidForRegistering($email)) {
+		if (empty($email) || !$this->emailHelper->validEmail($email)) {
 			throw new HttpException(400, 'email is not valid');
 		}
 
-		if (!$this->isEmailExistForRegistering($email)) {
-			throw new HttpException(200, 'email is already exist');
-		} else {
-			throw new HttpException(200, 'email is not exist');
-		}
+		return $this->handleView($this->view([
+			'valid' => $this->isEmailValidForRegistering($email)
+		], 200));
 	}
 
 	private function isEmailValidForRegistering(string $email): bool
 	{
-		return !empty($email)
-			&& $this->emailHelper->validEmail($email)
-			&& !$this->emailHelper->isFoodsharingEmailAddress($email);
-	}
-
-	private function isEmailExistForRegistering(string $email): bool
-	{
-		return !empty($email)
+		return !$this->emailHelper->isFoodsharingEmailAddress($email)
 			&& !$this->foodsaverGateway->emailExists($email);
 	}
 
