@@ -53,15 +53,13 @@ Another difference to models regarding the implementation of SQL queries is that
 database are not directly in the Gateway class by inheritance but encapsulated in the attribute 
 `db` (`$this->db-><functioncall>`, defined in `/src/Modules/Core/Database.php`).
 
-Gateways inherit from `BaseGateway` (`/src/Modules/Core/BaseGateway.php`)
+Gateways inherit from `BaseGateway` (`/src/Modules/Core/BaseGateway.php`), which provides them with the `$db` attribute.
 
-Often requesting information from the database uses `sql` calls via the functions at the end of the Database class, see 
- > // === methods that accept SQL statements ===
+If possible, use semantic methods like `$db->fetch()` or `$db->insert()` to build your queries.
+Often, requesting information from the database uses `sql` calls via the functions at the end of the Database class, like
+`$db->execute()` - don't use these unless you can't build your query otherwise.
 
-If possible, rather use the functions at the beginning that build the `sql` commands, see
- > // === high-level methods that build SQL internally ===
-
-Those functions are well-documented in `/src/Modules/Core/Database.php`.
+All of those functions are well-documented in `/src/Modules/Core/Database.php`.
 
 #### Transaction classes
 
@@ -82,14 +80,28 @@ controllers should use this transaction if they want to make a user join a picku
 transaction are executed, the pickup joining is complete. 
 
 #### Data Transfer Objects
-Currently, data is often represented differently. 
-For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used. An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). 
 
-TODO: agree on naming conventions and add them here.
+Currently, domain objects are often represented differently: Some methods receive and return them as associative arrays,
+some receive them as a very long list of parameters. If arrays are used, it's often unclear which format the output has
+and which format the input is expected to have. Parameter lists on the other hand can get very long, and if parameters
+are documented, the documentation for one domain object is spread around the code. 
 
-DTOs help with clearing up which parameters are expected when and what types they have. 
+For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used. 
+An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). 
 
-In addition to the above mentioned classes, Permission classes are used to organize what actions are allowed for which user.
+DTOs help with clearing up which parameters are expected when and what types they have. DTO classes have public
+properties and don't encapsulate logic or functionality. Only logic to create DTOs or convert them from other
+representations shall be implemented on the DTO classes as static methods.
+
+As objects are often represented differently, as only parts of them are needed, most domain objects have multiple DTO
+representations. That's why we put them in a `DTO` directory inside of the corresponding module directory. Usually,
+there is one main or "complete" representation, that includes all aspect of the domain object that can be found in its
+database table. This one is just named like the domain object itself (e. g. `Bell`). All other partial represantations
+can be named according to their purpose or the place they are used (e. g. `BellForList`).
+
+#### Permission classes
+
+Permission classes are used to organize what actions are allowed for which user.
 
 ## Services
 
