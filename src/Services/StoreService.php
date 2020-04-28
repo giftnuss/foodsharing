@@ -27,7 +27,7 @@ class StoreService
 	 *   * handle transition between regular and onetime pickup
 	 *   * (does not convert additional back to regular as the gain is little).
 	 */
-	public function changePickupSlots(int $storeId, Carbon $date, int $newTotalSlots): bool
+	public function changePickupSlots(int $storeId, \DateTimeInterface $date, int $newTotalSlots): bool
 	{
 		$occupiedSlots = count($this->storeGateway->getPickupSignupsForDate($storeId, $date));
 		$pickups = $this->storeGateway->getOnetimePickupsForRange($storeId, $date, $date);
