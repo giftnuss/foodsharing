@@ -96,6 +96,12 @@ class FoodSharePointView extends View
 			$data['picture'] = '';
 		}
 
+		// initial value for the image chooser can be empty (no image yet) or an old or new file path
+		$initialValue = '';
+		if (!empty($data['picture'])) {
+			$initialValue = (strpos($data['picture'], '/api/uploads/') !== 0 ? '/images/' : '') . $data['picture'];
+		}
+
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
 			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
 			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
@@ -107,7 +113,7 @@ class FoodSharePointView extends View
 			$this->vueComponent('image-upload', 'file-upload-v-form', [
 				'inputName' => 'picture',
 				'image' => true,
-				'initialValue' => (strpos($data['picture'], '/api/uploads/') !== 0 ? '/images/' : '') . $data['picture'],
+				'initialValue' => $initialValue,
 				'resize' => [528, 60],
 			]),
 			$this->latLonPicker('latLng', $latLonOptions),

@@ -13,7 +13,10 @@
       v-if="image"
       class="row align-items-center"
     >
-      <div class="col-2">
+      <div
+        v-if="value"
+        class="col-2"
+      >
         <div class="preview">
           <img
             v-if="value"
@@ -23,11 +26,8 @@
         </div>
       </div>
       <div class="col">
-        <div v-if="value">
-          {{ filename }}
-        </div>
         <div
-          v-else
+          v-if="!value"
           class="text-muted"
         >
           {{ $i18n('upload.no_image_yet') }}
@@ -62,7 +62,7 @@
       ref="upload-modal"
       :static="true"
       size="lg"
-      title="Bild ausschneiden"
+      :title="$i18n('upload.crop_dialog_title')"
       modal-class="bootstrap"
       hide-header-close
       @ok="cropImage"

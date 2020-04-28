@@ -25,6 +25,7 @@ rm -rf \
   "$base_dir"/data/attach \
   "$base_dir"/data/mailattach \
   "$base_dir"/data/pass \
+  "$base_dur"/data/uploads \
   "$base_dir"/data/visite \
   "$base_dir"/cache/searchindex \
   "$base_dir"/tmp

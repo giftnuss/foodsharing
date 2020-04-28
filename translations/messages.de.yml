@@ -11,6 +11,7 @@ upload:
   preview_image: Vorschau
   image: Bild hochladen
   file: Datei hochladen
+  crop_dialog_title: Bild ausschneiden
 
 button:
   save: Speichern
