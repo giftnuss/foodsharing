@@ -114,7 +114,7 @@ class FoodSharePointView extends View
 				'inputName' => 'picture',
 				'image' => true,
 				'initialValue' => $initialValue,
-				'resize' => [528, 60],
+				'resize' => [525, 169]
 			]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,

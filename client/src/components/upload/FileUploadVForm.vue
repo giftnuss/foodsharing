@@ -3,10 +3,7 @@
     id="input-wrapper"
     class="input-wrapper"
   >
-    <label
-      class="wrapper-label ui-widget"
-      for="input"
-    >{{ $i18n('image') }}</label>
+    <label class="wrapper-label ui-widget">{{ $i18n('image') }}</label>
 
     <div class="element-wrapper">
       <file-upload
@@ -25,7 +22,6 @@
 </template>
 
 <script>
-// import VueCroppie from 'vue-croppie/src/VueCroppieComponent'
 import FileUpload from './FileUpload'
 
 export default {
