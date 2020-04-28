@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import dateFnsParseISO from 'date-fns/parseISO'
 import { getConversationList, getConversation } from '@/api/conversations'
 import ProfileStore from '@/stores/profiles'
 
