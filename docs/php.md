@@ -86,7 +86,7 @@ class ActivityXhr extends Control {
 ... }
 ```
 Dependency injection (Symfony) then makes sure that every service we request is created and
-injected when someone requests our service.
+injected when our service is instanciated.
 
 This works because we only need at most one object of every service class. This is because,
 as already mentioned, service classes are not about representing objects using instances, 
