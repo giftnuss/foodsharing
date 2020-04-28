@@ -106,30 +106,6 @@ Permission classes are used to organize what actions are allowed for which user.
 
 ## Services
 
-A service class is a class that doesn't represent an object in the real world,
-but provides functionality. Service classes are used to structure operations 
-using object oriented design patterns. 
-
-What exactly a service is and what not, is not well defined (see Blog Post
-[Services in Domain-Driven Design](http://gorodinski.com/blog/2012/04/14/services-in-domain-driven-design-ddd/)),
-but there are some characteristics that are typical for services
-- only one instance is created per requests and then shared by 
-all classes
-- services depend on other services and the non-service objects (like DTOs) they operate on
-- non-service objects don't depend on services
-
-As we don't have any entity classes, except for the DTO classes, nearly all
-of our classes are services.
-
-Because service classes only need to be instantiated once, we don't use
-the `new` statement to create instances. Instead, we use the 
-[Dependency Injection Pattern](https://en.wikipedia.org/wiki/Dependency_injection).
-This enables us to share service instances throughout the application.
-
-Responsible for creating and injecting the instances is the Symfony Dependency
-Injection component. For more information on how we handle dependency injection,
-see [PHP Dependencies](php.md#php-dependencies).
-
 Currently, in our source code, some code that assists controllers can be found 
 in classes named "Service": `/src/Services`.
 Some of these classes are Transaction classes that need to be renamed, and some
