@@ -27,7 +27,7 @@ A few current architecture goals would be:
 * modernize a lot more of the frontend code
 * replace years long outdated flourish lib
 
-So the preferred approach would be [*Model* to *Gateway*](php-structure.md#gateway-classes-vs-models) classes, see here: [Issue 9](https://gitlab.com/foodsharing-dev/foodsharing/issues/9)
+So the preferred approach would be [*Model* to *Gateway*](php-structure.md#newer-module-structure) classes, see here: [Issue 9](https://gitlab.com/foodsharing-dev/foodsharing/issues/9)
 
 # Getting started
 Q: I would really love to do anything, but when I look at the repo I can't even find a thing I could change just for testing! How do you start?
