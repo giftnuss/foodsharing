@@ -21,12 +21,12 @@
         @blur="update"
       >
       <div
-        v-if="$v.email.$error || !isMailExist"
+        v-if="$v.email.$error || isMailExist"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
         <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
-        <span v-if="!isMailExist">{{ $i18n('register.error_email') }}</span>
+        <span v-if="isMailExist">{{ $i18n('register.error_email_exist') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -123,7 +123,7 @@ export default {
   },
   computed: {
     isValid () {
-      return this.isMailExist && !this.$v.$invalid
+      return !this.isMailExist && !this.$v.$invalid
     }
   },
   methods: {
@@ -133,20 +133,24 @@ export default {
         this.$emit('next')
       }
     },
-    async update ($event, isMailValid) {
+    async update ($event) {
       console.log('update event email: ', $event.target.value)
       this.$emit('update:email', $event.target.value)
       console.log('this.$v.email.$error: ', this.$v.email.$error)
       if (!this.$v.email.$error) {
         try {
           console.log('testRegisterEmail:', $event.target.value)
-          await testRegisterEmail($event.target.value)
-          this.isMailExist = true
+          const MailExist = await testRegisterEmail($event.target.value)
+          console.log('MailExist: ', MailExist)
+          console.log('MailExist Message: ', MailExist.message)
+          if (MailExist.message === 'email is already exist') {
+            this.isMailExist = true
+          }
+          if (MailExist.message === 'email is not exist') {
+            this.isMailExist = false
+          }
         } catch (err) {
-          if (err.code && err.code === 400) {
-            this.isMailExist = false
-          } else {
-            this.isMailExist = false
+          if (err.code && err.code > 200) {
             throw err
           }
           console.log('err.code: ', err.code)

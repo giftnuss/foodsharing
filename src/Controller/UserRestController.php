@@ -173,14 +173,23 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'email is not valid');
 		}
 
-		return $this->handleView($this->view([], 200));
+		if (!$this->isEmailExistForRegistering($email)) {
+			throw new HttpException(200, 'email is already exist');
+		} else {
+			throw new HttpException(200, 'email is not exist');
+		}
 	}
 
 	private function isEmailValidForRegistering(string $email): bool
 	{
 		return !empty($email)
 			&& $this->emailHelper->validEmail($email)
-			&& !$this->emailHelper->isFoodsharingEmailAddress($email)
+			&& !$this->emailHelper->isFoodsharingEmailAddress($email);
+	}
+
+	private function isEmailExistForRegistering(string $email): bool
+	{
+		return !empty($email)
 			&& !$this->foodsaverGateway->emailExists($email);
 	}
 
