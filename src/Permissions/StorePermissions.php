@@ -90,10 +90,29 @@ class StorePermissions
 		return $this->mayReadStoreWall($storeId);
 	}
 
+	public function mayDeleteStoreWallPost(int $postId): bool
+	{
+		return $this->session->may('orga')
+			|| $this->storeGateway->getStoreComment($postId)['foodsaver_id'] === $this->session->id();
+	}
+
+	public function mayCreateStore()
+	{
+		return $this->session->may('bieb');
+	}
+
 	public function mayEditStore(int $storeId): bool
 	{
 		$fsId = $this->session->id();
 		if (!$fsId) {
+			return false;
+		}
+
+		if (!$this->session->may('bieb')) {
+			return false;
+		}
+
+		if (!$this->session->may('bieb')) {
 			return false;
 		}
 

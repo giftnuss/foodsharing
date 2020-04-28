@@ -2,35 +2,27 @@
   <div class="bootstrap">
     <div class="card">
       <div class="card-header">
-        Antworten
+        {{ $i18n('button.answer') }}
       </div>
       <div class="card-body">
         <p v-html="$i18n('forum.markdown_description')" />
         <textarea
           ref="textarea"
           v-model="text"
-          @keyup.ctrl.enter="submit"
           class="form-control"
           rows="3"
+          @keyup.ctrl.enter="submit"
         />
       </div>
-      <div class="card-footer">
+      <div class="card-footer below">
         <div class="row">
-          <div class="col ml-2 pt-2">
-            <b-form-checkbox
-              :checked="isFollowing"
-              @change="$emit('toggleFollow')"
-            >
-              {{ $i18n('forum.subscribe_thread') }}
-            </b-form-checkbox>
-          </div>
-          <div class="col-auto text-right">
+          <div class="col">
             <button
               :disabled="!text.trim()"
+              class="btn btn-primary float-right"
               @click="submit"
-              class="btn btn-secondary"
             >
-              Senden
+              {{ $i18n('button.send') }}
             </button>
           </div>
         </div>
@@ -40,16 +32,9 @@
 </template>
 
 <script>
-import { BFormCheckbox } from 'bootstrap-vue'
 
 export default {
-  components: { BFormCheckbox },
-  props: {
-    isFollowing: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: {},
   data () {
     return {
       text: ''

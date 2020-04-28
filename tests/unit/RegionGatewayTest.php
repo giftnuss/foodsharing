@@ -27,7 +27,7 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 	/**
 	 * @var array
 	 */
-	private $fairteiler;
+	private $foodSharePoint;
 
 	/**
 	 * @var array
@@ -54,7 +54,7 @@ class RegionGatewayTest extends \Codeception\Test\Unit
 		$this->gateway = $this->tester->get(RegionGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region = $this->tester->createRegion('God');
-		$this->tester->addBezirkMember($this->region['id'], $this->foodsaver['id']);
+		$this->tester->addRegionMember($this->region['id'], $this->foodsaver['id']);
 		$this->childRegion = $this->tester->createRegion('Jesus', $this->region['id']);
 		$this->childChildRegion = $this->tester->createRegion('Human', $this->childRegion['id']);
 		$this->unrelatedRegion = $this->tester->createRegion('Something else');

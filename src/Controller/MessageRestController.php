@@ -31,11 +31,6 @@ class MessageRestController extends AbstractFOSRestController
 	 * @Rest\Get("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", nullable=true, default=null, description="ID of oldest already known message")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="Number of messages to return")
-	 *
-	 * @param int $conversationId
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function getConversationMessagesAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
@@ -61,11 +56,6 @@ class MessageRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="messagesLimit", requirements="\d+", default="20", description="How many messages to return.")
-	 *
-	 * @param int $conversationId
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function getConversationAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
@@ -108,10 +98,6 @@ class MessageRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("conversations")
 	 * @Rest\RequestParam(name="members", map=true, requirements="\d+", description="User ids of people to include in the conversation.")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function createConversationAction(ParamFetcher $paramFetcher): Response
 	{
@@ -134,10 +120,6 @@ class MessageRestController extends AbstractFOSRestController
 	 * @Rest\Get("conversations")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="How many conversations to return.")
 	 * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="Offset returned conversations.")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function getConversationsAction(ParamFetcher $paramFetcher): Response
 	{
@@ -163,11 +145,6 @@ class MessageRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
-	 *
-	 * @param int $conversationId
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function sendMessageAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
@@ -183,11 +160,6 @@ class MessageRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Patch("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="name", nullable=true, default=null)
-	 *
-	 * @param int $conversationId
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function patchConversationAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
@@ -206,11 +178,6 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("conversations/{conversationId}/members/{userId}", requirements={"conversationId" = "\d+", "userId" = "\d+"})
-	 *
-	 * @param int $conversationId
-	 * @param int $userId
-	 *
-	 * @return Response
 	 */
 	public function removeMemberFromConversationAction(int $conversationId, int $userId): Response
 	{
@@ -227,10 +194,6 @@ class MessageRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Post("user/{userId}/conversation", requirements={"userId" = "\d+"})
-	 *
-	 * @param int $userId
-	 *
-	 * @return Response
 	 */
 	public function getUserConversationAction(int $userId): Response
 	{

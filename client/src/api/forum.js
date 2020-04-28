@@ -7,12 +7,20 @@ export function deleteThread (threadId) {
   return remove(`/forum/thread/${threadId}`)
 }
 
-export function followThread (threadId) {
-  return post(`/forum/thread/${threadId}/follow`)
+export function followThreadByEmail (threadId) {
+  return post(`/forum/thread/${threadId}/follow/email`)
 }
 
-export function unfollowThread (threadId) {
-  return remove(`/forum/thread/${threadId}/follow`)
+export function followThreadByBell (threadId) {
+  return post(`/forum/thread/${threadId}/follow/bell`)
+}
+
+export function unfollowThreadByEmail (threadId) {
+  return remove(`/forum/thread/${threadId}/follow/email`)
+}
+
+export function unfollowThreadByBell (threadId) {
+  return remove(`/forum/thread/${threadId}/follow/bell`)
 }
 
 export function stickThread (threadId) {

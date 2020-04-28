@@ -18,6 +18,11 @@ class CreateForumThreadData
 	 */
 	public $body;
 
+	/**
+	 * @Assert\Type("bool")
+	 */
+	public $sendMail;
+
 	public static function create()
 	{
 		return new self();

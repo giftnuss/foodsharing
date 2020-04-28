@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
-import urls from '@/urls'
+import { url } from '@/urls'
 import { dateFormat, dateDistanceInWords } from '@/utils'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Vuelidate from 'vuelidate'
 
 Vue.use(BootstrapVue)
+Vue.use(Vuelidate)
 
 Vue.filter('dateFormat', dateFormat)
 Vue.filter('dateDistanceInWords', dateDistanceInWords)
@@ -19,13 +21,7 @@ Vue.prototype.$i18n = (key, variables = {}) => {
 }
 Vue.prototype.$dateFormat = dateFormat
 
-Vue.prototype.$url = (key, ...params) => {
-  if (!urls[key]) {
-    console.error(new Error(`Vue.$url() Error: url key '${key}' does not exist`))
-    return '#'
-  }
-  return urls[key](...params)
-}
+Vue.prototype.$url = url
 
 export function vueRegister (components) {
   for (const key in components) {
@@ -33,13 +29,16 @@ export function vueRegister (components) {
   }
 }
 
-export function vueApply (selector) {
+export function vueApply (selector, disableElNotFoundException = false) {
   let elements = document.querySelectorAll(selector)
 
   // querySelectorAll().forEach() is broken in iOS 9
   elements = Array.from(elements)
 
   if (!elements.length) {
+    if (disableElNotFoundException) {
+      return
+    }
     throw new Error(`vueUse-Error: no elements were found with selector '${selector}'`)
   }
   elements.forEach((el, index) => {

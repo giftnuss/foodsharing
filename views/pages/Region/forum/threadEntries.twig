@@ -1,19 +1,16 @@
 {% for thread in threads %}
     <li class="thread" id="thread-{{ thread.id }}">
-        <a class="ui-corner-all"
-           href="{{ thread.url }}">
-                        <span class="user_pic">
-                            {% include 'partials/avatar.twig' with thread.avatar only %}
-                        </span>
-            <span class="thread_title">
-                            {% if thread.sticky %}<b>{% endif %}
-                    {{ thread.title }}
-                    {% if thread.sticky %}</b>{% endif %}
-                        </span>
+        <a class="ui-corner-all" href="{{ thread.url }}">
+            <span class="user_pic">
+                {% include 'partials/avatar.twig' with thread.avatar only %}
+            </span>
+            <span class="thread_title {{ thread.sticky ? 'font-weight-bold' }}">
+                {{ thread.title }}
+            </span>
             <span class="last_post ui-corner-all">
-                            <span class="time">{{ thread.post_time }}</span>
-                            <span class="info">{{ 'forum.from'|trans({'%name%': thread.foodsaver_name}) }}</span>
-                        </span>
+                <span class="time">{{ thread.post_time }}</span>
+                <span class="info">{{ 'forum.from'|trans({'%name%': thread.foodsaver_name}) }}</span>
+            </span>
             <span style="clear:both;"></span>
         </a>
     </li>

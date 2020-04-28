@@ -3,8 +3,9 @@
 namespace Foodsharing\Services;
 
 use Exception;
-use Flourish\fImage;
 use Flourish\fException;
+use Flourish\fImage;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use UnexpectedValueException;
 
 final class ImageService
@@ -158,17 +159,14 @@ final class ImageService
 		$bg = '';
 		if (isset($foodsaver['quiz_rolle'])) {
 			switch ($foodsaver['quiz_rolle']) {
-				case 1:
+				case Role::FOODSAVER:
 					$bg = 'box-sizing:border-box;border:3px solid #4A3520;';
 					break;
-				case 2:
-					$bg = 'box-sizing:border-box;border:3px solid #599022;';
+				case Role::STORE_MANAGER:
+					$bg = 'box-sizing:border-box;border:3px solid var(--fs-green);';
 					break;
-				case 3:
+				case Role::AMBASSADOR:
 					$bg = 'box-sizing:border-box;border:3px solid #FFBB00;';
-					break;
-				case 4:
-					$bg = 'box-sizing:border-box;border:3px solid #FF4800;';
 					break;
 				default:
 					break;

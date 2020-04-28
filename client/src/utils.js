@@ -1,9 +1,9 @@
 import dateFnsFormat from 'date-fns/format'
-import dateFnsIsSameYear from 'date-fns/is_same_year'
-import dateFnsIsDameDay from 'date-fns/is_same_day'
+import dateFnsIsSameDay from 'date-fns/isSameDay'
+import dateFnsIsSameYear from 'date-fns/isSameYear'
 import dateFnsLocaleDE from 'date-fns/locale/de'
-import dateFnsDistanceInWords from 'date-fns/distance_in_words'
-import dateFnsAddDays from 'date-fns/add_days'
+import dateFnsFormatDistance from 'date-fns/formatDistance'
+import dateFnsAddDays from 'date-fns/addDays'
 
 import { ajreq } from '@/script'
 
@@ -41,27 +41,27 @@ export function expose (data) {
 export function dateFormat (date, format = 'full-long') {
   switch (format) {
     case 'full-long':
-      if (dateFnsIsDameDay(date, new Date())) {
-        return dateFormat(date, '[heute], dddd, HH:mm [Uhr]')
-      } else if (dateFnsIsDameDay(date, dateFnsAddDays(new Date(), 1))) {
-        return dateFormat(date, '[morgen], dddd, HH:mm [Uhr]')
+      if (dateFnsIsSameDay(date, new Date())) {
+        return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")
+      } else if (dateFnsIsSameDay(date, dateFnsAddDays(new Date(), 1))) {
+        return dateFormat(date, "'morgen', cccc, HH:mm 'Uhr'")
       } else if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, 'dddd, Do MMM, HH:mm [Uhr]')
+        return dateFormat(date, "cccc, do MMM, HH:mm 'Uhr'")
       } else {
-        return dateFormat(date, 'dddd, Do MMM YYYY, HH:mm [Uhr]')
+        return dateFormat(date, "cccccc, do MMM yyyy, HH:mm 'Uhr'")
       }
     case 'full-short':
       if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, 'dd, DD. MMM, HH:mm')
+        return dateFormat(date, 'cccccc, d. MMM, HH:mm')
       } else {
-        return dateFormat(date, 'dd, DD. MMM YY, HH:mm')
+        return dateFormat(date, 'cccccc, d.M.yyyy, HH:mm')
       }
     default:
       return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
   }
 }
 export function dateDistanceInWords (date) {
-  return dateFnsDistanceInWords(new Date(), date, {
+  return dateFnsFormatDistance(date, new Date(), {
     locale: dateFnsLocaleDE,
     addSuffix: true
   })
@@ -133,4 +133,15 @@ export function plainToHtmlAttribute (string) {
     return entityMap[s]
   }
   )
+}
+
+export function isWebGLSupported () {
+  // https://stackoverflow.com/a/22953053
+  try {
+    var canvas = document.createElement('canvas')
+    return !!window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+  } catch (e) {
+    return false
+  }
 }

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
@@ -15,13 +16,22 @@ class MailsControl extends ConsoleControl
 	private $mailer;
 	private $metrics;
 	private $routeHelper;
+	private $emailHelper;
+
+	/*
+	 * todo move this to config file as a constant if this becomes a permanent solution
+	 * until then we need to be able to configure this rather flexible in here
+	 * 45,11 mails/minute = 1330 milli seconds between mails
+	 * */
+	private $DELAY_MICRO_SECONDS_BETWEEN_MAILS = 1330000;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
 		Database $database,
 		InfluxMetrics $metrics,
 		\Swift_Mailer $mailer,
-		RouteHelper $routeHelper
+		RouteHelper $routeHelper,
+		EmailHelper $emailHelper
 	) {
 		error_reporting(E_ALL);
 		ini_set('display_errors', '1');
@@ -30,6 +40,7 @@ class MailsControl extends ConsoleControl
 		$this->mailer = $mailer;
 		$this->metrics = $metrics;
 		$this->routeHelper = $routeHelper;
+		$this->emailHelper = $emailHelper;
 		parent::__construct();
 	}
 
@@ -41,9 +52,7 @@ class MailsControl extends ConsoleControl
 			$elem = $this->mem->cache->brpoplpush('workqueue', 'workqueueprocessing', 10);
 			if ($elem !== false && $e = unserialize($elem)) {
 				if ($e['type'] == 'email') {
-					$res = $this->handleEmail($e['data']);
-					// very basic email rate limit
-					usleep(100000);
+					$res = $this->handleEmailRateLimited($e['data']);
 				} else {
 					$res = false;
 				}
@@ -101,11 +110,12 @@ class MailsControl extends ConsoleControl
 					$mb_ids = $this->mailsGateway->getMailboxIds($mboxes);
 
 					if (!$mb_ids) {
-						$mb_ids = $this->mailsGateway->getMailboxIds(array('lost'));
+						// send auto-reply message
+						if (!empty($msg->getFrom()) && $msg->getFrom()->getFullAddress() != DEFAULT_EMAIL) {
+							$this->emailHelper->tplMail('general/invalid_email_address', $msg->getFrom(), ['address' => $msg->getTo()]);
+						}
 						++$stats['unknown-recipient'];
-					}
-
-					if ($mb_ids) {
+					} else {
 						try {
 							$html = $msg->getBodyHtml();
 						} catch (\Exception $e) {
@@ -132,7 +142,7 @@ class MailsControl extends ConsoleControl
 							}
 						}
 
-						$attach = array();
+						$attach = [];
 						foreach ($msg->getAttachments() as $a) {
 							$filename = $a->getFilename();
 							if ($this->attach_allow($filename, null)) {
@@ -268,7 +278,7 @@ class MailsControl extends ConsoleControl
 			$ext = explode('.', $filename);
 			$ext = end($ext);
 			$ext = strtolower($ext);
-			$notallowed = array(
+			$notallowed = [
 				'php' => true,
 				'html' => true,
 				'htm' => true,
@@ -277,8 +287,8 @@ class MailsControl extends ConsoleControl
 				'php3' => true,
 				'php2' => true,
 				'php1' => true
-			);
-			$notallowed_mime = array();
+			];
+			$notallowed_mime = [];
 
 			if (!isset($notallowed[$ext]) && !isset($notallowed_mime[$mime])) {
 				return true;
@@ -288,7 +298,7 @@ class MailsControl extends ConsoleControl
 		return false;
 	}
 
-	public function handleEmail($data)
+	public function handleEmailRateLimited($data)
 	{
 		self::info('Mail from: ' . $data['from'][0] . ' (' . $data['from'][1] . ')');
 		$email = new \Swift_Message();
@@ -316,7 +326,7 @@ class MailsControl extends ConsoleControl
 				$file = $email->attach(\Swift_Attachment::fromPath($a[0]));
 			}
 		}
-		$has_recip = false;
+		$mailCount = 0;
 		foreach ($data['recipients'] as $r) {
 			$r[0] = strtolower($r[0]);
 			self::info('To: ' . $r[0]);
@@ -327,45 +337,41 @@ class MailsControl extends ConsoleControl
 			}
 			if (!$this->mailsGateway->emailIsBouncing($r[0])) {
 				$email->addTo($r[0], $r[1]);
-				$has_recip = true;
+				++$mailCount;
 			} else {
 				self::error('bouncing address');
 			}
 		}
-		if (!$has_recip) {
+		if ($mailCount < 1) {
 			return true;
 		}
 
-		$max_try = 2;
-		$sended = false;
-		while (!$sended) {
-			--$max_try;
+		for ($max_try = 2; $max_try > 0; --$max_try) {
 			try {
 				self::info('send email tries remaining ' . ($max_try));
 				$this->mailer->getTransport()->ping();
 				$this->mailer->send($email);
 				self::success('email send OK');
 
-				// remove atachements from temp folder
+				// remove attachments from temp folder
 				if (!empty($data['attachments'])) {
 					foreach ($data['attachments'] as $a) {
 						@unlink($a[0]);
 					}
 				}
 
-				return true;
-				$sended = true;
 				break;
 			} catch (\Exception $e) {
 				self::error('email send error: ' . $e->getMessage());
 				self::error(print_r($data, true));
 			}
 
-			if ($max_try == 0) {
+			if ($max_try == 1) {
 				return false;
-				break;
 			}
 		}
+		// rate limiting
+		usleep($mailCount * $this->DELAY_MICRO_SECONDS_BETWEEN_MAILS);
 
 		return true;
 	}
@@ -378,10 +384,10 @@ class MailsControl extends ConsoleControl
 			$name = $email;
 		}
 
-		return array(
+		return [
 			'personal' => $name,
 			'mailbox' => $p[0],
 			'host' => $p[1]
-		);
+		];
 	}
 }

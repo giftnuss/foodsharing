@@ -12,6 +12,10 @@ use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
+use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
+use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\ImageService;
@@ -56,15 +60,15 @@ class SettingsView extends View
 	{
 		$this->dataHelper->setEditData($sleep);
 
-		if ($sleep['sleep_status'] != 1) {
+		if ($sleep['sleep_status'] != SleepStatus::TEMP) {
 			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');
 		}
 
-		if ($sleep['sleep_status'] == 0) {
+		if ($sleep['sleep_status'] == SleepStatus::NONE) {
 			$this->pageHelper->addJs('$("#sleep_msg-wrapper").hide();');
 		}
 
-		if ($sleep['sleep_status'] == 1) {
+		if ($sleep['sleep_status'] == SleepStatus::TEMP) {
 			$date = DateTime::createFromFormat('Y-m-d', $sleep['sleep_from']);
 			if ($date === false) {
 				$date = new DateTime();
@@ -130,100 +134,98 @@ class SettingsView extends View
 			$("#formwrapper").show();
 		');
 
-		$out = $this->v_utils->v_quickform($this->translationHelper->s('sleepmode'), array(
+		$out = $this->v_utils->v_quickform($this->translationHelper->s('sleepmode'), [
 			$this->v_utils->v_info($this->translationHelper->s('sleepmode_info')),
 			$this->v_utils->v_info($this->translationHelper->s('sleepmode_show')),
-			$this->v_utils->v_form_select('sleep_status', array(
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no_sleepmode')),
-					array('id' => 1, 'name' => $this->translationHelper->s('temp_sleepmode')),
-					array('id' => 2, 'name' => $this->translationHelper->s('full_sleepmode'))
-				)
-			)),
+			$this->v_utils->v_form_select('sleep_status', [
+				'values' => [
+					['id' => SleepStatus::NONE, 'name' => $this->translationHelper->s('no_sleepmode')],
+					['id' => SleepStatus::TEMP, 'name' => $this->translationHelper->s('temp_sleepmode')],
+					['id' => SleepStatus::FULL, 'name' => $this->translationHelper->s('full_sleepmode')]
+				]
+			]),
 			$this->v_utils->v_form_daterange(),
-			$this->v_utils->v_form_textarea('sleep_msg', array(
+			$this->v_utils->v_form_textarea('sleep_msg', [
 				'maxlength' => 150
-			))
-		), array('submit' => $this->translationHelper->s('save')));
+			])
+		], ['submit' => $this->translationHelper->s('save')]);
 
 		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
 	}
 
-	public function settingsInfo($fairteiler, $threads)
+	public function settingsInfo($foodSharePoints, $threads)
 	{
 		global $g_data;
 		$out = '';
 
-		if ($fairteiler) {
-			foreach ($fairteiler as $ft) {
-				$disabled = false;
-				if ($ft['type'] == 2) {
-					$disabled = true;
-				}
-
+		if ($foodSharePoints) {
+			foreach ($foodSharePoints as $fsp) {
 				$this->pageHelper->addJs('
 					$("input[disabled=\'disabled\']").parent().on("click", function(){
 						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
 					});
 				');
 
-				$g_data['fairteiler_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('fairteiler_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_fairteiler', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_fairteiler_desc', $ft['name']),
-					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_fairteiler_mail')),
-						array('id' => 2, 'name' => $this->translationHelper->s('follow_fairteiler_alert')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_fairteiler_none'))
-					),
-					'disabled' => $disabled
-				));
+				$g_data['fairteiler_' . $fsp['id']] = $fsp['infotype'];
+				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], [
+					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
+					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
+					'values' => [
+						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_food_share_point_mail')],
+						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_bell')],
+						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_food_share_point_none')]
+					],
+					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
+				]);
 			}
 		}
 
 		if ($threads) {
-			foreach ($threads as $ft) {
-				$g_data['thread_' . $ft['id']] = $ft['infotype'];
-				$out .= $this->v_utils->v_form_radio('thread_' . $ft['id'], array(
-					'label' => $this->translationHelper->sv('follow_thread', $ft['name']),
-					'desc' => $this->translationHelper->sv('follow_thread_desc', $ft['name']),
-					'values' => array(
-						array('id' => 1, 'name' => $this->translationHelper->s('follow_thread_mail')),
-						array('id' => 0, 'name' => $this->translationHelper->s('follow_thread_none'))
-					)
-				));
+			foreach ($threads as $thread) {
+				$g_data['thread_' . $thread['id']] = $thread['infotype'];
+				$out .= $this->v_utils->v_form_radio('thread_' . $thread['id'], [
+					'label' => $this->translationHelper->sv('follow_thread', $thread['name']),
+					'desc' => $this->translationHelper->sv('follow_thread_desc', $thread['name']),
+					'values' => [
+						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_thread_mail')],
+						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_thread_none')]
+					]
+				]);
 			}
 		}
 
-		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', array(
-			$this->v_utils->v_form_radio('newsletter', array(
+		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', [
+			$this->v_utils->v_input_wrapper(
+				$this->translationHelper->s('push_notifications'),
+				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
+						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
+			),
+			$this->v_utils->v_form_radio('newsletter', [
 				'desc' => $this->translationHelper->s('newsletter_desc'),
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no')),
-					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
-				)
-			)),
-			$this->v_utils->v_form_radio('infomail_message', array(
+				'values' => [
+					['id' => 0, 'name' => $this->translationHelper->s('no')],
+					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+				]
+			]),
+			$this->v_utils->v_form_radio('infomail_message', [
 				'desc' => $this->translationHelper->s('infomail_message_desc'),
-				'values' => array(
-					array('id' => 0, 'name' => $this->translationHelper->s('no')),
-					array('id' => 1, 'name' => $this->translationHelper->s('yes'))
-				)
-			)),
+				'values' => [
+					['id' => 0, 'name' => $this->translationHelper->s('no')],
+					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+				]
+			]),
 			$out
-		), array('submit' => $this->translationHelper->s('save'))), $this->translationHelper->s('settings_info'), array('class' => 'ui-padding'));
+		], ['submit' => $this->translationHelper->s('save')]), $this->translationHelper->s('settings_info'), ['class' => 'ui-padding']);
 	}
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
 	{
 		if ($session['fp'] <= $session['maxfp']) {
-			$subtitle = 'Bestanden!';
 			$infotext = $this->v_utils->v_success('Herzlichen Glückwunsch! mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten bestanden!');
 		} else {
-			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden. <a href="https://wiki.foodsharing.de/" target="_blank">Informiere Dich im Wiki</a> für den nächsten Versuch.<p>Lies Dir hier noch mal in Ruhe die Fragen und die dazugehörigen Antworten durch, damit es beim nächsten Mal besser klappt</p>');
-			$subtitle = 'Leider nicht bestanden';
+			$infotext = $this->v_utils->v_error('mit ' . $session['fp'] . ' von maximal ' . $session['maxfp'] . ' Fehlerpunkten leider nicht bestanden.</p>');
 		}
-		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . ' Quiz', $subtitle, '<img src="/img/quiz.png" />') . '</div>');
+		$this->pageHelper->addContent('<div class="quizsession">' . $this->topbar($session['name'] . '-Quiz', '', '<img src="/img/quiz.png" />') . '</div>');
 		$out = '';
 
 		$out .= $infotext;
@@ -246,61 +248,26 @@ class SettingsView extends View
 				default:
 					break;
 			}
-			$out .= $this->v_utils->v_field('<p>Herzlichen Glückwunsch, Du hast es geschafft!</p><p>Die Auswertung findest Du unten.</p><p style="padding:15px;text-align:center;">' . $btn . '</p>', 'Geschafft!', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field('<p>Herzlichen Glückwunsch, Du hast es geschafft!</p><p>Die Auswertung findest Du unten.</p><p style="padding:15px;text-align:center;">' . $btn . '</p>', 'Geschafft!', ['class' => 'ui-padding']);
 		} else {
 			/*
 			 * get the specific text from content table
 			 */
 			$content_id = false;
 
-			switch ($session['quiz_id']) {
-				/*
-				 * failed Foodsaver
-				 */
-				case 1:
-					if ($try_count == 1) {
-						$content_id = 19;
-					} elseif ($try_count == 2) {
-						$content_id = 20;
-					} elseif ($try_count > 2) {
-						$content_id = 21;
-					}
-					break;
-
-				/*
-				 * failed Bieb
-				*/
-				case 2:
-					if ($try_count == 1) {
-						$content_id = 22;
-					} elseif ($try_count == 2) {
-						$content_id = 23;
-					} elseif ($try_count > 2) {
-						$content_id = 24;
-					}
-
-					break;
-
-				/*
-				 * failed Bot
-				*/
-				case 3:
-					if ($try_count == 1) {
-						$content_id = 25;
-					} elseif ($try_count == 2) {
-						$content_id = 26;
-					} elseif ($try_count > 2) {
-						$content_id = 27;
-					}
-					break;
-
-				default:
-					break;
+			if ($try_count > 4) {
+				$content_id = 13;
+			} elseif ($try_count > 2) {
+				$content_id = 21;
+			} elseif ($try_count == 2) {
+				$content_id = 20;
+			} elseif ($try_count == 1) {
+				$content_id = 19;
 			}
 
 			if ($content_id) {
 				$cnt = $contentGateway->get($content_id);
-				$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
+				$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], ['class' => 'ui-padding']);
 			}
 		}
 
@@ -328,7 +295,6 @@ class SettingsView extends View
 
 			$cnt .= $this->v_utils->v_input_wrapper('Passender Wiki-Artikel zu diesem Thema', '<a target="_blank" href="' . $r['wikilink'] . '">' . $r['wikilink'] . '</a>');
 
-			$answers = '';
 			$right_answers = '';
 			$wrong_answers = '';
 			$neutral_answers = '';
@@ -341,18 +307,14 @@ class SettingsView extends View
 				++$ai;
 				$right = 'red';
 
-				$smilie = 'fa-frown-o';
-
 				if ($a['user_say']) {
 					$noclicked = false;
 				}
 
-				$atext = '';
 				if (!$r['noco'] && $r['percent'] == 100) {
 					$atext = '';
 					$right = 'red';
-				} elseif ($a['user_say'] == true && $a['right'] == 1 && !$r['noco']) {
-					$atext = '';
+				} elseif ($a['user_say'] == true && $a['right'] == AnswerRating::CORRECT && !$r['noco']) {
 					$right = 'green';
 					if ($a['right']) {
 						$atext = ' ist richtig!';
@@ -361,7 +323,7 @@ class SettingsView extends View
 						$atext = ' ist falsch. Das hast Du richtig erkannt!';
 						$sort_right = 'right';
 					}
-				} elseif ($a['right'] == 2) {
+				} elseif ($a['right'] == AnswerRating::NEUTRAL) {
 					$atext = ' ist neutral und daher ohne Wertung.';
 					$right = 'neutral';
 					$sort_right = 'neutral';
@@ -374,8 +336,6 @@ class SettingsView extends View
 						$sort_right = 'false';
 					}
 				}
-
-				//$atext .= '<pre>'.print_r($r,true).'</pre>';
 
 				if ($sort_right == 'right') {
 					$right_answers .= '
@@ -417,32 +377,30 @@ class SettingsView extends View
 			}
 
 			if ($no_wrong_right_sort) {
-				$cnt .= $this->v_utils->v_input_wrapper('Antworten', $wrong_answers . $right_answers, false, array('collapse' => true));
+				$cnt .= $this->v_utils->v_input_wrapper('Antworten', $wrong_answers . $right_answers, false, ['collapse' => true]);
 			} else {
 				if (!empty($right_answers)) {
-					//$cnt .= $this->v_utils->v_input_wrapper('Antworten die Du richtig ausgewählt hast', $right_answers,false,array('collapse' => true));
-					$cnt .= $this->v_utils->v_input_wrapper('Richtige Antworten', $right_answers, false, array('collapse' => true));
+					$cnt .= $this->v_utils->v_input_wrapper('Richtige Antworten', $right_answers, false, ['collapse' => true]);
 				}
 				if (!empty($wrong_answers)) {
-					//$cnt .= $this->v_utils->v_input_wrapper('Antworten die Du falsch ausgewählt hast', $wrong_answers,false,array('collapse' => true));
-					$cnt .= $this->v_utils->v_input_wrapper('Falsche Antworten', $wrong_answers, false, array('collapse' => true));
+					$cnt .= $this->v_utils->v_input_wrapper('Falsche Antworten', $wrong_answers, false, ['collapse' => true]);
 				}
 				if (!empty($neutral_answers)) {
-					$cnt .= $this->v_utils->v_input_wrapper('Neutrale Antworten', $neutral_answers, false, array('collapse' => true));
+					$cnt .= $this->v_utils->v_input_wrapper('Neutrale Antworten', $neutral_answers, false, ['collapse' => true]);
 				}
 			}
 
-			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . $this->v_utils->v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">Absenden</a>', false, array('collapse' => true)) . '</div>';
+			$cnt .= '<div id="qcomment-' . (int)$r['id'] . '">' . $this->v_utils->v_input_wrapper('Kommentar zu dieser Frage schreiben', '<textarea style="height:50px;" id="comment-' . $r['id'] . '" name="desc" class="input textarea value"></textarea><br /><a class="button" href="#" onclick="ajreq(\'addcomment\',{app:\'quiz\',comment:$(\'#comment-' . (int)$r['id'] . '\').val(),id:' . (int)$r['id'] . '});return false;">Absenden</a>', false, ['collapse' => true]) . '</div>';
 
 			/*
-			 * If the question was a joke question lets diplay it to the user!
+			 * If the question was a joke question lets display it to the user!
 			 */
 			if ($was_a_joke) {
 				$ftext = 'war nur eine Scherzfrage und wird natürlich nicht bewertet <i class="far fa-smile"></i>';
 			}
 
 			/*
-			 * If the question is k.o. quetsion and the user has error display a message to the user
+			 * If the question is k.o. question and the user has error display a message to the user
 			 */
 			if ($was_a_ko_question && $r['userfp'] > 0) {
 				$ftext = 'Diese Frage war leider besonders wichtig und Du hast sie nicht korrekt beantwortet';
@@ -451,7 +409,7 @@ class SettingsView extends View
 
 			$out .= '
 					<div class="quizsession">' .
-				$this->v_utils->v_field($cnt, 'Frage ' . $i . ' ' . $ftext, array('class' => 'ui-padding')) . '
+				$this->v_utils->v_field($cnt, 'Frage ' . $i . ' ' . $ftext, ['class' => 'ui-padding']) . '
 					</div>';
 		}
 
@@ -486,54 +444,28 @@ class SettingsView extends View
 				</tr>
 				</table>
 
-				', 'Dein Abholkalender', array('class' => 'ui-padding'));
+				', 'Dein Abholkalender', ['class' => 'ui-padding']);
 	}
 
 	public function delete_account(int $fsId)
 	{
 		$content =
-			'<button type="button" id="delete-account" class="ui-button" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
+			'<button type="button" id="delete-account" class="button danger" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
 		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->translationHelper->s('reference'));
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
 	}
 
 	public function foodsaver_form()
 	{
 		global $g_data;
 
-		$this->pageHelper->addJs('$("#foodsaver-form").on("submit", function(e){
-		if($("#photo_public").length > 0)
-		{
-			$e = e;
-			if($("#photo_public").val()==4 && confirm("Achtung! Niemand kann Dich mit Deinen Einstellungen kontaktieren. Bist Du sicher?"))
-			{
-
-			}
-			else
-			{
-				$e.preventDefault();
-			}
-		}
-
-	});');
-
-		$oeff = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-			array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-			array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-			array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-			array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-		)));
-
-		if ($this->session->may('bot')) {
-			$oeff = '<input type="hidden" name="photo_public" value="1" />';
-		}
 		$bezirkchoose = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
 
 		if ($this->session->may('orga')) {
-			$bezirk = array('id' => 0, 'name' => false);
+			$bezirk = ['id' => 0, 'name' => false];
 			if ($b = $this->regionGateway->getRegion($this->session->getCurrentRegionId())) {
 				$bezirk['id'] = $b['id'];
 				$bezirk['name'] = $b['name'];
@@ -550,22 +482,22 @@ class SettingsView extends View
 		}
 		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), array(
+		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), [
 			$bezirkchoose,
 			$this->latLonPicker('LatLng', $latLonOptions),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
-			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8)),
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8]),
 			$communications,
 			$position,
-			$this->v_utils->v_form_textarea('about_me_public', array('desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz! Hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du vorteilhafterweise öffentlich an Informationen teilen möchtest.')),
-			$oeff
-		), array('submit' => $this->translationHelper->s('save')));
+			$this->v_utils->v_form_textarea('about_me_intern', ['desc' => $this->translationHelper->s('profile_description_text_display_info')]),
+			$this->v_utils->v_form_textarea('about_me_public', ['desc' => $this->translationHelper->s('profile_description_text_info')]),
+		], ['submit' => $this->translationHelper->s('save')]);
 	}
 
 	public function quizFailed($failed)
 	{
-		$out = $this->v_utils->v_field($failed['body'], $failed['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($failed['body'], $failed['title'], ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -578,7 +510,7 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out = $this->v_utils->v_field($out, 'Lernpause', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, 'Lernpause', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -592,11 +524,11 @@ class SettingsView extends View
 
 		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem. Deine Sitzung wurde gespeichert. Du kannst jederzeit die Beantwortung fortführen.');
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], $quiz['desc']);
+		$out .= $quiz['desc'];
 
 		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt weiter beantworten!</a></p>';
 
-		$out = $this->v_utils->v_field($out, 'Quiz fortführen', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . '-Quiz fortführen', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -609,22 +541,22 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], $quiz['desc']);
+		$out .= $quiz['desc'];
 
-		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit & 10 Fragen starten</a></p>';
+		$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
 
 		if ($quiz['id'] == 1) {
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit & 20 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', ['class' => 'ui-padding']);
 
 		return $out;
 	}
 
 	public function confirmBot($cnt)
 	{
-		$out = $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($cnt['body'], $cnt['title'], ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -636,7 +568,7 @@ class SettingsView extends View
 				<input type="hidden" value="confirmfs" name="form_submit">';
 
 		if ($cnt) {
-			$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], ['class' => 'ui-padding']);
 		}
 		if ($rv) {
 			$rv['body'] .= '
@@ -645,7 +577,7 @@ class SettingsView extends View
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
 
-			$out .= $this->v_utils->v_field($rv['body'], $rv['title'], array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($rv['body'], $rv['title'], ['class' => 'ui-padding']);
 		}
 
 		$out .= '
@@ -661,7 +593,7 @@ class SettingsView extends View
 				<input type="hidden" value="confirmfs" name="form_submit">';
 
 		if ($cnt) {
-			$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($cnt['body'], $cnt['title'], ['class' => 'ui-padding']);
 		}
 		if ($rv) {
 			$rv['body'] .= '
@@ -670,7 +602,7 @@ class SettingsView extends View
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
 
-			$out .= $this->v_utils->v_field($rv['body'], $rv['title'], array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($rv['body'], $rv['title'], ['class' => 'ui-padding']);
 		}
 
 		$out .= '
@@ -686,16 +618,16 @@ class SettingsView extends View
 			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
 		}
 
-		$out .= $this->v_utils->v_input_wrapper($quiz['name'], nl2br($quiz['desc']));
+		$out .= nl2br($quiz['desc']);
 
 		if ($quiz['id'] == 1) {
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit & 10 Fragen starten</a></p>';
-			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit & 20 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz mit Zeitlimit und 10 Fragen starten</a></p>';
+			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',easymode:1,qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz ohne Zeitlimit und 20 Fragen starten</a></p>';
 		} else {
 			$out .= '<p><a onclick="ajreq(\'startquiz\',{app:\'quiz\',qid:' . (int)$quiz['id'] . '});" href="#" class="button button-big">Quiz jetzt starten</a></p>';
 		}
 
-		$out = $this->v_utils->v_field($out, 'Du musst noch das Quiz bestehen!', array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', ['class' => 'ui-padding']);
 
 		return $out;
 	}

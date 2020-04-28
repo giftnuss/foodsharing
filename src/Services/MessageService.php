@@ -6,10 +6,12 @@ use Carbon\Carbon;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
-use Foodsharing\Lib\WebSocketSender;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Message\Message;
 use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
+use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 
 class MessageService
@@ -20,9 +22,10 @@ class MessageService
 	private $messageGateway;
 	private $storeGateway;
 	private $translationHelper;
-	private $webSocketSender;
+	private $pushNotificationGateway;
+	private $webSocketConnection;
 
-	public function __construct(EmailHelper $emailHelper, FoodsaverGateway $foodsaverGateway, Mem $mem, MessageGateway $messageGateway, StoreGateway $storeGateway, TranslationHelper $translationHelper, WebSocketSender $webSocketSender)
+	public function __construct(EmailHelper $emailHelper, FoodsaverGateway $foodsaverGateway, Mem $mem, MessageGateway $messageGateway, StoreGateway $storeGateway, TranslationHelper $translationHelper, PushNotificationGateway $pushNotificationGateway, WebSocketConnection $webSocketConnection)
 	{
 		$this->emailHelper = $emailHelper;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -30,7 +33,8 @@ class MessageService
 		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
 		$this->translationHelper = $translationHelper;
-		$this->webSocketSender = $webSocketSender;
+		$this->pushNotificationGateway = $pushNotificationGateway;
+		$this->webSocketConnection = $webSocketConnection;
 	}
 
 	private function sendNewMessageNotificationEmail(array $recipient, array $templateData): void
@@ -38,7 +42,7 @@ class MessageService
 		if (!$this->mem->userOnline($recipient['id'])) {
 			/* skip repeated notification emails in a short interval */
 			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = array();
+				$sessdata = [];
 			}
 
 			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
@@ -94,15 +98,27 @@ class MessageService
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
 
-			$this->webSocketSender->sendSockMulti($user_ids, 'conv', 'push', array(
+			$this->WebSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
 				'cid' => $conversationId,
 				'message' => $message,
-			));
+			]);
 
+			/* ToDo: Maybe conversation name unification */
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
-				if (($m['id'] != $message->authorId) && $m['infomail_message']) {
-					$this->sendNewMessageNotificationEmail($m, $notificationTemplateData);
+				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
+					/* ToDo: Conversation name does N queries */
+					$pushNotification = new MessagePushNotification(
+						$this->session->user('name'),
+						$message,
+						new \DateTime(),
+						$conversationId,
+						count($members) > 2 ? $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId) : null
+					);
+					$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $pushNotification);
+					if ($m['infomail_message']) {
+						$this->sendNewMessageNotificationEmail($m, $notificationTemplateData);
+					}
 				}
 			}
 		}

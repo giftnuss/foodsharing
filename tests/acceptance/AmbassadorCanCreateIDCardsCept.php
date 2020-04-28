@@ -4,24 +4,24 @@ function convertRegionName($name)
 {
 	$name = strtolower($name);
 
-	$name = str_replace(array('ä', 'ö', 'ü', 'ß'), array('ae', 'oe', 'ue', 'ss'), $name);
+	$name = str_replace(['ä', 'ö', 'ü', 'ß'], ['ae', 'oe', 'ue', 'ss'], $name);
 	$name = preg_replace('/[^a-zA-Z]/', '', $name);
 
 	return $name;
 }
 
-$testRegion = 241;
+$testRegionId = 241;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('create an id card for a foodsaver');
 
-$regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegion]);
-$foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegion]);
-$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegion]);
-$I->addBezirkAdmin($testRegion, $ambassador['id']);
+$regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegionId]);
+$I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
+$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
+$I->addRegionAdmin($testRegionId, $ambassador['id']);
 
 $I->login($ambassador['email']);
 
-$I->amOnPage('/?page=passgen&bid=' . $testRegion);
+$I->amOnPage('/?page=passgen&bid=' . $testRegionId);
 $I->waitForText('fs1 saver1');
 $I->click('Alle markieren');
 $I->click('Markierte Ausweise generieren');

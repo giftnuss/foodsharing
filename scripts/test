@@ -4,16 +4,16 @@ export FS_ENV=test
 
 set -o errexit
 
-source $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
 
-#echo "Installing chat dependencies"
-#install-chat-dependencies
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 echo "Bring up containers"
 # up starts the container, -d: run in background as a deamon
 dc up -d
 
-$dir/mkdirs
+"$dir"/mkdirs
 
 echo "Waiting for database to start"
 wait-for-mysql
@@ -35,10 +35,10 @@ exec-in-container selenium "find /home/seluser/Downloads -type f -print0 | xargs
 exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 exec-in-container app vendor/bin/codecept run "$@"
 
-echo "Running chat tests"
-run-in-container chat 'npm run lint && npm test'
-
-echo "Running client js tests"
+echo "Running JS tests"
 run-in-container client 'yarn && yarn lint && yarn test'
+
+echo "Running chat tests"
+run-in-container chat 'yarn && yarn lint && yarn test'
 
 echo "Done!"

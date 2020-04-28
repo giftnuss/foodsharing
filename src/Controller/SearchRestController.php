@@ -27,12 +27,10 @@ class SearchRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Get("search/legacyindex")
-	 *
-	 * @return Response
 	 */
 	public function getSearchLegacyIndexAction(): Response
 	{
-		if (!$this->session->id()) {
+		if (!$this->session->may()) {
 			throw new HttpException(403);
 		}
 		$data = $this->searchService->generateIndex($this->session->id());
@@ -45,10 +43,6 @@ class SearchRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("search/user")
 	 * @Rest\QueryParam(name="q", description="Search query.")
-	 *
-	 * @param ParamFetcher $paramFetcher
-	 *
-	 * @return Response
 	 */
 	public function listUserResultsAction(ParamFetcher $paramFetcher): Response
 	{

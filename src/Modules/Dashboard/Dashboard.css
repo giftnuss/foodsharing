@@ -1,0 +1,163 @@
+#button-pushnotifications {
+  display: inline-block;
+}
+
+#close-top-banner-pushnotifications {
+  font-size: 25pt;
+  margin-left: auto;
+  color: #533a20;
+}
+
+#close-top-banner-pushnotifications:hover {
+  color: #1c130b;
+}
+.top-banner-pushnotifications {
+  max-height: 500px; /* Needed for the transition, as CSS can not animate transistion from automated values and I want to animate height */
+  transition: transform 0.1s, max-height 0.5s, padding 0.2s 0.3s;
+}
+
+.top-banner-pushnotifications-closed {
+  transform: scale(1,0);
+  max-height: 0;
+  padding: 0;
+}
+
+.top-banner-flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.pushnotifications-icon {
+  fill: currentColor;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+@media all and (max-width: 575.99px) {
+  .pushnotifications-icon {
+    display: none;
+  }
+}
+#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
+
+#activity ul.linklist li span.qr
+{
+    margin-left:58px;
+    border-radius: 3px;
+    opacity:0.5;
+}
+
+#activity ul.linklist li span.qr:hover
+{
+    opacity:1;
+}
+
+#activity ul.linklist li span.qr img
+{
+    height:32px;
+    width:32px;
+    margin-right:-35px;
+    border-right:1px solid #ffffff;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+{
+    border: 0 none;
+    height: 16px;
+    margin-left: 36px;
+    padding: 8px;
+    width: 78.6%;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-right:-30px;
+    background-color:#F9F9F9;
+}
+
+#activity ul.linklist li span.qr .loader
+{
+    background-color: #ffffff;
+    position: relative;
+    text-align: left;
+    top: -10px;
+}
+
+#activity ul.linklist li span.t span.txt {
+    overflow: hidden;
+    text-overflow: unset;
+    white-space: normal;
+    padding-left:10px;
+    border-left:2px solid #4A3520;
+    margin-bottom:10px;
+    display:block;
+}
+#activity ul.linklist li span
+{
+    color:#4A3520;
+}
+#activity ul.linklist li span a
+{
+    color:var(--fs-green) !important;
+}
+#activity span.n i.fa
+{
+    display:inline-block;
+    width:11px;
+    text-align:center;
+}
+#activity span.n small
+{
+    float:right;
+    opacity:0.8;
+    font-size:12px;
+}
+#activity ul.linklist li span a:hover
+{
+    text-decoration:underline !important;
+    color:var(--fs-green) !important;
+}
+
+#activity ul.linklist li
+{
+    margin-bottom:10px;
+    background-color:#ffffff;
+    padding:10px;
+    border-radius: 6px;
+}
+
+ul.linklist li span.n
+{
+    font-weight:normal;
+    font-size:13px;
+    margin-bottom:10px;
+    text-overflow: unset;
+    white-space: inherit;
+}
+
+@media (max-width: 900px)
+{
+    #activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+    {
+        width:74.6%;
+    }
+}
+@media (max-width: 400px)
+{
+    ul.linklist li span.n
+    {
+        height:55px;
+    }
+    #activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
+    {
+        width:82%;
+    }
+    #activity ul.linklist li span.time, #activity ul.linklist li span.qr
+    {
+        margin-left:0px;
+    }
+    #activity span.n small
+    {
+        float:none;
+        display:block;
+    }
+}

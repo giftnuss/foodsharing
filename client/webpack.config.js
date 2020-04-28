@@ -9,10 +9,11 @@ const path = require('path')
 const clientRoot = path.resolve(__dirname)
 const { join, dirname } = require('path')
 const glob = require('glob')
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
 const dev = process.env.NODE_ENV !== 'production'
 
-const assetsPath = dev ? resolve('../assets') : resolve('../assets')
+const assetsPath = resolve('../assets')
 const modulesJsonPath = join(assetsPath, 'modules.json')
 
 const plugins = []
@@ -59,6 +60,13 @@ plugins.push(
   ])
 )
 
+plugins.push(
+  new ServiceWorkerWebpackPlugin({
+    entry: path.join(__dirname, 'src/serviceWorker.js'),
+    filename: '../sw.js'
+  })
+)
+
 module.exports = merge(webpackBase, {
   entry: moduleEntries(),
   mode: dev ? 'development' : 'production',
@@ -73,11 +81,7 @@ module.exports = merge(webpackBase, {
       filename: 'js/[name].[hash].js',
       chunkFilename: 'js/[id].[chunkhash].js'
     }),
-    publicPath: '/assets/',
-
-    // See https://github.com/ctrlplusb/react-universally/pull/566#issuecomment-373292166
-    // TODO: find somewhere to set the multiStep option from https://github.com/webpack/webpack/issues/6693
-    hotUpdateChunkFilename: '[hash].hot-update.js'
+    publicPath: '/assets/'
   },
   module: {
     rules: [
@@ -118,6 +122,7 @@ module.exports = merge(webpackBase, {
         sourceMap: true
       })
     ],
+    runtimeChunk: true,
     splitChunks: {
       chunks: 'all',
       name: dev,

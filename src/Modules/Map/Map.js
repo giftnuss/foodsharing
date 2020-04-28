@@ -8,15 +8,19 @@ import $ from 'jquery'
 import { getBrowserLocation, expose } from '@/utils'
 import { GET } from '@/browser'
 
-import { showLoader, hideLoader, goTo, ajreq, sleepmode } from '@/script'
+import { showLoader, hideLoader, goTo, ajreq } from '@/script'
 
 import storage from '@/storage'
+
+import { initMap } from '@/mapUtils'
 
 import L from 'leaflet'
 
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import 'mapbox-gl-leaflet'
 
+import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css'
 
 let u_map = null
@@ -56,17 +60,11 @@ const map = {
   init: function () {
     storage.setPrefix('map')
 
-    if (storage.get('center') != undefined && storage.get('zoom') != undefined) {
-      u_map = L.map('map').setView(storage.get('center'), storage.get('zoom'))
-    } else {
-      u_map = L.map('map').setView([50.89, 10.13], 6)
-    }
+    const center = storage.get('center', [50.89, 10.13])
+    const zoom = storage.get('zoom', 6)
+    u_map = initMap('map', center, zoom)
 
     expose({ u_map }) // need to re-expose it as it is just a variable
-
-    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-      attribution: 'Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-    }).addTo(u_map)
 
     this.initiated = true
 
@@ -201,46 +199,17 @@ function loadMarker (types, loader) {
         markers = null
 
         markers = L.markerClusterGroup({ maxClusterRadius: 50 })
-        let url = ''
         markers.on('click', function (el) {
           const fsid = (el.layer.options.id)
           const type = el.layer.options.type
 
-          if (type === 'fs') {
-            url = `/xhr.php?f=fsBubble&id=${fsid}`
-            showLoader()
-          } else if (type === 'bk') {
+          if (type === 'bk') {
             ajreq('bubble', { app: 'basket', id: fsid })
           } else if (type === 'b') {
-            url = `/xhr.php?f=bBubble&id=${fsid}`
-            u_loadDialog()
+            ajreq('bubble', { app: 'store', id: fsid })
           } else if (type === 'f') {
             const bid = (el.layer.options.bid)
             goTo(`/?page=fairteiler&sub=ft&bid=${bid}&id=${fsid}`)
-          }
-          if (url != '') {
-            $.ajax({
-              url: url,
-              dataType: 'json',
-              success: function (data) {
-                if (data.status === 1) {
-                  if (type === 'fs') {
-                    const popup = new L.Popup({ offset: new L.Point(1, -35) })
-                    popup.setLatLng(el.latlng)
-                    popup.setContent(data.html)
-                    u_map.openPopup(popup)
-                  } else if (type === 'b') {
-                    u_setDialogData(data)
-                    sleepmode.init()
-                  }
-                }
-              },
-              complete: function () {
-                if (loader) {
-                  hideLoader()
-                }
-              }
-            })
           }
         })
 

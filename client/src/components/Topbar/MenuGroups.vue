@@ -1,11 +1,12 @@
 <template>
   <div>
-    <nav-item-dropdown
+    <b-nav-item-dropdown
       v-if="workingGroups.length"
-      tooltip="Deine Gruppen"
+      id="dropdown-groups"
+      v-b-tooltip="$i18n('menu.entry.your_groups')"
       no-caret
     >
-      <template slot="button-content">
+      <template v-slot:button-content>
         <i class="fas fa-users" />
       </template>
       <div
@@ -41,28 +42,28 @@
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="far fa-comment" /> Forum
+            <i class="far fa-comment-alt" /> {{ $i18n('menu.entry.forum') }}
           </a>
           <a
             :href="$url('wall', group.id)"
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="fas fa-bullhorn" /> Pinnwand
+            <i class="fas fa-bullhorn" /> {{ $i18n('menu.entry.wall') }}
           </a>
           <a
             :href="$url('events', group.id)"
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="far fa-calendar-alt" /> Termine
+            <i class="far fa-calendar-alt" /> {{ $i18n('menu.entry.events') }}
           </a>
           <a
             :href="$url('members', group.id)"
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="fas fa-user" /> Mitglieder
+            <i class="fas fa-user" /> {{ $i18n('menu.entry.members') }}
           </a>
           <a
             v-if="group.isBot"
@@ -70,7 +71,7 @@
             role="menuitem"
             class="dropdown-item"
           >
-            <i class="fas fa-cog" /> Gruppe verwalten
+            <i class="fas fa-cog" /> {{ $i18n('menu.entry.workingGroupEdit') }}
           </a>
         </b-collapse>
       </div>
@@ -80,18 +81,20 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <small><i class="fas fa-users" /> Gruppenübersicht</small>
+        <small><i class="fas fa-users" /> {{ $i18n('menu.entry.groups') }}</small>
       </a>
-    </nav-item-dropdown>
+    </b-nav-item-dropdown>
     <li
       v-else
+      v-b-tooltip
+      :title="$i18n('menu.entry.groups')"
       class="nav-item"
     >
       <a
         v-b-tooltip
+        :title="$i18n('menu.entry.groups')"
         :href="$url('workingGroups')"
         class="nav-link"
-        title="Gruppenübersicht"
       >
         <i class="fas fa-users" />
       </a>
@@ -100,10 +103,9 @@
 </template>
 <script>
 import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
-import NavItemDropdown from './NavItemDropdown'
 
 export default {
-  components: { BCollapse, NavItemDropdown },
+  components: { BCollapse },
   directives: { VBToggle, VBTooltip },
   props: {
     workingGroups: {

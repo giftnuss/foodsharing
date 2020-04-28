@@ -20,66 +20,63 @@ class SearchGateway extends BaseGateway
 	 * Searches the given term in the database of regions, foodsavers and companies.
 	 *
 	 * @param string $q Query string / search term
-	 * @param int $region_to_search Optional region id to limit search to
+	 * @param bool $showDetails show detailed address info if true. Show only city if false
+	 * @param mixed $regionToSearch optional region id to limit search to
 	 *
 	 * @return array Array of regions, foodsavers and stores containing the search term
 	 */
-	public function search($q, $showDetails, $region_to_search = false): array
+	public function search(string $q, bool $showDetails, $regionToSearch = null): array
 	{
-		$out = array();
+		$out = [];
 
 		$regions = false;
-		if ($region_to_search) {
-			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($region_to_search);
+		if (!empty($regionToSearch)) {
+			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionToSearch);
 		}
 
-		$teaser = 'stadt';
-		if ($showDetails) {
-			$teaser = 'IF(`photo_public` BETWEEN 1 AND 3, CONCAT(`anschrift`,", ",`plz`," ",`stadt`), "")';
-		}
 		$out['foodsaver'] = $this->searchTable(
 			'fs_foodsaver',
-			array('name', 'nachname', 'plz', 'stadt'),
+			['name', 'nachname', 'plz', 'stadt'],
 			$q,
-			array(
+			[
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
-				'teaser' => $teaser
-			),
+				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
+			],
 			$regions
 		);
 
 		$out['bezirk'] = $this->searchTable(
 			'fs_bezirk',
-			array('name'),
+			['name'],
 			$q,
-			array(
+			[
 				'name' => '`name`',
 				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 				'teaser' => 'CONCAT("")'
-			)
+			]
 		);
 
 		$out['betrieb'] = $this->searchTable(
 			'fs_betrieb',
-			array('name', 'stadt', 'plz', 'str'),
+			['name', 'stadt', 'plz', 'str'],
 			$q,
-			array(
+			[
 				'name' => '`name`',
 				'click' => 'CONCAT("betrieb(",`id`,");")',
 				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
-			),
+			],
 			$regions
 		 );
 
 		return $out;
 	}
 
-	public function searchTable($table, $fields, $query, $show = array(), $regions_to_search = false): array
+	public function searchTable($table, $fields, $query, $show = [], $regions_to_search = false): array
 	{
 		$q = trim($query);
 
-		str_replace(array(',', ';', '+', '.'), ' ', $q);
+		str_replace([',', ';', '+', '.'], ' ', $q);
 
 		do {
 			$q = str_replace('  ', ' ', $q);

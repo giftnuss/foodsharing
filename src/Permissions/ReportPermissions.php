@@ -14,7 +14,7 @@ class ReportPermissions
 		$this->session = $session;
 	}
 
-	public function mayAccessReportsForRegion($regionId): bool
+	public function mayAccessReportsForRegion(int $regionId): bool
 	{
 		/* from https://gitlab.com/foodsharing-dev/foodsharing/issues/296
 		 * and https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/529
@@ -23,15 +23,21 @@ class ReportPermissions
 		 *
 		 */
 		return
-			$this->session->isOrgaTeam() ||
 			$this->session->isAdminFor($regionId) ||
 			/* ToDo: Need to check that regionId is a subgroup of europe. implied for now. */
-			$this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM)
+			$this->session->isOrgaTeam() ||
+			$this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM)
 		;
 	}
 
 	public function mayAccessReportsForSubRegions(): bool
 	{
-		return $this->session->mayGroup(RegionIDs::EUROPE_REPORT_TEAM);
+		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
+	}
+
+	public function mayHandleReports()
+	{
+		// group "Regelverletzungen/Meldungen"
+		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 }

@@ -10,6 +10,11 @@ class StoreService
 {
 	private $storeGateway;
 	const MAX_SLOTS_PER_PICKUP = 10;
+	// status constants for getAvailablePickupStatus
+	const STATUS_RED_TODAY_TOMORROW = 3;
+	const STATUS_ORANGE_3_DAYS = 2;
+	const STATUS_YELLOW_5_DAYS = 1;
+	const STATUS_GREEN = 0;
 
 	public function __construct(StoreGateway $storeGateway)
 	{
@@ -65,6 +70,50 @@ class StoreService
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns the time of the next available pickup slot or null if none is available up to the
+	 * given maximum date.
+	 *
+	 * @param Carbon $maxDate end of date range
+	 *
+	 * @return \DateTime the slot's time or null
+	 */
+	public function getNextAvailablePickupTime(int $storeId, Carbon $maxDate): ?\DateTime
+	{
+		if ($maxDate < Carbon::now()) {
+			return null;
+		}
+
+		$pickupSlots = $this->storeGateway->getPickupSlots($storeId, Carbon::now(), $maxDate, $maxDate);
+
+		$minimumDate = null;
+		foreach ($pickupSlots as $slot) {
+			if ($slot['isAvailable'] && (is_null($minimumDate) || $slot['date'] < $minimumDate)) {
+				$minimumDate = $slot['date'];
+			}
+		}
+
+		return $minimumDate;
+	}
+
+	/**
+	 * Returns the available pickup status of a store: 1, 2, or 3 if there is a free pickup slot in the next day,
+	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days.
+	 */
+	public function getAvailablePickupStatus(int $storeId): int
+	{
+		$availableDate = $this->getNextAvailablePickupTime($storeId, Carbon::tomorrow()->addDays(5));
+		if (is_null($availableDate)) {
+			return self::STATUS_GREEN;
+		} elseif ($availableDate < Carbon::tomorrow()->addDay()) {
+			return self::STATUS_RED_TODAY_TOMORROW;
+		} elseif ($availableDate < Carbon::tomorrow()->addDays(3)) {
+			return self::STATUS_ORANGE_3_DAYS;
+		} else {
+			return self::STATUS_YELLOW_5_DAYS;
+		}
 	}
 
 	public function joinPickup(int $storeId, Carbon $date, int $fsId, int $issuerId = null): bool

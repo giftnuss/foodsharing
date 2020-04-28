@@ -1,11 +1,12 @@
 <template>
   <b-nav-item-dropdown
+    id="dropdown-region"
     ref="dropdown"
     class="regionMenu"
   >
-    <template slot="button-content">
+    <template v-slot:button-content>
       <span class="regionName text-truncate">
-        {{ activeRegion ? activeRegion.name : 'Bezirke' }}
+        {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
       </span>
     </template>
     <div
@@ -33,7 +34,7 @@
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="far fa-comment" />Forum
+          <i class="far fa-comment-alt" />{{ $i18n('menu.entry.forum') }}
         </a>
         <a
           v-if="region.isBot"
@@ -41,57 +42,57 @@
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="far fa-comment-dots" />Bot-Forum
+          <i class="far fa-comment-dots" />{{ $i18n('menu.entry.BOTforum') }}
         </a>
         <a
-          :href="$url('fairteiler', region.id)"
+          :href="$url('foodsharepoints', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-recycle" />Fair-Teiler
+          <i class="fas fa-recycle" />{{ $i18n('terminology.fsp') }}
         </a>
         <a
           :href="$url('members', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-user" />Mitglieder
+          <i class="fas fa-user" />{{ $i18n('menu.entry.members') }}
         </a>
         <a
           :href="$url('events', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="far fa-calendar-alt" />Termine
+          <i class="far fa-calendar-alt" />{{ $i18n('menu.entry.events') }}
         </a>
         <a
           :href="$url('stores', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-cart-plus" />Betriebe
+          <i class="fas fa-cart-plus" />{{ $i18n('menu.entry.stores') }}
         </a>
         <a
           :href="$url('workingGroups', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-users" />Arbeitsgruppen
+          <i class="fas fa-users" />{{ $i18n('terminology.groups') }}
         </a>
         <a
           :href="$url('statistic', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-chart-bar" />Statistik
+          <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
         </a>
         <a
-          v-if="region.isBot"
+          v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-user" />Foodsaver
+          <i class="fas fa-user" />{{ $i18n('menu.entry.fs') }}
         </a>
         <a
           v-if="region.isBot"
@@ -99,7 +100,15 @@
           role="menuitem"
           class="dropdown-item dropdown-item-sub"
         >
-          <i class="fas fa-address-card" />Ausweise
+          <i class="fas fa-address-card" />{{ $i18n('menu.entry.ids') }}
+        </a>
+        <a
+          v-if="region.isBot"
+          :href="$url('reports', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-poo" />{{ $i18n('terminology.reports') }}
         </a>
       </b-collapse>
     </div>
@@ -108,12 +117,12 @@
       class="dropdown-divider"
     />
     <a
-      @click="joinRegionDialog"
       href="#"
       role="menuitem"
       class="dropdown-item"
+      @click="joinRegionDialog"
     >
-      <small><i class="fas fa-plus" /> Einem Bezirk beitreten</small>
+      <small><i class="fas fa-plus" /> {{ $i18n('menu.entry.joinregion') }}</small>
     </a>
   </b-nav-item-dropdown>
 </template>

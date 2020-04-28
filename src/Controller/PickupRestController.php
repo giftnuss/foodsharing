@@ -3,6 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -74,10 +75,6 @@ final class PickupRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
-	 *
-	 * @param int $storeId
-	 * @param string $pickupDate
-	 * @param int $fsId
 	 */
 	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId)
 	{
@@ -86,6 +83,9 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		$date = $this->parsePickupDate($pickupDate);
+		if ($date < Carbon::now()) {
+			throw new HttpException(400, 'Cannot modify pickup in the past.');
+		}
 
 		if (!$this->storeGateway->removeFetcher($fsId, $storeId, $date)) {
 			throw new HttpException(400, 'Failed to remove user from pickup');
@@ -149,18 +149,23 @@ final class PickupRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->maySeePickups($storeId)) {
 			throw new HttpException(403);
 		}
+		if (CarbonInterval::hours(Carbon::today()->diffInHours(Carbon::now()))->greaterThanOrEqualTo(CarbonInterval::hours(6))) {
+			$fromTime = Carbon::today();
+		} else {
+			$fromTime = Carbon::today()->subHours(6);
+		}
 
-		$pickups = $this->storeGateway->getPickupSlots($storeId, Carbon::now()->sub('6 hours'));
+		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
 		$profiles = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
+			$profiles[$user['id']] = RestNormalization::normalizeUser($user);
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				if (isset($profiles[$slot['foodsaverId']])) {
 					$slot['profile'] = $profiles[$slot['foodsaverId']];
 				} else {
-					$slot['profile'] = RestNormalization::normalizeFoodsaver($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
+					$slot['profile'] = RestNormalization::normalizeUser($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
 				}
 				unset($slot['foodsaverId']);
 			}

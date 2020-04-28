@@ -28,6 +28,9 @@ describe('vMap', () => {
              style="width: 500px; height: 500px;"
              data-options="${escape(JSON.stringify(options))}"></div>`
 
+    // Mapbox GL tries to call this function
+    window.URL.createObjectURL = function () {}
+
     require('@php/Lib/View/vMap')
   })
 

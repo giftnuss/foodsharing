@@ -23,7 +23,7 @@ span.thread_title {
   font-size: 15px;
   margin-top: 15px !important;
   margin-left: 5px !important;
-  color: #4a3520;
+  color: var(--fs-brown);
   width: 55%;
 }
 
@@ -61,11 +61,11 @@ div.post div.xv_left {
 }
 
 div.post div.xv_left ul li a {
-  color: #4a3520;
+  color: var(--fs-brown);
 }
 
 div.post div.xv_left ul li a:hover {
-  background-color: #4a3520;
+  background-color: var(--fs-brown);
   color: #ffffff;
 }
 
@@ -73,8 +73,8 @@ div.post textarea {
   height: 165px;
 }
 
-/* fairteilerlist */
-ul.fairteilerlist li a span.image {
+/* food share point list */
+ul.food-share-point-list li a span.image {
   display: block;
   width: 60px;
   height: 60px;
@@ -84,11 +84,11 @@ ul.fairteilerlist li a span.image {
   background-repeat: no-repeat;
 }
 
-ul.fairteilerlist li a span.image.noimage {
+ul.food-share-point-list li a span.image.noimage {
   background-color: #ffffff;
 }
 
-ul.fairteilerlist li a span.clear {
+ul.food-share-point-list li a span.clear {
   display: block;
   clear: both;
 }
@@ -179,5 +179,9 @@ div.event {
 .user_pic .avatar span.bubble {
   margin-left: 37px !important;
   margin-top: -40px !important;
-  color: #4a3520 !important;
+  color: var(--fs-brown) !important;
+}
+
+.user_pic_width {
+  width: 50px;
 }

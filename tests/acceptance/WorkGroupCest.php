@@ -24,15 +24,15 @@ class WorkGroupCest
 		$this->testGroup = $I->createWorkingGroup('a group for testing to see groups', ['apply_type' => ApplyType::OPEN]);
 		$this->testGroupApply = $I->createWorkingGroup('a group to apply for', ['apply_type' => ApplyType::EVERYBODY]);
 		$this->regionMember = $I->createFoodsaver();
-		$I->addBezirkMember($this->testGroup['id'], $this->regionMember['id']);
+		$I->addRegionMember($this->testGroup['id'], $this->regionMember['id']);
 		$this->unconnectedFoodsaver = $I->createFoodsaver();
 		$this->foodsharer = $I->createFoodsharer();
 		$this->groupAdmin = $I->createFoodsaver();
-		$I->addBezirkMember($this->testGroup['id'], $this->groupAdmin['id']);
-		$I->addBezirkAdmin($this->testGroup['id'], $this->groupAdmin['id']);
+		$I->addRegionMember($this->testGroup['id'], $this->groupAdmin['id']);
+		$I->addRegionAdmin($this->testGroup['id'], $this->groupAdmin['id']);
 		$this->groupApplyAdmin = $I->createFoodsaver();
-		$I->addBezirkMember($this->testGroupApply['id'], $this->groupApplyAdmin['id']);
-		$I->addBezirkAdmin($this->testGroupApply['id'], $this->groupApplyAdmin['id']);
+		$I->addRegionMember($this->testGroupApply['id'], $this->groupApplyAdmin['id']);
+		$I->addRegionAdmin($this->testGroupApply['id'], $this->groupApplyAdmin['id']);
 	}
 
 	public function _after(AcceptanceTester $I)
@@ -45,8 +45,6 @@ class WorkGroupCest
 	 * It is actually not really defined if foodsharer should be able to participate in groups or not.
 	 * They don't get the menu item but they can use groups.
 	 *
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["regionMember", true]
 	 * @example["unconnectedFoodsaver", true]
 	 * @example["foodsharer", true]
@@ -66,8 +64,6 @@ class WorkGroupCest
 	 * It is actually not really defined if foodsharer should be able to participate in groups or not.
 	 * They don't get the menu item but they can use groups.
 	 *
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["unconnectedFoodsaver", "testGroup"]
 	 */
 	public function canJoinGlobalGroup(AcceptanceTester $I, \Codeception\Example $example)
@@ -77,12 +73,7 @@ class WorkGroupCest
 		$I->amOnPage($I->groupListUrl());
 		$I->clickWithLeftButton(Locator::contains('.groups .field .head', $group['name']));
 		$I->click('Dieser Arbeitsgruppe beitreten');
-		/* We have a bug here: We need to relogin to join the Group. As I will not fix major bugs with this commit,
-		 * I leave this to a later bugfixer and just test the bugged behaviour :-)
-		 */
-		//$I->waitUrlEquals($I->forumUrl($group['id']));
-		$I->logout();
-		$I->login($this->{$example[0]}['email']);
+		$I->waitForText('Pinnwand');
 		$I->amOnPage($I->forumUrl($group['id']));
 		$I->see($group['name']);
 		$I->see('Noch keine Themen gepostet');
@@ -102,13 +93,12 @@ class WorkGroupCest
 		$I->see($admin['name'], '#work_group_form_administrators');
 		$I->removeFromTagSelect($user['name'], 'work_group_form_members');
 		$I->click('Änderungen speichern');
-		$I->waitForText('Änderungen gespeichert');
+		$I->see('Änderungen gespeichert');
 		$I->dontSee($user['name'], '#work_group_form_members');
 		$I->see($admin['name'], '#work_group_form_administrators');
 	}
 
 	/**
-	 * @param \Codeception\Example $example
 	 * @example["unconnectedFoodsaver"]
 	 * @example["regionMember"]
 	 */

@@ -70,7 +70,7 @@ class CompanyCest
 	 */
 	public function CanAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
 	{
-		call_user_func(array($this, $example[0]));
+		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeUrl($this->store['id']));
 		$I->see($this->store['name'] . '-Team', 'div.head.ui-widget-header.ui-corner-top');
 	}
@@ -83,7 +83,7 @@ class CompanyCest
 	 */
 	public function CanNotAccessCompanyPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
 	{
-		call_user_func(array($this, $example[0]));
+		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeUrl($this->store['id']));
 		$I->cantSeeInCurrentUrl('fsbetrieb');
 	}
@@ -96,7 +96,7 @@ class CompanyCest
 	public function CanAccessCompanyEditPage(\HtmlAcceptanceTester $I, \Codeception\Example $example)
 	{
 		$canAccess = $example[1];
-		call_user_func(array($this, $example[0]));
+		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeEditUrl($this->store['id']));
 		if ($canAccess) {
 			$I->see('Stammbezirk');

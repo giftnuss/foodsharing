@@ -15,11 +15,11 @@ class DashboardView extends View
 				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
 					<span class="i">' . $this->img($b) . '</span>
 					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht am ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
+					<span class="t">veröffentlicht: ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
-	
+
 			</li>';
 		}
 
@@ -31,150 +31,18 @@ class DashboardView extends View
 
 	public function updates()
 	{
-		$this->pageHelper->addStyle('
-		#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
-		
-		#activity ul.linklist li span.qr
-		{
-			margin-left:58px;
-			border-radius: 3px;
-			opacity:0.5;
-		}
-		
-		#activity ul.linklist li span.qr:hover
-		{
-			opacity:1;
-		}
-		
-		#activity ul.linklist li span.qr img
-		{
-			height:32px;
-			width:32px;
-			margin-right:-35px;
-			border-right:1px solid #ffffff;
-			border-top-left-radius: 3px;
-			border-bottom-left-radius: 3px;
-		}
-		#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-		{
-			border: 0 none;
-		    height: 16px;
-		    margin-left: 36px;
-		    padding: 8px;
-		    width: 78.6%;
-			border-top-right-radius: 3px;
-			border-bottom-right-radius: 3px;
-			margin-right:-30px;
-			background-color:#F9F9F9;
-		}
-		
-		#activity ul.linklist li span.qr .loader
-		{
-			background-color: #ffffff;
-		    position: relative;
-		    text-align: left;
-		    top: -10px;
-		}
-		
-		#activity ul.linklist li span.t span.txt {
-		    overflow: hidden;
-		    text-overflow: unset;
-    		white-space: normal;
-			padding-left:10px;
-			border-left:2px solid #4A3520;
-			margin-bottom:10px;
-			display:block;
-		}
-		#activity ul.linklist li span
-		{
-			color:#4A3520;
-		}
-		#activity ul.linklist li span a
-		{
-			color:#46891b !important;
-		}
-		#activity span.n i.fa
-		{
-			display:inline-block;
-			width:11px;
-			text-align:center;
-		}
-		#activity span.n small
-		{
-			float:right;
-			opacity:0.8;
-			font-size:12px;
-		}
-		#activity ul.linklist li span a:hover
-		{
-			text-decoration:underline !important;
-			color:#46891b !important;
-		}
-		
-		#activity ul.linklist li
-		{
-			margin-bottom:10px;
-			background-color:#ffffff;
-			padding:10px;
-			border-radius: 6px;
-		}
-		
-		ul.linklist li span.n
-		{
-			font-weight:normal;
-			font-size:13px;
-			margin-bottom:10px;
-			text-overflow: unset;
-    		white-space: inherit;
-		}
-		
-		@media (max-width: 900px)
-		{
-			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-			{
-				width:74.6%;
-			}
-		}
-		@media (max-width: 400px)
-		{
-			ul.linklist li span.n
-			{
-				height:55px;
-			}
-			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-			{
-				width:82%;
-			}
-			#activity ul.linklist li span.time, #activity ul.linklist li span.qr
-			{
-				margin-left:0px;
-			}
-			#activity span.n small
-			{
-				float:none;
-				display:block;
-			}
-		}
-	');
-		$this->pageHelper->addContent('
-	<div class="head ui-widget-header ui-corner-top">
-		Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
-	</div>
-	<div id="activity">
-		<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
-		<div style="display:none" id="activity-info">' . $this->v_utils->v_info('Es gibt gerade nichts Neues') . '</div>
-	</div>');
+		$this->pageHelper->addContent($this->vueComponent('activity-overview', 'activity-overview', []));
 	}
 
 	public function foodsharerMenu()
 	{
-		return $this->menu(array(
-			array('name' => $this->translationHelper->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"),
-			array('name' => $this->translationHelper->s('all_baskets'), 'href' => '/karte?load=baskets')
-		));
+		return $this->menu([
+			['name' => $this->translationHelper->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"],
+			['name' => $this->translationHelper->s('all_baskets'), 'href' => '/karte?load=baskets']
+		]);
 	}
 
-	public function closeBaskets($baskets)
+	public function nearbyBaskets($baskets)
 	{
 		$out = '<ul class="linklist baskets">';
 		foreach ($baskets as $b) {
@@ -187,7 +55,7 @@ class DashboardView extends View
 					<span class="d">' . $b['description'] . '</span>
 					<span class="c"></span>
 				</a>
-	
+
 			</li>';
 		}
 
@@ -210,7 +78,7 @@ class DashboardView extends View
 	{
 		return '
 	   <div class="msg-inside info">
-			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Möchtest Du auch Lebensmittel bei Betrieben retten und fair-teilen?<br />Werde Foodsaver!</a></strong>
+			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver werden!</a></strong>
 	   </div>';
 	}
 
@@ -250,7 +118,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out = $this->v_utils->v_field($list, 'Du bist verantwortlich für', array('class' => 'ui-padding'));
+			$out = $this->v_utils->v_field($list, 'Du bist verantwortlich für', ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['team'])) {
@@ -264,7 +132,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du holst Lebensmittel ab bei', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($list, 'Du holst Lebensmittel ab bei', ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['waitspringer'])) {
@@ -278,7 +146,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springerliste bei', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springerliste bei', ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['anfrage'])) {
@@ -286,7 +154,7 @@ class DashboardView extends View
 				function u_anfrage_action(key,el)
 				{
 					val = $(el).children("input:first").val().split(":::");
-					
+
 					if(key == "deny")
 					{
 						u_sign_out(val[0],val[1],el);
@@ -296,7 +164,7 @@ class DashboardView extends View
 						u_gotoMap(val[0],val[1],el);
 					}
 				}
-	
+
 				function u_sign_out(fsid,bid,el)
 					{
 						var item = $(el);
@@ -316,17 +184,17 @@ class DashboardView extends View
 								}
 							},
 							complete:function(){hideLoader();}
-						});	
-					}	
-	
+						});
+					}
+
 				function u_gotoMap(fsid,betriebid,el)
 					{
 						var item = $(el);
 						showLoader();
 						var baseUrl = "?page=map&bid=";
 						window.location.href = baseUrl+betriebid;
-						
-					}	
+
+					}
 			');
 			$this->pageHelper->addJs('
 				function createSignoutMenu() {
@@ -340,27 +208,27 @@ class DashboardView extends View
 						}
 					};
 				}
-			
+
 				$("#store-request").on("click", function(e){
 					var $this = $(this);
 					$this.data("runCallbackThingie", createSignoutMenu);
 					var _offset = $this.offset(),
 						position = {
-							x: _offset.left - 30, 
+							x: _offset.left - 30,
 							y: _offset.top - 97
 						}
 					$this.contextMenu(position);
 				});
-	
+
 				$.contextMenu({
 					selector: "#store-request",
 					trigger: "none",
 					build: function($trigger, e) {
 						return $trigger.data("runCallbackThingie")();
 					}
-				});		
-				
-				
+				});
+
+
 			');
 			$list = '
 			<ul class="linklist">';
@@ -373,7 +241,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Anfragen gestellt bei', array('class' => 'ui-padding'));
+			$out .= $this->v_utils->v_field($list, 'Anfragen gestellt bei', ['class' => 'ui-padding']);
 		}
 
 		if (empty($out)) {
@@ -388,12 +256,12 @@ class DashboardView extends View
 		$out = '';
 		$i = 0;
 		foreach ($updates as $u) {
-			$fs = array(
+			$fs = [
 				'id' => $u['foodsaver_id'],
 				'name' => $u['foodsaver_name'],
 				'photo' => $u['foodsaver_photo'],
 				'sleep_status' => $u['sleep_status']
-			);
+			];
 			$out .= '
 			<div class="updatepost">
 					<a class="poster ui-corner-all" href="/profile/' . (int)$u['foodsaver_id'] . '">
@@ -406,7 +274,7 @@ class DashboardView extends View
 			</div>';
 		}
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('updates'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('updates'), ['class' => 'ui-padding']);
 	}
 
 	public function u_update_type($u)
@@ -420,13 +288,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['post_body'] . '
 					</div>
-	
+
 				</div>
-				
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -443,13 +311,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['post_body'] . '
 					</div>
-	
+
 				</div>
-			
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -466,13 +334,13 @@ class DashboardView extends View
 							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
 						</div>
 					</div>
-	
+
 					<div class="activity_feed_content_link">
 						' . $u['text'] . '
 					</div>
-	
+
 				</div>
-			
+
 				<div class="js_feed_comment_border">
 					<div class="comment_mini_link_like">
 						<div class="foot">
@@ -488,6 +356,16 @@ class DashboardView extends View
 
 	public function u_invites($invites)
 	{
+		$this->pageHelper->addStyle('
+			@media (max-width: 410px)
+			{
+				.top_margin_on_small_screen
+				{
+					margin-top: 45px;
+				}
+			}
+		');
+
 		$out = '';
 		foreach ($invites as $i) {
 			$out .= '
@@ -496,27 +374,29 @@ class DashboardView extends View
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
-						
-				
-				<div class="activity_feed_content">
+
+
+				<div class="container activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
 							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-	
-					<div>
-						<a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a> <a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a> <a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a>
+
+					<div class="row activity-feed-content-buttons">
+						<div class="col mr-2"><a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a></div>
+						<div class="col-md-auto mr-2"><a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a></div>
+						<div class="col-md-auto"><a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a></div>
 					</div>
 				</div>
-				
+
 				<div class="clear"></div>
 			</div>
 			';
 		}
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding']);
 	}
 
 	public function u_events($events)
@@ -529,7 +409,7 @@ class DashboardView extends View
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
-			
+
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
@@ -537,12 +417,12 @@ class DashboardView extends View
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
-	
+
 					<div>
-						<a href="/?page=event&id=' . (int)$i['id'] . '" class="button">Zum Event</a> 
+						<a href="/?page=event&id=' . (int)$i['id'] . '" class="button">Zum Event</a>
 					</div>
 				</div>
-			
+
 				<div class="clear"></div>
 			</div>
 			';
@@ -554,6 +434,6 @@ class DashboardView extends View
 			$eventTitle = $this->translationHelper->s('event_headline');
 		}
 
-		return $this->v_utils->v_field($out, $eventTitle, array('class' => 'ui-padding moreswap'));
+		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'ui-padding moreswap']);
 	}
 }

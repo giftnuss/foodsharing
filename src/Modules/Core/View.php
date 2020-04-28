@@ -4,8 +4,8 @@ namespace Foodsharing\Modules\Core;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
@@ -76,11 +76,11 @@ class View
 		}
 
 		return '
-		<div class="top corner-all">
+		<div class="content-top corner-all">
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>		
+			<div style="clear:both;"></div>
 		</div>';
 	}
 
@@ -107,11 +107,11 @@ class View
 			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
-			Online-Sprachkonferenzen machen wir mit Mumble	
+			Online-Sprachkonferenzen machen wir mit Mumble
 		</p>
 		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
 		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
-		', 'Ort', array('class' => 'ui-padding'));
+		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -124,8 +124,8 @@ class View
 			' . $location['street'] . '<br />
 			' . $location['zip'] . ' ' . $location['city'] . '
 		</p>
-				
-		', 'Ort', array('class' => 'ui-padding'));
+
+		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -145,7 +145,7 @@ class View
 		}
 
 		return '
-					
+
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
 			' . $img . '
 			<div class="welcome_profile_name">
@@ -156,7 +156,7 @@ class View
 		</div>';
 	}
 
-	public function fsAvatarList($foodsaver, $option = array())
+	public function fsAvatarList($foodsaver, $option = [])
 	{
 		if (!is_array($foodsaver)) {
 			return '';
@@ -183,8 +183,6 @@ class View
 			shuffle($foodsaver);
 		}
 		foreach ($foodsaver as $fs) {
-			$jssaver[] = (int)$fs['id'];
-
 			$photo = $this->imageService->avatar($fs);
 
 			$click = ' onclick="profile(' . (int)$fs['id'] . ');return false;"';
@@ -217,7 +215,7 @@ class View
 		return $out;
 	}
 
-	public function menu($items, $option = array())
+	public function menu($items, $option = [])
 	{
 		$title = false;
 		if (isset($option['title'])) {
@@ -272,7 +270,7 @@ class View
 		</div>';
 	}
 
-	public function latLonPicker($id, $options = array())
+	public function latLonPicker($id, $options = [])
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation();
@@ -310,12 +308,12 @@ class View
 
 	public function simpleContent($content)
 	{
-		$out = $this->v_utils->v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($content['body'], $content['title'], ['class' => 'ui-padding']);
 
 		return $out;
 	}
 
-	public function vueComponent($id, $component, $props = array(), $data = array())
+	public function vueComponent($id, $component, $props = [], $data = [])
 	{
 		return $this->twig->render('partials/vue-wrapper.twig', [
 			'id' => $id,

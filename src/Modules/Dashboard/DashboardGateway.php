@@ -24,84 +24,15 @@ class DashboardGateway extends BaseGateway
 			', [':id' => $id]);
 	}
 
-	public function getNewestFoodbaskets($limit = 10)
+	/**
+	 * Returns the number of stores from the list of store IDs that are not assigned to a district.
+	 *
+	 * @param $storeIds
+	 */
+	public function countStoresWithoutDistrict($storeIds): int
 	{
-		return $this->db->fetchAll('
-	
-			SELECT
-				b.id,
-				b.`time`,
-				UNIX_TIMESTAMP(b.`time`) AS time_ts,
-				b.description,
-				b.picture,
-				b.contact_type,
-				b.tel,
-				b.handy,
-				b.fs_id AS fsf_id,
-				fs.id AS fs_id,
-				fs.name AS fs_name,
-				fs.photo AS fs_photo
-	
-			FROM
-				fs_basket b,
-				fs_foodsaver fs
-	
-			WHERE
-				b.foodsaver_id = fs.id
-			AND
-				b.status = 1
-	
-			ORDER BY
-				id DESC
-	
-			LIMIT
-				0, :limit
-	
-		', [':limit' => $limit]);
-	}
-
-	public function listCloseBaskets($id, $loc, $distance = 30)
-	{
-		return $this->db->fetchAll('
-			SELECT
-				b.id,
-				b.time,
-				UNIX_TIMESTAMP(b.`time`) AS time_ts,
-				b.picture,
-				b.description,
-				b.lat,
-				b.lon,
-				(6371 * acos(
-					cos(radians(:lat)) *
-					cos(radians(b.lat)) *
-					cos(radians(b.lon) - radians(:lon)) +
-					sin(radians(:lat_dup)) *
-					sin(radians(b.lat)))) AS distance,
-				fs.name AS fs_name
-			FROM
-				fs_basket b,
-				fs_foodsaver fs
-	
-			WHERE
-				b.foodsaver_id = fs.id
-				
-			AND
-				b.status = 1
-	
-			AND
-				foodsaver_id != :id
-		
-			HAVING
-				distance <= :distance
-	
-			ORDER BY
-				distance ASC
-	
-			LIMIT 6
-		', [':id' => $id,
-			':distance' => $distance,
-			':lat' => $loc['lat'],
-			':lat_dup' => $loc['lat'],
-			':lon' => $loc['lon']]);
+		return (int)$this->db->fetchValue('SELECT COUNT(*) FROM fs_betrieb WHERE id IN('
+			. implode(',', $storeIds)
+			. ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)');
 	}
 }

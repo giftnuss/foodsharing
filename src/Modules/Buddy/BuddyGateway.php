@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Buddy;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Buddy\BuddyId;
 
 class BuddyGateway extends BaseGateway
 {
@@ -19,10 +20,10 @@ class BuddyGateway extends BaseGateway
 		
 			WHERE 	b.buddy_id = fs.id
 			AND 	b.foodsaver_id = :foodsaver_id
-			AND 	b.confirmed = 1
+			AND 	b.confirmed = :buddy_id
 		';
 
-		return $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
+		return $this->db->fetchAll($stm, [':foodsaver_id' => $fsId, ':buddy_id' => BuddyId::BUDDY]);
 	}
 
 	public function listBuddyIds($fsId): array
@@ -44,28 +45,28 @@ class BuddyGateway extends BaseGateway
 		return false;
 	}
 
-	public function buddyRequest($buddyId, $fsId): bool
+	public function buddyRequest(int $buddyId, int $foodsaverId): bool
 	{
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:foodsaver_id, :buddy_id, 0)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $foodsaverId,
+			'buddy_id' => $buddyId,
+			'confirmed' => BuddyId::REQUESTED
+		]);
 
 		return true;
 	}
 
-	public function confirmBuddy($buddyId, $fsId): void
+	public function confirmBuddy(int $buddyId, int $foodsaverId): void
 	{
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:foodsaver_id, :buddy_id, 1)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
-		$stm = '
-			REPLACE INTO `fs_buddy`(`foodsaver_id`, `buddy_id`, `confirmed`)
-			VALUES (:buddy_id, :foodsaver_id, 1)
-		';
-		$this->db->execute($stm, ['foodsaver_id' => (int)$fsId, 'buddy_id' => (int)$buddyId]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $foodsaverId,
+			'buddy_id' => $buddyId,
+			'confirmed' => BuddyId::BUDDY
+		]);
+		$this->db->insertOrUpdate('fs_buddy', [
+			'foodsaver_id' => $buddyId,
+			'buddy_id' => $foodsaverId,
+			'confirmed' => BuddyId::BUDDY
+		]);
 	}
 }

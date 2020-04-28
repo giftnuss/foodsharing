@@ -4,6 +4,15 @@ namespace Foodsharing\Helpers;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\BlogPermissions;
+use Foodsharing\Permissions\ContentPermissions;
+use Foodsharing\Permissions\FAQPermissions;
+use Foodsharing\Permissions\MailboxPermissions;
+use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Permissions\ReportPermissions;
+use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
 use Twig\Environment;
@@ -33,6 +42,15 @@ final class PageHelper
 	public $jsData = [];
 	private $twig;
 	private $identificationHelper;
+	private $blogPermissions;
+	private $mailboxPermissions;
+	private $faqPermissions;
+	private $quizPermissions;
+	private $reportPermissions;
+	private $storePermissions;
+	private $contentPermissions;
+	private $newsletterEmailPermissions;
+	private $regionPermissions;
 
 	public function __construct(
 		Session $session,
@@ -41,7 +59,16 @@ final class PageHelper
 		Environment $twig,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,
-		IdentificationHelper $identificationHelper
+		IdentificationHelper $identificationHelper,
+		FAQPermissions $faqPermissions,
+		MailboxPermissions $mailboxPermissions,
+		QuizPermissions $quizPermissions,
+		ReportPermissions $reportPermissions,
+		StorePermissions $storePermissions,
+		ContentPermissions $contentPermissions,
+		BlogPermissions $blogPermissions,
+		RegionPermissions $regionPermissions,
+		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
 		$this->content_main = '';
 		$this->content_right = '';
@@ -50,7 +77,7 @@ final class PageHelper
 		$this->content_top = '';
 		$this->content_overtop = '';
 		$this->add_css = '';
-		$this->bread = array();
+		$this->bread = [];
 		$this->hidden = '';
 		$this->js_func = '';
 		$this->js = '';
@@ -63,6 +90,15 @@ final class PageHelper
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->faqPermissions = $faqPermissions;
+		$this->blogPermissions = $blogPermissions;
+		$this->mailboxPermissions = $mailboxPermissions;
+		$this->quizPermissions = $quizPermissions;
+		$this->reportPermissions = $reportPermissions;
+		$this->contentPermissions = $contentPermissions;
+		$this->storePermissions = $storePermissions;
+		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->regionPermissions = $regionPermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -96,6 +132,8 @@ final class PageHelper
 
 		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
+		$footer = $this->getFooter();
+
 		return [
 			'head' => $this->getHeadData(),
 			'bread' => $this->bread,
@@ -106,9 +144,8 @@ final class PageHelper
 			'hidden' => $this->hidden,
 			'isMob' => $this->session->isMob(),
 			'broadcast_message' => $g_broadcast_message,
-			'SRC_REVISION' => defined('SRC_REVISION') ? SRC_REVISION : null,
+			'footer' => $footer,
 			'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? BASE_URL,
-			'is_foodsharing_dot_at' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
 			'content' => [
 				'main' => [
 					'html' => $this->getContent(CNT_MAIN),
@@ -172,10 +209,10 @@ final class PageHelper
 			];
 		}
 
-		$ravenConfig = null;
+		$sentryConfig = null;
 
 		if (defined('RAVEN_JAVASCRIPT_CONFIG')) {
-			$ravenConfig = RAVEN_JAVASCRIPT_CONFIG;
+			$sentryConfig = RAVEN_JAVASCRIPT_CONFIG;
 		}
 
 		return array_merge($this->jsData, [
@@ -183,7 +220,7 @@ final class PageHelper
 			'page' => $this->routeHelper->getPage(),
 			'subPage' => $this->routeHelper->getSubPage(),
 			'location' => $location,
-			'ravenConfig' => $ravenConfig,
+			'ravenConfig' => $sentryConfig,
 			'translations' => $this->translationHelper->getTranslations(),
 			'isDev' => getenv('FS_ENV') === 'dev'
 		]);
@@ -196,7 +233,7 @@ final class PageHelper
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id'])]);
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id']), 'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($region['id'])]);
 				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
@@ -219,10 +256,15 @@ final class PageHelper
 				'hasFsRole' => $this->session->may('fs'),
 				'isOrgaTeam' => $this->session->isOrgaTeam(),
 				'may' => [
-					'editBlog' => $this->session->mayEditBlog(),
-					'editQuiz' => $this->session->mayEditQuiz(),
-					'handleReports' => $this->session->mayHandleReports(),
-					'addStore' => $this->session->may('bieb'),
+					'administrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
+					'editQuiz' => $this->quizPermissions->mayEditQuiz(),
+					'handleReports' => $this->reportPermissions->mayHandleReports(),
+					'addStore' => $this->storePermissions->mayCreateStore(),
+					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
+					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
+					'editContent' => $this->contentPermissions->mayEditContent(),
+					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
+					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,
@@ -235,6 +277,23 @@ final class PageHelper
 			[
 				'id' => 'vue-topbar',
 				'component' => 'topbar',
+				'props' => $params,
+			]
+		);
+	}
+
+	private function getFooter(): string
+	{
+		$params = [
+			'isFsDotAt' => strpos($_SERVER['HTTP_HOST'] ?? BASE_URL, 'foodsharing.at') !== false,
+			'srcRevision' => defined('SRC_REVISION') ? SRC_REVISION : null,
+		];
+
+		return $this->twig->render(
+			'partials/vue-wrapper.twig',
+			[
+				'id' => 'vue-footer',
+				'component' => 'Footer',
 				'props' => $params,
 			]
 		);
@@ -257,7 +316,7 @@ final class PageHelper
 	private function getMessages(): void
 	{
 		if (!isset($_SESSION['msg'])) {
-			$_SESSION['msg'] = array();
+			$_SESSION['msg'] = [];
 		}
 		if (isset($_SESSION['msg']['error']) && !empty($_SESSION['msg']['error'])) {
 			$msg = '';
@@ -280,9 +339,9 @@ final class PageHelper
 			}
 			$this->addJs('pulseSuccess("' . $this->sanitizerService->jsSafe($msg, '"') . '");');
 		}
-		$_SESSION['msg']['info'] = array();
-		$_SESSION['msg']['success'] = array();
-		$_SESSION['msg']['error'] = array();
+		$_SESSION['msg']['info'] = [];
+		$_SESSION['msg']['success'] = [];
+		$_SESSION['msg']['error'] = [];
 	}
 
 	private function getContent(int $positionCode = CNT_MAIN): string
@@ -385,7 +444,7 @@ final class PageHelper
 		$this->hidden .= $html;
 	}
 
-	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = array()): void
+	public function hiddenDialog(string $table, array $fields, string $title = '', array $option = []): void
 	{
 		$width = '';
 		if (isset($option['width'])) {

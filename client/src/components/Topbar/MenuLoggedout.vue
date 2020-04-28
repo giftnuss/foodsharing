@@ -5,10 +5,11 @@
   >
     <li class="nav-item">
       <a
-        :href="$url('map')"
         v-b-tooltip.hover.bottom
+        :href="$url('map')"
+        :title="$i18n('storelist.map')"
+        :aria-label="$i18n('storelist.map')"
         class="nav-link"
-        title="Karte"
       >
         <i class="fas fa-map-marker-alt" />
       </a>
@@ -19,7 +20,7 @@
         class="nav-link"
       >
         <i class="fas fa-rocket" />
-        Mach mit!
+        {{ $i18n('register.topbar') }}
       </a>
     </li>
 

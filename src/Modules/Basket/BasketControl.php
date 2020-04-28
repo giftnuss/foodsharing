@@ -3,7 +3,7 @@
 namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status;
+use Foodsharing\Modules\Core\DBConstants\Basket\Status;
 
 class BasketControl extends Control
 {
@@ -40,24 +40,24 @@ class BasketControl extends Control
 
 	public function find(): void
 	{
-		$baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation());
+		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation());
 		$this->view->find($baskets, $this->session->getLocation());
 	}
 
 	private function basket($basket): void
 	{
-		$wallPosts = false;
 		$requests = false;
 
 		if ($this->session->may()) {
-			$wallPosts = $this->wallposts('basket', $basket['id']);
 			if ($basket['fs_id'] == $this->session->id()) {
 				$requests = $this->basketGateway->listRequests($basket['id'], $this->session->id());
+			} else {
+				$requests = $this->basketGateway->getRequest($basket['id'], $this->session->id(), $basket['foodsaver_id']);
 			}
 		}
-		if ($basket['until_ts'] >= time() && $basket['status'] === Status::REQUESTED_MESSAGE_READ) {
-			$this->view->basket($basket, $wallPosts, $requests);
-		} elseif ($basket['until_ts'] <= time() || $basket['status'] === Status::DENIED || $basket['status'] === Status::DELETED_OTHER_REASON) {
+		if ($basket['status'] === Status::REQUESTED_MESSAGE_READ && $basket['until_ts'] >= time()) {
+			$this->view->basket($basket, $requests);
+		} elseif ($basket['status'] === Status::DELETED_OTHER_REASON || $basket['status'] === Status::DENIED || $basket['until_ts'] <= time()) {
 			$this->view->basketTaken($basket);
 		}
 	}

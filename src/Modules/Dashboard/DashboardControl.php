@@ -2,16 +2,15 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Basket\BasketGateway;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
-use Foodsharing\Modules\Quiz\QuizGateway;
+use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
@@ -29,7 +28,7 @@ class DashboardControl extends Control
 	private $profileGateway;
 	private $sanitizerService;
 	private $imageService;
-	private $quizGateway;
+	private $quizSessionGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -39,12 +38,11 @@ class DashboardControl extends Control
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EventGateway $eventGateway,
-		Db $model,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
 		SanitizerService $sanitizerService,
 		ImageService $imageService,
-		QuizGateway $quizGateway
+		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -53,12 +51,11 @@ class DashboardControl extends Control
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->eventGateway = $eventGateway;
-		$this->model = $model;
 		$this->twig = $twig;
 		$this->profileGateway = $profileGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
-		$this->quizGateway = $quizGateway;
+		$this->quizSessionGateway = $quizSessionGateway;
 
 		parent::__construct();
 
@@ -92,9 +89,9 @@ class DashboardControl extends Control
 
 		$fsId = $this->session->id();
 		if (
-			($is_fs && !$this->quizGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
-			($is_bieb && !$this->quizGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
-			($is_bot && !$this->quizGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
+			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
+			($is_bieb && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::STORE_MANAGER)) ||
+			($is_bot && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::AMBASSADOR))
 		) {
 			$check = true;
 
@@ -106,13 +103,13 @@ class DashboardControl extends Control
 		if ($check) {
 			$cnt = $this->contentGateway->get(33);
 
-			$cnt['body'] = str_replace(array(
+			$cnt['body'] = str_replace([
 				'{NAME}',
 				'{ANREDE}'
-			), array(
+			], [
 				$this->session->user('name'),
 				$this->translationHelper->s('anrede_' . $this->session->user('gender'))
-			), $cnt['body']);
+			], $cnt['body']);
 
 			if ($this->session->option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
@@ -134,17 +131,21 @@ class DashboardControl extends Control
 			$this->dashFoodsaver();
 		} else {
 			// foodsharer dashboard
-			$this->dashFs();
+			$this->dashFoodsharer();
 		}
 	}
 
-	private function dashFs()
+	/**
+	 * Simple dashboard that is only rendered for foodsharers (users who haven't done the quiz yet and can only create
+	 * food baskets and so on).
+	 */
+	private function dashFoodsharer()
 	{
 		$this->setContentWidth(8, 8);
 		$subtitle = $this->translationHelper->s('no_saved_food');
 
 		if ($this->user['stat_fetchweight'] > 0) {
-			$subtitle = $this->translationHelper->sv('saved_food', array('weight' => $this->user['stat_fetchweight']));
+			$subtitle = $this->translationHelper->sv('saved_food', ['weight' => $this->user['stat_fetchweight']]);
 		}
 
 		$this->pageHelper->addContent(
@@ -154,63 +155,60 @@ class DashboardControl extends Control
 				'avatar' => [
 					'user' => $this->user,
 					'size' => 50,
-					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/fairteiler50x50.png')
+					'imageUrl' => $this->imageService->img($this->user['photo'], 50, 'q', '/img/foodsharepoint50x50.png')
 				]
 			]),
 			CNT_TOP
 		);
 
-		$this->pageHelper->addContent($this->view->becomeFoodsaver());
+		// Advertisement for Push Notifications
+		$this->pageHelper->addContent(
+			$this->twig->render('partials/pushNotificationBanner.twig'),
+			CNT_TOP
+		);
 
 		$this->pageHelper->addContent($this->view->foodsharerMenu(), CNT_LEFT);
 
 		$cnt = $this->contentGateway->get(33);
 
-		$cnt['body'] = str_replace(array(
+		$cnt['body'] = str_replace([
 			'{NAME}',
 			'{ANREDE}'
-		), array(
+		], [
 			$this->session->user('name'),
 			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
-		), $cnt['body']);
+		], $cnt['body']);
 
-		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
+		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
+
+		$this->pageHelper->addContent($this->view->becomeFoodsaver());
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->dashboardGateway->listCloseBaskets($this->session->id(), $this->session->getLocation($this->model)))) {
-			$this->pageHelper->addContent($this->view->closeBaskets($baskets), CNT_LEFT);
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
+			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
-			if ($baskets = $this->dashboardGateway->getNewestFoodbaskets()) {
+			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
 	}
 
+	/**
+	 * Dashboard for all users except for foodsharers (they get a simpler one –  @see DashboardControl::dashFoodsharer() ).
+	 */
 	private function dashFoodsaver()
 	{
-		$val = $this->model->getValues(array('photo_public', 'anschrift', 'plz', 'lat', 'lon', 'stadt'), 'foodsaver', $this->session->id());
+		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
-		if (empty($val['lat']) || empty($val['lon']) ||
-			($val['lat']) == '50.05478727164819' && $val['lon'] == '10.3271484375'
-		) {
-			$this->flashMessageHelper->info('Bitte überprüfe Deine Adresse, die Koordinaten konnten nicht ermittelt werden.');
+		if (empty($val['lat']) || empty($val['lon'])) {
+			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 
 		global $g_data;
 		$g_data = $val;
-		$elements = array();
-
-		if ($val['photo_public'] == 0) {
-			$g_data['photo_public'] = 1;
-			$elements[] = $this->v_utils->v_form_radio('photo_public', array('desc' => 'Du solltest zumindest intern den Menschen in Deiner Umgebung ermöglichen, Dich zu kontaktieren. So kannst Du von anderen Foodsavern eingeladen werden, Lebensmittel zu retten und Ihr könnt Euch einander kennen lernen.', 'values' => array(
-				array('name' => 'Ja, ich bin einverstanden, dass mein Name und mein Foto veröffentlicht werden.', 'id' => 1),
-				array('name' => 'Bitte nur meinen Namen veröffentlichen.', 'id' => 2),
-				array('name' => 'Meine Daten nur intern anzeigen.', 'id' => 3),
-				array('name' => 'Meine Daten niemandem zeigen.', 'id' => 4)
-			)));
-		}
+		$elements = [];
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->pageHelper->addJs('
@@ -243,7 +241,7 @@ class DashboardControl extends Control
 		}
 
 		if (!empty($elements)) {
-			$out = $this->v_utils->v_form('grabInfo', $elements, array('submit' => 'Speichern'));
+			$out = $this->v_utils->v_form('grabInfo', $elements, ['submit' => 'Speichern']);
 
 			$this->pageHelper->addJs('
                 $("#grab-info-link").fancybox({
@@ -254,19 +252,7 @@ class DashboardControl extends Control
 
                 $("#grabinfo-form").on("submit", function(e){
                     e.preventDefault();
-                    check = true;
 
-                    if($("input[name=\'photo_public\']:checked").val()==4)
-                    {
-                        $("input[name=\'photo_public\']")[0].focus();
-                        check = false;
-                        if(confirm("Sicher, dass Du Deine Daten nicht anzeigen lassen möchstest? So kann Dich kein Foodsaver finden."))
-                        {
-                            check = true;
-                        }
-                    }
-                    if(check)
-                    {
                         showLoader();
                         $.ajax({
                             url:"/xhr.php?f=grabInfo",
@@ -278,7 +264,6 @@ class DashboardControl extends Control
                                 $.fancybox.close();
                             }
                         });
-                    }
                 });
             ');
 
@@ -293,15 +278,15 @@ class DashboardControl extends Control
 		}
 
 		/*
-		 * check is there are Betrieb not ordered to an bezirk
+		 * check if there are stores not bound to a region
 		 */
 		elseif (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
-			$ids = array();
+			$storeIds = [];
 			foreach ($_SESSION['client']['verantwortlich'] as $b) {
-				$ids[] = (int)$b['betrieb_id'];
+				$storeIds[] = (int)$b['betrieb_id'];
 			}
-			if (!empty($ids)) {
-				if ($bids = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+			if (!empty($storeIds)) {
+				if ($this->dashboardGateway->countStoresWithoutDistrict($storeIds) > 0) {
 					$this->pageHelper->addJs('ajax.req("betrieb","setbezirkids");');
 				}
 			}
@@ -317,139 +302,7 @@ class DashboardControl extends Control
 			$this->pageHelper->addContent($this->view->u_events($events));
 		}
 
-		$this->pageHelper->addStyle('
-			#activity ul.linklist li span.time{margin-left:58px;display:block;margin-top:10px;}
-
-			#activity ul.linklist li span.qr
-			{
-				margin-left:58px;
-				border-radius: 3px;
-				opacity:0.5;
-			}
-
-			#activity ul.linklist li span.qr:hover
-			{
-				opacity:1;
-			}
-
-			#activity ul.linklist li span.qr img
-			{
-				height:32px;
-				width:32px;
-				margin-right:-35px;
-				border-right:1px solid #ffffff;
-				border-top-left-radius: 3px;
-				border-bottom-left-radius: 3px;
-			}
-			#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-			{
-				border: 0 none;
-				height: 16px;
-				margin-left: 36px;
-				padding: 8px;
-				width: 78.6%;
-				border-top-right-radius: 3px;
-				border-bottom-right-radius: 3px;
-				margin-right:-30px;
-				background-color:#F9F9F9;
-			}
-
-			#activity ul.linklist li span.qr .loader
-			{
-				background-color: #ffffff;
-				position: relative;
-				text-align: left;
-				top: -10px;
-			}
-
-			#activity ul.linklist li span.t span.txt {
-				overflow: hidden;
-				text-overflow: unset;
-				white-space: normal;
-				padding-left:10px;
-				border-left:2px solid #4A3520;
-				margin-bottom:10px;
-				display:block;
-			}
-			#activity ul.linklist li span
-			{
-				color:#4A3520;
-			}
-			#activity ul.linklist li span a
-			{
-				color:#46891b !important;
-			}
-			#activity span.n i.fa
-			{
-				display:inline-block;
-				width:11px;
-				text-align:center;
-			}
-			#activity span.n small
-			{
-				float:right;
-				opacity:0.8;
-				font-size:12px;
-			}
-			#activity ul.linklist li span a:hover
-			{
-				text-decoration:underline !important;
-				color:#46891b !important;
-			}
-
-			#activity ul.linklist li
-			{
-				margin-bottom:10px;
-				background-color:#ffffff;
-				padding:10px;
-				border-radius: 6px;
-			}
-
-			ul.linklist li span.n
-			{
-				font-weight:normal;
-				font-size:13px;
-				margin-bottom:10px;
-				text-overflow: unset;
-				white-space: inherit;
-			}
-
-			@media (max-width: 900px)
-			{
-				#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-				{
-					width:74.6%;
-				}
-			}
-			@media (max-width: 400px)
-			{
-				ul.linklist li span.n
-				{
-					height:55px;
-				}
-				#activity ul.linklist li span.qr textarea, #activity ul.linklist li span.qr .loader
-				{
-					width:82%;
-				}
-				#activity ul.linklist li span.time, #activity ul.linklist li span.qr
-				{
-					margin-left:0px;
-				}
-				#activity span.n small
-				{
-					float:none;
-					display:block;
-				}
-			}
-		');
-		$this->pageHelper->addContent('
-		<div class="head ui-widget-header ui-corner-top">
-			Updates-Übersicht<span class="option"><a id="activity-option" href="#activity-listings" class="fas fa-cog"></a></span>
-		</div>
-		<div id="activity">
-			<div class="loader" style="padding:40px;background-image:url(/img/469.gif);background-repeat:no-repeat;background-position:center;"></div>
-			<div style="display:none" id="activity-info">' . $this->v_utils->v_info('Es gibt gerade nichts Neues') . '</div>
-		</div>');
+		$this->pageHelper->addContent($this->view->vueComponent('activity-overview', 'activity-overview', []));
 
 		/*
 		 * Top
@@ -468,28 +321,43 @@ class DashboardControl extends Control
 		// special case: stat_fetchcount and stat_fetchweight are correlated, each pickup increases both count and weight
 		$pickup_text = '';
 		if ($pickups > 0) {
-			$pickup_text = 'Du hast <strong style="white-space:nowrap">' . $pickups . ' x</strong> Lebensmittel abgeholt und damit <strong style="white-space:nowrap">' .
-				number_format($gerettet, 0, ',', '.') . '&thinsp;kg</strong> gerettet.';
+			$pickup_text = $this->translationHelper->sv('you_saved_times_weight', ['pickups' => $pickups, 'weight' => number_format($gerettet, 0, ',', '.')]);
+		}
+		if ($me['bezirk_name'] == null) {
+			$home_district_text = '</p>' .
+			'<p>' . '<a  class="button" href="javascript:becomeBezirk()" >' . $this->translationHelper->s('please_choose_your_home_district') . '</a>';
+		} else {
+			$home_district_text = $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.';
 		}
 
 		$this->pageHelper->addContent(
 			'
 		<div class="pure-u-1 ui-padding-bottom">
-		<ul id="conten-top"  class="top corner-all linklist" >
+		<ul class="content-top corner-all linklist">
 		<li>
 
-            <a href="profile/' . $me['id'] . '">
-                <div class="ui-padding">
-                    <div class="img">' . $this->imageService->avatar($me, 50) . '</div>
-                    <h3 class "corner-all">Hallo ' . $me['name'] . '</h3>
-                    <p>' . $pickup_text . ' Dein Stammbezirk ist ' . $me['bezirk_name'] . '.</p>
-                    <div style="clear:both;"></div>
-                </div>
-            </a>
+			<div class="ui-padding">
+				<a href="profile/' . $me['id'] . '">
+					<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
+				</a>
+				<h3 class "corner-all">' . $this->translationHelper->sv('greeting', ['name' => $me['name']]) . '</h3>
+				<p>'
+					. $pickup_text . $home_district_text .
+				'</p>
+				<div style="clear:both;"></div>
+
+            </div>
+
 		</li>
 		</ul>
 		</div>',
 
+			CNT_TOP
+		);
+
+		// Advertisement for Push Notifications
+		$this->pageHelper->addContent(
+			$this->twig->render('partials/pushNotificationBanner.twig'),
 			CNT_TOP
 		);
 
@@ -524,10 +392,10 @@ class DashboardControl extends Control
 			$orga .= '
 		</ul>';
 
-			$out = $this->v_utils->v_field($out, 'Deine Bezirke', array('class' => 'ui-padding'));
+			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding']);
 
 			if ($orgacheck) {
-				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', array('class' => 'ui-padding'));
+				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding']);
 			}
 
 			$this->pageHelper->addContent($out, CNT_RIGHT);
@@ -537,7 +405,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listCloseBaskets($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
@@ -578,7 +446,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), array('sonstige' => false))) {
+		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), ['sonstige' => false])) {
 			$this->pageHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);

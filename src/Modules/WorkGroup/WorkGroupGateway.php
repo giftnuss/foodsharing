@@ -6,17 +6,21 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
+use Foodsharing\Services\NotificationService;
 
 class WorkGroupGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
+	private $notificationService;
 
 	public function __construct(
 		Database $db,
-		ForumFollowerGateway $forumFollowerGateway
+		ForumFollowerGateway $forumFollowerGateway,
+		NotificationService $notificationService
 	) {
 		parent::__construct($db);
 		$this->forumFollowerGateway = $forumFollowerGateway;
+		$this->notificationService = $notificationService;
 	}
 
 	/*
@@ -31,7 +35,7 @@ class WorkGroupGateway extends BaseGateway
 			AND		`foodsaver_id` = :foodsaver_id
 		', [':active' => 1, ':foodsaver_id' => $fsId]);
 		if ($ret) {
-			$out = array();
+			$out = [];
 			foreach ($ret as $gid) {
 				$out[$gid] = $gid;
 			}
@@ -39,29 +43,35 @@ class WorkGroupGateway extends BaseGateway
 			return $out;
 		}
 
-		return array();
+		return [];
 	}
 
 	/**
 	 * Updates Group Members and Group-Admins.
-	 *
-	 * @param int $regionId
-	 * @param array $memberIds
-	 * @param array $leaderIds
 	 */
 	public function updateTeam(int $regionId, array $memberIds, array $leaderIds): void
 	{
 		$this->forumFollowerGateway->deleteForumSubscriptions($regionId, $memberIds, false);
 
 		if ($memberIds) {
+			$currentMemberIds = $this->db->fetchAllValuesByCriteria(
+				'fs_foodsaver_has_bezirk',
+				'foodsaver_id',
+				[
+					'bezirk_id' => $regionId,
+					'active' => 1
+				]
+			);
+
+			$deletedMemberIds = array_diff($currentMemberIds, $memberIds);
+
 			// delete all members if they're not in the submitted array
-			$this->db->execute('
-				DELETE
-				FROM	`fs_foodsaver_has_bezirk`
-				WHERE	`bezirk_id` = ' . $regionId . '
-				AND		`foodsaver_id` NOT IN(' . implode(',', array_map('intval', $memberIds)) . ')
-				AND		`active` = 1
-			');
+			foreach ($deletedMemberIds as $m) {
+				$this->db->delete('fs_foodsaver_has_bezirk', [
+					'foodsaver_id' => $m,
+					'bezirk_id' => $regionId
+				]);
+			}
 
 			// insert new members
 			foreach ($memberIds as $m) {
@@ -103,15 +113,12 @@ class WorkGroupGateway extends BaseGateway
 			}
 		} else {
 			$this->emptyLeader($regionId);
+			$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 		}
 	}
 
 	/**
 	 * Delete all Leaders from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyLeader(int $regionId): int
 	{
@@ -120,10 +127,6 @@ class WorkGroupGateway extends BaseGateway
 
 	/**
 	 * Delete all members from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyMember(int $regionId): int
 	{

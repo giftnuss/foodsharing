@@ -14,10 +14,22 @@ final class MessageGateway extends BaseGateway
 	 */
 	private $foodsaverGateway;
 
-	public function __construct(Database $db, FoodsaverGateway $foodsaverGateway)
+	/**
+	 * @var StoreGateway
+	 */
+	private $storeGateway;
+
+	/**
+	 * @var TranslationHelper
+	 */
+	private $translationHelper;
+
+	public function __construct(Database $db, FoodsaverGateway $foodsaverGateway, TranslationHelper $translationHelper, StoreGateway $storeGateway)
 	{
-		$this->foodsaverGateway = $foodsaverGateway;
 		parent::__construct($db);
+		$this->foodsaverGateway = $foodsaverGateway;
+		$this->storeGateway = $storeGateway;
+		$this->translationHelper = $translationHelper;
 	}
 
 	public function mayConversation($fsId, $conversationId): bool
@@ -25,18 +37,23 @@ final class MessageGateway extends BaseGateway
 		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
 	}
 
+	public function getConversationName(int $conversationId): ?string
+	{
+		return $this->db->fetchValueByCriteria('fs_conversation', 'name', ['id' => $conversationId]);
+	}
+
 	public function createConversation(array $fsIds, bool $locked = false): int
 	{
 		$this->db->beginTransaction();
 		$conversationId = $this->db->insert('fs_conversation', [
-			'locked' => $locked ? 1 : 0
-		]);
+		'locked' => $locked ? 1 : 0
+	]);
 		foreach ($fsIds as $fsId) {
 			$this->db->insert('fs_foodsaver_has_conversation', [
-				'foodsaver_id' => $fsId,
-				'conversation_id' => $conversationId,
-				'unread' => 0
-			]);
+			'foodsaver_id' => $fsId,
+			'conversation_id' => $conversationId,
+			'unread' => 0
+		]);
 		}
 		/* todo: would expect foreign key constraints to fail when a conversation with non-existing users is added.
 		That constraint is not in place and previous behaviour of messages did not check either, so keep it for now... */
@@ -57,7 +74,7 @@ final class MessageGateway extends BaseGateway
 		sort($fsIds);
 		$possibleConversations = $this->db->fetchAllValues(
 			'SELECT hc.conversation_id
-			FROM fs_foodsaver_has_conversation hc 
+			FROM fs_foodsaver_has_conversation hc
 			LEFT JOIN fs_conversation c on hc.conversation_id = c.id
 			WHERE hc.foodsaver_id = :fsId AND
 			c.locked = 0',
@@ -70,19 +87,19 @@ final class MessageGateway extends BaseGateway
 			SELECT
                   conversation_id,
                   GROUP_CONCAT(foodsaver_id ORDER BY foodsaver_id SEPARATOR ":") AS idstring
-        
+
                 FROM
                   fs_foodsaver_has_conversation
-        
+
                 WHERE
                   conversation_id IN (' . $this->db->generatePlaceholders(count($possibleConversations)) . ')
-        
+
                 GROUP BY
                   conversation_id
-        
+
                 HAVING
                   idstring = ?',
-			array_merge($possibleConversations, [$idString]));
+				array_merge($possibleConversations, [$idString]));
 			if (count($results) > 1) {
 				trigger_error('Found multiple conversations with ID set ' . $idString);
 
@@ -156,6 +173,40 @@ final class MessageGateway extends BaseGateway
 	}
 
 	/**
+	 * There are different ways conversations can be named: Some groups have actual names, then you want to display the
+	 * name, some groups have not, so you want to display a list of all Members, some groups belong to a store so you want
+	 * to display the store name and if the group has only two people, you want to display the name of the other person.
+	 * This function gives you the correct one so you don't have to worry.
+	 *
+	 * @param int $foodsaverId - the foodsaver the name should be displayed to
+	 * @param int $conversationId - the id of the conversation
+	 */
+	public function getProperConversationNameForFoodsaver(int $foodsaverId, int $conversationId): string
+	{
+		$name = $this->getConversationName($conversationId);
+
+		if ($name !== null) {
+			return $name;
+		}
+
+		// Maybe it's a store converstation
+		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
+
+		if ($storeName !== null) {
+			return $this->translationHelper->s('store') . ' ' . $storeName;
+		}
+
+		$conversationMembers = $this->getConversationMemberNamesExcept($conversationId, $foodsaverId);
+
+		if (count($conversationMembers) > 1) {
+			// in conversations with more than 2 members, there should still be something representing the foodsaver
+			$conversationMembers[] = $this->translationHelper->s('you');
+		}
+
+		return implode(', ', $conversationMembers);
+	}
+
+	/**
 	 * Renames an Conversation.
 	 */
 	public function renameConversation(int $cid, string $name): bool
@@ -172,9 +223,6 @@ final class MessageGateway extends BaseGateway
 	 * Method returns an array of all conversations a given user is part of.
 	 *
 	 * @param int $limit
-	 * @param int $offset
-	 *
-	 * @return array
 	 */
 	private function listConversationsForUserWithoutMembers(int $fsId, int $limit = null, int $offset = 0, int $cid = null): array
 	{
@@ -244,7 +292,7 @@ final class MessageGateway extends BaseGateway
 
 	public function listConversationMembersWithProfile(int $conversationId): array
 	{
-		return $this->db->fetchAll('		
+		return $this->db->fetchAll('
 			SELECT
 				fs.id,
 				fs.name,
@@ -255,7 +303,7 @@ final class MessageGateway extends BaseGateway
 
 			FROM
                 `fs_foodsaver_has_conversation` hc
-                
+
 			INNER JOIN
 				`fs_foodsaver` fs ON fs.id = hc.foodsaver_id
 

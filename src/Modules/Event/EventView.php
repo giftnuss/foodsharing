@@ -11,22 +11,22 @@ class EventView extends View
 	{
 		global $g_data;
 
-		$g_data = array_merge(array(
+		$g_data = array_merge([
 			'online_type' => 1,
 			'invite' => 1,
 			'invitesubs' => 1
-		), $g_data);
+		], $g_data);
 
-		$start_time = array('hour' => 15, 'min' => 0);
-		$end_time = array('hour' => 16, 'min' => 0);
+		$start_time = ['hour' => 15, 'min' => 0];
+		$end_time = ['hour' => 16, 'min' => 0];
 
 		if (isset($g_data['start'])) {
-			$start_time = array('hour' => (int)date('H', $g_data['start_ts']), 'min' => (int)date('i', $g_data['start_ts']));
+			$start_time = ['hour' => (int)date('H', $g_data['start_ts']), 'min' => (int)date('i', $g_data['start_ts'])];
 			$g_data['date'] = $g_data['start'];
 		}
 
 		if (isset($g_data['end'])) {
-			$end_time = array('hour' => (int)date('H', $g_data['end_ts']), 'min' => (int)date('i', $g_data['end_ts']));
+			$end_time = ['hour' => (int)date('H', $g_data['end_ts']), 'min' => (int)date('i', $g_data['end_ts'])];
 			$g_data['dateend'] = $g_data['end'];
 		}
 
@@ -60,13 +60,24 @@ class EventView extends View
 				}
 			});
 			
-			var dateend_wrapper = document.getElementById("dateend-wrapper");		
-			dateend_wrapper.style.display = "none";
+			var dateend_wrapper = document.getElementById("dateend-wrapper");	
 			
 			$("#date").after(\'<label class="addend"><input type="checkbox" name="addend" id="addend" value="1" /> Das Event geht über mehrere Tage</label>\');
+               
+            dateend_wrapper.style.display = "none";
+
+            var dateend = new Date(document.getElementById("dateend").value.split(" ")[0]);
+			var datestart = new Date(document.getElementById("date").value.split(" ")[0]);
+			datestart.setDate(datestart.getDate() + 1);
+			
+   			if(dateend >= datestart)
+			{
+                document.getElementById("addend").checked = true;
+                dateend_wrapper.style.display = "block";
+			}
 			
 			dateend_wrapper.classList.remove("required");
-
+			
 			$("#addend").on("change", function(){
 				if($("#addend:checked").length > 0)
 				{
@@ -167,28 +178,28 @@ class EventView extends View
 			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
-		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', array(
+		return $this->v_utils->v_field($this->v_utils->v_form('eventsss', [
 			$public_el,
 			$bezirkchoose,
-			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_date('date', array('required' => true)),
-			$this->v_utils->v_form_date('dateend', array('required' => true)),
+			$this->v_utils->v_form_text('name', ['required' => true]),
+			$this->v_utils->v_form_date('date', ['required' => true]),
+			$this->v_utils->v_form_date('dateend', ['required' => true]),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			$this->v_utils->v_form_textarea('description', array('desc' => $this->translationHelper->s('desc_desc'), 'required' => true)),
-			$this->v_utils->v_form_select('online_type', array('values' => array(
-				array('id' => 1, 'name' => $this->translationHelper->s('offline')),
-				array('id' => 0, 'name' => $this->translationHelper->s('online'))
-			))),
-			$this->v_utils->v_form_text('location_name', array('required' => true)),
+			$this->v_utils->v_form_textarea('description', ['desc' => $this->translationHelper->s('desc_desc'), 'required' => true]),
+			$this->v_utils->v_form_select('online_type', ['values' => [
+				['id' => 1, 'name' => $this->translationHelper->s('offline')],
+				['id' => 0, 'name' => $this->translationHelper->s('online')]
+			]]),
+			$this->v_utils->v_form_text('location_name', ['required' => true]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$this->v_utils->v_info($this->translationHelper->s('saveEventInfo'))
-		), array('submit' => $this->translationHelper->s('save'))), $title, array('class' => 'ui-padding'));
+		], ['submit' => $this->translationHelper->s('save')]), $title, ['class' => 'ui-padding']);
 	}
 
 	public function statusMenu(array $event, int $user_status): string
 	{
-		$menu = array();
+		$menu = [];
 
 		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
 			$menu[] = [
@@ -213,10 +224,10 @@ class EventView extends View
 			}
 
 			if ($user_status !== InvitationStatus::INVITED && $user_status !== InvitationStatus::ACCEPTED) {
-				$menu[] = array(
+				$menu[] = [
 					'name' => 'Ich kann doch',
 					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
-				);
+				];
 			}
 
 			if ($user_status !== InvitationStatus::MAYBE) {
@@ -329,6 +340,6 @@ class EventView extends View
 	public function event(array $event): string
 	{
 		return $this->v_utils->v_field(
-			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', array('class' => 'ui-padding'));
+			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', ['class' => 'ui-padding']);
 	}
 }

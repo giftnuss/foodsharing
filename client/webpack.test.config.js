@@ -17,6 +17,11 @@ module.exports = merge(webpackBase, {
     path: resolve('test'),
     filename: '_compiled.js'
   },
+  resolve: {
+    alias: {
+      sinon: path.resolve(__dirname, 'node_modules/sinon/pkg/sinon-esm.js')
+    }
+  },
   module: {
     rules: [
       {

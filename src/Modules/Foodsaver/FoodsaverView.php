@@ -19,10 +19,10 @@ class FoodsaverView extends View
 		$cnt .= $this->v_utils->v_input_wrapper('Letzter Login', $foodsaver['last_login']);
 
 		$cnt .= $this->v_utils->v_input_wrapper('Optionen', '
-			<span class="button" onclick="fsapp.deleteFromRegion(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>		
+			<span class="button" onclick="fsapp.deleteFromRegion(' . $foodsaver['id'] . ');">Aus Bezirk löschen</span>
 		');
 
-		return $this->v_utils->v_field($cnt, $foodsaver['name'], array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($cnt, $foodsaver['name'], ['class' => 'ui-padding']);
 	}
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
@@ -32,8 +32,8 @@ class FoodsaverView extends View
 		return
 			'<div id="' . $name . 'foodsaverlist">' .
 			$this->v_utils->v_field(
-				$this->fsAvatarList($foodsaver, array('id' => 'fslist', 'noshuffle' => true, 'height' => 600)),
-				$this->translationHelper->s('fs_in') . $bezirk['name'] . ($inactive ? $this->translationHelper->s('fs_list_not_logged_for_6_months') : '')
+				$this->fsAvatarList($foodsaver, ['id' => 'fslist', 'noshuffle' => true, 'height' => 600]),
+				count($foodsaver) . ' ' . $this->translationHelper->s('fs_in') . $bezirk['name'] . ($inactive ? $this->translationHelper->s('fs_list_not_logged_for_6_months') : '')
 			) . '
 		</div>';
 	}
@@ -48,26 +48,26 @@ class FoodsaverView extends View
 
 		if ($this->session->may('orga')) {
 			$position = $this->v_utils->v_form_text('position');
-			$options = array(
-				'values' => array(
-					array('id' => 1, 'name' => 'ist im bundesweiten Orgateam dabei')
-				)
-			);
+			$options = [
+				'values' => [
+					['id' => 1, 'name' => 'ist im bundesweiten Orgateam dabei']
+				]
+			];
 
 			if ($g_data['orgateam'] == 1) {
 				$options['checkall'] = true;
 			}
 
 			$orga = $this->v_utils->v_form_checkbox('orgateam', $options);
-			$orga .= $this->v_utils->v_form_select('rolle', array(
-				'values' => array(
-					array('id' => 0, 'name' => 'Foodsharer/in'),
-					array('id' => 1, 'name' => 'Foodsaver/in (FS)'),
-					array('id' => 2, 'name' => 'Betriebsverantwortliche/r (BIEB)'),
-					array('id' => 3, 'name' => 'Botschafter/in (BOT)'),
-					array('id' => 4, 'name' => 'Orgamensch (ORG)')
-				)
-			));
+			$orga .= $this->v_utils->v_form_select('rolle', [
+				'values' => [
+					['id' => 0, 'name' => 'Foodsharer/in'],
+					['id' => 1, 'name' => 'Foodsaver/in (FS)'],
+					['id' => 2, 'name' => 'Betriebsverantwortliche/r (BIEB)'],
+					['id' => 3, 'name' => 'Botschafter/in (BOT)'],
+					['id' => 4, 'name' => 'Orgamensch (ORG)']
+				]
+			]);
 		}
 
 		$this->pageHelper->addJs('
@@ -103,33 +103,33 @@ class FoodsaverView extends View
 
 		$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $regionDetails);
 
-		return $this->v_utils->v_quickform($title, array(
+		return $this->v_utils->v_quickform($title, [
 			$bezirkchoose,
 			$orga,
-			$this->v_utils->v_form_text('name', array('required' => true)),
-			$this->v_utils->v_form_text('nachname', array('required' => true)),
+			$this->v_utils->v_form_text('name', ['required' => true]),
+			$this->v_utils->v_form_text('nachname', ['required' => true]),
 
 			$position,
 
 			$this->v_utils->v_info($this->translationHelper->s('warning_of_address_change')),
-			$this->v_utils->v_form_text('stadt', array('required' => true)),
-			$this->v_utils->v_form_text('plz', array('required' => true)),
-			$this->v_utils->v_form_text('anschrift', array('required' => true)),
+			$this->v_utils->v_form_text('stadt', ['required' => true]),
+			$this->v_utils->v_form_text('plz', ['required' => true]),
+			$this->v_utils->v_form_text('anschrift', ['required' => true]),
 			$this->v_utils->v_form_text('lat'),
 			$this->v_utils->v_form_text('lon'),
-			$this->v_utils->v_form_text('email', array('required' => true, 'disabled' => true)),
+			$this->v_utils->v_form_text('email', ['required' => true, 'disabled' => true]),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
-			$this->v_utils->v_form_select('geschlecht', array('values' => array(
-				array('name' => 'Frau', 'id' => 2),
-				array('name' => 'Mann', 'id' => 1),
-				array('name' => 'Beides oder Sonstiges', 'id' => 3)
-			),
-				array('required' => true)
-			)),
+			$this->v_utils->v_form_select('geschlecht', ['values' => [
+				['name' => 'Frau', 'id' => 2],
+				['name' => 'Mann', 'id' => 1],
+				['name' => 'Beides oder Sonstiges', 'id' => 3]
+			],
+				['required' => true]
+			]),
 
-			$this->v_utils->v_form_date('geb_datum', array('required' => true, 'yearRangeFrom' => (date('Y') - 111), 'yearRangeTo' => date('Y')))
-		));
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (date('Y') - 111), 'yearRangeTo' => date('Y')])
+		]);
 	}
 
 	public function u_delete_account()
@@ -140,6 +140,6 @@ class FoodsaverView extends View
 	</div>
 	';
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), array('class' => 'ui-padding'));
+		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
 	}
 }

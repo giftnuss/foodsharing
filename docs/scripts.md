@@ -36,7 +36,7 @@ There are a number of helper scripts available. Most of them obey the `FS_INT` e
 | ./scripts/stop | Stop everything, but leave it configured see [Setting things up](setting-things-up.md) |
 | ./scripts/test | Run tests |
 | ./scripts/test-chat | Run test for the chat |
-| ./scripts/test-js | Run the javascript yarn test |
+| ./scripts/test-js | Run test for the client (JS) |
 | ./scripts/test-rerun | Run tests without recreating db (faster that test) |
 | ./scripts/watch-assets | Builds the static assets on change |
 

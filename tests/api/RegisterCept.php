@@ -13,7 +13,6 @@ $birthdate = '1990-05-31';
 $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
-	'iam' => 'human',
 	'name' => $first_name,
 	'surname' => $last_name,
 	'email' => $email,
@@ -22,11 +21,11 @@ $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
 	'gender' => 0,
 	'birthdate' => $birthdate,
 	'newsletter' => 1,
-	'lat' => 51.36662,
-	'lon' => 12.74167,
-	'str' => 'Kantstraße',
-	'nr' => '5a',
-	'plz' => '12345'
+//	'lat' => 51.36662,
+//	'lon' => 12.74167,
+//	'str' => 'Kantstraße',
+//	'nr' => '5a',
+//	'plz' => '12345'
 ]);
 
 $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
@@ -39,10 +38,8 @@ $I->seeInDatabase('fs_foodsaver', [
 	'nachname' => $last_name,
 	'newsletter' => 1,
 	'geb_datum' => $birthdate,
-	'passwd' => null, // no md5 password
-	'fs_password' => null, // no sha1 password
-	'anschrift' => 'Kantstraße 5a',
-	'plz' => '12345'
+//	'anschrift' => 'Kantstraße 5a',
+//	'plz' => '12345'
 ]);
 
 // verify password

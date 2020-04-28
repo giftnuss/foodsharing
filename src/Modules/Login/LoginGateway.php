@@ -6,16 +6,19 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Legal\LegalGateway;
 
 class LoginGateway extends BaseGateway
 {
 	private $emailHelper;
 	private $translationHelper;
+	private $legalGateway;
 
-	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db)
+	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db, LegalGateway $legalGateway)
 	{
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
+		$this->legalGateway = $legalGateway;
 
 		parent::__construct($db);
 	}
@@ -52,7 +55,7 @@ class LoginGateway extends BaseGateway
 
 		$user = $this->db->fetchByCriteria(
 			'fs_foodsaver',
-			['id', 'password', 'passwd', 'fs_password', 'bezirk_id', 'admin', 'orgateam', 'photo'],
+			['id', 'password', 'bezirk_id', 'admin', 'orgateam', 'photo'],
 			['email' => $email, 'deleted_at' => null]
 		);
 
@@ -66,24 +69,6 @@ class LoginGateway extends BaseGateway
 			if (password_verify($pass, $user['password'])) {
 				return $user['id'];
 			}
-
-			return false;
-
-			// old hashing algorithm
-		}
-
-		if (
-			($user['passwd'] && $user['passwd'] == $this->encryptMd5($email, $pass)) || // md5
-			($user['fs_password'] && $user['fs_password'] == $this->fs_sha1hash($pass))  // sha1
-		) {
-			// update stored password to modern
-			$this->db->update(
-				'fs_foodsaver',
-				['fs_password' => null, 'passwd' => null, 'password' => $this->password_hash($pass)],
-				['id' => $user['id']]
-			);
-
-			return $user['id'];
 		}
 
 		return false;
@@ -97,29 +82,6 @@ class LoginGateway extends BaseGateway
 		return password_hash($password, PASSWORD_ARGON2I);
 	}
 
-	/**
-	 * Generates md5 hash with email as salt. used before
-	 * xx.02.2018.
-	 */
-	private function encryptMd5($email, $pass)
-	{
-		$email = strtolower($email);
-
-		return md5($email . '-lz%&lk4-' . $pass);
-	}
-
-	/**
-	 * Generate a foodsharing.de style hash before 12.12.2014
-	 * fusion.
-	 * Uses sha1 of concatenation of fixed salt and password.
-	 */
-	private function fs_sha1hash($pass)
-	{
-		$salt = 'DYZG93b04yJfIxfs2guV3Uub5wv7iR2G0FgaC9mi';
-
-		return sha1($salt . $pass);
-	}
-
 	public function activate(string $email, string $token): bool
 	{
 		return $this->db->update('fs_foodsaver', ['active' => 1], ['email' => strip_tags($email), 'token' => strip_tags($token)]) > 0;
@@ -128,7 +90,6 @@ class LoginGateway extends BaseGateway
 	public function insertNewUser(array $data, string $token): int
 	{
 		/*
-				 [iam] => org
 				[name] => Peter
 				[email] => peter@pan.de
 				[pw] => 12345
@@ -146,24 +107,20 @@ class LoginGateway extends BaseGateway
 			'fs_foodsaver',
 			[
 				'rolle' => 0,
-				'type' => (int)$data['type'],
 				'active' => 0,
-				'plz' => strip_tags($data['plz']),
 				'email' => strip_tags($data['email']),
 				'password' => strip_tags($this->password_hash($data['pw'])),
 				'name' => strip_tags($data['name']),
 				'nachname' => strip_tags($data['surname']),
-				'anschrift' => strip_tags($data['str'] . ' ' . trim($data['nr'])),
 				'geb_datum' => strip_tags($data['birthdate']),
 				'handy' => strip_tags($data['mobile_phone']),
 				'newsletter' => (int)$data['newsletter'],
 				'geschlecht' => (int)$data['gender'],
 				'anmeldedatum' => $this->db->now(),
-				'stadt' => strip_tags($data['city']),
-				'lat' => strip_tags($data['lat']),
-				'lon' => strip_tags($data['lon']),
+				'privacy_notice_accepted_date' => $this->legalGateway->getPnVersion(),
+				'privacy_policy_accepted_date' => $this->legalGateway->getPpVersion(),
 				'token' => strip_tags($token),
-				'photo' => strip_tags($data['avatar']),
+				'beta' => 1
 			]
 		);
 	}
@@ -186,9 +143,7 @@ class LoginGateway extends BaseGateway
 				return $this->db->update(
 					'fs_foodsaver',
 					[
-						'password' => strip_tags($this->password_hash($data['pass1'])),
-						'passwd' => null,
-						'fs_password' => null,
+						'password' => strip_tags($this->password_hash($data['pass1']))
 					],
 					['id' => (int)$fsid]
 				);
@@ -207,19 +162,11 @@ class LoginGateway extends BaseGateway
 		)) {
 			$key = bin2hex(random_bytes(16));
 
-			$this->db->execute('
-			REPLACE INTO 	`fs_pass_request`
-			(
-				`foodsaver_id`,
-				`name`,
-				`time`
-			)
-			VALUES
-			(
-				:fs_id,
-				:key,
-				NOW()
-			)', [':fs_id' => (int)$fs['id'], ':key' => strip_tags($key)]);
+			$this->db->insertOrUpdate('fs_pass_request', [
+				'foodsaver_id' => $fs['id'],
+				'name' => $key,
+				'time' => $this->db->now()
+			]);
 
 			if ($mail) {
 				$vars = [

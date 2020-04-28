@@ -8,6 +8,9 @@ import 'jquery-dynatree'
 import 'leaflet'
 import 'leaflet.awesome-markers'
 import 'leaflet.markercluster'
+import 'mapbox-gl-leaflet'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import { initMap } from '@/mapUtils'
 import { goTo, img, pulseError, pulseSuccess } from '@/script'
 import { expose } from '@/utils'
 import './RegionAdmin.css'
@@ -15,7 +18,8 @@ import { deleteGroup } from '@/api/groups'
 
 expose({
   img,
-  deleteActiveGroup
+  deleteActiveGroup,
+  initMap
 })
 
 async function deleteActiveGroup () {

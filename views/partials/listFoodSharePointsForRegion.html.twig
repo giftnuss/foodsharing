@@ -1,0 +1,19 @@
+{% embed 'components/field.twig' with {'title': 'food_share_point.n_in_region'|transchoice(food_share_point|length, {'%name%': region.name})} %}
+    {% block content %}
+        <ul class="linklist food-share-point-list">
+            {% for ft in food_share_point %}
+                <li>
+                    <a href="/?page=fairteiler&bid={{ region.id }}&sub=ft&id={{ ft.id }}">
+                        {% if ft.pic %}
+                            <span class="image ui-corner-all" style="background-image:url({{ ft.pic.thumb }});"></span>
+                        {% else %}
+                            <span class="image noimage ui-corner-all" style="background-image:url(img/foodSharePointThumb.png);"></span>
+                        {% endif %}
+                        <span class="name">{{ ft.name }}</span>
+                        <span class="clear"></span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+{% endembed %}

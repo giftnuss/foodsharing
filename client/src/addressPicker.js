@@ -3,6 +3,9 @@ import 'corejs-typeahead'
 import PhotonAddressEngine from 'typeahead-address-photon'
 import L from 'leaflet'
 import 'leaflet.awesome-markers'
+import 'mapbox-gl-leaflet'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import { initMap } from '@/mapUtils'
 
 const fsIcon = L.AwesomeMarkers.icon({
   icon: 'smile',
@@ -34,14 +37,8 @@ export function attachAddressPicker () {
   const data = [$('#lat').val(), $('#lon').val()]
   let center = [51, 12]
   const initialZoom = 4
-  const map = L.map('map').setView(center, initialZoom)
+  const map = initMap('map', center, initialZoom, 18)
   setTimeout(() => (map.invalidateSize()), 400)
-
-  L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-    zoomControl: true,
-    maxZoom: 18,
-    attribution: 'Geocoding by <a href="https://photon.komoot.de">Komoot Photon</a>, Tiles by <a href="https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use">Wikimedia</a>, Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-  }).addTo(map)
 
   const engine = new PhotonAddressEngine(
     {

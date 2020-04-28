@@ -26,7 +26,7 @@ class Mem
 	{
 		if (MEM_ENABLED) {
 			$this->ensureConnected();
-			$options = array();
+			$options = [];
 			if ($ttl > 0) {
 				$options['ex'] = $ttl;
 			}
@@ -46,7 +46,7 @@ class Mem
 	public function queueWork($type, $data)
 	{
 		if (MEM_ENABLED) {
-			$e = serialize(array('type' => $type, 'data' => $data));
+			$e = serialize(['type' => $type, 'data' => $data]);
 			$this->ensureConnected();
 
 			return $this->cache->lPush('workqueue', $e);
@@ -69,7 +69,7 @@ class Mem
 		if (MEM_ENABLED) {
 			$this->ensureConnected();
 
-			return $this->cache->delete($key);
+			return $this->cache->del($key);
 		}
 
 		return false;
@@ -87,7 +87,7 @@ class Mem
 
 	public function userAppend($id, $key, $value)
 	{
-		$out = array();
+		$out = [];
 		if ($val = $this->user($id, $key)) {
 			if (is_array($val)) {
 				$out = $val;
@@ -115,14 +115,14 @@ class Mem
 	{
 		$this->ensureConnected();
 
-		return $this->cache->sAdd(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		return $this->cache->sAdd(join(':', ['php', 'user', $fs_id, 'sessions']), $session_id);
 	}
 
 	public function userRemoveSession($fs_id, $session_id)
 	{
 		$this->ensureConnected();
 
-		return $this->cache->sRem(join(':', array('php', 'user', $fs_id, 'sessions')), $session_id);
+		return $this->cache->sRem(join(':', ['php', 'user', $fs_id, 'sessions']), $session_id);
 	}
 
 	public function getPageCache($fsId)
@@ -140,55 +140,8 @@ class Mem
 		return $this->del('pc-' . $page . ':' . $fsId);
 	}
 
-	/**
-	 * Method to check users online status by checking timestamp from memcahce.
-	 *
-	 * @param int $fs_id
-	 *
-	 * @return bool
-	 */
-	public function userOnline($fs_id)
-	{
-		if ($time = $this->user($fs_id, 'active')) {
-			if ((time() - $time) < 600) {
-				return true;
-			}
-		}
-		/*
-		 * free memcache from userdata
-		 */
-		$this->userDel($fs_id, 'lastMailMessage');
-		$this->userDel($fs_id, 'active');
-
-		return false;
-	}
-
-	/**
-	 * Method to check users online status by checking timestamp from memcache.
-	 *
-	 * @param int $fs_id
-	 *
-	 * @return bool
-	 */
-	public function userIsActive($fs_id)
-	{
-		if ($time = $this->user($fs_id, 'active')) {
-			return !((time() - $time) > 600);
-		}
-
-		return false;
-	}
-
-	public function updateActivity($fs_id = null)
-	{
-		if ($fs_id) {
-			$this->userSet($fs_id, 'active', time());
-		}
-	}
-
 	public function logout($fs_id)
 	{
-		$this->userDel($fs_id, 'active');
 		$this->userDel($fs_id, 'lastMailMessage');
 		$this->userRemoveSession($fs_id, session_id());
 	}

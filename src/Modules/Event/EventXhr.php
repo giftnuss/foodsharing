@@ -3,8 +3,8 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Lib\Xhr\XhrDialog;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\EventPermissions;
 
 class EventXhr extends Control
@@ -77,10 +77,10 @@ class EventXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		if ($this->gateway->setInviteStatus($_GET['id'], $this->session->id(), InvitationStatus::WONT_JOIN)) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("Einladung gelöscht.");'
-			);
+			];
 		}
 
 		return $this->responses->fail_generic();
@@ -96,10 +96,10 @@ class EventXhr extends Control
 				$this->session->id(),
 				$_GET['s']
 			)) {
-			return array(
+			return [
 					'status' => 1,
 					'script' => 'pulseInfo("Einladungsstatus geändert!");'
-				);
+				];
 		}
 
 		return $this->responses->fail_generic();
@@ -112,13 +112,13 @@ class EventXhr extends Control
 		}
 		if (isset($this->stats[(int)$_GET['s']]) && $this->gateway->addInviteStatus(
 				$_GET['id'],
-				$this->session->id(),
+				[$this->session->id()],
 				$_GET['s']
 			)) {
-			return array(
+			return [
 					'status' => 1,
 					'script' => 'pulseInfo("Status geändert!");'
-				);
+				];
 		}
 
 		return $this->responses->fail_generic();

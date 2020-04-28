@@ -1,4 +1,4 @@
-# Die foodsharing-IT sucht HelferInnen 💻🔧
+# Die foodsharing-IT sucht Helfer\*innen 💻🔧
 [For the english version please click here.](it-tasks_EN.md)
 
 Lieber Interessent (w/m/d),
@@ -6,11 +6,11 @@ Lieber Interessent (w/m/d),
 es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
 Unsere Homepage ist das zentrale Werkzeug unserer Initiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich. 
 
-Was viele aber nicht wissen: Wir haben mehr als **270.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **62.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
-**Dem gegenüber stehen im Schnitt etwa nur 5 ProgrammiererInnen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im Juni 2019 einen neuen Aufruf starten.
+Was viele aber nicht wissen: Wir haben mehr als **300.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **66.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
+**Dem gegenüber stehen im Schnitt etwa nur 5 Programmierer\*Innen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im Juni 2019 einen neuen Aufruf starten.
 
 ## Du hast jetzt bereits Lust bekommen?
-Melde dich gerne bei Slack https://slackin.yunity.org im Kanal/Gruppenchat **#foodsharing-dev oder sende uns eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network)** damit wir mit dir gemeinsam mögliche Aufgaben und Betätigungsfelder rund um die unten aufgelisteten Themen für dich finden können. Wenn diese beiden Kontaktwege dich abhalten, kannst du auch gerne [Peter](https://foodsharing.de/profile/116481 "Peters Profil") über die Webseite eine Nachricht schreiben. Wir sind ein tolles Team und wir haben bisher für jedeN die/der helfen wollte eine Aufgabe gefunden.
+Melde dich gerne bei Slack https://slackin.yunity.org im Kanal/Gruppenchat **#foodsharing-dev oder sende uns eine Mail an [it@foodsharing.network](mailto:it@foodsharing.network)** damit wir mit dir gemeinsam mögliche Aufgaben und Betätigungsfelder rund um die unten aufgelisteten Themen für dich finden können. Wenn diese beiden Kontaktwege dich abhalten, kannst du auch gerne [Jonathan](https://foodsharing.de/profile/132347 "Jonathans Profil") über die Webseite eine Nachricht schreiben. Wir sind ein tolles Team und wir haben bisher für jedeN die/der helfen wollte eine Aufgabe gefunden.
 
 ## Wo sind all die Freiwilligen mit IT-Kenntnissen?
 
@@ -18,25 +18,25 @@ Wir haben so viele hochaktive und überzeugte Mitstreiter in unserem schönen Pr
 
 ## Was benötigen wir?
 
-### ProgrammiererInnen
-- Android ProgrammiererInnen (nativ)
-- iOS-ProgrammiererInnen (nativ)
-- Web-EntwicklerInnen
+### Programmierer\*innen
+- Android Programmierer\*innen (nativ)
+- iOS-Programmierer\*innen (nativ)
+- Web-Entwickler\*innen
 
 ### Qualitätssicherung
-- Beta-TesterInnen
-- Issue-BetreuerInnen
-- Unit-Test-EntwicklerInnen
+- Beta-Tester\*innen
+- Issue-Betreuer\*innen
+- Unit-Test-Entwickler\*innen
 
 ### Design
-- GrafikdesignerInnen
-- Android-Frontend-DesignerInnen (Verbesserung des App-Designs)
+- Grafikdesigner\*innen
+- Android-Frontend-Designer\*innen (Verbesserung des App-Designs)
 
 ### Support
-- Webseiten-SupporterInnen (deutschsprachig)
-- IT-SupporterInnen
+- Webseiten-Supporter\*innen (deutschsprachig)
+- IT-Supporter\*innen
 - Technische Redakteure
-- RecruiterInnen
+- Recruiter\*innen
 
 
 ## Wie finden wir mehr UnterstützerInnen?
@@ -47,10 +47,10 @@ Frag doch einmal in Deinem Bezirk herum. Innerhalb von foodsharing, aber gerne a
 Abhängig davon, welche Motivation Du mitbringst, findet sich gewiss eine Aufgabe für dich. Mögliche Aufgaben sind unter anderem:
 - Die rund 250 derzeit gemeldeten Fehler oder Feature Wünsche angehen
 - App für jeweils Android und iOS
-- Die vielen Botschafter und Botschafterinnen aber auch Mitglieder bei ihren IT-Problemen zu unterstützen
+- Die vielen Botschafter\*innen aber auch Mitglieder bei ihren IT-Problemen zu unterstützen
 - Die Plattform ins Englische transferieren
 - Akkumulation und Moderation der Issues und Feature-Wünsche
-- Auf Freiwilligenplattformen für uns neue ProgrammiererInnen werben
+- Auf Freiwilligenplattformen für uns neue Programmierer\*innen werben
 - ...
 
 ## Wie kannst Du Dich einbringen?
@@ -82,9 +82,9 @@ Aber natürlich:
 
 
 ### Generelles zu den Smartphone Apps
-- Das Backend wächst und wird in gemeinsamer Arbeit auf die Bedürfnisse der App EntwicklerInnen angepasst 
-- Beim Setup werdet ihr durch die Infos in der Gitlab Readme und durch uns unterstützt
-- Die Roadmap bestimmt ihr maßgeblich selbst mit 
+- Das Backend wächst und wird in gemeinsamer Arbeit auf die Bedürfnisse der App Entwickler\*innen angepasst 
+- Beim Setup wirst Du durch die Infos in der Gitlab Readme und durch uns unterstützt
+- Die Roadmap bestimmst Du maßgeblich selbst mit 
 - Screen / Workflow Designer für ein grundlegendes Design sind hier auch sehr willkommen
 - Wertvolle Unterstützung durch den CI Prozess
 
@@ -103,15 +103,15 @@ Aber natürlich:
 - Coordinator Pattern als Screenflow
 
 ## Hackweeks
-Um noch enger Hand in Hand zu arbeiten, treffen wir uns regelmäßig zu Hackweeks. Hier sind alle TeilnehmerInnen willkommen, die das Ziel haben, an der Entwicklung mitzuwirken. 
+Um noch enger Hand in Hand zu arbeiten, treffen wir uns regelmäßig zu Hackweeks. Hier sind alle Teilnehmer\*innen willkommen, die das Ziel haben, an der Entwicklung mitzuwirken. 
 
 Hier ein paar Artikel über die letzte Hackweek:   
-https://yunity.org/en/heartbeat/2019-02-24   
-https://foodsharing.de/?page=blog&sub=read&id=236
+- https://yunity.org/en/heartbeat/2019-02-24   
+- https://foodsharing.de/?page=blog&sub=read&id=236
 
-Ankündigungen für Hackweeks findet ihr entweder im [#foodsharing-hackweek Slack Channel](https://slackin.yunity.org "Slack Channel") oder hier:
-http://devblog.foodsharing.de/  
-https://yunity.org/heartbeat
+Ankündigungen für Hackweeks findest Du entweder im [#foodsharing-hackweek Slack Channel](https://slackin.yunity.org "Slack Channel") oder hier:
+- http://devblog.foodsharing.de/  
+- https://yunity.org/heartbeat
 
 ## Danke!
 
@@ -120,7 +120,7 @@ Danke Dir, dass Du so lange gelesen hast. Mit einer fitten IT hätten wir so vie
 📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR. ❤️ ❤️**   
 https://devdocs.foodsharing.network/it-tasks.html  
 
-Herzliche Grüße von Eurem IT-Team!   
+Herzliche Grüße von Deinem IT-Team!   
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
-(Letzte Änderung: 24.8.2019)
+(Letzte Änderung: 23.12.2019)

@@ -4,7 +4,7 @@ $I = new AcceptanceTester($scenario);
 
 $I->wantTo('create a store and manage it and my team');
 
-$region = $I->createRegion('A region I test with');
+$region = $I->createRegion('A region I test with', null, \Foodsharing\Modules\Core\DBConstants\Region\Type::CITY);
 $storeName = 'Multistore 24';
 $newStoreName = 'Ex-Ultrastore';
 $storeStreet = 'Kantstraße 20';
@@ -39,9 +39,9 @@ $I->fillField('#first_post', 'A first wallpost entry on the store');
 $I->click('Senden');
 
 /* See my mobile number because I am responsible */
-$I->waitForText($storeStreet, null, '#input-1-wrapper');
-$I->waitForText($storePostcode, null, '#input-1-wrapper');
-$I->waitForText($storeCity, null, '#input-1-wrapper');
+$I->waitForText($storeStreet, null, '#inputAdress');
+$I->waitForText($storePostcode, null, '#inputAdress');
+$I->waitForText($storeCity, null, '#inputAdress');
 $I->see($bibA['handy']);
 
 $teamConversationId = $I->grabFromDatabase('fs_betrieb', 'team_conversation_id', ['name' => $storeName]);
@@ -63,12 +63,12 @@ $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
 $I->click('Team bearbeiten');
-$I->waitForElement('.tagedit-list');
+$I->waitForElement('.tagedit-list', 5);
 $I->addInTagSelect($bibB['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverA['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverB['name'], '#foodsaver');
 $I->click('Speichern', '#team-form');
-$I->waitForElementNotVisible('#team-form');
+$I->waitForElementNotVisible('#team-form', 5);
 
 /* Mark another coordinator */
 $I->click('Team bearbeiten');
@@ -78,7 +78,7 @@ $I->click('Speichern', '#team-form');
 /* Edit the store to see that team does not change */
 $I->amOnPage($I->storeEditUrl($storeId));
 $I->click('Senden');
-$I->waitForText('Änderungen wurden gespeichert');
+$I->see('Änderungen wurden gespeichert');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));
@@ -91,7 +91,7 @@ $I->see($foodsaverB['name'] . ' ' . $foodsaverB['nachname'], '.team');
 $I->click('Team bearbeiten');
 $I->removeFromTagSelect($bibB['name'] . ' ' . $bibB['nachname']);
 $I->click('Speichern', '#team-form');
-$I->waitForText('Änderungen wurden gespeichert.');
+$I->see('Änderungen wurden gespeichert.');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));

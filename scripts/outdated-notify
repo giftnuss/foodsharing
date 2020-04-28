@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -eu
+
+SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+
+basedir="$(dirname "$0")/.."
+
+if [ -z "$SLACK_WEBHOOK_URL" ]; then
+  echo "SLACK_WEBHOOK_URL was not set"
+  exit 1
+fi
+
+json_escape () {
+    # clearly not a very thorough json escaping ... ;)
+    local text="$1"
+    text=${text//\"/\\\"} # escape double quotes
+    printf '"%s"' "$text"
+}
+
+send_to_slack () {
+  local title="$1"
+  local content="$2"
+  text="$(printf "*%s*\n\n``$(\n%s'\n')``\n" "$title" "$content")"
+  local text
+  escaped=$(json_escape "$text")
+  local escaped
+  payload=$(printf '{
+    "username": "Outdated Bot",
+    "channel": "#fs-outdated",
+    "text": %s
+  }' "$escaped")
+  local payload
+  echo "Posting: $title"
+  curl \
+    -X POST \
+    -H 'Content-type: application/json' \
+    --data "$payload" \
+    "$SLACK_WEBHOOK_URL"
+  echo
+}
+
+composer_outdated () {
+  local dir="$1"
+  cd "$dir" && composer outdated -D
+}
+
+yarn_outdated () {
+  local dir="$1"
+  cd "$dir" && yarn outdated | grep -E -v '<red|yellow|green>|Color legend'
+}
+
+send_to_slack "Outdated PHP dependencies" "$(composer_outdated "$basedir")"
+send_to_slack "Outdated Javascript dependencies ($(client/))" "$(yarn_outdated "$basedir/client")"
+send_to_slack "Outdated Javascript dependencies ($(chat/))" "$(yarn_outdated "$basedir/chat")"

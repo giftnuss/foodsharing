@@ -404,6 +404,25 @@ class fImage extends fFile
 			return 'jpg';
 		}
 
+		/*
+			there is a bug in flourish, which causes not all images to be recognized
+			https://github.com/flourishlib/flourish-classes/issues/198
+
+			bytes 3 and 4 are called the "application marker" APPn [2], where n stands
+			for the least significant bits. In this case APP13, which stands for JPEG-HDR [3], a valid JPEG file.
+
+			as a fallback, we rely now on the php internal mime type detection.
+			----
+			- [1] https://gitlab.com/foodsharing-dev/foodsharing/blob/master/src/Lib/Flourish/fImage.php#L403
+			- [2] https://www.media.mit.edu/pia/Research/deepview/exif.html#ExifMarker
+			- [3] https://sno.phy.queensu.ca/~phil/exiftool/TagNames/JPEG.html
+			- https://sentry.io/share/issue/47d28bf3d1eb41ba838cd4d23f6ee335/
+		*/
+		$mime = mime_content_type($image);
+		if($mime == 'image/jpeg') {
+			return 'jpg';
+		}
+
 		return null;
 	}
 

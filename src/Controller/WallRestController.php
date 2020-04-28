@@ -5,8 +5,8 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\WallPost\WallPostGateway;
 use Foodsharing\Permissions\WallPostPermissions;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -23,13 +23,13 @@ class WallRestController extends AbstractFOSRestController
 		$this->session = $session;
 	}
 
-	private function normalizePost($post): array
+	private function normalizePost(array $post): array
 	{
 		return [
 			'id' => $post['id'],
 			'body' => $post['body'],
 			'createdAt' => str_replace(' ', 'T', $post['time']),
-			'pictures' => isset($post['gallery']) ? $post['gallery'] : null,
+			'pictures' => $post['gallery'] ?? null,
 			'author' => [
 				'id' => $post['foodsaver_id'],
 				'name' => $post['name'],
@@ -41,9 +41,9 @@ class WallRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 */
-	public function getPostsAction($target, $targetId)
+	public function getPostsAction(string $target, int $targetId): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
@@ -60,23 +60,24 @@ class WallRestController extends AbstractFOSRestController
 		return $this->handleView($view);
 	}
 
-	private function getNormalizedPosts($target, $targetId)
+	private function getNormalizedPosts(string $target, int $targetId)
 	{
 		$posts = $this->wallPostGateway->getPosts($target, $targetId);
-		$posts = array_map(function ($value) {
+
+		return array_map(function ($value) {
 			return $this->normalizePost($value);
 		}, $posts);
-
-		return $posts;
 	}
 
 	/**
 	 * @Rest\Post("wall/{target}/{targetId}", requirements={"targetId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
+	 *
+	 * @throws \Exception
 	 */
-	public function addPostAction($target, $targetId, ParamFetcher $paramFetcher)
+	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
-		if (!$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
@@ -91,7 +92,7 @@ class WallRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("wall/{target}/{targetId}/{id}", requirements={"targetId" = "\d+", "id" = "\d+"})
 	 */
-	public function delPostAction($target, $targetId, $id)
+	public function delPostAction(string $target, int $targetId, int $id): \Symfony\Component\HttpFoundation\Response
 	{
 		if (!$this->wallPostGateway->isLinkedToTarget($id, $target, $targetId)) {
 			throw new HttpException(403);

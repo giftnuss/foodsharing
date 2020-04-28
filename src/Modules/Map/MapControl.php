@@ -2,15 +2,16 @@
 
 namespace Foodsharing\Modules\Map;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
 
 class MapControl extends Control
 {
-	public function __construct(Db $model, MapView $view)
+	private $mapGateway;
+
+	public function __construct(MapGateway $mapGateway, MapView $view)
 	{
 		$this->view = $view;
-		$this->model = $model;
+		$this->mapGateway = $mapGateway;
 
 		parent::__construct();
 	}
@@ -20,7 +21,9 @@ class MapControl extends Control
 		$this->pageHelper->addTitle($this->translationHelper->s('map'));
 		$this->setTemplate('map');
 
-		$center = $this->model->getValues(array('lat', 'lon'), 'foodsaver', $this->session->id());
+		if ($this->session->may()) {
+			$center = $this->mapGateway->getFoodsaverLocation($this->session->id());
+		}
 		$this->pageHelper->addContent($this->view->mapControl(), CNT_TOP);
 
 		$jsarr = '';
@@ -35,17 +38,21 @@ class MapControl extends Control
 		);
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
-			$center = $this->model->getValues(array('lat', 'lon'), 'betrieb', (int)$_GET['bid']);
-
+			$center = $this->mapGateway->getStoreLocation($_GET['bid']);
+			// (panschk) whitespace matters here -- we need line break after the method call for javascript to compile
 			$this->pageHelper->addJs('
-				u_loadDialog("/xhr.php?f=bBubble&id=' . (int)$_GET['bid'] . '");
+				ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' })
 			');
 		}
 
 		$this->pageHelper->addJs('u_init_map();');
 
-		if ($center) {
-			$this->pageHelper->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
+		if (!empty($center)) {
+			if ($center['lat'] == 0 && $center['lon'] == 0) {
+				$this->pageHelper->addJs('u_map.fitBounds([[46.0, 4.0],[55.0, 17.0]]);');
+			} else {
+				$this->pageHelper->addJs('u_map.setView([' . $center['lat'] . ',' . $center['lon'] . '],15);');
+			}
 		}
 
 		$this->pageHelper->addJs('map.initMarker(' . $jsarr . ');');

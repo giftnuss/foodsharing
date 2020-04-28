@@ -47,26 +47,29 @@ class StoreModel extends Db
 				fs.photo,
 				a.date,
 				UNIX_TIMESTAMP(a.date) AS date_ts
-	
+
 			FROM
 				fs_foodsaver fs,
 				fs_abholer a
-	
+
 			WHERE
 				a.foodsaver_id = fs.id
-	
+
 			AND
 				a.betrieb_id = ' . (int)$betrieb_id . '
-	
+
 			AND
-				a.date >= ' . $this->dateVal($from) . '
-	
+				a.date >= ' . $this->dateval($from) . '
+
 			AND
-				a.date <= ' . $this->dateVal($to) . '
-	
+				a.date <= ' . $this->dateval($to) . '
+
+			AND
+				a.confirmed = 1
+
 			ORDER BY
 				a.date
-	
+
 		');
 	}
 
@@ -90,13 +93,13 @@ class StoreModel extends Db
 			FROM
 				fs_betrieb b,
 				fs_betrieb_team t
-				
+
 			WHERE
 				b.id = t.betrieb_id
-				
+
 			AND
 				t.foodsaver_id = ' . $this->session->id() . '
-				
+
 			AND
 				t.active = 1
 		');
@@ -113,14 +116,14 @@ class StoreModel extends Db
 			AND 	`time` > NOW()
 		')
 		) {
-			$out = array();
+			$out = [];
 			foreach ($dates as $d) {
-				$out[date('Y-m-d H-i', $d['time_ts'])] = array(
+				$out[date('Y-m-d H-i', $d['time_ts'])] = [
 					'time' => date('H:i:s', $d['time_ts']),
 					'fetcher' => $d['fetchercount'],
 					'additional' => true,
 					'datetime' => $d['time']
-				);
+				];
 			}
 
 			return $out;
@@ -163,7 +166,7 @@ class StoreModel extends Db
 				SELECT
 				`id`,
 				`name`
-				
+
 				FROM 		`fs_betrieb_kategorie`
 				ORDER BY `name`');
 
@@ -386,7 +389,8 @@ class StoreModel extends Db
 			`ueberzeugungsarbeit`,
 			`presse`,
 			`sticker`,
-      `abholmenge`
+			`abholmenge`,
+			`prefetchtime`
 			)
 			VALUES
 			(
@@ -415,7 +419,8 @@ class StoreModel extends Db
 			' . (int)$data['ueberzeugungsarbeit'] . ',
 			' . (int)$data['presse'] . ',
 			' . (int)$data['sticker'] . ',
-      ' . (int)$data['abholmenge'] . '
+			' . (int)$data['abholmenge'] . ',
+			' . (int)$data['prefetchtime'] . '
 			)');
 
 		if (isset($data['lebensmittel']) && is_array($data['lebensmittel'])) {
@@ -447,12 +452,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-arequest-' . (int)$fsid);
+		], 'store-arequest-' . (int)$fsid);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageGateway->deleteUserFromConversation($scid, $fsid);
@@ -474,12 +479,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-wrequest-' . (int)$fsid);
+		], 'store-wrequest-' . (int)$fsid);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageGateway->addUserToConversation($scid, $fsid);
@@ -497,12 +502,12 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', array(
+		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		), array(
+		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
-		), 'store-drequest-' . (int)$fsid);
+		], 'store-drequest-' . (int)$fsid);
 
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`
@@ -567,19 +572,19 @@ class StoreModel extends Db
 			return false;
 		}
 		if (!$verantwortlicher) {
-			$verantwortlicher = array(
+			$verantwortlicher = [
 				$this->session->id() => true
-			);
+			];
 		}
 
-		$tmp = array();
+		$tmp = [];
 		foreach ($verantwortlicher as $vv) {
 			$tmp[$vv] = $vv;
 		}
 		$verantwortlicher = $tmp;
 
-		$values = array();
-		$member_ids = array();
+		$values = [];
+		$member_ids = [];
 
 		foreach ($member as $m) {
 			$v = 0;

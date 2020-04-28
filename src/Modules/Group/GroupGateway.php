@@ -28,7 +28,7 @@ class GroupGateway extends BaseGateway
 
 		$this->db->delete('fs_bezirk', ['id' => $groupId]);
 
-		$count = $this->db->fetchValue('SELECT COUNT(`id`) FROM fs_bezirk WHERE `parent_id` = :id', [':id' => $parent_id]);
+		$count = $this->db->count('fs_bezirk', ['parent_id' => $parent_id]);
 
 		if ($count == 0) {
 			$this->db->update(

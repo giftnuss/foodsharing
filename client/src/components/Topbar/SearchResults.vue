@@ -4,11 +4,11 @@
       v-if="isEmpty && !isLoading"
       class="dropdown-header alert alert-warning"
     >
-      Es konnten keine Ergebnisse gefunden werden
+      {{ $i18n('search.noresults') }}
     </div>
     <div v-if="filtered.myBuddies.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-user" /> Meine Buddies
+        <i class="fas fa-user" /> {{ $i18n('search.mybuddies') }}
       </h3>
       <search-result-entry
         v-for="buddy in filtered.myBuddies"
@@ -22,7 +22,7 @@
     </div>
     <div v-if="filtered.myGroups.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-users" /> Meine Gruppen
+        <i class="fas fa-users" /> {{ $i18n('search.mygroups') }}
       </h3>
       <search-result-entry
         v-for="group in filtered.myGroups"
@@ -36,7 +36,7 @@
     </div>
     <div v-if="filtered.myStores.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-shopping-cart" /> Meine Betriebe
+        <i class="fas fa-shopping-cart" /> {{ $i18n('search.mystores') }}
       </h3>
       <search-result-entry
         v-for="store in filtered.myStores"
@@ -50,7 +50,7 @@
     </div>
     <div v-if="filtered.myRegions.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-home" /> Meine Bezirke
+        <i class="fas fa-home" /> {{ $i18n('search.myregions') }}
       </h3>
       <search-result-entry
         v-for="region in filtered.myRegions"
@@ -65,7 +65,7 @@
 
     <div v-if="filtered.groups.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-users" /> Gruppen
+        <i class="fas fa-users" /> {{ $i18n('search.groups') }}
       </h3>
       <search-result-entry
         v-for="group in filtered.groups"
@@ -79,7 +79,7 @@
     </div>
     <div v-if="filtered.users.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-child" /> Personen
+        <i class="fas fa-child" /> {{ $i18n('search.persons') }}
       </h3>
       <search-result-entry
         v-for="user in filtered.users"
@@ -93,7 +93,7 @@
     </div>
     <div v-if="filtered.stores.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-shopping-cart" /> Betriebe
+        <i class="fas fa-shopping-cart" /> {{ $i18n('menu.entry.stores') }}
       </h3>
       <search-result-entry
         v-for="store in filtered.stores"
@@ -107,7 +107,7 @@
     </div>
     <div v-if="filtered.regions.length">
       <h3 class="dropdown-header">
-        <i class="fas fa-home" /> Bezirke
+        <i class="fas fa-home" /> {{ $i18n('terminology.regions') }}
       </h3>
       <search-result-entry
         v-for="region in filtered.regions"

@@ -28,13 +28,6 @@ body.page-map #topbar {
   height: calc(100% - 37px);
 }
 
-@media (max-width: 630px) {
-  #map {
-    top: 73px;
-    height: calc(100% - 73px);
-  }
-}
-
 div#main {
   position: absolute;
   width: 980px;
@@ -54,7 +47,6 @@ div#main {
   top: 200px;
   z-index: 50;
 }
-
 
 
 #map-control ul.linklist a {
@@ -174,4 +166,15 @@ div#main {
 
   opacity: 0.40;
 
+}
+
+/*575px defined in stores/ui.js as xs display size*/
+@media (max-width: 575px) {
+
+  #map-control-wrapper {
+    top: 142px
+  }
+  .leaflet-top {
+    top: 94px;
+  }
 }

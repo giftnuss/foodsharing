@@ -12,8 +12,6 @@ class RestNormalization
 	 * Formats a timestamp to the DATE_ATOM format.
 	 *
 	 * @param int $timestamp a timestamp
-	 *
-	 * @return string
 	 */
 	public static function normalizeDate(int $timestamp): string
 	{
@@ -26,10 +24,8 @@ class RestNormalization
 	 *
 	 * @param array $data the foodsaver data from the database
 	 * @param string $prefix a prefix for the entries in the data array
-	 *
-	 * @return array
 	 */
-	public static function normalizeFoodsaver(array $data, string $prefix = ''): array
+	public static function normalizeUser(array $data, string $prefix = ''): array
 	{
 		//sleep_status is used with and without prefix
 		$sleepStatus = self::getSleepStatus($data, $prefix);
@@ -39,6 +35,28 @@ class RestNormalization
 			'name' => $data[$prefix . 'name'],
 			'avatar' => $data[$prefix . 'photo'] ?? null,
 			'sleepStatus' => $sleepStatus,
+		];
+	}
+
+	/**
+	 * Normalises the detailed profile of a user.
+	 *
+	 * @param array $data user profile data
+	 */
+	public static function normaliseUserDetails(array $data): array
+	{
+		return [
+			'id' => $data['id'],
+			'firstname' => $data['name'],
+			'lastname' => $data['nachname'],
+			'address' => $data['anschrift'],
+			'city' => $data['stadt'],
+			'postcode' => $data['plz'],
+			'lat' => $data['lat'],
+			'lon' => $data['lon'],
+			'email' => $data['email'],
+			'landline' => $data['telefon'],
+			'mobile' => $data['handy'],
 		];
 	}
 
@@ -59,8 +77,6 @@ class RestNormalization
 	 * Returns the response data for a store.
 	 *
 	 * @param array $data the store data from the database
-	 *
-	 * @return array
 	 */
 	public static function normalizeStore(array $data): array
 	{
@@ -108,8 +124,6 @@ class RestNormalization
 	 * Returns the response data for an address.
 	 *
 	 * @param array $data the address data from the database
-	 *
-	 * @return array
 	 */
 	public static function normalizeAddress(array $data): array
 	{
@@ -125,8 +139,6 @@ class RestNormalization
 	 * Returns the response data for a note on a store's wall (milestone).
 	 *
 	 * @param array $data the note data from the database
-	 *
-	 * @return array
 	 */
 	public static function normalizeStoreNote(array $data): array
 	{

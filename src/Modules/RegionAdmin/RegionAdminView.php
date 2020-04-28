@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\View;
 
 class RegionAdminView extends View
@@ -61,7 +62,6 @@ class RegionAdminView extends View
 						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
 						    ' . $id . '_infowindow.openOn(' . $id . '_map);
 						  });
-						  ' . $id . '_map.fitBounds(' . $id . '_bounds);
 						}
     				}
     				if(data.betriebe != undefined && data.betriebe.length > 0)
@@ -97,10 +97,11 @@ class RegionAdminView extends View
 						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
 						    ' . $id . '_infowindow.openOn(' . $id . '_map);
 						  });
-						  ' . $id . '_map.fitBounds(' . $id . '_bounds);
 						}
 					}
-			
+					if (' . $id . '_bounds.isValid()) {
+						' . $id . '_map.fitBounds(' . $id . '_bounds);
+					}
 				},
 				complete: function(){
 					hideLoader();
@@ -142,21 +143,13 @@ class RegionAdminView extends View
 
 		$this->pageHelper->addContent($this->v_utils->v_field('<div class="map" id="' . $id . '_map"></div>', 'Karte'));
 
-		$zoom = 6;
-		$lat = '51.303145';
-		$lon = '10.235595';
+		$lon = MapConstants::CENTER_GERMANY_LON;
 
 		$this->pageHelper->addJs('
-	 	var ' . $id . '_center = L.latLng(' . $lat . ',' . $lon . ');
-		var ' . $id . '_options = {
-		  \'zoom\': ' . $zoom . ',
-		  \'center\': ' . $id . '_center,
-		};
+	 	var ' . $id . '_center = [' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . '];
+		var ' . $id . '_zoom = ' . MapConstants::ZOOM_COUNTRY . ';
 		
-		var ' . $id . '_map = L.map(document.getElementById("' . $id . '_map"), ' . $id . '_options);
-    L.tileLayer("https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png", {
-	  attribution: "Tiles by <a href=\"https://foundation.wikimedia.org/w/index.php?title=Maps_Terms_of_Use\">Wikimedia</a>, Map data © <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap contributors</a>"
-    }).addTo(' . $id . '_map);
+		var ' . $id . '_map = initMap(document.getElementById("' . $id . '_map"), ' . $id . '_center, ' . $id . '_zoom);
 	');
 	}
 }

@@ -30,7 +30,7 @@ class EventGatewayTest extends \Codeception\Test\Unit
 		$this->regionGateway = $this->tester->get(\Foodsharing\Modules\Region\RegionGateway::class);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region = $this->tester->createRegion('God');
-		$this->tester->addBezirkMember($this->region['id'], $this->foodsaver['id']);
+		$this->tester->addRegionMember($this->region['id'], $this->foodsaver['id']);
 		$this->childRegion = $this->tester->createRegion('Jesus', $this->region['id']);
 	}
 
@@ -85,7 +85,7 @@ class EventGatewayTest extends \Codeception\Test\Unit
 
 		$usersInRegion = [$this->foodsaver['id']];
 		$fs = $this->tester->createFoodsaver();
-		$this->tester->addBezirkMember($this->region['id'], $fs['id']);
+		$this->tester->addRegionMember($this->region['id'], $fs['id']);
 		$usersInRegion[] = $fs['id'];
 
 		$this->gateway->inviteFullRegion($this->region['id'], $eventid, false);
@@ -94,7 +94,7 @@ class EventGatewayTest extends \Codeception\Test\Unit
 		}
 
 		$fs = $this->tester->createFoodsaver();
-		$this->tester->addBezirkMember($this->childRegion['id'], $fs['id']);
+		$this->tester->addRegionMember($this->childRegion['id'], $fs['id']);
 		$usersInRegion[] = $fs['id'];
 
 		$this->gateway->inviteFullRegion($this->region['id'], $eventid, true);

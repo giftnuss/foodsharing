@@ -1,4 +1,4 @@
-FROM node:11.13.0-alpine
+FROM node:13.10.1-alpine
 
 COPY . /app/chat
 
@@ -6,12 +6,6 @@ WORKDIR /app/chat
 
 COPY package.json .
 
-# see https://github.com/npm/npm/issues/9863#issuecomment-255506533
-RUN \
-  mkdir -p node_modules && \
-  mv node_modules node_modules.tmp && \
-  mv node_modules.tmp node_modules && \
-  npm install && \
-  npm prune
+RUN yarn install
 
 CMD ["node", "server.js"]

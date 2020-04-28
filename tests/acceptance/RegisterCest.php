@@ -17,8 +17,10 @@ class RegisterCest
 		$this->first_name = sq('first_name');
 		$this->last_name = sq('last_name');
 		$this->password = sq('password');
-		$this->birthdate = '1991-04-27';
-		$this->mobile_number = '+491773231323';
+		$this->birthdate = '27.08.1983';
+		$this->birthdateUSFormat = '1983-08-27';
+		$this->mobile_number = '177 3231323';
+		$this->mobile_country_code = '+49 ';
 	}
 
 	public function _after()
@@ -38,45 +40,39 @@ class RegisterCest
 
 		$I->click('Mach mit!');
 		$I->click('Jetzt registrieren!');
-		$I->waitForElementVisible('#joinform', 4);
-		$I->waitForElementVisible('#joinform .step.step0', 4);
-		$I->click('weiter', '.step.step0');
+		$I->waitForElementVisible('#step1', 4);
+		$I->fillField('#email', $this->email);
+		$I->fillField('#password', $this->password);
+		$I->fillField('#confirmPassword', $this->password);
+		$I->click('weiter');
 
 		// fill in basic details
 
-		$I->waitForElementVisible('#joinform .step.step1', 4);
-		$I->fillField('login_name', $this->first_name);
-		$I->fillField('login_surname', $this->last_name);
-		$I->fillField('login_email', $this->email);
-		/* workaround because chromedriver fails to fill a date field... */
-		$I->executeJS("document.querySelector('#birthdate').value = '" . $this->birthdate . "'");
-		$I->fillField('#login_passwd1', $this->password);
-		$I->fillField('#login_passwd2', $this->password);
-		$I->click('weiter', '.step.step1');
+		$I->waitForElementVisible('#step2', 4);
+		$I->click('label[for="genderWoman"]');
+		$I->fillField('#firstname', $this->first_name);
+		$I->fillField('#lastname', $this->last_name);
+		$I->click('weiter');
 
-		// it gives us an alert to complain we did not upload a photo
-		// whatever, I'm in a hurry
+		$I->waitForElementVisible('#step3', 4);
+		$I->fillField('.vdp-datepicker > div:nth-child(1) > input:nth-child(2)', $this->birthdate);
+		$I->click('weiter');
 
-		$I->seeInPopup('Du hast kein Foto hochgeladen.');
-		$I->acceptPopup();
-
-		// skip the step with the address map, it is optional
-
-		$I->waitForElementVisible('#joinform .step.step2', 4);
-		$I->fillField('login_mobile_phone', $this->mobile_number);
-		$I->click('weiter', '.step.step2');
+		$I->waitForElementVisible('#step4', 4);
+		$I->fillField('input[class=vti__input]', $this->mobile_number);
+		$I->click('weiter');
 
 		// tick all the check boxes
 
-		$I->waitForElementVisible('#joinform .step.step3', 4);
-		$I->checkOption('input[name=join_legal1]');
-		$I->checkOption('input[name=join_legal2]');
-		$I->click('Anmeldung absenden', '.step.step3');
+		$I->waitForElementVisible('#step5', 4);
+		$I->executeJS("$('#acceptGdpr').click()");
+		$I->executeJS("$('#acceptLegal').click()");
+		$I->executeJS("$('#subscribeNewsletter').click()");
+		$I->click('Anmeldung absenden');
 
 		// we are signed up!
-
-		$I->waitForElementVisible('#joinready', 4);
-		$I->see('Deine Anmeldung war erfolgreich.');
+		$I->waitForElementVisible('#step6', 4);
+		$I->see('Du hast die Anmeldung bei foodsharing erfolgreich abgeschlossen.');
 
 		$I->expectNumMails(1, 4);
 
@@ -94,23 +90,9 @@ class RegisterCest
 			'email' => $this->stripped_email,
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
-			'geb_datum' => $this->birthdate,
+			'geb_datum' => $this->birthdateUSFormat,
 			'newsletter' => 0,
-			'handy' => $this->mobile_number
-		]);
-
-		$I->waitForText('Um die foodsharing-Plattform benutzen zu können, musst Du die beschriebenenen Datenschutzerklärung zur Kenntnis nehmen. Es steht Dir frei, Deinen Account zu löschen.');
-		$I->checkOption('#legal_form_privacy_policy');
-		$I->click('Einstellungen übernehmen');
-		$I->waitForText('Willkommen ' . $this->first_name . '!');
-
-		$I->seeInDatabase('fs_foodsaver', [
-			'email' => $this->stripped_email,
-			'name' => $this->first_name,
-			'nachname' => $this->last_name,
-			'handy' => $this->mobile_number,
-			'geb_datum' => $this->birthdate,
-			'newsletter' => 0
+			'handy' => $this->mobile_country_code . $this->mobile_number
 		]);
 	}
 }

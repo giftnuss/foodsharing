@@ -4,8 +4,8 @@ use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
-use Symfony\Component\DependencyInjection\Container;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -19,10 +19,8 @@ $csrf_whitelist = [
 	// 'getPinPost',
 	// 'activeSwitch',
 	// 'grabInfo',
-	// 'addPinPost',
 	// 'childBezirke',
-	'bBubble',
-	// 'fsBubble',
+	// 'bBubble',
 	// 'loadMarker',
 	// 'uploadPictureRefactorMeSoon',
 	'uploadPicture',
@@ -54,18 +52,18 @@ $csrf_whitelist = [
 	// 'bcontext'
 ];
 
-/* @var $container Container */
+/* @var Container $container */
 global $container;
 $container = initializeContainer();
 
-/* @var $session Session */
+/* @var Session $session */
 $session = $container->get(Session::class);
 $session->initIfCookieExists();
 
-/* @var $mem Mem */
+/* @var Mem $mem */
 $mem = $container->get(Mem::class);
 
-/* @var $influxdb \Foodsharing\Modules\Core\InfluxMetrics */
+/* @var \Foodsharing\Modules\Core\InfluxMetrics $influxdb */
 $influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
 if (isset($g_page_cache)) {
@@ -77,7 +75,6 @@ require_once 'lang/DE/de.php';
 
 $action = $_GET['f'];
 
-$mem->updateActivity($session->id());
 if (isset($_GET['f'])) {
 	if (!in_array($action, $csrf_whitelist)) {
 		if (!$session->isValidCsrfHeader()) {
@@ -86,7 +83,7 @@ if (isset($_GET['f'])) {
 		}
 	}
 
-	/* @var $xhr XhrMethods */
+	/* @var XhrMethods $xhr */
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
