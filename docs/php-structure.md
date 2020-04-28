@@ -52,7 +52,7 @@ pickup.
 
 Another difference to models regarding the implementation of SQL queries is that the functions to communicate with the
 database are not directly in the Gateway class by inheritance but encapsulated in the attribute 
-`db` (`$this->db-><functioncall>`, defined in `/src/Modules/Core/Database.php`).
+`db` (`$this->db-><functioncall>`) of class `Database` defined in `/src/Modules/Core/Database.php`.
 
 Gateways inherit from `BaseGateway` (`/src/Modules/Core/BaseGateway.php`), which provides them with the `$db` attribute.
 
