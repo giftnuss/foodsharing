@@ -25,6 +25,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\NotificationService;
@@ -58,6 +59,7 @@ class XhrMethods
 	private $dataHelper;
 	private $translationHelper;
 	private $newsletterEmailPermissions;
+	private $regionPermissions;
 	private $notificationService;
 
 	/**
@@ -89,7 +91,8 @@ class XhrMethods
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
 		NewsletterEmailPermissions $newsletterEmailPermissions,
-		NotificationService $notificationService
+		NotificationService $notificationService,
+		RegionPermissions $regionPermission
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -114,6 +117,7 @@ class XhrMethods
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->regionPermissions = $regionPermission;
 		$this->notificationService = $notificationService;
 	}
 
@@ -991,7 +995,7 @@ class XhrMethods
 
 	public function xhr_update_newbezirk($data)
 	{
-		if ($this->session->isOrgaTeam()) {
+		if ($this->regionPermissions->mayAdministrateRegions()) {
 			$data['name'] = strip_tags($data['name']);
 			$data['name'] = str_replace(['/', '"', "'", '.', ';'], '', $data['name']);
 			$data['has_children'] = 0;
@@ -1090,7 +1094,13 @@ class XhrMethods
 	public function xhr_getBezirk($data)
 	{
 		global $g_data;
-		if (!$this->session->may('orga')) {
+
+		/*
+		 * In some of these calls orga is still being checked against additionally, as this xhr methods are used with different modules but those modules don't have own permission classes yet.
+		 * Even tho orga is yet the only condition of mayAdministrateRegions().
+		 * This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
+		 * */
+		if (!($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions())) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
@@ -1338,7 +1348,12 @@ class XhrMethods
 
 	public function xhr_saveBezirk($data)
 	{
-		if ($this->session->may('orga')) {
+		/*
+		* In some of these calls orga is still being checked against additionally, as this xhr methods are used with different modules but those modules don't have own permission classes yet.
+		* Even tho orga is yet the only condition of mayAdministrateRegions().
+		* This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
+		* */
+		if ($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions()) {
 			global $g_data;
 			$g_data = $data;
 

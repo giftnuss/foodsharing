@@ -25,4 +25,5 @@ class RegionIDs
 	public const TEAM_BOARD_MEMBER = 1373;
 	public const TEAM_ALUMNI_MEMBER = 1564;
 	public const TEAM_ADMINISTRATION_MEMBER = 1565;
+	public const WORKGROUP_ADMIN_CREATION_GROUP = 1701;
 }

@@ -3,7 +3,7 @@
 The MySQL database saves data on a hard drive.
 It holds all long-term information.
 Querying information is done via `sql` in `Model.php` and `Gateway.php` classes.
-More detailed information about queries can be found in the [php reference](php.md).
+More detailed information about queries can be found in the [php reference](php-structure.md).
 
 Related issue: [Extract SQL Statements To Gateways](https://gitlab.com/foodsharing-dev/foodsharing/issues/9).
 

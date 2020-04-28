@@ -99,6 +99,7 @@
 - Refactored store infos to vue js !1406 @chriswalg
 - Moved profile Rest endpoint to user controller !1374 @alex.simm
 - Removed the two deprecated functions from Session.php !1259 @koenvg
+- Extend RegionPermissions to a mayAdministrateRegions() method. Removes the topbar menu entry if false !1236 @jofranz
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

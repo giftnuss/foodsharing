@@ -257,6 +257,8 @@ forum:
 
 chat:
   open_chat: Nachricht schreiben
+  notification_unnamed_conversation: '{foodsaver} hat dir geschrieben.'
+  notification_named_conversation: '{foodsaver} hat dir in {conversation} geschrieben.'
 
 wall:
   name: Pinnwand
@@ -563,3 +565,7 @@ storelist:
 
 menubells:
  no_bells: Du hast derzeit keine Benachrichtigungen
+
+push_notifications:
+  test_notification_title: 'Push-Benachrichtigungen aktiviert'
+  test_notification_body: 'Super, das scheint geklappt zu haben :)'

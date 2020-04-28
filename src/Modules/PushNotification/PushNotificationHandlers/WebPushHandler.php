@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\PushNotification\PushNotificationHandlers;
 
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
@@ -11,6 +10,7 @@ use Minishlink\WebPush\MessageSentReport;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\Utils;
 use Minishlink\WebPush\WebPush;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WebPushHandler implements PushNotificationHandlerInterface
 {
@@ -22,13 +22,13 @@ class WebPushHandler implements PushNotificationHandlerInterface
 	private $webpush;
 
 	/**
-	 * @var TranslationHelper
+	 * @var TranslatorInterface
 	 */
-	private $translationHelper;
+	private $translator;
 
-	public function __construct(TranslationHelper $translationHelper)
+	public function __construct(TranslatorInterface $translator)
 	{
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 
 		$auth = [
 			'VAPID' => [
@@ -108,18 +108,20 @@ class WebPushHandler implements PushNotificationHandlerInterface
 			$payloadArray['options']['data']['action'] = ['page' => 'conversations', 'params' => [$notification->getConversationId()]]; // this thing will be resolved to a url by urls.js on client side
 			// Set title
 			if ($notification->getConversationName() !== null) {
-				$payloadArray['title'] = $this->translationHelper->sv(
-					'message_notification_named_conversation',
-					['foodsaver' => $notification->getSender(), 'conversation' => $notification->getConversationName()]
+				$payloadArray['title'] = $this->translator->trans(
+					'chat.notification_named_conversation',
+					['{foodsaver}' => $notification->getSender(), '{conversation}' => $notification->getConversationName()]
 				);
 			} else {
-				$payloadArray['title'] = $this->translationHelper->sv(
-					'message_notification_unnamed_conversation',
-					$notification->getSender()
+				$payloadArray['title'] = $this->translator->trans(
+					'chat.notification_unnamed_conversation',
+					['{foodsaver}' => $notification->getSender()]
 				);
 			}
 		} else {
-			$payloadArray['title'] = $notification->getFallbackString($this->translationHelper);
+			// Seems to be a PushNotification type we don't know, but luckily we can fall back on a simple text notification with just title and body
+			$payloadArray['title'] = $notification->getTitle($this->translator);
+			$payloadArray['options']['body'] = $notification->getBody($this->translator);
 		}
 
 		$payloadArray = $this->cropPayload($payloadArray);

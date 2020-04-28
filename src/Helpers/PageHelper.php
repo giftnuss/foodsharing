@@ -263,7 +263,8 @@ final class PageHelper
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
 					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
 					'editContent' => $this->contentPermissions->mayEditContent(),
-					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail()
+					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
+					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
 				'stores' => array_values($stores),
 				'regions' => $regions,

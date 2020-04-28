@@ -27,7 +27,7 @@ A few current architecture goals would be:
 * modernize a lot more of the frontend code
 * replace years long outdated flourish lib
 
-So the preferred approach would be [*Model* to *Gateway*](requests.md#newer-code-structure) classes, see here: [Issue 9](https://gitlab.com/foodsharing-dev/foodsharing/issues/9)
+So the preferred approach would be [*Model* to *Gateway*](php-structure.md#gateway-classes-vs-models) classes, see here: [Issue 9](https://gitlab.com/foodsharing-dev/foodsharing/issues/9)
 
 # Getting started
 Q: I would really love to do anything, but when I look at the repo I can't even find a thing I could change just for testing! How do you start?
@@ -68,14 +68,16 @@ Q: What are the security parameters? (i.e. how the website will ensure secure ac
 A: There were a lot of SQL injections. Now we use prepared statements, which is clearer.
 [Vue](javascript.md#vuejs) helps against XSS attacks. (there might be legacy stuff lurking)
 
-Moving (from [XHR](requests.md#xhr) to [REST APIs](requests.md/rest-api) made it safer as well.
+Moving (from [XHR](requests.md#xhr) to [REST APIs](requests.md#rest-api) made it safer as well.
 
 We're aiming for a point, where you get only the data you're requesting (Currently a lot of code is structured "if you're this or that, you get to see xy")
 
 # Structure
 Q: So if we break the homepage down into its parts - how is it structured?
 
-A: Most of our functions can be found in `/src/Helpers/`.
+A: For some of the php code, see [the php page](php.md).
+
+Most of our functions can be found in `/src/Helpers/`.
 
 Book: https://leanpub.com/mlaphp
 
