@@ -13,7 +13,7 @@
     <div class="col-sm-auto">
       <input
         id="email"
-        v-model.lazy="$v.email.$model"
+        :value="email"
         :class="{ 'is-invalid': $v.email.$error }"
         type="email"
         name="email"
@@ -134,6 +134,7 @@ export default {
       }
     },
     async update ($event) {
+      this.$v.email.$touch()
       this.isMailExist = false
       this.$emit('update:email', $event.target.value)
       if (!this.$v.email.$error) {
