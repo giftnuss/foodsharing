@@ -33,7 +33,7 @@ class ActivityXhr extends Control {
 ... }
 ```
 Dependency injection (Symfony) makes sure that every time an object is used,
-all necessary objects are given.
+all necessary service objects are given.
 This works because we only need at most one object of every class.
 (You could with `new` create further objects but we do not do that.)
 Symfony config is in `/config/services.yml`.
