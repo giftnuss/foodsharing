@@ -51,8 +51,8 @@ that file. Don't use `require` if you can use autoloading.
 
 ### Services 
 
-A service class is a class that doesn't represent an object in the real world,
-but provides functionality. Service classes are used to structure operations 
+A service class is a class whose main purpose is not representing an object structure,
+but providing functionality. Service classes are used to structure operations 
 using object oriented design patterns. 
 
 What exactly a service is and what not, is not well defined (see Blog Post
