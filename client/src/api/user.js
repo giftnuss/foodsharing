@@ -9,5 +9,5 @@ export function deleteUser (id) {
 }
 
 export function testRegisterEmail (email) {
-  return post('/user/validemail', { email: email })
+  return post('/user/validemail', { email: email }).valid
 }

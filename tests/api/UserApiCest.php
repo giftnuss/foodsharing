@@ -2,6 +2,7 @@
 
 namespace api;
 
+use Codeception\Example;
 use Codeception\Util\HttpCode as Http;
 
 /**
@@ -78,42 +79,65 @@ class UserApiCest
 		$I->seeResponseIsJson();
 	}
 
-	public function canOnlyUseValidEmailForRegistering(\ApiTester $I): void
+	/**
+	 * @example["abcd@efgh.com"]
+	 * @example["test123@somedomain.de"]
+	 */
+	public function canUseValidEmailForRegistration(\ApiTester $I, Example $example): void
 	{
-		// valid
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'abcd@efgh.com']);
+		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
 		$I->seeResponseCodeIs(Http::OK);
+	}
 
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'test123@somedomain.de']);
-		$I->seeResponseCodeIs(Http::OK);
-
-		// invalid address
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'abcd']);
-		$I->seeResponseCodeIs(Http::BAD_REQUEST);
-
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'abcd@efgh']);
-		$I->seeResponseCodeIs(Http::BAD_REQUEST);
-
-		// foodsharing address are invalid for registering, too
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'abcd@foodsharing.de']);
-		$I->seeResponseCodeIs(Http::BAD_REQUEST);
-
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => 'abcd@foodsharing.network']);
+	/**
+	 * @example["abcd"]
+	 * @example["abcd@efgh"]
+	 */
+	public function canNotUseInvalidEmailForRegistration(\ApiTester $I, Example $example): void
+	{
+		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
 		$I->seeResponseCodeIs(Http::BAD_REQUEST);
 	}
 
-	public function canNotUseExistingEmailForRegistering(\ApiTester $I): void
+	/**
+	 * @example["abcd@foodsharing.de"]
+	 * @example["abcd@foodsharing.network"]
+	 */
+	public function canNotUseFoodsharingEmailForRegistration(\ApiTester $I, Example $example): void
+	{
+		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
+	}
+
+	public function canNotUseExistingEmailForRegistration(\ApiTester $I): void
 	{
 		// already existing email
 		$I->sendPOST(self::API_USER . '/validemail', ['email' => $this->user['email']]);
-		$I->seeResponseCodeIs(Http::BAD_REQUEST);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
 
 		// not yet existing email
 		$email = 'test123@somedomain.de';
 		$I->sendPOST(self::API_USER . '/validemail', ['email' => $email]);
 		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => true
+		]);
+
 		$I->createFoodsharer(null, ['email' => $email]);
 		$I->sendPOST(self::API_USER . '/validemail', ['email' => $email]);
-		$I->seeResponseCodeIs(Http::BAD_REQUEST);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
 	}
 }
