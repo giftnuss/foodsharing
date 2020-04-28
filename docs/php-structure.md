@@ -12,10 +12,11 @@ some of these, see the [refactoring page](refactor.md#back-end).
 
 The [Rest api controllers](requests.md#rest-api) do not go into
 their respective module directory but into the `/src/Controller`
-directory. This has mostly a legacy reason: you can sort code
-by topic or by type. Since some developers tried to do one,
-other did the other, leaving us in this mid-position that is explained
-on this page.
+directory. This is due to the Symfony framework: The framework's
+default conventions propose a very technical project structure
+having all controllers live in one directory/namespace. It is
+possible to reconfigure it, however, that might make it harder
+to follow Symfony manuals/guides. 
 
 
 ### Deprecated module structure
