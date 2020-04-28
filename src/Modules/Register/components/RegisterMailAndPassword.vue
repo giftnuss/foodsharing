@@ -134,30 +134,17 @@ export default {
       }
     },
     async update ($event) {
-      console.log('update event email: ', $event.target.value)
+      this.isMailExist = false
       this.$emit('update:email', $event.target.value)
-      console.log('this.$v.email.$error: ', this.$v.email.$error)
       if (!this.$v.email.$error) {
         try {
-          console.log('testRegisterEmail:', $event.target.value)
           const MailExist = await testRegisterEmail($event.target.value)
-          console.log('MailExist: ', MailExist)
-          console.log('MailExist Message: ', MailExist.message)
-          if (MailExist.message === 'email is already exist') {
-            this.isMailExist = true
-          }
-          if (MailExist.message === 'email is not exist') {
-            this.isMailExist = false
-          }
+          this.isMailExist = MailExist.exist
         } catch (err) {
           if (err.code && err.code > 200) {
             throw err
           }
-          console.log('err.code: ', err.code)
         }
-        console.log('isMailExist: ', this.isMailExist)
-        console.log('this.$v.email.$error: ', this.$v.email.$error)
-        console.log('isValid: ', this.isValid)
         return this.isMailExist
       }
     }

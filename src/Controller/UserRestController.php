@@ -161,7 +161,7 @@ class UserRestController extends AbstractFOSRestController
 
 	/**
 	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
-	 * and a 'valid' parameter that indicates if the email address can be used for registration.
+	 * and a 'exist' parameter that indicates if the email address can be used for registration.
 	 *
 	 * @Rest\Post("user/validemail")
 	 * @Rest\RequestParam(name="email", nullable=false)
@@ -174,7 +174,7 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		return $this->handleView($this->view([
-			'valid' => $this->isEmailValidForRegistering($email)
+			'exist' => !$this->isEmailValidForRegistering($email)
 		], 200));
 	}
 
