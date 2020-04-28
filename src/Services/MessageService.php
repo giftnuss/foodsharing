@@ -59,25 +59,56 @@ class MessageService
 		}
 	}
 
+	/**
+	 * There are different ways conversations can be named: Some groups have actual names, then you want to display the
+	 * name, some groups have not, so you want to display a list of all Members, some groups belong to a store so you want
+	 * to display the store name and if the group has only two people, you want to display the name of the other person.
+	 * This function gives you the correct one so you don't have to worry.
+	 *
+	 * @param int $foodsaverId - the foodsaver the name should be displayed to
+	 * @param int $conversationId - the id of the conversation
+	 */
+	private function getProperConversationNameForFoodsaver(int $foodsaverId, string $conversationName, string $storeName, array $members): string
+	{
+		if ($conversationName !== null) {
+			return $conversationName;
+		}
+
+		if ($storeName !== null) {
+			return $this->translationHelper->s('store') . ' ' . $storeName;
+		}
+
+		return implode(', ',
+			array_column(
+			/*array_filter($members,
+				function ($m) use ($message) {
+				 //TODO This is a bug. Conversation name should be all users except receiver of the notification
+					return $m['id'] != $message->authorId;
+				}), */
+				'name'
+			));
+	}
+
 	private function getNotificationTemplateData(int $conversationId, Message $message, array $members, string $notificationTemplate = null): array
 	{
 		$data = [];
-		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
+		$data['storeName'] = $this->storeGateway->getStoreNameByConversationId($conversationId);
+		$data['chatName'] = $this->messageGateway->getConversationName($conversationId);
 		if ($notificationTemplate !== null) {
 			$data['emailTemplate'] = $notificationTemplate;
-		} elseif ($storeName !== null) {
+		} elseif ($data['storeName'] !== null) {
 			$data['emailTemplate'] = 'chat/message_store';
-			$data['storeName'] = $storeName;
 		} else {
 			if (count($members) > 2) {
 				$data['emailTemplate'] = 'chat/message_group';
-				$data['chatName'] =
+				$data['chatName'] = $data['chatName'] ??
 					implode(', ',
 						array_column(
-							array_filter($members,
+							/*array_filter($members,
 								function ($m) use ($message) {
+								 //TODO This is a bug. Conversation name should be all users except receiver of the notification
 									return $m['id'] != $message->authorId;
-								}),
+								}), */
 							'name'
 						)
 					);
@@ -85,7 +116,6 @@ class MessageService
 				$data['emailTemplate'] = 'chat/message';
 			}
 		}
-
 		$data['sender'] = $this->foodsaverGateway->getFoodsaverDetails($message->authorId)['name'];
 		$data['message'] = $message->body;
 		$data['link'] = BASE_URL . '/?page=msg&cid=' . $conversationId;
@@ -98,22 +128,31 @@ class MessageService
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
 
-			$this->WebSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
+			$this->webSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
 				'cid' => $conversationId,
 				'message' => $message,
 			]);
 
-			/* ToDo: Maybe conversation name unification */
+			$author = array_filter($members, function ($m) use ($message) {
+				return $m['id'] = $message->authorId;
+			});
+			if (!$author) {
+				/* sender of message seem to not be part of the conversation... How to handle? */
+				$author = $this->foodsaverGateway->getFoodsaver($message->authorId);
+			} else {
+				$author = $author[0];
+			}
+
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
 				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
 					/* ToDo: Conversation name does N queries */
 					$pushNotification = new MessagePushNotification(
-						$this->session->user('name'),
+						array_filter('name'),
 						$message,
 						new \DateTime(),
 						$conversationId,
-						count($members) > 2 ? $this->messageGateway->getProperConversationNameForFoodsaver($m['id'], $conversationId) : null
+						count($members) > 2 ? $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $notificationTemplateData['storeName'], $members) : null
 					);
 					$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $pushNotification);
 					if ($m['infomail_message']) {

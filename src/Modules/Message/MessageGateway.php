@@ -3,9 +3,11 @@
 namespace Foodsharing\Modules\Message;
 
 use Carbon\Carbon;
+use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 
 final class MessageGateway extends BaseGateway
 {
@@ -170,40 +172,6 @@ final class MessageGateway extends BaseGateway
 		}
 
 		return $res;
-	}
-
-	/**
-	 * There are different ways conversations can be named: Some groups have actual names, then you want to display the
-	 * name, some groups have not, so you want to display a list of all Members, some groups belong to a store so you want
-	 * to display the store name and if the group has only two people, you want to display the name of the other person.
-	 * This function gives you the correct one so you don't have to worry.
-	 *
-	 * @param int $foodsaverId - the foodsaver the name should be displayed to
-	 * @param int $conversationId - the id of the conversation
-	 */
-	public function getProperConversationNameForFoodsaver(int $foodsaverId, int $conversationId): string
-	{
-		$name = $this->getConversationName($conversationId);
-
-		if ($name !== null) {
-			return $name;
-		}
-
-		// Maybe it's a store converstation
-		$storeName = $this->storeGateway->getStoreNameByConversationId($conversationId);
-
-		if ($storeName !== null) {
-			return $this->translationHelper->s('store') . ' ' . $storeName;
-		}
-
-		$conversationMembers = $this->getConversationMemberNamesExcept($conversationId, $foodsaverId);
-
-		if (count($conversationMembers) > 1) {
-			// in conversations with more than 2 members, there should still be something representing the foodsaver
-			$conversationMembers[] = $this->translationHelper->s('you');
-		}
-
-		return implode(', ', $conversationMembers);
 	}
 
 	/**
