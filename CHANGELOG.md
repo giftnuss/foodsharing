@@ -109,7 +109,7 @@
 - Fix registration link on login page !1425 #856 @alex.simm
 - Adjusted picture sizes of slots, thread posts and of menubasket. !1298 #735 @moffer
 - Submenus of burger menu (mobile view) for example 'Infos' can be scrolled. !1411 #838 #837 @moffer
-- Fix link of top-left icon in navbar and make the hover-heart appear more often !1421 #853 @alex.simm 
+- Fix link of top-left icon in navbar and make the hover-heart appear more often !1421 #853 @alex.simm
 - fixed arrow handling !1408 @jonathan_b
 - Show a prompt to select a home district on the dashboard if none is choosen #716 !1123 @lebe1 @dthulke @Caluera
 - Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
@@ -141,14 +141,14 @@
 - Use larger SQL queries for event invitations instead of many small queries !1285 #774 @alex.simm
 - redirected the refs from storelist.vue to lang.de.yml !1386 #824 @jonathan_b
 - Extended the text in footer for "DoNotReply"-Mails with the information not to reply to the message #826 !1389 @thesoult
-- redirected hardcoded German strings from topbar to lang.de.yml !1410 #824 @jonathan_b 
+- redirected hardcoded German strings from topbar to lang.de.yml !1410 #824 @jonathan_b
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
 - recreate Dashboard update-overview with vue components !735 !1424 @D0nPiano @ChrisOelmueller
 - changed ActivityModel to return data without HTML or JS !735 !1424 @D0nPiano @ChrisOelmueller
 - New function for deleting store wall posts via rest !1390 #9 @alex.simm
 - Get rid of /upload.php !1365 @\_fridtjof_
 - Removed unused delPost xhr function !1417 @alex.simm
-- Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm 
+- Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm
 - Reimplement footer in vue !1437 @ChrisOelmueller
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
 - Refactored store infos to vue js !1406 !1477 !1492 @chriswalg @ChrisOelmueller
