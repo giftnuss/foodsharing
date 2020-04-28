@@ -96,7 +96,7 @@ representations shall be implemented on the DTO classes as static methods.
 
 As objects are often represented differently, as only parts of them are needed, most domain objects have multiple DTO
 representations. That's why we put them in a `DTO` directory inside of the corresponding module directory. Usually,
-there is one main or "complete" representation, that includes all aspect of the domain object that can be found in its
+there is one main or "complete" representation, that includes all aspects of the domain object that can be found in its
 database table. This one is just named like the domain object itself (e. g. `Bell`). All other partial represantations
 can be named according to their purpose or the place they are used (e. g. `BellForList`).
 
