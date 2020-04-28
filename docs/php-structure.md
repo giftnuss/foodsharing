@@ -40,8 +40,9 @@ Our concept of Gateway classes follows the [Table Data Gateway pattern](https://
 One main difference to Models is that a Gateway doesn't contain the actual model of an entity, as the overall
 domain logic is put into [Transactions](#transaction-classes) while the structure lives in [Data Transfer Objects](#data-transfer-objects).
 
-The purpose of a Gateway is to provide functionality to *query* instances of a certain entity type. If you are familiar
-with ORM based architectures, you might compare the Gateway's responsibility to the one of a Repository.
+The purpose of a Gateway is to provide functionality to *query* instances of a certain entity type from the database. If
+you are familiar with ORM based architectures, you might compare the Gateway's responsibility to the one of a
+Repository.
 
 As methods to be found on a Gateway class have the job to perform queries, they should be named in a way that
 portrays this. They should not pretend to perform domain-related business logic. A method name suitable for a
