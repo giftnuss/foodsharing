@@ -60,6 +60,23 @@ It would be nice to have a docker setup (to avoid the local `yarn` dependency). 
 The gitlab ci is not triggered if you push with the option `git push -o ci.skip`.
 This is useful if you work on the devdocs since they are only built on master anyway.
 
+#### Check for broken links
+
+You can check for broken links with the node tool `broken-link-checker`.
+You can install it with `yarn`:
+
+```
+yarn global add broken-link-checker
+```
+
+and use it when gitbook is serving it:
+
+```
+blc --recursive --exclude-external http://localhost:4001
+```
+(Of course you can remove `--exclude-external` but I got a lot of false
+negatives. See for yourself.)
+
 ## GitBook
 
 The devdocs are built with [GitBook](https://docs.gitbook.com/).
