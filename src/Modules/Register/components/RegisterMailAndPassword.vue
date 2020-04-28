@@ -21,12 +21,12 @@
         @blur="update"
       >
       <div
-        v-if="$v.email.$error || !isMailValid"
+        v-if="$v.email.$error || !isMailExist"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
         <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
-        <span v-if="!isMailValid">{{ $i18n('register.error_email') }}</span>
+        <span v-if="!isMailExist">{{ $i18n('register.error_email') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -113,7 +113,7 @@ export default {
   data () {
     return {
       confirmPassword: '',
-      isMailValid: true
+      isMailExist: false
     }
   },
   validations: {
@@ -123,15 +123,12 @@ export default {
   },
   computed: {
     isValid () {
-      return this.isMailValid && !this.$v.$invalid
+      return this.isMailExist && !this.$v.$invalid
     }
   },
   methods: {
     redirect () {
       this.$v.$touch()
-      console.log('isMailValid: ', this.isMailValid)
-      console.log('this.$v.$invalid: ', !this.$v.$invalid)
-      console.log('isValid: ', this.isValid)
       if (this.isValid) {
         this.$emit('next')
       }
@@ -139,19 +136,25 @@ export default {
     async update ($event, isMailValid) {
       console.log('update event email: ', $event.target.value)
       this.$emit('update:email', $event.target.value)
-      try {
-        console.log('testRegisterEmail:', $event.target.value)
-        await testRegisterEmail($event.target.value)
-        this.isMailValid = true
-      } catch (err) {
-        if (err.code && err.code === 400) {
-          this.isMailValid = false
-        } else {
-          this.isMailValid = false
-          throw err
+      console.log('this.$v.email.$error: ', this.$v.email.$error)
+      if (!this.$v.email.$error) {
+        try {
+          console.log('testRegisterEmail:', $event.target.value)
+          await testRegisterEmail($event.target.value)
+          this.isMailExist = true
+        } catch (err) {
+          if (err.code && err.code === 400) {
+            this.isMailExist = false
+          } else {
+            this.isMailExist = false
+            throw err
+          }
+          console.log('err.code: ', err.code)
         }
-        console.log('err.code: ', err.code)
-        return this.isMailValid
+        console.log('isMailExist: ', this.isMailExist)
+        console.log('this.$v.email.$error: ', this.$v.email.$error)
+        console.log('isValid: ', this.isValid)
+        return this.isMailExist
       }
     }
   }
