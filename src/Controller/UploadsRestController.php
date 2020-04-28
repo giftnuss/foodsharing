@@ -10,6 +10,7 @@ use Foodsharing\Services\UploadsService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -39,6 +40,7 @@ class UploadsRestController extends AbstractFOSRestController
 	private const DEFAULT_QUALITY = 80;
 	private const MAX_UPLOAD_FILE_SIZE_LOGGED_IN = 1.5 * 1024 * 1024;
 	private const MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024;
+	private const EXPIRATION_TIME_SECONDS = 86400 * 7; // one week
 
 	public function __construct(UploadsGateway $uploadsGateway, UploadsService $uploadsService, Session $session)
 	{
@@ -57,14 +59,14 @@ class UploadsRestController extends AbstractFOSRestController
 	 * @Rest\QueryParam(name="h", requirements="\d+", default=0, description="Max image height")
 	 * @Rest\QueryParam(name="q", requirements="\d+", default=0, description="Image quality (between 1 and 100)")
 	 */
-	public function getFileAction(string $uuid, ParamFetcher $paramFetcher): void
+	public function getFileAction(Request $request, string $uuid, ParamFetcher $paramFetcher): void
 	{
 		$width = $paramFetcher->get('w');
 		$height = $paramFetcher->get('h');
 		$quality = $paramFetcher->get('q');
 		$doResize = $height || $width;
 
-		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+		if ($request->headers->get('if_modified_since')) {
 			http_response_code(304);
 			die();
 		}
@@ -125,8 +127,8 @@ class UploadsRestController extends AbstractFOSRestController
 
 		// write response
 		header('Pragma: public');
-		header('Cache-Control: max-age=' . (86400 * 7));
-		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + 86400 * 7));
+		header('Cache-Control: max-age=' . self::EXPIRATION_TIME_SECONDS);
+		header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time() + self::EXPIRATION_TIME_SECONDS));
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
 		$mime = explode('/', $mimetype);
