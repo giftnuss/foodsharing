@@ -3,12 +3,13 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\PushNotification\Notification\TestPushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 
-class PushNotificationSubscriptionRestController extends FOSRestController
+class PushNotificationSubscriptionRestController extends AbstractFOSRestController
 {
 	/**
 	 * @var PushNotificationGateway
@@ -57,6 +58,8 @@ class PushNotificationSubscriptionRestController extends FOSRestController
 		$foodsaverId = $this->session->id();
 
 		$this->gateway->addSubscription($foodsaverId, $pushSubscription, $type);
+
+		$this->gateway->sendPushNotificationsToFoodsaver($foodsaverId, new TestPushNotification());
 
 		return $this->handleHttpStatus(200);
 	}

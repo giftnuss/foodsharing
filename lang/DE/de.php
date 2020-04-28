@@ -236,8 +236,6 @@ $g_lang['wallboard'] = 'Pinnwand';
 
 $g_lang['you'] = 'Du';
 $g_lang['store'] = 'Betrieb';
-$g_lang['message_notification_unnamed_conversation'] = '{var} hat dir geschrieben.';
-$g_lang['message_notification_named_conversation']	= '{foodsaver} hat dir in {conversation} geschrieben.';
 
 $g_lang['error_ajax'] = 'Das hat leider nicht geklappt. Vielleicht funktioniert deine Internetverbindung gerade nicht. Lade die Seite neu und probiere es noch mal.';
 

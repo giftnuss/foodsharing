@@ -2,15 +2,19 @@
 
 namespace Foodsharing\Modules\PushNotification\Notification;
 
-use Foodsharing\Helpers\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class PushNotification
 {
 	/**
-	 * If a PushNotificationHandler does not know a push notification type, it can create a simple text notification
-	 * without any extra features that features this fallback string. This could be useful for outdated clients, that
-	 * could still display some sort of notification even if it does not know any features specific to the notification
-	 * type.
+	 * More complex PushNotifications should provide all metadata needed for the PushNotificationHandler or the client
+	 * to render a beautiful message according to the specific PushNotification type using dedicated getters. For the
+	 * case this is not possible or needed, e. g. because the notification type is so simple it doesn't provide any
+	 * metadata, or the client or handler does not know how to render a message from the metadata of a specific
+	 * PushNotification class, every PushNotification must be able to render a title and a body itself, on which the
+	 * client (or the handler) then can fall back on.
 	 */
-	abstract public function getFallbackString(TranslationHelper $translationHelper): string;
+	abstract public function getTitle(TranslatorInterface $translator): string;
+
+	abstract public function getBody(TranslatorInterface $translator): string;
 }
