@@ -105,15 +105,24 @@ class RegionApiCest
 
 	public function canNotLeaveDifferentRegionThanJoined(\ApiTester $I)
 	{
+		$region2 = $I->createRegion();
+
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
-		$I->login($this->user['email']);
-		$I->sendPOST('api/region/999999999/leave');
+		$I->sendPOST('api/region/' . $region2['id'] . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$I->seeInDatabase('fs_foodsaver_has_bezirk', [
 			'foodsaver_id' => $this->user['id'],
 			'bezirk_id' => $this->region['id']
 			]);
+	}
+
+	public function canNotLeaveNonExistingRegion(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/999999999/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+		$I->seeResponseIsJson();
 	}
 }

@@ -88,9 +88,9 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Removes the current user from a region. Returns 403 if not logged in or 200 if the user was removed from the
-	 * region or was not a member of that region. That means that after a 200 result the user will definitely not be
-	 * a member of that region anymore.
+	 * Removes the current user from a region. Returns 403 if not logged in, 400 if the region does not exist or 200
+	 * if the user was removed from the region or was not a member of that region. That means that after a 200 result
+	 * the user will definitely not be a member of that region anymore.
 	 *
 	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
 	 */
@@ -98,6 +98,10 @@ class RegionRestController extends AbstractFOSRestController
 	{
 		if (!$this->session->may()) {
 			throw new AccessDeniedHttpException();
+		}
+
+		if (empty($this->regionGateway->getRegion($regionId))) {
+			throw new HttpException(400, 'region does not exist');
 		}
 
 		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
