@@ -25,7 +25,7 @@
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
-        <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
+        <span v-if="!$v.email.email || !$v.email.foodsharing">{{ $i18n('register.email_invalid') }}</span>
         <span v-if="isMailExist">{{ $i18n('register.error_email_exist') }}</span>
       </div>
     </div>
@@ -105,8 +105,10 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs, not } from 'vuelidate/lib/validators'
 import { testRegisterEmail } from '@/api/user'
+
+const isFoodsharingDomain = (value) => value.match(/(.)+@foodsharing.((network)|(de))$/g)
 
 export default {
   props: { email: { type: String, default: '' }, password: { type: String, default: '' } },
@@ -117,7 +119,7 @@ export default {
     }
   },
   validations: {
-    email: { required, email },
+    email: { required, email, foodsharing: not(isFoodsharingDomain) },
     password: { required, minLength: minLength(8) },
     confirmPassword: { required, sameAsPassword: sameAs('password') }
   },
