@@ -109,6 +109,7 @@ import { required, email, minLength, sameAs, not } from 'vuelidate/lib/validator
 import { testRegisterEmail } from '@/api/user'
 
 const isFoodsharingDomain = (value) => value.match(/(.)+@foodsharing.((network)|(de))$/g)
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export default {
   props: { email: { type: String, default: '' }, password: { type: String, default: '' } },
@@ -136,9 +137,11 @@ export default {
       }
     },
     async update ($event) {
-      this.$v.email.$touch()
-      this.isMailExist = false
       this.$emit('update:email', $event.target.value)
+      this.$v.email.$touch()
+      // Needs some delay, because touch cannot be awaited: https://github.com/vuelidate/vuelidate/issues/625
+      await delay(20)
+      this.isMailExist = false
       if (!this.$v.email.$error) {
         try {
           const MailExist = await testRegisterEmail($event.target.value)
