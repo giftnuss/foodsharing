@@ -1,5 +1,7 @@
 <?php
 
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+
 class RegionApiCest
 {
 	private $user;
@@ -122,6 +124,14 @@ class RegionApiCest
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/999999999/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
+		$I->seeResponseIsJson();
+	}
+
+	public function canNotLeaveRootRegion(\ApiTester $I)
+	{
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/' . RegionIDs::ROOT . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
 		$I->seeResponseIsJson();
 	}
