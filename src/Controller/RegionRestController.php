@@ -101,7 +101,7 @@ class RegionRestController extends AbstractFOSRestController
 		}
 
 		if (empty($this->regionGateway->getRegion($regionId))) {
-			throw new HttpException(400, 'region does not exist');
+			throw new HttpException(400, 'region does not exist or is root region.');
 		}
 
 		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
