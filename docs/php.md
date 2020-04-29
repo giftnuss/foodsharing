@@ -113,6 +113,9 @@ $out = '<ul class="linklist baskets">';
 - `.=` adds the string to the right to the variable on the left
 - `$var->member` refers to a member variable or method of an object (in other languages `.`)
 - [`ClassName::member`](https://secure.php.net/manual/de/language.oop5.paamayim-nekudotayim.php) refers to a (static) member variable or function of a _class_
+- `...` is used for packing and unpacking arrays in argument lists
+  (packing in function definition argument list, unpacking in
+  function use argument list). Longer explanation on [stackoverflow](https://stackoverflow.com/a/57992172)
 
 ## Conventions
 
