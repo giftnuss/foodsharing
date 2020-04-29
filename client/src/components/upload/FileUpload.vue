@@ -14,7 +14,7 @@
     >
       <div
         v-if="value"
-        class="col-2"
+        class="col-2 mr-auto"
       >
         <div class="preview">
           <img
@@ -24,7 +24,7 @@
           >
         </div>
       </div>
-      <div class="col">
+      <div class="col-2 mr-auto">
         <div
           v-if="!value"
           class="text-muted"
