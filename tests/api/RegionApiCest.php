@@ -107,8 +107,9 @@ class RegionApiCest
 	{
 		$I->login($this->user['email']);
 		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
-		$I->sendPOST('api/region/999999/leave');
-		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
+		$I->login($this->user['email']);
+		$I->sendPOST('api/region/999999999/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
 		$I->seeInDatabase('fs_foodsaver_has_bezirk', [
 			'foodsaver_id' => $this->user['id'],
