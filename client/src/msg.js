@@ -33,6 +33,7 @@ const msg = {
   fsid: 0,
   listTimeout: false,
   moreIsLoading: false,
+  firstMessageReached: false,
   $conversation: null,
   $answer: null,
   $submit: null,
@@ -148,7 +149,6 @@ const msg = {
       msg.scrollBottom()
     }
     msg.updateConvList(message)
-    conversationStore.loadConversations()
   },
 
   updateConvList: function (message) {
@@ -255,11 +255,13 @@ const msg = {
     msg.conversation_id = 0
     msg.last_message_id = 0
   },
-  loadConversation: async function (id) {
-    if (id == msg.conversation_id) {
+  loadConversation: async function (id, reload = false) {
+    if (id == msg.conversation_id && !reload) {
       msg.scrollBottom()
       msg.$answer.trigger('select')
       return false
+    } else {
+      msg.firstMessageReached = false
     }
     msg.conversation_id = id
 
@@ -281,7 +283,7 @@ const msg = {
           <a title="${plainToHtmlAttribute(profileStore.profiles[member].name)}" href="/profile/${profileStore.profiles[member].id}">
             <img src="${img(member.avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
           </a>
-        `).join('')}  
+        `).join('')}
       </div>
       ${plainToHtml(titleText)}
       <div style="clear:both;"></div>
@@ -293,7 +295,7 @@ const msg = {
     /*
      * append messages to conversation message list
      */
-    conversation.messages.reverse().forEach(m => msg.appendMsg(m))
+    Object.values(conversation.messages).forEach(m => msg.appendMsg(m))
 
     document.getElementById('compose').style.display = 'none'
     document.getElementById('right').classList.add('list-active')
@@ -311,16 +313,24 @@ const msg = {
   loadMore: async function () {
     const lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
 
-    if (!msg.moreIsLoading) {
+    if (!msg.moreIsLoading && !msg.firstMessageReached) {
       msg.moreIsLoading = true
       try {
-        const ret = await api.getMessages(msg.conversation_id, lmid)
+        const cnt = await conversationStore.loadMoreMessages(msg.conversation_id)
+        /* const ret = await api.getMessages(msg.conversation_id, lmid)
         for (let i = 0; i < ret.messages.length; i++) {
           msg.prependMsg(ret.messages[i])
         }
+        */
+
+        await msg.loadConversation(msg.conversation_id, true)
+        if (cnt === 0) {
+          /* a bit hacky, first message reached is reset in loadConversation... */
+          msg.firstMessageReached = true
+        }
 
         const position = $(`#msg-${lmid}`).position()
-
+        console.log('found', lmid, 'at position', position)
         if (!position) return
 
         if (!msg.isMob()) {
@@ -338,25 +348,18 @@ const msg = {
   },
 
   scrollTrigger: function () {
-    msg.moreIsLoading = false
-
+    const fun = function () {
+      const $conv = $(this)
+      if ($conv.scrollTop() == 0) {
+        msg.loadMore()
+      }
+    }
     if (!msg.isMob()) {
       msg.$conversation.off('scroll')
-      msg.$conversation.on('scroll', function () {
-        const $conv = $(this)
-        if ($conv.scrollTop() == 0) {
-          msg.loadMore()
-        }
-      })
+      msg.$conversation.on('scroll', fun)
     } else {
       $(window).off('scroll')
-      $(window).on('scroll', function () {
-        const $conv = $(this)
-
-        if ($conv.scrollTop() == 0) {
-          msg.loadMore()
-        }
-      })
+      $(window).on('scroll', fun)
     }
   },
   resetConversation: function () {

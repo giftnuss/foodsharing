@@ -86,7 +86,6 @@ const conv = {
   },
 
   chat: function (cid) {
-    $('#convlist-4768').removeClass('unread-1').addClass('unread-0')
     if (isMob()) {
       if (GET('page') == 'msg') {
         msg.loadConversation(cid)
@@ -123,7 +122,6 @@ const conv = {
       conv.append(key, data.message)
       conv.scrollBottom(data.cid)
     }
-    conversationStore.loadConversations()
   },
 
   // minimize or maximize the chatbox
@@ -323,16 +321,8 @@ const conv = {
       /*
        * now append all arrived messages
        */
-      if (conversation.messages != undefined && conversation.messages.length > 0) {
-        /*
-         * list messages the reverse way
-         */
-        for (var y = (conversation.messages.length - 1); y >= 0; y--) {
-          conv.append(key, conversation.messages[y])
-        }
-
-        conv.scrollBottom(cid)
-      }
+      Object.values(conversation.messages).forEach((m) => conv.append(key, m))
+      conv.scrollBottom(cid)
     } catch (e) {
       pulseError('Fehler beim Laden der Unterhaltung')
       console.error(e)
