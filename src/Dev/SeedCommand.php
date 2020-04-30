@@ -120,8 +120,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$user2 = $I->createFoodsaver($password, ['email' => 'user2@example.com', 'name' => 'Two', 'bezirk_id' => $region1]);
 		$this->writeUser($user2, $password, 'foodsaver');
 
-		$user3 = $I->createStoreCoordinator($password, ['email' => 'user3@example.com', 'name' => 'Three', 'bezirk_id' => $region1]);
-		$this->writeUser($user3, $password, 'store coordinator');
+		$userStoreManager = $I->createStoreCoordinator($password, ['email' => 'storemanager1@example.com', 'name' => 'Three', 'bezirk_id' => $region1]);
+		$this->writeUser($userStoreManager, $password, 'store coordinator');
 
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
@@ -152,16 +152,16 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 
 		// Create store team conversations
-		$conv1 = $I->createConversation([$userbot['id'], $user2['id'], $user3['id']], ['name' => 'betrieb_bla']);
+		$conv1 = $I->createConversation([$userbot['id'], $user2['id'], $userStoreManager['id']], ['name' => 'betrieb_bla']);
 		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla']);
-		$I->addConversationMessage($user3['id'], $conv1['id']);
+		$I->addConversationMessage($userStoreManager['id'], $conv1['id']);
 		$I->addConversationMessage($userbot['id'], $conv1['id']);
 		$I->addConversationMessage($userbot['id'], $conv2['id']);
 
 		// Create a store and add team members
 		$store = $I->createStore($region1, $conv1['id'], $conv2['id'], ['betrieb_status_id' => 5]);
 		$I->addStoreTeam($store['id'], $user2['id']);
-		$I->addStoreTeam($store['id'], $user3['id'], true);
+		$I->addStoreTeam($store['id'], $userStoreManager['id'], true);
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
 
