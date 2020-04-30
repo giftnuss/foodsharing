@@ -96,3 +96,5 @@ services:
 
     Foodsharing\Modules\Message\Message:
         autowire: false
+
+    GuzzleHttp\Client:

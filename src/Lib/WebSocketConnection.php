@@ -2,6 +2,9 @@
 
 namespace Foodsharing\Lib;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+
 /**
  * This class is for handling connections to our WebSocket server.
  *
@@ -11,31 +14,29 @@ namespace Foodsharing\Lib;
  */
 class WebSocketConnection
 {
+	private $guzzle;
+
+	public function __construct(Client $guzzle)
+	{
+		$this->guzzle = $guzzle;
+	}
+
 	public function sendSock(int $fsid, string $app, string $method, array $options): void
 	{
-		$query = http_build_query([
-			'u' => $fsid, // user id
-			'a' => $app, // app
-			'm' => $method, // method
-			'o' => json_encode($options) // options
-		]);
-		file_get_contents(SOCK_URL . '?' . $query);
+		$url = SOCK_URL . 'user/' . $fsid . '/' . $app . '/' . $method;
+		$this->guzzle->post($url, [RequestOptions::JSON => $options]);
 	}
 
 	public function sendSockMulti(array $fsids, string $app, string $method, array $options): void
 	{
-		$query = http_build_query([
-			'us' => join(',', $fsids), // user ids
-			'a' => $app, // app
-			'm' => $method, // method
-			'o' => json_encode($options) // options
-		]);
-		file_get_contents(SOCK_URL . '?' . $query);
+		$url = SOCK_URL . 'user/' . join('-', $fsids) . '/' . $app . '/' . $method;
+		$this->guzzle->post($url, [RequestOptions::JSON => $options]);
+
 	}
 
 	public function isUserOnline(int $fsid): bool
 	{
-		$userIsOnline = file_get_contents(SOCK_URL . 'is-connected?u=' . $fsid);
+		$userIsOnline = $this->guzzle->get(SOCK_URL . 'user/' . $fsid . '/is-online')->getBody()->getContents();
 
 		if ($userIsOnline === 'true') {
 			return true;
