@@ -31,4 +31,6 @@ Any relevant screenshots if this is a design / frontend change
 - [ ] asked someone for a code review 
 - [ ] joined #foodsharing-beta channel at https://slackin.yunity.org
 - [ ] added an entry to CHANGELOG.md (description, merge request link, username(s))
-- [ ] Once your MR has been merged, you are responsible to update the [#foodsharing-beta Slack channel](https://slackin.yunity.org/) about what has been changed here. They will test your work in different browsers, roles or other settings
+- [ ] Once your MR has been merged, you are responsible to update the [#foodsharing-beta Slack channel](https://slackin.yunity.org/) about what has been changed here.  
+      Be aware, that also non technical people should understand. Do **not** post any Gitlab link, but only the MR number (e.g. !1234).  
+      Describe in a few sentences, what should be tested from a user perspective. Also mention different settings (e.g. different browsers, roles, ...).  
