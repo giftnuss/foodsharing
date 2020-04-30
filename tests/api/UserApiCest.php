@@ -83,20 +83,25 @@ class UserApiCest
 	 * @example["abcd@efgh.com"]
 	 * @example["test123@somedomain.de"]
 	 */
-	public function canUseValidEmailForRegistration(\ApiTester $I, Example $example): void
+	public function canUseEmailForRegistration(\ApiTester $I, Example $example): void
 	{
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $example[0]]);
 		$I->seeResponseCodeIs(Http::OK);
 	}
 
 	/**
 	 * @example["abcd"]
 	 * @example["abcd@efgh"]
+	 * @example["abcd@-efgh"]
 	 */
-	public function canNotUseInvalidEmailForRegistration(\ApiTester $I, Example $example): void
+	public function canNotUseInvalidMailForRegistration(\ApiTester $I, Example $example): void
 	{
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $example[0]]);
 		$I->seeResponseCodeIs(Http::BAD_REQUEST);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'message' => 'email is not valid'
+		]);
 	}
 
 	/**
@@ -105,39 +110,39 @@ class UserApiCest
 	 */
 	public function canNotUseFoodsharingEmailForRegistration(\ApiTester $I, Example $example): void
 	{
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $example[0]]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $example[0]]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 		$I->canSeeResponseContainsJson([
-			'valid' => false
+			'exist' => true
 		]);
 	}
 
 	public function canNotUseExistingEmailForRegistration(\ApiTester $I): void
 	{
 		// already existing email
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $this->user['email']]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $this->user['email']]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 		$I->canSeeResponseContainsJson([
-			'valid' => false
+			'exist' => true
 		]);
 
 		// not yet existing email
 		$email = 'test123@somedomain.de';
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $email]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $email]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 		$I->canSeeResponseContainsJson([
-			'valid' => true
+			'exist' => false
 		]);
 
 		$I->createFoodsharer(null, ['email' => $email]);
-		$I->sendPOST(self::API_USER . '/validemail', ['email' => $email]);
+		$I->sendPOST(self::API_USER . '/ismailexist', ['email' => $email]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
 		$I->canSeeResponseContainsJson([
-			'valid' => false
+			'exist' => true
 		]);
 	}
 }
