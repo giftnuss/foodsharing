@@ -317,20 +317,17 @@ const msg = {
       msg.moreIsLoading = true
       try {
         const cnt = await conversationStore.loadMoreMessages(msg.conversation_id)
-        /* const ret = await api.getMessages(msg.conversation_id, lmid)
-        for (let i = 0; i < ret.messages.length; i++) {
-          msg.prependMsg(ret.messages[i])
-        }
-        */
 
-        await msg.loadConversation(msg.conversation_id, true)
+        const messages = Object.values(conversationStore.conversations[msg.conversation_id].messages)
+        for (let i = cnt - 1; i >= 0; i--) {
+          msg.prependMsg(messages[i])
+        }
+
         if (cnt === 0) {
-          /* a bit hacky, first message reached is reset in loadConversation... */
           msg.firstMessageReached = true
         }
 
         const position = $(`#msg-${lmid}`).position()
-        console.log('found', lmid, 'at position', position)
         if (!position) return
 
         if (!msg.isMob()) {
