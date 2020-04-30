@@ -39,24 +39,22 @@ class MessageService
 
 	private function sendNewMessageNotificationEmail(array $recipient, array $templateData): void
 	{
-		if (!$this->mem->userOnline($recipient['id'])) {
-			/* skip repeated notification emails in a short interval */
-			if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
-				$sessdata = [];
-			}
-
-			if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
-				$sessdata[$recipient['id']] = time();
-
-				$templateData = array_merge($templateData, [
-					'anrede' => $this->translationHelper->genderWord($recipient['gender'], 'Lieber', 'Liebe', 'Liebe/r'),
-					'name' => $recipient['name'],
-				]);
-
-				$this->emailHelper->tplMail($templateData['emailTemplate'], $recipient['email'], $templateData);
-			}
-			$_SESSION['lastMailMessage'] = $sessdata;
+		/* skip repeated notification emails in a short interval */
+		if (!isset($_SESSION['lastMailMessage']) || !is_array($sessdata = $_SESSION['lastMailMessage'])) {
+			$sessdata = [];
 		}
+
+		if (!isset($sessdata[$recipient['id']]) || (time() - $sessdata[$recipient['id']]) > 600) {
+			$sessdata[$recipient['id']] = time();
+
+			$templateData = array_merge($templateData, [
+				'anrede' => $this->translationHelper->genderWord($recipient['gender'], 'Lieber', 'Liebe', 'Liebe/r'),
+				'name' => $recipient['name'],
+			]);
+
+			$this->emailHelper->tplMail($templateData['emailTemplate'], $recipient['email'], $templateData);
+		}
+		$_SESSION['lastMailMessage'] = $sessdata;
 	}
 
 	/**
@@ -134,7 +132,7 @@ class MessageService
 			]);
 
 			$author = array_filter($members, function ($m) use ($message) {
-				return $m['id'] = $message->authorId;
+				return $m['id'] != $message->authorId;
 			});
 			if (!$author) {
 				/* sender of message seem to not be part of the conversation... How to handle? */
@@ -146,10 +144,9 @@ class MessageService
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
 				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
-					/* ToDo: Conversation name does N queries */
 					$pushNotification = new MessagePushNotification(
-						array_filter('name'),
-						$message,
+						$author['name'],
+						$message->body,
 						new \DateTime(),
 						$conversationId,
 						count($members) > 2 ? $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $notificationTemplateData['storeName'], $members) : null
