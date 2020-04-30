@@ -18,7 +18,7 @@ export default {
 
     socket.on('conv', async function (data) {
       if (data.m === 'push') {
-        const obj = JSON.parse(data.o)
+        const obj = data.o
         /* temporary workaround to at least do something with messages retrieved from production */
         if (!obj.message) {
           const message = {
