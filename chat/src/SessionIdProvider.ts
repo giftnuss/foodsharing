@@ -34,7 +34,7 @@ export class SessionIdProvider {
         const sessionIds: string[] = [];
         for (const userId of userIds) {
             const sessionIdsForUser = await this.fetchSessionIdsForUser(userId);
-            sessionIds.concat(sessionIdsForUser);
+            sessionIds.push(...sessionIdsForUser);
         }
         return sessionIds;
     }

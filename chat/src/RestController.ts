@@ -42,7 +42,6 @@ export class RestController {
     @Post('/user/:ids/:channel/:method')
     async send(request: Request, response: Response) {
         const userIds: number[] = request.params.ids.split('-').map(Number);
-
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUsers(userIds);
         const sockets = this.socketRegistry.getSocketsForSessions(sessionIds);
 

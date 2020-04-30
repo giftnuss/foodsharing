@@ -35,7 +35,7 @@ export class SocketRegistry {
     getSocketsForSessions(sessionIds: string[]): Socket[] {
         const sockets: Socket[] = [];
         for (const sessionId of sessionIds) {
-            sockets.concat(this.registeredSockets[sessionId])
+            sockets.push(...this.registeredSockets[sessionId])
         }
         return sockets;
     }
