@@ -21,11 +21,11 @@
         @blur="update"
       >
       <div
-        v-if="$v.email.$error || isMailExist"
+        v-if="$v.email.$error || isMailExist || isMailInvalid"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
-        <span v-if="!$v.email.email || !$v.email.foodsharing">{{ $i18n('register.email_invalid') }}</span>
+        <span v-if="!$v.email.email || !$v.email.foodsharing || isMailInvalid">{{ $i18n('register.email_invalid') }}</span>
         <span v-if="isMailExist">{{ $i18n('register.error_email_exist') }}</span>
       </div>
     </div>
@@ -116,7 +116,8 @@ export default {
   data () {
     return {
       confirmPassword: '',
-      isMailExist: false
+      isMailExist: false,
+      isMailInvalid: false
     }
   },
   validations: {
@@ -126,7 +127,7 @@ export default {
   },
   computed: {
     isValid () {
-      return !this.isMailExist && !this.$v.$invalid
+      return !this.isMailExist && !this.$v.$invalid && !this.isMailInvalid
     }
   },
   methods: {
@@ -142,12 +143,16 @@ export default {
       // Needs some delay, because touch cannot be awaited: https://github.com/vuelidate/vuelidate/issues/625
       await delay(20)
       this.isMailExist = false
+      this.isMailInvalid = false
       if (!this.$v.email.$error) {
         try {
           const MailExist = await testRegisterEmail($event.target.value)
           this.isMailExist = MailExist.exist
         } catch (err) {
-          if (err.code && err.code > 200) {
+          if (err.code && err.code === 400) {
+            this.isMailInvalid = true
+            return this.isMailInvalid
+          } else {
             throw err
           }
         }
