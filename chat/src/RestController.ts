@@ -1,20 +1,11 @@
 import {Request, Response} from "restify";
 import {Get, Post} from "./Framework/Rest/rest-decorators";
-import * as util from "util";
-import * as fs from "fs";
-import {Tedis} from "tedis";
 import {ConnectionRepository} from "./ConnectionRepository";
+import {SessionIdProvider} from "./SessionIdProvider";
 
 export class RestController {
+    private sessionIdProvider = new SessionIdProvider()
     private connectionRepository: ConnectionRepository;
-
-    private sessionIdsScriptSHA: string;
-    private sessionIdsScriptFilename = `${__dirname}/../session-ids.lua`;
-
-    private redisClient = new Tedis({
-        host: process.env.REDIS_HOST || '127.0.0.1',
-        port: Number(process.env.REDIS_PORT) || 6379
-    });
 
     constructor(connectionRepository: ConnectionRepository) {
         this.connectionRepository = connectionRepository;
@@ -33,7 +24,7 @@ export class RestController {
     async userIsConnected(request: Request, response: Response)
     {
         const userId = request.params.id;
-        const sessionIds = await this.fetchSessionIdsForUser(userId);
+        const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
 
         for (const sessionId of sessionIds) {
             if (sessionId in this.connectionRepository.connectedClients) {
@@ -58,7 +49,7 @@ export class RestController {
     }
 
     private async sendToUser(userId: number, channel: string, method: string, payload: string) {
-        const sessionIds = await this.fetchSessionIdsForUser(userId);
+        const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
         if (!sessionIds) {
             return ;
         }
@@ -70,31 +61,5 @@ export class RestController {
                 connection.emit(channel, { m: method, o: payload });
             }
         }
-    }
-
-    private async fetchSessionIdsForUser(userId: number): Promise<string[]> {
-        const sha = await this.getSessionIdsScriptSHA();
-        try {
-            return await this.redisClient.command('EVALSHA', sha, 0, userId); // return value due to the lua script session-ids.lua
-        } catch (err) {
-            if (err.code !== 'NOSCRIPT') {
-                throw err;
-            }
-            await this.loadSessionIdsScript();
-            return this.fetchSessionIdsForUser(userId); // BEWARE OF ENDLESS LOOPS!
-        }
-    }
-
-    private async getSessionIdsScriptSHA(): Promise<string> {
-        if (!this.sessionIdsScriptSHA) {
-            await this.loadSessionIdsScript();
-        }
-
-        return this.sessionIdsScriptSHA;
-    }
-
-    private async loadSessionIdsScript(): Promise<void> {
-        const contents = await util.promisify(fs.readFile)(this.sessionIdsScriptFilename, 'utf8');
-        this.sessionIdsScriptSHA = await this.redisClient.command('SCRIPT', 'LOAD', contents);
     }
 }
