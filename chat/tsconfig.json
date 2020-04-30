@@ -4,6 +4,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "noImplicitAny": true,
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "dist"
