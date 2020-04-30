@@ -1,10 +1,8 @@
-import 'reflect-metadata';
-
-import 'reflect-metadata';
+import "reflect-metadata";
 import {ServerFacade} from "../ServerFacade";
 import {createServer} from "http";
 import {OnConnectionMetadata, OnSocketEventMetadata} from "./EventActionMetadata";
-import SocketIO = require("socket.io");
+import * as SocketIO from "socket.io";
 
 export class SocketIOServerFacade implements ServerFacade {
     private server = createServer();

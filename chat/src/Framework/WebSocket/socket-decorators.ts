@@ -5,7 +5,6 @@
  * to socket.io events.
  */
 
-import 'reflect-metadata'
 import {OnConnectionMetadata, OnSocketEventMetadata} from "./EventActionMetadata";
 import {pushMetadata} from "../push-to-metadata-array";
 

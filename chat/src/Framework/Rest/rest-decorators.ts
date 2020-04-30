@@ -7,7 +7,6 @@
  * request method and pass the path as a string.
  */
 
-import 'reflect-metadata'
 import {RouteMetadata} from "./RouteMetadata";
 import {pushMetadata} from "../push-to-metadata-array";
 

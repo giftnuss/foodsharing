@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import "reflect-metadata";
 import * as restify from "restify";
 import {plugins, Request, Response, Server} from "restify";
 import {RouteMetadata} from "./RouteMetadata";

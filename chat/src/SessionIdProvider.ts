@@ -30,6 +30,15 @@ export class SessionIdProvider {
         }
     }
 
+    async fetchSessionIdsForUsers(userIds: number[]) {
+        const sessionIds: string[] = [];
+        for (const userId of userIds) {
+            const sessionIdsForUser = await this.fetchSessionIdsForUser(userId);
+            sessionIds.concat(sessionIdsForUser);
+        }
+        return sessionIds;
+    }
+
     private async getSessionIdsScriptSHA(): Promise<string> {
         if (!this.sessionIdsScriptSHA) {
             await this.uploadSessionIdsScriptToRedis();

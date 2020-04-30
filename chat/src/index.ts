@@ -1,15 +1,15 @@
 import {RestController} from "./RestController";
 import {RestifyServerFacade} from "./Framework/Rest/RestifyServerFacade";
-import {ConnectionRepository} from "./ConnectionRepository";
+import {SocketRegistry} from "./SocketRegistry";
 import {SocketIOServerFacade} from "./Framework/WebSocket/SocketIOServerFacade";
 import {SocketController} from "./SocketController";
 
-const connectionRepository = new ConnectionRepository();
+const socketRegistry = new SocketRegistry();
 
 const restServer = new RestifyServerFacade();
-restServer.loadControllerDecorators(new RestController(connectionRepository));
+restServer.loadControllerDecorators(new RestController(socketRegistry));
 restServer.listen(1338);
 
 const socketServer = new SocketIOServerFacade();
-socketServer.loadControllerDecorators(new SocketController(connectionRepository));
+socketServer.loadControllerDecorators(new SocketController(socketRegistry));
 socketServer.listen(1337);
