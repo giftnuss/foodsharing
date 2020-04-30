@@ -185,14 +185,14 @@ final class PageHelper
 
 		$userData = [
 			'id' => $this->session->id(),
-			'firstname' => $user['name'],
-			'lastname' => $user['nachname'],
+			'firstname' => $user['name'] ?? '',
+			'lastname' => $user['nachname'] ?? '',
 			'may' => $this->session->may(),
 			'verified' => $this->session->isVerified(),
 			'avatar' => [
-				'mini' => $this->imageService->img($user['photo'], 'mini'),
-				'50' => $this->imageService->img($user['photo'], '50'),
-				'130' => $this->imageService->img($user['photo'], '130')
+				'mini' => $this->imageService->img($user['photo'] ?? '', 'mini'),
+				'50' => $this->imageService->img($user['photo'] ?? '', '50'),
+				'130' => $this->imageService->img($user['photo'] ?? '', '130')
 			]
 		];
 

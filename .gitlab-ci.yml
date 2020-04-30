@@ -119,7 +119,7 @@ build:frontend:
 
 build:backend:
   <<: *defaults
-  image: registry.gitlab.com/foodsharing-dev/images/php:2.19
+  image: registry.gitlab.com/foodsharing-dev/images/php:4
   stage: build
   script:
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
