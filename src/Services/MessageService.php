@@ -77,7 +77,7 @@ class MessageService
 		}
 
 		return implode(', ',
-			array_column(
+			array_column($members,
 			/*array_filter($members,
 				function ($m) use ($message) {
 				 //TODO This is a bug. Conversation name should be all users except receiver of the notification
@@ -101,7 +101,7 @@ class MessageService
 				$data['emailTemplate'] = 'chat/message_group';
 				$data['chatName'] = $data['chatName'] ??
 					implode(', ',
-						array_column(
+						array_column($members,
 							/*array_filter($members,
 								function ($m) use ($message) {
 								 //TODO This is a bug. Conversation name should be all users except receiver of the notification
