@@ -747,12 +747,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	public function getPickupSignupsForDate(int $storeId, Carbon $date)
+	public function getPickupSignupsForDate(int $storeId, \DateTimeInterface $date)
 	{
 		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
 	}
 
-	public function getPickupSignupsForDateRange(int $storeId, Carbon $from, Carbon $to = null)
+	public function getPickupSignupsForDateRange(int $storeId, \DateTimeInterface $from, \DateTimeInterface $to = null)
 	{
 		$condition = ['date >=' => $this->db->date($from), 'betrieb_id' => $storeId];
 		if (!is_null($to)) {
@@ -796,12 +796,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['betrieb_id' => $storeId]);
 	}
 
-	public function getOnetimePickups(int $storeId, Carbon $date)
+	public function getOnetimePickups(int $storeId, \DateTimeInterface $date)
 	{
 		return $this->getOnetimePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getOnetimePickupsForRange(int $storeId, Carbon $from, ?Carbon $to)
+	public function getOnetimePickupsForRange(int $storeId, \DateTimeInterface $from, ?\DateTimeInterface $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
@@ -828,7 +828,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function addOnetimePickup(int $storeId, \DateTime $date, int $slots)
+	public function addOnetimePickup(int $storeId, \DateTimeInterface $date, int $slots)
 	{
 		$this->db->insert(
 			'fs_fetchdate',
@@ -840,7 +840,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		);
 	}
 
-	public function updateOnetimePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
+	public function updateOnetimePickupTotalSlots(int $storeId, \DateTimeInterface $date, int $slots): bool
 	{
 		return $this->db->update(
 			'fs_fetchdate',

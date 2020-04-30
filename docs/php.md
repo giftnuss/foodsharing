@@ -25,6 +25,15 @@ If possible, rather use the functions at the beginning that build the `sql` comm
 
 Those functions are well-documented in `/src/Modules/Core/Database.php`.
 
+Currently, data is often represented differently. 
+For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used. An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). 
+
+TODO: agree on naming conventions and add them here.
+
+DTOs help with clearing up which parameters are expected when and what types they have. 
+
+In addition to the above mentioned classes, Permission classes are used to organize what actions are allowed for which user.
+
 ## main entry point
 
 The main entry point is `/index.php`.

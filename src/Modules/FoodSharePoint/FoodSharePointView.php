@@ -66,7 +66,7 @@ class FoodSharePointView extends View
 		);
 	}
 
-	public function foodSharePointForm($data = false): string
+	public function foodSharePointForm($data = []): string
 	{
 		$title = $this->translationHelper->s('new_food_share_point');
 
@@ -83,12 +83,19 @@ class FoodSharePointView extends View
 					pulseError("Es muss mindestens einen Verantwortlichen für diesen Fair-Teiler geben!");
 				}
 			});
-		');
+			');
+
+			foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+				$latLonOptions[$i] = $data[$i];
+			}
+			$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
+		} else {
+			$latLonOptions = [];
+			$data['bezirk_id'] = null;
+			$data['name'] = '';
+			$data['desc'] = '';
+			$data['picture'] = '';
 		}
-		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
-			$latLonOptions[$i] = $data[$i];
-		}
-		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
 			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),

@@ -87,7 +87,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
-			'token' => uniqid()
+			'token' => uniqid('', true)
 		], $extra_params);
 		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
 			'time_cost' => 1
