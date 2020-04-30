@@ -9,8 +9,8 @@ use GuzzleHttp\RequestOptions;
  * This class is for handling connections to our WebSocket server.
  *
  * Because it has to handle many connections at the same time, the server written in JavaScript/Node.js and not in PHP.
- * For historical reasons, the docker container containing our WebSocket server has been called "chat". You can find a
- * brief description of its API in chat/src/server.ts.
+ * For historical reasons, the docker container containing our WebSocket server has been called "chat". Its API is
+ * provided by chat/src/RestController.ts.
  */
 class WebSocketConnection
 {
