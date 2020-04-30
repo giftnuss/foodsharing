@@ -230,6 +230,7 @@
 - added information on our Workflow and how to solve Merge Conflicts in devdocs @jonathan_b
 - added text about refactoring to devdocs @Caluera !1464
 - added text about releases to devdocs @Caluera !1486
+- Changes text for posting test tasks in beta Slack channel @moffer !1471
 
 # 2020-04-22 Hotfix
 - Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
