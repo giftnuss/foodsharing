@@ -55,7 +55,7 @@ async function refreshPushNotificationSettings () {
 
   const pushNotificationsButton = document.querySelector('#push-notification-button')
 
-  if (!('PushManager' in window)) {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
     pushNotificationsLabel.textContent = i18n('push_notifications_not_supported')
     pushNotificationsButton.style.display = 'none'
     return
