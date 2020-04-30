@@ -34,7 +34,7 @@ $('#becomebezirkchooser-button').button().on('click', async function () {
       showLoader()
 
       try {
-        await api.join(bid)
+        await api.joinRegion(bid)
         goTo(`/?page=relogin&url=${encodeURIComponent('/?page=bezirk&bid=' + $('#becomebezirkchooser').val())}`)
         $.fancybox.close()
       } catch (err) {

@@ -1,6 +1,6 @@
 import { patch, post } from './base'
 
-export function join (regionId) {
+export function joinRegion (regionId) {
   return post(`/region/${regionId}/join`)
 }
 
