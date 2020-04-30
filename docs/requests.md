@@ -34,8 +34,8 @@ For this case there exists a separate `nodejs` server (on the same machine as th
 which uses the connection to the client to send the message.
 Note that there can be several connections to each session, of which there can be several for each user. `nodejs` sends the message to all connections of all addressed users.
 
-The code for the `nodejs` server is found in `/chat/src/server.ts` and other files in `/chat`
-chat/socket.io -> nodejs server, in chat/src/server.ts. There is documentation for all used parts in `/chat/node_modules/<modulename>/Readme.md`. All `nodejs`-documentation is found on [their webpage](https://nodejs.org/en/docs/).
+The code for the `nodejs` server is found in `/chat/src/index.ts` and other files in `/chat/src`
+chat/socket.io -> nodejs server, in chat/src/index.ts. There is documentation for all used parts in `/chat/node_modules/<modulename>/Readme.md`. All `nodejs`-documentation is found on [their webpage](https://nodejs.org/en/docs/).
   <!-- - php server tells websocket that there is a new message -->
   <!-- - nodejs-server sends message to all open connections of all sessions of all users -->
 
