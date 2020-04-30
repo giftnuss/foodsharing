@@ -185,4 +185,37 @@ class MaintenanceGateway extends BaseGateway
 		}
 		$this->db->commit();
 	}
+
+	/**
+	 * Makes sure that all foodsavers in regions that have master regions are also members of the master region.
+	 */
+	public function masterRegionUpdate(): void
+	{
+		$foodsaver = $this->db->fetchAll('
+				SELECT
+				b.`id`,
+				b.`name`,
+				b.`type`,
+				b.`master`,
+				hb.foodsaver_id
+
+				FROM 	`fs_bezirk` b,
+				`fs_foodsaver_has_bezirk` hb
+
+				WHERE 	hb.bezirk_id = b.id
+				AND 	b.`master` != 0
+				AND 	hb.active = 1
+		');
+
+		foreach ($foodsaver as $fs) {
+			if ((int)$fs['master'] > 0) {
+				$this->db->insertIgnore('fs_foodsaver_has_bezirk', [
+					'foodsaver_id' => $fs['foodsaver_id'],
+					'bezirk_id' => $fs['master'],
+					'active' => 1,
+					'added' => $this->db->now()
+				]);
+			}
+		}
+	}
 }

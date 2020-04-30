@@ -239,48 +239,7 @@ class MaintenanceControl extends ConsoleControl
 	private function masterBezirkUpdate()
 	{
 		self::info('master bezirk update');
-		/* Master Bezirke */
-		if ($foodsaver = $this->model->q('
-				SELECT
-				b.`id`,
-				b.`name`,
-				b.`type`,
-				b.`master`,
-				hb.foodsaver_id
-
-				FROM 	`fs_bezirk` b,
-				`fs_foodsaver_has_bezirk` hb
-
-				WHERE 	hb.bezirk_id = b.id
-				AND 	b.`master` != 0
-				AND 	hb.active = 1
-
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				if (!$this->model->qRow('SELECT bezirk_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
-					if ((int)$fs['master'] > 0) {
-						$this->model->insert('
-						INSERT INTO `fs_foodsaver_has_bezirk`
-						(
-							`foodsaver_id`,
-							`bezirk_id`,
-							`active`,
-							`added`
-						)
-						VALUES
-						(
-							' . (int)$fs['foodsaver_id'] . ',
-							' . (int)$fs['master'] . ',
-							1,
-							NOW()
-						)
-						');
-					}
-				}
-			}
-		}
-
+		$this->maintenanceGateway->masterRegionUpdate();
 		self::success('OK');
 	}
 
