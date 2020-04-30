@@ -8,4 +8,4 @@ COPY package.json .
 
 RUN yarn && npx tsc
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/index.js"]

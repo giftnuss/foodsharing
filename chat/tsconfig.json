@@ -3,10 +3,12 @@
     "module": "commonjs",
     "removeComments": true,
     "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
     "typeRoots": ["./node_modules/@types"],
     "outDir": "dist"
   },
   "files": [
-    "src/server.ts"
+    "src/index.ts"
   ]
 }
