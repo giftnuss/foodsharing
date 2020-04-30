@@ -20,13 +20,13 @@ export class SessionIdProvider {
     async fetchSessionIdsForUser(userId: number): Promise<string[]> {
         const sha = await this.getSessionIdsScriptSHA();
         try {
-            return await this.redisClient.command('EVALSHA', sha, 0, userId); // return value due to the lua script session-ids.lua
+            return await this.redisClient.command('EVALSHA', sha, 0, userId);
         } catch (err) {
             if (err.code !== 'NOSCRIPT') {
                 throw err;
             }
             await this.uploadSessionIdsScriptToRedis();
-            return this.fetchSessionIdsForUser(userId); // BEWARE OF ENDLESS LOOPS!
+            return await this.redisClient.command('EVALSHA', sha, 0, userId);
         }
     }
 
