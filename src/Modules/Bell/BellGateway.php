@@ -3,6 +3,9 @@
 namespace Foodsharing\Modules\Bell;
 
 use Foodsharing\Lib\WebSocketConnection;
+use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Bell\DTO\BellForExpirationUpdates;
+use Foodsharing\Modules\Bell\DTO\BellForList;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 
@@ -20,53 +23,24 @@ class BellGateway extends BaseGateway
 		$this->webSocketConnection = $webSocketConnection;
 	}
 
-	/**
-	 * @param int|int[] $foodsavers
-	 * @param string[] $link_attributes
-	 * @param string[] $vars
-	 * @param \DateTime $expiration A DateTime object that defines when the time since when the bell will be outdated - null means it doesn't expire
-	 * @param \DateTime $time A DateTime object for the bell's time - null means current date and time
-	 */
-	public function addBell(
-		$foodsavers,
-		string $title,
-		string $body,
-		string $icon,
-		array $link_attributes,
-		array $vars,
-		string $identifier = '',
-		int $closeable = 1,
-		\DateTime $expiration = null,
-		\DateTime $time = null
-	): void {
+	public function addBell($foodsavers, Bell $bellData): void
+	{
 		if (!is_array($foodsavers)) {
 			$foodsavers = [$foodsavers];
-		}
-
-		if ($link_attributes !== false) {
-			$link_attributes = serialize($link_attributes);
-		}
-
-		if ($vars !== false) {
-			$vars = serialize($vars);
-		}
-
-		if ($time === null) {
-			$time = new \DateTime();
 		}
 
 		$bellId = $this->db->insert(
 			'fs_bell',
 			[
-				'name' => $title,
-				'body' => $body,
-				'vars' => $vars,
-				'attr' => $link_attributes,
-				'icon' => $icon,
-				'identifier' => $identifier,
-				'time' => $time->format('Y-m-d H:i:s'),
-				'closeable' => $closeable,
-				'expiration' => $expiration ? $expiration->format('Y-m-d H:i:s') : null
+				'name' => $bellData->title,
+				'body' => $bellData->body,
+				'vars' => $bellData->vars ? serialize($bellData->vars) : null,
+				'attr' => $bellData->link_attributes ? serialize($bellData->link_attributes) : null,
+				'icon' => $bellData->icon,
+				'identifier' => $bellData->identifier,
+				'time' => $bellData->time ? $bellData->time->format('Y-m-d H:i:s') : (new \DateTime())->format('Y-m-d H:i:s'),
+				'closeable' => $bellData->closeable,
+				'expiration' => $bellData->expiration ? $bellData->expiration->format('Y-m-d H:i:s') : null
 			]
 		);
 
@@ -115,12 +89,12 @@ class BellGateway extends BaseGateway
 	}
 
 	/**
-	 * Method returns an array of all conversation from the user.
+	 * Method returns an array of all bells a user sees.
 	 *
 	 * @param $fsId
 	 * @param string $limit
 	 *
-	 * @return array|bool
+	 * @return BellForList[]
 	 */
 	public function listBells($fsId, $limit = '')
 	{
@@ -136,9 +110,7 @@ class BellGateway extends BaseGateway
 				b.`vars`,
 				b.`attr`,
 				b.`icon`,
-				b.`identifier`,
 				b.`time`,
-				UNIX_TIMESTAMP(b.`time`) AS time_ts,
 				hb.seen,
 				b.closeable
 
@@ -155,12 +127,13 @@ class BellGateway extends BaseGateway
 			ORDER BY b.`time` DESC
 			' . $limit . '
 		';
-		if ($bells = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId])
-		) {
-			return $this->unserializeBells($bells);
+		$rows = $this->db->fetchAll($stm, [':foodsaver_id' => $fsId]);
+
+		if (!$rows) {
+			return [];
 		}
 
-		return [];
+		return $this->createBellsForListFromDatabaseRows($rows);
 	}
 
 	/**
@@ -176,29 +149,21 @@ class BellGateway extends BaseGateway
 	/**
 	 * @param string $identifier - can contain SQL wildcards
 	 *
-	 * @return array - [index => ['id', 'name', 'body', 'vars', 'attr', 'icon', 'identifier', 'time', 'time_ts', 'closable']
+	 * @return BellForExpirationUpdates[]
 	 */
 	public function getExpiredByIdentifier(string $identifier): array
 	{
 		$bells = $this->db->fetchAll('
             SELECT
                 `id`,
-				`name`,
-				`body`,
-				`vars`,
-				`attr`,
-				`icon`,
-				`identifier`,
-				`time`,
-				UNIX_TIMESTAMP(`time`) AS time_ts,
-				`closeable`
+				`identifier`
             FROM `fs_bell`
             WHERE `identifier` LIKE :identifier
             AND `expiration` < NOW()',
 			[':identifier' => $identifier]
 		);
 
-		return $this->unserializeBells($bells);
+		return $this->createBellsForExpirationUpdatesFromDatabaseRows($bells);
 	}
 
 	public function bellWithIdentifierExists(string $identifier): bool
@@ -258,22 +223,57 @@ class BellGateway extends BaseGateway
 	}
 
 	/**
-	 * @param array $bells - 2D-array with bell data, needs indexes []['vars'] and []['attr'] to contain serialized data
+	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
 	 *
-	 * @return array - array with the same structure as the input, but with unserialized []['vars'] and []['attr']
+	 * @return BellForList[] - BellData objects with with unserialized $ball->vars and $bell->attr
 	 */
-	private function unserializeBells(array $bells): array
+	private function createBellsForListFromDatabaseRows(array $databaseRows): array
 	{
-		foreach ($bells as $i => $iValue) {
-			if (!empty($bells[$i]['vars'])) {
-				$bells[$i]['vars'] = unserialize($bells[$i]['vars'], ['allowed_classes' => false]);
+		$output = [];
+		foreach ($databaseRows as $row) {
+			$bellDTO = new BellForList();
+
+			// This onclick-to-href conversion is probably not needed anymore
+			if (isset($row['attr']['onclick'])) {
+				preg_match('/profile\((.*?)\)/', $row['attr']['onclick'], $matches);
+				if ($matches) {
+					$row['attr']['href'] = '/profile/' . $matches[1];
+				}
 			}
 
-			if (!empty($bells[$i]['attr'])) {
-				$bells[$i]['attr'] = unserialize($bells[$i]['attr'], ['allowed_classes' => false]);
-			}
+			$bellDTO->id = $row['id'];
+			$bellDTO->key = $row['body'];
+			$bellDTO->payload = unserialize($row['vars'], ['allowed_classes' => false]);
+			$bellDTO->href = unserialize($row['attr'], ['allowed_classes' => false])['href'];
+			$bellDTO->icon = $row['icon'][0] != '/' ? $row['icon'] : null;
+			$bellDTO->image = $row['icon'][0] == '/' ? $row['icon'] : null;
+			$bellDTO->createdAt = (new \DateTime($row['time']))->format('Y-m-d\TH:i:s');
+			$bellDTO->isRead = $row['seen'];
+			$bellDTO->isCloseable = $row['closeable'];
+
+			$output[] = $bellDTO;
 		}
 
-		return $bells;
+		return $output;
+	}
+
+	/**
+	 * @param array $databaseRows - 2D-array with bell data, expects indexes []['vars'] and []['attr'] to contain serialized data
+	 *
+	 * @return BellForExpirationUpdates[] - BellData objects with with unserialized $ball->vars and $bell->attr
+	 */
+	private function createBellsForExpirationUpdatesFromDatabaseRows(array $databaseRows): array
+	{
+		$output = [];
+		foreach ($databaseRows as $row) {
+			$bellDTO = new BellForExpirationUpdates();
+
+			$bellDTO->id = $row['id'];
+			$bellDTO->identifier = $row['identifier'];
+
+			$output[] = $bellDTO;
+		}
+
+		return $output;
 	}
 }

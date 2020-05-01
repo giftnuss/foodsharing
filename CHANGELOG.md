@@ -23,7 +23,7 @@
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
 - Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
-- Make it possible to unfollow forum bells #271 !1191 @jofranz @chriswalg @ChrisOelmueller @moffer
+- Make it possible to unfollow forum bells #271 !1191 !1467 @jofranz @chriswalg @ChrisOelmueller @moffer
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 !1438 @jofranz @alex.simm
 
 ## Bugfixes

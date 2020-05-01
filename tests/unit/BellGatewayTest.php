@@ -27,16 +27,24 @@ class BellGatewayTest extends \Codeception\Test\Unit
 	{
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
+		$bellData = \Foodsharing\Modules\Bell\DTO\Bell::create(
+			'first bell title',
+			$this->faker->text(50),
+			'',
+			[''],
+			[],
+			'',
+			1
+		);
 		/* addBell accepts different inputs: $id, [$id, $id], [['id' => $id]] */
-		$title = 'title';
-		$body = $this->faker->text(50);
-		$this->gateway->addBell([$user1, $user2], $title, $body, '', [''], [], '', 1);
-		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
+		$this->gateway->addBell([$user1, $user2], $bellData);
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $bellData->title, 'body' => $bellData->body]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user1['id'], 'bell_id' => $bellId, 'seen' => 0]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user2['id'], 'bell_id' => $bellId, 'seen' => 0]);
-		$title = 'title_zwei';
-		$this->gateway->addBell([$user1, $user2], $title, $body, '', [''], [], '', 0);
-		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
+
+		$bellData->title = 'second bell title';
+		$this->gateway->addBell([$user1, $user2], $bellData);
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $bellData->title, 'body' => $bellData->body]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user1['id'], 'bell_id' => $bellId, 'seen' => 0]);
 		$this->tester->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $user2['id'], 'bell_id' => $bellId, 'seen' => 0]);
 	}
@@ -100,14 +108,18 @@ class BellGatewayTest extends \Codeception\Test\Unit
 		$user1 = $this->tester->createFoodsaver();
 		$user2 = $this->tester->createFoodsaver();
 
-		$title = 'title';
-		$body = $this->faker->text(50);
-		$icon = 'some-icon';
-		$identifier = 'some-identifier';
-		$closable = 0;
+		$bellData = \Foodsharing\Modules\Bell\DTO\Bell::create(
+			'title',
+			$this->faker->text(50),
+			'some-icon',
+			[],
+			[],
+			'some-identifier',
+			$closable = 0
+		);
 
-		$this->gateway->addBell([$user1, $user2], $title, $body, $icon, [], [], $identifier, $closable);
-		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $title, 'body' => $body]);
+		$this->gateway->addBell([$user1, $user2], $bellData);
+		$bellId = $this->tester->grabFromDatabase('fs_bell', 'id', ['name' => $bellData->title, 'body' => $bellData->body]);
 
 		$updatedData = [
 			'name' => 'updated title',

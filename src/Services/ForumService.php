@@ -7,6 +7,7 @@ use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
@@ -74,8 +75,7 @@ class ForumService
 		$info = $this->forumGateway->getThreadInfo($threadId);
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
-		$this->bellGateway->addBell(
-			array_column($subscribedFs, 'id'),
+		$bellData = Bell::create(
 			'forum_answer_title',
 			'forum_answer',
 			'fas fa-comments',
@@ -83,6 +83,7 @@ class ForumService
 			['user' => $this->session->user('name'), 'forum' => $regionName],
 			'forum-post-' . $postId
 		);
+		$this->bellGateway->addBell(array_column($subscribedFs, 'id'), $bellData);
 	}
 
 	public function addPostToThread($fsId, $threadId, $body)

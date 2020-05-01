@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Buddy;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
 
@@ -45,24 +46,25 @@ class BuddyXhr extends Control
 		}
 
 		if ($this->gateway->buddyRequest($_GET['id'], $this->session->id())) {
+			$bellData = new Bell();
 			// language string for title
-			$title = 'buddy_request_title';
+			$bellData->title = 'buddy_request_title';
 
 			// language string for body too
-			$body = 'buddy_request';
+			$bellData->body = 'buddy_request';
 
 			// icon css class
-			$icon = $this->imageService->img($this->session->user('photo'));
+			$bellData->icon = $this->imageService->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
-			$link_attributes = ['href' => '/profile/' . (int)$this->session->id() . ''];
+			$bellData->link_attributes = ['href' => '/profile/' . (int)$this->session->id() . ''];
 
 			// variables for the language strings
-			$vars = ['name' => $this->session->user('name')];
+			$bellData->vars = ['name' => $this->session->user('name')];
 
-			$identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
+			$bellData->identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
 
-			$this->bellGateway->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
+			$this->bellGateway->addBell($_GET['id'], $bellData);
 
 			return [
 				'status' => 1,

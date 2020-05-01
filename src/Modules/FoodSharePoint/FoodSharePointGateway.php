@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
@@ -445,8 +446,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 
-		$this->bellGateway->addBell(
-			$ambassadorIds,
+		$bellData = Bell::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
 			'img img-recycle yellow',
@@ -455,6 +455,7 @@ class FoodSharePointGateway extends BaseGateway
 			'new-fairteiler-' . $foodSharePointId,
 			0
 		);
+		$this->bellGateway->addBell($ambassadorIds, $bellData);
 	}
 
 	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void

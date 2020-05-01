@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Store;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 
@@ -444,12 +445,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_title', 'store_request_accept', 'img img-store brown', [
+		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		], 'store-arequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageGateway->deleteUserFromConversation($scid, $fsid);
@@ -471,12 +473,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', [
+		$bellData = Bell::create('store_request_accept_wait_title', 'store_request_accept_wait', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		], 'store-wrequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			$this->messageGateway->addUserToConversation($scid, $fsid);
@@ -494,12 +497,13 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$this->bellGateway->addBell((int)$fsid, 'store_request_deny_title', 'store_request_deny', 'img img-store brown', [
+		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		], 'store-drequest-' . (int)$fsid);
+		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		return $this->update('
 					DELETE FROM 	`fs_betrieb_team`

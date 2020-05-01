@@ -13,6 +13,7 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
@@ -1050,12 +1051,13 @@ class XhrMethods
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
 		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
-		$this->bellGateway->addBell($team, 'store_cr_times_title', 'store_cr_times', 'img img-store brown', [
+		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		], 'store-time-' . (int)$data['bid']);
+		$this->bellGateway->addBell($team, $bellData);
 
 		return json_encode(['status' => 1]);
 	}
@@ -1317,12 +1319,13 @@ class XhrMethods
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
 			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
-			$this->bellGateway->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			], 'store-request-' . (int)$data['id']);
+			$this->bellGateway->addBell($biebs, $bellData);
 		} else {
 			$msg = 'Für diesen Betrieb gibt es noch keinen Verantwortlichen. Die Botschafter wurden informiert.';
 
@@ -1337,12 +1340,13 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$this->bellGateway->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			], 'store-request-' . (int)$data['id']);
+			$this->bellGateway->addBell($botsch, $bellData);
 		}
 
 		$this->storeModel->teamRequest($this->session->id(), $data['id']);
