@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 
 export class SocketRegistry {
-    private registeredSockets: {[sessionId: string]: Socket[]} = {};
+    private readonly registeredSockets: Map<string, Socket[]> = new Map<string, Socket[]>();
     private _numRegistrations = 0;
 
     /**
@@ -10,15 +10,17 @@ export class SocketRegistry {
     numConnections = 0;
 
     register (sessionId: string, socket: Socket): void {
-        if (!this.registeredSockets[sessionId]) {
-            this.registeredSockets[sessionId] = [];
+        let socketsForSessionId = this.registeredSockets.get(sessionId);
+        if (!socketsForSessionId) {
+            socketsForSessionId = [];
+            this.registeredSockets.set(sessionId, socketsForSessionId);
         }
-        this.registeredSockets[sessionId].push(socket);
+        socketsForSessionId.push(socket);
         this._numRegistrations++;
     }
 
     removeRegistration (sessionId: string, socket: Socket): void {
-        const socketsForSession = this.registeredSockets[sessionId];
+        const socketsForSession = this.registeredSockets.get(sessionId);
 
         if (!socketsForSession || !socketsForSession.includes(socket)) {
             return;
@@ -28,21 +30,24 @@ export class SocketRegistry {
         this._numRegistrations--;
 
         if (socketsForSession.length === 0) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-            delete this.registeredSockets[sessionId];
+            this.registeredSockets.delete(sessionId);
         }
     }
 
     getSocketsForSessions (sessionIds: string[]): Socket[] {
         const sockets: Socket[] = [];
         for (const sessionId of sessionIds) {
-            sockets.push(...this.registeredSockets[sessionId]);
+            const socketsForSession = this.registeredSockets.get(sessionId);
+            if (!socketsForSession) {
+                continue;
+            }
+            sockets.push(...socketsForSession);
         }
         return sockets;
     }
 
     hasSocketForSession (sessionId: string): boolean {
-        return sessionId in this.registeredSockets;
+        return this.registeredSockets.has(sessionId);
     }
 
     get numRegistrations (): number {
@@ -50,6 +55,6 @@ export class SocketRegistry {
     }
 
     get numRegisteredSessions (): number {
-        return Object.keys(this.registeredSockets).length;
+        return this.registeredSockets.size;
     }
 }

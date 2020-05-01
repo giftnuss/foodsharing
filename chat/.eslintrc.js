@@ -8,9 +8,13 @@ module.exports = {
   parserOptions: {
     "project": "./tsconfig.json"
   },
+  env: {
+    "es6": true,
+  },
   rules: {
     "@typescript-eslint/semi": ["error", "always"], // implicit semicolons can cause confusion, as not every new line is a semicolon, but some are
     "@typescript-eslint/indent": ["error", 4], // larger indentations make the code easier to oversee, and in object-oriented languages, you shouldn't indent so deeply. That's why we also use indentations of 4 for our PHP code
-    "@typescript-eslint/strict-boolean-expressions": "off" // explicit boolean comparisons are good, however, things like `const x = y || 'default';` are easier to read and to understand than checking for thousand possibilities of y being null/undefined/NaN/whatever JS offers
+    "@typescript-eslint/strict-boolean-expressions": "off", // explicit boolean comparisons are good, but JavaScript is not made for this. If you always have to list all possibilities of something being null/undefined/NaN/whatever JS offers, you're more likely to produce errors and you code becomes less readable
+    "@typescript-eslint/no-dynamic-delete": "off" // Unfortunately, we need this, as we use a Map-like object to organize our
   }
 };
