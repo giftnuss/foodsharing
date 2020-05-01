@@ -148,11 +148,11 @@ class StoreService
 	public function setStoreNameInConversations(int $storeId, string $storeName): void
 	{
 		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
-			$team_conversation_name = $this->translator->trans('store.team_conversation_name', ['name' => $storeName]);
+			$team_conversation_name = $this->translator->trans('store.team_conversation_name', ['{name}' => $storeName]);
 			$this->messageGateway->renameConversation($tcid, $team_conversation_name);
 		}
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$springer_conversation_name = $this->translator->trans('store.springer_conversation_name', ['name' => $storeName]);
+			$springer_conversation_name = $this->translator->trans('store.springer_conversation_name', ['{name}' => $storeName]);
 			$this->messageGateway->renameConversation($scid, $springer_conversation_name);
 		}
 	}
