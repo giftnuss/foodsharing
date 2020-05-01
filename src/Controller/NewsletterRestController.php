@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Controller;
 
-use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Permissions\NewsletterEmailPermissions;

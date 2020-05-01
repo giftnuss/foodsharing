@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Legal\LegalGateway;

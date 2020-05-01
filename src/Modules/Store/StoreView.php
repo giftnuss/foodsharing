@@ -2,36 +2,36 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Helpers\WeightHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class StoreView extends View
 {
 	private $weightHelper;
 
 	public function __construct(
-			\Twig\Environment $twig,
-			Utils $viewUtils,
-			Session $session,
-			SanitizerService $sanitizerService,
-			PageHelper $pageHelper,
-			TimeHelper $timeHelper,
-			ImageService $imageService,
-			RouteHelper $routeHelper,
-			IdentificationHelper $identificationHelper,
-			DataHelper $dataHelper,
-			TranslationHelper $translationHelper,
-			WeightHelper $weightHelper
+		\Twig\Environment $twig,
+		Utils $viewUtils,
+		Session $session,
+		Sanitizer $sanitizerService,
+		PageHelper $pageHelper,
+		TimeHelper $timeHelper,
+		ImageHelper $imageService,
+		RouteHelper $routeHelper,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		WeightHelper $weightHelper
 			) {
 		$this->weightHelper = $weightHelper;
 		parent::__construct(

@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Group;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 /**
  * Groups are the super category in which Regions and WorkGroups belong. GroupTransactions contains the common logic
@@ -29,7 +29,7 @@ final class GroupTransactions
 	public function __construct(
 		BellGateway $bellGateway,
 		FoodSharePointGateway $foodSharePoint,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
 		RegionGateway $regionGateway,

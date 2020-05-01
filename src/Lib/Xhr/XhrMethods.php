@@ -4,10 +4,10 @@ namespace Foodsharing\Lib\Xhr;
 
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
@@ -28,9 +28,9 @@ use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Modules\Group\GroupTransactions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,31 +69,31 @@ class XhrMethods
 	 * @param $model
 	 */
 	public function __construct(
-        Mem $mem,
-        Session $session,
-        Db $model,
-        Utils $viewUtils,
-        ViewUtils $xhrViewUtils,
-        StoreModel $storeModel,
-        MessageModel $messageModel,
-        RegionGateway $regionGateway,
-        ForumGateway $forumGateway,
-        BellGateway $bellGateway,
-        StoreGateway $storeGateway,
-        StorePermissions $storePermissions,
-        FoodsaverGateway $foodsaverGateway,
-        EmailGateway $emailGateway,
-        MailboxGateway $mailboxGateway,
-        ImageManager $imageManager,
-        SanitizerService $sanitizerService,
-        EmailHelper $emailHelper,
-        ImageService $imageService,
-        IdentificationHelper $identificationHelper,
-        DataHelper $dataHelper,
-        TranslationHelper $translationHelper,
-        NewsletterEmailPermissions $newsletterEmailPermissions,
-        GroupTransactions $groupTransactions,
-        RegionPermissions $regionPermission
+		Mem $mem,
+		Session $session,
+		Db $model,
+		Utils $viewUtils,
+		ViewUtils $xhrViewUtils,
+		StoreModel $storeModel,
+		MessageModel $messageModel,
+		RegionGateway $regionGateway,
+		ForumGateway $forumGateway,
+		BellGateway $bellGateway,
+		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
+		FoodsaverGateway $foodsaverGateway,
+		EmailGateway $emailGateway,
+		MailboxGateway $mailboxGateway,
+		ImageManager $imageManager,
+		Sanitizer $sanitizerService,
+		EmailHelper $emailHelper,
+		ImageHelper $imageService,
+		IdentificationHelper $identificationHelper,
+		DataHelper $dataHelper,
+		TranslationHelper $translationHelper,
+		NewsletterEmailPermissions $newsletterEmailPermissions,
+		GroupTransactions $groupTransactions,
+		RegionPermissions $regionPermission
 	) {
 		$this->mem = $mem;
 		$this->session = $session;

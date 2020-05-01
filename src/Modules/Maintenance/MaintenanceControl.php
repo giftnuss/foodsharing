@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Maintenance;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;

@@ -8,7 +8,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointTransactions;
 use Foodsharing\Permissions\WallPostPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class WallPostXhr extends Control
 {
@@ -25,7 +25,7 @@ class WallPostXhr extends Control
 		WallPostPermissions $wallPostPermissions,
 		WallPostView $view,
 		Session $session,
-		SanitizerService $sanitizerService
+		Sanitizer $sanitizerService
 	) {
 		$this->foodSharePointTransactions = $foodSharePointTransactions;
 		$this->wallPostGateway = $wallPostGateway;

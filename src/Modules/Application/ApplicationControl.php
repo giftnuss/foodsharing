@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Application;
 
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 

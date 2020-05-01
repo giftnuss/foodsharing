@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Helpers;
+namespace Foodsharing\Utility;
 
 use Carbon\Carbon;
 

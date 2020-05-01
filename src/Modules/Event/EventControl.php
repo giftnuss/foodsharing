@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\EventPermissions;
 

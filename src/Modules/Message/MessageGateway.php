@@ -10,7 +10,7 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Store\StoreGateway;

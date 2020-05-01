@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Buddy;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 
 class BuddyXhr extends Control
 {
@@ -13,7 +13,7 @@ class BuddyXhr extends Control
 	private $gateway;
 	private $imageService;
 
-	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, ImageService $imageService)
+	public function __construct(BuddyGateway $gateway, BellGateway $bellGateway, ImageHelper $imageService)
 	{
 		$this->gateway = $gateway;
 		$this->bellGateway = $bellGateway;

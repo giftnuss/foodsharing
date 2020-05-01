@@ -8,7 +8,7 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Modules\Region\ForumTransactions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -26,13 +26,13 @@ class ForumRestController extends AbstractFOSRestController
 	private $sanitizerService;
 
 	public function __construct(
-        Session $session,
-        RegionGateway $regionGateway,
-        ForumGateway $forumGateway,
-        ForumFollowerGateway $forumFollowerGateway,
-        ForumPermissions $forumPermissions,
-        ForumTransactions $forumTransactions,
-        SanitizerService $sanitizerService
+		Session $session,
+		RegionGateway $regionGateway,
+		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
+		ForumPermissions $forumPermissions,
+		ForumTransactions $forumTransactions,
+		Sanitizer $sanitizerService
 	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;

@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\FlashMessageHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\FlashMessageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;

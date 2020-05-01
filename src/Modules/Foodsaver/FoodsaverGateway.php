@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Carbon\Carbon;
 use Exception;
-use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;

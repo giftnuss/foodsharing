@@ -3,12 +3,12 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -18,8 +18,8 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class SettingsView extends View
 {
@@ -29,10 +29,10 @@ class SettingsView extends View
 		\Twig\Environment $twig,
 		Utils $viewUtils,
 		Session $session,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
-		ImageService $imageService,
+		ImageHelper $imageService,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,

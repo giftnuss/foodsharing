@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;

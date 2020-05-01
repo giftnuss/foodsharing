@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Report;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\ReportPermissions;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,10 +15,10 @@ class ReportControl extends Control
 	private $reportPermissions;
 
 	public function __construct(
-		ReportGateway $reportGateway,
-		ReportView $view,
-		ImageService $imageService,
-		ReportPermissions $reportPermissions)
+        ReportGateway $reportGateway,
+        ReportView $view,
+        ImageHelper $imageService,
+        ReportPermissions $reportPermissions)
 	{
 		$this->reportGateway = $reportGateway;
 		$this->view = $view;

@@ -8,7 +8,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 final class BlogGateway extends BaseGateway
 {
@@ -18,11 +18,11 @@ final class BlogGateway extends BaseGateway
 	private $session;
 
 	public function __construct(
-		BellGateway $bellGateway,
-		Database $db,
-		FoodsaverGateway $foodsaverGateway,
-		SanitizerService $sanitizerService,
-		Session $session
+        BellGateway $bellGateway,
+        Database $db,
+        FoodsaverGateway $foodsaverGateway,
+        Sanitizer $sanitizerService,
+        Session $session
 	) {
 		parent::__construct($db);
 		$this->bellGateway = $bellGateway;

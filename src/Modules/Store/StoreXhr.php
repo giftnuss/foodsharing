@@ -9,7 +9,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class StoreXhr extends Control
 {
@@ -19,12 +19,12 @@ class StoreXhr extends Control
 	private $sanitizerService;
 
 	public function __construct(
-        StoreModel $model,
-        StoreView $view,
-        StoreGateway $storeGateway,
-        StorePermissions $storePermissions,
-        StoreTransactions $storeTransactions,
-        SanitizerService $sanitizerService
+		StoreModel $model,
+		StoreView $view,
+		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
+		StoreTransactions $storeTransactions,
+		Sanitizer $sanitizerService
 	) {
 		$this->model = $model;
 		$this->view = $view;

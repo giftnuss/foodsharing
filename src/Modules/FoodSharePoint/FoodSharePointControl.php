@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\FoodSharePoint;
 
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -10,7 +10,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\FoodSharePointPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 use Symfony\Component\HttpFoundation\Request;
 
 class FoodSharePointControl extends Control
@@ -30,14 +30,14 @@ class FoodSharePointControl extends Control
 	private $foodSharePointPermissions;
 
 	public function __construct(
-		FoodSharePointView $view,
-		FoodSharePointGateway $foodSharePointGateway,
-		RegionGateway $regionGateway,
-		FoodsaverGateway $foodsaverGateway,
-		MailboxGateway $mailboxGateway,
-		SanitizerService $sanitizerService,
-		IdentificationHelper $identificationHelper,
-		FoodSharePointPermissions $foodSharePointPermissions
+        FoodSharePointView $view,
+        FoodSharePointGateway $foodSharePointGateway,
+        RegionGateway $regionGateway,
+        FoodsaverGateway $foodsaverGateway,
+        MailboxGateway $mailboxGateway,
+        Sanitizer $sanitizerService,
+        IdentificationHelper $identificationHelper,
+        FoodSharePointPermissions $foodSharePointPermissions
 	) {
 		$this->view = $view;
 		$this->foodSharePointGateway = $foodSharePointGateway;

@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Stats;
 
-use Foodsharing\Helpers\WeightHelper;
+use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 
@@ -21,18 +21,18 @@ class StatsModel extends Db
 	{
 		return $this->qOne(
 			'
-				SELECT 
-					MIN(`date`) 
-				
-				FROM 
-					fs_abholer 
-				
-				WHERE 
-					betrieb_id = ' . $storeId . ' 
-				
-				AND 
+				SELECT
+					MIN(`date`)
+
+				FROM
+					fs_abholer
+
+				WHERE
+					betrieb_id = ' . $storeId . '
+
+				AND
 					foodsaver_id = ' . $fsId . '
-				AND 
+				AND
 					`confirmed` = 1'
 		);
 	}
@@ -41,8 +41,8 @@ class StatsModel extends Db
 	{
 		$savedWeight = 0;
 		if ($queryResult = $this->qOne('
-			SELECT 
-			       sum(fw.weight) AS saved 
+			SELECT
+			       sum(fw.weight) AS saved
 			FROM fs_abholer fa
 				left outer join fs_betrieb fb on fa.betrieb_id = fb.id
 				left outer join fs_fetchweight fw on fb.abholmenge = fw.id
@@ -69,18 +69,18 @@ class StatsModel extends Db
 			'
 				SELECT
 					MAX(`date`)
-	
+
 				FROM
 					fs_abholer
-	
+
 				WHERE
 					betrieb_id = ' . $storeId . '
-	
+
 				AND
 					foodsaver_id = ' . $fsId . '
 				AND
 					`confirmed` = 1
-				AND 
+				AND
 					`date` < NOW()'
 		);
 	}
@@ -94,16 +94,16 @@ class StatsModel extends Db
 		$last_fetch)
 	{
 		$this->update('
-			UPDATE 	`fs_betrieb_team` 
-				
+			UPDATE 	`fs_betrieb_team`
+
 			SET 	`stat_last_update` = NOW(),
 					`stat_fetchcount` = ' . (int)$fetchcount . ',
 					`stat_first_fetch` = ' . $this->dateval($first_fetch) . ',
 					`stat_add_date` = ' . $this->dateval($add_date) . ',
 					`stat_last_fetch` = ' . $this->dateval($last_fetch) . '
-				
+
 			WHERE 	`foodsaver_id` = ' . (int)$foodsaver_id . '
-			AND 	`betrieb_id` = ' . (int)$betrieb_id . '		
+			AND 	`betrieb_id` = ' . (int)$betrieb_id . '
 		');
 	}
 
@@ -111,9 +111,9 @@ class StatsModel extends Db
 	{
 		$val = $this->qOne('
 			SELECT COUNT(foodsaver_id)
-					
+
 			FROM 	fs_abholer
-				
+
 			WHERE 	`foodsaver_id` = ' . (int)$fsId . '
 			AND 	`betrieb_id` = ' . (int)$storeId . '
 			AND 	`date` > ' . $this->dateval($last_update) . '
@@ -128,10 +128,10 @@ class StatsModel extends Db
 	{
 		return $this->update('
 
-				UPDATE 	
-					`fs_bezirk` 
-				
-				SET 
+				UPDATE
+					`fs_bezirk`
+
+				SET
 					`stat_last_update`= NOW(),
 					`stat_fetchweight`=' . (float)$fetchweight . ',
 					`stat_fetchcount`=' . (int)$fetchcount . ',
@@ -140,11 +140,11 @@ class StatsModel extends Db
 					`stat_korpcount`=' . (int)$korpcount . ',
 					`stat_botcount`=' . (int)$botcount . ',
 					`stat_fscount`=' . (int)$fscount . ',
-					`stat_fairteilercount`=' . (int)$foodSharePointCount . ' 
-				
-				WHERE 
+					`stat_fairteilercount`=' . (int)$foodSharePointCount . '
+
+				WHERE
 					`id` = ' . (int)$regionId . '
-				
+
 		');
 	}
 
@@ -179,24 +179,24 @@ class StatsModel extends Db
 		$child_ids[$region_id] = $region_id;
 
 		$stat_post = (int)$this->qOne('
-			
-			SELECT COUNT(p.id) 
-				
+
+			SELECT COUNT(p.id)
+
 			FROM 	fs_theme_post p,
 					fs_bezirk_has_theme tb
-				
+
 			WHERE 	p.theme_id = tb.theme_id
 			AND 	tb.bezirk_id IN(' . implode(',', $child_ids) . ')
-				
+
 		');
 
 		$stat_post += (int)$this->qOne('
-			SELECT 	COUNT(bn.id) 
+			SELECT 	COUNT(bn.id)
 			FROM 	fs_betrieb_notiz bn,
 					fs_betrieb b
 			WHERE 	bn.betrieb_id = b.id
 			AND 	b.bezirk_id IN(' . implode(',', $child_ids) . ')
-				
+
 		');
 
 		return $stat_post;
@@ -247,19 +247,19 @@ class StatsModel extends Db
 		$weight = 0;
 		$dat = [];
 		if ($res = $this->q('
-			SELECT 	a.betrieb_id, 
+			SELECT 	a.betrieb_id,
 					a.`date`,
 					b.abholmenge
-					
+
 			FROM   `fs_abholer` a,
 			       `fs_betrieb` b
 			WHERE 	a.betrieb_id =b.id
-			
+
 			AND   	a.`date` < NOW()
 			AND 	a.`date` > ' . $this->dateval($last_update) . '
-				
+
 			AND 	b.bezirk_id IN(' . implode(',', $child_ids) . ')
-		
+
 		')
 		) {
 			foreach ($res as $r) {

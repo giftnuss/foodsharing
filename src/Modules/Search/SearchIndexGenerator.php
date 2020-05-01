@@ -2,13 +2,15 @@
 
 namespace Foodsharing\Services;
 
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 
-class SearchService
+class SearchIndexGenerator
 {
 	private $buddyGateway;
 	private $workGroupGateway;
@@ -24,8 +26,8 @@ class SearchService
 		StoreModel $storeModel,
 		RegionGateway $regionGateway,
 		Session $session,
-		SanitizerService $sanitizerService,
-		ImageService $imageService
+		Sanitizer $sanitizerService,
+		ImageHelper $imageService
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupGateway = $workGroupGateway;

@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Modules\Group\GroupTransactions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class FoodsaverXhr extends Control
 {
@@ -20,7 +20,7 @@ class FoodsaverXhr extends Control
 	public function __construct(
 		FoodsaverView $view,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		RegionPermissions $regionPermissions,
 		FoodsaverGateway $foodsaverGateway,
 		GroupTransactions $groupTransactions

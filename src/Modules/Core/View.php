@@ -2,16 +2,16 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class View
 {
@@ -38,10 +38,10 @@ class View
 		\Twig\Environment $twig,
 		Utils $viewUtils,
 		Session $session,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
-		ImageService $imageService,
+		ImageHelper $imageService,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
@@ -80,7 +80,7 @@ class View
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>		
+			<div style="clear:both;"></div>
 		</div>';
 	}
 
@@ -107,7 +107,7 @@ class View
 			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
-			Online-Sprachkonferenzen machen wir mit Mumble	
+			Online-Sprachkonferenzen machen wir mit Mumble
 		</p>
 		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
 		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
@@ -124,7 +124,7 @@ class View
 			' . $location['street'] . '<br />
 			' . $location['zip'] . ' ' . $location['city'] . '
 		</p>
-				
+
 		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
@@ -145,7 +145,7 @@ class View
 		}
 
 		return '
-					
+
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
 			' . $img . '
 			<div class="welcome_profile_name">
@@ -273,31 +273,31 @@ class View
 	public function peopleChooser($id, $option = [])
 	{
 		$this->pageHelper->addJs('
-			var date = new Date(); 
+			var date = new Date();
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
 				url: "/api/search/legacyindex",
 				dataType: "json",
 				success: function(json){
-					
+
 					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
 					{
-						
+
 						for(y=0;y<json[0].result.length;y++)
 						{
 							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
 						}
-						
+
 					}
 				},
 				complete: function(){
 					$("#' . $id . ' input.tag").tagedit({
 						autocompleteOptions: {
 							delay: 0,
-							source: function(request, response) { 
+							source: function(request, response) {
 					            /* Remote results only if string > 3: */
-								
+
 								if(request.term.length > 3)
 								{
 									$.ajax({
@@ -324,7 +324,7 @@ class View
 								{
 									response(localsource);
 								}
-								
+
 					        },
 							minLength: 1
 						},
@@ -334,7 +334,7 @@ class View
 					});
 				}
 			});
-				
+
 				var localsource = [];
 		');
 

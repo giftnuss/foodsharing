@@ -8,7 +8,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -23,12 +23,12 @@ class RegionRestController extends AbstractFOSRestController
 	private $imageService;
 
 	public function __construct(
-		BellGateway $bellGateway,
-		FoodsaverGateway $foodsaverGateway,
-		RegionPermissions $regionPermissions,
-		RegionGateway $regionGateway,
-		Session $session,
-		ImageService $imageService
+        BellGateway $bellGateway,
+        FoodsaverGateway $foodsaverGateway,
+        RegionPermissions $regionPermissions,
+        RegionGateway $regionGateway,
+        Session $session,
+        ImageHelper $imageService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

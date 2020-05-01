@@ -1,10 +1,10 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Utility;
 
 use Html2Text\Html2Text;
 
-class SanitizerService
+class Sanitizer
 {
 	private $parseDown;
 	private $htmlPurifier;

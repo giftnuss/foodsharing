@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Utility\PageHelper;
 
 class vAccordion
 {

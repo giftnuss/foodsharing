@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Permissions\MailboxPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class MailboxXhr extends Control
 {
@@ -18,11 +18,11 @@ class MailboxXhr extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-		MailboxView $view,
-		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper,
-		MailboxGateway $mailboxGateway,
-		MailboxPermissions $mailboxPermissions
+        MailboxView $view,
+        Sanitizer $sanitizerService,
+        TimeHelper $timeHelper,
+        MailboxGateway $mailboxGateway,
+        MailboxPermissions $mailboxPermissions
 	) {
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;
@@ -72,7 +72,7 @@ class MailboxXhr extends Control
 				' . $init . '
 			}
 		</script>
-				
+
 		</head><body onload="init();"></body></html>';
 
 		exit();
@@ -149,10 +149,10 @@ class MailboxXhr extends Control
 						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
-							
+
 						});
 						$("#messagelist tbody tr").on("mouseout", function(){
-							$("#messagelist tbody tr").removeClass("selected focused");							
+							$("#messagelist tbody tr").removeClass("selected focused");
 						});
 						$("#messagelist tbody tr").on("click", function(){
 							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
@@ -406,13 +406,13 @@ class MailboxXhr extends Control
 				'html' => $this->view->message($mail),
 				'append' => '#message-body',
 				'script' => '
-		
+
 				bodymin = 80;
 				if($("#mailattch").length > 0)
 				{
 					bodymin += 40;
 				}
-		
+
 				$("#message-body").dialog("option",{
 					title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
 					height: ($( window ).height()-40)

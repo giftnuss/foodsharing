@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class Utils
 {
@@ -31,12 +31,12 @@ class Utils
 	private $translationHelper;
 
 	public function __construct(
-		SanitizerService $sanitizerService,
-		PageHelper $pageHelper,
-		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+        Sanitizer $sanitizerService,
+        PageHelper $pageHelper,
+        RouteHelper $routeHelper,
+        IdentificationHelper $identificationHelper,
+        DataHelper $dataHelper,
+        TranslationHelper $translationHelper
 	) {
 		$this->id = [];
 		$this->sanitizerService = $sanitizerService;

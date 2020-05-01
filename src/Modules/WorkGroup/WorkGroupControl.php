@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +21,9 @@ class WorkGroupControl extends Control
 	private $workGroupGateway;
 
 	public function __construct(
-		WorkGroupView $view,
-		ImageService $imageService,
-		WorkGroupGateway $workGroupGateway
+        WorkGroupView $view,
+        ImageHelper $imageService,
+        WorkGroupGateway $workGroupGateway
 	) {
 		$this->view = $view;
 		$this->imageService = $imageService;

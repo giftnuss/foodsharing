@@ -2,14 +2,14 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Permissions\QuizPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class QuizXhr extends Control
 {
@@ -25,7 +25,7 @@ class QuizXhr extends Control
 		QuizSessionGateway $quizSessionGateway,
 		QuizView $view,
 		ContentGateway $contentGateway,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerTransactions,
 		DataHelper $dataHelper,
 		QuizPermissions $quizPermissions
 	) {
@@ -33,7 +33,7 @@ class QuizXhr extends Control
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->contentGateway = $contentGateway;
-		$this->sanitizerService = $sanitizerService;
+		$this->sanitizerService = $sanitizerTransactions;
 		$this->dataHelper = $dataHelper;
 		$this->quizPermissions = $quizPermissions;
 

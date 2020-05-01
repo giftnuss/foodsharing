@@ -6,14 +6,14 @@ use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class TeamXhr extends Control
 {
 	private $gateway;
 	private $sanitizerService;
 
-	public function __construct(TeamGateway $gateway, TeamView $view, SanitizerService $sanitizerService)
+	public function __construct(TeamGateway $gateway, TeamView $view, Sanitizer $sanitizerService)
 	{
 		$this->gateway = $gateway;
 		$this->view = $view;

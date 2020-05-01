@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Helpers;
+namespace Foodsharing\Utility;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -13,8 +13,8 @@ use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 use Twig\Environment;
 
 final class PageHelper
@@ -54,8 +54,8 @@ final class PageHelper
 
 	public function __construct(
 		Session $session,
-		SanitizerService $sanitizerService,
-		ImageService $imageService,
+		Sanitizer $sanitizerService,
+		ImageHelper $imageService,
 		Environment $twig,
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,

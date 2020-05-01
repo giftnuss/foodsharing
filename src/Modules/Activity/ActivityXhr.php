@@ -6,7 +6,7 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 
 class ActivityXhr extends Control
 {
@@ -15,9 +15,9 @@ class ActivityXhr extends Control
 	private $activityGateway;
 
 	public function __construct(
-		ImageService $imageService,
-		MailboxGateway $mailboxGateway,
-		ActivityGateway $activityGateway
+        ImageHelper $imageService,
+        MailboxGateway $mailboxGateway,
+        ActivityGateway $activityGateway
 	) {
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;

@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -14,7 +14,7 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class EmailControl extends Control
 {
@@ -33,7 +33,7 @@ class EmailControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		EmailGateway $emailGateway,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerTransactions,
 		MailboxGateway $mailboxGateway,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
@@ -43,7 +43,7 @@ class EmailControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailGateway = $emailGateway;
 		$this->regionGateway = $regionGateway;
-		$this->sanitizerService = $sanitizerService;
+		$this->sanitizerService = $sanitizerTransactions;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;

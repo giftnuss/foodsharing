@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Mailbox;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\MailboxPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class MailboxControl extends Control
 {
@@ -13,10 +13,10 @@ class MailboxControl extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-		MailboxView $view,
-		SanitizerService $sanitizerService,
-		MailboxGateway $mailboxGateway,
-		MailboxPermissions $mailboxPermissions
+        MailboxView $view,
+        Sanitizer $sanitizerService,
+        MailboxGateway $mailboxGateway,
+        MailboxPermissions $mailboxPermissions
 	) {
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;

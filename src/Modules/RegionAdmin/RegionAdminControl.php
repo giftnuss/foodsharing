@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\RegionAdmin;
 
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Region\RegionGateway;

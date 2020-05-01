@@ -2,17 +2,17 @@
 
 namespace Foodsharing\Modules\StoreUser;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class StoreUserView extends View
 {
@@ -20,10 +20,10 @@ class StoreUserView extends View
 		\Twig\Environment $twig,
 		Utils $viewUtils,
 		Session $session,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		PageHelper $pageHelper,
 		TimeHelper $timeHelper,
-		ImageService $imageService,
+		ImageHelper $imageService,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,

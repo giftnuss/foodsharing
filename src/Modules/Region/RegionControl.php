@@ -11,7 +11,7 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\Form\FormFactoryBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,19 +55,19 @@ final class RegionControl extends Control
 	}
 
 	public function __construct(
-        EventGateway $eventGateway,
-        FoodSharePointGateway $foodSharePointGateway,
-        FoodsaverGateway $foodsaverGateway,
-        ForumGateway $forumGateway,
-        ForumFollowerGateway $forumFollowerGateway,
-        ForumPermissions $forumPermissions,
-        RegionPermissions $regionPermissions,
-        ForumTransactions $forumTransactions,
-        RegionGateway $gateway,
-        RegionHelper $regionHelper,
-        ReportPermissions $reportPermissions,
-        ImageService $imageService,
-        MailboxGateway $mailboxGateway
+		EventGateway $eventGateway,
+		FoodSharePointGateway $foodSharePointGateway,
+		FoodsaverGateway $foodsaverGateway,
+		ForumGateway $forumGateway,
+		ForumFollowerGateway $forumFollowerGateway,
+		ForumPermissions $forumPermissions,
+		RegionPermissions $regionPermissions,
+		ForumTransactions $forumTransactions,
+		RegionGateway $gateway,
+		RegionHelper $regionHelper,
+		ReportPermissions $reportPermissions,
+		ImageHelper $imageService,
+		MailboxGateway $mailboxGateway
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;

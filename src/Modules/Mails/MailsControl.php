@@ -3,8 +3,8 @@
 namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;

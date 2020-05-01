@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Helpers;
+namespace Foodsharing\Utility;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Legal\LegalControl;

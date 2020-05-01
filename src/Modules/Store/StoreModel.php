@@ -2,7 +2,7 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;

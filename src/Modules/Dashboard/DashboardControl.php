@@ -12,8 +12,8 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
 {
@@ -40,8 +40,8 @@ class DashboardControl extends Control
 		EventGateway $eventGateway,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
-		SanitizerService $sanitizerService,
-		ImageService $imageService,
+		Sanitizer $sanitizerService,
+		ImageHelper $imageService,
 		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;

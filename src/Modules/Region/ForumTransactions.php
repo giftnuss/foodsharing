@@ -2,15 +2,15 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\FlashMessageHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\FlashMessageHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class ForumTransactions
 {
@@ -32,7 +32,7 @@ class ForumTransactions
 		ForumFollowerGateway $forumFollowerGateway,
 		Session $session,
 		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
 		FlashMessageHelper $flashMessageHelper

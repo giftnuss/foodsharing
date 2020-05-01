@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\FAQAdmin;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\FAQPermissions;
 

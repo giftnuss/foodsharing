@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Utility;
 
 use Exception;
 use Flourish\fException;
@@ -8,7 +8,7 @@ use Flourish\fImage;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use UnexpectedValueException;
 
-final class ImageService
+final class ImageHelper
 {
 	private $extensions = ['image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/png' => 'png'];
 

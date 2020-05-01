@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\QuizPermissions;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 
 class QuizControl extends Control
 {
@@ -24,7 +24,7 @@ class QuizControl extends Control
 		QuizGateway $quizGateway,
 		QuizSessionGateway $quizSessionGateway,
 		FoodsaverGateway $foodsaverGateway,
-		ImageService $imageService,
+		ImageHelper $imageTransactions,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
 		QuizPermissions $quizPermissions
@@ -33,7 +33,7 @@ class QuizControl extends Control
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->imageService = $imageService;
+		$this->imageService = $imageTransactions;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->quizPermissions = $quizPermissions;

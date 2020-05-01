@@ -1,8 +1,8 @@
 <?php
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;

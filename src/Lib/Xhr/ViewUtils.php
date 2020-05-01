@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Helpers\WeightHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 
 class ViewUtils
 {
@@ -20,11 +20,11 @@ class ViewUtils
 	private $weightHelper;
 
 	public function __construct(
-		Utils $viewUtils,
-		Session $session,
-		ImageService $imageService,
-		TranslationHelper $translationHelper,
-		WeightHelper $weightHelper
+        Utils $viewUtils,
+        Session $session,
+        ImageHelper $imageService,
+        TranslationHelper $translationHelper,
+        WeightHelper $weightHelper
 	) {
 		$this->viewUtils = $viewUtils;
 		$this->weightHelper = $weightHelper;
