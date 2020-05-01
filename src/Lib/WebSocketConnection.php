@@ -31,7 +31,6 @@ class WebSocketConnection
 	{
 		$url = SOCK_URL . 'user/' . join('-', $fsids) . '/' . $app . '/' . $method;
 		$this->guzzle->post($url, [RequestOptions::JSON => $options]);
-
 	}
 
 	public function isUserOnline(int $fsid): bool
