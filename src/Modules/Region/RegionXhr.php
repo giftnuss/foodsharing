@@ -123,7 +123,6 @@ final class RegionXhr extends Control
 
 		if ($this->session->mayBezirk($groupId)) {
 			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($groupId);
 
 			return $this->responses->success();
 		}

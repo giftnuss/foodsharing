@@ -83,7 +83,6 @@ class FoodsaverXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$this->foodsaverGateway->deleteFromRegion($regionId, $foodsaverId);
-		$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 
 		return [
 			'status' => 1,

@@ -1375,7 +1375,6 @@ class XhrMethods
 			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
 
 			return json_encode([
 				'status' => 1,
