@@ -186,7 +186,7 @@ class MaintenanceControl extends ConsoleControl
 		@unlink('images/.png');
 
 		/* foodsaver photos */
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->maintenanceGateway->listUsersWithPhoto()) {
 			$update = [];
 			foreach ($foodsaver as $fs) {
 				if (!file_exists('images/' . $fs['photo'])) {
@@ -194,11 +194,11 @@ class MaintenanceControl extends ConsoleControl
 				}
 			}
 			if (!empty($update)) {
-				$this->model->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $update) . ')');
+				$this->maintenanceGateway->unsetUserPhotos();
 			}
 		}
 		$check = [];
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->maintenanceGateway->listUsersWithPhoto()) {
 			foreach ($foodsaver as $fs) {
 				$check[$fs['photo']] = $fs['id'];
 			}

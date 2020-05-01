@@ -218,4 +218,24 @@ class MaintenanceGateway extends BaseGateway
 			}
 		}
 	}
+
+	/**
+	 * Lists all users that have a profile photo.
+	 *
+	 * @return array foodsaver Id and photo file name for each user
+	 */
+	public function listUsersWithPhoto(): array
+	{
+		return $this->db->fetch('SELECT id, photo FROM fs_foodsaver WHERE photo != ""');
+	}
+
+	/**
+	 * Removes the profile photo file name for all users in the list.
+	 *
+	 * @param array $foodsaverIds a list of foodsaver IDs
+	 */
+	public function unsetUserPhotos(array $foodsaverIds): void
+	{
+		$this->db->execute('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $foodsaverIds) . ')');
+	}
 }
