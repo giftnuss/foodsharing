@@ -2,7 +2,10 @@
   <div>
     <div class="pickup">
       <div class="pickup-title">
-        <div :class="{'pickup-date': true, 'today': isToday && !isInPast}">
+        <div
+          class="pickup-date"
+          :class="{'today': isToday, 'past': isInPast, 'empty': emptySlots > 0, 'coord': isCoordinator}"
+        >
           <span>
             {{ date | dateFormat('full-long') }}
           </span>
@@ -143,34 +146,13 @@ export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
   directives: { VBTooltip },
   props: {
-    storeId: {
-      type: Number,
-      default: null
-    },
-    date: {
-      type: Date,
-      required: true
-    },
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    totalSlots: {
-      type: Number,
-      default: 0
-    },
-    occupiedSlots: {
-      type: Array,
-      default: () => []
-    },
-    isCoordinator: {
-      type: Boolean,
-      default: false
-    },
-    user: {
-      type: Object,
-      default: null
-    }
+    storeId: { type: Number, default: null },
+    date: { type: Date, required: true },
+    isAvailable: { type: Boolean, default: false },
+    totalSlots: { type: Number, default: 0 },
+    occupiedSlots: { type: Array, default: () => [] },
+    isCoordinator: { type: Boolean, default: false },
+    user: { type: Object, default: null }
   },
   data () {
     return {
@@ -212,16 +194,31 @@ export default {
   padding-top: 4px;
   padding-bottom: 4px;
   margin-bottom: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-left: 10px solid var(--white);
+  border-right: 10px solid var(--white);
+  background-clip: padding-box;
   font-weight: bolder;
   text-align: center;
   color: var(--fs-brown);
   background-color: var(--fs-beige);
 
+  &.coord {
+    border-right-color: rgba(var(--fs-green-rgb), 0.6);
+  }
+  &.coord.empty {
+    border-right-color: rgba(var(--warning-rgb), 0.6);
+  }
+  &.today.empty {
+    border-right-color: rgba(var(--danger-rgb), 0.8);
+  }
   &.today {
-    margin-left: -10px;
-    margin-right: -10px;
-    border-left: 10px solid var(--fs-brown);
-    border-right: 10px solid var(--fs-brown);
+    border-left-color: var(--fs-brown);
+  }
+  &.past {
+    border-left-color: var(--white) !important;
+    border-right-color: var(--white) !important;
   }
 }
 
