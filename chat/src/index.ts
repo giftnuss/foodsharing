@@ -1,8 +1,8 @@
-import {RestController} from "./RestController";
-import {RestifyServerFacade} from "./Framework/Rest/RestifyServerFacade";
-import {SocketRegistry} from "./SocketRegistry";
-import {SocketIOServerFacade} from "./Framework/WebSocket/SocketIOServerFacade";
-import {SocketController} from "./SocketController";
+import { RestController } from './RestController';
+import { RestifyServerFacade } from './Framework/Rest/RestifyServerFacade';
+import { SocketRegistry } from './SocketRegistry';
+import { SocketIOServerFacade } from './Framework/WebSocket/SocketIOServerFacade';
+import { SocketController } from './SocketController';
 
 const socketRegistry = new SocketRegistry();
 

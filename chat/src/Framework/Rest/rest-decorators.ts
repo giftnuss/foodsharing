@@ -7,27 +7,27 @@
  * request method and pass the path as a string.
  */
 
-import {RouteMetadata} from "./RouteMetadata";
-import {pushMetadata} from "../push-to-metadata-array";
+import { RouteMetadata } from './RouteMetadata';
+import { pushMetadata } from '../push-to-metadata-array';
 
 export const Get = (path: string): any => {
-    return (targetObject: Object, controllerMethodName: string) => {
+    return (targetObject: Record<string, any>, controllerMethodName: string) => {
         const route: RouteMetadata = {
-            requestMethod: "get",
+            requestMethod: 'get',
             path,
             controllerMethodName
         };
         pushMetadata('routes', route, targetObject);
-    }
-}
+    };
+};
 
 export const Post = (path: string): any => {
-    return (targetObject: Object, controllerMethodName: string) => {
+    return (targetObject: Record<string, any>, controllerMethodName: string) => {
         const route: RouteMetadata = {
-            requestMethod: "post",
+            requestMethod: 'post',
             path,
             controllerMethodName
         };
         pushMetadata('routes', route, targetObject);
-    }
-}
+    };
+};

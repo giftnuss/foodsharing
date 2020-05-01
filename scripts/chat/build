@@ -2,4 +2,4 @@
 
 . $(dirname "$0")/../inc.sh
 
-run-in-container chat npx tsc
+run-in-container chat yarn tsc

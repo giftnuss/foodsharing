@@ -1,23 +1,24 @@
-import * as util from "util";
-import * as fs from "fs";
-import {Tedis} from "tedis";
+import * as util from 'util';
+import * as fs from 'fs';
+import { Tedis } from 'tedis';
 
 export class SessionIdProvider {
-    private redisClient = new Tedis({
-        host: process.env.REDIS_HOST || '127.0.0.1',
+    private readonly redisClient = new Tedis({
+        host: process.env.REDIS_HOST ?? '127.0.0.1',
         port: Number(process.env.REDIS_PORT) || 6379
     });
+
     /**
      * This script can be uploaded to Redis to retrieve all current session ids of a user.
      */
-    private sessionIdsScriptFilename = `${__dirname}/../session-ids.lua`;
+    private readonly sessionIdsScriptFilename = `${__dirname}/../session-ids.lua`;
     /**
      * Once uploaded to Redis, the script is identified by an SHA hash. This can be used to tell Redis to execute the
      * script.
      */
     private sessionIdsScriptSHA: string;
 
-    async fetchSessionIdsForUser(userId: number): Promise<string[]> {
+    async fetchSessionIdsForUser (userId: number): Promise<string[]> {
         const sha = await this.getSessionIdsScriptSHA();
         try {
             return await this.redisClient.command('EVALSHA', sha, 0, userId);
@@ -30,7 +31,7 @@ export class SessionIdProvider {
         }
     }
 
-    async fetchSessionIdsForUsers(userIds: number[]): Promise<string[]>{
+    async fetchSessionIdsForUsers (userIds: number[]): Promise<string[]> {
         const sessionIds: string[] = [];
         for (const userId of userIds) {
             const sessionIdsForUser = await this.fetchSessionIdsForUser(userId);
@@ -39,7 +40,7 @@ export class SessionIdProvider {
         return sessionIds;
     }
 
-    private async getSessionIdsScriptSHA(): Promise<string> {
+    private async getSessionIdsScriptSHA (): Promise<string> {
         if (!this.sessionIdsScriptSHA) {
             await this.uploadSessionIdsScriptToRedis();
         }
@@ -47,7 +48,7 @@ export class SessionIdProvider {
         return this.sessionIdsScriptSHA;
     }
 
-    private async uploadSessionIdsScriptToRedis(): Promise<void> {
+    private async uploadSessionIdsScriptToRedis (): Promise<void> {
         const contents = await util.promisify(fs.readFile)(this.sessionIdsScriptFilename, 'utf8');
         this.sessionIdsScriptSHA = await this.redisClient.command('SCRIPT', 'LOAD', contents);
     }

@@ -1,18 +1,18 @@
-import {Request, Response} from "restify";
-import {Get, Post} from "./Framework/Rest/rest-decorators";
-import {SocketRegistry} from "./SocketRegistry";
-import {SessionIdProvider} from "./SessionIdProvider";
+import { Request, Response } from 'restify';
+import { Get, Post } from './Framework/Rest/rest-decorators';
+import { SocketRegistry } from './SocketRegistry';
+import { SessionIdProvider } from './SessionIdProvider';
 
 export class RestController {
-    private sessionIdProvider = new SessionIdProvider()
-    private socketRegistry: SocketRegistry;
+    private readonly sessionIdProvider = new SessionIdProvider();
+    private readonly socketRegistry: SocketRegistry;
 
-    constructor(connectionRepository: SocketRegistry) {
+    constructor (connectionRepository: SocketRegistry) {
         this.socketRegistry = connectionRepository;
     }
 
     @Get('/stats')
-    stats(request: Request, response: Response): void {
+    stats (request: Request, response: Response): void {
         response.send({
             connections: this.socketRegistry.numConnections,
             registrations: this.socketRegistry.numRegistrations,
@@ -21,8 +21,7 @@ export class RestController {
     }
 
     @Get('/user/:id/is-online')
-    async userIsConnected(request: Request, response: Response)
-    {
+    async userIsConnected (request: Request, response: Response): Promise<any> {
         const userId = request.params.id;
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
 
@@ -30,7 +29,7 @@ export class RestController {
             if (!this.socketRegistry.hasSocketForSession(sessionId)) {
                 continue;
             }
-            return response.send(true) // there is at least one socket connection for userId
+            return response.send(true); // there is at least one socket connection for userId
         }
 
         return response.send(false);
@@ -40,7 +39,7 @@ export class RestController {
      * :ids: You can post to multiple user ids separating them with dashes (-).
      */
     @Post('/user/:ids/:channel/:method')
-    async send(request: Request, response: Response) {
+    async send (request: Request, response: Response): Promise<any> {
         const userIds: number[] = request.params.ids.split('-').map(Number);
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUsers(userIds);
         const sockets = this.socketRegistry.getSocketsForSessions(sessionIds);

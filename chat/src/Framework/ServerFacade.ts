@@ -6,10 +6,10 @@ export interface ServerFacade {
     /**
      * Makes the server behind the facade listen to the specified port.
      */
-    listen(port: number): void;
+    listen(port: number): void
 
     /**
      * Loads all supported decorators/annotations from a controller class.
      */
-    loadControllerDecorators(controller: Object & any): void;
+    loadControllerDecorators(controller: Record<string, any> & any): void
 }

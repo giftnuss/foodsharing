@@ -1,19 +1,19 @@
-import "reflect-metadata";
-import * as restify from "restify";
-import {plugins, Request, Response, Server} from "restify";
-import {RouteMetadata} from "./RouteMetadata";
-import {ServerFacade} from "../ServerFacade";
+import 'reflect-metadata';
+import * as restify from 'restify';
+import { plugins, Request, Response, Server } from 'restify';
+import { RouteMetadata } from './RouteMetadata';
+import { ServerFacade } from '../ServerFacade';
 import bodyParser = plugins.bodyParser;
 
 export class RestifyServerFacade implements ServerFacade {
-    private server: Server;
+    private readonly server: Server;
 
-    constructor() {
+    constructor () {
         this.server = restify.createServer();
-        this.server.use(bodyParser({mapParams: false}));
+        this.server.use(bodyParser({ mapParams: false }));
     }
 
-    listen(port: number): void {
+    listen (port: number): void {
         this.server.listen(port);
     }
 
@@ -23,13 +23,13 @@ export class RestifyServerFacade implements ServerFacade {
      *
      * You can find supported decorators in rest-decorators.ts
      */
-    loadControllerDecorators(controller: Object & any): void {
+    loadControllerDecorators (controller: Record<string, any> & any): void {
         const routes: RouteMetadata[] = Reflect.getMetadata('routes', controller.constructor); // use constructor to identify the class at runtime
         for (const route of routes) {
-            const methodName: string= route.controllerMethodName;
+            const methodName: string = route.controllerMethodName;
 
             if (typeof controller[methodName] !== 'function') {
-                throw new Error(`Method ${ methodName } is not defined on the given controller.`);
+                throw new Error(`Method ${methodName} is not defined on the given controller.`);
             }
 
             this.server[route.requestMethod](route.path, (request: Request, response: Response) => {

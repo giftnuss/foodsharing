@@ -1,4 +1,4 @@
-import {Socket} from "socket.io";
+import { Socket } from 'socket.io';
 
 export class SocketRegistry {
     private registeredSockets: {[sessionId: string]: Socket[]} = {};
@@ -9,7 +9,7 @@ export class SocketRegistry {
      */
     numConnections = 0;
 
-    register(sessionId: string, socket: Socket): void {
+    register (sessionId: string, socket: Socket): void {
         if (!this.registeredSockets[sessionId]) {
             this.registeredSockets[sessionId] = [];
         }
@@ -17,38 +17,39 @@ export class SocketRegistry {
         this._numRegistrations++;
     }
 
-    removeRegistration(sessionId: string, socket: Socket): void {
+    removeRegistration (sessionId: string, socket: Socket): void {
         const socketsForSession = this.registeredSockets[sessionId];
 
         if (!socketsForSession || !socketsForSession.includes(socket)) {
             return;
         }
 
-        socketsForSession.splice(socketsForSession.indexOf(socket), 1)
-        this._numRegistrations--
+        socketsForSession.splice(socketsForSession.indexOf(socket), 1);
+        this._numRegistrations--;
 
         if (socketsForSession.length === 0) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete this.registeredSockets[sessionId];
         }
     }
 
-    getSocketsForSessions(sessionIds: string[]): Socket[] {
+    getSocketsForSessions (sessionIds: string[]): Socket[] {
         const sockets: Socket[] = [];
         for (const sessionId of sessionIds) {
-            sockets.push(...this.registeredSockets[sessionId])
+            sockets.push(...this.registeredSockets[sessionId]);
         }
         return sockets;
     }
 
-    hasSocketForSession(sessionId: string): boolean {
+    hasSocketForSession (sessionId: string): boolean {
         return sessionId in this.registeredSockets;
     }
 
-    get numRegistrations(): number {
+    get numRegistrations (): number {
         return this._numRegistrations;
     }
 
-    get numRegisteredSessions(): number {
+    get numRegisteredSessions (): number {
         return Object.keys(this.registeredSockets).length;
     }
 }

@@ -1,8 +1,8 @@
 export interface OnConnectionMetadata {
-    readonly controllerMethodName: string;
+    readonly controllerMethodName: string
 }
 
 export interface OnSocketEventMetadata {
-    readonly eventName: string;
-    readonly controllerMethodName: string;
+    readonly eventName: string
+    readonly controllerMethodName: string
 }
