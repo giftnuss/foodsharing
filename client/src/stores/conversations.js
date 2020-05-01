@@ -8,7 +8,7 @@ export default new Vue({
   },
   computed: {
     unreadCount () {
-      return Array.from(this.conversations).filter(b => b.hasUnreadMessages).length
+      return Object.values(this.conversations).filter(b => b.hasUnreadMessages).length
     }
   },
   methods: {
@@ -60,6 +60,7 @@ export default new Vue({
       const message = convertMessage(data.message)
       Vue.set(this.conversations[cid].messages, message.id, message)
       Vue.set(this.conversations[cid], 'lastMessage', message)
+      Vue.set(this.conversations[cid], 'hasUnreadMessages', true)
     }
   }
 })
