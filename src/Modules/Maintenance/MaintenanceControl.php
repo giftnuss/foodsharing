@@ -14,7 +14,6 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class MaintenanceControl extends ConsoleControl
 {
-	private $model;
 	private $bellGateway;
 	private $storeGateway;
 	private $foodsaverGateway;
@@ -25,7 +24,6 @@ class MaintenanceControl extends ConsoleControl
 	private $bellUpdateTrigger;
 
 	public function __construct(
-		MaintenanceModel $model,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -35,7 +33,6 @@ class MaintenanceControl extends ConsoleControl
 		QuizHelper $quizHelper,
 		BellUpdateTrigger $bellUpdateTrigger
 	) {
-		$this->model = $model;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
