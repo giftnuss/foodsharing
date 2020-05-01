@@ -10,20 +10,22 @@
     >
     <div
       v-if="isImage"
-      class="row align-items-center"
+      class="column align-items-center"
     >
       <div
         v-if="filename"
-        class="col-2 mr-auto"
+        class="mr-auto"
       >
         <div class="preview">
-          <img
-            :src="filename+'?h=100&w=100'"
-            :alt="previewAlt"
-          >
+          <p>
+            <img
+              :src="filename"
+              :alt="previewAlt"
+            >
+          </p>
         </div>
       </div>
-      <div class="col-2 mr-auto">
+      <div class="mr-auto">
         <div
           v-if="!filename"
           class="text-muted"
@@ -201,13 +203,10 @@ export default {
 <style lang="scss" scoped>
 
 .preview {
-  height: 100px;
-  width: 100px;
   background-color: #eee;
   padding: 0;
   img {
-    height: 100px;
-    width: 100px;
+    width: 100%;
   }
 }
 </style>
