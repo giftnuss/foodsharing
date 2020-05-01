@@ -236,6 +236,6 @@ class MaintenanceGateway extends BaseGateway
 	 */
 	public function unsetUserPhotos(array $foodsaverIds): void
 	{
-		$this->db->execute('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $foodsaverIds) . ')');
+		$this->db->update('fs_foodsaver', ['photo' => ''], ['id' => $foodsaverIds]);
 	}
 }
