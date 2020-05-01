@@ -63,13 +63,14 @@
       size="lg"
       :title="$i18n('upload.crop_dialog_title')"
       modal-class="bootstrap"
+      dialog-class="full-resize"
       hide-header-close
       @ok="cropImage"
     >
       <div class="resize-container">
         <vue-croppie
           ref="croppie"
-          :boundary="{ height: Math.max(resize[1]*1.5, 400), width: resize[0]*1.1 }"
+          :boundary="boundary"
           :viewport="{ height: resize[1], width: resize[0] }"
           :enable-resize="false"
         />
@@ -108,7 +109,8 @@ export default {
   data () {
     return {
       isLoading: false,
-      newFilename: null
+      newFilename: null,
+      boundary: { height: this.resize[1], width: this.resize[0] }
     }
   },
   computed: {
@@ -132,10 +134,23 @@ export default {
     },
     onFileChange () {
       const file = this.$refs.uploadElement.files[0]
+      if (!file) return
       const filename = file.name
       const reader = new FileReader()
       this.isLoading = true
       if (this.image && this.resize) {
+        // Width/Height calculated:
+        // For mobile use most of the window height, else take the image size
+        const width = Math.min(window.innerWidth - 50, this.resize[0] * 1.1)
+        const height = Math.min(window.innerHeight - 50, this.resize[1] + 100)
+        this.boundary = { height, width }
+        // Croppie needs to be destroyed, to take care of the new width/height :(
+        try {
+          this.$refs.croppie.destroy()
+        } catch (err) {
+          // If already destroyed, error will be thrown. Can't be checked before. :(
+          console.log('possible already destroyed')
+        }
         reader.onload = (res) => {
           this.isLoading = false
           this.newFilename = filename
@@ -160,6 +175,7 @@ export default {
     },
     openResizeDialog (dataUrl) {
       this.$refs['upload-modal'].show()
+      this.$refs.croppie.initCroppie()
       this.$refs.croppie.bind({
         url: dataUrl
       })
@@ -192,7 +208,16 @@ export default {
   }
 }
 .resize-container {
-  padding-bottom: 3em;
-  min-height: 200px;
+  // padding-bottom: 3em;
+  // min-height: 200px;
 }
+</style>
+<style lang="scss">
+.full-resize {
+  @media (min-width: 576px) {
+    max-width: fit-content;
+    margin: 1.75rem auto;
+  }
+}
+
 </style>
