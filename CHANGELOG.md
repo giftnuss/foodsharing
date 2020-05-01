@@ -6,7 +6,7 @@
 - Introduce Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
-- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 @chriswalg @moffer
+- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 !1476 @chriswalg @moffer @ChrisOelmueller
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies
@@ -21,8 +21,6 @@
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
-- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
-- Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
 - Make it possible to unfollow forum bells #271 !1191 !1467 @jofranz @chriswalg @ChrisOelmueller @moffer
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 !1438 @jofranz @alex.simm
 - Improve Metrics collection: Log execution timing including database execution timings for all controllers now. !1480 @NerdyProjects
