@@ -112,9 +112,10 @@ class FoodSharePointView extends View
 			]),
 			$this->vueComponent('image-upload', 'file-upload-v-form', [
 				'inputName' => 'picture',
-				'image' => true,
+				'isImage' => true,
 				'initialValue' => $initialValue,
-				'resize' => [525, 169]
+				'imgHeight' => 525,
+				'imgWidth' => 169
 			]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,

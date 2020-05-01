@@ -7,9 +7,10 @@
 
     <div class="element-wrapper">
       <file-upload
-        :value="value"
-        :image="image"
-        :resize="resize"
+        :filename="value"
+        :is-image="isImage"
+        :img-width="imgHeight"
+        :img-height="imgWidth"
         @change="onFileChange"
       />
       <input
@@ -27,7 +28,7 @@ import FileUpload from './FileUpload'
 export default {
   components: { FileUpload },
   props: {
-    image: {
+    isImage: {
       type: Boolean
     },
     initialValue: {
@@ -38,9 +39,13 @@ export default {
       type: String,
       default: 'file'
     },
-    resize: {
-      type: Array,
-      default: null
+    imgHeight: {
+      type: Number,
+      default: 0
+    },
+    imgWidth: {
+      type: Number,
+      default: 0
     }
   },
   data () {

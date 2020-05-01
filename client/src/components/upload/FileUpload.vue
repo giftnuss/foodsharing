@@ -9,24 +9,23 @@
       @change="onFileChange"
     >
     <div
-      v-if="image"
+      v-if="isImage"
       class="row align-items-center"
     >
       <div
-        v-if="value"
+        v-if="filename"
         class="col-2 mr-auto"
       >
         <div class="preview">
           <img
-            v-if="value"
-            :src="value+'?h=100&w=100'"
+            :src="filename+'?h=100&w=100'"
             :alt="previewAlt"
           >
         </div>
       </div>
       <div class="col-2 mr-auto">
         <div
-          v-if="!value"
+          v-if="!filename"
           class="text-muted"
         >
           {{ $i18n('upload.no_image_yet') }}
@@ -35,13 +34,13 @@
           :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
           @click.prevent="openUploadDialog"
         >
-          <span v-if="value">{{ $i18n('upload.new_neuter') }} </span>{{ $i18n('upload.image') }}
+          <span v-if="filename">{{ $i18n('upload.new_neuter') }} </span>{{ $i18n('upload.image') }}
         </button>
       </div>
     </div>
     <div v-else>
-      <div v-if="value">
-        {{ filename }}
+      <div v-if="filename">
+        {{ filenameWithoutPath }}
       </div>
       <div
         v-else
@@ -53,7 +52,7 @@
         :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
         @click.prevent="openUploadDialog"
       >
-        <span v-if="value">{{ $i18n('upload.new_feminine') }} </span>{{ $i18n('upload.file') }}
+        <span v-if="filename">{{ $i18n('upload.new_feminine') }} </span>{{ $i18n('upload.file') }}
       </button>
     </div>
 
@@ -71,7 +70,7 @@
         <vue-croppie
           ref="croppie"
           :boundary="boundary"
-          :viewport="{ height: resize[1], width: resize[0] }"
+          :viewport="{ height: imgHeight, width: imgWidth }"
           :enable-resize="false"
         />
       </div>
@@ -93,34 +92,38 @@ export default {
     'b-modal': VBModal
   },
   props: {
-    value: {
+    filename: {
       type: String,
       default: null
     },
-    image: {
+    isImage: {
       type: Boolean,
       default: false
     },
-    resize: {
-      type: Array,
-      default: null
+    imgHeight: {
+      type: Number,
+      default: 0
+    },
+    imgWidth: {
+      type: Number,
+      default: 0
     }
   },
   data () {
     return {
       isLoading: false,
       newFilename: null,
-      boundary: { height: this.resize[1], width: this.resize[0] }
+      boundary: { height: this.imgHeight, width: this.imgWidth }
     }
   },
   computed: {
-    filename () {
-      if (!this.value) return false
-      const f = this.value.split('/')
-      return f[f.length - 1]
+    filenameWithoutPath () {
+      if (!this.filename) return false
+      const splittedFilename = this.filename.split('/')
+      return splittedFilename[splittedFilename.length - 1]
     },
     accept () {
-      if (this.image) return 'image/*'
+      if (this.isImage) return 'image/*'
       else return ''
     },
     previewAlt () {
@@ -138,11 +141,11 @@ export default {
       const filename = file.name
       const reader = new FileReader()
       this.isLoading = true
-      if (this.image && this.resize) {
+      if (this.isImage && this.imgHeight && this.imgWidth) {
         // Width/Height calculated:
         // For mobile use most of the window height, else take the image size
-        const width = Math.min(window.innerWidth - 50, this.resize[0] * 1.1)
-        const height = Math.min(window.innerHeight - 50, this.resize[1] + 100)
+        const width = Math.min(window.innerWidth - 50, this.imgWidth * 1.1)
+        const height = Math.min(window.innerHeight - 50, this.imgHeight + 100)
         this.boundary = { height, width }
         // Croppie needs to be destroyed, to take care of the new width/height :(
         try {
@@ -206,10 +209,6 @@ export default {
     height: 100px;
     width: 100px;
   }
-}
-.resize-container {
-  // padding-bottom: 3em;
-  // min-height: 200px;
 }
 </style>
 <style lang="scss">
