@@ -12,7 +12,7 @@ export default new Vue({
     }
   },
   methods: {
-    async loadConversations (limit = 10) {
+    async loadConversations (limit = 20) {
       const res = await getConversationList(limit)
       ProfileStore.updateFrom(res.profiles)
       for (const conversation of res.conversations) {
@@ -53,6 +53,9 @@ export default new Vue({
       const cid = data.cid
       if (!(cid in this.conversations)) {
         await this.loadConversation(cid)
+        /* likely, when loading the conversation after the push message appeared, we don't need to add the push message.
+        Still, I think it shouldn't harm...
+         */
       }
       const message = convertMessage(data.message)
       Vue.set(this.conversations[cid].messages, message.id, message)
