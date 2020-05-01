@@ -83,7 +83,7 @@ services:
   chat:
     container_name: foodsharing_test_chat
     image: node:13.10.1-alpine
-    command: sh -c "yarn && npx tsc && node dist/index.js 0.0.0.0"
+    command: sh -c "yarn && yarn tsc && node dist/index.js 0.0.0.0"
     user: "node"
     working_dir: /app/chat
     depends_on:

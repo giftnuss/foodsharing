@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "fix": "eslint --fix . --ext .ts",
-    "test": "tape test.js | tap-spec"
+    "test": "tape test.ts | tap-spec"
   },
   "dependencies": {
     "@types/cookie": "^0.3.3",
@@ -30,6 +30,7 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "@types/tape": "^4.13.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "eslint": "^6.8.0",
@@ -42,6 +43,7 @@
     "request": "^2.88.2",
     "socket.io-client": "^2.3.0",
     "tap-spec": "^5.0.0",
-    "tape": "^4.13.2"
+    "tape": "^4.13.2",
+    "ts-node-dev": "^1.0.0-pre.44"
   }
 }
