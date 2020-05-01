@@ -14,7 +14,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Services\StoreService;
+use Foodsharing\Modules\Store\StoreTransactions;
 
 class Session
 {
@@ -24,19 +24,19 @@ class Session
 	private $regionGateway;
 	private $buddyGateway;
 	private $storeGateway;
-	private $storeService;
+	private $storeTransactions;
 	private $initialized = false;
 	private $translationHelper;
 
 	public function __construct(
-		Mem $mem,
-		FoodsaverGateway $foodsaverGateway,
-		QuizHelper $quizHelper,
-		RegionGateway $regionGateway,
-		BuddyGateway $buddyGateway,
-		StoreGateway $storeGateway,
-		StoreService $storeService,
-		TranslationHelper $translationHelper
+        Mem $mem,
+        FoodsaverGateway $foodsaverGateway,
+        QuizHelper $quizHelper,
+        RegionGateway $regionGateway,
+        BuddyGateway $buddyGateway,
+        StoreGateway $storeGateway,
+        StoreTransactions $storeTransactions,
+        TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -44,7 +44,7 @@ class Session
 		$this->regionGateway = $regionGateway;
 		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
-		$this->storeService = $storeService;
+		$this->storeTransactions = $storeTransactions;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -487,7 +487,7 @@ class Session
 			$_SESSION['client']['betriebe'] = [];
 			foreach ($r as $rr) {
 				// add info about the next free pickup slot to the store
-				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
+				$rr['pickupStatus'] = $this->storeTransactions->getAvailablePickupStatus($rr['id']);
 
 				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}

@@ -1,12 +1,10 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
-use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Store\TeamStatus;
 
-class StoreService
+class StoreTransactions
 {
 	private $storeGateway;
 	const MAX_SLOTS_PER_PICKUP = 10;

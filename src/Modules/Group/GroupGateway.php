@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Group;
 
 use Foodsharing\Modules\Core\BaseGateway;
 
-/* Group gateway meant to collect methods common for regions as well as working groups */
+/* Group gateway meant to collect queries common for regions as well as working groups */
 class GroupGateway extends BaseGateway
 {
 	public function deleteGroup($groupId)

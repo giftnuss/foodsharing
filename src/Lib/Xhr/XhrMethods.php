@@ -29,7 +29,7 @@ use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
-use Foodsharing\Services\NotificationService;
+use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,7 +61,7 @@ class XhrMethods
 	private $translationHelper;
 	private $newsletterEmailPermissions;
 	private $regionPermissions;
-	private $notificationService;
+	private $groupTransactions;
 
 	/**
 	 * XhrMethods constructor.
@@ -69,31 +69,31 @@ class XhrMethods
 	 * @param $model
 	 */
 	public function __construct(
-		Mem $mem,
-		Session $session,
-		Db $model,
-		Utils $viewUtils,
-		ViewUtils $xhrViewUtils,
-		StoreModel $storeModel,
-		MessageModel $messageModel,
-		RegionGateway $regionGateway,
-		ForumGateway $forumGateway,
-		BellGateway $bellGateway,
-		StoreGateway $storeGateway,
-		StorePermissions $storePermissions,
-		FoodsaverGateway $foodsaverGateway,
-		EmailGateway $emailGateway,
-		MailboxGateway $mailboxGateway,
-		ImageManager $imageManager,
-		SanitizerService $sanitizerService,
-		EmailHelper $emailHelper,
-		ImageService $imageService,
-		IdentificationHelper $identificationHelper,
-		DataHelper $dataHelper,
-		TranslationHelper $translationHelper,
-		NewsletterEmailPermissions $newsletterEmailPermissions,
-		NotificationService $notificationService,
-		RegionPermissions $regionPermission
+        Mem $mem,
+        Session $session,
+        Db $model,
+        Utils $viewUtils,
+        ViewUtils $xhrViewUtils,
+        StoreModel $storeModel,
+        MessageModel $messageModel,
+        RegionGateway $regionGateway,
+        ForumGateway $forumGateway,
+        BellGateway $bellGateway,
+        StoreGateway $storeGateway,
+        StorePermissions $storePermissions,
+        FoodsaverGateway $foodsaverGateway,
+        EmailGateway $emailGateway,
+        MailboxGateway $mailboxGateway,
+        ImageManager $imageManager,
+        SanitizerService $sanitizerService,
+        EmailHelper $emailHelper,
+        ImageService $imageService,
+        IdentificationHelper $identificationHelper,
+        DataHelper $dataHelper,
+        TranslationHelper $translationHelper,
+        NewsletterEmailPermissions $newsletterEmailPermissions,
+        GroupTransactions $groupTransactions,
+        RegionPermissions $regionPermission
 	) {
 		$this->mem = $mem;
 		$this->session = $session;
@@ -119,7 +119,7 @@ class XhrMethods
 		$this->translationHelper = $translationHelper;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 		$this->regionPermissions = $regionPermission;
-		$this->notificationService = $notificationService;
+		$this->groupTransactions = $groupTransactions;
 	}
 
 	public function xhr_verify($data)
@@ -1375,7 +1375,7 @@ class XhrMethods
 			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
+			$this->groupTransactions->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
 
 			return json_encode([
 				'status' => 1,

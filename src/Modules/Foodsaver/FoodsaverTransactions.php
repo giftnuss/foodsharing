@@ -1,13 +1,12 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 
-class FoodsaverService
+class FoodsaverTransactions
 {
 	private $foodsaverGateway;
 	private $quizSessionGateway;

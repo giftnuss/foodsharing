@@ -6,21 +6,21 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
-use Foodsharing\Services\NotificationService;
+use Foodsharing\Modules\Group\GroupTransactions;
 
 class WorkGroupGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
-	private $notificationService;
+	private $groupTransactions;
 
 	public function __construct(
 		Database $db,
 		ForumFollowerGateway $forumFollowerGateway,
-		NotificationService $notificationService
+		GroupTransactions $notificationService
 	) {
 		parent::__construct($db);
 		$this->forumFollowerGateway = $forumFollowerGateway;
-		$this->notificationService = $notificationService;
+		$this->groupTransactions = $notificationService;
 	}
 
 	/*
@@ -113,7 +113,7 @@ class WorkGroupGateway extends BaseGateway
 			}
 		} else {
 			$this->emptyLeader($regionId);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
+			$this->groupTransactions->sendEmailIfGroupHasNoAdmin($regionId);
 		}
 	}
 

@@ -6,7 +6,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ForumPermissions;
-use Foodsharing\Services\NotificationService;
+use Foodsharing\Modules\Group\GroupTransactions;
 
 final class RegionXhr extends Control
 {
@@ -18,17 +18,17 @@ final class RegionXhr extends Control
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
-	private $notificationService;
+	private $groupTransactions;
 
 	public function __construct(
-		RegionGateway $regionGateway,
-		ForumGateway $forumGateway,
-		ForumPermissions $forumPermissions,
-		RegionHelper $regionHelper,
-		\Twig\Environment $twig,
-		FoodsaverGateway $foodsaverGateway,
-		ForumFollowerGateway $forumFollowerGateway,
-		NotificationService $notificationService
+        RegionGateway $regionGateway,
+        ForumGateway $forumGateway,
+        ForumPermissions $forumPermissions,
+        RegionHelper $regionHelper,
+        \Twig\Environment $twig,
+        FoodsaverGateway $foodsaverGateway,
+        ForumFollowerGateway $forumFollowerGateway,
+        GroupTransactions $groupTransactions
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -38,7 +38,7 @@ final class RegionXhr extends Control
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
-		$this->notificationService = $notificationService;
+		$this->groupTransactions = $groupTransactions;
 
 		parent::__construct();
 	}
@@ -123,7 +123,7 @@ final class RegionXhr extends Control
 
 		if ($this->session->mayBezirk($groupId)) {
 			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($groupId);
+			$this->groupTransactions->sendEmailIfGroupHasNoAdmin($groupId);
 
 			return $this->responses->success();
 		}

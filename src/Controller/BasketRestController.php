@@ -6,9 +6,9 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\DBConstants\Basket\Status as BasketStatus;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
-use Foodsharing\Services\BasketService;
+use Foodsharing\Modules\Basket\BasketTransactions;
 use Foodsharing\Services\ImageService;
-use Foodsharing\Services\MessageService;
+use Foodsharing\Modules\Message\MessageTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -22,9 +22,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 final class BasketRestController extends AbstractFOSRestController
 {
 	private $gateway;
-	private $service;
+	private $basketTransactions;
 	private $imageService;
-	private $messageService;
+	private $messageTransactions;
 	private $session;
 
 	// literal constants
@@ -51,15 +51,15 @@ final class BasketRestController extends AbstractFOSRestController
 
 	public function __construct(
 		BasketGateway $gateway,
-		BasketService $service,
+		BasketTransactions $basketTransactions,
 		ImageService $imageService,
-		MessageService $messageService,
+		MessageTransactions $messageTransactions,
 		Session $session
 	) {
 		$this->gateway = $gateway;
-		$this->service = $service;
+		$this->basketTransactions = $basketTransactions;
 		$this->imageService = $imageService;
-		$this->messageService = $messageService;
+		$this->messageTransactions = $messageTransactions;
 		$this->session = $session;
 	}
 
@@ -290,7 +290,7 @@ final class BasketRestController extends AbstractFOSRestController
 			$contactTypes = array_map('intval', $contactTypes);
 		}
 
-		$basket = $this->service->addBasket(
+		$basket = $this->basketTransactions->addBasket(
 			$description,
 			'',
 			$contactTypes,
@@ -476,7 +476,7 @@ final class BasketRestController extends AbstractFOSRestController
 		}
 
 		// Send the message to the creator
-		$this->messageService->sendMessageToUser($basketCreatorId, $this->session->id(), $message, 'basket/request');
+		$this->messageTransactions->sendMessageToUser($basketCreatorId, $this->session->id(), $message, 'basket/request');
 		$this->gateway->setStatus($basketId, RequestStatus::REQUESTED_MESSAGE_UNREAD, $this->session->id());
 
 		return $this->getBasketAction($basketId);

@@ -6,7 +6,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
-use Foodsharing\Services\NotificationService;
+use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Services\SanitizerService;
 
 class FoodsaverXhr extends Control
@@ -15,7 +15,7 @@ class FoodsaverXhr extends Control
 	private $regionGateway;
 	private $sanitizerService;
 	private $regionPermissions;
-	private $notificationService;
+	private $groupTransactions;
 
 	public function __construct(
 		FoodsaverView $view,
@@ -23,14 +23,14 @@ class FoodsaverXhr extends Control
 		SanitizerService $sanitizerService,
 		RegionPermissions $regionPermissions,
 		FoodsaverGateway $foodsaverGateway,
-		NotificationService $notificationService
+		GroupTransactions $groupTransactions
 	) {
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->regionPermissions = $regionPermissions;
-		$this->notificationService = $notificationService;
+		$this->groupTransactions = $groupTransactions;
 
 		parent::__construct();
 	}
@@ -83,7 +83,7 @@ class FoodsaverXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$this->foodsaverGateway->deleteFromRegion($regionId, $foodsaverId);
-		$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
+		$this->groupTransactions->sendEmailIfGroupHasNoAdmin($regionId);
 
 		return [
 			'status' => 1,

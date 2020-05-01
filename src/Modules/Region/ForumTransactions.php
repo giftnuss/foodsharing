@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\FlashMessageHelper;
@@ -10,11 +10,9 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Region\ForumFollowerGateway;
-use Foodsharing\Modules\Region\ForumGateway;
-use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Services\SanitizerService;
 
-class ForumService
+class ForumTransactions
 {
 	private $forumGateway;
 	private $regionGateway;

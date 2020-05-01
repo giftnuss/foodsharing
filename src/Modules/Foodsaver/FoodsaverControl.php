@@ -12,7 +12,6 @@ use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
-use Foodsharing\Services\FoodsaverService;
 
 class FoodsaverControl extends Control
 {
@@ -20,7 +19,7 @@ class FoodsaverControl extends Control
 	private $settingsGateway;
 	private $regionGateway;
 	private $foodsaverGateway;
-	private $foodsaverService;
+	private $foodsaverTransactions;
 	private $identificationHelper;
 	private $dataHelper;
 	private $regionPermissions;
@@ -28,24 +27,24 @@ class FoodsaverControl extends Control
 	private $contentGateway;
 
 	public function __construct(
-		FoodsaverView $view,
-		StoreModel $storeModel,
-		SettingsGateway $settingsGateway,
-		RegionGateway $regionGateway,
-		FoodsaverGateway $foodsaverGateway,
-		FoodsaverService $foodsaverService,
-		IdentificationHelper $identificationHelper,
-		RegionPermissions $regionPermissions,
-		ProfilePermissions $profilePermissions,
-		DataHelper $dataHelper,
-		ContentGateway $contentGateway
+        FoodsaverView $view,
+        StoreModel $storeModel,
+        SettingsGateway $settingsGateway,
+        RegionGateway $regionGateway,
+        FoodsaverGateway $foodsaverGateway,
+        FoodsaverTransactions $foodsaverTransactions,
+        IdentificationHelper $identificationHelper,
+        RegionPermissions $regionPermissions,
+        ProfilePermissions $profilePermissions,
+        DataHelper $dataHelper,
+        ContentGateway $contentGateway
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;
 		$this->settingsGateway = $settingsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->foodsaverService = $foodsaverService;
+		$this->foodsaverTransactions = $foodsaverTransactions;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->regionPermissions = $regionPermissions;
@@ -157,7 +156,7 @@ class FoodsaverControl extends Control
 		}
 
 		if (isset($data['rolle']) && $data['rolle'] == Role::FOODSHARER && $data['rolle'] < $fs['rolle']) {
-			$downgradedRows = $this->foodsaverService->downgradeAndBlockForQuizPermanently($fs['id'], $this->storeModel);
+			$downgradedRows = $this->foodsaverTransactions->downgradeAndBlockForQuizPermanently($fs['id'], $this->storeModel);
 		} else {
 			$downgradedRows = 0;
 		}

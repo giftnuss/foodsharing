@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
 
 class RegionHelper
@@ -12,9 +11,9 @@ class RegionHelper
 	private $timeHelper;
 	private $imageService;
 
-	public function __construct(ForumService $forumService, TimeHelper $timeHelper, ImageService $imageService)
+	public function __construct(ForumTransactions $forumTransactions, TimeHelper $timeHelper, ImageService $imageService)
 	{
-		$this->forumService = $forumService;
+		$this->forumService = $forumTransactions;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
 	}

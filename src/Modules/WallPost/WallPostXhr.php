@@ -6,13 +6,13 @@ use Flourish\fImage;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\FoodSharePoint\FoodSharePointTransactions;
 use Foodsharing\Permissions\WallPostPermissions;
-use Foodsharing\Services\NotificationService;
 use Foodsharing\Services\SanitizerService;
 
 class WallPostXhr extends Control
 {
-	private $notificationService;
+	private $foodSharePointTransactions;
 	private $wallPostGateway;
 	private $wallPostPermissions;
 	private $table;
@@ -20,14 +20,14 @@ class WallPostXhr extends Control
 	private $sanitizerService;
 
 	public function __construct(
-		NotificationService $notificationService,
+		FoodSharePointTransactions $foodSharePointTransactions,
 		WallPostGateway $wallPostGateway,
 		WallPostPermissions $wallPostPermissions,
 		WallPostView $view,
 		Session $session,
 		SanitizerService $sanitizerService
 	) {
-		$this->notificationService = $notificationService;
+		$this->foodSharePointTransactions = $foodSharePointTransactions;
 		$this->wallPostGateway = $wallPostGateway;
 		$this->wallPostPermissions = $wallPostPermissions;
 		$this->view = $view;
@@ -156,7 +156,7 @@ class WallPostXhr extends Control
 			}
 			if ($this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {
 				if ($this->table === 'fairteiler') {
-					$this->notificationService->newFoodSharePointPost($this->id);
+					$this->foodSharePointTransactions->sendNewFoodSharePointPostNotifications($this->id);
 				}
 
 				return [

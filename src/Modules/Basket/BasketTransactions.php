@@ -1,11 +1,10 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Basket\BasketGateway;
 
-class BasketService
+class BasketTransactions
 {
 	private const TEL = 'tel';
 	private const MOBILE_NUMBER = 'handy';

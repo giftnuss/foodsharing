@@ -8,7 +8,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\StoreService;
+use Foodsharing\Modules\Store\StoreTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -20,15 +20,15 @@ final class PickupRestController extends AbstractFOSRestController
 	private $session;
 	private $storeGateway;
 	private $storePermissions;
-	private $storeService;
+	private $storeTransactions;
 
-	public function __construct(FoodsaverGateway $foodsaverGateway, Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, StoreService $storeService)
+	public function __construct(FoodsaverGateway $foodsaverGateway, Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, StoreTransactions $storeTransactions)
 	{
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
-		$this->storeService = $storeService;
+		$this->storeTransactions = $storeTransactions;
 	}
 
 	private function parsePickupDate(string $pickupDate): Carbon
@@ -66,7 +66,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$date = $this->parsePickupDate($pickupDate);
 
-		$isConfirmed = $this->storeService->joinPickup($storeId, $date, $fsId, $this->session->id());
+		$isConfirmed = $this->storeTransactions->joinPickup($storeId, $date, $fsId, $this->session->id());
 
 		return $this->handleView($this->view([
 			'isConfirmed' => $isConfirmed
@@ -133,7 +133,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$totalSlots = $paramFetcher->get('totalSlots');
 		if (!is_null($totalSlots)) {
-			if (!$this->storeService->changePickupSlots($storeId, $date, $totalSlots)) {
+			if (!$this->storeTransactions->changePickupSlots($storeId, $date, $totalSlots)) {
 				throw new HttpException(400);
 			}
 		}

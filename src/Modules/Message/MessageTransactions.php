@@ -1,15 +1,14 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Message;
 
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\MessageModel;
 
-class MessageService
+class MessageTransactions
 {
 	private $emailHelper;
 	private $foodsaverGateway;
