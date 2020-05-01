@@ -1,11 +1,12 @@
 import { get, post } from './base'
-import dateFnsParseISO from 'date-fns/parseISO'
 
 export async function getBaskets () {
-  const baskets = (await get('/../xhrapp.php?app=basket&m=infobar')).data.baskets
+  const baskets = (await get('/baskets?type=mine')).baskets
   return baskets.map(basket => {
+    basket.createdAt = new Date(basket.createdAt * 1000)
+    basket.updatedAt = new Date(basket.updatedAt * 1000)
     basket.requests = basket.requests.map(request => {
-      request.time = dateFnsParseISO(request.time)
+      request.time = new Date(request.time * 1000)
       return request
     })
     return basket

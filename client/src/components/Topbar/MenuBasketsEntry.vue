@@ -27,7 +27,7 @@
           class="requests"
         >
           <b-list-group-item
-            v-for="req in basket.requests"
+            v-for="req in requests"
             :key="req.id"
             href="#"
             class="d-flex w-100 align-items-center food-basket-create-test-class"
@@ -70,6 +70,16 @@ export default {
     basket: {
       type: Object,
       default: () => ({})
+    }
+  },
+  computed: {
+    requests () {
+      // add artificial IDs to the requests for v-for
+      let requestId = 0
+      return this.basket.requests.map(request => {
+        request.id = requestId++
+        return request
+      })
     }
   },
   methods: {

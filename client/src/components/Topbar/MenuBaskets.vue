@@ -53,6 +53,7 @@ import MenuBasketsEntry from './MenuBasketsEntry'
 import basketStore from '@/stores/baskets'
 
 import { ajreq } from '@/script'
+import dateFnsCompareDesc from 'date-fns/compareDesc'
 
 export default {
   components: { MenuBasketsEntry },
@@ -67,7 +68,7 @@ export default {
       return basketStore.baskets
     },
     basketsSorted () {
-      return this.baskets.slice().sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+      return this.baskets.slice().sort((a, b) => dateFnsCompareDesc(a.updatedAt, b.updatedAt))
     }
   },
   created () {

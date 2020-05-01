@@ -103,6 +103,7 @@
 - Extend RegionPermissions to a mayAdministrateRegions() method. Removes the topbar menu entry if false !1236 @jofranz
 - Update to PHP 7.4.5 and fix some backwards incompatible changes @NerdyProjects
 - Add database constraints to fs_faq !1436 @ffm_hessen
+- Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
