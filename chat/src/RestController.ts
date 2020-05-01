@@ -30,7 +30,7 @@ export class RestController {
             if (!this.socketRegistry.hasSocketForSession(sessionId)) {
                 continue;
             }
-            return response.send(true) // there is at least one session for userId
+            return response.send(true) // there is at least one socket connection for userId
         }
 
         return response.send(false);

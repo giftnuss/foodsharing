@@ -30,7 +30,7 @@ export class SessionIdProvider {
         }
     }
 
-    async fetchSessionIdsForUsers(userIds: number[]) {
+    async fetchSessionIdsForUsers(userIds: number[]): Promise<string[]>{
         const sessionIds: string[] = [];
         for (const userId of userIds) {
             const sessionIdsForUser = await this.fetchSessionIdsForUser(userId);
