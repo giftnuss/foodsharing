@@ -9,7 +9,7 @@ module.exports = {
     "project": "./tsconfig.json"
   },
   env: {
-    "es6": true,
+    "node": true,
   },
   rules: {
     "@typescript-eslint/semi": ["error", "always"], // implicit semicolons can cause confusion, as not every new line is a semicolon, but some are

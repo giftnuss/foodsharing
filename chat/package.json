@@ -8,8 +8,8 @@
     "node": ">=6.5.0"
   },
   "scripts": {
-    "lint": "eslint -c package.json .",
-    "fix": "eslint -c package.json --fix .",
+    "lint": "eslint . --ext .ts",
+    "fix": "eslint --fix . --ext .ts",
     "test": "tape test.js | tap-spec"
   },
   "dependencies": {
@@ -43,19 +43,5 @@
     "socket.io-client": "^2.3.0",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.2"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "standard"
-    ],
-    "rules": {
-      "object-curly-spacing": [
-        "error",
-        "always"
-      ]
-    }
   }
 }
