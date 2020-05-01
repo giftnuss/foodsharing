@@ -89,6 +89,9 @@ class MessageRestController extends AbstractFOSRestController
 		$profileIDs = array_unique($profileIDs);
 		$profiles = $this->foodsaverGateway->getProfileForUsers($profileIDs);
 
+		/*
+		 * conversation title is not generated here so the frontend can do this including more markup (e.g. links to profiles)
+		 */
 		return [
 			'conversation' => $conversation,
 			'profiles' => array_values($profiles),

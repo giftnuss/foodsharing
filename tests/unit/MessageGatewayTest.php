@@ -46,62 +46,6 @@ class MessageGatewayTest extends Unit
 		);
 	}
 
-	public function testGetProperConversationNameReturnsProperConversationNameForNamedConversations()
-	{
-		$testConversationName = 'conversationName';
-
-		$testConversation = $this->tester->createConversation(
-			[$this->testFoodsaver1['id'], $this->testFoodsaver2['id']],
-			['name' => $testConversationName]
-		);
-
-		$this->tester->assertEquals(
-			$testConversationName,
-			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
-		);
-	}
-
-	public function testGetProperConversationNameReturnsProperConverationNameForStoreTeamConversation()
-	{
-		$testConversation = $this->tester->createConversation([$this->testFoodsaver1['id'], $this->testFoodsaver2['id']]);
-
-		$testStore = $this->tester->createStore(
-			$this->tester->createRegion()['id'],
-			$testConversation['id']
-		);
-
-		$this->assertEquals(
-			$this->translationHelper->s('store') . ' ' . $testStore['name'],
-			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
-		);
-	}
-
-	public function testGetProperConversationNameReturnsProperConverationNameForStoreSpringerConversation()
-	{
-		$testConversation = $this->tester->createConversation([$this->testFoodsaver1['id'], $this->testFoodsaver2['id']]);
-
-		$testStore = $this->tester->createStore(
-			$this->tester->createRegion()['id'],
-			null,
-			$testConversation['id']
-		);
-
-		$this->assertEquals(
-			$this->translationHelper->s('store') . ' ' . $testStore['name'],
-			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
-		);
-	}
-
-	public function testGetProperConversationNameReturnsProperConversationNameForTwoMemberConversation()
-	{
-		$testConversation = $this->tester->createConversation([$this->testFoodsaver1['id'], $this->testFoodsaver2['id']]);
-
-		$this->assertEquals(
-			$this->testFoodsaver2['name'],
-			$this->gateway->getProperConversationNameForFoodsaver($this->testFoodsaver1['id'], $testConversation['id'])
-		);
-	}
-
 	public function testGetOrCreateConversationGetsExistingConversation()
 	{
 		$fsa = $this->tester->createFoodsaver();

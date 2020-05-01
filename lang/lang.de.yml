@@ -199,6 +199,8 @@ store:
   my_last_pickup: Meine letzte Abholung
   days: Tagen
   days_before: vor
+  team_conversation_name: 'Team {name}'
+  springer_conversation_name: 'Springer {name}'
 
 pickup:
   dates: Abholtermine

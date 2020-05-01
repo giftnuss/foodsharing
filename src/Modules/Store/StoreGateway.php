@@ -951,14 +951,11 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function getStoreNameByConversationId(int $id): ?string
+	public function getStoreByConversationId(int $id): ?array
 	{
-		$store = $this->db->fetch('SELECT name FROM fs_betrieb WHERE team_conversation_id = ? OR springer_conversation_id = ?', [$id, $id]);
-		if ($store) {
-			return $store['name'];
-		} else {
-			return null;
-		}
+		$store = $this->db->fetch('SELECT id, name FROM fs_betrieb WHERE team_conversation_id = ? OR springer_conversation_id = ?', [$id, $id]);
+
+		return $store;
 	}
 
 	/**
@@ -1069,5 +1066,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function setStoreTeamStatus(int $storeId, int $teamStatus)
 	{
 		$this->db->update('fs_betrieb', ['team_status' => $teamStatus], ['id' => $storeId]);
+	}
+
+	public function getStores()
+	{
+		return $this->db->fetchAllByCriteria('fs_betrieb', ['id', 'name']);
 	}
 }

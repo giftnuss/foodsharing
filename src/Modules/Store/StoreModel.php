@@ -318,14 +318,6 @@ class StoreModel extends Db
 		}
 
 		$name = $data['name'];
-		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
-			$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $name);
-			$this->messageGateway->renameConversation($tcid, $team_conversation_name);
-		}
-		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
-			$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $name);
-			$this->messageGateway->renameConversation($scid, $springer_conversation_name);
-		}
 
 		return $this->update('
 		UPDATE 	`fs_betrieb`

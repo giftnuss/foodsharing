@@ -3,12 +3,16 @@
 namespace Foodsharing\Services;
 
 use Carbon\Carbon;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreService
 {
+	private $messageGateway;
 	private $storeGateway;
+	private $translator;
 	const MAX_SLOTS_PER_PICKUP = 10;
 	// status constants for getAvailablePickupStatus
 	const STATUS_RED_TODAY_TOMORROW = 3;
@@ -16,9 +20,11 @@ class StoreService
 	const STATUS_YELLOW_5_DAYS = 1;
 	const STATUS_GREEN = 0;
 
-	public function __construct(StoreGateway $storeGateway)
+	public function __construct(MessageGateway $messageGateway, StoreGateway $storeGateway, TranslatorInterface $translator)
 	{
+		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
+		$this->translator = $translator;
 	}
 
 	/**
@@ -137,5 +143,17 @@ class StoreService
 		}
 
 		return false;
+	}
+
+	public function setStoreNameInConversations(int $storeId, string $storeName): void
+	{
+		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
+			$team_conversation_name = $this->translator->trans('store.team_conversation_name', ['name' => $storeName]);
+			$this->messageGateway->renameConversation($tcid, $team_conversation_name);
+		}
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$springer_conversation_name = $this->translator->trans('store.springer_conversation_name', ['name' => $storeName]);
+			$this->messageGateway->renameConversation($scid, $springer_conversation_name);
+		}
 	}
 }
