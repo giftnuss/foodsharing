@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Utility\DataHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\Sanitizer;
 
 class QuizXhr extends Control

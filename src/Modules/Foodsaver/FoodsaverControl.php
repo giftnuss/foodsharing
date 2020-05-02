@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -12,6 +10,8 @@ use Foodsharing\Modules\Settings\SettingsGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 
 class FoodsaverControl extends Control
 {
@@ -27,17 +27,17 @@ class FoodsaverControl extends Control
 	private $contentGateway;
 
 	public function __construct(
-        FoodsaverView $view,
-        StoreModel $storeModel,
-        SettingsGateway $settingsGateway,
-        RegionGateway $regionGateway,
-        FoodsaverGateway $foodsaverGateway,
-        FoodsaverTransactions $foodsaverTransactions,
-        IdentificationHelper $identificationHelper,
-        RegionPermissions $regionPermissions,
-        ProfilePermissions $profilePermissions,
-        DataHelper $dataHelper,
-        ContentGateway $contentGateway
+		FoodsaverView $view,
+		StoreModel $storeModel,
+		SettingsGateway $settingsGateway,
+		RegionGateway $regionGateway,
+		FoodsaverGateway $foodsaverGateway,
+		FoodsaverTransactions $foodsaverTransactions,
+		IdentificationHelper $identificationHelper,
+		RegionPermissions $regionPermissions,
+		ProfilePermissions $profilePermissions,
+		DataHelper $dataHelper,
+		ContentGateway $contentGateway
 	) {
 		$this->view = $view;
 		$this->storeModel = $storeModel;

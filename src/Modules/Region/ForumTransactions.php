@@ -2,15 +2,15 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\FlashMessageHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\FlashMessageHelper;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TranslationHelper;
 
 class ForumTransactions
 {

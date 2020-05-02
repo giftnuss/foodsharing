@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Modules\Region;
 
-use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\TimeHelper;
 
 class RegionHelper
 {

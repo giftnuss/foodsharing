@@ -3,12 +3,6 @@
 namespace Foodsharing\Modules\Profile;
 
 use Carbon\Carbon;
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
-use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
-use Foodsharing\Utility\TimeHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Lib\View\vPage;
@@ -18,8 +12,14 @@ use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
 
 class ProfileView extends View
 {

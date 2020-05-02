@@ -2,18 +2,18 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
-use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
-use Foodsharing\Utility\TimeHelper;
-use Foodsharing\Utility\TranslationHelper;
-use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Foodsharing\Utility\WeightHelper;
 
 class StoreView extends View
 {

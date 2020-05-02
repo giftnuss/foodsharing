@@ -5,8 +5,6 @@ namespace Foodsharing\Modules\Email;
 use DOMDocument;
 use Exception;
 use Flourish\fImage;
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -14,6 +12,8 @@ use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\Sanitizer;
 
 class EmailControl extends Control

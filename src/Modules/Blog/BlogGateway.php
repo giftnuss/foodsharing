@@ -18,11 +18,11 @@ final class BlogGateway extends BaseGateway
 	private $session;
 
 	public function __construct(
-        BellGateway $bellGateway,
-        Database $db,
-        FoodsaverGateway $foodsaverGateway,
-        Sanitizer $sanitizerService,
-        Session $session
+		BellGateway $bellGateway,
+		Database $db,
+		FoodsaverGateway $foodsaverGateway,
+		Sanitizer $sanitizerService,
+		Session $session
 	) {
 		parent::__construct($db);
 		$this->bellGateway = $bellGateway;

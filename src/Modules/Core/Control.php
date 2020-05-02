@@ -2,16 +2,16 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\FlashMessageHelper;
-use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\FlashMessageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TranslationHelper;
 use ReflectionClass;
 
 abstract class Control

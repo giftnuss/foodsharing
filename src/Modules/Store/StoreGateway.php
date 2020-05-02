@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdaterInterface;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
@@ -13,6 +12,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Utility\TimeHelper;
 
 class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {

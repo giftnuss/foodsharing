@@ -10,10 +10,10 @@
 
 namespace Foodsharing\Modules\Message;
 
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Utility\TranslationHelper;
 
 final class MessageGateway extends BaseGateway
 {

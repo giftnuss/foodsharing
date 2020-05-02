@@ -21,9 +21,9 @@ class WorkGroupControl extends Control
 	private $workGroupGateway;
 
 	public function __construct(
-        WorkGroupView $view,
-        ImageHelper $imageService,
-        WorkGroupGateway $workGroupGateway
+		WorkGroupView $view,
+		ImageHelper $imageService,
+		WorkGroupGateway $workGroupGateway
 	) {
 		$this->view = $view;
 		$this->imageService = $imageService;

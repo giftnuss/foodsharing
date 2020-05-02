@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Carbon\Carbon;
 use Exception;
-use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -12,6 +11,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Utility\DataHelper;
 
 final class FoodsaverGateway extends BaseGateway
 {

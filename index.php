@@ -1,13 +1,13 @@
 <?php
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;

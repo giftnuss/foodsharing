@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
 
 class MailboxXhr extends Control
 {
@@ -18,11 +18,11 @@ class MailboxXhr extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-        MailboxView $view,
-        Sanitizer $sanitizerService,
-        TimeHelper $timeHelper,
-        MailboxGateway $mailboxGateway,
-        MailboxPermissions $mailboxPermissions
+		MailboxView $view,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		MailboxGateway $mailboxGateway,
+		MailboxPermissions $mailboxPermissions
 	) {
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;

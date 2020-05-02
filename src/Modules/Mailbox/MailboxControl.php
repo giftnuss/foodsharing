@@ -13,10 +13,10 @@ class MailboxControl extends Control
 	private $mailboxPermissions;
 
 	public function __construct(
-        MailboxView $view,
-        Sanitizer $sanitizerService,
-        MailboxGateway $mailboxGateway,
-        MailboxPermissions $mailboxPermissions
+		MailboxView $view,
+		Sanitizer $sanitizerService,
+		MailboxGateway $mailboxGateway,
+		MailboxPermissions $mailboxPermissions
 	) {
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;

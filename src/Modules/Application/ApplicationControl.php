@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Application;
 
-use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Utility\IdentificationHelper;
 
 class ApplicationControl extends Control
 {

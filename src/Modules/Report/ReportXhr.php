@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
 
 class ReportXhr extends Control
 {
@@ -19,12 +19,12 @@ class ReportXhr extends Control
 	private $reportPermissions;
 
 	public function __construct(
-        ReportGateway $reportGateway,
-        ReportView $view,
-        FoodsaverGateway $foodsaverGateway,
-        Sanitizer $sanitizerService,
-        TimeHelper $timeHelper,
-        ReportPermissions $reportPermissions
+		ReportGateway $reportGateway,
+		ReportView $view,
+		FoodsaverGateway $foodsaverGateway,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		ReportPermissions $reportPermissions
 	) {
 		$this->view = $view;
 		$this->reportGateway = $reportGateway;

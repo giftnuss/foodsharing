@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Legal\LegalGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 
 class LoginGateway extends BaseGateway
 {

@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Event;
 
-use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\EventPermissions;
+use Foodsharing\Utility\DataHelper;
 
 class EventControl extends Control
 {

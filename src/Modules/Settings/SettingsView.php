@@ -3,12 +3,6 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
-use Foodsharing\Utility\PageHelper;
-use Foodsharing\Utility\RouteHelper;
-use Foodsharing\Utility\TimeHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Content\ContentGateway;
@@ -18,8 +12,14 @@ use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 use Foodsharing\Modules\Core\DBConstants\Quiz\AnswerRating;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
 
 class SettingsView extends View
 {

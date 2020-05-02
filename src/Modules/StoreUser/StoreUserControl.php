@@ -3,9 +3,6 @@
 namespace Foodsharing\Modules\StoreUser;
 
 use Carbon\Carbon;
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\TimeHelper;
-use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -13,7 +10,10 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\WeightHelper;
 
 class StoreUserControl extends Control
 {
@@ -27,16 +27,16 @@ class StoreUserControl extends Control
 	private $weightHelper;
 
 	public function __construct(
-        StoreModel $model,
-        StoreUserView $view,
-        StoreGateway $storeGateway,
-        StorePermissions $storePermissions,
-        FoodsaverGateway $foodsaverGateway,
-        Sanitizer $sanitizerService,
-        TimeHelper $timeHelper,
-        DataHelper $dataHelper,
-        RegionGateway $regionGateway,
-        WeightHelper $weightHelper
+		StoreModel $model,
+		StoreUserView $view,
+		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
+		FoodsaverGateway $foodsaverGateway,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		DataHelper $dataHelper,
+		RegionGateway $regionGateway,
+		WeightHelper $weightHelper
 	) {
 		$this->model = $model;
 		$this->view = $view;

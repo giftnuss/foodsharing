@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Settings;
 
-use Foodsharing\Utility\DataHelper;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -15,6 +14,7 @@ use Foodsharing\Modules\Quiz\QuizGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Utility\DataHelper;
 
 class SettingsControl extends Control
 {

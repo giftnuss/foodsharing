@@ -15,9 +15,9 @@ class ActivityXhr extends Control
 	private $activityGateway;
 
 	public function __construct(
-        ImageHelper $imageService,
-        MailboxGateway $mailboxGateway,
-        ActivityGateway $activityGateway
+		ImageHelper $imageService,
+		MailboxGateway $mailboxGateway,
+		ActivityGateway $activityGateway
 	) {
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;

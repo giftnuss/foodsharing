@@ -6,7 +6,6 @@ use Flourish\fFile;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Modules\Core\InfluxMetrics;
-use Foodsharing\Utility\Sanitizer;
 use Twig\Environment;
 
 final class EmailHelper
@@ -20,10 +19,10 @@ final class EmailHelper
 	private $twig;
 
 	public function __construct(
-        InfluxMetrics $metrics,
-        Mem $mem,
-        Sanitizer $sanitizerService,
-        Environment $twig
+		InfluxMetrics $metrics,
+		Mem $mem,
+		Sanitizer $sanitizerService,
+		Environment $twig
 	) {
 		$this->mem = $mem;
 		$this->metrics = $metrics;

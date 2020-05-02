@@ -2,9 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
-use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
@@ -12,6 +9,9 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\WeightHelper;
 
 class StoreControl extends Control
 {

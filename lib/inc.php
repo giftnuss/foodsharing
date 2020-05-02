@@ -1,13 +1,13 @@
 <?php
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
-use Foodsharing\Utility\PageHelper;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
 use Symfony\Component\DependencyInjection\Container;
 
 /* @var Container $container */

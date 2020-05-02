@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Search;
 
-use Foodsharing\Utility\ImageHelper;
-use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class SearchIndexGenerator
 {

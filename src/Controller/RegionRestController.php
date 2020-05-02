@@ -23,12 +23,12 @@ class RegionRestController extends AbstractFOSRestController
 	private $imageService;
 
 	public function __construct(
-        BellGateway $bellGateway,
-        FoodsaverGateway $foodsaverGateway,
-        RegionPermissions $regionPermissions,
-        RegionGateway $regionGateway,
-        Session $session,
-        ImageHelper $imageService
+		BellGateway $bellGateway,
+		FoodsaverGateway $foodsaverGateway,
+		RegionPermissions $regionPermissions,
+		RegionGateway $regionGateway,
+		Session $session,
+		ImageHelper $imageService
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

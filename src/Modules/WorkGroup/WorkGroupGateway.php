@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\WorkGroup;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Group\GroupTransactions;
+use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 class WorkGroupGateway extends BaseGateway
 {

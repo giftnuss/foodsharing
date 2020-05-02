@@ -4,11 +4,11 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Basket\BasketGateway;
+use Foodsharing\Modules\Basket\BasketTransactions;
 use Foodsharing\Modules\Core\DBConstants\Basket\Status as BasketStatus;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
-use Foodsharing\Modules\Basket\BasketTransactions;
-use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Modules\Message\MessageTransactions;
+use Foodsharing\Utility\ImageHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;

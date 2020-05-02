@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Content;
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Permissions\ContentPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Parsedown;
 
 class ContentControl extends Control

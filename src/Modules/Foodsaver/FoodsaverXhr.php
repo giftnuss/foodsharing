@@ -4,9 +4,9 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
-use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Utility\Sanitizer;
 
 class FoodsaverXhr extends Control

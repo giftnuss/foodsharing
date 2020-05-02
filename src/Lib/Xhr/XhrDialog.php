@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TranslationHelper;
 
 class XhrDialog
 {

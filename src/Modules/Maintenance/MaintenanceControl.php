@@ -2,8 +2,6 @@
 
 namespace Foodsharing\Modules\Maintenance;
 
-use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;
@@ -11,6 +9,8 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 
 class MaintenanceControl extends ConsoleControl
 {

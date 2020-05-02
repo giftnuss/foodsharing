@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\DTO\Bell;

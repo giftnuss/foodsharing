@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Quiz;
 
-use Foodsharing\Utility\DataHelper;
-use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\QuizPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
 
 class QuizControl extends Control

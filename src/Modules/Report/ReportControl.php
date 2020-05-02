@@ -15,10 +15,10 @@ class ReportControl extends Control
 	private $reportPermissions;
 
 	public function __construct(
-        ReportGateway $reportGateway,
-        ReportView $view,
-        ImageHelper $imageService,
-        ReportPermissions $reportPermissions)
+		ReportGateway $reportGateway,
+		ReportView $view,
+		ImageHelper $imageService,
+		ReportPermissions $reportPermissions)
 	{
 		$this->reportGateway = $reportGateway;
 		$this->view = $view;

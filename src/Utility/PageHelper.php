@@ -13,8 +13,6 @@ use Foodsharing\Permissions\QuizPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Utility\ImageHelper;
-use Foodsharing\Utility\Sanitizer;
 use Twig\Environment;
 
 final class PageHelper

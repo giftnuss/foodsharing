@@ -5,8 +5,8 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Modules\Group\GroupTransactions;
+use Foodsharing\Permissions\ForumPermissions;
 
 final class RegionXhr extends Control
 {
@@ -21,14 +21,14 @@ final class RegionXhr extends Control
 	private $groupTransactions;
 
 	public function __construct(
-        RegionGateway $regionGateway,
-        ForumGateway $forumGateway,
-        ForumPermissions $forumPermissions,
-        RegionHelper $regionHelper,
-        \Twig\Environment $twig,
-        FoodsaverGateway $foodsaverGateway,
-        ForumFollowerGateway $forumFollowerGateway,
-        GroupTransactions $groupTransactions
+		RegionGateway $regionGateway,
+		ForumGateway $forumGateway,
+		ForumPermissions $forumPermissions,
+		RegionHelper $regionHelper,
+		\Twig\Environment $twig,
+		FoodsaverGateway $foodsaverGateway,
+		ForumFollowerGateway $forumFollowerGateway,
+		GroupTransactions $groupTransactions
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

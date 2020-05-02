@@ -6,7 +6,6 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
-use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -15,6 +14,7 @@ use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
+use Foodsharing\Utility\TranslationHelper;
 
 class Session
 {
@@ -29,14 +29,14 @@ class Session
 	private $translationHelper;
 
 	public function __construct(
-        Mem $mem,
-        FoodsaverGateway $foodsaverGateway,
-        QuizHelper $quizHelper,
-        RegionGateway $regionGateway,
-        BuddyGateway $buddyGateway,
-        StoreGateway $storeGateway,
-        StoreTransactions $storeTransactions,
-        TranslationHelper $translationHelper
+		Mem $mem,
+		FoodsaverGateway $foodsaverGateway,
+		QuizHelper $quizHelper,
+		RegionGateway $regionGateway,
+		BuddyGateway $buddyGateway,
+		StoreGateway $storeGateway,
+		StoreTransactions $storeTransactions,
+		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
 		$this->foodsaverGateway = $foodsaverGateway;

@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Stats;
 
-use Foodsharing\Utility\WeightHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Utility\WeightHelper;
 
 class StatsModel extends Db
 {
