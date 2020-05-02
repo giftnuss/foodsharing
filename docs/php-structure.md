@@ -33,6 +33,12 @@ Those are executed with the functions inherited from the `Db` class (see `use Fo
 Instead of Model classes, that hold both, data query logic and application logic, we move towards splitting these up
 into Gateway classes and Transaction classes.
 
+For a general description what „application logic“ is, see sectionn [Transactions](#transaction-classes).
+
+Note that all of the following guidelines have a lot of exceptions
+in the existing code. Nevertheless try to heed the following guidelines
+in code you write and refactor.
+
 #### Gateway classes
 
 Our concept of Gateway classes follows the [Table Data Gateway pattern](https://www.martinfowler.com/eaaCatalog/tableDataGateway.html).
@@ -80,6 +86,12 @@ This is why joining a pickup is implemented in the `joinPickup()` method on the 
 controllers should use this transaction if they want to make a user join a pickup, because only if all steps of the
 transaction are executed, the pickup joining is complete. 
 
+What should not be part of a transaction class:
+
+* knowledge of the underlying database (should still work with a gateway reading from punched cards)
+* knowledge of request types (e.g. should be callable from a desktop application or some different internet protocoll). Therefore transaction classes do not raise HTTPException or choose HTTP response codes or the json representation of responses
+* the session - but at this point we are not strict, so far transaction classes use information of the session
+
 #### Data Transfer Objects
 
 Currently, domain objects are often represented differently: Some methods receive and return them as associative arrays,
@@ -103,6 +115,25 @@ can be named according to their purpose or the place they are used (e. g. `BellF
 #### Permission classes
 
 Permission classes are used to organize what actions are allowed for which user.
+They are a special type of transaction class.
+
+#### Controllers
+
+Controllers handle requests.
+They define how to extract relevant information from the
+request, check permissions by calling the correct [`Permission`](#permission-classes) and calling the suitable [transaction](#transaction-classes).
+They define which HTTP response including the response code
+is sent back and the conversion of internal data to json
+(`return $this->handleView(...)`).
+
+Since the business logic („What is part of an event (= transaction)?“)
+is in the transaction classes, a controller method
+usually just calls one actual transaction method (apart from permission checks).
+It can read necessary information from the session to give those
+as arguments to the transaction class.
+
+We have (old) XHR controllers, classes with the name `<module>Control.php` and
+[`RestController.php`](requests.md#rest-api).
 
 ## Services
 
