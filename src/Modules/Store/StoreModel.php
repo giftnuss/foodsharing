@@ -533,7 +533,6 @@ class StoreModel extends Db
 		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getStoreTeam($storeId));
 		$tcid = $this->messageGateway->createConversation($teamIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$this->messageGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$storeId . '
@@ -548,7 +547,6 @@ class StoreModel extends Db
 		$standbyTeamMemberIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
 		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamMemberIds, true);
 		$store = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$this->messageGateway->renameConversation($standbyTeamChatId, $standbyTeamConversationName);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$standbyTeamChatId . ' WHERE id = ' . (int)$storeId . '
 			');
