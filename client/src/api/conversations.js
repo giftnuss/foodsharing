@@ -11,7 +11,7 @@ export function getConversation (conversationId) {
 }
 
 export function getConversationIdForConversationWithUser (userId) {
-  return post(`/user/${userId}/conversation`)
+  return get(`/user/${userId}/conversation`)
 }
 
 export function getMessages (conversationId, olderThanID) {
@@ -19,7 +19,7 @@ export function getMessages (conversationId, olderThanID) {
 }
 
 export function sendMessage (conversationId, body) {
-  return post(`/conversations/${conversationId}`, {
+  return post(`/conversations/${conversationId}/messages`, {
     body: body
   })
 }

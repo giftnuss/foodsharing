@@ -146,7 +146,7 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Post("conversations/{conversationId}", requirements={"conversationId" = "\d+"})
+	 * @Rest\Post("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\RequestParam(name="body", nullable=false)
 	 */
 	public function sendMessageAction(int $conversationId, ParamFetcher $paramFetcher): Response
@@ -196,7 +196,7 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Post("user/{userId}/conversation", requirements={"userId" = "\d+"})
+	 * @Rest\Get("user/{userId}/conversation", requirements={"userId" = "\d+"})
 	 */
 	public function getUserConversationAction(int $userId): Response
 	{
