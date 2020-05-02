@@ -117,7 +117,7 @@ class RegionApiCest
 		$I->seeInDatabase('fs_foodsaver_has_bezirk', [
 			'foodsaver_id' => $this->user['id'],
 			'bezirk_id' => $this->region['id']
-			]);
+		]);
 	}
 
 	public function canNotLeaveNonExistingRegion(\ApiTester $I)

@@ -105,7 +105,6 @@ class RegionRestController extends AbstractFOSRestController
 		}
 
 		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());
-		$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 
 		return $this->handleView($this->view([], 200));
 	}
