@@ -6,6 +6,7 @@
  */
 import $ from 'jquery'
 import conv from '@/conv'
+import i18n from '@/i18n'
 import serverData from '@/server-data'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
@@ -106,7 +107,7 @@ const msg = {
         try {
           await api.sendMessage(msg.conversation_id, val)
         } catch (e) {
-          pulseError('Fehler beim Senden der Nachricht')
+          pulseError(i18n('chat.error_sending_message'))
           console.error(e)
         } finally {
           setTimeout(function () {
@@ -178,11 +179,11 @@ const msg = {
             msg.clearComposeForm()
             msg.loadConversation(conversation.id)
           } catch (e) {
-            pulseError('Die Nachricht konnte nicht gesendet werden')
+            pulseError(i18n('chat.error_sending_message'))
             console.error(e)
           }
         } else {
-          pulseInfo('Du musst eine Nachricht eingeben')
+          pulseInfo(i18n('chat.empty_message'))
         }
       }
     })
@@ -238,12 +239,11 @@ const msg = {
       id = parseInt(id)
       out[out.length] = id
     })
-    console.log(out)
 
     if (out.length > 0) {
       return out
     } else {
-      pulseError('Du hast noch keine Empfänger ausgewählt.')
+      pulseError(i18n('chat.empty_recipients'))
       return false
     }
   },
@@ -336,7 +336,7 @@ const msg = {
           $(window).scrollTop(position.top)
         }
       } catch (e) {
-        pulseError('Das Nachladen von Nachrichten ist fehlgeschlagen')
+        pulseError(i18n('chat.error_loading_messages'))
         console.error(e)
       } finally {
         msg.moreIsLoading = false
