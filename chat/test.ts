@@ -17,11 +17,11 @@ const redisClient = new Tedis({
 });
 
 // Start the server in a child process ...
-const server = spawn(process.execPath, ['dist/index.js'], { stdio: 'inherit' });
+const server = spawn('ts-node', ['src/index.ts'], { stdio: 'inherit' });
 
 // ... kill it after the tests are done
 test.onFinish(() => {
-    redisClient.command('FLUSHDB').then(redisClient.close).catch(error => { console.log(error); });
+    redisClient.command('FLUSHDB').then(() => redisClient.close()).catch(error => { console.log(error); });
     server.kill();
 });
 
@@ -337,17 +337,16 @@ test('does not send to other users', t => {
     });
 });
 function connect (t: Test, sessionId: string, cookieName = 'PHPSESSID'): Socket {
+    // const manager = new Manager(WS_URL, { extraHeaders: { cookie: serialize(cookieName, sessionId) } });
     const socket = io.connect(WS_URL, {
         transports: ['websocket'],
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                    cookie: serialize(cookieName, sessionId)
-                }
-            }
+        // @ts-ignore - according to the socket.io client documentation, extraHeaders is a possible option on node.js
+        extraHeaders: {
+            cookie: serialize(cookieName, sessionId)
         }
     });
-    test.onFinish(() => socket.disconnect());
+    // @ts-ignore - until https://github.com/DefinitelyTyped/DefinitelyTyped/pull/44442 is merged
+    t.on('end', () => socket.disconnect());
     return socket;
 }
 

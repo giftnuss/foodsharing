@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "fix": "eslint --fix . --ext .ts",
-    "test": "tsc && tsc test.ts && tape test.js | tap-spec"
+    "test": "tsc test.ts && tape test.js | tap-spec"
   },
   "dependencies": {
     "@types/cookie": "^0.3.3",
