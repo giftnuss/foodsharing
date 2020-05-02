@@ -206,6 +206,7 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
+				$this->storeService->setStoreNameInConversations($id, $g_data['name']);
 				$this->storeGateway->add_betrieb_notiz([
 					'foodsaver_id' => $this->session->id(),
 					'betrieb_id' => $id,

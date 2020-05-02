@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
@@ -15,20 +14,17 @@ class StoreModel extends Db
 	private $storeGateway;
 	private $regionGateway;
 	private $messageGateway;
-	private $translationHelper;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
-		MessageGateway $messageGateway,
-		TranslationHelper $translationHelper
+		MessageGateway $messageGateway
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->messageGateway = $messageGateway;
-		$this->translationHelper = $translationHelper;
 
 		parent::__construct();
 	}
@@ -537,7 +533,6 @@ class StoreModel extends Db
 		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getStoreTeam($storeId));
 		$tcid = $this->messageGateway->createConversation($teamIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
 		$this->messageGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
@@ -553,7 +548,6 @@ class StoreModel extends Db
 		$standbyTeamMemberIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
 		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamMemberIds, true);
 		$store = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$standbyTeamConversationName = $this->translationHelper->sv('springer_conversation_name', $store['name']);
 		$this->messageGateway->renameConversation($standbyTeamChatId, $standbyTeamConversationName);
 		$this->update('
 				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$standbyTeamChatId . ' WHERE id = ' . (int)$storeId . '
