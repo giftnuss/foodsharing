@@ -251,8 +251,34 @@ test('does not send to other users', t => {
     });
 });
 
+test('online status is false for non-connected user', t => {
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-3-user-1', () => {});
+    superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+        if (err) {
+            t.error(err);
+        }
+        t.equal(response.type, 'application/json', 'content type is JSON');
+        t.equal(response.body, false, 'response body is "false"');
+    });
+});
+
+test('online status is true for connected user', t => {
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-4-user-1', () => {});
+    const socket = connect(t, 'test-4-user-1');
+    register(socket, () => {
+        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            if (err) {
+                t.error(err);
+            }
+            t.equal(response.type, 'application/json', 'content type is JSON');
+            t.equal(response.body, true, 'response body is "true"');
+        });
+    });
+});
+
 function connect (t: Test, sessionId: string, cookieName = 'PHPSESSID'): Socket {
-    // const manager = new Manager(WS_URL, { extraHeaders: { cookie: serialize(cookieName, sessionId) } });
     const socket = io.connect(WS_URL, {
         transports: ['websocket'],
         // @ts-ignore - according to the socket.io client documentation, extraHeaders is a possible option on node.js
