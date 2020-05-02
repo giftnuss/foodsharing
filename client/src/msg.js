@@ -175,9 +175,9 @@ const msg = {
         if (body != '') {
           try {
             const conversation = await api.createConversation(recip)
-            await api.sendMessage(conversation.id, body)
+            await api.sendMessage(conversation.conversation.id, body)
             msg.clearComposeForm()
-            msg.loadConversation(conversation.id)
+            msg.loadConversation(conversation.conversation.id)
           } catch (e) {
             pulseError(i18n('chat.error_sending_message'))
             console.error(e)
