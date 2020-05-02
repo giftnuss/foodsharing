@@ -86,6 +86,8 @@ class MessageService
 		$data['store'] = $this->storeGateway->getStoreByConversationId($conversationId);
 		if ($data['store']) {
 			$data['store']['LINK'] = BASE_URL . '/?page=fsbetrieb&id=' . $data['store']['id'];
+		} else {
+			$data['store'] = null;
 		}
 		if ($notificationTemplate !== null) {
 			$data['emailTemplate'] = $notificationTemplate;
