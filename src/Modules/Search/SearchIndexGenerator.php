@@ -1,6 +1,6 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Search;
 
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\Sanitizer;

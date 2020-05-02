@@ -3,7 +3,7 @@
 namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Services\SearchIndexGenerator;
+use Foodsharing\Modules\Search\SearchIndexGenerator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpKernel\Exception\HttpException;
