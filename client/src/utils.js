@@ -113,23 +113,19 @@ export function plainToHtml (string) {
   const entityMap = {
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-    '/': '&#x2F;',
-    '`': '&#x60;',
-    '=': '&#x3D;'
+    '>': '&gt;'
   }
-  return autoLink(nl2br(String(string).replace(/[&<>"'`=/]/g, function fromEntityMap (s) {
+  return autoLink(nl2br(String(string).replace(/[&<>]/g, function fromEntityMap (s) {
     return entityMap[s]
   })))
 }
 
 export function plainToHtmlAttribute (string) {
   const entityMap = {
-    '"': '&quot'
+    '"': '&quot',
+    "'": '&#39;'
   }
-  return String(string).replace(/["]/g, function fromEntityMap (s) {
+  return String(string).replace(/["']/g, function fromEntityMap (s) {
     return entityMap[s]
   }
   )
