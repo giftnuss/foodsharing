@@ -6,8 +6,8 @@ import { Test } from 'tape';
 import * as io from 'socket.io-client';
 import { serialize } from 'cookie';
 import * as superagent from 'superagent';
+import { Response } from 'superagent';
 import Socket = SocketIOClient.Socket;
-import {Response} from "superagent";
 
 const HTTP_URL = 'http://127.0.0.1:1338';
 const WS_URL = 'http://127.0.0.1:1337';
@@ -180,7 +180,7 @@ test('can send to api users', t => {
     t.plan(3);
     const sessionId = randomString.generate();
     const userId = 2;
-    addAPISessionToRedis(userId, sessionId, (err: any) => {
+    addAPISessionToRedis(userId, sessionId, () => {
         const socket = connect(t, sessionId, 'sessionid'); // django session cookie name
         socket.on('some-app', (data: any) => {
             t.equal(data.m, 'some-method', 'passed m param');
@@ -304,7 +304,7 @@ function addPHPSessionToRedis (userId: number, sessionId: string, callback: (err
 
 function addAPISessionToRedis (userId: number, sessionId: string, callback: (error: any) => any): void {
     redisClient.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
-        .then(async ()  =>
+        .then(async () =>
             await redisClient.sadd(`api:user:${userId}:sessions`, sessionId)
         ).then(callback)
         .catch(error => callback(error));
