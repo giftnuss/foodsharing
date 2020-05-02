@@ -200,7 +200,7 @@ class MessageRestController extends AbstractFOSRestController
 	 */
 	public function getUserConversationAction(int $userId): Response
 	{
-		if (!$this->session->may()) {
+		if (!$this->session->may() || $userId == $this->session->id()) {
 			throw new HttpException(401);
 		}
 

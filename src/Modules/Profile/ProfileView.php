@@ -208,10 +208,13 @@ class ProfileView extends View
 			}
 		}
 
+		$writeMessage = $this->foodsaver['id'] != $this->session->id() ?
+			'<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>'
+			: '';
+
 		return '
 		<ul class="linklist">
-			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>
-			' . $opt . '
+			' . $writeMessage . $opt . '
 			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
 		</ul>';
 	}
