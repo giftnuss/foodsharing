@@ -42,6 +42,10 @@ class MessageRestController extends AbstractFOSRestController
 		$olderThanID = $paramFetcher->get('olderThanId');
 		$olderThanID = $olderThanID ? (int)$olderThanID : null;
 
+		if ($olderThanID === null) {
+			$this->messageGateway->markAsRead($conversationId, $this->session->id());
+		}
+
 		$messages = $this->messageGateway->getConversationMessages($conversationId, $limit, $olderThanID);
 		$profileIDs = [];
 		array_walk($messages, function ($v, $k) use (&$profileIDs) {

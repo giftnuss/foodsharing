@@ -26,19 +26,18 @@ export default new Vue({
     },
     async loadConversation (id) {
       const c = this.conversations[id] ?? { messages: {} }
-      if (Object.keys(c.messages).length === 0) {
-        /* only load conversation when not already there */
-        const res = await getConversation(id)
-        ProfileStore.updateFrom(res.profiles)
-        for (const message of res.conversation.messages) {
-          c.messages[message.id] = convertMessage(message)
-        }
-        Vue.set(this.conversations, id, {
-          ...res.conversation,
-          messages: c.messages,
-          lastMessage: convertMessage(res.conversation.lastMessage)
-        })
+      /* always load conversation for proper read mark handling.
+      * Will still cache messages during store lifetime */
+      const res = await getConversation(id)
+      ProfileStore.updateFrom(res.profiles)
+      for (const message of res.conversation.messages) {
+        c.messages[message.id] = convertMessage(message)
       }
+      Vue.set(this.conversations, id, {
+        ...res.conversation,
+        messages: c.messages,
+        lastMessage: convertMessage(res.conversation.lastMessage)
+      })
     },
     async loadMoreMessages (cid) {
       const c = this.conversations[cid]
