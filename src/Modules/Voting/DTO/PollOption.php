@@ -8,11 +8,11 @@ namespace Foodsharing\Modules\Voting\DTO;
 class PollOption
 {
 	/**
-	 * @var Poll
+	 * @var int
 	 *
-	 * The poll to which this option belongs.
+	 * Id of the poll to which this option belongs.
 	 */
-	public $poll;
+	public $pollId;
 
 	/**
 	 * @var int
@@ -36,12 +36,12 @@ class PollOption
 	public $votes;
 
 	public function __construct(
-		Poll $poll,
+		int $pollId,
 		int $optionIndex,
 		string $text,
 		int $votes
 	) {
-		$this->poll = $poll;
+		$this->pollId = $pollId;
 		$this->optionIndex = $optionIndex;
 		$this->text = $text;
 		$this->votes = $votes;

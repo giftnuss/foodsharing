@@ -68,13 +68,6 @@ class Poll
 	 */
 	public $type;
 
-	/**
-	 * @var array<int,string>
-	 *
-	 * The options of this poll.
-	 */
-	public $options;
-
 	public function __construct(
 		int $id,
 		string $name,
@@ -83,8 +76,7 @@ class Poll
 		DateTime $endDate,
 		int $regionId,
 		int $scope,
-		int $type,
-		array $options
+		int $type
 	) {
 		$this->id = $id;
 		$this->name = $name;
@@ -94,6 +86,5 @@ class Poll
 		$this->regionId = $regionId;
 		$this->scope = $scope;
 		$this->type = $type;
-		$this->options = $options;
 	}
 }
