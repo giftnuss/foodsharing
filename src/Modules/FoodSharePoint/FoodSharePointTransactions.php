@@ -2,15 +2,32 @@
 
 namespace Foodsharing\Modules\FoodSharePoint;
 
+use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TranslationHelper;
 
 class FoodSharePointTransactions
 {
 	private FoodSharePointGateway $foodSharePointGateway;
+	private BellGateway $bellGateway;
+	private EmailHelper $emailHelper;
+	private TranslationHelper $translationHelper;
+	private Sanitizer $sanitizer;
 
-	public function __construct(FoodSharePointGateway $foodSharePointGateway)
-	{
+	public function __construct(
+		FoodSharePointGateway $foodSharePointGateway,
+		BellGateway $bellGateway,
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper,
+		Sanitizer $sanitizer
+	) {
 		$this->foodSharePointGateway = $foodSharePointGateway;
+		$this->bellGateway = $bellGateway;
+		$this->emailHelper = $emailHelper;
+		$this->translationHelper = $translationHelper;
+		$this->sanitizer = $sanitizer;
 	}
 
 	public function sendNewFoodSharePointPostNotifications(int $foodSharePointId): void
@@ -50,7 +67,7 @@ class FoodSharePointTransactions
 					'ft_update',
 					'img img-recycle yellow',
 					['href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId],
-					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)],
+					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizer->tt($post['body'], 100)],
 					'fairteiler-' . $foodSharePointId
 				);
 				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
