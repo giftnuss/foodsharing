@@ -26,10 +26,9 @@ export class RestController {
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
 
         for (const sessionId of sessionIds) {
-            if (!this.socketRegistry.hasSocketForSession(sessionId)) {
-                continue;
+            if (this.socketRegistry.hasSocketForSession(sessionId)) {
+                return response.send(true); // there is at least one socket connection for userId
             }
-            return response.send(true); // there is at least one socket connection for userId
         }
 
         return response.send(false);
