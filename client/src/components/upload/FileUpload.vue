@@ -139,6 +139,7 @@ export default {
     },
     onFileChange () {
       const file = this.$refs.uploadElement.files[0]
+      this.resetFileInput(this.$refs.uploadElement)
       if (!file) return
       const filename = file.name
       const reader = new FileReader()
@@ -168,6 +169,10 @@ export default {
         }
         reader.readAsBinaryString(file)
       }
+    },
+    resetFileInput (fileInputElement) {
+      fileInputElement.type = 'text'
+      fileInputElement.type = 'file'
     },
     async uploadFile (filename, data) {
       try {
