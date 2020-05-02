@@ -96,7 +96,7 @@ Conversation 108242 and 108243 missing (store 1, 2) (fixed, inserted)
 
 ### later todo
 Link `bezirk_id` to *fs_bezirk*
-Care about kette_id, betrieb_kategorie_id
+Care about kette_id, betrieb_kategorie_id (fixed with issue #862)
 
 ## fs_betrieb_notiz
 Stores wallposts on stores (independent of wallpost system)
