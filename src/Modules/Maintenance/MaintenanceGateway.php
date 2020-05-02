@@ -226,7 +226,7 @@ class MaintenanceGateway extends BaseGateway
 	 */
 	public function listUsersWithPhoto(): array
 	{
-		return $this->db->fetch('SELECT id, photo FROM fs_foodsaver WHERE photo != ""');
+		return $this->db->fetchAllByCriteria('fs_foodsaver', ['id', 'photo'], ['photo !=' => '']);
 	}
 
 	/**
