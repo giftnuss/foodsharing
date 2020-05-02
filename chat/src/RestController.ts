@@ -30,8 +30,7 @@ export class RestController {
                 return response.send(true); // there is at least one socket connection for userId
             }
         }
-
-        return response.send(false);
+        return response.sendRaw('false', { 'Content-Type': 'application/json' }); // due to a bug in Restify, a normal send would result in false being casted to null
     }
 
     /**
