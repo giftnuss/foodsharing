@@ -84,16 +84,13 @@ class MessageService
 		$data = [];
 		$data['chatName'] = $this->messageGateway->getConversationName($conversationId);
 		$data['store'] = $this->storeGateway->getStoreByConversationId($conversationId);
+		if ($data['store']) {
+			$data['store']['LINK'] = BASE_URL . '/?page=fsbetrieb&id=' . $data['store']['id'];
+		}
 		if ($notificationTemplate !== null) {
 			$data['emailTemplate'] = $notificationTemplate;
-		} elseif ($data['store']) {
-			$data['emailTemplate'] = 'chat/message_store';
 		} else {
-			if (count($members) > 2) {
-				$data['emailTemplate'] = 'chat/message_group';
-			} else {
-				$data['emailTemplate'] = 'chat/message';
-			}
+			$data['emailTemplate'] = 'chat/message';
 		}
 		$data['sender'] = $this->foodsaverGateway->getFoodsaverDetails($message->authorId)['name'];
 		$data['message'] = $message->body;
@@ -125,16 +122,17 @@ class MessageService
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
 				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
+					$conversationName = $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $members);
 					$pushNotification = new MessagePushNotification(
 						$author['name'],
 						$message->body,
 						new \DateTime(),
 						$conversationId,
-						count($members) > 2 ? $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $members) : null
+						count($members) > 2 ? $conversationName : null
 					);
 					$this->pushNotificationGateway->sendPushNotificationsToFoodsaver($m['id'], $pushNotification);
 					if ($m['infomail_message']) {
-						$this->sendNewMessageNotificationEmail($m, $notificationTemplateData);
+						$this->sendNewMessageNotificationEmail($m, array_merge($notificationTemplateData, ['chatName' => $conversationName]));
 					}
 				}
 			}
