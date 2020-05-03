@@ -19,6 +19,7 @@ class InfluxMetrics
 		$this->pageStatTags = [];
 		$this->pageStatFields = [];
 		$this->mailStat = [];
+		$this->dbStat = [];
 	}
 
 	public function __destruct()
@@ -35,6 +36,11 @@ class InfluxMetrics
 		} else {
 			$this->mailStat[$template] = $count;
 		}
+	}
+
+	public function addDbQuery(int $execution_ms): void
+	{
+		$this->dbStat[] = $execution_ms;
 	}
 
 	/**
@@ -83,7 +89,12 @@ class InfluxMetrics
 		if (isset($script_start_time)) {
 			$now = microtime(true);
 			$executionTime = $now - $script_start_time;
-			$this->addPageStatData([], ['execution_time' => $executionTime]);
+			$this->addPageStatData([], [
+				'execution_time' => $executionTime,
+				'db_execution_time' => array_sum($this->dbStat),
+				'db_queries' => count($this->dbStat),
+				'db_execution_times' => implode(';', $this->dbStat)
+			]);
 			$this->addPoint('page', $this->pageStatTags, $this->pageStatFields);
 		}
 	}
