@@ -331,6 +331,17 @@ export default {
       p {
         margin: 5px 0;
       }
+
+      /deep/ .markdown {
+        ol, ul {
+          padding-left: 5px;
+
+          > li {
+            display: list-item;
+            margin: 0;
+          }
+        }
+      }
     }
   }
 }
