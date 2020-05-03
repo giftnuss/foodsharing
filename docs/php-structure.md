@@ -31,7 +31,7 @@ Those are executed with the functions inherited from the `Db` class (see `use Fo
 ### Newer module structure
 
 Instead of Model classes, that hold both, data query logic and application logic, we move towards splitting these up
-into Gateway classes and Transaction classes.
+into [Gateway classes](#gateway-classes) and [Transaction classes](#transaction-classes).
 
 For a general description what „application logic“ is, see sectionn [Transactions](#transaction-classes).
 
@@ -55,6 +55,7 @@ portrays this. They should not pretend to perform domain-related business logic.
 Gateway class would be `selectResponsibleFoodsavers()` or `insertFetcher()`. A method not suitable would be
 `addFetcher()`, as this implies that the method took care of the whole transaction of adding a fetcher to a store
 pickup.
+In particular permission checks are not to be found in Gateways.
 
 Another difference to models regarding the implementation of SQL queries is that the functions to communicate with the
 database are not directly in the Gateway class by inheritance but encapsulated in the attribute 
