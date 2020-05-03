@@ -3,6 +3,17 @@
 This directory contains a node.js server written in TypeScript to handle or WebSocket connections to clients. These
 connections are used in order to push updates to clients (e. g. browser windows or the Android app).
 
+## Setup
+### How to run yarn?
+`./scripts/chat/yarn`
+### How to fix the code style?
+`./scripts/chat/yarn fix`
+### How to run the tests?
+`./scripts/chat/yarn test`
+### How to get my changes running?
+You don't need to. In development, we use the neat tool `ts-node-dev`, which keeps track of your TypeScript files and
+updates the server on changes. No manual TypeScript build and no server restart is required.
+
 ## NABPOQ - Never asked, but probably occurring questions:
 
 ## Why node?
