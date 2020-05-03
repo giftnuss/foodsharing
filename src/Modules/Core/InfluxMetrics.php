@@ -10,6 +10,7 @@ class InfluxMetrics
 	private $points;
 	private $pageStatTags;
 	private $pageStatFields;
+	private $mailStat;
 
 	public function __construct(\InfluxDB\Database $influxdb)
 	{
@@ -17,12 +18,23 @@ class InfluxMetrics
 		$this->points = [];
 		$this->pageStatTags = [];
 		$this->pageStatFields = [];
+		$this->mailStat = [];
 	}
 
 	public function __destruct()
 	{
 		$this->generatePageStatistics();
+		$this->generateMailStatistics();
 		$this->flush();
+	}
+
+	public function addOutgoingMail(string $template, int $count): void
+	{
+		if (array_key_exists($template, $this->mailStat)) {
+			$this->mailStat[$template] += $count;
+		} else {
+			$this->mailStat[$template] = $count;
+		}
 	}
 
 	/**
@@ -73,6 +85,13 @@ class InfluxMetrics
 			$executionTime = $now - $script_start_time;
 			$this->addPageStatData([], ['execution_time' => $executionTime]);
 			$this->addPoint('page', $this->pageStatTags, $this->pageStatFields);
+		}
+	}
+
+	private function generateMailStatistics()
+	{
+		foreach ($this->mailStat as $k => $v) {
+			$this->addPoint('outgoing_email', ['template' => $k], ['count' => $v]);
 		}
 	}
 }
