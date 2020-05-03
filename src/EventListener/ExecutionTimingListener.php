@@ -1,4 +1,5 @@
 <?php
+
 namespace Foodsharing\EventListener;
 
 use Foodsharing\Modules\Core\InfluxMetrics;
@@ -27,7 +28,6 @@ class ExecutionTimingListener implements EventSubscriberInterface
 
 		$this->influxMetrics->addPageStatData(['controller' => get_class($controller[0]), 'method' => $controller[1]]);
 	}
-
 
 	public static function getSubscribedEvents()
 	{
