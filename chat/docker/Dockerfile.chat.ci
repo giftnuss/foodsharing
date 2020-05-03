@@ -8,4 +8,4 @@ COPY package.json .
 
 RUN yarn
 
-CMD ["yarn", "ts-node src/index.ts"]
+CMD ["yarn", "ts-node", "src/index.ts"]
