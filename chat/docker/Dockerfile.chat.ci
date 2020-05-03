@@ -6,6 +6,6 @@ WORKDIR /app/chat
 
 COPY package.json .
 
-RUN yarn && yarn tsc
+RUN yarn
 
-CMD ["node", "dist/index.js"]
+CMD ["yarn", "ts-node src/index.ts"]
