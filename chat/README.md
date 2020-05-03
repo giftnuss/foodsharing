@@ -1,6 +1,6 @@
 # WebSocket server (chat)
 
-This directory contains a node.js server written in TypeScript to handle or WebSocket connections to clients. These
+This directory contains a node.js server written in TypeScript to handle WebSocket connections to clients. These
 connections are used in order to push updates to clients (e. g. browser windows or the Android app).
 
 ## Setup
