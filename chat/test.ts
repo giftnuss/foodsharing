@@ -252,6 +252,7 @@ test('does not send to other users', t => {
 });
 
 test('online status is false for non-connected user', t => {
+    t.timeoutAfter(10000);
     t.plan(2);
     addPHPSessionToRedis(1, 'test-3-user-1', () => {});
     superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
@@ -263,7 +264,8 @@ test('online status is false for non-connected user', t => {
     });
 });
 
-test('online status is true for connected user', t => {
+test('online status is true initially after user connected', t => {
+    t.timeoutAfter(10000);
     t.plan(2);
     addPHPSessionToRedis(1, 'test-4-user-1', () => {});
     const socket = connect(t, 'test-4-user-1');
@@ -274,6 +276,40 @@ test('online status is true for connected user', t => {
             }
             t.equal(response.type, 'application/json', 'content type is JSON');
             t.equal(response.body, true, 'response body is "true"');
+        });
+    });
+});
+
+test('online status is false after user window lost focus', t => {
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-5-user-1', () => {});
+    const socket = connect(t, 'test-5-user-1');
+    register(socket, () => {
+        socket.emit('blur');
+        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            if (err) {
+                t.error(err);
+            }
+            t.equal(response.type, 'application/json', 'content type is JSON');
+            t.equal(response.body, false, 'response body is "false"');
+        });
+    });
+});
+
+test('online status is true after window gained focus again', t => {
+    t.timeoutAfter(10000);
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-6-user-1', () => {});
+    const socket = connect(t, 'test-6-user-1');
+    register(socket, () => {
+        socket.emit('blur');
+        socket.emit('focus');
+        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            if (err) {
+                t.error(err);
+            }
+            t.equal(response.type, 'application/json', 'content type is JSON');
+            t.equal(response.body, true, 'response body is "false"');
         });
     });
 });

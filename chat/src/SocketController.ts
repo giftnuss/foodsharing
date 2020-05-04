@@ -1,31 +1,52 @@
 import { OnSocketConnection, OnSocketEvent } from './Framework/WebSocket/socket-decorators';
 import { Socket } from 'socket.io';
-import { SocketRegistry } from './SocketRegistry';
+import { ConnectionRegistry } from './ConnectionRegistry';
 import { parse as parseCookie } from 'cookie';
+import { Connection } from './Connection';
 
 export class SocketController {
-    private readonly socketRegistry: SocketRegistry;
+    private readonly connectionRegistry: ConnectionRegistry;
 
-    constructor (socketRegistry: SocketRegistry) {
-        this.socketRegistry = socketRegistry;
+    constructor (socketRegistry: ConnectionRegistry) {
+        this.connectionRegistry = socketRegistry;
     }
 
     @OnSocketConnection()
     onConnect (socket: Socket): void {
-        this.socketRegistry.numConnections++;
+        this.connectionRegistry.numConnections++;
     }
 
     @OnSocketEvent('register')
     onRegister (socket: Socket): void {
         const sessionId = this.readSessionId(socket);
-        this.socketRegistry.register(sessionId, socket);
+        this.connectionRegistry.register(sessionId, new Connection(socket));
     }
 
     @OnSocketEvent('disconnect')
     onDisconnect (socket: Socket): void {
         const sessionId = this.readSessionId(socket);
-        this.socketRegistry.removeRegistration(sessionId, socket);
-        this.socketRegistry.numConnections--;
+        this.connectionRegistry.removeRegistration(sessionId, socket.id);
+        this.connectionRegistry.numConnections--;
+    }
+
+    @OnSocketEvent('blur')
+    onClientBlur (socket: Socket): void {
+        const sessionId = this.readSessionId(socket);
+        const connection = this.connectionRegistry.getConnection(sessionId, socket.id);
+        if (!connection) {
+            return;
+        }
+        connection.clientIsHidden = true;
+    }
+
+    @OnSocketEvent('focus')
+    onClientFocus (socket: Socket): void {
+        const sessionId = this.readSessionId(socket);
+        const connection = this.connectionRegistry.getConnection(sessionId, socket.id);
+        if (!connection) {
+            return;
+        }
+        connection.clientIsHidden = false;
     }
 
     private readSessionId (socket: Socket): string {

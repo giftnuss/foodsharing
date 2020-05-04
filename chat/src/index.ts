@@ -1,10 +1,10 @@
 import { RestController } from './RestController';
 import { RestifyServerFacade } from './Framework/Rest/RestifyServerFacade';
-import { SocketRegistry } from './SocketRegistry';
+import { ConnectionRegistry } from './ConnectionRegistry';
 import { SocketIOServerFacade } from './Framework/WebSocket/SocketIOServerFacade';
 import { SocketController } from './SocketController';
 
-const socketRegistry = new SocketRegistry();
+const socketRegistry = new ConnectionRegistry();
 
 const restServer = new RestifyServerFacade();
 restServer.loadControllerDecorators(new RestController(socketRegistry));

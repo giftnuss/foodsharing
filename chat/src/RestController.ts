@@ -1,22 +1,22 @@
 import { Request, Response } from 'restify';
 import { Get, Post } from './Framework/Rest/rest-decorators';
-import { SocketRegistry } from './SocketRegistry';
+import { ConnectionRegistry } from './ConnectionRegistry';
 import { SessionIdProvider } from './SessionIdProvider';
 
 export class RestController {
     private readonly sessionIdProvider = new SessionIdProvider();
-    private readonly socketRegistry: SocketRegistry;
+    private readonly connectionRegistry: ConnectionRegistry;
 
-    constructor (connectionRepository: SocketRegistry) {
-        this.socketRegistry = connectionRepository;
+    constructor (connectionRegistry: ConnectionRegistry) {
+        this.connectionRegistry = connectionRegistry;
     }
 
     @Get('/stats')
     stats (request: Request, response: Response): void {
         response.send({
-            connections: this.socketRegistry.numConnections,
-            registrations: this.socketRegistry.numRegistrations,
-            sessions: this.socketRegistry.numRegisteredSessions
+            connections: this.connectionRegistry.numConnections,
+            registrations: this.connectionRegistry.numRegistrations,
+            sessions: this.connectionRegistry.numRegisteredSessions
         });
     }
 
@@ -24,12 +24,15 @@ export class RestController {
     async userIsConnected (request: Request, response: Response): Promise<any> {
         const userId = request.params.id;
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
+        const connections = this.connectionRegistry.getConnectionsForSessions(sessionIds);
 
-        for (const sessionId of sessionIds) {
-            if (this.socketRegistry.hasSocketForSession(sessionId)) {
-                return response.send(true); // there is at least one socket connection for userId
+        for (const connection of connections) {
+            if (connection.clientIsHidden) {
+                continue;
             }
+            return response.send(true); // there at least one connection to a client that is visible to the user
         }
+
         return response.sendRaw('false', { 'Content-Type': 'application/json' }); // due to a bug in Restify, a normal send would result in false being casted to null
     }
 
@@ -40,10 +43,10 @@ export class RestController {
     async send (request: Request, response: Response): Promise<any> {
         const userIds: number[] = request.params.ids.split('-').map(Number);
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUsers(userIds);
-        const sockets = this.socketRegistry.getSocketsForSessions(sessionIds);
+        const connections = this.connectionRegistry.getConnectionsForSessions(sessionIds);
 
-        for (const socket of sockets) {
-            socket.emit(request.params.channel, { m: request.params.method, o: request.body });
+        for (const connection of connections) {
+            connection.send(request.params.channel, { m: request.params.method, o: request.body });
         }
 
         return response.send();
