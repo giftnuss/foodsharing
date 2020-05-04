@@ -280,12 +280,12 @@ test('online status is true initially after user connected', t => {
     });
 });
 
-test('online status is false after user window lost focus', t => {
+test('online status is false after user window moved into the background', t => {
     t.plan(2);
     addPHPSessionToRedis(1, 'test-5-user-1', () => {});
     const socket = connect(t, 'test-5-user-1');
     register(socket, () => {
-        socket.emit('blur');
+        socket.emit('visibilitychange', true); // hidden = true
         superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
             if (err) {
                 t.error(err);
@@ -296,14 +296,14 @@ test('online status is false after user window lost focus', t => {
     });
 });
 
-test('online status is true after window gained focus again', t => {
+test('online status is true after window came into the foreground again', t => {
     t.timeoutAfter(10000);
     t.plan(2);
     addPHPSessionToRedis(1, 'test-6-user-1', () => {});
     const socket = connect(t, 'test-6-user-1');
     register(socket, () => {
-        socket.emit('blur');
-        socket.emit('focus');
+        socket.emit('visibilitychange', true);
+        socket.emit('visibilitychange', false);
         superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
             if (err) {
                 t.error(err);

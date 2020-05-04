@@ -29,24 +29,14 @@ export class SocketController {
         this.connectionRegistry.numConnections--;
     }
 
-    @OnSocketEvent('blur')
-    onClientBlur (socket: Socket): void {
+    @OnSocketEvent('visibilitychange')
+    onClientVisibilityChange (socket: Socket, hidden: boolean): void {
         const sessionId = this.readSessionId(socket);
         const connection = this.connectionRegistry.getConnection(sessionId, socket.id);
         if (!connection) {
             return;
         }
-        connection.clientIsHidden = true;
-    }
-
-    @OnSocketEvent('focus')
-    onClientFocus (socket: Socket): void {
-        const sessionId = this.readSessionId(socket);
-        const connection = this.connectionRegistry.getConnection(sessionId, socket.id);
-        if (!connection) {
-            return;
-        }
-        connection.clientIsHidden = false;
+        connection.clientIsHidden = hidden;
     }
 
     private readSessionId (socket: Socket): string {

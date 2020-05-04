@@ -42,7 +42,7 @@ export class SocketIOServerFacade implements ServerFacade {
             }
 
             this.socketIo.on('connection', (socket) => {
-                socket.on(metadata.eventName, () => controller[methodName](socket));
+                socket.on(metadata.eventName, (...args) => controller[methodName](socket, ...args));
             }
             );
         }

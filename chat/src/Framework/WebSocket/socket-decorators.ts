@@ -23,7 +23,7 @@ export const OnSocketConnection = (): any => {
 
 /**
  * A method with this decorator will be registered to listen to the specified socket event. The socket connection
- * emitting this event will be injected.
+ * emitting this event will be injected as first parameter, followed by all of the event's arguments.
  */
 export const OnSocketEvent = (eventName: string): any => {
     return (targetObject: Record<string, any>, controllerMethodName: string) => {
