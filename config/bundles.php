@@ -5,5 +5,6 @@ return [
 	Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
 	FOS\RestBundle\FOSRestBundle::class => ['all' => true],
 	JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
-	Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle::class => ['all' => true]
+	Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle::class => ['all' => true],
+	Nelmio\ApiDocBundle\NelmioApiDocBundle::class => ['all' => true]
 ];

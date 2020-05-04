@@ -4,6 +4,8 @@ framework:
         handler_id: ~
     php_errors:
         log: true
+    assets:
+        base_path: '/assets'
 
 
 fos_rest:
