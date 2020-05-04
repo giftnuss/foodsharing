@@ -24,6 +24,7 @@ dc up -d
 echo "Running composer install"
 # exec-in-container is defined in inc.sh
 exec-in-container app composer install
+exec-in-container app bin/console assets:install
 exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 
 echo "Waiting for database"
