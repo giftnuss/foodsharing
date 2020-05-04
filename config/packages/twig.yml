@@ -1,0 +1,6 @@
+twig:
+  form_themes:
+    - partials/fields.html.twig
+
+  strict_variables:     true
+  default_path: 'views'
