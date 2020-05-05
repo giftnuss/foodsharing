@@ -185,19 +185,6 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->tester->seeInDatabase('fs_betrieb', ['bezirk_id' => $newRegion['id'], 'id' => $this->store['id']]);
 	}
 
-	public function testDeleteDate()
-	{
-		$storeId = $this->store['id'];
-		$date = Carbon::now();
-		$this->tester->haveInDatabase('fs_abholer', ['betrieb_id' => $storeId, 'date' => $date]);
-		$this->tester->haveInDatabase('fs_fetchdate', ['betrieb_id' => $storeId, 'time' => $date]);
-
-		$this->gateway->deleteDate($storeId, $date);
-
-		$this->tester->dontSeeInDatabase('fs_abholer', ['betrieb_id' => $storeId, 'date' => $date]);
-		$this->tester->dontSeeInDatabase('fs_fetchdate', ['betrieb_id' => $storeId, 'time' => $date]);
-	}
-
 	public function testGetNoTeamConversation()
 	{
 		$conversationId = $this->gateway->getBetriebConversation($this->store['id']);

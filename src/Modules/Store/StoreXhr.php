@@ -66,25 +66,6 @@ class StoreXhr extends Control
 		}
 	}
 
-	public function deldate()
-	{
-		$storeId = (int)$_GET['id'];
-		if (!$this->storePermissions->mayDeletePickup($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
-			$this->storeGateway->deleteDate($storeId, $_GET['time']);
-
-			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
-
-			return [
-				'status' => 1,
-				'script' => 'reload();'
-			];
-		}
-	}
-
 	public function getfetchhistory()
 	{
 		$storeId = (int)$_GET['bid'];
