@@ -157,13 +157,6 @@ $(document).ready(() => {
     ]
   })
 
-  $('#changeStatus').button().on('click', () => {
-    $('#changeStatus-hidden').dialog({
-      title: i18n('change_status'),
-      modal: true
-    })
-  })
-
   $('.nft-remove').button({
     text: false,
     icons: {

@@ -32,6 +32,7 @@ export default {
         case 5: // CooperationStatus::COOPERATION_ESTABLISHED
           return i18n('storestatus.5')
         case 4: // CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US
+        case 7: // CooperationStatus::PERMANENTLY_CLOSED
           return i18n('storestatus.4')
         case 6: // CooperationStatus::GIVES_TO_OTHER_CHARITY
           return i18n('storestatus.6')
@@ -61,7 +62,8 @@ export default {
         color: #79aa51;
     }
 
-    &[data-status="4"] {
+    &[data-status="4"],
+    &[data-status="7"] {
         color: #df4b4d;
     }
 

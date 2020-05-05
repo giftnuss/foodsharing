@@ -334,15 +334,17 @@ class XhrMethods
 			foreach ($data['types'] as $t) {
 				if ($t == 'betriebe' && $this->session->may('fs')) {
 					$team_status = [];
-					$nkoorp = '';
+					$hide_some = ' AND betrieb_status_id <> 7'; // CooperationStatus::PERMANENTLY_CLOSED
 					if (isset($data['options']) && is_array($data['options'])) {
 						foreach ($data['options'] as $opt) {
 							if ($opt == 'needhelpinstant') {
-								$team_status[] = 'team_status = 2';
+								$team_status[] = 'team_status = 2'; // TeamStatus::OPEN_SEARCHING
 							} elseif ($opt == 'needhelp') {
-								$team_status[] = 'team_status = 1';
+								$team_status[] = 'team_status = 1'; // TeamStatus::OPEN
 							} elseif ($opt == 'nkoorp') {
-								$nkoorp = ' AND betrieb_status_id NOT IN(3,5)';
+								// CooperationStatus::COOPERATION_STARTING
+								// CooperationStatus::COOPERATION_ESTABLISHED
+								$hide_some .= ' AND betrieb_status_id NOT IN(3,5)';
 							}
 						}
 					}
@@ -353,7 +355,7 @@ class XhrMethods
 						$team_status = '';
 					}
 
-					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $nkoorp);
+					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $hide_some);
 				} elseif ($t == 'fairteiler') {
 					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM fs_fairteiler WHERE lat != "" AND status = 1 ');
 				} elseif ($t == 'baskets') {

@@ -102,9 +102,6 @@ class StoreUserControl extends Control
 					$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
 				}
 				$this->routeHelper->goSelf();
-			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {
-				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
-				$this->routeHelper->go($this->routeHelper->getSelf());
 			}
 
 			$this->pageHelper->addTitle($store['name']);
@@ -346,21 +343,12 @@ class StoreUserControl extends Control
 				if (!$store['jumper']) {
 					if ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED) {
 					} else {
-						$bt = '';
-						$storeStateName = '';
-						$storeStateList = $this->storeGateway->getStoreStateList();
-						foreach ($storeStateList as $storeState) {
-							if ($storeState['id'] == $store['betrieb_status_id']) {
-								$storeStateName = $storeState['name'];
-							}
-						}
-						if ($store['verantwortlich']) {
-							$this->pageHelper->addHidden('<div id="changeStatus-hidden">' . $this->v_utils->v_form('changeStatusForm', [
-									$this->v_utils->v_form_select('betrieb_status_id', ['value' => $store['betrieb_status_id'], 'values' => $storeStateList])
-								]) . '</div>');
-							$bt = '<p><span id="changeStatus">' . $this->translationHelper->s('change_status') . '</a></p>';
-						}
-						$this->pageHelper->addContent($this->v_utils->v_field('<p>' . $this->v_utils->v_getStatusAmpel($store['betrieb_status_id']) . $storeStateName . '</p>' . $bt, $this->translationHelper->s('status'), ['class' => 'ui-padding']), CNT_RIGHT);
+						$icon = $this->v_utils->v_getStatusAmpel($store['betrieb_status_id']);
+						$this->pageHelper->addContent($this->v_utils->v_field(
+							'<p>' . $icon . '</p>',
+							$this->translator->trans('storeview.status'),
+							['class' => 'ui-padding']
+						), CNT_RIGHT);
 					}
 				}
 			} else {

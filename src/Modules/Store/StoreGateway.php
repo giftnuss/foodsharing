@@ -97,13 +97,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					k.logo
 
 			FROM 	fs_betrieb b
-                    LEFT JOIN fs_kette k
-                    ON b.kette_id = k.id
+			LEFT JOIN fs_kette k ON b.kette_id = k.id
 
-			WHERE   b.bezirk_id = :regionId
-			AND     b.`lat` != ""
-        ', [
-			':regionId' => $regionId
+			WHERE 	b.bezirk_id = :regionId
+			  AND	b.betrieb_status_id <> :permanentlyClosed
+			  AND	b.`lat` != ""
+		', [
+				':regionId' => $regionId,
+				':permanentlyClosed' => CooperationStatus::PERMANENTLY_CLOSED,
 		]);
 	}
 
@@ -734,29 +735,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchValueByCriteria('fs_betrieb', $chatType, ['id' => $storeId]);
 	}
 
-	public function changeBetriebStatus($fs_id, $storeId, $status): int
-	{
-		$last = $this->db->fetch('SELECT id, milestone FROM `fs_betrieb_notiz` WHERE `betrieb_id` = :id ORDER BY id DESC LIMIT 1', [':id' => $storeId]);
-
-		if ($last['milestone'] == 3) {
-			$this->db->delete('fs_betrieb_notiz', ['id' => $last['id']]);
-		}
-
-		$this->add_betrieb_notiz([
-			'foodsaver_id' => $fs_id,
-			'betrieb_id' => $storeId,
-			'text' => 'status_msg_' . (int)$status,
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 3
-		]);
-
-		return $this->db->update(
-			'fs_betrieb',
-			['betrieb_status_id' => $status],
-			['id' => $storeId]
-		);
-	}
-
 	public function add_betrieb_notiz($data): int
 	{
 		$last = 0;
@@ -1200,7 +1178,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['id' => '3', 'name' => 'Betrieb ist bereit zu spenden :-)'],
 			['id' => '4', 'name' => 'Betrieb will nicht kooperieren'],
 			['id' => '5', 'name' => 'Betrieb spendet bereits'],
-			['id' => '6', 'name' => 'spendet an Tafel etc. & wirft nichts weg']
+			['id' => '6', 'name' => 'spendet an Tafel etc. & wirft nichts weg'],
+			['id' => '7', 'name' => 'Betrieb existiert nicht mehr :-('],
 		];
 	}
 

@@ -1287,28 +1287,26 @@ class Utils
 
 	public function v_getStatusAmpel($status)
 	{
-		$out = '';
+		if (!in_array($status, range(1, 7))) {
+			$status = 0;
+		}
+		$color = 'grau';
 		switch ($status) {
-			case 1:
-				$out = '<span class="hidden">1</span><a href="#" onclick="return false;" title="Es besteht noch kein Kontakt" class="ampel ampel-grau"><span>&nbsp;</span></a>';
-				break;
 			case 2:
-				$out = '<span class="hidden">2</span><a href="#" onclick="return false;" title="Verhandlungen laufen" class="ampel ampel-gelb"><span>&nbsp;</span></a>';
-				break;
+				$color = 'gelb'; break;
 			case 3:
-				$out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>';
-				break;
 			case 5:
-				$out = '<span class="hidden">3</span><a href="#" onclick="return false;" title="Betrieb kooperiert bereits" class="ampel ampel-gruen"><span>&nbsp;</span></a>';
-				break;
+				$color = 'gruen'; break;
 			case 4:
-				$out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Will nicht kooperieren" class="ampel ampel-rot"><span>&nbsp;</span></a>';
-				break;
+			case 7:
+				$color = 'rot'; break;
 			case 6:
-				$out = '<span class="hidden">4</span><a href="#" onclick="return false;" title="Spendet an Tafel etc. und wirft nichts weg" class="ampel ampel-blau"><span>&nbsp;</span></a>';
-				break;
+				$color = 'blau'; break;
 		}
 
-		return $out;
+		return '<a href="#" onclick="return false;" title="'
+			. $this->translator->trans('storestatus.' . $status)
+			. '" class="ampel ampel-'
+			. $color . '"><span>&nbsp;</span></a>';
 	}
 }
