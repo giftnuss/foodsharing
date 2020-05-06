@@ -128,6 +128,8 @@
 - Added a workaround to devdocs for fedora 32 or debian 10 and docker !1439 @chriswalg
 - added information on our Workflow and how to solve Merge Conflicts in devdocs @jonathan_b
 - added text about refactoring to devdocs @Caluera !1464
+- added text about releases to devdocs @Caluera !1486
+
 
 
 # 2020-03-16 Hotfix
