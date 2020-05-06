@@ -24,7 +24,6 @@ dc up -d
 echo "Running composer install"
 # exec-in-container is defined in inc.sh
 exec-in-container app composer install
-exec-in-container app bin/console assets:install
 exec-in-container-asroot app rm --recursive --force cache/.views-cache cache/di-cache.php
 
 echo "Waiting for database"
@@ -35,6 +34,10 @@ createdb foodsharing
 
 # Migrating db
 migratedb foodsharing || true
+
+echo "Waiting for assets to be generated..."
+wait-for-assets
+exec-in-container app bin/console assets:install
 
 echo
 echo "  Go visit http://localhost:18080 now!"
