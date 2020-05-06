@@ -41,8 +41,9 @@ chat/socket.io -> nodejs server, in chat/server.js. There is documentation for a
 
 # REST API
 
-The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony).
+The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony). The documentation of the REST api endpoints is located at the definition of the endpoints and can be nicely viewed on (https://beta.foodsharing.de/api/doc/).
 <!-- TODO: good link to intro/ tutorial -->
+<!-- TODO: how is this created? -->
 
 In the [Code quality page](code-review.md) we have some notes on how to define the REST API Endpoints.
 
