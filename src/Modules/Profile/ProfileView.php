@@ -20,6 +20,7 @@ use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ProfileView extends View
 {
@@ -40,10 +41,11 @@ class ProfileView extends View
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
 		ProfilePermissions $profilePermissions,
-		ReportPermissions $reportPermissions
+		ReportPermissions $reportPermissions,
+		TranslatorInterface $translator
 	) {
 		parent::__construct($twig, $viewUtils, $session, $sanitizerService, $pageHelper, $timeHelper, $imageService,
-			$routeHelper, $identificationHelper, $dataHelper, $translationHelper);
+			$routeHelper, $identificationHelper, $dataHelper, $translationHelper, $translator);
 
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;

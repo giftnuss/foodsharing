@@ -14,6 +14,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class StoreView extends View
 {
@@ -31,7 +32,8 @@ class StoreView extends View
 			IdentificationHelper $identificationHelper,
 			DataHelper $dataHelper,
 			TranslationHelper $translationHelper,
-			WeightHelper $weightHelper
+			WeightHelper $weightHelper,
+			TranslatorInterface $translator
 			) {
 		$this->weightHelper = $weightHelper;
 		parent::__construct(
@@ -45,7 +47,8 @@ class StoreView extends View
 						$routeHelper,
 						$identificationHelper,
 						$dataHelper,
-						$translationHelper
+						$translationHelper,
+						$translator
 						);
 	}
 

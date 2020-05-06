@@ -13,6 +13,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class StoreUserView extends View
 {
@@ -27,7 +28,8 @@ class StoreUserView extends View
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
 	) {
 		parent::__construct(
 			$twig,
@@ -40,7 +42,8 @@ class StoreUserView extends View
 			$routeHelper,
 			$identificationHelper,
 			$dataHelper,
-			$translationHelper
+			$translationHelper,
+			$translator
 		);
 	}
 
