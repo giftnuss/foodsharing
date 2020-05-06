@@ -12,6 +12,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class View
 {
@@ -33,6 +34,7 @@ class View
 	protected $identificationHelper;
 	protected $dataHelper;
 	protected $translationHelper;
+	protected $translator;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -45,7 +47,8 @@ class View
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
 	) {
 		$this->twig = $twig;
 		$this->v_utils = $viewUtils;
@@ -58,6 +61,7 @@ class View
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	public function setSub($sub)

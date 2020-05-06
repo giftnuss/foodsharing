@@ -208,6 +208,11 @@ class Session
 		return fSession::get($var, false);
 	}
 
+	public function getLocale()
+	{
+		return fSession::get('locale', 'de');
+	}
+
 	/**
 	 * gets a user specific option and will be available after next login.
 	 *

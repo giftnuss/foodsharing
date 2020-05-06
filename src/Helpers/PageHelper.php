@@ -226,7 +226,8 @@ final class PageHelper
 			'location' => $location,
 			'ravenConfig' => $sentryConfig,
 			'translations' => $this->translationHelper->getTranslations(),
-			'isDev' => getenv('FS_ENV') === 'dev'
+			'isDev' => getenv('FS_ENV') === 'dev',
+			'locale' => $this->session->getLocale()
 		]);
 	}
 

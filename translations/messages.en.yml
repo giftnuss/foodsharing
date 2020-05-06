@@ -1,0 +1,107 @@
+group:
+  name: Name
+  description: Description
+  photo: photo
+  applications: Applications
+  applications_for: Applications for %name%
+  mail_link_title:
+    workgroup: email inbox
+    region: email inbox
+  application_requirements:
+    requirements: Who can enter this group?
+    nobody: Nobody (closed group)
+    requires_properties: Everybody who fulfills certain criteria
+    everybody: Everybody can apply
+    open: Everybody can directly join
+    fetch_count: How many pickups does an applicant need to have done?
+    banana_count: How many trust bananas must an applicant have?
+    banana_count_errors:
+      min: Nobody can have less than {{ limit }} trust banans!
+      max: Please do not expect more than {{ limit }} trust bananas!
+    member_since_weeks: How many weeks does an applicant need to be registered on the platform?
+    not_fulfilled: To apply for this group, you have to be registered for at least %weeks% weeks, have %bananas% trust bananas and helped %fetches% times picking up food.
+  members: Members
+  administrators: Administrators
+  title: foodsharing working groups
+  subtitle: find help and or work...
+  member_count: '{0} No members|{1} One member| [2, Inf[ %count% members'
+  admin_count: '{0} No administrators|{1} One administrator| [2, Inf[ %count% administrators'
+  image: image for %name%
+  already_applied: You already applied for this group
+  actions:
+    contact: Contact group
+    edit: Edit group
+    go: Visit group page
+    apply: Apply for this group
+    join: Join this group
+    safe: Save changes
+  no_groups: No groups exist in this category
+  quit_name: Leave group %name%
+  quit: Leave
+  really_quit_name: Do you really want to quit the group %name%?
+  delete_group_sure: Do you really want to delete the group {groupName}?
+
+menu:
+  manage_regions: Manage regions
+  blog: Manage blog content
+  quiz: Manage quiz
+  reports: Violation reports
+  email: Newsletter tool
+  manage_mailboxes: Manage mailboxes
+  faq: Manage FAQ
+  content: Manage content
+  entry:
+    activities: Activities
+    infos: Infos
+    all_messages: All Messages
+    messages: Messages
+    your_groups: Your groups
+    groups: Group overview
+    your_account: Your account
+    your_stores: Your stores
+    administration: Administration
+    notifications: Notifications
+    contact: Contact
+    politics: Political
+    fscities: foodsharing cities
+    demands: Demands
+    pastcampaigns: Previous campaigns
+    education: Education
+    academy: Academy
+    talksandworkshops: Talks and workshops
+    fsfestival: foodsharing festival
+    mailbox: Mailbox
+    donate: Donate
+    press: Press
+    forcompanies: For companies
+    imprint: Impressum
+    regionalgroups: Regional groups
+    Germany: Germany
+    Austria: Austria
+    Swiss: Switzerland
+    international: International
+    forum: Forum
+    BOTforum: Ambassador forum
+    wall: Wall
+    events: Events
+    members: Members
+    workingGroupEdit: Manage group
+    aboutUs: About us
+    mission: Mission
+    fundamentals: Fundamentals
+    blog: Blog
+    team: Team
+    partners: Partner
+    background: Background
+    faq: F.A.Q.
+    wiki: Wiki
+    guide: Guide
+    statistics: Statistics
+    transparency: Transparency
+    dataprivacy: Data privacy
+    changelog: Changelog
+    stores: Stores
+    fs: Foodsaver
+    ids: Passports
+    joinregion: Join a region
+  your_settings: Your data and settings

@@ -118,7 +118,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out = $this->v_utils->v_field($list, 'Du bist verantwortlich für', ['class' => 'ui-padding']);
+			$out = $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_are_responsible_for_stores'), ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['team'])) {
@@ -132,7 +132,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du holst Lebensmittel ab bei', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_pickup_at_stores'), ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['waitspringer'])) {
@@ -146,7 +146,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springerliste bei', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_wait_at_stores'), ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['anfrage'])) {

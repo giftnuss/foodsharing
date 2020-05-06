@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Legal;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\View;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,7 @@ class LegalControl extends Control
 	private $gateway;
 
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 
@@ -28,7 +28,7 @@ class LegalControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -48,7 +48,7 @@ class LegalControl extends Control
 			$data = new LegalData(false, true);
 		}
 
-		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
+		$form = $this->formFactory->create(LegalForm::class, $data);
 
 		$form->handleRequest($request);
 

@@ -433,6 +433,9 @@ dashboard:
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
   source_store: "Betriebe {0}"
+  you_are_responsible_for_stores: Du bist verantwortlich für
+  you_pickup_at_stores: Du holst Lebensmittel ab bei
+  you_wait_at_stores: Du bist auf der Springerliste bei
 
 home:
   title: Startseite

@@ -12,25 +12,6 @@ services:
         calls:
         - [initIfCookieExists]
 
-    translator.xliff_file_loader:
-        class: Symfony\Component\Translation\Loader\XliffFileLoader
-
-    translator.yaml_file_loader:
-        class: Symfony\Component\Translation\Loader\YamlFileLoader
-
-    translator:
-        class: Symfony\Component\Translation\Translator
-        arguments:
-            - 'de'
-        calls:
-            - ['addLoader', ['xlf', '@translator.xliff_file_loader']]
-            - ['addLoader', ['yml', '@translator.yaml_file_loader']]
-            - ['addResource', ['xlf', 'vendor/symfony/validator/Resources/translations/validators.de.xlf', 'de', 'messages']]
-            - ['addResource', ['yml', 'lang/lang.de.yml', 'de', 'messages']]
-            - ['setFallbackLocales', [['de']]]
-
-    Symfony\Contracts\Translation\TranslatorInterface: '@translator'
-
     markdown.nohtml:
         class: \Parsedown
         calls:
@@ -41,30 +22,6 @@ services:
     Parsedown: '@markdown.nohtml'
 
     HTMLPurifier: '@exercise_html_purifier.default'
-
-    validator.builder:
-        class: Symfony\Component\Validator\ValidatorBuilder
-        factory: 'Symfony\Component\Validator\Validation::createValidatorBuilder'
-        calls:
-            - [setTranslator, ['@translator']]
-            - [setTranslationDomain, ['messages']]
-            - [enableAnnotationMapping]
-
-    validator:
-        class: Symfony\Component\Validator\Validator\ValidatorInterface
-        factory: "validator.builder:getValidator"
-
-    Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension:
-
-    Symfony\Component\Form\Extension\Validator\ValidatorExtension:
-        arguments:
-            - "@=service('validator')"
-
-    Symfony\Component\Form\FormFactoryBuilder:
-        factory: [Symfony\Component\Form\Forms, createFormFactoryBuilder]
-        calls:
-            - [addExtension, ['@Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension']]
-            - [addExtension, ['@Symfony\Component\Form\Extension\Validator\ValidatorExtension']]
 
     Intervention\Image\ImageManager:
         arguments:
