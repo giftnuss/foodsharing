@@ -124,7 +124,6 @@ final class MessageGateway extends BaseGateway
 
 	public function getConversationForUser(int $conversationId, int $fsId): ?Conversation
 	{
-		/* TODO: This may return empty conversations that don't have a last message */
 		$result = $this->listConversationsForUserWithoutMembers($fsId, null, 0, $conversationId);
 		if ($result) {
 			return $result[$conversationId];
@@ -222,6 +221,9 @@ final class MessageGateway extends BaseGateway
 			$query .= '
 			AND c.id = :cid';
 			$params = array_merge($params, [':cid' => $cid]);
+		} else {
+			$query .= '
+			AND c.last_message_ID IS NOT NULL';
 		}
 		$query .= '
 			ORDER BY

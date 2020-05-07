@@ -138,10 +138,6 @@ class MessageRestController extends AbstractFOSRestController
 		$offset = $paramFetcher->get('offset');
 
 		$data = $this->messageService->listConversationsWithProfilesForUser($this->session->id(), $limit, $offset);
-		$data['conversations'] = array_filter($data['conversations'], function ($c) {
-			/* hide conversations without a message, as this has always been the behaviour */
-			return $c->lastMessage || $c->messages;
-		});
 
 		return $this->handleView($this->view([
 			'conversations' => array_values($data['conversations']),
