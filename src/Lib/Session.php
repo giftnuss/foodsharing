@@ -210,6 +210,10 @@ class Session
 
 	public function getLocale()
 	{
+		if (!$this->initialized) {
+			return 'de';
+		}
+
 		return fSession::get('locale', 'de');
 	}
 
