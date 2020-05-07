@@ -415,7 +415,7 @@ final class MessageGateway extends BaseGateway
 					'unread' => 0
 				];
 			}
-			$this->db->insertMultiple('fs_foodsaver_has_conversation', $data);
+			$this->db->insertMultiple('fs_foodsaver_has_conversation', $data, ['ignore' => true]);
 			$this->db->commit();
 		}
 	}

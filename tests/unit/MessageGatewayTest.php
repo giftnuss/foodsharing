@@ -66,4 +66,27 @@ class MessageGatewayTest extends Unit
 		$result = $this->gateway->getOrCreateConversation([$fsa['id'], $fsc['id']]);
 		$this->tester->assertNotEquals($conversation['id'], $result);
 	}
+
+	public function testSetConversationMembers()
+	{
+		$fsa = $this->tester->createFoodsaver();
+		$fsb = $this->tester->createFoodsaver();
+		$fsc = $this->tester->createFoodsaver();
+		$conversation = $this->tester->createConversation([$fsb['id'], $fsa['id']]);
+		$cid = $conversation['id'];
+		$members = [$fsa['id'], $fsb['id']];
+		$this->tester->assertEqualsCanonicalizing($members, $this->tester->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $cid]));
+		$members = [$fsa['id']];
+		$this->gateway->setConversationMembers($cid, $members);
+		$this->tester->assertEqualsCanonicalizing($members, $this->tester->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $cid]));
+		$members = [$fsa['id'], $fsb['id'], $fsc['id']];
+		$this->gateway->setConversationMembers($cid, $members);
+		$this->tester->assertEqualsCanonicalizing($members, $this->tester->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $cid]));
+		$members = [];
+		$this->gateway->setConversationMembers($cid, $members);
+		$this->tester->assertEqualsCanonicalizing($members, $this->tester->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $cid]));
+		$members = [$fsa['id'], $fsb['id'], $fsc['id']];
+		$this->gateway->setConversationMembers($cid, $members);
+		$this->tester->assertEqualsCanonicalizing($members, $this->tester->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $cid]));
+	}
 }

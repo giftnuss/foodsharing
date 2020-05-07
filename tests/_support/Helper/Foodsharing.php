@@ -524,9 +524,9 @@ class Foodsharing extends \Codeception\Module\Db
 			'locked' => 0,
 			'name' => null,
 			'last' => $this->faker->dateTime(),
-			'last_foodsaver_id' => $users[0],
+			'last_foodsaver_id' => $users ? $users[0] : null,
 			'last_message_id' => null,
-			'last_message' => '',
+			'last_message' => null,
 		], $extra_params);
 		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
