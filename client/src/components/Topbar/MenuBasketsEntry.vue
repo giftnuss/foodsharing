@@ -27,8 +27,8 @@
           class="requests"
         >
           <b-list-group-item
-            v-for="req in requests"
-            :key="req.id"
+            v-for="req in basket.requests"
+            :key="`${req.user.id}`"
             href="#"
             class="d-flex w-100 align-items-center food-basket-create-test-class"
             @click.prevent="openChat(req.user.id, $event)"
@@ -70,16 +70,6 @@ export default {
     basket: {
       type: Object,
       default: () => ({})
-    }
-  },
-  computed: {
-    requests () {
-      // add artificial IDs to the requests for v-for
-      let requestId = 0
-      return this.basket.requests.map(request => {
-        request.id = requestId++
-        return request
-      })
     }
   },
   methods: {
