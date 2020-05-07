@@ -284,6 +284,7 @@ export default {
     margin-bottom: 10px;
     text-overflow: unset;
     white-space: inherit;
+    overflow-wrap: break-word;
 
     i.fa {
       display: inline-block;

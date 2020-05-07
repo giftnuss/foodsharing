@@ -83,8 +83,10 @@ input, textarea, select, option {
   font-size: 13px;
 }
 
+.event-description,
 .activity_feed_content_info p {
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 .activity_feed_content_text {
