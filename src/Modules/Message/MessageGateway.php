@@ -407,14 +407,15 @@ final class MessageGateway extends BaseGateway
 			AND conversation_id = ?
 			', array_merge($userIds, [$conversationId]));
 
-			/* TODO: database layer doesn't support helpers for bulk insert */
+			$data = [];
 			foreach ($userIds as $userId) {
-				$this->db->insert('fs_foodsaver_has_conversation', [
+				$data[] = [
 					'conversation_id' => $conversationId,
 					'foodsaver_id' => $userId,
 					'unread' => 0
-				]);
+				];
 			}
+			$this->db->insertMultiple('fs_foodsaver_has_conversation', $data);
 			$this->db->commit();
 		}
 	}
