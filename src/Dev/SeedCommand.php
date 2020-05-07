@@ -112,6 +112,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$password = 'user';
+		$region1WorkGroup = '1135'; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
 		// Create users
 		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $region1]);
@@ -138,7 +139,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionAdmin($region1, $userbot['id']);
 		$I->addRegionMember($ag_quiz, $userbot['id']);
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
-
+		$I->addRegionAdmin($region1WorkGroup, $userbot['id']);
 		$I->addRegionMember($region_vorstand, $userbot['id']);
 		$I->addRegionMember($ag_aktive, $userbot['id']);
 
@@ -200,6 +201,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 			}
 		}
 		$this->output->writeln('Created conversations');
+
+		// add some users to a workgroup
+		$this->output->writeln('Add user to workgroup');
+		foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $random_user) {
+			$I->addRegionMember($region1WorkGroup, $random_user);
+		}
 
 		// create more stores and collect their ids in a list
 		$this->stores = [$store['id']];

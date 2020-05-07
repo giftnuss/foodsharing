@@ -216,6 +216,7 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Fixed broken tooltips !1304 @ctwx_ok
 - Fix error message when downgrading a foodsaver and do only downgrade if user role has decreased !1323 @pfaufisch @jofranz
 - Temporarily disable pickup slot markers for production release !1307 @jofranz
+- Passportgenerator list sorted by name default, workgroups are not shown anymore !1310 @fs_k
 
 ## Refactoring
 - Optimize database access for legal queries !1292 @CarolineFischer
