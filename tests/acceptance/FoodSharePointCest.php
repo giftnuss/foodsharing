@@ -52,7 +52,7 @@ class FoodSharePointCest
 		$I->fillFieldJs('#lon', '2.48');
 		$I->click('Speichern');
 		$I->waitForText('wurde erfolgreich eingetragen');
-		$id = $I->grabFromDatabase('fs_fairteiler', 'id', ['name' => 'The greatest fairsharepoint']);
+		$id = $I->grabFromDatabase('fs_fairteiler', 'id', ['name' => 'The greatest fairsharepoint', 'bezirk_id' => $this->testBezirk['id']]);
 		$I->amOnPage($I->foodSharePointGetUrl($id));
 		$I->waitForText('Kantstrasse 20', 10);
 	}

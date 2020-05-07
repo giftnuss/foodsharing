@@ -4,6 +4,9 @@ class SessionTest extends \Codeception\Test\Unit
 {
 	protected $tester;
 
+	/**
+	 * @var \Foodsharing\Lib\Session
+	 */
 	private $session;
 
 	protected function _before()
