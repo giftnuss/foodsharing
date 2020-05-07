@@ -81,7 +81,7 @@ export default {
 <style lang="scss">
 .topbar-bells {
     .dropdown-menu {
-        width: 250px;
+        width: 280px;
         padding: 0;
     }
 }
