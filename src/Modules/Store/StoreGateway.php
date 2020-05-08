@@ -426,18 +426,19 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						t.`stat_add_date`,
 						UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
 						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+						(10000 * t.`verantwortlich`) + t.`stat_fetchcount` + fs.`verified` - fs.sleep_status AS priority,
 						fs.sleep_status
 
 
 				FROM 	`fs_betrieb_team` t
-						INNER JOIN `fs_foodsaver` fs
+				INNER JOIN `fs_foodsaver` fs
 				     	ON fs.id = t.foodsaver_id
 
 				WHERE	`betrieb_id` = :id
 				AND 	t.active  = :membershipStatus
 				AND		fs.deleted_at IS NULL
 
-				ORDER BY t.`stat_fetchcount` DESC
+				ORDER BY 	priority DESC
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::MEMBER
@@ -460,6 +461,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						t.`stat_fetchcount`,
 						t.`stat_first_fetch`,
 						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
+						(10000 * t.`verantwortlich`) + t.`stat_fetchcount` + fs.`verified` - fs.sleep_status AS priority,
 						fs.sleep_status
 
 				FROM 	`fs_betrieb_team` t
@@ -469,6 +471,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				WHERE 	`betrieb_id` = :id
 				AND 	t.active  = :membershipStatus
 				AND		fs.deleted_at IS NULL
+
+				ORDER BY 	priority DESC
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::JUMPER
