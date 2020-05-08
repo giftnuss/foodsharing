@@ -334,7 +334,7 @@ class DashboardControl extends Control
 
 		$this->pageHelper->addContent(
 			'
-		<div class="pure-u-1 ui-padding-bottom">
+		<div class="ui-padding-bottom">
 		<ul class="content-top corner-all linklist">
 		<li>
 

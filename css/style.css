@@ -188,6 +188,15 @@ q:before, q:after {
   padding-left: 8px;
 }
 
+.field.reset-password {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.field.reset-password .input-wrapper {
+  border-bottom: none;
+}
+
 .odd {
   background-color: #fffffe;
   border-bottom: 1px solid var(--border);
