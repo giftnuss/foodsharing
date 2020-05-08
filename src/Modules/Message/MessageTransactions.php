@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Foodsaver\Profile;
+use Foodsharing\Modules\Message\Message;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -129,12 +132,16 @@ class MessageTransactions
 
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {
-				if (($m['id'] != $message->authorId) && !$this->webSocketConnection->isUserOnline($m['id'])) {
+				if ($m['id'] != $message->authorId) {
 					$conversationName = $this->getProperConversationNameForFoodsaver($m['id'], $notificationTemplateData['chatName'], $members);
 					$pushNotification = new MessagePushNotification(
-						$author['name'] ?? '?',
-						$message->body,
-						new \DateTime(),
+						$message,
+						new Profile(
+							$author['id'],
+							$author['name'] ?? '?',
+							$author['photo'],
+							0
+						),
 						$conversationId,
 						count($members) > 2 ? $conversationName : null
 					);

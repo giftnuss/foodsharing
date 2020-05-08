@@ -866,11 +866,12 @@ final class FoodsaverGateway extends BaseGateway
 
 		$profiles = [];
 		foreach ($res as $p) {
-			$profile = new Profile();
-			$profile->id = $p['id'];
-			$profile->name = $p['name'];
-			$profile->avatar = $p['photo'];
-			$profile->sleepStatus = $p['sleep_status'];
+			$profile = new Profile(
+				$p['id'],
+				$p['name'],
+				$p['photo'],
+				$p['sleep_status']
+			);
 			$profiles[$p['id']] = $profile;
 		}
 

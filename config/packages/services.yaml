@@ -97,6 +97,9 @@ services:
     Foodsharing\Modules\Message\Message:
         autowire: false
 
+    Foodsharing\Modules\Foodsaver\Profile:
+        autowire: false
+
     GuzzleHttp\Client:
 
     Foodsharing\Lib\BigBlueButton:

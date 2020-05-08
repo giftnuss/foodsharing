@@ -2,26 +2,39 @@
 
 namespace Foodsharing\Modules\PushNotification\PushNotificationHandlers;
 
+use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
+use Foodsharing\Modules\PushNotification\Notification\PushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationHandlerInterface;
 use Minishlink\WebPush\Encryption;
 use Psr\Log\LoggerInterface;
 use Base64Url\Base64Url;
+use Minishlink\WebPush\Utils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AndroidPushHandler implements PushNotificationHandlerInterface
 {
 	private const typeIdentifier = 'android';
 
-	private $logger;
+	/**
+	 * @var fcmKey
+	 */
+	private $fcmKey;
 
-	public function __construct(LoggerInterface $logger)
+	/**
+	 * @var TranslatorInterface
+	 */
+	private $translator;
+
+	public function __construct(TranslatorInterface $translator)
 	{
-		// TODO remove logger before merging
-		$this->logger = $logger;
+		$this->translator = $translator;
+
+		//$this->fcmKey = FCM_SERVER_KEY;
+		$this->fcmKey = "AAAAIoVAv9Y:APA91bFybj8_BXrQOI5GXzKjFAGlvxJMf_CcTD70k8i8kc4ngLsbvXW6R6sDBoCpwYMgiWWX6rpyYob6QbW2w_tmliIlrgOEijPRBVPGIxuY0yWvbFcchZLINQGFwGLi8gGykwdXvu8N";
 	}
 
 	/**
-	 * Returns a string that identifies subscriptions that will be handled by this handler. It will be used in the
-	 * database but also in the URL of the REST api.
+	 * @see PushNotificationHandlerInterface::getTypeIdentifier()
 	 */
 	public static function getTypeIdentifier(): string
 	{
@@ -29,32 +42,15 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 	}
 
 	/**
-	 * Gets an array with subscription strings in the format they were saved in the database and sends the
-	 * $messasge to all of these clients.
-	 *
-	 * @var array - an array with subscription strings in JSON format
+	 * @var string[] an array with subscription strings in JSON format
 	 */
-	public function sendPushNotificationsToClients(array $subscriptionData, $title, array $options, array $action = null): array
+	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array
 	{
-		$this->logger->error("AndroidPush logger");
-		$this->logger->error("AndroidPush logger2");
         // Initialize Guzzle client
 		try {
-			$this->logger->error("client created");
+			$payloadJson = $this->makePayload($notification);
 
-			$options['data']['action'] = $action;
-			$payloadJson = json_encode(['title' => $title, 'options' => $options, 'p' => '']);
-
-			// Capillary does not support aes128gcm padding, thus we manually add padding to the payload			
-			$paddingLen = 2600 - strlen($payloadJson);
-			if ($paddingLen > 0) {
-				$payloadJson = json_encode(['title' => $title, 'options' => $options, 'p' => str_repeat("0", $paddingLen)]);
-			}
-
-			$this->logger->error("Number of subs " . sizeof($subscriptionData));
 			foreach ($subscriptionData as $subscriptionAsJson) {
-
-				$this->logger->error("start sub handling");
 				$subscriptionArray = json_decode($subscriptionAsJson, true);
 
 				$userPublicKey = $subscriptionArray['public_key'];
@@ -67,20 +63,11 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 
 				// Capillary does not support padding
                 $paddedPayload = $payloadJson . chr(2);
-
-				$this->logger->error("before encrypt");
-				$this->logger->error("payload json " . $payloadJson);
-				$this->logger->error("userPublicKey " . $userPublicKey);
-				$this->logger->error("userAuthToken " . $userAuthToken);
-				$this->logger->error("contentEncoding " . $contentEncoding);
 	            $encrypted = Encryption::encrypt($paddedPayload, $userPublicKey, $userAuthToken, $contentEncoding);
-				$this->logger->error("after encrypt");
 
 	            $cipherText = $encrypted['cipherText'];
 	            $salt = $encrypted['salt'];
 	            $localPublicKey = $encrypted['localPublicKey'];
-
-				$this->logger->error("salt length " . strlen($salt));
 
                 $encryptionContentCodingHeader = Encryption::getContentCodingHeader($salt, $localPublicKey, $contentEncoding);
                 $payload = $encryptionContentCodingHeader.$cipherText;
@@ -95,10 +82,8 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 				    		]];
 
 				$requestJson = json_encode($data);
-				$this->logger->error("requestJson is: " . $requestJson);
-				$this->logger->error("content length is: " . strlen($requestJson));
 				// TODO move this somewhere else
-				$fcm_key = "AAAAIoVAv9Y:APA91bFybj8_BXrQOI5GXzKjFAGlvxJMf_CcTD70k8i8kc4ngLsbvXW6R6sDBoCpwYMgiWWX6rpyYob6QbW2w_tmliIlrgOEijPRBVPGIxuY0yWvbFcchZLINQGFwGLi8gGykwdXvu8N";
+				$fcm_key = $this->fcmKey;
 				$options = array(
 				    'http' => array(
 				        'header'  => "Content-Type: application/json\r\nAuthorization: key=" . $fcm_key . "\r\n" . sprintf('Content-Length: %d', strlen($requestJson)) . "\r\n",
@@ -109,23 +94,73 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 				$context  = stream_context_create($options);
 				$result = file_get_contents($url, false, $context);
 				if ($result === FALSE) {
-					$this->logger->error("An error in android push");
+					//$this->logger->error("An error in android push");
 				}
 
-				$this->logger->error($result);
+				//$this->logger->error($result);
 			}
 		} catch (Exception $e) {
-			$this->logger->error("Error in android push: " . $e->getMessage());
+			//$this->logger->error("Error in android push: " . $e->getMessage());
 		}
 
-		$this->logger->error("END AndroidPush");
+		//$this->logger->error("END AndroidPush");
 		return [];
 	}
 
-	public function getPublicKey(): string
+	public function getServerInformation(): array
 	{
-		// TODO: this is not necessary for this handler. Maybe this should be removed from the abstraction.
-		return "";
+		return ['key' => WEBPUSH_PUBLIC_KEY];
 	}
 
+	/**
+	 * @return string - json formatted payload
+	 */
+	private function makePayload(PushNotification $notification): string
+	{
+		$payloadArray = [];
+
+		if ($notification instanceof MessagePushNotification) {
+			$payloadArray['t'] = 'c';
+			$payloadArray['c'] = $notification->getConversationId();
+			$payloadArray['m'] = $notification->getMessage();
+			$payloadArray['a'] = $notification->getAuthor();
+		} else {
+			// Seems to be a PushNotification type we don't know, but luckily we can fall back on a simple text notification with just title and body
+			$payloadArray['t'] = 'd';
+			$payloadArray['c'] = $notification->getTitle($this->translator);
+			$payloadArray['b'] = $notification->getBody($this->translator);
+		}
+
+		$payloadArray = $this->cropPayload($payloadArray, $notification);
+
+		return json_encode($payloadArray);
+	}
+
+	/**
+	 * Crops the payload body, so the payload doesn't exceed the safe string length for WebPush payloads.
+	 *
+	 * @param array $payload a payload array containing at least a 'body' key (because this is what will be cropped)
+	 *
+	 * @return array Payload that definitely has a sendable length
+	 */
+	private function cropPayload(array $payload, PushNotification $notification): array
+	{
+		$overlappingChars = Utils::safeStrlen(json_encode($payload)) - Encryption::MAX_COMPATIBILITY_PAYLOAD_LENGTH;
+
+		if ($overlappingChars <= 0) {
+			return $payload;
+		}
+
+		if ($notification instanceof MessagePushNotification) {
+			$body = $payload['m']->body;
+			$body = substr($body, 0, strlen($body) - $overlappingChars - 3);
+			$body .= '...';
+			$payload['m']->body = $body;
+		} else {
+			$payload['b'] = substr($payload['b'], 0, strlen($payload['b']) - $overlappingChars - 3);
+			$payload['b'] .= '...';
+		}
+
+		return $payload;
+	}
 }

@@ -86,21 +86,21 @@ class WebPushHandler implements PushNotificationHandlerInterface
 
 		if ($notification instanceof MessagePushNotification) {
 			// set body
-			$payloadArray['options']['body'] = $notification->getBody();
+			$payloadArray['options']['body'] = $notification->getMessage()->body;
 			// set time stamp
-			$payloadArray['options']['timestamp'] = $notification->getTime()->getTimestamp() * 1000; // timestamp needs to be in milliseconds
+			$payloadArray['options']['timestamp'] = $notification->getMessage()->sentAt->getTimestamp() * 1000; // timestamp needs to be in milliseconds
 			// set action
 			$payloadArray['options']['data']['action'] = ['page' => 'conversations', 'params' => [$notification->getConversationId()]]; // this thing will be resolved to a url by urls.js on client side
 			// Set title
 			if ($notification->getConversationName() !== null) {
 				$payloadArray['title'] = $this->translator->trans(
 					'chat.notification_named_conversation',
-					['{foodsaver}' => $notification->getSender(), '{conversation}' => $notification->getConversationName()]
+					['{foodsaver}' => $notification->getAuthor()->name, '{conversation}' => $notification->getConversationName()]
 				);
 			} else {
 				$payloadArray['title'] = $this->translator->trans(
 					'chat.notification_unnamed_conversation',
-					['{foodsaver}' => $notification->getSender()]
+					['{foodsaver}' => $notification->getAuthor()->name]
 				);
 			}
 		} else {
