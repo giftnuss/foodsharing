@@ -18,7 +18,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadEditRecurringPickupModal"
               >
-                <i class="fa fa-pen" />
+                <i class="fas fa-pen" />
               </button>
               <button
                 v-if="isCoordinator"
@@ -27,7 +27,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadAddPickupModal"
               >
-                <i class="fa fa-plus" />
+                <i class="fas fa-plus" />
               </button>
             </div>
           </div>
@@ -200,5 +200,14 @@ export default {
 .btn-group.slot-actions {
   // counter the .card definition of padding: 6px 8px;
   margin: -6px -8px;
+
+  button {
+    line-height: 21px;
+    padding: 5px 10px;
+  }
+
+  i.fas {
+    font-size: 14px;
+  }
 }
 </style>
