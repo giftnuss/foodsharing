@@ -99,7 +99,7 @@ class ProfileView extends View
 		$bananaCount = $this->renderBananas();
 
 		return '
-			<div class="pure-g">
+			<div>
 				<div class="profile statdisplay">
 					' . $fetchWeight . '
 					' . $fetchCount . '
@@ -285,7 +285,7 @@ class ProfileView extends View
 		}
 
 		return '
-		<div class="pure-g">
+		<div>
 		    <div class="infos"> ' . $out . ' </div>
 		</div>';
 	}
@@ -321,7 +321,7 @@ class ProfileView extends View
 		}
 
 		return '
-		<div class="pure-g">
+		<div>
 		    <div class="infos"> ' . $out . ' </div>
 		</div>';
 	}
