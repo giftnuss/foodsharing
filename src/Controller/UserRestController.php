@@ -2,7 +2,9 @@
 
 namespace Foodsharing\Controller;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
@@ -10,6 +12,7 @@ use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\UserPermissions;
 use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\RegisterTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -28,8 +31,11 @@ class UserRestController extends AbstractFOSRestController
 	private $userPermissions;
 	private $profilePermissions;
 	private $emailHelper;
+	private $registerTransactions;
 
 	private const MIN_RATING_MESSAGE_LENGTH = 100;
+	private const MIN_PASSWORD_LENGTH = 8;
+	private const MIN_AGE_YEARS = 18;
 
 	public function __construct(
 		Session $session,
@@ -39,7 +45,8 @@ class UserRestController extends AbstractFOSRestController
 		ReportPermissions $reportPermissions,
 		UserPermissions $userPermissions,
 		ProfilePermissions $profilePermissions,
-		EmailHelper $emailHelper
+		EmailHelper $emailHelper,
+		RegisterTransactions $registerTransactions
 	) {
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
@@ -49,6 +56,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->userPermissions = $userPermissions;
 		$this->profilePermissions = $profilePermissions;
 		$this->emailHelper = $emailHelper;
+		$this->registerTransactions = $registerTransactions;
 	}
 
 	/**
@@ -179,6 +187,68 @@ class UserRestController extends AbstractFOSRestController
 		return $this->handleView($this->view([
 			'valid' => $this->isEmailValidForRegistration($email)
 		], 200));
+	}
+
+	/**
+	 * @Rest\Post("user")
+	 * @Rest\RequestParam(name="firstname", nullable=false)
+	 * @Rest\RequestParam(name="lastname", nullable=false)
+	 * @Rest\RequestParam(name="email", nullable=false)
+	 * @Rest\RequestParam(name="password", nullable=false)
+	 * @Rest\RequestParam(name="gender", nullable=false, requirements="\d+")
+	 * @Rest\RequestParam(name="birthday", nullable=false)
+	 * @Rest\RequestParam(name="mobilePhone, nullable=true)
+	 * @Rest\RequestParam(name="subscribeNewsletter, requirements="(0|1)", default=0)
+	 */
+	public function registerUserAction(ParamFetcher $paramFetcher): Response
+	{
+		// validate data
+		$data = [];
+		$data['name'] = trim(strip_tags($paramFetcher->get('firstname')));
+		$data['surname'] = trim(strip_tags($paramFetcher->get('lastname')));
+		if (empty($data['name']) || empty($data['surname'])) {
+			throw new HttpException(400, 'names must not be empty');
+		}
+
+		$data['email'] = trim($paramFetcher->get('email'));
+		if (empty($data['email']) || !$this->emailHelper->validEmail($data['email'])
+			|| !$this->isEmailValidForRegistration($data['email'])) {
+			throw new HttpException(400, 'email is not valid or already used');
+		}
+
+		$data['pw'] = trim($paramFetcher->get('password'));
+		if (strlen($data['pw'] < self::MIN_PASSWORD_LENGTH)) {
+			throw new HttpException(400, 'password is too short');
+		}
+
+		$data['gender'] = (int)$paramFetcher->get('gender');
+		if ($data['gender'] > Gender::DIVERSE || $data['gender'] < Gender::NOT_SELECTED) {
+			$data['gender'] = Gender::NOT_SELECTED;
+		}
+
+		$birthdate = Carbon::createFromFormat('Y-m-d', $paramFetcher->get('birthdate'));
+		if (!$birthdate) {
+			throw new HttpException(400, 'invalid birthdate');
+		}
+		$minBirthdate = Carbon::today()->subYears(self::MIN_AGE_YEARS);
+		if ($birthdate > $minBirthdate) {
+			throw new HttpException(400, 'you are not old enough');
+		}
+
+		$data['mobile_phone'] = strip_tags($paramFetcher->get('mobilePhone') ?? '');
+		$data['newsletter'] = (int)$paramFetcher->get('subscribeNewsletter') == 1;
+
+		try {
+			// register user and send out registration email
+			$id = $this->registerTransactions->registerUser($data);
+
+			// return the created user
+			$user = RestNormalization::normalizeUser($this->foodsaverGateway->getFoodsaverBasics($id));
+
+			return $this->handleView($this->view($user, 200));
+		} catch (\Exception $e) {
+			throw new HttpException(500, 'could not register user');
+		}
 	}
 
 	private function isEmailValidForRegistration(string $email): bool
