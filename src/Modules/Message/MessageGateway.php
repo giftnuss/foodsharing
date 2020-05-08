@@ -105,11 +105,6 @@ final class MessageGateway extends BaseGateway
                 HAVING
                   idstring = ?',
 				array_merge($possibleConversations, [$idString]));
-			if (count($results) > 1) {
-				trigger_error('Found multiple conversations with ID set ' . $idString);
-
-				return $results[0];
-			}
 			if ($results) {
 				return $results[0];
 			}
