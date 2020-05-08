@@ -256,11 +256,8 @@ div#main {
   margin: 0 auto;
   max-width: 1100px;
   padding: 0;
-}
-
-div#main {
   min-height: calc(83vh);
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 
 .inside, .mainpure {
@@ -1629,4 +1626,3 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
   background-color: var(--danger);
   white-space: nowrap;
 }
-
