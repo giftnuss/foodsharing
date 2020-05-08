@@ -79,8 +79,8 @@
 }
 
 .content-top {
-  background-color: #ffffff;
-  color: #533a20;
+  background-color: var(--white);
+  color: var(--fs-brown);
   padding: 15px;
   margin-bottom: 15px;
 }
@@ -103,18 +103,18 @@
 }
 
 .bubble {
-  background-color: #ffffff !important;
+  background-color: var(--white) !important;
   padding: 8px !important;
   position: absolute !important;
   width: 250px !important;
-  color: #533a20 !important;
+  color: var(--fs-brown) !important;
   font-size: 13px !important;
   font-weight: bold !important;
   z-index: 150;
 }
 
 .bubble-right:after {
-  border-color: transparent #ffffff !important;
+  border-color: transparent var(--white) !important;
   border-style: solid !important;
   border-width: 7px 7px 7px 0 !important;
   content: "" !important;
@@ -229,7 +229,7 @@ body {
 }
 
 .input-wrapper label.wrapper-label {
-  color: #533a22;
+  color: var(--fs-brown);
   display: block;
 
   font-weight: lighter;
@@ -242,7 +242,7 @@ label.wrapper-label.required:after {
 
 .input-wrapper label.wrapper-label a {
   text-decoration: none;
-  color: #533a22;
+  color: var(--fs-brown);
 }
 
 .input-wrapper label.wrapper-label a:hover {
@@ -251,7 +251,7 @@ label.wrapper-label.required:after {
 
 select {
   padding: 7px;
-  background-color: #ffffff;
+  background-color: var(--white);
 }
 
 .margin-bottom {
@@ -322,7 +322,7 @@ div.popbox h3 {
 }
 
 div.popbox a.link {
-  color: #533a22;
+  color: var(--fs-brown);
   text-decoration: none;
 }
 
@@ -395,7 +395,7 @@ div.msg-inside i {
 
 div.msg-inside.error, div.msg-inside.error a {
   background-color: #e74955;
-  color: #fff;
+  color: var(--white);
 }
 
 div.msg-inside.error a {
@@ -408,21 +408,21 @@ div.msg-inside.error a:hover {
 
 div.msg-inside.success, div.msg-inside.success a {
   background-color: var(--fs-green) !important;
-  color: #fff !important;
+  color: var(--white) !important;
 }
 
 div.msg-inside.error i {
-  color: #fff;
+  color: var(--white);
 }
 
 div#pulse-success {
   background-color: var(--fs-green) !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 div#pulse-error {
   background-color: #e74955 !important;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 div#pulse-info {
@@ -490,7 +490,7 @@ div.xv_left ul li a {
 }
 
 div.xv_left ul li a:hover {
-  background-color: #533a20;
+  background-color: var(--fs-brown);
   color: #fff;
 }
 
@@ -539,7 +539,7 @@ ul.team li a .infos .item {
 }
 
 ul.team li a:hover .infos .item {
-  color: #ffffff;
+  color: var(--white);
 }
 
 ul.team li a .avatar {
@@ -552,9 +552,9 @@ ul.team li a {
   margin: 0;
   display: block;
   padding: 5px;
-  background-color: #ffffff;
+  background-color: var(--white);
   height: 35px;
-  color: #ffffff !important;
+  color: var(--white) !important;
 }
 
 ul.team li a.verantwortlich {
@@ -575,7 +575,7 @@ ul.team li.jumper {
 }
 
 ul.team li a:hover {
-  background-color: #533a20;
+  background-color: var(--fs-brown);
 }
 
 ul.team li a.status {
@@ -623,7 +623,7 @@ ul.team li.breakline {
 }
 
 .innerRow .label {
-  color: #533a22;
+  color: var(--fs-brown);
   width: 110px;
 
 }
@@ -661,7 +661,7 @@ a.light {
 }
 
 a.light:hover {
-  color: #533a22;
+  color: var(--fs-brown);
 }
 
 table.pintable tr td span.msg {
@@ -690,7 +690,7 @@ table.pintable tr.milestone {
 table.pintable tr.milestone td {
   vertical-align: middle;
   text-align: center;
-  color: #533a22;
+  color: var(--fs-brown);
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -751,7 +751,7 @@ ul.imglist li a {
 }
 
 ul.imglist li a:hover {
-  background-color: #533a20;
+  background-color: var(--fs-brown);
 }
 
 ul.imglist li a img {
@@ -759,7 +759,7 @@ ul.imglist li a img {
 }
 
 div.input-wrapper.today {
-  background-color: #ffffff;
+  background-color: var(--white);
   margin-left: -10px;
   margin-right: -10px;
   padding-left: 10px;
@@ -773,7 +773,7 @@ div.input-wrapper.today ul.imglist li a {
 }
 
 div.input-wrapper.today ul.imglist li a:hover {
-  background-color: #533a20; /* The same as ul.imglist li a:hover */
+  background-color: var(--fs-brown);
 }
 
 li.nohover a, li.nohover {
@@ -813,7 +813,7 @@ div.welcome {
 }
 
 div.welcome a {
-  color: #533a22;
+  color: var(--fs-brown);
   text-decoration: none;
 }
 
@@ -844,7 +844,7 @@ div.welcome .welcome_profile_name {
 
 div.welcome .user_display_name {
   padding-top: 6px;
-  color: #533a20;
+  color: var(--fs-brown);
   font-weight: bold;
 }
 
@@ -940,7 +940,7 @@ ul.linklist li > a.more {
   background-color: var(--fs-green);
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  color: #ffffff;
+  color: var(--white);
   display: block;
   font-size: 12px;
   font-weight: bold;
@@ -958,25 +958,25 @@ ul.linklist li, ul.linklist li > a, ul.linklist li > a span {
 ul.linklist li > a {
   padding: 6px;
   text-decoration: none !important;
-  color: #533a20;
+  color: var(--fs-brown);
   font-weight: lighter;
   position: relative;
 }
 
 ul.linklist li > a span.title {
   text-decoration: none !important;
-  color: #533a22;
+  color: var(--fs-brown);
   font-weight: bold;
 }
 
 ul.linklist li > a.active {
-  color: #533a22;
+  color: var(--fs-brown);
   font-weight: bold;
 }
 
 ul.linklist li > a:hover, ul.linklist li > a:hover span {
   background-color: var(--fs-green);
-  color: #ffffff;
+  color: var(--white);
 }
 
 .updatepost {
@@ -1026,8 +1026,8 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .ui-widget-header {
-  background: none repeat scroll 0 0 #533a20;
-  color: #fff;
+  background: none repeat scroll 0 0 var(--fs-brown);
+  color: var(--white);
   font-weight: bold;
   border: 0;
   border-radius: 6px;
@@ -1052,7 +1052,7 @@ div.statdisplay .item {
   margin-right: 8px;
   border-radius: 8px;
   background-color: var(--fs-green);
-  color: #ffffff;
+  color: var(--white);
   text-align: center;
   width: 62px;
 }
@@ -1172,7 +1172,7 @@ span.verified {
 
 .scroller .thumb .end,
 .scroller .thumb {
-  background-color: #533a20;
+  background-color: var(--fs-brown);
   border-radius: 4px;
 }
 
@@ -1183,7 +1183,7 @@ span.verified {
 }
 
 .scroller .track {
-  background-color: #ffffff;
+  background-color: var(--white);
   height: 100%;
   width: 8px;
   position: relative;
@@ -1211,7 +1211,7 @@ span.verified {
 }
 
 .ui-tooltip, .arrow:after {
-  background: #533a20;
+  background: var(--fs-brown);
   border: 2px solid white;
 }
 
@@ -1258,7 +1258,7 @@ span.verified {
 }
 
 a.light {
-  color: #533a20;
+  color: var(--fs-brown);
 }
 
 
@@ -1269,7 +1269,7 @@ a.light {
 
 .user_profile_link_span a {
   text-decoration: none;
-  color: #533a22;
+  color: var(--fs-brown);
 }
 
 .calendar {
@@ -1286,7 +1286,7 @@ a.light {
   background-color: #e07a0b !important;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  color: #ffffff !important;
+  color: var(--white) !important;
   display: block;
   font-size: 13px;
   font-weight: bold;
@@ -1356,7 +1356,7 @@ a.expand-collapse-link {
   display: block;
   padding: 3px;
   text-align: center;
-  color: #fff;
+  color: var(--white);
   font-weight: bold;
   background-color: var(--fs-green);
   text-decoration: none;
@@ -1374,7 +1374,7 @@ a.expand-collapse-link:hover {
 a.preview-thumb {
   display: block;
   float: left;
-  border: 3px solid #ffffff;
+  border: 3px solid var(--white);
   margin: 3px;
   width: 60px;
   height: 60px;
@@ -1395,7 +1395,7 @@ a.preview-thumb {
 }
 
 a.preview-thumb:hover {
-  border: 3px solid #533a20;
+  border: 3px solid var(--fs-brown);
 }
 
 .attach-load {
@@ -1428,7 +1428,7 @@ td.load {
 
 
 .ui-button, .button {
-  color: #ffffff !important;
+  color: var(--white) !important;
   background-color: var(--fs-green);
   border-radius: 6px;
   border: 0 none;
@@ -1536,7 +1536,7 @@ ul.bread li a:hover {
 ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bubble {
   margin-left: 37px !important;
   margin-top: -40px !important;
-  color: #533a20 !important;
+  color: var(--fs-brown) !important;
 }
 
 .slimScrollDiv .avatar .bubble {
@@ -1550,7 +1550,7 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
 
 .vidlink img {
   padding: 0;
-  border: 10px solid #ffffff;
+  border: 10px solid var(--white);
   width: 100%;
   box-sizing: border-box;
   height: auto;
@@ -1563,7 +1563,7 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
 .vmap {
   width: 100%;
   height: 450px;
-  background-color: #fff
+  background-color: var(--white);
 }
 
 @media (max-width: 1025px) {
