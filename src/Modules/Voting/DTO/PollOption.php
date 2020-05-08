@@ -49,7 +49,7 @@ class PollOption
 	 */
 	public $downvotes;
 
-	public function __construct(
+	public static function create(
 		int $pollId,
 		int $optionIndex,
 		string $text,
@@ -57,11 +57,14 @@ class PollOption
 		int $neutralvotes,
 		int $downvotes
 	) {
-		$this->pollId = $pollId;
-		$this->optionIndex = $optionIndex;
-		$this->text = $text;
-		$this->upvotes = $upvotes;
-		$this->neutralvotes = $neutralvotes;
-		$this->downvotes = $downvotes;
+		$option = new PollOption();
+		$option->pollId = $pollId;
+		$option->optionIndex = $optionIndex;
+		$option->text = $text;
+		$option->upvotes = $upvotes;
+		$option->neutralvotes = $neutralvotes;
+		$option->downvotes = $downvotes;
+
+		return $option;
 	}
 }

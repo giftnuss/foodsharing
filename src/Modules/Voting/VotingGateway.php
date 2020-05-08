@@ -15,7 +15,9 @@ class VotingGateway extends BaseGateway
 	 * Returns the detailed data of a poll.
 	 *
 	 * @param int $pollId a valid id of a poll
+	 *
 	 * @return Poll the poll object
+	 *
 	 * @throws Exception if the poll with the given id does not exist
 	 */
 	public function getPoll(int $pollId): Poll
@@ -37,7 +39,9 @@ class VotingGateway extends BaseGateway
 	 * Returns all options of a poll.
 	 *
 	 * @param int $pollId a valid id of a poll
+	 *
 	 * @return array multiple {@link PollOption} objects
+	 *
 	 * @throws Exception if the poll does not exist
 	 */
 	public function getOptions(int $pollId): array
@@ -57,7 +61,9 @@ class VotingGateway extends BaseGateway
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
+	 *
 	 * @return bool whether the user has already votes in that poll
+	 *
 	 * @throws Exception if the poll does not exist or the user is not allowed to vote in that poll
 	 */
 	public function hasUserVoted(int $pollId, int $userId): bool
@@ -74,6 +80,7 @@ class VotingGateway extends BaseGateway
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
 	 * @param array $options the vote (+1, -1, 0) for each option
+	 *
 	 * @throws Exception if the poll does not exist
 	 */
 	public function vote(int $pollId, int $userId, array $options): void
@@ -100,7 +107,9 @@ class VotingGateway extends BaseGateway
 	 * @param Poll $poll a valid poll object
 	 * @param array $options a set of PollOptions
 	 * @param array $userIds the ids of all users that will be allowed to vote
+	 *
 	 * @return int the id of the created poll
+	 *
 	 * @throws Exception
 	 */
 	public function insertPoll(Poll $poll, array $options, array $userIds): int
@@ -143,5 +152,19 @@ class VotingGateway extends BaseGateway
 		}
 
 		return $pollId;
+	}
+
+	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $verified = true): array
+	{
+		return $this->db->fetchAll('
+			SELECT id
+			FROM fs_foodsaver fs
+			INNER JOIN fs_foodsaver_has_bezirk hb
+			ON fs.id = hb.foodsaver_id
+			WHERE hb.active = 1
+			AND fs.verified = 1
+			AND fs.rolle > :role', [
+			':role' => $minRole
+		]);
 	}
 }

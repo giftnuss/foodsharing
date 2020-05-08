@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Core\DBConstants\Voting;
 
 /**
  * Table `fs_poll`, column `type`.
- * TINYINT(1) UNSIGNED NOT NULL
+ * TINYINT(1) UNSIGNED NOT NULL.
  */
 class VotingType
 {

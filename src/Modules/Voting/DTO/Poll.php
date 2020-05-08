@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Voting\DTO;
 
 use DateTime;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 
 /**
@@ -56,7 +57,7 @@ class Poll
 	/**
 	 * @var int
 	 *
-	 * The scope is an additional constraint defining which user groups are allowed to vote
+	 * The scope is an additional constraint defining which user groups are allowed to vote. See {@link VotingScope}.
 	 */
 	public $scope;
 
@@ -68,7 +69,7 @@ class Poll
 	 */
 	public $type;
 
-	public function __construct(
+	public static function create(
 		int $id,
 		string $name,
 		string $description,
@@ -78,13 +79,16 @@ class Poll
 		int $scope,
 		int $type
 	) {
-		$this->id = $id;
-		$this->name = $name;
-		$this->description = $description;
-		$this->startDate = $startDate;
-		$this->endDate = $endDate;
-		$this->regionId = $regionId;
-		$this->scope = $scope;
-		$this->type = $type;
+		$poll = new Poll();
+		$poll->id = $id;
+		$poll->name = $name;
+		$poll->description = $description;
+		$poll->startDate = $startDate;
+		$poll->endDate = $endDate;
+		$poll->regionId = $regionId;
+		$poll->scope = $scope;
+		$poll->type = $type;
+
+		return $poll;
 	}
 }
