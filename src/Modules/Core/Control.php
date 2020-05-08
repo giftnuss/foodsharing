@@ -503,4 +503,13 @@ abstract class Control
 
 		return false;
 	}
+
+	public function parseGitlabLinks($markdown)
+	{
+		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
+		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
+		$markdown = preg_replace('/#([0-9]+)/', '[#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+
+		return $markdown;
+	}
 }

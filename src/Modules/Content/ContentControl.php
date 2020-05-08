@@ -343,17 +343,26 @@ class ContentControl extends Control
 		}
 	}
 
+	public function releaseNotes(): void
+	{
+		$this->pageHelper->addBread($this->translationHelper->s('release-notes'));
+		$this->pageHelper->addTitle($this->translationHelper->s('release-notes'));
+		$markdown = $this->parseGitlabLinks(file_get_contents('release-notes.md'));
+		$Parsedown = new Parsedown();
+		$cl['changelog'] = '<a class="float-right" href="/?page=content&sub=changelog">' . $this->translationHelper->s('current_changelog') . '</a>';
+		$cl['title'] = $this->translationHelper->s('release-notes');
+		$cl['body'] = $Parsedown->parse($markdown);
+		$this->pageHelper->addContent($this->view->releaseNotes($cl));
+	}
+
 	public function changelog(): void
 	{
-		$this->pageHelper->addBread('Changelog');
-		$this->pageHelper->addTitle('Changelog');
-		$markdown = file_get_contents('CHANGELOG.md');
-		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
-		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
-		$markdown = preg_replace('/#([0-9]+)/', '[#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+		$this->pageHelper->addBread($this->translationHelper->s('changelog'));
+		$this->pageHelper->addTitle($this->translationHelper->s('changelog'));
+		$markdown = $this->parseGitlabLinks(file_get_contents('CHANGELOG.md'));
 		$Parsedown = new Parsedown();
+		$cl['title'] = $this->translationHelper->s('changelog');
 		$cl['body'] = $Parsedown->parse($markdown);
-		$cl['title'] = 'Changelog';
 		$this->pageHelper->addContent($this->view->simple($cl));
 	}
 
