@@ -7,6 +7,7 @@ use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class LoginXhr extends Control
@@ -161,8 +162,8 @@ class LoginXhr extends Control
 
 		$data['gender'] = (int)$data['gender'];
 
-		if ($data['gender'] > 2 || $data['gender'] < 0) {
-			$data['gender'] = 0;
+		if ($data['gender'] > Gender::DIVERSE || $data['gender'] < Gender::NOT_SELECTED) {
+			$data['gender'] = Gender::NOT_SELECTED;
 		}
 
 		$birthdate = \DateTime::createFromFormat('Y-m-d', $data['birthdate']);
