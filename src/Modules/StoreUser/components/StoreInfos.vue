@@ -138,8 +138,10 @@ export default {
     max-width: 100%;
     margin-bottom: 5px;
     padding-bottom: 10px;
-    /* Safari / Edge compat: */
+    /* Global fallback */
     overflow-wrap: break-word;
+    /* Safari / Edge compat: */
+    word-break: break-word;
     /* Desired behavior: */
     overflow-wrap: anywhere;
 
