@@ -65,7 +65,7 @@ const urls = {
   press: () => '/?page=content&sub=presse',
   imprint: () => '/impressum',
   donate: () => '/unterstuetzung',
-  changelog: () => '/?page=content&sub=changelog',
+  releaseNotes: () => '/?page=content&sub=releaseNotes',
   reports: (regionId) => `/?page=report&bid=${regionId}`,
   login: () => '/?page=login'
 }

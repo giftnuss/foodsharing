@@ -97,4 +97,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ ul.linklist li {
+  margin-bottom: 10px;
+  background-color: var(--white);
+  padding: 10px;
+  border-radius: 6px;
+}
 </style>

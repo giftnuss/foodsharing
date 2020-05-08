@@ -128,6 +128,8 @@ build:backend:
     - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
+    - mkdir assets
+    - FS_ENV=dev bin/console assets:install
   cache:
     key: backend:build:v1
     paths:
@@ -136,6 +138,7 @@ build:backend:
   artifacts:
     expire_in: 1 week
     paths:
+    - assets
     - vendor
   except:
   - schedules

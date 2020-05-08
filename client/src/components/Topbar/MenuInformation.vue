@@ -97,11 +97,11 @@
       {{ $i18n('menu.entry.dataprivacy') }}
     </a>
     <a
-      :href="$url('changelog')"
+      :href="$url('releaseNotes')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      {{ $i18n('menu.entry.changelog') }}
+      {{ $i18n('menu.entry.release-notes') }}
     </a>
   </b-nav-item-dropdown>
 </template>

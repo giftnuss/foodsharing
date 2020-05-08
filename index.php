@@ -109,7 +109,7 @@ if ($isUsingResponse) {
 		$pageHelper->addContent($debug->renderContent(), CNT_BOTTOM);
 	}
 	/* @var \Twig\Environment $twig */
-	$twig = $container->get(\Twig\Environment::class);
+	$twig = $container->get('twig');
 	$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 }
 

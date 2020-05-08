@@ -28,7 +28,7 @@
         >
           <b-list-group-item
             v-for="req in basket.requests"
-            :key="req.id"
+            :key="`${req.user.id}`"
             href="#"
             class="d-flex w-100 align-items-center food-basket-create-test-class"
             @click.prevent="openChat(req.user.id, $event)"

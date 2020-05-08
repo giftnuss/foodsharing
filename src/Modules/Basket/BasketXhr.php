@@ -352,52 +352,6 @@ class BasketXhr extends Control
 		return $dia->xhrout();
 	}
 
-	public function infobar(): void
-	{
-		// TODO: rewrite this to an proper API endpoint
-		// and update /client/src/api/baskets.js
-		$this->session->noWrite();
-
-		$xhr = new Xhr();
-
-		$updates = $this->basketGateway->listUpdates($this->session->id());
-		$baskets = $this->basketGateway->listMyBaskets($this->session->id());
-
-		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
-			$basket = [
-				'id' => (int)$b['id'],
-				'description' => html_entity_decode($b['description']),
-				'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-				'requests' => []
-			];
-			$id = 0;
-			foreach ($updates as $update) {
-				if ((int)$update['id'] == $basket['id']) {
-					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
-					$basket['requests'][] = [
-						'user' => [
-							'id' => (int)$update['fs_id'],
-							'name' => $update['fs_name'],
-							'avatar' => $update['fs_photo'],
-							'sleepStatus' => $update['sleep_status'],
-						],
-						'id' => ++$id, // required for Vue's v-for key parameter
-						'description' => $update['description'],
-						'time' => $time,
-					];
-					if (strcmp($time, $basket['updatedAt']) > 0) {
-						$basket['updatedAt'] = $time;
-					}
-				}
-			}
-
-			return $basket;
-		}, $baskets));
-
-		$xhr->send();
-	}
-
 	public function removeRequest()
 	{
 		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], $this->session->id())) {

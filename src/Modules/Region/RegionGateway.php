@@ -194,7 +194,7 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function listIdsForDescendantsAndSelf(int $regionId, bool $includeSelf = true): array
+	public function listIdsForDescendantsAndSelf(int $regionId, bool $includeSelf = true, bool $includeWorkgroups = true): array
 	{
 		if ($regionId == RegionIDs::ROOT) {
 			return [];
@@ -205,9 +205,23 @@ class RegionGateway extends BaseGateway
 			$minDepth = 1;
 		}
 
-		return $this->db->fetchAllValuesByCriteria('fs_bezirk_closure', 'bezirk_id',
-			['ancestor_id' => $regionId, 'depth >=' => $minDepth]
-		);
+		if ($includeWorkgroups) {
+			return $this->db->fetchAllValuesByCriteria('fs_bezirk_closure', 'bezirk_id',
+				['ancestor_id' => $regionId, 'depth >=' => $minDepth]
+			);
+		} else {
+			return $this->db->fetchAllValues(
+				'SELECT
+						fbc.bezirk_id
+					FROM `fs_bezirk_closure` fbc
+					left outer join `fs_bezirk` reg on fbc.bezirk_id = reg.id
+					  WHERE
+						fbc.ancestor_id = :regionId
+					AND fbc.depth >= :min_depth
+					and reg.type <> :regionTypeWorkGroup',
+				['regionId' => $regionId, 'min_depth' => $minDepth, 'regionTypeWorkGroup' => Type::WORKING_GROUP]
+			);
+		}
 	}
 
 	public function listForFoodsaverExceptWorkingGroups(int $foodsaverId): array

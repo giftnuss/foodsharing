@@ -141,31 +141,42 @@ div#main {
 </style>
 
 <style lang="scss" scoped>
+.bootstrap {
+  .form-control {
+      background-color: var(--fs-white);
+  }
 
-.bootstrap .invalid-feedback {
-  font-size: 100%;
-  display: unset;
-}
+  .invalid-feedback {
+    font-size: 100%;
+    display: unset;
+  }
 
-.bootstrap .input-group input.form-control {
-  padding-left: 12px;
-}
+  .input-group {
+    input.form-control {
+      padding-left: 12px;
+    }
 
-.bootstrap .input-group .input-group-text {
-  background-color: var(--fs-beige);
+    .input-group-text {
+      background-color: var(--fs-beige);
+      padding-left: 12px;
+    }
+  }
+
+  /deep/ .custom-control-label {
+    font-size: 1rem;
+    &::before {
+      top: .1rem;
+    }
+  }
+
+  .card /deep/ a[href] {
+    font-weight: bolder;
+    color: var(--fs-green);
+  }
 }
 
 .vdp-datepicker__calendar {
   margin-left: -22px;
 }
 
-.bootstrap .form-control {
-    background-color: var(--fs-white);
-}
-
-.bootstrap .input-group .input-group-text {
-    background-color: var(--fs-beige);
-    padding-left: 12px;
-
-}
 </style>

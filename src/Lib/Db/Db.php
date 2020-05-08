@@ -5,6 +5,7 @@ namespace Foodsharing\Lib\Db;
 use Exception;
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\InfluxMetrics;
 use mysqli;
 
 class Db
@@ -30,6 +31,11 @@ class Db
 	 */
 	protected $session;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	protected $influxMetrics;
+
 	public function __construct()
 	{
 		$this->values = [];
@@ -54,6 +60,14 @@ class Db
 	/**
 	 * @required
 	 */
+	public function setInfluxMetrics(InfluxMetrics $influxMetrics)
+	{
+		$this->influxMetrics = $influxMetrics;
+	}
+
+	/**
+	 * @required
+	 */
 	public function setSession(Session $session)
 	{
 		$this->session = $session;
@@ -72,9 +86,9 @@ class Db
 	 */
 	public function sql($query)
 	{
-		$start = microtime(true);
+		$start = hrtime(true);
 		$res = $this->mysqli->query($query);
-		$duration = microtime(true) - $start;
+		$duration = intdiv(hrtime(true) - $start, 1e6);
 
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
@@ -82,6 +96,7 @@ class Db
 		} else {
 			$this->debug->addQuery($query, $duration, true);
 		}
+		$this->influxMetrics->addDbQuery($duration);
 
 		return $res;
 	}

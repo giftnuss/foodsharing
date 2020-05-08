@@ -7,7 +7,7 @@
     <template v-slot:button-content>
       <Avatar
         :url="profile.avatar"
-        :size="35"
+        :size="50"
         :class="{pending: !confirmed, confirmed: confirmed}"
       />
       <div :class="{'slotstatus': true, pending: !confirmed, confirmed: confirmed}">
@@ -85,34 +85,38 @@ export default {
 }
 </script>
 
-<style scoped>
-  .slotstatus {
-    position: absolute;
-    top: 0px;
-    right: 2px;
-    height: 12px;
-    width: 12px;
-    transform: rotate(45deg);
-    opacity: 0.8;
-    background-color: var(--fs-beige);
-    box-shadow: 0 0 2px 0px var(--fs-brown);
-  }
-  .slotstatus.pending {
+<style lang="scss" scoped>
+.slotstatus {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  height: 16px;
+  width: 16px;
+  z-index: 3;
+  transform: rotate(45deg);
+  opacity: 0.9;
+  background-color: var(--fs-beige);
+  box-shadow: 0 0 3px 0px var(--fs-brown);
+
+  &.pending {
     color: var(--danger);
   }
-  .slotstatus.confirmed {
+  &.confirmed {
     color: var(--fs-green);
   }
-  .avatar.pending {
-    opacity: 0.33;
-  }
-  /* Check / Clock inside the statuspatch */
+
+  // Check / Clock inside the statuspatch
   .slotstatus-icon {
     position: absolute;
     display: inline-block;
     bottom: 1px;
     right: 1px;
     transform: rotate(-45deg);
-    font-size: 10px;
+    font-size: 14px;
   }
+}
+
+.avatar.pending {
+  opacity: 0.33;
+}
 </style>
