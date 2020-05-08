@@ -289,7 +289,7 @@ export default {
     .navbar-nav {
         align-items: center;
     }
-    .navbar-collapse.collapse, .navbar-collapse.collapsing {
+    .navbar-collapse.collapse.show, .navbar-collapse.collapsing {
         &.show {
           // Only when menu is shown. Fixes problem that list of dropdown items is to long.
           max-height: 70vh;
