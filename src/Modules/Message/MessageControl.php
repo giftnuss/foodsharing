@@ -2,14 +2,21 @@
 
 namespace Foodsharing\Modules\Message;
 
+use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Services\MessageService;
 
 final class MessageControl extends Control
 {
-	public function __construct(MessageModel $model, MessageView $view)
+	private $messageGateway;
+	private $messageService;
+
+	public function __construct(Db $model, MessageGateway $messageGateway, MessageService $messageService, MessageView $view)
 	{
 		$this->model = $model;
 		$this->view = $view;
+		$this->messageGateway = $messageGateway;
+		$this->messageService = $messageService;
 
 		parent::__construct();
 
@@ -34,14 +41,7 @@ final class MessageControl extends Control
 			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
 		}
 
-		$conversations = $this->model->listConversations();
-		if ($conversations) {
-			$ids = [];
-			foreach ($conversations as $c) {
-				$ids[$c['id']] = true;
-			}
-			$this->session->set('msg_conversations', $ids);
-		}
-		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$data = $this->messageService->listConversationsWithProfilesForUser($this->session->id());
+		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($data['conversations'], $data['profiles'])), CNT_RIGHT);
 	}
 }

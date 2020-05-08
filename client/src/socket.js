@@ -6,6 +6,7 @@ import { session_id, GET } from '@/script'
 import msg from '@/msg'
 import conv from '@/conv'
 import bellsStore from '@/stores/bells'
+import conversationStore, { convertMessage } from '@/stores/conversations'
 
 export default {
   connect: function () {
@@ -15,12 +16,16 @@ export default {
       socket.emit('register', session_id())
     })
 
-    socket.on('conv', function (data) {
+    socket.on('conv', async function (data) {
       if (data.m === 'push') {
+        const obj = JSON.parse(data.o)
+        await conversationStore.updateFromPush(obj)
+        const message = convertMessage(obj.message)
+        obj.message = message
         if (GET('page') === 'msg') {
-          msg.push(JSON.parse(data.o))
+          msg.push(obj)
         } else {
-          conv.push(JSON.parse(data.o))
+          conv.push(obj)
         }
       }
     })

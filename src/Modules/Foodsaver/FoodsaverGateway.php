@@ -907,6 +907,26 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function getProfileForUsers(array $fsIds): array
+	{
+		$res = $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			['id', 'name', 'photo', 'sleep_status'],
+			['id' => $fsIds]);
+
+		$profiles = [];
+		foreach ($res as $p) {
+			$profile = new Profile();
+			$profile->id = $p['id'];
+			$profile->name = $p['name'];
+			$profile->avatar = $p['photo'];
+			$profile->sleepStatus = $p['sleep_status'];
+			$profiles[$p['id']] = $profile;
+		}
+
+		return $profiles;
+	}
+
 	/**
 	 * Returns the first name of the foodsaver.
 	 */

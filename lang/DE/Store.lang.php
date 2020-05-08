@@ -39,8 +39,6 @@ $g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['prefetchtime'] = 'Wie viele Wochen im Voraus können sich Foodsaver mittels automatischer Slots eintragen?';
 $g_lang['no_member'] = 'Du bist gar kein Mitglied in diesem Betrieb';
 $g_lang['signout_error_admin'] = 'Du bist verantwortlich für diesen Betrieb und kannst Dich nicht löschen!';
-$g_lang['team_conversation_name'] = 'Team {var}';
-$g_lang['springer_conversation_name'] = 'Springer {var}';
 $g_lang['position_search_infobox'] = 'Bitte gib die Adresse des Betriebs im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.';
 $g_lang['store_status_impact_explanation'] = 'Bitte aktualisiere nach jedem Betriebskontakt (<a href="https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste" target="_blank">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href="https://wiki.foodsharing.de/Betrieb" target="_blank">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt.';
 $g_lang['store_error'] = 'Betrieb konnte nicht geladen werden.';

@@ -405,11 +405,6 @@ export function img (photo, size) {
   }
 }
 
-export function stopHeartbeats () {
-  clearInterval(window.g_interval_newBasket)
-  // stopChatHeartbeat();
-}
-
 export function fancy (content, title, subtitle) {
   let t = ''
   let s = ''
@@ -614,10 +609,6 @@ export function pictureCrop (id, img) {
     $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
     $(`#${id}-form`).trigger('submit')
   }
-}
-export function nl2br (str, is_xhtml) {
-  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>' // Adjust comment to avoid issue on phpjs.org display
-  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
 }
 
 export function u_loadCoords (addressdata, func) {

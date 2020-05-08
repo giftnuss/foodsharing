@@ -80,7 +80,7 @@ class View
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>		
+			<div style="clear:both;"></div>
 		</div>';
 	}
 
@@ -107,7 +107,7 @@ class View
 			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
-			Online-Sprachkonferenzen machen wir mit Mumble	
+			Online-Sprachkonferenzen machen wir mit Mumble
 		</p>
 		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
 		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
@@ -124,7 +124,7 @@ class View
 			' . $location['street'] . '<br />
 			' . $location['zip'] . ' ' . $location['city'] . '
 		</p>
-				
+
 		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
@@ -145,7 +145,7 @@ class View
 		}
 
 		return '
-					
+
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
 			' . $img . '
 			<div class="welcome_profile_name">
@@ -268,79 +268,6 @@ class View
 				' . $out . '
 			</ul>
 		</div>';
-	}
-
-	public function peopleChooser($id, $option = [])
-	{
-		$this->pageHelper->addJs('
-			var date = new Date(); 
-			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
-			var localsource = [];
-			$.ajax({
-				url: "/api/search/legacyindex",
-				dataType: "json",
-				success: function(json){
-					
-					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
-					{
-						
-						for(y=0;y<json[0].result.length;y++)
-						{
-							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
-						}
-						
-					}
-				},
-				complete: function(){
-					$("#' . $id . ' input.tag").tagedit({
-						autocompleteOptions: {
-							delay: 0,
-							source: function(request, response) { 
-					            /* Remote results only if string > 3: */
-								
-								if(request.term.length > 3)
-								{
-									$.ajax({
-						                url: "/xhrapp.php?app=msg&m=people",
-										data: {term:request.term},
-						                dataType: "json",
-						                success: function(data) {
-											response(data);
-											// following doesn\'t work somehow => ignoring
-											// local = [];
-											// term = request.term.toLowerCase();
-											// for(i=0;i<localsource.length;i++)
-											// {
-											// 	if(localsource[i].value.indexOf(term) > 0)
-											// 	{
-											// 		local.push(localsource[i]);
-											// 	}
-											// }
-											// response(merge(local,data,"id"));
-						                }
-						            });
-								}
-								else
-								{
-									response(localsource);
-								}
-								
-					        },
-							minLength: 1
-						},
-						allowEdit: false,
-						allowAdd: false,
-						animSpeed:1
-					});
-				}
-			});
-				
-				var localsource = [];
-		');
-
-		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-
-		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function latLonPicker($id, $options = [])

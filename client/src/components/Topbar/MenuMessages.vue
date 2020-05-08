@@ -45,7 +45,9 @@ export default {
 
   computed: {
     conversations () {
-      return conversationStore.conversations
+      /* let res = Array.from(conversationStore.conversations) // .filter(c => c.lastMessage || c.messages)
+      return res */
+      return Object.values(conversationStore.conversations).filter((a) => (a.lastMessage != null)).sort((a, b) => (a.lastMessage.sentAt < b.lastMessage.sentAt) ? 1 : -1)
     },
     unread () {
       return conversationStore.unreadCount

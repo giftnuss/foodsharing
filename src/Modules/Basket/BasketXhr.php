@@ -11,14 +11,12 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
 	private $basketGateway;
 	private $foodsaverGateway;
-	private $messageModel;
 	private $timeHelper;
 	private $imageService;
 	private $webSocketConnection;
@@ -27,12 +25,10 @@ class BasketXhr extends Control
 		BasketView $view,
 		BasketGateway $basketGateway,
 		FoodsaverGateway $foodsaverGateway,
-		MessageModel $messageModel,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
 		WebSocketConnection $webSocketConnection
 	) {
-		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

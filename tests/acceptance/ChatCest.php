@@ -22,25 +22,6 @@ class ChatCest
 		$this->foodsaver2 = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk]);
 	}
 
-	public function GetEmailNotificationForMessage(AcceptanceTester $I)
-	{
-		$I->login($this->foodsaver1['email']);
-		// view the other users profile and start a chat
-		$I->amOnPage('/profile/' . $this->foodsaver2['id']);
-		$I->click('Nachricht schreiben');
-		$I->waitForElementVisible('.chatboxtextarea', 15);
-
-		// write a message to them
-		$I->fillField('.chatboxtextarea', 'is anyone there for the email?');
-		$I->pressKey('.chatboxtextarea', Facebook\WebDriver\WebDriverKeys::ENTER);
-		$I->waitForText('is anyone there for', 20, '.chatboxcontent');
-
-		$I->expectNumMails(1, 5);
-		$mail = $I->getMails()[0];
-		$I->assertStringContainsString('is anyone there for the email?', $mail->text);
-		$I->assertStringContainsString($this->foodsaver1['name'], $mail->subject);
-	}
-
 	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)
 	{
 		$I->login($this->foodsaver1['email']);
@@ -59,6 +40,11 @@ class ChatCest
 			'foodsaver_id' => $this->foodsaver1['id'],
 			'body' => 'is anyone there?'
 		]);
+
+		$I->expectNumMails(1, 10);
+		$mail = $I->getMails()[0];
+		$I->assertStringContainsString('is anyone there?', $mail->text);
+		$I->assertStringContainsString($this->foodsaver1['name'], $mail->subject);
 
 		$matthias = $I->haveFriend('matthias');
 		$matthias->does(function (AcceptanceTester $I) {

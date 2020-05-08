@@ -105,6 +105,7 @@ $teamConversationMembers = $I->grabColumnFromDatabase('fs_foodsaver_has_conversa
 $jumperConversationMembers = $I->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $jumperConversationId]);
 $storeTeamIDs = [$bibA['id'], $foodsaverA['id'], $foodsaverB['id']];
 $storeCoordinatorIDs = [$bibA['id']];
+$I->assertEquals($storeTeamIDs, $I->grabColumnFromDatabase('fs_betrieb_team', 'foodsaver_id', ['betrieb_id' => $storeId, 'active' => 1]));
 $I->assertEquals($storeTeamIDs, $teamConversationMembers);
 /* TODO fails, please fix. See https://gitlab.com/foodsharing-dev/issues0/issues/352 :) */
 /*

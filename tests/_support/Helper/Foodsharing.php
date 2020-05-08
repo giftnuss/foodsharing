@@ -521,17 +521,13 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createConversation($users, $extra_params = [])
 	{
 		$params = array_merge([
-			'locked' => 1,
+			'locked' => 0,
 			'name' => null,
-			'start' => $this->faker->dateTime(),
 			'last' => $this->faker->dateTime(),
-			'last_foodsaver_id' => $users[0],
-			'start_foodsaver_id' => $users[0],
+			'last_foodsaver_id' => $users ? $users[0] : null,
 			'last_message_id' => null,
-			'last_message' => '',
-			'member' => '',
+			'last_message' => null,
 		], $extra_params);
-		$params['start'] = $this->toDateTime($params['start']);
 		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
 

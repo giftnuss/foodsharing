@@ -20,11 +20,11 @@
             {{ title }}
           </h5>
           <small class="text-muted text-right nowrap">
-            {{ conversation.lastMessageTime | dateDistanceInWords }}
+            {{ conversation.lastMessage.sentAt | dateDistanceInWords }}
           </small>
         </div>
         <p class="mb-1 text-truncate">
-          {{ conversation.lastMessage.bodyRaw }}
+          {{ conversation.lastMessage.body }}
         </p>
       </div>
     </div>
@@ -34,6 +34,7 @@
 import serverData from '@/server-data'
 import conv from '@/conv'
 import { AVATAR_DEFAULT, GROUP_PICTURE_DEFAULT } from '@/consts'
+import profileStore from '@/stores/profiles'
 
 export default {
   props: {
@@ -56,35 +57,35 @@ export default {
       if (this.conversation.title) return this.conversation.title
       const members = this.conversation.members
       // without ourselve
-        .filter(m => m.id !== this.loggedinUser.id)
+        .filter(m => m !== this.loggedinUser.id)
 
-      return members.map(m => m.name).join(', ')
+      return members.map(m => profileStore.profiles[m].name).join(', ')
     },
     avatars () {
       const lastId = this.conversation.lastMessage.authorId
       let members = this.conversation.members
 
       // without ourselve
-        .filter(m => m.id !== this.loggedinUser.id)
+        .filter(m => m !== this.loggedinUser.id)
 
       // bring last participant to the top
         .sort((a, b) => {
           /* eslint-disable eqeqeq */
-          if (a.id == lastId) return -1
-          if (b.id == lastId) return 1
+          if (a == lastId) return -1
+          if (b == lastId) return 1
           return 0
         })
 
       // enough avatars for displaying?
-      if (members.filter(m => m.avatar).length > 4) {
-        members = members.filter(m => m.avatar)
+      if (members.filter(m => profileStore.profiles[m].avatar).length > 4) {
+        members = members.filter(m => profileStore.profiles[m].avatar)
       }
 
       // we dont need more then 4
       members = members.slice(0, 4)
 
       if (members.length) {
-        return members.map(m => m.avatar)
+        return members.map(m => profileStore.profiles[m].avatar)
       } else {
         if (this.conversation.members.length !== 2) {
           // default group picture

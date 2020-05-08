@@ -2,37 +2,29 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Message\MessageGateway;
-use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class StoreModel extends Db
 {
-	private $messageModel;
 	private $bellGateway;
 	private $storeGateway;
 	private $regionGateway;
-	private $messagesGateway;
-	private $translationHelper;
+	private $messageGateway;
 
 	public function __construct(
-		MessageModel $messageModel,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
-		MessageGateway $messagesGateway,
-		TranslationHelper $translationHelper
+		MessageGateway $messageGateway
 	) {
-		$this->messageModel = $messageModel;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
-		$this->messagesGateway = $messagesGateway;
-		$this->translationHelper = $translationHelper;
+		$this->messageGateway = $messageGateway;
 
 		parent::__construct();
 	}
@@ -145,10 +137,10 @@ class StoreModel extends Db
 		$this->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $fsId . ' AND `date` > NOW()');
 
 		if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
-			$this->messageModel->deleteUserFromConversation($tcid, $fsId, true);
+			$this->messageGateway->deleteUserFromConversation($tcid, $fsId);
 		}
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageModel->deleteUserFromConversation($scid, $fsId, true);
+			$this->messageGateway->deleteUserFromConversation($scid, $fsId);
 		}
 	}
 
@@ -323,14 +315,6 @@ class StoreModel extends Db
 		}
 
 		$name = $data['name'];
-		if ($tcid = $this->storeGateway->getBetriebConversation($id, false)) {
-			$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $name);
-			$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
-		}
-		if ($scid = $this->storeGateway->getBetriebConversation($id, true)) {
-			$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $name);
-			$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
-		}
 
 		return $this->update('
 		UPDATE 	`fs_betrieb`
@@ -445,31 +429,10 @@ class StoreModel extends Db
 			}
 		}
 
-		if (isset($data['foodsaver']) && is_array($data['foodsaver'])) {
-			foreach ($data['foodsaver'] as $foodsaver_id) {
-				$this->insert('
-						REPLACE INTO `fs_betrieb_team`
-						(
-							`betrieb_id`,
-							`foodsaver_id`,
-							`verantwortlich`,
-							`active`,
-							`stat_add_date`
-						)
-						VALUES
-						(
-							' . (int)$id . ',
-							' . (int)$foodsaver_id . ',
-							1,
-							1,
-							NOW()
-						)
-					');
-			}
-		}
-
 		$this->createTeamConversation($id);
 		$this->createSpringerConversation($id);
+
+		$this->addBetriebTeam($id, $data['foodsaver'], $data['foodsaver']);
 
 		return $id;
 	}
@@ -487,11 +450,11 @@ class StoreModel extends Db
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageModel->deleteUserFromConversation($scid, $fsid, true);
+			$this->messageGateway->deleteUserFromConversation($scid, $fsid);
 		}
 
 		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
-			$this->messageModel->addUserToConversation($tcid, $fsid, true);
+			$this->messageGateway->addUserToConversation($tcid, $fsid);
 		}
 
 		return $this->update('
@@ -515,7 +478,7 @@ class StoreModel extends Db
 		$this->bellGateway->addBell((int)$fsid, $bellData);
 
 		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-			$this->messageModel->addUserToConversation($scid, $fsid, true);
+			$this->messageGateway->addUserToConversation($scid, $fsid);
 		}
 
 		return $this->update('
@@ -564,60 +527,34 @@ class StoreModel extends Db
 			)');
 	}
 
-	public function createTeamConversation($storeId)
+	/* creates an empty team conversation for the given store */
+	public function createTeamConversation(int $storeId): int
 	{
-		$tcid = $this->messageModel->insertConversation([], true);
+		$teamIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getStoreTeam($storeId));
+		$tcid = $this->messageGateway->createConversation($teamIds, true);
 		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$team_conversation_name = $this->translationHelper->sv('team_conversation_name', $betrieb['name']);
-		$this->messagesGateway->renameConversation($tcid, $team_conversation_name);
 
 		$this->update('
 				UPDATE	`fs_betrieb` SET team_conversation_id = ' . (int)$tcid . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$teamMembers = $this->storeGateway->getStoreTeam($storeId);
-		if ($teamMembers) {
-			foreach ($teamMembers as $fs) {
-				$this->messageModel->addUserToConversation($tcid, $fs['id']);
-			}
-		}
-
 		return $tcid;
 	}
 
-	public function createSpringerConversation($storeId)
+	/* creates an empty springer conversation for the given store */
+	public function createSpringerConversation(int $storeId): int
 	{
-		$scid = $this->messageModel->insertConversation([], true);
-		$betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId);
-		$springer_conversation_name = $this->translationHelper->sv('springer_conversation_name', $betrieb['name']);
-		$this->messagesGateway->renameConversation($scid, $springer_conversation_name);
+		$standbyTeamMemberIds = array_map(function ($fs) { return $fs['id']; }, $this->storeGateway->getBetriebSpringer($storeId));
+		$standbyTeamChatId = $this->messageGateway->createConversation($standbyTeamMemberIds, true);
+		$store = $this->storeGateway->getMyStore($this->session->id(), $storeId);
 		$this->update('
-				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$scid . ' WHERE id = ' . (int)$storeId . '
+				UPDATE	`fs_betrieb` SET springer_conversation_id = ' . (int)$standbyTeamChatId . ' WHERE id = ' . (int)$storeId . '
 			');
 
-		$springerMembers = $this->storeGateway->getBetriebSpringer($storeId);
-		if ($springerMembers) {
-			foreach ($springerMembers as $fs) {
-				$this->messageModel->addUserToConversation($scid, $fs['id']);
-			}
-		}
-
-		return $scid;
+		return $standbyTeamChatId;
 	}
 
-	public function addTeamMessage($storeId, $message)
-	{
-		if ($betrieb = $this->storeGateway->getMyStore($this->session->id(), $storeId)) {
-			if (!is_null($betrieb['team_conversation_id'])) {
-				$this->messageModel->sendMessage($betrieb['team_conversation_id'], $message);
-			} elseif (is_null($betrieb['team_conversation_id'])) {
-				$tcid = $this->createTeamConversation($storeId);
-				$this->messageModel->sendMessage($tcid, $message);
-			}
-		}
-	}
-
-	public function addBetriebTeam($storeId, $member, $verantwortlicher = false)
+	public function addBetriebTeam(int $storeId, array $member, ?array $verantwortlicher = null)
 	{
 		if (empty($member)) {
 			return false;
@@ -651,12 +588,12 @@ class StoreModel extends Db
 		$sql = 'INSERT IGNORE INTO `fs_betrieb_team` (`betrieb_id`,`foodsaver_id`,`verantwortlich`,`active`,`stat_add_date`) VALUES ' . implode(',', $values);
 
 		if ($cid = $this->storeGateway->getBetriebConversation($storeId)) {
-			$this->messageModel->setConversationMembers($cid, $member_ids);
+			$this->messageGateway->setConversationMembers($cid, $member_ids);
 		}
 
 		if ($sid = $this->storeGateway->getBetriebConversation($storeId, true)) {
 			foreach ($verantwortlicher as $user) {
-				$this->messageModel->addUserToConversation($sid, $user);
+				$this->messageGateway->addUserToConversation($sid, $user);
 			}
 		}
 
