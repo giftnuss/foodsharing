@@ -262,7 +262,7 @@ div#main {
   padding-bottom: 30px;
 }
 
-.inside, .mainpure {
+.inside {
   background-color: transparent;
   border-radius: 6px;
 }
@@ -1585,7 +1585,7 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
     top: -5px;
   }
 
-  .inside, .mainpure {
+  .inside {
     border-radius: 0;
   }
 }
