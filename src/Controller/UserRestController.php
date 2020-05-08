@@ -161,9 +161,9 @@ class UserRestController extends AbstractFOSRestController
 
 	/**
 	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
-	 * and a 'exist' parameter that indicates if the email address can be used for registration.
+	 * and a 'valid' parameter that indicates if the email address can be used for registration.
 	 *
-	 * @Rest\Post("user/ismailexist")
+	 * @Rest\Post("user/isvalidemail")
 	 * @Rest\RequestParam(name="email", nullable=false)
 	 */
 	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
@@ -174,11 +174,11 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		return $this->handleView($this->view([
-			'exist' => !$this->isEmailExistForRegistering($email)
+			'valid' => $this->isEmailValidForRegistration($email)
 		], 200));
 	}
 
-	private function isEmailExistForRegistering(string $email): bool
+	private function isEmailValidForRegistration(string $email): bool
 	{
 		return !$this->emailHelper->isFoodsharingEmailAddress($email)
 			&& !$this->foodsaverGateway->emailExists($email);

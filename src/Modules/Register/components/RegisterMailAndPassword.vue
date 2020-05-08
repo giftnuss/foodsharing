@@ -21,12 +21,12 @@
         @blur="update"
       >
       <div
-        v-if="$v.email.$error || isMailExist || isMailInvalid"
+        v-if="$v.email.$error || !isMailValidForRegistration || isMailInvalid"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
-        <span v-if="!$v.email.email || !$v.email.foodsharing || isMailInvalid">{{ $i18n('register.email_invalid') }}</span>
-        <span v-if="isMailExist">{{ $i18n('register.error_email_exist') }}</span>
+        <span v-else-if="!$v.email.email || !$v.email.foodsharing || isMailInvalid">{{ $i18n('register.email_invalid') }}</span>
+        <span v-else-if="!isMailValidForRegistration">{{ $i18n('register.error_email_exist') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -116,7 +116,7 @@ export default {
   data () {
     return {
       confirmPassword: '',
-      isMailExist: false,
+      isMailValidForRegistration: false,
       isMailInvalid: false
     }
   },
@@ -127,7 +127,7 @@ export default {
   },
   computed: {
     isValid () {
-      return !this.isMailExist && !this.$v.$invalid && !this.isMailInvalid
+      return this.isMailValidForRegistration && !this.$v.$invalid && !this.isMailInvalid
     }
   },
   methods: {
@@ -142,12 +142,12 @@ export default {
       this.$v.email.$touch()
       // Needs some delay, because touch cannot be awaited: https://github.com/vuelidate/vuelidate/issues/625
       await delay(20)
-      this.isMailExist = false
+      this.isMailValidForRegistration = false
       this.isMailInvalid = false
       if (!this.$v.email.$error) {
         try {
           const MailExist = await testRegisterEmail($event.target.value)
-          this.isMailExist = MailExist.exist
+          this.isMailValidForRegistration = MailExist.valid
         } catch (err) {
           if (err.code && err.code === 400) {
             this.isMailInvalid = true
@@ -156,7 +156,7 @@ export default {
             throw err
           }
         }
-        return this.isMailExist
+        return this.isMailValidForRegistration
       }
     }
   }
