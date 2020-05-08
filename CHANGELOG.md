@@ -99,7 +99,7 @@
 - Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm 
 - Reimplement footer in vue !1437 @ChrisOelmueller
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
-- Refactored store infos to vue js !1406 @chriswalg
+- Refactored store infos to vue js !1406 !1477 !1492 @chriswalg @ChrisOelmueller
 - Moved profile Rest endpoint to user controller !1374 @alex.simm
 - Removed the two deprecated functions from Session.php !1259 @koenvg
 - Extend RegionPermissions to a mayAdministrateRegions() method. Removes the topbar menu entry if false !1236 @jofranz
