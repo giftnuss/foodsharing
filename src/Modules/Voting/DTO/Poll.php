@@ -13,35 +13,35 @@ class Poll
 	/**
 	 * @var int
 	 *
-	 * Unique identifier of this poll.
+	 * Unique identifier of this poll
 	 */
 	public $id;
 
 	/**
 	 * @var string
 	 *
-	 * A short description of the poll that can serve as a title.
+	 * A short description of the poll that can serve as a title
 	 */
 	public $name;
 
 	/**
 	 * @var string
 	 *
-	 * A more detailed description of the topic of this poll.
+	 * A more detailed description of the topic of this poll
 	 */
 	public $description;
 
 	/**
-	 * @var DateTime
+	 * @var dateTime
 	 *
-	 * The date at which this poll began.
+	 * The date at which this poll began
 	 */
 	public $startDate;
 
 	/**
-	 * @var DateTime
+	 * @var dateTime
 	 *
-	 * The date at which this poll will end or has ended.
+	 * The date at which this poll will end or has ended
 	 */
 	public $endDate;
 
@@ -56,7 +56,7 @@ class Poll
 	/**
 	 * @var int
 	 *
-	 * The scope is an additional constraint defining which user groups are allowed to vote.
+	 * The scope is an additional constraint defining which user groups are allowed to vote
 	 */
 	public $scope;
 
