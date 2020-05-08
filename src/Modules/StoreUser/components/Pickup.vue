@@ -4,7 +4,7 @@
       <div class="pickup-title">
         <div
           class="pickup-date"
-          :class="{'today': isToday, 'past': isInPast, 'empty': emptySlots > 0, 'coord': isCoordinator}"
+          :class="{'today': isToday, 'past': isInPast, 'soon': isSoon, 'empty': emptySlots > 0, 'coord': isCoordinator}"
         >
           <span>
             {{ date | dateFormat('full-long') }}
@@ -139,8 +139,9 @@
 import { BFormTextarea, BModal, VBTooltip } from 'bootstrap-vue'
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
-import dateFnsCompareAsc from 'date-fns/compareAsc'
-import dateFnsIsSameDay from 'date-fns/isSameDay'
+import differenceInDays from 'date-fns/differenceInDays'
+import differenceInHours from 'date-fns/differenceInHours'
+import isPast from 'date-fns/isPast'
 
 export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
@@ -173,10 +174,13 @@ export default {
       }) !== -1
     },
     isInPast () {
-      return dateFnsCompareAsc(new Date(), this.date) >= 1
+      return isPast(this.date)
+    },
+    isSoon () {
+      return differenceInDays(this.date, new Date()) <= 3
     },
     isToday () {
-      return dateFnsIsSameDay(this.date, new Date())
+      return differenceInHours(this.date, new Date()) <= 24
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
@@ -191,99 +195,117 @@ export default {
 }
 
 .pickup-date {
-  padding-top: 4px;
-  padding-bottom: 4px;
-  margin-bottom: 10px;
-  margin-left: -10px;
-  margin-right: -10px;
-  border-left: 10px solid var(--white);
-  border-right: 10px solid var(--white);
-  background-clip: padding-box;
-  font-weight: bolder;
-  text-align: center;
-  color: var(--fs-brown);
-  background-color: var(--fs-beige);
+  padding-bottom: 5px;
 
-  &.coord {
-    border-right-color: rgba(var(--fs-green-rgb), 0.6);
-  }
-  &.coord.empty {
-    border-right-color: rgba(var(--warning-rgb), 0.6);
-  }
-  &.today.empty {
-    border-right-color: rgba(var(--danger-rgb), 0.8);
-  }
   &.today {
-    border-left-color: var(--fs-brown);
+    &:not(.past) {
+      font-weight: bolder;
+    }
   }
-  &.past {
-    border-left-color: var(--white) !important;
-    border-right-color: var(--white) !important;
+
+  // Pickup marker to explain traffic lights
+  &.coord.soon.empty::after {
+    float: right;
+    margin-right: -5px;
+    text-align: right;
+    content: "\f12a"; // fa-exclamation
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--warning);
+  }
+  &.coord.soon.empty.today::after {
+    color: var(--danger);
+  }
+  &.coord.past::after {
+    content: "" !important;
   }
 }
 
-.pickup ul.slots {
-  display: flex;
-  padding: 0;
-  margin: 0 0 5px;
-  flex-wrap: wrap;
+.pickup-block:not(:last-of-type) {
+  .pickup-text {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--fs-beige);
+  }
+}
 
-  div {
-    display: inline-block;
+// The container for one pickup
+.pickup {
+  .pickup-text {
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
-  /deep/ .btn {
-    position: initial;
-    display: inline-block;
-    margin: 2px;
-    margin-left: 1px;
-    width: 50px;
-    height: 50px;
-    color: rgba(var(--fs-brown-rgb), 0.75);
-    background-color: rgba(var(--fs-white-rgb), 0.5);
-    border-color: var(--fs-beige);
-    border-width: 2px;
+  // The list of slots for one pickup
+  ul.slots {
+    display: flex;
+    padding: 0;
+    margin: 0 0 5px;
+    flex-wrap: wrap;
 
-    &:hover {
-      border-color: var(--fs-brown);
+    div {
+      display: inline-block;
     }
-    &:focus {
-      box-shadow: none;
-    }
-    &.filled {
-      overflow: hidden;
-      border-width: 0;
-    }
-    &.btn-secondary {
-      background-color: var(--fs-beige);
-    }
-    &[disabled] {
-      opacity: 1;
-    }
-    &[disabled]:hover {
+
+    /deep/ .btn {
+      position: initial;
+      display: inline-block;
+      margin: 2px;
+      margin-left: 1px;
+      width: 50px;
+      height: 50px;
+      color: rgba(var(--fs-brown-rgb), 0.75);
+      background-color: rgba(var(--fs-white-rgb), 0.5);
       border-color: var(--fs-beige);
-      cursor: default;
+      border-width: 2px;
+
+      &:hover {
+        border-color: var(--fs-brown);
+      }
+      &:focus {
+        box-shadow: none;
+      }
+      &.filled {
+        overflow: hidden;
+        border-width: 0;
+      }
+      &.btn-secondary {
+        background-color: var(--fs-beige);
+      }
+      &[disabled] {
+        opacity: 1;
+      }
+      &[disabled]:hover {
+        border-color: var(--fs-beige);
+        cursor: default;
+      }
     }
   }
-}
 
-/* Display deletion button only when hovering pickup date */
-.pickup .delete-pickup {
-  display: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: var(--fs-brown);
-  background-color: var(--fs-beige);
-  opacity: 0.75;
+  /* Display deletion button only when hovering pickup date */
+  .delete-pickup {
+    display: none;
+    position: absolute;
+    top: -4px;
+    right: -9px;
+    color: var(--fs-brown);
+    background-color: var(--white);
+    opacity: 0.9;
 
-  .btn {
-    padding: 3px 5px;
-    line-height: 1.38;
+    .btn {
+      padding: 3px 5px;
+      line-height: 1.38;
+    }
   }
-}
 
-.pickup:hover .delete-pickup {
-  display: block;
+  &:hover .delete-pickup {
+    display: block;
+  }
+
+  .soon .delete-pickup {
+    right: 1px;
+  }
 }
 </style>
