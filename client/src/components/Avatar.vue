@@ -59,7 +59,6 @@ export default {
 <style lang="scss" scoped>
 .avatar {
   position: relative;
-  // margin: auto;
   display: inline-block;
   background-size: cover;
 }
