@@ -130,6 +130,10 @@ final class PageHelper
 			$bodyClasses[] = 'loggedin';
 		}
 
+		if ($this->session->may('fs')) {
+			$bodyClasses[] = 'fs';
+		}
+
 		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
 		$footer = $this->getFooter();

@@ -68,7 +68,7 @@
 - Short Description is shown on profile and purpose of both self descriptions is made clear in settings !1145 #656 @fs_k @Caluera
 - Fallback to raster tiles if the browser does not support WebGL !1455 @dthulke
 - Correct Dashboard preview of ordered + unordered lists #455 !1481 @ChrisOelmueller
-- Fix gender selection during registration that was set to 'unselected' by mistake !1494 @alex.simm
+- Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae
@@ -106,6 +106,7 @@
 - Update to PHP 7.4.5 and fix some backwards incompatible changes @NerdyProjects
 - Add database constraints to fs_faq !1436 @ffm_hessen
 - Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
+- CSS adjustments for foodbasket page, mobile dashboard view with columns !1494 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen

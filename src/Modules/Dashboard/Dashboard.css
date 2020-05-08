@@ -38,3 +38,27 @@
     display: none;
   }
 }
+
+@media screen and (max-width: 959px) {
+  /* Foodsaver Dashboard */
+  /* Move left+right side panels up before main content */
+  .page-dashboard.fs #left,
+  .page-dashboard.fs #right {
+    order: -1;
+  }
+  /* Foodsharer Dashboard */
+  /* Move left panel down below main content */
+  .page-dashboard:not(.fs) #left {
+    order: 1;
+  }
+}
+
+@media screen and (min-width: 370px) and (max-width: 959px) {
+  .page-dashboard.fs #left,
+  .page-dashboard.fs #right {
+    width: 50%;
+  }
+  .page-dashboard.fs #left {
+    order: -2;
+  }
+}
