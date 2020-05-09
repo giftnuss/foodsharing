@@ -20,7 +20,7 @@ export class RestController {
         });
     }
 
-    @Get('/user/:id/is-online')
+    @Get('/users/:id/is-online')
     async userIsConnected (request: Request, response: Response): Promise<any> {
         const userId = request.params.id;
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUser(userId);
@@ -37,11 +37,11 @@ export class RestController {
     }
 
     /**
-     * :ids: You can post to multiple user ids separating them with dashes (-).
+     * :ids: You can post to multiple user ids separating them with commas (,).
      */
-    @Post('/user/:ids/:channel/:method')
+    @Post('/users/:ids/:channel/:method')
     async send (request: Request, response: Response): Promise<any> {
-        const userIds: number[] = request.params.ids.split('-').map(Number);
+        const userIds: number[] = request.params.ids.split(',').map(Number);
         const sessionIds = await this.sessionIdProvider.fetchSessionIdsForUsers(userIds);
         const connections = this.connectionRegistry.getConnectionsForSessions(sessionIds);
 
