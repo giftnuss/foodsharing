@@ -280,9 +280,9 @@ const msg = {
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
           <a title="${plainToHtmlAttribute(profileStore.profiles[member].name)}" href="/profile/${profileStore.profiles[member].id}">
-            <img src="${img(member.avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
+            <img src="${img(profileStore.profiles[member].avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
           </a>
-        `).join('')}
+        `).slice(0, 25).join('')}
       </div>
       ${plainToHtml(titleText)}
       <div style="clear:both;"></div>
