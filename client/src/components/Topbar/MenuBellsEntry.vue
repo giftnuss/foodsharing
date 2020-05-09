@@ -35,7 +35,7 @@
       </small>
       <div class="bell-body mt-1">
         <h5 class="bell-title mb-1">
-          {{ $i18n(`bell.${bell.key}_title`, bell.payload) }}
+          {{ $i18n(`bell.${bell.title}`, bell.payload) }}
         </h5>
         <p class="bell-text mb-1">
           {{ $i18n(`bell.${bell.key}`, bell.payload) }}
@@ -113,7 +113,7 @@ export default {
 
     .bell-icon {
       grid-row-start: 1;
-      grid-row-end: 2;
+      grid-row-end: 3;
       align-self: center;
       font-size: 2em;
 

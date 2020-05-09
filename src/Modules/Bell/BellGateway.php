@@ -243,6 +243,7 @@ class BellGateway extends BaseGateway
 
 			$bellDTO->id = $row['id'];
 			$bellDTO->key = $row['body'];
+			$bellDTO->title = $row['name'];
 			$bellDTO->payload = unserialize($row['vars'], ['allowed_classes' => false]);
 			$bellDTO->href = unserialize($row['attr'], ['allowed_classes' => false])['href'];
 			$bellDTO->icon = $row['icon'][0] != '/' ? $row['icon'] : null;

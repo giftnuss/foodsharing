@@ -21,6 +21,15 @@ class BellForList
 	/**
 	 * @var string
 	 *
+	 * @see Bell::$name
+	 *
+	 * The name is called "title" in the frontend
+	 */
+	public $title;
+
+	/**
+	 * @var string
+	 *
 	 * The destination of the bell when clicked on. Will be put in the href attribute of the a tag surrounding the
 	 * notification.
 	 */

@@ -76,11 +76,15 @@ class ForumService
 		$regionName = $this->regionGateway->getRegionName($info['region_id']);
 
 		$bellData = Bell::create(
-			'forum_answer_title',
+			'forum_reply_title',
 			'forum_answer',
 			'fas fa-comments',
 			['href' => $this->url($info['region_id'], $info['ambassador_forum'], $threadId, $postId)],
-			['user' => $this->session->user('name'), 'forum' => $regionName],
+			[
+				'user' => $this->session->user('name'),
+				'forum' => $regionName,
+				'title' => $info['title'],
+			],
 			'forum-post-' . $postId
 		);
 		$this->bellGateway->addBell(array_column($subscribedFs, 'id'), $bellData);

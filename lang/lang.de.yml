@@ -299,7 +299,8 @@ reports:
 
 bell:
   no_bells: "Keine Benachrichtigungen"
-  forum_answer_title: "{forum}"
+  forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
+  forum_reply_title: "{forum}: {title}"
   forum_answer: "{user} hat Dir geantwortet"
   blog_new_check_title: "Neuer Blogartikel"
   blog_new_check: "{title}"
