@@ -4,7 +4,7 @@
 
 ## Features
 - Introduce Web Push Notifications #336 !734 @janopae
-- Use WebSocket connection to determine whether a user is online or not !734 @janopae
+- Use WebSocket connection to determine whether a user is online or not !734 !1470 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
 - Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 !1476 @chriswalg @moffer @ChrisOelmueller
 - Redirect to login page after login failed !1342 @chriswalg
@@ -119,6 +119,7 @@
 - Add database constraints to fs_faq !1436 @ffm_hessen
 - Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
 - CSS adjustments for foodbasket page, mobile dashboard view with columns !1494 @ChrisOelmueller
+- Port WebSocket server ("chat") to TypeScript and refactor it in an object oriented way !1470 @janopae 
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
