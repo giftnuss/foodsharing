@@ -44,7 +44,7 @@ export class ConnectionRegistry {
     getConnection (sessionId: string, connectionId: string): Connection | undefined {
         const connectionsForSession = this.registeredConnections.get(sessionId);
         if (!connectionsForSession) {
-            return;
+            return undefined;
         }
         return connectionsForSession.find((connection) => connection.id === connectionId);
     }
