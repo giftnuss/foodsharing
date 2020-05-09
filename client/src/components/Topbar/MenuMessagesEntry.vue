@@ -82,7 +82,7 @@ export default {
       members = members.slice(0, 4)
 
       if (members.length) {
-        return members.map(m => profileStore.profiles[m].avatar)
+        return members.map(m => '/images/mini_q_' + profileStore.profiles[m].avatar)
       } else {
         if (this.conversation.members.length !== 2) {
           // default group picture
