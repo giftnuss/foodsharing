@@ -25,6 +25,7 @@
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 !1438 @jofranz @alex.simm
 - Improve Metrics collection: Log execution timing including database execution timings for all controllers now. !1480 @NerdyProjects
 - Release notes introduced and replaced with the changelog !1474 @chriswalg
+- Extend the lifetime of persistent sessions after every request !1496 @dthulke
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
