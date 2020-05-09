@@ -3,20 +3,11 @@
     id="topbar-navright"
     class="ml-auto"
   >
-    <li class="nav-item">
-      <a
-        v-b-tooltip.hover.bottom
-        :href="$url('map')"
-        :title="$i18n('storelist.map')"
-        :aria-label="$i18n('storelist.map')"
-        class="nav-link"
-      >
-        <i class="fas fa-map-marker-alt" />
-        <span class="d-sm-none">
-          {{ $i18n('storelist.map') }}
-        </span>
-      </a>
-    </li>
+    <menu-item
+      :url="$url('map')"
+      icon="fa-map-marker-alt"
+      :title="$i18n('storelist.map')"
+    />
 
     <MenuBullhorn />
     <MenuInformation />
@@ -30,9 +21,10 @@ import { VBTooltip, BNavbarNav } from 'bootstrap-vue'
 import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
+import MenuItem from './MenuItem'
 
 export default {
-  components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav },
+  components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav, MenuItem },
   directives: { VBTooltip },
   props: {
     isMobile: {

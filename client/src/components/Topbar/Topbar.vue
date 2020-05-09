@@ -17,11 +17,13 @@
           :url="$url('joininfo')"
           icon="fa-rocket"
           :title="$i18n('register.topbar')"
+          :show-on-mobile="true"
         />
         <menu-item
           id="login"
           icon="fa-rocket"
           title="Login"
+          :show-on-mobile="true"
         />
         <div class="bootstrap">
           <Login />
@@ -132,13 +134,14 @@ export default {
     }
   }
 }
-/deep/ .navbar-collapse.show {
+
+/deep/ .navbar-collapse {
   &.show {
     // Only when menu is shown. Fixes problem that list of dropdown items is to long.
     max-height: 70vh;
     overflow: auto;
   }
-  .nav-link i {
+  &.show .nav-link i, &.collapsing .nav-link i {
       width: 40px;
       text-align: center;
   }

@@ -11,54 +11,23 @@
         {{ $i18n('menu.entry.activities') }}
       </span>
     </template>
-    <h3 class="dropdown-header">
-      {{ $i18n('menu.entry.politics') }}
-    </h3>
-    <a
-      :href="$url('fsstaedte')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.fscities') }}
-    </a>
-    <a
-      :href="$url('claims')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.demands') }}
-    </a>
-    <a
-      :href="$url('leeretonne')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.pastcampaigns') }}
-    </a>
-    <h3 class="dropdown-header">
-      {{ $i18n('menu.entry.education') }}
-    </h3>
-    <a
-      :href="$url('academy')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.academy') }}
-    </a>
-    <a
-      :href="$url('workshops')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.talksandworkshops') }}
-    </a>
-    <a
-      :href="$url('festival')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.fsfestival') }}
-    </a>
+    <template v-for="heading in headings">
+      <h3
+        :key="heading.heading"
+        class="dropdown-header"
+      >
+        {{ $i18n(heading.heading) }}
+      </h3>
+      <a
+        v-for="item in heading.menuItems"
+        :key="item.url"
+        :href="$url(item.url)"
+        class="dropdown-item sub"
+        role="menuitem"
+      >
+        {{ $i18n(item.menuTitle) }}
+      </a>
+    </template>
   </b-nav-item-dropdown>
 </template>
 <script>
@@ -68,10 +37,28 @@ export default {
     displayArrow: {
       type: Boolean,
       default: true
-    },
-    displayText: {
-      type: Boolean,
-      default: false
+    }
+  },
+  data () {
+    return {
+      headings: [
+        {
+          heading: 'menu.entry.politics',
+          menuItems: [
+            { url: 'fsstaedte', menuTitle: 'menu.entry.fscities' },
+            { url: 'claims', menuTitle: 'menu.entry.demands' },
+            { url: 'leeretonne', menuTitle: 'menu.entry.pastcampaigns' }
+          ]
+        },
+        {
+          heading: 'menu.entry.education',
+          menuItems: [
+            { url: 'academy', menuTitle: 'menu.entry.academy' },
+            { url: 'workshops', menuTitle: 'menu.entry.talksandworkshops' },
+            { url: 'festival', menuTitle: 'menu.entry.fsfestival' }
+          ]
+        }
+      ]
     }
   }
 }
