@@ -261,8 +261,6 @@ const msg = {
       msg.scrollBottom()
       msg.$answer.trigger('select')
       return false
-    } else {
-      msg.firstMessageReached = false
     }
     msg.conversation_id = id
 
@@ -309,6 +307,7 @@ const msg = {
     msg.$answer.trigger('select')
 
     msg.scrollTrigger()
+    msg.firstMessageReached = false
   },
 
   loadMore: async function () {
