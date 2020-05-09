@@ -106,11 +106,6 @@ class MessageService
 		if ($members = $this->messageGateway->listConversationMembersWithProfile($conversationId)) {
 			$user_ids = array_column($members, 'id');
 
-			$this->webSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
-				'cid' => $conversationId,
-				'message' => $message,
-			]);
-
 			$author = array_values(array_filter($members, function ($m) use ($message) {
 				return $m['id'] == $message->authorId;
 			}));
@@ -120,6 +115,18 @@ class MessageService
 			} else {
 				$author = $author[0];
 			}
+
+			$this->webSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
+				'cid' => $conversationId,
+				'message' => $message,
+				/* Compatibility part: This ensures readability of the push message in legacy clients. Will be removed after release */
+				'id' => $message->id,
+				'fs_id' => $message->authorId,
+				'fs_name' => $author['name'],
+				'fs_photo' => $author['photo'],
+				'body' => htmlentities($message->body),
+				'time' => $message->sentAt->format('Y-m-d H:i:s')
+			]);
 
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);
 			foreach ($members as $m) {

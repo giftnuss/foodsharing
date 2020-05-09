@@ -57,7 +57,7 @@ export default new Vue({
         Still, I think it shouldn't harm...
          */
       }
-      const message = convertMessage(data.message)
+      const message = data.message
       Vue.set(this.conversations[cid].messages, message.id, message)
       Vue.set(this.conversations[cid], 'lastMessage', message)
       if (message.authorId !== serverData.user.id) {
