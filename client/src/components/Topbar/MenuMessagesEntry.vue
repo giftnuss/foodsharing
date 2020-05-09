@@ -76,10 +76,7 @@ export default {
           return 0
         })
 
-      // enough avatars for displaying?
-      if (members.filter(m => profileStore.profiles[m].avatar).length > 4) {
-        members = members.filter(m => profileStore.profiles[m].avatar)
-      }
+      members = members.filter(m => profileStore.profiles[m].avatar)
 
       // we dont need more then 4
       members = members.slice(0, 4)
