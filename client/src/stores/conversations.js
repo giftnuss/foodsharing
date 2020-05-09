@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import { getConversationList, getConversation, getMessages } from '@/api/conversations'
+import { getConversationList, getConversation, getMessages, markConversationRead } from '@/api/conversations'
 import ProfileStore from '@/stores/profiles'
+import serverData from '@/server-data'
 
 export default new Vue({
   data: {
@@ -59,7 +60,15 @@ export default new Vue({
       const message = convertMessage(data.message)
       Vue.set(this.conversations[cid].messages, message.id, message)
       Vue.set(this.conversations[cid], 'lastMessage', message)
-      Vue.set(this.conversations[cid], 'hasUnreadMessages', true)
+      if (message.authorId !== serverData.user.id) {
+        Vue.set(this.conversations[cid], 'hasUnreadMessages', true)
+      }
+    },
+    async markAsRead (cid) {
+      if (this.conversations[cid].hasUnreadMessages) {
+        Vue.set(this.conversations[cid], 'hasUnreadMessages', false)
+        await markConversationRead(cid)
+      }
     }
   }
 })

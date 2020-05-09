@@ -92,6 +92,10 @@ const msg = {
       msg.$answer.css('margin-top', `-${msg.$answer.height() - 40}px`)
     })
 
+    msg.$answer.on('focus', function () {
+      conversationStore.markAsRead(msg.conversation_id)
+    })
+
     /*
      * initiate message submit functionality for conversation form
      */

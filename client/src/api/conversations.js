@@ -39,3 +39,7 @@ export function createConversation (userIds) {
     members: userIds
   })
 }
+
+export function markConversationRead (conversationId) {
+  return post(`/conversations/${conversationId}/read`)
+}

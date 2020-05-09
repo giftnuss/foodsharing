@@ -380,6 +380,7 @@ const conv = {
       $el.children('.chatboxinput').children('textarea').autosize()
 
       $el.children('.chatboxinput').children('textarea').on('focus', function () {
+        conversationStore.markAsRead(cid)
         conv.activeBox = cid
       })
 

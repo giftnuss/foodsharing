@@ -28,6 +28,20 @@ class MessageRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Post("conversations/{conversationId}/read", requirements={"conversationId" = "\d+"})
+	 */
+	public function markConversationReadAction(int $conversationId): Response
+	{
+		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
+			throw new HttpException(401);
+		}
+
+		$this->messageGateway->markAsRead($conversationId, $this->session->id());
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * @Rest\Get("conversations/{conversationId}/messages", requirements={"conversationId" = "\d+"})
 	 * @Rest\QueryParam(name="olderThanId", requirements="\d+", nullable=true, default=null, description="ID of oldest already known message")
 	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="Number of messages to return")
