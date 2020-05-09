@@ -1,7 +1,8 @@
 # WebSocket server (chat)
 
 This directory contains a node.js server written in TypeScript to handle WebSocket connections to clients. These
-connections are used in order to push updates to clients (e. g. browser windows or the Android app).
+connections are used in order to push updates (e. g. new chat messages or bell notifications) to clients (e. g.
+browsers or the Android app).
 
 ## Setup
 ### How to run yarn?
@@ -14,7 +15,7 @@ connections are used in order to push updates to clients (e. g. browser windows 
 You don't need to. In development, we use the neat tool `ts-node-dev`, which keeps track of your TypeScript files and
 updates the server on changes. No manual TypeScript build and no server restart is required.
 
-## NABPOQ - Never asked, but probably occurring questions:
+## NABPUQ - Never asked, but probably upcoming questions:
 
 ## Why node?
 Node servers work very differently from most server implementations in PHP or other languages. Normally, a server
@@ -53,7 +54,7 @@ if you want to know the session of one user id.
 This is because the same user can be logged in across different browsers and different devices – every browser will
 have their own cookies, and therefore have their own session id.
 
-## Why does a session have many Sockets?
+## Why does a session have many connections/sockets?
 A session is always tied to a browser. If you log in to a site, you are still logged in on other tabs or windows,
 unless it's a private one. Sockets are tied to instances of the client. Every tab or window executes an own instance
 of the client. Because one browser can have many windows or tabs, one session can have many sockets.

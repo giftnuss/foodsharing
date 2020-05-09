@@ -13,7 +13,7 @@ export class Connection {
      * Whether the client the connection belongs to is in a background position, where the user can not see it and
      * therefore misses updates.
      */
-    public clientIsHidden = false;
+    clientIsHidden = false;
 
     send (channel: string, payload: any): void {
         this.socket.emit(channel, payload);

@@ -1,6 +1,9 @@
 import { Connection } from './Connection';
 
 export class ConnectionRegistry {
+    /**
+     * Registered connections indexed by session ids
+     */
     private readonly registeredConnections: Map<string, Connection[]> = new Map<string, Connection[]>();
     private _numRegistrations = 0;
 
@@ -10,12 +13,12 @@ export class ConnectionRegistry {
     numConnections = 0;
 
     register (sessionId: string, connection: Connection): void {
-        let socketsForSessionId = this.registeredConnections.get(sessionId);
-        if (!socketsForSessionId) {
-            socketsForSessionId = [];
-            this.registeredConnections.set(sessionId, socketsForSessionId);
+        let connectionsForSessionId = this.registeredConnections.get(sessionId);
+        if (!connectionsForSessionId) {
+            connectionsForSessionId = [];
+            this.registeredConnections.set(sessionId, connectionsForSessionId);
         }
-        socketsForSessionId.push(connection);
+        connectionsForSessionId.push(connection);
         this._numRegistrations++;
     }
 
@@ -47,15 +50,15 @@ export class ConnectionRegistry {
     }
 
     getConnectionsForSessions (sessionIds: string[]): Connection[] {
-        const sockets: Connection[] = [];
+        const connections: Connection[] = [];
         for (const sessionId of sessionIds) {
-            const socketsForSession = this.registeredConnections.get(sessionId);
-            if (!socketsForSession) {
+            const connectionsForSession = this.registeredConnections.get(sessionId);
+            if (!connectionsForSession) {
                 continue;
             }
-            sockets.push(...socketsForSession);
+            connections.push(...connectionsForSession);
         }
-        return sockets;
+        return connections;
     }
 
     get numRegistrations (): number {
@@ -64,5 +67,18 @@ export class ConnectionRegistry {
 
     get numRegisteredSessions (): number {
         return this.registeredConnections.size;
+    }
+
+    get numConnectionsOnline (): number {
+        let numConnectionsOnline = 0;
+        for (const connections of this.registeredConnections.values()) {
+            for (const connection of connections) {
+                if (connection.clientIsHidden) {
+                    continue;
+                }
+                numConnectionsOnline++;
+            }
+        }
+        return numConnectionsOnline;
     }
 }
