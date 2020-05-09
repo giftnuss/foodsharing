@@ -309,7 +309,93 @@ test('online status is true after window came into the foreground again', t => {
                 t.error(err);
             }
             t.equal(response.type, 'application/json', 'content type is JSON');
-            t.equal(response.body, true, 'response body is "false"');
+            t.equal(response.body, true, 'response body is "true"');
+        });
+    });
+});
+
+test('online status is false if user has two windows and both are in the background', t => {
+    t.timeoutAfter(10000);
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-6-user-1', () => {});
+    const socket1 = connect(t, 'test-7-user-1');
+    const socket2 = connect(t, 'test-7-user-1');
+    register(socket1, () => {
+        register(socket2, () => {
+            socket1.emit('visibilitychange', true);
+            socket2.emit('visibilitychange', true);
+            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+                if (err) {
+                    t.error(err);
+                }
+                t.equal(response.type, 'application/json', 'content type is JSON');
+                t.equal(response.body, false, 'response body is "false"');
+            });
+        });
+    });
+});
+
+test('online status is true if user has two windows and only one is in the background', t => {
+    t.timeoutAfter(10000);
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-8-user-1', () => {});
+    const socket1 = connect(t, 'test-8-user-1');
+    const socket2 = connect(t, 'test-8-user-1'); // second browser window
+    register(socket1, () => {
+        register(socket2, () => {
+            socket1.emit('visibilitychange', false);
+            socket2.emit('visibilitychange', false);
+            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+                if (err) {
+                    t.error(err);
+                }
+                t.equal(response.type, 'application/json', 'content type is JSON');
+                t.equal(response.body, true, 'response body is "true"');
+            });
+        });
+    });
+});
+
+test('online status is false if user has two windows in different browsers and both are in the background', t => {
+    t.timeoutAfter(10000);
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-9-user-1-browser-1', () => {});
+    addPHPSessionToRedis(1, 'test-9-user-1-browser-2', () => {});
+    const socket1 = connect(t, 'test-9-user-1-browser-1');
+    const socket2 = connect(t, 'test-9-user-1-browser-2');
+    register(socket1, () => {
+        register(socket2, () => {
+            socket1.emit('visibilitychange', true);
+            socket2.emit('visibilitychange', true);
+            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+                if (err) {
+                    t.error(err);
+                }
+                t.equal(response.type, 'application/json', 'content type is JSON');
+                t.equal(response.body, false, 'response body is "false"');
+            });
+        });
+    });
+});
+
+test('online status is true if user has two windows in different browsers and only one is in the background', t => {
+    t.timeoutAfter(10000);
+    t.plan(2);
+    addPHPSessionToRedis(1, 'test-10-user-1-browser-1', () => {});
+    addPHPSessionToRedis(1, 'test-10-user-1-browser-2', () => {});
+    const socket1 = connect(t, 'test-10-user-1-browser-1');
+    const socket2 = connect(t, 'test-10-user-1-browser-2');
+    register(socket1, () => {
+        register(socket2, () => {
+            socket1.emit('visibilitychange', true);
+            socket2.emit('visibilitychange', false);
+            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+                if (err) {
+                    t.error(err);
+                }
+                t.equal(response.type, 'application/json', 'content type is JSON');
+                t.equal(response.body, true, 'response body is "true"');
+            });
         });
     });
 });
@@ -317,7 +403,7 @@ test('online status is true after window came into the foreground again', t => {
 function connect (t: Test, sessionId: string, cookieName = 'PHPSESSID'): Socket {
     const socket = io.connect(WS_URL, {
         transports: ['websocket'],
-        // @ts-ignore - according to the socket.io client documentation, extraHeaders is a possible option on node.js
+        // @ts-ignore - according to the socket.io client documentation, extraHeaders is a possible option when using node.js
         extraHeaders: {
             cookie: serialize(cookieName, sessionId)
         }
