@@ -73,7 +73,7 @@ class Session
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
-		fSession::setLength('24 hours', '1 week');
+		fSession::setLength('24 hours', '2 weeks');
 
 		if ($rememberMe) {
 			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
@@ -96,9 +96,13 @@ class Session
 
 		fSession::open();
 
+		$cookieExpires = $this->isPersistent() ? strtotime('2 weeks') : 0;
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
-			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
 			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
+		} else if ($this->isPersistent() && isset($_COOKIE['CSRF_TOKEN']) && isset($_COOKIE['PHPSESSID'])) {
+			// Extend the duration of the cookies in every request
+			setcookie('CSRF_TOKEN', $_COOKIE['CSRF_TOKEN'], $cookieExpires, '/');
+			setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], $cookieExpires, '/');
 		}
 	}
 
