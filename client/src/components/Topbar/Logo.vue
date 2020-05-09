@@ -2,9 +2,12 @@
   <a
     :href="linkUrl"
     :aria-label="$i18n('home.title')"
-    class="navbar-brand mr-2"
+    class="navbar-brand brand"
   >
-    food<span>shar<span>i</span>ng</span>
+    <span class="logo-text">
+      food<span class="green">shar<span class="apple">i</span>ng</span>
+    </span>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
   </a>
 </template>
 <script>
@@ -18,32 +21,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.navbar-brand {
+.brand {
     font-family: 'Alfa Slab One',serif;
     color: #ffffff;
     margin-right: 0;
+    margin-left: 5px;
     font-size: 1.1rem;
-    span {
+    span.green {
         color: #64ae25;
-    }
-    span {
         position: relative;
-        &:hover {
-            span::before {
-                content: '♥';
-                color: red;
-                position: absolute;
-                font-size: 0.5em;
-                margin-top: -0.04em;
-                margin-left: -0.085em;
-            }
-        }
     }
-    @media (max-width: 680px) {
-        font-size: 0.9rem;
-        &.small {
-            font-size: 0.4rem;
-        }
+    span.logo-text:hover .apple::before {
+      content: '♥';
+      color: red;
+      position: absolute;
+      font-size: 0.5em;
+    }
+    @media (max-width: 680px)  {
+      // background-image: url('/img/fsgabelgwrgbklein.png');
+      background-image: url('/img/fsgabelgwrgbklein.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      .logo-text {
+        display:none;
+      }
     }
 }
 </style>

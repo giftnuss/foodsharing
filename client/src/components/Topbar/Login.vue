@@ -1,101 +1,88 @@
 <template>
-  <form
-    id="login-form"
-    class="form-inline my-2 my-lg-0 flex-grow-1"
-    @submit.prevent
+  <b-popover
+    target="login"
+    custom-class="bootstrap login-popover"
+    triggers="focus"
+    placement="top"
+    container="topbar"
+    variant="secondary"
+    @show="focusLogin=true"
+    @shown="focusLogin=false"
   >
-    <div
-      ref="inputgroup"
-      class="input-group input-group-sm mr-2 my-1"
+    <form
+      id="login-form"
+      class="my-lg-0 flex-grow-1"
+      @submit.prevent
     >
-      <div class="input-group-prepend">
-        <label
-          class="input-group-text text-primary"
-          for="login-email"
+      <div
+        ref="inputgroup"
+        class="input-group input-group-sm mr-2 my-1"
+      >
+        <div class="input-group-prepend">
+          <label
+            class="input-group-text text-primary"
+            for="login-email"
+          >
+            <i class="fas fa-user" />
+          </label>
+        </div>
+        <input
+          id="login-email"
+          ref="email"
+          v-model="email"
+          :placeholder="$i18n('login.email_address')"
+          :aria-label="$i18n('login.email_address')"
+          type="email"
+          name="login-email"
+          class="form-control text-primary"
+          @keydown.enter="submit"
         >
-          <i class="fas fa-user" />
-        </label>
       </div>
-      <input
-        id="login-email"
-        v-model="email"
-        :placeholder="$i18n('login.email_address')"
-        :aria-label="$i18n('login.email_address')"
-        type="email"
-        name="login-email"
-        class="form-control text-primary"
-        @keydown.enter="submit"
+      <div
+        ref="inputgroup"
+        class="input-group input-group-sm mr-2 my-1"
       >
-    </div>
-    <div
-      ref="inputgroup"
-      class="input-group input-group-sm mr-2 my-1"
-    >
-      <div class="input-group-prepend">
-        <label
-          class="input-group-text text-primary"
-          for="login-password"
+        <div class="input-group-prepend">
+          <label
+            class="input-group-text text-primary"
+            for="login-password"
+          >
+            <i class="fas fa-key" />
+          </label>
+        </div>
+        <input
+          id="login-password"
+          v-model="password"
+          :placeholder="$i18n('login.password')"
+          :aria-label="$i18n('login.password')"
+          type="password"
+          name="login-password"
+          class="form-control text-primary"
+          autocomplete="on"
+          @keydown.enter="submit"
         >
-          <i class="fas fa-key" />
-        </label>
       </div>
-      <input
-        id="login-password"
-        v-model="password"
-        :placeholder="$i18n('login.password')"
-        :aria-label="$i18n('login.password')"
-        type="password"
-        name="login-password"
-        class="form-control text-primary"
-        @keydown.enter="submit"
+      <b-overlay
+        :show="isLoading"
       >
-    </div>
-    <button
-      v-if="!isLoading "
-      :aria-label="$i18n('login.login_button_label')"
-      href="#"
-      class="btn btn-secondary btn-sm"
-      @click="submit"
-    >
-      <i class="fas fa-arrow-right" />
-    </button>
-    <button
-      v-else
-      :aria-label="$i18n('login.login_button_label')"
-      class="btn btn-light btn-sm loadingButton"
-      @click="submit"
-    >
-      <img src="/img/469.gif">
-    </button>
-    <b-popover
-      target="login-password"
-      custom-class="bootstrap login-popover bg-white"
-      triggers="focus"
-      :title="$i18n('login.save_password')"
-      placement="top"
-      container="topbar"
-      variant="secondary"
-    >
-      <form
-        class="my-lg-0 flex-grow-1"
-      >
-        <b-checkbox
-          id="login-rememberme"
-          v-model="rememberMe"
-          switch
-          class="mt-2 mb-4"
+        <template v-slot:overlay>
+          <img src="/img/469.gif">
+        </template>
+        <b-button
+          :aria-label="$i18n('login.login_button_label')"
+          href="#"
+          secondary
+          class="login-btn"
+          @click="submit"
         >
-          {{ $i18n('login.steady_login') }}
-        </b-checkbox>
-        <b-link
-          :href="$url('passwordReset')"
-          class="b-link"
-        >
-          {{ $i18n('login.forgotten_password_label') }}
-        </b-link>
-      </form>
-    </b-popover>
-  </form>
+          <span>
+            Login
+          </span>
+          <i class="fas fa-arrow-right mr-auto" />
+        </b-button>
+      </b-overlay>
+    </form>
+  </b-popover>
 </template>
 
 <script>
@@ -114,19 +101,27 @@ export default {
       password: serverData.isDev ? 'user' : '',
       rememberMe: false,
       isLoading: false,
-      error: null
+      error: null,
+      focusLogin: false
+    }
+  },
+  watch: {
+    focus: function (val) {
+      if (val) {
+        this.$refs.email.select()
+      }
     }
   },
   methods: {
     async submit () {
       if (!this.email) {
         pulseError(i18n('login.error_no_email'))
-        window.location = this.$url('login')
+        // window.location = this.$url('login')
         return
       }
       if (!this.password) {
         pulseError(i18n('login.error_no_password'))
-        window.location = this.$url('login')
+        // window.location = this.$url('login')
         return
       }
       this.isLoading = true
@@ -146,13 +141,24 @@ export default {
         if (err.code && err.code === 401) {
           pulseError(i18n('login.error_no_auth'))
           setTimeout(() => {
-            window.location = this.$url('login')
+            // window.location = this.$url('login')
           }, 2000)
         } else {
           pulseError(i18n('error_unexpected'))
           throw err
         }
       }
+    },
+    focusRef (ref) {
+      // Some references may be a component, functional component, or plain element
+      // This handles that check before focusing, assuming a `focus()` method exists
+      // We do this in a double `$nextTick()` to ensure components have
+      // updated & popover positioned first
+      this.$nextTick(() => {
+        this.$nextTick(() => {
+          ;(ref.$el || ref).focus()
+        })
+      })
     }
   }
 }

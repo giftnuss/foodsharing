@@ -1,7 +1,7 @@
 <template>
-  <ul
+  <b-navbar-nav
     id="topbar-navright"
-    class="navbar-nav ml-auto no-collapse"
+    class="ml-auto"
   >
     <li class="nav-item">
       <a
@@ -12,33 +12,27 @@
         class="nav-link"
       >
         <i class="fas fa-map-marker-alt" />
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        :href="$url('joininfo')"
-        class="nav-link"
-      >
-        <i class="fas fa-rocket" />
-        {{ $i18n('register.topbar') }}
+        <span class="d-sm-none">
+          {{ $i18n('storelist.map') }}
+        </span>
       </a>
     </li>
 
     <MenuBullhorn />
     <MenuInformation />
     <MenuEnvelope />
-  </ul>
+  </b-navbar-nav>
 </template>
 
 <script>
 
-import { VBTooltip } from 'bootstrap-vue'
+import { VBTooltip, BNavbarNav } from 'bootstrap-vue'
 import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
 
 export default {
-  components: { MenuBullhorn, MenuInformation, MenuEnvelope },
+  components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav },
   directives: { VBTooltip },
   props: {
     isMobile: {

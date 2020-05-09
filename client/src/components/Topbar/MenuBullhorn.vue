@@ -7,7 +7,7 @@
   >
     <template v-slot:button-content>
       <i class="fas fa-bullhorn" />
-      <span v-if="displayText">
+      <span class="d-sm-none">
         {{ $i18n('menu.entry.activities') }}
       </span>
     </template>
