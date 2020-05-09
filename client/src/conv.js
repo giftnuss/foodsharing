@@ -93,11 +93,15 @@ const conv = {
         goTo(`/?page=msg&cid=${cid}`)
       }
     } else {
-      if (!this.initiated) {
-        this.init()
-      }
+      if (GET('page') == 'msg') {
+        msg.loadConversation(cid)
+      } else {
+        if (!this.initiated) {
+          this.init()
+        }
 
-      this.appendChatbox(cid)
+        this.appendChatbox(cid)
+      }
     }
   },
 
@@ -355,7 +359,6 @@ const conv = {
 
   appendChatbox: function (cid, min) {
     if (this.isBigPageMode) {
-      msg.loadConversation(cid)
       return false
     }
 

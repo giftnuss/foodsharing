@@ -113,9 +113,6 @@ const msg = {
           setTimeout(function () {
             msg.hideLoader()
           }, 100)
-          /* await conversationStore.loadConversations()
-          const conversation = conversationStore.conversations[msg.conversation_id]
-          msg.updateConvList({ cid: conversation.id, body: conversation.lastMessage.body, time: conversation.lastMessage.sentAt }) */
         }
       }
     })
