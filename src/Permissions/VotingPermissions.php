@@ -19,9 +19,14 @@ final class VotingPermissions
 	public function mayVote(int $pollId): bool
 	{
 		try {
-			return $this->votingGateway->hasUserVoted($pollId, $this->session->id());
+			return $this->votingGateway->mayUserVote($pollId, $this->session->id());
 		} catch (\Exception $e) {
 			return false;
 		}
+	}
+
+	public function mayCreatePoll(int $regionId): bool
+	{
+		return $this->session->mayBezirk($regionId);
 	}
 }

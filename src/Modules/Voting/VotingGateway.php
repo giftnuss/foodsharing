@@ -57,21 +57,22 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns whether a user has already voted in a specific poll.
+	 * Returns whether a user is allowed to vote in a specific poll and has not voted yet.
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
 	 *
-	 * @return bool whether the user has already votes in that poll
+	 * @return bool whether the user may vote in that poll
 	 *
-	 * @throws Exception if the poll does not exist or the user is not allowed to vote in that poll
+	 * @throws Exception
 	 */
-	public function hasUserVoted(int $pollId, int $userId): bool
+	public function mayUserVote(int $pollId, int $userId): bool
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver_has_poll', 'has_voted', [
-				'user_id' => $userId,
-				'poll_id' => $pollId
-			]) === 1;
+		return $this->db->exists('fs_foodsaver_has_poll', [
+			'poll_id' => $pollId,
+			'user_id' => $userId,
+			'has_votes' => 0
+		]);
 	}
 
 	/**
