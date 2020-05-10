@@ -40,6 +40,8 @@ export function expose (data) {
 
 export function dateFormat (date, format = 'full-long') {
   switch (format) {
+    case 'day':
+      return dateFormat(date, 'd.M.yyyy')
     case 'full-long':
       if (dateFnsIsSameDay(date, new Date())) {
         return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")

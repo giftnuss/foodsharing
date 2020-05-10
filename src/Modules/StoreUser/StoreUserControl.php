@@ -216,12 +216,30 @@ class StoreUserControl extends Control
 				}
 
 				/* team list */
+				$allowedFields = [
+					// personal info
+					'id', 'name', 'photo', 'handy', 'telefon', 'quiz_rolle', 'sleep_status',
+					// team-related info
+					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
+				];
+				if ($this->storePermissions->mayEditStore($store['id'])) {
+					$allowedFields[] = 'last_fetch';
+				}
+
 				$this->pageHelper->addContent(
-					$this->v_utils->v_field(
-						$this->view->u_team($store) . '',
-						$store['name'] . '-Team',
-						['class' => 'truncate-content truncate-height-280 collapse-mobile']
-					),
+					$this->view->vueComponent('vue-storeteam', 'store-team', [
+						'mayEditStore' => $this->storePermissions->mayEditStore($store['id']),
+						'team' => array_map(
+							function ($a) use ($allowedFields) {
+								return array_filter($a, function ($key) use ($allowedFields) {
+									return in_array($key, $allowedFields);
+								}, ARRAY_FILTER_USE_KEY);
+							},
+							array_merge($store['foodsaver'], $store['springer']),
+						),
+						'storeId' => $store['id'],
+						'storeTitle' => $store['name'],
+					]),
 					CNT_LEFT
 				);
 
@@ -244,19 +262,6 @@ class StoreUserControl extends Control
 				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
-				}
-
-				if ($verantwortlicher = $this->view->u_getVerantwortlicher($store)) {
-					$cnt = '';
-
-					foreach ($verantwortlicher as $v) {
-						$phoneNumbers = $this->view->u_innerRow('telefon', $v);
-						$phoneNumbers .= $this->view->u_innerRow('handy', $v);
-
-						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $phoneNumbers);
-					}
-
-					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), ['class' => 'ui-padding']), CNT_LEFT);
 				}
 
 				/* fetchdates */

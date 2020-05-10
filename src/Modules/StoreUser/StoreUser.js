@@ -35,6 +35,7 @@ import {
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
 import StoreInfos from './components/StoreInfos'
+import StoreTeam from './components/StoreTeam'
 import { deleteStorePost } from '@/api/stores'
 
 expose({
@@ -179,9 +180,6 @@ $(document).ready(() => {
     $this.parent().parent().remove()
   })
 
-  addContextMenu('.context-team', 160, createMenu)
-  addContextMenu('.context-jumper', 95, createJumperMenu)
-
   $('.timetable').on('keyup', '.fetchercount', function () {
     if (this.value != '') {
       let val = parseInt(`0${this.value}`, 10)
@@ -225,8 +223,13 @@ $(document).ready(() => {
 
   vueRegister({
     PickupList,
-    StoreInfos
+    StoreInfos,
+    StoreTeam
   })
   vueApply('#vue-pickuplist', true)
   vueApply('#vue-storeinfos', true)
+  vueApply('#vue-storeteam', true)
+
+  addContextMenu('.contextmenu-team', 40, createMenu)
+  addContextMenu('.contextmenu-jumper', 40, createJumperMenu)
 })

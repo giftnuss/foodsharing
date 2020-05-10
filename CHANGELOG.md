@@ -18,6 +18,7 @@
 - Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
 - Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 @ChrisOelmueller
+- Rewrite store team list in Vue !1499 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
@@ -48,6 +49,9 @@
 
 ## Refactoring
 - Make the instant search in the topbar use a new rest endpoint without legacy wrapping code for search results !1522 !1559 @alex.simm
+
+## Refactoring
+- Reimplement store team list in Vue !1499 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects

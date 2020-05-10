@@ -39,7 +39,7 @@ if (isset($_GET['logout'])) {
 	unset($_SESSION['client']);
 }
 
-$content_left_width = 5;
+$content_left_width = 6;
 $content_right_width = 6;
 
 /* @var DataHelper $dataHelper */

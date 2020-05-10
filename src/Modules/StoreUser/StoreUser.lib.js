@@ -85,6 +85,8 @@ export function u_contextAction (action, fsid) {
       dataType: 'json',
       success: function (data) {
         if (data.status == 1) {
+          // TODO make this dynamic again
+          // $('.fs-' + fsid)     this.$forceUpdate()
           if (action === 'toteam') {
             $('.fs-' + fsid).removeClass('jumper')
             $('.fs-' + fsid).addClass('team')
@@ -106,10 +108,7 @@ export function u_contextAction (action, fsid) {
 export function createJumperMenu () {
   return {
     callback: function (key, options) {
-      var li = $(this).parent()
-
-      const fsid = li.attr('class').split('fs-')[1]
-
+      const fsid = $(this).attr('class').split('fs-')[1]
       u_contextAction(key, fsid)
     },
     items: {
@@ -125,10 +124,7 @@ export function createJumperMenu () {
 export function createMenu () {
   return {
     callback: function (key, options) {
-      var li = $(this).parent()
-
-      const fsid = li.attr('class').split('fs-')[1]
-
+      const fsid = $(this).attr('class').split('fs-')[1]
       u_contextAction(key, fsid)
     },
     items: {
@@ -147,7 +143,7 @@ export function addContextMenu (selector, offsetY, build) {
     const offset = $this.offset()
     $this.contextMenu({
       x: offset.left - 42,
-      y: offset.top - offsetY
+      y: offset.top + offsetY
     })
   })
   $.contextMenu({ selector, trigger: 'none', build })
