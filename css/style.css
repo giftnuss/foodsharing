@@ -1,4 +1,6 @@
 :root {
+  --border: #e3ded3;
+
   --warning-rgb: 255, 193,  7; /* bootstrap default, #ffc107 */
   --danger-rgb:  220,  53, 69; /* bootstrap default, #dc3545 */
 
@@ -188,12 +190,12 @@ q:before, q:after {
 
 .odd {
   background-color: #fffffe;
-  border-bottom: 1px solid var(--fs-beige);
+  border-bottom: 1px solid var(--border);
 }
 
 .even {
   background-color: #fffffe;
-  border-bottom: 1px solid var(--fs-beige);
+  border-bottom: 1px solid var(--border);
 }
 
 body {
@@ -211,7 +213,7 @@ body {
 }
 
 .input-wrapper {
-  border-bottom: 1px solid #e3ded3;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 15px;
   padding-top: 15px;
   margin-top: 0;
@@ -599,7 +601,7 @@ ul.team li.breaker {
 ul.team li.breakline {
   display: block;
   float: none;
-  border-bottom: 1px solid #e3ded3;
+  border-bottom: 1px solid var(--border);
   height: 0 !important;
   margin: 5px 8px 8px 5px !important;
   padding: 0 !important;
@@ -890,7 +892,7 @@ ul.linklist li > a i.fa {
 .history li.title {
   font-size: 13px;
   font-weight: bold;
-  border-top: 1px solid #e3ded3;
+  border-top: 1px solid var(--border);
   padding-top: 8px;
   margin-top: 8px;
 }
@@ -969,7 +971,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .updatepost {
-  border-bottom: 1px solid #e3ded3 !important;
+  border-bottom: 1px solid var(--border) !important;
   padding-bottom: 15px;
   margin-bottom: 15px;
 }
@@ -1286,7 +1288,7 @@ a.light {
 
 
 .bottom_bar {
-  border-top: 1px solid #e3ded3 !important;
+  border-top: 1px solid var(--border) !important;
   padding-top: 7px;
 }
 

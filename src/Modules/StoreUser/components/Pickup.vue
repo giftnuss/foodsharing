@@ -225,7 +225,7 @@ export default {
   .pickup-text {
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--fs-beige);
+    border-bottom: 1px solid var(--border);
   }
 }
 

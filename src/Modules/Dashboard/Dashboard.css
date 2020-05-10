@@ -62,3 +62,8 @@
     order: -2;
   }
 }
+
+.post.event:not(:last-of-type) {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 15px;
+}

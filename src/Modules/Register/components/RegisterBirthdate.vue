@@ -94,12 +94,12 @@ export default {
 </script>
 <style>
 .datepickerClass {
-  border: 1px solid #ced4da !important;
+  border: 1px solid var(--border) !important;
 }
 
 .bootstrap .input-group .input-group-text {
   background-color: var(--fs-green);
-  color:white;
+  color: white;
 }
 </style>
 

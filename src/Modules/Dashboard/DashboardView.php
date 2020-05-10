@@ -369,7 +369,7 @@ class DashboardView extends View
 		$out = '';
 		foreach ($invites as $i) {
 			$out .= '
-			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;">
+			<div class="post event">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
@@ -404,7 +404,7 @@ class DashboardView extends View
 		$out = '';
 		foreach ($events as $i) {
 			$out .= '
-			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;padding-top:15px;">
+			<div class="post event" style="padding-top:15px;">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
