@@ -1,97 +1,16 @@
 <template>
-  <b-nav-item-dropdown
-    id="dropdown-envelope"
-    v-b-tooltip="$i18n('menu.entry.contact')"
-    :no-caret="!displayArrow"
-    right
-  >
-    <template v-slot:button-content>
-      <i class="fas fa-envelope" />
-      <span class="d-md-none">{{ $i18n('menu.entry.contact') }}</span>
-      <span v-if="displayText">{{ $i18n('menu.entry.contact') }}</span>
-      <span
-        v-if="unread"
-        class="badge badge-danger"
-      >
-        {{ unread }}
-      </span>
-    </template>
-    <b-dropdown-item
-      v-if="displayMailbox"
-      :href="$url('mailbox')"
-    >
-      {{ $i18n('menu.entry.mailbox') }}
-    </b-dropdown-item>
-    <b-dropdown-divider
-      v-if="displayMailbox"
-    />
-    <b-dropdown-item
-      :href="$url('contact')"
-    >
-      {{ $i18n('menu.entry.contact') }}
-    </b-dropdown-item>
-    <b-dropdown-item
-      :href="$url('donate')"
-    >
-      {{ $i18n('menu.entry.donate') }}
-    </b-dropdown-item>
-    <b-dropdown-item
-      :href="$url('press')"
-    >
-      {{ $i18n('menu.entry.press') }}
-    </b-dropdown-item>
-    <b-dropdown-item
-      :href="$url('infosCompany')"
-    >
-      {{ $i18n('menu.entry.forcompanies') }}
-    </b-dropdown-item>
-    <b-dropdown-item
-      :href="$url('imprint')"
-    >
-      {{ $i18n('menu.entry.imprint') }}
-    </b-dropdown-item>
-    <b-dropdown-divider />
-    <b-dropdown-header
-      id="dropdown-header-groups"
-    >
-      {{ $i18n('menu.entry.regionalgroups') }}
-    </b-dropdown-header>
-    <a
-      :href="$url('communitiesGermany')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.Germany') }}
-    </a>
-    <a
-      :href="$url('communitiesAustria')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.Austria') }}
-    </a>
-    <a
-      :href="$url('communitiesSwitzerland')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.Swiss') }}
-    </a>
-    <a
-      :href="$url('international')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.international') }}
-    </a>
-  </b-nav-item-dropdown>
+  <fs-dropdown-menu
+    menu-title="menu.entry.contact"
+    :items="headings"
+    icon="fa-envelope"
+  />
 </template>
-<script>
 
-import { BDropdownDivider, BDropdownItem, BNavItemDropdown } from 'bootstrap-vue'
+<script>
+import FsDropdownMenu from './FsDropdownMenu'
 
 export default {
-  components: { BDropdownDivider, BDropdownItem, BNavItemDropdown },
+  components: { FsDropdownMenu },
   props: {
     displayArrow: {
       type: Boolean,
@@ -105,6 +24,34 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data () {
+    const contactMenuItems = []
+    if (this.displayMailbox) {
+      contactMenuItems.push({ url: 'mailbox', menuTitle: 'menu.entry.mailbox' })
+    }
+    contactMenuItems.push({ url: 'mailbox', menuTitle: 'menu.entry.mailbox' })
+    contactMenuItems.push({ url: 'contact', menuTitle: 'menu.entry.contact' })
+    contactMenuItems.push({ url: 'donate', menuTitle: 'menu.entry.donate' })
+    contactMenuItems.push({ url: 'press', menuTitle: 'menu.entry.press' })
+    contactMenuItems.push({ url: 'infosCompany', menuTitle: 'menu.entry.forcompanies' })
+    contactMenuItems.push({ url: 'imprint', menuTitle: 'menu.entry.imprint' })
+    return {
+      headings: [{
+        heading: 'menu.entry.contact',
+        menuItems: contactMenuItems
+      },
+      {
+        heading: 'menu.entry.regionalgroups',
+        menuItems: [
+          { url: 'communitiesGermany', menuTitle: 'menu.entry.Germany' },
+          { url: 'communitiesAustria', menuTitle: 'menu.entry.Austria' },
+          { url: 'communitiesSwitzerland', menuTitle: 'menu.entry.Swiss' },
+          { url: 'international', menuTitle: 'menu.entry.international' }
+        ]
+      }]
+    }
   }
 }
+
 </script>

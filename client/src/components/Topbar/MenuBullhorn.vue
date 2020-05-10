@@ -1,43 +1,17 @@
 <template>
-  <b-nav-item-dropdown
-    id="dropdown-bullhorn"
-    v-b-tooltip="$i18n('menu.entry.activities')"
-    :no-caret="!displayArrow"
-    right
-  >
-    <template v-slot:button-content>
-      <i class="fas fa-bullhorn" />
-      <span class="d-md-none">
-        {{ $i18n('menu.entry.activities') }}
-      </span>
-    </template>
-    <template v-for="heading in headings">
-      <h3
-        :key="heading.heading"
-        class="dropdown-header"
-      >
-        {{ $i18n(heading.heading) }}
-      </h3>
-      <a
-        v-for="item in heading.menuItems"
-        :key="item.url"
-        :href="$url(item.url)"
-        class="dropdown-item sub"
-        role="menuitem"
-      >
-        {{ $i18n(item.menuTitle) }}
-      </a>
-    </template>
-  </b-nav-item-dropdown>
+  <fs-dropdown-menu
+    menu-title="menu.entry.activities"
+    :items="headings"
+    icon="fa-bullhorn"
+  />
 </template>
+
 <script>
+import FsDropdownMenu from './FsDropdownMenu'
 
 export default {
-  props: {
-    displayArrow: {
-      type: Boolean,
-      default: true
-    }
+  components: {
+    FsDropdownMenu
   },
   data () {
     return {

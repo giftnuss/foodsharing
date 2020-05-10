@@ -1,117 +1,15 @@
 <template>
-  <b-nav-item-dropdown
-    id="dropdown-information"
-    v-b-tooltip="$i18n('menu.entry.infos')"
-    :no-caret="!displayArrow"
-    right
-  >
-    <template v-slot:button-content>
-      <i class="fas fa-info " />
-      <span class="d-md-none">
-        {{ $i18n('menu.entry.infos') }}
-      </span>
-    </template>
-    <h3 class="dropdown-header">
-      {{ $i18n('menu.entry.aboutUs') }}
-    </h3>
-    <a
-      :href="$url('mission')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.mission') }}
-    </a>
-    <a
-      :href="$url('grundsaetze')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.fundamentals') }}
-    </a>
-    <a
-      :href="$url('blog')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.blog') }}
-    </a>
-    <a
-      :href="$url('team')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.team') }}
-    </a>
-    <a
-      :href="$url('partner')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.partners') }}
-    </a>
-    <h3 class="dropdown-header">
-      {{ $i18n('menu.entry.background') }}
-    </h3>
-    <a
-      :href="$url('support')"
-      class="dropdown-item sub"
-      target="_blank"
-      rel="noopener noreferrer nofollow"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.support') }}
-    </a>
-    <a
-      :href="$url('wiki')"
-      class="dropdown-item sub"
-      target="_blank"
-      rel="noopener noreferrer nofollow"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.wiki') }}
-    </a>
-    <a
-      :href="$url('guide')"
-      class="dropdown-item sub"
-      target="_blank"
-      rel="noopener noreferrer nofollow"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.guide') }}
-    </a>
-    <a
-      :href="$url('statistics')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.statistics') }}
-    </a>
-    <a
-      :href="$url('transparency')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.transparency') }}
-    </a>
-    <a
-      :href="$url('dataprivacy')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.dataprivacy') }}
-    </a>
-    <a
-      :href="$url('releaseNotes')"
-      class="dropdown-item sub"
-      role="menuitem"
-    >
-      {{ $i18n('menu.entry.release-notes') }}
-    </a>
-  </b-nav-item-dropdown>
+  <fs-dropdown-menu
+    menu-title="menu.entry.infos"
+    :items="headings"
+    icon="fa-info"
+  />
 </template>
 <script>
+import FsDropdownMenu from './FsDropdownMenu'
 
 export default {
+  components: { FsDropdownMenu },
   props: {
     wXS: {
       type: Boolean,
@@ -124,6 +22,35 @@ export default {
     displayText: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      headings:
+      [
+        {
+          heading: 'menu.entry.aboutUs',
+          menuItems: [
+            { url: 'mission', menuTitle: 'menu.entry.mission' },
+            { url: 'grundsaetze', menuTitle: 'menu.entry.fundamentals' },
+            { url: 'blog', menuTitle: 'menu.entry.blog' },
+            { url: 'team', menuTitle: 'menu.entry.team' },
+            { url: 'partner', menuTitle: 'menu.entry.partners' }
+          ]
+        },
+        {
+          heading: 'menu.entry.background',
+          menuItems: [
+            { url: 'support', menuTitle: 'menu.entry.faq', target: '_blank' },
+            { url: 'wiki', menuTitle: 'menu.entry.wiki' },
+            { url: 'guide', menuTitle: 'menu.entry.guide', target: '_blank' },
+            { url: 'statistics', menuTitle: 'menu.entry.statistics' },
+            { url: 'transparency', menuTitle: 'menu.entry.transparency' },
+            { url: 'dataprivacy', menuTitle: 'menu.entry.dataprivacy' },
+            { url: 'releaseNotes', menuTitle: 'menu.entry.release-notes' }
+          ]
+        }
+      ]
     }
   }
 }
