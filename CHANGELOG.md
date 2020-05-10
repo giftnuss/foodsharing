@@ -67,6 +67,7 @@
 - Fix issues introduced with push notifications #831 #841 #857 !1442 !1443 !1444 !1445 !1446 @janopae
 - Short Description is shown on profile and purpose of both self descriptions is made clear in settings !1145 #656 @fs_k @Caluera
 - Fallback to raster tiles if the browser does not support WebGL !1455 @dthulke
+- Correct wording: "Fairteiler" and "FairTeiler" to "Fair-Teiler" in some files #890 !1479 @treee111
 - Correct Dashboard preview of ordered + unordered lists #455 !1481 @ChrisOelmueller
 - Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
 

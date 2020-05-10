@@ -416,7 +416,7 @@ dashboard:
   no_updates: "Keine Updates"
   no_more_updates_all: "Das war's!"
   no_more_updates_event: "Keine weiteren Termine"
-  no_more_updates_foodsharepoint: "Keine weiteren Fairteiler-Posts"
+  no_more_updates_foodsharepoint: "Keine weiteren Fair-Teiler-Posts"
   no_more_updates_forum: "Keine weiteren Foren-Einträge"
   no_more_updates_friendWall: "Keine weiteren Status-Meldungen"
   no_more_updates_mailbox: "Keine weiteren Mailbox-Nachrichten"
@@ -425,7 +425,7 @@ dashboard:
   empty_section: "Du hast noch keine {type}"
   event_title: "Termin: {title}"
   save_selection: Einstellungen speichern
-  source_foodsharepoint: "Fairteiler {0}"
+  source_foodsharepoint: "Fair-Teiler {0}"
   source_friendWall: "Pinnwand von {0}"
   source_friendWall_own: "Deine Pinnwand"
   source_forum: "Forum {0}"
