@@ -8,21 +8,25 @@ use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
+use Foodsharing\Services\NotificationService;
 
 class VotingTransactions
 {
 	private $votingGateway;
 	private $foodsaverGateway;
 	private $storeGateway;
+	private $notificationService;
 
 	public function __construct(
 		VotingGateway $votingGateway,
 		FoodsaverGateway $foodsaverGateway,
-		StoreGateway $storeGateway)
+		StoreGateway $storeGateway,
+		NotificationService $notificationService)
 	{
 		$this->votingGateway = $votingGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->storeGateway = $storeGateway;
+		$this->notificationService = $notificationService;
 	}
 
 	/**
@@ -30,12 +34,14 @@ class VotingTransactions
 	 *
 	 * @throws Exception
 	 */
-	public function createPollForRegion(Poll $poll, array $options, int $regionId)
+	public function createPollForRegion(Poll $poll, array $options, int $regionId, bool $notifyUsers)
 	{
 		$userIds = $this->listUserIds($regionId, $poll->scope);
 		$this->votingGateway->insertPoll($poll, $options, $userIds);
 
-		//TODO: invite people by email or bell
+		if ($notifyUsers) {
+			$this->notificationService->newPoll($poll, $userIds);
+		}
 	}
 
 	/**

@@ -820,6 +820,8 @@ bell:
   store_request_accept_wait: "Du bist nun auf der Springer-/Warteliste."
   store_request_deny_title: "{name}"
   store_request_deny: "Deine Anfrage wurde abgelehnt."
+  poll_new_title: "Neue Abstimmung"
+  poll_new: "{title}"
 
   store_wallpost_title: "{name}"
   store_wallpost: "Neuer Eintrag auf der Pinnwand."

@@ -69,6 +69,13 @@ class Poll
 	 */
 	public $type;
 
+	/**
+	 * @var int
+	 *
+	 * Id of the user who created this poll.
+	 */
+	public $authorId;
+
 	public static function create(
 		int $id,
 		string $name,
@@ -77,7 +84,8 @@ class Poll
 		DateTime $endDate,
 		int $regionId,
 		int $scope,
-		int $type
+		int $type,
+		int $authorId
 	) {
 		$poll = new Poll();
 		$poll->id = $id;
@@ -88,6 +96,7 @@ class Poll
 		$poll->regionId = $regionId;
 		$poll->scope = $scope;
 		$poll->type = $type;
+		$poll->authorId = $authorId;
 
 		return $poll;
 	}
