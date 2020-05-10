@@ -57,13 +57,10 @@
 </template>
 <script>
 import { BTooltip } from 'bootstrap-vue'
+import vueStore from '@/stores/stores'
 export default {
   components: { BTooltip },
   props: {
-    stores: {
-      type: Array,
-      default: () => []
-    },
     mayAddStore: {
       type: Boolean,
       default: false
@@ -76,6 +73,12 @@ export default {
         status = Math.max(status, store.pickupStatus)
       }
       return status
+    },
+    stores () {
+      if (vueStore.stores === null) {
+        vueStore.loadStores()
+      }
+      return vueStore.stores
     }
   },
   methods: {

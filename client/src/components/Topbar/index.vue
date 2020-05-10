@@ -65,8 +65,7 @@
               :working-groups="workingGroups"
             />
             <menu-stores
-              v-if="hasFsRole && stores.length"
-              :stores="stores"
+              v-if="hasFsRole"
               :may-add-store="may.addStore"
             />
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
@@ -240,10 +239,6 @@ export default {
     may: {
       type: Object,
       default: () => ({})
-    },
-    stores: {
-      type: Array,
-      default: () => []
     },
     regions: {
       type: Array,

@@ -291,22 +291,6 @@ class Session
 		return false;
 	}
 
-	public function getMyBetriebIds()
-	{
-		$out = [];
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			foreach ($_SESSION['client']['betriebe'] as $b) {
-				$out[] = $b['id'];
-			}
-		}
-
-		if (!empty($out)) {
-			return $out;
-		}
-
-		return false;
-	}
-
 	public function listRegionIDs(): array
 	{
 		$out = [];
@@ -484,16 +468,6 @@ class Session
 						'type' => $rr['type']
 					];
 				}
-			}
-		}
-		$_SESSION['client']['betriebe'] = false;
-		if ($r = $this->storeGateway->listFilteredStoresForFoodsaver($fs['id'])) {
-			$_SESSION['client']['betriebe'] = [];
-			foreach ($r as $rr) {
-				// add info about the next free pickup slot to the store
-				$rr['pickupStatus'] = $this->storeService->getAvailablePickupStatus($rr['id']);
-
-				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}
 

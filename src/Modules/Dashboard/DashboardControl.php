@@ -74,10 +74,6 @@ class DashboardControl extends Control
 		$is_bot = $this->session->may('bot');
 		$is_fs = $this->session->may('fs');
 
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe']) && count($_SESSION['client']['betriebe']) > 0) {
-			$is_fs = true;
-		}
-
 		if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) && count($_SESSION['client']['verantwortlich']) > 0) {
 			$is_bieb = true;
 		}

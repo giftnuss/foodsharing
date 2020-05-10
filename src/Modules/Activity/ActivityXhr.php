@@ -433,7 +433,7 @@ class ActivityXhr extends Control
 
 	private function loadStoreUpdates(int $page): array
 	{
-		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
+		if ($ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = [];
 			foreach ($ret as $r) {
 				$out[] = [

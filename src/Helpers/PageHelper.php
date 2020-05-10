@@ -233,7 +233,6 @@ final class PageHelper
 	private function getMenu(): string
 	{
 		$regions = [];
-		$stores = [];
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
@@ -244,9 +243,6 @@ final class PageHelper
 					$regions[] = $region;
 				}
 			}
-		}
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			$stores = $_SESSION['client']['betriebe'];
 		}
 
 		$loggedIn = $this->session->may();
@@ -270,7 +266,6 @@ final class PageHelper
 					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
 					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
-				'stores' => array_values($stores),
 				'regions' => $regions,
 				'workingGroups' => $workingGroups,
 			]

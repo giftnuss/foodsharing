@@ -4,6 +4,7 @@ namespace Foodsharing\Services;
 
 use Carbon\Carbon;
 use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -155,5 +156,20 @@ class StoreService
 			$springer_conversation_name = $this->translator->trans('store.springer_conversation_name', ['{name}' => $storeName]);
 			$this->messageGateway->renameConversation($scid, $springer_conversation_name);
 		}
+	}
+
+	/**
+	 * @return StoreForTopbarMenu[]
+	 */
+	public function getFilteredStoresForUser(int $userId): array
+	{
+		$filteredStoresForUser = $this->storeGateway->listFilteredStoresForFoodsaver($userId);
+
+		foreach ($filteredStoresForUser as $store) {
+			// add info about the next free pickup slot to the store
+			$store->pickupStatus = $this->getAvailablePickupStatus($store->id);
+		}
+
+		return $filteredStoresForUser;
 	}
 }

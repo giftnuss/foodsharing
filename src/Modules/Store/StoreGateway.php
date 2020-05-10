@@ -13,6 +13,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 
 class StoreGateway extends BaseGateway implements BellUpdaterInterface
 {
@@ -720,9 +721,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			[':regionId' => $regionId]);
 	}
 
-	public function listFilteredStoresForFoodsaver($fsId)
+	/**
+	 * @return StoreForTopbarMenu[]
+	 */
+	public function listFilteredStoresForFoodsaver($fsId): array
 	{
-		return $this->db->fetchAll('
+		$rows =  $this->db->fetchAll('
 			SELECT 	b.`id`,
 					b.name
 
@@ -740,6 +744,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				':givesToOtherCharity' => CooperationStatus::GIVES_TO_OTHER_CHARITY
 			]
 		);
+
+		$stores = [];
+		foreach ($rows as $row) {
+			$store = new StoreForTopbarMenu();
+			$store->id = $row['id'];
+			$store->name = $row['name'];
+			$stores[] = $store;
+		}
+
+		return $stores;
 	}
 
 	public function listStoreIdsForBieb($fsId)
