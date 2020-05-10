@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Foodsharing\Modules\Store\DTO;
 
 class StoreForTopbarMenu

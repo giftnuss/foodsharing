@@ -726,7 +726,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	 */
 	public function listFilteredStoresForFoodsaver($fsId): array
 	{
-		$rows =  $this->db->fetchAll('
+		$rows = $this->db->fetchAll('
 			SELECT 	b.`id`,
 					b.name
 
