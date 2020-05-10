@@ -65,7 +65,7 @@ export default new Vue({
       }
     },
     async markAsRead (cid) {
-      if (this.conversations[cid].hasUnreadMessages) {
+      if (cid in this.conversations && this.conversations[cid].hasUnreadMessages) {
         Vue.set(this.conversations[cid], 'hasUnreadMessages', false)
         await markConversationRead(cid)
       }
