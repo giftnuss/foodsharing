@@ -46,14 +46,14 @@
               :url="foo.avatar"
               :size="50"
               class="member-pic"
-              :img-class="foo.avatarBorder"
               :sleep-status="foo.sleepStatus"
             />
           </a>
           <b-badge
             class="member-fetchcount"
+            :class="foo.roleColorClass"
+            tag="span"
             variant="primary"
-            tag="div"
             pill
           >
             <span v-if="foo.isJumper">
@@ -128,7 +128,7 @@ export default {
       return 'tel:' + num.toString().replace(/[^0-9]/g, '')
     },
     foodsaverData (fs) {
-      const avatarBorder = {
+      const roleColorClass = {
         1: 'fs', // Role::FOODSAVER
         2: 'sm', // Role::STORE_MANAGER
         3: 'amb' // Role::AMBASSADOR
@@ -141,7 +141,7 @@ export default {
         isManager: !!fs.verantwortlich,
         // isVerified: fs.verified === 1, // ?!
         avatar: fs.photo || '1fed4bcb88762eeb368f23d2a27e216d.png',
-        avatarBorder,
+        roleColorClass,
         sleepStatus: fs.sleep_status,
         name: fs.name,
         number: fs.handy || fs.telefon || '',
@@ -156,16 +156,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+* {
+  --role-ambassador: #fa0; // darker version of --warning
+  --role-storemanager: var(--fs-green);
+  --role-foodsaver: var(--fs-brown);
+}
+
 .store-team {
   .list-group.team {
     padding-top: 0px;
   }
 
   .list-group-item.member {
-    padding: 0;
+    padding: 2px;
+    padding-right: 0;
+
+    &:not(:last-of-type) {
+      border-bottom: 0;
+    }
 
     &:focus {
-      outline-color: var(--primary);
+      outline: 0;
     }
 
     &.jumper {
@@ -178,27 +189,27 @@ export default {
       // vertical-align: top;
     }
     .member-pic /deep/ img {
-      border: 3px solid var(--fs-white);
       border-radius: 6px;
-      background-clip: border-box;
-
-      &.fs { border-color: var(--fs-brown); }
-      &.sm { border-color: var(--fs-green); }
-      &.amb { border-color: var(--warning); }
     }
 
     .member-fetchcount {
       position: absolute;
       top: -2px;
-      left: 36px;
-      border: 2px solid var(--fs-white);
+      left: 34px;
+      border: 2px solid var(--white);
+      min-width: 1.5rem;
+      opacity: 0.9;
+
+      &.fs { background-color: var(--role-foodsaver); }
+      &.sm { background-color: var(--role-storemanager); }
+      &.amb { background-color: var(--role-ambassador); }
     }
 
     .member-info {
       display: inline-flex;
       flex-direction: column;
-      padding-left: 6px;
-      max-width: calc(100% - 56px - 6px);
+      padding-left: 8px;
+      max-width: calc(100% - 50px - 8px);
       min-width: 0;
       align-self: center;
       font-size: smaller;
