@@ -204,6 +204,8 @@ export default {
   button {
     line-height: 21px;
     padding: 5px 10px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
 
   i.fas {
