@@ -1,18 +1,14 @@
 <template>
-  <b-nav-item-dropdown
-    id="dropdown-stores"
-    v-b-tooltip="$i18n('menu.entry.your_stores')"
-    no-caret
-  >
-    <template v-slot:button-content>
-      <i class="fas fa-shopping-cart" />
-      <span
-        v-if="globalPickupStatus>0"
-        :class="'badge badge-pill '+badgeClass(globalPickupStatus)"
-      >&nbsp;</span>
-    </template>
+  <div>
+    <div
+      v-if="!loaded"
+      class="loader-container"
+    >
+      <img src="/img/469.gif"> <!-- 469.gif is the file name of the spinning apple -->
+    </div>
     <div
       v-for="store in stores"
+      v-else
       :key="store.id"
     >
       <a
@@ -35,53 +31,36 @@
       </b-tooltip>
     </div>
     <div
-      v-if="stores.length && mayAddStore"
+      v-if="stores.length || !loaded"
       class="dropdown-divider"
     />
-    <a
-      v-if="mayAddStore"
-      :href="$url('storeAdd')"
-      role="menuitem"
-      class="dropdown-item"
-    >
-      <small><i class="fas fa-plus" /> {{ $i18n('store.add_new_store') }} </small>
-    </a>
-    <a
-      :href="$url('storeList')"
-      role="menuitem"
-      class="dropdown-item"
-    >
-      <small><i class="fas fa-list" /> {{ $i18n('store.all_of_my_stores') }} </small>
-    </a>
-  </b-nav-item-dropdown>
+  </div>
 </template>
+
 <script>
-import { BTooltip } from 'bootstrap-vue'
 import vueStore from '@/stores/stores'
+import { BTooltip } from 'bootstrap-vue'
+
 export default {
   components: { BTooltip },
-  props: {
-    mayAddStore: {
-      type: Boolean,
-      default: false
-    }
+  data () {
+    return { loaded: false }
   },
   computed: {
-    globalPickupStatus () {
-      let status = 0
-      for (const store of this.stores) {
-        status = Math.max(status, store.pickupStatus)
-      }
-      return status
-    },
     stores () {
-      if (vueStore.stores === null) {
-        vueStore.loadStores()
-      }
-      return vueStore.stores
+      return vueStore.stores || []
     }
   },
+  async created () {
+    this.loadStores()
+  },
   methods: {
+    async loadStores () {
+      if (vueStore.stores === null) {
+        await vueStore.loadStores()
+      }
+      this.loaded = true
+    },
     badgeClass (pickupStatus) {
       const classes = ['badge-info', 'badge-info', 'badge-warning', 'badge-danger']
       return classes[pickupStatus]
@@ -103,14 +82,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .fa-circle {
     margin-left: -1em;
   }
-  .bootstrap .badge-info {
-    background-color: #f5f5b5;
-  }
-
   .status-info {
     color: #f5f5b5;
   }
@@ -119,5 +94,8 @@ export default {
   }
   .status-danger {
     color: #dc3545;
+  }
+  .loader-container {
+    text-align: center;
   }
 </style>

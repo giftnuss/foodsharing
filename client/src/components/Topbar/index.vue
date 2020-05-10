@@ -175,7 +175,7 @@ import ui from '@/stores/ui'
 import { VBTooltip, BCollapse, BNavbarToggle } from 'bootstrap-vue'
 
 import MenuRegion from './MenuRegion'
-import MenuStores from './MenuStores'
+import MenuStores from './Stores/MenuStores'
 import MenuGroups from './MenuGroups'
 import MenuBaskets from './Baskets/MenuBaskets'
 import MenuBullhorn from './MenuBullhorn'
