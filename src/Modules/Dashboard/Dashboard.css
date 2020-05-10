@@ -39,7 +39,8 @@
   }
 }
 
-@media screen and (max-width: 959px) {
+/* 48em from pure-grid md breakpoint */
+@media screen and (max-width: 48em) {
   /* Foodsaver Dashboard */
   /* Move left+right side panels up before main content */
   .page-dashboard.fs #left,
@@ -53,13 +54,18 @@
   }
 }
 
-@media screen and (min-width: 370px) and (max-width: 959px) {
+/* 48em from pure-grid md breakpoint */
+@media screen and (min-width: 370px) and (max-width: 48em) {
   .page-dashboard.fs #left,
   .page-dashboard.fs #right {
     width: 50%;
   }
   .page-dashboard.fs #left {
     order: -2;
+  }
+  /* main content hack-fix for weird 36em/48em pure-grid breakpoints */
+  .page-dashboard .mainpure > .pure-u-md-13-24 {
+    width: 100%;
   }
 }
 
