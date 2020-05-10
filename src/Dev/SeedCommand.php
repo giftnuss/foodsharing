@@ -95,12 +95,13 @@ class SeedCommand extends Command implements CustomCommandInterface
 					$this->helper->addCollector($foodSaver_id, $store_id, ['date' => $pickupDate->toDateTimeString()]);
 				}
 			}
+			$this->output->write('.');
 		}
 	}
 
 	private function writeUser($user, $password, $name = 'user')
 	{
-		$this->output->writeln('Created ' . $name . ' ' . $user['email'] . ' with password "' . $password . '"');
+		$this->output->writeln('- created ' . $name . ' ' . $user['email'] . ' with password "' . $password . '"');
 	}
 
 	protected function seed()
@@ -115,6 +116,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$region1WorkGroup = '1135'; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
 		// Create users
+		$this->output->writeln('Create basic users:');
 		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $region1]);
 		$this->writeUser($user1, $password, 'foodsharer');
 
@@ -134,18 +136,21 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$userorga = $I->createOrga($password, false, ['email' => 'userorga@example.com', 'name' => 'Orga', 'bezirk_id' => $region1]);
 		$this->writeUser($userorga, $password, 'orga');
+		$this->output->writeln('- done');
 
+		$this->output->writeln('Create some user interaction:');
 		// Add users to region
+		$this->output->writeln('- add users to region');
 		$I->addRegionAdmin($region1, $userbot['id']);
 		$I->addRegionMember($ag_quiz, $userbot['id']);
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
-		$I->addRegionAdmin($region1WorkGroup, $userbot['id']);
 		$I->addRegionMember($region_vorstand, $userbot['id']);
 		$I->addRegionMember($ag_aktive, $userbot['id']);
 
 		$I->addRegionMember($ag_testimonials, $user2['id']);
 
 		// Make ambassador responsible for all work groups in the region
+		$this->output->writeln('- make ambassador responsible for all work groups');
 		$workGroupsIds = $I->grabColumnFromDatabase('fs_bezirk', 'id', ['parent_id' => $region1, 'type' => Type::WORKING_GROUP]);
 		foreach ($workGroupsIds as $id) {
 			$I->addRegionMember($id, $userbot['id']);
@@ -153,6 +158,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 
 		// Create store team conversations
+		$this->output->writeln('- create store team conversations');
 		$conv1 = $I->createConversation([$userbot['id'], $user2['id'], $userStoreManager['id']], ['name' => 'betrieb_bla', 'locked' => 1]);
 		$conv2 = $I->createConversation([$userbot['id']], ['name' => 'springer_bla', 'locked' => 1]);
 		$I->addConversationMessage($userStoreManager['id'], $conv1['id']);
@@ -160,6 +166,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addConversationMessage($userbot['id'], $conv2['id']);
 
 		// Create a store and add team members
+		$this->output->writeln('- create store and add team members');
 		$store = $I->createStore($region1, $conv1['id'], $conv2['id'], ['betrieb_status_id' => 5]);
 		$I->addStoreTeam($store['id'], $user2['id']);
 		$I->addStoreTeam($store['id'], $userStoreManager['id'], true);
@@ -167,6 +174,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRecurringPickup($store['id']);
 
 		// Forum theads and posts
+		$this->output->writeln('- create forum threads and posts');
 		$theme = $I->addForumTheme($region1, $userbot['id']);
 		$I->addForumThemePost($theme['id'], $user2['id']);
 		$theme = $I->addForumTheme($region1, $user2['id']);
@@ -174,11 +182,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$theme = $I->addForumTheme($region1, $user1['id']);
 		$I->addForumThemePost($theme['id'], $userorga['id']);
 
+		$this->output->writeln('- follow a food share point');
 		$foodSharePoint = $I->createFoodSharePoint($userbot['id'], $region1);
 		$I->addFoodSharePointFollower($user2['id'], $foodSharePoint['id']);
 		$I->addFoodSharePointPost($userbot['id'], $foodSharePoint['id']);
+		$this->output->writeln('- done');
 
 		// create users and collect their ids in a list
+		$this->output->writeln('Create some more users');
 		$this->foodsavers = [$user2['id'], $userbot['id'], $userorga['id']];
 		foreach (range(0, 100) as $_) {
 			$user = $I->createFoodsaver($password, ['bezirk_id' => $region1]);
@@ -187,10 +198,12 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addCollector($user['id'], $store['id']);
 			$I->addStoreNotiz($user['id'], $store['id']);
 			$I->addForumThemePost($theme['id'], $user['id']);
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created some other users');
+		$this->output->writeln(' done');
 
 		// create conversations between users
+		$this->output->writeln('Create conversations between users');
 		foreach ($this->foodsavers as $user) {
 			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $chatpartner) {
 				if ($user !== $chatpartner) {
@@ -199,16 +212,22 @@ class SeedCommand extends Command implements CustomCommandInterface
 					$I->addConversationMessage($chatpartner, $conv['id']);
 				}
 			}
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created conversations');
+		$this->output->writeln(' done');
 
 		// add some users to a workgroup
-		$this->output->writeln('Add user to workgroup');
-		foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $random_user) {
+		$this->output->writeln('Add users to workgroup');
+		// but only the ones we generated above
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 10) as $random_user) {
 			$I->addRegionMember($region1WorkGroup, $random_user);
+			$this->output->write('.');
 		}
+		$this->output->writeln(' done');
 
 		// create more stores and collect their ids in a list
+		$this->output->writeln('Create some stores');
 		$this->stores = [$store['id']];
 		foreach (range(0, 40) as $_) {
 			// TODO conversations are missing the other store members
@@ -220,22 +239,27 @@ class SeedCommand extends Command implements CustomCommandInterface
 				$I->addRecurringPickup($store['id']);
 			}
 			$this->stores[] = $store['id'];
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created stores');
+		$this->output->writeln(' done');
 
+		$this->output->writeln('Create more pickups');
 		$this->CreateMorePickups();
-		$this->output->writeln('Created more pickups');
+		$this->output->writeln(' done');
 
 		// create foodbaskets
+		$this->output->writeln('Create foodbaskets');
 		foreach (range(0, 500) as $_) {
 			$user = $this->getRandomIDOfArray($this->foodsavers);
 			$foodbasket = $I->createFoodbasket($user);
 			$commenter = $this->getRandomIDOfArray($this->foodsavers);
 			$I->addFoodbasketWallpost($commenter, $foodbasket['id']);
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created foodbaskets');
+		$this->output->writeln(' done');
 
 		// create food share point
+		$this->output->writeln('Create food share points');
 		foreach ($this->getRandomIDOfArray($this->foodsavers, 50) as $user) {
 			$foodSharePoint = $I->createFoodSharePoint($user, $region1);
 			foreach ($this->getRandomIDOfArray($this->foodsavers, 10) as $follower) {
@@ -244,24 +268,34 @@ class SeedCommand extends Command implements CustomCommandInterface
 				}
 				$I->addFoodSharePointPost($follower, $foodSharePoint['id']);
 			}
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created food share points');
+		$this->output->writeln(' done');
 
+		$this->output->writeln('Create blog posts');
 		foreach (range(0, 20) as $_) {
 			$I->addBlogPost($userbot['id'], $region1);
+			$this->output->write('.');
 		}
-		$this->output->writeln('Created blog posts');
+		$this->output->writeln(' done');
 
+		$this->output->writeln('Create reports');
 		foreach (range(0, 4) as $_) {
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 0);
+			$this->output->write('.');
 		}
 
 		foreach (range(0, 3) as $_) {
 			$I->addReport($this->getRandomIDOfArray($this->foodsavers), $this->getRandomIDOfArray($this->foodsavers), 0, 1);
+			$this->output->write('.');
 		}
+		$this->output->writeln(' done');
 
+		$this->output->writeln('Create quizzes');
 		foreach (range(1, 3) as $quizRole) {
 			$I->createQuiz($quizRole, 3);
+			$this->output->write('.');
 		}
+		$this->output->writeln(' done');
 	}
 }
