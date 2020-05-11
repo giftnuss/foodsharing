@@ -28,6 +28,7 @@
 - Extend the lifetime of persistent sessions after every request !1496 @dthulke
 - Include topic title in bell notification for forum posts #869 !1487 @ChrisOelmueller
 - Load store menu in the top bar only when the menu is opened in order to make the slot markers release ready !1502 @janopae
+- Update all package dependencies to current as of 2020-05-11 !1503 @NerdyProjects
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
