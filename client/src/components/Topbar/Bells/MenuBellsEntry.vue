@@ -91,20 +91,23 @@ export default {
   }
 
   /*
-  some bells use ".img-store", which shows a white store based on a .png
-  because we are on a white background we have to override this with a black one
+  Override old-style bell data passing ".img-store" or ".img-recycle"
+  as image data with the respective FontAwesome icons. See also: #907
   */
-  .img-store {
+  .img-store,
+  .img-recycle {
     font-family: "Font Awesome 5 Free", monospace;
     font-style: normal;
     font-weight: 900;
     font-size: inherit;
     text-rendering: auto;
     background: none;
-
-    &:before {
-      content: "\f07a";
-    }
+  }
+  .img-recycle:before {
+    content: "\f1b8"; /* fa-recycle */
+  }
+  .img-store:before {
+    content: "\f07a"; /* fa-shopping-cart */
   }
 
   .bell-grid {
