@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ConvertTranslationsCommand extends Command
+class AnalyzeTranslationsCommand extends Command
 {
-	protected static $defaultName = 'translations:convert-to-yaml';
+	protected static $defaultName = 'translations:write_as_yaml';
 
 	private $database;
 	private $storeGateway;
@@ -31,7 +31,6 @@ class ConvertTranslationsCommand extends Command
 		$output->writeln("processing file $file");
 		include $file;
 		foreach ($g_lang as $k => $v) {
-			//$output->writeln("processing $k");
 			if (array_key_exists($k, $data)) {
 				$output->writeln("($file): Key $k already existing from " . $data[$k]['origin'] . ' existing followed by new:');
 				$output->writeln($data[$k]['value']);
@@ -60,6 +59,6 @@ class ConvertTranslationsCommand extends Command
 		$g_lang = [];
 		include 'lang/DE/de.php';
 		$yaml = Yaml::dump($g_lang);
-		//$output->write($yaml);
+		$output->write($yaml);
 	}
 }
