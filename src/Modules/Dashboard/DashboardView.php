@@ -396,7 +396,7 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding truncate-content collapse-mobile']);
 	}
 
 	public function u_events($events)
