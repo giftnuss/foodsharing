@@ -1377,7 +1377,7 @@ ul.fsicons li.row {
   width: 100%;
 }
 
-a.moreswaplink {
+a.expand-collapse-link {
   display: block;
   padding: 3px;
   text-align: center;
@@ -1391,7 +1391,7 @@ a.moreswaplink {
   top: -20px;
 }
 
-a.moreswaplink:hover {
+a.expand-collapse-link:hover {
   background-color: var(--fs-green);
   text-decoration: none;
 }

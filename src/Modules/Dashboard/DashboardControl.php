@@ -388,10 +388,10 @@ class DashboardControl extends Control
 			$orga .= '
 		</ul>';
 
-			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding moreswap moreswap-height-85 collapse-mobile']);
+			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding truncate-content truncate-height-85 collapse-mobile']);
 
 			if ($orgacheck) {
-				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding moreswap moreswap-height-140 collapse-mobile']);
+				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding truncate-content truncate-height-140 collapse-mobile']);
 			}
 
 			$this->pageHelper->addContent($out, CNT_RIGHT);

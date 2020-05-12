@@ -76,7 +76,7 @@ export function initialize () {
     $('textarea.comment').autosize()
     $('#main').css('display', 'block')
 
-    $('.moreswap').each(function () {
+    $('.truncate-content').each(function () {
       const $this = $(this)
       let max_height
 
@@ -84,7 +84,7 @@ export function initialize () {
         return // skip + continue
       }
 
-      const cheight = $this.attr('class').split('moreswap-height-')
+      const cheight = $this.attr('class').split('truncate-height-')
       if (cheight.length > 1) {
         max_height = parseInt(cheight[1])
       } else {
@@ -98,14 +98,14 @@ export function initialize () {
           height: `${max_height}px`,
           overflow: 'hidden'
         })
-        $this.after(`<a class="moreswaplink" href="#" data-show="0" data-maxheight="${max_height}">
+        $this.after(`<a class="expand-collapse-link" href="#" data-show="0" data-maxheight="${max_height}">
             <i class="fas fa-plus-square"></i>
             <span>mehr anzeigen</span>
         </a>`)
       }
     })
 
-    $('.moreswaplink').each(function () {
+    $('.expand-collapse-link').each(function () {
       const $link = $(this)
       const $wrapper = $link.prev()
 
