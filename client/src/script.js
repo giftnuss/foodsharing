@@ -69,7 +69,6 @@ export const sleepmode = {
 }
 
 export function initialize () {
-  var g_moreswapheight = 100
   $(function () {
     // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
     sleepmode.init()
@@ -78,49 +77,55 @@ export function initialize () {
     $('#main').css('display', 'block')
 
     $('.moreswap').each(function () {
-      var height = 100
-
       const $this = $(this)
-      $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
+      let max_height
 
       const cheight = $this.attr('class').split('moreswap-height-')
-
       if (cheight.length > 1) {
-        height = parseInt(cheight[1])
+        max_height = parseInt(cheight[1])
+      } else {
+        max_height = 100
       }
 
-      g_moreswapheight = height
-
-      if ($this.height() > 100) {
+      // only modify the element if it exceeds the defined max height
+      // if it does, automatically collapse it and show button for expanding content
+      if ($this.height() > max_height) {
         $this.css({
-          height: `${height}px`,
+          height: `${max_height}px`,
           overflow: 'hidden'
         })
+        $this.after(`<a class="moreswaplink" href="#" data-show="0" data-maxheight="${max_height}">
+            <i class="fas fa-plus-square"></i>
+            <span>mehr anzeigen</span>
+        </a>`)
       }
     })
 
     $('.moreswaplink').each(function () {
-      const $this = $(this)
-      $this.prev().css({
-        height: `${g_moreswapheight}px`,
-        overflow: 'hidden'
-      })
-      $this.on('click', function (ev) {
+      const $link = $(this)
+      const $wrapper = $link.prev()
+
+      $link.on('click', function (ev) {
         ev.preventDefault()
-        if ($this.attr('data-show') == 0) {
-          $this.prev().css({
+        if ($link.attr('data-show') == 0) {
+          // currently collapsed => expand, and convert button to "collapse on click"
+          $wrapper.css({
             height: 'auto',
             overflow: 'visible'
           })
-          $this.text('einklappen')
-          $this.attr('data-show', 1)
+          $link.children('i.fas').removeClass('fa-plus-square').addClass('fa-minus-square')
+          $link.children('span').text('einklappen')
+          $link.attr('data-show', 1)
         } else {
-          $this.prev().css({
-            height: `${g_moreswapheight}px`,
+          // currently expanded => collapse, and convert button to "expand on click"
+          const max_height = $link.attr('data-maxheight')
+          $wrapper.css({
+            height: `${max_height}px`,
             overflow: 'hidden'
           })
-          $this.text('Mehr anzeigen')
-          $this.attr('data-show', 0)
+          $link.children('i.fas').removeClass('fa-minus-square').addClass('fa-plus-square')
+          $link.children('span').text('mehr anzeigen')
+          $link.attr('data-show', 0)
         }
       })
     })
