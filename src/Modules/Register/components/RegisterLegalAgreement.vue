@@ -28,7 +28,7 @@
     </b-form-checkbox>
     <b-form-checkbox
       id="subscribeNewsletter"
-      :checked="subscribeNewsletter"
+      :unchecked="subscribeNewsletter"
       name="subscribeNewsletter"
       @input="$emit('update:subscribeNewsletter', $event)"
     >
@@ -55,7 +55,7 @@
 import { sameAs } from 'vuelidate/lib/validators'
 
 export default {
-  props: { subscribeNewsletter: { type: Boolean, default: true }, acceptGdpr: { type: Boolean, default: false }, acceptLegal: { type: Boolean, default: false } },
+  props: { subscribeNewsletter: { type: Boolean, default: false }, acceptGdpr: { type: Boolean, default: false }, acceptLegal: { type: Boolean, default: false } },
 
   validations: {
     acceptGdpr: { sameAs: sameAs(() => true) },

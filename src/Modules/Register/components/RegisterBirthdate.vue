@@ -1,7 +1,7 @@
 <template>
   <form class="my-1">
     <div class="col-sm-auto">
-      <label for="birthdate">{{ $i18n('register.geb_datum') }}<sup><i class="fas fa-asterisk" /></sup></label>
+      <label>{{ $i18n('register.geb_datum') }}<sup><i class="fas fa-asterisk" /></sup></label>
     </div>
     <div class="mt-2 col-sm-auto">
       <DatePicker
@@ -67,12 +67,7 @@ export default {
   props: { birthdate: { type: Date, default: null } },
   data () {
     return {
-      de: de,
-      cleaveOptions: {
-        date: true,
-        delimiter: '-',
-        datePattern: ['d', 'm', 'Y']
-      }
+      de: de
     }
   },
   validations: {
