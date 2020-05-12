@@ -436,7 +436,9 @@ class DashboardControl extends Control
 				<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
 			</div>';
 
-			$this->pageHelper->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
+			$this->pageHelper->addContent(
+				$this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe', ['class' => 'truncate-content truncate-height-150 collapse-mobile']),
+			CNT_LEFT);
 		}
 
 		/*
