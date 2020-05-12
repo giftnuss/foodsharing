@@ -80,6 +80,10 @@ export function initialize () {
       const $this = $(this)
       let max_height
 
+      if (!isMob() && $this.hasClass('collapse-mobile')) {
+        return // skip + continue
+      }
+
       const cheight = $this.attr('class').split('moreswap-height-')
       if (cheight.length > 1) {
         max_height = parseInt(cheight[1])

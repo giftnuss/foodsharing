@@ -195,7 +195,7 @@ class StoreUserControl extends Control
 					$this->v_utils->v_field(
 						$this->view->u_team($store) . '',
 						$store['name'] . '-Team',
-						($this->session->isMob() && count($store['foodsaver']) > 8) ? ['class' => 'moreswap moreswap-height-280'] : []
+						['class' => 'moreswap moreswap-height-280 collapse-mobile']
 					),
 					CNT_LEFT
 				);
@@ -215,7 +215,7 @@ class StoreUserControl extends Control
 								</div>
 
 								<div class="posts"></div>
-							</div>', 'Pinnwand', $this->session->isMob() ? ['class' => 'moreswap moreswap-height-280'] : []));
+							</div>', 'Pinnwand', ['class' => 'moreswap moreswap-height-280 collapse-mobile']));
 				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
