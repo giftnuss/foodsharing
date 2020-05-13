@@ -30,6 +30,7 @@
 - Load store menu in the top bar only when the menu is opened in order to make the slot markers release ready !1502 @janopae
 - Update all package dependencies to current as of 2020-05-11 !1503 @NerdyProjects
 - Allow changing the language for all translation capable texts !1485 @NerdyProjects
+- Allow adding people to conversation by putting their ID into the recipient field !1508 @NerdyProjects
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
