@@ -932,7 +932,7 @@ final class FoodsaverGateway extends BaseGateway
 	 */
 	public function getFoodsaverName($foodsaverId): string
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId]);
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId, 'deleted_at' => null]);
 	}
 
 	public function foodsaverExists($foodsaverId): bool

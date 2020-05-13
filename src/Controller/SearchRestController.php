@@ -4,6 +4,7 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Search\SearchGateway;
 use Foodsharing\Services\SearchService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -44,7 +45,7 @@ class SearchRestController extends AbstractFOSRestController
 	 * @Rest\Get("search/user")
 	 * @Rest\QueryParam(name="q", description="Search query.")
 	 */
-	public function listUserResultsAction(ParamFetcher $paramFetcher): Response
+	public function listUserResultsAction(ParamFetcher $paramFetcher, FoodsaverGateway $foodsaverGateway): Response
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(403);
@@ -60,6 +61,11 @@ class SearchRestController extends AbstractFOSRestController
 			$this->session->listRegionIDs(),
 			$canSearchAllFoodsaver
 		);
+
+		if (preg_match('/^[0-9]+$/', $q) && $foodsaverGateway->foodsaverExists((int)$q)) {
+			$user = $foodsaverGateway->getFoodsaverName((int)$q);
+			$results[] = ['id' => (int)$q, 'value' => $user . ' (' . (int)$q . ')'];
+		}
 
 		return $this->handleView($this->view($results, 200));
 	}
