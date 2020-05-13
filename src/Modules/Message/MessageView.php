@@ -16,31 +16,31 @@ final class MessageView extends View
 	private function peopleChooser($id, $option = [])
 	{
 		$this->pageHelper->addJs('
-			var date = new Date(); 
+			var date = new Date();
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
 			var localsource = [];
 			$.ajax({
 				url: "/api/search/legacyindex",
 				dataType: "json",
 				success: function(json){
-					
+
 					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
 					{
-						
+
 						for(y=0;y<json[0].result.length;y++)
 						{
-							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
+							localsource.push({id:json[0].result[y].id,value:`${json[0].result[y].name} (${json[0].result[y].id})`});
 						}
-						
+
 					}
 				},
 				complete: function(){
 					$("#' . $id . ' input.tag").tagedit({
 						autocompleteOptions: {
 							delay: 0,
-							source: function(request, response) { 
+							source: function(request, response) {
 					            /* Remote results only if string > 3: */
-								
+
 								if(request.term.length > 3)
 								{
 									$.ajax({
@@ -67,7 +67,7 @@ final class MessageView extends View
 								{
 									response(localsource);
 								}
-								
+
 					        },
 							minLength: 1
 						},
@@ -77,7 +77,7 @@ final class MessageView extends View
 					});
 				}
 			});
-				
+
 				var localsource = [];
 		');
 
