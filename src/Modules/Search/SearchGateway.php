@@ -100,24 +100,28 @@ class SearchGateway extends BaseGateway
 					 ' . $show['name'] . ' AS name,
 					 ' . $show['click'] . ' AS click,
 					 ' . $show['teaser'] . ' AS teaser
-	
-		
+
+
 			FROM 	' . $table . '
-	
+
 			WHERE ' . $fsql . ' LIKE ' . implode(' AND ' . $fsql . ' LIKE ', $terms) . '
 			' . $fs_sql . '
-	
+
 			ORDER BY `name`
-				
+
 			LIMIT 0,50
-			
+
 		');
 	}
 
+	/**
+	 * So far this is only used for searching users to be added to conversations.
+	 * It directly defines the output format for the frontend, e.g. the formatting of the value.
+	 */
 	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver): array
 	{
 		$searchStr = '%' . str_replace(['_', '%'], ['\\\\_', '\\\\%'], $q) . '%';
-		$select = 'SELECT fs.id AS id, CONCAT(fs.name," ",fs.nachname) AS value ';
+		$select = 'SELECT fs.id AS id, CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value ';
 		$condition = 'WHERE fs.deleted_at IS NULL AND CONCAT(fs.name," ",fs.nachname ) LIKE ? ';
 
 		$result = [];
