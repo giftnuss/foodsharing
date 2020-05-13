@@ -129,6 +129,9 @@ class MessageRestController extends AbstractFOSRestController
 		$members = $paramFetcher->get('members');
 		$members[] = $this->session->id();
 		$members = array_unique($members);
+		if (!$this->foodsaverGateway->foodsaversExist($members)) {
+			throw new HttpException(404, 'At least one of the members could not be found');
+		}
 
 		$conversationId = $this->messageGateway->getOrCreateConversation($members);
 
@@ -217,6 +220,10 @@ class MessageRestController extends AbstractFOSRestController
 	{
 		if (!$this->session->may() || $userId == $this->session->id()) {
 			throw new HttpException(401);
+		}
+
+		if (!$this->foodsaverGateway->foodsaverExists($userId)) {
+			throw new HttpException(404);
 		}
 
 		$conversationId = $this->messageGateway->getOrCreateConversation([$this->session->id(), $userId]);

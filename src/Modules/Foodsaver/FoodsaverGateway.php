@@ -934,4 +934,17 @@ final class FoodsaverGateway extends BaseGateway
 	{
 		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId]);
 	}
+
+	public function foodsaverExists($foodsaverId): bool
+	{
+		return $this->db->exists('fs_foodsaver', ['id' => $foodsaverId, 'deleted_at' => null]);
+	}
+
+	public function foodsaversExist(array $foodsaverIds): bool
+	{
+		$foodsaverIds = array_unique($foodsaverIds);
+		$existing = $this->db->fetchAllValuesByCriteria('fs_foodsaver', 'id', ['id' => $foodsaverIds]);
+
+		return count($foodsaverIds) === count($existing);
+	}
 }
