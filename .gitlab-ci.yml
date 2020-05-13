@@ -2,8 +2,10 @@ include:
   template: Dependency-Scanning.gitlab-ci.yml
 
 dependency_scanning:
-  only:
-  - master
+  rules:
+  - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    when: always
+  - when: never
 
 .defaults: &defaults
   tags:
