@@ -139,6 +139,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('- done');
 
 		$this->output->writeln('Create some user interaction:');
+		// Create buddyset
+		$I->addBuddy($userbot['id'], $userorga['id']);
+
 		// Add users to region
 		$this->output->writeln('- add users to region');
 		$I->addRegionAdmin($region1, $userbot['id']);

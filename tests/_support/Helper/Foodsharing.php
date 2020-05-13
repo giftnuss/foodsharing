@@ -26,10 +26,12 @@ class Foodsharing extends \Codeception\Module\Db
 	public function clear()
 	{
 		$this->_getDriver()->executeQuery('
-			DELETE FROM fs_foodsaver;
+			DELETE FROM fs_buddy;
+			DELETE FROM fs_question_has_quiz;
+			DELETE FROM fs_question;
+			DELETE FROM fs_quiz;
 			DELETE FROM fs_foodsaver_has_bezirk;
 			DELETE FROM fs_foodsaver_has_conversation;
-			DELETE FROM fs_conversation;
 			DELETE FROM fs_msg;
 			DELETE FROM fs_betrieb_team;
 			DELETE FROM fs_betrieb;
@@ -43,10 +45,12 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler;
 			DELETE FROM fs_fairteiler_follower;
 			DELETE FROM fs_fairteiler_has_wallpost;
-			DELETE FROM fs_wallpost;
 			DELETE FROM fs_report;
 			DELETE FROM fs_basket;
 			DELETE FROM fs_basket_has_wallpost;
+			DELETE FROM fs_foodsaver;
+			DELETE FROM fs_conversation;
+			DELETE FROM fs_wallpost;
 		', []);
 	}
 
@@ -423,6 +427,12 @@ class Foodsharing extends \Codeception\Module\Db
 		$mb['id'] = $this->haveInDatabase('fs_mailbox', $mb);
 
 		return $mb;
+	}
+
+	public function addBuddy(int $user1, int $user2, bool $confirmed = true): void
+	{
+		$confirmed = $confirmed ? 1 : 0;
+		$this->haveInDatabase('fs_buddy', ['foodsaver_id' => $user1, 'buddy_id' => $user2, 'confirmed' => $confirmed]);
 	}
 
 	public function createRegion($name = null, $parentId = RegionIDs::EUROPE, $type = Type::PART_OF_TOWN, $extra_params = [])
