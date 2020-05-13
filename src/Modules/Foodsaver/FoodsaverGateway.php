@@ -937,7 +937,7 @@ final class FoodsaverGateway extends BaseGateway
 
 	public function foodsaverExists($foodsaverId): bool
 	{
-		return $this->db->exists('fs_foodsaver', ['id' => $foodsaverId, 'deleted_at' => null]);
+		return $this->foodsaversExist([$foodsaverId]);
 	}
 
 	public function foodsaversExist(array $foodsaverIds): bool
