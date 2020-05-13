@@ -121,10 +121,6 @@ const msg = {
       }
     })
 
-    /*
-     * if the conversation list is not empty we want to load the first one
-     */
-
     var cid = 0
     var gcid = GET('cid')
     if (GET('cid') != undefined && parseInt(gcid) > 0) {
@@ -132,9 +128,6 @@ const msg = {
       this.loadConversation(cid)
     } else if (GET('u2c') != undefined) {
       conv.userChat(parseInt(GET('u2c')))
-    } else if ($('#conversation-list ul li a').length > 0) {
-      cid = $('#conversation-list ul li:first').attr('id').split('-')[1]
-      this.loadConversation(cid)
     }
   },
 
