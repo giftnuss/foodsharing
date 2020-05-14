@@ -76,3 +76,12 @@
   border-bottom: 1px solid var(--border);
   padding-bottom: 15px;
 }
+
+.all-baskets-link {
+  text-align: center;
+}
+.all-baskets-link a {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
