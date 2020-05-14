@@ -121,7 +121,7 @@ class SearchGateway extends BaseGateway
 	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver): array
 	{
 		$searchStr = '%' . str_replace(['_', '%'], ['\\\\_', '\\\\%'], $q) . '%';
-		$select = 'SELECT fs.id AS id, CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value ';
+		$select = 'SELECT DISTINCT fs.id AS id, CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value ';
 		$condition = 'WHERE fs.deleted_at IS NULL AND CONCAT(fs.name," ",fs.nachname ) LIKE ? ';
 
 		$result = [];
