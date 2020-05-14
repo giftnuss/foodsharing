@@ -115,6 +115,28 @@ class SearchGateway extends BaseGateway
 	}
 
 	/**
+	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
+	 * (e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 */
+	public function searchUserInDirectGroups(string $q, array $groupIds, bool $findInAllUsers): array
+	{
+		/*
+		 * SELECT name, nachname FROM fs_foodsaver fs, fs_foodsaver_has_bezirk hb WHERE MATCH (fs.name, fs.nachname) AGAINST ('+Jan* +Beck*' IN BOOLEAN MODE) AND hb.bezirk_id IN (741) AND hb.foodsaver_id = fs.id
+		 */
+		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
+		$q = mb_ereg_replace('\W', ' ', $q);
+		/* put + before and * after the words */
+		$searchString = implode(' ', array_map(function ($a) { return '+' . $a . '*'; }, explode(' ', $q)));
+		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
+		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE)';
+		if ($findInAllUsers) {
+			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition, [$searchString]);
+		}
+
+		return [];
+	}
+
+	/**
 	 * So far this is only used for searching users to be added to conversations.
 	 * It directly defines the output format for the frontend, e.g. the formatting of the value.
 	 */
