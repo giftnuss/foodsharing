@@ -53,18 +53,18 @@ class SearchRestController extends AbstractFOSRestController
 
 		$q = $paramFetcher->get('q');
 
-		$canSearchAllFoodsaver = in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs(), true) ||
-			$this->session->may('orga');
-
-		$results = $this->searchGateway->searchUserInGroups(
-			$q,
-			$this->session->listRegionIDs(),
-			$canSearchAllFoodsaver
-		);
-
 		if (preg_match('/^[0-9]+$/', $q) && $foodsaverGateway->foodsaverExists((int)$q)) {
 			$user = $foodsaverGateway->getFoodsaverName((int)$q);
-			$results[] = ['id' => (int)$q, 'value' => $user . ' (' . (int)$q . ')'];
+			$results = [['id' => (int)$q, 'value' => $user . ' (' . (int)$q . ')']];
+		} else {
+			$canSearchAllFoodsaver = in_array(RegionIDs::EUROPE_WELCOME_TEAM, $this->session->listRegionIDs(), true) ||
+				$this->session->may('orga');
+
+			$results = $this->searchGateway->searchUserInGroups(
+				$q,
+				$this->session->listRegionIDs(),
+				$canSearchAllFoodsaver
+			);
 		}
 
 		return $this->handleView($this->view($results, 200));
