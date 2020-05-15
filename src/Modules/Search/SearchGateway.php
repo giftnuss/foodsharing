@@ -121,9 +121,6 @@ class SearchGateway extends BaseGateway
 	 */
 	public function searchUserInGroups(string $q, ?array $groupIds = []): array
 	{
-		/*
-		 * SELECT name, nachname FROM fs_foodsaver fs, fs_foodsaver_has_bezirk hb WHERE MATCH (fs.name, fs.nachname) AGAINST ('+Jan* +Beck*' IN BOOLEAN MODE) AND hb.bezirk_id IN (741) AND hb.foodsaver_id = fs.id
-		 */
 		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
 		$q = mb_ereg_replace('\W', ' ', $q);
 		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
