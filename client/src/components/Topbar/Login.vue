@@ -29,8 +29,7 @@
     </div>
     <div
       ref="inputgroup"
-      class="input-group input-group-sm mr-2 my-1
-"
+      class="input-group input-group-sm mr-2 my-1"
     >
       <div class="input-group-prepend">
         <label
@@ -91,10 +90,12 @@ export default {
     async submit () {
       if (!this.email) {
         pulseError(i18n('login.error_no_email'))
+        window.location = this.$url('login')
         return
       }
       if (!this.password) {
         pulseError(i18n('login.error_no_password'))
+        window.location = this.$url('login')
         return
       }
       this.isLoading = true
@@ -114,10 +115,10 @@ export default {
         if (err.code && err.code === 401) {
           pulseError(i18n('login.error_no_auth'))
           setTimeout(() => {
-            window.location = '/?page=login&ref=%2F%3Fpage%3Ddashboard'
+            window.location = this.$url('login')
           }, 2000)
         } else {
-          pulseError('Unknown error')
+          pulseError(i18n('error_unexpected'))
           throw err
         }
       }

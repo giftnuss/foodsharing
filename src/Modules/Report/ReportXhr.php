@@ -83,6 +83,8 @@ class ReportXhr extends Control
 
 			return $dialog->xhrout();
 		}
+
+		return null;
 	}
 
 	public function comReport(): ?array
@@ -96,6 +98,8 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function delReport(): ?array
@@ -109,6 +113,8 @@ class ReportXhr extends Control
 				'script' => 'reload();'
 			];
 		}
+
+		return null;
 	}
 
 	public function reportDialog(): array
@@ -128,7 +134,7 @@ class ReportXhr extends Control
 			$storeId = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', array('desc' => $this->translationHelper->s('reportmessage_desc'))));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', ['desc' => $this->translationHelper->s('reportmessage_desc')]));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
 		$dialog->addOpt('width', '$(window).width()*0.9', false);

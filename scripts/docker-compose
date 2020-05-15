@@ -7,9 +7,10 @@ set -o errexit
 
 dir=$(dirname "$0")
 
-source $dir/inc.sh
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 docker-compose \
-  --file $dir/../docker/docker-compose.$FS_ENV.yml \
-  --project-name foodsharing_$FS_ENV \
+  --file "$dir"/../docker/docker-compose."$FS_ENV".yml \
+  --project-name foodsharing_"$FS_ENV" \
   "$@"

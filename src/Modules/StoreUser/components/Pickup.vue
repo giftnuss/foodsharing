@@ -1,64 +1,64 @@
 <template>
   <div>
-    <div class="card pickup">
-      <div class="card-body">
-        <div class="card-title row">
-          <div :class="{col: true, 'text-truncate':true, 'font-weight-bold': isToday}">
+    <div class="pickup">
+      <div class="pickup-title">
+        <div
+          class="pickup-date"
+          :class="{'today': isToday, 'past': isInPast, 'soon': isSoon, 'empty': emptySlots > 0, 'coord': isCoordinator}"
+        >
+          <span>
             {{ date | dateFormat('full-long') }}
-          </div>
+          </span>
           <div
             v-if="isCoordinator && !isInPast"
-            class="col-2 p-0 remove"
+            class="delete-pickup"
           >
             <button
-              v-b-tooltip.hover
-              :title="$i18n('pickup.delete_title')"
-              class="btn btn-sm p-0"
+              v-b-tooltip.hover="$i18n('pickup.delete_title')"
+              class="btn btn-sm"
+              :class="{'cannot-delete': occupiedSlots.length > 0}"
               @click="occupiedSlots.length > 0 ? $refs.modal_delete_error.show() : $refs.modal_delete.show()"
             >
-              <i class="fa fa-times" />
+              <i class="fas fa-trash-alt" />
             </button>
           </div>
         </div>
-        <p class="card-text clearfix">
-          <ul class="slots">
-            <TakenSlot
-              v-for="slot in occupiedSlots"
-              :key="slot.profile.id"
-              :profile="slot.profile"
-              :confirmed="slot.isConfirmed"
-              :allow-leave="slot.profile.id == user.id && !isInPast"
-              :allow-kick="isCoordinator && !isInPast"
-              :allow-confirm="isCoordinator"
-              :allow-chat="slot.profile.id !== user.id"
-              @leave="$refs.modal_leave.show()"
-              @kick="activeSlot = slot; $refs.modal_kick.show()"
-              @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
-            />
-            <EmptySlot
-              v-for="n in emptySlots"
-              :key="n"
-              :allow-join="!isUserParticipant && isAvailable && n == 1"
-              :allow-remove="isCoordinator && n == emptySlots && !isInPast"
-              @join="$refs.modal_join.show()"
-              @remove="$emit('remove-slot', date)"
-            />
-            <li
+      </div>
+      <p class="pickup-text">
+        <ul class="slots">
+          <TakenSlot
+            v-for="slot in occupiedSlots"
+            :key="slot.profile.id"
+            :profile="slot.profile"
+            :confirmed="slot.isConfirmed"
+            :allow-leave="slot.profile.id == user.id && !isInPast"
+            :allow-kick="isCoordinator && !isInPast"
+            :allow-confirm="isCoordinator"
+            :allow-chat="slot.profile.id !== user.id"
+            @leave="$refs.modal_leave.show()"
+            @kick="activeSlot = slot, $refs.modal_kick.show()"
+            @confirm="$emit('confirm', {date: date, fsId: slot.profile.id})"
+          />
+          <EmptySlot
+            v-for="n in emptySlots"
+            :key="n"
+            :allow-join="!isUserParticipant && isAvailable && n == 1"
+            :allow-remove="isCoordinator && n == emptySlots && !isInPast"
+            @join="$refs.modal_join.show()"
+            @remove="$emit('remove-slot', date)"
+          />
+          <div class="add-pickup-slot">
+            <button
               v-if="isCoordinator && totalSlots < 10 && !isInPast"
+              v-b-tooltip.hover="$i18n('pickup.slot_add')"
+              class="btn secondary"
               @click="$emit('add-slot', date)"
             >
-              <button
-                v-b-tooltip.hover
-                :title="$i18n('pickup.slot_add')"
-                type="button"
-                class="btn secondary"
-              >
-                <i class="fa fa-plus" />
-              </button>
-            </li>
-          </ul>
-        </p>
-      </div>
+              <i class="fas fa-plus" />
+            </button>
+          </div>
+        </ul>
+      </p>
     </div>
     <b-modal
       ref="modal_join"
@@ -139,41 +139,21 @@
 import { BFormTextarea, BModal, VBTooltip } from 'bootstrap-vue'
 import TakenSlot from './TakenSlot'
 import EmptySlot from './EmptySlot'
-import dateFnsCompareAsc from 'date-fns/compare_asc'
-import isSameDay from 'date-fns/is_same_day'
+import differenceInDays from 'date-fns/differenceInDays'
+import differenceInHours from 'date-fns/differenceInHours'
+import isPast from 'date-fns/isPast'
 
 export default {
   components: { EmptySlot, TakenSlot, BFormTextarea, BModal },
   directives: { VBTooltip },
   props: {
-    storeId: {
-      type: Number,
-      default: null
-    },
-    date: {
-      type: Date,
-      default: null
-    },
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    totalSlots: {
-      type: Number,
-      default: 0
-    },
-    occupiedSlots: {
-      type: Array,
-      default: () => []
-    },
-    isCoordinator: {
-      type: Boolean,
-      default: false
-    },
-    user: {
-      type: Object,
-      default: null
-    }
+    storeId: { type: Number, default: null },
+    date: { type: Date, required: true },
+    isAvailable: { type: Boolean, default: false },
+    totalSlots: { type: Number, default: 0 },
+    occupiedSlots: { type: Array, default: () => [] },
+    isCoordinator: { type: Boolean, default: false },
+    user: { type: Object, default: null }
   },
   data () {
     return {
@@ -194,10 +174,13 @@ export default {
       }) !== -1
     },
     isInPast () {
-      return dateFnsCompareAsc(new Date(), this.date) >= 1
+      return isPast(this.date)
+    },
+    isSoon () {
+      return differenceInDays(this.date, new Date()) <= 3
     },
     isToday () {
-      return isSameDay(this.date, new Date())
+      return differenceInHours(this.date, new Date()) <= 24
     },
     emptySlots () {
       return Math.max(this.totalSlots - this.occupiedSlots.length, 0)
@@ -206,48 +189,123 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.pickup {
+  position: relative;
+}
+
+.pickup-date {
+  padding-bottom: 5px;
+
+  &.today {
+    &:not(.past) {
+      font-weight: bolder;
+    }
+  }
+
+  // Pickup marker to explain traffic lights
+  &.coord.soon.empty::after {
+    float: right;
+    margin-right: -5px;
+    text-align: right;
+    content: "\f12a"; // fa-exclamation
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--warning);
+  }
+  &.coord.soon.empty.today::after {
+    color: var(--danger);
+  }
+  &.coord.past::after {
+    content: "" !important;
+  }
+}
+
+.pickup-block:not(:last-of-type) {
+  .pickup-text {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+// The container for one pickup
+.pickup {
+  .pickup-text {
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  // The list of slots for one pickup
   ul.slots {
+    display: flex;
     padding: 0;
     margin: 0 0 5px;
-    float: left;
-    list-style: none;
-  }
+    flex-wrap: wrap;
 
-  ul.slots li {
-    float: left;
-  }
+    div {
+      display: inline-block;
+    }
 
-  ul.slots >>> .btn {
-    display: inline-block;
-    padding: 4px;
-    margin: 2px;
-    width: 35px;
-    height: 35px;
-    border-color: var(--fs-beige);
-    border-width: 3px;
-  }
-  ul.slots >>> .btn.filled {
-    overflow: hidden;
-  }
-  ul.slots >>> .btn.secondary {
-    opacity: 0.3;
-  }
-  ul.slots >>> .btn:hover {
-      border-color: #533a20
-  }
-  ul.slots >>> .btn[disabled]:hover {
+    /deep/ .btn {
+      position: initial;
+      display: inline-block;
+      margin: 2px;
+      margin-left: 1px;
+      width: 50px;
+      height: 50px;
+      color: rgba(var(--fs-brown-rgb), 0.75);
+      background-color: rgba(var(--fs-white-rgb), 0.5);
       border-color: var(--fs-beige);
-      cursor: default;
+      border-width: 2px;
+
+      &:hover {
+        border-color: var(--fs-brown);
+      }
+      &:focus {
+        box-shadow: none;
+      }
+      &.filled {
+        overflow: hidden;
+        border-width: 0;
+      }
+      &.btn-secondary {
+        background-color: var(--fs-beige);
+      }
+      &[disabled] {
+        opacity: 1;
+      }
+      &[disabled]:hover {
+        border-color: var(--fs-beige);
+        cursor: default;
+      }
+    }
   }
-  ul.slots[data-v-1dfadebe] .btn.secondary {
-    opacity: .6;
-  }
-  .pickup .remove {
+
+  /* Display deletion button only when hovering pickup date */
+  .delete-pickup {
     display: none;
-    margin-top: -0.1rem;
+    position: absolute;
+    top: -4px;
+    right: -9px;
+    color: var(--fs-brown);
+    background-color: var(--white);
+    opacity: 0.9;
+
+    .btn {
+      padding: 3px 5px;
+      line-height: 1.38;
+    }
   }
-  .pickup:hover .remove {
+
+  &:hover .delete-pickup {
     display: block;
   }
+
+  .soon .delete-pickup {
+    right: 1px;
+  }
+}
 </style>

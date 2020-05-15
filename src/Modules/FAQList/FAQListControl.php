@@ -28,7 +28,7 @@ class FAQListControl extends Control
 					$cnt .= $res['answer'];
 				}
 
-				$this->pageHelper->addContent($this->v_utils->v_field($cnt, $res['name'], array('class' => 'ui-padding')));
+				$this->pageHelper->addContent($this->v_utils->v_field($cnt, $res['name'], ['class' => 'ui-padding']));
 			} else {
 				$this->routeHelper->goPage('listFaq');
 			}
@@ -36,12 +36,12 @@ class FAQListControl extends Control
 			$this->pageHelper->addBread('FAQ`s', '/?page=listFaq');
 
 			$docs = $this->faqGateway->getFaqIntern();
-			$menu = array();
+			$menu = [];
 			foreach ($docs as $d) {
-				$menu[] = array(
+				$menu[] = [
 					'href' => '/?page=listFaq&id=' . $d['id'],
 					'name' => $d['name']
-				);
+				];
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_menu($menu, 'FAQ'));

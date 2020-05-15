@@ -68,7 +68,7 @@
     <b-modal
       v-if="mayDelete"
       ref="confirmDelete"
-      :title="$i18n('forum.delete_post')"
+      :title="$i18n('forum.post.delete')"
       :cancel-title="$i18n('button.abort')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       modal-class="bootstrap"

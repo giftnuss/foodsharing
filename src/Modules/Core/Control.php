@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\FlashMessageHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\EmailHelper;
+use Foodsharing\Helpers\FlashMessageHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
@@ -153,7 +153,6 @@ abstract class Control
 				}
 			}
 		}
-		$this->mem->updateActivity($this->session->id());
 		$this->metrics->addPageStatData(['controller' => $className]);
 	}
 
@@ -413,10 +412,10 @@ abstract class Control
 	public function getPostTime($name)
 	{
 		if (isset($_POST[$name]['hour'], $_POST[$name]['min'])) {
-			return array(
+			return [
 				'hour' => (int)$_POST[$name]['hour'],
 				'min' => (int)$_POST[$name]['min']
-			);
+			];
 		}
 
 		return false;
@@ -454,32 +453,6 @@ abstract class Control
 		}
 
 		return false;
-	}
-
-	public function mailMessage($sender_id, $recip_id, $msg, $tpl_id = 'new_message')
-	{
-		$info = $this->legacyDb->getVal('infomail_message', 'foodsaver', $recip_id);
-		if ((int)$info > 0) {
-			if (!isset($_SESSION['lastMailMessage'])) {
-				$_SESSION['lastMailMessage'] = array();
-			}
-
-			if (!$this->mem->userIsActive($recip_id)) {
-				if (!isset($_SESSION['lastMailMessage'][$recip_id]) || (time() - $_SESSION['lastMailMessage'][$recip_id]) > 600) {
-					$_SESSION['lastMailMessage'][$recip_id] = time();
-					$foodsaver = $this->foodsaverGateway->getFoodsaver($recip_id);
-					$sender = $this->foodsaverGateway->getFoodsaver($sender_id);
-
-					$this->emailHelper->tplMail($tpl_id, $foodsaver['email'], array(
-						'anrede' => $this->translationHelper->genderWord($foodsaver['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'sender' => $sender['name'],
-						'name' => $foodsaver['name'],
-						'message' => $msg,
-						'link' => BASE_URL . '/?page=msg&u2c=' . (int)$sender_id
-					));
-				}
-			}
-		}
 	}
 
 	public function appout($data)
@@ -529,5 +502,16 @@ abstract class Control
 		}
 
 		return false;
+	}
+
+	public function parseGitlabLinks($markdown)
+	{
+		$markdown = preg_replace('/\W@(\S+)/', ' [@\1](https://gitlab.com/\1)', $markdown);
+		$markdown = preg_replace('/(android)!([0-9]+)/', '[\1!\2](https://gitlab.com/foodsharing-dev/foodsharing-android/merge_requests/\2)', $markdown);
+		$markdown = preg_replace('/(android)#([0-9]+)/', '[\1#\2](https://gitlab.com/foodsharing-dev/foodsharing-android/issues/\2))', $markdown);
+		$markdown = preg_replace('/\W!([0-9]+)/', ' [!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
+		$markdown = preg_replace('/\W#([0-9]+)/', ' [#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+
+		return $markdown;
 	}
 }

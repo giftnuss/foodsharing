@@ -8,9 +8,11 @@
         <div class="col-sm-3 avatarSide text-center">
           <a :href="$url('profile', author.id)">
             <Avatar
+              style="margin-bottom: 5px"
               :url="author.avatar"
               :sleep-status="author.sleepStatus"
               :size="130"
+              :auto-scale="false"
             />
           </a>
           <a

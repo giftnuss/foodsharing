@@ -10,7 +10,7 @@ $inactiveFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-i', 'nachname' => 
 $activeFoodsaver = $I->createFoodsaver(null, ['name' => 'fs-a', 'nachname' => 'saver3', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegionId]);
 $ambassador = $I->createAmbassador(null, ['name' => 'ambassador-a', 'photo' => 'does-not-exist.jpg', 'last_login' => (new \DateTime())->format('Y-m-d H:i:s'), 'bezirk_id' => $testRegionId]);
 $unrelatedFoodsaver = $I->createFoodsaver(null, ['name' => 'unrelated-fs']);
-$I->addBezirkAdmin($testRegionId, $ambassador['id']);
+$I->addRegionAdmin($testRegionId, $ambassador['id']);
 
 $I->login($ambassador['email']);
 

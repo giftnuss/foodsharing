@@ -2,16 +2,19 @@
 
 set -o errexit
 
-source $(dirname "$0")/inc.sh
+dir=$(dirname "$0")
+
+# shellcheck source=./inc.sh
+source "$dir"/inc.sh
 
 dc kill
 
 name=foodsharing_$FS_ENV
 
 echo "Removing $name containers"
-containers=$(docker ps -aq -f name=$name)
+containers=$(docker ps -aq -f name="$name")
 if [ "x" != "x$containers" ]; then
-  docker rm $containers
+  docker rm "$containers"
 else
   echo "... there are none!"
 fi
@@ -19,7 +22,7 @@ fi
 volume_name=foodsharing_$FS_ENV
 
 echo "Removing $volume_name volumes"
-volumes=$(docker volume ls -q -f name=$volume_name)
+volumes=$(docker volume ls -q -f name="$volume_name")
 if [ "x" != "x$volumes" ]; then
   remove=""
   for V in $volumes; do
@@ -28,7 +31,7 @@ if [ "x" != "x$volumes" ]; then
     fi
   done
   echo "Removing volumes: $remove"
-  docker volume rm $remove
+  docker volume rm "$remove"
 else
   echo "... there are none!"
 fi

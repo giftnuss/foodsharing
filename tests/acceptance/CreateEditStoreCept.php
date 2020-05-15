@@ -39,9 +39,9 @@ $I->fillField('#first_post', 'A first wallpost entry on the store');
 $I->click('Senden');
 
 /* See my mobile number because I am responsible */
-$I->waitForText($storeStreet, null, '#input-1-wrapper');
-$I->waitForText($storePostcode, null, '#input-1-wrapper');
-$I->waitForText($storeCity, null, '#input-1-wrapper');
+$I->waitForText($storeStreet, null, '#inputAdress');
+$I->waitForText($storePostcode, null, '#inputAdress');
+$I->waitForText($storeCity, null, '#inputAdress');
 $I->see($bibA['handy']);
 
 $teamConversationId = $I->grabFromDatabase('fs_betrieb', 'team_conversation_id', ['name' => $storeName]);
@@ -63,12 +63,12 @@ $I->amOnPage($I->storeUrl($storeId));
 
 /* Add more Users */
 $I->click('Team bearbeiten');
-$I->waitForElement('.tagedit-list');
+$I->waitForElement('.tagedit-list', 5);
 $I->addInTagSelect($bibB['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverA['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverB['name'], '#foodsaver');
 $I->click('Speichern', '#team-form');
-$I->waitForElementNotVisible('#team-form');
+$I->waitForElementNotVisible('#team-form', 5);
 
 /* Mark another coordinator */
 $I->click('Team bearbeiten');
@@ -78,7 +78,7 @@ $I->click('Speichern', '#team-form');
 /* Edit the store to see that team does not change */
 $I->amOnPage($I->storeEditUrl($storeId));
 $I->click('Senden');
-$I->waitForText('Änderungen wurden gespeichert');
+$I->see('Änderungen wurden gespeichert');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));
@@ -91,7 +91,7 @@ $I->see($foodsaverB['name'] . ' ' . $foodsaverB['nachname'], '.team');
 $I->click('Team bearbeiten');
 $I->removeFromTagSelect($bibB['name'] . ' ' . $bibB['nachname']);
 $I->click('Speichern', '#team-form');
-$I->waitForText('Änderungen wurden gespeichert.');
+$I->see('Änderungen wurden gespeichert.');
 
 /* Reload to get rid of green overlay */
 $I->amOnPage($I->storeUrl($storeId));
@@ -105,6 +105,7 @@ $teamConversationMembers = $I->grabColumnFromDatabase('fs_foodsaver_has_conversa
 $jumperConversationMembers = $I->grabColumnFromDatabase('fs_foodsaver_has_conversation', 'foodsaver_id', ['conversation_id' => $jumperConversationId]);
 $storeTeamIDs = [$bibA['id'], $foodsaverA['id'], $foodsaverB['id']];
 $storeCoordinatorIDs = [$bibA['id']];
+$I->assertEquals($storeTeamIDs, $I->grabColumnFromDatabase('fs_betrieb_team', 'foodsaver_id', ['betrieb_id' => $storeId, 'active' => 1]));
 $I->assertEquals($storeTeamIDs, $teamConversationMembers);
 /* TODO fails, please fix. See https://gitlab.com/foodsharing-dev/issues0/issues/352 :) */
 /*

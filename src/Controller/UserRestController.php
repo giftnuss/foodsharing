@@ -2,50 +2,57 @@
 
 namespace Foodsharing\Controller;
 
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
+use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Permissions\ProfilePermissions;
+use Foodsharing\Permissions\ReportPermissions;
+use Foodsharing\Permissions\UserPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Mobile_Detect;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Mobile_Detect;
 
 class UserRestController extends AbstractFOSRestController
 {
 	private $session;
 	private $loginGateway;
 	private $foodsaverGateway;
+	private $profileGateway;
+	private $reportPermissions;
+	private $userPermissions;
+	private $profilePermissions;
+	private $emailHelper;
 
-	public function __construct(Session $session, LoginGateway $loginGateway, FoodsaverGateway $foodsaverGateway)
+	public function __construct(
+		Session $session,
+		LoginGateway $loginGateway,
+		FoodsaverGateway $foodsaverGateway,
+		ProfileGateway $profileGateway,
+		ReportPermissions $reportPermissions,
+		UserPermissions $userPermissions,
+		ProfilePermissions $profilePermissions,
+		EmailHelper $emailHelper)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->profileGateway = $profileGateway;
+		$this->reportPermissions = $reportPermissions;
+		$this->userPermissions = $userPermissions;
+		$this->profilePermissions = $profilePermissions;
+		$this->emailHelper = $emailHelper;
 	}
 
 	/**
-	 * @Rest\Get("user/current")
-	 */
-	public function currentUserAction(): Response
-	{
-		if (!$this->session->may()) {
-			throw new HttpException(404);
-		}
-
-		return $this->handleUserView();
-	}
-
-	/**
-	 * Lists details about a user. Returns 200 and the user data, 404 if the
+	 * Checks if the user is logged in and lists the basic user information. Returns 200 and the user data, 404 if the
 	 * user does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("user/{id}", requirements={"id" = "\d+"})
-	 *
-	 * @param int $id
-	 *
-	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function userAction(int $id): Response
 	{
@@ -58,9 +65,55 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(404, 'User does not exist.');
 		}
 
-		$normalized = RestNormalization::normalizeFoodsaver($data);
+		return $this->handleView($this->view(RestNormalization::normalizeUser($data), 200));
+	}
 
-		return $this->handleView($this->view($normalized, 200));
+	/**
+	 * Checks if the user is logged in  and lists the basic user information. Returns 401 if not logged in or 200 and
+	 * the user data.
+	 *
+	 * @Rest\Get("user/current")
+	 */
+	public function currentUserAction(): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		return $this->userAction($this->session->id());
+	}
+
+	/**
+	 * Lists the detailed profile of a user. Returns 403 if not allowed or 200 and the data.
+	 *
+	 * @Rest\Get("user/{id}/details", requirements={"id" = "\d+"})
+	 */
+	public function userDetailsAction(int $id): Response
+	{
+		if (!$this->userPermissions->maySeeUserDetails($id)) {
+			throw new HttpException(403);
+		}
+
+		$data = $this->profileGateway->getData($id, -1, $this->reportPermissions->mayHandleReports());
+		if (!$data || empty($data)) {
+			throw new HttpException(404, 'User does not exist.');
+		}
+
+		return $this->handleView($this->view(RestNormalization::normaliseUserDetails($data), 200));
+	}
+
+	/**
+	 * Lists the detailed profile of the current user. Returns 401 if not logged in or 200 and the data.
+	 *
+	 * @Rest\Get("user/current/details")
+	 */
+	public function currentUserDetailsAction(): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(401);
+		}
+
+		return $this->userDetailsAction($this->session->id());
 	}
 
 	/**
@@ -83,7 +136,14 @@ class UserRestController extends AbstractFOSRestController
 				$_SESSION['mob'] = 1;
 			}
 
-			return $this->handleUserView();
+			// retrieve user data and normalise it
+			$user = $this->foodsaverGateway->getFoodsaverBasics($fs_id);
+			if (!$user || empty($user)) {
+				throw new HttpException(404, 'User does not exist.');
+			}
+			$normalizedUser = RestNormalization::normalizeUser($user);
+
+			return $this->handleView($this->view($normalizedUser, 200));
 		}
 
 		throw new HttpException(401, 'email or password are invalid');
@@ -100,11 +160,36 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
+	 * and a 'valid' parameter that indicates if the email address can be used for registration.
+	 *
+	 * @Rest\Post("user/isvalidemail")
+	 * @Rest\RequestParam(name="email", nullable=false)
+	 */
+	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
+	{
+		$email = $paramFetcher->get('email');
+		if (empty($email) || !$this->emailHelper->validEmail($email)) {
+			throw new HttpException(400, 'email is not valid');
+		}
+
+		return $this->handleView($this->view([
+			'valid' => $this->isEmailValidForRegistration($email)
+		], 200));
+	}
+
+	private function isEmailValidForRegistration(string $email): bool
+	{
+		return !$this->emailHelper->isFoodsharingEmailAddress($email)
+			&& !$this->foodsaverGateway->emailExists($email);
+	}
+
+	/**
 	 * @Rest\Delete("user/{userId}", requirements={"userId" = "\d+"})
 	 */
 	public function deleteUserAction(int $userId): Response
 	{
-		if ($userId !== $this->session->id() && !$this->session->may('orga')) {
+		if ($userId !== $this->session->id() && !$this->profilePermissions->mayDeleteUser()) {
 			throw new HttpException(403);
 		}
 
@@ -118,11 +203,11 @@ class UserRestController extends AbstractFOSRestController
 
 	private function handleUserView(): Response
 	{
-		$user = $this->session->get('user');
-
-		return $this->handleView($this->view([
+		$user = RestNormalization::normalizeUser([
 			'id' => $this->session->id(),
-			'name' => $user['name']
-		], 200));
+			'name' => $this->session->get('user')['name']
+		]);
+
+		return $this->handleView($this->view($user, 200));
 	}
 }

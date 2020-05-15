@@ -35,7 +35,7 @@ class WorkGroupGateway extends BaseGateway
 			AND		`foodsaver_id` = :foodsaver_id
 		', [':active' => 1, ':foodsaver_id' => $fsId]);
 		if ($ret) {
-			$out = array();
+			$out = [];
 			foreach ($ret as $gid) {
 				$out[$gid] = $gid;
 			}
@@ -43,15 +43,11 @@ class WorkGroupGateway extends BaseGateway
 			return $out;
 		}
 
-		return array();
+		return [];
 	}
 
 	/**
 	 * Updates Group Members and Group-Admins.
-	 *
-	 * @param int $regionId
-	 * @param array $memberIds
-	 * @param array $leaderIds
 	 */
 	public function updateTeam(int $regionId, array $memberIds, array $leaderIds): void
 	{
@@ -117,16 +113,11 @@ class WorkGroupGateway extends BaseGateway
 			}
 		} else {
 			$this->emptyLeader($regionId);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 		}
 	}
 
 	/**
 	 * Delete all Leaders from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyLeader(int $regionId): int
 	{
@@ -135,10 +126,6 @@ class WorkGroupGateway extends BaseGateway
 
 	/**
 	 * Delete all members from a group.
-	 *
-	 * @param int $regionId
-	 *
-	 * @return int
 	 */
 	private function emptyMember(int $regionId): int
 	{

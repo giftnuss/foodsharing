@@ -19,8 +19,6 @@ class SettingsCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example["newsletter", false]
 	 * @example["newsletter", true]
 	 * @example["infomail_message", false]
@@ -77,8 +75,6 @@ class SettingsCest
 	}
 
 	/**
-	 * @param AcceptanceTester $I
-	 * @param \Codeception\Example $example
 	 * @example[0, "NONE"]
 	 * @example[1, "EMAIL"]
 	 * @example[2, "BELL"]
@@ -117,6 +113,21 @@ class SettingsCest
 
 		$I->waitForPageBody();
 		$I->seeOptionIsSelected($selector, InfoType::EMAIL);
+	}
+
+	public function canEditInternalSelfDescription(AcceptanceTester $I)
+	{
+		$newSelfDesc = 'This is a new self description!';
+		$I->login($this->foodsaver['email']);
+		$I->amOnPage('/?page=settings&sub=general');
+		$I->waitForPageBody();
+		$I->fillField('#about_me_intern', $newSelfDesc);
+		$I->click('Speichern');
+		$I->waitForPageBody();
+
+		$I->amOnPage('/profile/' . $this->foodsaver['id']);
+		$I->waitForPageBody();
+		$I->see($newSelfDesc);
 	}
 
 	private function createSelector(string $field)

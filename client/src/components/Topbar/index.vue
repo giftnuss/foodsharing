@@ -3,19 +3,18 @@
     id="topbar"
     :class="{bootstrap:true, loggedIn}"
   >
-    <div class="navbar fixed-top navbar-expand-md navbar-dark bg-primary ">
+    <b-navbar
+      toggleable="md"
+      class="navbar fixed-top navbar-expand-md navbar-dark bg-primary "
+    >
       <div
         v-if="!loggedIn"
         class="container"
       >
         <div id="topbar-navleft">
-          <a
-            :href="$url('home')"
-            :aria-label="$i18n('home.title')"
-            class="navbar-brand mr-2"
-          >
-            food<span>shar<span>i</span>ng</span>
-          </a>
+          <Logo
+            :link-url="$url('home')"
+          />
           <login v-if="!isMobile" />
           <menu-loggedout
             v-if="isMobile"
@@ -34,14 +33,11 @@
         class="container"
       >
         <div id="topbar-navleft">
-          <a
-            :href="$url('dashboard')"
-            :aria-label="$i18n('dashboard.title')"
-            class="navbar-brand"
-          >
-            food<span>shar<span>i</span>ng</span>
-          </a>
-          <ul class="navbar-nav flex-row no-collapse">
+          <Logo
+            :link-url="$url('dashboard')"
+            class="small"
+          />
+          <b-navbar-nav class="flex-row no-collapse">
             <li
               v-if="!hasFsRole"
               class="nav-item ml-2"
@@ -69,31 +65,29 @@
               :working-groups="workingGroups"
             />
             <menu-stores
-              v-if="hasFsRole && stores.length"
-              :stores="stores"
+              v-if="hasFsRole"
               :may-add-store="may.addStore"
             />
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
             <li
               v-if="!isMobile"
-              v-b-tooltip.hover.bottom
-              title="Karte"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
                 :href="$url('map')"
-                :aria-label="$i18n('map.title')"
+                :aria-label="$i18n('storelist.map')"
                 class="nav-link"
               >
                 <i class="fas fa-map-marker-alt" />
                 <span v-if="!loggedIn || !hasFsRole">
-                  {{ $i18n('map.title') }}
+                  {{ $i18n('storelist.map') }}
                 </span>
               </a>
             </li>
             <menu-messages v-if="isMobile" />
             <menu-bells v-if="isMobile" />
-          </ul>
+          </b-navbar-nav>
           <b-navbar-toggle
             v-if="!hasFsRole"
             target="nav_collapse"
@@ -112,10 +106,9 @@
           id="nav_collapse"
           is-nav
         >
-          <ul class="navbar-nav ml-auto">
+          <b-navbar-nav class="ml-auto">
             <li
-              v-b-tooltip.hover.bottom
-              title="Home"
+              v-b-tooltip.hover="$i18n('home.home')"
               class="nav-item"
             >
               <a
@@ -131,8 +124,7 @@
             </li>
             <li
               v-if="isMobile"
-              v-b-tooltip.hover.bottom
-              :title="$i18n('map.title')"
+              v-b-tooltip.hover="$i18n('storelist.map')"
               class="nav-item"
             >
               <a
@@ -141,7 +133,7 @@
               >
                 <i class="fas fa-map-marker-alt" />
                 <span class="d-md-none">
-                  {{ $i18n('map.title') }}
+                  {{ $i18n('storelist.map') }}
                 </span>
               </a>
             </li>
@@ -171,10 +163,10 @@
               :avatar="image"
               :is-mobile="isMobile"
             />
-          </ul>
+          </b-navbar-nav>
         </b-collapse>
       </div>
-    </div>
+    </b-navbar>
   </div>
 </template>
 
@@ -183,19 +175,20 @@ import ui from '@/stores/ui'
 import { VBTooltip, BCollapse, BNavbarToggle } from 'bootstrap-vue'
 
 import MenuRegion from './MenuRegion'
-import MenuStores from './MenuStores'
+import MenuStores from './Stores/MenuStores'
 import MenuGroups from './MenuGroups'
-import MenuBaskets from './MenuBaskets'
+import MenuBaskets from './Baskets/MenuBaskets'
 import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
 import MenuAdmin from './MenuAdmin'
-import MenuMessages from './MenuMessages'
-import MenuBells from './MenuBells'
+import MenuMessages from './Messages/MenuMessages'
+import MenuBells from './Bells/MenuBells'
 import MenuUser from './MenuUser'
-import Search from './Search'
+import Search from './Search/Search'
 import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
+import Logo from './Logo'
 
 export default {
   components: {
@@ -214,7 +207,8 @@ export default {
     MenuBells,
     MenuUser,
     Search,
-    Login
+    Login,
+    Logo
   },
   directives: { VBTooltip },
   props: {
@@ -246,10 +240,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    stores: {
-      type: Array,
-      default: () => []
-    },
     regions: {
       type: Array,
       default: () => []
@@ -261,7 +251,7 @@ export default {
   },
   computed: {
     someAdminRights () {
-      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes || this.may.administrateNewsletterEmail
+      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes || this.may.administrateNewsletterEmail || this.may.administrateRegions
     },
     isMobile () {
       return this.ui.wSM || this.ui.wXS
@@ -283,37 +273,7 @@ export default {
     }
 
     .container {
-        max-width: 1000px;
-    }
-
-    // logo
-    .navbar-brand {
-        font-family: 'Alfa Slab One',serif;
-        color: #ffffff;
-        margin-right: 0;
-        font-size: 1.1rem;
-        span {
-            color: #64ae25;
-        }
-        span span {
-            position: relative;
-            &:hover::before {
-                content: '♥';
-                color: red;
-                position: absolute;
-                font-size: 0.5em;
-                margin-top: -0.04em;
-                margin-left: -0.085em;
-            }
-        }
-    }
-    @media (max-width: 680px) {
-        & .navbar-brand {
-            font-size: 0.9rem;
-        }
-        &.loggedIn .navbar-brand {
-            font-size: 0.4rem;
-        }
+        max-width: 1100px;
     }
 
     @media (max-width: 630px) {
@@ -324,7 +284,12 @@ export default {
     .navbar-nav {
         align-items: center;
     }
-    .navbar-collapse.collapse, .navbar-collapse.collapsing {
+    .navbar-collapse.collapse.show, .navbar-collapse.collapsing {
+        &.show {
+          // Only when menu is shown. Fixes problem that list of dropdown items is to long.
+          max-height: 70vh;
+          overflow: auto;
+        }
         .navbar-nav {
             align-items: start;
         }

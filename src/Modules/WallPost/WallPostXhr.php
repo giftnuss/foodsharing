@@ -100,7 +100,8 @@ class WallPostXhr extends Control
 		if (!$this->wallPostPermissions->mayWriteWall($this->session->id(), $this->table, $this->id)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		$message = trim(strip_tags($_POST['msg'] ?? ''));
+		$data = json_decode(file_get_contents('php://input'), true);
+		$message = trim(strip_tags($data['msg'] ?? ''));
 
 		if (!empty($message) && $post_id = $this->wallPostGateway->addPost(
 				$message,
@@ -222,7 +223,7 @@ class WallPostXhr extends Control
 				' . $init . '
 			}
 		</script>
-				
+
 		</head><body onload="init();"></body></html>';
 
 		exit();

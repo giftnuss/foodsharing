@@ -1,7 +1,8 @@
 <?php
 global $g_lang;
 $g_lang['photo_should_be_usable'] = 'Dein Gesicht sollte auf dem Profilfoto <a href="https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto">erkennbar</a> sein, da es, wenn Du mal <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> wirst, für den Foodsharing-<a href="https://wiki.foodsharing.de/Ausweis">Ausweis</a> verwendet wird.';
-$g_lang['profile_description_text_info'] = 'Bitte fülle dieses Feld nur aus, wenn Du darauf hingewiesen wurdest.';
+$g_lang['profile_description_text_info'] = 'Diese Kurzbeschreibung wird auf der <a href="https://foodsharing.de/team">Team-</a> und der <a href="https://foodsharing.de/team/ehemalige">Ehemaligenseite</a> für die dort aufgeführten Personen angezeigt.';
+$g_lang['profile_description_text_display_info'] = 'Deine Kurzbeschreibung wird auf Deiner Profilseite, für die foodsharing Community sichtbar, angezeigt.';
 $g_lang['upload_new_photo'] = 'Neues Foto hochladen';
 $g_lang['edit_photo'] = 'Foto bearbeiten';
 $g_lang['posible_restore_account'] = 'Dein Account kann nach dem Löschen wiederhergestellt werden';
@@ -12,7 +13,7 @@ $g_lang['delete_account_confirm_title'] = 'Account wirklich löschen?';
 $g_lang['delete_account_confirm_bt'] = 'Ja, Account jetzt löschen';
 
 $g_lang['position_search'] = 'Adresssuche';
-$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenksörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
+$g_lang['position_search_infobox'] = 'Bitte gib Deine Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.<br><a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenskörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.';
 $g_lang['settings_general'] = 'Deine Angaben';
 $g_lang['settings_info'] = 'Benachrichtigungen';
 $g_lang['settings_mumble'] = 'Mumble-Einstellungen';
@@ -25,7 +26,7 @@ $g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine in
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
-$g_lang['about_me_public'] = 'Kurzbeschreibung';
+$g_lang['about_me_public'] = 'Öffentliche Kurzbeschreibung';
 $g_lang['aufgaben_botschafter'] = 'Ich habe das Dokument "Aufgaben der BotschafterInnen von foodsharing gelesen und übernehme ab jetzt für diese die Verantwortlichkeit in meiner Stadt/Region/Bezirk.';
 $g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';

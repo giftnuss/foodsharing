@@ -80,7 +80,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -103,6 +103,12 @@
   }
   .campaigntext, .campaignimg {
     width: 100%;
+  }
+  .campaigntext h2 {
+    font-size: 1.7em;
+  }
+  .campaigntext h3 {
+    font-size: 1.2em;
   }
 }
 

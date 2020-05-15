@@ -16,7 +16,7 @@
         role="menuitem"
         class="nav-link"
       >
-        <i class="fas fa-cog" /> {{ $i18n('settings') }}
+        <i class="fas fa-cog" /> {{ $i18n('menu.your_settings') }}
       </a>
       <a
         :href="$url('logout')"
@@ -26,14 +26,14 @@
         <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
     </div>
-    <nav-item-dropdown
+    <b-nav-item-dropdown
       v-else
-      :tooltip="$i18n('menu.tooltips.your_account')"
+      v-b-tooltip="$i18n('menu.entry.your_account')"
       no-caret
       class="user"
       right
     >
-      <template slot="button-content">
+      <template v-slot:button-content>
         <img :src="avatar">
       </template>
       <a
@@ -48,7 +48,7 @@
         role="menuitem"
         class="dropdown-item"
       >
-        <i class="fas fa-cog" /> {{ $i18n('settings') }}
+        <i class="fas fa-cog" /> {{ $i18n('menu.your_settings') }}
       </a>
       <a
         :href="$url('logout')"
@@ -57,17 +57,12 @@
       >
         <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
-    </nav-item-dropdown>
+    </b-nav-item-dropdown>
   </div>
 </template>
 <script>
 
-import NavItemDropdown from './NavItemDropdown'
-
 export default {
-  components: {
-    NavItemDropdown
-  },
   props: {
     userId: {
       type: Number,

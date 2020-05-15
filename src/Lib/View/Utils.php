@@ -4,8 +4,8 @@ namespace Foodsharing\Lib\View;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Services\SanitizerService;
@@ -38,7 +38,7 @@ class Utils
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper
 	) {
-		$this->id = array();
+		$this->id = [];
 		$this->sanitizerService = $sanitizerService;
 		$this->pageHelper = $pageHelper;
 		$this->routeHelper = $routeHelper;
@@ -63,7 +63,7 @@ class Utils
 		$this->twig = $twig;
 	}
 
-	public function v_quickform($titel, $elements, $option = array())
+	public function v_quickform($titel, $elements, $option = [])
 	{
 		return $this->v_field('<div class="v-form">' . $this->v_form($titel, $elements, $option) . '</div>', $titel);
 	}
@@ -128,13 +128,13 @@ class Utils
 				</div>';
 	}
 
-	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = array())
+	public function v_bezirkChooser($id = 'bezirk_id', $bezirk = false, $option = [])
 	{
 		if (!$bezirk) {
-			$bezirk = array(
+			$bezirk = [
 				'id' => 0,
 				'name' => $this->translationHelper->s('no_bezirk_choosen')
-			);
+			];
 		}
 		$id = $this->identificationHelper->id($id);
 
@@ -252,16 +252,16 @@ class Utils
 	public function v_form_time($id, $value = false)
 	{
 		if ($value == false) {
-			$value = array();
+			$value = [];
 			$value['hour'] = 20;
 			$value['min'] = 0;
 		} elseif (!is_array($value)) {
 			$v = explode(':', $value);
-			$value = array('hour' => $v[0], 'min' => $v[1]);
+			$value = ['hour' => $v[0], 'min' => $v[1]];
 		}
 		$id = $this->identificationHelper->id($id);
 		$hours = range(0, 23);
-		$mins = array(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55);
+		$mins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 		$out = '<select name="' . $id . '[hour]">';
 
@@ -297,7 +297,7 @@ class Utils
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
 
-	public function v_form_tinymce($id, $option = array())
+	public function v_form_tinymce($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
@@ -311,8 +311,8 @@ class Utils
 			$class = 'post';
 		}
 
-		$plugins = array('autoresize', 'link', 'image', 'media', 'table', 'contextmenu', 'paste', 'code', 'advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'hr', 'anchor', 'pagebreak', 'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'insertdatetime', 'nonbreaking', 'directionality', 'emoticons', 'textcolor');
-		$toolbar = array('styleselect', 'bold italic', 'alignleft aligncenter alignright', 'bullist outdent indent', 'media image link', 'paste', 'code');
+		$plugins = ['autoresize', 'link', 'image', 'media', 'table', 'contextmenu', 'paste', 'code', 'advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'hr', 'anchor', 'pagebreak', 'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'insertdatetime', 'nonbreaking', 'directionality', 'emoticons', 'textcolor'];
+		$toolbar = ['styleselect', 'bold italic', 'alignleft aligncenter alignright', 'bullist outdent indent', 'media image link', 'paste', 'code'];
 		$addOpt = '';
 
 		if (isset($option['type'])) {
@@ -543,7 +543,7 @@ class Utils
 
 					</div>
 					<a href="#" style="display:none" id="' . $id . '-save">Speichern</a>
-					<iframe name="' . $id . '-frame" src="upload.php" width="1" height="1" style="visibility:hidden;"></iframe>
+					<iframe name="' . $id . '-frame" src="" width="1" height="1" style="visibility:hidden;"></iframe>
 				</div>');
 
 		if (isset($_GET['pinit'])) {
@@ -552,9 +552,9 @@ class Utils
 
 		$this->pageHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
-		$menu = array(array('name' => $this->translationHelper->s('edit_photo'), 'href' => '#edit'));
+		$menu = [['name' => $this->translationHelper->s('edit_photo'), 'href' => '#edit']];
 		if ($_GET['page'] == 'settings') {
-			$menu[] = array('name' => $this->translationHelper->s('upload_new_photo'), 'href' => '#new');
+			$menu[] = ['name' => $this->translationHelper->s('upload_new_photo'), 'href' => '#new'];
 		}
 
 		return '
@@ -564,7 +564,7 @@ class Utils
 			</div>';
 	}
 
-	public function v_form($name, $elements, $option = array())
+	public function v_form($name, $elements, $option = [])
 	{
 		$js = '';
 		if (isset($option['id'])) {
@@ -641,7 +641,7 @@ class Utils
 		return $out;
 	}
 
-	public function v_menu($items, $title = false, $option = array())
+	public function v_menu($items, $title = false, $option = [])
 	{
 		$id = $this->identificationHelper->id('vmenu');
 
@@ -687,7 +687,7 @@ class Utils
 		return $out;
 	}
 
-	public function v_toolbar($option = array())
+	public function v_toolbar($option = [])
 	{
 		$id = 0;
 		if (isset($option['id'])) {
@@ -707,7 +707,7 @@ class Utils
 
 		$out = '';
 		if (!isset($option['types'])) {
-			$option['types'] = array('edit', 'delete');
+			$option['types'] = ['edit', 'delete'];
 		}
 
 		$last = count($option['types']) - 1;
@@ -750,7 +750,7 @@ class Utils
 		return $out;
 	}
 
-	public function v_tablesorter($head, $data, $option = array())
+	public function v_tablesorter($head, $data, $option = [])
 	{
 		$params = [
 			'nohead' => isset($option['noHead']) && $option['noHead'],
@@ -762,7 +762,7 @@ class Utils
 		return $this->twig->render('partials/tablesorter.twig', $params);
 	}
 
-	public function v_form_submit($val, $id, $option = array())
+	public function v_form_submit($val, $id, $option = [])
 	{
 		$out = '';
 		if (isset($option['buttons'])) {
@@ -777,7 +777,7 @@ class Utils
 		</div>';
 	}
 
-	public function v_form_textarea($id, $option = array())
+	public function v_form_textarea($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		if (isset($option['value'])) {
@@ -823,7 +823,7 @@ class Utils
 	 *
 	 * $option = ['values' => ['list', 'of', 'possible', 'values']];
 	 */
-	public function v_form_checkbox($id, $option = array())
+	public function v_form_checkbox($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 
@@ -837,10 +837,10 @@ class Utils
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
-			$values = array();
+			$values = [];
 		}
 
-		$checked = array();
+		$checked = [];
 		if (is_array($value)) {
 			foreach ($value as $key => $ch) {
 				$checked[$ch] = true;
@@ -866,7 +866,7 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
-	public function v_form_tagselect($id, $option = array())
+	public function v_form_tagselect($id, $option = [])
 	{
 		$xhr = $id;
 		if (isset($option['xhr'])) {
@@ -917,7 +917,7 @@ class Utils
 		return $this->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
-	public function v_form_picture($id, $option = array())
+	public function v_form_picture($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 
@@ -993,7 +993,7 @@ class Utils
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
-	public function v_form_file($id, $option = array())
+	public function v_form_file($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 
@@ -1017,7 +1017,7 @@ class Utils
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
 
-	public function v_form_radio($id, $option = array())
+	public function v_form_radio($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
@@ -1032,7 +1032,7 @@ class Utils
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
-			$values = array();
+			$values = [];
 		}
 
 		$disabled = '';
@@ -1058,7 +1058,7 @@ class Utils
 
 	private function jsValidate($option, $id, $name)
 	{
-		$out = array('class' => '', 'msg' => array());
+		$out = ['class' => '', 'msg' => []];
 
 		if (isset($option['required'])) {
 			$out['class'] .= ' required';
@@ -1070,7 +1070,7 @@ class Utils
 		return $out;
 	}
 
-	public function v_form_select($id, $option = array())
+	public function v_form_select($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		/* isset instead of array_key_exists does not matter here */
@@ -1085,7 +1085,7 @@ class Utils
 		if (isset($option['values'])) {
 			$values = $option['values'];
 		} else {
-			$values = array();
+			$values = [];
 		}
 
 		$out = '
@@ -1152,7 +1152,7 @@ class Utils
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
-	public function v_input_wrapper($label, $content, $id = false, $option = array())
+	public function v_input_wrapper($label, $content, $id = false, $option = [])
 	{
 		if (isset($option['nowrapper'])) {
 			return $content;
@@ -1217,13 +1217,13 @@ class Utils
 		</div>';
 	}
 
-	public function v_form_daterange($id = 'daterange', $option = array())
+	public function v_form_daterange($id = 'daterange', $option = [])
 	{
 		$label = $this->translationHelper->s($id);
 		$id = $this->identificationHelper->id($id);
 
 		if (!isset($option['options'])) {
-			$option['options'] = array('from' => array(), 'to' => array());
+			$option['options'] = ['from' => [], 'to' => []];
 		}
 
 		$this->pageHelper->addJs('
@@ -1259,7 +1259,7 @@ class Utils
 		);
 	}
 
-	public function v_form_date($id, $option = array())
+	public function v_form_date($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
@@ -1285,7 +1285,7 @@ class Utils
 		);
 	}
 
-	public function v_form_text($id, $option = array())
+	public function v_form_text($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
@@ -1351,7 +1351,7 @@ class Utils
 		</div>';
 	}
 
-	public function v_form_passwd($id, $option = array())
+	public function v_form_passwd($id, $option = [])
 	{
 		$id = $this->identificationHelper->id($id);
 

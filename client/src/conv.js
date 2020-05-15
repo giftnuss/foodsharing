@@ -3,14 +3,17 @@
 import $ from 'jquery'
 
 import storage from '@/storage'
-import { ajax, GET, goTo, isMob, nl2br, pulseError } from '@/script'
+import { GET, goTo, isMob, pulseError, img } from '@/script'
 import serverData from '@/server-data'
-import timeformat from '@/timeformat'
-import autoLink from '@/autoLink'
+import { dateFormat } from '@/./utils'
 import msg from '@/msg'
 import conversationStore from '@/stores/conversations'
-import { sendMessage } from '@/api/conversations'
+import profileStore from '@/stores/profiles'
+import * as api from '@/api/conversations'
 
+import {
+  plainToHtml
+} from '@/utils'
 const conv = {
 
   initiated: false,
@@ -49,7 +52,6 @@ const conv = {
       this.$chat = []
       this.user2Conv = []
 
-      console.log('openchats...')
       const chats = storage.get('msg-chats')
 
       if (chats != undefined) {
@@ -61,16 +63,17 @@ const conv = {
       }
     }
   },
-  userChat: function (fsid) {
+  userChat: async function (fsid) {
     if (!this.initiated) {
       this.init()
     }
-    ajax.req('msg', 'user2conv', {
-      data: { fsid: fsid },
-      success: function (ret) {
-        conv.chat(ret.cid)
-      }
-    })
+    try {
+      const conversation = await api.getConversationIdForConversationWithUser(fsid)
+      conv.chat(conversation.id)
+    } catch (e) {
+      pulseError('Fehler beim Starten der Unterhaltung')
+      console.error(e)
+    }
   },
 
   getConvByFs: function (fsid) {
@@ -83,7 +86,6 @@ const conv = {
   },
 
   chat: function (cid) {
-    $('#convlist-4768').removeClass('unread-1').addClass('unread-0')
     if (isMob()) {
       if (GET('page') == 'msg') {
         msg.loadConversation(cid)
@@ -91,36 +93,26 @@ const conv = {
         goTo(`/?page=msg&cid=${cid}`)
       }
     } else {
-      if (!this.initiated) {
-        this.init()
-      }
+      if (GET('page') == 'msg') {
+        msg.loadConversation(cid)
+      } else {
+        if (!this.initiated) {
+          this.init()
+        }
 
-      this.appendChatbox(cid)
+        this.appendChatbox(cid)
+      }
     }
   },
 
-  /**
-   * method to send the right data to the polling service
-   *
-   */
-  registerPollingService: function () {
+  storeOpenedChatWindows: function () {
     var ids = conv.getCids()
 
     if (ids.length > 0) {
       var infos = conv.getChatInfos()
       storage.set('msg-chats', infos)
-
-      /*
-      info.editService('msg','chat',{
-        speed:'fast',
-        premethod:'setSessionInfo',
-        ids:ids,
-        infos:infos
-      });
-      */
     } else {
       storage.del('msg-chats')
-      // info.removeService('msg-chats','chat')
     }
   },
 
@@ -131,10 +123,9 @@ const conv = {
     const key = conv.getKey(data.cid)
     if (key >= 0) {
       conv.maxbox(data.cid)
-      conv.append(key, data)
+      conv.append(key, data.message)
       conv.scrollBottom(data.cid)
     }
-    conversationStore.loadConversations()
   },
 
   // minimize or maximize the chatbox
@@ -142,14 +133,13 @@ const conv = {
     const key = conv.getKey(cid)
 
     conv.chatboxes[key].el.children('.slimScrollDiv, .chatboxinput').toggle()
-    // $('#chat-'+cid+' .slimScrollDiv, #chat-'+cid+' ').toggle();
     if ($(`#chat-${cid} .chatboxinput`).is(':visible')) {
       conv.chatboxes[key].minimized = false
     } else {
       conv.chatboxes[key].minimized = true
     }
 
-    conv.registerPollingService()
+    conv.storeOpenedChatWindows()
   },
 
   // maximoze mini box
@@ -184,13 +174,14 @@ const conv = {
       val = val.replace(new RegExp('(\n){3,}', 'gim'), '\n\n')
 
       try {
-        await sendMessage(cid, val)
-        conversationStore.loadConversations()
-      } catch (err) {
-        console.error(err)
-        pulseError('Beim versenden der Nachricht ist leider ein Fehler aufgetreten')
+        await api.sendMessage(cid, val)
+      } catch (e) {
+        pulseError('Fehler beim Senden der Nachricht')
+        console.error(e)
+      } finally {
+        /* we intentionally don't reload conversation here as we will be updated via websocket */
+        conv.hideLoader(cid)
       }
-      conv.hideLoader(cid)
     }
   },
 
@@ -199,19 +190,6 @@ const conv = {
    */
   scrollBottom: function (cid) {
     $(`#chat-${cid} .chatboxcontent`).slimScroll({ scrollTo: `${$('#chat-' + cid + ' .chatboxcontent').prop('scrollHeight')}px` })
-    // var el = conv.chatboxes[conv.getKey(cid)].el.children('.chatboxcontent');
-    // el.slimScroll({scrollTo : el.prop('scrollHeight') + 'px' });
-  },
-
-  img: function (photo, size) {
-    if (size == undefined) {
-      size = 'med'
-    }
-    if (photo && photo.length > 3) {
-      return `/images/${size}_q_${photo}`
-    } else {
-      return `/img/${size}_q_avatar.png`
-    }
   },
 
   /**
@@ -235,7 +213,7 @@ const conv = {
     this.chatCount--
 
     // re register polling service
-    this.registerPollingService()
+    this.storeOpenedChatWindows()
   },
 
   showLoader: function (cid) {
@@ -307,75 +285,80 @@ const conv = {
   * adding a class 'my-message' to current user's own messages
   */
     let ownMessageClass = ''
-    if (message.fs_id === serverData.user.id) { ownMessageClass = ' my-message' }
+    if (message.authorId === serverData.user.id) { ownMessageClass = ' my-message' }
     conv.chatboxes[key].last_mid = parseInt(message.id)
-    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.time}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.fs_id}"><img src="${conv.img(message.fs_photo, 'mini')}"></a></span><span class="chatboxmessagecontent">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><div style="clear:both;"></div></div>`)
+    conv.chatboxes[key].el.children('.slimScrollDiv').children('.chatboxcontent').append(`<div title="${message.sentAt}" class="chatboxmessage${ownMessageClass}"><span class="chatboxmessagefrom"><a class="photo" href="/profile/${message.authorId}"><img src="${img(profileStore.profiles[message.authorId].avatar, 'mini')}"></a></span><span class="chatboxmessagecontent">${plainToHtml(message.body)}<span class="time">${dateFormat(message.sentAt)}</span></span><div style="clear:both;"></div></div>`)
   },
 
   /**
    * load the first content for one chatbox
    */
-  initChat: function (cid) {
+  initChat: async function (cid) {
     conv.showLoader(cid)
 
-    var key = this.getKey(cid)
+    const key = this.getKey(cid)
 
-    ajax.req('msg', 'loadconversation', {
-      loader: false,
-      data: {
-        id: cid
-      },
-      success: function (ret) {
-        /*
-         * add link to leave the chat only if its no 1:1 conversation
-         */
-        if (ret.member.length > 2) {
-          // conv.addChatOption(cid,'<a href="#" onclick="ajax.req(\'msg\',\'invite\',{data:{cid:'+cid+'}});return false;">Jemand zum Chat hinzufügen</a>');
-          conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest?')){ajax.req('msg','leave',{data:{cid:${cid}}});}return false;">Chat verlassen</a>`)
-          conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="var val=$(this).prev().val();ajax.req('msg','rename',{data:{cid:${cid},name:val}});return false;" class="fas fa-arrow-circle-right"></i></span>`)
-        }
+    try {
+      await conversationStore.loadConversation(cid)
+      const conversation = conversationStore.conversations[cid]
+      /* disable leaving chats as it currently leads to undefined logical behaviour that breaks other behaviour :D
+        conv.addChatOption(cid, `<a href="#" onclick="if(confirm('Bist Du Dir sicher, dass Du den Chat verlassen möchtest? Dadurch verlierst du unwiderruflich Zugriff auf alle Nachrichten in dieser Unterhaltung.')){conv.leaveConversation(${cid});}return false;">Chat verlassen</a>`)
+      */
+      conv.addChatOption(cid, `<span class="optinput"><input placeholder="Chat umbenennen..." type="text" name="chatname" value="" maxlength="30" /><i onclick="conv.rename(${cid}, $(this).prev().val())" class="fas fa-arrow-circle-right"></i></span>`)
 
-        /*
-         * first make a title with all the usernames
-         */
+      /*
+       * first make a title with all the usernames
+       */
 
-        let title = ret.conversation.name
-        if (ret.conversation.name == null) {
-          title = []
-          for (var i = 0; i < ret.member.length; i++) {
-            if (ret.member[i] != undefined && ret.member[i].id != serverData.user.id) {
-              title.push(`<a href="/profile/${ret.member[i].id}">${ret.member[i].name}</a>`)
-            }
+      let title = conversation.title
+      if (title == null) {
+        title = []
+        for (const m of conversation.members) {
+          if (m == serverData.user.id) {
+            continue
           }
-          title = title.join(', ')
+          title.push(`<a href="/profile/${m}">${plainToHtml(profileStore.profiles[m].name)}</a>`)
         }
-
-        conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
-
-        /*
-         * now append all arrived messages
-         */
-        if (ret.messages != undefined && ret.messages.length > 0) {
-          /*
-           * list messages the reverse way
-           */
-          for (var y = (ret.messages.length - 1); y >= 0; y--) {
-            conv.append(key, ret.messages[y])
-          }
-
-          conv.scrollBottom(cid)
-        }
-      },
-      complete: function () {
-        conv.hideLoader(cid)
-        conv.registerPollingService()
+        title = title.join(', ')
       }
-    })
+
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${title}`)
+
+      /*
+       * now append all arrived messages
+       */
+      Object.values(conversation.messages).forEach((m) => conv.append(key, m))
+      conv.scrollBottom(cid)
+    } catch (e) {
+      pulseError('Fehler beim Laden der Unterhaltung')
+      console.error(e)
+    } finally {
+      conv.hideLoader(cid)
+      conv.storeOpenedChatWindows()
+    }
+  },
+
+  rename: async function (cid, newName) {
+    try {
+      await api.renameConversation(cid, newName)
+      const key = this.getKey(cid)
+      conv.chatboxes[key].el.children('.chatboxhead').children('.chatboxtitle').html(`<i class="fas fa-comment fa-flip-horizontal"></i>${plainToHtml(newName)}`)
+    } catch (e) {
+      pulseError('Fehler beim Umbenennen der Unterhaltung')
+      console.error(e)
+    } finally {
+
+    }
+  },
+
+  leaveConversation: async function (cid) {
+    await api.removeUserFromConversation(cid, serverData.user.id)
+    conv.close(cid)
+    conversationStore.loadConversations()
   },
 
   appendChatbox: function (cid, min) {
     if (this.isBigPageMode) {
-      msg.loadConversation(cid)
       return false
     }
 
@@ -391,12 +374,13 @@ const conv = {
       const name = ''
 
       var $el = $(`<div id="chat-${cid}" class="chatbox ui-corner-top" style="bottom: 0px; right: ${right}px; display: block;"></div>`).appendTo('body')
-      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${name}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
+      $el.html(`<div class="chatboxhead ui-corner-top"><div class="chatboxtitle" onclick="conv.togglebox(${cid});"><i class="fas fa-spinner fa-spin"></i>${plainToHtml(name)}</div><ul style="display:none;" class="settings linklist linkbubble ui-shadow corner-all">${options}</ul><div class="chatboxoptions"><a href="#" class="fas fa-cog" title="Einstellungen" onclick="conv.settings(${cid});return false;"></a><a title="schließen" class="fas fa-times" href="#" onclick="conv.close(${cid});return false;"></a></div><br clear="all"/></div><div class="chatboxcontent"></div><div class="chatboxinput"><textarea placeholder="Schreibe etwas..." class="chatboxtextarea" onkeydown="conv.checkInputKey(event,this,'${cid}');"></textarea></div>`)
 
       $el.children('.chatboxcontent').slimScroll()
       $el.children('.chatboxinput').children('textarea').autosize()
 
       $el.children('.chatboxinput').children('textarea').on('focus', function () {
+        conversationStore.markAsRead(cid)
         conv.activeBox = cid
       })
 

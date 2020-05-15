@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["./node_modules/@types"],
+    "outDir": "dist"
+  },
+  "files": [
+    "src/index.ts",
+    "test.ts"
+  ]
+}

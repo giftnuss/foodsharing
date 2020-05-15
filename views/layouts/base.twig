@@ -76,7 +76,7 @@
                 <div class="pure-g mainpure">
                     {% if isMob %}
                         {% if _main is not empty %}
-                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
+                            <div id="news" class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
                                 <div class="inside">
                                     {{ _main|raw }}
                                 </div>
@@ -143,7 +143,9 @@
         {% endblock full %}
 
         {% block footer %}
-            {% include 'partials/footer.twig' %}
+            <footer>
+                {{ footer | raw }}
+            </footer>
         {% endblock %}
 
         <noscript>

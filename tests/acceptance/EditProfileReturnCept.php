@@ -11,8 +11,8 @@ $region = $I->createRegion(null, 0, Type::REGION);
 $member = $I->createFoodsaver();
 $ambassador = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
 
-$I->addBezirkAdmin($region['id'], $ambassador['id']);
-$I->addBezirkMember($region['id'], $member['id']);
+$I->addRegionAdmin($region['id'], $ambassador['id']);
+$I->addRegionMember($region['id'], $member['id']);
 
 $I->login($ambassador['email']);
 

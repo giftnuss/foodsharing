@@ -5,12 +5,12 @@ namespace Foodsharing\Modules\Maintenance;
 use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Bell\BellUpdateTrigger;
 
 class MaintenanceControl extends ConsoleControl
 {
@@ -192,7 +192,7 @@ class MaintenanceControl extends ConsoleControl
 
 		/* foodsaver photos */
 		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
-			$update = array();
+			$update = [];
 			foreach ($foodsaver as $fs) {
 				if (!file_exists('images/' . $fs['photo'])) {
 					$update[] = $fs['id'];
@@ -202,7 +202,7 @@ class MaintenanceControl extends ConsoleControl
 				$this->model->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $update) . ')');
 			}
 		}
-		$check = array();
+		$check = [];
 		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
 			foreach ($foodsaver as $fs) {
 				$check[$fs['photo']] = $fs['id'];
@@ -236,7 +236,7 @@ class MaintenanceControl extends ConsoleControl
 	{
 		$admins = $this->foodsaverGateway->getAllWorkGroupAmbassadorIds();
 		if (!$admins) {
-			$admins = array();
+			$admins = [];
 		}
 		$this->mem->set('all_global_group_admins', serialize($admins));
 	}
@@ -311,12 +311,12 @@ class MaintenanceControl extends ConsoleControl
 		if ($foodsaver = $this->model->getStoreManagersWhichWillBeAlerted()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
-				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], array(
+				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], [
 					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
 					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
-				));
+				]);
 			}
 			self::success('OK');
 		}
@@ -324,17 +324,8 @@ class MaintenanceControl extends ConsoleControl
 
 	private function wakeupSleepingUsers()
 	{
-		$this->model->update('
-			UPDATE
-				fs_foodsaver
-			SET
-				sleep_status = 0
-			WHERE
-				sleep_status = 1
-			AND
-				sleep_until > 0
-			AND
-				sleep_until < CURDATE()
-		');
+		self::info('wake up sleeping users...');
+		$count = $this->maintenanceGateway->wakeupSleepingUsers();
+		self::success($count . ' users woken up');
 	}
 }

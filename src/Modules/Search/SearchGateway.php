@@ -27,7 +27,7 @@ class SearchGateway extends BaseGateway
 	 */
 	public function search(string $q, bool $showDetails, $regionToSearch = null): array
 	{
-		$out = array();
+		$out = [];
 
 		$regions = false;
 		if (!empty($regionToSearch)) {
@@ -36,47 +36,47 @@ class SearchGateway extends BaseGateway
 
 		$out['foodsaver'] = $this->searchTable(
 			'fs_foodsaver',
-			array('name', 'nachname', 'plz', 'stadt'),
+			['name', 'nachname', 'plz', 'stadt'],
 			$q,
-			array(
+			[
 				'name' => 'CONCAT(`name`," ",`nachname`)',
 				'click' => 'CONCAT("profile(",`id`,");")',
 				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
-			),
+			],
 			$regions
 		);
 
 		$out['bezirk'] = $this->searchTable(
 			'fs_bezirk',
-			array('name'),
+			['name'],
 			$q,
-			array(
+			[
 				'name' => '`name`',
 				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 				'teaser' => 'CONCAT("")'
-			)
+			]
 		);
 
 		$out['betrieb'] = $this->searchTable(
 			'fs_betrieb',
-			array('name', 'stadt', 'plz', 'str'),
+			['name', 'stadt', 'plz', 'str'],
 			$q,
-			array(
+			[
 				'name' => '`name`',
 				'click' => 'CONCAT("betrieb(",`id`,");")',
 				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
-			),
+			],
 			$regions
 		 );
 
 		return $out;
 	}
 
-	public function searchTable($table, $fields, $query, $show = array(), $regions_to_search = false): array
+	public function searchTable($table, $fields, $query, $show = [], $regions_to_search = false): array
 	{
 		$q = trim($query);
 
-		str_replace(array(',', ';', '+', '.'), ' ', $q);
+		str_replace([',', ';', '+', '.'], ' ', $q);
 
 		do {
 			$q = str_replace('  ', ' ', $q);
@@ -100,17 +100,51 @@ class SearchGateway extends BaseGateway
 					 ' . $show['name'] . ' AS name,
 					 ' . $show['click'] . ' AS click,
 					 ' . $show['teaser'] . ' AS teaser
-	
-		
+
+
 			FROM 	' . $table . '
-	
+
 			WHERE ' . $fsql . ' LIKE ' . implode(' AND ' . $fsql . ' LIKE ', $terms) . '
 			' . $fs_sql . '
-	
+
 			ORDER BY `name`
-				
+
 			LIMIT 0,50
-			
+
 		');
+	}
+
+	/**
+	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
+	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 * @param array|null $groupIds the groupids a person must be in to be found. Set to null to query over all users.
+	 */
+	public function searchUserInGroups(string $q, ?array $groupIds = []): array
+	{
+		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
+		$q = mb_ereg_replace('\W', ' ', $q);
+		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
+		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
+		$searchString = implode(' ',
+			array_map(
+				function ($a) { return '+' . $a . '*'; },
+				array_filter(
+					explode(' ', $q),
+					function ($v) { return mb_strlen($v) > 2; }
+					)
+			)
+		);
+		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
+		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
+		$groupBy = ' GROUP BY fs.id';
+		if ($groupIds === null) {
+			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
+		} else {
+			return $this->db->fetchAll(
+				$select . ', fs_foodsaver_has_bezirk hb WHERE ' .
+				$fulltextCondition .
+				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')' . $groupBy,
+				array_merge([$searchString], $groupIds));
+		}
 	}
 }

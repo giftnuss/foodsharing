@@ -6,11 +6,11 @@ $alumni_id = \Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::TEAM_ALUMNI
 $I = new AcceptanceTester($scenario);
 
 $boardMember = $I->createFoodsaver();
-$I->addBezirkMember($board_id, $boardMember['id']);
+$I->addRegionMember($board_id, $boardMember['id']);
 $administrationMember = $I->createFoodsaver();
-$I->addBezirkMember($administration_id, $administrationMember['id']);
+$I->addRegionMember($administration_id, $administrationMember['id']);
 $alumniMember = $I->createFoodsaver();
-$I->addBezirkMember($alumni_id, $alumniMember['id']);
+$I->addRegionMember($alumni_id, $alumniMember['id']);
 
 $I->wantTo('Check if the team page lists board and active members and the alumni subpage only alumni members');
 

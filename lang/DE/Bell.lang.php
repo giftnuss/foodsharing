@@ -1,8 +1,6 @@
 <?php
 global $g_lang;
 
-$g_lang['forum_answer_title'] = '{forum}';
-$g_lang['forum_answer'] = '{user} hat Dir geantwortet';
 $g_lang['no_bells'] = 'Keine Benachrichtigungen';
 $g_lang['blog_new_check_title'] = 'Neuer Blogartikel';
 $g_lang['blog_new_check'] = '{title}';

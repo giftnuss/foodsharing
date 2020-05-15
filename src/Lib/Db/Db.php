@@ -5,6 +5,7 @@ namespace Foodsharing\Lib\Db;
 use Exception;
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\InfluxMetrics;
 use mysqli;
 
 class Db
@@ -30,9 +31,14 @@ class Db
 	 */
 	protected $session;
 
+	/**
+	 * @var InfluxMetrics
+	 */
+	protected $influxMetrics;
+
 	public function __construct()
 	{
-		$this->values = array();
+		$this->values = [];
 	}
 
 	/**
@@ -49,6 +55,14 @@ class Db
 	public function setMem(Mem $mem)
 	{
 		$this->mem = $mem;
+	}
+
+	/**
+	 * @required
+	 */
+	public function setInfluxMetrics(InfluxMetrics $influxMetrics)
+	{
+		$this->influxMetrics = $influxMetrics;
 	}
 
 	/**
@@ -72,9 +86,9 @@ class Db
 	 */
 	public function sql($query)
 	{
-		$start = microtime(true);
+		$start = hrtime(true);
 		$res = $this->mysqli->query($query);
-		$duration = microtime(true) - $start;
+		$duration = intdiv(hrtime(true) - $start, 1e6);
 
 		if ($res == false) {
 			error_log('SQL QUERY ERROR URL ' . ($_SERVER['REQUEST_URI'] ?? $_SERVER['argv'][0]) . ' IN ' . $query . ' : ' . $this->mysqli->error);
@@ -82,6 +96,7 @@ class Db
 		} else {
 			$this->debug->addQuery($query, $duration, true);
 		}
+		$this->influxMetrics->addDbQuery($duration);
 
 		return $res;
 	}
@@ -107,7 +122,7 @@ class Db
 	 */
 	public function qCol($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_array()) {
 				$out[] = $row[0];
@@ -204,7 +219,7 @@ class Db
 	 */
 	public function q($sql)
 	{
-		$out = array();
+		$out = [];
 		if ($res = $this->sql($sql)) {
 			while ($row = $res->fetch_assoc()) {
 				foreach ($row as $i => $r) {

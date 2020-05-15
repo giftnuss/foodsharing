@@ -30,7 +30,7 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$regionId = $this->region['id'];
 		$this->regionMember = $this->tester->createFoodsaver(null, ['bezirk_id' => $regionId]);
 		$this->regionAdmin = $this->tester->createAmbassador(null, ['bezirk_id' => $regionId]);
-		$this->tester->addBezirkAdmin($regionId, $this->regionAdmin['id']);
+		$this->tester->addRegionAdmin($regionId, $this->regionAdmin['id']);
 	}
 
 	public function testUpdateProfile()
@@ -261,5 +261,25 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$foodsavers = $this->gateway->getFoodsaversWithoutAmbassadors();
 
 		$this->tester->assertCount(3, $foodsavers);
+	}
+
+	public function testFoodsaverExists()
+	{
+		$randomNotExistingFsId = 1238513513;
+		$this->tester->assertFalse($this->gateway->foodsaverExists($randomNotExistingFsId));
+		$fs = $this->tester->createFoodsaver();
+		$this->tester->assertTrue($this->gateway->foodsaverExists($fs['id']));
+		$this->gateway->deleteFoodsaver($fs['id']);
+		$this->tester->assertFalse($this->gateway->foodsaverExists($fs['id']));
+	}
+
+	public function testFoodsaversExist()
+	{
+		$randomNotExistingFsId = 1238513513;
+		$fs = $this->tester->createFoodsaver();
+		$fs2 = $this->tester->createFoodsaver();
+		$this->tester->assertFalse($this->gateway->foodsaversExist([$randomNotExistingFsId, $fs['id']]));
+		$this->tester->assertTrue($this->gateway->foodsaversExist([$fs['id']]));
+		$this->tester->assertTrue($this->gateway->foodsaversExist([$fs['id'], $fs2['id']]));
 	}
 }

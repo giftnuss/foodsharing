@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Buddy;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Services\ImageService;
 
@@ -29,7 +30,7 @@ class BuddyXhr extends Control
 			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . (int)$_GET['id']);
 			$this->bellGateway->delBellsByIdentifier('buddy-' . (int)$_GET['id'] . $this->session->id());
 
-			$buddy_ids = array();
+			$buddy_ids = [];
 			if ($b = $this->session->get('buddy-ids')) {
 				$buddy_ids = $b;
 			}
@@ -38,36 +39,37 @@ class BuddyXhr extends Control
 
 			$this->session->set('buddy-ids', $buddy_ids);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$(".buddyRequest").remove();pulseInfo("Jetzt kennt Ihr Euch!");'
-			);
+			];
 		}
 
 		if ($this->gateway->buddyRequest($_GET['id'], $this->session->id())) {
+			$bellData = new Bell();
 			// language string for title
-			$title = 'buddy_request_title';
+			$bellData->title = 'buddy_request_title';
 
 			// language string for body too
-			$body = 'buddy_request';
+			$bellData->body = 'buddy_request';
 
 			// icon css class
-			$icon = $this->imageService->img($this->session->user('photo'));
+			$bellData->icon = $this->imageService->img($this->session->user('photo'));
 
 			// whats happen when click on the bell content
-			$link_attributes = array('href' => '/profile/' . (int)$this->session->id() . '');
+			$bellData->link_attributes = ['href' => '/profile/' . (int)$this->session->id() . ''];
 
 			// variables for the language strings
-			$vars = array('name' => $this->session->user('name'));
+			$bellData->vars = ['name' => $this->session->user('name')];
 
-			$identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
+			$bellData->identifier = 'buddy-' . $this->session->id() . '-' . (int)$_GET['id'];
 
-			$this->bellGateway->addBell($_GET['id'], $title, $body, $icon, $link_attributes, $vars, $identifier);
+			$this->bellGateway->addBell($_GET['id'], $bellData);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => '$(".buddyRequest").remove();pulseInfo("Anfrage versendet!");'
-			);
+			];
 		}
 	}
 
@@ -75,9 +77,9 @@ class BuddyXhr extends Control
 	{
 		$this->gateway->removeRequest($_GET['id'], $this->session->id());
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseInfo("Anfrage gelöscht");$(".buddyreq-' . (int)$_GET['id'] . '").remove();'
-		);
+		];
 	}
 }

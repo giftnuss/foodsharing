@@ -5,12 +5,13 @@ namespace Foodsharing\Modules\PassportGenerator;
 use Endroid\QrCode\QrCode;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use setasign\Fpdi\Tcpdf\Fpdi;
-use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
-use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 
 final class PassportGeneratorControl extends Control
 {
@@ -102,12 +103,12 @@ final class PassportGeneratorControl extends Control
 
 	public function generate(array $foodsavers): void
 	{
-		$tmp = array();
+		$tmp = [];
 		foreach ($foodsavers as $foodsaver) {
 			$tmp[$foodsaver] = (int)$foodsaver;
 		}
 		$foodsavers = $tmp;
-		$is_generated = array();
+		$is_generated = [];
 
 		$pdf = new Fpdi();
 		$pdf->AddPage();
@@ -119,7 +120,7 @@ final class PassportGeneratorControl extends Control
 		$y = 0;
 		$card = 0;
 
-		$noPhoto = array();
+		$noPhoto = [];
 
 		end($foodsavers);
 
@@ -131,8 +132,7 @@ final class PassportGeneratorControl extends Control
 				if (empty($foodsaver['photo'])) {
 					$noPhoto[] = $foodsaver['name'] . ' ' . $foodsaver['nachname'];
 
-					$this->bellGateway->addBell(
-						$foodsaver['id'],
+					$bellData = Bell::create(
 						'passgen_failed_title',
 						'passgen_failed',
 						'fas fa-camera',
@@ -140,6 +140,7 @@ final class PassportGeneratorControl extends Control
 						['user' => $this->session->user('name')],
 						'pass-fail-' . $foodsaver['id']
 					);
+					$this->bellGateway->addBell($foodsaver['id'], $bellData);
 					//continue;
 				}
 
@@ -190,14 +191,14 @@ final class PassportGeneratorControl extends Control
 
 				$pdf->useTemplate($fs_logo, 13.5 + $x, 13.6 + $y, 29.8);
 
-				$style = array(
+				$style = [
 					'vpadding' => 'auto',
 					'hpadding' => 'auto',
-					'fgcolor' => array(0, 0, 0),
+					'fgcolor' => [0, 0, 0],
 					'bgcolor' => false, //array(255,255,255)
 					'module_width' => 1, // width of a single module in points
 					'module_height' => 1 // height of a single module in points
-				);
+				];
 
 				// QRCODE,L : QR-CODE Low error correction
 				$pdf->write2DBarcode('https://foodsharing.de/profile/' . $fs_id, 'QRCODE,L', 70.5 + $x, 43 + $y, 20, 20, $style, 'N');

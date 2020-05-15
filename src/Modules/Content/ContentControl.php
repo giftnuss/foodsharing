@@ -5,9 +5,9 @@ namespace Foodsharing\Modules\Content;
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
-use Parsedown;
 use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Permissions\ContentPermissions;
+use Parsedown;
 
 class ContentControl extends Control
 {
@@ -48,9 +48,9 @@ class ContentControl extends Control
 
 				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
 					$this->flashMessageHelper->info($this->translationHelper->s('content_deleted'));
@@ -67,9 +67,9 @@ class ContentControl extends Control
 
 				$this->pageHelper->addContent($this->content_form());
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				)), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translationHelper->s('actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
 					$this->pageHelper->addBread($cnt['title']);
@@ -83,29 +83,29 @@ class ContentControl extends Control
 				$this->pageHelper->addBread($this->translationHelper->s('content_bread'), '/?page=content');
 
 				if ($data = $this->contentGateway->list()) {
-					$rows = array();
+					$rows = [];
 					foreach ($data as $d) {
-						$rows[] = array(
-							array('cnt' => $d['id']),
-							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])))
-							));
+						$rows[] = [
+							['cnt' => $d['id']],
+							['cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'],
+							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])])
+							]];
 					}
 
-					$table = $this->v_utils->v_tablesorter(array(
-						array('name' => 'ID', 'width' => 30),
-						array('name' => $this->translationHelper->s('name')),
-						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
-					), $rows);
+					$table = $this->v_utils->v_tablesorter([
+						['name' => 'ID', 'width' => 30],
+						['name' => $this->translationHelper->s('name')],
+						['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50]
+					], $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
 					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
 				}
 
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-					array('href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content'))
-				)), 'Aktionen'), CNT_RIGHT);
+				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+					['href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content')]
+				]), 'Aktionen'), CNT_RIGHT);
 			}
 		}
 	}
@@ -255,7 +255,7 @@ class ContentControl extends Control
 		$this->pageHelper->addBread('F.A.Q');
 		$this->pageHelper->addTitle('F.A.Q.');
 
-		$cat_ids = array(1, 6, 7);
+		$cat_ids = [1, 6, 7];
 		if ($this->session->may('fs')) {
 			$cat_ids[] = 2;
 			$cat_ids[] = 4;
@@ -343,32 +343,41 @@ class ContentControl extends Control
 		}
 	}
 
+	public function releaseNotes(): void
+	{
+		$this->pageHelper->addBread($this->translationHelper->s('release-notes'));
+		$this->pageHelper->addTitle($this->translationHelper->s('release-notes'));
+		$markdown = $this->parseGitlabLinks(file_get_contents('release-notes.md'));
+		$Parsedown = new Parsedown();
+		$cl['changelog'] = '<a class="float-right" href="/?page=content&sub=changelog">' . $this->translationHelper->s('current_changelog') . '</a>';
+		$cl['title'] = $this->translationHelper->s('release-notes');
+		$cl['body'] = $Parsedown->parse($markdown);
+		$this->pageHelper->addContent($this->view->releaseNotes($cl));
+	}
+
 	public function changelog(): void
 	{
-		$this->pageHelper->addBread('Changelog');
-		$this->pageHelper->addTitle('Changelog');
-		$markdown = file_get_contents('CHANGELOG.md');
-		$markdown = preg_replace('/\@(\S+)/', '[@\1](https://gitlab.com/\1)', $markdown);
-		$markdown = preg_replace('/!([0-9]+)/', '[!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
-		$markdown = preg_replace('/#([0-9]+)/', '[#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+		$this->pageHelper->addBread($this->translationHelper->s('changelog'));
+		$this->pageHelper->addTitle($this->translationHelper->s('changelog'));
+		$markdown = $this->parseGitlabLinks(file_get_contents('CHANGELOG.md'));
 		$Parsedown = new Parsedown();
+		$cl['title'] = $this->translationHelper->s('changelog');
 		$cl['body'] = $Parsedown->parse($markdown);
-		$cl['title'] = 'Changelog';
 		$this->pageHelper->addContent($this->view->simple($cl));
 	}
 
 	private function content_form($title = 'Content Management')
 	{
-		return $this->v_utils->v_form('faq', array(
+		return $this->v_utils->v_form('faq', [
 			$this->v_utils->v_field(
-				$this->v_utils->v_form_text('name', array('required' => true)) .
-				$this->v_utils->v_form_text('title', array('required' => true)),
+				$this->v_utils->v_form_text('name', ['required' => true]) .
+				$this->v_utils->v_form_text('title', ['required' => true]),
 
 				$title,
-				array('class' => 'ui-padding')
+				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', array('public_content' => true, 'nowrapper' => true)), 'Inhalt')
-		), array('submit' => $this->translationHelper->s('save')));
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', ['public_content' => true, 'nowrapper' => true]), 'Inhalt')
+		], ['submit' => $this->translationHelper->s('save')]);
 	}
 
 	private function handle_edit(): void

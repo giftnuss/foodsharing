@@ -3,11 +3,12 @@
 namespace Foodsharing\Modules\Region;
 
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Info\FollowStatus;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
 
 class ForumFollowerGateway extends BaseGateway
 {
-	public function getThreadFollower($fs_id, $thread_id)
+	public function getThreadEmailFollower($fs_id, $thread_id)
 	{
 		return $this->db->fetchAll('
 			SELECT 	fs.name,
@@ -20,7 +21,8 @@ class ForumFollowerGateway extends BaseGateway
 			AND 	tf.theme_id = :theme_id
 			AND 	tf.foodsaver_id != :fs_id
 			AND		fs.deleted_at IS NULL
-		', ['theme_id' => $thread_id, 'fs_id' => $fs_id]);
+			AND		tf.infotype = :infotype_email
+		', [':theme_id' => $thread_id, ':fs_id' => $fs_id, ':infotype_email' => InfoType::EMAIL]);
 	}
 
 	public function getForumThreads(int $fsId): array
@@ -41,17 +43,41 @@ class ForumFollowerGateway extends BaseGateway
 		', [':fsId' => $fsId]);
 	}
 
-	public function isFollowing($fsId, $threadId)
+	public function getThreadBellFollower($thread_id, $fs_id)
+	{
+		return $this->db->fetchAll('
+			SELECT 	DISTINCT fs.id AS id
+
+			FROM 	fs_foodsaver fs,
+					fs_theme_follower tf
+			WHERE 	tf.foodsaver_id = fs.id
+			AND 	tf.theme_id = :theme_id
+			AND		fs.deleted_at IS NULL
+			AND		tf.bell_notification = :followstatus_enabled
+			AND		fs.deleted_at IS NULL
+			AND		fs.id != :fsId
+		', [':theme_id' => $thread_id, ':fsId' => $fs_id, ':followstatus_enabled' => FollowStatus::ENABLED]);
+	}
+
+	public function isFollowingEmail($fsId, $threadId)
 	{
 		return $this->db->exists(
 			'fs_theme_follower',
-			['theme_id' => $threadId, 'foodsaver_id' => $fsId]
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'infotype' => InfoType::EMAIL]
 		);
 	}
 
-	public function followThread($fs_id, $thread_id)
+	public function isFollowingBell($fsId, $threadId)
 	{
-		return $this->db->insertIgnore(
+		return $this->db->exists(
+			'fs_theme_follower',
+			['theme_id' => $threadId, 'foodsaver_id' => $fsId, 'bell_notification' => FollowStatus::ENABLED]
+		);
+	}
+
+	public function followThreadByEmail($fs_id, $thread_id)
+	{
+		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
 			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::EMAIL]
 		);
@@ -69,25 +95,27 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function unfollowThread(int $fsId, int $threadId): int
+	public function followThreadByBell($fs_id, $thread_id)
 	{
-		return $this->db->delete(
+		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $threadId
-			]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::ENABLED]
 		);
 	}
 
-	public function unfollowThreads(int $fsId, array $threadIds): int
+	public function unfollowThreadByEmail($fs_id, $thread_id)
 	{
-		return $this->db->delete(
+		return $this->db->insertOrUpdate(
 			'fs_theme_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $threadIds
-			]
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'infotype' => InfoType::NONE]
+		);
+	}
+
+	public function unfollowThreadByBell($fs_id, $thread_id)
+	{
+		return $this->db->insertOrUpdate(
+			'fs_theme_follower',
+			['foodsaver_id' => $fs_id, 'theme_id' => $thread_id, 'bell_notification' => FollowStatus::DISABLED]
 		);
 	}
 
@@ -134,5 +162,19 @@ class ForumFollowerGateway extends BaseGateway
 
 			$this->db->execute($query);
 		}
+	}
+
+	/**
+	 * Recreates the default behaviour of pre may 2020 release by adding bell notifications for everybody who did not set/disable
+	 * email notifications for a certain thread.
+	 *
+	 * @return int number of inserted entries
+	 */
+	public function createFollowerEntriesForExistingThreads(): int
+	{
+		$query = 'INSERT IGNORE INTO fs_theme_follower (foodsaver_id, theme_id, infotype, bell_notification)
+				SELECT foodsaver_id, theme_id, 0, 1 FROM fs_theme_post';
+
+		return $this->db->execute($query)->rowCount();
 	}
 }

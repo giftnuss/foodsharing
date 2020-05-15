@@ -160,12 +160,12 @@ class EventGateway extends BaseGateway
 				fe.event_id = :event_id
 		', [':event_id' => $event_id]);
 
-		$out = array(
-			'invited' => array(),
-			'accepted' => array(),
-			'maybe' => array(),
-			'may' => array()
-		);
+		$out = [
+			'invited' => [],
+			'accepted' => [],
+			'maybe' => [],
+			'may' => []
+		];
 		foreach ($invites as $i) {
 			$out['may'][$i['id']] = true;
 			if ($i['status'] == InvitationStatus::INVITED) {
@@ -311,54 +311,45 @@ class EventGateway extends BaseGateway
 		return true;
 	}
 
-	public function addInviteStatus(int $event_id, int $foodsaver_id, int $status): bool
+	/**
+	 * Sets the invitation status for multiple foodsavers.
+	 *
+	 * @throws \Exception if the database query fails (which should usually not happen)
+	 */
+	public function addInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
 	{
-		$this->db->insertOrUpdate(
-			'fs_foodsaver_has_event',
-			[
-				'status' => $status,
-				'foodsaver_id' => $foodsaver_id,
-				'event_id' => $event_id
-			]
-		);
+		$parts = array_chunk($foodsaverIds, 100);
+		foreach ($parts as $part) {
+			foreach ($part as $id) {
+				$data[] = [
+					'status' => $status,
+					'foodsaver_id' => $id,
+					'event_id' => $eventId
+				];
+			}
+			$this->db->insertOrUpdateMultiple(
+				'fs_foodsaver_has_event',
+				$data
+			);
+		}
 
 		return true;
 	}
 
 	public function inviteFullRegion(int $region_id, int $event_id, bool $invite_subs = false): void
 	{
-		$b_sql = '= ' . $region_id;
-
+		$regionIds = [$region_id];
 		if ($invite_subs) {
 			$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($region_id);
-			$b_sql = 'IN(' . implode(',', $regionIds) . ')';
 		}
 
-		if ($fsids = $this->db->fetchAllValues('
-			SELECT 	`foodsaver_id`
-			FROM	`fs_foodsaver_has_bezirk`
-			WHERE 	`bezirk_id` ' . $b_sql . '
-			AND 	`active` = 1
-		')
-		) {
-			$invited = array();
-			if ($inv = $this->db->fetchAllValues(
-				'
-				SELECT `foodsaver_id` FROM `fs_foodsaver_has_event`
-				WHERE `event_id` = :event_id',
-				[':event_id' => $event_id]
-			)
-			) {
-				foreach ($inv as $i) {
-					$invited[$i] = true;
-				}
-			}
+		$foodsaverIds = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_bezirk', 'foodsaver_id',
+			['bezirk_id' => $regionIds, 'active' => 1]
+		);
+		$invited = $this->db->fetchAllValuesByCriteria('fs_foodsaver_has_event', 'foodsaver_id',
+			['event_id' => $event_id]
+		);
 
-			foreach ($fsids as $id) {
-				if (!isset($invited[$id])) {
-					$this->addInviteStatus($event_id, $id, InvitationStatus::INVITED);
-				}
-			}
-		}
+		$this->addInviteStatus($event_id, array_diff($foodsaverIds, $invited), InvitationStatus::INVITED);
 	}
 }

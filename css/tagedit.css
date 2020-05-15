@@ -1,0 +1,5 @@
+/* peoplepicker UI fix for #867 */
+.ui-autocomplete .ui-menu-item:hover > a {
+  color: var(--white);
+  text-decoration: none;
+}

@@ -1,0 +1,4 @@
+node_modules
+dist
+# temporarily, unless it's adjusted and ported to TypeScript:
+test.js

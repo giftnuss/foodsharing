@@ -4,14 +4,15 @@ namespace Foodsharing\Modules\Core;
 
 use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class View
 {
@@ -33,6 +34,7 @@ class View
 	protected $identificationHelper;
 	protected $dataHelper;
 	protected $translationHelper;
+	protected $translator;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -45,7 +47,8 @@ class View
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
 	) {
 		$this->twig = $twig;
 		$this->v_utils = $viewUtils;
@@ -58,6 +61,7 @@ class View
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	public function setSub($sub)
@@ -76,11 +80,11 @@ class View
 		}
 
 		return '
-		<div class="top corner-all">
+		<div class="content-top corner-all">
 			' . $icon . '
 			<h3>' . $title . '</h3>
 			' . $subtitle . '
-			<div style="clear:both;"></div>		
+			<div style="clear:both;"></div>
 		</div>';
 	}
 
@@ -107,11 +111,11 @@ class View
 			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
 		</p>
 		<p>
-			Online-Sprachkonferenzen machen wir mit Mumble	
+			Online-Sprachkonferenzen machen wir mit Mumble
 		</p>
 		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
 		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
-		', 'Ort', array('class' => 'ui-padding'));
+		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -124,8 +128,8 @@ class View
 			' . $location['street'] . '<br />
 			' . $location['zip'] . ' ' . $location['city'] . '
 		</p>
-				
-		', 'Ort', array('class' => 'ui-padding'));
+
+		', 'Ort', ['class' => 'ui-padding']);
 
 		return $out;
 	}
@@ -145,7 +149,7 @@ class View
 		}
 
 		return '
-					
+
 		<div class="welcome ui-padding margin-bottom ui-corner-all">
 			' . $img . '
 			<div class="welcome_profile_name">
@@ -156,7 +160,7 @@ class View
 		</div>';
 	}
 
-	public function fsAvatarList($foodsaver, $option = array())
+	public function fsAvatarList($foodsaver, $option = [])
 	{
 		if (!is_array($foodsaver)) {
 			return '';
@@ -215,7 +219,7 @@ class View
 		return $out;
 	}
 
-	public function menu($items, $option = array())
+	public function menu($items, $option = [])
 	{
 		$title = false;
 		if (isset($option['title'])) {
@@ -270,80 +274,7 @@ class View
 		</div>';
 	}
 
-	public function peopleChooser($id, $option = array())
-	{
-		$this->pageHelper->addJs('
-			var date = new Date(); 
-			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
-			var localsource = [];
-			$.ajax({
-				url: "/api/search/legacyindex",
-				dataType: "json",
-				success: function(json){
-					
-					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
-					{
-						
-						for(y=0;y<json[0].result.length;y++)
-						{
-							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
-						}
-						
-					}
-				},
-				complete: function(){
-					$("#' . $id . ' input.tag").tagedit({
-						autocompleteOptions: {
-							delay: 0,
-							source: function(request, response) { 
-					            /* Remote results only if string > 3: */
-								
-								if(request.term.length > 3)
-								{
-									$.ajax({
-						                url: "/xhrapp.php?app=msg&m=people",
-										data: {term:request.term},
-						                dataType: "json",
-						                success: function(data) {
-											response(data);
-											// following doesn\'t work somehow => ignoring
-											// local = [];
-											// term = request.term.toLowerCase();
-											// for(i=0;i<localsource.length;i++)
-											// {
-											// 	if(localsource[i].value.indexOf(term) > 0)
-											// 	{
-											// 		local.push(localsource[i]);
-											// 	}
-											// }
-											// response(merge(local,data,"id"));
-						                }
-						            });
-								}
-								else
-								{
-									response(localsource);
-								}
-								
-					        },
-							minLength: 1
-						},
-						allowEdit: false,
-						allowAdd: false,
-						animSpeed:1
-					});
-				}
-			});
-				
-				var localsource = [];
-		');
-
-		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-
-		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
-	}
-
-	public function latLonPicker($id, $options = array())
+	public function latLonPicker($id, $options = [])
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation();
@@ -381,12 +312,12 @@ class View
 
 	public function simpleContent($content)
 	{
-		$out = $this->v_utils->v_field($content['body'], $content['title'], array('class' => 'ui-padding'));
+		$out = $this->v_utils->v_field($content['body'], $content['title'], ['class' => 'ui-padding']);
 
 		return $out;
 	}
 
-	public function vueComponent($id, $component, $props = array(), $data = array())
+	public function vueComponent($id, $component, $props = [], $data = [])
 	{
 		return $this->twig->render('partials/vue-wrapper.twig', [
 			'id' => $id,

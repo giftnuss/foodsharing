@@ -36,7 +36,7 @@ module.exports = {
       '@': resolve('src'),
       '@php': resolve('../src'),
       '>': resolve('test'),
-      '@translations': resolve('../lang')
+      '@translations': resolve('../translations')
     }
   },
   module: {

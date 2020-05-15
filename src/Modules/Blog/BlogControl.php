@@ -6,8 +6,8 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Permissions\BlogPermissions;
 
 class BlogControl extends Control
 {
@@ -93,12 +93,12 @@ class BlogControl extends Control
 				$this->flashMessageHelper->info($this->translationHelper->s('blog_entry_empty'));
 			}
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+				[
 					'href' => '/?page=blog&sub=add',
 					'name' => $this->translationHelper->s('new_article')
-				)
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+				]
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		}
 	}
 
@@ -111,7 +111,7 @@ class BlogControl extends Control
 						$this->pageHelper->addTitle($post['name']);
 						$this->pageHelper->addBread($post['name'], '/?page=blog&post=' . (int)$post['id']);
 						$this->pageHelper->addContent($this->view->topbar($post['name'], $this->timeHelper->niceDate($post['time_ts'])));
-						$this->pageHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], array('class' => 'ui-padding')));
+						$this->pageHelper->addContent($this->v_utils->v_field($post['body'], $post['name'], ['class' => 'ui-padding']));
 					}
 				}
 			}
@@ -137,9 +137,9 @@ class BlogControl extends Control
 
 			$this->pageHelper->addContent($this->view->blog_entry_form($regions, true));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
 			$this->flashMessageHelper->info('Du darfst keine Artikel erstellen!');
 			$this->routeHelper->goPage();
@@ -176,9 +176,9 @@ class BlogControl extends Control
 
 			$this->pageHelper->addContent($this->view->blog_entry_form($regions));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('blog', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_LEFT);
+			]), $this->translationHelper->s('actions')), CNT_LEFT);
 		} else {
 			$this->flashMessageHelper->info('Diesen Artikel kannst Du nicht bearbeiten');
 			$this->routeHelper->goPage();
@@ -189,7 +189,7 @@ class BlogControl extends Control
 	{
 		global $g_data;
 		if ($this->blogPermissions->mayAdministrateBlog() && $this->submitted()) {
-			$data = $this->model->getValues(array('time', 'foodsaver_id'), 'blog_entry', $_GET['id']);
+			$data = $this->blogGateway->getOne_blog_entry($_GET['id']);
 
 			$g_data['foodsaver_id'] = $data['foodsaver_id'];
 			$g_data['time'] = $data['time'];

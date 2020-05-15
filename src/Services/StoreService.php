@@ -3,12 +3,17 @@
 namespace Foodsharing\Services;
 
 use Carbon\Carbon;
+use Foodsharing\Modules\Message\MessageGateway;
+use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\TeamStatus;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreService
 {
+	private $messageGateway;
 	private $storeGateway;
+	private $translator;
 	const MAX_SLOTS_PER_PICKUP = 10;
 	// status constants for getAvailablePickupStatus
 	const STATUS_RED_TODAY_TOMORROW = 3;
@@ -16,9 +21,11 @@ class StoreService
 	const STATUS_YELLOW_5_DAYS = 1;
 	const STATUS_GREEN = 0;
 
-	public function __construct(StoreGateway $storeGateway)
+	public function __construct(MessageGateway $messageGateway, StoreGateway $storeGateway, TranslatorInterface $translator)
 	{
+		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
+		$this->translator = $translator;
 	}
 
 	/**
@@ -27,7 +34,7 @@ class StoreService
 	 *   * handle transition between regular and onetime pickup
 	 *   * (does not convert additional back to regular as the gain is little).
 	 */
-	public function changePickupSlots(int $storeId, Carbon $date, int $newTotalSlots): bool
+	public function changePickupSlots(int $storeId, \DateTimeInterface $date, int $newTotalSlots): bool
 	{
 		$occupiedSlots = count($this->storeGateway->getPickupSignupsForDate($storeId, $date));
 		$pickups = $this->storeGateway->getOnetimePickupsForRange($storeId, $date, $date);
@@ -76,7 +83,6 @@ class StoreService
 	 * Returns the time of the next available pickup slot or null if none is available up to the
 	 * given maximum date.
 	 *
-	 * @param int $storeId
 	 * @param Carbon $maxDate end of date range
 	 *
 	 * @return \DateTime the slot's time or null
@@ -102,10 +108,6 @@ class StoreService
 	/**
 	 * Returns the available pickup status of a store: 1, 2, or 3 if there is a free pickup slot in the next day,
 	 * three days, or five days, respectively. Returns 0 if there is no free slot in the next five days.
-	 *
-	 * @param int $storeId
-	 *
-	 * @return int
 	 */
 	public function getAvailablePickupStatus(int $storeId): int
 	{
@@ -142,5 +144,32 @@ class StoreService
 		}
 
 		return false;
+	}
+
+	public function setStoreNameInConversations(int $storeId, string $storeName): void
+	{
+		if ($tcid = $this->storeGateway->getBetriebConversation($storeId, false)) {
+			$team_conversation_name = $this->translator->trans('store.team_conversation_name', ['{name}' => $storeName]);
+			$this->messageGateway->renameConversation($tcid, $team_conversation_name);
+		}
+		if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
+			$springer_conversation_name = $this->translator->trans('store.springer_conversation_name', ['{name}' => $storeName]);
+			$this->messageGateway->renameConversation($scid, $springer_conversation_name);
+		}
+	}
+
+	/**
+	 * @return StoreForTopbarMenu[]
+	 */
+	public function getFilteredStoresForUser(int $userId): array
+	{
+		$filteredStoresForUser = $this->storeGateway->listFilteredStoresForFoodsaver($userId);
+
+		foreach ($filteredStoresForUser as $store) {
+			// add info about the next free pickup slot to the store
+			$store->pickupStatus = $this->getAvailablePickupStatus($store->id);
+		}
+
+		return $filteredStoresForUser;
 	}
 }

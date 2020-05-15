@@ -51,7 +51,7 @@ $g_lang['basket_not_picked_up'] = 'Nein, {gender} ist leider nicht wie verabrede
 $g_lang['basket_deleted_other_reason'] = 'Die Lebensmittel wurden von jemand anderem abgeholt.';
 $g_lang['basket_request_deny'] = 'Ich möchte diese Anfrage ablehnen.';
 $g_lang['basket_not_active'] = 'Essenskorb ist jetzt nicht mehr aktiv!';
-$g_lang['basket_picked_up'] = '<b>Dieser Essenskorb ist leider nicht mehr verfügbar!</b> <br><br> Bist Du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen oder stelle selbst einen Essenskorb ein!<br><br>Auf unserer Karte findest Du gegebenenfalls weitere Essenksörbe in Deiner Gegend.';
+$g_lang['basket_picked_up'] = '<b>Dieser Essenskorb ist leider nicht mehr verfügbar!</b> <br><br> Bist Du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen oder stelle selbst einen Essenskorb ein!<br><br>Auf unserer Karte findest Du gegebenenfalls weitere Essenskörbe in Deiner Gegend.';
 
 $g_lang['basket_detail_login_hint'] = 'Für detaillierte Infos musst Du eingeloggt sein. Bist Du noch nicht als Foodsharer registriert? Dann klick oben auf <b>Mach mit!</b> um loszulegen!';
 $g_lang['basket_on_map'] = 'Alle Körbe auf der Karte';

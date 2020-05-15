@@ -44,9 +44,9 @@ class FAQAdminControl extends Control
 
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('faq', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_RIGHT);
+			]), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 			if ($this->faqGateway->del_faq($id)) {
 				$this->flashMessageHelper->info($this->translationHelper->s('faq_deleted'));
@@ -62,9 +62,9 @@ class FAQAdminControl extends Control
 
 			$this->pageHelper->addContent($this->view->faq_form($this->faqGateway->getBasics_faq_category()));
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 				$this->routeHelper->pageLink('faq', 'back_to_overview')
-			)), $this->translationHelper->s('actions')), CNT_RIGHT);
+			]), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$data = $this->faqGateway->getOne_faq($_GET['id']);
 			print_r($data);
@@ -72,10 +72,10 @@ class FAQAdminControl extends Control
 			$this->pageHelper->addBread($this->translationHelper->s('faq_bread'), '/?page=faq');
 
 			if ($data = $this->faqGateway->get_faq()) {
-				$sort = array();
+				$sort = [];
 				foreach ($data as $d) {
 					if (!isset($sort[$d['faq_kategorie_id']])) {
-						$sort[$d['faq_kategorie_id']] = array();
+						$sort[$d['faq_kategorie_id']] = [];
 					}
 					$sort[$d['faq_kategorie_id']][] = $d;
 				}
@@ -83,18 +83,18 @@ class FAQAdminControl extends Control
 				$categoryData = $this->faqGateway->getBasics_faq_category();
 				$mappedData = array_combine(array_column($categoryData, 'id'), array_column($categoryData, 'name'));
 				foreach ($sort as $key => $data) {
-					$rows = array();
+					$rows = [];
 					foreach ($data as $d) {
-						$rows[] = array(
-							array('cnt' => '<a class="linkrow ui-corner-all" href="/?page=faq&a=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'),
-							array('cnt' => $this->v_utils->v_toolbar(array('id' => $d['id'], 'types' => array('edit', 'delete'), 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])))
-							));
+						$rows[] = [
+							['cnt' => '<a class="linkrow ui-corner-all" href="/?page=faq&a=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'],
+							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])])
+							]];
 					}
 
-					$table = $this->v_utils->v_tablesorter(array(
-						array('name' => $this->translationHelper->s('name')),
-						array('name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50)
-					), $rows);
+					$table = $this->v_utils->v_tablesorter([
+						['name' => $this->translationHelper->s('name')],
+						['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50]
+					], $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, $mappedData[$key]));
 				}
@@ -102,9 +102,9 @@ class FAQAdminControl extends Control
 				$this->flashMessageHelper->info($this->translationHelper->s('faq_empty'));
 			}
 
-			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu(array(
-				array('href' => '/?page=faq&a=neu', 'name' => $this->translationHelper->s('neu_faq'))
-			)), 'Aktionen'), CNT_RIGHT);
+			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+				['href' => '/?page=faq&a=neu', 'name' => $this->translationHelper->s('neu_faq')]
+			]), 'Aktionen'), CNT_RIGHT);
 		}
 	}
 

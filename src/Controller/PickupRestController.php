@@ -75,10 +75,6 @@ final class PickupRestController extends AbstractFOSRestController
 
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
-	 *
-	 * @param int $storeId
-	 * @param string $pickupDate
-	 * @param int $fsId
 	 */
 	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId)
 	{
@@ -162,14 +158,14 @@ final class PickupRestController extends AbstractFOSRestController
 		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
 		$profiles = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$profiles[$user['id']] = RestNormalization::normalizeFoodsaver($user);
+			$profiles[$user['id']] = RestNormalization::normalizeUser($user);
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				if (isset($profiles[$slot['foodsaverId']])) {
 					$slot['profile'] = $profiles[$slot['foodsaverId']];
 				} else {
-					$slot['profile'] = RestNormalization::normalizeFoodsaver($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
+					$slot['profile'] = RestNormalization::normalizeUser($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
 				}
 				unset($slot['foodsaverId']);
 			}

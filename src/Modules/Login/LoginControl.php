@@ -2,38 +2,39 @@
 
 namespace Foodsharing\Modules\Login;
 
+use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Mobile_Detect;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginControl extends Control
 {
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 
 	private $loginGateway;
 	private $settingsGateway;
+	private $contentGateway;
 
-	public function __construct(LoginView $view, LoginGateway $loginGateway, SettingsGateway $settingsGateway)
+	public function __construct(LoginView $view, LoginGateway $loginGateway, ContentGateway $contentGateway, SettingsGateway $settingsGateway)
 	{
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
+		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
 	}
 
 	/**
 	 * @required
-	 *
-	 * @param FormFactoryBuilder $formFactory
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory): void
+	public function setFormFactory(FormFactoryInterface $formFactory): void
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -53,7 +54,7 @@ class LoginControl extends Control
 		if (!$this->session->may()) {
 			$has_subpage = $request->query->has('sub');
 
-			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
+			$form = $this->formFactory->create(LoginForm::class);
 			$form->handleRequest($request);
 
 			if (!$has_subpage) {
@@ -73,10 +74,10 @@ class LoginControl extends Control
 					$action = '/?page=login&ref=' . urlencode($_SERVER['REQUEST_URI']);
 				}
 
-				$params = array(
+				$params = [
 					'action' => $action,
 					'form' => $form->createView(),
-				);
+				];
 
 				$response->setContent($this->render('pages/Login/page.twig', $params));
 			}

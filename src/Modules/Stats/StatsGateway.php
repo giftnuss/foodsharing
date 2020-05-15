@@ -9,9 +9,9 @@ class StatsGateway extends BaseGateway
 {
 	private $statsService;
 
-	public function __construct(Database $db, StatsService $statsService)
+	public function __construct(Database $db, StatsService $statsConnection)
 	{
-		$this->statsService = $statsService;
+		$this->statsService = $statsConnection;
 
 		parent::__construct($db);
 	}

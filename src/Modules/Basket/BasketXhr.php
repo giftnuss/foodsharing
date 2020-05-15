@@ -4,37 +4,37 @@ namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
 use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
-use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
-use Foodsharing\Modules\Message\MessageModel;
 use Foodsharing\Lib\Xhr\XhrResponses;
+use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
+use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Services\ImageService;
 
 class BasketXhr extends Control
 {
 	private $basketGateway;
-	private $messageModel;
+	private $foodsaverGateway;
 	private $timeHelper;
 	private $imageService;
-	private $foodsaverGateway;
+	private $webSocketConnection;
 
 	public function __construct(
 		BasketView $view,
 		BasketGateway $basketGateway,
-		MessageModel $messageModel,
+		FoodsaverGateway $foodsaverGateway,
 		TimeHelper $timeHelper,
 		ImageService $imageService,
-		FoodsaverGateway $foodsaverGateway
+		WebSocketConnection $webSocketConnection
 	) {
-		$this->messageModel = $messageModel;
 		$this->view = $view;
 		$this->basketGateway = $basketGateway;
+		$this->foodsaverGateway = $foodsaverGateway;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;
-		$this->foodsaverGateway = $foodsaverGateway;
+		$this->webSocketConnection = $webSocketConnection;
 
 		parent::__construct();
 
@@ -97,15 +97,15 @@ class BasketXhr extends Control
 
 		$dia->addJs(
 			'
-				
+
 		$("#tel-wrapper").hide();
 		$("#handy-wrapper").hide();
-		
+
 		$("input.input.cb-contact_type[value=\'2\']").on("change", function(){
 			if(this.checked)
 			{
 				$("#tel-wrapper").show();
-				$("#handy-wrapper").show();	
+				$("#handy-wrapper").show();
 			}
 			else
 			{
@@ -113,7 +113,7 @@ class BasketXhr extends Control
 				$("#handy-wrapper").hide();
 			}
 		});
-				
+
 		$(".cb-food_art[value=3]").on("click", function(){
 			if(this.checked)
 			{
@@ -199,7 +199,7 @@ class BasketXhr extends Control
 				$this->session->id()
 			))) {
 			if (isset($data['food_type']) && is_array($data['food_type'])) {
-				$types = array();
+				$types = [];
 				foreach ($data['food_type'] as $foodType) {
 					if ((int)$foodType > 0) {
 						$types[] = (int)$foodType;
@@ -210,7 +210,7 @@ class BasketXhr extends Control
 			}
 
 			if (isset($data['food_art']) && is_array($data['food_art'])) {
-				$kinds = array();
+				$kinds = [];
 				foreach ($data['food_art'] as $foodKind) {
 					if ((int)$foodKind > 0) {
 						$kinds[] = (int)$foodKind;
@@ -303,7 +303,7 @@ class BasketXhr extends Control
 					$dia->setTitle($this->translationHelper->s('basket'));
 					$dia->addContent($this->view->bubbleNoUser($basket));
 				} else {
-					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', array('name' => $basket['fs_name'])));
+					$dia->setTitle($this->translationHelper->sv('basket_foodsaver', ['name' => $basket['fs_name']]));
 					$dia->addContent($this->view->bubble($basket));
 				}
 
@@ -352,57 +352,13 @@ class BasketXhr extends Control
 		return $dia->xhrout();
 	}
 
-	public function infobar(): void
-	{
-		// TODO: rewrite this to an proper API endpoint
-		// and update /client/src/api/baskets.js
-		$this->session->noWrite();
-
-		$xhr = new Xhr();
-
-		$updates = $this->basketGateway->listUpdates($this->session->id());
-		$baskets = $this->basketGateway->listMyBaskets($this->session->id());
-
-		$xhr->addData('baskets', array_map(function ($b) use ($updates) {
-			$basket = [
-				'id' => (int)$b['id'],
-				'description' => html_entity_decode($b['description']),
-				'createdAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-				'updatedAt' => date('Y-m-d\TH:i:s', $b['time_ts']),
-				'requests' => []
-			];
-			foreach ($updates as $update) {
-				if ((int)$update['id'] == $basket['id']) {
-					$time = date('Y-m-d\TH:i:s', $update['time_ts']);
-					$basket['requests'][] = [
-						'user' => [
-							'id' => (int)$update['fs_id'],
-							'name' => $update['fs_name'],
-							'avatar' => $update['fs_photo'],
-							'sleepStatus' => $update['sleep_status'],
-						],
-						'description' => $update['description'],
-						'time' => $time,
-					];
-					if (strcmp($time, $basket['updatedAt']) > 0) {
-						$basket['updatedAt'] = $time;
-					}
-				}
-			}
-
-			return $basket;
-		}, $baskets));
-
-		$xhr->send();
-	}
-
 	public function removeRequest()
 	{
 		if ($request = $this->basketGateway->getRequest($_GET['id'], $_GET['fid'], $this->session->id())) {
 			$dia = new XhrDialog();
 			$dia->addOpt('width', '400');
 			$dia->noOverflow();
-			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', array('name' => $request['fs_name'])));
+			$dia->setTitle($this->translationHelper->sv('basket_foodsaver_close', ['name' => $request['fs_name']]));
 			$gender = $this->translationHelper->genderWord(
 				$request['fs_gender'],
 				'er',
@@ -421,11 +377,11 @@ class BasketXhr extends Control
 						'values' => [
 							[
 								'id' => RequestStatus::DELETED_PICKED_UP,
-								'name' => $this->translationHelper->sv('basket_deleted_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_deleted_picked_up', ['gender' => $gender]),
 							],
 							[
 								'id' => RequestStatus::NOT_PICKED_UP,
-								'name' => $this->translationHelper->sv('basket_not_picked_up', array('gender' => $gender)),
+								'name' => $this->translationHelper->sv('basket_not_picked_up', ['gender' => $gender]),
 							],
 							[
 								'id' => RequestStatus::DELETED_OTHER_REASON,

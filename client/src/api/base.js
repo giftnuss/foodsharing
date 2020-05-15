@@ -5,7 +5,7 @@ const DEFAULT_OPTIONS = {
   mode: 'cors',
   headers: {}
 }
-if (window.fetch) window.fetch.activeFetchCalls = 0
+if (self.fetch) self.fetch.activeFetchCalls = 0
 
 export function getCsrfToken () {
   if (!document.cookie) return null
@@ -24,26 +24,26 @@ export class HTTPError extends Error {
 
 export async function request (path, options = {}) {
   try {
-    window.fetch.activeFetchCalls++
+    self.fetch.activeFetchCalls++
     const o = Object.assign({}, DEFAULT_OPTIONS, options)
     const csrfToken = getCsrfToken()
     if (csrfToken) o.headers['X-CSRF-Token'] = csrfToken
-    const request = new window.Request(BASE_URL + path, o)
-    const res = await window.fetch(request)
+    const request = new self.Request(BASE_URL + path, o)
+    const res = await self.fetch(request)
     if (!res.ok) {
       throw new HTTPError(res.status, res.statusText, request.method, request.url)
     }
     if (res.status === 204) {
-      window.fetch.activeFetchCalls--
+      self.fetch.activeFetchCalls--
       return {}
     } else {
       const json = await res.json()
-      window.fetch.activeFetchCalls--
+      self.fetch.activeFetchCalls--
       return json
     }
   } catch (err) {
     console.error(err)
-    window.fetch.activeFetchCalls--
+    self.fetch.activeFetchCalls--
     throw err
   }
 }

@@ -39,12 +39,12 @@ class TeamView extends View
 
 	public function contactForm($user): string
 	{
-		return $this->v_utils->v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', array(
+		return $this->v_utils->v_quickform('Schreibe ' . $user['name'] . ' eine E-Mail!', [
 			$this->v_utils->v_form_text('name'),
 			$this->v_utils->v_form_text('email'),
 			$this->v_utils->v_form_textarea('message'),
 			$this->v_utils->v_form_hidden('id', (int)$user['id'])
-		), array('id' => 'contactform'));
+		], ['id' => 'contactform']);
 	}
 
 	public function teamList($team, $header): string

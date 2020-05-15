@@ -1,0 +1,4 @@
+framework:
+  default_locale: 'de'
+  translator:
+    fallbacks: ['de']

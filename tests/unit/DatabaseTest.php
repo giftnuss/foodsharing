@@ -127,4 +127,43 @@ class DatabaseTest extends \Codeception\Test\Unit
 		$this->assertEquals(2, $delCount);
 		$this->assertEquals(1, $this->db->count('fs_quiz_session', $params));
 	}
+
+	public function testFlattenArray()
+	{
+		// use reflection to access private function
+		$class = new ReflectionClass($this->db);
+		$method = $class->getMethod('flattenArray');
+		$method->setAccessible(true);
+
+		// without keys
+		$this->assertEquals($method->invokeArgs($this->db, [['a', ['b', 'c'], 'd'], false]), ['a', 'b', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [['a', ['a', 'c'], 'd'], false]), ['a', 'a', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['a', 'b'], ['c', 'd']], false]), ['a', 'b', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['a', 'b'], ['a', 'd']], false]), ['a', 'b', 'a', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [['A' => 'a', ['B' => 'b', 'C' => 'c'], 'D' => 'd'], false]), ['a', 'b', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [['A' => 'a', ['A' => 'b', 'C' => 'c'], 'D' => 'd'], false]), ['a', 'b', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['A' => 'a', 'B' => 'b'], ['C' => 'c', 'D' => 'd']], false]), ['a', 'b', 'c', 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['A' => 'a', 'B' => 'b'], ['A' => 'c', 'D' => 'd']], false]), ['a', 'b', 'c', 'd']);
+
+		// with keys
+		$this->assertEquals($method->invokeArgs($this->db, [['A' => 'a', ['B' => 'b', 'C' => 'c'], 'D' => 'd']]),
+			['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [['A' => 'a', ['A' => 'b', 'C' => 'c'], 'D' => 'd']]),
+			['A' => 'b', 'C' => 'c', 'D' => 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['A' => 'a', 'B' => 'b'], ['C' => 'c', 'D' => 'd']]]),
+			['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd']);
+		$this->assertEquals($method->invokeArgs($this->db, [[['A' => 'a', 'B' => 'b'], ['A' => 'c', 'D' => 'd']]]),
+			['A' => 'c', 'B' => 'b', 'D' => 'd']);
+	}
+
+	public function testInsertMultiple()
+	{
+		$fs1 = $this->tester->createFoodsaver();
+		$fs2 = $this->tester->createFoodsaver();
+		$fs3 = $this->tester->createFoodsaver();
+		$conv = $this->tester->createConversation([]);
+
+		$this->db->insertMultiple('fs_foodsaver_has_conversation', [['conversation_id' => $conv['id'], 'foodsaver_id' => $fs1['id']], ['conversation_id' => $conv['id'], 'foodsaver_id' => $fs2['id']]]);
+		$this->tester->seeNumRecords(2, 'fs_foodsaver_has_conversation', ['conversation_id' => $conv['id']]);
+	}
 }

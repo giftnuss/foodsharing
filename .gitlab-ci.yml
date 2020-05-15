@@ -2,13 +2,16 @@ include:
   template: Dependency-Scanning.gitlab-ci.yml
 
 dependency_scanning:
-  only:
-  - master
+  rules:
+  - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    when: always
+  - when: never
 
 .defaults: &defaults
   tags:
   - shared
-  image: registry.gitlab.com/foodsharing-dev/images/ci:2
+  - linux
+  image: registry.gitlab.com/foodsharing-dev/images/ci:3
 
 
 .ssh: &ssh
@@ -46,7 +49,7 @@ stages:
 - deploy
 
 triage:
-  image: ruby:2.6-alpine
+  image: ruby:2.6.5-alpine
   stage: triage
   script:
   - gem install gitlab-triage
@@ -83,7 +86,7 @@ outdated:
 
 build:backend-chat:
   <<: *defaults
-  image: node:13.6.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - (cd chat && yarn && yarn lint)
@@ -100,7 +103,7 @@ build:backend-chat:
 
 build:frontend:
   <<: *defaults
-  image: node:13.6.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - (cd client && yarn && yarn lint && yarn test && yarn build)
@@ -112,12 +115,13 @@ build:frontend:
     expire_in: 1 week
     paths:
     - assets
+    - sw.js
   except:
   - schedules
 
 build:backend:
   <<: *defaults
-  image: registry.gitlab.com/foodsharing-dev/images/php:2.18
+  image: registry.gitlab.com/foodsharing-dev/images/php:4
   stage: build
   script:
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
@@ -126,6 +130,8 @@ build:backend:
     - vendor/bin/phpstan analyse --memory-limit=768M --no-progress
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-dev --classmap-authoritative --no-suggest --no-scripts --ignore-platform-reqs
     - composer dump-autoload --classmap-authoritative
+    - mkdir assets
+    - FS_ENV=dev bin/console assets:install
   cache:
     key: backend:build:v1
     paths:
@@ -134,13 +140,14 @@ build:backend:
   artifacts:
     expire_in: 1 week
     paths:
+    - assets
     - vendor
   except:
   - schedules
 
 build:docs:
   <<: *defaults
-  image: node:13.6.0-alpine
+  image: node:13.10.1-alpine
   stage: build
   script:
   - yarn global add gitbook-cli

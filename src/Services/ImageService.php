@@ -3,8 +3,8 @@
 namespace Foodsharing\Services;
 
 use Exception;
-use Flourish\fImage;
 use Flourish\fException;
+use Flourish\fImage;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use UnexpectedValueException;
 

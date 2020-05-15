@@ -16,6 +16,8 @@ tests/_output/*vendor
 tests/_support/_generated/
 .composer
 chat/.npm
+chat/.yarnrc
+chat/dist
 api/**
 .php_cs.cache
 .php_cs_cache_local
@@ -38,3 +40,5 @@ c3.php
 /images/
 /nbproject/
 maintenance_mode_on
+sw.js
+.vscode

@@ -73,11 +73,11 @@ div.statdisplay .item {
 
 #double ul {
   width: 100%;
-  border-top: 1px solid var(--fs-beige);
+  border-top: 1px solid var(--border);
 }
 
 #double ul li {
-  border-bottom: 1px solid var(--fs-beige);
+  border-bottom: 1px solid var(--border);
 }
 
 .disabled {

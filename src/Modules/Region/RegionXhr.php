@@ -55,50 +55,52 @@ final class RegionXhr extends Control
 			$viewdata['region']['id'] = $regionId;
 			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
 
-			return array(
+			return [
 				'status' => 1,
-				'data' => array(
+				'data' => [
 					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
-				)
-			);
+				]
+			];
 		}
 	}
 
 	public function quickreply()
 	{
-		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $_POST['msg']) && $this->session->may(
-			) && $_POST['msg'] != '') {
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $data['msg']) && $this->session->may(
+			) && $data['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
 			}
 
-			$body = $_POST['msg'];
+			$body = $data['msg'];
 
 			if ($this->forumPermissions->mayPostToThread($_GET['tid'])
 				&& $bezirk = $this->regionGateway->getRegion($_GET['bid'])
 			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
-					if ($follower = $this->forumFollowerGateway->getThreadFollower($this->session->id(), $_GET['tid'])) {
+					if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($this->session->id(), $_GET['tid'])) {
 						$theme = $this->forumGateway->getThreadInfo($_GET['tid']);
 
 						foreach ($follower as $f) {
-							$this->emailHelper->tplMail('forum/answer', $f['email'], array(
+							$this->emailHelper->tplMail('forum/answer', $f['email'], [
 								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
-								'thread' => $theme,
+								'thread' => $theme['title'],
 								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
-							));
+							]);
 						}
 					}
 
-					echo json_encode(array(
+					echo json_encode([
 						'status' => 1,
 						'message' => 'Prima! Deine Antwort wurde gespeichert.'
-					));
+					]);
 					exit();
 				}
 			}
@@ -108,10 +110,10 @@ final class RegionXhr extends Control
 			 */
 		}
 
-		echo json_encode(array(
+		echo json_encode([
 			'status' => 0,
 			'message' => $this->translationHelper->s('post_could_not_saved')
-		));
+		]);
 		exit();
 	}
 
@@ -121,7 +123,6 @@ final class RegionXhr extends Control
 
 		if ($this->session->mayBezirk($groupId)) {
 			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($groupId);
 
 			return $this->responses->success();
 		}

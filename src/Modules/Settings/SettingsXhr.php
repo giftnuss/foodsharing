@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\Settings;
 
 use DateTime;
-use Foodsharing\Modules\Core\Control;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
+use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -54,22 +54,22 @@ class SettingsXhr extends Control
 	{
 		$emailAddress = $_GET['email'];
 		if (!$this->emailHelper->validEmail($emailAddress)) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_invalid') . '");'
-			);
+			];
 		}
 		if ($this->emailHelper->isFoodsharingEmailAddress($emailAddress)) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_illegal_domain') . '");'
-			);
+			];
 		}
 		if ($this->foodsaverGateway->emailExists($emailAddress)) {
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseError("' . $this->translationHelper->s('newmail_in_use') . '");'
-			);
+			];
 		}
 
 		$token = bin2hex(random_bytes(16));
@@ -77,16 +77,16 @@ class SettingsXhr extends Control
 
 		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
 			$this->mailsGateway->removeBounceForMail($emailAddress);
-			$this->emailHelper->tplMail('user/change_email', $emailAddress, array(
+			$this->emailHelper->tplMail('user/change_email', $emailAddress, [
 				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 				'name' => $fs['name'],
 				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
-			));
+			]);
 
-			return array(
+			return [
 				'status' => 1,
 				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_sent') . '",{sticky:true});'
-			);
+			];
 		}
 	}
 
@@ -120,24 +120,24 @@ class SettingsXhr extends Control
 					if ($this->settingsGateway->changeMail($fsId, $newEmail) > 0) {
 						$this->settingsGateway->logChangedSetting($fsId, ['email' => $this->session->user('email')], ['email' => $newEmail], ['email']);
 
-						return array(
+						return [
 							'status' => 1,
 							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
-						);
+						];
 					}
 
-					return array(
+					return [
 						'status' => 1,
 						'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-					);
+					];
 				}
 			}
 		}
 
-		return array(
+		return [
 			'status' => 1,
 			'script' => 'pulseError("Das Passwort wahl wohl falsch, vertippt?");$("#passcheck").val("");$("#passcheck")[0].focus();'
-		);
+		];
 	}
 
 	public function sleepmode()
@@ -154,11 +154,11 @@ class SettingsXhr extends Control
 		$to = '';
 		$msg = '';
 
-		$states = array(
+		$states = [
 			SleepStatus::NONE => true,
 			SleepStatus::TEMP => true,
 			SleepStatus::FULL => true
-		);
+		];
 
 		if (isset($_POST['from']) && $date = DateTime::createFromFormat('d.m.Y', $_POST['from'])) {
 			$from = $date->format('Y-m-d H:i:s');

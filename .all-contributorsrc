@@ -34,8 +34,8 @@
     },
     {
       "login": "k.miklobusec",
-      "name": "OnceUponAFoodsharingTime",
-      "avatar_url": "https://foodsharing.de/images/q_e09cefb9259140ef547313b6cb5691ea.jpg",
+      "name": "fs_k",
+      "avatar_url": "https://secure.gravatar.com/avatar/722f002e5ac2b5e0084a5c3d4ba1ce31?s=800&d=identicon",
       "profile": "https://gitlab.com/k.miklobusec",
       "contributions": [
         "code",
@@ -308,7 +308,18 @@
       "contributions": [
         "code"
       ]
-    }
+    },
+    {
+       "login": "chriswalg",
+       "name": "Christian",
+       "avatar_url":"https://gitlab.com/uploads/-/system/user/avatar/890523/avatar.png?width=400",
+       "profile": "https://gitlab.com/chriswalg",
+       "contributions": [
+         "code",
+         "bug",
+         "doc"
+       ]
+     }
   ],
   "repoType": "gitlab"
 }

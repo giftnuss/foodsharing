@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
@@ -71,15 +72,15 @@ class FoodSharePointGateway extends BaseGateway
 
 	public function updateFSPManagers(int $foodSharePointId, $fspManager): void
 	{
-		$values = array();
+		$values = [];
 
 		foreach ($fspManager as $fs) {
-			$values[] = '(' .
-				$foodSharePointId . ',' .
-				(int)$fs . ',' .
-				FollowerType::FOOD_SHARE_POINT_MANAGER . ',' .
-				InfoType::EMAIL .
-			')';
+			$values[] = [
+				'fairteiler_id' => $foodSharePointId,
+				'foodsaver_id' => (int)$fs,
+				'type' => FollowerType::FOOD_SHARE_POINT_MANAGER,
+				'infotype' => InfoType::EMAIL
+			];
 		}
 
 		$this->db->update(
@@ -88,19 +89,7 @@ class FoodSharePointGateway extends BaseGateway
 			['fairteiler_id' => $foodSharePointId]
 		);
 
-		$this->db->execute(
-			'
-				REPLACE INTO `fs_fairteiler_follower`
-				(
-					`fairteiler_id`,
-					`foodsaver_id`,
-					`type`,
-					`infotype`
-				)
-				VALUES
-				' . implode(',', $values) . '
-		'
-		);
+		$this->db->insertOrUpdateMultiple('fs_fairteiler_follower', $values);
 	}
 
 	public function getInfoFollowerIds(int $foodSharePointId): array
@@ -139,11 +128,11 @@ class FoodSharePointGateway extends BaseGateway
 			foreach ($foodSharePoints as $fspKey => $fspValue) {
 				$foodSharePoints[$fspKey]['pic'] = false;
 				if (!empty($fspValue['picture'])) {
-					$foodSharePoints[$fspKey]['pic'] = array(
+					$foodSharePoints[$fspKey]['pic'] = [
 						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fspValue['picture']),
 						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fspValue['picture']),
 						'orig' => 'images/' . ($fspValue['picture']),
-					);
+					];
 				}
 			}
 
@@ -192,7 +181,7 @@ class FoodSharePointGateway extends BaseGateway
 		'
 			))
 		) {
-			$out = array();
+			$out = [];
 
 			foreach ($foodSharePoint as $fsp) {
 				if (!isset($out[$fsp['bezirk_id']])) {
@@ -457,8 +446,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
 
-		$this->bellGateway->addBell(
-			$ambassadorIds,
+		$bellData = Bell::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
 			'img img-recycle yellow',
@@ -467,6 +455,7 @@ class FoodSharePointGateway extends BaseGateway
 			'new-fairteiler-' . $foodSharePointId,
 			0
 		);
+		$this->bellGateway->addBell($ambassadorIds, $bellData);
 	}
 
 	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void

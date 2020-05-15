@@ -1,10 +1,6 @@
 <template>
-  <div
-    class="bootstrap"
-  >
-    <div
-      class="card rounded"
-    >
+  <div class="bootstrap">
+    <div class="card rounded">
       <div class="card-header text-white bg-primary">
         <div class="row align-items-center">
           <div class="col text-truncate font-weight-bold">
@@ -12,7 +8,7 @@
           </div>
           <div class="col col-5 text-right">
             <div
-              class="btn-group"
+              class="btn-group slot-actions"
               role="group"
             >
               <button
@@ -22,7 +18,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadEditRecurringPickupModal"
               >
-                <i class="fa fa-pen" />
+                <i class="fas fa-pen" />
               </button>
               <button
                 v-if="isCoordinator"
@@ -31,7 +27,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadAddPickupModal"
               >
-                <i class="fa fa-plus" />
+                <i class="fas fa-plus" />
               </button>
             </div>
           </div>
@@ -39,26 +35,25 @@
       </div>
       <div
         :class="{disabledLoading: isLoading}"
-        class="card-body"
+        class="pickup-list card-body"
       >
-        <template v-for="pickup in pickups">
-          <Pickup
-            :key="pickup.date.valueOf()"
-            v-bind="pickup"
-            :store-id="storeId"
-            :is-coordinator="isCoordinator"
-            :user="user"
-            class="mb-2"
-            @leave="leave"
-            @kick="kick"
-            @join="join"
-            @confirm="confirm"
-            @delete="setSlots(pickup.date, 0)"
-            @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
-            @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
-            @team-message="sendTeamMessage"
-          />
-        </template>
+        <Pickup
+          v-for="pickup in pickups"
+          :key="pickup.date.valueOf()"
+          v-bind="pickup"
+          :store-id="storeId"
+          :is-coordinator="isCoordinator"
+          :user="user"
+          class="pickup-block"
+          @leave="leave"
+          @kick="kick"
+          @join="join"
+          @confirm="confirm"
+          @delete="setSlots(pickup.date, 0)"
+          @add-slot="setSlots(pickup.date, pickup.totalSlots + 1)"
+          @remove-slot="setSlots(pickup.date, pickup.totalSlots - 1)"
+          @team-message="sendTeamMessage"
+        />
       </div>
     </div>
   </div>
@@ -72,6 +67,7 @@ import { sendMessage } from '@/api/conversations'
 import { user } from '@/server-data'
 import { ajreq, pulseError, pulseSuccess } from '@/script'
 import $ from 'jquery'
+import i18n from '@/i18n'
 
 export default {
   components: { Pickup },
@@ -115,7 +111,7 @@ export default {
       try {
         this.pickups = await listPickups(this.storeId)
       } catch (e) {
-        pulseError('failed loading pickup list ' + e)
+        pulseError(i18n('pickuplist.error_loadingPickup') + e)
       }
 
       if (!silent) this.isLoading = false
@@ -126,7 +122,7 @@ export default {
         await joinPickup(this.storeId, date, this.user.id)
       } catch (e) {
         console.error(e)
-        pulseError('Das Eintragen hat leider nicht funktioniert. Dies liegt vermutlich daran, dass jemand anderes schneller war.<br /><br />Versuche es nach einem Neuladen einfach noch mal!')
+        pulseError(i18n('pickuplist.tooslow') + '<br /><br />' + i18n('pickuplist.tryagain'))
       }
       this.reload()
     },
@@ -135,7 +131,7 @@ export default {
       try {
         await leavePickup(this.storeId, date, this.user.id)
       } catch (e) {
-        pulseError('leave failed: ' + e)
+        pulseError(i18n('pickuplist.error_leave') + e)
       }
       this.reload()
     },
@@ -144,7 +140,7 @@ export default {
       try {
         await leavePickup(this.storeId, data.date, data.fsId)
       } catch (e) {
-        pulseError('kick failed: ' + e)
+        pulseError(i18n('pickuplist.error_kick') + e)
       }
       this.reload()
     },
@@ -153,7 +149,7 @@ export default {
       try {
         await confirmPickup(this.storeId, data.date, data.fsId)
       } catch (e) {
-        pulseError('confirm failed: ' + e)
+        pulseError(i18n('pickuplist.error_confirm') + e)
       }
       this.reload()
     },
@@ -162,7 +158,7 @@ export default {
       try {
         await setPickupSlots(this.storeId, date, totalSlots)
       } catch (e) {
-        pulseError('change slot count failed: ' + e)
+        pulseError(i18n('pickuplist.error_changeSlotCount') + e)
       }
       this.reload()
     },
@@ -172,7 +168,7 @@ export default {
         pulseSuccess(this.$i18n('pickup.team_message_success'))
       } catch (e) {
         console.error(e)
-        pulseError('Error while sending message')
+        pulseError(i18n('pickuplist.error_whileSending'))
       }
     },
     loadAddPickupModal () {
@@ -192,6 +188,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.pickup-list {
+  padding: 10px;
 
+  .pickup-block:last-child {
+    margin-bottom: -10px;
+  }
+}
+
+.btn-group.slot-actions {
+  // counter the .card definition of padding: 6px 8px;
+  margin: -6px -8px;
+
+  button {
+    line-height: 21px;
+    padding: 5px 10px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  i.fas {
+    font-size: 14px;
+  }
+}
 </style>

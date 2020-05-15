@@ -8,7 +8,7 @@ $I->wantTo('Join another region');
 $user = $I->createFoodsaver(null, ['verified' => 0]);
 $region = $I->createRegion(null, 0, 3);
 $ambassador = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
-$I->addBezirkAdmin($region['id'], $ambassador['id']);
+$I->addRegionAdmin($region['id'], $ambassador['id']);
 
 $I->login($user['email']);
 /*

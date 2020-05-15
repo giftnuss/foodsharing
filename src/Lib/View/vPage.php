@@ -24,11 +24,11 @@ class vPage
 		$this->setTitle($title);
 		$this->setContent($content);
 
-		$this->sections = array();
-		$this->sections_left = array();
-		$this->sections_right = array();
+		$this->sections = [];
+		$this->sections_left = [];
+		$this->sections_right = [];
 		$this->subtitle = false;
-		$this->bread = array($title, false);
+		$this->bread = [$title, false];
 		$this->pageHelper = $container->get(PageHelper::class);
 	}
 
@@ -39,7 +39,7 @@ class vPage
 
 	public function setBread($name, $url = false)
 	{
-		$this->bread = array($name, $url);
+		$this->bread = [$name, $url];
 	}
 
 	public function setSubTitle($subtitle)
@@ -52,46 +52,46 @@ class vPage
 		$this->content = $html;
 	}
 
-	public function addSection($html, $title = false, $option = array())
+	public function addSection($html, $title = false, $option = [])
 	{
-		$defOpt = array(
+		$defOpt = [
 			'wrapper' => true
-		);
+		];
 		$option = array_merge($defOpt, $option);
 
-		$this->sections[] = array(
+		$this->sections[] = [
 			'cnt' => $html,
 			'title' => $title,
 			'option' => $option
-		);
+		];
 	}
 
-	public function addSectionRight($html, $title = false, $option = array())
+	public function addSectionRight($html, $title = false, $option = [])
 	{
-		$defOpt = array(
+		$defOpt = [
 			'wrapper' => true
-		);
+		];
 		$option = array_merge($defOpt, $option);
 
-		$this->sections_right[] = array(
+		$this->sections_right[] = [
 			'cnt' => $html,
 			'title' => $title,
 			'option' => $option
-		);
+		];
 	}
 
-	public function addSectionLeft($html, $title = false, $option = array())
+	public function addSectionLeft($html, $title = false, $option = [])
 	{
-		$defOpt = array(
+		$defOpt = [
 			'wrapper' => true
-		);
+		];
 		$option = array_merge($defOpt, $option);
 
-		$this->sections_left[] = array(
+		$this->sections_left[] = [
 			'cnt' => $html,
 			'title' => $title,
 			'option' => $option
-		);
+		];
 	}
 
 	public function render()
