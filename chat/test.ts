@@ -255,7 +255,7 @@ test('online status is false for non-connected user', t => {
     t.timeoutAfter(10000);
     t.plan(2);
     addPHPSessionToRedis(1, 'test-3-user-1', () => {});
-    superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+    superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
         if (err) {
             t.error(err);
         }
@@ -270,7 +270,7 @@ test('online status is true initially after user connected', t => {
     addPHPSessionToRedis(1, 'test-4-user-1', () => {});
     const socket = connect(t, 'test-4-user-1');
     register(socket, () => {
-        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+        superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
             if (err) {
                 t.error(err);
             }
@@ -286,7 +286,7 @@ test('online status is false after user window moved into the background', t => 
     const socket = connect(t, 'test-5-user-1');
     register(socket, () => {
         socket.emit('visibilitychange', true); // hidden = true
-        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+        superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
             if (err) {
                 t.error(err);
             }
@@ -304,7 +304,7 @@ test('online status is true after window came into the foreground again', t => {
     register(socket, () => {
         socket.emit('visibilitychange', true);
         socket.emit('visibilitychange', false);
-        superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+        superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
             if (err) {
                 t.error(err);
             }
@@ -324,7 +324,7 @@ test('online status is false if user has two windows and both are in the backgro
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
             socket2.emit('visibilitychange', true);
-            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
                 if (err) {
                     t.error(err);
                 }
@@ -345,7 +345,7 @@ test('online status is true if user has two windows and only one is in the backg
         register(socket2, () => {
             socket1.emit('visibilitychange', false);
             socket2.emit('visibilitychange', false);
-            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
                 if (err) {
                     t.error(err);
                 }
@@ -367,7 +367,7 @@ test('online status is false if user has two windows in different browsers and b
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
             socket2.emit('visibilitychange', true);
-            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
                 if (err) {
                     t.error(err);
                 }
@@ -389,7 +389,7 @@ test('online status is true if user has two windows in different browsers and on
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
             socket2.emit('visibilitychange', false);
-            superagent.get(HTTP_URL + '/user/1/is-online').end((err, response) => {
+            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
                 if (err) {
                     t.error(err);
                 }
@@ -426,7 +426,7 @@ function register (socket: Socket, callback: () => any): void {
 }
 
 function sendMessage (userIds: number[], channel: string, method: string, options: object, callback: (error: any, res: Response) => any): void {
-    superagent.post(HTTP_URL + `/user/${userIds.join('-')}/${channel}/${method}`).send(options).end(callback);
+    superagent.post(HTTP_URL + `/users/${userIds.join('-')}/${channel}/${method}`).send(options).end(callback);
 }
 
 function fetchStats (callback: (error: any, stats?: {connections: number, registrations: number, sessions: number}) => any): void {
