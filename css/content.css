@@ -144,10 +144,6 @@ input, textarea, select, option {
   }
 }
 
-.post.event {
-  padding-top: 10px;
-}
-
 .activity_feed_content_info p a {
   font-size: 14px;
 }
