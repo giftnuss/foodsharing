@@ -31,6 +31,11 @@
 - Update all package dependencies to current as of 2020-05-11 !1503 @NerdyProjects
 - Allow changing the language for all translation capable texts !1485 @NerdyProjects
 - Allow adding people to conversation by putting their ID into the recipient field !1508 @NerdyProjects
+- Return less results for the user search when creating a new conversation !1513 @NerdyProjects
+  - Now, it returns everybody who is in the same groups as you but excludes people that are just in state or country groups (e.g. Niedersachsen, Deutschland, Europa).
+  - Ambassadors additionally get all people in their ambassador regions and subregions
+  - Orga and Welcome team get all people, now also including foodsharers
+- Massively optimize performance of user search when creating a new conversation !1513 @NerdyProjects
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
