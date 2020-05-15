@@ -468,7 +468,7 @@ class Session
 				}
 			}
 
-			if ($r = $this->regionGateway->listRegionsForFoodsaver($fs['id'])) {
+			if ($r = $this->regionGateway->listForFoodsaver($fs['id'])) {
 				$_SESSION['client']['bezirke'] = [];
 				foreach ($r as $rr) {
 					$_SESSION['client']['bezirke'][$rr['id']] = [

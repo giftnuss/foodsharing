@@ -81,26 +81,6 @@ class RegionGateway extends BaseGateway
 			ORDER BY `name`');
 	}
 
-	public function listRegionsForFoodsaver(int $foodsaverId): array
-	{
-		return $this->db->fetchAll('
-			SELECT 	b.`id`,
-					b.name,
-					b.type,
-					b.`master`
-
-			FROM 	`fs_foodsaver_has_bezirk` hb,
-					`fs_bezirk` b
-
-			WHERE 	hb.bezirk_id = b.id
-			AND 	`foodsaver_id` = :id
-			AND 	hb.active = 1
-
-			ORDER BY b.name',
-			[':id' => $foodsaverId]
-		);
-	}
-
 	public function getBezirkByParent(int $parentId, bool $includeOrga = false): array
 	{
 		$sql = 'AND 		`type` != ' . Type::WORKING_GROUP;
