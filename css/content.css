@@ -451,3 +451,21 @@ i {
 .page-fsbetrieb .element-wrapper {
   word-break: break-word;
 }
+
+.pageImage {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right:20px;
+}
+
+.pageImageFloatRight {
+  margin-left: 20px;
+  margin-top: 20px;
+  float: right;
+}
+
+.pageImageFloatLeft {
+  margin-right: 20px;
+  margin-top: 20px;
+  float: left;
+}
