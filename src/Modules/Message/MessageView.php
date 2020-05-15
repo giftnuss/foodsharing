@@ -37,7 +37,7 @@ final class MessageView extends View
 				complete: function(){
 					$("#' . $id . ' input.tag").tagedit({
 						autocompleteOptions: {
-							delay: 0,
+							delay: 300,
 							source: function(request, response) {
 					            /* Remote results only if string > 3: */
 
