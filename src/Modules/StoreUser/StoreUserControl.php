@@ -215,7 +215,7 @@ class StoreUserControl extends Control
 								</div>
 
 								<div class="posts"></div>
-							</div>', 'Pinnwand', ['class' => 'truncate-content truncate-height-280 collapse-mobile']));
+							</div>', 'Pinnwand', ['class' => 'truncate-content truncate-height-280 collapse-mobile force-collapse']));
 				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));

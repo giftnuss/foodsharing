@@ -92,8 +92,9 @@ export function initialize () {
       }
 
       // only modify the element if it exceeds the defined max height
-      // if it does, automatically collapse it and show button for expanding content
-      if ($this.height() > max_height) {
+      // if it does, or if we're lazy-loading content expected to be large
+      // => automatically collapse, and show button for expanding content
+      if (($this.height() > max_height) || $this.hasClass('force-collapse')) {
         $this.css({
           height: `${max_height}px`,
           overflow: 'hidden'
