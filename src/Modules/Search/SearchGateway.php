@@ -136,13 +136,14 @@ class SearchGateway extends BaseGateway
 		);
 		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
 		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
+		$groupBy = ' GROUP BY fs.id';
 		if ($groupIds === null) {
-			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition, [$searchString]);
+			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
 		} else {
 			return $this->db->fetchAll(
 				$select . ', fs_foodsaver_has_bezirk hb WHERE ' .
 				$fulltextCondition .
-				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')',
+				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')' . $groupBy,
 				array_merge([$searchString], $groupIds));
 		}
 	}
