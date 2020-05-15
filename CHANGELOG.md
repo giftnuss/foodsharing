@@ -75,6 +75,7 @@
 - Correct wording: "Fairteiler" and "FairTeiler" to "Fair-Teiler" in some files #890 !1479 @treee111
 - Correct Dashboard preview of ordered + unordered lists #455 !1481 @ChrisOelmueller
 - Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
+- TagEdit color correction when hovering #867 !1514 @ChrisOelmueller
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae
