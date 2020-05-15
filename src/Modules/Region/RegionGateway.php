@@ -174,6 +174,13 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
+	public function getFsAmbassadorIds(int $foodsaverId): array
+	{
+		return $this->db->fetchAllValuesByCriteria('fs_botschafter', 'bezirk_id',
+			['foodsaver_id' => $foodsaverId]
+		);
+	}
+
 	public function listIdsForDescendantsAndSelf(int $regionId, bool $includeSelf = true, bool $includeWorkgroups = true): array
 	{
 		if ($regionId == RegionIDs::ROOT) {

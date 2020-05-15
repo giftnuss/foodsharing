@@ -116,54 +116,37 @@ class SearchGateway extends BaseGateway
 
 	/**
 	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
-	 * (e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 * @param array|null $groupIds the groupids a person must be in to be found. Set to null to query over all users.
 	 */
-	public function searchUserInDirectGroups(string $q, array $groupIds, bool $findInAllUsers): array
+	public function searchUserInGroups(string $q, ?array $groupIds = []): array
 	{
 		/*
 		 * SELECT name, nachname FROM fs_foodsaver fs, fs_foodsaver_has_bezirk hb WHERE MATCH (fs.name, fs.nachname) AGAINST ('+Jan* +Beck*' IN BOOLEAN MODE) AND hb.bezirk_id IN (741) AND hb.foodsaver_id = fs.id
 		 */
 		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
 		$q = mb_ereg_replace('\W', ' ', $q);
-		/* put + before and * after the words */
-		$searchString = implode(' ', array_map(function ($a) { return '+' . $a . '*'; }, explode(' ', $q)));
+		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
+		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
+		$searchString = implode(' ',
+			array_map(
+				function ($a) { return '+' . $a . '*'; },
+				array_filter(
+					explode(' ', $q),
+					function ($v) { return mb_strlen($v) > 2; }
+					)
+			)
+		);
 		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
-		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE)';
-		if ($findInAllUsers) {
+		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
+		if ($groupIds === null) {
 			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition, [$searchString]);
+		} else {
+			return $this->db->fetchAll(
+				$select . ', fs_foodsaver_has_bezirk hb WHERE ' .
+				$fulltextCondition .
+				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')',
+				array_merge([$searchString], $groupIds));
 		}
-
-		return [];
-	}
-
-	/**
-	 * So far this is only used for searching users to be added to conversations.
-	 * It directly defines the output format for the frontend, e.g. the formatting of the value.
-	 */
-	public function searchUserInGroups(string $q, array $groupIds, bool $findInAllFoodsaver): array
-	{
-		$searchStr = '%' . str_replace(['_', '%'], ['\\\\_', '\\\\%'], $q) . '%';
-		$select = 'SELECT DISTINCT fs.id AS id, CONCAT(fs.name," ",fs.nachname," (",fs.id,")") AS value ';
-		$condition = 'WHERE fs.deleted_at IS NULL AND CONCAT(fs.name," ",fs.nachname ) LIKE ? ';
-
-		$result = [];
-
-		if ($findInAllFoodsaver) {
-			$result = $this->db->fetchAll(
-				$select .
-				'FROM fs_foodsaver fs ' .
-				$condition .
-				' AND fs.rolle >= 1', [$searchStr]);
-		} elseif ($groupIds) {
-			$result = $this->db->fetchAll(
-				$select .
-				'FROM fs_foodsaver_has_bezirk hb ' .
-				'LEFT JOIN fs_foodsaver fs ON hb.foodsaver_id = fs.id ' .
-				$condition .
-				'AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')',
-				array_merge([$searchStr], $groupIds));
-		}
-
-		return $result;
 	}
 }
