@@ -7,6 +7,8 @@
 ## Bugfixes
 - Be more robust against errors in the WebSocket Chat server: Let request suceed anyway. !1525 @NerdyProjects
 - Fix crash on incoming email that would generate a bounce !1524 @NerdyProjects
+- Fix broken data in internal email system email storage for sender address !1523 @NerdyProjects
+- Migrate all broken email storage sender addresses to be valid !1523 @NerdyProjects
 
 ## Refactoring
 
