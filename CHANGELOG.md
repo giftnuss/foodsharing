@@ -3,6 +3,16 @@
 ## Major changes
 
 ## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
+# 2020-05-16 
+
+## Features
 - Introduce Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 !1470 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
