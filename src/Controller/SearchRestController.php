@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Search\SearchGateway;
+use Foodsharing\Modules\Search\SearchHelper;
 use Foodsharing\Services\SearchService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -17,15 +18,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SearchRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $searchGateway;
-	private $searchService;
+	private Session $session;
+	private SearchGateway $searchGateway;
+	private SearchService $searchService;
+	private SearchHelper $searchHelper;
 
-	public function __construct(Session $session, SearchGateway $searchGateway, SearchService $searchService)
+	public function __construct(
+		Session $session,
+		SearchGateway $searchGateway,
+		SearchService $searchService,
+		SearchHelper $searchHelper)
 	{
 		$this->session = $session;
 		$this->searchGateway = $searchGateway;
 		$this->searchService = $searchService;
+		$this->searchHelper = $searchHelper;
 	}
 
 	/**
@@ -89,6 +96,28 @@ class SearchRestController extends AbstractFOSRestController
 			);
 			$results = array_map(function ($v) { return ['id' => $v['id'], 'value' => $v['name'] . ' ' . $v['nachname'] . ' (' . $v['id'] . ')']; }, $results);
 		}
+
+		return $this->handleView($this->view($results, 200));
+	}
+
+	/**
+	 * General search endpoint that returns foodsavers, stores, and regions.
+	 *
+	 * @Rest\Get("search/all")
+	 * @Rest\QueryParam(name="q", description="Search query.")
+	 */
+	public function searchAction(ParamFetcher $paramFetcher)
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(403);
+		}
+
+		$q = $paramFetcher->get('q');
+		if (empty($q)) {
+			throw new HttpException(400);
+		}
+
+		$results = $this->searchHelper->search($q);
 
 		return $this->handleView($this->view($results, 200));
 	}
