@@ -29,7 +29,17 @@ export class SocketIOServerFacade implements ServerFacade {
                 throw new Error(`Method ${methodName} is not defined on the given controller.`);
             }
 
-            this.socketIo.on('connection', socket => controller[methodName](socket));
+            this.socketIo.on('connection', socket => {
+                let result;
+                try {
+                    result = controller[methodName](socket);
+                } catch (error) {
+                    socket.error(error);
+                }
+                if (result instanceof Promise) {
+                    result.catch(error => socket.error(error));
+                }
+            });
         }
 
         // register methods with OnSocketEvent() decorators to socket.on('event-name')
@@ -42,7 +52,17 @@ export class SocketIOServerFacade implements ServerFacade {
             }
 
             this.socketIo.on('connection', (socket) => {
-                socket.on(metadata.eventName, (...args) => controller[methodName](socket, ...args));
+                socket.on(metadata.eventName, (...args) => {
+                    let result;
+                    try {
+                        result = controller[methodName](socket, ...args);
+                    } catch (error) {
+                        socket.error(error);
+                    }
+                    if (result instanceof Promise) {
+                        result.catch(error => socket.error(error));
+                    }
+                });
             }
             );
         }
