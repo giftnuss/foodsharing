@@ -37,6 +37,7 @@
 - Wrap long email address in user profile #828 !1541 @ChrisOelmueller
 
 ## Refactoring
+- Make the instant search in the topbar use a new rest endpoint without legacy wrapping code for search results !1522 @alex.simm
 
 ## Dev/Test/CI stuff
 - Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
