@@ -6,6 +6,7 @@
 
 ## Bugfixes
 - Be more robust against errors in the WebSocket Chat server: Let request suceed anyway. !1525 @NerdyProjects
+- Fix crash on incoming email that would generate a bounce !1524 @NerdyProjects
 
 ## Refactoring
 
