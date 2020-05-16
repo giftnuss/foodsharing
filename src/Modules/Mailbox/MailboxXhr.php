@@ -72,7 +72,7 @@ class MailboxXhr extends Control
 				' . $init . '
 			}
 		</script>
-				
+
 		</head><body onload="init();"></body></html>';
 
 		exit();
@@ -149,10 +149,10 @@ class MailboxXhr extends Control
 						$("#messagelist tbody tr").on("mouseover", function(){
 							$("#messagelist tbody tr").removeClass("selected focused");
 							$(this).addClass("selected focused");
-							
+
 						});
 						$("#messagelist tbody tr").on("mouseout", function(){
-							$("#messagelist tbody tr").removeClass("selected focused");							
+							$("#messagelist tbody tr").removeClass("selected focused");
 						});
 						$("#messagelist tbody tr").on("click", function(){
 							ajreq("loadMail",{id:($(this).attr("id").split("-")[1])});
@@ -191,7 +191,7 @@ class MailboxXhr extends Control
 		$mailboxId = $this->mailboxGateway->getMailboxId($_GET['mid']);
 		if ($this->mailboxPermissions->mayMailbox($mailboxId)) {
 			$message = $this->mailboxGateway->getMessage($_GET['mid']);
-			$sender = @json_decode($message['sender'], true);
+			$sender = json_decode($message['sender'], true, 512, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_IGNORE);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(['Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'], '', $message['subject']));
 
@@ -406,13 +406,13 @@ class MailboxXhr extends Control
 				'html' => $this->view->message($mail),
 				'append' => '#message-body',
 				'script' => '
-		
+
 				bodymin = 80;
 				if($("#mailattch").length > 0)
 				{
 					bodymin += 40;
 				}
-		
+
 				$("#message-body").dialog("option",{
 					title: \'' . $this->sanitizerService->jsSafe($mail['subject']) . '\',
 					height: ($( window ).height()-40)
