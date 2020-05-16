@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Search;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Search\DTO\SearchResult;
 
 class SearchGateway extends BaseGateway
 {
@@ -17,62 +18,74 @@ class SearchGateway extends BaseGateway
 	}
 
 	/**
-	 * Searches the given term in the database of regions, foodsavers and companies.
+	 * Searches the given term in the database of users.
 	 *
 	 * @param string $q Query string / search term
 	 * @param bool $showDetails show detailed address info if true. Show only city if false
-	 * @param mixed $regionToSearch optional region id to limit search to
+	 * @param mixed $regions optional region ids to limit search to
 	 *
-	 * @return array Array of regions, foodsavers and stores containing the search term
+	 * @return array SearchResult[] Array of foodsavers containing the search term
 	 */
-	public function search(string $q, bool $showDetails, $regionToSearch = null): array
+	public function searchUsers(string $q, bool $showDetails, array $regions = null): array
 	{
-		$out = [];
-
-		$regions = false;
-		if (!empty($regionToSearch)) {
-			$regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionToSearch);
-		}
-
-		$out['foodsaver'] = $this->searchTable(
+		// 'click' => 'CONCAT("profile(",`id`,");")',
+		return $this->searchTable(
 			'fs_foodsaver',
 			['name', 'nachname', 'plz', 'stadt'],
 			$q,
 			[
 				'name' => 'CONCAT(`name`," ",`nachname`)',
-				'click' => 'CONCAT("profile(",`id`,");")',
 				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
 			],
 			$regions
 		);
+	}
 
-		$out['bezirk'] = $this->searchTable(
+	/**
+	 * Searches the given term in the database of regions.
+	 *
+	 * @param string $q Query string / search term
+	 *
+	 * @return array SearchResult[] Array of regions containing the search term
+	 */
+	public function searchRegions(string $q): array
+	{
+		// 'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
+		return $this->searchTable(
 			'fs_bezirk',
 			['name'],
 			$q,
 			[
 				'name' => '`name`',
-				'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 				'teaser' => 'CONCAT("")'
 			]
 		);
+	}
 
-		$out['betrieb'] = $this->searchTable(
+	/**
+	 * Searches the given term in the database of stores.
+	 *
+	 * @param string $q Query string / search term
+	 * @param mixed $regions optional region ids to limit search to
+	 *
+	 * @return array SearchResult[] Array of stores containing the search term
+	 */
+	public function searchStores(string $q, array $regions = null): array
+	{
+		// 'click' => 'CONCAT("betrieb(",`id`,");")',
+		return $this->searchTable(
 			'fs_betrieb',
 			['name', 'stadt', 'plz', 'str'],
 			$q,
 			[
 				'name' => '`name`',
-				'click' => 'CONCAT("betrieb(",`id`,");")',
 				'teaser' => 'CONCAT(`str`,", ",`plz`," ",`stadt`)'
 			],
 			$regions
-		 );
-
-		return $out;
+		);
 	}
 
-	public function searchTable($table, $fields, $query, $show = [], $regions_to_search = false): array
+	private function searchTable(string $table, array $fields, string $query, array $show = [], array $regions_to_search = null): array
 	{
 		$q = trim($query);
 
@@ -91,14 +104,13 @@ class SearchGateway extends BaseGateway
 		$fsql = 'CONCAT(' . implode(',', $fields) . ')';
 
 		$fs_sql = '';
-		if ($regions_to_search !== false) {
+		if (!empty($regions_to_search)) {
 			$fs_sql = ' AND bezirk_id IN(' . implode(',', $regions_to_search) . ')';
 		}
 
-		return $this->db->fetchAll('
+		$results = $this->db->fetchAll('
 			SELECT 	`id`,
 					 ' . $show['name'] . ' AS name,
-					 ' . $show['click'] . ' AS click,
 					 ' . $show['teaser'] . ' AS teaser
 
 
@@ -110,8 +122,11 @@ class SearchGateway extends BaseGateway
 			ORDER BY `name`
 
 			LIMIT 0,50
-
 		');
+
+		return array_map(function ($x) {
+			return SearchResult::create($x['id'], $x['name'], $x['teaser']);
+		}, $results);
 	}
 
 	/**
@@ -127,11 +142,15 @@ class SearchGateway extends BaseGateway
 		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
 		$searchString = implode(' ',
 			array_map(
-				function ($a) { return '+' . $a . '*'; },
+				function ($a) {
+					return '+' . $a . '*';
+				},
 				array_filter(
 					explode(' ', $q),
-					function ($v) { return mb_strlen($v) > 2; }
-					)
+					function ($v) {
+						return mb_strlen($v) > 2;
+					}
+				)
 			)
 		);
 		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
