@@ -331,22 +331,18 @@ class MailboxGateway extends BaseGateway
 	public function getBoxes(bool $isAmbassador, int $fsId, bool $mayStoreManager)
 	{
 		if ($isAmbassador) {
-			$mailboxAdminRegions = $this->getMailboxAdminRegions($fsId);
-			$selectedRegions = [];
+			$selectedRegions = $this->getMailboxAdminRegions($fsId);
 			$mBoxes = [];
-			foreach ($mailboxAdminRegions as $region) {
-				$selectedRegions[] = (int)$region;
-			}
 
-			if ($mailboxAdminRegions = $this->db->fetchAll(
-				'
+			if ($selectedRegions) {
+				$mailboxAdminRegions = $this->db->fetchAll(
+					'
 				SELECT 	`id`,`mailbox_id`,`name`
 				FROM 	`fs_bezirk`
 				WHERE 	`id` IN (' . implode(',', array_map('intval', $selectedRegions)) . ')
 				AND 	`mailbox_id` = 0
 			'
-			)
-			) {
+				);
 				foreach ($mailboxAdminRegions as $region) {
 					if ($region['mailbox_id'] == 0) {
 						$mb_name = strtolower($region['name']);
@@ -369,20 +365,19 @@ class MailboxGateway extends BaseGateway
 						}
 					}
 				}
-			}
-			if ($mailboxAdminRegions = $this->db->fetchAll(
-				'
-				SELECT 	m.`id`,
-						m.`name`,
-						b.email_name,
-						b.id AS bezirk_id
-				FROM 	`fs_bezirk` b,
-						`fs_mailbox` m
-				WHERE 	b.mailbox_id = m.id
-				AND 	b.`id` IN (' . implode(',', array_map('intval', $selectedRegions)) . ')
-			'
-			)
-			) {
+
+				$mailboxAdminRegions = $this->db->fetchAll(
+					'
+					SELECT 	m.`id`,
+							m.`name`,
+							b.email_name,
+							b.id AS bezirk_id
+					FROM 	`fs_bezirk` b,
+							`fs_mailbox` m
+					WHERE 	b.mailbox_id = m.id
+					AND 	b.`id` IN (' . implode(',', array_map('intval', $selectedRegions)) . ')
+				');
+
 				foreach ($mailboxAdminRegions as $region) {
 					if (empty($region['email_name'])) {
 						$region['email_name'] = 'foodsharing ' . $region['name'];
@@ -485,7 +480,7 @@ class MailboxGateway extends BaseGateway
 			];
 		}
 
-		return empty($mBoxes) ? false : $mBoxes;
+		return $mBoxes;
 	}
 
 	public function getMailboxId(int $mid)
