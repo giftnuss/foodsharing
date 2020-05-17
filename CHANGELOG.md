@@ -13,6 +13,7 @@
 - Fix wrongly accessing null values in Fairteiler. !1527 @NerdyProjects
 - Fix javascript error accessing the map the first time / without localstorage. !1528 @NerdyProjects
 - Fix issuing invalid SQL IN() query !1534 @NerdyProjects
+- Fix not logged in users getting errors when things should have been logged to their not-existing session !1531 @NerdyProjects
 
 ## Refactoring
 
