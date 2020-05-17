@@ -21,6 +21,7 @@
 ## Dev/Test/CI stuff
 - Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
 - Do not run CI tests before deployment !1529 @NerdyProjects
+- Do not run gitlab dependency scanning job as nobody used the output !1533 @NerdyProjects
 
 # 2020-05-16 
 
