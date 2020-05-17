@@ -27,6 +27,9 @@
 - Fix not logged in users getting errors when things should have been logged to their not-existing session !1531 @NerdyProjects
 - Fix accessing invalid location for users without a session or without an address. !1538 @NerdyProjects
 - Fix Content Security Policy violation for web worker for older browsers (fixes push notification for older browsers) @NerdyProjects
+- Wrap long email address in user profile #828 !1541 @ChrisOelmueller
+
+## Refactoring
 
 ## Dev/Test/CI stuff
 - Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects

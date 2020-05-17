@@ -253,9 +253,10 @@ class ProfileView extends View
 			$url = $this->session->id() == $this->foodsaver['id']
 				? '/?page=mailbox'
 				: '/?page=mailbox&mailto=' . urlencode($this->foodsaver['mailbox']);
+			$splitMail = implode('<wbr>@', explode('@', $this->foodsaver['mailbox']));
 			$infos[] = [
 				'name' => $this->translationHelper->s('mailbox'),
-				'val' => '<a href="' . $url . '">' . $this->foodsaver['mailbox'] . '</a>',
+				'val' => '<a href="' . $url . '">' . $splitMail . '</a>',
 			];
 		}
 
