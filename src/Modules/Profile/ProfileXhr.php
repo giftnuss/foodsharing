@@ -71,16 +71,9 @@ class ProfileXhr extends Control
 
 	public function rate(): array
 	{
-		$rate = 1;
-		if (isset($_GET['rate'])) {
-			$rate = (int)$_GET['rate'];
-		}
-
 		$foodsharerId = (int)$_GET['id'];
 
 		if ($foodsharerId > 0) {
-			$type = (int)$_GET['type'];
-
 			$message = '';
 			if (isset($_GET['message'])) {
 				$message = strip_tags($_GET['message']);
@@ -93,7 +86,7 @@ class ProfileXhr extends Control
 				];
 			}
 
-			$this->profileGateway->rate($foodsharerId, $rate, $type, $message, $this->session->id());
+			$this->profileGateway->rate($foodsharerId, $message, $this->session->id());
 
 			$comment = '';
 			if ($msg = $this->profileGateway->getRateMessage($foodsharerId, $this->session->id())) {
@@ -104,7 +97,7 @@ class ProfileXhr extends Control
 				'status' => 1,
 				'comment' => $comment,
 				'title' => 'Nachricht hinterlassen',
-				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
+				'script' => 'pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
 			];
 		}
 

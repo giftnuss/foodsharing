@@ -78,7 +78,7 @@ input, textarea, select, option {
   line-height: 1.28;
 }
 
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, .mfp-content label {
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   line-height: normal;
   font-size: 13px;
 }

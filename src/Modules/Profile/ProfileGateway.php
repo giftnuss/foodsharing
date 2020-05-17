@@ -205,15 +205,15 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function rate(int $fsId, int $rate, int $type = 1, string $message = '', int $sessionId): int
+	public function rate(int $fsId, string $message = '', int $sessionId): int
 	{
 		return $this->db->insert(
 			'fs_rating',
 			[
 				'foodsaver_id' => $fsId,
 				'rater_id' => $sessionId,
-				'rating' => $rate,
-				'ratingtype' => $type,
+				'rating' => 1,
+				'ratingtype' => 2,
 				'msg' => $message,
 				'time' => $this->db->now(),
 			]

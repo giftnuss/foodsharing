@@ -52,6 +52,11 @@
   background-image: url("/img/bananan.png");
 }
 
+#bananas {
+  max-width: 650px;
+  margin: 10px;
+}
+
 .page .linklist {
   margin-top: 10px;
   margin-bottom: 0;

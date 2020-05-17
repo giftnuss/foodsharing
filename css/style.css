@@ -1248,40 +1248,6 @@ span.verified {
   top: auto;
 }
 
-.vouch-banana {
-  display: block;
-  position: absolute;
-  left: 367px;
-  top: 142px;
-  height: 44px;
-  width: 44px;
-  text-decoration: none;
-  padding: 6px;
-  border-radius: 40px;
-  background: #ffffff;
-}
-
-.vouch-banana span {
-  display: block;
-  background-image: url(/img/banana.png);
-  background-repeat: no-repeat;
-  background-position: right;
-  text-decoration: none;
-  height: 44px;
-  width: 44px;
-}
-
-span.vouch-banana span {
-  background-image: url(/img/bananan.png);
-}
-
-a.vouch-banana:hover {
-  background: #533a20;
-  padding: 4px;
-  border: 2px solid white;
-  box-shadow: 6px 5px 9px -9px black;
-}
-
 a.light {
   color: #533a20;
 }

@@ -435,79 +435,112 @@ class ProfileView extends View
 
 	private function renderBananas(): string
 	{
-		if ($this->session->may('fs')) {
-			$bananaCount = count($this->foodsaver['bananen']);
-			if ($bananaCount === 0) {
-				$bananaCount = '&nbsp;';
-			}
+		if (!$this->session->may('fs')) {
+			return '';
+		}
 
-			$banananButtonClass = ' bouched';
-			$giveBanana = '';
+		$bananaCount = count($this->foodsaver['bananen']);
+		if ($bananaCount === 0) {
+			$bananaCount = '&nbsp;';
+		}
 
-			if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
-				$banananButtonClass = '';
-				$giveBanana = '
-				<a onclick="$(this).hide().next().show().children(\'textarea\').autosize();return false;" href="#">Schenke ' . $this->foodsaver['name'] . ' eine Banane</a>
-				<div class="vouch-banana-wrapper" style="display:none;">
-					<div class="vouch-banana-desc">
-						Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
-						Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
-						<p><strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong></p>
-						<a href="#" style="float:right;" onclick="ajreq(\'rate\',{app:\'profile\',type:2,id:' . (int)$this->foodsaver['id'] . ',message:$(\'#bouch-ta\').val()});return false;"><img src="/img/banana.png" /></a>
-					</div>
-					<textarea id="bouch-ta" class="textarea" placeholder="min. 100 Zeichen..." style="height:50px;"></textarea>
-				</div>';
-			}
+		$buttonClass = ' bouched';
+		$giveBanana = '';
 
-			$this->pageHelper->addJs(
-				'
-			$(".stat_bananacount").magnificPopup({
-				type:"inline"
-			});'
-			);
-			$bananaCountButton = '
-			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $banananButtonClass . '">
+		if (!$this->foodsaver['bouched'] && ($this->foodsaver['id'] != $this->session->id())) {
+			$buttonClass = '';
+			$giveBanana = '
+		<div class="mb-2">
+			<a class="btn btn-secondary btn-sm" href="#" onclick="
+				$(this).hide().next().removeClass(\'d-none\');
+				$(\'#bouch-ta\').autosize();
+				$.fancybox.update();
+				return false;"
+			>
+				Schenke ' . $this->foodsaver['name'] . ' eine Banane
+			</a>
+			<div class="d-none">
+				<div class="info">
+					Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
+					Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
+					<p>
+						<strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong>
+					</p>
+				</div>
+				<div class="d-flex">
+					<textarea id="bouch-ta" class="textarea mr-2" placeholder="min. 100 Zeichen..."></textarea>
+					<a href="#" class="btn btn-sm btn-secondary float-right d-inline-flex" onclick="
+						ajreq(\'rate\',{
+							app:\'profile\',
+							id:' . (int)$this->foodsaver['id'] . ',
+							message:$(\'#bouch-ta\').val().trim()
+						});
+						return false;"
+					>
+						<img src="/img/banana.png" class="align-self-center" />
+					</a>
+				</div>
+			</div>
+		</div>
+		';
+		}
+
+		$this->pageHelper->addJs('
+			$(".stat_bananacount").fancybox({
+				closeClick: false,
+				closeBtn: true,
+			});
+		');
+
+		$this->pageHelper->addHidden('
+			<div id="bananas">
+				<div class="popbox bootstrap">
+					<h3>' . str_replace('&nbsp;', '', $bananaCount) . ' Vertrauensbananen</h3>
+					' . $giveBanana . '
+					<table class="pintable">
+						<tbody>
+							' . $this->renderBananasTable($this->foodsaver['bananen']) . '
+						</tbody>
+					</table>
+				</div>
+			</div>
+		');
+
+		return '
+			<a href="#bananas" onclick="return false;" class="item stat_bananacount' . $buttonClass . '">
 				<span class="val">' . $bananaCount . '</span>
 				<span class="name">&nbsp;</span>
 			</a>
-			';
+		';
+	}
 
-			$bananaCountButton .= '
-			<div id="bananas" class="white-popup mfp-hide corner-all">
-				<h3>' . str_replace('&nbsp;', '', $bananaCount) . ' Vertrauensbananen</h3>
-				' . $giveBanana . '
-				<table class="pintable">
-					<tbody>';
-			$odd = 'even';
+	private function renderBananasTable(array $bananasFrom): string
+	{
+		$out = '';
 
-			foreach ($this->foodsaver['bananen'] as $foodsaver) {
-				if ($odd === 'even') {
-					$odd = 'odd';
-				} else {
-					$odd = 'even';
-				}
-				$bananaCountButton .= '
-				<tr class="' . $odd . ' bpost">
-					<td class="img"><a title="' . $foodsaver['name'] . '" href="/profile/' . $foodsaver['id'] . '"><img src="' . $this->imageService->img(
-						$foodsaver['photo']
-					) . '"></a></td>
-					<td><span class="msg">' . nl2br($foodsaver['msg']) . '</span>
+		foreach ($bananasFrom as $foodsaver) {
+			$fsName = $foodsaver['name'];
+			$when = $this->timeHelper->niceDate($foodsaver['time_ts']);
+			$photo = $this->imageService->img($foodsaver['photo'], '50');
+			$text = nl2br($foodsaver['msg']);
+			$out .= '
+			<tr class="border-top">
+				<td>
+					<a title="' . $fsName . '" href="/profile/' . $foodsaver['id'] . '">
+						<img src="' . $photo . '">
+					</a>
+				</td>
+				<td>
+					<span class="msg">' . $text . '</span>
 					<div class="foot">
-						<span class="time">' . $this->timeHelper->niceDate(
-						$foodsaver['time_ts']
-					) . ' von ' . $foodsaver['name'] . '</span>
-					</div></td>
-				</tr>';
-			}
-			$bananaCountButton .= '
-					</tbody>
-				</table>
-			</div>';
-		} else {
-			$bananaCountButton = '';
+						<span class="time">' . $when . ' von ' . $fsName . '</span>
+					</div>
+				</td>
+			</tr>
+			';
 		}
 
-		return $bananaCountButton;
+		return $out;
 	}
 
 	private function renderInformation(): string

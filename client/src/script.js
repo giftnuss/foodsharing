@@ -252,22 +252,6 @@ export function chat (fsid) {
   conv.userChat(fsid)
 }
 
-export function addbanana (fsid) {
-  $('.vouch-banana').tooltip('close')
-
-  $('#fsprofileratemsg-wrapper label').html($('.vouch-banana-title').html())
-  $('#fsprofileratemsg-wrapper div.desc').html($('.vouch-banana-desc').html())
-  $('#fsprofileratemsg').css({
-    height: '137px',
-    width: '558px'
-  })
-  $('#fs-profile-rate-comment').dialog('option', {
-    width: 600,
-    height: 450
-  })
-  $('#fs-profile-rate-comment').dialog('open')
-}
-
 export function profile (id) {
   showLoader()
   goTo(`/profile/${id}`)
