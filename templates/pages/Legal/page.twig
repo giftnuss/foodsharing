@@ -10,12 +10,14 @@
     {% endembed %}
 
     {% if loggedIn %}
-        {% embed 'components/field.twig' with {'title': 'legal.acknowledge'|trans, 'classes': ['ui-padding']} %}
+        {% embed 'components/field.twig' with {'title': 'legal.acknowledge'|trans, 'classes': ['ui-padding bootstrap legal']} %}
             {% block content %}
                 {{ 'legal.not_acknowledge_pp_description'|trans }}
                 {{ form_row(form.privacyPolicyAcknowledged) }}
                 {{ 'legal.dont_agree'|trans }}
-                <a href="/?page=settings&sub=deleteaccount" class="button danger">{{ 'legal.delete_account'|trans }}</a>
+                <a href="/?page=settings&sub=deleteaccount" class="btn btn-sm btn-danger">
+                    {{ 'legal.delete_account'|trans }}
+                </a>
             {% endblock %}
         {% endembed %}
 
@@ -34,7 +36,9 @@
             {% endembed %}
         {% endif %}
 
-        <input type="submit" value="{{ 'legal.actions.safe'|trans }}"/>
+        <div class="bootstrap">
+            <input type="submit" class="btn btn-secondary" value="{{ 'legal.actions.safe'|trans }}"/>
+        </div>
     {% endif %}
 
     {% do form.privacyPolicyAcknowledged.setRendered %}

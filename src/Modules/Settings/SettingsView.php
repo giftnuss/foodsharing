@@ -452,11 +452,16 @@ class SettingsView extends View
 
 	public function delete_account(int $fsId)
 	{
-		$content =
-			'<button type="button" id="delete-account" class="button danger" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('deleteAccountNow') . '</button>'
-		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->translationHelper->s('reference'));
+		$content = '<button type="button" id="delete-account" class="btn btn-sm btn-danger"'
+			. ' onclick="confirmDeleteAccount(' . $fsId . ')">'
+			. $this->translationHelper->s('deleteAccountNow')
+			. '</button>'
+			. $this->v_utils->v_info(
+				'Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?',
+				$this->translationHelper->s('reference')
+			);
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('deleteAccount'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($content, $this->translationHelper->s('deleteAccount'), ['class' => 'ui-padding bootstrap']);
 	}
 
 	public function foodsaver_form()
