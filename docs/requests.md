@@ -42,7 +42,7 @@ chat/socket.io -> nodejs server, in chat/server.js. There is documentation for a
 # REST API
 
 The more modern way to build our api is a [REST api](https://symfony.com/doc/master/bundles/FOSRestBundle/index.html) by FOS (friends of symfony). The documentation of the REST api endpoints is located at the definition of the endpoints and can be nicely viewed on (https://beta.foodsharing.de/api/doc/).
-<!-- TODO: good link to intro/ tutorial -->
+In the [documentation](https://symfony.com/doc/current/bundles/NelmioApiDocBundle/index.html) you can read how to properly include the documentation. A good example can be found in `/src/Controller/ForumRestController.php`.
 <!-- TODO: how is this created? -->
 
 In the [Code quality page](code-review.md) we have some notes on how to define the REST API Endpoints.
@@ -61,6 +61,7 @@ REST is configured via [annotations](https://symfony.com/doc/master/bundles/FOSR
   - `@Rest\Get("subsite")` specifies the address to access to start this Action: `https://foodsharing.de/api/subsite"
   - `@Rest\QueryParam(name="optionname")` specifies which options can be used. These are found behind the `?` in the url: `http://foodsharing.de/api/conversations/687484?messagesLimit=1` only sends one message.
   - Both `Get` and `QueryParam` can enforce limitations on the sent data with `requirement="<some regular expression>"`.
+  - `@SWG\Parameter`, `@SWG\Response`, ... create the [documentation](https://symfony.com/doc/current/bundles/NelmioApiDocBundle/index.html) (see above)
 
 Functions need to have special names for symfony to use them: the end with `Action`.
 They start with a permission check, throw a `HttpException(401)` if the action is not permitted.
