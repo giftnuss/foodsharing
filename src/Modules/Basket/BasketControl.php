@@ -40,8 +40,13 @@ class BasketControl extends Control
 
 	public function find(): void
 	{
-		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation());
-		$this->view->find($baskets, $this->session->getLocation());
+		$loc = $this->session->getLocation();
+		$loc = $this->session->getLocation();
+		if (!$loc || ($loc['lat']) === 0 && ($loc['lon']) === 0) {
+			$loc = ['lat' => 48, 'lon' => '10'];
+		}
+		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $loc);
+		$this->view->find($baskets, $loc);
 	}
 
 	private function basket($basket): void

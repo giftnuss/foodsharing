@@ -277,7 +277,7 @@ class View
 	public function latLonPicker($id, $options = [])
 	{
 		if (!isset($options['location'])) {
-			$data = $this->session->getLocation();
+			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
 		} else {
 			$data['lat'] = $options['location']['lat'];
 			$data['lon'] = $options['location']['lon'];
