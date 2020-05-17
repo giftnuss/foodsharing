@@ -1,8 +1,9 @@
 <template>
   <a
     :class="bellClasses"
-    href="#"
-    @click="$emit('bellClick', bell)"
+    :href="bell.href"
+    @click="$emit('bellRead', bell)"
+    @click.middle="$emit('bellRead', bell)"
   >
     <div class="bell-grid">
       <div class="bell-icon">

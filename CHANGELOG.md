@@ -2,6 +2,7 @@
 
 ## Features
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
+- Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
 
 ## Bugfixes
 
