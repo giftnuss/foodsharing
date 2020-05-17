@@ -92,10 +92,17 @@ class RegionRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Removes the current user from a region. Returns 403 if not logged in, 400 if the region does not exist or 200
-	 * if the user was removed from the region or was not a member of that region. That means that after a 200 result
-	 * the user will definitely not be a member of that region anymore.
+	 * Removes the current user from a region. Returns 403 if not logged in, 400 if the region does not exist, 409 if
+	 * the user is still an active store manager in the region, or 200 if the user was removed from the region or was
+	 * not a member of that region. That means that after a 200 result the user will definitely not be a member of that
+	 * region anymore.
 	 *
+	 * @SWG\Tag(name="region")
+	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="which region or group to leave")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="400", description="Region or group does not exist")
+	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @SWG\Response(response="409", description="User is still an active store manager in the region")
 	 * @Rest\Post("region/{regionId}/leave", requirements={"regionId" = "\d+"})
 	 */
 	public function leaveRegionAction($regionId)

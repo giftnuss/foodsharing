@@ -110,7 +110,7 @@ class RegionApiCest
 		$region2 = $I->createRegion();
 
 		$I->login($this->user['email']);
-		$I->sendPOST('api/region/' . $this->region['id'] . '/join');
+		$I->addRegionMember($this->region['id'], $this->user['id'], true);
 		$I->sendPOST('api/region/' . $region2['id'] . '/leave');
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeResponseIsJson();
