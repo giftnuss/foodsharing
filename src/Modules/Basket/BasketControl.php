@@ -41,7 +41,6 @@ class BasketControl extends Control
 	public function find(): void
 	{
 		$loc = $this->session->getLocation();
-		$loc = $this->session->getLocation();
 		if (!$loc || ($loc['lat']) === 0 && ($loc['lon']) === 0) {
 			$loc = ['lat' => 48, 'lon' => '10'];
 		}
