@@ -14,6 +14,5 @@ local function collect(user_key, session_prefix)
 end
 
 collect("php:user:" .. user_id .. ":sessions", "PHPREDIS_SESSION:")
-collect("api:user:" .. user_id .. ":sessions", ":1:django.contrib.sessions.cache")
 
 return all_session_ids

@@ -156,32 +156,13 @@ test('can send a message', t => {
     });
 });
 
-test('can send to php users', t => {
+test('can send to users', t => {
     t.timeoutAfter(10000);
     t.plan(3);
     const sessionId = randomString.generate();
     const userId = 1;
     addPHPSessionToRedis(userId, sessionId, () => {
         const socket = connect(t, sessionId);
-        socket.on('some-app', (data: any) => {
-            t.equal(data.m, 'some-method', 'passed m param');
-            t.deepEqual(data.o, { someKey: 'some-payload' }, 'passed o param');
-        });
-        register(socket, () => {
-            sendMessage([userId], 'some-app', 'some-method', { someKey: 'some-payload' }, (err: any) => {
-                t.error(err, 'does not error');
-            });
-        });
-    });
-});
-
-test('can send to api users', t => {
-    t.timeoutAfter(10000);
-    t.plan(3);
-    const sessionId = randomString.generate();
-    const userId = 2;
-    addAPISessionToRedis(userId, sessionId, () => {
-        const socket = connect(t, sessionId, 'sessionid'); // django session cookie name
         socket.on('some-app', (data: any) => {
             t.equal(data.m, 'some-method', 'passed m param');
             t.deepEqual(data.o, { someKey: 'some-payload' }, 'passed o param');
@@ -468,14 +449,6 @@ function addPHPSessionToRedis (userId: number, sessionId: string, callback: (err
     redisClient.set(`PHPREDIS_SESSION:${sessionId}`, 'foo')
         .then(async () =>
             await redisClient.sadd(`php:user:${userId}:sessions`, sessionId)
-        ).then(callback)
-        .catch(error => callback(error));
-}
-
-function addAPISessionToRedis (userId: number, sessionId: string, callback: (error: any) => any): void {
-    redisClient.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
-        .then(async () =>
-            await redisClient.sadd(`api:user:${userId}:sessions`, sessionId)
         ).then(callback)
         .catch(error => callback(error));
 }
