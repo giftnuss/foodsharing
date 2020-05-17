@@ -34,6 +34,7 @@
     <menu-messages class="d-md-none" />
     <menu-bells class="d-md-none" />
     <menu-item
+      v-if="hasFsRole"
       id="search"
       icon="fa-search"
       :hide-title-always="true"
@@ -46,11 +47,11 @@
 <script>
 import MenuItem from './MenuItem'
 import MenuRegion from './MenuRegion'
-import MenuStores from './MenuStores'
+import MenuStores from './Stores/MenuStores'
 import MenuGroups from './MenuGroups'
-import MenuBaskets from './MenuBaskets'
-import MenuMessages from './MenuMessages'
-import MenuBells from './MenuBells'
+import MenuBaskets from './Baskets/MenuBaskets'
+import MenuMessages from './Messages/MenuMessages'
+import MenuBells from './Bells/MenuBells'
 
 export default {
   components: {

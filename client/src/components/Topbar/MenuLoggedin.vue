@@ -29,8 +29,8 @@ import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
 import MenuItem from './MenuItem'
-import MenuMessages from './MenuMessages'
-import MenuBells from './MenuBells'
+import MenuMessages from './Messages/MenuMessages'
+import MenuBells from './Bells/MenuBells'
 import MenuUser from './MenuUser'
 
 export default {

@@ -80,7 +80,7 @@ import MenuLoggedout from './MenuLoggedout'
 import MenuLoggedin from './MenuLoggedin'
 import MenuItem from './MenuItem'
 import LoggedInFixedNav from './LoggedInFixedNav'
-import Search from './Search'
+import Search from './Search/Search'
 
 export default {
   components: {
