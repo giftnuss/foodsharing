@@ -202,127 +202,149 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.activity-item span.time {
-  margin-left: 58px;
-  display: block;
-  margin-top: 10px;
-  font-size: 10px;
-  opacity: 0.8;
-}
-
-.activity-item span.qr {
-  margin-left: 58px;
-  border-radius: 3px;
-  opacity: 0.5;
-}
-.activity-item span.qr textarea {
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
-  height: 16px;
-}
-.activity-item span.qr:focus-within {
-  opacity: 1;
-}
-
-.activity-item span.qr:hover {
-  opacity: 1;
-}
-
-.activity-item span.qr img {
-  height: 32px;
-  width: 32px;
-  margin-right: -35px;
-  border-right: 1px solid #ffffff;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-.activity-item span.qr textarea,
-.activity-item span.qr .loader {
-  border: 0 none;
-  height: 16px;
-  margin-left: 36px;
-  padding: 8px;
-  width: 78.6%;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  margin-right: -30px;
-  background-color: #f9f9f9;
-}
-
-.activity-item span.qr .loader {
-  background-color: #ffffff;
-  position: relative;
-  text-align: left;
-  top: -10px;
-}
-.activity-item span.t img {
-    float: left;
-    padding-right: 10px;
-  }
-.activity-item span.t span.img-txt {
-  display: inline;
-  vertical-align: bottom;
-}
-.activity-item span.t span.img-txt span.txt{
-  border: 0;
-  display: inline;
-  padding-left: 0;
-}
-
-.activity-item span.t span.txt {
-  overflow: hidden;
-  text-overflow: unset;
-  white-space: normal;
-  padding-left: 10px;
-  border-left: 2px solid #4a3520;
-  margin-bottom: 10px;
-  display: block;
-}
-.activity-item span.t span.txt a {
-  cursor: pointer;
-}
-.activity-item span.t span.txt p {
-  margin: 5px 0 ;
-}
-.activity-item span {
-  color: #4a3520;
-}
-.activity-item span a {
-  color: #46891b !important;
-}
-.activity-item span.n {
-  display: block;
-  overflow: hidden;
-}
-.activity-item span.n i.fa {
-  display: inline-block;
-  width: 11px;
-  text-align: center;
-}
-.activity-item span.n small {
-  float: right;
-  opacity: 0.8;
-  font-size: 12px;
-}
-.activity-item span a:hover {
-  text-decoration: underline !important;
-  color: #46891b !important;
-}
-
 .activity-item {
   margin-bottom: 10px;
-  background-color: #ffffff;
+  background-color: var(--white);
   padding: 10px;
   border-radius: 6px;
-}
 
-.activity-item span.n {
-  font-weight: normal;
-  font-size: 13px;
-  margin-bottom: 10px;
-  text-overflow: unset;
-  white-space: inherit;
+  span {
+    color: #4a3520;
+
+    a {
+      color: var(--fs-green) !important;
+
+      &:hover {
+        text-decoration: underline !important;
+        color: var(--fs-green) !important;
+      }
+    }
+  }
+
+  span.time {
+    margin-left: 58px;
+    display: block;
+    margin-top: 10px;
+    font-size: 10px;
+    opacity: 0.8;
+  }
+
+  span.qr {
+    margin-left: 58px;
+    border-radius: 3px;
+    opacity: 0.5;
+
+    &:hover,
+    &:focus-within {
+      opacity: 1;
+    }
+
+    img {
+      height: 32px;
+      width: 32px;
+      margin-right: -35px;
+      border-right: 1px solid var(--white);
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+
+    textarea,
+    .loader {
+      border: 0 none;
+      height: 16px;
+      margin-left: 36px;
+      padding: 8px;
+      width: 78.6%;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      margin-right: -30px;
+      background-color: #f9f9f9;
+    }
+
+    textarea {
+      overflow: hidden;
+      overflow-wrap: break-word;
+      resize: none;
+      height: 16px;
+    }
+
+    .loader {
+      background-color: var(--white);
+      position: relative;
+      text-align: left;
+      top: -10px;
+    }
+  }
+
+  span.n {
+    display: block;
+    overflow: hidden;
+    font-weight: normal;
+    font-size: 13px;
+    margin-bottom: 10px;
+    text-overflow: unset;
+    white-space: inherit;
+    overflow-wrap: break-word;
+
+    i.fa {
+      display: inline-block;
+      width: 11px;
+      text-align: center;
+    }
+
+    small {
+      float: right;
+      opacity: 0.8;
+      font-size: 12px;
+    }
+  }
+
+  span.t {
+    img {
+      float: left;
+      padding-right: 10px;
+    }
+
+    span.img-txt {
+      display: inline;
+      vertical-align: bottom;
+
+      span.txt {
+        border: 0;
+        display: inline;
+        padding-left: 0;
+      }
+    }
+
+    span.txt {
+      overflow: hidden;
+      text-overflow: unset;
+      white-space: normal;
+      padding-left: 10px;
+      border-left: 2px solid var(--fs-brown);
+      margin-bottom: 10px;
+      display: block;
+
+      a {
+        cursor: pointer;
+      }
+
+      p {
+        margin: 5px 0;
+      }
+
+      /deep/ .markdown {
+        ol, ul {
+          padding-left: 5px;
+
+          > li {
+            display: list-item;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 900px) {

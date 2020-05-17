@@ -2,15 +2,21 @@
 
 namespace Helper;
 
+use GuzzleHttp\Client;
+
 class Maildev extends \Codeception\Module
 {
 	protected $requiredFields = ['url'];
 
+	public function __construct($moduleContainer, $config = null)
+	{
+		parent::__construct($moduleContainer, $config);
+		$this->client = new Client(['base_uri' => $this->config['url'], 'headers' => ['Accept' => 'application/json']]);
+	}
+
 	public function getMails()
 	{
-		$headers = ['Accept' => 'application/json'];
-
-		return \Unirest\Request::get($this->config['url'] . '/email', $headers)->body;
+		return json_decode($this->client->get('/email')->getBody());
 	}
 
 	public function _before(\Codeception\TestInterface $test)
@@ -20,7 +26,7 @@ class Maildev extends \Codeception\Module
 
 	public function deleteAllMails()
 	{
-		\Unirest\Request::delete($this->config['url'] . '/email/all');
+		$this->client->delete('/email/all');
 	}
 
 	public function expectNumMails($num, $timeout = 0)

@@ -907,11 +907,44 @@ final class FoodsaverGateway extends BaseGateway
 		);
 	}
 
+	public function getProfileForUsers(array $fsIds): array
+	{
+		$res = $this->db->fetchAllByCriteria(
+			'fs_foodsaver',
+			['id', 'name', 'photo', 'sleep_status'],
+			['id' => $fsIds]);
+
+		$profiles = [];
+		foreach ($res as $p) {
+			$profile = new Profile();
+			$profile->id = $p['id'];
+			$profile->name = $p['name'];
+			$profile->avatar = $p['photo'];
+			$profile->sleepStatus = $p['sleep_status'];
+			$profiles[$p['id']] = $profile;
+		}
+
+		return $profiles;
+	}
+
 	/**
 	 * Returns the first name of the foodsaver.
 	 */
 	public function getFoodsaverName($foodsaverId): string
 	{
-		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId]);
+		return $this->db->fetchValueByCriteria('fs_foodsaver', 'name', ['id' => $foodsaverId, 'deleted_at' => null]);
+	}
+
+	public function foodsaverExists($foodsaverId): bool
+	{
+		return $this->foodsaversExist([$foodsaverId]);
+	}
+
+	public function foodsaversExist(array $foodsaverIds): bool
+	{
+		$foodsaverIds = array_unique($foodsaverIds);
+		$existing = $this->db->fetchAllValuesByCriteria('fs_foodsaver', 'id', ['id' => $foodsaverIds, 'deleted_at' => null]);
+
+		return count($foodsaverIds) === count($existing);
 	}
 }

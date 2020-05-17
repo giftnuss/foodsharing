@@ -4,7 +4,7 @@ namespace Foodsharing\Modules\Legal;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\View;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,7 @@ class LegalControl extends Control
 	private $gateway;
 
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 
@@ -28,7 +28,7 @@ class LegalControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -37,13 +37,18 @@ class LegalControl extends Control
 	{
 		$privacyPolicyDate = $this->gateway->getPpVersion();
 		$privacyNoticeDate = $this->gateway->getPnVersion();
-		$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
 
-		$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
-		$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
-		$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
+		if ($this->session->id()) {
+			$privacyNoticeNeccessary = $this->session->user('rolle') >= 2;
+			$privacyPolicyAcknowledged = $this->session->user('privacy_policy_accepted_date') == $privacyPolicyDate;
+			$privacyNoticeAcknowledged = $this->session->user('privacy_notice_accepted_date') == $privacyNoticeDate;
+			$data = new LegalData($privacyPolicyAcknowledged, $privacyNoticeNeccessary ? $privacyNoticeAcknowledged : true);
+		} else {
+			$privacyNoticeNeccessary = false;
+			$data = new LegalData(false, true);
+		}
 
-		$form = $this->formFactory->getFormFactory()->create(LegalForm::class, $data);
+		$form = $this->formFactory->create(LegalForm::class, $data);
 
 		$form->handleRequest($request);
 

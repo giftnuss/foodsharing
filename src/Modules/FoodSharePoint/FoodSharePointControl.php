@@ -62,7 +62,11 @@ class FoodSharePointControl extends Control
 			$this->regions = $this->session->getRegions();
 
 			if ($this->regionId === 0) {
-				$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
+				if ($this->session->id()) {
+					$regionIds = $this->regionGateway->listIdsForFoodsaverWithDescendants($this->session->id());
+				} else {
+					$regionIds = [];
+				}
 			} else {
 				$regionIds = $this->regionGateway->listIdsForDescendantsAndSelf($this->regionId);
 			}

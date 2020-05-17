@@ -1,6 +1,5 @@
-import { get } from './base'
+import { get, patch, post, remove } from './base'
 import { generateQueryString } from '../utils'
-import { ajax } from '@/script'
 
 export function getConversationList (limit = '', offset = '') {
   const queryString = generateQueryString({ limit, offset })
@@ -11,18 +10,36 @@ export function getConversation (conversationId) {
   return get(`/conversations/${conversationId}`)
 }
 
-// legacy MessageXhr method, going to be replaced by a proper REST Endpoint
-export async function sendMessage (conversationId, message) {
-  return new Promise((resolve, reject) => {
-    ajax.req('msg', 'sendmsg', {
-      loader: false,
-      method: 'post',
-      data: {
-        c: conversationId,
-        b: message
-      },
-      success: () => resolve(), // so that no one even tries to use the response data :D
-      error: reject
-    })
+export function getConversationIdForConversationWithUser (userId) {
+  return get(`/user/${userId}/conversation`)
+}
+
+export function getMessages (conversationId, olderThanID) {
+  return get(`/conversations/${conversationId}/messages?olderThanId=${olderThanID}`)
+}
+
+export function sendMessage (conversationId, body) {
+  return post(`/conversations/${conversationId}/messages`, {
+    body: body
   })
+}
+
+export function renameConversation (conversationId, newName) {
+  return patch(`/conversations/${conversationId}`, {
+    name: newName
+  })
+}
+
+export function removeUserFromConversation (conversationId, userId) {
+  return remove(`/conversations/${conversationId}/members/${userId}`)
+}
+
+export function createConversation (userIds) {
+  return post('/conversations', {
+    members: userIds
+  })
+}
+
+export function markConversationRead (conversationId) {
+  return post(`/conversations/${conversationId}/read`)
 }

@@ -26,10 +26,12 @@ class Foodsharing extends \Codeception\Module\Db
 	public function clear()
 	{
 		$this->_getDriver()->executeQuery('
-			DELETE FROM fs_foodsaver;
+			DELETE FROM fs_buddy;
+			DELETE FROM fs_question_has_quiz;
+			DELETE FROM fs_question;
+			DELETE FROM fs_quiz;
 			DELETE FROM fs_foodsaver_has_bezirk;
 			DELETE FROM fs_foodsaver_has_conversation;
-			DELETE FROM fs_conversation;
 			DELETE FROM fs_msg;
 			DELETE FROM fs_betrieb_team;
 			DELETE FROM fs_betrieb;
@@ -43,10 +45,12 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler;
 			DELETE FROM fs_fairteiler_follower;
 			DELETE FROM fs_fairteiler_has_wallpost;
-			DELETE FROM fs_wallpost;
 			DELETE FROM fs_report;
 			DELETE FROM fs_basket;
 			DELETE FROM fs_basket_has_wallpost;
+			DELETE FROM fs_foodsaver;
+			DELETE FROM fs_conversation;
+			DELETE FROM fs_wallpost;
 		', []);
 	}
 
@@ -87,7 +91,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'active' => 1,
 			'privacy_policy_accepted_date' => '2018-05-24 10:24:53',
 			'privacy_notice_accepted_date' => '2018-05-24 18:25:28',
-			'token' => uniqid()
+			'token' => uniqid('', true)
 		], $extra_params);
 		$params['password'] = password_hash($pass, PASSWORD_ARGON2I, [
 			'time_cost' => 1
@@ -425,6 +429,12 @@ class Foodsharing extends \Codeception\Module\Db
 		return $mb;
 	}
 
+	public function addBuddy(int $user1, int $user2, bool $confirmed = true): void
+	{
+		$confirmed = $confirmed ? 1 : 0;
+		$this->haveInDatabase('fs_buddy', ['foodsaver_id' => $user1, 'buddy_id' => $user2, 'confirmed' => $confirmed]);
+	}
+
 	public function createRegion($name = null, $parentId = RegionIDs::EUROPE, $type = Type::PART_OF_TOWN, $extra_params = [])
 	{
 		if ($name == null) {
@@ -521,17 +531,13 @@ class Foodsharing extends \Codeception\Module\Db
 	public function createConversation($users, $extra_params = [])
 	{
 		$params = array_merge([
-			'locked' => 1,
+			'locked' => 0,
 			'name' => null,
-			'start' => $this->faker->dateTime(),
 			'last' => $this->faker->dateTime(),
-			'last_foodsaver_id' => $users[0],
-			'start_foodsaver_id' => $users[0],
+			'last_foodsaver_id' => $users ? $users[0] : null,
 			'last_message_id' => null,
-			'last_message' => '',
-			'member' => '',
+			'last_message' => null,
 		], $extra_params);
-		$params['start'] = $this->toDateTime($params['start']);
 		$params['last'] = $this->toDateTime($params['last']);
 		$id = $this->haveInDatabase('fs_conversation', $params);
 

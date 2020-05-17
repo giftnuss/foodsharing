@@ -57,7 +57,7 @@ export default {
         items.push({
           url: '/?page=region',
           icon: 'fas fa-map',
-          label: this.$i18n('menu_manage_regions')
+          label: this.$i18n('menu.manage_regions')
         })
       }
       if (this.may.administrateNewsletterEmail) {

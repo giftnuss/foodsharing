@@ -13,7 +13,7 @@ use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,7 +29,7 @@ final class RegionControl extends Control
 	private $forumFollowerGateway;
 	/* @var TranslatorInterface */
 	private $translator;
-	/* @var FormFactoryBuilder */
+	/* @var FormFactoryInterface */
 	private $formFactory;
 	private $forumService;
 	private $forumPermissions;
@@ -50,7 +50,7 @@ final class RegionControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -259,7 +259,7 @@ final class RegionControl extends Control
 	{
 		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
-		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
+		$form = $this->formFactory->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
 				$region['id'],

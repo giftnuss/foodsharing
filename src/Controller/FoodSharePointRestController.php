@@ -113,9 +113,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 		if (!$this->isValidNumber($lat, -90.0, 90.0) || !$this->isValidNumber($lon, -180.0, 180.0)) {
 			// find user's location
 			$loc = $this->session->getLocation();
-			$lat = $loc['lat'];
-			$lon = $loc['lon'];
-			if ($lat === 0 && $lon === 0) {
+			if (!$loc || (($lat = $loc['lat']) === 0 && ($lon = $loc['lon']) === 0)) {
 				throw new HttpException(400, 'The user profile has no address.');
 			}
 		}

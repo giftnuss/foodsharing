@@ -20,6 +20,7 @@ use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ProfileView extends View
 {
@@ -40,10 +41,11 @@ class ProfileView extends View
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
 		ProfilePermissions $profilePermissions,
-		ReportPermissions $reportPermissions
+		ReportPermissions $reportPermissions,
+		TranslatorInterface $translator
 	) {
 		parent::__construct($twig, $viewUtils, $session, $sanitizerService, $pageHelper, $timeHelper, $imageService,
-			$routeHelper, $identificationHelper, $dataHelper, $translationHelper);
+			$routeHelper, $identificationHelper, $dataHelper, $translationHelper, $translator);
 
 		$this->profilePermissions = $profilePermissions;
 		$this->reportPermissions = $reportPermissions;
@@ -208,10 +210,13 @@ class ProfileView extends View
 			}
 		}
 
+		$writeMessage = $this->foodsaver['id'] != $this->session->id() ?
+			'<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>'
+			: '';
+
 		return '
 		<ul class="linklist">
-			<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>
-			' . $opt . '
+			' . $writeMessage . $opt . '
 			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
 		</ul>';
 	}

@@ -83,8 +83,10 @@ input, textarea, select, option {
   font-size: 13px;
 }
 
+.event-description,
 .activity_feed_content_info p {
   margin: 0;
+  overflow-wrap: break-word;
 }
 
 .activity_feed_content_text {
@@ -140,10 +142,6 @@ input, textarea, select, option {
   .col.mr-2, .col-md-auto.mr-2 {
     margin-right: 0 !important;
   }
-}
-
-.post.event {
-  padding-top: 10px;
 }
 
 .activity_feed_content_info p a {
@@ -452,4 +450,22 @@ i {
 
 .page-fsbetrieb .element-wrapper {
   word-break: break-word;
+}
+
+.pageImage {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-right:20px;
+}
+
+.pageImageFloatRight {
+  margin-left: 20px;
+  margin-top: 20px;
+  float: right;
+}
+
+.pageImageFloatLeft {
+  margin-right: 20px;
+  margin-top: 20px;
+  float: left;
 }

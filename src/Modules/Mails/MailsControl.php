@@ -111,8 +111,14 @@ class MailsControl extends ConsoleControl
 
 					if (!$mb_ids) {
 						// send auto-reply message
-						if (!empty($msg->getFrom()) && $msg->getFrom()->getFullAddress() != DEFAULT_EMAIL) {
-							$this->emailHelper->tplMail('general/invalid_email_address', $msg->getFrom(), ['address' => $msg->getTo()]);
+						$return_path = $msg->getReturnPath();
+						if (!$return_path) {
+							$return_path = $msg->getFrom();
+						} else {
+							$return_path = $return_path[0];
+						}
+						if ($return_path && $return_path != DEFAULT_EMAIL) {
+							$this->emailHelper->tplMail('general/invalid_email_address', $return_path->getAddress(), ['address' => implode(', ', $mboxes)]);
 						}
 						++$stats['unknown-recipient'];
 					} else {

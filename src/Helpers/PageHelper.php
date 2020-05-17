@@ -130,6 +130,10 @@ final class PageHelper
 			$bodyClasses[] = 'loggedin';
 		}
 
+		if ($this->session->may('fs')) {
+			$bodyClasses[] = 'fs';
+		}
+
 		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
 		$footer = $this->getFooter();
@@ -185,14 +189,14 @@ final class PageHelper
 
 		$userData = [
 			'id' => $this->session->id(),
-			'firstname' => $user['name'],
-			'lastname' => $user['nachname'],
+			'firstname' => $user['name'] ?? '',
+			'lastname' => $user['nachname'] ?? '',
 			'may' => $this->session->may(),
 			'verified' => $this->session->isVerified(),
 			'avatar' => [
-				'mini' => $this->imageService->img($user['photo'], 'mini'),
-				'50' => $this->imageService->img($user['photo'], '50'),
-				'130' => $this->imageService->img($user['photo'], '130')
+				'mini' => $this->imageService->img($user['photo'] ?? '', 'mini'),
+				'50' => $this->imageService->img($user['photo'] ?? '', '50'),
+				'130' => $this->imageService->img($user['photo'] ?? '', '130')
 			]
 		];
 
@@ -222,14 +226,14 @@ final class PageHelper
 			'location' => $location,
 			'ravenConfig' => $sentryConfig,
 			'translations' => $this->translationHelper->getTranslations(),
-			'isDev' => getenv('FS_ENV') === 'dev'
+			'isDev' => getenv('FS_ENV') === 'dev',
+			'locale' => $this->session->getLocale()
 		]);
 	}
 
 	private function getMenu(): string
 	{
 		$regions = [];
-		$stores = [];
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
@@ -240,9 +244,6 @@ final class PageHelper
 					$regions[] = $region;
 				}
 			}
-		}
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			$stores = $_SESSION['client']['betriebe'];
 		}
 
 		$loggedIn = $this->session->may();
@@ -266,7 +267,6 @@ final class PageHelper
 					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
 					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
-				'stores' => array_values($stores),
 				'regions' => $regions,
 				'workingGroups' => $workingGroups,
 			]

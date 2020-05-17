@@ -6,6 +6,7 @@ use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -73,8 +74,7 @@ final class NotificationService
 
 			if ($followers = $this->foodSharePointGateway->getInfoFollowerIds($foodSharePointId)) {
 				$followersWithoutPostAuthor = array_diff($followers, [$post['fs_id']]);
-				$this->bellGateway->addBell(
-					$followersWithoutPostAuthor,
+				$bellData = Bell::create(
 					'ft_update_title',
 					'ft_update',
 					'img img-recycle yellow',
@@ -82,30 +82,8 @@ final class NotificationService
 					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizerService->tt($post['body'], 100)],
 					'fairteiler-' . $foodSharePointId
 				);
+				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
 			}
-		}
-	}
-
-	public function sendEmailIfGroupHasNoAdmin(int $groupId): void
-	{
-		if (count($this->foodsaverGateway->getAdminsOrAmbassadors($groupId)) < 1) {
-			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
-			$groupName = $this->regionGateway->getRegionName($groupId);
-			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
-
-			$idStructureList = '';
-			foreach ($idStructure as $key => $id) {
-				$idStructureList .= str_repeat('---', $key + 1) . '> <b>' . $id . '</b>  -  ' . $this->regionGateway->getRegionName($id) . '<br>';
-			}
-
-			$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructureList' => $idStructureList, 'groupName' => $groupName]);
-
-			$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
-				'gruppenname' => $groupName,
-				'message' => $messageText,
-				'username' => $this->session->user('name'),
-				'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-			], $this->session->user('email'));
 		}
 	}
 }

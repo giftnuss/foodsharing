@@ -1,10 +1,12 @@
 <?php
 
+use Foodsharing\Lib\Session;
+
 class SessionTest extends \Codeception\Test\Unit
 {
 	protected $tester;
 
-	private $session;
+	private Session $session;
 
 	protected function _before()
 	{

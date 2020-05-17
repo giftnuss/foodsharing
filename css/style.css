@@ -1,8 +1,18 @@
 :root {
-  --fs-brown: #533a20;
-  --fs-green: #64ae24;
-  --fs-beige: #f1e7c9;
-  --fs-white: #F9F5E0;
+  --border: #e3ded3;
+
+  --warning-rgb: 255, 193,  7; /* bootstrap default, #ffc107 */
+  --danger-rgb:  220,  53, 69; /* bootstrap default, #dc3545 */
+
+  --fs-brown-rgb:  83,  58,  32;
+  --fs-green-rgb: 100, 174,  36;
+  --fs-beige-rgb: 241, 231, 201;
+  --fs-white-rgb: 249, 245, 224;
+
+  --fs-brown: rgb(var(--fs-brown-rgb)); /* #533a20 */
+  --fs-green: rgb(var(--fs-green-rgb)); /* #64ae24 */
+  --fs-beige: rgb(var(--fs-beige-rgb)); /* #f1e7c9 */
+  --fs-white: rgb(var(--fs-white-rgb)); /* #f9f5e0 */
 }
 
 .avatar, .avatar > i {
@@ -180,12 +190,12 @@ q:before, q:after {
 
 .odd {
   background-color: #fffffe;
-  border-bottom: 1px solid var(--fs-beige);
+  border-bottom: 1px solid var(--border);
 }
 
 .even {
   background-color: #fffffe;
-  border-bottom: 1px solid var(--fs-beige);
+  border-bottom: 1px solid var(--border);
 }
 
 body {
@@ -203,7 +213,7 @@ body {
 }
 
 .input-wrapper {
-  border-bottom: 1px solid #e3ded3;
+  border-bottom: 1px solid var(--border);
   padding-bottom: 15px;
   padding-top: 15px;
   margin-top: 0;
@@ -246,13 +256,10 @@ select {
 div#main {
   line-height: 1.6em;
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 1100px;
   padding: 0;
-}
-
-div#main {
   min-height: calc(83vh);
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 
 .inside, .mainpure {
@@ -594,7 +601,7 @@ ul.team li.breaker {
 ul.team li.breakline {
   display: block;
   float: none;
-  border-bottom: 1px solid #e3ded3;
+  border-bottom: 1px solid var(--border);
   height: 0 !important;
   margin: 5px 8px 8px 5px !important;
   padding: 0 !important;
@@ -885,7 +892,7 @@ ul.linklist li > a i.fa {
 .history li.title {
   font-size: 13px;
   font-weight: bold;
-  border-top: 1px solid #e3ded3;
+  border-top: 1px solid var(--border);
   padding-top: 8px;
   margin-top: 8px;
 }
@@ -964,7 +971,7 @@ ul.linklist li > a:hover, ul.linklist li > a:hover span {
 }
 
 .updatepost {
-  border-bottom: 1px solid #e3ded3 !important;
+  border-bottom: 1px solid var(--border) !important;
   padding-bottom: 15px;
   margin-bottom: 15px;
 }
@@ -1281,7 +1288,7 @@ a.light {
 
 
 .bottom_bar {
-  border-top: 1px solid #e3ded3 !important;
+  border-top: 1px solid var(--border) !important;
   padding-top: 7px;
 }
 
@@ -1370,7 +1377,7 @@ ul.fsicons li.row {
   width: 100%;
 }
 
-a.moreswaplink {
+a.expand-collapse-link {
   display: block;
   padding: 3px;
   text-align: center;
@@ -1384,7 +1391,7 @@ a.moreswaplink {
   top: -20px;
 }
 
-a.moreswaplink:hover {
+a.expand-collapse-link:hover {
   background-color: var(--fs-green);
   text-decoration: none;
 }
@@ -1621,4 +1628,3 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
   background-color: var(--danger);
   white-space: nowrap;
 }
-

@@ -20,6 +20,7 @@ use Foodsharing\Modules\Core\View;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class SettingsView extends View
 {
@@ -37,7 +38,8 @@ class SettingsView extends View
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
 		TranslationHelper $translationHelper,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		TranslatorInterface $translator
 	) {
 		$this->regionGateway = $regionGateway;
 
@@ -52,7 +54,8 @@ class SettingsView extends View
 			$routeHelper,
 			$identificationHelper,
 			$dataHelper,
-			$translationHelper
+			$translationHelper,
+			$translator
 		);
 	}
 

@@ -1,10 +1,6 @@
 <template>
-  <div
-    class="bootstrap"
-  >
-    <div
-      class="card rounded"
-    >
+  <div class="bootstrap">
+    <div class="card rounded">
       <div class="card-header text-white bg-primary">
         <div class="row align-items-center">
           <div class="col text-truncate font-weight-bold">
@@ -12,7 +8,7 @@
           </div>
           <div class="col col-5 text-right">
             <div
-              class="btn-group"
+              class="btn-group slot-actions"
               role="group"
             >
               <button
@@ -22,7 +18,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadEditRecurringPickupModal"
               >
-                <i class="fa fa-pen" />
+                <i class="fas fa-pen" />
               </button>
               <button
                 v-if="isCoordinator"
@@ -31,7 +27,7 @@
                 class="btn btn-secondary btn-sm"
                 @click="loadAddPickupModal"
               >
-                <i class="fa fa-plus" />
+                <i class="fas fa-plus" />
               </button>
             </div>
           </div>
@@ -39,7 +35,7 @@
       </div>
       <div
         :class="{disabledLoading: isLoading}"
-        class="card-body"
+        class="pickup-list card-body"
       >
         <Pickup
           v-for="pickup in pickups"
@@ -48,7 +44,7 @@
           :store-id="storeId"
           :is-coordinator="isCoordinator"
           :user="user"
-          class="mb-2"
+          class="pickup-block"
           @leave="leave"
           @kick="kick"
           @join="join"
@@ -192,6 +188,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.pickup-list {
+  padding: 10px;
 
+  .pickup-block:last-child {
+    margin-bottom: -10px;
+  }
+}
+
+.btn-group.slot-actions {
+  // counter the .card definition of padding: 6px 8px;
+  margin: -6px -8px;
+
+  button {
+    line-height: 21px;
+    padding: 5px 10px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  i.fas {
+    font-size: 14px;
+  }
+}
 </style>

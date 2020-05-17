@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Quiz;
 
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
@@ -357,14 +358,14 @@ class QuizGateway extends BaseGateway
 	{
 		if ($commentId > 0) {
 			if ($quizAMBs = $this->foodsaverGateway->getAdminsOrAmbassadors(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)) {
-				$this->bellGateway->addBell(
-					$quizAMBs,
+				$bellData = Bell::create(
 					'new_quiz_comment_title',
 					'new_quiz_comment',
 					'fas fa-question-circle',
 					['href' => '/?page=quiz&sub=wall&id=' . $questionId],
 					['comment' => $comment]
 				);
+				$this->bellGateway->addBell($quizAMBs, $bellData);
 			}
 
 			$this->db->update(

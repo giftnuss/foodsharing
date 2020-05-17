@@ -13,19 +13,20 @@
     <div class="col-sm-auto">
       <input
         id="email"
-        v-model.lazy="$v.email.$model"
+        :value="email"
         :class="{ 'is-invalid': $v.email.$error }"
         type="email"
         name="email"
         class="form-control"
-        @input="$emit('update:email', $event.target.value)"
+        @blur="update"
       >
       <div
-        v-if="$v.email.$error"
+        v-if="$v.email.$error || !isMailValidForRegistration || isMailInvalid"
         class="invalid-feedback"
       >
         <span v-if="!$v.email.required">{{ $i18n('register.email_required') }}</span>
-        <span v-if="!$v.email.email">{{ $i18n('register.email_invalid') }}</span>
+        <span v-else-if="!$v.email.email || !$v.email.foodsharing || isMailInvalid">{{ $i18n('register.email_invalid') }}</span>
+        <span v-else-if="!isMailValidForRegistration">{{ $i18n('register.error_email_exist') }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -104,26 +105,58 @@
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs, not } from 'vuelidate/lib/validators'
+import { testRegisterEmail } from '@/api/user'
+
+const isFoodsharingDomain = (value) => value.match(/(.)+@foodsharing.((network)|(de))$/g)
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export default {
   props: { email: { type: String, default: '' }, password: { type: String, default: '' } },
   data () {
     return {
-      confirmPassword: ''
+      confirmPassword: '',
+      isMailValidForRegistration: false,
+      isMailInvalid: false
     }
   },
   validations: {
-    email: { required, email },
+    email: { required, email, foodsharing: not(isFoodsharingDomain) },
     password: { required, minLength: minLength(8) },
     confirmPassword: { required, sameAsPassword: sameAs('password') }
   },
-
+  computed: {
+    isValid () {
+      return this.isMailValidForRegistration && !this.$v.$invalid && !this.isMailInvalid
+    }
+  },
   methods: {
     redirect () {
       this.$v.$touch()
-      if (!this.$v.$invalid) {
+      if (this.isValid) {
         this.$emit('next')
+      }
+    },
+    async update ($event) {
+      this.$emit('update:email', $event.target.value)
+      this.$v.email.$touch()
+      // Needs some delay, because touch cannot be awaited: https://github.com/vuelidate/vuelidate/issues/625
+      await delay(20)
+      this.isMailValidForRegistration = false
+      this.isMailInvalid = false
+      if (!this.$v.email.$error) {
+        try {
+          const MailExist = await testRegisterEmail($event.target.value)
+          this.isMailValidForRegistration = MailExist.valid
+        } catch (err) {
+          if (err.code && err.code === 400) {
+            this.isMailInvalid = true
+            return this.isMailInvalid
+          } else {
+            throw err
+          }
+        }
+        return this.isMailValidForRegistration
       }
     }
   }

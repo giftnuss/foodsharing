@@ -28,6 +28,8 @@ if (isset($g_page_cache)) {
 	$cache->lookup();
 }
 
+$translator = $container->get('translator');
+$translator->setLocale($session->getLocale());
 require_once 'lang/DE/de.php';
 
 error_reporting(E_ALL);

@@ -4,6 +4,7 @@ namespace Foodsharing\Modules\Basket;
 
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Basket\Status;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 
 class BasketControl extends Control
 {
@@ -40,8 +41,12 @@ class BasketControl extends Control
 
 	public function find(): void
 	{
-		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation());
-		$this->view->find($baskets, $this->session->getLocation());
+		$loc = $this->session->getLocation();
+		if (!$loc || ($loc['lat']) === 0 && ($loc['lon']) === 0) {
+			$loc = ['lat' => MapConstants::CENTER_GERMANY_LAT, 'lon' => MapConstants::CENTER_GERMANY_LON];
+		}
+		$baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $loc);
+		$this->view->find($baskets, $loc);
 	}
 
 	private function basket($basket): void

@@ -10,11 +10,13 @@ class Database
 {
 	private $pdo;
 	private $fluent;
+	private $influxMetrics;
 
-	public function __construct(PDO $pdo)
+	public function __construct(PDO $pdo, InfluxMetrics $influxMetrics)
 	{
 		$this->pdo = $pdo;
 		$this->fluent = new Query($pdo);
+		$this->influxMetrics = $influxMetrics;
 	}
 
 	/**
@@ -510,9 +512,9 @@ class Database
 		return date('Y-m-d H:i:s');
 	}
 
-	public function date(Carbon $date): string
+	public function date(\DateTimeInterface $date): string
 	{
-		return $date->copy()->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
+		return (clone $date)->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
 	}
 
 	public function parseDate(string $date): Carbon
@@ -575,6 +577,7 @@ class Database
 	 */
 	private function preparedQuery(string $query, array $params): \PDOStatement
 	{
+		$timing_start = hrtime(true);
 		try {
 			// Depending on the PDO's error handling, when the query can't be prepared,
 			// this will either throw a PDOException, or return false.
@@ -615,6 +618,9 @@ class Database
 
 		$statement->setFetchMode(PDO::FETCH_ASSOC);
 		$statement->execute();
+
+		$timing_stop = hrtime(true);
+		$this->influxMetrics->addDbQuery(intdiv($timing_stop - $timing_start, 1e+6));
 
 		return $statement;
 	}

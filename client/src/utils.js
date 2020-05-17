@@ -95,6 +95,42 @@ export const generateQueryString = params => {
   return qs.length ? `?${qs}` : ''
 }
 
+function autoLink (text) {
+  const pattern = /(^|\s)((?:https?|ftp):\/\/([-A-Z0-9+\u0026@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|]))/gi
+  const currentHost = document.location.host
+
+  return text.replace(pattern, function (match, space, url, urlWithoutProto) {
+    return `${space}<a href="${url}" ${urlWithoutProto.split('/', 2)[0] !== currentHost ? ' target="_blank"' : ''}>${urlWithoutProto}</a>`
+  })
+}
+
+function nl2br (str) {
+  const breakTag = '<br>'
+  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
+}
+
+export function plainToHtml (string) {
+  const entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+  }
+  return autoLink(nl2br(String(string).replace(/[&<>]/g, function fromEntityMap (s) {
+    return entityMap[s]
+  })))
+}
+
+export function plainToHtmlAttribute (string) {
+  const entityMap = {
+    '"': '&quot',
+    "'": '&#39;'
+  }
+  return String(string).replace(/["']/g, function fromEntityMap (s) {
+    return entityMap[s]
+  }
+  )
+}
+
 export function isWebGLSupported () {
   // https://stackoverflow.com/a/22953053
   try {

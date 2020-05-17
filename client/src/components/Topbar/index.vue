@@ -65,8 +65,7 @@
               :working-groups="workingGroups"
             />
             <menu-stores
-              v-if="hasFsRole && stores.length"
-              :stores="stores"
+              v-if="hasFsRole"
               :may-add-store="may.addStore"
             />
             <menu-baskets :show-label="!hasFsRole && !isMobile" />
@@ -176,17 +175,17 @@ import ui from '@/stores/ui'
 import { VBTooltip, BCollapse, BNavbarToggle } from 'bootstrap-vue'
 
 import MenuRegion from './MenuRegion'
-import MenuStores from './MenuStores'
+import MenuStores from './Stores/MenuStores'
 import MenuGroups from './MenuGroups'
-import MenuBaskets from './MenuBaskets'
+import MenuBaskets from './Baskets/MenuBaskets'
 import MenuBullhorn from './MenuBullhorn'
 import MenuInformation from './MenuInformation'
 import MenuEnvelope from './MenuEnvelope'
 import MenuAdmin from './MenuAdmin'
-import MenuMessages from './MenuMessages'
-import MenuBells from './MenuBells'
+import MenuMessages from './Messages/MenuMessages'
+import MenuBells from './Bells/MenuBells'
 import MenuUser from './MenuUser'
-import Search from './Search'
+import Search from './Search/Search'
 import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
 import Logo from './Logo'
@@ -241,10 +240,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    stores: {
-      type: Array,
-      default: () => []
-    },
     regions: {
       type: Array,
       default: () => []
@@ -278,7 +273,7 @@ export default {
     }
 
     .container {
-        max-width: 1000px;
+        max-width: 1100px;
     }
 
     @media (max-width: 630px) {
@@ -289,7 +284,7 @@ export default {
     .navbar-nav {
         align-items: center;
     }
-    .navbar-collapse.collapse, .navbar-collapse.collapsing {
+    .navbar-collapse.collapse.show, .navbar-collapse.collapsing {
         &.show {
           // Only when menu is shown. Fixes problem that list of dropdown items is to long.
           max-height: 70vh;

@@ -69,7 +69,6 @@ export const sleepmode = {
 }
 
 export function initialize () {
-  var g_moreswapheight = 100
   $(function () {
     // $(".sleepmode-1, .sleepmode-2").append('<span class="corner-all bubble bubble-right ui-shadow"> nimmt sich gerade eine Auszeit und ist im Schlafmützen-Modus</span>');
     sleepmode.init()
@@ -77,50 +76,61 @@ export function initialize () {
     $('textarea.comment').autosize()
     $('#main').css('display', 'block')
 
-    $('.moreswap').each(function () {
-      var height = 100
-
+    $('.truncate-content').each(function () {
       const $this = $(this)
-      $this.after('<a class="moreswaplink" href="#" data-show="0">Mehr anzeigen</a>')
+      let max_height
 
-      const cheight = $this.attr('class').split('moreswap-height-')
-
-      if (cheight.length > 1) {
-        height = parseInt(cheight[1])
+      if (!isMob() && $this.hasClass('collapse-mobile')) {
+        return // skip + continue
       }
 
-      g_moreswapheight = height
+      const cheight = $this.attr('class').split('truncate-height-')
+      if (cheight.length > 1) {
+        max_height = parseInt(cheight[1])
+      } else {
+        max_height = 100
+      }
 
-      if ($this.height() > 100) {
+      // only modify the element if it exceeds the defined max height
+      // if it does, or if we're lazy-loading content expected to be large
+      // => automatically collapse, and show button for expanding content
+      if (($this.height() > max_height) || $this.hasClass('force-collapse')) {
         $this.css({
-          height: `${height}px`,
+          height: `${max_height}px`,
           overflow: 'hidden'
         })
+        $this.after(`<a class="expand-collapse-link" href="#" data-show="0" data-maxheight="${max_height}">
+            <i class="fas fa-plus-square"></i>
+            <span>mehr anzeigen</span>
+        </a>`)
       }
     })
 
-    $('.moreswaplink').each(function () {
-      const $this = $(this)
-      $this.prev().css({
-        height: `${g_moreswapheight}px`,
-        overflow: 'hidden'
-      })
-      $this.on('click', function (ev) {
+    $('.expand-collapse-link').each(function () {
+      const $link = $(this)
+      const $wrapper = $link.prev()
+
+      $link.on('click', function (ev) {
         ev.preventDefault()
-        if ($this.attr('data-show') == 0) {
-          $this.prev().css({
+        if ($link.attr('data-show') == 0) {
+          // currently collapsed => expand, and convert button to "collapse on click"
+          $wrapper.css({
             height: 'auto',
             overflow: 'visible'
           })
-          $this.text('einklappen')
-          $this.attr('data-show', 1)
+          $link.children('i.fas').removeClass('fa-plus-square').addClass('fa-minus-square')
+          $link.children('span').text('einklappen')
+          $link.attr('data-show', 1)
         } else {
-          $this.prev().css({
-            height: `${g_moreswapheight}px`,
+          // currently expanded => collapse, and convert button to "expand on click"
+          const max_height = $link.attr('data-maxheight')
+          $wrapper.css({
+            height: `${max_height}px`,
             overflow: 'hidden'
           })
-          $this.text('Mehr anzeigen')
-          $this.attr('data-show', 0)
+          $link.children('i.fas').removeClass('fa-minus-square').addClass('fa-plus-square')
+          $link.children('span').text('mehr anzeigen')
+          $link.attr('data-show', 0)
         }
       })
     })
@@ -405,11 +415,6 @@ export function img (photo, size) {
   }
 }
 
-export function stopHeartbeats () {
-  clearInterval(window.g_interval_newBasket)
-  // stopChatHeartbeat();
-}
-
 export function fancy (content, title, subtitle) {
   let t = ''
   let s = ''
@@ -614,10 +619,6 @@ export function pictureCrop (id, img) {
     $(`#${id}-form`).attr('action', `/xhr.php?f=pictureCrop&id=${id}&img=${img}`)
     $(`#${id}-form`).trigger('submit')
   }
-}
-export function nl2br (str, is_xhtml) {
-  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>' // Adjust comment to avoid issue on phpjs.org display
-  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
 }
 
 export function u_loadCoords (addressdata, func) {

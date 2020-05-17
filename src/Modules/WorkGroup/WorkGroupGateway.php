@@ -113,7 +113,6 @@ class WorkGroupGateway extends BaseGateway
 			}
 		} else {
 			$this->emptyLeader($regionId);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($regionId);
 		}
 	}
 

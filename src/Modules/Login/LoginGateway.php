@@ -119,8 +119,7 @@ class LoginGateway extends BaseGateway
 				'anmeldedatum' => $this->db->now(),
 				'privacy_notice_accepted_date' => $this->legalGateway->getPnVersion(),
 				'privacy_policy_accepted_date' => $this->legalGateway->getPpVersion(),
-				'token' => strip_tags($token),
-				'beta' => 1
+				'token' => strip_tags($token)
 			]
 		);
 	}

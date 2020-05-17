@@ -157,3 +157,7 @@ function purge-db() {
 function wait-for-mysql() {
   exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent --execute='select 1' >/dev/null 2>&1; do sleep 1; done"
 }
+
+function wait-for-assets() {
+  while ! [ -d "assets" ]; do sleep 1; done
+}

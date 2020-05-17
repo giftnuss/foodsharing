@@ -101,7 +101,7 @@ class DashboardView extends View
 			</ul>
 		</div>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('next_dates'));
+		return $this->v_utils->v_field($out, $this->translationHelper->s('next_dates'), ['class' => 'truncate-content truncate-height-150 collapse-mobile']);
 	}
 
 	public function u_myBetriebe($betriebe)
@@ -118,7 +118,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out = $this->v_utils->v_field($list, 'Du bist verantwortlich für', ['class' => 'ui-padding']);
+			$out = $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_are_responsible_for_stores'), ['class' => 'ui-padding truncate-content truncate-height-85 collapse-mobile']);
 		}
 
 		if (!empty($betriebe['team'])) {
@@ -132,7 +132,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du holst Lebensmittel ab bei', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_pickup_at_stores'), ['class' => 'ui-padding truncate-content truncate-height-140 collapse-mobile']);
 		}
 
 		if (!empty($betriebe['waitspringer'])) {
@@ -146,7 +146,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Du bist auf der Springerliste bei', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_wait_at_stores'), ['class' => 'ui-padding']);
 		}
 
 		if (!empty($betriebe['anfrage'])) {
@@ -241,7 +241,7 @@ class DashboardView extends View
 			}
 			$list .= '
 			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Anfragen gestellt bei', ['class' => 'ui-padding']);
+			$out .= $this->v_utils->v_field($list, 'Anfragen gestellt bei', ['class' => 'ui-padding truncate-content truncate-height-50 collapse-mobile']);
 		}
 
 		if (empty($out)) {
@@ -369,7 +369,7 @@ class DashboardView extends View
 		$out = '';
 		foreach ($invites as $i) {
 			$out .= '
-			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;">
+			<div class="post event">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
@@ -396,7 +396,7 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding truncate-content collapse-mobile']);
 	}
 
 	public function u_events($events)
@@ -404,7 +404,7 @@ class DashboardView extends View
 		$out = '';
 		foreach ($events as $i) {
 			$out .= '
-			<div class="post event" style="border-bottom:1px solid #E3DED3; padding-bottom:15px;padding-top:15px;">
+			<div class="post event">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
 					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
@@ -434,6 +434,6 @@ class DashboardView extends View
 			$eventTitle = $this->translationHelper->s('event_headline');
 		}
 
-		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'ui-padding moreswap']);
+		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'ui-padding truncate-content']);
 	}
 }

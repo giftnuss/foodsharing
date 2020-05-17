@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Services\ImageService;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,7 +35,7 @@ class WorkGroupControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -191,7 +191,7 @@ class WorkGroupControl extends Control
 
 			$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
 			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
-			$form = $this->formFactory->getFormFactory()->create(WorkGroupForm::class, $editWorkGroupRequest);
+			$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
 			$form->handleRequest($request);
 			if ($form->isSubmitted()) {
 				if ($form->isValid()) {

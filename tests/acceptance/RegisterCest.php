@@ -91,7 +91,7 @@ class RegisterCest
 			'name' => $this->first_name,
 			'nachname' => $this->last_name,
 			'geb_datum' => $this->birthdateUSFormat,
-			'newsletter' => 0,
+			'newsletter' => 1,
 			'handy' => $this->mobile_country_code . $this->mobile_number
 		]);
 	}

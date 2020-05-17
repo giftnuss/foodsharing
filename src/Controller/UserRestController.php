@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Controller;
 
+use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -25,6 +26,7 @@ class UserRestController extends AbstractFOSRestController
 	private $reportPermissions;
 	private $userPermissions;
 	private $profilePermissions;
+	private $emailHelper;
 
 	public function __construct(
 		Session $session,
@@ -33,7 +35,8 @@ class UserRestController extends AbstractFOSRestController
 		ProfileGateway $profileGateway,
 		ReportPermissions $reportPermissions,
 		UserPermissions $userPermissions,
-		ProfilePermissions $profilePermissions)
+		ProfilePermissions $profilePermissions,
+		EmailHelper $emailHelper)
 	{
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
@@ -42,6 +45,7 @@ class UserRestController extends AbstractFOSRestController
 		$this->reportPermissions = $reportPermissions;
 		$this->userPermissions = $userPermissions;
 		$this->profilePermissions = $profilePermissions;
+		$this->emailHelper = $emailHelper;
 	}
 
 	/**
@@ -153,6 +157,31 @@ class UserRestController extends AbstractFOSRestController
 		$this->session->logout();
 
 		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Tests if an email address is valid for registration. Returns 400 if the parameter is not an email address or 200
+	 * and a 'valid' parameter that indicates if the email address can be used for registration.
+	 *
+	 * @Rest\Post("user/isvalidemail")
+	 * @Rest\RequestParam(name="email", nullable=false)
+	 */
+	public function testRegisterEmailAction(ParamFetcher $paramFetcher): Response
+	{
+		$email = $paramFetcher->get('email');
+		if (empty($email) || !$this->emailHelper->validEmail($email)) {
+			throw new HttpException(400, 'email is not valid');
+		}
+
+		return $this->handleView($this->view([
+			'valid' => $this->isEmailValidForRegistration($email)
+		], 200));
+	}
+
+	private function isEmailValidForRegistration(string $email): bool
+	{
+		return !$this->emailHelper->isFoodsharingEmailAddress($email)
+			&& !$this->foodsaverGateway->emailExists($email);
 	}
 
 	/**

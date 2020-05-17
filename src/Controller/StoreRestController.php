@@ -4,8 +4,10 @@ namespace Foodsharing\Controller;
 
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\StoreService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -15,19 +17,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class StoreRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $storeGateway;
-	private $storePermissions;
-	private $bellGateway;
+	private Session $session;
+	private StoreGateway $storeGateway;
+	private StoreService $storeService;
+	private StorePermissions $storePermissions;
+	private BellGateway $bellGateway;
 
 	// literal constants
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const ID = 'id';
 
-	public function __construct(Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, BellGateway $bellGateway)
+	public function __construct(Session $session, StoreGateway $storeGateway, StoreService $storeService, StorePermissions $storePermissions, BellGateway $bellGateway)
 	{
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
+		$this->storeService = $storeService;
 		$this->storePermissions = $storePermissions;
 		$this->bellGateway = $bellGateway;
 	}
@@ -56,6 +60,24 @@ class StoreRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * @Rest\Get("user/current/stores")
+	 */
+	public function getFilteredStoresForUserAction(): Response
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(403, self::NOT_LOGGED_IN);
+		}
+
+		$filteredStoresForUser = $this->storeService->getFilteredStoresForUser($this->session->id());
+
+		if ($filteredStoresForUser === []) {
+			return $this->handleView($this->view([], 204));
+		}
+
+		return $this->handleView($this->view($filteredStoresForUser, 200));
+	}
+
+	/**
 	 * @Rest\Post("stores/{storeId}/posts")
 	 * @Rest\RequestParam(name="text")
 	 */
@@ -78,8 +100,7 @@ class StoreRestController extends AbstractFOSRestController
 		$storeName = $this->storeGateway->getBetrieb($storeId)['name'];
 		$team = $this->storeGateway->getStoreTeam($storeId);
 
-		$this->bellGateway->addBell(
-			$team,
+		$bellData = Bell::create(
 			'store_wallpost_title',
 			'store_wallpost',
 			'img img-store brown',
@@ -90,6 +111,8 @@ class StoreRestController extends AbstractFOSRestController
 			],
 			'store-wallpost-' . $storeId
 		);
+
+		$this->bellGateway->addBell($team, $bellData);
 
 		return $this->handleView($this->view([], 200));
 	}

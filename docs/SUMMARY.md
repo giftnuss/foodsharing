@@ -31,6 +31,7 @@
   - [Databases](database.md)
   - [Tests](tests.md)
   - [Refactoring](refactor.md)
+  - [Release](release.md)
   - [Glossary](GLOSSARY.md)
 
 - [About the devdocs](about-devdocs.md)

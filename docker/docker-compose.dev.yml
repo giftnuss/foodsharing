@@ -22,7 +22,7 @@ services:
 
   app:
     container_name: foodsharing_dev_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
+    image: registry.gitlab.com/foodsharing-dev/images/php:4
     working_dir: /app
     expose:
       - 9000
@@ -65,7 +65,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_dev_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
+    image: registry.gitlab.com/foodsharing-dev/images/php:4
     command: php run.php Mails queueWorker
     restart: always
     depends_on:
@@ -86,9 +86,10 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
-    command: sh -c "yarn && node server.js 0.0.0.0"
     image: node:13.10.1-alpine
     working_dir: /app/chat
+    command: sh -c "yarn && yarn ts-node-dev src/index.ts 0.0.0.0"
+    user: "node"
     depends_on:
       - redis
     environment:

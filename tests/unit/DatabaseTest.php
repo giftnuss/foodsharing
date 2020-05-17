@@ -155,4 +155,15 @@ class DatabaseTest extends \Codeception\Test\Unit
 		$this->assertEquals($method->invokeArgs($this->db, [[['A' => 'a', 'B' => 'b'], ['A' => 'c', 'D' => 'd']]]),
 			['A' => 'c', 'B' => 'b', 'D' => 'd']);
 	}
+
+	public function testInsertMultiple()
+	{
+		$fs1 = $this->tester->createFoodsaver();
+		$fs2 = $this->tester->createFoodsaver();
+		$fs3 = $this->tester->createFoodsaver();
+		$conv = $this->tester->createConversation([]);
+
+		$this->db->insertMultiple('fs_foodsaver_has_conversation', [['conversation_id' => $conv['id'], 'foodsaver_id' => $fs1['id']], ['conversation_id' => $conv['id'], 'foodsaver_id' => $fs2['id']]]);
+		$this->tester->seeNumRecords(2, 'fs_foodsaver_has_conversation', ['conversation_id' => $conv['id']]);
+	}
 }

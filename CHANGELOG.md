@@ -3,10 +3,34 @@
 ## Major changes
 
 ## Features
+- Added tooltips to Dashboard Activities-Overview filter options !1526 @mr-kenhoff
+
+## Bugfixes
+- Be more robust against errors in the WebSocket Chat server: Let request suceed anyway. !1525 @NerdyProjects
+- Fix crash on incoming email that would generate a bounce !1524 @NerdyProjects
+- Fix broken data in internal email system email storage for sender address !1523 @NerdyProjects
+- Migrate all broken email storage sender addresses to be valid !1523 @NerdyProjects
+- Fix accessing null value as array in FairteilerView. !1527 @NerdyProjects
+- Fix wrongly accessing null values in Fairteiler. !1527 @NerdyProjects
+- Fix javascript error accessing the map the first time / without localstorage. !1528 @NerdyProjects
+- Fix issuing invalid SQL IN() query !1534 @NerdyProjects
+- Fix not logged in users getting errors when things should have been logged to their not-existing session !1531 @NerdyProjects
+- Fix accessing invalid location for users without a session or without an address. !1538 @NerdyProjects
+
+## Refactoring
+
+## Dev/Test/CI stuff
+- Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
+- Do not run CI tests before deployment !1529 @NerdyProjects
+- Do not run gitlab dependency scanning job as nobody used the output !1533 @NerdyProjects
+
+# 2020-05-16 
+
+## Features
 - Introduce Web Push Notifications #336 !734 @janopae
-- Use WebSocket connection to determine whether a user is online or not !734 @janopae
+- Use WebSocket connection to determine whether a user is online or not !734 !1470 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz
-- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 @chriswalg @moffer
+- Refactored register form to multi step pages in vue !1099 !1309 !1370 !1401 !1476 @chriswalg @moffer @ChrisOelmueller
 - Redirect to login page after login failed !1342 @chriswalg
 - Display icon for verified Foodsavers in store popup #766 !1294 @pfaufisch
 - update twig to version 3 @peter.toennies
@@ -21,10 +45,21 @@
 - Picture thumbnails are included in dashboard snippets of wallposts !735 #454 @D0nPiano @ChrisOelmueller
 - Link Avatar pictures on dashboard to profiles !735 #464 @D0nPiano @ChrisOelmueller
 - Add option for new forum threads in unmoderated fora to send mail or not !1233 #64 @jofranz @Caluera
-- Refactored register form to multi step pages in vue !1099 !1309 @chriswalg
-- Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 @jofranz
-- Make it possible to unfollow forum bells #271 !1191 @jofranz @chriswalg @ChrisOelmueller @moffer
+- Make it possible to unfollow forum bells #271 !1191 !1467 @jofranz @chriswalg @ChrisOelmueller @moffer
 - Introduce permissions for user profile data handling: maySeeHistory(), mayAdministrateUserProfile(), mayHandleFoodsaverRegionMenu() and mayDeleteFoodsaverFromRegion() !1288 !1438 @jofranz @alex.simm
+- Improve Metrics collection: Log execution timing including database execution timings for all controllers now. !1480 @NerdyProjects
+- Release notes introduced and replaced with the changelog !1474 @chriswalg
+- Extend the lifetime of persistent sessions after every request !1496 @dthulke
+- Include topic title in bell notification for forum posts #869 !1487 @ChrisOelmueller
+- Load store menu in the top bar only when the menu is opened in order to make the slot markers release ready !1502 @janopae
+- Update all package dependencies to current as of 2020-05-11 !1503 @NerdyProjects
+- Allow changing the language for all translation capable texts !1485 @NerdyProjects
+- Allow adding people to conversation by putting their ID into the recipient field !1508 @NerdyProjects
+- Return less results for the user search when creating a new conversation !1513 @NerdyProjects
+  - Now, it returns everybody who is in the same groups as you but excludes people that are just in state or country groups (e.g. Niedersachsen, Deutschland, Europa).
+  - Ambassadors additionally get all people in their ambassador regions and subregions
+  - Orga and Welcome team get all people, now also including foodsharers
+- Massively optimize performance of user search when creating a new conversation !1513 @NerdyProjects
 
 ## Bugfixes
 - Don't ask to accept the legal requirements when not logged in. #811 !1384 @CarolineFischer
@@ -66,6 +101,10 @@
 - Fix issues introduced with push notifications #831 #841 #857 !1442 !1443 !1444 !1445 !1446 @janopae
 - Short Description is shown on profile and purpose of both self descriptions is made clear in settings !1145 #656 @fs_k @Caluera
 - Fallback to raster tiles if the browser does not support WebGL !1455 @dthulke
+- Correct wording: "Fairteiler" and "FairTeiler" to "Fair-Teiler" in some files #890 !1479 @treee111
+- Correct Dashboard preview of ordered + unordered lists #455 !1481 @ChrisOelmueller
+- Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
+- TagEdit color correction when hovering #867 !1514 @ChrisOelmueller
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae
@@ -96,10 +135,15 @@
 - Removed ActivityModel by moving functions to ActivityXhr !1434 #9 @alex.simm 
 - Reimplement footer in vue !1437 @ChrisOelmueller
 - redirected the german refs from storestatusicon.vue and pickuplist.vue to lang.de.yml !1392 #824 @jonathan_b @thesoult
-- Refactored store infos to vue js !1406 @chriswalg
+- Refactored store infos to vue js !1406 !1477 !1492 @chriswalg @ChrisOelmueller
 - Moved profile Rest endpoint to user controller !1374 @alex.simm
 - Removed the two deprecated functions from Session.php !1259 @koenvg
 - Extend RegionPermissions to a mayAdministrateRegions() method. Removes the topbar menu entry if false !1236 @jofranz
+- Update to PHP 7.4.5 and fix some backwards incompatible changes @NerdyProjects
+- Add database constraints to fs_faq !1436 @ffm_hessen
+- Replace XHR request for baskets in topbar by existing REST endpoint !1472 @alex.simm
+- CSS adjustments for foodbasket page, mobile dashboard view with columns !1494 @ChrisOelmueller
+- Port WebSocket server ("chat") to TypeScript and refactor it in an object oriented way !1470 @janopae 
 
 ## Dev/Test/CI stuff
 - Add "linux" tag for finding CI servers !1332 @nicksellen
@@ -120,6 +164,8 @@
 - Added a workaround to devdocs for fedora 32 or debian 10 and docker !1439 @chriswalg
 - added information on our Workflow and how to solve Merge Conflicts in devdocs @jonathan_b
 - added text about refactoring to devdocs @Caluera !1464
+- added text about releases to devdocs @Caluera !1486
+
 
 
 # 2020-03-16 Hotfix
@@ -214,6 +260,8 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Fixed broken tooltips !1304 @ctwx_ok
 - Fix error message when downgrading a foodsaver and do only downgrade if user role has decreased !1323 @pfaufisch @jofranz
 - Temporarily disable pickup slot markers for production release !1307 @jofranz
+- Passportgenerator list sorted by name default, workgroups are not shown anymore !1310 @fs_k
+- Fix text overflow problems with events and notifications #722 #876 !1487 @ChrisOelmueller
 
 ## Refactoring
 - Optimize database access for legal queries !1292 @CarolineFischer

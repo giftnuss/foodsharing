@@ -4,7 +4,12 @@ framework:
         handler_id: ~
     php_errors:
         log: true
+    assets:
+        base_path: '/assets'
 
+jms_serializer:
+    property_naming:
+        id: 'jms_serializer.identical_property_naming_strategy'
 
 fos_rest:
     param_fetcher_listener: true
@@ -21,12 +26,3 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
-
-exercise_html_purifier:
-    default:
-        Cache.SerializerPath: '%kernel.cache_dir%/htmlpurifier-cache'
-        Cache.SerializerPermissions: 0775
-        AutoFormat.DisplayLinkURI: false
-        AutoFormat.Linkify: false
-        CSS.AllowedProperties: []
-        URI.DisableExternalResources: true

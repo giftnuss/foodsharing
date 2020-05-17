@@ -13,12 +13,13 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Modules\Message\MessageModel;
+use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -28,6 +29,7 @@ use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\ImageService;
+use Foodsharing\Services\MessageService;
 use Foodsharing\Services\NotificationService;
 use Foodsharing\Services\SanitizerService;
 use Intervention\Image\ImageManager;
@@ -42,7 +44,7 @@ class XhrMethods
 	private $v_utils;
 	private $xhrViewUtils;
 	private $storeModel;
-	private $messageModel;
+	private $messageGateway;
 	private $regionGateway;
 	private $storePermissions;
 	private $forumGateway;
@@ -58,6 +60,7 @@ class XhrMethods
 	private $identificationHelper;
 	private $dataHelper;
 	private $translationHelper;
+	private $messageService;
 	private $newsletterEmailPermissions;
 	private $regionPermissions;
 	private $notificationService;
@@ -74,7 +77,7 @@ class XhrMethods
 		Utils $viewUtils,
 		ViewUtils $xhrViewUtils,
 		StoreModel $storeModel,
-		MessageModel $messageModel,
+		MessageGateway $messageGateway,
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		BellGateway $bellGateway,
@@ -89,6 +92,7 @@ class XhrMethods
 		ImageService $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
+		MessageService $messageService,
 		TranslationHelper $translationHelper,
 		NewsletterEmailPermissions $newsletterEmailPermissions,
 		NotificationService $notificationService,
@@ -100,7 +104,7 @@ class XhrMethods
 		$this->v_utils = $viewUtils;
 		$this->xhrViewUtils = $xhrViewUtils;
 		$this->storeModel = $storeModel;
-		$this->messageModel = $messageModel;
+		$this->messageGateway = $messageGateway;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->bellGateway = $bellGateway;
@@ -116,6 +120,7 @@ class XhrMethods
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->messageService = $messageService;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 		$this->regionPermissions = $regionPermission;
 		$this->notificationService = $notificationService;
@@ -1046,12 +1051,13 @@ class XhrMethods
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
 		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
-		$this->bellGateway->addBell($team, 'store_cr_times_title', 'store_cr_times', 'img img-store brown', [
+		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'img img-store brown', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		], [
 			'user' => $this->session->user('name'),
 			'name' => $betrieb
 		], 'store-time-' . (int)$data['bid']);
+		$this->bellGateway->addBell($team, $bellData);
 
 		return json_encode(['status' => 1]);
 	}
@@ -1313,12 +1319,13 @@ class XhrMethods
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
 			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
-			$this->bellGateway->addBell($biebs, 'store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			], 'store-request-' . (int)$data['id']);
+			$this->bellGateway->addBell($biebs, $bellData);
 		} else {
 			$msg = 'Für diesen Betrieb gibt es noch keinen Verantwortlichen. Die Botschafter wurden informiert.';
 
@@ -1333,12 +1340,13 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$this->bellGateway->addBell($botsch, 'store_new_request_title', 'store_new_request', 'img img-store brown', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'img img-store brown', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
 				'name' => $betrieb
 			], 'store-request-' . (int)$data['id']);
+			$this->bellGateway->addBell($botsch, $bellData);
 		}
 
 		$this->storeModel->teamRequest($this->session->id(), $data['id']);
@@ -1371,7 +1379,6 @@ class XhrMethods
 			$this->sanitizerService->handleTagSelect('botschafter');
 
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
-			$this->notificationService->sendEmailIfGroupHasNoAdmin($data['bezirk_id']);
 
 			return json_encode([
 				'status' => 1,
@@ -1398,23 +1405,25 @@ class XhrMethods
 		$storeId = (int)$data['bid'];
 		if ($this->storePermissions->mayEditStoreTeam($storeId)) {
 			$check = false;
+			$foodsaverId = (int)$data['fsid'];
+			$teamChatId = $this->storeGateway->getBetriebConversation($storeId);
+			$standbyTeamChatId = $this->storeGateway->getBetriebConversation($storeId, true);
 			if ($data['action'] == 'toteam') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 1 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->messageGateway->addUserToConversation($teamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
 			} elseif ($data['action'] == 'tojumper') {
 				$check = true;
-				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
+				$this->model->update('UPDATE `fs_betrieb_team` SET `active` = 2 WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->messageGateway->addUserToConversation($standbyTeamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
 			} elseif ($data['action'] == 'delete') {
 				$check = true;
-				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . (int)$data['fsid'] . ' AND betrieb_id = ' . $storeId);
-				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . (int)$data['fsid'] . ' AND `date` > NOW()');
-
-				if ($tcid = $this->storeGateway->getBetriebConversation($storeId)) {
-					$this->messageModel->deleteUserFromConversation($tcid, (int)$data['fsid'], true);
-				}
-				if ($scid = $this->storeGateway->getBetriebConversation($storeId, true)) {
-					$this->messageModel->deleteUserFromConversation($scid, (int)$data['fsid'], true);
-				}
+				$this->model->del('DELETE FROM `fs_betrieb_team` WHERE foodsaver_id = ' . $foodsaverId . ' AND betrieb_id = ' . $storeId);
+				$this->model->del('DELETE FROM `fs_abholer` WHERE `betrieb_id` = ' . $storeId . ' AND `foodsaver_id` = ' . $foodsaverId . ' AND `date` > NOW()');
+				$this->messageGateway->deleteUserFromConversation($teamChatId, $foodsaverId);
+				$this->messageGateway->deleteUserFromConversation($standbyTeamChatId, $foodsaverId);
 			}
 
 			if ($check) {

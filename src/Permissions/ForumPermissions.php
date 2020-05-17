@@ -3,7 +3,6 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumGateway;
 
 class ForumPermissions
@@ -95,10 +94,6 @@ class ForumPermissions
 			return true;
 		}
 		if ($post['author_id'] == $this->session->id()) {
-			return true;
-		}
-		/* ToDo: If forum ever gets used outside of the region context, the relationship in the post is not accurate anymore */
-		if ($post['region_type'] == Type::WORKING_GROUP && ($this->session->isAdminFor($post['region_type']))) {
 			return true;
 		}
 

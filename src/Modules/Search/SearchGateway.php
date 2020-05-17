@@ -100,17 +100,51 @@ class SearchGateway extends BaseGateway
 					 ' . $show['name'] . ' AS name,
 					 ' . $show['click'] . ' AS click,
 					 ' . $show['teaser'] . ' AS teaser
-	
-		
+
+
 			FROM 	' . $table . '
-	
+
 			WHERE ' . $fsql . ' LIKE ' . implode(' AND ' . $fsql . ' LIKE ', $terms) . '
 			' . $fs_sql . '
-	
+
 			ORDER BY `name`
-				
+
 			LIMIT 0,50
-			
+
 		');
+	}
+
+	/**
+	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
+	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 * @param array|null $groupIds the groupids a person must be in to be found. Set to null to query over all users.
+	 */
+	public function searchUserInGroups(string $q, ?array $groupIds = []): array
+	{
+		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
+		$q = mb_ereg_replace('\W', ' ', $q);
+		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
+		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
+		$searchString = implode(' ',
+			array_map(
+				function ($a) { return '+' . $a . '*'; },
+				array_filter(
+					explode(' ', $q),
+					function ($v) { return mb_strlen($v) > 2; }
+					)
+			)
+		);
+		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
+		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
+		$groupBy = ' GROUP BY fs.id';
+		if ($groupIds === null) {
+			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
+		} else {
+			return $this->db->fetchAll(
+				$select . ', fs_foodsaver_has_bezirk hb WHERE ' .
+				$fulltextCondition .
+				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')' . $groupBy,
+				array_merge([$searchString], $groupIds));
+		}
 	}
 }

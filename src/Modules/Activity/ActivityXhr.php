@@ -343,7 +343,7 @@ class ActivityXhr extends Control
 			if ($updates = $this->activityGateway->fetchAllMailboxUpdates($mb_ids, $page)) {
 				$out = [];
 				foreach ($updates as $u) {
-					$sender = @json_decode($u['sender'], true);
+					$sender = json_decode($u['sender'], true, 512, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_IGNORE);
 
 					$out[] = [
 						'type' => 'mailbox',
@@ -433,7 +433,7 @@ class ActivityXhr extends Control
 
 	private function loadStoreUpdates(int $page): array
 	{
-		if ($this->session->getMyBetriebIds() && $ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
+		if ($ret = $this->activityGateway->fetchAllStoreUpdates($this->session->id(), $page)) {
 			$out = [];
 			foreach ($ret as $r) {
 				$out[] = [

@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\View;
 
 class FoodSharePointView extends View
 {
-	private $regionId;
 	private $region;
 	private $regions;
 
@@ -22,7 +21,6 @@ class FoodSharePointView extends View
 	public function setRegion($region): void
 	{
 		$this->region = $region;
-		$this->regionId = $region['id'];
 	}
 
 	public function setFoodSharePoint($foodSharePoint, $follower): void
@@ -66,7 +64,7 @@ class FoodSharePointView extends View
 		);
 	}
 
-	public function foodSharePointForm($data = false): string
+	public function foodSharePointForm($data = []): string
 	{
 		$title = $this->translationHelper->s('new_food_share_point');
 
@@ -83,12 +81,19 @@ class FoodSharePointView extends View
 					pulseError("Es muss mindestens einen Verantwortlichen für diesen Fair-Teiler geben!");
 				}
 			});
-		');
+			');
+
+			foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
+				$latLonOptions[$i] = $data[$i];
+			}
+			$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
+		} else {
+			$latLonOptions = [];
+			$data['bezirk_id'] = null;
+			$data['name'] = '';
+			$data['desc'] = '';
+			$data['picture'] = '';
 		}
-		foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
-			$latLonOptions[$i] = $data[$i];
-		}
-		$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
 			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
@@ -176,7 +181,7 @@ class FoodSharePointView extends View
 			$content .= $this->twig->render('partials/listFoodSharePointsForRegion.html.twig', ['region' => $region, 'food_share_point' => $region['fairteiler']]);
 		}
 
-		if ($this->regionId > 0) {
+		if ($this->region) {
 			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_food_share_point', $this->region['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->region['name'] . ' und allen Unterbezirken',
 				'<img src="/img/foodSharePointThumb.png" />'
 			), CNT_TOP);

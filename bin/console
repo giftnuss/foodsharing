@@ -9,8 +9,8 @@ use Symfony\Component\ErrorHandler\Debug;
 
 set_time_limit(0);
 
-require __DIR__.'/../vendor/autoload.php';
-include __DIR__.'/../config.inc.php';
+require __DIR__ . '/../vendor/autoload.php';
+include __DIR__ . '/../config.inc.php';
 
 if (!class_exists(Application::class)) {
     throw new \RuntimeException('You need to add "symfony/framework-bundle" as a Composer dependency.');
@@ -18,7 +18,7 @@ if (!class_exists(Application::class)) {
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev', true);
-$debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env)) && !$input->hasParameterOption('--no-debug', true);
+$debug = (bool)($_SERVER['APP_DEBUG'] ?? ('prod' !== $env)) && !$input->hasParameterOption('--no-debug', true);
 
 if ($debug) {
     umask(0000);

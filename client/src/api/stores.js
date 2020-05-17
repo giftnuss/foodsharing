@@ -33,3 +33,7 @@ export async function setPickupSlots (storeId, pickupDate, totalSlots) {
 export async function deleteStorePost (postId) {
   return remove(`/stores/posts/${postId}`)
 }
+
+export async function listStoresForCurrentUser () {
+  return get('/user/current/stores')
+}

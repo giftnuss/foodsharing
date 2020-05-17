@@ -24,7 +24,7 @@ services:
 
   app:
     container_name: foodsharing_test_app
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
+    image: registry.gitlab.com/foodsharing-dev/images/php:4
     working_dir: /app
     expose:
       - 9000
@@ -63,7 +63,7 @@ services:
 
   mailqueuerunner:
     container_name: foodsharing_test_mailqueuerunner
-    image: registry.gitlab.com/foodsharing-dev/images/php:2.20
+    image: registry.gitlab.com/foodsharing-dev/images/php:4
     command: php run.php Mails queueWorker
     working_dir: /app
     restart: always
@@ -83,7 +83,8 @@ services:
   chat:
     container_name: foodsharing_test_chat
     image: node:13.10.1-alpine
-    command: sh -c "yarn && node server.js 0.0.0.0"
+    command: sh -c "yarn && yarn ts-node src/index.ts 0.0.0.0"
+    user: "node"
     working_dir: /app/chat
     depends_on:
       - redis
@@ -129,8 +130,8 @@ services:
 
   selenium:
     container_name: foodsharing_test_selenium
-    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.3
-    shm_size: 256M
+    image: registry.gitlab.com/foodsharing-dev/images/selenium:1.4
+    shm_size: 512M
     links:
       - web:web
     expose:

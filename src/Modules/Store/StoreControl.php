@@ -6,17 +6,20 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\StorePermissions;
+use Foodsharing\Services\StoreService;
 
 class StoreControl extends Control
 {
 	private $bellGateway;
 	private $storeGateway;
 	private $storePermissions;
+	private $storeService;
 	private $regionGateway;
 	private $foodsaverGateway;
 	private $identificationHelper;
@@ -26,6 +29,7 @@ class StoreControl extends Control
 	public function __construct(
 		StoreModel $model,
 		StorePermissions $storePermissions,
+		StoreService $storeService,
 		StoreView $view,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
@@ -40,6 +44,7 @@ class StoreControl extends Control
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
+		$this->storeService = $storeService;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
 		$this->identificationHelper = $identificationHelper;
@@ -162,13 +167,15 @@ class StoreControl extends Control
 	{
 		global $g_data;
 		if ($this->submitted()) {
+			$id = (int)$_GET['id'];
 			$g_data['stadt'] = $g_data['ort'];
 			$g_data['hsnr'] = '';
 			$g_data['str'] = $g_data['anschrift'];
 
-			if ($this->model->update_betrieb($_GET['id'], $g_data)) {
+			if ($this->model->update_betrieb($id, $g_data)) {
+				$this->storeService->setStoreNameInConversations($id, $g_data['name']);
 				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_edit_success'));
-				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);
+				$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
 			} else {
 				$this->flashMessageHelper->error($this->translationHelper->s('error'));
 			}
@@ -199,6 +206,7 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 
 			if ($id = $this->model->add_betrieb($g_data)) {
+				$this->storeService->setStoreNameInConversations($id, $g_data['name']);
 				$this->storeGateway->add_betrieb_notiz([
 					'foodsaver_id' => $this->session->id(),
 					'betrieb_id' => $id,
@@ -219,12 +227,13 @@ class StoreControl extends Control
 
 				$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($g_data['bezirk_id']);
 
-				$this->bellGateway->addBell($foodsaver, 'store_new_title', 'store_new', 'img img-store brown', [
+				$bellData = Bell::create('store_new_title', 'store_new', 'img img-store brown', [
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				], [
 					'user' => $this->session->user('name'),
 					'name' => $g_data['name']
 				], 'store-new-' . (int)$id);
+				$this->bellGateway->addBell($foodsaver, $bellData);
 
 				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_add_success'));
 

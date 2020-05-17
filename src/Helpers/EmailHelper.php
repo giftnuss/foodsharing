@@ -110,7 +110,7 @@ final class EmailHelper
 			$mail->addRecipient($to);
 		}
 		$mail->send();
-		$this->metrics->addPoint('outgoing_email', ['template' => $tpl_id], ['count' => $num_recipients]);
+		$this->metrics->addOutgoingMail($tpl_id, $num_recipients);
 	}
 
 	public function validEmail(string $email): bool
@@ -175,6 +175,6 @@ final class EmailHelper
 		}
 
 		$mail->send();
-		$this->metrics->addPoint('outgoing_email', ['template' => 'libmail'], ['count' => 1]);
+		$this->metrics->addOutgoingMail('libmail', 1);
 	}
 }

@@ -8,41 +8,47 @@
     "node": ">=6.5.0"
   },
   "scripts": {
-    "lint": "eslint -c package.json .",
-    "fix": "eslint -c package.json --fix .",
-    "test": "tape test.js | tap-spec"
+    "lint": "eslint . --ext .ts",
+    "fix": "eslint --fix . --ext .ts",
+    "test": "tsc test.ts && tape test.js | tap-spec"
   },
   "dependencies": {
+    "@types/cookie": "^0.3.3",
+    "@types/node": "^13.13.2",
+    "@types/redis": "^2.8.18",
+    "@types/restify": "^8.4.2",
+    "@types/socket.io": "^2.1.4",
     "cookie": "^0.4.0",
+    "eslint-config-standard-with-typescript": "^16.0.0",
     "randomstring": "^1.1.5",
-    "redis": "^3.0.2",
+    "reflect-metadata": "^0.1.13",
+    "restify": "^8.5.1",
     "socket.io": "^2.3.0",
+    "tedis": "^0.1.12",
+    "ts-node": "^8.9.1",
+    "typescript": "^3.8.3",
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "@types/randomstring": "^1.1.6",
+    "@types/socket.io-client": "^1.4.32",
+    "@types/superagent": "^4.1.7",
+    "@types/tape": "^4.13.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "node-dev": "^4.0.0",
     "request": "^2.88.2",
     "socket.io-client": "^2.3.0",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2",
     "tap-spec": "^5.0.0",
-    "tape": "^4.13.2"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "standard"
-    ],
-    "rules": {
-      "object-curly-spacing": [
-        "error",
-        "always"
-      ]
-    }
+    "tape": "^4.13.2",
+    "ts-node-dev": "^1.0.0-pre.44"
   }
 }

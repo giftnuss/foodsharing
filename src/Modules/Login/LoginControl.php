@@ -6,14 +6,14 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Mobile_Detect;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class LoginControl extends Control
 {
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 
@@ -34,7 +34,7 @@ class LoginControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory): void
+	public function setFormFactory(FormFactoryInterface $formFactory): void
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -54,7 +54,7 @@ class LoginControl extends Control
 		if (!$this->session->may()) {
 			$has_subpage = $request->query->has('sub');
 
-			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
+			$form = $this->formFactory->create(LoginForm::class);
 			$form->handleRequest($request);
 
 			if (!$has_subpage) {
