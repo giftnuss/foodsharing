@@ -10,6 +10,7 @@
 - Fix broken data in internal email system email storage for sender address !1523 @NerdyProjects
 - Migrate all broken email storage sender addresses to be valid !1523 @NerdyProjects
 - Fix accessing null value as array in FairteilerView. !1527 @NerdyProjects
+- Fix wrongly accessing null values in Fairteiler. !1527 @NerdyProjects
 
 ## Refactoring
 
