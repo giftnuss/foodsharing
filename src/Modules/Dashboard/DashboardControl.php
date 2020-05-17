@@ -6,6 +6,7 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -192,7 +193,7 @@ class DashboardControl extends Control
 
 	private function getUserLocationOrDefault()
 	{
-		return $this->session->getLocation() ?? ['lat' => 48, 'lon' => 10];
+		return $this->session->getLocation() ?? ['lat' => MapConstants::CENTER_GERMANY_LAT, 'lon' => MapConstants::CENTER_GERMANY_LON];
 	}
 
 	/**
