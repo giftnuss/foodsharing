@@ -7,7 +7,7 @@
     <span class="logo-text">
       food<span class="green">shar<span class="apple">i</span>ng</span>
     </span>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class="d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;</span>
   </a>
 </template>
 <script>
@@ -37,7 +37,7 @@ export default {
       position: absolute;
       font-size: 0.5em;
     }
-    @media (max-width: 680px)  {
+    @media (max-width: 768px)  {
       // background-image: url('/img/fsgabelgwrgbklein.png');
       background-image: url('/img/fsgabelgwrgbklein.png');
       background-size: contain;

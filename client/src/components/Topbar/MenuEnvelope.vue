@@ -7,7 +7,7 @@
   >
     <template v-slot:button-content>
       <i class="fas fa-envelope" />
-      <span class="d-sm-none">{{ $i18n('menu.entry.contact') }}</span>
+      <span class="d-md-none">{{ $i18n('menu.entry.contact') }}</span>
       <span v-if="displayText">{{ $i18n('menu.entry.contact') }}</span>
       <span
         v-if="unread"

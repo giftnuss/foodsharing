@@ -106,8 +106,9 @@ export default {
     }
   },
   watch: {
-    focus: function (val) {
+    focusLogin: function (val) {
       if (val) {
+        this.$refs.email.focus()
         this.$refs.email.select()
       }
     }

@@ -5,7 +5,8 @@
     class="regionMenu"
   >
     <template v-slot:button-content>
-      <span class="regionName text-truncate">
+      <i class="fas fa-globe" />
+      <span class="regionName text-truncate d-none d-sm-inline-block">
         {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
       </span>
     </template>
@@ -143,6 +144,7 @@
   </b-nav-item-dropdown>
 </template>
 <script>
+import ui from '@/stores/ui'
 import { BCollapse, BNavItemDropdown, VBToggle } from 'bootstrap-vue'
 
 import { becomeBezirk } from '@/script'
@@ -156,13 +158,12 @@ export default {
     regions: {
       type: Array,
       default: () => []
-    },
-    activeRegionId: {
-      type: Number,
-      default: null
     }
   },
   computed: {
+    activeRegionId () {
+      return ui.activeRegionId
+    },
     activeRegion () {
       return this.regions.find(r => r.id === this.activeRegionId)
     },
@@ -203,5 +204,21 @@ export default {
     max-width: 120px;
     display: inline-block;
     margin-bottom: -0.35em;
+}
+
+.dropdown-item {
+  font-weight: bold;
+  font-size: 0.9em;
+  i {
+    display: inline-block;
+    width: 1.7em;
+    text-align: center;
+    margin-left: -0.4em;
+  }
+}
+.sub .dropdown-item {
+    font-size: 0.8em;
+    padding-left: 3em;
+    font-weight: normal;
 }
 </style>

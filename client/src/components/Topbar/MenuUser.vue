@@ -1,36 +1,28 @@
 <template>
   <div>
-    <div
-      v-if="isMobile"
-      class="nav-item b-nav-dropdown dropdown"
-    >
-      <a
-        :href="$url('profile', userId)"
-        role="menuitem"
-        class="nav-link"
-      >
-        <i class="fas fa-address-card" /> {{ $i18n('profile.title') }}
-      </a>
-      <a
-        :href="$url('settings')"
-        role="menuitem"
-        class="nav-link"
-      >
-        <i class="fas fa-cog" /> {{ $i18n('settings.header') }}
-      </a>
-      <a
-        :href="$url('logout')"
-        role="menuitem"
-        class="nav-link"
-      >
-        <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
-      </a>
-    </div>
+    <menu-item
+      :url="$url('profile', userId)"
+      icon="fa-address-card"
+      :title="$i18n('profile.title')"
+      class="d-md-none"
+    />
+    <menu-item
+      :url="$url('settings')"
+      icon="fa-cog"
+      :title="$i18n('settings.header')"
+      class="d-md-none"
+    />
+    <menu-item
+      :url="$url('logout')"
+      icon="fa-power-off"
+      :title="$i18n('login.logout') "
+      class="d-md-none"
+    />
+
     <b-nav-item-dropdown
-      v-else
       v-b-tooltip="$i18n('menu.entry.your_account')"
       no-caret
-      class="user"
+      class="user d-none d-md-inline-block"
       right
     >
       <template v-slot:button-content>
@@ -61,8 +53,10 @@
   </div>
 </template>
 <script>
+import MenuItem from './MenuItem'
 
 export default {
+  components: { MenuItem },
   props: {
     userId: {
       type: Number,

@@ -8,7 +8,10 @@
   >
     <template v-slot:button-content>
       <i class="fas fa-shopping-basket" />
-      <span v-if="showLabel">
+      <span
+        v-if="showLabel"
+        class="d-none d-sm-inline-block"
+      >
         {{ $i18n('basket.title') }}
       </span>
     </template>

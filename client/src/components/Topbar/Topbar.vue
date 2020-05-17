@@ -5,40 +5,69 @@
   >
     <b-navbar
       fixed="top"
-      toggleable="sm"
+      toggleable="md"
       class="navbar-expand-md navbar-dark bg-primary"
     >
-      <b-navbar-brand>
-        <Logo :link-url="loggedIn ? $url('dashboard') : $url('home')" />
-      </b-navbar-brand>
+      <b-container fluid="xl">
+        <b-navbar-brand>
+          <Logo :link-url="loggedIn ? $url('dashboard') : $url('home')" />
+        </b-navbar-brand>
 
-      <b-navbar-nav class="nav-row">
-        <menu-item
-          :url="$url('joininfo')"
-          icon="fa-rocket"
-          :title="$i18n('register.topbar')"
-          :show-on-mobile="true"
-        />
-        <menu-item
-          id="login"
-          icon="fa-rocket"
-          title="Login"
-          :show-on-mobile="true"
-        />
-        <div class="bootstrap">
-          <Login />
-        </div>
-      </b-navbar-nav>
-      <b-navbar-toggle target="nav-collapse">
-        <i :class="`fa fa-bars`" />
-      </b-navbar-toggle>
+        <!-- When not logged in -->
+        <b-navbar-nav
+          v-if="!loggedIn"
+          class="nav-row justify-content-md-end"
+        >
+          <menu-item
+            :url="$url('joininfo')"
+            icon="fa-rocket"
+            :title="$i18n('register.topbar')"
+            :show-title-always="true"
+          />
+          <menu-item
+            id="login"
+            icon="fa-rocket"
+            title="Login"
+            :show-title-always="true"
+          />
+          <div class="bootstrap">
+            <Login />
+          </div>
+        </b-navbar-nav>
 
-      <b-collapse
-        id="nav-collapse"
-        is-nav
-      >
-        <menu-loggedout />
-      </b-collapse>
+        <!-- When logged in -->
+        <logged-in-fixed-nav
+          v-if="loggedIn"
+          :has-fs-role="hasFsRole"
+          :regions="regions"
+          :stores="stores"
+          :working-groups="workingGroups"
+          :may-add-stores="may.addStore"
+          @openSearch="searchOpen = !searchOpen"
+        />
+
+        <search
+          v-if="hasFsRole"
+          :show-on-mobile="searchOpen"
+        />
+
+        <b-navbar-toggle target="nav-collapse">
+          <i :class="`fa fa-bars`" />
+        </b-navbar-toggle>
+
+        <b-collapse
+          id="nav-collapse"
+          is-nav
+        >
+          <menu-loggedout v-if="!loggedIn" />
+          <menu-loggedin
+            v-if="loggedIn"
+            :display-mailbox="mailbox"
+            :fs-id="fsId"
+            :image="image"
+          />
+        </b-collapse>
+      </b-container>
     </b-navbar>
   </div>
 </template>
@@ -48,7 +77,10 @@ import { BNavbarBrand, BNavbarToggle, BCollapse } from 'bootstrap-vue'
 import Logo from './Logo'
 import Login from './Login'
 import MenuLoggedout from './MenuLoggedout'
+import MenuLoggedin from './MenuLoggedin'
 import MenuItem from './MenuItem'
+import LoggedInFixedNav from './LoggedInFixedNav'
+import Search from './Search'
 
 export default {
   components: {
@@ -58,7 +90,10 @@ export default {
     Login,
     MenuLoggedout,
     Logo,
-    MenuItem
+    MenuItem,
+    LoggedInFixedNav,
+    MenuLoggedin,
+    Search
   },
   props: {
     fsId: {
@@ -101,29 +136,36 @@ export default {
       type: Array,
       default: () => []
     }
+  },
+  data () {
+    return {
+      searchOpen: false
+    }
   }
-
 }
 </script>
 <style lang="scss" scoped>
 #topbar {
   height: 38px;
-  nav {
+  nav, /deep/ .dropdown-menu {
     box-shadow: 0em 0em 5px 0px black;
   }
 }
   .bootstrap .navbar-brand {
     padding: 0;
+    margin-right: 3px;
   }
  .nav-row {
   flex-direction: row!important;
   margin:0;
   display: flex;
   flex-grow: 1;
-  .nav-item {
-    margin-right: 3px;
+  align-items: center;
+  justify-content: space-evenly;
+  /deep/ .nav-item {
+    margin-right: 6px;
     &:first-child {
-      margin-left: auto;
+      // margin-left: auto;
     }
   }
   .login-popover {
@@ -135,15 +177,26 @@ export default {
   }
 }
 
+/deep/ .dropdown-menu {
+  // Fixes problem that list of dropdown items is to long.
+  max-height: 70vh;
+  overflow: auto;
+}
+
 /deep/ .navbar-collapse {
   &.show {
     // Only when menu is shown. Fixes problem that list of dropdown items is to long.
     max-height: 70vh;
     overflow: auto;
+    .dropdown-menu  {
+      max-height: initial;
+    }
   }
   &.show .nav-link i, &.collapsing .nav-link i {
       width: 40px;
       text-align: center;
   }
+  order: 2;
 }
+
 </style>

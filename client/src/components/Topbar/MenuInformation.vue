@@ -7,7 +7,7 @@
   >
     <template v-slot:button-content>
       <i class="fas fa-info " />
-      <span class="d-sm-none">
+      <span class="d-md-none">
         {{ $i18n('menu.entry.infos') }}
       </span>
     </template>
