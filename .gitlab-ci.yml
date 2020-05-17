@@ -1,12 +1,3 @@
-include:
-  template: Dependency-Scanning.gitlab-ci.yml
-
-dependency_scanning:
-  rules:
-  - if: $CI_COMMIT_BRANCH == 'master'
-    when: always
-  - when: never
-
 .defaults: &defaults
   tags:
   - shared
