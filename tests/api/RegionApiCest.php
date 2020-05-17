@@ -135,4 +135,16 @@ class RegionApiCest
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST);
 		$I->seeResponseIsJson();
 	}
+
+	public function canNotLeaveRegionIfActiveStoreManager(\ApiTester $I)
+	{
+		$store = $I->createStore($this->region['id']);
+		$coordinator = $I->createStoreCoordinator();
+		$I->addRegionMember($this->region['id'], $coordinator['id'], true);
+		$I->addStoreTeam($store['id'], $coordinator['id'], true, false, true);
+
+		$I->login($coordinator['email']);
+		$I->sendPOST('api/region/' . $this->region['id'] . '/leave');
+		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::CONFLICT);
+	}
 }

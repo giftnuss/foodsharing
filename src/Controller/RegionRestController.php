@@ -7,6 +7,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\NotificationService;
@@ -21,6 +22,7 @@ class RegionRestController extends AbstractFOSRestController
 	private $bellGateway;
 	private $foodsaverGateway;
 	private $regionGateway;
+	private $storeGateway;
 	private $regionPermissions;
 	private $session;
 	private $imageService;
@@ -31,6 +33,7 @@ class RegionRestController extends AbstractFOSRestController
 		FoodsaverGateway $foodsaverGateway,
 		RegionPermissions $regionPermissions,
 		RegionGateway $regionGateway,
+		StoreGateway $storeGateway,
 		Session $session,
 		ImageService $imageService,
 		NotificationService $notificationService
@@ -39,6 +42,7 @@ class RegionRestController extends AbstractFOSRestController
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionPermissions = $regionPermissions;
 		$this->regionGateway = $regionGateway;
+		$this->storeGateway = $storeGateway;
 		$this->session = $session;
 		$this->imageService = $imageService;
 		$this->notificationService = $notificationService;
@@ -102,6 +106,10 @@ class RegionRestController extends AbstractFOSRestController
 
 		if (empty($this->regionGateway->getRegion($regionId))) {
 			throw new HttpException(400, 'region does not exist or is root region.');
+		}
+
+		if (in_array($this->session->id(), $this->storeGateway->getStoreManagersOf($regionId))) {
+			throw new HttpException(409, 'still an active store manager in that region');
 		}
 
 		$this->foodsaverGateway->deleteFromRegion($regionId, $this->session->id());

@@ -5,7 +5,8 @@ import $ from 'jquery'
 import {
   ajax,
   goTo,
-  GET
+  GET,
+  pulseError
 } from '@/script'
 import i18n from '@/i18n'
 import './Region.css'
@@ -32,8 +33,18 @@ $(document).ready(() => {
       {
         text: i18n('button.yes_i_am_sure'),
         click: async function () {
-          await leaveRegion($('input', this).val())
-          goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+          try {
+            await leaveRegion($('input', this).val())
+            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+          } catch (e) {
+            console.error(e.code)
+            if (e.code === 409) {
+              pulseError(i18n('region.store_managers_cannot_leave'))
+            } else {
+              pulseError(i18n('error_unexpected'))
+            }
+            $(this).dialog('close')
+          }
         }
       },
       {

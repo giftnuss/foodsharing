@@ -581,3 +581,6 @@ menubells:
 push_notifications:
   test_notification_title: 'Push-Benachrichtigungen aktiviert'
   test_notification_body: 'Super, das scheint geklappt zu haben :)'
+
+region:
+  store_managers_cannot_leave: Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist.
