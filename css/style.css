@@ -1256,3 +1256,15 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
     border-radius: 0;
   }
 }
+
+.legal .form-check .wrapper-label {
+  display: inline-block;
+  margin-top: 5px;
+}
+.legal .form-check .element-wrapper {
+  display: inline;
+  float: left;
+  transform: scale(1.5);
+  margin-left: -20px;
+  padding: 10px 20px;
+}

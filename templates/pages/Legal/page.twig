@@ -13,7 +13,9 @@
         {% embed 'components/field.twig' with {'title': 'legal.acknowledge'|trans, 'classes': ['ui-padding bootstrap legal']} %}
             {% block content %}
                 {{ 'legal.not_acknowledge_pp_description'|trans }}
-                {{ form_row(form.privacyPolicyAcknowledged) }}
+                <div class="form-check">
+                    {{ form_row(form.privacyPolicyAcknowledged) }}
+                </div>
                 {{ 'legal.dont_agree'|trans }}
                 <a href="/?page=settings&sub=deleteaccount" class="btn btn-sm btn-danger">
                     {{ 'legal.delete_account'|trans }}
