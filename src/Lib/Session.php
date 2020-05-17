@@ -166,7 +166,7 @@ class Session
 
 	public function getLocation()
 	{
-		if (!$this->initialized) {
+		if (!$this->initialized || !$this->id()) {
 			return ['lat' => null, 'lon' => null];
 		}
 
