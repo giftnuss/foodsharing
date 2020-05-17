@@ -179,14 +179,6 @@ class Session
 		return $loc;
 	}
 
-	public function setLocation($lat, $lng)
-	{
-		$this->set('g_location', [
-			'lat' => $lat,
-			'lon' => $lng
-		]);
-	}
-
 	public function destroy()
 	{
 		$this->checkInitialized();
