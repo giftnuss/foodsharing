@@ -7,7 +7,6 @@ use Foodsharing\Modules\Core\View;
 
 class FoodSharePointView extends View
 {
-	private $regionId;
 	private $region;
 	private $regions;
 
@@ -22,7 +21,6 @@ class FoodSharePointView extends View
 	public function setRegion($region): void
 	{
 		$this->region = $region;
-		$this->regionId = $region['id'];
 	}
 
 	public function setFoodSharePoint($foodSharePoint, $follower): void
@@ -183,7 +181,7 @@ class FoodSharePointView extends View
 			$content .= $this->twig->render('partials/listFoodSharePointsForRegion.html.twig', ['region' => $region, 'food_share_point' => $region['fairteiler']]);
 		}
 
-		if ($this->regionId > 0) {
+		if ($this->region) {
 			$this->pageHelper->addContent($this->topbar($this->translationHelper->sv('list_food_share_point', $this->region['name']), 'Es gibt ' . $count . ' Fair-Teiler in ' . $this->region['name'] . ' und allen Unterbezirken',
 				'<img src="/img/foodSharePointThumb.png" />'
 			), CNT_TOP);
