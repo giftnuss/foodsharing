@@ -3,6 +3,7 @@
 ## Major changes
 
 ## Features
+- Added tooltips to Dashboard Activities-Overview filter options !1526 @mr-kenhoff
 
 ## Bugfixes
 - Be more robust against errors in the WebSocket Chat server: Let request suceed anyway. !1525 @NerdyProjects
