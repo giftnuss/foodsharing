@@ -17,7 +17,6 @@ time, mark, audio, video {
   border: 0;
   font: inherit;
   vertical-align: baseline;
-  /*color:#4A3520;*/
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -32,6 +31,10 @@ a {
 
 strong {
   font-weight: bold;
+}
+
+em {
+  font-style: italic;
 }
 
 body {
@@ -150,10 +153,6 @@ input, textarea, select, option {
 
 table.mce-item-table td {
   padding: 15px;
-}
-
-em {
-  font-style: italic;
 }
 
 table {

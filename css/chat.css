@@ -91,11 +91,13 @@
   border-left: 1px solid #61ab23;
 }
 
+#msg-conversation a,
 .chatboxmessagecontent a {
   color: var(--fs-green);
   text-decoration: none;
 }
 
+#msg-conversation a:hover,
 .chatboxmessagecontent a:hover {
   text-decoration: underline;
 }

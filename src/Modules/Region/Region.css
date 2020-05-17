@@ -1,13 +1,5 @@
-
-.forum_threads {
-
-}
-
-.forum_threads .thread {
-
-}
-
-.user_pic, .thread_title {
+.user_pic,
+.thread_title {
   float: left;
   display: block;
 }
@@ -41,11 +33,8 @@ span.thread_title {
   font-size: 12px;
 }
 
-.post {
-
-}
-
-ul.forum_threads.linklist li a:hover, ul.forum_threads.linklist li a:hover span.last_post span {
+ul.forum_threads.linklist li a:hover,
+ul.forum_threads.linklist li a:hover span.last_post span {
   color: #4a3522 !important;
 }
 
@@ -54,19 +43,6 @@ div.post_body {
   margin-top: 7px;
   margin-bottom: 7px;
   width: 75%;
-}
-
-div.post div.xv_left {
-  background-color: #e8e3d8;
-}
-
-div.post div.xv_left ul li a {
-  color: var(--fs-brown);
-}
-
-div.post div.xv_left ul li a:hover {
-  background-color: var(--fs-brown);
-  color: #ffffff;
 }
 
 div.post textarea {
@@ -103,13 +79,15 @@ ul.food-share-point-list li a span.clear {
   cursor: default;
 }
 
-.item_is_active, .item_is_not_active {
+.item_is_active,
+.item_is_not_active {
   display: inline-block;
   padding: 4px 8px 4px 4px;
   width: 60px;
 }
 
-.item_is_active span, .item_is_not_active span {
+.item_is_active span,
+.item_is_not_active span {
   position: relative;
   top: -2px;
 }

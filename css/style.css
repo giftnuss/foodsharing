@@ -134,10 +134,6 @@
   top: 12px;
 }
 
-.xvptab-content {
-  height: 500px;
-}
-
 .red, .red a {
   color: #e74955;
 }
@@ -161,14 +157,6 @@
   box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
 }
 
-.my-message a {
-  color: var(--fs-green);
-}
-
-.my-message a:hover {
-  text-decoration: underline;
-}
-
 textarea {
   resize: none;
 }
@@ -186,15 +174,6 @@ q:before, q:after {
 .inside {
   padding-right: 8px;
   padding-left: 8px;
-}
-
-.field.reset-password {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.field.reset-password .input-wrapper {
-  border-bottom: none;
 }
 
 .odd {
