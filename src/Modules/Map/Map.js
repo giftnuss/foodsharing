@@ -86,7 +86,7 @@ const map = {
       }
 
       if (GET('load') == undefined) {
-        items = (storage.get('activeItems'))
+        items = storage.get('activeItems', items)
       }
     }
     for (let i = 0; i < items.length; i++) {
