@@ -16,6 +16,8 @@
 ## Refactoring
 
 ## Dev/Test/CI stuff
+- Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
+- Do not run CI tests before deployment !1529 @NerdyProjects
 
 # 2020-05-16 
 
