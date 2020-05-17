@@ -330,9 +330,9 @@ class MailboxGateway extends BaseGateway
 
 	public function getBoxes(bool $isAmbassador, int $fsId, bool $mayStoreManager)
 	{
+		$mBoxes = [];
 		if ($isAmbassador) {
 			$selectedRegions = $this->getMailboxAdminRegions($fsId);
-			$mBoxes = [];
 
 			if ($selectedRegions) {
 				$mailboxAdminRegions = $this->db->fetchAll(
