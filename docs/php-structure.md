@@ -147,6 +147,9 @@ example for that.
 Some code in the services should rather go into the modules if they
 belong to a specific module.
 
+Also see the section [Services](php.md#services) for a broader
+use of this term.
+
 ## Libraries
 
 Please explain the general content of `/src/Lib` after understanding it.
