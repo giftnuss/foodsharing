@@ -34,8 +34,6 @@
     "leaflet": "^1.6.0",
     "leaflet.awesome-markers": "^2.0.5",
     "leaflet.markercluster": "^1.4.1",
-    "mapbox-gl-leaflet": "^0.0.12",
-    "mapbox-gl": "^1.9.0",
     "lodash.pickby": "^4.6.0",
     "magnific-popup": "^1.1.0",
     "mapbox-gl": "^1.9.0",
