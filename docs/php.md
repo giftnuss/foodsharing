@@ -3,15 +3,15 @@
 ## Code structure
 
 For the structure of the php code, see the subpage [php Code structure](php-structure.md).
-
-Currently, data is often represented differently. 
-For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used. An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). 
-
-TODO: agree on naming conventions and add them here.
-
-DTOs help with clearing up which parameters are expected when and what types they have. 
-
-In addition to the above mentioned classes, Permission classes are used to organize what actions are allowed for which user.
+Different kinds of classes and concepts are explained there:
+[Modules](php-structure.md#modules),
+[Gateways](php-structure.md#gateway-classes),
+[Transactions](php-structure.md#transaction-classes),
+[Data Transfer Objects](php-structure.md#data-transfer-objects),
+[Permissions](php-structure.md#permission-classes),
+[Controllers](php-structure.md#controllers),
+[Services](php-structure.md#services) and
+[Helper](php-structure.md#helper-classes)
 
 ## Main entry point
 
