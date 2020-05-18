@@ -133,7 +133,8 @@ usually just calls one actual transaction method (apart from permission checks).
 It can read necessary information from the session to give those
 as arguments to the transaction class.
 
-We have (old) XHR controllers, classes with the name `<module>Control.php` and
+We have (old) XHR controllers with the name `<module>XHR.php`,
+(old) HTML controllers with the name `<module>Control.php` and
 [`RestController.php`](requests.md#rest-api).
 
 ## Services
