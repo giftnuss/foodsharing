@@ -101,7 +101,7 @@ and which format the input is expected to have. Parameter lists on the other han
 are documented, the documentation for one domain object is spread around the code.
 
 For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used.
-An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457).
+An example can be found in the Bell module, introduced in the [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457).
 
 DTOs help with clearing up which parameters are expected when and what types they have. DTO classes have public
 properties and don't encapsulate logic or functionality. Only logic to create DTOs or convert them from other
