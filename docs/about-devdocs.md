@@ -37,7 +37,7 @@ Here are some principles:
 
 ### Markdown
 
-The devdocs are written in [Markdown](https://toolchain.gitbook.com/syntax/markdown.html) (md).
+The devdocs are written in [Markdown](https://docs.gitbook.com/editing-content/markdown) (md).
 Additionally we use the plugin [richquotes](https://github.com/erixtekila/gitbook-plugin-richquotes).
 
 ### Setting things up
