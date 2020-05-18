@@ -3,10 +3,10 @@
 
 Lieber Interessent (w/m/d),
 
-es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns   
-Unsere Homepage ist das zentrale Werkzeug unserer Initiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich. 
+es freut uns, dass du dich für dieses Thema interessierst. Wir von foodsharing sind eine Initiative, mit dem Ziel sich gegen Lebensmittelverschwendung einzusetzen: https://foodsharing.de/ueber-uns
+Unsere Homepage ist das zentrale Werkzeug unserer Initiative. Die gesamte Vernetzung untereinander, die gemeinsame Arbeit an verschiedensten Themen und zu guter Letzt die Organisation all unserer Lebensmittelrettungen sind dank dieser Plattform möglich.
 
-Was viele aber nicht wissen: Wir haben mehr als **300.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **66.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.  
+Was viele aber nicht wissen: Wir haben mehr als **300.000** registrierte Konten und verschicken hunderttausende Mails pro Monat. Ein riesen Apparat. Etwa **66.000** Foodsaver organisieren sich über die Homepage, viele hunderte Botschafterinnen und Botschafter verwalten unterschiedlichste Regionen im gesamten deutschsprachigen Raum.
 **Dem gegenüber stehen im Schnitt etwa nur 5 Programmierer\*Innen**. Daher wollen wir mit diesem aufgefrischten Post jetzt im Juni 2019 einen neuen Aufruf starten.
 
 ## Du hast jetzt bereits Lust bekommen?
@@ -82,9 +82,9 @@ Aber natürlich:
 
 
 ### Generelles zu den Smartphone Apps
-- Das Backend wächst und wird in gemeinsamer Arbeit auf die Bedürfnisse der App Entwickler\*innen angepasst 
+- Das Backend wächst und wird in gemeinsamer Arbeit auf die Bedürfnisse der App Entwickler\*innen angepasst
 - Beim Setup wirst Du durch die Infos in der Gitlab Readme und durch uns unterstützt
-- Die Roadmap bestimmst Du maßgeblich selbst mit 
+- Die Roadmap bestimmst Du maßgeblich selbst mit
 - Screen / Workflow Designer für ein grundlegendes Design sind hier auch sehr willkommen
 - Wertvolle Unterstützung durch den CI Prozess
 
@@ -99,28 +99,28 @@ Aber natürlich:
 - Carthage als Packet Manager
 - Die grundlegende Architektur der App baut auf ReSwift auf
 - Views werden im Code, mit AutoLayout und Constraints erzeugt
-- Als UI Architektur wird RxSwift verwendet 
+- Als UI Architektur wird RxSwift verwendet
 - Coordinator Pattern als Screenflow
 
 ## Hackweeks
-Um noch enger Hand in Hand zu arbeiten, treffen wir uns regelmäßig zu Hackweeks. Hier sind alle Teilnehmer\*innen willkommen, die das Ziel haben, an der Entwicklung mitzuwirken. 
+Um noch enger Hand in Hand zu arbeiten, treffen wir uns regelmäßig zu Hackweeks. Hier sind alle Teilnehmer\*innen willkommen, die das Ziel haben, an der Entwicklung mitzuwirken.
 
-Hier ein paar Artikel über die letzte Hackweek:   
-- https://yunity.org/en/heartbeat/2019-02-24   
+Hier ein paar Artikel über die letzte Hackweek:
+- https://yunity.org/en/heartbeat/2019-02-24
 - https://foodsharing.de/?page=blog&sub=read&id=236
 
 Ankündigungen für Hackweeks findest Du entweder im [#foodsharing-hackweek Slack Channel](https://slackin.yunity.org "Slack Channel") oder hier:
-- http://devblog.foodsharing.de/  
+- https://devblog.foodsharing.de/
 - https://yunity.org/heartbeat
 
 ## Danke!
 
 Danke Dir, dass Du so lange gelesen hast. Mit einer fitten IT hätten wir so viel mehr Potential und es wäre natürlich generell toll, die vielen Aufgaben auf viele Schultern zu verteilen. Mit einem noch cooleren IT-Team können wir in guter Stimmung eigentlich alles umsetzen, was wir uns wünschen. Und man lernt nebenbei 'nen ganzen Haufen spannenden Kram. Wir freuen uns schon sehr darauf, Dich und Deine Bekannten bald im Team willkommen zu heißen.
 
-📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR. ❤️ ❤️**   
-https://devdocs.foodsharing.network/it-tasks.html  
+📣📣 **Vielleicht ist es leider wirklich nichts für Dich, schicke aber bitte Du trotzdem jemanden den Link zu dieser Seite. Damit HILFST DU uns und somit der ganzen Community WIRKLICH SEHR. ❤️ ❤️**
+https://devdocs.foodsharing.network/it-tasks.html
 
-Herzliche Grüße von Deinem IT-Team!   
+Herzliche Grüße von Deinem IT-Team!
 [it@foodsharing.network](mailto:it@foodsharing.network)
 
 (Letzte Änderung: 23.12.2019)
