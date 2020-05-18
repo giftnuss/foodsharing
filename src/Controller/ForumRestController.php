@@ -356,11 +356,11 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function deleteThreadAction(int $threadId): SymfonyResponse
 	{
-		$thread = $this->forumGateway->getThreadInfo($threadId);
+		$thread = $this->forumGateway->getThread($threadId);
 		if (!$thread) {
 			throw new HttpException(404);
 		}
-		if (!$this->forumPermissions->mayDeleteThread($threadId)) {
+		if (!$this->forumPermissions->mayDeleteThread($thread)) {
 			throw new HttpException(403);
 		}
 
