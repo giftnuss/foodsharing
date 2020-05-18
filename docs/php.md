@@ -18,7 +18,7 @@ Different kinds of classes and concepts are explained there:
 The main entry point for the web is `/index.php`.
 That means that `/index.php` gets called whenever a `https://foodsharing.de`-request gets sent to the website.
 
-Another entry point is `xhr.php`, which is used for routes starting with `https://foodsharing.de/xhr.php`. These are 
+Another entry point is `xhr.php`, which is used for routes starting with `https://foodsharing.de/xhr.php`. These are
 used for our legacy API (see [Xhr](requests.md#xhr)).
 
 The third entry point is `restApi.php`, which will be used whenever a URL starting with `https://foodsharing.de/api` is
@@ -49,16 +49,16 @@ like `index.php`, which are not in the `/src` directory and therefore can't use 
 `require` basically executes the PHP file unter the given file name, so you can use the class declaration defined in
 that file. Don't use `require` if you can use autoloading.
 
-### Services 
+### Services
 
 A service class is a class whose main purpose is not representing an object structure,
-but providing functionality. Service classes are used to structure operations 
-using object oriented design patterns. 
+but providing functionality. Service classes are used to structure operations
+using object oriented design patterns.
 
 What exactly a service is and what not, is not well defined (see Blog Post
 [Services in Domain-Driven Design](http://gorodinski.com/blog/2012/04/14/services-in-domain-driven-design-ddd/)),
 but there are some characteristics that are typical for services
-- only one instance is created per requests and then shared by 
+- only one instance is created per requests and then shared by
 all classes
 - services depend on other services and the non-service objects (like DTOs) they operate on
 - non-service objects don't depend on services
@@ -67,14 +67,14 @@ As we don't have any entity classes, except for the [DTO classes](php-structure.
 of our classes are services.
 
 Because service classes only need to be instantiated once, we don't use
-the `new` statement to create instances. Instead, we use the 
+the `new` statement to create instances. Instead, we use the
 [Dependency Injection pattern](https://en.wikipedia.org/wiki/Dependency_injection).
 This enables us to share service instances throughout the application.
 
 ### Automatic service injection
 
 Responsible for creating and injecting the instances is the Symfony Dependency
-Injection component. 
+Injection component.
 
 If we want Symfony to inject a dependency into our service, all we need to do is mentioning
  the class in our constructor (`__construct`), e.g.
@@ -89,7 +89,7 @@ Dependency injection (Symfony) then makes sure that every service we request is 
 injected when our service is instanciated.
 
 This works because we only need at most one object of every service class. This is because,
-as already mentioned, service classes are not about representing objects using instances, 
+as already mentioned, service classes are not about representing objects using instances,
 but about the functionality they provide.
 
 Symfony config is in `/config/services.yml`. This configuration makes sure that services
