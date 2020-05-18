@@ -50,7 +50,7 @@ In the [Code quality page](code-review.md) we have some notes on how to define t
 The javascript code that sends REST API requests is found under `/client/src/api` and is used by other javascript by [import](javascript.md).
 
 All php classes working with REST requests are found in [`/src/Modules/Controllers/<..>RestController.php`](https://symfony.com/doc/current/controller.html).
-This is configured in [`/config/routes/routing.yml`](https://symfony.com/doc/master/bundles/FOSRestBundle/5-automatic-route-generation_single-restful-controller.html).
+This is configured in [`/config/routes/routing.yml`](https://symfony.com/doc/current/bundles/FOSRestBundle/5-automatic-route-generation_single-restful-controller.html).
 There it is also configured, that calls to `/api/` are interpreted by the REST api, e.g.
 ```
 https://foodsharing.de/api/conversations/<conversationid>
