@@ -414,6 +414,7 @@ dashboard:
   updates_title_all: "Updates-Übersicht"
   updates_title_some: "Updates-Übersicht ({0})"
   display_all: Alle
+  settings_tooltip: Übersichts-Einstellungen
   no_updates: "Keine Updates"
   no_more_updates_all: "Das war's!"
   no_more_updates_event: "Keine weiteren Termine"

@@ -1,12 +1,3 @@
-include:
-  template: Dependency-Scanning.gitlab-ci.yml
-
-dependency_scanning:
-  rules:
-  - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-    when: always
-  - when: never
-
 .defaults: &defaults
   tags:
   - shared
@@ -54,11 +45,9 @@ triage:
   script:
   - gem install gitlab-triage
   - gitlab-triage --token $API_TOKEN --project-id $CI_PROJECT_PATH
-  only:
-    refs:
-    - schedules
-    variables:
-    - $SCHEDULED_JOB == "triage"
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB == "triage"
+    when: always
   tags:
   - shared
   - linux
@@ -75,17 +64,20 @@ outdated:
     key: outdated:v1
     paths:
     - vendor
-  only:
-    refs:
-    - schedules
-    variables:
-    - $SCHEDULED_JOB == "outdated"
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULED_JOB == "outdated"
+    when: always
   tags:
   # run on our server where we likely have the image already
   - non-shared
 
 build:backend-chat:
   <<: *defaults
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_MERGE_REQUEST_ID
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
   image: node:13.10.1-alpine
   stage: build
   script:
@@ -98,11 +90,14 @@ build:backend-chat:
     expire_in: 1 week
     paths:
     - chat/node_modules
-  except:
-  - schedules
 
 build:frontend:
   <<: *defaults
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_MERGE_REQUEST_ID
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
   image: node:13.10.1-alpine
   stage: build
   script:
@@ -116,11 +111,14 @@ build:frontend:
     paths:
     - assets
     - sw.js
-  except:
-  - schedules
 
 build:backend:
   <<: *defaults
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_MERGE_REQUEST_ID
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
   image: registry.gitlab.com/foodsharing-dev/images/php:4
   stage: build
   script:
@@ -142,8 +140,6 @@ build:backend:
     paths:
     - assets
     - vendor
-  except:
-  - schedules
 
 build:docs:
   <<: *defaults
@@ -161,13 +157,19 @@ build:docs:
     expire_in: 1 week
     paths:
     - docs/dist
-  only:
-  - master
-  except:
-  - schedules
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
 
 test:
   <<: *defaults
+  # only run tests for MR, not for the target branch. While this might show to be dangerous, it also allows us to
+  # deploy without relying on potentially flaky tests
+  rules:
+  - if: $CI_MERGE_REQUEST_ID
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
   # run it on our foodsharing ci server
   tags:
   - non-shared
@@ -188,28 +190,26 @@ test:
     when: always
     paths:
     - tests/_output
-  except:
-  - schedules
 
 deploy:beta:
   <<: *deploy
   environment:
     name: beta
     url: https://beta.foodsharing.de
-  only:
-  - master
-  except:
-  - schedules
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
 
 deploy:production:
   <<: *deploy
   environment:
     name: production
     url: https://foodsharing.de
-  only:
-  - production
-  except:
-  - schedules
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'production'
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
 
 deploy:docs:
   <<: *defaults
@@ -222,10 +222,10 @@ deploy:docs:
   environment:
     name: docs
     url: https://devdocs.foodsharing.network
-  only:
-  - master
-  except:
-  - schedules
+  rules:
+  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_PIPELINE_SOURCE == "schedule"
+    when: never
 
 variables:
   # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/

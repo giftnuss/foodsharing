@@ -6,6 +6,7 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -181,13 +182,18 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->getUserLocationOrDefault()))) {
 			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
+	}
+
+	private function getUserLocationOrDefault()
+	{
+		return $this->session->getLocation() ?? ['lat' => MapConstants::CENTER_GERMANY_LAT, 'lon' => MapConstants::CENTER_GERMANY_LON];
 	}
 
 	/**
@@ -401,7 +407,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->getUserLocationOrDefault())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {

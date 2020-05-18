@@ -4,6 +4,7 @@ namespace Foodsharing\Lib;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use function Sentry\captureException;
 
 /**
  * This class is for handling connections to our WebSocket server.
@@ -21,24 +22,37 @@ class WebSocketConnection
 		$this->guzzle = $guzzle;
 	}
 
+	private function post($url, $options): void
+	{
+		try {
+			$this->guzzle->post($url, $options);
+		} catch (\Exception $e) {
+			captureException($e);
+		}
+	}
+
 	public function sendSock(int $fsid, string $app, string $method, array $options): void
 	{
 		$url = SOCK_URL . 'users/' . $fsid . '/' . $app . '/' . $method;
-		$this->guzzle->post($url, [RequestOptions::JSON => $options]);
+		$this->post($url, [RequestOptions::JSON => $options]);
 	}
 
 	public function sendSockMulti(array $fsids, string $app, string $method, array $options): void
 	{
 		$url = SOCK_URL . 'users/' . join(',', $fsids) . '/' . $app . '/' . $method;
-		$this->guzzle->post($url, [RequestOptions::JSON => $options]);
+		$this->post($url, [RequestOptions::JSON => $options]);
 	}
 
 	public function isUserOnline(int $fsid): bool
 	{
-		$userIsOnline = $this->guzzle->get(SOCK_URL . 'users/' . $fsid . '/is-online')->getBody()->getContents();
+		try {
+			$userIsOnline = $this->guzzle->get(SOCK_URL . 'users/' . $fsid . '/is-online')->getBody()->getContents();
 
-		if ($userIsOnline === 'true') {
-			return true;
+			if ($userIsOnline === 'true') {
+				return true;
+			}
+		} catch (\Exception $e) {
+			captureException($e);
 		}
 
 		return false;

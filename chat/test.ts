@@ -156,32 +156,13 @@ test('can send a message', t => {
     });
 });
 
-test('can send to php users', t => {
+test('can send to users', t => {
     t.timeoutAfter(10000);
     t.plan(3);
     const sessionId = randomString.generate();
     const userId = 1;
     addPHPSessionToRedis(userId, sessionId, () => {
         const socket = connect(t, sessionId);
-        socket.on('some-app', (data: any) => {
-            t.equal(data.m, 'some-method', 'passed m param');
-            t.deepEqual(data.o, { someKey: 'some-payload' }, 'passed o param');
-        });
-        register(socket, () => {
-            sendMessage([userId], 'some-app', 'some-method', { someKey: 'some-payload' }, (err: any) => {
-                t.error(err, 'does not error');
-            });
-        });
-    });
-});
-
-test('can send to api users', t => {
-    t.timeoutAfter(10000);
-    t.plan(3);
-    const sessionId = randomString.generate();
-    const userId = 2;
-    addAPISessionToRedis(userId, sessionId, () => {
-        const socket = connect(t, sessionId, 'sessionid'); // django session cookie name
         socket.on('some-app', (data: any) => {
             t.equal(data.m, 'some-method', 'passed m param');
             t.deepEqual(data.o, { someKey: 'some-payload' }, 'passed o param');
@@ -286,13 +267,15 @@ test('online status is false after user window moved into the background', t => 
     const socket = connect(t, 'test-5-user-1');
     register(socket, () => {
         socket.emit('visibilitychange', true); // hidden = true
-        superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-            if (err) {
-                t.error(err);
-            }
-            t.equal(response.type, 'application/json', 'content type is JSON');
-            t.equal(response.body, false, 'response body is "false"');
-        });
+        setTimeout(() => { // give the server some time to process the event
+            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                if (err) {
+                    t.error(err);
+                }
+                t.equal(response.type, 'application/json', 'content type is JSON');
+                t.equal(response.body, false, 'response body is "false"');
+            });
+        }, 100);
     });
 });
 
@@ -303,14 +286,18 @@ test('online status is true after window came into the foreground again', t => {
     const socket = connect(t, 'test-6-user-1');
     register(socket, () => {
         socket.emit('visibilitychange', true);
-        socket.emit('visibilitychange', false);
-        superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-            if (err) {
-                t.error(err);
-            }
-            t.equal(response.type, 'application/json', 'content type is JSON');
-            t.equal(response.body, true, 'response body is "true"');
-        });
+        setTimeout(() => { // give the server some time to process the event
+            socket.emit('visibilitychange', false);
+            setTimeout(() => {
+                superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                    if (err) {
+                        t.error(err);
+                    }
+                    t.equal(response.type, 'application/json', 'content type is JSON');
+                    t.equal(response.body, true, 'response body is "true"');
+                });
+            }, 100);
+        }, 100);
     });
 });
 
@@ -323,14 +310,18 @@ test('online status is false if user has two windows and both are in the backgro
     register(socket1, () => {
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
-            socket2.emit('visibilitychange', true);
-            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-                if (err) {
-                    t.error(err);
-                }
-                t.equal(response.type, 'application/json', 'content type is JSON');
-                t.equal(response.body, false, 'response body is "false"');
-            });
+            setTimeout(() => { // give the server some time to process the event
+                socket2.emit('visibilitychange', true);
+                setTimeout(() => {
+                    superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                        if (err) {
+                            t.error(err);
+                        }
+                        t.equal(response.type, 'application/json', 'content type is JSON');
+                        t.equal(response.body, false, 'response body is "false"');
+                    });
+                }, 100);
+            }, 100);
         });
     });
 });
@@ -344,14 +335,18 @@ test('online status is true if user has two windows and only one is in the backg
     register(socket1, () => {
         register(socket2, () => {
             socket1.emit('visibilitychange', false);
-            socket2.emit('visibilitychange', false);
-            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-                if (err) {
-                    t.error(err);
-                }
-                t.equal(response.type, 'application/json', 'content type is JSON');
-                t.equal(response.body, true, 'response body is "true"');
-            });
+            setTimeout(() => { // give the server some time to process the event
+                socket2.emit('visibilitychange', false);
+                setTimeout(() => {
+                    superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                        if (err) {
+                            t.error(err);
+                        }
+                        t.equal(response.type, 'application/json', 'content type is JSON');
+                        t.equal(response.body, true, 'response body is "true"');
+                    });
+                }, 100);
+            }, 100);
         });
     });
 });
@@ -366,14 +361,18 @@ test('online status is false if user has two windows in different browsers and b
     register(socket1, () => {
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
-            socket2.emit('visibilitychange', true);
-            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-                if (err) {
-                    t.error(err);
-                }
-                t.equal(response.type, 'application/json', 'content type is JSON');
-                t.equal(response.body, false, 'response body is "false"');
-            });
+            setTimeout(() => { // give the server some time to process the event
+                socket2.emit('visibilitychange', true);
+                setTimeout(() => {
+                    superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                        if (err) {
+                            t.error(err);
+                        }
+                        t.equal(response.type, 'application/json', 'content type is JSON');
+                        t.equal(response.body, false, 'response body is "false"');
+                    });
+                }, 100);
+            }, 100);
         });
     });
 });
@@ -388,14 +387,18 @@ test('online status is true if user has two windows in different browsers and on
     register(socket1, () => {
         register(socket2, () => {
             socket1.emit('visibilitychange', true);
-            socket2.emit('visibilitychange', false);
-            superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
-                if (err) {
-                    t.error(err);
-                }
-                t.equal(response.type, 'application/json', 'content type is JSON');
-                t.equal(response.body, true, 'response body is "true"');
-            });
+            setTimeout(() => { // give the server some time to process the event
+                socket2.emit('visibilitychange', false);
+                setTimeout(() => {
+                    superagent.get(HTTP_URL + '/users/1/is-online').end((err, response) => {
+                        if (err) {
+                            t.error(err);
+                        }
+                        t.equal(response.type, 'application/json', 'content type is JSON');
+                        t.equal(response.body, true, 'response body is "true"');
+                    });
+                }, 100);
+            }, 100);
         });
     });
 });
@@ -426,7 +429,7 @@ function register (socket: Socket, callback: () => any): void {
 }
 
 function sendMessage (userIds: number[], channel: string, method: string, options: object, callback: (error: any, res: Response) => any): void {
-    superagent.post(HTTP_URL + `/users/${userIds.join('-')}/${channel}/${method}`).send(options).end(callback);
+    superagent.post(HTTP_URL + `/users/${userIds.join(',')}/${channel}/${method}`).send(options).end(callback);
 }
 
 function fetchStats (callback: (error: any, stats?: {connections: number, registrations: number, sessions: number}) => any): void {
@@ -446,14 +449,6 @@ function addPHPSessionToRedis (userId: number, sessionId: string, callback: (err
     redisClient.set(`PHPREDIS_SESSION:${sessionId}`, 'foo')
         .then(async () =>
             await redisClient.sadd(`php:user:${userId}:sessions`, sessionId)
-        ).then(callback)
-        .catch(error => callback(error));
-}
-
-function addAPISessionToRedis (userId: number, sessionId: string, callback: (error: any) => any): void {
-    redisClient.set(`:1:django.contrib.sessions.cache${sessionId}`, 'foo')
-        .then(async () =>
-            await redisClient.sadd(`api:user:${userId}:sessions`, sessionId)
         ).then(callback)
         .catch(error => callback(error));
 }

@@ -9,7 +9,7 @@ export class RestifyServerFacade implements ServerFacade {
     private readonly server: Server;
 
     constructor () {
-        this.server = restify.createServer();
+        this.server = restify.createServer({ maxParamLength: 50000 });
         this.server.use(bodyParser({ mapParams: false }));
     }
 

@@ -14,6 +14,31 @@
 ## Major changes
 
 ## Features
+- Added tooltips to Dashboard Activities-Overview filter options !1526 @mr-kenhoff
+
+## Bugfixes
+- Be more robust against errors in the WebSocket Chat server: Let request suceed anyway. !1525 @NerdyProjects
+- Fix crash on incoming email that would generate a bounce !1524 @NerdyProjects
+- Fix broken data in internal email system email storage for sender address !1523 @NerdyProjects
+- Migrate all broken email storage sender addresses to be valid !1523 @NerdyProjects
+- Fix accessing null value as array in FairteilerView. !1527 @NerdyProjects
+- Fix wrongly accessing null values in Fairteiler. !1527 @NerdyProjects
+- Fix javascript error accessing the map the first time / without localstorage. !1528 @NerdyProjects
+- Fix issuing invalid SQL IN() query !1534 @NerdyProjects
+- Fix not logged in users getting errors when things should have been logged to their not-existing session !1531 @NerdyProjects
+- Fix accessing invalid location for users without a session or without an address. !1538 @NerdyProjects
+- Fix Content Security Policy violation for web worker for older browsers (fixes push notification for older browsers) @NerdyProjects
+
+## Refactoring
+
+## Dev/Test/CI stuff
+- Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
+- Do not run CI tests before deployment !1529 @NerdyProjects
+- Do not run gitlab dependency scanning job as nobody used the output !1533 @NerdyProjects
+
+# 2020-05-16 
+
+## Features
 - Introduce Web Push Notifications #336 !734 @janopae
 - Use WebSocket connection to determine whether a user is online or not !734 !1470 @janopae
 - Re-enable pickup slot markers after production release !1331 !1307 @jofranz

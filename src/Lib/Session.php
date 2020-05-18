@@ -166,25 +166,17 @@ class Session
 
 	public function getLocation()
 	{
-		if (!$this->initialized) {
-			return ['lat' => null, 'lon' => null];
+		if (!$this->initialized || !$this->id()) {
+			return null;
 		}
 
-		$loc = fSession::get('g_location', false);
+		$loc = fSession::get('g_location', null);
 		if (!$loc) {
 			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
 			$this->set('g_location', ['lat' => $loc['lat'], 'lon' => $loc['lon']]);
 		}
 
 		return $loc;
-	}
-
-	public function setLocation($lat, $lng)
-	{
-		$this->set('g_location', [
-			'lat' => $lat,
-			'lon' => $lng
-		]);
 	}
 
 	public function destroy()
@@ -195,8 +187,11 @@ class Session
 
 	public function set($key, $value)
 	{
-		$this->checkInitialized();
-		fSession::set($key, $value);
+		/* fail silently when session does not exist. This allows us at some point to also support sessions for not logged in users.
+		It doesn't do any harm in other cases as we previously generated 500 responses */
+		if ($this->initialized) {
+			fSession::set($key, $value);
+		}
 	}
 
 	public function get($var)
