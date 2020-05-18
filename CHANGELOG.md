@@ -7,6 +7,7 @@
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
+- Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
 
 ## Dev/Test/CI stuff
 

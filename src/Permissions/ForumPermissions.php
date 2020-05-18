@@ -99,4 +99,9 @@ class ForumPermissions
 
 		return false;
 	}
+
+	public function mayDeleteThread($threadId): bool
+	{
+		return $this->mayModerate($threadId);
+	}
 }

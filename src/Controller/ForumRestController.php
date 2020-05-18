@@ -345,6 +345,31 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Deletes a forum thread.
+	 *
+	 * @SWG\Tag(name="forum")
+	 * @SWG\Parameter(name="threadId", in="path", type="integer", description="ID of the thread that will be deleted")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="403", description="Insufficient permissions to delete that thread")
+	 * @SWG\Response(response="404", description="Thread does not exist.")
+	 * @Rest\Delete("forum/thread/{threadId}", requirements={"postId" = "\d+"})
+	 */
+	public function deleteThreadAction(int $threadId): SymfonyResponse
+	{
+		$thread = $this->forumGateway->getThreadInfo($threadId);
+		if (!$thread) {
+			throw new HttpException(404);
+		}
+		if (!$this->forumPermissions->mayDeleteThread($threadId)) {
+			throw new HttpException(403);
+		}
+
+		$this->forumGateway->deleteThread($threadId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Adds an emoji reaction to a post. An emoji is an arbitrary string but needs to be supported by the frontend.
 	 *
 	 * @SWG\Tag(name="forum")
