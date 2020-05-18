@@ -46,10 +46,8 @@ The devdocs are built at every change on the master branch and published [here](
 To see your changes, you can build the devdocs locally.
 You need to have `nodejs` and `yarn` installed on your system. On Windows: After every install you might have to close and reopen the powershell so yarn is recognized as a command. Then go to the main directory `/` and run
 ```
-yarn global add gitbook-cli
-gitbook install docs
-cd ..
-gitbook serve docs --port 4001
+yarn add gitbook-cli
+yarn run gitbook install docs && yarn run gitbook serve docs -- port 4001
 ```
 This makes the current devdocs available via `localhost:4001` in your browser.
 
@@ -63,16 +61,17 @@ This is useful if you work on the devdocs since they are only built on master an
 #### Check for broken links
 
 You can check for broken links with the node tool `broken-link-checker`.
-You can install it with `yarn`:
+You can install it with `yarn`: (and ignore created files)
 
 ```
-yarn global add broken-link-checker
+yarn add broken-link-checker
+echo "package.json\nyarn.lock" >> ../.git/info/exclude
 ```
 
-and use it when gitbook is serving it:
+and use it while gitbook is serving it:
 
 ```
-blc --recursive --exclude-external http://localhost:4001
+yarn run blc --recursive --exclude-external http://localhost:4001
 ```
 (Of course you can remove `--exclude-external` but I got a lot of false
 negatives. See for yourself.)
