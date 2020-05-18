@@ -74,7 +74,7 @@ outdated:
 build:backend-chat:
   <<: *defaults
   rules:
-  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'production'
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
@@ -94,7 +94,7 @@ build:backend-chat:
 build:frontend:
   <<: *defaults
   rules:
-  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'production'
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
@@ -115,7 +115,7 @@ build:frontend:
 build:backend:
   <<: *defaults
   rules:
-  - if: $CI_COMMIT_BRANCH == 'master'
+  - if: $CI_COMMIT_BRANCH == 'master' || $CI_COMMIT_BRANCH == 'production'
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
