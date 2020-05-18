@@ -100,7 +100,7 @@ class ForumPermissions
 		return false;
 	}
 
-	public function mayDeleteThread($thread): bool
+	public function mayDeleteThread(array $thread): bool
 	{
 		return !$thread['active'] && $this->mayModerate($thread['id']);
 	}

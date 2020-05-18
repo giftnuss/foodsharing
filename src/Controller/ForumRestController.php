@@ -350,7 +350,7 @@ class ForumRestController extends AbstractFOSRestController
 	 * @SWG\Tag(name="forum")
 	 * @SWG\Parameter(name="threadId", in="path", type="integer", description="ID of the thread that will be deleted")
 	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to delete that thread")
+	 * @SWG\Response(response="403", description="Insufficient permissions to delete that thread or thread is already active")
 	 * @SWG\Response(response="404", description="Thread does not exist.")
 	 * @Rest\Delete("forum/thread/{threadId}", requirements={"postId" = "\d+"})
 	 */
