@@ -119,13 +119,6 @@ class MessageService
 			$this->webSocketConnection->sendSockMulti($user_ids, 'conv', 'push', [
 				'cid' => $conversationId,
 				'message' => $message,
-				/* Compatibility part: This ensures readability of the push message in legacy clients. Will be removed after release */
-				'id' => $message->id,
-				'fs_id' => $message->authorId,
-				'fs_name' => $author['name'],
-				'fs_photo' => $author['photo'],
-				'body' => htmlentities($message->body),
-				'time' => $message->sentAt->format('Y-m-d H:i:s')
 			]);
 
 			$notificationTemplateData = $this->getNotificationTemplateData($conversationId, $message, $members, $notificationTemplate);

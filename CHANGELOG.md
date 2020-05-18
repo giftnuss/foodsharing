@@ -1,6 +1,4 @@
-# Unreleased
-
-## Major changes
+# 2020-05-18 Hotfix
 
 ## Features
 - Added tooltips to Dashboard Activities-Overview filter options !1526 @mr-kenhoff
@@ -16,8 +14,7 @@
 - Fix issuing invalid SQL IN() query !1534 @NerdyProjects
 - Fix not logged in users getting errors when things should have been logged to their not-existing session !1531 @NerdyProjects
 - Fix accessing invalid location for users without a session or without an address. !1538 @NerdyProjects
-
-## Refactoring
+- Fix Content Security Policy violation for web worker for older browsers (fixes push notification for older browsers) @NerdyProjects
 
 ## Dev/Test/CI stuff
 - Migrate gitlab CI config to use rules instead of only/except !1529 @NerdyProjects
@@ -166,7 +163,17 @@
 - added text about refactoring to devdocs @Caluera !1464
 - added text about releases to devdocs @Caluera !1486
 
+# 2020-04-22 Hotfix
+- Use Geoapify as tile server and use mapbox gl to render vector tiles !1405 @dthulke
+- More accurate email rate limiting !1419 @jofranz
+- Set height for topbar and removed the height of div#main. Now is the broadcast message completely readable !1383 !1391 !1432 @chriswalg
+- Improve the statistics for outgoing mail in grafana !1395 #64 @dthulke
+- Fixed rendering error when replying to forum posts !1447 @ChrisOelmueller
 
+
+# 2020-03-26 Hotfix 
+- Use WebSocket connection to determine whether a user is online or not !734 @janopae
+- Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz

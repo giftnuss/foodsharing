@@ -55,6 +55,7 @@ class ContentSecurityPolicy
 				'blob:'
 			],
 			'child-src' => [
+				$self,
 				'blob:'
 			]
 		];
