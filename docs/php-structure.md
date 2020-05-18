@@ -15,7 +15,7 @@ directory. This is due to the Symfony framework: The framework's
 default conventions propose a very technical project structure
 having all controllers live in one directory/namespace. It is
 possible to reconfigure it, however, that might make it harder
-to follow Symfony manuals/guides. 
+to follow Symfony manuals/guides.
 
 
 ### Deprecated module structure
@@ -33,7 +33,7 @@ Those are executed with the functions inherited from the `Db` class (see `use Fo
 Instead of Model classes, that hold both, data query logic and application logic, we move towards splitting these up
 into [Gateway classes](#gateway-classes) and [Transaction classes](#transaction-classes).
 
-For a general description what „application logic“ is, see sectionn [Transactions](#transaction-classes).
+For a general description what „application logic“ is, see section [Transactions](#transaction-classes).
 
 Note that all of the following guidelines have a lot of exceptions
 in the existing code. Nevertheless try to heed the following guidelines
@@ -58,7 +58,7 @@ pickup.
 In particular permission checks are not to be found in Gateways.
 
 Another difference to models regarding the implementation of SQL queries is that the functions to communicate with the
-database are not directly in the Gateway class by inheritance but encapsulated in the attribute 
+database are not directly in the Gateway class by inheritance but encapsulated in the attribute
 `db` (`$this->db-><functioncall>`) of class `Database` defined in `/src/Modules/Core/Database.php`.
 
 Gateways inherit from `BaseGateway` (`/src/Modules/Core/BaseGateway.php`), which provides them with the `$db` attribute.
@@ -74,10 +74,10 @@ All of those functions are well-documented in `/src/Modules/Core/Database.php`.
 All modules have certain business rules/domain logic to follow when their data is modified. After all, there are always
 certain operations that have to be executed together to ensure that the data keeps being consistent according to the
 the rules that apply to them in reality. We implement these transactions of operations executed together as methods on
-Transaction classes. 
+Transaction classes.
 
-*Note: Currently, all our Transaction classes are called "Service" and live in the `Foodsharing\Service` 
-namespace. When they get renamed and moved to their modules, this note can be removed.* 
+*Note: Currently, all our Transaction classes are called "Service" and live in the `Foodsharing\Service`
+namespace. When they get renamed and moved to their modules, this note can be removed.*
 
 For example, when someone wants to join a store pickup, it's not enough to just insert this information into the
 database. We also have to be check if the user has the rights to join without a confirmation, and if not, we have to
@@ -85,7 +85,7 @@ make sure that the store owner gets notified that they should confirm or deny it
 
 This is why joining a pickup is implemented in the `joinPickup()` method on the corresponding Transaction class. All
 controllers should use this transaction if they want to make a user join a pickup, because only if all steps of the
-transaction are executed, the pickup joining is complete. 
+transaction are executed, the pickup joining is complete.
 
 What should not be part of a transaction class:
 
@@ -98,10 +98,10 @@ What should not be part of a transaction class:
 Currently, domain objects are often represented differently: Some methods receive and return them as associative arrays,
 some receive them as a very long list of parameters. If arrays are used, it's often unclear which format the output has
 and which format the input is expected to have. Parameter lists on the other hand can get very long, and if parameters
-are documented, the documentation for one domain object is spread around the code. 
+are documented, the documentation for one domain object is spread around the code.
 
-For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used. 
-An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457). 
+For further structuring  [Data Transfer Objects](https://en.wikipedia.org/wiki/Data_transfer_object) (DTO) can be used.
+An example can be found in the Bell module, currently in [merge request !1457](https://gitlab.com/foodsharing-dev/foodsharing/-/merge_requests/1457).
 
 DTOs help with clearing up which parameters are expected when and what types they have. DTO classes have public
 properties and don't encapsulate logic or functionality. Only logic to create DTOs or convert them from other
@@ -138,7 +138,7 @@ We have (old) XHR controllers, classes with the name `<module>Control.php` and
 
 ## Services
 
-Currently, in our source code, some code that assists controllers can be found 
+Currently, in our source code, some code that assists controllers can be found
 in classes named "Service": `/src/Services`.
 Some of these classes are Transaction classes that need to be renamed, and some
 of them are utility classes. `/src/Services/SanitizerService.php` is the best
