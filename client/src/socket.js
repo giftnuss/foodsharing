@@ -23,16 +23,6 @@ export default {
     socket.on('conv', async function (data) {
       if (data.m === 'push') {
         const obj = data.o
-        /* temporary workaround to at least do something with messages retrieved from production */
-        if (!obj.message) {
-          const message = {
-            id: obj.id,
-            authorId: obj.fs_id,
-            body: obj.body,
-            sentAt: obj.time
-          }
-          obj.message = message
-        }
         const message = convertMessage(obj.message)
         obj.message = message
         await conversationStore.updateFromPush(obj)
