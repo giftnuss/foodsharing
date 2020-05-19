@@ -30,10 +30,10 @@ Those are executed with the functions inherited from the `Db` class (see `use Fo
 
 ### Newer module structure
 
-Instead of Model classes, that hold both, data query logic and application logic, we move towards splitting these up
+Instead of Model classes, that hold both, data query logic and domain logic, we move towards splitting these up
 into [Gateway classes](#gateway-classes) and [Transaction classes](#transaction-classes).
 
-For a general description what „application logic“ is, see section [Transactions](#transaction-classes).
+For a general description what „domain logic“ is, see section [Transactions](#transaction-classes).
 
 Note that all of the following guidelines have a lot of exceptions
 in the existing code. Nevertheless try to heed the following guidelines
