@@ -241,11 +241,11 @@ class ProfileView extends View
 				'name' => $this->translationHelper->s('registration_date'),
 				'val' => $registration_date->format('d.m.Y'),
 			];
+			$url = '/?page=mailbox&mailto=' . urlencode($this->foodsaver['email']);
+			$splitMail = implode('<wbr>@', explode('@', $this->foodsaver['email']));
 			$infos[] = [
 				'name' => $this->translationHelper->s('private_mail'),
-				'val' => '<a href="/?page=mailbox&mailto=' . urlencode(
-						$this->foodsaver['email']
-					) . '">' . $this->foodsaver['email'] . '</a>',
+				'val' => '<a href="' . $url . '">' . $splitMail . '</a>',
 			];
 		}
 
