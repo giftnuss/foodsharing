@@ -42,6 +42,7 @@ async function deleteActiveGroup () {
 async function tryMasterUpdate (regionId) {
   try {
     masterUpdate(regionId)
+    pulseSuccess(i18n('success'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))
   }
