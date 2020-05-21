@@ -1,3 +1,13 @@
+# Unreleased
+
+## Features
+
+## Bugfixes
+
+## Refactoring
+
+## Dev/Test/CI stuff
+
 # 2020-05-18 Hotfix
 
 ## Features
