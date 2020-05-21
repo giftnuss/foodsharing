@@ -5,6 +5,7 @@
 ## Bugfixes
 
 ## Refactoring
+- Move master-update function for regions to the rest controller !1547 @alex.simm 
 
 ## Dev/Test/CI stuff
 

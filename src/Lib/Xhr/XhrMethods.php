@@ -1158,7 +1158,7 @@ class XhrMethods
 				),
 				$this->v_utils->v_input_wrapper($this->translationHelper->s($id), $inputs, $id)
 			], ['submit' => $this->translationHelper->s('save')]) .
-			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){ajreq(\'masterupdate\',{app:\'region\',id:' . (int)$data['id'] . '});}return false;">Master-Update starten</a>', 'masterupdate', ['desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen']);
+			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){tryMasterUpdate(' . (int)$data['id'] . ');}return false;">Master-Update starten</a>', 'masterupdate', ['desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen']);
 
 		$out['script'] = '
 		$("#bezirkform-form").off("submit");

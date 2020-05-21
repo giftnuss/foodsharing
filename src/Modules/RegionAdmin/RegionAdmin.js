@@ -15,11 +15,13 @@ import { goTo, img, pulseError, pulseSuccess } from '@/script'
 import { expose } from '@/utils'
 import './RegionAdmin.css'
 import { deleteGroup } from '@/api/groups'
+import { masterUpdate } from '@/api/regions'
 
 expose({
   img,
   deleteActiveGroup,
-  initMap
+  initMap,
+  tryMasterUpdate
 })
 
 async function deleteActiveGroup () {
@@ -34,5 +36,13 @@ async function deleteActiveGroup () {
       pulseError(i18n('error_unexpected'))
       throw err
     }
+  }
+}
+
+async function tryMasterUpdate (regionId) {
+  try {
+    masterUpdate(regionId)
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
   }
 }

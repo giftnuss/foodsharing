@@ -11,6 +11,7 @@ use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Services\ImageService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RegionRestController extends AbstractFOSRestController
@@ -79,5 +80,27 @@ class RegionRestController extends AbstractFOSRestController
 		$view = $this->view([], 200);
 
 		return $this->handleView($view);
+	}
+
+	/**
+	 * Updates the master region for the given region and all its subregions.
+	 *
+	 * @SWG\Tag(name="region")
+	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="the region that will be updated")
+	 * @SWG\Response(response="200", description="success")
+	 * @SWG\Response(response="403", description="Insufficient permissions")
+	 * @Rest\Patch("region/{regionId}/masterupdate", requirements={"regionId" = "\d+"})
+	 */
+	public function masterUpdateAction(int $regionId)
+	{
+		if (!$this->regionPermissions->mayAdministrateRegions()) {
+			throw new HttpException(403);
+		}
+
+		if ($regions = $this->regionGateway->listIdsForDescendantsAndSelf($regionId)) {
+			$this->regionGateway->updateMasterRegions($regions, $regionId);
+		}
+
+		return $this->handleView($this->view([], 200));
 	}
 }
