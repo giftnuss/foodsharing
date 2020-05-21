@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 
 ## Bugfixes
 
