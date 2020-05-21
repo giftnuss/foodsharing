@@ -54,7 +54,7 @@
             :class="foo.roleColorClass"
             tag="span"
             variant="primary"
-            pill
+            :pill="foo.fetchCount < 100"
           >
             <span v-if="foo.isJumper">
               <i class="fas fa-star member-jumper" />
@@ -72,7 +72,10 @@
             <span class="member-phone">
               {{ foo.number }}
             </span>
-            <span v-if="foo.phone && (foo.phone !== foo.number)">
+            <span
+              v-if="foo.phone && (foo.phone !== foo.number)"
+              class="member-phone"
+            >
               {{ foo.phone }}
             </span>
           </div>
@@ -91,10 +94,10 @@
 
           <!-- TODO isMobile instead of media query? -->
           <b-button
-            v-if="foo.number"
+            v-if="foo.callable"
             variant="link"
             class="member-call d-md-none"
-            :href="callableNumber(foo.number)"
+            :href="foo.callable"
           >
             <i class="fas fa-phone" />
           </b-button>
@@ -107,6 +110,7 @@
 <script>
 import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
+import { callableNumber } from '@/utils'
 import Avatar from '@/components/Avatar'
 
 export default {
@@ -119,14 +123,10 @@ export default {
   },
   computed: {
     foodsaver () {
-      console.log(this.team)
       return _.map(this.team, this.foodsaverData)
     }
   },
   methods: {
-    callableNumber (num) {
-      return 'tel:' + num.toString().replace(/[^0-9]/g, '')
-    },
     foodsaverData (fs) {
       const roleColorClass = {
         1: 'fs', // Role::FOODSAVER
@@ -136,15 +136,16 @@ export default {
       }[fs.quiz_rolle] || ''
       return {
         id: fs.id,
-        isActive: fs.team_active === 1,
-        isJumper: fs.team_active === 2,
+        isActive: fs.team_active === 1, // MembershipStatus::MEMBER
+        isJumper: fs.team_active === 2, // MembershipStatus::JUMPER
         isManager: !!fs.verantwortlich,
         // isVerified: fs.verified === 1, // ?!
-        avatar: fs.photo || '1fed4bcb88762eeb368f23d2a27e216d.png',
+        avatar: fs.photo,
         roleColorClass,
         sleepStatus: fs.sleep_status,
         name: fs.name,
         number: fs.handy || fs.telefon || '',
+        callable: callableNumber(fs.handy) || callableNumber(fs.telefon) || '',
         phone: fs.telefon,
         joinDate: fs.add_date ? fromUnixTime(fs.add_date) : null,
         lastPickup: fs.last_fetch ? fromUnixTime(fs.last_fetch) : null,
@@ -156,13 +157,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-* {
+.store-team {
   --role-ambassador: #fa0; // darker version of --warning
   --role-storemanager: var(--fs-green);
   --role-foodsaver: var(--fs-brown);
-}
 
-.store-team {
   .list-group.team {
     padding-top: 0px;
   }
@@ -208,14 +207,15 @@ export default {
     .member-info {
       display: inline-flex;
       flex-direction: column;
-      padding-left: 8px;
-      max-width: calc(100% - 50px - 8px);
+      padding-left: 9px;
+      max-width: calc(100% - 50px - 9px);
       min-width: 0;
       align-self: center;
       font-size: smaller;
     }
 
     .member-name {
+      padding-left: 1px;
       min-width: 0;
       word-break: break-word;
       font-weight: bolder;

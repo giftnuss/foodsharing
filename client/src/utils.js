@@ -71,6 +71,11 @@ export function dateDistanceInWords (date) {
 
 const noLocale = /^[\w-.\s,]*$/
 
+export function callableNumber (number) {
+  const digits = number.toString().replace(/[^0-9]/g, '')
+  return (!digits) ? '' : ('tel:' + digits)
+}
+
 /**
  * Compare function used in sorting of btable
  */
