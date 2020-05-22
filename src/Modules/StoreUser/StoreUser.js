@@ -225,5 +225,5 @@ $(document).ready(() => {
     StoreInfos
   })
   vueApply('#vue-pickuplist', true)
-  vueApply('#vue-storeinfos')
+  vueApply('#vue-storeinfos', true)
 })
