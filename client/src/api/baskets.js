@@ -1,4 +1,4 @@
-import { get, post } from './base'
+import { get, post, remove } from './base'
 
 export async function getBaskets () {
   const baskets = (await get('/baskets?type=mine')).baskets
@@ -21,4 +21,8 @@ export async function requestBasket (basketId, message) {
 
 export async function withdrawBasketRequest (basketId) {
   return (post(`/baskets/${basketId}/withdraw`))
+}
+
+export async function removeBasket (basketId) {
+  return remove(`/baskets/${basketId}`)
 }

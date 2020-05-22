@@ -459,6 +459,7 @@ basket:
   request_empty: Dein Anfragetext darf nicht leer sein.
   not_found: Der Essenskorb existiert nicht mehr.
   request_denied: Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.
+  not_active: Essenskorb ist jetzt nicht mehr aktiv!
 
 personal_data:
   label: Kontakt

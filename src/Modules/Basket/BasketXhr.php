@@ -406,16 +406,6 @@ class BasketXhr extends Control
 		}
 	}
 
-	public function removeBasket(): array
-	{
-		$this->basketGateway->removeBasket($_GET['id'], $this->session->id());
-
-		return [
-			'status' => 1,
-			'script' => 'basketStore.loadBaskets();pulseInfo("' . $this->translationHelper->s('basket_not_active') . '");',
-		];
-	}
-
 	public function editBasket()
 	{
 		$basket = $this->basketGateway->getBasket($_GET['id']);
