@@ -18,10 +18,10 @@ final class ProfileGateway extends BaseGateway
 
 	/**
 	 * @param int $fsId id of the foodsaver we want the info from
-	 * @param int $raterId id of foodsaver doing the "rating" (Banana) on a given foodsaver. Pass -1 to prevent loading of rater information
+	 * @param int $viewerId id of foodsaver looking for info. Pass -1 to prevent loading profile information of the viewer.
 	 * @param bool $mayHandleReports info such as nb. of violations is only retrieved if this is true
 	 */
-	public function getData(int $fsId, int $raterId, bool $mayHandleReports): array
+	public function getData(int $fsId, int $viewerId, bool $mayHandleReports): array
 	{
 		$stm = '
 			SELECT 	fs.`id`,
@@ -77,11 +77,11 @@ final class ProfileGateway extends BaseGateway
 
 		$data['bouched'] = false;
 		$data['bananen'] = false;
-		if ($raterId != -1) {
-			$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :rater_id AND foodsaver_id = :fs_id AND ratingtype = 2';
+		if ($viewerId != -1) {
+			$stm = 'SELECT 1 FROM `fs_rating` WHERE rater_id = :viewerId AND foodsaver_id = :fs_id';
 
 			try {
-				if ($this->db->fetchValue($stm, [':rater_id' => $raterId, ':fs_id' => $fsId])) {
+				if ($this->db->fetchValue($stm, [':viewerId' => $viewerId, ':fs_id' => $fsId])) {
 					$data['bouched'] = true;
 				}
 			} catch (\Exception $e) {
@@ -170,7 +170,6 @@ final class ProfileGateway extends BaseGateway
 							 `fs_rating` r
 					WHERE 	r.rater_id = fs.id
 					AND 	r.foodsaver_id = :fs_id
-					AND 	r.ratingtype = 2
 					ORDER BY time DESC
 			';
 		$data['bananen'] = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
@@ -205,22 +204,20 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function rate(int $fsId, string $message = '', int $sessionId): int
+	public function giveBanana(int $fsId, string $message = '', int $sessionId): int
 	{
 		return $this->db->insert(
 			'fs_rating',
 			[
 				'foodsaver_id' => $fsId,
 				'rater_id' => $sessionId,
-				'rating' => 1,
-				'ratingtype' => 2,
 				'msg' => $message,
 				'time' => $this->db->now(),
 			]
 		);
 	}
 
-	public function getRateMessage(int $fsId, int $sessionId)
+	public function getBananaMessage(int $fsId, int $sessionId)
 	{
 		return $this->db->fetchValueByCriteria(
 			'fs_rating',

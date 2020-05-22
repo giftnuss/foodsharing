@@ -69,7 +69,7 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function rate(): array
+	public function banana(): array
 	{
 		$foodsharerId = (int)$_GET['id'];
 
@@ -86,10 +86,10 @@ class ProfileXhr extends Control
 				];
 			}
 
-			$this->profileGateway->rate($foodsharerId, $message, $this->session->id());
+			$this->profileGateway->giveBanana($foodsharerId, $message, $this->session->id());
 
 			$comment = '';
-			if ($msg = $this->profileGateway->getRateMessage($foodsharerId, $this->session->id())) {
+			if ($msg = $this->profileGateway->getBananaMessage($foodsharerId, $this->session->id())) {
 				$comment = $msg;
 			}
 
