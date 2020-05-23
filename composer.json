@@ -27,6 +27,7 @@
     "phpstan/phpstan": "0.12.28",
     "phpunit/phpunit": "9.2.2",
     "roave/security-advisories": "dev-master",
+    "robmorgan/phinx": "0.12.1",
     "sebastian/diff": "4.0.1"
   },
   "require": {

@@ -9,6 +9,7 @@ export FS_ENV=${FS_ENV:-dev}
 # user identification number of the current user
 export UID
 
+
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
