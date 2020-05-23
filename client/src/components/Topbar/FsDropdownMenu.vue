@@ -2,6 +2,7 @@
   <b-nav-item-dropdown
     v-b-tooltip="$i18n(menuTitle)"
     right
+    class="caret-beneath"
   >
     <template v-slot:button-content>
       <i :class="`fas ${icon}`" />
@@ -62,6 +63,28 @@ export default {
 <style lang="scss" scoped>
 i {
   font-size: 1rem;
+}
+.caret-beneath /deep/ .dropdown-toggle {
+  padding-bottom: 5px;
+  text-align: center;
+  &::after {
+    display: flex;
+    width: fit-content;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media(max-width: 767px) {
+  .collapse .caret-beneath /deep/ .dropdown-toggle {
+    text-align: unset;
+    &::after {
+      display: inline-block;
+      margin-left: 0.255em;
+      vertical-align: middle;
+    }
+  }
 }
 .dropdown {
   @media (max-width: 575px) {
