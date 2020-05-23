@@ -189,6 +189,7 @@
 # 2020-03-26 Hotfix 
 - Use WebSocket connection to determine whether a user is online or not !734 @janopae
 - Adds a null check to the chat server to avoid null WebSocket messages !1398 @dthulke
+* start documenting database tables and columns !1259 @flukx
 
 # 2020-03-16 Hotfix
 - Fix nightly fetcher warnings by using expected id instead of betrieb_id allowing all nightly maintenance methods to be executed again #747 !1348 @jofranz

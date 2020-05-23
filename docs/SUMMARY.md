@@ -28,6 +28,7 @@
   - [javascript, vue.js](javascript.md)
     - [icons](icons.md)
   - [Databases](database.md)
+    - [Tables, columns](database-tables-columns.md)
   - [Tests](tests.md)
   - [Refactoring](refactor.md)
   - [Release](release.md)
