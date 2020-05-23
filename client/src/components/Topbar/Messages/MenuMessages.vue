@@ -1,20 +1,21 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-messages"
     ref="dropdown"
-    v-b-tooltip="$i18n('menu.entry.messages')"
+    menu-title="menu.entry.messages"
+    icon="fa-comments"
     no-caret
     right
     class="topbar-messages"
   >
-    <template v-slot:button-content>
-      <i class="fas fa-comments" />
+    <template v-slot:heading-text>
       <span
         v-if="unread"
         class="badge badge-danger"
       >
         {{ unread }}
       </span>
+      <span v-else />
     </template>
     <div class="list-group">
       <div class="scroll-container">
@@ -41,14 +42,15 @@
         <i class="fas fa-comments" /> {{ $i18n('menu.entry.all_messages') }}
       </a>
     </div>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 <script>
 import MenuMessagesEntry from './MenuMessagesEntry'
 import conversationStore from '@/stores/conversations'
+import FsDropdownMenu from '../FsDropdownMenu'
 
 export default {
-  components: { MenuMessagesEntry },
+  components: { MenuMessagesEntry, FsDropdownMenu },
 
   computed: {
     conversations () {

@@ -52,7 +52,7 @@
         />
 
         <b-navbar-toggle target="nav-collapse">
-          <i :class="`fa fa-bars`" />
+          <i class="fa fa-bars" />
         </b-navbar-toggle>
 
         <b-collapse
@@ -146,9 +146,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 #topbar {
-  height: 38px;
-  nav, /deep/ .dropdown-menu {
+  height: 50px;
+  nav {
     box-shadow: 0em 0em 5px 0px black;
+  }
+  /deep/ .dropdown-menu {
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3)
   }
 }
   .bootstrap .navbar-brand {
@@ -163,10 +166,7 @@ export default {
   align-items: center;
   justify-content: space-evenly;
   /deep/ .nav-item {
-    margin-right: 6px;
-    &:first-child {
-      // margin-left: auto;
-    }
+    padding-right: 6px;
   }
   .login-popover {
     background-color: --var(beige);

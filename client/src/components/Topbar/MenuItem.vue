@@ -33,3 +33,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+i {
+  font-size: 1rem;
+}
+</style>

@@ -1,11 +1,12 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-region"
     ref="dropdown"
+    menu-title="terminology.regions"
     class="regionMenu"
+    icon="fa-globe"
   >
-    <template v-slot:button-content>
-      <i class="fas fa-globe" />
+    <template v-slot:heading-text>
       <span class="regionName text-truncate d-none d-sm-inline-block">
         {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
       </span>
@@ -141,17 +142,17 @@
     >
       <small><i class="fas fa-plus" /> {{ $i18n('menu.entry.joinregion') }}</small>
     </a>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 <script>
 import ui from '@/stores/ui'
-import { BCollapse, BNavItemDropdown, VBToggle } from 'bootstrap-vue'
-
+import { BCollapse, VBToggle } from 'bootstrap-vue'
+import FsDropdownMenu from './FsDropdownMenu'
 import { becomeBezirk } from '@/script'
 import Conference from './Conference'
 
 export default {
-  components: { BCollapse, BNavItemDropdown },
+  components: { BCollapse, FsDropdownMenu },
   directives: { VBToggle },
   mixins: [Conference],
   props: {

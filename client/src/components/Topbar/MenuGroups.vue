@@ -1,14 +1,12 @@
 <template>
   <div>
-    <b-nav-item-dropdown
+    <fs-dropdown-menu
       v-if="workingGroups.length"
       id="dropdown-groups"
-      v-b-tooltip="$i18n('menu.entry.your_groups')"
-      no-caret
+      menu-title="menu.entry.your_groups"
+      :show-menu-title="false"
+      icon="fa-users"
     >
-      <template v-slot:button-content>
-        <i class="fas fa-users" />
-      </template>
       <div
         v-for="group in workingGroups"
         :key="group.id"
@@ -98,30 +96,24 @@
       >
         <small><i class="fas fa-users" /> {{ $i18n('menu.entry.groups') }}</small>
       </a>
-    </b-nav-item-dropdown>
-    <li
+    </fs-dropdown-menu>
+    <menu-item
       v-else
-      v-b-tooltip
+      :url="$url('workingGroups')"
+      icon="fa-users"
       :title="$i18n('menu.entry.groups')"
-      class="nav-item"
-    >
-      <a
-        v-b-tooltip
-        :title="$i18n('menu.entry.groups')"
-        :href="$url('workingGroups')"
-        class="nav-link"
-      >
-        <i class="fas fa-users" />
-      </a>
-    </li>
+      :hide-title-mobile="true"
+    />
   </div>
 </template>
 <script>
 import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
 import Conference from './Conference'
+import FsDropdownMenu from './FsDropdownMenu'
+import MenuItem from './MenuItem'
 
 export default {
-  components: { BCollapse },
+  components: { BCollapse, FsDropdownMenu, MenuItem },
   directives: { VBToggle, VBTooltip },
   mixins: [Conference],
   props: {

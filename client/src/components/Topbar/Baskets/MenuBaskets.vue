@@ -1,19 +1,24 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-baskets"
     ref="dropdown"
-    v-b-tooltip="$i18n('basket.title')"
-    :no-caret="!showLabel"
+    menu-title="basket.title"
+    icon="fa-shopping-basket"
     class="topbar-baskets"
   >
-    <template v-slot:button-content>
-      <i class="fas fa-shopping-basket" />
+    <template v-slot:heading-text>
+      <span class="regionName text-truncate d-none d-sm-inline-block">
+        {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
+      </span>
+    </template>
+    <template v-slot:heading-text>
       <span
         v-if="showLabel"
         class="d-none d-sm-inline-block"
       >
         {{ $i18n('basket.title') }}
       </span>
+      <span v-else />
     </template>
     <div class="list-group">
       <p
@@ -49,17 +54,18 @@
         </a>
       </div>
     </div>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 <script>
 import MenuBasketsEntry from './MenuBasketsEntry'
 import basketStore from '@/stores/baskets'
+import FsDropdownMenu from '../FsDropdownMenu'
 
 import { ajreq } from '@/script'
 import dateFnsCompareDesc from 'date-fns/compareDesc'
 
 export default {
-  components: { MenuBasketsEntry },
+  components: { MenuBasketsEntry, FsDropdownMenu },
   props: {
     showLabel: {
       type: Boolean,

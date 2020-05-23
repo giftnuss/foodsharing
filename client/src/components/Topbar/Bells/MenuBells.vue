@@ -1,19 +1,19 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-bells"
-    v-b-tooltip="$i18n('menu.entry.notifications')"
-    no-caret
+    menu-title="menu.entry.notifications"
+    icon="fa-bell"
     right
     class="topbar-bells"
   >
-    <template v-slot:button-content>
-      <i class="fas fa-bell" />
+    <template v-slot:heading-text>
       <span
         v-if="unread"
         class="badge badge-danger"
       >
         {{ unread }}
       </span>
+      <span v-else />
     </template>
     <div class="list-group">
       <small
@@ -43,7 +43,7 @@
         <i class="fas fa-check" /> {{ $i18n('menu.entry.mark_as_read') }}
       </a>
     </div>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 <script>
 import MenuBellsEntry from './MenuBellsEntry'
@@ -51,9 +51,10 @@ import bellStore from '@/stores/bells'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
 import dateFnsParseISO from 'date-fns/parseISO'
+import FsDropdownMenu from '../FsDropdownMenu'
 
 export default {
-  components: { MenuBellsEntry },
+  components: { MenuBellsEntry, FsDropdownMenu },
   computed: {
     bells () {
       return bellStore.bells.map(bell => {
