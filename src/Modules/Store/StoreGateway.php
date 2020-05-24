@@ -1232,16 +1232,16 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $res;
 	}
 
-	public function getStoreStateList()
+	public function getStoreStateList(): array
 	{
-		return $this->db->fetchAll('
-			SELECT  `id`,
-			        `name`
-
-			FROM    `fs_betrieb_status`
-
-			ORDER BY `name`
-        ');
+		return [
+			['id' => '1', 'name' => 'Es besteht noch kein Kontakt'],
+			['id' => '2', 'name' => 'Verhandlungen laufen'],
+			['id' => '3', 'name' => 'Betrieb ist bereit zu spenden :-)'],
+			['id' => '4', 'name' => 'Betrieb will nicht kooperieren'],
+			['id' => '5', 'name' => 'Betrieb spendet bereits'],
+			['id' => '6', 'name' => 'spendet an Tafel etc. & wirft nichts weg']
+		];
 	}
 
 	public function setStoreTeamStatus(int $storeId, int $teamStatus)
