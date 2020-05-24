@@ -4,10 +4,12 @@
     :aria-label="$i18n('home.title')"
     class="navbar-brand brand"
   >
-    <span class="logo-text">
+    <span class="logo-text d-none d-md-inline-block">
       food<span class="green">shar<span class="apple">i</span>ng</span>
     </span>
-    <span class="d-md-none">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span class="logo-text d-md-none">
+      f<span class="green">s</span>
+    </span>
   </a>
 </template>
 <script>
@@ -36,15 +38,6 @@ export default {
       color: red;
       position: absolute;
       font-size: 0.5em;
-    }
-    @media (max-width: 768px)  {
-      // background-image: url('/img/fsgabelgwrgbklein.png');
-      background-image: url('/img/fsgabelgwrgbklein.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      .logo-text {
-        display:none;
-      }
     }
 }
 </style>
