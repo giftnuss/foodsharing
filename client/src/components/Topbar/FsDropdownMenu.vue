@@ -74,7 +74,7 @@ i {
   text-align: center;
   &::after {
     display: flex;
-    width: fit-content;
+    width: max-content;
     align-self: center;
     margin-left: auto;
     margin-right: auto;
