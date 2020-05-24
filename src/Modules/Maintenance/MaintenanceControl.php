@@ -9,6 +9,7 @@ use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
 
@@ -22,6 +23,7 @@ class MaintenanceControl extends ConsoleControl
 	private $maintenanceGateway;
 	private $quizHelper;
 	private $bellUpdateTrigger;
+	private $groupGateway;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -31,7 +33,8 @@ class MaintenanceControl extends ConsoleControl
 		TranslationHelper $translationHelper,
 		MaintenanceGateway $maintenanceGateway,
 		QuizHelper $quizHelper,
-		BellUpdateTrigger $bellUpdateTrigger
+		BellUpdateTrigger $bellUpdateTrigger,
+		GroupGateway $groupGateway
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
@@ -41,6 +44,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->maintenanceGateway = $maintenanceGateway;
 		$this->quizHelper = $quizHelper;
 		$this->bellUpdateTrigger = $bellUpdateTrigger;
+		$this->groupGateway = $groupGateway;
 
 		parent::__construct();
 	}
@@ -116,7 +120,7 @@ class MaintenanceControl extends ConsoleControl
 	public function rebuildRegionClosure()
 	{
 		self::info('rebuilding region closure...');
-		$this->maintenanceGateway->rebuildRegionClosure();
+		$this->groupGateway->recreateClosure();
 		self::success('OK');
 	}
 

@@ -157,36 +157,6 @@ class MaintenanceGateway extends BaseGateway
 	}
 
 	/**
-	 * Rebuilds the 'fs_bezirk_closure' table.
-	 */
-	public function rebuildRegionClosure(): void
-	{
-		$this->db->beginTransaction();
-		$this->db->execute('DELETE FROM fs_bezirk_closure');
-		$this->db->execute('
-			INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth)
-			SELECT a.id, a.id, 0
-			FROM fs_bezirk
-			AS a
-			WHERE a.parent_id > 0'
-		);
-		for ($depth = 0; $depth < 6; ++$depth) {
-			$this->db->execute('
-				INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth)
-				SELECT a.bezirk_id, b.parent_id, a.depth+1
-				FROM fs_bezirk_closure
-				AS a
-				JOIN fs_bezirk
-				AS b
-				ON b.id = a.ancestor_id
-				WHERE b.parent_id IS NOT NULL
-				AND a.depth = ' . $depth
-			);
-		}
-		$this->db->commit();
-	}
-
-	/**
 	 * Makes sure that all foodsavers in regions that have master regions are also members of the master region.
 	 */
 	public function masterRegionUpdate(): void
