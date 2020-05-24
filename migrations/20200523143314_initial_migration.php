@@ -7,6 +7,7 @@ class InitialMigration extends Phinx\Migration\AbstractMigration
 {
 	public function change()
 	{
+		$this->execute('set sql_mode="NO_AUTO_VALUE_ON_ZERO";');
 		$this->execute("ALTER DATABASE CHARACTER SET 'utf8mb4';");
 		$this->execute("ALTER DATABASE COLLATE='utf8mb4_unicode_ci';");
 		$this->table('fs_basket', [
@@ -6640,7 +6641,7 @@ Bitte alle Änderungen absprechen
 		$this->table('fs_content')->insert($content)->save();
 
 		$fs_bezirk = [
-			['id' => '0', 'parent_id' => null, 'has_children' => '1', 'type' => '0', 'teaser' => 'Root', 'desc' => 'Root', 'photo' => '', 'master' => '0', 'mailbox_id' => '0', 'name' => '', 'email' => '', 'email_pass' => '', 'email_name' => '', 'apply_type' => '0', 'banana_count' => '0', 'fetch_count' => '0', 'week_num' => '0', 'report_num' => '0', 'stat_last_update' => '2020-05-24 02:17:18', 'stat_fetchweight' => '702651.00', 'stat_fetchcount' => '48754', 'stat_postcount' => '152', 'stat_betriebcount' => '13', 'stat_korpcount' => '0', 'stat_botcount' => '0', 'stat_fscount' => '0', 'stat_fairteilercount' => '0', 'conversation_id' => '0', 'moderated' => '0'],
+			['id' => 0, 'parent_id' => null, 'has_children' => '1', 'type' => '0', 'teaser' => 'Root', 'desc' => 'Root', 'photo' => '', 'master' => '0', 'mailbox_id' => '0', 'name' => '', 'email' => '', 'email_pass' => '', 'email_name' => '', 'apply_type' => '0', 'banana_count' => '0', 'fetch_count' => '0', 'week_num' => '0', 'report_num' => '0', 'stat_last_update' => '2020-05-24 02:17:18', 'stat_fetchweight' => '702651.00', 'stat_fetchcount' => '48754', 'stat_postcount' => '152', 'stat_betriebcount' => '13', 'stat_korpcount' => '0', 'stat_botcount' => '0', 'stat_fscount' => '0', 'stat_fairteilercount' => '0', 'conversation_id' => '0', 'moderated' => '0'],
 			['id' => '392', 'parent_id' => '0', 'has_children' => '1', 'type' => '8', 'teaser' => '', 'desc' => '', 'photo' => '', 'master' => '392', 'mailbox_id' => '32678', 'name' => 'Arbeitsgruppen Überregional', 'email' => '', 'email_pass' => '', 'email_name' => 'Foodsharing Arbeitsgruppen Überregional', 'apply_type' => '2', 'banana_count' => '0', 'fetch_count' => '0', 'week_num' => '0', 'report_num' => '0', 'stat_last_update' => '2020-05-24 02:17:57', 'stat_fetchweight' => '5176.00', 'stat_fetchcount' => '208', 'stat_postcount' => '53969', 'stat_betriebcount' => '1', 'stat_korpcount' => '0', 'stat_botcount' => '1', 'stat_fscount' => '3360', 'stat_fairteilercount' => '0', 'conversation_id' => '0', 'moderated' => '0'],
 			['id' => '258', 'parent_id' => '0', 'has_children' => '1', 'type' => '7', 'teaser' => 'Das Forum des alten Orgateams', 'desc' => '', 'photo' => '', 'master' => '0', 'mailbox_id' => '528', 'name' => 'Orgateam Archiv', 'email' => '', 'email_pass' => '', 'email_name' => 'Foodsharing Orgateam', 'apply_type' => '0', 'banana_count' => '0', 'fetch_count' => '0', 'week_num' => '0', 'report_num' => '0', 'stat_last_update' => '2020-05-24 02:17:55', 'stat_fetchweight' => '179.00', 'stat_fetchcount' => '135', 'stat_postcount' => '6308', 'stat_betriebcount' => '0', 'stat_korpcount' => '0', 'stat_botcount' => '0', 'stat_fscount' => '22', 'stat_fairteilercount' => '0', 'conversation_id' => '0', 'moderated' => '1'],
 			['id' => '741', 'parent_id' => '0', 'has_children' => '1', 'type' => '6', 'teaser' => '', 'desc' => '', 'photo' => '', 'master' => '0', 'mailbox_id' => '25467', 'name' => 'Europa', 'email' => 'europa', 'email_pass' => '', 'email_name' => 'Foodsharing Europa', 'apply_type' => '2', 'banana_count' => '0', 'fetch_count' => '0', 'week_num' => '0', 'report_num' => '0', 'stat_last_update' => '2020-05-24 02:18:15', 'stat_fetchweight' => '33829400.50', 'stat_fetchcount' => '2116647', 'stat_postcount' => '1733615', 'stat_betriebcount' => '23002', 'stat_korpcount' => '7031', 'stat_botcount' => '1004', 'stat_fscount' => '74600', 'stat_fairteilercount' => '891', 'conversation_id' => '0', 'moderated' => '0'],
@@ -6660,5 +6661,6 @@ Wir können sonst nicht antworten, da uns Absender*in und Emailadresse leider ni
 	];
 		$this->table('fs_bezirk')->insert($fs_bezirk)->save();
 		$this->execute('SET FOREIGN_KEY_CHECKS=1;');
+		$this->execute('set sql_mode="";');
 	}
 }
