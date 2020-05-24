@@ -2,7 +2,7 @@
   <div
     id="topbar-search"
     class="form flex-grow-1"
-    :class="{'d-none d-sm-flex': !showOnMobile,
+    :class="{'d-none d-md-flex': !showOnMobile,
              'my-2': showOnMobile}"
   >
     <div
@@ -173,12 +173,7 @@ export default {
       align-items: unset;
     }
   }
-  @media (max-width: 600px) {
-    #topbar-search {
-      // max-width: 150px;
-    }
-  }
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     #topbar-search {
       width: 100%;
       max-width: unset;

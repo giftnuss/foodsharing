@@ -37,7 +37,7 @@
       id="search"
       icon="fa-search"
       :hide-title-always="true"
-      class="d-sm-none"
+      class="d-md-none"
       @click="$emit('openSearch')"
     />
   </b-navbar-nav>
