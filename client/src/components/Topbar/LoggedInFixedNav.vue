@@ -19,8 +19,7 @@
       :working-groups="workingGroups"
     />
     <menu-stores
-      v-if="hasFsRole && stores.length"
-      :stores="stores"
+      v-if="hasFsRole"
       :may-add-store="mayAddStore"
     />
     <menu-baskets :show-label="!hasFsRole" />
@@ -68,10 +67,6 @@ export default {
     hasFsRole: {
       type: Boolean,
       default: true
-    },
-    stores: {
-      type: Array,
-      default: () => []
     },
     regions: {
       type: Array,

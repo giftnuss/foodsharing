@@ -1,12 +1,13 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-stores"
-    v-b-tooltip="$i18n('menu.entry.your_stores')"
-    no-caret
+    menu-title="menu.entry.your_stores"
+    :items="headings"
+    icon="fa-shopping-cart"
     lazy
   >
-    <template v-slot:button-content>
-      <i class="fas fa-shopping-cart" />
+    <template v-slot:heading-text>
+      <span />
     </template>
     <menu-stores-list /> <!-- This is an own component in order to be lazy loaded -->
     <a
@@ -24,13 +25,14 @@
     >
       <small><i class="fas fa-list" /> {{ $i18n('store.all_of_my_stores') }} </small>
     </a>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 
 <script>
 import MenuStoresList from '@/components/Topbar/Stores/MenuStoresList'
+import FsDropdownMenu from '../FsDropdownMenu'
 export default {
-  components: { MenuStoresList },
+  components: { MenuStoresList, FsDropdownMenu },
   props: {
     mayAddStore: {
       type: Boolean,

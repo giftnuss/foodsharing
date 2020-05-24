@@ -40,7 +40,6 @@
           v-if="loggedIn"
           :has-fs-role="hasFsRole"
           :regions="regions"
-          :stores="stores"
           :working-groups="workingGroups"
           :may-add-stores="may.addStore"
           @openSearch="searchOpen = !searchOpen"
@@ -123,10 +122,6 @@ export default {
     may: {
       type: Object,
       default: () => ({})
-    },
-    stores: {
-      type: Array,
-      default: () => []
     },
     regions: {
       type: Array,

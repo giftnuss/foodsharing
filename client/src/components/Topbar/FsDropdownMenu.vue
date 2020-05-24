@@ -2,6 +2,7 @@
   <b-nav-item-dropdown
     v-b-tooltip="$i18n(menuTitle)"
     right
+    :lazy="lazy"
     class="caret-beneath"
   >
     <template v-slot:button-content>
@@ -55,6 +56,10 @@ export default {
     showMenuTitle: {
       type: Boolean,
       default: true
+    },
+    lazy: {
+      type: Boolean,
+      default: false
     }
   }
 }
