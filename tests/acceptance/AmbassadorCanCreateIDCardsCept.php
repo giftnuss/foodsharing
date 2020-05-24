@@ -10,20 +10,19 @@ function convertRegionName($name)
 	return $name;
 }
 
-$testRegionId = 241;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('create an id card for a foodsaver');
 
-$regionName = $I->grabFromDatabase('fs_bezirk', 'name', ['id' => $testRegionId]);
-$I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
-$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $testRegionId]);
-$I->addRegionAdmin($testRegionId, $ambassador['id']);
+$region = $I->createRegion();
+$I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1', 'photo' => 'does-not-exist.jpg', 'bezirk_id' => $region['id']]);
+$ambassador = $I->createAmbassador(null, ['photo' => 'does-not-exist.jpg', 'bezirk_id' => $region['id']]);
+$I->addRegionAdmin($region['id'], $ambassador['id']);
 
 $I->login($ambassador['email']);
 
-$I->amOnPage('/?page=passgen&bid=' . $testRegionId);
+$I->amOnPage('/?page=passgen&bid=' . $region['id']);
 $I->waitForText('fs1 saver1');
 $I->click('Alle markieren');
 $I->click('Markierte Ausweise generieren');
 
-$I->waitForFileExists('/downloads/foodsaver_pass_' . convertRegionName($regionName) . '.pdf', 10);
+$I->waitForFileExists('/downloads/foodsaver_pass_' . convertRegionName($region['name']) . '.pdf', 10);

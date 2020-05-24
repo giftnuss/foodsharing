@@ -8,7 +8,7 @@ $I->wantTo('Join another region');
 
 /* This user is explicitly unverified to trigger #404; also actually newly registered users are unverified. */
 $user = $I->createFoodsaver(null, ['verified' => 0]);
-$region = $I->createRegion(null, 0, 3);
+$region = $I->createRegion(null, ['parent_id' => 0]);
 $ambassador = $I->createAmbassador(null, ['bezirk_id' => $region['id']]);
 $I->addRegionAdmin($region['id'], $ambassador['id']);
 $welcomeAdmin = $I->createFoodsaver(null, ['verified' => 0]);

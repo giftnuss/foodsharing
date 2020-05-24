@@ -6,7 +6,7 @@ $I = new AcceptanceTester($scenario);
 
 $I->wantTo('create a store and manage it and my team');
 
-$region = $I->createRegion('A region I test with', null, \Foodsharing\Modules\Core\DBConstants\Region\Type::CITY);
+$region = $I->createRegion();
 $storeName = 'Multistore 24';
 $newStoreName = 'Ex-Ultrastore';
 $storeStreet = 'Kantstraße 20';

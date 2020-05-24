@@ -2,11 +2,14 @@
 
 class CompanyCest
 {
-	private $bezirk_id = 241;
+	private $bezirk;
+	private $bezirk_id;
 
 	private function createStoreAndUsers()
 	{
 		$I = $this->tester;
+		$this->bezirk = $this->tester->createRegion();
+		$this->bezirk_id = $this->bezirk['id'];
 		$this->store = $I->createStore($this->bezirk_id);
 		$this->storeCoordinator = $I->createStoreCoordinator(null, ['bezirk_id' => $this->bezirk_id]);
 		$this->participatorA = $I->createFoodsaver(null, ['bezirk_id' => $this->bezirk_id]);

@@ -14,8 +14,8 @@ class ReportApiCest
 	public function _before(\ApiTester $I)
 	{
 		$this->parentRegion = $I->createRegion();
-		$this->region = $I->createRegion(null, $this->parentRegion['id']);
-		$this->subRegion = $I->createRegion(null, $this->region['id']);
+		$this->region = $I->createRegion(null, ['parent_id' => $this->parentRegion['id']]);
+		$this->subRegion = $I->createRegion(null, ['parent_id' => $this->region['id']]);
 		$this->ambassador = $I->createAmbassador(null, ['bezirk_id' => $this->region['id']]);
 		$I->addRegionAdmin($this->region['id'], $this->ambassador['id']);
 		$this->parentAmbassador = $I->createAmbassador(null, ['bezirk_id' => $this->parentRegion['id']]);
@@ -104,6 +104,7 @@ class ReportApiCest
 	public function reportTeamCanAccessReports(\ApiTester $I)
 	{
 		$fs = $I->createFoodsaver();
+		$reportTeamRegion = $I->createRegion('report team region', ['id' => Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM]);
 		$I->addRegionMember(Foodsharing\Modules\Core\DBConstants\Region\RegionIDs::EUROPE_REPORT_TEAM, $fs['id']);
 		$I->login($fs['email']);
 		$I->sendGET($I->apiReportListForRegion($this->region['id']));

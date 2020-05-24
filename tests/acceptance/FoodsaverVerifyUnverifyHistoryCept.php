@@ -1,12 +1,12 @@
 <?php
 
-$testRegionId = 253;
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Verify, unverify and see verification history of a foodsaver');
 
-$foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $testRegionId]);
-$ambassador = $I->createAmbassador(null, ['name' => 'Bot', 'bezirk_id' => $testRegionId]);
-$I->addRegionAdmin($testRegionId, $ambassador['id']);
+$region = $I->createRegion();
+$foodsaver = $I->createFoodsaver(null, ['bezirk_id' => $region['id']]);
+$ambassador = $I->createAmbassador(null, ['name' => 'Bot', 'bezirk_id' => $region['id']]);
+$I->addRegionAdmin($region['id'], $ambassador['id']);
 
 /* define xpath locator
 1. //a[contains(text(), "%s")]     look a the link with the foodsavers' name:
@@ -23,11 +23,11 @@ $I->amOnPage('/profile/' . $foodsaver['id']);
 $I->click('Verifizierungshistorie');
 $I->waitForText('Es liegen keine Daten vor');
 
-$I->amOnPage('/?page=passgen&bid=' . $testRegionId);
+$I->amOnPage('/?page=passgen&bid=' . $region['id']);
 $I->click($verify_y);
 $I->seeElement($verify_n);
 
-$I->amOnPage('/?page=passgen&bid=' . $testRegionId);
+$I->amOnPage('/?page=passgen&bid=' . $region['id']);
 $I->click($verify_n);
 $I->waitForText('Ausweis übergeben?');
 $I->click('Verifizieren');

@@ -4,11 +4,9 @@ class ChatCest
 {
 	private $foodsaver1;
 	private $foodsaver2;
-	private $testBezirk;
 
 	public function _before(AcceptanceTester $I)
 	{
-		$this->testBezirk = 241;
 		$this->createUsers($I);
 	}
 
@@ -18,8 +16,8 @@ class ChatCest
 
 	private function createUsers(AcceptanceTester $I)
 	{
-		$this->foodsaver1 = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk]);
-		$this->foodsaver2 = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk]);
+		$this->foodsaver1 = $I->createFoodsaver(null);
+		$this->foodsaver2 = $I->createFoodsaver(null);
 	}
 
 	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)

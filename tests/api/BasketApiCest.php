@@ -36,7 +36,7 @@ class BasketApiCest
 
 	public function getOutdatedBasket(\ApiTester $I)
 	{
-		$basket = $I->createFoodbasket($this->user[self::ID], 241, [
+		$basket = $I->createFoodbasket($this->user[self::ID], [
 			'time' => $this->faker->dateTime($max = '-2 days'),
 			'until' => $this->faker->dateTime($max = '-1 day')
 		]);

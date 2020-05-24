@@ -31,7 +31,7 @@ class EventGatewayTest extends \Codeception\Test\Unit
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->region = $this->tester->createRegion('God');
 		$this->tester->addRegionMember($this->region['id'], $this->foodsaver['id']);
-		$this->childRegion = $this->tester->createRegion('Jesus', $this->region['id']);
+		$this->childRegion = $this->tester->createRegion('Jesus', ['parent_id' => $this->region['id']]);
 	}
 
 	public function testAddLocation()
