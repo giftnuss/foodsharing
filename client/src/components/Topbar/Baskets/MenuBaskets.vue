@@ -7,11 +7,6 @@
     class="topbar-baskets"
   >
     <template v-slot:heading-text>
-      <span class="regionName text-truncate d-none d-sm-inline-block">
-        {{ activeRegion ? activeRegion.name : $i18n('terminology.regions') }}
-      </span>
-    </template>
-    <template v-slot:heading-text>
       <span
         v-if="showLabel"
         class="d-none d-sm-inline-block"

@@ -4,8 +4,6 @@
     ref="dropdown"
     menu-title="menu.entry.messages"
     icon="fa-comments"
-    no-caret
-    right
     class="topbar-messages"
   >
     <template v-slot:heading-text>
