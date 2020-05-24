@@ -1,16 +1,10 @@
 <template>
-  <b-nav-item-dropdown
+  <fs-dropdown-menu
     id="dropdown-admin"
-    v-b-tooltip="$i18n('menu.entry.administration')"
-    right
-    no-caret
+    ref="dropdown"
+    menu-title="menu.entry.administration"
+    icon="fa-cog"
   >
-    <template v-slot:button-content>
-      <i class="fas fa-cog" />
-      <span class="d-md-none">
-        {{ $i18n('menu.entry.administration') }}
-      </span>
-    </template>
     <b-dropdown-item
       v-for="item in items"
       :key="item.url"
@@ -18,14 +12,16 @@
     >
       <i :class="item.icon" /> {{ item.label }}
     </b-dropdown-item>
-  </b-nav-item-dropdown>
+  </fs-dropdown-menu>
 </template>
 
 <script>
 import { url } from '@/urls'
 import i18n from '@/i18n'
+import FsDropdownMenu from './FsDropdownMenu'
 
 export default {
+  components: { FsDropdownMenu },
   props: {
     may: {
       type: Object,

@@ -64,6 +64,8 @@
             :display-mailbox="mailbox"
             :fs-id="fsId"
             :image="image"
+            :may="may"
+            :is-orga-team="isOrgaTeam"
           />
         </b-collapse>
       </b-container>

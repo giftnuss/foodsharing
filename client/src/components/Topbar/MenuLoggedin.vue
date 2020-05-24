@@ -10,6 +10,11 @@
       class="d-sm-none"
     />
 
+    <menu-admin
+      v-if="someAdminRights"
+      :is-orga-team="isOrgaTeam"
+      :may="may"
+    />
     <MenuBullhorn />
     <MenuInformation />
     <MenuEnvelope :display-mailbox="displayMailbox" />
@@ -32,9 +37,10 @@ import MenuItem from './MenuItem'
 import MenuMessages from './Messages/MenuMessages'
 import MenuBells from './Bells/MenuBells'
 import MenuUser from './MenuUser'
+import MenuAdmin from './MenuAdmin'
 
 export default {
-  components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav, MenuItem, MenuMessages, MenuBells, MenuUser },
+  components: { MenuAdmin, MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav, MenuItem, MenuMessages, MenuBells, MenuUser },
   directives: { VBTooltip },
   props: {
     displayMailbox: {
@@ -48,6 +54,19 @@ export default {
     image: {
       type: String,
       default: ''
+    },
+    isOrgaTeam: {
+      type: Boolean,
+      default: true
+    },
+    may: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  computed: {
+    someAdminRights () {
+      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.editFAQ || this.may.manageMailboxes || this.may.administrateNewsletterEmail || this.may.administrateRegions
     }
   }
 }
