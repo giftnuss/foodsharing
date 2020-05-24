@@ -51,7 +51,7 @@ log-header "Initializing database"
 SECONDS=0
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
-migratedb foodsharing
+migratedb
 
 "$dir"/mkdirs
 echo $SECONDS seconds elapsed

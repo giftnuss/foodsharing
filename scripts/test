@@ -25,7 +25,7 @@ echo "Initializing database"
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
 
 echo "Running migrations"
-migratedb foodsharing
+migratedb
 
 echo "Running composer install"
 exec-in-container app 'composer install'
