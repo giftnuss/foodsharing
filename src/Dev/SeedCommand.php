@@ -110,13 +110,17 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected function seed()
 	{
 		$I = $this->helper;
-		$region1 = '241'; // this is called 'Göttingen'
+		$I->_getDbh()->beginTransaction();
+		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=0;', []);
+		$regionOne = $I->createRegion('Göttingen');
+		$region1 = $regionOne['id'];
+		$regionOneWorkGroup = $I->createWorkingGroup('Schnippelparty Göttingen', ['parent_id' => $regionOne['id']]);
 		$region_vorstand = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_aktive = RegionIDs::TEAM_ADMINISTRATION_MEMBER;
 		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$password = 'user';
-		$region1WorkGroup = '1135'; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
+		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
 		// Create users
 		$this->output->writeln('Create basic users:');
@@ -322,5 +326,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$this->output->write('.');
 		}
 		$this->output->writeln(' done');
+		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);
+		$I->_getDbh()->commit();
 	}
 }
