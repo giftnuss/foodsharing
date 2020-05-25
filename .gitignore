@@ -22,7 +22,6 @@ api/**
 .php_cs.cache
 .php_cs_cache_local
 revision.inc.php
-migrations/_*
 .vagrant
 .DS_Store
 docs/_book

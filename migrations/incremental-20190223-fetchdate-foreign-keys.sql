@@ -1,2 +1,0 @@
-ALTER TABLE fs_fetchdate ADD FOREIGN KEY (betrieb_id) REFERENCES fs_betrieb (ID) ON DELETE CASCADE;
-ALTER TABLE fs_abholer ADD FOREIGN KEY (betrieb_id) REFERENCES fs_betrieb (ID) ON DELETE CASCADE;
