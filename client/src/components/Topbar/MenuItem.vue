@@ -1,7 +1,7 @@
 <template>
   <b-nav-item
     v-b-tooltip.hover.bottom
-    :class="{'d-none d-sm-inline-block': hideOnMobile}"
+    :class="{'d-none d-md-inline-block': hideOnMobile, 'd-md-none': showOnlyOnMobile}"
     :href="url"
     :title="title"
     :aria-label="title"
@@ -29,7 +29,8 @@ export default {
     showTitleAlways: { type: Boolean, default: false },
     hideTitleAlways: { type: Boolean, default: false },
     hideTitleMobile: { type: Boolean, default: false },
-    hideOnMobile: { type: Boolean, default: false }
+    hideOnMobile: { type: Boolean, default: false },
+    showOnlyOnMobile: { type: Boolean, default: false }
   }
 }
 </script>

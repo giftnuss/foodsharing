@@ -30,19 +30,19 @@
       :hide-on-mobile="true"
       :hide-title-always="true"
     />
-    <menu-messages class="d-md-none" />
-    <menu-bells class="d-md-none" />
+    <menu-messages :show-only-on-mobile="true" />
+    <menu-bells :show-only-on-mobile="true" />
     <menu-user
       :avatar="avatar"
       :user-id="userId"
-      class="d-md-none"
+      :show-only-on-mobile="true"
     />
     <menu-item
       v-if="hasFsRole"
       id="search"
       icon="fa-search"
       :hide-title-always="true"
-      class="d-md-none"
+      :show-only-on-mobile="true"
       @click="$emit('openSearch')"
     />
   </b-navbar-nav>

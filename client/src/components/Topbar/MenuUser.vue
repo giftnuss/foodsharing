@@ -6,6 +6,8 @@
       class="user"
       right
       menu-title="menu.entry.your_account"
+      :show-only-on-mobile="showOnlyOnMobile"
+      :hide-only-on-mobile="hideOnlyOnMobile"
     >
       <template v-slot:heading-text>
         <img :src="avatar">
@@ -48,10 +50,8 @@ export default {
       type: String,
       default: null
     },
-    isMobile: {
-      type: Boolean,
-      default: false
-    }
+    showOnlyOnMobile: { type: Boolean, default: false },
+    hideOnlyOnMobile: { type: Boolean, default: false }
   }
 }
 </script>

@@ -4,6 +4,7 @@
     right
     :lazy="lazy"
     class="caret-beneath"
+    :class="{'d-md-none': showOnlyOnMobile, 'd-none d-md-inline-block': hideOnlyOnMobile }"
   >
     <template v-slot:button-content>
       <i
@@ -63,7 +64,9 @@ export default {
     lazy: {
       type: Boolean,
       default: false
-    }
+    },
+    showOnlyOnMobile: { type: Boolean, default: false },
+    hideOnlyOnMobile: { type: Boolean, default: false }
   }
 }
 </script>

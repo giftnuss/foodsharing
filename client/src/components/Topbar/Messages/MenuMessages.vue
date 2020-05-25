@@ -5,6 +5,8 @@
     menu-title="menu.entry.messages"
     icon="fa-comments"
     class="topbar-messages"
+    :show-only-on-mobile="showOnlyOnMobile"
+    :hide-only-on-mobile="hideOnlyOnMobile"
   >
     <template v-slot:heading-text>
       <span
@@ -49,7 +51,10 @@ import FsDropdownMenu from '../FsDropdownMenu'
 
 export default {
   components: { MenuMessagesEntry, FsDropdownMenu },
-
+  props: {
+    showOnlyOnMobile: { type: Boolean, default: false },
+    hideOnlyOnMobile: { type: Boolean, default: false }
+  },
   computed: {
     conversations () {
       /* let res = Array.from(conversationStore.conversations) // .filter(c => c.lastMessage || c.messages)

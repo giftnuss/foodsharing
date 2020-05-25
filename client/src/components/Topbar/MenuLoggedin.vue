@@ -7,7 +7,7 @@
       :url="$url('map')"
       icon="fa-map-marker-alt"
       :title="$i18n('storelist.map')"
-      class="d-sm-none"
+      :show-only-on-mobile="true"
     />
 
     <menu-admin
@@ -18,12 +18,12 @@
     <MenuBullhorn />
     <MenuInformation />
     <MenuEnvelope :display-mailbox="displayMailbox" />
-    <menu-messages class="d-none d-md-inline-block" />
-    <menu-bells class="d-none d-md-inline-block" />
+    <menu-messages :hide-only-on-mobile="true" />
+    <menu-bells :hide-only-on-mobile="true" />
     <menu-user
       :user-id="fsId"
       :avatar="image"
-      class="d-none d-md-inline-block"
+      :hide-only-on-mobile="true"
     />
   </b-navbar-nav>
 </template>

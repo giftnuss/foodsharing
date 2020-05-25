@@ -5,6 +5,8 @@
     icon="fa-bell"
     right
     class="topbar-bells"
+    :show-only-on-mobile="showOnlyOnMobile"
+    :hide-only-on-mobile="hideOnlyOnMobile"
   >
     <template v-slot:heading-text>
       <span
@@ -55,6 +57,10 @@ import FsDropdownMenu from '../FsDropdownMenu'
 
 export default {
   components: { MenuBellsEntry, FsDropdownMenu },
+  props: {
+    showOnlyOnMobile: { type: Boolean, default: false },
+    hideOnlyOnMobile: { type: Boolean, default: false }
+  },
   computed: {
     bells () {
       return bellStore.bells.map(bell => {
