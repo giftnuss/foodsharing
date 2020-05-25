@@ -6,7 +6,7 @@
       v-if="!hasFsRole"
       :url="$url('upgradeToFs')"
       icon="fa-rocket"
-      :title="$i18n('foodsaver.upgrade_to')"
+      :title="$i18n('foodsaver.upgrade.to_fs')"
       :show-title-always="true"
     />
 
