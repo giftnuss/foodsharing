@@ -147,9 +147,7 @@ export default {
   nav {
     box-shadow: 0em 0em 5px 0px black;
   }
-  /deep/ .dropdown-menu {
-    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3)
-  }
+
 }
   .bootstrap .navbar-brand {
     padding: 0;
@@ -174,12 +172,6 @@ export default {
   }
 }
 
-/deep/ .dropdown-menu {
-  // Fixes problem that list of dropdown items is to long.
-  max-height: 70vh;
-  overflow: auto;
-}
-
 /deep/ .navbar-collapse {
   &.show {
     // Only when menu is shown. Fixes problem that list of dropdown items is to long.
@@ -190,7 +182,8 @@ export default {
     }
   }
   &.show .nav-link i, &.collapsing .nav-link i {
-      width: 40px;
+      width: 20px;
+      margin-right: 10px;
       text-align: center;
   }
   order: 2;

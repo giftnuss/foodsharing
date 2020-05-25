@@ -92,10 +92,31 @@ i {
   }
 }
 .dropdown {
+  /deep/ .dropdown-menu {
+    max-height: 420px;
+    max-width: 300px;
+    overflow-y: auto;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    // Fixes problem that list of dropdown items is to long.
+    max-height: 70vh;
+    overflow: auto;
+    // Margin to have an indent in the burger menu.
+    margin-left: 30px;
+    .scroll-container {
+      max-height: 300px;
+      min-height: 120px;
+      overflow: auto;
+    }
+  }
   @media (max-width: 575px) {
     position: initial;
     /deep/ .dropdown-menu {
       width: 100%;
+      max-width: initial;
+      top: 2.2em;
+      .scroll-container {
+        width: 100%;
+      }
     }
   }
 }
