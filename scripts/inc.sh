@@ -117,8 +117,9 @@ function recreatedb() {
 
 function migratedb() {
   echo "Migrating database for $FS_ENV"
-  exec-in-container app vendor/robmorgan/phinx/bin/phinx migrate
-  exec-in-container app bin/console maintenance:recreateGroupStructure
+  local container=${1:-app}
+  exec-in-container $container vendor/bin/phinx migrate
+  exec-in-container $container bin/console maintenance:recreateGroupStructure
 }
 
 function wait-for-mysql() {
