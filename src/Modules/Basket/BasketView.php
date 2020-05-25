@@ -59,7 +59,7 @@ class BasketView extends View
 					$b['description'],
 					50
 				) . '</span>
-
+						
 						<span style="clear:both;"></span>
 					</a>
 				</li>';
@@ -76,10 +76,10 @@ class BasketView extends View
 	{
 		$page = new vPage(
 			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
-
+		
 		<div class="fbasket-wrap">
 		    <div class="fbasket-pic">
-				' . $this->pageImg($basket['picture'] ?? '') . '
+				' . $this->pageImg($basket['picture'] ?? '') . '	
 			</div>
 		    <div class="fbasket-desc">
 				<p>' . nl2br($basket['description']) . '</p>
@@ -124,7 +124,7 @@ class BasketView extends View
 	{
 		$page = new vPage(
 			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
-
+		
 		<div>
 			<p>' . $this->translationHelper->s('basket_picked_up') . '</p>
 		</div>

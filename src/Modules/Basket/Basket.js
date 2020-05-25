@@ -4,15 +4,17 @@ import '@/globals'
 
 import $ from 'jquery'
 
-import { ajax, ajreq, pulseError } from '@/script'
+import { ajax, ajreq, pulseInfo, pulseError } from '@/script'
 import './Basket.css'
 
 import { addMarker, clearCluster, commitCluster } from '@php/Lib/View/vMap'
 
 import { vueApply, vueRegister } from '@/vue'
 import RequestForm from './components/RequestForm'
-import i18n from '@/i18n';
-import { expose } from '@/utils';
+import i18n from '@/i18n'
+import { expose } from '@/utils'
+import { removeBasket } from '@/api/baskets'
+import basketStore from '@/stores/baskets'
 
 expose({
   tryRemoveBasket
@@ -114,9 +116,9 @@ $(document).ready(() => {
 
 function tryRemoveBasket (basketId) {
   try {
-    tryRemoveBasket(basketId)
-    basketStore.loadBaskets();
-    pulseInfo(i18n('basket.not_active'));
+    removeBasket(basketId)
+    basketStore.loadBaskets()
+    pulseInfo(i18n('basket.not_active'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))
   }
