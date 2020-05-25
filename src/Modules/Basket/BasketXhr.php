@@ -44,7 +44,6 @@ class BasketXhr extends Control
 		$allowed = [
 			'bubble' => true,
 			'login' => true,
-			'basketCoordinates' => true,
 			'nearbyBaskets' => true,
 		];
 
@@ -58,16 +57,6 @@ class BasketXhr extends Control
 			);
 			exit();
 		}
-	}
-
-	public function basketCoordinates(): void
-	{
-		$xhr = new Xhr();
-		if ($baskets = $this->basketGateway->getBasketCoordinates()) {
-			$xhr->addData('baskets', $baskets);
-		}
-
-		$xhr->send();
 	}
 
 	public function newBasket(): array

@@ -13,7 +13,7 @@ import { vueApply, vueRegister } from '@/vue'
 import RequestForm from './components/RequestForm'
 import i18n from '@/i18n'
 import { expose } from '@/utils'
-import { removeBasket } from '@/api/baskets'
+import { removeBasket, listBasketCoordinates } from '@/api/baskets'
 import basketStore from '@/stores/baskets'
 
 expose({
@@ -79,13 +79,14 @@ const mapsearch = {
 mapsearch.init()
 
 if ($('#mapsearch').length > 0) {
-  ajax.req('basket', 'basketCoordinates', {
-    success: function (ret) {
-      if (ret.baskets != undefined && ret.baskets.length > 0) {
-        mapsearch.setMarker(ret.baskets)
+  try {
+    listBasketCoordinates().then((data) => {
+      if (data.length > 0) {
+        mapsearch.setMarker(data)
       }
-    }
-  })
+    })
+  } catch (e) {
+  }
 
   $('#map-latLng').on('change', function () {
     console.log()

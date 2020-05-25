@@ -26,3 +26,7 @@ export async function withdrawBasketRequest (basketId) {
 export async function removeBasket (basketId) {
   return remove(`/baskets/${basketId}`)
 }
+
+export async function listBasketCoordinates () {
+  return (await get('/baskets?type=coordinates')).baskets
+}
