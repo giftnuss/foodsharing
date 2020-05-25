@@ -12,7 +12,6 @@
 
     <menu-admin
       v-if="someAdminRights"
-      :is-orga-team="isOrgaTeam"
       :may="may"
     />
     <MenuBullhorn />
