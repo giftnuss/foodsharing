@@ -1,31 +1,13 @@
 <template>
   <div>
-    <menu-item
-      :url="$url('profile', userId)"
-      icon="fa-address-card"
-      :title="$i18n('profile.title')"
-      class="d-md-none"
-    />
-    <menu-item
-      :url="$url('settings')"
-      icon="fa-cog"
-      :title="$i18n('settings.header')"
-      class="d-md-none"
-    />
-    <menu-item
-      :url="$url('logout')"
-      icon="fa-power-off"
-      :title="$i18n('login.logout') "
-      class="d-md-none"
-    />
-
-    <b-nav-item-dropdown
+    <fs-dropdown-menu
       v-b-tooltip="$i18n('menu.entry.your_account')"
       no-caret
-      class="user d-none d-md-inline-block"
+      class="user"
       right
+      menu-title="menu.entry.your_account"
     >
-      <template v-slot:button-content>
+      <template v-slot:heading-text>
         <img :src="avatar">
       </template>
       <a
@@ -49,14 +31,14 @@
       >
         <i class="fas fa-power-off" /> {{ $i18n('login.logout') }}
       </a>
-    </b-nav-item-dropdown>
+    </fs-dropdown-menu>
   </div>
 </template>
 <script>
-import MenuItem from './MenuItem'
+import FsDropdownMenu from './FsDropdownMenu'
 
 export default {
-  components: { MenuItem },
+  components: { FsDropdownMenu },
   props: {
     userId: {
       type: Number,
@@ -77,5 +59,9 @@ export default {
 <style lang="scss" scoped>
 img {
     height: 1.2rem;
+    border-radius: 16px;
+    border: 1px solid white;
+    margin-bottom: 1px;
+    margin-top: -2px;
 }
 </style>

@@ -23,6 +23,7 @@
     <menu-user
       :user-id="fsId"
       :avatar="image"
+      class="d-none d-md-inline-block"
     />
   </b-navbar-nav>
 </template>

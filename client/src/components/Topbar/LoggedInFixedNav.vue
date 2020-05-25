@@ -32,6 +32,11 @@
     />
     <menu-messages class="d-md-none" />
     <menu-bells class="d-md-none" />
+    <menu-user
+      :avatar="avatar"
+      :user-id="userId"
+      class="d-md-none"
+    />
     <menu-item
       v-if="hasFsRole"
       id="search"
@@ -51,6 +56,7 @@ import MenuGroups from './MenuGroups'
 import MenuBaskets from './Baskets/MenuBaskets'
 import MenuMessages from './Messages/MenuMessages'
 import MenuBells from './Bells/MenuBells'
+import MenuUser from './MenuUser'
 
 export default {
   components: {
@@ -60,7 +66,8 @@ export default {
     MenuGroups,
     MenuBaskets,
     MenuMessages,
-    MenuBells
+    MenuBells,
+    MenuUser
   },
 
   props: {
@@ -79,6 +86,14 @@ export default {
     mayAddStore: {
       type: Boolean,
       default: false
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    userId: {
+      type: Number,
+      default: null
     }
   }
 }

@@ -42,6 +42,8 @@
           :regions="regions"
           :working-groups="workingGroups"
           :may-add-stores="may.addStore"
+          :avatar="image"
+          :user-id="fsId"
           @openSearch="searchOpen = !searchOpen"
         />
 
@@ -147,7 +149,6 @@ export default {
   nav {
     box-shadow: 0em 0em 5px 0px black;
   }
-
 }
   .bootstrap .navbar-brand {
     padding: 0;

@@ -6,7 +6,10 @@
     class="caret-beneath"
   >
     <template v-slot:button-content>
-      <i :class="`fas ${icon}`" />
+      <i
+        v-if="icon"
+        :class="`fas ${icon}`"
+      />
       <slot name="heading-text">
         <span
           v-if="showMenuTitle"
