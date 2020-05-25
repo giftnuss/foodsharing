@@ -133,7 +133,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function getMyStores($fsId, $regionId, $options = []): array
+	public function getMyStores($fsId, $addFromRegionId = null): array
 	{
 		$betriebe = $this->db->fetchAll('
 			SELECT 	s.id,
@@ -174,35 +174,28 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		$already_in = [];
 
-		if (is_array($betriebe)) {
-			foreach ($betriebe as $b) {
-				$already_in[$b['id']] = true;
-				if ($b['verantwortlich'] == 0) {
-					if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
-						$result['anfrage'][] = $b;
-					} elseif ($b['active'] == MembershipStatus::MEMBER) {
-						$result['team'][] = $b;
-					} elseif ($b['active'] == MembershipStatus::JUMPER) {
-						$result['waitspringer'][] = $b;
-					}
-				} else {
-					$result['verantwortlich'][] = $b;
+		foreach ($betriebe as $b) {
+			$already_in[$b['id']] = true;
+			if ($b['verantwortlich'] == 0) {
+				if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
+					$result['anfrage'][] = $b;
+				} elseif ($b['active'] == MembershipStatus::MEMBER) {
+					$result['team'][] = $b;
+				} elseif ($b['active'] == MembershipStatus::JUMPER) {
+					$result['waitspringer'][] = $b;
 				}
+			} else {
+				$result['verantwortlich'][] = $b;
 			}
 		}
-		unset($betriebe);
 
-		if (!isset($options['sonstige'])) {
-			$options['sonstige'] = true;
-		}
-
-		if ($options['sonstige']) {
-			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($regionId);
+		if ($addFromRegionId !== null) {
+			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($addFromRegionId);
 			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
 			$result['sonstige'] = [];
 			$betriebe = $this->db->fetchAll('
-                SELECT  b.id,
+				SELECT  b.id,
 						b.betrieb_status_id,
 						b.plz,
 						b.kette_id,
@@ -227,7 +220,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				WHERE 	bezirk_id IN(' . $placeholders . ')
 
 				ORDER BY bz.name DESC
-            ', $child_region_ids);
+				', $child_region_ids);
 
 			foreach ($betriebe as $b) {
 				if (!isset($already_in[$b['id']])) {
