@@ -234,11 +234,10 @@ final class PageHelper
 		$params = array_merge(
 			[
 				'loggedIn' => $loggedIn,
-				'fsId' => $this->session->id(),
-				'image' => $loggedIn ? $this->imageService->img() : '',
+				'userId' => $this->session->id(),
+				'avatar' => $loggedIn ? $this->imageService->img() : '',
 				'mailbox' => $this->session->get('mailbox'),
 				'hasFsRole' => $this->session->may('fs'),
-				'isOrgaTeam' => $this->session->isOrgaTeam(),
 				'may' => [
 					'administrateBlog' => $this->blogPermissions->mayAdministrateBlog(),
 					'editQuiz' => $this->quizPermissions->mayEditQuiz(),

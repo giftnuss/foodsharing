@@ -25,12 +25,6 @@ import MenuItem from './MenuItem'
 
 export default {
   components: { MenuBullhorn, MenuInformation, MenuEnvelope, BNavbarNav, MenuItem },
-  directives: { VBTooltip },
-  props: {
-    isMobile: {
-      type: Boolean,
-      default: false
-    }
-  }
+  directives: { VBTooltip }
 }
 </script>

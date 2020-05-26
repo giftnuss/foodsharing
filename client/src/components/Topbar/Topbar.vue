@@ -42,8 +42,8 @@
           :regions="regions"
           :working-groups="workingGroups"
           :may-add-stores="may.addStore"
-          :avatar="image"
-          :user-id="fsId"
+          :avatar="avatar"
+          :user-id="userId"
           @openSearch="searchOpen = !searchOpen"
         />
 
@@ -64,10 +64,9 @@
           <menu-loggedin
             v-if="loggedIn"
             :display-mailbox="mailbox"
-            :fs-id="fsId"
-            :image="image"
+            :user-id="userId"
+            :avatar="avatar"
             :may="may"
-            :is-orga-team="isOrgaTeam"
           />
         </b-collapse>
       </b-container>
@@ -99,7 +98,7 @@ export default {
     Search
   },
   props: {
-    fsId: {
+    userId: {
       type: Number,
       default: null
     },
@@ -107,7 +106,7 @@ export default {
       type: Boolean,
       default: true
     },
-    image: {
+    avatar: {
       type: String,
       default: ''
     },
@@ -116,10 +115,6 @@ export default {
       default: true
     },
     hasFsRole: {
-      type: Boolean,
-      default: true
-    },
-    isOrgaTeam: {
       type: Boolean,
       default: true
     },

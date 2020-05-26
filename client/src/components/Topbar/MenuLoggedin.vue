@@ -20,8 +20,8 @@
     <menu-messages :hide-only-on-mobile="true" />
     <menu-bells :hide-only-on-mobile="true" />
     <menu-user
-      :user-id="fsId"
-      :avatar="image"
+      :user-id="userId"
+      :avatar="avatar"
       :hide-only-on-mobile="true"
     />
   </b-navbar-nav>
@@ -47,17 +47,13 @@ export default {
       type: Boolean,
       default: false
     },
-    fsId: {
+    userId: {
       type: Number,
       default: null
     },
-    image: {
+    avatar: {
       type: String,
       default: ''
-    },
-    isOrgaTeam: {
-      type: Boolean,
-      default: true
     },
     may: {
       type: Object,
@@ -66,7 +62,7 @@ export default {
   },
   computed: {
     someAdminRights () {
-      return this.isOrgaTeam || this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.manageMailboxes || this.may.administrateNewsletterEmail || this.may.administrateRegions
+      return this.may.administrateBlog || this.may.editQuiz || this.may.handleReports || this.may.editContent || this.may.manageMailboxes || this.may.administrateNewsletterEmail || this.may.administrateRegions
     }
   }
 }
