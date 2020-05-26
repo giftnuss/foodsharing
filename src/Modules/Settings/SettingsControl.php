@@ -263,8 +263,9 @@ class SettingsControl extends Control
 					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
 				} else {
 					$this->foodsaverGateway->riseRole($fsId, Role::STORE_MANAGER);
+					$this->session->refreshFromDatabase();
 					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
-					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->routeHelper->go('/?page=dashboard');
 				}
 			}
 			$cnt = $this->contentGateway->get(15);
