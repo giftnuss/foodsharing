@@ -47,11 +47,9 @@ class LegalControl extends Control
 			$privacyNoticeNeccessary = false;
 			$data = new LegalData(false, true);
 		}
-
 		$form = $this->formFactory->create(LegalForm::class, $data);
 
 		$form->handleRequest($request);
-
 		if ($form->isSubmitted() && $form->isValid()) {
 			$this->gateway->agreeToPp($this->session->id(), $privacyPolicyDate);
 			if ($privacyNoticeNeccessary) {
