@@ -23,7 +23,7 @@ class ForumApiCest
 		$I->addRegionMember($this->region['id'], $this->user['id']);
 		$this->thread = $I->addForumTheme($this->region['id'], $this->user['id']);
 
-		$this->moderatedRegion = $I->createRegion(null, null, Type::CITY, ['moderated' => true]);
+		$this->moderatedRegion = $I->createRegion(null, ['type' => Type::CITY, 'moderated' => true]);
 		$I->addRegionMember($this->moderatedRegion['id'], $this->user['id']);
 		$I->addRegionAdmin($this->moderatedRegion['id'], $this->ambassador['id']);
 		$this->inactiveThread = $I->addForumTheme($this->moderatedRegion['id'], $this->user['id'], null, ['active' => false]);
