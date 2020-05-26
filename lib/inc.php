@@ -23,7 +23,7 @@ $mem = $container->get(Mem::class);
 /* @var \Foodsharing\Modules\Core\InfluxMetrics $influxdb */
 $influxdb = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 
-if (isset($g_page_cache)) {
+if (isset($g_page_cache) && strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
 	$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 	$cache->lookup();
 }
