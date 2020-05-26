@@ -264,7 +264,7 @@ class StoreXhr extends Control
 					$bezirks = $this->session->getRegions();
 
 					foreach ($bezirks as $key => $b) {
-						if (!in_array($b['type'], [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN])) {
+						if (!Type::isAccessibleRegion($b['type'])) {
 							unset($bezirks[$key]);
 						}
 					}

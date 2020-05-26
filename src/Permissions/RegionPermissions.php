@@ -21,7 +21,7 @@ final class RegionPermissions
 	{
 		$type = $this->regionGateway->getType($regionId);
 
-		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
+		return $this->session->may('fs') && Type::isAccessibleRegion($type);
 	}
 
 	public function mayAdministrateRegions(): bool
