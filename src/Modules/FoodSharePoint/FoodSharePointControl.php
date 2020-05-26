@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\FoodSharePoint;
 use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -176,7 +177,7 @@ class FoodSharePointControl extends Control
 
 	public function getRealRegions(): array
 	{
-		return array_filter($this->session->getRegions(), 'Type::isAccessibleRegion');
+		return array_filter($this->session->getRegions(), function ($r) { return Type::isAccessibleRegion($r['type']); });
 	}
 
 	public function edit(Request $request): void
