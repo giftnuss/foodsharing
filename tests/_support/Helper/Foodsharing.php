@@ -205,6 +205,10 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function createStoreCoordinator($pass = null, $extra_params = [])
 	{
+		if (!array_key_exists('bezirk_id', $extra_params)) {
+			$region = $this->createRegion();
+			$extra_params['bezirk_id'] = $region['id'];
+		}
 		$params = array_merge([
 			'rolle' => 2,
 			'quiz_rolle' => 2,
@@ -333,7 +337,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'text' => $this->faker->realText(100),
 			'zeit' => $this->faker->dateTime(),
 			'last' => 0, // should be 1 for newest entry, can't do that here though
-			], $extra_params);
+		], $extra_params);
 		$params['zeit'] = $this->toDateTime($params['zeit']);
 
 		$id = $this->haveInDatabase('fs_betrieb_notiz', $params);
@@ -758,6 +762,20 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['id'] = $this->haveInDatabase('fs_report', $params);
 
 		return $params;
+	}
+
+	public function updateThePrivacyNoticeDate()
+	{
+		$lastModified = $this->grabFromDatabase('fs_content', 'last_mod', ['name' => 'datenschutzbelehrung']);
+		$beforeLastModified = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($lastModified)));
+		$this->updateInDatabase('fs_content', ['last_mod' => $beforeLastModified], ['name' => 'datenschutzbelehrung']);
+
+		return $lastModified;
+	}
+
+	public function resetThePrivacyNoticeDate($lastModified)
+	{
+		$this->updateInDatabase('fs_content', ['last_mod' => $lastModified], ['name' => 'datenschutzbelehrung']);
 	}
 
 	public function updateThePrivacyPolicyDate()
