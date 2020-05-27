@@ -1,10 +1,10 @@
 <template>
   <b-nav-item-dropdown
+    v-if="show"
     v-b-tooltip="$i18n(menuTitle)"
     right
     :lazy="lazy"
     class="caret-beneath"
-    :class="{'d-md-none': showOnlyOnMobile, 'd-none d-md-inline-block': hideOnlyOnMobile }"
   >
     <template v-slot:button-content>
       <i
@@ -42,8 +42,10 @@
   </b-nav-item-dropdown>
 </template>
 <script>
+import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
+  mixins: [MediaQueryMixin],
   props: {
     menuTitle: {
       type: String,
@@ -67,6 +69,16 @@ export default {
     },
     showOnlyOnMobile: { type: Boolean, default: false },
     hideOnlyOnMobile: { type: Boolean, default: false }
+  },
+  computed: {
+    show () {
+      if (this.hideOnlyOnMobile) {
+        return !(this.wXS || this.wSM)
+      } else if (this.showOnlyOnMobile) {
+        return this.wXS || this.wSM
+      }
+      return true
+    }
   }
 }
 </script>

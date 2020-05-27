@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     getWindowWidth (event) {
-      const w = document.documentElement.clientWidth
+      const w = window.innerWidth
       this.windowWidth = w
       this.wXS = w <= mediaQuery.xs.max
       this.wSM = w >= mediaQuery.sm.min && w <= mediaQuery.sm.max

@@ -1,7 +1,7 @@
 <template>
   <b-nav-item
+    v-if="show"
     v-b-tooltip.hover.bottom
-    :class="{'d-none d-md-inline-block': hideOnMobile, 'd-md-none': showOnlyOnMobile}"
     :href="url"
     :title="title"
     :aria-label="title"
@@ -19,9 +19,11 @@
 
 <script>
 import { VBTooltip } from 'bootstrap-vue'
+import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
   directives: { VBTooltip },
+  mixins: [MediaQueryMixin],
   props: {
     url: { type: String, default: undefined },
     icon: { type: String, default: undefined },
@@ -31,6 +33,16 @@ export default {
     hideTitleMobile: { type: Boolean, default: false },
     hideOnMobile: { type: Boolean, default: false },
     showOnlyOnMobile: { type: Boolean, default: false }
+  },
+  computed: {
+    show () {
+      if (this.hideOnMobile) {
+        return !(this.wXS || this.wSM)
+      } else if (this.showOnlyOnMobile) {
+        return this.wXS || this.wSM
+      }
+      return true
+    }
   }
 }
 </script>
