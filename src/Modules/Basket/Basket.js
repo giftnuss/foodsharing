@@ -79,14 +79,11 @@ const mapsearch = {
 mapsearch.init()
 
 if ($('#mapsearch').length > 0) {
-  try {
-    listBasketCoordinates().then((data) => {
-      if (data.length > 0) {
-        mapsearch.setMarker(data)
-      }
-    })
-  } catch (e) {
-  }
+  listBasketCoordinates().then((data) => {
+    if (data.length > 0) {
+      mapsearch.setMarker(data)
+    }
+  }).catch()
 
   $('#map-latLng').on('change', function () {
     console.log()
