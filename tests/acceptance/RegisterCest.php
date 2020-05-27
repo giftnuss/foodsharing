@@ -80,10 +80,11 @@ class RegisterCest
 
 		$I->amOnPage('/');
 
+		$I->click('#login');
 		$I->waitForElement('#login-email');
 		$I->fillField('#login-email', $this->email);
 		$I->fillField('#login-password', $this->password);
-		$I->click('#topbar .btn');
+		$I->click('#topbar .login-btn');
 		$I->waitForElement('#pulse-success');
 
 		$I->seeInDatabase('fs_foodsaver', [
