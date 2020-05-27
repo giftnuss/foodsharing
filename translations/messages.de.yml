@@ -378,6 +378,8 @@ salutation:
   3: 'Liebe*r'
 
 login:
+  submit_btn: Login
+  topbar: Login
   form_title: Anmelden
   email_address: E-Mail-Adresse
   password: Passwort

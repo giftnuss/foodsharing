@@ -27,7 +27,7 @@
           <menu-item
             id="login"
             icon="fa-rocket"
-            title="Login"
+            :title="$i18n('login.topbar')"
             :show-title-always="true"
           />
           <div class="bootstrap">

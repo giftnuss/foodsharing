@@ -76,7 +76,7 @@
           @click="submit"
         >
           <span>
-            Login
+            {{ $i18n('login.submit_btn') }}
           </span>
           <i class="fas fa-arrow-right mr-auto" />
         </b-button>
