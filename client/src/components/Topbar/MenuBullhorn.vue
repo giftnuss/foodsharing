@@ -3,6 +3,7 @@
     menu-title="menu.entry.activities"
     :items="headings"
     icon="fa-bullhorn"
+    right
   />
 </template>
 

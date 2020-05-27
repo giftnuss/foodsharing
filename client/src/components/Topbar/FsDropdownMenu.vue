@@ -2,7 +2,7 @@
   <b-nav-item-dropdown
     v-if="show"
     v-b-tooltip="$i18n(menuTitle)"
-    right
+    :right="right"
     :lazy="lazy"
     class="caret-beneath"
   >
@@ -67,6 +67,10 @@ export default {
       type: Boolean,
       default: false
     },
+    right: {
+      type: Boolean,
+      default: false
+    },
     showOnlyOnMobile: { type: Boolean, default: false },
     hideOnlyOnMobile: { type: Boolean, default: false }
   },
@@ -100,26 +104,29 @@ i {
 }
 
 @media(max-width: 767px) {
-  .collapse .caret-beneath /deep/ .dropdown-toggle {
-    text-align: unset;
-    &::after {
-      display: inline-block;
-      margin-left: 0.255em;
-      vertical-align: middle;
+  .collapse {
+    .caret-beneath /deep/ .dropdown-toggle {
+      text-align: unset;
+      &::after {
+        display: inline-block;
+        margin-left: 0.255em;
+        vertical-align: middle;
+      }
+    }
+    .dropdown /deep/ .dropdown-menu {
+      // Margin to have an indent in the burger menu.
+      margin-left: 30px;
     }
   }
 }
 .dropdown {
   /deep/ .dropdown-menu {
-    max-height: 420px;
     max-width: 300px;
     overflow-y: auto;
     box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
     // Fixes problem that list of dropdown items is to long.
     max-height: 70vh;
     overflow: auto;
-    // Margin to have an indent in the burger menu.
-    margin-left: 30px;
     .scroll-container {
       max-height: 300px;
       min-height: 120px;

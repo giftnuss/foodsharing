@@ -7,6 +7,7 @@
     class="topbar-messages"
     :show-only-on-mobile="showOnlyOnMobile"
     :hide-only-on-mobile="hideOnlyOnMobile"
+    right
   >
     <template v-slot:heading-text>
       <span

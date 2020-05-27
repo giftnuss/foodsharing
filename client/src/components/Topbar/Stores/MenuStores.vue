@@ -2,7 +2,6 @@
   <fs-dropdown-menu
     id="dropdown-stores"
     menu-title="menu.entry.your_stores"
-    :items="headings"
     icon="fa-shopping-cart"
     lazy
   >

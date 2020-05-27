@@ -3,6 +3,7 @@
     menu-title="menu.entry.contact"
     :items="headings"
     icon="fa-envelope"
+    right
   />
 </template>
 

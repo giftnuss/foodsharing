@@ -3,6 +3,7 @@
     id="dropdown-admin"
     ref="dropdown"
     menu-title="menu.entry.administration"
+    right
     icon="fa-cog"
   >
     <b-dropdown-item

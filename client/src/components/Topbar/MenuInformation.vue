@@ -3,6 +3,7 @@
     menu-title="menu.entry.infos"
     :items="headings"
     icon="fa-info"
+    right
   />
 </template>
 <script>
