@@ -36,10 +36,11 @@ class AcceptanceTester extends Codeception\Actor
 		$I = $this;
 		$I->amOnPage('/');
 		$I->executeJS('window.localStorage.clear();');
+		$I->click('#login');
 		$I->waitForElement('#login-email');
 		$I->fillField('#login-email', $email);
 		$I->fillField('#login-password', $password);
-		$I->click('#topbar .btn');
+		$I->click('#topbar .login-btn');
 		$I->waitForActiveAPICalls();
 		$I->waitForElementNotVisible('#pulse-success');
 		$I->waitForPageBody();
