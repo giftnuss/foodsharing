@@ -1,3 +1,8 @@
+# 2020-06-01 Hotfix
+
+## Bugfixes 
+- Allow to accept privacy notice, so people can become store managers again !1551 @NerdyProjects
+
 # 2020-05-18 Hotfix
 
 ## Features
