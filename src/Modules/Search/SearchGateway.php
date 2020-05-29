@@ -18,30 +18,6 @@ class SearchGateway extends BaseGateway
 	}
 
 	/**
-	 * Searches the given term in the database of users.
-	 *
-	 * @param string $q Query string / search term
-	 * @param bool $showDetails show detailed address info if true. Show only city if false
-	 * @param mixed $regions optional region ids to limit search to
-	 *
-	 * @return array SearchResult[] Array of foodsavers containing the search term
-	 */
-	public function searchUsers(string $q, bool $showDetails, array $regions = null): array
-	{
-		// 'click' => 'CONCAT("profile(",`id`,");")',
-		return $this->searchTable(
-			'fs_foodsaver',
-			['name', 'nachname', 'plz', 'stadt'],
-			$q,
-			[
-				'name' => 'CONCAT(`name`," ",`nachname`)',
-				'teaser' => $showDetails ? 'CONCAT(`anschrift`,", ",`plz`," ",`stadt`)' : 'stadt'
-			],
-			$regions
-		);
-	}
-
-	/**
 	 * Searches the given term in the database of regions.
 	 *
 	 * @param string $q Query string / search term
@@ -50,7 +26,6 @@ class SearchGateway extends BaseGateway
 	 */
 	public function searchRegions(string $q): array
 	{
-		// 'click' => 'CONCAT("goTo(\'/?page=bezirk&bid=",`id`,"\');")',
 		return $this->searchTable(
 			'fs_bezirk',
 			['name'],
@@ -72,7 +47,6 @@ class SearchGateway extends BaseGateway
 	 */
 	public function searchStores(string $q, array $regions = null): array
 	{
-		// 'click' => 'CONCAT("betrieb(",`id`,");")',
 		return $this->searchTable(
 			'fs_betrieb',
 			['name', 'stadt', 'plz', 'str'],
@@ -132,9 +106,12 @@ class SearchGateway extends BaseGateway
 	/**
 	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
 	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 * @param bool $showDetails show detailed address info if true. Show only city if false
 	 * @param array|null $groupIds the groupids a person must be in to be found. Set to null to query over all users.
+	 *
+	 * @return array SearchResult[] Array of foodsavers containing the search term
 	 */
-	public function searchUserInGroups(string $q, ?array $groupIds = []): array
+	public function searchUserInGroups(string $q, bool $showDetails, ?array $groupIds = []): array
 	{
 		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
 		$q = mb_ereg_replace('\W', ' ', $q);
@@ -153,17 +130,23 @@ class SearchGateway extends BaseGateway
 				)
 			)
 		);
-		$select = 'SELECT fs.id, fs.name, fs.nachname FROM fs_foodsaver fs';
+		$select = 'SELECT fs.id, fs.name, fs.nachname, fs.anschrift, fs.stadt, fs.plz FROM fs_foodsaver fs';
 		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
 		$groupBy = ' GROUP BY fs.id';
 		if ($groupIds === null) {
-			return $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
+			$results = $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
 		} else {
-			return $this->db->fetchAll(
+			$results = $this->db->fetchAll(
 				$select . ', fs_foodsaver_has_bezirk hb WHERE ' .
 				$fulltextCondition .
 				' AND fs.id = hb.foodsaver_id AND hb.bezirk_id IN (' . $this->db->generatePlaceholders(count($groupIds)) . ')' . $groupBy,
 				array_merge([$searchString], $groupIds));
 		}
+
+		return array_map(function ($x) use ($showDetails) {
+			$teaser = $showDetails ? $x['anschrift'] . ', ' . $x['plz'] . ' ' . $x['stadt'] : $x['stadt'];
+
+			return SearchResult::create($x['id'], $x['name'] . ' ' . $x['nachname'], $teaser);
+		}, $results);
 	}
 }

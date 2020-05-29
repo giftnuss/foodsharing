@@ -92,9 +92,10 @@ class SearchRestController extends AbstractFOSRestController
 
 			$results = $this->searchGateway->searchUserInGroups(
 				$q,
+				false,
 				$regions
 			);
-			$results = array_map(function ($v) { return ['id' => $v['id'], 'value' => $v['name'] . ' ' . $v['nachname'] . ' (' . $v['id'] . ')']; }, $results);
+			$results = array_map(function ($v) { return ['id' => $v->id, 'value' => $v->name . ' (' . $v->id . ')']; }, $results);
 		}
 
 		return $this->handleView($this->view($results, 200));

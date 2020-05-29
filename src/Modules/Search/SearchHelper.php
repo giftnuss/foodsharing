@@ -40,7 +40,7 @@ class SearchHelper
 		}
 
 		$regions = $this->searchGateway->searchRegions($q);
-		$users = $this->searchGateway->searchUsers($q, $this->session->may('orga'), $regionsFilter);
+		$users = $this->searchGateway->searchUserInGroups($q, $this->searchPermissions->maySeeUserAddress(), $regionsFilter);
 		$stores = $this->searchGateway->searchStores($q, $regionsFilter);
 
 		return [

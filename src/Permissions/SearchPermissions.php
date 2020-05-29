@@ -17,4 +17,9 @@ class SearchPermissions
 	{
 		return $this->session->isAmbassador() || $this->session->isOrgaTeam();
 	}
+
+	public function maySeeUserAddress(): bool
+	{
+		return $this->session->may('orga');
+	}
 }
