@@ -67,18 +67,15 @@ class LegalControlCest
 		$I->dontSee('Datenschutzerklärung');
 
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
-		$lastModifiedpn = $I->updateThePrivacyNoticeDate();
 		$I->amOnPage('/?page=dashboard');
 		$I->seeCheckboxIsChecked('#legal_form_privacyPolicyAcknowledged');
-		$I->seeOptionIsSelected('#legal_form_privacyNoticeAcknowledged', 'Ich stimme nicht zu');
-		$I->selectOption('#legal_form_privacyNoticeAcknowledged', 'Ich stimme zu');
+		$I->seeOptionIsSelected('#legal_form_privacyNoticeAcknowledged', 'Ich stimme zu');
 		$I->click('Einstellungen übernehmen');
 		$I->waitForText('Dein Stammbezirk ist');
 		$I->dontSee('Datenschutzerklärung');
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
 		$I->logout();
 		$I->resetThePrivacyPolicyDate($lastModifiedpp);
-		$I->resetThePrivacyNoticeDate($lastModifiedpn);
 	}
 
 	public function testGivenIAmLoggedInAndAHaveRoleHigherThanOneThenICanDegradeToFoodsaver(AcceptanceTester $I)
@@ -91,8 +88,13 @@ class LegalControlCest
 		$I->checkOption('#legal_form_privacyPolicyAcknowledged');
 		$I->selectOption('#legal_form_privacyNoticeAcknowledged', 'Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden');
 		$I->click('Einstellungen übernehmen');
-		$I->amOnPage('/?page=dashboard');
-		$I->dontSee('Datenschutzerklärung');
+		$I->seeInPopup('Bist du dir sicher?');
+		$I->cancelPopup();
+		$I->click('Einstellungen übernehmen');
+		$I->seeInPopup('Bist du dir sicher?');
+		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
+		$I->acceptPopup();
+		$I->waitForText('Dein Stammbezirk ist');
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 1]);
 		$I->logout();
 		$I->resetThePrivacyPolicyDate($lastModified);

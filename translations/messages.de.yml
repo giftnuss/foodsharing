@@ -75,6 +75,7 @@ legal:
     not_acknowledge: Ich stimme nicht zu und möchte zum Foodsaver herabgestuft werden
   not_acknowledge_pn_description: Wenn Du mit der Belehrung nicht einverstanden bist, wirst Du zum Foodsaver herabgestuft. Das bedeutet, dass Du kein*e Botschafter*in von Bezirken mehr bist, Deine Betriebsverantwortlichkeiten verlierst und das Quiz zur/m Betriebsverantwortlichen/Botschafter*in erneut durchführen musst.
   legal_agreement: Rechtsvereinbarung
+  are_you_sure_to_downgrade: 'Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?'
 
 
 login:
