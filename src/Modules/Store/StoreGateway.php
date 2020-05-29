@@ -872,7 +872,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			WHERE   bt.`foodsaver_id` = :fsId
 			AND 	bt.active = :membershipStatus
 			AND 	b.betrieb_status_id NOT IN (:doesNotWantToWorkWithUs, :givesToOtherCharity)
-			ORDER BY b.name
+			ORDER BY bt.verantwortlich DESC, b.name ASC
 		', [
 			':fsId' => $fsId,
 			':membershipStatus' => MembershipStatus::MEMBER,
