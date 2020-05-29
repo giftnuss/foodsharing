@@ -61,18 +61,14 @@ class LegalControlCest
 		$I->see('Datenschutzerklärung');
 		$I->dontSeeCheckboxIsChecked('#legal_form_privacyPolicyAcknowledged');
 		$I->seeOptionIsSelected('#legal_form_privacyNoticeAcknowledged', 'Ich stimme zu');
+		$I->click('Einstellungen übernehmen');
+		$I->wait(1);
+		$I->dontSeeCheckboxIsChecked('#legal_form_privacyPolicyAcknowledged');
 		$I->checkOption('#legal_form_privacyPolicyAcknowledged');
 		$I->click('Einstellungen übernehmen');
 		$I->waitForText('Dein Stammbezirk ist');
 		$I->dontSee('Datenschutzerklärung');
 
-		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
-		$I->amOnPage('/?page=dashboard');
-		$I->seeCheckboxIsChecked('#legal_form_privacyPolicyAcknowledged');
-		$I->seeOptionIsSelected('#legal_form_privacyNoticeAcknowledged', 'Ich stimme zu');
-		$I->click('Einstellungen übernehmen');
-		$I->waitForText('Dein Stammbezirk ist');
-		$I->dontSee('Datenschutzerklärung');
 		$I->seeInDatabase('fs_foodsaver', ['id' => $user['id'], 'rolle' => 3]);
 		$I->logout();
 		$I->resetThePrivacyPolicyDate($lastModifiedpp);
