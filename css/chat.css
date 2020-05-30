@@ -58,13 +58,13 @@
 
 .chatboxhead .settings li .optinput {
   padding: 0;
+  display: flex;
 }
 
 .chatboxhead .settings li .optinput i {
   color: var(--fs-brown);
   cursor: pointer;
   font-size: 20px;
-  margin-left: -21px;
   position: relative;
   top: 3px;
 }
@@ -77,8 +77,9 @@
   border: 1px solid #a2988e;
   border-radius: 4px;
   margin-bottom: 0;
+  margin-right: 5px;
   padding: 4px 5px;
-  width: 167px;
+  width: 100%;
 }
 
 .chatboxhead .linklist li a {
