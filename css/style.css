@@ -1162,35 +1162,6 @@ a.calendar {
   text-decoration: none !important;
 }
 
-ul.fsicons, ul.fsicons li {
-  display: block;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-ul.fsicons li {
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-}
-
-ul.fsicons li a {
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-ul.fsicons li.row {
-  display: block;
-  height: 25px;
-  line-height: 25px;
-  margin: 3px 0 0 0;
-  width: 100%;
-}
-
 a.expand-collapse-link {
   display: block;
   padding: 3px;

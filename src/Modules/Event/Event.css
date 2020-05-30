@@ -14,3 +14,33 @@ div.welcome .welcome_profile_image {
   width: auto;
   height: auto;
 }
+
+ul.event-avatars,
+ul.event-avatars li {
+  display: block;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.event-avatars li {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+}
+
+ul.event-avatars li a {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+ul.event-avatars li.row {
+  display: block;
+  height: 25px;
+  line-height: 25px;
+  margin: 3px 0 0 0;
+  width: 100%;
+}

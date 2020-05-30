@@ -312,7 +312,7 @@ class EventView extends View
 	private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
 	{
 		if (!empty($foodsavers)) {
-			$out = '<ul class="fsicons">';
+			$out = '<ul class="event-avatars">';
 
 			if (count($foodsavers) > $maxNumberOfAvatars) {
 				shuffle($foodsavers);
