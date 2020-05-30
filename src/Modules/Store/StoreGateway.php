@@ -863,7 +863,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$rows = $this->db->fetchAll('
 			SELECT 	b.`id`,
-					b.name
+					b.name,
+					bt.verantwortlich AS managing
 
 			FROM 	`fs_betrieb_team` bt
 					INNER JOIN `fs_betrieb` b
@@ -885,6 +886,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$store = new StoreForTopbarMenu();
 			$store->id = $row['id'];
 			$store->name = $row['name'];
+			$store->isManaging = $row['managing'];
 			$stores[] = $store;
 		}
 

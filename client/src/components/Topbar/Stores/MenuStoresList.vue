@@ -18,17 +18,21 @@
       >
         <span
           :id="`store_marker_${store.id}`"
-          :class="'fas fa-circle '+statusClass(store.pickupStatus)"
-          :style="badgeVisibility(store.pickupStatus)"
+          v-b-tooltip="store.pickupStatus === 0 ? '' : $i18n(tooltipId(store.pickupStatus))"
+          class="store-status fas fa-circle"
+          :class="statusClass(store.pickupStatus)"
         >&nbsp;</span>
-        {{ store.name }}
+        <span class="store-name">
+          {{ store.name }}
+        </span>
+        <span
+          v-if="store.isManaging"
+          v-b-tooltip="$i18n('store.tooltip_managing')"
+          class="text-muted is-managing"
+        >
+          <i class="fas fa-cog text-right" />
+        </span>
       </a>
-      <b-tooltip
-        v-if="store.pickupStatus>0"
-        :target="`store_marker_${store.id}`"
-      >
-        {{ $i18n(tooltipId(store.pickupStatus)) }}
-      </b-tooltip>
     </div>
     <div
       v-if="stores.length || !loaded"
@@ -39,10 +43,8 @@
 
 <script>
 import vueStore from '@/stores/stores'
-import { BTooltip } from 'bootstrap-vue'
 
 export default {
-  components: { BTooltip },
   data () {
     return { loaded: false }
   },
@@ -66,25 +68,20 @@ export default {
       return classes[pickupStatus]
     },
     statusClass (pickupStatus) {
-      const classes = ['status-info', 'status-info', 'status-warning', 'status-danger']
+      const classes = ['invisible', 'status-info', 'status-warning', 'status-danger']
       return classes[pickupStatus]
     },
-    badgeVisibility (pickupStatus) {
-      return {
-        visibility: pickupStatus > 0 ? 'visible' : 'hidden'
-      }
-    },
     tooltipId (pickupStatus) {
-      const ids = ['store.tooltip_yellow', 'store.tooltip_orange', 'store.tooltip_red']
-      return ids[pickupStatus - 1]
+      const ids = ['', 'store.tooltip_yellow', 'store.tooltip_orange', 'store.tooltip_red']
+      return ids[pickupStatus]
     }
   }
 }
 </script>
 
 <style scoped>
-  .fa-circle {
-    margin-left: -1em;
+  .store-status {
+    margin-left: -1rem;
   }
   .status-info {
     color: #f5f5b5;
@@ -94,6 +91,10 @@ export default {
   }
   .status-danger {
     color: #dc3545;
+  }
+  .is-managing {
+    position: absolute;
+    right: 0.5rem;
   }
   .loader-container {
     text-align: center;
