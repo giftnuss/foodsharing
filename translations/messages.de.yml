@@ -281,6 +281,10 @@ events:
   name: Termine
   add_new_event: Jetzt neuen Termin eintragen
   add_event: Neues Event
+  acceptedCount: '{count} sind dabei'
+  maybeCount: '{count} kommen vielleicht'
+  invitedCount: '{count} Einladungen'
+  morePeople: '… und {count} weitere'
 
 reports:
   about: Über
