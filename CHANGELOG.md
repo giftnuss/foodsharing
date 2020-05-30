@@ -13,6 +13,7 @@
 - Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
 - Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
 - Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 @ChrisOelmueller
+- Some refactorings from StoreModel to StoreGateway !1196 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 
@@ -334,8 +335,6 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Removed class IndexGateway as it serves no purpose !1270 #763 @panschk
 - Remove unused stats and maintenance methods of nightly stats run !1274 @jofranz
 - Refactored region gateway to use more prepared statements !1297 @alex.simm
-- Renamed "Verschwendungsfasten" to "foodsharing-Städte" @D0nPiano
-- Some refactorings from StoreModel to StoreGateway !1196 #9 @svenpascal
 
 ## Dev/Test/CI stuff
 
