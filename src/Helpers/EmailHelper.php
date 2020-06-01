@@ -48,7 +48,7 @@ final class EmailHelper
 		return $this->twig->render('emailTemplates/general/body.html.twig', ['MESSAGE' => $message, 'UNSUBSCRIBE' => $unsubscribe]);
 	}
 
-	public function tplMail($tpl_id, $to, $var = [], $from_email = false)
+	public function tplMail($tpl_id, $to, $var = [], $from_email = false, bool $highPriority = false)
 	{
 		$mail = new AsyncMail($this->mem);
 
@@ -109,6 +109,7 @@ final class EmailHelper
 		} else {
 			$mail->addRecipient($to);
 		}
+		$mail->setHighPriority($highPriority);
 		$mail->send();
 		$this->metrics->addOutgoingMail($tpl_id, $num_recipients);
 	}
@@ -130,7 +131,8 @@ final class EmailHelper
 		return in_array($domain, MAILBOX_OWN_DOMAINS, true);
 	}
 
-	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false)
+	public function libmail($bezirk, $email, $subject, $message, $attach = false, $token = false,
+							bool $highPriority = false)
 	{
 		if ($bezirk === false) {
 			$bezirk = [
@@ -174,6 +176,7 @@ final class EmailHelper
 			}
 		}
 
+		$mail->setHighPriority($highPriority);
 		$mail->send();
 		$this->metrics->addOutgoingMail('libmail', 1);
 	}
