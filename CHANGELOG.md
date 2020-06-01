@@ -7,7 +7,6 @@
 
 ## Bugfixes
 - Clarify that new forum threads won't reache members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
-- Allow to accept privacy notice, so people can become store managers again !1551 @NerdyProjects
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
@@ -17,6 +16,11 @@
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 #9 @svenpascal @alex.simm
 
 ## Dev/Test/CI stuff
+
+# 2020-06-01 Hotfix
+
+## Bugfixes 
+- Allow to accept privacy notice, so people can become store managers again !1551 @NerdyProjects
 
 # 2020-05-18 Hotfix
 
