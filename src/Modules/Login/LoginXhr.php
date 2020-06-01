@@ -98,7 +98,7 @@ class LoginXhr extends Control
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
-			]);
+			], false, true);
 
 			echo json_encode([
 				'status' => 1
