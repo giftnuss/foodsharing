@@ -371,7 +371,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		return $this->db->fetchByCriteria(
 			'fs_betrieb',
-			'bezirk_id',
+			['bezirk_id'],
 			['id' => $storeId]
 		);
 	}
