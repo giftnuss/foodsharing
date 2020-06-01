@@ -13,7 +13,7 @@
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
 - Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
 - Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
-- Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 @ChrisOelmueller
+- Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 #9 @svenpascal @alex.simm
 
 ## Dev/Test/CI stuff
