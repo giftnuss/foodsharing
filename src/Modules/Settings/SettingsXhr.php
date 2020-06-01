@@ -81,7 +81,7 @@ class SettingsXhr extends Control
 				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 				'name' => $fs['name'],
 				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
-			]);
+			], false, true);
 
 			return [
 				'status' => 1,
