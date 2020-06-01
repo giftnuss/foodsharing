@@ -412,7 +412,7 @@ class Foodsharing extends \Codeception\Module\Db
 	{
 		$parentId = RegionIDs::GLOBAL_WORKING_GROUPS;
 		if (array_key_exists('parent_id', $extra_params)) {
-			$parentId = $extra_params[$parentId];
+			$parentId = $extra_params['parent_id'];
 		}
 
 		$extra_params = array_merge([

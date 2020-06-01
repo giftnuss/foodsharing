@@ -70,7 +70,14 @@ class RegionRestController extends AbstractFOSRestController
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
-		$bots = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
+		$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
+		$regionWelcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($regionId);
+		if ($regionWelcomeGroupId) {
+			$welcomeAdmins = $this->foodsaverGateway->getAdminsOrAmbassadors($regionWelcomeGroupId);
+			$welcomeBellRecipients = array_merge($welcomeBellRecipients, $welcomeAdmins);
+			$welcomeBellRecipients = array_unique(array_column($welcomeBellRecipients, 'id'));
+		}
+
 		$foodsaver = $this->session->get('user');
 		$bellData = Bell::create(
 			'new_foodsaver_title',
@@ -84,7 +91,7 @@ class RegionRestController extends AbstractFOSRestController
 			'new-fs-' . $sessionId,
 			true
 		);
-		$this->bellGateway->addBell($bots, $bellData);
+		$this->bellGateway->addBell($welcomeBellRecipients, $bellData);
 
 		$view = $this->view([], 200);
 

@@ -13,6 +13,7 @@ use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Services\ForumService;
 use Foodsharing\Services\ImageService;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,8 @@ final class RegionControl extends Control
 	private $imageService;
 	private $reportPermissions;
 	private $mailboxGateway;
+
+	private const DisplayAvatarListEntries = 30;
 
 	/**
 	 * @required
@@ -149,6 +152,7 @@ final class RegionControl extends Control
 				'imageUrl' => $this->imageService->img($fs['photo'], 50, 'q')
 			];
 		};
+
 		$viewdata['isRegion'] = !$isWorkGroup;
 		$stat = [
 			'num_fs' => $this->region['fs_count'],
@@ -159,12 +163,14 @@ final class RegionControl extends Control
 			'num_pickups' => $this->region['stat_fetchcount'],
 			'pickup_weight_kg' => round($this->region['stat_fetchweight']),
 		];
+
 		$viewdata['region'] = [
 			'id' => $this->region['id'],
 			'name' => $this->region['name'],
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
-			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
+			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, self::DisplayAvatarListEntries)),
+			'welcomeAdmins' => array_map($avatarListEntry, array_slice($this->region['welcomeAdmins'], 0, self::DisplayAvatarListEntries)),
 		];
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 

@@ -3,6 +3,7 @@
 ## Features
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
+- Added Workgroup Function: Welcome to wokrgroup !1544 @fs_k
 
 ## Bugfixes
 - Clarify that new forum threads won't reache members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter

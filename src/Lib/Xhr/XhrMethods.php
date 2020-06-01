@@ -16,6 +16,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -1156,6 +1157,15 @@ class XhrMethods
 						],
 					]
 				),
+				$this->v_utils->v_form_select(
+					'workgroup_function',
+					[
+						'label' => 'Arbeitsgruppenfunktion',
+						'values' => [
+							['id' => WorkgroupFunction::WELCOME, 'name' => 'Begrüßung'],
+						],
+					]
+				),
 				$this->v_utils->v_input_wrapper($this->translationHelper->s($id), $inputs, $id)
 			], ['submit' => $this->translationHelper->s('save')]) .
 			$this->v_utils->v_input_wrapper('Master-Update', '<a class="button" href="#" onclick="if(confirm(\'Master-Update wirklich starten?\')){tryMasterUpdate(' . (int)$data['id'] . ');}return false;">Master-Update starten</a>', 'masterupdate', ['desc' => 'Bei allen Kindbezirken ' . $g_data['name'] . ' als Master eintragen']);
@@ -1365,6 +1375,27 @@ class XhrMethods
 			global $g_data;
 			$g_data = $data;
 
+			/* Check for : Only a workgroup can have a function.
+						   If the workgroup is set to welcome Team - make sure there can be only one Welcome Team in a district. */
+			if ($data['type'] != Type::WORKING_GROUP && $data['workgroup_function']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translationHelper->s('invalid_district_setting') . '");'
+				]);
+			} elseif ($data['workgroup_function'] == WorkgroupFunction::WELCOME) {
+				$welcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($data['parent_id']);
+				if ($welcomeGroupId) {
+					if (($welcomeGroupId != (int)$data['bezirk_id'])) {
+						return json_encode([
+							'status' => 1,
+							'script' => 'pulseError("' . $this->translationHelper->s('invalid_welcome_team') . '");'
+						]);
+					}
+				}
+			}
+
+			$oldRegionData = $this->regionGateway->getOne_bezirk($data['bezirk_id']);
+
 			$mbid = (int)$this->model->qOne('SELECT mailbox_id FROM fs_bezirk WHERE id = ' . (int)$data['bezirk_id']);
 
 			if (strlen($g_data['mailbox_name']) > 1) {
@@ -1378,7 +1409,28 @@ class XhrMethods
 
 			$this->sanitizerService->handleTagSelect('botschafter');
 
+			// If the workgroup is moved it loses the old functions.
+			// else a region is moved, all workgroups loose their related targets
+			if ($oldRegionData['parent_id'] != $g_data['parent_id']) {
+				if ($oldRegionData['type'] == Type::WORKING_GROUP) {
+					if ($oldRegionData['workgroup_function']) {
+						$this->regionGateway->deleteRegionFunction($data['bezirk_id'], $oldRegionData['workgroup_function']);
+					}
+				} else {
+					$this->regionGateway->deleteTargetFunctions($data['bezirk_id']);
+				}
+				$oldRegionData = $this->regionGateway->getOne_bezirk($data['bezirk_id']);
+			}
+
 			$this->regionGateway->update_bezirkNew($data['bezirk_id'], $g_data);
+
+			if (!$oldRegionData['workgroup_function'] && $g_data['workgroup_function']) {
+				if ($g_data['workgroup_function'] > 0) {
+					$this->regionGateway->addRegionFunction($data['bezirk_id'], $g_data['workgroup_function'], $g_data['parent_id']);
+				}
+			} elseif ($oldRegionData['workgroup_function'] != $g_data['workgroup_function']) {
+				$this->regionGateway->deleteRegionFunction($data['bezirk_id'], $oldRegionData['workgroup_function']);
+			}
 
 			return json_encode([
 				'status' => 1,

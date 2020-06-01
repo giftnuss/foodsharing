@@ -6,6 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class RegionGateway extends BaseGateway
@@ -38,6 +39,13 @@ class RegionGateway extends BaseGateway
 			['id', 'parent_id', 'has_children', 'name', 'email', 'email_pass', 'email_name', 'type', 'master', 'mailbox_id'],
 			['id' => $regionId]
 		);
+
+		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
+			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
+		} else {
+			$out['workgroup_function'] = [];
+		}
+
 		$out['botschafter'] = $this->db->fetchAll('
 				SELECT 		`fs_foodsaver`.`id`,
 							CONCAT(`fs_foodsaver`.`name`," ",`fs_foodsaver`.`nachname`) AS name
@@ -288,6 +296,13 @@ class RegionGateway extends BaseGateway
 		$region['botschafter'] = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
+		if ($welcomeGroupId = $this->getRegionWelcomeGroupId($regionId)) {
+			$region['welcomeAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($welcomeGroupId);
+			shuffle($region['welcomeAdmins']);
+		} else {
+			$region['welcomeAdmins'] = [];
+		}
+
 		return $region;
 	}
 
@@ -473,6 +488,55 @@ class RegionGateway extends BaseGateway
 	public function updateMasterRegions(array $regionIds, int $masterId): void
 	{
 		$this->db->update('fs_bezirk', ['master' => $masterId], ['id' => $regionIds]);
+	}
+
+	public function getRegionWelcomeGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::WELCOME
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
+	public function deleteRegionFunction($regionId, $functionId)
+	{
+		return $this->db->delete('fs_region_function',
+			['region_id' => $regionId,
+			 'function_id' => $functionId]
+		);
+	}
+
+	public function deleteTargetFunctions($targetId)
+	{
+		return $this->db->delete('fs_region_function',
+			['target_id' => $targetId]
+		);
+	}
+
+	public function addRegionFunction(int $regionId, int $functionId, int $targetId)
+	{
+		return $this->db->insert('fs_region_function',
+			['region_id' => $regionId,
+			'function_id' => $functionId,
+			'target_id' => $targetId]
+			);
+	}
+
+	public function existRegionWelcomeGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function',
+			['region_id' => $region_id,
+			 'function_id' => WorkgroupFunction::WELCOME,
+			 'target_id' => $target_id]
+		);
 	}
 
 	public function genderCountRegion(int $regionId): array
