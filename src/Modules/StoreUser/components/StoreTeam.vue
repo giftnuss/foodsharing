@@ -51,7 +51,6 @@
           </a>
           <b-badge
             class="member-fetchcount"
-            :class="foo.roleColorClass"
             tag="span"
             variant="primary"
             :pill="foo.fetchCount < 100"
@@ -128,12 +127,6 @@ export default {
   },
   methods: {
     foodsaverData (fs) {
-      const roleColorClass = {
-        1: 'fs', // Role::FOODSAVER
-        2: 'sm', // Role::STORE_MANAGER
-        3: 'amb' // Role::AMBASSADOR
-        // 4: 'orga' // Role::ORGA
-      }[fs.quiz_rolle] || ''
       return {
         id: fs.id,
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
@@ -141,7 +134,6 @@ export default {
         isManager: !!fs.verantwortlich,
         // isVerified: fs.verified === 1, // ?!
         avatar: fs.photo,
-        roleColorClass,
         sleepStatus: fs.sleep_status,
         name: fs.name,
         number: fs.handy || fs.telefon || '',
@@ -158,10 +150,6 @@ export default {
 
 <style lang="scss" scoped>
 .store-team {
-  --role-ambassador: #fa0; // darker version of --warning
-  --role-storemanager: var(--fs-green);
-  --role-foodsaver: var(--fs-brown);
-
   .list-group.team {
     padding-top: 0px;
   }
@@ -196,12 +184,9 @@ export default {
       top: -2px;
       left: 34px;
       border: 2px solid var(--white);
+      background-color: var(--fs-brown);
       min-width: 1.5rem;
       opacity: 0.9;
-
-      &.fs { background-color: var(--role-foodsaver); }
-      &.sm { background-color: var(--role-storemanager); }
-      &.amb { background-color: var(--role-ambassador); }
     }
 
     .member-info {
