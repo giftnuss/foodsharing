@@ -121,7 +121,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					b.str,
 					b.hsnr
 
-			FROM	fs_betrieb b,
+			FROM	fs_betrieb b
 					INNER JOIN fs_betrieb_team t
 					ON b.id = t.betrieb_id
 
