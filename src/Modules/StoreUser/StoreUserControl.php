@@ -79,13 +79,26 @@ class StoreUserControl extends Control
 			];
 
 			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($store['id'])) {
+				$this->sanitizerService->handleTagSelect('storemanagers');
+				if (!empty($g_data['storemanagers'])) {
+					if (count($g_data['storemanagers']) > 3) {
+						$this->flashMessageHelper->error($this->translationHelper->s('too_many_storemanagers_warning'));
+					} else {
+						foreach ($g_data['storemanagers'] as $fsId) {
+							$addedStoremanager = $this->storeGateway->addStoreManager($store['id'], $fsId);
+						}
+					}
+				}
+
 				$this->sanitizerService->handleTagSelect('foodsaver');
 				if (!empty($g_data['foodsaver'])) {
-					$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
-				} else {
+					$addedTeam = $this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
+				} elseif (empty($g_data['storemanagers'])) {
 					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}
-				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
+				if (isset($addedStoremanager) || isset($addedTeam)) {
+					$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
+				}
 				$this->routeHelper->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
@@ -128,14 +141,26 @@ class StoreUserControl extends Control
 					}
 					$verantwortlich_select = $this->v_utils->v_form_checkbox('verantwortlicher', ['values' => $bibsaver, 'checked' => $checked]);
 
+					$elements = [
+						$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
+						),
+						$verantwortlich_select,
+					];
+
+					if (empty($checked)) {
+						$noStoreManagerWarning = $this->v_utils->v_error($this->translationHelper->s('no_storemanager_warning'));
+						$hiddenField = $this->v_utils->v_form_hidden('set_new_store_manager', 'true');
+						$elements = [
+							$noStoreManagerWarning,
+							$this->v_utils->v_form_tagselect('storemanagers', ['valueOptions' => $this->foodsaverGateway->xhrGetStoremanagersOfRegionsForTagSelect($this->session->listRegionIDs())]
+							),
+							$hiddenField,
+						];
+					}
+
 					$edit_team = $this->v_utils->v_form(
 						'team',
-
-						[
-							$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
-							),
-							$verantwortlich_select
-						],
+						$elements,
 						['submit' => $this->translationHelper->s('save')]
 					);
 

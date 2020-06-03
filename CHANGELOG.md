@@ -130,6 +130,8 @@
 - Correct Dashboard preview of ordered + unordered lists #455 !1481 @ChrisOelmueller
 - Fix gender selection during registration that was set to 'unselected' by mistake @alex.simm
 - TagEdit color correction when hovering #867 !1514 @ChrisOelmueller
+- Fixed outgoing mails not displaying line breaks !1317 @pfaufisch
+- Bots can now add up to three new store managers to abandoned stores #209 #405 !1319 @pfaufisch
 
 ## Refactoring
 - Name generation for chat groups has been extracted to an own method method, which is now used by push notifications and in the E-Mail generation for missed chat messages. The new method does a slightly better job at naming; beta testers are welcomed to check the E-Mails generated for missed chat messages. @janopae
@@ -301,6 +303,8 @@ Another release from your lovely dev Team. A lot of changes have been done "unde
 - Temporarily disable pickup slot markers for production release !1307 @jofranz
 - Passportgenerator list sorted by name default, workgroups are not shown anymore !1310 @fs_k
 - Fix text overflow problems with events and notifications #722 #876 !1487 @ChrisOelmueller
+- Bots can now add a new store manager to abandoned stores #209 #405 !1319 @pfaufisch
+- Bots can now add up to three new store managers to abandoned stores #209 #405 !1319 @pfaufisch
 
 ## Refactoring
 - Optimize database access for legal queries !1292 @CarolineFischer

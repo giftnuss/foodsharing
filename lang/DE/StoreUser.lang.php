@@ -90,3 +90,6 @@ $g_lang['prefix_Ago'] = 'Vor';
 $g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
 $g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';
 $g_lang['user_is_verified'] = 'Nutzer*in ist verifiziert';
+$g_lang['storemanagers'] = 'Betriebsverantwortliche';
+$g_lang['no_storemanager_warning'] = 'In diesem Betrieb gibt es aktuell keine Verantwortliche! Bitte füge bis zu drei Betriebsverantwortliche hinzu, die diesen Betrieb in Zukunft betreuen.';
+$g_lang['too_many_storemanagers_warning'] = 'Bitte wähle maximal drei BVs';

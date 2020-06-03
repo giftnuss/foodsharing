@@ -1266,4 +1266,21 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		return $this->db->fetchAllByCriteria('fs_betrieb', ['id', 'name']);
 	}
+
+	/**
+	 * Add store manager to a store and make her responsible for that store.
+	 *
+	 * @return int	Last insert ID
+	 */
+	public function addStoreManager(int $storeId, int $storeManagerId): int
+	{
+		$data = [
+			'foodsaver_id' => $storeManagerId,
+			'betrieb_id' => $storeId,
+			'verantwortlich' => 1,
+			'active' => 1,
+		];
+
+		return $this->db->insertOrUpdate('fs_betrieb_team', $data);
+	}
 }

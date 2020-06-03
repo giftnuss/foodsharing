@@ -58,9 +58,12 @@ $(document).ready(() => {
   })
 
   $('#team-form').on('submit', function (ev) {
-    if ($('.cb-verantwortlicher:checked').length == 0) {
+    if ($('.cb-verantwortlicher:checked').length == 0 && $('#set_new_store_manager').val() != 'true') {
       pulseError(i18n('verantwortlicher_must_be'))
       ev.preventDefault()
+      return false
+    } else if ($('#set_new_store_manager').val() == 'true' && $('.tagedit-listelement-old').length > 3) {
+      pulseError(i18n('max_3_leader'))
       return false
     }
   })

@@ -364,6 +364,24 @@ final class FoodsaverGateway extends BaseGateway
 		');
 	}
 
+	public function xhrGetStoremanagersOfRegionsForTagSelect(array $regionIds): array
+	{
+		return $this->db->fetchAll('
+			SELECT DISTINCT
+				fs.`id`,
+				CONCAT(fs.`name`," ",fs.`nachname`," (",fs.`id`,")") AS value
+
+			FROM 	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk hb
+					ON hb.foodsaver_id = fs.id
+
+			WHERE 	hb.bezirk_id IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
+			AND		fs.deleted_at IS NULL
+			AND		fs.rolle >= 2
+			AND		fs.privacy_notice_accepted_date IS NOT NULL
+		');
+	}
+
 	public function xhrGetFoodsaver(array $data): array
 	{
 		if (isset($data['bid'])) {
