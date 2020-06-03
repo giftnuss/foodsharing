@@ -35,7 +35,7 @@ class SearchHelper
 	public function search(string $q): array
 	{
 		$regionsFilter = null;
-		if ($this->searchPermissions->maySearchAllRegions()) {
+		if (!$this->searchPermissions->maySearchAllRegions()) {
 			$regionsFilter = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
 		}
 

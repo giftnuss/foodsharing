@@ -133,7 +133,7 @@ class SearchGateway extends BaseGateway
 		$select = 'SELECT fs.id, fs.name, fs.nachname, fs.anschrift, fs.stadt, fs.plz FROM fs_foodsaver fs';
 		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
 		$groupBy = ' GROUP BY fs.id';
-		if ($groupIds === null) {
+		if (empty($groupIds)) {
 			$results = $this->db->fetchAll($select . ' WHERE ' . $fulltextCondition . $groupBy, [$searchString]);
 		} else {
 			$results = $this->db->fetchAll(
