@@ -28,7 +28,7 @@
               <Avatar
                 :url="data.item.avatar"
                 :size="50"
-                class="member-pic"
+                :class="{'member-pic': true, 'jumper': data.item.isJumper}"
                 :sleep-status="data.item.sleepStatus"
               />
             </a>
@@ -64,12 +64,13 @@
               {{ $i18n('store.isJumper') }}
             </div>
           </b-tooltip>
-          <div
+          <a
             :id="`member-${data.item.id}`"
             v-b-tooltip.hover
+            href="#memberdetails"
             class="member-info"
-            tabindex="0"
-            @click="data.toggleDetails"
+            :class="{'jumper': data.item.isJumper}"
+            @click.prevent="data.toggleDetails"
           >
             <span class="member-name">
               {{ data.item.name }}
@@ -83,7 +84,7 @@
             >
               {{ data.item.phone }}
             </span>
-          </div>
+          </a>
         </template>
 
         <template v-slot:cell(mobinfo)="data">
@@ -176,6 +177,7 @@
 import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
 
+import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
 import { xhrf, chat } from '@/script'
 import Avatar from '@/components/Avatar'
@@ -219,6 +221,9 @@ export default {
     },
     // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
     removeFromTeam (fsId) {
+      if (!confirm(i18n('are_you_sure'))) {
+        return
+      }
       const fData = {
         bid: this.storeId,
         fsid: fsId,
@@ -258,95 +263,89 @@ export default {
 .store-team {
   background: var(--white);
 
-  /deep/ table tr {
+  /deep/ table tr td {
+    padding: 2px;
+    border-top-color: var(--border);
+    vertical-align: middle;
+    cursor: default;
 
-    td {
-      padding: 2px;
-      border-top-color: var(--border);
-      vertical-align: middle;
-      cursor: default;
+    .jumper {
+      opacity: 0.75;
 
-      .member-ava {
-        position: relative;
+      &.member-pic {
+        opacity: 0.5;
+      }
+    }
 
-        .member-pic /deep/ img {
-          border-radius: 6px;
-        }
+    .member-ava {
+      position: relative;
 
-        .member-fetchcount {
-          position: absolute;
-          top: -2px;
-          left: 30px;
-          border: 2px solid var(--white);
-          background-color: var(--fs-brown);
-          min-width: 1.5rem;
-          opacity: 0.9;
-        }
+      .member-pic /deep/ img {
+        border-radius: 6px;
       }
 
-      .member-info {
-        display: flex;
-        min-height: 50px;
-        padding-left: 9px;
-        flex-direction: column;
-        justify-content: center;
+      .member-fetchcount {
+        position: absolute;
+        top: -2px;
+        left: 36px;
+        border: 2px solid var(--white);
+        background-color: var(--fs-brown);
+        min-width: 1.5rem;
+        opacity: 0.9;
+      }
+    }
+
+    .member-info {
+      display: flex;
+      min-height: 50px;
+      padding-left: 9px;
+      flex-direction: column;
+      justify-content: center;
+      font-size: smaller;
+      color: var(--dark);
+
+      &:hover, &:focus {
+        text-decoration: none;
+        outline-color: var(--fs-brown);
+      }
+    }
+
+    .member-name {
+      padding-left: 1px;
+      min-width: 0;
+      word-break: break-word;
+      font-weight: bolder;
+    }
+
+    .member-teaminfo-mobile {
+      align-self: center;
+      padding: 0 10px;
+      text-align: right;
+
+      &, div {
         font-size: smaller;
-        cursor: pointer;
-        // background: orange;
-
-        &:focus {
-          outline-color: var(--fs-brown);
-        }
-      }
-
-      .member-name {
-        padding-left: 1px;
-        min-width: 0;
-        word-break: break-word;
-        font-weight: bolder;
-      }
-
-      .member-teaminfo-mobile {
-        align-self: center;
-        padding: 0 10px;
-        text-align: right;
-
-        &, div {
-          font-size: smaller;
-        }
-      }
-
-      .member-call {
-        padding: 10px;
-        align-self: center;
-        color: var(--fs-green);
-
-        &:hover {
-          background-color: var(--fs-green);
-          color: var(--white);
-        }
-        &:focus {
-          outline: 2px solid var(--fs-green);
-        }
-      }
-
-      .member-actions {
-        .btn {
-          margin-bottom: 5px;
-        }
       }
     }
-  }
 
-  // .
+    .member-call {
+      padding: 10px;
+      align-self: center;
+      color: var(--fs-green);
 
-  .list-group-item.member {
-    &.jumper {
-      opacity: 0.8;
-
-      .member-pic { opacity: 0.6; }
+      &:hover {
+        background-color: var(--fs-green);
+        color: var(--white);
+      }
+      &:focus {
+        outline: 2px solid var(--fs-green);
+      }
     }
 
+    .member-actions {
+      .btn {
+        margin-bottom: 5px;
+      }
+    }
   }
 }
 </style>
