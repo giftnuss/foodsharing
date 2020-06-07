@@ -818,25 +818,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
 
-	public function getTeamleader($storeId): array
-	{
-		return $this->db->fetch('
-            SELECT 	fs.`id`,
-                    CONCAT(fs.name," ",nachname) AS name
-
-			FROM    fs_betrieb_team t
-                    INNER JOIN fs_foodsaver fs
-			        ON t.foodsaver_id = fs.id
-
-			WHERE   `betrieb_id` = :id
-			AND     t.verantwortlich = 1
-			AND     fs.`active` = 1
-			AND     fs.deleted_at IS NULL
-        ', [
-			':id' => $storeId
-		]);
-	}
-
 	/**
 	 * retrieves all store managers for a given region (by being store manager in a store that is part of that region,
 	 * which is semantically not the same we use on platform).

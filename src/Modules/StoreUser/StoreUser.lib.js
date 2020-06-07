@@ -2,9 +2,7 @@
 
 import $ from 'jquery'
 
-import { hideLoader, showLoader, reload, chat, ajreq, profile, GET } from '@/script'
-
-import { store } from '@/server-data'
+import { hideLoader, showLoader, reload, GET } from '@/script'
 
 export function u_updatePosts () {
   $.ajax({
@@ -68,83 +66,4 @@ export function denyRequest (fsid, bid) {
     },
     complete: function () { hideLoader() }
   })
-}
-
-export function u_contextAction (action, fsid) {
-  if (action === 'gotoprofile') {
-    profile(fsid)
-  } else if (action === 'message') {
-    chat(fsid)
-  } else if (action === 'report') {
-    ajreq('reportDialog', { app: 'report', fsid: fsid, bid: store.id })
-  } else {
-    showLoader()
-    $.ajax({
-      url: '/xhr.php?f=bcontext',
-      data: { action: action, fsid: fsid, bid: store.id, bzid: store.bezirk_id },
-      dataType: 'json',
-      success: function (data) {
-        if (data.status == 1) {
-          // TODO make this dynamic again
-          // $('.fs-' + fsid)     this.$forceUpdate()
-          if (action === 'toteam') {
-            $('.fs-' + fsid).removeClass('jumper')
-            $('.fs-' + fsid).addClass('team')
-          } else if (action === 'tojumper') {
-            $('.fs-' + fsid).removeClass('team')
-            $('.fs-' + fsid).addClass('jumper')
-          } else if (action === 'delete') {
-            $('.fs-' + fsid).remove()
-          }
-        }
-      },
-      complete: function () {
-        hideLoader()
-      }
-    })
-  }
-}
-
-export function createJumperMenu () {
-  return {
-    callback: function (key, options) {
-      const fsid = $(this).attr('class').split('fs-')[1]
-      u_contextAction(key, fsid)
-    },
-    items: {
-      gotoprofile: { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
-      report: { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
-      delete: { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
-      toteam: { name: 'Ins Team aufnehmen', icon: 'fas fa-clipboard-check fa-fw' },
-      message: { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
-    }
-  }
-}
-
-export function createMenu () {
-  return {
-    callback: function (key, options) {
-      const fsid = $(this).attr('class').split('fs-')[1]
-      u_contextAction(key, fsid)
-    },
-    items: {
-      gotoprofile: { name: 'Profil anzeigen', icon: 'fas fa-user fa-fw' },
-      report: { name: 'Melden', icon: 'fas fa-bullhorn fa-fw' },
-      delete: { name: 'Aus Team löschen', icon: 'fas fa-user-times fa-fw' },
-      tojumper: { name: 'Auf die Springerliste', icon: 'fas fa-mug-hot fa-fw' },
-      message: { name: 'Nachricht schreiben', icon: 'fas fa-comment fa-fw' }
-    }
-  }
-}
-
-export function addContextMenu (selector, offsetY, build) {
-  $(selector).on('click', function () {
-    const $this = $(this)
-    const offset = $this.offset()
-    $this.contextMenu({
-      x: offset.left - 42,
-      y: offset.top + offsetY
-    })
-  })
-  $.contextMenu({ selector, trigger: 'none', build })
 }

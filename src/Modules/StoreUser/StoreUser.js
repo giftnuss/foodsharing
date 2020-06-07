@@ -26,11 +26,7 @@ import {
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest,
-  createJumperMenu,
-  createMenu,
-  u_timetableAction,
-  addContextMenu
+  denyRequest
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
@@ -44,10 +40,7 @@ expose({
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest,
-  createJumperMenu,
-  createMenu,
-  u_timetableAction
+  denyRequest
 })
 
 $(document).ready(() => {
@@ -229,7 +222,4 @@ $(document).ready(() => {
   vueApply('#vue-pickuplist', true)
   vueApply('#vue-storeinfos', true)
   vueApply('#vue-storeteam', true)
-
-  addContextMenu('.contextmenu-team', 40, createMenu)
-  addContextMenu('.contextmenu-jumper', 40, createJumperMenu)
 })
