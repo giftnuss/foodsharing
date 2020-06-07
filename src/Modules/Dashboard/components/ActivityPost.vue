@@ -305,17 +305,6 @@ export default {
       padding-right: 10px;
     }
 
-    span.img-txt {
-      display: inline;
-      vertical-align: bottom;
-
-      span.txt {
-        border: 0;
-        display: inline;
-        padding-left: 0;
-      }
-    }
-
     span.txt {
       overflow: hidden;
       text-overflow: unset;
