@@ -678,7 +678,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$bellData = Bell::create(
 				'betrieb_fetch_title',
 				'betrieb_fetch',
-				'img img-store brown',
+				'fas fa-shopping-cart',
 				['href' => '/?page=fsbetrieb&id=' . $storeId],
 				$messageVars,
 				$messageIdentifier,

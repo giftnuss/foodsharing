@@ -103,7 +103,7 @@ class StoreRestController extends AbstractFOSRestController
 		$bellData = Bell::create(
 			'store_wallpost_title',
 			'store_wallpost',
-			'img img-store brown',
+			'fas fa-shopping-cart',
 			['href' => '/?page=fsbetrieb&id=' . $storeId],
 			[
 				'user' => $this->session->user('name'),
