@@ -220,11 +220,8 @@ class StoreUserControl extends Control
 					// personal info
 					'id', 'name', 'photo', 'handy', 'telefon', 'quiz_rolle', 'sleep_status',
 					// team-related info
-					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
+					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date', 'last_fetch',
 				];
-				if ($this->storePermissions->mayEditStore($store['id'])) {
-					$allowedFields[] = 'last_fetch';
-				}
 
 				$this->pageHelper->addContent(
 					$this->view->vueComponent('vue-storeteam', 'store-team', [

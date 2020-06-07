@@ -57,7 +57,7 @@
             <div v-if="data.item.fetchCount && data.item.lastPickup">
               {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
             </div>
-            <div v-else-if="mayEditStore">
+            <div v-else>
               {{ $i18n('store.noPickup') }}
             </div>
             <div v-if="data.item.isJumper">
