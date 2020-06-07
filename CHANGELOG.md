@@ -3,11 +3,11 @@
 ## Features
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
-- Added Workgroup Function: Welcome to wokrgroup !1544 @fs_k
+- Added Workgroup Function: Welcome to workgroup !1544 @fs_k
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
 
 ## Bugfixes
-- Clarify that new forum threads won't reache members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
+- Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
@@ -15,6 +15,7 @@
 - Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
 - Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
+- Modernize icon handling of store bells + fairteiler bells #907 !1560 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 
