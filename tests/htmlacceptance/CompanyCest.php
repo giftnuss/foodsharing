@@ -72,7 +72,7 @@ class CompanyCest
 	{
 		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeUrl($this->store['id']));
-		$I->see($this->store['name'] . '-Team', 'div.head.ui-widget-header.ui-corner-top');
+		$I->see($this->store['name'], '#main .bread');
 	}
 
 	/**

@@ -281,6 +281,8 @@ export default {
       position: relative;
 
       .member-pic /deep/ img {
+        width: 50px;
+        height: 50px;
         border-radius: 6px;
       }
 
