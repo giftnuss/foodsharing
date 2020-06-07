@@ -6,7 +6,7 @@
   - jumpers
   Sleeping team members will come last in each of those sections
   -->
-  <div class="store-team">
+  <div :class="['store-team', `team-${storeId}`]">
     <div
       v-if="storeTitle"
       class="head ui-widget-header ui-corner-top"
@@ -14,94 +14,160 @@
       {{ $i18n('store.teamName', { storeTitle }) }}
     </div>
     <div class="corner-bottom margin-bottom bootstrap">
-      <b-list-group :class="['team', `team-${storeId}`]">
-        <b-list-group-item
-          v-for="foo in foodsaver"
-          :key="foo.id"
-          class="d-flex justify-content-between member"
-          :class="[`fs-${foo.id}`, {
-            'jumper': foo.isJumper,
-            'contextmenu-team': mayEditStore && foo.isActive,
-            'contextmenu-jumper': mayEditStore && foo.isJumper }]"
-          :variant="foo.isManager ? 'warning' : ''"
-          button
-        >
-          <b-tooltip :target="`member-${foo.id}`">
-            <div v-if="foo.isManager">
-              {{ $i18n('store.isManager', { name: foo.name || '' }) }}
+      <b-table
+        ref="teamlist"
+        :items="foodsaver"
+        :fields="['ava', 'info', `${(wXS || wSM) ? 'mobinfo' : ''}`, `${(wXS || wSM) ? 'call' : ''}`]"
+        primary-key="id"
+        thead-class="d-none"
+      >
+        <template v-slot:cell(ava)="data">
+          <div class="member-ava">
+            <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+            <a :href="`/profile/${data.item.id}`" tabindex="-1">
+              <Avatar
+                :url="data.item.avatar"
+                :size="50"
+                class="member-pic"
+                :sleep-status="data.item.sleepStatus"
+              />
+            </a>
+            <b-badge
+              class="member-fetchcount"
+              tag="span"
+              variant="primary"
+              :pill="data.item.fetchCount < 100"
+            >
+              <span v-if="data.item.isJumper">
+                <i class="fas fa-star member-jumper" />
+              </span>
+              <span v-else>{{ data.item.fetchCount }}</span>
+            </b-badge>
+          </div>
+        </template>
+
+        <template v-slot:cell(info)="data">
+          <b-tooltip :target="`member-${data.item.id}`">
+            <div v-if="data.item.isManager">
+              {{ $i18n('store.isManager', { name: data.item.name || '' }) }}
             </div>
-            <div v-if="foo.joinDate">
-              {{ $i18n('store.memberSince', { date: $dateFormat(foo.joinDate, 'day') }) }}
+            <div v-if="data.item.joinDate">
+              {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
             </div>
-            <div v-if="foo.fetchCount && foo.lastPickup">
-              {{ $i18n('store.lastPickup', { date: $dateFormat(foo.lastPickup, 'day') }) }}
+            <div v-if="data.item.fetchCount && data.item.lastPickup">
+              {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
             </div>
             <div v-else-if="mayEditStore">
               {{ $i18n('store.noPickup') }}
+            </div>
+            <div v-if="data.item.isJumper">
+              {{ $i18n('store.isJumper') }}
             </div>
           </b-tooltip>
-
-          <a :href="`/profile/${foo.id}`">
-            <Avatar
-              :url="foo.avatar"
-              :size="50"
-              class="member-pic"
-              :sleep-status="foo.sleepStatus"
-            />
-          </a>
-          <b-badge
-            class="member-fetchcount"
-            tag="span"
-            variant="primary"
-            :pill="foo.fetchCount < 100"
-          >
-            <span v-if="foo.isJumper">
-              <i class="fas fa-star member-jumper" />
-            </span>
-            <span v-else>{{ foo.fetchCount }}</span>
-          </b-badge>
           <div
-            :id="`member-${foo.id}`"
+            :id="`member-${data.item.id}`"
             v-b-tooltip.hover
-            class="member-info flex-grow-1 flex-shrink-0"
+            class="member-info"
+            tabindex="0"
+            @click="data.toggleDetails"
           >
             <span class="member-name">
-              {{ foo.name }}
+              {{ data.item.name }}
             </span>
             <span class="member-phone">
-              {{ foo.number }}
+              {{ data.item.number }}
             </span>
             <span
-              v-if="foo.phone && (foo.phone !== foo.number)"
+              v-if="data.item.phone && (data.item.phone !== data.item.number)"
               class="member-phone"
             >
-              {{ foo.phone }}
+              {{ data.item.phone }}
             </span>
           </div>
+        </template>
 
-          <div class="d-md-none member-teaminfo-mobile">
-            <div v-if="foo.joinDate">
-              {{ $i18n('store.memberSince', { date: $dateFormat(foo.joinDate, 'day') }) }}
+        <template v-slot:cell(mobinfo)="data">
+          <div class="member-teaminfo-mobile">
+            <div v-if="data.item.joinDate">
+              {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
             </div>
-            <div v-if="foo.fetchCount && foo.lastPickup">
-              {{ $i18n('store.lastPickup', { date: $dateFormat(foo.lastPickup, 'day') }) }}
+            <div v-if="data.item.fetchCount && data.item.lastPickup">
+              {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
             </div>
             <div v-else-if="mayEditStore">
               {{ $i18n('store.noPickup') }}
             </div>
           </div>
+        </template>
 
-          <!-- TODO isMobile instead of media query? -->
+        <template v-slot:cell(call)="data">
           <b-button
-            v-if="foo.callable"
+            v-if="data.item.callable"
             variant="link"
-            class="member-call d-md-none"
-            :href="foo.callable"
+            class="member-call"
+            :href="data.item.callable"
           >
             <i class="fas fa-phone" />
           </b-button>
-        </b-list-group-item>
-      </b-list-group>
+        </template>
+
+        <template v-slot:row-details="data">
+          <div class="member-actions">
+            <b-button
+              size="sm"
+              :href="`/profile/${data.item.id}`"
+              :block="!(wXS || wSM)"
+            >
+              <i class="fas fa-user" />
+              {{ $i18n('pickup.open_profile') }}
+            </b-button>
+
+            <b-button
+              v-if="data.item.id !== fsId"
+              size="sm"
+              variant="secondary"
+              :block="!(wXS || wSM)"
+              @click="openChat(data.item.id)"
+            >
+              <i class="fas fa-comment" />
+              {{ $i18n('chat.open_chat') }}
+            </b-button>
+
+            <b-button
+              v-if="mayEditStore && data.item.isJumper"
+              size="sm"
+              variant="primary"
+              :block="!(wXS || wSM)"
+              @click="changeMembershipStatus(data.item.id, 'toteam')"
+            >
+              <i class="fas fa-clipboard-check" />
+              {{ $i18n('store.makeRegularTeamMember') }}
+            </b-button>
+
+            <b-button
+              v-if="mayEditStore && data.item.isActive"
+              size="sm"
+              variant="primary"
+              :block="!(wXS || wSM)"
+              @click="changeMembershipStatus(data.item.id, 'tojumper')"
+            >
+              <i class="fas fa-mug-hot" />
+              {{ $i18n('store.makeJumper') }}
+            </b-button>
+
+            <b-button
+              v-if="mayEditStore"
+              size="sm"
+              variant="danger"
+              :block="!(wXS || wSM)"
+              @click="removeFromTeam(data.item.id)"
+            >
+              <i class="fas fa-user-times" />
+              {{ $i18n('store.removeFromTeam') }}
+            </b-button>
+          </div>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -109,12 +175,17 @@
 <script>
 import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
+
 import { callableNumber } from '@/utils'
+import { xhrf, chat } from '@/script'
 import Avatar from '@/components/Avatar'
+import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 export default {
   components: { Avatar },
+  mixins: [MediaQueryMixin],
   props: {
+    fsId: { type: Number, required: true },
     mayEditStore: { type: Boolean, default: false },
     team: { type: Array, required: true },
     storeId: { type: Number, required: true },
@@ -126,12 +197,47 @@ export default {
     }
   },
   methods: {
+    openChat (fsId) {
+      chat(fsId)
+    },
+    // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
+    changeMembershipStatus (fsId, newStatus) {
+      const fData = {
+        bid: this.storeId,
+        fsid: fsId,
+        action: newStatus
+      }
+      xhrf('bcontext', fData)
+      const index = this.team.findIndex(fs => fs.id === fsId)
+      if (index >= 0) {
+        const fs = this.foodsaver[index]
+        fs.isJumper = (newStatus === 'tojumper')
+        fs.isActive = !fs.isJumper
+        fs._showDetails = false
+        this.$set(this.team, index, fs)
+      }
+    },
+    // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
+    removeFromTeam (fsId) {
+      const fData = {
+        bid: this.storeId,
+        fsid: fsId,
+        action: 'delete'
+      }
+      xhrf('bcontext', fData)
+      const index = this.team.findIndex(fs => fs.id === fsId)
+      if (index >= 0) {
+        this.foodsaver.splice(index, 1)
+        this.$refs.teamlist.refresh()
+      }
+    },
     foodsaverData (fs) {
       return {
         id: fs.id,
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
         isJumper: fs.team_active === 2, // MembershipStatus::JUMPER
         isManager: !!fs.verantwortlich,
+        _rowVariant: fs.verantwortlich ? 'warning' : '',
         // isVerified: fs.verified === 1, // ?!
         avatar: fs.photo,
         sleepStatus: fs.sleep_status,
@@ -150,82 +256,97 @@ export default {
 
 <style lang="scss" scoped>
 .store-team {
-  .list-group.team {
-    padding-top: 0px;
+  background: var(--white);
+
+  /deep/ table tr {
+
+    td {
+      padding: 2px;
+      border-top-color: var(--border);
+      vertical-align: middle;
+      cursor: default;
+
+      .member-ava {
+        position: relative;
+
+        .member-pic /deep/ img {
+          border-radius: 6px;
+        }
+
+        .member-fetchcount {
+          position: absolute;
+          top: -2px;
+          left: 30px;
+          border: 2px solid var(--white);
+          background-color: var(--fs-brown);
+          min-width: 1.5rem;
+          opacity: 0.9;
+        }
+      }
+
+      .member-info {
+        display: flex;
+        min-height: 50px;
+        padding-left: 9px;
+        flex-direction: column;
+        justify-content: center;
+        font-size: smaller;
+        cursor: pointer;
+        // background: orange;
+
+        &:focus {
+          outline-color: var(--fs-brown);
+        }
+      }
+
+      .member-name {
+        padding-left: 1px;
+        min-width: 0;
+        word-break: break-word;
+        font-weight: bolder;
+      }
+
+      .member-teaminfo-mobile {
+        align-self: center;
+        padding: 0 10px;
+        text-align: right;
+
+        &, div {
+          font-size: smaller;
+        }
+      }
+
+      .member-call {
+        padding: 10px;
+        align-self: center;
+        color: var(--fs-green);
+
+        &:hover {
+          background-color: var(--fs-green);
+          color: var(--white);
+        }
+        &:focus {
+          outline: 2px solid var(--fs-green);
+        }
+      }
+
+      .member-actions {
+        .btn {
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 
+  // .
+
   .list-group-item.member {
-    padding: 2px;
-    padding-right: 0;
-
-    &:not(:last-of-type) {
-      border-bottom: 0;
-    }
-
-    &:focus {
-      outline: 0;
-    }
-
     &.jumper {
       opacity: 0.8;
 
       .member-pic { opacity: 0.6; }
     }
 
-    .member-pic {
-      // vertical-align: top;
-    }
-    .member-pic /deep/ img {
-      border-radius: 6px;
-    }
-
-    .member-fetchcount {
-      position: absolute;
-      top: -2px;
-      left: 34px;
-      border: 2px solid var(--white);
-      background-color: var(--fs-brown);
-      min-width: 1.5rem;
-      opacity: 0.9;
-    }
-
-    .member-info {
-      display: inline-flex;
-      flex-direction: column;
-      padding-left: 9px;
-      max-width: calc(100% - 50px - 9px);
-      min-width: 0;
-      align-self: center;
-      font-size: smaller;
-    }
-
-    .member-name {
-      padding-left: 1px;
-      min-width: 0;
-      word-break: break-word;
-      font-weight: bolder;
-    }
-
-    .member-teaminfo-mobile {
-      align-self: center;
-      padding: 0 10px;
-      text-align: right;
-
-      &, div {
-        font-size: smaller;
-      }
-    }
-
-    .member-call {
-      padding: 10px;
-      align-self: center;
-      color: var(--fs-green);
-
-      &:hover {
-        background-color: var(--fs-green);
-        color: var(--white);
-      }
-    }
   }
 }
 </style>

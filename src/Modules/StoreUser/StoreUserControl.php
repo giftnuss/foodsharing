@@ -228,6 +228,7 @@ class StoreUserControl extends Control
 
 				$this->pageHelper->addContent(
 					$this->view->vueComponent('vue-storeteam', 'store-team', [
+						'fsId' => $this->session->id(),
 						'mayEditStore' => $this->storePermissions->mayEditStore($store['id']),
 						'team' => array_map(
 							function ($a) use ($allowedFields) {

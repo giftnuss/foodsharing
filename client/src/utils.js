@@ -72,6 +72,9 @@ export function dateDistanceInWords (date) {
 const noLocale = /^[\w-.\s,]*$/
 
 export function callableNumber (number) {
+  if (!number) {
+    return ''
+  }
   const digits = number.toString().replace(/[^0-9]/g, '')
   return (!digits) ? '' : ('tel:' + digits)
 }

@@ -200,6 +200,10 @@ store:
   lastPickup: 'Letzte Abholung: {date}'
   unknownDate: unbekannt
   noPickup: Hat noch nie hier abgeholt.
+  isJumper: Ist auf der Springerliste.
+  removeFromTeam: Aus dem Team entfernen
+  makeJumper: Auf die Springerliste
+  makeRegularTeamMember: In das Team aufnehmen
   particularities: Besonderheiten
   average_collection_quantity: Abholmenge im Schnitt
   attribution: Namensnennung

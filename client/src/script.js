@@ -412,11 +412,12 @@ export function fancy (content, title, subtitle) {
   $('#fancylink').trigger('click')
 }
 
-export function xhrf (func) {
+export function xhrf (func, fdata = null) {
   showLoader()
   $.ajax({
     dataType: 'json',
     url: `/xhr.php?f=${func}`,
+    data: fdata || {},
     success: function (data) {
       hideLoader()
       if (data.status == 1) {
