@@ -449,7 +449,7 @@ class FoodSharePointGateway extends BaseGateway
 		$bellData = Bell::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
-			'img img-recycle yellow',
+			'fas fa-recycle',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
 			'new-fairteiler-' . $foodSharePointId,
