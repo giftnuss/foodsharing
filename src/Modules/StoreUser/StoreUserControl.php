@@ -7,6 +7,7 @@ use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -127,7 +128,7 @@ class StoreUserControl extends Control
 
 				$bibsaver = [];
 				foreach ($store['foodsaver'] as $fs) {
-					if ($fs['rolle'] >= 2) {
+					if ($fs['rolle'] >= Role::STORE_MANAGER) {
 						$bibsaver[] = $fs;
 					}
 				}
