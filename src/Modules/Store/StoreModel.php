@@ -395,7 +395,7 @@ class StoreModel extends Db
 		return $standbyTeamChatId;
 	}
 
-	public function addBetriebTeam(int $storeId, array $member, array $managerIds)
+	public function addBetriebTeam(int $storeId, array $member, array $selectedManagers)
 	{
 		if (empty($member)) {
 			return false;
@@ -403,11 +403,13 @@ class StoreModel extends Db
 
 		$values = [];
 		$memberIds = [];
+		$managerIds = []; // intersection between members and selectedManagers
 
 		foreach ($member as $m) {
 			$v = 0;
-			if (in_array($m, $managerIds)) {
+			if (in_array($m, $selectedManagers)) {
 				$v = 1;
+				$managerIds[] = $m;
 			}
 			$memberIds[] = (int)$m;
 			$values[] = '(' . $storeId . ',' . (int)$m . ',' . $v . ',1,NOW())';

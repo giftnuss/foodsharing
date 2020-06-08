@@ -108,8 +108,6 @@ $I->see($foodsaverF['name'] . ' ' . $foodsaverF['nachname'], '.store-team');
 
 /* Remove one store manager from the team, demote another to regular team member */
 $I->click('Team bearbeiten');
-// TODO this is important!! and should be fixed to not be necessary
-$I->uncheckOption($bibC['name'] . ' ' . $bibC['nachname']);
 $I->removeFromTagSelect($bibC['name'] . ' ' . $bibC['nachname']);
 $I->uncheckOption($bibB['name'] . ' ' . $bibB['nachname']);
 $I->click('Speichern', '#team-form');
