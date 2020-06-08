@@ -263,93 +263,98 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// separate because of loader issues with deep selectors in scoped + nested SCSS
+// (see https://github.com/vuejs/vue-loader/issues/913 for a discussion)
+.store-team .member-ava .member-pic ::v-deep img {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+</style>
+
+<style lang="scss" scoped>
 .store-team {
   background: var(--white);
+}
 
-  /deep/ table tr td {
-    padding: 2px;
-    border-top-color: var(--border);
-    vertical-align: middle;
-    cursor: default;
+.store-team ::v-deep table tr td {
+  padding: 2px;
+  border-top-color: var(--border);
+  vertical-align: middle;
+  cursor: default;
 
-    .jumper {
-      opacity: 0.75;
+  .jumper {
+    opacity: 0.75;
 
-      &.member-pic {
-        opacity: 0.5;
-      }
+    &.member-pic {
+      opacity: 0.5;
     }
+  }
 
-    .member-ava {
-      position: relative;
+  .member-ava {
+    position: relative;
 
-      .member-pic /deep/ img {
-        width: 50px;
-        height: 50px;
-        border-radius: 6px;
-      }
-
-      .member-fetchcount {
-        position: absolute;
-        top: -2px;
-        left: 36px;
-        border: 2px solid var(--white);
-        background-color: var(--fs-brown);
-        min-width: 1.5rem;
-        opacity: 0.9;
-      }
+    .member-fetchcount {
+      position: absolute;
+      top: -2px;
+      left: 36px;
+      border: 2px solid var(--white);
+      background-color: var(--fs-brown);
+      min-width: 1.5rem;
+      opacity: 0.9;
     }
+  }
 
-    .member-info {
-      display: flex;
-      min-height: 50px;
-      padding-left: 9px;
-      flex-direction: column;
-      justify-content: center;
+  .member-info {
+    display: flex;
+    min-height: 50px;
+    padding-left: 9px;
+    flex-direction: column;
+    justify-content: center;
+    font-size: smaller;
+    color: var(--dark);
+
+    &:hover, &:focus {
+      text-decoration: none;
+      outline-color: var(--fs-brown);
+    }
+  }
+
+  .member-name {
+    padding-left: 1px;
+    min-width: 0;
+    word-break: break-word;
+    font-weight: bolder;
+  }
+
+  .member-teaminfo-mobile {
+    align-self: center;
+    padding: 0 10px;
+    text-align: right;
+
+    &, div {
       font-size: smaller;
-      color: var(--dark);
-
-      &:hover, &:focus {
-        text-decoration: none;
-        outline-color: var(--fs-brown);
-      }
     }
+  }
 
-    .member-name {
-      padding-left: 1px;
-      min-width: 0;
-      word-break: break-word;
-      font-weight: bolder;
+  .member-call {
+    padding: 10px;
+    align-self: center;
+    color: var(--fs-green);
+
+    &:hover {
+      background-color: var(--fs-green);
+      color: var(--white);
     }
-
-    .member-teaminfo-mobile {
-      align-self: center;
-      padding: 0 10px;
-      text-align: right;
-
-      &, div {
-        font-size: smaller;
-      }
+    &:focus {
+      outline: 2px solid var(--fs-green);
     }
+  }
 
-    .member-call {
-      padding: 10px;
-      align-self: center;
-      color: var(--fs-green);
-
-      &:hover {
-        background-color: var(--fs-green);
-        color: var(--white);
-      }
-      &:focus {
-        outline: 2px solid var(--fs-green);
-      }
-    }
-
-    .member-actions {
-      .btn {
-        margin-bottom: 5px;
-      }
+  .member-actions {
+    .btn {
+      margin-bottom: 5px;
     }
   }
 }
