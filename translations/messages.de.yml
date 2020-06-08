@@ -201,6 +201,7 @@ store:
   unknownDate: unbekannt
   noPickup: Hat noch nie hier abgeholt.
   isJumper: Ist auf der Springerliste.
+  isNotVerified: Ist noch nicht verifiziert.
   removeFromTeam: Aus dem Team entfernen
   makeJumper: Auf die Springerliste
   makeRegularTeamMember: In das Team aufnehmen

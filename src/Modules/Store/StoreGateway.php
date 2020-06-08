@@ -450,10 +450,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		return $this->db->fetchAll('
 				SELECT  fs.`id`,
+						fs.`verified`,
 						fs.`active`,
 						fs.`telefon`,
 						fs.`handy`,
 						fs.photo,
+						fs.quiz_rolle,
 						fs.rolle,
 						CONCAT(fs.name," ",fs.nachname) AS name,
 						name as vorname,
@@ -462,6 +464,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						t.`stat_last_update`,
 						t.`stat_fetchcount`,
 						t.`stat_first_fetch`,
+						t.`stat_add_date`,
+						UNIX_TIMESTAMP(t.`stat_last_fetch`) AS last_fetch,
 						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
 						(10000 * t.`verantwortlich`) + t.`stat_fetchcount` + fs.`verified` - fs.sleep_status AS priority,
 						fs.sleep_status

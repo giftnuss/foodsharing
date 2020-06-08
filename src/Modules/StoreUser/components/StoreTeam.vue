@@ -63,6 +63,9 @@
             <div v-if="data.item.isJumper">
               {{ $i18n('store.isJumper') }}
             </div>
+            <div v-if="!data.item.isVerified">
+              {{ $i18n('store.isNotVerified') }}
+            </div>
           </b-tooltip>
           <a
             :id="`member-${data.item.id}`"
@@ -242,8 +245,8 @@ export default {
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
         isJumper: fs.team_active === 2, // MembershipStatus::JUMPER
         isManager: !!fs.verantwortlich,
-        _rowVariant: fs.verantwortlich ? 'warning' : '',
-        // isVerified: fs.verified === 1, // ?!
+        _rowVariant: fs.verantwortlich ? 'warning' : (fs.verified ? '' : 'primary'),
+        isVerified: fs.verified === 1,
         avatar: fs.photo,
         sleepStatus: fs.sleep_status,
         name: fs.name,
