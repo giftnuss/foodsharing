@@ -98,3 +98,9 @@ services:
         autowire: false
 
     GuzzleHttp\Client:
+
+    Foodsharing\Lib\BigBlueButton:
+        bind:
+            $url: !php/const BBB_DOMAIN
+            $secret: !php/const BBB_SECRET
+            $dialin: !php/const BBB_DIALIN

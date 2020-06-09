@@ -5,6 +5,7 @@
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
 - Added Workgroup Function: Welcome to workgroup !1544 @fs_k
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
+- Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
