@@ -28,18 +28,22 @@
               <Avatar
                 :url="data.item.avatar"
                 :size="50"
-                :class="{'member-pic': true, 'jumper': data.item.isJumper}"
+                :class="['member-pic', data.item.isJumper ? 'jumper' : '']"
                 :sleep-status="data.item.sleepStatus"
               />
             </a>
             <b-badge
-              class="member-fetchcount"
+              :class="['member-fetchcount', data.item.roleClass]"
               tag="span"
               variant="primary"
               :pill="data.item.fetchCount < 100"
             >
               <span v-if="data.item.isJumper">
-                <i class="fas fa-star member-jumper" />
+                <i class="fas fa-fw fa-star member-jumper" />
+              </span>
+              <span v-else-if="!data.item.isVerified">
+                <!-- fa-eye-slash would work better but is too large -->
+                <i class="fas fa-asterisk member-unverified" />
               </span>
               <span v-else>{{ data.item.fetchCount }}</span>
             </b-badge>
@@ -257,14 +261,22 @@ export default {
       }
     },
     foodsaverData (fs) {
+      if (!fs) {
+        return {}
+      }
+      let teamRoleClass = ''
+      if (fs.quiz_rolle >= 2) { teamRoleClass = 'tutor' } // Role::STORE_MANAGER
+      if (fs.team_active === 2) { teamRoleClass = 'jumper' }
+      if (fs.verified < 1) { teamRoleClass = 'unverified' }
       return {
         id: fs.id,
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
         isJumper: fs.team_active === 2, // MembershipStatus::JUMPER
         isManager: !!fs.verantwortlich,
-        _rowVariant: fs.verantwortlich ? 'warning' : (fs.verified ? '' : 'primary'),
+        _rowVariant: fs.verantwortlich ? 'warning' : (fs.verified ? '' : 'dark'),
         isVerified: fs.verified === 1,
         avatar: fs.photo,
+        roleClass: teamRoleClass,
         sleepStatus: fs.sleep_status,
         name: fs.name,
         number: fs.handy || fs.telefon || '',
@@ -288,10 +300,20 @@ export default {
   border-radius: 6px;
   overflow: hidden;
 }
+
+.store-team ::v-deep table tr.table-dark,
+.store-team ::v-deep table tr.table-dark td {
+  background-color: rgba(var(--fs-brown-rgb), 0.15);
+}
 </style>
 
 <style lang="scss" scoped>
-.store-team .team-list {
+.store-team .team-list.bootstrap {
+  --role-tutor: var(--fs-green);
+  --role-foodsaver: var(--fs-brown);
+  --role-other: var(--fs-beige);
+  --role-other-fg: var(--fs-brown);
+
   background: var(--white);
 }
 
@@ -301,12 +323,8 @@ export default {
   vertical-align: middle;
   cursor: default;
 
-  .jumper {
-    opacity: 0.75;
-
-    &.member-pic {
-      opacity: 0.5;
-    }
+  .member-pic.jumper {
+    opacity: 0.5;
   }
 
   .member-ava {
@@ -317,9 +335,19 @@ export default {
       top: -2px;
       left: 36px;
       border: 2px solid var(--white);
-      background-color: var(--fs-brown);
       min-width: 1.5rem;
       opacity: 0.9;
+      background-color: var(--role-foodsaver);
+
+      &.tutor {
+        background-color: var(--role-tutor);
+      }
+
+      &.jumper,
+      &.unverified {
+        background-color: var(--role-other);
+        color: var(--role-other-fg);
+      }
     }
   }
 
