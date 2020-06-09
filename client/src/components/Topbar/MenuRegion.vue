@@ -93,7 +93,7 @@
           class="dropdown-item dropdown-item-sub"
           @click="showConferencePopup(region.id)"
         >
-          <i class="fas fa-chart-bar" />{{ $i18n('menu.entry.conference') }}
+          <i class="fas fa-users" />{{ $i18n('menu.entry.conference') }}
         </a>
         <a
           v-if="region.mayHandleFoodsaverRegionMenu"

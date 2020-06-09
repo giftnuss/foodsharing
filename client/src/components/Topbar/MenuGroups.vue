@@ -71,7 +71,7 @@
             class="dropdown-item"
             @click="showConferencePopup(group.id)"
           >
-            <i class="fas fa-user" /> {{ $i18n('menu.entry.conference') }}
+            <i class="fas fa-users" /> {{ $i18n('menu.entry.conference') }}
           </a>
           <a
             v-if="group.isBot"
