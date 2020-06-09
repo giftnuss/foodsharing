@@ -1,10 +1,5 @@
 <?php
 
-use function Sentry\configureScope;
-use function Sentry\init;
-use Sentry\Severity;
-use Sentry\State\Scope;
-
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
 if (defined('FS_ENV')) {
@@ -33,24 +28,6 @@ locale_set_default('de-DE');
 $revision_filename = __DIR__ . '/revision.inc.php';
 if (file_exists($revision_filename)) {
 	require_once $revision_filename;
-}
-
-/*
- * Configure Sentry for remote error reporting
- */
-
-if (defined('SENTRY_URL')) {
-	init([
-		'dsn' => SENTRY_URL,
-		'release' => SRC_REVISION,
-		'environment' => $FS_ENV,
-		'send_default_pii' => true
-	]);
-
-	configureScope(
-		static function (Scope $scope): void {
-			$scope->setLevel(Severity::warning());
-		});
 }
 
 if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {

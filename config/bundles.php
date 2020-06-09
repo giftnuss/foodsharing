@@ -2,6 +2,7 @@
 
 return [
 	Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
+	Sentry\SentryBundle\SentryBundle::class => ['all' => true],
 	Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
 	JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
 	Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle::class => ['all' => true],

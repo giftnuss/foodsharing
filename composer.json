@@ -61,7 +61,7 @@
     "nelmio/api-doc-bundle": "3.6.1",
     "nesbot/carbon": "2.33.0",
     "sensio/framework-extra-bundle": "5.5.5",
-    "sentry/sdk": "2.1.0",
+    "sentry/sentry-symfony": "^3.5",
     "setasign/fpdi": "2.3.3",
     "swiftmailer/swiftmailer": "6.2.3",
     "symfony/asset": "4.4.8",

@@ -18,6 +18,7 @@
 - Modernize icon handling of store bells + fairteiler bells #907 !1560 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
+- Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
 
 # 2020-06-01 Hotfix
 
