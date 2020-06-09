@@ -13,7 +13,7 @@
     >
       {{ $i18n('store.teamName', { storeTitle }) }}
     </div>
-    <div class="corner-bottom margin-bottom bootstrap">
+    <div class="corner-bottom margin-bottom bootstrap team-list">
       <b-table
         ref="teamlist"
         :items="foodsaver"
@@ -47,7 +47,11 @@
         </template>
 
         <template v-slot:cell(info)="data">
-          <b-tooltip :target="`member-${data.item.id}`">
+          <b-tooltip
+            :target="`member-${data.item.id}`"
+            triggers="hover blur"
+            :variant="`${data.item.isManager ? 'warning' : (data.item.isJumper ? 'secondary' : '')}`"
+          >
             <div v-if="data.item.isManager">
               {{ $i18n('store.isManager', { name: data.item.name || '' }) }}
             </div>
@@ -69,11 +73,10 @@
           </b-tooltip>
           <a
             :id="`member-${data.item.id}`"
-            v-b-tooltip.hover
             href="#memberdetails"
             class="member-info"
             :class="{'jumper': data.item.isJumper}"
-            @click.prevent="data.toggleDetails"
+            @click.prevent="toggleActions(data)"
           >
             <span class="member-name">
               {{ data.item.name }}
@@ -202,6 +205,20 @@ export default {
     }
   },
   methods: {
+    toggleActions (row) {
+      const wasOpen = row.detailsShowing
+      this.foodsaver.forEach((item) => {
+        if (item._showDetails) {
+          // Firefox has some funny ideas about focus handling, so we must all suffer
+          this.$root.$emit('bv::hide::tooltip', 'member-' + item.id)
+          // close previously open action list
+          this.$set(item, '_showDetails', false)
+        }
+      })
+      if (!wasOpen) {
+        row.toggleDetails()
+      }
+    },
     openChat (fsId) {
       chat(fsId)
     },
@@ -274,7 +291,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.store-team {
+.store-team .team-list {
   background: var(--white);
 }
 
