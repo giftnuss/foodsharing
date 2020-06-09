@@ -2,7 +2,7 @@
   tags:
   - shared
   - linux
-  image: registry.gitlab.com/foodsharing-dev/images/ci:3
+  image: registry.gitlab.com/foodsharing-dev/images/ci:4
 
 
 .ssh: &ssh
