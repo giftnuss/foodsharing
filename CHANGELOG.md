@@ -24,6 +24,8 @@
 - Rewrite store team list in Vue !1499 @ChrisOelmueller
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_
+- Do not show unsubscribed email subscriptions for forum threads in notification settings #893 !1570 @chriswalg
+
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects

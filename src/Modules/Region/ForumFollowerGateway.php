@@ -25,7 +25,7 @@ class ForumFollowerGateway extends BaseGateway
 		', [':theme_id' => $thread_id, ':fs_id' => $fs_id, ':infotype_email' => InfoType::EMAIL]);
 	}
 
-	public function getForumThreads(int $fsId): array
+	public function getEmailSubscribedThreadsForUser(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -40,6 +40,8 @@ class ForumFollowerGateway extends BaseGateway
 
 			WHERE
 				tf.foodsaver_id = :fsId
+			AND
+				tf.infotype = 1
 		', [':fsId' => $fsId]);
 	}
 
