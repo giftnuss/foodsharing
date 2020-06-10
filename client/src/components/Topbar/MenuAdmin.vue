@@ -78,13 +78,6 @@ export default {
           label: i18n('menu.manage_mailboxes')
         })
       }
-      if (this.may.editFAQ) {
-        items.push({
-          url: url('faqEdit'),
-          icon: 'fas fa-question',
-          label: i18n('menu.faq')
-        })
-      }
       if (this.may.editContent) {
         items.push({
           url: url('contentEdit'),

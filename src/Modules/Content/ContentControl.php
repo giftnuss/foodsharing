@@ -249,25 +249,6 @@ class ContentControl extends Control
 		}
 	}
 
-	public function faq(): void
-	{
-		$this->pageHelper->addBread('F.A.Q');
-		$this->pageHelper->addTitle('F.A.Q.');
-
-		$cat_ids = [1, 6, 7];
-		if ($this->session->may('fs')) {
-			$cat_ids[] = 2;
-			$cat_ids[] = 4;
-		}
-		if ($this->session->may('bot')) {
-			$cat_ids[] = 5;
-		}
-
-		if ($faq = $this->contentGateway->listFaq($cat_ids)) {
-			$this->pageHelper->addContent($this->view->faq($faq));
-		}
-	}
-
 	public function impressum(): void
 	{
 		if ($cnt = $this->contentGateway->get(8)) {

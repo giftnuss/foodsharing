@@ -67,22 +67,4 @@ class ContentGateway extends BaseGateway
 	{
 		return $this->db->delete('fs_content', ['id' => $id]);
 	}
-
-	public function listFaq($cat_ids): array
-	{
-		$stm = '
-			SELECT 
-				`id`,
-				`name`,
-				`answer`
-
-			FROM 
-				fs_faq
-				
-			WHERE 
-				`faq_kategorie_id` IN(' . implode(',', $cat_ids) . ')
-		';
-
-		return $this->db->fetchAll($stm);
-	}
 }

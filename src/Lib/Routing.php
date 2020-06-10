@@ -15,7 +15,6 @@ class Routing
 		'dashboard' => 'Dashboard',
 		'email' => 'Email',
 		'event' => 'Event',
-		'faq' => 'FAQAdmin',
 		'fairteiler' => 'FoodSharePoint',
 		'foodsaver' => 'Foodsaver',
 		'index' => 'Index',
