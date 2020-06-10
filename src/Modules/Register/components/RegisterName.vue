@@ -15,13 +15,13 @@
         >
           <b-form-radio
             id="genderWoman"
-            :value="1"
+            :value="2"
           >
             {{ $i18n('register.woman') }}
           </b-form-radio>
           <b-form-radio
             id="genderMan"
-            :value="2"
+            :value="1"
           >
             {{ $i18n('register.man') }}
           </b-form-radio>
