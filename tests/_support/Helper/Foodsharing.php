@@ -66,7 +66,6 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_fairteiler_has_wallpost;
 			DELETE FROM fs_report;
 			DELETE FROM fs_basket;
-			DELETE FROM fs_basket_has_wallpost;
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_conversation;
 			DELETE FROM fs_wallpost;
@@ -799,17 +798,6 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['id'] = $id;
 
 		return $params;
-	}
-
-	public function addFoodbasketWallpost($user, $foodbasket, $extra_params = [])
-	{
-		$post = $this->createWallpost($user, $extra_params);
-		$this->haveInDatabase('fs_basket_has_wallpost', [
-			'basket_id' => $foodbasket,
-			'wallpost_id' => $post['id'],
-		]);
-
-		return $post;
 	}
 
 	public function addBells($users, $extra_params = [])

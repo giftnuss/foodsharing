@@ -22,7 +22,6 @@ class ActivityGateway extends BaseGateway
 				fs.photo AS fs_photo,
 				b.id AS basket_id
 			FROM
-				fs_basket_has_wallpost hw,
 				fs_foodsaver fs,
 				fs_wallpost w,
 				fs_basket b
@@ -71,7 +70,6 @@ class ActivityGateway extends BaseGateway
 				fs.photo AS fs_photo,
 				b.id AS basket_id
 			FROM
-				fs_basket_has_wallpost hw,
 				fs_foodsaver fs,
 				fs_wallpost w,
 				fs_basket b,
