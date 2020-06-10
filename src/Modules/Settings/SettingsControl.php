@@ -181,15 +181,14 @@ class SettingsControl extends Control
 	private function handleQuizStatus(array $quiz, int $role): void
 	{
 		$fsId = $this->session->id();
-		$desc = $this->contentGateway->get(12);
 		$quizStatus = $this->quizSessionGateway->getQuizStatus($role, $fsId);
 		switch ($quizStatus['status']) {
 			case QuizStatus::NEVER_TRIED:
-				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				$this->pageHelper->addContent($this->view->quizIndex($quiz));
 				break;
 
 			case QuizStatus::RUNNING:
-				$this->pageHelper->addContent($this->view->quizContinue($quiz, $desc));
+				$this->pageHelper->addContent($this->view->quizContinue($quiz));
 				break;
 
 			case QuizStatus::PASSED:
@@ -198,7 +197,7 @@ class SettingsControl extends Control
 
 			case QuizStatus::FAILED:
 				$failCount = $this->quizSessionGateway->countSessions($fsId, $role, SessionStatus::FAILED);
-				$this->pageHelper->addContent($this->view->quizRetry($quiz, $desc, $failCount, 3));
+				$this->pageHelper->addContent($this->view->quizRetry($quiz, $failCount, 3));
 				break;
 
 			case QuizStatus::PAUSE:
@@ -206,11 +205,11 @@ class SettingsControl extends Control
 					$this->foodsaverGateway->riseRole($fsId, Role::FOODSHARER);
 				}
 				$lastTry = $this->quizSessionGateway->getLastTry($fsId, $role);
-				$this->pageHelper->addContent($this->view->pause($quizStatus['wait'], $desc));
+				$this->pageHelper->addContent($this->view->pause($quizStatus['wait']));
 				break;
 
 			case QuizStatus::PAUSE_ELAPSED:
-				$this->pageHelper->addContent($this->view->quizIndex($quiz, $desc));
+				$this->pageHelper->addContent($this->view->quizIndex($quiz));
 				break;
 
 			default:

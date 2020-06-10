@@ -511,25 +511,18 @@ class SettingsView extends View
 		return $out;
 	}
 
-	public function pause($days_to_wait, $desc)
+	public function pause($days_to_wait)
 	{
 		$out = $this->v_utils->v_input_wrapper('Du hast das Quiz 3x nicht bestanden', 'In ' . $days_to_wait . ' Tagen kannst Du es noch einmal probieren');
-
-		if ($desc) {
-			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
-		}
 
 		$out = $this->v_utils->v_field($out, 'Lernpause', ['class' => 'ui-padding']);
 
 		return $out;
 	}
 
-	public function quizContinue($quiz, $desc)
+	public function quizContinue($quiz)
 	{
 		$out = '';
-		if ($desc) {
-			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
-		}
 
 		$out .= $this->v_utils->v_input_wrapper('Du hast Das Quiz noch nicht beendet', 'Aber kein Problem. Deine Sitzung wurde gespeichert. Du kannst jederzeit die Beantwortung fortführen.');
 
@@ -542,13 +535,9 @@ class SettingsView extends View
 		return $out;
 	}
 
-	public function quizRetry($quiz, $desc, $failed_count, $max_failed_count)
+	public function quizRetry($quiz, $failed_count, $max_failed_count)
 	{
 		$out = $this->v_utils->v_input_wrapper(($failed_count + 1) . '. Versuch', '<p>Du hast das Quiz bereits ' . $failed_count . 'x nicht geschafft, hast aber noch ' . ($max_failed_count - $failed_count) . ' Versuche</p><p>Viel Glück!</p>');
-
-		if ($desc) {
-			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
-		}
 
 		$out .= $quiz['desc'];
 
@@ -620,12 +609,9 @@ class SettingsView extends View
 		return $out;
 	}
 
-	public function quizIndex($quiz, $desc)
+	public function quizIndex($quiz)
 	{
 		$out = '';
-		if ($desc) {
-			$out .= $this->v_utils->v_input_wrapper($desc['title'], $desc['body']);
-		}
 
 		$out .= nl2br($quiz['desc']);
 
