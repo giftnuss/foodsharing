@@ -275,9 +275,7 @@ class ContentControl extends Control
 
 	public function ratgeber(): void
 	{
-		$this->pageHelper->addBread('Ratgeber');
-		$this->pageHelper->addTitle('Ratgeber Lebensmittelsicherheit');
-		$this->pageHelper->addContent($this->view->ratgeber());
+		header('Location: ' . 'https://wiki.foodsharing.de/Ratgeber', true, 301);
 	}
 
 	public function joininfo(): void

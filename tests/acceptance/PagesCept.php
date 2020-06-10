@@ -10,9 +10,6 @@ $I->amOnPage('/essenskoerbe');
 $I->seeCurrentUrlEquals('/essenskoerbe/find'); // it redirects
 $I->see('Essenskörbe');
 
-$I->amOnPage('/ratgeber');
-$I->see('Da Lebensmittel uns am Leben erhalten, sollte man mit ihnen auch respektvoll umgehen');
-
 $I->amOnPage('/karte');
 $I->see('Essenskörbe');
 $I->see('Fairteiler');
