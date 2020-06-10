@@ -19,12 +19,12 @@
         </div>
         <a
           v-if="bell.isCloseable"
-          class="showonhover"
+          class="icon showonhover"
           href="#"
           @click.stop="$emit('remove', bell.id)"
         >
           <i
-            class="fas fa-times"
+            class="icon fas fa-times"
           />
         </a>
         <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
@@ -70,12 +70,20 @@ export default {
 
 <style lang="scss" scoped>
   .list-group-item {
-    padding: 0.4em 0.8em;
+    padding: 0.4em 0.6em;
   }
 
   .icon {
-    display: block;
-    width: 2em;
+    display: grid;
+    height: 100%;
+    min-height: 1.5em;
+    min-width: 1.5em;
+    text-align: center;
+
+    &::before,
+    i.fas::before {
+      grid-row-start: none;
+    }
   }
 
   .icon img {
@@ -87,7 +95,8 @@ export default {
   }
 
   .list-group-item:hover {
-    .showonhover { display: block; }
+    .icon { text-decoration: none; }
+    .showonhover { display: grid; }
     .hideonhover { display: none; }
   }
 
@@ -116,12 +125,12 @@ export default {
     grid-template-columns: 45px 1fr 80px;
 
     .bell-icon {
+      height: 100%;
       grid-row-start: 1;
       grid-row-end: 3;
       align-self: center;
+      justify-self: center;
       font-size: 2em;
-
-      .showonhover { padding-left: 5px; }
     }
 
     .bell-title {
