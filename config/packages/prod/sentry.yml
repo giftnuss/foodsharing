@@ -9,3 +9,4 @@ sentry:
     send_default_pii: true
     excluded_exceptions: #exclude validation errors
       - Symfony\Component\Security\Core\Exception\AccessDeniedException
+      - Symfony\Component\HttpKernel\Exception\HttpException
