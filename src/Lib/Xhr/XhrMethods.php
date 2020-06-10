@@ -1052,7 +1052,7 @@ class XhrMethods
 		$betrieb = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
 		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
-		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'fas fa-shopping-cart', [
+		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'fas fa-user-clock', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid']
 		], [
 			'user' => $this->session->user('name'),
@@ -1329,7 +1329,7 @@ class XhrMethods
 		if ($biebs = $this->storeGateway->getBiebsForStore($data['id'])) {
 			$msg = 'Der Verantwortliche wurde über Deine Anfrage informiert und wird sich bei Dir melden.';
 
-			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-shopping-cart', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),
@@ -1350,7 +1350,7 @@ class XhrMethods
 				$add = ' Es gibt aber keinen Botschafter';
 			}
 
-			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-shopping-cart', [
+			$bellData = Bell::create('store_new_request_title', 'store_new_request', 'fas fa-user-plus', [
 				'href' => '/?page=fsbetrieb&id=' . (int)$data['id']
 			], [
 				'user' => $this->session->user('name'),

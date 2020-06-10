@@ -228,7 +228,7 @@ class StoreControl extends Control
 
 				$foodsaver = $this->foodsaverGateway->getFoodsaversByRegion($g_data['bezirk_id']);
 
-				$bellData = Bell::create('store_new_title', 'store_new', 'fas fa-shopping-cart', [
+				$bellData = Bell::create('store_new_title', 'store_new', 'fas fa-store-alt', [
 					'href' => '/?page=fsbetrieb&id=' . (int)$id
 				], [
 					'user' => $this->session->user('name'),

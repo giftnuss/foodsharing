@@ -279,7 +279,7 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'fas fa-shopping-cart', [
+		$bellData = Bell::create('store_request_accept_title', 'store_request_accept', 'fas fa-user-check', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
@@ -307,7 +307,7 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = Bell::create('store_request_accept_wait_title', 'store_request_accept_wait', 'fas fa-shopping-cart', [
+		$bellData = Bell::create('store_request_accept_wait_title', 'store_request_accept_wait', 'fas fa-user-tag', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
@@ -331,7 +331,7 @@ class StoreModel extends Db
 	{
 		$betrieb = $this->getVal('name', 'betrieb', $storeId);
 
-		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-shopping-cart', [
+		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
 		], [
 			'user' => $this->session->user('name'),
