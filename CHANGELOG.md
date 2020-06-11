@@ -7,6 +7,7 @@
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
 - Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
 - Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
+- Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm  
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter

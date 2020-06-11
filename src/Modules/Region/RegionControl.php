@@ -195,6 +195,7 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
+			$this->flashMessageHelper->error($this->translator->trans('region.not_a_member_error'));
 			$this->routeHelper->go('/?page=dashboard');
 
 			return;
