@@ -194,11 +194,11 @@ store:
   addNewStoresButton: Neuen Betrieb eintragen
   noStores: Es sind noch keine Betriebe eingetragen
   teamName: '{storeTitle}-Team'
-  isManager: '{name} ist verantwortlich für diesen Betrieb.'
   memberSince: 'Im Team seit: {date}'
   jumperSince: 'Springer seit: {date}'
   lastPickup: 'Letzte Abholung: {date}'
   unknownDate: unbekannt
+  isManager: Verantwortlich für diesen Betrieb.
   noPickup: Hat noch nie hier abgeholt.
   isJumper: Ist auf der Springerliste.
   isNotVerified: Ist noch nicht verifiziert.

@@ -12,12 +12,20 @@
       class="head ui-widget-header ui-corner-top"
     >
       {{ $i18n('store.teamName', { storeTitle }) }}
+      <a
+        class="float-right pl-2 pr-1 d-md-none"
+        href="#"
+        @click.prevent="toggleTeamDisplay"
+      >
+        <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
+      </a>
     </div>
     <div class="corner-bottom margin-bottom bootstrap team-list">
       <b-table
         ref="teamlist"
         :items="foodsaver"
         :fields="tableFields"
+        :class="{'d-none': !displayMembers}"
         details-td-class="col-actions"
         primary-key="id"
         thead-class="d-none"
@@ -74,7 +82,7 @@
           <!-- eslint-disable-next-line vue/max-attributes-per-line -->
           <b-tooltip :target="`member-${data.item.id}`" triggers="hover blur">
             <div v-if="data.item.isManager">
-              {{ $i18n('store.isManager', { name: data.item.name || '' }) }}
+              {{ $i18n('store.isManager') }}
             </div>
             <div v-if="data.item.joinDate">
               {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
@@ -117,21 +125,10 @@
         </template>
 
         <template v-slot:cell(mobinfo)="data">
-          <div v-if="data.item.joinDate">
-            {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
-          </div>
-          <div v-if="data.item.fetchCount && data.item.lastPickup">
-            {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
-          </div>
-          <div v-else-if="mayEditStore">
-            {{ $i18n('store.noPickup') }}
-          </div>
-          <div v-if="data.item.isJumper">
-            {{ $i18n('store.isJumper') }}
-          </div>
-          <div v-if="!data.item.isVerified">
-            {{ $i18n('store.isNotVerified') }}
-          </div>
+          <StoreTeamInfotext
+            :member="data.item"
+            :may-edit-store="mayEditStore"
+          />
         </template>
 
         <template v-slot:cell(call)="data">
@@ -146,6 +143,13 @@
         </template>
 
         <template v-slot:row-details="data">
+          <StoreTeamInfotext
+            v-if="wXS"
+            :member="data.item"
+            :may-edit-store="mayEditStore"
+            classes="text-center"
+          />
+
           <div class="member-actions">
             <b-button
               v-if="(wXS || wSM)"
@@ -216,10 +220,13 @@ import { xhrf, chat } from '@/script'
 import Avatar from '@/components/Avatar'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
+import StoreTeamInfotext from './StoreTeamInfotext'
+
 export default {
-  components: { Avatar },
+  components: { Avatar, StoreTeamInfotext },
   mixins: [MediaQueryMixin],
   props: {
+    displayMembers: { type: Boolean, default: true },
     fsId: { type: Number, required: true },
     mayEditStore: { type: Boolean, default: false },
     team: { type: Array, required: true },
@@ -235,14 +242,19 @@ export default {
         { key: 'ava', class: 'col-ava' },
         { key: 'info', class: 'col-info' }
       ]
-      if (this.wXS || this.wSM) {
+      if (this.wSM) {
         fields.push({ key: 'mobinfo', class: 'col-mobinfo' })
+      }
+      if (this.wXS || this.wSM) {
         fields.push({ key: 'call', class: 'col-call' })
       }
       return fields
     }
   },
   methods: {
+    toggleTeamDisplay () {
+      this.displayMembers = !this.displayMembers
+    },
     toggleActions (row) {
       const wasOpen = row.detailsShowing
       this.foodsaver.forEach((item) => {
@@ -343,7 +355,7 @@ export default {
   --fetchcount-bg: var(--fs-beige);
   --fetchcount-fg: var(--fs-brown);
   --fetchcount-border: var(--fs-brown);
-  --role-may-manage-store: #7ad42b; // lighter version of --fs-green
+  --role-may-manage-store: var(--fs-green);
   --role-may-ambassador: var(--warning);
   --role-other: var(--fs-beige);
 
@@ -359,17 +371,25 @@ export default {
 
     tr {
       display: flex;
+      border-bottom: 1px solid var(--border);
 
       &.b-table-details {
         justify-content: center;
       }
 
-      &.table-warning:not(.b-table-has-details) {
-        border-bottom: 2px solid var(--warning);
+      &.table-warning {
+        border-bottom-width: 2px;
+        border-bottom-color: var(--warning);
+        padding-bottom: 1px;
+      }
 
-        td {
-          border-top: 0;
-        }
+      &:last-child,
+      &.b-table-has-details {
+        border-bottom-width: 0;
+      }
+
+      td {
+        border-top: 0;
       }
     }
   }
@@ -446,13 +466,8 @@ export default {
     }
 
     &.col-mobinfo {
-      align-self: center;
       padding: 0 10px;
       text-align: right;
-
-      div {
-        font-size: smaller;
-      }
     }
 
     &.col-call {
