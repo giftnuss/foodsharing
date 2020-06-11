@@ -4,6 +4,8 @@ import dateFnsIsSameYear from 'date-fns/isSameYear'
 import dateFnsLocaleDE from 'date-fns/locale/de'
 import dateFnsFormatDistance from 'date-fns/formatDistance'
 import dateFnsAddDays from 'date-fns/addDays'
+// awesome-phonenumber is used by vue-tel-input and no explicit dep:
+import PhoneNumber from 'awesome-phonenumber'
 
 import { ajreq } from '@/script'
 
@@ -75,8 +77,18 @@ export function callableNumber (number) {
   if (!number) {
     return ''
   }
-  const digits = number.toString().replace(/[^+0-9]/g, '')
-  return (!digits) ? '' : ('tel:' + digits)
+  let digits = number.toString().replace(/[^+0-9]/g, '')
+  if (digits.substring(0, 1) === '0') {
+    // maybe it's 0049 instead of +49?
+    digits = digits.replace(/^00/, '+')
+    // assume German country code if just one 0
+    digits = digits.replace(/^0/, '+' + PhoneNumber.getCountryCodeForRegionCode('DE'))
+  }
+  const phone = new PhoneNumber(digits)
+  if (!phone.isValid()) {
+    return ''
+  }
+  return 'tel:' + digits
 }
 
 /**
