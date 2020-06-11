@@ -202,7 +202,11 @@ store:
   noPickup: Hat noch nie hier abgeholt.
   isJumper: Ist auf der Springerliste.
   isNotVerified: Ist noch nicht verifiziert.
+  fetchCount: 'Hat {count}× hier abgeholt.'
+  mayAmb: Hat das BOT-Quiz bestanden.
+  mayManage: Hat das BV-Quiz bestanden.
   removeFromTeam: Aus dem Team entfernen
+  reallyRemove: 'Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?'
   makeJumper: Auf die Springerliste
   makeRegularTeamMember: In das Team aufnehmen
   particularities: Besonderheiten

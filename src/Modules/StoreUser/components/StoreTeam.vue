@@ -17,45 +17,62 @@
       <b-table
         ref="teamlist"
         :items="foodsaver"
-        :fields="['ava', 'info', `${(wXS || wSM) ? 'mobinfo' : ''}`, `${(wXS || wSM) ? 'call' : ''}`]"
+        :fields="tableFields"
+        details-td-class="col-actions"
         primary-key="id"
         thead-class="d-none"
       >
         <template v-slot:cell(ava)="data">
-          <div class="member-ava">
-            <!-- eslint-disable-next-line vue/max-attributes-per-line -->
-            <a :href="`/profile/${data.item.id}`" tabindex="-1">
-              <Avatar
-                :url="data.item.avatar"
-                :size="50"
-                :class="['member-pic', data.item.isJumper ? 'jumper' : '']"
-                :sleep-status="data.item.sleepStatus"
-              />
-            </a>
-            <b-badge
-              :class="['member-fetchcount', data.item.roleClass]"
-              tag="span"
-              variant="primary"
-              :pill="data.item.fetchCount < 100"
-            >
-              <span v-if="data.item.isJumper">
-                <i class="fas fa-fw fa-star member-jumper" />
-              </span>
-              <span v-else-if="!data.item.isVerified">
-                <!-- fa-eye-slash would work better but is too large -->
-                <i class="fas fa-asterisk member-unverified" />
-              </span>
-              <span v-else>{{ data.item.fetchCount }}</span>
-            </b-badge>
-          </div>
+          <a
+            v-b-tooltip.hover="$i18n('pickup.open_profile')"
+            :href="`/profile/${data.item.id}`"
+          >
+            <Avatar
+              :url="data.item.avatar"
+              :size="50"
+              class="member-pic"
+              :class="{'jumper': data.item.isJumper}"
+              :sleep-status="data.item.sleepStatus"
+            />
+          </a>
+
+          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+          <b-tooltip :target="`fetchcount-${data.item.id}`" triggers="hover blur">
+            <div>
+              {{ $i18n('store.fetchCount', {'count': data.item.fetchCount}) }}
+            </div>
+            <div v-if="data.item.mayAmb">
+              {{ $i18n('store.mayAmb') }}
+            </div>
+            <div v-if="data.item.mayManage">
+              {{ $i18n('store.mayManage') }}
+            </div>
+            <div v-if="data.item.isJumper">
+              {{ $i18n('store.isJumper') }}
+            </div>
+            <div v-if="!data.item.isVerified">
+              {{ $i18n('store.isNotVerified') }}
+            </div>
+          </b-tooltip>
+          <b-badge
+            :id="`fetchcount-${data.item.id}`"
+            class="member-fetchcount"
+            :class="{'maysm': data.item.mayManage, 'waiting': data.item.isWaiting}"
+            tag="span"
+          >
+            <span v-if="data.item.isJumper">
+              <i class="fas fa-fw fa-star member-jumper" />
+            </span>
+            <span v-else-if="!data.item.isVerified">
+              <i class="fas fa-fw fa-eye-slash member-unverified" />
+            </span>
+            <span v-else>{{ data.item.fetchCount }}</span>
+          </b-badge>
         </template>
 
         <template v-slot:cell(info)="data">
-          <b-tooltip
-            :target="`member-${data.item.id}`"
-            triggers="hover blur"
-            :variant="`${data.item.isManager ? 'warning' : (data.item.isJumper ? 'secondary' : '')}`"
-          >
+          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+          <b-tooltip :target="`member-${data.item.id}`" triggers="hover blur">
             <div v-if="data.item.isManager">
               {{ $i18n('store.isManager', { name: data.item.name || '' }) }}
             </div>
@@ -68,12 +85,14 @@
             <div v-else>
               {{ $i18n('store.noPickup') }}
             </div>
+            <!-- TODO figure out if we want to duplicate this information here:
             <div v-if="data.item.isJumper">
               {{ $i18n('store.isJumper') }}
             </div>
             <div v-if="!data.item.isVerified">
               {{ $i18n('store.isNotVerified') }}
             </div>
+            -->
           </b-tooltip>
           <a
             :id="`member-${data.item.id}`"
@@ -98,16 +117,20 @@
         </template>
 
         <template v-slot:cell(mobinfo)="data">
-          <div class="member-teaminfo-mobile">
-            <div v-if="data.item.joinDate">
-              {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
-            </div>
-            <div v-if="data.item.fetchCount && data.item.lastPickup">
-              {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
-            </div>
-            <div v-else-if="mayEditStore">
-              {{ $i18n('store.noPickup') }}
-            </div>
+          <div v-if="data.item.joinDate">
+            {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
+          </div>
+          <div v-if="data.item.fetchCount && data.item.lastPickup">
+            {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
+          </div>
+          <div v-else-if="mayEditStore">
+            {{ $i18n('store.noPickup') }}
+          </div>
+          <div v-if="data.item.isJumper">
+            {{ $i18n('store.isJumper') }}
+          </div>
+          <div v-if="!data.item.isVerified">
+            {{ $i18n('store.isNotVerified') }}
           </div>
         </template>
 
@@ -118,18 +141,18 @@
             class="member-call"
             :href="data.item.callable"
           >
-            <i class="fas fa-phone" />
+            <i class="fas fa-fw fa-phone" />
           </b-button>
         </template>
 
         <template v-slot:row-details="data">
           <div class="member-actions">
             <b-button
+              v-if="(wXS || wSM)"
               size="sm"
               :href="`/profile/${data.item.id}`"
-              :block="!(wXS || wSM)"
             >
-              <i class="fas fa-user" />
+              <i class="fas fa-fw fa-user" />
               {{ $i18n('pickup.open_profile') }}
             </b-button>
 
@@ -140,7 +163,7 @@
               :block="!(wXS || wSM)"
               @click="openChat(data.item.id)"
             >
-              <i class="fas fa-comment" />
+              <i class="fas fa-fw fa-comment" />
               {{ $i18n('chat.open_chat') }}
             </b-button>
 
@@ -151,29 +174,29 @@
               :block="!(wXS || wSM)"
               @click="changeMembershipStatus(data.item.id, 'toteam')"
             >
-              <i class="fas fa-clipboard-check" />
+              <i class="fas fa-fw fa-clipboard-check" />
               {{ $i18n('store.makeRegularTeamMember') }}
             </b-button>
 
             <b-button
-              v-if="mayEditStore && data.item.isActive"
+              v-if="mayEditStore && data.item.isActive && !data.item.isManager"
               size="sm"
               variant="primary"
               :block="!(wXS || wSM)"
               @click="changeMembershipStatus(data.item.id, 'tojumper')"
             >
-              <i class="fas fa-mug-hot" />
+              <i class="fas fa-fw fa-mug-hot" />
               {{ $i18n('store.makeJumper') }}
             </b-button>
 
             <b-button
-              v-if="mayEditStore"
+              v-if="mayEditStore && !data.item.isManager"
               size="sm"
               variant="danger"
               :block="!(wXS || wSM)"
-              @click="removeFromTeam(data.item.id)"
+              @click="removeFromTeam(data.item)"
             >
-              <i class="fas fa-user-times" />
+              <i class="fas fa-fw fa-user-times" />
               {{ $i18n('store.removeFromTeam') }}
             </b-button>
           </div>
@@ -206,6 +229,17 @@ export default {
   computed: {
     foodsaver () {
       return _.map(this.team, this.foodsaverData)
+    },
+    tableFields () {
+      const fields = [
+        { key: 'ava', class: 'col-ava' },
+        { key: 'info', class: 'col-info' }
+      ]
+      if (this.wXS || this.wSM) {
+        fields.push({ key: 'mobinfo', class: 'col-mobinfo' })
+        fields.push({ key: 'call', class: 'col-call' })
+      }
+      return fields
     }
   },
   methods: {
@@ -244,17 +278,21 @@ export default {
       }
     },
     // FIXME convert this XHR-reliant method to REST + StoreTransactions after !1475 is merged
-    removeFromTeam (fsId) {
-      if (!confirm(i18n('are_you_sure'))) {
+    removeFromTeam (fs) {
+      if (!fs || !fs.id) {
         return
       }
+      if (!confirm(i18n('store.reallyRemove', { name: fs.name }))) {
+        return
+      }
+      const fsId = fs.id
       const fData = {
         bid: this.storeId,
         fsid: fsId,
         action: 'delete'
       }
       xhrf('bcontext', fData)
-      const index = this.team.findIndex(fs => fs.id === fsId)
+      const index = this.team.findIndex(member => member.id === fsId)
       if (index >= 0) {
         this.foodsaver.splice(index, 1)
         this.$refs.teamlist.refresh()
@@ -264,19 +302,17 @@ export default {
       if (!fs) {
         return {}
       }
-      let teamRoleClass = ''
-      if (fs.quiz_rolle >= 2) { teamRoleClass = 'tutor' } // Role::STORE_MANAGER
-      if (fs.team_active === 2) { teamRoleClass = 'jumper' }
-      if (fs.verified < 1) { teamRoleClass = 'unverified' }
       return {
         id: fs.id,
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
         isJumper: fs.team_active === 2, // MembershipStatus::JUMPER
         isManager: !!fs.verantwortlich,
-        _rowVariant: fs.verantwortlich ? 'warning' : (fs.verified ? '' : 'dark'),
+        _rowVariant: fs.verantwortlich ? 'warning' : '',
         isVerified: fs.verified === 1,
+        mayManage: fs.quiz_rolle >= 2, // Role::STORE_MANAGER
+        // mayAmb: fs.quiz_rolle >= 3, // Role::AMBASSADOR
         avatar: fs.photo,
-        roleClass: teamRoleClass,
+        isWaiting: fs.team_active === 2 || fs.verified < 1, // MembershipStatus::JUMPER or unverified
         sleepStatus: fs.sleep_status,
         name: fs.name,
         number: fs.handy || fs.telefon || '',
@@ -294,112 +330,153 @@ export default {
 <style lang="scss" scoped>
 // separate because of loader issues with deep selectors in scoped + nested SCSS
 // (see https://github.com/vuejs/vue-loader/issues/913 for a discussion)
-.store-team .member-ava .member-pic ::v-deep img {
+.store-team .col-ava .member-pic ::v-deep img {
   width: 50px;
   height: 50px;
   border-radius: 6px;
   overflow: hidden;
 }
-
-.store-team ::v-deep table tr.table-dark,
-.store-team ::v-deep table tr.table-dark td {
-  background-color: rgba(var(--fs-brown-rgb), 0.15);
-}
 </style>
 
 <style lang="scss" scoped>
 .store-team .team-list.bootstrap {
-  --role-tutor: var(--fs-green);
-  --role-foodsaver: var(--fs-brown);
+  --fetchcount-bg: var(--fs-beige);
+  --fetchcount-fg: var(--fs-brown);
+  --fetchcount-border: var(--fs-brown);
+  --role-may-manage-store: #7ad42b; // lighter version of --fs-green
+  --role-may-ambassador: var(--warning);
   --role-other: var(--fs-beige);
-  --role-other-fg: var(--fs-brown);
 
   background: var(--white);
 }
 
-.store-team ::v-deep table tr td {
-  padding: 2px;
-  border-top-color: var(--border);
-  vertical-align: middle;
-  cursor: default;
+.store-team ::v-deep table {
+  display: flex;
+  flex-direction: row;
 
-  .member-pic.jumper {
-    opacity: 0.5;
-  }
+  thead, tbody {
+    width: 100%;
 
-  .member-ava {
-    position: relative;
+    tr {
+      display: flex;
 
-    .member-fetchcount {
-      position: absolute;
-      top: -2px;
-      left: 36px;
-      border: 2px solid var(--white);
-      min-width: 1.5rem;
-      opacity: 0.9;
-      background-color: var(--role-foodsaver);
-
-      &.tutor {
-        background-color: var(--role-tutor);
+      &.b-table-details {
+        justify-content: center;
       }
 
-      &.jumper,
-      &.unverified {
-        background-color: var(--role-other);
-        color: var(--role-other-fg);
+      &.table-warning:not(.b-table-has-details) {
+        border-bottom: 2px solid var(--warning);
+
+        td {
+          border-top: 0;
+        }
       }
     }
   }
 
-  .member-info {
-    display: flex;
-    min-height: 50px;
-    padding-left: 9px;
-    flex-direction: column;
-    justify-content: center;
-    font-size: smaller;
-    color: var(--dark);
+  tr td {
+    padding: 3px;
+    border-top-color: var(--border);
+    vertical-align: middle;
+    cursor: default;
+    display: inline-block;
 
-    &:hover, &:focus {
-      text-decoration: none;
-      outline-color: var(--fs-brown);
+    &.col-actions {
+      padding: 0;
     }
-  }
 
-  .member-name {
-    padding-left: 1px;
-    min-width: 0;
-    word-break: break-word;
-    font-weight: bolder;
-  }
+    &.col-ava {
+      position: relative;
+      align-self: center;
 
-  .member-teaminfo-mobile {
-    align-self: center;
-    padding: 0 10px;
-    text-align: right;
+      a {
+        display: inline-block;
+      }
 
-    &, div {
-      font-size: smaller;
+      .member-pic.jumper {
+        opacity: 0.5;
+      }
+
+      .member-fetchcount {
+        position: absolute;
+        top: 0;
+        right: -10px;
+        border: 2px solid var(--fetchcount-border);
+        min-width: 1.5rem;
+        opacity: 0.9;
+        background-color: var(--fetchcount-bg);
+        color: var(--fetchcount-fg);
+
+        &.maysm {
+          border-color: var(--role-may-manage-store);
+        }
+        // &.mayamb {
+        //   border-color: var(--role-may-ambassador);
+        // }
+        &.waiting {
+          border-color: var(--role-other);
+        }
+      }
     }
-  }
 
-  .member-call {
-    padding: 10px;
-    align-self: center;
-    color: var(--fs-green);
+    &.col-info {
+      flex-grow: 1;
 
-    &:hover {
-      background-color: var(--fs-green);
-      color: var(--white);
+      .member-info {
+        display: flex;
+        min-height: 50px;
+        padding-left: 10px;
+        flex-direction: column;
+        justify-content: center;
+        font-size: smaller;
+        color: var(--dark);
+
+        &:hover, &:focus {
+          text-decoration: none;
+          outline-color: var(--fs-brown);
+        }
+      }
+
+      .member-name {
+        padding-left: 1px;
+        min-width: 0;
+        word-break: break-word;
+        font-weight: bolder;
+      }
     }
-    &:focus {
-      outline: 2px solid var(--fs-green);
-    }
-  }
 
-  .member-actions {
-    .btn {
-      margin-bottom: 5px;
+    &.col-mobinfo {
+      align-self: center;
+      padding: 0 10px;
+      text-align: right;
+
+      div {
+        font-size: smaller;
+      }
+    }
+
+    &.col-call {
+      .member-call {
+        padding: 10px;
+        align-self: center;
+        color: var(--fs-green);
+
+        &:hover {
+          background-color: var(--fs-green);
+          color: var(--white);
+        }
+        &:focus {
+          outline: 2px solid var(--fs-green);
+        }
+      }
+    }
+
+    .member-actions {
+      padding: 5px 0;
+
+      .btn {
+        margin-bottom: 5px;
+      }
     }
   }
 }
