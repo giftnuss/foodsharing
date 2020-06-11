@@ -193,7 +193,7 @@ class UploadsRestController extends AbstractFOSRestController
 
 		// image? check whether its valid
 		if ((strpos($mimeType, 'image/') === 0) && !$this->uploadsService->isValidImage($tempfile)) {
-				unlink($tempfile);
+			unlink($tempfile);
 			throw new HttpException(400, 'invalid image provided');
 		}
 
