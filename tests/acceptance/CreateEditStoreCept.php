@@ -145,11 +145,11 @@ $I->assertEquals($jumperIds, $jumpers);
 // remove a member from the team entirely
 $I->click($foodsaverF['name'] . ' ' . $foodsaverF['nachname'], '.store-team');
 $I->click('Aus dem Team entfernen', '.member-actions');
-$I->seeInPopup('Bist Du sicher?');
+$I->seeInPopup('aus diesem Betriebs-Team entfernen?');
 $I->cancelPopup();
 // confirm alert this time
 $I->click('Aus dem Team entfernen', '.member-actions');
-$I->seeInPopup('Bist Du sicher?');
+$I->seeInPopup('aus diesem Betriebs-Team entfernen?');
 $I->acceptPopup();
 $I->dontSee($foodsaverF['name'] . ' ' . $foodsaverF['nachname'], '.store-team');
 $I->wait(2); // should become $I->waitForActiveAPICalls(); after RESTification
