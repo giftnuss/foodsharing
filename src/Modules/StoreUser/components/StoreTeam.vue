@@ -121,6 +121,12 @@
             >
               {{ data.item.phone }}
             </span>
+            <span
+              v-if="data.item.fetchCount && data.item.lastPickup"
+              class="text-muted"
+            >
+              {{ $i18n('store.lastPickupShort', { date: $dateDistanceInWords(data.item.lastPickup) }) }}
+            </span>
           </a>
         </template>
 
@@ -133,10 +139,10 @@
 
         <template v-slot:cell(call)="data">
           <b-button
-            v-if="data.item.callable"
             variant="link"
             class="member-call"
             :href="data.item.callable"
+            :disabled="!data.item.callable"
           >
             <i class="fas fa-fw fa-phone" />
           </b-button>
@@ -482,6 +488,9 @@ export default {
         }
         &:focus {
           outline: 2px solid var(--fs-green);
+        }
+        &:disabled {
+          color: var(--fs-beige);
         }
       }
     }
