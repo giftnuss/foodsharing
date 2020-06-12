@@ -421,6 +421,8 @@ index:
 
 profile:
   title: Profil
+  warning: Warnung
+  mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing Mails und Kommunikation gesperrt. Durch das ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
 
 search:
   title: Suche

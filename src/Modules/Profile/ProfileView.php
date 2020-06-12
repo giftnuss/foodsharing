@@ -59,6 +59,15 @@ class ProfileView extends View
 		array $fetchDates = []
 	): void {
 		$page = new vPage($this->foodsaver['name'], $this->infos());
+
+		if ($this->profilePermissions->maySeeBounceWarning($this->foodsaver['id'])) {
+			if ($this->foodsaver['emailIsBouncing']) {
+				$warningMessage = '<h1>' . $this->translator->trans('profile.mailBounceWarning', ['{email}' => $this->foodsaver['email']]) . '</h1>';
+				$warningContainer = '<div>' . $this->v_utils->v_info($warningMessage, false, false) . '</div>';
+				$page->addSection($warningContainer, $this->translator->trans('profile.warning'));
+			}
+		}
+
 		$page->addSection($wallPosts, 'Status-Updates von ' . $this->foodsaver['name']);
 
 		if ($this->session->id() != $this->foodsaver['id']) {
@@ -78,6 +87,7 @@ class ProfileView extends View
 		if ($profileVisitorMayAdminThisFoodsharer && $userCompanies) { // AMB functionality
 			$page->addSectionLeft($this->sideInfosCompanies($userCompanies), 'Betriebe (' . count($userCompanies) . ')');
 		}
+
 		$page->render();
 	}
 
