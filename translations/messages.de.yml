@@ -280,7 +280,7 @@ forum:
 chat:
   open_chat: Nachricht schreiben
   notification_unnamed_conversation: '{foodsaver} hat dir geschrieben.'
-  notification_named_conversation: '{foodsaver} hat dir in {conversation} geschrieben.'
+  notification_named_conversation: '{foodsaver} hat in {conversation} geschrieben.'
   error_loading_messages: Das Nachladen von Nachrichten ist fehlgeschlagen.
   error_sending_message: Das Senden der Nachricht ist fehlgeschlagen.
   empty_message: Du musst erst eine Nachricht eingeben.
