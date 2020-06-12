@@ -49,4 +49,9 @@ class ProfilePermissions
 	{
 		return $this->session->may('orga');
 	}
+
+	public function maySeeBounceWarning(int $userId): bool
+	{
+		return $this->session->id() == $userId || $this->session->may('orga');
+	}
 }
