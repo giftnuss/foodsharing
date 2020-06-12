@@ -70,6 +70,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->seed();
 
 		$this->output->writeln('All done!');
+
+		return 0;
 	}
 
 	protected function getRandomIDOfArray(array $value, $number = 1)

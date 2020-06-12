@@ -5,7 +5,7 @@
         </div>
         <div class="welcome_quick_link">
             <ul>
-                <li>{{ 'terminology.n_foodsaver'|transchoice(region.stat.num_fs) }}, {{ 'terminology.n_sleeping'|transchoice(region.stat.num_sleeping) }}, {{ 'terminology.n_ambassadors'|transchoice(region.stat.num_ambassadors) }}, {{ 'terminology.n_stores'|transchoice(region.stat.num_stores) }}, {{ 'terminology.n_cooperating_stores'|transchoice(region.stat.num_cooperations) }}</li>
+                <li>{{ 'terminology.n_foodsaver'|trans({'%count%': region.stat.num_fs}) }}, {{ 'terminology.n_sleeping'|trans({'%count%': region.stat.num_sleeping}) }}, {{ 'terminology.n_ambassadors'|trans({'%count%': region.stat.num_ambassadors}) }}, {{ 'terminology.n_stores'|trans({'%count%': region.stat.num_stores}) }}, {{ 'terminology.n_cooperating_stores'|trans({'%count%': region.stat.num_cooperations}) }}</li>
             </ul>
             <div class="clear"></div>
         </div>
@@ -16,7 +16,7 @@
     <div class="user_display_name" style="float:right;margin:5px 10px 0 0;">
         {{ 'statistics.kg_food_saved'|trans({'%count%': region.stat.pickup_weight_kg}) }}
         <br />
-        <span style="font-size:13px;line-height:25px;font-weight:normal;">{{ 'statistics.num_fetches'|transchoice(region.stat.num_pickups) }}</span>
+        <span style="font-size:13px;line-height:25px;font-weight:normal;">{{ 'statistics.num_fetches'|trans({'%count%': region.stat.num_pickups}) }}</span>
     </div>
 
     <div class="clear"></div>

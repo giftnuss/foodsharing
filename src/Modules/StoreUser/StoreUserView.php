@@ -13,7 +13,7 @@ use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
 use Foodsharing\Services\ImageService;
 use Foodsharing\Services\SanitizerService;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreUserView extends View
 {

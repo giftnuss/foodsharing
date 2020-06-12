@@ -23,8 +23,8 @@
                                 <img src="{{ leader.image }}" alt="{{ leader.name }}"/>
                             </a>
                         {% endfor %}
-                        <div><strong>{{ 'group.admin_count'|transchoice(group.leaders | length) }}</strong></div>
-                        <div>{{ 'group.member_count'|transchoice(group.members | length) }}</div>
+                        <div><strong>{{ 'group.admin_count'|trans({'%count%': group.leaders | length}) }}</strong></div>
+                        <div>{{ 'group.member_count'|trans({'%count%': group.members | length}) }}</div>
                     </div>
 
                     {% if group.image %}

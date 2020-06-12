@@ -11,7 +11,7 @@
     {% else %}
         {% include 'partials/topbar.twig' with {
             'title': 'terminology.group'|trans ~ ' - ' ~ region.name,
-            'subtitle': 'group.member_count'|transchoice(region.stat.num_fs),
+            'subtitle': 'group.member_count'|trans({'%count%': region.stat.num_fs}),
             'img': '/img/groups.png',
         } %}
     {% endif %}

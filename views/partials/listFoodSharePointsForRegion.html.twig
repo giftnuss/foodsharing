@@ -1,4 +1,4 @@
-{% embed 'components/field.twig' with {'title': 'food_share_point.n_in_region'|transchoice(food_share_point|length, {'%name%': region.name})} %}
+{% embed 'components/field.twig' with {'title': 'food_share_point.n_in_region'|trans({'%count%': food_share_point|length, '%name%': region.name})} %}
     {% block content %}
         <ul class="linklist food-share-point-list">
             {% for ft in food_share_point %}
