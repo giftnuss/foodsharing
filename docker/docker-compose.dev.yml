@@ -179,17 +179,7 @@ services:
       - influxdb:/var/lib/influxdb:cached
       - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "127.0.0.1:4000:3000"
-    volumes:
-      - grafana:/var/lib/grafana:cached
-
-
-
 volumes:
   client-node-modules:
   chat-node-modules:
   influxdb:
-  grafana:
