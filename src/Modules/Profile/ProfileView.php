@@ -712,6 +712,7 @@ class ProfileView extends View
 						$typeOfChange = $this->translationHelper->s('verified');
 						break;
 					default:
+						$class = '';
 						break;
 				}
 				$out .= '<li class="title"><span class="' . $class . '">' . $typeOfChange . '</span> am ' . $this->timeHelper->niceDate(

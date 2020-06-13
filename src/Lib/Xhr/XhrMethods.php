@@ -817,7 +817,7 @@ class XhrMethods
 				sleep(2);
 			}
 
-			return json_encode(['left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . $fs['email'] . ')']);
+			return json_encode(['left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . (isset($fs['email']) ? $fs['email'] : 'Unbekannt') . ')']);
 		}
 
 		return 0;
@@ -847,13 +847,12 @@ class XhrMethods
 						$image = new fImage('./tmp/' . $file);
 						$image->resize(550, 0);
 						$image->saveChanges();
+						$func = 'parent.fotoupload(\'' . $file . '\',\'' . $id . '\');';
 					} catch (Exception $e) {
-						$func = 'parent.pic_error(\'Deine Datei schein nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild\',\'' . $id . '\');';
+						$func = 'parent.pic_error(\'Deine Datei scheint nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild\',\'' . $id . '\');';
 					}
-
-					$func = 'parent.fotoupload(\'' . $file . '\',\'' . $id . '\');';
 				} else {
-					$func = 'parent.pic_error(\'Deine Datei schein nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild\',\'' . $id . '\');';
+					$func = 'parent.pic_error(\'Deine Datei scheint nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild\',\'' . $id . '\');';
 				}
 			}
 		} elseif (isset($_POST['action']) && $_POST['action'] == 'crop') {

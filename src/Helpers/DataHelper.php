@@ -12,11 +12,7 @@ class DataHelper
 
 	public function getPostData(): array
 	{
-		if (isset($_POST)) {
-			return $_POST;
-		}
-
-		return [];
+		return $_POST;
 	}
 
 	public function getValue($id)

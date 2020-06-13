@@ -184,28 +184,28 @@ class WorkGroupControl extends Control
 		if ($group = $this->workGroupGateway->getGroup($groupId)) {
 			if ($group['type'] != Type::WORKING_GROUP) {
 				$this->routeHelper->go('/?page=dashboard');
-			}
-			if (!$this->mayEdit($group)) {
+			} elseif (!$this->mayEdit($group)) {
 				$this->routeHelper->go('/?page=dashboard');
-			}
-
-			$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
-			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
-			$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
-			$form->handleRequest($request);
-			if ($form->isSubmitted()) {
-				if ($form->isValid()) {
-					$data = $editWorkGroupRequest->toGroup();
-					$this->workGroupGateway->updateGroup($group['id'], $data);
-					$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
-					$this->flashMessageHelper->info('Änderungen gespeichert!');
-					$this->routeHelper->goSelf();
+			} else {
+				$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+				$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
+				$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
+				$form->handleRequest($request);
+				if ($form->isSubmitted()) {
+					if ($form->isValid()) {
+						$data = $editWorkGroupRequest->toGroup();
+						$this->workGroupGateway->updateGroup($group['id'], $data);
+						$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
+						$this->flashMessageHelper->info('Änderungen gespeichert!');
+						$this->routeHelper->goSelf();
+					}
 				}
+				$response->setContent($this->render('pages/WorkGroup/edit.twig',
+					['nav' => $this->getSideMenuData(), 'group' => $group, 'form' => $form->createView()]
+				));
 			}
+		} else {
+			$this->routeHelper->go('/?page=groups');
 		}
-
-		$response->setContent($this->render('pages/WorkGroup/edit.twig',
-			['nav' => $this->getSideMenuData(), 'group' => $group, 'form' => $form->createView()]
-		));
 	}
 }

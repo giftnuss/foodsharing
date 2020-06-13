@@ -849,7 +849,14 @@ class QuizXhr extends Control
 			}
 		}
 
-		++$quizIndex;
+		/* Fix possible use of undefined variable - I am unable to see through the logic above to see what this actually should do, this check ensures the behaviour it had
+		when the undefined variable is accessed here */
+		if (isset($quizIndex)) {
+			++$quizIndex;
+		} else {
+			/* Incrementing an undefined variable sets it to 1 on PHP 7.4 */
+			$quizIndex = 1;
+		}
 		$this->session->set('quiz-index', $quizIndex);
 
 		return [
@@ -866,8 +873,8 @@ class QuizXhr extends Control
 
 		if ($quiz = $this->quizGateway->getQuiz($this->session->get('quiz-id'))) {
 			if ($questions = $this->session->get('quiz-questions')) {
+				$explains = [];
 				if ($rightQuestions = $this->quizGateway->getRightQuestions($this->session->get('quiz-id'))) {
-					$explains = [];
 					$failurePoints = 0;
 					$question_number = 0;
 					foreach ($questions as $q_key => $q) {
@@ -885,14 +892,13 @@ class QuizXhr extends Control
 							$explains[$q['id']]['userfp'] = round($valid['fp'], 2);
 						}
 					}
+					$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $failurePoints, $quiz['maxfp']);
+
+					return [
+						'status' => 1,
+						'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)$this->session->get('quiz-session') . '");'
+					];
 				}
-
-				$this->quizSessionGateway->finishQuizSession($this->session->get('quiz-session'), $questions, $explains, $failurePoints, $quiz['maxfp']);
-
-				return [
-					'status' => 1,
-					'script' => 'goTo("/?page=settings&sub=quizsession&sid=' . (int)$this->session->get('quiz-session') . '");'
-				];
 			}
 		}
 	}

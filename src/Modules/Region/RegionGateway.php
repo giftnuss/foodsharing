@@ -354,16 +354,17 @@ class RegionGateway extends BaseGateway
 	{
 		if (isset($data['botschafter']) && is_array($data['botschafter'])) {
 			$this->db->delete('fs_botschafter', ['bezirk_id' => $regionId]);
-			$master = 0;
-			if (isset($data['master'])) {
-				$master = (int)$data['master'];
-			}
 			foreach ($data['botschafter'] as $foodsaver_id) {
 				$this->db->insert('fs_botschafter', [
 					'bezirk_id' => $regionId,
 					'foodsaver_id' => $foodsaver_id
 				]);
 			}
+		}
+
+		$master = 0;
+		if (isset($data['master'])) {
+			$master = (int)$data['master'];
 		}
 
 		$this->db->beginTransaction();

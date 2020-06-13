@@ -35,7 +35,7 @@ class FoodSharePointPermissions
 
 	public function mayEdit(int $regionId, array $follower): bool
 	{
-		return (isset($regionId) && $this->session->isAdminFor($regionId)) ||
+		return ($this->session->isAdminFor($regionId)) ||
 			$this->session->isOrgaTeam() ||
 			(
 				isset($follower['all'][$this->session->id()]) &&

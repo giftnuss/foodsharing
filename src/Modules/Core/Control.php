@@ -368,12 +368,12 @@ abstract class Control
 
 	public function submitted(): bool
 	{
-		return isset($_POST) && !empty($_POST);
+		return !empty($_POST);
 	}
 
 	public function isSubmitted($form = false): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
+		if (!empty($_POST)) {
 			return $form === false || $_POST['submitted'] == $form;
 		}
 
