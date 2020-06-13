@@ -670,7 +670,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'foodsaver_id' => $user,
 			'status' => 1,
 			'time' => $this->faker->dateTime($max = 'now'),
-			'until' => $this->faker->dateTimeBetween('now', '+14 days'),
+			'until' => $this->faker->dateTimeBetween('+5m', '+14 days'),
 			'fetchtime' => null,
 			'description' => $this->faker->realText(200),
 			'picture' => null,
