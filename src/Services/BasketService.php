@@ -27,8 +27,8 @@ class BasketService
 	 * @param int $weight weight in kg
 	 * @param int $lifetime lifetime in days
 	 */
-	public function addBasket(string $description, $photo, $contactTypes, $tel, $handy,
-			int $weight, float $lat, float $lon, int $lifetime): array
+	public function addBasket(string $description, string $photo, ?array $contactTypes, ?string $tel, ?string $handy,
+			?int $weight, ?float $lat, ?float $lon, ?int $lifetime): array
 	{
 		// parse contact types and phone numbers
 		$contactString = '1';
