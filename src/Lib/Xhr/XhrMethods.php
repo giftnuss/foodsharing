@@ -66,11 +66,6 @@ class XhrMethods
 	private $regionPermissions;
 	private $notificationService;
 
-	/**
-	 * XhrMethods constructor.
-	 *
-	 * @param $model
-	 */
 	public function __construct(
 		Mem $mem,
 		Session $session,

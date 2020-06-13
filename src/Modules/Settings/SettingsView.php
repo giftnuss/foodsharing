@@ -490,7 +490,7 @@ class SettingsView extends View
 			$this->latLonPicker('LatLng', $latLonOptions),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
-			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8]),
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (int)date('Y') - 120, 'yearRangeTo' => (int)date('Y') - 8]),
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_intern', ['desc' => $this->translationHelper->s('profile_description_text_display_info')]),

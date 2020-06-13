@@ -143,7 +143,7 @@ class Session
 		return $user[$index];
 	}
 
-	public function id()
+	public function id(): ?int
 	{
 		if (!$this->initialized) {
 			return null;
@@ -214,8 +214,6 @@ class Session
 
 	/**
 	 * gets a user specific option and will be available after next login.
-	 *
-	 * @param $name
 	 */
 	public function option($key)
 	{

@@ -18,6 +18,7 @@ use Foodsharing\Services\SanitizerService;
 
 class StoreUserControl extends Control
 {
+	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $foodsaverGateway;
@@ -39,7 +40,7 @@ class StoreUserControl extends Control
 		RegionGateway $regionGateway,
 		WeightHelper $weightHelper
 	) {
-		$this->model = $model;
+		$this->storeModel = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
@@ -93,7 +94,7 @@ class StoreUserControl extends Control
 
 				$this->sanitizerService->handleTagSelect('foodsaver');
 				if (!empty($g_data['foodsaver'])) {
-					$addedTeam = $this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
+					$addedTeam = $this->storeModel->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
 				} elseif (empty($g_data['storemanagers'])) {
 					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}

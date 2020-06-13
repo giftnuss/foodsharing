@@ -127,9 +127,6 @@ class RegionGateway extends BaseGateway
 	}
 
 	/**
-	 * @param $foodsaverId
-	 * @param $regionId
-	 *
 	 * @return bool true when the given user is active (an accepted member) in the given region
 	 */
 	public function hasMember(int $foodsaverId, int $regionId): bool
@@ -138,9 +135,6 @@ class RegionGateway extends BaseGateway
 	}
 
 	/**
-	 * @param $foodsaverId
-	 * @param $regionId
-	 *
 	 * @return bool true when the given user is an admin/ambassador for the given group/region
 	 */
 	public function isAdmin(int $foodsaverId, int $regionId): bool

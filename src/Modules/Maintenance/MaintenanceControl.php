@@ -240,23 +240,6 @@ class MaintenanceControl extends ConsoleControl
 		self::success('OK');
 	}
 
-	public function flushcache()
-	{
-		self::info('flush Page Cache...');
-
-		$this->mem->ensureConnected();
-
-		if ($keys = $this->mem->cache->getAllKeys()) {
-			foreach ($keys as $key) {
-				if (substr($key, 0, 3) == 'pc-') {
-					$this->mem->del($key);
-				}
-			}
-		}
-
-		self::success('OK');
-	}
-
 	public function betriebFetchWarning()
 	{
 		if ($foodsaver = $this->maintenanceGateway->getStoreManagersWhichWillBeAlerted()) {

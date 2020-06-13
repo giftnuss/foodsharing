@@ -97,6 +97,9 @@ final class MessageView extends View
 		return '<div id="compose">' . $this->v_utils->v_field($content, $this->translationHelper->s('new_message'), ['class' => 'ui-padding']) . '</div>';
 	}
 
+	/**
+	 * @param Conversation[] $conversations
+	 */
 	public function conversationList(array $conversations, array $profiles): string
 	{
 		$list = '';

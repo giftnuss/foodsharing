@@ -18,10 +18,6 @@ abstract class Control
 {
 	protected $isControl = false;
 	protected $isXhrControl = false;
-	/**
-	 * @var Db
-	 */
-	protected $model;
 	protected $view;
 	private $sub;
 	private $sub_func;

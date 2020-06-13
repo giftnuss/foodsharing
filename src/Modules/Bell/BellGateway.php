@@ -91,12 +91,9 @@ class BellGateway extends BaseGateway
 	/**
 	 * Method returns an array of all bells a user sees.
 	 *
-	 * @param $fsId
-	 * @param string $limit
-	 *
 	 * @return BellForList[]
 	 */
-	public function listBells($fsId, $limit = '')
+	public function listBells(int $fsId, string $limit = '')
 	{
 		if ($limit !== '') {
 			$limit = ' LIMIT 0,' . (int)$limit;

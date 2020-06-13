@@ -38,7 +38,6 @@ class ContentControl extends Control
 			if (!$this->contentPermissions->mayEditContent()) {
 				$this->routeHelper->go('/');
 			}
-			$this->model;
 
 			if ($this->identificationHelper->getAction('neu')) {
 				$this->handle_add();

@@ -49,12 +49,8 @@ class InfluxMetrics
 
 	/**
 	 * adds a point.
-	 *
-	 * @param string measurement name of the measurement
-	 * @param array fields array of field => value for field values
-	 * @param array tags array of tag => value for tag values
 	 */
-	public function addPoint($measurement, $tags = [], $fields = [])
+	public function addPoint(string $measurement, array $tags = [], array $fields = [])
 	{
 		$this->points[] = new Point($measurement,
 			null,

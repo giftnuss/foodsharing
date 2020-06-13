@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WorkGroupControl extends Control
 {
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 	private $imageService;

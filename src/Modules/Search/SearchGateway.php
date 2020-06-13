@@ -40,9 +40,6 @@ class SearchGateway extends BaseGateway
 	/**
 	 * Searches the given term in the database of stores.
 	 *
-	 * @param string $q Query string / search term
-	 * @param mixed $regions optional region ids to limit search to
-	 *
 	 * @return array SearchResult[] Array of stores containing the search term
 	 */
 	public function searchStores(string $q, array $regions = null): array

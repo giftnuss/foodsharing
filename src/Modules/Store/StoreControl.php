@@ -18,6 +18,7 @@ use Foodsharing\Services\StoreService;
 class StoreControl extends Control
 {
 	private $bellGateway;
+	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $storeService;
@@ -40,7 +41,7 @@ class StoreControl extends Control
 		DataHelper $dataHelper,
 		WeightHelper $weightHelper
 	) {
-		$this->model = $model;
+		$this->storeModel = $model;
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
@@ -100,17 +101,10 @@ class StoreControl extends Control
 				$this->routeHelper->go('?page=settings&sub=upgrade/up_bip');
 			}
 		} elseif ($id = $this->identificationHelper->getActionId('delete')) {
-			/*
-			if($this->model->del_betrieb($id))
-			{
-				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_deleted'));
-				$this->routeHelper->goPage();
-			}
-			*/
 		} elseif ($id = $this->identificationHelper->getActionId('edit')) {
 			$this->pageHelper->addBread($this->translationHelper->s('bread_betrieb'), '/?page=betrieb');
 			$this->pageHelper->addBread($this->translationHelper->s('edit_store'));
-			$data = $this->model->getOne_betrieb($id);
+			$data = $this->storeModel->getOne_betrieb($id);
 
 			$this->pageHelper->addTitle($data['name']);
 			$this->pageHelper->addTitle($this->translationHelper->s('edit'));
@@ -120,7 +114,7 @@ class StoreControl extends Control
 
 				$this->dataHelper->setEditData($data);
 
-				$region = $this->model->getValues(['id', 'name'], 'bezirk', $data['bezirk_id']);
+				$region = $this->storeModel->getValues(['id', 'name'], 'bezirk', $data['bezirk_id']);
 				if (isset($_GET['id'])) {
 					$g_data['foodsaver'] = $this->storeGateway->getStoreManagers($_GET['id']);
 				}
@@ -138,7 +132,7 @@ class StoreControl extends Control
 		} else {
 			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=betrieb');
 
-			$stores = $this->model->listBetriebReq($regionId);
+			$stores = $this->storeModel->listBetriebReq($regionId);
 
 			$storesMapped = array_map(function ($store) {
 				return [
@@ -173,7 +167,7 @@ class StoreControl extends Control
 			$g_data['hsnr'] = '';
 			$g_data['str'] = $g_data['anschrift'];
 
-			if ($this->model->update_betrieb($id, $g_data)) {
+			if ($this->storeModel->update_betrieb($id, $g_data)) {
 				$this->storeService->setStoreNameInConversations($id, $g_data['name']);
 				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_edit_success'));
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
@@ -206,7 +200,7 @@ class StoreControl extends Control
 			}
 			$g_data['hsnr'] = '';
 
-			if ($id = $this->model->add_betrieb($g_data)) {
+			if ($id = $this->storeModel->add_betrieb($g_data)) {
 				$this->storeService->setStoreNameInConversations($id, $g_data['name']);
 				$this->storeGateway->add_betrieb_notiz([
 					'foodsaver_id' => $this->session->id(),

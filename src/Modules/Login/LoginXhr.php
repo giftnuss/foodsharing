@@ -115,27 +115,9 @@ class LoginXhr extends Control
 
 	/**
 	 * validates the xhr request.
-	 *
-	 * @param array $data
-	 *
-	 * @return array || string error
 	 */
-	private function joinValidate($data)
+	private function joinValidate(array $data)
 	{
-		/*
-		[name] => Peter
-		[email] => peter@pan.de
-		[pw] => 12345
-		[avatar] => 5427fb55f3a5d.jpg
-		[phone] => 02261889971
-		[lat] => 48.0649838
-		[lon] => 7.885475300000053
-		[str] => Bauerngasse
-		[nr] => 6
-		[plz] => 79211
-		[country] => DE
-		*/
-
 		$check = true;
 
 		$data['name'] = strip_tags($data['name']);

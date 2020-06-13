@@ -1,9 +1,10 @@
 parameters:
-  level: 1
+  level: 2
   paths:
     - src
   excludes_analyse:
     - %currentWorkingDirectory%/src/Lib/Flourish
+    - %currentWorkingDirectory%/src/Dev
   ignoreErrors:
     - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
   bootstrapFiles:

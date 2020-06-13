@@ -14,6 +14,7 @@ use Foodsharing\Services\StoreService;
 
 class StoreXhr extends Control
 {
+	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $storeService;
@@ -27,7 +28,7 @@ class StoreXhr extends Control
 		StoreService $storeService,
 		SanitizerService $sanitizerService
 	) {
-		$this->model = $model;
+		$this->storeModel = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
@@ -252,7 +253,7 @@ class StoreXhr extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+				if ($betriebe = $this->storeModel->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');
@@ -326,7 +327,7 @@ class StoreXhr extends Control
 		if ($status === TeamStatus::Coordinator) {
 			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
-			$this->model->signout($_GET['id'], $this->session->id());
+			$this->storeModel->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->translationHelper->s('no_member'), 'error');

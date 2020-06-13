@@ -528,12 +528,8 @@ class SettingsControl extends Control
 
 	/**
 	 * Creates and saves a new API token for given user.
-	 *
-	 * @param int $fsId Foodsaver ID
-	 *
-	 * @return false in case of error or weak algorithm, generated token otherwise
 	 */
-	private function generate_api_token(int $fsId): string
+	private function generate_api_token(int $fsId): ?string
 	{
 		if ($token = bin2hex(openssl_random_pseudo_bytes(10))) {
 			$this->settingsGateway->saveApiToken($fsId, $token);
@@ -541,6 +537,6 @@ class SettingsControl extends Control
 			return $token;
 		}
 
-		return false;
+		return null;
 	}
 }

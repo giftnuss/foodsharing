@@ -1070,10 +1070,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	/**
 	 * Returns all comments for a given store.
-	 *
-	 * @param $storeId
 	 */
-	private function getBetriebNotiz($storeId): array
+	private function getBetriebNotiz(int $storeId): array
 	{
 		return $this->db->fetchAll('
 			SELECT   `id`,
@@ -1140,9 +1138,9 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	}
 
 	/**
-	 * @param \DateTime $from DateRange start for all slots. Now if empty.
-	 * @param \DateTime $to DateRange for regular slots - future pickup interval if empty
-	 * @param \DateTime $oneTimeSlotTo DateRange for onetime slots to be taken into account
+	 * @param Carbon $from DateRange start for all slots. Now if empty.
+	 * @param Carbon $to DateRange for regular slots - future pickup interval if empty
+	 * @param Carbon $oneTimeSlotTo DateRange for onetime slots to be taken into account
 	 */
 	public function getPickupSlots(int $storeId, ?Carbon $from = null, ?Carbon $to = null, ?Carbon $oneTimeSlotTo = null): array
 	{

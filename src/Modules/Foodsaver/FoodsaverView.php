@@ -128,7 +128,7 @@ class FoodsaverView extends View
 				['required' => true]
 			]),
 
-			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (date('Y') - 111), 'yearRangeTo' => date('Y')])
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => ((int)date('Y') - 111), 'yearRangeTo' => date('Y')])
 		]);
 	}
 

@@ -758,8 +758,6 @@ final class FoodsaverGateway extends BaseGateway
 
 	/**
 	 * set option is an key value store each var is available in the user session.
-	 *
-	 * @param $val
 	 */
 	public function setOption(int $fsId, string $key, $val): int
 	{

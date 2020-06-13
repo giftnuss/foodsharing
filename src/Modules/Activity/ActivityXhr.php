@@ -45,7 +45,7 @@ class ActivityXhr extends Control
 				$options = false;
 			}
 
-			$this->session->setOption('activity-listings', $options, $this->model);
+			$this->session->setOption('activity-listings', $options);
 		}
 
 		$page = $_GET['page'] ?? 0;
@@ -91,11 +91,11 @@ class ActivityXhr extends Control
 				$options = false;
 			}
 
-			$this->session->setOption('activity-listings', $options, $this->model);
+			$this->session->setOption('activity-listings', $options);
 		}
 
 		if (isset($_GET['select_all_options'])) {
-			$this->session->setOption('activity-listings', false, $this->model);
+			$this->session->setOption('activity-listings', false);
 		}
 	}
 

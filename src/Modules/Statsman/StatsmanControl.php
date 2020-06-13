@@ -186,9 +186,6 @@ class StatsmanControl extends ConsoleControl
 		fclose($fp);
 	}
 
-	/**
-	 * @param $fp
-	 */
 	private function writeResultsToFile($fp, array $all_yw, array $data): void
 	{
 		fwrite($fp, 'bezirk,');
