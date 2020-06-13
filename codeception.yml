@@ -16,7 +16,7 @@ extensions:
     commands:
         - Foodsharing\Dev\SeedCommand
 coverage:
-  enabled: true
+  enabled: false
   remote: false
   include:
     - src/*
