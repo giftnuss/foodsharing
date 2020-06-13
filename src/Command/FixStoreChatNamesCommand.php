@@ -36,11 +36,13 @@ class FixStoreChatNamesCommand extends Command
 		$this->setHelp('This command should just be needed as a one-time fix to bring all store conversation names up to date. It can also be used whenever conventions on store chat naming changes.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$stores = $this->storeGateway->getStores();
 		foreach ($stores as $store) {
 			$this->storeService->setStoreNameInConversations($store['id'], $store['name']);
 		}
+
+		return 0;
 	}
 }

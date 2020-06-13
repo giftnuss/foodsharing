@@ -45,7 +45,7 @@ class AnalyzeTranslationsCommand extends Command
 		return $data;
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$map = [];
 		$map = $this->processFile($map, 'lang/DE/de.php', $output);
@@ -60,5 +60,7 @@ class AnalyzeTranslationsCommand extends Command
 		include 'lang/DE/de.php';
 		$yaml = Yaml::dump($g_lang);
 		$output->write($yaml);
+
+		return 0;
 	}
 }

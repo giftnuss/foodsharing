@@ -27,9 +27,11 @@ class ProcessBounceMailsCommand extends Command
 		$this->setDescription('fetches email bounces and stores them in the database');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->bounceProcessing->process();
 		$this->influxMetrics->addPoint('mail_bounce', [], ['cnt' => $this->bounceProcessing->getNumberOfProcessedBounces()]);
+
+		return 0;
 	}
 }

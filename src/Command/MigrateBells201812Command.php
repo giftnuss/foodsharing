@@ -27,7 +27,7 @@ class MigrateBells201812Command extends Command
 		$this->setDescription('Recreates bells that are handled differently since the 2018-12 release');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		/*
 		 * Delete existing store bells: Before this deployment, bells were not stored in the database. So all bells with
@@ -45,5 +45,7 @@ class MigrateBells201812Command extends Command
 		foreach ($storeIds as $storeId) {
 			$this->storeGateway->updateBellNotificationForStoreManagers($storeId);
 		}
+
+		return 0;
 	}
 }

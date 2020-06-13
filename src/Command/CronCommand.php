@@ -30,8 +30,10 @@ class CronCommand extends Command
 		While the exact interval should not matter, it must still be chosen sane. See implementation for details.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->mailsControl->fetchMails();
+
+		return 0;
 	}
 }
