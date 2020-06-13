@@ -2,6 +2,7 @@
 
 use Foodsharing\Lib\Db\Db;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 
@@ -55,12 +56,15 @@ function generate_calendar_event($utc_begin, $utc_end, $utc_change, $uid, $locat
 	return $out;
 }
 
-function api_generate_calendar($fs, $options, Db $model)
+function api_generate_calendar($fs, $options, Db $model): Response
 {
-	/* from https://gist.github.com/jakebellacera/635416 */
-	header('Content-type: text/calendar; charset=utf-8');
-	header('Content-Disposition: attachment; filename=calendar.ics');
-	echo "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
+	/* adapted from https://gist.github.com/jakebellacera/635416 */
+	$response = new Response();
+
+	$response->headers->set('Content-Type', 'text/calendar; charset=utf-8');
+	$response->headers->set('Content-Disposition', 'attachment; filename=calendar.ics');
+
+	$content = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//foodsharing.de//NONSGML v1.0//EN\r\nCALSCALE:GREGORIAN\r\n";
 	if (strpos($options, 's') !== false) {
 		$fetches = $model->q('SELECT b.id, b.name, b.str, b.hsnr, b.plz, b.stadt, a.confirmed, UNIX_TIMESTAMP(a.`date`) AS date_ts FROM fs_abholer a INNER JOIN fs_betrieb b ON a.betrieb_id = b.id WHERE a.foodsaver_id = ' . (int)$fs . ' AND a.`date` > NOW() - INTERVAL 1 DAY');
 		if (is_array($fetches)) {
@@ -75,8 +79,8 @@ function api_generate_calendar($fs, $options, Db $model)
 				}
 				$description = 'foodsharing Abholung bei ' . $f['name'];
 				$uri = BASE_URL . '/?page=fsbetrieb&id=' . $f['id'];
-				// 3. Echo out the ics file's contents
-				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
+				// 3. Append the ics file's contents
+				$content .= generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 			}
 		}
 	}
@@ -128,13 +132,16 @@ function api_generate_calendar($fs, $options, Db $model)
 				}
 				$description = 'foodsharing Event: ' . $c['description'];
 				$uri = BASE_URL . '/?page=event&id=' . $c['id'];
-				// 3. Echo out the ics file's contents
-				echo generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
+				// 3. append the ics file's contents
+				$content .= generate_calendar_event($datestart, $dateend, time(), $uid, $address, $description, $summary, $uri);
 			}
 		}
 	}
 
-	echo "END:VCALENDAR\r\n";
+	$content .= "END:VCALENDAR\r\n";
+
+	$response->setContent($content);
+	return $response;
 }
 
 $action = $_GET['f'];
@@ -149,13 +156,17 @@ $container = initializeContainer();
 /* @var Db $model */
 $model = $container->get(Db::class);
 
+$response = new Response();
+
 if (!check_api_token($fs, $key, $model)) {
-	http_response_code(403);
-	echo 'Invalid access token!';
+	$response->setStatusCode(Response::HTTP_FORBIDDEN);
+	$response->setContent('Invalid access token!');
+	$response->send();
 } else {
 	switch ($action) {
 		case 'cal':
-			api_generate_calendar($fs, $opts, $model);
+			$response = api_generate_calendar($fs, $opts, $model);
+			$response->send();
 			break;
 	}
 }

@@ -6,6 +6,7 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrMethods;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -78,8 +79,12 @@ $action = $_GET['f'];
 if (isset($_GET['f'])) {
 	if (!in_array($action, $csrf_whitelist)) {
 		if (!$session->isValidCsrfHeader()) {
-			header('HTTP/1.1 403 Forbidden');
-			die('CSRF Failed: CSRF token missing or incorrect.');
+			$response = new Response();
+			$response->setProtocolVersion('1.1');
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+			$response->setContent('CSRF Failed: CSRF token missing or incorrect.');
+			$response->send();
+			exit();
 		}
 	}
 
@@ -87,6 +92,7 @@ if (isset($_GET['f'])) {
 	$xhr = $container->get(XhrMethods::class);
 	$func = 'xhr_' . $action;
 	if (method_exists($xhr, $func)) {
+		$response = new Response();
 		$metrics = $container->get(\Foodsharing\Modules\Core\InfluxMetrics::class);
 		$metrics->addPageStatData(['controller' => $func]);
 
@@ -96,14 +102,17 @@ if (isset($_GET['f'])) {
 		ob_end_clean();
 
 		if ($page === XhrResponses::PERMISSION_DENIED) {
-			header('HTTP/1.1 403 Forbidden');
-			die('Permission denied');
+			$response->setProtocolVersion('1.1');
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+			$response->setContent('Permission denied');
+			$response->send();
+			exit();
 		}
 
 		if (is_string($page) && (!trim($page) || $page[0] == '{' || $page[0] == '[')) {
-			// just assume it's an JSON, to prevent the browser from interpreting it as
+			// just assume it's JSON, to prevent the browser from interpreting it as
 			// HTML, which could result in XSS possibilities
-			header('Content-Type: application/json');
+			$response->headers->set('Content-Type', 'application/json');
 		}
 		/*
 		 * check for page caching
@@ -111,6 +120,8 @@ if (isset($_GET['f'])) {
 		if (isset($cache) && $cache->shouldCache()) {
 			$cache->cache($page);
 		}
-		echo $page;
+
+		$response->setContent($page);
+		$response->send();
 	}
 }

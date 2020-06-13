@@ -89,13 +89,13 @@ if (isset($obj)) {
 		$obj->$sub($request, $response);
 	}
 } else {
-	$response->setStatusCode(404);
+	$response->setStatusCode(Response::HTTP_NOT_FOUND);
 	$response->setContent('');
 }
 
 $page = $response->getContent();
-$isUsingResponse = $page !== '--';
-if ($isUsingResponse) {
+$controllerUsedResponse = $page !== '--';
+if ($controllerUsedResponse) {
 	if ($debug->isEnabled()) {
 		$response->setContent(str_replace(
 			'</body>',
@@ -117,6 +117,7 @@ if (isset($cache) && $cache->shouldCache()) {
 	$cache->cache($page);
 }
 
-if (!$isUsingResponse) {
-	echo $page;
+if (!$controllerUsedResponse) {
+	$response->setContent($page);
+	$response->send();
 }
