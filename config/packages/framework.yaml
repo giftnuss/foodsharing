@@ -15,6 +15,7 @@ fos_rest:
     param_fetcher_listener: true
     body_listener: true
     exception:
+        serializer_error_renderer: true
         codes:
             'DomainException': 409
     format_listener:
