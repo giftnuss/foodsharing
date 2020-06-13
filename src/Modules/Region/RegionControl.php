@@ -194,53 +194,55 @@ final class RegionControl extends Control
 			$big = [Type::BIG_CITY, Type::FEDERAL_STATE, Type::COUNTRY];
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
-
-			$this->pageHelper->addTitle($region['name']);
-			$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region_id);
-
-			switch ($request->query->get('sub')) {
-				case 'botforum':
-					if (!$this->forumPermissions->mayAccessAmbassadorBoard($region_id)) {
-						$this->routeHelper->go($this->forumService->url($region_id, false));
-					}
-					$this->forum($request, $response, $region, true);
-					break;
-				case 'forum':
-					$this->forum($request, $response, $region, false);
-					break;
-				case 'wall':
-					if (!$this->isWorkGroup($region)) {
-						$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
-						$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
-					} else {
-						$this->wall($request, $response, $region);
-					}
-					break;
-				case 'fairteiler':
-					$this->foodSharePoint($request, $response, $region);
-					break;
-				case 'events':
-					$this->events($request, $response, $region);
-					break;
-				case 'applications':
-					$this->applications($request, $response, $region);
-					break;
-				case 'members':
-					$this->members($request, $response, $region);
-					break;
-				case 'statistic':
-					$this->statistic($request, $response, $region);
-					break;
-				default:
-					if ($this->isWorkGroup($region)) {
-						$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
-					} else {
-						$this->routeHelper->go($this->forumService->url($region_id, false));
-					}
-					break;
-			}
 		} else {
 			$this->routeHelper->go('/?page=dashboard');
+
+			return;
+		}
+
+		$this->pageHelper->addTitle($region['name']);
+		$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region_id);
+
+		switch ($request->query->get('sub')) {
+			case 'botforum':
+				if (!$this->forumPermissions->mayAccessAmbassadorBoard($region_id)) {
+					$this->routeHelper->go($this->forumService->url($region_id, false));
+				}
+				$this->forum($request, $response, $region, true);
+				break;
+			case 'forum':
+				$this->forum($request, $response, $region, false);
+				break;
+			case 'wall':
+				if (!$this->isWorkGroup($region)) {
+					$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
+					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
+				} else {
+					$this->wall($request, $response, $region);
+				}
+				break;
+			case 'fairteiler':
+				$this->foodSharePoint($request, $response, $region);
+				break;
+			case 'events':
+				$this->events($request, $response, $region);
+				break;
+			case 'applications':
+				$this->applications($request, $response, $region);
+				break;
+			case 'members':
+				$this->members($request, $response, $region);
+				break;
+			case 'statistic':
+				$this->statistic($request, $response, $region);
+				break;
+			default:
+				if ($this->isWorkGroup($region)) {
+					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
+				} else {
+					$this->routeHelper->go($this->forumService->url($region_id, false));
+				}
+				break;
 		}
 	}
 
