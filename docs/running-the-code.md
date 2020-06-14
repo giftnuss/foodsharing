@@ -76,9 +76,8 @@ If you are using Windows 10 Pro or higher go with this link:
 Install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/) ([direct link](https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe)) and
 [Git for Windows](https://git-scm.com/download/win).
 
-If you are using Windows 10 Home or lower follow this instruction:
-
-Install [Docker Toolbox for Windows] (https://docs.docker.com/toolbox/toolbox_install_windows/) and [Git for Windows](https://git-scm.com/download/win).
+If you are using Windows 10 Home, make sure you fulfill all [system requirements](https://docs.docker.com/docker-for-windows/install-windows-home/#system-requirements)
+and then install both [Docker Desktop on Windows Home](https://docs.docker.com/docker-for-windows/install-windows-home/) and [Git for Windows](https://git-scm.com/download/win). 
 
 It is important to grant docker access to C: (in the graphical docker interface: settings -> resources -> filesharing -> mark C, apply and restart)
 
