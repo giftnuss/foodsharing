@@ -142,6 +142,9 @@ class SearchGateway extends BaseGateway
 
 		return array_map(function ($x) use ($showDetails) {
 			$teaser = $showDetails ? $x['anschrift'] . ', ' . $x['plz'] . ' ' . $x['stadt'] : $x['stadt'];
+			if (is_null($teaser)) {
+				$teaser = '';
+			}
 
 			return SearchResult::create($x['id'], $x['name'] . ' ' . $x['nachname'], $teaser);
 		}, $results);

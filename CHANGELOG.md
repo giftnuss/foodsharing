@@ -56,7 +56,7 @@
 - Wrap long email address in user profile #828 !1541 @ChrisOelmueller
 
 ## Refactoring
-- Make the instant search in the topbar use a new rest endpoint without legacy wrapping code for search results !1522 !1559 @alex.simm
+- Make the instant search in the topbar use a new rest endpoint without legacy wrapping code for search results !1522 !1559 !1579 @alex.simm
 
 ## Refactoring
 - Reimplement store team list in Vue !1499 @ChrisOelmueller
