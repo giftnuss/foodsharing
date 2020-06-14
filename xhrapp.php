@@ -4,6 +4,7 @@ use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
@@ -142,7 +143,7 @@ if (isset($_GET['app'], $_GET['m'])) {
 	$session = $container->get(Session::class);
 	$session->initIfCookieExists();
 
-	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+	$request = Request::createFromGlobals();
 	$response = new Response();
 
 	$class = Routing::getClassName($app, 'Xhr');

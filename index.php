@@ -61,8 +61,9 @@ if ($debug->isEnabled()) {
 }
 
 if ($session->may()) {
-	if (isset($_GET['uc'])) {
-		if ($session->id() != $_GET['uc']) {
+	$uc = $request->query->get('uc');
+	if ($uc !== null) {
+		if ($session->id() != $uc) {
 			$mem->logout($session->id());
 			$routeHelper->goLogin();
 		}
@@ -78,9 +79,9 @@ try {
 }
 
 if (isset($obj)) {
-	if (isset($_GET['a']) && is_callable([$obj, $_GET['a']])) {
-		$meth = $_GET['a'];
-		$obj->$meth($request, $response);
+	$action = $request->query->get('a');
+	if ($action !== null && is_callable([$obj, $action])) {
+		$obj->$action($request, $response);
 	} else {
 		$obj->index($request, $response);
 	}

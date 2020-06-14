@@ -2,6 +2,7 @@
 
 use Foodsharing\Lib\Db\Db;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
@@ -144,10 +145,12 @@ function api_generate_calendar($fs, $options, Db $model): Response
 	return $response;
 }
 
-$action = $_GET['f'];
-$fs = $_GET['fs'];
-$key = $_GET['key'];
-$opts = $_GET['opts'];
+$request = Request::createFromGlobals();
+
+$action = $request->query->get('f');
+$fs = $request->query->get('fs');
+$key = $request->query->get('key');
+$opts = $request->query->get('opts');
 
 /* @var Container $container */
 global $container;
