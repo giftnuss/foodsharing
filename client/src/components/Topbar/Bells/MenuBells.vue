@@ -20,7 +20,7 @@
         v-if="!bells.length"
         class="list-group-item text-muted"
       >
-        {{ $i18n('menubells.no_bells') }}
+        {{ $i18n('bell.no_bells') }}
       </small>
       <menu-bells-entry
         v-for="bell in bells"

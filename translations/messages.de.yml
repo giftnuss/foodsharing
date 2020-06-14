@@ -89,13 +89,20 @@ login:
   error_no_auth: E-Mail-Adresse oder Passwort sind falsch
   success: <b>Wunderschönen Tag Dir, {user_name}!</b><br />Du hast Dich erfolgreich eingeloggt und wirst gleich weitergeleitet.
   logout: Logout
+  pwreset:
+    bread: Password zurücksetzen
+    wrongMail: Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?
+    mailSent: Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.
+    success: Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt einloggen.
+    tooShort: Sorry, Dein gewähltes Passwort ist zu kurz.
+    expired: Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage erneut ein neues Passwort!
+    error: Sorry, es gibt ein Problem mit Deinen Daten.
+    mismatch: Sorry, die Passwörter stimmen nicht überein.
 
 register:
   topbar: Mach mit!
   title: Registrierung
   register_button_label: Registrieren
-  login_success: Prima! Jetzt bist Du eingeloggt
-  login_failed: Diese Zugangdsdaten stimmen leider so nicht.
   mail_hint: WICHTIG - Achte auf korrekte Schreibweise!
   requiredFields: Pflichteingabe
   birthdate_hint: Nähere Information findest du in der <a href="?page=legal" target="_blank">Datenschutzerklärung</a> in Punkt 2d) Bei der Anmeldung als Foodsharer bzw. Foodsaver.
@@ -137,7 +144,6 @@ register:
   error: Es ist ein Fehler aufgetreten
   error_name: Bitte gib einen Namen ein
   error_email_exist: Deine E-Mail-Adresse existiert bereits.
-  error_passwd: Dein Passwort muss mindestens 8 Zeichen lang sein
   error_birthdate: Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
   activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
@@ -322,7 +328,7 @@ reports:
   store: Zugeordneter Betrieb
 
 bell:
-  no_bells: "Keine Benachrichtigungen"
+  no_bells: Du hast derzeit keine Benachrichtigungen
   forum_answer_title: "{forum}" # this old key is kept for compatibility with bells generated before #869
   forum_reply_title: "{forum}: {title}"
   forum_answer: "{user} hat Dir geantwortet"
@@ -601,9 +607,6 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
-
-menubells:
- no_bells: Du hast derzeit keine Benachrichtigungen
 
 push_notifications:
   test_notification_title: 'Push-Benachrichtigungen aktiviert'
