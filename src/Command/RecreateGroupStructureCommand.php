@@ -19,8 +19,10 @@ class RecreateGroupStructureCommand extends Command
 		parent::__construct();
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$this->groupGateway->recreateClosure();
+
+		return 0;
 	}
 }
