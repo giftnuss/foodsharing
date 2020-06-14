@@ -3,6 +3,7 @@
 use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Util\Literal;
 
+/* More migration history can be found in e2bfd22332cd32fa58a975f86298ce3174d98c7f where pure SQL migrations have been transformed to phinx */
 class InitialMigration extends Phinx\Migration\AbstractMigration
 {
 	public function change()
