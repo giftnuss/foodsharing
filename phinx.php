@@ -1,6 +1,6 @@
 <?php
 
-use Foodsharing\FoodsharingKernel as Kernel;
+use Foodsharing\Kernel;
 
 require __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/config.inc.php';
@@ -23,7 +23,9 @@ return
 			'user' => 'unused',
 			'pass' => 'unused',
 			'name' => 'foodsharing',
-			'connection' => $pdo
+			'connection' => $pdo,
+			'charset' => 'utf8mb4',
+			'collation' => 'utf8mb4_unicode_ci'
 		]
 	],
 	'version_order' => 'creation'
