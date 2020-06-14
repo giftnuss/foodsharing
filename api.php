@@ -142,6 +142,7 @@ function api_generate_calendar($fs, $options, Db $model): Response
 	$content .= "END:VCALENDAR\r\n";
 
 	$response->setContent($content);
+
 	return $response;
 }
 
