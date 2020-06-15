@@ -4,15 +4,12 @@
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
 - Added Workgroup Function: Welcome to workgroup !1544 @fs_k
-- Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
 - Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
 - Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
 - Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm  
-- Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
-- Gender value for women and man is now fixed !1564 @chriswalg
 - Push notifications for group chats no longer sound like the message addresses the user specifically !1574 @\_fridtjof_
 
 ## Refactoring
@@ -31,6 +28,11 @@
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
 - Include Phinx database migration tool for (hopefully soon) automated migrations and less confusion about database state !1549 @NerdyProjects
+
+# 2020-06-15 Hotfix
+- Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
+- Gender value for women and man is now fixed !1564 @chriswalg
+- Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
 
 # 2020-06-01 Hotfix
 
