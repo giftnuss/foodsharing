@@ -1,28 +1,7 @@
-# Unreleased
-
-## Features
-- Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
-- Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
-- Added Workgroup Function: Welcome to wokrgroup !1544 @fs_k
+# 2020-06-15 Hotfix
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
-- Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
-- Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
-- Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm  
-- Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
-
-## Bugfixes
-- Clarify that new forum threads won't reache members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
-- Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
 - Gender value for women and man is now fixed !1564 @chriswalg
-
-## Refactoring
-- Move master-update function for regions to the rest controller !1547 @alex.simm 
-- Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
-- Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
-- Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
-- Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
-
-## Dev/Test/CI stuff
+- Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
 
 # 2020-06-01 Hotfix
 
