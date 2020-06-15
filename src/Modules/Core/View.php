@@ -296,9 +296,16 @@ class View
 			}
 		}
 
-		$out = $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), $this->v_utils->v_info($this->translationHelper->s('position_search_infobox')) . '
-		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap"></div>');
+		$out = $this->v_utils->v_input_wrapper(
+			$this->translator->trans('addresspicker.label'),
+	'<div class="lat-lon-picker">' .
+			$this->v_utils->v_info(
+				$this->translationHelper->s('position_search_infobox')
+			) .
+		'<input placeholder="' . $this->translator->trans('addresspicker.placeholder') . '" '
+			. 'type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
+		<div id="map" class="pickermap" />
+	</div>');
 		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .

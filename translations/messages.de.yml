@@ -310,6 +310,10 @@ events:
   invitedCount: '{count} Einladungen'
   morePeople: '… und {count} weitere'
 
+addresspicker:
+  label: Adress-/Standort-Suche
+  placeholder: Bitte hier die Adresse suchen! Falls nötig, danach unten korrigieren.
+
 reports:
   about: Über
   about_first_name: Über Name

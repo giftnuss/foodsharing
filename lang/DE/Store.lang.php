@@ -28,7 +28,6 @@ $g_lang['betrieb_added'] = 'hat den Betrieb am {var} eingetragen';
 $g_lang['accept_request'] = '{var} ist jetzt im Team';
 $g_lang['quiz_dropped'] = '{var} ist jetzt nicht mehr im Team';
 $g_lang['foodsaver'] = 'Verantwortliche Foodsaver';
-$g_lang['position_search'] = 'Adresssuche';
 $g_lang['public_info'] = 'Öffentliche Infos zum Betrieb';
 $g_lang['public_time'] = 'Ungefähre Tageszeit der Abholung';
 $g_lang['fetchercount'] = 'Anzahl der Abholer/innen';

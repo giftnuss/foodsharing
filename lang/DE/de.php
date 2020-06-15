@@ -170,7 +170,6 @@ $g_lang['status'] = 'Aktueller Status';
 $g_lang['info'] = 'Informationen';
 $g_lang['photo'] = 'Foto';
 $g_lang['||ENDE||'] = true;
-$g_lang['position_search'] = 'Positionssuche';
 $g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
 
 $g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
