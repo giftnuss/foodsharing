@@ -58,7 +58,7 @@ task('deploy:update_code', function () {
 });
 
 task('deploy:cache:warmup', function () {
-	run('{{release_path}}/bin/console cache:warmup');
+	run('FS_ENV=prod {{release_path}}/bin/console cache:warmup -e prod');
 })->desc('Warmup symfony cache');
 
 desc('Deploy your project');
