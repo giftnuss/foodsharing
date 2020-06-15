@@ -47,9 +47,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 		return 'foodsharing:seed';
 	}
 
-	public function getDescription()
+	protected function configure(): void
 	{
-		return 'seed the dev db';
+		$this->setDescription('Seed the dev db.');
+		$this->setHelp('This commands adds seed data to the database. The general rule is that before running this command, you have a working instance of foodsharing without customized data (e.g. missing regions, quizzes, ...) but already including all the data that is directly used in the code (so you will not get any internal server errors). The future goal is, to make the code as much independent of data as possible and move all data you may want to playing around into the seed.');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)

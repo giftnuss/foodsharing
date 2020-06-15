@@ -25,6 +25,9 @@ class Foodsharing extends \Codeception\Module\Db
 
 	public function clear()
 	{
+		/* This method should clear the database back to a state that seed data can be inserted again without fucking something up.
+		It is okay to destroy user generated data and it is okay to fail when the user changed things. Actually, the suggested way is
+		to reseed the database in case any modification to static data could have happened */
 		$this->_getDriver()->executeQuery('
 			DELETE FROM fs_buddy;
 			DELETE FROM fs_question_has_quiz;
