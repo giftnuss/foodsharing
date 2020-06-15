@@ -195,7 +195,7 @@ class FoodSharePointControl extends Control
 				$this->flashMessageHelper->info($this->translationHelper->s('food_share_point_edit_success'));
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('food_share_point_edit_fail'));
+				$this->flashMessageHelper->error($this->translationHelper->s('error_default'));
 			}
 		}
 

@@ -1,8 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['already_in_bezirk'] = 'In diesem Bezirk bist Du schon aktiv.';
-$g_lang['request_already_send'] = 'An diesen Bezirk hast Du schon eine Anfrage gesendet.';
-$g_lang['bezirk_request_successfull'] = 'Die Anfrage wurde erfolgreich versandt. Du wirst benachrichtigt, sobald Du freigeschaltet wurdest.';
 $g_lang['position_search'] = 'Positionssuche';
 $g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
 $g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht.</strong>';
@@ -36,11 +33,8 @@ $g_lang['not_responsible_but_bot'] = 'Du bist nicht verantwortlich für diesen B
 $g_lang['not_responsible_but_orga'] = 'Du bist nicht verantwortlich für diesen Betrieb, hast jedoch weitreichende Rechte, da Du im globalen Orgateam bist.';
 $g_lang['edit_fetchtime'] = 'Abholzeiten bearbeiten';
 $g_lang['responsible_foodsaver'] = 'Verantwortliche Foodsaver';
-$g_lang['no_fetchtime'] = 'Für {name} sind noch keine Abholzeiten eingetragen';
 $g_lang['add_fetchtime'] = 'Abholzeiten eintragen';
 $g_lang['not_in_team'] = 'Du bist noch nicht im Team dieses Betriebes.';
-$g_lang['find_representation'] = 'Vertretung finden';
-$g_lang['choose_fetcher'] = 'Abholer auswählen';
 $g_lang['add_new'] = 'Neuen Betrieb eintragen';
 $g_lang['you_responsible'] = 'Betriebe für die Du verantwortlich bist';
 $g_lang['you_fetcher'] = 'Betriebe bei denen Du Lebensmittel abholst';
@@ -60,9 +54,6 @@ $g_lang['status_msg_4'] = 'Betrieb will nicht kooperieren';
 $g_lang['status_msg_5'] = 'Betrieb kooperiert bereits';
 $g_lang['status_msg_6'] = 'Spendet an Tafel etc. und wirft nichts weg';
 $g_lang['status_change_at'] = 'Statusänderung am {var}';
-$g_lang['shure_range_date'] = '<strong>Verbindlich {label}s</strong> im gewählten Zeitraum abholen.';
-$g_lang['zeitraum'] = 'Zeitraum';
-$g_lang['date_add_successful'] = '<p><b>Termine wurden erfolgreich hinzugefügt.</b><br>Sie müssen nur noch vom Betriebsverantwortlichen bestätigt werden.</p>';
 $g_lang['team_msg'] = 'Nachricht ans ganze Team';
 $g_lang['fetcher'] = 'Abholer';
 $g_lang['fetcher_count'] = 'Anzahl Abholer';

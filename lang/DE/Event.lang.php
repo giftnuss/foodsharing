@@ -1,8 +1,6 @@
 <?php
 global $g_lang;
 
-$g_lang['new_event'] = 'Neuen Termin eintragen';
-$g_lang['no_events_posted'] = 'Noch keine Events vorhanden';
 $g_lang['new_event'] = 'Neue/n Termin/Veranstaltung eintragen';
 $g_lang['description'] = 'Beschreibung';
 $g_lang['desc_desc'] = 'Was ist das für ein Event?';
