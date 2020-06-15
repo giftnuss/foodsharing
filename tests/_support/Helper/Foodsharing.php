@@ -37,6 +37,8 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver_has_conversation;
 			DELETE FROM fs_msg;
 			DELETE FROM fs_betrieb_team;
+			DELETE FROM fs_betrieb_has_lebensmittel;
+			DELETE FROM fs_kette;
 			DELETE FROM fs_betrieb;
 			DELETE FROM fs_abholer;
 			DELETE FROM fs_abholzeiten;
@@ -54,6 +56,8 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_conversation;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_bezirk WHERE region_id NOT IN(0, 258, 341, 392, 741, 1373, 1564, 1565);
+			DELETE FROM fs_lebensmittel;
 		', []);
 	}
 
@@ -406,6 +410,30 @@ class Foodsharing extends \Codeception\Module\Db
 		$params['date'] = $this->toDateTime($params['date']);
 
 		$id = $this->haveInDatabase('fs_abholer', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addStoreFoodType($extra_params = [])
+	{
+		$params = array_merge([
+			'name' => 'food_' . $this->faker->word()
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_lebensmittel', $params);
+		$params['id'] = $id;
+
+		return $params;
+	}
+
+	public function addStoreChain($extra_params = [])
+	{
+		$params = array_merge([
+			'name' => 'chain_' . $this->faker->company()
+		], $extra_params);
+
+		$id = $this->haveInDatabase('fs_kette', $params);
 		$params['id'] = $id;
 
 		return $params;

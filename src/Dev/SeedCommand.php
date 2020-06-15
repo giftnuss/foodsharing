@@ -123,6 +123,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
+		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
+
 		// Create users
 		$this->output->writeln('Create basic users:');
 		$user1 = $I->createFoodsharer($password, ['email' => 'user1@example.com', 'name' => 'One', 'bezirk_id' => $region1]);
@@ -202,6 +204,14 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addStoreTeam($store['id'], $userStoreManager['id'], true);
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
+
+		$I->addStoreChain();
+		$I->addStoreChain();
+		$I->addStoreChain();
+
+		$I->addStoreFoodType();
+		$I->addStoreFoodType();
+		$I->addStoreFoodType();
 
 		// Forum theads and posts
 		$this->output->writeln('- create forum threads and posts');
