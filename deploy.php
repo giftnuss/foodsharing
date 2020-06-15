@@ -3,6 +3,7 @@
 namespace Deployer;
 
 require 'recipe/common.php';
+require 'recipe/cachetool.php';
 
 // Project name
 set('application', 'foodsharing');
@@ -29,12 +30,14 @@ set('default_timeout', 600);
 host('beta')
 	->hostname('dragonfruit.foodsharing.network')
 	->user('deploy')
-	->set('deploy_path', '/var/www/beta');
+	->set('deploy_path', '/var/www/beta')
+	->set('cachetool', '/var/run/php7-fpm-beta.sock');
 
 host('production')
 	->hostname('dragonfruit.foodsharing.network')
 	->user('deploy')
-	->set('deploy_path', '/var/www/production');
+	->set('deploy_path', '/var/www/production')
+	->set('cachetool', '/var/run/php7-fpm-production.sock');
 
 // Tasks
 desc('Create the revision information');
@@ -54,6 +57,10 @@ task('deploy:update_code', function () {
 	]);
 });
 
+task('deploy:cache:warmup', function () {
+	run('{{release_path}}/bin/console cache:warmup');
+})->desc('Warmup symfony cache');
+
 desc('Deploy your project');
 task('deploy', [
 	'deploy:info',
@@ -65,7 +72,9 @@ task('deploy', [
 	'deploy:shared',
 	'deploy:clear_paths',
 	'deploy:create_revision',
+	'deploy:cache:warmup',
 	'deploy:symlink',
+	'cachetool:clear:opcache',
 	'deploy:unlock',
 	'cleanup',
 	'success'
