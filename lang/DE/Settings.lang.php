@@ -16,7 +16,6 @@ $g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine in
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
 $g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
-$g_lang['about_me_public'] = 'Öffentliche Kurzbeschreibung';
 $g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';
 $g_lang['upgrade_bot_success'] = 'Danke Dir für Deine Motivation mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.';

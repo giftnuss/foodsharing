@@ -1,7 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['attach_image'] = 'Bild anhängen';
-$g_lang['write_teaser'] = 'Schreibe etwas...';
 $g_lang['next_dates'] = 'Nächste Abholtermine';
 $g_lang['updates'] = 'Letzte Aktivitäten';
 $g_lang['welcome'] = 'Willkommen {name}! Schön, dass Du da bist!';

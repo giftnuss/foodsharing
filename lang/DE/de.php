@@ -182,7 +182,11 @@ $g_lang['pubbtime_2'] = 'mittags/nachmittags';
 $g_lang['pubbtime_3'] = 'abends';
 $g_lang['pubbtime_4'] = 'nachts';
 $g_lang['join'] = 'Anmelden';
+$g_lang['last_login'] = 'Letzter Login';
 $g_lang['datetime'] = 'Zeitpunkt';
+$g_lang['title'] = 'Überschrift';
+$g_lang['body'] = 'Nachricht';
+$g_lang['forum'] = 'Forum';
 
 $g_lang['search'] = 'Suchen';
 $g_lang['no_result'] = 'Kein Ergebnis';

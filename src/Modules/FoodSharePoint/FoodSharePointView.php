@@ -98,7 +98,7 @@ class FoodSharePointView extends View
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
 			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
 			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
-			$this->v_utils->v_form_textarea('desc', ['value' => $data['desc'], 'desc' => $this->translationHelper->s('desc_desc'), 'required' => true]),
+			$this->v_utils->v_form_textarea('desc', ['value' => $data['desc'], 'desc' => $this->translationHelper->s('fsp_desc'), 'required' => true]),
 			$this->v_utils->v_form_picture('picture', ['pic' => $data['picture'], 'resize' => [528, 60], 'crop' => [(528 / 170), 1]]),
 			$this->latLonPicker('latLng', $latLonOptions),
 			$tagselect,

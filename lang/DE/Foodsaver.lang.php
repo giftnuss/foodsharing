@@ -12,7 +12,6 @@ $g_lang['orgateam'] = 'Bundesweite Orga';
 $g_lang['fs_id'] = 'foodsharing-ID';
 $g_lang['back_to_profile'] = 'Zurück zum Profil';
 
-$g_lang['last_login'] = 'Letzter Login';
 $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
 $g_lang['inactive'] = 'Inaktive ';
 $g_lang['fs_in'] = 'Foodsaver in ';

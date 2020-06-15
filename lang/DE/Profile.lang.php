@@ -2,10 +2,7 @@
 global $g_lang;
 
 $g_lang['write_teaser'] = 'Schreibe etwas auf Deine Pinnwand...';
-$g_lang['attach_image'] = 'Statusbilder hochladen';
-$g_lang['send'] = 'Beitrag absenden';
 $g_lang['mailbox'] = 'Interne Mailbox';
-$g_lang['last_login'] = 'Letzter Login';
 $g_lang['registration_date'] = 'Registrierungsdatum';
 $g_lang['private_mail'] = 'Private E-Mail-Adresse';
 $g_lang['violation_count'] = 'Meldungen <strong>({count})</strong>';

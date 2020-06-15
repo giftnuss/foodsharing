@@ -1,7 +1,6 @@
 <?php
 global $g_lang;
 $g_lang['name'] = 'Eindeutiger Name';
-$g_lang['title'] = 'Überschrift';
 $g_lang['body'] = 'Inhalt';
 $g_lang['last_mod'] = 'last_mod';
 $g_lang['bread_content'] = 'Alle Seiten';

@@ -186,7 +186,7 @@ class EventView extends View
 			$this->v_utils->v_form_date('dateend', ['required' => true]),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			$this->v_utils->v_form_textarea('description', ['desc' => $this->translationHelper->s('desc_desc'), 'required' => true]),
+			$this->v_utils->v_form_textarea('description', ['desc' => $this->translationHelper->s('event_desc'), 'required' => true]),
 			$this->v_utils->v_form_select('online_type', ['values' => [
 				['id' => 1, 'name' => $this->translationHelper->s('offline')],
 				['id' => 0, 'name' => $this->translationHelper->s('online')]
