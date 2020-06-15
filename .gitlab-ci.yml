@@ -29,7 +29,7 @@
   - build:backend-chat
   script:
   - (cd deployer && composer install)
-  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA -vv
+  - deployer/vendor/bin/dep deploy $CI_ENVIRONMENT_NAME --revision $CI_COMMIT_SHA
   - ./scripts/deploy.notifyslack.sh
 
 stages:
