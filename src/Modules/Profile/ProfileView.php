@@ -715,11 +715,11 @@ class ProfileView extends View
 				switch ($h['change_status']) {
 					case 0:
 						$class = 'unverify';
-						$typeOfChange = $this->translationHelper->s('de_verified');
+						$typeOfChange = $this->translationHelper->s('lostVerification');
 						break;
 					case 1:
 						$class = 'verify';
-						$typeOfChange = $this->translationHelper->s('verified');
+						$typeOfChange = $this->translationHelper->s('wasVerified');
 						break;
 					default:
 						$class = '';

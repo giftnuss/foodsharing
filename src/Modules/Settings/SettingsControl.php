@@ -94,7 +94,7 @@ class SettingsControl extends Control
 		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
 			$menu[] = ['name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip'];
 		}
-		$menu[] = ['name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount'];
+		$menu[] = ['name' => $this->translationHelper->s('deleteAccount'), 'href' => '/?page=settings&sub=deleteaccount'];
 		$this->pageHelper->addContent($this->view->menu($menu, ['title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub()]), CNT_LEFT);
 	}
 
@@ -370,7 +370,7 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('delete_account'));
+		$this->pageHelper->addBread($this->translationHelper->s('deleteAccount'));
 		$this->pageHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 

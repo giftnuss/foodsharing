@@ -212,7 +212,7 @@ class FoodSharePointControl extends Control
 			$items[] = [
 				'name' => $this->translationHelper->s('delete'),
 				'click' => 'if(confirm(\'' . $this->translationHelper->s(
-						'delete_sure'
+						'fsp_delete_sure'
 					) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id'] . '&delete=1\');}return false;',
 			];
 		}

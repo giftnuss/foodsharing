@@ -1,15 +1,8 @@
 <?php
 global $g_lang;
 $g_lang['position_search'] = 'Positionssuche';
-$g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
-$g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht.</strong>';
-$g_lang['team_status_2'] = '<strong>Es werden dringend noch Helfer gesucht.</strong>';
 $g_lang['attach_image'] = 'Bild anhängen';
 $g_lang['write_teaser'] = 'Schreibe etwas...';
-$g_lang['pubbtime_1'] = 'morgens';
-$g_lang['pubbtime_2'] = 'mittags/nachmittags';
-$g_lang['pubbtime_3'] = 'abends';
-$g_lang['pubbtime_4'] = 'nachts';
 $g_lang['datetime'] = 'Zeitpunkt';
 $g_lang['betrieb_status_id'] = 'Status';
 $g_lang['bezirk_id'] = 'Bezirk';
@@ -21,8 +14,6 @@ $g_lang['status_date'] = 'letzte Statusänderung';
 $g_lang['bread_betrieb'] = 'Alle Betriebe';
 $g_lang['edit_store'] = 'Betrieb bearbeiten';
 $g_lang['add_new_store'] = 'Neuen Betrieb eintragen';
-$g_lang['neu_betrieb'] = 'Neuen Betrieb eintragen';
-$g_lang['delete_sure'] = 'Soll {var} wirklich unwiderruflich gelöscht werden?';
 $g_lang['ansprechpartner'] = 'Ansprechpartner';
 $g_lang['fax'] = 'Fax';
 $g_lang['betrieb_edit_success'] = 'Änderungen wurden gespeichert';

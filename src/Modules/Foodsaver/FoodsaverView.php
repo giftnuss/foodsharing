@@ -136,10 +136,10 @@ class FoodsaverView extends View
 	{
 		$content = '
 	<div style="text-align:center;margin-bottom:10px;">
-		<span id="delete-account">' . $this->translationHelper->s('delete_now') . '</span>
+		<span id="delete-account">' . $this->translationHelper->s('deleteAccountNow') . '</span>
 	</div>
 	';
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($content, $this->translationHelper->s('deleteAccount'), ['class' => 'ui-padding']);
 	}
 }

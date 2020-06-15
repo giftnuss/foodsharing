@@ -98,7 +98,7 @@ class FoodsaverControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_menu([
 						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
+						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('deleteAccount')]
 						]),
 						$this->translationHelper->s('actions')),
 						CNT_RIGHT

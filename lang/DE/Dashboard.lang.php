@@ -1,15 +1,8 @@
 <?php
 global $g_lang;
 $g_lang['position_search'] = 'Positionssuche';
-$g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
-$g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht</strong>';
-$g_lang['team_status_2'] = '<strong>Es werden dringend noch Helfer gesucht</strong>';
 $g_lang['attach_image'] = 'Bild anhängen';
 $g_lang['write_teaser'] = 'Schreibe etwas...';
-$g_lang['pubbtime_1'] = 'morgens';
-$g_lang['pubbtime_2'] = 'mittags/nachmittags';
-$g_lang['pubbtime_3'] = 'abends';
-$g_lang['pubbtime_4'] = 'nachts';
 $g_lang['next_dates'] = 'Nächste Abholtermine';
 $g_lang['updates'] = 'Letzte Aktivitäten';
 $g_lang['welcome'] = 'Willkommen {name}! Schön, dass Du da bist!';
