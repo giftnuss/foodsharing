@@ -1,13 +1,6 @@
 <?php
 
-use Foodsharing\Kernel;
-
-require __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/config.inc.php';
-
-$kernel = new Kernel('dev', false);
-$kernel->boot();
-$pdo = $kernel->getContainer()->get('PDO');
 
 return
 [
@@ -19,11 +12,11 @@ return
 		'default_migration_table' => 'phinxlog',
 		'default_environment' => 'symfony',
 		'symfony' => [
-			/* silence some PHP notices that are generated otherwise */
-			'user' => 'unused',
-			'pass' => 'unused',
-			'name' => 'foodsharing',
-			'connection' => $pdo,
+			'adapter' => 'mysql',
+			'host' => DB_HOST,
+			'user' => DB_USER,
+			'pass' => DB_PASS,
+			'name' => DB_DB,
 			'charset' => 'utf8mb4',
 			'collation' => 'utf8mb4_unicode_ci'
 		]

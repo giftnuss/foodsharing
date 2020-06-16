@@ -123,6 +123,7 @@ build:backend:
   stage: build
   script:
     - composer install --verbose --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs
+    - (cd phinx && composer install --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs)
     - vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format udiff --verbose --ansi
     - vendor/bin/parallel-lint --no-progress --exclude vendor .
     - FS_ENV=dev vendor/bin/phpstan analyse --memory-limit=768M --no-progress

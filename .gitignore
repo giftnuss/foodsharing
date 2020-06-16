@@ -12,6 +12,7 @@ cache/**
 tmp/**
 vendor/**
 deployer/vendor/**
+phinx/vendor/**
 tests/_output/*vendor
 tests/_support/_generated/
 .composer
