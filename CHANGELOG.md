@@ -7,7 +7,6 @@
 - Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
 - Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
 - Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm  
-
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
 - Push notifications for group chats no longer sound like the message addresses the user specifically !1574 @\_fridtjof_
@@ -23,11 +22,12 @@
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_
 - Do not show unsubscribed email subscriptions for forum threads in notification settings #893 !1570 @chriswalg
-
+- Remove and refactor some PHP translations &22 !1583 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
 - Include Phinx database migration tool for (hopefully soon) automated migrations and less confusion about database state !1549 @NerdyProjects
+
 
 # 2020-06-15 Hotfix
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 
