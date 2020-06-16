@@ -29,6 +29,7 @@
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
 - Include Phinx database migration tool for (hopefully soon) automated migrations and less confusion about database state !1549 @NerdyProjects
+- Install phinx as a separate project in deployment !1584 @NerdyProjects
 
 
 # 2020-06-15 Hotfix
