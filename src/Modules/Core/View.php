@@ -304,7 +304,7 @@ class View
 			) .
 		'<input placeholder="' . $this->translator->trans('addresspicker.placeholder') . '" '
 			. 'type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap" />
+		<div id="map" class="pickermap"></div>
 	</div>');
 		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
