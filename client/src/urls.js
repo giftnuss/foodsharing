@@ -29,7 +29,7 @@ const urls = {
   event: (eventId) => `/?page=event&id=${eventId}`,
   events: (regionId) => `/?page=bezirk&bid=${regionId}&sub=events`,
   fairteiler: (regionId) => `/?page=bezirk&bid=${regionId}&sub=fairteiler`,
-  faq: () => '/faq',
+  support: () => 'https://foodsharing.freshdesk.com/support/home',
   faqEdit: () => '/?page=faq',
   festival: () => '/?page=content&sub=festival',
   foodsaverList: (regionId) => `/?page=foodsaver&bid=${regionId}`,

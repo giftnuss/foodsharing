@@ -554,7 +554,7 @@ menu:
     team: Team
     partners: Partner
     background: Hintergrund
-    faq: F.A.Q.
+    support: Hilfe & Support
     wiki: Wiki
     guide: Ratgeber
     statistics: Statistik
@@ -572,7 +572,7 @@ footer:
   team: Team
   imprint: Impressum
   dataprivacy: Datenschutz
-  faq: FAQ
+  support: Hilfe & Support
   guide: Ratgeber
   infosCompany: Unternehmen
   partner: Partner

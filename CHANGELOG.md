@@ -8,6 +8,7 @@
 - Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
 - Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm  
 - Better highlight the position picker input-box !1583 !1586 @ChrisOelmueller
+- Removed faq and replaced to external freshdesk support form in top and footer menu #817 !1587 @chriswalg
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
