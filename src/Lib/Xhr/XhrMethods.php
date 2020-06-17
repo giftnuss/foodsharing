@@ -668,15 +668,6 @@ class XhrMethods
 		return '<html><head></head><body onload="parent.pictureReady(\'' . $id . '\',\'' . $img . '\');"></body></html>';
 	}
 
-	public function xhr_getRecip($data)
-	{
-		if ($this->session->may()) {
-			$fs = $this->foodsaverGateway->xhrGetFoodsaver($data);
-
-			return json_encode($fs);
-		}
-	}
-
 	public function xhr_addPhoto($data)
 	{
 		if (!$this->session->may()) {
@@ -1195,7 +1186,14 @@ class XhrMethods
 		$("input[type=\'submit\']").button();
 
 		$("#' . $id . ' input").tagedit({
-			autocompleteURL: "/xhr.php?f=getRecip",
+			autocompleteURL: async function (request, response) {
+			  let data = null
+			  try {
+			    data = await searchUser(request.term)
+			  } catch (e) {
+			  }
+			  response(data)
+			},
 			allowEdit: false,
 			allowAdd: false
 		});

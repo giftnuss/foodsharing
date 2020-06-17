@@ -43,6 +43,10 @@ export async function instantSearch (query) {
   return await get(`/search/all?q=${encodeURIComponent(query)}`)
 }
 
+export async function searchUser (query) {
+  return await get(`/search/user?q=${encodeURIComponent(query)}`)
+}
+
 export async function instantSearchIndex () {
   return mapOldResponseToNewFormat(await get('/search/legacyindex'))
 }

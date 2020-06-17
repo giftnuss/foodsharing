@@ -382,38 +382,6 @@ final class FoodsaverGateway extends BaseGateway
 		');
 	}
 
-	public function xhrGetFoodsaver(array $data): array
-	{
-		if (isset($data['bid'])) {
-			throw new Exception('filterung by bezirkIds is not supported anymore');
-		}
-
-		$term = $data['term'];
-		$term = trim($term);
-		$term = preg_replace('/[^a-zA-ZäöüÖÜß]/', '', $term);
-		$term = $term . '%';
-
-		if (strlen($term) > 2) {
-			$out = $this->db->fetchAll('
-				SELECT	`id`,
-						CONCAT_WS(" ", `name`, `nachname`, CONCAT("(", `id`, ")")) AS value
-
-				FROM 	fs_foodsaver
-
-				WHERE 	(`name` LIKE :term
-						OR	`nachname` LIKE :term2)
-				AND     deleted_at IS NULL
-			', [
-				':term' => $term,
-				':term2' => $term
-			]);
-
-			return $out;
-		}
-
-		return [];
-	}
-
 	public function getEmailAddress(int $fsId): string
 	{
 		return $this->db->fetchValueByCriteria('fs_foodsaver', 'email', ['id' => $fsId]);

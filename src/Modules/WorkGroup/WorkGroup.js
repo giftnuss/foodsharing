@@ -7,6 +7,7 @@ import 'jquery-tagedit-auto-grow-input'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 import './WorkGroup.css'
+import { searchUser } from '@/api/search'
 
 const $groups = $('.groups .field')
 if ($groups.length > 3) {
@@ -151,7 +152,14 @@ $('#work_group_form_photo-opener').button().on('click', function () {
 })
 
 const tageditOptions = {
-  autocompleteURL: '/xhr.php?f=getRecip',
+  autocompleteURL: async function (request, response) {
+    let data = null
+    try {
+      data = await searchUser(request.term)
+    } catch (e) {
+    }
+    response(data)
+  },
   allowEdit: false,
   allowAdd: false,
   animSpeed: 100

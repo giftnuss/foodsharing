@@ -16,12 +16,14 @@ import { expose } from '@/utils'
 import './RegionAdmin.css'
 import { deleteGroup } from '@/api/groups'
 import { masterUpdate } from '@/api/regions'
+import { searchUser } from '@/api/search'
 
 expose({
   img,
   deleteActiveGroup,
   initMap,
-  tryMasterUpdate
+  tryMasterUpdate,
+  searchUser
 })
 
 async function deleteActiveGroup () {

@@ -13,13 +13,13 @@
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
 - Allow seeing basket markers on map without being logged in !1636 @alex.simm
 - Removed form for new amb's #821 !1619 @chriswalg
-
 - Fix default center value for leaflet map !1644 @alex.simm
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
+- Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 
 ## Dev/Test/CI stuff
 
