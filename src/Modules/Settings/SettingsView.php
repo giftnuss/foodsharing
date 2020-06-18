@@ -454,14 +454,14 @@ class SettingsView extends View
 	{
 		$content = '<button type="button" id="delete-account" class="btn btn-sm btn-danger"'
 			. ' onclick="confirmDeleteAccount(' . $fsId . ')">'
-			. $this->translationHelper->s('deleteAccountNow')
+			. $this->translator->trans('foodsaver.delete_account_now')
 			. '</button>'
 			. $this->v_utils->v_info(
-				'Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?',
+				$this->translator->trans('foodsaver.delete_own_account'),
 				$this->translationHelper->s('reference')
 			);
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('deleteAccount'), ['class' => 'ui-padding bootstrap']);
+		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding bootstrap']);
 	}
 
 	public function foodsaver_form()
@@ -580,7 +580,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
@@ -605,7 +605,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';

@@ -15,6 +15,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\StorePermissions;
 use Foodsharing\Services\SanitizerService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreUserControl extends Control
 {
@@ -26,6 +27,7 @@ class StoreUserControl extends Control
 	private $timeHelper;
 	private $dataHelper;
 	private $regionGateway;
+	private $translator;
 	private $weightHelper;
 
 	public function __construct(
@@ -38,6 +40,7 @@ class StoreUserControl extends Control
 		TimeHelper $timeHelper,
 		DataHelper $dataHelper,
 		RegionGateway $regionGateway,
+		TranslatorInterface $translator,
 		WeightHelper $weightHelper
 	) {
 		$this->storeModel = $model;
@@ -49,6 +52,7 @@ class StoreUserControl extends Control
 		$this->timeHelper = $timeHelper;
 		$this->dataHelper = $dataHelper;
 		$this->regionGateway = $regionGateway;
+		$this->translator = $translator;
 		$this->weightHelper = $weightHelper;
 
 		parent::__construct();
@@ -99,7 +103,7 @@ class StoreUserControl extends Control
 					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}
 				if (isset($addedStoremanager) || isset($addedTeam)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
+					$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
 				}
 				$this->routeHelper->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {

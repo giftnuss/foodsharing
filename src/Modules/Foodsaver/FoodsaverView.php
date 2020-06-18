@@ -2,10 +2,51 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Foodsharing\Helpers\DataHelper;
+use Foodsharing\Helpers\IdentificationHelper;
+use Foodsharing\Helpers\PageHelper;
+use Foodsharing\Helpers\RouteHelper;
+use Foodsharing\Helpers\TimeHelper;
+use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Services\ImageService;
+use Foodsharing\Services\SanitizerService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodsaverView extends View
 {
+	public function __construct(
+			\Twig\Environment $twig,
+			Utils $viewUtils,
+			Session $session,
+			SanitizerService $sanitizerService,
+			PageHelper $pageHelper,
+			TimeHelper $timeHelper,
+			ImageService $imageService,
+			RouteHelper $routeHelper,
+			IdentificationHelper $identificationHelper,
+			DataHelper $dataHelper,
+			TranslationHelper $translationHelper,
+			TranslatorInterface $translator
+	) {
+		parent::__construct(
+			$twig,
+			$viewUtils,
+			$session,
+			$sanitizerService,
+			$pageHelper,
+			$timeHelper,
+			$imageService,
+			$routeHelper,
+			$identificationHelper,
+			$dataHelper,
+			$translationHelper,
+			$translator
+		);
+	}
+
 	public function foodsaverForm($foodsaver = false)
 	{
 		if ($foodsaver === false) {
@@ -111,7 +152,13 @@ class FoodsaverView extends View
 
 			$position,
 
-			$this->v_utils->v_info($this->translationHelper->s('warning_of_address_change')),
+			$this->v_utils->v_info(
+				'<b>' . $this->translator->trans('foodsaver.addresschange.title') . '</b>'
+				. '<br>' . $this->translator->trans('foodsaver.addresschange.text', [
+					'{settings}' => '<a href="/?page=settings&sub=general">'
+						. $this->translator->trans('terminology.settings') . '</a>',
+				])
+			),
 			$this->v_utils->v_form_text('stadt', ['required' => true]),
 			$this->v_utils->v_form_text('plz', ['required' => true]),
 			$this->v_utils->v_form_text('anschrift', ['required' => true]),
@@ -136,10 +183,10 @@ class FoodsaverView extends View
 	{
 		$content = '
 	<div style="text-align:center;margin-bottom:10px;">
-		<span id="delete-account">' . $this->translationHelper->s('deleteAccountNow') . '</span>
+		<span id="delete-account">' . $this->translator->trans('foodsaver.delete_account_now') . '</span>
 	</div>
 	';
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('deleteAccount'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding']);
 	}
 }

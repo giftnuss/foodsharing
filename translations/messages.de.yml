@@ -166,6 +166,7 @@ terminology:
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
   subgroups: Untergruppen
+  settings: Einstellungen
   mailboxes: Mailboxen
   n_foodsaver: 'Ein Foodsaver|%count% Foodsaver'
   n_sleeping: 'Eine Schlafmütze|%count% Schlafmützen'
@@ -420,8 +421,32 @@ pickuplist:
   unclear: Status unklar
 
 foodsaver:
+  delete_account: Account löschen
   delete_account_sure: "Soll der Account wirklich gelöscht werden?"
-  upgrade_to: Werde Foodsaver*in
+  delete_account_now: Account jetzt löschen
+  delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
+  url_error: Mit deiner Homepage-URL stimmt etwas nicht
+  mailchange_error: Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!
+  upgrade:
+    to_fs: Werde Foodsaver*in
+    needs_fs: Du musst erst Foodsaver werden
+    needs_sm: Du musst erst BetriebsverantwortlicheR werden
+    needs_fs_quiz: Du darfst zunächst das Foodsaver Quiz machen
+    amb_region: In welcher Region möchtest du Botschafter werden?
+    needs_publicinfo: Deine Kurzbeschreibung ist leer
+    needs_region: Du hast keinen Bezirk gewählt, in dem du Botschafter werden möchtest
+    needs_rv: Du musst die Rechtsvereinbarung akzeptieren!
+    quiz_error: 'Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:'
+    fs_success: Danke! Du bist jetzt Foodsaver
+    sm_success: Danke! Du bist jetzt Betriebsverantwortlicher
+    amb_success: Danke dir für deine Motivation, mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.
+
+  addresschange:
+    title: Warnung bzgl. Adressänderung
+    text: Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert.
+
+settings:
+  saved: Änderungen wurden gespeichert.
 
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"

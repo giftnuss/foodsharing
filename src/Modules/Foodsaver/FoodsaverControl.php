@@ -13,6 +13,7 @@ use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Services\FoodsaverService;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodsaverControl extends Control
 {
@@ -25,6 +26,7 @@ class FoodsaverControl extends Control
 	private $dataHelper;
 	private $regionPermissions;
 	private $profilePermissions;
+	private $translator;
 	private $contentGateway;
 
 	public function __construct(
@@ -37,6 +39,7 @@ class FoodsaverControl extends Control
 		IdentificationHelper $identificationHelper,
 		RegionPermissions $regionPermissions,
 		ProfilePermissions $profilePermissions,
+		TranslatorInterface $translator,
 		DataHelper $dataHelper,
 		ContentGateway $contentGateway
 	) {
@@ -50,6 +53,7 @@ class FoodsaverControl extends Control
 		$this->dataHelper = $dataHelper;
 		$this->regionPermissions = $regionPermissions;
 		$this->profilePermissions = $profilePermissions;
+		$this->translator = $translator;
 		$this->contentGateway = $contentGateway;
 
 		parent::__construct();
@@ -98,7 +102,7 @@ class FoodsaverControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_menu([
 						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('deleteAccount')]
+						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translator->trans('foodsaver.delete_account')]
 						]),
 						$this->translationHelper->s('actions')),
 						CNT_RIGHT
