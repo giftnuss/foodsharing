@@ -111,7 +111,7 @@ class BasketView extends View
 			}
 		} else {
 			$page->addSection(
-				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translationHelper->s('reference')),
+				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translator->trans('notice')),
 				false,
 				['wrapper' => false]
 			);

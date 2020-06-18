@@ -4,6 +4,7 @@ picture_upload_widget:
   choose_picture: Wähle ein Bild von Deinem Rechner!
 
 button:
+  save: Speichern
   change_picture: Bild ändern
   attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
@@ -162,7 +163,7 @@ terminology:
   wall: Pinnwand
   statistic: Statistik
   reports: Regelverletzungen (Preview)
-  fsp: Fair-Teiler
+  fsp: Fairteiler
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
   subgroups: Untergruppen
@@ -184,10 +185,57 @@ are_you_sure: Bist Du sicher?
 really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
+back: Zurück
 options: Optionen
 error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
 delete: Löschen
+notice: Hinweis!
+
+info:
+  md: Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.
+
+fsp:
+  yours: Fairteiler in deinen Bezirken
+  inRegion: Alle Fairteiler in {region}
+  summary: Es gibt {count} Fairteiler in allen Bezirken, in denen du aktiv bist
+  summaryRegion: Es gibt {count} Fairteiler in {region} und allen Unterbezirken
+  follow: Diesem Fairteiler folgen
+  followName: Fairteiler {name} folgen
+  unfollow: Fairteiler nicht mehr folgen
+  managers: Ansprechpartner
+  followers: Follower
+  description: Beschreibung
+  new: Neuer Fairteiler
+  add: Fairteiler eintragen
+  addError: Fairteiler konnte nicht eingetragen werden. Hast du alles richtig ausgefüllt?
+  addSuccess: Fairteiler wurde erfolgreich eingetragen
+  suggest: Fairteiler vorschlagen
+  suggestSuccess: Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter bestätigt werden.
+  accept: Fairteiler freischalten
+  acceptSuccess: Fairteiler ist jetzt aktiv
+  reject: Fairteiler ablehnen
+  rejectConfirm: Achtung! Wenn du den Fairteiler löschst, kannst du dies nicht mehr rückgängig machen. Fortfahren?
+  edit: Fairteiler bearbeiten
+  editName: 'Fairteiler "{name}" bearbeiten'
+  editSuccess: Fairteiler wurde erfolgreich bearbeitet
+  descLabel: Schreibe hier ein paar grundsätzliche Infos über den Fairteiler! Insbesondere wann er zugänglich/geöffnet ist.
+  noManager: Es muss mindestens einen Verantwortlichen für diesen Fairteiler geben!
+  publicwall: Beachte, dass deine Beiträge auf der Fairteiler-Pinnwand öffentlich einsehbar sind.
+  delete: Fairteiler löschen
+  deleteConfirm: Möchtest du wirklich diesen Fairteiler löschen?
+  deleteSuccess: Fairteiler wurde gelöscht
+  none: Noch keine Fairteiler eingetragen
+  info:
+    from: 'Updates vom Fairteiler "{name}"'
+    bell: nur interne Infomeldungen (Glocke)
+    mail: Glocke und E-Mail-Benachrichtigung
+    none: gar nicht mehr
+    descModal: Wie möchtest du über Updates (z.B. Essenslieferungen) informiert werden?
+    descSettings: 'Du folgst allen Informationen des Fairteilers "{name}". Auf welche Art möchtest du diese Benachrichtigungen bekommen?'
+    manager: Du bist verantwortlich für diesen Fairteiler und somit verpflichtet, die Updates entgegenzunehmen!
+  twig:
+    n_in_region: '{0} Keine Fairteiler in %name%| {1} Ein Fairteiler in %name%| [2, Inf[ %count% Fairteiler in %name%'
 
 store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
@@ -297,11 +345,6 @@ wall:
   name: Pinnwand
   message_placeholder: Nachricht schreiben...
 
-food_share_point:
-  all_at: Alle Fair-Teiler in %name%
-  n_in_region: '{0} Keine Fair-Teiler in %name%| {1} Ein Fair-Teiler in %name%| [2, Inf[ %count% Fair-Teiler in %name%'
-  add_new: Neuer Fair-Teiler
-
 events:
   name: Termine
   add_new_event: Jetzt neuen Termin eintragen
@@ -372,7 +415,7 @@ bell:
 
   buddy_request_title: "Kennst Du {name}?"
   buddy_request: "{name} kennt Dich."
-  sharepoint_activate_title: "Neuer Fair-Teiler in {bezirk}"
+  sharepoint_activate_title: "Neuer Fairteiler in {bezirk}"
   sharepoint_activate: "{name} wurde eingetragen"
 
   passgen_failed: "Bitte lade ein Foto! Dann wird es klappen."
@@ -479,7 +522,7 @@ dashboard:
   no_updates: "Keine Updates"
   no_more_updates_all: "Das war's!"
   no_more_updates_event: "Keine weiteren Termine"
-  no_more_updates_foodsharepoint: "Keine weiteren Fair-Teiler-Posts"
+  no_more_updates_foodsharepoint: "Keine weiteren Fairteiler-Posts"
   no_more_updates_forum: "Keine weiteren Foren-Einträge"
   no_more_updates_friendWall: "Keine weiteren Status-Meldungen"
   no_more_updates_mailbox: "Keine weiteren Mailbox-Nachrichten"
@@ -488,7 +531,7 @@ dashboard:
   empty_section: "Du hast noch keine {type}"
   event_title: "Termin: {title}"
   save_selection: Einstellungen speichern
-  source_foodsharepoint: "Fair-Teiler {0}"
+  source_foodsharepoint: "Fairteiler {0}"
   source_friendWall: "Pinnwand von {0}"
   source_friendWall_own: "Deine Pinnwand"
   source_forum: "Forum {0}"

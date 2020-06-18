@@ -45,14 +45,6 @@ final class RegionControl extends Control
 	/**
 	 * @required
 	 */
-	public function setTranslator(TranslatorInterface $translator)
-	{
-		$this->translator = $translator;
-	}
-
-	/**
-	 * @required
-	 */
 	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
@@ -70,6 +62,7 @@ final class RegionControl extends Control
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ReportPermissions $reportPermissions,
+		TranslatorInterface $translator,
 		ImageService $imageService,
 		MailboxGateway $mailboxGateway
 	) {
@@ -84,6 +77,7 @@ final class RegionControl extends Control
 		$this->forumService = $forumService;
 		$this->regionHelper = $regionHelper;
 		$this->reportPermissions = $reportPermissions;
+		$this->translator = $translator;
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
 
@@ -256,8 +250,8 @@ final class RegionControl extends Control
 
 	private function foodSharePoint(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('food_share_point'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
-		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point'));
+		$this->pageHelper->addBread($this->translator->trans('terminology.fsp'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->pageHelper->addTitle($this->translator->trans('terminology.fsp'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
 		$viewdata['food_share_point'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);

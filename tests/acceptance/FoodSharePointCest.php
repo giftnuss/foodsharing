@@ -38,8 +38,8 @@ class FoodSharePointCest
 	{
 		$I->login($this->responsible['email']);
 		$I->amOnPage($I->foodSharePointRegionListUrl($this->testBezirk['id']));
-		$I->waitForText('Fair-Teiler eintragen', 10);
-		$I->click('Fair-Teiler eintragen');
+		$I->waitForText('Fairteiler eintragen', 10);
+		$I->click('Fairteiler eintragen');
 		$I->waitForText('In welchem Bezirk');
 		$I->selectOption('#bezirk_id', $this->testBezirk['id']);
 		$I->fillField('#name', 'The greatest fairsharepoint');
@@ -52,7 +52,10 @@ class FoodSharePointCest
 		$I->fillFieldJs('#lon', '2.48');
 		$I->click('Speichern');
 		$I->waitForText('wurde erfolgreich eingetragen');
-		$id = $I->grabFromDatabase('fs_fairteiler', 'id', ['name' => 'The greatest fairsharepoint', 'bezirk_id' => $this->testBezirk['id']]);
+		$id = $I->grabFromDatabase('fs_fairteiler', 'id', [
+			'name' => 'The greatest fairsharepoint',
+			'bezirk_id' => $this->testBezirk['id'],
+		]);
 		$I->amOnPage($I->foodSharePointGetUrl($id));
 		$I->waitForText('Kantstrasse 20', 10);
 	}
@@ -62,9 +65,10 @@ class FoodSharePointCest
 		$user = $I->createFoodsaver(null, ['bezirk_id' => $this->testBezirk['id']]);
 		$I->login($this->responsible['email']);
 		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']));
-		$I->waitForText('Schreibe hier ein paar grundsätzliche Infos über den Fair-Teiler! Insbesondere wann er zugänglich/geöffnet ist');
-		$I->fillField('#name', 'Der BESTE fairshare point!');
-		$I->addInTagSelect($user['name'], '#bfoodsaver');
+		$I->waitForText('Schreibe hier ein paar grundsätzliche Infos über den Fairteiler!');
+		$I->waitForText('Insbesondere wann er zugänglich/geöffnet ist');
+		$I->fillField('#name', 'The BEST fairshare point!');
+		$I->addInTagSelect($user['name'], '#fspmanagers');
 		$I->click('Speichern');
 		$I->waitForText('erfolgreich bearbeitet');
 		$I->waitForText($user['name'] . ' ' . $user['nachname']);
@@ -84,7 +88,7 @@ class FoodSharePointCest
 			$I->waitForText('Schreibe hier ein paar');
 		} else {
 			/* just see the fairteiler page if not enough permissions to edit */
-			$I->waitForText('Beachte, dass Deine Beiträge');
+			$I->waitForText('Beachte, dass deine Beiträge');
 		}
 	}
 
@@ -96,6 +100,6 @@ class FoodSharePointCest
 		$I->login($bot['email']);
 		$I->amOnPage($I->foodSharePointEditUrl($this->foodSharePoint['id']) . '&bid=' . $region['id']);
 		/* does not get edit view although region admin of another region (regression) */
-		$I->waitForText('Beachte, dass Deine Beiträge');
+		$I->waitForText('Beachte, dass deine Beiträge');
 	}
 }

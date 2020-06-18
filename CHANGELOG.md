@@ -25,7 +25,8 @@
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_
 - Do not show unsubscribed email subscriptions for forum threads in notification settings #893 !1570 @chriswalg
-- Remove and refactor some PHP translations &22 !1583 @ChrisOelmueller
+- Remove and refactor some PHP translations &22 !1583 !1590 @ChrisOelmueller
+- Rename Fair-Teiler to Fairteiler #906 !1590 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects

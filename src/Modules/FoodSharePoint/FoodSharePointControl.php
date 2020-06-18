@@ -12,6 +12,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\FoodSharePointPermissions;
 use Foodsharing\Services\SanitizerService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodSharePointControl extends Control
 {
@@ -26,6 +27,7 @@ class FoodSharePointControl extends Control
 	private $foodsaverGateway;
 	private $mailboxGateway;
 	private $sanitizerService;
+	private $translator;
 	private $identificationHelper;
 	private $foodSharePointPermissions;
 
@@ -36,6 +38,7 @@ class FoodSharePointControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		MailboxGateway $mailboxGateway,
 		SanitizerService $sanitizerService,
+		TranslatorInterface $translator,
 		IdentificationHelper $identificationHelper,
 		FoodSharePointPermissions $foodSharePointPermissions
 	) {
@@ -45,6 +48,7 @@ class FoodSharePointControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->sanitizerService = $sanitizerService;
+		$this->translator = $translator;
 		$this->identificationHelper = $identificationHelper;
 		$this->foodSharePointPermissions = $foodSharePointPermissions;
 
@@ -54,7 +58,7 @@ class FoodSharePointControl extends Control
 	public function index(Request $request): void
 	{
 		$this->setup($request);
-		$this->pageHelper->addBread($this->translationHelper->s('your_food_share_point'), '/?page=fairteiler');
+		$this->pageHelper->addBread($this->translator->trans('fsp.yours'), '/?page=fairteiler');
 		if ($this->regionId > 0) {
 			$this->pageHelper->addBread($this->region['name'], '/?page=fairteiler&bid=' . $this->regionId);
 		}
@@ -75,7 +79,7 @@ class FoodSharePointControl extends Control
 				$this->pageHelper->addContent($this->view->listFoodSharePoints($this->foodSharePoint));
 			} else {
 				$this->pageHelper->addContent(
-					$this->v_utils->v_info($this->translationHelper->s('no_food_share_point_available'))
+					$this->v_utils->v_info($this->translator->trans('fsp.none'))
 				);
 			}
 			$this->pageHelper->addContent($this->view->foodSharePointOptions($this->regionId), CNT_RIGHT);
@@ -189,13 +193,13 @@ class FoodSharePointControl extends Control
 			$this->foodSharePoint['name'],
 			'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id']
 		);
-		$this->pageHelper->addBread($this->translationHelper->s('edit'));
+		$this->pageHelper->addBread($this->translator->trans('fsp.edit'));
 		if ($request->request->get('form_submit') === 'fairteiler') {
-			if ($this->handleEditFt($request)) {
-				$this->flashMessageHelper->info($this->translationHelper->s('food_share_point_edit_success'));
+			if ($this->handleEditFsp($request)) {
+				$this->flashMessageHelper->info($this->translator->trans('fsp.editSuccess'));
 				$this->routeHelper->go($this->routeHelper->getSelf());
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error_default'));
+				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
 
@@ -203,17 +207,17 @@ class FoodSharePointControl extends Control
 
 		$items = [
 			[
-				'name' => $this->translationHelper->s('back'),
+				'name' => $this->translator->trans('back'),
 				'href' => '/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id'],
 			],
 		];
 
 		if ($this->foodSharePointPermissions->mayDeleteFoodSharePointOfRegion($this->regionId)) {
 			$items[] = [
-				'name' => $this->translationHelper->s('delete'),
-				'click' => 'if(confirm(\'' . $this->translationHelper->s(
-						'fsp_delete_sure'
-					) . '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id'] . '&delete=1\');}return false;',
+				'name' => $this->translator->trans('fsp.delete'),
+				'click' => 'if(confirm(\''
+					. $this->translator->trans('fsp.deleteConfirm')
+					. '\')){goTo(\'/?page=fairteiler&sub=ft&bid=' . $this->regionId . '&id=' . $this->foodSharePoint['id'] . '&delete=1\');}return false;',
 			];
 		}
 
@@ -247,15 +251,17 @@ class FoodSharePointControl extends Control
 						[
 							[
 								'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=1',
-								'name' => 'Fair-Teiler freischalten',
+								'name' => $this->translator->trans('fsp.accept'),
 							],
 							[
-								'click' => 'if(confirm(\'Achtung! Wenn Du den Fair-Teiler löschst, kannst Du dies nicht mehr rückgängig machen. Fortfahren?\')){goTo(this.href);}else{return false;}',
+								'click' => 'if(confirm(\''
+									. $this->translator->trans('fsp.rejectConfirm')
+									. '\')){goTo(this.href);}else{return false;}',
 								'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=0',
-								'name' => 'Fair-Teiler ablehnen',
+								'name' => $this->translator->trans('fsp.reject'),
 							],
 						],
-						['title' => 'Optionen']
+						['title' => $this->translator->trans('options')]
 					),
 					CNT_RIGHT
 				);
@@ -270,14 +276,14 @@ class FoodSharePointControl extends Control
 	private function accept(): void
 	{
 		$this->foodSharePointGateway->acceptFoodSharePoint($this->foodSharePoint['id']);
-		$this->flashMessageHelper->info('Fair-Teiler ist jetzt aktiv');
+		$this->flashMessageHelper->info($this->translator->trans('fsp.acceptSuccess'));
 		$this->routeHelper->go('/?page=fairteiler&sub=ft&id=' . $this->foodSharePoint['id']);
 	}
 
 	private function delete(): void
 	{
 		if ($this->foodSharePointGateway->deleteFoodSharePoint($this->foodSharePoint['id'])) {
-			$this->flashMessageHelper->info($this->translationHelper->s('delete_success'));
+			$this->flashMessageHelper->info($this->translator->trans('fsp.deleteSuccess'));
 			$this->routeHelper->go('/?page=fairteiler&bid=' . $this->regionId);
 		}
 	}
@@ -288,11 +294,11 @@ class FoodSharePointControl extends Control
 		$this->pageHelper->addTitle($this->foodSharePoint['name']);
 		$this->pageHelper->addContent(
 			$this->view->foodSharePointHead() . '
-			<div>
-				' . $this->v_utils->v_info(
-				'Beachte, dass Deine Beiträge auf der Fair-Teiler-Pinnwand öffentlich einsehbar sind.',
-				'Hinweis!'
-			) . '
+			<div>'
+				. $this->v_utils->v_info(
+					$this->translator->trans('fsp.publicwall'),
+					$this->translator->trans('notice')
+				) . '
 			</div>
 			<div class="ui-widget ui-widget-content ui-corner-all margin-bottom">
 				' . $this->wallposts('fairteiler', $this->foodSharePoint['id']) . '
@@ -304,18 +310,23 @@ class FoodSharePointControl extends Control
 
 			if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 				$items[] = [
-					'name' => $this->translationHelper->s('edit'),
+					'name' => $this->translator->trans('fsp.edit'),
 					'href' => '/?page=fairteiler&bid=' . $this->regionId . '&sub=edit&id=' . $this->foodSharePoint['id'],
 				];
 			}
 
 			if ($this->isFollower()) {
-				$items[] = [
-					'name' => $this->translationHelper->s('no_more_follow'),
-					'href' => $this->routeHelper->getSelf() . '&follow=0',
-				];
+				if ($this->foodSharePointPermissions->mayUnfollow($this->foodSharePoint['id'])) {
+					$items[] = [
+						'name' => $this->translator->trans('fsp.unfollow'),
+						'href' => $this->routeHelper->getSelf() . '&follow=0',
+					];
+				}
 			} else {
-				$items[] = ['name' => $this->translationHelper->s('follow'), 'click' => 'u_follow();return false;'];
+				$items[] = [
+					'name' => $this->translator->trans('fsp.follow'),
+					'click' => 'u_follow();return false;'
+				];
 				$this->pageHelper->addHidden($this->view->followHidden());
 			}
 
@@ -329,18 +340,18 @@ class FoodSharePointControl extends Control
 
 	public function add(Request $request): void
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('add_food_share_point'));
+		$this->pageHelper->addBread($this->translator->trans('fsp.add'));
 
 		if ($request->request->get('form_submit') === 'fairteiler') {
-			if ($this->handelAdd($request)) {
+			if ($this->handleAdd($request)) {
 				if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('food_share_point_add_success'));
+					$this->flashMessageHelper->info($this->translator->trans('fsp.addSuccess'));
 				} else {
-					$this->flashMessageHelper->info($this->translationHelper->s('food_share_point_prepare_success'));
+					$this->flashMessageHelper->info($this->translator->trans('fsp.suggestSuccess'));
 				}
 				$this->routeHelper->go('/?page=fairteiler&bid=' . (int)$this->regionId);
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('food_share_point_add_fail'));
+				$this->flashMessageHelper->error($this->translator->trans('fsp.addError'));
 			}
 		}
 
@@ -349,22 +360,22 @@ class FoodSharePointControl extends Control
 			$this->v_utils->v_menu(
 				[
 					[
-						'name' => $this->translationHelper->s('back'),
+						'name' => $this->translator->trans('back'),
 						'href' => '/?page=fairteiler&bid=' . (int)$this->regionId . '',
 					],
 				],
-				$this->translationHelper->s('options')
+				$this->translator->trans('options')
 			),
 			CNT_RIGHT
 		);
 	}
 
-	private function handleEditFt(Request $request): bool
+	private function handleEditFsp(Request $request): bool
 	{
 		if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 			$data = $this->prepareInput($request);
 			if ($this->validateInput($data)) {
-				$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('bfoodsaver'));
+				$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('fspmanagers'));
 				$this->foodSharePointGateway->updateFSPManagers($this->foodSharePoint['id'], $fspManager);
 
 				return $this->foodSharePointGateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);
@@ -406,7 +417,7 @@ class FoodSharePointControl extends Control
 		return $data['lat'] && $data['lon'] && $data['bezirk_id'];
 	}
 
-	private function handelAdd(Request $request): int
+	private function handleAdd(Request $request): int
 	{
 		$data = $this->prepareInput($request);
 		if ($this->validateInput($data)) {

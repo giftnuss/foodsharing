@@ -165,18 +165,18 @@ class SettingsView extends View
 			foreach ($foodSharePoints as $fsp) {
 				$this->pageHelper->addJs('
 					$("input[disabled=\'disabled\']").parent().on("click", function(){
-						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
+						pulseInfo("' . $this->translator->trans('fsp.info.manager') . '");
 					});
 				');
 
 				$g_data['fairteiler_' . $fsp['id']] = $fsp['infotype'];
 				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], [
-					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
-					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
+					'label' => $this->translator->trans('fsp.info.from', ['{name}' => $fsp['name']]),
+					'desc' => $this->translator->trans('fsp.info.descSettings', ['{name}' => $fsp['name']]),
 					'values' => [
-						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_food_share_point_mail')],
-						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_bell')],
-						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_food_share_point_none')]
+						['id' => InfoType::BELL, 'name' => $this->translator->trans('fsp.info.bell')],
+						['id' => InfoType::EMAIL, 'name' => $this->translator->trans('fsp.info.mail')],
+						['id' => InfoType::NONE, 'name' => $this->translator->trans('fsp.info.none')],
 					],
 					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
 				]);
@@ -458,7 +458,7 @@ class SettingsView extends View
 			. '</button>'
 			. $this->v_utils->v_info(
 				$this->translator->trans('foodsaver.delete_own_account'),
-				$this->translationHelper->s('reference')
+				$this->translator->trans('notice')
 			);
 
 		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding bootstrap']);

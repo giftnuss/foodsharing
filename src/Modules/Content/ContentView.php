@@ -88,7 +88,7 @@ class ContentView extends View
 			<h5><span>3</span> Sei verantwortungsvoll</h5>
 			<p>30<span style="white-space:nowrap">&thinsp;</span>% aller Lebensmittel landen im Müll. Damit soll nun endlich Schluss sein. Wir möchten nichts mehr wegwerfen! Wir wollen verantwortungsvoll mit Lebensmitteln umgehen und freuen uns, dass Du mitmachst.</p>
 			<h5><span>4</span> Sei zuverlässig</h5>
-			<p>In vielen Städten gibt es Fair-Teiler an denen Lebensmittel geteilt werden. Ihr könnt euch dort oder an anderen neutralen Orten treffen zum Teilen treffen. Wenn ihr Lebensmittel übergeben oder übernehmen wollt, seid bitte zuverlässig und pünktlich, lasst keinen im "Regen" stehen.</p>
+			<p>In vielen Städten gibt es Fairteiler an denen Lebensmittel geteilt werden. Ihr könnt euch dort oder an anderen neutralen Orten treffen zum Teilen treffen. Wenn ihr Lebensmittel übergeben oder übernehmen wollt, seid bitte zuverlässig und pünktlich, lasst keinen im "Regen" stehen.</p>
 			<h5><span>5</span> Mach Vorschläge</h5>
 			<p>Wir wollen uns weiterentwickeln, immer besser werden. Dazu brauchen wir Euch mit vielen guten Ideen und Tipps. Die schickt Ihr an <a href="mailto:info@foodsharing.de">info@foodsharing.de</a></p>
 			</div>', 'foodsharing Etikette', ['class' => 'ui-padding']) . '

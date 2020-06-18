@@ -20,7 +20,7 @@ $I->see('Da Lebensmittel uns am Leben erhalten, sollte man mit ihnen auch respek
 
 $I->amOnPage('/karte');
 $I->see('Essenskörbe');
-$I->see('Fair-Teiler');
+$I->see('Fairteiler');
 $I->seeElement('#map');
 // this might need a wait beforehand so leaflet had time to load asynchronously.
 // Figure out & add this wait as soon as this fails once!
