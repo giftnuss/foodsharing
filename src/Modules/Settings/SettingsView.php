@@ -492,7 +492,7 @@ class SettingsView extends View
 
 		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), [
 			$bezirkchoose,
-			$this->latLonPicker('LatLng', $latLonOptions),
+			$this->latLonPicker('LatLng', $latLonOptions, '_profile'),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
 			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (int)date('Y') - 120, 'yearRangeTo' => (int)date('Y') - 8]),

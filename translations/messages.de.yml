@@ -357,6 +357,8 @@ events:
 addresspicker:
   label: Adress-/Standort-Suche
   placeholder: Bitte hier die Adresse suchen! Falls nötig, danach unten korrigieren.
+  infobox: Bitte gib die Adresse im Textfeld zwischen dieser Nachricht und der Karte ein und bestätige diese dann durch Auswahl in der Karte.
+  infobox_profile: '<a href="https://wiki.foodsharing.de/Foodsharer">Foodsharer</a> benötigen die Adresse, um Essenskörbe über die Webseite anbieten zu können. Um als <a href="https://wiki.foodsharing.de/Foodsaver">Foodsaver</a> an Lebensmittelrettungen teilnehmen zu können, ist sie notwendig.'
 
 reports:
   about: Über

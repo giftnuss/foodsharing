@@ -274,7 +274,7 @@ class View
 		</div>';
 	}
 
-	public function latLonPicker($id, $options = [])
+	public function latLonPicker($id, $options = [], $context = '')
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
@@ -300,7 +300,8 @@ class View
 			$this->translator->trans('addresspicker.label'),
 	'<div class="lat-lon-picker">' .
 			$this->v_utils->v_info(
-				$this->translationHelper->s('position_search_infobox')
+				$this->translator->trans('addresspicker.infobox')
+				. ($context ? '<hr>' . $this->translator->trans('addresspicker.infobox' . $context) : '')
 			) .
 		'<input placeholder="' . $this->translator->trans('addresspicker.placeholder') . '" '
 			. 'type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
