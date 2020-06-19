@@ -224,10 +224,13 @@ class StoreUserControl extends Control
 				/* team list */
 				$allowedFields = [
 					// personal info
-					'id', 'name', 'photo', 'handy', 'telefon', 'quiz_rolle', 'sleep_status', 'verified',
+					'id', 'name', 'photo', 'quiz_rolle', 'sleep_status', 'verified',
 					// team-related info
-					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date', 'last_fetch',
+					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
 				];
+				if ($this->storePermissions->maySeePhoneNumbers($store['id'])) {
+					array_push($allowedFields, 'handy', 'telefon', 'last_fetch');
+				}
 
 				$this->pageHelper->addContent(
 					$this->view->vueComponent('vue-storeteam', 'store-team', [
@@ -283,7 +286,13 @@ class StoreUserControl extends Control
 ');
 
 				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
-					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-pickuplist', 'pickup-list', [
+							'storeId' => $store['id'],
+							'isCoordinator' => $store['verantwortlich'],
+							'teamConversationId' => $store['team_conversation_id'],
+						]),
+						CNT_RIGHT);
 				}
 
 				/* change regular fetchdates */

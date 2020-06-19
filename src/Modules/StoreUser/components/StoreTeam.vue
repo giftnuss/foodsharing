@@ -90,17 +90,15 @@
             <div v-if="data.item.fetchCount && data.item.lastPickup">
               {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
             </div>
-            <div v-else>
+            <div v-else-if="!data.item.fetchCount">
               {{ $i18n('store.noPickup') }}
             </div>
-            <!-- TODO figure out if we want to duplicate this information here:
-            <div v-if="data.item.isJumper">
+            <div v-else-if="data.item.isJumper">
               {{ $i18n('store.isJumper') }}
             </div>
-            <div v-if="!data.item.isVerified">
+            <div v-else-if="!data.item.isVerified">
               {{ $i18n('store.isNotVerified') }}
             </div>
-            -->
           </b-tooltip>
           <a
             :id="`member-${data.item.id}`"

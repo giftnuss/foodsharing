@@ -192,6 +192,11 @@ class StorePermissions
 		return $this->mayDoPickup($storeId);
 	}
 
+	public function maySeePhoneNumbers($storeId)
+	{
+		return $this->mayDoPickup($storeId);
+	}
+
 	public function mayChatWithRegularTeam(array $store): bool
 	{
 		return (!$store['jumper'] || $store['verantwortlich'])
