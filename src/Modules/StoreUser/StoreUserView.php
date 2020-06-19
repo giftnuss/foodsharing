@@ -88,6 +88,33 @@ class StoreUserView extends View
 		$this->pageHelper->addJs('$("#dialog_requests").dialog("open");');
 	}
 
+	public function u_legacyStoreTeamStatus(array $storeData): string
+	{
+		$this->pageHelper->addJs('
+			$("#team_status").on("change", function(){
+				var val = $(this).val();
+				showLoader();
+				$.ajax({
+					url: "/xhr.php?f=bteamstatus&bid=' . (int)$storeData['id'] . '&status=" + val,
+					success: function() { hideLoader(); }
+				});
+			});
+		');
+
+		global $g_data;
+		$g_data['team_status'] = $storeData['team_status'];
+
+		$out = $this->v_utils->v_form_select('team_status', [
+			'values' => [
+				['id' => 0, 'name' => 'Team ist voll'],
+				['id' => 1, 'name' => 'HelferInnen gesucht'],
+				['id' => 2, 'name' => 'Es werden dringend HelferInnen gesucht!']
+			]
+		]);
+
+		return $out;
+	}
+
 	public function u_storeList($storeData, $title)
 	{
 		if (empty($storeData)) {
