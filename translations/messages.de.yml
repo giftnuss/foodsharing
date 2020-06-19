@@ -279,7 +279,8 @@ store:
 
 pickup:
   dates: Abholtermine
-  confirm: 'Bestätigen'
+  call: Anrufen
+  confirm: Bestätigen
   kick: Austragen
   leave: Austragen
   open_profile: Profil aufrufen

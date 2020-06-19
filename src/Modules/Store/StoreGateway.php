@@ -422,7 +422,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 						UNIX_TIMESTAMP(t.`stat_add_date`) AS add_date,
 						fs.sleep_status
 
-
 				FROM 	`fs_betrieb_team` t
 				INNER JOIN `fs_foodsaver` fs
 				     	ON fs.id = t.foodsaver_id
