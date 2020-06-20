@@ -217,7 +217,9 @@
               v-if="data.item.fetchCount && data.item.lastPickup"
               class="text-muted"
             >
-              {{ $i18n('store.lastPickupShort', { date: $dateDistanceInWords(data.item.lastPickup) }) }}
+              {{ displayManageControls ?
+                $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) :
+                $i18n('store.lastPickupShort', { date: $dateDistanceInWords(data.item.lastPickup) }) }}
             </span>
           </a>
         </template>
