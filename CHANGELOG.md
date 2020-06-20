@@ -15,6 +15,7 @@
 - Show an popover for the "remember me"-function, if clicked in password field on login page !1585 #370 @TheSoulT
 - Add a link to reset the password in the login popover !1585 @TheSoulT
 - Disabled report link on profile page and Xhr functions for sending reports !1610 @alex.simm
+- Store managers can toggle team list mode to sort by last pickup !1593 @ChrisOelmueller
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
@@ -33,6 +34,8 @@
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
 - Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 !1597 @ChrisOelmueller
 - Rewrite store team list in Vue !1499 !1591 @ChrisOelmueller
+- Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 @ChrisOelmueller
+- Rewrite store team list in Vue !1499 !1591 !1593 @ChrisOelmueller
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_
 - Do not show unsubscribed email subscriptions for forum threads in notification settings #893 !1570 @chriswalg

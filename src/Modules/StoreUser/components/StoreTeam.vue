@@ -6,7 +6,7 @@
   - unverified team members
   - jumpers
   Sleeping team members will come last in each of those sections.
-  Check StoreGateway:getStoreTeam for details.
+  Check `tableSortFunction` (and StoreGateway:getStoreTeam) for details.
   -->
   <div :class="['bootstrap store-team', `team-${storeId}`]">
     <div class="head ui-widget-header ui-corner-top">
@@ -15,8 +15,8 @@
       <div class="float-right">
         <a
           v-if="mayEditStore"
-          class="px-1"
-          :class="[displayManageControls ? 'text-warning' : 'text-light']"
+          v-b-tooltip.hover.top="$i18n('store.sm.managementToggle')"
+          :class="['px-1', managementModeEnabled ? 'text-warning' : 'text-light']"
           href="#"
           @click.prevent="toggleManageControls"
         >
@@ -33,86 +33,17 @@
     </div>
 
     <div
-      v-if="displayManageControls"
-      class="ui-widget-content ui-corner-top team-management"
+      v-if="managementModeEnabled"
+      class="bg-white ui-corner-top p-2 team-management"
     >
-      <b-button-toolbar
-        class="flex-md-column p-1"
-        key-nav
-        justify
-        :aria-label="$i18n('store.sm.managementActions')"
-      >
-        <b-button-group
-          v-b-tooltip.hover.top="$i18n('store.sm.byLastPickup')"
-          size="sm"
-          class="m-1 manage-sort"
-        >
-          <b-button
-            variant="secondary"
-            disabled
-            class="last-pickup"
-          >
-            <i class="fas fa-fw fa-user-clock" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupDesc')"
-            variant="light"
-            class="last-pickup descending"
-          >
-            <i class="fas fa-fw fa-chevron-down" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupAsc')"
-            variant="light"
-            class="last-pickup ascending"
-          >
-            <i class="fas fa-fw fa-chevron-up" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupReset')"
-            variant="light"
-            class="last-pickup reset"
-          >
-            <i class="fas fa-fw fa-sort" />
-          </b-button>
-        </b-button-group>
-
-        <b-button-group
-          v-b-tooltip.hover.top="$i18n('store.sm.filter')"
-          size="sm"
-          class="m-1 manage-filter"
-        >
-          <b-button
-            variant="warning"
-            disabled
-            class="filter"
-          >
-            <i class="fas fa-fw fa-filter" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.filterJumper')"
-            variant="light"
-            class="filter-jumper"
-          >
-            <i class="fas fa-fw fa-star" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.filterUnverified')"
-            variant="light"
-            class="filter-unverified"
-          >
-            <i class="fas fa-fw fa-eye-slash" />
-          </b-button>
-          <b-button
-            v-b-tooltip.hover.bottom="$i18n('store.sm.filterQuizSM')"
-            variant="light"
-            class="filter-storemanager-quiz"
-          >
-            <i class="fas fa-fw fa-store-alt" />
-          </b-button>
-        </b-button-group>
-      </b-button-toolbar>
+      <span class="text-muted">{{ $i18n('store.sm.managementEffect') }}</span>
     </div>
+
+    <!-- preparation for more store-management features -->
+    <StoreManagementPanel
+      v-if="false && managementModeEnabled"
+      classes="p-2 team-management"
+    />
 
     <div class="corner-bottom margin-bottom team-list">
       <b-table
@@ -123,105 +54,22 @@
         details-td-class="col-actions"
         primary-key="id"
         thead-class="d-none"
+        sort-by="ava"
+        :sort-desc.sync="sortdesc"
+        :sort-compare="sortfun"
+        show-empty
+        sort-null-last
       >
         <template v-slot:cell(ava)="data">
-          <a
-            v-b-tooltip.hover="$i18n('pickup.open_profile')"
-            :href="`/profile/${data.item.id}`"
-          >
-            <Avatar
-              :url="data.item.avatar"
-              :size="50"
-              class="member-pic"
-              :class="{'jumper': data.item.isJumper}"
-              :sleep-status="data.item.sleepStatus"
-            />
-          </a>
-
-          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
-          <b-tooltip :target="`fetchcount-${data.item.id}`" triggers="hover blur">
-            <div>
-              {{ $i18n('store.fetchCount', {'count': data.item.fetchCount}) }}
-            </div>
-            <div v-if="data.item.mayAmb">
-              {{ $i18n('store.mayAmb') }}
-            </div>
-            <div v-if="data.item.mayManage">
-              {{ $i18n('store.mayManage') }}
-            </div>
-            <div v-if="data.item.isJumper">
-              {{ $i18n('store.isJumper') }}
-            </div>
-            <div v-if="!data.item.isVerified">
-              {{ $i18n('store.isNotVerified') }}
-            </div>
-          </b-tooltip>
-          <b-badge
-            :id="`fetchcount-${data.item.id}`"
-            class="member-fetchcount"
-            :class="{'maysm': data.item.mayManage, 'waiting': data.item.isWaiting}"
-            tag="span"
-          >
-            <span v-if="data.item.isJumper">
-              <i class="fas fa-fw fa-star member-jumper" />
-            </span>
-            <span v-else-if="!data.item.isVerified">
-              <i class="fas fa-fw fa-eye-slash member-unverified" />
-            </span>
-            <span v-else>{{ data.item.fetchCount }}</span>
-          </b-badge>
+          <StoreTeamAvatar :user="data.item" />
         </template>
 
         <template v-slot:cell(info)="data">
-          <!-- eslint-disable-next-line vue/max-attributes-per-line -->
-          <b-tooltip :target="`member-${data.item.id}`" triggers="hover blur">
-            <div v-if="data.item.isManager">
-              {{ $i18n('store.isManager') }}
-            </div>
-            <div v-if="data.item.joinDate">
-              {{ $i18n('store.memberSince', { date: $dateFormat(data.item.joinDate, 'day') }) }}
-            </div>
-            <div v-if="data.item.fetchCount && data.item.lastPickup">
-              {{ $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) }}
-            </div>
-            <div v-else-if="!data.item.fetchCount">
-              {{ $i18n('store.noPickup') }}
-            </div>
-            <div v-else-if="data.item.isJumper">
-              {{ $i18n('store.isJumper') }}
-            </div>
-            <div v-else-if="!data.item.isVerified">
-              {{ $i18n('store.isNotVerified') }}
-            </div>
-          </b-tooltip>
-          <a
-            :id="`member-${data.item.id}`"
-            href="#memberdetails"
-            class="member-info"
-            :class="{'jumper': data.item.isJumper}"
-            @click.prevent="toggleActions(data)"
-          >
-            <span class="member-name">
-              {{ data.item.name }}
-            </span>
-            <span class="member-phone">
-              {{ data.item.number }}
-            </span>
-            <span
-              v-if="data.item.phone && (data.item.phone !== data.item.number)"
-              class="member-phone"
-            >
-              {{ data.item.phone }}
-            </span>
-            <span
-              v-if="data.item.fetchCount && data.item.lastPickup"
-              class="text-muted"
-            >
-              {{ displayManageControls ?
-                $i18n('store.lastPickup', { date: $dateFormat(data.item.lastPickup, 'day') }) :
-                $i18n('store.lastPickupShort', { date: $dateDistanceInWords(data.item.lastPickup) }) }}
-            </span>
-          </a>
+          <StoreTeamInfo
+            :user="data.item"
+            :store-manager-view="managementModeEnabled"
+            @toggle-details="toggleActions(data)"
+          />
         </template>
 
         <template v-slot:cell(mobinfo)="data">
@@ -313,17 +161,20 @@
 <script>
 import _ from 'underscore'
 import fromUnixTime from 'date-fns/fromUnixTime'
+import compareAsc from 'date-fns/compareAsc'
 
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
 import { xhrf, chat } from '@/script'
-import Avatar from '@/components/Avatar'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
+import StoreManagementPanel from './StoreManagementPanel'
+import StoreTeamAvatar from './StoreTeamAvatar'
+import StoreTeamInfo from './StoreTeamInfo'
 import StoreTeamInfotext from './StoreTeamInfotext'
 
 export default {
-  components: { Avatar, StoreTeamInfotext },
+  components: { StoreManagementPanel, StoreTeamAvatar, StoreTeamInfo, StoreTeamInfotext },
   mixins: [MediaQueryMixin],
   props: {
     fsId: { type: Number, required: true },
@@ -334,7 +185,9 @@ export default {
   },
   data () {
     return {
-      displayManageControls: false,
+      sortfun: this.tableSortFunction,
+      sortdesc: true,
+      managementModeEnabled: false,
       displayMembers: true
     }
   },
@@ -344,7 +197,7 @@ export default {
     },
     tableFields () {
       const fields = [
-        { key: 'ava', class: 'col-ava' },
+        { key: 'ava', class: 'col-ava', sortable: true },
         { key: 'info', class: 'col-info' }
       ]
       if (this.wSM) {
@@ -358,7 +211,8 @@ export default {
   },
   methods: {
     toggleManageControls () {
-      this.displayManageControls = !this.displayManageControls
+      this.sortfun = this.managementModeEnabled ? this.tableSortFunction : this.pickupSortFunction
+      this.managementModeEnabled = !this.managementModeEnabled
     },
     toggleTeamDisplay () {
       this.displayMembers = !this.displayMembers
@@ -418,10 +272,49 @@ export default {
         this.$refs.teamlist.refresh()
       }
     },
+    /* eslint-disable brace-style */
+    pickupSortFunction (a, b, key, directionDesc) {
+      const direction = directionDesc ? 1 : -1
+      // ORDER BY
+      // isManager (verantwortlich) DESC
+      if (a.isManager !== b.isManager) { return direction * (a.isManager - b.isManager) }
+      // lastPickup (last_fetch) DESC
+      if (a.lastPickup && b.lastPickup) { return direction * compareAsc(a.lastPickup, b.lastPickup) }
+      else if (a.lastPickup) { return direction }
+      else if (b.lastPickup) { return -1 * direction }
+      // joinDate (add_date) DESC
+      if (a.joinDate && b.joinDate) { return direction * compareAsc(a.joinDate, b.joinDate) }
+      else if (a.joinDate) { return direction }
+      else if (b.joinDate) { return -1 * direction }
+      // name ASC
+      return -1 * direction * a.name.localeCompare(b.name)
+    },
+    /* eslint-enable brace-style */
+    tableSortFunction (a, b, key, directionDesc) {
+      const direction = directionDesc ? 1 : -1
+      // ORDER BY
+      // isManager (verantwortlich) DESC
+      if (a.isManager !== b.isManager) { return direction * (a.isManager - b.isManager) }
+      // isJumper (team_active == MembershipStatus::JUMPER) ASC
+      if (a.isJumper !== b.isJumper) { return -1 * direction * (a.isJumper - b.isJumper) }
+      // isVerified (verified == 1) DESC
+      if (a.isVerified !== b.isVerified) { return direction * (a.isVerified - b.isVerified) }
+      // sleepStatus (sleep_status) ASC
+      if (a.sleepStatus !== b.sleepStatus) { return -1 * direction * (a.sleepStatus - b.sleepStatus) }
+      // fetchCount (stat_fetchcount) DESC
+      if (a.fetchCount !== b.fetchCount) { return direction * (a.fetchCount - b.fetchCount) }
+      // lastPickup (last_fetch) DESC
+      if (a.lastPickup && b.lastPickup) { return direction * compareAsc(a.lastPickup, b.lastPickup) }
+      // joinDate (add_date) DESC
+      if (a.joinDate && b.joinDate) { return direction * compareAsc(a.joinDate, b.joinDate) }
+      // name ASC
+      return -1 * direction * a.name.localeCompare(b.name)
+    },
     foodsaverData (fs) {
       if (!fs) {
         return {}
       }
+
       return {
         id: fs.id,
         isActive: fs.team_active === 1, // MembershipStatus::MEMBER
@@ -448,29 +341,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// separate because of loader issues with deep selectors in scoped + nested SCSS
-// (see https://github.com/vuejs/vue-loader/issues/913 for a discussion)
-.store-team .col-ava .member-pic ::v-deep img {
-  width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  overflow: hidden;
-}
-</style>
-
-<style lang="scss" scoped>
-.team-management {
+.store-team .team-management {
   border-bottom: 2px solid var(--warning);
 }
 
-.store-team.bootstrap .team-list {
-  --fetchcount-bg: var(--fs-beige);
-  --fetchcount-fg: var(--fs-brown);
-  --fetchcount-border: var(--fs-brown);
-  --role-may-manage-store: var(--fs-green);
-  --role-may-ambassador: var(--warning);
-  --role-other: var(--fs-beige);
-
+.store-team .team-list {
   background: var(--white);
 }
 
@@ -520,61 +395,10 @@ export default {
     &.col-ava {
       position: relative;
       align-self: center;
-
-      a {
-        display: inline-block;
-      }
-
-      .member-pic.jumper {
-        opacity: 0.5;
-      }
-
-      .member-fetchcount {
-        position: absolute;
-        top: 0;
-        right: -10px;
-        border: 2px solid var(--fetchcount-border);
-        min-width: 1.5rem;
-        opacity: 0.9;
-        background-color: var(--fetchcount-bg);
-        color: var(--fetchcount-fg);
-
-        &.maysm {
-          border-color: var(--role-may-manage-store);
-        }
-        // &.mayamb {
-        //   border-color: var(--role-may-ambassador);
-        // }
-        &.waiting {
-          border-color: var(--role-other);
-        }
-      }
     }
 
     &.col-info {
       flex-grow: 1;
-
-      .member-info {
-        display: flex;
-        min-height: 50px;
-        padding-left: 10px;
-        flex-direction: column;
-        justify-content: center;
-        font-size: smaller;
-        color: var(--dark);
-
-        &:hover, &:focus {
-          text-decoration: none;
-          outline-color: var(--fs-brown);
-        }
-      }
-
-      .member-name {
-        padding-left: 1px;
-        min-width: 0;
-        word-break: break-word;
-        font-weight: bolder;
-      }
     }
 
     &.col-mobinfo {

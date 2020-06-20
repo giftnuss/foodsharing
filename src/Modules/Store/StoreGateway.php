@@ -430,7 +430,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 	t.active  = :membershipStatus
 				AND		fs.deleted_at IS NULL
 
-				ORDER BY t.verantwortlich DESC, fs.sleep_status ASC, t.stat_fetchcount DESC, fs.verified DESC
+				ORDER BY fs.id
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::MEMBER
@@ -468,7 +468,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				AND 	t.active  = :membershipStatus
 				AND		fs.deleted_at IS NULL
 
-				ORDER BY t.verantwortlich DESC, fs.sleep_status ASC, t.stat_fetchcount DESC, fs.verified DESC
+				ORDER BY fs.id
 		', [
 			':id' => $storeId,
 			':membershipStatus' => MembershipStatus::JUMPER

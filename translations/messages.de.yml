@@ -285,6 +285,8 @@ store:
   team_conversation_name: 'Team {name}'
   springer_conversation_name: 'Springer {name}'
   sm:
+    managementToggle: BV-Ansicht
+    managementEffect: 'Für Betriebsverantwortliche zum vereinfachten Verwalten des Teams: Sortierung nach letztem Abholdatum'
     managementActions: BV-Aktionen
     byLastPickup: Nach letzter Abholung sortieren
     pickupDesc: Neueste zuerst
@@ -295,7 +297,7 @@ store:
     filterJumper: Springer
     filterQuizSM: BV-Quiz bestanden
     removeFromTeam: Aus dem Team entfernen
-    reallyRemove: 'Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?'
+    reallyRemove: Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?
     makeJumper: Auf die Springerliste
     makeRegularTeamMember: In das Team aufnehmen
 
