@@ -8,18 +8,113 @@
   Sleeping team members will come last in each of those sections.
   Check StoreGateway:getStoreTeam for details.
   -->
-  <div :class="['store-team', `team-${storeId}`]">
+  <div :class="['bootstrap store-team', `team-${storeId}`]">
     <div class="head ui-widget-header ui-corner-top">
-      {{ $i18n('store.teamName', { storeTitle }) }}
-      <a
-        class="float-right pl-2 pr-1 d-md-none text-light"
-        href="#"
-        @click.prevent="toggleTeamDisplay"
-      >
-        <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
-      </a>
+      <span>{{ $i18n('store.teamName', { storeTitle }) }}</span>
+
+      <div class="float-right">
+        <a
+          v-if="mayEditStore"
+          class="px-1"
+          :class="[displayManageControls ? 'text-warning' : 'text-light']"
+          href="#"
+          @click.prevent="toggleManageControls"
+        >
+          <i class="fas fa-fw fa-cog" />
+        </a>
+        <a
+          class="px-1 d-md-none text-light"
+          href="#"
+          @click.prevent="toggleTeamDisplay"
+        >
+          <i :class="['fas fa-fw', `fa-chevron-${displayMembers ? 'down' : 'left'}`]" />
+        </a>
+      </div>
     </div>
-    <div class="corner-bottom margin-bottom bootstrap team-list">
+
+    <div
+      v-if="displayManageControls"
+      class="ui-widget-content ui-corner-top team-management"
+    >
+      <b-button-toolbar
+        class="flex-md-column p-1"
+        key-nav
+        justify
+        :aria-label="$i18n('store.sm.managementActions')"
+      >
+        <b-button-group
+          v-b-tooltip.hover.top="$i18n('store.sm.byLastPickup')"
+          size="sm"
+          class="m-1 manage-sort"
+        >
+          <b-button
+            variant="secondary"
+            disabled
+            class="last-pickup"
+          >
+            <i class="fas fa-fw fa-user-clock" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupDesc')"
+            variant="light"
+            class="last-pickup descending"
+          >
+            <i class="fas fa-fw fa-chevron-down" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupAsc')"
+            variant="light"
+            class="last-pickup ascending"
+          >
+            <i class="fas fa-fw fa-chevron-up" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.pickupReset')"
+            variant="light"
+            class="last-pickup reset"
+          >
+            <i class="fas fa-fw fa-sort" />
+          </b-button>
+        </b-button-group>
+
+        <b-button-group
+          v-b-tooltip.hover.top="$i18n('store.sm.filter')"
+          size="sm"
+          class="m-1 manage-filter"
+        >
+          <b-button
+            variant="warning"
+            disabled
+            class="filter"
+          >
+            <i class="fas fa-fw fa-filter" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.filterJumper')"
+            variant="light"
+            class="filter-jumper"
+          >
+            <i class="fas fa-fw fa-star" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.filterUnverified')"
+            variant="light"
+            class="filter-unverified"
+          >
+            <i class="fas fa-fw fa-eye-slash" />
+          </b-button>
+          <b-button
+            v-b-tooltip.hover.bottom="$i18n('store.sm.filterQuizSM')"
+            variant="light"
+            class="filter-storemanager-quiz"
+          >
+            <i class="fas fa-fw fa-store-alt" />
+          </b-button>
+        </b-button-group>
+      </b-button-toolbar>
+    </div>
+
+    <div class="corner-bottom margin-bottom team-list">
       <b-table
         ref="teamlist"
         :items="foodsaver"
@@ -182,7 +277,7 @@
               @click="changeMembershipStatus(data.item.id, 'toteam')"
             >
               <i class="fas fa-fw fa-clipboard-check" />
-              {{ $i18n('store.makeRegularTeamMember') }}
+              {{ $i18n('store.sm.makeRegularTeamMember') }}
             </b-button>
 
             <b-button
@@ -193,7 +288,7 @@
               @click="changeMembershipStatus(data.item.id, 'tojumper')"
             >
               <i class="fas fa-fw fa-mug-hot" />
-              {{ $i18n('store.makeJumper') }}
+              {{ $i18n('store.sm.makeJumper') }}
             </b-button>
 
             <b-button
@@ -204,7 +299,7 @@
               @click="removeFromTeam(data.item)"
             >
               <i class="fas fa-fw fa-user-times" />
-              {{ $i18n('store.removeFromTeam') }}
+              {{ $i18n('store.sm.removeFromTeam') }}
             </b-button>
           </div>
         </template>
@@ -237,6 +332,7 @@ export default {
   },
   data () {
     return {
+      displayManageControls: false,
       displayMembers: true
     }
   },
@@ -259,6 +355,9 @@ export default {
     }
   },
   methods: {
+    toggleManageControls () {
+      this.displayManageControls = !this.displayManageControls
+    },
     toggleTeamDisplay () {
       this.displayMembers = !this.displayMembers
     },
@@ -301,7 +400,7 @@ export default {
       if (!fs || !fs.id) {
         return
       }
-      if (!confirm(i18n('store.reallyRemove', { name: fs.name }))) {
+      if (!confirm(i18n('store.sm.reallyRemove', { name: fs.name }))) {
         return
       }
       const fsId = fs.id
@@ -358,7 +457,11 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-.store-team .team-list.bootstrap {
+.team-management {
+  border-bottom: 2px solid var(--warning);
+}
+
+.store-team.bootstrap .team-list {
   --fetchcount-bg: var(--fs-beige);
   --fetchcount-fg: var(--fs-brown);
   --fetchcount-border: var(--fs-brown);

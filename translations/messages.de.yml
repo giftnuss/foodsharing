@@ -273,10 +273,6 @@ store:
   fetchCount: 'Hat {count}× hier abgeholt.'
   mayAmb: Hat das BOT-Quiz bestanden.
   mayManage: Hat das BV-Quiz bestanden.
-  removeFromTeam: Aus dem Team entfernen
-  reallyRemove: 'Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?'
-  makeJumper: Auf die Springerliste
-  makeRegularTeamMember: In das Team aufnehmen
   particularities: Besonderheiten
   average_collection_quantity: Abholmenge im Schnitt
   attribution: Namensnennung
@@ -288,6 +284,20 @@ store:
   days_before: vor
   team_conversation_name: 'Team {name}'
   springer_conversation_name: 'Springer {name}'
+  sm:
+    managementActions: BV-Aktionen
+    byLastPickup: Nach letzter Abholung sortieren
+    pickupDesc: Neueste zuerst
+    pickupAsc: Neueste zuletzt
+    pickupReset: Standard-Sortierung
+    filter: 'Zeige nur an:'
+    filterUnverified: Unverifizierte
+    filterJumper: Springer
+    filterQuizSM: BV-Quiz bestanden
+    removeFromTeam: Aus dem Team entfernen
+    reallyRemove: 'Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?'
+    makeJumper: Auf die Springerliste
+    makeRegularTeamMember: In das Team aufnehmen
 
 pickup:
   dates: Abholtermine
