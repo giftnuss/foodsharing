@@ -1,19 +1,18 @@
 <template>
   <!--
-  Default team list order:
+  Default team list order, sorted by number of pickups each:
   - store managers
   - active team members
+  - unverified team members
   - jumpers
-  Sleeping team members will come last in each of those sections
+  Sleeping team members will come last in each of those sections.
+  Check StoreGateway:getStoreTeam for details.
   -->
   <div :class="['store-team', `team-${storeId}`]">
-    <div
-      v-if="storeTitle"
-      class="head ui-widget-header ui-corner-top"
-    >
+    <div class="head ui-widget-header ui-corner-top">
       {{ $i18n('store.teamName', { storeTitle }) }}
       <a
-        class="float-right pl-2 pr-1 d-md-none"
+        class="float-right pl-2 pr-1 d-md-none text-light"
         href="#"
         @click.prevent="toggleTeamDisplay"
       >
@@ -230,12 +229,16 @@ export default {
   components: { Avatar, StoreTeamInfotext },
   mixins: [MediaQueryMixin],
   props: {
-    displayMembers: { type: Boolean, default: true },
     fsId: { type: Number, required: true },
     mayEditStore: { type: Boolean, default: false },
     team: { type: Array, required: true },
     storeId: { type: Number, required: true },
     storeTitle: { type: String, default: '' }
+  },
+  data () {
+    return {
+      displayMembers: true
+    }
   },
   computed: {
     foodsaver () {
