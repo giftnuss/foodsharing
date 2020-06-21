@@ -35,6 +35,7 @@
 - Rename Fair-Teiler to Fairteiler #906 !1590 @ChrisOelmueller
 - Rename "Service" classes to "Transaction" classes and move them to the corresponding modules @janopae !1475
 - Rename "Helper" namespace to "Utility" @janopae !1475
+- REST API: file uploads with resizing of images in foodshare points !818 @alangecker
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
