@@ -406,12 +406,12 @@ test('online status is true if user has two windows in different browsers and on
 function connect (t: Test, sessionId: string, cookieName = 'PHPSESSID'): Socket {
     const socket = io.connect(WS_URL, {
         transports: ['websocket'],
-        // @ts-ignore - according to the socket.io client documentation, extraHeaders is a possible option when using node.js
+        // @ts-expect-error - according to the socket.io client documentation, extraHeaders is a possible option when using node.js
         extraHeaders: {
             cookie: serialize(cookieName, sessionId)
         }
     });
-    // @ts-ignore - until https://github.com/DefinitelyTyped/DefinitelyTyped/pull/44442 is merged
+    // @ts-expect-error - until https://github.com/DefinitelyTyped/DefinitelyTyped/pull/44442 is merged
     t.on('end', () => socket.disconnect());
     return socket;
 }
