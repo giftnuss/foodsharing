@@ -251,14 +251,16 @@ class StoreUserControl extends Control
 				);
 
 				/* team status */
-				$this->pageHelper->addContent(
-					$this->v_utils->v_field(
-						$this->view->u_legacyStoreTeamStatus($store),
-						$this->translationHelper->s('status'),
-						['class' => 'ui-padding']
-					),
-					CNT_LEFT
-				);
+				if ($this->storePermissions->mayEditStore($store['id'])) {
+					$this->pageHelper->addContent(
+						$this->v_utils->v_field(
+							$this->view->u_legacyStoreTeamStatus($store),
+							$this->translationHelper->s('status'),
+							['class' => 'ui-padding']
+						),
+						CNT_LEFT
+					);
+				}
 
 				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
 					$this->pageHelper->addJs('u_updatePosts();');
