@@ -48,10 +48,10 @@
               >
                 <i class="fas fa-rocket" />
                 <small v-if="isMobile">
-                  {{ $i18n('foodsaver.upgrade_to') }}
+                  {{ $i18n('foodsaver.upgrade.to_fs') }}
                 </small>
                 <span v-else>
-                  {{ $i18n('foodsaver.upgrade_to') }}
+                  {{ $i18n('foodsaver.upgrade.to_fs') }}
                 </span>
               </a>
             </li>
