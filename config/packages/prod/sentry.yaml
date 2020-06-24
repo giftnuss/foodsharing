@@ -1,0 +1,12 @@
+sentry:
+  dsn: !php/const SENTRY_URL
+  messenger:
+    enabled: true # flushes Sentry messages at the end of each message handling
+    capture_soft_fails: true # captures exceptions marked for retry too
+  options:
+    environment: '%kernel.environment%'
+    release: !php/const SRC_REVISION #your app version
+    send_default_pii: true
+    excluded_exceptions: #exclude validation errors
+      - Symfony\Component\Security\Core\Exception\AccessDeniedException
+      - Symfony\Component\HttpKernel\Exception\HttpException

@@ -5,7 +5,8 @@ import $ from 'jquery'
 import {
   ajax,
   goTo,
-  GET
+  GET,
+  pulseError
 } from '@/script'
 import i18n from '@/i18n'
 import './Region.css'
@@ -15,6 +16,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
+import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
   $('a[href=\'#signout\']').on('click', function () {
@@ -30,13 +32,19 @@ $(document).ready(() => {
     buttons: [
       {
         text: i18n('button.yes_i_am_sure'),
-        click: function () {
-          ajax.req('bezirk', 'signout', {
-            data: $('input', this).serialize(),
-            success: function () {
-              goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+        click: async function () {
+          try {
+            await leaveRegion($('input', this).val())
+            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+          } catch (e) {
+            console.error(e.code)
+            if (e.code === 409) {
+              pulseError(i18n('region.store_managers_cannot_leave'))
+            } else {
+              pulseError(i18n('error_unexpected'))
             }
-          })
+            $(this).dialog('close')
+          }
         }
       },
       {
@@ -63,7 +71,7 @@ $(document).ready(() => {
     vueApply('#vue-genderlist')
     vueApply('#vue-pickuplist', true)
   } else if (['botforum', 'forum'].includes(GET('sub'))) {
-    if (GET('tid') !== 'undefined') {
+    if (GET('tid') !== undefined) {
       vueRegister({
         Thread
       })

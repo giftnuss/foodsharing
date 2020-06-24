@@ -12,52 +12,56 @@ use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class View
 {
 	private $sub;
 
+	/* @var \Foodsharing\Lib\Session */
+	protected $session;
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
-	protected $session;
-	protected $sanitizerService;
-	protected $pageHelper;
-	protected $timeHelper;
 
-	/**
-	 * @var \Twig\Environment
-	 */
+	/* @var \Twig\Environment */
 	public $twig;
-	protected $imageService;
-	protected $routeHelper;
-	protected $identificationHelper;
+
 	protected $dataHelper;
+	protected $identificationHelper;
+	protected $imageService;
+	protected $pageHelper;
+	protected $routeHelper;
+	protected $sanitizerService;
+	protected $timeHelper;
 	protected $translationHelper;
+	protected $translator;
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Utils $viewUtils,
 		Session $session,
-		Sanitizer $sanitizerService,
-		PageHelper $pageHelper,
-		TimeHelper $timeHelper,
-		ImageHelper $imageService,
-		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper,
+		Utils $viewUtils,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
 	) {
 		$this->twig = $twig;
-		$this->v_utils = $viewUtils;
 		$this->session = $session;
-		$this->sanitizerService = $sanitizerService;
-		$this->pageHelper = $pageHelper;
-		$this->timeHelper = $timeHelper;
-		$this->imageService = $imageService;
-		$this->routeHelper = $routeHelper;
-		$this->identificationHelper = $identificationHelper;
+		$this->v_utils = $viewUtils;
 		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->imageService = $imageService;
+		$this->pageHelper = $pageHelper;
+		$this->routeHelper = $routeHelper;
+		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	public function setSub($sub)
@@ -270,83 +274,10 @@ class View
 		</div>';
 	}
 
-	public function peopleChooser($id, $option = [])
-	{
-		$this->pageHelper->addJs('
-			var date = new Date();
-			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
-			var localsource = [];
-			$.ajax({
-				url: "/api/search/legacyindex",
-				dataType: "json",
-				success: function(json){
-
-					if(json.length > 0 && json[0] != undefined && json[0].key != undefined && json[0].key == "buddies")
-					{
-
-						for(y=0;y<json[0].result.length;y++)
-						{
-							localsource.push({id:json[0].result[y].id,value:json[0].result[y].name});
-						}
-
-					}
-				},
-				complete: function(){
-					$("#' . $id . ' input.tag").tagedit({
-						autocompleteOptions: {
-							delay: 0,
-							source: function(request, response) {
-					            /* Remote results only if string > 3: */
-
-								if(request.term.length > 3)
-								{
-									$.ajax({
-						                url: "/xhrapp.php?app=msg&m=people",
-										data: {term:request.term},
-						                dataType: "json",
-						                success: function(data) {
-											response(data);
-											// following doesn\'t work somehow => ignoring
-											// local = [];
-											// term = request.term.toLowerCase();
-											// for(i=0;i<localsource.length;i++)
-											// {
-											// 	if(localsource[i].value.indexOf(term) > 0)
-											// 	{
-											// 		local.push(localsource[i]);
-											// 	}
-											// }
-											// response(merge(local,data,"id"));
-						                }
-						            });
-								}
-								else
-								{
-									response(localsource);
-								}
-
-					        },
-							minLength: 1
-						},
-						allowEdit: false,
-						allowAdd: false,
-						animSpeed:1
-					});
-				}
-			});
-
-				var localsource = [];
-		');
-
-		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
-
-		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
-	}
-
-	public function latLonPicker($id, $options = [])
+	public function latLonPicker($id, $options = [], $context = '')
 	{
 		if (!isset($options['location'])) {
-			$data = $this->session->getLocation();
+			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
 		} else {
 			$data['lat'] = $options['location']['lat'];
 			$data['lon'] = $options['location']['lon'];
@@ -365,9 +296,17 @@ class View
 			}
 		}
 
-		$out = $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), $this->v_utils->v_info($this->translationHelper->s('position_search_infobox')) . '
-		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap"></div>');
+		$out = $this->v_utils->v_input_wrapper(
+			$this->translator->trans('addresspicker.label'),
+	'<div class="lat-lon-picker">' .
+			$this->v_utils->v_info(
+				$this->translator->trans('addresspicker.infobox')
+				. ($context ? '<hr>' . $this->translator->trans('addresspicker.infobox' . $context) : '')
+			) .
+		'<input placeholder="' . $this->translator->trans('addresspicker.placeholder') . '" '
+			. 'type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
+		<div id="map" class="pickermap"></div>
+	</div>');
 		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .

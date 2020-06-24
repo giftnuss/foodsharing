@@ -2,10 +2,7 @@
 global $g_lang;
 
 $g_lang['write_teaser'] = 'Schreibe etwas auf Deine Pinnwand...';
-$g_lang['attach_image'] = 'Statusbilder hochladen';
-$g_lang['send'] = 'Beitrag absenden';
 $g_lang['mailbox'] = 'Interne Mailbox';
-$g_lang['last_login'] = 'Letzter Login';
 $g_lang['registration_date'] = 'Registrierungsdatum';
 $g_lang['private_mail'] = 'Private E-Mail-Adresse';
 $g_lang['violation_count'] = 'Meldungen <strong>({count})</strong>';
@@ -23,6 +20,6 @@ $g_lang['notes'] = 'Notizen';
 $g_lang['notes_about'] = 'Notizen über {name}';
 $g_lang['stores'] = 'Betriebe ({count})';
 $g_lang['no_data'] = 'Es liegen keine Daten vor';
-$g_lang['verified'] = 'Verifiziert';
-$g_lang['de_verified'] = 'Entverifiziert';
+$g_lang['wasVerified'] = 'Verifiziert';
+$g_lang['lostVerification'] = 'Entverifiziert';
 $g_lang['fs_profile_does_not_exist_anymore'] = 'Dieses Nutzerprofil gibt es nicht oder nicht mehr';

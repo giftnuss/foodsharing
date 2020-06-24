@@ -25,7 +25,7 @@ class ForumFollowerGateway extends BaseGateway
 		', [':theme_id' => $thread_id, ':fs_id' => $fs_id, ':infotype_email' => InfoType::EMAIL]);
 	}
 
-	public function getForumThreads(int $fsId): array
+	public function getEmailSubscribedThreadsForUser(int $fsId): array
 	{
 		return $this->db->fetchAll('
 			SELECT
@@ -40,6 +40,8 @@ class ForumFollowerGateway extends BaseGateway
 
 			WHERE
 				tf.foodsaver_id = :fsId
+			AND
+				tf.infotype = 1
 		', [':fsId' => $fsId]);
 	}
 
@@ -103,17 +105,6 @@ class ForumFollowerGateway extends BaseGateway
 		);
 	}
 
-	public function deleteAllThreadSubscriptionTypes(int $fsId, array $threadIds): int
-	{
-		return $this->db->delete(
-			'fs_theme_follower',
-			[
-				'foodsaver_id' => $fsId,
-				'theme_id' => $threadIds
-			]
-		);
-	}
-
 	public function unfollowThreadByEmail($fs_id, $thread_id)
 	{
 		return $this->db->insertOrUpdate(
@@ -173,5 +164,19 @@ class ForumFollowerGateway extends BaseGateway
 
 			$this->db->execute($query);
 		}
+	}
+
+	/**
+	 * Recreates the default behaviour of pre may 2020 release by adding bell notifications for everybody who did not set/disable
+	 * email notifications for a certain thread.
+	 *
+	 * @return int number of inserted entries
+	 */
+	public function createFollowerEntriesForExistingThreads(): int
+	{
+		$query = 'INSERT IGNORE INTO fs_theme_follower (foodsaver_id, theme_id, infotype, bell_notification)
+				SELECT foodsaver_id, theme_id, 0, 1 FROM fs_theme_post';
+
+		return $this->db->execute($query)->rowCount();
 	}
 }

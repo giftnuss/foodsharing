@@ -2,6 +2,7 @@
 
 namespace api;
 
+use Codeception\Example;
 use Codeception\Util\HttpCode as Http;
 
 /**
@@ -76,5 +77,72 @@ class UserApiCest
 		codecept_debug($I->grabResponse());
 		$I->seeResponseCodeIs(Http::NOT_FOUND);
 		$I->seeResponseIsJson();
+	}
+
+	/**
+	 * @example["abcd@efgh.com"]
+	 * @example["test123@somedomain.de"]
+	 */
+	public function canUseEmailForRegistration(\ApiTester $I, Example $example): void
+	{
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $example[0]]);
+		$I->seeResponseCodeIs(Http::OK);
+	}
+
+	/**
+	 * @example["abcd"]
+	 * @example["abcd@efgh"]
+	 * @example["abcd@-efgh"]
+	 */
+	public function canNotUseInvalidMailForRegistration(\ApiTester $I, Example $example): void
+	{
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $example[0]]);
+		$I->seeResponseCodeIs(Http::BAD_REQUEST);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'message' => 'email is not valid'
+		]);
+	}
+
+	/**
+	 * @example["abcd@foodsharing.de"]
+	 * @example["abcd@foodsharing.network"]
+	 */
+	public function canNotUseFoodsharingEmailForRegistration(\ApiTester $I, Example $example): void
+	{
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $example[0]]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
+	}
+
+	public function canNotUseExistingEmailForRegistration(\ApiTester $I): void
+	{
+		// already existing email
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $this->user['email']]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
+
+		// not yet existing email
+		$email = 'test123@somedomain.de';
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $email]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => true
+		]);
+
+		$I->createFoodsharer(null, ['email' => $email]);
+		$I->sendPOST(self::API_USER . '/isvalidemail', ['email' => $email]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->seeResponseIsJson();
+		$I->canSeeResponseContainsJson([
+			'valid' => false
+		]);
 	}
 }

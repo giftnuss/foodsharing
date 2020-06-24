@@ -1,5 +1,0 @@
-messages:
-  type: rest
-  prefix: /api
-  resource: ../src/Controller
-  defaults: {_format: json}

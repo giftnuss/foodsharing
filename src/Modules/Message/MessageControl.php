@@ -6,10 +6,17 @@ use Foodsharing\Modules\Core\Control;
 
 final class MessageControl extends Control
 {
-	public function __construct(MessageModel $model, MessageView $view)
-	{
-		$this->model = $model;
+	private $messageGateway;
+	private $messageTransactions;
+
+	public function __construct(
+		MessageGateway $messageGateway,
+		MessageTransactions $messageTransactions,
+		MessageView $view
+	) {
 		$this->view = $view;
+		$this->messageGateway = $messageGateway;
+		$this->messageTransactions = $messageTransactions;
 
 		parent::__construct();
 
@@ -34,14 +41,7 @@ final class MessageControl extends Control
 			$this->pageHelper->addContent($this->view->leftMenu(), CNT_RIGHT);
 		}
 
-		$conversations = $this->model->listConversations();
-		if ($conversations) {
-			$ids = [];
-			foreach ($conversations as $c) {
-				$ids[$c['id']] = true;
-			}
-			$this->session->set('msg_conversations', $ids);
-		}
-		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($conversations)), CNT_RIGHT);
+		$data = $this->messageTransactions->listConversationsWithProfilesForUser($this->session->id());
+		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($data['conversations'], $data['profiles'])), CNT_RIGHT);
 	}
 }

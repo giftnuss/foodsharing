@@ -22,8 +22,13 @@ final class PickupRestController extends AbstractFOSRestController
 	private $storePermissions;
 	private $storeTransactions;
 
-	public function __construct(FoodsaverGateway $foodsaverGateway, Session $session, StoreGateway $storeGateway, StorePermissions $storePermissions, StoreTransactions $storeTransactions)
-	{
+	public function __construct(
+		FoodsaverGateway $foodsaverGateway,
+		Session $session,
+		StoreGateway $storeGateway,
+		StorePermissions $storePermissions,
+		StoreTransactions $storeTransactions
+	) {
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
@@ -158,14 +163,15 @@ final class PickupRestController extends AbstractFOSRestController
 		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
 		$profiles = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$profiles[$user['id']] = RestNormalization::normalizeUser($user);
+			$profiles[$user['id']] = RestNormalization::normalizeStoreUser($user);
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
 				if (isset($profiles[$slot['foodsaverId']])) {
 					$slot['profile'] = $profiles[$slot['foodsaverId']];
 				} else {
-					$slot['profile'] = RestNormalization::normalizeUser($this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']));
+					$details = $this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']);
+					$slot['profile'] = RestNormalization::normalizeStoreUser($details);
 				}
 				unset($slot['foodsaverId']);
 			}

@@ -54,11 +54,8 @@ class Xhr
 	 *    $xhr->addData('tree_id',1);
 	 *    is accesable in global Javascript with:
 	 *    alert(ajax.data.tree_id); => output is "1".
-	 *
-	 * @param string $key
-	 * @param $value
 	 */
-	public function addData($key, $value)
+	public function addData(string $key, $value)
 	{
 		$this->data[$key] = $value;
 	}

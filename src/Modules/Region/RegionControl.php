@@ -12,7 +12,8 @@ use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Utility\ImageHelper;
-use Symfony\Component\Form\FormFactoryBuilder;
+use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,7 +29,7 @@ final class RegionControl extends Control
 	private $forumFollowerGateway;
 	/* @var TranslatorInterface */
 	private $translator;
-	/* @var FormFactoryBuilder */
+	/* @var FormFactoryInterface */
 	private $formFactory;
 	private $forumTransactions;
 	private $forumPermissions;
@@ -38,18 +39,12 @@ final class RegionControl extends Control
 	private $reportPermissions;
 	private $mailboxGateway;
 
-	/**
-	 * @required
-	 */
-	public function setTranslator(TranslatorInterface $translator)
-	{
-		$this->translator = $translator;
-	}
+	private const DisplayAvatarListEntries = 30;
 
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory)
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -66,6 +61,7 @@ final class RegionControl extends Control
 		RegionGateway $gateway,
 		RegionHelper $regionHelper,
 		ReportPermissions $reportPermissions,
+		TranslatorInterface $translator,
 		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway
 	) {
@@ -80,6 +76,7 @@ final class RegionControl extends Control
 		$this->forumTransactions = $forumTransactions;
 		$this->regionHelper = $regionHelper;
 		$this->reportPermissions = $reportPermissions;
+		$this->translator = $translator;
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
 
@@ -148,6 +145,7 @@ final class RegionControl extends Control
 				'imageUrl' => $this->imageService->img($fs['photo'], 50, 'q')
 			];
 		};
+
 		$viewdata['isRegion'] = !$isWorkGroup;
 		$stat = [
 			'num_fs' => $this->region['fs_count'],
@@ -158,12 +156,14 @@ final class RegionControl extends Control
 			'num_pickups' => $this->region['stat_fetchcount'],
 			'pickup_weight_kg' => round($this->region['stat_fetchweight']),
 		];
+
 		$viewdata['region'] = [
 			'id' => $this->region['id'],
 			'name' => $this->region['name'],
 			'isWorkGroup' => $isWorkGroup,
 			'stat' => $stat,
-			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, 30)),
+			'admins' => array_map($avatarListEntry, array_slice($this->region['botschafter'], 0, self::DisplayAvatarListEntries)),
+			'welcomeAdmins' => array_map($avatarListEntry, array_slice($this->region['welcomeAdmins'], 0, self::DisplayAvatarListEntries)),
 		];
 		$viewdata['nav'] = ['menu' => $menu, 'active' => '=' . $activeSubpage];
 
@@ -188,7 +188,10 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
+			$this->flashMessageHelper->error($this->translator->trans('region.not_a_member_error'));
 			$this->routeHelper->go('/?page=dashboard');
+
+			return;
 		}
 
 		$this->pageHelper->addTitle($region['name']);
@@ -246,8 +249,8 @@ final class RegionControl extends Control
 
 	private function foodSharePoint(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('food_share_point'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
-		$this->pageHelper->addTitle($this->translationHelper->s('food_share_point'));
+		$this->pageHelper->addBread($this->translator->trans('terminology.fsp'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
+		$this->pageHelper->addTitle($this->translator->trans('terminology.fsp'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
 		$viewdata['food_share_point'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);
@@ -258,7 +261,7 @@ final class RegionControl extends Control
 	{
 		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
-		$form = $this->formFactory->getFormFactory()->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
+		$form = $this->formFactory->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
 				$region['id'],

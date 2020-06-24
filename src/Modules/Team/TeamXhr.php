@@ -13,8 +13,11 @@ class TeamXhr extends Control
 	private $gateway;
 	private $sanitizerService;
 
-	public function __construct(TeamGateway $gateway, TeamView $view, Sanitizer $sanitizerService)
-	{
+	public function __construct(
+		TeamGateway $gateway,
+		TeamView $view,
+		Sanitizer $sanitizerService
+	) {
 		$this->gateway = $gateway;
 		$this->view = $view;
 		$this->sanitizerService = $sanitizerService;

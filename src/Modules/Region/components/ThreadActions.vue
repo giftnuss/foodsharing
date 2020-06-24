@@ -8,7 +8,7 @@
         :checked="isFollowingBell"
         class="bell"
         switch
-        @change="toggleFollowBell"
+        @change="$emit('toggle:follow-bell')"
       >
         <a :class="{'text-strike': true, 'enabled': isFollowingBell}">
           {{ $i18n('forum.follow.bell') }}
@@ -18,7 +18,7 @@
         :checked="isFollowingEmail"
         class="email"
         switch
-        @change="toggleFollowEmail"
+        @change="$emit('toggle:follow-email')"
       >
         <a :class="{'text-strike': true, 'enabled': isFollowingEmail}">
           {{ $i18n('forum.follow.email') }}
@@ -29,7 +29,7 @@
         :checked="isSticky"
         class="sticky"
         switch
-        @change="toggleStickyness"
+        @change="$emit('toggle:sticky')"
       >
         <a :class="{'text-bold enabled': isSticky}">
           {{ $i18n('forum.thread.stick') }}
@@ -41,71 +41,13 @@
 
 <script>
 
-import * as api from '@/api/forum'
-import { pulseError } from '@/script'
-import i18n from '@/i18n'
-
 export default {
   components: {},
   props: {
-    threadId: { type: Number, default: null },
     isFollowingBell: { type: Boolean, default: null },
     isFollowingEmail: { type: Boolean, default: null },
     isSticky: { type: Boolean, default: null },
     showSticky: { type: Boolean, default: null }
-  },
-  methods: {
-    async toggleFollowBell () {
-      let targetState = !this.isFollowingBell
-      try {
-        if (targetState) {
-          await api.followThreadByBell(this.threadId)
-        } else {
-          await api.unfollowThreadByBell(this.threadId)
-        }
-        // this.$emit('update:bell')
-      } catch (err) {
-        // failed? undo it
-        targetState = !targetState
-        pulseError(i18n('error_unexpected'))
-      } finally {
-        this.$emit('update:isFollowingBell', targetState)
-      }
-    },
-    async toggleFollowEmail () {
-      let targetState = !this.isFollowingEmail
-      try {
-        if (targetState) {
-          await api.followThreadByEmail(this.threadId)
-        } else {
-          await api.unfollowThreadByEmail(this.threadId)
-        }
-        // this.$emit('update:email')
-      } catch (err) {
-        // failed? undo it
-        targetState = !targetState
-        pulseError(i18n('error_unexpected'))
-      } finally {
-        this.$emit('update:isFollowingEmail', targetState)
-      }
-    },
-    async toggleStickyness () {
-      let targetState = !this.isSticky
-      try {
-        if (targetState) {
-          await api.stickThread(this.threadId)
-        } else {
-          await api.unstickThread(this.threadId)
-        }
-        // this.$emit('update:sticky')
-      } catch (err) {
-        // failed? undo it
-        targetState = !targetState
-        pulseError(i18n('error_unexpected'))
-      } finally {
-        this.$emit('update:isSticky', targetState)
-      }
-    }
   }
 }
 </script>

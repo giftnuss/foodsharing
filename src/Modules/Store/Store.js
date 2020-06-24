@@ -8,11 +8,11 @@ import {
   GET
 } from '@/script'
 
-if (GET('a') === 'undefined') {
+if (GET('a') === undefined) {
   vueRegister({
     StoreList
   })
-  vueApply('#vue-storelist')
+  vueApply('#vue-storelist', true)
 }
 
 if (GET('a') === 'edit' || GET('a') === 'new') {

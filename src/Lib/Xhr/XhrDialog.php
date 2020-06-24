@@ -46,7 +46,7 @@ class XhrDialog
 		$this->sanitizerService = $container->get(Sanitizer::class);
 
 		if ($title !== false) {
-			$this->addOpt('title', $title);
+			$this->setTitle($title);
 		}
 
 		$this->addOpt('modal', 'true', false);
@@ -74,7 +74,7 @@ class XhrDialog
 
 	public function setTitle($title)
 	{
-		$this->addOpt('title', $title);
+		$this->addOpt('title', $this->sanitizerService->jsSafe($title, '"'));
 	}
 
 	public function addJsBefore($js)

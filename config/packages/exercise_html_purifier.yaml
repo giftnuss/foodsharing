@@ -1,0 +1,10 @@
+exercise_html_purifier:
+  default_cache_serializer_path: '%kernel.cache_dir%/htmlpurifier-cache'
+  html_profiles:
+    default:
+      config:
+        Cache.SerializerPermissions: 0775
+        AutoFormat.DisplayLinkURI: false
+        AutoFormat.Linkify: false
+        CSS.AllowedProperties: []
+        URI.DisableExternalResources: true

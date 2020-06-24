@@ -87,6 +87,15 @@
           <i class="fas fa-chart-bar" />{{ $i18n('terminology.statistic') }}
         </a>
         <a
+          v-if="region.hasConference"
+          href="#"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+          @click="showConferencePopup(region.id)"
+        >
+          <i class="fas fa-users" />{{ $i18n('menu.entry.conference') }}
+        </a>
+        <a
           v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"
@@ -130,10 +139,12 @@
 import { BCollapse, BNavItemDropdown, VBToggle } from 'bootstrap-vue'
 
 import { becomeBezirk } from '@/script'
+import Conference from './Conference'
 
 export default {
   components: { BCollapse, BNavItemDropdown },
   directives: { VBToggle },
+  mixins: [Conference],
   props: {
     regions: {
       type: Array,

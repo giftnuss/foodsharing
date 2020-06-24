@@ -16,8 +16,11 @@ class WallRestController extends AbstractFOSRestController
 	private $wallPostService;
 	private $session;
 
-	public function __construct(WallPostGateway $wallPostGateway, WallPostPermissions $wallPostService, Session $session)
-	{
+	public function __construct(
+		WallPostGateway $wallPostGateway,
+		WallPostPermissions $wallPostService,
+		Session $session
+	) {
 		$this->wallPostGateway = $wallPostGateway;
 		$this->wallPostService = $wallPostService;
 		$this->session = $session;

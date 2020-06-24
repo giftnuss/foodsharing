@@ -1,6 +1,6 @@
 import sinon from 'sinon'
 import assert from 'assert'
-import { sleep, jsonOK, setGETParams, resetModules } from '>/utils'
+import { sleep, resetModules } from '>/utils'
 
 describe('script', () => {
   const sandbox = sinon.createSandbox()
@@ -35,41 +35,6 @@ describe('script', () => {
     describe('isMob', () => {
       it('works', () => {
         assert.strictEqual(script.isMob(), true)
-      })
-    })
-
-    describe('chat', () => {
-      const fsId = 82
-      const conversationId = 10
-
-      beforeEach(() => {
-        server.respondWith(
-          `/xhrapp.php?app=msg&m=user2conv&fsid=${fsId}`,
-          jsonOK({ status: 1, data: { cid: conversationId } })
-        )
-      })
-
-      it('redirects to user chat page', () => {
-        mockBrowser
-          .expects('goTo')
-          .once()
-          .withArgs(`/?page=msg&cid=${conversationId}`)
-
-        script.chat(fsId)
-        server.respond()
-      })
-
-      it('on msg page it loads the conversation', () => {
-        mockBrowser
-          .expects('goTo')
-          .never()
-
-        setGETParams({ page: 'msg' })
-
-        script.chat(fsId)
-        server.respond()
-
-        assert(msg.loadConversation.called)
       })
     })
   })

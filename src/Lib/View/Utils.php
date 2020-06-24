@@ -1264,8 +1264,8 @@ class Utils
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
 
-		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
-		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
+		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : ((int)date('Y') - 60);
+		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : ((int)date('Y') + 60);
 
 		$value = $this->dataHelper->getValue($id);
 

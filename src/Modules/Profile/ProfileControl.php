@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Profile;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
@@ -18,8 +19,10 @@ final class ProfileControl extends Control
 	private $mailboxGateway;
 	private $reportPermissions;
 	private $profilePermissions;
+	private $mailsGateway;
 
 	public function __construct(
+		MailsGateway $mailsGateway,
 		ProfileView $view,
 		RegionGateway $regionGateway,
 		ProfileGateway $profileGateway,
@@ -35,6 +38,7 @@ final class ProfileControl extends Control
 		$this->mailboxGateway = $mailboxGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->profilePermissions = $profilePermissions;
+		$this->mailsGateway = $mailsGateway;
 
 		parent::__construct();
 
@@ -47,6 +51,9 @@ final class ProfileControl extends Control
 			if ($data && $data['deleted_at'] === null) {
 				$this->foodsaver = $data;
 				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $this->session->id());
+				if ($this->profilePermissions->maySeeBounceWarning($id)) {
+					$this->foodsaver['emailIsBouncing'] = $this->mailsGateway->emailIsBouncing($this->foodsaver['email']);
+				}
 				$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
 						$this->foodsaver['id']
 					);

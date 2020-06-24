@@ -23,18 +23,11 @@ class BasketTransactions
 	/**
 	 * Creates a new food basket and returns the created basket.
 	 *
-	 * @param string $description basket's description
-	 * @param string $phone array with 'tel' and 'handy' entries
-	 * @param string $contactString
 	 * @param int $weight weight in kg
-	 * @param float $lat latitude
-	 * @param float $lon longitude
 	 * @param int $lifetime lifetime in days
-	 *
-	 * @return array|bool the basket's details in an array or false
 	 */
-	public function addBasket($description, $photo, $contactTypes, $tel, $handy,
-			$weight, $lat, $lon, $lifetime): array
+	public function addBasket(string $description, string $photo, ?array $contactTypes, ?string $tel, ?string $handy,
+			?int $weight, ?float $lat, ?float $lon, ?int $lifetime): array
 	{
 		// parse contact types and phone numbers
 		$contactString = '1';

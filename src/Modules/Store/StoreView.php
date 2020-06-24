@@ -14,6 +14,7 @@ use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Utility\WeightHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreView extends View
 {
@@ -21,32 +22,34 @@ class StoreView extends View
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Utils $viewUtils,
 		Session $session,
-		Sanitizer $sanitizerService,
-		PageHelper $pageHelper,
-		TimeHelper $timeHelper,
-		ImageHelper $imageService,
-		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper,
+		Utils $viewUtils,
 		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
 		TranslationHelper $translationHelper,
-		WeightHelper $weightHelper
-			) {
+		WeightHelper $weightHelper,
+		TranslatorInterface $translator
+	) {
 		$this->weightHelper = $weightHelper;
 		parent::__construct(
-						$twig,
-						$viewUtils,
-						$session,
-						$sanitizerService,
-						$pageHelper,
-						$timeHelper,
-						$imageService,
-						$routeHelper,
-						$identificationHelper,
-						$dataHelper,
-						$translationHelper
-						);
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
 	}
 
 	public function dateForm()

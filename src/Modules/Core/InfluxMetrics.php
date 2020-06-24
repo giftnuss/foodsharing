@@ -10,6 +10,9 @@ class InfluxMetrics
 	private $points;
 	private $pageStatTags;
 	private $pageStatFields;
+	private $mailStat;
+	private $dbStat;
+	private $scriptStartTime;
 
 	public function __construct(\InfluxDB\Database $influxdb)
 	{
@@ -17,22 +20,37 @@ class InfluxMetrics
 		$this->points = [];
 		$this->pageStatTags = [];
 		$this->pageStatFields = [];
+		$this->mailStat = [];
+		$this->dbStat = [];
+		/* This is theoretically not the start time of the script - but it is quite close. */
+		$this->scriptStartTime = hrtime(true);
 	}
 
 	public function __destruct()
 	{
 		$this->generatePageStatistics();
+		$this->generateMailStatistics();
 		$this->flush();
+	}
+
+	public function addOutgoingMail(string $template, int $count): void
+	{
+		if (array_key_exists($template, $this->mailStat)) {
+			$this->mailStat[$template] += $count;
+		} else {
+			$this->mailStat[$template] = $count;
+		}
+	}
+
+	public function addDbQuery(int $execution_ms): void
+	{
+		$this->dbStat[] = $execution_ms;
 	}
 
 	/**
 	 * adds a point.
-	 *
-	 * @param string measurement name of the measurement
-	 * @param array fields array of field => value for field values
-	 * @param array tags array of tag => value for tag values
 	 */
-	public function addPoint($measurement, $tags = [], $fields = [])
+	public function addPoint(string $measurement, array $tags = [], array $fields = [])
 	{
 		$this->points[] = new Point($measurement,
 			null,
@@ -67,12 +85,21 @@ class InfluxMetrics
 
 	private function generatePageStatistics()
 	{
-		global $script_start_time;
-		if (isset($script_start_time)) {
-			$now = microtime(true);
-			$executionTime = $now - $script_start_time;
-			$this->addPageStatData([], ['execution_time' => $executionTime]);
-			$this->addPoint('page', $this->pageStatTags, $this->pageStatFields);
+		$now = hrtime(true);
+		$executionTime = $now - $this->scriptStartTime;
+		$this->addPageStatData([], [
+			'execution_time' => intdiv($executionTime, 1e6),
+			'db_execution_time' => array_sum($this->dbStat),
+			'db_queries' => count($this->dbStat),
+			'db_execution_times' => implode(';', $this->dbStat)
+		]);
+		$this->addPoint('page', $this->pageStatTags, $this->pageStatFields);
+	}
+
+	private function generateMailStatistics()
+	{
+		foreach ($this->mailStat as $k => $v) {
+			$this->addPoint('outgoing_email', ['template' => $k], ['count' => $v]);
 		}
 	}
 }

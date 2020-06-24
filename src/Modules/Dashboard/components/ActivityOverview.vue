@@ -18,31 +18,37 @@
         </a>
         <div class="header-divider" />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('forum'))"
           :class="{'active': isActiveFilter('forum')}"
           class="fa-fw fas fa-comment-alt"
           @click="filter('forum')"
         />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('event'))"
           :class="{'active': isActiveFilter('event')}"
           class="fa-fw far fa-calendar-alt"
           @click="filter('event')"
         />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('friendWall'))"
           :class="{'active': isActiveFilter('friendWall')}"
           class="fa-fw fas fa-user"
           @click="filter('friendWall')"
         />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('foodsharepoint'))"
           :class="{'active': isActiveFilter('foodsharepoint')}"
           class="fa-fw fas fa-recycle"
           @click="filter('foodsharepoint')"
         />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('mailbox'))"
           :class="{'active': isActiveFilter('mailbox')}"
           class="fa-fw fas fa-envelope"
           @click="filter('mailbox')"
         />
         <a
+          v-b-tooltip="$i18n(getFilterDescription('store'))"
           :class="{'active': isActiveFilter('store')}"
           class="fa-fw fas fa-shopping-cart"
           @click="filter('store')"
@@ -50,6 +56,7 @@
         <div class="header-divider" />
         <a
           id="activity-option"
+          v-b-tooltip="$i18n('dashboard.settings_tooltip')"
           :class="{'active': showListings}"
           class="fas fa-cog"
           @click="toggleOptionListings"
@@ -78,9 +85,11 @@ import ActivityThread from './ActivityThread'
 import ActivityOptionListings from './ActivityOptionListings'
 import { allFilterTypes } from './ActivityFilter'
 import _ from 'underscore'
+import { VBTooltip } from 'bootstrap-vue'
 
 export default {
   components: { ActivityThread, ActivityOptionListings },
+  directives: { VBTooltip },
   props: {
     allTypes: {
       type: Array,
@@ -96,16 +105,7 @@ export default {
   computed: {
     currentFilterDescription () {
       if (this.displayedTypes.length === 1) {
-        switch (this.displayedTypes[0]) {
-          case 'event': return 'terminology.events'
-          case 'forum': return 'terminology.forum'
-          case 'foodsharepoint': return 'terminology.fsp'
-          case 'friendWall': return 'terminology.wall'
-          case 'mailbox': return 'terminology.mailboxes'
-          case 'store': return 'terminology.stores'
-          default:
-            return null
-        }
+        return this.getFilterDescription(this.displayedTypes[0])
       } else {
         // this assumes that no other filter enables more than one type!
         return null
@@ -124,6 +124,18 @@ export default {
     isActiveFilter: function (category = null) {
       const categories = category ? [category] : this.allTypes
       return _.isEqual(categories, this.displayedTypes)
+    },
+    getFilterDescription: function (filterName) {
+      switch (filterName) {
+        case 'event': return 'terminology.events'
+        case 'forum': return 'terminology.forum'
+        case 'foodsharepoint': return 'terminology.fsp'
+        case 'friendWall': return 'terminology.wall'
+        case 'mailbox': return 'terminology.mailboxes'
+        case 'store': return 'terminology.stores'
+        default:
+          return null
+      }
     }
   }
 }

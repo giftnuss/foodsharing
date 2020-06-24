@@ -13,6 +13,7 @@ class AsyncMail
 {
 	private $mem;
 	private $data;
+	private bool $highPriority;
 
 	public function __construct(Mem $mem)
 	{
@@ -26,6 +27,7 @@ class AsyncMail
 			'subject' => DEFAULT_EMAIL_NAME,
 			'identifier' => '',
 			'queuedAt' => new \DateTime()];
+		$this->highPriority = false;
 	}
 
 	public function addRecipient($email, $name = null)
@@ -76,6 +78,11 @@ class AsyncMail
 		$this->data['identifier'] = $identifier;
 	}
 
+	public function setHighPriority(bool $highPriority)
+	{
+		$this->highPriority = $highPriority;
+	}
+
 	public function toArray()
 	{
 		return $this->data;
@@ -83,6 +90,6 @@ class AsyncMail
 
 	public function send()
 	{
-		$this->mem->queueWork('email', $this->toArray());
+		$this->mem->queueWork('email', $this->toArray(), $this->highPriority);
 	}
 }

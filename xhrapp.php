@@ -4,6 +4,8 @@ use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/includes/setup.php';
 require_once 'config.inc.php';
@@ -69,12 +71,9 @@ $csrf_whitelist = [
 	// 'Message::loadconversation',
 	// 'Message::loadmore',
 	// 'Message::sendmsg',
-	// 'Message::loadconvlist',
 	// 'Message::user2conv',
 	// 'Message::newconversation',
-	// 'Message::heartbeat($opt)',
 	// 'Message::people',
-	// 'Profile::rate',
 	// 'Profile::history',
 	// 'Profile::deleteFromSlot',
 	// 'Profile::quickprofile',
@@ -144,7 +143,8 @@ if (isset($_GET['app'], $_GET['m'])) {
 	$session = $container->get(Session::class);
 	$session->initIfCookieExists();
 
-	$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+	$request = Request::createFromGlobals();
+	$response = new Response();
 
 	$class = Routing::getClassName($app, 'Xhr');
 	$obj = $container->get(ltrim($class, '\\'));
@@ -154,8 +154,11 @@ if (isset($_GET['app'], $_GET['m'])) {
 		$whitelist_key = explode('\\', $class)[3] . '::' . $meth;
 		if (!in_array($whitelist_key, $csrf_whitelist)) {
 			if (!$session->isValidCsrfHeader()) {
-				header('HTTP/1.1 403 Forbidden');
-				die('CSRF Failed: CSRF token missing or incorrect.');
+				$response->setProtocolVersion('1.1');
+				$response->setStatusCode(Response::HTTP_FORBIDDEN);
+				$response->setContent('CSRF Failed: CSRF token missing or incorrect.');
+				$response->send();
+				exit();
 			}
 		}
 
@@ -163,17 +166,19 @@ if (isset($_GET['app'], $_GET['m'])) {
 		$out = $obj->$meth($request);
 
 		if ($out === XhrResponses::PERMISSION_DENIED) {
-			header('HTTP/1.1 403 Forbidden');
-			exit();
+			$response->setProtocolVersion('1.1');
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+		} else {
+			if (!isset($out['script'])) {
+				$out['script'] = '';
+			}
+
+			$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
+
+			$response->headers->set('Content-Type', 'application/json');
+			$response->setContent(json_encode($out));
 		}
 
-		if (!isset($out['script'])) {
-			$out['script'] = '';
-		}
-
-		$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
-
-		header('Content-Type: application/json');
-		echo json_encode($out);
+		$response->send();
 	}
 }

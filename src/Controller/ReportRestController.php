@@ -17,8 +17,12 @@ class ReportRestController extends AbstractFOSRestController
 	private $reportGateway;
 	private $regionGateway;
 
-	public function __construct(Session $session, RegionGateway $regionGateway, ReportGateway $reportGateway, ReportPermissions $reportPermissions)
-	{
+	public function __construct(
+		Session $session,
+		RegionGateway $regionGateway,
+		ReportGateway $reportGateway,
+		ReportPermissions $reportPermissions
+	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->reportGateway = $reportGateway;

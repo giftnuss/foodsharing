@@ -12,8 +12,11 @@ class QuizHelper
 	private $storeGateway;
 	private $foodsaverGateway;
 
-	public function __construct(QuizSessionGateway $quizSessionGateway, StoreGateway $storeGateway, FoodsaverGateway $foodsaverGateway)
-	{
+	public function __construct(
+		QuizSessionGateway $quizSessionGateway,
+		StoreGateway $storeGateway,
+		FoodsaverGateway $foodsaverGateway
+	) {
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;

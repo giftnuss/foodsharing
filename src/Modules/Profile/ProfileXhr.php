@@ -9,14 +9,12 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 
 class ProfileXhr extends Control
 {
 	private $foodsaver;
-	private $storeModel;
 	private $bellGateway;
 	private $mailboxGateway;
 	private $regionGateway;
@@ -27,7 +25,6 @@ class ProfileXhr extends Control
 
 	public function __construct(
 		ProfileView $view,
-		StoreModel $storeModel,
 		BellGateway $bellGateway,
 		RegionGateway $regionGateway,
 		MailboxGateway $mailboxGateway,
@@ -37,7 +34,6 @@ class ProfileXhr extends Control
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
-		$this->storeModel = $storeModel;
 		$this->bellGateway = $bellGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->regionGateway = $regionGateway;
@@ -69,18 +65,11 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function rate(): array
+	public function banana(): array
 	{
-		$rate = 1;
-		if (isset($_GET['rate'])) {
-			$rate = (int)$_GET['rate'];
-		}
-
 		$foodsharerId = (int)$_GET['id'];
 
 		if ($foodsharerId > 0) {
-			$type = (int)$_GET['type'];
-
 			$message = '';
 			if (isset($_GET['message'])) {
 				$message = strip_tags($_GET['message']);
@@ -93,10 +82,10 @@ class ProfileXhr extends Control
 				];
 			}
 
-			$this->profileGateway->rate($foodsharerId, $rate, $type, $message, $this->session->id());
+			$this->profileGateway->giveBanana($foodsharerId, $message, $this->session->id());
 
 			$comment = '';
-			if ($msg = $this->profileGateway->getRateMessage($foodsharerId, $this->session->id())) {
+			if ($msg = $this->profileGateway->getBananaMessage($foodsharerId, $this->session->id())) {
 				$comment = $msg;
 			}
 
@@ -104,7 +93,7 @@ class ProfileXhr extends Control
 				'status' => 1,
 				'comment' => $comment,
 				'title' => 'Nachricht hinterlassen',
-				'script' => '$("#fs-profile-rate-comment").dialog("close");$(".vouch-banana").tooltip("close");pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
+				'script' => 'pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
 			];
 		}
 
@@ -154,7 +143,7 @@ class ProfileXhr extends Control
 	// used in ProfileView:fetchDates
 	public function deleteSinglePickup(): array
 	{
-		$store = $this->storeModel->getBetriebBezirkID($_GET['storeId']);
+		$store = $this->storeGateway->getStoreRegionId($_GET['storeId']);
 
 		if ($this->session->isOrgaTeam() || $this->session->isAdminFor($store['bezirk_id'])) {
 			if ($this->storeGateway->removeFetcher(

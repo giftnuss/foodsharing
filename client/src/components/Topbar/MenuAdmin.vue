@@ -20,7 +20,11 @@
     </b-dropdown-item>
   </b-nav-item-dropdown>
 </template>
+
 <script>
+import { url } from '@/urls'
+import i18n from '@/i18n'
+
 export default {
   props: {
     may: {
@@ -34,58 +38,58 @@ export default {
       const items = []
       if (this.may.administrateBlog) {
         items.push({
-          url: '/?page=blog&sub=manage',
+          url: url('blogEdit'),
           icon: 'far fa-newspaper',
-          label: this.$i18n('menu.blog')
+          label: i18n('menu.blog')
         })
       }
       if (this.may.editQuiz) {
         items.push({
-          url: '/?page=quiz',
+          url: url('quizEdit'),
           icon: 'fas fa-question-circle',
-          label: this.$i18n('menu.quiz')
+          label: i18n('menu.quiz')
         })
       }
       if (this.may.handleReports) {
         items.push({
-          url: '/?page=report&sub=uncom',
+          url: url('reports'),
           icon: 'fas fa-exclamation',
-          label: this.$i18n('menu.reports')
+          label: i18n('menu.reports')
         })
       }
       if (this.may.administrateRegions) {
         items.push({
-          url: '/?page=region',
+          url: url('region'),
           icon: 'fas fa-map',
-          label: this.$i18n('menu.manage_regions')
+          label: i18n('menu.manage_regions')
         })
       }
       if (this.may.administrateNewsletterEmail) {
         items.push({
-          url: '/?page=email',
+          url: url('email'),
           icon: 'fas fa-envelope',
-          label: this.$i18n('menu.email')
+          label: i18n('menu.email')
         })
       }
       if (this.may.manageMailboxes) {
         items.push({
-          url: '/?page=mailbox&a=manage',
+          url: url('mailboxManage'),
           icon: 'far fa-envelope',
-          label: this.$i18n('menu.manage_mailboxes')
+          label: i18n('menu.manage_mailboxes')
         })
       }
       if (this.may.editFAQ) {
         items.push({
-          url: '/?page=faq',
+          url: url('faqEdit'),
           icon: 'fas fa-question',
-          label: this.$i18n('menu.faq')
+          label: i18n('menu.faq')
         })
       }
       if (this.may.editContent) {
         items.push({
-          url: '/?page=content',
+          url: url('contentEdit'),
           icon: 'fas fa-file-alt',
-          label: this.$i18n('menu.content')
+          label: i18n('menu.content')
         })
       }
 
@@ -96,5 +100,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -191,7 +191,7 @@ class MailboxXhr extends Control
 		$mailboxId = $this->mailboxGateway->getMailboxId($_GET['mid']);
 		if ($this->mailboxPermissions->mayMailbox($mailboxId)) {
 			$message = $this->mailboxGateway->getMessage($_GET['mid']);
-			$sender = @json_decode($message['sender'], true);
+			$sender = json_decode($message['sender'], true, 512, JSON_THROW_ON_ERROR + JSON_INVALID_UTF8_IGNORE);
 			if (isset($sender['mailbox'], $sender['host']) && $sender != null) {
 				$subject = 'Re: ' . trim(str_replace(['Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'], '', $message['subject']));
 
@@ -252,12 +252,7 @@ class MailboxXhr extends Control
 		if (!$this->mailboxPermissions->mayHaveMailbox()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
-		/*
-		 *  an		an
-			body	body
-			mb		1
-			sub		betr
-		 */
+		$mb_id = (int)$_POST['mb'];
 
 		if ($last = (int)$this->mem->user($this->session->id(), 'mailbox-last')) {
 			if ((time() - $last) < 15) {
@@ -270,8 +265,8 @@ class MailboxXhr extends Control
 
 		$this->mem->userSet($this->session->id(), 'mailbox-last', time());
 
-		if ($this->mailboxPermissions->mayMailbox($_POST['mb'])) {
-			if ($mailbox = $this->mailboxGateway->getMailbox($_POST['mb'])) {
+		if ($this->mailboxPermissions->mayMailbox($mb_id)) {
+			if ($mailbox = $this->mailboxGateway->getMailbox($mb_id)) {
 				$an = explode(';', $_POST['an']);
 				$tmp = [];
 				foreach ($an as $a) {
@@ -331,7 +326,7 @@ class MailboxXhr extends Control
 				}
 
 				if ($this->mailboxGateway->saveMessage(
-					$_POST['mb'],
+					$mb_id,
 					MailboxFolder::FOLDER_SENT,
 					json_encode([
 						'host' => PLATFORM_MAILBOX_HOST,

@@ -51,6 +51,6 @@ class LoginCest
 
 		$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 		$I->seeHtml();
-		$I->seeResponseContains('Falsche Zugangsdaten');
+		$I->seeResponseContains('E-Mail-Adresse oder Passwort sind falsch');
 	}
 }

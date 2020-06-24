@@ -18,7 +18,10 @@ class BlogControl extends Control
 	private $identificationHelper;
 
 	public function __construct(
-		BlogView $view, BlogGateway $blogGateway, BlogPermissions $blogPermissions, TimeHelper $timeHelper,
+		BlogView $view,
+		BlogGateway $blogGateway,
+		BlogPermissions $blogPermissions,
+		TimeHelper $timeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {

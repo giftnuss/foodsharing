@@ -11,8 +11,11 @@ class RegionHelper
 	private $timeHelper;
 	private $imageService;
 
-	public function __construct(ForumTransactions $forumTransactions, TimeHelper $timeHelper, ImageHelper $imageService)
-	{
+	public function __construct(
+		ForumTransactions $forumTransactions,
+		TimeHelper $timeHelper,
+		ImageHelper $imageService
+	) {
 		$this->forumService = $forumTransactions;
 		$this->timeHelper = $timeHelper;
 		$this->imageService = $imageService;

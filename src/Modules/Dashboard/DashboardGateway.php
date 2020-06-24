@@ -9,7 +9,7 @@ class DashboardGateway extends BaseGateway
 	public function getUser($id)
 	{
 		return $this->db->fetch('
-				SELECT 
+				SELECT
 					`id`,
 					`name`,
 					rolle,
@@ -26,10 +26,8 @@ class DashboardGateway extends BaseGateway
 
 	/**
 	 * Returns the number of stores from the list of store IDs that are not assigned to a district.
-	 *
-	 * @param $storeIds
 	 */
-	public function countStoresWithoutDistrict($storeIds): int
+	public function countStoresWithoutDistrict(array $storeIds): int
 	{
 		return (int)$this->db->fetchValue('SELECT COUNT(*) FROM fs_betrieb WHERE id IN('
 			. implode(',', $storeIds)

@@ -1,6 +1,6 @@
 <?php
 
-use Foodsharing\FoodsharingKernel;
+use Foodsharing\Kernel;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,7 +25,7 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
 	Request::setTrustedHosts(explode(',', $trustedHosts));
 }
 
-$kernel = new FoodsharingKernel($env, $debug);
+$kernel = new Kernel($env, $debug);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

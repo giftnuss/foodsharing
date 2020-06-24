@@ -53,11 +53,13 @@
       {{ $i18n('menu.entry.background') }}
     </h3>
     <a
-      :href="$url('faq')"
+      :href="$url('support')"
       class="dropdown-item sub"
+      target="_blank"
+      rel="noopener noreferrer nofollow"
       role="menuitem"
     >
-      {{ $i18n('menu.entry.faq') }}
+      {{ $i18n('menu.entry.support') }}
     </a>
     <a
       :href="$url('wiki')"
@@ -97,11 +99,11 @@
       {{ $i18n('menu.entry.dataprivacy') }}
     </a>
     <a
-      :href="$url('changelog')"
+      :href="$url('releaseNotes')"
       class="dropdown-item sub"
       role="menuitem"
     >
-      {{ $i18n('menu.entry.changelog') }}
+      {{ $i18n('menu.entry.release-notes') }}
     </a>
   </b-nav-item-dropdown>
 </template>

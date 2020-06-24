@@ -43,7 +43,7 @@ class LegalData
 	public function setPrivacyNoticeAcknowledged(?bool $acknowledged): void
 	{
 		if ($acknowledged !== null) {
-			$this->privacyPolicyAcknowledged = $acknowledged;
+			$this->privacyNoticeAcknowledged = $acknowledged;
 		}
 	}
 }

@@ -15,8 +15,11 @@ class FoodSharePointGateway extends BaseGateway
 	private $regionGateway;
 	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway, BellGateway $bellGateway)
-	{
+	public function __construct(
+		Database $db,
+		RegionGateway $regionGateway,
+		BellGateway $bellGateway
+	) {
 		parent::__construct($db);
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
@@ -449,7 +452,7 @@ class FoodSharePointGateway extends BaseGateway
 		$bellData = Bell::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
-			'img img-recycle yellow',
+			'fas fa-recycle',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
 			'new-fairteiler-' . $foodSharePointId,

@@ -21,8 +21,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 
 	private $store;
 	private $foodsaver;
-
-	private $region_id = 241;
+	private $region;
 
 	private function storeData($status = 'none'): array
 	{
@@ -40,7 +39,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 			'anschrift' => implode(' ', [$this->store['str'], $this->store['hsnr']]),
 			'str' => $this->store['str'],
 			'hsnr' => (string)$this->store['hsnr'],
-			'bezirk_name' => 'Göttingen'
+			'bezirk_name' => $this->region['name']
 		];
 
 		if ($status === 'team') {
@@ -55,7 +54,8 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(\Foodsharing\Modules\Store\StoreGateway::class);
-		$this->store = $this->tester->createStore($this->region_id);
+		$this->region = $this->tester->createRegion();
+		$this->store = $this->tester->createStore($this->region['id']);
 		$this->foodsaver = $this->tester->createFoodsaver();
 		$this->faker = Faker\Factory::create('de_DE');
 	}
@@ -135,27 +135,27 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 	public function testListStoresForFoodsaver()
 	{
 		$this->assertEquals(
-			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [],
 				'waitspringer' => [],
 				'anfrage' => [],
 				'sonstige' => [$this->storeData()],
-			]
+			],
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region['id'])
 		);
 
 		$this->tester->addStoreTeam($this->store['id'], $this->foodsaver['id']);
 
 		$this->assertEquals(
-			$this->gateway->getMyStores($this->foodsaver['id'], $this->region_id),
 			[
 				'verantwortlich' => [],
 				'team' => [$this->storeData('team')],
 				'waitspringer' => [],
 				'anfrage' => [],
 				'sonstige' => [],
-			]
+			],
+			$this->gateway->getMyStores($this->foodsaver['id'], $this->region['id'])
 		);
 	}
 
@@ -174,6 +174,15 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 		$this->gateway->updateExpiredBells();
 
 		$this->tester->dontSeeInDatabase('fs_bell', ['identifier' => 'store-fetch-unconfirmed-' . $this->store['id']]);
+	}
+
+	public function testUpdateStoreRegion()
+	{
+		$newRegion = $this->tester->createRegion();
+
+		$updates = $this->gateway->updateStoreRegion($this->store['id'], $newRegion['id']);
+
+		$this->tester->seeInDatabase('fs_betrieb', ['bezirk_id' => $newRegion['id'], 'id' => $this->store['id']]);
 	}
 
 	public function testGetNoTeamConversation()

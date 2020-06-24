@@ -4,6 +4,8 @@ import dateFnsIsSameYear from 'date-fns/isSameYear'
 import dateFnsLocaleDE from 'date-fns/locale/de'
 import dateFnsFormatDistance from 'date-fns/formatDistance'
 import dateFnsAddDays from 'date-fns/addDays'
+// awesome-phonenumber is used by vue-tel-input and no explicit dep:
+import PhoneNumber from 'awesome-phonenumber'
 
 import { ajreq } from '@/script'
 
@@ -40,6 +42,8 @@ export function expose (data) {
 
 export function dateFormat (date, format = 'full-long') {
   switch (format) {
+    case 'day':
+      return dateFormat(date, 'd.M.yyyy')
     case 'full-long':
       if (dateFnsIsSameDay(date, new Date())) {
         return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")
@@ -69,6 +73,24 @@ export function dateDistanceInWords (date) {
 
 const noLocale = /^[\w-.\s,]*$/
 
+export function callableNumber (number) {
+  if (!number) {
+    return ''
+  }
+  let digits = number.toString().replace(/[^+0-9]/g, '')
+  if (digits.substring(0, 1) === '0') {
+    // maybe it's 0049 instead of +49?
+    digits = digits.replace(/^00/, '+')
+    // assume German country code if just one 0
+    digits = digits.replace(/^0/, '+' + PhoneNumber.getCountryCodeForRegionCode('DE'))
+  }
+  const phone = new PhoneNumber(digits)
+  if (!phone.isValid()) {
+    return ''
+  }
+  return 'tel:' + digits
+}
+
 /**
  * Compare function used in sorting of btable
  */
@@ -93,6 +115,42 @@ export const generateQueryString = params => {
     .map(key => key + '=' + params[key])
     .join('&')
   return qs.length ? `?${qs}` : ''
+}
+
+function autoLink (text) {
+  const pattern = /(^|\s)((?:https?|ftp):\/\/([-A-Z0-9+\u0026@#/%?=()~_|!:,.;]*[-A-Z0-9+\u0026@#/%=~()_|]))/gi
+  const currentHost = document.location.host
+
+  return text.replace(pattern, function (match, space, url, urlWithoutProto) {
+    return `${space}<a href="${url}" ${urlWithoutProto.split('/', 2)[0] !== currentHost ? ' target="_blank"' : ''}>${urlWithoutProto}</a>`
+  })
+}
+
+function nl2br (str) {
+  const breakTag = '<br>'
+  return (`${str}`).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, `$1${breakTag}$2`)
+}
+
+export function plainToHtml (string) {
+  const entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+  }
+  return autoLink(nl2br(String(string).replace(/[&<>]/g, function fromEntityMap (s) {
+    return entityMap[s]
+  })))
+}
+
+export function plainToHtmlAttribute (string) {
+  const entityMap = {
+    '"': '&quot',
+    "'": '&#39;'
+  }
+  return String(string).replace(/["']/g, function fromEntityMap (s) {
+    return entityMap[s]
+  }
+  )
 }
 
 export function isWebGLSupported () {

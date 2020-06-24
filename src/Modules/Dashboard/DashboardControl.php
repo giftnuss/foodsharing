@@ -6,6 +6,7 @@ use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
+use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
@@ -73,10 +74,6 @@ class DashboardControl extends Control
 		$is_bieb = $this->session->may('bieb');
 		$is_bot = $this->session->may('bot');
 		$is_fs = $this->session->may('fs');
-
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe']) && count($_SESSION['client']['betriebe']) > 0) {
-			$is_fs = true;
-		}
 
 		if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich']) && count($_SESSION['client']['verantwortlich']) > 0) {
 			$is_bieb = true;
@@ -185,13 +182,18 @@ class DashboardControl extends Control
 
 		$this->view->updates();
 
-		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation()))) {
+		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->getUserLocationOrDefault()))) {
 			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
 		} else {
 			if ($baskets = $this->basketGateway->listNewestBaskets()) {
 				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
 			}
 		}
+	}
+
+	private function getUserLocationOrDefault()
+	{
+		return $this->session->getLocation() ?? ['lat' => MapConstants::CENTER_GERMANY_LAT, 'lon' => MapConstants::CENTER_GERMANY_LON];
 	}
 
 	/**
@@ -332,7 +334,7 @@ class DashboardControl extends Control
 
 		$this->pageHelper->addContent(
 			'
-		<div class="pure-u-1 ui-padding-bottom">
+		<div class="ui-padding-bottom">
 		<ul class="content-top corner-all linklist">
 		<li>
 
@@ -392,10 +394,10 @@ class DashboardControl extends Control
 			$orga .= '
 		</ul>';
 
-			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding']);
+			$out = $this->v_utils->v_field($out, 'Deine Bezirke', ['class' => 'ui-padding truncate-content truncate-height-85 collapse-mobile']);
 
 			if ($orgacheck) {
-				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding']);
+				$out .= $this->v_utils->v_field($orga, 'Deine Gruppen', ['class' => 'ui-padding truncate-content truncate-height-140 collapse-mobile']);
 			}
 
 			$this->pageHelper->addContent($out, CNT_RIGHT);
@@ -405,7 +407,7 @@ class DashboardControl extends Control
 		 * Essenskörbe
 		 */
 
-		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->session->getLocation())) {
+		if ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->getUserLocationOrDefault())) {
 			$out = '
 			<ul class="linklist">';
 			foreach ($baskets as $b) {
@@ -427,7 +429,7 @@ class DashboardControl extends Control
 				$out .= '
 					<li>
 						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
-							<span style="float:left;margin-right:7px;"><img width="35px" alt="Maike" src="' . $img . '" class="ui-corner-all"></span>
+							<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
 							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
 
 							<span style="clear:both;"></span>
@@ -436,17 +438,19 @@ class DashboardControl extends Control
 			}
 			$out .= '
 			</ul>
-			<div style="text-align:center;">
+			<div class="all-baskets-link">
 				<a class="button" href="/essenskoerbe/find/">Alle Essenskörbe</a>
 			</div>';
 
-			$this->pageHelper->addContent($this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe'), CNT_LEFT);
+			$this->pageHelper->addContent(
+				$this->v_utils->v_field($out, 'Essenskörbe in Deiner Nähe', ['class' => 'truncate-content truncate-height-150 collapse-mobile']),
+			CNT_LEFT);
 		}
 
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), ['sonstige' => false])) {
+		if ($betriebe = $this->storeGateway->getMyStores($this->session->id())) {
 			$this->pageHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);

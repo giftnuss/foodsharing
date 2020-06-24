@@ -50,8 +50,7 @@ echo $SECONDS seconds elapsed
 log-header "Initializing database"
 SECONDS=0
 sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
-
-migratedb foodsharing
+migratedb codeception
 
 "$dir"/mkdirs
 echo $SECONDS seconds elapsed

@@ -33,8 +33,8 @@ final class GroupTransactions
 		EmailHelper $emailHelper,
 		TranslationHelper $translationHelper,
 		RegionGateway $regionGateway,
-		Session $session,
-		FoodsaverGateway $foodsaverGateway
+		FoodsaverGateway $foodsaverGateway,
+		Session $session
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodSharePointGateway = $foodSharePoint;
@@ -42,30 +42,7 @@ final class GroupTransactions
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
 		$this->regionGateway = $regionGateway;
-		$this->session = $session;
 		$this->foodsaverGateway = $foodsaverGateway;
-	}
-
-	public function sendEmailIfGroupHasNoAdmin(int $groupId): void
-	{
-		if (count($this->foodsaverGateway->getAdminsOrAmbassadors($groupId)) < 1) {
-			$recipient = ['welcome@foodsharing.network', 'ags.bezirke@foodsharing.network', 'beta@foodsharing.network'];
-			$groupName = $this->regionGateway->getRegionName($groupId);
-			$idStructure = $this->regionGateway->listRegionsIncludingParents([$groupId]);
-
-			$idStructureList = '';
-			foreach ($idStructure as $key => $id) {
-				$idStructureList .= str_repeat('---', $key + 1) . '> <b>' . $id . '</b>  -  ' . $this->regionGateway->getRegionName($id) . '<br>';
-			}
-
-			$messageText = $this->translationHelper->sv('message_text_to_group_admin_workgroup', ['groupId' => $groupId, 'idStructureList' => $idStructureList, 'groupName' => $groupName]);
-
-			$this->emailHelper->tplMail('general/workgroup_contact', $recipient, [
-				'gruppenname' => $groupName,
-				'message' => $messageText,
-				'username' => $this->session->user('name'),
-				'userprofile' => BASE_URL . '/profile/' . $this->session->id()
-			], $this->session->user('email'));
-		}
+		$this->session = $session;
 	}
 }

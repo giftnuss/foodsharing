@@ -12,44 +12,48 @@ use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodsaverControl extends Control
 {
-	private $storeModel;
-	private $settingsGateway;
-	private $regionGateway;
 	private $foodsaverGateway;
 	private $foodsaverTransactions;
-	private $identificationHelper;
-	private $dataHelper;
-	private $regionPermissions;
-	private $profilePermissions;
 	private $contentGateway;
+	private $regionGateway;
+	private $settingsGateway;
+	private $storeModel;
+	private $profilePermissions;
+	private $regionPermissions;
+	private $dataHelper;
+	private $identificationHelper;
+	private $translator;
 
 	public function __construct(
 		FoodsaverView $view,
-		StoreModel $storeModel,
-		SettingsGateway $settingsGateway,
-		RegionGateway $regionGateway,
 		FoodsaverGateway $foodsaverGateway,
 		FoodsaverTransactions $foodsaverTransactions,
-		IdentificationHelper $identificationHelper,
-		RegionPermissions $regionPermissions,
+		ContentGateway $contentGateway,
+		RegionGateway $regionGateway,
+		SettingsGateway $settingsGateway,
+		StoreModel $storeModel,
 		ProfilePermissions $profilePermissions,
+		RegionPermissions $regionPermissions,
 		DataHelper $dataHelper,
-		ContentGateway $contentGateway
+		IdentificationHelper $identificationHelper,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
-		$this->storeModel = $storeModel;
-		$this->settingsGateway = $settingsGateway;
-		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->foodsaverTransactions = $foodsaverTransactions;
-		$this->identificationHelper = $identificationHelper;
-		$this->dataHelper = $dataHelper;
-		$this->regionPermissions = $regionPermissions;
-		$this->profilePermissions = $profilePermissions;
 		$this->contentGateway = $contentGateway;
+		$this->regionGateway = $regionGateway;
+		$this->settingsGateway = $settingsGateway;
+		$this->storeModel = $storeModel;
+		$this->profilePermissions = $profilePermissions;
+		$this->regionPermissions = $regionPermissions;
+		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->translator = $translator;
 
 		parent::__construct();
 	}
@@ -97,7 +101,7 @@ class FoodsaverControl extends Control
 					$this->pageHelper->addContent($this->v_utils->v_field(
 						$this->v_utils->v_menu([
 						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translationHelper->s('delete_account')]
+						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translator->trans('foodsaver.delete_account')]
 						]),
 						$this->translationHelper->s('actions')),
 						CNT_RIGHT

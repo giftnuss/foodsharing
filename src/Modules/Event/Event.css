@@ -14,3 +14,36 @@ div.welcome .welcome_profile_image {
   width: auto;
   height: auto;
 }
+
+ul.event-avatars {
+  margin-left: 0;
+  /* IE fallback for grid layout */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+@supports (display: grid) {
+  /* grid layout */
+  ul.event-avatars {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 35px);
+    grid-gap: 3px;
+    gap: 3px;
+    justify-content: space-between;
+  }
+}
+
+ul.event-avatars li {
+  display: inline-block;
+  margin-bottom: 0;
+  flex-basis: 38px;
+}
+
+ul.event-avatars li a {
+  display: inline-block;
+}
+
+ul.event-avatars li a img {
+  vertical-align: top;
+}

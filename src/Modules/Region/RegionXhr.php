@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Region;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Group\GroupTransactions;
 use Foodsharing\Permissions\ForumPermissions;
 
 final class RegionXhr extends Control
@@ -18,7 +17,6 @@ final class RegionXhr extends Control
 	private $forumPermissions;
 	private $regionHelper;
 	private $twig;
-	private $groupTransactions;
 
 	public function __construct(
 		RegionGateway $regionGateway,
@@ -27,8 +25,7 @@ final class RegionXhr extends Control
 		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
-		ForumFollowerGateway $forumFollowerGateway,
-		GroupTransactions $groupTransactions
+		ForumFollowerGateway $forumFollowerGateway
 	) {
 		$this->regionGateway = $regionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -38,7 +35,6 @@ final class RegionXhr extends Control
 		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
-		$this->groupTransactions = $groupTransactions;
 
 		parent::__construct();
 	}
@@ -115,19 +111,5 @@ final class RegionXhr extends Control
 			'message' => $this->translationHelper->s('post_could_not_saved')
 		]);
 		exit();
-	}
-
-	public function signout(): array
-	{
-		$groupId = (int)$_GET['bid'];
-
-		if ($this->session->mayBezirk($groupId)) {
-			$this->foodsaverGateway->deleteFromRegion($groupId, $this->session->id());
-			$this->groupTransactions->sendEmailIfGroupHasNoAdmin($groupId);
-
-			return $this->responses->success();
-		}
-
-		return $this->responses->fail_generic();
 	}
 }

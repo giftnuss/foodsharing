@@ -1,0 +1,8 @@
+.field.reset-password {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.field.reset-password .input-wrapper {
+  border-bottom: none;
+}

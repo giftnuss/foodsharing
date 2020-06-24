@@ -39,6 +39,30 @@ class RestNormalization
 	}
 
 	/**
+	 * Returns the response data for a foodsaver in store context: the above, plus
+	 * phone numbers, verification state, passed quiz level and if they're manager.
+	 *
+	 * @param array $data the user data from the database
+	 */
+	public static function normalizeStoreUser(array $data): array
+	{
+		return [
+			/* user-related data: */
+			'id' => (int)$data['id'],
+			'name' => $data['name'],
+			'avatar' => $data['photo'] ?? null,
+			'sleepStatus' => self::getSleepStatus($data, ''),
+			'mobile' => $data['handy'],
+			'landline' => $data['telefon'],
+			// 'isVerified' => boolval($data['verified']),
+			// 'roleLevel' => $data['quiz_rolle'], // should be added to FS:getFoodsaverDetails
+			/* team-related data: */
+			'isManager' => boolval($data['verantwortlich']),
+			// 'team_active' (membership status) should be included as well
+		];
+	}
+
+	/**
 	 * Normalises the detailed profile of a user.
 	 *
 	 * @param array $data user profile data

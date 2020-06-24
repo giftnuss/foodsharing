@@ -12,8 +12,12 @@ class EventControl extends Control
 	private $dataHelper;
 	private $eventPermissions;
 
-	public function __construct(EventView $view, EventGateway $gateway, DataHelper $dataHelper, EventPermissions $eventPermissions)
-	{
+	public function __construct(
+		EventView $view,
+		EventGateway $gateway,
+		DataHelper $dataHelper,
+		EventPermissions $eventPermissions
+	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->dataHelper = $dataHelper;

@@ -26,7 +26,7 @@ class FoodSharePointApiCest
 
 	public function getFoodSharePoint(\ApiTester $I)
 	{
-		$fsp = $I->createFoodSharePoint($this->user[self::ID], 241);
+		$fsp = $I->createFoodSharePoint($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendGET(self::API_FSPS . '/' . $fsp[self::ID]);
@@ -36,7 +36,7 @@ class FoodSharePointApiCest
 
 	public function listNearbyFoodSharePoints(\ApiTester $I)
 	{
-		$I->createFoodSharePoint($this->user[self::ID], 241);
+		$I->createFoodSharePoint($this->user[self::ID]);
 
 		$I->login($this->user[self::EMAIL]);
 		$I->sendGET(self::API_FSPS . '/nearby?distance=30');

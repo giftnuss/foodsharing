@@ -112,10 +112,6 @@ class StorePermissions
 			return false;
 		}
 
-		if (!$this->session->may('bieb')) {
-			return false;
-		}
-
 		if ($this->session->isOrgaTeam()) {
 			return true;
 		}
@@ -192,6 +188,11 @@ class StorePermissions
 	}
 
 	public function maySeePickups($storeId)
+	{
+		return $this->mayDoPickup($storeId);
+	}
+
+	public function maySeePhoneNumbers($storeId)
 	{
 		return $this->mayDoPickup($storeId);
 	}

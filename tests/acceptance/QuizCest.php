@@ -73,6 +73,6 @@ class QuizCest
 		$I->waitForText('nicht bestanden');
 
 		$I->dontSee('Diesmal hat es leider nicht geklappt');
-		$I->see('Du hast es leider nicht geschafft');
+		$I->see('Du hast leider bei 5 Versuchen das Quiz für Foodsaver nicht bestanden.');
 	}
 }

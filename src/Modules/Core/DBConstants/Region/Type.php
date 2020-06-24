@@ -41,4 +41,14 @@ class Type
 	public const BIG_CITY = 8;
 	/* fifth layer or lower */
 	public const PART_OF_TOWN = 9;
+
+	public static function isAccessibleRegion(int $type): bool
+	{
+		return in_array($type, [self::PART_OF_TOWN, self::CITY, self::REGION, self::DISTRICT]);
+	}
+
+	public static function isRegion(int $type): bool
+	{
+		return $type != self::WORKING_GROUP;
+	}
 }

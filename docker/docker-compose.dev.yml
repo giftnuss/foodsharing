@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_dev_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.8
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.9
     ports:
       - 18090:8080
     depends_on:
@@ -86,9 +86,10 @@ services:
 
   chat:
     container_name: foodsharing_dev_chat
-    command: sh -c "yarn && node server.js 0.0.0.0"
     image: node:13.10.1-alpine
     working_dir: /app/chat
+    command: sh -c "yarn && yarn ts-node-dev src/index.ts 0.0.0.0"
+    user: "node"
     depends_on:
       - redis
     environment:
@@ -178,17 +179,7 @@ services:
       - influxdb:/var/lib/influxdb:cached
       - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "127.0.0.1:4000:3000"
-    volumes:
-      - grafana:/var/lib/grafana:cached
-
-
-
 volumes:
   client-node-modules:
   chat-node-modules:
   influxdb:
-  grafana:

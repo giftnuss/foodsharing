@@ -21,7 +21,7 @@
     <b-dropdown
       v-else-if="allowJoin && allowRemove"
       no-caret
-      toggle-class="btn filled"
+      toggle-class="btn p-0"
       variant="tertiary"
     >
       <template v-slot:button-content>
@@ -70,8 +70,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  .empty-slot {
-    display: inline-block;
-  }
+<style lang="scss" scoped>
+.empty-slot {
+  display: inline-block;
+}
 </style>

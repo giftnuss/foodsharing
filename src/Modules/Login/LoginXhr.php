@@ -7,6 +7,7 @@ use Flourish\fImage;
 use Flourish\fUpload;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class LoginXhr extends Control
@@ -97,7 +98,7 @@ class LoginXhr extends Control
 				'name' => $data['name'],
 				'link' => $activationUrl,
 				'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
-			]);
+			], false, true);
 
 			echo json_encode([
 				'status' => 1
@@ -114,27 +115,9 @@ class LoginXhr extends Control
 
 	/**
 	 * validates the xhr request.
-	 *
-	 * @param array $data
-	 *
-	 * @return array || string error
 	 */
-	private function joinValidate($data)
+	private function joinValidate(array $data)
 	{
-		/*
-		[name] => Peter
-		[email] => peter@pan.de
-		[pw] => 12345
-		[avatar] => 5427fb55f3a5d.jpg
-		[phone] => 02261889971
-		[lat] => 48.0649838
-		[lon] => 7.885475300000053
-		[str] => Bauerngasse
-		[nr] => 6
-		[plz] => 79211
-		[country] => DE
-		*/
-
 		$check = true;
 
 		$data['name'] = strip_tags($data['name']);
@@ -161,8 +144,8 @@ class LoginXhr extends Control
 
 		$data['gender'] = (int)$data['gender'];
 
-		if ($data['gender'] > 2 || $data['gender'] < 0) {
-			$data['gender'] = 0;
+		if ($data['gender'] > Gender::DIVERSE || $data['gender'] < Gender::NOT_SELECTED) {
+			$data['gender'] = Gender::NOT_SELECTED;
 		}
 
 		$birthdate = \DateTime::createFromFormat('Y-m-d', $data['birthdate']);
@@ -183,143 +166,5 @@ class LoginXhr extends Control
 		}
 
 		return $data;
-	}
-
-	private function resizeAvatar($img)
-	{
-		// prevent path traversal
-		$img = preg_replace('/%/', '', $img);
-		$img = preg_replace('/\.+/', '.', $img);
-
-		$folder = ROOT_DIR . 'tmp/';
-		if (file_exists($folder . $img)) {
-			$image = new fImage($folder . $img);
-
-			try {
-				$folder = ROOT_DIR . 'images/';
-
-				$image->move($folder, false);
-				// make 35x35
-				copy($folder . $img, $folder . 'mini_q_' . $img);
-				$image = new fImage($folder . 'mini_q_' . $img);
-				$image->cropToRatio(1, 1);
-				$image->resize(35, 35);
-				$image->saveChanges();
-
-				// make 75x75
-				copy($folder . $img, $folder . 'med_q_' . $img);
-				$image = new fImage($folder . 'med_q_' . $img);
-				$image->cropToRatio(1, 1);
-				$image->resize(75, 75);
-				$image->saveChanges();
-
-				// make 50x50
-				copy($folder . $img, $folder . '50_q_' . $img);
-				$image = new fImage($folder . '50_q_' . $img);
-				$image->cropToRatio(1, 1);
-				$image->resize(75, 75);
-				$image->saveChanges();
-
-				// make 130x130
-				copy($folder . $img, $folder . '130_q_' . $img);
-				$image = new fImage($folder . '130_q_' . $img);
-				$image->cropToRatio(1, 1);
-				$image->resize(130, 130);
-				$image->saveChanges();
-
-				// make 150x150
-				copy($folder . $img, $folder . 'q_' . $img);
-				$image = new fImage($folder . 'q_' . $img);
-				$image->cropToRatio(1, 1);
-				$image->resize(150, 150);
-				$image->saveChanges();
-
-				return $img;
-			} catch (Exception $e) {
-				$this->flashMessageHelper->info('Dein Foto konnte nicht gespeichert werden');
-
-				return '';
-			}
-		}
-
-		return '';
-	}
-
-	private function validate_phone_number($phone)
-	{
-		/*********************************************************************/
-		/*   Purpose:   To determine if the passed string is a valid phone  */
-		/*              number following one of the establish formatting        */
-		/*                  styles for phone numbers.  This function also breaks    */
-		/*                  a valid number into it's respective components of:      */
-		/*                          3-digit area code,                                      */
-		/*                          3-digit exchange code,                                  */
-		/*                          4-digit subscriber number                               */
-		/*                  and validates the number against 10 digit US NANPA  */
-		/*                  guidelines.                                                         */
-		/*********************************************************************/
-		$format_pattern = '/^(?:(?:\((?=\d{3}\)))?(\d{3})(?:(?<=\(\d{3})\))' .
-			'?[\s.\/-]?)?(\d{3})[\s\.\/-]?(\d{4})\s?(?:(?:(?:' .
-			'(?:e|x|ex|ext)\.?\:?|extension\:?)\s?)(?=\d+)' .
-			'(\d+))?$/';
-		$nanpa_pattern = '/^(?:1)?(?(?!(37|96))[2-9][0-8][0-9](?<!(11)))?' .
-			'[2-9][0-9]{2}(?<!(11))[0-9]{4}(?<!(555(01([0-9]' .
-			'[0-9])|1212)))$/';
-
-		// Init array of variables to false
-		$valid = ['format' => false,
-			'nanpa' => false,
-			'ext' => false,
-			'all' => false];
-
-		//Check data against the format analyzer
-		if (preg_match($format_pattern, $phone, $matchset)) {
-			$valid['format'] = true;
-		}
-
-		//If formatted properly, continue
-		//if($valid['format']) {
-		if (!$valid['format']) {
-			return false;
-		}
-
-		//Set array of new components
-		$components = ['ac' => $matchset[1], //area code
-			'xc' => $matchset[2], //exchange code
-			'sn' => $matchset[3] //subscriber number
-		];
-		//              $components =   array ( 'ac' => $matchset[1], //area code
-		//                                              'xc' => $matchset[2], //exchange code
-		//                                              'sn' => $matchset[3], //subscriber number
-		//                                              'xn' => $matchset[4] //extension number
-		//                                              );
-
-		//Set array of number variants
-		$numbers = ['original' => $matchset[0],
-			'stripped' => substr(preg_replace('[\D]', '', $matchset[0]), 0, 10)
-		];
-
-		//Now let's check the first ten digits against NANPA standards
-		if (preg_match($nanpa_pattern, $numbers['stripped'])) {
-			$valid['nanpa'] = true;
-		}
-
-		//If the NANPA guidelines have been met, continue
-		if ($valid['nanpa']) {
-			if (!empty($components['xn'])) {
-				if (preg_match('/^[\d]{1,6}$/', $components['xn'])) {
-					$valid['ext'] = true;
-				}   // end if if preg_match
-			} else {
-				$valid['ext'] = true;
-			}   // end if if  !empty
-		}   // end if $valid nanpa
-
-		//If the extension number is valid or non-existent, continue
-		if ($valid['ext']) {
-			$valid['all'] = true;
-		}   // end if $valid ext
-		// end if $valid
-		return $valid['all'];
 	}
 }

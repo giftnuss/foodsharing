@@ -92,3 +92,34 @@ span.twitter-typeahead {
 .input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
   top: 46px !important;
 }
+
+.lat-lon-picker .twitter-typeahead {
+  margin: 10px 0;
+  position: relative;
+}
+.lat-lon-picker .twitter-typeahead input.input {
+  border: 5px solid var(--fs-green);
+  padding: 10px;
+  width: -moz-available;
+  width: -webkit-fill-available;
+}
+.lat-lon-picker .twitter-typeahead::after {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  display: inline;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  font-size: 1.5em;
+  color: var(--fs-green);
+  background-color: var(--white);
+  border: 5px solid var(--fs-green);
+  border-left: 0;
+  border-radius: 5px;
+  padding: 0 4px;
+  content: '\f3c5'; /* fa-map-marker-alt */
+}

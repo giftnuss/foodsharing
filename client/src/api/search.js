@@ -40,7 +40,7 @@ function mapOldResponseToNewFormat (data) {
 }
 
 export async function instantSearch (query) {
-  return mapOldResponseToNewFormat((await get(`/../xhrapp.php?app=search&m=search&s=${encodeURIComponent(query)}`)).data)
+  return await get(`/search/all?q=${encodeURIComponent(query)}`)
 }
 
 export async function instantSearchIndex () {

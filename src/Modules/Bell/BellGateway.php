@@ -91,12 +91,9 @@ class BellGateway extends BaseGateway
 	/**
 	 * Method returns an array of all bells a user sees.
 	 *
-	 * @param $fsId
-	 * @param string $limit
-	 *
 	 * @return BellForList[]
 	 */
-	public function listBells($fsId, $limit = '')
+	public function listBells(int $fsId, string $limit = '')
 	{
 		if ($limit !== '') {
 			$limit = ' LIMIT 0,' . (int)$limit;
@@ -243,6 +240,7 @@ class BellGateway extends BaseGateway
 
 			$bellDTO->id = $row['id'];
 			$bellDTO->key = $row['body'];
+			$bellDTO->title = $row['name'];
 			$bellDTO->payload = unserialize($row['vars'], ['allowed_classes' => false]);
 			$bellDTO->href = unserialize($row['attr'], ['allowed_classes' => false])['href'];
 			$bellDTO->icon = $row['icon'][0] != '/' ? $row['icon'] : null;

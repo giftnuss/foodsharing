@@ -5,46 +5,42 @@
  * (after checking the current page), so this could probably be split into two.
  */
 import $ from 'jquery'
-
-import info from '@/info'
 import conv from '@/conv'
+import i18n from '@/i18n'
 import serverData from '@/server-data'
-import autoLink from '@/autoLink'
 import autosize from 'autosize'
 import timeformat from '@/timeformat'
-import { getConversation, sendMessage } from '@/api/conversations'
+import * as api from '@/api/conversations'
 import conversationStore from '@/stores/conversations'
+import profileStore from '@/stores/profiles'
 
 import {
-  ajax,
-  stopHeartbeats,
   img,
   GET,
   pulseInfo,
   pulseError,
-  shuffle,
-  nl2br
+  shuffle
 } from '@/script'
+
+import {
+  dateDistanceInWords, dateFormat,
+  plainToHtml,
+  plainToHtmlAttribute
+} from '@/utils'
 
 const msg = {
   conversation_id: 0,
   last_message_id: 0,
-  heartbeatTime: 500,
   fsid: 0,
-  heartbeatXhr: false,
   listTimeout: false,
   moreIsLoading: false,
+  firstMessageReached: false,
   $conversation: null,
   $answer: null,
   $submit: null,
   $convs: null,
 
   init: function () {
-    /*
-     * to reduce server load, stop all other heartbeat functionality
-     */
-    stopHeartbeats()
-
     /*
      * initiate dom querys for a little bit js performance
      */
@@ -87,22 +83,6 @@ const msg = {
           height: height,
           scrollTo: `${msg.$conversation.prop('scrollHeight')}px`
         })
-      } else {
-        /* THIS CODE IS BROKEN BECAUSE app.resize does not exist, it's a copy-and-paste from stackoverflow error
-        // resize event is triggered also on scrolling in android / ios
-        // http://stackoverflow.com/questions/14257541/android-browser-triggers-jquery-window-resize-on-scolling
-        clearTimeout(app.resize.timer)
-        app.resize.timer = setTimeout(function () {
-          // do not check height, because it changes on scrolling due to hide / show address bar
-          let windowChanged = $(window).width() != app.size.window_width
-          if (windowChanged) {
-
-            // window was actually resized
-            msg.scrollBottom()
-
-          }
-        }, 500)
-        */
       }
     })
 
@@ -110,6 +90,10 @@ const msg = {
 
     msg.$answer.on('resize', function () {
       msg.$answer.css('margin-top', `-${msg.$answer.height() - 40}px`)
+    })
+
+    msg.$answer.on('focus', function () {
+      conversationStore.markAsRead(msg.conversation_id)
     })
 
     /*
@@ -124,25 +108,18 @@ const msg = {
         msg.$answer.css('height', '40px')
         msg.$answer[0].focus()
         msg.showLoader()
-
         try {
-          await sendMessage(msg.conversation_id, val)
-          conversationStore.loadConversations()
-        } catch (err) {
-          console.error(err)
-          pulseError('Die Nachricht konnte nicht versendet werden')
+          await api.sendMessage(msg.conversation_id, val)
+        } catch (e) {
+          pulseError(i18n('chat.error_sending_message'))
+          console.error(e)
+        } finally {
+          setTimeout(function () {
+            msg.hideLoader()
+          }, 100)
         }
-
-        msg.hideLoader()
-        setTimeout(function () {
-          msg.hideLoader()
-        }, 100)
       }
     })
-
-    /*
-     * if the conversation list is not empty we want to load the first one
-     */
 
     var cid = 0
     var gcid = GET('cid')
@@ -151,11 +128,6 @@ const msg = {
       this.loadConversation(cid)
     } else if (GET('u2c') != undefined) {
       conv.userChat(parseInt(GET('u2c')))
-    } else if ($('#conversation-list ul li a').length > 0) {
-      cid = $('#conversation-list ul li:first').attr('id').split('-')[1]
-      this.loadConversation(cid)
-    } else {
-      msg.heartbeat()
     }
   },
 
@@ -163,106 +135,49 @@ const msg = {
     return $(window).width() <= 600
   },
 
-  /**
-   * list heartbeat checks every time updates on all conversations
-   */
-  heartbeat: function () {
-    info.editService('msg', 'heartbeat', {
-      cid: msg.conversation_id,
-      mid: msg.last_message_id,
-      speed: 'fast'
-    })
-  },
-
   /*
    * Method for arrived message data from socket.io
    */
   push: function (message) {
     if (message.cid == msg.conversation_id) {
-      msg.appendMsg(message)
+      msg.appendMsg(message.message)
       msg.scrollBottom()
-    } else {
-      msg.updateConvList(message)
     }
-    conversationStore.loadConversations()
+    msg.updateConvList(message)
   },
 
   updateConvList: function (message) {
     const $item = $(`#convlist-${message.cid}`)
     const $itemLink = $item.children('a')
     if ($item.length > 0) {
-      $itemLink.children('.msg').html(message.body)
-      $itemLink.children('.time').text(timeformat.nice(message.time))
+      $itemLink.children('.msg').text(message.message.body)
+      $itemLink.children('.time').text(dateDistanceInWords(message.message.sentAt))
       $item.hide()
       $item.prependTo('#conversation-list ul:first')
       $item.show('highlight', { color: '#F5F5B5' })
-    } else {
-      msg.loadConversationList()
     }
   },
 
-  /**
-   * Method will be called if there arrived something new from the server
-   */
-  pushArrived: function (data) {
-    const ret = data.msg_heartbeat
-
-    console.log(ret._duration)
-
-    /*
-     * update current chat if there are new messages
-     */
-    if (ret.messages != undefined) {
-      for (var i = 0; i < ret.messages.length; i++) {
-        msg.appendMsg(ret.messages[i])
-      }
-      msg.scrollBottom()
-    }
-
-    /*
-     * update conversation list move newest on top etc.
-     */
-    if (ret.convs) {
-      for (let i = 0; i < ret.convs.length; i++) {
-        // if the element exist remove to add it new on the top
-        $(`#convlist-${ret.convs[i].id}`).remove()
-        msg.appendConvList(ret.convs[i], true)
-      }
-    }
-  },
-
-  /**
-   * function will abort the heartbeat ajax call and restart it
-   */
-  heartbeatRestart: function () {
-    info.editService('msg', 'heartbeat', {
-      cid: msg.conversation_id,
-      mid: msg.last_message_id,
-      speed: 'fast'
-    })
-  },
   initComposer: function () {
     autosize(document.getElementById('compose_body'))
-    $('#compose_submit').on('click', function (ev) {
+    $('#compose_submit').on('click', async function (ev) {
       ev.preventDefault()
 
       const recip = msg.getRecipients()
       if (recip != false) {
         const body = $('#compose_body').val()
         if (body != '') {
-          ajax.req('msg', 'newconversation', {
-            data: {
-              recip: recip,
-              body: body
-            },
-            method: 'post',
-            success: function (data) {
-              msg.clearComposeForm()
-              msg.loadConversation(data.cid)
-            }
-          })
+          try {
+            const conversation = await api.createConversation(recip)
+            await api.sendMessage(conversation.conversation.id, body)
+            msg.clearComposeForm()
+            msg.loadConversation(conversation.conversation.id)
+          } catch (e) {
+            pulseError(i18n('chat.error_sending_message'))
+            console.error(e)
+          }
         } else {
-          pulseInfo('Du musst eine Nachricht eingeben')
+          pulseInfo(i18n('chat.empty_message'))
         }
       }
     })
@@ -306,8 +221,9 @@ const msg = {
      * set a class 'my-message' to active user's own messages
      */
     let ownMessageClass = ''
-    if (message.fs_id === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
-    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${message.fs_name}" href="/profile/${message.fs_id}"><img height="35" src="${img(message.fs_photo, 'mini')}" /></a></span><span class="body">${nl2br(autoLink(message.body))}<span class="time">${timeformat.nice(message.time)}</span></span><span class="clear"></span></li>`)
+    const author = profileStore.profiles[message.authorId]
+    if (message.authorId === serverData.user.id) { ownMessageClass = ' class="my-message" ' }
+    return $(`<li id="msg-${message.id}" ${ownMessageClass} style="display:none;"><span class="img"><a title="${plainToHtmlAttribute(author.name)}" href="/profile/${message.authorId}"><img height="35" src="${img(author.avatar, 'mini')}" /></a></span><span class="body">${plainToHtml(message.body)}<span class="time">${dateFormat(message.sentAt)}</span></span><span class="clear"></span></li>`)
   },
 
   getRecipients: function () {
@@ -317,12 +233,11 @@ const msg = {
       id = parseInt(id)
       out[out.length] = id
     })
-    console.log(out)
 
     if (out.length > 0) {
       return out
     } else {
-      pulseError('Du hast noch keine Empfänger ausgewählt.')
+      pulseError(i18n('chat.empty_recipients'))
       return false
     }
   },
@@ -334,34 +249,35 @@ const msg = {
     msg.conversation_id = 0
     msg.last_message_id = 0
   },
-  loadConversation: async function (id) {
-    if (id == msg.conversation_id) {
+  loadConversation: async function (id, reload = false) {
+    if (id == msg.conversation_id && !reload) {
       msg.scrollBottom()
       msg.$answer.trigger('select')
       return false
     }
     msg.conversation_id = id
 
-    const { name, members, messages } = await getConversation(id)
+    await conversationStore.loadConversation(id)
+    const conversation = conversationStore.conversations[id]
 
     msg.resetConversation()
 
     const $conversation = $('#msg-conversation ul:first')
     $conversation.html('')
 
-    const otherMembers = members.filter(m => m.id != msg.fsid)
+    const otherMembers = conversation.members.filter(m => m != msg.fsid)
 
-    const titleText = name || `Unterhaltung mit ${otherMembers.map(member => member.name).join(', ')}`
+    const titleText = conversation.title || `Unterhaltung mit ${otherMembers.map(member => profileStore.profiles[member].name).join(', ')}`
 
     const title = `
       &nbsp;<div class="images">
         ${otherMembers.map(member => `
-          <a title="${member.name}" href="/profile/${member.id}">
-            <img src="${img(member.avatar, 'mini')}" width="22" alt="${member.name}" />
+          <a title="${plainToHtmlAttribute(profileStore.profiles[member].name)}" href="/profile/${profileStore.profiles[member].id}">
+            <img src="${img(profileStore.profiles[member].avatar, 'mini')}" width="22" alt="${plainToHtmlAttribute(profileStore.profiles[member].name)}" />
           </a>
-        `).join('')}  
+        `).slice(0, 25).join('')}
       </div>
-      ${titleText}
+      ${plainToHtml(titleText)}
       <div style="clear:both;"></div>
     `
 
@@ -371,11 +287,7 @@ const msg = {
     /*
      * append messages to conversation message list
      */
-    if (messages) {
-      messages
-        .reverse()
-        .forEach(m => msg.appendMsg(m))
-    }
+    Object.values(conversation.messages).forEach(m => msg.appendMsg(m))
 
     document.getElementById('compose').style.display = 'none'
     document.getElementById('right').classList.add('list-active')
@@ -387,83 +299,58 @@ const msg = {
 
     msg.$answer.trigger('select')
 
-    msg.heartbeatRestart()
-
     msg.scrollTrigger()
+    msg.firstMessageReached = false
   },
 
-  loadMore: function () {
+  loadMore: async function () {
     const lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
 
-    if (!msg.moreIsLoading) {
+    if (!msg.moreIsLoading && !msg.firstMessageReached) {
       msg.moreIsLoading = true
-      ajax.req('msg', 'loadmore', {
-        loader: true,
-        data: {
-          lmid: lmid,
-          cid: msg.conversation_id
-        },
-        success: function (ret) {
-          msg.moreIsLoading = false
+      try {
+        const cnt = await conversationStore.loadMoreMessages(msg.conversation_id)
 
-          for (let i = 0; i < ret.messages.length; i++) {
-            msg.prependMsg(ret.messages[i])
-          }
-
-          const position = $(`#msg-${lmid}`).position()
-
-          if (!position) return
-
-          if (!msg.isMob()) {
-            msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
-          } else {
-            $(window).scrollTop(position.top)
-          }
+        const messages = Object.values(conversationStore.conversations[msg.conversation_id].messages)
+        for (let i = cnt - 1; i >= 0; i--) {
+          msg.prependMsg(messages[i])
         }
-      })
+
+        if (cnt === 0) {
+          msg.firstMessageReached = true
+        }
+
+        const position = $(`#msg-${lmid}`).position()
+        if (!position) return
+
+        if (!msg.isMob()) {
+          msg.$conversation.slimScroll({ scrollTo: `${position.top}px` })
+        } else {
+          $(window).scrollTop(position.top)
+        }
+      } catch (e) {
+        pulseError(i18n('chat.error_loading_messages'))
+        console.error(e)
+      } finally {
+        msg.moreIsLoading = false
+      }
     }
   },
 
   scrollTrigger: function () {
-    msg.moreIsLoading = false
-
+    const fun = function () {
+      const $conv = $(this)
+      if ($conv.scrollTop() == 0) {
+        msg.loadMore()
+      }
+    }
     if (!msg.isMob()) {
       msg.$conversation.off('scroll')
-      msg.$conversation.on('scroll', function () {
-        const $conv = $(this)
-        if ($conv.scrollTop() == 0) {
-          msg.loadMore()
-        }
-      })
+      msg.$conversation.on('scroll', fun)
     } else {
       $(window).off('scroll')
-      $(window).on('scroll', function () {
-        const $conv = $(this)
-
-        if ($conv.scrollTop() == 0) {
-          msg.loadMore()
-        }
-      })
+      $(window).on('scroll', fun)
     }
-  },
-
-  loadConversationList: function () {
-    ajax.req('msg', 'loadconvlist', {
-      loader: false,
-      success: function (ret) {
-        if (ret.convs != undefined && ret.convs.length > 0) {
-          msg.$convs.html('')
-          msg.loadConversation(ret.convs[0].id)
-
-          for (var i = 0; i < ret.convs.length; i++) {
-            msg.appendConvList(ret.convs[i])
-          }
-        }
-      },
-      complete: function () {
-
-      }
-    })
   },
   resetConversation: function () {
     $('#msg-conversation-title').html('<i class="fas fa-comment"></i>')
@@ -496,7 +383,7 @@ const msg = {
       cssclass = ' class="active"'
     }
 
-    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${names}</span><span class="msg">${conversation.body}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
+    const $el = $(`<li style="display:none;" id="convlist-${conversation.id}"${cssclass}><a href="#" onclick="msg.loadConversation(${conversation.id});return false;"><span class="pics">${pics}</span><span class="names">${plainToHtml(names)}</span><span class="msg">${plainToHtml(conversation.body)}</span><span class="time">${timeformat.nice(conversation.time)}</span><span class="clear"></span></a></li>`)
 
     if (prepend != undefined) {
       msg.$convs.prepend($el)
@@ -520,11 +407,5 @@ const msg = {
     }
   }
 }
-
-/* should only initialize it in Message.js when it is webpack'd
-$(function () {
-  msg.init()
-})
-*/
 
 export default msg

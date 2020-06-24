@@ -5,7 +5,7 @@ namespace Foodsharing\Modules\Search;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Region\RegionGateway;
-use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\Sanitizer;
@@ -14,7 +14,7 @@ class SearchIndexGenerator
 {
 	private $buddyGateway;
 	private $workGroupGateway;
-	private $storeModel;
+	private $storeGateway;
 	private $regionGateway;
 	private $session;
 	private $sanitizerService;
@@ -23,7 +23,7 @@ class SearchIndexGenerator
 	public function __construct(
 		BuddyGateway $buddyGateway,
 		WorkGroupGateway $workGroupGateway,
-		StoreModel $storeModel,
+		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
 		Session $session,
 		Sanitizer $sanitizerService,
@@ -31,7 +31,7 @@ class SearchIndexGenerator
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupGateway = $workGroupGateway;
-		$this->storeModel = $storeModel;
+		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
@@ -39,16 +39,17 @@ class SearchIndexGenerator
 	}
 
 	/**
-	 * Method to generate search Index for instant seach.
+	 * Method to generate search Index for instant search.
 	 */
 	public function generateIndex($fsId)
 	{
+		$userId = $this->session->id();
 		$index = [];
 
 		/*
 		 * Buddies Load persons in the index array that connected with the user
 		*/
-		if ($buddies = $this->buddyGateway->listBuddies($this->session->id())) {
+		if ($buddies = $this->buddyGateway->listBuddies($userId)) {
 			$result = [];
 			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';
@@ -104,7 +105,7 @@ class SearchIndexGenerator
 		/*
 		 * Betriebe load food stores connected to the user in the array
 		*/
-		if ($betriebe = $this->storeModel->listMyBetriebe()) {
+		if ($betriebe = $this->storeGateway->listMyStores($userId)) {
 			$result = [];
 			foreach ($betriebe as $b) {
 				$result[] = [
@@ -125,7 +126,7 @@ class SearchIndexGenerator
 		/*
 		 * Bezirke load Bezirke connected to the user in the array
 		*/
-		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($this->session->id());
+		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($userId);
 		$result = [];
 		foreach ($bezirke as $b) {
 			$result[] = [

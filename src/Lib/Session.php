@@ -13,38 +13,34 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Modules\Store\StoreTransactions;
 use Foodsharing\Utility\TranslationHelper;
 
 class Session
 {
 	private $mem;
+	private $buddyGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
 	private $regionGateway;
-	private $buddyGateway;
 	private $storeGateway;
-	private $storeTransactions;
 	private $initialized = false;
 	private $translationHelper;
 
 	public function __construct(
 		Mem $mem,
+		BuddyGateway $buddyGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
-		StoreTransactions $storeTransactions,
 		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
+		$this->buddyGateway = $buddyGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
-		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
-		$this->storeTransactions = $storeTransactions;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -73,7 +69,7 @@ class Session
 		ini_set('session.save_handler', 'redis');
 		ini_set('session.save_path', 'tcp://' . REDIS_HOST . ':' . REDIS_PORT);
 
-		fSession::setLength('24 hours', '1 week');
+		fSession::setLength('24 hours', '2 weeks');
 
 		if ($rememberMe) {
 			// This regenerates the session id even if it's already persistent, we want to only set it when logging in
@@ -96,9 +92,13 @@ class Session
 
 		fSession::open();
 
+		$cookieExpires = $this->isPersistent() ? strtotime('2 weeks') : 0;
 		if (!isset($_COOKIE['CSRF_TOKEN']) || !$_COOKIE['CSRF_TOKEN'] || !$this->isValidCsrfToken('cookie', $_COOKIE['CSRF_TOKEN'])) {
-			$cookieExpires = $this->isPersistent() ? strtotime('1 week') : 0;
 			setcookie('CSRF_TOKEN', $this->generateCrsfToken('cookie'), $cookieExpires, '/');
+		} elseif ($this->isPersistent() && isset($_COOKIE['CSRF_TOKEN']) && isset($_COOKIE['PHPSESSID'])) {
+			// Extend the duration of the cookies in every request
+			setcookie('CSRF_TOKEN', $_COOKIE['CSRF_TOKEN'], $cookieExpires, '/');
+			setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], $cookieExpires, '/');
 		}
 	}
 
@@ -139,7 +139,7 @@ class Session
 		return $user[$index];
 	}
 
-	public function id()
+	public function id(): ?int
 	{
 		if (!$this->initialized) {
 			return null;
@@ -162,25 +162,17 @@ class Session
 
 	public function getLocation()
 	{
-		if (!$this->initialized) {
-			return ['lat' => null, 'lon' => null];
+		if (!$this->initialized || !$this->id()) {
+			return null;
 		}
 
-		$loc = fSession::get('g_location', false);
+		$loc = fSession::get('g_location', null);
 		if (!$loc) {
 			$loc = $this->foodsaverGateway->getFoodsaverAddress($this->id());
 			$this->set('g_location', ['lat' => $loc['lat'], 'lon' => $loc['lon']]);
 		}
 
 		return $loc;
-	}
-
-	public function setLocation($lat, $lng)
-	{
-		$this->set('g_location', [
-			'lat' => $lat,
-			'lon' => $lng
-		]);
 	}
 
 	public function destroy()
@@ -191,8 +183,11 @@ class Session
 
 	public function set($key, $value)
 	{
-		$this->checkInitialized();
-		fSession::set($key, $value);
+		/* fail silently when session does not exist. This allows us at some point to also support sessions for not logged in users.
+		It doesn't do any harm in other cases as we previously generated 500 responses */
+		if ($this->initialized) {
+			fSession::set($key, $value);
+		}
 	}
 
 	public function get($var)
@@ -204,10 +199,17 @@ class Session
 		return fSession::get($var, false);
 	}
 
+	public function getLocale()
+	{
+		if (!$this->initialized) {
+			return 'de';
+		}
+
+		return fSession::get('locale', 'de');
+	}
+
 	/**
 	 * gets a user specific option and will be available after next login.
-	 *
-	 * @param $name
 	 */
 	public function option($key)
 	{
@@ -282,22 +284,6 @@ class Session
 					return true;
 				}
 			}
-		}
-
-		return false;
-	}
-
-	public function getMyBetriebIds()
-	{
-		$out = [];
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			foreach ($_SESSION['client']['betriebe'] as $b) {
-				$out[] = $b['id'];
-			}
-		}
-
-		if (!empty($out)) {
-			return $out;
 		}
 
 		return false;
@@ -471,7 +457,7 @@ class Session
 				}
 			}
 
-			if ($r = $this->regionGateway->listRegionsForFoodsaver($fs['id'])) {
+			if ($r = $this->regionGateway->listForFoodsaver($fs['id'])) {
 				$_SESSION['client']['bezirke'] = [];
 				foreach ($r as $rr) {
 					$_SESSION['client']['bezirke'][$rr['id']] = [
@@ -480,16 +466,6 @@ class Session
 						'type' => $rr['type']
 					];
 				}
-			}
-		}
-		$_SESSION['client']['betriebe'] = false;
-		if ($r = $this->storeGateway->listFilteredStoresForFoodsaver($fs['id'])) {
-			$_SESSION['client']['betriebe'] = [];
-			foreach ($r as $rr) {
-				// add info about the next free pickup slot to the store
-				$rr['pickupStatus'] = $this->storeTransactions->getAvailablePickupStatus($rr['id']);
-
-				$_SESSION['client']['betriebe'][$rr['id']] = $rr;
 			}
 		}
 

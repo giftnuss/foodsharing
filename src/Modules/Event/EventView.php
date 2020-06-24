@@ -186,7 +186,7 @@ class EventView extends View
 			$this->v_utils->v_form_date('dateend', ['required' => true]),
 			$this->v_utils->v_input_wrapper('Uhrzeit Beginn', $this->v_utils->v_form_time('time_start', $start_time)),
 			$this->v_utils->v_input_wrapper('Uhrzeit Ende', $this->v_utils->v_form_time('time_end', $end_time)),
-			$this->v_utils->v_form_textarea('description', ['desc' => $this->translationHelper->s('desc_desc'), 'required' => true]),
+			$this->v_utils->v_form_textarea('description', ['desc' => $this->translationHelper->s('event_desc'), 'required' => true]),
 			$this->v_utils->v_form_select('online_type', ['values' => [
 				['id' => 1, 'name' => $this->translationHelper->s('offline')],
 				['id' => 0, 'name' => $this->translationHelper->s('online')]
@@ -293,17 +293,26 @@ class EventView extends View
 
 		if (!empty($invites['accepted'])) {
 			$avatars = $this->placeFsAvatars($invites['accepted'], 60);
-			$out .= $this->v_utils->v_field($avatars, '' . count($invites['accepted']) . ' sind dabei');
+			$out .= $this->v_utils->v_field(
+				$avatars,
+				$this->translator->trans('events.acceptedCount', ['{count}' => count($invites['accepted'])])
+			);
 		}
 
 		if (!empty($invites['maybe'])) {
 			$avatars = $this->placeFsAvatars($invites['maybe'], 54);
-			$out .= $this->v_utils->v_field($avatars, '' . count($invites['maybe']) . ' kommen vielleicht');
+			$out .= $this->v_utils->v_field(
+				$avatars,
+				$this->translator->trans('events.maybeCount', ['{count}' => count($invites['maybe'])])
+			);
 		}
 
 		if (!empty($invites['invited'])) {
 			$avatars = $this->placeFsAvatars($invites['invited'], 54);
-			$out .= $this->v_utils->v_field($avatars, '' . count($invites['invited']) . ' Einladungen');
+			$out .= $this->v_utils->v_field(
+				$avatars,
+				$this->translator->trans('events.invitedCount', ['{count}' => count($invites['invited'])])
+			);
 		}
 
 		return $out;
@@ -311,35 +320,48 @@ class EventView extends View
 
 	private function placeFsAvatars(array $foodsavers, int $maxNumberOfAvatars): string
 	{
-		if (!empty($foodsavers)) {
-			$out = '<ul class="fsicons">';
-
-			if (count($foodsavers) > $maxNumberOfAvatars) {
-				shuffle($foodsavers);
-				$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
-			} else {
-				$foodsaverDisplayed = $foodsavers;
-			}
-
-			foreach ($foodsaverDisplayed as $fs) {
-				$out .= '
-				<li>
-					<a title="' . $fs['name'] . '" style="background-image:url(' . $this->imageService->img($fs['photo']) . ');" href="/profile/' . (int)$fs['id'] . '"><span></span></a>	
-				</li>';
-			}
-			if (count($foodsavers) > $maxNumberOfAvatars) {
-				$out .= '<li class="row">...und ' . (count($foodsavers) - $maxNumberOfAvatars) . ' weitere</li></ul>';
-			}
-
-			return $out;
+		if (empty($foodsavers)) {
+			return '';
 		}
 
-		return '';
+		$out = '<ul class="event-avatars p-1">';
+
+		if (count($foodsavers) > $maxNumberOfAvatars) {
+			shuffle($foodsavers);
+			$foodsaverDisplayed = array_slice($foodsavers, 0, $maxNumberOfAvatars);
+			$howManyMore = count($foodsavers) - $maxNumberOfAvatars;
+		} else {
+			$foodsaverDisplayed = $foodsavers;
+			$howManyMore = 0;
+		}
+
+		foreach ($foodsaverDisplayed as $fs) {
+			$out .= '
+			<li>
+				<a title="' . $fs['name'] . '" href="/profile/' . (int)$fs['id'] . '">
+					<img src="' . $this->imageService->img($fs['photo']) . '" class="corner-all">
+				</a>
+			</li>';
+		}
+		$out .= '</ul>';
+		if ($howManyMore > 0) {
+			$out .=
+				'<div class="p-1 pl-2">'
+				. $this->translator->trans('events.morePeople', ['{count}' => $howManyMore])
+				. '</div>';
+		}
+
+		return $out;
 	}
 
 	public function event(array $event): string
 	{
 		return $this->v_utils->v_field(
-			'<p>' . nl2br($this->routeHelper->autolink($event['description'])) . '</p>', 'Beschreibung', ['class' => 'ui-padding']);
+			'<p>' . nl2br(
+				$this->routeHelper->autolink($event['description'])
+			) . '</p>',
+			$this->translationHelper->s('description'),
+			['class' => 'ui-padding event-description']
+		);
 	}
 }

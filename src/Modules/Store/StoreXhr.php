@@ -13,6 +13,7 @@ use Foodsharing\Utility\Sanitizer;
 
 class StoreXhr extends Control
 {
+	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
 	private $storeTransactions;
@@ -26,7 +27,7 @@ class StoreXhr extends Control
 		StoreTransactions $storeTransactions,
 		Sanitizer $sanitizerService
 	) {
-		$this->model = $model;
+		$this->storeModel = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
@@ -65,25 +66,6 @@ class StoreXhr extends Control
 		}
 	}
 
-	public function deldate()
-	{
-		$storeId = (int)$_GET['id'];
-		if (!$this->storePermissions->mayDeletePickup($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
-			$this->model->deldate($storeId, $_GET['time']);
-
-			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
-
-			return [
-				'status' => 1,
-				'script' => 'reload();'
-			];
-		}
-	}
-
 	public function getfetchhistory()
 	{
 		$storeId = (int)$_GET['bid'];
@@ -92,7 +74,7 @@ class StoreXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		if ($history = $this->model->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
+		if ($history = $this->storeGateway->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -254,7 +236,7 @@ class StoreXhr extends Control
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
 				if ($this->storePermissions->mayEditStore($b['id']) && (int)$b['v'] > 0) {
-					$this->model->updateBetriebBezirk($b['id'], $b['v']);
+					$this->storeGateway->updateStoreRegion($b['id'], $b['v']);
 				}
 			}
 		}
@@ -270,7 +252,7 @@ class StoreXhr extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+				if ($betriebe = $this->storeModel->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');
@@ -281,7 +263,7 @@ class StoreXhr extends Control
 					$bezirks = $this->session->getRegions();
 
 					foreach ($bezirks as $key => $b) {
-						if (!in_array($b['type'], [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN])) {
+						if (!Type::isAccessibleRegion($b['type'])) {
 							unset($bezirks[$key]);
 						}
 					}
@@ -344,7 +326,7 @@ class StoreXhr extends Control
 		if ($status === TeamStatus::Coordinator) {
 			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
-			$this->model->signout($_GET['id'], $this->session->id());
+			$this->storeModel->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->translationHelper->s('no_member'), 'error');

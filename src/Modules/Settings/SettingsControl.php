@@ -15,6 +15,7 @@ use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Utility\DataHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SettingsControl extends Control
 {
@@ -28,6 +29,7 @@ class SettingsControl extends Control
 	private $dataHelper;
 	private $forumFollowerGateway;
 	private $regionGateway;
+	private $translator;
 
 	public function __construct(
 		SettingsView $view,
@@ -39,7 +41,8 @@ class SettingsControl extends Control
 		FoodSharePointGateway $foodSharePointGateway,
 		DataHelper $dataHelper,
 		ForumFollowerGateway $forumFollowerGateway,
-		RegionGateway $regionGateway
+		RegionGateway $regionGateway,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
 		$this->settingsGateway = $settingsGateway;
@@ -51,6 +54,7 @@ class SettingsControl extends Control
 		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->regionGateway = $regionGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -81,7 +85,6 @@ class SettingsControl extends Control
 		];
 
 		$menu[] = ['name' => $this->translationHelper->s('bcard'), 'href' => '/?page=bcard'];
-		//$menu[] = array('name' => $this->translationHelper->s('calendar'), 'href' => '/?page=settings&sub=calendar');
 
 		$this->pageHelper->addContent($this->view->menu($menu, ['title' => $this->translationHelper->s('settings'), 'active' => $this->getSub()]), CNT_LEFT);
 
@@ -94,7 +97,7 @@ class SettingsControl extends Control
 		} elseif ($this->foodsaver['rolle'] == Role::FOODSAVER) {
 			$menu[] = ['name' => 'Werde ' . $this->translationHelper->s('rolle_2_' . $this->foodsaver['geschlecht']), 'href' => '/?page=settings&sub=upgrade/up_bip'];
 		}
-		$menu[] = ['name' => $this->translationHelper->s('delete_account'), 'href' => '/?page=settings&sub=deleteaccount'];
+		$menu[] = ['name' => $this->translator->trans('foodsaver.delete_account'), 'href' => '/?page=settings&sub=deleteaccount'];
 		$this->pageHelper->addContent($this->view->menu($menu, ['title' => $this->translationHelper->s('account_option'), 'active' => $this->getSub()]), CNT_LEFT);
 	}
 
@@ -132,7 +135,7 @@ class SettingsControl extends Control
 				if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
 					$fsId = $this->session->id();
 					if (!$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) {
-						$this->flashMessageHelper->info('Du darfst zunächst das Foodsaver Quiz machen');
+						$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_fs_quiz'));
 						$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					}
 
@@ -149,17 +152,22 @@ class SettingsControl extends Control
 			if ($quiz = $this->quizGateway->getQuiz($quizRole)) {
 				$this->handleQuizStatus($quiz, $quizRole);
 			} else {
-				$this->pageHelper->addContent($this->v_utils->v_info('Fehler! Quizdaten Für Deine Rolle konnten nicht geladen werden. Bitte wende Dich an den IT-Support: <a href=mailto:' . SUPPORT_EMAIL . '>' . SUPPORT_EMAIL . '</a>'));
+				$this->pageHelper->addContent(
+					$this->v_utils->v_info(
+						$this->translator->trans('foodsaver.upgrade.quiz_error')
+						. ' <a href=mailto:' . SUPPORT_EMAIL . '>' . SUPPORT_EMAIL . '</a>'
+					)
+				);
 			}
 		} else {
 			switch ($this->foodsaver['rolle']) {
 				case Role::FOODSHARER:
-					$this->flashMessageHelper->info('Du musst erst Foodsaver werden');
+					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_fs'));
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_fs');
 					break;
 
 				case Role::FOODSAVER:
-					$this->flashMessageHelper->info('Du musst erst BetriebsverantwortlicheR werden');
+					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.needs_sm'));
 					$this->routeHelper->go('/?page=settings&sub=upgrade/up_bip');
 					break;
 
@@ -236,14 +244,14 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.upgrade.needs_rv'));
 				} else {
 					$this->session->set('hastodoquiz', false);
 					$this->mem->delPageCache('/?page=dashboard', $fsId);
 					if (!$this->session->may('fs')) {
 						$this->foodsaverGateway->riseRole($fsId, Role::FOODSAVER);
 					}
-					$this->flashMessageHelper->info('Danke! Du bist jetzt Foodsaver');
+					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.fs_success'));
 					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
 				}
 			}
@@ -260,11 +268,12 @@ class SettingsControl extends Control
 			if ($this->isSubmitted()) {
 				if (empty($_POST['accepted'])) {
 					$check = false;
-					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.upgrade.needs_rv'));
 				} else {
 					$this->foodsaverGateway->riseRole($fsId, Role::STORE_MANAGER);
-					$this->flashMessageHelper->info('Danke! Du bist jetzt Betriebsverantwortlicher');
-					$this->routeHelper->go('/?page=relogin&url=' . urlencode('/?page=dashboard'));
+					$this->session->refreshFromDatabase();
+					$this->flashMessageHelper->info($this->translator->trans('foodsaver.upgrade.sm_success'));
+					$this->routeHelper->go('/?page=dashboard');
 				}
 			}
 			$cnt = $this->contentGateway->get(15);
@@ -288,17 +297,17 @@ class SettingsControl extends Control
 
 				if (empty($_POST['about_me_public'])) {
 					$isDataComplete = false;
-					$this->flashMessageHelper->error('Deine Kurzbeschreibung ist leer');
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.upgrade.needs_publicinfo'));
 				}
 
 				if (!isset($_POST['rv_botschafter'])) {
 					$isDataComplete = false;
-					$this->flashMessageHelper->error($this->translationHelper->s('not_rv_accepted'));
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.upgrade.needs_rv'));
 				}
 
 				if (empty((int)$_POST['bezirk'])) {
 					$isDataComplete = false;
-					$this->flashMessageHelper->error('Du hast keinen Bezirk gewählt, in dem Du Botschafter werden möchtest');
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.upgrade.needs_region'));
 				}
 
 				if ($isDataComplete) {
@@ -306,7 +315,7 @@ class SettingsControl extends Control
 					$this->foodsaverGateway->updateProfile($fsId, $data);
 
 					$this->pageHelper->addContent($this->v_utils->v_field(
-						$this->v_utils->v_info($this->translationHelper->s('upgrade_bot_success')),
+						$this->v_utils->v_info($this->translator->trans('foodsaver.upgrade.amb_success')),
 						$this->translationHelper->s('upgrade_request_send'),
 						[
 							'class' => 'ui-padding'
@@ -342,7 +351,9 @@ class SettingsControl extends Control
 					$this->view->confirmBot($this->contentGateway->get(16)) .
 
 					$this->v_utils->v_form('upBotsch', [$this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), ['label' => 'In welcher Region möchtest Du Botschafter werden?']) .
+						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), [
+							'label' => $this->translator->trans('foodsaver.upgrade.amb_region'),
+						]) .
 						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
 						$this->v_utils->v_form_select('time', ['values' => [
 							['id' => 1, 'name' => '3-5 Stunden'],
@@ -353,15 +364,15 @@ class SettingsControl extends Control
 						]]) .
 						$this->v_utils->v_form_textarea('about_me_public', ['desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.']),
 
-						'Botschafter werden',
+						$this->translator->trans('foodsaver.upgrade.to_amb'),
 
 						['class' => 'ui-padding']
 					),
 
 						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', ['required' => true, 'values' => [
-								['id' => 1, 'name' => $this->translationHelper->s('rv_accept')]
+								['id' => 1, 'name' => $this->translator->trans('foodsaver.upgrade.rv')]
 							]]), $rv['title'], ['class' => 'ui-padding'])
-					], ['submit' => 'Antrag auf Botschafterrolle verbindlich absenden'])
+					], ['submit' => $this->translator->trans('foodsaver.upgrade.amb_submit')])
 				);
 			}
 		}
@@ -369,7 +380,7 @@ class SettingsControl extends Control
 
 	public function deleteaccount()
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('delete_account'));
+		$this->pageHelper->addBread($this->translator->trans('foodsaver.delete_account'));
 		$this->pageHelper->addContent($this->view->delete_account($this->session->id()));
 	}
 
@@ -441,7 +452,7 @@ class SettingsControl extends Control
 			}
 
 			if ($this->settingsGateway->saveInfoSettings($fsId, $newsletter, $infomail)) {
-				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
+				$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
 			}
 		}
 		$this->pageHelper->addBread($this->translationHelper->s('settings_info'));
@@ -449,7 +460,7 @@ class SettingsControl extends Control
 		$g_data = $this->foodsaverGateway->getSubscriptions($fsId);
 
 		$foodSharePoints = $this->foodSharePointGateway->listFoodsaversFoodSharePoints($fsId);
-		$threads = $this->forumFollowerGateway->getForumThreads($fsId);
+		$threads = $this->forumFollowerGateway->getEmailSubscribedThreadsForUser($fsId);
 
 		$this->pageHelper->addContent($this->view->settingsInfo($foodSharePoints, $threads));
 	}
@@ -468,7 +479,7 @@ class SettingsControl extends Control
 
 				if (!$this->validUrl($data['homepage'])) {
 					$check = false;
-					$this->flashMessageHelper->error('Mit Deiner Homepage-URL stimmt etwas nicht');
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.url_error'));
 				}
 			}
 
@@ -516,7 +527,7 @@ class SettingsControl extends Control
 		if ($email = $this->settingsGateway->getNewMail($this->session->id(), $_GET['newmail'])) {
 			$this->pageHelper->addJs("ajreq('changemail3');");
 		} else {
-			$this->flashMessageHelper->info($this->translationHelper->s('mailchange_failed'));
+			$this->flashMessageHelper->info($this->translator->trans('foodsaver.mailchange_error'));
 		}
 	}
 
@@ -527,12 +538,8 @@ class SettingsControl extends Control
 
 	/**
 	 * Creates and saves a new API token for given user.
-	 *
-	 * @param int $fsId Foodsaver ID
-	 *
-	 * @return false in case of error or weak algorithm, generated token otherwise
 	 */
-	private function generate_api_token(int $fsId): string
+	private function generate_api_token(int $fsId): ?string
 	{
 		if ($token = bin2hex(openssl_random_pseudo_bytes(10))) {
 			$this->settingsGateway->saveApiToken($fsId, $token);
@@ -540,6 +547,6 @@ class SettingsControl extends Control
 			return $token;
 		}
 
-		return false;
+		return null;
 	}
 }

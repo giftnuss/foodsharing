@@ -14,8 +14,11 @@ class ApplicationControl extends Control
 	private $gateway;
 	private $identificationHelper;
 
-	public function __construct(ApplicationGateway $gateway, ApplicationView $view, IdentificationHelper $identificationHelper)
-	{
+	public function __construct(
+		ApplicationGateway $gateway,
+		ApplicationView $view,
+		IdentificationHelper $identificationHelper
+	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->identificationHelper = $identificationHelper;

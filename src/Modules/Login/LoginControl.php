@@ -6,27 +6,35 @@ use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Settings\SettingsGateway;
 use Mobile_Detect;
-use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginControl extends Control
 {
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 
 	private $loginGateway;
 	private $settingsGateway;
 	private $contentGateway;
+	private $translator;
 
-	public function __construct(LoginView $view, LoginGateway $loginGateway, ContentGateway $contentGateway, SettingsGateway $settingsGateway)
-	{
+	public function __construct(
+		LoginView $view,
+		LoginGateway $loginGateway,
+		ContentGateway $contentGateway,
+		SettingsGateway $settingsGateway,
+		TranslatorInterface $translator
+	) {
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
 		$this->contentGateway = $contentGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 	}
@@ -34,7 +42,7 @@ class LoginControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryBuilder $formFactory): void
+	public function setFormFactory(FormFactoryInterface $formFactory): void
 	{
 		$this->formFactory = $formFactory;
 	}
@@ -54,7 +62,7 @@ class LoginControl extends Control
 		if (!$this->session->may()) {
 			$has_subpage = $request->query->has('sub');
 
-			$form = $this->formFactory->getFormFactory()->create(LoginForm::class);
+			$form = $this->formFactory->create(LoginForm::class);
 			$form->handleRequest($request);
 
 			if (!$has_subpage) {
@@ -91,10 +99,10 @@ class LoginControl extends Control
 	public function activate()
 	{
 		if ($this->loginGateway->activate($_GET['e'], $_GET['t'])) {
-			$this->flashMessageHelper->info($this->translationHelper->s('activation_success'));
+			$this->flashMessageHelper->info($this->translator->trans('register.activation_success'));
 			$this->routeHelper->goPage('login');
 		} else {
-			$this->flashMessageHelper->error($this->translationHelper->s('activation_failed'));
+			$this->flashMessageHelper->error($this->translator->trans('register.activation_failed'));
 			$this->routeHelper->goPage('login');
 		}
 	}
@@ -107,7 +115,7 @@ class LoginControl extends Control
 		$fs_id = $this->loginGateway->login($email_address, $password);
 
 		if ($fs_id === null) {
-			$this->flashMessageHelper->error($this->translationHelper->s('wrong_credentials'));
+			$this->flashMessageHelper->error($this->translator->trans('login.error_no_auth'));
 
 			return;
 		}
@@ -137,8 +145,8 @@ class LoginControl extends Control
 			$k = strip_tags($_GET['k']);
 		}
 
-		$this->pageHelper->addTitle('Password zurücksetzen');
-		$this->pageHelper->addBread('Passwort zurücksetzen');
+		$this->pageHelper->addTitle($this->translator->trans('login.pwreset.bread'));
+		$this->pageHelper->addBread($this->translator->trans('login.pwreset.bread'));
 
 		if (isset($_POST['email']) || isset($_GET['m'])) {
 			$mail = '';
@@ -148,12 +156,18 @@ class LoginControl extends Control
 				$mail = $_POST['email'];
 			}
 			if (!$this->emailHelper->validEmail($mail)) {
-				$this->flashMessageHelper->error('Sorry! Hast Du Dich vielleicht bei Deiner E-Mail-Adresse vertippt?');
+				$this->flashMessageHelper->error(
+					$this->translator->trans('login.pwreset.wrongMail')
+				);
 			} else {
 				if ($this->loginGateway->addPassRequest($mail)) {
-					$this->flashMessageHelper->info('Alles klar! Dir wurde ein Link zum Passwortändern per E-Mail zugeschickt.');
+					$this->flashMessageHelper->info(
+						$this->translator->trans('login.pwreset.mailSent')
+					);
 				} else {
-					$this->flashMessageHelper->error('Sorry, diese E-Mail-Adresse ist uns nicht bekannt.');
+					$this->flashMessageHelper->error(
+						$this->translator->trans('login.pwreset.wrongMail')
+					);
 				}
 			}
 		}
@@ -164,34 +178,41 @@ class LoginControl extends Control
 					if ($_POST['pass1'] == $_POST['pass2']) {
 						$check = true;
 						if ($this->loginGateway->newPassword($_POST)) {
-							$this->view->success('Prima, Dein Passwort wurde erfolgreich geändert. Du kannst Dich jetzt Dich einloggen.');
+							$this->view->success(
+								$this->translator->trans('login.pwreset.success')
+							);
 						} elseif (strlen($_POST['pass1']) < 5) {
 							$check = false;
-							$this->flashMessageHelper->error('Sorry, Dein gewähltes Passwort ist zu kurz.');
+							$this->flashMessageHelper->error(
+								$this->translator->trans('login.pwreset.tooShort')
+							);
 						} elseif (!$this->loginGateway->checkResetKey($_POST['k'])) {
 							$check = false;
-							$this->flashMessageHelper->error('Sorry, Du hast zu lang gewartet. Bitte beantrage noch einmal ein neues Passwort!');
+							$this->flashMessageHelper->error(
+								$this->translator->trans('login.pwreset.expired')
+							);
 						} else {
 							$check = false;
-							$this->flashMessageHelper->error('Sorry, es gibt ein Problem mir Deinen Daten. Ein Administrator wurde informiert.');
-							/*
-							$this->emailHelper->tplMail(11, 'kontakt@prographix.de',array(
-								'data' => '<pre>'.print_r($_POST,true).'</pre>'
-							));
-							*/
+							$this->flashMessageHelper->error(
+								$this->translator->trans('login.pwreset.error')
+							);
 						}
 
 						if ($check) {
 							$this->routeHelper->go('/?page=login');
 						}
 					} else {
-						$this->flashMessageHelper->error('Sorry, die Passwörter stimmen nicht überein.');
+						$this->flashMessageHelper->error(
+							$this->translator->trans('login.pwreset.mismatch')
+						);
 					}
 				}
 				$this->pageHelper->addJs('$("#pass1").val("");');
 				$this->pageHelper->addContent($this->view->newPasswordForm($k));
 			} else {
-				$this->flashMessageHelper->error('Sorry, Du hast ein bisschen zu lange gewartet. Bitte beantrage ein neues Passwort!');
+				$this->flashMessageHelper->error(
+					$this->translator->trans('login.pwreset.expired')
+				);
 				$this->pageHelper->addContent($this->view->passwordRequest(), CNT_LEFT);
 			}
 		} else {

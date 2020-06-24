@@ -20,6 +20,7 @@ use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SettingsView extends View
 {
@@ -27,32 +28,34 @@ class SettingsView extends View
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Utils $viewUtils,
 		Session $session,
-		Sanitizer $sanitizerService,
-		PageHelper $pageHelper,
-		TimeHelper $timeHelper,
-		ImageHelper $imageService,
-		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper,
+		Utils $viewUtils,
+		RegionGateway $regionGateway,
 		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
 		TranslationHelper $translationHelper,
-		RegionGateway $regionGateway
+		TranslatorInterface $translator
 	) {
 		$this->regionGateway = $regionGateway;
 
 		parent::__construct(
 			$twig,
-			$viewUtils,
 			$session,
-			$sanitizerService,
-			$pageHelper,
-			$timeHelper,
-			$imageService,
-			$routeHelper,
-			$identificationHelper,
+			$viewUtils,
 			$dataHelper,
-			$translationHelper
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
 		);
 	}
 
@@ -162,18 +165,18 @@ class SettingsView extends View
 			foreach ($foodSharePoints as $fsp) {
 				$this->pageHelper->addJs('
 					$("input[disabled=\'disabled\']").parent().on("click", function(){
-						pulseInfo("Du bist verantwortlich für diesen Fair-Teiler und somit verpflichtet, die Updates entgegenzunehmen!");
+						pulseInfo("' . $this->translator->trans('fsp.info.manager') . '");
 					});
 				');
 
 				$g_data['fairteiler_' . $fsp['id']] = $fsp['infotype'];
 				$out .= $this->v_utils->v_form_radio('fairteiler_' . $fsp['id'], [
-					'label' => $this->translationHelper->sv('follow_food_share_point', $fsp['name']),
-					'desc' => $this->translationHelper->sv('follow_food_share_point_desc', $fsp['name']),
+					'label' => $this->translator->trans('fsp.info.from', ['{name}' => $fsp['name']]),
+					'desc' => $this->translator->trans('fsp.info.descSettings', ['{name}' => $fsp['name']]),
 					'values' => [
-						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_food_share_point_mail')],
-						['id' => InfoType::BELL, 'name' => $this->translationHelper->s('follow_food_share_point_bell')],
-						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_food_share_point_none')]
+						['id' => InfoType::BELL, 'name' => $this->translator->trans('fsp.info.bell')],
+						['id' => InfoType::EMAIL, 'name' => $this->translator->trans('fsp.info.mail')],
+						['id' => InfoType::NONE, 'name' => $this->translator->trans('fsp.info.none')],
 					],
 					'disabled' => $fsp['type'] == FollowerType::FOOD_SHARE_POINT_MANAGER
 				]);
@@ -449,11 +452,16 @@ class SettingsView extends View
 
 	public function delete_account(int $fsId)
 	{
-		$content =
-			'<button type="button" id="delete-account" class="button danger" onclick="confirmDeleteAccount(' . $fsId . ')">' . $this->translationHelper->s('delete_now') . '</button>'
-		. $this->v_utils->v_info('Du bist dabei Deinen Account zu löschen. Bist Du Dir ganz sicher?', $this->translationHelper->s('reference'));
+		$content = '<button type="button" id="delete-account" class="btn btn-sm btn-danger"'
+			. ' onclick="confirmDeleteAccount(' . $fsId . ')">'
+			. $this->translator->trans('foodsaver.delete_account_now')
+			. '</button>'
+			. $this->v_utils->v_info(
+				$this->translator->trans('foodsaver.delete_own_account'),
+				$this->translator->trans('notice')
+			);
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding bootstrap']);
 	}
 
 	public function foodsaver_form()
@@ -484,10 +492,10 @@ class SettingsView extends View
 
 		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), [
 			$bezirkchoose,
-			$this->latLonPicker('LatLng', $latLonOptions),
+			$this->latLonPicker('LatLng', $latLonOptions, '_profile'),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),
-			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => date('Y') - 120, 'yearRangeTo' => date('Y') - 8]),
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (int)date('Y') - 120, 'yearRangeTo' => (int)date('Y') - 8]),
 			$communications,
 			$position,
 			$this->v_utils->v_form_textarea('about_me_intern', ['desc' => $this->translationHelper->s('profile_description_text_display_info')]),
@@ -572,7 +580,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
@@ -597,7 +605,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('rv_accept') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';

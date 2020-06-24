@@ -1,0 +1,9 @@
+messages:
+  type: annotation
+  prefix: /api
+  resource: ../..//src/Controller/
+  defaults: {_format: json}
+
+NelmioApiDocBundle:
+  resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+  prefix:   /api/doc

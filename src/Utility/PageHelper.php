@@ -128,6 +128,10 @@ final class PageHelper
 			$bodyClasses[] = 'loggedin';
 		}
 
+		if ($this->session->may('fs')) {
+			$bodyClasses[] = 'fs';
+		}
+
 		$bodyClasses[] = 'page-' . $this->routeHelper->getPage();
 
 		$footer = $this->getFooter();
@@ -220,27 +224,24 @@ final class PageHelper
 			'location' => $location,
 			'ravenConfig' => $sentryConfig,
 			'translations' => $this->translationHelper->getTranslations(),
-			'isDev' => getenv('FS_ENV') === 'dev'
+			'isDev' => getenv('FS_ENV') === 'dev',
+			'locale' => $this->session->getLocale()
 		]);
 	}
 
 	private function getMenu(): string
 	{
 		$regions = [];
-		$stores = [];
 		$workingGroups = [];
 		if (isset($_SESSION['client']['bezirke']) && is_array($_SESSION['client']['bezirke'])) {
 			foreach ($_SESSION['client']['bezirke'] as $region) {
-				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id']), 'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($region['id'])]);
+				$region = array_merge($region, ['isBot' => $this->session->isAdminFor($region['id']), 'mayHandleFoodsaverRegionMenu' => $this->regionPermissions->mayHandleFoodsaverRegionMenu($region['id']), 'hasConference' => $this->regionPermissions->hasConference($region['type'])]);
 				if ($region['type'] == Type::WORKING_GROUP) {
 					$workingGroups[] = $region;
 				} else {
 					$regions[] = $region;
 				}
 			}
-		}
-		if (isset($_SESSION['client']['betriebe']) && is_array($_SESSION['client']['betriebe'])) {
-			$stores = $_SESSION['client']['betriebe'];
 		}
 
 		$loggedIn = $this->session->may();
@@ -264,7 +265,6 @@ final class PageHelper
 					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
 					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
 				],
-				'stores' => array_values($stores),
 				'regions' => $regions,
 				'workingGroups' => $workingGroups,
 			]

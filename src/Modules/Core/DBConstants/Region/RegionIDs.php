@@ -7,6 +7,7 @@ class RegionIDs
 	// upper level holding groups
 	public const ROOT = 0;
 	public const GLOBAL_WORKING_GROUPS = 392;
+	public const EUROPE_WELCOME_TEAM = 813;
 	public const EUROPE = 741; // second level from top. First selectable level
 
 	// workgroups with special permissions:

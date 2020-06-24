@@ -1,0 +1,19 @@
+nelmio_api_doc:
+  documentation:
+    info:
+      title: Foodsharing API
+      description: https://devdocs.foodsharing.de
+      version: 1.0.0
+    securityDefinitions:
+      api_key:
+        type: apiKey
+        name: X-CSRF-Token
+        in: header
+        description: Requests manipulating data need to supply a CSRF token
+
+    security:
+      - api_key: []
+
+  areas:
+    path_patterns:
+      - ^/api(?!/(swagger.json|doc/)$)

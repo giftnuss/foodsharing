@@ -242,7 +242,7 @@ class StatsModel extends Db
 	public function getFetchWeight($region_id, $last_update, $child_ids)
 	{
 		$child_ids[$region_id] = $region_id;
-		$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $region_id));
+		//$current = floatval($this->getVal('stat_fetchweight', 'bezirk', $region_id));
 
 		$weight = 0;
 		$dat = [];

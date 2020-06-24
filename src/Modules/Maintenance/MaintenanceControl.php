@@ -7,6 +7,7 @@ use Foodsharing\Modules\Bell\BellUpdateTrigger;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\EmailHelper;
@@ -14,7 +15,6 @@ use Foodsharing\Utility\TranslationHelper;
 
 class MaintenanceControl extends ConsoleControl
 {
-	private $model;
 	private $bellGateway;
 	private $storeGateway;
 	private $foodsaverGateway;
@@ -23,9 +23,9 @@ class MaintenanceControl extends ConsoleControl
 	private $maintenanceGateway;
 	private $quizHelper;
 	private $bellUpdateTrigger;
+	private $groupGateway;
 
 	public function __construct(
-		MaintenanceModel $model,
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
@@ -33,9 +33,9 @@ class MaintenanceControl extends ConsoleControl
 		TranslationHelper $translationHelper,
 		MaintenanceGateway $maintenanceGateway,
 		QuizHelper $quizHelper,
-		BellUpdateTrigger $bellUpdateTrigger
+		BellUpdateTrigger $bellUpdateTrigger,
+		GroupGateway $groupGateway
 	) {
-		$this->model = $model;
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -44,6 +44,7 @@ class MaintenanceControl extends ConsoleControl
 		$this->maintenanceGateway = $maintenanceGateway;
 		$this->quizHelper = $quizHelper;
 		$this->bellUpdateTrigger = $bellUpdateTrigger;
+		$this->groupGateway = $groupGateway;
 
 		parent::__construct();
 	}
@@ -85,7 +86,7 @@ class MaintenanceControl extends ConsoleControl
 		 *
 		 * it gets crashed by some updates sometimes, workaround: Rebuild every day
 		 */
-		$this->rebuildBezirkClosure();
+		$this->rebuildRegionClosure();
 
 		/*
 		 * Master Bezirk Update
@@ -97,7 +98,7 @@ class MaintenanceControl extends ConsoleControl
 		/*
 		 * Delete old blocked ips
 		 */
-		$this->model->deleteOldIpBlocks();
+		$this->deleteOldIpBlocks();
 
 		/*
 		 * There may be some groups where people should automatically be added
@@ -116,16 +117,11 @@ class MaintenanceControl extends ConsoleControl
 		$this->bellUpdateTrigger->triggerUpdate();
 	}
 
-	public function rebuildBezirkClosure()
+	public function rebuildRegionClosure()
 	{
-		$this->model->sql('DELETE FROM fs_bezirk_closure');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.id, a.id, 0 FROM fs_bezirk AS a WHERE a.parent_id > 0');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 0');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 1');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 2');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 3');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 4');
-		$this->model->sql('INSERT INTO fs_bezirk_closure (bezirk_id, ancestor_id, depth) SELECT a.bezirk_id, b.parent_id, a.depth+1 FROM fs_bezirk_closure AS a JOIN fs_bezirk AS b ON b.id = a.ancestor_id WHERE b.parent_id IS NOT NULL AND a.depth = 5');
+		self::info('rebuilding region closure...');
+		$this->groupGateway->recreateClosure();
+		self::success('OK');
 	}
 
 	private function updateSpecialGroupMemberships()
@@ -191,7 +187,7 @@ class MaintenanceControl extends ConsoleControl
 		@unlink('images/.png');
 
 		/* foodsaver photos */
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->maintenanceGateway->listUsersWithPhoto()) {
 			$update = [];
 			foreach ($foodsaver as $fs) {
 				if (!file_exists('images/' . $fs['photo'])) {
@@ -199,11 +195,11 @@ class MaintenanceControl extends ConsoleControl
 				}
 			}
 			if (!empty($update)) {
-				$this->model->update('UPDATE fs_foodsaver SET photo = "" WHERE id IN(' . implode(',', $update) . ')');
+				$this->maintenanceGateway->unsetUserPhotos();
 			}
 		}
 		$check = [];
-		if ($foodsaver = $this->model->q('SELECT id, photo FROM fs_foodsaver WHERE photo != ""')) {
+		if ($foodsaver = $this->maintenanceGateway->listUsersWithPhoto()) {
 			foreach ($foodsaver as $fs) {
 				$check[$fs['photo']] = $fs['id'];
 			}
@@ -244,71 +240,13 @@ class MaintenanceControl extends ConsoleControl
 	private function masterBezirkUpdate()
 	{
 		self::info('master bezirk update');
-		/* Master Bezirke */
-		if ($foodsaver = $this->model->q('
-				SELECT
-				b.`id`,
-				b.`name`,
-				b.`type`,
-				b.`master`,
-				hb.foodsaver_id
-
-				FROM 	`fs_bezirk` b,
-				`fs_foodsaver_has_bezirk` hb
-
-				WHERE 	hb.bezirk_id = b.id
-				AND 	b.`master` != 0
-				AND 	hb.active = 1
-
-		')
-		) {
-			foreach ($foodsaver as $fs) {
-				if (!$this->model->qRow('SELECT bezirk_id FROM `fs_foodsaver_has_bezirk` WHERE foodsaver_id = ' . (int)$fs['foodsaver_id'] . ' AND bezirk_id = ' . $fs['master'])) {
-					if ((int)$fs['master'] > 0) {
-						$this->model->insert('
-						INSERT INTO `fs_foodsaver_has_bezirk`
-						(
-							`foodsaver_id`,
-							`bezirk_id`,
-							`active`,
-							`added`
-						)
-						VALUES
-						(
-							' . (int)$fs['foodsaver_id'] . ',
-							' . (int)$fs['master'] . ',
-							1,
-							NOW()
-						)
-						');
-					}
-				}
-			}
-		}
-
-		self::success('OK');
-	}
-
-	public function flushcache()
-	{
-		self::info('flush Page Cache...');
-
-		$this->mem->ensureConnected();
-
-		if ($keys = $this->mem->cache->getAllKeys()) {
-			foreach ($keys as $key) {
-				if (substr($key, 0, 3) == 'pc-') {
-					$this->mem->del($key);
-				}
-			}
-		}
-
+		$this->maintenanceGateway->masterRegionUpdate();
 		self::success('OK');
 	}
 
 	public function betriebFetchWarning()
 	{
-		if ($foodsaver = $this->model->getStoreManagersWhichWillBeAlerted()) {
+		if ($foodsaver = $this->maintenanceGateway->getStoreManagersWhichWillBeAlerted()) {
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], [
@@ -327,5 +265,12 @@ class MaintenanceControl extends ConsoleControl
 		self::info('wake up sleeping users...');
 		$count = $this->maintenanceGateway->wakeupSleepingUsers();
 		self::success($count . ' users woken up');
+	}
+
+	private function deleteOldIpBlocks()
+	{
+		self::info('deleting old blocked IPs...');
+		$count = $this->maintenanceGateway->deleteOldIpBlocks();
+		self::success($count . ' entries deleted');
 	}
 }

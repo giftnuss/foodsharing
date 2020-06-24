@@ -47,7 +47,7 @@ class ReportXhr extends Control
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
-			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
+			$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
 			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));

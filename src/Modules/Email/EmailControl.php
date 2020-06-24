@@ -399,9 +399,9 @@ class EmailControl extends Control
 						}
 						copy($file, $new_path . $new_filename);
 						$fimage = new fImage($new_path . $new_filename);
-						if (!empty($src) && $width = $tag->getAttribute('width') && $width < 2000) {
+						if (!empty($src) && ($width = $tag->getAttribute('width')) < 2000) {
 							$fimage->resize($width, 0);
-						} elseif (!empty($src) && $height = $tag->getAttribute('height') && $height < 2000) {
+						} elseif (!empty($src) && ($height = $tag->getAttribute('height')) < 2000) {
 							$fimage->resize(0, $height);
 						}
 						$fimage->saveChanges();

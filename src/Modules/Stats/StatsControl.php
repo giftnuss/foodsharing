@@ -47,7 +47,7 @@ class StatsControl extends ConsoleControl
 				);
 
 				$stat_bananacount = (int)$this->model->qOne(
-					'SELECT COUNT(foodsaver_id) FROM fs_rating WHERE `ratingtype` = 2 AND foodsaver_id = ' . (int)$fsid
+					'SELECT COUNT(foodsaver_id) FROM fs_rating WHERE foodsaver_id = ' . (int)$fsid
 				);
 
 				$stat_buddycount = (int)$this->model->qone(

@@ -9,6 +9,7 @@ export FS_ENV=${FS_ENV:-dev}
 # user identification number of the current user
 export UID
 
+
 MYSQL_USERNAME=${MYSQL_USERNAME:-root}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
 
@@ -115,45 +116,16 @@ function recreatedb() {
 }
 
 function migratedb() {
-  local database=$1;
-  echo "Migrating database $FS_ENV/$database"
-  dest=migrations/_all.sql
-  migration_files="\
-      migrations/initial.sql \
-      migrations/static.sql \
-      migrations/27-profilchange.sql \
-      migrations/27-verify.sql \
-      migrations/incremental-* \
-  "
-  echo "" > $dest
-  for f in $migration_files; do
-    cat $f >> $dest
-    echo ';' >> $dest
-  done
-  echo "COMMIT;" >> $dest
-
-  # if running in ci we do not have a mounted folder so we need to
-  # manually copy the generated migration file into the container
-  # dc ps = docker container ls: list containers
-  # -q: only display numeric IDs
-  docker cp $dest "$(dc ps -q db)":/app/$dest
-
-  sql-file "$database" $dest
-
-  dest=migrations/_reload_data.sql
-  echo "set foreign_key_checks=0;" > $dest
-  for T in $(sql-query foodsharing "SHOW TABLES;" | tail -n+2); do
-    echo "TRUNCATE TABLE $T;" >> $dest
-  done
-  sql-dump --extended-insert --quick --no-create-info --single-transaction --disable-keys --no-autocommit --skip-add-locks >> $dest
-  echo "set foreign_key_checks=1;" >> $dest
-  docker cp $dest "$(dc ps -q app)":/app/$dest
-}
-
-function purge-db() {
-  time sql-file foodsharing migrations/_reload_data.sql
+  echo "Migrating database for $FS_ENV"
+  local container=${1:-app}
+  exec-in-container $container vendor/bin/phinx migrate
+  exec-in-container $container bin/console maintenance:recreateGroupStructure
 }
 
 function wait-for-mysql() {
   exec-in-container-asroot db "while ! mysql --password=$MYSQL_PASSWORD --silent --execute='select 1' >/dev/null 2>&1; do sleep 1; done"
+}
+
+function wait-for-assets() {
+  while ! [ -d "assets" ]; do sleep 1; done
 }

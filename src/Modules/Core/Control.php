@@ -18,10 +18,6 @@ abstract class Control
 {
 	protected $isControl = false;
 	protected $isXhrControl = false;
-	/**
-	 * @var Db
-	 */
-	protected $model;
 	protected $view;
 	private $sub;
 	private $sub_func;
@@ -368,12 +364,12 @@ abstract class Control
 
 	public function submitted(): bool
 	{
-		return isset($_POST) && !empty($_POST);
+		return !empty($_POST);
 	}
 
 	public function isSubmitted($form = false): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
+		if (!empty($_POST)) {
 			return $form === false || $_POST['submitted'] == $form;
 		}
 
@@ -502,5 +498,16 @@ abstract class Control
 		}
 
 		return false;
+	}
+
+	public function parseGitlabLinks($markdown)
+	{
+		$markdown = preg_replace('/\W@(\S+)/', ' [@\1](https://gitlab.com/\1)', $markdown);
+		$markdown = preg_replace('/(android)!([0-9]+)/', '[\1!\2](https://gitlab.com/foodsharing-dev/foodsharing-android/merge_requests/\2)', $markdown);
+		$markdown = preg_replace('/(android)#([0-9]+)/', '[\1#\2](https://gitlab.com/foodsharing-dev/foodsharing-android/issues/\2))', $markdown);
+		$markdown = preg_replace('/\W!([0-9]+)/', ' [!\1](https://gitlab.com/foodsharing-dev/foodsharing/merge_requests/\1)', $markdown);
+		$markdown = preg_replace('/\W#([0-9]+)/', ' [#\1](https://gitlab.com/foodsharing-dev/foodsharing/issues/\1)', $markdown);
+
+		return $markdown;
 	}
 }

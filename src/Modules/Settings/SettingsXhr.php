@@ -18,8 +18,13 @@ class SettingsXhr extends Control
 	private $settingsGateway;
 	private $mailsGateway;
 
-	public function __construct(SettingsView $view, SettingsGateway $settingsGateway, FoodsaverGateway $foodsaverGateway, LoginGateway $loginGateway, MailsGateway $mailsGateway)
-	{
+	public function __construct(
+		SettingsView $view,
+		SettingsGateway $settingsGateway,
+		FoodsaverGateway $foodsaverGateway,
+		LoginGateway $loginGateway,
+		MailsGateway $mailsGateway
+	) {
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->loginGateway = $loginGateway;
@@ -81,7 +86,7 @@ class SettingsXhr extends Control
 				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
 				'name' => $fs['name'],
 				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
-			]);
+			], false, true);
 
 			return [
 				'status' => 1,

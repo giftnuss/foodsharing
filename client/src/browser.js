@@ -23,6 +23,6 @@ if (strGET !== '') {
 }
 
 export function GET (v) {
-  if (!HTTP_GET_VARS[v]) { return 'undefined' }
+  if (!HTTP_GET_VARS[v]) { return undefined }
   return HTTP_GET_VARS[v]
 }
