@@ -65,7 +65,7 @@ class FoodSharePointTransactions
 				$bellData = Bell::create(
 					'ft_update_title',
 					'ft_update',
-					'img img-recycle yellow',
+					'fas fa-recycle',
 					['href' => '/?page=fairteiler&sub=ft&id=' . $foodSharePointId],
 					['name' => $foodSharePoint['name'], 'user' => $post['fs_name'], 'teaser' => $this->sanitizer->tt($post['body'], 100)],
 					'fairteiler-' . $foodSharePointId
