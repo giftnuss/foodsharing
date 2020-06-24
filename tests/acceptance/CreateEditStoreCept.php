@@ -75,10 +75,10 @@ $I->amOnPage($I->storeUrl($storeId));
 $I->click('Team bearbeiten');
 $I->waitForElement('.tagedit-list', 5);
 $I->addInTagSelect($bibB['name'], '#foodsaver');
-$I->addInTagSelect($bibC['id'], '#foodsaver');
+$I->addInTagSelect($bibC['nachname'], '#foodsaver');
 $I->addInTagSelect($foodsaverD['name'], '#foodsaver');
 $I->addInTagSelect($foodsaverE['nachname'], '#foodsaver');
-$I->addInTagSelect($foodsaverF['id'], '#foodsaver');
+$I->addInTagSelect($foodsaverF['name'], '#foodsaver');
 $I->click('Speichern', '#team-form');
 $I->waitForElementNotVisible('#team-form', 5);
 
