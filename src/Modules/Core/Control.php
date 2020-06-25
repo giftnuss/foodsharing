@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -48,11 +47,6 @@ abstract class Control
 	private $twig;
 
 	/**
-	 * @var Db
-	 */
-	private $legacyDb;
-
-	/**
 	 * @var FoodsaverGateway
 	 */
 	private $foodsaverGateway;
@@ -88,7 +82,6 @@ abstract class Control
 		$this->mem = $container->get(Mem::class);
 		$this->session = $container->get(Session::class);
 		$this->v_utils = $container->get(Utils::class);
-		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageHelper = $container->get(PageHelper::class);

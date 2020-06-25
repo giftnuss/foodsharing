@@ -1,7 +1,6 @@
 <?php
 
 use Foodsharing\Lib\Cache\Caching;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
@@ -56,9 +55,6 @@ $viewUtils = $container->get(Utils::class);
 
 $g_template = 'default';
 $g_data = $dataHelper->getPostData();
-
-/* @var Db $db */
-$db = $container->get(Db::class);
 
 $pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
 $pageHelper->addHidden('<div id="' . $identificationHelper->id('fancy') . '"></div>');

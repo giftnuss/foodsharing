@@ -8,6 +8,8 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +53,9 @@ $pageHelper = $container->get(PageHelper::class);
 /* @var Session $session */
 $session = $container->get(Session::class);
 
-$g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
+/* @var ContentGateway $contentGateway */
+$contentGateway = $container->get(ContentGateway::class);
+$g_broadcast_message = $contentGateway->get(ContentId::BROADCAST_MESSAGE)['body'];
 
 /* @var DebugBar $debug */
 $debug = $container->get(DebugBar::class);
