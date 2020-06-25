@@ -72,23 +72,30 @@ export function dateDistanceInWords (date) {
 }
 
 const noLocale = /^[\w-.\s,]*$/
+const noPhoneDigit = /[^+0-9]/g
 
-export function callableNumber (number) {
+export function callableNumber (number, allowInvalid = false) {
   if (!number) {
     return ''
   }
-  let digits = number.toString().replace(/[^+0-9]/g, '')
-  if (digits.substring(0, 1) === '0') {
-    // maybe it's 0049 instead of +49?
-    digits = digits.replace(/^00/, '+')
-    // assume German country code if just one 0
-    digits = digits.replace(/^0/, '+' + PhoneNumber.getCountryCodeForRegionCode('DE'))
-  }
+  let digits = number.toString()
+  // check for invalid +49(0) numbers that we can try to "rescue" later:
+  // (this will fail for `+49 (0)` etc which are not worth the effort)
+  digits = digits.replace(/^(\+\d{1,3})\(0\)/, '$1')
+  // now strip the remaining non-number characters aside from country code:
+  digits = digits.replace(noPhoneDigit, '')
+  // convert an implicit country code into the expected format:
+  // maybe it's given as 0049 instead of +49?
+  digits = digits.replace(/^00/, '+')
+
   const phone = new PhoneNumber(digits)
-  if (!phone.isValid()) {
+  if (phone.isValid()) {
+    return 'tel:' + digits
+  } else if (allowInvalid) {
+    return (digits.length > 6) ? digits : ''
+  } else {
     return ''
   }
-  return 'tel:' + digits
 }
 
 /**

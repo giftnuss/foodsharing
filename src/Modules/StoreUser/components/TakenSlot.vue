@@ -30,6 +30,14 @@
       <i class="fas fa-fw fa-phone" /> {{ $i18n('pickup.call') }}
     </b-dropdown-item>
     <b-dropdown-item
+      v-else-if="callText"
+      @click="copyIntoClipboard(callText)"
+    >
+      <i class="fas fa-fw fa-phone-slash" />
+      <span v-if="canCopy">{{ $i18n('pickup.copyNumber') }}</span>
+      <span v-else>{{ callText }}</span>
+    </b-dropdown-item>
+    <b-dropdown-item
       v-if="!confirmed && allowConfirm"
       @click="$emit('confirm', profile.id)"
     >
@@ -53,8 +61,10 @@
 <script>
 import Avatar from '@/components/Avatar'
 import { BDropdown, BDropdownItem } from 'bootstrap-vue'
+import { pulseSuccess } from '@/script'
 import { callableNumber } from '@/utils'
 import conv from '@/conv'
+import i18n from '@/i18n'
 
 export default {
   components: { Avatar, BDropdown, BDropdownItem },
@@ -88,9 +98,23 @@ export default {
     callLink () {
       const number = callableNumber(this.profile.mobile) || callableNumber(this.profile.landline)
       return number || ''
+    },
+    callText () {
+      const number = callableNumber(this.profile.mobile, true) || callableNumber(this.profile.landline, true)
+      return number || ''
+    },
+    canCopy () {
+      return !!navigator.clipboard
     }
   },
   methods: {
+    copyIntoClipboard (text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          pulseSuccess(i18n('pickup.copiedNumber', { number: text }))
+        })
+      }
+    },
     openChat () {
       conv.userChat(this.profile.id)
     }
