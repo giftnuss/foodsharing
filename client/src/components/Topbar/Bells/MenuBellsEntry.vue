@@ -21,7 +21,7 @@
           v-if="bell.isCloseable"
           class="icon showonhover"
           href="#"
-          @click.stop="$emit('remove', bell.id)"
+          @click.stop.prevent="$emit('remove', bell.id)"
         >
           <i
             class="icon fas fa-times"
