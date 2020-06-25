@@ -28,7 +28,7 @@
 - Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
 - Remove Magnific Popup by rewriting trust banana UI code to fancybox !1530 !1556 @ChrisOelmueller
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
-- Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 @ChrisOelmueller
+- Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 !1597 @ChrisOelmueller
 - Rewrite store team list in Vue !1499 !1591 @ChrisOelmueller
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_

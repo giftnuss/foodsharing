@@ -69,16 +69,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .list-group-item {
-    padding: 0.4em 0.6em;
-  }
+.list-group-item {
+  padding: 0.4em 0.6em;
+}
 
-  .icon {
+.icon {
+  height: 100%;
+  min-height: 1.5em;
+  min-width: 1.5em;
+  text-align: center;
+
+  @supports (display: grid) {
     display: grid;
-    height: 100%;
-    min-height: 1.5em;
-    min-width: 1.5em;
-    text-align: center;
 
     &::before,
     i.fas::before {
@@ -86,19 +88,21 @@ export default {
     }
   }
 
-  .icon img {
+  img {
     width: 100%;
   }
+}
 
-  .showonhover {
-    display: none;
-  }
+.showonhover { display: none; }
 
-  .list-group-item:hover {
-    .icon { text-decoration: none; }
+.list-group-item:hover {
+  .icon { text-decoration: none; }
+  .hideonhover { display: none; }
+  .showonhover { display: inline-block; }
+  @supports (display: grid) {
     .showonhover { display: grid; }
-    .hideonhover { display: none; }
   }
+}
 
   /*
   Override old-style bell data passing ".img-store" or ".img-recycle"
@@ -120,43 +124,46 @@ export default {
     content: "\f07a"; /* fa-shopping-cart */
   }
 
-  .bell-grid {
+.bell-grid {
+  @supports (display: grid) {
     display: grid;
     grid-template-columns: 45px 1fr 80px;
-
-    .bell-icon {
-      height: 100%;
-      grid-row-start: 1;
-      grid-row-end: 3;
-      align-self: center;
-      justify-self: center;
-      font-size: 2em;
-    }
-
-    .bell-title {
-      margin-right: 60px;
-      font-weight: bold;
-      font-size: 0.9em;
-    }
-
-    .bell-text {
-      font-size: 0.8em;
-    }
-
-    .bell-body {
-      grid-column-start: 2;
-      grid-column-end: 4;
-      grid-row-start: 1;
-      grid-row-end: 3;
-    }
-    .bell-date {
-      margin-right: -5px;
-      text-align: right;
-      grid-column-start: 3;
-      grid-column-end: 4;
-      grid-row-start: 1;
-      grid-row-end: 2;
-      z-index: 2;
-    }
   }
+
+  .bell-icon {
+    height: 100%;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    align-self: center;
+    justify-self: center;
+    font-size: 2em;
+  }
+
+  .bell-title {
+    margin-right: 60px;
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+
+  .bell-text {
+    font-size: 0.8em;
+  }
+
+  .bell-body {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
+
+  .bell-date {
+    margin-right: -5px;
+    text-align: right;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    z-index: 2;
+  }
+}
 </style>
