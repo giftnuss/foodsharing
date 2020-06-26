@@ -483,6 +483,7 @@ foodsaver:
     amb_region: In welcher Region möchtest du Botschafter werden?
     needs_publicinfo: Deine Kurzbeschreibung ist leer
     needs_region: Du hast keinen Bezirk gewählt, in dem du Botschafter werden möchtest
+    rv: Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.
     needs_rv: Du musst die Rechtsvereinbarung akzeptieren!
     quiz_error: 'Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:'
     fs_success: Danke! Du bist jetzt Foodsaver
