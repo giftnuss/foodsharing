@@ -6,7 +6,7 @@ use Exception;
 use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Uploads\UploadsGateway;
-use Foodsharing\Services\UploadsService;
+use Foodsharing\Modules\Uploads\UploadsTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -22,9 +22,9 @@ class UploadsRestController extends AbstractFOSRestController
 	private $uploadsGateway;
 
 	/**
-	 * @var UploadsService
+	 * @var UploadsTransactions
 	 */
-	private $uploadsService;
+	private $uploadsTransactions;
 
 	/**
 	 * @var Session
@@ -42,10 +42,10 @@ class UploadsRestController extends AbstractFOSRestController
 	private const MAX_UPLOAD_FILE_SIZE = 0.3 * 1024 * 1024;
 	private const EXPIRATION_TIME_SECONDS = 86400 * 7; // one week
 
-	public function __construct(UploadsGateway $uploadsGateway, UploadsService $uploadsService, Session $session)
+	public function __construct(UploadsGateway $uploadsGateway, UploadsTransactions $uploadsService, Session $session)
 	{
 		$this->uploadsGateway = $uploadsGateway;
-		$this->uploadsService = $uploadsService;
+		$this->uploadsTransactions = $uploadsService;
 		$this->session = $session;
 	}
 
@@ -105,7 +105,7 @@ class UploadsRestController extends AbstractFOSRestController
 		// update lastAccess timestamp
 		$this->uploadsGateway->touchFile($uuid);
 
-		$filename = $this->uploadsService->getFileLocation($uuid);
+		$filename = $this->uploadsTransactions->getFileLocation($uuid);
 
 		// resizing of images
 		if ($doResize) {
@@ -118,10 +118,10 @@ class UploadsRestController extends AbstractFOSRestController
 			}
 
 			$originalFilename = $filename;
-			$filename = $this->uploadsService->getFileLocation($uuid, $width, $height, $quality);
+			$filename = $this->uploadsTransactions->getFileLocation($uuid, $width, $height, $quality);
 
 			if (!file_exists($filename)) {
-				$this->uploadsService->resizeImage($originalFilename, $filename, $width, $height, $quality);
+				$this->uploadsTransactions->resizeImage($originalFilename, $filename, $width, $height, $quality);
 			}
 		}
 
@@ -192,7 +192,7 @@ class UploadsRestController extends AbstractFOSRestController
 		}
 
 		// image? check whether its valid
-		if ((strpos($mimeType, 'image/') === 0) && !$this->uploadsService->isValidImage($tempfile)) {
+		if ((strpos($mimeType, 'image/') === 0) && !$this->uploadsTransactions->isValidImage($tempfile)) {
 			unlink($tempfile);
 			throw new HttpException(400, 'invalid image provided');
 		}
@@ -200,7 +200,7 @@ class UploadsRestController extends AbstractFOSRestController
 		$file = $this->uploadsGateway->addFile($this->session->id(), $hash, $size, $mimeType);
 
 		if (!$file['isReuploaded']) {
-			$path = $this->uploadsService->getFileLocation($file['uuid']);
+			$path = $this->uploadsTransactions->getFileLocation($file['uuid']);
 			$dir = dirname($path);
 
 			// create parent directories if they don't exist yeted
@@ -210,7 +210,7 @@ class UploadsRestController extends AbstractFOSRestController
 
 			// JPEG? strip exif data!
 			if ($mimeType === 'image/jpeg') {
-				$this->uploadsService->stripImageExifData($tempfile, $path);
+				$this->uploadsTransactions->stripImageExifData($tempfile, $path);
 			} else {
 				// otherwise just move it
 				rename($tempfile, $path);

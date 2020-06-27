@@ -1,10 +1,10 @@
 <?php
 
-namespace Foodsharing\Services;
+namespace Foodsharing\Modules\Uploads;
 
 use Imagick;
 
-class UploadsService
+class UploadsTransactions
 {
 	/**
 	 * Returns the actual path of the file with the specified parameters.
