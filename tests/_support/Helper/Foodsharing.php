@@ -28,6 +28,19 @@ class Foodsharing extends \Codeception\Module\Db
 		/* This method should clear the database back to a state that seed data can be inserted again without fucking something up.
 		It is okay to destroy user generated data and it is okay to fail when the user changed things. Actually, the suggested way is
 		to reseed the database in case any modification to static data could have happened */
+		$regionsToKeep = implode(',', [
+			RegionIDs::ROOT,
+			258, // Orgateam Archiv, apparently was a parent of some stuff
+			RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP,
+			RegionIDs::GLOBAL_WORKING_GROUPS,
+			RegionIDs::EUROPE,
+			RegionIDs::NEWSLETTER_WORK_GROUP,
+			RegionIDs::EUROPE_REPORT_TEAM,
+			RegionIDs::TEAM_BOARD_MEMBER,
+			RegionIDs::TEAM_ALUMNI_MEMBER,
+			RegionIDs::TEAM_ADMINISTRATION_MEMBER,
+			RegionIDs::WORKGROUP_ADMIN_CREATION_GROUP,
+		]);
 		$this->_getDriver()->executeQuery('
 			DELETE FROM fs_buddy;
 			DELETE FROM fs_question_has_quiz;
@@ -56,7 +69,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_conversation;
 			DELETE FROM fs_wallpost;
-			DELETE FROM fs_bezirk WHERE region_id NOT IN(0, 258, 341, 392, 741, 1373, 1564, 1565);
+			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ');
 			DELETE FROM fs_lebensmittel;
 		', []);
 	}
