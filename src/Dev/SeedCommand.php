@@ -205,13 +205,19 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
 
-		$I->addStoreChain();
-		$I->addStoreChain();
-		$I->addStoreChain();
+		$this->output->writeln('- create store chains');
+		foreach (range(0, 50) as $_) {
+			$I->addStoreChain();
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
 
-		$I->addStoreFoodType();
-		$I->addStoreFoodType();
-		$I->addStoreFoodType();
+		$this->output->writeln('- create food types');
+		foreach (range(0, 10) as $_) {
+			$I->addStoreFoodType();
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
 
 		// Forum theads and posts
 		$this->output->writeln('- create forum threads and posts');
