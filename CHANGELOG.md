@@ -18,6 +18,7 @@
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
 - Push notifications for group chats no longer sound like the message addresses the user specifically !1574 @\_fridtjof_
 - Exclude workgroups from the "my groups" section in the topbar search for which the user was not yet accepted !1589 @alex.simm
+- Only count pickups via the function getMyStore until the current day !1599 @chriswalg
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 

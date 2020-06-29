@@ -267,6 +267,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			FROM 	`fs_betrieb` b
         			LEFT JOIN `fs_abholer` a
         			ON a.betrieb_id = b.id
+			AND		a.date < CURDATE()
 
 			WHERE 	b.`id` = :storeId
 
