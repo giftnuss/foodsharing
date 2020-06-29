@@ -128,7 +128,7 @@ class MailboxXhr extends Control
 				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 					foreach ($newcount as $nc) {
 						$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
+								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).addClass("newmail").attr("data-count","(' . $nc['count'] . ') ");';
 					}
 				}
 			}
