@@ -124,11 +124,16 @@ class MailboxXhr extends Control
 			}
 
 			$nc_js = '';
-			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->mailboxPermissions->mayHaveMailbox())) {
+			// we already handled the "not a store manager case" (PERMISSION_DENIED) earlier
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), true)) {
 				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 					foreach ($newcount as $nc) {
+						// locate the tree entry for this mailbox with jQuery + append unread count
+						$mailboxName = $nc['name'] . '@' . PLATFORM_MAILBOX_HOST;
 						$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).addClass("newmail").attr("data-count","(' . $nc['count'] . ') ");';
+				$("ul.dynatree-container a.dynatree-title").filter(function () {
+					return $(this).text() === "' . $mailboxName . '";
+				}).addClass("newmail").attr("data-count","(' . $nc['count'] . ') ");';
 					}
 				}
 			}
