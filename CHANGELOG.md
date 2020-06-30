@@ -53,6 +53,7 @@
 - Include Phinx database migration tool for (hopefully soon) automated migrations and less confusion about database state !1549 @NerdyProjects
 - Install phinx as a separate project in deployment !1584 @NerdyProjects
 - made development on Windows possible again by tweaking direcotry cache and line endings !1603 @peter.toennies
+- Add emails to seed data !1601 @alex.simm
 
 # 2020-06-15 Hotfix
 - Allow emails for password reset and email address change to be sent with higher priority !1557 #925 @alex.simm 

@@ -8,6 +8,7 @@ use Faker;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -235,6 +236,10 @@ class Foodsharing extends \Codeception\Module\Db
 		], $extra_params);
 		$params = $this->createFoodsaver($pass, $params);
 		$this->createQuizTry($params['id'], 2, 1);
+
+		// create a mailbox and assign this user to it
+		$mailbox = $this->createMailbox(strtolower(substr($params['name'], 0, 1) . '.' . $params['nachname']));
+		$this->updateInDatabase('fs_foodsaver', ['mailbox_id' => $mailbox['id']], ['id' => $params['id']]);
 
 		return $params;
 	}
@@ -471,7 +476,66 @@ class Foodsharing extends \Codeception\Module\Db
 		$mb['name'] = $name;
 		$mb['id'] = $this->haveInDatabase('fs_mailbox', $mb);
 
+		// add up to 10 emails to each folder
+		foreach ([MailboxFolder::FOLDER_INBOX, MailboxFolder::FOLDER_SENT, MailboxFolder::FOLDER_TRASH] as $folder) {
+			$numMails = $this->faker->numberBetween(0, 10);
+			for ($i = 0; $i < $numMails; ++$i) {
+				$this->createEmail($mb, $folder);
+			}
+		}
+
 		return $mb;
+	}
+
+	public function createEmail(array $mailbox, int $folder, array $extra_params = []): int
+	{
+		$body = $this->faker->realText(200);
+		$extra_params = array_merge([
+			'mailbox_id' => $mailbox['id'],
+			'folder' => $folder,
+			'subject' => $this->faker->text(30),
+			'body' => $body,
+			'body_html' => $body,
+			'time' => $this->faker->dateTimeThisDecade->format('Y-m-d H:i:s'),
+			'attach' => null,
+			'read' => ($folder == MailboxFolder::FOLDER_INBOX) ? $this->faker->boolean : true,
+			'answer' => false
+		], $extra_params);
+
+		// add sender and receiver based on the mailbox folder
+		if ($folder == MailboxFolder::FOLDER_INBOX) {
+			$extra_params['sender'] = $this->createRandomEmailAddress($this->faker->boolean);
+			$extra_params['to'] = [$this->createFoodsharingEmailAddress($mailbox)];
+		} else {
+			$extra_params['to'] = [];
+			for ($i = 0; $i < $this->faker->numberBetween(1, 5); ++$i) {
+				$extra_params['to'][] = $this->createRandomEmailAddress(false);
+			}
+			$extra_params['sender'] = $this->createFoodsharingEmailAddress($mailbox);
+		}
+
+		$extra_params['sender'] = json_encode($extra_params['sender']);
+		$extra_params['to'] = json_encode($extra_params['to']);
+
+		return $this->haveInDatabase('fs_mailbox_message', $extra_params);
+	}
+
+	private function createFoodsharingEmailAddress(array $mailbox): array
+	{
+		return [
+			'host' => 'foodsharing.network',
+			'mailbox' => $mailbox['name'],
+			'personal' => $mailbox['name'] . '@foodsharing.network'
+		];
+	}
+
+	private function createRandomEmailAddress(bool $includePersonal = true): array
+	{
+		return [
+			'host' => $this->faker->safeEmailDomain,
+			'mailbox' => $this->faker->userName,
+			'personal' => $includePersonal ? $this->faker->name : null
+		];
 	}
 
 	public function addBuddy(int $user1, int $user2, bool $confirmed = true): void
