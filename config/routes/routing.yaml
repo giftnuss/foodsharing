@@ -15,3 +15,7 @@ index:
 xhr:
   path: /xhr.php
   controller: Foodsharing\Entrypoint\XhrController::xhr
+
+xhrapp:
+  path: /xhrapp.php
+  controller: Foodsharing\Entrypoint\XhrAppController::xhrapp
