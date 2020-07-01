@@ -7,3 +7,7 @@ messages:
 NelmioApiDocBundle:
   resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
   prefix:   /api/doc
+
+index:
+  path: /
+  controller: Foodsharing\Entrypoint\IndexController::index
