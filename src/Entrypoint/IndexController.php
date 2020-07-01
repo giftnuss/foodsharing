@@ -5,11 +5,10 @@ namespace Foodsharing\Entrypoint;
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\ContentSecurityPolicy;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
-use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
@@ -20,6 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class IndexController extends AbstractController
 {
@@ -40,13 +40,12 @@ class IndexController extends AbstractController
 		Session $session,
 		Mem $mem,
 		InfluxMetrics $influxdb,
-		Utils $viewUtils,
 		DebugBar $debugBar,
 		RouteHelper $routeHelper,
 		PageHelper $pageHelper,
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
-		Db $db
+		Database $db
 	): Response {
 		$response = new Response('--');
 
@@ -98,7 +97,8 @@ class IndexController extends AbstractController
 		// lib/inc.php END
 
 		global $g_broadcast_message;
-		$g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
+
+		$g_broadcast_message = $db->fetchValue('SELECT `body` FROM fs_content WHERE `id` = 51');
 
 		if ($debugBar->isEnabled()) {
 			$pageHelper->addHead($debugBar->renderHead());
@@ -157,7 +157,7 @@ class IndexController extends AbstractController
 			if ($debugBar->isEnabled()) {
 				$pageHelper->addContent($debugBar->renderContent(), CNT_BOTTOM);
 			}
-			/* @var \Twig\Environment $twig */
+			/* @var Environment $twig */
 			$twig = $this->get('twig');
 			$page = $twig->render('layouts/' . $g_template . '.twig', $pageHelper->generateAndGetGlobalViewData());
 
