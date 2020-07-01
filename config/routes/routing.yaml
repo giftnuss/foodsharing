@@ -11,3 +11,7 @@ NelmioApiDocBundle:
 index:
   path: /
   controller: Foodsharing\Entrypoint\IndexController::index
+
+xhr:
+  path: /xhr.php
+  controller: Foodsharing\Entrypoint\XhrController::xhr
