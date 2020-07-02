@@ -85,6 +85,8 @@ login:
   password: Passwort
   forgotten_password_label: Passwort vergessen?
   login_button_label: Anmelden
+  save_password: Passwort speichern
+  steady_login: Eingeloggt bleiben (verwendet Cookies)
   error_no_email: Bitte gib Deine E-Mail-Adresse an!
   error_no_password: Bitte gib Dein Passwort an!
   error_no_auth: E-Mail-Adresse oder Passwort sind falsch

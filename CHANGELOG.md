@@ -11,6 +11,8 @@
 - Removed faq and replaced to external freshdesk support form in top and footer menu #817 !1587 @chriswalg
 - Call foodsaver from pickup slot dropdown menu #772 !1591 @ChrisOelmueller
 - Hide all phone numbers for unverified store team members and jumpers !1591 @ChrisOelmueller
+- Show an popover for the "remember me"-function, if clicked in password field on login page !1585 #370 @TheSoulT
+- Add a link to reset the password in the login popover !1585 @TheSoulT
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter

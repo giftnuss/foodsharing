@@ -55,6 +55,7 @@ const urls = {
   mission: () => '/ueber-uns',
   partner: () => '/partner',
   passports: (regionId) => `/?page=passgen&bid=${regionId}`,
+  passwordReset: () => '/?page=login&sub=passwordReset',
   press: () => '/?page=content&sub=presse',
   quizEdit: () => '/?page=quiz',
   region: () => '/?page=region',
