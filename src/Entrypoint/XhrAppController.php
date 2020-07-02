@@ -141,16 +141,14 @@ class XhrAppController extends AbstractController
 		// 'WorkGroup::contactgroup',
 	];
 
-	public function xhrApp(
-		Request $request,
-		Session $session
-	): Response {
+	public function xhrApp(Request $request, Session $session): Response
+	{
 		$response = new Response();
 		if (isset($_GET['app'], $_GET['m'])) {
 			$app = str_replace('/', '', $_GET['app']);
 			$meth = str_replace('/', '', $_GET['m']);
 
-			require_once 'config.inc.php';
+			global $g_lang;
 			require_once 'lang/DE/de.php';
 
 			$session->initIfCookieExists();
@@ -166,6 +164,7 @@ class XhrAppController extends AbstractController
 						$response->setProtocolVersion('1.1');
 						$response->setStatusCode(Response::HTTP_FORBIDDEN);
 						$response->setContent('CSRF Failed: CSRF token missing or incorrect.');
+
 						return $response;
 					}
 				}
@@ -173,10 +172,7 @@ class XhrAppController extends AbstractController
 				// execute method
 				$out = $obj->$meth($request);
 
-				if ($out === XhrResponses::PERMISSION_DENIED) {
-					$response->setProtocolVersion('1.1');
-					$response->setStatusCode(Response::HTTP_FORBIDDEN);
-				} else {
+				if ($out !== XhrResponses::PERMISSION_DENIED) {
 					if (!isset($out['script'])) {
 						$out['script'] = '';
 					}
@@ -185,12 +181,17 @@ class XhrAppController extends AbstractController
 
 					$response->headers->set('Content-Type', 'application/json');
 					$response->setContent(json_encode($out));
+				} else {
+					$response->setProtocolVersion('1.1');
+					$response->setStatusCode(Response::HTTP_FORBIDDEN);
 				}
 
 				return $response;
+			} else {
+				return new Response(Response::HTTP_BAD_REQUEST);
 			}
+		} else {
+			return new Response(Response::HTTP_BAD_REQUEST);
 		}
-
-		return new Response(Response::HTTP_BAD_REQUEST);
 	}
 }
