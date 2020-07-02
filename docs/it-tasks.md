@@ -68,7 +68,7 @@ Schickte uns auch gerne eine Mail an [it@foodsharing.network](mailto:it@foodshar
 Aber natürlich:
 
 ### Webseiten Front- und Backend
-- PHP (Symfony 4)
+- PHP (Symfony 5)
 - JavaScript (Webpack, Vue.js)
 - HTML (Twig)
 - CSS (Bootstrap)

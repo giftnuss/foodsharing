@@ -17,7 +17,7 @@ A: The main architecture goals came from this book "[Modernizing Legacy Applicat
 A few current architecture goals would be:
 
 * only 1 php entrypoint (`index.php`), remove [xhr](requests.md#xhr)|xhrapp.php/etc
-* use symfony approach for handling all requests (some controllers do this already, others use the old way), in index.php the `$isUsingResponse` switches behaviour based on that
+* use symfony approach for handling all requests (some controllers do this already, others use the old way), in IndexController the `$isUsingResponse` switches behaviour based on that
 * create [REST](requests.md#rest-api) controllers for all API use, remove all other API stuff
 * use a symfony router or similar (might also involve changing page urls to nice paths instead of get parameters + adding redirects)
 * have simple/general/default kind of symfony `index.php` for templates/frontend stuff
@@ -98,7 +98,7 @@ Chandi showed how karrot and foodsharing might work together on the code base. (
 Q: [it-tasks.html](it-tasks_EN.md) lists a number of tech stuff we use on the page. How is their relationship to each other / what do we use them for? What do we want to remove from our codebase?
 
 A: We use ...
-* [PHP](php.md) (Symfony 4) ... we also use non-symfony-php, that we want to refactor
+* [PHP](php.md) (Symfony 5) ... we also use a lot of non-symfony-php, that we want to refactor
 * [JavaScript](javascript.md) ([Webpack](javascript.md#webpack), [Vue.js](javascript.md#vuejs)) ... we're also modernizing some old JavaScript. Vue impacts mainly just one thing. CSS mostly has an effect on other stuff as well. (see below)
 * HTML (Twig) ... there is also the old way with string contatination.  Twig is the new way. We're moving more towards vue.
 * CSS (Bootstrap) ... move from global CSS to [vue](javascript.md#vuejs)vue components

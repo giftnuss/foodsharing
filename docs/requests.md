@@ -1,7 +1,7 @@
 # HTTP Request
 
 The traditional loading of a page is a `http` request,
-e.g. calling the main address `https://foodsharing.de` calls `/index.php`
+e.g. calling the main address `https://foodsharing.de` calls `/src/Entrypoint/IndexController.php`
 which uses other `php` files to answer the request.
 The `php` builds `html`, `css` and `javascript` and sends them to the client.
 

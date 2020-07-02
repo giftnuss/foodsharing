@@ -70,7 +70,7 @@ We would also be happy to receive an email to [it@foodsharing.network](mailto:it
 But of course:
 
 ### Website Front- and Backend
-- PHP (Symfony 4)
+- PHP (Symfony 5)
 - JavaScript (Webpack, Vue.js)
 - HTML (Twig)
 - CSS (Bootstrap)
