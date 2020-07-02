@@ -143,55 +143,56 @@ class XhrAppController extends AbstractController
 
 	public function xhrApp(Request $request, Session $session): Response
 	{
-		$response = new Response();
-		if (isset($_GET['app'], $_GET['m'])) {
-			$app = str_replace('/', '', $_GET['app']);
-			$meth = str_replace('/', '', $_GET['m']);
-
-			global $g_lang;
-			require_once 'lang/DE/de.php';
-
-			$session->initIfCookieExists();
-
-			$class = Routing::getClassName($app, 'Xhr');
-			$obj = $this->fullServiceContainer->get(ltrim($class, '\\'));
-
-			if (method_exists($obj, $meth)) {
-				// check CSRF Header
-				$whitelist_key = explode('\\', $class)[3] . '::' . $meth;
-				if (!in_array($whitelist_key, XhrAppController::csrf_whitelist)) {
-					if (!$session->isValidCsrfHeader()) {
-						$response->setProtocolVersion('1.1');
-						$response->setStatusCode(Response::HTTP_FORBIDDEN);
-						$response->setContent('CSRF Failed: CSRF token missing or incorrect.');
-
-						return $response;
-					}
-				}
-
-				// execute method
-				$out = $obj->$meth($request);
-
-				if ($out !== XhrResponses::PERMISSION_DENIED) {
-					if (!isset($out['script'])) {
-						$out['script'] = '';
-					}
-
-					$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
-
-					$response->headers->set('Content-Type', 'application/json');
-					$response->setContent(json_encode($out));
-				} else {
-					$response->setProtocolVersion('1.1');
-					$response->setStatusCode(Response::HTTP_FORBIDDEN);
-				}
-
-				return $response;
-			} else {
-				return new Response(Response::HTTP_BAD_REQUEST);
-			}
-		} else {
+		if (!isset($_GET['app'], $_GET['m'])) {
 			return new Response(Response::HTTP_BAD_REQUEST);
 		}
+
+		$app = str_replace('/', '', $_GET['app']);
+		$meth = str_replace('/', '', $_GET['m']);
+
+		global $g_lang;
+		require_once 'lang/DE/de.php';
+
+		$session->initIfCookieExists();
+
+		$class = Routing::getClassName($app, 'Xhr');
+		$obj = $this->fullServiceContainer->get(ltrim($class, '\\'));
+
+		if (!method_exists($obj, $meth)) {
+			return new Response(Response::HTTP_BAD_REQUEST);
+		}
+
+		$response = new Response();
+
+		// check CSRF Header
+		$whitelist_key = explode('\\', $class)[3] . '::' . $meth;
+		if (!in_array($whitelist_key, XhrAppController::csrf_whitelist) && !$session->isValidCsrfHeader()) {
+			$response->setProtocolVersion('1.1');
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+			$response->setContent('CSRF Failed: CSRF token missing or incorrect.');
+
+			return $response;
+		}
+
+		// execute method
+		$out = $obj->$meth($request);
+
+		if ($out === XhrResponses::PERMISSION_DENIED) {
+			$response->setProtocolVersion('1.1');
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
+
+			return $response;
+		}
+
+		if (!isset($out['script'])) {
+			$out['script'] = '';
+		}
+
+		$out['script'] = '$(".tooltip").tooltip({show: false,hide:false,position: {	my: "center bottom-20",	at: "center top",using: function( position, feedback ) {	$( this ).css( position );	$("<div>").addClass( "arrow" ).addClass( feedback.vertical ).addClass( feedback.horizontal ).appendTo( this );}}});' . $out['script'];
+
+		$response->headers->set('Content-Type', 'application/json');
+		$response->setContent(json_encode($out));
+
+		return $response;
 	}
 }
