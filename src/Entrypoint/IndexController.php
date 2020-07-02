@@ -60,6 +60,8 @@ class IndexController extends AbstractController
 
 		$session->initIfCookieExists();
 
+		// is this actually used anywhere? (prod?)
+		global $g_page_cache;
 		if (isset($g_page_cache) && strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
 			$cache = new Caching($g_page_cache, $session, $mem, $influxdb);
 			$cache->lookup();
