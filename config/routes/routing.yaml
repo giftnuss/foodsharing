@@ -18,4 +18,4 @@ xhr:
 
 xhrapp:
   path: /xhrapp.php
-  controller: Foodsharing\Entrypoint\XhrAppController::xhrapp
+  controller: Foodsharing\Entrypoint\XhrAppController::xhrApp
