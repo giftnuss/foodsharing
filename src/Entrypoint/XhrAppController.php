@@ -156,6 +156,9 @@ class XhrAppController extends AbstractController
 		$session->initIfCookieExists();
 
 		$class = Routing::getClassName($app, 'Xhr');
+
+		global $container;
+		$container = $this->fullServiceContainer;
 		$obj = $this->fullServiceContainer->get(ltrim($class, '\\'));
 
 		if (!method_exists($obj, $meth)) {
