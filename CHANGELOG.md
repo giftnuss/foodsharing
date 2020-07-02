@@ -177,6 +177,7 @@
 - Remove jquery contextmenu, refactor some dashboard view code &22 !1606 @ChrisOelmueller
 - Refactor profile view, permissions, and pickup schedule overview !1604 @ChrisOelmueller
 - Rewrite store pickup history in Vue, using the Pickup components &9 &22 !1611 @ChrisOelmueller
+- Move entry points to Symfony controllers @\_fridtjof_ !1602
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
