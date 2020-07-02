@@ -28,6 +28,8 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
 // hack to make Symfony routing work for this
 // because routing looks at a URL's path info (see Request::getPathInfo),
 // we prepend the file name again, so the path info is '/xhrapp.php' instead of '/'
+// ideally all requests should go through a single entry point,
+// but that will require changing web server configs in sync with merging, not to mention doing this when releasing to prod
 $_SERVER['REQUEST_URI'] = '/xhrapp.php' . $_SERVER['REQUEST_URI'];
 
 $kernel = new Kernel($env, $debug);
