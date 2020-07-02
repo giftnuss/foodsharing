@@ -124,8 +124,6 @@ class IndexController extends AbstractController
 			$container = $this->fullServiceContainer;
 			$obj = $container->get(ltrim($controller, '\\'));
 		} catch (ServiceNotFoundException $e) {
-			$response->setStatusCode(Response::HTTP_NOT_FOUND);
-			$response->setContent($e->getMessage());
 		}
 
 		if (isset($obj)) {
@@ -139,6 +137,9 @@ class IndexController extends AbstractController
 			if ($sub !== false && is_callable([$obj, $sub])) {
 				$obj->$sub($request, $response);
 			}
+		} else {
+			$response->setStatusCode(Response::HTTP_NOT_FOUND);
+			$response->setContent('');
 		}
 
 		$page = $response->getContent();
