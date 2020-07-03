@@ -149,7 +149,7 @@ class XhrAppController extends AbstractController
 	 * Note that this entry point still performs CSRF checks on its own,
 	 * except for what's specified in csrf_whitelist.
 	 */
-	public function xhrApp(Request $request, Session $session): Response
+	public function __invoke(Request $request, Session $session): Response
 	{
 		if (!isset($_GET['app'], $_GET['m'])) {
 			return new Response(Response::HTTP_BAD_REQUEST);

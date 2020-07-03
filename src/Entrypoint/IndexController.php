@@ -40,7 +40,7 @@ class IndexController extends AbstractController
 	 * breaks POST on these entrypoints right now,
 	 * so this annotation disables it.
 	 */
-	public function index(
+	public function __invoke(
 		Request $request,
 		ContentSecurityPolicy $csp,
 		Session $session,

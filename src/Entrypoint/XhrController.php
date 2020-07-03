@@ -64,7 +64,7 @@ class XhrController extends AbstractController
 	 * Note that this entry point still performs CSRF checks on its own,
 	 * except for what's specified in csrf_whitelist.
 	 */
-	public function xhr(
+	public function __invoke(
 		Request $request,
 		Session $session,
 		Mem $mem,
