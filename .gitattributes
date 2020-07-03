@@ -1,2 +1,4 @@
 CHANGELOG.md merge=union
 /composer.lock -merge
+
+/bin/console text eol=lf
