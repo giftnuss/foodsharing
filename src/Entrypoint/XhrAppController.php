@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Entrypoint;
 
+use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\Xhr\XhrResponses;
@@ -141,6 +142,13 @@ class XhrAppController extends AbstractController
 		// 'WorkGroup::contactgroup',
 	];
 
+	/**
+	 * @DisableCsrfProtection CSRF Protection (originally done for the REST API)
+	 * breaks POST on these entrypoints right now,
+	 * so this annotation disables it.
+	 * Note that this entry point still performs CSRF checks on its own,
+	 * except for what's specified in csrf_whitelist.
+	 */
 	public function xhrApp(Request $request, Session $session): Response
 	{
 		if (!isset($_GET['app'], $_GET['m'])) {

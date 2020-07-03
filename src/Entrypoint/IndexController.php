@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Entrypoint;
 
+use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Debug\DebugBar;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\ContentSecurityPolicy;
@@ -34,6 +35,11 @@ class IndexController extends AbstractController
 		$this->fullServiceContainer = $container;
 	}
 
+	/**
+	 * @DisableCsrfProtection CSRF Protection (originally done for the REST API)
+	 * breaks POST on these entrypoints right now,
+	 * so this annotation disables it.
+	 */
 	public function index(
 		Request $request,
 		ContentSecurityPolicy $csp,

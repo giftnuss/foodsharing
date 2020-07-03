@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Entrypoint;
 
+use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Cache\Caching;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
@@ -56,6 +57,13 @@ class XhrController extends AbstractController
 		// 'bcontext'
 	];
 
+	/**
+	 * @DisableCsrfProtection CSRF Protection (originally done for the REST API)
+	 * breaks POST on these entrypoints right now,
+	 * so this annotation disables it.
+	 * Note that this entry point still performs CSRF checks on its own,
+	 * except for what's specified in csrf_whitelist.
+	 */
 	public function xhr(
 		Request $request,
 		Session $session,
