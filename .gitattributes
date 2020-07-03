@@ -1,4 +1,6 @@
 CHANGELOG.md merge=union
 /composer.lock -merge
 
+# Settings for line ending treatment
+* text=auto
 /bin/console text eol=lf
