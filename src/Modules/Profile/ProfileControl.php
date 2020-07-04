@@ -9,6 +9,7 @@ use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ProfileControl extends Control
 {
@@ -20,6 +21,7 @@ final class ProfileControl extends Control
 	private $reportPermissions;
 	private $profilePermissions;
 	private $mailsGateway;
+	private $translator;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
@@ -29,16 +31,18 @@ final class ProfileControl extends Control
 		BasketGateway $basketGateway,
 		MailboxGateway $mailboxGateway,
 		ReportPermissions $reportPermissions,
+		TranslatorInterface $translator,
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
-		$this->profileGateway = $profileGateway;
 		$this->regionGateway = $regionGateway;
+		$this->profileGateway = $profileGateway;
 		$this->basketGateway = $basketGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->profilePermissions = $profilePermissions;
 		$this->mailsGateway = $mailsGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -51,7 +55,7 @@ final class ProfileControl extends Control
 		$isRemoved = (!$data) || isset($data['deleted_at']);
 
 		if ($isRemoved) {
-			$this->flashMessageHelper->error($this->translationHelper->s('fs_profile_does_not_exist_anymore'));
+			$this->flashMessageHelper->error($this->translator->trans('profile.notFound'));
 			$this->routeHelper->goPage('dashboard');
 		}
 
