@@ -10,37 +10,23 @@ import {
   picFinish,
   pulseSuccess,
   pulseError,
-  goTo,
   collapse_wrapper,
   GET
 } from '@/script'
 import { expose } from '@/utils'
 import i18n from '@/i18n'
-import { deleteUser } from '@/api/user'
 import { subscribeForPushNotifications, unsubscribeFromPushNotifications } from '@/pushNotifications'
+import { confirmDeleteUser } from '../Foodsaver/Foodsaver'
 
 expose({
   fotoupload,
   picFinish,
-  collapse_wrapper,
-  confirmDeleteAccount
+  confirmDeleteUser,
+  collapse_wrapper
 })
 
 if (GET('sub') === 'general') {
   attachAddressPicker()
-}
-
-async function confirmDeleteAccount (fsId) {
-  if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
-    try {
-      await deleteUser(fsId)
-      pulseSuccess(i18n('success'))
-      goTo('/')
-    } catch (err) {
-      pulseError(i18n('error_unexpected'))
-      throw err
-    }
-  }
 }
 
 // Fill the Push Notifications module with life

@@ -453,7 +453,8 @@ class SettingsView extends View
 	public function delete_account(int $fsId)
 	{
 		$content = '<button type="button" id="delete-account" class="btn btn-sm btn-danger"'
-			. ' onclick="confirmDeleteAccount(' . $fsId . ')">'
+			. ' onclick="confirmDeleteUser(' . $fsId . ',\''
+			. $this->translator->trans('foodsaver.your_account') . '\')">'
 			. $this->translator->trans('foodsaver.delete_account_now')
 			. '</button>'
 			. $this->v_utils->v_info(

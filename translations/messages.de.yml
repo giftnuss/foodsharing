@@ -501,6 +501,7 @@ foodsaver:
   delete_account: ⚠️ Account löschen
   delete_account_sure: 'Soll der Account von {name} wirklich gelöscht werden?'
   delete_account_now: Account jetzt löschen
+  your_account: dir
   delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
   url_error: Mit deiner Homepage-URL stimmt etwas nicht
   mailchange_error: Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!

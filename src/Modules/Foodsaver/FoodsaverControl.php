@@ -137,7 +137,7 @@ class FoodsaverControl extends Control
 			}
 			if ($this->profilePermissions->mayDeleteUser($fs['id'])) {
 				$actions[] = [
-					'click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ',\'' . $name . '\')',
+					'click' => 'confirmDeleteUser(' . $fs['id'] . ',\'' . $name . '\')',
 					'name' => $this->translator->trans('foodsaver.delete_account'),
 				];
 			}

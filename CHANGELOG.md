@@ -1,5 +1,8 @@
 # Unreleased
 
+## Major changes
+- New store-team list
+
 ## Features
 - Welcome Bell only for welcome group Admins #945 !1612 @fs_k
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
@@ -16,6 +19,7 @@
 - Add a link to reset the password in the login popover !1585 @TheSoulT
 - Disabled report link on profile page and Xhr functions for sending reports !1610 @alex.simm
 - Store managers can toggle team list mode to sort by last pickup !1593 @ChrisOelmueller
+- Public profile page, to allow checking badge validity #688 !1604 @ChrisOelmueller
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
@@ -47,6 +51,7 @@
 - Removed dependency on old Db class from some classes !1598 #9 @alex.simm
 - Move sending of bananas to new REST endpoint !1617 #798 @alex.simm 
 - Remove jquery contextmenu, refactor some dashboard view code &22 !1606 @ChrisOelmueller
+- Refactor profile view, permissions, and pickup schedule overview !1604 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects

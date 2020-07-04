@@ -1,6 +1,7 @@
 import '@/core'
 import '@/globals'
-import { ajreq, GET, goTo } from '@/script'
+import { ajreq, GET, goTo, pulseSuccess } from '@/script'
+import { expose } from '@/utils'
 import $ from 'jquery'
 import 'jquery-dynatree'
 import i18n from '@/i18n'
@@ -39,16 +40,20 @@ const fsapp = {
         id: foodsaverId
       })
     }
-  },
-  confirmDeleteUser: async function (fsId, name) {
-    if (window.confirm(i18n('foodsaver.delete_account_sure', { name }))) {
-      await deleteUser(fsId)
-      window.alert(i18n('success'))
-      goTo('/?page=dashboard')
-    }
+  }
+}
+
+export async function confirmDeleteUser (fsId, name) {
+  if (window.confirm(i18n('foodsaver.delete_account_sure', { name }))) {
+    await deleteUser(fsId)
+    pulseSuccess(i18n('success'))
+    goTo('/?page=dashboard')
   }
 }
 
 fsapp.init()
 
-window.fsapp = fsapp
+expose({
+  fsapp,
+  confirmDeleteUser
+})
