@@ -192,7 +192,7 @@ class UserRestController extends AbstractFOSRestController
 	 */
 	public function deleteUserAction(int $userId): Response
 	{
-		if ($userId !== $this->session->id() && !$this->profilePermissions->mayDeleteUser()) {
+		if (!$this->profilePermissions->mayDeleteUser($userId)) {
 			throw new HttpException(403);
 		}
 

@@ -95,23 +95,26 @@ class FoodsaverControl extends Control
 				$this->dataHelper->setEditData($fs);
 
 				$regionDetails = $fs['bezirk_id'] > 0 ? $this->regionGateway->getRegion($fs['bezirk_id']) : false;
-				$this->pageHelper->addContent($this->view->foodsaver_form($fs['name'] . ' ' . $fs['nachname'] . ' bearbeiten', $regionDetails));
+				$name = $fs['name'] . ' ' . $fs['nachname'];
+				$this->pageHelper->addContent(
+					$this->view->foodsaver_form($name . ' bearbeiten', $regionDetails)
+				);
 
-				if ($this->profilePermissions->mayDeleteUser()) {
-					$this->pageHelper->addContent($this->v_utils->v_field(
-						$this->v_utils->v_menu([
-						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-						['click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')', 'name' => $this->translator->trans('foodsaver.delete_account')]
-						]),
-						$this->translationHelper->s('actions')),
-						CNT_RIGHT
-					);
+				$actions = [];
+				if ($this->profilePermissions->mayDeleteUser($fs['id'])) {
+					$actions[] = [
+						'click' => 'fsapp.confirmDeleteUser(' . $fs['id'] . ')',
+						'name' => $this->translator->trans('foodsaver.delete_account'),
+					];
+				}
+				if ($this->session->may()) {
+					$actions[] = [
+						'href' => '/profile/' . $fs['id'],
+						'name' => $this->translationHelper->s('back_to_profile'),
+					];
 				}
 				$this->pageHelper->addContent($this->v_utils->v_field(
-					$this->v_utils->v_menu([
-						['href' => '/profile/' . $fs['id'], 'name' => $this->translationHelper->s('back_to_profile')],
-					]),
-					$this->translationHelper->s('actions')),
+					$this->v_utils->v_menu($actions, $this->translationHelper->s('actions')),
 					CNT_RIGHT
 				);
 			}

@@ -45,9 +45,9 @@ class ProfilePermissions
 		return $this->session->id() == $foodsharerId || $this->session->isOrgaTeam();
 	}
 
-	public function mayDeleteUser(): bool
+	public function mayDeleteUser($userId): bool
 	{
-		return $this->session->may('orga');
+		return $this->session->id() == $userId || $this->session->may('orga');
 	}
 
 	public function maySeeBounceWarning(int $userId): bool
