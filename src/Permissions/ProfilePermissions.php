@@ -16,7 +16,7 @@ class ProfilePermissions
 		$this->regionGateway = $regionGateway;
 	}
 
-	public function mayAdministrateUserProfile($foodsaverId, $regionId = 0): bool
+	public function mayAdministrateUserProfile($userId, $regionId = 0): bool
 	{
 		if (!$this->session->isAmbassador()) {
 			return false;
@@ -30,7 +30,7 @@ class ProfilePermissions
 			return true;
 		}
 
-		$regionIds = $this->regionGateway->getFsRegionIds($foodsaverId);
+		$regionIds = $this->regionGateway->getFsRegionIds($userId);
 
 		return $this->session->isAmbassadorForRegion($regionIds, false, true);
 	}
@@ -40,9 +40,9 @@ class ProfilePermissions
 		return $this->mayAdministrateUserProfile($fsId);
 	}
 
-	public function maySeeEmailAddress(int $foodsharerId): bool
+	public function maySeeEmailAddress(int $fsId): bool
 	{
-		return $this->session->id() == $foodsharerId || $this->session->isOrgaTeam();
+		return $this->session->id() == $fsId || $this->session->isOrgaTeam();
 	}
 
 	public function mayDeleteUser($userId): bool
