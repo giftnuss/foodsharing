@@ -402,6 +402,7 @@ i {
 }
 
 .page-section {
+  position: relative;
   margin-top: 15px;
 }
 

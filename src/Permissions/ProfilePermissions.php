@@ -45,6 +45,26 @@ class ProfilePermissions
 		return $this->session->id() == $fsId || $this->session->isOrgaTeam();
 	}
 
+	public function maySeePrivateEmail(int $userId): bool
+	{
+		return $this->session->may('orga');
+	}
+
+	public function maySeeLastLogin(int $userId): bool
+	{
+		return $this->session->may('orga');
+	}
+
+	public function maySeeRegistrationDate(int $userId): bool
+	{
+		return $this->session->may('orga');
+	}
+
+	public function maySeeFetchRate(int $fsId): bool
+	{
+		return $this->session->may();
+	}
+
 	public function mayDeleteUser($userId): bool
 	{
 		return $this->session->id() == $userId || $this->session->may('orga');

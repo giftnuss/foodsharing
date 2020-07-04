@@ -135,47 +135,53 @@ class ProfileView extends View
 
 	private function fetchDates(array $fetchDates): string
 	{
-		$out = '<div class="ui-padding" id="double">';
+		$out = '<div class="bootstrap">';
 
 		if ($this->session->isOrgaTeam()) {
-			$out .= '<a class="button button-big" href="#" onclick="ajreq(\'deleteAllDatesFromFoodsaver\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . '});return false;">' . $this->translationHelper->s(
-					'cancel_all'
-				) . '</a>';
+			$out .= '<a class="btn btn-sm btn-danger cancel-all-button" href="#" onclick="'
+				. 'if(confirm(\''
+					. $this->translator->trans('profile.cancelAll', ['{name}' => $this->foodsaver['name']])
+				. '\')){'
+				. 'ajreq(\'deleteAllDatesFromFoodsaver\','
+				. '{app:\'profile\',fsid:' . $this->foodsaver['id'] . '}'
+				. ')};return false;">'
+					. $this->translationHelper->s('cancel_all')
+				. '</a>';
 		}
 
-		$out .= '<ul class="datelist linklist" id="double">';
+		$out .= '
+<div class="clear datelist">';
 		foreach ($fetchDates as $date) {
-			$userConfirmedForPickup = $date['confirmed'] == 1 ? '✓&nbsp;' : '?&nbsp;';
+			$userConfirmedForPickup = ($date['confirmed'] == 1 ? '✓' : '?') . '&nbsp;';
 
-			$out .= '<li>
-						<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
-							<span class="title">' . $userConfirmedForPickup . $this->timeHelper->niceDate($date['date_ts']) . '</span>
-						</a>
-					</li>
-					<li>
-						<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
-							<span class="title">' . $date['betrieb_name'] . '</span>
-						</a>
-					</li>';
+			$out .= '
+	<div class="row align-items-center p-1 border-top">';
+			$out .= '
+		<div class="col my-1">
+			<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
+				<span class="title">'
+				. $userConfirmedForPickup . $this->timeHelper->niceDate($date['date_ts']) .
+				'</span>
+			</a>
+		</div>
+		<div class="col my-1 text-center text-md-left">
+			<a href="/?page=fsbetrieb&id=' . $date['betrieb_id'] . '" class="ui-corner-all">
+				<span class="title">' . $date['betrieb_name'] . '</span>
+			</a>
+		</div>';
 
-			if ($this->session->isAdminFor($date['bezirk_id']) || $this->session->isOrgaTeam()) {
-				$out .= '<li>
-							<a class="button button-big" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $date['betrieb_id'] . ',date:' . $date['date_ts'] . '});return false;">austragen</a>
-						</li>';
-			} elseif ($this->session->may('fs')) {
-				$out .= '<li>
-							<a class="button button-big disabled" hidden=hidden href="#">austragen</a>
-							</li>';
-			} else {
-				$out .= '<li>
-							<a class="button button-big disabled" disabled=disabled href="#"></a>
-						</li>';
+			if (false && $this->session->isAdminFor($date['bezirk_id']) || $this->session->isOrgaTeam()) {
+				$out .= '
+		<div class="col flex-grow-0 flex-shrink-1">
+			<a class="btn btn-sm btn-secondary" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $date['betrieb_id'] . ',date:' . $date['date_ts'] . '});return false;">austragen</a>
+		</div>';
 			}
+			$out .= '
+	</div>';
 		}
 
 		return $out . '
-					</ul>
-				</div>';
+</div>';
 	}
 
 	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
@@ -261,71 +267,89 @@ class ProfileView extends View
 
 	private function sideInfos(): string
 	{
+		$fsId = $this->foodsaver['id'];
 		$infos = [];
 
-		if ($this->session->may('orga')) {
-			$last_login = (
-			$this->foodsaver['last_login']
-				? Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y')
-				: $this->translationHelper->s('Never')
-			);
-			$registration_date = Carbon::parse($this->foodsaver['anmeldedatum']);
-
+		if ($this->profilePermissions->maySeeLastLogin($fsId)) {
+			if (isset($this->foodsaver['last_login'])) {
+				$last_login = Carbon::parse($this->foodsaver['last_login'])->format('d.m.Y');
+			} else {
+				$last_login = $this->translator->trans('profile.never');
+			}
 			$infos[] = [
-				'name' => $this->translationHelper->s('last_login'),
+				'name' => $this->translator->trans('profile.lastLogin'),
 				'val' => $last_login,
 			];
+		}
+
+		if ($this->profilePermissions->maySeeRegistrationDate($fsId)) {
+			if (isset($this->foodsaver['anmeldedatum'])) {
+				$registration_date = Carbon::parse($this->foodsaver['anmeldedatum'])->format('d.m.Y');
+			} else {
+				$registration_date = $this->translator->trans('profile.never');
+			}
 			$infos[] = [
-				'name' => $this->translationHelper->s('registration_date'),
-				'val' => $registration_date->format('d.m.Y'),
+				'name' => $this->translator->trans('profile.registrationDate'),
+				'val' => $registration_date,
 			];
-			$url = '/?page=mailbox&mailto=' . urlencode($this->foodsaver['email']);
-			$splitMail = implode('<wbr>@', explode('@', $this->foodsaver['email']));
+		}
+
+		$privateMail = $this->foodsaver['email'] ?? '';
+		if ($privateMail && $this->profilePermissions->maySeePrivateEmail($fsId)) {
+			$url = '/?page=mailbox&mailto=' . urlencode($privateMail);
+			$splitMail = implode('<wbr>@', explode('@', $privateMail));
 			$infos[] = [
-				'name' => $this->translationHelper->s('private_mail'),
+				'name' => $this->translator->trans('profile.privateMail'),
 				'val' => '<a href="' . $url . '">' . $splitMail . '</a>',
 			];
 		}
 
-		if (isset($this->foodsaver['mailbox']) && $this->profilePermissions->maySeeEmailAddress($this->foodsaver['id'])) {
-			$url = $this->session->id() == $this->foodsaver['id']
-				? '/?page=mailbox'
-				: '/?page=mailbox&mailto=' . urlencode($this->foodsaver['mailbox']);
-			$splitMail = implode('<wbr>@', explode('@', $this->foodsaver['mailbox']));
+		$fsMail = $this->foodsaver['mailbox'] ?? '';
+		if ($fsMail && $this->profilePermissions->maySeeEmailAddress($fsId)) {
+			if ($this->session->id() == $fsId) {
+				$url = '/?page=mailbox';
+			} else {
+				$url = '/?page=mailbox&mailto=' . urlencode($fsMail);
+			}
+			$splitMail = implode('<wbr>@', explode('@', $fsMail));
 			$infos[] = [
-				'name' => $this->translationHelper->s('mailbox'),
+				'name' => $this->translator->trans('profile.fsMail'),
 				'val' => '<a href="' . $url . '">' . $splitMail . '</a>',
 			];
 		}
 
-		if ($this->foodsaver['stat_buddycount'] > 0) {
+		$buddycount = $this->foodsaver['stat_buddycount'];
+		if ($buddycount > 0) {
 			$infos[] = [
 				'name' => 'Bekannte',
-				'val' => $this->foodsaver['name'] . (($this->foodsaver['stat_buddycount'] == 1) ? ' kennt ' : ' kennen ') . $this->foodsaver['stat_buddycount'] . ' Foodsaver',
+				'val' => $this->translator->trans('profile.buddycount' . ($buddycount == 1 ? '1' : ''), [
+					'{count}' => $buddycount,
+					'{name}' => $this->foodsaver['name'],
+				]),
 			];
 		}
 
-		if ($this->foodsaver['stat_fetchcount'] > 0) {
+		if ($this->foodsaver['stat_fetchcount'] > 0 && $this->profilePermissions->maySeeFetchRate($fsId)) {
 			$infos[] = [
 				'name' => 'Abholquote',
-				'val' => $this->foodsaver['stat_fetchrate'] . '<span style="white-space:nowrap">&thinsp;</span>%'
+				'val' => $this->foodsaver['stat_fetchrate'] . '&thinsp;%',
 			];
 		}
 
+		$isFoodsaver = $this->foodsaver['rolle'] > Role::FOODSHARER;
 		$infos[] = [
-			'name' => ($this->foodsaver['rolle'] > Role::FOODSHARER) ? 'Foodsaver ID' : 'Foodsharer ID',
-			'val' => $this->foodsaver['id']
+			'name' => $this->translator->trans($isFoodsaver ? 'profile.foodsaverId' : 'profile.foodsharerId'),
+			'val' => $fsId,
 		];
 
-		$out = '';
+		$out = '<dl class="profile-sideinfos">';
 		foreach ($infos as $info) {
-			$out .= '<p><strong>' . $info['name'] . '</strong><br />' . $info['val'] . '</p>';
+			$out .= '<dt>' . $info['name'] . '</dt>';
+			$out .= '<dd>' . $info['val'] . '</dd>';
 		}
+		$out .= '</dl>';
 
-		return '
-		<div>
-		    <div class="infos"> ' . $out . ' </div>
-		</div>';
+		return $out;
 	}
 
 	/**

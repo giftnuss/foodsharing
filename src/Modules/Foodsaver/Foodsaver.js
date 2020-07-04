@@ -40,8 +40,8 @@ const fsapp = {
       })
     }
   },
-  confirmDeleteUser: async function (fsId) {
-    if (window.confirm(i18n('foodsaver.delete_account_sure'))) {
+  confirmDeleteUser: async function (fsId, name) {
+    if (window.confirm(i18n('foodsaver.delete_account_sure', { name }))) {
       await deleteUser(fsId)
       window.alert(i18n('success'))
       goTo('/?page=dashboard')

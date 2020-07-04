@@ -494,8 +494,12 @@ pickuplist:
   unclear: Status unklar
 
 foodsaver:
-  delete_account: Account löschen
-  delete_account_sure: "Soll der Account wirklich gelöscht werden?"
+  bread: Alle Foodsaver
+  edit: Foodsaver bearbeiten
+  editName: '{name} bearbeiten'
+  profileBack: Zurück zum Profil
+  delete_account: ⚠️ Account löschen
+  delete_account_sure: 'Soll der Account von {name} wirklich gelöscht werden?'
   delete_account_now: Account jetzt löschen
   delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
   url_error: Mit deiner Homepage-URL stimmt etwas nicht
@@ -514,7 +518,7 @@ foodsaver:
     fs_success: Danke! Du bist jetzt Foodsaver
     sm_success: Danke! Du bist jetzt Betriebsverantwortlicher
     amb_success: Danke dir für deine Motivation, mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.
-
+  restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
   addresschange:
     title: Warnung bzgl. Adressänderung
     text: Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert.
@@ -534,6 +538,16 @@ profile:
   mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing Mails und Kommunikation gesperrt. Durch das ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
   bananaSent: Banane wurde gesendet!
   bananaMessageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
+  lastLogin: Letzter Login
+  registrationDate: Registrierungsdatum
+  never: Noch nie
+  privateMail: Private E-Mail-Adresse
+  fsMail: Interne Mailbox
+  foodsaverId: Foodsaver-ID
+  foodsharerId: Foodsharer-ID
+  cancelAll: 'Wirklich {name} aus allen kommenden Abhol-Terminen austragen?'
+  buddycount: '{name} kennen {count} Foodsaver'
+  buddycount1: '{name} kennt {count} Foodsaver'
 
 search:
   title: Suche
@@ -722,6 +736,7 @@ push_notifications:
 region:
   store_managers_cannot_leave: Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist.
   not_a_member_error: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
+  restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
 
 conference:
   description_text: 'Hier kannst du einer Videokonferenz für die gewählte Gruppe beitreten. Die Videokonferenz öffnet BigBlueButton in einem neuen Fenster.'

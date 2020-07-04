@@ -1,22 +1,32 @@
-.infos {
-  width: 100%;
-}
-
 .infos p {
-  font-size: 12px;
-  letter-spacing: normal;
   margin: 0 0 10px;
 }
 
-.verify {
-  color: #ffffff;
-  font-weight: bold;
-  background-color: var(--fs-green);
+.profile-sideinfos {
+  font-size: 13px;
+  color: var(--fs-brown);
+  margin-bottom: -5px;
+}
+.profile-sideinfos dt {
+  font-weight: bolder;
+  margin-top: 5px;
+}
+.profile-sideinfos dt::after {
+  content: ':';
+}
+.profile-sideinfos dd {
+  padding-bottom: 5px;
 }
 
+.verify,
 .unverify {
   color: #ffffff;
   font-weight: bold;
+}
+.verify {
+  background-color: var(--fs-green);
+}
+.unverify {
   background-color: red;
 }
 
@@ -93,23 +103,14 @@ div.statdisplay a.item:hover {
   margin-bottom: 0;
 }
 
-#double {
-  display: flex;
-  flex-wrap: wrap;
+.datelist a {
+  font-weight: bolder;
 }
 
-#double li {
-  width: 33.333333%; /* fallback for older browsers */
-  width: calc(100% / 3);
-}
-
-#double ul {
-  width: 100%;
-  border-top: 1px solid var(--border);
-}
-
-#double ul li {
-  border-bottom: 1px solid var(--border);
+.cancel-all-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .disabled {
