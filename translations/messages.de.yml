@@ -548,6 +548,15 @@ profile:
   cancelAll: 'Wirklich {name} aus allen kommenden Abhol-Terminen austragen?'
   buddycount: '{name} kennen {count} Foodsaver'
   buddycount1: '{name} kennt {count} Foodsaver'
+  public:
+    who: '{name} aus {from}'
+    may: aktiv
+    mayNot: nicht verifiziert
+    textMay: '{name} darf Lebensmittel im Namen von foodsharing entgegennehmen.'
+    textMayNot: '{name} ist zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen.'
+    cta: 'Das Profil von {name} ist nach Anmeldung zugänglich:'
+    login: Zum Login
+    join: Mitmachen & Registrieren
 
 search:
   title: Suche

@@ -42,39 +42,44 @@ final class ProfileControl extends Control
 
 		parent::__construct();
 
-		if (!$this->session->may()) {
-			$this->routeHelper->go('/');
+		if (!$profileId = $this->uriInt(2)) {
+			$this->routeHelper->goPage('dashboard');
 		}
 
-		if ($id = $this->uriInt(2)) {
-			$data = $this->profileGateway->getData($id, $this->session->id(), $this->reportPermissions->mayHandleReports());
-			if ($data && $data['deleted_at'] === null) {
-				$this->foodsaver = $data;
-				$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $this->session->id());
-				if ($this->profilePermissions->maySeeBounceWarning($id)) {
-					$this->foodsaver['emailIsBouncing'] = $this->mailsGateway->emailIsBouncing($this->foodsaver['email']);
-				}
-				$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
-						$this->foodsaver['id']
-					);
-				if ((int)$this->foodsaver['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($id)) {
-					$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($this->foodsaver['mailbox_id'])
-						. '@' . PLATFORM_MAILBOX_HOST;
-				}
+		$viewerId = $this->session->id() || -1; // -1 carries special meaning for `profileGateway:getData`
+		$data = $this->profileGateway->getData($profileId, $viewerId, $this->reportPermissions->mayHandleReports());
+		$isRemoved = (!$data) || isset($data['deleted_at']);
 
-				$this->view->setData($this->foodsaver);
-
-				if ($this->uriStr(3) === 'notes') {
-					$this->orgaTeamNotes();
-				} else {
-					$this->profile();
-				}
-			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('fs_profile_does_not_exist_anymore'));
-				$this->routeHelper->goPage('dashboard');
-			}
-		} else {
+		if ($isRemoved) {
+			$this->flashMessageHelper->error($this->translationHelper->s('fs_profile_does_not_exist_anymore'));
 			$this->routeHelper->goPage('dashboard');
+		}
+
+		if (!$this->session->may()) {
+			$this->profilePublic($data);
+
+			return;
+		}
+
+		$this->foodsaver = $data;
+		$this->foodsaver['buddy'] = $this->profileGateway->buddyStatus($this->foodsaver['id'], $viewerId);
+		if ($this->profilePermissions->maySeeBounceWarning($profileId)) {
+			$this->foodsaver['emailIsBouncing'] = $this->mailsGateway->emailIsBouncing($this->foodsaver['email']);
+		}
+		$this->foodsaver['basketCount'] = $this->basketGateway->getAmountOfFoodBaskets(
+				$this->foodsaver['id']
+			);
+		if ((int)$this->foodsaver['mailbox_id'] > 0 && $this->profilePermissions->maySeeEmailAddress($profileId)) {
+			$this->foodsaver['mailbox'] = $this->mailboxGateway->getMailboxname($this->foodsaver['mailbox_id'])
+				. '@' . PLATFORM_MAILBOX_HOST;
+		}
+
+		$this->view->setData($this->foodsaver);
+
+		if ($this->uriStr(3) === 'notes') {
+			$this->orgaTeamNotes();
+		} else {
+			$this->profile();
 		}
 	}
 
@@ -112,6 +117,19 @@ final class ProfileControl extends Control
 				$this->foodsaver['id'] === $this->session->id() ? $this->profileGateway->getNextDates($this->foodsaver['id'], 50) : []
 			);
 		}
+	}
+
+	private function profilePublic(array $profileData): void
+	{
+		$isVerified = $profileData['verified'] ?? 0;
+		$this->pageHelper->addContent(
+			$this->view->vueComponent('profile-public', 'PublicProfile', [
+				'canPickUp' => $isVerified > 0,
+				'firstName' => $profileData['name'] ?? '',
+				'fromPlace' => $profileData['stadt'] ?? '',
+				'fsId' => $profileData['id'],
+			])
+		);
 	}
 
 	// this is required even if empty.

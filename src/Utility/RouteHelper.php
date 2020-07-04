@@ -8,15 +8,18 @@ use Foodsharing\Modules\Legal\LegalGateway;
 
 final class RouteHelper
 {
+	private $session;
 	private $translationHelper;
 	private $legalGateway;
-	private $session;
 
-	public function __construct(Session $session, TranslationHelper $translationHelper, LegalGateway $legalGateway)
-	{
+	public function __construct(
+		Session $session,
+		TranslationHelper $translationHelper,
+		LegalGateway $legalGateway
+	) {
+		$this->session = $session;
 		$this->translationHelper = $translationHelper;
 		$this->legalGateway = $legalGateway;
-		$this->session = $session;
 	}
 
 	public function go(string $url): void

@@ -75,7 +75,8 @@ const urls = {
   wiki: () => 'https://wiki.foodsharing.de/',
   workingGroupEdit: (groupId) => `/?page=groups&sub=edit&id=${groupId}`,
   workingGroups: (regionId = null) => regionId ? `/?page=groups&p=${regionId}` : '/?page=groups',
-  workshops: () => '/?page=content&sub=workshops'
+  workshops: () => '/?page=content&sub=workshops',
+  urlencode: (url) => encodeURIComponent(`${url}`)
 }
 
 const url = (key, ...params) => {

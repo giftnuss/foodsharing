@@ -1,11 +1,13 @@
 import '@/core'
 import '@/globals'
 import './Profile.css'
+import $ from 'jquery'
 import { expose } from '@/utils'
 import { sendBanana } from '@/api/user'
 import { pulseError, pulseInfo, profile } from '@/script'
 import i18n from '@/i18n'
-import $ from 'jquery'
+import { vueRegister, vueApply } from '@/vue'
+import PublicProfile from './components/PublicProfile'
 
 expose({ trySendBanana })
 
@@ -22,3 +24,9 @@ async function trySendBanana (id) {
     }
   }
 }
+
+vueRegister({
+  PublicProfile
+})
+
+vueApply('#profile-public', true)
