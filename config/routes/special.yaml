@@ -1,0 +1,158 @@
+# The following is necessary because there is some special handling in the webserver configuration
+# (see https://gitlab.com/foodsharing-dev/images/-/blob/master/web/foodsharing.conf)
+# that breaks due to how the URL etc are passed to php-fpm by nginx,
+# and due to how Symfony handles those parameters when routing.
+# (Because we go through Symfony, it has to know about any possible paths anyway)
+#
+# Details:
+# nginx makes a difference between the request URI (the actual path in the request)
+# and the document URI (the _file_ that nginx ends up picking for a request).
+# When looking at the config above:
+# DOCUMENT_URI will be set to /index.php, but REQUEST_URI will stay as the original URL.
+# With our old entry points, we ignored REQUEST_URI, and instead only looked at $_GET for routing.
+# The original URI is passed through the 'uri' query parameter,
+# so the controller code can extract any parameters needed (yikes!)
+# Because now Symfony comes before our logic, we have to play along with its routing
+# and pass those requests on to our normal IndexController entry point.
+
+# Examples:
+# - '/login'
+#   - DOCUMENT_URI: '/index.php'
+#   - Query string: 'page=login&uri=/login'
+#   - REQUEST_URI: '/login'
+# - '/profile/25'
+#   - DOCUMENT_URI: '/index.php'
+#   - Query string: 'page=login&uri=/profile/25'
+#   - REQUEST_URI: '/profile/25'
+#
+# URIs with parameters (like the profile URI above) require a separate route.
+# Luckily, forwarding them to IndexController is enough,
+# because Symfony does not complain if an action is missing a parameter argument.
+# The code that actually handles these parameters (Control::uri) only looks at the REQUEST_URI,
+# which is not changed by Symfony.
+
+partner:
+  path: /partner
+  controller: Foodsharing\Entrypoint\IndexController
+
+ueber-uns:
+  path: /ueber-uns
+  controller: Foodsharing\Entrypoint\IndexController
+
+team:
+  path: /team
+  controller: Foodsharing\Entrypoint\IndexController
+
+# specific user, see comment in TeamControl::index
+team_id:
+  path: /team/{id}
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+team_type:
+  path: /team/{type}
+  controller: Foodsharing\Entrypoint\IndexController
+
+faq:
+  path: /faq
+  controller: Foodsharing\Entrypoint\IndexController
+
+fuer-unternehmen:
+  path: /fuer-unternehmen
+  controller: Foodsharing\Entrypoint\IndexController
+
+leeretonne:
+  path: /leeretonne
+  controller: Foodsharing\Entrypoint\IndexController
+
+fairteilerrettung:
+  path: /fairteilerrettung
+  controller: Foodsharing\Entrypoint\IndexController
+
+unterstuetzung:
+  path: /unterstuetzung
+  controller: Foodsharing\Entrypoint\IndexController
+
+impressum:
+  path: /impressum
+  controller: Foodsharing\Entrypoint\IndexController
+
+ratgeber:
+  path: /ratgeber
+  controller: Foodsharing\Entrypoint\IndexController
+
+recovery:
+  path: /recovery
+  controller: Foodsharing\Entrypoint\IndexController
+
+login:
+  path: /login
+  controller: Foodsharing\Entrypoint\IndexController
+
+statistik:
+  path: /statistik
+  controller: Foodsharing\Entrypoint\IndexController
+
+profile:
+  path: /profile
+  controller: Foodsharing\Entrypoint\IndexController
+
+profile_id:
+  path: /profile/{id}
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+profile_id_notes:
+  path: /profile/{id}/notes
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+karte:
+  path: /karte
+  controller: Foodsharing\Entrypoint\IndexController
+
+news:
+  path: /news
+  controller: Foodsharing\Entrypoint\IndexController
+
+blog:
+  path: /blog/{id}
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+mach-mit:
+  path: /mach-mit
+  controller: Foodsharing\Entrypoint\IndexController
+
+fairteiler:
+  path: /fairteiler
+  controller: Foodsharing\Entrypoint\IndexController
+
+fairteiler_id:
+  path: /fairteiler/{id}
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+essenskoerbe:
+  path: /essenskoerbe
+  controller: Foodsharing\Entrypoint\IndexController
+
+essenskoerbe_find:
+  path: /essenskoerbe/find
+  controller: Foodsharing\Entrypoint\IndexController
+
+essenskoerbe_id:
+  path: /essenskoerbe/{id}
+  controller: Foodsharing\Entrypoint\IndexController
+  requirements:
+    id: '\d+'
+
+# method refers to any method name in BasketControl, see BasketControl::index
+essenskoerbe_method:
+  path: /essenskoerbe/{method}
+  controller: Foodsharing\Entrypoint\IndexController
