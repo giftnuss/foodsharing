@@ -55,9 +55,11 @@ plugins.push(
   }
 )
 plugins.push(
-  new CopyWebpackPlugin([
-    { from: './lib/tinymce', to: './tinymce' }
-  ])
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: './lib/tinymce', to: './tinymce' }
+    ]
+  })
 )
 
 plugins.push(
