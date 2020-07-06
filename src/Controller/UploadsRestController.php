@@ -3,7 +3,6 @@
 namespace Foodsharing\Controller;
 
 use Exception;
-use Foodsharing\Annotation\DisableCsrfProtection;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Uploads\UploadsGateway;
 use Foodsharing\Modules\Uploads\UploadsTransactions;
@@ -53,7 +52,6 @@ class UploadsRestController extends AbstractFOSRestController
 	 * Returns the file with the requested UUID. Width and height must both be given or can be set both to 0 to
 	 * indicate no resizing.
 	 *
-	 * @DisableCsrfProtection
 	 * @Rest\Get("uploads/{uuid}", requirements={"uuid"="[0-9a-f\-]+"})
 	 * @Rest\QueryParam(name="w", requirements="\d+", default=0, description="Max image width")
 	 * @Rest\QueryParam(name="h", requirements="\d+", default=0, description="Max image height")
@@ -149,7 +147,6 @@ class UploadsRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @DisableCsrfProtection
 	 * @Rest\Post("uploads")
 	 * @Rest\RequestParam(name="filename")
 	 * @Rest\RequestParam(name="body")

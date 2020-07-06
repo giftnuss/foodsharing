@@ -42,19 +42,8 @@ class CsrfListener
 			return;
 		}
 
-		// TODO: This should be refactored later to either use a whitelist or try to find a way to read the annotations.
-		if ($this->startsWith($event->getRequest()->getRequestUri(), '/api/uploads') &&
-			$event->getRequest()->getMethod() === 'GET') {
-			return;
-		}
-
 		if (!$this->session->isValidCsrfHeader()) {
 			throw new SuspiciousOperationException('CSRF Failed: CSRF token missing or incorrect.');
 		}
-	}
-
-	private function startsWith($haystack, $needle): bool
-	{
-		return strpos($haystack, $needle) === 0;
 	}
 }
