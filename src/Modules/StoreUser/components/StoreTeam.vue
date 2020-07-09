@@ -308,7 +308,7 @@ export default {
         action: 'delete'
       }
       xhrf('bcontext', fData)
-      const index = this.team.findIndex(member => member.id === fsId)
+      const index = this.foodsaver.findIndex(member => member.id === fsId)
       if (index >= 0) {
         this.foodsaver.splice(index, 1)
         this.$refs.teamlist.refresh()
