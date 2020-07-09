@@ -166,7 +166,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result['verantwortlich'] = [];
 		$result['team'] = [];
 		$result['waitspringer'] = [];
-		$result['anfrage'] = [];
+		$result['requested'] = [];
 		$result['sonstige'] = [];
 
 		$already_in = [];
@@ -175,7 +175,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			$already_in[$b['id']] = true;
 			if ($b['verantwortlich'] == 0) {
 				if ($b['active'] == MembershipStatus::APPLIED_FOR_TEAM) {
-					$result['anfrage'][] = $b;
+					$result['requested'][] = $b;
 				} elseif ($b['active'] == MembershipStatus::MEMBER) {
 					$result['team'][] = $b;
 				} elseif ($b['active'] == MembershipStatus::JUMPER) {

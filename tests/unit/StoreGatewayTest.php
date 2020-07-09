@@ -139,7 +139,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'verantwortlich' => [],
 				'team' => [],
 				'waitspringer' => [],
-				'anfrage' => [],
+				'requested' => [],
 				'sonstige' => [$this->storeData()],
 			],
 			$this->gateway->getMyStores($this->foodsaver['id'], $this->region['id'])
@@ -152,7 +152,7 @@ class StoreGatewayTest extends \Codeception\Test\Unit
 				'verantwortlich' => [],
 				'team' => [$this->storeData('team')],
 				'waitspringer' => [],
-				'anfrage' => [],
+				'requested' => [],
 				'sonstige' => [],
 			],
 			$this->gateway->getMyStores($this->foodsaver['id'], $this->region['id'])

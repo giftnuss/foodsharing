@@ -126,7 +126,7 @@ class DashboardView extends View
 		);
 
 		$out .= $this->u_storeLinkList(
-			$betriebe['anfrage'],
+			$betriebe['requested'],
 			$this->translator->trans('dashboard.you_requested_to_join'),
 			'truncate-height-50'
 		);
