@@ -573,7 +573,9 @@ dashboard:
   source_store: "Betriebe {0}"
   you_are_responsible_for_stores: Du bist verantwortlich für
   you_pickup_at_stores: Du holst Lebensmittel ab bei
+  you_requested_to_join: Anfragen gestellt bei
   you_wait_at_stores: Du bist auf der Springerliste bei
+  no_store_team: 'Du bist bis jetzt in keinem Betriebsteam.'
 
 home:
   title: Startseite

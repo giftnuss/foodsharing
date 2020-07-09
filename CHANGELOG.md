@@ -46,6 +46,7 @@
 - REST API: file uploads with resizing of images in foodshare points !818 @alangecker
 - Removed dependency on old Db class from some classes !1598 #9 @alex.simm
 - Move sending of bananas to new REST endpoint !1617 #798 @alex.simm 
+- Remove jquery contextmenu, refactor some dashboard view code &22 !1606 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
