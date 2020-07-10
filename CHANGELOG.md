@@ -30,6 +30,7 @@
 - Fix crashing "All my stores" page when user has no home district !1616 #936 @alex.simm 
 - Fix creation and deletion of buddy bells !1618 #942 @alex.simm
 - Fix wrong viewer/session ID on profile page !1629 @alex.simm
+- Filter outdated baskets from REST responses #706 !1608 @alex.simm
 
 ## Refactoring
 - Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects

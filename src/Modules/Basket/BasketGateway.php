@@ -377,7 +377,8 @@ class BasketGateway extends BaseGateway
 				`id`,
 				`description`,
 				`picture`,
-				UNIX_TIMESTAMP(`time`) AS time_ts
+				UNIX_TIMESTAMP(`time`) AS time_ts,
+				UNIX_TIMESTAMP(`until`) AS until_ts
 				
 			FROM 
 				fs_basket

@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Basket;
 
+use Carbon\Carbon;
 use Foodsharing\Lib\Session;
 
 class BasketTransactions
@@ -63,5 +64,12 @@ class BasketTransactions
 		}
 
 		return $this->basketGateway->getBasket($basketId);
+	}
+
+	public function filterOutdatedBaskets(array $baskets): array
+	{
+		return array_filter($baskets, function ($b) {
+			return Carbon::createFromTimestamp($b['until_ts']) > Carbon::now();
+		});
 	}
 }
