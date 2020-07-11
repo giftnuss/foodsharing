@@ -1,0 +1,90 @@
+<template>
+  <div class="bootstrap">
+    <div
+      v-if="isEmpty && !isLoading"
+      class="dropdown-header alert alert-warning"
+    >
+      {{ $i18n('search.noresults') }}
+    </div>
+
+    <div v-if="filtered.themes.length">
+      <h3 class="dropdown-header">
+        <i class="fas fa-comment" /> {{ $i18n('terminology.themes') }}
+      </h3>
+      <search-result-entry
+        v-for="theme in filtered.themes"
+        :key="theme.id"
+        :href="$url('forum', groupId, ambassadorForum, theme.id)"
+        :title="theme.name"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+
+import SearchResultEntry from '@/components/Topbar/Search/SearchResultEntry'
+import { VBTooltip } from 'bootstrap-vue'
+
+function match (word, e) {
+  if (e.name && e.name.toLowerCase().indexOf(word) !== -1) return true
+  return e.teaser && e.teaser.toLowerCase().indexOf(word) !== -1
+}
+
+export default {
+  components: {
+    SearchResultEntry
+  },
+  directives: { VBTooltip },
+  props: {
+    themes: {
+      type: Array,
+      default: () => []
+    },
+    groupId: {
+      type: Number,
+      default: -1
+    },
+    ambassadorForum: {
+      type: Boolean,
+      default: false
+    },
+    query: {
+      type: String,
+      default: ''
+    },
+    isLoading: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    filtered () {
+      const query = this.query.toLowerCase().trim()
+      const words = query.match(/[^ ,;+.]+/g)
+
+      // filter elements, whether all of the query words are contained somewhere in name or teaser
+      const filterFunction = (e) => {
+        if (!words.length) return false
+        for (const word of words) {
+          if (!match(word, e)) return false
+        }
+        return true
+      }
+      return {
+        themes: this.themes.filter(filterFunction)
+      }
+    },
+    isEmpty () {
+      return !this.filtered.themes.length
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.dropdown-header {
+    white-space: normal;
+    margin-bottom: 0;
+}
+</style>

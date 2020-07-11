@@ -188,6 +188,7 @@ terminology:
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
   profile_picture: 'Profilbild'
   regions: Bezirke
+  themes: Themen
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'

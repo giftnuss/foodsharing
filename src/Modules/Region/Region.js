@@ -16,6 +16,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
+import ForumSearchField from './components/ForumSearchField'
 import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
@@ -106,6 +107,11 @@ $(document).ready(() => {
           })
         }
       })
+
+      vueRegister({
+        ForumSearchField
+      })
+      vueApply('#vue-forumsearchfield')
     }
   }
 })
