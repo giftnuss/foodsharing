@@ -554,9 +554,9 @@ profile:
     who: '{name} aus {from}'
     may: aktiv
     mayNot: nicht verifiziert
-    textMay: '{name} darf Lebensmittel im Namen von foodsharing entgegennehmen.'
-    textMayNot: '{name} ist zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen.'
-    cta: 'Das Profil von {name} ist nach Anmeldung zugänglich:'
+    textMay: 'und darf daher Lebensmittel im Namen von foodsharing entgegennehmen.'
+    textMayNot: 'und daher zurzeit nicht befugt, Lebensmittel im Namen von foodsharing anzunehmen.'
+    cta: 'Das vollständige Profil von {name} ist nach Anmeldung zugänglich:'
     login: Zum Login
     join: Mitmachen & Registrieren
 

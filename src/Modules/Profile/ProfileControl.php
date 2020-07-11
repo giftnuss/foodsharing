@@ -126,12 +126,14 @@ final class ProfileControl extends Control
 	private function profilePublic(array $profileData): void
 	{
 		$isVerified = $profileData['verified'] ?? 0;
+		$initials = ($profileData['name'] ?? '?')[0] . '. ' . ($profileData['nachname'] ?? '?')[0] . '.';
+		$regionName = $this->regionGateway->getRegionName($profileData['bezirk_id']) ?? '';
 		$this->pageHelper->addContent(
 			$this->view->vueComponent('profile-public', 'PublicProfile', [
 				'canPickUp' => $isVerified > 0,
-				'firstName' => $profileData['name'] ?? '',
-				'fromPlace' => $profileData['stadt'] ?? '',
+				'fromRegion' => $regionName,
 				'fsId' => $profileData['id'],
+				'initials' => $initials,
 			])
 		);
 	}
