@@ -9,7 +9,8 @@ use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Core\Database;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Modules\Core\InfluxMetrics;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
@@ -51,7 +52,7 @@ class IndexController extends AbstractController
 		PageHelper $pageHelper,
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
-		Database $db
+		ContentGateway $contentGateway
 	): Response {
 		$response = new Response('--');
 
@@ -105,8 +106,7 @@ class IndexController extends AbstractController
 		// lib/inc.php END
 
 		global $g_broadcast_message;
-
-		$g_broadcast_message = $db->fetchValue('SELECT `body` FROM fs_content WHERE `id` = 51');
+		$g_broadcast_message = $contentGateway->get(ContentId::BROADCAST_MESSAGE)['body'];
 
 		if ($debugBar->isEnabled()) {
 			$pageHelper->addHead($debugBar->renderHead());
