@@ -110,23 +110,7 @@ class SearchGateway extends BaseGateway
 	 */
 	public function searchUserInGroups(string $q, bool $showDetails, ?array $groupIds = []): array
 	{
-		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
-		$q = mb_ereg_replace('\W', ' ', $q);
-		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
-		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
-		$searchString = implode(' ',
-			array_map(
-				function ($a) {
-					return '+' . $a . '*';
-				},
-				array_filter(
-					explode(' ', $q),
-					function ($v) {
-						return mb_strlen($v) > 2;
-					}
-				)
-			)
-		);
+		$searchString = $this->prepareSearchString($q);
 		$select = 'SELECT fs.id, fs.name, fs.nachname, fs.anschrift, fs.stadt, fs.plz FROM fs_foodsaver fs';
 		$fulltextCondition = 'MATCH (fs.name, fs.nachname) AGAINST (? IN BOOLEAN MODE) AND deleted_at IS NULL';
 		$groupBy = ' GROUP BY fs.id';
@@ -146,5 +130,57 @@ class SearchGateway extends BaseGateway
 
 			return SearchResult::create($x['id'], $x['name'] . ' ' . $x['nachname'], $teaser);
 		}, $results);
+	}
+
+	/**
+	 * Searches in the titles of forum themes of a group for a given string.
+	 *
+	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
+	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
+	 * @param int $groupId ID of a group (region or work group) in which will be searched
+	 * @param bool $ambassadorForum whether to search in the ambassador forum or the normal forum
+	 *
+	 * @return array SearchResult[] Array of forum themes containing the search term
+	 */
+	public function searchForumTitle(string $q, int $groupId, bool $ambassadorForum): array
+	{
+		$searchString = $this->prepareSearchString($q);
+		$results = $this->db->fetchAll(
+			'SELECT t.id, t.name
+				   FROM fs_theme t, fs_bezirk_has_theme ht
+				   WHERE MATCH (t.name) AGAINST (? IN BOOLEAN MODE)
+				   AND t.id = ht.theme_id AND ht.bezirk_id = ?
+				   AND t.active = 1 AND ht.bot_theme = ?
+				   GROUP BY t.id',
+			[$searchString, $groupId, $ambassadorForum ? '1' : '0']
+		);
+
+		return array_map(function ($x) {
+			return SearchResult::create($x['id'], $x['name'], '');
+		}, $results);
+	}
+
+	/**
+	 * Sanitises a search query for an SQL request.
+	 */
+	private function prepareSearchString(string $q): string
+	{
+		/* remove all non-word characters as they will not be indexed by the database and might change the search condition */
+		$q = mb_ereg_replace('\W', ' ', $q);
+		/* put + before and * after the words, omitting all words with less than 3 characters, because they would not be found in the result. */
+		/* TODO: this number depends on innodb_ft_min_token_size MySQL setting. It could be viable setting it to 1 alternatively. */
+		return implode(' ',
+			array_map(
+				function ($a) {
+					return '+' . $a . '*';
+				},
+				array_filter(
+					explode(' ', $q),
+					function ($v) {
+						return mb_strlen($v) > 2;
+					}
+				)
+			)
+		);
 	}
 }

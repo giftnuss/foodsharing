@@ -10,9 +10,11 @@ use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Search\SearchGateway;
 use Foodsharing\Modules\Search\SearchHelper;
 use Foodsharing\Modules\Search\SearchIndexGenerator;
+use Foodsharing\Permissions\ForumPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -22,17 +24,20 @@ class SearchRestController extends AbstractFOSRestController
 	private SearchGateway $searchGateway;
 	private SearchIndexGenerator $searchIndexGenerator;
 	private SearchHelper $searchHelper;
+	private ForumPermissions $forumPermissions;
 
 	public function __construct(
 		Session $session,
 		SearchGateway $searchGateway,
 		SearchIndexGenerator $searchIndexGenerator,
-		SearchHelper $searchHelper
+		SearchHelper $searchHelper,
+		ForumPermissions $forumPermissions
 	) {
 		$this->session = $session;
 		$this->searchGateway = $searchGateway;
 		$this->searchIndexGenerator = $searchIndexGenerator;
 		$this->searchHelper = $searchHelper;
+		$this->forumPermissions = $forumPermissions;
 	}
 
 	/**
@@ -119,6 +124,45 @@ class SearchRestController extends AbstractFOSRestController
 		}
 
 		$results = $this->searchHelper->search($q);
+
+		return $this->handleView($this->view($results, 200));
+	}
+
+	/**
+	 * Searches in the titles of forum threads in a specific group.
+	 *
+	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which forum to return threads for (region or group)")
+	 * @SWG\Parameter(name="q", in="query", type="string", description="search query")
+	 * @SWG\Parameter(name="ambassadorForum", in="query", type="boolean", description="whether to search in the ambassador forum")
+	 * @SWG\Response(response="200", description="Success",
+	 *     @SWG\Schema(type="object", @SWG\Property(property="data", type="array",
+	 *         @SWG\Items(type="object",
+	 *             @SWG\Property(property="id", type="integer", description="thread id"),
+	 *             @SWG\Property(property="name", type="string", description="thread title")
+	 *         )
+	 *     ))
+	 * )
+	 * @SWG\Response(response="400", description="Empty search query.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to search in that forum.")
+	 * @SWG\Tag(name="search")
+	 *
+	 * @Rest\Get("search/forum/{groupId}", requirements={"groupId" = "\d+"})
+	 * @Rest\QueryParam(name="q", description="Search query.", nullable=false)
+	 * @Rest\QueryParam(name="ambassadorForum", description="Whether to search in the ambassador forum.", nullable=false)
+	 */
+	public function searchForumTitleAction(int $groupId, ParamFetcher $paramFetcher)
+	{
+		$ambassadorForum = (bool)$paramFetcher->get('ambassadorForum');
+		if (!$this->session->may() || !$this->forumPermissions->mayAccessForum($groupId, $ambassadorForum ? 1 : 0)) {
+			throw new HttpException(403);
+		}
+
+		$q = $paramFetcher->get('q');
+		if (empty($q)) {
+			throw new HttpException(400);
+		}
+
+		$results = $this->searchGateway->searchForumTitle($q, $groupId, $ambassadorForum);
 
 		return $this->handleView($this->view($results, 200));
 	}
