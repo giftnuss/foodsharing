@@ -43,6 +43,7 @@
 - Store managers can toggle team list mode to sort by last pickup !1593 @ChrisOelmueller
 - Public profile page, to allow checking badge validity #688 !1604 @ChrisOelmueller
 - Ask whether message draft should be kept when switching between chat conversations !1621 @ChrisOelmueller
+- Make titles of forum threads searchable !1609 #99 @alex.simm
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
