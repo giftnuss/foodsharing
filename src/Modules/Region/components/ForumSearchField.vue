@@ -1,13 +1,13 @@
 <template>
   <div
     id="forum-search"
-    class="form my-2 my-lg-0 flex-grow-1"
+    class="form m-2"
   >
     <div
       ref="foruminputgroup"
       class="input-group input-group-sm"
     >
-      <div class="input-group-prepend">
+      <span class="input-group-prepend">
         <label
           id="forum-searchfield-label"
           :aria-label="$i18n('search.title')"
@@ -24,16 +24,16 @@
             class="fas fa-search"
           />
         </label>
-      </div>
-      <input
-        id="forum-searchfield"
-        v-model="query"
-        :placeholder="$i18n('search.placeholder')"
-        type="text"
-        class="form-control text-primary"
-        aria-labelledby="forum-searchfield-label"
-        aria-placeholder=""
-      >
+        <input
+          id="forum-searchfield"
+          v-model="query"
+          :placeholder="$i18n('search.placeholder')"
+          type="text"
+          class="form-control text-primary w-50"
+          aria-labelledby="forum-searchfield-label"
+          aria-placeholder=""
+        >
+      </span>
     </div>
     <div
       v-if="isOpen"
