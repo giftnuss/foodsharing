@@ -85,7 +85,7 @@ final class BasketRestController extends AbstractFOSRestController
 				$baskets = $this->getCurrentUsersBaskets();
 				break;
 			case 'coordinates':
-				$baskets = $this->basketTransactions->filterOutdatedBaskets($this->gateway->getBasketCoordinates());
+				$baskets = $this->gateway->getBasketCoordinates();
 				break;
 		}
 
@@ -116,8 +116,7 @@ final class BasketRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'distance must be positive and <= ' . self::MAX_BASKET_DISTANCE);
 		}
 
-		$baskets = $this->basketTransactions->filterOutdatedBaskets(
-			$this->gateway->listNearbyBasketsByDistance($this->session->id(), $location, $distance));
+		$baskets = $this->gateway->listNearbyBasketsByDistance($this->session->id(), $location, $distance);
 		$baskets = array_map(function ($b) {
 			$basket = $this->gateway->getBasket((int)$b[self::ID]);
 			$request = $this->gateway->getRequest($basket[self::ID], $this->session->id(), $basket['foodsaver_id']);
@@ -134,7 +133,7 @@ final class BasketRestController extends AbstractFOSRestController
 	private function getCurrentUsersBaskets()
 	{
 		$updates = $this->gateway->listUpdates($this->session->id());
-		$baskets = $this->basketTransactions->filterOutdatedBaskets($this->gateway->listMyBaskets($this->session->id()));
+		$baskets = $this->gateway->listMyBaskets($this->session->id());
 		$baskets = array_map(function ($b) use ($updates) {
 			return $this->normalizeMyBasket($b, $updates);
 		}, $baskets);
