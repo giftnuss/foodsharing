@@ -41,27 +41,31 @@ export function expose (data) {
 }
 
 export function dateFormat (date, format = 'full-long') {
-  switch (format) {
-    case 'day':
-      return dateFormat(date, 'd.M.yyyy')
-    case 'full-long':
-      if (dateFnsIsSameDay(date, new Date())) {
-        return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")
-      } else if (dateFnsIsSameDay(date, dateFnsAddDays(new Date(), 1))) {
-        return dateFormat(date, "'morgen', cccc, HH:mm 'Uhr'")
-      } else if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, "cccc, do MMM, HH:mm 'Uhr'")
-      } else {
-        return dateFormat(date, "cccccc, do MMM yyyy, HH:mm 'Uhr'")
-      }
-    case 'full-short':
-      if (dateFnsIsSameYear(date, new Date())) {
-        return dateFormat(date, 'cccccc, d. MMM, HH:mm')
-      } else {
-        return dateFormat(date, 'cccccc, d.M.yyyy, HH:mm')
-      }
-    default:
-      return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
+  try {
+    switch (format) {
+      case 'day':
+        return dateFormat(date, 'd.M.yyyy')
+      case 'full-long':
+        if (dateFnsIsSameDay(date, new Date())) {
+          return dateFormat(date, "'heute', cccc, HH:mm 'Uhr'")
+        } else if (dateFnsIsSameDay(date, dateFnsAddDays(new Date(), 1))) {
+          return dateFormat(date, "'morgen', cccc, HH:mm 'Uhr'")
+        } else if (dateFnsIsSameYear(date, new Date())) {
+          return dateFormat(date, "cccc, do MMM, HH:mm 'Uhr'")
+        } else {
+          return dateFormat(date, "cccccc, do MMM yyyy, HH:mm 'Uhr'")
+        }
+      case 'full-short':
+        if (dateFnsIsSameYear(date, new Date())) {
+          return dateFormat(date, 'cccccc, d. MMM, HH:mm')
+        } else {
+          return dateFormat(date, 'cccccc, d.M.yyyy, HH:mm')
+        }
+      default:
+        return dateFnsFormat(date, format, { locale: dateFnsLocaleDE })
+    }
+  } catch (error) {
+    console.error({ error, date })
   }
 }
 export function dateDistanceInWords (date) {
