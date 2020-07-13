@@ -224,10 +224,26 @@ class ProfileView extends View
 			'<li><a href="#" onclick="chat(' . $this->foodsaver['id'] . ');return false;"><i class="fas fa-comment fa-fw"></i>Nachricht schreiben</a></li>'
 			: '';
 
+		$this->pageHelper->addJs('
+			$("#disabledreports-link").fancybox({
+				closeClick: false,
+				closeBtn: true,
+			});
+		');
+
+		$this->pageHelper->addHidden('
+			<div id="disabledreports">
+				<div class="popbox bootstrap">
+					<h3>Regelverletzung melden</h3>
+					<p>Bis zum 30. September ist es nicht möglich Regelverletzungen über das System zu melden. Mehr Infos findet ihr in dem Blogeintrag <a href="https://foodsharing.de/?page=blog&sub=read&id=254">https://foodsharing.de/?page=blog&sub=read&id=254</a>.</p>
+				</div>
+			</div>
+		');
+
 		return '
 		<ul class="linklist">
 			' . $writeMessage . $opt . '
-			<li><a href="#" onclick="ajreq(\'reportDialog\',{app:\'report\',fsid:' . (int)$this->foodsaver['id'] . '});return false;"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
+			<li><a href="#disabledreports" id="disabledreports-link" onclick="return false;" class="item"><i class="far fa-life-ring fa-fw"></i>Regelverletzung melden</a></li>
 		</ul>';
 	}
 
