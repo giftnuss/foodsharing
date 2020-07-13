@@ -414,6 +414,17 @@ div.pulse-msg p {
   line-height: 17px;
 }
 
+div.broadcast-message {
+  border-radius: 0;
+  border-bottom: 1px solid var(--fs-brown);
+  padding: 15px;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  margin-top: -20px;
+  background-color: var(--fs-white);
+  text-align: center;
+}
+
 
 li.placeholder {
   list-style: none;

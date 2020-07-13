@@ -50,7 +50,7 @@
         {% include 'partials/becomeBezirk.twig' %}
         {{ menu | raw }}
         {% if broadcast_message %}
-            <div class="inner inside msg-inside info">{{ broadcast_message | raw }}</div>
+            <div class="inner inside broadcast-message">{{ broadcast_message | raw }}</div>
         {% endif %}
 
         {% block overtop %}
