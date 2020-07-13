@@ -119,7 +119,8 @@ class ReportXhr extends Control
 
 	public function reportDialog(): array
 	{
-		$dialog = new XhrDialog();
+		// disabled until reports are fixed
+		/*$dialog = new XhrDialog();
 		$dialog->setTitle($this->foodsaver['name'] . ' melden');
 
 		global $g_data;
@@ -193,12 +194,14 @@ class ReportXhr extends Control
 		');
 		$dialog->noOverflow();
 
-		return $dialog->xhrout();
+		return $dialog->xhrout();*/
+		return ['status' => 0];
 	}
 
 	public function betriebReport(): array
 	{
-		$reason_id = 1;
+		// disabled until reports are fixed
+		/*$reason_id = 1;
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
 		}
@@ -215,6 +218,7 @@ class ReportXhr extends Control
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
-		];
+		];*/
+		return ['status' => 0];
 	}
 }

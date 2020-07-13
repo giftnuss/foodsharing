@@ -13,6 +13,7 @@
 - Hide all phone numbers for unverified store team members and jumpers !1591 @ChrisOelmueller
 - Show an popover for the "remember me"-function, if clicked in password field on login page !1585 #370 @TheSoulT
 - Add a link to reset the password in the login popover !1585 @TheSoulT
+- Disabled report link on profile page and Xhr functions for sending reports !1610 @alex.simm
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
