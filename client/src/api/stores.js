@@ -1,10 +1,6 @@
 import { get, patch, post, remove } from './base'
 import dateFnsParseISO from 'date-fns/parseISO'
-
-export async function joinPickup (storeId, pickupDate, fsId) {
-  const date = pickupDate.toISOString()
-  return post(`/stores/${storeId}/pickups/${date}/${fsId}`)
-}
+import _ from 'underscore'
 
 export async function listPickups (storeId) {
   const res = await get(`/stores/${storeId}/pickups`)
@@ -13,6 +9,22 @@ export async function listPickups (storeId) {
     ...c,
     date: dateFnsParseISO(c.date)
   }))
+}
+
+export async function listPickupHistory (storeId, from, to) {
+  const res = await get(`/stores/${storeId}/history/${from}/${to}`)
+  const slots = res.pickups[0].occupiedSlots
+
+  return _.groupBy(slots.map(s => ({
+    ...s,
+    isConfirmed: !!s.confirmed,
+    date: dateFnsParseISO(s.date)
+  })), 'date_ts')
+}
+
+export async function joinPickup (storeId, pickupDate, fsId) {
+  const date = pickupDate.toISOString()
+  return post(`/stores/${storeId}/pickups/${date}/${fsId}`)
 }
 
 export async function leavePickup (storeId, pickupDate, fsId) {

@@ -50,7 +50,6 @@ $g_lang['delete_post_sure'] = 'Soll der Beitrag wirklich gelöscht werden?';
 $g_lang['delete_sure_title'] = 'Wirklich löschen?';
 $g_lang['betrieb_sign_out'] = 'Mich hier austragen';
 $g_lang['team_status'] = 'Teamstatus';
-$g_lang['fetch_history'] = 'Abholungshistorie';
 $g_lang['prefix_Ago'] = 'Vor';
 $g_lang['chat_with_regular_team'] = 'Nachricht ans Team';
 $g_lang['chat_with_jumper_waiting_team'] = 'Nachricht an Springer';

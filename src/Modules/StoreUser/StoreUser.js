@@ -29,6 +29,7 @@ import {
   denyRequest
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
+import PickupHistory from './components/PickupHistory'
 import PickupList from './components/PickupList'
 import StoreInfos from './components/StoreInfos'
 import StoreTeam from './components/StoreTeam'
@@ -215,10 +216,12 @@ $(document).ready(() => {
   })
 
   vueRegister({
+    PickupHistory,
     PickupList,
     StoreInfos,
     StoreTeam
   })
+  vueApply('#vue-pickup-history', true)
   vueApply('#vue-pickuplist', true)
   vueApply('#vue-storeinfos', true)
   vueApply('#vue-storeteam', true)

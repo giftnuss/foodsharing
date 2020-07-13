@@ -9,6 +9,12 @@
           <span>
             {{ date | dateFormat('full-long') }}
           </span>
+          <span
+            v-if="showRelativeDate"
+            class="text-muted"
+          >
+            ({{ date | dateDistanceInWords }})
+          </span>
           <div
             v-if="isCoordinator && !isInPast"
             class="delete-pickup"
@@ -149,11 +155,12 @@ export default {
   props: {
     storeId: { type: Number, default: null },
     date: { type: Date, required: true },
+    showRelativeDate: { type: Boolean, default: false },
     isAvailable: { type: Boolean, default: false },
     totalSlots: { type: Number, default: 0 },
     occupiedSlots: { type: Array, default: () => [] },
     isCoordinator: { type: Boolean, default: false },
-    user: { type: Object, default: null }
+    user: { type: Object, default: () => { return { id: null } } }
   },
   data () {
     return {

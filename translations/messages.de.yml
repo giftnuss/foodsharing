@@ -334,6 +334,23 @@ pickup:
   add_onetime_pickup: Zusatztermin eintragen
   slot_add: Slot hinzufügen
   slot_remove: Slot entfernen
+  history:
+    title: Abholungshistorie
+    search: Abholungen anzeigen
+
+calendar:
+  locale: de
+  labelPrevYear: Vorheriges Jahr
+  labelPrevMonth: Vorheriger Monat
+  labelCurrentMonth: Aktueller Monat
+  labelNextMonth: Nächster Monat
+  labelNextYear: Nächstes Jahr
+  labelToday: Heute
+  labelSelected: Ausgewähltes Datum
+  labelNoDateSelected: Datum wählen
+  labelCalendar: Kalender
+  labelNav: Kalendernavigation
+  labelHelp: Navigation ist auch mit Pfeiltasten möglich
 
 forum:
   from: Von %name%

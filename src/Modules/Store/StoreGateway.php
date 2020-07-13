@@ -907,16 +907,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	public function getFetchHistory(int $storeId, string $from, string $to): array
 	{
 		return $this->db->fetchAll('
-			SELECT	fs.id,
-					fs.name,
-					fs.nachname,
-					fs.photo,
+			SELECT	a.foodsaver_id AS foodsaverId,
+					a.confirmed,
 					a.date,
 					UNIX_TIMESTAMP(a.date) AS date_ts
 
-			FROM	fs_foodsaver fs
-					INNER JOIN fs_abholer a
-					ON a.foodsaver_id = fs.id
+			FROM	fs_abholer a
 
 			WHERE	a.betrieb_id = :storeId
 			AND     a.date >= :from

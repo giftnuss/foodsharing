@@ -108,8 +108,6 @@ $csrf_whitelist = [
 	// 'Settings::sleepmode',
 	// 'Store::savedate',
 	// 'Store::deldate',
-	// 'Store::getfetchhistory',
-	// 'Store::fetchhistory',
 	// 'Store::adddate',
 	// 'Store::savebezirkids',
 	// 'Store::setbezirkids',

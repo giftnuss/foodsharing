@@ -69,40 +69,6 @@ class StoreView extends View
 			]]);
 	}
 
-	public function fetchHistory()
-	{
-		return $this->v_utils->v_form_daterange('daterange', [
-				'content_after' => ' <a href="#" id="daterange_submit" class="button"><i class="fas fa-search"></i></a>'
-			]) . '<div id="daterange_content"></div>';
-	}
-
-	public function fetchlist($history)
-	{
-		$out = '
-			<ul class="linklist history">';
-		$curdate = 0;
-		foreach ($history as $h) {
-			if ($curdate != $h['date']) {
-				$out .= '<li class="title">' . $this->timeHelper->niceDate($h['date_ts']) . '</li>';
-				$curdate = $h['date'];
-			}
-			$out .= '
-				<li>
-					<a class="corner-all" href="/profile/' . (int)$h['id'] . '">
-						<span class="i"><img src="' . $this->imageService->img($h['photo']) . '" /></span>
-						<span class="n">' . $h['name'] . ' ' . $h['nachname'] . '</span>
-						<span class="t"></span>
-						<span class="c"></span>
-					</a>
-				</li>';
-		}
-
-		$out .= '
-			</ul>';
-
-		return $out;
-	}
-
 	public function betrieb_form($region = false, $page = '', $lebensmittel_values, $chains, $categories, $status, $weightArray)
 	{
 		global $g_data;

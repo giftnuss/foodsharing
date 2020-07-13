@@ -200,25 +200,52 @@ class StoreUserControl extends Control
 				$menu = [];
 
 				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
-					$menu[] = ['name' => $this->translationHelper->s('chat_with_regular_team'), 'click' => 'conv.chat(' . $store['team_conversation_id'] . ');'];
+					$menu[] = [
+						'name' => $this->translationHelper->s('chat_with_regular_team'),
+						'click' => 'conv.chat(' . $store['team_conversation_id'] . ');',
+					];
 				}
 
 				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
-					$menu[] = ['name' => $this->translationHelper->s('chat_with_jumper_waiting_team'), 'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');'];
+					$menu[] = [
+						'name' => $this->translationHelper->s('chat_with_jumper_waiting_team'),
+						'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');',
+					];
 				}
 
-				if ($this->storePermissions->mayEditStore($store['id'])) {
-					$menu[] = ['name' => $this->translationHelper->s('fetch_history'), 'click' => "ajreq('fetchhistory',{app:'betrieb',bid:" . (int)$store['id'] . '});'];
-					$menu[] = ['name' => $this->translationHelper->s('edit_betrieb'), 'href' => '/?page=betrieb&a=edit&id=' . $store['id']];
-					$menu[] = ['name' => $this->translationHelper->s('edit_team'), 'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});'];
-					$menu[] = ['name' => $this->translationHelper->s('edit_fetchtime'), 'click' => '$(\'#bid\').val(' . (int)$store['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;'];
+				if ($this->storePermissions->maySeePickupHistory($store['id'])) {
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-pickup-history', 'PickupHistory', [
+							'storeId' => $store['id'],
+						])
+					);
 				}
+				if ($this->storePermissions->mayEditStore($store['id'])) {
+					$menu[] = [
+						'name' => $this->translationHelper->s('edit_betrieb'),
+						'href' => '/?page=betrieb&a=edit&id=' . $store['id'],
+					];
+					$menu[] = [
+						'name' => $this->translationHelper->s('edit_team'),
+						'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});',
+					];
+					$menu[] = [
+						'name' => $this->translationHelper->s('edit_fetchtime'),
+						'click' => '$(\'#bid\').val(' . (int)$store['id'] . ');$(\'#dialog_abholen\').dialog(\'open\');return false;',
+					];
+				}
+
 				if (!$store['verantwortlich'] || $this->session->isAmbassador() || $this->session->isOrgaTeam()) {
-					$menu[] = ['name' => $this->translationHelper->s('betrieb_sign_out'), 'click' => 'u_betrieb_sign_out(' . (int)$store['id'] . ');return false;'];
+					$menu[] = [
+						'name' => $this->translationHelper->s('betrieb_sign_out'),
+						'click' => 'u_betrieb_sign_out(' . (int)$store['id'] . ');return false;',
+					];
 				}
 
 				if (!empty($menu)) {
-					$this->pageHelper->addContent($this->v_utils->v_menu($menu, $this->translationHelper->s('options')), CNT_LEFT);
+					$this->pageHelper->addContent($this->v_utils->v_menu(
+						$menu, $this->translationHelper->s('options')
+					), CNT_LEFT);
 				}
 
 				/* team list */

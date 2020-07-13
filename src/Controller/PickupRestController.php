@@ -161,6 +161,43 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		$pickups = $this->storeGateway->getPickupSlots($storeId, $fromTime);
+
+		return $this->handleView($this->view([
+			'pickups' => $this->enrichPickupSlots($pickups, $storeId)
+		]));
+	}
+
+	/**
+	 * @Rest\Get("stores/{storeId}/history/{fromTS}/{toTS}", requirements={"storeId" = "\d+", "fromTS" = "\d+", "toTS" = "\d+"})
+	 */
+	public function listPickupHistoryAction(int $storeId, int $fromTS, int $toTS)
+	{
+		if (!$this->storePermissions->maySeePickupHistory($storeId)) {
+			throw new HttpException(403);
+		}
+		// convert unix timestamps
+		$fromDate = null;
+		$toDate = null;
+		try {
+			$fromDate = Carbon::now()->min(Carbon::createFromTimestamp($fromTS));
+			$toDate = Carbon::now()->min(Carbon::createFromTimestamp($toTS));
+		} catch (\Exception $e) {
+		}
+		if (!$fromDate || !$toDate) {
+			throw new HttpException(400, 'Invalid date format');
+		}
+
+		$pickups = [[
+			'occupiedSlots' => $this->storeGateway->getFetchHistory($storeId, $fromDate, $toDate)
+		]];
+
+		return $this->handleView($this->view([
+			'pickups' => $this->enrichPickupSlots($pickups, $storeId)
+		]));
+	}
+
+	private function enrichPickupSlots(array $pickups, int $storeId): array
+	{
 		$profiles = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
 			$profiles[$user['id']] = RestNormalization::normalizeStoreUser($user);
@@ -181,8 +218,6 @@ final class PickupRestController extends AbstractFOSRestController
 			return $a['date']->lt($b['date']) ? -1 : 1;
 		});
 
-		return $this->handleView($this->view([
-			'pickups' => $pickups
-		]));
+		return $pickups;
 	}
 }
