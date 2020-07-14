@@ -31,6 +31,6 @@ $I->moveMouseOver('#becomebezirkchooser-button');
 $I->click('#becomebezirkchooser-button');
 $I->waitForElementVisible('//a[contains(text(), "Neues Thema")]');
 
-$I->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $ambassador['id']]);
+$I->dontSeeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $ambassador['id']]);
 $I->seeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $welcomeAdmin['id']]);
 $I->seeInDatabase('fs_foodsaver_has_bezirk', ['foodsaver_id' => $user['id'], 'bezirk_id' => $region['id']]);

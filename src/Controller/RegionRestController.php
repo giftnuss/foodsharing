@@ -66,12 +66,12 @@ class RegionRestController extends AbstractFOSRestController
 			$this->foodsaverGateway->updateProfile($sessionId, ['bezirk_id' => $regionId]);
 		}
 
-		$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		$regionWelcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($regionId);
 		if ($regionWelcomeGroupId) {
-			$welcomeAdmins = $this->foodsaverGateway->getAdminsOrAmbassadors($regionWelcomeGroupId);
-			$welcomeBellRecipients = array_merge($welcomeBellRecipients, $welcomeAdmins);
-			$welcomeBellRecipients = array_unique(array_column($welcomeBellRecipients, 'id'));
+			$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionWelcomeGroupId);
+		}
+		else {
+			$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		}
 
 		$foodsaver = $this->session->get('user');
