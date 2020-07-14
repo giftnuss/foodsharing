@@ -91,6 +91,8 @@ import parseISO from 'date-fns/parseISO'
 import startOfDay from 'date-fns/startOfDay'
 import endOfDay from 'date-fns/endOfDay'
 import min from 'date-fns/min'
+import max from 'date-fns/max'
+import sub from 'date-fns/sub'
 import { listPickupHistory } from '@/api/stores'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
@@ -113,12 +115,12 @@ const calendarLabels = {
 export default {
   components: { Pickup },
   props: {
-    storeId: { type: Number, required: true }
+    storeId: { type: Number, required: true },
+    coopStart: { type: String, default: '' }
   },
   data () {
     const maxDate = new Date()
-    const minDate = new Date()
-    minDate.setMonth(minDate.getMonth() - 13)
+    const minDate = sub(new Date(), { years: 10, months: 1, days: 1 })
 
     const dateFormatOptions = {
       year: 'numeric',
@@ -134,7 +136,7 @@ export default {
       toDate: maxDate,
       dateFormatOptions,
       maxDateTo: maxDate,
-      minDateFrom: minDate,
+      minDateFrom: this.coopStart ? max([minDate, parseISO(this.coopStart)]) : minDate,
       pickupList: [],
       calendarLabels: calendarLabels
     }

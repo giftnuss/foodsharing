@@ -217,6 +217,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent(
 						$this->view->vueComponent('vue-pickup-history', 'PickupHistory', [
 							'storeId' => $store['id'],
+							'coopStart' => $store['begin'],
 						])
 					);
 				}
