@@ -11,7 +11,9 @@ export async function listPickups (storeId) {
   }))
 }
 
-export async function listPickupHistory (storeId, from, to) {
+export async function listPickupHistory (storeId, fromDate, toDate) {
+  const from = fromDate.toISOString()
+  const to = toDate.toISOString()
   const res = await get(`/stores/${storeId}/history/${from}/${to}`)
   const slots = res.pickups[0].occupiedSlots
 

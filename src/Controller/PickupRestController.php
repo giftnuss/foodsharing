@@ -168,27 +168,27 @@ final class PickupRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * @Rest\Get("stores/{storeId}/history/{fromTS}/{toTS}", requirements={"storeId" = "\d+", "fromTS" = "\d+", "toTS" = "\d+"})
+	 * @Rest\Get("stores/{storeId}/history/{fromDate}/{toDate}", requirements={"storeId" = "\d+", "fromDate" = "[^/]+", "toDate" = "[^/]+"})
 	 */
-	public function listPickupHistoryAction(int $storeId, int $fromTS, int $toTS)
+	public function listPickupHistoryAction(int $storeId, string $fromDate, string $toDate)
 	{
 		if (!$this->storePermissions->maySeePickupHistory($storeId)) {
 			throw new HttpException(403);
 		}
-		// convert unix timestamps
-		$fromDate = null;
-		$toDate = null;
+		// convert date strings into datetime objects
+		$from = null;
+		$to = null;
 		try {
-			$fromDate = Carbon::now()->min(Carbon::createFromTimestamp($fromTS));
-			$toDate = Carbon::now()->min(Carbon::createFromTimestamp($toTS));
+			$from = $this->parsePickupDate($fromDate)->min(Carbon::now());
+			$to = $this->parsePickupDate($toDate)->min(Carbon::now());
 		} catch (\Exception $e) {
 		}
-		if (!$fromDate || !$toDate) {
+		if (!$from || !$to) {
 			throw new HttpException(400, 'Invalid date format');
 		}
 
 		$pickups = [[
-			'occupiedSlots' => $this->storeGateway->getFetchHistory($storeId, $fromDate, $toDate)
+			'occupiedSlots' => $this->storeGateway->getFetchHistory($storeId, $from, $to)
 		]];
 
 		return $this->handleView($this->view([
