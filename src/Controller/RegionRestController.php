@@ -69,8 +69,7 @@ class RegionRestController extends AbstractFOSRestController
 		$regionWelcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($regionId);
 		if ($regionWelcomeGroupId) {
 			$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionWelcomeGroupId);
-		}
-		else {
+		} else {
 			$welcomeBellRecipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		}
 
