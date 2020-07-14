@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Welcome Bell only for welcome group Admins #945 !1612 @fs_k
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
 - Added Workgroup Function: Welcome to workgroup !1544 @fs_k
