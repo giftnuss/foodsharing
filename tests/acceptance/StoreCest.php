@@ -44,24 +44,33 @@ class StoreCest
 		$I->see('morgens', '#public_time option[selected]');
 	}
 
-	public function watchFetchlist(AcceptanceTester $I)
+	public function seePickupHistory(AcceptanceTester $I)
 	{
 		$I->haveInDatabase('fs_abholer', [
 			'betrieb_id' => $this->store['id'],
 			'foodsaver_id' => $this->foodsaver['id'],
-			'date' => Carbon::now()
+			'date' => Carbon::now()->subYears(3)->subHours(8),
 		]);
 
 		$I->login($this->storeCoordinator['email']);
 		$I->amOnPage($I->storeUrl($this->store['id']));
-		$I->waitForText('Optionen');
-		$I->click('Abholungshistorie');
-		$I->waitForText('Zeitraum');
-		$I->fillField('#daterange_from', '01.01.1970');
-		$I->fillField('#daterange_to', Carbon::now()->toString());
-		$I->click('#daterange_submit');
+		$I->waitForText('Abholungshistorie');
+		// expand UI (should be collapsed by default)
+		$I->click('.pickup-history-title');
+		$I->waitForText('Abholungen anzeigen');
+		// select a date ~4 years in the past, to see if the calendar works
+		$I->click('#datepicker-from');
+		$I->click('button[title="Vorheriges Jahr"]');
+		$I->click('button[title="Vorheriges Jahr"]');
+		$I->click('button[title="Vorheriges Jahr"]');
+		$I->click('button[title="Vorheriger Monat"]');
+		$I->click('button[title="Vorheriges Jahr"]');
+		$I->click('.b-calendar-grid-body > .row:first-child > .col:last-child');
+		// submit search
+		$I->click('.pickup-search-button > button');
 
-		$I->waitForText($this->foodsaver['name']);
+		$I->waitForElement('.pickup-date', 5);
 		$I->see($this->foodsaver['name'] . ' ' . $this->foodsaver['nachname']);
+		$I->waitForText('vor etwa 3 Jahren');
 	}
 }

@@ -6,7 +6,9 @@
       class="head ui-widget-header ui-corner-top"
       @click.prevent="toggleDisplay"
     >
-      {{ $i18n('pickup.history.title') }}
+      <span class="pickup-history-title">
+        {{ $i18n('pickup.history.title') }}
+      </span>
       <a
         class="float-right pl-2 pr-1"
         href="#"
