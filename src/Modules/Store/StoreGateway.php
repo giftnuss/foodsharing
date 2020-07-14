@@ -904,7 +904,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function getFetchHistory(int $storeId, string $from, string $to): array
+	public function getPickupHistory(int $storeId, \DateTime $from, \DateTime $to): array
 	{
 		return $this->db->fetchAll('
 			SELECT	a.foodsaver_id AS foodsaverId,
@@ -921,8 +921,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			ORDER BY a.date
 		', [
 			':storeId' => $storeId,
-			':from' => $from,
-			':to' => $to
+			':from' => $this->db->date($from),
+			':to' => $this->db->date($to),
 		]);
 	}
 

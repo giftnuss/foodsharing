@@ -188,7 +188,7 @@ final class PickupRestController extends AbstractFOSRestController
 		}
 
 		$pickups = [[
-			'occupiedSlots' => $this->storeGateway->getFetchHistory($storeId, $from, $to)
+			'occupiedSlots' => $this->storeGateway->getPickupHistory($storeId, $from, $to)
 		]];
 
 		return $this->handleView($this->view([
