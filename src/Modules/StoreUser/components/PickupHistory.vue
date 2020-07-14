@@ -88,6 +88,9 @@
 
 <script>
 import parseISO from 'date-fns/parseISO'
+import startOfDay from 'date-fns/startOfDay'
+import endOfDay from 'date-fns/endOfDay'
+import min from 'date-fns/min'
 import { listPickupHistory } from '@/api/stores'
 import i18n from '@/i18n'
 import { pulseError } from '@/script'
@@ -157,7 +160,11 @@ export default {
       }
       this.isLoading = true
       try {
-        this.pickupList = await listPickupHistory(this.storeId, this.fromDate, this.toDate)
+        this.pickupList = await listPickupHistory(
+          this.storeId,
+          startOfDay(this.fromDate),
+          min([new Date(), endOfDay(this.toDate)])
+        )
       } catch (e) {
         pulseError(i18n('error_unexpected') + e)
       }
