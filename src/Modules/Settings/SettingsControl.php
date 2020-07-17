@@ -333,7 +333,7 @@ class SettingsControl extends Control
 					if($("#bezirk").val() == 0)
 					{
 						check = false;
-						error("Du musst einen Bezirk ausw&auml;hlen");
+						pulseError("Du musst einen Bezirk ausw&auml;hlen");
 					}
 
 					if(!check)

@@ -432,9 +432,6 @@ export function info (txt) {
     $('#info-msg').append(`<li>${txt}</li>`)
   }
 }
-export function error (txt) {
-  pulseError(txt)
-}
 
 export function uploadPhoto () {
   $('#uploadPhoto form').trigger('submit')

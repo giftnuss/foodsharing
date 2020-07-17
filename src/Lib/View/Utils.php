@@ -616,7 +616,7 @@ class Utils
 				{
 					check = false;
 					input.addClass("input-error");
-					error($("#" + input.attr("id") + "-error-msg").val());
+					pulseError($("#" + input.attr("id") + "-error-msg").val());
 				}
 			});
 
