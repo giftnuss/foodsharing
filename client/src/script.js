@@ -381,19 +381,6 @@ export function img (photo, size) {
   }
 }
 
-export function fancy (content, title, subtitle) {
-  let t = ''
-  let s = ''
-  if (title != undefined) {
-    t = `<h3>${title}</h3>`
-  }
-  if (subtitle != undefined) {
-    s = `<p class="subtitle">${subtitle}</p>`
-  }
-  $('#fancy').html(`<div class="popbox">${t}${s}${content}</div>`)
-  $('#fancylink').trigger('click')
-}
-
 export function xhrf (func, fdata = null) {
   showLoader()
   $.ajax({
