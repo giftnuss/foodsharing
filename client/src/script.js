@@ -606,14 +606,6 @@ export function becomeBezirk () {
   })
   $('#becomeBezirk-link').trigger('click')
 }
-export function preZero (number, length) {
-  if (length == undefined) {
-    length = 2
-  }
-  var num = `${number}`
-  while (num.length < length) num = `0${num}`
-  return num
-}
 
 export function shuffle (o) {
   for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);

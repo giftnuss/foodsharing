@@ -31,7 +31,6 @@ import {
   showLoader,
   hideLoader,
   becomeBezirk,
-  preZero,
   betriebRequest,
   rejectBetriebRequest,
   error
@@ -57,7 +56,6 @@ expose({
   showLoader,
   hideLoader,
   becomeBezirk,
-  preZero,
   betriebRequest,
   rejectBetriebRequest,
   u_printChildBezirke,
