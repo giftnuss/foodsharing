@@ -324,7 +324,7 @@ abstract class Control
 		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
+				<textarea id="wallpost-text" name="text" placeholder="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>
 

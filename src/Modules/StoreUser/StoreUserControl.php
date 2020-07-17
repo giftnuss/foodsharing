@@ -269,7 +269,7 @@ class StoreUserControl extends Control
 
 								<div class="tools ui-padding">
 									<form method="get" action="' . $this->routeHelper->getSelf() . '">
-										<textarea class="comment textarea inlabel" title="Nachricht schreiben..." name="text"></textarea>
+										<textarea class="comment textarea" placeholder="' . $this->translator->trans('wall.message_placeholder') . '" name="text"></textarea>
 										<div align="right">
 											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->translationHelper->s('send') . '" />
 										</div>

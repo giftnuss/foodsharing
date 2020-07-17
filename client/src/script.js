@@ -117,23 +117,6 @@ export function initialize () {
       })
     })
 
-    $('textarea.inlabel, input.inlabel').each(function () {
-      var $this = $(this)
-      if ($this.val() === '') {
-        $this.val($this.attr('title'))
-      }
-      $this.on('focus', function () {
-        if ($this.val() === $this.attr('title')) {
-          $this.val('')
-        }
-      })
-      $this.on('blur', function () {
-        if ($this.val() === '') {
-          $this.val($this.attr('title'))
-        }
-      })
-    })
-
     if (!isMob()) {
       $('#main a').tooltip({
         show: false,
