@@ -13,24 +13,6 @@ import conv from '@/conv'
 
 export { goTo, isMob, GET }
 
-export const dialogs = {
-  dialogs: [],
-  add: function (dialog) {
-    this.dialogs[this.dialogs.length] = dialog
-  },
-  closeAll: function () {
-    for (var i = 0; i < dialogs.dialogs.length; i++) {
-      var $dia = $(`#${dialogs.dialogs[i]}`)
-      if ($dia.length > 0) {
-        if ($dia.dialog('isOpen') === true) {
-          $dia.dialog('close')
-        }
-      }
-    }
-    dialogs.dialogs = []
-  }
-}
-
 export function collapse_wrapper (id) {
   const $content = $(`#${id}-wrapper .element-wrapper`)
   const $label = $(`#${id}-wrapper .wrapper-label i`)
