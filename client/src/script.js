@@ -425,14 +425,6 @@ export function openPhotoDialog (fs_id) {
   $('#uploadPhoto').dialog('open')
 }
 
-export function info (txt) {
-  if ($('#info-msg').length == 0) {
-    $('#top').after(`<div class="ui-widget ui-msg"><div class="ui-state-highlight ui-corner-all ui-padding"><span style="float: left; margin-right: .3em;" class="ui-icon ui-icon-info"></span><ul id="info-msg">${txt}</ul><div class="clear"></div></div></div>`)
-  } else {
-    $('#info-msg').append(`<li>${txt}</li>`)
-  }
-}
-
 export function uploadPhoto () {
   $('#uploadPhoto form').trigger('submit')
 }
@@ -440,7 +432,7 @@ export function uploadPhoto () {
 export function uploadPhotoReady (id, file) {
   $(`#miniq-${id}`).attr('src', file)
   $('#uploadPhoto').dialog('close')
-  info('Foto erfolgreich hochgeladen!')
+  pulseInfo('Foto erfolgreich hochgeladen!')
 }
 
 export function addSelect (id) {
