@@ -1217,10 +1217,11 @@ class XhrMethods
 				$img = '';
 				if ($b['kette_id'] != 0) {
 					if ($img = $b['logo']) {
-						$img = '<a href="/?page=betrieb&id=' . (int)$b['id'] . '"><img style="float:right;margin-left:10px;" src="' . $this->idimg($img, 100) . '" /></a>';
+						$img = '<a href="/?page=fsbetrieb&id=' . (int)$b['id'] . '"><img style="float:right;margin-left:10px;" src="' . $this->idimg($img, 100) . '" /></a>';
 					}
 				}
-				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;"><div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a onclick="betrieb(' . (int)$b['id'] . ');return false;" href="#">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->sanitizerService->jsSafe($b['plz']) . ' ' . $this->sanitizerService->jsSafe($b['stadt']) . '</p></div><div style="clear:both;"></div>';
+				$out['betriebe'][$i]['bubble'] = '<div style="height:110px;overflow:hidden;width:270px;">'
+					. '<div style="margin-right:5px;float:right;">' . $img . '</div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/?page=fsbetrieb&id=' . (int)$b['id'] . '">' . $this->sanitizerService->jsSafe($b['name']) . '</a></h1><p>' . $this->sanitizerService->jsSafe($b['str'] . ' ' . $b['hsnr']) . '</p><p>' . $this->sanitizerService->jsSafe($b['plz']) . ' ' . $this->sanitizerService->jsSafe($b['stadt']) . '</p>' . '</div><div style="clear:both;"></div>';
 			}
 		}
 

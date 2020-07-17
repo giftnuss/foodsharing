@@ -481,10 +481,6 @@ export function addSelect (id) {
   }
 }
 
-export function betrieb (id) {
-  goTo(`/?page=betrieb&id=${id}`)
-}
-
 export function ucfirst (str) {
   str += ''
   var f = str.charAt(0).toUpperCase()
