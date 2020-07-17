@@ -352,15 +352,6 @@ export const pulseInfo = definePulse('info', 4000)
 export const pulseSuccess = definePulse('success', 5000)
 export const pulseError = definePulse('error', 6000)
 
-export function addHover (sel) {
-  $(sel).on('mouseenter', function () { $(this).addClass('hover') })
-    .on('mouseleave', function () { $(this).removeClass('hover') })
-}
-
-export function aNotify () {
-  // $('#xhr-chat-notify')[0].play();
-}
-
 export function checkEmail (email) {
   var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/
 
