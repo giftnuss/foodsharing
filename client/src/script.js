@@ -377,10 +377,6 @@ export function reload () {
   window.location.reload()
 }
 
-export function v_field (content, title, id) {
-  return `<div id="${id}"><div class="head ui-widget-header ui-corner-top">${title}</div><div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom ui-padding">${content}</div></div>`
-}
-
 export function openPhotoDialog (fs_id) {
   $('#uploadPhoto-fs_id').val(fs_id)
   $('#uploadPhoto').dialog('open')
