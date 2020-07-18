@@ -15,7 +15,7 @@
       <div class="float-right">
         <a
           v-if="mayEditStore"
-          v-b-tooltip.hover.top="$i18n('store.sm.managementToggle')"
+          v-b-tooltip.hover.top="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
           :class="['px-1', managementModeEnabled ? 'text-warning' : 'text-light']"
           href="#"
           @click.prevent="toggleManageControls"
