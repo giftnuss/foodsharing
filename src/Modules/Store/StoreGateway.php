@@ -167,6 +167,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		$result['team'] = [];
 		$result['waitspringer'] = [];
 		$result['anfrage'] = [];
+		$result['sonstige'] = [];
 
 		$already_in = [];
 
@@ -187,40 +188,42 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		if ($addFromRegionId !== null) {
 			$child_region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($addFromRegionId);
-			$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
+			if (!empty($child_region_ids)) {
+				$placeholders = $this->db->generatePlaceholders(count($child_region_ids));
 
-			$result['sonstige'] = [];
-			$betriebe = $this->db->fetchAll('
-				SELECT  b.id,
-						b.betrieb_status_id,
-						b.plz,
-						b.kette_id,
+				$result['sonstige'] = [];
+				$betriebe = $this->db->fetchAll('
+					SELECT  b.id,
+							b.betrieb_status_id,
+							b.plz,
+							b.kette_id,
 
-						b.ansprechpartner,
-						b.fax,
-						b.telefon,
-						b.email,
+							b.ansprechpartner,
+							b.fax,
+							b.telefon,
+							b.email,
 
-						b.betrieb_kategorie_id,
-						b.name,
-						CONCAT(b.str," ",b.hsnr) AS anschrift,
-						b.str,
-						b.hsnr,
-						b.`betrieb_status_id`,
-						bz.name AS bezirk_name
+							b.betrieb_kategorie_id,
+							b.name,
+							CONCAT(b.str," ",b.hsnr) AS anschrift,
+							b.str,
+							b.hsnr,
+							b.`betrieb_status_id`,
+							bz.name AS bezirk_name
 
-				FROM 	fs_betrieb b
-						INNER JOIN fs_bezirk bz
-				        ON b.bezirk_id = bz.id
+					FROM 	fs_betrieb b
+							INNER JOIN fs_bezirk bz
+					        ON b.bezirk_id = bz.id
 
-				WHERE 	bezirk_id IN(' . $placeholders . ')
+					WHERE 	bezirk_id IN(' . $placeholders . ')
 
-				ORDER BY bz.name DESC
-				', $child_region_ids);
+					ORDER BY bz.name DESC
+					', $child_region_ids);
 
-			foreach ($betriebe as $b) {
-				if (!isset($already_in[$b['id']])) {
-					$result['sonstige'][] = $b;
+				foreach ($betriebe as $b) {
+					if (!isset($already_in[$b['id']])) {
+						$result['sonstige'][] = $b;
+					}
 				}
 			}
 		}

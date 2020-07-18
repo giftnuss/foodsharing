@@ -23,6 +23,7 @@
 - Only count pickups via the function getMyStore until the current day !1599 @chriswalg
 - Stop overwriting mailbox names if they contain unread mails #789 !1600 @ChrisOelmueller
 - Prevent page from jumping to top when deleting bells !1597 @ChrisOelmueller
+- Fix crashing "All my stores" page when user has no home district !1616 #936 @alex.simm 
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
