@@ -14,6 +14,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Mobile_Detect;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -27,6 +28,8 @@ class UserRestController extends AbstractFOSRestController
 	private $userPermissions;
 	private $profilePermissions;
 	private $emailHelper;
+
+	private const MIN_RATING_MESSAGE_LENGTH = 100;
 
 	public function __construct(
 		Session $session,
@@ -199,6 +202,42 @@ class UserRestController extends AbstractFOSRestController
 		$this->foodsaverGateway->deleteFoodsaver($userId);
 
 		return $this->handleView($this->view());
+	}
+
+	/**
+	 * Gives a banana to a user.
+	 *
+	 * @SWG\Parameter(name="userId", in="path", type="integer", description="to which user to give the banana")
+	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user")
+	 * @SWG\Response(response="200", description="Success.")
+	 * @SWG\Response(response="400", description="Message too short or the user does not exist.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to rate that user.")
+	 * @SWG\Tag(name="user")
+	 *
+	 * @Rest\Put("user/{userId}/banana", requirements={"userId" = "\d+"})
+	 * @Rest\RequestParam(name="message", nullable=false)
+	 */
+	public function addBanana(int $userId, ParamFetcher $paramFetcher): Response
+	{
+		// make sure that users may not give themselves bananas
+		if (!$this->session->may() || $this->session->id() === $userId) {
+			throw new HttpException(403);
+		}
+
+		// check if the user exists
+		if (!$this->foodsaverGateway->foodsaverExists($userId)) {
+			throw new HttpException(400);
+		}
+
+		// check length of message
+		$message = strip_tags($paramFetcher->get('message'));
+		if (strlen($message) < self::MIN_RATING_MESSAGE_LENGTH) {
+			throw new HttpException(400);
+		}
+
+		$this->profileGateway->giveBanana($userId, $message, $this->session->id());
+
+		return $this->handleView($this->view([], 200));
 	}
 
 	private function handleUserView(): Response

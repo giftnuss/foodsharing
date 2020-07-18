@@ -65,41 +65,6 @@ class ProfileXhr extends Control
 		}
 	}
 
-	public function banana(): array
-	{
-		$foodsharerId = (int)$_GET['id'];
-
-		if ($foodsharerId > 0) {
-			$message = '';
-			if (isset($_GET['message'])) {
-				$message = strip_tags($_GET['message']);
-			}
-
-			if (strlen($message) < 100) {
-				return [
-					'status' => 1,
-					'script' => 'pulseError("Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.");',
-				];
-			}
-
-			$this->profileGateway->giveBanana($foodsharerId, $message, $this->session->id());
-
-			$comment = '';
-			if ($msg = $this->profileGateway->getBananaMessage($foodsharerId, $this->session->id())) {
-				$comment = $msg;
-			}
-
-			return [
-				'status' => 1,
-				'comment' => $comment,
-				'title' => 'Nachricht hinterlassen',
-				'script' => 'pulseInfo("Banane wurde gesendet!");profile(' . $foodsharerId . ');',
-			];
-		}
-
-		return [];
-	}
-
 	public function history(): array
 	{
 		if ($this->profilePermissions->maySeeHistory($_GET['fsid'])) {

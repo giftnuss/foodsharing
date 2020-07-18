@@ -508,11 +508,7 @@ class ProfileView extends View
 				<div class="d-flex">
 					<textarea id="bouch-ta" class="textarea mr-2" placeholder="min. 100 Zeichen..."></textarea>
 					<a href="#" class="btn btn-sm btn-secondary float-right d-inline-flex" onclick="
-						ajreq(\'banana\',{
-							app:\'profile\',
-							id:' . (int)$this->foodsaver['id'] . ',
-							message:$(\'#bouch-ta\').val().trim()
-						});
+						trySendBanana(' . (int)$this->foodsaver['id'] . ');
 						return false;"
 					>
 						<img src="/img/banana.png" class="align-self-center" />

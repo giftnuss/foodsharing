@@ -517,6 +517,8 @@ profile:
   title: Profil
   warning: Warnung
   mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing Mails und Kommunikation gesperrt. Durch das ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
+  bananaSent: Banane wurde gesendet!
+  bananaMessageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
 
 search:
   title: Suche
