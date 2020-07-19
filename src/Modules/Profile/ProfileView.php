@@ -556,7 +556,7 @@ class ProfileView extends View
 			$fsName = $foodsaver['name'];
 			$when = $this->timeHelper->niceDate($foodsaver['time_ts']);
 			$photo = $this->imageService->img($foodsaver['photo'], '50');
-			$text = nl2br($foodsaver['msg']);
+			$text = nl2br(strip_tags($foodsaver['msg']));
 			$out .= '
 			<tr class="border-top">
 				<td>

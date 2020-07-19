@@ -4,6 +4,7 @@ namespace api;
 
 use Codeception\Example;
 use Codeception\Util\HttpCode as Http;
+use Faker;
 
 /**
  * Tests for the user api.
@@ -12,6 +13,7 @@ class UserApiCest
 {
 	private $user;
 	private $userOrga;
+	private $faker;
 
 	private const EMAIL = 'email';
 	private const API_USER = 'api/user';
@@ -21,6 +23,8 @@ class UserApiCest
 	{
 		$this->user = $I->createFoodsaver();
 		$this->userOrga = $I->createOrga();
+
+		$this->faker = Faker\Factory::create('de_DE');
 	}
 
 	public function getUser(\ApiTester $I)
@@ -144,5 +148,38 @@ class UserApiCest
 		$I->canSeeResponseContainsJson([
 			'valid' => false
 		]);
+	}
+
+	public function canGiveBanana(\ApiTester $I): void
+	{
+		$testUser = $I->createFoodsaver();
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->seeResponseCodeIs(Http::OK);
+	}
+
+	public function canNotGiveBananaWithShortMessage(\ApiTester $I): void
+	{
+		$testUser = $I->createFoodsaver();
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(50)]);
+		$I->seeResponseCodeIs(Http::BAD_REQUEST);
+	}
+
+	public function canNotGiveBananaTwice(\ApiTester $I): void
+	{
+		$testUser = $I->createFoodsaver();
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->seeResponseCodeIs(Http::OK);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+	}
+
+	public function canNotGiveBananaToMyself(\ApiTester $I): void
+	{
+		$I->login($this->user[self::EMAIL]);
+		$I->sendPUT(self::API_USER . '/' . $this->user['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
 	}
 }

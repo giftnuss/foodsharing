@@ -217,6 +217,14 @@ final class ProfileGateway extends BaseGateway
 		);
 	}
 
+	/**
+	 * Returns whether the user with the raterId has already given a banana with the user with userId.
+	 */
+	public function hasGivenBanana(int $raterId, int $userId): bool
+	{
+		return $this->db->exists('fs_rating', ['foodsaver_id' => $userId, 'rater_id' => $raterId]);
+	}
+
 	public function getBananaMessage(int $fsId, int $sessionId)
 	{
 		return $this->db->fetchValueByCriteria(

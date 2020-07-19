@@ -230,8 +230,13 @@ class UserRestController extends AbstractFOSRestController
 			throw new HttpException(404);
 		}
 
+		// do not allow giving bananas twice
+		if ($this->profileGateway->hasGivenBanana($this->session->id(), $userId)) {
+			throw new HttpException(403);
+		}
+
 		// check length of message
-		$message = strip_tags($paramFetcher->get('message'));
+		$message = trim($paramFetcher->get('message'));
 		if (strlen($message) < self::MIN_RATING_MESSAGE_LENGTH) {
 			throw new HttpException(400);
 		}
