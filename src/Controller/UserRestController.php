@@ -210,8 +210,9 @@ class UserRestController extends AbstractFOSRestController
 	 * @SWG\Parameter(name="userId", in="path", type="integer", description="to which user to give the banana")
 	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user")
 	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="400", description="Message too short or the user does not exist.")
+	 * @SWG\Response(response="400", description="Accompanying message is too short.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to rate that user.")
+	 * @SWG\Response(response="404", description="User to rate does not exist.")
 	 * @SWG\Tag(name="user")
 	 *
 	 * @Rest\Put("user/{userId}/banana", requirements={"userId" = "\d+"})
@@ -226,7 +227,7 @@ class UserRestController extends AbstractFOSRestController
 
 		// check if the user exists
 		if (!$this->foodsaverGateway->foodsaverExists($userId)) {
-			throw new HttpException(400);
+			throw new HttpException(404);
 		}
 
 		// check length of message

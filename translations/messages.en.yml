@@ -108,4 +108,4 @@ menu:
 
 profile:
   bananaSent: The banana was sent!
-  bananaMessageTooShort: Please insert a message of at least 100 letters for your banana.
+  bananaMessageTooShort: The text message accompanying your banana should be at least 100 characters long.
