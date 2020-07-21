@@ -1,3 +1,8 @@
+variables:
+  # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
+  # https://gitlab.com/gitlab-org/gitlab-ce/issues/19971
+  DOCKER_DRIVER: overlay
+
 .defaults: &defaults
   tags:
   - shared
@@ -165,27 +170,47 @@ build:docs:
 
 test:
   <<: *defaults
+  variables:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_INITDB_SKIP_TZINFO: 1
+    TZ: Europe/Berlin
+    FF_NETWORK_PER_BUILD: 1
+    REDIS_HOST: redis
+    FS_ENV: test
+  image: registry.gitlab.com/foodsharing-dev/images/php:7
+  services:
+# Note: Gitlab runner will mark a lot of service healthchecks as failed. This is a bug that will partly be addressed with the upcoming release of the gitlab-runner. It is also due to our configuration, e.g. the chat container not exposing ports but listed as a service. Unfortunately, health check cannot be disabled.
+    - name: redis:5.0.8-alpine
+      alias: redis
+    - name: registry.gitlab.com/foodsharing-dev/images/db/test:2
+      alias: db
+    - name: selenium/standalone-chrome:3.141.59-20200515
+      alias: selenium
+    - name: maildev/maildev
+      alias: maildev
+      command: ["bin/maildev",  "--web", "80", "--smtp", "25", "--hide-extensions", "STARTTLS"]
+    - name: node:13.10.1-alpine
+      alias: chat
+      # Chat service runs with code that gets checked out later by the main build job. We use a file to synchronize that, so start chat service only when that file has been recreated.
+      command: ["/bin/sh", "-c", 'rm $CI_PROJECT_DIR/code_updated; while [ ! -e $CI_PROJECT_DIR/code_updated ]; do sleep 1; done; cd /builds/foodsharing-dev/foodsharing/chat && yarn ts-node src/index.ts 0.0.0.0']
+    - name: registry.gitlab.com/foodsharing-dev/images/web_ci:1.10
+      alias: web
+
   # only run tests for MR, not for the target branch. While this might show to be dangerous, it also allows us to
   # deploy without relying on potentially flaky tests
   rules:
   - if: $CI_MERGE_REQUEST_ID
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
-  # run it on our foodsharing ci server
-  tags:
-  - non-shared
+  dependencies:
+    - build:frontend
+    - build:backend
+    - build:backend-chat
+
   script:
-  - composer validate --no-check-all --strict
-  - ./scripts/ci.test
-  after_script:
-  # collect artifacts
-  - docker cp foodsharing_ci_selenium:/home/seluser/Downloads tests/_output/ || true
-  - docker cp foodsharing_ci_codeception:/app/tests/_output/ tests/_output || true
-  - docker logs foodsharing_ci_app --since 15m --timestamps &> tests/_output/logs-app.txt || true
-  - docker logs foodsharing_ci_mailqueuerunner --since 15m --timestamps &> tests/_output/logs-mailqueuerunner.txt || true
-  # stop/kill all the containers
-  - FS_ENV=ci ./scripts/rm
-  # collect any test output
+    # Create file to notify chat container that code is up to date
+    - touch $CI_PROJECT_DIR/code_updated
+    - ./scripts/ci.test
   artifacts:
     expire_in: 1 month
     when: always
@@ -227,8 +252,3 @@ deploy:docs:
   - if: $CI_COMMIT_BRANCH == 'master'
   - if: $CI_PIPELINE_SOURCE == "schedule"
     when: never
-
-variables:
-  # https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
-  # https://gitlab.com/gitlab-org/gitlab-ce/issues/19971
-  DOCKER_DRIVER: overlay

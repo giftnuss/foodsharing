@@ -60,6 +60,7 @@
 - Gender value for women and man is now fixed !1564 @chriswalg
 - Show on profile a warning if the private mail adresse is on bounce list for orga and foodsaver them self. #931 !1572 @chriswalg
 - Update devdocs to recommend Docker Desktop for Win10 Home !1578 @\_fridtjof_
+- Use gitlab ci services instead of building and running docker images in CI !1577 @NerdyProjects
 
 # 2020-06-01 Hotfix
 
