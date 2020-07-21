@@ -56,8 +56,6 @@ $viewUtils = $container->get(Utils::class);
 $g_template = 'default';
 $g_data = $dataHelper->getPostData();
 
-$pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
-
 $pageHelper->addHidden('<div id="u-profile"></div>');
 $pageHelper->addHidden('<ul id="hidden-info"></ul>');
 $pageHelper->addHidden('<ul id="hidden-error"></ul>');

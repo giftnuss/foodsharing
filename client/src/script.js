@@ -200,16 +200,6 @@ export function initialize () {
           }
         }
     })
-
-    $('#fancylink').fancybox({
-      minWidth: 470,
-      maxWidth: 470,
-      minHeight: 450,
-      scrolling: 'auto',
-      helpers: {
-        overlay: { closeClick: false }
-      }
-    })
   })
 }
 
