@@ -57,7 +57,6 @@ $g_template = 'default';
 $g_data = $dataHelper->getPostData();
 
 $pageHelper->addHidden('<a id="' . $identificationHelper->id('fancylink') . '" href="#fancy">&nbsp;</a>');
-$pageHelper->addHidden('<div id="' . $identificationHelper->id('fancy') . '"></div>');
 
 $pageHelper->addHidden('<div id="u-profile"></div>');
 $pageHelper->addHidden('<ul id="hidden-info"></ul>');
