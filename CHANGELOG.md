@@ -29,6 +29,7 @@
 - Stop overwriting mailbox names if they contain unread mails #789 !1600 @ChrisOelmueller
 - Prevent page from jumping to top when deleting bells !1597 @ChrisOelmueller
 - Fix crashing "All my stores" page when user has no home district !1616 #936 @alex.simm 
+- Fix creation and deletion of buddy bells !1618 #942 @alex.simm
 
 ## Refactoring
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
