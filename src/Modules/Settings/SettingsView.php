@@ -244,10 +244,6 @@ class SettingsView extends View
 					$btn = '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen!</a>';
 					break;
 
-				case 3:
-					$btn = '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen!</a>';
-					break;
-
 				default:
 					break;
 			}
@@ -548,13 +544,6 @@ class SettingsView extends View
 		}
 
 		$out = $this->v_utils->v_field($out, $quiz['name'] . ' - Jetzt gilt es noch das Quiz zu bestehen!', ['class' => 'ui-padding']);
-
-		return $out;
-	}
-
-	public function confirmBot($cnt)
-	{
-		$out = $this->v_utils->v_field($cnt['body'], $cnt['title'], ['class' => 'ui-padding']);
 
 		return $out;
 	}

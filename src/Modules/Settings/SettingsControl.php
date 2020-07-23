@@ -341,38 +341,6 @@ class SettingsControl extends Control
 					}
 
 				});');
-
-				// Rechtsvereinbarung
-
-				$rv = $this->contentGateway->get(32);
-
-				$this->pageHelper->addContent(
-					$this->view->confirmBot($this->contentGateway->get(16)) .
-
-					$this->v_utils->v_form('upBotsch', [$this->v_utils->v_field(
-						$this->v_utils->v_bezirkChooser('bezirk', $this->regionGateway->getRegion($this->session->getCurrentRegionId()), [
-							'label' => $this->translator->trans('foodsaver.upgrade.amb_region'),
-						]) .
-						'<div style="display:none" id="bezirk-notAvail">' . $this->v_utils->v_form_text('new_bezirk') . '</div>' .
-						$this->v_utils->v_form_select('time', ['values' => [
-							['id' => 1, 'name' => '3-5 Stunden'],
-							['id' => 2, 'name' => '5-8 Stunden'],
-							['id' => 3, 'name' => '9-12 Stunden'],
-							['id' => 4, 'name' => '13-15 Stunden'],
-							['id' => 5, 'name' => '15-20 Stunden']
-						]]) .
-						$this->v_utils->v_form_textarea('about_me_public', ['desc' => 'Um möglichst transparent, aber auch offen, freundlich, seriös und einladend gegenüber den Lebensmittelbetrieben, den Foodsavern sowie allen, die bei foodsharing mitmachen wollen, aufzutreten, wollen wir neben Deinem Foto, Namen und Telefonnummer auch eine Beschreibung Deiner Person als Teil von foodsharing mit aufnehmen. Bitte fass Dich also relativ kurz, hier unsere Vorlage: https://foodsharing.de/ueber-uns Gerne kannst Du auch Deine Website, Projekt oder sonstiges erwähnen, was Du öffentlich an Informationen teilen möchtest, die vorteilhaft sind.']),
-
-						$this->translator->trans('foodsaver.upgrade.to_amb'),
-
-						['class' => 'ui-padding']
-					),
-
-						$this->v_utils->v_field($rv['body'] . $this->v_utils->v_form_checkbox('rv_botschafter', ['required' => true, 'values' => [
-								['id' => 1, 'name' => $this->translator->trans('foodsaver.upgrade.rv')]
-							]]), $rv['title'], ['class' => 'ui-padding'])
-					], ['submit' => $this->translator->trans('foodsaver.upgrade.amb_submit')])
-				);
 			}
 		}
 	}
