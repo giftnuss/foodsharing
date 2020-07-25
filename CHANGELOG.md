@@ -18,6 +18,7 @@
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
+- Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
 
 ## Dev/Test/CI stuff
 
@@ -74,7 +75,6 @@
 - Move sending of bananas to new REST endpoint !1617 #798 @alex.simm 
 - Remove jquery contextmenu, refactor some dashboard view code &22 !1606 @ChrisOelmueller
 - Refactor profile view, permissions, and pickup schedule overview !1604 @ChrisOelmueller
-- Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
 
 ## Dev/Test/CI stuff
 - Include sentry as symfony bundle to hopefully not miss error reporting for Rest API anymore !1562 @NerdyProjects
