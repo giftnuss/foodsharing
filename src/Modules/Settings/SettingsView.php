@@ -581,7 +581,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translator->trans('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
@@ -606,7 +606,7 @@ class SettingsView extends View
 		}
 		if ($rv) {
 			$rv['body'] .= '
-			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translationHelper->s('foodsaver.upgrade.rv') . '</label>
+			<label><input id="rv-accept" class="input" type="checkbox" name="accepted" value="1">&nbsp;' . $this->translator->trans('foodsaver.upgrade.rv') . '</label>
 			<div class="input-wrapper">
 				<p><input type="submit" value="Bestätigen" class="button"></p>
 			</div>';
