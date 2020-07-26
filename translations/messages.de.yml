@@ -6,11 +6,11 @@ picture_upload_widget:
 upload:
   no_image_yet: Noch kein Bild hochgeladen
   no_image_chosen: Noch keine Datei ausgewählt
-  new_neuter: Neues
-  new_feminine: Neue
   preview_image: Vorschau
   image: Bild hochladen
+  new_image: Neues Bild hochladen
   file: Datei hochladen
+  new_file: Neue Datei hochladen
   crop_dialog_title: Bild ausschneiden
 
 button:

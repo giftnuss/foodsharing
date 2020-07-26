@@ -33,10 +33,12 @@
           {{ $i18n('upload.no_image_yet') }}
         </div>
         <button
-          :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
+          class="btn btn-sm btn-secondary"
+          :class="{'disabledLoading': isLoading}"
           @click.prevent="openUploadDialog"
         >
-          <span v-if="filename">{{ $i18n('upload.new_neuter') }} </span>{{ $i18n('upload.image') }}
+          <span v-if="filename">{{ $i18n('upload.new_image') }}</span>
+          <span v-else>{{ $i18n('upload.image') }}</span>
         </button>
       </div>
     </div>
@@ -51,10 +53,12 @@
         {{ $i18n('upload.no_image_chosen') }}
       </div>
       <button
-        :class="`btn btn-sm btn-secondary ${isLoading ? 'disabledLoading' : ''}`"
+        class="btn btn-sm btn-secondary"
+        :class="{'disabledLoading': isLoading}"
         @click.prevent="openUploadDialog"
       >
-        <span v-if="filename">{{ $i18n('upload.new_feminine') }} </span>{{ $i18n('upload.file') }}
+        <span v-if="filename">{{ $i18n('upload.new_file') }}</span>
+        <span v-else>{{ $i18n('upload.file') }}</span>
       </button>
     </div>
 
