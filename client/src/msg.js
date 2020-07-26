@@ -250,10 +250,19 @@ const msg = {
     msg.last_message_id = 0
   },
   loadConversation: async function (id, reload = false) {
-    if (id == msg.conversation_id && !reload) {
-      msg.scrollBottom()
-      msg.$answer.trigger('select')
-      return false
+    if (!reload) {
+      const text = msg.$answer.val().trim()
+      if (id == msg.conversation_id) {
+        msg.scrollBottom()
+        msg.$answer.trigger('select')
+        return false
+      } else if (text != '') {
+        // prompt for confirmation to make sure the user is aware of
+        // their draft potentially being moved to a new target audience
+        if (confirm(i18n('chat.confirm_draft_discard'))) {
+          msg.$answer.val('')
+        }
+      }
     }
     msg.conversation_id = id
 

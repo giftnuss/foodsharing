@@ -368,6 +368,10 @@ chat:
   error_sending_message: Das Senden der Nachricht ist fehlgeschlagen.
   empty_message: Du musst erst eine Nachricht eingeben.
   empty_recipients: Du musst erst noch Empfänger*Innen auswählen.
+  confirm_draft_discard: |
+    Du wechselst zu einer neuen Unterhaltung. Der Text im Antwortfeld wird dabei verworfen.
+
+    Wenn du diesen Dialog abbrichst, wird dein Entwurf stattdessen in die neue Unterhaltung mitgenommen.
 
 wall:
   name: Pinnwand
