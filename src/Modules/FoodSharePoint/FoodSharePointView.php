@@ -209,7 +209,7 @@ class FoodSharePointView extends View
 			$count += count($region['fairteiler']);
 			$content .= $this->twig->render('partials/listFoodSharePointsForRegion.html.twig', [
 				'region' => $region,
-				'food_share_point' => $region['fairteiler'],
+				'food_share_points' => $region['fairteiler'],
 			]);
 		}
 

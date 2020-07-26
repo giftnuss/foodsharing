@@ -1,15 +1,15 @@
-{% embed 'components/field.twig' with {'title': 'fsp.twig.n_in_region'|trans({'%count%': food_share_point|length, '%name%': region.name})} %}
+{% embed 'components/field.twig' with {'title': 'fsp.twig.n_in_region'|trans({'%count%': food_share_points|length, '%name%': region.name})} %}
     {% block content %}
         <ul class="linklist food-share-point-list">
-            {% for ft in food_share_point %}
+            {% for fsp in food_share_points %}
                 <li>
-                    <a href="/?page=fairteiler&bid={{ region.id }}&sub=ft&id={{ ft.id }}">
-                        {% if ft.picture %}
-                            <span class="image ui-corner-all" style="background-image:url({{ ft.pic.thumb }});"></span>
+                    <a href="/?page=fairteiler&bid={{ region.id }}&sub=ft&id={{ fsp.id }}">
+                        {% if fsp.picture %}
+                            <span class="image ui-corner-all" style="background-image:url({{ fsp.pic.thumb }});"></span>
                         {% else %}
                             <span class="image noimage ui-corner-all" style="background-image:url(img/foodSharePointThumb.png);"></span>
                         {% endif %}
-                        <span class="name">{{ ft.name }}</span>
+                        <span class="name">{{ fsp.name }}</span>
                         <span class="clear"></span>
                     </a>
                 </li>

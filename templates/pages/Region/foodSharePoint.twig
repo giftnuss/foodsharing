@@ -2,9 +2,9 @@
 {% extends 'pages/Region/baseRegion.twig' %}
 
 {% block main %}
-    {%  include 'partials/listFoodSharePointsForRegion.html.twig' with {'region': region, 'food_share_point': food_share_point} %}
+    {%  include 'partials/listFoodSharePointsForRegion.html.twig' with {'region': region, 'food_share_points': food_share_points} %}
 {% endblock %}
 
 {% block right %}
-    {{ sidenav.menu_tree({'items': {'href': '/?page=fairteiler&bid=' ~ region.id ~ '&sub=add', 'name': 'fsp.new'|trans() }}, 'options'|trans) }}
+    {{ sidenav.menu_tree({'items': {'href': '/?page=fairteiler&bid=' ~ region.id ~ '&sub=add', 'name': 'fsp.new'|trans }}, 'options'|trans) }}
 {% endblock %}

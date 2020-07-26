@@ -253,7 +253,7 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($this->translator->trans('terminology.fsp'));
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$bezirk_ids = $this->gateway->listIdsForDescendantsAndSelf($region['id']);
-		$viewdata['food_share_point'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);
+		$viewdata['food_share_points'] = $this->foodSharePointGateway->listActiveFoodSharePoints($bezirk_ids);
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 
