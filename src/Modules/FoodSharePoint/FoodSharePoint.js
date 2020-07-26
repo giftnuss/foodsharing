@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import '@/core'
 import '@/globals'
-import $ from 'jquery'
 import 'jquery-tagedit'
 import 'jquery-tagedit-auto-grow-input'
 import 'jquery-jcrop'
@@ -25,10 +24,6 @@ vueRegister({
 expose({
   pictureCrop,
   pictureReady
-})
-
-$('#wall-submit').on('mousedown', function () {
-  $('#ft-public-link').trigger('click')
 })
 
 const sub = GET('sub')

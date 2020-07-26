@@ -145,17 +145,6 @@ class FoodSharePointControl extends Control
 			$this->foodSharePoint['urlname'] = $this->identificationHelper->id($this->foodSharePoint['urlname']);
 			$this->foodSharePoint['urlname'] = str_replace('_', '-', $this->foodSharePoint['urlname']);
 
-			$this->pageHelper->addHidden(
-				'
-				<a href="#ft-fbshare" id="ft-public-link" target="_blank">&nbsp;</a>
-				<input type="hidden" name="ft-name" id="ft-name" value="' . $this->foodSharePoint['name'] . '" />
-				<input type="hidden" name="ft-id" id="ft-id" value="' . $this->foodSharePoint['id'] . '" />
-				<input type="hidden" name="ft-urlname" id="ft-urlname" value="' . $this->foodSharePoint['urlname'] . '" />
-				<input type="hidden" name="ft-bezirk" id="ft-bezirk" value="' . $this->region['urlname'] . '" />
-				<input type="hidden" name="ft-publicurl" id="ft-publicurl" value="' . BASE_URL . '/' . $this->region['urlname'] . '/fairteiler/' . $this->foodSharePoint['id'] . '_' . $this->foodSharePoint['urlname'] . '" />
-				'
-			);
-
 			if ($request->query->has('delete') && $this->foodSharePointPermissions->mayDeleteFoodSharePointOfRegion($this->regionId)) {
 				$this->delete();
 			}
