@@ -22,6 +22,19 @@ class ChatCest
 
 	public function CanSendAndReceiveChatMessages(AcceptanceTester $I)
 	{
+		// Activate chat notifications by mail
+		$I->login($this->foodsaver2['email']);
+
+		$I->amOnPage('?page=settings&sub=info/');
+		$I->selectOption('form input[name=infomail_message]', '1');
+		$I->click('Speichern');
+		$I->see('Änderungen wurden gespeichert.');
+		$I->seeInDatabase('fs_foodsaver', [
+			'id' => $this->foodsaver2['id'],
+			'infomail_message' => '1'
+		]);
+		$I->logout();
+
 		$I->login($this->foodsaver1['email']);
 
 		// view the other users profile and start a chat
