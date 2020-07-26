@@ -4,6 +4,7 @@
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
+- Disable chat notification by mail for new users. #949 !1620 @chriswalg
 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
