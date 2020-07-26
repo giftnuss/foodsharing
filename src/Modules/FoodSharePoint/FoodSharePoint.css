@@ -6,6 +6,10 @@
   background-repeat: no-repeat;
 }
 
+.fsp-desc {
+  overflow-wrap: break-word;
+}
+
 /* food share point list */
 ul.food-share-point-list li a span.image {
   display: block;
