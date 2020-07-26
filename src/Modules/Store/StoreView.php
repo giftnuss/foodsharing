@@ -160,7 +160,9 @@ class StoreView extends View
 
 			$this->v_utils->v_form_checkbox('lebensmittel', ['values' => $lebensmittel_values]),
 			$this->v_utils->v_form_date('begin'),
-			$this->v_utils->v_form_textarea('besonderheiten'),
+			$this->v_utils->v_form_textarea('besonderheiten', [
+				'desc' => $this->v_utils->v_info($this->translator->trans('info.md'), false, '<i class="fab fa-markdown fa-2x d-inline align-middle text-muted"></i>')
+			]),
 			$this->v_utils->v_form_textarea('public_info', ['maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig:</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>']),
 			$this->v_utils->v_form_select('public_time', ['values' => [
 				['id' => 0, 'name' => 'Keine Angabe'],
