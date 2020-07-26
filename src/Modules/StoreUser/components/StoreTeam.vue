@@ -9,10 +9,10 @@
   Check `tableSortFunction` (and StoreGateway:getStoreTeam) for details.
   -->
   <div :class="['bootstrap store-team', `team-${storeId}`]">
-    <div class="head ui-widget-header ui-corner-top">
+    <div class="head ui-widget-header ui-corner-top d-flex justify-content-between">
       <span>{{ $i18n('store.teamName', { storeTitle }) }}</span>
 
-      <div class="float-right">
+      <div class="align-self-center">
         <a
           v-if="mayEditStore"
           v-b-tooltip.hover.top="$i18n(managementModeEnabled ? 'store.sm.managementToggleOff' : 'store.sm.managementToggleOn')"
