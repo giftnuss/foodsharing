@@ -142,7 +142,7 @@
             rel="nofollow noopener"
           ><img
             src="/img/denns_logo_100.png"
-            alt="Denn's Biomarkt"
+            alt="Denn's - Wir sind Bio."
           ></a>
         </span>
       </div>
