@@ -33,7 +33,8 @@
       v-else-if="callText"
       @click="copyIntoClipboard(callText)"
     >
-      <i class="fas fa-fw fa-phone-slash" />
+      <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+      <i class="fas fa-fw" :class="[canCopy ? 'fa-clone' : 'fa-phone-slash']" />
       <span v-if="canCopy">{{ $i18n('pickup.copyNumber') }}</span>
       <span v-else>{{ callText }}</span>
     </b-dropdown-item>

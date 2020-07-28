@@ -81,12 +81,22 @@
 
         <template v-slot:cell(call)="data">
           <b-button
+            v-if="data.item.callable || !data.item.copyNumber"
             variant="link"
             class="member-call"
             :href="data.item.callable"
             :disabled="!data.item.callable"
           >
             <i class="fas fa-fw fa-phone" />
+          </b-button>
+          <b-button
+            v-else-if="data.item.copyNumber"
+            variant="link"
+            class="member-call copy-clipboard"
+            href="#"
+            @click.prevent="copyIntoClipboard(data.item.copyNumber)"
+          >
+            <i class="fas fa-fw fa-clone" />
           </b-button>
         </template>
 
@@ -165,7 +175,7 @@ import compareAsc from 'date-fns/compareAsc'
 
 import i18n from '@/i18n'
 import { callableNumber } from '@/utils'
-import { xhrf, chat } from '@/script'
+import { xhrf, chat, pulseSuccess } from '@/script'
 import MediaQueryMixin from '@/utils/VueMediaQueryMixin'
 
 import StoreManagementPanel from './StoreManagementPanel'
@@ -216,6 +226,16 @@ export default {
     },
     toggleTeamDisplay () {
       this.displayMembers = !this.displayMembers
+    },
+    canCopy () {
+      return !!navigator.clipboard
+    },
+    copyIntoClipboard (text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          pulseSuccess(i18n('pickup.copiedNumber', { number: text }))
+        })
+      }
     },
     toggleActions (row) {
       const wasOpen = row.detailsShowing
@@ -330,6 +350,7 @@ export default {
         name: fs.name,
         number: fs.handy || fs.telefon || '',
         callable: callableNumber(fs.handy) || callableNumber(fs.telefon) || '',
+        copyNumber: callableNumber(fs.handy, true) || callableNumber(fs.telefon, true) || '',
         phone: fs.telefon,
         joinDate: fs.add_date ? fromUnixTime(fs.add_date) : null,
         lastPickup: fs.last_fetch ? fromUnixTime(fs.last_fetch) : null,
@@ -411,6 +432,8 @@ export default {
         padding: 10px;
         align-self: center;
         color: var(--fs-green);
+
+        &.copy-clipboard { opacity: 0.7; }
 
         &:hover {
           background-color: var(--fs-green);
