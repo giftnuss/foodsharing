@@ -1,15 +1,13 @@
 # Unreleased
 
 ## Major changes
-- New store-team list
+- New store-team list !1499 !1591 !1593 !1621 @ChrisOelmueller
+- Workgroup Function: Welcome to workgroup #945 !1544 !1612 @fs_k
 
 ## Features
-- Welcome Bell only for welcome group Admins #945 !1612 @fs_k
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
 - Allow opening bell notifications in new tab #912 !1540 @ChrisOelmueller
-- Added Workgroup Function: Welcome to workgroup !1544 @fs_k
 - Add integration with BigBlueButton video conferencing system !1561 @NerdyProjects
-- Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
 - Show an error notification if the user is redirected from a region page to the dashboard !1571 @alex.simm
 - Better highlight the position picker input-box !1583 !1586 @ChrisOelmueller
 - Removed faq and replaced to external freshdesk support form in top and footer menu #817 !1587 @chriswalg
@@ -20,6 +18,7 @@
 - Disabled report link on profile page and Xhr functions for sending reports !1610 @alex.simm
 - Store managers can toggle team list mode to sort by last pickup !1593 @ChrisOelmueller
 - Public profile page, to allow checking badge validity #688 !1604 @ChrisOelmueller
+- Ask whether message draft should be kept when switching between chat conversations !1621 @ChrisOelmueller
 
 ## Bugfixes
 - Clarify that new forum threads won't reach members inactive for more than six months !1553 ("merging" !1385 and !1233) @zommuter
@@ -32,6 +31,7 @@
 - Fix creation and deletion of buddy bells !1618 #942 @alex.simm
 
 ## Refactoring
+- Update to Symfony 5 / FOSRestBundle 3 !1573 @NerdyProjects
 - Move master-update function for regions to the rest controller !1547 @alex.simm 
 - Add missing endpoint for deleting forum threads !1545 #913 @alex.simm
 - Use rest endpoints for basket deletion and the coordinates on the baskets map !1550 @alex.simm 
@@ -39,8 +39,6 @@
 - Some refactorings from StoreModel to StoreGateway !1196 !1554 !1558 #9 @svenpascal @alex.simm
 - Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 !1597 @ChrisOelmueller
 - Rewrite store team list in Vue !1499 !1591 @ChrisOelmueller
-- Modernize icon handling of store bells + fairteiler bells #907 !1560 !1566 @ChrisOelmueller
-- Rewrite store team list in Vue !1499 !1591 !1593 @ChrisOelmueller
 - Increase phpstan analysis level to 2 and fix all issues !1575 @NerdyProjects
 - Use Request/Response objects in the application entry points !1576 @\_fridtjof_
 - Do not show unsubscribed email subscriptions for forum threads in notification settings #893 !1570 @chriswalg
