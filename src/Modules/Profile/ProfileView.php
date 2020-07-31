@@ -170,7 +170,7 @@ class ProfileView extends View
 			</a>
 		</div>';
 
-			if (false && $this->session->isAdminFor($date['bezirk_id']) || $this->session->isOrgaTeam()) {
+			if ($this->session->isAdminFor($date['bezirk_id']) || $this->session->isOrgaTeam()) {
 				$out .= '
 		<div class="col flex-grow-0 flex-shrink-1">
 			<a class="btn btn-sm btn-secondary" href="#" onclick="ajreq(\'deleteSinglePickup\',{app:\'profile\',fsid:' . $this->foodsaver['id'] . ',storeId:' . $date['betrieb_id'] . ',date:' . $date['date_ts'] . '});return false;">austragen</a>
