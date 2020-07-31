@@ -90,7 +90,7 @@
             <i class="fas fa-fw fa-phone" />
           </b-button>
           <b-button
-            v-else-if="data.item.copyNumber"
+            v-else-if="data.item.copyNumber && canCopy"
             variant="link"
             class="member-call copy-clipboard"
             href="#"
