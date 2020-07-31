@@ -42,7 +42,7 @@
       </span>
       <span
         v-if="user.fetchCount && user.lastPickup"
-        :class="[storeManagerView ? 'font-weight-bolder' : 'text-muted']"
+        :class="[storeManagerView ? 'font-weight-bolder text-black-50' : 'text-muted']"
       >
         {{ storeManagerView ?
           $i18n('store.lastPickup', { date: $dateFormat(user.lastPickup, 'day') }) :
