@@ -50,7 +50,7 @@ final class ProfileControl extends Control
 			$this->routeHelper->goPage('dashboard');
 		}
 
-		$viewerId = $this->session->id() || -1; // -1 carries special meaning for `profileGateway:getData`
+		$viewerId = $this->session->id() ?? -1; // -1 carries special meaning for `profileGateway:getData`
 		$data = $this->profileGateway->getData($profileId, $viewerId, $this->reportPermissions->mayHandleReports());
 		$isRemoved = (!$data) || isset($data['deleted_at']);
 
