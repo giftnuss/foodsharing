@@ -179,9 +179,10 @@ class ProfileView extends View
 			$out .= '
 	</div>';
 		}
-
-		return $out . '
+		$out .= '
 </div>';
+
+		return $out . '</div>';
 	}
 
 	private function photo(bool $profileVisitorMayAdminThisFoodsharer, bool $profileVisitorMaySeeHistory): string
