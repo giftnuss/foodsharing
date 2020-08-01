@@ -453,17 +453,27 @@ i {
 }
 
 .pageImage {
-  margin-left: 20px;
-  margin-right:20px;
-  margin-bottom: 20px;
+  margin: 0.5rem 1rem;
+  margin-top: 0;
 }
-
-.pageImageFloatRight {
-  margin-left: 20px;
+.pageImage.right {
+  margin-right: 0;
   float: right;
 }
-
-.pageImageFloatLeft {
-  margin-right: 20px;
+.pageImage.left {
+  margin-left: 0;
   float: left;
+}
+.pageImage.clear {
+  clear: both;
+}
+@media (max-width: 627px) {
+  .pageImage,
+  .pageImage.left,
+  .pageImage.right {
+    float: none;
+    display: block;
+    margin: 0.5rem auto;
+    max-width: 100%;
+  }
 }
