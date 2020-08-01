@@ -1,10 +1,10 @@
 ## Release "Birne" (pear), August of 2020 - English, highly abridged Version:
 
 The possibly two biggest changes (from a single FS' point of view):
-**Please check if your phone number** is stored in your profile with the correct country code. We implemented a way to directly call numbers that are stored in the database like "+49 176 12345678". A number of other ways to write the phone number are not accepted by the system any more.
+**Please check if your phone number** is stored in your profile with the correct country code. We implemented a way to directly call numbers that are stored in the database like "+49 176 12345678".
+Other ways to write the phone number are not auto-callable by the system. In those cases, copying the number into your clipboard and pasting it into the dialer app would a workaround. We've provided buttons to copy where possible!
 
-As you have already read [in the BOT forum](https://foodsharing.de/?page=bezirk&bid=881&sub=forum&tid=107714): To take stress off the BOT team, it is now possible to hand over the **greetings of new food savers** to a local AG. The AG members will then get the appropriate rights and a bell notification for new registrations.
-
+As you have already read [in the BOT forum](https://foodsharing.de/?page=bezirk&bid=881&sub=forum&tid=107714): To lighten the BOT team workload, it is now possible to hand over the task of **greeting new food savers** to a local workgroup (AG). Administrators of that workgroup will then receive the appropriate rights and a bell notification upon new registrations.
 
 If you feel the need for a better English version, [please contact us](https://foodsharing.de/?page=content&sub=contact). We'll be glad to regularly provide an English version as well, if you help us translate or proofread.
 
@@ -18,9 +18,11 @@ If you feel the need for a better English version, [please contact us](https://f
 
 Wir wurden gefragt: "**Warum heißt das (letzte) Release Apfelsine** - bedeutet das etwas?" Die Idee dahinter ist, dass ein schöner Name uns für die Arbeit motiviert und das Zählen der Versionen etwas heiterer macht. Dieses Release heißt "Birne", das nächste wird "Cranberry" heißen.
 
-Wir wurden weiterhin gefragt: "**Wie kann ich am besten helfen**?" Dafür gibt es verschiedene AGs und Möglichkeiten wie unsere Hack-Events. (Das nächste ist übrigens schon bald: [21. bis 23. August 2020](https://codi.kanthaus.online/foodsharing-hackweek_August2020?both) ) Schreib uns einfach eine Nachricht über das [Support-Portal](https://foodsharing.de/?page=content&sub=contact), dann nehmen wir Kontakt mit dir auf.
+Wir wurden weiterhin gefragt: "**Wie kann ich am besten helfen**?" Dafür gibt es verschiedene AGs und Möglichkeiten wie unsere Hack-Events. (Das nächste ist übrigens schon bald: [21. bis 23. August 2020](https://codi.kanthaus.online/foodsharing-hackweek_August2020?both) ) Schreib uns bei Interesse einfach eine Nachricht über das [Support-Portal](https://foodsharing.de/?page=content&sub=contact), dann nehmen wir Kontakt mit dir auf. Du kannst diese Info auch gern an potentiell Interessierte weiterleiten!
 
-Mit dem Release der neuen Software-Version sind weitere Funktionen verfügbar. Allerdings wirst du gar nicht alle Änderungen merken, auch wenn einige wirklich viel Arbeit gemacht haben. Zum Beispiel sind wir Fehlermeldungen angegangen, haben den Software-Code modernisiert und Layout-Verbesserungen vorgenommen. Die bemerkt man seltener als eine neue Funktion, aber sie machen die Seite stabil und zukunftsfähig. Aktuell ist unser ehrenamtliches Team sehr ausgelastet und freut sich stets über Unterstützung: Wenn es eine neue Funktion gibt, die du gerne programmiert sehen willst, ist es am besten, du findest selbst Entwickler\*innen, die Lust haben, diese zu implementieren.
+Mit dem Release der neuen Software-Version sind weitere Funktionen verfügbar. Allerdings wirst du gar nicht alle Änderungen merken, auch wenn manche davon wirklich viel Arbeit gemacht haben.
+Zum Beispiel sind wir Fehlermeldungen angegangen, haben den Software-Code modernisiert, Layout-Verbesserungen vorgenommen, Übersetzungen ermöglicht und vieles mehr.
+All das fällt beim Benutzen seltener als eine neue Funktion, Instandhaltung macht die Seite jedoch stabiler und zukunftsfähig. Aktuell ist unser ehrenamtliches Team sehr ausgelastet und freut sich daher stets über Unterstützung!
 
 Wir haben [Notizen im Changelog](https://foodsharing.de/?page=content&sub=changelog) gesichtet, diskutiert und formuliert. Nun haben wir bündig zusammengefasst, was sich für dich ändert, wenn du Foodsharer\*in oder Foodsaver\*in, BV oder BOT bist.
 
@@ -31,79 +33,82 @@ Es gab verschiedene Schreibweisen für [Fairteiler](https://wiki.foodsharing.de/
 Wenn du nicht als Nutzer\*in eingeloggt bist und einen Profillink über den Ausweis-QR-Code aufrufst, erreichst du jetzt eine **Statusseite**, ob der*\-oder die\*jenige verifiziert ist.
 (Referenz:!1604)
 
-Es ist jetzt möglich, einen Cookie so zu hinterlegen, dass du auch bei einem Neustart des Browsers bei foodsharing **angemeldet bleibst**. Abgemeldet wirst du, wenn du mal 14 Tage lang die Seite nicht aufrufen solltest.
+Es ist jetzt beim Login möglich, einen Cookie so zu hinterlegen, dass du auch bei einem Neustart des Browsers bei foodsharing **angemeldet bleibst**. Abgemeldet wirst du, wenn du mal 14 Tage lang die Seite nicht aufrufen solltest.
 (Referenz: !1585) 
 
 Wo früher "Oft gestellte Fragen" (**FAQ**) beantwortet wurden, findest du jetzt eine schicke neue Seite mit der gleichen Funktion: 
 https://foodsharing.freshdesk.com   
-Mit freshdesk können unsere Leute im Support besser arbeiten als bisher (hoffen wir :grin:).  
+Mit freshdesk können unsere Leute im Support euch noch besser unterstützen als bisher (hoffen wir :grin:).  
 #### Dort kannst du insbesondere:
 * bekannte und bewährte Lösungen finden
-* über das Formular Anfragen stellen und direkt Videos / Screenshots mit hochladen
-* dich selbst für den Support bewerben (wir freuen uns über Unterstützung)
+* über das Formular Anfragen stellen und direkt Videos / Screenshots ergänzend hochladen
+* dich selbst für den Support bewerben (wir freuen uns über Unterstützung!)
 (Referenz: !1587)
 
-In deinem Profil wird eine Warnung gezeigt, wenn unsere Mails deine private E-Mail-Adresse nicht mehr erreichen (= wenn du auf der **"Bounce Liste"** von foodsharing gelandet bist).
+In deinem Profil wird eine Warnung gezeigt, wenn unsere Mails deine private E-Mail-Adresse nicht mehr erreichen (d.h. wenn du auf der **"Bounce Liste"** von foodsharing gelandet sein solltest).
 [Falls du besagte Warnung siehst, lies bitte diesen Artikel in Freshdesk](https://foodsharing.freshdesk.com/support/solutions/articles/77000299947-e-mail-sperre-im-profil). (Referenz: !1572) 
 
 **Mails, die deinen Zugang zum Account betreffen**, zum Beispiel "Passwort vergessen" oder "E-Mail-Adresse ändern", werden jetzt schneller versendet als andere Benachrichtigungen.
 (Referenz: !1557) 
 
-Wir haben das Verhalten von **Glockenbenachrichtigungen** überarbeitet. Beispielsweise haben jetzt Fairteilerposts ein eigenes Icon und beim Anklicken einer Benachrichtigung "mit mittlerer Maustaste" wird ein neuer Tab geöffnet.
+Wir haben das Verhalten von **Glockenbenachrichtigungen** überarbeitet. Beispielsweise haben jetzt Fairteilerposts ein eigenes Icon, Betriebs-Glocken sehen nicht alle gleich aus, und das Anklicken einer Benachrichtigung "mit mittlerer Maustaste" (um sie in einem neuen Tab zu öffnen) ist nun möglich.
 (Referenz: !1504, !1566, !1560, !1540)
 
 ## Foodsharer\*in und Foodsaver\*in
 **Bitte prüf einmal, ob deine Rufnummer [im Profil](foodsharing.de/?page=settings&sub=general) mit Ländervorwahl hinterlegt ist**. 
-(*Richtig* ist beispielsweise: "+49 176 123 456 78" oder "+49 3371 123456". 
-*Nicht gültig* sind beispielsweise: "0176 123 456 78" oder "0176-123..." oder "0176/123..." oder "+49(176)...") 
-In der Regel wird die Möglichkeit, jemanden anzurufen, **nur mit korrekt hinterlegter Ländervorwahl** in Betriebslisten angezeigt.
+(*Richtig* ist beispielsweise: "+49 176 123 456 78" oder "+49 3371 123456" oder auch "+49(176)...". 
+*Nicht* automatisch anrufbar sind beispielsweise: "0176 123 456 78", nicht gültig beispielsweise "+49(0)176 123 456 78")
+Die Möglichkeit, jemanden direkt anzurufen, wird **nur mit korrekt hinterlegter Ländervorwahl** in Betriebslisten und Abhol-Slots angezeigt. Ansonsten muss der Text kopiert und in der Anruf-App eingefügt werden.
 
-In **Teamlisten von Betrieben** hatten alle FS, die das Quiz für Botschafter\*innen (BOT-Quiz) bestanden hatten, einen orangenen Rahmen ums Profilbild. Diese Rahmen sind nicht mehr vorhanden, weil sie in diesem Kontext keinen Sinn ergeben.
-Wenn du deine Botschafter\*innen suchst, klickst du oben links auf Bezirke, wählst deinen Bezirk aus, klickst beispielsweise auf "Forum" - und da sind die BOTs dann nach wie vor hervorgehoben.
+In **Teamlisten von Betrieben** hatten alle FS, die das Quiz für Botschafter\*innen (BOT-Quiz) bestanden hatten, einen orangenen Rahmen ums Profilbild. Diese Rahmen sind nun an der Stelle nicht mehr vorhanden, weil sie in diesem Betriebs-Kontext eher Verwirrung erzeugt als geholfen haben.
+Wenn du deine Botschafter\*innen suchst, klickst du oben links auf Bezirke, wählst deinen Bezirk aus, klickst beispielsweise auf "Forum" - und da sind dann die aktiven BOTs aufgelistet, ohne ehemalige oder welche aus anderen Bezirken :)
 
-Ebenfalls neu in der Betriebsliste: Die Profile der Betriebsverantwortlichen sind jetzt oben fixiert, farblich hervorgehoben und leichter zu finden.
+Ebenfalls neu in der Betriebsliste: Die Profile der Betriebsverantwortlichen sind jetzt oben fixiert, farblich hervorgehoben und leichter zu finden. Das ersetzt die Box, die zuvor ganz unten platziert war.  
+Außerdem haben wir zur besseren Erkennbarkeit die Profilbilder vergrößert. Ein Klick auf das Bild leitet dich nun direkt auf das Profil weiter.
 
-Es gibt jetzt **kein Drop-Down-Menü mehr**, wenn du in deinem Betrieb einen FS anklickst. Dadurch hat sich das Design ein wenig verändert, insbesondere für BVs. 
+Es gibt jetzt übrigens **kein Drop-Down-Menü mehr**, wenn du in deinem Betrieb einen FS anklickst. Dadurch hat sich das Design ein wenig verändert, insbesondere für BVs. Die Funktionen klappen jetzt nach Klick auf den Namen in einer Box auf.  
 Hier sind einige Screenshots, die zeigen, wie es für Betriebsverantwortliche aussieht:
-Hier sind die Änderungen noch genauer beschrieben:
+Hier sind die Änderungen an der Betriebs-Liste für Interessierte noch genauer beschrieben:
 https://gitlab.com/foodsharing-dev/foodsharing-beta-testing/-/issues/14
 (Referenz: !1499)
 
-Wir haben die "Funktion der Regelverletzung" auf der Profilseite und damit das **Meldesystem für Verstöße deaktiviert**. Nähere Informationen kannst Du im [Blogpost](https://foodsharing.de/?page=blog&sub=read&id=254) nachlesen.
+Wir haben die "Funktion der Regelverletzung" auf der Profilseite und damit das **Meldesystem für Verstöße deaktiviert**. Nähere Informationen kannst Du im [Blogpost](https://foodsharing.de/?page=blog&sub=read&id=254) nachlesen. Eure BOTs oder lokalen Meldegruppen sollten euch darüber bereits informiert haben.
 (Referenz: !1610)
 
-In der **Suchleiste** oben werden Arbeitsgruppen angezeigt. Wir haben beispielsweise verändert, dass dort (unter "meine Arbeitsgruppen") diejenigen nicht mehr auftauchen, in denen du nicht aufgenommen wurdest.
+In der **Suchleiste** oben werden auch Arbeitsgruppen angezeigt. Wir haben beispielsweise verändert, dass dort unter "meine Arbeitsgruppen" diejenigen nicht mehr auftauchen, in denen du (noch) nicht aufgenommen wurdest.
 Wir haben auch die Suchfunktion angepasst, die Ergebnisse werden jetzt besser gefiltert.
 (Referenz: !1589, !1513)
 
-Wenn du für eine gemeinsame Abholung mit anderen Leuten bestätigt bist, dann - und erst dann - kannst du die **Telefonnummer von Mitabholer\*innen** im Pickup-Slot sehen. Es erscheint dort ein Menü, mit dem ein direkter Anruf möglich ist.
-Insbesondere schützt diese neue Funktion sensible Daten, z. B. gegenüber Unverifizierten und den Foodsavern der Springer-Liste.
-Wenn, liebe\*r Betriebsverantwortliche\*r, in deinem Betrieb wichtig ist, dass unverifizierte Leute die Nummern sehen können, dann nutze bitte die Pinnwand oder die Betriebsbeschreibung.
-(Referenz: !1591)
-
-Du bist in einer Arbeitsgruppe und willst eine **Videokonferenz** starten? Das geht jetzt mit BigBlueButton. (Klicke oben auf "Deine Gruppen", den Gruppentitel, "Videokonferenz".)
+Übrigens: Du bist in einer Arbeitsgruppe und willst eine **Videokonferenz** starten? Das geht jetzt direkt mit BigBlueButton, einem Open-Source-Konferenztool. Klicke dazu oben auf "Deine Gruppen", den Gruppentitel, dann auf "Videokonferenz".
 (Referenz: !1561)
 
+Wenn **unverifizierte FS** einem Team beitreten, konnten diese bislang die Telefonnummern und das letzte Abholungs-Datum von allen Leuten im Team einsehen. Das haben wir eingeschränkt und werden auch noch weiter daran arbeiten, um eine gute Balance zu finden. Aktuell sind die genannten Daten übrigens auch für Menschen auf der Springerliste versteckt, d.h. für alle, die sich nicht in Abholslots eintragen können.  
+Wenn es, liebe\*r Betriebsverantwortliche\*r, für Abläufe in deinem Betrieb wichtig ist, dass unverifizierte Leute die Nummern sehen können: nutze bitte zur Kommunikation die Pinnwand (können Unverifizierte lesen, Springer nicht) oder die Betriebsbeschreibung (können sowohl Springer wie auch Unverifizierte lesen). Bei Betrieben, in denen beispielsweise Einführungen angeboten werden, sind Pinnwand-Einträge mit der Kontakt-Info empfehlenswert.
+(Referenz: !1591)
+
+Eine häufig nachgefragte Funktion haben wir in dem Zug auch noch umgesetzt: Wenn du für kurzfristige Informationen zu einer Abholung die eingetragenen Personen anrufen möchtest, kannst du deren Telefonnummer jetzt direkt im Dropdown des Abholslots entweder anrufen oder kopieren. Ein Suchen in der Teamliste entfällt damit.
+(Referenz: !1591)
+
 ## Betriebsverantwortliche 
-Wenn du oben auf das **Einkaufswagen-Icon** klickst, stehen jetzt die Betriebe ganz oben, für die du verantwortlich ist. Das liegt vor allem daran, dass für diese Betriebe die Ampelfunktion besonders wichtig ist. Alle "Deine" Betriebe haben ein Zahnrad hinter dem Betriebsnamen.
+Wenn du oben auf das **Einkaufswagen-Icon** klickst, stehen jetzt diejenigen Betriebe ganz oben, für die du verantwortlich ist. Das liegt vor allem daran, dass für diese Betriebe die Ampelfunktion besonders wichtig ist. Alle "Deine" Betriebe haben zur Kennzeichnung ein Zahnrad hinter dem Betriebsnamen.
 (Referenz: !1546)
 
-Mit einem neuen Button (kleines Zahnrad) an der Teamübersicht können BVs nun das Team nach der letzten Abholung sortieren, um so einen schnellen Überblick der aktiven Foodsaver des Betriebs zu haben.
+Mit einem neuen Button (ebenfalls ein Zahnrad) an der Teamübersicht können BVs nun das Team nach der letzten Abholung sortieren, um so einen schnellen Überblick der aktiven Foodsaver des Betriebs zu haben. Das genaue Datum ist auch in der Standard-Ansicht weiterhin einsehbar, dazu einfach die Maus über den Namen bewegen.
 (Referenz: !1593)
 
-In der **Betriebsbeschreibung** sind neue Formatierungen in der Markdown-Syntax möglich: Du kannst jetzt Hyperlinks einbauen, Überschriften hervorheben, Text fett/kursiv machen und Aufzählungspuntke nutzen.
+In der **Betriebsbeschreibung** sind neue Formatierungen in der [Markdown-Syntax](https://markdown.de/) möglich: Du kannst jetzt Hyperlinks einbauen, Überschriften hervorheben, Text fett/kursiv machen und Aufzählungspunkte oder Linien nutzen.
 (Referenz: !1520)
 
-Wir sind dabei, die Funktion zum **Hochladen von Bildern** zu modernisieren. Bereits umgesetzt ist das *für Fairteiler*. Das bedeutet: foodsharing kann jetzt auch mit z. B. gedrehten Bildern umgehen, den Ausschnitt besser markieren etc.
-Bis das für alle Bilder umgesetzt ist, ist es noch ein langer Weg - [wir freuen uns über Unterstützung!](https://foodsharing.de/?page=content&sub=contact)
+Wir sind dabei, die Funktion zum **Hochladen von Bildern** zu modernisieren. Bereits umgesetzt ist das *für Fairteiler* und wird nun einige Zeit dafür getestet. Das bedeutet: foodsharing kann jetzt auch mit z. B. gedrehten Bildern umgehen, den Ausschnitt besser markieren etc.  
+Bis der moderne Upload für alle Bilder umgesetzt werden kann, ist es noch ein langer Weg - [wir freuen uns über Unterstützung!](https://foodsharing.de/?page=content&sub=contact)
 (Referenz: !818)
 
 ## Botschafter\*innen
-Wie ihr bereits [im BOT-Forum](https://foodsharing.de/?page=bezirk&bid=881&sub=forum&tid=107714) gelesen habt: Um das BOT-Team zu entlasten, ist es jetzt möglich, die **Begrüßung neuer Foodsaver\*innen** an eine lokale AG abzugeben. Wenn die AG eingerichtet ist, erhalten nur die Admins der AG (nicht mehr die BOTs) bei Neuanmeldungen jeweils die Glocken-Benachrichtigung.
+Wie ihr bereits [im BOT-Forum](https://foodsharing.de/?page=bezirk&bid=881&sub=forum&tid=107714) gelesen habt: Um das BOT-Team zu entlasten, ist es jetzt möglich, die **Begrüßung neuer Foodsaver\*innen** an eine lokale AG abzugeben. Wenn die AG eingerichtet ist, erhalten nur die Admins dieser AG (nicht mehr alle BOTs) bei Neuanmeldungen jeweils die Glocken-Benachrichtigung.
 (Referenz: !1612, !1544)
 
 ## AG-Admins, BOTs und Orga
-Vielleicht ist dir aufgefallen, dass in deiner Mailbox manche Mailadressen falsch angezeigt wurden. Wir haben dieses Verhalten korrigiert und E-Mail-Adressen in AG-Postfächern werden nun wieder korrekt angezeigt.
+Vielleicht ist dir aufgefallen, dass in deiner Mailbox manche Mailadressen falsch angezeigt wurden, wenn sie ungelesene Nachrichten enthalten. Wir haben dieses Verhalten korrigiert und E-Mail-Adressen in AG-Postfächern werden nun hoffentlich wieder alle korrekt angezeigt.
 (Referenz: !1600)
 
 
