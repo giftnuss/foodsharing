@@ -52,7 +52,9 @@ In deinem Profil wird eine Warnung gezeigt, wenn unsere Mails deine private E-Ma
 (Referenz: !1557) 
 
 Wir haben das Verhalten von **Glockenbenachrichtigungen** überarbeitet. Beispielsweise haben jetzt Fairteilerposts ein eigenes Icon, Betriebs-Glocken sehen nicht alle gleich aus, und das Anklicken einer Benachrichtigung "mit mittlerer Maustaste" (um sie in einem neuen Tab zu öffnen) ist nun möglich.
-(Referenz: !1504, !1566, !1560, !1540)
+(Referenz: !1504, !1566, !1560, !1540) 
+<img class="pageImage" title="Eigene Icons für die Glockenbenachrichtigungen - Bild 1" src="./img/releasenotes/august-2020-bells-1.png">
+<img class="pageImage" title="Eigene Icons für die Glockenbenachrichtigungen - Bild 2" src="./img/releasenotes/august-2020-bells-2.png">
 
 ## Foodsharer\*in und Foodsaver\*in
 **Bitte prüf einmal, ob deine Rufnummer [im Profil](foodsharing.de/?page=settings&sub=general) mit Ländervorwahl hinterlegt ist**. 
@@ -60,6 +62,7 @@ Wir haben das Verhalten von **Glockenbenachrichtigungen** überarbeitet. Beispie
 *Nicht* automatisch anrufbar sind beispielsweise: "0176 123 456 78", nicht gültig beispielsweise "+49(0)176 123 456 78")
 Die Möglichkeit, jemanden direkt anzurufen, wird **nur mit korrekt hinterlegter Ländervorwahl** in Betriebslisten und Abhol-Slots angezeigt. Ansonsten muss der Text kopiert und in der Anruf-App eingefügt werden.
 
+<img class="pageImageFloatLeft" src="./img/releasenotes/august-2020-store-team.png">
 In **Teamlisten von Betrieben** hatten alle FS, die das Quiz für Botschafter\*innen (BOT-Quiz) bestanden hatten, einen orangenen Rahmen ums Profilbild. Diese Rahmen sind nun an der Stelle nicht mehr vorhanden, weil sie in diesem Betriebs-Kontext eher Verwirrung erzeugt als geholfen haben.
 Wenn du deine Botschafter\*innen suchst, klickst du oben links auf Bezirke, wählst deinen Bezirk aus, klickst beispielsweise auf "Forum" - und da sind dann die aktiven BOTs aufgelistet, ohne ehemalige oder welche aus anderen Bezirken :)
 
@@ -67,21 +70,22 @@ Ebenfalls neu in der Betriebsliste: Die Profile der Betriebsverantwortlichen sin
 Außerdem haben wir zur besseren Erkennbarkeit die Profilbilder vergrößert. Ein Klick auf das Bild leitet dich nun direkt auf das Profil weiter.
 
 Es gibt jetzt übrigens **kein Drop-Down-Menü mehr**, wenn du in deinem Betrieb einen FS anklickst. Dadurch hat sich das Design ein wenig verändert, insbesondere für BVs. Die Funktionen klappen jetzt nach Klick auf den Namen in einer Box auf.  
-Hier sind einige Screenshots, die zeigen, wie es für Betriebsverantwortliche aussieht:
 Hier sind die Änderungen an der Betriebs-Liste für Interessierte noch genauer beschrieben:
 https://gitlab.com/foodsharing-dev/foodsharing-beta-testing/-/issues/14
 (Referenz: !1499)
-
-Wir haben die "Funktion der Regelverletzung" auf der Profilseite und damit das **Meldesystem für Verstöße deaktiviert**. Nähere Informationen kannst Du im [Blogpost](https://foodsharing.de/?page=blog&sub=read&id=254) nachlesen. Eure BOTs oder lokalen Meldegruppen sollten euch darüber bereits informiert haben.
-(Referenz: !1610)
 
 In der **Suchleiste** oben werden auch Arbeitsgruppen angezeigt. Wir haben beispielsweise verändert, dass dort unter "meine Arbeitsgruppen" diejenigen nicht mehr auftauchen, in denen du (noch) nicht aufgenommen wurdest.
 Wir haben auch die Suchfunktion angepasst, die Ergebnisse werden jetzt besser gefiltert.
 (Referenz: !1589, !1513)
 
+<img class="pageImageFloatRight" src="./img/releasenotes/august-2020-bbb-conf.png">
 Übrigens: Du bist in einer Arbeitsgruppe und willst eine **Videokonferenz** starten? Das geht jetzt direkt mit BigBlueButton, einem Open-Source-Konferenztool. Klicke dazu oben auf "Deine Gruppen", den Gruppentitel, dann auf "Videokonferenz".
 (Referenz: !1561)
 
+Wir haben die "Funktion der Regelverletzung" auf der Profilseite und damit das **Meldesystem für Verstöße deaktiviert**. Nähere Informationen kannst Du im [Blogpost](https://foodsharing.de/?page=blog&sub=read&id=254) nachlesen. Eure BOTs oder lokalen Meldegruppen sollten euch darüber bereits informiert haben.
+(Referenz: !1610)
+
+<img class="pageImageFloatLeft" src="./img/releasenotes/august-2020-slot-call.png">
 Wenn **unverifizierte FS** einem Team beitreten, konnten diese bislang die Telefonnummern und das letzte Abholungs-Datum von allen Leuten im Team einsehen. Das haben wir eingeschränkt und werden auch noch weiter daran arbeiten, um eine gute Balance zu finden. Aktuell sind die genannten Daten übrigens auch für Menschen auf der Springerliste versteckt, d.h. für alle, die sich nicht in Abholslots eintragen können.  
 Wenn es, liebe\*r Betriebsverantwortliche\*r, für Abläufe in deinem Betrieb wichtig ist, dass unverifizierte Leute die Nummern sehen können: nutze bitte zur Kommunikation die Pinnwand (können Unverifizierte lesen, Springer nicht) oder die Betriebsbeschreibung (können sowohl Springer wie auch Unverifizierte lesen). Bei Betrieben, in denen beispielsweise Einführungen angeboten werden, sind Pinnwand-Einträge mit der Kontakt-Info empfehlenswert.
 (Referenz: !1591)
@@ -90,6 +94,8 @@ Eine häufig nachgefragte Funktion haben wir in dem Zug auch noch umgesetzt: Wen
 (Referenz: !1591)
 
 ## Betriebsverantwortliche 
+<img class="pageImageFloatLeft" src="./img/releasenotes/august-2020-manage-team.png">
+<img class="pageImageFloatRight" src="./img/releasenotes/august-2020-md-desc.png">
 Wenn du oben auf das **Einkaufswagen-Icon** klickst, stehen jetzt diejenigen Betriebe ganz oben, für die du verantwortlich ist. Das liegt vor allem daran, dass für diese Betriebe die Ampelfunktion besonders wichtig ist. Alle "Deine" Betriebe haben zur Kennzeichnung ein Zahnrad hinter dem Betriebsnamen.
 (Referenz: !1546)
 
@@ -134,6 +140,7 @@ Dann schau doch mal in unseren [Aufruf zur Mitarbeit](https://devdocs.foodsharin
 Weiterhin frohes Retten!
 Für das Team: Laura, Jonathan und Christian
 
+---
 
 # Release Apfelsine Mai 2020 
 
@@ -153,15 +160,15 @@ Die Release Notes haben jetzt einen eigenen Ort. Du findest sie oben beim Inform
 
 ## Foodsharer\*in und Foodsaver\*in
 
-* Das Registrierungsformular für neue Foodsharer\*innen wurde vollständig neu entwickelt. Da wir beim Beheben von Fehlern mit alten Technologien immer wieder an Grenzen gestoßen sind, wurde das Formular in eine Mehr-Seiten-Variante mit aktueller Technologie (vue js) neu programmiert.
+Das Registrierungsformular für neue Foodsharer\*innen wurde vollständig neu entwickelt. Da wir beim Beheben von Fehlern mit alten Technologien immer wieder an Grenzen gestoßen sind, wurde das Formular in eine Mehr-Seiten-Variante mit aktueller Technologie (vue js) neu programmiert.
 Dabei haben wir an den wichtigen Stellen, umfangreiche Überprüfungen der Eingaben eingebaut. Die Eingabe vom Geburtsdatum funktioniert jetzt deutlich einfacher. Für die Eingabe einer optionalen Handynummer wurde eine Funktion zur Auswahl des Ländercodes eingebaut.
 Die Eingabe der Adresse oder das Hochladen vom Profil-Foto haben wir nicht eingebaut, da es freiwillig ist und auch später in den Einstellungen nachgeholt werden kann.
 (Referenz: !1401 )
 
-* Wir sind zu einem anderen Kartenanbieter (Geoapify) gewechselt. Die Gelegenheit haben wir genutzt, um die Kartendarstellung auf eine modernere Technologie umzustellen, wodurch die Karte jetzt mit deutlich höherer Auflösung dargestellt wird.
+Wir sind zu einem anderen Kartenanbieter (Geoapify) gewechselt. Die Gelegenheit haben wir genutzt, um die Kartendarstellung auf eine modernere Technologie umzustellen, wodurch die Karte jetzt mit deutlich höherer Auflösung dargestellt wird.
 (Referenz: !1405 !1355 )
 
-* Wenn du neu bei foodsharing bist und das Quiz bereits bestanden hast, aber du noch keinen Stammbezirk gewählt hast, bekommst du einen Hinweis und wirst zur Bezirksauswahl umgeleitet. 
+Wenn du neu bei foodsharing bist und das Quiz bereits bestanden hast, aber du noch keinen Stammbezirk gewählt hast, bekommst du einen Hinweis und wirst zur Bezirksauswahl umgeleitet. 
 (Referenz: !1123 )
 
 <img class="pageImageFloatLeft" src="./img/releasenotes/mai-2020-store-marker.png">
@@ -171,77 +178,77 @@ Wenn in der näheren Zeit keine freien Slots übrig sind, gibt es auch keine Amp
 Die ampelfarbenen Marker werden auch erklärt, wenn man mit der Maus über das Ampelsymbol fährt.
 (Referenz: !1106 !1133 !1331 !1502)
 
-* Du kannst jetzt auf dem Dashboard nach Betriebsupdates, E-Mails etc. filtern. Dazu sind die neuen Icons da.
+Du kannst jetzt auf dem Dashboard nach Betriebsupdates, E-Mails etc. filtern. Dazu sind die neuen Icons da.
 (Referenz: !735)
 
-* Du kannst jetzt einstellen, dass du für Chat-Nachrichten Push-Benachrichtigungen über den Browser (auch auf dem Smartphone) erhältst. Diese aktivierst du über die Einstellungen oder die Infobox auf dem Dashboard. (Referenz: !734 !1444 )
+Du kannst jetzt einstellen, dass du für Chat-Nachrichten Push-Benachrichtigungen über den Browser (auch auf dem Smartphone) erhältst. Diese aktivierst du über die Einstellungen oder die Infobox auf dem Dashboard. (Referenz: !734 !1444 )
 
-* Benutzer\*innen, die sich sechs Monate lang nicht eingeloggt haben, kriegen keine E-Mails mehr über Forumsbeiträge. Das heißt, wir sparen hier etwas E-Mails und du bekommst weniger automatische Mails, wenn du gerade inaktiv bist. (Referenz: !1385 )
+Benutzer\*innen, die sich sechs Monate lang nicht eingeloggt haben, kriegen keine E-Mails mehr über Forumsbeiträge. Das heißt, wir sparen hier etwas E-Mails und du bekommst weniger automatische Mails, wenn du gerade inaktiv bist. (Referenz: !1385 )
 
-* Außerdem haben wir ein neues Feld "Kurzbeschreibung" auf dem Profil eingefügt. Hier kannst Du dich (nur für angemeldeten Benutzer sichtbar) selbst beschreiben.
+Außerdem haben wir ein neues Feld "Kurzbeschreibung" auf dem Profil eingefügt. Hier kannst Du dich (nur für angemeldeten Benutzer sichtbar) selbst beschreiben.
 (Referenz: !1145 )
 
-* Wenn du dich für eine Arbeitsgruppe oder einen Bezirk bewirbst und abgelehnt wirst, kannst du dich danach erneut bewerben. (Abgelehnte Anträge werden nun gelöscht. Referenz: !1277 )
+Wenn du dich für eine Arbeitsgruppe oder einen Bezirk bewirbst und abgelehnt wirst, kannst du dich danach erneut bewerben. (Abgelehnte Anträge werden nun gelöscht. Referenz: !1277 )
 
-* Auf dem Handy (Browserversion) war es eine Zeit lang nicht möglich, Betrieben mit langen Beschreibungen beizutreten. Das ist jetzt gelöst.
+Auf dem Handy (Browserversion) war es eine Zeit lang nicht möglich, Betrieben mit langen Beschreibungen beizutreten. Das ist jetzt gelöst.
 (Referenz: !1378 )
 
-* Auch das Problem, dass Untermenüs des Burgermenüs in der mobilen Version (Browserversion) nicht vollständig lesbar waren, ist nun behoben. 
+Auch das Problem, dass Untermenüs des Burgermenüs in der mobilen Version (Browserversion) nicht vollständig lesbar waren, ist nun behoben. 
 (Referenz: !1411 )
 
-* Auf dem Handy (Browserversion) werden jetzt die letzte Abholung und der letzte Teambeitritt auf der Teamliste angezeigt.
+Auf dem Handy (Browserversion) werden jetzt die letzte Abholung und der letzte Teambeitritt auf der Teamliste angezeigt.
 (Referenz: !1335 )
 
-* Wenn die interne Adresse einer empfangenen E-Mail nicht gefunden werden kann, wird die Mail nicht mehr in 'lost@foodsharing' einsortiert. Stattdessen wird eine automatische Antwort gesendet, die besagt, dass die Adresse nicht gefunden werden konnte.
+Wenn die interne Adresse einer empfangenen E-Mail nicht gefunden werden kann, wird die Mail nicht mehr in 'lost@foodsharing' einsortiert. Stattdessen wird eine automatische Antwort gesendet, die besagt, dass die Adresse nicht gefunden werden konnte.
 
 Der Text dieser Email ist noch etwas kurz und könnte durch etwas Schöneres ersetzt werden. Jede Idee ist willkommen :)
 (Referenz: !1346 )
 
-* Aus deiner foodsharing-Mailbox können Mails nun auch mit Leerzeichen versendet werden. Das heißt, es macht für den Versand nichts mehr aus, wenn eine Mailadresse versehentlich mit Leerzeichen eingetragen wird.
+Aus deiner foodsharing-Mailbox können Mails nun auch mit Leerzeichen versendet werden. Das heißt, es macht für den Versand nichts mehr aus, wenn eine Mailadresse versehentlich mit Leerzeichen eingetragen wird.
 (Referenz: !1372 )
 
-* Wir haben die [Statistik-Seite](https://foodsharing.de/statistik) um Informationen erweitert. (Referenz: !1351 )
+Wir haben die [Statistik-Seite](https://foodsharing.de/statistik) um Informationen erweitert. (Referenz: !1351 )
 
-* Wir haben einen grafischen Fehler behoben, durch den zum Beispiel Links in der Betriebsbeschreibung über den Seitenrand hinausreichten. (Referenz: !1269 )
+Wir haben einen grafischen Fehler behoben, durch den zum Beispiel Links in der Betriebsbeschreibung über den Seitenrand hinausreichten. (Referenz: !1269 )
 
-* Die Darstellung vom Dashboard wurde für Smartphones oder kleine Bildschirme verbessert. (Referenz: !1494) 
+Die Darstellung vom Dashboard wurde für Smartphones oder kleine Bildschirme verbessert. (Referenz: !1494) 
 
-* Nur als Info: Es kam ab und zu vor, dass Foodsaver\*innen ihre Accounts gelöscht haben, als sie die Datenschutzrichtlinie akzeptiert haben. Daher wurden nun die Farbe und die Formulierung angepasst, sodass klarer ist, dass bei Ablehnung der Richtlinie der Account gelöscht wird.
+Nur als Info: Es kam ab und zu vor, dass Foodsaver\*innen ihre Accounts gelöscht haben, als sie die Datenschutzrichtlinie akzeptiert haben. Daher wurden nun die Farbe und die Formulierung angepasst, sodass klarer ist, dass bei Ablehnung der Richtlinie der Account gelöscht wird.
 (Referenz: !1318)
 
 ## Betriebsverantwortliche 
 
-* Wir haben neben vielen kleinen Fehlern einen großen ausgemerzt, bei dem Mailboxen nicht erstellt wurden.
+Wir haben neben vielen kleinen Fehlern einen großen ausgemerzt, bei dem Mailboxen nicht erstellt wurden.
 Die beeinträchtigten FS können jetzt auch wieder Visitenkarten erstellen. (Referenz: !1356 )
 
-* Deine persönliche foodsharing-Mailadresse siehst du nun auf deinem Profil. Die Mailadresse ist nur für dich und Personen mit Orga-Rechten sichtbar.(Referenz: !1387 )
+Deine persönliche foodsharing-Mailadresse siehst du nun auf deinem Profil. Die Mailadresse ist nur für dich und Personen mit Orga-Rechten sichtbar.(Referenz: !1387 )
 
 <img class="pageImageFloatRight" src="./img/releasenotes/mai-2020-store-fs-verified.png">
-* Visitenkarten mit langen Bezirksnamen werden jetzt auch wieder korrekt erstellt. (Referenz: !1362 )
+Visitenkarten mit langen Bezirksnamen werden jetzt auch wieder korrekt erstellt. (Referenz: !1362 )
 
-* Bewerben sich FS als Abholer\*innen in einem Betrieb, siehst du nun an einem neuen Symbol, ob die Person bereits verifiziert ist. (Referenz: !1294 )
+Bewerben sich FS als Abholer\*innen in einem Betrieb, siehst du nun an einem neuen Symbol, ob die Person bereits verifiziert ist. (Referenz: !1294 )
 
-* Der Button zum Anlegen neuer Betriebe passt jetzt besser ins Design. (Referenz: !1282 !1339 )
+Der Button zum Anlegen neuer Betriebe passt jetzt besser ins Design. (Referenz: !1282 !1339 )
 
 ## Botschafter\*innen
 
-* Bisher wurden bei ausgehenden Mails keine Zeilenumbrüche angezeigt. Dies ist jetzt behoben. (Referenz: !1317 !1344 )
+Bisher wurden bei ausgehenden Mails keine Zeilenumbrüche angezeigt. Dies ist jetzt behoben. (Referenz: !1317 !1344 )
 
-* In der Liste bei der Ausweiserstellung sind die Namen der Foodsaver\*innen nun alphabetisch pro Bezirk sortiert. Die Auflistung der AGs wurde entfernt.  (Referenz: !1310)
+In der Liste bei der Ausweiserstellung sind die Namen der Foodsaver\*innen nun alphabetisch pro Bezirk sortiert. Die Auflistung der AGs wurde entfernt.  (Referenz: !1310)
 
 <img class="pageImageFloatRight" src="./img/releasenotes/mai-2020-choosing-mails-sending-forum.png">
-* Als BOT kannst du jetzt bei unmoderierten Foren wie dem Europaforum auswählen, ob alle in der Region und damit im Forum per Mail über neue Beiträge informiert werden sollen. 
+Als BOT kannst du jetzt bei unmoderierten Foren wie dem Europaforum auswählen, ob alle in der Region und damit im Forum per Mail über neue Beiträge informiert werden sollen. 
 Das sollte unsere Maillast etwas verringern. (Referenz: !1233)
 
 
 ## AG-Admins und Orga
-* Es ist jetzt wieder möglich, Blog-Beiträge zu veröffentlichen, zu bearbeiten und zu löschen. (Referenz: !1349 )
+Es ist jetzt wieder möglich, Blog-Beiträge zu veröffentlichen, zu bearbeiten und zu löschen. (Referenz: !1349 )
 
 ## Orga
 
-* Personen mit Orga-Rechten können nun die Rollen anderer Benutzer\*innen ändern. (Referenz: !1322 !1323 )
+Personen mit Orga-Rechten können nun die Rollen anderer Benutzer\*innen ändern. (Referenz: !1322 !1323 )
 
-* Beiträge auf Fairteiler-Pinnwänden können jetzt gelöscht werden. Admins der Arbeitsgruppen können wieder die Wall für Bewerber sehen. (Referenz: !1359 )
+Beiträge auf Fairteiler-Pinnwänden können jetzt gelöscht werden. Admins der Arbeitsgruppen können wieder die Wall für Bewerber sehen. (Referenz: !1359 )
 
 ---
 ## App
@@ -250,11 +257,11 @@ Die folgenden Änderungen gelten für die Android-App. Leider gibt es aktuell ke
 
 
 #### Was ist neu?
-* Du kannst nun auch Text von jeder anderen App über foodsharing teilen. Diese Funktion kannst du ganz einfach nutzen, wenn du über "Teilen" die foodsharing-App auswählst. (Referenz: android!195)
+Du kannst nun auch Text von jeder anderen App über foodsharing teilen. Diese Funktion kannst du ganz einfach nutzen, wenn du über "Teilen" die foodsharing-App auswählst. (Referenz: android!195)
 
-* Die Pinnwände von Fairteilern werden jetzt auch in der App angezeigt und du kannst mit der App neue Einträge erstellen. Leider ist es momentan noch nicht möglich neue Bilder über die App hochzuladen, aber das schaffen wir bestimmt bis zum nächsten Release. (Referenz: android!193)
+Die Pinnwände von Fairteilern werden jetzt auch in der App angezeigt und du kannst mit der App neue Einträge erstellen. Leider ist es momentan noch nicht möglich neue Bilder über die App hochzuladen, aber das schaffen wir bestimmt bis zum nächsten Release. (Referenz: android!193)
 
-* Wenn du einen Essenskorb erstellt hast, kannst du das Foto auch später jederzeit ändern. Dabei kannst du entscheiden, ob du ein Foto aus deiner Galerie wählen oder ein neues machen möchtest. Essenskörbe werden in der Liste jetzt mit Foto dargestellt. 
+Wenn du einen Essenskorb erstellt hast, kannst du das Foto auch später jederzeit ändern. Dabei kannst du entscheiden, ob du ein Foto aus deiner Galerie wählen oder ein neues machen möchtest. Essenskörbe werden in der Liste jetzt mit Foto dargestellt. 
   Das Design der Essenskörbe ist nun angepasst an die Website. Das heißt, die aktuelle Anzahl der Anfragen wird angezeigt, du kannst eine Anfrage für den Essenskorb stellen, deine bisherige Anfrage zurückziehen oder eine Nachricht an den/die Ersteller\*in schreiben.
   Wenn du der Standortbestimmung durch die App zustimmst, wird dir auch die Distanz zum Essenskorb angezeigt. Auch die Gruppierung der Icons wurde optimiert, damit es nicht mehr zu Icon-Überschneidungen kommt.
 (Referenz: android!181 android!182 android!177 android!180 android!179 android!183 android!190 )
@@ -262,9 +269,9 @@ Die folgenden Änderungen gelten für die Android-App. Leider gibt es aktuell ke
   <img src="./img/releasenotes/mai-2020-android-essenskoerbe.jpg">
   <img src="./img/releasenotes/mai-2020-android-karte.jpg">
 
-* Die Status-Updates werden jetzt in den Profilen angezeigt und du kannst in deinem Profil ein neues Status-Update posten.
+Die Status-Updates werden jetzt in den Profilen angezeigt und du kannst in deinem Profil ein neues Status-Update posten.
 
-* Im Burgermenü der App gibt es jetzt einen direkten Link zur Website, damit du schnell hin und her springen kannst. 
+Im Burgermenü der App gibt es jetzt einen direkten Link zur Website, damit du schnell hin und her springen kannst. 
 Außerdem kannst du nun ebenfalls über das Burgermenü die foodsharing-App mit nur einem Klick weiterempfehlen. (Referenz: android!198 android!199 android!185)
 <img class="pageImageFloatLeft" src="./img/releasenotes/mai-2020-android-teilen.png">
 
