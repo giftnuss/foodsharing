@@ -254,7 +254,7 @@ class ProfileView extends View
 			<div id="disabledreports">
 				<div class="popbox bootstrap">
 					<h3>Regelverletzung melden</h3>
-					<p>Bis zum 30. September ist es nicht möglich, Regelverletzungen über das System zu melden. Mehr Infos dazu findet ihr <a href="https://foodsharing.de/?page=blog&sub=read&id=254">in diesem Blogeintrag</a>.</p>
+					<p>Bis zum 30. September ist es nicht möglich Regelverletzungen über das System zu melden. Mehr Infos findet ihr in dem Blogeintrag <a href="https://foodsharing.de/?page=blog&sub=read&id=254">https://foodsharing.de/?page=blog&sub=read&id=254</a>.</p>
 				</div>
 			</div>
 		');
