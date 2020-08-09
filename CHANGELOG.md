@@ -6,11 +6,14 @@
 - Removed FAQ section !1568 @chriswalg
 - Disable chat notification by mail for new users. #949 !1620 @chriswalg
 - Removed quiz description #737 !1565 @chriswalg
+- Removed unused legal agreement for new amb's #821 !1619 @chriswalg
 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
 - Allow seeing basket markers on map without being logged in !1636 @alex.simm
+- Removed form for new amb's #821 !1619 @chriswalg
+
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
