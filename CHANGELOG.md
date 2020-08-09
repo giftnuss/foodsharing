@@ -1,9 +1,8 @@
-# Release "Birne" (pear), August of 2020
+# Release "Birne" (pear), 2020-08-09
 
 ## Major changes
 - New store-team list !1499 !1591 !1593 !1621 @ChrisOelmueller
 - Workgroup Function: Welcome to workgroup #945 !1544 !1612 @fs_k
-# Unreleased
 
 ## Features
 - Sort own (managed) stores to top of topbar store list #920 !1546 @ChrisOelmueller
