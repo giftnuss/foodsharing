@@ -3,10 +3,10 @@
 namespace Foodsharing\Modules\Register;
 
 use Exception;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\TranslationHelper;
-use Foodsharing\Modules\Login\LoginGateway;
 
 class RegisterTransactions
 {
@@ -40,10 +40,10 @@ class RegisterTransactions
 		}
 
 		// send activation email
-		$this->emailHelper->tplMail('user/join', $data['email'], [
-			'name' => $data['name'],
-			'link' => BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token),
-			'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
+		$this->emailHelper->tplMail('user/join', $data->email, [
+			'name' => $data->firstName,
+			'link' => BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data->email) . '&t=' . urlencode($token),
+			'anrede' => $this->translationHelper->s('anrede_' . $data->gender)
 		], false, true);
 
 		return $id;

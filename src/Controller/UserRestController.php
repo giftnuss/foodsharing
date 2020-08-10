@@ -199,9 +199,9 @@ class UserRestController extends AbstractFOSRestController
 	 * @Rest\RequestParam(name="email", nullable=false)
 	 * @Rest\RequestParam(name="password", nullable=false)
 	 * @Rest\RequestParam(name="gender", nullable=false, requirements="\d+")
-	 * @Rest\RequestParam(name="birthday", nullable=false)
-	 * @Rest\RequestParam(name="mobilePhone, nullable=true)
-	 * @Rest\RequestParam(name="subscribeNewsletter, requirements="(0|1)", default=0)
+	 * @Rest\RequestParam(name="birthdate", nullable=false)
+	 * @Rest\RequestParam(name="mobilePhone", nullable=true)
+	 * @Rest\RequestParam(name="subscribeNewsletter", requirements="(0|1)", default=0)
 	 */
 	public function registerUserAction(ParamFetcher $paramFetcher): Response
 	{
@@ -220,7 +220,7 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		$data->password = trim($paramFetcher->get('password'));
-		if (strlen($data['pw'] < self::MIN_PASSWORD_LENGTH)) {
+		if (strlen($data->password) < self::MIN_PASSWORD_LENGTH) {
 			throw new HttpException(400, 'password is too short');
 		}
 

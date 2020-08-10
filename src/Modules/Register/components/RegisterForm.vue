@@ -56,7 +56,8 @@
 </template>
 
 <script>
-import { register } from '@/api/foodsaver'
+import { registerUser } from '@/api/user'
+import { format } from 'date-fns'
 import { pulseSuccess, pulseError } from '@/script'
 import i18n from '@/i18n'
 import RegisterMailAndPassword from './RegisterMailAndPassword'
@@ -105,16 +106,9 @@ export default {
       this.isLoading = true
 
       try {
-        await register({
-          firstname: this.firstname,
-          lastname: this.lastname,
-          email: this.email,
-          password: this.password,
-          birthdate: this.birthdate,
-          mobile: this.mobile,
-          gender: this.gender,
-          subscribeNewsletter: this.subscribeNewsletter ? 1 : 0
-        })
+        const birthdateFormat = format(new Date(this.birthdate), 'yyyy-MM-dd')
+        await registerUser(this.firstname, this.lastname, this.email, this.password, this.gender, birthdateFormat,
+          this.mobile, this.subscribeNewsletter ? 1 : 0)
         this.page = 6
         pulseSuccess(i18n('register.join_success'))
       } catch (err) {
