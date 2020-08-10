@@ -8,11 +8,12 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Gender;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
+use Foodsharing\Modules\Register\DTO\RegisterData;
+use Foodsharing\Modules\Register\RegisterTransactions;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\UserPermissions;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\RegisterTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -190,6 +191,8 @@ class UserRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Registers a new user.
+	 *
 	 * @Rest\Post("user")
 	 * @Rest\RequestParam(name="firstname", nullable=false)
 	 * @Rest\RequestParam(name="lastname", nullable=false)
@@ -203,27 +206,27 @@ class UserRestController extends AbstractFOSRestController
 	public function registerUserAction(ParamFetcher $paramFetcher): Response
 	{
 		// validate data
-		$data = [];
-		$data['name'] = trim(strip_tags($paramFetcher->get('firstname')));
-		$data['surname'] = trim(strip_tags($paramFetcher->get('lastname')));
-		if (empty($data['name']) || empty($data['surname'])) {
+		$data = new RegisterData();
+		$data->firstName = trim(strip_tags($paramFetcher->get('firstname')));
+		$data->lastName = trim(strip_tags($paramFetcher->get('lastname')));
+		if (empty($data->firstName) || empty($data->lastName)) {
 			throw new HttpException(400, 'names must not be empty');
 		}
 
-		$data['email'] = trim($paramFetcher->get('email'));
-		if (empty($data['email']) || !$this->emailHelper->validEmail($data['email'])
-			|| !$this->isEmailValidForRegistration($data['email'])) {
+		$data->email = trim($paramFetcher->get('email'));
+		if (empty($data->email) || !$this->emailHelper->validEmail($data->email)
+			|| !$this->isEmailValidForRegistration($data->email)) {
 			throw new HttpException(400, 'email is not valid or already used');
 		}
 
-		$data['pw'] = trim($paramFetcher->get('password'));
+		$data->password = trim($paramFetcher->get('password'));
 		if (strlen($data['pw'] < self::MIN_PASSWORD_LENGTH)) {
 			throw new HttpException(400, 'password is too short');
 		}
 
-		$data['gender'] = (int)$paramFetcher->get('gender');
-		if ($data['gender'] > Gender::DIVERSE || $data['gender'] < Gender::NOT_SELECTED) {
-			$data['gender'] = Gender::NOT_SELECTED;
+		$data->gender = (int)$paramFetcher->get('gender');
+		if (!Gender::isValid($data->gender)) {
+			$data->gender = Gender::NOT_SELECTED;
 		}
 
 		$birthdate = Carbon::createFromFormat('Y-m-d', $paramFetcher->get('birthdate'));
@@ -234,9 +237,10 @@ class UserRestController extends AbstractFOSRestController
 		if ($birthdate > $minBirthdate) {
 			throw new HttpException(400, 'you are not old enough');
 		}
+		$data->birthday = $birthdate;
 
-		$data['mobile_phone'] = strip_tags($paramFetcher->get('mobilePhone') ?? '');
-		$data['newsletter'] = (int)$paramFetcher->get('subscribeNewsletter') == 1;
+		$data->mobilePhone = strip_tags($paramFetcher->get('mobilePhone') ?? '');
+		$data->subscribeNewsletter = (int)$paramFetcher->get('subscribeNewsletter') == 1;
 
 		try {
 			// register user and send out registration email

@@ -1,10 +1,11 @@
 <?php
 
-namespace Foodsharing\Utility;
+namespace Foodsharing\Modules\Register;
 
 use Exception;
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Modules\Register\DTO\RegisterData;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Foodsharing\Modules\Login\LoginGateway;
 
 class RegisterTransactions
@@ -30,9 +31,8 @@ class RegisterTransactions
 	 *
 	 * @throws Exception if the database insert fails
 	 */
-	public function registerUser(array $data): int
+	public function registerUser(RegisterData $data): int
 	{
-		// insert into database
 		$token = bin2hex(random_bytes(12));
 		$id = $this->loginGateway->insertNewUser($data, $token);
 		if (!$id) {
@@ -44,7 +44,7 @@ class RegisterTransactions
 			'name' => $data['name'],
 			'link' => BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token),
 			'anrede' => $this->translationHelper->s('anrede_' . $data['gender'])
-		]);
+		], false, true);
 
 		return $id;
 	}

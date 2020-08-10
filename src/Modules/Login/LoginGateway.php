@@ -5,6 +5,7 @@ namespace Foodsharing\Modules\Login;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Legal\LegalGateway;
+use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\TranslationHelper;
 
@@ -91,35 +92,21 @@ class LoginGateway extends BaseGateway
 		return $this->db->update('fs_foodsaver', ['active' => 1], ['email' => strip_tags($email), 'token' => strip_tags($token)]) > 0;
 	}
 
-	public function insertNewUser(array $data, string $token): int
+	public function insertNewUser(RegisterData $data, string $token): int
 	{
-		/*
-				[name] => Peter
-				[email] => peter@pan.de
-				[pw] => 12345
-				[avatar] => 5427fb55f3a5d.jpg
-				[phone] => 02261889971
-				[lat] => 48.0649838
-				[lon] => 7.885475300000053
-				[str] => Bauerngasse
-				[nr] => 6
-				[plz] => 79211
-				[country] => DE
-		*/
-
 		return $this->db->insert(
 			'fs_foodsaver',
 			[
 				'rolle' => 0,
 				'active' => 0,
-				'email' => strip_tags($data['email']),
-				'password' => strip_tags($this->password_hash($data['pw'])),
-				'name' => strip_tags($data['name']),
-				'nachname' => strip_tags($data['surname']),
-				'geb_datum' => strip_tags($data['birthdate']),
-				'handy' => strip_tags($data['mobile_phone']),
-				'newsletter' => (int)$data['newsletter'],
-				'geschlecht' => (int)$data['gender'],
+				'email' => strip_tags($data->email),
+				'password' => strip_tags($this->password_hash($data->password)),
+				'name' => strip_tags($data->firstName),
+				'nachname' => strip_tags($data->lastName),
+				'geb_datum' => strip_tags($data->birthday),
+				'handy' => strip_tags($data->mobilePhone),
+				'newsletter' => (int)$data->subscribeNewsletter,
+				'geschlecht' => (int)$data->gender,
 				'anmeldedatum' => $this->db->now(),
 				'privacy_notice_accepted_date' => $this->legalGateway->getPnVersion(),
 				'privacy_policy_accepted_date' => $this->legalGateway->getPpVersion(),
