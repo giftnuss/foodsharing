@@ -14,9 +14,6 @@ import registerServiceWorker from '@/registerServiceWorker'
 import './scss/bootstrap-theme.scss'
 import './scss/index.scss'
 
-// TODO: join dynamic form could be on any page - fix this
-import '@/join'
-
 import '@/menu'
 import '@/becomeBezirk'
 import '@/footer'

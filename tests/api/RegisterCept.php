@@ -12,15 +12,15 @@ $birthdate = '1990-05-31';
 
 $I->haveHttpHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-$I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
-	'name' => $first_name,
-	'surname' => $last_name,
+$I->sendPOST('/api/user', [
+	'firstname' => $first_name,
+	'lastname' => $last_name,
 	'email' => $email,
-	'mobile_phone' => '39833',
-	'pw' => $pass,
+	'mobilePhone' => '39833',
+	'password' => $pass,
 	'gender' => 0,
 	'birthdate' => $birthdate,
-	'newsletter' => 1,
+	'subscribeNewsletter' => 1,
 //	'lat' => 51.36662,
 //	'lon' => 12.74167,
 //	'str' => 'Kantstraße',
@@ -30,7 +30,7 @@ $I->sendPOST('/xhrapp.php?app=login&m=joinsubmit', [
 
 $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
 $I->seeResponseIsJson();
-$I->seeResponseContainsJson(['status' => 1]);
+$I->seeResponseContainsJson(['name' => $first_name]);
 
 $I->seeInDatabase('fs_foodsaver', [
 	'email' => $email,
