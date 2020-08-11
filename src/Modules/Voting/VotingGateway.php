@@ -23,16 +23,16 @@ class VotingGateway extends BaseGateway
 	public function getPoll(int $pollId): Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
-			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end'],
+			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author'],
 			['id' => $pollId]
 		);
 		if (empty($data)) {
 			throw new Exception('poll does not exist');
 		}
 
-		return new Poll($pollId, $data['name'], $data['description'],
+		return Poll::create($pollId, $data['name'], $data['description'],
 			new DateTime($data['start']), new DateTime($data['end']),
-			$data['region_id'], $data['scope'], $data['type']);
+			$data['region_id'], $data['scope'], $data['type'], $data['author']);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class VotingGateway extends BaseGateway
 		);
 
 		return array_map(function ($x) use ($pollId) {
-			return new PollOption($pollId, $x['option'], $x['text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
+			return PollOption::create($pollId, $x['option'], $x['text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
 		}, $data);
 	}
 
@@ -123,7 +123,8 @@ class VotingGateway extends BaseGateway
 			'description' => $poll->description,
 			'type' => $poll->type,
 			'start' => $this->db->now(),
-			'end' => $poll->endDate
+			'end' => $poll->endDate,
+			'author' => $poll->authorId
 		]);
 
 		// insert all options
