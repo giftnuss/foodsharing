@@ -195,7 +195,7 @@ class MaintenanceControl extends ConsoleControl
 				}
 			}
 			if (!empty($update)) {
-				$this->maintenanceGateway->unsetUserPhotos();
+				$this->maintenanceGateway->unsetUserPhotos($update);
 			}
 		}
 		$check = [];
