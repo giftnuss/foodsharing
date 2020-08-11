@@ -72,7 +72,7 @@ class Poll
 	/**
 	 * @var int
 	 *
-	 * Id of the user who created this poll.
+	 * Id of the user who created this poll
 	 */
 	public $authorId;
 

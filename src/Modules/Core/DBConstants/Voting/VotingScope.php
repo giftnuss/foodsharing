@@ -3,8 +3,9 @@
 namespace Foodsharing\Modules\Core\DBConstants\Voting;
 
 /**
- * Table `fs_poll`, column `scope`.
- * TINYINT(2) UNSIGNED NOT NULL.
+ * Scope of a poll that determines who is allowed to vote.
+ *
+ * Table `fs_poll`, column `scope`. TINYINT(2) UNSIGNED NOT NULL.
  */
 class VotingScope
 {

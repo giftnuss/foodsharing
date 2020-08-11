@@ -3,30 +3,35 @@
 namespace Foodsharing\Modules\Voting;
 
 use Exception;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
-use Foodsharing\Services\NotificationService;
 
 class VotingTransactions
 {
-	private $votingGateway;
-	private $foodsaverGateway;
-	private $storeGateway;
-	private $notificationService;
+	private VotingGateway $votingGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private StoreGateway $storeGateway;
+	private RegionGateway $regionGateway;
+	private BellGateway $bellGateway;
 
 	public function __construct(
 		VotingGateway $votingGateway,
 		FoodsaverGateway $foodsaverGateway,
 		StoreGateway $storeGateway,
-		NotificationService $notificationService)
+		RegionGateway $regionGateway,
+		BellGateway $bellGateway)
 	{
 		$this->votingGateway = $votingGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->storeGateway = $storeGateway;
-		$this->notificationService = $notificationService;
+		$this->regionGateway = $regionGateway;
+		$this->bellGateway = $bellGateway;
 	}
 
 	/**
@@ -40,7 +45,7 @@ class VotingTransactions
 		$this->votingGateway->insertPoll($poll, $options, $userIds);
 
 		if ($notifyUsers) {
-			$this->notificationService->newPoll($poll, $userIds);
+			$this->notifyUsers($poll, $userIds);
 		}
 	}
 
@@ -79,5 +84,25 @@ class VotingTransactions
 		}
 
 		return $users;
+	}
+
+	/**
+	 * Notifies all users in the list (except the author of the poll) via a bell that a new poll
+	 * has been created.
+	 */
+	private function notifyUsers(Poll $poll, array $userIds)
+	{
+		$region = $this->regionGateway->getRegion($poll->regionId);
+
+		$usersWithoutPostAuthor = array_diff($userIds, [$poll->authorId]);
+		$bellData = Bell::create(
+			'poll_new_title',
+			'poll_new',
+			'fas fa-poll-h',
+			['href' => '/?page=bezirk&sub=polls&id=' . $poll->id],
+			['name' => $poll->name, 'region' => $region['name']],
+			'new-poll-' . $poll->id
+		);
+		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);
 	}
 }

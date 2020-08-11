@@ -3,8 +3,9 @@
 namespace Foodsharing\Modules\Core\DBConstants\Voting;
 
 /**
- * Table `fs_poll`, column `type`.
- * TINYINT(1) UNSIGNED NOT NULL.
+ * Type of a poll that determines how and how many options can be chosen by voters.
+ *
+ * Table `fs_poll`, column `type`. TINYINT(1) UNSIGNED NOT NULL.
  */
 class VotingType
 {

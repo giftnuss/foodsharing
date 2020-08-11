@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\FoodSharePoint;
 
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
-use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\Sanitizer;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -77,27 +76,5 @@ class FoodSharePointTransactions
 				$this->bellGateway->addBell($followersWithoutPostAuthor, $bellData);
 			}
 		}
-	}
-
-	/**
-	 * Notifies all users in the list that a new poll has been created.
-	 *
-	 * @param Poll $poll
-	 * @param array $voterIds
-	 */
-	public function newPoll(Poll $poll, array $voterIds)
-	{
-		$region = $this->regionGateway->getRegion($poll->regionId);
-
-		$usersWithoutPostAuthor = array_diff($voterIds, [$poll->authorId]);
-		$bellData = Bell::create(
-			'poll_new_title',
-			'poll_new',
-			'fas fa-poll-h',
-			['href' => '/?page=bezirk&sub=polls&id=' . $poll->id],
-			['name' => $poll->name, 'region' => $region['name']],
-			'new-poll-' . $poll->id
-		);
-		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);
 	}
 }
