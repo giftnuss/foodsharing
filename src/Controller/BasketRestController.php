@@ -75,13 +75,12 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function listBasketsAction(ParamFetcher $paramFetcher): Response
 	{
-		if (!$this->session->may()) {
-			throw new HttpException(401, self::NOT_LOGGED_IN);
-		}
-
 		$baskets = [];
 		switch ($paramFetcher->get('type')) {
 			case 'mine':
+				if (!$this->session->may()) {
+					throw new HttpException(401, self::NOT_LOGGED_IN);
+				}
 				$baskets = $this->getCurrentUsersBaskets();
 				break;
 			case 'coordinates':

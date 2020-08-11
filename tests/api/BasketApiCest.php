@@ -78,7 +78,6 @@ class BasketApiCest
 	{
 		$I->createFoodbasket($this->user[self::ID]);
 
-		$I->login($this->user[self::EMAIL]);
 		$I->sendGET(self::API_BASKETS . '?type=coordinates');
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
@@ -115,8 +114,6 @@ class BasketApiCest
 		$basket = $I->createFoodbasket($this->user[self::ID]);
 
 		$I->sendGET(self::API_BASKETS . '?type=mine');
-		$I->seeResponseCodeIs(Http::UNAUTHORIZED);
-		$I->sendGET(self::API_BASKETS . '?type=coordinates');
 		$I->seeResponseCodeIs(Http::UNAUTHORIZED);
 		$I->sendGET(self::API_BASKETS . '/' . $basket[self::ID]);
 		$I->seeResponseCodeIs(Http::UNAUTHORIZED);

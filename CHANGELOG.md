@@ -2,6 +2,7 @@
 
 ## Bugfixes
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
+- Allow seeing basket markers on map without being logged in !1636 @alex.simm
 
 # Release "Birne" (pear), 2020-08-09
 
