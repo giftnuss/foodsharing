@@ -1,14 +1,7 @@
-# Unreleased
-
-## Features
+# 2020-08-11 Hotfix
 
 ## Bugfixes
-- Filter outdated baskets from REST responses #706 !1608 @alex.simm
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm
-
-## Refactoring
-
-## Dev/Test/CI stuff
 
 # Release "Birne" (pear), 2020-08-09
 
