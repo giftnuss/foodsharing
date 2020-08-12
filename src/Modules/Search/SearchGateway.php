@@ -138,11 +138,11 @@ class SearchGateway extends BaseGateway
 	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
 	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
 	 * @param int $groupId ID of a group (region or work group) in which will be searched
-	 * @param bool $ambassadorForum whether to search in the ambassador forum or the normal forum
+	 * @param int $subforumId ID of the forum in the group
 	 *
 	 * @return array SearchResult[] Array of forum themes containing the search term
 	 */
-	public function searchForumTitle(string $q, int $groupId, bool $ambassadorForum): array
+	public function searchForumTitle(string $q, int $groupId, int $subforumId): array
 	{
 		$searchString = $this->prepareSearchString($q);
 		$results = $this->db->fetchAll(
@@ -152,7 +152,7 @@ class SearchGateway extends BaseGateway
 				   AND t.id = ht.theme_id AND ht.bezirk_id = ?
 				   AND t.active = 1 AND ht.bot_theme = ?
 				   GROUP BY t.id',
-			[$searchString, $groupId, $ambassadorForum ? '1' : '0']
+			[$searchString, $groupId, $subforumId]
 		);
 
 		return array_map(function ($x) {

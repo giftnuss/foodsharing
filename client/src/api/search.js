@@ -47,6 +47,6 @@ export async function instantSearchIndex () {
   return mapOldResponseToNewFormat(await get('/search/legacyindex'))
 }
 
-export async function searchForum (groupId, query, ambassadorForum) {
-  return await get(`/search/forum/${groupId}?q=${encodeURIComponent(query)}&ambassadorForum=${ambassadorForum ? 1 : 0}`)
+export async function searchForum (groupId, subforumId, query) {
+  return await get(`/search/forum/${groupId}/${subforumId}?q=${encodeURIComponent(query)}`)
 }

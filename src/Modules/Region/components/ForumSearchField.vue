@@ -44,7 +44,7 @@
       <forum-search-results
         :themes="themes || []"
         :group-id="groupId"
-        :ambassador-forum="ambassadorForum"
+        :subforum-id="subforumId"
         :query="query"
         :is-loading="isLoading"
       />
@@ -66,9 +66,9 @@ export default {
       type: Number,
       default: -1
     },
-    ambassadorForum: {
-      type: Boolean,
-      default: false
+    subforumId: {
+      type: Number,
+      default: -1
     }
   },
   data () {
@@ -129,7 +129,7 @@ export default {
     async fetch () {
       const curQuery = this.query
       this.isLoading = true
-      const res = await searchForum(this.groupId, curQuery, this.ambassadorForum)
+      const res = await searchForum(this.groupId, this.subforumId, curQuery)
       if (curQuery !== this.query) {
         // query has changed, throw away this response
         return false

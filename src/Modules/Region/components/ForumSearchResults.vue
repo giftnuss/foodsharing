@@ -14,7 +14,7 @@
       <search-result-entry
         v-for="theme in filtered.themes"
         :key="theme.id"
-        :href="$url('forum', groupId, ambassadorForum, theme.id)"
+        :href="$url('forum', groupId, subforumId, theme.id)"
         :title="theme.name"
       />
     </div>
@@ -45,9 +45,9 @@ export default {
       type: Number,
       default: -1
     },
-    ambassadorForum: {
-      type: Boolean,
-      default: false
+    subforumId: {
+      type: Number,
+      default: -1
     },
     query: {
       type: String,

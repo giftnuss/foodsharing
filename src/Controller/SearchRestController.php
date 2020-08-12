@@ -132,8 +132,8 @@ class SearchRestController extends AbstractFOSRestController
 	 * Searches in the titles of forum threads in a specific group.
 	 *
 	 * @SWG\Parameter(name="groupId", in="path", type="integer", description="which forum to return threads for (region or group)")
+	 * @SWG\Parameter(name="subforumId", in="path", type="integer", description="ID of the forum in the group (normal or ambassador forum)")
 	 * @SWG\Parameter(name="q", in="query", type="string", description="search query")
-	 * @SWG\Parameter(name="ambassadorForum", in="query", type="boolean", description="whether to search in the ambassador forum")
 	 * @SWG\Response(response="200", description="Success",
 	 *     @SWG\Schema(type="object", @SWG\Property(property="data", type="array",
 	 *         @SWG\Items(type="object",
@@ -146,14 +146,12 @@ class SearchRestController extends AbstractFOSRestController
 	 * @SWG\Response(response="403", description="Insufficient permissions to search in that forum.")
 	 * @SWG\Tag(name="search")
 	 *
-	 * @Rest\Get("search/forum/{groupId}", requirements={"groupId" = "\d+"})
+	 * @Rest\Get("search/forum/{groupId}/{subforumId}", requirements={"groupId" = "\d+", "subforumId" = "\d+"})
 	 * @Rest\QueryParam(name="q", description="Search query.", nullable=false)
-	 * @Rest\QueryParam(name="ambassadorForum", description="Whether to search in the ambassador forum.", nullable=false)
 	 */
-	public function searchForumTitleAction(int $groupId, ParamFetcher $paramFetcher)
+	public function searchForumTitleAction(int $groupId, int $subforumId, ParamFetcher $paramFetcher)
 	{
-		$ambassadorForum = (bool)$paramFetcher->get('ambassadorForum');
-		if (!$this->session->may() || !$this->forumPermissions->mayAccessForum($groupId, $ambassadorForum ? 1 : 0)) {
+		if (!$this->session->may() || !$this->forumPermissions->mayAccessForum($groupId, $subforumId)) {
 			throw new HttpException(403);
 		}
 
@@ -162,7 +160,7 @@ class SearchRestController extends AbstractFOSRestController
 			throw new HttpException(400);
 		}
 
-		$results = $this->searchGateway->searchForumTitle($q, $groupId, $ambassadorForum);
+		$results = $this->searchGateway->searchForumTitle($q, $groupId, $subforumId);
 
 		return $this->handleView($this->view($results, 200));
 	}

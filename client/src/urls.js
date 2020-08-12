@@ -3,9 +3,9 @@
 
 const urls = {
   profile: (id) => `/profile/${id}`,
-  forum: (regionId, isAmb = false, topicId = null, postId = null) => {
+  forum: (regionId, subforumId = 0, topicId = null, postId = null) => {
     return (`/?page=bezirk&bid=${regionId}` +
-      `&sub=${isAmb ? 'botforum' : 'forum'}` +
+      `&sub=${(subforumId === 1) ? 'botforum' : 'forum'}` +
       (topicId === null ? '' : `&tid=${topicId}`) +
       (postId === null ? '' : `&pid=${postId}#tpost-${postId}`)
     )

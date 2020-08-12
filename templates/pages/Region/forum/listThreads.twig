@@ -8,7 +8,7 @@
             component: 'forum-search-field',
             props: {
                 groupId: region.id,
-                ambassadorForum: sub=='botforum'
+                subforumId: sub=='botforum' ? 1 : 0
             }
         } %}
     {% endblock %}
