@@ -12,69 +12,56 @@ use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 class Poll
 {
 	/**
-	 * @var int
-	 *
-	 * Unique identifier of this poll
+	 * Unique identifier of this poll.
 	 */
-	public $id;
+	public int $id;
 
 	/**
-	 * @var string
-	 *
-	 * A short description of the poll that can serve as a title
+	 * A short description of the poll that can serve as a title.
 	 */
-	public $name;
+	public string $name;
 
 	/**
-	 * @var string
-	 *
-	 * A more detailed description of the topic of this poll
+	 * A more detailed description of the topic of this poll.
 	 */
-	public $description;
+	public string $description;
 
 	/**
-	 * @var dateTime
-	 *
-	 * The date at which this poll began
+	 * The date at which this poll began.
 	 */
-	public $startDate;
+	public DateTime $startDate;
 
 	/**
-	 * @var dateTime
-	 *
-	 * The date at which this poll will end or has ended
+	 * The date at which this poll will end or has ended.
 	 */
-	public $endDate;
+	public DateTime $endDate;
 
 	/**
-	 * @var int
-	 *
 	 * Identifier of the region or work group in which this poll takes place. Only members of that region are allowed
 	 * to vote.
 	 */
-	public $regionId;
+	public int $regionId;
 
 	/**
-	 * @var int
-	 *
 	 * The scope is an additional constraint defining which user groups are allowed to vote. See {@link VotingScope}.
 	 */
-	public $scope;
+	public int $scope;
 
 	/**
-	 * @var int
-	 *
 	 * The type defines how users can vote. Different types allow to vote for one or multiple choices or allow a score
 	 * voting. See {@link VotingType}.
 	 */
-	public $type;
+	public int $type;
 
 	/**
-	 * @var int
-	 *
-	 * Id of the user who created this poll
+	 * Id of the user who created this poll.
 	 */
-	public $authorId;
+	public int $authorId;
+
+	/**
+	 * Options of the poll.
+	 */
+	public array $options;
 
 	public static function create(
 		int $id,
@@ -85,7 +72,8 @@ class Poll
 		int $regionId,
 		int $scope,
 		int $type,
-		int $authorId
+		int $authorId,
+		array $options
 	) {
 		$poll = new Poll();
 		$poll->id = $id;
@@ -97,6 +85,7 @@ class Poll
 		$poll->scope = $scope;
 		$poll->type = $type;
 		$poll->authorId = $authorId;
+		$poll->options = $options;
 
 		return $poll;
 	}

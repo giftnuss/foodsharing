@@ -30,30 +30,85 @@ class VotingGateway extends BaseGateway
 			throw new Exception('poll does not exist');
 		}
 
+		$options = $this->getOptions($pollId);
+
 		return Poll::create($pollId, $data['name'], $data['description'],
 			new DateTime($data['start']), new DateTime($data['end']),
-			$data['region_id'], $data['scope'], $data['type'], $data['author']);
+			$data['region_id'], $data['scope'], $data['type'], $data['author'], $options);
 	}
 
 	/**
-	 * Returns all options of a poll.
+	 * Returns all options of a poll without the vote counts. If the poll does not exist or does not have any
+	 * options an empty array is returned.
 	 *
 	 * @param int $pollId a valid id of a poll
 	 *
 	 * @return array multiple {@link PollOption} objects
-	 *
-	 * @throws Exception if the poll does not exist
 	 */
 	public function getOptions(int $pollId): array
 	{
-		$data = $this->db->fetchByCriteria('fs_poll_has_option',
-			['option', 'text', 'upvotes', 'neutralvotes', 'downvotes'],
-			['poll_id' => $pollId]
-		);
+		try {
+			$data = $this->db->fetchAllByCriteria('fs_poll_has_options',
+				['option', 'option_text'],
+				['poll_id' => $pollId]
+			);
+		} catch (Exception $e) {
+			$data = [];
+		}
 
 		return array_map(function ($x) use ($pollId) {
-			return PollOption::create($pollId, $x['option'], $x['text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
+			return PollOption::create($pollId, $x['option'], $x['option_text'], 0, 0, 0);
 		}, $data);
+	}
+
+	/**
+	 * Returns all options of a poll with the vote counts. If the poll does not exist or does not have any
+	 * options an empty array is returned.
+	 *
+	 * @param int $pollId a valid id of a poll
+	 *
+	 * @return array multiple {@link PollOption} objects
+	 */
+	public function getResults(int $pollId): array
+	{
+		try {
+			$data = $this->db->fetchAllByCriteria('fs_poll_has_options',
+				['option', 'option_text', 'upvotes', 'neutralvotes', 'downvotes'],
+				['poll_id' => $pollId]
+			);
+		} catch (Exception $e) {
+			$data = [];
+		}
+
+		return array_map(function ($x) use ($pollId) {
+			return PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
+		}, $data);
+	}
+
+	/**
+	 * Returns all polls in a group (region or working group). If the group does not exists an empty array
+	 * is returned.
+	 *
+	 * @param int $groupId a valid ID of a group or region
+	 *
+	 * @return array multiple {@link Poll} objects
+	 */
+	public function listPolls(int $groupId): array
+	{
+		$data = $this->db->fetchAllByCriteria('fs_poll',
+			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author'],
+			['region_id' => $groupId]
+		);
+
+		$polls = [];
+		foreach ($data as $d) {
+			$options = $this->getOptions($d['id']);
+			$polls[] = Poll::create($d['id'], $d['name'], $d['description'],
+				new DateTime($d['start']), new DateTime($d['end']),
+				$d['region_id'], $d['scope'], $d['type'], $d['author'], $options);
+		}
+
+		return $polls;
 	}
 
 	/**
@@ -156,16 +211,20 @@ class VotingGateway extends BaseGateway
 		return $pollId;
 	}
 
-	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $verified = true): array
+	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true): array
 	{
+		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';
+
 		return $this->db->fetchAll('
 			SELECT id
 			FROM fs_foodsaver fs
 			INNER JOIN fs_foodsaver_has_bezirk hb
 			ON fs.id = hb.foodsaver_id
-			WHERE hb.active = 1
-			AND fs.verified = 1
-			AND fs.rolle > :role', [
+			WHERE hb.bezirk_id = :regionId
+			AND hb.active = 1
+			AND fs.rolle > :role
+			' . $verifiedCondition, [
+			':regionId' => $regionId,
 			':role' => $minRole
 		]);
 	}

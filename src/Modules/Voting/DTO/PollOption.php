@@ -8,46 +8,34 @@ namespace Foodsharing\Modules\Voting\DTO;
 class PollOption
 {
 	/**
-	 * @var int
-	 *
-	 * Id of the poll to which this option belongs
+	 * Id of the poll to which this option belongs.
 	 */
-	public $pollId;
+	public int $pollId;
 
 	/**
-	 * @var int
-	 *
-	 * Index of this option in the poll
+	 * Index of this option in the poll.
 	 */
-	public $optionIndex;
+	public int $optionIndex;
 
 	/**
-	 * @var string
-	 *
-	 * A short description of the option
+	 * A short description of the option.
 	 */
-	public $text;
+	public string $text;
 
 	/**
-	 * @var int
-	 *
-	 * The number of up votes for this option
+	 * The number of up votes for this option.
 	 */
-	public $upvotes;
+	public int $upvotes;
 
 	/**
-	 * @var int
-	 *
 	 * The number of neutral votes for this option. Depending on the voting type is might not be used.
 	 */
-	public $neutralvotes;
+	public int $neutralvotes;
 
 	/**
-	 * @var int
-	 *
 	 * The number of down votes for this option. Depending on the voting type is might not be used.
 	 */
-	public $downvotes;
+	public int $downvotes;
 
 	public static function create(
 		int $pollId,
