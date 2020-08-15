@@ -15,4 +15,4 @@ $I->click('#topbar .btn');
 $I->waitForActiveAPICalls();
 $I->waitForElementNotVisible('#pulse-success');
 $I->waitForPageBody();
-$I->waitForText('Willkommen ' . $foodsaver['name'] . '!');
+$I->waitForText('Hallo ' . $foodsaver['name'] . '!');

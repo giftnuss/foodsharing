@@ -88,6 +88,11 @@ legal:
   legal_agreement: Rechtsvereinbarung
   are_you_sure_to_downgrade: 'Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?'
 
+salutation:
+  0: 'Liebe/r'
+  1: 'Lieber'
+  2: 'Liebe'
+  3: 'Liebe*r'
 
 login:
   form_title: Anmelden
@@ -635,6 +640,15 @@ dashboard:
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
   source_store: "Betriebe {0}"
+  checkAddress: 'Bitte überprüfe Deine Adresse! Die Koordinaten konnten nicht ermittelt werden.'
+  homeRegion: 'Dein Stammbezirk ist {region}.'
+  chooseHomeRegion: 'Bitte wähle einen Stammbezirk aus.'
+  greeting: Hallo {name}! Schön, dass du hier bist.
+  foodsharer: Viel Spaß beim Retten!
+  foodsharer_amount: Du hast schon {weight} Kilos gerettet!
+  foodsaver_amount: |
+      Du hast <strong style="white-space:nowrap">{pickups}&thinsp;x</strong> Lebensmittel abgeholt
+      und damit <strong style="white-space:nowrap">{weight}&thinsp;kg</strong> gerettet.
   you_are_responsible_for_stores: Du bist verantwortlich für
   you_pickup_at_stores: Du holst Lebensmittel ab bei
   you_requested_to_join: Anfragen gestellt bei

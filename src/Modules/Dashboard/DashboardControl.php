@@ -15,6 +15,7 @@ use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\Sanitizer;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DashboardControl extends Control
 {
@@ -30,6 +31,7 @@ class DashboardControl extends Control
 	private $sanitizerService;
 	private $imageService;
 	private $quizSessionGateway;
+	private $translator;
 
 	public function __construct(
 		DashboardView $view,
@@ -43,7 +45,8 @@ class DashboardControl extends Control
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
-		QuizSessionGateway $quizSessionGateway
+		QuizSessionGateway $quizSessionGateway,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -57,6 +60,7 @@ class DashboardControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -105,7 +109,7 @@ class DashboardControl extends Control
 				'{ANREDE}'
 			], [
 				$this->session->user('name'),
-				$this->translationHelper->s('anrede_' . $this->session->user('gender'))
+				$this->translator->trans('salutation.' . $this->session->user('gender'))
 			], $cnt['body']);
 
 			if ($this->session->getOption('quiz-infobox-seen')) {
@@ -139,15 +143,17 @@ class DashboardControl extends Control
 	private function dashFoodsharer()
 	{
 		$this->setContentWidth(8, 8);
-		$subtitle = $this->translationHelper->s('no_saved_food');
+		$subtitle = $this->translator->trans('dashboard.foodsharer');
 
 		if ($this->user['stat_fetchweight'] > 0) {
-			$subtitle = $this->translationHelper->sv('saved_food', ['weight' => $this->user['stat_fetchweight']]);
+			$subtitle = $this->translator->trans('dashboard.foodsharer_amount', [
+				'{weight}' => $this->user['stat_fetchweight'],
+			]);
 		}
 
 		$this->pageHelper->addContent(
 			$this->twig->render('partials/topbar.twig', [
-				'title' => $this->translationHelper->sv('welcome', ['name' => $this->user['name']]),
+				'title' => $this->translator->trans('dashboard.greeting', ['{name}' => $this->user['name']]),
 				'subtitle' => $subtitle,
 				'avatar' => [
 					'user' => $this->user,
@@ -173,7 +179,7 @@ class DashboardControl extends Control
 			'{ANREDE}'
 		], [
 			$this->session->user('name'),
-			$this->translationHelper->s('anrede_' . $this->session->user('gender'))
+			$this->translator->trans('salutation.' . $this->session->user('gender'))
 		], $cnt['body']);
 
 		$this->pageHelper->addContent($this->v_utils->v_info($cnt['body']));
@@ -204,7 +210,7 @@ class DashboardControl extends Control
 		$val = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
 		if (empty($val['lat']) || empty($val['lon'])) {
-			$this->flashMessageHelper->info($this->translationHelper->s('please_check_address'));
+			$this->flashMessageHelper->info($this->translator->trans('dashboard.checkAddress'));
 			$this->routeHelper->go('/?page=settings&sub=general&');
 		}
 
@@ -323,13 +329,18 @@ class DashboardControl extends Control
 		// special case: stat_fetchcount and stat_fetchweight are correlated, each pickup increases both count and weight
 		$pickup_text = '';
 		if ($pickups > 0) {
-			$pickup_text = $this->translationHelper->sv('you_saved_times_weight', ['pickups' => $pickups, 'weight' => number_format($gerettet, 0, ',', '.')]);
+			$pickup_text = $this->translator->trans('dashboard.foodsaver_amount', [
+				'{pickups}' => $pickups,
+				'{weight}' => number_format($gerettet, 0, ',', '.'),
+			]);
 		}
 		if ($me['bezirk_name'] == null) {
-			$home_district_text = '</p>' .
-			'<p>' . '<a  class="button" href="javascript:becomeBezirk()" >' . $this->translationHelper->s('please_choose_your_home_district') . '</a>';
+			$home_district_text = '</p><p>' .
+				'<a class="button" href="javascript:becomeBezirk()">'
+					. $this->translator->trans('dashboard.chooseHomeRegion') .
+				'</a>';
 		} else {
-			$home_district_text = $this->translationHelper->s('your_home_district_is') . $me['bezirk_name'] . '.';
+			$home_district_text = $this->translator->trans('dashboard.homeRegion', ['{region}' => $me['bezirk_name']]);
 		}
 
 		$this->pageHelper->addContent(
@@ -342,7 +353,7 @@ class DashboardControl extends Control
 				<a href="profile/' . $me['id'] . '">
 					<div class="img">' . $this->imageService->avatar($me, 50) . '</div>
 				</a>
-				<h3 class "corner-all">' . $this->translationHelper->sv('greeting', ['name' => $me['name']]) . '</h3>
+				<h3 class "corner-all">' . $this->translator->trans('dashboard.greeting', ['{name}' => $me['name']]) . '</h3>
 				<p>'
 					. $pickup_text . $home_district_text .
 				'</p>

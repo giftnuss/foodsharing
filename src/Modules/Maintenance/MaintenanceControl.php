@@ -11,7 +11,7 @@ use Foodsharing\Modules\Group\GroupGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MaintenanceControl extends ConsoleControl
 {
@@ -19,32 +19,32 @@ class MaintenanceControl extends ConsoleControl
 	private $storeGateway;
 	private $foodsaverGateway;
 	private $emailHelper;
-	private $translationHelper;
 	private $maintenanceGateway;
 	private $quizHelper;
 	private $bellUpdateTrigger;
 	private $groupGateway;
+	private $translator;
 
 	public function __construct(
 		BellGateway $bellGateway,
 		StoreGateway $storeGateway,
 		FoodsaverGateway $foodsaverGateway,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper,
 		MaintenanceGateway $maintenanceGateway,
 		QuizHelper $quizHelper,
 		BellUpdateTrigger $bellUpdateTrigger,
-		GroupGateway $groupGateway
+		GroupGateway $groupGateway,
+		TranslatorInterface $translator
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->storeGateway = $storeGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
 		$this->maintenanceGateway = $maintenanceGateway;
 		$this->quizHelper = $quizHelper;
 		$this->bellUpdateTrigger = $bellUpdateTrigger;
 		$this->groupGateway = $groupGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 	}
@@ -250,7 +250,7 @@ class MaintenanceControl extends ConsoleControl
 			self::info('send ' . count($foodsaver) . ' warnings...');
 			foreach ($foodsaver as $fs) {
 				$this->emailHelper->tplMail('chat/fetch_warning', $fs['fs_email'], [
-					'anrede' => $this->translationHelper->s('anrede_' . $fs['geschlecht']),
+					'anrede' => $this->translator->trans('salutation.' . $fs['geschlecht']),
 					'name' => $fs['fs_name'],
 					'betrieb' => $fs['betrieb_name'],
 					'link' => BASE_URL . '/?page=fsbetrieb&id=' . $fs['betrieb_id']
