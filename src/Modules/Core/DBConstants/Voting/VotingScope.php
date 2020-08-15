@@ -30,4 +30,9 @@ class VotingScope
 	 * All ambassadors of the poll's region.
 	 */
 	public const AMBASSADORS = 4;
+
+	public static function isValidScope(int $scope): bool
+	{
+		return in_array($scope, range(self::ALL_USERS, self::AMBASSADORS));
+	}
 }

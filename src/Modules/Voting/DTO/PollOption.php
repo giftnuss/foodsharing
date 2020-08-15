@@ -41,9 +41,9 @@ class PollOption
 		int $pollId,
 		int $optionIndex,
 		string $text,
-		int $upvotes,
-		int $neutralvotes,
-		int $downvotes
+		int $upvotes = 0,
+		int $neutralvotes = 0,
+		int $downvotes = 0
 	) {
 		$option = new PollOption();
 		$option->pollId = $pollId;

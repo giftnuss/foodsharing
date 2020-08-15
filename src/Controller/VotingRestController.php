@@ -47,7 +47,7 @@ class VotingRestController extends AbstractFOSRestController
 	public function getPoll(int $pollId): Response
 	{
 		try {
-			$poll = $this->votingGateway->getPoll($pollId);
+			$poll = $this->votingGateway->getPoll($pollId, $this->votingPermissions->maySeeResults($pollId));
 		} catch (Exception $e) {
 			throw new HttpException(404);
 		}
@@ -134,7 +134,7 @@ class VotingRestController extends AbstractFOSRestController
 	public function deletePollAction(int $pollId): Response
 	{
 		try {
-			$poll = $this->votingGateway->getPoll($pollId);
+			$poll = $this->votingGateway->getPoll($pollId, false);
 		} catch (Exception $e) {
 			throw new HttpException(404);
 		}

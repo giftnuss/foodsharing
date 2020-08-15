@@ -2,8 +2,10 @@
 
 namespace Foodsharing\Permissions;
 
+use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Modules\Voting\VotingGateway;
 
 final class VotingPermissions
@@ -34,6 +36,11 @@ final class VotingPermissions
 		}
 
 		return $this->session->mayBezirk($regionId);
+	}
+
+	public function maySeeResults(Poll $poll): bool
+	{
+		return $poll->endDate < new DateTime();
 	}
 
 	public function mayVote(int $pollId): bool

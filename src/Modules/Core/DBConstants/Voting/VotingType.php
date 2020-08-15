@@ -21,4 +21,9 @@ class VotingType
 	 * Users can rate each option with a thumbs up, thumbs down, or neutral (+1, -1, 0).
 	 */
 	public const SCORE_VOTING = 2;
+
+	public static function isValidType(int $scope): bool
+	{
+		return in_array($scope, range(self::SELECT_ONE_CHOICE, self::SCORE_VOTING));
+	}
 }

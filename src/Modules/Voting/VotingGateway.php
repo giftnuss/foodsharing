@@ -15,12 +15,13 @@ class VotingGateway extends BaseGateway
 	 * Returns the detailed data of a poll.
 	 *
 	 * @param int $pollId a valid id of a poll
+	 * @param bool $includeResults whether the counted votes should be included
 	 *
 	 * @return Poll the poll object
 	 *
 	 * @throws Exception if the poll with the given id does not exist
 	 */
-	public function getPoll(int $pollId): Poll
+	public function getPoll(int $pollId, bool $includeResults): Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
 			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author'],
@@ -30,7 +31,7 @@ class VotingGateway extends BaseGateway
 			throw new Exception('poll does not exist');
 		}
 
-		$options = $this->getOptions($pollId);
+		$options = $this->getOptions($pollId, $includeResults);
 
 		return Poll::create($pollId, $data['name'], $data['description'],
 			new DateTime($data['start']), new DateTime($data['end']),
@@ -42,22 +43,28 @@ class VotingGateway extends BaseGateway
 	 * options an empty array is returned.
 	 *
 	 * @param int $pollId a valid id of a poll
+	 * @param bool $includeResults whether the counted votes should be included
 	 *
 	 * @return array multiple {@link PollOption} objects
 	 */
-	public function getOptions(int $pollId): array
+	public function getOptions(int $pollId, bool $includeResults): array
 	{
+		$columns = ['option', 'option_text'];
+		if ($includeResults) {
+			$columns = array_merge($columns, ['upvotes', 'neutralvotes', 'downvotes']);
+		}
 		try {
-			$data = $this->db->fetchAllByCriteria('fs_poll_has_options',
-				['option', 'option_text'],
-				['poll_id' => $pollId]
-			);
+			$data = $this->db->fetchAllByCriteria('fs_poll_has_options', $columns, ['poll_id' => $pollId]);
 		} catch (Exception $e) {
 			$data = [];
 		}
 
-		return array_map(function ($x) use ($pollId) {
-			return PollOption::create($pollId, $x['option'], $x['option_text'], 0, 0, 0);
+		return array_map(function ($x) use ($pollId, $includeResults) {
+			if ($includeResults) {
+				return PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
+			} else {
+				return PollOption::create($pollId, $x['option'], $x['option_text']);
+			}
 		}, $data);
 	}
 
@@ -215,6 +222,7 @@ class VotingGateway extends BaseGateway
 	 * Deletes a poll and all its options.
 	 *
 	 * @param int $pollId a valid poll ID
+	 *
 	 * @throws Exception
 	 */
 	public function deletePoll(int $pollId): void
