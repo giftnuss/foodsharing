@@ -399,7 +399,8 @@ wall:
 events:
   name: Termine
   add_new_event: Jetzt neuen Termin eintragen
-  add_event: Neues Event
+  add_event: Neuer Termin
+  goto: Zum Termin
   acceptedCount: '{count} sind dabei'
   maybeCount: '{count} kommen vielleicht'
   invitedCount: '{count} Einladungen'
@@ -639,6 +640,10 @@ dashboard:
   you_requested_to_join: Anfragen gestellt bei
   you_wait_at_stores: Du bist auf der Springerliste bei
   no_store_team: 'Du bist bis jetzt in keinem Betriebsteam.'
+  invitations: Du wurdest eingeladen
+  event: Nächstes Event
+  events: 'Nächste Events ({count})'
+  pickupdates: Nächste Abholtermine
 
 home:
   title: Startseite
@@ -648,7 +653,11 @@ basket:
   title: Essenskörbe
   my_list_empty: Du hast keine Essenskörbe eingetragen
   all: Alle Essenskörbe
+  all_map: Alle Körbe auf der Karte
+  recent: Neueste Essenskörbe
+  nearby: Essenskörbe in Deiner Nähe
   add: Essenskorb anlegen
+  new: Neuer Essenskorb
   no_requests: Bisher keine Anfragen
   requested_by: angefragt von
   request_close: Essenskorbanfrage abschließen
