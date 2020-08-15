@@ -49,4 +49,9 @@ final class VotingPermissions
 	{
 		return $this->session->mayBezirk($regionId);
 	}
+
+	public function mayDeletePoll(int $pollId): bool
+	{
+		return $this->session->may('orga');
+	}
 }

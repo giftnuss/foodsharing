@@ -39,7 +39,7 @@ class VotingTransactions
 	 *
 	 * @throws Exception
 	 */
-	public function createPollForRegion(Poll $poll, array $options, int $regionId, bool $notifyUsers)
+	public function createPollForRegion(Poll $poll, array $options, int $regionId, bool $notifyUsers): void
 	{
 		$userIds = $this->listUserIds($regionId, $poll->scope);
 		$this->votingGateway->insertPoll($poll, $options, $userIds);
@@ -90,7 +90,7 @@ class VotingTransactions
 	 * Notifies all users in the list (except the author of the poll) via a bell that a new poll
 	 * has been created.
 	 */
-	private function notifyUsers(Poll $poll, array $userIds)
+	private function notifyUsers(Poll $poll, array $userIds): void
 	{
 		$region = $this->regionGateway->getRegion($poll->regionId);
 
@@ -104,5 +104,14 @@ class VotingTransactions
 			'new-poll-' . $poll->id
 		);
 		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);
+	}
+
+	/**
+	 * Deletes a poll from the database and removes all bell notifications for it.
+	 */
+	public function deletePoll(int $pollId): void
+	{
+		$this->votingGateway->deletePoll($pollId);
+		$this->bellGateway->delBellsByIdentifier('new-poll-' . $pollId);
 	}
 }

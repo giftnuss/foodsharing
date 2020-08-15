@@ -211,6 +211,17 @@ class VotingGateway extends BaseGateway
 		return $pollId;
 	}
 
+	/**
+	 * Deletes a poll and all its options.
+	 *
+	 * @param int $pollId a valid poll ID
+	 * @throws Exception
+	 */
+	public function deletePoll(int $pollId): void
+	{
+		$this->db->delete('fs_poll', ['id' => $pollId]);
+	}
+
 	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true): array
 	{
 		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';

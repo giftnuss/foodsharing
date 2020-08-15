@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Voting\VotingGateway;
+use Foodsharing\Modules\Voting\VotingTransactions;
 use Foodsharing\Permissions\VotingPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -15,15 +16,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class VotingRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $votingGateway;
-	private $votingPermissions;
+	private Session $session;
+	private VotingGateway $votingGateway;
+	private VotingPermissions $votingPermissions;
+	private VotingTransactions $votingTransactions;
 
-	public function __construct(Session $session, VotingGateway $votingGateway, VotingPermissions $votingPermissions)
+	public function __construct(
+		Session $session,
+		VotingGateway $votingGateway,
+		VotingPermissions $votingPermissions,
+		VotingTransactions $votingTransactions)
 	{
 		$this->session = $session;
 		$this->votingGateway = $votingGateway;
 		$this->votingPermissions = $votingPermissions;
+		$this->votingTransactions = $votingTransactions;
 	}
 
 	/**
@@ -42,7 +49,7 @@ class VotingRestController extends AbstractFOSRestController
 		try {
 			$poll = $this->votingGateway->getPoll($pollId);
 		} catch (Exception $e) {
-			throw new HttpException(404, 'poll does not exist');
+			throw new HttpException(404);
 		}
 
 		if (!$this->votingPermissions->maySeePoll($pollId, $poll->regionId)) {
@@ -112,5 +119,30 @@ class VotingRestController extends AbstractFOSRestController
 
 		//TODO
 		return $this->handleView($this->view([], 200));
+	}
+
+	/**
+	 * Deletes a poll.
+	 *
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="403", description="Insufficient permissions to delete that poll.")
+	 * @SWG\Response(response="404", description="Poll does not exist.")
+	 * @SWG\Tag(name="polls")
+	 *
+	 * @Rest\Delete("polls/{pollId}", requirements={"pollId" = "\d+"})
+	 */
+	public function deletePollAction(int $pollId): Response
+	{
+		try {
+			$poll = $this->votingGateway->getPoll($pollId);
+		} catch (Exception $e) {
+			throw new HttpException(404);
+		}
+
+		if (!$this->votingPermissions->mayDeletePoll($pollId)) {
+			throw new HttpException(403);
+		}
+
+		return $this->handleView($this->view($poll, 200));
 	}
 }
