@@ -35,16 +35,30 @@ class VotingTransactions
 	}
 
 	/**
-	 * Creates a new poll for a region or work group and invites members based on the poll's scope.
+	 * Creates a new poll for a region or work group and invites members based on the poll's scope. This also
+	 * assigns a valid ID to the poll object and all options.
+	 *
+	 * @param Poll $poll a valid poll object
+	 * @param bool $notifyVoters whether the voters should be notified by a bell
 	 *
 	 * @throws Exception
 	 */
-	public function createPollForRegion(Poll $poll, array $options, int $regionId, bool $notifyUsers): void
+	public function createPollForRegion(Poll &$poll, bool $notifyVoters): void
 	{
-		$userIds = $this->listUserIds($regionId, $poll->scope);
-		$this->votingGateway->insertPoll($poll, $options, $userIds);
+		// assign option indices
+		$index = 0;
+		foreach ($poll->options as $option) {
+			$option->optionIndex = $index++;
+		}
 
-		if ($notifyUsers) {
+		// create poll
+		$userIds = $this->listUserIds($poll->regionId, $poll->scope);
+		$poll->id = $this->votingGateway->insertPoll($poll, $userIds);
+		foreach ($poll->options as $option) {
+			$option->pollId = $poll->id;
+		}
+
+		if ($notifyVoters) {
 			$this->notifyUsers($poll, $userIds);
 		}
 	}
@@ -100,7 +114,7 @@ class VotingTransactions
 			'poll_new',
 			'fas fa-poll-h',
 			['href' => '/?page=bezirk&sub=polls&id=' . $poll->id],
-			['name' => $poll->name, 'region' => $region['name']],
+			['title' => $poll->name, 'region' => $region['name']],
 			'new-poll-' . $poll->id
 		);
 		$this->bellGateway->addBell($usersWithoutPostAuthor, $bellData);

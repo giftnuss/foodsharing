@@ -2,8 +2,13 @@
 
 namespace Foodsharing\Controller;
 
+use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
+use Foodsharing\Modules\Voting\DTO\Poll;
+use Foodsharing\Modules\Voting\DTO\PollOption;
 use Foodsharing\Modules\Voting\VotingGateway;
 use Foodsharing\Modules\Voting\VotingTransactions;
 use Foodsharing\Permissions\VotingPermissions;
@@ -47,13 +52,17 @@ class VotingRestController extends AbstractFOSRestController
 	public function getPoll(int $pollId): Response
 	{
 		try {
-			$poll = $this->votingGateway->getPoll($pollId, $this->votingPermissions->maySeeResults($pollId));
+			$poll = $this->votingGateway->getPoll($pollId, false);
 		} catch (Exception $e) {
 			throw new HttpException(404);
 		}
 
 		if (!$this->votingPermissions->maySeePoll($pollId, $poll->regionId)) {
 			throw new HttpException(403);
+		}
+
+		if ($this->votingPermissions->maySeeResults($poll)) {
+			$poll = $this->votingGateway->getPoll($pollId, true);
 		}
 
 		return $this->handleView($this->view($poll, 200));
@@ -67,7 +76,7 @@ class VotingRestController extends AbstractFOSRestController
 	 * @SWG\Response(response="403", description="Insufficient permissions to list polls in that group.")
 	 * @SWG\Tag(name="polls")
 	 *
-	 * @Rest\Get("polls/group/{groupId}", requirements={"groupId" = "\d+"})
+	 * @Rest\Get("groups/{groupId}/polls", requirements={"groupId" = "\d+"})
 	 */
 	public function listPolls(int $groupId): Response
 	{
@@ -103,22 +112,73 @@ class VotingRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Creates a new poll.
+	 * Creates a new poll. The poll and all its options will be assigned valid IDs and option indices by the
+	 * server. Options must be passed as an array of strings for the options' texts. The order of the options will
+	 * be kept.
 	 *
 	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="400", description="Invalid parameters.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to create a poll in that region.")
 	 * @SWG\Tag(name="polls")
 	 *
-	 * @Rest\Post("polls/{groupId}", requirements={"groupId" = "\d+"})
+	 * @Rest\Post("polls")
+	 * @Rest\RequestParam(name="name", nullable=false)
+	 * @Rest\RequestParam(name="description", nullable=false)
+	 * @Rest\RequestParam(name="startDate", nullable=false)
+	 * @Rest\RequestParam(name="endDate", nullable=false)
+	 * @Rest\RequestParam(name="regionId", nullable=false, requirements="\d+")
+	 * @Rest\RequestParam(name="scope", nullable=false, requirements="\d+")
+	 * @Rest\RequestParam(name="type", nullable=false, requirements="\d+")
+	 * @Rest\RequestParam(name="options", nullable=false)
+	 * @Rest\RequestParam(name="notifyVoters", nullable=false)
 	 */
-	public function createPollAction(int $groupId, ParamFetcher $paramFetcher): Response
+	public function createPollAction(ParamFetcher $paramFetcher): Response
 	{
-		if (!$this->votingPermissions->mayCreatePoll($groupId)) {
+		// parse and check parameters
+		$poll = new Poll();
+		$poll->name = trim($paramFetcher->get('name'));
+		$poll->description = trim($paramFetcher->get('description'));
+		if (empty($poll->name) || empty($poll->description)) {
+			throw new HttpException(400, 'empty name or description: ' . $poll->name . ', ' . $poll->description);
+		}
+
+		$poll->startDate = DateTime::createFromFormat(DateTime::ISO8601, $paramFetcher->get('startDate'));
+		$poll->endDate = DateTime::createFromFormat(DateTime::ISO8601, $paramFetcher->get('endDate'));
+		if (!$poll->startDate || !$poll->endDate || $poll->startDate >= $poll->endDate) {
+			throw new HttpException(400, 'invalid start or end date');
+		}
+
+		$poll->scope = (int)$paramFetcher->get('scope');
+		if (!VotingScope::isValidScope($poll->scope)) {
+			throw new HttpException(400, 'invalid scope');
+		}
+		$poll->type = (int)$paramFetcher->get('type');
+		if (!VotingType::isValidType($poll->type)) {
+			throw new HttpException(400, 'invalid poll type');
+		}
+
+		$poll->regionId = (int)$paramFetcher->get('regionId');
+		if (!$this->votingPermissions->mayCreatePoll($poll->regionId)) {
 			throw new HttpException(403);
 		}
 
-		//TODO
-		return $this->handleView($this->view([], 200));
+		$poll->authorId = $this->session->id();
+
+		// parse options
+		$poll->options = array_map(function ($x) {
+			$o = new PollOption();
+			$o->text = $x;
+
+			return $o;
+		}, $paramFetcher->get('options'));
+		if (empty($poll->options)) {
+			throw new HttpException(400, 'poll does not have any options');
+		}
+
+		// create poll
+		$this->votingTransactions->createPollForRegion($poll, $paramFetcher->get('notifyVoters'));
+
+		return $this->handleView($this->view($poll, 200));
 	}
 
 	/**
@@ -134,7 +194,7 @@ class VotingRestController extends AbstractFOSRestController
 	public function deletePollAction(int $pollId): Response
 	{
 		try {
-			$poll = $this->votingGateway->getPoll($pollId, false);
+			$this->votingGateway->getPoll($pollId, false);
 		} catch (Exception $e) {
 			throw new HttpException(404);
 		}
@@ -143,6 +203,8 @@ class VotingRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		return $this->handleView($this->view($poll, 200));
+		$this->votingTransactions->deletePoll($pollId);
+
+		return $this->handleView($this->view([], 200));
 	}
 }

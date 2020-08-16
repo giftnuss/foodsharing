@@ -93,23 +93,23 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns all polls in a group (region or working group). If the group does not exists an empty array
+	 * Returns all polls in a region or working group. If the region does not exists an empty array
 	 * is returned.
 	 *
-	 * @param int $groupId a valid ID of a group or region
+	 * @param int $regionId a valid ID of a group or region
 	 *
 	 * @return array multiple {@link Poll} objects
 	 */
-	public function listPolls(int $groupId): array
+	public function listPolls(int $regionId): array
 	{
 		$data = $this->db->fetchAllByCriteria('fs_poll',
 			['id', 'region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author'],
-			['region_id' => $groupId]
+			['region_id' => $regionId]
 		);
 
 		$polls = [];
 		foreach ($data as $d) {
-			$options = $this->getOptions($d['id']);
+			$options = $this->getOptions($d['id'], false);
 			$polls[] = Poll::create($d['id'], $d['name'], $d['description'],
 				new DateTime($d['start']), new DateTime($d['end']),
 				$d['region_id'], $d['scope'], $d['type'], $d['author'], $options);
@@ -168,29 +168,28 @@ class VotingGateway extends BaseGateway
 	 * Inserts a new poll.
 	 *
 	 * @param Poll $poll a valid poll object
-	 * @param array $options a set of PollOptions
 	 * @param array $userIds the ids of all users that will be allowed to vote
 	 *
 	 * @return int the id of the created poll
 	 *
 	 * @throws Exception
 	 */
-	public function insertPoll(Poll $poll, array $options, array $userIds): int
+	public function insertPoll(Poll $poll, array $userIds): int
 	{
 		// insert the poll
 		$pollId = $this->db->insert('fs_poll', [
 			'region_id' => $poll->regionId,
-			'scope' => $poll->scope,
 			'name' => $poll->name,
 			'description' => $poll->description,
+			'scope' => $poll->scope,
 			'type' => $poll->type,
-			'start' => $this->db->now(),
-			'end' => $poll->endDate,
+			'start' => $poll->startDate->format('Y-m-d H:i:s'),
+			'end' => $poll->endDate->format('Y-m-d H:i:s'),
 			'author' => $poll->authorId
 		]);
 
 		// insert all options
-		foreach ($options as $option) {
+		foreach ($poll->options as $option) {
 			if (!($option instanceof PollOption)) {
 				throw new Exception('unexpected object type for the poll option');
 			}
@@ -211,7 +210,6 @@ class VotingGateway extends BaseGateway
 				'foodsaver_id' => $user,
 				'poll_id' => $pollId,
 				'has_voted' => 0
-				//TODO: is the timestamp `time` automatically inserted?
 			]);
 		}
 

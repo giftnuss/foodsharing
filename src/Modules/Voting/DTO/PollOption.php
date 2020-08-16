@@ -23,27 +23,39 @@ class PollOption
 	public string $text;
 
 	/**
-	 * The number of up votes for this option.
+	 * The number of up votes for this option. A value of null means that the poll is returned without results.
 	 */
-	public int $upvotes;
+	public ?int $upvotes;
 
 	/**
-	 * The number of neutral votes for this option. Depending on the voting type is might not be used.
+	 * The number of neutral votes for this option. Depending on the voting type is might not be used. A value of
+	 * null means that the poll is returned without results.
 	 */
-	public int $neutralvotes;
+	public ?int $neutralvotes;
 
 	/**
-	 * The number of down votes for this option. Depending on the voting type is might not be used.
+	 * The number of down votes for this option. Depending on the voting type is might not be used. A value of null
+	 * means that the poll is returned without results.
 	 */
-	public int $downvotes;
+	public ?int $downvotes;
+
+	public function __construct()
+	{
+		$this->pollId = -1;
+		$this->optionIndex = -1;
+		$this->text = '';
+		$this->upvotes = null;
+		$this->neutralvotes = null;
+		$this->downvotes = null;
+	}
 
 	public static function create(
 		int $pollId,
 		int $optionIndex,
 		string $text,
-		int $upvotes = 0,
-		int $neutralvotes = 0,
-		int $downvotes = 0
+		int $upvotes = null,
+		int $neutralvotes = null,
+		int $downvotes = null
 	) {
 		$option = new PollOption();
 		$option->pollId = $pollId;

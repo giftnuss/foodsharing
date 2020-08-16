@@ -15,7 +15,8 @@ class AddVoting extends AbstractMigration
 			->addColumn('id', 'integer', [
 				'null' => false,
 				'signed' => false,
-				'limit' => 10
+				'limit' => 10,
+				'identity' => 'enable'
 			])
 			->addColumn('region_id', 'integer', [
 				'null' => false,

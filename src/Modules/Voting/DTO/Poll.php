@@ -60,8 +60,24 @@ class Poll
 
 	/**
 	 * Options of the poll.
+	 *
+	 * @var PollOption[]
 	 */
 	public array $options;
+
+	public function __construct()
+	{
+		$this->id = -1;
+		$this->name = '';
+		$this->description = '';
+		$this->startDate = new DateTime();
+		$this->endDate = new DateTime();
+		$this->regionId = -1;
+		$this->scope = -1;
+		$this->type = -1;
+		$this->authorId = -1;
+		$this->options = [];
+	}
 
 	public static function create(
 		int $id,
