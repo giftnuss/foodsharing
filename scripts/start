@@ -34,7 +34,7 @@ wait-for-mysql
 createdb foodsharing
 
 # Migrating db
-migratedb foodsharing || true
+migratedb
 
 echo "Waiting for assets to be generated..."
 wait-for-assets

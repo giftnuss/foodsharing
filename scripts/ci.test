@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export FS_ENV=ci
+export FS_ENV=test
 
 set -o errexit
 
@@ -10,68 +10,44 @@ dir=$(dirname "$0")
 source "$dir"/inc.sh
 echo $SECONDS seconds elapsed
 
-if [ "x" != "x$CI_BUILD_TOKEN" ]; then
-  log-header "Logging into docker registry"
-  SECONDS=0
-  docker login -u gitlab-ci-token -p "$CI_BUILD_TOKEN" registry.gitlab.com
-  echo $SECONDS seconds elapsed
-fi
 
-log-header "Building images"
+log-header "Preparing execution environment: Prepare PHP config, application & composer dev dependencies"
 SECONDS=0
-
-pids=()
-
-for name in app chat web db influxdb; do
-  dc build $name &
-  pids+=($!)
-done
-
-for pid in "${pids[@]}"; do
-  wait "$pid"
-done
-
-echo $SECONDS seconds elapsed
-
-log-header "Installing composer deps in codeception container"
-SECONDS=0
-dc up -d --no-build --no-deps codeception
-exec-in-container-asroot codeception 'composer install && composer outdated --direct'
-echo $SECONDS seconds elapsed
-
-log-header "Bring up containers"
-SECONDS=0
-dc up -d --no-build
-
-echo "Waiting for database to start"
-wait-for-mysql
+# configure path to application
+sed -i "s#/app#$CI_PROJECT_DIR#g" /usr/local/etc/php-fpm.d/fpm.conf
+# let PHP-FPM run as root
+sed -i "s#www-data#root#g" /usr/local/etc/php-fpm.d/fpm.conf
+# disable xdebug
+rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+bin/console foodsharing:setup
+# also install dev packages
+composer install --prefer-dist --no-progress --no-interaction --no-suggest --no-scripts --ignore-platform-reqs && composer outdated --direct
+php-fpm -R 2> php_fpm_err.log &
 echo $SECONDS seconds elapsed
 
 log-header "Initializing database"
 SECONDS=0
-sql-query mysql 'drop database if exists foodsharing; create database foodsharing'
-
-migratedb foodsharing
-
-"$dir"/mkdirs
+mysql -u root -proot -hdb --execute="drop database if exists foodsharing; create database foodsharing"
+php run.php Mails queueWorker &
+vendor/bin/phinx migrate
 echo $SECONDS seconds elapsed
 
 log-header "Running tests"
 failed=0
 SECONDS=0
-exec-in-container codeception vendor/bin/codecept run --xml --html || failed=1
+vendor/bin/codecept run --xml --html || failed=1
 echo $SECONDS seconds elapsed
 
 if [ $failed -eq 1 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+  grep -E '<error|<failure' tests/_output/report.xml || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container codeception vendor/bin/codecept run --xml --html -g failed || failed=2
+  vendor/bin/codecept run --xml --html -g failed || failed=2
   echo $SECONDS seconds elapsed
 fi
 
@@ -79,12 +55,12 @@ if [ $failed -eq 2 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+  grep -E '<error|<failure' tests/_output/report.xml || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container codeception vendor/bin/codecept run --xml --html -g failed || failed=3
+  vendor/bin/codecept run --xml --html -g failed || failed=3
   echo $SECONDS seconds elapsed
 fi
 
@@ -92,18 +68,13 @@ if [ $failed -eq 3 ]; then
   log-header "Check for codeception errors"
   # check if codeception generated a report file that contains failed tests
   # Otherwise, codeception probably failed itself and the whole job should fail
-  exec-in-container codeception "grep -E '<error|<failure' /app/tests/_output/report.xml" || \
+  grep -E '<error|<failure' tests/_output/report.xml || \
     (echo "report.xml is incomplete, aborting" && false)
 
   log-header "Rerunning failed tests"
   SECONDS=0
-  exec-in-container codeception vendor/bin/codecept run -g failed
+  vendor/bin/codecept run -g failed
   echo $SECONDS seconds elapsed
 fi
-
-log-header "Running chat tests"
-SECONDS=0
-run-in-container chat 'yarn lint && yarn test'
-echo $SECONDS seconds elapsed
 
 log-header "Done!"

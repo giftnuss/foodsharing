@@ -3,7 +3,6 @@
 namespace Foodsharing\Modules\Basket;
 
 use Flourish\fImage;
-use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Lib\Xhr\XhrDialog;
@@ -11,7 +10,8 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\BasketRequests\Status as RequestStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\TimeHelper;
 
 class BasketXhr extends Control
 {
@@ -26,7 +26,7 @@ class BasketXhr extends Control
 		BasketGateway $basketGateway,
 		FoodsaverGateway $foodsaverGateway,
 		TimeHelper $timeHelper,
-		ImageService $imageService,
+		ImageHelper $imageService,
 		WebSocketConnection $webSocketConnection
 	) {
 		$this->view = $view;
@@ -44,7 +44,6 @@ class BasketXhr extends Control
 		$allowed = [
 			'bubble' => true,
 			'login' => true,
-			'basketCoordinates' => true,
 			'nearbyBaskets' => true,
 		];
 
@@ -58,16 +57,6 @@ class BasketXhr extends Control
 			);
 			exit();
 		}
-	}
-
-	public function basketCoordinates(): void
-	{
-		$xhr = new Xhr();
-		if ($baskets = $this->basketGateway->getBasketCoordinates()) {
-			$xhr->addData('baskets', $baskets);
-		}
-
-		$xhr->send();
 	}
 
 	public function newBasket(): array
@@ -404,16 +393,6 @@ class BasketXhr extends Control
 
 			return $dia->xhrout();
 		}
-	}
-
-	public function removeBasket(): array
-	{
-		$this->basketGateway->removeBasket($_GET['id'], $this->session->id());
-
-		return [
-			'status' => 1,
-			'script' => 'basketStore.loadBaskets();pulseInfo("' . $this->translationHelper->s('basket_not_active') . '");',
-		];
 	}
 
 	public function editBasket()

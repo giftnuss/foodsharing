@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Content;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
 use Foodsharing\Permissions\ContentPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
 use Parsedown;
 
 class ContentControl extends Control
@@ -38,7 +38,6 @@ class ContentControl extends Control
 			if (!$this->contentPermissions->mayEditContent()) {
 				$this->routeHelper->go('/');
 			}
-			$this->model;
 
 			if ($this->identificationHelper->getAction('neu')) {
 				$this->handle_add();
@@ -88,7 +87,7 @@ class ContentControl extends Control
 						$rows[] = [
 							['cnt' => $d['id']],
 							['cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'],
-							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('delete_sure', $d['name'])])
+							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('content_delete_sure', $d['name'])])
 							]];
 					}
 

@@ -6,7 +6,6 @@ use Exception;
 use Flourish\fAuthorization;
 use Flourish\fImage;
 use Flourish\fSession;
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
@@ -14,37 +13,34 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Services\StoreService;
+use Foodsharing\Utility\TranslationHelper;
 
 class Session
 {
 	private $mem;
+	private $buddyGateway;
 	private $foodsaverGateway;
 	private $quizHelper;
 	private $regionGateway;
-	private $buddyGateway;
 	private $storeGateway;
-	private $storeService;
 	private $initialized = false;
 	private $translationHelper;
 
 	public function __construct(
 		Mem $mem,
+		BuddyGateway $buddyGateway,
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		BuddyGateway $buddyGateway,
 		StoreGateway $storeGateway,
-		StoreService $storeService,
 		TranslationHelper $translationHelper
 	) {
 		$this->mem = $mem;
+		$this->buddyGateway = $buddyGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
-		$this->buddyGateway = $buddyGateway;
 		$this->storeGateway = $storeGateway;
-		$this->storeService = $storeService;
 		$this->translationHelper = $translationHelper;
 	}
 
@@ -143,7 +139,7 @@ class Session
 		return $user[$index];
 	}
 
-	public function id()
+	public function id(): ?int
 	{
 		if (!$this->initialized) {
 			return null;
@@ -214,8 +210,6 @@ class Session
 
 	/**
 	 * gets a user specific option and will be available after next login.
-	 *
-	 * @param $name
 	 */
 	public function option($key)
 	{

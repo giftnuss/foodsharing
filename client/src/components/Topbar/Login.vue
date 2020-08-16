@@ -67,6 +67,34 @@
     >
       <img src="/img/469.gif">
     </button>
+    <b-popover
+      target="login-password"
+      custom-class="bootstrap login-popover bg-white"
+      triggers="focus"
+      :title="$i18n('login.save_password')"
+      placement="top"
+      container="topbar"
+      variant="secondary"
+    >
+      <form
+        class="my-lg-0 flex-grow-1"
+      >
+        <b-checkbox
+          id="login-rememberme"
+          v-model="rememberMe"
+          switch
+          class="mt-2 mb-4"
+        >
+          {{ $i18n('login.steady_login') }}
+        </b-checkbox>
+        <b-link
+          :href="$url('passwordReset')"
+          class="b-link"
+        >
+          {{ $i18n('login.forgotten_password_label') }}
+        </b-link>
+      </form>
+    </b-popover>
   </form>
 </template>
 
@@ -76,12 +104,15 @@ import { login } from '@/api/user'
 import { pulseError, pulseSuccess } from '@/script'
 import i18n from '@/i18n'
 import serverData from '@/server-data'
+import { BPopover } from 'bootstrap-vue'
 
 export default {
+  components: { BPopover },
   data () {
     return {
       email: serverData.isDev ? 'userbot@example.com' : '',
       password: serverData.isDev ? 'user' : '',
+      rememberMe: false,
       isLoading: false,
       error: null
     }
@@ -100,7 +131,7 @@ export default {
       }
       this.isLoading = true
       try {
-        const user = await login(this.email, this.password)
+        const user = await login(this.email, this.password, this.rememberMe)
         pulseSuccess(i18n('login.success', { user_name: user.name }))
 
         const urlParams = new URLSearchParams(window.location.search)
@@ -128,15 +159,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .b-link {
+    color: rgb(100, 174, 036);
+  }
   .loadingButton {
     img {
       height: 1em;
     }
   }
-
   #login-form .input-group {
     @media (max-width: 575px) {
       width: 80%;
     }
+  }
+  .login-btn {
+    display: flex;
+    align-items: center;
+    span {
+      width: 100%;
+    }
+  }
+  .login-popover {
+    box-shadow: -0.5em 0.5em 20px -3px #333;
+    max-width: 100%;
   }
 </style>

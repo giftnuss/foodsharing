@@ -6,7 +6,7 @@ use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 
 class ActivityXhr extends Control
 {
@@ -15,7 +15,7 @@ class ActivityXhr extends Control
 	private $activityGateway;
 
 	public function __construct(
-		ImageService $imageService,
+		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway,
 		ActivityGateway $activityGateway
 	) {
@@ -45,7 +45,7 @@ class ActivityXhr extends Control
 				$options = false;
 			}
 
-			$this->session->setOption('activity-listings', $options, $this->model);
+			$this->session->setOption('activity-listings', $options);
 		}
 
 		$page = $_GET['page'] ?? 0;
@@ -91,11 +91,11 @@ class ActivityXhr extends Control
 				$options = false;
 			}
 
-			$this->session->setOption('activity-listings', $options, $this->model);
+			$this->session->setOption('activity-listings', $options);
 		}
 
 		if (isset($_GET['select_all_options'])) {
-			$this->session->setOption('activity-listings', false, $this->model);
+			$this->session->setOption('activity-listings', false);
 		}
 	}
 

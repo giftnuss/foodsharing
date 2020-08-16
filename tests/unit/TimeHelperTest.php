@@ -8,13 +8,13 @@ class TimeHelperTest extends \Codeception\Test\Unit
 	protected $tester;
 
 	/**
-	 * @var \Foodsharing\Helpers\TimeHelper|null
+	 * @var \Foodsharing\Utility\TimeHelper|null
 	 */
 	private $timeHelper;
 
 	protected function _before()
 	{
-		$this->timeHelper = $this->tester->get(\Foodsharing\Helpers\TimeHelper::class);
+		$this->timeHelper = $this->tester->get(\Foodsharing\Utility\TimeHelper::class);
 	}
 
 	public function testNiceDate(): void

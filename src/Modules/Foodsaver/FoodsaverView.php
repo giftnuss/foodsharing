@@ -2,10 +2,51 @@
 
 namespace Foodsharing\Modules\Foodsaver;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodsaverView extends View
 {
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizer,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
+	) {
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizer,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+	}
+
 	public function foodsaverForm($foodsaver = false)
 	{
 		if ($foodsaver === false) {
@@ -111,7 +152,13 @@ class FoodsaverView extends View
 
 			$position,
 
-			$this->v_utils->v_info($this->translationHelper->s('warning_of_address_change')),
+			$this->v_utils->v_info(
+				'<b>' . $this->translator->trans('foodsaver.addresschange.title') . '</b>'
+				. '<br>' . $this->translator->trans('foodsaver.addresschange.text', [
+					'{settings}' => '<a href="/?page=settings&sub=general">'
+						. $this->translator->trans('terminology.settings') . '</a>',
+				])
+			),
 			$this->v_utils->v_form_text('stadt', ['required' => true]),
 			$this->v_utils->v_form_text('plz', ['required' => true]),
 			$this->v_utils->v_form_text('anschrift', ['required' => true]),
@@ -128,7 +175,7 @@ class FoodsaverView extends View
 				['required' => true]
 			]),
 
-			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (date('Y') - 111), 'yearRangeTo' => date('Y')])
+			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => ((int)date('Y') - 111), 'yearRangeTo' => date('Y')])
 		]);
 	}
 
@@ -136,10 +183,10 @@ class FoodsaverView extends View
 	{
 		$content = '
 	<div style="text-align:center;margin-bottom:10px;">
-		<span id="delete-account">' . $this->translationHelper->s('delete_now') . '</span>
+		<span id="delete-account">' . $this->translator->trans('foodsaver.delete_account_now') . '</span>
 	</div>
 	';
 
-		return $this->v_utils->v_field($content, $this->translationHelper->s('delete_account'), ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($content, $this->translator->trans('foodsaver.delete_account'), ['class' => 'ui-padding']);
 	}
 }

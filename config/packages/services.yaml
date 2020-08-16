@@ -1,0 +1,106 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Foodsharing\:
+        resource: '../../src/*'
+        exclude: '../../src/{Lib/Flourish,Lib/Cache,Lib/Session,Lib/View/v*,Dev,Debug,FoodsharingKernel.php,Modules/PushNotification/Notification}'
+
+    Foodsharing\Lib\Session:
+        calls:
+        - [initIfCookieExists]
+
+    markdown.nohtml:
+        class: \Parsedown
+        calls:
+            - ['setSafeMode', [true]]
+            - ['setMarkupEscaped', [false]]
+            - ['setBreaksEnabled', [true]]
+
+    Parsedown: '@markdown.nohtml'
+
+    HTMLPurifier: '@exercise_html_purifier.default'
+
+    Intervention\Image\ImageManager:
+        arguments:
+            - driver: 'imagick'
+
+    mysqli:
+      class: mysqli
+      arguments:
+        - !php/const DB_HOST
+        - !php/const DB_USER
+        - !php/const DB_PASS
+        - !php/const DB_DB
+      calls:
+        - [query, ['SET NAMES "utf8mb4"']]
+
+    Foodsharing\Debug\DebugBar:
+        class: Foodsharing\Debug\DisabledDebugBar
+
+    PDO:
+        alias: RealPDO
+
+    RealPDO:
+        class: PDO
+        arguments:
+        - !php/const DSN
+        - !php/const DB_USER
+        - !php/const DB_PASS
+        calls:
+        - [ setAttribute, [!php/const PDO::ATTR_EMULATE_PREPARES, false]]
+        - [ setAttribute, [!php/const PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION]]
+
+    InfluxDB\Database:
+        factory: ['InfluxDB\Client', 'fromdsn']
+        arguments:
+            - !php/const INFLUX_DSN
+
+    BounceMailHandler\BounceMailHandler:
+        properties:
+            mailhost: !php/const BOUNCE_IMAP_HOST
+            mailboxUserName: !php/const BOUNCE_IMAP_USER
+            mailboxPassword: !php/const BOUNCE_IMAP_PASS
+            port: !php/const BOUNCE_IMAP_PORT
+            service: 'imap'
+            serviceOption: 'tls'
+            boxname: 'INBOX'
+            maxMessages: 10000
+            verbose: 0
+
+    Foodsharing\Lib\TwigExtensions:
+        tags:
+            - twig.extension
+
+    Twig\Extra\Intl\IntlExtension:
+        tags:
+            - twig.extension
+
+    Foodsharing\EventListener\CsrfListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller }
+        arguments:
+            - "@annotation_reader"
+
+    mailer.transport:
+        class: Swift_SmtpTransport
+        arguments:
+            - !php/const MAILER_HOST
+
+    Swift_Mailer:
+        class: Swift_Mailer
+        arguments:
+            - '@mailer.transport'
+
+    Foodsharing\Modules\Message\Message:
+        autowire: false
+
+    GuzzleHttp\Client:
+
+    Foodsharing\Lib\BigBlueButton:
+        bind:
+            $url: !php/const BBB_DOMAIN
+            $secret: !php/const BBB_SECRET
+            $dialin: !php/const BBB_DIALIN

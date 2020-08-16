@@ -52,12 +52,6 @@ Object.assign(module.exports, convert({
     }
   },
 
-  'jquery-contextmenu': {
-    imports: {
-      jQuery: 'jquery'
-    }
-  },
-
   'corejs-typeahead': {
     dependencies: [
       'css/typeahead.css'

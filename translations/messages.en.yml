@@ -105,3 +105,7 @@ menu:
     ids: Passports
     joinregion: Join a region
   your_settings: Your data and settings
+
+profile:
+  bananaSent: The banana was sent!
+  bananaMessageTooShort: The text message accompanying your banana should be at least 100 characters long.

@@ -133,7 +133,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 	/**
 	 * Normalizes the details of a food share point for the Rest response.
 	 *
-	 * @param array $fspData the food share point data
+	 * @param array $data the food share point data
 	 */
 	private function normalizeFoodSharePoint(array $data): array
 	{

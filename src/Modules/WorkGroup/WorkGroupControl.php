@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\ApplyType;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
-use Foodsharing\Services\ImageService;
+use Foodsharing\Utility\ImageHelper;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WorkGroupControl extends Control
 {
 	/**
-	 * @var FormFactoryBuilder
+	 * @var FormFactoryInterface
 	 */
 	private $formFactory;
 	private $imageService;
@@ -22,7 +22,7 @@ class WorkGroupControl extends Control
 
 	public function __construct(
 		WorkGroupView $view,
-		ImageService $imageService,
+		ImageHelper $imageService,
 		WorkGroupGateway $workGroupGateway
 	) {
 		$this->view = $view;
@@ -180,30 +180,26 @@ class WorkGroupControl extends Control
 	private function edit(Request $request, Response $response)
 	{
 		$groupId = $request->query->getInt('id');
-
-		if ($group = $this->workGroupGateway->getGroup($groupId)) {
-			if ($group['type'] != Type::WORKING_GROUP) {
-				$this->routeHelper->go('/?page=dashboard');
-			}
-			if (!$this->mayEdit($group)) {
-				$this->routeHelper->go('/?page=dashboard');
-			}
-
-			$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
-			$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
-			$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
-			$form->handleRequest($request);
-			if ($form->isSubmitted()) {
-				if ($form->isValid()) {
-					$data = $editWorkGroupRequest->toGroup();
-					$this->workGroupGateway->updateGroup($group['id'], $data);
-					$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
-					$this->flashMessageHelper->info('Änderungen gespeichert!');
-					$this->routeHelper->goSelf();
-				}
-			}
+		$group = $this->workGroupGateway->getGroup($groupId);
+		if (!$group) {
+			$this->routeHelper->go('/?page=groups');
+		} elseif ($group['type'] != Type::WORKING_GROUP || !$this->mayEdit($group)) {
+			$this->routeHelper->go('/?page=dashboard');
 		}
 
+		$this->pageHelper->addBread($group['name'] . ' bearbeiten', '/?page=groups&sub=edit&id=' . (int)$group['id']);
+		$editWorkGroupRequest = EditWorkGroupData::fromGroup($group);
+		$form = $this->formFactory->create(WorkGroupForm::class, $editWorkGroupRequest);
+		$form->handleRequest($request);
+		if ($form->isSubmitted()) {
+			if ($form->isValid()) {
+				$data = $editWorkGroupRequest->toGroup();
+				$this->workGroupGateway->updateGroup($group['id'], $data);
+				$this->workGroupGateway->updateTeam($group['id'], $data['member'], $data['leader']);
+				$this->flashMessageHelper->info('Änderungen gespeichert!');
+				$this->routeHelper->goSelf();
+			}
+		}
 		$response->setContent($this->render('pages/WorkGroup/edit.twig',
 			['nav' => $this->getSideMenuData(), 'group' => $group, 'form' => $form->createView()]
 		));

@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Modules\Mailbox;
 
-use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Mail\AsyncMail;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Permissions\MailboxPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
 
 class MailboxXhr extends Control
 {
@@ -19,7 +19,7 @@ class MailboxXhr extends Control
 
 	public function __construct(
 		MailboxView $view,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
 		MailboxGateway $mailboxGateway,
 		MailboxPermissions $mailboxPermissions
@@ -124,11 +124,16 @@ class MailboxXhr extends Control
 			}
 
 			$nc_js = '';
-			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->mailboxPermissions->mayHaveMailbox())) {
+			// we already handled the "not a store manager case" (PERMISSION_DENIED) earlier
+			if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), true)) {
 				if ($newcount = $this->mailboxGateway->getNewCount($boxes)) {
 					foreach ($newcount as $nc) {
+						// locate the tree entry for this mailbox with jQuery + append unread count
+						$mailboxName = $nc['name'] . '@' . PLATFORM_MAILBOX_HOST;
 						$nc_js .= '
-								$( "ul.dynatree-container a.dynatree-title:contains(\'' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . '\')" ).removeClass("nonew").addClass("newmail").text("' . $nc['name'] . '@' . PLATFORM_MAILBOX_HOST . ' (' . (int)$nc['count'] . ')");';
+				$("ul.dynatree-container a.dynatree-title").filter(function () {
+					return $(this).text() === "' . $mailboxName . '";
+				}).addClass("newmail").attr("data-count","(' . $nc['count'] . ') ");';
 					}
 				}
 			}

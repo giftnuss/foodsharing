@@ -2,11 +2,11 @@
 
 namespace Foodsharing\Modules\Login;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Legal\LegalGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\TranslationHelper;
 
 class LoginGateway extends BaseGateway
 {
@@ -14,8 +14,12 @@ class LoginGateway extends BaseGateway
 	private $translationHelper;
 	private $legalGateway;
 
-	public function __construct(EmailHelper $emailHelper, TranslationHelper $translationHelper, Database $db, LegalGateway $legalGateway)
-	{
+	public function __construct(
+		EmailHelper $emailHelper,
+		TranslationHelper $translationHelper,
+		Database $db,
+		LegalGateway $legalGateway
+	) {
 		$this->emailHelper = $emailHelper;
 		$this->translationHelper = $translationHelper;
 		$this->legalGateway = $legalGateway;
@@ -174,7 +178,7 @@ class LoginGateway extends BaseGateway
 					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
 				];
 
-				$this->emailHelper->tplMail('user/reset_password', $fs['email'], $vars);
+				$this->emailHelper->tplMail('user/reset_password', $fs['email'], $vars, false, true);
 
 				return true;
 			}

@@ -13,8 +13,8 @@ class WorkGroupXhr extends Control
 	private $responses;
 
 	public function __construct(
-			WorkGroupView $view,
-			WorkGroupGateway $workGroupGateway
+		WorkGroupView $view,
+		WorkGroupGateway $workGroupGateway
 	) {
 		$this->view = $view;
 		$this->workGroupGateway = $workGroupGateway;

@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Foodsaver;
 
 use Carbon\Carbon;
 use Exception;
-use Foodsharing\Helpers\DataHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -12,6 +11,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Store\StoreModel;
+use Foodsharing\Utility\DataHelper;
 
 final class FoodsaverGateway extends BaseGateway
 {
@@ -361,6 +361,24 @@ final class FoodsaverGateway extends BaseGateway
 
 			WHERE 	hb.bezirk_id IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
 			AND		fs.deleted_at IS NULL
+		');
+	}
+
+	public function xhrGetStoremanagersOfRegionsForTagSelect(array $regionIds): array
+	{
+		return $this->db->fetchAll('
+			SELECT DISTINCT
+				fs.`id`,
+				CONCAT(fs.`name`," ",fs.`nachname`," (",fs.`id`,")") AS value
+
+			FROM 	fs_foodsaver fs
+					INNER JOIN fs_foodsaver_has_bezirk hb
+					ON hb.foodsaver_id = fs.id
+
+			WHERE 	hb.bezirk_id IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
+			AND		fs.deleted_at IS NULL
+			AND		fs.rolle >= 2
+			AND		fs.privacy_notice_accepted_date IS NOT NULL
 		');
 	}
 
@@ -740,8 +758,6 @@ final class FoodsaverGateway extends BaseGateway
 
 	/**
 	 * set option is an key value store each var is available in the user session.
-	 *
-	 * @param $val
 	 */
 	public function setOption(int $fsId, string $key, $val): int
 	{

@@ -66,6 +66,14 @@
             <i class="fas fa-user" /> {{ $i18n('menu.entry.members') }}
           </a>
           <a
+            href="#"
+            role="menuitem"
+            class="dropdown-item"
+            @click="showConferencePopup(group.id)"
+          >
+            <i class="fas fa-users" /> {{ $i18n('menu.entry.conference') }}
+          </a>
+          <a
             v-if="group.isBot"
             :href="$url('workingGroupEdit', group.id)"
             role="menuitem"
@@ -103,10 +111,12 @@
 </template>
 <script>
 import { BCollapse, VBToggle, VBTooltip } from 'bootstrap-vue'
+import Conference from './Conference'
 
 export default {
   components: { BCollapse },
   directives: { VBToggle, VBTooltip },
+  mixins: [Conference],
   props: {
     workingGroups: {
       type: Array,

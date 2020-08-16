@@ -25,8 +25,10 @@ class CreateThemeFollowerEntriesCommand extends Command
 		$this->setHelp('This command goes together with change from 2020-05 release where bell notifications can be enabled/disabled per thread. This creates a default notification setting for all participants of a thread that do not have an info entry yet.');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): void
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$output->writeln('created ' . $this->forumFollowerGateway->createFollowerEntriesForExistingThreads() . ' follower entries');
+
+		return 0;
 	}
 }

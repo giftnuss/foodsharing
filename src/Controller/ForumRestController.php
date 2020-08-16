@@ -5,10 +5,10 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\ForumGateway;
+use Foodsharing\Modules\Region\ForumTransactions;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ForumPermissions;
-use Foodsharing\Services\ForumService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -23,7 +23,7 @@ class ForumRestController extends AbstractFOSRestController
 	private $forumGateway;
 	private $forumFollowerGateway;
 	private $forumPermissions;
-	private $forumService;
+	private $forumTransactions;
 	private $sanitizerService;
 
 	public function __construct(
@@ -32,15 +32,15 @@ class ForumRestController extends AbstractFOSRestController
 		ForumGateway $forumGateway,
 		ForumFollowerGateway $forumFollowerGateway,
 		ForumPermissions $forumPermissions,
-		ForumService $forumService,
-		SanitizerService $sanitizerService
+		ForumTransactions $forumTransactions,
+		Sanitizer $sanitizerService
 	) {
 		$this->session = $session;
 		$this->regionGateway = $regionGateway;
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumPermissions = $forumPermissions;
-		$this->forumService = $forumService;
+		$this->forumTransactions = $forumTransactions;
 		$this->sanitizerService = $sanitizerService;
 	}
 
@@ -192,7 +192,7 @@ class ForumRestController extends AbstractFOSRestController
 		}
 
 		$body = $paramFetcher->get('body');
-		$this->forumService->addPostToThread($this->session->id(), $threadId, $body);
+		$this->forumTransactions->addPostToThread($this->session->id(), $threadId, $body);
 
 		return $this->handleView($this->view());
 	}
@@ -218,7 +218,7 @@ class ForumRestController extends AbstractFOSRestController
 		$regionDetails = $this->regionGateway->getRegionDetails($forumId);
 		$postActiveWithoutModeration = ($this->session->user('verified') && !$regionDetails['moderated']) || $this->session->isAmbassadorForRegion([$forumId]);
 
-		$threadId = $this->forumService->createThread($this->session->id(), $title, $body, $regionDetails, $forumSubId, $postActiveWithoutModeration, true);
+		$threadId = $this->forumTransactions->createThread($this->session->id(), $title, $body, $regionDetails, $forumSubId, $postActiveWithoutModeration, true);
 
 		return $this->getThreadAction($threadId);
 	}
@@ -249,7 +249,7 @@ class ForumRestController extends AbstractFOSRestController
 		}
 		$isActive = $paramFetcher->get('isActive');
 		if ($isActive === true) {
-			$this->forumService->activateThread($threadId);
+			$this->forumTransactions->activateThread($threadId);
 		}
 
 		return $this->getThreadAction($threadId);
@@ -345,6 +345,31 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
+	 * Deletes a forum thread.
+	 *
+	 * @SWG\Tag(name="forum")
+	 * @SWG\Parameter(name="threadId", in="path", type="integer", description="ID of the thread that will be deleted")
+	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="403", description="Insufficient permissions to delete that thread or thread is already active")
+	 * @SWG\Response(response="404", description="Thread does not exist.")
+	 * @Rest\Delete("forum/thread/{threadId}", requirements={"postId" = "\d+"})
+	 */
+	public function deleteThreadAction(int $threadId): SymfonyResponse
+	{
+		$thread = $this->forumGateway->getThread($threadId);
+		if (!$thread) {
+			throw new HttpException(404);
+		}
+		if (!$this->forumPermissions->mayDeleteThread($thread)) {
+			throw new HttpException(403);
+		}
+
+		$this->forumGateway->deleteThread($threadId);
+
+		return $this->handleView($this->view([], 200));
+	}
+
+	/**
 	 * Adds an emoji reaction to a post. An emoji is an arbitrary string but needs to be supported by the frontend.
 	 *
 	 * @SWG\Tag(name="forum")
@@ -360,7 +385,7 @@ class ForumRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
-		$this->forumService->addReaction($this->session->id(), $postId, $emoji);
+		$this->forumTransactions->addReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
 	}
@@ -374,7 +399,7 @@ class ForumRestController extends AbstractFOSRestController
 	 */
 	public function deleteReactionAction(int $postId, string $emoji): SymfonyResponse
 	{
-		$this->forumService->removeReaction($this->session->id(), $postId, $emoji);
+		$this->forumTransactions->removeReaction($this->session->id(), $postId, $emoji);
 
 		return $this->handleView($this->view([]));
 	}

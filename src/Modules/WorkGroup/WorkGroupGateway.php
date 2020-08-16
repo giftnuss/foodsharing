@@ -6,21 +6,17 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
-use Foodsharing\Services\NotificationService;
 
 class WorkGroupGateway extends BaseGateway
 {
 	private $forumFollowerGateway;
-	private $notificationService;
 
 	public function __construct(
 		Database $db,
-		ForumFollowerGateway $forumFollowerGateway,
-		NotificationService $notificationService
+		ForumFollowerGateway $forumFollowerGateway
 	) {
 		parent::__construct($db);
 		$this->forumFollowerGateway = $forumFollowerGateway;
-		$this->notificationService = $notificationService;
 	}
 
 	/*
@@ -208,8 +204,9 @@ class WorkGroupGateway extends BaseGateway
 			ON			hb.`bezirk_id` = b.`id`
 			WHERE		hb.`foodsaver_id` = :foodsaver_id
 			AND			b.`type` = :bezirk_type
+			AND			hb.active = :active
 			ORDER BY	b.`name`
-		', [':foodsaver_id' => $fsId, ':bezirk_type' => Type::WORKING_GROUP]);
+		', [':foodsaver_id' => $fsId, ':bezirk_type' => Type::WORKING_GROUP, ':active' => 1]);
 	}
 
 	public function listGroups(int $parentId): array

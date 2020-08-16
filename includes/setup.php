@@ -1,6 +1,6 @@
 <?php
 
-use Foodsharing\FoodsharingKernel;
+use Foodsharing\Kernel;
 use Symfony\Component\DependencyInjection\Container;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -14,7 +14,7 @@ function initializeContainer()
 {
 	$env = $_SERVER['FS_ENV'] ?? getenv('FS_ENV') ?? 'dev';
 	$debug = (bool)($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
-	$kernel = new FoodsharingKernel($env, $debug);
+	$kernel = new Kernel($env, $debug);
 	$kernel->boot();
 
 	return $kernel->getContainer();

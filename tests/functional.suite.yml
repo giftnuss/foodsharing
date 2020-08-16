@@ -10,7 +10,7 @@ modules:
         - Symfony:
             app_path: 'src'
             environment: 'test'
-            kernel_class: 'Foodsharing\FoodsharingKernel'
+            kernel_class: 'Foodsharing\Kernel'
             cache_router: 'true'
         # add framework module here
         - \Helper\Functional

@@ -2,64 +2,64 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
-use Symfony\Component\Translation\TranslatorInterface;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class View
 {
 	private $sub;
 
+	/* @var \Foodsharing\Lib\Session */
+	protected $session;
 	/* @var \Foodsharing\Lib\View\Utils */
 	protected $v_utils;
-	protected $session;
-	protected $sanitizerService;
-	protected $pageHelper;
-	protected $timeHelper;
 
-	/**
-	 * @var \Twig\Environment
-	 */
+	/* @var \Twig\Environment */
 	public $twig;
-	protected $imageService;
-	protected $routeHelper;
-	protected $identificationHelper;
+
 	protected $dataHelper;
+	protected $identificationHelper;
+	protected $imageService;
+	protected $pageHelper;
+	protected $routeHelper;
+	protected $sanitizerService;
+	protected $timeHelper;
 	protected $translationHelper;
 	protected $translator;
 
 	public function __construct(
 		\Twig\Environment $twig,
-		Utils $viewUtils,
 		Session $session,
-		SanitizerService $sanitizerService,
-		PageHelper $pageHelper,
-		TimeHelper $timeHelper,
-		ImageService $imageService,
-		RouteHelper $routeHelper,
-		IdentificationHelper $identificationHelper,
+		Utils $viewUtils,
 		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
 		TranslationHelper $translationHelper,
 		TranslatorInterface $translator
 	) {
 		$this->twig = $twig;
-		$this->v_utils = $viewUtils;
 		$this->session = $session;
-		$this->sanitizerService = $sanitizerService;
-		$this->pageHelper = $pageHelper;
-		$this->timeHelper = $timeHelper;
-		$this->imageService = $imageService;
-		$this->routeHelper = $routeHelper;
-		$this->identificationHelper = $identificationHelper;
+		$this->v_utils = $viewUtils;
 		$this->dataHelper = $dataHelper;
+		$this->identificationHelper = $identificationHelper;
+		$this->imageService = $imageService;
+		$this->pageHelper = $pageHelper;
+		$this->routeHelper = $routeHelper;
+		$this->sanitizerService = $sanitizerService;
+		$this->timeHelper = $timeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->translator = $translator;
 	}
@@ -274,7 +274,7 @@ class View
 		</div>';
 	}
 
-	public function latLonPicker($id, $options = [])
+	public function latLonPicker($id, $options = [], $context = '')
 	{
 		if (!isset($options['location'])) {
 			$data = $this->session->getLocation() ?? ['lat' => 0, 'lon' => 0];
@@ -296,9 +296,17 @@ class View
 			}
 		}
 
-		$out = $this->v_utils->v_input_wrapper($this->translationHelper->s('position_search'), $this->v_utils->v_info($this->translationHelper->s('position_search_infobox')) . '
-		<input placeholder="Bitte hier Deine Adresse suchen! Falls nötig, danach unten korrigieren." type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
-		<div id="map" class="pickermap"></div>');
+		$out = $this->v_utils->v_input_wrapper(
+			$this->translator->trans('addresspicker.label'),
+	'<div class="lat-lon-picker">' .
+			$this->v_utils->v_info(
+				$this->translator->trans('addresspicker.infobox')
+				. ($context ? '<hr>' . $this->translator->trans('addresspicker.infobox' . $context) : '')
+			) .
+		'<input placeholder="' . $this->translator->trans('addresspicker.placeholder') . '" '
+			. 'type="text" value="" id="addresspicker" type="text" class="input text value ui-corner-top" />
+		<div id="map" class="pickermap"></div>
+	</div>');
 		$out .=
 			$this->v_utils->v_form_text('anschrift', ['value' => $options['anschrift'], 'required' => '1']) .
 			$this->v_utils->v_form_text('plz', ['value' => $options['plz'], 'disabled' => '1', 'required' => '1']) .

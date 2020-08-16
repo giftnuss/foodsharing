@@ -58,13 +58,13 @@
 
 .chatboxhead .settings li .optinput {
   padding: 0;
+  display: flex;
 }
 
 .chatboxhead .settings li .optinput i {
   color: var(--fs-brown);
   cursor: pointer;
   font-size: 20px;
-  margin-left: -21px;
   position: relative;
   top: 3px;
 }
@@ -77,8 +77,9 @@
   border: 1px solid #a2988e;
   border-radius: 4px;
   margin-bottom: 0;
+  margin-right: 5px;
   padding: 4px 5px;
-  width: 167px;
+  width: 100%;
 }
 
 .chatboxhead .linklist li a {
@@ -91,11 +92,13 @@
   border-left: 1px solid #61ab23;
 }
 
+#msg-conversation a,
 .chatboxmessagecontent a {
   color: var(--fs-green);
   text-decoration: none;
 }
 
+#msg-conversation a:hover,
 .chatboxmessagecontent a:hover {
   text-decoration: underline;
 }
@@ -107,9 +110,6 @@
   width: 259px;
   overflow-y: auto;
   padding: 7px !important;
-  border-left: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #eeeeee;
   background-color: #ffffff;
   overflow-x: hidden;
 }
@@ -117,9 +117,6 @@
 .chatboxinput {
   padding: 5px;
   background-color: #ffffff;
-  border-left: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
   height: 50px;
 }
 
@@ -129,10 +126,14 @@
   padding: 3px 0 3px 3px;
   border: 1px solid #eeeeee;
   margin: 1px;
-  overflow: hidden;
+  max-height: 250px;
+  overflow-x: hidden;
+  overflow-y: auto !important;
   border-radius: 6px;
   position: absolute;
   bottom: 4px;
+  box-shadow: 0 -2px 1px 1px var(--border);
+  outline-color: var(--fs-brown);
 }
 
 .chatboxtextareaselected {

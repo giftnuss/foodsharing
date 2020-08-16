@@ -118,12 +118,12 @@ class EventGateway extends BaseGateway
 				UNIX_TIMESTAMP(e.end) AS end_ts,
 				e.description,
 				e.bot,
-				e.online	
+				e.online
 			FROM
 				fs_event e,
-				fs_foodsaver fs	
+				fs_foodsaver fs
 			WHERE
-				e.foodsaver_id = fs.id	
+				e.foodsaver_id = fs.id
 			AND
 				e.id = :id
 		', [':id' => $id]);
@@ -149,14 +149,14 @@ class EventGateway extends BaseGateway
 					fs.name,
 					fs.photo,
 					fe.status
-			FROM 
+			FROM
 				`fs_foodsaver_has_event` fe,
 				`fs_foodsaver` fs
-				
+
 			WHERE
 				fe.foodsaver_id = fs.id
-				
-			AND 
+
+			AND
 				fe.event_id = :event_id
 		', [':event_id' => $event_id]);
 
@@ -238,8 +238,8 @@ class EventGateway extends BaseGateway
 				fe.status = 0
 			AND
 				e.end > NOW()
-			ORDER BY 
-			e.start 
+			ORDER BY
+			e.start
 		', [':fs_id' => $fs_id]);
 	}
 
@@ -318,6 +318,7 @@ class EventGateway extends BaseGateway
 	 */
 	public function addInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
 	{
+		$data = [];
 		$parts = array_chunk($foodsaverIds, 100);
 		foreach ($parts as $part) {
 			foreach ($part as $id) {

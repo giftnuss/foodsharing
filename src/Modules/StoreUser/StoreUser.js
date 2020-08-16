@@ -26,15 +26,12 @@ import {
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest,
-  createJumperMenu,
-  createMenu,
-  u_timetableAction,
-  addContextMenu
+  denyRequest
 } from './StoreUser.lib'
 import { vueApply, vueRegister } from '@/vue'
 import PickupList from './components/PickupList'
 import StoreInfos from './components/StoreInfos'
+import StoreTeam from './components/StoreTeam'
 import { deleteStorePost } from '@/api/stores'
 
 expose({
@@ -43,10 +40,7 @@ expose({
   u_delPost,
   acceptRequest,
   warteRequest,
-  denyRequest,
-  createJumperMenu,
-  createMenu,
-  u_timetableAction
+  denyRequest
 })
 
 $(document).ready(() => {
@@ -58,9 +52,12 @@ $(document).ready(() => {
   })
 
   $('#team-form').on('submit', function (ev) {
-    if ($('.cb-verantwortlicher:checked').length == 0) {
+    if ($('.cb-verantwortlicher:checked').length == 0 && $('#set_new_store_manager').val() != 'true') {
       pulseError(i18n('verantwortlicher_must_be'))
       ev.preventDefault()
+      return false
+    } else if ($('#set_new_store_manager').val() == 'true' && $('.tagedit-listelement-old').length > 3) {
+      pulseError(i18n('max_3_leader'))
       return false
     }
   })
@@ -176,9 +173,6 @@ $(document).ready(() => {
     $this.parent().parent().remove()
   })
 
-  addContextMenu('.context-team', 160, createMenu)
-  addContextMenu('.context-jumper', 95, createJumperMenu)
-
   $('.timetable').on('keyup', '.fetchercount', function () {
     if (this.value != '') {
       let val = parseInt(`0${this.value}`, 10)
@@ -222,8 +216,10 @@ $(document).ready(() => {
 
   vueRegister({
     PickupList,
-    StoreInfos
+    StoreInfos,
+    StoreTeam
   })
   vueApply('#vue-pickuplist', true)
-  vueApply('#vue-storeinfos')
+  vueApply('#vue-storeinfos', true)
+  vueApply('#vue-storeteam', true)
 })

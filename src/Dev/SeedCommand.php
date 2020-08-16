@@ -8,6 +8,7 @@ use Codeception\Lib\Di;
 use Codeception\Lib\ModuleContainer;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 use Helper\Foodsharing;
 use Symfony\Component\Console\Command\Command;
@@ -46,9 +47,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 		return 'foodsharing:seed';
 	}
 
-	public function getDescription()
+	protected function configure(): void
 	{
-		return 'seed the dev db';
+		$this->setDescription('Seed the dev db.');
+		$this->setHelp('This commands adds seed data to the database. The general rule is that before running this command, you have a working instance of foodsharing without customized data (e.g. missing regions, quizzes, ...) but already including all the data that is directly used in the code (so you will not get any internal server errors). The future goal is, to make the code as much independent of data as possible and move all data you may want to playing around into the seed.');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -69,6 +71,8 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->seed();
 
 		$this->output->writeln('All done!');
+
+		return 0;
 	}
 
 	protected function getRandomIDOfArray(array $value, $number = 1)
@@ -107,13 +111,19 @@ class SeedCommand extends Command implements CustomCommandInterface
 	protected function seed()
 	{
 		$I = $this->helper;
-		$region1 = '241'; // this is called 'Göttingen'
+		$I->_getDbh()->beginTransaction();
+		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=0;', []);
+		$regionOne = $I->createRegion('Göttingen');
+		$region1 = $regionOne['id'];
+		$regionOneWorkGroup = $I->createWorkingGroup('Schnippelparty Göttingen', ['parent_id' => $regionOne['id']]);
 		$region_vorstand = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_aktive = RegionIDs::TEAM_ADMINISTRATION_MEMBER;
 		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
 		$password = 'user';
-		$region1WorkGroup = '1135'; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
+		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
+
+		$region1Subregion = $I->createRegion('Stadtteil von Göttingen', ['type' => Type::PART_OF_TOWN, 'parent_id' => $region1]);
 
 		// Create users
 		$this->output->writeln('Create basic users:');
@@ -153,12 +163,31 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionMember($ag_testimonials, $user2['id']);
 
 		// Make ambassador responsible for all work groups in the region
-		$this->output->writeln('- make ambassador responsible for all work groups');
+		$this->output->writeln('- make ambassador responsible for all work groups except welcome group');
+		$welcomeGroupIdRead = $I->grabColumnFromDatabase('fs_region_function', 'region_id', ['target_id' => $region1, 'function_id' => 1]);
 		$workGroupsIds = $I->grabColumnFromDatabase('fs_bezirk', 'id', ['parent_id' => $region1, 'type' => Type::WORKING_GROUP]);
 		foreach ($workGroupsIds as $id) {
-			$I->addRegionMember($id, $userbot['id']);
-			$I->addRegionAdmin($id, $userbot['id']);
+			if ($welcomeGroupIdRead) {
+				if ($welcomeGroupIdRead[0] == $id) {
+					continue;
+				}
+			} else {
+				$I->addRegionMember($id, $userbot['id']);
+				$I->addRegionAdmin($id, $userbot['id']);
+			}
 		}
+
+		// Create a welcome Group if it doesn't exist.
+		if (!$welcomeGroupIdRead) {
+			$this->output->writeln('- create welcome group');
+
+			$welcomeGroup = $I->createWorkingGroup('Begrüßung', ['parent_id' => $region1, 'email_name' => 'Begrüßung Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
+			$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
+			$welcomeGroupIdRead[0] = $welcomeGroup['id'];
+		}
+		$this->output->writeln('- make foodsaver responsible for welcome group');
+		$I->addRegionMember($welcomeGroupIdRead[0], $user2['id']);
+		$I->addRegionAdmin($welcomeGroupIdRead[0], $user2['id']);
 
 		// Create store team conversations
 		$this->output->writeln('- create store team conversations');
@@ -175,6 +204,20 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addStoreTeam($store['id'], $userStoreManager['id'], true);
 		$I->addStoreTeam($store['id'], $userbot['id'], true);
 		$I->addRecurringPickup($store['id']);
+
+		$this->output->writeln('- create store chains');
+		foreach (range(0, 50) as $_) {
+			$I->addStoreChain();
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
+
+		$this->output->writeln('- create food types');
+		foreach (range(0, 10) as $_) {
+			$I->addStoreFoodType();
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
 
 		// Forum theads and posts
 		$this->output->writeln('- create forum threads and posts');
@@ -300,5 +343,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$this->output->write('.');
 		}
 		$this->output->writeln(' done');
+		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);
+		$I->_getDbh()->commit();
 	}
 }

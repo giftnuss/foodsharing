@@ -1,8 +1,9 @@
 <template>
   <a
     :class="bellClasses"
-    href="#"
-    @click="$emit('bellClick', bell)"
+    :href="bell.href"
+    @click="$emit('bellRead', bell)"
+    @click.middle="$emit('bellRead', bell)"
   >
     <div class="bell-grid">
       <div class="bell-icon">
@@ -18,12 +19,12 @@
         </div>
         <a
           v-if="bell.isCloseable"
-          class="showonhover"
+          class="icon showonhover"
           href="#"
-          @click.stop="$emit('remove', bell.id)"
+          @click.stop.prevent="$emit('remove', bell.id)"
         >
           <i
-            class="fas fa-times"
+            class="icon fas fa-times"
           />
         </a>
         <!-- <div :class="['avatar', 'avatar_'+avatars.length]">
@@ -68,34 +69,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .list-group-item {
-    padding: 0.4em 0.8em;
+.list-group-item {
+  padding: 0.4em 0.6em;
+}
+
+.icon {
+  height: 100%;
+  min-height: 1.5em;
+  min-width: 1.5em;
+  text-align: center;
+
+  @supports (display: grid) {
+    display: grid;
+
+    &::before,
+    i.fas::before {
+      grid-row-start: none;
+    }
   }
 
-  .icon {
-    display: block;
-    width: 2em;
-  }
-
-  .icon img {
+  img {
     width: 100%;
   }
+}
 
-  .showonhover {
-    display: none;
-  }
+.showonhover { display: none; }
 
-  .list-group-item:hover {
-    .showonhover { display: block; }
-    .hideonhover { display: none; }
+.list-group-item:hover {
+  .icon { text-decoration: none; }
+  .hideonhover { display: none; }
+  .showonhover { display: inline-block; }
+  @supports (display: grid) {
+    .showonhover { display: grid; }
   }
+}
 
   /*
   Override old-style bell data passing ".img-store" or ".img-recycle"
   as image data with the respective FontAwesome icons. See also: #907
   */
-  .img-store,
-  .img-recycle {
+  .img-recycle,
+  .img-store {
     font-family: "Font Awesome 5 Free", monospace;
     font-style: normal;
     font-weight: 900;
@@ -110,43 +124,46 @@ export default {
     content: "\f07a"; /* fa-shopping-cart */
   }
 
-  .bell-grid {
+.bell-grid {
+  @supports (display: grid) {
     display: grid;
     grid-template-columns: 45px 1fr 80px;
-
-    .bell-icon {
-      grid-row-start: 1;
-      grid-row-end: 3;
-      align-self: center;
-      font-size: 2em;
-
-      .showonhover { padding-left: 5px; }
-    }
-
-    .bell-title {
-      margin-right: 60px;
-      font-weight: bold;
-      font-size: 0.9em;
-    }
-
-    .bell-text {
-      font-size: 0.8em;
-    }
-
-    .bell-body {
-      grid-column-start: 2;
-      grid-column-end: 4;
-      grid-row-start: 1;
-      grid-row-end: 3;
-    }
-    .bell-date {
-      margin-right: -5px;
-      text-align: right;
-      grid-column-start: 3;
-      grid-column-end: 4;
-      grid-row-start: 1;
-      grid-row-end: 2;
-      z-index: 2;
-    }
   }
+
+  .bell-icon {
+    height: 100%;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    align-self: center;
+    justify-self: center;
+    font-size: 2em;
+  }
+
+  .bell-title {
+    margin-right: 60px;
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+
+  .bell-text {
+    font-size: 0.8em;
+  }
+
+  .bell-body {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
+
+  .bell-date {
+    margin-right: -5px;
+    text-align: right;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    z-index: 2;
+  }
+}
 </style>

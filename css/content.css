@@ -17,7 +17,6 @@ time, mark, audio, video {
   border: 0;
   font: inherit;
   vertical-align: baseline;
-  /*color:#4A3520;*/
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -32,6 +31,10 @@ a {
 
 strong {
   font-weight: bold;
+}
+
+em {
+  font-style: italic;
 }
 
 body {
@@ -78,7 +81,7 @@ input, textarea, select, option {
   line-height: 1.28;
 }
 
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, .mfp-content label {
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   line-height: normal;
   font-size: 13px;
 }
@@ -150,10 +153,6 @@ input, textarea, select, option {
 
 table.mce-item-table td {
   padding: 15px;
-}
-
-em {
-  font-style: italic;
 }
 
 table {
@@ -403,6 +402,7 @@ i {
 }
 
 .page-section {
+  position: relative;
   margin-top: 15px;
 }
 
@@ -453,19 +453,27 @@ i {
 }
 
 .pageImage {
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-right:20px;
+  margin: 0.5rem 1rem;
+  margin-top: 0;
 }
-
-.pageImageFloatRight {
-  margin-left: 20px;
-  margin-top: 20px;
+.pageImage.right {
+  margin-right: 0;
   float: right;
 }
-
-.pageImageFloatLeft {
-  margin-right: 20px;
-  margin-top: 20px;
+.pageImage.left {
+  margin-left: 0;
   float: left;
+}
+.pageImage.clear {
+  clear: both;
+}
+@media (max-width: 627px) {
+  .pageImage,
+  .pageImage.left,
+  .pageImage.right {
+    float: none;
+    display: block;
+    margin: 0.5rem auto;
+    max-width: 100%;
+  }
 }

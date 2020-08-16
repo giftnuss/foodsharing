@@ -26,9 +26,7 @@
         <div class="desc-block-title ui-widget">
           {{ $i18n('store.particularities') }}
         </div>
-        <!-- no whitespace between the tags, since it is formatted as pre-line -->
-        <!-- eslint-disable-next-line vue/singleline-html-element-content-newline -->
-        <div class="store-particularities">{{ particularitiesDescription }}</div>
+        <Markdown :source="particularitiesDescription" />
       </div>
       <div
         id="inputAverageCollectionQuantity"
@@ -73,8 +71,10 @@
 <script>
 import { format } from 'date-fns'
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
+import Markdown from '@/components/Markdown/Markdown'
 
 export default {
+  components: { Markdown },
   props: {
     particularitiesDescription: {
       type: String,
@@ -149,8 +149,17 @@ export default {
       padding-bottom: 0;
     }
 
-    .store-particularities {
-      white-space: pre-line;
+    /deep/ .markdown {
+      hr {
+        border: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      blockquote {
+        padding: 4px 8px;
+        border-left: 2px solid var(--border);
+        background-color: var(--fs-white);
+      }
     }
   }
 

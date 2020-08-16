@@ -29,6 +29,12 @@ Any relevant screenshots if this is a design / frontend change
 - [ ] added a test, or explain why one is not needed/possible...
 - [ ] no unrelated changes
 - [ ] asked someone for a code review 
-- [ ] joined #foodsharing-beta channel at https://slackin.yunity.org
-- [ ] added an entry to CHANGELOG.md (description, merge request link, username(s))
-- [ ] Once your MR has been merged, you are responsible to update the [#foodsharing-beta Slack channel](https://slackin.yunity.org/) about what has been changed here. They will test your work in different browsers, roles or other settings
+- [ ] set a "for:" label to indicate who will be affected by this change
+- [ ] use "state:" labels to track this MR's state until it was beta tested 
+- [ ] added an entry to CHANGELOG.md
+- [ ] add a short text that can be used in the release notes
+- [ ] Once your MR has been merged, you are responsible to create a testing issue in [Beta Testing Repo](https://gitlab.com/foodsharing-dev/foodsharing-beta-testing):  
+     *  Consider writing a detailed description **in German**.  
+     *  Describe in a few sentences, what should be tested from a **user perspective**.   
+     *  Also mention different settings (e.g. **different browsers**, roles, ...).   how this change can be tested.   
+     *  Be aware, that also **non technical** people should understand.  

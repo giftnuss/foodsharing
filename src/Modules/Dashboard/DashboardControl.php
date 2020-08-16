@@ -13,8 +13,8 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
 {
@@ -41,8 +41,8 @@ class DashboardControl extends Control
 		EventGateway $eventGateway,
 		ProfileGateway $profileGateway,
 		\Twig\Environment $twig,
-		SanitizerService $sanitizerService,
-		ImageService $imageService,
+		Sanitizer $sanitizerService,
+		ImageHelper $imageService,
 		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
@@ -334,7 +334,7 @@ class DashboardControl extends Control
 
 		$this->pageHelper->addContent(
 			'
-		<div class="pure-u-1 ui-padding-bottom">
+		<div class="ui-padding-bottom">
 		<ul class="content-top corner-all linklist">
 		<li>
 
@@ -450,7 +450,7 @@ class DashboardControl extends Control
 		/*
 		 * Deine Betriebe
 		*/
-		if ($betriebe = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId(), ['sonstige' => false])) {
+		if ($betriebe = $this->storeGateway->getMyStores($this->session->id())) {
 			$this->pageHelper->addContent($this->view->u_myBetriebe($betriebe), CNT_LEFT);
 		} else {
 			$this->pageHelper->addContent($this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.'), CNT_LEFT);

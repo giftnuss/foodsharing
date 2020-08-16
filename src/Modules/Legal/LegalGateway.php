@@ -45,7 +45,6 @@ class LegalGateway extends BaseGateway
 	{
 		$this->db->update('fs_foodsaver', ['rolle' => 1], ['id' => $fsId]);
 		$this->db->delete('fs_botschafter', ['foodsaver_id' => $fsId]);
-		$this->db->delete('fs_quiz_session', ['foodsaver_id' => $fsId, 'quiz_id' => 3]);
 		$this->db->update('fs_betrieb_team', ['verantwortlich' => 0], ['foodsaver_id' => $fsId]);
 	}
 }

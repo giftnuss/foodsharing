@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Controller;
 
-use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Login\LoginGateway;
@@ -10,10 +9,12 @@ use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
 use Foodsharing\Permissions\UserPermissions;
+use Foodsharing\Utility\EmailHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Mobile_Detect;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -28,6 +29,8 @@ class UserRestController extends AbstractFOSRestController
 	private $profilePermissions;
 	private $emailHelper;
 
+	private const MIN_RATING_MESSAGE_LENGTH = 100;
+
 	public function __construct(
 		Session $session,
 		LoginGateway $loginGateway,
@@ -36,8 +39,8 @@ class UserRestController extends AbstractFOSRestController
 		ReportPermissions $reportPermissions,
 		UserPermissions $userPermissions,
 		ProfilePermissions $profilePermissions,
-		EmailHelper $emailHelper)
-	{
+		EmailHelper $emailHelper
+	) {
 		$this->session = $session;
 		$this->loginGateway = $loginGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -189,7 +192,7 @@ class UserRestController extends AbstractFOSRestController
 	 */
 	public function deleteUserAction(int $userId): Response
 	{
-		if ($userId !== $this->session->id() && !$this->profilePermissions->mayDeleteUser()) {
+		if (!$this->profilePermissions->mayDeleteUser($userId)) {
 			throw new HttpException(403);
 		}
 
@@ -199,6 +202,48 @@ class UserRestController extends AbstractFOSRestController
 		$this->foodsaverGateway->deleteFoodsaver($userId);
 
 		return $this->handleView($this->view());
+	}
+
+	/**
+	 * Gives a banana to a user.
+	 *
+	 * @SWG\Parameter(name="userId", in="path", type="integer", description="to which user to give the banana")
+	 * @SWG\Parameter(name="message", in="body", type="string", description="message to the user")
+	 * @SWG\Response(response="200", description="Success.")
+	 * @SWG\Response(response="400", description="Accompanying message is too short.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to rate that user.")
+	 * @SWG\Response(response="404", description="User to rate does not exist.")
+	 * @SWG\Tag(name="user")
+	 *
+	 * @Rest\Put("user/{userId}/banana", requirements={"userId" = "\d+"})
+	 * @Rest\RequestParam(name="message", nullable=false)
+	 */
+	public function addBanana(int $userId, ParamFetcher $paramFetcher): Response
+	{
+		// make sure that users may not give themselves bananas
+		if (!$this->session->may() || $this->session->id() === $userId) {
+			throw new HttpException(403);
+		}
+
+		// check if the user exists
+		if (!$this->foodsaverGateway->foodsaverExists($userId)) {
+			throw new HttpException(404);
+		}
+
+		// do not allow giving bananas twice
+		if ($this->profileGateway->hasGivenBanana($this->session->id(), $userId)) {
+			throw new HttpException(403);
+		}
+
+		// check length of message
+		$message = trim($paramFetcher->get('message'));
+		if (strlen($message) < self::MIN_RATING_MESSAGE_LENGTH) {
+			throw new HttpException(400);
+		}
+
+		$this->profileGateway->giveBanana($userId, $message, $this->session->id());
+
+		return $this->handleView($this->view([], 200));
 	}
 
 	private function handleUserView(): Response

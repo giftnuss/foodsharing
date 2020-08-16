@@ -8,13 +8,13 @@ class SanitizerTest extends \Codeception\Test\Unit
 	protected $tester;
 
 	/**
-	 * @var \Foodsharing\Services\SanitizerService
+	 * @var \Foodsharing\Utility\Sanitizer
 	 */
 	private $sanitizer;
 
 	protected function _before()
 	{
-		$this->sanitizer = $this->tester->get(\Foodsharing\Services\SanitizerService::class);
+		$this->sanitizer = $this->tester->get(\Foodsharing\Utility\Sanitizer::class);
 	}
 
 	protected function _after()

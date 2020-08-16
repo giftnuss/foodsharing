@@ -2469,6 +2469,11 @@ cropperjs@^1.5.6:
   resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-1.5.6.tgz#82faf432bec709d828f2f7a96d1179198edaf0e2"
   integrity sha512-eAgWf4j7sNJIG329qUHIFi17PSV0VtuWyAu9glZSgu/KlQSrfTQOC2zAz+jHGa5fAB+bJldEnQwvJEaJ8zRf5A==
 
+croppie@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/croppie/-/croppie-2.6.4.tgz#7477b8c5af560c09841f7c84f55066ba128544da"
+  integrity sha512-dK2gP7nmAuzMP8TU+JNPOmZJkMyp5VPMJxE/uvmiOC7Vzwon333eo2i9T40D5rqm9NrBJU/ovAyg7xDX2Swaiw==
+
 cross-spawn@6.0.5, cross-spawn@^6.0.0:
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-6.0.5.tgz#4a5ec7c64dfae22c3a14124dbacdee846d80cbc4"
@@ -4682,13 +4687,6 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-jquery-contextmenu@^2.9.0:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/jquery-contextmenu/-/jquery-contextmenu-2.9.1.tgz#fd7211550f82a913b4800d095e7e6f3c7ddf6abc"
-  integrity sha512-r6k4oJ41XHlNdrH+1XAUtPwp6tpUeeJe6X5hibzxvAbPXBC/RWdEFZXq57ierRrehSlcDvfP4YcfYkMSnLfyhg==
-  dependencies:
-    jquery "^3.5.0"
-
 jquery-jcrop@^0.9.13:
   version "0.9.13"
   resolved "https://registry.yarnpkg.com/jquery-jcrop/-/jquery-jcrop-0.9.13.tgz#cda8c9557fffc56540008cc7b6291a0ec4071bf5"
@@ -4716,7 +4714,7 @@ jquery.ui.position@^1.11.4:
   resolved "https://registry.yarnpkg.com/jquery.ui.position/-/jquery.ui.position-1.11.4.tgz#372a8d197f4175dffdbdbc1ee9bbc5d2abd1d28c"
   integrity sha1-NyqNGX9Bdd/9vbwe6bvF0qvR0ow=
 
-"jquery@>= 1.7", jquery@>=1.11, jquery@^3.4.1, jquery@^3.5.0:
+"jquery@>= 1.7", jquery@>=1.11, jquery@^3.4.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
   integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
@@ -5117,11 +5115,6 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
-
-magnific-popup@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/magnific-popup/-/magnific-popup-1.1.0.tgz#3e7362c5bd18f6785fe99e59d013e20af33d3049"
-  integrity sha1-PnNixb0Y9nhf6Z5Z0BPiCvM9MEk=
 
 make-dir@^2.0.0:
   version "2.1.0"
@@ -8147,6 +8140,13 @@ vt-pbf@^3.1.1:
     "@mapbox/point-geometry" "0.1.0"
     "@mapbox/vector-tile" "^1.3.1"
     pbf "^3.0.5"
+
+vue-croppie@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-croppie/-/vue-croppie-2.0.1.tgz#ba52b2b9aaae3db882618567f96bc95ea69b41ec"
+  integrity sha512-oo9EVHvjlMg3kegHq55pibbSk4mOiAIpzEnjnhZS8kSGAFtbJ0sB9q4JrOnsfcE1gtml/UfavEVJ9fH8bGhcSQ==
+  dependencies:
+    croppie "^2.6.4"
 
 vue-eslint-parser@^7.0.0:
   version "7.0.0"

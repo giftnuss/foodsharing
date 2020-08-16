@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Blog;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\BlogPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\TimeHelper;
 
 class BlogControl extends Control
 {
@@ -18,7 +18,10 @@ class BlogControl extends Control
 	private $identificationHelper;
 
 	public function __construct(
-		BlogView $view, BlogGateway $blogGateway, BlogPermissions $blogPermissions, TimeHelper $timeHelper,
+		BlogView $view,
+		BlogGateway $blogGateway,
+		BlogPermissions $blogPermissions,
+		TimeHelper $timeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper
 	) {

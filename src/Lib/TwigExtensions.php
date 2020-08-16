@@ -2,8 +2,8 @@
 
 namespace Foodsharing\Lib;
 
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\TranslationHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\TranslationHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 

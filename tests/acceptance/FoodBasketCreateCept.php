@@ -51,8 +51,12 @@ $id = $I->grabFromDatabase('fs_basket', 'id', ['description' => $description,
 
 //Check update of the foodbasket
 $I->amOnPage($I->foodBasketInfoUrl($id));
+$I->waitForActiveAPICalls();
+$I->waitForElementNotVisible('#fancybox-loading');
 $I->click('Essenskorb bearbeiten');
-$I->waitForText('Essenskorb bearbeiten');
+$I->waitForElementNotVisible('#fancybox-loading', 3);
+$I->waitForText('Essenskorb bearbeiten', 3);
+$I->waitForText('Essenskorb veröffentlichen', 3);
 $I->waitForElement('#description');
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
@@ -82,6 +86,8 @@ $nick->does(
 	});
 
 $I->amOnPage($I->foodBasketInfoUrl($id));
+$I->waitForActiveAPICalls();
+$I->waitForElementNotVisible('#fancybox-loading');
 $I->waitForText('Anfragen 1');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');

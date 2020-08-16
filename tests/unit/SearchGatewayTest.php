@@ -34,12 +34,12 @@ class SearchGatewayTest extends \Codeception\Test\Unit
 		$f3 = $fs3['id'];
 		$f4 = $fs4['id'];
 		$f5 = $fs5['id'];
-		$this->assertEqualsCanonicalizing([$f1, $f2], array_column($this->searchGateway->searchUserInGroups('Albe', null), 'id'));
-		$this->assertEqualsCanonicalizing([$f4], array_column($this->searchGateway->searchUserInGroups('Karl-Heinz', null), 'id'));
-		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('-(Matze)', null), 'id'));
-		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('von Heuschreckenland', null), 'id'));
-		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('um Heuschreckenland', null), 'id'));
-		$this->assertEqualsCanonicalizing([], array_column($this->searchGateway->searchUserInGroups('Fr*d', null), 'id'));
-		$this->assertEqualsCanonicalizing([$f2], array_column($this->searchGateway->searchUserInGroups('Alb', [$region2['id']]), 'id'));
+		$this->assertEqualsCanonicalizing([$f1, $f2], array_column($this->searchGateway->searchUserInGroups('Albe', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([$f4], array_column($this->searchGateway->searchUserInGroups('Karl-Heinz', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('-(Matze)', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('von Heuschreckenland', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([$f5], array_column($this->searchGateway->searchUserInGroups('um Heuschreckenland', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([], array_column($this->searchGateway->searchUserInGroups('Fr*d', false, null), 'id'));
+		$this->assertEqualsCanonicalizing([$f2], array_column($this->searchGateway->searchUserInGroups('Alb', false, [$region2['id']]), 'id'));
 	}
 }

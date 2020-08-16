@@ -4,13 +4,21 @@ import '@/globals'
 
 import $ from 'jquery'
 
-import { ajax, ajreq } from '@/script'
+import { ajax, ajreq, pulseInfo, pulseError } from '@/script'
 import './Basket.css'
 
 import { addMarker, clearCluster, commitCluster } from '@php/Lib/View/vMap'
 
 import { vueApply, vueRegister } from '@/vue'
 import RequestForm from './components/RequestForm'
+import i18n from '@/i18n'
+import { expose } from '@/utils'
+import { removeBasket, listBasketCoordinates } from '@/api/baskets'
+import basketStore from '@/stores/baskets'
+
+expose({
+  tryRemoveBasket
+})
 
 const mapsearch = {
   lat: null,
@@ -71,13 +79,11 @@ const mapsearch = {
 mapsearch.init()
 
 if ($('#mapsearch').length > 0) {
-  ajax.req('basket', 'basketCoordinates', {
-    success: function (ret) {
-      if (ret.baskets != undefined && ret.baskets.length > 0) {
-        mapsearch.setMarker(ret.baskets)
-      }
+  listBasketCoordinates().then((data) => {
+    if (data.length > 0) {
+      mapsearch.setMarker(data)
     }
-  })
+  }).catch()
 
   $('#map-latLng').on('change', function () {
     console.log()
@@ -105,3 +111,13 @@ $(document).ready(() => {
     vueApply('#' + requestFormContainerId)
   }
 })
+
+async function tryRemoveBasket (basketId) {
+  try {
+    await removeBasket(basketId)
+    await basketStore.loadBaskets()
+    pulseInfo(i18n('basket.not_active'))
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+}

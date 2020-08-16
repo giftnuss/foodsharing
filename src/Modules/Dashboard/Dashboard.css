@@ -64,7 +64,7 @@
     order: -2;
   }
   /* main content hack-fix for weird 36em/48em pure-grid breakpoints */
-  .page-dashboard .mainpure > .pure-u-md-13-24 {
+  .page-dashboard #main .pure-g > .pure-u-md-13-24 {
     width: 100%;
   }
 }

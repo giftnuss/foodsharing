@@ -3,51 +3,57 @@
 namespace Foodsharing\Modules\StoreUser;
 
 use Carbon\Carbon;
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\WeightHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreUserControl extends Control
 {
+	private $regionGateway;
 	private $storeGateway;
+	private $storeModel;
 	private $storePermissions;
 	private $foodsaverGateway;
+	private $dataHelper;
 	private $sanitizerService;
 	private $timeHelper;
-	private $dataHelper;
-	private $regionGateway;
 	private $weightHelper;
+	private $translator;
 
 	public function __construct(
-		StoreModel $model,
 		StoreUserView $view,
+		RegionGateway $regionGateway,
 		StoreGateway $storeGateway,
+		StoreModel $model,
 		StorePermissions $storePermissions,
 		FoodsaverGateway $foodsaverGateway,
-		SanitizerService $sanitizerService,
-		TimeHelper $timeHelper,
 		DataHelper $dataHelper,
-		RegionGateway $regionGateway,
-		WeightHelper $weightHelper
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		WeightHelper $weightHelper,
+		TranslatorInterface $translator
 	) {
-		$this->model = $model;
 		$this->view = $view;
+		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
+		$this->storeModel = $model;
 		$this->storePermissions = $storePermissions;
 		$this->foodsaverGateway = $foodsaverGateway;
+		$this->dataHelper = $dataHelper;
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
-		$this->dataHelper = $dataHelper;
-		$this->regionGateway = $regionGateway;
 		$this->weightHelper = $weightHelper;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -79,13 +85,26 @@ class StoreUserControl extends Control
 			];
 
 			if (isset($_POST['form_submit']) && $_POST['form_submit'] == 'team' && $this->storePermissions->mayEditStore($store['id'])) {
+				$this->sanitizerService->handleTagSelect('storemanagers');
+				if (!empty($g_data['storemanagers'])) {
+					if (count($g_data['storemanagers']) > 3) {
+						$this->flashMessageHelper->error($this->translationHelper->s('too_many_storemanagers_warning'));
+					} else {
+						foreach ($g_data['storemanagers'] as $fsId) {
+							$addedStoremanager = $this->storeGateway->addStoreManager($store['id'], $fsId);
+						}
+					}
+				}
+
 				$this->sanitizerService->handleTagSelect('foodsaver');
 				if (!empty($g_data['foodsaver'])) {
-					$this->model->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
-				} else {
+					$addedTeam = $this->storeModel->addBetriebTeam($_GET['id'], $g_data['foodsaver'], $g_data['verantwortlicher']);
+				} elseif (empty($g_data['storemanagers'])) {
 					$this->flashMessageHelper->info($this->translationHelper->s('team_not_empty'));
 				}
-				$this->flashMessageHelper->info($this->translationHelper->s('changes_saved'));
+				if (isset($addedStoremanager) || isset($addedTeam)) {
+					$this->flashMessageHelper->info($this->translator->trans('settings.saved'));
+				}
 				$this->routeHelper->goSelf();
 			} elseif (isset($_POST['form_submit']) && $_POST['form_submit'] == 'changestatusform' && $this->storePermissions->mayEditStore($store['id'])) {
 				$this->storeGateway->changeBetriebStatus($this->session->id(), $_GET['id'], $_POST['betrieb_status_id']);
@@ -114,7 +133,7 @@ class StoreUserControl extends Control
 
 				$bibsaver = [];
 				foreach ($store['foodsaver'] as $fs) {
-					if ($fs['rolle'] >= 2) {
+					if ($fs['rolle'] >= Role::STORE_MANAGER) {
 						$bibsaver[] = $fs;
 					}
 				}
@@ -128,14 +147,26 @@ class StoreUserControl extends Control
 					}
 					$verantwortlich_select = $this->v_utils->v_form_checkbox('verantwortlicher', ['values' => $bibsaver, 'checked' => $checked]);
 
+					$elements = [
+						$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
+						),
+						$verantwortlich_select,
+					];
+
+					if (empty($checked)) {
+						$noStoreManagerWarning = $this->v_utils->v_error($this->translationHelper->s('no_storemanager_warning'));
+						$hiddenField = $this->v_utils->v_form_hidden('set_new_store_manager', 'true');
+						$elements = [
+							$noStoreManagerWarning,
+							$this->v_utils->v_form_tagselect('storemanagers', ['valueOptions' => $this->foodsaverGateway->xhrGetStoremanagersOfRegionsForTagSelect($this->session->listRegionIDs())]
+							),
+							$hiddenField,
+						];
+					}
+
 					$edit_team = $this->v_utils->v_form(
 						'team',
-
-						[
-							$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
-							),
-							$verantwortlich_select
-						],
+						$elements,
 						['submit' => $this->translationHelper->s('save')]
 					);
 
@@ -191,14 +222,45 @@ class StoreUserControl extends Control
 				}
 
 				/* team list */
+				$allowedFields = [
+					// personal info
+					'id', 'name', 'photo', 'quiz_rolle', 'sleep_status', 'verified',
+					// team-related info
+					'verantwortlich', 'team_active', 'stat_fetchcount', 'add_date',
+				];
+				if ($this->storePermissions->maySeePhoneNumbers($store['id'])) {
+					array_push($allowedFields, 'handy', 'telefon', 'last_fetch');
+				}
+
 				$this->pageHelper->addContent(
-					$this->v_utils->v_field(
-						$this->view->u_team($store) . '',
-						$store['name'] . '-Team',
-						['class' => 'truncate-content truncate-height-280 collapse-mobile']
-					),
+					$this->view->vueComponent('vue-storeteam', 'store-team', [
+						'fsId' => $this->session->id(),
+						'mayEditStore' => $this->storePermissions->mayEditStore($store['id']),
+						'team' => array_map(
+							function ($a) use ($allowedFields) {
+								return array_filter($a, function ($key) use ($allowedFields) {
+									return in_array($key, $allowedFields);
+								}, ARRAY_FILTER_USE_KEY);
+							},
+							array_merge($store['foodsaver'], $store['springer']),
+						),
+						'storeId' => $store['id'],
+						'storeTitle' => $store['name'],
+					]),
 					CNT_LEFT
 				);
+
+				/* team status */
+				if ($this->storePermissions->mayEditStore($store['id'])) {
+					$this->pageHelper->addContent(
+						$this->v_utils->v_field(
+							$this->view->u_legacyStoreTeamStatus($store),
+							$this->translationHelper->s('status'),
+							['class' => 'ui-padding']
+						),
+						CNT_LEFT
+					);
+				}
 
 				if ($this->storePermissions->mayReadStoreWall($store['id'])) {
 					$this->pageHelper->addJs('u_updatePosts();');
@@ -207,7 +269,7 @@ class StoreUserControl extends Control
 
 								<div class="tools ui-padding">
 									<form method="get" action="' . $this->routeHelper->getSelf() . '">
-										<textarea class="comment textarea inlabel" title="Nachricht schreiben..." name="text"></textarea>
+										<textarea class="comment textarea" placeholder="' . $this->translator->trans('wall.message_placeholder') . '" name="text"></textarea>
 										<div align="right">
 											<input id="comment-post" type="submit" class="submit" name="msg" value="' . $this->translationHelper->s('send') . '" />
 										</div>
@@ -219,19 +281,6 @@ class StoreUserControl extends Control
 				/* end of pinboard */
 				} else {
 					$this->pageHelper->addContent($this->v_utils->v_info('Du bist momentan auf der Springerliste. Sobald Hilfe benötigt wird, wirst Du kontaktiert.'));
-				}
-
-				if ($verantwortlicher = $this->view->u_getVerantwortlicher($store)) {
-					$cnt = '';
-
-					foreach ($verantwortlicher as $v) {
-						$phoneNumbers = $this->view->u_innerRow('telefon', $v);
-						$phoneNumbers .= $this->view->u_innerRow('handy', $v);
-
-						$cnt .= $this->v_utils->v_input_wrapper($v['name'], $phoneNumbers);
-					}
-
-					$this->pageHelper->addContent($this->v_utils->v_field($cnt, $this->translationHelper->s('responsible_foodsaver'), ['class' => 'ui-padding']), CNT_LEFT);
 				}
 
 				/* fetchdates */
@@ -249,7 +298,13 @@ class StoreUserControl extends Control
 ');
 
 				if ($this->storePermissions->maySeePickups($store['id']) && ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED)) {
-					$this->pageHelper->addContent($this->view->vueComponent('vue-pickuplist', 'pickup-list', ['storeId' => $store['id'], 'isCoordinator' => $store['verantwortlich'], 'teamConversationId' => $store['team_conversation_id']]), CNT_RIGHT);
+					$this->pageHelper->addContent(
+						$this->view->vueComponent('vue-pickuplist', 'pickup-list', [
+							'storeId' => $store['id'],
+							'isCoordinator' => $store['verantwortlich'],
+							'teamConversationId' => $store['team_conversation_id'],
+						]),
+						CNT_RIGHT);
 				}
 
 				/* change regular fetchdates */
@@ -308,7 +363,9 @@ class StoreUserControl extends Control
 			$stores = $this->storeGateway->getMyStores($this->session->id(), $this->session->getCurrentRegionId());
 			$this->pageHelper->addContent($this->view->u_storeList($stores['verantwortlich'], $this->translationHelper->s('you_responsible')));
 			$this->pageHelper->addContent($this->view->u_storeList($stores['team'], $this->translationHelper->s('you_fetcher')));
-			$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', ['name' => $region['name']])));
+			if (!is_null($region)) {
+				$this->pageHelper->addContent($this->view->u_storeList($stores['sonstige'], $this->translationHelper->sv('more_stores', ['name' => $region['name']])));
+			}
 		}
 	}
 }

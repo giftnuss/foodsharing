@@ -2,13 +2,13 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\Session;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TranslationHelper;
 
 class Utils
 {
@@ -31,7 +31,7 @@ class Utils
 	private $translationHelper;
 
 	public function __construct(
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		PageHelper $pageHelper,
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
@@ -311,7 +311,7 @@ class Utils
 			$class = 'post';
 		}
 
-		$plugins = ['autoresize', 'link', 'image', 'media', 'table', 'contextmenu', 'paste', 'code', 'advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'hr', 'anchor', 'pagebreak', 'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'insertdatetime', 'nonbreaking', 'directionality', 'emoticons', 'textcolor'];
+		$plugins = ['autoresize', 'link', 'image', 'media', 'table', 'paste', 'code', 'advlist', 'autolink', 'lists', 'charmap', 'print', 'preview', 'hr', 'anchor', 'pagebreak', 'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'insertdatetime', 'nonbreaking', 'directionality', 'emoticons', 'textcolor'];
 		$toolbar = ['styleselect', 'bold italic', 'alignleft aligncenter alignright', 'bullist outdent indent', 'media image link', 'paste', 'code'];
 		$addOpt = '';
 
@@ -616,7 +616,7 @@ class Utils
 				{
 					check = false;
 					input.addClass("input-error");
-					error($("#" + input.attr("id") + "-error-msg").val());
+					pulseError($("#" + input.attr("id") + "-error-msg").val());
 				}
 			});
 
@@ -1264,8 +1264,8 @@ class Utils
 		$id = $this->identificationHelper->id($id);
 		$label = $this->translationHelper->s($id);
 
-		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : (date('Y') - 60);
-		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : (date('Y') + 60);
+		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : ((int)date('Y') - 60);
+		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : ((int)date('Y') + 60);
 
 		$value = $this->dataHelper->getValue($id);
 

@@ -83,7 +83,7 @@ class MailboxView extends View
 	{
 		return $this->v_utils->v_menu([
 			['name' => $this->translationHelper->s('refresh'), 'click' => 'mb_refresh();return false;'],
-			['name' => $this->translationHelper->s('new_message'), 'click' => 'mb_new_message();return false;']
+			['name' => $this->translationHelper->s('new_mb_message'), 'click' => 'mb_new_message();return false;']
 		], $this->translationHelper->s('options'));
 	}
 

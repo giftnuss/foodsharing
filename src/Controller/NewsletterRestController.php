@@ -2,10 +2,10 @@
 
 namespace Foodsharing\Controller;
 
-use Foodsharing\Helpers\EmailHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
+use Foodsharing\Utility\EmailHelper;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;

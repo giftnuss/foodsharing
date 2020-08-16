@@ -111,7 +111,7 @@ class BasketView extends View
 			}
 		} else {
 			$page->addSection(
-				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translationHelper->s('reference')),
+				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translator->trans('notice')),
 				false,
 				['wrapper' => false]
 			);
@@ -192,7 +192,7 @@ class BasketView extends View
 				<div class="ui-padding-bottom">
 					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_edit') . '</a>
 				</div><div>
-					<a class="button button-big" href="#" onclick="ajreq(\'removeBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_delete') . '</a>
+					<a class="button button-big" href="#" onclick="tryRemoveBasket(' . (int)$basket['id'] . ');">' . $this->translationHelper->s('basket_delete') . '</a>
 				</div>';
 		}
 

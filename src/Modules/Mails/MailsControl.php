@@ -3,11 +3,11 @@
 namespace Foodsharing\Modules\Mails;
 
 use Ddeboer\Imap\Server;
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Modules\Console\ConsoleControl;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\InfluxMetrics;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\RouteHelper;
 
 class MailsControl extends ConsoleControl
 {

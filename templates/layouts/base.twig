@@ -1,0 +1,180 @@
+{% set _left = block('left') %}
+{% set _top = block('top') %}
+{% set _main = block('main') %}
+{% set _right = block('right') %}
+{% set _bottom = block('bottom') %}
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="favicon" href="/favicon.ico" type="image/x-icon" />
+
+        <title>{{ head.title }}</title>
+
+        {% for stylesheet in head.stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ stylesheet }}" />
+        {% endfor %}
+
+        {% if dev %}
+            {# to avoid a flash of unstyled content we hide the body initially, then reveal it at the end #}
+            <style type="text/css">body { display: none; }</style>
+        {% endif %}
+
+        <script type="text/javascript">
+            window.serverData = {{ serverDataJSON | raw }};
+        </script>
+
+        {{ head.extra | raw }}
+
+        {% block head %}{% endblock %}
+
+        <meta name="description" content="Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta name="keywords" content="foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch" />
+        <meta name="author" content="foodsharing" />
+        <meta name="robots" content="all" />
+        <meta name="allow-search" content="yes" />
+        <meta name="revisit-after" content="1 days" />
+        <meta name="google-site-verification" content="pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks" />
+
+        <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
+        <meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta property="og:image" content="https://foodsharing.de/img/foodsharinglogo_200px.png" />
+        <meta property="og:url" content="https://foodsharing.de" />
+
+        <style type="text/css">{{ head.css | raw }}</style>
+    </head>
+
+    <body class="{{ bodyClasses|join(' ') }}">
+        {% include 'partials/becomeBezirk.twig' %}
+        {{ menu | raw }}
+        {% if broadcast_message %}
+            <div class="inner inside broadcast-message">{{ broadcast_message | raw }}</div>
+        {% endif %}
+
+        {% block overtop %}
+            {{ content.overtop.html | raw }}
+        {% endblock %}
+
+        {% block full %}
+
+            <div id="main" class="{{ isMob ? 'mobile' : '' }}">
+
+                {% include 'partials/breadcrumbs.twig' with { items: bread } %}
+
+                {% if _top is not empty %}
+                    <div class="pure-g">
+                        <div id="content_top" class="pure-u-1">
+                            <div class="inside">
+                                {{ _top|raw }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="pure-g">
+                    {% if isMob %}
+                        {% if _main is not empty %}
+                            <div id="news" class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
+                                <div class="inside">
+                                    {{ _main|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if _right is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
+                                <div class="inside">
+                                    {{ _right|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if _left is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
+                                <div class="inside">
+                                    {{ _left|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+
+                        {% if _left is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ content.left.width }}-24" id="left">
+                                <div class="inside">
+                                    {{ _left|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if _main is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ contentMainWidth(_left is not empty, _right is not empty, content.left.width, content.right.width, 24) }}-24">
+                                <div class="inside">
+                                    {{ _main|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if _right is not empty %}
+                            <div class="pure-u-1 pure-u-md-{{ content.right.width }}-24" id="right">
+                                <div class="inside">
+                                    {{ _right|raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+                </div>
+
+                {% if _bottom is not empty %}
+                    <div class="pure-g">
+                        <div id="content_bottom" class="pure-u-1">
+                            <div class="inside">
+                                {{ _bottom|raw }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        {% endblock full %}
+
+        {% block footer %}
+            <footer>
+                {{ footer | raw }}
+            </footer>
+        {% endblock %}
+
+        <noscript>
+            <div id="nojs" class="bootstrap">
+                <div class="alert alert-danger">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+            </div>
+        </noscript>
+
+        {% if hidden %}
+            <div style="display:none;">{{ hidden | raw }}</div>
+        {% endif %}
+
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-error" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-info" style="display:none;"></div>
+        <div class="pulse-msg ui-shadow ui-corner-all" id="pulse-success" style="display:none;"></div>
+
+        {% for script in head.scripts %}
+            <script type="text/javascript" src="{{ script }}"></script>
+        {% endfor %}
+
+        <script type="text/javascript">
+            {{ head.jsFunc | raw }}
+            document.addEventListener("DOMContentLoaded", function() {
+                {{ head.js | raw }}
+            });
+        </script>
+
+        {% if dev %}
+            <style type="text/css">body { display: block; }</style>
+        {% endif %}
+    </body>
+</html>

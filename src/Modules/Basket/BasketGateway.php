@@ -11,9 +11,10 @@ class BasketGateway extends BaseGateway
 	public function getBasketCoordinates(): array
 	{
 		$stm = '
-			SELECT id,lat,lon 
-			FROM fs_basket 
+			SELECT id,lat,lon,UNIX_TIMESTAMP(until) AS until_ts
+			FROM fs_basket
 			WHERE status = :status
+			AND until > NOW()
 			';
 
 		return $this->db->fetchAll($stm, [':status' => BasketStatus::REQUESTED_MESSAGE_READ]);
@@ -387,6 +388,8 @@ class BasketGateway extends BaseGateway
 				
 			AND 
 				`status` = :status
+			AND
+				`until` > NOW()
 				';
 		if ($baskets = $this->db->fetchAll(
 			$stm,

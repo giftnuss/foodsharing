@@ -20,6 +20,7 @@ Vue.prototype.$i18n = (key, variables = {}) => {
   return i18n(key, variables)
 }
 Vue.prototype.$dateFormat = dateFormat
+Vue.prototype.$dateDistanceInWords = dateDistanceInWords
 
 Vue.prototype.$url = url
 

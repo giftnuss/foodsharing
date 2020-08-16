@@ -8,7 +8,8 @@ use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Search\SearchGateway;
-use Foodsharing\Services\SearchService;
+use Foodsharing\Modules\Search\SearchHelper;
+use Foodsharing\Modules\Search\SearchIndexGenerator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -17,15 +18,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SearchRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $searchGateway;
-	private $searchService;
+	private Session $session;
+	private SearchGateway $searchGateway;
+	private SearchIndexGenerator $searchIndexGenerator;
+	private SearchHelper $searchHelper;
 
-	public function __construct(Session $session, SearchGateway $searchGateway, SearchService $searchService)
-	{
+	public function __construct(
+		Session $session,
+		SearchGateway $searchGateway,
+		SearchIndexGenerator $searchIndexGenerator,
+		SearchHelper $searchHelper
+	) {
 		$this->session = $session;
 		$this->searchGateway = $searchGateway;
-		$this->searchService = $searchService;
+		$this->searchIndexGenerator = $searchIndexGenerator;
+		$this->searchHelper = $searchHelper;
 	}
 
 	/**
@@ -36,7 +43,7 @@ class SearchRestController extends AbstractFOSRestController
 		if (!$this->session->may()) {
 			throw new HttpException(403);
 		}
-		$data = $this->searchService->generateIndex($this->session->id());
+		$data = $this->searchIndexGenerator->generateIndex($this->session->id());
 
 		$view = $this->view($data, 200);
 
@@ -85,10 +92,33 @@ class SearchRestController extends AbstractFOSRestController
 
 			$results = $this->searchGateway->searchUserInGroups(
 				$q,
+				false,
 				$regions
 			);
-			$results = array_map(function ($v) { return ['id' => $v['id'], 'value' => $v['name'] . ' ' . $v['nachname'] . ' (' . $v['id'] . ')']; }, $results);
+			$results = array_map(function ($v) { return ['id' => $v->id, 'value' => $v->name . ' (' . $v->id . ')']; }, $results);
 		}
+
+		return $this->handleView($this->view($results, 200));
+	}
+
+	/**
+	 * General search endpoint that returns foodsavers, stores, and regions.
+	 *
+	 * @Rest\Get("search/all")
+	 * @Rest\QueryParam(name="q", description="Search query.")
+	 */
+	public function searchAction(ParamFetcher $paramFetcher)
+	{
+		if (!$this->session->may()) {
+			throw new HttpException(403);
+		}
+
+		$q = $paramFetcher->get('q');
+		if (empty($q)) {
+			throw new HttpException(400);
+		}
+
+		$results = $this->searchHelper->search($q);
 
 		return $this->handleView($this->view($results, 200));
 	}

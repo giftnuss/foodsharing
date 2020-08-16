@@ -1,13 +1,15 @@
 <?php
 
 use Foodsharing\Debug\DebugBar;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
 use Foodsharing\Lib\ContentSecurityPolicy;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Routing;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
+use Foodsharing\Modules\Content\ContentGateway;
+use Foodsharing\Modules\Core\DBConstants\Content\ContentId;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +53,9 @@ $pageHelper = $container->get(PageHelper::class);
 /* @var Session $session */
 $session = $container->get(Session::class);
 
-$g_broadcast_message = $db->qOne('SELECT `body` FROM fs_content WHERE `id` = 51');
+/* @var ContentGateway $contentGateway */
+$contentGateway = $container->get(ContentGateway::class);
+$g_broadcast_message = $contentGateway->get(ContentId::BROADCAST_MESSAGE)['body'];
 
 /* @var DebugBar $debug */
 $debug = $container->get(DebugBar::class);
@@ -61,8 +65,9 @@ if ($debug->isEnabled()) {
 }
 
 if ($session->may()) {
-	if (isset($_GET['uc'])) {
-		if ($session->id() != $_GET['uc']) {
+	$uc = $request->query->get('uc');
+	if ($uc !== null) {
+		if ($session->id() != $uc) {
 			$mem->logout($session->id());
 			$routeHelper->goLogin();
 		}
@@ -78,9 +83,9 @@ try {
 }
 
 if (isset($obj)) {
-	if (isset($_GET['a']) && is_callable([$obj, $_GET['a']])) {
-		$meth = $_GET['a'];
-		$obj->$meth($request, $response);
+	$action = $request->query->get('a');
+	if ($action !== null && is_callable([$obj, $action])) {
+		$obj->$action($request, $response);
 	} else {
 		$obj->index($request, $response);
 	}
@@ -89,13 +94,13 @@ if (isset($obj)) {
 		$obj->$sub($request, $response);
 	}
 } else {
-	$response->setStatusCode(404);
+	$response->setStatusCode(Response::HTTP_NOT_FOUND);
 	$response->setContent('');
 }
 
 $page = $response->getContent();
-$isUsingResponse = $page !== '--';
-if ($isUsingResponse) {
+$controllerUsedResponse = $page !== '--';
+if ($controllerUsedResponse) {
 	if ($debug->isEnabled()) {
 		$response->setContent(str_replace(
 			'</body>',
@@ -117,6 +122,7 @@ if (isset($cache) && $cache->shouldCache()) {
 	$cache->cache($page);
 }
 
-if (!$isUsingResponse) {
-	echo $page;
+if (!$controllerUsedResponse) {
+	$response->setContent($page);
+	$response->send();
 }

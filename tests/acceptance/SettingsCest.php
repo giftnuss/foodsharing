@@ -50,15 +50,15 @@ class SettingsCest
 		$I->login($this->foodsaver['email']);
 		$I->amOnPage($I->foodSharePointGetUrl($newFsp['id']));
 		$I->waitForPageBody();
-		$I->click('Diesem Fair-Teiler folgen');
+		$I->click('Diesem Fairteiler folgen');
 		$I->waitForText($newFsp['name'] . ' folgen');
 		$I->click('Speichern');
 		$I->waitForPageBody();
 
-		$I->see('Fair-Teiler nicht mehr folgen');
+		$I->see('Fairteiler nicht mehr folgen');
 		$I->amOnPage('/?page=settings&sub=info');
 		$I->waitForPageBody();
-		$I->see('Updates vom Fair-Teiler "' . $newFsp['name'] . '"');
+		$I->see('Updates vom Fairteiler "' . $newFsp['name'] . '"');
 	}
 
 	public function userCanUnfollowAFoodsharepoint(AcceptanceTester $I)
@@ -68,10 +68,10 @@ class SettingsCest
 		$I->login($this->foodsaver['email']);
 		$I->amOnPage($I->foodSharePointGetUrl($this->foodSharePoint['id']));
 		$I->waitForPageBody();
-		$I->click('Fair-Teiler nicht mehr folgen');
+		$I->click('Fairteiler nicht mehr folgen');
 		$I->waitForPageBody();
 
-		$I->see('Diesem Fair-Teiler folgen');
+		$I->see('Diesem Fairteiler folgen');
 	}
 
 	/**

@@ -3,26 +3,50 @@
 namespace Foodsharing\Modules\Search;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Permissions\SearchPermissions;
 
 class SearchHelper
 {
-	private $searchGateway;
-	private $session;
+	private SearchGateway $searchGateway;
+	private RegionGateway $regionGateway;
+	private Session $session;
+	private SearchPermissions $searchPermissions;
 
-	public function __construct(SearchGateway $searchGateway, Session $session)
-	{
+	public function __construct(
+		SearchGateway $searchGateway,
+		RegionGateway $regionGateway,
+		Session $session,
+		SearchPermissions $searchPermissions
+	) {
 		$this->searchGateway = $searchGateway;
+		$this->regionGateway = $regionGateway;
 		$this->session = $session;
+		$this->searchPermissions = $searchPermissions;
 	}
 
-	public function search($q)
+	/**
+	 * Searches for regions, stores, and foodsavers.
+	 *
+	 * @param string $q the search query
+	 *
+	 * @return array SearchResult[]
+	 */
+	public function search(string $q): array
 	{
-		$isAdmin = $this->session->isAmbassador() || $this->session->isOrgaTeam();
+		$regionsFilter = null;
+		if (!$this->searchPermissions->maySearchAllRegions()) {
+			$regionsFilter = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
+		}
 
-		return $this->searchGateway->search(
-			$q,
-			$this->session->may('orga'),
-			$isAdmin ? null : $this->session->getCurrentRegionId()
-		);
+		$regions = $this->searchGateway->searchRegions($q);
+		$users = $this->searchGateway->searchUserInGroups($q, $this->searchPermissions->maySeeUserAddress(), $regionsFilter);
+		$stores = $this->searchGateway->searchStores($q, $regionsFilter);
+
+		return [
+			'regions' => $regions,
+			'users' => $users,
+			'stores' => $stores
+		];
 	}
 }

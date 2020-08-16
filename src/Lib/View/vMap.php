@@ -2,7 +2,6 @@
 
 namespace Foodsharing\Lib\View;
 
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 
 class vMap extends vCore
@@ -14,16 +13,8 @@ class vMap extends vCore
 	private $defaultMarkerOptions;
 	private $marker;
 
-	/**
-	 * @var Db
-	 */
-	private $model;
-
 	public function __construct($center = false)
 	{
-		global $container;
-		$this->model = $container->get(Db::class);
-
 		if (!$center) {
 			$center = [MapConstants::CENTER_GERMANY_LAT, MapConstants::CENTER_GERMANY_LON];
 		}

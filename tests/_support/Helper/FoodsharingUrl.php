@@ -26,7 +26,7 @@ class FoodsharingUrl extends \Codeception\Module\Db
 
 	public function storeNewUrl()
 	{
-		return '/?page=betrieb&&a=new';
+		return '/?page=betrieb&a=new';
 	}
 
 	public function groupEditUrl($groupId)

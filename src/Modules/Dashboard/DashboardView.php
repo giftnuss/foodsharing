@@ -107,251 +107,60 @@ class DashboardView extends View
 	public function u_myBetriebe($betriebe)
 	{
 		$out = '';
-		if (!empty($betriebe['verantwortlich'])) {
-			$list = '
-			<ul class="linklist">';
-			foreach ($betriebe['verantwortlich'] as $b) {
-				$list .= '
-				<li>
-					<a class="ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>
-				</li>';
-			}
-			$list .= '
-			</ul>';
-			$out = $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_are_responsible_for_stores'), ['class' => 'ui-padding truncate-content truncate-height-85 collapse-mobile']);
-		}
+		$out .= $this->u_storeLinkList(
+			$betriebe['verantwortlich'],
+			$this->translator->trans('dashboard.you_are_responsible_for_stores'),
+			'truncate-height-85'
+		);
 
-		if (!empty($betriebe['team'])) {
-			$list = '
-			<ul class="linklist">';
-			foreach ($betriebe['team'] as $b) {
-				$list .= '
-				<li>
-					<a class="ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>
-				</li>';
-			}
-			$list .= '
-			</ul>';
-			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_pickup_at_stores'), ['class' => 'ui-padding truncate-content truncate-height-140 collapse-mobile']);
-		}
+		$out .= $this->u_storeLinkList(
+			$betriebe['team'],
+			$this->translator->trans('dashboard.you_pickup_at_stores'),
+			'truncate-height-140'
+		);
 
-		if (!empty($betriebe['waitspringer'])) {
-			$list = '
-			<ul class="linklist">';
-			foreach ($betriebe['waitspringer'] as $b) {
-				$list .= '
-				<li>
-					<a class="ui-corner-all" href="/?page=fsbetrieb&id=' . $b['id'] . '">' . $b['name'] . '</a>
-				</li>';
-			}
-			$list .= '
-			</ul>';
-			$out .= $this->v_utils->v_field($list, $this->translator->trans('dashboard.you_wait_at_stores'), ['class' => 'ui-padding']);
-		}
+		$out .= $this->u_storeLinkList(
+			$betriebe['waitspringer'],
+			$this->translator->trans('dashboard.you_wait_at_stores'),
+			'truncate-height-85'
+		);
 
-		if (!empty($betriebe['anfrage'])) {
-			$this->pageHelper->addJsFunc('
-				function u_anfrage_action(key,el)
-				{
-					val = $(el).children("input:first").val().split(":::");
-
-					if(key == "deny")
-					{
-						u_sign_out(val[0],val[1],el);
-					}
-					else if(key == "map")
-					{
-						u_gotoMap(val[0],val[1],el);
-					}
-				}
-
-				function u_sign_out(fsid,bid,el)
-					{
-						var item = $(el);
-						showLoader();
-						$.ajax({
-							dataType:"json",
-							data: "fsid="+fsid+"&bid="+bid,
-							url:"/xhr.php?f=denyRequest",
-							success : function(data){
-								if(data.status == 1)
-								{
-									pulseSuccess(data.msg);
-									window.setTimeout(function(){reload()},1500);
-								}else{
-									pulseError(data.msg);
-									window.setTimeout(function(){reload()},1500);
-								}
-							},
-							complete:function(){hideLoader();}
-						});
-					}
-
-				function u_gotoMap(fsid,betriebid,el)
-					{
-						var item = $(el);
-						showLoader();
-						var baseUrl = "?page=map&bid=";
-						window.location.href = baseUrl+betriebid;
-
-					}
-			');
-			$this->pageHelper->addJs('
-				function createSignoutMenu() {
-					return {
-						callback: function(key, options) {
-							u_anfrage_action(key,this);
-						},
-						items: {
-							"deny": {name: "Anfrage beenden",icon:"fas fa-trash-alt fa-fw"},
-							"map": {name: "Auf Karte anschauen",icon:"fas fa-map-marked-alt fa-fw"}
-						}
-					};
-				}
-
-				$("#store-request").on("click", function(e){
-					var $this = $(this);
-					$this.data("runCallbackThingie", createSignoutMenu);
-					var _offset = $this.offset(),
-						position = {
-							x: _offset.left - 30,
-							y: _offset.top - 97
-						}
-					$this.contextMenu(position);
-				});
-
-				$.contextMenu({
-					selector: "#store-request",
-					trigger: "none",
-					build: function($trigger, e) {
-						return $trigger.data("runCallbackThingie")();
-					}
-				});
-
-
-			');
-			$list = '
-			<ul class="linklist">';
-			foreach ($betriebe['anfrage'] as $b) {
-				//<a id="anfrage-betrieb" class="ui-corner-all" href="/?page=fsbetrieb&id='.$b['id'].'">'.$b['name'].'</a>
-				$list .= '
-				<li>
-					<a id="store-request" class="ui-corner-all" href="#" onclick="return false;">' . $b['name'] . '<input type="hidden" name="anfrage" value="' . $this->session->id() . ':::' . $b['id'] . '" /></a>
-				</li>';
-			}
-			$list .= '
-			</ul>';
-			$out .= $this->v_utils->v_field($list, 'Anfragen gestellt bei', ['class' => 'ui-padding truncate-content truncate-height-50 collapse-mobile']);
-		}
+		$out .= $this->u_storeLinkList(
+			$betriebe['requested'],
+			$this->translator->trans('dashboard.you_requested_to_join'),
+			'truncate-height-50'
+		);
 
 		if (empty($out)) {
-			$out = $this->v_utils->v_info('Du bist bis jetzt in keinem Betriebsteam.');
+			$out = $this->v_utils->v_info(
+				$this->translator->trans('dashboard.no_store_team')
+			);
 		}
 
 		return $out;
 	}
 
-	public function u_updates($updates)
+	private function u_storeLinkList($storeList, $title, $classes = ''): string
 	{
-		$out = '';
-		$i = 0;
-		foreach ($updates as $u) {
-			$fs = [
-				'id' => $u['foodsaver_id'],
-				'name' => $u['foodsaver_name'],
-				'photo' => $u['foodsaver_photo'],
-				'sleep_status' => $u['sleep_status']
-			];
-			$out .= '
-			<div class="updatepost">
-					<a class="poster ui-corner-all" href="/profile/' . (int)$u['foodsaver_id'] . '">
-						' . $this->imageService->avatar($fs, 50) . '
-					</a>
-					<div class="post">
-						' . $this->u_update_type($u) . '
-					</div>
-					<div style="clear:both;"></div>
-			</div>';
+		if (empty($storeList)) {
+			return '';
 		}
-
-		return $this->v_utils->v_field($out, $this->translationHelper->s('updates'), ['class' => 'ui-padding']);
-	}
-
-	public function u_update_type($u)
-	{
-		$out = '';
-		if ($u['type'] == 'forum') {
-			$out = '
-				<div class="activity_feed_content">
-					<div class="activity_feed_content_text">
-						<div class="activity_feed_content_info">
-							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=forum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Forum geschrieben.
-						</div>
-					</div>
-
-					<div class="activity_feed_content_link">
-						' . $u['post_body'] . '
-					</div>
-
-				</div>
-
-				<div class="js_feed_comment_border">
-					<div class="comment_mini_link_like">
-						<div class="foot">
-							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
-						</div>
-					</div>
-					<div class="clear"></div>
-				</div>';
-		} elseif ($u['type'] == 'bforum') {
-			$out = '
-				<div class="activity_feed_content">
-					<div class="activity_feed_content_text">
-						<div class="activity_feed_content_info">
-							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas zum Thema "<a href="/?page=bezirk&bid=' . $u['bezirk_id'] . '&sub=botforum&tid=' . $u['id'] . '&pid=' . $u['last_post_id'] . '#post' . $u['last_post_id'] . '">' . $u['name'] . '</a>" ins Botschafterforum geschrieben.
-						</div>
-					</div>
-
-					<div class="activity_feed_content_link">
-						' . $u['post_body'] . '
-					</div>
-
-				</div>
-
-				<div class="js_feed_comment_border">
-					<div class="comment_mini_link_like">
-						<div class="foot">
-							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
-						</div>
-					</div>
-					<div class="clear"></div>
-				</div>';
-		} elseif ($u['type'] == 'bpin') {
-			$out = '
-				<div class="activity_feed_content">
-					<div class="activity_feed_content_text">
-						<div class="activity_feed_content_info">
-							<a href="/profile/' . (int)$u['foodsaver_id'] . '">' . $u['foodsaver_name'] . '</a> hat etwas auf die Pinnwand von <a href="/?page=fsbetrieb&id=' . $u['betrieb_id'] . '">' . $u['betrieb_name'] . '</a> geschrieben.
-						</div>
-					</div>
-
-					<div class="activity_feed_content_link">
-						' . $u['text'] . '
-					</div>
-
-				</div>
-
-				<div class="js_feed_comment_border">
-					<div class="comment_mini_link_like">
-						<div class="foot">
-							<span class="time">' . $this->timeHelper->niceDate($u['update_time_ts']) . '</span>
-						</div>
-					</div>
-					<div class="clear"></div>
-				</div>';
+		$list = '<ul class="linklist">';
+		foreach ($storeList as $store) {
+			$list .=
+			'<li>' .
+				'<a class="ui-corner-all" href="/?page=fsbetrieb&id=' . $store['id'] . '">' .
+					$store['name'] .
+				'</a>' .
+			'</li>';
 		}
+		$list .= '</ul>';
 
-		return $out;
+		return $this->v_utils->v_field(
+			$list,
+			$title,
+			['class' => 'ui-padding collapse-mobile truncate-content ' . $classes]
+		);
 	}
 
 	public function u_invites($invites)

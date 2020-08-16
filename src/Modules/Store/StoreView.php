@@ -2,54 +2,54 @@
 
 namespace Foodsharing\Modules\Store;
 
-use Foodsharing\Helpers\DataHelper;
-use Foodsharing\Helpers\IdentificationHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TimeHelper;
-use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Helpers\WeightHelper;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
-use Foodsharing\Services\ImageService;
-use Foodsharing\Services\SanitizerService;
-use Symfony\Component\Translation\TranslatorInterface;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Foodsharing\Utility\WeightHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreView extends View
 {
 	private $weightHelper;
 
 	public function __construct(
-			\Twig\Environment $twig,
-			Utils $viewUtils,
-			Session $session,
-			SanitizerService $sanitizerService,
-			PageHelper $pageHelper,
-			TimeHelper $timeHelper,
-			ImageService $imageService,
-			RouteHelper $routeHelper,
-			IdentificationHelper $identificationHelper,
-			DataHelper $dataHelper,
-			TranslationHelper $translationHelper,
-			WeightHelper $weightHelper,
-			TranslatorInterface $translator
-			) {
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		WeightHelper $weightHelper,
+		TranslatorInterface $translator
+	) {
 		$this->weightHelper = $weightHelper;
 		parent::__construct(
-						$twig,
-						$viewUtils,
-						$session,
-						$sanitizerService,
-						$pageHelper,
-						$timeHelper,
-						$imageService,
-						$routeHelper,
-						$identificationHelper,
-						$dataHelper,
-						$translationHelper,
-						$translator
-						);
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
 	}
 
 	public function dateForm()
@@ -160,7 +160,9 @@ class StoreView extends View
 
 			$this->v_utils->v_form_checkbox('lebensmittel', ['values' => $lebensmittel_values]),
 			$this->v_utils->v_form_date('begin'),
-			$this->v_utils->v_form_textarea('besonderheiten'),
+			$this->v_utils->v_form_textarea('besonderheiten', [
+				'desc' => $this->v_utils->v_info($this->translator->trans('info.md'), false, '<i class="fab fa-markdown fa-2x d-inline align-middle text-muted"></i>')
+			]),
 			$this->v_utils->v_form_textarea('public_info', ['maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig:</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>']),
 			$this->v_utils->v_form_select('public_time', ['values' => [
 				['id' => 0, 'name' => 'Keine Angabe'],

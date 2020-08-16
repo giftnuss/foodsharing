@@ -48,10 +48,10 @@
               >
                 <i class="fas fa-rocket" />
                 <small v-if="isMobile">
-                  {{ $i18n('foodsaver.upgrade_to') }}
+                  {{ $i18n('foodsaver.upgrade.to_fs') }}
                 </small>
                 <span v-else>
-                  {{ $i18n('foodsaver.upgrade_to') }}
+                  {{ $i18n('foodsaver.upgrade.to_fs') }}
                 </span>
               </a>
             </li>
@@ -424,27 +424,27 @@ export default {
 }
 
 #topbar {
-  @media (max-width: 823px) {
-    height: 90px;
-
-    &.loggedIn {
-      height: 37px;
-    }
-  }
-
   @media (min-width: 993px) {
     height: 45px;
-
-    &.loggedIn {
-      height: 37px;
-    }
+    &.loggedIn { height: 40px; }
   }
-  @media (max-height: 320px), (max-width: 415px) {
-    height: 130px;
 
-    &.loggedIn {
-      height: 80px;
-    }
+  @media (max-width: 992px) {
+    height: 62px;
+  }
+
+  @media (max-width: 939px) {
+    height: 98px;
+    &.loggedIn { height: 52px; }
+  }
+
+  @media (max-width: 627px) {
+    &.loggedIn { height: 80px; }
+  }
+
+  @media (max-width: 575px) {
+    height: 130px;
+    &.loggedIn { height: 80px; }
   }
 }
 </style>

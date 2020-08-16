@@ -1,25 +1,34 @@
-.infos {
-  width: 100%;
-}
-
 .infos p {
-  font-size: 12px;
-  letter-spacing: normal;
   margin: 0 0 10px;
 }
 
-.verify {
-  color: #ffffff;
-  font-weight: bold;
-  background-color: var(--fs-green);
+.profile-sideinfos {
+  font-size: 13px;
+  color: var(--fs-brown);
+  margin-bottom: -5px;
+}
+.profile-sideinfos dt {
+  font-weight: bolder;
+  margin-top: 5px;
+}
+.profile-sideinfos dt::after {
+  content: ':';
+}
+.profile-sideinfos dd {
+  padding-bottom: 5px;
 }
 
+.verify,
 .unverify {
   color: #ffffff;
   font-weight: bold;
+}
+.verify {
+  background-color: var(--fs-green);
+}
+.unverify {
   background-color: red;
 }
-
 
 .profile.statdisplay {
   margin: -20px auto 10px auto;
@@ -38,10 +47,36 @@
 
 .profile.statdisplay .item {
   float: right;
+  display: block;
+  padding: 0 5px 0 5px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: var(--fs-green);
+  text-align: center;
+  width: 62px;
 }
 
 .profile.statdisplay .item span {
+  color: #fafafc;
   letter-spacing: normal;
+}
+
+div.statdisplay .item .val {
+  font-size: 17px;
+  font-weight: bold;
+  display: block;
+  margin: 14px 0 1px;
+}
+
+div.statdisplay .item .name {
+  font-size: 11px;
+  display: block;
+  margin: 0 0 14px 0;
+}
+
+div.statdisplay a.item:hover {
+  text-decoration: none;
+  opacity: 0.8;
 }
 
 .stat_bananacount {
@@ -52,32 +87,30 @@
   background-image: url("/img/bananan.png");
 }
 
+#bananas {
+  max-width: 650px;
+  margin: 10px;
+}
+
+#bananas a > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+}
+
 .page .linklist {
   margin-top: 10px;
   margin-bottom: 0;
 }
 
-div.statdisplay .item {
-  border-radius: 40px;
+.datelist a {
+  font-weight: bolder;
 }
 
-#double {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-#double li {
-  width: 33.333333%; /* fallback for older browsers */
-  width: calc(100% / 3);
-}
-
-#double ul {
-  width: 100%;
-  border-top: 1px solid var(--border);
-}
-
-#double ul li {
-  border-bottom: 1px solid var(--border);
+.cancel-all-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .disabled {

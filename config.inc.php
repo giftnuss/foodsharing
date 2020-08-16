@@ -1,12 +1,8 @@
 <?php
 
-use function Sentry\configureScope;
-use function Sentry\init;
-use Sentry\Severity;
-use Sentry\State\Scope;
-
 $FS_ENV = getenv('FS_ENV');
 $env_filename = __DIR__ . '/config.inc.' . $FS_ENV . '.php';
+$private_env_filename = __DIR__ . '/.config.inc.' . $FS_ENV . '.php';
 if (defined('FS_ENV')) {
 	if (FS_ENV !== $FS_ENV) {
 		die('different values of FS_ENV const (' . FS_ENV . ') and ENV var (' . $FS_ENV . ')');
@@ -19,6 +15,9 @@ if (file_exists($env_filename)) {
 	require_once $env_filename;
 } else {
 	die('no config found for env [' . $FS_ENV . ']');
+}
+if (file_exists($private_env_filename)) {
+	require_once $private_env_filename;
 }
 if (!defined('SOCK_URL')) {
 	define('SOCK_URL', 'http://127.0.0.1:1338/');
@@ -33,24 +32,6 @@ locale_set_default('de-DE');
 $revision_filename = __DIR__ . '/revision.inc.php';
 if (file_exists($revision_filename)) {
 	require_once $revision_filename;
-}
-
-/*
- * Configure Sentry for remote error reporting
- */
-
-if (defined('SENTRY_URL')) {
-	init([
-		'dsn' => SENTRY_URL,
-		'release' => SRC_REVISION,
-		'environment' => $FS_ENV,
-		'send_default_pii' => true
-	]);
-
-	configureScope(
-		static function (Scope $scope): void {
-			$scope->setLevel(Severity::warning());
-		});
 }
 
 if (!defined('RAVEN_JAVASCRIPT_CONFIG') && getenv('RAVEN_JAVASCRIPT_CONFIG')) {
@@ -79,6 +60,12 @@ define('DSN', 'mysql:host=' . DB_HOST . ';dbname=' . DB_DB . ';charset=utf8mb4')
 
 // define('WEBPUSH_PUBLIC_KEY', 'TO CHANGE AT DEPLOYMENT');
 // define('WEBPUSH_PRIVATE_KEY', 'TO CHANGE AT DEPLOYMENT');
+
+if (!defined('BBB_DOMAIN')) {
+	define('BBB_DOMAIN', \Foodsharing\Lib\BigBlueButton::DEFAULT_CLIENT);
+	define('BBB_SECRET', 'CHANGEME');
+	define('BBB_DIALIN', '+49xxxxx');
+}
 
 /*
  * How to put the webpush keys at the first deployment after webpush was introduced:

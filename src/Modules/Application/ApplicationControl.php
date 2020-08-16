@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Modules\Application;
 
-use Foodsharing\Helpers\IdentificationHelper;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Utility\IdentificationHelper;
 
 class ApplicationControl extends Control
 {
@@ -14,8 +14,11 @@ class ApplicationControl extends Control
 	private $gateway;
 	private $identificationHelper;
 
-	public function __construct(ApplicationGateway $gateway, ApplicationView $view, IdentificationHelper $identificationHelper)
-	{
+	public function __construct(
+		ApplicationGateway $gateway,
+		ApplicationView $view,
+		IdentificationHelper $identificationHelper
+	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->identificationHelper = $identificationHelper;

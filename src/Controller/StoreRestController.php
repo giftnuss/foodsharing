@@ -6,8 +6,8 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\Store\StoreTransactions;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\StoreService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -19,7 +19,7 @@ class StoreRestController extends AbstractFOSRestController
 {
 	private Session $session;
 	private StoreGateway $storeGateway;
-	private StoreService $storeService;
+	private StoreTransactions $storeTransactions;
 	private StorePermissions $storePermissions;
 	private BellGateway $bellGateway;
 
@@ -27,11 +27,16 @@ class StoreRestController extends AbstractFOSRestController
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const ID = 'id';
 
-	public function __construct(Session $session, StoreGateway $storeGateway, StoreService $storeService, StorePermissions $storePermissions, BellGateway $bellGateway)
-	{
+	public function __construct(
+		Session $session,
+		StoreGateway $storeGateway,
+		StoreTransactions $storeTransactions,
+		StorePermissions $storePermissions,
+		BellGateway $bellGateway
+	) {
 		$this->session = $session;
 		$this->storeGateway = $storeGateway;
-		$this->storeService = $storeService;
+		$this->storeTransactions = $storeTransactions;
 		$this->storePermissions = $storePermissions;
 		$this->bellGateway = $bellGateway;
 	}
@@ -68,7 +73,7 @@ class StoreRestController extends AbstractFOSRestController
 			throw new HttpException(403, self::NOT_LOGGED_IN);
 		}
 
-		$filteredStoresForUser = $this->storeService->getFilteredStoresForUser($this->session->id());
+		$filteredStoresForUser = $this->storeTransactions->getFilteredStoresForUser($this->session->id());
 
 		if ($filteredStoresForUser === []) {
 			return $this->handleView($this->view([], 204));
@@ -103,7 +108,7 @@ class StoreRestController extends AbstractFOSRestController
 		$bellData = Bell::create(
 			'store_wallpost_title',
 			'store_wallpost',
-			'img img-store brown',
+			'fas fa-thumbtack',
 			['href' => '/?page=fsbetrieb&id=' . $storeId],
 			[
 				'user' => $this->session->user('name'),

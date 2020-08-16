@@ -9,14 +9,14 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\StorePermissions;
-use Foodsharing\Services\SanitizerService;
-use Foodsharing\Services\StoreService;
+use Foodsharing\Utility\Sanitizer;
 
 class StoreXhr extends Control
 {
+	private $storeModel;
 	private $storeGateway;
 	private $storePermissions;
-	private $storeService;
+	private $storeTransactions;
 	private $sanitizerService;
 
 	public function __construct(
@@ -24,14 +24,14 @@ class StoreXhr extends Control
 		StoreView $view,
 		StoreGateway $storeGateway,
 		StorePermissions $storePermissions,
-		StoreService $storeService,
-		SanitizerService $sanitizerService
+		StoreTransactions $storeTransactions,
+		Sanitizer $sanitizerService
 	) {
-		$this->model = $model;
+		$this->storeModel = $model;
 		$this->view = $view;
 		$this->storeGateway = $storeGateway;
 		$this->storePermissions = $storePermissions;
-		$this->storeService = $storeService;
+		$this->storeTransactions = $storeTransactions;
 		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
@@ -55,7 +55,7 @@ class StoreXhr extends Control
 				$fetchercount = 8;
 			}
 
-			if ($this->storeService->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
+			if ($this->storeTransactions->changePickupSlots($storeId, Carbon::createFromTimeString($time), $fetchercount)) {
 				$this->flashMessageHelper->info('Abholtermin wurde eingetragen!');
 
 				return [
@@ -63,25 +63,6 @@ class StoreXhr extends Control
 					'script' => 'reload();'
 				];
 			}
-		}
-	}
-
-	public function deldate()
-	{
-		$storeId = (int)$_GET['id'];
-		if (!$this->storePermissions->mayDeletePickup($storeId)) {
-			return XhrResponses::PERMISSION_DENIED;
-		}
-
-		if (isset($storeId, $_GET['time']) && strtotime($_GET['time']) > 0) {
-			$this->model->deldate($storeId, $_GET['time']);
-
-			$this->flashMessageHelper->info('Abholtermin wurde gelöscht.');
-
-			return [
-				'status' => 1,
-				'script' => 'reload();'
-			];
 		}
 	}
 
@@ -93,7 +74,7 @@ class StoreXhr extends Control
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		if ($history = $this->model->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
+		if ($history = $this->storeGateway->getFetchHistory($storeId, $_GET['from'], $_GET['to'])) {
 			return [
 				'status' => 1,
 				'script' => '
@@ -125,7 +106,7 @@ class StoreXhr extends Control
 				$( "#' . $id . '_from" ).datepicker({
 					changeMonth: true,
 					maxDate: "0",
-					
+
 					onClose: function( selectedDate ) {
 						$( "#' . $id . '_to" ).datepicker( "option", "minDate", selectedDate );
 					}
@@ -138,30 +119,30 @@ class StoreXhr extends Control
 						$( "#' . $id . '_from" ).datepicker( "option", "maxDate", selectedDate );
 					}
 				});
-				
+
 				$( "#' . $id . '_to" ).val(new Date(Date.now()).toLocaleDateString("de-DE", {year: "numeric", month: "2-digit", day: "2-digit", }));
 				$( "#' . $id . '_from" ).datepicker("show");
-				
-				
+
+
 				$(window).on("resize", function(){
 					$("#' . $dia->getId() . '").dialog("option",{
 						height:($(window).height()-40)
 					});
 				});
-				
+
 				$("#daterange_submit").on("click", function(ev){
 					ev.preventDefault();
-				
+
 					var date = $( "#' . $id . '_from" ).datepicker("getDate");
-					
+
 					var from = "";
 					var to = "";
-					
+
 					if(date !== null)
 					{
 						from = date.getFullYear() + "-" + preZero((date.getMonth()+1)) + "-" + preZero(date.getDate());
 						date = $( "#' . $id . '_to" ).datepicker("getDate");
-					
+
 						if(date === null)
 						{
 							to = from;
@@ -177,7 +158,7 @@ class StoreXhr extends Control
 								to = to + " " + "23:59:59"
 							}
 						}
-				
+
 						ajreq("getfetchhistory",{app:"betrieb",from:from,to:to,bid:' . $storeId . '});
 					}
 					else
@@ -185,7 +166,7 @@ class StoreXhr extends Control
 						alert("Du musst erst ein Datum ausw&auml;hlen ;)");
 					}
 				});
-				
+
 		');
 
 		if ($this->session->isMob()) {
@@ -216,17 +197,17 @@ class StoreXhr extends Control
 		$dia->addButton('Speichern', 'saveDate();');
 
 		$dia->addJs('
-				
+
 			function saveDate()
 			{
 				var date = $("#datepicker").datepicker( "getDate" );
-				
+
 				date = date.getFullYear() + "-" +
 				    ("00" + (date.getMonth()+1)).slice(-2) + "-" +
-				    ("00" + date.getDate()).slice(-2) + " " + 
-				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" + 
+				    ("00" + date.getDate()).slice(-2) + " " +
+				    ("00" + $("select[name=\'time[hour]\']").val()).slice(-2) + ":" +
 				    ("00" + $("select[name=\'time[min]\']").val()).slice(-2) + ":00";
-				
+
 				if($("#fetchercount").val() >= 0)
 				{
 					ajreq("savedate",{
@@ -241,10 +222,10 @@ class StoreXhr extends Control
 					pulseError("Du musst noch die Anzahl der Abholer/innen auswählen");
 				}
 			}
-				
+
 			$("#datepicker").datepicker({
 				minDate: new Date()
-			});	
+			});
 		');
 
 		return $dia->xhrout();
@@ -255,7 +236,7 @@ class StoreXhr extends Control
 		if (isset($_GET['ids']) && is_array($_GET['ids']) && count($_GET['ids']) > 0) {
 			foreach ($_GET['ids'] as $b) {
 				if ($this->storePermissions->mayEditStore($b['id']) && (int)$b['v'] > 0) {
-					$this->model->updateBetriebBezirk($b['id'], $b['v']);
+					$this->storeGateway->updateStoreRegion($b['id'], $b['v']);
 				}
 			}
 		}
@@ -271,7 +252,7 @@ class StoreXhr extends Control
 				$ids[] = (int)$b['betrieb_id'];
 			}
 			if (!empty($ids)) {
-				if ($betriebe = $this->model->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
+				if ($betriebe = $this->storeModel->q('SELECT id,name,bezirk_id,str,hsnr FROM fs_betrieb WHERE id IN(' . implode(',', $ids) . ') AND ( bezirk_id = 0 OR bezirk_id IS NULL)')) {
 					$dia = new XhrDialog();
 
 					$dia->setTitle('Fehlende Zuordnung');
@@ -282,7 +263,7 @@ class StoreXhr extends Control
 					$bezirks = $this->session->getRegions();
 
 					foreach ($bezirks as $key => $b) {
-						if (!in_array($b['type'], [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN])) {
+						if (!Type::isAccessibleRegion($b['type'])) {
 							unset($bezirks[$key]);
 						}
 					}
@@ -300,14 +281,14 @@ class StoreXhr extends Control
 					$dia->addJs('
 						$("#savebetriebetoselect").on("click", function(ev){
 							ev.preventDefault();
-							
+
 							var saveArr = new Array();
-							
+
 							$("#betriebetoselect select.input.select").each(function(){
 								var $this = $(this);
 								var value = parseInt($this.val());
 								var id = parseInt($this.attr("id").split("b_")[1]);
-							
+
 								if(id > 0 && value > 0)
 								{
 									saveArr.push({
@@ -316,7 +297,7 @@ class StoreXhr extends Control
 									});
 								}
 							});
-							
+
 							if(saveArr.length > 0)
 							{
 								ajax.req("betrieb","savebezirkids",{
@@ -327,7 +308,7 @@ class StoreXhr extends Control
 									}
 								});
 							}
-						});		
+						});
 					');
 					$dia->addContent($cnt);
 					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translationHelper->s('save') . '</a>'));
@@ -345,7 +326,7 @@ class StoreXhr extends Control
 		if ($status === TeamStatus::Coordinator) {
 			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
-			$this->model->signout($_GET['id'], $this->session->id());
+			$this->storeModel->signout($_GET['id'], $this->session->id());
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->translationHelper->s('no_member'), 'error');

@@ -43,13 +43,17 @@ class Mem
 	/* enqueue work of specified type.
 	   counterpart of asynchronous queue runner in mails.control
 	 */
-	public function queueWork($type, $data)
+	public function queueWork($type, $data, bool $highPriority = false)
 	{
 		if (MEM_ENABLED) {
 			$e = serialize(['type' => $type, 'data' => $data]);
 			$this->ensureConnected();
 
-			return $this->cache->lPush('workqueue', $e);
+			if ($highPriority) {
+				return $this->cache->rPush('workqueue', $e);
+			} else {
+				return $this->cache->lPush('workqueue', $e);
+			}
 		}
 	}
 

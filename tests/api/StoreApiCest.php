@@ -9,9 +9,9 @@ use Codeception\Util\HttpCode as Http;
  */
 class StoreApiCest
 {
-	private $region_id = 241;
 	private $user;
 	private $store;
+	private $region;
 
 	private const API_STORES = 'api/stores';
 	private const EMAIL = 'email';
@@ -20,7 +20,8 @@ class StoreApiCest
 	public function _before(\ApiTester $I)
 	{
 		$this->user = $I->createFoodsaver();
-		$this->store = $I->createStore($this->region_id);
+		$this->region = $I->createRegion();
+		$this->store = $I->createStore($this->region['id']);
 	}
 
 	public function getStore(\ApiTester $I)

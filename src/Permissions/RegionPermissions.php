@@ -21,7 +21,7 @@ final class RegionPermissions
 	{
 		$type = $this->regionGateway->getType($regionId);
 
-		return $this->session->may('fs') && in_array($type, [Type::CITY, TYPE::REGION, TYPE::PART_OF_TOWN, TYPE::DISTRICT], true);
+		return $this->session->may('fs') && Type::isAccessibleRegion($type);
 	}
 
 	public function mayAdministrateRegions(): bool
@@ -41,6 +41,11 @@ final class RegionPermissions
 	public function mayHandleFoodsaverRegionMenu(int $regionId): bool
 	{
 		return $this->session->isAmbassadorForRegion([$regionId], false, false) || $this->session->may('orga');
+	}
+
+	public function hasConference(int $regionType): bool
+	{
+		return in_array($regionType, [Type::CITY, TYPE::WORKING_GROUP, Type::PART_OF_TOWN, Type::DISTRICT, Type::REGION, Type::BIG_CITY]);
 	}
 
 	public function mayDeleteFoodsaverFromRegion(int $regionId): bool

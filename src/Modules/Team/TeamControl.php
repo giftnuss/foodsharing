@@ -11,8 +11,11 @@ class TeamControl extends Control
 	private $gateway;
 	private $contentGateway;
 
-	public function __construct(TeamGateway $gateway, TeamView $view, ContentGateway $contentGateway)
-	{
+	public function __construct(
+		TeamGateway $gateway,
+		TeamView $view,
+		ContentGateway $contentGateway
+	) {
 		$this->gateway = $gateway;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;

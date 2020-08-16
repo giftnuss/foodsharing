@@ -15,8 +15,11 @@ class FoodSharePointGateway extends BaseGateway
 	private $regionGateway;
 	private $bellGateway;
 
-	public function __construct(Database $db, RegionGateway $regionGateway, BellGateway $bellGateway)
-	{
+	public function __construct(
+		Database $db,
+		RegionGateway $regionGateway,
+		BellGateway $bellGateway
+	) {
 		parent::__construct($db);
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
@@ -128,11 +131,7 @@ class FoodSharePointGateway extends BaseGateway
 			foreach ($foodSharePoints as $fspKey => $fspValue) {
 				$foodSharePoints[$fspKey]['pic'] = false;
 				if (!empty($fspValue['picture'])) {
-					$foodSharePoints[$fspKey]['pic'] = [
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fspValue['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fspValue['picture']),
-						'orig' => 'images/' . ($fspValue['picture']),
-					];
+					$foodSharePoints[$fspKey]['pic'] = $this->getPicturePaths($fspValue['picture']);
 				}
 			}
 
@@ -193,11 +192,7 @@ class FoodSharePointGateway extends BaseGateway
 				}
 				$pic = false;
 				if (!empty($fsp['picture'])) {
-					$pic = [
-						'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $fsp['picture']),
-						'head' => 'images/' . str_replace('/', '/crop_0_528_', $fsp['picture']),
-						'orig' => 'images/' . ($fsp['picture']),
-					];
+					$pic = $this->getPicturePaths($fsp['picture']);
 				}
 				$out[$fsp['bezirk_id']]['fairteiler'][] = [
 					'id' => $fsp['id'],
@@ -399,11 +394,7 @@ class FoodSharePointGateway extends BaseGateway
 		) {
 			$foodSharePoint['pic'] = false;
 			if (!empty($foodSharePoint['picture'])) {
-				$foodSharePoint['pic'] = [
-					'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $foodSharePoint['picture']),
-					'head' => 'images/' . str_replace('/', '/crop_0_528_', $foodSharePoint['picture']),
-					'orig' => 'images/' . ($foodSharePoint['picture']),
-				];
+				$foodSharePoint['pic'] = $this->getPicturePaths($foodSharePoint['picture']);
 			}
 
 			return $foodSharePoint;
@@ -449,7 +440,7 @@ class FoodSharePointGateway extends BaseGateway
 		$bellData = Bell::create(
 			'sharepoint_activate_title',
 			'sharepoint_activate',
-			'img img-recycle yellow',
+			'fas fa-recycle',
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
 			'new-fairteiler-' . $foodSharePointId,
@@ -465,5 +456,31 @@ class FoodSharePointGateway extends BaseGateway
 			return;
 		}
 		$this->bellGateway->delBellsByIdentifier($identifier);
+	}
+
+	/**
+	 * Returns the URL paths for the 'thumb', 'head', and 'orig' version of the picture. This differentiates between
+	 * newer files, which are requested via rest API, and older files, which are requested directly with their file
+	 * path.
+	 *
+	 * @param string $picture a picture file's name
+	 *
+	 * @return array URL paths for the 'thumb', 'head', 'orig' version
+	 */
+	private function getPicturePaths(string $picture): array
+	{
+		if (strpos($picture, '/api/uploads/') === 0) {
+			return [
+				'thumb' => $picture . '?h=60&w=60',
+				'head' => $picture . '?h=169&w=525',
+				'orig' => $picture
+			];
+		}
+
+		return [
+			'thumb' => 'images/' . str_replace('/', '/crop_1_60_', $picture),
+			'head' => 'images/' . str_replace('/', '/crop_0_528_', $picture),
+			'orig' => 'images/' . ($picture),
+		];
 	}
 }

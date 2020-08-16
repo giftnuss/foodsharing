@@ -2,12 +2,12 @@
 
 namespace Foodsharing\Modules\Report;
 
-use Foodsharing\Helpers\TimeHelper;
 use Foodsharing\Lib\Xhr\XhrDialog;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Permissions\ReportPermissions;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
 
 class ReportXhr extends Control
 {
@@ -22,7 +22,7 @@ class ReportXhr extends Control
 		ReportGateway $reportGateway,
 		ReportView $view,
 		FoodsaverGateway $foodsaverGateway,
-		SanitizerService $sanitizerService,
+		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
 		ReportPermissions $reportPermissions
 	) {
@@ -47,7 +47,7 @@ class ReportXhr extends Control
 			$reason = explode('=>', $report['tvalue']);
 
 			$dialog = new XhrDialog();
-			$dialog->setTitle(htmlspecialchars('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']));
+			$dialog->setTitle('Meldung über ' . $report['fs_name'] . ' ' . $report['fs_nachname']);
 
 			$content = $this->v_utils->v_input_wrapper('Report ID', $report['id']);
 			$content .= $this->v_utils->v_input_wrapper('Zeitpunkt', $this->timeHelper->niceDate($report['time_ts']));
@@ -119,7 +119,8 @@ class ReportXhr extends Control
 
 	public function reportDialog(): array
 	{
-		$dialog = new XhrDialog();
+		// disabled until reports are fixed
+		/*$dialog = new XhrDialog();
 		$dialog->setTitle($this->foodsaver['name'] . ' melden');
 
 		global $g_data;
@@ -193,12 +194,14 @@ class ReportXhr extends Control
 		');
 		$dialog->noOverflow();
 
-		return $dialog->xhrout();
+		return $dialog->xhrout();*/
+		return ['status' => 0];
 	}
 
 	public function betriebReport(): array
 	{
-		$reason_id = 1;
+		// disabled until reports are fixed
+		/*$reason_id = 1;
 		if ($_GET['reason_id'] === 2) {
 			$reason_id = 2;
 		}
@@ -215,6 +218,7 @@ class ReportXhr extends Control
 				$("#reportmessage").val("");
 				$("#reportreason ~ select").hide();
 				$("#reportreason ~ div.cb").hide();'
-		];
+		];*/
+		return ['status' => 0];
 	}
 }

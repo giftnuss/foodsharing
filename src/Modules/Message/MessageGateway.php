@@ -3,11 +3,11 @@
 namespace Foodsharing\Modules\Message;
 
 use Carbon\Carbon;
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Utility\TranslationHelper;
 
 final class MessageGateway extends BaseGateway
 {

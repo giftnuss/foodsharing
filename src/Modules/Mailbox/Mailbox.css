@@ -228,6 +228,9 @@ span.dynatree-folder a {
 a.newmail {
   font-weight: bold !important;
 }
+a.newmail:before {
+  content: attr(data-count);
+}
 
 table.edit-table {
   margin: 0;

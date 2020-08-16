@@ -2,26 +2,21 @@
 
 namespace Foodsharing\Modules\Core;
 
-use Foodsharing\Helpers\EmailHelper;
-use Foodsharing\Helpers\FlashMessageHelper;
-use Foodsharing\Helpers\PageHelper;
-use Foodsharing\Helpers\RouteHelper;
-use Foodsharing\Helpers\TranslationHelper;
-use Foodsharing\Lib\Db\Db;
 use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\Session;
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\FlashMessageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\TranslationHelper;
 use ReflectionClass;
 
 abstract class Control
 {
 	protected $isControl = false;
 	protected $isXhrControl = false;
-	/**
-	 * @var Db
-	 */
-	protected $model;
 	protected $view;
 	private $sub;
 	private $sub_func;
@@ -50,11 +45,6 @@ abstract class Control
 	 * @var \Twig\Environment
 	 */
 	private $twig;
-
-	/**
-	 * @var Db
-	 */
-	private $legacyDb;
 
 	/**
 	 * @var FoodsaverGateway
@@ -92,7 +82,6 @@ abstract class Control
 		$this->mem = $container->get(Mem::class);
 		$this->session = $container->get(Session::class);
 		$this->v_utils = $container->get(Utils::class);
-		$this->legacyDb = $container->get(Db::class);
 		$this->foodsaverGateway = $container->get(FoodsaverGateway::class);
 		$this->metrics = $container->get(InfluxMetrics::class);
 		$this->pageHelper = $container->get(PageHelper::class);
@@ -335,7 +324,7 @@ abstract class Control
 		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" title="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea inlabel"></textarea>
+				<textarea id="wallpost-text" name="text" placeholder="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display:none;" id="wallpost-attach" /></div>
 
@@ -368,12 +357,12 @@ abstract class Control
 
 	public function submitted(): bool
 	{
-		return isset($_POST) && !empty($_POST);
+		return !empty($_POST);
 	}
 
 	public function isSubmitted($form = false): bool
 	{
-		if (isset($_POST) && !empty($_POST)) {
+		if (!empty($_POST)) {
 			return $form === false || $_POST['submitted'] == $form;
 		}
 

@@ -6,8 +6,7 @@ use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\RegionPermissions;
-use Foodsharing\Services\NotificationService;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
 
 class FoodsaverXhr extends Control
 {
@@ -15,22 +14,19 @@ class FoodsaverXhr extends Control
 	private $regionGateway;
 	private $sanitizerService;
 	private $regionPermissions;
-	private $notificationService;
 
 	public function __construct(
 		FoodsaverView $view,
-		RegionGateway $regionGateway,
-		SanitizerService $sanitizerService,
-		RegionPermissions $regionPermissions,
 		FoodsaverGateway $foodsaverGateway,
-		NotificationService $notificationService
+		RegionGateway $regionGateway,
+		RegionPermissions $regionPermissions,
+		Sanitizer $sanitizerService
 	) {
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->regionGateway = $regionGateway;
-		$this->sanitizerService = $sanitizerService;
 		$this->regionPermissions = $regionPermissions;
-		$this->notificationService = $notificationService;
+		$this->sanitizerService = $sanitizerService;
 
 		parent::__construct();
 	}

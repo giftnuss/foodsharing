@@ -1,0 +1,149 @@
+<?php
+
+namespace Foodsharing\Modules\Search;
+
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Buddy\BuddyGateway;
+use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
+use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\Sanitizer;
+
+class SearchIndexGenerator
+{
+	private $buddyGateway;
+	private $workGroupGateway;
+	private $storeGateway;
+	private $regionGateway;
+	private $session;
+	private $sanitizerService;
+	private $imageService;
+
+	public function __construct(
+		BuddyGateway $buddyGateway,
+		WorkGroupGateway $workGroupGateway,
+		StoreGateway $storeGateway,
+		RegionGateway $regionGateway,
+		Session $session,
+		Sanitizer $sanitizerService,
+		ImageHelper $imageService
+	) {
+		$this->buddyGateway = $buddyGateway;
+		$this->workGroupGateway = $workGroupGateway;
+		$this->storeGateway = $storeGateway;
+		$this->regionGateway = $regionGateway;
+		$this->session = $session;
+		$this->sanitizerService = $sanitizerService;
+		$this->imageService = $imageService;
+	}
+
+	/**
+	 * Method to generate search Index for instant search.
+	 */
+	public function generateIndex($fsId)
+	{
+		$userId = $this->session->id();
+		$index = [];
+
+		/*
+		 * Buddies Load persons in the index array that connected with the user
+		*/
+		if ($buddies = $this->buddyGateway->listBuddies($userId)) {
+			$result = [];
+			foreach ($buddies as $b) {
+				$img = '/img/avatar-mini.png';
+
+				if (!empty($b['photo'])) {
+					$img = $this->imageService->img($b['photo']);
+				}
+
+				$result[] = [
+					'name' => $b['name'] . ' ' . $b['nachname'],
+					'teaser' => '',
+					'img' => $img,
+					'click' => 'chat(\'' . $b['id'] . '\');',
+					'id' => $b['id'],
+					'search' => [
+						$b['name'], $b['nachname']
+					]
+				];
+			}
+			$index[] = [
+				'title' => 'Menschen die Du kennst',
+				'key' => 'buddies',
+				'result' => $result
+			];
+		}
+
+		/*
+		 * Groups load Groups connected to the user in the array
+		*/
+		if ($groups = $this->workGroupGateway->listMemberGroups($fsId)) {
+			$result = [];
+			foreach ($groups as $b) {
+				$img = '/img/groups.png';
+				if (!empty($b['photo'])) {
+					$img = 'images/' . str_replace('photo/', 'photo/thumb_', $b['photo']);
+				}
+				$result[] = [
+					'name' => $b['name'],
+					'teaser' => $this->sanitizerService->tt($b['teaser'], 65),
+					'img' => $img,
+					'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+					'search' => [
+						$b['name']
+					]
+				];
+			}
+			$index[] = [
+				'title' => 'Deine Gruppen',
+				'result' => $result
+			];
+		}
+
+		/*
+		 * Betriebe load food stores connected to the user in the array
+		*/
+		if ($betriebe = $this->storeGateway->listMyStores($userId)) {
+			$result = [];
+			foreach ($betriebe as $b) {
+				$result[] = [
+					'name' => $b['name'],
+					'teaser' => $b['str'] . ' ' . $b['hsnr'] . ', ' . $b['plz'] . ' ' . $b['stadt'],
+					'href' => '/?page=fsbetrieb&id=' . $b['id'],
+					'search' => [
+						$b['name'], $b['str']
+					]
+				];
+			}
+			$index[] = [
+				'title' => 'Deine Betriebe',
+				'result' => $result
+			];
+		}
+
+		/*
+		 * Bezirke load Bezirke connected to the user in the array
+		*/
+		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($userId);
+		$result = [];
+		foreach ($bezirke as $b) {
+			$result[] = [
+				'name' => $b['name'],
+				'teaser' => '',
+				'img' => false,
+				'href' => '/?page=bezirk&bid=' . $b['id'] . '&sub=forum',
+				'search' => [
+					$b['name']
+				]
+			];
+		}
+		$index[] = [
+			'title' => 'Deine Bezirke',
+			'result' => $result
+		];
+
+		return $index;
+	}
+}

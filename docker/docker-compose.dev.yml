@@ -8,7 +8,7 @@ services:
 
   web:
     container_name: foodsharing_dev_web
-    image: registry.gitlab.com/foodsharing-dev/images/web:1.8
+    image: registry.gitlab.com/foodsharing-dev/images/web:1.9
     ports:
       - 18090:8080
     depends_on:
@@ -102,7 +102,7 @@ services:
       - "127.0.0.1:11338:1338"
     volumes:
       - ../:/app:delegated
-      - chat-node-modules:/app/node_modules:cached
+      - chat-node-modules:/app/chat/node_modules:cached
 
   # mysql
   #------------------------------------
@@ -179,17 +179,7 @@ services:
       - influxdb:/var/lib/influxdb:cached
       - ./conf/influxdb/influxdb.toml:/etc/influxdb/influxdb.toml:cached
 
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "127.0.0.1:4000:3000"
-    volumes:
-      - grafana:/var/lib/grafana:cached
-
-
-
 volumes:
   client-node-modules:
   chat-node-modules:
   influxdb:
-  grafana:

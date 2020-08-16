@@ -2,9 +2,9 @@
 
 namespace Foodsharing\Lib\Xhr;
 
-use Foodsharing\Helpers\TranslationHelper;
 use Foodsharing\Lib\View\Utils;
-use Foodsharing\Services\SanitizerService;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TranslationHelper;
 
 class XhrDialog
 {
@@ -26,7 +26,7 @@ class XhrDialog
 	 */
 	private $translationHelper;
 	/**
-	 * @var SanitizerService
+	 * @var Sanitizer
 	 */
 	private $sanitizerService;
 
@@ -43,17 +43,17 @@ class XhrDialog
 		$this->scriptBefore = '';
 		$this->onopen = [];
 		$this->classnames = [];
-		$this->sanitizerService = $container->get(SanitizerService::class);
+		$this->sanitizerService = $container->get(Sanitizer::class);
 
 		if ($title !== false) {
-			$this->addOpt('title', $title);
+			$this->setTitle($title);
 		}
 
 		$this->addOpt('modal', 'true', false);
 		$this->addJs('
 			$("#' . $this->id . '").dialog({
 			    position: { "my": "center", "at": "center" }
-			});		
+			});
 		');
 	}
 
@@ -74,7 +74,7 @@ class XhrDialog
 
 	public function setTitle($title)
 	{
-		$this->addOpt('title', $title);
+		$this->addOpt('title', $this->sanitizerService->jsSafe($title, '"'));
 	}
 
 	public function addJsBefore($js)
@@ -141,7 +141,7 @@ class XhrDialog
 				<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->translationHelper->s($id . '-choose') . '</span>
 				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
 				<div class="attach-preview" style="float:right;">
-					
+
 				</div>
 				<div style="width:10px;height:10px;overflow:hidden;">
 					<form action="/xhrapp.php?app=main&m=picupload" target="' . $in_id . '-iframe" id="' . $in_id . '-form" method="post" enctype="multipart/form-data">
@@ -153,37 +153,37 @@ class XhrDialog
 					<iframe frameborder="0" style="width:1px;height:1px;opacity:0;" name="' . $in_id . '-iframe"></iframe>
 					<div style="clear:both;"></div>
 				</div>
-				
-				
+
+
 				'));
 		$this->addJs('
-				
+
 			$("#' . $in_id . '-file").on("change", function(){
 				$("#' . $in_id . '-form").trigger("submit");
 				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
 				$(".attach-preview").show();
 				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
 			});
-			
+
 			$("#' . $in_id . '").button().on("click", function(){
 				$("#' . $in_id . '-file").trigger("click");
-			});;	
+			});;
 		');
 	}
 
 	public function noOverflow()
 	{
 		$this->addOpt('maxHeight', '$(window).height()-30', false);
-		$this->addJsAfter('		
+		$this->addJsAfter('
 
 			if($("#' . $this->getId() . '").width() > $(window).width())
 			{
 				$("#' . $this->getId() . '").dialog("option","width",$(window).width()-30);
 			}
-				
+
 			$(window).on("resize", function(){
 				$("#' . $this->getId() . '").dialog("option","maxHeight",$(window).height()-30);
-			});	
+			});
 		');
 	}
 
@@ -216,7 +216,7 @@ class XhrDialog
 			'status' => 1,
 			'script' => '
 				' . $this->scriptBefore . '
-				
+
 				if($(".xhrDialog").length > 0)
 				{
 					$(".xhrDialog").dialog("close");
@@ -229,9 +229,7 @@ class XhrDialog
 				$(".xhrDialog .input.textarea").autosize();
 				$("#' . $this->id . '").dialog({
 					' . implode(',', $options) . '
-				});' . $this->script . $this->scriptAfter . '
-				dialogs.add("' . $this->id . '");
-				' . $classjs . '
+				});' . $this->script . $this->scriptAfter . $classjs . '
 				'
 		];
 	}

@@ -10,8 +10,11 @@ class StatisticsControl extends Control
 	private $contentGateway;
 	private $statisticsGateway;
 
-	public function __construct(StatisticsGateway $statisticsGateway, StatisticsView $view, ContentGateway $contentGateway)
-	{
+	public function __construct(
+		StatisticsGateway $statisticsGateway,
+		StatisticsView $view,
+		ContentGateway $contentGateway
+	) {
 		$this->statisticsGateway = $statisticsGateway;
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
