@@ -11,12 +11,7 @@ a controller, an (old) view, javascript, css, (old) [XHR](requests.md#xhr),
 
 The [Rest api controllers](requests.md#rest-api) do not go into
 their respective module directory but into the `/src/Controller`
-directory. This is due to the Symfony framework: The framework's
-default conventions propose a very technical project structure
-having all controllers live in one directory/namespace. It is
-possible to reconfigure it, however, that might make it harder
-to follow Symfony manuals/guides.
-
+directory. This does not have a good reason but it's the way it is now. 
 
 ### Deprecated module structure
 
