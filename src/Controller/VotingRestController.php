@@ -91,7 +91,8 @@ class VotingRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Vote in a poll.
+	 * Vote in a poll. The options need to be a list mapping option indices to the vote values (+1, 0, -1). Depending
+	 * on the voting type not all options need to be included.
 	 *
 	 * @SWG\Parameter(name="pollId", in="path", type="integer", description="in which poll to vote")
 	 * @SWG\Response(response="200", description="Success")
@@ -112,20 +113,21 @@ class VotingRestController extends AbstractFOSRestController
 			throw new HttpException(404);
 		}
 
-		if (!$this->votingPermissions->mayVote($pollId)) {
+		if (!$this->votingPermissions->mayVote($poll)) {
 			throw new HttpException(403);
 		}
 
-		// check if voting options are valid
+		// convert option indices to integers to avoid type problems
 		$options = $paramFetcher->get('options');
-		try {
-			if (!$this->votingTransactions->isValidVote($poll, $options)) {
-				throw new HttpException(400, 'options: ' . implode(',', $options));
-			}
-		} catch (Exception $e) {
-			throw new HttpException(400, $e->getMessage());
+		$options = array_combine(array_map('intval', array_keys($options)),
+			array_map('intval', array_values($options)));
+
+		// check if voting options are valid
+		if (!$this->votingTransactions->isValidVote($poll, $options)) {
+			throw new HttpException(400);
 		}
 
+		// store the vote
 		$this->votingGateway->vote($pollId, $this->session->id(), $options);
 
 		return $this->handleView($this->view([], 200));

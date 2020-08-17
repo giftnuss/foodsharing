@@ -43,10 +43,15 @@ final class VotingPermissions
 		return $poll->endDate < new DateTime();
 	}
 
-	public function mayVote(int $pollId): bool
+	public function mayVote(Poll $poll): bool
 	{
+		$now = new DateTime();
+		if ($poll->startDate > $now || $poll->endDate < $now) {
+			return false;
+		}
+
 		try {
-			return $this->votingGateway->mayUserVote($pollId, $this->session->id());
+			return $this->votingGateway->mayUserVote($poll->id, $this->session->id());
 		} catch (Exception $e) {
 			return false;
 		}

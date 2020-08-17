@@ -156,13 +156,14 @@ class VotingTransactions
 		switch ($poll->type) {
 			case VotingType::SELECT_ONE_CHOICE:
 				// only one +1 option (upvote) possible
-				if (sizeof($options) !== 1 || $options[0] !== 1) {
+				if (sizeof($options) !== 1 || array_pop($options) !== 1) {
 					return false;
 				}
 				break;
 			case VotingType::SELECT_MULTIPLE:
 				// multiple +1 options (upvotes) possible, but at most as many as options in the poll
-				if (sizeof($poll->options) <= sizeof($options)) {
+				if (sizeof($options) > sizeof($poll->options)
+					|| !$this->areArrayValuesValid(array_values($options), [1])) {
 					return false;
 				}
 				break;
