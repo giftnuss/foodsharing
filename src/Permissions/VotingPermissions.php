@@ -28,7 +28,7 @@ final class VotingPermissions
 	{
 		if (is_null($regionId)) {
 			try {
-				$regionId = $this->votingGateway->getPoll($pollId)->regionId;
+				$regionId = $this->votingGateway->getPoll($pollId, false)->regionId;
 			} catch (Exception $e) {
 				// thrown if the poll does not exist
 				return false;
