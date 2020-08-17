@@ -12,6 +12,8 @@ use Foodsharing\Modules\Core\DBConstants\Mailbox\MailboxFolder;
 use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 
 class Foodsharing extends \Codeception\Module\Db
 {
@@ -886,6 +888,48 @@ class Foodsharing extends \Codeception\Module\Db
 	public function resetThePrivacyPolicyDate($lastModified)
 	{
 		$this->updateInDatabase('fs_content', ['last_mod' => $lastModified], ['name' => 'datenschutz']);
+	}
+
+	public function createPoll(int $regionId, int $authorId, array $extraParams = [])
+	{
+		$params = array_merge([
+			'name' => $this->faker->text(30),
+			'description' => $this->faker->realText(200),
+			'scope' => $this->faker->randomElement(range(VotingScope::ALL_USERS, VotingScope::AMBASSADORS)),
+			'type' => $this->faker->randomElement(range(VotingType::SELECT_ONE_CHOICE, VotingType::SCORE_VOTING)),
+			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
+			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s')
+		], $extraParams);
+		$params['author'] = $authorId;
+		$params['region_id'] = $regionId;
+		$params['id'] = $this->haveInDatabase('fs_poll', $params);
+
+		return $params;
+	}
+
+	public function createPollOption(int $pollId, array $extraParams = [])
+	{
+		$params = array_merge([
+			'option_text' => $this->faker->text(30),
+			'upvotes' => 0,
+			'neutralvotes' => 0,
+			'downvotes' => 0
+		], $extraParams);
+		$params['poll_id'] = $pollId;
+		$params['option'] = $this->countInDatabase('fs_poll_has_options', ['poll_id' => $pollId]);
+
+		$this->haveInDatabase('fs_poll_has_options', $params);
+
+		return $params;
+	}
+
+	public function addPollVoter(int $pollId, int $userId)
+	{
+		$this->haveInDatabase('fs_foodsaver_has_poll', [
+			'foodsaver_id' => $userId,
+			'poll_id' => $pollId,
+			'has_voted' => false,
+		]);
 	}
 
 	// =================================================================================================================

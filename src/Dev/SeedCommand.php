@@ -362,6 +362,16 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->createQuiz($quizRole, 3);
 			$this->output->write('.');
 		}
+
+		$this->output->writeln('- create poll');
+		$poll = $I->createPoll($region1, $userbot['id'], ['scope' => 0]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($poll['id']);
+		}
+		foreach ([$user1, $user2, $userStoreManager, $userbot, $userorga] as $u) {
+			$I->addPollVoter($poll['id'], $u['id']);
+		}
+
 		$this->output->writeln(' done');
 		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);
 		$I->_getDbh()->commit();
