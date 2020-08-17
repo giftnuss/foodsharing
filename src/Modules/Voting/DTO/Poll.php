@@ -59,7 +59,8 @@ class Poll
 	public int $authorId;
 
 	/**
-	 * Options of the poll.
+	 * Options of the poll. The array maps the option indices to the object and the indices will always be ascending
+	 * integers starting at 0.
 	 *
 	 * @var PollOption[]
 	 */

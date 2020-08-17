@@ -7,6 +7,7 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -45,15 +46,20 @@ class VotingTransactions
 	 */
 	public function createPollForRegion(Poll &$poll, bool $notifyVoters): void
 	{
-		// assign option indices
+		// assign valid indices to the options
+		$mappedOptions = [];
 		$index = 0;
 		foreach ($poll->options as $option) {
-			$option->optionIndex = $index++;
+			$option->optionIndex = $index;
+			$mappedOptions[$index++] = $option;
 		}
+		$poll->options = $mappedOptions;
 
 		// create poll
 		$userIds = $this->listUserIds($poll->regionId, $poll->scope);
 		$poll->id = $this->votingGateway->insertPoll($poll, $userIds);
+
+		// assign poll ID to the options
 		foreach ($poll->options as $option) {
 			$option->pollId = $poll->id;
 		}
@@ -127,5 +133,62 @@ class VotingTransactions
 	{
 		$this->votingGateway->deletePoll($pollId);
 		$this->bellGateway->delBellsByIdentifier('new-poll-' . $pollId);
+	}
+
+	/**
+	 * Checks whether the vote is valid for the poll's type and options.
+	 *
+	 * @param Poll $poll an ongoing poll
+	 * @param array $options a map from option index to the voted value for that option
+	 *
+	 * @return bool if the vote is valid
+	 */
+	public function isValidVote(Poll $poll, array $options): bool
+	{
+		// make sure the option indices fit the poll's options
+		foreach ($options as $index => $value) {
+			if ($index < 0 || $index >= sizeof($poll->options)) {
+				return false;
+			}
+		}
+
+		// check contraints given by voting type
+		switch ($poll->type) {
+			case VotingType::SELECT_ONE_CHOICE:
+				// only one +1 option (upvote) possible
+				if (sizeof($options) !== 1 || $options[0] !== 1) {
+					return false;
+				}
+				break;
+			case VotingType::SELECT_MULTIPLE:
+				// multiple +1 options (upvotes) possible, but at most as many as options in the poll
+				if (sizeof($poll->options) <= sizeof($options)) {
+					return false;
+				}
+				break;
+			case VotingType::SCORE_VOTING:
+				// each option must have a value and all values must be +1, 0, or -1
+				if (sizeof($poll->options) != sizeof($options)
+					|| !$this->areArrayValuesValid(array_values($options), [-1, 0, 1])) {
+					return false;
+				}
+				break;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns whether each value in the array x is one of the possible values.
+	 */
+	private function areArrayValuesValid(array $x, array $possibleValues): bool
+	{
+		foreach ($x as $value) {
+			if (!in_array($value, $possibleValues)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

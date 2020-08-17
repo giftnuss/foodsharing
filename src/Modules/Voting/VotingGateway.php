@@ -8,7 +8,6 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Modules\Voting\DTO\PollOption;
 
-//TODO: can the fs_fodsaver_has_poll entries be deleted after the poll is finished? should polls ever be deleted?
 class VotingGateway extends BaseGateway
 {
 	/**
@@ -45,7 +44,7 @@ class VotingGateway extends BaseGateway
 	 * @param int $pollId a valid id of a poll
 	 * @param bool $includeResults whether the counted votes should be included
 	 *
-	 * @return array multiple {@link PollOption} objects
+	 * @return array associative array that maps the option indices to {@link PollOption} objects
 	 */
 	public function getOptions(int $pollId, bool $includeResults): array
 	{
@@ -59,13 +58,14 @@ class VotingGateway extends BaseGateway
 			$data = [];
 		}
 
-		return array_map(function ($x) use ($pollId, $includeResults) {
-			if ($includeResults) {
-				return PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
-			} else {
-				return PollOption::create($pollId, $x['option'], $x['option_text']);
-			}
-		}, $data);
+		$result = [];
+		foreach ($data as $d) {
+			$result[$d['option']] = $includeResults
+				? PollOption::create($pollId, $d['option'], $d['option_text'], $d['upvotes'], $d['neutralvotes'], $d['downvotes'])
+				: PollOption::create($pollId, $d['option'], $d['option_text']);
+		}
+
+		return $result;
 	}
 
 	/**
@@ -87,9 +87,12 @@ class VotingGateway extends BaseGateway
 			$data = [];
 		}
 
-		return array_map(function ($x) use ($pollId) {
-			return PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
-		}, $data);
+		$result = [];
+		foreach ($data as $x) {
+			$result[$x['option']] = PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
+		}
+
+		return $result;
 	}
 
 	/**
@@ -132,8 +135,8 @@ class VotingGateway extends BaseGateway
 	{
 		return $this->db->exists('fs_foodsaver_has_poll', [
 			'poll_id' => $pollId,
-			'user_id' => $userId,
-			'has_votes' => 0
+			'foodsaver_id' => $userId,
+			'has_voted' => 0
 		]);
 	}
 
@@ -142,26 +145,33 @@ class VotingGateway extends BaseGateway
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
-	 * @param array $options the vote (+1, -1, 0) for each option
+	 * @param array $options a map from option index to the vote value (+1, -1, 0)
 	 *
 	 * @throws Exception if the poll does not exist
 	 */
 	public function vote(int $pollId, int $userId, array $options): void
 	{
-		$columns = ['upvotes', 'neutralvotes', 'downvotes'];
-		//TODO: this needs locks
+		$columns = ['downvotes', 'neutralvotes', 'upvotes'];
+		$this->db->execute('LOCK TABLES fs_foodsaver_has_poll WRITE, fs_poll_has_option WRITE');
 		$this->db->beginTransaction();
 
-		foreach ($options as $option => $vote) {
+		foreach ($options as $index => $vote) {
 			// increment one of the columns depending on the vote for this option
 			$column = $columns[$vote + 1];
-			$this->db->update('fs_poll_has_option',
-				[$column => $column . '+1'],
-				['poll_id' => $pollId, 'option' => $option]);
+			$this->db->execute('
+				UPDATE fs_poll_has_options
+				SET ' . $column . ' = ' . $column . '+1
+				WHERE poll_id = :pollId
+				AND option = :option',
+				[
+					':pollId' => $pollId,
+					':option' => $index
+				]);
 		}
 
-		$this->db->update('fs_foodsaver_has_poll', ['has_voted' => 1], ['user_id' => $userId]);
+		$this->db->update('fs_foodsaver_has_poll', ['has_voted' => 1], ['foodsaver_id' => $userId]);
 		$this->db->commit();
+		$this->db->execute('UNLOCK TABLES');
 	}
 
 	/**
@@ -189,7 +199,7 @@ class VotingGateway extends BaseGateway
 		]);
 
 		// insert all options
-		foreach ($poll->options as $option) {
+		foreach ($poll->options as $index => $option) {
 			if (!($option instanceof PollOption)) {
 				throw new Exception('unexpected object type for the poll option');
 			}

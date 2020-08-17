@@ -61,6 +61,7 @@ class VotingRestController extends AbstractFOSRestController
 			throw new HttpException(403);
 		}
 
+		// if possible, request the poll again and include its results
 		if ($this->votingPermissions->maySeeResults($poll)) {
 			$poll = $this->votingGateway->getPoll($pollId, true);
 		}
@@ -94,18 +95,37 @@ class VotingRestController extends AbstractFOSRestController
 	 *
 	 * @SWG\Parameter(name="pollId", in="path", type="integer", description="in which poll to vote")
 	 * @SWG\Response(response="200", description="Success")
+	 * @SWG\Response(response="400", description="Invalid options.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to vote in that polls.")
+	 * @SWG\Response(response="404", description="Poll does not exist.")
 	 * @SWG\Tag(name="polls")
 	 *
 	 * @Rest\Put("polls/{pollId}/vote", requirements={"pollId" = "\d+"})
+	 * @Rest\RequestParam(name="options", nullable=false)
 	 */
-	public function voteAction(int $pollId): Response
+	public function voteAction(int $pollId, ParamFetcher $paramFetcher): Response
 	{
+		// check if poll exists and user may vote
+		try {
+			$poll = $this->votingGateway->getPoll($pollId, false);
+		} catch (Exception $e) {
+			throw new HttpException(404);
+		}
+
 		if (!$this->votingPermissions->mayVote($pollId)) {
 			throw new HttpException(403);
 		}
 
-		$options = []; //TODO
+		// check if voting options are valid
+		$options = $paramFetcher->get('options');
+		try {
+			if (!$this->votingTransactions->isValidVote($poll, $options)) {
+				throw new HttpException(400, 'options: ' . implode(',', $options));
+			}
+		} catch (Exception $e) {
+			throw new HttpException(400, $e->getMessage());
+		}
+
 		$this->votingGateway->vote($pollId, $this->session->id(), $options);
 
 		return $this->handleView($this->view([], 200));
