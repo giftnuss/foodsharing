@@ -15,6 +15,7 @@
 - Removed form for new amb's #821 !1619 @chriswalg
 
 - Fix default center value for leaflet map !1644 @alex.simm
+- Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm

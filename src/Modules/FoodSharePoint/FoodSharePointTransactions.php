@@ -49,7 +49,10 @@ class FoodSharePointTransactions
 					}
 				}
 
-				foreach ($followers as $f) {
+				$followersWithoutPostAuthor = array_filter($followers, function ($x) use ($post) {
+					return $x['id'] !== $post['fs_id'];
+				});
+				foreach ($followersWithoutPostAuthor as $f) {
 					$this->emailHelper->tplMail('foodSharePoint/new_message', $f['email'], [
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$foodSharePointId,
 						'name' => $f['name'],
