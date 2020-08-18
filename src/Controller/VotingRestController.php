@@ -43,7 +43,6 @@ class VotingRestController extends AbstractFOSRestController
 	 *
 	 * @SWG\Parameter(name="pollId", in="path", type="integer", description="which poll to return")
 	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to view that poll.")
 	 * @SWG\Response(response="404", description="Poll does not exist.")
 	 * @SWG\Tag(name="polls")
 	 *
@@ -55,10 +54,6 @@ class VotingRestController extends AbstractFOSRestController
 			$poll = $this->votingGateway->getPoll($pollId, false);
 		} catch (Exception $e) {
 			throw new HttpException(404);
-		}
-
-		if (!$this->votingPermissions->maySeePoll($pollId, $poll->regionId)) {
-			throw new HttpException(403);
 		}
 
 		// if possible, request the poll again and include its results
@@ -74,17 +69,12 @@ class VotingRestController extends AbstractFOSRestController
 	 *
 	 * @SWG\Parameter(name="regionId", in="path", type="integer", description="which region to list polls for")
 	 * @SWG\Response(response="200", description="Success")
-	 * @SWG\Response(response="403", description="Insufficient permissions to list polls in that group.")
 	 * @SWG\Tag(name="polls")
 	 *
 	 * @Rest\Get("groups/{groupId}/polls", requirements={"groupId" = "\d+"})
 	 */
 	public function listPolls(int $groupId): Response
 	{
-		if (!$this->votingPermissions->mayListPolls($groupId)) {
-			throw new HttpException(403);
-		}
-
 		$polls = $this->votingGateway->listPolls($groupId);
 
 		return $this->handleView($this->view($polls, 200));

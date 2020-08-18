@@ -19,25 +19,6 @@ final class VotingPermissions
 		$this->votingGateway = $votingGateway;
 	}
 
-	public function mayListPolls(int $regionId): bool
-	{
-		return $this->session->mayBezirk($regionId);
-	}
-
-	public function maySeePoll(int $pollId, int $regionId = null): bool
-	{
-		if (is_null($regionId)) {
-			try {
-				$regionId = $this->votingGateway->getPoll($pollId, false)->regionId;
-			} catch (Exception $e) {
-				// thrown if the poll does not exist
-				return false;
-			}
-		}
-
-		return $this->session->mayBezirk($regionId);
-	}
-
 	public function maySeeResults(Poll $poll): bool
 	{
 		return $poll->endDate < new DateTime();

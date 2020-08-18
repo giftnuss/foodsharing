@@ -31,22 +31,22 @@ class VotingApiCest
 		$I->addPollVoter($this->poll['id'], $this->userVoter['id']);
 	}
 
-	public function canOnlyGetPollsAsRegionMember(\ApiTester $I)
+	public function canSeePolls(\ApiTester $I)
 	{
-		$I->sendGET(self::POLLS_API . '/' . $this->poll['id']);
-		$I->seeResponseCodeIs(Http::FORBIDDEN);
-
-		$I->sendGET(self::GROUPS_API . '/' . $this->region['id'] . '/polls');
-		$I->seeResponseCodeIs(Http::FORBIDDEN);
-
 		$I->login($this->userNonVoter['email']);
 		$I->sendGET(self::POLLS_API . '/' . $this->poll['id']);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
+		$I->seeResponseContainsJson([
+			'id' => $this->poll['id']
+		]);
 
 		$I->sendGET(self::GROUPS_API . '/' . $this->region['id'] . '/polls');
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
+		$I->seeResponseContainsJson([
+			'id' => $this->poll['id']
+		]);
 	}
 
 	public function canNotGetNonExistingPoll(\ApiTester $I)
