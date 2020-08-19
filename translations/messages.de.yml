@@ -958,6 +958,16 @@ home:
   title: Startseite
   home: Home
 
+team:
+  current: Team
+  former: Ehemalige
+  name: Name
+  email: E-Mail-Adresse
+  contact: '{name} via foodsharing.de Kontaktformular'
+  contacted: Deine Nachricht wurde erfolgreich gesendet!
+  ratelimit: 'Bitte warte {minutes} Minuten, bis du die nächste Nachricht senden kannst.'
+  not-found: Page not found
+
 basket:
   title: Essenskörbe
   my_list_empty: Du hast keine Essenskörbe eingetragen
