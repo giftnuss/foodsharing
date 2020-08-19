@@ -31,8 +31,8 @@ final class MessageControl extends Control
 		$this->setContentWidth(5, 8);
 
 		$this->pageHelper->addJs('msg.fsid = ' . (int)$this->session->id() . ';');
-		$this->pageHelper->addBread($this->translationHelper->s('messages'));
-		$this->pageHelper->addTitle($this->translationHelper->s('messages'));
+		$this->pageHelper->addBread($this->translator->trans('messages.bread'));
+		$this->pageHelper->addTitle($this->translator->trans('messages.bread'));
 
 		$this->pageHelper->addContent($this->view->compose());
 		$this->pageHelper->addContent($this->view->conversation());
@@ -42,6 +42,8 @@ final class MessageControl extends Control
 		}
 
 		$data = $this->messageTransactions->listConversationsWithProfilesForUser($this->session->id());
-		$this->pageHelper->addContent($this->view->conversationListWrapper($this->view->conversationList($data['conversations'], $data['profiles'])), CNT_RIGHT);
+		$this->pageHelper->addContent($this->view->conversationListWrapper(
+			$this->view->conversationList($data['conversations'], $data['profiles'])
+		), CNT_RIGHT);
 	}
 }

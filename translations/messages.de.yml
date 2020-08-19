@@ -439,6 +439,9 @@ forum:
   sending_error: Beim Senden ist ein Fehler aufgetreten
   markdown_description: 'Zur Formatierung von *<i>kursivem</i>* oder **<b>fettem</b>** Text kannst du <a href="https://de.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a> verwenden.<br />Achtung: Möchtest du ein * in deinem Text verwenden, so musst du ein \ voranstellen. Zum Beispiel beim Gendern des Wortes Botschafter\*innen.'
   inform_per_email: Alle in den letzten sechs Monaten aktiven Forenmitglieder über die Erstellung dieses neuen Themas per E-Mail informieren, nur in unmoderierten Foren möglich
+  quickreply:
+    success: 'Prima! Deine Antwort wurde gespeichert.'
+    error: 'Post konnte nicht gespeichert werden.'
 
 chat:
   open_chat: Nachricht schreiben
@@ -681,6 +684,9 @@ content:
 
 map:
   title: Karte
+
+messages:
+  bread: Nachrichten
 
 settings:
   saved: Änderungen wurden gespeichert.
@@ -965,8 +971,14 @@ push_notifications:
 
 region:
   store_managers_cannot_leave: Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist.
-  not_a_member_error: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
+  not-member: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
   restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
+  forum-redirect: 'Für Regionen gibt es keine Pinnwand. Du wurdest zum Forum weitergeleitet.'
+  bread: Bezirke verwalten
+  new: Neuer Bezirk
+  edit: Bezirk bearbeiten
+  noParent: Ohne `Eltern` Bezirk
+  delete: Bezirk löschen
 
 blog:
   bread: Blog

@@ -4,4 +4,3 @@ $g_lang['conversations'] = 'Unterhaltungen';
 $g_lang['no_conversations'] = 'Noch keine Unterhaltungen';
 $g_lang['compose_recipients'] = 'Empfänger';
 $g_lang['compose_body'] = 'Nachricht';
-$g_lang['messages'] = 'Nachrichten';

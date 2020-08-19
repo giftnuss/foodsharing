@@ -179,7 +179,7 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
-			$this->flashMessageHelper->error($this->translator->trans('region.not_a_member_error'));
+			$this->flashMessageHelper->error($this->translator->trans('region.not-member'));
 			$this->routeHelper->go('/?page=dashboard');
 
 			return;
@@ -200,7 +200,7 @@ final class RegionControl extends Control
 				break;
 			case 'wall':
 				if (!$this->isWorkGroup($region)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
+					$this->flashMessageHelper->info($this->translator->trans('region.forum-redirect'));
 					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
 				} else {
 					$this->wall($request, $response, $region);

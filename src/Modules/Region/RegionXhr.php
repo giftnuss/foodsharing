@@ -58,7 +58,7 @@ final class RegionXhr extends Control
 
 						foreach ($follower as $f) {
 							$this->emailHelper->tplMail('forum/answer', $f['email'], [
-								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+								'anrede' => $this->translator->trans('salutation.' . $f['geschlecht']),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'thread' => $theme['title'],
@@ -71,20 +71,16 @@ final class RegionXhr extends Control
 
 					echo json_encode([
 						'status' => 1,
-						'message' => 'Prima! Deine Antwort wurde gespeichert.'
+						'message' => $this->translator->trans('forum.quickreply.success'),
 					]);
 					exit();
 				}
 			}
-
-			/*
-			 * end add post
-			 */
 		}
 
 		echo json_encode([
 			'status' => 0,
-			'message' => $this->translationHelper->s('post_could_not_saved')
+			'message' => $this->translator->trans('forum.quickreply.error'),
 		]);
 		exit();
 	}
