@@ -355,7 +355,9 @@ class SettingsControl extends Control
 
 		$this->dataHelper->setEditData($data);
 
-		$this->pageHelper->addContent($this->view->foodsaver_form());
+		$this->pageHelper->addContent($this->view->foodsaver_form(
+			$this->translator->trans('foodsaver.title'))
+		);
 
 		$this->pageHelper->addContent($this->picture_box(), CNT_RIGHT);
 	}

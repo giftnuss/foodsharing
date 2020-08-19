@@ -206,6 +206,11 @@ register:
   pass2: Passwortwiederholung
   signup_newsletter: Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten
 
+gender:
+  m: Mann
+  f: Frau
+  d: Beides oder Sonstiges
+
 terminology:
   forum: Forum
   events: Termine
@@ -226,6 +231,8 @@ terminology:
     m: Botschafter
     f: Botschafterin
     d: Botschafter*in
+  orga:
+    d: Orgamensch
   ambassadors: Botschafter
   ambassador_forum: BotschafterInnenforum
   admins: Administratoren
@@ -632,6 +639,7 @@ pickuplist:
 
 foodsaver:
   bread: Alle Foodsaver
+  title: Foodsaver
   actions: Aktionen
   edit: Foodsaver bearbeiten
   editName: '{name} bearbeiten'
@@ -645,6 +653,14 @@ foodsaver:
   delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
   url_error: Mit deiner Homepage-URL stimmt etwas nicht
   mailchange_error: Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!
+  manage:
+    photo: Foto
+    name: Name
+    role: Rolle
+    last-login: Letzter Login
+    actions: Optionen
+    remove: Aus Bezirk löschen
+    orga: ist im bundesweiten Orgateam dabei
   data:
     request: 'Bitte noch ein paar Daten vervollständigen bzw. überprüfen!'
     explain: |
