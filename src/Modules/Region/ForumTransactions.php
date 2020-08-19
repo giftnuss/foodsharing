@@ -10,7 +10,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\FlashMessageHelper;
 use Foodsharing\Utility\Sanitizer;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ForumTransactions
 {
@@ -22,8 +22,8 @@ class ForumTransactions
 	private $session;
 	private $sanitizerService;
 	private $emailHelper;
-	private $translationHelper;
 	private $flashMessageHelper;
+	private $translator;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -34,8 +34,8 @@ class ForumTransactions
 		RegionGateway $regionGateway,
 		Sanitizer $sanitizerService,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper,
-		FlashMessageHelper $flashMessageHelper
+		FlashMessageHelper $flashMessageHelper,
+		TranslatorInterface $translator
 	) {
 		$this->bellGateway = $bellGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -45,8 +45,8 @@ class ForumTransactions
 		$this->regionGateway = $regionGateway;
 		$this->sanitizerService = $sanitizerService;
 		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
 		$this->flashMessageHelper = $flashMessageHelper;
+		$this->translator = $translator;
 	}
 
 	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
@@ -107,7 +107,7 @@ class ForumTransactions
 			if ($sendMail) {
 				$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
 			} else {
-				$this->flashMessageHelper->info($this->translationHelper->s('new_thread_without_email'));
+				$this->flashMessageHelper->info($this->translator->trans('forum.thread.no_mail'));
 			}
 		}
 
@@ -125,11 +125,10 @@ class ForumTransactions
 			$this->emailHelper->tplMail(
 				$tpl,
 				$recipient['email'],
-				array_merge($data,
-					[
-						'anrede' => $this->translationHelper->genderWord($recipient['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-						'name' => $recipient['name']
-					])
+				array_merge($data, [
+					'anrede' => $this->translator->trans('salutation.' . $recipient['geschlecht']),
+					'name' => $recipient['name'],
+				])
 			);
 		}
 	}
@@ -171,11 +170,11 @@ class ForumTransactions
 	{
 		$regionType = $this->regionGateway->getType($regionData['id']);
 		if (!$isAmbassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
-			$this->flashMessageHelper->info($this->translationHelper->s('no_email_to_states'));
+			$this->flashMessageHelper->info($this->translator->trans('forum.thread.too_big_to_mail'));
 
 			return;
 		} else {
-			$this->flashMessageHelper->info($this->translationHelper->s('new_thread_with_email'));
+			$this->flashMessageHelper->info($this->translator->trans('forum.thread.with_mail'));
 		}
 
 		$theme = $this->forumGateway->getThread($threadId);

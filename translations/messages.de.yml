@@ -374,6 +374,9 @@ forum:
     delete: Beitrag löschen
     body: Nachricht
   thread:
+    with_mail: Thema eröffnet und alle per Mail darüber informiert
+    no_mail: Das Thema wurde eröffnet, ohne Mails zu versenden
+    too_big_to_mail: 'Für das Thema wurden keine Emails versendet, da es sich um ein Land oder ein Bundesland handelt.'
     activate: Thema aktivieren
     delete: Thema löschen
     inactive: |
