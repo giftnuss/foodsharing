@@ -25,11 +25,11 @@ class FoodsaverCest
 
 		$I->login($this->orga['email']);
 		$I->amOnPage('/?page=foodsaver&a=edit&id=' . $fsId);
-		$I->selectOption('Benutzerrolle', 'Foodsaver/in');
+		$I->selectOption('Benutzerrolle', 'Foodsaver*in');
 		$I->click('Senden');
 
 		$I->amOnPage('/?page=foodsaver&a=edit&id=' . $fsId);
-		$I->selectOption('Benutzerrolle', 'Foodsharer/in');
+		$I->selectOption('Benutzerrolle', 'Foodsharer*in');
 		$I->click('Senden');
 
 		$I->dontSeeInDatabase('fs_foodsaver_has_bell', ['foodsaver_id' => $fsId]);

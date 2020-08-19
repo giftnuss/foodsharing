@@ -67,7 +67,7 @@ class BusinessCardGateway extends BaseGateway
 		if ($isBieb) {
 			$fs['sm'] = $fs['fs'];
 		} else {
-			$fs['sm'] = false;
+			$fs['sm'] = [];
 		}
 
 		return $fs;

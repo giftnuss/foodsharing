@@ -460,7 +460,7 @@ class SettingsControl extends Control
 				if ($this->foodsaverGateway->updateProfile($this->session->id(), $data)) {
 					try {
 						$this->session->refreshFromDatabase();
-						$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+						$this->flashMessageHelper->info($this->translator->trans('foodsaver.edit_success'));
 					} catch (\Exception $e) {
 						$this->routeHelper->goPage('logout');
 					}

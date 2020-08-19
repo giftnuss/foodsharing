@@ -38,9 +38,6 @@ class BusinessCardControl extends Control
 			}
 
 			$choices = [];
-			$data['bot'] ??= [];
-			$data['sm'] ??= [];
-			$data['fs'] ??= [];
 
 			foreach ($data['bot'] as $b) {
 				$choices[] = [

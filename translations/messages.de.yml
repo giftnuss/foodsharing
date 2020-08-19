@@ -233,9 +233,9 @@ terminology:
   events: Termine
   stores: Betriebe
   foodsharer:
-    m: Freiwilliger
-    f: Freiwillige
-    d: Freiwillige*r
+    m: Foodsharer
+    f: Foodsharerin
+    d: Foodsharer*in
   foodsaver:
     m: Foodsaver
     f: Foodsaverin
@@ -746,8 +746,8 @@ foodsaver:
     title: Warnung bzgl. Adressänderung
     text: Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert.
   list:
-    summary: '{count} in {region}'
-    inactive: ', die sich 6 Monate nicht eingeloggt haben.'
+    summary: '{count} Foodsaver in {region}'
+    inactive: ', die sich 6 Monate nicht eingeloggt haben:'
 
 content:
   bread: Alle Seiten
