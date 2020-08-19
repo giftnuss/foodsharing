@@ -710,6 +710,31 @@ map:
 messages:
   bread: Nachrichten
 
+mailbox:
+  mail: E-Mails
+  title: Mailboxen
+  inbox: Posteingang
+  sent: Gesendet
+  trash: Papierkorb
+  empty: Noch keine Nachrichten in dieser Mailbox
+  reply: Antworten
+  delete: In die Tonne
+  sender: Absender
+  recipient: Empfänger
+  date: Datum
+  subject: Betreff
+  actions: Optionen
+  member: Mailbox-Benutzer
+  refresh: Aktualisieren
+  write: Neue E-Mail
+  attach: 'Datei anhängen (max. 1,2 MB)'
+  exceeds-size: 'Sorry! Die Datei ist zu groß.'
+  claim: 'foodsharing.de - verwenden statt verschwenden'
+  signature: 'Nachricht vom {date}'
+  new: Neue Mailbox anlegen
+  hostinfo: 'Nur den Namen der Mailbox eintragen! Also ohne @{host}'
+  name: Angezeigter Name
+
 settings:
   saved: Änderungen wurden gespeichert.
 
