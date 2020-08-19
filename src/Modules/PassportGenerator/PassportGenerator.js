@@ -40,7 +40,7 @@ $('#verifyconfirm-dialog').dialog({
         }
       })
     },
-    [i18n('button.abort')]: function () {
+    [i18n('button.cancel')]: function () {
       $(this).dialog('close')
     }
   }
@@ -53,7 +53,7 @@ $('#unverifyconfirm-dialog').dialog({
     [i18n('pass.button.check')]: function () {
       goTo(`/profile/${verify_fid}`)
     },
-    [i18n('button.abort')]: function () {
+    [i18n('button.cancel')]: function () {
       $(this).dialog('close')
     }
   }

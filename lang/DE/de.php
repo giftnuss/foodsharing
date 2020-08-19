@@ -200,11 +200,6 @@ $g_lang['menu_all_store'] = 'Alle Betriebe';
 $g_lang['menu_foodtypes'] = 'Lebensmitteltypen verwalten';
 $g_lang['menu_email_tpl'] = 'E-Mail-Vorlagen';
 
-$g_lang['release-notes'] = 'Was ist neu?';
-$g_lang['changelog'] = 'Changelog';
-$g_lang['current_changelog'] = 'Aktuelles Changelog';
-$g_lang['wallboard'] = 'Pinnwand';
-
 $g_lang['you'] = 'Du';
 $g_lang['store'] = 'Betrieb';
 

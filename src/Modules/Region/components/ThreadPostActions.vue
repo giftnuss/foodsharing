@@ -69,7 +69,7 @@
       v-if="mayDelete"
       ref="confirmDelete"
       :title="$i18n('forum.post.delete')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       modal-class="bootstrap"
       @ok="$emit('delete')"

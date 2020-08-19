@@ -29,31 +29,25 @@ $(document).ready(() => {
     autoOpen: false,
     modal: true,
     width: 'auto',
-    buttons: [
-      {
-        text: i18n('button.yes_i_am_sure'),
-        click: async function () {
-          try {
-            await leaveRegion($('input', this).val())
-            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
-          } catch (e) {
-            console.error(e.code)
-            if (e.code === 409) {
-              pulseError(i18n('region.store_managers_cannot_leave'))
-            } else {
-              pulseError(i18n('error_unexpected'))
-            }
-            $(this).dialog('close')
+    buttons: {
+      [i18n('button.yes_i_am_sure')]: async function () {
+        try {
+          await leaveRegion($('input', this).val())
+          goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+        } catch (e) {
+          console.error(e.code)
+          if (e.code === 409) {
+            pulseError(i18n('region.store_managers_cannot_leave'))
+          } else {
+            pulseError(i18n('error_unexpected'))
           }
-        }
-      },
-      {
-        text: i18n('button.abort'),
-        click: function () {
           $(this).dialog('close')
         }
+      },
+      [i18n('button.cancel')]: function () {
+        $(this).dialog('close')
       }
-    ]
+    }
   })
 
   if (GET('sub') == 'wall') {

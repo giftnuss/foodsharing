@@ -19,8 +19,9 @@ button:
   attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
   upload: Hochladen
+  permadelete: Unwiderruflich löschen
   yes_i_am_sure: Ja, ich bin mir sicher
-  abort: Abbrechen
+  cancel: Abbrechen
   send: Senden
   answer: Antworten
   create: Anlegen
@@ -662,6 +663,21 @@ foodsaver:
   list:
     summary: '{count} in {region}'
     inactive: ', die sich 6 Monate nicht eingeloggt haben.'
+
+content:
+  bread: Alle Seiten
+  public: Öffentliche Seiten
+  actions: Aktionen
+  new: Neue Seite anlegen
+  new_success: Seite wurde angelegt
+  edit: Seite bearbeiten
+  edit_success: Seite wurde gespeichert!
+  delete: Soll {name} wirklich gelöscht werden?
+  delete_success: Seite wurde gelöscht
+  name: Eindeutiger Name
+  content: Inhalt
+  empty: 'Bisher wurde keine Seite eingetragen.'
+  changelog: Aktuelles Changelog
 
 settings:
   saved: Änderungen wurden gespeichert.

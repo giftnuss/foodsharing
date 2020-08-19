@@ -95,7 +95,7 @@
     <b-modal
       ref="modal_kick"
       :title="$i18n('pickup.really_kick_user_date_title', {'date': $dateFormat(date, 'full-long'), 'name': activeSlot.profile.name})"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       modal-class="bootstrap"
       header-class="d-flex"
@@ -107,7 +107,7 @@
     <b-modal
       ref="modal_team_message"
       :title="$i18n('pickup.leave_team_message_title')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('pickup.team_message_send_and_leave')"
       modal-class="bootstrap"
       header-class="d-flex"
@@ -130,7 +130,7 @@
     <b-modal
       ref="modal_delete"
       :title="$i18n('pickup.delete_title')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('delete')"
       modal-class="bootstrap"
       @ok="$emit('delete', date)"

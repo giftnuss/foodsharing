@@ -119,7 +119,7 @@
     <b-modal
       ref="deleteModal"
       :title="$i18n('forum.thread.delete')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="deleteThread"
     >

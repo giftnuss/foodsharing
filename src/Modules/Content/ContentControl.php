@@ -8,26 +8,30 @@ use Foodsharing\Permissions\ContentPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Parsedown;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentControl extends Control
 {
-	private $contentGateway;
-	private $identificationHelper;
-	private $dataHelper;
-	private $contentPermissions;
+	private ContentGateway $contentGateway;
+	private IdentificationHelper $identificationHelper;
+	private DataHelper $dataHelper;
+	private ContentPermissions $contentPermissions;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		ContentPermissions $contentPermissions
+		ContentPermissions $contentPermissions,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->contentPermissions = $contentPermissions;
+		$this->translator = $translator;
 
 		parent::__construct();
 	}
@@ -42,17 +46,17 @@ class ContentControl extends Control
 			if ($this->identificationHelper->getAction('neu')) {
 				$this->handle_add();
 
-				$this->pageHelper->addBread($this->translationHelper->s('bread_content'), '/?page=content');
-				$this->pageHelper->addBread($this->translationHelper->s('bread_new_content'));
+				$this->pageHelper->addBread($this->translator->trans('content.bread'), '/?page=content');
+				$this->pageHelper->addBread($this->translator->trans('content.new'));
 
 				$this->pageHelper->addContent($this->content_form());
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				]), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translator->trans('content.actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('delete')) {
 				if ($this->contentGateway->delete($id)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('content_deleted'));
+					$this->flashMessageHelper->info($this->translator->trans('content.delete_success'));
 					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
@@ -61,8 +65,8 @@ class ContentControl extends Control
 				}
 				$this->handle_edit();
 
-				$this->pageHelper->addBread($this->translationHelper->s('bread_content'), '/?page=content');
-				$this->pageHelper->addBread($this->translationHelper->s('bread_edit_content'));
+				$this->pageHelper->addBread($this->translator->trans('content.bread'), '/?page=content');
+				$this->pageHelper->addBread($this->translator->trans('content.edit'));
 
 				$data = $this->contentGateway->getDetail($id);
 				$this->dataHelper->setEditData($data);
@@ -71,7 +75,7 @@ class ContentControl extends Control
 
 				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					$this->routeHelper->pageLink('content', 'back_to_overview')
-				]), $this->translationHelper->s('actions')), CNT_RIGHT);
+				]), $this->translator->trans('content.actions')), CNT_RIGHT);
 			} elseif ($id = $this->identificationHelper->getActionId('view')) {
 				if ($cnt = $this->contentGateway->get($id)) {
 					$this->pageHelper->addBread($cnt['title']);
@@ -82,32 +86,38 @@ class ContentControl extends Control
 			} elseif (isset($_GET['id'])) {
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->pageHelper->addBread($this->translationHelper->s('content_bread'), '/?page=content');
+				$this->pageHelper->addBread($this->translator->trans('content.public'), '/?page=content');
 
 				if ($data = $this->contentGateway->list($this->contentPermissions->mayEditContentListIDs())) {
 					$rows = [];
 					foreach ($data as $d) {
+						$link = '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">';
 						$rows[] = [
 							['cnt' => $d['id']],
-							['cnt' => '<a class="linkrow ui-corner-all" href="/?page=content&id=' . $d['id'] . '">' . $d['name'] . '</a>'],
-							['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('content_delete_sure', $d['name'])])
-							]];
+							['cnt' => $link . $d['name'] . '</a>'],
+							['cnt' => $this->v_utils->v_toolbar([
+								'id' => $d['id'],
+								'types' => ['edit', 'delete'],
+								'confirmMsg' => $this->translator->trans('content.delete', ['{name}' => $d['name']]),
+							])],
+						];
 					}
 
 					$table = $this->v_utils->v_tablesorter([
 						['name' => 'ID', 'width' => 30],
-						['name' => $this->translationHelper->s('name')],
-						['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50]
+						['name' => $this->translator->trans('content.name')],
+						['name' => $this->translator->trans('content.actions'), 'sort' => false, 'width' => 50]
 					], $rows);
 
 					$this->pageHelper->addContent($this->v_utils->v_field($table, 'Öffentliche Webseiten bearbeiten'));
 				} else {
-					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
+					$this->flashMessageHelper->info($this->translator->trans('content.empty'));
 				}
+
 				if ($this->contentPermissions->mayCreateContent()) {
 					$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
-					['href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content')]
-				]), 'Aktionen'), CNT_RIGHT);
+						['href' => '/?page=content&a=neu', 'name' => $this->translator->trans('content.new')]
+					]), $this->translator->trans('content.actions')), CNT_RIGHT);
 				}
 			}
 		}
@@ -327,23 +337,25 @@ class ContentControl extends Control
 
 	public function releaseNotes(): void
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('release-notes'));
-		$this->pageHelper->addTitle($this->translationHelper->s('release-notes'));
+		$this->pageHelper->addBread($this->translator->trans('menu.entry.release-notes'));
+		$this->pageHelper->addTitle($this->translator->trans('menu.entry.release-notes'));
 		$markdown = $this->parseGitlabLinks(file_get_contents('release-notes.md'));
 		$Parsedown = new Parsedown();
-		$cl['changelog'] = '<a class="float-right" href="/?page=content&sub=changelog">' . $this->translationHelper->s('current_changelog') . '</a>';
-		$cl['title'] = $this->translationHelper->s('release-notes');
+		$cl['changelog'] = '<a class="float-right" href="/?page=content&sub=changelog">'
+			. $this->translator->trans('content.changelog') .
+		'</a>';
+		$cl['title'] = $this->translator->trans('menu.entry.release-notes');
 		$cl['body'] = $Parsedown->parse($markdown);
 		$this->pageHelper->addContent($this->view->releaseNotes($cl));
 	}
 
 	public function changelog(): void
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('changelog'));
-		$this->pageHelper->addTitle($this->translationHelper->s('changelog'));
+		$this->pageHelper->addBread($this->translator->trans('content.changelog'));
+		$this->pageHelper->addTitle($this->translator->trans('content.changelog'));
 		$markdown = $this->parseGitlabLinks(file_get_contents('CHANGELOG.md'));
 		$Parsedown = new Parsedown();
-		$cl['title'] = $this->translationHelper->s('changelog');
+		$cl['title'] = $this->translator->trans('content.changelog');
 		$cl['body'] = $Parsedown->parse($markdown);
 		$this->pageHelper->addContent($this->view->simple($cl));
 	}
@@ -354,12 +366,17 @@ class ContentControl extends Control
 			$this->v_utils->v_field(
 				$this->v_utils->v_form_text('name', ['required' => true]) .
 				$this->v_utils->v_form_text('title', ['required' => true]),
-
 				$title,
 				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', ['public_content' => true, 'nowrapper' => true]), 'Inhalt')
-		], ['submit' => $this->translationHelper->s('save')]);
+			$this->v_utils->v_field(
+				$this->v_utils->v_form_tinymce('body', [
+					'public_content' => true,
+					'nowrapper' => true,
+				]),
+				$this->translator->trans('content.content')
+			)
+		], ['submit' => $this->translator->trans('button.save')]);
 	}
 
 	private function handle_edit(): void
@@ -368,10 +385,10 @@ class ContentControl extends Control
 		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->update($_GET['id'], $g_data)) {
-				$this->flashMessageHelper->info($this->translationHelper->s('content_edit_success'));
+				$this->flashMessageHelper->info($this->translator->trans('content.edit_success'));
 				$this->routeHelper->go('/?page=content&a=edit&id=' . (int)$_GET['id']);
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
 	}
@@ -382,10 +399,10 @@ class ContentControl extends Control
 		if ($this->submitted()) {
 			$g_data['last_mod'] = date('Y-m-d H:i:s');
 			if ($this->contentGateway->create($g_data)) {
-				$this->flashMessageHelper->info($this->translationHelper->s('content_add_success'));
+				$this->flashMessageHelper->info($this->translator->trans('content.new_success'));
 				$this->routeHelper->goPage();
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
 	}
