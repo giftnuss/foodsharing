@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Event\EventType;
 use Foodsharing\Permissions\EventPermissions;
 use Foodsharing\Utility\DataHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,7 +35,7 @@ class EventControl extends Control
 	{
 		if (!isset($_GET['sub'])
 			&& isset($_GET['id'])
-			&& ($event = $this->gateway->getEventWithInvites($_GET['id']))
+			&& ($event = $this->gateway->getEvent($_GET['id'], true))
 			&& $this->eventPermissions->maySeeEvent($event)
 		) {
 			$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
@@ -67,7 +68,7 @@ class EventControl extends Control
 
 	public function edit()
 	{
-		$event = $this->gateway->getEventWithInvites($_GET['id']);
+		$event = $this->gateway->getEvent($_GET['id'], true);
 
 		if (!$event || !$this->eventPermissions->mayEditEvent($event)) {
 			return false;
@@ -136,7 +137,6 @@ class EventControl extends Control
 		$out = [
 			'name' => '',
 			'description' => '',
-			'online_type' => 0,
 			'location_id' => null,
 			'start' => date('Y-m-d') . ' 15:00:00',
 			'end' => date('Y-m-d') . ' 16:00:00',
@@ -144,7 +144,7 @@ class EventControl extends Control
 			'bezirk_id' => 0,
 			'invite' => false,
 			'online' => 0,
-			'invitesubs' => false
+			'invitesubs' => false,
 		];
 
 		if (isset($_POST['public']) && $_POST['public'] == 1) {
@@ -187,27 +187,22 @@ class EventControl extends Control
 			$out['description'] = $description;
 		}
 
-		$out['online_type'] = $this->getPostInt('online_type');
+		$online_type = $this->getPostInt('online_type');
 
-		if ($out['online_type'] == 1) {
+		if (EventType::isOnline($online_type)) {
+			$out['online'] = 1;
+			$out['location_id'] = null;
+		} else {
 			$out['online'] = 0;
-
-			$lat = $this->getPost('lat');
-			$lon = $this->getPost('lon');
-
 			$id = $this->gateway->addLocation(
 				$this->getPostString('location_name'),
-				$lat,
-				$lon,
+				$this->getPost('lat'),
+				$this->getPost('lon'),
 				$this->getPostString('anschrift'),
 				$this->getPostString('plz'),
 				$this->getPostString('ort')
 			);
-
 			$out['location_id'] = $id;
-		} else {
-			$out['online'] = 1;
-			$out['location_id'] = null;
 		}
 
 		return $out;

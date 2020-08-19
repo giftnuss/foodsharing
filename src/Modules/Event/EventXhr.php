@@ -34,7 +34,7 @@ class EventXhr extends Control
 		parent::__construct();
 
 		if (isset($_GET['id'])) {
-			$this->event = $this->gateway->getEventWithInvites($_GET['id']);
+			$this->event = $this->gateway->getEvent($_GET['id'], true);
 		}
 	}
 

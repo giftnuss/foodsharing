@@ -169,7 +169,7 @@ class EventView extends View
 			$groups = '<optgroup label="' . $this->translator->trans('events.create.groups') . '">' . $groups . '</optgroup>';
 		}
 		if (!empty($regions)) {
-			$regions = '<optgroup label="' . $this->translator->trans('events.create.regions'). '">' . $regions . '</optgroup>';
+			$regions = '<optgroup label="' . $this->translator->trans('events.create.regions') . '">' . $regions . '</optgroup>';
 		}
 
 		$this->pageHelper->addJs('
@@ -419,6 +419,23 @@ class EventView extends View
 			) . '</p>',
 			$this->translator->trans('events.description'),
 			['class' => 'ui-padding event-description']
+		);
+	}
+
+	public function locationMumble()
+	{
+		return $this->v_utils->v_field('
+		<p style="text-align: center;">
+			<a target="_blank" href="https://wiki.foodsharing.de/Mumble">'
+			. '<img src="/img/mlogo.png" alt="Mumble" />' .
+			'</a>
+		</p>
+		<p> ' . $this->translator->trans('events.mumble.text') . '</p>
+		<p> ' . $this->translator->trans('events.mumble.location') . '</p>
+		<p> ' . $this->translator->trans('events.mumble.guide') . '</p>
+',
+			$this->translator->trans('events.mumble.title'),
+			['class' => 'ui-padding']
 		);
 	}
 }
