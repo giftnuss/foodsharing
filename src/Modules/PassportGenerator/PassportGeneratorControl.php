@@ -12,7 +12,6 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Utility\IdentificationHelper;
 use setasign\Fpdi\Tcpdf\Fpdi;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PassportGeneratorControl extends Control
 {
@@ -23,7 +22,6 @@ final class PassportGeneratorControl extends Control
 	private $passportGeneratorGateway;
 	private $foodsaverGateway;
 	private $identificationHelper;
-	private $translator;
 
 	public function __construct(
 		PassportGeneratorView $view,
@@ -31,8 +29,7 @@ final class PassportGeneratorControl extends Control
 		RegionGateway $regionGateway,
 		PassportGeneratorGateway $passportGateway,
 		FoodsaverGateway $foodsaverGateway,
-		IdentificationHelper $identificationHelper,
-		TranslatorInterface $translator
+		IdentificationHelper $identificationHelper
 	) {
 		$this->view = $view;
 		$this->bellGateway = $bellGateway;
@@ -40,7 +37,6 @@ final class PassportGeneratorControl extends Control
 		$this->passportGeneratorGateway = $passportGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->identificationHelper = $identificationHelper;
-		$this->translator = $translator;
 
 		parent::__construct();
 

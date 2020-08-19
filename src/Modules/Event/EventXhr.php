@@ -5,7 +5,6 @@ namespace Foodsharing\Modules\Event;
 use Foodsharing\Lib\Xhr\XhrResponses;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Permissions\EventPermissions;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EventXhr extends Control
 {
@@ -13,18 +12,15 @@ class EventXhr extends Control
 	private $gateway;
 	private $responses;
 	private $eventPermissions;
-	private $translator;
 	private $responseOptions;
 
 	public function __construct(
 		EventGateway $gateway,
-		EventPermissions $eventPermissions,
-		TranslatorInterface $translator
+		EventPermissions $eventPermissions
 	) {
 		$this->gateway = $gateway;
 		$this->responses = new XhrResponses();
 		$this->eventPermissions = $eventPermissions;
-		$this->translator = $translator;
 		$this->responseOptions = [
 			InvitationStatus::ACCEPTED => 'pulseSuccess("' . $this->translator->trans('events.rsvp.yes') . '");',
 			InvitationStatus::MAYBE => 'pulseSuccess("' . $this->translator->trans('events.rsvp.maybe') . '");',

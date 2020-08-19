@@ -8,7 +8,6 @@ use Foodsharing\Permissions\ContentPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Parsedown;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContentControl extends Control
 {
@@ -16,22 +15,19 @@ class ContentControl extends Control
 	private IdentificationHelper $identificationHelper;
 	private DataHelper $dataHelper;
 	private ContentPermissions $contentPermissions;
-	private TranslatorInterface $translator;
 
 	public function __construct(
 		ContentView $view,
 		ContentGateway $contentGateway,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		ContentPermissions $contentPermissions,
-		TranslatorInterface $translator
+		ContentPermissions $contentPermissions
 	) {
 		$this->view = $view;
 		$this->contentGateway = $contentGateway;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->contentPermissions = $contentPermissions;
-		$this->translator = $translator;
 
 		parent::__construct();
 	}

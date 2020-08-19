@@ -16,7 +16,6 @@ use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RegionControl extends Control
 {
@@ -27,7 +26,6 @@ final class RegionControl extends Control
 	private FoodSharePointGateway $foodSharePointGateway;
 	private FoodsaverGateway $foodsaverGateway;
 	private ForumFollowerGateway $forumFollowerGateway;
-	private TranslatorInterface $translator;
 	private FormFactoryInterface $formFactory;
 	private ForumTransactions $forumTransactions;
 	private ForumPermissions $forumPermissions;
@@ -57,7 +55,6 @@ final class RegionControl extends Control
 		ForumTransactions $forumTransactions,
 		RegionGateway $gateway,
 		ReportPermissions $reportPermissions,
-		TranslatorInterface $translator,
 		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway
 	) {
@@ -71,7 +68,6 @@ final class RegionControl extends Control
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumTransactions = $forumTransactions;
 		$this->reportPermissions = $reportPermissions;
-		$this->translator = $translator;
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
 

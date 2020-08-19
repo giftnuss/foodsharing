@@ -15,7 +15,6 @@ use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Region\ForumFollowerGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Utility\DataHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SettingsControl extends Control
 {
@@ -29,7 +28,6 @@ class SettingsControl extends Control
 	private $dataHelper;
 	private $forumFollowerGateway;
 	private $regionGateway;
-	private $translator;
 
 	public function __construct(
 		SettingsView $view,
@@ -41,8 +39,7 @@ class SettingsControl extends Control
 		FoodSharePointGateway $foodSharePointGateway,
 		DataHelper $dataHelper,
 		ForumFollowerGateway $forumFollowerGateway,
-		RegionGateway $regionGateway,
-		TranslatorInterface $translator
+		RegionGateway $regionGateway
 	) {
 		$this->view = $view;
 		$this->settingsGateway = $settingsGateway;
@@ -54,7 +51,6 @@ class SettingsControl extends Control
 		$this->dataHelper = $dataHelper;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->regionGateway = $regionGateway;
-		$this->translator = $translator;
 
 		parent::__construct();
 

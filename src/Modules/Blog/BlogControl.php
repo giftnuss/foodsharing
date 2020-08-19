@@ -8,7 +8,6 @@ use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\TimeHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BlogControl extends Control
 {
@@ -17,7 +16,6 @@ class BlogControl extends Control
 	private $dataHelper;
 	private $identificationHelper;
 	private $timeHelper;
-	private $translator;
 
 	public function __construct(
 		BlogView $view,
@@ -25,8 +23,7 @@ class BlogControl extends Control
 		BlogPermissions $blogPermissions,
 		DataHelper $dataHelper,
 		IdentificationHelper $identificationHelper,
-		TimeHelper $timeHelper,
-		TranslatorInterface $translator
+		TimeHelper $timeHelper
 	) {
 		$this->view = $view;
 		$this->blogGateway = $blogGateway;
@@ -34,7 +31,6 @@ class BlogControl extends Control
 		$this->dataHelper = $dataHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->timeHelper = $timeHelper;
-		$this->translator = $translator;
 
 		parent::__construct();
 		if ($id = $this->identificationHelper->getActionId('delete')) {

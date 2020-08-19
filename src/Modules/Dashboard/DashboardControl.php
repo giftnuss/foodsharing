@@ -15,7 +15,6 @@ use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\Sanitizer;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DashboardControl extends Control
 {
@@ -31,7 +30,6 @@ class DashboardControl extends Control
 	private $sanitizerService;
 	private $imageService;
 	private $quizSessionGateway;
-	private $translator;
 
 	public function __construct(
 		DashboardView $view,
@@ -45,8 +43,7 @@ class DashboardControl extends Control
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
-		QuizSessionGateway $quizSessionGateway,
-		TranslatorInterface $translator
+		QuizSessionGateway $quizSessionGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -60,7 +57,6 @@ class DashboardControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
-		$this->translator = $translator;
 
 		parent::__construct();
 

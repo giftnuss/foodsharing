@@ -12,7 +12,6 @@ use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\IdentificationHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodsaverControl extends Control
 {
@@ -26,7 +25,6 @@ class FoodsaverControl extends Control
 	private $regionPermissions;
 	private $dataHelper;
 	private $identificationHelper;
-	private $translator;
 
 	public function __construct(
 		FoodsaverView $view,
@@ -39,8 +37,7 @@ class FoodsaverControl extends Control
 		ProfilePermissions $profilePermissions,
 		RegionPermissions $regionPermissions,
 		DataHelper $dataHelper,
-		IdentificationHelper $identificationHelper,
-		TranslatorInterface $translator
+		IdentificationHelper $identificationHelper
 	) {
 		$this->view = $view;
 		$this->foodsaverGateway = $foodsaverGateway;
@@ -53,7 +50,6 @@ class FoodsaverControl extends Control
 		$this->regionPermissions = $regionPermissions;
 		$this->dataHelper = $dataHelper;
 		$this->identificationHelper = $identificationHelper;
-		$this->translator = $translator;
 
 		parent::__construct();
 	}

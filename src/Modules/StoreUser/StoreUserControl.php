@@ -15,7 +15,6 @@ use Foodsharing\Utility\DataHelper;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TimeHelper;
 use Foodsharing\Utility\WeightHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class StoreUserControl extends Control
 {
@@ -28,7 +27,6 @@ class StoreUserControl extends Control
 	private $sanitizerService;
 	private $timeHelper;
 	private $weightHelper;
-	private $translator;
 
 	public function __construct(
 		StoreUserView $view,
@@ -40,8 +38,7 @@ class StoreUserControl extends Control
 		DataHelper $dataHelper,
 		Sanitizer $sanitizerService,
 		TimeHelper $timeHelper,
-		WeightHelper $weightHelper,
-		TranslatorInterface $translator
+		WeightHelper $weightHelper
 	) {
 		$this->view = $view;
 		$this->regionGateway = $regionGateway;
@@ -53,7 +50,6 @@ class StoreUserControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->timeHelper = $timeHelper;
 		$this->weightHelper = $weightHelper;
-		$this->translator = $translator;
 
 		parent::__construct();
 

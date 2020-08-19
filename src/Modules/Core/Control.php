@@ -12,6 +12,7 @@ use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\TranslationHelper;
 use ReflectionClass;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class Control
 {
@@ -21,60 +22,18 @@ abstract class Control
 	private $sub;
 	private $sub_func;
 
-	/**
-	 * @var PageHelper
-	 */
-	protected $pageHelper;
-
-	/**
-	 * @var Mem
-	 */
-	protected $mem;
-
-	/**
-	 * @var \Foodsharing\Lib\Session
-	 */
-	protected $session;
-
-	/**
-	 * @var Utils
-	 */
-	protected $v_utils;
-
-	/**
-	 * @var \Twig\Environment
-	 */
-	private $twig;
-
-	/**
-	 * @var FoodsaverGateway
-	 */
-	private $foodsaverGateway;
-
-	/**
-	 * @var InfluxMetrics
-	 */
-	private $metrics;
-
-	/**
-	 * @var EmailHelper
-	 */
-	protected $emailHelper;
-
-	/**
-	 * @var RouteHelper
-	 */
-	protected $routeHelper;
-
-	/**
-	 * @var TranslationHelper
-	 */
-	protected $translationHelper;
-
-	/**
-	 * @var FlashMessageHelper
-	 */
-	protected $flashMessageHelper;
+	protected PageHelper $pageHelper;
+	protected Mem $mem;
+	protected \Foodsharing\Lib\Session $session;
+	protected Utils $v_utils;
+	private \Twig\Environment $twig;
+	private FoodsaverGateway $foodsaverGateway;
+	private InfluxMetrics $metrics;
+	protected EmailHelper $emailHelper;
+	protected FlashMessageHelper $flashMessageHelper;
+	protected RouteHelper $routeHelper;
+	protected TranslationHelper $translationHelper;
+	protected TranslatorInterface $translator;
 
 	public function __construct()
 	{
@@ -87,8 +46,9 @@ abstract class Control
 		$this->pageHelper = $container->get(PageHelper::class);
 		$this->emailHelper = $container->get(EmailHelper::class);
 		$this->routeHelper = $container->get(RouteHelper::class);
-		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->flashMessageHelper = $container->get(FlashMessageHelper::class);
+		$this->translationHelper = $container->get(TranslationHelper::class);
+		$this->translator = $container->get('translator'); // TODO TranslatorInterface is an alias
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;

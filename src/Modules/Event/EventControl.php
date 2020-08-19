@@ -6,27 +6,23 @@ use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Event\EventType;
 use Foodsharing\Permissions\EventPermissions;
 use Foodsharing\Utility\DataHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EventControl extends Control
 {
 	private EventGateway $gateway;
 	private DataHelper $dataHelper;
 	private EventPermissions $eventPermissions;
-	private TranslatorInterface $translator;
 
 	public function __construct(
 		EventView $view,
 		EventGateway $gateway,
 		DataHelper $dataHelper,
-		EventPermissions $eventPermissions,
-		TranslatorInterface $translator
+		EventPermissions $eventPermissions
 	) {
 		$this->view = $view;
 		$this->gateway = $gateway;
 		$this->dataHelper = $dataHelper;
 		$this->eventPermissions = $eventPermissions;
-		$this->translator = $translator;
 
 		parent::__construct();
 	}

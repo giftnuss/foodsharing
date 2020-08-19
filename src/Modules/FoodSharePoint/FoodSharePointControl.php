@@ -12,7 +12,6 @@ use Foodsharing\Permissions\FoodSharePointPermissions;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\Sanitizer;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodSharePointControl extends Control
 {
@@ -27,7 +26,6 @@ class FoodSharePointControl extends Control
 	private $foodsaverGateway;
 	private $mailboxGateway;
 	private $sanitizerService;
-	private $translator;
 	private $identificationHelper;
 	private $foodSharePointPermissions;
 
@@ -38,7 +36,6 @@ class FoodSharePointControl extends Control
 		FoodsaverGateway $foodsaverGateway,
 		MailboxGateway $mailboxGateway,
 		Sanitizer $sanitizerService,
-		TranslatorInterface $translator,
 		IdentificationHelper $identificationHelper,
 		FoodSharePointPermissions $foodSharePointPermissions
 	) {
@@ -48,7 +45,6 @@ class FoodSharePointControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->sanitizerService = $sanitizerService;
-		$this->translator = $translator;
 		$this->identificationHelper = $identificationHelper;
 		$this->foodSharePointPermissions = $foodSharePointPermissions;
 
