@@ -11,6 +11,3 @@ $g_lang['fs_id'] = 'foodsharing-ID';
 
 $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
 $g_lang['inactive'] = 'Inaktive ';
-$g_lang['fs_in'] = 'Foodsaver in ';
-$g_lang['fs_list_not_logged_for_6_months'] = ', die sich 6 Monate nicht eingeloggt haben.';
-$g_lang['foodsaver_edit_failure'] = 'Es wurde nichts verändert oder Änderungen wurden nicht gespeichert';

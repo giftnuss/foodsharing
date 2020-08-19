@@ -628,8 +628,11 @@ pickuplist:
 
 foodsaver:
   bread: Alle Foodsaver
+  actions: Aktionen
   edit: Foodsaver bearbeiten
   editName: '{name} bearbeiten'
+  edit_success: Änderungen wurden gespeichert
+  edit_failure: Es wurde nichts verändert oder Änderungen wurden nicht gespeichert
   profileBack: Zurück zum Profil
   delete_account: ⚠️ Account löschen
   delete_account_sure: 'Soll der Account von {name} wirklich gelöscht werden?'
@@ -656,6 +659,9 @@ foodsaver:
   addresschange:
     title: Warnung bzgl. Adressänderung
     text: Eine hier geänderte Adresse aktualisiert nicht die Geokoordinaten, welche etwa für Essenskörbe benötigt werden. Daher wird dringend empfohlen, dass der Nutzer die Adresse selbst in den {settings} ändert.
+  list:
+    summary: '{count} in {region}'
+    inactive: ', die sich 6 Monate nicht eingeloggt haben.'
 
 settings:
   saved: Änderungen wurden gespeichert.

@@ -142,7 +142,7 @@ class FoodsaverControl extends Control
 				];
 			}
 			$this->pageHelper->addContent($this->v_utils->v_field(
-				$this->v_utils->v_menu($actions, $this->translationHelper->s('actions')),
+				$this->v_utils->v_menu($actions, $this->translator->trans('foodsaver.actions')),
 			), CNT_RIGHT);
 		} else {
 			// end user-edit
@@ -177,9 +177,9 @@ class FoodsaverControl extends Control
 				}
 
 				if ($this->updateFoodsaver($oldFs, $g_data)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('foodsaver_edit_success'));
+					$this->flashMessageHelper->info($this->translator->trans('foodsaver.edit_success'));
 				} else {
-					$this->flashMessageHelper->error($this->translationHelper->s('foodsaver_edit_failure'));
+					$this->flashMessageHelper->error($this->translator->trans('foodsaver.edit_failure'));
 				}
 			}
 		}

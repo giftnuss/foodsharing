@@ -71,7 +71,6 @@ $g_lang['upload_picture'] = 'Bild hochladen';
 $g_lang['picture'] = 'Bild';
 $g_lang['message'] = 'Nachricht';
 $g_lang['parent_id'] = 'Elternbezirk';
-$g_lang['foodsaver_edit_success'] = '&Auml;nderungen wurden gespeichert';
 $g_lang['fs_id'] = 'Deine foodsharing-ID';
 $g_lang['lat'] = 'Längengrad';
 $g_lang['lon'] = 'Breitengrad';

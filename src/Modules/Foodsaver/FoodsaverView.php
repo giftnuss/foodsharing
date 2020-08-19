@@ -68,15 +68,17 @@ class FoodsaverView extends View
 
 	public function foodsaverList($foodsaver, $bezirk, $inactive = false)
 	{
+		$avatars = $this->fsAvatarList($foodsaver, ['id' => 'fslist', 'noshuffle' => true, 'height' => 600]);
 		$name = $inactive ? 'inactive' : '';
 
-		return
-			'<div id="' . $name . 'foodsaverlist">' .
-			$this->v_utils->v_field(
-				$this->fsAvatarList($foodsaver, ['id' => 'fslist', 'noshuffle' => true, 'height' => 600]),
-				count($foodsaver) . ' ' . $this->translationHelper->s('fs_in') . $bezirk['name'] . ($inactive ? $this->translationHelper->s('fs_list_not_logged_for_6_months') : '')
-			) . '
-		</div>';
+		return '<div id="' . $name . 'foodsaverlist">' .
+			$this->v_utils->v_field($avatars,
+				$this->translator->trans('foodsaver.list.summary', [
+					'{count}' => count($foodsaver),
+					'{region}' => $bezirk['name'],
+				])
+				. ($inactive ? $this->translator->trans('foodsaver.list.inactive') : '')
+			) . '</div>';
 	}
 
 	public function foodsaver_form($title = 'Foodsaver', $regionDetails)
@@ -112,35 +114,31 @@ class FoodsaverView extends View
 		}
 
 		$this->pageHelper->addJs('
-			$("#rolle").on("change", function(){
-				if(this.value == 4)
-				{
+			$("#rolle").on("change", function () {
+				if (this.value == 4) {
 					$("#orgateam-wrapper input")[0].checked = true;
-				}
-				else
-				{
+				} else {
 					$("#orgateam-wrapper input")[0].checked = false;
 				}
 			});
-			$("#plz, #stadt, #anschrift").on("blur",function(){
 
-
-					if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
-					{
+			$("#plz, #stadt, #anschrift").on("blur", function () {
+				if ($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "") {
 					u_loadCoords({
-							plz: $("#plz").val(),
-							stadt: $("#stadt").val(),
-							anschrift: $("#anschrift").val(),
-							},function(lat,lon){
-							$("#lat").val(lat);
-							$("#lon").val(lon);
-							});
-					}
+						plz: $("#plz").val(),
+						stadt: $("#stadt").val(),
+						anschrift: $("#anschrift").val(),
+					},
+					function (lat, lon) {
+						$("#lat").val(lat);
+						$("#lon").val(lon);
 					});
+				}
+			});
 
 			$("#lat-wrapper").hide();
 			$("#lon-wrapper").hide();
-			');
+		');
 
 		$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $regionDetails);
 
