@@ -142,7 +142,7 @@ class WorkGroupControl extends Control
 
 	private function list(Request $request, Response $response)
 	{
-		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
+		$this->pageHelper->addTitle($this->translator->trans('terminology.groups'));
 
 		$parent = $request->query->getInt('p', RegionIDs::GLOBAL_WORKING_GROUPS);
 		$myApplications = $this->workGroupGateway->getApplications($this->session->id());

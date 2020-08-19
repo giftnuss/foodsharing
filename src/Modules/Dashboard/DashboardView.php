@@ -112,31 +112,31 @@ class DashboardView extends View
 		$out = '';
 		$out .= $this->u_storeLinkList(
 			$betriebe['verantwortlich'],
-			$this->translator->trans('dashboard.you_are_responsible_for_stores'),
+			$this->translator->trans('dashboard.my.managing'),
 			'truncate-height-85'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['team'],
-			$this->translator->trans('dashboard.you_pickup_at_stores'),
+			$this->translator->trans('dashboard.my.stores'),
 			'truncate-height-140'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['waitspringer'],
-			$this->translator->trans('dashboard.you_wait_at_stores'),
+			$this->translator->trans('dashboard.my.waiting'),
 			'truncate-height-85'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['requested'],
-			$this->translator->trans('dashboard.you_requested_to_join'),
+			$this->translator->trans('dashboard.my.pending'),
 			'truncate-height-50'
 		);
 
 		if (empty($out)) {
 			$out = $this->v_utils->v_info(
-				$this->translator->trans('dashboard.no_store_team')
+				$this->translator->trans('dashboard.my.no-stores')
 			);
 		}
 

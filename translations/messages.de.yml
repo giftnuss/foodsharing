@@ -645,6 +645,12 @@ foodsaver:
   delete_own_account: "Du bist dabei, deinen Account zu löschen. Bist du dir ganz sicher?"
   url_error: Mit deiner Homepage-URL stimmt etwas nicht
   mailchange_error: Die Aktivierung deiner neuen E-Mail-Adresse ist fehlgeschlagen. Bitte versuche es erneut!
+  data:
+    request: 'Bitte noch ein paar Daten vervollständigen bzw. überprüfen!'
+    explain: |
+      Damit dein Profil voll funktionsfähig ist, benötigen wir noch folgende Angaben von dir.
+      Herzlichen Dank!
+    thanks: Danke dir!
   upgrade:
     to_fs: Werde Foodsaver*in
     needs_fs: Du musst erst Foodsaver werden
@@ -814,15 +820,22 @@ dashboard:
   foodsaver_amount: |
       Du hast <strong style="white-space:nowrap">{pickups}&thinsp;x</strong> Lebensmittel abgeholt
       und damit <strong style="white-space:nowrap">{weight}&thinsp;kg</strong> gerettet.
-  you_are_responsible_for_stores: Du bist verantwortlich für
-  you_pickup_at_stores: Du holst Lebensmittel ab bei
-  you_requested_to_join: Anfragen gestellt bei
-  you_wait_at_stores: Du bist auf der Springerliste bei
-  no_store_team: 'Du bist bis jetzt in keinem Betriebsteam.'
+  my:
+    regions: Deine Bezirke
+    groups: Deine Gruppen
+    stores: Du holst Lebensmittel ab bei
+    pending: Anfragen gestellt bei
+    waiting: Du bist auf der Springerliste bei
+    managing: Du bist verantwortlich für
+    no-stores: 'Du bist bis jetzt in keinem Betriebsteam.'
   invitations: Du wurdest eingeladen
   event: Nächstes Event
   events: 'Nächste Events ({count})'
   pickupdates: Nächste Abholtermine
+  quiz:
+    ack: Hinweis gelesen und nicht mehr anzeigen
+    read: weiterlesen
+    go: Weiter zum Quiz
 
 home:
   title: Startseite
