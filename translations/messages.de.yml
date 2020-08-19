@@ -744,6 +744,12 @@ mailbox:
       Löse hier das {quiz}, wenn du bereit bist.
   sm-quiz: Quiz für Betriebsverantwortliche
   not-allowed: 'Du hast nicht die nötigen Rechte, dies zu tun.'
+  okay: 'E-Mail wurde erfolgreich versendet.'
+  failed: 'Die E-Mail konnte nicht gesendet werden.'
+  recipients: Zu viele Empfänger
+  ratelimit: 'Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...'
+  filetype: Dieser Dateityp ist nicht erlaubt
+  filesize: 'Sorry! Die Datei ist zu groß.'
 
 settings:
   saved: Änderungen wurden gespeichert.
