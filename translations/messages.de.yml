@@ -23,6 +23,7 @@ button:
   abort: Abbrechen
   send: Senden
   answer: Antworten
+  create: Anlegen
   clear_filter: Filter leeren
 
 pass:
@@ -456,10 +457,40 @@ wall:
   message_placeholder: Nachricht schreiben...
 
 events:
-  name: Termine
+  bread: Termine
   add_new_event: Jetzt neuen Termin eintragen
   add_event: Neuer Termin
+  create:
+    title: Neue Veranstaltung eintragen
+    public: Ist die Veranstaltung öffentlich?
+    isPublic: Ja, die Veranstaltung ist öffentlich
+    who: Für welchen Bezirk oder welche AG soll die Veranstaltung angelegt werden?
+    groups: Deine Arbeitsgruppen
+    regions: Deine Bezirke
+    inviteAll: Gesamte(n) Gruppe/Bezirk zum Termin einladen?
+    cascading: Alle untergeordneten Gruppen/Bezirke einschließen?
+    delinvites: Vorhandene Einladungen löschen?
+    multiday: Das Event geht über mehrere Tage
+    starttime: Uhrzeit Beginn
+    endtime: Uhrzeit Ende
+    desc: Was ist das für ein Event?
+    offline: Ganz normal im echten Leben
+    online: Per Video- oder Telefonkonferenz
+    mumble: Multilokal auf mumble.foodsharing.de
+    info: |
+      <b>Bitte beachten:</b>
+      <br>
+      Der Termin ist nach dem Anlegen für alle in <b>der jeweiligen Gruppe</b>
+      über einen geteilten Link oder das Termin-Menü erreichbar.
+      <br>
+      Um den Termin auch zwischenzeitlichen Neuzugängen auf dem Dashboard anzuzeigen,
+      speichere ihn zu einem späteren Zeitpunkt erneut ab.
+  duration: '{from} bis {until}'
+  description: Beschreibung
+  time: '{time} Uhr'
+  edited: Event wurde erfolgreich geändert!
   goto: Zum Termin
+  notFound: 'Dieses Event existiert nicht oder es kann nicht darauf zugegriffen werden.'
   acceptedCount: '{count} sind dabei'
   maybeCount: '{count} kommen vielleicht'
   invitedCount: '{count} Einladungen'

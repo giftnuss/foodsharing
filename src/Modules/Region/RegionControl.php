@@ -302,8 +302,8 @@ final class RegionControl extends Control
 
 	private function events(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->translator->trans('events.name'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
-		$this->pageHelper->addTitle($this->translator->trans('events.name'));
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->pageHelper->addTitle($this->translator->trans('events.bread'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 
