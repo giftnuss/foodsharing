@@ -60,9 +60,9 @@ class QuizView extends View
 		$out = '';
 
 		/*
-		 * Example:
-		 *
-		  [0] => Array
+		* Example:
+		*
+			[0] => Array
 			(
 				[id] => 9
 				[fp] => 0.00
@@ -81,8 +81,7 @@ class QuizView extends View
 				[time_start_ts] => 1404716793
 				[name] => Foodsaver
 			)
-
-		 */
+		*/
 
 		$cur_qid = $sessions[0]['quiz_id'];
 		$rows = [];
@@ -287,7 +286,7 @@ class QuizView extends View
 		}
 
 		return $msg . '
-		<p style="text-align:center;padding:40px;">
+		<p style="text-align: center; padding: 40px;">
 			<img src="/img/clockloader.gif" />
 		</p>';
 	}
@@ -312,42 +311,50 @@ class QuizView extends View
 			$exp = '';
 
 			foreach ($e['explains'] as $ex) {
-				$right = 'Auch diese Antwort wäre <strong style="color:green;font-weight:bold;">richtig</strong> gewesen!';
+				$right = 'Auch diese Antwort wäre <strong style="color: green; font-weight: bold;">richtig</strong> gewesen!';
 				if ($ex['right'] == 0) {
-					$right = 'Diese Antwort ist <strong style="color:red;font-weight:bold;">nicht richtig</strong>!';
+					$right = 'Diese Antwort ist <strong style="color: red; font-weight: bold;">nicht richtig</strong>!';
 				} elseif ($ex['right'] != 1) {
 					$right = 'Diese Antwort wurde nicht gewertet.';
 				}
 				$exp .= $this->v_utils->v_input_wrapper(
 					$right,
-					'<div style="margin:10px 0;">' . $ex['text'] . '</div>' .
-					'<div class="ui-state-highlight ui-corner-all" style="padding:15px"><p><strong>Erklärung:</strong> ' . $ex['explanation'] . '</p></div>'
+					'<div style="margin: 10px 0;">' . $ex['text'] . '</div>' .
+					'<div class="ui-state-highlight ui-corner-all" style="padding: 15px;">'
+						. '<p><strong>Erklärung:</strong> ' . $ex['explanation'] . '</p>' .
+					'</div>'
 				);
 			}
 
 			$out .= '
-				 <h3><strong>Frage ' . (int)$e['number'] . ' ' . (100 - $e['percent']) . ' % richtig</strong> - ' . $e['userfp'] . '/' . $e['fp'] . ' Fehlerpunkten</h3>
-				 <div style="background-color:#FFFFFF;">
-				 	<p style="font-style:italic;padding:15px;">&bdquo;' . ($e['text']) . '&ldquo;</p>
-				 	' . $exp . '
-				 </div>';
+				<h3><strong>Frage ' . (int)$e['number'] . ' ' . (100 - $e['percent']) . ' % richtig</strong> - ' . $e['userfp'] . '/' . $e['fp'] . ' Fehlerpunkten</h3>
+				<div style="background-color:#FFFFFF;">
+					<p style="font-style:italic;padding:15px;">&bdquo;' . ($e['text']) . '&ldquo;</p>
+					' . $exp . '
+				</div>';
 		}
 		$out .= '
 		</div>
-		<p style="text-align:center;">';
+		<p style="text-align: center;">';
 
 		if ($failurePoints < $maxFailurePoints) {
 			switch ($this->session->get('quiz-id')) {
 				case Role::FOODSAVER:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">Jetzt die Foodsaver-Anmeldung abschließen.</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_fs" class="button">'
+						. 'Jetzt die Foodsaver-Anmeldung abschließen.' .
+					'</a>';
 					break;
 
 				case Role::STORE_MANAGER:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">Jetzt die Betriebsverantwortlichenanmeldung abschließen.</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bip" class="button">'
+						. 'Jetzt die Betriebsverantwortlichenanmeldung abschließen.' .
+					'</a>';
 					break;
 
 				case Role::AMBASSADOR:
-					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">Jetzt die Botschafteranmeldung abschließen.</a>';
+					$out .= '<a href="/?page=settings&sub=upgrade/up_bot" class="button">'
+						. 'Jetzt die Botschafteranmeldung abschließen.'
+					. '</a>';
 					break;
 
 				default:
@@ -375,34 +382,36 @@ class QuizView extends View
 					animate: 200,
 					collapsible: true,
 					autoHeight: false,
-    				active: false
+					active: false
 				});
-				setTimeout(function(){
-					$("#questions").css("opacity",1);
-				},500);');
+				setTimeout(function () {
+					$("#questions").css("opacity", 1);
+				}, 500);');
 			$out = '
 			<div id="questions">';
 			foreach ($questions as $q) {
 				$answers = '<ul class="answers" id="answerlist-' . $q['id'] . '">';
 				if (is_array($q['answers'])) {
 					foreach ($q['answers'] as $k => $a) {
-						$answers .= '<li class="right-' . $a['right'] . '" id="answer-' . $a['id'] . '">' . $a['text'] . ' <span class="explanation"><strong>Erklärung: </strong>' . $a['explanation'] . '</span> <a class="dellink" href="#" onclick="if(confirm(\'Antwort wirklich löschen?\')){ajreq(\'delanswer\',{id:' . (int)$a['id'] . '});}return false;">[löschen]</a> <a class="dellink" href="#" onclick="ajreq(\'editanswer\',{id:' . (int)$a['id'] . '});return false;">[bearbeiten]</a></li>';
+						$answers .= '<li class="right-' . $a['right'] . '" id="answer-' . $a['id'] . '">'
+							. $a['text']
+							. ' <span class="explanation"><strong>Erklärung: </strong>' . $a['explanation'] . '</span>'
+							. ' <a class="dellink" href="#" onclick="if(confirm(\'Antwort wirklich löschen?\')){ajreq(\'delanswer\',{id:' . (int)$a['id'] . '});}return false;">[löschen]</a>'
+							. ' <a class="dellink" href="#" onclick="ajreq(\'editanswer\',{id:' . (int)$a['id'] . '});return false;">[bearbeiten]</a>'
+						. '</li>';
 					}
 				}
 				$answers .= '</ul>';
 				$out .= '
-				 <h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->sanitizerService->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
-				 <div class="question-' . $q['id'] . '">
+				<h3 class="question-' . $q['id'] . '"><strong>#' . (int)$q['id'] . ' </strong> - <span class="teaser">' . $this->sanitizerService->tt($q['text'], 50) . ' ' . (int)$q['comment_count'] . ' Kommentare</span></h3>
+				<div class="question-' . $q['id'] . '">
 					' . $this->v_utils->v_input_wrapper('Frage', $q['text'] . '
 					<p><strong>' . $q['fp'] . ' Fehlerpunkte, ' . $q['duration'] . ' Sekunden zum Antworten</strong></p>
 					<p style="margin-top:15px;">
 						<a href="#" class="button" onclick="ajreq(\'addanswer\',{qid:' . (int)$q['id'] . '});return false;">Antwort hinzufügen</a> <a href="#" class="button" onclick="if(confirm(\'Wirklich die ganze Frage löschen?\')){ajreq(\'delquest\',{id:' . (int)$q['id'] . '});}return false;">Frage komplett löschen</a> <a href="#" class="button" onclick="ajreq(\'editquest\',{id:' . (int)$q['id'] . ',qid:' . (int)$quiz_id . '});return false;">Frage bearbeiten</a> <a class="button" href="/?page=quiz&sub=wall&id=' . (int)$q['id'] . '">Kommentare</a>
 					</p>') . '
-
 					' . $this->v_utils->v_input_wrapper('Antworten', $answers) . '
-
-
-				 </div>';
+				</div>';
 			}
 			$out .= '
 			</div>';
@@ -419,7 +428,8 @@ class QuizView extends View
 			return '';
 		}
 
-		$out = '<ul class="linklist">';
+		$out = '
+<ul class="linklist">';
 		foreach ($answers as $a) {
 			$ampel = 'ampel ampel-gruen';
 			if ($a['right'] == 0) {
@@ -428,14 +438,20 @@ class QuizView extends View
 				$ampel = '';
 			}
 			$out .= '
-			<li>
-			<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
-			<span style="height:35px;overflow:hidden;font-size:11px;"><strong class="' . $ampel . '" style="float:right;margin:0 0 0 3px;"><span>&nbsp;</span></strong>' . $this->sanitizerService->tt($a['text'], 60) . '</span>
+	<li>
+		<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
+			<span style="height: 35px; overflow: hidden; font-size: 11px;">'
+			. '<strong class="' . $ampel . '" style="float: right; margin: 0 0 0 3px;">'
+				. '<span>&nbsp;</span>'
+			. '</strong>'
+			. $this->sanitizerService->tt($a['text'], 60) .
+			'</span>
 			<span style="clear:both;"></span>
-			</a>
-			</li>';
+		</a>
+	</li>';
 		}
-		$out .= '</ul>';
+		$out .= '
+</ul>';
 
 		return $this->v_utils->v_field($out, 'Antwortmöglichkeiten');
 	}

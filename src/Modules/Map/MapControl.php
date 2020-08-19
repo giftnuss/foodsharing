@@ -39,10 +39,7 @@ class MapControl extends Control
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
 			$center = $this->mapGateway->getStoreLocation($_GET['bid']);
-			// (panschk) whitespace matters here -- we need line break after the method call for javascript to compile
-			$this->pageHelper->addJs('
-				ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' })
-			');
+			$this->pageHelper->addJs('ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' });');
 		}
 
 		$this->pageHelper->addJs('u_init_map();');

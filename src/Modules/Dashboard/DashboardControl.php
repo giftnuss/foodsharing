@@ -93,7 +93,7 @@ class DashboardControl extends Control
 			$check = true;
 
 			if ($is_bot) {
-				$this->pageHelper->addJs('ajreq("endpopup",{app:"quiz"});');
+				$this->pageHelper->addJs('ajreq("endpopup", {app:"quiz"});');
 			}
 		}
 
@@ -111,7 +111,7 @@ class DashboardControl extends Control
 			if ($this->session->option('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
-				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\',{app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\',\'hideinfo\');return false;"><i class="far fa-check-square"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
+				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\', {app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\', \'hideinfo\');return false;"><i class="far fa-check-square"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
 			}
 			$this->pageHelper->addContent($this->v_utils->v_info($cnt['body'], $cnt['title']));
 		}
@@ -214,21 +214,20 @@ class DashboardControl extends Control
 
 		if (empty($val['lat']) || empty($val['lon'])) {
 			$this->pageHelper->addJs('
-                $("#plz, #stadt, #anschrift, #hsnr").on("blur",function(){
-                    if($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "")
-                    {
+                $("#plz, #stadt, #anschrift, #hsnr").on("blur", function () {
+                    if ($("#plz").val() != "" && $("#stadt").val() != "" && $("#anschrift").val() != "") {
                         u_loadCoords({
                             plz: $("#plz").val(),
                             stadt: $("#stadt").val(),
                             anschrift: $("#anschrift").val(),
-                            complete: function()
-                            {
+                            complete: function () {
                                 hideLoader();
                             }
-                        },function(lat,lon){
-                            $("#lat").val(lat);
-                            $("#lon").val(lon);
-                        });
+						},
+						function (lat, lon) {
+							$("#lat").val(lat);
+							$("#lon").val(lon);
+						});
                     }
                 });
 
@@ -247,25 +246,26 @@ class DashboardControl extends Control
 
 			$this->pageHelper->addJs('
                 $("#grab-info-link").fancybox({
-                    closeClick:false,
-                    closeBtn:true,
+                    closeClick: false,
+                    closeBtn: true,
                 });
                 $("#grab-info-link").trigger("click");
 
-                $("#grabinfo-form").on("submit", function(e){
+                $("#grabinfo-form").on("submit", function (e) {
                     e.preventDefault();
-
-                        showLoader();
-                        $.ajax({
-                            url:"/xhr.php?f=grabInfo",
-                            data: $("#grabinfo-form").serialize(),
-                            dataType: "json",
-                            complete:function(){hideLoader();},
-                            success: function(){
-                                pulseInfo("Danke Dir!");
-                                $.fancybox.close();
-                            }
-                        });
+					showLoader();
+					$.ajax({
+						url:"/xhr.php?f=grabInfo",
+						data: $("#grabinfo-form").serialize(),
+						dataType: "json",
+						complete: function () {
+							hideLoader();
+						},
+						success: function () {
+							pulseInfo("Danke Dir!");
+							$.fancybox.close();
+						}
+					});
                 });
             ');
 
@@ -289,7 +289,7 @@ class DashboardControl extends Control
 			}
 			if (!empty($storeIds)) {
 				if ($this->dashboardGateway->countStoresWithoutDistrict($storeIds) > 0) {
-					$this->pageHelper->addJs('ajax.req("betrieb","setbezirkids");');
+					$this->pageHelper->addJs('ajax.req("betrieb", "setbezirkids");');
 				}
 			}
 		}
@@ -428,7 +428,7 @@ class DashboardControl extends Control
 
 				$out .= '
 					<li>
-						<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
+						<a class="ui-corner-all" onclick="ajreq(\'bubble\', {app:\'basket\', id:' . (int)$b['id'] . ', modal:1});return false;" href="#">
 							<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
 							<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt($b['description'], 50) . '</span>
 

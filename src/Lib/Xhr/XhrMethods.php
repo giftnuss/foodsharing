@@ -1003,7 +1003,7 @@ class XhrMethods
 			return XhrResponses::PERMISSION_DENIED;
 		}
 
-		$this->model->del('DELETE FROM 	`fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
+		$this->model->del('DELETE FROM `fs_abholzeiten` WHERE `betrieb_id` = ' . (int)$data['bid']);
 
 		if (is_array($data['newfetchtime'])) {
 			for ($i = 0; $i < (count($data['newfetchtime']) - 1); ++$i) {

@@ -11,116 +11,100 @@ class RegionAdminView extends View
 	{
 		$this->pageHelper->addJs('
 	$("#' . $id . '").dynatree({
-		onDblClick: function(node, event) {
+		onDblClick: function (node, event) {
 			alert(node.data.ident);
 		},
-	    initAjax: {
+		initAjax: {
 			url: "/xhr.php?f=bezirkTree",
-			data: {p: "0" }
+			data: {p: "0"}
 		},
-		onActivate: function(node){
-			$("#deletebezirk").css("visibility","visible");
+		onActivate: function (node){
+			$("#deletebezirk").css("visibility", "visible");
 			showLoader();
 			$("#' . $id . '-hidden").val(node.data.ident);
 			$("#' . $id . '-hidden-name").val(node.data.title);
 			$.ajax({
 				url: "/xhr.php?f=getBezirk",
-				data: { "id": node.data.ident },
+				data: {"id": node.data.ident},
 				dataType: "json",
-				success: function(data) {
+				success: function (data) {
 					$("#bezirk_form").html(data.html);
-					if(data.script != undefined)
-					{
+					if (data.script != undefined) {
 						$.globalEval(data.script);
 					}
 					' . $id . '_clearMarkers();
-					image = L.icon({iconUrl: "/img/foodsaver.png",
-						        iconSize: [32.0, 37.0],
-						        iconAnchor: [16.0, 18.0],
-										shadowIconUrl: "/img/shadow-foodsaver.png",
-						        shadowIconSize: [51.0, 37.0],
-						        shadowIconAnchor: [16.0, 18.0]
+					image = L.icon({
+						iconUrl: "/img/foodsaver.png",
+						iconSize: [32.0, 37.0],
+						iconAnchor: [16.0, 18.0],
+						shadowIconUrl: "/img/shadow-foodsaver.png",
+						shadowIconSize: [51.0, 37.0],
+						shadowIconAnchor: [16.0, 18.0]
 					});
-						
-					if(data.foodsaver != undefined && data.foodsaver.length > 0)
-					{
-						
-						
-						for(i=0;i<data.foodsaver.length;i++)
-						{
-							loc = L.latLng(data.foodsaver[i].lat,data.foodsaver[i].lon);
-    						' . $id . '_bounds.extend(loc);
-							
+
+					if (data.foodsaver != undefined && data.foodsaver.length > 0) {
+						for (i = 0; i < data.foodsaver.length; i++) {
+							loc = L.latLng(data.foodsaver[i].lat, data.foodsaver[i].lon);
+							' . $id . '_bounds.extend(loc);
 							' . $id . '_markers[i] = L.marker(loc, {
-						      title:data.foodsaver[i].name,
-						      icon: image,
-						  }).addTo(' . $id . '_map);
-						  ' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a href=/profile/\'+ data.foodsaver[i].id +\'"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/\'+ data.foodsaver[i].id +\'>\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
-						      		
-						  ' . $id . '_markers[i].on( \'click\', function(e,ii) {
-						    ' . $id . '_infowindow.setContent(""+this.content);
-						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
-						    ' . $id . '_infowindow.openOn(' . $id . '_map);
-						  });
+								title: data.foodsaver[i].name,
+								icon: image,
+							}).addTo(' . $id . '_map);
+							' . $id . '_markers[i].content = \'<div style="height:80px;overflow:hidden;"><div style="margin-right:10px;float:left;"><a href=/profile/\'+ data.foodsaver[i].id +\'"><img src="\'+img(data.foodsaver[i].photo)+\'" /></a></div><h1 style="font-size:13px;font-weight:bold;margin-bottom:8px;"><a href="/profile/\'+ data.foodsaver[i].id +\'>\' + data.foodsaver[i].name + "</a></h1><p>" + data.foodsaver[i].anschrift + "</p><p>" + data.foodsaver[i].plz + " " + data.foodsaver[i].stadt + \'</p><div style="clear:both;"></div></div>\';
+							' . $id . '_markers[i].on(\'click\', function (e, ii) {
+								' . $id . '_infowindow.setContent("" + this.content);
+								' . $id . '_infowindow.setLatLng(this.getLatLng());
+								' . $id . '_infowindow.openOn(' . $id . '_map);
+							});
 						}
-    				}
-    				if(data.betriebe != undefined && data.betriebe.length > 0)
-    				{		
-    					for(i=0;i<data.betriebe.length;i++)
-						{
-    					  	if(data.foodsaver != undefined)
-    					  	{
-    					  		y = (i+data.foodsaver.length);
-    					  	}
-    					  	else
-    					  	{
-    					  		y = i;	
-    					  	}
-							loc = L.latLng(data.betriebe[i].lat,data.betriebe[i].lon);
-    						' . $id . '_bounds.extend(loc);
-							
+					}
+
+					if (data.betriebe != undefined && data.betriebe.length > 0) {
+						for (i = 0; i < data.betriebe.length; i++) {
+							if (data.foodsaver != undefined) {
+								y = (i+data.foodsaver.length);
+							} else {
+								y = i;
+							}
+							loc = L.latLng(data.betriebe[i].lat, data.betriebe[i].lon);
+							' . $id . '_bounds.extend(loc);
 							' . $id . '_markers[y] = L.marker(loc, {
-						      title:data.betriebe[i].name,
-						      icon:   L.icon( {
-							  			iconUrl: "/img/supermarkt.png",
-						        	iconSize: [32.0, 37.0],
-						        	iconAnchor: [16.0, 18.0],
-										shadowIconUrl: "/img/shadow-foodsaver.png",
-						        shadowIconSize: [51.0, 37.0],
-						        shadowIconAnchor: [16.0, 18.0]
-							  } )
-						  }).addTo(' . $id . '_map);
-						  ' . $id . '_markers[y].content = data.betriebe[i].bubble;
-						      		
-						  ' . $id . '_markers[y].on( \'click\', function(e,ii) {
-						    ' . $id . '_infowindow.setContent(""+this.content);
-						    ' . $id . '_infowindow.setLatLng(this.getLatLng());
-						    ' . $id . '_infowindow.openOn(' . $id . '_map);
-						  });
+								title: data.betriebe[i].name,
+								icon: L.icon({
+									iconUrl: "/img/supermarkt.png",
+									iconSize: [32.0, 37.0],
+									iconAnchor: [16.0, 18.0],
+									shadowIconUrl: "/img/shadow-foodsaver.png",
+									shadowIconSize: [51.0, 37.0],
+									shadowIconAnchor: [16.0, 18.0]
+								})
+							}).addTo(' . $id . '_map);
+							' . $id . '_markers[y].content = data.betriebe[i].bubble;
+							' . $id . '_markers[y].on(\'click\', function (e, ii) {
+								' . $id . '_infowindow.setContent("" + this.content);
+								' . $id . '_infowindow.setLatLng(this.getLatLng());
+								' . $id . '_infowindow.openOn(' . $id . '_map);
+							});
 						}
 					}
 					if (' . $id . '_bounds.isValid()) {
 						' . $id . '_map.fitBounds(' . $id . '_bounds);
 					}
 				},
-				complete: function(){
+				complete: function () {
 					hideLoader();
 				}
 			});
 		},
-		onLazyRead: function(node){
-			 node.appendAjax({url: "/xhr.php?f=bezirkTree",
-				data: { "p": node.data.ident },
+		onLazyRead: function (node) {
+			node.appendAjax({
+				url: "/xhr.php?f=bezirkTree",
+				data: {"p": node.data.ident},
 				dataType: "json",
-				success: function(node) {
-			
-				},
-				error: function(node, XMLHttpRequest, textStatus, errorThrown) {
-			
-				},
+				success: function (node) {},
+				error: function (node, XMLHttpRequest, textStatus, errorThrown) {},
 				cache: false
 			});
-		
 		}
 	});
 	');
@@ -134,9 +118,8 @@ class RegionAdminView extends View
 	var ' . $id . '_markers = [];
 	var ' . $id . '_bounds = L.latLngBounds([]);
 	var ' . $id . '_infowindow = L.popup();
-	' . $id . '_infowindow.setContent( \'Information!\' );
-	function ' . $id . '_clearMarkers()
-	{
+	' . $id . '_infowindow.setContent(\'Information!\');
+	function ' . $id . '_clearMarkers() {
 		' . $id . '_bounds = L.latLngBounds([]);
 		' . $id . '_markers = [];
 	}');
@@ -146,9 +129,8 @@ class RegionAdminView extends View
 		$lon = MapConstants::CENTER_GERMANY_LON;
 
 		$this->pageHelper->addJs('
-	 	var ' . $id . '_center = [' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . '];
+		var ' . $id . '_center = [' . MapConstants::CENTER_GERMANY_LAT . ',' . MapConstants::CENTER_GERMANY_LON . '];
 		var ' . $id . '_zoom = ' . MapConstants::ZOOM_COUNTRY . ';
-		
 		var ' . $id . '_map = initMap(document.getElementById("' . $id . '_map"), ' . $id . '_center, ' . $id . '_zoom);
 	');
 	}

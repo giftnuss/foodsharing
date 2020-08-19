@@ -32,17 +32,13 @@ class MailboxView extends View
 		$this->pageHelper->addJs('
 			$("#mailfolder").dynatree({
             onActivate: function(node) {
-
-				if(node.data.ident != undefined)
-				{
+				if (node.data.ident != undefined) {
 					ajreq("loadmails",{mb:node.data.ident,folder:node.data.folder,type:node.data.type});
 					mb_setMailbox(node.data.ident);
 					$("#mbh-mailbox").val(node.data.ident);
 					$("#mbh-folder").val(node.data.folder);
 					$("#mbh-type").val(node.data.type);
 				}
-
-
             },
 			imagePath: "/img/icon-mail/",
             persist: false,
@@ -290,8 +286,8 @@ class MailboxView extends View
 			resizable:false,
 			draggable:false,
 			open: function (event, ui) {
-		    	$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
-		  	}
+				$("#message-body").css("overflow", "hidden"); //this line does the actual hiding
+			}
 		});');
 		$this->pageHelper->addHidden('
 		<div id="message-body">
@@ -318,38 +314,33 @@ class MailboxView extends View
 		}
 		$this->pageHelper->addJs('
 		$("#message-editor").dialog({
-			autoOpen:false,
-			width:980,
-			modal:true,
-			resizable:false,
-			draggable:false,
+			autoOpen: false,
+			width: 980,
+			modal: true,
+			resizable: false,
+			draggable: false,
 			open: function (event, ui) {
-		    	$("#message-editor").css("overflow", "hidden");
-				$("#message-editor").dialog("option",{
-					height: ($( window ).height()-40)
+				$("#message-editor").css("overflow", "hidden");
+				$("#message-editor").dialog("option", {
+					height: ($(window).height() - 40)
 				});
-				var height = ($("#message-editor").height()-100);
-				if(height > 50)
-				{
+				var height = ($("#message-editor").height() - 100);
+				if (height > 50) {
 					$(".edit-body").css({
-							"height" : height+"px"
+						"height" : height + "px"
 					});
 				}
 				u_addTypeHead();
-
-		  	}
-		});
-		$("#etattach").on("change", function(){
-			if(this.files[0].size < 1310720)
-			{
-				$("#etattach-button").button( "option", "disabled", true );
-				setTimeout(function(){
-					$("#et-file-list").append("<li>"+$("#etattach-info").text()+"</li>");
-				},10);
-				$(".et-filebox form").trigger("submit");
 			}
-			else
-			{
+		});
+		$("#etattach").on("change", function () {
+			if (this.files[0].size < 1310720) {
+				$("#etattach-button").button("option", "disabled", true);
+				setTimeout(function () {
+					$("#et-file-list").append("<li>" + $("#etattach-info").text() + "</li>");
+				}, 10);
+				$(".et-filebox form").trigger("submit");
+			} else {
 				pulseError("' . $this->translationHelper->s('file_to_big') . '");
 			}
 		});

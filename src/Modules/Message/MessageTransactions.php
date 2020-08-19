@@ -65,8 +65,8 @@ class MessageTransactions
 
 	/**
 	 * There are different ways conversations can be named:
-	 * 	- Each conversation can have a custom name
-	 * 		- Although we don't want to allow to rename conversations with less than three people, it is not the responsibility of this method.
+	 *  - Each conversation can have a custom name
+	 *  - Although we don't want to allow to rename conversations with less than three people, it is not the responsibility of this method.
 	 *  - For conversations not having a name, the name will be the list of all people in there except the person to whom the list is displayed
 	 *  - Store team conversations will also just have a custom name, so they don't need extra handling.
 	 */
