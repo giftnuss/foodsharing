@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Dashboard;
 
+use Carbon\Translator;
 use Foodsharing\Modules\Basket\BasketGateway;
 use Foodsharing\Modules\Content\ContentGateway;
 use Foodsharing\Modules\Core\Control;
@@ -16,6 +17,7 @@ use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\LoginService;
 use Foodsharing\Utility\Sanitizer;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DashboardControl extends Control
 {
@@ -32,6 +34,7 @@ class DashboardControl extends Control
 	private Sanitizer $sanitizerService;
 	private ImageHelper $imageService;
 	private QuizSessionGateway $quizSessionGateway;
+	private Translator $translater;
 
 	public function __construct(
 		DashboardView $view,
@@ -46,7 +49,8 @@ class DashboardControl extends Control
 		\Twig\Environment $twig,
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
-		QuizSessionGateway $quizSessionGateway
+		QuizSessionGateway $quizSessionGateway,
+		TranslatorInterface $translator
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -61,6 +65,7 @@ class DashboardControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
+		$this->translator = $translator;
 
 		parent::__construct();
 
@@ -90,7 +95,7 @@ class DashboardControl extends Control
 
 		$fsId = $this->session->id();
 		if (!$this->session->isActivated($fsId)) {
-			$this->pageHelper->addContent($this->v_utils->v_error($this->translationHelper->s('mail_activation_error_body'), $this->translationHelper->s('mail_activation_error_title')));
+			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body'), $this->translator->trans('dashboard.mail_activation_error_title')));
 		}
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
@@ -152,10 +157,10 @@ class DashboardControl extends Control
 	{
 		$fsId = $this->session->id();
 
-		if ($this->loginGateway->newEmailActivation($fsId)) {
-			$this->flashMessageHelper->info($this->translationHelper->s('activation_mail_sent'));
+		if ($this->loginService->newMailActivation($fsId)) {
+			$this->flashMessageHelper->info($this->translator->trans('dashboard.activation_mail_sent'));
 		} else {
-			$this->flashMessageHelper->error($this->translationHelper->s('activation_mail_failure'));
+			$this->flashMessageHelper->error($this->translator->trans('dashboard.activation_mail_failure'));
 		}
 
 		$this->routeHelper->goPage('dashboard');
