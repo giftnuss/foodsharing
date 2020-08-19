@@ -6,28 +6,28 @@ use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\Sanitizer;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FoodSharePointTransactions
 {
 	private FoodSharePointGateway $foodSharePointGateway;
 	private BellGateway $bellGateway;
 	private EmailHelper $emailHelper;
-	private TranslationHelper $translationHelper;
 	private Sanitizer $sanitizer;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		FoodSharePointGateway $foodSharePointGateway,
 		BellGateway $bellGateway,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper,
-		Sanitizer $sanitizer
+		Sanitizer $sanitizer,
+		TranslatorInterface $translator
 	) {
 		$this->foodSharePointGateway = $foodSharePointGateway;
 		$this->bellGateway = $bellGateway;
 		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
 		$this->sanitizer = $sanitizer;
+		$this->translator = $translator;
 	}
 
 	public function sendNewFoodSharePointPostNotifications(int $foodSharePointId): void
@@ -56,7 +56,7 @@ class FoodSharePointTransactions
 					$this->emailHelper->tplMail('foodSharePoint/new_message', $f['email'], [
 						'link' => BASE_URL . '/?page=fairteiler&sub=ft&id=' . (int)$foodSharePointId,
 						'name' => $f['name'],
-						'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+						'anrede' => $this->translator->trans('salutation.' . $f['geschlecht']),
 						'fairteiler' => $foodSharePoint['name'],
 						'post' => $body
 					]);
