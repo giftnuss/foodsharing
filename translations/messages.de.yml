@@ -65,6 +65,20 @@ pass:
   noPhoto: 'Die folgenden Personen haben noch kein Foto hochgeladen:'
   notGenerated: 'Ihr Ausweis konnte daher nicht erstellt werden.'
 
+bcard:
+  title: Visitenkarten-Generator
+  card: Deine foodsharing Visitenkarte
+  claim: 'Hier easy generieren, ausdrucken und ausschneiden...'
+  for: '{role} für {region}'
+  actions: Optionen
+  desc: 'Wähle hier, für welchen Bezirk bzw. für welche Rolle du deine Visitenkarte erstellen möchtest!'
+  choose: Du musst eine Option wählen
+  error:
+    length: 'Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.'
+    phone: 'Du musst eine gültige Telefonnummer angegeben haben, um deine Visitenkarte zu generieren.'
+    verified: 'Du musst verifiziert sein, um deine Visitenkarte generieren zu können.'
+  generate: Visitenkarten erstellen
+
 group:
   name: Name
   description: Beschreibung

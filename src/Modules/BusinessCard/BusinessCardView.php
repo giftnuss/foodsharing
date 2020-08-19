@@ -8,7 +8,10 @@ class BusinessCardView extends View
 {
 	public function top()
 	{
-		return $this->topbar('Deine foodsharing Visitenkarte', 'Hier easy generieren, ausdrucken und ausschneiden...', '<img src="/img/bcard.png" />');
+		return $this->topbar($this->translator->trans('bcard.card'),
+			$this->translator->trans('bcard.claim'),
+			'<img src="/img/bcard.png" />'
+		);
 	}
 
 	public function optionForm($selectedData)
@@ -16,26 +19,22 @@ class BusinessCardView extends View
 		$this->pageHelper->addJs('
 			$("#optionen-form .input-wrapper:last").hide();
 			
-			$("#opt").on("change", function(){
+			$("#opt").on("change", function () {
 				$("#optionen-form").trigger("submit");
 			});
 				
-			$("#optionen-form").on("submit", function(ev){
+			$("#optionen-form").on("submit", function (ev) {
 				ev.preventDefault();
-				if($("#opt").val() == "")
-				{
-					pulseError(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('should_choose_option')) . '\');
-				}
-				else
-				{
+				if ($("#opt").val() == "") {
+					pulseError(\'' . $this->translator->trans('bcard.choose') . '\');
+				} else {
 					goTo("/?page=bcard&sub=makeCard&opt=" + $("#opt").val());
 				}
 				
-			});		
-		');
+			});');
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('options'), [
-				$this->v_utils->v_form_select('opt', ['desc' => $this->translationHelper->s('opt_desc'), 'values' => $selectedData])
-			], ['submit' => 'Visitenkarten erstellen']);
+		return $this->v_utils->v_quickform($this->translator->trans('bcard.actions'), [
+			$this->v_utils->v_form_select('opt', ['desc' => $this->translator->trans('bcard.desc'), 'values' => $selectedData]),
+		], ['submit' => $this->translator->trans('bcard.generate')]);
 	}
 }
