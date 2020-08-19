@@ -30,7 +30,10 @@ class MailboxControl extends Control
 		}
 
 		if (!$this->mailboxPermissions->mayHaveMailbox()) {
-			$this->pageHelper->addContent($this->v_utils->v_info($this->translationHelper->s('bieb_quiz_required')));
+			$this->pageHelper->addContent($this->v_utils->v_info($this->translator->trans('mailbox.not-available', [
+				'{role}' => '<a href="https://wiki.foodsharing.de/Betriebsverantwortliche*r">' . $this->translator->trans('terminology.storemanager.d') . '</a>',
+				'{quiz}' => '<a href="/?page=settings&sub=upgrade/up_bip">' . $this->translator->trans('mailbox.sm-quiz') . '</a>',
+			])));
 		}
 	}
 
@@ -43,15 +46,15 @@ class MailboxControl extends Control
 						if (isset($attach[(int)$_GET['i']])) {
 							$file = 'data/mailattach/' . $attach[(int)$_GET['i']]['filename'];
 
-							$Dateiname = $attach[(int)$_GET['i']]['origname'];
+							$filename = $attach[(int)$_GET['i']]['origname'];
 							$size = filesize($file);
 
 							$mime = $attach[(int)$_GET['i']]['mime'];
 							if ($mime) {
 								header('Content-Type: ' . $mime);
 							}
-							header('Content-Disposition: attachment; filename="' . $Dateiname . '"');
-							header("Content-Length: $size");
+							header('Content-Disposition: attachment; filename="' . $filename . '"');
+							header('Content-Length: $size');
 							readfile($file);
 							exit();
 						}
@@ -65,7 +68,8 @@ class MailboxControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addBread('Mailboxen');
+		$this->setContentWidth(8, 16);
+		$this->pageHelper->addBread($this->translator->trans('mailbox.title'));
 
 		if ($boxes = $this->mailboxGateway->getBoxes($this->session->isAmbassador(), $this->session->id(), $this->session->may('bieb'))) {
 			if (isset($_GET['show']) && (int)$_GET['show']) {
@@ -88,17 +92,17 @@ class MailboxControl extends Control
 
 	public function newbox()
 	{
-		$this->pageHelper->addBread('Mailbox Manager', '/?page=mailbox&a=manage');
-		$this->pageHelper->addBread('Neue Mailbox');
+		$this->pageHelper->addBread($this->translator->trans('mailbox.manage'), '/?page=mailbox&a=manage');
+		$this->pageHelper->addBread($this->translator->trans('mailbox.new'));
 
 		if ($this->mailboxPermissions->mayAddMailboxes()) {
 			if (isset($_POST['name'])) {
 				if ($mailbox = $this->mailboxGateway->filterName($_POST['name'])) {
 					if ($this->mailboxGateway->addMailbox($mailbox, 1)) {
-						$this->flashMessageHelper->info($this->translationHelper->s('mailbox_add_success'));
+						$this->flashMessageHelper->info($this->translator->trans('mailbox.add_success'));
 						$this->routeHelper->go('/?page=mailbox&a=manage');
 					} else {
-						$this->flashMessageHelper->error($this->translationHelper->s('mailbox_already_exists'));
+						$this->flashMessageHelper->error($this->translator->trans('mailbox.already_exists'));
 					}
 				}
 			}
@@ -109,7 +113,7 @@ class MailboxControl extends Control
 
 	public function manage()
 	{
-		$this->pageHelper->addBread('Mailbox Manager');
+		$this->pageHelper->addBread($this->translator->trans('mailbox.manage'));
 		if ($this->mailboxPermissions->mayManageMailboxes()) {
 			if (isset($_POST['mbid'])) {
 				global $g_data;
@@ -119,7 +123,7 @@ class MailboxControl extends Control
 				$this->sanitizerService->handleTagSelect($index);
 
 				if ($this->mailboxGateway->updateMember($_POST['mbid'], $g_data[$index])) {
-					$this->flashMessageHelper->info($this->translationHelper->s('edit_success'));
+					$this->flashMessageHelper->info($this->translator->trans('mailbox.saved'));
 					$this->routeHelper->go('/?page=mailbox&a=manage');
 				}
 			}
@@ -137,7 +141,7 @@ class MailboxControl extends Control
 
 			$this->pageHelper->addContent($this->view->manageOpt(), CNT_LEFT);
 		} else {
-			$this->flashMessageHelper->error($this->translationHelper->s('access_error'));
+			$this->flashMessageHelper->error($this->translator->trans('mailbox.not-allowed'));
 			$this->routeHelper->goPage('dashboard');
 		}
 	}

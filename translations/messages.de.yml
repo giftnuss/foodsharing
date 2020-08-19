@@ -731,9 +731,19 @@ mailbox:
   exceeds-size: 'Sorry! Die Datei ist zu groß.'
   claim: 'foodsharing.de - verwenden statt verschwenden'
   signature: 'Nachricht vom {date}'
-  new: Neue Mailbox anlegen
+  manage: Mailbox-Manager
+  create: Neue Mailbox anlegen
+  new: Neue Mailbox
   hostinfo: 'Nur den Namen der Mailbox eintragen! Also ohne @{host}'
+  add_success: 'Mailbox wurde erfolgreich angelegt.'
+  saved: Änderungen wurden gespeichert
+  already_exists: Eine Mailbox mit diesem Namen gibt es schon
   name: Angezeigter Name
+  not-available: |
+      Du musst {role} sein, um auf E-Mail-Postfächer zugreifen zu können.
+      Löse hier das {quiz}, wenn du bereit bist.
+  sm-quiz: Quiz für Betriebsverantwortliche
+  not-allowed: 'Du hast nicht die nötigen Rechte, dies zu tun.'
 
 settings:
   saved: Änderungen wurden gespeichert.

@@ -10,6 +10,7 @@ class MailboxView extends View
 	public function folder($boxes)
 	{
 		$children = [];
+		$isLast = false;
 
 		foreach ($boxes as $i => $b) {
 			$mbId = intval($b['id']);
@@ -82,7 +83,7 @@ class MailboxView extends View
 	{
 		$desc = $this->translator->trans('mailbox.hostinfo', ['{host}' => PLATFORM_MAILBOX_HOST]);
 
-		return $this->v_utils->v_quickform($this->translator->trans('mailbox.new'), [
+		return $this->v_utils->v_quickform($this->translator->trans('mailbox.create'), [
 			$this->v_utils->v_form_text('name', ['desc' => $desc])
 		], ['submit' => $this->translator->trans('button.save')]);
 	}
@@ -90,7 +91,7 @@ class MailboxView extends View
 	public function manageOpt()
 	{
 		return $this->v_utils->v_menu([
-			['name' => $this->translator->trans('mailbox.new'), 'href' => '/?page=mailbox&a=newbox']
+			['name' => $this->translator->trans('mailbox.create'), 'href' => '/?page=mailbox&a=newbox']
 		], $this->translator->trans('mailbox.actions'));
 	}
 
@@ -295,7 +296,7 @@ class MailboxView extends View
 	{
 		return PHP_EOL . PHP_EOL . PHP_EOL
 			. '-- '
-			. PHP_EOL .  $this->translator->trans('mailbox.claim')
+			. PHP_EOL . $this->translator->trans('mailbox.claim')
 			. PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL
 			. '----------- '
 			. $this->translator->trans('mailbox.signature', ['{date}' => date('j.m.Y H:i', $ts)])
