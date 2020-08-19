@@ -25,6 +25,41 @@ button:
   answer: Antworten
   clear_filter: Filter leeren
 
+pass:
+  bread: Pass-Generator
+  none: '- noch nicht erstellt -'
+  photo: Foto
+  name: Name
+  date: Zuletzt erstellt
+  verified: Verifiziert?
+  nav:
+    options: Optionen
+    select: Alle markieren
+    deselect: Keine markieren
+    title: Und los!
+    generate: Markierte Ausweise generieren
+  hint: Hinweise
+  hintSelect: |
+    Mit einem Klick auf das Erstellungsdatum werden alle Foodsaver mit dem gleichen Datum bzw. ohne Erstellungsdatum markiert.
+  hintVerify: |
+    Foodsaver, die einen Ausweis bekommen haben und die Richtigkeit ihrer Persodaten bestätigt haben, können verifiziert werden.
+  claim: Teile Lebensmittel, anstatt sie wegzuwerfen!
+  verify:
+    do: 'Account von {name} verifizieren'
+    undo: 'Verifizierung von {name} aufheben'
+    confirm: Sicher?
+    text: |
+      Persodaten gecheckt? <br/>
+      Ausweis übergeben?
+    failed: Es ist ein Problem aufgetreten
+    hasPickup: Noch für Abholungen eingetragen
+    checkPickups: Vor dem Entverifizieren musst du die eingetragenen Abholtermine prüfen!
+  button:
+    verify: Verifizieren
+    check: Termine prüfen
+  noPhoto: 'Die folgenden Personen haben noch kein Foto hochgeladen:'
+  notGenerated: 'Ihr Ausweis konnte daher nicht erstellt werden.'
+
 group:
   name: Name
   description: Beschreibung
@@ -173,12 +208,24 @@ terminology:
   forum: Forum
   events: Termine
   stores: Betriebe
-  ambassador_forum: BotschafterInnenforum
-  ambassadors: Botschafter
+  foodsharer:
+    m: Freiwilliger
+    f: Freiwillige
+    d: Freiwillige*r
+  foodsaver:
+    m: Foodsaver
+    f: Foodsaverin
+    d: Foodsaver*in
+  storemanager:
+    m: Betriebsverantwortlicher
+    f: Betriebsverantwortliche
+    d: Betriebsverantwortliche*r
   ambassador:
     m: Botschafter
     f: Botschafterin
     d: Botschafter*in
+  ambassadors: Botschafter
+  ambassador_forum: BotschafterInnenforum
   admins: Administratoren
   welcomeAdmins: Begrüßungsteam
   wall: Pinnwand
