@@ -1098,51 +1098,6 @@ class Utils
 		$out .= '
 		</select>';
 
-		if (isset($option['add'])) {
-			$this->pageHelper->addHidden('
-			<div id="' . $id . '-dialog" style="display:none;">
-				' . $this->v_form_text($id . ': NEU') . '
-			</div>');
-
-			$out .= '<a href="#" id="' . $id . '-add" class="select-add">&nbsp;</a>';
-
-			$this->pageHelper->addJs('
-
-					$("#' . $id . 'neu").on("keyup", function(e){
-
-						if(e.keyCode == 13)
-						{
-						  addSelect("' . $id . '");
-						}
-					});
-
-
-
-					$("#' . $id . '-add").button({
-						icons:{primary:"ui-icon-plusthick"},
-						text:false
-					}).on("click", function(event){
-
-						event.preventDefault();
-						$("#' . $id . '-dialog label").remove();
-
-						$("#' . $id . '-dialog").dialog({
-							modal:true,
-							title: "' . $label . ' anlegen",
-							buttons:
-							{
-								"Speichern":function()
-								{
-									addSelect("' . $id . '");
-								}
-							}
-						});
-					});
-
-
-					');
-		}
-
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
 
