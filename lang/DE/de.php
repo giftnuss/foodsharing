@@ -38,7 +38,6 @@ $g_lang['email_pass'] = 'Passwort';
 $g_lang['click_to_edit'] = 'Klicken zum bearbeiten';
 $g_lang['about_me_public'] = 'Öffentliche Kurzbeschreibung';
 $g_lang['about_me_intern'] = 'Kurzbeschreibung';
-$g_lang['about_me_intern_profile'] = 'Über sich selbst';
 $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
 $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)';

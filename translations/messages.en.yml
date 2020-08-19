@@ -106,5 +106,7 @@ menu:
   your_settings: Your data and settings
 
 profile:
-  bananaSent: The banana was sent!
-  bananaMessageTooShort: The text message accompanying your banana should be at least 100 characters long.
+  banana:
+    by: ' by '
+    sent: The banana was sent!
+    messageTooShort: The text message accompanying your banana should be at least 100 characters long.

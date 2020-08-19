@@ -15,11 +15,11 @@ expose({ trySendBanana, trySendBuddyRequest })
 async function trySendBanana (id) {
   try {
     await sendBanana(id, $('#bouch-ta').val().trim())
-    pulseInfo(i18n('profile.bananaSent'))
+    pulseInfo(i18n('profile.banana.sent'))
     profile(id)
   } catch (err) {
     if (err.code === 400) {
-      pulseError(i18n('profile.bananaMessageTooShort'))
+      pulseError(i18n('profile.banana.messageTooShort'))
     } else {
       pulseError(i18n('error_unexpected'))
     }

@@ -175,6 +175,10 @@ terminology:
   stores: Betriebe
   ambassador_forum: BotschafterInnenforum
   ambassadors: Botschafter
+  ambassador:
+    m: Botschafter
+    f: Botschafterin
+    d: Botschafter*in
   admins: Administratoren
   welcomeAdmins: Begrüßungsteam
   wall: Pinnwand
@@ -581,18 +585,62 @@ profile:
   notFound: Dieses Nutzerprofil gibt es nicht oder nicht mehr
   warning: Warnung
   mailBounceWarning: 'Deine persönliche Mail-Adresse {email} ist für foodsharing Mails und Kommunikation gesperrt. Durch das ändern der Mail-Adresse wird diese Sperre wieder entfernt.'
-  bananaSent: Banane wurde gesendet!
-  bananaMessageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
-  lastLogin: Letzter Login
-  registrationDate: Registrierungsdatum
-  never: Noch nie
-  privateMail: Private E-Mail-Adresse
-  fsMail: Interne Mailbox
-  foodsaverId: Foodsaver-ID
-  foodsharerId: Foodsharer-ID
-  cancelAll: 'Wirklich {name} aus allen kommenden Abhol-Terminen austragen?'
-  buddycount: '{name} kennen {count} Foodsaver'
-  buddycount1: '{name} kennt {count} Foodsaver'
+  banana:
+    title: '{count} Vertrauensbananen'
+    by: ' von '
+    sent: Banane wurde gesendet!
+    messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
+  nav:
+    edit: Profil bearbeiten
+    buddy: 'Ich kenne {name}'
+    history: Passhistorie
+    verificationHistory: Verifizierungshistorie
+    notes: Notizen <strong>({count})</strong>
+    violations: Meldungen <strong>({count})</strong>
+    storelist: Betriebe ({count})
+  history:
+    noActor: 'Es liegt keine Information über den Ersteller vor'
+    noData: 'Es liegen keine Daten vor.'
+    wasVerified: Verifiziert
+    lostVerification: Entverifiziert
+  notes:
+    bread: Notizen
+    title: Notizen über {name}
+    info: |
+      Bitte gehe gewissenhaft mit dieser Funktion um.
+      Sie soll helfen, Vorgänge sichbar zu machen um uns Arbeit zu ersparen.
+      Persönliches oder Wertendes zu einer Person hat hier nichts verloren.
+      Bleibe sachlich!
+  online: '{name} ist online!'
+  infos:
+    title: Infos
+    lastLogin: Letzter Login
+    registrationDate: Registrierungsdatum
+    never: Noch nie
+    privateMail: Private E-Mail-Adresse
+    fsMail: Interne Mailbox
+    buddies: 'Bekannte'
+    buddycount: '{name} kennen {count} Foodsaver'
+    buddycount1: '{name} kennt {count} Foodsaver'
+    fetchrate: Abholquote
+    foodsaverId: Foodsaver-ID
+    foodsharerId: Foodsharer-ID
+  stats:
+    weight: 'gerettet'
+    count: 'abgeholt'
+    baskets: 'Essenskörbe'
+    posts: 'Beiträge'
+  regions: '{name} ist Foodsaver in'
+  ambRegions: '{name} ist {role} für'
+  homeRegion: 'Stammbezirk von {name}'
+  workgroups: '{name} ist Ansprechperson für folgende Arbeitsgruppen'
+  sleeping: '{name} hat eine Schlafmütze auf unbestimmte Zeit'
+  sleepinfo: '{name} hat eine Schlafmütze auf vom {from} bis {until}'
+  about_me_intern: Über sich selbst
+  pinboard: 'Status-Updates von {name}'
+  signoutPickup: austragen
+  signoutAll: Aus allen austragen
+  signoutAllConfirmation: 'Wirklich {name} aus allen kommenden Abhol-Terminen austragen?'
   public:
     who: '{name} aus {from}'
     may: aktiv
