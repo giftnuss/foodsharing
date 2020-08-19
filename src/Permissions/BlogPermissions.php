@@ -18,15 +18,21 @@ final class BlogPermissions
 		return $this->session->isOrgaTeam() || $this->session->isAdminFor($regionId);
 	}
 
+	public function mayPublish(int $regionId): bool
+	{
+		return $this->mayAdd($regionId);
+	}
+
 	public function mayEdit(array $authorOfPost): bool
 	{
-		if ($authorOfPost) {
-			if ($this->session->id() == $authorOfPost['foodsaver_id'] || $this->session->isAdminFor($authorOfPost['bezirk_id'])) {
-				return true;
-			}
+		if (!$authorOfPost) {
+			return false;
+		}
+		if ($this->session->id() == $authorOfPost['foodsaver_id']) {
+			return true;
 		}
 
-		return false;
+		return $this->session->isAdminFor($authorOfPost['bezirk_id']);
 	}
 
 	public function mayAdministrateBlog(): bool

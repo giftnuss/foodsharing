@@ -857,6 +857,41 @@ region:
   not_a_member_error: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
   restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
 
+blog:
+  bread: Blog
+  header: News aus der foodsharing-Welt
+  manage: Blogeinträge verwalten
+  title: Blogartikel
+  empty: 'Bisher sind keine Einträge vorhanden.'
+  table:
+    status: Status
+    date: Datum
+    name: Titel
+    actions: Aktionen
+  article: Artikel
+  actions: Aktionen
+  all: Alle Blogeinträge
+  new: Neuen Artikel schreiben
+  edit: Blogeintrag bearbeiten
+  newTitle: 'Neuer Artikel für {region}'
+  content: Inhalt
+  status:
+    0: inaktiv
+    1: veröffentlicht
+  confirmDelete: Soll {name} wirklich unwiderruflich gelöscht werden?
+  success:
+    new: Artikel wurde angelegt
+    edit: Artikel wurde gespeichert
+    delete: Artikel gelöscht!
+  failure:
+    new: Artikel konnte nicht angelegt werden
+    edit: Artikel konnte nicht gespeichert werden
+    delete: Artikel konnte nicht gelöscht werden
+  permissions:
+    new: Du darfst keine Artikel erstellen!
+    edit: Diesen Artikel kannst du nicht bearbeiten
+    delete: Diesen Artikel kannst du nicht löschen
+
 conference:
   description_text: 'Hier kannst du einer Videokonferenz für die gewählte Gruppe beitreten. Die Videokonferenz öffnet BigBlueButton in einem neuen Fenster.'
   privacy_notice: 'Hinweis: Videokonferenzen werden über den Konferenzserver des living utopia Kollektivs abgewickelt. Du wirst dort automatisch mit deinem bei foodsharing eingegebenen Vornamen eingeloggt.'

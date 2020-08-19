@@ -2,38 +2,100 @@
 
 namespace Foodsharing\Modules\Blog;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\BlogPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BlogView extends View
 {
+	private $blogPermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		BlogPermissions $blogPermissions,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
+	) {
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+		$this->blogPermissions = $blogPermissions;
+	}
+
 	public function listArticle($data)
 	{
 		$rows = [];
-		foreach ($data as $d) {
-			$row_tmp = [];
+		foreach ($data as $article) {
+			$blogId = intval($article['id']);
 
-			if ($this->session->isAdminFor($d['bezirk_id']) || $this->session->isOrgaTeam()) {
-				$row_tmp[] = ['cnt' => $this->v_utils->v_activeSwitcher('blog_entry', $d['id'], $d['active'])];
+			if ($this->blogPermissions->mayPublish($article['bezirk_id'])) {
+				$active = $this->v_utils->v_activeSwitcher('blog_entry', $blogId, $article['active']);
 			} else {
-				$row_tmp[] = ['cnt' => $this->translationHelper->s('status_' . $d['active'])];
+				$active = $this->translator->trans('blog.status.' . $article['active']);
 			}
-			$row_tmp[] = ['cnt' => '<span style="display:none;">a' . $d['time_ts'] . '</span><a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . date('d.m.Y', $d['time_ts']) . '</a>'];
-			$row_tmp[] = ['cnt' => '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $d['id'] . '">' . $d['name'] . '</a>'];
-			$row_tmp[] = ['cnt' => $this->v_utils->v_toolbar(['id' => $d['id'], 'types' => ['edit', 'delete'], 'confirmMsg' => $this->translationHelper->sv('blog_delete_sure', $d['name'])])];
 
-			$rows[] = $row_tmp;
+			$link = '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $blogId . '">';
+
+			// No idea what that stray `a` is doing there, perhaps it is used for sorting?
+			$when = '<span style="display:none;">' . 'a' . $article['time_ts'] . '</span>';
+			$when .= $link . date('d.m.Y', $article['time_ts']) . '</a>';
+
+			$name = $link . $article['name'] . '</a>';
+
+			$actions = $this->v_utils->v_toolbar([
+				'id' => $blogId,
+				'types' => ['edit', 'delete'],
+				'confirmMsg' => $this->translator->trans('blog.confirmDelete', ['{name}' => $article['name']]),
+			]);
+
+			$rows[] = [
+				['cnt' => $active],
+				['cnt' => $when],
+				['cnt' => $name],
+				['cnt' => $actions],
+			];
 		}
 
-		$theads = [];
-
-		$theads[] = ['name' => $this->translationHelper->s('status'), 'sort' => false, 'width' => 140];
-		$theads[] = ['name' => $this->translationHelper->s('date'), 'width' => 80];
-		$theads[] = ['name' => $this->translationHelper->s('name')];
-		$theads[] = ['name' => $this->translationHelper->s('actions'), 'sort' => false, 'width' => 50];
+		$theads = [
+			['name' => $this->translator->trans('blog.table.status'), 'sort' => false, 'width' => 140],
+			['name' => $this->translator->trans('blog.table.date'), 'width' => 80],
+			['name' => $this->translator->trans('blog.table.name')],
+			['name' => $this->translator->trans('blog.table.actions'), 'sort' => false, 'width' => 50],
+		];
 
 		$table = $this->v_utils->v_tablesorter($theads, $rows);
 
-		return $this->v_utils->v_field($table, $this->translationHelper->s('article'));
+		return $this->v_utils->v_field($table, $this->translator->trans('blog.article'));
 	}
 
 	public function newsPost($news)
@@ -87,36 +149,48 @@ class BlogView extends View
 
 	public function blog_entry_form($bezirke, $add = false)
 	{
-		$bezirkchoose = '';
 		if ($add) {
-			$title = $this->translationHelper->s('neu_blog_entry');
+			$title = $this->translator->trans('blog.new');
 		} else {
-			$title = $this->translationHelper->s('edit_article');
+			$title = $this->translator->trans('blog.edit');
 			global $g_data;
 			$this->pageHelper->addContent($this->v_utils->v_field(
 				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
-				'Status',
+				$this->translator->trans('blog.table.status'),
 				['class' => 'ui-padding']
 			), CNT_LEFT);
 		}
-		if (is_array($bezirke) && count($bezirke) > 1) {
-			$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $bezirke]);
-		} elseif (is_array($bezirke)) {
-			$bezirk = end($bezirke);
-			$title = 'Neuer Artikel für ' . $bezirk['name'];
-			$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
+
+		$bezirkchoose = '';
+		if (is_array($bezirke)) {
+			if (count($bezirke) > 1) {
+				$bezirkchoose = $this->v_utils->v_form_select('bezirk_id', ['values' => $bezirke]);
+			} else {
+				// Automatically select this region
+				$bezirk = end($bezirke);
+				$title = $this->translator->trans('blog.newTitle', ['{region}' => $bezirk['name']]);
+				$bezirkchoose = $this->v_utils->v_form_hidden('bezirk_id', $bezirk['id']);
+			}
 		}
 
 		return $this->v_utils->v_form('test', [
 			$this->v_utils->v_field(
-				$bezirkchoose .
-				$this->v_utils->v_form_text('name') . $this->v_utils->v_form_textarea('teaser', ['style' => 'height:75px;']) .
-				$this->v_utils->v_form_picture('picture', ['resize' => [250, 528], 'crop' => [(250 / 135), (528 / 170)]]),
-
+				$bezirkchoose
+				. $this->v_utils->v_form_text('name')
+				. $this->v_utils->v_form_textarea('teaser', [
+					'style' => 'height:75px;',
+				])
+				. $this->v_utils->v_form_picture('picture', [
+					'resize' => [250, 528],
+					'crop' => [(250 / 135), (528 / 170)],
+				]),
 				$title,
 				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', ['nowrapper' => true, 'public_content' => true]), 'Inhalt')
+			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', [
+				'nowrapper' => true,
+				'public_content' => true,
+			]), $this->translator->trans('blog.content'))
 		]);
 	}
 }
