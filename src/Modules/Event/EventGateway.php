@@ -74,10 +74,6 @@ class EventGateway extends BaseGateway
 
 	public function getLocation(int $id)
 	{
-		if ($id === null) {
-			return null;
-		}
-
 		return $this->db->fetch('
 			SELECT id, name, lat, lon, zip, city, street
 			FROM  fs_location
