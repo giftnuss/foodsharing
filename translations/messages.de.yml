@@ -679,6 +679,9 @@ content:
   empty: 'Bisher wurde keine Seite eingetragen.'
   changelog: Aktuelles Changelog
 
+map:
+  title: Karte
+
 settings:
   saved: Änderungen wurden gespeichert.
 

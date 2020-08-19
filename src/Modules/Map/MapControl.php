@@ -18,7 +18,7 @@ class MapControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addTitle($this->translationHelper->s('map'));
+		$this->pageHelper->addTitle($this->translator->trans('map.title'));
 		$this->setTemplate('map');
 
 		if ($this->session->may()) {
