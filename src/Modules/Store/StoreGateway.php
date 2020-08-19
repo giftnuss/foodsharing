@@ -541,34 +541,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->count('fs_betrieb_team', ['foodsaver_id' => $fs_id, 'verantwortlich' => 1]);
 	}
 
-	public function getEmailBiepBez($region_ids): array
-	{
-		// TODO can probably be removed
-		$placeholders = $this->db->generatePlaceholders(count($region_ids));
-
-		$verant = $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`email`
-
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_betrieb_team` bt
-			        ON bt.foodsaver_id = fs.id
-					    INNER JOIN `fs_foodsaver_has_bezirk` b
-			            ON bt.foodsaver_id = b.foodsaver_id
-
-			WHERE 	bt.verantwortlich = 1
-			AND		b.`bezirk_id` IN(' . $placeholders . ')
-			AND		fs.deleted_at IS NULL
-		', $region_ids);
-
-		$result = [];
-		foreach ($verant as $v) {
-			$result[$v['id']] = $v;
-		}
-
-		return $result;
-	}
-
 	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
 		$result = $this->db->fetchByCriteria('fs_betrieb_team', [

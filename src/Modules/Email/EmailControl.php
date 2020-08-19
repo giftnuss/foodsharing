@@ -200,15 +200,8 @@ class EmailControl extends Control
 					$this->flashMessageHelper->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
 
 					$foodsaver = [];
-				} elseif ($data['recip_choose'] == 'filialbez') {
-					// TODO can probably be removed
-					$foodsaver = $this->storeGateway->getEmailBiepBez($data['recip_choose-choose']);
 				} elseif (isset($data['recip_choose-choose'])) {
-					if ($data['recip_choose'] == 'choosebot') {
-						$foodsaver = $this->foodsaverGateway->getRegionAmbassadorsEmailAddresses($data['recip_choose-choose']);
-					} else {
-						$foodsaver = $this->foodsaverGateway->getEmailAddressesFromRegions($data['recip_choose-choose']);
-					}
+					$foodsaver = $this->foodsaverGateway->getEmailAddressesFromRegions($data['recip_choose-choose']);
 				}
 			} else {
 				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());

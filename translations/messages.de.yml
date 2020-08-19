@@ -19,6 +19,9 @@ button:
   attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
   upload: Hochladen
+  new: Neu
+  edit: Bearbeiten
+  delete: Löschen
   permadelete: Unwiderruflich löschen
   yes_i_am_sure: Ja, ich bin mir sicher
   cancel: Abbrechen
@@ -1119,6 +1122,7 @@ region:
   edit: Bezirk bearbeiten
   noParent: Ohne `Eltern` Bezirk
   delete: Bezirk löschen
+  none: Noch kein Bezirk gewählt
 
 blog:
   bread: Blog

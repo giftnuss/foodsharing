@@ -110,19 +110,6 @@ class FoodsaverGatewayTest extends \Codeception\Test\Unit
 		$this->tester->assertEquals(2, $updates['deletions'], 'Wrong number of deletions!');
 	}
 
-	public function testGetRegionBotsEmailList()
-	{
-		$regions = [0 => $this->region['id'], 1 => 0];
-
-		$emails = $this->gateway->getRegionAmbassadorsEmailAddresses($regions);
-
-		$this->tester->assertIsArray($emails);
-		$this->tester->assertCount(1, $emails);
-		$bot = $this->regionAdmin;
-		$this->tester->assertArrayHasKey($bot['id'], $emails);
-		$this->tester->assertEquals($bot['email'], $emails[$bot['id']]['email']);
-	}
-
 	public function testGetRegionFoodsaversEmailList()
 	{
 		$regions = [0 => $this->region['id'], 1 => 0];

@@ -9,26 +9,23 @@ use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
 use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Utils
 {
 	private $id;
-
-	/**
-	 * @var \Foodsharing\Lib\Session
-	 */
-	private $session;
-
+	private Session $session;
 	/**
 	 * @var \Twig\Environment
 	 */
 	private $twig;
-	private $sanitizerService;
-	private $pageHelper;
-	private $routeHelper;
-	private $identificationHelper;
-	private $dataHelper;
-	private $translationHelper;
+	private Sanitizer $sanitizerService;
+	private PageHelper $pageHelper;
+	private RouteHelper $routeHelper;
+	private IdentificationHelper $identificationHelper;
+	private DataHelper $dataHelper;
+	private TranslationHelper $translationHelper;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		Sanitizer $sanitizerService,
@@ -36,7 +33,8 @@ class Utils
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
 	) {
 		$this->id = [];
 		$this->sanitizerService = $sanitizerService;
@@ -45,6 +43,7 @@ class Utils
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	/**
@@ -63,9 +62,9 @@ class Utils
 		$this->twig = $twig;
 	}
 
-	public function v_quickform($titel, $elements, $option = [])
+	public function v_quickform($title, $elements, $option = [])
 	{
-		return $this->v_field('<div class="v-form">' . $this->v_form($titel, $elements, $option) . '</div>', $titel);
+		return $this->v_field('<div class="v-form">' . $this->v_form($title, $elements, $option) . '</div>', $title);
 	}
 
 	public function v_scroller($content, $maxHeight)
@@ -75,7 +74,7 @@ class Utils
 		}
 
 		$id = $this->identificationHelper->id('scroller');
-		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: \'auto\'});');
+		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: "auto"});');
 
 		return '
 			<div style="max-height:' . $maxHeight . 'px" id="' . $id . '" class="scroller">
@@ -133,7 +132,7 @@ class Utils
 		if (!$bezirk) {
 			$bezirk = [
 				'id' => 0,
-				'name' => $this->translationHelper->s('no_bezirk_choosen')
+				'name' => $this->translator->trans('region.none'),
 			];
 		}
 		$id = $this->identificationHelper->id($id);
@@ -142,13 +141,11 @@ class Utils
 			$("#' . $id . '-dialog").dialog("open");
 		});');
 		$this->pageHelper->addJs('$("#' . $id . '-dialog").dialog({
-			autoOpen:false,
-			modal:true,
-			title:"Bezirk ändern",
-			buttons:
-			{
-				"Übernehmen":function()
-				{
+			autoOpen: false,
+			modal: true,
+			title: "' . 'Bezirk ändern' . '",
+			buttons: {
+				"Übernehmen": function () {
 					$("#' . $id . '").val($("#' . $id . '-hId").val());
 					$("#' . $id . '-preview").html($("#' . $id . '-hName").val());
 					$("#' . $id . '-dialog").dialog("close");
@@ -380,69 +377,59 @@ class Utils
 				<option value="choose">' . $this->translationHelper->s('recip_choose_bezirk') . '</option>
 				<option value="manual">Manuelle Eingabe</option>
 			</select>
-			<div id="' . $id . '-hidden" style="display:none">
+			<div id="' . $id . '-hidden" style="display: none;">
 
 			</div>
-			<div id="' . $id . 'manual-wrapper" style="display:none">
+			<div id="' . $id . 'manual-wrapper" style="display: none;">
 				' . $this->v_form_textarea($id . 'manual') . '
 			</div>
-			<div id="' . $id . '-tree-wrapper" style="display:none;">
+			<div id="' . $id . '-tree-wrapper" style="display: none;">
 				' . $this->v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen! Sonst: Alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
 				<div id="' . $id . '-tree">
-
 				</div>
 			</div>';
 
 		$this->pageHelper->addJs('
-				$(\'#' . $id . '\').on("change", function(){
-					if($(this).val() == "choose" || $(this).val() == "choosebot" || $(this).val() == "filialbez")
-					{
-						$("#' . $id . '-tree-wrapper").show();
-						$("#' . $id . 'manual-wrapper").hide();
-					}
-					else if($(this).val() == "manual")
-					{
-						$("#' . $id . 'manual-wrapper").show();
-						$("#' . $id . '-tree-wrapper").hide();
-					}
-					else
-					{
-						$("#' . $id . 'manual-wrapper").hide();
-						$("#' . $id . '-tree-wrapper").hide();
-					}
-
-				});
-
-				$("#' . $id . '-tree").dynatree({
-				onSelect: function(select, node) {
-					$("#' . $id . '-hidden").html("");
-					$.map(node.tree.getSelectedNodes(), function(node){
-						$("#' . $id . '-hidden").append(\'<input type="hidden" name="' . $id . '-choose[]" value="\'+node.data.ident+\'" />\');
-					});
-				},
-				persist: false,
-				checkbox:true,
-				selectMode: 3,
-				clickFolderMode: 3,
-				activeVisible: true,
-				initAjax: {
-					url: "/xhr.php?f=bezirkTree",
-					data: {p: "0" }
-				},
-				onLazyRead: function(node){
-					 node.appendAjax({url: "/xhr.php?f=bezirkTree",
-						data: { "p": node.data.ident },
-						dataType: "json",
-						success: function(node) {
-
-						},
-						error: function(node, XMLHttpRequest, textStatus, errorThrown) {
-
-						},
-						cache: false
-					});
+			$(\'#' . $id . '\').on("change", function () {
+				if ($(this).val() == "choose") {
+					$("#' . $id . '-tree-wrapper").show();
+					$("#' . $id . 'manual-wrapper").hide();
+				} else if ($(this).val() == "manual") {
+					$("#' . $id . 'manual-wrapper").show();
+					$("#' . $id . '-tree-wrapper").hide();
+				} else {
+					$("#' . $id . 'manual-wrapper").hide();
+					$("#' . $id . '-tree-wrapper").hide();
 				}
-			});');
+			});
+
+			$("#' . $id . '-tree").dynatree({
+			onSelect: function (select, node) {
+				$("#' . $id . '-hidden").html("");
+				$.map(node.tree.getSelectedNodes(), function (node) {
+					$("#' . $id . '-hidden").append(\'<input type="hidden" name="' . $id . '-choose[]" value="\'+node.data.ident+\'" />\');
+				});
+			},
+			persist: false,
+			checkbox: true,
+			selectMode: 3,
+			clickFolderMode: 3,
+			activeVisible: true,
+			initAjax: {
+				url: "/xhr.php?f=bezirkTree",
+				data: {p: "0"}
+			},
+			onLazyRead: function (node) {
+				 node.appendAjax({
+					url: "/xhr.php?f=bezirkTree",
+					data: {"p": node.data.ident},
+					dataType: "json",
+					success: function (node) {},
+					error: function (node, XMLHttpRequest, textStatus, errorThrown) {},
+					cache: false
+				});
+			}
+		});');
 
 		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), $out);
 	}
@@ -458,93 +445,89 @@ class Utils
 		$original = end($original);
 
 		$this->pageHelper->addJs('
+			$("#' . $id . '-link").fancybox({
+				minWidth: 600,
+				scrolling: "auto",
+				closeClick: false,
+				helpers: {
+					overlay: {closeClick: false}
+				}
+			});
 
-				$("#' . $id . '-link").fancybox({
-					minWidth : 600,
-					scrolling :"auto",
-					closeClick : false,
-					helpers : {
-					  overlay : {closeClick: false}
-					}
-				});
+			$("a[href=\'#edit\']").on("click", function () {
 
-				$("a[href=\'#edit\']").on("click", function(){
+				$("#' . $id . '-placeholder").html(\'<img src="images/' . $original . '" />\');
+				$("#' . $id . '-link").trigger("click");
+				$.fancybox.reposition();
+				jcrop = $("#' . $id . '-placeholder img").Jcrop({
+					 setSelect: [100, 0, 400, 400],
+					 aspectRatio: 35 / 45,
+					 onSelect: function (c) {
+						$("#' . $id . '-x").val(c.x);
+						$("#' . $id . '-y").val(c.y);
+						$("#' . $id . '-w").val(c.w);
+						$("#' . $id . '-h").val(c.h);
+					 }
+				 });
 
-					$("#' . $id . '-placeholder").html(\'<img src="images/' . $original . '" />\');
-					$("#' . $id . '-link").trigger("click");
-					$.fancybox.reposition();
-					jcrop = $("#' . $id . '-placeholder img").Jcrop({
-						 setSelect:   [ 100, 0, 400, 400 ],
-						 aspectRatio: 35 / 45,
-						 onSelect: function(c){
-								$("#' . $id . '-x").val(c.x);
-								$("#' . $id . '-y").val(c.y);
-								$("#' . $id . '-w").val(c.w);
-								$("#' . $id . '-h").val(c.h);
-						 }
-					 });
-
-					 $("#' . $id . '-save").show();
-					 $("#' . $id . '-save").button().on("click", function(){
-						 showLoader();
-						 $("#' . $id . '-action").val("crop");
-						 $.ajax({
-							url: "/xhr.php?f=cropagain",
-							data: {
-								x:parseInt($("#' . $id . '-x").val()),
-								y:parseInt($("#' . $id . '-y").val()),
-								w:parseInt($("#' . $id . '-w").val()),
-								h:parseInt($("#' . $id . '-h").val()),
-								fsid:' . (int)$fsid . '
-							},
-							success:function(data){
-								if(data == 1)
-								{
-									reload();
-								}
-							},
-							complete:function(){
-								hideLoader();
+				 $("#' . $id . '-save").show();
+				 $("#' . $id . '-save").button().on("click", function () {
+					 showLoader();
+					 $("#' . $id . '-action").val("crop");
+					 $.ajax({
+						url: "/xhr.php?f=cropagain",
+						data: {
+							x:parseInt($("#' . $id . '-x").val()),
+							y:parseInt($("#' . $id . '-y").val()),
+							w:parseInt($("#' . $id . '-w").val()),
+							h:parseInt($("#' . $id . '-h").val()),
+							fsid:' . (int)$fsid . '
+						},
+						success: function (data) {
+							if (data == 1) {
+								reload();
 							}
-						 });
-						 return false;
+						},
+						complete: function () {
+							hideLoader();
+						}
 					 });
+					 return false;
+				 });
 
-					 $("#' . $id . '-placeholder").css("height","auto");
-					 hideLoader();
-					 setTimeout(function(){
-						 $.fancybox.update();
-						 $.fancybox.reposition();
-						 $.fancybox.toggle();
-					 },200);
-				});
+				 $("#' . $id . '-placeholder").css("height", "auto");
+				 hideLoader();
+				 setTimeout(function () {
+					 $.fancybox.update();
+					 $.fancybox.reposition();
+					 $.fancybox.toggle();
+				 }, 200);
+			});
 
-				$("a[href=\'#new\']").on("click", function(){
-					$("#' . $id . '-link").trigger("click");
-					return false;
-				});
-				');
+			$("a[href=\'#new\']").on("click", function () {
+				$("#' . $id . '-link").trigger("click");
+				return false;
+			});');
 
 		$this->pageHelper->addHidden('
-				<div class="fotoupload popbox" style="display:none;" id="' . $id . '">
-					<h3>Fotoupload</h3>
-					<p class="subtitle">Hier kannst Du ein Foto von Deinem Computer ausw&auml;hlen</p>
-					<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="/xhr.php?f=uploadPhoto">
-						<input type="file" name="uploadpic" onchange="showLoader();$(\'#' . $id . '-form\')[0].submit();" />
-						<input type="hidden" id="' . $id . '-action" name="action" value="upload" />
-						<input type="hidden" id="' . $id . '-x" name="x" value="0" />
-						<input type="hidden" id="' . $id . '-y" name="y" value="0" />
-						<input type="hidden" id="' . $id . '-w" name="w" value="0" />
-						<input type="hidden" id="' . $id . '-h" name="h" value="0" />
-						<input type="hidden" id="' . $id . '-file" name="file" value="0" />
-						<input type="hidden" name="pic_id" value="' . $id . '" />
-					</form>
-					<div id="' . $id . '-placeholder" style="margin-top:15px;margin-bottom:15px;background-repeat:no-repeat;background-position:center center;">
-
-					</div>
-					<a href="#" style="display:none" id="' . $id . '-save">Speichern</a>
-					<iframe name="' . $id . '-frame" src="" width="1" height="1" style="visibility:hidden;"></iframe>
-				</div>');
+			<div class="fotoupload popbox" style="display: none;" id="' . $id . '">
+				<h3>' . $this->translator->trans('picture_upload_widget.picture_upload') . '</h3>
+				<p class="subtitle">' . $this->translator->trans('picture_upload_widget.choose_picture') . '</p>
+				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-frame" action="/xhr.php?f=uploadPhoto">
+					<input type="file" name="uploadpic" onchange="showLoader(); $(\'#' . $id . '-form\')[0].submit();" />
+					<input type="hidden" id="' . $id . '-action" name="action" value="upload" />
+					<input type="hidden" id="' . $id . '-x" name="x" value="0" />
+					<input type="hidden" id="' . $id . '-y" name="y" value="0" />
+					<input type="hidden" id="' . $id . '-w" name="w" value="0" />
+					<input type="hidden" id="' . $id . '-h" name="h" value="0" />
+					<input type="hidden" id="' . $id . '-file" name="file" value="0" />
+					<input type="hidden" name="pic_id" value="' . $id . '" />
+				</form>
+				<div id="' . $id . '-placeholder" style="margin-top: 15px; margin-bottom: 15px; background-repeat: no-repeat; background-position: center center;">
+				</div>
+				<a href="#" style="display: none;" id="' . $id . '-save">' . $this->translator->trans('button.save') . '</a>
+				<iframe name="' . $id . '-frame" src="" width="1" height="1" style="visibility: hidden;"></iframe>
+			</div>');
 
 		if (isset($_GET['pinit'])) {
 			$this->pageHelper->addJs('$("#' . $id . '-link").trigger("click");');
@@ -578,9 +561,11 @@ class Utils
 			if (isset($option['noclose'])) {
 				$noclose = ',
 				closeOnEscape: false,
-				open: function(event, ui) {$(this).parent().children().children(".ui-dialog-titlebar-close").hide();}';
+				open: function (event, ui) {
+					$(this).parent().children().children(".ui-dialog-titlebar-close").hide();
+				}';
 			}
-			$this->pageHelper->addJs('$("#' . $id . '").dialog({modal:true,title:"' . $name . '"' . $noclose . '});');
+			$this->pageHelper->addJs('$("#' . $id . '").dialog({modal: true, title: "' . $name . '"' . $noclose . '});');
 		}
 
 		$action = $this->routeHelper->getSelf();
@@ -589,48 +574,42 @@ class Utils
 		}
 
 		$out = '
-		<div id="' . $id . '">
+	<div id="' . $id . '">
 		<form method="post" id="' . $id . '-form" class="validate" enctype="multipart/form-data" action="' . $action . '">
 			<input type="hidden" name="form_submit" value="' . $id . '" />';
-		foreach ($elements as $el) {
-			$out .= $el;
-		}
+
+		$out .= join('', $elements);
 
 		if (!isset($option['submit'])) {
-			$out .= $this->v_form_submit('Senden', $id, $option);
+			$out .= $this->v_form_submit($this->translator->trans('button.send'), $id, $option);
 		} elseif ($option['submit'] !== false) {
 			$out .= $this->v_form_submit($option['submit'], $id, $option);
 		}
 
 		$out .= '
-		</div>
 		</form>
-		';
+	</div>';
 
-		$this->pageHelper->addJs('$("#' . $id . '-form").on("submit", function(ev){
-
+		$this->pageHelper->addJs('$("#' . $id . '-form").on("submit", function (ev) {
 			check = true;
-			$("#' . $id . '-form div.required .value").each(function(i,el){
+			$("#' . $id . '-form div.required .value").each(function (i, el) {
 				input = $(el);
-				if(input.val() == "")
-				{
+				if (input.val() == "") {
 					check = false;
 					input.addClass("input-error");
 					pulseError($("#" + input.attr("id") + "-error-msg").val());
 				}
 			});
 
-			if(check == false)
-			{
+			if (check == false) {
 				ev.preventDefault();
 			}
-
 		});');
 
 		if (!empty($js)) {
 			$out .= '
 			<script type="text/javascript">
-			$(document).ready(function(){
+			$(document).ready(function () {
 			' . $js . '
 			});
 			</script>';
@@ -722,16 +701,24 @@ class Utils
 			}
 			switch ($t) {
 				case 'edit':
-					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');" title="bearbeiten" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-wrench"></span></li>';
+					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');"'
+						. ' title="' . $this->translator->trans('button.edit') . '" class="ui-state-default' . $corner . '">'
+						. '<span class="ui-icon ui-icon-wrench"></span>'
+						. '</li>';
 					break;
 
 				case 'delete':
 					if (isset($option['confirmMsg'])) {
 						$cmsg = $option['confirmMsg'];
 					} else {
-						$cmsg = 'Wirklich l&ouml;schen?';
+						$cmsg = $this->translator->trans('really_delete');
 					}
-					$out .= '<li onclick="ifconfirm(\'/?page=' . $page . '&a=delete&id=' . $id . '\',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');" title="l&ouml;schen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-trash"></span></li>';
+					$link = "'/?page=" . $page . '&a=delete&id=' . $id . "'";
+					$out .= '<li class="ui-state-default' . $corner . '"'
+						. ' title="' . $this->translator->trans('button.delete') . '"'
+						. ' onclick="ifconfirm(' . $link . ',\'' . $this->sanitizerService->jsSafe($cmsg) . '\');">'
+						. '<span class="ui-icon ui-icon-trash"></span>'
+					. '</li>';
 					break;
 
 				default:

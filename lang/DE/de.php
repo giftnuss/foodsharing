@@ -79,7 +79,6 @@ $g_lang['dow6'] = 'Samstag';
 $g_lang['dow0'] = 'Sonntag';
 $g_lang['time'] = 'Uhrzeit';
 $g_lang['day'] = 'Tag';
-$g_lang['no_bezirk_choosen'] = 'Noch kein Bezirk gewählt';
 
 $g_lang['rolle'] = 'Benutzerrolle';
 
