@@ -18,7 +18,6 @@ class Routing
 		'fairteiler' => 'FoodSharePoint',
 		'foodsaver' => 'Foodsaver',
 		'index' => 'Index',
-		'listFaq' => 'FAQList',
 		'legal' => 'Legal',
 		'login' => 'Login',
 		'logout' => 'Logout',

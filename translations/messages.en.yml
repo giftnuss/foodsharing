@@ -48,7 +48,6 @@ menu:
   reports: Violation reports
   email: Newsletter tool
   manage_mailboxes: Manage mailboxes
-  faq: Manage FAQ
   content: Manage content
   entry:
     activities: Activities
@@ -93,7 +92,7 @@ menu:
     team: Team
     partners: Partner
     background: Background
-    faq: F.A.Q.
+    support: Help & Support
     wiki: Wiki
     guide: Guide
     statistics: Statistics

@@ -6,7 +6,6 @@ use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Permissions\BlogPermissions;
 use Foodsharing\Permissions\ContentPermissions;
-use Foodsharing\Permissions\FAQPermissions;
 use Foodsharing\Permissions\MailboxPermissions;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\QuizPermissions;
@@ -42,7 +41,6 @@ final class PageHelper
 	private $identificationHelper;
 	private $blogPermissions;
 	private $mailboxPermissions;
-	private $faqPermissions;
 	private $quizPermissions;
 	private $reportPermissions;
 	private $storePermissions;
@@ -58,7 +56,6 @@ final class PageHelper
 		RouteHelper $routeHelper,
 		TranslationHelper $translationHelper,
 		IdentificationHelper $identificationHelper,
-		FAQPermissions $faqPermissions,
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
 		ReportPermissions $reportPermissions,
@@ -88,7 +85,6 @@ final class PageHelper
 		$this->routeHelper = $routeHelper;
 		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
-		$this->faqPermissions = $faqPermissions;
 		$this->blogPermissions = $blogPermissions;
 		$this->mailboxPermissions = $mailboxPermissions;
 		$this->quizPermissions = $quizPermissions;
@@ -260,7 +256,6 @@ final class PageHelper
 					'handleReports' => $this->reportPermissions->mayHandleReports(),
 					'addStore' => $this->storePermissions->mayCreateStore(),
 					'manageMailboxes' => $this->mailboxPermissions->mayManageMailboxes(),
-					'editFAQ' => $this->faqPermissions->mayEditFAQ(),
 					'editContent' => $this->contentPermissions->mayEditContent(),
 					'administrateNewsletterEmail' => $this->newsletterEmailPermissions->mayAdministrateNewsletterEmail(),
 					'administrateRegions' => $this->regionPermissions->mayAdministrateRegions()
