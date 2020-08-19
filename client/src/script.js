@@ -368,11 +368,6 @@ export function reload () {
   window.location.reload()
 }
 
-export function openPhotoDialog (fs_id) {
-  $('#uploadPhoto-fs_id').val(fs_id)
-  $('#uploadPhoto').dialog('open')
-}
-
 export function uploadPhoto () {
   $('#uploadPhoto form').trigger('submit')
 }

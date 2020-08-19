@@ -721,12 +721,6 @@ class Utils
 				$corner .= ' ui-corner-right';
 			}
 			switch ($t) {
-				case 'image':
-					$out .= '<li onclick="openPhotoDialog(' . $option['id'] . ');" title="Foto Hochladen" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-image"></span></li>';
-					break;
-				case 'new':
-					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=new\');" title="neu" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-document"></span></li>';
-					break;
 				case 'edit':
 					$out .= '<li onclick="goTo(\'/?page=' . $page . '&id=' . $id . '&a=edit\');" title="bearbeiten" class="ui-state-default' . $corner . '"><span class="ui-icon ui-icon-wrench"></span></li>';
 					break;

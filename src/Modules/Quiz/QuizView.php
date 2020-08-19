@@ -98,7 +98,11 @@ class QuizView extends View
 				['cnt' => $s['fp']],
 				['cnt' => $status],
 
-				['cnt' => $this->v_utils->v_toolbar(['id' => $s['id'], 'types' => ['delete'], 'confirmMsg' => 'Soll diese Quiz-Session wirklich gel&ouml;scht werden?'])]
+				['cnt' => $this->v_utils->v_toolbar([
+					'id' => $s['id'],
+					'types' => ['delete'],
+					'confirmMsg' => 'Soll diese Quiz-Session wirklich gel&ouml;scht werden?',
+				])]
 			];
 			if ($cur_qid != $s['quiz_id'] || $key == (count($sessions) - 1)) {
 				$cur_qid = $s['quiz_id'];
