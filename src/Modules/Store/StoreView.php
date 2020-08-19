@@ -189,7 +189,7 @@ class StoreView extends View
 
 		$time = strtotime($b['begin']);
 		if ($time > 0) {
-			$count_info .= '<div> ' . $this->translationHelper->sv('store_info_cooperation', ['startTime' => $this->translationHelper->s('month_' . (int)date('m', $time)) . ' ' . date('Y', $time)]) . '</div>';
+			$count_info .= '<div> ' . $this->translationHelper->sv('store_info_cooperation', ['startTime' => $this->timeHelper->month($time) . ' ' . date('Y', $time)]) . '</div>';
 		}
 
 		if ((int)$b['public_time'] != 0) {

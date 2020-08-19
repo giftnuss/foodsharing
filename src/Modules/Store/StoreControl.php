@@ -124,7 +124,7 @@ class StoreControl extends Control
 			}
 
 			$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
-				$this->routeHelper->pageLink('betrieb', 'back_to_overview')
+				$this->routeHelper->pageLink('betrieb')
 			]), $this->translationHelper->s('actions')), CNT_RIGHT);
 		} elseif (isset($_GET['id'])) {
 			$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$_GET['id']);

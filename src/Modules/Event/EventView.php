@@ -317,12 +317,8 @@ class EventView extends View
 		<div class="event welcome ui-padding margin-bottom ui-corner-all">
 			<div class="welcome_profile_image">
 				<span class="calendar">
-					<span class="month">'
-					. $this->translationHelper->s('month_' . (int)date('m', $event['start_ts'])) .
-					'</span>
-					<span class="day">'
-					. date('d', $event['start_ts']) .
-					'</span>
+					<span class="month">' . $this->timeHelper->month($event['start_ts']) . '</span>
+					<span class="day">' . date('d', $event['start_ts']) . '</span>
 				</span>
 				<div class="clear"></div>
 			</div>

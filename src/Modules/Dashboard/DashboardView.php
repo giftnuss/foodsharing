@@ -184,7 +184,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event">
 				<a href="/?page=event&id=' . $eventId . '" class="calendar">
-					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->timeHelper->month($i['start_ts']) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 
@@ -235,7 +235,7 @@ class DashboardView extends View
 			$out .= '
 			<div class="post event">
 				<a href="/?page=event&id=' . $eventId . '" class="calendar">
-					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+					<span class="month">' . $this->timeHelper->month($i['start_ts']) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 
