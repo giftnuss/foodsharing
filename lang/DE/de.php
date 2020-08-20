@@ -10,7 +10,6 @@ $g_lang['name'] = 'Name';
 $g_lang['add'] = 'hinzufügen';
 $g_lang['nachname'] = 'Nachname';
 $g_lang['continue'] = 'Weiter';
-$g_lang['mailinglist'] = 'Mailingliste';
 $g_lang['subject'] = 'Betreff';
 $g_lang['reference'] = 'Hinweis';
 $g_lang['message'] = 'Nachricht';

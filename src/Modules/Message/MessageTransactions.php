@@ -10,7 +10,7 @@ use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MessageTransactions
 {
@@ -19,7 +19,7 @@ class MessageTransactions
 	private $mem;
 	private $messageGateway;
 	private $storeGateway;
-	private $translationHelper;
+	private $translator;
 	private $pushNotificationGateway;
 	private $webSocketConnection;
 
@@ -29,7 +29,7 @@ class MessageTransactions
 		Mem $mem,
 		MessageGateway $messageGateway,
 		StoreGateway $storeGateway,
-		TranslationHelper $translationHelper,
+		TranslatorInterface $translator,
 		PushNotificationGateway $pushNotificationGateway,
 		WebSocketConnection $webSocketConnection
 	) {
@@ -38,7 +38,7 @@ class MessageTransactions
 		$this->mem = $mem;
 		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 		$this->pushNotificationGateway = $pushNotificationGateway;
 		$this->webSocketConnection = $webSocketConnection;
 	}
@@ -54,7 +54,7 @@ class MessageTransactions
 			$sessdata[$recipient['id']] = time();
 
 			$templateData = array_merge($templateData, [
-				'anrede' => $this->translationHelper->genderWord($recipient['gender'], 'Lieber', 'Liebe', 'Liebe/r'),
+				'anrede' => $this->translator->trans('salutation.' . $recipient['gender']),
 				'name' => $recipient['name'],
 			]);
 

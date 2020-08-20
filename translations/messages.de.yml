@@ -277,6 +277,7 @@ terminology:
   regions: Bezirke
   themes: Themen
   homeRegion: Stammbezirk
+  message: Nachricht
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -552,6 +553,8 @@ events:
     no: 'Einladungsstatus geändert: du nimmst nun nicht teil.'
 
 recipients:
+  bread: Newsletter-Verteiler
+  prepare: Vorbereiten zum Versand
   recipients: Empfänger
   all: Alle Foodsaver weltweit
   botschafter: Alle Botschafter bundesweit
@@ -568,6 +571,24 @@ recipients:
     <strong>Hinweis:</strong>
     Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen!
     In alle nicht sichtbaren Bezirke werden keine Mails versendet.
+  empty-region: In den ausgewählten Bezirken gibt es noch keine Foodsaver
+  body: Nachricht
+  send: E-Mail senden
+  confirm: E-Mail senden?
+  test: Newsletter testen
+  testmail: Test-Mail senden
+  variables: Persönliche Anrede
+  variable-info: |
+    Um die Mail persönlicher zu gestalten, kannst Du <strong>{NAME}</strong> anstelle des Namens einfügen
+    und <strong>{ANREDE}</strong> für die Anrede verwenden.
+    <p>{ANREDE} {NAME} ergibt beispielsweise: Lieber Peter
+  doublecheck: Alles gechecked? Soll die E-Mail an die gewählte Zielgruppe gesendet werden?
+  sent: Die E-Mail wurde erfolgreich an {count} E-Mail-Adressen gesendet
+  history: Von dir gesendete Mails
+  pending: 'Es sind noch {count} E-Mails zu versenden'
+  continue: Mit dem Senden weitermachen
+  abort: Versand abbrechen
+  permission: Du bist nicht berechtigt, E-Mails zu versenden
 
 addresspicker:
   label: Adress-/Standort-Suche
@@ -1029,7 +1050,7 @@ menu:
   blog: Blogbeiträge bearbeiten
   quiz: Quiz verwalten
   reports: Meldungen
-  email: E-Mail-Verteiler
+  email: Newsletter versenden
   manage_mailboxes: Mailboxen verwalten
   content: Inhalte bearbeiten
   entry:
