@@ -136,6 +136,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Rename `theme` variables to `thread` !1645 #840 @Caluera @ChrisOelmueller
 - Deprecate `v_scroller` !1698 @ChrisOelmueller
 - Make navigation bar responsive !1532 @moffer
+- Refactor translations from twig email templates to yml to messages.de.yml !1640 #824 @jonathan_b @chriswalg
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

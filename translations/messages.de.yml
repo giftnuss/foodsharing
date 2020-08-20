@@ -1911,6 +1911,49 @@ base:
   slogan: Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland
   jsrequired: Ohne JavaScript läuft hier leider nichts.
 
+email:
+  request_from: Anfrage von
+  from: -- Von
+  to: an
+  dont_respond:
+    noreply: Bitte antworte nicht auf diese E-Mail. Diese Nachricht wurde von einer Adresse gesendet, hinter welcher kein Postfach existiert.
+    no_notification_link: Willst Du diese Art von Benachrichtigungen nicht mehr bekommen?
+    you_can: Du kannst unter
+    notification: Benachrichtigungen
+    nomail: einstellen, welche Mails Du erhältst.
+  newsletter:
+    unsubscribe: Möchtest Du keinen Newsletter mehr erhalten?
+    linktext: Klicke hier zum Abbestellen!
+  impress:
+    title: Impressum
+    general_information_requirements: Angaben gemäß § 5 TMG
+    address: 'foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Vertreten durch:\n\n Frank Bowinkelmann \n Kontakt:\n E-Mail: info@foodsharing.de\n Registereintrag:\n\n Eintragung im Vereinsregister\n Registergericht: Amtsgericht Köln\n Registernummer: VR 17439\n Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:\n  Frank Bowinkelmann'
+  unknown_email: Unbekannte E-Mail-Adresse
+  unknown_email2: Die E-Mail-Adresse {{ ADDRESS }} ist nicht bekannt.
+  withlove: Alles Liebe,
+  yourFSteam: Dein foodsharing-Team.
+  in: in
+  login: Einloggen zum Antworten
+  confirm_topic: 'Thema muss bestätigt werden:'
+  confirm_link: möchte das Thema
+  confirm_BOT: absenden. Da Du Botschafter für {{ BEZIRK }} bist, musst Du es bestätigen, bevor es veröffentlicht wird.
+  foodsharepoint: -- Fair-Teiler
+  reply: Antworten
+  warning: Warnung
+  slot_empty: Für die nächste Abholung bei {{ BETRIEB }} hat sich noch niemand zum Abholen eingetragen
+  you_responsible:
+    part1: Du bist verantwortlich für
+    part2: Leider hat sich für den nächsten Termin noch niemand zum Abholen eingetragen.
+  find_someone: Bitte kümmere Dich schnellstmöglich um jemanden aus Deinem Betriebsteam, damit die Abholung stattfinden kann. Solltest du niemanden mobilisieren können, wäre es schön, wenn du die Abholung übernehmen könntest. Sollte dir das nicht möglich sein, dann sage den Termin bitte rechtzeitig beim Betrieb ab.
+  information: Info
+  manual_slots_get_ignored: Diese Benachrichtigung wird aktuell leider nur bei automatischen Abholterminen versendet. Manuell angelegte, überschriebene oder gelöschte Slots werden daher nicht berücksichtigt.
+  help_needed:
+    main: Um diese Funktion zu überarbeiten, benötigen wir die Unterstützung weiterer ProgrammiererInnen, Tester und Helfer aus Deinem Bezirk
+    link: https://devdocs.foodsharing.network/it-tasks.html
+    or: oder
+    support_mail: it@foodsharing.network
+  foodbasket_request: Dein Essenskorb wurde von {{ SENDER }} angefragt
+
 buddy:
   request_sent: Anfrage versendet!
   request_accepted: Jetzt kennt Ihr Euch!
