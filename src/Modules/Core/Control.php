@@ -215,7 +215,7 @@ abstract class Control
 			$("#wall-submit").button().on("click", function (ev) {
 				ev.preventDefault();
 				if (($("#wallpost-text").val() != ""
-						&& $("#wallpost-text").val() != "' . $this->translationHelper->s('write_teaser') . '")
+						&& $("#wallpost-text").val() != "' . $this->translator->trans('wall.message_placeholder') . '")
 					|| $("#attach-preview a").length > 0
 				) {
 					$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
@@ -229,7 +229,7 @@ abstract class Control
 					}
 
 					text = $("#wallpost-text").val();
-					if (text == "' . $this->translationHelper->s('write_teaser') . '") {
+					if (text == "' . $this->translator->trans('wall.message_placeholder') . '") {
 						text = "";
 					}
 
@@ -277,14 +277,14 @@ abstract class Control
 		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" placeholder="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea"></textarea>
+				<textarea id="wallpost-text" name="text" placeholder="' . $this->translator->trans('wall.message_placeholder') . '" class="comment textarea"></textarea>
 				<div id="attach-preview"></div>
 				<div style="display: none;" id="wallpost-attach" /></div>
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translationHelper->s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . $this->translationHelper->s('send') . '</a>
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translator->trans('button.attach_image') . '</span>
+					<a href="#" id="wall-submit">' . $this->translator->trans('button.send') . '</a>
 					<div style="overflow: hidden; height: 0;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
