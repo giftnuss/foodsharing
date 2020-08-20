@@ -1367,6 +1367,67 @@ conference:
   join_title: Konferenz beitreten
   join: Konferenz beitreten
 
+page:
+  welcomeheader: Willkommen bei foodsharing!
+  welcome_main_1: Wir sind eine Initiative, die sich gegen Lebensmittelverschwendung engagiert. Wir “retten” ungewollte und überproduzierte Lebensmittel in privaten Haushalten sowie von kleinen und großen Betrieben.
+  welcome_main_2: Darüber hinaus verstehen wir uns als bildungspolitische Bewegung und fühlen uns nachhaltigen Umwelt- und Konsumzielen verpflichtet. Wir setzen uns unter anderem für einen Wegwerfstopp und gegen den Verpackungswahnsinn der Supermärkte ein. Mit diesen und anderen Themen sind wir auf Veranstaltungen oder in Medien präsent und starten eigene Aktionen.
+  welcome_main_3: Die Organisation unserer foodsharing-Community und unserer Aktivitäten läuft in erster Linie über die Online-Plattform foodsharing. Hier vernetzen und koordinieren sich die Lebensmittelretter*innen (Foodsharer/Foodsaver) in den einzelnen Städten und Regionen. Über die Plattform werden überregionale Themen, Veranstaltungen und Informationen veröffentlicht.
+  welcome_main_4: Unsere foodsharing-Initiative entstand 2012 in Berlin. Mittlerweile ist sie zu einer internationalen Bewegung mit über 200.000 registrierten Nutzern*innen in Deutschland, Österreich, der Schweiz und weiteren europäischen Ländern herangewachsen.
+  welcome_main_5: Die Mitglieder der foodsharing-Community arbeiten ehrenamtlich und unentgeltlich. Die Initiative foodsharing ist und bleibt kostenlos, nicht kommerziell, unabhängig und werbefrei. Wir wollen die Plattform open source und weltweit leichter zugänglich machen – so wie es das foodsharing-Konzept des Lebensmittelrettens bereits ist.
+  howitworksheader: Wie funktioniert foodsharing?
+  howitworks_main: Was steckt hinter unserer Initiative und wie kannst Du Dich einbringen? Diese und weitere Fragen beantworten wir mit diesem Video.
+  joinheader: Werde aktiv und rette mit!
+  join_main_1: Wir laden Dich ein, bei foodsharing aktiv zu werden und Dich gemeinsam mit tausenden Gleichgesinnten gegen Lebensmittelverschwendung zu engagieren.
+  join_main_2: Registriere Dich bei foodsharing und werde Teil unserer Community. Du kannst hier unsere Aktivitäten und Mitglieder in Deinem Bezirk kennenlernen und Dich gemeinsam mit ihnen für eine gute Sache einsetzen.
+  join_button: Mitmachen
+  whatiswhat: Was ist das?
+  fsvsfs:
+    header: Foodsharer und Foodsaver
+    main: Sobald Du Dich bei foodsharing registriert hast, gehörst Du als Lebensmittelretter*in (Foodsharer) zur Community.\n\nAls Foodsharer kannst Du Essenskörbe anbieten oder abholen, an foodsharing-Events teilnehmen und Lebensmittel zum Fairteiler bringen oder von dort mitnehmen. Wenn Du als Foodsharer von Betrieben Lebensmittel retten möchtest, musst Du zwei weitere Schritte tun:\n1. Du nimmst an einem foodsharing-Quiz teil.\n2. Du absolvierst drei betreute Einführungsabholungen bei einem Betrieb.\n\nAls Foodsaver handelst Du aktiv und freiwillig mit dem Ziel, gute Lebensmittel nicht in der Tonne enden zu lassen. Du wirst in Absprache mit anderen Foodsavern Lebensmittel von den kooperierenden Betrieben einsammeln und fair-teilen. Es ist natürlich sinnvoll und wünschenswert, wenn Du mit der Community in Kontakt stehst und an Events und Bezirkstreffen teilnimmst.\n\nFalls Du Interesse an einem weiterreichenden Engagement hast, findest Du bei uns auch verantwortungsvolle Tätigkeiten, etwa als Mitglied einer Arbeitsgruppe, als Betriebsverantwortliche*r oder Botschafter*in.
+  basket:
+    header: Essenskörbe
+    main: Du kannst Deine eigenen überschüssigen Lebensmittel der lokalen foodsharing-Community anbieten und Lebensmittel bei anderen Community-Mitgliedern abholen. Über die Plattform könnt Ihr Kontakt aufnehmen, um die Übergabe zu organisieren.
+  foodsharepoints:
+    header: Fairteiler
+    main: Der Fairteiler ist wie ein „Umschlagplatz“ für Lebensmittel, zu dem Du Lebensmittel bringen und von dort gratis mitnehmen darfst. Als Fairteiler dient ein Regal und/oder ein Kühlschrank. Du findest unsere Fairteiler an gut zugänglichen Orten wie in privaten oder kommunalen Räumen, auf dem Uni-Gelände, in Vereinsräumen u. v. m. Die Fairteiler können auf unserer Plattform eingetragen und somit für alle Nutzer*innen auf einer Karte angezeigt werden.\n\nEs gibt Fairteiler mit geregelten Öffnungszeiten und solche, die rund um die Uhr zugänglich sind.\nUnsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.
+  necessities: Unsere Fairteiler-Regeln und -Voraussetzungen, etwa der Hygieneplan und die Verantwortlichkeit eines betriebsverantwortlichen Foodsavers sind in jedem Fall zu beachten.
+  cooperations:
+    header: Betriebe
+    main: Unsere kooperierenden Betriebe sind Bäckereien, Obst- und Gemüsehändler, Filialen von Supermärkten, Wochenmärkte, Restaurants, Kantinen, Cafés, Catering-Services, der Großhandel, Bauernhöfe u. v. m.\n\nFür jede Kooperation mit einem Betrieb gibt es einen betriebsverantwortlichen Foodsaver. Außerdem kümmert er/sie sich um die Organisation zuverlässiger Abholungen. Wir sind bestrebt, das Tagesgeschäft der Betriebe so wenig wie möglich zu beeinträchtigen. Die Abholungen bei Betrieben werden daher im Vorfeld abgestimmt und vereinbart.\n\nDie foodsharing-Kooperation ist nachhaltig und eine Win-Win-Situation. Die Betriebe können dabei ihre Lebensmittelabfälle und damit verbundene Entsorgungskosten reduzieren und bewusst ein Zeichen gegen Lebensmittelverschwendung setzen.
+  presence:
+    header: Festivals
+    main: foodsharing ist regelmäßig auf vielen Veranstaltungen und Festivals präsent, um auch dort auf die Initiativen und unser Engagement aufmerksam zu machen. Wir nutzen auch diese Gelegenheiten, um ein klares Statement gegen Lebensmittel- und Ressourcenverschwendung und für Nachhaltigkeit in Umwelt- und Konsumfragen abzugeben. Dafür veranstalten wir auf dem Festivalgelände Workshops oder Vorträge, Filmvorführungen und Diskussionsrunden und sind an Infoständen (mit und ohne Essensverteilung) zu finden.\n\nEine Bedingung für unsere Präsenz ist, direkt mit Festivalbetreiber*innen zu kooperieren um auf dem Veranstaltungsgelände selbst "aktiv" werden zu können.\nWir retten auf Festivals überschüssige Lebensmittel von Besucher*innen oder von Essensständen. Am Ende eines Festivals bergen wir auch zurückgelassene Dinge, die noch brauchbar sind.
+
+tablesorter:
+  page: Seite
+  from: von
+  entriespp: Einträge pro Seite
+
+password:
+  reset: Passwort zurücksetzen
+  insertmail: Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!
+
+sidenav:
+  superregional: Überregionale Gruppen
+  localgroups: Lokalgruppen
+  countryspecific: Länderspezifische Gruppen
+  yourgroups: Deine Gruppen
+
+becomeregion:
+  chooseregion: Wähle den Bezirk aus, in dem Du aktiv werden möchtest!
+  enterregion:
+    main: Deinem ersten Bezirk kannst Du beitreten, indem Du Dich über die Auswahl 'Europa' bis zu Deinem Bezirk durchklickst.<br> Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest Du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten. Lies Dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu
+    region_link_text: Bezirke gründen oder reaktivieren
+    text1: gut durch! Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki nicht beantwortet, schreib uns eine Mail an
+    text2: Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können Dir aber bei Fragen zu Bezirken weiterhelfen.
+  save: Speichern
+
+base:
+  whatfor: Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben
+  keywords: foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch
+  slogan: Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland
+  jsrequired: Ohne JavaScript l&auml;uft hier leider nichts.
+
 buddy:
   request_sent: Anfrage versendet!
   request_accepted: Jetzt kennt Ihr Euch!
