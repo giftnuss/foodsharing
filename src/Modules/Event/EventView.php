@@ -337,7 +337,7 @@ class EventView extends View
 
 	private function ts_time($ts): string
 	{
-		return $this->translator->trans('events.time', ['{time}' => date('H:i', $ts)]);
+		return $this->translator->trans('date.time', ['{time}' => date('H:i', $ts)]);
 	}
 
 	public function invites(array $invites): string

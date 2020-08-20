@@ -52,7 +52,7 @@ $I->seeInField('#homepage', 'https://www.matthias-larisch.de');
 /* I have no picture - that is the default */
 $I->seeElement('//img[@src="img/portrait.png"]');
 
-$I->click('Neues Foto hochladen');
+$I->click('Neues Bild hochladen');
 $I->attachFile('//input[@type="file"][@name="uploadpic"]', 'avatar-300px.png');
 $I->wait(2);
 $I->waitForElement('#fotoupload-save', 10);

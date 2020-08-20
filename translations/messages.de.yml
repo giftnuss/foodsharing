@@ -9,7 +9,9 @@ upload:
   preview_image: Vorschau
   image: Bild hochladen
   new_image: Neues Bild hochladen
+  edit_image: Bild bearbeiten
   file: Datei hochladen
+  choose_file: Datei hochladen
   new_file: Neue Datei hochladen
   crop_dialog_title: Bild ausschneiden
 
@@ -274,6 +276,7 @@ terminology:
   profile_picture: 'Profilbild'
   regions: Bezirke
   themes: Themen
+  homeRegion: Stammbezirk
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -285,10 +288,13 @@ yes: Ja
 no: Nein
 back: Zurück
 options: Optionen
-error_unexpected: Es ist ein Fehler aufgetreten
 success: Erfolgreich abgeschlossen
+error_unexpected: Es ist ein Fehler aufgetreten
 delete: Löschen
 notice: Hinweis!
+validate:
+  required: '{it} darf nicht leer sein'
+select: Bitte auswählen
 
 info:
   md: Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.
@@ -518,7 +524,6 @@ events:
       speichere ihn zu einem späteren Zeitpunkt erneut ab.
   duration: '{from} bis {until}'
   description: Beschreibung
-  time: '{time} Uhr'
   mumble:
     title: Online-Termin (Mumble)
     text: 'Online-Sprachkonferenzen führen wir mit <em>Mumble</em> durch.'
@@ -546,6 +551,24 @@ events:
     maybe: 'Schön, dass du vielleicht dabei bist!'
     no: 'Einladungsstatus geändert: du nimmst nun nicht teil.'
 
+recipients:
+  recipients: Empfänger
+  all: Alle Foodsaver weltweit
+  botschafter: Alle Botschafter bundesweit
+  orgateam: Orgateam bundesweit
+  newsletter: Alle Newsletter-Abonnenten (mindestens Foodsaver)
+  newsletter_all: Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)
+  newsletter_only_foodsharer: NUR die Foodsharer unter allen Newsletter-Abonnenten
+  all_no_botschafter: Alle Foodsaver ohne Botschafter
+  storemanagers: Alle Betriebsverantwortlichen weltweit
+  storemanagers_and_ambs: Alle Betriebsverantwortlichen + Botschafter
+  choose: Bezirke einzeln auswählen
+  manual: Manuelle Eingabe
+  region-hint: |
+    <strong>Hinweis:</strong>
+    Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen!
+    In alle nicht sichtbaren Bezirke werden keine Mails versendet.
+
 addresspicker:
   label: Adress-/Standort-Suche
   placeholder: Bitte hier die Adresse suchen! Falls nötig, danach unten korrigieren.
@@ -554,6 +577,8 @@ addresspicker:
 
 date:
   time: '{time} Uhr'
+  from: von
+  to: bis
   Today: Heute
   today: heute
   -- Tomorrow: Morgen
@@ -1113,6 +1138,8 @@ push_notifications:
   test_notification_body: 'Super, das scheint geklappt zu haben :)'
 
 region:
+  change: Bezirk ändern
+  no-huge: 'Sorry, du kannst ein Land oder ein Bundesland nicht als Region auswählen.'
   store_managers_cannot_leave: Du kannst den Bezirk nicht verlassen, da du dort noch für mindestens einen Betrieb verantwortlich bist.
   not-member: Du bist nicht Teil dieser Region bzw. Arbeitsgruppe.
   restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.

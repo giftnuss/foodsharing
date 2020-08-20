@@ -77,7 +77,7 @@ class Utils
 		$this->pageHelper->addJs('$("#' . $id . '").slimScroll({height: "auto"});');
 
 		return '
-			<div style="max-height:' . $maxHeight . 'px" id="' . $id . '" class="scroller">
+			<div style="max-height:' . $maxHeight . 'px;" id="' . $id . '" class="scroller">
 				' . $content . '
 			</div>';
 	}
@@ -95,20 +95,20 @@ class Utils
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:1},
-						method:"get",
-						complete:function(){
+						data: {t:"' . $table . '",id:"' . (int)$field_id . '",value:1},
+						method: "get",
+						complete: function () {
 							hideLoader();
 						}
 					});
 				},
-				off_callback:function(){
+				off_callback: function () {
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=activeSwitch",
-						data:{t:"' . $table . '",id:"' . (int)$field_id . '",value:0},
-						method:"get",
-						complete:function(){
+						data: {t:"' . $table . '",id:"' . (int)$field_id . '",value:0},
+						method: "get",
+						complete: function () {
 							hideLoader();
 						}
 					});
@@ -143,7 +143,7 @@ class Utils
 		$this->pageHelper->addJs('$("#' . $id . '-dialog").dialog({
 			autoOpen: false,
 			modal: true,
-			title: "' . 'Bezirk ändern' . '",
+			title: "' . $this->translator->trans('region.change') . '",
 			buttons: {
 				"Übernehmen": function () {
 					$("#' . $id . '").val($("#' . $id . '-hId").val());
@@ -159,55 +159,52 @@ class Utils
 		}
 
 		$this->pageHelper->addJs('$("#' . $id . '-tree").dynatree({
-				onSelect: function(select, node) {
-					$("#' . $id . '-hidden").html("");
-					$.map(node.tree.getSelectedNodes(), function(node){
-						if(' . $nodeselect . ')
-						{
-							$("#' . $id . '-hId").val(node.data.ident);
-							$("#' . $id . '").val(node.data.ident);
-							$("#' . $id . '-hName").val(node.data.title);
-						}
-						else
-						{
-							node.select(false);
-							pulseError("Sorry, Du kannst nicht als Region ein Land oder ein Bundesland auswählen.");
-						}
+			onSelect: function (select, node) {
+				$("#' . $id . '-hidden").html("");
+				$.map(node.tree.getSelectedNodes(), function (node) {
+					if (' . $nodeselect . ') {
+						$("#' . $id . '-hId").val(node.data.ident);
+						$("#' . $id . '").val(node.data.ident);
+						$("#' . $id . '-hName").val(node.data.title);
+					} else {
+						node.select(false);
+						pulseError("' . $this->translator->trans('region.no-huge') . '");
+					}
 
-					});
-				},
-				persist: false,
-				checkbox:true,
-				selectMode: 1,
-				initAjax: {
-					url: "/xhr.php?f=bezirkTree",
-					data: {p: "0" }
-				},
-				onLazyRead: function(node){
-					 node.appendAjax({url: "/xhr.php?f=bezirkTree",
-						data: { "p": node.data.ident },
-						dataType: "json",
-						success: function(node) {
-
-						},
-						error: function(node, XMLHttpRequest, textStatus, errorThrown) {
-
-						},
-						cache: false
-					});
-				}
-			});');
+				});
+			},
+			persist: false,
+			checkbox: true,
+			selectMode: 1,
+			initAjax: {
+				url: "/xhr.php?f=bezirkTree",
+				data: {p: "0"}
+			},
+			onLazyRead: function (node) {
+				node.appendAjax({url: "/xhr.php?f=bezirkTree",
+					data: {"p": node.data.ident},
+					dataType: "json",
+					success: function (node) {},
+					error: function (node, XMLHttpRequest, textStatus, errorThrown) {},
+					cache: false
+				});
+			}
+		});');
 		$this->pageHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-		$label = $this->translationHelper->s('Stammbezirk');
 		if (isset($option['label'])) {
 			$label = $option['label'];
+		} else {
+			$label = $this->translator->trans('terminology.homeRegion');
 		}
 
-		return $this->v_input_wrapper($label, '<span id="' . $id . '-preview">' . $bezirk['name'] . '</span> <span id="' . $id . '-button">Bezirk &auml;ndern</span>
-				<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $bezirk['id'] . '" />
-				<input type="hidden" name="' . $id . '-hName" id="' . $id . '-hName" value="' . $bezirk['id'] . '" />
-				<input type="hidden" name="' . $id . 'hId" id="' . $id . '-hId" value="' . $bezirk['id'] . '" />');
+		return $this->v_input_wrapper($label,
+			'<span id="' . $id . '-preview">' . $bezirk['name'] . '</span> '
+			. '<span id="' . $id . '-button">' . $this->translator->trans('region.change') . '</span>'
+			. '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $bezirk['id'] . '" />'
+			. '<input type="hidden" name="' . $id . '-hName" id="' . $id . '-hName" value="' . $bezirk['id'] . '" />'
+			. '<input type="hidden" name="' . $id . 'hId" id="' . $id . '-hId" value="' . $bezirk['id'] . '" />'
+		);
 	}
 
 	public function v_success($msg, $title = false)
@@ -280,7 +277,7 @@ class Utils
 			}
 			$out .= '<option' . $sel . ' value="' . $m . '">' . sprintf('%02d', $m) . '</option>';
 		}
-		$out .= '</select> Uhr';
+		$out .= '</select>' . $this->translator->trans('date.time', ['{time}' => '']);
 
 		return $out;
 	}
@@ -289,7 +286,9 @@ class Utils
 	{
 		$new_id = $this->identificationHelper->id($id);
 
-		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function(){$("#dialog_' . $id . '").dialog("open");});');
+		$this->pageHelper->addJs('$("#' . $new_id . '-button").button({}).on("click", function () {
+			$("#dialog_' . $id . '").dialog("open");
+		});');
 
 		return '<span id="' . $new_id . '-button">' . $label . '</span>';
 	}
@@ -300,7 +299,7 @@ class Utils
 		$label = $this->translationHelper->s($id);
 		$value = $this->dataHelper->getValue($id);
 
-		$this->pageHelper->addStyle('div#content {width: 580px;}div#right{width:222px;}');
+		$this->pageHelper->addStyle('div#content {width: 580px;} div#right {width: 222px;}');
 
 		$css = 'css/content.css,css/jquery-ui.css';
 		$class = 'ui-widget ui-widget-content ui-padding';
@@ -312,28 +311,25 @@ class Utils
 		$toolbar = ['styleselect', 'bold italic', 'alignleft aligncenter alignright', 'bullist outdent indent', 'media image link', 'paste', 'code'];
 		$addOpt = '';
 
-		if (isset($option['type'])) {
-			if ($option['type'] == 'email') {
-				$css = 'css/email.css';
-				$class = '';
-			}
+		if (isset($option['type']) && $option['type'] == 'email') {
+			$css = 'css/email.css';
+			$class = '';
 		}
 
 		$js = '
 		$("#' . $id . '").tinymce({
-			script_url : "./assets/tinymce/tinymce.min.js",
-			theme : "modern",
-			language : "de",
-			content_css : "' . $css . '",
+			script_url: "./assets/tinymce/tinymce.min.js",
+			theme: "modern",
+			language: "de",
+			content_css: "' . $css . '",
 			body_class: "' . $class . '",
 			menubar: false,
 			statusbar: false,
 			plugins: "' . implode(' ', $plugins) . '",
 			toolbar: "' . implode(' | ', $toolbar) . '",
 			relative_urls: false,
-			valid_elements : "a[href|name|target=_blank|class|style],span,strong,b,div[align|class],br,i,p[class],ul[class],li[class],ol,h1,h2,h3,h4,h5,h6,table,tr,td[valign=top|align|style],th,tbody,thead,tfoot,img[src|width|name|class]",
+			valid_elements: "a[href|name|target=_blank|class|style],span,strong,b,div[align|class],br,i,p[class],ul[class],li[class],ol,h1,h2,h3,h4,h5,h6,table,tr,td[valign=top|align|style],th,tbody,thead,tfoot,img[src|width|name|class]",
 			convert_urls: false' . $addOpt . '
-
 		});';
 
 		$this->pageHelper->addJs($js);
@@ -352,42 +348,39 @@ class Utils
 	{
 		$id = 'recip_choose';
 
-		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), '
+		return $this->v_input_wrapper($this->translator->trans('recipients.recipients'), '
 			<select class="select" name="' . $id . '" id="' . $id . '">
-				<option value="botschafter">Alle Botschafter bundesweit</option>
-				<option value="orgateam">Orgateam bundesweit</option>
+				<option value="botschafter">' . $this->translator->trans('recipients.botschafter') . '</option>
+				<option value="orgateam">' . $this->translator->trans('recipients.orgateam') . '</option>
 			</select>');
 	}
 
 	public function v_form_recip_chooser()
 	{
 		$id = 'recip_choose';
-		$out = '
-			<select class="select" name="' . $id . '" id="' . $id . '">
-				<option value="all">' . $this->translationHelper->s('recip_all') . '</option>
-				<option value="newsletter">Alle Newsletter-Abonnenten (mindestens Foodsaver)</option>
-				<option value="newsletter_all">Alle Newsletter-Abonnenten (Foodsharer, Foodsaver, alle)</option>
+		$out = '<select class="select" name="' . $id . '" id="' . $id . '">
+			<option value="all">' . $this->translator->trans('recipients.all') . '</option>
+			<option value="newsletter">' . $this->translator->trans('recipients.newsletter') . '</option>
+			<option value="newsletter_all">' . $this->translator->trans('recipients.newsletter_all') . '</option>
 
-				<option value="newsletter_only_foodsharer">NL Abonnenten NUR Foodsharer</option>
-				<option value="botschafter">Alle Botschafter weltweit</option>
-				<option value="storemanagers">Alle Betriebsverantwortlichen weltweit</option>
-				<option value="storemanagers_and_ambs">Alle Betriebsverantwortlichen + Botschafter</option>
-				<option value="all_no_botschafter">Alle Foodsaver ohne Botschafter</option>
-				<option value="orgateam">Orgateam</option>
-				<option value="choose">' . $this->translationHelper->s('recip_choose_bezirk') . '</option>
-				<option value="manual">Manuelle Eingabe</option>
-			</select>
-			<div id="' . $id . '-hidden" style="display: none;">
+			<option value="newsletter_only_foodsharer">' . $this->translator->trans('recipients.newsletter_only_foodsharer') . '</option>
+			<option value="botschafter">' . $this->translator->trans('recipients.botschafter') . '</option>
+			<option value="storemanagers">' . $this->translator->trans('recipients.storemanagers') . '</option>
+			<option value="storemanagers_and_ambs">' . $this->translator->trans('recipients.storemanagers_and_ambs') . '</option>
+			<option value="all_no_botschafter">' . $this->translator->trans('recipients.all_no_botschafter') . '</option>
+			<option value="orgateam">' . $this->translator->trans('recipients.orgateam') . '</option>
+			<option value="choose">' . $this->translator->trans('recipients.choose') . '</option>
+			<option value="manual">' . $this->translator->trans('recipients.manual') . '</option>
+		</select>
 
-			</div>
-			<div id="' . $id . 'manual-wrapper" style="display: none;">
-				' . $this->v_form_textarea($id . 'manual') . '
-			</div>
-			<div id="' . $id . '-tree-wrapper" style="display: none;">
-				' . $this->v_info('<strong>Hinweis</strong> Um untergeordnete Bezirke zu markieren, musst Du den Ordner erst öffnen! Sonst: Alle nicht sichtbaren Bezirke bekommen keine Mail.') . '
-				<div id="' . $id . '-tree">
-				</div>
-			</div>';
+		<div id="' . $id . '-hidden" style="display: none;"></div>
+		<div id="' . $id . 'manual-wrapper" style="display: none;">
+			' . $this->v_form_textarea($id . 'manual') . '
+		</div>
+		<div id="' . $id . '-tree-wrapper" style="display: none;">'
+			. $this->v_info($this->translator->trans('recipients.region-hint'))
+			. '<div id="' . $id . '-tree"></div>
+		</div>';
 
 		$this->pageHelper->addJs('
 			$(\'#' . $id . '\').on("change", function () {
@@ -420,7 +413,7 @@ class Utils
 				data: {p: "0"}
 			},
 			onLazyRead: function (node) {
-				 node.appendAjax({
+				node.appendAjax({
 					url: "/xhr.php?f=bezirkTree",
 					data: {"p": node.data.ident},
 					dataType: "json",
@@ -431,7 +424,7 @@ class Utils
 			}
 		});');
 
-		return $this->v_input_wrapper($this->translationHelper->s('recip_chooser'), $out);
+		return $this->v_input_wrapper($this->translator->trans('recipients.recipients'), $out);
 	}
 
 	public function v_photo_edit($src, $fsid = false)
@@ -460,28 +453,28 @@ class Utils
 				$("#' . $id . '-link").trigger("click");
 				$.fancybox.reposition();
 				jcrop = $("#' . $id . '-placeholder img").Jcrop({
-					 setSelect: [100, 0, 400, 400],
-					 aspectRatio: 35 / 45,
-					 onSelect: function (c) {
+					setSelect: [100, 0, 400, 400],
+					aspectRatio: 35 / 45,
+					onSelect: function (c) {
 						$("#' . $id . '-x").val(c.x);
 						$("#' . $id . '-y").val(c.y);
 						$("#' . $id . '-w").val(c.w);
 						$("#' . $id . '-h").val(c.h);
-					 }
-				 });
+					}
+				});
 
-				 $("#' . $id . '-save").show();
-				 $("#' . $id . '-save").button().on("click", function () {
-					 showLoader();
-					 $("#' . $id . '-action").val("crop");
-					 $.ajax({
+				$("#' . $id . '-save").show();
+				$("#' . $id . '-save").button().on("click", function () {
+					showLoader();
+					$("#' . $id . '-action").val("crop");
+					$.ajax({
 						url: "/xhr.php?f=cropagain",
 						data: {
-							x:parseInt($("#' . $id . '-x").val()),
-							y:parseInt($("#' . $id . '-y").val()),
-							w:parseInt($("#' . $id . '-w").val()),
-							h:parseInt($("#' . $id . '-h").val()),
-							fsid:' . (int)$fsid . '
+							x: parseInt($("#' . $id . '-x").val()),
+							y: parseInt($("#' . $id . '-y").val()),
+							w: parseInt($("#' . $id . '-w").val()),
+							h: parseInt($("#' . $id . '-h").val()),
+							fsid: ' . (int)$fsid . '
 						},
 						success: function (data) {
 							if (data == 1) {
@@ -491,17 +484,17 @@ class Utils
 						complete: function () {
 							hideLoader();
 						}
-					 });
-					 return false;
-				 });
+					});
+					return false;
+				});
 
-				 $("#' . $id . '-placeholder").css("height", "auto");
-				 hideLoader();
-				 setTimeout(function () {
-					 $.fancybox.update();
-					 $.fancybox.reposition();
-					 $.fancybox.toggle();
-				 }, 200);
+				$("#' . $id . '-placeholder").css("height", "auto");
+				hideLoader();
+				setTimeout(function () {
+					$.fancybox.update();
+					$.fancybox.reposition();
+					$.fancybox.toggle();
+				}, 200);
 			});
 
 			$("a[href=\'#new\']").on("click", function () {
@@ -535,9 +528,9 @@ class Utils
 
 		$this->pageHelper->addHidden('<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>');
 
-		$menu = [['name' => $this->translationHelper->s('edit_photo'), 'href' => '#edit']];
+		$menu = [['name' => $this->translator->trans('upload.edit_image'), 'href' => '#edit']];
 		if ($_GET['page'] == 'settings') {
-			$menu[] = ['name' => $this->translationHelper->s('upload_new_photo'), 'href' => '#new'];
+			$menu[] = ['name' => $this->translator->trans('upload.new_image'), 'href' => '#new'];
 		}
 
 		return '
@@ -549,7 +542,6 @@ class Utils
 
 	public function v_form($name, $elements, $option = [])
 	{
-		$js = '';
 		if (isset($option['id'])) {
 			$id = $this->identificationHelper->makeId($option['id']);
 		} else {
@@ -605,15 +597,6 @@ class Utils
 				ev.preventDefault();
 			}
 		});');
-
-		if (!empty($js)) {
-			$out .= '
-			<script type="text/javascript">
-			$(document).ready(function () {
-			' . $js . '
-			});
-			</script>';
-		}
 
 		$this->id[$id] = true;
 
@@ -871,15 +854,15 @@ class Utils
 				' . $source . ',
 				allowEdit: false,
 				allowAdd: false,
-				animSpeed:100
+				animSpeed: 100
 			});
 
-			$("#' . $id . '").on("keydown", function(event){
-				if(event.keyCode == 13) {
-				  event.preventDefault();
-				  return false;
+			$("#' . $id . '").on("keydown", function (event) {
+				if (event.keyCode == 13) {
+					event.preventDefault();
+					return false;
 				}
-			  });
+			});
 		');
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
@@ -904,18 +887,16 @@ class Utils
 
 		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
-				minWidth : 600,
-				scrolling :"auto",
-				closeClick : false,
-				helpers : {
-				  overlay : {closeClick: false}
+				minWidth: 600,
+				scrolling: "auto",
+				closeClick: false,
+				helpers: {
+					overlay: {closeClick: false}
 				}
 			});
 
-			$("#' . $id . '-opener").button().on("click", function(){
-
+			$("#' . $id . '-opener").button().on("click", function () {
 				$("#' . $id . '-link").trigger("click");
-
 			});
 		');
 
@@ -936,8 +917,8 @@ class Utils
 		$this->pageHelper->addHidden('
 		<div id="' . $id . '-fancy">
 			<div class="popbox">
-				<h3>' . $this->translationHelper->s($id) . ' Upload</h3>
-				<p class="subtitle">W&auml;hle ein Bild von Deinem Rechner</p>
+				<h3>' . $this->translator->trans('picture_upload_widget.picture_upload') . '</h3>
+				<p class="subtitle">' . $this->translator->trans('picture_upload_widget.choose_picture') . '</p>
 
 				<form id="' . $id . '-form" method="post" enctype="multipart/form-data" target="' . $id . '-iframe" action="/xhr.php?f=uploadPicture&id=' . $id . '&crop=' . $crop . '">
 
@@ -957,7 +938,7 @@ class Utils
 
 				<div id="' . $id . '-crop"></div>
 
-				<iframe src="" id="' . $id . '-iframe" name="' . $id . '-iframe" style="width:1px;height:1px;visibility:hidden;"></iframe>
+				<iframe src="" id="' . $id . '-iframe" name="' . $id . '-iframe" style="width: 1px; height: 1px; visibility: hidden;"></iframe>
 			</div>
 		</div>');
 
@@ -969,7 +950,7 @@ class Utils
 		}
 		$out = '
 			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
-			<span id="' . $id . '-opener">' . $this->translationHelper->s('upload_picture') . '</span><span style="display:none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
+			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
@@ -985,15 +966,21 @@ class Utils
 		}
 
 		$this->pageHelper->addJs('
-		$("#' . $id . '-button").button().on("click", function(){$("#' . $id . '").trigger("click") ;});
-		$("#' . $id . '").on("change", function(){$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());});');
+			$("#' . $id . '-button").button().on("click", function () {
+				$("#' . $id . '").trigger("click");
+			});
 
-		$btlabel = $this->translationHelper->s('choose_file');
+			$("#' . $id . '").on("change", function () {
+				$("#' . $id . '-info").html($("#' . $id . '").val().split("\\\").pop());
+			});'
+		);
+
+		$btlabel = $this->translator->trans('upload.choose_file');
 		if (isset($option['btlabel'])) {
 			$btlabel = $option['btlabel'];
 		}
 
-		$out = '<input style="display:block;visibility:hidden;margin-bottom:-23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
+		$out = '<input style="display: block; visibility: hidden; margin-bottom: -23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
 
 		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
 	}
@@ -1044,7 +1031,7 @@ class Utils
 		if (isset($option['required'])) {
 			$out['class'] .= ' required';
 			if (!isset($option['required']['msg'])) {
-				$out['msg']['required'] = $name . ' darf nicht leer sein';
+				$out['msg']['required'] = $this->translator->trans('validate.required', ['{it}' => $name]);
 			}
 		}
 
@@ -1069,21 +1056,18 @@ class Utils
 			$values = [];
 		}
 
-		$out = '
-		<select class="input select value" name="' . $id . '" id="' . $id . '">
-			<option value="">Bitte ausw&auml;hlen...</option>';
+		$out = '<select class="input select value" name="' . $id . '" id="' . $id . '">'
+			. '<option value="">' . $this->translator->trans('select') . '</option>';
 		if (!empty($values)) {
 			foreach ($values as $v) {
 				$sel = '';
 				if ($selected == $v['id']) {
 					$sel = ' selected="selected"';
 				}
-				$out .= '
-				<option value="' . $v['id'] . '"' . $sel . '>' . $v['name'] . '</option>';
+				$out .= '<option value="' . $v['id'] . '"' . $sel . '>' . $v['name'] . '</option>';
 			}
 		}
-		$out .= '
-		</select>';
+		$out .= '</select>';
 
 		return $this->v_input_wrapper($label, $out, $id, $option);
 	}
@@ -1106,7 +1090,7 @@ class Utils
 			if (isset($option['required']['msg'])) {
 				$error_msg = $option['required']['msg'];
 			} else {
-				$error_msg = $label . ' darf nicht leer sein';
+				$error_msg = $this->translator->trans('validate.required', ['{it}' => $label]);
 			}
 		}
 
@@ -1124,7 +1108,7 @@ class Utils
 		}
 
 		if (isset($option['click'])) {
-			$label = '<a href="#" onclick="' . $option['click'] . ';return false;">' . $label . '</a>';
+			$label = '<a href="#" onclick="' . $option['click'] . '; return false;">' . $label . '</a>';
 		}
 
 		$label_in = '<label class="wrapper-label ui-widget" for="' . $id . '">' . $label . $star . '</label>';
@@ -1149,7 +1133,7 @@ class Utils
 			' . $content . '
 		</div>
 		<input type="hidden" id="' . $id . '-error-msg" value="' . $error_msg . '" />
-		<div style="clear:both;"></div>
+		<div style="clear: both;"></div>
 		</div>';
 	}
 
@@ -1163,18 +1147,19 @@ class Utils
 		}
 
 		$this->pageHelper->addJs('
-			 $(function() {
-				$( "#' . $id . '_from" ).datepicker({
+			$(function () {
+				$("#' . $id . '_from").datepicker({
 					changeMonth: true,
-					onClose: function( selectedDate ) {
-						$( "#' . $id . '_to" ).datepicker( "option", "minDate", selectedDate );
+					onClose: function (selectedDate) {
+						$("#' . $id . '_to").datepicker("option", "minDate", selectedDate);
 					},
 					' . implode(',', $option['options']['from']) . '
 				});
-				$( "#' . $id . '_to" ).datepicker({
+
+				$("#' . $id . '_to").datepicker({
 					changeMonth: true,
-					onClose: function( selectedDate ) {
-						$( "#' . $id . '_from" ).datepicker( "option", "maxDate", selectedDate );
+					onClose: function (selectedDate) {
+						$("#' . $id . '_from").datepicker("option", "maxDate", selectedDate);
 					}
 					' . implode(',', $option['options']['to']) . '
 				});
@@ -1187,9 +1172,10 @@ class Utils
 
 		return $this->v_input_wrapper(
 			$label,
-			'
-			<input placeholder="' . $this->translationHelper->s('from') . '" class="input text date value" type="text" id="' . $id . '_from" name="' . $id . '[from]">
-			<input placeholder="' . $this->translationHelper->s('to') . '" class="input text date value" type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
+			'<input placeholder="' . $this->translator->trans('date.from') . '" class="input text date value"'
+			. ' type="text" id="' . $id . '_from" name="' . $id . '[from]">
+			<input placeholder="' . $this->translator->trans('date.to') . '" class="input text date value"'
+			. ' type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
 			$id,
 			$option
 		);
@@ -1205,11 +1191,11 @@ class Utils
 
 		$value = $this->dataHelper->getValue($id);
 
+		// additional datepicker config in client/lib/jquery-ui-addons.js
 		$this->pageHelper->addJs('$("#' . $id . '").datepicker({
 			changeYear: true,
 			changeMonth: true,
 			dateFormat: "yy-mm-dd",
-			monthNames: [ "Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ],
 			yearRange: "' . $yearRangeFrom . ':' . $yearRangeTo . '"
 		});');
 
