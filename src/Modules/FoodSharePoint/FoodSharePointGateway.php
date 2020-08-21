@@ -12,8 +12,8 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
 {
-	private $regionGateway;
-	private $bellGateway;
+	private RegionGateway $regionGateway;
+	private BellGateway $bellGateway;
 
 	public function __construct(
 		Database $db,
@@ -73,11 +73,11 @@ class FoodSharePointGateway extends BaseGateway
 		);
 	}
 
-	public function updateFSPManagers(int $foodSharePointId, $fspManager): void
+	public function updateFSPManagers(int $foodSharePointId, array $fspManagers): void
 	{
 		$values = [];
 
-		foreach ($fspManager as $fs) {
+		foreach ($fspManagers as $fs) {
 			$values[] = [
 				'fairteiler_id' => $foodSharePointId,
 				'foodsaver_id' => (int)$fs,
@@ -444,7 +444,7 @@ class FoodSharePointGateway extends BaseGateway
 			['href' => '/?page=fairteiler&sub=check&id=' . $foodSharePointId],
 			['bezirk' => $region['name'], 'name' => $foodSharePoint['name']],
 			'new-fairteiler-' . $foodSharePointId,
-			0
+			false
 		);
 		$this->bellGateway->addBell($ambassadorIds, $bellData);
 	}

@@ -7,8 +7,8 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class ProfilePermissions
 {
-	private $session;
-	private $regionGateway;
+	private Session $session;
+	private RegionGateway $regionGateway;
 
 	public function __construct(Session $session, RegionGateway $regionGateway)
 	{
@@ -16,7 +16,7 @@ class ProfilePermissions
 		$this->regionGateway = $regionGateway;
 	}
 
-	public function mayAdministrateUserProfile($userId, $regionId = 0): bool
+	public function mayAdministrateUserProfile(int $userId, int $regionId = 0): bool
 	{
 		if (!$this->session->isAmbassador()) {
 			return false;
@@ -65,7 +65,7 @@ class ProfilePermissions
 		return $this->session->may();
 	}
 
-	public function mayDeleteUser($userId): bool
+	public function mayDeleteUser(int $userId): bool
 	{
 		return $this->session->id() == $userId || $this->session->may('orga');
 	}

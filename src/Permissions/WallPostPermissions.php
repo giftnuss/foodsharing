@@ -9,10 +9,10 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 class WallPostPermissions
 {
-	private $regionGateway;
-	private $eventGateway;
-	private $eventPermission;
-	private $session;
+	private RegionGateway $regionGateway;
+	private EventGateway $eventGateway;
+	private EventPermissions $eventPermission;
+	private Session $session;
 
 	public function __construct(
 		RegionGateway $regionGateway,

@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session;
 
 class SearchPermissions
 {
-	private $session;
+	private Session $session;
 
 	public function __construct(Session $session)
 	{

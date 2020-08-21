@@ -8,7 +8,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 final class ContentPermissions
 {
-	private $session;
+	private Session $session;
 
 	private $PR_PARTNER_AND_TEAM_CONTENT_IDS = ['id' => [ContentId::PARTNER_PAGE_10,
 														 ContentId::TEAM_HEADER_PAGE_39,
@@ -46,7 +46,7 @@ final class ContentPermissions
 		$this->session = $session;
 	}
 
-	public function mayEditContent()
+	public function mayEditContent(): bool
 	{
 		return $this->session->may('orga')
 			|| $this->session->isAdminFor(RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP)

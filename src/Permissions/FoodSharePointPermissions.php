@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session;
 
 class FoodSharePointPermissions
 {
-	private $session;
+	private Session $session;
 
 	public function __construct(Session $session)
 	{

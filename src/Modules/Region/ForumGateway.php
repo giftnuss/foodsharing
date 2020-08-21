@@ -135,9 +135,9 @@ class ForumGateway extends BaseGateway
 		return $threadId;
 	}
 
-	public function activateThread($thread_id)
+	public function activateThread(int $threadId): void
 	{
-		$this->db->update('fs_theme', ['active' => 1], ['id' => $thread_id]);
+		$this->db->update('fs_theme', ['active' => 1], ['id' => $threadId]);
 	}
 
 	public function deleteThread($thread_id)

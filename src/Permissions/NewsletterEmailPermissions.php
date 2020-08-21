@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class NewsletterEmailPermissions
 {
-	private $session;
+	private Session $session;
 
 	public function __construct(
 		Session $session

@@ -7,8 +7,8 @@ use Foodsharing\Modules\Region\ForumGateway;
 
 class ForumPermissions
 {
-	private $forumGateway;
-	private $session;
+	private ForumGateway $forumGateway;
+	private Session $session;
 
 	public function __construct(ForumGateway $forumGateway, Session $session)
 	{
@@ -32,7 +32,7 @@ class ForumPermissions
 		return !$region['moderated'];
 	}
 
-	public function mayPostToRegion($regionId, $ambassadorForum): bool
+	public function mayPostToRegion(int $regionId, $ambassadorForum): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
@@ -56,7 +56,7 @@ class ForumPermissions
 		return $this->mayPostToRegion($forumId, $forumSubId);
 	}
 
-	public function mayPostToThread($threadId): bool
+	public function mayPostToThread(int $threadId): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
@@ -71,7 +71,7 @@ class ForumPermissions
 		return false;
 	}
 
-	public function mayModerate($threadId): bool
+	public function mayModerate(int $threadId): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;
@@ -86,27 +86,27 @@ class ForumPermissions
 		return false;
 	}
 
-	public function mayAccessThread($threadId): bool
+	public function mayAccessThread(int $threadId): bool
 	{
 		return $this->mayPostToThread($threadId);
 	}
 
-	public function mayAccessAmbassadorBoard($regionId): bool
+	public function mayAccessAmbassadorBoard(int $regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayActivateThreads($regionId): bool
+	public function mayActivateThreads(int $regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayChangeStickiness($regionId): bool
+	public function mayChangeStickiness(int $regionId): bool
 	{
 		return $this->mayPostToRegion($regionId, true);
 	}
 
-	public function mayDeletePost($post): bool
+	public function mayDeletePost(array $post): bool
 	{
 		if ($this->session->isOrgaTeam()) {
 			return true;

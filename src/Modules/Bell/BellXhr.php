@@ -26,7 +26,6 @@ class BellXhr extends Control
 		$xhr = new Xhr();
 		$bells = $this->gateway->listBells($this->session->id(), 20);
 
-		// $xhr->addData('aaa', $bells);
 		$xhr->addData('list', $bells);
 
 		$xhr->send();
@@ -37,7 +36,8 @@ class BellXhr extends Control
 	 */
 	public function delbell()
 	{
-		$this->gateway->delBellForFoodsaver($_GET['id'], $this->session->id());
+		$bellId = intval($_GET['id']);
+		$this->gateway->delBellForFoodsaver($bellId, $this->session->id());
 	}
 
 	/**

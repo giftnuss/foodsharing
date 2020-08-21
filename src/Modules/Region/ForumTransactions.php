@@ -114,13 +114,9 @@ class ForumTransactions
 		return $threadId;
 	}
 
-	public function activateThread($threadId, $region = null, $ambassadorForum = false)
+	public function activateThread(int $threadId): void
 	{
 		$this->forumGateway->activateThread($threadId);
-		/* TODO: this needs proper first activation handling */
-		if ($region) {
-			$this->notifyMembersOfForumAboutNewThreadViaMail($region, $threadId, $ambassadorForum);
-		}
 	}
 
 	public function notificationMail($recipients, $tpl, $data)

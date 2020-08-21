@@ -690,7 +690,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function confirmFetcher($fsid, $storeId, $date): int
+	public function confirmFetcher(int $fsid, int $storeId, $date): int
 	{
 		$result = $this->db->update(
 		'fs_abholer',
@@ -1103,7 +1103,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		foreach ($expiredBells as $bell) {
 			$storeId = substr($bell->identifier, strlen('store-fetch-unconfirmed-'));
-			$this->updateBellNotificationForStoreManagers($storeId);
+			$this->updateBellNotificationForStoreManagers(intval($storeId));
 		}
 	}
 

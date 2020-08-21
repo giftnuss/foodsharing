@@ -6,7 +6,7 @@ use Foodsharing\Lib\Session;
 
 final class EventPermissions
 {
-	private $session;
+	private Session $session;
 
 	public function __construct(Session $session)
 	{
