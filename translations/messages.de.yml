@@ -14,6 +14,7 @@ upload:
   choose_file: Datei hochladen
   new_file: Neue Datei hochladen
   crop_dialog_title: Bild ausschneiden
+  image-problem: Deine Datei scheint nicht in Ordnung zu sein, nimm am besten ein normales jpg Bild
 
 button:
   save: Speichern
@@ -126,6 +127,11 @@ group:
   quit: Verlassen
   really_quit_name: Möchtest Du wirklich den Bezirk bzw. das Team %name% verlassen?
   delete_group_sure: Soll die Arbeitsgruppe/der Bezirk {groupName} wirklich gelöscht werden?
+  function:
+    title: Arbeitsgruppenfunktion
+    welcome: Begrüßung
+    invalid: 'Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden.'
+    duplicate: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
 
 legal:
   pp: Datenschutzerklärung
@@ -394,7 +400,12 @@ store:
     reallyRemove: Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?
     makeJumper: Auf die Springerliste
     makeRegularTeamMember: In das Team aufnehmen
-  request_withdrawn: Deine Anfrage wurde erfolgreich zurückgezogen!
+  request:
+    got-it: 'Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden.'
+    no-sm: 'Für diesen Betrieb gibt es noch keine Verantwortlichen.'
+    amb-instead: 'Die Botschafter*innen wurden informiert.'
+    orga-instead: 'Das Orga-Team wurde informiert.'
+    withdrawn: 'Die Anfrage wurde erfolgreich zurückgezogen.'
 
 pickup:
   dates: Abholtermine
@@ -493,6 +504,7 @@ chat:
 wall:
   name: Pinnwand
   message_placeholder: Nachricht schreiben...
+  by: '{when} von {name}'
 
 events:
   bread: Termine
@@ -1167,10 +1179,33 @@ region:
   forum-redirect: 'Für Regionen gibt es keine Pinnwand. Du wurdest zum Forum weitergeleitet.'
   bread: Bezirke verwalten
   new: Neuer Bezirk
+  created: '{region} wurde angelegt'
   edit: Bezirk bearbeiten
   noParent: Ohne `Eltern` Bezirk
   delete: Bezirk löschen
   none: Noch kein Bezirk gewählt
+  type:
+    title: Bezirkstyp
+    city: Stadt
+    bigcity: Großstadt (ohne Anmeldemöglichkeit)
+    townpart: Stadtteil
+    district: Bezirk
+    region: Region
+    state: Bundesland
+    country: Land
+    workgroup: Arbeitsgruppe
+  hull:
+    parent: Master-Bezirk
+    parent-info: Alle Foodsaver sind automatisch mit im Master-Bezirk, sofern einer angegeben wurde
+    title: Master-Update
+    closure: Bei allen Kindbezirken {region} als Master eintragen
+    start: Master-Update starten
+    confirm: Master-Update wirklich starten?
+  mail:
+    name-info: 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.'
+    sender: Absendername
+  confirm: Sicher, dass du die Änderungen am Bezirk speichern möchtest?
+  edit_success: Bezirk wurde gespeichert!
 
 blog:
   bread: Blog

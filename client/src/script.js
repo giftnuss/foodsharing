@@ -578,7 +578,7 @@ export async function withdrawStoreRequest (fsid, bid) {
 
   try {
     await removeStoreRequest(bid, fsid)
-    pulseSuccess(i18n('store.request_withdrawn'))
+    pulseSuccess(i18n('store.request.withdrawn'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))
   }
