@@ -12,7 +12,7 @@
 - Allow seeing basket markers on map without being logged in !1636 @alex.simm
 
 ## Refactoring
-- Move registration request to the REST endpoint #819 !1632 @alex.simm
+- Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 
 ## Dev/Test/CI stuff
 
