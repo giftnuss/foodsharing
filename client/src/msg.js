@@ -313,7 +313,12 @@ const msg = {
   },
 
   loadMore: async function () {
-    const lmid = parseInt($('#msg-conversation li:first').attr('id').replace('msg-', ''))
+    let lmid = $('#msg-conversation li:first').attr('id')
+    if (lmid === undefined) {
+      msg.moreIsLoading = false
+      return
+    }
+    lmid = parseInt(lmid.replace('msg-', ''))
 
     if (!msg.moreIsLoading && !msg.firstMessageReached) {
       msg.moreIsLoading = true
