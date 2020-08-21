@@ -94,6 +94,33 @@ group:
   mail_link_title:
     workgroup: AG-Postfach
     region: Bezirks-Postfach
+  contact:
+    title: '{group} kontaktieren'
+    admins: '{count} Ansprechpartner:'
+    disclaimer: |
+      Durch Senden einer Nachricht an diese Arbeitsgruppe
+      sehen alle Administratoren der Arbeitsgruppe deine E-Mail-Adresse,
+      welche du auf deinem foodsharing-Profil angegeben hast.
+      Dir wird eine Kopie dieser Nachricht als E-Mail zugeschickt.
+    empty: Schreib doch erst einmal etwas ;)
+    send: Nachricht senden
+    sent: Nachricht wurde erfolgreich versendet!
+  apply:
+    title: 'Bewerbung für {group}'
+    summary: '{name} möchte gerne in der Arbeitsgruppe {group} mitmachen.'
+    motivation: Was ist deine Motivation, in der Gruppe {group} mitzuwirken?
+    faehigkeit: Was sind deine Fähigkeiten, die du in diesem Bereich hast?
+    erfahrung: |
+      Kannst du in der Gruppe auf Erfahrungen, die du woanders gesammelt hast zurückgreifen?
+      Wenn ja, wo bzw. was?
+    zeit: Wie viele Stunden hast du pro Woche Zeit und Lust dafür aufzuwenden?
+    time:
+      1: 1-2 Stunden
+      2: 2-3 Stunden
+      3: 3-4 Stunden
+      5: 5 oder mehr Stunden
+    send: Bewerbung absenden
+    sent: Bewerbung wurde abgeschickt!
   application_requirements:
     requirements: Wer kann sich für diese Gruppe eintragen?
     nobody: Niemand (geschlossene Gruppe)
