@@ -1911,7 +1911,7 @@ base:
   slogan: Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland
   jsrequired: Ohne JavaScript läuft hier leider nichts.
 
-email:
+email_template:
   request_from: Anfrage von
   from: -- Von
   to: an
@@ -1929,18 +1929,18 @@ email:
     general_information_requirements: Angaben gemäß § 5 TMG
     address: 'foodsharing e.V. \n Neven-DuMont-Str. 14 \n 50667 Köln \n Vertreten durch:\n\n Frank Bowinkelmann \n Kontakt:\n E-Mail: info@foodsharing.de\n Registereintrag:\n\n Eintragung im Vereinsregister\n Registergericht: Amtsgericht Köln\n Registernummer: VR 17439\n Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:\n  Frank Bowinkelmann'
   unknown_email: Unbekannte E-Mail-Adresse
-  unknown_email2: Die E-Mail-Adresse {{ ADDRESS }} ist nicht bekannt.
+  unknown_email2: Die E-Mail-Adresse %ADDRESS% ist nicht bekannt.
   withlove: Alles Liebe,
   yourFSteam: Dein foodsharing-Team.
   in: in
   login: Einloggen zum Antworten
   confirm_topic: 'Thema muss bestätigt werden:'
   confirm_link: möchte das Thema
-  confirm_BOT: absenden. Da Du Botschafter für {{ BEZIRK }} bist, musst Du es bestätigen, bevor es veröffentlicht wird.
+  confirm_BOT: absenden. Da Du Botschafter für %BEZIRK% bist, musst Du es bestätigen, bevor es veröffentlicht wird.
   foodsharepoint: -- Fair-Teiler
   reply: Antworten
   warning: Warnung
-  slot_empty: Für die nächste Abholung bei {{ BETRIEB }} hat sich noch niemand zum Abholen eingetragen
+  slot_empty: Für die nächste Abholung bei %BETRIEB% hat sich noch niemand zum Abholen eingetragen
   you_responsible:
     part1: Du bist verantwortlich für
     part2: Leider hat sich für den nächsten Termin noch niemand zum Abholen eingetragen.
@@ -1952,7 +1952,7 @@ email:
     link: https://devdocs.foodsharing.network/it-tasks.html
     or: oder
     support_mail: it@foodsharing.network
-  foodbasket_request: Dein Essenskorb wurde von {{ SENDER }} angefragt
+  foodbasket_request: Dein Essenskorb wurde von %SENDER% angefragt
 
 buddy:
   request_sent: Anfrage versendet!

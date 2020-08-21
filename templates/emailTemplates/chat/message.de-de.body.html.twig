@@ -1,6 +1,6 @@
 <div class="border">
 <p>{{ MESSAGE }}</p>
-    <p>{{ 'email.from'|translate }}: {{ SENDER }} {% if CHATNAME != SENDER %} {{ 'email.to'|translate }} {{ CHATNAME }}{% endif %}</p>
+    <p>{{ 'email_template.from'|trans }}: {{ SENDER }} {% if CHATNAME != SENDER %} {{ 'email_template.to'|trans }} {{ CHATNAME }}{% endif %}</p>
 </div>
 <p></p>
-<p><a href="{{ LINK }}" target="_blank" class="button">{{ 'email.reply'|translate }}</a></p>
+<p><a href="{{ LINK }}" target="_blank" class="button">{{ 'email_template.reply'|trans }}</a></p>
