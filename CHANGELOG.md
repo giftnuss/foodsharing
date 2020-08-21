@@ -14,6 +14,7 @@
 - Allow seeing basket markers on map without being logged in !1636 @alex.simm
 - Removed form for new amb's #821 !1619 @chriswalg
 
+- Fix default center value for leaflet map !1644 @alex.simm
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm

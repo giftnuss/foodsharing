@@ -16,7 +16,10 @@ class vMap extends vCore
 	public function __construct($center = false)
 	{
 		if (!$center) {
-			$center = [MapConstants::CENTER_GERMANY_LAT, MapConstants::CENTER_GERMANY_LON];
+			$center = [
+				'lat' => MapConstants::CENTER_GERMANY_LAT,
+				'lon' => MapConstants::CENTER_GERMANY_LON
+			];
 		}
 		$this->center = $center;
 

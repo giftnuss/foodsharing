@@ -24,7 +24,7 @@ export async function initializeMap (el, cb = null) {
   if (!mapOptions) return console.error('map is missing data-options')
 
   const {
-    center,
+    center = { lat: 50.89, lon: 10.13 },
     zoom = 13,
     searchpanel = false,
     markers = [],
