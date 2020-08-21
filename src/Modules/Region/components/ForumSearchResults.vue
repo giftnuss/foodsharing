@@ -47,7 +47,7 @@ export default {
     },
     subforumId: {
       type: Number,
-      default: -1
+      required: true
     },
     query: {
       type: String,
