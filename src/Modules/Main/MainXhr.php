@@ -33,7 +33,7 @@ class MainXhr extends Control
 					'image/pjpeg',
 					'image/png'
 				],
-				$this->translationHelper->s('no_image')
+				$this->translator->trans('upload.no_image')
 			);
 			try {
 				$file = $upload->move('tmp', 'picture');
@@ -52,16 +52,21 @@ class MainXhr extends Control
 		}
 
 		if (!$check) {
-			$function = 'window.parent.pulseError(\'Sorry, dieses Foto konnte nicht verarbeitet werden.\');window.parent.$(\'.attach-preview\').hide();';
+			$function = 'window.parent.pulseError(\''
+				. $this->translationHelper->s('upload.image-problem')
+				. '\');'
+				. 'window.parent.$(\'.attach-preview\').hide();';
 		}
 
 		echo '<html><head><title>upload</title>
 		<script type="text/javascript">
-			function placeThumb()
-			{
-				window.parent.$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", false );
+			function placeThumb() {
+				window.parent.$(".ui-dialog-buttonpane .ui-button").button("option", "disabled", false);
 				window.parent.$(\'#' . $inid . '-filename\').val(\'' . $newname . '\');
-				window.parent.$(\'.attach-preview\').html(\'<a href="#" onclick="return false;" class="preview-thumb" rel="wallpost-gallery"><img height="60" src="/tmp/thumb-' . $newname . '">&nbsp;</a><div style="clear:both"></div>\');
+				window.parent.$(\'.attach-preview\').html(\''
+					. '<a href="#" onclick="return false;" class="preview-thumb" rel="wallpost-gallery">'
+					. '<img height="60" src="/tmp/thumb-' . $newname . '">&nbsp;'
+					. '</a><div style="clear: both;"></div>\');
 			}
 		</script>
 		</head><body onload="' . $function . '"></body></html>';

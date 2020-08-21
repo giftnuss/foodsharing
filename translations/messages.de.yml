@@ -4,6 +4,7 @@ picture_upload_widget:
   choose_picture: Wähle ein Bild von Deinem Rechner!
 
 upload:
+  no_image: 'Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!'
   no_image_yet: Noch kein Bild hochgeladen
   no_image_chosen: Noch keine Datei ausgewählt
   preview_image: Vorschau

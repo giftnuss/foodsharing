@@ -1,7 +1,6 @@
 <?php
 global $g_lang;
 
-$g_lang['upload_no_image'] = 'Die hochgeladene Datei ist kein Foto. Bitte wähle eine andere Datei!';
 $g_lang['login_email'] = 'Deine E-Mail-Adresse';
 $g_lang['login_location'] = 'Deine Adresse';
 $g_lang['prev'] = 'zur&uuml;ck';
