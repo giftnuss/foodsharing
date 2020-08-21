@@ -13,7 +13,6 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Utility\TranslationHelper;
 
 class Session
 {
@@ -24,7 +23,6 @@ class Session
 	private $regionGateway;
 	private $storeGateway;
 	private $initialized = false;
-	private $translationHelper;
 
 	public function __construct(
 		Mem $mem,
@@ -32,8 +30,7 @@ class Session
 		FoodsaverGateway $foodsaverGateway,
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
-		StoreGateway $storeGateway,
-		TranslationHelper $translationHelper
+		StoreGateway $storeGateway
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -41,7 +38,6 @@ class Session
 		$this->quizHelper = $quizHelper;
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
-		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -211,7 +207,7 @@ class Session
 	/**
 	 * gets a user specific option and will be available after next login.
 	 */
-	public function option($key)
+	public function getOption($key)
 	{
 		return $this->get('useroption_' . $key);
 	}
@@ -220,25 +216,6 @@ class Session
 	{
 		$this->foodsaverGateway->setOption($this->id(), $key, $val);
 		$this->set('useroption_' . $key, $val);
-	}
-
-	public function addMsg($message, $type, $title = null)
-	{
-		$this->checkInitialized();
-		$msg = fSession::get('g_message', []);
-
-		if (!isset($msg[$type])) {
-			$msg[$type] = [];
-		}
-
-		if (!$title) {
-			$title = ' ' . $this->translationHelper->s($type);
-		} else {
-			$title = ' ';
-		}
-
-		$msg[$type][] = ['msg' => $message, 'title' => $title];
-		fSession::set('g_message', $msg);
 	}
 
 	/**

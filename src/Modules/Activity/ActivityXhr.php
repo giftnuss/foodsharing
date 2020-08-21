@@ -56,7 +56,7 @@ class ActivityXhr extends Control
 			'buddywall' => []
 		];
 
-		if ($sesOptions = $this->session->option('activity-listings')) {
+		if ($sesOptions = $this->session->getOption('activity-listings')) {
 			foreach ($sesOptions as $o) {
 				if (isset($hidden_ids[$o['index']])) {
 					$hidden_ids[$o['index']][$o['id']] = $o['id'];
@@ -117,7 +117,7 @@ class ActivityXhr extends Control
 
 		$option = [];
 
-		if ($list = $this->session->option('activity-listings')) {
+		if ($list = $this->session->getOption('activity-listings')) {
 			$option = $list;
 		}
 

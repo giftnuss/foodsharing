@@ -108,7 +108,7 @@ class DashboardControl extends Control
 				$this->translationHelper->s('anrede_' . $this->session->user('gender'))
 			], $cnt['body']);
 
-			if ($this->session->option('quiz-infobox-seen')) {
+			if ($this->session->getOption('quiz-infobox-seen')) {
 				$cnt['body'] = '<div>' . substr(strip_tags($cnt['body']), 0, 120) . ' ...<a href="#" onclick="$(this).parent().hide().next().show();return false;">weiterlesen</a></div><div style="display:none;">' . $cnt['body'] . '</div>';
 			} else {
 				$cnt['body'] = $cnt['body'] . '<p><a href="#" onclick="ajreq(\'quizpopup\', {app:\'quiz\'});return false;">Weiter zum Quiz</a></p><p><a href="#" onclick="$(this).parent().parent().hide();ajax.req(\'quiz\', \'hideinfo\');return false;"><i class="far fa-check-square"></i> Hinweis gelesen und nicht mehr anzeigen</a></p>';
