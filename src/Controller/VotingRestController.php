@@ -56,6 +56,10 @@ class VotingRestController extends AbstractFOSRestController
 			throw new HttpException(404);
 		}
 
+		if (!$this->votingPermissions->maySeePoll($poll)) {
+			throw new HttpException(403);
+		}
+
 		// if possible, request the poll again and include its results
 		if ($this->votingPermissions->maySeeResults($poll)) {
 			$poll = $this->votingGateway->getPoll($pollId, true);

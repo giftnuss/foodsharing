@@ -33,6 +33,11 @@ final class VotingPermissions
 		$this->regionGateway = $regionGateway;
 	}
 
+	public function maySeePoll(Poll $poll): bool
+	{
+		return $this->session->mayBezirk($poll->regionId);
+	}
+
 	public function maySeeResults(Poll $poll): bool
 	{
 		return $poll->endDate < new DateTime();

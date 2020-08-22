@@ -907,18 +907,24 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
-	public function createPollOption(int $pollId, array $extraParams = [])
+	public function createPollOption(int $pollId, array $values, array $extraParams = [])
 	{
 		$params = array_merge([
-			'option_text' => $this->faker->text(30),
-			'upvotes' => 0,
-			'neutralvotes' => 0,
-			'downvotes' => 0
+			'option_text' => $this->faker->text(30)
 		], $extraParams);
 		$params['poll_id'] = $pollId;
 		$params['option'] = $this->countInDatabase('fs_poll_has_options', ['poll_id' => $pollId]);
 
 		$this->haveInDatabase('fs_poll_has_options', $params);
+
+		foreach ($values as $value) {
+			$this->haveInDatabase('fs_poll_option_has_value', [
+				'poll_id' => $pollId,
+				'option' => $params['option'],
+				'value' => (int)$value,
+				'votes' => 0
+			]);
+		}
 
 		return $params;
 	}

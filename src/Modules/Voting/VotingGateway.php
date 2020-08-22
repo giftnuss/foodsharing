@@ -66,7 +66,7 @@ class VotingGateway extends BaseGateway
 					$mappedValues[$v['value']] = $v['votes'];
 				}
 			} else {
-				$values = $this->db->fetchAllByCriteria('fs_poll_option_has_value', 'value', [
+				$values = $this->db->fetchAllValuesByCriteria('fs_poll_option_has_value', 'value', [
 					'poll_id' => $pollId, 'option' => $d['option']]);
 				$mappedValues = array_combine($values, array_fill(0, sizeof($values), -1));
 			}
