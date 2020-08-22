@@ -217,7 +217,7 @@ class ProfileView extends View
 		if ($this->foodsaver['buddy'] === BuddyId::NO_BUDDY && $this->foodsaver['id'] != $this->session->id()) {
 			$name = explode(' ', $this->foodsaver['name']);
 			$name = $name[0];
-			$opt .= '<li class="buddyRequest"><a onclick="ajreq(\'request\',{app:\'buddy\',id:' . (int)$this->foodsaver['id'] . '});return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
+			$opt .= '<li class="buddyRequest"><a onclick="sendBuddyRequest(' . (int)$this->foodsaver['id'] . ');return false;" href="#"><i class="fas fa-user fa-fw"></i>Ich kenne ' . $name . '</a></li>';
 		}
 		if ($profileVisitorMaySeeHistory) {
 			$opt .= '<li><a href="#" onclick="ajreq(\'history\',{app:\'profile\',fsid:' . (int)$this->foodsaver['id'] . ',type:1});"><i class="fas fa-file-alt fa-fw"></i>Passhistorie</a></li>';

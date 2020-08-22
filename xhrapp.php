@@ -39,9 +39,6 @@ $csrf_whitelist = [
 	// 'Bell::infobar',
 	// 'Bell::delbell',
 	// 'Bell::markBellsAsRead',
-	// 'Buddy::request',
-	// 'Buddy::removeRequest',
-	// 'Buddy::makeCard',
 	// 'Email::testmail' .
 	// 'Event::accept',
 	// 'Event::maybe',

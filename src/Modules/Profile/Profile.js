@@ -4,12 +4,13 @@ import './Profile.css'
 import $ from 'jquery'
 import { expose } from '@/utils'
 import { sendBanana } from '@/api/user'
+import { sendBuddyRequest } from '@/api/buddy'
 import { pulseError, pulseInfo, profile } from '@/script'
 import i18n from '@/i18n'
 import { vueRegister, vueApply } from '@/vue'
 import PublicProfile from './components/PublicProfile'
 
-expose({ trySendBanana })
+expose({ trySendBanana, trySendBuddyRequest })
 
 async function trySendBanana (id) {
   try {
@@ -22,6 +23,16 @@ async function trySendBanana (id) {
     } else {
       pulseError(i18n('error_unexpected'))
     }
+  }
+}
+
+async function trySendBuddyRequest (userId) {
+  try {
+    const isBuddy = await sendBuddyRequest(userId)
+    $('.buddyRequest').remove()
+    if (isBuddy) { pulseInfo(i18n('buddy.request_accepted')) } else { pulseInfo(i18n('buddy.request_sent')) }
+  } catch (err) {
+    pulseError(i18n('error_unexpected'))
   }
 }
 

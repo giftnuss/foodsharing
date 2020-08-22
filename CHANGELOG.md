@@ -21,6 +21,7 @@
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
+- Move buddy requests to REST endpoint #847 #798 @alex.simm
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm

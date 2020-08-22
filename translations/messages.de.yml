@@ -776,3 +776,7 @@ conference:
   privacy_notice: 'Hinweis: Videokonferenzen werden über den Konferenzserver des living utopia Kollektivs abgewickelt. Du wirst dort automatisch mit deinem bei foodsharing eingegebenen Vornamen eingeloggt.'
   join_title: Konferenz beitreten
   join: Konferenz beitreten
+
+buddy:
+  request_sent: Anfrage versendet!
+  request_accepted: Jetzt kennt Ihr Euch!
