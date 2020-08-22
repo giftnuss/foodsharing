@@ -20,7 +20,11 @@ class VotingType
 	/**
 	 * Users can rate each option with a thumbs up, thumbs down, or neutral (+1, -1, 0).
 	 */
-	public const SCORE_VOTING = 2;
+	public const THUMB_VOTING = 2;
+	/**
+	 * Users can rate each option with a value from -3 to +3.
+	 */
+	public const SCORE_VOTING = 3;
 
 	public static function isValidType(int $scope): bool
 	{

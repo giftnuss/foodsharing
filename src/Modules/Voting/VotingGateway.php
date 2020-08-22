@@ -140,7 +140,7 @@ class VotingGateway extends BaseGateway
 			// increment one of the columns depending on the vote for this option
 			$this->db->execute('
 				UPDATE fs_poll_option_has_value
-				SET ' . $voteValue . ' = ' . $voteValue . '+1
+				SET votes = votes+1
 				WHERE poll_id = :pollId
 				AND option = :option',
 				[

@@ -151,7 +151,7 @@ class VotingTransactions
 	{
 		// make sure the option indices fit the poll's options and all voted value are valid
 		foreach ($values as $index => $value) {
-			if (!isset($poll->options[$index]) || !in_array($value, $poll->options[$index]->values)) {
+			if (!isset($poll->options[$index]) || !in_array($value, array_keys($poll->options[$index]->values))) {
 				return false;
 			}
 		}
@@ -170,6 +170,7 @@ class VotingTransactions
 					return false;
 				}
 				break;
+			case VotingType::THUMB_VOTING:
 			case VotingType::SCORE_VOTING:
 				// each option must have a value
 				if (sizeof($poll->options) != sizeof($values)) {
