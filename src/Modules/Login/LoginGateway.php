@@ -14,19 +14,16 @@ class LoginGateway extends BaseGateway
 	private LegalGateway $legalGateway;
 	private EmailHelper $emailHelper;
 	private TranslatorInterface $translator;
-	private $loginService;
 
 	public function __construct(
 		Database $db,
 		LegalGateway $legalGateway,
 		EmailHelper $emailHelper,
-		TranslatorInterface $translator,
-		LoginService $loginService
+		TranslatorInterface $translator
 	) {
 		$this->legalGateway = $legalGateway;
 		$this->emailHelper = $emailHelper;
 		$this->translator = $translator;
-		$this->loginService = $loginService;
 
 		parent::__construct($db);
 	}

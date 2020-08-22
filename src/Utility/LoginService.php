@@ -3,20 +3,22 @@
 namespace Foodsharing\Utility;
 
 use Foodsharing\Modules\Login\LoginGateway;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginService
 {
 	public const ACTIVATION_MAIL_LIMIT_PER_DAY = 3;
+	public const MAIL_TOKEN_LENGTH = 24;
 
-	private $loginGateway;
-	private $emailHelper;
-	private $translationHelper;
+	private LoginGateway $loginGateway;
+	private EmailHelper $emailHelper;
+	private TranslatorInterface $translator;
 
-	public function __construct(LoginGateway $loginGateway, EmailHelper $emailHelper, TranslationHelper $translationHelper)
+	public function __construct(LoginGateway $loginGateway, EmailHelper $emailHelper, TranslatorInterface $translator)
 	{
 		$this->loginGateway = $loginGateway;
 		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	public function generateMailActivationToken(int $count = 1): string
@@ -61,7 +63,7 @@ class LoginService
 	private function extractTokenData(string $token): array
 	{
 		// Old style tokens should return valid data
-		if (strlen($token) <= 24) {
+		if (strlen($token) <= self::MAIL_TOKEN_LENGTH) {
 			return [
 				'date' => date('Ymd'),
 				'count' => 0,
@@ -90,19 +92,18 @@ class LoginService
 		}
 
 		$tokenData = $this->validateTokenLimit($data['token']);
-		if ($tokenData['isValid']) {
-			$token = $this->generateMailActivationToken($tokenData['count']);
-			$this->loginGateway->updateMailActivationToken($fsId, $token);
-		} else {
+		if (!$tokenData['isValid']) {
 			return false;
 		}
+		$token = $this->generateMailActivationToken($tokenData['count']);
+		$this->loginGateway->updateMailActivationToken($fsId, $token);
 
 		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data['email']) . '&t=' . urlencode($token);
 
 		$this->emailHelper->tplMail('user/join', $data['email'], [
 			'name' => $data['name'],
 			'link' => $activationUrl,
-			'anrede' => $this->translationHelper->s('anrede_' . $data['geschlecht'])
+			'anrede' => $this->translator->trans('salutation.' . $data['geschlecht'])
 		]);
 
 		return true;

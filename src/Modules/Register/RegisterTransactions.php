@@ -6,6 +6,7 @@ use Exception;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
+use Foodsharing\Utility\LoginService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterTransactions
@@ -13,15 +14,18 @@ class RegisterTransactions
 	private LoginGateway $loginGateway;
 	private EmailHelper $emailHelper;
 	private TranslatorInterface $translator;
+	private $loginService;
 
 	public function __construct(
 		LoginGateway $loginGateway,
 		EmailHelper $emailHelper,
-		TranslatorInterface $translator
+		TranslatorInterface $translator,
+		LoginService $loginService
 	) {
 		$this->loginGateway = $loginGateway;
 		$this->emailHelper = $emailHelper;
 		$this->translator = $translator;
+		$this->loginService = $loginService;
 	}
 
 	/**
@@ -33,7 +37,8 @@ class RegisterTransactions
 	 */
 	public function registerUser(RegisterData $data): int
 	{
-		$token = bin2hex(random_bytes(12));
+		$token = $this->loginService->generateMailActivationToken(1);
+		$activationUrl = BASE_URL . '/?page=login&a=activate&e=' . urlencode($data->email) . '&t=' . urlencode($token);
 		$id = $this->loginGateway->insertNewUser($data, $token);
 		if (!$id) {
 			throw new Exception('could not register user');
@@ -42,7 +47,7 @@ class RegisterTransactions
 		// send activation email
 		$this->emailHelper->tplMail('user/join', $data->email, [
 			'name' => $data->firstName,
-			'link' => BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data->email) . '&t=' . urlencode($token),
+			'link' => $activationUrl,
 			'anrede' => $this->translator->trans('salutation.' . $data->gender),
 		], false, true);
 

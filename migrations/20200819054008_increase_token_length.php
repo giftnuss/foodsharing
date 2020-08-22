@@ -31,6 +31,8 @@ class IncreaseTokenLength extends AbstractMigration
 	 */
 	public function change()
 	{
-		$this->execute('ALTER TABLE fs_foodsaver MODIFY COLUMN token varchar(100)');
+		$table = $this->table('fs_foodsaver');
+		$table->changeColumn('token', 'string', ['limit' => 100])
+			->update();
 	}
 }

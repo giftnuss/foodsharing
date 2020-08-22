@@ -1489,15 +1489,14 @@ dashboard:
   source_forum_bot: "BOT-Forum {0}"
   source_event: "Termin {0}"
   source_store: "Betriebe {0}"
-  you_are_responsible_for_stores: Du bist verantwortlich für
-  you_pickup_at_stores: Du holst Lebensmittel ab bei
-  you_requested_to_join: Anfragen gestellt bei
-  you_wait_at_stores: Du bist auf der Springerliste bei
-  no_store_team: Du bist bis jetzt in keinem Betriebsteam.
   activation_mail_sent: Aktivierungslink verschickt - bitte prüfe deine E-Mails
   activation_mail_failure: Es konnte kein neuer Aktivierungslink verschickt werden
-  mail_activation_error_body: Bitte best&auml;tige deine E-Mail-Adresse, indem du auf den Link in der Aktivierungsmail klickst. Alternativ kannst du <a href="/?page=dashboard&a=activate">hier eine neue Aktivierungsmail anfordern</a> oder <a href="/?page=settings&sub=general">deine E-Mail-Adresse &auml;ndern</a>
-  mail_activation_error_title: E-Mail-Adresse nicht best&auml;tigt
+  mail_activation_error_body:
+    part_1: Bitte bestätige deine E-Mail-Adresse, indem du auf den Link in der Aktivierungsmail klickst. Alternativ kannst du
+    part_2: hier eine neue Aktivierungsmail anfordern
+    part_3: oder
+    part_4: deine E-Mail-Adresse ändern
+  mail_activation_error_title: E-Mail-Adresse nicht bestätigt
   checkAddress: 'Bitte überprüfe deine Adresse! Die Koordinaten konnten nicht ermittelt werden.'
   homeRegion: 'Dein Stammbezirk ist {region}.'
   chooseHomeRegion: 'Bitte wähle einen Stammbezirk aus.'

@@ -8,21 +8,14 @@ class MailActivationTest extends \Codeception\Test\Unit
 	/**
 	 * @var \UnitTester
 	 */
-	protected $tester;
+	protected UnitTester $tester;
 
-	/**
-	 * @var LoginGateway
-	 */
-	private $gateway;
+	private LoginGateway $gateway;
 
-	/**
-	 * @var LoginService
-	 */
-	private $service;
+	private LoginService $service;
 
 	protected function _before()
 	{
-		$this->gateway = $this->tester->get(LoginGateway::class);
 		$this->service = $this->tester->get(LoginService::class);
 	}
 

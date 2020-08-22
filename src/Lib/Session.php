@@ -11,7 +11,6 @@ use Foodsharing\Modules\Buddy\BuddyGateway;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
-use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Quiz\QuizHelper;
 use Foodsharing\Modules\Region\RegionGateway;
@@ -27,8 +26,6 @@ class Session
 	private $storeGateway;
 	private $loginGateway;
 	private $initialized = false;
-	private $legalGateway;
-	private $routeHelper;
 
 	private const ROLE_KEYS = [
 		Role::FOODSHARER => 'user',
@@ -46,8 +43,7 @@ class Session
 		QuizHelper $quizHelper,
 		RegionGateway $regionGateway,
 		StoreGateway $storeGateway,
-		LoginGateway $loginGateway,
-		TranslationHelper $translationHelper
+		LoginGateway $loginGateway
 	) {
 		$this->mem = $mem;
 		$this->buddyGateway = $buddyGateway;
@@ -56,7 +52,6 @@ class Session
 		$this->regionGateway = $regionGateway;
 		$this->storeGateway = $storeGateway;
 		$this->loginGateway = $loginGateway;
-		$this->translationHelper = $translationHelper;
 	}
 
 	public function initIfCookieExists()
@@ -153,29 +148,6 @@ class Session
 		$user = $this->get('user');
 
 		return $user[$index];
-	}
-
-	public function isActivated(int $fsId): bool
-	{
-		return $this->loginGateway->isActivated($fsId);
-	}
-
-	public function getRouteOverride()
-	{
-		$ppVersion = $this->legalGateway->getPpVersion();
-		$pnVersion = $this->legalGateway->getPnVersion();
-		if ($this->id() &&
-			(($ppVersion && $ppVersion != $this->user('privacy_policy_accepted_date')) ||
-				($pnVersion && $this->user('rolle') >= 2 && $this->user('privacy_notice_accepted_date') != $pnVersion))) {
-			/* Allow Settings page, otherwise redirect to legal page */
-			if (in_array($this->routeHelper->getPage(), ['settings', 'logout'])) {
-				return null;
-			}
-
-			return LegalControl::class;
-		}
-
-		return null;
 	}
 
 	public function id(): ?int

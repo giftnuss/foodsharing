@@ -11,13 +11,13 @@ use Foodsharing\Modules\Core\DBConstants\Map\MapConstants;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
+use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Profile\ProfileGateway;
 use Foodsharing\Modules\Quiz\QuizSessionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\LoginService;
 use Foodsharing\Utility\Sanitizer;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DashboardControl extends Control
 {
@@ -34,7 +34,7 @@ class DashboardControl extends Control
 	private Sanitizer $sanitizerService;
 	private ImageHelper $imageService;
 	private QuizSessionGateway $quizSessionGateway;
-	private Translator $translater;
+	private LoginGateway $loginGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -50,7 +50,7 @@ class DashboardControl extends Control
 		Sanitizer $sanitizerService,
 		ImageHelper $imageService,
 		QuizSessionGateway $quizSessionGateway,
-		TranslatorInterface $translator
+		LoginGateway $loginGateway
 	) {
 		$this->view = $view;
 		$this->dashboardGateway = $dashboardGateway;
@@ -65,7 +65,7 @@ class DashboardControl extends Control
 		$this->sanitizerService = $sanitizerService;
 		$this->imageService = $imageService;
 		$this->quizSessionGateway = $quizSessionGateway;
-		$this->translator = $translator;
+		$this->loginGateway = $loginGateway;
 
 		parent::__construct();
 
@@ -94,8 +94,9 @@ class DashboardControl extends Control
 		}
 
 		$fsId = $this->session->id();
-		if (!$this->session->isActivated($fsId)) {
-			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body'), $this->translator->trans('dashboard.mail_activation_error_title')));
+		if (!$this->loginGateway->isActivated($fsId)) {
+			$this->pageHelper->addContent($this->v_utils->v_error($this->translator->trans('dashboard.mail_activation_error_body.part_1') . '<a href="/?page=dashboard&a=activate">' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_2') . '</a>' . ' ' . $this->translator->trans('dashboard.mail_activation_error_body.part_3') .
+				' ' . '<a href="/?page=settings&sub=general">' . $this->translator->trans('dashboard.mail_activation_error_body.part_4') . '</a>', $this->translator->trans('dashboard.mail_activation_error_title')));
 		}
 		if (
 			($is_fs && !$this->quizSessionGateway->hasPassedQuiz($fsId, Role::FOODSAVER)) ||
