@@ -896,7 +896,7 @@ class Foodsharing extends \Codeception\Module\Db
 			'name' => $this->faker->text(30),
 			'description' => $this->faker->realText(200),
 			'scope' => $this->faker->randomElement(range(VotingScope::ALL_USERS, VotingScope::AMBASSADORS)),
-			'type' => $this->faker->randomElement(range(VotingType::SELECT_ONE_CHOICE, VotingType::SCORE_VOTING)),
+			'type' => $this->faker->randomElement(range(VotingType::SELECT_ONE_CHOICE, VotingType::THUMB_VOTING)),
 			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
 			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s')
 		], $extraParams);

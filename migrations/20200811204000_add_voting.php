@@ -53,11 +53,11 @@ class AddVoting extends AbstractMigration
 			])
 			->addColumn('start', 'datetime', [
 				'null' => false,
-				'comment' => 'start date and time for the poll'
+				'comment' => 'start timestamp for the poll'
 			])
 			->addColumn('end', 'datetime', [
 				'null' => false,
-				'comment' => 'end date and time for the poll'
+				'comment' => 'end timestamp for the poll'
 			])
 			->addColumn('author', 'integer', [
 				'null' => false,
