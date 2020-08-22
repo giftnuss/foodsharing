@@ -12,6 +12,6 @@ $I->addRegionAdmin($group['id'], $admin['id']);
 $I->login($admin['email']);
 $I->amOnPage($I->groupEditUrl($group['id']));
 $I->waitForElement('.tagedit-listelement-old');
-$I->addInTagSelect('lastNameOfThat (' . $foodsaver['id'] . ')', '#work_group_form_members');
+$I->addInTagSelect($foodsaver['id'], '#work_group_form_members');
 $I->click('Änderungen speichern');
 $I->seeInDatabase('fs_foodsaver_has_bezirk', ['bezirk_id' => $group['id'], 'foodsaver_id' => $foodsaver['id']]);

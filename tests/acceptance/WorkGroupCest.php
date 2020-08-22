@@ -85,8 +85,8 @@ class WorkGroupCest
 		$admin = $I->createFoodsaver();
 		$I->login($this->groupAdmin['email']);
 		$I->amOnPage($I->groupEditUrl($this->testGroup['id']));
-		$I->addInTagSelect($admin['name'], '#work_group_form_administrators');
-		$I->addInTagSelect($user['name'], '#work_group_form_members');
+		$I->addInTagSelect($admin['id'], '#work_group_form_administrators');
+		$I->addInTagSelect($user['id'], '#work_group_form_members');
 		$I->click('Änderungen speichern');
 		$I->waitForText('Änderungen gespeichert');
 		$I->see($user['name'], '#work_group_form_members');
