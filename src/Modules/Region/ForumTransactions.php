@@ -150,13 +150,13 @@ class ForumTransactions
 
 	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody): void
 	{
-		$theme = $this->forumGateway->getThread($threadId);
-		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
+		$thread = $this->forumGateway->getThread($threadId);
+		$posterName = $this->foodsaverGateway->getFoodsaverName($thread['creator_id']);
 
 		if ($foodsaver = $this->foodsaverGateway->getAdminsOrAmbassadors($region['id'])) {
 			$data = [
 				'link' => BASE_URL . $this->url($region['id'], false, $threadId),
-				'thread' => $theme['title'],
+				'thread' => $thread['title'],
 				'post' => $this->sanitizerService->markdownToHtml($rawPostBody),
 				'poster' => $posterName,
 				'bezirk' => $region['name'],
@@ -177,10 +177,10 @@ class ForumTransactions
 			$this->flashMessageHelper->info($this->translator->trans('forum.thread.with_mail'));
 		}
 
-		$theme = $this->forumGateway->getThread($threadId);
-		$body = $this->forumGateway->getPost($theme['last_post_id'])['body'];
+		$thread = $this->forumGateway->getThread($threadId);
+		$body = $this->forumGateway->getPost($thread['last_post_id'])['body'];
 
-		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
+		$posterName = $this->foodsaverGateway->getFoodsaverName($thread['creator_id']);
 
 		if ($isAmbassadorForum) {
 			$recipients = $this->foodsaverGateway->getAdminsOrAmbassadors($regionData['id']);
@@ -191,7 +191,7 @@ class ForumTransactions
 		$data = [
 			'bezirk' => $regionData['name'],
 			'poster' => $posterName,
-			'thread' => $theme['title'],
+			'thread' => $thread['title'],
 			'link' => BASE_URL . $this->url($regionData['id'], $isAmbassadorForum, $threadId),
 			'post' => $this->sanitizerService->markdownToHtml($body),
 			];
