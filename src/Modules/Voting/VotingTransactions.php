@@ -44,7 +44,7 @@ class VotingTransactions
 	 *
 	 * @throws Exception
 	 */
-	public function createPollForRegion(Poll &$poll, bool $notifyVoters): void
+	public function createPoll(Poll &$poll, bool $notifyVoters): void
 	{
 		// assign valid indices to the options
 		$mappedOptions = [];
@@ -139,15 +139,15 @@ class VotingTransactions
 	 * Checks whether the vote is valid for the poll's type and options.
 	 *
 	 * @param Poll $poll an ongoing poll
-	 * @param array $options a map from option index to the voted value for that option
+	 * @param array $values a map from option index to the voted value for that option
 	 *
 	 * @return bool if the vote is valid
 	 */
-	public function isValidVote(Poll $poll, array $options): bool
+	public function isValidVote(Poll $poll, array $values): bool
 	{
-		// make sure the option indices fit the poll's options
-		foreach ($options as $index => $value) {
-			if ($index < 0 || $index >= sizeof($poll->options)) {
+		// make sure the option indices fit the poll's options and all voted value are valid
+		foreach ($values as $index => $value) {
+			if (!isset($poll->options[$index]) || !in_array($value, $poll->options[$index]->values)) {
 				return false;
 			}
 		}
@@ -155,39 +155,23 @@ class VotingTransactions
 		// check contraints given by voting type
 		switch ($poll->type) {
 			case VotingType::SELECT_ONE_CHOICE:
-				// only one +1 option (upvote) possible
-				if (sizeof($options) !== 1 || array_pop($options) !== 1) {
+				// only one option possible
+				if (sizeof($values) !== 1) {
 					return false;
 				}
 				break;
 			case VotingType::SELECT_MULTIPLE:
-				// multiple +1 options (upvotes) possible, but at most as many as options in the poll
-				if (sizeof($options) > sizeof($poll->options)
-					|| !$this->areArrayValuesValid(array_values($options), [1])) {
+				// multiple options possible, but at most as many as options in the poll
+				if (sizeof($values) > sizeof($poll->options)) {
 					return false;
 				}
 				break;
 			case VotingType::SCORE_VOTING:
-				// each option must have a value and all values must be +1, 0, or -1
-				if (sizeof($poll->options) != sizeof($options)
-					|| !$this->areArrayValuesValid(array_values($options), [-1, 0, 1])) {
+				// each option must have a value
+				if (sizeof($poll->options) != sizeof($values)) {
 					return false;
 				}
 				break;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Returns whether each value in the array x is one of the possible values.
-	 */
-	private function areArrayValuesValid(array $x, array $possibleValues): bool
-	{
-		foreach ($x as $value) {
-			if (!in_array($value, $possibleValues)) {
-				return false;
-			}
 		}
 
 		return true;

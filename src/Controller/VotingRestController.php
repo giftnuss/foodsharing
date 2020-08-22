@@ -188,7 +188,7 @@ class VotingRestController extends AbstractFOSRestController
 		}
 
 		// create poll
-		$this->votingTransactions->createPollForRegion($poll, $paramFetcher->get('notifyVoters'));
+		$this->votingTransactions->createPoll($poll, $paramFetcher->get('notifyVoters'));
 
 		return $this->handleView($this->view($poll, 200));
 	}

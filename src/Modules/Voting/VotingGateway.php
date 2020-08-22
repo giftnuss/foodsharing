@@ -48,55 +48,36 @@ class VotingGateway extends BaseGateway
 	 */
 	public function getOptions(int $pollId, bool $includeResults): array
 	{
-		$columns = ['option', 'option_text'];
-		if ($includeResults) {
-			$columns = array_merge($columns, ['upvotes', 'neutralvotes', 'downvotes']);
-		}
+		// meta-data of option
 		try {
-			$data = $this->db->fetchAllByCriteria('fs_poll_has_options', $columns, ['poll_id' => $pollId]);
+			$data = $this->db->fetchAllByCriteria('fs_poll_has_options', ['option', 'option_text'], ['poll_id' => $pollId]);
 		} catch (Exception $e) {
 			$data = [];
 		}
 
+		// values and counted votes
 		$result = [];
 		foreach ($data as $d) {
-			$result[$d['option']] = $includeResults
-				? PollOption::create($pollId, $d['option'], $d['option_text'], $d['upvotes'], $d['neutralvotes'], $d['downvotes'])
-				: PollOption::create($pollId, $d['option'], $d['option_text']);
+			if ($includeResults) {
+				$values = $this->db->fetchAllByCriteria('fs_poll_option_has_value', ['value', 'votes'], [
+					'poll_id' => $pollId, 'option' => $d['option']]);
+				$mappedValues = [];
+				foreach ($values as $v) {
+					$mappedValues[$v['value']] = $v['votes'];
+				}
+			} else {
+				$values = $this->db->fetchAllByCriteria('fs_poll_option_has_value', 'value', [
+					'poll_id' => $pollId, 'option' => $d['option']]);
+				$mappedValues = array_combine($values, array_fill(0, sizeof($values), -1));
+			}
+			$result[$d['option']] = PollOption::create($pollId, $d['option'], $d['option_text'], $mappedValues);
 		}
 
 		return $result;
 	}
 
 	/**
-	 * Returns all options of a poll with the vote counts. If the poll does not exist or does not have any
-	 * options an empty array is returned.
-	 *
-	 * @param int $pollId a valid id of a poll
-	 *
-	 * @return array multiple {@link PollOption} objects
-	 */
-	public function getResults(int $pollId): array
-	{
-		try {
-			$data = $this->db->fetchAllByCriteria('fs_poll_has_options',
-				['option', 'option_text', 'upvotes', 'neutralvotes', 'downvotes'],
-				['poll_id' => $pollId]
-			);
-		} catch (Exception $e) {
-			$data = [];
-		}
-
-		$result = [];
-		foreach ($data as $x) {
-			$result[$x['option']] = PollOption::create($pollId, $x['option'], $x['option_text'], $x['upvotes'], $x['neutralvotes'], $x['downvotes']);
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Returns all polls in a region or working group. If the region does not exists an empty array
+	 * Returns all polls in a region or working group. If the region does not exist an empty array
 	 * is returned.
 	 *
 	 * @param int $regionId a valid ID of a group or region
@@ -145,27 +126,25 @@ class VotingGateway extends BaseGateway
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
-	 * @param array $options a map from option index to the vote value (+1, -1, 0)
+	 * @param array $options a map from option index to the vote value
 	 *
-	 * @throws Exception if the poll does not exist
+	 * @throws Exception if the poll does not exist or if one of the chosen values for an option is invalid
 	 */
 	public function vote(int $pollId, int $userId, array $options): void
 	{
-		$columns = ['downvotes', 'neutralvotes', 'upvotes'];
 		$this->db->execute('LOCK TABLES fs_foodsaver_has_poll WRITE, fs_poll_has_option WRITE');
 		$this->db->beginTransaction();
 
-		foreach ($options as $index => $vote) {
+		foreach ($options as $option => $voteValue) {
 			// increment one of the columns depending on the vote for this option
-			$column = $columns[$vote + 1];
 			$this->db->execute('
-				UPDATE fs_poll_has_options
-				SET ' . $column . ' = ' . $column . '+1
+				UPDATE fs_poll_option_has_value
+				SET ' . $voteValue . ' = ' . $voteValue . '+1
 				WHERE poll_id = :pollId
 				AND option = :option',
 				[
 					':pollId' => $pollId,
-					':option' => $index
+					':option' => $option
 				]);
 		}
 
@@ -207,11 +186,18 @@ class VotingGateway extends BaseGateway
 			$this->db->insert('fs_poll_has_options', [
 				'poll_id' => $pollId,
 				'option' => $option->optionIndex,
-				'option_text' => $option->text,
-				'upvotes' => 0,
-				'neutralvotes' => 0,
-				'downvotes' => 0
+				'option_text' => $option->text
 			]);
+
+			// insert all values for this option
+			foreach (array_keys($option->values) as $value) {
+				$this->db->insert('fs_poll_option_has_value', [
+					'poll_id' => $pollId,
+					'option' => $option->optionIndex,
+					'value' => $value,
+					'votes' => 0
+				]);
+			}
 		}
 
 		// insert all voters

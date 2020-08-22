@@ -23,47 +23,30 @@ class PollOption
 	public string $text;
 
 	/**
-	 * The number of up votes for this option. A value of null means that the poll is returned without results.
+	 * Associative array that maps the possible values to the number of counted votes. Value of -1 mean that
+	 * the poll is returned without results.
 	 */
-	public ?int $upvotes;
-
-	/**
-	 * The number of neutral votes for this option. Depending on the voting type is might not be used. A value of
-	 * null means that the poll is returned without results.
-	 */
-	public ?int $neutralvotes;
-
-	/**
-	 * The number of down votes for this option. Depending on the voting type is might not be used. A value of null
-	 * means that the poll is returned without results.
-	 */
-	public ?int $downvotes;
+	public array $values;
 
 	public function __construct()
 	{
 		$this->pollId = -1;
 		$this->optionIndex = -1;
 		$this->text = '';
-		$this->upvotes = null;
-		$this->neutralvotes = null;
-		$this->downvotes = null;
+		$this->values = [];
 	}
 
 	public static function create(
 		int $pollId,
 		int $optionIndex,
 		string $text,
-		int $upvotes = null,
-		int $neutralvotes = null,
-		int $downvotes = null
+		array $values
 	) {
 		$option = new PollOption();
 		$option->pollId = $pollId;
 		$option->optionIndex = $optionIndex;
 		$option->text = $text;
-		$option->upvotes = $upvotes;
-		$option->neutralvotes = $neutralvotes;
-		$option->downvotes = $downvotes;
+		$option->values = $values;
 
 		return $option;
 	}
