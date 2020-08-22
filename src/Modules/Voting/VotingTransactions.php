@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Voting;
 
 use Exception;
+use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
@@ -20,19 +21,22 @@ class VotingTransactions
 	private StoreGateway $storeGateway;
 	private RegionGateway $regionGateway;
 	private BellGateway $bellGateway;
+	private Session $session;
 
 	public function __construct(
 		VotingGateway $votingGateway,
 		FoodsaverGateway $foodsaverGateway,
 		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
-		BellGateway $bellGateway)
-	{
+		BellGateway $bellGateway,
+		Session $session
+	) {
 		$this->votingGateway = $votingGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+		$this->session = $session;
 	}
 
 	/**
@@ -127,11 +131,11 @@ class VotingTransactions
 	}
 
 	/**
-	 * Deletes a poll from the database and removes all bell notifications for it.
+	 * Cancels a poll by movin its end date into the past and removes all bell notifications for it.
 	 */
-	public function deletePoll(int $pollId): void
+	public function cancelPoll(int $pollId): void
 	{
-		$this->votingGateway->deletePoll($pollId);
+		$this->votingGateway->cancelPoll($pollId, $this->session->id());
 		$this->bellGateway->delBellsByIdentifier('new-poll-' . $pollId);
 	}
 

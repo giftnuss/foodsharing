@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Voting;
 
+use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
@@ -213,15 +214,19 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Deletes a poll and all its options.
+	 * Sets a poll's end date to the past and logs who cancelled it.
 	 *
 	 * @param int $pollId a valid poll ID
+	 * @param int $userId ID of the user who cancelled the poll
 	 *
 	 * @throws Exception
 	 */
-	public function deletePoll(int $pollId): void
+	public function cancelPoll(int $pollId, int $userId): void
 	{
-		$this->db->delete('fs_poll', ['id' => $pollId]);
+		$this->db->update('fs_poll', [
+			'end' => $this->db->date(Carbon::now()->subMinute()),
+			'cancelled_by' => $userId
+		], ['id' => $pollId]);
 	}
 
 	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true): array

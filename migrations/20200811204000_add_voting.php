@@ -65,6 +65,13 @@ class AddVoting extends AbstractMigration
 				'limit' => 10,
 				'comment' => 'id of the user who created the poll'
 			])
+			->addColumn('cancelled_by', 'integer', [
+				'null' => true,
+				'signed' => false,
+				'limit' => 10,
+				'default' => null,
+				'comment' => 'id of the user who cancelled the poll'
+			])
 			->addForeignKey('region_id', 'fs_bezirk', 'id', [
 				'delete' => 'CASCADE',
 				'update' => 'CASCADE'
