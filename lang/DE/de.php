@@ -149,6 +149,3 @@ $g_lang['push_notifications_deactivation_success'] = 'Push-Benachrichtigungen er
 $g_lang['push_notifications_banner_heading'] = 'Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen.';
 $g_lang['push_notifications_banner_text'] = 'Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren.';
 $g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';
-
-$g_lang['registration'] = 'Registrieren';
-$g_lang['you_are_already_register_please_logg_out_if_you_want_to_register_again'] = 'Du bist bereits registriert. Bitte logge Dich aus, wenn du dich erneut registrieren möchtest.';

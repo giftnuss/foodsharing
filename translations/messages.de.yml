@@ -253,13 +253,15 @@ register:
   man: männlich
   other: divers
   error: Es ist ein Fehler aufgetreten
-  error_name: Bitte gib einen Namen ein
   error_email_exist: Deine E-Mail-Adresse existiert bereits.
   error_birthdate: Beispiel 25.03.2001 (DD.MM.JJJJ). Aus datenschutz- und haftungsrechtlichen Gründen musst du mindestens 18 Jahre alt sein, um bei foodsharing mitzumachen.
+  account-exists: 'Du bist bereits registriert. Bitte logge Dich aus, wenn du dich erneut registrieren möchtest.'
   activation_success: '<strong>Aktivierung erfolgreich.</strong> Logge Dich jetzt mit Deiner E-Mail-Adresse und Deinem gewählten Passwort ein.'
   activation_failed: '<strong>Aktivierung fehlgeschlagen!</strong> Ist der eingegebene Link auch korrekt?'
+  change-password: 'Jetzt kannst du dein Passwort ändern.'
   pass1: Dein neues gewünschtes Passwort
   pass2: Passwortwiederholung
+  set-password: Neues Passwort setzen
   signup_newsletter: Ich möchte ca. 1x im Monat den foodsharing Newsletter erhalten
 
 gender:
