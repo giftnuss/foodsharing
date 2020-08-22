@@ -198,16 +198,16 @@ final class PickupRestController extends AbstractFOSRestController
 
 	private function enrichPickupSlots(array $pickups, int $storeId): array
 	{
-		$profiles = [];
+		$team = [];
 		foreach ($this->storeGateway->getStoreTeam($storeId) as $user) {
-			$profiles[$user['id']] = RestNormalization::normalizeStoreUser($user);
+			$team[$user['id']] = RestNormalization::normalizeStoreUser($user);
 		}
 		foreach ($pickups as &$pickup) {
 			foreach ($pickup['occupiedSlots'] as &$slot) {
-				if (isset($profiles[$slot['foodsaverId']])) {
-					$slot['profile'] = $profiles[$slot['foodsaverId']];
+				if (isset($team[$slot['foodsaverId']])) {
+					$slot['profile'] = $team[$slot['foodsaverId']];
 				} else {
-					$details = $this->foodsaverGateway->getFoodsaverDetails($slot['foodsaverId']);
+					$details = $this->foodsaverGateway->getFoodsaver($slot['foodsaverId']);
 					$slot['profile'] = RestNormalization::normalizeStoreUser($details);
 				}
 				unset($slot['foodsaverId']);
