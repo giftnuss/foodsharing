@@ -38,10 +38,7 @@ class BuddyTransactions
 		$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . $userId);
 		$this->bellGateway->delBellsByIdentifier('buddy-' . $userId . '-' . $this->session->id());
 
-		$buddyIds = [];
-		if ($b = $this->session->get('buddy-ids')) {
-			$buddyIds = $b;
-		}
+		$buddyIds = $this->session->get('buddy-ids') ?: [];
 
 		$buddyIds[$userId] = $userId;
 		$this->session->set('buddy-ids', $buddyIds);
