@@ -8,6 +8,7 @@ use Foodsharing\Modules\Event\EventGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\FoodSharePoint\FoodSharePointGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
+use Foodsharing\Modules\Voting\VotingGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
@@ -33,6 +34,7 @@ final class RegionControl extends Control
 	private ImageHelper $imageService;
 	private ReportPermissions $reportPermissions;
 	private MailboxGateway $mailboxGateway;
+	private VotingGateway $votingGateway;
 
 	private const DisplayAvatarListEntries = 30;
 
@@ -56,7 +58,8 @@ final class RegionControl extends Control
 		RegionGateway $gateway,
 		ReportPermissions $reportPermissions,
 		ImageHelper $imageService,
-		MailboxGateway $mailboxGateway
+		MailboxGateway $mailboxGateway,
+		VotingGateway $votingGateway
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -70,6 +73,7 @@ final class RegionControl extends Control
 		$this->reportPermissions = $reportPermissions;
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
+		$this->votingGateway = $votingGateway;
 
 		parent::__construct();
 	}
@@ -87,6 +91,7 @@ final class RegionControl extends Control
 			['name' => 'terminology.forum', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=forum'],
 			['name' => 'terminology.events', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=events'],
 			['name' => 'group.members', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=members'],
+			['name' => 'terminology.polls', 'href' => '/?page=bezirk&bid=' . $regionId . '&sub=polls'],
 		];
 
 		if (!$isWorkGroup && $this->forumPermissions->mayAccessAmbassadorBoard($regionId)) {
@@ -221,6 +226,9 @@ final class RegionControl extends Control
 			case 'statistic':
 				$this->statistic($request, $response, $region);
 				break;
+			case 'polls':
+				$this->polls($request, $response, $region);
+				break;
 			default:
 				if ($this->isWorkGroup($region)) {
 					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=wall');
@@ -354,5 +362,15 @@ final class RegionControl extends Control
 			$viewData['pickupData']['yearly'] = $this->gateway->listRegionPickupsByDate((int)$region['id'], '%Y');
 		}
 		$response->setContent($this->render('pages/Region/statistic.twig', $viewData));
+	}
+
+	private function polls(Request $request, Response $response, array $region): void
+	{
+		$this->pageHelper->addBread($this->translator->trans('terminology.polls'), '/?page=bezirk&bid=' . $region['id'] . '&sub=polls');
+		$this->pageHelper->addTitle($this->translator->trans('terminology.polls'));
+		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
+		$viewdata['polls'] = $this->votingGateway->listPolls($region['id']);
+		$viewdata['regionId'] = $region['id'];
+		$response->setContent($this->render('pages/Region/polls.twig', $viewdata));
 	}
 }

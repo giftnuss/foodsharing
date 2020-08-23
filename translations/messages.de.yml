@@ -329,6 +329,7 @@ terminology:
   themes: Themen
   homeRegion: Stammbezirk
   message: Nachricht
+  polls: Abstimmungen
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'
@@ -1558,3 +1559,9 @@ base:
 buddy:
   request_sent: Anfrage versendet!
   request_accepted: Jetzt kennt Ihr Euch!
+
+polls:
+  some_in_all: "({some} von {all})"
+  title: Titel
+  start_date: von
+  end_date: bis

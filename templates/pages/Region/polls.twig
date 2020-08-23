@@ -1,0 +1,12 @@
+{% extends 'pages/Region/baseRegion.twig' %}
+
+{% block main %}
+    {% include 'partials/vue-wrapper.twig' with {
+        id: 'vue-polllist',
+        component: 'poll-list',
+        props: {
+            regionId: regionId,
+            polls: polls
+        }
+    } %}
+{% endblock %}

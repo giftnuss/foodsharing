@@ -96,6 +96,13 @@
           <i class="fas fa-users" />{{ $i18n('menu.entry.conference') }}
         </a>
         <a
+          :href="$url('polls', region.id)"
+          role="menuitem"
+          class="dropdown-item dropdown-item-sub"
+        >
+          <i class="fas fa-poll-h" />{{ $i18n('terminology.polls') }}
+        </a>
+        <a
           v-if="region.mayHandleFoodsaverRegionMenu"
           :href="$url('foodsaverList', region.id)"
           role="menuitem"

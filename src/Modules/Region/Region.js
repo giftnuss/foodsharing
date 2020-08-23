@@ -16,6 +16,7 @@ import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
 import ThreadList from './components/ThreadList'
+import PollList from './components/PollList'
 import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
@@ -76,5 +77,10 @@ $(document).ready(() => {
       })
       vueApply('#vue-threadlist')
     }
+  } else if (GET('sub') === 'polls') {
+    vueRegister({
+      PollList
+    })
+    vueApply('#vue-polllist')
   }
 })
