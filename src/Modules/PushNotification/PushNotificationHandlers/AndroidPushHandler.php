@@ -15,7 +15,7 @@ class AndroidPushHandler implements PushNotificationHandlerInterface
 	private const typeIdentifier = 'android';
 
 	/**
-	 * @var fcmKey
+	 * @var string
 	 */
 	private $fcmKey;
 
