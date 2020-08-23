@@ -3,6 +3,9 @@
 namespace Foodsharing\Modules\Store;
 
 use Carbon\Carbon;
+use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Bell\BellGateway;
+use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -12,6 +15,8 @@ class StoreTransactions
 	private $messageGateway;
 	private $storeGateway;
 	private $translator;
+	private BellGateway $bellGateway;
+	private Session $session;
 	const MAX_SLOTS_PER_PICKUP = 10;
 	// status constants for getAvailablePickupStatus
 	const STATUS_RED_TODAY_TOMORROW = 3;
@@ -22,11 +27,15 @@ class StoreTransactions
 	public function __construct(
 		MessageGateway $messageGateway,
 		StoreGateway $storeGateway,
-		TranslatorInterface $translator
+		TranslatorInterface $translator,
+		BellGateway $bellGateway,
+		Session $session
 	) {
 		$this->messageGateway = $messageGateway;
 		$this->storeGateway = $storeGateway;
 		$this->translator = $translator;
+		$this->bellGateway = $bellGateway;
+		$this->session = $session;
 	}
 
 	/**
@@ -172,5 +181,23 @@ class StoreTransactions
 		}
 
 		return $filteredStoresForUser;
+	}
+
+	/**
+	 * Removes (denies) a user's request for a store and creates a bell notification for that user.
+	 */
+	public function removeStoreRequest(int $storeId, int $userId): void
+	{
+		$betrieb = $this->storeGateway->getBetrieb($storeId);
+
+		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
+			'href' => '/?page=fsbetrieb&id=' . $storeId
+		], [
+			'user' => $this->session->user('name'),
+			'name' => $betrieb['name']
+		], 'store-drequest-' . $userId);
+		$this->bellGateway->addBell($userId, $bellData);
+
+		$this->storeGateway->removeUserFromTeam($storeId, $userId);
 	}
 }

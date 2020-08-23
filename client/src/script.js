@@ -10,7 +10,8 @@ import 'jquery-ui-addons'
 import { GET, goTo, isMob } from '@/browser'
 
 import conv from '@/conv'
-
+import { removeStoreRequest } from '@/api/stores'
+import i18n from '@/i18n'
 export { goTo, isMob, GET }
 
 export function collapse_wrapper (id) {
@@ -578,21 +579,17 @@ export function betriebRequest (id) {
   })
 }
 
-export function rejectBetriebRequest (fsid, bid) {
+export async function withdrawStoreRequest (fsid, bid) {
   showLoader()
-  $.ajax({
-    dataType: 'json',
-    data: `fsid=${fsid}&bid=${bid}`,
-    url: '/xhr.php?f=denyRequest',
-    success: function (data) {
-      if (data.status == 1) {
-        pulseSuccess(data.msg)
-      } else {
-        pulseError(data.msg)
-      }
-    },
-    complete: function () { hideLoader() }
-  })
+
+  try {
+    await removeStoreRequest(bid, fsid)
+    pulseSuccess(i18n('store.request_withdrawn'))
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+
+  hideLoader()
 }
 
 export function checkAllCb (sel) {

@@ -137,4 +137,20 @@ class StoreRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([], 200));
 	}
+
+	/**
+	 * Removes the user's own request or denies another user's request for a store.
+	 *
+	 * @Rest\Delete("stores/{storeId}/requests/{userId}")
+	 */
+	public function removeStoreRequestAction(int $storeId, int $userId)
+	{
+		if ($this->session->id() !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
+			throw new HttpException(403);
+		}
+
+		$this->storeTransactions->removeStoreRequest($storeId, $userId);
+
+		return $this->handleView($this->view([], 200));
+	}
 }

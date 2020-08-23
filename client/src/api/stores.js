@@ -51,3 +51,7 @@ export async function deleteStorePost (postId) {
 export async function listStoresForCurrentUser () {
   return get('/user/current/stores')
 }
+
+export async function removeStoreRequest (storeId, userId) {
+  return remove(`/stores/${storeId}/requests/${userId}`)
+}

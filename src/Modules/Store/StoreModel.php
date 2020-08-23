@@ -327,25 +327,6 @@ class StoreModel extends Db
 		');
 	}
 
-	public function denyRequest($fsid, $storeId)
-	{
-		$betrieb = $this->getVal('name', 'betrieb', $storeId);
-
-		$bellData = Bell::create('store_request_deny_title', 'store_request_deny', 'fas fa-user-times', [
-			'href' => '/?page=fsbetrieb&id=' . (int)$storeId
-		], [
-			'user' => $this->session->user('name'),
-			'name' => $betrieb
-		], 'store-drequest-' . (int)$fsid);
-		$this->bellGateway->addBell((int)$fsid, $bellData);
-
-		return $this->update('
-					DELETE FROM 	`fs_betrieb_team`
-					WHERE 		`betrieb_id` = ' . (int)$storeId . '
-					AND 		`foodsaver_id` = ' . (int)$fsid . '
-		');
-	}
-
 	public function teamRequest($fsid, $storeId)
 	{
 		return $this->insert('

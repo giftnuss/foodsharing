@@ -2,7 +2,9 @@
 
 import $ from 'jquery'
 
-import { hideLoader, showLoader, reload, GET } from '@/script'
+import { hideLoader, showLoader, reload, GET, pulseError } from '@/script'
+import { removeStoreRequest } from '@/api/stores'
+import i18n from '@/i18n'
 
 export function u_updatePosts () {
   $.ajax({
@@ -53,17 +55,15 @@ export function warteRequest (fsid, bid) {
     complete: function () { hideLoader() }
   })
 }
-export function denyRequest (fsid, bid) {
+export async function denyRequest (fsid, bid) {
   showLoader()
-  $.ajax({
-    dataType: 'json',
-    data: 'fsid=' + fsid + '&bid=' + bid,
-    url: '/xhr.php?f=denyRequest',
-    success: function (data) {
-      if (data.status == 1) {
-        reload()
-      }
-    },
-    complete: function () { hideLoader() }
-  })
+
+  try {
+    await removeStoreRequest(bid, fsid)
+    reload()
+  } catch (e) {
+    pulseError(i18n('error_unexpected'))
+  }
+
+  hideLoader()
 }

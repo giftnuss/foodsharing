@@ -1258,4 +1258,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		return $this->db->insertOrUpdate('fs_betrieb_team', $data);
 	}
+
+	public function removeUserFromTeam(int $storeId, int $userId): void
+	{
+		$this->db->delete('fs_betrieb_team', [
+			'betrieb_id' => $storeId,
+			'foodsaver_id' => $userId
+		]);
+	}
 }

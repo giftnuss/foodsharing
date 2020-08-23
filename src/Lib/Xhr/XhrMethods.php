@@ -21,7 +21,6 @@ use Foodsharing\Modules\Region\ForumGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreModel;
-use Foodsharing\Modules\Store\TeamStatus;
 use Foodsharing\Permissions\NewsletterEmailPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\StorePermissions;
@@ -1251,21 +1250,6 @@ class XhrMethods
 
 			return json_encode(['status' => 1]);
 		}
-	}
-
-	public function xhr_denyRequest($data)
-	{
-		if ($this->session->id() == $data['fsid'] || $this->storeGateway->getUserTeamStatus($this->session->id(), $data['bid']) === TeamStatus::Coordinator || $this->session->isOrgaTeam()) {
-			$this->storeModel->denyRequest($data['fsid'], $data['bid']);
-
-			$msg = 'Deine Anfrage wurde erfolgreich zur&uuml;ckgezogen!';
-
-			return json_encode(['status' => 1, 'msg' => $msg]);
-		}
-
-		$msg = 'Es ist ein Fehler aufgetreten!';
-
-		return json_encode(['status' => 0, 'msg' => $msg]);
 	}
 
 	public function xhr_acceptRequest($data)

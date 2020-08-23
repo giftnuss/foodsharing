@@ -302,6 +302,7 @@ store:
     reallyRemove: Möchtest Du wirklich {name} aus diesem Betriebs-Team entfernen?
     makeJumper: Auf die Springerliste
     makeRegularTeamMember: In das Team aufnehmen
+  request_withdrawn: Deine Anfrage wurde erfolgreich zurückgezogen!
 
 pickup:
   dates: Abholtermine

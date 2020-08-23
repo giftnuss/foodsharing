@@ -32,7 +32,7 @@ import {
   hideLoader,
   becomeBezirk,
   betriebRequest,
-  rejectBetriebRequest,
+  withdrawStoreRequest,
   error
 } from '@/script'
 
@@ -57,7 +57,7 @@ expose({
   hideLoader,
   becomeBezirk,
   betriebRequest,
-  rejectBetriebRequest,
+  withdrawStoreRequest,
   u_printChildBezirke,
   conv,
   error,

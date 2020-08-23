@@ -40,7 +40,6 @@ $csrf_whitelist = [
 	// 'getBezirk',
 	// 'acceptBezirkRequest',
 	// 'denyBezirkRequest',
-	// 'denyRequest',
 	// 'acceptRequest',
 	// 'warteRequest',
 	// 'betriebRequest',

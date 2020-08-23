@@ -20,6 +20,7 @@
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
+- Move removal of store requests to new REST endpoint !1648 @alex.simm
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm
