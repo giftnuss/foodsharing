@@ -11,10 +11,11 @@ class BasketView extends View
 {
 	public function find(array $baskets, $location): void
 	{
-		$page = new vPage($this->translationHelper->s('baskets'), $this->findMap($location));
+		$page = new vPage($this->translator->trans('terminology.baskets'), $this->findMap($location));
 
 		if ($baskets) {
-			$page->addSectionRight($this->nearbyBaskets($baskets), $this->translationHelper->s('basket_near'));
+			$label = $this->translator->trans('basket.nearby-short');
+			$page->addSectionRight($this->nearbyBaskets($baskets), $label);
 		}
 
 		$page->render();
@@ -35,8 +36,12 @@ class BasketView extends View
 		$map->setMarkerCluster();
 		$map->setDefaultMarkerOptions('shopping-basket', 'green');
 
-		return '<div class="ui-widget"><input id="mapsearch" type="text" name="mapsearch" value="" placeholder="Adresssuche..." class="input text value ui-corner-top"/><div class="findmap">' . $map->render(
-			) . '</div></div>';
+		return '<div class="ui-widget">
+			<input id="mapsearch" type="text" name="mapsearch" value="" placeholder="'
+			. $this->translator->trans('basket.mapsearch')
+			. '" class="input text value ui-corner-top" />
+			<div class="findmap">' . $map->render() . '</div>
+		</div>';
 	}
 
 	public function nearbyBaskets(array $baskets): string
@@ -51,52 +56,55 @@ class BasketView extends View
 
 			$distance = $this->distance($b['distance']);
 
-			$out .= '
-				<li>
-					<a class="ui-corner-all" onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . ',modal:1});return false;" href="#">
-						<span style="float:left;margin-right:7px;"><img width="35px" src="' . $img . '" class="ui-corner-all"></span>
-						<span style="height:35px;overflow:hidden;font-size:11px;line-height:16px;"><strong style="float:right;margin:0 0 0 3px;">(' . $distance . ')</strong>' . $this->sanitizerService->tt(
-					$b['description'],
-					50
-				) . '</span>
-						
-						<span style="clear:both;"></span>
-					</a>
-				</li>';
+			$out .= '<li>
+				<a class="ui-corner-all" onclick="ajreq(\'bubble\','
+				. '{app: \'basket\''
+				. ',id:' . (int)$b['id']
+				. ',modal: 1'
+				. '}); return false;" href="#">
+					<span style="float: left; margin-right: 7px;">
+						<img width="35px" src="' . $img . '" class="ui-corner-all">
+					</span>
+					<span style="height: 35px; overflow: hidden; font-size: 11px; line-height: 16px;">
+						<strong style="float: right; margin: 0 0 0 3px;">(' . $distance . ')</strong>'
+						. $this->sanitizerService->tt($b['description'], 50) . '
+					</span>
+					<span style="clear: both;"></span>
+				</a>
+			</li>';
 		}
 
 		return $out . '
 		</ul>
-		<div style="text-align:center;">
-			<a class="button" href="/karte?load=baskets">' . $this->translationHelper->s('basket_on_map') . '</a>
+		<div style="text-align: center;">
+			<a class="button" href="/karte?load=baskets">' . $this->translator->trans('basket.all_map') . '</a>
 		</div>';
 	}
 
 	public function basket(array $basket, $requests): void
 	{
-		$page = new vPage(
-			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
-		
-		<div class="fbasket-wrap">
-		    <div class="fbasket-pic">
-				' . $this->pageImg($basket['picture'] ?? '') . '	
-			</div>
-		    <div class="fbasket-desc">
-				<p>' . nl2br($basket['description']) . '</p>
-			</div>
-		</div>
-		'
-		);
+		$label = $this->translator->trans('terminology.basket') . ' #' . $basket['id'];
+		$page = new vPage($label,
+			'<div class="fbasket-wrap">
+				<div class="fbasket-pic">
+					' . $this->pageImg($basket['picture'] ?? '') . '	
+				</div>
+				<div class="fbasket-desc">
+					<p>' . nl2br($basket['description']) . '</p>
+				</div>
+			</div>');
 
 		$page->setSubTitle($this->getSubtitle($basket));
 
 		if ($this->session->may()) {
-			$page->addSection($this->v_utils->v_info($this->translationHelper->sv('basket_pickup_warning', $basket['id'])));
+			$page->addSection($this->v_utils->v_info($this->translator->trans('basket.howto')));
 
-			$page->addSectionRight($this->userBox($basket, $requests), $this->translationHelper->s('provider'));
+			$label = $this->translator->trans('basket.provider');
+			$page->addSectionRight($this->userBox($basket, $requests), $label);
 
 			if ($basket['fs_id'] == $this->session->id() && $requests) {
-				$page->addSectionRight($this->requests($requests), $this->translationHelper->sv('req_count', ['count' => count($requests)]));
+				$label = $this->translator->trans('basket.requests', ['{count}' => count($requests)]);
+				$page->addSectionRight($this->requests($requests), $label);
 			}
 
 			if ($basket['lat'] != 0 || $basket['lon'] != 0) {
@@ -107,11 +115,14 @@ class BasketView extends View
 
 				$map->setCenter($basket['lat'], $basket['lon']);
 
-				$page->addSectionRight($map->render(), 'Wo?');
+				$page->addSectionRight($map->render(), $this->translator->trans('basket.where'));
 			}
 		} else {
 			$page->addSection(
-				$this->v_utils->v_info($this->translationHelper->s('basket_detail_login_hint'), $this->translator->trans('notice')),
+				$this->v_utils->v_info(
+					$this->translator->trans('basket.login'),
+					$this->translator->trans('notice')
+				),
 				false,
 				['wrapper' => false]
 			);
@@ -122,44 +133,43 @@ class BasketView extends View
 
 	public function basketTaken(array $basket): void
 	{
-		$page = new vPage(
-			$this->translationHelper->s('basket') . ' #' . $basket['id'], '
-		
-		<div>
-			<p>' . $this->translationHelper->s('basket_picked_up') . '</p>
-		</div>
-		'
-		);
+		$label = $this->translator->trans('terminology.basket') . ' #' . $basket['id'];
+		$page = new vPage($label,
+			'<div>
+				<p>' . $this->translator->trans('basket.taken') . '</p>
+			</div>');
 		$page->render();
 	}
 
 	public function requests(array $requests): string
 	{
-		$out = '
-		<ul class="linklist conversation-list">';
+		$out = '<ul class="linklist conversation-list">';
 
 		foreach ($requests as $r) {
-			$out .= '
-			<li><a onclick="chat(' . (int)$r['fs_id'] . ');return false;" href="#"><span class="pics"><img width="50" alt="avatar" src="' . $this->imageService->img(
-					$r['fs_photo']
-				) . '"></span><span class="names">' . $r['fs_name'] . '</span><span class="msg"></span><span class="time">' . $this->timeHelper->niceDate(
-					$r['time_ts']
-				) . '</span><span class="clear"></span></a></li>';
+			$img = $this->imageService->img($r['fs_photo']);
+			$out .= '<li><a onclick="chat(' . (int)$r['fs_id'] . '); return false;" href="#">'
+				. '<span class="pics"><img width="50" alt="avatar" src="' . $img . '"></span>'
+				. '<span class="names">' . $r['fs_name'] . '</span>'
+				. '<span class="msg"></span>'
+				. '<span class="time">' . $this->timeHelper->niceDate($r['time_ts']) . '</span>'
+				. '<span class="clear"></span>
+			</a></li>';
 		}
 
-		return $out . '
-		</ul>';
+		return $out . '</ul>';
 	}
 
 	private function getSubtitle(array $basket): string
 	{
-		$subtitle = '<p>' . $this->translationHelper->s('create_at') . ' <strong>' . $this->timeHelper->niceDate(
-				$basket['time_ts']
-			) . '</strong>';
+		$created = $this->timeHelper->niceDate($basket['time_ts']);
+		$expires = $this->timeHelper->niceDate($basket['until_ts']);
 
-		$subtitle .= '</p><p>' . $this->translationHelper->s('until') . ' <strong>' . $this->timeHelper->niceDate($basket['until_ts']) . '</strong></p>';
+		$subtitle = '<p>' . $this->translator->trans('basket.created', ['{date}' => $created]) . '</p>';
+		$subtitle .= '<p>' . $this->translator->trans('basket.expires', ['{date}' => $expires]) . '</p>';
+
 		if ($basket['update_ts']) {
-			$subtitle .= '<p>' . $this->translationHelper->s('update_at') . ' <strong>' . $this->timeHelper->niceDate($basket['update_ts']) . '</strong></p>';
+			$updated = $this->timeHelper->niceDate($basket['update_ts']);
+			$subtitle .= '<p>' . $this->translator->trans('basket.updated', ['{date}' => $updated]) . '</p>';
 		}
 
 		return $subtitle;
@@ -190,33 +200,35 @@ class BasketView extends View
 		} else {
 			$request = '
 				<div class="ui-padding-bottom">
-					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\',{app:\'basket\',id:' . (int)$basket['id'] . '});">' . $this->translationHelper->s('basket_edit') . '</a>
+					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\','
+					. '{app:\'basket\''
+					. ',id:' . (int)$basket['id']
+					. '});">' . $this->translator->trans('basket.edit') . '
+					</a>
 				</div><div>
-					<a class="button button-big" href="#" onclick="tryRemoveBasket(' . (int)$basket['id'] . ');">' . $this->translationHelper->s('basket_delete') . '</a>
+					<a class="button button-big" href="#" onclick="tryRemoveBasket(' . (int)$basket['id'] . ');">'
+					. $this->translator->trans('basket.delete') . '
+					</a>
 				</div>';
 		}
 
 		return $this->fsAvatarList(
+			[
 				[
-					[
-						'id' => $basket['fs_id'],
-						'name' => $basket['fs_name'],
-						'photo' => $basket['fs_photo'],
-						'sleep_status' => $basket['sleep_status'],
-					],
+					'id' => $basket['fs_id'],
+					'name' => $basket['fs_name'],
+					'photo' => $basket['fs_photo'],
+					'sleep_status' => $basket['sleep_status'],
 				],
-				['height' => 600, 'scroller' => false]
-			) .
-			$request;
+			], ['height' => 600, 'scroller' => false]
+		) . $request;
 	}
 
 	private function pageImg(string $img): string
 	{
-		if ($img != '') {
-			return '<img class="basket-img" src="/images/basket/medium-' . $img . '" />';
-		}
+		$img = ($img == '') ? '/img/foodloob.gif' : '/images/basket/medium-' . $img;
 
-		return '<img class="basket-img" src="/img/foodloob.gif" />';
+		return '<img class="basket-img" src="' . $img . '" />';
 	}
 
 	public function basketForm(array $foodsaver): string
@@ -231,85 +243,62 @@ class BasketView extends View
 			['id' => 0.75, 'name' => '750 g'],
 		];
 
-		for ($i = 1; $i <= 10; ++$i) {
+		$kgValues = array_merge(range(1, 9), range(10, 100, 10));
+		foreach ($kgValues as $i) {
 			$values[] = [
 				'id' => $i,
-				'name' => number_format($i, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg',
+				'name' => $i . '<span style="white-space:nowrap">&thinsp;</span>kg',
 			];
 		}
 
-		for ($i = 2; $i <= 10; ++$i) {
-			$val = ($i * 10);
-			$values[] = [
-				'id' => $val,
-				'name' => number_format($val, 2, ',', '.') . '<span style="white-space:nowrap">&thinsp;</span>kg',
-			];
-		}
+		$out .= $this->v_utils->v_form_select('weight', [
+			'values' => $values,
+			'selected' => 3,
+		]);
 
-		$out .= $this->v_utils->v_form_select(
-			'weight',
-			[
-				'values' => $values,
-				'selected' => 3,
-			]
-		);
-
-		$out .= $this->v_utils->v_form_checkbox(
-			'contact_type',
-			[
-				'values' => [
-					['id' => 1, 'name' => 'Per Nachricht'],
-					['id' => 2, 'name' => 'Per Telefonanruf'],
-				],
-				'checked' => [1],
-			]
-		);
+		$out .= $this->v_utils->v_form_checkbox('contact_type', [
+			'values' => [
+				['id' => 1, 'name' => $this->translator->trans('basket.contact.write')],
+				['id' => 2, 'name' => $this->translator->trans('basket.contact.call')],
+			],
+			'checked' => [1],
+		]);
 
 		$out .= $this->v_utils->v_form_text('tel', ['value' => $foodsaver['telefon']]);
 		$out .= $this->v_utils->v_form_text('handy', ['value' => $foodsaver['handy']]);
 
-		$lifetimeNames = $this->translationHelper->sv('lifetime_options', []);
-		$out .= $this->v_utils->v_form_select(
-			'lifetime',
-			[
-				'values' => [
-					['id' => 1, 'name' => $lifetimeNames[0]],
-					['id' => 2, 'name' => $lifetimeNames[1]],
-					['id' => 3, 'name' => $lifetimeNames[2]],
-					['id' => 7, 'name' => $lifetimeNames[3]],
-					['id' => 14, 'name' => $lifetimeNames[4]],
-					['id' => 21, 'name' => $lifetimeNames[5]]
-				],
-				'selected' => 7,
-			]
-		);
+		$out .= $this->v_utils->v_form_select('lifetime', [
+			'values' => [
+				['id' => 1, 'name' => $this->translator->trans('basket.valid.1')],
+				['id' => 2, 'name' => $this->translator->trans('basket.valid.2')],
+				['id' => 3, 'name' => $this->translator->trans('basket.valid.3')],
+				['id' => 7, 'name' => $this->translator->trans('basket.valid.7')],
+				['id' => 14, 'name' => $this->translator->trans('basket.valid.14')],
+				['id' => 21, 'name' => $this->translator->trans('basket.valid.21')],
+			],
+			'selected' => 7,
+		]);
 
-		$out .= $this->v_utils->v_form_checkbox(
-			'food_type',
-			[
-				'values' => [
-					['id' => 1, 'name' => 'Backwaren'],
-					['id' => 2, 'name' => 'Obst & Gemüse'],
-					['id' => 3, 'name' => 'Molkereiprodukte'],
-					['id' => 4, 'name' => 'Trockenware'],
-					['id' => 5, 'name' => 'Tiefkühlware'],
-					['id' => 6, 'name' => 'Zubereitete Speisen'],
-					['id' => 7, 'name' => 'Tierfutter'],
-				],
-			]
-		);
+		$out .= $this->v_utils->v_form_checkbox('food_type', [
+			'values' => [
+				['id' => 1, 'name' => $this->translator->trans('basket.has.bread')],
+				['id' => 2, 'name' => $this->translator->trans('basket.has.greens')],
+				['id' => 3, 'name' => $this->translator->trans('basket.has.dairy')],
+				['id' => 4, 'name' => $this->translator->trans('basket.has.dry')],
+				['id' => 5, 'name' => $this->translator->trans('basket.has.frozen')],
+				['id' => 6, 'name' => $this->translator->trans('basket.has.prepared')],
+				['id' => 7, 'name' => $this->translator->trans('basket.has.pet')],
+			],
+		]);
 
-		return $out . $this->v_utils->v_form_checkbox(
-				'food_art',
-				[
-					'values' => [
-						['id' => 1, 'name' => 'sind Bio'],
-						['id' => 2, 'name' => 'sind vegetarisch'],
-						['id' => 3, 'name' => 'sind vegan'],
-						['id' => 4, 'name' => 'sind glutenfrei'],
-					],
-				]
-			);
+		return $out . $this->v_utils->v_form_checkbox('food_art', [
+			'values' => [
+				['id' => 1, 'name' => $this->translator->trans('basket.is.organic')],
+				['id' => 2, 'name' => $this->translator->trans('basket.is.veggie')],
+				['id' => 3, 'name' => $this->translator->trans('basket.is.vegan')],
+				['id' => 4, 'name' => $this->translator->trans('basket.is.gf')],
+			],
+		]);
 	}
 
 	public function basketEditForm(array $basket): string
@@ -325,40 +314,52 @@ class BasketView extends View
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
-			$img = '<div style="width:100%;max-height:200px;overflow:hidden;"><img src="http://media.myfoodsharing.org/de/items/200/' . $basket['picture'] . '" /></div>';
+			$img = '<div style="width: 100%; max-height: 200px; overflow: hidden;">
+				<img src="http://media.myfoodsharing.org/de/items/200/' . $basket['picture'] . '" />
+			</div>';
 		}
 
-		return '
-		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
-		' .
-			'<div style="text-align:center;"><a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">' . $this->translationHelper->s('basket_request_on_page') . '</a></div>';
+		return $img . $this->v_utils->v_input_wrapper(
+			$this->translator->trans('basket.description'),
+			nl2br($this->routeHelper->autolink($basket['description']))
+		) . '
+		<div style="text-align: center;">
+			<a class="fsbutton" href="' . BASE_URL . '/essenskoerbe/' . $basket['fsf_id'] . '" target="_blank">'
+			. $this->translator->trans('basket.request-fs') .
+			'</a>
+		</div>';
 	}
 
 	public function bubbleNoUser(array $basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
-			$img = '<div style="width:100%;overflow:hidden;"><img src="/images/basket/medium-' . $basket['picture'] . '" width="100%" /></div>';
+			$img = '<div style="width: 100%; overflow: hidden;">
+				<img src="/images/basket/medium-' . $basket['picture'] . '" width="100%" />
+			</div>';
 		}
 
-		return '
-		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
-		';
+		return $img . $this->v_utils->v_input_wrapper(
+			$this->translator->trans('basket.description'),
+			nl2br($this->routeHelper->autolink($basket['description']))
+		);
 	}
 
 	public function bubble(array $basket): string
 	{
 		$img = '';
 		if (!empty($basket['picture'])) {
-			$img = '<div style="width:100%;overflow:hidden;"><img src="/images/basket/medium-' . $basket['picture'] . '" width="100%" /></div>';
+			$img = '<div style="width: 100%; overflow: hidden;">
+				<img src="/images/basket/medium-' . $basket['picture'] . '" width="100%" />
+			</div>';
 		}
 
-		return '
-		' . $img . '
-		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('set_date'), $this->timeHelper->niceDate($basket['time_ts'])) . '
-		' . $this->v_utils->v_input_wrapper($this->translationHelper->s('desc'), nl2br($this->routeHelper->autolink($basket['description']))) . '
-		';
+		return $img . $this->v_utils->v_input_wrapper(
+			$this->translator->trans('basket.date'),
+			$this->timeHelper->niceDate($basket['time_ts'])
+		) . $this->v_utils->v_input_wrapper(
+			$this->translator->trans('basket.description'),
+			nl2br($this->routeHelper->autolink($basket['description']))
+		);
 	}
 }

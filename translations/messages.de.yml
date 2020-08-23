@@ -1070,11 +1070,14 @@ team:
 
 basket:
   title: Essenskörbe
+  description: Beschreibung
   my_list_empty: Du hast keine Essenskörbe eingetragen
   all: Alle Essenskörbe
   all_map: Alle Körbe auf der Karte
   recent: Neueste Essenskörbe
   nearby: Essenskörbe in Deiner Nähe
+  nearby-short: In Deiner Nähe
+  mapsearch: 'Adresssuche...'
   go: zum Essenskorb
   by: 'Essenskorb von {name}'
   on: 'Essenskorb von {platform}'
@@ -1083,10 +1086,34 @@ basket:
   edit: Essenskorb bearbeiten
   delete: Essenskorb löschen
   new: Neuer Essenskorb
+  date: Einstelldatum
+  created: 'Veröffentlicht am <strong>{date}</strong>'
+  expires: 'Gültig bis <strong>{date}</strong>'
+  updated: 'Aktualisiert am <strong>{date}</strong>'
+  where: Wo?
+  provider: Anbieter*in
+  requests: Anfragen ({count})
+  howto: |
+    <b>Information zur Benutzung von Essenskörben</b>
+    <br>
+    Bitte nutze die grüne Schaltfläche <b>"Essenskorb anfragen"</b>, um Interesse an diesem Korb zu bekunden,
+    oder <b>"Essenskorb bearbeiten"</b>, um deinen eigenen Korb nachträglich zu bearbeiten!
+  login: |
+    Für detaillierte Infos musst du eingeloggt sein.
+    Bist du noch nicht als Foodsharer registriert?
+    Dann klick oben auf <b>Mach mit!</b> und leg direkt los!
+  taken: |
+    <b>Dieser Essenskorb ist leider nicht mehr verfügbar!</b>
+    <br><br>
+    Bist du noch nicht als Foodsharer registriert?
+    Dann klick oben auf <b>Mach mit!</b> um loszulegen oder stelle selbst einen Essenskorb ein!
+    <br><br>
+    Auf unserer Karte findest du gegebenenfalls weitere Essenskörbe in deiner Gegend.
   no_requests: Bisher keine Anfragen
   requested_by: angefragt von
   request_close: Essenskorbanfrage abschließen
   request: Essenskorb anfragen
+  request-fs: Essenskorb anfragen auf unserer foodsharing-Homepage
   withdraw_request: Anfrage zurückziehen
   n_requests: 'Bisherige Anfragen: <strong>{count}</strong>'
   send_request: Anfrage absenden
@@ -1100,6 +1127,30 @@ basket:
     deny: 'Ich möchte diese Anfrage ablehnen.'
     finished: 'Danke Dir! Der Vorgang ist abgeschlossen.'
   request_empty: Dein Anfragetext darf nicht leer sein.
+  image: Füge dem Essenskorb ein Foto hinzu!
+  contact:
+    write: Per Nachricht
+    call: Per Telefonanruf
+  valid:
+    1: einen Tag
+    2: zwei Tage
+    3: drei Tage
+    7: eine Woche
+    14: zwei Wochen
+    21: drei Wochen
+  has:
+    bread: Backwaren
+    greens: Obst & Gemüse
+    dairy: Molkereiprodukte
+    dry: Trockenware
+    frozen: Tiefkühlware
+    prepared: Zubereitete Speisen
+    pet: Tierfutter
+  is:
+    organic: sind Bio
+    veggie: sind vegetarisch
+    vegan: sind vegan
+    gf: sind glutenfrei
   error: Essenskorb konnte nicht geladen werden.
   not_found: Der Essenskorb existiert nicht mehr.
   request_denied: Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.

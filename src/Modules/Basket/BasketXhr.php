@@ -84,7 +84,7 @@ class BasketXhr extends Control
 			$this->translator->trans('notice')
 		));
 
-		$dia->addPictureField('picture');
+		$dia->addPictureField('picture', $this->translator->trans('basket.image'));
 
 		$dia->addContent($this->view->basketForm($basketProvider));
 
@@ -413,7 +413,7 @@ class BasketXhr extends Control
 		$dia = new XhrDialog();
 		$dia->setTitle($this->translator->trans('basket.edit'));
 
-		$dia->addPictureField('picture');
+		$dia->addPictureField('picture', $this->translator->trans('basket.image'));
 
 		$dia->addContent($this->view->basketEditForm($basket));
 
