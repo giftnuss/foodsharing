@@ -19,6 +19,7 @@ upload:
 
 button:
   save: Speichern
+  next: Weiter
   change_picture: Bild ändern
   attach_image: Bild anhängen
   rotate_right: im Uhrzeigersinn drehen
@@ -181,6 +182,12 @@ legal:
   legal_agreement: Rechtsvereinbarung
   are_you_sure_to_downgrade: 'Achtung: Du hast ausgewählt, dass du zum Foodsaver herabgestuft werden möchtest. Bist du dir sicher?'
 
+pronoun:
+  0: 'er/sie'
+  1: 'er'
+  2: 'sie'
+  3: 'er*sie'
+
 salutation:
   0: 'Liebe/r'
   1: 'Lieber'
@@ -299,6 +306,8 @@ terminology:
   statistic: Statistik
   reports: Regelverletzungen (Preview)
   fsp: Fairteiler
+  basket: Essenskorb
+  baskets: Essenskörbe
   groups: Arbeitsgruppen
   group: Arbeitsgruppe
   subgroups: Untergruppen
@@ -1066,7 +1075,13 @@ basket:
   all_map: Alle Körbe auf der Karte
   recent: Neueste Essenskörbe
   nearby: Essenskörbe in Deiner Nähe
+  go: zum Essenskorb
+  by: 'Essenskorb von {name}'
+  on: 'Essenskorb von {platform}'
   add: Essenskorb anlegen
+  publish: Essenskorb veröffentlichen
+  edit: Essenskorb bearbeiten
+  delete: Essenskorb löschen
   new: Neuer Essenskorb
   no_requests: Bisher keine Anfragen
   requested_by: angefragt von
@@ -1077,10 +1092,33 @@ basket:
   send_request: Anfrage absenden
   sent_request: Anfrage wurde versendet
   withdrawn_request: Anfrage wurde zurückgezogen
+  change-state: Essenskorbanfrage von {name} abschließen
+  state:
+    okay: 'Ja, {pronoun} hat den Essenskorb abgeholt.'
+    nope: 'Nein, {pronoun} ist leider nicht wie verabredet erschienen.'
+    gone: 'Die Lebensmittel wurden von jemand anderem abgeholt.'
+    deny: 'Ich möchte diese Anfrage ablehnen.'
+    finished: 'Danke Dir! Der Vorgang ist abgeschlossen.'
   request_empty: Dein Anfragetext darf nicht leer sein.
+  error: Essenskorb konnte nicht geladen werden.
   not_found: Der Essenskorb existiert nicht mehr.
   request_denied: Deine Anfrage wurde vom Essenskorbanbieter abgelehnt.
   not_active: Essenskorb ist jetzt nicht mehr aktiv!
+  no-login: |
+    Du bist nicht eingeloggt, vielleicht ist deine Session abgelaufen.
+    Bitte logge dich ein und sende deine Anfrage erneut ab.
+  no-address: |
+    Bitte gib deine Adresse in den {settings} an, um einen Essenskorb über die Webseite anbieten zu können.
+    <br><br>
+    Diese wird benötigt, um einen Essenskorb mittels Pinnadel auf der Karte darzustellen.
+    <br><br>
+    Die Postanschrift deiner Adresse ist dabei für EssenskorbnutzerInnen nicht sichtbar.
+  go-to-settings: Zu den Einstellungen
+  public-info: 'Beschreibung, Bild, Übergabeort und Zeitraum sind öffentlich sichtbar.'
+  no-desc: Bitte gib eine Beschreibung ein!
+  not-allowed: 'Du bist nicht dazu berechtigt, diesen Essenskorb zu bearbeiten.'
+  publish_error: 'Es gab einen Fehler. Der Essenskorb konnte nicht veröffentlicht werden.'
+  published: Danke dir! Der Essenskorb wurde veröffentlicht!
 
 personal_data:
   label: Kontakt

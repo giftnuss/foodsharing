@@ -26,7 +26,6 @@ $csrf_whitelist = [
 	// 'Basket::basketCoordinates',
 	// 'Basket::newBasket',
 	// 'Basket::publish',
-	// 'Basket::resizePic',
 	// 'Basket::nearbyBaskets',
 	// 'Basket::bubble',
 	// 'Basket::fsBubble',
