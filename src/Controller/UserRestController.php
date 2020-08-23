@@ -312,7 +312,7 @@ class UserRestController extends AbstractFOSRestController
 		// check length of message
 		$message = trim($paramFetcher->get('message'));
 		if (strlen($message) < self::MIN_RATING_MESSAGE_LENGTH) {
-			throw new HttpException(400);
+			throw new HttpException(400, 'text too short: ' . strlen($message) . ' < ' . self::MIN_RATING_MESSAGE_LENGTH);
 		}
 
 		$this->profileGateway->giveBanana($userId, $message, $this->session->id());

@@ -22,6 +22,7 @@
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 
 ## Dev/Test/CI stuff
+- Fix banana unit test !1649 @alex.simm
 
 # Release "Birne" (pear), 2020-08-09
 

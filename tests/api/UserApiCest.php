@@ -152,9 +152,15 @@ class UserApiCest
 
 	public function canGiveBanana(\ApiTester $I): void
 	{
+		// create text of at least 150 characters
+		$text = $this->faker->text(150);
+		while (strlen($text) < 150) {
+			$text .= ' ' . $this->faker->text(20);
+		}
+
 		$testUser = $I->createFoodsaver();
 		$I->login($this->user[self::EMAIL]);
-		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $text]);
 		$I->seeResponseCodeIs(Http::OK);
 	}
 
