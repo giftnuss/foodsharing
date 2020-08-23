@@ -7,8 +7,6 @@ use Foodsharing\Lib\Db\Mem;
 use Foodsharing\Lib\WebSocketConnection;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Foodsaver\Profile;
-use Foodsharing\Modules\Message\Message;
-use Foodsharing\Modules\Message\MessageGateway;
 use Foodsharing\Modules\PushNotification\Notification\MessagePushNotification;
 use Foodsharing\Modules\PushNotification\PushNotificationGateway;
 use Foodsharing\Modules\Store\StoreGateway;
