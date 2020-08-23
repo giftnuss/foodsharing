@@ -249,6 +249,7 @@ and persistent session disabled after each request, so that LastLogin is set cor
 - Add ageband to statistic page !1685 @fs_k
 - Activity page shows only last entry to buddywall, eventwall, fairsharepointwall !1694 @fs_k
 - Leaving a district is captured in history. Leaving a home district removes verification. !1358 @fs_k
+- Introduces Push Notifications for the Android App !1647 @dthulke
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
