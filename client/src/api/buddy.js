@@ -1,5 +1,5 @@
-import { post } from './base'
+import { put } from './base'
 
 export async function sendBuddyRequest (userId) {
-  return (await post(`/buddy/${userId}`)).isBuddy
+  return (await put(`/buddy/${userId}`)).isBuddy
 }

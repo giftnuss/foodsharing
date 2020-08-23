@@ -19,8 +19,7 @@ class BuddyTransactions
 		BellGateway $bellGateway,
 		Session $session,
 		ImageHelper $imageHelper
-	)
-	{
+	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->bellGateway = $bellGateway;
 		$this->session = $session;
@@ -28,42 +27,41 @@ class BuddyTransactions
 	}
 
 	/**
-	 * Updates the buddy request status in the database, creates a bell notification, and returns whether the
-	 * users are now buddies.
+	 * Updates the buddy status and deletes open bell notifications.
 	 *
 	 * @param int $userId ID of another user
-	 *
-	 * @return bool whether this and the other user are now buddies
 	 */
-	public function processBuddyRequest(int $userId): bool
+	public function acceptBuddyRequest(int $userId): void
 	{
-		if ($this->buddyGateway->buddyRequestedMe($userId, $this->session->id())) {
-			$this->buddyGateway->confirmBuddy($userId, $this->session->id());
+		$this->buddyGateway->confirmBuddy($userId, $this->session->id());
 
-			$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . $userId);
-			$this->bellGateway->delBellsByIdentifier('buddy-' . $userId . '-' . $this->session->id());
+		$this->bellGateway->delBellsByIdentifier('buddy-' . $this->session->id() . '-' . $userId);
+		$this->bellGateway->delBellsByIdentifier('buddy-' . $userId . '-' . $this->session->id());
 
-			$buddyIds = [];
-			if ($b = $this->session->get('buddy-ids')) {
-				$buddyIds = $b;
-			}
-
-			$buddyIds[$userId] = $userId;
-			$this->session->set('buddy-ids', $buddyIds);
-
-			return true;
-		} else {
-			$this->buddyGateway->buddyRequest($userId, $this->session->id());
-			$this->bellGateway->addBell($userId, Bell::create(
-				'buddy_request_title',
-				'buddy_request',
-				$this->imageHelper->img($this->session->user('photo')),
-				['href' => '/profile/' . (int)$this->session->id() . ''],
-				['name' => $this->session->user('name')],
-				'buddy-' . $this->session->id() . '-' . $userId
-			));
-
-			return false;
+		$buddyIds = [];
+		if ($b = $this->session->get('buddy-ids')) {
+			$buddyIds = $b;
 		}
+
+		$buddyIds[$userId] = $userId;
+		$this->session->set('buddy-ids', $buddyIds);
+	}
+
+	/**
+	 * Sends a buddy request and creates a bell notification.
+	 *
+	 * @param int $userId ID of another user
+	 */
+	public function sendBuddyRequest(int $userId): void
+	{
+		$this->buddyGateway->buddyRequest($userId, $this->session->id());
+		$this->bellGateway->addBell($userId, Bell::create(
+			'buddy_request_title',
+			'buddy_request',
+			$this->imageHelper->img($this->session->user('photo')),
+			['href' => '/profile/' . (int)$this->session->id() . ''],
+			['name' => $this->session->user('name')],
+			'buddy-' . $this->session->id() . '-' . $userId
+		));
 	}
 }
