@@ -61,6 +61,28 @@ class PushNotificationSubscriptionRestController extends AbstractFOSRestControll
 
 		$this->gateway->sendPushNotificationsToFoodsaver($foodsaverId, new TestPushNotification());
 
+		$view = $this->view($pushSubscription, 200);
+		return $this->handleView($view);
+	}
+
+	/**
+	 * @Rest\Post("pushnotification/{type}/unsubscribe")
+	 */
+	public function unsubscribeAction(Request $request, string $type)
+	{
+		if (!$this->gateway->hasHandlerFor($type)) {
+			return $this->handleHttpStatus(404);
+		}
+
+		if (!$this->session->may()) {
+			return $this->handleHttpStatus(403);
+		}
+
+		$pushSubscription = $request->getContent();
+		$foodsaverId = $this->session->id();
+
+		$this->gateway->deleteSubscriptionByDataForFoodsaver($foodsaverId, $pushSubscription, $type);
+
 		return $this->handleHttpStatus(200);
 	}
 

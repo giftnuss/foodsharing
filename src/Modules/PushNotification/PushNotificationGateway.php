@@ -35,6 +35,19 @@ class PushNotificationGateway extends BaseGateway
 		]);
 	}
 
+	public function deleteSubscriptionByDataForFoodsaver(int $foodsaverId, string $subscriptionData, string $type)
+	{
+		if (!$this->hasHandlerFor($type)) {
+			throw new \InvalidArgumentException("There is no handler registered to handle {$type}.");
+		}
+
+		return $this->db->delete('fs_push_notification_subscription', [
+			'foodsaver_id' => $foodsaverId,
+			'data' => $subscriptionData,
+			'type' => $type
+		]);
+	}
+
 	/**
 	 * @param string[] $subscriptionData - array of subscription data to be removed
 	 */
