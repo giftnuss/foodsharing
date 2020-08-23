@@ -18,14 +18,14 @@ $I->click('.topbar-baskets > a');
 $I->see('Essenskorb anlegen');
 
 $I->click('Essenskorb anlegen');
-$I->waitForText('Essenskorb anbieten');
+$I->waitForText('Wie lange soll dein Essenskorb gültig sein?');
 /*
  * Check for default options on the foodbasket create form.
  * this was implemented mainly to check the v_components when refactoring default options.
  */
 $I->seeCheckboxIsChecked('.input.cb-contact_type[value="1"]');
 $I->dontSeeCheckboxIsChecked('.input.cb-contact_type[value="2"]');
-$I->seeOptionIsSelected('#weight', '3,0');
+$I->seeOptionIsSelected('#weight', '3 kg');
 $I->dontSeeElement('#handy');
 $I->checkOption('.input.cb-contact_type[value="2"]');
 $I->waitForElement('#handy');
@@ -34,8 +34,8 @@ $I->seeOptionIsSelected('#lifetime', 'eine Woche');
 
 $I->fillField('description', $description);
 
-/* This line should not be necessary - actually the window should not get too big! */
-$I->scrollTo('//*[contains(text(),"Essenskorb veröffentlichen")]');
+// /* This line should not be necessary - actually the window should not get too big! */
+// $I->scrollTo('//*[contains(text(),"Essenskorb veröffentlichen")]');
 $I->click('Essenskorb veröffentlichen');
 
 $I->waitForElementVisible('#pulse-info', 4);
@@ -60,7 +60,7 @@ $I->waitForText('Essenskorb veröffentlichen', 3);
 $I->waitForElement('#description');
 $I->fillField('description', $description . $updateDescription);
 $I->click('Essenskorb veröffentlichen');
-$I->waitForText('Geändert am');
+$I->waitForText('Aktualisiert am');
 
 $I->see($updateDescription);
 $I->seeInDatabase('fs_basket', [
@@ -88,7 +88,7 @@ $nick->does(
 $I->amOnPage($I->foodBasketInfoUrl($id));
 $I->waitForActiveAPICalls();
 $I->waitForElementNotVisible('#fancybox-loading');
-$I->waitForText('Anfragen 1');
+$I->waitForText('Anfragen (1)');
 $I->click('.topbar-baskets > a');
 $I->waitForText('angefragt von');
 $I->click('.topbar-baskets .requests > a');

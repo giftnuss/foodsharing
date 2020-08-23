@@ -420,7 +420,7 @@ class BasketXhr extends Control
 		$dia->addOpt('width', '90%');
 		$dia->noOverflow();
 
-		$dia->addButton($this->translator->trans('basket_publish'),
+		$dia->addButton($this->translator->trans('basket.publish'),
 			'ajreq(\'publishEdit\',{'
 			. 'appost: 0,'
 			. 'app: \'basket\','

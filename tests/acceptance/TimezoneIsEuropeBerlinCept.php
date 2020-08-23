@@ -14,7 +14,7 @@ $I->click('.topbar-baskets > a');
 $I->waitForText('Essenskorb anlegen');
 
 $I->click('Essenskorb anlegen');
-$I->waitForText('Essenskorb anbieten');
+$I->waitForText('Wie lange soll dein Essenskorb gültig sein?');
 
 $I->fillField('description', $description);
 
