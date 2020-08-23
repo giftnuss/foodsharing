@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.1",
-    "@sentry/browser": "^5.20.1",
-    "@sentry/integrations": "^5.20.1",
-    "@sum.cumo/vue-datepicker": "^2.0.0",
+    "@sentry/browser": "^5.21.3",
+    "@sentry/integrations": "^5.21.3",
+    "@sum.cumo/vue-datepicker": "^2.1.1",
     "autosize": "^4.0.2",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.16.0",
