@@ -297,9 +297,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln('Create foodbaskets');
 		foreach (range(0, 500) as $_) {
 			$user = $this->getRandomIDOfArray($this->foodsavers);
-			$foodbasket = $I->createFoodbasket($user);
-			$commenter = $this->getRandomIDOfArray($this->foodsavers);
-			$I->addFoodbasketWallpost($commenter, $foodbasket['id']);
+			$I->createFoodbasket($user);
 			$this->output->write('.');
 		}
 		$this->output->writeln(' done');
