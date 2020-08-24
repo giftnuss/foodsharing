@@ -7,15 +7,15 @@
       {{ $i18n('search.noresults') }}
     </div>
 
-    <div v-if="filtered.themes.length">
+    <div v-if="filtered.threads.length">
       <h3 class="dropdown-header">
         <i class="fas fa-comment" /> {{ $i18n('terminology.themes') }}
       </h3>
       <search-result-entry
-        v-for="theme in filtered.themes"
-        :key="theme.id"
-        :href="$url('forum', groupId, subforumId, theme.id)"
-        :title="theme.name"
+        v-for="thread in filtered.threads"
+        :key="thread.id"
+        :href="$url('forum', groupId, subforumId, thread.id)"
+        :title="thread.name"
       />
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
   },
   directives: { VBTooltip },
   props: {
-    themes: {
+    threads: {
       type: Array,
       default: () => []
     },
@@ -72,11 +72,11 @@ export default {
         return true
       }
       return {
-        themes: this.themes.filter(filterFunction)
+        threads: this.threads.filter(filterFunction)
       }
     },
     isEmpty () {
-      return !this.filtered.themes.length
+      return !this.filtered.threads.length
     }
   }
 }

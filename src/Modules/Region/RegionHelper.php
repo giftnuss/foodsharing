@@ -24,13 +24,10 @@ class RegionHelper
 	public function transformThreadViewData($threads, $regionId, $ambassadorForum)
 	{
 		$processThreads = function ($t) use ($regionId, $ambassadorForum) {
+			$t['userId'] = $t['foodsaver_id'];
 			$t['avatar'] = [
-				'user' => ['id' => $t['foodsaver_id'],
-					'name' => $t['foodsaver_name'],
-					'sleep_status' => $t['sleep_status'],
-				],
-				'size' => 'mini',
-				'imageUrl' => $this->imageService->img($t['foodsaver_photo'], 'mini', 'q')
+				'sleepStatus' => $t['sleep_status'],
+				'imageUrl' => $this->imageService->img($t['foodsaver_photo'], 'mini', 'q'),
 			];
 			$t['post_time'] = $this->timeHelper->niceDate($t['post_time_ts']);
 			$t['url'] = $this->forumService->url($regionId, $ambassadorForum, $t['id']);

@@ -84,7 +84,6 @@ $csrf_whitelist = [
 	// 'Quiz::next',
 	// 'Quiz::pause',
 	// 'Quiz::updatequest',
-	// 'Region::morethemes',
 	'Region::quickreply',
 	// 'Region::signout',
 	// 'Report::loadReport',

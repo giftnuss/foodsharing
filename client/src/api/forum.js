@@ -1,5 +1,9 @@
 import { get, post, put, patch, remove } from './base'
 
+export function listThreads (groupId, subforumId, offset = 0) {
+  return get(`/forum/${groupId}/${subforumId}?offset=${offset}`)
+}
+
 export function getThread (threadId) {
   return get(`/forum/thread/${threadId}`)
 }

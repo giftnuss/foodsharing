@@ -298,7 +298,11 @@ final class RegionControl extends Control
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
 			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {
-			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
+			$viewdata['threads'] = $this->regionHelper->transformThreadViewData(
+				$this->forumGateway->listThreads($region['id'], $ambassadorForum),
+				$region['id'],
+				$ambassadorForum
+			);
 		}
 
 		$response->setContent($this->render('pages/Region/forum.twig', $viewdata));

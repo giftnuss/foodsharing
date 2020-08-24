@@ -3,7 +3,6 @@ import '@/core'
 import '@/globals'
 import $ from 'jquery'
 import {
-  ajax,
   goTo,
   GET,
   pulseError
@@ -16,7 +15,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
-import ForumSearchField from './components/ForumSearchField'
+import ThreadList from './components/ThreadList'
 import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
@@ -77,41 +76,11 @@ $(document).ready(() => {
         Thread
       })
       vueApply('#vue-thread')
-    } else {
-      const loadedPages = []
-      $(window).on('scroll', function () {
-        if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
-          return
-        }
-
-        var page = parseInt($('#morebutton').val()) || 1
-        for (let i = 0; i < loadedPages.length; i++) {
-          if (loadedPages[i] == page) {
-            return
-          }
-        }
-        loadedPages.push(page)
-        const last = $('.thread:last').attr('id')
-        if (last != undefined) {
-          ajax.req('bezirk', 'morethemes', {
-            data: {
-              bid: GET('bid'),
-              bot: GET('sub') == 'botforum' ? 1 : 0,
-              page: page,
-              last: last.split('-')[1]
-            },
-            success: function (data) {
-              $('#morebutton').val(page + 1)
-              $('.forum_threads.linklist').append(data.html)
-            }
-          })
-        }
-      })
-
+    } else if (!GET('newthread')) {
       vueRegister({
-        ForumSearchField
+        ThreadList
       })
-      vueApply('#vue-forumsearchfield')
+      vueApply('#vue-threadlist')
     }
   }
 })

@@ -44,16 +44,16 @@ class ForumRestController extends AbstractFOSRestController
 		$this->sanitizerService = $sanitizerService;
 	}
 
-	private function normalizeThread($thread): array
+	private function normalizeThread($thread, ?int $regionId = null, ?int $subforumId = null): array
 	{
 		$normalizedThread = [
 			'id' => $thread['id'],
-			'regionId' => $thread['regionId'],
-			'regionSubId' => $thread['regionSubId'],
+			'regionId' => $regionId ?? $thread['regionId'],
+			'regionSubId' => $subforumId ?? $thread['regionSubId'],
 			'title' => $thread['title'],
 			'createdAt' => str_replace(' ', 'T', $thread['time']),
-			'isSticky' => (bool)$thread['sticky'],
-			'isActive' => (bool)$thread['active'] ?? true,
+			'isSticky' => boolval($thread['sticky'] ?? false),
+			'isActive' => boolval($thread['active'] ?? true),
 			'lastPost' => [
 				'id' => $thread['last_post_id'],
 			],
@@ -93,6 +93,8 @@ class ForumRestController extends AbstractFOSRestController
 	 * @SWG\Parameter(name="forumSubId", in="path", type="integer",
 	 *   description="each region/group has another namespace to separate different forums with the same base id (region/group id, here: forumId). So with any forumId, there is (currently) 2, possibly infinite, actual forums (list of threads).
 	 * 0: Forum, 1: Ambassador forum")
+	 * @SWG\Parameter(name="limit", in="query", type="integer", description="how many search results to return")
+	 * @SWG\Parameter(name="offset", in="query", type="integer", description="starting with which result")
 	 * @SWG\Response(response="200", description="Success",
 	 *     @SWG\Schema(type="object", @SWG\Property(property="data", type="array", @SWG\Items(type="object",
 	 *     @SWG\Property(property="id", type="integer", description="thread id"),
@@ -109,14 +111,19 @@ class ForumRestController extends AbstractFOSRestController
 	 * @SWG\Response(response="403", description="Insufficient permissions to view that forum.")
 	 * @SWG\Tag(name="forum")
 	 * @Rest\Get("forum/{forumId}/{forumSubId}", requirements={"forumId" = "\d+", "forumSubId" = "\d"})
+	 * @Rest\QueryParam(name="limit", requirements="\d+", default="20", description="how many search results to return")
+	 * @Rest\QueryParam(name="offset", requirements="\d+", default="0", description="starting with which result")
 	 */
-	public function listThreadsAction(int $forumId, int $forumSubId): SymfonyResponse
+	public function listThreadsAction(int $forumId, int $forumSubId, ParamFetcher $paramFetcher): SymfonyResponse
 	{
 		if (!$this->forumPermissions->mayAccessForum($forumId, $forumSubId)) {
 			throw new HttpException(403);
 		}
 
-		$threads = $this->getNormalizedThreads($forumId, $forumSubId);
+		$limit = intval($paramFetcher->get('limit'));
+		$offset = intval($paramFetcher->get('offset'));
+
+		$threads = $this->getNormalizedThreads($forumId, $forumSubId, $limit, $offset);
 
 		$view = $this->view([
 			'data' => $threads
@@ -125,11 +132,11 @@ class ForumRestController extends AbstractFOSRestController
 		return $this->handleView($view);
 	}
 
-	private function getNormalizedThreads(int $forumId, int $forumSubId)
+	private function getNormalizedThreads(int $forumId, int $forumSubId, int $limit, int $offset)
 	{
-		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, 0, 0, 1000);
-		$threads = array_map(function ($thread) {
-			return $this->normalizeThread($thread);
+		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, $limit, $offset);
+		$threads = array_map(function ($thread) use ($forumId, $forumSubId) {
+			return $this->normalizeThread($thread, $forumId, $forumSubId);
 		}, $threads);
 
 		return $threads;

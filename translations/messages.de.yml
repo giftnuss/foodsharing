@@ -354,7 +354,7 @@ calendar:
   labelHelp: Navigation ist auch mit Pfeiltasten möglich
 
 forum:
-  from: Von %name%
+  from: 'Von {name}'
   threads: Themen
   new_thread: Neues Thema verfassen
   follow:
@@ -600,6 +600,7 @@ profile:
 search:
   title: Suche
   placeholder: Suche...
+  forum: Nach Titel suchen...
   noresults: Es konnten keine Ergebnisse gefunden werden
   mybuddies: Meine Buddies
   mygroups: Meine Gruppen

@@ -39,27 +39,6 @@ final class RegionXhr extends Control
 		parent::__construct();
 	}
 
-	public function morethemes()
-	{
-		$regionId = (int)$_GET['bid'];
-		$ambassadorForum = ($_GET['bot'] == 1);
-		if (isset($_GET['page']) && $this->session->mayBezirk($regionId)) {
-			if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
-				return $this->responses->fail_permissions();
-			}
-
-			$viewdata['region']['id'] = $regionId;
-			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
-
-			return [
-				'status' => 1,
-				'data' => [
-					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
-				]
-			];
-		}
-	}
-
 	public function quickreply()
 	{
 		$data = json_decode(file_get_contents('php://input'), true);
