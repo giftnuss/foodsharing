@@ -16,6 +16,22 @@ class ForumPermissions
 		$this->session = $session;
 	}
 
+	public function mayStartUnmoderatedThread(array $region, $ambassadorForum): bool
+	{
+		if (!$this->session->user('verified')) {
+			return false;
+		}
+		$regionId = $region['id'];
+		if (!$this->mayPostToRegion($regionId, $ambassadorForum)) {
+			return false;
+		}
+		if ($this->session->isAmbassadorForRegion([$regionId])) {
+			return true;
+		}
+
+		return !$region['moderated'];
+	}
+
 	public function mayPostToRegion($regionId, $ambassadorForum): bool
 	{
 		if ($this->session->isOrgaTeam()) {

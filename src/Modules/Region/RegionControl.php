@@ -291,11 +291,10 @@ final class RegionControl extends Control
 		$viewdata['sub'] = $sub;
 
 		if ($tid = $request->query->getInt('tid')) {
-			/* this index triggers the rendering of the vue forum component */
 			$viewdata['thread'] = ['id' => $tid];
-			$viewdata['posts'] = [];
+			$viewdata['posts'] = []; // this triggers the rendering of the vue component `Thread`
 		} elseif ($request->query->has('newthread')) {
-			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+			$postActiveWithoutModeration = $this->forumPermissions->mayStartUnmoderatedThread($region, $ambassadorForum);
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
 			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {
