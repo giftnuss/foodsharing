@@ -5,6 +5,7 @@ namespace api;
 use ApiTester;
 use Codeception\Util\HttpCode as Http;
 use DateTime;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 
 /**
@@ -13,9 +14,10 @@ use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 class VotingApiCest
 {
 	private $region;
-	private $userAuthor;
-	private $userVoter;
-	private $userNonVoter;
+	private $userFoodsaverUnverified;
+	private $userFoodsaver;
+	private $userStoreManager;
+	private $userAmbassador;
 	private $poll;
 
 	private const POLLS_API = 'api/polls';
@@ -24,12 +26,17 @@ class VotingApiCest
 	public function _before(ApiTester $I)
 	{
 		$this->region = $I->createRegion();
-		$this->userAuthor = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
-		$this->userVoter = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
-		$this->userNonVoter = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
+		$this->userFoodsaverUnverified = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id'], 'verified' => 0]);
+		$this->userFoodsaver = $I->createFoodsaver(null, ['bezirk_id' => $this->region['id']]);
+
+		$this->userAmbassador = $I->createAmbassador(null, ['bezirk_id' => $this->region['id']]);
+		$I->addRegionAdmin($this->region['id'], $this->userAmbassador['id']);
+
+		$store = $I->createStore($this->region['id']);
+		$this->userStoreManager = $I->createStoreCoordinator(null, ['bezirk_id' => $this->region['id']]);
+		$I->addStoreTeam($store['id'], $this->userStoreManager['id'], true);
+
 		$this->poll = $this->createPoll($I, [1], ['type' => VotingType::SELECT_ONE_CHOICE]);
-		$I->addPollVoter($this->poll['id'], $this->userAuthor['id']);
-		$I->addPollVoter($this->poll['id'], $this->userVoter['id']);
 	}
 
 	public function canSeePolls(ApiTester $I)
@@ -37,7 +44,10 @@ class VotingApiCest
 		$I->sendGET(self::POLLS_API . '/' . $this->poll['id']);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
 
-		$I->login($this->userNonVoter['email']);
+		$I->sendGET(self::GROUPS_API . '/' . $this->region['id'] . '/polls');
+		$I->seeResponseCodeIs(Http::FORBIDDEN);
+
+		$I->login($this->userFoodsaver['email']);
 		$I->sendGET(self::POLLS_API . '/' . $this->poll['id']);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->seeResponseIsJson();
@@ -55,7 +65,7 @@ class VotingApiCest
 
 	public function canNotGetNonExistingPoll(ApiTester $I)
 	{
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendGET(self::POLLS_API . '/' . ($this->poll['id'] + 1));
 		$I->seeResponseCodeIs(Http::NOT_FOUND);
 	}
@@ -69,7 +79,7 @@ class VotingApiCest
 			'value' => 1
 		]);
 
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $this->poll['id'] . '/vote', ['options' => [$choice => 1]]);
 		$I->seeResponseCodeIs(Http::OK);
 		$I->sendPUT(self::POLLS_API . '/' . $this->poll['id'] . '/vote', ['options' => [$choice => 1]]);
@@ -81,9 +91,13 @@ class VotingApiCest
 			'value' => 1,
 			'votes' => $votes + 1
 		]);
+		$I->seeInDatabase('fs_foodsaver_has_voted', [
+			'poll_id' => $this->poll['id'],
+			'foodsaver_id' => $this->userFoodsaver['id']
+		]);
 	}
 
-	public function canNotVoteAsNonvoter(ApiTester $I)
+	public function canNotVoteInDifferentRegion(ApiTester $I)
 	{
 		$choice = 0;
 		$votes = $I->grabFromDatabase('fs_poll_option_has_value', 'votes', [
@@ -92,7 +106,10 @@ class VotingApiCest
 			'value' => 1
 		]);
 
-		$I->login($this->userNonVoter['email']);
+		$region = $I->createRegion();
+		$user = $I->createFoodsaver(null, ['bezirk_id' => $region['id']]);
+
+		$I->login($user['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $this->poll['id'] . '/vote', ['options' => [0 => 1]]);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
 
@@ -106,14 +123,13 @@ class VotingApiCest
 
 	public function canOnlyVoteInOngoingPoll(ApiTester $I)
 	{
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 
 		// create outdated poll
 		$poll = $this->createPoll($I, [1], [
 			'type' => VotingType::SELECT_ONE_CHOICE,
 			'end' => (new DateTime('now - 1 day'))->format('Y-m-d H:i:s')
 		]);
-		$I->addPollVoter($poll['id'], $this->userVoter['id']);
 
 		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
 			'options' => [0 => 1]
@@ -125,7 +141,6 @@ class VotingApiCest
 			'type' => VotingType::SELECT_ONE_CHOICE,
 			'start' => (new DateTime('now + 1 day'))->format('Y-m-d H:i:s')
 		]);
-		$I->addPollVoter($poll2['id'], $this->userVoter['id']);
 
 		$I->sendPUT(self::POLLS_API . '/' . $poll2['id'] . '/vote', [
 			'options' => [0 => 1]
@@ -137,10 +152,9 @@ class VotingApiCest
 	{
 		// create poll with single selection
 		$poll = $this->createPoll($I, [1], ['type' => VotingType::SELECT_ONE_CHOICE]);
-		$I->addPollVoter($poll['id'], $this->userVoter['id']);
 
 		// vote with different numbers of options
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
 			'options' => [0 => 1, 1 => 0, 2 => 1]
 		]);
@@ -163,10 +177,9 @@ class VotingApiCest
 	{
 		// create poll with multi-selection
 		$poll = $this->createPoll($I, [1], ['type' => VotingType::SELECT_MULTIPLE]);
-		$I->addPollVoter($poll['id'], $this->userVoter['id']);
 
 		// vote with different numbers of options
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
 			'options' => [0 => 1, 1 => 0]
 		]);
@@ -189,10 +202,9 @@ class VotingApiCest
 	{
 		// create poll with score voting
 		$poll = $this->createPoll($I, [-1, 0, 1], ['type' => VotingType::THUMB_VOTING]);
-		$I->addPollVoter($poll['id'], $this->userVoter['id']);
 
 		// vote with different numbers of options
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
 			'options' => [0 => 1, 1 => 0]
 		]);
@@ -215,10 +227,9 @@ class VotingApiCest
 	{
 		// create poll with score voting
 		$poll = $this->createPoll($I, range(-3, 3), ['type' => VotingType::SCORE_VOTING]);
-		$I->addPollVoter($poll['id'], $this->userVoter['id']);
 
 		// vote with different numbers of options
-		$I->login($this->userVoter['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
 			'options' => [0 => 1, 1 => 0]
 		]);
@@ -244,7 +255,7 @@ class VotingApiCest
 	public function orgaCanCancelPoll(ApiTester $I)
 	{
 		$poll = $this->createPoll($I, [-1, 0, 1], ['type' => VotingType::THUMB_VOTING]);
-		$I->login($this->userAuthor['email']);
+		$I->login($this->userFoodsaver['email']);
 		$I->sendDELETE(self::POLLS_API . '/' . $poll['id']);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
 		$I->seeInDatabase('fs_poll', [
@@ -262,13 +273,82 @@ class VotingApiCest
 		]);
 	}
 
+	public function canVoteInScopeAll(ApiTester $I)
+	{
+		$poll = $this->createPoll($I, [-1, 0, 1], [
+			'type' => VotingType::THUMB_VOTING,
+			'scope' => VotingScope::ALL_USERS
+		]);
+		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified);
+		$this->testCanVote($I, $poll, $this->userFoodsaver);
+		$this->testCanVote($I, $poll, $this->userStoreManager);
+		$this->testCanVote($I, $poll, $this->userAmbassador);
+	}
+
+	public function canVoteInScopeFoodsavers(ApiTester $I)
+	{
+		$poll = $this->createPoll($I, [-1, 0, 1], [
+			'type' => VotingType::THUMB_VOTING,
+			'scope' => VotingScope::FOODSAVERS
+		]);
+		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified);
+		$this->testCanVote($I, $poll, $this->userFoodsaver);
+		$this->testCanVote($I, $poll, $this->userStoreManager);
+		$this->testCanVote($I, $poll, $this->userAmbassador);
+	}
+
+	public function canVoteInScopeVerifiedFoodsavers(ApiTester $I)
+	{
+		$poll = $this->createPoll($I, [-1, 0, 1], [
+			'type' => VotingType::THUMB_VOTING,
+			'scope' => VotingScope::VERIFIED_FOODSAVERS
+		]);
+		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified, false);
+		$this->testCanVote($I, $poll, $this->userFoodsaver);
+		$this->testCanVote($I, $poll, $this->userStoreManager);
+		$this->testCanVote($I, $poll, $this->userAmbassador);
+	}
+
+	public function canVoteInScopeStoreManagers(ApiTester $I)
+	{
+		$poll = $this->createPoll($I, [-1, 0, 1], [
+			'type' => VotingType::THUMB_VOTING,
+			'scope' => VotingScope::STORE_MANAGERS
+		]);
+		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified, false);
+		$this->testCanVote($I, $poll, $this->userFoodsaver, false);
+		$this->testCanVote($I, $poll, $this->userStoreManager);
+		$this->testCanVote($I, $poll, $this->userAmbassador, false);
+	}
+
+	public function canVoteInScopeAmbassadors(ApiTester $I)
+	{
+		$poll = $this->createPoll($I, [-1, 0, 1], [
+			'type' => VotingType::THUMB_VOTING,
+			'scope' => VotingScope::AMBASSADORS
+		]);
+		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified, false);
+		$this->testCanVote($I, $poll, $this->userFoodsaver, false);
+		$this->testCanVote($I, $poll, $this->userStoreManager, false);
+		$this->testCanVote($I, $poll, $this->userAmbassador);
+	}
+
 	private function createPoll(ApiTester $I, array $values, array $params = []): array
 	{
-		$poll = $I->createPoll($this->region['id'], $this->userAuthor['id'], $params);
+		$poll = $I->createPoll($this->region['id'], $this->userFoodsaver['id'], $params);
 		foreach (range(0, 3) as $_) {
 			$I->createPollOption($poll['id'], $values);
 		}
 
 		return $poll;
+	}
+
+	private function testCanVote(ApiTester $I, array $poll, array $user, bool $canVote = true)
+	{
+		$I->login($user['email']);
+		$I->sendPUT(self::POLLS_API . '/' . $poll['id'] . '/vote', [
+			'options' => [0 => 0, 1 => 0, 2 => 0, 3 => 0]
+		]);
+		$I->seeResponseCodeIs($canVote ? Http::OK : Http::FORBIDDEN);
 	}
 }

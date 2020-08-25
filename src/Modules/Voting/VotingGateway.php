@@ -104,21 +104,20 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns whether a user is allowed to vote in a specific poll and has not voted yet.
+	 * Returns whether a user has already voted in a specific poll.
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
 	 *
-	 * @return bool whether the user may vote in that poll
+	 * @return bool whether the user has voted in that poll
 	 *
 	 * @throws Exception
 	 */
-	public function mayUserVote(int $pollId, int $userId): bool
+	public function hasUserVoted(int $pollId, int $userId): bool
 	{
-		return $this->db->exists('fs_foodsaver_has_poll', [
+		return $this->db->exists('fs_foodsaver_has_voted', [
 			'poll_id' => $pollId,
-			'foodsaver_id' => $userId,
-			'has_voted' => 0
+			'foodsaver_id' => $userId
 		]);
 	}
 
@@ -133,7 +132,7 @@ class VotingGateway extends BaseGateway
 	 */
 	public function vote(int $pollId, int $userId, array $options): void
 	{
-		$this->db->execute('LOCK TABLES fs_foodsaver_has_poll WRITE, fs_poll_has_option WRITE');
+		$this->db->execute('LOCK TABLES fs_foodsaver_has_voted WRITE, fs_poll_has_option WRITE');
 		$this->db->beginTransaction();
 
 		foreach ($options as $option => $voteValue) {
@@ -149,7 +148,11 @@ class VotingGateway extends BaseGateway
 				]);
 		}
 
-		$this->db->update('fs_foodsaver_has_poll', ['has_voted' => 1], ['foodsaver_id' => $userId]);
+		$this->db->insert('fs_foodsaver_has_voted', [
+			'poll_id' => $pollId,
+			'foodsaver_id' => $userId,
+			'time' => $this->db->now()
+		]);
 		$this->db->commit();
 		$this->db->execute('UNLOCK TABLES');
 	}
@@ -158,13 +161,12 @@ class VotingGateway extends BaseGateway
 	 * Inserts a new poll.
 	 *
 	 * @param Poll $poll a valid poll object
-	 * @param array $userIds the ids of all users that will be allowed to vote
 	 *
 	 * @return int the id of the created poll
 	 *
 	 * @throws Exception
 	 */
-	public function insertPoll(Poll $poll, array $userIds): int
+	public function insertPoll(Poll $poll): int
 	{
 		// insert the poll
 		$pollId = $this->db->insert('fs_poll', [
@@ -199,15 +201,6 @@ class VotingGateway extends BaseGateway
 					'votes' => 0
 				]);
 			}
-		}
-
-		// insert all voters
-		foreach ($userIds as $user) {
-			$this->db->insert('fs_foodsaver_has_poll', [
-				'foodsaver_id' => $user,
-				'poll_id' => $pollId,
-				'has_voted' => 0
-			]);
 		}
 
 		return $pollId;

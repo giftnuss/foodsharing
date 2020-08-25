@@ -60,8 +60,7 @@ class VotingTransactions
 		$poll->options = $mappedOptions;
 
 		// create poll
-		$userIds = $this->listUserIds($poll->regionId, $poll->scope);
-		$poll->id = $this->votingGateway->insertPoll($poll, $userIds);
+		$poll->id = $this->votingGateway->insertPoll($poll);
 
 		// assign poll ID to the options
 		foreach ($poll->options as $option) {
@@ -69,6 +68,7 @@ class VotingTransactions
 		}
 
 		if ($notifyVoters) {
+			$userIds = $this->listUserIds($poll->regionId, $poll->scope);
 			$this->notifyUsers($poll, $userIds);
 		}
 	}
@@ -93,7 +93,7 @@ class VotingTransactions
 				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER, false);
 				break;
 			case VotingScope::VERIFIED_FOODSAVERS:
-				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER);
+				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER, true);
 				break;
 			case VotingScope::STORE_MANAGERS:
 				$users = $this->storeGateway->getStoreManagersOf($regionId);

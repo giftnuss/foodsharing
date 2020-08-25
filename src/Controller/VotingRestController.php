@@ -79,6 +79,10 @@ class VotingRestController extends AbstractFOSRestController
 	 */
 	public function listPolls(int $groupId): Response
 	{
+		if (!$this->votingPermissions->mayListPolls($groupId)) {
+			throw new HttpException(403);
+		}
+
 		$polls = $this->votingGateway->listPolls($groupId);
 
 		return $this->handleView($this->view($polls, 200));

@@ -895,7 +895,7 @@ class Foodsharing extends \Codeception\Module\Db
 		$params = array_merge([
 			'name' => $this->faker->text(30),
 			'description' => $this->faker->realText(200),
-			'scope' => $this->faker->randomElement(range(VotingScope::ALL_USERS, VotingScope::AMBASSADORS)),
+			'scope' => VotingScope::ALL_USERS,
 			'type' => $this->faker->randomElement(range(VotingType::SELECT_ONE_CHOICE, VotingType::THUMB_VOTING)),
 			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
 			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s')
@@ -927,15 +927,6 @@ class Foodsharing extends \Codeception\Module\Db
 		}
 
 		return $params;
-	}
-
-	public function addPollVoter(int $pollId, int $userId)
-	{
-		$this->haveInDatabase('fs_foodsaver_has_poll', [
-			'foodsaver_id' => $userId,
-			'poll_id' => $pollId,
-			'has_voted' => false,
-		]);
 	}
 
 	// =================================================================================================================

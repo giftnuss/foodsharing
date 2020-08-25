@@ -6,7 +6,9 @@ use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Region\RegionGateway;
+use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Modules\Voting\VotingGateway;
 
@@ -15,6 +17,7 @@ final class VotingPermissions
 	private Session $session;
 	private VotingGateway $votingGateway;
 	private RegionGateway $regionGateway;
+	private StoreGateway $storeGateway;
 
 	/**
 	 * In regions with one of these types all verified foodsavers are allowed to create polls. In other regions only
@@ -26,16 +29,23 @@ final class VotingPermissions
 	public function __construct(
 		Session $session,
 		VotingGateway $votingGateway,
-		RegionGateway $regionGateway)
+		RegionGateway $regionGateway,
+		StoreGateway $storeGateway)
 	{
 		$this->session = $session;
 		$this->votingGateway = $votingGateway;
 		$this->regionGateway = $regionGateway;
+		$this->storeGateway = $storeGateway;
 	}
 
 	public function maySeePoll(Poll $poll): bool
 	{
 		return $this->session->mayBezirk($poll->regionId);
+	}
+
+	public function mayListPolls(int $regionId): bool
+	{
+		return $this->session->mayBezirk($regionId);
 	}
 
 	public function maySeeResults(Poll $poll): bool
@@ -45,13 +55,47 @@ final class VotingPermissions
 
 	public function mayVote(Poll $poll): bool
 	{
+		// only as member of the region
+		if (!$this->session->mayBezirk($poll->regionId)) {
+			return false;
+		}
+
+		// only in ongoing polls
 		$now = new DateTime();
 		if ($poll->startDate > $now || $poll->endDate < $now) {
 			return false;
 		}
 
+		// constraints by the poll's scope
+		switch ($poll->scope) {
+			case VotingScope::AMBASSADORS:
+				if (!$this->session->isAmbassadorForRegion([$poll->regionId])) {
+					return false;
+				}
+				break;
+			case VotingScope::STORE_MANAGERS:
+				if (!$this->session->may('bieb')) {
+					return false;
+				}
+				if (!in_array($this->session->id(), $this->storeGateway->getStoreManagersOf($poll->regionId))) {
+					return false;
+				}
+				break;
+			case VotingScope::VERIFIED_FOODSAVERS:
+				if (!$this->session->may('fs') || !$this->session->isVerified()) {
+					return false;
+				}
+				break;
+			case VotingScope::FOODSAVERS:
+				if (!$this->session->may('fs')) {
+					return false;
+				}
+				break;
+		}
+
+		// only if not voted yet
 		try {
-			return $this->votingGateway->mayUserVote($poll->id, $this->session->id());
+			return !$this->votingGateway->hasUserVoted($poll->id, $this->session->id());
 		} catch (Exception $e) {
 			return false;
 		}

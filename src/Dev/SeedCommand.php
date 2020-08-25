@@ -371,9 +371,6 @@ class SeedCommand extends Command implements CustomCommandInterface
 			foreach (range(0, 3) as $_) {
 				$I->createPollOption($poll['id'], [-1, 0, 1]);
 			}
-			foreach ([$user1, $user2, $userStoreManager, $userbot, $userorga] as $u) {
-				$I->addPollVoter($poll['id'], $u['id']);
-			}
 			$this->output->write('.');
 		}
 		$this->output->writeln(' done');
