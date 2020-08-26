@@ -1565,6 +1565,9 @@ polls:
   title: Titel
   start_date: von
   end_date: bis
+  new_poll: Neue Abstimmung erstellen
+  ongoing: Laufende Abstimmungen
+  ended: Vergangene Abstimmungen
 
 poll:
   not_available: Diese Umfrage existiert nicht oder du kannst nicht darauf zugreifen.
@@ -1589,3 +1592,6 @@ poll:
   submit_vote: Abstimmen
   error_cannot_vote: Du kannst an dieser Abstimmung nicht teilnehmen
   vote_success: Du hast erfolgreich abgestimmt.
+  new_poll:
+    title: Neue Abstimmung
+  ended_at: lief bis
