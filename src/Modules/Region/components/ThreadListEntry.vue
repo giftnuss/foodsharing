@@ -59,7 +59,7 @@ export default {
     margin-right: 10px;
     width: 64px;
     height: 50px;
-    background-image: url(/img/forum_bubble.png);
+    background-image: url('/img/forum_bubble.png');
   }
 
   .user_pic .avatar ::v-deep img {

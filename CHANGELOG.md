@@ -20,9 +20,9 @@
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
+- Rewrite forum thread list in Vue #962 !1650 @ChrisOelmueller
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
-- Move buddy requests to REST endpoint #847 #798 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Move registration request to the REST endpoint #819 !1632 @alex.simm
 - Prepare event invitations for REST !1627 @ChrisOelmueller

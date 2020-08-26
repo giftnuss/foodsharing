@@ -3,11 +3,12 @@
 
 const urls = {
   profile: (id) => `/profile/${id}`,
-  forum: (regionId, subforumId = 0, topicId = null, postId = null) => {
+  forum: (regionId, subforumId = 0, topicId = null, postId = null, newThread = false) => {
     return (`/?page=bezirk&bid=${regionId}` +
       `&sub=${(subforumId === 1) ? 'botforum' : 'forum'}` +
       (topicId === null ? '' : `&tid=${topicId}`) +
-      (postId === null ? '' : `&pid=${postId}#tpost-${postId}`)
+      (postId === null ? '' : `&pid=${postId}#post-${postId}`) +
+      (newThread ? '&newthread=1' : '')
     )
   },
   academy: () => '/?page=content&sub=academy',

@@ -4,7 +4,7 @@
     <div class="ui-widget-content ui-corner-all margin-bottom ui-padding">
       <a
         class="button"
-        :href="$url('forum', groupId, subforumId) + '&newthread=1'"
+        :href="$url('forum', groupId, subforumId, null, null, true)"
       >
         {{ $i18n('forum.new_thread') }}
       </a>
