@@ -141,10 +141,12 @@ class VotingGateway extends BaseGateway
 				UPDATE fs_poll_option_has_value
 				SET votes = votes+1
 				WHERE poll_id = :pollId
-				AND option = :option',
+				AND option = :option
+				AND value = :value',
 				[
 					':pollId' => $pollId,
-					':option' => $option
+					':option' => $option,
+					':value' => $voteValue
 				]);
 		}
 
