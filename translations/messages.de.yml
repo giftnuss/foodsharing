@@ -325,6 +325,7 @@ terminology:
   n_stores: 'Ein Betrieb|%count% Betriebe'
   n_cooperating_stores: 'Eine laufende Kooperation|%count% laufende Kooperationen'
   profile_picture: 'Profilbild'
+  region: Bezirk
   regions: Bezirke
   themes: Themen
   homeRegion: Stammbezirk
@@ -1561,7 +1562,30 @@ buddy:
   request_accepted: Jetzt kennt Ihr Euch!
 
 polls:
-  some_in_all: "({some} von {all})"
   title: Titel
   start_date: von
   end_date: bis
+
+poll:
+  not_available: Diese Umfrage existiert nicht oder du kannst nicht darauf zugreifen.
+  time_period: Zeitraum
+  in_past: beendet
+  in_future: noch nicht gestartet
+  allowed_voters: Stimmberechtigt
+  scope_description_0: Foodsharer
+  scope_description_1: Foodsaver
+  scope_description_2: Verifizierte Foodsharer
+  scope_description_3: Betriebsverantwortliche
+  scope_description_4: Botschafter
+  singleselection:
+    description: Du kannst eine der Optionen auswählen.
+  multiselection:
+    description: Du kannst beliebig viele Optionen auswählen.
+  thumbvoting:
+    description: Du kannst jeder Option einen Daumen hoch, runter oder neutral geben.
+  scorevoting:
+    description: Du kannst jeder Option einen Wert zwischen -3 und +3 zuweisen.
+  submit_vote_warning: "Achtung: nach dem Abstimmen kannst du deine Auswahl nicht mehr ändern!"
+  submit_vote: Abstimmen
+  error_cannot_vote: Du kannst an dieser Abstimmung nicht teilnehmen
+  vote_success: Du hast erfolgreich abgestimmt.

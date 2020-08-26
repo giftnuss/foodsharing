@@ -27,6 +27,7 @@ class Routing
 		'msg' => 'Message',
 		'message' => 'Message',
 		'passgen' => 'PassportGenerator',
+		'poll' => 'Voting',
 		'profile' => 'Profile',
 		'quiz' => 'Quiz',
 		'bezirk' => 'Region',

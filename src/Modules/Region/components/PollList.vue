@@ -32,14 +32,14 @@
           <a
             :href="$url('poll', row.item.id)"
           >
-            {{ row.item.startDate.date }}
+            {{ new Date(row.item.startDate.date) | dateFormat('full-short') }}
           </a>
         </template>
         <template v-slot:cell(endDate)="row">
           <a
             :href="$url('poll', row.item.id)"
           >
-            {{ row.item.endDate.date }}
+            {{ new Date(row.item.endDate.date) | dateFormat('full-short') }}
           </a>
         </template>
       </b-table>
