@@ -2,12 +2,25 @@
 
 {% block main %}
     {% if threads is defined %}
-        {% include 'pages/Region/forum/listThreads.twig' %}
+        {% include "partials/vue-wrapper.twig" with {
+            id: 'vue-threadlist',
+            component: 'ThreadList',
+            props: {
+                groupId: region.id,
+                subforumId: sub=='botforum' ? 1 : 0,
+            }
+        } %}
     {% endif %}
-    {% if posts is defined %}
-        {% include 'pages/Region/forum/showThread.twig' %}
+    {% if threadId is defined %}
+        {% include "partials/vue-wrapper.twig" with {
+            id: 'vue-thread',
+            component: "Thread",
+            props: {
+                id: threadId,
+            }
+        } %}
     {% endif %}
     {% if newThreadForm is defined %}
-        {% include 'pages/Region/forum/newThread.twig' %}
+        {% include 'pages/Region/newForumThread.twig' %}
     {% endif %}
 {% endblock %}
