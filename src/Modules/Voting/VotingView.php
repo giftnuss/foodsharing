@@ -17,4 +17,11 @@ class VotingView extends View
 			'mayVote' => $mayVote
 		]);
 	}
+
+	public function newPollForm(array $region)
+	{
+		return $this->vueComponent('new-poll-form', 'newPollForm', [
+			'region' => $region
+		]);
+	}
 }

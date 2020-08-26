@@ -273,18 +273,6 @@ class VotingApiCest
 		]);
 	}
 
-	public function canVoteInScopeAll(ApiTester $I)
-	{
-		$poll = $this->createPoll($I, [-1, 0, 1], [
-			'type' => VotingType::THUMB_VOTING,
-			'scope' => VotingScope::ALL_USERS
-		]);
-		$this->testCanVote($I, $poll, $this->userFoodsaverUnverified);
-		$this->testCanVote($I, $poll, $this->userFoodsaver);
-		$this->testCanVote($I, $poll, $this->userStoreManager);
-		$this->testCanVote($I, $poll, $this->userAmbassador);
-	}
-
 	public function canVoteInScopeFoodsavers(ApiTester $I)
 	{
 		$poll = $this->createPoll($I, [-1, 0, 1], [

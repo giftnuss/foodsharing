@@ -41,7 +41,15 @@ class VotingControl extends Control
 
 			$mayVote = $this->votingPermissions->mayVote($poll);
 			$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote));
-		} elseif (!isset($_GET['sub'])) {
+		} elseif (isset($_GET['sub']) && $_GET['sub'] === 'new' && isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid']))
+			&& $this->votingPermissions->mayCreatePoll($region['id'])) {
+			$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region['id']);
+			$this->pageHelper->addBread($this->translator->trans('terminology.polls'), '/?page=bezirk&bid=' . $region['id'] . '&sub=polls');
+			$this->pageHelper->addBread($this->translator->trans('polls.new_poll'));
+			$this->pageHelper->addTitle($this->translator->trans('polls.new_poll'));
+
+			$this->pageHelper->addContent($this->view->newPollForm($region));
+		} else {
 			$this->flashMessageHelper->info($this->translator->trans('poll.not_available'));
 			$this->routeHelper->go('/?page=dashboard');
 		}

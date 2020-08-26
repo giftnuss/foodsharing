@@ -40,6 +40,31 @@
     </div>
 
     <div
+      v-if="futurePolls.length > 0"
+      class="card mb-3 rounded"
+    >
+      <div class="card-header text-white bg-primary">
+        {{ $i18n('polls.future') }}
+      </div>
+      <div class="card-body">
+        <ul>
+          <li
+            v-for="poll in futurePolls"
+            :key="poll.id"
+            class="mb-2"
+          >
+            <b-link
+              :href="$url('poll', poll.id)"
+            >
+              <b>{{ poll.name }}</b>
+              <div>{{ $i18n('poll.begins_at') }} {{ convertDate(poll.startDate.date) | dateFormat }}</div>
+            </b-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div
       v-if="endedPolls.length > 0"
       class="card mb-3 rounded"
     >
@@ -97,17 +122,22 @@ export default {
   },
   computed: {
     ongoingPolls: function () {
-      return this.polls.filter(p => this.isOngoingPoll(p))
+      return this.polls.filter(p => !this.isPollInFuture(p) && !this.isPollInPast(p))
+    },
+    futurePolls: function () {
+      return this.polls.filter(p => this.isPollInFuture(p))
     },
     endedPolls: function () {
-      return this.polls.filter(p => !this.isOngoingPoll(p))
+      return this.polls.filter(p => this.isPollInPast(p))
     }
   },
   methods: {
     compare: optimizedCompare,
-    isOngoingPoll (poll) {
-      return isAfter(this.convertDate(poll.endDate.date), new Date()) &&
-        isBefore(this.convertDate(poll.startDate.date), new Date())
+    isPollInPast (poll) {
+      return isBefore(this.convertDate(poll.endDate.date), new Date())
+    },
+    isPollInFuture (poll) {
+      return isAfter(this.convertDate(poll.startDate.date), new Date())
     },
     convertDate (date) {
       return dateFnsParseISO(date)

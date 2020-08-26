@@ -10,7 +10,7 @@ export async function listPolls (groupId) {
 }
 
 export async function createPoll (regionId, name, description, startDate, endDate, scope, type, options, notifyVoters) {
-  return post('/polls', {
+  return (await post('/polls', {
     regionId: regionId,
     name: name,
     description: description,
@@ -20,7 +20,7 @@ export async function createPoll (regionId, name, description, startDate, endDat
     type: type,
     options: options,
     notifyVoters: notifyVoters
-  })
+  }))
 }
 
 export async function deletePoll (pollId) {

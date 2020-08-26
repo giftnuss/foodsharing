@@ -228,7 +228,7 @@ class VotingGateway extends BaseGateway
 	{
 		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';
 
-		return $this->db->fetchAll('
+		$list = $this->db->fetchAll('
 			SELECT id
 			FROM fs_foodsaver fs
 			INNER JOIN fs_foodsaver_has_bezirk hb
@@ -240,5 +240,9 @@ class VotingGateway extends BaseGateway
 			':regionId' => $regionId,
 			':role' => $minRole
 		]);
+
+		return array_map(function ($x) {
+			return $x['id'];
+		}, $list);
 	}
 }

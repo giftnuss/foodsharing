@@ -86,9 +86,6 @@ class VotingTransactions
 	private function listUserIds(int $regionId, int $scope): array
 	{
 		switch ($scope) {
-			case VotingScope::ALL_USERS:
-				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSHARER, false);
-				break;
 			case VotingScope::FOODSAVERS:
 				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER, false);
 				break;
@@ -123,7 +120,7 @@ class VotingTransactions
 			'poll_new_title',
 			'poll_new',
 			'fas fa-poll-h',
-			['href' => '/?page=bezirk&sub=polls&id=' . $poll->id],
+			['href' => '/?page=poll&id=' . $poll->id],
 			['title' => $poll->name, 'region' => $region['name']],
 			'new-poll-' . $poll->id
 		);

@@ -1568,6 +1568,7 @@ polls:
   new_poll: Neue Abstimmung erstellen
   ongoing: Laufende Abstimmungen
   ended: Vergangene Abstimmungen
+  future: Zukünftige Abstimmungen
 
 poll:
   not_available: Diese Umfrage existiert nicht oder du kannst nicht darauf zugreifen.
@@ -1594,4 +1595,23 @@ poll:
   vote_success: Du hast erfolgreich abgestimmt.
   new_poll:
     title: Neue Abstimmung
+    name: Name der Abstimmung
+    scope: Wer darf abstimmen?
+    scope1: Alle Foodsaver aus dem Bezirk / der Gruppe
+    scope2: Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe
+    scope3: Alle Betriebsverantwortlichen aus dem Bezirk / der Gruppe
+    scope4: Alle Botschafter aus dem Bezirk / der Gruppe
+    type: Wahlmodus
+    type1: Auswählen (nur eine Option kann gewählt werden)
+    type2: Ankreuzen (mehrere Optionen können gewählt werden)
+    type3: Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung
+    type4: Bewertungswahl mit Werten zwischen -3 und +3
+    start_date: Abstimmungsbeginn
+    end_date: Abstimmungsende
+    description: Beschreibung
+    description_placeholder: Was ist das für eine Abstimmung?
+    options: Optionen, die zur Auswahl stehen sollen
+    submit: Abstimmung speichern
+    submit_success: Die Abstimmung wurde angelegt
   ended_at: lief bis
+  begins_at: 'Beginn:'
