@@ -1,6 +1,8 @@
 <template>
-  <div class="bootstrap">
-    <div :class="{card:true, disabledLoading: isLoading, 'mb-2':true}">
+  <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+  <div :id="`post-${id}`" class="bootstrap">
+    <!-- eslint-disable-next-line vue/max-attributes-per-line -->
+    <div class="card mb-2" :class="{'disabledLoading': isLoading}">
       <div class="card-header">
         {{ author.name }}
       </div>
@@ -31,12 +33,17 @@
       <div class="card-footer">
         <div class="row">
           <div class="col-auto text-muted pt-1 pl-3">
-            <small v-if="wXS">
-              {{ createdAt | dateFormat('full-short') }}
-            </small>
-            <small v-else>
-              {{ createdAt | dateFormat('full-long') }}
-            </small>
+            <a
+              :href="deepLink"
+              @click.prevent="$emit('scroll')"
+            >
+              <small v-if="wXS">
+                {{ createdAt | dateFormat('full-short') }}
+              </small>
+              <small v-else>
+                {{ createdAt | dateFormat('full-long') }}
+              </small>
+            </a>
           </div>
           <div class="col text-right">
             <ThreadPostActions
@@ -70,6 +77,7 @@ export default {
     body: { type: String, default: '' },
     author: { type: Object, default: () => ({ avatar: null }) },
     createdAt: { type: Date, default: null },
+    deepLink: { type: String, default: '' },
     reactions: { type: Object, default: () => ({}) },
     mayEdit: { type: Boolean, default: false },
     mayDelete: { type: Boolean, default: false },
