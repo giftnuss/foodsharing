@@ -10,19 +10,17 @@ use Foodsharing\Permissions\ForumPermissions;
 final class RegionXhr extends Control
 {
 	private $responses;
-	private $regionGateway;
-	private $foodsaverGateway;
-	private $forumGateway;
-	private $forumFollowerGateway;
-	private $forumPermissions;
-	private $regionHelper;
-	private $twig;
+	private RegionGateway $regionGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ForumGateway $forumGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
+	private ForumPermissions $forumPermissions;
+	private \Twig\Environment $twig;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
-		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
 		ForumFollowerGateway $forumFollowerGateway
@@ -32,7 +30,6 @@ final class RegionXhr extends Control
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumPermissions = $forumPermissions;
-		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
 

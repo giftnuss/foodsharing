@@ -18,13 +18,13 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ForumRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $regionGateway;
-	private $forumGateway;
-	private $forumFollowerGateway;
-	private $forumPermissions;
-	private $forumTransactions;
-	private $sanitizerService;
+	private Session $session;
+	private RegionGateway $regionGateway;
+	private ForumGateway $forumGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
+	private ForumPermissions $forumPermissions;
+	private ForumTransactions $forumTransactions;
+	private Sanitizer $sanitizerService;
 
 	public function __construct(
 		Session $session,
@@ -44,12 +44,12 @@ class ForumRestController extends AbstractFOSRestController
 		$this->sanitizerService = $sanitizerService;
 	}
 
-	private function normalizeThread($thread, ?int $regionId = null, ?int $subforumId = null): array
+	private function normalizeThread(array $thread): array
 	{
 		$normalizedThread = [
 			'id' => $thread['id'],
-			'regionId' => $regionId ?? $thread['regionId'],
-			'regionSubId' => $subforumId ?? $thread['regionSubId'],
+			'regionId' => $thread['regionId'],
+			'regionSubId' => $thread['regionSubId'],
 			'title' => $thread['title'],
 			'createdAt' => str_replace(' ', 'T', $thread['time']),
 			'isSticky' => boolval($thread['sticky'] ?? false),
@@ -73,7 +73,7 @@ class ForumRestController extends AbstractFOSRestController
 		return $normalizedThread;
 	}
 
-	private function normalizePost($post): array
+	private function normalizePost(array $post): array
 	{
 		return [
 			'id' => $post['id'],
@@ -86,7 +86,7 @@ class ForumRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Gets available threads including their last post. Warning: This endpoint is not yet in use in the web frontend and might need changes!
+	 * Gets available threads including their last post.
 	 *
 	 * @SWG\Parameter(name="forumId", in="path", type="integer",
 	 *   description="which forum to return threads for (region or group)")
@@ -132,11 +132,11 @@ class ForumRestController extends AbstractFOSRestController
 		return $this->handleView($view);
 	}
 
-	private function getNormalizedThreads(int $forumId, int $forumSubId, int $limit, int $offset)
+	private function getNormalizedThreads(int $forumId, int $forumSubId, int $limit, int $offset): array
 	{
 		$threads = $this->forumGateway->listThreads($forumId, $forumSubId, $limit, $offset);
-		$threads = array_map(function ($thread) use ($forumId, $forumSubId) {
-			return $this->normalizeThread($thread, $forumId, $forumSubId);
+		$threads = array_map(function ($thread) {
+			return $this->normalizeThread($thread);
 		}, $threads);
 
 		return $threads;

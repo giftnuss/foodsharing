@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
-	private $forumFollowerGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
@@ -35,6 +35,8 @@ class ForumGateway extends BaseGateway
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
 						t.sticky,
+						bt.bezirk_id AS regionId,
+						bt.bot_theme AS regionSubId,
 						creator.id as creator_id,
 						creator.name as creator_name,
 						creator.photo as creator_photo,
