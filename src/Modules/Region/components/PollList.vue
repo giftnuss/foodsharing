@@ -32,7 +32,7 @@
             <b>{{ poll.name }}</b>
           </div>
           <div class="mt-2">
-            {{ convertDate(poll.startDate.date) | dateFormat }} - {{ convertDate(poll.endDate.date) | dateFormat }}
+            {{ $dateFormat(convertDate(poll.startDate.date)) }} - {{ $dateFormat(convertDate(poll.endDate.date)) }}
           </div>
           <span class="clear" />
         </b-link>
@@ -57,7 +57,7 @@
               :href="$url('poll', poll.id)"
             >
               <b>{{ poll.name }}</b>
-              <div>{{ $i18n('poll.begins_at') }} {{ convertDate(poll.startDate.date) | dateFormat }}</div>
+              <div>{{ $i18n('poll.begins_at') }}: {{ $dateFormat(convertDate(poll.startDate.date)) }}</div>
             </b-link>
           </li>
         </ul>
@@ -82,7 +82,7 @@
               :href="$url('poll', poll.id)"
             >
               <b>{{ poll.name }}</b>
-              <div>{{ $i18n('poll.ended_at') }} {{ convertDate(poll.endDate.date) | dateFormat }}</div>
+              <div>{{ $i18n('poll.ended_at') }} {{ $dateFormat(convertDate(poll.endDate.date)) }}</div>
             </b-link>
           </li>
         </ul>
@@ -93,13 +93,12 @@
 
 <script>
 import { BLink } from 'bootstrap-vue'
-import { dateFormat, optimizedCompare } from '@/utils'
+import { optimizedCompare } from '@/utils'
 import { isBefore, isAfter, format } from 'date-fns'
 import dateFnsParseISO from 'date-fns/parseISO'
 
 export default {
   components: { BLink },
-  directives: { dateFormat, format },
   props: {
     regionId: {
       type: Number,

@@ -95,7 +95,7 @@ final class VotingPermissions
 
 		// only if not voted yet
 		try {
-			return !$this->votingGateway->hasUserVoted($poll->id, $this->session->id());
+			return $this->votingGateway->hasUserVoted($poll->id, $this->session->id()) === null;
 		} catch (Exception $e) {
 			return false;
 		}

@@ -108,21 +108,29 @@ class VotingGateway extends BaseGateway
 	}
 
 	/**
-	 * Returns whether a user has already voted in a specific poll.
+	 * Returns if and when a user has voted in a specific poll or null if the user has not voted yet.
 	 *
 	 * @param int $pollId a valid id of a poll
 	 * @param int $userId a valid user id
 	 *
-	 * @return bool whether the user has voted in that poll
+	 * @return DateTime the date at which the user has voted
 	 *
 	 * @throws Exception
 	 */
-	public function hasUserVoted(int $pollId, int $userId): bool
+	public function hasUserVoted(int $pollId, int $userId): ?DateTime
 	{
-		return $this->db->exists('fs_foodsaver_has_voted', [
-			'poll_id' => $pollId,
-			'foodsaver_id' => $userId
-		]);
+		try {
+			$value = $this->db->fetchValueByCriteria('fs_foodsaver_has_voted', 'time', [
+				'poll_id' => $pollId,
+				'foodsaver_id' => $userId
+			]);
+			$format = 'Y-m-d H:i:s';
+			$date = DateTime::createFromFormat($format, $value);
+
+			return $date ? $date : null;
+		} catch (Exception $e) {
+			return null;
+		}
 	}
 
 	/**

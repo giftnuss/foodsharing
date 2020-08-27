@@ -1610,7 +1610,8 @@ poll:
     submit: Abstimmung speichern
     submit_success: Die Abstimmung wurde angelegt
   ended_at: lief bis
-  begins_at: 'Beginn:'
+  begins_at: Beginn
+  already_voted: Du hast an dieser Abstimmung bereits teilgenommen
   results:
     number_of_votes: Abgegebene Stimmen
     votes: Stimmen

@@ -9,7 +9,7 @@
           {{ poll.description }}
         </form>
         <div>
-          <b>{{ $i18n('poll.time_period') }}:</b> {{ startDate | dateFormat('full-short') }} - {{ endDate | dateFormat('full-short') }}
+          <b>{{ $i18n('poll.time_period') }}:</b> {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
           <span v-if="isPollInPast">
             ({{ $i18n('poll.in_past') }})
           </span>
@@ -25,6 +25,12 @@
         </div>
         <div class="my-1">
           <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
+        </div>
+        <div
+          v-if="userVoteDate !== null"
+          class="my-1 mt-3"
+        >
+          {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
         </div>
 
         <VoteForm
@@ -48,7 +54,6 @@
 </template>
 
 <script>
-import { dateFormat } from '@/utils'
 import { isBefore, isAfter } from 'date-fns'
 import dateFnsParseISO from 'date-fns/parseISO'
 import VoteForm from './VoteForm'
@@ -56,7 +61,6 @@ import ResultsTable from './ResultsTable'
 
 export default {
   components: { ResultsTable, VoteForm },
-  directives: { dateFormat },
   props: {
     poll: {
       type: Object,
@@ -77,6 +81,10 @@ export default {
     mayVote: {
       type: Boolean,
       default: false
+    },
+    userVoteDate: {
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -96,6 +104,9 @@ export default {
   methods: {
     disableVoteForm () {
       this.mayVote = false
+    },
+    parseDate (date) {
+      return dateFnsParseISO(date)
     }
   }
 }
