@@ -30,7 +30,7 @@
             v-model="scope"
             :value="index - 1"
           >
-            {{ $i18n('poll.new_poll.scope' + index) }}
+            {{ $i18n('poll.scope_description_' + index) }}
           </b-form-radio>
         </b-form-group>
 
@@ -43,7 +43,7 @@
             v-model="type"
             :value="index - 1"
           >
-            {{ $i18n('poll.new_poll.type' + index) }}
+            {{ $i18n('poll.type_description_' + index) }}
           </b-form-radio>
         </b-form-group>
 

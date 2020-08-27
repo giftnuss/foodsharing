@@ -898,7 +898,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'scope' => VotingScope::FOODSAVERS,
 			'type' => $this->faker->randomElement(range(VotingType::SELECT_ONE_CHOICE, VotingType::THUMB_VOTING)),
 			'start' => $this->faker->dateTimeBetween('-7 days', 'now')->format('Y-m-d H:i:s'),
-			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s')
+			'end' => $this->faker->dateTimeBetween('now', '+7 days')->format('Y-m-d H:i:s'),
+			'votes' => $this->faker->numberBetween(0, 1000)
 		], $extraParams);
 		$params['author'] = $authorId;
 		$params['region_id'] = $regionId;
@@ -922,7 +923,7 @@ class Foodsharing extends \Codeception\Module\Db
 				'poll_id' => $pollId,
 				'option' => $params['option'],
 				'value' => (int)$value,
-				'votes' => 0
+				'votes' => $this->faker->numberBetween(0, 100)
 			]);
 		}
 

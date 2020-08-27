@@ -9,6 +9,8 @@ use Codeception\Lib\ModuleContainer;
 use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 use Foodsharing\Modules\WorkGroup\WorkGroupGateway;
 use Helper\Foodsharing;
 use Symfony\Component\Console\Command\Command;
@@ -365,13 +367,37 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln(' done');
 
 		$this->output->writeln('Create polls');
-		foreach (range(0, 3) as $type) {
-			$poll = $I->createPoll($region1, $userbot['id'], ['type' => $type, 'scope' => 0]);
-			foreach (range(0, 3) as $_) {
-				$I->createPollOption($poll['id'], [-1, 0, 1]);
-			}
-			$this->output->write('.');
+		$poll1 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SELECT_ONE_CHOICE, 'scope' => VotingScope::FOODSAVERS]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($poll1['id'], [1]);
 		}
+		$this->output->write('.');
+		$poll2 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SELECT_MULTIPLE, 'scope' => VotingScope::FOODSAVERS]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($poll2['id'], [1]);
+		}
+		$this->output->write('.');
+		$poll3 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::THUMB_VOTING, 'scope' => VotingScope::FOODSAVERS]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($poll3['id'], [-1, 0, 1]);
+		}
+		$this->output->write('.');
+		$poll4 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SCORE_VOTING, 'scope' => 0]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($poll4['id'], [-3, -2, -1, 0, 1, 2, 3]);
+		}
+		$this->output->write('.');
+		$pollEnded = $I->createPoll($region1, $userbot['id'], [
+			'type' => VotingType::SELECT_ONE_CHOICE,
+			'scope' => 0,
+			'start' => Carbon::now('-14 days')->format('Y-m-d H:i:s'),
+			'end' => Carbon::now('-7 days')->format('Y-m-d H:i:s'),
+		]);
+		foreach (range(0, 3) as $_) {
+			$I->createPollOption($pollEnded['id'], [1]);
+		}
+		$this->output->write('.');
+
 		$this->output->writeln(' done');
 
 		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);

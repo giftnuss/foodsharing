@@ -65,6 +65,13 @@ class AddVoting extends AbstractMigration
 				'limit' => 10,
 				'comment' => 'id of the user who created the poll'
 			])
+			->addColumn('votes', 'integer', [
+				'null' => false,
+				'signed' => false,
+				'limit' => 10,
+				'default' => 0,
+				'comment' => 'number of users who have voted'
+			])
 			->addColumn('cancelled_by', 'integer', [
 				'null' => true,
 				'signed' => false,

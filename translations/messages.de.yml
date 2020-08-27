@@ -1576,11 +1576,15 @@ poll:
   in_past: beendet
   in_future: noch nicht gestartet
   allowed_voters: Stimmberechtigt
-  scope_description_0: Foodsharer
-  scope_description_1: Foodsaver
-  scope_description_2: Verifizierte Foodsharer
-  scope_description_3: Betriebsverantwortliche
-  scope_description_4: Botschafter
+  scope_description_0: Alle Foodsaver aus dem Bezirk / der Gruppe
+  scope_description_1: Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe
+  scope_description_2: Alle Betriebsverantwortlichen aus dem Bezirk / der Gruppe
+  scope_description_3: Alle Botschafter aus dem Bezirk / der Gruppe
+  type: Art der Abstimmung
+  type_description_0: Auswählen (nur eine Option kann gewählt werden)
+  type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
+  type_description_2: Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung
+  type_description_3: Bewertungswahl mit Werten zwischen -3 und +3
   singleselection:
     description: Du kannst eine der Optionen auswählen.
   multiselection:
@@ -1597,15 +1601,7 @@ poll:
     title: Neue Abstimmung
     name: Name der Abstimmung
     scope: Wer darf abstimmen?
-    scope1: Alle Foodsaver aus dem Bezirk / der Gruppe
-    scope2: Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe
-    scope3: Alle Betriebsverantwortlichen aus dem Bezirk / der Gruppe
-    scope4: Alle Botschafter aus dem Bezirk / der Gruppe
     type: Wahlmodus
-    type1: Auswählen (nur eine Option kann gewählt werden)
-    type2: Ankreuzen (mehrere Optionen können gewählt werden)
-    type3: Wahlmöglichkeiten jeweils Zustimmung / Enthaltung / Ablehnung
-    type4: Bewertungswahl mit Werten zwischen -3 und +3
     start_date: Abstimmungsbeginn
     end_date: Abstimmungsende
     description: Beschreibung
@@ -1615,3 +1611,8 @@ poll:
     submit_success: Die Abstimmung wurde angelegt
   ended_at: lief bis
   begins_at: 'Beginn:'
+  results:
+    number_of_votes: Abgegebene Stimmen
+    votes: Stimmen
+    option_text: Option
+    average: Mittelwert

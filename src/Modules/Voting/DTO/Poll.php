@@ -59,6 +59,16 @@ class Poll
 	public int $authorId;
 
 	/**
+	 * The number of different values that each option is this poll can have.
+	 */
+	public int $numValues;
+
+	/**
+	 * Number of users who have voted. A value of null means that the results are not included in this poll object.
+	 */
+	public ?int $votes;
+
+	/**
 	 * Options of the poll. The array maps the option indices to the object and the indices will always be ascending
 	 * integers starting at 0.
 	 *
@@ -77,6 +87,8 @@ class Poll
 		$this->scope = -1;
 		$this->type = -1;
 		$this->authorId = -1;
+		$this->numValues = 0;
+		$this->votes = null;
 		$this->options = [];
 	}
 
@@ -90,6 +102,8 @@ class Poll
 		int $scope,
 		int $type,
 		int $authorId,
+		int $numValues,
+		?int $votes,
 		array $options
 	) {
 		$poll = new Poll();
@@ -102,6 +116,8 @@ class Poll
 		$poll->scope = $scope;
 		$poll->type = $type;
 		$poll->authorId = $authorId;
+		$poll->numValues = $numValues;
+		$poll->votes = $votes;
 		$poll->options = $options;
 
 		return $poll;

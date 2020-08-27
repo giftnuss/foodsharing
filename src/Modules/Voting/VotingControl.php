@@ -39,6 +39,10 @@ class VotingControl extends Control
 			$this->pageHelper->addBread($poll->name);
 			$this->pageHelper->addTitle($poll->name);
 
+			if ($this->votingPermissions->maySeeResults($poll)) {
+				$poll = $this->votingGateway->getPoll($poll->id, true);
+			}
+
 			$mayVote = $this->votingPermissions->mayVote($poll);
 			$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote));
 		} elseif (isset($_GET['sub']) && $_GET['sub'] === 'new' && isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid']))

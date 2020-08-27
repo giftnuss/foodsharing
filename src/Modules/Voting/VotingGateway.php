@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
+use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
 use Foodsharing\Modules\Voting\DTO\Poll;
 use Foodsharing\Modules\Voting\DTO\PollOption;
 
@@ -24,7 +25,7 @@ class VotingGateway extends BaseGateway
 	public function getPoll(int $pollId, bool $includeResults): Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
-			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author'],
+			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes'],
 			['id' => $pollId]
 		);
 		if (empty($data)) {
@@ -35,7 +36,9 @@ class VotingGateway extends BaseGateway
 
 		return Poll::create($pollId, $data['name'], $data['description'],
 			new DateTime($data['start']), new DateTime($data['end']),
-			$data['region_id'], $data['scope'], $data['type'], $data['author'], $options);
+			$data['region_id'], $data['scope'], $data['type'], $data['author'],
+			VotingType::getNumberOfValues($data['type']),
+			$includeResults ? $data['votes'] : null, $options);
 	}
 
 	/**
@@ -97,7 +100,8 @@ class VotingGateway extends BaseGateway
 			$options = $this->getOptions($d['id'], false);
 			$polls[] = Poll::create($d['id'], $d['name'], $d['description'],
 				new DateTime($d['start']), new DateTime($d['end']),
-				$d['region_id'], $d['scope'], $d['type'], $d['author'], $options);
+				$d['region_id'], $d['scope'], $d['type'], $d['author'],
+				VotingType::getNumberOfValues($d['type']), null, $options);
 		}
 
 		return $polls;
@@ -132,7 +136,7 @@ class VotingGateway extends BaseGateway
 	 */
 	public function vote(int $pollId, int $userId, array $options): void
 	{
-		$this->db->execute('LOCK TABLES fs_foodsaver_has_voted WRITE, fs_poll_has_option WRITE');
+		$this->db->execute('LOCK TABLES fs_poll WRITE, fs_foodsaver_has_voted WRITE, fs_poll_has_option WRITE');
 		$this->db->beginTransaction();
 
 		foreach ($options as $option => $voteValue) {
@@ -154,6 +158,9 @@ class VotingGateway extends BaseGateway
 			'poll_id' => $pollId,
 			'foodsaver_id' => $userId,
 			'time' => $this->db->now()
+		]);
+		$this->db->execute('UPDATE fs_poll SET votes = votes+1 WHERE id = :pollId', [
+			':pollId' => $pollId
 		]);
 		$this->db->commit();
 		$this->db->execute('UNLOCK TABLES');
@@ -179,7 +186,8 @@ class VotingGateway extends BaseGateway
 			'type' => $poll->type,
 			'start' => $poll->startDate->format('Y-m-d H:i:s'),
 			'end' => $poll->endDate->format('Y-m-d H:i:s'),
-			'author' => $poll->authorId
+			'author' => $poll->authorId,
+			'votes' => 0
 		]);
 
 		// insert all options

@@ -30,4 +30,22 @@ class VotingType
 	{
 		return in_array($scope, range(self::SELECT_ONE_CHOICE, self::SCORE_VOTING));
 	}
+
+	/**
+	 * Returns the number of possible values that each option in a poll with the specific scope can have.
+	 */
+	public static function getNumberOfValues(int $scope): int
+	{
+		switch ($scope) {
+			case self::SELECT_ONE_CHOICE:
+			case self::SELECT_MULTIPLE:
+				return 1;
+			case self::THUMB_VOTING:
+				return 3;
+			case self::SCORE_VOTING:
+				return 7;
+			default:
+				return -1;
+		}
+	}
 }
