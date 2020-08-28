@@ -404,6 +404,20 @@ events:
   maybeCount: '{count} kommen vielleicht'
   invitedCount: '{count} Einladungen'
   morePeople: '… und {count} weitere'
+  button:
+    yes: Annehmen
+    maybe: Vielleicht
+    no: Kann nicht
+  menu:
+    options: Eventoptionen
+    edit: Event bearbeiten
+    yes: Einladung annehmen
+    maybe: Ich kann vielleicht
+    no: Ich kann nicht
+  rsvp:
+    yes: 'Lieben Dank! Du hast die Einladung angenommen.'
+    maybe: 'Schön, dass du vielleicht dabei bist!'
+    no: 'Einladungsstatus geändert: du nimmst nun nicht teil.'
 
 addresspicker:
   label: Adress-/Standort-Suche

@@ -3,6 +3,7 @@
 namespace Foodsharing\Modules\Dashboard;
 
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Modules\Event\InvitationStatus;
 
 class DashboardView extends View
 {
@@ -177,6 +178,7 @@ class DashboardView extends View
 
 		$out = '';
 		foreach ($invites as $i) {
+			$eventId = intval($i['id']);
 			$out .= '
 			<div class="post event">
 				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
@@ -194,9 +196,15 @@ class DashboardView extends View
 					</div>
 
 					<div class="row activity-feed-content-buttons">
-						<div class="col mr-2"><a href="#" onclick="ajreq(\'accept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Einladung annehmen</a></div>
-						<div class="col-md-auto mr-2"><a href="#" onclick="ajreq(\'maybe\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Vielleicht</a></div>
-						<div class="col-md-auto"><a href="#" onclick="ajreq(\'noaccept\',{app:\'event\',id:\'' . (int)$i['id'] . '\'});return false;" class="button">Nein</a></div>
+						<div class="col mr-md-1"><a href="#" onclick="'
+							. $this->buildEventResponse($eventId, InvitationStatus::ACCEPTED) .
+						'" class="button">' . $this->translator->trans('events.button.yes') . '</a></div>
+						<div class="col-md-auto mx-1"><a href="#" onclick="'
+							. $this->buildEventResponse($eventId, InvitationStatus::MAYBE) .
+						'" class="button">' . $this->translator->trans('events.button.maybe') . '</a></div>
+						<div class="col-md-auto ml-md-1"><a href="#" onclick="'
+							. $this->buildEventResponse($eventId, InvitationStatus::WONT_JOIN) .
+						'" class="button">' . $this->translator->trans('events.button.no') . '</a></div>
 					</div>
 				</div>
 
@@ -206,6 +214,12 @@ class DashboardView extends View
 		}
 
 		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding truncate-content collapse-mobile']);
+	}
+
+	// TODO Duplicated in EventView right now
+	private function buildEventResponse(int $eventId, int /* InvitationStatus */ $newStatus): string
+	{
+		return "ajreq('eventresponse',{app:'event',id:'" . $eventId . "',s:'" . $newStatus . "'});return false;";
 	}
 
 	public function u_events($events)

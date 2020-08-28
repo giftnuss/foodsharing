@@ -40,11 +40,7 @@ $csrf_whitelist = [
 	// 'Bell::delbell',
 	// 'Bell::markBellsAsRead',
 	// 'Email::testmail' .
-	// 'Event::accept',
-	// 'Event::maybe',
-	// 'Event::noaccept',
-	// 'Event::ustat',
-	// 'Event::ustatadd',
+	// 'Event::eventresponse',
 	// 'Foodsaver::loadFoodsaver',
 	// 'Foodsaver::foodsaverrefresh',
 	// 'Foodsaver::delFromRegion',

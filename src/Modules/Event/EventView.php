@@ -2,11 +2,57 @@
 
 namespace Foodsharing\Modules\Event;
 
+use Foodsharing\Lib\Session;
+use Foodsharing\Lib\View\Utils;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\View;
+use Foodsharing\Permissions\EventPermissions;
+use Foodsharing\Utility\DataHelper;
+use Foodsharing\Utility\IdentificationHelper;
+use Foodsharing\Utility\ImageHelper;
+use Foodsharing\Utility\PageHelper;
+use Foodsharing\Utility\RouteHelper;
+use Foodsharing\Utility\Sanitizer;
+use Foodsharing\Utility\TimeHelper;
+use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EventView extends View
 {
+	private $eventPermissions;
+
+	public function __construct(
+		\Twig\Environment $twig,
+		Session $session,
+		Utils $viewUtils,
+		EventPermissions $eventPermissions,
+		DataHelper $dataHelper,
+		IdentificationHelper $identificationHelper,
+		ImageHelper $imageService,
+		PageHelper $pageHelper,
+		RouteHelper $routeHelper,
+		Sanitizer $sanitizerService,
+		TimeHelper $timeHelper,
+		TranslationHelper $translationHelper,
+		TranslatorInterface $translator
+	) {
+		parent::__construct(
+			$twig,
+			$session,
+			$viewUtils,
+			$dataHelper,
+			$identificationHelper,
+			$imageService,
+			$pageHelper,
+			$routeHelper,
+			$sanitizerService,
+			$timeHelper,
+			$translationHelper,
+			$translator
+		);
+		$this->eventPermissions = $eventPermissions;
+	}
+
 	public function eventForm($bezirke)
 	{
 		global $g_data;
@@ -200,54 +246,38 @@ class EventView extends View
 	public function statusMenu(array $event, int $user_status): string
 	{
 		$menu = [];
+		$eventId = intval($event['id']);
 
-		if ($event['fs_id'] == $this->session->id() || $this->session->isOrgaTeam()) {
+		if ($this->eventPermissions->mayEditEvent($event)) {
 			$menu[] = [
-				'name' => 'Event bearbeiten',
-				'href' => '/?page=event&sub=edit&id=' . (int)$event['id']
+				'name' => $this->translator->trans('events.menu.edit'),
+				'href' => '/?page=event&sub=edit&id=' . $eventId,
 			];
 		}
 
-		if ($user_status !== -1) {
-			if ($user_status !== InvitationStatus::WONT_JOIN) {
-				$menu[] = [
-					'name' => 'Ich kann doch nicht',
-					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:3});return false;'
-				];
-			}
-
-			if ($user_status === InvitationStatus::INVITED) {
-				$menu[] = [
-					'name' => 'Einladung annehmen',
-					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
-				];
-			}
-
-			if ($user_status !== InvitationStatus::INVITED && $user_status !== InvitationStatus::ACCEPTED) {
-				$menu[] = [
-					'name' => 'Ich kann doch',
-					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:1});return false;'
-				];
-			}
-
-			if ($user_status !== InvitationStatus::MAYBE) {
-				$menu[] = [
-					'name' => 'Ich kann vielleicht',
-					'click' => 'ajreq(\'ustat\',{id:' . (int)$event['id'] . ',s:2});return false;'
-				];
-			}
-		} else {
+		if ($this->eventPermissions->mayJoinEvent($event)) {
 			$menu[] = [
-				'name' => 'Ich werde teilnehmen',
-				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:1});return false;'
+				'name' => $this->translator->trans('events.menu.yes'),
+				'click' => $this->buildEventResponse($eventId, InvitationStatus::ACCEPTED),
 			];
 			$menu[] = [
-				'name' => 'Ich werde vielleicht teilnehmen',
-				'click' => 'ajreq(\'ustatadd\',{id:' . (int)$event['id'] . ',s:2});return false;'
+				'name' => $this->translator->trans('events.menu.maybe'),
+				'click' => $this->buildEventResponse($eventId, InvitationStatus::MAYBE),
+			];
+			$menu[] = [
+				'name' => $this->translator->trans('events.menu.no'),
+				'click' => $this->buildEventResponse($eventId, InvitationStatus::WONT_JOIN),
 			];
 		}
 
-		return $this->v_utils->v_field($this->menu($menu), $this->translationHelper->s('event_options'), [], 'fas fa-cog');
+		return $this->v_utils->v_field(
+			$this->menu($menu), $this->translator->trans('events.menu.options'), [], 'fas fa-cog'
+		);
+	}
+
+	private function buildEventResponse(int $eventId, int /* InvitationStatus */ $newStatus): string
+	{
+		return "ajreq('eventresponse',{app:'event',id:'" . $eventId . "',s:'" . $newStatus . "'});return false;";
 	}
 
 	public function eventTop(array $event): string

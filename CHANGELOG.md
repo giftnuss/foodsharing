@@ -23,6 +23,8 @@
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
 - Move buddy requests to REST endpoint #847 #798 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
+- Move registration request to the REST endpoint #819 !1632 @alex.simm
+- Prepare event invitations for REST !1627 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm
@@ -134,7 +136,7 @@
 - Do not run gitlab dependency scanning job as nobody used the output !1533 @NerdyProjects
 - Explain (wanted) php code structure in devdocs !1463 @flukx
 
-# 2020-05-16
+# Release "Apfelsine" (orange), 2020-05-16
 
 ## Features
 - Introduce Web Push Notifications #336 !734 @janopae

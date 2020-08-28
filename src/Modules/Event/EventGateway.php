@@ -300,23 +300,12 @@ class EventGateway extends BaseGateway
 		return (int)$status;
 	}
 
-	public function setInviteStatus(int $event_id, int $foodsaver_id, int $status): bool
-	{
-		$this->db->update(
-			'fs_foodsaver_has_event',
-			['status' => $status],
-			['foodsaver_id' => $foodsaver_id, 'event_id' => $event_id]
-		);
-
-		return true;
-	}
-
 	/**
 	 * Sets the invitation status for multiple foodsavers.
 	 *
 	 * @throws \Exception if the database query fails (which should usually not happen)
 	 */
-	public function addInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
+	public function setInviteStatus(int $eventId, array $foodsaverIds, int $status): bool
 	{
 		$data = [];
 		$parts = array_chunk($foodsaverIds, 100);
@@ -351,6 +340,6 @@ class EventGateway extends BaseGateway
 			['event_id' => $event_id]
 		);
 
-		$this->addInviteStatus($event_id, array_diff($foodsaverIds, $invited), InvitationStatus::INVITED);
+		$this->setInviteStatus($event_id, array_diff($foodsaverIds, $invited), InvitationStatus::INVITED);
 	}
 }

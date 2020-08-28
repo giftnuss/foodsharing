@@ -13,6 +13,18 @@ final class EventPermissions
 		$this->session = $session;
 	}
 
+	public function mayEditEvent(array $event): bool
+	{
+		if ($this->session->isOrgaTeam()) {
+			return true;
+		}
+		if ($this->session->isAdminFor($event['bezirk_id'])) {
+			return true;
+		}
+
+		return $event['fs_id'] == $this->session->id();
+	}
+
 	public function maySeeEvent(array $event): bool
 	{
 		return $this->session->mayBezirk($event['bezirk_id']) || isset($event['invites']['may'][$this->session->id()]) || $event['public'] == 1;
@@ -21,13 +33,6 @@ final class EventPermissions
 	public function mayJoinEvent(array $event): bool
 	{
 		return $this->maySeeEvent($event);
-	}
-
-	public function mayEditEvent(array $event): bool
-	{
-		return $event['fs_id'] == $this->session->id() || $this->session->isAdminFor(
-				$event['bezirk_id']
-			) || $this->session->isOrgaTeam();
 	}
 
 	public function mayCommentInEvent(array $event): bool
