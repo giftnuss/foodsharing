@@ -92,7 +92,7 @@ class VotingTransactions
 			case VotingScope::VERIFIED_FOODSAVERS:
 				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER, true);
 				break;
-			case VotingScope::VERIFIRED_FOODSAVER_HOME_DISTRICT:
+			case VotingScope::VERIFIED_FOODSAVERS_HOME_DISTRICT:
 				$users = $this->votingGateway->listActiveRegionMemberIds($regionId, Role::FOODSAVER, true, true);
 				break;
 			case VotingScope::STORE_MANAGERS:

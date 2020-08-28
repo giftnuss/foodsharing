@@ -200,6 +200,7 @@ export default {
         window.location = this.$url('poll', poll.id)
       } catch (e) {
         pulseError(i18n('error_unexpected'))
+        pulseError(e)
       }
 
       this.isLoading = false
