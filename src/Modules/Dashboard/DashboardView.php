@@ -216,8 +216,10 @@ class DashboardView extends View
 		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding truncate-content collapse-mobile']);
 	}
 
-	// TODO Duplicated in EventView right now
-	private function buildEventResponse(int $eventId, int /* InvitationStatus */ $newStatus): string
+	/** TODO Duplicated in EventView right now.
+	 * @param int $newStatus  The invitation response (a valid {@see InvitationStatus})
+	 */
+	private function buildEventResponse(int $eventId, $newStatus): string
 	{
 		return "ajreq('eventresponse',{app:'event',id:'" . $eventId . "',s:'" . $newStatus . "'});return false;";
 	}

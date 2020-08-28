@@ -275,7 +275,10 @@ class EventView extends View
 		);
 	}
 
-	private function buildEventResponse(int $eventId, int /* InvitationStatus */ $newStatus): string
+	/** TODO Duplicated in DashboardView right now.
+	 * @param int $newStatus  The invitation response (a valid {@see InvitationStatus})
+	 */
+	private function buildEventResponse(int $eventId, $newStatus): string
 	{
 		return "ajreq('eventresponse',{app:'event',id:'" . $eventId . "',s:'" . $newStatus . "'});return false;";
 	}
