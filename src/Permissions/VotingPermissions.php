@@ -91,6 +91,11 @@ final class VotingPermissions
 					return false;
 				}
 				break;
+			case VotingScope::VERIFIRED_FOODSAVER_HOME_DISTRICT:
+				if (!$this->session->get('bezirk_id') == $poll->regionId) {
+					return false;
+				}
+				break;
 		}
 
 		// only if not voted yet

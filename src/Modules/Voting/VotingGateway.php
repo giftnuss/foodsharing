@@ -240,25 +240,38 @@ class VotingGateway extends BaseGateway
 		], ['id' => $pollId]);
 	}
 
-	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true): array
+	public function listActiveRegionMemberIds(int $regionId, int $minRole, bool $onlyVerified = true, bool $restrict_homeDistrict = false): array
 	{
 		$verifiedCondition = $onlyVerified ? 'AND fs.verified = 1' : '';
 
-		$list = $this->db->fetchAll('
+		if ($restrict_homeDistrict) {
+			$list = $this->db->fetchAll('
 			SELECT id
 			FROM fs_foodsaver fs
-			INNER JOIN fs_foodsaver_has_bezirk hb
-			ON fs.id = hb.foodsaver_id
-			WHERE hb.bezirk_id = :regionId
-			AND hb.active = 1
+			WHERE fs.bezirk_id = :regionId
 			AND fs.rolle > :role
 			' . $verifiedCondition, [
-			':regionId' => $regionId,
-			':role' => $minRole
-		]);
+				':regionId' => $regionId,
+				':role' => $minRole
+			]);
+		} else {
+			$list = $this->db->fetchAll('
+				SELECT id
+				FROM fs_foodsaver fs
+				INNER JOIN fs_foodsaver_has_bezirk hb
+				ON fs.id = hb.foodsaver_id
+				WHERE hb.bezirk_id = :regionId
+				AND hb.active = 1
+				AND fs.rolle > :role
+				' . $verifiedCondition, [
+				':regionId' => $regionId,
+				':role' => $minRole
+			]);
+		}
 
 		return array_map(function ($x) {
 			return $x['id'];
 		}, $list);
+
 	}
 }

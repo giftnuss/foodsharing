@@ -27,8 +27,10 @@ class VotingScope
 	 */
 	public const AMBASSADORS = 3;
 
+	public const VERIFIRED_FOODSAVER_HOME_DISTRICT = 4;
+
 	public static function isValidScope(int $scope): bool
 	{
-		return in_array($scope, range(self::FOODSAVERS, self::AMBASSADORS));
+		return in_array($scope, range(self::FOODSAVERS, self::VERIFIRED_FOODSAVER_HOME_DISTRICT));
 	}
 }

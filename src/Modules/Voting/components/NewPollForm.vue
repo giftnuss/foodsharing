@@ -25,7 +25,7 @@
           :label="$i18n('poll.new_poll.scope')"
         >
           <b-form-radio
-            v-for="index in 4"
+            v-for="index in 5"
             :key="index"
             v-model="scope"
             :value="index - 1"

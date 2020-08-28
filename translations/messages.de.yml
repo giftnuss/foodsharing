@@ -1580,6 +1580,8 @@ poll:
   scope_description_1: Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe
   scope_description_2: Alle Betriebsverantwortlichen aus dem Bezirk / der Gruppe
   scope_description_3: Alle Botschafter aus dem Bezirk / der Gruppe
+  scope_description_4: Alle verifizierten und nicht verifizierten foodsaver aus dem Bezirk / der Gruppe
+  scope_description_5: Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung
   type: Art der Abstimmung
   type_description_0: Auswählen (nur eine Option kann gewählt werden)
   type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
