@@ -272,6 +272,5 @@ class VotingGateway extends BaseGateway
 		return array_map(function ($x) {
 			return $x['id'];
 		}, $list);
-
 	}
 }
