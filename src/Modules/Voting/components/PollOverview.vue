@@ -44,7 +44,6 @@
         <ResultsTable
           v-if="isPollInPast"
           :options="poll.options"
-          :num-values="numValues"
           :num-votes="poll.votes"
           class="mt-5"
         />
@@ -64,10 +63,6 @@ export default {
   props: {
     poll: {
       type: Object,
-      required: true
-    },
-    numValues: {
-      type: Number,
       required: true
     },
     regionName: {
