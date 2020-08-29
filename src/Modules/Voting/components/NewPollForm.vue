@@ -12,6 +12,7 @@
           :label="$i18n('poll.new_poll.name')"
           label-for="input-name"
           :state="isNameValid"
+          class="mb-4"
         >
           <b-form-input
             id="input-name"
@@ -19,10 +20,10 @@
             trim
           />
         </b-form-group>
-        <div>{{ name }}</div>
 
         <b-form-group
           :label="$i18n('poll.new_poll.scope')"
+          class="mb-3"
         >
           <b-form-radio
             v-for="index in 5"
@@ -36,6 +37,7 @@
 
         <b-form-group
           :label="$i18n('poll.new_poll.type')"
+          class="mb-4"
         >
           <b-form-radio
             v-for="index in 4"
@@ -43,12 +45,19 @@
             v-model="type"
             :value="index - 1"
           >
-            {{ $i18n('poll.type_description_' + index) }}
+            {{ $i18n('poll.type_description_' + (index - 1)) }}
           </b-form-radio>
         </b-form-group>
 
-        <label for="input-startdate">{{ $i18n('poll.new_poll.start_date') }}</label>
-        <div class="row ml-2">
+        <b-row>
+          <b-col>
+            <label for="input-startdate">{{ $i18n('poll.new_poll.start_date') }}</label>
+          </b-col>
+          <b-col class="text-center">
+            <label for="input-startdate-time">Uhrzeit</label>
+          </b-col>
+        </b-row>
+        <b-row class="ml-2 mb-2">
           <b-form-datepicker
             id="input-startdate"
             v-model="startDate"
@@ -60,10 +69,10 @@
             class="col"
             hide-header
           />
-        </div>
+        </b-row>
 
         <label for="input-enddate">{{ $i18n('poll.new_poll.end_date') }}</label>
-        <div class="row ml-2">
+        <b-row class="ml-2 mb-3">
           <b-form-datepicker
             id="input-enddate"
             v-model="endDate"
@@ -75,7 +84,7 @@
             class="col"
             hide-header
           />
-        </div>
+        </b-row>
 
         <label for="input-description">{{ $i18n('poll.new_poll.description') }}</label>
         <b-form-textarea
@@ -84,39 +93,46 @@
           :placeholder="$i18n('poll.new_poll.description_placeholder')"
           rows="3"
           max-rows="6"
+          class="ml-1 mb-4"
         />
 
         <b-form-group
           :label="$i18n('poll.new_poll.options')"
           label-for="input-name"
           :state="isNameValid"
+          class="mb-4"
         >
           <b-form-spinbutton
             id="input-num-options"
             v-model="numOptions"
-            min="1"
+            min="2"
             max="10"
+            class="m-1 mb-3 mr-3"
+            style="width:120px"
+            size="sm"
           />
 
-          <div
+          <b-row
             v-for="index in numOptions"
             :key="index"
             class="row"
           >
-            <div
-              class="col"
+            <b-col
+              cols="3"
+              align-v="stretch"
             >
               Option {{ index }}:
-            </div>
-            <b-form-input
-              id="input-option-0"
-              v-model="options[index-1]"
-              trim
-              class="col"
-            />
-          </div>
+            </b-col>
+            <b-col>
+              <b-form-input
+                id="input-option-0"
+                v-model="options[index-1]"
+                trim
+                class="mr-3 mb-1"
+              />
+            </b-col>
+          </b-row>
         </b-form-group>
-        <div>{{ options }}</div>
 
         <b-button
           type="submit"
@@ -141,7 +157,9 @@ import {
   BTime,
   BFormTextarea,
   BFormSpinbutton,
-  BButton
+  BButton,
+  BRow,
+  BCol
 } from 'bootstrap-vue'
 import { createPoll } from '@/api/voting'
 import { pulseError } from '@/script'
@@ -157,7 +175,9 @@ export default {
     BTime,
     BFormTextarea,
     BFormSpinbutton,
-    BButton
+    BButton,
+    BRow,
+    BCol
   },
   props: {
     region: {
@@ -209,8 +229,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #input-num-options {
-  width: 200px
+  width: 120px;
 }
 </style>
