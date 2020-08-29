@@ -682,7 +682,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				['href' => '/?page=fsbetrieb&id=' . $storeId],
 				$messageVars,
 				$messageIdentifier,
-				0,
+				false,
 				$messageExpiration,
 				$messageTimestamp
 			);
@@ -690,10 +690,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function confirmFetcher(int $fsid, int $storeId, $date): int
+	public function confirmFetcher(int $fsid, int $storeId, \DateTime $date): int
 	{
 		$result = $this->db->update(
-		'fs_abholer',
+			'fs_abholer',
 			['confirmed' => 1],
 			['foodsaver_id' => $fsid, 'betrieb_id' => $storeId, 'date' => $this->db->date($date)]
 		);
@@ -751,7 +751,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return false;
 	}
 
-	public function getBetriebConversation($storeId, $springerConversation = false)
+	public function getBetriebConversation(int $storeId, bool $springerConversation = false): ?int
 	{
 		if ($springerConversation) {
 			$chatType = 'springer_conversation_id';
@@ -880,12 +880,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	public function getPickupSignupsForDate(int $storeId, \DateTimeInterface $date)
+	public function getPickupSignupsForDate(int $storeId, \DateTime $date)
 	{
 		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
 	}
 
-	public function getPickupSignupsForDateRange(int $storeId, \DateTimeInterface $from, \DateTimeInterface $to = null)
+	public function getPickupSignupsForDateRange(int $storeId, \DateTime $from, ?\DateTime $to = null)
 	{
 		$condition = ['date >=' => $this->db->date($from), 'betrieb_id' => $storeId];
 		if (!is_null($to)) {
@@ -950,12 +950,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function getOnetimePickups(int $storeId, \DateTimeInterface $date)
+	public function getOnetimePickups(int $storeId, \DateTime $date)
 	{
 		return $this->getOnetimePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getOnetimePickupsForRange(int $storeId, \DateTimeInterface $from, ?\DateTimeInterface $to)
+	public function getOnetimePickupsForRange(int $storeId, \DateTime $from, ?\DateTime $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
@@ -981,7 +981,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function addOnetimePickup(int $storeId, \DateTimeInterface $date, int $slots)
+	public function addOnetimePickup(int $storeId, \DateTime $date, int $slots)
 	{
 		$this->db->insert('fs_fetchdate', [
 			'betrieb_id' => $storeId,
@@ -990,7 +990,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function updateOnetimePickupTotalSlots(int $storeId, \DateTimeInterface $date, int $slots): bool
+	public function updateOnetimePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
 	{
 		return $this->db->update('fs_fetchdate', [
 			'fetchercount' => $slots

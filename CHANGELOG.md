@@ -27,6 +27,7 @@
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Move registration request to the REST endpoint #819 !1632 @alex.simm
 - Prepare event invitations for REST !1627 @ChrisOelmueller
+- Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm
