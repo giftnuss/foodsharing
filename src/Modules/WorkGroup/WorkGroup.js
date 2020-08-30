@@ -160,6 +160,7 @@ const tageditOptions = {
     }
     response(data)
   },
+  deleteEmptyItems: true,
   allowEdit: false,
   allowAdd: false,
   animSpeed: 100

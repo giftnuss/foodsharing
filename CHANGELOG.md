@@ -8,6 +8,7 @@
 - Disable chat notification by mail for new users. #949 !1620 @chriswalg
 - Removed quiz description #737 !1565 @chriswalg
 - Removed unused legal agreement for new amb's #821 !1619 @chriswalg
+- Allow translating lots and lots of text !1637 @ChrisOelmueller
 - Workgroup Admins of Startpage and Team/Partner page can edit their pages #967 !1651 @fs_k
 - Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
 
@@ -19,6 +20,7 @@
 - Fix default center value for leaflet map !1644 @alex.simm
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
 - Try to correct scrolling to requested forum post #930 #968 !1650 @ChrisOelmueller
+- Allow adding workgroup admins or members if none exist currently #896 !1637 @ChrisOelmueller
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
@@ -28,6 +30,7 @@
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Move registration request to the REST endpoint #819 !1632 @alex.simm
+- Use TranslatorInterface for many old translations !1637 @ChrisOelmueller
 - Prepare event invitations for REST !1627 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 
