@@ -120,6 +120,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$ag_aktive = RegionIDs::TEAM_ADMINISTRATION_MEMBER;
 		$ag_testimonials = RegionIDs::TEAM_BOARD_MEMBER;
 		$ag_quiz = RegionIDs::QUIZ_AND_REGISTRATION_WORK_GROUP;
+		$ag_startpage = RegionIDs::PR_START_PAGE;
+		$I->createWorkingGroup('AG Startseite', ['id' => $ag_startpage]);
+		$ag_partnerandteam = RegionIDs::PR_PARTNER_AND_TEAM_WORK_GROUP;
+		$I->createWorkingGroup('AG Team und Partnerseite', ['id' => $ag_partnerandteam]);
 		$password = 'user';
 		$region1WorkGroup = $regionOneWorkGroup['id']; // workgroup 'Schnippelparty Göttingen' from 'Göttingen'
 
@@ -135,6 +139,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		$userStoreManager = $I->createStoreCoordinator($password, ['email' => 'storemanager1@example.com', 'name' => 'Three', 'bezirk_id' => $region1]);
 		$this->writeUser($userStoreManager, $password, 'store coordinator');
+
+		$userStoreManager2 = $I->createStoreCoordinator($password, ['email' => 'storemanager2@example.com', 'name' => 'Four', 'bezirk_id' => $region1]);
+		$this->writeUser($userStoreManager2, $password, 'store coordinator2');
 
 		$userbot = $I->createAmbassador($password, [
 			'email' => 'userbot@example.com',
@@ -157,6 +164,10 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionAdmin($region1, $userbot['id']);
 		$I->addRegionMember($ag_quiz, $userbot['id']);
 		$I->addRegionAdmin($ag_quiz, $userbot['id']);
+		$I->addRegionMember($ag_startpage, $userStoreManager['id']);
+		$I->addRegionAdmin($ag_startpage, $userStoreManager['id']);
+		$I->addRegionMember($ag_partnerandteam, $userStoreManager2['id']);
+		$I->addRegionAdmin($ag_partnerandteam, $userStoreManager2['id']);
 		$I->addRegionMember($region_vorstand, $userbot['id']);
 		$I->addRegionMember($ag_aktive, $userbot['id']);
 
