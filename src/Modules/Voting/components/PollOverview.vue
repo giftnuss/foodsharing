@@ -41,7 +41,7 @@
           @disableVoteForm="disableVoteForm"
         />
         <div
-          v-else
+          v-else-if="userVoteDate === null"
           class="mt-3"
         >
           {{ $i18n('poll.may_not_vote') }}

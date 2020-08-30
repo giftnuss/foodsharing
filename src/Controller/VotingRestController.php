@@ -184,15 +184,20 @@ class VotingRestController extends AbstractFOSRestController
 
 		$poll->authorId = $this->session->id();
 
-		// parse options
+		// parse options and check that they are not empty
 		$poll->options = array_map(function ($x) {
 			$o = new PollOption();
-			$o->text = $x;
+			$o->text = trim($x);
 
 			return $o;
 		}, $paramFetcher->get('options'));
 		if (empty($poll->options)) {
 			throw new HttpException(400, 'poll does not have any options');
+		}
+		foreach ($poll->options as $option) {
+			if (empty($option->text)) {
+				throw new HttpException(400, 'option text must not be empty');
+			}
 		}
 
 		// create poll
