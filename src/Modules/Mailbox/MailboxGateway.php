@@ -328,8 +328,11 @@ class MailboxGateway extends BaseGateway
 		return $this->db->fetchAllValuesByCriteria('fs_botschafter', 'bezirk_id', ['foodsaver_id' => $fsId]);
 	}
 
-	public function getBoxes(bool $isAmbassador, ?int $fsId, bool $mayStoreManager)
+	public function getBoxes(bool $isAmbassador, ?int $fsId, bool $mayStoreManager): array
 	{
+		if ($fsId === null) {
+			return [];
+		}
 		$mBoxes = [];
 		if ($isAmbassador) {
 			$selectedRegions = $this->getMailboxAdminRegions($fsId);
