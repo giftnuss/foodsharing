@@ -18,7 +18,7 @@
     <div class="head ui-widget-header ui-corner-top ui-padding">
       {{ $i18n('forum.threads') }}
     </div>
-    <div class="ui-widget ui-widget-content corner-all margin-bottom ui-padding corner-bottom">
+    <div class="ui-widget ui-widget-content corner-all margin-bottom">
       <ul class="forum_threads linklist">
         <ThreadListEntry
           v-for="(el, index) in threads"
