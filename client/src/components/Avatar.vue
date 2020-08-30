@@ -1,13 +1,14 @@
-
 <template>
   <div
     class="avatar"
-    :class="[{'auto-scale': autoScale, sleeping: sleepStatus}, `sleep${size}`]"
+    :class="[{'sleeping': sleepStatus}, `sleep${size}`]"
+    :style="wrapperStyle"
   >
     <img
       :src="avatarUrl"
       :class="imgClass"
-      style="height:100%"
+      style="height: 100%"
+      :style="imgStyle"
     >
   </div>
 </template>
@@ -32,6 +33,10 @@ export default {
       type: String,
       default: ''
     },
+    rounded: {
+      type: Boolean,
+      default: true
+    },
     autoScale: {
       type: Boolean,
       default: true
@@ -49,6 +54,21 @@ export default {
       } else {
         return '/img/' + prefix + 'avatar.png'
       }
+    },
+    wrapperStyle () {
+      const styles = {}
+      if (this.autoScale) {
+        styles.height = '100%'
+        styles.width = 'auto'
+      }
+      return styles
+    },
+    imgStyle () {
+      const styles = {}
+      if (this.rounded) {
+        styles['border-radius'] = '5px'
+      }
+      return styles
     }
   }
 }
@@ -79,9 +99,5 @@ export default {
 }
 .sleep130::after {
   background-image: url('/img/sleep130x130.png');
-}
-.auto-scale {
-  height: 100%;
-  width: auto;
 }
 </style>

@@ -11,10 +11,12 @@
       </span>
       <div class="flex-grow-1 d-flex flex-wrap-reverse flex-sm-nowrap">
         <div
-          class="thread-title px-1 mr-1 align-self-center flex-grow-1 flex-shrink-1 flex-sm-noshrink"
+          class="thread-main px-1 mr-1 align-self-center flex-grow-1 flex-shrink-1 flex-sm-noshrink"
           :class="{'font-weight-bold': thread.isSticky}"
         >
-          {{ thread.title }}
+          <span class="thread-title d-inline">
+            {{ thread.title }}
+          </span>
         </div>
         <div
           v-b-tooltip="$dateFormat(lastPostDate, 'full-long')"
@@ -62,11 +64,6 @@ export default {
     width: 64px;
     height: 50px;
     background-image: url('/img/forum_bubble.png');
-  }
-
-  // `deep` because of the Avatar component
-  .user-picture .avatar ::v-deep img {
-    border-radius: 5px;
   }
 
   .thread-title {
