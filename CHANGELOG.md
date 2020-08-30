@@ -7,6 +7,7 @@
 - Disable chat notification by mail for new users. #949 !1620 @chriswalg
 - Removed quiz description #737 !1565 @chriswalg
 - Removed unused legal agreement for new amb's #821 !1619 @chriswalg
+- ContentIds can be viewed and edited by according workgroups #967 !1651 @fs_k
 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
