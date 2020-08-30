@@ -1,8 +1,5 @@
 <template>
   <div class="bootstrap">
-    <div>
-      {{ $i18n('poll.multiselection.description') }}
-    </div>
     <b-form-group>
       <b-form-checkbox
         v-for="option in options"

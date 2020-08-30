@@ -1,8 +1,5 @@
 <template>
   <div class="bootstrap">
-    <div>
-      {{ $i18n('poll.scorevoting.description') }}
-    </div>
     <b-form-group>
       <div
         v-for="i in options.length"

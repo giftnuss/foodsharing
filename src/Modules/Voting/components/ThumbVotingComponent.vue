@@ -1,8 +1,5 @@
 <template>
   <div class="bootstrap">
-    <div>
-      {{ $i18n('poll.thumbvoting.description') }}
-    </div>
     <b-form-group
       v-for="(option, i) in options"
       :key="option.optionIndex"

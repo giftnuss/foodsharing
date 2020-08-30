@@ -1,8 +1,5 @@
 <template>
   <div class="bootstrap">
-    <div>
-      {{ $i18n('poll.singleselection.description') }}
-    </div>
     <b-form-group>
       <b-form-radio
         v-for="option in options"

@@ -29,11 +29,13 @@
         @updateVotingRequestValues="updateVotingRequestValues"
       />
 
-      <div
+      <b-alert
+        show
+        variant="warning"
         class="mt-5"
       >
         {{ $i18n('poll.submit_vote_warning') }}
-      </div>
+      </b-alert>
       <b-button
         type="submit"
         variant="primary"
@@ -46,7 +48,7 @@
 </template>
 
 <script>
-import { BButton, BForm } from 'bootstrap-vue'
+import { BButton, BForm, BAlert } from 'bootstrap-vue'
 import ThumbVotingComponent from './ThumbVotingComponent'
 import ScoreVotingComponent from './ScoreVotingComponent'
 import SingleSelectionVotingComponent from './SingleSelectionVotingComponent'
@@ -62,7 +64,8 @@ export default {
     SingleSelectionVotingComponent,
     MultiSelectionVotingComponent,
     BButton,
-    BForm
+    BForm,
+    BAlert
   },
   props: {
     poll: {

@@ -5,9 +5,9 @@
         {{ poll.name }}
       </div>
       <div class="card-body">
-        <form class="my-1 mb-3">
+        <div class="prestyled mb-3">
           {{ poll.description }}
-        </form>
+        </div>
         <div>
           <b>{{ $i18n('poll.time_period') }}:</b> {{ $dateFormat(startDate) }} - {{ $dateFormat(endDate) }}
           <span v-if="isPollInPast">
@@ -106,3 +106,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.prestyled {
+  white-space: pre-line;
+}
+</style>
