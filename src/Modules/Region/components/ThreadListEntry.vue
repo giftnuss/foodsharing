@@ -9,16 +9,21 @@
           :size="50"
         />
       </span>
-      <span class="thread_title" :class="{'font-weight-bold': thread.isSticky}">
+      <div class="thread_title" :class="{'font-weight-bold': thread.isSticky}">
         {{ thread.title }}
-      </span>
-      <span class="last_post ui-corner-all">
-        <span class="time">{{ lastPostDate }}</span>
+      </div>
+      <div
+        v-b-tooltip="$dateFormat(lastPostDate, 'full-long')"
+        class="last_post ui-corner-all"
+      >
+        <span class="time">
+          {{ lastPostDate | dateDistanceInWords }}
+        </span>
         <span class="info">
           {{ $i18n('forum.from', { name: thread.lastPost.author.name || '' }) }}
         </span>
-      </span>
-      <!-- TODO ... -->
+      </div>
+      <!-- TODO modernize this whole layout, particularly the float structure: -->
       <span style="clear: both;" />
     </a>
   </li>
@@ -40,8 +45,7 @@ export default {
       return url('forum', this.thread.regionId, this.thread.regionSubId, this.thread.id)
     },
     lastPostDate () {
-      return this.$dateDistanceInWords(dateFnsParseISO(this.thread.lastPost.createdAt))
-      // TODO the relative display is nicer, but it should show the exact date on hover as well
+      return dateFnsParseISO(this.thread.lastPost.createdAt)
     }
   }
 }
@@ -52,11 +56,10 @@ export default {
   .user_pic,
   .thread_title {
     float: left;
-    display: block;
   }
 
   .user_pic {
-    margin-right: 10px;
+    margin-right: 5px;
     width: 64px;
     height: 50px;
     background-image: url('/img/forum_bubble.png');
@@ -67,16 +70,15 @@ export default {
   }
 
   .thread_title {
-    font-size: 15px;
+    font-size: 1.25em;
     margin-top: 15px !important;
     margin-left: 5px !important;
-    color: var(--fs-brown);
     width: 55%;
   }
 
   .last_post {
     float: right;
-    padding: 7px;
+    padding: 4px 8px;
     width: 170px;
   }
 
