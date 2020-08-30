@@ -56,6 +56,9 @@ class ContentControl extends Control
 					$this->routeHelper->goPage();
 				}
 			} elseif ($id = $this->identificationHelper->getActionId('edit')) {
+				if (!$this->contentPermissions->mayEditContentId((int)$_GET['id'])) {
+					$this->routeHelper->go('/?page=content');
+				}
 				$this->handle_edit();
 
 				$this->pageHelper->addBread($this->translationHelper->s('bread_content'), '/?page=content');
@@ -81,7 +84,7 @@ class ContentControl extends Control
 			} else {
 				$this->pageHelper->addBread($this->translationHelper->s('content_bread'), '/?page=content');
 
-				if ($data = $this->contentGateway->list()) {
+				if ($data = $this->contentGateway->list($this->contentPermissions->mayEditContentListIDs())) {
 					$rows = [];
 					foreach ($data as $d) {
 						$rows[] = [
@@ -101,10 +104,11 @@ class ContentControl extends Control
 				} else {
 					$this->flashMessageHelper->info($this->translationHelper->s('content_empty'));
 				}
-
-				$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
+				if ($this->contentPermissions->mayCreateContent()) {
+					$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_menu([
 					['href' => '/?page=content&a=neu', 'name' => $this->translationHelper->s('neu_content')]
 				]), 'Aktionen'), CNT_RIGHT);
+				}
 			}
 		}
 	}

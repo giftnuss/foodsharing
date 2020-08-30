@@ -16,31 +16,14 @@ class ContentGateway extends BaseGateway
 		);
 	}
 
-	public function list(): array
+	public function list($filter): array
 	{
-		return $this->db->fetchAll('
-			SELECT 	 	`id`,
-						`name`
-			FROM 		`fs_content`
-			ORDER BY `name`'
-		);
+		return $this->db->fetchAllByCriteria('fs_content', ['id', 'name'], $filter);
 	}
 
 	public function getDetail($id): array
 	{
-		return $this->db->fetch('
-			SELECT
-			`id`,
-			`name`,
-			`title`,
-			`body`,
-			`last_mod`
-
-			FROM 		`fs_content`
-
-			WHERE 		`id` = :id',
-			[':id' => $id]
-		);
+		return $this->db->fetchByCriteria('fs_content', ['id', 'name', 'title', 'body', 'last_mod'], ['id' => $id]);
 	}
 
 	public function create($data): int
