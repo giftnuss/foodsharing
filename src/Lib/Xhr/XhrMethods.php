@@ -1152,6 +1152,10 @@ class XhrMethods
 						'id' => WorkgroupFunction::WELCOME,
 						'name' => $this->translator->trans('group.function.welcome'),
 					],
+					[
+						'id' => WorkgroupFunction::VOTING,
+						'name' => 'Umfrage'
+					],
 				],
 			]),
 			$this->v_utils->v_input_wrapper(
@@ -1382,6 +1386,16 @@ class XhrMethods
 					'status' => 1,
 					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate') . '");',
 				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::VOTING) {
+			$votingGroupId = $this->regionGateway->getRegionVotingGroupId($data['parent_id']);
+			if ($votingGroupId) {
+				if (($votingGroupId != (int)$data['bezirk_id'])) {
+					return json_encode([
+						'status' => 1,
+						'script' => 'pulseError("' . $this->translationHelper->s('invalid_voting_team') . '");'
+					]);
+				}
 			}
 		}
 

@@ -176,31 +176,30 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$I->addRegionMember($ag_testimonials, $user2['id']);
 
 		// Make ambassador responsible for all work groups in the region
-		$this->output->writeln('- make ambassador responsible for all work groups except welcome group');
-		$welcomeGroupIdRead = $I->grabColumnFromDatabase('fs_region_function', 'region_id', ['target_id' => $region1, 'function_id' => 1]);
+		$this->output->writeln('- make ambassador responsible for all work groups');
 		$workGroupsIds = $I->grabColumnFromDatabase('fs_bezirk', 'id', ['parent_id' => $region1, 'type' => Type::WORKING_GROUP]);
 		foreach ($workGroupsIds as $id) {
-			if ($welcomeGroupIdRead) {
-				if ($welcomeGroupIdRead[0] == $id) {
-					continue;
-				}
-			} else {
-				$I->addRegionMember($id, $userbot['id']);
-				$I->addRegionAdmin($id, $userbot['id']);
-			}
+			$I->addRegionMember($id, $userbot['id']);
+			$I->addRegionAdmin($id, $userbot['id']);
 		}
 
 		// Create a welcome Group if it doesn't exist.
-		if (!$welcomeGroupIdRead) {
-			$this->output->writeln('- create welcome group');
-
-			$welcomeGroup = $I->createWorkingGroup('Begrüßung', ['parent_id' => $region1, 'email_name' => 'Begrüßung Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
-			$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
-			$welcomeGroupIdRead[0] = $welcomeGroup['id'];
-		}
+		$this->output->writeln('- create welcome group');
+		$welcomeGroup = $I->createWorkingGroup('Begrüßung', ['parent_id' => $region1, 'email_name' => 'Begrüßung Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
+		$welcomeGroup['id'];
 		$this->output->writeln('- make foodsaver responsible for welcome group');
-		$I->addRegionMember($welcomeGroupIdRead[0], $user2['id']);
-		$I->addRegionAdmin($welcomeGroupIdRead[0], $user2['id']);
+		$I->addRegionMember($welcomeGroup['id'], $user2['id']);
+		$I->addRegionAdmin($welcomeGroup['id'], $user2['id']);
+
+		// Create voting Group
+		$this->output->writeln('- create voting group');
+		$votingGroup = $I->createWorkingGroup('Umfrage', ['parent_id' => $region1, 'email_name' => 'Umfrage Göttingen', 'teaser' => 'Hier sind die Umfrager für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $votingGroup['id'], 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $region1]);
+		$I->addRegionMember($votingGroup['id'], $userStoreManager['id']);
+		$I->addRegionAdmin($votingGroup['id'], $userStoreManager['id']);
+		$I->addRegionMember($votingGroup['id'], $userbot['id']);
+		$I->addRegionAdmin($votingGroup['id'], $userbot['id']);
 
 		// Create store team conversations
 		$this->output->writeln('- create store team conversations');

@@ -27,6 +27,7 @@ $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf.
 $g_lang['geschlecht'] = 'Geschlecht';
 $g_lang['botschafter'] = 'Botschafter';
 $g_lang['save'] = 'Speichern'; // SettingsView SettingsView SettingsView
+$g_lang['invalid_voting_team'] = 'Umfrageteam schon angelegt ! In einem Bezirk kann es nur ein Umfrageteam geben.';
 $g_lang['options'] = 'Optionen';
 $g_lang['picture'] = 'Bild';
 $g_lang['message'] = 'Nachricht';

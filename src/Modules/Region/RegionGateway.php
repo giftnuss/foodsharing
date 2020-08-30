@@ -40,11 +40,18 @@ class RegionGateway extends BaseGateway
 			['id' => $regionId]
 		);
 
+//		$out['workgroup_function'] = $this->RegionFunctionGroup($out['id'], $out['parent_id']);
 		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
 		} else {
-			$out['workgroup_function'] = [];
+			if ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
+				$out['workgroup_function'] = WorkgroupFunction::VOTING;
+			} else {
+				$out['workgroup_function'] = [];
+			}
 		}
+
+
 
 		$out['botschafter'] = $this->db->fetchAll('
 				SELECT 		`fs_foodsaver`.`id`,
@@ -307,6 +314,13 @@ class RegionGateway extends BaseGateway
 			$region['welcomeAdmins'] = [];
 		}
 
+		if ($votingGroupId = $this->getRegionVotingGroupId($regionId)) {
+			$region['votingAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($votingGroupId);
+			shuffle($region['votingAdmins']);
+		} else {
+			$region['votingAdmins'] = [];
+		}
+
 		return $region;
 	}
 
@@ -511,6 +525,22 @@ class RegionGateway extends BaseGateway
 		}
 	}
 
+	public function getRegionVotingGroupId(int $parentId): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => WorkgroupFunction::VOTING
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	public function deleteRegionFunction($regionId, $functionId)
 	{
 		return $this->db->delete('fs_region_function',
@@ -535,12 +565,29 @@ class RegionGateway extends BaseGateway
 			);
 	}
 
+	public function RegionFunctionGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->fetchValueByCriteria('fs_region_function','function_id',
+			['region_id' => $region_id,
+             'target_id' => $target_id]
+		);
+	}
+
 	public function existRegionWelcomeGroup(int $region_id, int $target_id): bool
 	{
 		return  $this->db->exists('fs_region_function',
 			['region_id' => $region_id,
 			 'function_id' => WorkgroupFunction::WELCOME,
 			 'target_id' => $target_id]
+		);
+	}
+
+	public function existRegionVotingGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function',
+			['region_id' => $region_id,
+				'function_id' => WorkgroupFunction::VOTING,
+				'target_id' => $target_id]
 		);
 	}
 

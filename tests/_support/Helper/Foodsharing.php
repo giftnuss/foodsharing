@@ -71,6 +71,7 @@ class Foodsharing extends \Codeception\Module\Db
 			DELETE FROM fs_foodsaver;
 			DELETE FROM fs_conversation;
 			DELETE FROM fs_wallpost;
+			DELETE FROM fs_region_function;
 			DELETE FROM fs_bezirk WHERE id NOT IN(' . $regionsToKeep . ');
 			DELETE FROM fs_lebensmittel;
 		', []);

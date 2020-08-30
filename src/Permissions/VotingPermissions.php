@@ -112,12 +112,15 @@ final class VotingPermissions
 			return false;
 		}
 
-		$type = $this->regionGateway->getType($regionId);
+		$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
+		return $this->session->isAdminFor($votingGroup);
+
+/*		$type = $this->regionGateway->getType($regionId);
 		if (in_array($type, self::LOWER_REGIONS)) {
 			return true;
 		} else {
 			return $this->session->isAdminFor($regionId);
-		}
+		}*/
 	}
 
 	public function mayDeletePoll(int $pollId): bool
