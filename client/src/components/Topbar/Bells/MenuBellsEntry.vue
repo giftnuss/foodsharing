@@ -104,26 +104,6 @@ export default {
   }
 }
 
-  /*
-  Override old-style bell data passing ".img-store" or ".img-recycle"
-  as image data with the respective FontAwesome icons. See also: #907
-  */
-  .img-recycle,
-  .img-store {
-    font-family: "Font Awesome 5 Free", monospace;
-    font-style: normal;
-    font-weight: 900;
-    font-size: inherit;
-    text-rendering: auto;
-    background: none;
-  }
-  .img-recycle:before {
-    content: "\f1b8"; /* fa-recycle */
-  }
-  .img-store:before {
-    content: "\f07a"; /* fa-shopping-cart */
-  }
-
 .bell-grid {
   @supports (display: grid) {
     display: grid;
