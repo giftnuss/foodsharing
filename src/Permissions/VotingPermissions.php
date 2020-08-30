@@ -92,7 +92,7 @@ final class VotingPermissions
 				}
 				break;
 			case VotingScope::VERIFIED_FOODSAVERS_HOME_DISTRICT:
-				if ($this->session->get('bezirk_id') != $poll->regionId) {
+				if ($this->session->getCurrentRegionId() !== $poll->regionId) {
 					return false;
 				}
 				break;

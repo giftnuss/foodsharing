@@ -37,7 +37,7 @@
             v-model="scope"
             :value="index - 1"
           >
-            {{ $i18n('poll.scope_description_' + index) }}
+            {{ $i18n('poll.scope_description_' + (index - 1)) }}
           </b-form-radio>
         </b-form-group>
 
@@ -70,7 +70,8 @@
                 id="input-startdate"
                 v-model="startDate"
                 class="mb-2"
-                :placeholder="$i18n('poll.new_poll.pick_a_date')"
+                v-bind="labelsCalendar[locale] || {}"
+                :locale="locale"
                 :min="new Date()"
                 :state="$v.startDateTime.$error ? false : null"
                 @input="updateDateTimes"
@@ -80,7 +81,9 @@
               <b-form-timepicker
                 id="input-startdatetime"
                 v-model="startTime"
-                :placeholder="$i18n('poll.new_poll.pick_a_time')"
+                :locale="locale"
+                v-bind="labelsTimepicker[locale] || {}"
+                now-button
                 :state="$v.startDateTime.$error ? false : null"
                 @input="updateDateTimes"
               />
@@ -103,7 +106,8 @@
                 id="input-enddate"
                 v-model="endDate"
                 class="mb-2"
-                :placeholder="$i18n('poll.new_poll.pick_a_date')"
+                v-bind="labelsCalendar[locale] || {}"
+                :locale="locale"
                 :min="startDate"
                 :state="$v.endDateTime.$error ? false : null"
                 @input="updateDateTimes"
@@ -113,7 +117,8 @@
               <b-form-timepicker
                 id="input-enddatetime"
                 v-model="endTime"
-                :placeholder="$i18n('poll.new_poll.pick_a_time')"
+                :locale="locale"
+                v-bind="labelsTimepicker[locale] || {}"
                 :state="$v.endDateTime.$error ? false : null"
                 @input="updateDateTimes"
               />
@@ -262,7 +267,36 @@ export default {
       endTime: null,
       description: '',
       numOptions: 3,
-      options: Array(3).fill('')
+      options: Array(3).fill(''),
+      locale: 'de',
+      labelsTimepicker: {
+        de: {
+          labelHours: i18n('timepicker.labelHours'),
+          labelMinutes: i18n('timepicker.labelMinutes'),
+          labelSeconds: i18n('timepicker.labelSeconds'),
+          labelIncrement: i18n('timepicker.labelIncrement'),
+          labelDecrement: i18n('timepicker.labelDecrement'),
+          labelSelected: i18n('timepicker.labelSelected'),
+          labelNoTimeSelected: i18n('timepicker.labelNoTimeSelected'),
+          labelCloseButton: i18n('timepicker.labelCloseButton'),
+          labelNowButton: i18n('timepicker.labelNowButton')
+        }
+      },
+      labelsCalendar: {
+        de: {
+          labelPrevYear: i18n('calendar.labelPrevYear'),
+          labelPrevMonth: i18n('calendar.labelPrevMonth'),
+          labelCurrentMonth: i18n('calendar.labelCurrentMonth'),
+          labelNextMonth: i18n('calendar.labelNextMonth'),
+          labelNextYear: i18n('calendar.labelNextYear'),
+          labelToday: i18n('calendar.labelToday'),
+          labelSelected: i18n('calendar.labelSelected'),
+          labelNoDateSelected: i18n('calendar.labelNoDateSelected'),
+          labelCalendar: i18n('calendar.labelCalendar'),
+          labelNav: i18n('calendar.labelNav'),
+          labelHelp: i18n('calendar.labelHelp')
+        }
+      }
     }
   },
   validations: {

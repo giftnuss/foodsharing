@@ -40,6 +40,12 @@
           class="mt-5"
           @disableVoteForm="disableVoteForm"
         />
+        <div
+          v-else
+          class="mt-3"
+        >
+          {{ $i18n('poll.may_not_vote') }}
+        </div>
 
         <ResultsTable
           v-if="isPollInPast"

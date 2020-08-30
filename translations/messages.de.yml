@@ -577,6 +577,17 @@ calendar:
   labelNav: Kalendernavigation
   labelHelp: Navigation ist auch mit Pfeiltasten möglich
 
+timepicker:
+  labelHours: Stunden
+  labelMinutes: Minuten
+  labelSeconds: Sekunden
+  labelIncrement: Erhöhen
+  labelDecrement: Verringern
+  labelSelected: Ausgewählte Zeit
+  labelNoTimeSelected: Keine Zeit ausgewählt
+  labelCloseButton: Schließen
+  labelNowButton: Jetzt
+
 forum:
   from: 'Von {name}'
   threads: Themen
@@ -1576,12 +1587,11 @@ poll:
   in_past: beendet
   in_future: noch nicht gestartet
   allowed_voters: Stimmberechtigt
-  scope_description_0: Alle Foodsaver aus dem Bezirk / der Gruppe
+  scope_description_0: Alle verifizierten und nicht verifizierten Foodsaver aus dem Bezirk / der Gruppe
   scope_description_1: Alle verifizierten Foodsaver aus dem Bezirk / der Gruppe
   scope_description_2: Alle Betriebsverantwortlichen aus dem Bezirk / der Gruppe
   scope_description_3: Alle Botschafter aus dem Bezirk / der Gruppe
-  scope_description_4: Alle verifizierten und nicht verifizierten foodsaver aus dem Bezirk / der Gruppe
-  scope_description_5: Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung
+  scope_description_4: Alle verifizierten foodsaver mit dem Stammbezirk der Abstimmung
   type: Art der Abstimmung
   type_description_0: Auswählen (nur eine Option kann gewählt werden)
   type_description_1: Ankreuzen (mehrere Optionen können gewählt werden)
@@ -1610,11 +1620,10 @@ poll:
     option_texts_required: Bitte gib für jede Option einen Text ein.
     submit: Abstimmung speichern
     submit_success: Die Abstimmung wurde angelegt
-    pick_a_date: Kein Datum ausgewählt
-    pick_a_time: Keine Uhrzeit ausgewählt
   ended_at: lief bis
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen
+  may_not_vote: Du kannst in dieser Umfrage nicht abstimmen.
   results:
     number_of_votes: Abgegebene Stimmen
     votes: Stimmen
