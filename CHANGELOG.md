@@ -1,6 +1,7 @@
 # Unreleased
 
 ## Features
+- Display deep link to forum posts, better responsive layout #937 !1650 !1652 @ChrisOelmueller
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
@@ -17,11 +18,12 @@
 - Removed form for new amb's #821 !1619 @chriswalg
 - Fix default center value for leaflet map !1644 @alex.simm
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
+- Try to correct scrolling to requested forum post #930 #968 !1650 @ChrisOelmueller
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
-- Rewrite forum thread list in Vue #962 !1650 @ChrisOelmueller
+- Rewrite forum thread list in Vue #86 #764 #962 !1650 !1652 @ChrisOelmueller
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm

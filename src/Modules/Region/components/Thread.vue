@@ -313,7 +313,7 @@ export default {
         reactions: {},
         author: {
           name: `${user.firstname} ${user.lastname}`,
-          avatar: user.avatar['130']
+          avatar: user.avatar['130'].replace(/^(\/images\/130_q_)/, '')
         }
       }
       this.loadingPosts.push(-1)
