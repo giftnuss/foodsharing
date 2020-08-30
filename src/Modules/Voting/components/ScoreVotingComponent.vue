@@ -1,35 +1,55 @@
 <template>
   <div class="bootstrap">
-    <b-form-group>
+    <b-form-group v-if="smallLayout">
       <div
         v-for="i in options.length"
         :key="i"
-        class="my-1"
+        class="mb-5"
       >
-        <div>{{ options[i-1].text }}, {{ values[i-1] }}</div>
+        {{ options[i - 1].text }}
         <vue-slider
+          v-model="selected[i-1]"
           :min="-3"
           :max="3"
           :value="0"
           :marks="marks"
           :adsorb="true"
-          class="my-5 w-50"
-          @change="v => values[i-1] = +v"
+          class="mt-2"
         />
       </div>
     </b-form-group>
-    <div>Value: {{ values }}</div>
+    <b-form-group v-else>
+      <b-form-row
+        v-for="i in options.length"
+        :key="i"
+        class="mb-5"
+      >
+        <b-col>
+          {{ options[i - 1].text }}
+        </b-col>
+        <b-col>
+          <vue-slider
+            v-model="selected[i-1]"
+            :min="-3"
+            :max="3"
+            :value="0"
+            :marks="marks"
+            :adsorb="true"
+          />
+        </b-col>
+      </b-form-row>
+    </b-form-group>
   </div>
 </template>
 
 <script>
 
-import { BFormGroup } from 'bootstrap-vue'
+import { BFormGroup, BFormRow, BCol } from 'bootstrap-vue'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/antd.css'
 
 export default {
-  components: { BFormGroup, VueSlider },
+  components: { BFormGroup, VueSlider, BFormRow, BCol },
   props: {
     options: {
       type: Array,
@@ -38,21 +58,32 @@ export default {
   },
   data () {
     return {
-      values: [0, 0, 0, 0],
-      marks: [-3, -2, -1, 0, 1, 2, 3]
+      selected: Array(this.options.length).fill(0),
+      marks: [-3, -2, -1, 0, 1, 2, 3],
+      smallLayout: window.innerWidth < 500
     }
   },
   computed: {
     votingRequestValues: function () {
-      return [selected => 1]
+      const v = {}
+      for (let i = 0; i < this.selected.length; i++) {
+        v[this.options[i].optionIndex] = this.selected[i]
+      }
+      return v
     }
+  },
+  watch: {
+    votingRequestValues () { this.$emit('updateVotingRequestValues', this.votingRequestValues) }
   },
   created () {
     this.$emit('updateValidSelection', true)
     this.$emit('updateVotingRequestValues', this.votingRequestValues)
-    // this.values[this.options.length - 1] = 0
-    // this.values.length = this.options.length
-    // this.values = this.values.fill(0, 0, this.options.length)
+    window.addEventListener('resize', this.updateWidth)
+  },
+  methods: {
+    updateWidth (event) {
+      this.smallLayout = window.innerWidth < 500
+    }
   }
 }
 </script>
