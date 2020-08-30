@@ -65,6 +65,7 @@
     >
       <ThreadPost
         :id="post.id"
+        :user-id="userId"
         :author="post.author"
         :body="post.body"
         :deep-link="getPostLink(post.id)"
@@ -165,6 +166,11 @@ export default {
       isLoading: false,
       loadingPosts: [],
       errorMessage: null
+    }
+  },
+  computed: {
+    userId () {
+      return user.id
     }
   },
   async created () {
