@@ -67,7 +67,7 @@ final class ContentPermissions
 			return $this->PR_PARTNER_AND_TEAM_CONTENT_IDS;
 		}
 		if ($this->session->isAdminFor(RegionIDs::PR_START_PAGE)) {
-			return $this->START_PAGE;
+			return $this->START_CONTENT_IDS;
 		}
 	}
 
