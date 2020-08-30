@@ -89,8 +89,9 @@ export default {
       this.isLoading = true
       this.isValidSelection = false
       try {
-        vote(this.poll.id, this.votingRequestValues)
+        await vote(this.poll.id, this.votingRequestValues)
         pulseSuccess(i18n('poll.vote_success'))
+        this.$emit('disableVoteForm')
       } catch (e) {
         if (e.code === 403) {
           pulseError(i18n('poll.error_cannot_vote'))
@@ -99,7 +100,6 @@ export default {
         }
       }
 
-      this.$emit('disableVoteForm')
       this.isLoading = false
     },
     updateValidSelection (value) {

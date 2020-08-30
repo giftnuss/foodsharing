@@ -50,11 +50,14 @@ class VotingTransactions
 	 */
 	public function createPoll(Poll &$poll, bool $notifyVoters): void
 	{
-		// assign valid indices to the options
+		// assign valid indices and values to the options
+		$possibleValues = $this->getPossibleValues($poll->type);
+		$possibleValues = array_combine($possibleValues, array_fill(0, sizeof($possibleValues), 0));
 		$mappedOptions = [];
 		$index = 0;
 		foreach ($poll->options as $option) {
 			$option->optionIndex = $index;
+			$option->values = $possibleValues;
 			$mappedOptions[$index++] = $option;
 		}
 		$poll->options = $mappedOptions;
@@ -70,6 +73,30 @@ class VotingTransactions
 		if ($notifyVoters) {
 			$userIds = $this->listUserIds($poll->regionId, $poll->scope);
 			$this->notifyUsers($poll, $userIds);
+		}
+	}
+
+	/**
+	 * Returns a list of possible option values for a poll's type.
+	 *
+	 * @param int $pollType type of a poll, see {@see VotingType}
+	 *
+	 * @return int[] list of possible values
+	 *
+	 * @throws Exception if the type is not valid
+	 */
+	private function getPossibleValues(int $pollType)
+	{
+		switch ($pollType) {
+			case VotingType::SELECT_ONE_CHOICE:
+			case VotingType::SELECT_MULTIPLE:
+				return [1];
+			case VotingType::THUMB_VOTING:
+				return [1, 0, -1];
+			case VotingType::SCORE_VOTING:
+				return [3, 2, 1, 0, -1, -2, -3];
+			default:
+				throw new Exception('invalid poll type');
 		}
 	}
 
