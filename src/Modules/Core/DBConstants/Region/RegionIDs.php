@@ -13,6 +13,8 @@ class RegionIDs
 	// workgroups with special permissions:
 	public const NEWSLETTER_WORK_GROUP = 331;
 	public const QUIZ_AND_REGISTRATION_WORK_GROUP = 341;
+	public const PR_PARTNER_AND_TEAM_WORK_GROUP = 1811;
+	public const PR_START_PAGE = 2287;
 	public const EUROPE_REPORT_TEAM = 432;
 
 	// region and ambassador groups
