@@ -194,7 +194,7 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		// Create voting Group
 		$this->output->writeln('- create voting group');
-		$votingGroup = $I->createWorkingGroup('Umfrage', ['parent_id' => $region1, 'email_name' => 'Umfrage Göttingen', 'teaser' => 'Hier sind die Umfrager für unseren Bezirk']);
+		$votingGroup = $I->createWorkingGroup('Abstimmung', ['parent_id' => $region1, 'email_name' => 'Abstimmung Göttingen', 'teaser' => 'Hier sind die Abstimmungen für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $votingGroup['id'], 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $region1]);
 		$I->addRegionMember($votingGroup['id'], $userStoreManager['id']);
 		$I->addRegionAdmin($votingGroup['id'], $userStoreManager['id']);

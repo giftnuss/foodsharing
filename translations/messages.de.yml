@@ -308,7 +308,7 @@ terminology:
   ambassador_forum: BotschafterInnenforum
   admins: Administratoren
   welcomeAdmins: Begrüßungsteam
-  votingAdmins: Umfrageteam
+  votingAdmins: Abstimmungsteam
   wall: Pinnwand
   statistic: Statistik
   reports: Regelverletzungen (Preview)
@@ -1583,7 +1583,7 @@ polls:
   future: Zukünftige Abstimmungen
 
 poll:
-  not_available: Diese Umfrage existiert nicht oder du kannst nicht darauf zugreifen.
+  not_available: Diese Abstimmung existiert nicht oder du kannst nicht darauf zugreifen.
   time_period: Zeitraum
   in_past: beendet
   in_future: noch nicht gestartet
@@ -1624,7 +1624,7 @@ poll:
   ended_at: lief bis
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen
-  may_not_vote: Du kannst in dieser Umfrage nicht abstimmen.
+  may_not_vote: Du kannst in dieser Abstimmung nicht abstimmen.
   results:
     number_of_votes: Abgegebene Stimmen
     votes: Stimmen
