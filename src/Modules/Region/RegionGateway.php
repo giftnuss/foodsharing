@@ -566,7 +566,7 @@ class RegionGateway extends BaseGateway
 	{
 		return  $this->db->fetchValueByCriteria('fs_region_function', 'function_id',
 			['region_id' => $region_id,
-             'target_id' => $target_id]
+			 'target_id' => $target_id]
 		);
 	}
 

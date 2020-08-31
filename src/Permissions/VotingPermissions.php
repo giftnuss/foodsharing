@@ -19,13 +19,6 @@ final class VotingPermissions
 	private RegionGateway $regionGateway;
 	private StoreGateway $storeGateway;
 
-	/**
-	 * In regions with one of these types all verified foodsavers are allowed to create polls. In other regions only
-	 * ambassadors are allowed to do so.
-	 */
-	private const LOWER_REGIONS = [Type::CITY, Type::DISTRICT, Type::REGION, Type::PART_OF_TOWN, Type::BIG_CITY,
-		Type::WORKING_GROUP];
-
 	public function __construct(
 		Session $session,
 		VotingGateway $votingGateway,
@@ -117,16 +110,9 @@ final class VotingPermissions
 			return $this->session->isAdminFor($regionId);
 		} else {
 			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
-			
+
 			return $this->session->isAdminFor($votingGroup);
 		}
-
-		/*$type = $this->regionGateway->getType($regionId);
-		if (in_array($type, self::LOWER_REGIONS)) {
-			return true;
-		} else {
-			return $this->session->isAdminFor($regionId);
-		}*/
 	}
 
 	public function mayDeletePoll(int $pollId): bool

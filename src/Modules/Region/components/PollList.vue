@@ -110,7 +110,7 @@ export default {
     },
     mayCreatePoll: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data () {

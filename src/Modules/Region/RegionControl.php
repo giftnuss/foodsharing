@@ -12,6 +12,7 @@ use Foodsharing\Modules\Voting\VotingGateway;
 use Foodsharing\Permissions\ForumPermissions;
 use Foodsharing\Permissions\RegionPermissions;
 use Foodsharing\Permissions\ReportPermissions;
+use Foodsharing\Permissions\VotingPermissions;
 use Foodsharing\Utility\ImageHelper;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -35,6 +36,7 @@ final class RegionControl extends Control
 	private ReportPermissions $reportPermissions;
 	private MailboxGateway $mailboxGateway;
 	private VotingGateway $votingGateway;
+	private VotingPermissions $votingPermissions;
 
 	private const DisplayAvatarListEntries = 30;
 
@@ -59,7 +61,8 @@ final class RegionControl extends Control
 		ReportPermissions $reportPermissions,
 		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway,
-		VotingGateway $votingGateway
+		VotingGateway $votingGateway,
+		VotingPermissions $votingPermissions
 	) {
 		$this->gateway = $gateway;
 		$this->eventGateway = $eventGateway;
@@ -74,6 +77,7 @@ final class RegionControl extends Control
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->votingGateway = $votingGateway;
+		$this->votingPermissions = $votingPermissions;
 
 		parent::__construct();
 	}
@@ -372,6 +376,7 @@ final class RegionControl extends Control
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$viewdata['polls'] = $this->votingGateway->listPolls($region['id']);
 		$viewdata['regionId'] = $region['id'];
+		$viewdata['mayCreatePoll'] = $this->votingPermissions->mayCreatePoll($region['id']);
 		$response->setContent($this->render('pages/Region/polls.twig', $viewdata));
 	}
 }
