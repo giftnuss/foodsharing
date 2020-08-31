@@ -112,10 +112,15 @@ final class VotingPermissions
 			return false;
 		}
 
-		$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
-		return $this->session->isAdminFor($votingGroup);
+		$type = $this->regionGateway->getType($regionId);
+		if ($type == Type::WORKING_GROUP) {
+			return $this->session->isAdminFor($regionId);
+		} else {
+			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
+			return $this->session->isAdminFor($votingGroup);
+		}
 
-/*		$type = $this->regionGateway->getType($regionId);
+		/*$type = $this->regionGateway->getType($regionId);
 		if (in_array($type, self::LOWER_REGIONS)) {
 			return true;
 		} else {
