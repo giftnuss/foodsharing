@@ -40,7 +40,6 @@ class RegionGateway extends BaseGateway
 			['id' => $regionId]
 		);
 
-//		$out['workgroup_function'] = $this->RegionFunctionGroup($out['id'], $out['parent_id']);
 		if ($this->existRegionWelcomeGroup($out['id'], $out['parent_id'])) {
 			$out['workgroup_function'] = WorkgroupFunction::WELCOME;
 		} else {
@@ -50,8 +49,6 @@ class RegionGateway extends BaseGateway
 				$out['workgroup_function'] = [];
 			}
 		}
-
-
 
 		$out['botschafter'] = $this->db->fetchAll('
 				SELECT 		`fs_foodsaver`.`id`,
@@ -584,11 +581,7 @@ class RegionGateway extends BaseGateway
 
 	public function existRegionVotingGroup(int $region_id, int $target_id): bool
 	{
-		return  $this->db->exists('fs_region_function',
-			['region_id' => $region_id,
-				'function_id' => WorkgroupFunction::VOTING,
-				'target_id' => $target_id]
-		);
+		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
 	}
 
 	public function genderCountRegion(int $regionId): array
