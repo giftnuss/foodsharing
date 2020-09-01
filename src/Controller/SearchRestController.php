@@ -92,7 +92,7 @@ class SearchRestController extends AbstractFOSRestController
 						$regionGateway->listIdsForDescendantsAndSelf($region)
 					);
 				}
-				array_unique($regions);
+				$regions = array_unique($regions);
 			}
 
 			$results = $this->searchGateway->searchUserInGroups(
