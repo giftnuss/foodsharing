@@ -34,11 +34,6 @@ class WorkGroupView extends View
 		], ['submit' => false]);
 	}
 
-	private function img($img, $prefix = 'crop_1_128_')
-	{
-		return 'images/' . str_replace('/', '/' . $prefix, $img);
-	}
-
 	public function contactgroup($group)
 	{
 		$adminList = '';
