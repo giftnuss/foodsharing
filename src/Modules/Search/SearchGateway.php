@@ -9,7 +9,7 @@ use Foodsharing\Modules\Search\DTO\SearchResult;
 
 class SearchGateway extends BaseGateway
 {
-	private $regionGateway;
+	private RegionGateway $regionGateway;
 
 	public function __construct(Database $db, RegionGateway $regionGateway)
 	{

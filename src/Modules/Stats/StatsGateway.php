@@ -7,11 +7,11 @@ use Foodsharing\Modules\Core\Database;
 
 class StatsGateway extends BaseGateway
 {
-	private $statsService;
+	private StatsService $statsService;
 
-	public function __construct(Database $db, StatsService $statsConnection)
+	public function __construct(Database $db, StatsService $statsService)
 	{
-		$this->statsService = $statsConnection;
+		$this->statsService = $statsService;
 
 		parent::__construct($db);
 	}

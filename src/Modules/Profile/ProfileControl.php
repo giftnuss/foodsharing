@@ -13,13 +13,13 @@ use Foodsharing\Permissions\ReportPermissions;
 final class ProfileControl extends Control
 {
 	private $foodsaver;
-	private $regionGateway;
-	private $profileGateway;
-	private $basketGateway;
-	private $mailboxGateway;
-	private $reportPermissions;
-	private $profilePermissions;
-	private $mailsGateway;
+	private MailsGateway $mailsGateway;
+	private RegionGateway $regionGateway;
+	private ProfileGateway $profileGateway;
+	private BasketGateway $basketGateway;
+	private MailboxGateway $mailboxGateway;
+	private ReportPermissions $reportPermissions;
+	private ProfilePermissions $profilePermissions;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
@@ -32,13 +32,13 @@ final class ProfileControl extends Control
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
+		$this->mailsGateway = $mailsGateway;
 		$this->regionGateway = $regionGateway;
 		$this->profileGateway = $profileGateway;
 		$this->basketGateway = $basketGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->reportPermissions = $reportPermissions;
 		$this->profilePermissions = $profilePermissions;
-		$this->mailsGateway = $mailsGateway;
 
 		parent::__construct();
 

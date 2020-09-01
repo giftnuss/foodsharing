@@ -14,16 +14,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ForumTransactions
 {
-	private $forumGateway;
-	private $regionGateway;
-	private $foodsaverGateway;
-	private $bellGateway;
-	private $forumFollowerGateway;
-	private $session;
-	private $sanitizerService;
-	private $emailHelper;
-	private $flashMessageHelper;
-	private $translator;
+	private BellGateway $bellGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ForumGateway $forumGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
+	private Session $session;
+	private RegionGateway $regionGateway;
+	private Sanitizer $sanitizerService;
+	private EmailHelper $emailHelper;
+	private FlashMessageHelper $flashMessageHelper;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		BellGateway $bellGateway,
@@ -49,7 +49,7 @@ class ForumTransactions
 		$this->translator = $translator;
 	}
 
-	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null)
+	public function url($regionId, $ambassadorForum, $threadId = null, $postId = null): string
 	{
 		$url = '/?page=bezirk&bid=' . $regionId . '&sub=' . ($ambassadorForum ? 'botforum' : 'forum');
 		if ($threadId) {
@@ -119,7 +119,7 @@ class ForumTransactions
 		$this->forumGateway->activateThread($threadId);
 	}
 
-	public function notificationMail($recipients, $tpl, $data)
+	public function notificationMail($recipients, $tpl, $data): void
 	{
 		foreach ($recipients as $recipient) {
 			$this->emailHelper->tplMail(
@@ -148,7 +148,7 @@ class ForumTransactions
 		}
 	}
 
-	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody)
+	private function notifyAdminsModeratedThread($region, $threadId, $rawPostBody): void
 	{
 		$theme = $this->forumGateway->getThread($threadId);
 		$posterName = $this->foodsaverGateway->getFoodsaverName($theme['creator_id']);
@@ -166,7 +166,7 @@ class ForumTransactions
 		}
 	}
 
-	private function notifyMembersOfForumAboutNewThreadViaMail(array $regionData, int $threadId, bool $isAmbassadorForum)
+	private function notifyMembersOfForumAboutNewThreadViaMail(array $regionData, int $threadId, bool $isAmbassadorForum): void
 	{
 		$regionType = $this->regionGateway->getType($regionData['id']);
 		if (!$isAmbassadorForum && in_array($regionType, [Type::COUNTRY, Type::FEDERAL_STATE])) {
@@ -199,7 +199,7 @@ class ForumTransactions
 			$isAmbassadorForum ? 'forum/new_region_ambassador_message' : 'forum/new_message', $data);
 	}
 
-	public function addReaction($fsId, $postId, $key)
+	public function addReaction($fsId, $postId, $key): void
 	{
 		if (!$fsId || !$postId || !$key) {
 			throw new \InvalidArgumentException();
@@ -207,7 +207,7 @@ class ForumTransactions
 		$this->forumGateway->addReaction($postId, $fsId, $key);
 	}
 
-	public function removeReaction($fsId, $postId, $key)
+	public function removeReaction($fsId, $postId, $key): void
 	{
 		if (!$fsId || !$postId || !$key) {
 			throw new \InvalidArgumentException();

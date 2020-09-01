@@ -11,13 +11,13 @@ use Foodsharing\Utility\ImageHelper;
 
 class QuizControl extends Control
 {
-	private $quizGateway;
-	private $quizSessionGateway;
-	private $foodsaverGateway;
-	private $imageService;
-	private $identificationHelper;
-	private $dataHelper;
-	private $quizPermissions;
+	private QuizGateway $quizGateway;
+	private QuizSessionGateway $quizSessionGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ImageHelper $imageHelper;
+	private IdentificationHelper $identificationHelper;
+	private DataHelper $dataHelper;
+	private QuizPermissions $quizPermissions;
 
 	public function __construct(
 		QuizView $view,
@@ -33,7 +33,7 @@ class QuizControl extends Control
 		$this->quizGateway = $quizGateway;
 		$this->quizSessionGateway = $quizSessionGateway;
 		$this->foodsaverGateway = $foodsaverGateway;
-		$this->imageService = $imageTransactions;
+		$this->imageHelper = $imageTransactions;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
 		$this->quizPermissions = $quizPermissions;
@@ -185,7 +185,7 @@ class QuizControl extends Control
 	{
 		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
 		$subtitle = $this->translationHelper->s('rolle_' . $fs['rolle'] . '_' . $fs['geschlecht']);
-		$icon = $this->imageService->avatar($fs);
+		$icon = $this->imageHelper->avatar($fs);
 
 		return $this->view->topbar($title, $subtitle, $icon);
 	}

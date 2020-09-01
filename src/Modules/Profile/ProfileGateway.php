@@ -8,7 +8,7 @@ use Foodsharing\Modules\Core\Database;
 
 final class ProfileGateway extends BaseGateway
 {
-	private $webSocketConnection;
+	private WebSocketConnection $webSocketConnection;
 
 	public function __construct(Database $db, WebSocketConnection $webSocketConnection)
 	{

@@ -24,9 +24,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileView extends View
 {
-	private $foodsaver;
-	private $profilePermissions;
-	private $reportPermissions;
+	private array $foodsaver;
+	private ProfilePermissions $profilePermissions;
+	private ReportPermissions $reportPermissions;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -488,7 +488,7 @@ class ProfileView extends View
 		return $stats;
 	}
 
-	private function renderStat($number, $suffix, $label, $class): string
+	private function renderStat($number, string $suffix, string $label, string $class): string
 	{
 		return '<span class="item ' . $class . '">'
 			. '<span class="val">' . number_format($number, 0, ',', '.')

@@ -15,13 +15,13 @@ use Foodsharing\Permissions\ReportPermissions;
 class ProfileXhr extends Control
 {
 	private $foodsaver;
-	private $bellGateway;
-	private $mailboxGateway;
-	private $regionGateway;
-	private $profileGateway;
-	private $storeGateway;
-	private $reportPermissions;
-	private $profilePermissions;
+	private BellGateway $bellGateway;
+	private MailboxGateway $mailboxGateway;
+	private RegionGateway $regionGateway;
+	private ProfileGateway $profileGateway;
+	private StoreGateway $storeGateway;
+	private ReportPermissions $reportPermissions;
+	private ProfilePermissions $profilePermissions;
 
 	public function __construct(
 		ProfileView $view,

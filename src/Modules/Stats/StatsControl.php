@@ -8,10 +8,10 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class StatsControl extends ConsoleControl
 {
-	private $model;
-	private $storeGateway;
-	private $regionGateway;
-	private $statsGateway;
+	private StatsModel $model;
+	private StoreGateway $storeGateway;
+	private RegionGateway $regionGateway;
+	private StatsGateway $statsGateway;
 
 	public function __construct(
 		StatsModel $model,

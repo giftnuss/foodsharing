@@ -7,8 +7,8 @@ use Foodsharing\Modules\Core\Control;
 
 class StatisticsControl extends Control
 {
-	private $contentGateway;
-	private $statisticsGateway;
+	private ContentGateway $contentGateway;
+	private StatisticsGateway $statisticsGateway;
 
 	public function __construct(
 		StatisticsGateway $statisticsGateway,
@@ -22,7 +22,7 @@ class StatisticsControl extends Control
 		parent::__construct();
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$content = $this->contentGateway->get(11);
 

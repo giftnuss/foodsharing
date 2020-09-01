@@ -14,14 +14,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MessageTransactions
 {
-	private $emailHelper;
-	private $foodsaverGateway;
-	private $mem;
-	private $messageGateway;
-	private $storeGateway;
-	private $translator;
-	private $pushNotificationGateway;
-	private $webSocketConnection;
+	private EmailHelper $emailHelper;
+	private FoodsaverGateway $foodsaverGateway;
+	private Mem $mem;
+	private MessageGateway $messageGateway;
+	private StoreGateway $storeGateway;
+	private TranslatorInterface $translator;
+	private PushNotificationGateway $pushNotificationGateway;
+	private WebSocketConnection $webSocketConnection;
 
 	public function __construct(
 		EmailHelper $emailHelper,

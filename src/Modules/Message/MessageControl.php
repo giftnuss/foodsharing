@@ -6,8 +6,8 @@ use Foodsharing\Modules\Core\Control;
 
 final class MessageControl extends Control
 {
-	private $messageGateway;
-	private $messageTransactions;
+	private MessageGateway $messageGateway;
+	private MessageTransactions $messageTransactions;
 
 	public function __construct(
 		MessageGateway $messageGateway,

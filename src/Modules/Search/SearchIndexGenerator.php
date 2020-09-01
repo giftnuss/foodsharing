@@ -12,13 +12,13 @@ use Foodsharing\Utility\Sanitizer;
 
 class SearchIndexGenerator
 {
-	private $buddyGateway;
-	private $workGroupGateway;
-	private $storeGateway;
-	private $regionGateway;
-	private $session;
-	private $sanitizerService;
-	private $imageService;
+	private BuddyGateway $buddyGateway;
+	private WorkGroupGateway $workGroupGateway;
+	private StoreGateway $storeGateway;
+	private RegionGateway $regionGateway;
+	private Session $session;
+	private Sanitizer $sanitizerService;
+	private ImageHelper $imageHelper;
 
 	public function __construct(
 		BuddyGateway $buddyGateway,
@@ -27,7 +27,7 @@ class SearchIndexGenerator
 		RegionGateway $regionGateway,
 		Session $session,
 		Sanitizer $sanitizerService,
-		ImageHelper $imageService
+		ImageHelper $imageHelper
 	) {
 		$this->buddyGateway = $buddyGateway;
 		$this->workGroupGateway = $workGroupGateway;
@@ -35,27 +35,25 @@ class SearchIndexGenerator
 		$this->regionGateway = $regionGateway;
 		$this->session = $session;
 		$this->sanitizerService = $sanitizerService;
-		$this->imageService = $imageService;
+		$this->imageHelper = $imageHelper;
 	}
 
 	/**
-	 * Method to generate search Index for instant search.
+	 * Generate the search index for instant search.
 	 */
-	public function generateIndex($fsId)
+	public function generateIndex($fsId): array
 	{
 		$userId = $this->session->id();
 		$index = [];
 
-		/*
-		 * Buddies Load persons in the index array that connected with the user
-		*/
+		// load buddies connected to the user
 		if ($buddies = $this->buddyGateway->listBuddies($userId)) {
 			$result = [];
 			foreach ($buddies as $b) {
 				$img = '/img/avatar-mini.png';
 
 				if (!empty($b['photo'])) {
-					$img = $this->imageService->img($b['photo']);
+					$img = $this->imageHelper->img($b['photo']);
 				}
 
 				$result[] = [
@@ -76,9 +74,7 @@ class SearchIndexGenerator
 			];
 		}
 
-		/*
-		 * Groups load Groups connected to the user in the array
-		*/
+		// load groups connected to the user
 		if ($groups = $this->workGroupGateway->listMemberGroups($fsId)) {
 			$result = [];
 			foreach ($groups as $b) {
@@ -102,9 +98,7 @@ class SearchIndexGenerator
 			];
 		}
 
-		/*
-		 * Betriebe load food stores connected to the user in the array
-		*/
+		// load stores connected to the user
 		if ($betriebe = $this->storeGateway->listMyStores($userId)) {
 			$result = [];
 			foreach ($betriebe as $b) {
@@ -123,9 +117,7 @@ class SearchIndexGenerator
 			];
 		}
 
-		/*
-		 * Bezirke load Bezirke connected to the user in the array
-		*/
+		// load regions connected to the user
 		$bezirke = $this->regionGateway->listForFoodsaverExceptWorkingGroups($userId);
 		$result = [];
 		foreach ($bezirke as $b) {
