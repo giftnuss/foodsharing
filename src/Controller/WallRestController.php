@@ -12,17 +12,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class WallRestController extends AbstractFOSRestController
 {
-	private $wallPostGateway;
-	private $wallPostService;
-	private $session;
+	private WallPostGateway $wallPostGateway;
+	private WallPostPermissions $wallPostPermissions;
+	private Session $session;
 
 	public function __construct(
 		WallPostGateway $wallPostGateway,
-		WallPostPermissions $wallPostService,
+		WallPostPermissions $wallPostPermissions,
 		Session $session
 	) {
 		$this->wallPostGateway = $wallPostGateway;
-		$this->wallPostService = $wallPostService;
+		$this->wallPostPermissions = $wallPostPermissions;
 		$this->session = $session;
 	}
 
@@ -46,7 +46,7 @@ class WallRestController extends AbstractFOSRestController
 	 */
 	public function getPostsAction(string $target, int $targetId): \Symfony\Component\HttpFoundation\Response
 	{
-		if ($this->session->id() === null || !$this->wallPostService->mayReadWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostPermissions->mayReadWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
@@ -56,14 +56,14 @@ class WallRestController extends AbstractFOSRestController
 
 		$view = $this->view([
 			'results' => $posts,
-			'mayPost' => $this->wallPostService->mayWriteWall($sessionId, $target, $targetId),
-			'mayDelete' => $this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
+			'mayPost' => $this->wallPostPermissions->mayWriteWall($sessionId, $target, $targetId),
+			'mayDelete' => $this->wallPostPermissions->mayDeleteFromWall($sessionId, $target, $targetId)
 		], 200);
 
 		return $this->handleView($view);
 	}
 
-	private function getNormalizedPosts(string $target, int $targetId)
+	private function getNormalizedPosts(string $target, int $targetId): array
 	{
 		$posts = $this->wallPostGateway->getPosts($target, $targetId);
 
@@ -80,7 +80,7 @@ class WallRestController extends AbstractFOSRestController
 	 */
 	public function addPostAction(string $target, int $targetId, ParamFetcher $paramFetcher): \Symfony\Component\HttpFoundation\Response
 	{
-		if ($this->session->id() === null || !$this->wallPostService->mayWriteWall($this->session->id(), $target, $targetId)) {
+		if ($this->session->id() === null || !$this->wallPostPermissions->mayWriteWall($this->session->id(), $target, $targetId)) {
 			throw new HttpException(403);
 		}
 
@@ -102,7 +102,7 @@ class WallRestController extends AbstractFOSRestController
 		}
 		$sessionId = $this->session->id();
 		if ($this->wallPostGateway->getFsByPost($id) != $sessionId
-			&& !$this->wallPostService->mayDeleteFromWall($sessionId, $target, $targetId)
+			&& !$this->wallPostPermissions->mayDeleteFromWall($sessionId, $target, $targetId)
 		) {
 			throw new HttpException(403);
 		}
