@@ -6,8 +6,8 @@ use Foodsharing\Modules\Core\View;
 
 class WallPostView extends View
 {
-	private $table;
-	private $wallId;
+	private string $table;
+	private int $wallId;
 
 	public function setTable(string $table, int $wallId): void
 	{

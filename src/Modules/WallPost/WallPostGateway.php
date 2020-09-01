@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 
 class WallPostGateway extends BaseGateway
 {
-	private $targets = [
+	private array $targets = [
 		'application',
 		'bezirk',
 		'event',
@@ -35,7 +35,7 @@ class WallPostGateway extends BaseGateway
 		return $target . '_id';
 	}
 
-	public function isValidTarget(string $target)
+	public function isValidTarget(string $target): bool
 	{
 		return in_array($target, $this->targets, true);
 	}
@@ -110,7 +110,7 @@ class WallPostGateway extends BaseGateway
 		return $posts;
 	}
 
-	public function getLastPostId(string $target, int $targetId)
+	public function getLastPostId(string $target, int $targetId): int
 	{
 		return $this->db->fetchValue('
 			SELECT 	MAX(id)
@@ -147,7 +147,7 @@ class WallPostGateway extends BaseGateway
 		return $postId;
 	}
 
-	public function getFsByPost(int $postId)
+	public function getFsByPost(int $postId): int
 	{
 		return $this->db->fetchValueByCriteria('fs_wallpost', 'foodsaver_id', ['id' => $postId]);
 	}
