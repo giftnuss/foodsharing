@@ -248,7 +248,7 @@ class StoreXhr extends Control
 		if ($store['team_status'] != 0 && (!$store['inTeam'] && (!$store['pendingRequest']))) {
 			$dia->addButton($this->translationHelper->s('want_to_fetch'), 'betriebRequest(' . (int)$store['id'] . ');return false;');
 		} elseif ($store['team_status'] != 0 && (!$store['inTeam'] && ($store['pendingRequest']))) {
-			$dia->addButton($this->translationHelper->s('withdraw_application'), 'withdrawStoreRequest(' . (int)$this->session->id() . ',' . (int)$store['id'] . ');return false;');
+			$dia->addButton($this->translator->trans('store.request.withdraw'), 'withdrawStoreRequest(' . (int)$this->session->id() . ',' . (int)$store['id'] . ');return false;');
 		}
 		$modal = false;
 		if (isset($_GET['modal'])) {

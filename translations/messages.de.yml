@@ -387,6 +387,22 @@ fsp:
   twig:
     n_in_region: '{0} Keine Fairteiler in %name%| {1} Ein Fairteiler in %name%| [2, Inf[ %count% Fairteiler in %name%'
 
+storeview:
+  store: Betrieb
+  info: Informationen
+  teamInfo: 'Es sind <strong>{active}</strong> Aktive und <strong>{jumper}</strong> Springer im Team.'
+  counter: '<strong>{count}<span style="white-space:nowrap"> </span>{suffix}</strong>'
+  pickupCount: 'Bei diesem Betrieb wurde {pickupCount} abgeholt.'
+  pickupWeight: 'Es wurden {pickupWeight} gerettet.'
+  cooperation: 'Kooperation seit {startTime}.'
+  frequency: 'Es wird in etwa {freq} abgeholt. Geh bitte niemals ohne Absprache zum Laden!'
+  frequency1: morgens
+  frequency2: mittags/nachmittags
+  frequency3: abends
+  frequency4: nachts
+  status: Aktueller Status
+  managers: Verantwortliche Foodsaver
+
 store:
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
   add_new_store: Neuen Betrieb anlegen
@@ -444,7 +460,17 @@ store:
     no-sm: 'Für diesen Betrieb gibt es noch keine Verantwortlichen.'
     amb-instead: 'Die Botschafter*innen wurden informiert.'
     orga-instead: 'Das Orga-Team wurde informiert.'
+    withdraw: Anfrage zurückziehen
     withdrawn: 'Die Anfrage wurde erfolgreich zurückgezogen.'
+
+storeedit:
+  store:
+    status: Status
+  fetch:
+    teamStatus: Teamstatus
+    teamStatus0: Dieses Team ist voll und sucht z.Z. keine weiteren Helfer
+    teamStatus1: Es werden noch Helfer gesucht
+    teamStatus2: Es werden dringend noch Helfer gesucht
 
 pickup:
   dates: Abholtermine
@@ -1258,13 +1284,14 @@ newsletter:
   test_email_sent: E-Mail wurde versendet!
   test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
 
-storestatusicon:
-  nocontact: Es besteht noch kein Kontakt
-  inprogress: Verhandlungen laufen
-  cooperating: Betrieb kooperiert bereits
-  nocooperation: Will nicht kooperieren
-  nowaste: Spendet an Tafel etc. und wirft nichts weg
-  unclear: Status unklar
+storestatus:
+  0: Status unklar
+  1: Es besteht noch kein Kontakt
+  2: Verhandlungen laufen
+  3: Betrieb ist bereit zu kooperieren
+  4: Will nicht kooperieren
+  5: Betrieb kooperiert bereits
+  6: Spendet an Tafel etc. und wirft nichts weg
 
 storelist:
  entered: "Eingetragen:"

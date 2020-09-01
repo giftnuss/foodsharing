@@ -164,49 +164,80 @@ class StoreView extends View
 
 	public function bubble(array $store): string
 	{
-		$b = $store;
-		$verantwortlich = '<ul class="linklist">';
-		foreach ($b['foodsaver'] as $fs) {
+		$managers = '<ul class="linklist">';
+		foreach ($store['foodsaver'] as $fs) {
 			if ($fs['verantwortlich'] == 1) {
-				$verantwortlich .= '
-			<li><a style="background-color:transparent;" href="/profile/' . (int)$fs['id'] . '">' . $this->imageService->avatar($fs, 50) . '</a></li>';
+				$managers .= '<li>' .
+					'<a style="background-color: transparent;" href="/profile/' . intval($fs['id']) . '">'
+					. $this->imageService->avatar($fs, 50) .
+					'</a></li>';
 			}
 		}
-		$verantwortlich .= '</ul>';
+		$managers .= '</ul>';
 
-		$besonderheiten = '';
+		$count_info = '<div>' . $this->translator->trans('storeview.teamInfo', [
+			'{active}' => count($store['foodsaver']),
+			'{jumper}' => count($store['springer']),
+		]) . '</div>';
 
-		$count_info = '';
-		$activeFoodSaver = count($b['foodsaver']);
-		$jumperFoodSaver = count($b['springer']);
-		$count_info .= '<div>' . $this->translationHelper->sv('store_info', ['active' => $activeFoodSaver, 'jumper' => $jumperFoodSaver]) . '</div>';
-		$pickup_count = (int)$b['pickup_count'];
+		$pickup_count = intval($store['pickup_count']);
 		if ($pickup_count > 0) {
-			$count_info .= '<div>' . $this->translationHelper->sv('store_info_pickupcount', ['pickupCount' => $pickup_count]) . '</div>';
-			$fetch_weight = round(floatval(($pickup_count * $this->weightHelper->mapIdToKilos($b['abholmenge']))), 2);
-			$count_info .= '<div>' . $this->translationHelper->sv('store_info_pickupweight', ['fetch_weight' => $fetch_weight]) . '</div>';
+			$count_info .= '<div>' . $this->translator->trans('storeview.pickupCount', [
+				'{pickupCount}' => $this->translator->trans('storeview.counter', [
+					'{suffix}' => 'x',
+					'{count}' => $pickup_count,
+				]),
+			]) . '</div>';
+
+			$pickupWeight = $this->translator->trans('storeview.counter', [
+				'{suffix}' => 'kg',
+				'{count}' => round(floatval(
+					$pickup_count * $this->weightHelper->mapIdToKilos($store['abholmenge'])
+				), 2),
+			]);
+			$count_info .= '<div>' . $this->translator->trans('storeview.pickupWeight', [
+				'{pickupWeight}' => $pickupWeight,
+			]) . '</div>';
 		}
 
-		$time = strtotime($b['begin']);
-		if ($time > 0) {
-			$count_info .= '<div> ' . $this->translationHelper->sv('store_info_cooperation', ['startTime' => $this->timeHelper->month($time) . ' ' . date('Y', $time)]) . '</div>';
+		$when = strtotime($store['begin']);
+		if ($when > 0) {
+			$startTime = $this->translator->trans('month.' . intval(date('m', $when))) . ' ' . date('Y', $when);
+			$count_info .= '<div>' . $this->translator->trans('storeview.cooperation', [
+				'{startTime}' => $startTime,
+			]) . '</div>';
 		}
 
-		if ((int)$b['public_time'] != 0) {
-			$b['public_info'] .= '<div>' . $this->translationHelper->sv('store_info_freq', ['freq' => $this->translationHelper->s('pubbtime_' . (int)$b['public_time'])]) . '</div>';
+		$fetchTime = intval($store['public_time']);
+		if ($fetchTime != 0) {
+			$count_info .= '<div>' . $this->translator->trans('storeview.frequency', [
+				'{freq}' => $this->translator->trans('storeview.frequency' . $fetchTime),
+			]) . '</div>';
 		}
 
-		if (!empty($b['public_info'])) {
-			$besonderheiten = $this->v_utils->v_input_wrapper($this->translationHelper->s('info'), $b['public_info'], 'bcntspecial');
+		$publicInfo = '';
+		if (!empty($store['public_info'])) {
+			$publicInfo = $this->v_utils->v_input_wrapper(
+				$this->translator->trans('storeview.info'),
+				$store['public_info'],
+				'bcntspecial'
+			);
 		}
 
-		$status = $this->v_utils->v_getStatusAmpel($b['betrieb_status_id']);
-		$html = $this->v_utils->v_input_wrapper($this->translationHelper->s('status'), $status . '<span class="bstatus">' . $this->translationHelper->s('betrieb_status_' . $b['betrieb_status_id']) . '</span>' . $count_info) . '
-			' . $this->v_utils->v_input_wrapper($this->translationHelper->s('foodsaver'), $verantwortlich, 'bcntverantwortlich') . '
-			' . $besonderheiten . '
-			<div class="ui-padding">
-				' . $this->v_utils->v_info('' . $this->translationHelper->s('team_status_' . $b['team_status']) . '') . '
-			</div>';
+		$status = $this->v_utils->v_getStatusAmpel($store['betrieb_status_id']);
+
+		// Store status
+		$bstatus = $this->translator->trans('storestatus.' . intval($store['betrieb_status_id'])) . '.';
+		// Team status
+		$tstatus = $this->translator->trans('storeedit.fetch.teamStatus' . intval($store['team_status']));
+
+		$html = $this->v_utils->v_input_wrapper(
+			$this->translator->trans('storeedit.store.status'),
+			$status . '<span class="bstatus">' . $bstatus . '</span>' . $count_info
+		) . $this->v_utils->v_input_wrapper(
+			$this->translator->trans('storeview.managers'), $managers, 'bcntverantwortlich'
+		) . $publicInfo . '<div class="ui-padding">'
+		. $this->v_utils->v_info('<strong>' . $tstatus . '</strong>') . '</div>';
 
 		return $html;
 	}

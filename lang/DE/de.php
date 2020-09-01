@@ -92,14 +92,6 @@ $g_lang['rolle_4_1'] = 'Orgamensch';
 $g_lang['rolle_4_2'] = 'Orgamensch';
 $g_lang['rolle_4_3'] = 'Orgamensch';
 
-$g_lang['betrieb_status_6'] = 'Spendet an Tafel etc. und wirft nichts weg.';
-$g_lang['betrieb_status_5'] = 'Betrieb kooperiert bereits.';
-$g_lang['betrieb_status_4'] = 'Betrieb will nicht kooperieren.';
-$g_lang['betrieb_status_3'] = 'Betrieb ist bereit zu kooperieren.';
-$g_lang['betrieb_status_2'] = 'Verhandlungen laufen.';
-$g_lang['betrieb_status_1'] = 'Es besteht noch kein Kontakt.';
-$g_lang['betrieb_status_0'] = $g_lang['betrieb_status_2'];
-
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
 $g_lang['to_team_page'] = 'Zur Teamseite';
 $g_lang['status'] = 'Aktueller Status';
@@ -107,13 +99,6 @@ $g_lang['info'] = 'Informationen';
 $g_lang['photo'] = 'Foto';
 $g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
 
-$g_lang['team_status_0'] = 'Dieses Team ist voll. Daher werden z.<span style="white-space:nowrap">&thinsp;</span>Z. keine weiteren Helfer gesucht.';
-$g_lang['team_status_1'] = '<strong>Es werden noch Helfer gesucht</strong>';
-$g_lang['team_status_2'] = '<strong>Es werden dringend noch Helfer gesucht</strong>';
-$g_lang['pubbtime_1'] = 'morgens';
-$g_lang['pubbtime_2'] = 'mittags/nachmittags';
-$g_lang['pubbtime_3'] = 'abends';
-$g_lang['pubbtime_4'] = 'nachts';
 $g_lang['join'] = 'Anmelden';
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['datetime'] = 'Zeitpunkt';
