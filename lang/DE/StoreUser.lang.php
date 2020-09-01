@@ -1,19 +1,6 @@
 <?php
 global $g_lang;
-$g_lang['betrieb_status_id'] = 'Status';
-$g_lang['bezirk_id'] = 'Bezirk';
-$g_lang['kette_id'] = 'Betriebskette';
-$g_lang['betrieb_kategorie_id'] = 'Kategorie';
-$g_lang['str'] = 'Straße';
-$g_lang['hsnr'] = 'Hausnummer';
-$g_lang['status_date'] = 'letzte Statusänderung';
 $g_lang['bread_betrieb'] = 'Alle Betriebe';
-$g_lang['edit_store'] = 'Betrieb bearbeiten';
-$g_lang['add_new_store'] = 'Neuen Betrieb eintragen';
-$g_lang['ansprechpartner'] = 'Ansprechpartner';
-$g_lang['fax'] = 'Fax';
-$g_lang['betrieb_edit_success'] = 'Änderungen wurden gespeichert';
-$g_lang['betrieb_add_success'] = 'Kooperationsbetrieb wurde gespeichert';
 $g_lang['betrieb_bread'] = 'Kooperationsbetrieb';
 $g_lang['team_not_empty'] = 'Das Team darf nicht leer sein.';
 $g_lang['not_responsible_but_bot'] = 'Du bist nicht verantwortlich für diesen Betrieb, hast jedoch weitreichende Rechte, da Du BotschafterIn bist.';
@@ -26,7 +13,6 @@ $g_lang['you_responsible'] = 'Betriebe für die Du verantwortlich bist';
 $g_lang['you_fetcher'] = 'Betriebe bei denen Du Lebensmittel abholst';
 $g_lang['more_stores'] = 'Weitere Betriebe aus {name}';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
-$g_lang['info'] = 'Infos';
 $g_lang['edit_team'] = 'Team bearbeiten';
 $g_lang['change_status'] = 'Status ändern';
 $g_lang['status_msg_1'] = 'Es besteht noch kein Kontakt';

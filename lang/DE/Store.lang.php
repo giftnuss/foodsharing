@@ -1,21 +1,18 @@
 <?php
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
-$g_lang['betrieb'] = 'Betrieb';
 $g_lang['bezirk_id'] = 'Bezirk';
 $g_lang['kette_id'] = 'Betriebskette';
 $g_lang['betrieb_kategorie_id'] = 'Kategorie';
 $g_lang['str'] = 'Straße';
 $g_lang['hsnr'] = 'Hausnummer';
 $g_lang['status_date'] = 'letzte Statusänderung';
-$g_lang['bread_betrieb'] = 'Alle Betriebe';
 $g_lang['edit_store'] = 'Betrieb bearbeiten';
 $g_lang['add_new_store'] = 'Neuen Betrieb eintragen';
 $g_lang['ansprechpartner'] = 'Betriebsansprechpartner (Filialleiter etc.)';
 $g_lang['fax'] = 'Fax';
 $g_lang['betrieb_edit_success'] = 'Änderungen wurden gespeichert';
 $g_lang['betrieb_add_success'] = 'Kooperationsbetrieb wurde gespeichert';
-$g_lang['betrieb_bread'] = 'Kooperationsbetrieb';
 $g_lang['lebensmittel'] = 'Welche Lebensmittel dürfen abgeholt werden?';
 $g_lang['ueberzeugungsarbeit'] = 'War es einfach, eine/n Verantwortliche/n zu überzeugen, mit foodsharing zu kooperieren?';
 $g_lang['presse'] = 'Ist der Betrieb/Laden/Verein bereit, bei der Presse und foodsharing.de genannt zu werden?';
