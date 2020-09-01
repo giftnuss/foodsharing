@@ -85,7 +85,8 @@ final class VotingPermissions
 				}
 				break;
 			case VotingScope::VERIFIED_FOODSAVERS_HOME_DISTRICT:
-				if ($this->session->getCurrentRegionId() !== $poll->regionId) {
+				if (!$this->session->may('fs') || !$this->session->isVerified()
+					|| $this->session->getCurrentRegionId() !== $poll->regionId) {
 					return false;
 				}
 				break;

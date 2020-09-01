@@ -13,6 +13,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Voting\DTO\Poll;
+use Foodsharing\Permissions\VotingPermissions;
 
 class VotingTransactions
 {
@@ -21,6 +22,7 @@ class VotingTransactions
 	private StoreGateway $storeGateway;
 	private RegionGateway $regionGateway;
 	private BellGateway $bellGateway;
+	private VotingPermissions $votingPermissions;
 	private Session $session;
 
 	public function __construct(
@@ -29,6 +31,7 @@ class VotingTransactions
 		StoreGateway $storeGateway,
 		RegionGateway $regionGateway,
 		BellGateway $bellGateway,
+		VotingPermissions $votingPermissions,
 		Session $session
 	) {
 		$this->votingGateway = $votingGateway;
@@ -36,6 +39,7 @@ class VotingTransactions
 		$this->storeGateway = $storeGateway;
 		$this->regionGateway = $regionGateway;
 		$this->bellGateway = $bellGateway;
+		$this->votingPermissions = $votingPermissions;
 		$this->session = $session;
 	}
 
@@ -207,5 +211,29 @@ class VotingTransactions
 		}
 
 		return true;
+	}
+
+	/**
+	 * Helper function that fetches a poll from the database and removes all results and the number of
+	 * current votes from a poll if the current user is not allowed to see them
+	 * (see {@see VotingPermissions::maySeeResults}).
+	 *
+	 * @param int $pollId a valid id of a poll
+	 * @param bool $includeResults whether the counted votes should be included
+	 *
+	 * @return Poll the poll object or null if this poll ID doesn't exist
+	 */
+	public function getPoll(int $pollId, bool $includeResults): ?Poll
+	{
+		$poll = $this->votingGateway->getPoll($pollId, $includeResults);
+
+		if (!is_null($poll) && (!$includeResults || !$this->votingPermissions->maySeeResults($poll))) {
+			$poll->votes = null;
+			foreach ($poll->options as &$option) {
+				$option->values = array_fill_keys(array_keys($option->values), -1);
+			}
+		}
+
+		return $poll;
 	}
 }

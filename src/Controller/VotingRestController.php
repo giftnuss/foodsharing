@@ -3,7 +3,6 @@
 namespace Foodsharing\Controller;
 
 use DateTime;
-use Exception;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingScope;
 use Foodsharing\Modules\Core\DBConstants\Voting\VotingType;
@@ -50,19 +49,13 @@ class VotingRestController extends AbstractFOSRestController
 	 */
 	public function getPoll(int $pollId): Response
 	{
-		try {
-			$poll = $this->votingGateway->getPoll($pollId, false);
-		} catch (Exception $e) {
+		$poll = $this->votingTransactions->getPoll($pollId, true);
+		if (is_null($poll)) {
 			throw new HttpException(404);
 		}
 
 		if (!$this->votingPermissions->maySeePoll($poll)) {
 			throw new HttpException(403);
-		}
-
-		// if possible, request the poll again and include its results
-		if ($this->votingPermissions->maySeeResults($poll)) {
-			$poll = $this->votingGateway->getPoll($pollId, true);
 		}
 
 		return $this->handleView($this->view($poll, 200));
@@ -105,9 +98,8 @@ class VotingRestController extends AbstractFOSRestController
 	public function voteAction(int $pollId, ParamFetcher $paramFetcher): Response
 	{
 		// check if poll exists and user may vote
-		try {
-			$poll = $this->votingGateway->getPoll($pollId, false);
-		} catch (Exception $e) {
+		$poll = $this->votingGateway->getPoll($pollId, false);
+		if (is_null($poll)) {
 			throw new HttpException(404);
 		}
 
@@ -188,6 +180,9 @@ class VotingRestController extends AbstractFOSRestController
 		$poll->options = array_map(function ($x) {
 			$o = new PollOption();
 			$o->text = trim($x);
+			if (empty($option->text)) {
+				throw new HttpException(400, 'option text must not be empty');
+			}
 
 			return $o;
 		}, $paramFetcher->get('options'));
@@ -218,9 +213,8 @@ class VotingRestController extends AbstractFOSRestController
 	 */
 	public function cancelPollAction(int $pollId): Response
 	{
-		try {
-			$this->votingGateway->getPoll($pollId, false);
-		} catch (Exception $e) {
+		$poll = $this->votingGateway->getPoll($pollId, false);
+		if (is_null($poll)) {
 			throw new HttpException(404);
 		}
 

@@ -12,6 +12,7 @@ class VotingControl extends Control
 {
 	private VotingGateway $votingGateway;
 	private VotingPermissions $votingPermissions;
+	private VotingTransactions $votingTransactions;
 	private RegionGateway $regionGateway;
 	private TranslatorInterface $translator;
 
@@ -19,12 +20,14 @@ class VotingControl extends Control
 		VotingView $view,
 		VotingGateway $votingGateway,
 		VotingPermissions $votingPermissions,
+		VotingTransactions $votingTransactions,
 		RegionGateway $regionGateway,
 		TranslatorInterface $translator
 	) {
 		$this->view = $view;
 		$this->votingGateway = $votingGateway;
 		$this->votingPermissions = $votingPermissions;
+		$this->votingTransactions = $votingTransactions;
 		$this->regionGateway = $regionGateway;
 		$this->translator = $translator;
 		parent::__construct();
@@ -33,17 +36,13 @@ class VotingControl extends Control
 	public function index()
 	{
 		try {
-			if (isset($_GET['id']) && ($poll = $this->votingGateway->getPoll($_GET['id'], false))
+			if (isset($_GET['id']) && ($poll = $this->votingTransactions->getPoll($_GET['id'], true))
 				&& $this->votingPermissions->maySeePoll($poll)) {
 				$region = $this->regionGateway->getRegion($poll->regionId);
 				$this->pageHelper->addBread($region['name'], '/?page=bezirk&bid=' . $region['id']);
 				$this->pageHelper->addBread($this->translator->trans('terminology.polls'), '/?page=bezirk&bid=' . $region['id'] . '&sub=polls');
 				$this->pageHelper->addBread($poll->name);
 				$this->pageHelper->addTitle($poll->name);
-
-				if ($this->votingPermissions->maySeeResults($poll)) {
-					$poll = $this->votingGateway->getPoll($poll->id, true);
-				}
 
 				$mayVote = $this->votingPermissions->mayVote($poll);
 				$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,

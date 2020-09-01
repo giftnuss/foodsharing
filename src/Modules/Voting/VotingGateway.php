@@ -18,18 +18,16 @@ class VotingGateway extends BaseGateway
 	 * @param int $pollId a valid id of a poll
 	 * @param bool $includeResults whether the counted votes should be included
 	 *
-	 * @return Poll the poll object
-	 *
-	 * @throws Exception if the poll with the given id does not exist
+	 * @return Poll the poll object or null if this poll ID doesn't exist
 	 */
-	public function getPoll(int $pollId, bool $includeResults): Poll
+	public function getPoll(int $pollId, bool $includeResults): ?Poll
 	{
 		$data = $this->db->fetchByCriteria('fs_poll',
 			['region_id', 'scope', 'name', 'description', 'type', 'start', 'end', 'author', 'votes'],
 			['id' => $pollId]
 		);
 		if (empty($data)) {
-			throw new Exception('poll does not exist');
+			return null;
 		}
 
 		$options = $this->getOptions($pollId, $includeResults);
