@@ -64,7 +64,7 @@ const urls = {
   settings: () => '/?page=settings',
   statistic: (regionId) => `/?page=bezirk&bid=${regionId}&sub=statistic`,
   statistics: () => '/statistik',
-  store: (storeId) => `/?page=betrieb&id=${storeId}`,
+  store: (storeId) => `/?page=fsbetrieb&id=${storeId}`,
   storeAdd: (regionId = null) => regionId ? `/?page=betrieb&a=new&bid=${regionId}` : '/?page=betrieb&a=new',
   storeList: () => '/?page=fsbetrieb',
   stores: (regionId) => `/?page=betrieb&bid=${regionId}`,

@@ -61,8 +61,8 @@ class StoreUserControl extends Control
 	public function index()
 	{
 		if (isset($_GET['id'])) {
-			$this->pageHelper->addBread($this->translationHelper->s('betrieb_bread'), '/?page=fsbetrieb');
-			$this->pageHelper->addTitle($this->translationHelper->s('betrieb_bread'));
+			$this->pageHelper->addBread($this->translator->trans('store.bread'), '/?page=fsbetrieb');
+			$this->pageHelper->addTitle($this->translator->trans('store.bread'));
 			$this->pageHelper->addStyle('.button{margin-right:8px;}#right .tagedit-list{width:256px;}#foodsaver-wrapper{padding-top:0px;}');
 			global $g_data;
 
@@ -194,14 +194,14 @@ class StoreUserControl extends Control
 
 				if ($this->storePermissions->mayChatWithRegularTeam($store)) {
 					$menu[] = [
-						'name' => $this->translationHelper->s('chat_with_regular_team'),
+						'name' => $this->translator->trans('store.chat.team'),
 						'click' => 'conv.chat(' . $store['team_conversation_id'] . ');',
 					];
 				}
 
 				if ($this->storePermissions->mayChatWithJumperWaitingTeam($store)) {
 					$menu[] = [
-						'name' => $this->translationHelper->s('chat_with_jumper_waiting_team'),
+						'name' => $this->translator->trans('store.chat.jumper'),
 						'click' => 'conv.chat(' . $store['springer_conversation_id'] . ');',
 					];
 				}
@@ -216,12 +216,16 @@ class StoreUserControl extends Control
 				}
 				if ($this->storePermissions->mayEditStore($store['id'])) {
 					$menu[] = [
-						'name' => $this->translationHelper->s('edit_betrieb'),
+						'name' => $this->translator->trans('storeedit.bread'),
 						'href' => '/?page=betrieb&a=edit&id=' . $store['id'],
 					];
 					$menu[] = [
-						'name' => $this->translationHelper->s('edit_team'),
-						'click' => '$(\'#teamEditor\').dialog({modal:true,width:$(window).width()*0.95,title:\'' . $this->translationHelper->s('edit_team') . '\'});',
+						'name' => $this->translator->trans('storeedit.edit-team'),
+						'click' => '$(\'#teamEditor\').dialog({'
+						. 'modal: true,'
+						. 'width: $(window).width() * 0.95,'
+						. 'title:\'' . $this->translator->trans('storeedit.edit-team') . '\''
+						. '});',
 					];
 					$menu[] = [
 						'name' => $this->translationHelper->s('edit_fetchtime'),
@@ -366,9 +370,9 @@ class StoreUserControl extends Control
 			if ($this->storePermissions->mayCreateStore()) {
 				$this->pageHelper->addContent($this->v_utils->v_menu(
 					[
-						['href' => '/?page=betrieb&a=new', 'name' => $this->translationHelper->s('add_new')]
+						['href' => '/?page=betrieb&a=new', 'name' => $this->translator->trans('storeedit.add-new')]
 					],
-					'Aktionen'), CNT_RIGHT);
+					$this->translator->trans('storeedit.actions')), CNT_RIGHT);
 			}
 
 			$region = $this->regionGateway->getRegion($this->session->getCurrentRegionId());
