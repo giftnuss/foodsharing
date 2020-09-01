@@ -77,7 +77,7 @@ class MessageTransactions
 		}
 
 		return implode(', ',
-			array_column(array_filter($members,
+			array_column(array_filter($members ?? [],
 					function ($m) use ($foodsaverId) {
 						return $m['id'] != $foodsaverId;
 					}),
