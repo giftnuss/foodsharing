@@ -10,16 +10,20 @@ use Foodsharing\Permissions\RegionPermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GroupRestController extends AbstractFOSRestController
 {
-	private $groupGateway;
-	private $session;
-	private $regionPermissions;
+	private GroupGateway $groupGateway;
+	private Session $session;
+	private RegionPermissions $regionPermissions;
 
-	public function __construct(GroupGateway $groupGateway, Session $session, RegionPermissions $regionPermissions)
-	{
+	public function __construct(
+		GroupGateway $groupGateway,
+		Session $session,
+		RegionPermissions $regionPermissions
+	) {
 		$this->groupGateway = $groupGateway;
 		$this->session = $session;
 		$this->regionPermissions = $regionPermissions;
@@ -30,7 +34,7 @@ class GroupRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("groups/{groupId}", requirements={"groupId" = "\d+"})
 	 */
-	public function deleteGroupAction(int $groupId)
+	public function deleteGroupAction(int $groupId): Response
 	{
 		/*
 		* In some of these calls orga is still being checked against additionally, as this REST call is used with different modules but those modules don't have own permission classes yet.
@@ -52,7 +56,7 @@ class GroupRestController extends AbstractFOSRestController
 	 * @Rest\Get("groups/{groupId}/conference", requirements={"groupId" = "\d+"})
 	 * @Rest\QueryParam(name="redirect", default="false", description="Should the response perform a 301 redirect to the actual conference?")
 	 */
-	public function joinConferenceAction(RegionGateway $regionGateway, RegionPermissions $regionPermissions, BigBlueButton $bbb, int $groupId, ParamFetcher $paramFetcher)
+	public function joinConferenceAction(RegionGateway $regionGateway, RegionPermissions $regionPermissions, BigBlueButton $bbb, int $groupId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(401);
