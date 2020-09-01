@@ -14,8 +14,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 final class FoodSharePointRestController extends AbstractFOSRestController
 {
-	private $foodSharePointGateway;
-	private $session;
+	private FoodSharePointGateway $foodSharePointGateway;
+	private Session $session;
 
 	private const NOT_LOGGED_IN = 'not logged in';
 	private const MAX_FSP_DISTANCE = 50;
@@ -74,7 +74,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 
 	/**
 	 * Returns details of the food share point with the given ID. Returns 200 and the
-	 * food share point, 500 if the food share point does not exist, or 401 if not logged in.
+	 * food share point, 404 if the food share point does not exist, or 401 if not logged in.
 	 *
 	 * @Rest\Get("foodSharePoints/{foodSharePointId}", requirements={"foodSharePointId" = "\d+"})
 	 */
@@ -106,7 +106,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 		return $this->getFoodSharePointAction($foodSharePointId);
 	}
 
-	private function fetchLocationOrUserHome($paramFetcher): array
+	private function fetchLocationOrUserHome(ParamFetcher $paramFetcher): array
 	{
 		$lat = $paramFetcher->get('lat');
 		$lon = $paramFetcher->get('lon');
@@ -123,6 +123,7 @@ final class FoodSharePointRestController extends AbstractFOSRestController
 
 	/**
 	 * Checks if the number is a valid value in the given range.
+	 * TODO Duplicated in BasketRestController.php.
 	 */
 	private function isValidNumber($value, $lowerBound, $upperBound): bool
 	{
