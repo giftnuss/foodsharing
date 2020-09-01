@@ -345,11 +345,13 @@ class StoreUserControl extends Control
 				}
 
 				if (!$store['jumper']) {
-					if ($store['betrieb_status_id'] === CooperationStatus::COOPERATION_STARTING || $store['betrieb_status_id'] === CooperationStatus::COOPERATION_ESTABLISHED) {
-					} else {
+					if (!in_array($store['betrieb_status_id'], [
+						CooperationStatus::COOPERATION_STARTING,
+						CooperationStatus::COOPERATION_ESTABLISHED,
+					])) {
 						$icon = $this->v_utils->v_getStatusAmpel($store['betrieb_status_id']);
 						$this->pageHelper->addContent($this->v_utils->v_field(
-							'<p>' . $icon . '</p>',
+							'<p>' . $icon . $this->translator->trans('storestatus.' . $store['betrieb_status_id']) . '</p>',
 							$this->translator->trans('storeview.status'),
 							['class' => 'ui-padding']
 						), CNT_RIGHT);

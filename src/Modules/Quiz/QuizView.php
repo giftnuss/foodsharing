@@ -435,17 +435,17 @@ class QuizView extends View
 		$out = '
 <ul class="linklist">';
 		foreach ($answers as $a) {
-			$ampel = 'ampel ampel-gruen';
+			$indicator = 'trafficlight color-success';
 			if ($a['right'] == 0) {
-				$ampel = 'ampel ampel-rot';
+				$indicator = 'trafficlight color-danger';
 			} elseif ($a['right'] == 2) {
-				$ampel = '';
+				$indicator = '';
 			}
 			$out .= '
 	<li>
 		<a href="#" onclick="ajreq(\'editanswer\',{app:\'quiz\',id:' . $a['id'] . '});return false;" class="ui-corner-all">
 			<span style="height: 35px; overflow: hidden; font-size: 11px;">'
-			. '<strong class="' . $ampel . '" style="float: right; margin: 0 0 0 3px;">'
+			. '<strong class="' . $indicator . '" style="float: right; margin: 0 0 0 3px;">'
 				. '<span>&nbsp;</span>'
 			. '</strong>'
 			. $this->sanitizerService->tt($a['text'], 60) .

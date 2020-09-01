@@ -1290,23 +1290,23 @@ class Utils
 		if (!in_array($status, range(1, 7))) {
 			$status = 0;
 		}
-		$color = 'grau';
+		$color = 'light';
 		switch ($status) {
 			case 2:
-				$color = 'gelb'; break;
+				$color = 'warn'; break;
 			case 3:
 			case 5:
-				$color = 'gruen'; break;
+				$color = 'success'; break;
 			case 4:
 			case 7:
-				$color = 'rot'; break;
+				$color = 'danger'; break;
 			case 6:
-				$color = 'blau'; break;
+				$color = 'info'; break;
 		}
 
 		return '<a href="#" onclick="return false;" title="'
 			. $this->translator->trans('storestatus.' . $status)
-			. '" class="ampel ampel-'
+			. '" class="trafficlight store-trafficlight color-'
 			. $color . '"><span>&nbsp;</span></a>';
 	}
 }

@@ -5,6 +5,7 @@ body {
   padding: 0;
   width: 100%;
 }
+
 body.page-map #topbar {
   position: absolute;
   top: 0;
@@ -47,7 +48,6 @@ div#main {
   top: 200px;
   z-index: 50;
 }
-
 
 #map-control ul.linklist a {
   cursor: pointer;
@@ -129,7 +129,7 @@ div#main {
   border: 0 !important;
 }
 
-#b_content a.ampel {
+#b_content a.trafficlight {
   display: inline-block;
   padding-left: 0;
   margin-right: 5px;
@@ -158,19 +158,14 @@ div#main {
 }
 
 .ui-corner-all.active > span .fa-circle {
-
   opacity: 1;
-
 }
-.ui-corner-all > span .fa-circle{
-
+.ui-corner-all > span .fa-circle {
   opacity: 0.40;
-
 }
 
-/*575px defined in stores/ui.js as xs display size*/
+/* 575px defined in stores/ui.js as xs display size */
 @media (max-width: 575px) {
-
   #map-control-wrapper {
     top: 142px
   }
