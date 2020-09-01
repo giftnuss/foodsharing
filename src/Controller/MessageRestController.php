@@ -187,9 +187,11 @@ class MessageRestController extends AbstractFOSRestController
 	 */
 	public function patchConversationAction(int $conversationId, ParamFetcher $paramFetcher): Response
 	{
-		if ($this->messageGateway->isConversationLocked($conversationId) || !$this->session->may(
-			) || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
+		if (!$this->session->may() || !$this->messageGateway->mayConversation($this->session->id(), $conversationId)) {
 			throw new HttpException(401);
+		}
+		if ($this->messageGateway->isConversationLocked($conversationId)) {
+			throw new HttpException(403);
 		}
 
 		if ($name = $paramFetcher->get('name')) {
