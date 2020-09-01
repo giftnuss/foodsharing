@@ -36,7 +36,7 @@ class EventGateway extends BaseGateway
 		', [':regionId' => $regionId]);
 	}
 
-	public function getEvent(int $eventId, bool $withInvitations = false): array
+	public function getEvent(int $eventId, bool $withInvitations = false): ?array
 	{
 		$event = $this->db->fetch('
 			SELECT

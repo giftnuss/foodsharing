@@ -8,11 +8,11 @@ use Foodsharing\Permissions\EventPermissions;
 
 class EventXhr extends Control
 {
-	private $event;
-	private $gateway;
-	private $responses;
-	private $eventPermissions;
-	private $responseOptions;
+	private ?array $event;
+	private XhrResponses $responses;
+	private EventGateway $gateway;
+	private EventPermissions $eventPermissions;
+	private array $responseOptions;
 
 	public function __construct(
 		EventGateway $gateway,
@@ -37,23 +37,26 @@ class EventXhr extends Control
 
 	public function eventresponse()
 	{
+		if ($this->event === null) {
+			return XhrResponses::PERMISSION_DENIED;
+		}
 		if (!$this->eventPermissions->mayJoinEvent($this->event)) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
+
 		$newStatus = (int)$_GET['s'];
 		if (!InvitationStatus::isValidStatus($newStatus)) {
+			return $this->responses->fail_generic();
+		}
+		if (!$this->gateway->setInviteStatus($_GET['id'], [$this->session->id()], $_GET['s'])) {
 			return $this->responses->fail_generic();
 		}
 
 		$responseScript = $this->responseOptions[$newStatus];
 
-		if ($this->gateway->setInviteStatus($_GET['id'], [$this->session->id()], $_GET['s'])) {
-			return [
-				'status' => 1,
-				'script' => $responseScript,
-			];
-		} else {
-			return $this->responses->fail_generic();
-		}
+		return [
+			'status' => 1,
+			'script' => $responseScript,
+		];
 	}
 }
