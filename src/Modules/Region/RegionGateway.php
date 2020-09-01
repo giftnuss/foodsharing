@@ -116,8 +116,11 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function listIdsForFoodsaverWithDescendants(int $foodsaverId): array
+	public function listIdsForFoodsaverWithDescendants(?int $foodsaverId): array
 	{
+		if ($foodsaverId === null) {
+			return [];
+		}
 		$bezirk_ids = [];
 		foreach ($this->listForFoodsaver($foodsaverId) as $bezirk) {
 			$bezirk_ids += $this->listIdsForDescendantsAndSelf($bezirk['id']);
@@ -142,8 +145,11 @@ class RegionGateway extends BaseGateway
 		return $this->db->exists('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $foodsaverId]);
 	}
 
-	public function listForFoodsaver(int $foodsaverId): array
+	public function listForFoodsaver(?int $foodsaverId): array
 	{
+		if ($foodsaverId === null) {
+			return [];
+		}
 		$values = $this->db->fetchAll(
 			'
 			SELECT 	b.`id`,
@@ -176,8 +182,12 @@ class RegionGateway extends BaseGateway
 		);
 	}
 
-	public function getFsAmbassadorIds(int $foodsaverId): array
+	public function getFsAmbassadorIds(?int $foodsaverId): array
 	{
+		if ($foodsaverId === null) {
+			return [];
+		}
+
 		return $this->db->fetchAllValuesByCriteria('fs_botschafter', 'bezirk_id',
 			['foodsaver_id' => $foodsaverId]
 		);

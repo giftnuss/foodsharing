@@ -724,8 +724,11 @@ final class FoodsaverGateway extends BaseGateway
 		]);
 	}
 
-	public function deleteFromRegion(int $regionId, int $fsId): void
+	public function deleteFromRegion(int $regionId, ?int $fsId): void
 	{
+		if ($fsId === null) {
+			return;
+		}
 		$this->db->delete('fs_botschafter', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 		$this->db->delete('fs_foodsaver_has_bezirk', ['bezirk_id' => $regionId, 'foodsaver_id' => $fsId]);
 

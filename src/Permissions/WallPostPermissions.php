@@ -77,8 +77,11 @@ class WallPostPermissions
 	/**
 	 * method describing _global_ deletion access to walls. Every author is always allowed to remove their own posts.
 	 */
-	public function mayDeleteFromWall(int $fsId, string $target, int $targetId): bool
+	public function mayDeleteFromWall(?int $fsId, string $target, int $targetId): bool
 	{
+		if ($fsId === null) {
+			return false;
+		}
 		switch ($target) {
 			case 'bezirk':
 				$result = $this->regionGateway->isAdmin($fsId, $targetId);

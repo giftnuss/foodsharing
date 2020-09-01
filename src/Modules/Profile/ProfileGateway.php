@@ -204,8 +204,12 @@ final class ProfileGateway extends BaseGateway
 		return (int)$this->db->fetchValue($stm, [':fs_id' => $fsId]);
 	}
 
-	public function giveBanana(int $fsId, string $message = '', int $sessionId): int
+	public function giveBanana(int $fsId, string $message = '', ?int $sessionId): int
 	{
+		if ($sessionId === null) {
+			throw new \UnexpectedValueException('Must be logged in to give banana.');
+		}
+
 		return $this->db->insert(
 			'fs_rating',
 			[
@@ -220,8 +224,12 @@ final class ProfileGateway extends BaseGateway
 	/**
 	 * Returns whether the user with the raterId has already given a banana with the user with userId.
 	 */
-	public function hasGivenBanana(int $raterId, int $userId): bool
+	public function hasGivenBanana(?int $raterId, int $userId): bool
 	{
+		if ($raterId === null) {
+			return false;
+		}
+
 		return $this->db->exists('fs_rating', ['foodsaver_id' => $userId, 'rater_id' => $raterId]);
 	}
 
