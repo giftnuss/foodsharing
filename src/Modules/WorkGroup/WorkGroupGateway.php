@@ -9,7 +9,7 @@ use Foodsharing\Modules\Region\ForumFollowerGateway;
 
 class WorkGroupGateway extends BaseGateway
 {
-	private $forumFollowerGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
@@ -287,7 +287,7 @@ class WorkGroupGateway extends BaseGateway
 		', [':fs_id' => $fsId]);
 	}
 
-	public function getGroupMail(int $regionId)
+	public function getGroupMail(int $regionId): string
 	{
 		return $this->db->fetchValue('
 			SELECT		CONCAT(mb.`name`,"@' . PLATFORM_MAILBOX_HOST . '")

@@ -6,7 +6,7 @@ use Foodsharing\Modules\Core\View;
 
 class WorkGroupView extends View
 {
-	public function applyForm($group)
+	public function applyForm(array $group)
 	{
 		return $this->v_utils->v_form('apply', [
 			$this->v_utils->v_form_textarea('motivation', [
@@ -34,7 +34,7 @@ class WorkGroupView extends View
 		], ['submit' => false]);
 	}
 
-	public function contactgroup($group)
+	public function contactgroup(array $group): string
 	{
 		$adminList = '';
 		if ($group['leader']) {
