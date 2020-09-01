@@ -51,7 +51,7 @@ class RestNormalization
 			'id' => (int)$data['id'],
 			'name' => $data['name'],
 			'avatar' => $data['photo'] ?? null,
-			'sleepStatus' => self::getSleepStatus($data, ''),
+			'sleepStatus' => self::getSleepStatus($data),
 			'mobile' => $data['handy'],
 			'landline' => $data['telefon'],
 			// 'isVerified' => boolval($data['verified']),
@@ -84,7 +84,10 @@ class RestNormalization
 		];
 	}
 
-	private static function getSleepStatus(array $data, string $prefix)
+	/**
+	 * @return ?\Foodsharing\Modules\Core\DBConstants\Foodsaver\SleepStatus
+	 */
+	private static function getSleepStatus(array $data, string $prefix = '')
 	{
 		if (isset($data[$prefix . 'sleep_status'])) {
 			$sleepStatus = $data[$prefix . 'sleep_status'];
