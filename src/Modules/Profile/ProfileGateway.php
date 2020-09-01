@@ -225,15 +225,6 @@ final class ProfileGateway extends BaseGateway
 		return $this->db->exists('fs_rating', ['foodsaver_id' => $userId, 'rater_id' => $raterId]);
 	}
 
-	public function getBananaMessage(int $fsId, int $sessionId)
-	{
-		return $this->db->fetchValueByCriteria(
-			'fs_rating',
-			'msg',
-			['foodsaver_id' => $fsId, 'rater_id' => $sessionId]
-		);
-	}
-
 	public function getNextDates(int $fsId, int $limit = 10): array
 	{
 		$stm = '
