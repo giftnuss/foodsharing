@@ -7,23 +7,23 @@ use Foodsharing\Modules\Core\View;
 
 class FoodSharePointView extends View
 {
-	private $region;
-	private $regions;
+	private ?array $region;
+	private array $regions;
 
-	private $foodSharePoint;
-	private $follower;
+	private array $foodSharePoint;
+	private array $follower;
 
 	public function setRegions(array $regions): void
 	{
 		$this->regions = $regions;
 	}
 
-	public function setRegion($region): void
+	public function setRegion(?array $region): void
 	{
 		$this->region = $region;
 	}
 
-	public function setFoodSharePoint($foodSharePoint, $follower): void
+	public function setFoodSharePoint(array $foodSharePoint, array $follower): void
 	{
 		$this->foodSharePoint = $foodSharePoint;
 		$this->follower = $follower;
@@ -34,7 +34,7 @@ class FoodSharePointView extends View
 		return $this->twig->render('pages/FoodSharePoint/foodSharePointTop.html.twig', ['food_share_point' => $this->foodSharePoint]);
 	}
 
-	public function checkFoodSharePoint($foodSharePoint): string
+	public function checkFoodSharePoint(array $foodSharePoint): string
 	{
 		$htmlEscapedName = htmlspecialchars($foodSharePoint['name']);
 		$content = '';
@@ -64,7 +64,7 @@ class FoodSharePointView extends View
 		);
 	}
 
-	public function foodSharePointForm($data = []): string
+	public function foodSharePointForm(array $data = []): string
 	{
 		$title = $this->translator->trans('fsp.new');
 

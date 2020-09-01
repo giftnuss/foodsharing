@@ -15,19 +15,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FoodSharePointControl extends Control
 {
-	private $regionId;
-	private $region;
-	private $foodSharePoint;
-	private $follower;
-	private $regions;
+	private int $regionId;
+	private ?array $region;
+	private array $foodSharePoint;
+	private array $follower;
+	private array $regions;
 
-	private $foodSharePointGateway;
-	private $regionGateway;
-	private $foodsaverGateway;
-	private $mailboxGateway;
-	private $sanitizerService;
-	private $identificationHelper;
-	private $foodSharePointPermissions;
+	private FoodSharePointGateway $foodSharePointGateway;
+	private RegionGateway $regionGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private MailboxGateway $mailboxGateway;
+	private Sanitizer $sanitizerService;
+	private IdentificationHelper $identificationHelper;
+	private FoodSharePointPermissions $foodSharePointPermissions;
 
 	public function __construct(
 		FoodSharePointView $view,
@@ -95,14 +95,16 @@ class FoodSharePointControl extends Control
 			$this->routeHelper->goLogin();
 		}
 
-		$this->foodSharePoint = false;
-		$this->follower = false;
+		$this->foodSharePoint = [];
+		$this->follower = [];
 		$this->regions = $this->getRealRegions();
-		if ($foodSharePointId = $request->query->get('id')) {
+		if ($foodSharePointId = intval($request->query->get('id'))) {
 			$this->foodSharePoint = $this->foodSharePointGateway->getFoodSharePoint($foodSharePointId);
 
 			if (!$this->foodSharePoint) {
 				$this->routeHelper->go('/?page=fairteiler');
+
+				return;
 			}
 			$regionId = $this->foodSharePoint['bezirk_id'];
 		}
@@ -123,7 +125,8 @@ class FoodSharePointControl extends Control
 
 		if ($foodSharePointId) {
 			$follow = $request->query->get('follow');
-			$infoType = $request->query->get('infotype', InfoType::BELL);
+			$infoType = intval($request->query->get('infotype', InfoType::BELL));
+
 			if ($this->handleFollowUnfollow($foodSharePointId, $this->session->id() ?? 0, $follow, $infoType)) {
 				$url = explode('&follow=', $this->routeHelper->getSelf());
 				$this->routeHelper->go($url[0]);
@@ -149,12 +152,11 @@ class FoodSharePointControl extends Control
 		$this->view->setRegion($this->region);
 	}
 
-	private function handleFollowUnfollow(int $foodSharePointId, int $foodSharerId, $follow, int $infoType): bool
+	private function handleFollowUnfollow(int $foodSharePointId, int $foodSharerId, ?string $follow, int $infoType): bool
 	{
 		if ($follow === null) {
 			return false;
 		}
-
 		if ($follow == 1 && in_array($infoType, [InfoType::EMAIL, InfoType::BELL], true)) {
 			$this->foodSharePointGateway->follow($foodSharerId, $foodSharePointId, $infoType);
 		} else {
@@ -411,8 +413,10 @@ class FoodSharePointControl extends Control
 				$status = 1;
 			}
 			$data['status'] = $status;
-
-			return $this->foodSharePointGateway->addFoodSharePoint($this->session->id(), $data);
+			$userId = $this->session->id();
+			if ($userId !== null) {
+				return $this->foodSharePointGateway->addFoodSharePoint($userId, $data);
+			}
 		}
 
 		return 0;
