@@ -112,7 +112,7 @@ class SearchRestController extends AbstractFOSRestController
 	 * @Rest\Get("search/all")
 	 * @Rest\QueryParam(name="q", description="Search query.")
 	 */
-	public function searchAction(ParamFetcher $paramFetcher)
+	public function searchAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may()) {
 			throw new HttpException(403);
@@ -149,7 +149,7 @@ class SearchRestController extends AbstractFOSRestController
 	 * @Rest\Get("search/forum/{groupId}/{subforumId}", requirements={"groupId" = "\d+", "subforumId" = "\d+"})
 	 * @Rest\QueryParam(name="q", description="Search query.", nullable=false)
 	 */
-	public function searchForumTitleAction(int $groupId, int $subforumId, ParamFetcher $paramFetcher)
+	public function searchForumTitleAction(int $groupId, int $subforumId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->may() || !$this->forumPermissions->mayAccessForum($groupId, $subforumId)) {
 			throw new HttpException(403);
