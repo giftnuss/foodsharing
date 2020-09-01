@@ -11,13 +11,13 @@ class EditWorkGroupData
 	 * @Assert\Type("string")
 	 * @Assert\NotBlank()
 	 */
-	public $name;
+	public string $name;
 
 	/**
 	 * @Assert\Type("string")
 	 * @Assert\NotBlank()
 	 */
-	public $description;
+	public string $description;
 
 	/**
 	 * @Assert\Type("integer")
@@ -26,7 +26,7 @@ class EditWorkGroupData
 	 *     max = 3
 	 * )
 	 */
-	public $applyType;
+	public int $applyType;
 
 	/**
 	 * @Assert\Type("integer")
@@ -37,7 +37,7 @@ class EditWorkGroupData
 	 *     maxMessage = "group.application_requirements.banana_count_errors.max"
 	 * )
 	 */
-	public $bananaCount;
+	public int $bananaCount;
 
 	/**
 	 * @Assert\Type("integer")
@@ -46,7 +46,7 @@ class EditWorkGroupData
 	 *     max = 100
 	 * )
 	 */
-	public $fetchCount;
+	public int $fetchCount;
 
 	/**
 	 * @Assert\Type("integer")
@@ -55,20 +55,20 @@ class EditWorkGroupData
 	 *     max = 52
 	 * )
 	 */
-	public $weekNum;
+	public int $weekNum;
 
 	/**
 	 * @Assert\Type("string")
 	 * @Assert\Regex("?^images/[[:alnum:]/]+\.(jpg|png|gif)$?")
 	 * @Assert\File()
 	 */
-	public $photo;
+	public ?string $photo;
 
-	public $members;
+	public array $members;
 
-	public $administrators;
+	public array $administrators;
 
-	public static function fromGroup($group): self
+	public static function fromGroup(array $group): self
 	{
 		$workGroupRequest = new self();
 		$workGroupRequest->name = $group['name'];
