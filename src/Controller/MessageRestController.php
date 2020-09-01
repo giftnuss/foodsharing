@@ -14,10 +14,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageRestController extends AbstractFOSRestController
 {
-	private $foodsaverGateway;
-	private $messageGateway;
-	private $messageTransactions;
-	private $session;
+	private FoodsaverGateway $foodsaverGateway;
+	private MessageGateway $messageGateway;
+	private MessageTransactions $messageTransactions;
+	private Session $session;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
