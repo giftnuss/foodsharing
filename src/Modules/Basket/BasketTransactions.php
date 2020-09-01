@@ -59,7 +59,7 @@ class BasketTransactions
 				$this->session->user('bezirk_id'), $this->session->id()
 		);
 		if ($basketId === 0) {
-			return false;
+			return [];
 		}
 
 		return $this->basketGateway->getBasket($basketId);
