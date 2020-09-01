@@ -24,15 +24,15 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserRestController extends AbstractFOSRestController
 {
-	private $session;
-	private $loginGateway;
-	private $foodsaverGateway;
-	private $profileGateway;
-	private $reportPermissions;
-	private $userPermissions;
-	private $profilePermissions;
-	private $emailHelper;
-	private $registerTransactions;
+	private Session $session;
+	private LoginGateway $loginGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ProfileGateway $profileGateway;
+	private ReportPermissions $reportPermissions;
+	private UserPermissions $userPermissions;
+	private ProfilePermissions $profilePermissions;
+	private EmailHelper $emailHelper;
+	private RegisterTransactions $registerTransactions;
 
 	private const MIN_RATING_MESSAGE_LENGTH = 100;
 	private const MIN_PASSWORD_LENGTH = 8;
