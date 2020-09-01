@@ -13,12 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WorkGroupControl extends Control
 {
-	/**
-	 * @var FormFactoryInterface
-	 */
-	private $formFactory;
-	private $imageService;
-	private $workGroupGateway;
+	private FormFactoryInterface $formFactory;
+	private ImageHelper $imageService;
+	private WorkGroupGateway $workGroupGateway;
 
 	public function __construct(
 		WorkGroupView $view,
@@ -35,12 +32,12 @@ class WorkGroupControl extends Control
 	/**
 	 * @required
 	 */
-	public function setFormFactory(FormFactoryInterface $formFactory)
+	public function setFormFactory(FormFactoryInterface $formFactory): void
 	{
 		$this->formFactory = $formFactory;
 	}
 
-	public function index(Request $request, Response $response)
+	public function index(Request $request, Response $response): void
 	{
 		if (!$this->session->may()) {
 			$this->routeHelper->goLogin();
@@ -55,7 +52,7 @@ class WorkGroupControl extends Control
 		}
 	}
 
-	private function fulfillApplicationRequirements($group, $stats)
+	private function fulfillApplicationRequirements(array $group, array $stats): bool
 	{
 		return
 			$stats['bananacount'] >= $group['banana_count']
@@ -74,7 +71,7 @@ class WorkGroupControl extends Control
 		return $this->session->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
-	private function mayApply(array $group, $applications, $stats): bool
+	private function mayApply(array $group, array $applications, array $stats): bool
 	{
 		if ($this->session->mayBezirk($group['id'])) {
 			return false; // may not apply if already a member
@@ -133,11 +130,13 @@ class WorkGroupControl extends Control
 			}, $myGroups
 		);
 
-		return ['global' => $menuGlobal,
+		return [
+			'global' => $menuGlobal,
 			'local' => $menuLocalRegions,
 			'countries' => $menuCountries,
 			'groups' => $menuMyGroups,
-			'active' => $activeUrlPartial];
+			'active' => $activeUrlPartial,
+		];
 	}
 
 	private function list(Request $request, Response $response)
