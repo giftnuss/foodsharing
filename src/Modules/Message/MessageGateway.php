@@ -65,7 +65,7 @@ final class MessageGateway extends BaseGateway
 		sort($fsIds);
 		/* as a user can only be part of a conversation once, the algorithm doesn't work and always creates new conversations when a user is
 		part twice */
-		array_unique($fsIds);
+		$fsIds = array_unique($fsIds);
 		$possibleConversations = $this->db->fetchAllValues(
 			'SELECT hc.conversation_id
 			FROM fs_foodsaver_has_conversation hc
