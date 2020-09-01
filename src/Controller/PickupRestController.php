@@ -12,15 +12,16 @@ use Foodsharing\Permissions\StorePermissions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class PickupRestController extends AbstractFOSRestController
 {
-	private $foodsaverGateway;
-	private $session;
-	private $storeGateway;
-	private $storePermissions;
-	private $storeTransactions;
+	private FoodsaverGateway $foodsaverGateway;
+	private Session $session;
+	private StoreGateway $storeGateway;
+	private StorePermissions $storePermissions;
+	private StoreTransactions $storeTransactions;
 
 	public function __construct(
 		FoodsaverGateway $foodsaverGateway,
@@ -59,7 +60,7 @@ final class PickupRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Post("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 */
-	public function joinPickupAction(int $storeId, string $pickupDate, int $fsId)
+	public function joinPickupAction(int $storeId, string $pickupDate, int $fsId): Response
 	{
 		if ($fsId != $this->session->id()) {
 			/* currently it is forbidden to add other users to a pickup */
@@ -81,7 +82,7 @@ final class PickupRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Delete("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 */
-	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId)
+	public function leavePickupAction(int $storeId, string $pickupDate, int $fsId): Response
 	{
 		if (!$this->storePermissions->mayRemovePickupUser($storeId, $fsId)) {
 			throw new HttpException(403);
@@ -103,7 +104,7 @@ final class PickupRestController extends AbstractFOSRestController
 	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}/{fsId}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+", "fsId" = "\d+"})
 	 * @Rest\RequestParam(name="isConfirmed", nullable=true, default=null)
 	 */
-	public function editPickupSlotAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher)
+	public function editPickupSlotAction(int $storeId, string $pickupDate, int $fsId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->storePermissions->mayConfirmPickup($storeId)) {
 			throw new HttpException(403);
@@ -124,7 +125,7 @@ final class PickupRestController extends AbstractFOSRestController
 	 * @Rest\Patch("stores/{storeId}/pickups/{pickupDate}", requirements={"storeId" = "\d+", "pickupDate" = "[^/]+"})
 	 * @Rest\RequestParam(name="totalSlots", nullable=true, default=null)
 	 */
-	public function editPickupAction(int $storeId, string $pickupDate, ParamFetcher $paramFetcher)
+	public function editPickupAction(int $storeId, string $pickupDate, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->storePermissions->mayEditPickups($storeId)) {
 			throw new HttpException(403);
@@ -149,7 +150,7 @@ final class PickupRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("stores/{storeId}/pickups", requirements={"storeId" = "\d+"})
 	 */
-	public function listPickupsAction(int $storeId)
+	public function listPickupsAction(int $storeId): Response
 	{
 		if (!$this->storePermissions->maySeePickups($storeId)) {
 			throw new HttpException(403);
@@ -170,7 +171,7 @@ final class PickupRestController extends AbstractFOSRestController
 	/**
 	 * @Rest\Get("stores/{storeId}/history/{fromDate}/{toDate}", requirements={"storeId" = "\d+", "fromDate" = "[^/]+", "toDate" = "[^/]+"})
 	 */
-	public function listPickupHistoryAction(int $storeId, string $fromDate, string $toDate)
+	public function listPickupHistoryAction(int $storeId, string $fromDate, string $toDate): Response
 	{
 		if (!$this->storePermissions->maySeePickupHistory($storeId)) {
 			throw new HttpException(403);
