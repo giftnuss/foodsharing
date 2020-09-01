@@ -1,11 +1,20 @@
 parameters:
-  level: 2
+  level: 3
   paths:
     - src
   excludes_analyse:
     - %currentWorkingDirectory%/src/Lib/Flourish
     - %currentWorkingDirectory%/src/Dev
-  ignoreErrors:
-    - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
   bootstrapFiles:
     - config.inc.php
+  ignoreErrors:
+    - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
+    # For level 4 we will also need these:
+    # -
+    #   message: '#If condition is always true#'
+    #   paths:
+    #     - src/Lib/Db/Mem.php
+    # -
+    #   message: '#Unreachable statement - code above always terminates#'
+    #   paths:
+    #     - src/Lib/Db/Mem.php

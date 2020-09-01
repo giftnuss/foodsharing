@@ -38,6 +38,7 @@
 - Use TranslatorInterface for many old translations !1637 @ChrisOelmueller
 - Prepare event invitations for REST !1627 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 !1654 @ChrisOelmueller
+- Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm

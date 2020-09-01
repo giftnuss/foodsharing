@@ -15,21 +15,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class WebPushHandler implements PushNotificationHandlerInterface
 {
 	private const typeIdentifier = 'webpush';
-
-	/**
-	 * @var WebPush
-	 */
-	private $webpush;
-
-	/**
-	 * @var TranslatorInterface
-	 */
-	private $translator;
+	private WebPush $webpush;
+	private TranslatorInterface $translator;
 
 	public function __construct(TranslatorInterface $translator)
 	{
-		$this->translator = $translator;
-
 		$auth = [
 			'VAPID' => [
 				'subject' => $_SERVER['SERVER_NAME'] ?? '',
@@ -39,6 +29,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 		];
 
 		$this->webpush = new WebPush($auth);
+		$this->translator = $translator;
 	}
 
 	/**
@@ -70,6 +61,7 @@ class WebPushHandler implements PushNotificationHandlerInterface
 			 */
 			$reportGenerator = $this->webpush->sendNotification($subscription, $payload, true);
 
+			// @phpstan-ignore-next-line see https://github.com/phpstan/phpstan/issues/1060#issuecomment-667675767
 			foreach ($reportGenerator as $report) {
 				$endpoint = $report->getEndpoint();
 

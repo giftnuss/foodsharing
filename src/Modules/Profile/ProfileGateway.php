@@ -308,7 +308,7 @@ final class ProfileGateway extends BaseGateway
 		';
 		$ret = $this->db->fetchAll($stm, [':fs_id' => $fsId]);
 
-		return ($ret === false) ? [] : $ret;
+		return $ret;
 	}
 
 	public function listStoresOfFoodsaver(int $fsId): array

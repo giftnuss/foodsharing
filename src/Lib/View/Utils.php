@@ -15,10 +15,7 @@ class Utils
 {
 	private $id;
 	private Session $session;
-	/**
-	 * @var \Twig\Environment
-	 */
-	private $twig;
+	private \Twig\Environment $twig;
 	private Sanitizer $sanitizerService;
 	private PageHelper $pageHelper;
 	private RouteHelper $routeHelper;
@@ -645,8 +642,6 @@ class Utils
 					' . $out . '
 				</div>
 			</div>';
-
-		return $out;
 	}
 
 	public function v_toolbar($option = [])
