@@ -8,7 +8,7 @@ use Foodsharing\Modules\Region\RegionGateway;
 
 final class PassportGeneratorGateway extends BaseGateway
 {
-	private $regionGateway;
+	private RegionGateway $regionGateway;
 
 	public function __construct(Database $db, RegionGateway $regionGateway)
 	{

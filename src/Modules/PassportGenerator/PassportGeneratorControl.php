@@ -17,11 +17,11 @@ final class PassportGeneratorControl extends Control
 {
 	private $regionId;
 	private $region;
-	private $bellGateway;
-	private $regionGateway;
-	private $passportGeneratorGateway;
-	private $foodsaverGateway;
-	private $identificationHelper;
+	private BellGateway $bellGateway;
+	private RegionGateway $regionGateway;
+	private PassportGeneratorGateway $passportGeneratorGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private IdentificationHelper $identificationHelper;
 
 	public function __construct(
 		PassportGeneratorView $view,
@@ -251,7 +251,7 @@ final class PassportGeneratorControl extends Control
 		exit();
 	}
 
-	public function getRole(int $gender_id, int $role_id)
+	public function getRole(int $gender_id, int $role_id): string
 	{
 		switch ($gender_id) {
 			case Gender::MALE:
