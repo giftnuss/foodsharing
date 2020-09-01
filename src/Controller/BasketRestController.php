@@ -21,11 +21,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 final class BasketRestController extends AbstractFOSRestController
 {
-	private $gateway;
-	private $basketTransactions;
-	private $imageService;
-	private $messageTransactions;
-	private $session;
+	private BasketGateway $gateway;
+	private BasketTransactions $basketTransactions;
+	private ImageHelper $imageHelper;
+	private MessageTransactions $messageTransactions;
+	private Session $session;
 
 	// literal constants
 	private const TIME_TS = 'time_ts';
@@ -52,13 +52,13 @@ final class BasketRestController extends AbstractFOSRestController
 	public function __construct(
 		BasketGateway $gateway,
 		BasketTransactions $basketTransactions,
-		ImageHelper $imageService,
+		ImageHelper $imageHelper,
 		MessageTransactions $messageTransactions,
 		Session $session
 	) {
 		$this->gateway = $gateway;
 		$this->basketTransactions = $basketTransactions;
-		$this->imageService = $imageService;
+		$this->imageHelper = $imageHelper;
 		$this->messageTransactions = $messageTransactions;
 		$this->session = $session;
 	}
@@ -129,7 +129,7 @@ final class BasketRestController extends AbstractFOSRestController
 		return $this->handleView($this->view(['baskets' => $baskets], 200));
 	}
 
-	private function getCurrentUsersBaskets()
+	private function getCurrentUsersBaskets(): array
 	{
 		$updates = $this->gateway->listUpdates($this->session->id());
 		$baskets = $this->gateway->listMyBaskets($this->session->id());
@@ -310,6 +310,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 	/**
 	 * Checks if the number is a valid value in the given range.
+	 * TODO Duplicated in FoodSharePointRestController.php.
 	 */
 	private function isValidNumber($value, $lowerBound, $upperBound): bool
 	{
@@ -401,7 +402,7 @@ final class BasketRestController extends AbstractFOSRestController
 		$tmp = uniqid('tmp/', true);
 		file_put_contents($tmp, $request->getContent());
 		try {
-			$picname = $this->imageService->createResizedPictures($tmp, 'images/basket/', self::SIZES);
+			$picname = $this->imageHelper->createResizedPictures($tmp, 'images/basket/', self::SIZES);
 			unlink($tmp);
 		} catch (\Exception $e) {
 			throw new HttpException(400, 'Picture could not be resized: ' . $e->getMessage());
@@ -409,7 +410,7 @@ final class BasketRestController extends AbstractFOSRestController
 
 		//remove old images
 		if (isset($basket[self::PICTURE]) && $basket[self::PICTURE] !== '') {
-			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
+			$this->imageHelper->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 		}
 
 		//update basket
@@ -435,7 +436,7 @@ final class BasketRestController extends AbstractFOSRestController
 		//update basket
 		$basket = $this->findEditableBasket($basketId);
 		if (isset($basket[self::PICTURE])) {
-			$this->imageService->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
+			$this->imageHelper->removeResizedPictures('images/basket/', $basket[self::PICTURE], self::SIZES);
 			$basket[self::PICTURE] = null;
 			$this->gateway->editBasket($basketId, $basket[self::DESCRIPTION], null, $basket[self::LAT], $basket[self::LON], $this->session->id());
 		}
