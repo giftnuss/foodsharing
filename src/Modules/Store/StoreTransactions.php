@@ -171,8 +171,11 @@ class StoreTransactions
 	/**
 	 * @return StoreForTopbarMenu[]
 	 */
-	public function getFilteredStoresForUser(int $userId): array
+	public function getFilteredStoresForUser(?int $userId): array
 	{
+		if ($userId === null) {
+			return [];
+		}
 		$filteredStoresForUser = $this->storeGateway->listFilteredStoresForFoodsaver($userId);
 
 		foreach ($filteredStoresForUser as $store) {

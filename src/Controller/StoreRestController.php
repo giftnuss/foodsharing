@@ -86,7 +86,7 @@ class StoreRestController extends AbstractFOSRestController
 	 * @Rest\Post("stores/{storeId}/posts")
 	 * @Rest\RequestParam(name="text")
 	 */
-	public function addStorePostAction(int $storeId, ParamFetcher $paramFetcher)
+	public function addStorePostAction(int $storeId, ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->storePermissions->mayWriteStoreWall($storeId)) {
 			throw new AccessDeniedHttpException();
@@ -127,7 +127,7 @@ class StoreRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("stores/posts/{postId}")
 	 */
-	public function deleteStorePostAction(int $postId)
+	public function deleteStorePostAction(int $postId): Response
 	{
 		if (!$this->storePermissions->mayDeleteStoreWallPost($postId)) {
 			throw new AccessDeniedHttpException();
@@ -143,7 +143,7 @@ class StoreRestController extends AbstractFOSRestController
 	 *
 	 * @Rest\Delete("stores/{storeId}/requests/{userId}")
 	 */
-	public function removeStoreRequestAction(int $storeId, int $userId)
+	public function removeStoreRequestAction(int $storeId, int $userId): Response
 	{
 		if ($this->session->id() !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new HttpException(403);
