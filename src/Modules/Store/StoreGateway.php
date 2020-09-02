@@ -11,6 +11,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
+use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\StoreTeam\MembershipStatus;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\DTO\StoreForTopbarMenu;
@@ -811,7 +812,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 	{
 		$result = $this->getSingleStoreNote($id);
 
-		$this->addStoreLog($result['betrieb_id'], $foodsaver_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
+		$this->addStoreLog($result['betrieb_id'], $fs_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
 
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
