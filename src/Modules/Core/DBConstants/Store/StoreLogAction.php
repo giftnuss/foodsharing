@@ -22,4 +22,5 @@ class StoreLogAction
 	public const SLOT_CONFIRMED = 14;
 	public const DELETED_FROM_WALL = 15;
 	public const REQUEST_CANCELLED = 16;
+	public const APPOINT_STORE_MANAGER = 17;
 }
