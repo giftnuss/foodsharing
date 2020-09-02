@@ -76,6 +76,7 @@ final class PickupRestController extends AbstractFOSRestController
 		$isConfirmed = $this->storeTransactions->joinPickup($storeId, $date, $fsId, $this->session->id());
 
 		$this->storeGateway->addStoreLog($storeId, $fsId, null, $date, StoreLogAction::SIGN_UP_SLOT);
+
 		return $this->handleView($this->view([
 			'isConfirmed' => $isConfirmed
 		], 200));
@@ -143,7 +144,6 @@ final class PickupRestController extends AbstractFOSRestController
 				$date,
 				StoreLogAction::SLOT_CONFIRMED
 			);
-
 		}
 
 		return $this->handleView($this->view([], 200));

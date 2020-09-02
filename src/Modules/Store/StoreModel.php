@@ -334,7 +334,6 @@ class StoreModel extends Db
 
 	public function teamRequest($fsid, $storeId)
 	{
-
 		$this->storeGateway->addStoreLog($storeId, $fsid, null, null, StoreLogAction::REQUEST_TO_JOIN);
 
 		return $this->insert('
