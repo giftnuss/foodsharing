@@ -41,7 +41,7 @@
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 
 ## Dev/Test/CI stuff
-- Fix banana unit test !1649 @alex.simm
+- Fix banana unit test !1649 !1656 #964 @alex.simm
 
 # Release "Birne" (pear), 2020-08-09
 

@@ -152,15 +152,9 @@ class UserApiCest
 
 	public function canGiveBanana(\ApiTester $I): void
 	{
-		// create text of at least 150 characters
-		$text = $this->faker->text(150);
-		while (strlen($text) < 150) {
-			$text .= ' ' . $this->faker->text(20);
-		}
-
 		$testUser = $I->createFoodsaver();
 		$I->login($this->user[self::EMAIL]);
-		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $text]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->createRandomText(100, 150)]);
 		$I->seeResponseCodeIs(Http::OK);
 	}
 
@@ -176,16 +170,26 @@ class UserApiCest
 	{
 		$testUser = $I->createFoodsaver();
 		$I->login($this->user[self::EMAIL]);
-		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->createRandomText(100, 150)]);
 		$I->seeResponseCodeIs(Http::OK);
-		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->sendPUT(self::API_USER . '/' . $testUser['id'] . '/banana', ['message' => $this->createRandomText(100, 150)]);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
 	}
 
 	public function canNotGiveBananaToMyself(\ApiTester $I): void
 	{
 		$I->login($this->user[self::EMAIL]);
-		$I->sendPUT(self::API_USER . '/' . $this->user['id'] . '/banana', ['message' => $this->faker->text(120)]);
+		$I->sendPUT(self::API_USER . '/' . $this->user['id'] . '/banana', ['message' => $this->createRandomText(100, 150)]);
 		$I->seeResponseCodeIs(Http::FORBIDDEN);
+	}
+
+	private function createRandomText(int $minLength, int $maxLength): string
+	{
+		$text = $this->faker->text($maxLength);
+		while (strlen($text) < $minLength) {
+			$text .= ' ' . $this->faker->text(($maxLength + $minLength) / 2 - strlen($text));
+		}
+
+		return $text;
 	}
 }
