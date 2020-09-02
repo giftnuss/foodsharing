@@ -13,6 +13,7 @@
 - Allow translating lots and lots of text !1637 @ChrisOelmueller
 - Workgroup Admins of Startpage and Team/Partner page can edit their pages #967 !1651 @fs_k
 - Moved guide page (ratgeber) to wiki page #776 !1567 !1664 @chriswalg
+- Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
 - Add store log for different user activities in store #553 !1658 @fs_k
 
 ## Bugfixes
