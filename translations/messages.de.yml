@@ -336,6 +336,10 @@ back: Zurück
 options: Optionen
 success: Erfolgreich abgeschlossen
 error_unexpected: Es ist ein Fehler aufgetreten
+error_ajax: |
+  Das hat leider nicht geklappt.
+  Vielleicht funktioniert deine Internetverbindung gerade nicht.
+  Lade die Seite neu und probiere es noch mal.
 delete: Löschen
 notice: Hinweis!
 validate:
@@ -409,6 +413,7 @@ store:
   chat:
     team: Nachricht ans Team
     jumper: Nachricht an Springer
+  not-in-team: 'Du bist noch nicht im Team dieses Betriebes.'
   pickup_slot_unavailable: Dieser Abhol-Slot liegt weiter in der Zukunft als von Deinen BIEBs vorgesehen ist. Betroffen hiervon sind derzeit zwei Tage am Ende der Liste. Versuch es also bitte in 1 resp. 2 Tagen wieder.
   all_of_my_stores: Alle meine Betriebe
   tooltip_yellow: Offene Abholungen in den nächsten fünf Tagen
@@ -418,6 +423,8 @@ store:
   allStoresOfRegion: Alle Betriebe aus dem Bezirk
   addNewStoresButton: Neuen Betrieb eintragen
   noStores: Es sind noch keine Betriebe eingetragen
+  go: Zur Teamseite
+  error: 'Betrieb konnte nicht geladen werden.'
   teamName: '{storeTitle}-Team'
   memberSince: 'Im Team seit: {date}'
   jumperSince: 'Springer seit: {date}'
@@ -460,19 +467,49 @@ store:
     makeJumper: Auf die Springerliste
     makeRegularTeamMember: In das Team aufnehmen
   request:
+    request: 'In diesem Team würde ich gerne helfen.'
     got-it: 'Die Verantwortlichen wurden über deine Anfrage informiert und werden sich bei dir melden.'
     no-sm: 'Für diesen Betrieb gibt es noch keine Verantwortlichen.'
     amb-instead: 'Die Botschafter*innen wurden informiert.'
     orga-instead: 'Das Orga-Team wurde informiert.'
     withdraw: Anfrage zurückziehen
     withdrawn: 'Die Anfrage wurde erfolgreich zurückgezogen.'
+    verified: Nutzer*in ist verifiziert
 
 storeedit:
   bread: Betrieb bearbeiten
   add-new: Neuen Betrieb anlegen
   not-in-region: 'Du kannst Betriebe nur in Regionen anlegen, in denen Du Mitglied bist.'
   actions: Optionen
-  edit-team: Team bearbeiten
+  team:
+    bread: Team bearbeiten
+    leave: Aus Betrieb austragen
+    cannot-leave: Du bist noch verantwortlich für diesen Betrieb und kannst ihn daher nicht verlassen!
+    empty: Das Team darf nicht leer sein
+    need-sm: Es muss mindestens eine verantwortliche Person für den Betrieb geben!
+    max-sm: Bitte wähle maximal drei Betriebsverantwortliche
+    unmanaged: |
+      In diesem Betrieb gibt es aktuell keine Verantwortliche!
+      Bitte füge bis zu drei Betriebsverantwortliche hinzu, die diesen Betrieb in Zukunft betreuen.
+    note: 'Hinweis:'
+    amb: |
+      Du bist nicht verantwortlich für diesen Betrieb.
+      Du hast jedoch weitreichende Rechte als Botschafter*in.
+    orga: |
+      Du bist nicht verantwortlich für diesen Betrieb.
+      Du hast jedoch weitreichende Rechte als Teil des globalen Orgateams.
+  time:
+    bread: Abholzeiten bearbeiten
+    add: Abholzeiten eintragen
+    many-people: |
+      Du hast mehr als zwei Personen zum Abholen angegeben.
+      <br />
+      Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb.
+      Zu viele Abholer führten schon oft zum Ende einer Kooperation.
+      <br />
+      Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab!
+      Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
+      außer Sichtweite des Betriebes warten.
   store:
     status: Status
   fetch:
@@ -480,6 +517,8 @@ storeedit:
     teamStatus0: Dieses Team ist voll und sucht z.Z. keine weiteren Helfer
     teamStatus1: Es werden noch Helfer gesucht
     teamStatus2: Es werden dringend noch Helfer gesucht
+  add_success: Kooperationsbetrieb wurde eingetragen
+  edit_success: Änderungen wurden gespeichert
 
 pickup:
   dates: Abholtermine
@@ -579,6 +618,8 @@ wall:
   name: Pinnwand
   message_placeholder: Nachricht schreiben...
   by: '{when} von {name}'
+  delete: Eintrag löschen
+  confirm-deletion: Soll der Pinnwand-Eintrag wirklich gelöscht werden?
 
 events:
   bread: Termine
@@ -1321,6 +1362,9 @@ storelist:
  nowaste: Wirft nichts weg
  emptyfilters: Filter leeren
  map: Karte
+ managing: Betriebe für die du verantwortlich bist
+ fetching: Betriebe bei denen du Lebensmittel abholst
+ others: 'Weitere Betriebe aus {region}'
 
 push_notifications:
   test_notification_title: 'Push-Benachrichtigungen aktiviert'

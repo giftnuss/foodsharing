@@ -106,7 +106,7 @@ class StoreControl extends Control
 			$data = $this->storeModel->getOne_betrieb($id);
 
 			$this->pageHelper->addTitle($data['name']);
-			$this->pageHelper->addTitle($this->translationHelper->s('edit'));
+			$this->pageHelper->addTitle($this->translator->trans('storeedit.bread'));
 
 			if ($this->storePermissions->mayEditStore($id)) {
 				$this->handle_edit();
@@ -168,10 +168,10 @@ class StoreControl extends Control
 
 			if ($this->storeModel->update_betrieb($id, $g_data)) {
 				$this->storeTransactions->setStoreNameInConversations($id, $g_data['name']);
-				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_edit_success'));
+				$this->flashMessageHelper->info($this->translator->trans('storeedit.edit_success'));
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . $id);
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
 	}
@@ -229,11 +229,11 @@ class StoreControl extends Control
 				], 'store-new-' . (int)$id);
 				$this->bellGateway->addBell($foodsaver, $bellData);
 
-				$this->flashMessageHelper->info($this->translationHelper->s('betrieb_add_success'));
+				$this->flashMessageHelper->info($this->translator->trans('storeedit.add_success'));
 
 				$this->routeHelper->go('/?page=fsbetrieb&id=' . (int)$id);
 			} else {
-				$this->flashMessageHelper->error($this->translationHelper->s('error'));
+				$this->flashMessageHelper->error($this->translator->trans('error_unexpected'));
 			}
 		}
 	}

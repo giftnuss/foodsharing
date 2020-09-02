@@ -47,18 +47,18 @@ expose({
 $(document).ready(() => {
   $('.cb-verantwortlicher').on('click', function () {
     if ($('.cb-verantwortlicher:checked').length >= 4) {
-      pulseError(i18n('max_3_leader'))
+      pulseError(i18n('storeedit.team.max-sm'))
       return false
     }
   })
 
   $('#team-form').on('submit', function (ev) {
     if ($('.cb-verantwortlicher:checked').length == 0 && $('#set_new_store_manager').val() != 'true') {
-      pulseError(i18n('verantwortlicher_must_be'))
+      pulseError(i18n('storeedit.team.need-sm'))
       ev.preventDefault()
       return false
     } else if ($('#set_new_store_manager').val() == 'true' && $('.tagedit-listelement-old').length > 3) {
-      pulseError(i18n('max_3_leader'))
+      pulseError(i18n('storeedit.team.max-sm'))
       return false
     }
   })
@@ -173,7 +173,7 @@ $(document).ready(() => {
       if (val == 0) {
         val = 1
       } else if (val > 2) {
-        pulseInfo(i18n('max_2_foodsaver'), {
+        pulseInfo(i18n('storeedit.team.many-people'), {
           sticky: true
         })
       }
