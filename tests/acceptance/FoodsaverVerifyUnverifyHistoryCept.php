@@ -14,8 +14,8 @@ $I->addRegionAdmin($region['id'], $ambassador['id']);
 3. //*[contains(...)]			   go down again and find the element that has the given class
 */
 $verify_xpath = '//a[contains(text(), "%s")]/ancestor::tr//*[contains(concat(" ", normalize-space(@class), " "), " %s ")]';
-$verify_y = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-y')];
-$verify_n = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-n')];
+$verify_undo = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-undo')];
+$verify_do = ['xpath' => sprintf($verify_xpath, $foodsaver['name'] . ' ' . $foodsaver['nachname'], 'verify-do')];
 
 $I->login($ambassador['email']);
 
@@ -24,14 +24,14 @@ $I->click('Verifizierungshistorie');
 $I->waitForText('Es liegen keine Daten vor');
 
 $I->amOnPage('/?page=passgen&bid=' . $region['id']);
-$I->click($verify_y);
-$I->seeElement($verify_n);
+$I->click($verify_undo);
+$I->seeElement($verify_do);
 
 $I->amOnPage('/?page=passgen&bid=' . $region['id']);
-$I->click($verify_n);
+$I->click($verify_do);
 $I->waitForText('Ausweis übergeben?');
 $I->click('Verifizieren');
-$I->seeElement($verify_y);
+$I->seeElement($verify_undo);
 
 $I->amOnPage('/profile/' . $foodsaver['id']);
 $I->click('Verifizierungshistorie');

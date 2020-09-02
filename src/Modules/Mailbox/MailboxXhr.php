@@ -59,9 +59,9 @@ class MailboxXhr extends Control
 
 			$init = 'window.parent.mb_finishFile("' . $new_filename . '");';
 		} elseif (!$attachmentIsAllowed) {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('wrong_file')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->translator->trans('mailbox.filetype') . '\');window.parent.mb_removeLast();';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_removeLast();';
+			$init = 'window.parent.pulseInfo(\'' . $this->translator->trans('mailbox.filesize') . '\');window.parent.mb_removeLast();';
 		}
 
 		echo '<html><head>
@@ -201,7 +201,11 @@ class MailboxXhr extends Control
 				$subject = 'Re: ' . trim(str_replace(['Re:', 'RE:', 're:', 'aw:', 'Aw:', 'AW:'], '', $message['subject']));
 
 				$data = json_decode(file_get_contents('php://input'), true);
-				$body = strip_tags($data['msg']) . "\n\n\n\n--------- Nachricht von " . $this->timeHelper->niceDate($message['time_ts']) . " ---------\n\n>\t" . str_replace("\n", "\n>\t", $message['body']);
+				$body = strip_tags($data['msg'])
+					. "\n\n\n\n--------- "
+					. $this->translator->trans('mailbox.signature', ['{date}' => $this->timeHelper->niceDate($message['time_ts'])])
+					. " ---------\n\n>\t"
+					. str_replace("\n", "\n>\t", $message['body']);
 
 				$mail = new AsyncMail($this->mem);
 				$mail->setFrom($message['mailbox'] . '@' . PLATFORM_MAILBOX_HOST, $this->session->user('name'));
@@ -239,7 +243,7 @@ class MailboxXhr extends Control
 
 				echo json_encode([
 					'status' => 1,
-					'message' => 'Spitze! Die E-Mail wurde versendet.'
+					'message' => $this->translator->trans('mailbox.okay'),
 				]);
 				exit();
 			}
@@ -247,7 +251,7 @@ class MailboxXhr extends Control
 
 		echo json_encode([
 			'status' => 0,
-			'message' => 'Die E-Mail konnte nicht gesendet werden.'
+			'message' => $this->translator->trans('mailbox.failed'),
 		]);
 		exit();
 	}
@@ -263,7 +267,7 @@ class MailboxXhr extends Control
 			if ((time() - $last) < 15) {
 				return [
 					'status' => 1,
-					'script' => 'pulseError("Du kannst nur eine E-Mail pro 15 Sekunden versenden, bitte warte einen Augenblick...");'
+					'script' => 'pulseError("' . $this->translator->trans('mailbox.ratelimit') . '");',
 				];
 			}
 		}
@@ -282,7 +286,7 @@ class MailboxXhr extends Control
 				if (count($an) > 100) {
 					return [
 						'status' => 1,
-						'script' => 'pulseError("Zu viele Empfänger");'
+						'script' => 'pulseError("' . $this->translator->trans('mailbox.recipients') . '");'
 					];
 				}
 				$attach = false;
@@ -345,19 +349,19 @@ class MailboxXhr extends Control
 					date('Y-m-d H:i:s'),
 					'',
 					1
-				)
-				) {
+				)) {
 					if (($mb_id = $this->mailboxGateway->getMailboxId($_POST['reply']))
-						&& $this->mailboxPermissions->mayMailbox($mb_id)) {
+						&& $this->mailboxPermissions->mayMailbox($mb_id)
+					) {
 						$this->mailboxGateway->setAnswered($_POST['reply']);
 					}
 
 					return [
 						'status' => 1,
 						'script' => '
-									pulseInfo("' . $this->translationHelper->s('send_success') . '");
-									mb_clearEditor();
-									mb_closeEditor();'
+							pulseInfo("' . $this->translator->trans('mailbox.okay') . '");
+							mb_clearEditor();
+							mb_closeEditor();'
 					];
 				}
 			}

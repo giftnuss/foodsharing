@@ -103,23 +103,6 @@ class View
 		return $distance;
 	}
 
-	public function locationMumble()
-	{
-		$out = $this->v_utils->v_field('
-		<p>Online-Termin</p>
-		<p style="text-align:center;">
-			<a target="_blank" href="https://wiki.foodsharing.de/Mumble"><img src="/img/mlogo.png" alt="Mumble" /></a>
-		</p>
-		<p>
-			Online-Sprachkonferenzen machen wir mit Mumble
-		</p>
-		<p>Unser Mumble-Server:<br />mumble.foodsharing.de</p>
-		<p>Anleitung unter: <a target="_blank" href="https://wiki.foodsharing.de/Mumble">wiki.foodsharing.de/Mumble</a></p>
-		', 'Ort', ['class' => 'ui-padding']);
-
-		return $out;
-	}
-
 	public function location($location)
 	{
 		$out = $this->v_utils->v_field('

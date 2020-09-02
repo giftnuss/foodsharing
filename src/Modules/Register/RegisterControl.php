@@ -17,11 +17,11 @@ class RegisterControl extends Control
 	public function index()
 	{
 		if ($this->session->may()) {
-			$this->flashMessageHelper->info($this->translationHelper->s('you_are_already_register_please_logg_out_if_you_want_to_register_again'));
+			$this->flashMessageHelper->info($this->translator->trans('register.account-exists'));
 			$this->routeHelper->go('/?page=dashboard');
 		} else {
-			$this->pageHelper->addBread($this->translationHelper->s('registration'));
-			$this->pageHelper->addTitle($this->translationHelper->s('registration'));
+			$this->pageHelper->addBread($this->translator->trans('register.title'));
+			$this->pageHelper->addTitle($this->translator->trans('register.title'));
 
 			$this->pageHelper->addContent($this->view->registerForm());
 		}

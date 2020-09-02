@@ -247,22 +247,26 @@ a.linkrow span.item {
   display: none;
 }
 
-.ampel {
+.trafficlight {
   display: block;
   text-decoration: none;
   padding-left: 17px;
 }
 
-.ampel span {
+.store-trafficlight {
+  display: inline-block;
+}
+
+.trafficlight span {
   display: block;
   width: 17px;
   height: 17px;
-  background-image: url(/img/ampel.png);
+  background-image: url('/img/ampel.png');
   background-repeat: no-repeat;
   text-decoration: none;
 }
 
-div.head a.ampel {
+div.head a.trafficlight {
   float: left;
   padding-left: 0;
   padding-right: 8px;
@@ -270,25 +274,11 @@ div.head a.ampel {
   top: -2px;
 }
 
-.ampel-gelb span {
-  background-position: -17px 0;
-}
-
-.ampel-rot span {
-  background-position: -34px 0;
-}
-
-.ampel-gruen span {
-  background-position: 0 0;
-}
-
-.ampel-grau span {
-  background-position: -51px 0;
-}
-
-.ampel-blau span {
-  background-position: -68px 0;
-}
+.trafficlight.color-warn span { background-position: -17px 0; }
+.trafficlight.color-danger span { background-position: -34px 0; }
+.trafficlight.color-success span { background-position: 0 0; }
+.trafficlight.color-light span { background-position: -51px 0; }
+.trafficlight.color-info span { background-position: -68px 0; }
 
 ul.toolbar {
   margin: 0 !important;

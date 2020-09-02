@@ -18,7 +18,7 @@ class MapControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addTitle($this->translationHelper->s('map'));
+		$this->pageHelper->addTitle($this->translator->trans('map.title'));
 		$this->setTemplate('map');
 
 		if ($this->session->may()) {
@@ -39,10 +39,7 @@ class MapControl extends Control
 
 		if ($this->session->may('fs') && isset($_GET['bid'])) {
 			$center = $this->mapGateway->getStoreLocation($_GET['bid']);
-			// (panschk) whitespace matters here -- we need line break after the method call for javascript to compile
-			$this->pageHelper->addJs('
-				ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' })
-			');
+			$this->pageHelper->addJs('ajreq(\'bubble\', { app: \'store\', id: ' . $_GET['bid'] . ' });');
 		}
 
 		$this->pageHelper->addJs('u_init_map();');

@@ -9,7 +9,6 @@ use Mobile_Detect;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginControl extends Control
 {
@@ -21,20 +20,17 @@ class LoginControl extends Control
 	private $loginGateway;
 	private $settingsGateway;
 	private $contentGateway;
-	private $translator;
 
 	public function __construct(
 		LoginView $view,
 		LoginGateway $loginGateway,
 		ContentGateway $contentGateway,
-		SettingsGateway $settingsGateway,
-		TranslatorInterface $translator
+		SettingsGateway $settingsGateway
 	) {
 		$this->view = $view;
 		$this->loginGateway = $loginGateway;
 		$this->settingsGateway = $settingsGateway;
 		$this->contentGateway = $contentGateway;
-		$this->translator = $translator;
 
 		parent::__construct();
 	}

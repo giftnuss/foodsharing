@@ -20,8 +20,8 @@ interface PushNotificationHandlerInterface
 	 * be sent to
 	 *
 	 * @return string[] - Dead subscriptions: The returned array contains strings that identify endpoints to which the
-	 * 		delivery failed. Subscriptions with data equaling one of the dead subscriptions will be removed form the
-	 * 		database.
+	 *		delivery failed. Subscriptions with data equaling one of the dead subscriptions will be removed form the
+	 *		database.
 	 */
 	public function sendPushNotificationsToClients(array $subscriptionData, PushNotification $notification): array;
 

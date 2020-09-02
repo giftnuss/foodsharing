@@ -8,8 +8,8 @@ use Foodsharing\Modules\Store\StoreGateway;
 
 class StorePermissions
 {
-	private $storeGateway;
-	private $session;
+	private StoreGateway $storeGateway;
+	private Session $session;
 
 	public function __construct(
 		StoreGateway $storeGateway,
@@ -96,7 +96,7 @@ class StorePermissions
 			|| $this->storeGateway->getStoreComment($postId)['foodsaver_id'] === $this->session->id();
 	}
 
-	public function mayCreateStore()
+	public function mayCreateStore(): bool
 	{
 		return $this->session->may('bieb');
 	}
@@ -187,12 +187,12 @@ class StorePermissions
 		return true;
 	}
 
-	public function maySeePickups($storeId)
+	public function maySeePickups(int $storeId): bool
 	{
 		return $this->mayDoPickup($storeId);
 	}
 
-	public function maySeePhoneNumbers($storeId)
+	public function maySeePhoneNumbers(int $storeId): bool
 	{
 		return $this->mayDoPickup($storeId);
 	}

@@ -67,7 +67,7 @@
     <b-modal
       ref="modal_request"
       :title="$i18n('basket.request')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('basket.send_request')"
       modal-class="bootstrap"
       header-class="d-flex"

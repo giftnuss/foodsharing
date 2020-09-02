@@ -197,7 +197,7 @@ class StoreXhr extends Control
 						});
 					');
 					$dia->addContent($cnt);
-					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translationHelper->s('save') . '</a>'));
+					$dia->addContent($this->v_utils->v_input_wrapper(false, '<a class="button" id="savebetriebetoselect" href="#">' . $this->translator->trans('button.save') . '</a>'));
 
 					return $dia->xhrout();
 				}
@@ -210,13 +210,13 @@ class StoreXhr extends Control
 		$xhr = new Xhr();
 		$status = $this->storeGateway->getUserTeamStatus($this->session->id(), $_GET['id']);
 		if ($status === TeamStatus::Coordinator) {
-			$xhr->addMessage($this->translationHelper->s('signout_error_admin'), 'error');
+			$xhr->addMessage($this->translator->trans('storeedit.team.cannot-leave'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
 			$this->storeModel->signout($_GET['id'], $this->session->id());
 			$this->storeGateway->addStoreLog($_GET['id'], $this->session->id(), null, null, StoreLogAction::LEFT_STORE);
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
-			$xhr->addMessage($this->translationHelper->s('no_member'), 'error');
+			$xhr->addMessage($this->translator->trans('store.not-in-team'), 'error');
 		}
 		$xhr->send();
 	}
@@ -232,7 +232,7 @@ class StoreXhr extends Control
 
 		return [
 				'status' => 1,
-				'script' => 'pulseError("' . $this->translationHelper->s('store_error') . '");',
+				'script' => 'pulseError("' . $this->translator->trans('store.error') . '");',
 		];
 	}
 
@@ -245,12 +245,12 @@ class StoreXhr extends Control
 		$dia->setTitle($store['name']);
 		$dia->addContent($this->view->bubble($store));
 		if (($store['inTeam']) || $this->session->isOrgaTeam()) {
-			$dia->addButton($this->translationHelper->s('to_team_page'), 'goTo(\'/?page=fsbetrieb&id=' . (int)$store['id'] . '\');');
+			$dia->addButton($this->translator->trans('store.go'), 'goTo(\'/?page=fsbetrieb&id=' . (int)$store['id'] . '\');');
 		}
 		if ($store['team_status'] != 0 && (!$store['inTeam'] && (!$store['pendingRequest']))) {
-			$dia->addButton($this->translationHelper->s('want_to_fetch'), 'betriebRequest(' . (int)$store['id'] . ');return false;');
+			$dia->addButton($this->translator->trans('store.request.request'), 'betriebRequest(' . (int)$store['id'] . ');return false;');
 		} elseif ($store['team_status'] != 0 && (!$store['inTeam'] && ($store['pendingRequest']))) {
-			$dia->addButton($this->translationHelper->s('withdraw_application'), 'withdrawStoreRequest(' . (int)$this->session->id() . ',' . (int)$store['id'] . ');return false;');
+			$dia->addButton($this->translator->trans('store.request.withdraw'), 'withdrawStoreRequest(' . (int)$this->session->id() . ',' . (int)$store['id'] . ');return false;');
 		}
 		$modal = false;
 		if (isset($_GET['modal'])) {

@@ -3,11 +3,12 @@
 
 const urls = {
   profile: (id) => `/profile/${id}`,
-  forum: (regionId, subforumId = 0, topicId = null, postId = null) => {
+  forum: (regionId, subforumId = 0, topicId = null, postId = null, newThread = false) => {
     return (`/?page=bezirk&bid=${regionId}` +
       `&sub=${(subforumId === 1) ? 'botforum' : 'forum'}` +
       (topicId === null ? '' : `&tid=${topicId}`) +
-      (postId === null ? '' : `&pid=${postId}#tpost-${postId}`)
+      (postId === null ? '' : `&pid=${postId}#post-${postId}`) +
+      (newThread ? '&newthread=1' : '')
     )
   },
   academy: () => '/?page=content&sub=academy',
@@ -36,7 +37,7 @@ const urls = {
   foodsharepoints: (regionId) => `/?page=bezirk&bid=${regionId}&sub=fairteiler`,
   fsstaedte: () => '/?page=content&sub=fsstaedte',
   grundsaetze: () => 'https://wiki.foodsharing.de/Grundsätze',
-  guide: () => '/ratgeber',
+  guide: () => 'https://wiki.foodsharing.de/Ratgeber',
   home: () => '/',
   imprint: () => '/impressum',
   infos: () => '/?page=content&sub=infohub',
@@ -63,7 +64,7 @@ const urls = {
   settings: () => '/?page=settings',
   statistic: (regionId) => `/?page=bezirk&bid=${regionId}&sub=statistic`,
   statistics: () => '/statistik',
-  store: (storeId) => `/?page=betrieb&id=${storeId}`,
+  store: (storeId) => `/?page=fsbetrieb&id=${storeId}`,
   storeAdd: (regionId = null) => regionId ? `/?page=betrieb&a=new&bid=${regionId}` : '/?page=betrieb&a=new',
   storeList: () => '/?page=fsbetrieb',
   stores: (regionId) => `/?page=betrieb&bid=${regionId}`,

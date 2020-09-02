@@ -59,7 +59,7 @@ class EmailControl extends Control
 	public function index()
 	{
 		$this->handleEmail();
-		$this->pageHelper->addBread($this->translationHelper->s('mailinglist'), '/?page=email');
+		$this->pageHelper->addBread($this->translator->trans('recipients.bread'), '/?page=email');
 
 		if ($emailstosend = $this->emailGateway->getEmailsToSend($this->session->id())) {
 			$this->pageHelper->addContent($this->v_email_statusbox($emailstosend));
@@ -80,33 +80,49 @@ class EmailControl extends Control
 		foreach ($boxes as $key => $b) {
 			$boxes[$key]['name'] = $b['name'] . '@' . NOREPLY_EMAIL_HOST;
 		}
-		$this->pageHelper->addContent($this->v_utils->v_form('Nachrichten Verteiler', [
-			$this->v_utils->v_field(
-				$recip .
-				$this->v_utils->v_form_select('mailbox_id', ['values' => $boxes, 'required' => true]) .
-				$this->v_utils->v_form_text('subject', ['required' => true]) .
-				$this->v_utils->v_form_file('attachement'),
+		$this->pageHelper->addContent($this->v_utils->v_form($this->translator->trans('recipients.bread'), [
+			$this->v_utils->v_field($recip
+				. $this->v_utils->v_form_select('mailbox_id', ['values' => $boxes, 'required' => true])
+				. $this->v_utils->v_form_text('subject', ['required' => true])
+				. $this->v_utils->v_form_file('attachement'),
 
-				$this->translationHelper->s('mailing_list'),
+				$this->translator->trans('recipients.bread'),
 				['class' => 'ui-padding']
 			),
-			$this->v_utils->v_field($this->v_utils->v_form_tinymce('message', ['nowrapper' => true, 'type' => 'email']), $this->translationHelper->s('message'))
-		], ['submit' => 'Zum Senden Vorbereiten']));
+			$this->v_utils->v_field(
+				$this->v_utils->v_form_tinymce('message', ['nowrapper' => true, 'type' => 'email']),
+				$this->translator->trans('recipients.body')
+			)
+		], ['submit' => $this->translator->trans('recipients.prepare')]));
 
-		$this->pageHelper->addStyle('#testemail{width:91%;}');
+		$this->pageHelper->addStyle('#testemail {width: 91%;}');
 
 		$g_data['testemail'] = $this->foodsaverGateway->getEmailAddress($this->session->id());
 
-		$this->pageHelper->addContent($this->v_utils->v_field($this->v_utils->v_form_text('testemail') . $this->v_utils->v_input_wrapper('', '<a class="button" href="#" onclick="trySendTestEmail();return false;">Test-Mail senden</a>'), 'Newsletter Testen', ['class' => 'ui-padding']), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field(
+			$this->v_utils->v_form_text('testemail')
+			. $this->v_utils->v_input_wrapper('',
+				'<a class="button" href="#" onclick="trySendTestEmail(); return false;">'
+				. $this->translator->trans('recipients.testmail')
+				. '</a>'
+			),
+			$this->translator->trans('recipients.test'), ['class' => 'ui-padding']
+		), CNT_RIGHT);
 
 		$this->pageHelper->addJs("$('#rightmenu').menu();");
-		$this->pageHelper->addContent($this->v_utils->v_field('<div class="ui-padding">' . $this->translationHelper->s('personal_styling_desc') . '</div>', $this->translationHelper->s('personal_styling')), CNT_RIGHT);
+		$this->pageHelper->addContent($this->v_utils->v_field(
+			'<div class="ui-padding">' . $this->translator->trans('recipients.variable-info') . '</div>',
+			$this->translator->trans('recipients.variables')
+		), CNT_RIGHT);
 
 		$this->pageHelper->addContent('
-	<div id="dialog-confirm" title="E-Mail senden?" style="display:none">
-	<p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>' . $this->translationHelper->s('shure') . '</p>
+	<div id="dialog-confirm" title="' . $this->translator->trans('recipients.confirm') . '" style="display: none;">
+		<p>
+			<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>'
+			. $this->translator->trans('recipients.doublecheck') .
+		'</p>
 	</div>
-	<h3 class="head ui-widget-header ui-corner-top">von Dir gesendete Mails</h3>
+	<h3 class="head ui-widget-header ui-corner-top">' . $this->translator->trans('recipients.history') . '</h3>
 	<div class="ui-widget ui-widget-content ui-corner-bottom margin-bottom">
 	<ul id="rightmenu">', CNT_RIGHT);
 
@@ -115,9 +131,19 @@ class EmailControl extends Control
 		if ($mails = $this->emailGateway->getSendMails($this->session->id())) {
 			foreach ($mails as $m) {
 				++$i;
-				$this->pageHelper->addContent('<li><a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\');return false;">' . date('d.m.', strtotime($m['zeit'])) . ' ' . $m['name'] . '</a></li>', CNT_RIGHT);
-				$divs .= '<div id="right-' . $i . '" style="display:none;">' . nl2br($m['message']) . '</div>';
-				$this->pageHelper->addJs('$("#right-' . $i . '").dialog({autoOpen:false,title:"' . $this->sanitizerService->jsSafe($m['name'], '"') . '",modal:true});');
+				$this->pageHelper->addContent('<li>'
+					. '<a href="#" onclick="$(\'#right-' . $i . '\').dialog(\'open\'); return false;">'
+						. date('d.m.', strtotime($m['zeit']))
+						. ' ' . $m['name']
+					. '</a>'
+				. '</li>', CNT_RIGHT);
+
+				$divs .= '<div id="right-' . $i . '" style="display: none;">' . nl2br($m['message']) . '</div>';
+				$this->pageHelper->addJs(
+					'$("#right-' . $i . '").dialog({autoOpen: false, title: "'
+					. $this->sanitizerService->jsSafe($m['name'], '"')
+					. '", modal: true});'
+				);
 			}
 		}
 		$this->pageHelper->addContent('</ul></div>' . $divs, CNT_RIGHT);
@@ -126,7 +152,7 @@ class EmailControl extends Control
 	private function handleEmail()
 	{
 		if ($this->submitted()) {
-			$betreff = $_POST['subject'];
+			$subject = $_POST['subject'];
 			$nachricht = $_POST['message'];
 			$mailbox_id = $_POST['mailbox_id'];
 
@@ -190,25 +216,18 @@ class EmailControl extends Control
 						}
 
 						if ($this->emailHelper->validEmail($email)) {
-							$this->emailHelper->libmail($bezirk, $email, $betreff, str_replace('{NAME}', $name, $nachricht));
+							$this->emailHelper->libmail($bezirk, $email, $subject, str_replace('{NAME}', $name, $nachricht));
 							++$count;
 						} else {
 							unset($foodsaver[$i]);
 						}
 					}
 
-					$this->flashMessageHelper->info('Die E-Mail wurde erfolgreich an ' . $count . ' E-Mail-Adressen gesendet');
+					$this->flashMessageHelper->info($this->translator->trans('recipients.sent', ['{count}' => $count]));
 
 					$foodsaver = [];
-				} elseif ($data['recip_choose'] == 'filialbez') {
-					// TODO can probably be removed
-					$foodsaver = $this->storeGateway->getEmailBiepBez($data['recip_choose-choose']);
 				} elseif (isset($data['recip_choose-choose'])) {
-					if ($data['recip_choose'] == 'choosebot') {
-						$foodsaver = $this->foodsaverGateway->getRegionAmbassadorsEmailAddresses($data['recip_choose-choose']);
-					} else {
-						$foodsaver = $this->foodsaverGateway->getEmailAddressesFromRegions($data['recip_choose-choose']);
-					}
+					$foodsaver = $this->foodsaverGateway->getEmailAddressesFromRegions($data['recip_choose-choose']);
 				}
 			} else {
 				$region_ids = $this->regionGateway->listIdsForDescendantsAndSelf($this->session->getCurrentRegionId());
@@ -226,37 +245,37 @@ class EmailControl extends Control
 				foreach ($out as $o) {
 					$foodsaver[] = $o;
 				}
-				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $betreff, $attach);
+				$this->emailGateway->initEmail($this->session->id(), $mailbox_id, $foodsaver, $nachricht, $subject, $attach);
 				$this->routeHelper->goPage();
 			} elseif ($data['recip_choose'] != 'manual') {
-				$this->flashMessageHelper->error('In den ausgew&auml;hlten Bezirken gibt es noch keine Foodsaver');
+				$this->flashMessageHelper->error($this->translator->trans('recipients.empty-region'));
 			}
 		}
 	}
 
 	private function handleAttach($name)
 	{
-		if (isset($_FILES[$name]) && $_FILES[$name]['size'] > 0) {
-			$datei = $_FILES[$name]['tmp_name'];
-			$size = $_FILES[$name]['size'];
-			$datein = $_FILES[$name]['name'];
-			$datein = strtolower($datein);
-			$datein = str_replace('.jpeg', '.jpg', $datein);
-			$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
-
-			$new_name = bin2hex(random_bytes(16)) . $dateiendung;
-			move_uploaded_file($datei, './data/attach/' . $new_name);
-
-			return [
-				'name' => $datein,
-				'path' => './data/attach/' . $new_name,
-				'uname' => $new_name,
-				'mime' => mime_content_type('./data/attach/' . $new_name),
-				'size' => $size
-			];
+		if (!isset($_FILES[$name]) || $_FILES[$name]['size'] == 0) {
+			return false;
 		}
 
-		return false;
+		$file = $_FILES[$name]['tmp_name'];
+		$size = $_FILES[$name]['size'];
+		$filename = $_FILES[$name]['name'];
+		$filename = strtolower($filename);
+		$filename = str_replace('.jpeg', '.jpg', $filename);
+		$extension = strtolower(substr($filename, strlen($filename) - 4, 4));
+
+		$new_name = bin2hex(random_bytes(16)) . $extension;
+		move_uploaded_file($file, './data/attach/' . $new_name);
+
+		return [
+			'name' => $filename,
+			'path' => './data/attach/' . $new_name,
+			'uname' => $new_name,
+			'mime' => mime_content_type('./data/attach/' . $new_name),
+			'size' => $size
+		];
 	}
 
 	private function v_email_statusbox($mail)
@@ -269,80 +288,81 @@ class EmailControl extends Control
 
 		$this->pageHelper->addJs('
 			$("#' . $id . '-link").fancybox({
-				minWidth : 600,
-				scrolling :"auto",
-				closeClick : false,
-				helpers : {
-				  overlay : {closeClick: false}
+				minWidth: 600,
+				scrolling: "auto",
+				closeClick: false,
+				helpers: {
+					overlay: {closeClick: false}
 				}
 			});
 
 			$("#' . $id . '-link").trigger("click");
 
-			$("#' . $id . '-continue").button().on("click", function(){
+			$("#' . $id . '-continue").button().on("click", function () {
 				' . $id . '_continue_xhr();
 				return false;
 			});
 
-			$("#' . $id . '-abort").button().on("click", function(){
+			$("#' . $id . '-abort").button().on("click", function () {
 				showLoader();
 				$.ajax({
-					url:"/xhr.php?f=abortEmail",
-					data:{id:' . (int)$mail['id'] . '},
-					complete:function(){hideLoader();closeBox();}
+					url: "/xhr.php?f=abortEmail",
+					data: {id:' . (int)$mail['id'] . '},
+					complete: function () {
+						hideLoader();
+						closeBox();
+					}
 				});
-			});
-
-
-		');
+			});'
+		);
 
 		$this->pageHelper->addJsFunc('
-		function ' . $id . '_continue_xhr()
-		{
+			function ' . $id . '_continue_xhr () {
 				showLoader();
 				$.ajax({
-						dataType:"json",
-						url:"/xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
-						success : function(data){
-							$("#' . $id . '-continue").hide();
-							if(data.status == 1)
-							{
-								$("#' . $id . '-comment").html(data.comment);
-								$("#' . $id . '-left").html(data.left);
-								' . $id . '_continue_xhr();
-							}
-							else if(data.status == 2)
-							{
-								$("#' . $id . '-comment").html(data.comment);
-								hideLoader();
-							}
-							else
-							{
-								alert("Du hast nich nie nötigen Rechte E-Mails zu versenden");
-							}
+					dataType: "json",
+					url: "/xhr.php?f=continueMail&id=' . (int)$mail['id'] . '",
+					success: function (data) {
+						$("#' . $id . '-continue").hide();
+						if (data.status == 1) {
+							$("#' . $id . '-comment").html(data.comment);
+							$("#' . $id . '-left").html(data.left);
+							' . $id . '_continue_xhr();
+						} else if (data.status == 2) {
+							$("#' . $id . '-comment").html(data.comment);
+							hideLoader();
+						} else {
+							alert("' . $this->translator->trans('recipients.permission') . '");
 						}
+					}
 				});
-			}');
+			}'
+		);
 
 		$style = '';
 		if (count($recip) > 50) {
-			$style = ' style="height:100px;overflow:auto;font-size:10px;background-color:#fff;color:#333;padding:5px;"';
+			$style = ' style="height: 100px; overflow: auto; font-size: 10px; background-color: #fff; color: #333; padding: 5px;"';
 		}
 
 		$this->pageHelper->addHidden('
-				<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>
-				<div class="popbox" id="' . $id . '">
-					<h3>E-Mail senden</h3>
-					<p class="subtitle">Es sind noch <span id="' . $id . '-left">' . $mail['anz'] . '</span> E-Mails zu versenden</p>
+			<a id="' . $id . '-link" href="#' . $id . '">&nbsp;</a>
+			<div class="popbox" id="' . $id . '">
+				<h3>' . $this->translator->trans('recipients.send') . '</h3>
+				<p class="subtitle">' . $this->translator->trans('recipients.pending', [
+					'{count}' => '<span id="' . $id . '-left">' . $mail['anz'] . '</span>',
+				]) . '</p>
 
-					<div id="' . $id . '-comment">
-						' . $this->v_utils->v_input_wrapper('Empfänger', '<div' . $style . '>' . implode(', ', $recip) . '</div>') . '
-						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('subject'), $mail['name']) . '
-						' . $this->v_utils->v_input_wrapper($this->translationHelper->s('message'), nl2br($mail['message'])) . '
+				<div id="' . $id . '-comment">'
+					. $this->v_utils->v_input_wrapper($this->translator->trans('recipients.recipients'), '<div' . $style . '>' . implode(', ', $recip) . '</div>')
+					. $this->v_utils->v_input_wrapper($this->translator->trans('mailbox.subject'), $mail['name'])
+					. $this->v_utils->v_input_wrapper($this->translator->trans('recipients.body'), nl2br($mail['message'])) . '
 
-					</div>
-					<a id="' . $id . '-continue" href="#">Mit dem Senden weitermachen</a> <a id="' . $id . '-abort" href="#">Senden Abbrechen</a>
-				</div>');
+				</div>
+				<a id="' . $id . '-continue" href="#">' . $this->translator->trans('recipients.continue') . '</a> '
+				. '<a id="' . $id . '-abort" href="#">' . $this->translator->trans('recipients.abort') . '</a>
+				
+			</div>'
+		);
 
 		return $out;
 	}

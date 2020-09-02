@@ -3,12 +3,12 @@
 <div style="display: none;">
     <div id="becomeBezirk">
         <div class="popbox">
-            <h3>Wähle den Bezirk aus, in dem Du aktiv werden möchtest!</h3>
+            <h3>{{ 'becomeregion.chooseregion'|trans }}</h3>
             <p class="subtitle">
-                Deinem ersten Bezirk kannst Du beitreten, indem Du Dich über die Auswahl 'Europa' bis zu Deinem Bezirk durchklickst.<br>
-                Solltest Du keinen Bezirk für Dich finden, wähle ein Level höher oder tritt dem nächstgelegenen Bezirk bei. Solltest Du keine Möglichkeit haben, Dich in der Umgebung zum Foodsaver ausbilden zu lassen, dann kannst Du Dir überlegen einen eigenen Bezirk zu starten. Lies Dir in diesem Fall bitte das Wiki und insbesondere den Artikel zu '<a href="https://wiki.foodsharing.de/Bezirk_gr%C3%BCnden_oder_reaktivieren">Bezirke gründen oder reaktivieren</a>' gut durch!<br>
-                Wenn Du den Bezirk starten möchtest oder explizite Fragen hast, die das Wiki <i>nicht</i> beantwortet, schreib uns eine Mail an <a href="mailto:welcome@foodsharing.network">welcome@foodsharing.network</a>.<br>
-                Wir sind nicht die zentrale Anlaufstelle für allgemeine Fragen, können Dir aber bei Fragen zu Bezirken weiterhelfen.
+                {{ 'becomeregion.enterregion.main'|trans }}
+                <a href="https://wiki.foodsharing.de/Bezirk_gr%C3%BCnden_oder_reaktivieren">{{ 'becomeregion.enterregion.region_link_text'|trans }}</a>
+                {{ 'becomeregion.enterregion.text1'|trans }} <a href="mailto:welcome@foodsharing.network">welcome@foodsharing.network</a>
+                {{ 'becomeregion.enterregion.text2'|trans }}
             </p>
 
             {% set id = 'becomebezirkchooser' %}
@@ -19,7 +19,7 @@
 
             </div>
             <p class="bottom">
-                <span id="{{ id }}-button">Speichern</span>
+                <span id="{{ id }}-button">{{ 'becomeregion.save'|trans }}</span>
             </p>
         </div>
     </div>

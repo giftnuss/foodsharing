@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 
 class ReportPermissions
 {
-	private $session;
+	private Session $session;
 
 	public function __construct(Session $session)
 	{
@@ -35,7 +35,7 @@ class ReportPermissions
 		return $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);
 	}
 
-	public function mayHandleReports()
+	public function mayHandleReports(): bool
 	{
 		// group "Regelverletzungen/Meldungen"
 		return $this->session->may('orga') || $this->session->isAdminFor(RegionIDs::EUROPE_REPORT_TEAM);

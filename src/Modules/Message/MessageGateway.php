@@ -7,34 +7,23 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
-use Foodsharing\Utility\TranslationHelper;
 
 final class MessageGateway extends BaseGateway
 {
-	/**
-	 * @var FoodsaverGateway
-	 */
-	private $foodsaverGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private StoreGateway $storeGateway;
 
-	/**
-	 * @var StoreGateway
-	 */
-	private $storeGateway;
-
-	/**
-	 * @var TranslationHelper
-	 */
-	private $translationHelper;
-
-	public function __construct(Database $db, FoodsaverGateway $foodsaverGateway, TranslationHelper $translationHelper, StoreGateway $storeGateway)
-	{
+	public function __construct(
+		Database $db,
+		FoodsaverGateway $foodsaverGateway,
+		StoreGateway $storeGateway
+	) {
 		parent::__construct($db);
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->storeGateway = $storeGateway;
-		$this->translationHelper = $translationHelper;
 	}
 
-	public function mayConversation($fsId, $conversationId): bool
+	public function mayConversation(int $fsId, int $conversationId): bool
 	{
 		return $this->db->exists('fs_foodsaver_has_conversation', ['foodsaver_id' => $fsId, 'conversation_id' => $conversationId]);
 	}
@@ -174,12 +163,12 @@ final class MessageGateway extends BaseGateway
 	/**
 	 * Renames an Conversation.
 	 */
-	public function renameConversation(int $cid, string $name): bool
+	public function renameConversation(int $cid, string $name): int
 	{
 		return $this->db->update('fs_conversation', ['name' => $name], ['id' => $cid]);
 	}
 
-	public function isConversationLocked(int $cid)
+	public function isConversationLocked(int $cid): bool
 	{
 		return $this->db->fetchValueByCriteria('fs_conversation', 'locked', ['id' => $cid]);
 	}

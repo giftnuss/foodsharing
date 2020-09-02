@@ -19,103 +19,118 @@ class BusinessCardControl extends Control
 
 	public function index()
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('bcard_generator'));
+		$this->pageHelper->addBread($this->translator->trans('bcard.title'));
 
 		$this->pageHelper->addContent($this->view->top(), CNT_TOP);
 
 		if ($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) {
 			if (strlen($data['anschrift'] . ', ' . $data['plz'] . ' ' . $data['stadt']) >= 49) {
-				$this->flashMessageHelper->error('Deine Anschrift ist zu lang! Anschrift, Postleitzahl und Stadt dürfen zusammen maximal 49 Zeichen haben.');
+				$this->flashMessageHelper->error($this->translator->trans('bcard.error.length'));
 				$this->routeHelper->go('/?page=settings');
 			}
 			if (strlen($data['telefon'] . $data['handy']) <= 3) {
-				$this->flashMessageHelper->error('Du musst eine gültige Telefonnummer angegeben haben, um Deine Visitenkarte zu generieren');
+				$this->flashMessageHelper->error($this->translator->trans('bcard.error.phone'));
 				$this->routeHelper->go('/?page=settings');
 			}
 			if ($data['verified'] == 0) {
-				// you have to be a verified user to generate your business card.
-				$this->flashMessageHelper->error('Du musst verifiziert sein, um Deine Visitenkarte generieren zu können.');
+				$this->flashMessageHelper->error($this->translator->trans('bcard.error.verified'));
 				$this->routeHelper->go('/?page=settings');
 			}
-			$sel_data = [];
-			if ($data['bot']) {
-				foreach ($data['bot'] as $b) {
-					$sel_data[] = [
-						'id' => 'bot:' . $b['id'],
-						'name' => $this->translationHelper->sv('bot_for', $b['name'])
-					];
-				}
+
+			$choices = [];
+
+			foreach ($data['bot'] as $b) {
+				$choices[] = [
+					'id' => 'bot:' . $b['id'],
+					'name' => $this->translator->trans('bcard.for', [
+						'{role}' => $this->translator->trans('terminology.ambassador.d'),
+						'{region}' => $b['name'],
+					]),
+				];
+			}
+			foreach ($data['sm'] as $b) {
+				$choices[] = [
+					'id' => 'sm:' . $b['id'],
+					'name' => $this->translator->trans('bcard.for', [
+						'{role}' => $this->translator->trans('terminology.storemanager.d'),
+						'{region}' => $b['name'],
+					]),
+				];
+			}
+			foreach ($data['fs'] as $b) {
+				$choices[] = [
+					'id' => 'fs:' . $b['id'],
+					'name' => $this->translator->trans('bcard.for', [
+						'{role}' => $this->translator->trans('terminology.foodsaver.d'),
+						'{region}' => $b['name'],
+					]),
+				];
 			}
 
-			if ($data['sm']) {
-				foreach ($data['sm'] as $fs) {
-					$sel_data[] = [
-						'id' => 'sm:' . $fs['id'],
-						'name' => $this->translationHelper->sv('sm_for', $fs['name'])
-					];
-				}
-			}
-			if ($data['fs']) {
-				foreach ($data['fs'] as $fs) {
-					$sel_data[] = [
-						'id' => 'fs:' . $fs['id'],
-						'name' => $this->translationHelper->sv('fs_for', $fs['name'])
-					];
-				}
-			}
-
-			$this->pageHelper->addContent($this->view->optionForm($sel_data));
+			$this->pageHelper->addContent($this->view->optionForm($choices));
 		}
 	}
 
 	public function makeCard()
 	{
-		if (($data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'))) && ($opt = $this->getRequest('opt'))) {
-			$opt = explode(':', $opt);
-			if (count($opt) == 2 && (int)$opt[1] > 0) {
-				$id = (int)$opt[1];
-				$type = $opt[0];
-				$mailbox = false;
-				if (isset($data[$type]) && $data[$type] != false) {
-					foreach ($data[$type] as $d) {
-						if ($d['id'] == $id) {
-							$mailbox = $d;
-						}
-					}
-				} else {
-					return false;
-				}
-				if ($mailbox !== false) {
-					if ($type == 'fs') {
-						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->translationHelper->sv('fs_for_w', $mailbox['name']);
-						} else {
-							$data['subtitle'] = $this->translationHelper->sv('fs_for', $mailbox['name']);
-						}
-					} elseif ($type == 'sm') {
-						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->translationHelper->sv('sm_for_w', $mailbox['name']);
-						} else {
-							$data['subtitle'] = $this->translationHelper->sv('sm_for', $mailbox['name']);
-						}
-					} elseif ($type == 'bot') {
-						if ($data['geschlecht'] == 2) {
-							$data['subtitle'] = $this->translationHelper->sv('bot_for_w', $mailbox['name']);
-						} else {
-							$data['subtitle'] = $this->translationHelper->sv('bot_for', $mailbox['name']);
-						}
-						$data['email'] = $mailbox['email'];
-					} else {
-						return false;
-					}
-				}
-
-				return $this->generatePdf($data, $type);
-			}
+		$data = $this->gateway->getMyData($this->session->id(), $this->session->may('bieb'));
+		$opt = $this->getRequest('opt');
+		if (!$data || !$opt) {
+			return;
+		} else {
+			$opt = explode(':', $opt); // role:region
 		}
+
+		if (count($opt) != 2 || (int)$opt[1] < 0) {
+			return;
+		}
+
+		$regionId = (int)$opt[1];
+		$role = $opt[0];
+		$mailbox = false;
+
+		if (isset($data[$role]) && $data[$role] != false) {
+			foreach ($data[$role] as $d) {
+				if ($d['id'] == $regionId) {
+					$mailbox = $d;
+				}
+			}
+		} else {
+			return;
+		}
+
+		if (!$mailbox) {
+			return;
+		}
+
+		if (isset($mailbox['email'])) {
+			$data['email'] = $mailbox['email'];
+		}
+		$data['subtitle'] = $this->displayedRole($role, $data['geschlecht'], $mailbox['name']);
+
+		return $this->generatePdf($data, $role);
 	}
 
-	private function generatePdf($data, $type = 'fs')
+	private function displayedRole($role, $gender, $regionName)
+	{
+		$modifier = 'dmfd'[$gender]; // 0=d 1=m 2=f 3=d
+		switch ($role) {
+			case 'sm':
+				$roleName = $this->translator->trans('terminology.storemanager.' . $modifier);
+				break;
+			case 'bot':
+				$roleName = $this->translator->trans('terminology.ambassador.' . $modifier);
+				break;
+			case 'fs':
+			default:
+				$roleName = $this->translator->trans('terminology.foodsaver.' . $modifier);
+				break;
+		}
+
+		return $this->translator->trans('bcard.for', ['{role}' => $roleName, '{region}' => $regionName]);
+	}
+
+	private function generatePdf($data, $role = 'fs')
 	{
 		$pdf = new Fpdi();
 		$pdf->AddPage();
@@ -169,6 +184,6 @@ class BusinessCardControl extends Control
 			}
 		}
 
-		$pdf->Output('bcard-' . $type . '.pdf', 'D');
+		$pdf->Output('bcard-' . $role . '.pdf', 'D');
 	}
 }

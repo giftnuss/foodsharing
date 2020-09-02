@@ -2,19 +2,24 @@
   margin: 0 0 10px;
 }
 
-.profile-sideinfos {
-  font-size: 13px;
+.profile-infos {
   color: var(--fs-brown);
   margin-bottom: -5px;
 }
-.profile-sideinfos dt {
+.profile-infos.profile-main {
+  font-size: 1.1em;
+}
+.profile-infos.profile-side {
+  font-size: 0.9em;
+}
+.profile-infos dt {
   font-weight: bolder;
   margin-top: 5px;
 }
-.profile-sideinfos dt::after {
+.profile-infos dt::after {
   content: ':';
 }
-.profile-sideinfos dd {
+.profile-infos dd {
   padding-bottom: 5px;
 }
 

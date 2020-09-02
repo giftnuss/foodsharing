@@ -15,7 +15,7 @@
       role="menuitem"
       class="dropdown-item"
     >
-      <small><i class="fas fa-plus" /> {{ $i18n('store.add_new_store') }} </small>
+      <small><i class="fas fa-plus" /> {{ $i18n('storeedit.add-new') }} </small>
     </a>
     <a
       :href="$url('storeList')"

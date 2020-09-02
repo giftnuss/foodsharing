@@ -1,21 +1,8 @@
 <template>
-  <div class="bootstrap">
-    <!-- emoji buttons & selector -->
-    <span class="emojis">
-      <span
-        v-for="(users, key) in reactionsWithUsers"
-        :key="key"
-      >
-        <a
-          v-b-tooltip.hover
-          :title="concatUsers(users)"
-          :class="['btn', 'btn-sm', (gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary')]"
-          @click="toggleReaction(key)"
-        >
-          {{ users.length }}x <Emoji :name="key" />
-        </a>
-      </span>
+  <div>
+    <div class="emojis mb-1 d-inline-block">
       <b-dropdown
+        v-if="canGiveEmoji"
         ref="emojiSelector"
         v-b-tooltip.hover
         title="Eine Reaktion hinzufügen"
@@ -26,7 +13,7 @@
         right
       >
         <a
-          v-for="(symbol, key) in emojis"
+          v-for="(symbol, key) in emojisToGive"
           :key="key"
           class="btn"
           @click="giveEmoji(key)"
@@ -34,11 +21,24 @@
           <Emoji :name="key" />
         </a>
       </b-dropdown>
-    </span>
+      <span
+        v-for="(users, key) in reactionsWithUsers"
+        :key="key"
+      >
+        <a
+          v-b-tooltip.hover
+          :title="concatUsers(users)"
+          class="btn btn-sm"
+          :class="[gaveIThisReaction(key) ? 'btn-primary' : 'btn-secondary']"
+          @click="toggleReaction(key)"
+        >
+          {{ users.length }}x <Emoji :name="key" />
+        </a>
+      </span>
+    </div>
 
-    <span :class="{divider: true, textPprimary: true, mobile: isMobile }" />
+    <span class="divider text-black-50 mx-1" />
 
-    <!-- non emoji button -->
     <a
       class="btn btn-sm btn-secondary"
       @click="$emit('reply')"
@@ -49,7 +49,7 @@
       v-if="mayDelete"
       v-b-tooltip.hover
       title="Beitrag löschen"
-      class="btn btn-sm btn-secondary"
+      class="btn btn-sm btn-danger"
       @click="$refs.confirmDelete.show()"
     >
       <i class="fas fa-trash-alt" />
@@ -69,7 +69,7 @@
       v-if="mayDelete"
       ref="confirmDelete"
       :title="$i18n('forum.post.delete')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       modal-class="bootstrap"
       @ok="$emit('delete')"
@@ -99,10 +99,6 @@ export default {
     mayDelete: {
       type: Boolean,
       default: false
-    },
-    isMobile: {
-      type: Boolean,
-      default: false
     }
   },
   data () {
@@ -113,12 +109,20 @@ export default {
   computed: {
     reactionsWithUsers () {
       return pickBy(this.reactions, users => users.length > 0)
+    },
+    canGiveEmoji () {
+      return Object.keys(this.emojisToGive).length > 0
+    },
+    emojisToGive () {
+      return pickBy(this.emojis, (symbol, key) => !this.gaveIThisReaction(key))
     }
   },
   methods: {
     toggleReaction (key, dontRemove = false) {
       if (this.gaveIThisReaction(key)) {
-        if (!dontRemove) this.$emit('reactionRemove', key)
+        if (!dontRemove) {
+          this.$emit('reactionRemove', key)
+        }
       } else {
         this.$emit('reactionAdd', key)
       }
@@ -128,58 +132,50 @@ export default {
       this.toggleReaction(key, true)
     },
     gaveIThisReaction (key) {
-      if (!this.reactions[key]) return false
+      if (!this.reactions[key]) {
+        return false
+      }
       return !!this.reactions[key].find(r => r.id === user.id)
     },
     concatUsers (users) {
       const names = users.map(u => u.id === user.id ? 'Du' : u.name)
-      if (names.length === 1) return names[0]
-
+      if (names.length === 1) {
+        return names[0]
+      }
       return `${names.slice(0, names.length - 1).join(', ')} & ${names[names.length - 1]}`
     }
   }
 }
 </script>
 
-<style lang="scss">
-.emoji-dropdown > button {
-    border-radius: 0.2rem !important;
-}
-.emoji-dropdown .dropdown-menu {
-    padding: 10px;
-    a.btn {
-        padding: 0;
-    }
-    .emoji {
-        padding: 0 0.3em;
-    }
-}
-</style>
-
 <style lang="scss" scoped>
+.emoji-dropdown {
+  .dropdown-menu .btn {
+    padding: 0;
+
+    .emoji {
+      padding: 0 0.3em;
+    }
+  }
+}
+
 .emojis {
-    line-height: 2.2;
-    > span > a {
-        color: white !important;
-        margin-left: 0.3em;
-        padding: 0.05rem 0.5rem;
-        span {
-            font-size: 1.35em;
-        }
+  line-height: 2.5;
+
+  span > a {
+    margin-left: 3px;
+
+    span {
+      line-height: 1;
+      font-size: 1.35em;
+      vertical-align: middle;
     }
+  }
 }
+
 .divider {
-    margin: 0 0.3em;
-    opacity: 0.3;
-    &::before {
-        content: '|';
-    }
-}
-.divider.mobile {
-    &::before {
-        content: '';
-    }
-    height: 5px;
-    display: block;
+  &::before {
+    content: '|';
+  }
 }
 </style>

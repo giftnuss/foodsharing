@@ -417,24 +417,6 @@ final class FoodsaverGateway extends BaseGateway
 		return $this->dataHelper->useIdAsKey($foodsavers);
 	}
 
-	public function getRegionAmbassadorsEmailAddresses(array $regionIds): array
-	{
-		$foodsavers = $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`email`
-
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_botschafter` b
-					ON b.foodsaver_id = fs.id
-
-			WHERE 	fs.deleted_at IS NULL
-            AND     b.`bezirk_id` > 0
-			AND     b.`bezirk_id` IN(' . $this->dataHelper->commaSeparatedIds($regionIds) . ')
-		');
-
-		return $this->dataHelper->useIdAsKey($foodsavers);
-	}
-
 	public function getEmailAddressesFromRegions(array $regionIds): array
 	{
 		$foodsavers = $this->db->fetchAll('

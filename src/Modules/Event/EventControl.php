@@ -3,14 +3,15 @@
 namespace Foodsharing\Modules\Event;
 
 use Foodsharing\Modules\Core\Control;
+use Foodsharing\Modules\Core\DBConstants\Event\EventType;
 use Foodsharing\Permissions\EventPermissions;
 use Foodsharing\Utility\DataHelper;
 
 class EventControl extends Control
 {
-	private $gateway;
-	private $dataHelper;
-	private $eventPermissions;
+	private EventGateway $gateway;
+	private DataHelper $dataHelper;
+	private EventPermissions $eventPermissions;
 
 	public function __construct(
 		EventView $view,
@@ -28,8 +29,12 @@ class EventControl extends Control
 
 	public function index()
 	{
-		if (!isset($_GET['sub']) && isset($_GET['id']) && ($event = $this->gateway->getEventWithInvites($_GET['id'])) && $this->eventPermissions->maySeeEvent($event)) {
-			$this->pageHelper->addBread('Termine', '/?page=event');
+		if (!isset($_GET['sub'])
+			&& isset($_GET['id'])
+			&& ($event = $this->gateway->getEvent($_GET['id'], true))
+			&& $this->eventPermissions->maySeeEvent($event)
+		) {
+			$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
 			$this->pageHelper->addBread($event['name']);
 
 			$status = $this->gateway->getInviteStatus($event['id'], $this->session->id());
@@ -47,61 +52,66 @@ class EventControl extends Control
 			if ($event['invites']) {
 				$this->pageHelper->addContent($this->view->invites($event['invites']), CNT_RIGHT);
 			}
-			$this->pageHelper->addContent($this->v_utils->v_field($this->wallposts('event', $event['id']), 'Pinnwand'));
+			$this->pageHelper->addContent($this->v_utils->v_field(
+				$this->wallposts('event', $event['id']),
+				$this->translator->trans('wall.name')
+			));
 		} elseif (!isset($_GET['sub'])) {
-			$this->flashMessageHelper->info($this->translationHelper->s('event_not_available'));
+			$this->flashMessageHelper->info($this->translator->trans('events.notFound'));
 			$this->routeHelper->go('/?page=dashboard');
 		}
 	}
 
 	public function edit()
 	{
-		if ($event = $this->gateway->getEventWithInvites($_GET['id'])) {
-			if (!$this->eventPermissions->mayEditEvent($event)) {
-				return false;
-			}
+		$event = $this->gateway->getEvent($_GET['id'], true);
 
-			if ($this->eventPermissions->mayEditEvent($event)) {
-				$this->pageHelper->addBread('Termine', '/?page=event');
-				$this->pageHelper->addBread('Neuer Termin');
+		if (!$event || !$this->eventPermissions->mayEditEvent($event)) {
+			return false;
+		}
 
-				if ($this->isSubmitted() && $data = $this->validateEvent()) {
-					if ($this->gateway->updateEvent($_GET['id'], $data)) {
-						if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
-							$this->gateway->deleteInvites($_GET['id']);
-						}
-						if ($data['invite']) {
-							$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
-						}
-						$this->flashMessageHelper->info('Event wurde erfolgreich geändert!');
-						$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
-					}
+		if (!$this->eventPermissions->mayEditEvent($event)) {
+			$this->routeHelper->go('/?page=event');
+
+			return;
+		}
+
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
+		$this->pageHelper->addBread($this->translator->trans('events.add_event'));
+
+		if ($this->isSubmitted() && $data = $this->validateEvent()) {
+			if ($this->gateway->updateEvent($_GET['id'], $data)) {
+				if (isset($_POST['delinvites']) && $_POST['delinvites'] == 1) {
+					$this->gateway->deleteInvites($_GET['id']);
 				}
-
-				$regions = $this->session->getRegions();
-
-				if (($event['location_id'] !== null) && $loc = $this->gateway->getLocation($event['location_id'])) {
-					$event['location_name'] = $loc['name'];
-					$event['lat'] = $loc['lat'];
-					$event['lon'] = $loc['lon'];
-					$event['plz'] = $loc['zip'];
-					$event['ort'] = $loc['city'];
-					$event['anschrift'] = $loc['street'];
+				if ($data['invite']) {
+					$this->gateway->inviteFullRegion($data['bezirk_id'], $_GET['id'], $data['invitesubs']);
 				}
-
-				$this->dataHelper->setEditData($event);
-
-				$this->pageHelper->addContent($this->view->eventForm($regions));
-			} else {
-				$this->routeHelper->go('/?page=event');
+				$this->flashMessageHelper->info($this->translator->trans('events.edited'));
+				$this->routeHelper->go('/?page=event&id=' . (int)$_GET['id']);
 			}
 		}
+
+		$regions = $this->session->getRegions();
+
+		if (($event['location_id'] !== null) && $loc = $this->gateway->getLocation($event['location_id'])) {
+			$event['location_name'] = $loc['name'];
+			$event['lat'] = $loc['lat'];
+			$event['lon'] = $loc['lon'];
+			$event['plz'] = $loc['zip'];
+			$event['ort'] = $loc['city'];
+			$event['anschrift'] = $loc['street'];
+		}
+
+		$this->dataHelper->setEditData($event);
+
+		$this->pageHelper->addContent($this->view->eventForm($regions));
 	}
 
 	public function add(): void
 	{
-		$this->pageHelper->addBread('Termine', '/?page=event');
-		$this->pageHelper->addBread('Neuer Termin');
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=event');
+		$this->pageHelper->addBread($this->translator->trans('events.add_event'));
 
 		if ($this->isSubmitted()) {
 			if (($data = $this->validateEvent()) && $id = $this->gateway->addEvent($this->session->id(), $data)) {
@@ -123,7 +133,6 @@ class EventControl extends Control
 		$out = [
 			'name' => '',
 			'description' => '',
-			'online_type' => 0,
 			'location_id' => null,
 			'start' => date('Y-m-d') . ' 15:00:00',
 			'end' => date('Y-m-d') . ' 16:00:00',
@@ -131,7 +140,7 @@ class EventControl extends Control
 			'bezirk_id' => 0,
 			'invite' => false,
 			'online' => 0,
-			'invitesubs' => false
+			'invitesubs' => false,
 		];
 
 		if (isset($_POST['public']) && $_POST['public'] == 1) {
@@ -174,27 +183,22 @@ class EventControl extends Control
 			$out['description'] = $description;
 		}
 
-		$out['online_type'] = $this->getPostInt('online_type');
+		$online_type = $this->getPostInt('online_type');
 
-		if ($out['online_type'] == 1) {
+		if (EventType::isOnline($online_type)) {
+			$out['online'] = 1;
+			$out['location_id'] = null;
+		} else {
 			$out['online'] = 0;
-
-			$lat = $this->getPost('lat');
-			$lon = $this->getPost('lon');
-
 			$id = $this->gateway->addLocation(
 				$this->getPostString('location_name'),
-				$lat,
-				$lon,
+				$this->getPost('lat'),
+				$this->getPost('lon'),
 				$this->getPostString('anschrift'),
 				$this->getPostString('plz'),
 				$this->getPostString('ort')
 			);
-
 			$out['location_id'] = $id;
-		} else {
-			$out['online'] = 1;
-			$out['location_id'] = null;
 		}
 
 		return $out;

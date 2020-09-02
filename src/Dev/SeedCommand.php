@@ -273,6 +273,17 @@ class SeedCommand extends Command implements CustomCommandInterface
 		}
 		$this->output->writeln(' done');
 
+		// Create more Forum Threads
+		$this->output->writeln('- Create more forum Threads');
+		$randomFsList = array_slice($this->foodsavers, -100, 100, true);
+		foreach ($this->getRandomIDOfArray($randomFsList, 30) as $random_user) {
+			foreach (range(0, 5) as $_) {
+				$I->addForumTheme($region1, $random_user);
+			}
+			$this->output->write('.');
+		}
+		$this->output->writeln(' done');
+
 		// add some users to a workgroup
 		$this->output->writeln('Add users to workgroup');
 		// but only the ones we generated above

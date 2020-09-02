@@ -512,7 +512,10 @@ class Database
 		return date('Y-m-d H:i:s');
 	}
 
-	public function date(Carbon $date): string
+	/**
+	 * @param Carbon|\DateTime $date
+	 */
+	public function date($date): string
 	{
 		return (clone $date)->setTimezone('Europe/Berlin')->format('Y-m-d H:i:s');
 	}

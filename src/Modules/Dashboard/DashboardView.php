@@ -27,7 +27,7 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('new_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->translator->trans('basket.recent'));
 	}
 
 	public function updates()
@@ -38,8 +38,8 @@ class DashboardView extends View
 	public function foodsharerMenu()
 	{
 		return $this->menu([
-			['name' => $this->translationHelper->s('new_basket'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"],
-			['name' => $this->translationHelper->s('all_baskets'), 'href' => '/karte?load=baskets']
+			['name' => $this->translator->trans('basket.new'), 'click' => "ajreq('newBasket',{app:'basket'});return false;"],
+			['name' => $this->translator->trans('basket.all_map'), 'href' => '/karte?load=baskets']
 		]);
 	}
 
@@ -63,7 +63,7 @@ class DashboardView extends View
 		$out .= '
 				</ul>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('close_foodbaskets'));
+		return $this->v_utils->v_field($out, $this->translator->trans('basket.nearby'));
 	}
 
 	private function img($basket)
@@ -102,7 +102,9 @@ class DashboardView extends View
 			</ul>
 		</div>';
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('next_dates'), ['class' => 'truncate-content truncate-height-150 collapse-mobile']);
+		return $this->v_utils->v_field($out, $this->translator->trans('dashboard.pickupdates'), [
+			'class' => 'truncate-content truncate-height-150 collapse-mobile',
+		]);
 	}
 
 	public function u_myBetriebe($betriebe)
@@ -110,31 +112,31 @@ class DashboardView extends View
 		$out = '';
 		$out .= $this->u_storeLinkList(
 			$betriebe['verantwortlich'],
-			$this->translator->trans('dashboard.you_are_responsible_for_stores'),
+			$this->translator->trans('dashboard.my.managing'),
 			'truncate-height-85'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['team'],
-			$this->translator->trans('dashboard.you_pickup_at_stores'),
+			$this->translator->trans('dashboard.my.stores'),
 			'truncate-height-140'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['waitspringer'],
-			$this->translator->trans('dashboard.you_wait_at_stores'),
+			$this->translator->trans('dashboard.my.waiting'),
 			'truncate-height-85'
 		);
 
 		$out .= $this->u_storeLinkList(
 			$betriebe['requested'],
-			$this->translator->trans('dashboard.you_requested_to_join'),
+			$this->translator->trans('dashboard.my.pending'),
 			'truncate-height-50'
 		);
 
 		if (empty($out)) {
 			$out = $this->v_utils->v_info(
-				$this->translator->trans('dashboard.no_store_team')
+				$this->translator->trans('dashboard.my.no-stores')
 			);
 		}
 
@@ -181,16 +183,15 @@ class DashboardView extends View
 			$eventId = intval($i['id']);
 			$out .= '
 			<div class="post event">
-				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+				<a href="/?page=event&id=' . $eventId . '" class="calendar">
+					<span class="month">' . $this->timeHelper->month($i['start_ts']) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
-
 
 				<div class="container activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
+							<p><a href="/?page=event&id=' . $eventId . '">' . $i['name'] . '</a></p>
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
@@ -213,7 +214,9 @@ class DashboardView extends View
 			';
 		}
 
-		return $this->v_utils->v_field($out, $this->translationHelper->s('you_were_invited'), ['class' => 'ui-padding truncate-content collapse-mobile']);
+		return $this->v_utils->v_field($out, $this->translator->trans('dashboard.invitations'), [
+			'class' => 'ui-padding truncate-content collapse-mobile',
+		]);
 	}
 
 	/** TODO Duplicated in EventView right now.
@@ -228,23 +231,26 @@ class DashboardView extends View
 	{
 		$out = '';
 		foreach ($events as $i) {
+			$eventId = intval($i['id']);
 			$out .= '
 			<div class="post event">
-				<a href="/?page=event&id=' . (int)$i['id'] . '" class="calendar">
-					<span class="month">' . $this->translationHelper->s('month_' . (int)date('m', $i['start_ts'])) . '</span>
+				<a href="/?page=event&id=' . $eventId . '" class="calendar">
+					<span class="month">' . $this->timeHelper->month($i['start_ts']) . '</span>
 					<span class="day">' . date('d', $i['start_ts']) . '</span>
 				</a>
 
 				<div class="activity_feed_content">
 					<div class="activity_feed_content_text">
 						<div class="activity_feed_content_info">
-							<p><a href="/?page=event&id=' . (int)$i['id'] . '">' . $i['name'] . '</a></p>
+							<p><a href="/?page=event&id=' . $eventId . '">' . $i['name'] . '</a></p>
 							<p>' . $this->timeHelper->niceDate($i['start_ts']) . '</p>
 						</div>
 					</div>
 
 					<div>
-						<a href="/?page=event&id=' . (int)$i['id'] . '" class="button">Zum Event</a>
+						<a href="/?page=event&id=' . $eventId . '" class="button">'
+						. $this->translator->trans('events.goto') .
+						'</a>
 					</div>
 				</div>
 
@@ -254,9 +260,9 @@ class DashboardView extends View
 		}
 
 		if (count($events) > 1) {
-			$eventTitle = $this->translationHelper->s('events_headline') . ' (' . count($events) . ')';
+			$eventTitle = $this->translator->trans('dashboard.events', ['{count}' => count($events)]);
 		} else {
-			$eventTitle = $this->translationHelper->s('event_headline');
+			$eventTitle = $this->translator->trans('dashboard.event');
 		}
 
 		return $this->v_utils->v_field($out, $eventTitle, ['class' => 'ui-padding truncate-content']);

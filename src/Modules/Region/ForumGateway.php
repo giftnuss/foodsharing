@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\Database;
 
 class ForumGateway extends BaseGateway
 {
-	private $forumFollowerGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
 
 	public function __construct(
 		Database $db,
@@ -19,9 +19,9 @@ class ForumGateway extends BaseGateway
 
 	// Thread-related
 
-	public function listThreads($bezirk_id, $bot_theme = 0, $page = 0, $last = 0, $threads_per_page = 15)
+	public function listThreads(int $regionId, int $subforumId = 0, int $limit = 15, int $offset = 0): array
 	{
-		if ($ret = $this->db->fetchAll('
+		$threads = $this->db->fetchAll('
 			SELECT 		t.id,
 						t.name as title,
 						t.`time`,
@@ -35,6 +35,8 @@ class ForumGateway extends BaseGateway
 						UNIX_TIMESTAMP(p.`time`) AS post_time_ts,
 						t.last_post_id,
 						t.sticky,
+						bt.bezirk_id AS regionId,
+						bt.bot_theme AS regionSubId,
 						creator.id as creator_id,
 						creator.name as creator_name,
 						creator.photo as creator_photo,
@@ -54,32 +56,22 @@ class ForumGateway extends BaseGateway
 						fs_foodsaver creator
 						ON creator.id = t.foodsaver_id
 
-			WHERE       bt.bezirk_id = :bezirk_id
-			AND 		bt.bot_theme = :bot_theme
+			WHERE       bt.bezirk_id = :regionId
+			AND 		bt.bot_theme = :subforumId
 			AND 		t.`active` = 1
 
 			ORDER BY t.sticky DESC, t.last_post_id DESC
 
-			LIMIT :offset, :size
-
+			LIMIT :limit
+			OFFSET :offset
 		', [
-			'bezirk_id' => $bezirk_id,
-			'bot_theme' => $bot_theme,
-			'offset' => $page * $threads_per_page,
-			'size' => $threads_per_page
-		])
-		) {
-			if ($last > 0) {
-				$ll = end($ret);
-				if ($ll['id'] == $last) {
-					return false;
-				}
-			}
+			':regionId' => $regionId,
+			':subforumId' => $subforumId,
+			':limit' => $limit,
+			':offset' => $offset,
+		]);
 
-			return $ret;
-		}
-
-		return [];
+		return $threads ?: [];
 	}
 
 	public function getThreadInfo($threadId)
@@ -143,9 +135,9 @@ class ForumGateway extends BaseGateway
 		return $threadId;
 	}
 
-	public function activateThread($thread_id)
+	public function activateThread(int $threadId): void
 	{
-		$this->db->update('fs_theme', ['active' => 1], ['id' => $thread_id]);
+		$this->db->update('fs_theme', ['active' => 1], ['id' => $threadId]);
 	}
 
 	public function deleteThread($thread_id)

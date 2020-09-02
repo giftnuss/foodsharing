@@ -32,7 +32,7 @@ class BigBlueButton
 			$res = $this->client->get($url)->getBody()->getContents();
 			$res = new \SimpleXMLElement($res);
 
-			if (!$res->returncode == 'SUCCESS') {
+			if ($res->returncode != 'SUCCESS') {
 				return null;
 			}
 

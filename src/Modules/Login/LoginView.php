@@ -7,7 +7,7 @@ use Foodsharing\Modules\Core\View;
 
 class LoginView extends View
 {
-	public function join($email = '', $pass = '', $datenschutz, $rechtsvereinbarung)
+	public function join(string $email = '', string $pass = '', $datenschutz, $rechtsvereinbarung)
 	{
 		$map = new vMap();
 		$map->setSearchPanel('login_location');
@@ -28,7 +28,7 @@ class LoginView extends View
 	{
 		if (!$this->session->may()) {
 			$params = [
-				'email' => $this->translationHelper->s('login_email'),
+				'email' => $this->translator->trans('register.login_email'),
 				'action' => $_SERVER['REQUEST_URI']
 			];
 
@@ -36,22 +36,22 @@ class LoginView extends View
 		}
 	}
 
-	public function newPasswordForm($key)
+	public function newPasswordForm(string $key)
 	{
 		$key = preg_replace('/[^0-9a-zA-Z]/', '', $key);
-		$cnt = $this->v_utils->v_info('Jetzt kannst Du Dein Passwort ändern.');
+		$cnt = $this->v_utils->v_info($this->translator->trans('register.change-password'));
 		$cnt .= '
 			<form name="newPass" method="post" class="contact-form">
 				<input type="hidden" name="k" value="' . $key . '" />
 				' . $this->v_utils->v_form_passwd('pass1') . '
 				' . $this->v_utils->v_form_passwd('pass2') . '
-				' . $this->v_utils->v_form_submit($this->translationHelper->s('save'), 'submitted') . '
+				' . $this->v_utils->v_form_submit($this->translator->trans('button.save'), 'submitted') . '
 			</form>';
 
-		return $this->v_utils->v_field($cnt, 'Neues Passwort setzen', ['class' => 'ui-padding']);
+		return $this->v_utils->v_field($cnt, $this->translator->trans('register.set-password'), ['class' => 'ui-padding']);
 	}
 
-	public function success($msg, $title = false)
+	public function success(string $msg, $title = false): void
 	{
 		$t = '';
 		if ($title !== false) {

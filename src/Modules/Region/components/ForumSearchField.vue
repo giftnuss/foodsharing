@@ -27,9 +27,9 @@
         <input
           id="forum-searchfield"
           v-model="query"
-          :placeholder="$i18n('search.placeholder')"
+          :placeholder="$i18n('search.forum')"
           type="text"
-          class="form-control text-primary w-50"
+          class="form-control text-primary"
           aria-labelledby="forum-searchfield-label"
           aria-placeholder=""
         >
@@ -42,7 +42,7 @@
       class="dropdown-menu"
     >
       <forum-search-results
-        :themes="themes || []"
+        :threads="threads || []"
         :group-id="groupId"
         :subforum-id="subforumId"
         :query="query"
@@ -78,7 +78,7 @@ export default {
       query: '',
       isOpen: false,
       isLoading: false,
-      themes: []
+      threads: []
     }
   },
   computed: {
@@ -134,7 +134,7 @@ export default {
         // query has changed, throw away this response
         return false
       }
-      this.themes = res
+      this.threads = res
       this.isLoading = false
     },
     clickOutListener () {
@@ -145,8 +145,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #forum-search-results {
-    display: block;
-    width: 250px;
-  }
+#forum-search {
+  display: block;
+}
 </style>

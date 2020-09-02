@@ -7,28 +7,28 @@ use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Legal\LegalGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginGateway extends BaseGateway
 {
-	private $emailHelper;
-	private $translationHelper;
-	private $legalGateway;
+	private LegalGateway $legalGateway;
+	private EmailHelper $emailHelper;
+	private TranslatorInterface $translator;
 
 	public function __construct(
-		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper,
 		Database $db,
-		LegalGateway $legalGateway
+		LegalGateway $legalGateway,
+		EmailHelper $emailHelper,
+		TranslatorInterface $translator
 	) {
-		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
 		$this->legalGateway = $legalGateway;
+		$this->emailHelper = $emailHelper;
+		$this->translator = $translator;
 
 		parent::__construct($db);
 	}
 
-	public function login($email, $pass)
+	public function login(string $email, string $pass)
 	{
 		$email = trim($email);
 		if ($this->db->exists('fs_email_blacklist', ['email' => $email])) {
@@ -51,7 +51,7 @@ class LoginGateway extends BaseGateway
 	 * Check given email and password combination,
 	 * update password if old-style one is detected.
 	 */
-	public function checkClient($email, $pass = false)
+	public function checkClient(string $email, $pass = false)
 	{
 		$email = trim($email);
 		if (strlen($email) < 2 || strlen($pass) < 1) {
@@ -80,7 +80,7 @@ class LoginGateway extends BaseGateway
 	}
 
 	/**
-	 * hashes password with modern hashing algorithmn.
+	 * hashes password with modern hashing algorithm.
 	 */
 	public function password_hash($password)
 	{
@@ -103,14 +103,14 @@ class LoginGateway extends BaseGateway
 				'password' => strip_tags($this->password_hash($data->password)),
 				'name' => strip_tags($data->firstName),
 				'nachname' => strip_tags($data->lastName),
-				'geb_datum' => strip_tags($data->birthday),
+				'geb_datum' => strip_tags($data->birthday), // FIXME DateTime / string mismatch
 				'handy' => strip_tags($data->mobilePhone),
 				'newsletter' => (int)$data->subscribeNewsletter,
 				'geschlecht' => (int)$data->gender,
 				'anmeldedatum' => $this->db->now(),
 				'privacy_notice_accepted_date' => $this->legalGateway->getPnVersion(),
 				'privacy_policy_accepted_date' => $this->legalGateway->getPpVersion(),
-				'token' => strip_tags($token)
+				'token' => strip_tags($token),
 			]
 		);
 	}
@@ -122,57 +122,61 @@ class LoginGateway extends BaseGateway
 
 	public function newPassword(array $data)
 	{
-		if (strlen($data['pass1']) > 4) {
-			if ($fsid = $this->db->fetchValueByCriteria(
-				'fs_pass_request',
-				'foodsaver_id',
-				['name' => strip_tags($data['k'])]
-			)) {
-				$this->db->delete('fs_pass_request', ['foodsaver_id' => (int)$fsid]);
-
-				return $this->db->update(
-					'fs_foodsaver',
-					[
-						'password' => strip_tags($this->password_hash($data['pass1']))
-					],
-					['id' => (int)$fsid]
-				);
-			}
+		if (strlen($data['pass1']) <= 4) {
+			return false;
 		}
 
-		return false;
+		$fsid = $this->db->fetchValueByCriteria(
+			'fs_pass_request',
+			'foodsaver_id',
+			['name' => strip_tags($data['k'])]
+		);
+		if (!$fsid) {
+			return false;
+		}
+
+		$this->db->delete('fs_pass_request', ['foodsaver_id' => (int)$fsid]);
+
+		return $this->db->update(
+			'fs_foodsaver',
+			[
+				'password' => strip_tags($this->password_hash($data['pass1']))
+			],
+			['id' => (int)$fsid]
+		);
 	}
 
-	public function addPassRequest(string $email, $mail = true)
+	public function addPassRequest(string $email, bool $mail = true)
 	{
-		if ($fs = $this->db->fetchByCriteria(
+		$fs = $this->db->fetchByCriteria(
 			'fs_foodsaver',
 			['id', 'email', 'name', 'geschlecht'],
 			['deleted_at' => null, 'email' => strip_tags($email)]
-		)) {
-			$key = bin2hex(random_bytes(16));
-
-			$this->db->insertOrUpdate('fs_pass_request', [
-				'foodsaver_id' => $fs['id'],
-				'name' => $key,
-				'time' => $this->db->now()
-			]);
-
-			if ($mail) {
-				$vars = [
-					'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
-					'name' => $fs['name'],
-					'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r')
-				];
-
-				$this->emailHelper->tplMail('user/reset_password', $fs['email'], $vars, false, true);
-
-				return true;
-			}
-
-			return $key;
+		);
+		if (!$fs) {
+			return false;
 		}
 
-		return false;
+		$key = bin2hex(random_bytes(16));
+
+		$this->db->insertOrUpdate('fs_pass_request', [
+			'foodsaver_id' => $fs['id'],
+			'name' => $key,
+			'time' => $this->db->now()
+		]);
+
+		if ($mail) {
+			$vars = [
+				'link' => BASE_URL . '/?page=login&sub=passwordReset&k=' . $key,
+				'name' => $fs['name'],
+				'anrede' => $this->translator->trans('salutation.' . $fs['geschlecht']),
+			];
+
+			$this->emailHelper->tplMail('user/reset_password', $fs['email'], $vars, false, true);
+
+			return true;
+		}
+
+		return $key;
 	}
 }

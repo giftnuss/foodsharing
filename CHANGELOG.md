@@ -1,13 +1,17 @@
 # Unreleased
 
 ## Features
+- Display deep link to forum posts, better responsive layout #937 !1650 !1652 @ChrisOelmueller
+- New store status "permanently closed" #786 !1655 @ChrisOelmueller
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
 - Disable chat notification by mail for new users. #949 !1620 @chriswalg
 - Removed quiz description #737 !1565 @chriswalg
 - Removed unused legal agreement for new amb's #821 !1619 @chriswalg
+- Allow translating lots and lots of text !1637 @ChrisOelmueller
 - Workgroup Admins of Startpage and Team/Partner page can edit their pages #967 !1651 @fs_k
+- Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
 - Add store log for different user activities in store #553 !1658 @fs_k
 
 ## Bugfixes
@@ -17,16 +21,21 @@
 - Removed form for new amb's #821 !1619 @chriswalg
 - Fix default center value for leaflet map !1644 @alex.simm
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
+- Try to correct scrolling to requested forum post #930 #968 !1650 @ChrisOelmueller
+- Allow adding workgroup admins or members if none exist currently #896 !1637 @ChrisOelmueller
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
 - Renamed unused table fs_basket_has_wallpost and removed related code #889 !1569 @chriswalg
+- Rewrite forum thread list in Vue #86 #764 #962 !1650 !1652 @ChrisOelmueller
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
-- Move buddy requests to REST endpoint #847 #798 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Move registration request to the REST endpoint #819 !1632 @alex.simm
+- Use TranslatorInterface for many old translations !1637 !1655 @ChrisOelmueller
 - Prepare event invitations for REST !1627 @ChrisOelmueller
+- Some PHP linting chores and more type hints !1641 @ChrisOelmueller
+- Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 @alex.simm

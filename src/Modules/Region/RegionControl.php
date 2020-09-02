@@ -16,28 +16,23 @@ use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RegionControl extends Control
 {
-	private $region;
-	private $gateway;
-	private $eventGateway;
-	private $forumGateway;
-	private $foodSharePointGateway;
-	private $foodsaverGateway;
-	private $forumFollowerGateway;
-	/* @var TranslatorInterface */
-	private $translator;
-	/* @var FormFactoryInterface */
-	private $formFactory;
-	private $forumTransactions;
-	private $forumPermissions;
-	private $regionPermissions;
-	private $regionHelper;
-	private $imageService;
-	private $reportPermissions;
-	private $mailboxGateway;
+	private array $region;
+	private RegionGateway $gateway;
+	private EventGateway $eventGateway;
+	private ForumGateway $forumGateway;
+	private FoodSharePointGateway $foodSharePointGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
+	private FormFactoryInterface $formFactory;
+	private ForumTransactions $forumTransactions;
+	private ForumPermissions $forumPermissions;
+	private RegionPermissions $regionPermissions;
+	private ImageHelper $imageService;
+	private ReportPermissions $reportPermissions;
+	private MailboxGateway $mailboxGateway;
 
 	private const DisplayAvatarListEntries = 30;
 
@@ -59,9 +54,7 @@ final class RegionControl extends Control
 		RegionPermissions $regionPermissions,
 		ForumTransactions $forumTransactions,
 		RegionGateway $gateway,
-		RegionHelper $regionHelper,
 		ReportPermissions $reportPermissions,
-		TranslatorInterface $translator,
 		ImageHelper $imageService,
 		MailboxGateway $mailboxGateway
 	) {
@@ -74,21 +67,19 @@ final class RegionControl extends Control
 		$this->foodsaverGateway = $foodsaverGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumTransactions = $forumTransactions;
-		$this->regionHelper = $regionHelper;
 		$this->reportPermissions = $reportPermissions;
-		$this->translator = $translator;
 		$this->imageService = $imageService;
 		$this->mailboxGateway = $mailboxGateway;
 
 		parent::__construct();
 	}
 
-	private function mayAccessApplications($regionId)
+	private function mayAccessApplications(int $regionId): bool
 	{
 		return $this->forumPermissions->mayAccessAmbassadorBoard($regionId);
 	}
 
-	private function regionViewData($region, $activeSubpage)
+	private function regionViewData(array $region, string $activeSubpage): array
 	{
 		$isWorkGroup = $this->isWorkGroup($region);
 		$regionId = (int)$region['id'];
@@ -170,7 +161,7 @@ final class RegionControl extends Control
 		return $viewdata;
 	}
 
-	private function isWorkGroup($region)
+	private function isWorkGroup(array $region): bool
 	{
 		return $region['type'] == Type::WORKING_GROUP;
 	}
@@ -188,7 +179,7 @@ final class RegionControl extends Control
 			$region['moderated'] = $region['moderated'] || in_array($region['type'], $big);
 			$this->region = $region;
 		} else {
-			$this->flashMessageHelper->error($this->translator->trans('region.not_a_member_error'));
+			$this->flashMessageHelper->error($this->translator->trans('region.not-member'));
 			$this->routeHelper->go('/?page=dashboard');
 
 			return;
@@ -209,7 +200,7 @@ final class RegionControl extends Control
 				break;
 			case 'wall':
 				if (!$this->isWorkGroup($region)) {
-					$this->flashMessageHelper->info($this->translationHelper->s('redirect_to_forum_no_workgroup'));
+					$this->flashMessageHelper->info($this->translator->trans('region.forum-redirect'));
 					$this->routeHelper->go('/?page=bezirk&bid=' . $region_id . '&sub=forum');
 				} else {
 					$this->wall($request, $response, $region);
@@ -240,14 +231,14 @@ final class RegionControl extends Control
 		}
 	}
 
-	private function wall(Request $request, Response $response, $region)
+	private function wall(Request $request, Response $response, array $region)
 	{
 		$viewdata = $this->regionViewData($region, $request->query->get('sub'));
 		$viewdata['wall'] = ['module' => 'bezirk', 'wallId' => $region['id']];
 		$response->setContent($this->render('pages/Region/wall.twig', $viewdata));
 	}
 
-	private function foodSharePoint(Request $request, Response $response, $region)
+	private function foodSharePoint(Request $request, Response $response, array $region)
 	{
 		$this->pageHelper->addBread($this->translator->trans('terminology.fsp'), '/?page=bezirk&bid=' . $region['id'] . '&sub=fairteiler');
 		$this->pageHelper->addTitle($this->translator->trans('terminology.fsp'));
@@ -257,17 +248,19 @@ final class RegionControl extends Control
 		$response->setContent($this->render('pages/Region/foodSharePoint.twig', $viewdata));
 	}
 
-	private function handleNewThreadForm(Request $request, $region, $ambassadorForum, $postActiveWithoutModeration)
+	private function handleNewThreadForm(Request $request, array $region, $ambassadorForum, bool $postActiveWithoutModeration)
 	{
 		$this->pageHelper->addBread($this->translator->trans('forum.new_thread'));
 		$data = CreateForumThreadData::create();
 		$form = $this->formFactory->create(ForumCreateThreadForm::class, $data, ['postActiveWithoutModeration' => $postActiveWithoutModeration]);
 		$form->handleRequest($request);
-		if ($form->isSubmitted() && $form->isValid() && $this->forumPermissions->mayPostToRegion(
-				$region['id'],
-				$ambassadorForum
-			)) {
-			$threadId = $this->forumTransactions->createThread($this->session->id(), $data->title, $data->body, $region, $ambassadorForum, $postActiveWithoutModeration, $data->sendMail);
+		if ($form->isSubmitted() && $form->isValid()
+			&& $this->forumPermissions->mayPostToRegion($region['id'], $ambassadorForum)
+		) {
+			$threadId = $this->forumTransactions->createThread(
+				$this->session->id(), $data->title, $data->body, $region,
+				$ambassadorForum, $postActiveWithoutModeration, $data->sendMail
+			);
 
 			$this->forumFollowerGateway->followThreadByEmail($this->session->id(), $threadId);
 			$this->forumFollowerGateway->followThreadByBell($this->session->id(), $threadId);
@@ -290,16 +283,14 @@ final class RegionControl extends Control
 		$this->pageHelper->addTitle($trans);
 		$viewdata['sub'] = $sub;
 
-		if ($tid = $request->query->getInt('tid')) {
-			/* this index triggers the rendering of the vue forum component */
-			$viewdata['thread'] = ['id' => $tid];
-			$viewdata['posts'] = [];
+		if ($threadId = $request->query->getInt('tid')) {
+			$viewdata['threadId'] = $threadId; // this triggers the rendering of the vue component `Thread`
 		} elseif ($request->query->has('newthread')) {
-			$postActiveWithoutModeration = ($this->session->user('verified') && !$this->region['moderated']) || $this->session->isAmbassadorForRegion([$region['id']]);
+			$postActiveWithoutModeration = $this->forumPermissions->mayStartUnmoderatedThread($region, $ambassadorForum);
 			$viewdata['newThreadForm'] = $this->handleNewThreadForm($request, $region, $ambassadorForum, $postActiveWithoutModeration);
 			$viewdata['postActiveWithoutModeration'] = $postActiveWithoutModeration;
 		} else {
-			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($region['id'], $ambassadorForum), $region['id'], $ambassadorForum);
+			$viewdata['threads'] = []; // this triggers the rendering of the vue component `ThreadList`
 		}
 
 		$response->setContent($this->render('pages/Region/forum.twig', $viewdata));
@@ -307,8 +298,8 @@ final class RegionControl extends Control
 
 	private function events(Request $request, Response $response, $region)
 	{
-		$this->pageHelper->addBread($this->translator->trans('events.name'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
-		$this->pageHelper->addTitle($this->translator->trans('events.name'));
+		$this->pageHelper->addBread($this->translator->trans('events.bread'), '/?page=bezirk&bid=' . $region['id'] . '&sub=events');
+		$this->pageHelper->addTitle($this->translator->trans('events.bread'));
 		$sub = $request->query->get('sub');
 		$viewdata = $this->regionViewData($region, $sub);
 

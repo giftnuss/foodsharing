@@ -64,9 +64,11 @@
       :key="post.id"
     >
       <ThreadPost
-        :name="`post-${post.id}`"
+        :id="post.id"
+        :user-id="userId"
         :author="post.author"
         :body="post.body"
+        :deep-link="getPostLink(post.id)"
         :reactions="post.reactions"
         :may-delete="post.mayDelete"
         :may-edit="false"
@@ -76,6 +78,7 @@
         @reactionAdd="reactionAdd(post, arguments[0])"
         @reactionRemove="reactionRemove(post, arguments[0])"
         @reply="reply"
+        @scroll="scrollToPost(post.id)"
       />
     </div>
 
@@ -116,7 +119,7 @@
     <b-modal
       ref="deleteModal"
       :title="$i18n('forum.thread.delete')"
-      :cancel-title="$i18n('button.abort')"
+      :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.yes_i_am_sure')"
       @ok="deleteThread"
     >
@@ -165,16 +168,27 @@ export default {
       errorMessage: null
     }
   },
+  computed: {
+    userId () {
+      return user.id
+    }
+  },
   async created () {
     this.isLoading = true
     await this.reload()
-    this.scrollToPost(GET('pid'))
+    setTimeout(() => { this.scrollToPost(GET('pid')) }, 200)
   },
   methods: {
-    scrollToPost (pid) {
-      const els = window.document.getElementsByName(`post-${pid}`)
-      if (els.length > 0) {
-        els[0].scrollIntoView(false)
+    getPostLink (postId) {
+      return this.$url('forum', this.regionId, this.regionSubId, this.id, postId)
+    },
+    scrollToPost (postId) {
+      const deepLink = this.getPostLink(postId)
+      window.history.pushState({ postId }, 'Post deeplink', deepLink)
+
+      const p = window.document.getElementById(`post-${postId}`)
+      if (p) {
+        p.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
     },
     reply (body) {
@@ -305,7 +319,7 @@ export default {
         reactions: {},
         author: {
           name: `${user.firstname} ${user.lastname}`,
-          avatar: user.avatar['130']
+          avatar: user.avatar['130'].replace(/^(\/images\/130_q_)/, '')
         }
       }
       this.loadingPosts.push(-1)

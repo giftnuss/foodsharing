@@ -71,7 +71,7 @@ class StoreUserView extends View
 			} else {
 				$odd = 'even';
 			}
-			$verificationStatus = $r['verified'] ? '<i class="fas fa-user-check" title="' . $this->translationHelper->s('user_is_verified') . '"></i> ' : '';
+			$verificationStatus = $r['verified'] ? '<i class="fas fa-user-check" title="' . $this->translator->trans('store.request.verified') . '"></i> ' : '';
 			$out .= '
 		<tr class="' . $odd . ' request-' . $r['id'] . '">
 			<td class="img" width="35px"><a href="/profile/' . (int)$r['id'] . '"><img src="' . $this->imageService->img($r['photo']) . '" /></a></td>

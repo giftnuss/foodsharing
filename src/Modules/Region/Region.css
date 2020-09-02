@@ -1,43 +1,3 @@
-.user_pic,
-.thread_title {
-  float: left;
-  display: block;
-}
-
-.user_pic {
-  margin-right: 10px;
-  width: 64px;
-  height: 50px;
-  background-image: url(/img/forum_bubble.png);
-}
-
-span.thread_title {
-  font-size: 15px;
-  margin-top: 15px !important;
-  margin-left: 5px !important;
-  color: var(--fs-brown);
-  width: 55%;
-}
-
-.last_post {
-  float: right;
-  padding: 7px !important;
-  background-color: #ffffff !important;
-  color: #4a3522 !important;
-  width: 170px;
-}
-
-.last_post span {
-  background-color: #ffffff !important;
-  color: #4a3522 !important;
-  font-size: 12px;
-}
-
-ul.forum_threads.linklist li a:hover,
-ul.forum_threads.linklist li a:hover span.last_post span {
-  color: #4a3522 !important;
-}
-
 div.post_body {
   float: left;
   margin-top: 7px;
@@ -67,29 +27,6 @@ ul.food-share-point-list li a span.image.noimage {
 ul.food-share-point-list li a span.clear {
   display: block;
   clear: both;
-}
-
-.item_is_active {
-  background: none repeat scroll 0 0 #cadcba;
-  cursor: default;
-}
-
-.item_is_not_active {
-  background: none repeat scroll 0 0 #f6e3e3;
-  cursor: default;
-}
-
-.item_is_active,
-.item_is_not_active {
-  display: inline-block;
-  padding: 4px 8px 4px 4px;
-  width: 60px;
-}
-
-.item_is_active span,
-.item_is_not_active span {
-  position: relative;
-  top: -2px;
 }
 
 .event .welcome_profile_name {
@@ -144,22 +81,7 @@ div.event {
   text-align: center;
 }
 
-.thread .info {
-  font-weight: lighter !important;
-}
-
-.user_pic .avatar {
-  margin-top: 7px;
-  margin-left: 7px;
-  border-radius: 3px;
-}
-
-.user_pic .avatar span.bubble {
-  margin-left: 37px !important;
-  margin-top: -40px !important;
-  color: var(--fs-brown) !important;
-}
-
+/* TODO move me to MemberList.vue */
 .user_pic_width {
   width: 50px;
 }

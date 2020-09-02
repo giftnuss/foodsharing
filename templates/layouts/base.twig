@@ -30,16 +30,16 @@
 
         {% block head %}{% endblock %}
 
-        <meta name="description" content="Auf foodsharing.de kannst Du Deine Lebensmittel vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
-        <meta name="keywords" content="foodsharing, essen, lebensmittel, ablaufdatum, Lebensmittelverschwendung, essen wegschmeissen, spenden, lebensmitteltausch" />
+        <meta name="description" content="{{ 'base.whatfor'|trans }}" />
+        <meta name="keywords" content="{{ 'base.keywords'|trans }}" />
         <meta name="author" content="foodsharing" />
         <meta name="robots" content="all" />
         <meta name="allow-search" content="yes" />
         <meta name="revisit-after" content="1 days" />
         <meta name="google-site-verification" content="pZxwmxz2YMVLCW0aGaS5gFsCJRh-fivMv1afrDYFrks" />
 
-        <meta property="og:title" content="Lebensmittel teilen, statt wegwerfen - foodsharing Deutschland" />
-        <meta property="og:description" content="Auf foodsharing kannst Du Deine Lebensmitteln vor dem Verfall an soziale Einrichtungen oder andere Personen abgeben" />
+        <meta property="og:title" content="{{ 'base.slogan'|trans }}" />
+        <meta property="og:description" content="{{ 'base.whatfor'|trans }}" />
         <meta property="og:image" content="https://foodsharing.de/img/foodsharinglogo_200px.png" />
         <meta property="og:url" content="https://foodsharing.de" />
 
@@ -150,7 +150,7 @@
 
         <noscript>
             <div id="nojs" class="bootstrap">
-                <div class="alert alert-danger">Ohne JavaScript l&auml;uft hier leider nichts.</div>
+                <div class="alert alert-danger">{{ 'base.jsrequired'|trans }}</div>
             </div>
         </noscript>
 

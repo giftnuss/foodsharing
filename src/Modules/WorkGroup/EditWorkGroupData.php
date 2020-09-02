@@ -78,10 +78,13 @@ class EditWorkGroupData
 		$workGroupRequest->fetchCount = $group['fetch_count'];
 		$workGroupRequest->weekNum = $group['week_num'];
 		$workGroupRequest->photo = $group['photo'] ? 'images/' . $group['photo'] : null;
-		$workGroupRequest->members = [];
+
+		$workGroupRequest->members = [null]; // [#896] make sure to enable deleteEmptyItems
 		foreach ($group['member'] as $m) {
 			$workGroupRequest->members[$m['id']] = $m['name'];
 		}
+
+		$workGroupRequest->administrators = [null]; // [#896] make sure to enable deleteEmptyItems
 		foreach ($group['leader'] as $m) {
 			$workGroupRequest->administrators[$m['id']] = $m['name'];
 		}

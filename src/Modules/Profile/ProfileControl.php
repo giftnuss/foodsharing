@@ -9,7 +9,6 @@ use Foodsharing\Modules\Mails\MailsGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\ProfilePermissions;
 use Foodsharing\Permissions\ReportPermissions;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ProfileControl extends Control
 {
@@ -21,7 +20,6 @@ final class ProfileControl extends Control
 	private $reportPermissions;
 	private $profilePermissions;
 	private $mailsGateway;
-	private $translator;
 
 	public function __construct(
 		MailsGateway $mailsGateway,
@@ -31,7 +29,6 @@ final class ProfileControl extends Control
 		BasketGateway $basketGateway,
 		MailboxGateway $mailboxGateway,
 		ReportPermissions $reportPermissions,
-		TranslatorInterface $translator,
 		ProfilePermissions $profilePermissions
 	) {
 		$this->view = $view;
@@ -42,7 +39,6 @@ final class ProfileControl extends Control
 		$this->reportPermissions = $reportPermissions;
 		$this->profilePermissions = $profilePermissions;
 		$this->mailsGateway = $mailsGateway;
-		$this->translator = $translator;
 
 		parent::__construct();
 

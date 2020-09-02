@@ -35,7 +35,7 @@ class PushNotificationGatewayTest extends \Codeception\Test\Unit
 			"keys": {
 				"p256dh": "BIPUL12DLfytvTajnryr2PRdAgXS3HGKiLqndGcJGabyhHheJYlNGCeXl1dn18gSJ1WAkAPIxr4gK0_dQds4yiI=",
 				"auth":"FPssNDTKnInHVndSTdbKFw=="
- 			}
+			}
 		}';
 	}
 

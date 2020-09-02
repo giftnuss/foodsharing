@@ -32,7 +32,7 @@ class TeamXhr extends Control
 		$minutesWaiting = 10;
 
 		if ($this->gateway->isABlockedIP($minutesWaiting * 60, 'contact')) {
-			$xhr->addMessage($this->translationHelper->sv('wait-var-minutes-till-next-message', ['minutes' => $minutesWaiting]), 'error');
+			$xhr->addMessage($this->translator->trans('team.ratelimit', ['{minutes}' => $minutesWaiting]), 'error');
 			$xhr->send();
 		}
 
@@ -52,25 +52,25 @@ class TeamXhr extends Control
 
 				$senderName = strip_tags($_POST['name']);
 
-				$msg = 'Name: ' . $senderName . "\n";
-				$msg .= $this->translationHelper->s('email') . ': ' . strip_tags($_POST['email']) . "\n\n";
+				$msg = $this->translator->trans('team.name') . ': ' . $senderName . "\n";
+				$msg .= $this->translator->trans('team.email') . ': ' . strip_tags($_POST['email']) . "\n\n";
 				$msg .= $_POST['message'];
 
 				$mail->setBody($msg);
 				$mail->setHtmlBody($this->sanitizerService->plainToHtml($msg));
-				$mail->setSubject($this->translationHelper->sv('var-name-send-fs-contact-message', ['name' => $senderName]));
+				$mail->setSubject($this->translator->trans('team.contact', ['{name}' => $senderName]));
 
 				$mail->addRecipient($user['email']);
 
 				$mail->send();
 
 				$xhr->addScript('$("#contactform").parent().parent().parent().fadeOut();');
-				$xhr->addMessage($this->translationHelper->s('mail_send_success'), 'success');
+				$xhr->addMessage($this->translator->trans('team.contacted'), 'success');
 				$xhr->send();
 			}
 		}
 
-		$xhr->addMessage($this->translationHelper->s('error'), 'error');
+		$xhr->addMessage($this->translator->trans('error_unexpected'), 'error');
 		$xhr->send();
 	}
 }

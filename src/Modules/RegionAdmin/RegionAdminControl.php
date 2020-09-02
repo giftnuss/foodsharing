@@ -35,33 +35,37 @@ class RegionAdminControl extends Control
 	public function index()
 	{
 		$id = $this->identificationHelper->id('tree');
-		$this->pageHelper->addBread($this->translationHelper->s('bezirk_bread'), '/?page=region');
-		$this->pageHelper->addTitle($this->translationHelper->s('bezirk_bread'));
-		$cnt = '
-		<div>
-			<div style="float:left;width:150px;" id="' . '..' . '"></div>
-			<div style="float:right;width:250px;"></div>
-			<div style="clear:both;"></div>
-		</div>';
+		$this->pageHelper->addBread($this->translator->trans('region.bread'), '/?page=region');
+		$this->pageHelper->addTitle($this->translator->trans('region.bread'));
 
-		$this->pageHelper->addStyle('#bezirk-buttons {left: 50%; margin-left: 5px;position: absolute;top: 77px;}');
+		$this->pageHelper->addStyle('#bezirk-buttons {left: 50%; margin-left: 5px; position: absolute; top: 77px;}');
 
-		$bezirke = $this->regionGateway->getBasics_bezirk();
+		$regions = $this->regionGateway->getBasics_bezirk();
 
-		array_unshift($bezirke, ['id' => RegionIDs::ROOT, 'name' => 'Ohne `Eltern` Bezirk']);
+		array_unshift($regions, [
+			'id' => RegionIDs::ROOT,
+			'name' => $this->translator->trans('region.noParent'),
+		]);
 
 		$this->pageHelper->hiddenDialog('newbezirk', [
 			$this->v_utils->v_form_text('Name'),
 			$this->v_utils->v_form_text('email'),
-			$this->v_utils->v_form_select('parent_id', ['values' => $bezirke])
-		], 'Neuer Bezirk');
+			$this->v_utils->v_form_select('parent_id', ['values' => $regions])
+		], $this->translator->trans('region.new'));
 
-		$this->pageHelper->addContent($this->v_utils->v_field('<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>', 'Bezirk bearbeiten', ['class' => 'ui-padding']), CNT_LEFT);
-		$this->pageHelper->addContent($this->v_utils->v_field($this->view->v_bezirk_tree($id) . '
+		$this->pageHelper->addContent($this->v_utils->v_field(
+			'<div><div id="' . $this->identificationHelper->id('bezirk_form') . '"></div></div>',
+			$this->translator->trans('region.edit'),
+			['class' => 'ui-padding']
+		), CNT_LEFT);
+		$this->pageHelper->addContent($this->v_utils->v_field(
+			$this->view->v_bezirk_tree($id) . '
 				<div id="bezirk-buttons" class="bootstrap">
-					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility:hidden;" onclick="deleteActiveGroup()">' . $this->translationHelper->s('group.delete') . '</button>
-					' . $this->v_utils->v_dialog_button('newbezirk', 'Neuer Bezirk') . '
-				</div>', 'Bezirke'), CNT_RIGHT);
+					<button id="deletebezirk" class="btn btn-secondary btn-sm" style="visibility: hidden;" onclick="deleteActiveGroup()">' . $this->translator->trans('region.delete') . '</button>
+					' . $this->v_utils->v_dialog_button('newbezirk', $this->translator->trans('region.new')) . '
+				</div>',
+			$this->translator->trans('terminology.regions')
+		), CNT_RIGHT);
 
 		$this->view->i_map($id);
 	}

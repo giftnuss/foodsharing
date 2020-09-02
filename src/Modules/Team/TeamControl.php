@@ -25,8 +25,8 @@ class TeamControl extends Control
 
 	public function index(): void
 	{
-		$this->pageHelper->addBread($this->translationHelper->s('team'), '/team');
-		$this->pageHelper->addTitle($this->translationHelper->s('team'));
+		$this->pageHelper->addBread($this->translator->trans('team.current'), '/team');
+		$this->pageHelper->addTitle($this->translator->trans('team.current'));
 
 		// Three types of pages:
 		// a) /team - displays board
@@ -55,14 +55,14 @@ class TeamControl extends Control
 		if ($teamType = $this->uriStr(2)) {
 			if ($teamType === 'ehemalige') {
 				// Type b, display "Ehemalige"
-				$this->pageHelper->addBread($this->translationHelper->s('Ehemalige'), '/team/ehemalige');
-				$this->pageHelper->addTitle($this->translationHelper->s('Ehemalige'));
+				$this->pageHelper->addBread($this->translator->trans('team.former'), '/team/ehemalige');
+				$this->pageHelper->addTitle($this->translator->trans('team.former'));
 				$this->displayTeamContent(RegionIDs::TEAM_ALUMNI_MEMBER, 54);
 
 				return;
 			}
 
-			$this->pageHelper->addContent('Page not found');
+			$this->pageHelper->addContent($this->translator->trans('team.not-found'));
 
 			return;
 		}

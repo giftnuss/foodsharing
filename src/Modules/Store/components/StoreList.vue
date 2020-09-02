@@ -241,11 +241,11 @@ export default {
       ],
       statusOptions: [
         { value: null, text: 'Status' },
-        { value: 1, text: i18n('storelist.nocontact') },
-        { value: 2, text: i18n('storelist.inprogress') },
-        { value: 3, text: i18n('storelist.cooperating') },
-        { value: 4, text: i18n('storelist.notcooperating') },
-        { value: 6, text: i18n('storelist.nowaste') }
+        { value: 1, text: i18n('storestatus.1') }, // CooperationStatus::NO_CONTACT
+        { value: 2, text: i18n('storestatus.2') }, // CooperationStatus::IN_NEGOTIATION
+        { value: 3, text: i18n('storestatus.3') }, // CooperationStatus::COOPERATION_STARTING or COOPERATION_ESTABLISHED
+        { value: 4, text: i18n('storestatus.4') }, // CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US
+        { value: 6, text: i18n('storestatus.6') } // CooperationStatus::GIVES_TO_OTHER_CHARITY
       ]
     }
   },

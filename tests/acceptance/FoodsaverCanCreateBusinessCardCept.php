@@ -22,7 +22,7 @@ $foodsaver = $I->createFoodsaver(null, ['name' => 'fs1', 'nachname' => 'saver1',
 $I->login($foodsaver['email']);
 
 $I->amOnPage('/?page=bcard');
-$I->selectOption('Optionen', 'Foodsaver für ' . $region['name']);
+$I->selectOption('Optionen', 'Foodsaver*in für ' . $region['name']);
 
 /* ToDo: Not supported in new CI run style */
 //$I->waitForFileExists('/downloads/bcard-fs.pdf');

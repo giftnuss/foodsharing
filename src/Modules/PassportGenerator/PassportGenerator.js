@@ -1,11 +1,13 @@
 /* eslint-disable eqeqeq,camelcase */
+import $ from 'jquery'
 import '@/core'
 import '@/globals'
-import $ from 'jquery'
 import '@/tablesorter'
+import i18n from '@/i18n'
 import {
   showLoader,
   hideLoader,
+  goTo,
   checkAllCb
 } from '@/script'
 import {
@@ -22,51 +24,39 @@ let verify_el = null
 $('#verifyconfirm-dialog').dialog({
   autoOpen: false,
   modal: true,
-  buttons: [
-    {
-      text: $('#verifyconfirm-dialog .button_confirm').text(),
-      click: function () {
-        showLoader()
-        $.ajax({
-          url: `/xhr.php?f=verify&fid=${verify_fid}&v=1`,
-          dataType: 'json',
-          success: function (data) {
-            verify_el.removeClass('verify-n')
-            verify_el.addClass('verify-y')
-          },
-          complete: function () {
-            hideLoader()
-            $('#verifyconfirm-dialog').dialog('close')
-          }
-        })
-      }
+  buttons: {
+    [i18n('pass.button.verify')]: function () {
+      showLoader()
+      $.ajax({
+        url: `/xhr.php?f=verify&fid=${verify_fid}&v=1`,
+        dataType: 'json',
+        success: function (data) {
+          verify_el.removeClass('verify-do')
+          verify_el.addClass('verify-undo')
+        },
+        complete: () => {
+          hideLoader()
+          $(this).dialog('close')
+        }
+      })
     },
-    {
-      text: $('#verifyconfirm-dialog .button_abort').text(),
-      click: function () {
-        $('#verifyconfirm-dialog').dialog('close')
-      }
+    [i18n('button.cancel')]: function () {
+      $(this).dialog('close')
     }
-  ]
+  }
 })
+
 $('#unverifyconfirm-dialog').dialog({
   autoOpen: false,
   modal: true,
-  buttons: [
-    {
-      text: $('#unverifyconfirm-dialog .button_confirm').text(),
-      click: function () {
-        showLoader()
-        window.location.href = `/profile/${verify_fid}`
-      }
+  buttons: {
+    [i18n('pass.button.check')]: function () {
+      goTo(`/profile/${verify_fid}`)
     },
-    {
-      text: $('#unverifyconfirm-dialog .button_abort').text(),
-      click: function () {
-        $('#unverifyconfirm-dialog').dialog('close')
-      }
+    [i18n('button.cancel')]: function () {
+      $(this).dialog('close')
     }
-  ]
+  }
 })
 
 $('.checker').on('click', function (el) {
@@ -84,7 +74,7 @@ $('.verify').on('click', function () {
   verify_el = $this
   verify_fid = $this.parent().parent().children('td:first').children('input').val()
 
-  if ($this.hasClass('verify-n')) {
+  if ($this.hasClass('verify-do')) {
     $('#verifyconfirm-dialog').dialog('open')
   } else {
     showLoader()
@@ -93,12 +83,12 @@ $('.verify').on('click', function () {
       dataType: 'json',
       success: function (data) {
         if (data.status == '0') {
-          if ($this.hasClass('verify-y')) {
+          if ($this.hasClass('verify-undo')) {
             $('#unverifyconfirm-dialog').dialog('open')
           }
         } else {
-          $this.removeClass('verify-y')
-          $this.addClass('verify-n')
+          $this.removeClass('verify-undo')
+          $this.addClass('verify-do')
         }
       },
       complete: function () {
@@ -109,6 +99,7 @@ $('.verify').on('click', function () {
 
   return false
 })
+
 $('a.fsname').on('click', function () {
   const $this = $(this)
   if ($(`input[value='${$this.next().val()}']`)[0].checked) {
@@ -118,10 +109,12 @@ $('a.fsname').on('click', function () {
   }
   return false
 })
+
 $("a[href='#start']").on('click', function () {
   $('form#generate').trigger('submit')
   return false
 })
+
 $('a.dateclick').on('click', function () {
   const $this = $(this)
   const dstr = $this.next().val()

@@ -1,6 +1,6 @@
 {% import 'partials/menu.twig' as sidenav%}
 
-{{ sidenav.menu_tree(nav.global, 'Überregionale Gruppen', nav.active) }}
-{{ sidenav.menu_tree(nav.local, 'Lokalgruppen', nav.active) }}
-{{ sidenav.menu_tree(nav.countries, 'Länderspezifische Gruppen', nav.active) }}
-{{ sidenav.menu_tree(nav.groups, 'Deine Gruppen', nav.active) }}
+{{ sidenav.menu_tree(nav.global, 'sidenav.superregional'|trans, nav.active) }}
+{{ sidenav.menu_tree(nav.local, 'sidenav.localgroups'|trans, nav.active) }}
+{{ sidenav.menu_tree(nav.countries, 'sidenav.countryspecific'|trans, nav.active) }}
+{{ sidenav.menu_tree(nav.groups, 'sidenav.yourgroups'|trans, nav.active) }}

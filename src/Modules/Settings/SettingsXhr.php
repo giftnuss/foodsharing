@@ -34,7 +34,7 @@ class SettingsXhr extends Control
 		parent::__construct();
 
 		if (!$this->session->may()) {
-			return false;
+			return;
 		}
 	}
 

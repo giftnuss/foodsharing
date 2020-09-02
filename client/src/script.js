@@ -8,10 +8,10 @@ import 'jquery-fancybox'
 import 'jquery-ui-addons'
 
 import { GET, goTo, isMob } from '@/browser'
-
 import conv from '@/conv'
 import { removeStoreRequest } from '@/api/stores'
 import i18n from '@/i18n'
+
 export { goTo, isMob, GET }
 
 export function collapse_wrapper (id) {
@@ -153,17 +153,16 @@ export function initialize () {
         modal: true,
         autoOpen: false,
         buttons: {
-          'unwiderruflich löschen': function () {
+          [i18n('button.permadelete')]: function () {
             goTo($('#dialog-confirm-url').val())
             $(this).dialog('close')
           },
-          Abbrechen: function () {
+          [i18n('button.cancel')]: function () {
             $(this).dialog('close')
           }
         }
       })
     })
-    // $('.button').button();
     $('.dialog').dialog()
 
     $('ul.toolbar li').on('mouseenter', function () {
@@ -366,11 +365,6 @@ export function xhrf (func, fdata = null) {
 
 export function reload () {
   window.location.reload()
-}
-
-export function openPhotoDialog (fs_id) {
-  $('#uploadPhoto-fs_id').val(fs_id)
-  $('#uploadPhoto').dialog('open')
 }
 
 export function uploadPhoto () {
@@ -584,7 +578,7 @@ export async function withdrawStoreRequest (fsid, bid) {
 
   try {
     await removeStoreRequest(bid, fsid)
-    pulseSuccess(i18n('store.request_withdrawn'))
+    pulseSuccess(i18n('store.request.withdrawn'))
   } catch (e) {
     pulseError(i18n('error_unexpected'))
   }

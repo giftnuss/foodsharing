@@ -3,14 +3,15 @@
 namespace Foodsharing\Utility;
 
 use Carbon\Carbon;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class TimeHelper
 {
-	private $translationHelper;
+	private $translator;
 
-	public function __construct(TranslationHelper $translationHelper)
+	public function __construct(TranslatorInterface $translator)
 	{
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	// given a unix time it provides a human readable full date format.
@@ -24,11 +25,11 @@ final class TimeHelper
 		$date = Carbon::createFromTimestamp($unixTimeStamp);
 
 		if ($date->isToday()) {
-			$dateString = $this->translationHelper->s('today') . ', ';
+			$dateString = $this->translator->trans('date.today') . ', ';
 		} elseif ($date->isTomorrow()) {
-			$dateString = $this->translationHelper->s('tomorrow') . ', ';
+			$dateString = $this->translator->trans('date.tomorrow') . ', ';
 		} elseif ($date->isYesterday()) {
-			$dateString = $this->translationHelper->s('yesterday') . ', ';
+			$dateString = $this->translator->trans('date.yesterday') . ', ';
 		} else {
 			$dateString = '';
 			$extendWithAbsoluteDate = true;
@@ -39,7 +40,7 @@ final class TimeHelper
 			$dateString = $dateString . $days[date('w', $unixTimeStamp)] . ', ' . (int)date(
 					'd',
 					$unixTimeStamp
-				) . '. ' . $this->translationHelper->s('smonth_' . date('n', $unixTimeStamp));
+				) . '. ' . $this->translator->trans('month.short.' . date('n', $unixTimeStamp));
 			$year = date('Y', $unixTimeStamp);
 			if ($year != date('Y')) {
 				$dateString = $dateString . ' ' . $year;
@@ -47,28 +48,35 @@ final class TimeHelper
 			$dateString .= ', ';
 		}
 
-		return $dateString . date('H:i', $unixTimeStamp) . ' ' . $this->translationHelper->s('clock');
+		return $dateString . $this->translator->trans('date.time', [
+			'{time}' => date('H:i', $unixTimeStamp),
+		]);
 	}
 
 	public function niceDateShort($ts)
 	{
 		if (date('Y-m-d', $ts) === date('Y-m-d')) {
-			return $this->translationHelper->s('today') . ' ' . date('H:i', $ts);
+			return $this->translator->trans('date.Today') . ' ' . date('H:i', $ts);
 		}
 
 		return date('j.m.Y. H:i', $ts);
 	}
 
+	public function month($ts)
+	{
+		return $this->translator->trans('month.' . intval(date('m', $ts)));
+	}
+
 	public function getDow(): array
 	{
 		return [
-			1 => $this->translationHelper->s('monday'),
-			2 => $this->translationHelper->s('tuesday'),
-			3 => $this->translationHelper->s('wednesday'),
-			4 => $this->translationHelper->s('thursday'),
-			5 => $this->translationHelper->s('friday'),
-			6 => $this->translationHelper->s('saturday'),
-			0 => $this->translationHelper->s('sunday'),
+			1 => $this->translator->trans('date.monday'),
+			2 => $this->translator->trans('date.tuesday'),
+			3 => $this->translator->trans('date.wednesday'),
+			4 => $this->translator->trans('date.thursday'),
+			5 => $this->translator->trans('date.friday'),
+			6 => $this->translator->trans('date.saturday'),
+			0 => $this->translator->trans('date.sunday'),
 		];
 	}
 }

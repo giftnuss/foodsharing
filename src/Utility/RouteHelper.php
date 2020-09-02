@@ -5,20 +5,21 @@ namespace Foodsharing\Utility;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Legal\LegalControl;
 use Foodsharing\Modules\Legal\LegalGateway;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class RouteHelper
 {
 	private $session;
-	private $translationHelper;
+	private $translator;
 	private $legalGateway;
 
 	public function __construct(
 		Session $session,
-		TranslationHelper $translationHelper,
+		TranslatorInterface $translator,
 		LegalGateway $legalGateway
 	) {
 		$this->session = $session;
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 		$this->legalGateway = $legalGateway;
 	}
 
@@ -79,13 +80,9 @@ final class RouteHelper
 		return $_GET[$name] ?? false;
 	}
 
-	public function pageLink($page, $id, $action = '')
+	public function pageLink(string $page, ?string $title = null)
 	{
-		if (!empty($action)) {
-			$action = '&a=' . $action;
-		}
-
-		return ['href' => '/?page=' . $page . $action, 'name' => $this->translationHelper->s($id)];
+		return ['href' => '/?page=' . $page, 'name' => $title ?? $this->translator->trans('bread.backToOverview')];
 	}
 
 	public function autolink(string $str, array $attributes = [])

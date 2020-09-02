@@ -66,9 +66,6 @@ export default {
 // (see https://github.com/vuejs/vue-loader/issues/913 for a discussion)
 .team-ava .member-pic ::v-deep img {
   width: 50px;
-  height: 50px;
-  border-radius: 6px;
-  overflow: hidden;
 }
 </style>
 

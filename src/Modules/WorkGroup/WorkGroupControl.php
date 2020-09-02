@@ -63,31 +63,42 @@ class WorkGroupControl extends Control
 			&& $stats['weeks'] >= $group['week_num'];
 	}
 
-	private function mayEdit($group)
+	private function mayEdit(array $group): bool
 	{
-		/* this actually only implements access for bots for _direct parents_, not all hierarchical parents */
+		// this actually only implements access for bots for _direct parents_, not all hierarchical parents
 		return $this->session->isOrgaTeam() || $this->session->isAdminFor($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
-	private function mayAccess($group)
+	private function mayAccess(array $group): bool
 	{
 		return $this->session->mayBezirk($group['id']) || $this->session->isAdminFor($group['parent_id']);
 	}
 
-	private function mayApply($group, $applications, $stats)
+	private function mayApply(array $group, $applications, $stats): bool
 	{
-		return
-			!$this->session->mayBezirk($group['id'])
-			&& !in_array($group['id'], $applications)
-			&& ($group['apply_type'] == ApplyType::EVERYBODY
-			  || ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES && $this->fulfillApplicationRequirements($group, $stats)));
+		if ($this->session->mayBezirk($group['id'])) {
+			return false; // may not apply if already a member
+		}
+		if (in_array($group['id'], $applications)) {
+			return false; // may not apply if already applied
+		}
+		if ($group['apply_type'] == ApplyType::EVERYBODY) {
+			return true;
+		}
+		if ($group['apply_type'] == ApplyType::REQUIRES_PROPERTIES) {
+			return $this->fulfillApplicationRequirements($group, $stats);
+		}
+
+		return false;
 	}
 
-	private function mayJoin($group)
+	private function mayJoin(array $group): bool
 	{
-		return
-			!$this->session->mayBezirk($group['id'])
-			&& $group['apply_type'] == ApplyType::OPEN;
+		if ($this->session->mayBezirk($group['id'])) {
+			return false; // may not join if already a member
+		}
+
+		return $group['apply_type'] == ApplyType::OPEN;
 	}
 
 	private function getSideMenuData($activeUrlPartial = null)
@@ -131,7 +142,7 @@ class WorkGroupControl extends Control
 
 	private function list(Request $request, Response $response)
 	{
-		$this->pageHelper->addTitle($this->translationHelper->s('groups'));
+		$this->pageHelper->addTitle($this->translator->trans('terminology.groups'));
 
 		$parent = $request->query->getInt('p', RegionIDs::GLOBAL_WORKING_GROUPS);
 		$myApplications = $this->workGroupGateway->getApplications($this->session->id());

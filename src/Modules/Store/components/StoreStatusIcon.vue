@@ -25,19 +25,19 @@ export default {
   computed: {
     description () {
       switch (this.status) {
-        case 1:
-          return i18n('storestatusicon.nocontact')
-        case 2:
-          return i18n('storestatusicon.inprogress')
-        case 3:
-        case 5:
-          return i18n('storestatusicon.cooperating')
-        case 4:
-          return i18n('storestatusicon.nocooperation')
-        case 6:
-          return i18n('storestatusicon.nowaste')
-        default:
-          return i18n('storestatusicon.unclear')
+        case 1: // CooperationStatus::NO_CONTACT
+        case 2: // CooperationStatus::IN_NEGOTIATION
+          return i18n('storestatus.2')
+        case 3: // CooperationStatus::COOPERATION_STARTING
+        case 5: // CooperationStatus::COOPERATION_ESTABLISHED
+          return i18n('storestatus.5')
+        case 4: // CooperationStatus::DOES_NOT_WANT_TO_WORK_WITH_US
+        case 7: // CooperationStatus::PERMANENTLY_CLOSED
+          return i18n('storestatus.4')
+        case 6: // CooperationStatus::GIVES_TO_OTHER_CHARITY
+          return i18n('storestatus.6')
+        default: // unclear
+          return i18n('storestatus.0')
       }
     }
   }
@@ -62,7 +62,8 @@ export default {
         color: #79aa51;
     }
 
-    &[data-status="4"] {
+    &[data-status="4"],
+    &[data-status="7"] {
         color: #df4b4d;
     }
 

@@ -3,7 +3,6 @@ import '@/core'
 import '@/globals'
 import $ from 'jquery'
 import {
-  ajax,
   goTo,
   GET,
   pulseError
@@ -16,7 +15,7 @@ import Thread from './components/Thread'
 import MemberList from './components/MemberList'
 import GenderList from './components/GenderList'
 import PickupList from './components/PickupList'
-import ForumSearchField from './components/ForumSearchField'
+import ThreadList from './components/ThreadList'
 import { leaveRegion } from '@/api/regions'
 
 $(document).ready(() => {
@@ -30,31 +29,25 @@ $(document).ready(() => {
     autoOpen: false,
     modal: true,
     width: 'auto',
-    buttons: [
-      {
-        text: i18n('button.yes_i_am_sure'),
-        click: async function () {
-          try {
-            await leaveRegion($('input', this).val())
-            goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
-          } catch (e) {
-            console.error(e.code)
-            if (e.code === 409) {
-              pulseError(i18n('region.store_managers_cannot_leave'))
-            } else {
-              pulseError(i18n('error_unexpected'))
-            }
-            $(this).dialog('close')
+    buttons: {
+      [i18n('button.yes_i_am_sure')]: async function () {
+        try {
+          await leaveRegion($('input', this).val())
+          goTo(`/?page=relogin&url=${encodeURIComponent('/?page=dashboard')}`)
+        } catch (e) {
+          console.error(e.code)
+          if (e.code === 409) {
+            pulseError(i18n('region.store_managers_cannot_leave'))
+          } else {
+            pulseError(i18n('error_unexpected'))
           }
-        }
-      },
-      {
-        text: i18n('button.abort'),
-        click: function () {
           $(this).dialog('close')
         }
+      },
+      [i18n('button.cancel')]: function () {
+        $(this).dialog('close')
       }
-    ]
+    }
   })
 
   if (GET('sub') == 'wall') {
@@ -77,41 +70,11 @@ $(document).ready(() => {
         Thread
       })
       vueApply('#vue-thread')
-    } else {
-      const loadedPages = []
-      $(window).on('scroll', function () {
-        if ($(window).scrollTop() < $(document).height() - $(window).height() - 10) {
-          return
-        }
-
-        var page = parseInt($('#morebutton').val()) || 1
-        for (let i = 0; i < loadedPages.length; i++) {
-          if (loadedPages[i] == page) {
-            return
-          }
-        }
-        loadedPages.push(page)
-        const last = $('.thread:last').attr('id')
-        if (last != undefined) {
-          ajax.req('bezirk', 'morethemes', {
-            data: {
-              bid: GET('bid'),
-              bot: GET('sub') == 'botforum' ? 1 : 0,
-              page: page,
-              last: last.split('-')[1]
-            },
-            success: function (data) {
-              $('#morebutton').val(page + 1)
-              $('.forum_threads.linklist').append(data.html)
-            }
-          })
-        }
-      })
-
+    } else if (!GET('newthread')) {
       vueRegister({
-        ForumSearchField
+        ThreadList
       })
-      vueApply('#vue-forumsearchfield')
+      vueApply('#vue-threadlist')
     }
   }
 })

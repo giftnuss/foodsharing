@@ -52,7 +52,7 @@
           class="button cancel-button"
           @click="$emit('close')"
         >
-          {{ $i18n('button.abort') }}
+          {{ $i18n('button.cancel') }}
         </a>
       </fieldset>
     </form>

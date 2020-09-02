@@ -13,11 +13,8 @@ $g_lang['infomail_message'] = 'Benachrichtigung über Chat-Nachrichten auf foods
 $g_lang['infomail_message_desc'] = 'Wenn Du auf der foodsharing-Homepage eine interne Nachricht geschickt bekommst, aber gerade nicht eingeloggt bist, kannst Du per E-Mail darüber informiert werden. Möchtest Du das?';
 
 $g_lang['bcard'] = 'Persönliche Visitenkarte';
-$g_lang['new_bezirk'] = 'Bezirk, den das Orgateam neu anlegen soll';
 $g_lang['time'] = 'Wie viel Zeit kannst/willst Du für Deine Botschafterrolle pro Woche aufbringen (ungefähr)';
-$g_lang['datenschutz'] = 'Ich habe die Datenschutzerklärung für meine Botschafterrolle zur Kenntnis genommen und bin damit einverstanden';
 $g_lang['comment'] = 'Anregungen, Kritik und Kommentare';
-$g_lang['upgrade_bot_success'] = 'Danke Dir für Deine Motivation mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.';
 $g_lang['upgrade_request_send'] = 'Anfrage erfolgreich versendet!';
 $g_lang['account_option'] = 'Account-Optionen';
 $g_lang['settings'] = 'Einstellungen';
@@ -46,5 +43,4 @@ $g_lang['sleepmode_info'] = 'Mit der Schlafmützenfunktion ist es Dir möglich d
 $g_lang['sleepmode_show'] = 'Mit der Nutzung dieser Funktion bist Du damit einverstanden, dass Dein Status, Deine Abwesenheitsdauer und Deine Nachricht auf Deiner Profilseite angezeigt und ein "Schlafmützensymbol" über Dein Profilbild gesetzt wird.';
 $g_lang['sleep_msg'] = 'Hier kannst Du eine kurze Nachricht hinterlassen, warum Du gerade keine Zeit hast.';
 $g_lang['homepage'] = 'Deine Webseite';
-$g_lang['position'] = 'Deine Position bei foodsharing (öffentlich)';
 $g_lang['calendar'] = 'Kalender';

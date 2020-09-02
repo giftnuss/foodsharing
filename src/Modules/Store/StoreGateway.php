@@ -98,13 +98,14 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 					k.logo
 
 			FROM 	fs_betrieb b
-                    LEFT JOIN fs_kette k
-                    ON b.kette_id = k.id
+			LEFT JOIN fs_kette k ON b.kette_id = k.id
 
-			WHERE   b.bezirk_id = :regionId
-			AND     b.`lat` != ""
-        ', [
-			':regionId' => $regionId
+			WHERE 	b.bezirk_id = :regionId
+			  AND	b.betrieb_status_id <> :permanentlyClosed
+			  AND	b.`lat` != ""
+		', [
+				':regionId' => $regionId,
+				':permanentlyClosed' => CooperationStatus::PERMANENTLY_CLOSED,
 		]);
 	}
 
@@ -542,34 +543,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->count('fs_betrieb_team', ['foodsaver_id' => $fs_id, 'verantwortlich' => 1]);
 	}
 
-	public function getEmailBiepBez($region_ids): array
-	{
-		// TODO can probably be removed
-		$placeholders = $this->db->generatePlaceholders(count($region_ids));
-
-		$verant = $this->db->fetchAll('
-			SELECT 	fs.`id`,
-					fs.`email`
-
-			FROM 	`fs_foodsaver` fs
-					INNER JOIN `fs_betrieb_team` bt
-			        ON bt.foodsaver_id = fs.id
-					    INNER JOIN `fs_foodsaver_has_bezirk` b
-			            ON bt.foodsaver_id = b.foodsaver_id
-
-			WHERE 	bt.verantwortlich = 1
-			AND		b.`bezirk_id` IN(' . $placeholders . ')
-			AND		fs.deleted_at IS NULL
-		', $region_ids);
-
-		$result = [];
-		foreach ($verant as $v) {
-			$result[$v['id']] = $v;
-		}
-
-		return $result;
-	}
-
 	public function getUserTeamStatus(int $userId, int $storeId): int
 	{
 		$result = $this->db->fetchByCriteria('fs_betrieb_team', [
@@ -683,7 +656,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 				['href' => '/?page=fsbetrieb&id=' . $storeId],
 				$messageVars,
 				$messageIdentifier,
-				0,
+				false,
 				$messageExpiration,
 				$messageTimestamp
 			);
@@ -691,10 +664,10 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 	}
 
-	public function confirmFetcher($fsid, $storeId, $date): int
+	public function confirmFetcher(int $fsid, int $storeId, \DateTime $date): int
 	{
 		$result = $this->db->update(
-		'fs_abholer',
+			'fs_abholer',
 			['confirmed' => 1],
 			['foodsaver_id' => $fsid, 'betrieb_id' => $storeId, 'date' => $this->db->date($date)]
 		);
@@ -752,7 +725,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return false;
 	}
 
-	public function getBetriebConversation($storeId, $springerConversation = false)
+	public function getBetriebConversation(int $storeId, bool $springerConversation = false): ?int
 	{
 		if ($springerConversation) {
 			$chatType = 'springer_conversation_id';
@@ -761,29 +734,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}
 
 		return $this->db->fetchValueByCriteria('fs_betrieb', $chatType, ['id' => $storeId]);
-	}
-
-	public function changeBetriebStatus($fs_id, $storeId, $status): int
-	{
-		$last = $this->db->fetch('SELECT id, milestone FROM `fs_betrieb_notiz` WHERE `betrieb_id` = :id ORDER BY id DESC LIMIT 1', [':id' => $storeId]);
-
-		if ($last['milestone'] == 3) {
-			$this->db->delete('fs_betrieb_notiz', ['id' => $last['id']]);
-		}
-
-		$this->add_betrieb_notiz([
-			'foodsaver_id' => $fs_id,
-			'betrieb_id' => $storeId,
-			'text' => 'status_msg_' . (int)$status,
-			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 3
-		]);
-
-		return $this->db->update(
-			'fs_betrieb',
-			['betrieb_status_id' => $status],
-			['id' => $storeId]
-		);
 	}
 
 	public function add_betrieb_notiz($data): int
@@ -885,12 +835,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return $this->db->fetchAllByCriteria('fs_betrieb_team', ['betrieb_id'], ['foodsaver_id' => $fsId, 'verantwortlich' => 1]);
 	}
 
-	public function getPickupSignupsForDate(int $storeId, \DateTimeInterface $date)
+	public function getPickupSignupsForDate(int $storeId, \DateTime $date)
 	{
 		return $this->getPickupSignupsForDateRange($storeId, $date, $date);
 	}
 
-	public function getPickupSignupsForDateRange(int $storeId, \DateTimeInterface $from, \DateTimeInterface $to = null)
+	public function getPickupSignupsForDateRange(int $storeId, \DateTime $from, ?\DateTime $to = null)
 	{
 		$condition = ['date >=' => $this->db->date($from), 'betrieb_id' => $storeId];
 		if (!is_null($to)) {
@@ -955,12 +905,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function getOnetimePickups(int $storeId, \DateTimeInterface $date)
+	public function getOnetimePickups(int $storeId, \DateTime $date)
 	{
 		return $this->getOnetimePickupsForRange($storeId, $date, $date);
 	}
 
-	public function getOnetimePickupsForRange(int $storeId, \DateTimeInterface $from, ?\DateTimeInterface $to)
+	public function getOnetimePickupsForRange(int $storeId, \DateTime $from, ?\DateTime $to)
 	{
 		$condition = [
 			'betrieb_id' => $storeId,
@@ -986,7 +936,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		}, $result);
 	}
 
-	public function addOnetimePickup(int $storeId, \DateTimeInterface $date, int $slots)
+	public function addOnetimePickup(int $storeId, \DateTime $date, int $slots)
 	{
 		$this->db->insert('fs_fetchdate', [
 			'betrieb_id' => $storeId,
@@ -995,7 +945,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function updateOnetimePickupTotalSlots(int $storeId, \DateTimeInterface $date, int $slots): bool
+	public function updateOnetimePickupTotalSlots(int $storeId, \DateTime $date, int $slots): bool
 	{
 		return $this->db->update('fs_fetchdate', [
 			'fetchercount' => $slots
@@ -1108,7 +1058,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 		foreach ($expiredBells as $bell) {
 			$storeId = substr($bell->identifier, strlen('store-fetch-unconfirmed-'));
-			$this->updateBellNotificationForStoreManagers($storeId);
+			$this->updateBellNotificationForStoreManagers(intval($storeId));
 		}
 	}
 
@@ -1270,7 +1220,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 			['id' => '3', 'name' => 'Betrieb ist bereit zu spenden :-)'],
 			['id' => '4', 'name' => 'Betrieb will nicht kooperieren'],
 			['id' => '5', 'name' => 'Betrieb spendet bereits'],
-			['id' => '6', 'name' => 'spendet an Tafel etc. & wirft nichts weg']
+			['id' => '6', 'name' => 'spendet an Tafel etc. & wirft nichts weg'],
+			['id' => '7', 'name' => 'Betrieb existiert nicht mehr :-('],
 		];
 	}
 

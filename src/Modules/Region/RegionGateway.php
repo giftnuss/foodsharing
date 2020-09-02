@@ -11,7 +11,7 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class RegionGateway extends BaseGateway
 {
-	private $foodsaverGateway;
+	private FoodsaverGateway $foodsaverGateway;
 
 	public function __construct(
 		Database $db,

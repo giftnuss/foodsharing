@@ -4,7 +4,7 @@ namespace Foodsharing\Lib\Xhr;
 
 use Foodsharing\Lib\View\Utils;
 use Foodsharing\Utility\Sanitizer;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class XhrDialog
 {
@@ -17,24 +17,15 @@ class XhrDialog
 	private $scriptAfter;
 	private $onopen;
 	private $classnames;
-	/**
-	 * @var Utils
-	 */
-	private $viewUtils;
-	/**
-	 * @var TranslationHelper
-	 */
-	private $translationHelper;
-	/**
-	 * @var Sanitizer
-	 */
-	private $sanitizerService;
+	private Utils $viewUtils;
+	private TranslatorInterface $translator;
+	private Sanitizer $sanitizerService;
 
 	public function __construct($title = false)
 	{
 		global $container;
 		$this->viewUtils = $container->get(Utils::class);
-		$this->translationHelper = $container->get(TranslationHelper::class);
+		$this->translator = $container->get('translator'); // TODO TranslatorInterface is an alias
 		$this->id = 'd-' . uniqid();
 		$this->buttons = [];
 		$this->options = [];
@@ -102,10 +93,10 @@ class XhrDialog
 		return $this->id;
 	}
 
-	public function addAbortButton($text = 'Abbrechen')
+	public function addAbortButton()
 	{
 		$this->buttons[] = [
-			'text' => $text,
+			'text' => $this->translator->trans('button.cancel'),
 			'click' => '$("#' . $this->id . '").dialog("close");'
 		];
 	}
@@ -125,73 +116,60 @@ class XhrDialog
 
 	public function setResizeable($val = true)
 	{
-		if ($val) {
-			$val = 'true';
-		} else {
-			$val = 'false';
-		}
+		$val = $val ? 'true' : 'false';
 		$this->addOpt('resizable', $val, false);
 	}
 
-	public function addPictureField($id)
+	public function addPictureField($id, $label)
 	{
 		$in_id = $this->id . '-' . $id;
 
-		$this->addContent($this->viewUtils->v_input_wrapper($this->translationHelper->s($id . '-desc'), '
-				<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->translationHelper->s($id . '-choose') . '</span>
-				<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
-				<div class="attach-preview" style="float:right;">
-
-				</div>
-				<div style="width:10px;height:10px;overflow:hidden;">
-					<form action="/xhrapp.php?app=main&m=picupload" target="' . $in_id . '-iframe" id="' . $in_id . '-form" method="post" enctype="multipart/form-data">
-						<input style="float:right;" type="file" name="' . $id . '" id="' . $in_id . '-file" />
-						<input type="hidden" name="id" value="' . $this->id . '" />
-						<input type="hidden" name="oid" value="' . $id . '" />
-						<input type="hidden" name="inid" value="' . $in_id . '" />
-					</form>
-					<iframe frameborder="0" style="width:1px;height:1px;opacity:0;" name="' . $in_id . '-iframe"></iframe>
-					<div style="clear:both;"></div>
-				</div>
-
-
-				'));
+		$this->addContent($this->viewUtils->v_input_wrapper($label, '
+			<span id="' . $in_id . '"><i class="far fa-image"></i> ' . $this->translator->trans('upload.image') . '</span>
+			<input class="input" type="hidden" name="filename" id="' . $in_id . '-filename" value="" />
+			<div class="attach-preview" style="float: right;"></div>
+			<div style="width: 10px; height: 10px; overflow: hidden;">
+				<form action="/xhrapp.php?app=main&m=picupload" target="' . $in_id . '-iframe" id="' . $in_id . '-form" method="post" enctype="multipart/form-data">
+					<input style="float: right;" type="file" name="' . $id . '" id="' . $in_id . '-file" />
+					<input type="hidden" name="id" value="' . $this->id . '" />
+					<input type="hidden" name="oid" value="' . $id . '" />
+					<input type="hidden" name="inid" value="' . $in_id . '" />
+				</form>
+				<iframe frameborder="0" style="width: 1px; height: 1px; opacity: 0;" name="' . $in_id . '-iframe"></iframe>
+				<div style="clear: both;"></div>
+			</div>'
+		));
 		$this->addJs('
-
-			$("#' . $in_id . '-file").on("change", function(){
+			$("#' . $in_id . '-file").on("change", function () {
 				$("#' . $in_id . '-form").trigger("submit");
-				$(".ui-dialog-buttonpane .ui-button").button( "option", "disabled", true );
+				$(".ui-dialog-buttonpane .ui-button").button("option", "disabled", true);
 				$(".attach-preview").show();
-				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear:both;"></div>\');
+				$(".attach-preview").html(\'<a href="#" class="preview-thumb attach-load" rel="wallpost-gallery">&nbsp;</a><div style="clear: both;"></div>\');
 			});
 
-			$("#' . $in_id . '").button().on("click", function(){
+			$("#' . $in_id . '").button().on("click", function () {
 				$("#' . $in_id . '-file").trigger("click");
-			});;
-		');
+			});');
 	}
 
 	public function noOverflow()
 	{
 		$this->addOpt('maxHeight', '$(window).height()-30', false);
 		$this->addJsAfter('
-
-			if($("#' . $this->getId() . '").width() > $(window).width())
-			{
-				$("#' . $this->getId() . '").dialog("option","width",$(window).width()-30);
+			if ($("#' . $this->getId() . '").width() > $(window).width()) {
+				$("#' . $this->getId() . '").dialog("option", "width", $(window).width() - 30);
 			}
 
-			$(window).on("resize", function(){
-				$("#' . $this->getId() . '").dialog("option","maxHeight",$(window).height()-30);
-			});
-		');
+			$(window).on("resize", function () {
+				$("#' . $this->getId() . '").dialog("option", "maxHeight", $(window).height() - 30);
+			});');
 	}
 
 	public function xhrout()
 	{
 		$buttons = [];
 		foreach ($this->buttons as $b) {
-			$buttons[] = '{"text":\'' . $b['text'] . '\',click:function(){' . $b['click'] . '}}';
+			$buttons[] = '{"text":\'' . $b['text'] . '\', click: function () {' . $b['click'] . '}}';
 		}
 
 		$this->addOpt('buttons', '[' . implode(',', $buttons) . ']', false);
@@ -199,7 +177,7 @@ class XhrDialog
 		$this->addJs('$("#' . $this->id . '").dialog("option", "position", "center");');
 
 		if (!empty($this->onopen)) {
-			$this->addOpt('open', 'function( event, ui ) {' . implode(' ', $this->onopen) . '}', false);
+			$this->addOpt('open', 'function(event, ui) {' . implode(' ', $this->onopen) . '}', false);
 		}
 
 		$options = [];
@@ -214,23 +192,20 @@ class XhrDialog
 
 		return [
 			'status' => 1,
-			'script' => '
-				' . $this->scriptBefore . '
-
-				if($(".xhrDialog").length > 0)
-				{
+			'script' => $this->scriptBefore . '
+				if ($(".xhrDialog").length > 0) {
 					$(".xhrDialog").dialog("close");
 					$(".xhrDialog").dialog("destroy");
 					$(".xhrDialog").remove();
 				}
-				$("body").append(\'<div class="xhrDialog" style="display:none;" id="' . $this->id . '"></div>\');
+				$("body").append(\'<div class="xhrDialog" style="display: none;" id="' . $this->id . '"></div>\');
 				$("#' . $this->id . '").html(\'' . $this->sanitizerService->jsSafe($this->content) . '\');
-				$(".xhrDialog .input.textarea").css("height","50px");
+				$(".xhrDialog .input.textarea").css("height", "50px");
 				$(".xhrDialog .input.textarea").autosize();
 				$("#' . $this->id . '").dialog({
 					' . implode(',', $options) . '
-				});' . $this->script . $this->scriptAfter . $classjs . '
-				'
+				});'
+				. $this->script . $this->scriptAfter . $classjs
 		];
 	}
 }

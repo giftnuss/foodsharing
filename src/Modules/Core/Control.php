@@ -12,6 +12,7 @@ use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\TranslationHelper;
 use ReflectionClass;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class Control
 {
@@ -21,60 +22,18 @@ abstract class Control
 	private $sub;
 	private $sub_func;
 
-	/**
-	 * @var PageHelper
-	 */
-	protected $pageHelper;
-
-	/**
-	 * @var Mem
-	 */
-	protected $mem;
-
-	/**
-	 * @var \Foodsharing\Lib\Session
-	 */
-	protected $session;
-
-	/**
-	 * @var Utils
-	 */
-	protected $v_utils;
-
-	/**
-	 * @var \Twig\Environment
-	 */
-	private $twig;
-
-	/**
-	 * @var FoodsaverGateway
-	 */
-	private $foodsaverGateway;
-
-	/**
-	 * @var InfluxMetrics
-	 */
-	private $metrics;
-
-	/**
-	 * @var EmailHelper
-	 */
-	protected $emailHelper;
-
-	/**
-	 * @var RouteHelper
-	 */
-	protected $routeHelper;
-
-	/**
-	 * @var TranslationHelper
-	 */
-	protected $translationHelper;
-
-	/**
-	 * @var FlashMessageHelper
-	 */
-	protected $flashMessageHelper;
+	protected PageHelper $pageHelper;
+	protected Mem $mem;
+	protected \Foodsharing\Lib\Session $session;
+	protected Utils $v_utils;
+	private \Twig\Environment $twig;
+	private FoodsaverGateway $foodsaverGateway;
+	private InfluxMetrics $metrics;
+	protected EmailHelper $emailHelper;
+	protected FlashMessageHelper $flashMessageHelper;
+	protected RouteHelper $routeHelper;
+	protected TranslationHelper $translationHelper;
+	protected TranslatorInterface $translator;
 
 	public function __construct()
 	{
@@ -87,8 +46,9 @@ abstract class Control
 		$this->pageHelper = $container->get(PageHelper::class);
 		$this->emailHelper = $container->get(EmailHelper::class);
 		$this->routeHelper = $container->get(RouteHelper::class);
-		$this->translationHelper = $container->get(TranslationHelper::class);
 		$this->flashMessageHelper = $container->get(FlashMessageHelper::class);
+		$this->translationHelper = $container->get(TranslationHelper::class);
+		$this->translator = $container->get('translator'); // TODO TranslatorInterface is an alias
 
 		$reflection = new ReflectionClass($this);
 		$dir = dirname($reflection->getFileName()) . DIRECTORY_SEPARATOR;
@@ -198,98 +158,95 @@ abstract class Control
 	public function wallposts($table, $id): string
 	{
 		$this->pageHelper->addJsFunc('
-			function u_delPost(id, module, wallId)
-				{
-					var id = id;
-					$.ajax({
-						url: "/xhrapp.php?app=wallpost&m=delpost&table=' . $table . '&id=' . $id . '&post=" + id,
-						dataType: "JSON",
-						success: function(data)
-						{
-							if(data.status == 1)
-							{
-								$(".wallpost-" + id).remove();
-							}
+			function u_delPost (id, module, wallId) {
+				var id = id;
+				$.ajax({
+					url: "/xhrapp.php?app=wallpost&m=delpost&table=' . $table . '&id=' . $id . '&post=" + id,
+					dataType: "JSON",
+					success: function (data) {
+						if (data.status == 1) {
+							$(".wallpost-" + id).remove();
 						}
-					});
-				}
-				function mb_finishImage(file)
-				{
-					$("#wallpost-attach").append(\'<input type="hidden" name="attach[]" value="image-\'+file+\'" />\');
-					$("#attach-preview div:last").remove();
-					$(".attach-load").remove();
-					$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb" href="/images/wallpost/\'+file+\'"><img src="/images/wallpost/thumb_\'+file+\'" height="60" /></a>\');
-					$("#attach-preview").append(\'<div style="clear:both;"></div>\');
-					$("#attach-preview a").fancybox();
-					mb_clear();
-				}
-				function mb_clear()
-				{
-					$("#wallpost-loader").html(\'\');
-					$("a.attach-load").remove();
-				}
+					}
+				});
+			}
+
+			function mb_finishImage (file) {
+				$("#wallpost-attach").append(\'<input type="hidden" name="attach[]" value="image-\'+file+\'" />\');
+				$("#attach-preview div:last").remove();
+				$(".attach-load").remove();
+				$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb" href="/images/wallpost/\'+file+\'"><img src="/images/wallpost/thumb_\'+file+\'" height="60" /></a>\');
+				$("#attach-preview").append(\'<div style="clear: both;"></div>\');
+				$("#attach-preview a").fancybox();
+				mb_clear();
+			}
+
+			function mb_clear () {
+				$("#wallpost-loader").html(\'\');
+				$("a.attach-load").remove();
+			}
 			');
 		$this->pageHelper->addJs('
-				$("#wallpost-text").autosize();
-			$("#wallpost-text").on("focus", function(){
+			$("#wallpost-text").autosize();
+			$("#wallpost-text").on("focus", function () {
 				$("#wallpost-submit").show();
 			});
 
-				$("#wallpost-attach-trigger").on("change", function(){
-					$("#attach-preview div:last").remove();
-					$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>\');
-					$("#attach-preview").append(\'<div style="clear:both;"></div>\');
-					$("#wallpost-attachimage-form").trigger("submit");
-				});
+			$("#wallpost-attach-trigger").on("change", function () {
+				$("#attach-preview div:last").remove();
+				$("#attach-preview").append(\'<a rel="wallpost-gallery" class="preview-thumb attach-load" href="#" onclick="return false;">&nbsp;</a>\');
+				$("#attach-preview").append(\'<div style="clear: both;"></div>\');
+				$("#wallpost-attachimage-form").trigger("submit");
+			});
 
-			$("#wallpost-text").on("blur", function(){
+			$("#wallpost-text").on("blur", function () {
 				$("#wallpost-submit").show();
 			});
-			$("#wallpost-post").on("submit", function(ev){
+			$("#wallpost-post").on("submit", function (ev) {
 				ev.preventDefault();
-
 			});
-			$("#wallpost-attach-image").button().on("click", function(){
+			$("#wallpost-attach-image").button().on("click", function () {
 				$("#wallpost-attach-trigger").trigger("click") ;
 			});
-				$("#wall-submit").button().on("click", function(ev){
-					ev.preventDefault();
-					if(($("#wallpost-text").val() != "" && $("#wallpost-text").val() != "' . $this->translationHelper->s('write_teaser') . '") || $("#attach-preview a").length > 0)
-					{
-						$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
+			$("#wallpost-attach-trigger").on("focus", function () {
+				$("#wall-submit")[0].focus();
+			});
 
-						attach = "";
-						$("#wallpost-attach input").each(function(){
-							attach = attach + ":" + $(this).val();
-						});
-						if(attach.length > 0)
-						{
-							attach = attach.substring(1);
-						}
+			$("#wall-submit").button().on("click", function (ev) {
+				ev.preventDefault();
+				if (($("#wallpost-text").val() != ""
+						&& $("#wallpost-text").val() != "' . $this->translator->trans('wall.message_placeholder') . '")
+					|| $("#attach-preview a").length > 0
+				) {
+					$(".wall-posts table tr:first").before(\'<tr><td colspan="2" class="load">&nbsp;</td></tr>\');
 
-						text = $("#wallpost-text").val();
-						if(text == "' . $this->translationHelper->s('write_teaser') . '")
-						{
-							text = "";
-						}
+					attach = "";
+					$("#wallpost-attach input").each(function () {
+						attach = attach + ":" + $(this).val();
+					});
+					if (attach.length > 0) {
+						attach = attach.substring(1);
+					}
 
-						$.ajax({
+					text = $("#wallpost-text").val();
+					if (text == "' . $this->translator->trans('wall.message_placeholder') . '") {
+						text = "";
+					}
+
+					$.ajax({
 						url: "/xhrapp.php?app=wallpost&m=post&table=' . $table . '&id=' . $id . '",
 						type: "POST",
 						data: {
-								text: text,
+							text: text,
 							attach: attach
-							},
+						},
 						dataType: "JSON",
-						success: function(data)
-						{
+						success: function (data) {
 							$("#wallpost-attach").html("");
-							if(data.status == 1)
-							{
+							if (data.status == 1) {
 								$(".wall-posts").html(data.html);
 								$(".preview-thumb").fancybox();
-								if(data.script != undefined)
-								{
+								if (data.script != undefined) {
 									$.globalEval(data.script);
 								}
 							}
@@ -298,24 +255,20 @@ abstract class Control
 					$("#wallpost-text").val("");
 					$("#attach-preview").html("");
 					$("#wallpost-attach").html("");
-						$("#wallpost-text")[0].focus();
-						$("#wallpost-text").css("height","33px");
+					$("#wallpost-text")[0].focus();
+					$("#wallpost-text").css("height", "33px");
 				}
-				});
-			$("#wallpost-attach-trigger").on("focus", function(){
-					$("#wall-submit")[0].focus();
-				});
+			});
+
 			$.ajax({
-					url: "/xhrapp.php?app=wallpost&m=update&table=' . $table . '&id=' . $id . '&last=0",
-					dataType: "JSON",
-					success: function(data)
-					{
-						if(data.status == 1)
-						{
-							$(".wall-posts").html(data.html);
-							$(".preview-thumb").fancybox();
-						}
+				url: "/xhrapp.php?app=wallpost&m=update&table=' . $table . '&id=' . $id . '&last=0",
+				dataType: "JSON",
+				success: function (data) {
+					if (data.status == 1) {
+						$(".wall-posts").html(data.html);
+						$(".preview-thumb").fancybox();
 					}
+				}
 			});
 
 		');
@@ -324,24 +277,24 @@ abstract class Control
 		if ($this->session->may()) {
 			$posthtml = '
 				<div class="tools ui-padding">
-				<textarea id="wallpost-text" name="text" placeholder="' . $this->translationHelper->s('write_teaser') . '" class="comment textarea"></textarea>
+				<textarea id="wallpost-text" name="text" placeholder="' . $this->translator->trans('wall.message_placeholder') . '" class="comment textarea"></textarea>
 				<div id="attach-preview"></div>
-				<div style="display:none;" id="wallpost-attach" /></div>
+				<div style="display: none;" id="wallpost-attach" /></div>
 
 				<div id="wallpost-submit" align="right">
 
-					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translationHelper->s('attach_image') . '</span>
-					<a href="#" id="wall-submit">' . $this->translationHelper->s('send') . '</a>
-					<div style="overflow:hidden;height:0;">
+					<span id="wallpost-loader"></span><span id="wallpost-attach-image"><i class="far fa-image"></i> ' . $this->translator->trans('button.attach_image') . '</span>
+					<a href="#" id="wall-submit">' . $this->translator->trans('button.send') . '</a>
+					<div style="overflow: hidden; height: 0;">
 						<form id="wallpost-attachimage-form" action="/xhrapp.php?app=wallpost&m=attachimage&table=' . $table . '&id=' . $id . '" method="post" enctype="multipart/form-data" target="wallpost-frame">
 							<input id="wallpost-attach-trigger" type="file" maxlength="100000" size="chars" name="etattach" />
 						</form>
 					</div>
 
 				</div>
-				<div style="clear:both"></div>
-				<div style="visibility:hidden;">
-				<iframe name="wallpost-frame" style="height:1px;" frameborder="0"></iframe>
+				<div style="clear: both;"></div>
+				<div style="visibility: hidden;">
+				<iframe name="wallpost-frame" style="height: 1px;" frameborder="0"></iframe>
 				</div>
 			</div>';
 		}
@@ -442,17 +395,6 @@ abstract class Control
 		}
 
 		return false;
-	}
-
-	public function appout($data)
-	{
-		header('content-type: application/json; charset=utf-8');
-		if (isset($_GET['callback']) && strlen($_GET['callback']) > 1) {
-			echo strip_tags($_GET['callback']) . '(' . json_encode($data) . ');';
-		} else {
-			echo json_encode($data);
-		}
-		exit();
 	}
 
 	public function setContentWidth($left, $right)

@@ -101,7 +101,7 @@ class Bell
 		array $link_attributes,
 		array $vars,
 		string $identifier = '',
-		int $closeable = 1,
+		bool $closeable = true,
 		\DateTime $expiration = null,
 		\DateTime $time = null
 	): Bell {

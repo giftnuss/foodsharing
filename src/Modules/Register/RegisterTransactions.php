@@ -6,22 +6,22 @@ use Exception;
 use Foodsharing\Modules\Login\LoginGateway;
 use Foodsharing\Modules\Register\DTO\RegisterData;
 use Foodsharing\Utility\EmailHelper;
-use Foodsharing\Utility\TranslationHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegisterTransactions
 {
-	private $loginGateway;
-	private $emailHelper;
-	private $translationHelper;
+	private LoginGateway $loginGateway;
+	private EmailHelper $emailHelper;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		LoginGateway $loginGateway,
 		EmailHelper $emailHelper,
-		TranslationHelper $translationHelper
+		TranslatorInterface $translator
 	) {
 		$this->loginGateway = $loginGateway;
 		$this->emailHelper = $emailHelper;
-		$this->translationHelper = $translationHelper;
+		$this->translator = $translator;
 	}
 
 	/**
@@ -43,7 +43,7 @@ class RegisterTransactions
 		$this->emailHelper->tplMail('user/join', $data->email, [
 			'name' => $data->firstName,
 			'link' => BASE_URL . '/?page=login&sub=activate&e=' . urlencode($data->email) . '&t=' . urlencode($token),
-			'anrede' => $this->translationHelper->s('anrede_' . $data->gender)
+			'anrede' => $this->translator->trans('salutation.' . $data->gender),
 		], false, true);
 
 		return $id;

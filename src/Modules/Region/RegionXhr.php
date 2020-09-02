@@ -10,19 +10,17 @@ use Foodsharing\Permissions\ForumPermissions;
 final class RegionXhr extends Control
 {
 	private $responses;
-	private $regionGateway;
-	private $foodsaverGateway;
-	private $forumGateway;
-	private $forumFollowerGateway;
-	private $forumPermissions;
-	private $regionHelper;
-	private $twig;
+	private RegionGateway $regionGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private ForumGateway $forumGateway;
+	private ForumFollowerGateway $forumFollowerGateway;
+	private ForumPermissions $forumPermissions;
+	private \Twig\Environment $twig;
 
 	public function __construct(
 		RegionGateway $regionGateway,
 		ForumGateway $forumGateway,
 		ForumPermissions $forumPermissions,
-		RegionHelper $regionHelper,
 		\Twig\Environment $twig,
 		FoodsaverGateway $foodsaverGateway,
 		ForumFollowerGateway $forumFollowerGateway
@@ -32,32 +30,10 @@ final class RegionXhr extends Control
 		$this->forumGateway = $forumGateway;
 		$this->forumFollowerGateway = $forumFollowerGateway;
 		$this->forumPermissions = $forumPermissions;
-		$this->regionHelper = $regionHelper;
 		$this->twig = $twig;
 		$this->responses = new XhrResponses();
 
 		parent::__construct();
-	}
-
-	public function morethemes()
-	{
-		$regionId = (int)$_GET['bid'];
-		$ambassadorForum = ($_GET['bot'] == 1);
-		if (isset($_GET['page']) && $this->session->mayBezirk($regionId)) {
-			if ($ambassadorForum && !$this->session->isAdminFor($regionId)) {
-				return $this->responses->fail_permissions();
-			}
-
-			$viewdata['region']['id'] = $regionId;
-			$viewdata['threads'] = $this->regionHelper->transformThreadViewData($this->forumGateway->listThreads($regionId, $ambassadorForum, (int)$_GET['page'], (int)$_GET['last']), $regionId, $ambassadorForum);
-
-			return [
-				'status' => 1,
-				'data' => [
-					'html' => $this->twig->render('pages/Region/forum/threadEntries.twig', $viewdata)
-				]
-			];
-		}
 	}
 
 	public function quickreply()
@@ -82,7 +58,7 @@ final class RegionXhr extends Control
 
 						foreach ($follower as $f) {
 							$this->emailHelper->tplMail('forum/answer', $f['email'], [
-								'anrede' => $this->translationHelper->genderWord($f['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
+								'anrede' => $this->translator->trans('salutation.' . $f['geschlecht']),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
 								'thread' => $theme['title'],
@@ -95,20 +71,16 @@ final class RegionXhr extends Control
 
 					echo json_encode([
 						'status' => 1,
-						'message' => 'Prima! Deine Antwort wurde gespeichert.'
+						'message' => $this->translator->trans('forum.quickreply.success'),
 					]);
 					exit();
 				}
 			}
-
-			/*
-			 * end add post
-			 */
 		}
 
 		echo json_encode([
 			'status' => 0,
-			'message' => $this->translationHelper->s('post_could_not_saved')
+			'message' => $this->translator->trans('forum.quickreply.error'),
 		]);
 		exit();
 	}
