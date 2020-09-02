@@ -212,6 +212,7 @@ class StoreXhr extends Control
 			$xhr->addMessage($this->translator->trans('storeedit.team.cannot-leave'), 'error');
 		} elseif ($status >= TeamStatus::Applied) {
 			$this->storeModel->signout($_GET['id'], $this->session->id());
+			$this->storeGateway->addStoreLog($_GET['id'], $this->session->id(), null, null, StoreLogAction::LEFT_STORE);
 			$xhr->addScript('goTo("/?page=relogin&url=" + encodeURIComponent("/?page=dashboard") );');
 		} else {
 			$xhr->addMessage($this->translator->trans('store.not-in-team'), 'error');

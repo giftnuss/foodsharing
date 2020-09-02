@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
@@ -73,6 +74,7 @@ final class PickupRestController extends AbstractFOSRestController
 
 		$isConfirmed = $this->storeTransactions->joinPickup($storeId, $date, $fsId, $this->session->id());
 
+		$this->storeGateway->addStoreLog($storeId, $fsId, null, $date, StoreLogAction::SIGN_UP_SLOT);
 		return $this->handleView($this->view([
 			'isConfirmed' => $isConfirmed
 		], 200));
@@ -96,6 +98,24 @@ final class PickupRestController extends AbstractFOSRestController
 			throw new HttpException(400, 'Failed to remove user from pickup');
 		}
 
+		if ($this->session->id() === $fsId) {
+			$this->storeGateway->addStoreLog( // the user removed their own pickup
+				$storeId,
+				$fsId,
+				null,
+				$date,
+				StoreLogAction::SIGN_OUT_SLOT
+			);
+		} else {
+			$this->storeGateway->addStoreLog( // the user got kicked/the pickup got denied
+				$storeId,
+				$this->session->id(),
+				$fsId,
+				$date,
+				StoreLogAction::REMOVED_FROM_SLOT
+			);
+		}
+
 		return $this->handleView($this->view([], 200));
 	}
 
@@ -115,6 +135,14 @@ final class PickupRestController extends AbstractFOSRestController
 			if (!$this->storeGateway->confirmFetcher($fsId, $storeId, $date)) {
 				throw new HttpException(400);
 			}
+			$this->storeGateway->addStoreLog(
+				$storeId,
+				$this->session->id(),
+				$fsId,
+				$date,
+				StoreLogAction::SLOT_CONFIRMED
+			);
+
 		}
 
 		return $this->handleView($this->view([], 200));
