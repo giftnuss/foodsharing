@@ -295,6 +295,8 @@ class StoreModel extends Db
 			$this->messageGateway->addUserToConversation($tcid, $fsid);
 		}
 
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::REQUEST_APPROVED);
+
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 1, `stat_add_date` = NOW()
@@ -319,6 +321,9 @@ class StoreModel extends Db
 			$this->messageGateway->addUserToConversation($scid, $fsid);
 		}
 
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::REQUEST_APPROVED);
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $fsid, null, StoreLogAction::MOVED_TO_JUMPER);
+
 		return $this->update('
 					UPDATE 	 	`fs_betrieb_team`
 					SET 		`active` = 2
@@ -329,6 +334,9 @@ class StoreModel extends Db
 
 	public function teamRequest($fsid, $storeId)
 	{
+
+		$this->storeGateway->addStoreLog($storeId, $fsid, null, null, StoreLogAction::REQUEST_TO_JOIN);
+
 		return $this->insert('
 			REPLACE INTO `fs_betrieb_team`
 			(
