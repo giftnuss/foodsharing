@@ -32,7 +32,7 @@
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
 - Move registration request to the REST endpoint #819 !1632 @alex.simm
 - Use TranslatorInterface for many old translations !1637 !1655 @ChrisOelmueller
-- Prepare event invitations for REST !1627 @ChrisOelmueller
+- Prepare event invitations for REST !1627 !1657 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 - Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
 

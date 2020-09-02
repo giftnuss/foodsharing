@@ -21,13 +21,14 @@ class EventXhr extends Control
 		$this->gateway = $gateway;
 		$this->responses = new XhrResponses();
 		$this->eventPermissions = $eventPermissions;
+
+		parent::__construct();
+
 		$this->responseOptions = [
 			InvitationStatus::ACCEPTED => 'pulseSuccess("' . $this->translator->trans('events.rsvp.yes') . '");',
 			InvitationStatus::MAYBE => 'pulseSuccess("' . $this->translator->trans('events.rsvp.maybe') . '");',
 			InvitationStatus::WONT_JOIN => 'pulseInfo("' . $this->translator->trans('events.rsvp.no') . '");',
 		];
-
-		parent::__construct();
 
 		if (isset($_GET['id'])) {
 			$this->event = $this->gateway->getEvent($_GET['id'], true);
