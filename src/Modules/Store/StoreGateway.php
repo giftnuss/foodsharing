@@ -757,8 +757,12 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function deleteBPost($id): int
+	public function deleteBPost($id, $fs_id): int
 	{
+		$result = $this->getSingleStoreNote($id);
+
+		$this->addStoreLog($result['betrieb_id'], $foodsaver_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
+
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
 
@@ -1073,6 +1077,43 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 
 		return $store;
+	}
+
+	public function addStoreLog(
+		int $store_id,
+		int $foodsaver_id,
+		?int $fs_id_p,
+		?\DateTimeInterface $dateReference,
+		int $action,
+		?string $content = null,
+		?string $reason = null
+	) {
+		return $this->db->insert('fs_store_log', [
+			'store_id' => $store_id,
+			'action' => $action,
+			'fs_id_a' => $foodsaver_id,
+			'fs_id_p' => $fs_id_p,
+			'date_reference' => $dateReference ? $dateReference->format('Y-m-d H:i:s') : null,
+			'content' => strip_tags($content),
+			'reason' => strip_tags($reason),
+		]);
+	}
+
+	private function getSingleStoreNote($id): array
+	{
+		return $this->db->fetch('
+			SELECT
+			`id`,
+			`foodsaver_id`,
+			`betrieb_id`,
+			`text`,
+			`zeit`,
+			UNIX_TIMESTAMP(`zeit`) AS zeit_ts
+
+			FROM 		`fs_betrieb_notiz`
+
+			WHERE `id` = :id',
+			[':id' => $id]);
 	}
 
 	/**

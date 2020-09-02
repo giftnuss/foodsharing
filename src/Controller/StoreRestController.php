@@ -133,7 +133,7 @@ class StoreRestController extends AbstractFOSRestController
 			throw new AccessDeniedHttpException();
 		}
 
-		$this->storeGateway->deleteBPost($postId);
+		$this->storeGateway->deleteBPost($postId, $this->session->id());
 
 		return $this->handleView($this->view([], 200));
 	}
@@ -145,11 +145,21 @@ class StoreRestController extends AbstractFOSRestController
 	 */
 	public function removeStoreRequestAction(int $storeId, int $userId): Response
 	{
+		$LogAction = -1;
+
 		if ($this->session->id() !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new HttpException(403);
 		}
 
 		$this->storeTransactions->removeStoreRequest($storeId, $userId);
+
+		if ($this->session->id() == $userId) {
+			$LogAction = StoreLogAction::REQUEST_CANCELLED;
+		} else {
+			$LogAction = StoreLogAction::REQUEST_DECLINED;
+		}
+
+		$this->storeGateway->addStoreLog($storeId, $this->session->id(), $userId, null, $LogAction);
 
 		return $this->handleView($this->view([], 200));
 	}
