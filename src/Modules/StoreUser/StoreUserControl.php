@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 use Foodsharing\Modules\Core\DBConstants\Store\CooperationStatus;
+use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -88,6 +89,7 @@ class StoreUserControl extends Control
 					} else {
 						foreach ($g_data['storemanagers'] as $fsId) {
 							$addedStoremanager = $this->storeGateway->addStoreManager($store['id'], $fsId);
+							$this->storeGateway->addStoreLog($store['id'], $this->session->id(), $fsId, null, StoreLogAction::APPOINT_STORE_MANAGER);
 						}
 					}
 				}
