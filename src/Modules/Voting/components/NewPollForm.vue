@@ -75,7 +75,7 @@
                 :locale="locale"
                 :min="new Date()"
                 :state="$v.startDateTime.$error ? false : null"
-                @input="updateDateTimes"
+                @input="updateDateStartTimes"
               />
             </b-col>
             <b-col>
@@ -86,7 +86,7 @@
                 v-bind="labelsTimepicker[locale] || {}"
                 now-button
                 :state="$v.startDateTime.$error ? false : null"
-                @input="updateDateTimes"
+                @input="updateDateStartTimes"
               />
             </b-col>
           </b-form-row>
@@ -111,7 +111,7 @@
                 :locale="locale"
                 :min="startDate"
                 :state="$v.endDateTime.$error ? false : null"
-                @input="updateDateTimes"
+                @blur="updateDateEndTimes"
               />
             </b-col>
             <b-col>
@@ -121,7 +121,7 @@
                 :locale="locale"
                 v-bind="labelsTimepicker[locale] || {}"
                 :state="$v.endDateTime.$error ? false : null"
-                @input="updateDateTimes"
+                @blur="updateDateEndTimes"
               />
             </b-col>
           </b-form-row>
@@ -329,9 +329,11 @@ export default {
     }
   },
   methods: {
-    updateDateTimes () {
-      this.$v.endDateTime.$touch()
+    updateDateStartTimes () {
       this.$v.startDateTime.$touch()
+    },
+    updateDateEndTimes () {
+      this.$v.endDateTime.$touch()
     },
     updateNumOptions () {
       // keeps the length of options in sync for the validation
