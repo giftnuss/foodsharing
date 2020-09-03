@@ -8,15 +8,12 @@ class vPage
 {
 	private $title;
 	private $content;
-	private $sections;
-	private $sections_left;
-	private $sections_right;
+	private array $sections;
+	private array $sections_left;
+	private array $sections_right;
 	private $subtitle;
-	private $bread;
-	/**
-	 * @var PageHelper
-	 */
-	private $pageHelper;
+	private array $bread;
+	private PageHelper $pageHelper;
 
 	public function __construct($title, $content)
 	{
@@ -52,7 +49,7 @@ class vPage
 		$this->content = $html;
 	}
 
-	public function addSection($html, $title = false, $option = [])
+	public function addSection($html, $title = false, array $option = [])
 	{
 		$defOpt = [
 			'wrapper' => true
@@ -66,7 +63,7 @@ class vPage
 		];
 	}
 
-	public function addSectionRight($html, $title = false, $option = [])
+	public function addSectionRight($html, $title = false, array $option = [])
 	{
 		$defOpt = [
 			'wrapper' => true
@@ -80,7 +77,7 @@ class vPage
 		];
 	}
 
-	public function addSectionLeft($html, $title = false, $option = [])
+	public function addSectionLeft($html, $title = false, array $option = [])
 	{
 		$defOpt = [
 			'wrapper' => true

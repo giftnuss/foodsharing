@@ -29,6 +29,7 @@ button:
   delete: Löschen
   permadelete: Unwiderruflich löschen
   yes_i_am_sure: Ja, ich bin mir sicher
+  apply: Übernehmen
   cancel: Abbrechen
   send: Senden
   answer: Antworten
@@ -37,6 +38,11 @@ button:
 
 bread:
   backToOverview: zurück zur Übersicht
+
+ui:
+  switch:
+    on: veröffentlicht
+    off: inaktiv
 
 pass:
   bread: Pass-Generator

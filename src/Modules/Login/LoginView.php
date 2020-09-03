@@ -45,7 +45,7 @@ class LoginView extends View
 				<input type="hidden" name="k" value="' . $key . '" />
 				' . $this->v_utils->v_form_passwd('pass1') . '
 				' . $this->v_utils->v_form_passwd('pass2') . '
-				' . $this->v_utils->v_form_submit($this->translator->trans('button.save'), 'submitted') . '
+				' . $this->v_utils->v_form_submit($this->translator->trans('button.save')) . '
 			</form>';
 
 		return $this->v_utils->v_field($cnt, $this->translator->trans('register.set-password'), ['class' => 'ui-padding']);

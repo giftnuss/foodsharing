@@ -431,6 +431,7 @@ i {
   margin-bottom: 20px;
 }
 
+/* TODO check if I'm used anywhere */
 .page .ui-accordion h3 {
   font-family: 'Alfa Slab One', serif;
   font-weight: normal;

@@ -1,7 +1,7 @@
 <?php
 global $g_lang;
 $g_lang['betrieb_status_id'] = 'Status';
-$g_lang['bezirk_id'] = 'Bezirk';
+$g_lang['bezirk_id'] = 'Bezirk'; // Blog FoodSharePoint Store
 $g_lang['kette_id'] = 'Betriebskette';
 $g_lang['betrieb_kategorie_id'] = 'Kategorie';
 $g_lang['str'] = 'Straße';

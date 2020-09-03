@@ -59,7 +59,7 @@ class BlogView extends View
 			$blogId = intval($article['id']);
 
 			if ($this->blogPermissions->mayPublish($article['bezirk_id'])) {
-				$active = $this->v_utils->v_activeSwitcher('blog_entry', $blogId, $article['active']);
+				$active = $this->v_utils->v_activeSwitcher('blog_entry', $blogId, boolval($article['active']));
 			} else {
 				$active = $this->translator->trans('blog.status.' . $article['active']);
 			}
@@ -67,7 +67,7 @@ class BlogView extends View
 			$link = '<a class="linkrow ui-corner-all" href="/?page=blog&sub=edit&id=' . $blogId . '">';
 
 			// No idea what that stray `a` is doing there, perhaps it is used for sorting?
-			$when = '<span style="display:none;">' . 'a' . $article['time_ts'] . '</span>';
+			$when = '<span style="display: none;">' . 'a' . $article['time_ts'] . '</span>';
 			$when .= $link . date('d.m.Y', $article['time_ts']) . '</a>';
 
 			$name = $link . $article['name'] . '</a>';
@@ -155,7 +155,7 @@ class BlogView extends View
 			$title = $this->translator->trans('blog.edit');
 			global $g_data;
 			$this->pageHelper->addContent($this->v_utils->v_field(
-				$this->v_utils->v_activeSwitcher('blog_entry', $_GET['id'], $g_data['active']),
+				$this->v_utils->v_activeSwitcher('blog_entry', intval($_GET['id']), boolval($g_data['active'])),
 				$this->translator->trans('blog.table.status'),
 				['class' => 'ui-padding']
 			), CNT_LEFT);

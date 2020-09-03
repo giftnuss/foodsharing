@@ -116,6 +116,8 @@ $g_lang['food_art'] = 'Was trifft auf die Lebensmittel zu?';
 $g_lang['fetchstate'] = 'Hat alles gut geklappt?';
 $g_lang['contact_type'] = 'Wie möchtest du kontaktiert werden?';
 $g_lang['lifetime'] = 'Wie lange soll dein Essenskorb gültig sein?';
+// BlogView
+$g_lang['teaser'] = 'Teaser';
 // BusinessCardView
 $g_lang['opt'] = 'Optionen';
 // ContentControl (and maybe others)
