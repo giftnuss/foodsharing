@@ -1621,6 +1621,7 @@ poll:
     option_texts_required: Bitte gib für jede Option einen Text ein.
     submit: Abstimmung speichern
     submit_success: Die Abstimmung wurde angelegt
+    missing_fields: Es müssen alle Felder ausgefüllt werden
   ended_at: lief bis
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen

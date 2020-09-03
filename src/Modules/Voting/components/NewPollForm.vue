@@ -69,6 +69,7 @@
               <b-form-datepicker
                 id="input-startdate"
                 v-model="startDate"
+                today-button
                 class="mb-2"
                 v-bind="labelsCalendar[locale] || {}"
                 :locale="locale"
@@ -205,6 +206,12 @@
         >
           {{ $i18n('poll.new_poll.submit') }}
         </b-button>
+        <div
+          v-if="$v.$invalid"
+          class="invalid-feedback"
+        >
+          {{ $i18n('poll.new_poll.missing_fields') }}
+        </div>
       </b-form>
     </div>
   </div>
@@ -294,7 +301,8 @@ export default {
           labelNoDateSelected: i18n('calendar.labelNoDateSelected'),
           labelCalendar: i18n('calendar.labelCalendar'),
           labelNav: i18n('calendar.labelNav'),
-          labelHelp: i18n('calendar.labelHelp')
+          labelHelp: i18n('calendar.labelHelp'),
+          labelTodayButton: i18n('calendar.labelToday')
         }
       }
     }

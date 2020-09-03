@@ -152,7 +152,7 @@ class AddVoting extends AbstractMigration
 			->create();
 
 		// voter table
-		$this->table('fs_foodsaver_has_voted', [
+		$this->table('fs_foodsaver_has_poll', [
 			'id' => false,
 			'primary_key' => ['foodsaver_id', 'poll_id']
 		])
@@ -169,10 +169,10 @@ class AddVoting extends AbstractMigration
 				'comment' => 'id of the poll'
 			])
 			->addColumn('time', 'datetime', [
-				'null' => false,
-				'default' => 'CURRENT_TIMESTAMP',
+				'null' => true,
+				'default' => null,
 				'update' => 'CURRENT_TIMESTAMP',
-				'comment' => 'time at which the voter has voted'
+				'comment' => 'time at which the voter has voted, null if not voted yet'
 			])
 			->addForeignKey('foodsaver_id', 'fs_foodsaver', 'id', [
 				'delete' => 'CASCADE',

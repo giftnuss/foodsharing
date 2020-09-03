@@ -366,40 +366,54 @@ class SeedCommand extends Command implements CustomCommandInterface
 		$this->output->writeln(' done');
 
 		$this->output->writeln('Create polls');
-		$poll1 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SELECT_ONE_CHOICE, 'scope' => VotingScope::FOODSAVERS]);
-		foreach (range(0, 3) as $_) {
-			$I->createPollOption($poll1['id'], [1]);
+		foreach ([VotingType::SELECT_ONE_CHOICE, VotingType::SELECT_MULTIPLE, VotingType::THUMB_VOTING,
+					 VotingType::SCORE_VOTING] as $type) {
+			$this->createPoll($region1, $userbot['id'], $type,
+				[$user2['id'], $userStoreManager['id'], $userStoreManager2['id'], $userbot['id'], $userorga['id']]
+			);
+			$this->output->write('.');
 		}
-		$this->output->write('.');
-		$poll2 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SELECT_MULTIPLE, 'scope' => VotingScope::FOODSAVERS]);
-		foreach (range(0, 3) as $_) {
-			$I->createPollOption($poll2['id'], [1]);
-		}
-		$this->output->write('.');
-		$poll3 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::THUMB_VOTING, 'scope' => VotingScope::FOODSAVERS]);
-		foreach (range(0, 3) as $_) {
-			$I->createPollOption($poll3['id'], [-1, 0, 1]);
-		}
-		$this->output->write('.');
-		$poll4 = $I->createPoll($region1, $userbot['id'], ['type' => VotingType::SCORE_VOTING, 'scope' => 0]);
-		foreach (range(0, 3) as $_) {
-			$I->createPollOption($poll4['id'], [-3, -2, -1, 0, 1, 2, 3]);
-		}
-		$this->output->write('.');
-		$pollEnded = $I->createPoll($region1, $userbot['id'], [
-			'type' => VotingType::SELECT_ONE_CHOICE,
-			'scope' => 0,
-			'start' => Carbon::now('-14 days')->format('Y-m-d H:i:s'),
-			'end' => Carbon::now('-7 days')->format('Y-m-d H:i:s'),
-		]);
-		foreach (range(0, 3) as $_) {
-			$I->createPollOption($pollEnded['id'], [1]);
-		}
+		$this->createPoll($region1, $userbot['id'], VotingType::SELECT_ONE_CHOICE,
+			[$user2['id'], $userStoreManager['id'], $userStoreManager2['id'], $userbot['id'], $userorga['id']],
+			Carbon::now('-14 days'), Carbon::now('-7 days')
+		);
 		$this->output->write('.');
 
 		$this->output->writeln(' done');
 
 		$I->_getDriver()->executeQuery('SET FOREIGN_KEY_CHECKS=1;', []);
 		$I->_getDbh()->commit();
+	}
+
+	private function createPoll(int $regionId, int $authorId, int $type, array $voterIds,
+								?Carbon $startDate = null, ?Carbon $endDate = null)
+	{
+		$possibleValues = [];
+		switch ($type) {
+			case VotingType::SELECT_ONE_CHOICE:
+			case VotingType::SELECT_MULTIPLE:
+				$possibleValues = [1];
+				break;
+			case VotingType::THUMB_VOTING:
+				$possibleValues = [1, 0, -1];
+				break;
+			case VotingType::SCORE_VOTING:
+				$possibleValues = [3, 2, 1, 0, -1, -2, -3];
+				break;
+		}
+
+		$params = ['type' => $type, 'scope' => VotingScope::FOODSAVERS];
+		if (!is_null($startDate)) {
+			$params['start'] = $startDate->format('Y-m-d H:i:s');
+		}
+		if (!is_null($endDate)) {
+			$params['end'] = $endDate->format('Y-m-d H:i:s');
+		}
+
+		$poll = $this->helper->createPoll($regionId, $authorId, $params);
+		foreach (range(0, 3) as $_) {
+			$this->helper->createPollOption($poll['id'], $possibleValues);
+		}
+		$this->helper->addVoters($poll['id'], $voterIds);
 	}
 }

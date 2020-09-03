@@ -180,7 +180,7 @@ class VotingRestController extends AbstractFOSRestController
 		$poll->options = array_map(function ($x) {
 			$o = new PollOption();
 			$o->text = trim($x);
-			if (empty($option->text)) {
+			if (empty($o->text)) {
 				throw new HttpException(400, 'option text must not be empty');
 			}
 

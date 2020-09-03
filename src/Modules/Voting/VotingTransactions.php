@@ -67,7 +67,8 @@ class VotingTransactions
 		$poll->options = $mappedOptions;
 
 		// create poll
-		$poll->id = $this->votingGateway->insertPoll($poll);
+		$voterIds = $this->listUserIds($poll->regionId, $poll->scope);
+		$poll->id = $this->votingGateway->insertPoll($poll, $voterIds);
 
 		// assign poll ID to the options
 		foreach ($poll->options as $option) {
@@ -75,8 +76,7 @@ class VotingTransactions
 		}
 
 		if ($notifyVoters) {
-			$userIds = $this->listUserIds($poll->regionId, $poll->scope);
-			$this->notifyUsers($poll, $userIds);
+			$this->notifyUsers($poll, $voterIds);
 		}
 	}
 

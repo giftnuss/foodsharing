@@ -1389,13 +1389,11 @@ class XhrMethods
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::VOTING) {
 			$votingGroupId = $this->regionGateway->getRegionVotingGroupId($data['parent_id']);
-			if ($votingGroupId) {
-				if (($votingGroupId != (int)$data['bezirk_id'])) {
-					return json_encode([
-						'status' => 1,
-						'script' => 'pulseError("' . $this->translationHelper->s('invalid_voting_team') . '");'
-					]);
-				}
+			if ($votingGroupId !== null && $votingGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translationHelper->s('invalid_voting_team') . '");'
+				]);
 			}
 		}
 

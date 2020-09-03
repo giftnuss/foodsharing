@@ -6,7 +6,6 @@ use Exception;
 use Foodsharing\Modules\Core\Control;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Permissions\VotingPermissions;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class VotingControl extends Control
 {
@@ -14,22 +13,19 @@ class VotingControl extends Control
 	private VotingPermissions $votingPermissions;
 	private VotingTransactions $votingTransactions;
 	private RegionGateway $regionGateway;
-	private TranslatorInterface $translator;
 
 	public function __construct(
 		VotingView $view,
 		VotingGateway $votingGateway,
 		VotingPermissions $votingPermissions,
 		VotingTransactions $votingTransactions,
-		RegionGateway $regionGateway,
-		TranslatorInterface $translator
+		RegionGateway $regionGateway
 	) {
 		$this->view = $view;
 		$this->votingGateway = $votingGateway;
 		$this->votingPermissions = $votingPermissions;
 		$this->votingTransactions = $votingTransactions;
 		$this->regionGateway = $regionGateway;
-		$this->translator = $translator;
 		parent::__construct();
 	}
 
@@ -46,7 +42,7 @@ class VotingControl extends Control
 
 				$mayVote = $this->votingPermissions->mayVote($poll);
 				$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,
-					$mayVote ? null : $this->votingGateway->hasUserVoted($poll->id, $this->session->id()))
+					$mayVote ? null : $this->votingGateway->getVoteDatetime($poll->id, $this->session->id()))
 				);
 			} elseif (isset($_GET['sub']) && $_GET['sub'] === 'new' && isset($_GET['bid']) && ($region = $this->regionGateway->getRegion($_GET['bid']))
 				&& $this->votingPermissions->mayCreatePoll($region['id'])) {

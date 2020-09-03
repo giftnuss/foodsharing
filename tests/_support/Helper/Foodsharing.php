@@ -931,6 +931,17 @@ class Foodsharing extends \Codeception\Module\Db
 		return $params;
 	}
 
+	public function addVoters(int $pollId, array $userIds)
+	{
+		foreach ($userIds as $id) {
+			$this->haveInDatabase('fs_foodsaver_has_poll', [
+				'poll_id' => $pollId,
+				'foodsaver_id' => $id,
+				'time' => null
+			]);
+		}
+	}
+
 	// =================================================================================================================
 	// private methods
 	// =================================================================================================================
