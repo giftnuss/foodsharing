@@ -603,6 +603,10 @@ forum:
 
 chat:
   open_chat: Nachricht schreiben
+  new_message: Neue Nachricht
+  conversations: Unterhaltungen
+  empty: Noch keine Unterhaltungen
+  placeholder: Schreibe etwas!
   notification_unnamed_conversation: '{foodsaver} hat dir geschrieben.'
   notification_named_conversation: '{foodsaver} hat in {conversation} geschrieben.'
   error_loading_messages: Das Nachladen von Nachrichten ist fehlgeschlagen.

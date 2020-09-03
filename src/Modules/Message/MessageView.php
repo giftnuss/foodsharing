@@ -10,7 +10,7 @@ final class MessageView extends View
 	{
 		return $this->menu([
 			[
-				'name' => $this->translationHelper->s('new_message'),
+				'name' => $this->translator->trans('chat.new_message'),
 				'click' => 'msg.compose(); return false;',
 			]
 		]);
@@ -77,11 +77,11 @@ final class MessageView extends View
 		$content .= $this->v_utils->v_form_textarea('compose_body');
 
 		$content .= $this->v_utils->v_input_wrapper(false,
-			'<a class="button" id="compose_submit" href="#">' . $this->translationHelper->s('send') . '</a>');
+			'<a class="button" id="compose_submit" href="#">' . $this->translator->trans('button.send') . '</a>');
 
 		return '<div id="compose">' . $this->v_utils->v_field(
 			$content,
-			$this->translationHelper->s('new_message'),
+			$this->translator->trans('chat.new_message'),
 			['class' => 'ui-padding']
 		) . '</div>';
 	}
@@ -93,7 +93,7 @@ final class MessageView extends View
 	{
 		if (empty($conversations)) {
 			return '<li class="noconv">'
-				. $this->v_utils->v_info($this->translationHelper->s('no_conversations'))
+				. $this->v_utils->v_info($this->translator->trans('chat.empty'))
 				. '</li>';
 		}
 
@@ -148,7 +148,7 @@ final class MessageView extends View
 	{
 		return $this->v_utils->v_field(
 			'<div id="conversation-list"><ul class="linklist conversation-list">' . $list . '</ul></div>',
-			$this->translationHelper->s('conversations'),
+			$this->translator->trans('chat.conversations'),
 			[],
 			'fas fa-comments'
 		);
@@ -168,7 +168,7 @@ final class MessageView extends View
 			. $this->v_utils->v_form_textarea('msg_answer', [
 				'style' => 'width: 88%;',
 				'nolabel' => true,
-				'placeholder' => $this->translationHelper->s('write_something'),
+				'placeholder' => $this->translator->trans('chat.placeholder'),
 			]) . '<input id="conv_submit" type="submit" class="button" name="submit" value="&#xf0a9;" />
 			</form>
 		</div>';

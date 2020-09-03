@@ -25,7 +25,6 @@ $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
 $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)';
 $g_lang['geschlecht'] = 'Geschlecht';
-$g_lang['send'] = 'Senden'; // MessageView
 $g_lang['botschafter'] = 'Botschafter';
 $g_lang['save'] = 'Speichern'; // SettingsView SettingsView SettingsView
 $g_lang['options'] = 'Optionen';
@@ -92,8 +91,6 @@ $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';
 
 // $g_lang['search'] = 'Suchen';
-$g_lang['write_something'] = 'Schreibe etwas!'; // MessageView
-$g_lang['new_message'] = 'Neue Nachricht'; // MessageView MessageView
 $g_lang['daterange'] = 'Zeitraum';
 // $g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter';
 // $g_lang['regions'] = 'Bezirke';
