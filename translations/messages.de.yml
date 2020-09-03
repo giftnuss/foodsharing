@@ -1452,6 +1452,23 @@ blog:
     edit: Diesen Artikel kannst du nicht bearbeiten
     delete: Diesen Artikel kannst du nicht löschen
 
+stats:
+  title: Gesamtstatistik
+  total:
+    weight: 'Lebensmittel erfolgreich vor der Tonne gerettet.'
+    cooperations: 'Betriebe kooperieren kontinuierlich und zufrieden mit uns.'
+    foodsaver: 'Foodsaver engagieren sich ehrenamtlich für eine Welt ohne Lebensmittelverschwendung.'
+    foodsharer: 'Foodsharer sind derzeit auf foodsharing registriert und interessieren sich für unsere Arbeit.'
+    pickups: 'Rettungseinsätze haben unsere Foodsaver gemeistert.'
+    baskets: 'Essenskörbe wurden insgesamt online gestellt.'
+    fsp: 'Fairteiler werden zum Tausch von Lebensmitteln genutzt.'
+  avg:
+    pickups: 'Rettungseinsätze gibt es derzeit durchschnittlich pro Tag.'
+    baskets: 'Essenskörbe werden derzeit durschnittlich pro Woche online gestellt.'
+  leader:
+    regions: Aktivste Bezirke
+    users: Aktivste Foodsaver
+
 conference:
   description_text: 'Hier kannst du einer Videokonferenz für die gewählte Gruppe beitreten. Die Videokonferenz öffnet BigBlueButton in einem neuen Fenster.'
   privacy_notice: 'Hinweis: Videokonferenzen werden über den Konferenzserver des living utopia Kollektivs abgewickelt. Du wirst dort automatisch mit deinem bei foodsharing eingegebenen Vornamen eingeloggt.'

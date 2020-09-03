@@ -1,96 +1,81 @@
-
-.stat_item {
-  display: inline-block;
-  margin: 0;
-  width: 330px;
-  vertical-align: top;
-}
-
-.stat_badge {
-  display: inline-block;
-  background-color: var(--fs-green);
-  border-radius: 300px;
-  height: 220px;
-  line-height: 300px;
-  margin: 0;
-  padding: 0;
-  width: 220px;
-}
-
-.stat_icon {
-  color: #FFF;
-  font-size: 96px;
-  line-height: 220px;
-}
-
-.stat_text h4 {
-  padding: 0;
-  margin: 10px 0;
-  font-size: 33px;
-  font-family: "Alfa Slab One", serif;
-  font-weight: normal;
-}
-
-.stat_text, .stat_text h4, .stat_text p {
-  text-align: center;
-  color: var(--fs-brown);
-}
-
-.stat_text h4 {
-  height: 40px;
-}
-
-.stat_text p {
-  display: inline-block;
-  height: 85px;
-  margin: 0 40px;
-}
-
-table.stat_cities {
-  border-collapse: inherit;
-  width: 255px;
-  border-spacing: 0 10px;
-}
-
-table.stat_cities {
-  vertical-align: top;
-}
-
-table.stat_cities .city {
-  overflow: hidden;
-  line-height: 12px;
-}
-
-table.stat_cities td p {
-  padding: 0;
-  display: block;
-  margin: 3px 0 0;
-}
-
-table.stat_cities td h4 {
-  font-family: "Alfa Slab One", serif;
-  margin: 0;
-  padding: 0;
-  display: block;
-  font-size: 22px;
-  line-height: 24px;
-  font-weight: normal;
-  color: var(--fs-green);
-}
-
 #stat_whole {
   text-align: center;
   padding-top: 20px;
 }
 
+.stat_item {
+  display: inline-block;
+  width: 330px;
+}
+
+.stat_badge {
+  display: inline-block;
+  background-color: var(--fs-green);
+  border-radius: 50%;
+  height: 220px;
+  width: 220px;
+}
+
+.stat_icon {
+  color: var(--white);
+  font-size: 96px;
+  line-height: 220px;
+}
+
+.stat_text h4 {
+  margin: 0.5rem 0;
+  height: 2.5rem;
+  font-size: 2rem;
+}
+
+.stat_text h4,
+table.leaderboard td h4 {
+  padding: 0;
+  font-family: "Alfa Slab One", serif;
+  font-weight: normal;
+}
+
+table.leaderboard td h4 {
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  color: var(--fs-green);
+}
+
+.stat_text,
+.stat_text h4,
+.stat_text p {
+  color: var(--fs-brown);
+}
+
+.stat_text p {
+  display: inline-block;
+  height: 5.5rem;
+  margin: 0 2.5rem;
+}
+
+table.leaderboard {
+  border-collapse: inherit;
+  border-spacing: 0 10px;
+}
+
+table.leaderboard .rank {
+  padding-right: 0.3rem;
+  text-align: right;
+}
+
+table.leaderboard .name .fetchweight,
+table.leaderboard .name .fetchcount {
+  margin: 2px 0;
+}
+
 .fa-stack {
- width: 200px;
- vertical-align: bottom;
+  width: 200px;
+  vertical-align: bottom;
 }
 .fa-stack i.far.fa-calendar.fa-stack-2x {
- font-size: 1.4em;
- margin-top: 12px;
+  font-size: 1.4em;
+  margin-top: 12px;
 }
 .fa-stack i.fas.fa-shopping-basket.fa-stack-1x {
- font-size: 0.7em;
+  font-size: 0.7em;
 }
