@@ -201,9 +201,13 @@ class BellGateway extends BaseGateway
 		$this->updateMultipleFoodsaverClients($foodsaverIds);
 	}
 
-	public function setBellsAsSeen(array $bellIds, int $foodsaverId): void
+	/**
+	 * Marks the bells specified by a list of IDs and the owner's ID as read. Returns the number of
+	 * bells that were successfully changed.
+	 */
+	public function setBellsAsSeen(array $bellIds, int $foodsaverId): int
 	{
-		$this->db->update('fs_foodsaver_has_bell',
+		return $this->db->update('fs_foodsaver_has_bell',
 			['seen' => 1],
 			[
 				'bell_id' => array_map('intval', $bellIds),

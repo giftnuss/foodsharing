@@ -1,4 +1,4 @@
-import { get, remove } from './base'
+import { get, patch, remove } from './base'
 
 // wrapper around the legacy SearchXHR method
 export async function getBellList () {
@@ -10,5 +10,7 @@ export function deleteBell (id) {
 }
 
 export function markBellsAsRead (ids) {
-  return get(`/../xhrapp.php?app=bell&m=markBellsAsRead&ids=${JSON.stringify(ids)}`)
+  return patch('/bells/', {
+    ids: ids
+  })
 }
