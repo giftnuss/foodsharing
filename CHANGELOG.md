@@ -45,6 +45,7 @@
 - Clarify and extract some permission handling !1671 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 !1654 @ChrisOelmueller
 - Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
+- Move bell XHR requests to REST !1659 @alex.simm
 
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm

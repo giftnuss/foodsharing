@@ -52,10 +52,10 @@ class BellRestController extends AbstractFOSRestController
 	 * Marks one or more bells as read.
 	 *
 	 * @SWG\Parameter(name="bellId", in="path", type="integer", description="which bell to mark as read")
-	 * @SWG\Response(response="200", description="Success.")
+	 * @SWG\Response(response="200", description="At least one of the bells was successfully marked.")
 	 * @SWG\Response(response="400", description="If the list of IDs is empty.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to change the bells.")
-	 * @SWG\Response(response="404", description="At least one of the bells does not exist.")
+	 * @SWG\Response(response="404", description="None of the bells exists.")
 	 * @SWG\Tag(name="bells")
 	 *
 	 * @Rest\Patch("bells")
@@ -76,7 +76,7 @@ class BellRestController extends AbstractFOSRestController
 
 		return $this->handleView($this->view([
 			'ids' => $bellIds
-		], $changed === sizeof($bellIds) ? 200 : 404));
+		], $changed > 0 ? 200 : 404));
 	}
 
 	/**

@@ -811,8 +811,8 @@ class Foodsharing extends \Codeception\Module\Db
 			'name' => 'title',
 			'body' => $this->faker->text(50),
 			'vars' => '',
-			'attr' => '',
-			'icon' => '',
+			'attr' => serialize(['href' => '/']),
+			'icon' => 'icon',
 			'identifier' => '',
 			'time' => $this->faker->dateTime($max = 'now'),
 			'closeable' => 1
@@ -828,6 +828,8 @@ class Foodsharing extends \Codeception\Module\Db
 				'seen' => 0
 			]);
 		}
+
+		return $bell_id;
 	}
 
 	public function addBlogPost($authorId, $regionId, $extra_params = [])
