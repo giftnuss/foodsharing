@@ -133,14 +133,14 @@ class SearchGateway extends BaseGateway
 	}
 
 	/**
-	 * Searches in the titles of forum themes of a group for a given string.
+	 * Searches in the titles of forum threads (called themes in the database) of a group for a given string.
 	 *
 	 * @param string $q Search string as provided by an end user. Individual words all have to be found in the result, each being the prefixes of words of the results
 	 *(e.g. hell worl is expanded to a MySQL match condition of +hell* +worl*). The input string is properly sanitized, e.g. no further control over the search operation is possible.
 	 * @param int $groupId ID of a group (region or work group) in which will be searched
 	 * @param int $subforumId ID of the forum in the group
 	 *
-	 * @return array SearchResult[] Array of forum themes containing the search term
+	 * @return array SearchResult[] Array of forum threads containing the search term
 	 */
 	public function searchForumTitle(string $q, int $groupId, int $subforumId): array
 	{
