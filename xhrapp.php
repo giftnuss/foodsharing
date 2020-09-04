@@ -35,8 +35,6 @@ $csrf_whitelist = [
 	// 'Basket::editBasket',
 	// 'Basket::publishEdit',
 	// 'Basket::finishRequest',
-	// 'Bell::infobar',
-	// 'Bell::markBellsAsRead',
 	// 'Email::testmail' .
 	// 'Event::eventresponse',
 	// 'Foodsaver::loadFoodsaver',

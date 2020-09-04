@@ -93,10 +93,10 @@ class BellGateway extends BaseGateway
 	 *
 	 * @return BellForList[]
 	 */
-	public function listBells(int $fsId, string $limit = '')
+	public function listBells(int $fsId, ?int $limit = null, int $offset = 0)
 	{
-		if ($limit !== '') {
-			$limit = ' LIMIT 0,' . (int)$limit;
+		if ($limit !== null) {
+			$limit = ' LIMIT ' . $offset . ', ' . $limit;
 		}
 
 		$stm = '

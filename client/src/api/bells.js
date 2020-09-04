@@ -2,7 +2,7 @@ import { get, patch, remove } from './base'
 
 // wrapper around the legacy SearchXHR method
 export async function getBellList () {
-  return (await get('/../xhrapp.php?app=bell&m=infobar')).data.list
+  return await get('/bells')
 }
 
 export function deleteBell (id) {
@@ -10,7 +10,7 @@ export function deleteBell (id) {
 }
 
 export function markBellsAsRead (ids) {
-  return patch('/bells/', {
+  return patch('/bells', {
     ids: ids
   })
 }
