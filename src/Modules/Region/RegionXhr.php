@@ -40,8 +40,7 @@ final class RegionXhr extends Control
 	{
 		$data = json_decode(file_get_contents('php://input'), true);
 
-		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $data['msg']) && $this->session->may(
-			) && $data['msg'] != '') {
+		if (isset($_GET['bid'], $_GET['tid'], $_GET['pid'], $data['msg']) && $this->session->may() && $data['msg'] != '') {
 			$sub = 'forum';
 			if ($_GET['sub'] != 'forum') {
 				$sub = 'botforum';
@@ -54,14 +53,14 @@ final class RegionXhr extends Control
 			) {
 				if ($post_id = $this->forumGateway->addPost($this->session->id(), $_GET['tid'], $body)) {
 					if ($follower = $this->forumFollowerGateway->getThreadEmailFollower($this->session->id(), $_GET['tid'])) {
-						$theme = $this->forumGateway->getThreadInfo($_GET['tid']);
+						$thread = $this->forumGateway->getThreadInfo($_GET['tid']);
 
 						foreach ($follower as $f) {
 							$this->emailHelper->tplMail('forum/answer', $f['email'], [
 								'anrede' => $this->translator->trans('salutation.' . $f['geschlecht']),
 								'name' => $f['name'],
 								'link' => BASE_URL . '/?page=bezirk&bid=' . $bezirk['id'] . '&sub=' . $sub . '&tid=' . (int)$_GET['tid'] . '&pid=' . $post_id . '#post' . $post_id,
-								'thread' => $theme['title'],
+								'thread' => $thread['title'],
 								'bezirk' => $bezirk['name'],
 								'post' => $body,
 								'poster' => $this->session->user('name')
