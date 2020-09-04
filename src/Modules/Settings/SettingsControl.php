@@ -399,12 +399,12 @@ class SettingsControl extends Control
 						}
 					}
 				} elseif (substr($key, 0, 7) == 'thread_') {
-					$themeId = (int)substr($key, 7);
-					if (!empty($themeId)) {
+					$threadId = (int)substr($key, 7);
+					if (!empty($threadId)) {
 						if ($infoType == InfoType::NONE) {
-							$threadIdsToUnfollow[] = $themeId;
+							$threadIdsToUnfollow[] = $threadId;
 						} else {
-							$this->forumFollowerGateway->updateInfoType($fsId, $themeId, $infoType);
+							$this->forumFollowerGateway->updateInfoType($fsId, $threadId, $infoType);
 						}
 					}
 				}
