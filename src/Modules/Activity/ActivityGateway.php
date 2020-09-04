@@ -131,7 +131,7 @@ class ActivityGateway extends BaseGateway
 		);
 	}
 
-	public function fetchAllForumUpdates(array $regionIds, int $page, $isAmbassadorTheme = false): array
+	public function fetchAllForumUpdates(array $regionIds, int $page, $isAmbassadorThread = false): array
 	{
 		$stm = '
 			SELECT	t.id,
@@ -158,7 +158,7 @@ class ActivityGateway extends BaseGateway
 
 			WHERE	t.active = 1
 			AND 	bt.bezirk_id IN ( ' . implode(',', $regionIds) . ' )
-			AND 	bt.bot_theme = :bot_theme_id
+			AND 	bt.bot_theme = :isAmbassadorThread
 			AND 	fs.deleted_at IS NULL
 
 			ORDER BY t.last_post_id DESC
@@ -170,7 +170,7 @@ class ActivityGateway extends BaseGateway
 			[
 				':start_item_index' => $page * self::ITEMS_PER_PAGE,
 				':items_per_page' => self::ITEMS_PER_PAGE,
-				':bot_theme_id' => $isAmbassadorTheme ? 1 : 0
+				':isAmbassadorThread' => $isAmbassadorThread ? 1 : 0
 			]
 		);
 	}
