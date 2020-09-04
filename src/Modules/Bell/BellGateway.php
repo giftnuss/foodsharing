@@ -168,16 +168,22 @@ class BellGateway extends BaseGateway
 		return $this->db->exists('fs_bell', ['identifier' => $identifier]);
 	}
 
-	public function delBellForFoodsaver(int $bellId, int $fsId): void
+	/**
+	 * Deletes the bell with the given ID for a specific foodsaver. Returns whether the bell was succesfully
+	 * deleted.
+	 */
+	public function delBellForFoodsaver(int $bellId, int $fsId): bool
 	{
 		$bellIsCloseable = $this->db->fetchValueByCriteria('fs_bell', 'closeable', ['id' => $bellId]);
 
 		if (!$bellIsCloseable) {
-			return;
+			return false;
 		}
 
-		$this->db->delete('fs_foodsaver_has_bell', ['bell_id' => $bellId, 'foodsaver_id' => $fsId]);
+		$deleted = $this->db->delete('fs_foodsaver_has_bell', ['bell_id' => $bellId, 'foodsaver_id' => $fsId]);
 		$this->updateFoodsaverClient($fsId);
+
+		return $deleted > 0;
 	}
 
 	public function delBellsByIdentifier(string $identifier): void

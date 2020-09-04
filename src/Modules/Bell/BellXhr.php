@@ -32,15 +32,6 @@ class BellXhr extends Control
 	}
 
 	/**
-	 * ajax call to delete a bell.
-	 */
-	public function delbell()
-	{
-		$bellId = intval($_GET['id']);
-		$this->gateway->delBellForFoodsaver($bellId, $this->session->id());
-	}
-
-	/**
 	 * ajax call to set bell as seen.
 	 */
 	public function markBellsAsRead(): void
