@@ -130,15 +130,13 @@ class DashboardControl extends Control
 		$this->pageHelper->addBread($this->translator->trans('dashboard.title'));
 		$this->pageHelper->addTitle($this->translator->trans('dashboard.title'));
 
-		/* User is foodsaver */
-		if ($this->user['rolle'] > 0 && !$this->session->getCurrentRegionId()) {
-			$this->pageHelper->addJs('becomeBezirk();');
-		}
-
 		if ($this->session->may('fs')) {
+			// User is foodsaver: prompt for home region if not set
+			if (!$this->session->getCurrentRegionId()) {
+				$this->pageHelper->addJs('becomeBezirk();');
+			}
 			$this->dashFoodsaver();
 		} else {
-			// foodsharer dashboard
 			$this->dashFoodsharer();
 		}
 	}
@@ -147,7 +145,7 @@ class DashboardControl extends Control
 	 * Simple dashboard that is only rendered for foodsharers (users who haven't done the quiz yet and can only create
 	 * food baskets and so on).
 	 */
-	private function dashFoodsharer()
+	private function dashFoodsharer(): void
 	{
 		$this->setContentWidth(8, 8);
 		$subtitle = $this->translator->trans('dashboard.foodsharer');
