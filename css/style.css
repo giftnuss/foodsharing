@@ -169,30 +169,21 @@ blockquote:before, blockquote:after,
 q:before, q:after {
   content: none;
 }
-
 /* RESET END */
-.inside {
-  padding-right: 8px;
-  padding-left: 8px;
-}
-
-.odd {
-  background-color: #fffffe;
-  border-bottom: 1px solid var(--border);
-}
-
-.even {
-  background-color: #fffffe;
-  border-bottom: 1px solid var(--border);
-}
 
 body {
   background-color: var(--fs-beige);
 }
 
-.float_right {
-  float: right;
-  display: block;
+.inside {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+.even,
+.odd {
+  background-color: #fffffe;
+  border-bottom: 1px solid var(--border);
 }
 
 .v-form {
@@ -984,17 +975,6 @@ a.light {
   color: var(--fs-brown);
 }
 
-
-.bottom_bar {
-  border-top: 1px solid var(--border) !important;
-  padding-top: 7px;
-}
-
-.user_profile_link_span a {
-  text-decoration: none;
-  color: var(--fs-brown);
-}
-
 .calendar {
   display: block;
   float: left;
@@ -1255,8 +1235,17 @@ ul.linklist li > a .avatar span.bubble, ul.linklist li > a:hover .avatar span.bu
   background-color: var(--white);
 }
 
-@media (max-width: 1025px) {
+.bottom_bar {
+  border-top: 1px solid var(--border) !important;
+  padding-top: 7px;
+}
 
+div.bottom_bar .float_right {
+  float: right;
+  display: block;
+}
+
+@media (max-width: 1025px) {
   div.bottom_bar .float_right {
     float: none !important;
     display: block;
