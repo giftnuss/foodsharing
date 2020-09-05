@@ -322,8 +322,11 @@ class StoreUserControl extends Control
 						<span class="sure" style="display: none;">' . $this->translator->trans('wall.delete') . '</span>
 						<span class="abort" style="display: none;">' . $this->translator->trans('button.cancel') . '</span>
 					</div>
-					<div id="signout_shure" title="' . $this->translationHelper->s('signout_sure_title') . '">
-						' . $this->v_utils->v_info($this->translationHelper->s('signout_sure')) . '
+					<div id="signout_shure" title="' . $this->translator->trans('pickup.signout_confirm') . '">
+						' . $this->v_utils->v_info('
+							<strong>' . $this->translator->trans('pickup.signout_sure') . '</strong>
+							<p>' . $this->translator->trans('pickup.signout_info') . '</p>'
+						) . '
 						<span class="sure" style="display: none;">' . $this->translator->trans('storeedit.team.leave') . '</span>
 						<span class="abort" style="display: none;">' . $this->translator->trans('button.cancel') . '</span>
 					</div>

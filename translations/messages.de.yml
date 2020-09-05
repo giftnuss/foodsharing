@@ -540,6 +540,9 @@ pickup:
   open_profile: Profil aufrufen
   copyNumber: Nummer kopieren
   copiedNumber: '"{number}" wurde in die Zwischenablage kopiert.'
+  signout_sure: Möchtest du dieses Team verlassen?
+  signout_info: Sämtliche deiner Abholtermine werden gelöscht.
+  signout_confirm: Bist du dir sicher?
   really_kick_user_date_title: '{name} für {date} austragen?'
   really_leave_date_title: Für {date} austragen?
   really_kick_user_date: Möchtest Du {name} wirklich aus der Abholung am {date} austragen?
