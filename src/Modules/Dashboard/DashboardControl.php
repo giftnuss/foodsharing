@@ -196,11 +196,9 @@ class DashboardControl extends Control
 		$this->view->updates();
 
 		if ($this->user['lat'] && ($baskets = $this->basketGateway->listNearbyBasketsByDistance($this->session->id(), $this->getUserLocationOrDefault()))) {
-			$this->pageHelper->addContent($this->view->nearbyBaskets($baskets), CNT_LEFT);
-		} else {
-			if ($baskets = $this->basketGateway->listNewestBaskets()) {
-				$this->pageHelper->addContent($this->view->newBaskets($baskets), CNT_LEFT);
-			}
+			$this->pageHelper->addContent($this->view->listBaskets($baskets, true), CNT_LEFT);
+		} elseif ($baskets = $this->basketGateway->listNewestBaskets()) {
+			$this->pageHelper->addContent($this->view->listBaskets($baskets, false), CNT_LEFT);
 		}
 	}
 

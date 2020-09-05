@@ -7,29 +7,6 @@ use Foodsharing\Modules\Event\InvitationStatus;
 
 class DashboardView extends View
 {
-	public function newBaskets($baskets)
-	{
-		$out = '<ul class="linklist baskets">';
-		foreach ($baskets as $b) {
-			$out .= '
-			<li>
-				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
-					<span class="i">' . $this->img($b) . '</span>
-					<span class="n">Essenskorb von ' . $b['fs_name'] . '</span>
-					<span class="t">veröffentlicht: ' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
-					<span class="d">' . $b['description'] . '</span>
-					<span class="c"></span>
-				</a>
-
-			</li>';
-		}
-
-		$out .= '
-				</ul>';
-
-		return $this->v_utils->v_field($out, $this->translator->trans('basket.recent'));
-	}
-
 	public function updates()
 	{
 		$this->pageHelper->addContent($this->vueComponent('activity-overview', 'activity-overview', []));
@@ -43,36 +20,42 @@ class DashboardView extends View
 		]);
 	}
 
-	public function nearbyBaskets($baskets)
+	public function listBaskets(array $baskets, bool $nearby): string
 	{
 		$out = '<ul class="linklist baskets">';
 		foreach ($baskets as $b) {
-			$out .= '
-			<li>
-				<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . (int)$b['id'] . '});return false;" href="#" class="corner-all">
-					<span class="i">' . $this->img($b) . '</span>
-					<span class="n">Essenskorb von ' . $b['fs_name'] . ' (' . $this->distance($b['distance']) . ')</span>
-					<span class="t">' . $this->timeHelper->niceDate($b['time_ts']) . '</span>
-					<span class="d">' . $b['description'] . '</span>
-					<span class="c"></span>
-				</a>
-
-			</li>';
+			$out .= $this->basketListEntry($b, $nearby);
 		}
+		$out .= '</ul>';
+		$label = $nearby ? $this->translator->trans('basket.nearby') : $this->translator->trans('basket.recent');
 
-		$out .= '
-				</ul>';
-
-		return $this->v_utils->v_field($out, $this->translator->trans('basket.nearby'));
+		return $this->v_utils->v_field($out, $label);
 	}
 
-	private function img($basket)
+	private function basketListEntry(array $basket, bool $nearby): string
 	{
-		if ($basket['picture'] != '' && file_exists(ROOT_DIR . 'images/basket/50x50-' . $basket['picture'])) {
-			return '<img src="/images/basket/thumb-' . $basket['picture'] . '" height="50" />';
+		$basketId = intval($basket['id']);
+		$by = $this->translator->trans('basket.by', ['{name}' => $basket['fs_name']]);
+		if ($nearby && $basket['distance']) {
+			$by .= ' (' . $this->distance($basket['distance']) . ')';
 		}
 
-		return '<img src="/img/basket50x50.png" height="50" />';
+		if ($basket['picture'] && file_exists(ROOT_DIR . 'images/basket/50x50-' . $basket['picture'])) {
+			$img = '<img src="/images/basket/thumb-' . $basket['picture'] . '" height="50" />';
+		} else {
+			$img = '<img src="/img/basket50x50.png" height="50" />';
+		}
+		$when = $this->timeHelper->niceDate($basket['time_ts']);
+
+		return '
+		<li>
+			<a onclick="ajreq(\'bubble\',{app:\'basket\',id:' . $basketId . '}); return false;" href="#" class="corner-all">
+				<span class="i">' . $img . '</span>
+				<span class="n">' . $by . '</span>
+				<span class="t">' . $when . '</span>
+				<span class="d">' . $basket['description'] . '</span>
+			</a>
+		</li>';
 	}
 
 	public function becomeFoodsaver()
