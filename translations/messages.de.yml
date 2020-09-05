@@ -959,6 +959,7 @@ foodsaver:
   list:
     summary: '{count} Foodsaver in {region}'
     inactive: ', die sich 6 Monate nicht eingeloggt haben:'
+  kicked: Foodsaver wurde entfernt
 
 content:
   bread: Alle Seiten
