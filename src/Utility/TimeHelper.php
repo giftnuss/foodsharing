@@ -25,30 +25,28 @@ final class TimeHelper
 		$date = Carbon::createFromTimestamp($unixTimeStamp);
 
 		if ($date->isToday()) {
-			$dateString = $this->translator->trans('date.today') . ', ';
+			$dateString = $this->translator->trans('date.today');
 		} elseif ($date->isTomorrow()) {
-			$dateString = $this->translator->trans('date.tomorrow') . ', ';
+			$dateString = $this->translator->trans('date.tomorrow');
 		} elseif ($date->isYesterday()) {
-			$dateString = $this->translator->trans('date.yesterday') . ', ';
+			$dateString = $this->translator->trans('date.yesterday');
 		} else {
 			$dateString = '';
 			$extendWithAbsoluteDate = true;
 		}
 
 		if ($extendWithAbsoluteDate) {
-			$days = $this->getDow();
-			$dateString = $dateString . $days[date('w', $unixTimeStamp)] . ', ' . (int)date(
-					'd',
-					$unixTimeStamp
-				) . '. ' . $this->translator->trans('month.short.' . date('n', $unixTimeStamp));
+			$dateString .= $this->getDow(intval(date('w', $unixTimeStamp))) . ', '
+				. (int)date('d', $unixTimeStamp) . '. '
+				. $this->translator->trans('month.short.' . date('n', $unixTimeStamp));
+
 			$year = date('Y', $unixTimeStamp);
 			if ($year != date('Y')) {
-				$dateString = $dateString . ' ' . $year;
+				$dateString .= ' ' . $year;
 			}
-			$dateString .= ', ';
 		}
 
-		return $dateString . $this->translator->trans('date.time', [
+		return $dateString . ', ' . $this->translator->trans('date.time', [
 			'{time}' => date('H:i', $unixTimeStamp),
 		]);
 	}
@@ -67,7 +65,7 @@ final class TimeHelper
 		return $this->translator->trans('month.' . intval(date('m', $ts)));
 	}
 
-	public function getDow(): array
+	public function getDow(int $day): string
 	{
 		return [
 			1 => $this->translator->trans('date.monday'),
@@ -77,6 +75,6 @@ final class TimeHelper
 			5 => $this->translator->trans('date.friday'),
 			6 => $this->translator->trans('date.saturday'),
 			0 => $this->translator->trans('date.sunday'),
-		];
+		][$day];
 	}
 }
