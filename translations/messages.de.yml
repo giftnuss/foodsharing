@@ -1019,6 +1019,15 @@ profile:
   banana:
     title: '{count} Vertrauensbananen'
     by: ' von '
+    give: Schenke {name} eine Banane
+    details: |
+      Hier kannst du etwas dazu schreiben, warum du {name} gerne eine Banane schenken möchtest.
+    undo: 'Vertrauensbananen können nicht verändert oder zurückgenommen werden.'
+    vouch: |
+      Bitte vergib die Vertrauensbanane daher nur an dir persönlich bekannte Menschen,
+      welche die Verhaltensregeln und die Rechtsvereinbarung einhalten
+      und für deren Zuverlässigkeit und Engagement du einstehen kannst.
+    placeholder: 'min. 100 Zeichen...'
     sent: Banane wurde gesendet!
     messageTooShort: Bitte gib mindestens einen 100 Zeichen langen Text zu Deiner Banane ein.
   nav:

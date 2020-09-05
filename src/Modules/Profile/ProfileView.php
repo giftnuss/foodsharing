@@ -522,18 +522,18 @@ class ProfileView extends View
 				$.fancybox.update();
 				return false;"
 			>
-				Schenke ' . $this->foodsaver['name'] . ' eine Banane
+				' . $this->translator->trans('profile.banana.give', ['{name}' => $this->foodsaver['name']]) . '
 			</a>
 			<div class="d-none">
 				<div class="info">
-					Hier kannst Du etwas dazu schreiben, warum Du ' . $this->foodsaver['name'] . ' gerne eine Banane schenken möchtest. Du kannst jedem Foodsaver nur eine Banane schenken!<br />
-					Bitte gib die Vertrauensbanane nur an Foodsaver, die Du persönlich kennst und bei denen Du weißt, dass sie zuverlässig und engagiert sind und Du sicher bist, dass sie die Verhaltensregeln und die Rechtsvereinbarung einhalten.
-					<p>
-						<strong>Vertrauensbananen können nicht zurückgenommen werden. Sei bitte deswegen besonders achtsam, wem Du eine schenkst.</strong>
-					</p>
+					' . $this->translator->trans('profile.banana.details', ['{name}' => $this->foodsaver['name']]) . '
+					<br>
+					<strong>' . $this->translator->trans('profile.banana.undo') . '</strong>
+					<br>
+					' . $this->translator->trans('profile.banana.vouch') . '
 				</div>
 				<div class="d-flex">
-					<textarea id="bouch-ta" class="textarea mr-2" placeholder="min. 100 Zeichen..."></textarea>
+					<textarea id="bouch-ta" class="textarea mr-2" placeholder="' . $this->translator->trans('profile.banana.placeholder') . '"></textarea>
 					<a href="#" class="btn btn-sm btn-secondary float-right d-inline-flex" onclick="
 						trySendBanana(' . (int)$this->foodsaver['id'] . ');
 						return false;"
