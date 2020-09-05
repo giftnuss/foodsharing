@@ -630,6 +630,8 @@ wall:
   by: '{when} von {name}'
   delete: Eintrag löschen
   confirm-deletion: Soll der Pinnwand-Eintrag wirklich gelöscht werden?
+  created: 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
+  error: 'Upps! Dein Pinnwandeintrag konnte nicht gespeichert werden.'
 
 events:
   bread: Termine

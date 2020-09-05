@@ -12,12 +12,12 @@ use Foodsharing\Utility\Sanitizer;
 
 class WallPostXhr extends Control
 {
-	private $foodSharePointTransactions;
-	private $wallPostGateway;
-	private $wallPostPermissions;
-	private $table;
-	private $id;
-	private $sanitizerService;
+	private string $table;
+	private int $id;
+	private FoodSharePointTransactions $foodSharePointTransactions;
+	private WallPostGateway $wallPostGateway;
+	private WallPostPermissions $wallPostPermissions;
+	private Sanitizer $sanitizerService;
 
 	public function __construct(
 		FoodSharePointTransactions $foodSharePointTransactions,
@@ -109,21 +109,17 @@ class WallPostXhr extends Control
 				$this->table,
 				$this->id
 			)) {
-			echo json_encode(
-				[
-					'status' => 1,
-					'message' => 'Klasse! Dein Pinnwandeintrag wurde gespeichert.'
-				]
-			);
+			echo json_encode([
+				'status' => 1,
+				'message' => $this->translator->trans('wall.created'),
+			]);
 			exit();
 		}
 
-		echo json_encode(
-			[
+		echo json_encode([
 			'status' => 0,
-			'message' => 'Upps! Dein Pinnwandeintrag konnte nicht gespeichert werden.'
-			]
-		);
+			'message' => $this->translator->trans('wall.error'),
+		]);
 		exit();
 	}
 
@@ -161,7 +157,10 @@ class WallPostXhr extends Control
 
 				return [
 					'status' => 1,
-					'html' => $this->view->posts($this->wallPostGateway->getPosts($this->table, $this->id), $this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id))
+					'html' => $this->view->posts(
+						$this->wallPostGateway->getPosts($this->table, $this->id),
+						$this->wallPostPermissions->mayDeleteFromWall($this->session->id(), $this->table, $this->id)
+					)
 				];
 			}
 		}
@@ -218,8 +217,7 @@ class WallPostXhr extends Control
 		echo '<html><head>
 
 		<script type="text/javascript">
-			function init()
-			{
+			function init () {
 				' . $init . '
 			}
 		</script>
