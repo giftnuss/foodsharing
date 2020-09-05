@@ -78,9 +78,14 @@ class DashboardView extends View
 	public function becomeFoodsaver()
 	{
 		return '
-	   <div class="msg-inside info">
-			   <i class="fas fa-info-circle"></i> <strong><a href="/?page=settings&sub=upgrade/up_fs">Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver werden!</a></strong>
-	   </div>';
+		<div class="msg-inside info">
+			<i class="fas fa-info-circle"></i>
+			<strong>
+				<a href="/?page=settings&sub=upgrade/up_fs">
+				' . $this->translator->trans('foodsaver.upgrade.ad_fs') . '
+				</a>
+			</strong>
+		</div>';
 	}
 
 	public function u_nextDates($dates)

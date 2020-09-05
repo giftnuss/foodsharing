@@ -920,6 +920,7 @@ foodsaver:
       Herzlichen Dank!
     thanks: Danke dir!
   upgrade:
+    ad_fs: 'Ich möchte jetzt das Foodsaver-Quiz machen und Foodsaver*in werden!'
     to_fs: Werde Foodsaver*in
     needs_fs: Du musst erst Foodsaver werden
     needs_sm: Du musst erst BetriebsverantwortlicheR werden
