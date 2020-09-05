@@ -173,16 +173,6 @@ class DashboardView extends View
 
 	public function u_invites($invites)
 	{
-		$this->pageHelper->addStyle('
-			@media (max-width: 410px)
-			{
-				.top_margin_on_small_screen
-				{
-					margin-top: 45px;
-				}
-			}
-		');
-
 		$out = '';
 		foreach ($invites as $i) {
 			$eventId = intval($i['id']);
