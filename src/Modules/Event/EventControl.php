@@ -118,7 +118,7 @@ class EventControl extends Control
 				if ($data['invite']) {
 					$this->gateway->inviteFullRegion($data['bezirk_id'], $id, $data['invitesubs']);
 				}
-				$this->flashMessageHelper->info('Event wurde erfolgreich eingetragen!');
+				$this->flashMessageHelper->info($this->translator->trans('events.created'));
 				$this->routeHelper->go('/?page=event&id=' . $id);
 			}
 		} else {
