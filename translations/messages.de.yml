@@ -729,6 +729,9 @@ recipients:
   continue: Mit dem Senden weitermachen
   abort: Versand abbrechen
   permission: Du bist nicht berechtigt, E-Mails zu versenden
+  status: 'Versende E-Mails ... (aktuelle E-Mail-Adresse: {current})'
+  unknown: unbekannt
+  done: Es wurden alle E-Mails verschickt
 
 addresspicker:
   label: Adress-/Standort-Suche
@@ -1417,6 +1420,8 @@ region:
     name-info: 'Achtung! Nicht willkürlich ändern! Auch darauf achten, dass diese Adresse unter Mailboxen verwalten noch nicht existiert.'
     sender: Absendername
   confirm: Sicher, dass du die Änderungen am Bezirk speichern möchtest?
+  save: Ja, speichern
+  cancel: Nein, doch nicht
   edit_success: Bezirk wurde gespeichert!
 
 blog:

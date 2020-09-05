@@ -734,27 +734,22 @@ class XhrMethods
 			$bezirk['email_name'] = EMAIL_PUBLIC_NAME;
 			$recip = $this->emailGateway->getMailNext($mail_id);
 
+			if (empty($recip)) {
+				return json_encode([
+					'status' => 2,
+					'comment' => $this->translator->trans('recipients.done'),
+				]);
+			}
+
 			$mailbox = $this->mailboxGateway->getMailbox((int)$mail['mailbox_id']);
 			$mailbox['email'] = $mailbox['name'] . '@' . NOREPLY_EMAIL_HOST;
 
 			$sender = $this->model->getValues(['geschlecht', 'name'], 'foodsaver', $this->session->id());
 
-			if (empty($recip)) {
-				return json_encode(['status' => 2, 'comment' => 'Es wurden alle E-Mails verschickt']);
-				exit();
-			}
-
 			$this->emailGateway->setEmailStatus($mail['id'], $recip, EmailStatus::STATUS_INITIALISED);
 
 			foreach ($recip as $fs) {
-				$anrede = 'Liebe/r';
-				if ($fs['geschlecht'] == 1) {
-					$anrede = 'Lieber';
-				} elseif ($fs['geschlecht'] == 2) {
-					$anrede = 'Liebe';
-				} else {
-					$anrede = 'Liebe/r';
-				}
+				$anrede = $this->translator->trans('salutation.' . $fs['geschlecht']);
 
 				$search = ['{NAME}', '{ANREDE}', '{EMAIL}'];
 				$replace = [$fs['name'], $anrede, $fs['email']];
@@ -784,8 +779,13 @@ class XhrMethods
 				// throttle to 5 mails per second here to avoid queue bloat
 				sleep(2);
 			}
+			$current = $fs['email'] ?? $this->translator->trans('recipients.unknown');
 
-			return json_encode(['left' => $mails_left, 'status' => 1, 'comment' => 'Versende E-Mails ... (aktuelle E-Mail-Adresse: ' . (isset($fs['email']) ? $fs['email'] : 'Unbekannt') . ')']);
+			return json_encode([
+				'left' => $mails_left,
+				'status' => 1,
+				'comment' => $this->translator->trans('recipients.status', ['{current}' => $current]),
+			]);
 		}
 
 		return 0;
@@ -1182,7 +1182,7 @@ class XhrMethods
 			$("#dialog-confirm-msg").html("' . $this->translator->trans('region.confirm') . '");
 
 			$("#dialog-confirm").dialog("option", "buttons", {
-				"Ja, Speichern": function () {
+				"' . $this->translator->trans('region.save') . '": function () {
 					showLoader();
 					$.ajax({
 						url: "/xhr.php?f=saveBezirk",
@@ -1199,8 +1199,8 @@ class XhrMethods
 						}
 					});
 				},
-				"Nein, doch nicht": function () {
-					$( "#dialog-confirm" ).dialog("close");
+				"' . $this->translator->trans('region.cancel') . '": function () {
+					$("#dialog-confirm").dialog("close");
 				}
 			});
 
