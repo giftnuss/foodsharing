@@ -975,7 +975,6 @@ mailbox:
   refresh: Aktualisieren
   write: Neue E-Mail
   attach: 'Datei anhängen (max. 1,2 MB)'
-  exceeds-size: 'Sorry! Die Datei ist zu groß.'
   claim: 'foodsharing.de - verwenden statt verschwenden'
   signature: 'Nachricht vom {date}'
   manage: Mailbox-Manager

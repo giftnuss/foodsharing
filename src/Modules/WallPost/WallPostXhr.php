@@ -212,7 +212,7 @@ class WallPostXhr extends Control
 
 			$init = 'window.parent.mb_finishImage("' . $new_filename . '");';
 		} else {
-			$init = 'window.parent.pulseInfo(\'' . $this->sanitizerService->jsSafe($this->translationHelper->s('file_to_big')) . '\');window.parent.mb_clear();';
+			$init = 'window.parent.pulseInfo(\'' . $this->translator->trans('mailbox.filesize') . '\'); window.parent.mb_clear();';
 		}
 
 		echo '<html><head>

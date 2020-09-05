@@ -368,7 +368,7 @@ class MailboxView extends View
 				}, 10);
 				$(".et-filebox form").trigger("submit");
 			} else {
-				pulseError("' . $this->translator->trans('mailbox.exceeds-size') . '");
+				pulseError("' . $this->translator->trans('mailbox.filesize') . '");
 			}
 		});
 		');
