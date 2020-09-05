@@ -13,6 +13,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
 use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
@@ -37,31 +38,31 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class XhrMethods
 {
-	private $model;
-	private $mem;
-	private $session;
-	private $v_utils;
-	private $xhrViewUtils;
-	private $storeModel;
-	private $messageGateway;
-	private $regionGateway;
-	private $storePermissions;
-	private $forumGateway;
-	private $bellGateway;
-	private $storeGateway;
-	private $foodsaverGateway;
-	private $emailGateway;
-	private $mailboxGateway;
-	private $imageManager;
-	private $sanitizerService;
-	private $emailHelper;
-	private $imageService;
-	private $identificationHelper;
-	private $dataHelper;
-	private $translationHelper;
-	private $newsletterEmailPermissions;
-	private $regionPermissions;
-	private $translator;
+	private Db $model;
+	private Mem $mem;
+	private Session $session;
+	private Utils $v_utils;
+	private ViewUtils $xhrViewUtils;
+	private StoreModel $storeModel;
+	private MessageGateway $messageGateway;
+	private RegionGateway $regionGateway;
+	private StorePermissions $storePermissions;
+	private ForumGateway $forumGateway;
+	private BellGateway $bellGateway;
+	private StoreGateway $storeGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private EmailGateway $emailGateway;
+	private MailboxGateway $mailboxGateway;
+	private ImageManager $imageManager;
+	private Sanitizer $sanitizerService;
+	private EmailHelper $emailHelper;
+	private ImageHelper $imageService;
+	private IdentificationHelper $identificationHelper;
+	private DataHelper $dataHelper;
+	private TranslationHelper $translationHelper;
+	private NewsletterEmailPermissions $newsletterEmailPermissions;
+	private RegionPermissions $regionPermissions;
+	private TranslatorInterface $translator;
 
 	public function __construct(
 		Mem $mem,
@@ -355,17 +356,25 @@ class XhrMethods
 						$team_status = '';
 					}
 
-					$out['betriebe'] = $this->model->q(' SELECT `id`,lat,lon FROM fs_betrieb WHERE lat != "" ' . $team_status . $hide_some);
+					$out['betriebe'] = $this->model->q('
+						SELECT `id`, lat, lon
+						FROM fs_betrieb
+						WHERE lat != ""
+						' . $team_status . $hide_some
+					);
 				} elseif ($t == 'fairteiler') {
-					$out['fairteiler'] = $this->model->q(' SELECT `id`,lat,lon,bezirk_id AS bid FROM fs_fairteiler WHERE lat != "" AND status = 1 ');
+					$out['fairteiler'] = $this->model->q('
+						SELECT `id`, lat, lon, bezirk_id AS bid
+						FROM fs_fairteiler
+						WHERE lat != ""
+						AND status = 1'
+					);
 				} elseif ($t == 'baskets') {
 					if ($baskets = $this->model->q('
-
-					SELECT id, lat, lon, location_type
-					FROM fs_basket
-					WHERE `status` = 1
-
-					')) {
+						SELECT id, lat, lon, location_type
+						FROM fs_basket
+						WHERE `status` = 1')
+					) {
 						$out['baskets'] = $baskets;
 					}
 				}
@@ -436,8 +445,8 @@ class XhrMethods
 		$id = preg_replace('/[^a-z0-9_]/', '', $id);
 		if (isset($_FILES['uploadpic'])) {
 			if ($this->is_allowed($_FILES['uploadpic'])) {
-				$datein = str_replace('.jpeg', '.jpg', strtolower($_FILES['uploadpic']['name']));
-				$ext = strtolower(substr($datein, strlen($datein) - 4, 4));
+				$filename = str_replace('.jpeg', '.jpg', strtolower($_FILES['uploadpic']['name']));
+				$extension = strtolower(substr($filename, strlen($filename) - 4, 4));
 
 				$path = ROOT_DIR . 'images/' . $id;
 
@@ -445,7 +454,7 @@ class XhrMethods
 					mkdir($path);
 				}
 
-				$newname = uniqid() . $ext;
+				$newname = uniqid() . $extension;
 
 				move_uploaded_file($_FILES['uploadpic']['tmp_name'], $path . '/orig_' . $newname);
 
@@ -799,19 +808,19 @@ class XhrMethods
 			$id = strip_tags($_POST['pic_id']);
 			if (isset($_FILES['uploadpic'])) {
 				$error = 0;
-				$datei = $_FILES['uploadpic']['tmp_name'];
+				$uploaded = $_FILES['uploadpic']['tmp_name'];
 				// prevent path traversal
-				$datei = preg_replace('/%/', '', $datei);
-				$datei = preg_replace('/\.+/', '.', $datei);
+				$uploaded = preg_replace('/%/', '', $uploaded);
+				$uploaded = preg_replace('/\.+/', '.', $uploaded);
 
-				$datein = $_FILES['uploadpic']['name'];
-				$datein = strtolower($datein);
-				$datein = str_replace('.jpeg', '.jpg', $datein);
-				$dateiendung = strtolower(substr($datein, strlen($datein) - 4, 4));
+				$filename = $_FILES['uploadpic']['name'];
+				$filename = strtolower($filename);
+				$filename = str_replace('.jpeg', '.jpg', $filename);
+				$extension = strtolower(substr($filename, strlen($filename) - 4, 4));
 				if ($this->is_allowed($_FILES['uploadpic'])) {
 					try {
-						$file = $this->makeUnique() . $dateiendung;
-						move_uploaded_file($datei, './tmp/' . $file);
+						$file = $this->makeUnique() . $extension;
+						move_uploaded_file($uploaded, './tmp/' . $file);
 						$image = new fImage('./tmp/' . $file);
 						$image->resize(550, 0);
 						$image->saveChanges();
@@ -867,8 +876,6 @@ class XhrMethods
 		$filename = $img['name'];
 		$parts = explode('.', $filename);
 		$ext = end($parts);
-
-		$allowed_mime = ['image/gif' => true, 'image/jpeg' => true, 'image/png' => true];
 
 		if (isset($allowed[$ext])) {
 			return true;
@@ -994,7 +1001,7 @@ class XhrMethods
 
 		return json_encode([
 			'status' => 1,
-			'script' => '$("#tree").dynatree("getTree").reload();pulseInfo("'
+			'script' => '$("#tree").dynatree("getTree").reload(); pulseInfo("'
 				. $this->translator->trans('region.created', ['{region}' => $data['name']]) .
 			'");',
 		]);
@@ -1034,7 +1041,7 @@ class XhrMethods
 		}
 		$storeName = $this->model->getVal('name', 'betrieb', $data['bid']);
 		$team = $this->storeGateway->getStoreTeam($data['bid']);
-		$team = array_map(function ($foodsaver) {return $foodsaver['id']; }, $team);
+		$team = array_map(function ($foodsaver) { return $foodsaver['id']; }, $team);
 		$bellData = Bell::create('store_cr_times_title', 'store_cr_times', 'fas fa-user-clock', [
 			'href' => '/?page=fsbetrieb&id=' . (int)$data['bid'],
 		], [
@@ -1075,9 +1082,7 @@ class XhrMethods
 	{
 		$teamStatus = (int)$_GET['status'];
 		$storeId = (int)$_GET['bid'];
-		if ($this->storePermissions->mayEditStore($storeId) && in_array($teamStatus,
-				range(\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::CLOSED,
-				\Foodsharing\Modules\Core\DBConstants\Store\TeamStatus::OPEN_SEARCHING))) {
+		if ($this->storePermissions->mayEditStore($storeId) && TeamStatus::isValidStatus($teamStatus)) {
 			$this->storeGateway->setStoreTeamStatus($storeId, $teamStatus);
 		}
 	}
@@ -1086,12 +1091,7 @@ class XhrMethods
 	{
 		global $g_data;
 
-		/*
-		 * In some of these calls orga is still being checked against additionally, as this xhr methods are used with different modules but those modules don't have own permission classes yet.
-		 * Even tho orga is yet the only condition of mayAdministrateRegions().
-		 * This allows us to be flexible in case we want to remove this feature for most orgas. Which might be likely.
-		 * */
-		if (!($this->session->may('orga') || $this->regionPermissions->mayAdministrateRegions())) {
+		if (!$this->regionPermissions->mayAdministrateRegions()) {
 			return XhrResponses::PERMISSION_DENIED;
 		}
 		$g_data = $this->regionGateway->getOne_bezirk($data['id']);
