@@ -1154,7 +1154,7 @@ class XhrMethods
 					],
 					[
 						'id' => WorkgroupFunction::VOTING,
-						'name' => 'Umfrage'
+						'name' => $this->translator->trans('group.function.voting'),
 					],
 				],
 			]),
@@ -1384,7 +1384,7 @@ class XhrMethods
 			if ($welcomeGroupId && ($welcomeGroupId != $regionId)) {
 				return json_encode([
 					'status' => 1,
-					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate') . '");',
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_welcome_team') . '");',
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::VOTING) {
@@ -1392,7 +1392,7 @@ class XhrMethods
 			if ($votingGroupId !== null && $votingGroupId !== (int)$data['bezirk_id']) {
 				return json_encode([
 					'status' => 1,
-					'script' => 'pulseError("' . $this->translationHelper->s('invalid_voting_team') . '");'
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_welcome_team') . '");',
 				]);
 			}
 		}

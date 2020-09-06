@@ -165,8 +165,10 @@ group:
   function:
     title: Arbeitsgruppenfunktion
     welcome: Begrüßung
+    voting: Abstimmung
     invalid: 'Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden.'
-    duplicate: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
+    duplicate_welcome_team: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
+    duplicate_voting_team: 'Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben.'
 
 legal:
   pp: Datenschutzerklärung
