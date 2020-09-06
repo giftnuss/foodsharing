@@ -37,13 +37,14 @@ class BellRestController extends AbstractFOSRestController
 	 */
 	public function listBells(ParamFetcher $paramFetcher): Response
 	{
-		if (!$this->session->id()) {
+		$id = $this->session->id();
+		if (!$id) {
 			throw new HttpException(403);
 		}
 
 		$limit = $paramFetcher->get('limit');
 		$offset = $paramFetcher->get('offset');
-		$bells = $this->bellGateway->listBells($this->session->id(), $limit, $offset);
+		$bells = $this->bellGateway->listBells($id, $limit, $offset);
 
 		return $this->handleView($this->view($bells, 200));
 	}
@@ -53,9 +54,8 @@ class BellRestController extends AbstractFOSRestController
 	 *
 	 * @SWG\Parameter(name="bellId", in="path", type="integer", description="which bell to mark as read")
 	 * @SWG\Response(response="200", description="At least one of the bells was successfully marked.")
-	 * @SWG\Response(response="400", description="If the list of IDs is empty.")
+	 * @SWG\Response(response="400", description="If the list of IDs is empty or none of the bells could be marked.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to change the bells.")
-	 * @SWG\Response(response="404", description="None of the bells exists.")
 	 * @SWG\Tag(name="bells")
 	 *
 	 * @Rest\Patch("bells")
@@ -63,7 +63,8 @@ class BellRestController extends AbstractFOSRestController
 	 */
 	public function markBellsAsReadAction(ParamFetcher $paramFetcher): Response
 	{
-		if (!$this->session->id()) {
+		$id = $this->session->id();
+		if (!$id) {
 			throw new HttpException(403);
 		}
 
@@ -72,11 +73,15 @@ class BellRestController extends AbstractFOSRestController
 			throw new HttpException(400);
 		}
 
-		$changed = $this->bellGateway->setBellsAsSeen($bellIds, $this->session->id());
+		$changed = $this->bellGateway->setBellsAsSeen($bellIds, $id);
 
-		return $this->handleView($this->view([
-			'ids' => $bellIds
-		], $changed > 0 ? 200 : 404));
+		if ($changed === 0) {
+			return $this->handleView($this->view([], 400));
+		} else {
+			return $this->handleView($this->view([
+				'marked' => $changed
+			], 200));
+		}
 	}
 
 	/**
@@ -92,11 +97,12 @@ class BellRestController extends AbstractFOSRestController
 	 */
 	public function deleteBellAction(int $bellId): Response
 	{
-		if (!$this->session->id()) {
+		$id = $this->session->id();
+		if (!$id) {
 			throw new HttpException(403);
 		}
 
-		$deleted = $this->bellGateway->delBellForFoodsaver($bellId, $this->session->id());
+		$deleted = $this->bellGateway->delBellForFoodsaver($bellId, $id);
 
 		return $this->handleView($this->view([], $deleted ? 200 : 404));
 	}

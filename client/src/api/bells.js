@@ -9,8 +9,11 @@ export function deleteBell (id) {
   return remove(`/bells/${id}`)
 }
 
-export function markBellsAsRead (ids) {
-  return patch('/bells', {
+/**
+ * Returns the number of bells that were successfully marked as read.
+ */
+export async function markBellsAsRead (ids) {
+  return (await patch('/bells', {
     ids: ids
-  })
+  })).marked
 }
