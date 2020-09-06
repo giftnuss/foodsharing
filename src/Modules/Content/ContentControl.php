@@ -281,7 +281,7 @@ class ContentControl extends Control
 
 	public function ratgeber(): void
 	{
-		header('Location: ' . 'https://wiki.foodsharing.de/Ratgeber', true, 301);
+		header('Location: ' . 'https://wiki.foodsharing.de/Hygiene-Ratgeber_f%C3%BCr_Lebensmittel', true, 301);
 	}
 
 	public function joininfo(): void

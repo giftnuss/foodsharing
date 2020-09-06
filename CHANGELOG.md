@@ -11,7 +11,7 @@
 - Removed unused legal agreement for new amb's #821 !1619 @chriswalg
 - Allow translating lots and lots of text !1637 @ChrisOelmueller
 - Workgroup Admins of Startpage and Team/Partner page can edit their pages #967 !1651 @fs_k
-- Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
+- Moved guide page (ratgeber) to wiki page #776 !1567 !1664 @chriswalg
 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm

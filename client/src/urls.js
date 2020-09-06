@@ -37,7 +37,7 @@ const urls = {
   foodsharepoints: (regionId) => `/?page=bezirk&bid=${regionId}&sub=fairteiler`,
   fsstaedte: () => '/?page=content&sub=fsstaedte',
   grundsaetze: () => 'https://wiki.foodsharing.de/Grundsätze',
-  guide: () => 'https://wiki.foodsharing.de/Ratgeber',
+  guide: () => 'https://wiki.foodsharing.de/Hygiene-Ratgeber_f%C3%BCr_Lebensmittel',
   home: () => '/',
   imprint: () => '/impressum',
   infos: () => '/?page=content&sub=infohub',

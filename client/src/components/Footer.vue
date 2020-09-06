@@ -45,6 +45,8 @@
             <a
               :href="$url('guide')"
               :aria-label="$i18n('footer.guide')"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
             >
               {{ $i18n('footer.guide') }}
             </a>
