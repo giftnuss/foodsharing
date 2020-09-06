@@ -133,8 +133,11 @@ class StoreRestController extends AbstractFOSRestController
 		if (!$this->storePermissions->mayDeleteStoreWallPost($postId)) {
 			throw new AccessDeniedHttpException();
 		}
+		$result = $this->storeGateway->getSingleStoreNote($postId);
 
-		$this->storeGateway->deleteBPost($postId, $this->session->id());
+		$this->storeGateway->addStoreLog($result['betrieb_id'], $fs_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
+
+		$this->storeGateway->deleteBPost($postId);
 
 		return $this->handleView($this->view([], 200));
 	}
@@ -146,8 +149,6 @@ class StoreRestController extends AbstractFOSRestController
 	 */
 	public function removeStoreRequestAction(int $storeId, int $userId): Response
 	{
-		$LogAction = -1;
-
 		if ($this->session->id() !== $userId && !$this->storePermissions->mayEditStoreTeam($storeId)) {
 			throw new HttpException(403);
 		}

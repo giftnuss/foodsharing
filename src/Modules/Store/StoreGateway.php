@@ -758,11 +758,8 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	public function deleteBPost($id, $fs_id): int
+	public function deleteBPost($id): int
 	{
-		$result = $this->getSingleStoreNote($id);
-
-		$this->addStoreLog($result['betrieb_id'], $fs_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
 
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
