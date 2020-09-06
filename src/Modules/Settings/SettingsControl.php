@@ -87,7 +87,7 @@ class SettingsControl extends Control
 		]), CNT_LEFT);
 
 		$menu = [
-			['name' => $this->translator->trans('settings.sleep'), 'href' => '/?page=settings&sub=sleeping'],
+			['name' => $this->translator->trans('settings.sleep.title'), 'href' => '/?page=settings&sub=sleeping'],
 			['name' => $this->translator->trans('settings.email'), 'click' => 'ajreq(\'changemail\'); return false;'],
 		];
 

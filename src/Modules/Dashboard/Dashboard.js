@@ -25,7 +25,7 @@ if (('serviceWorker' in navigator) && ('PushManager' in window) && (Notification
   pushnotificationsButton.addEventListener('click', async () => {
     try {
       await subscribeForPushNotifications()
-      pulseSuccess(i18n('push_notifications_activation_success'))
+      pulseSuccess(i18n('settings.push.success'))
       pushnotificationsBanner.classList.add('top-banner-pushnotifications-closed')
     } catch (error) {
       pulseError(i18n('error_ajax'))

@@ -1119,14 +1119,9 @@ class Utils
 		</div>';
 	}
 
-	public function v_form_daterange(string $id = 'daterange', array $option = []): string
+	public function v_form_daterange(string $id, string $label = ''): string
 	{
-		$label = $this->translationHelper->s($id);
 		$id = $this->identificationHelper->id($id);
-
-		if (!isset($option['options'])) {
-			$option['options'] = ['from' => [], 'to' => []];
-		}
 
 		$this->pageHelper->addJs('
 			$(function () {
@@ -1134,8 +1129,7 @@ class Utils
 					changeMonth: true,
 					onClose: function (selectedDate) {
 						$("#' . $id . '_to").datepicker("option", "minDate", selectedDate);
-					},
-					' . implode(',', $option['options']['from']) . '
+					}
 				});
 
 				$("#' . $id . '_to").datepicker({
@@ -1143,23 +1137,18 @@ class Utils
 					onClose: function (selectedDate) {
 						$("#' . $id . '_from").datepicker("option", "maxDate", selectedDate);
 					}
-					' . implode(',', $option['options']['to']) . '
 				});
 			});
 		');
-
-		if (!isset($option['content_after'])) {
-			$option['content_after'] = '';
-		}
 
 		return $this->v_input_wrapper(
 			$label,
 			'<input placeholder="' . $this->translator->trans('date.from') . '" class="input text date value"'
 			. ' type="text" id="' . $id . '_from" name="' . $id . '[from]">
 			<input placeholder="' . $this->translator->trans('date.to') . '" class="input text date value"'
-			. ' type="text" id="' . $id . '_to" name="' . $id . '[to]">' . $option['content_after'],
+			. ' type="text" id="' . $id . '_to" name="' . $id . '[to]">',
 			$id,
-			$option
+			[]
 		);
 	}
 

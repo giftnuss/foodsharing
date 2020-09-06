@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SettingsView extends View
 {
-	private $regionGateway;
+	private RegionGateway $regionGateway;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -64,7 +64,7 @@ class SettingsView extends View
 		$this->dataHelper->setEditData($sleep);
 
 		if ($sleep['sleep_status'] != SleepStatus::TEMP) {
-			$this->pageHelper->addJs('$("#daterange-wrapper").hide();');
+			$this->pageHelper->addJs('$("#sleeprange-wrapper").hide();');
 		}
 
 		if ($sleep['sleep_status'] == SleepStatus::NONE) {
@@ -85,75 +85,69 @@ class SettingsView extends View
 			$to = $date->format('d.m.Y');
 
 			$this->pageHelper->addJs("
-				$('#daterange_from').val('$from');
-				$('#daterange_to').val('$to');
+				$('#sleeprange_from').val('$from');
+				$('#sleeprange_to').val('$to');
 			");
 		}
 
 		$this->pageHelper->addJs('
-			$("#sleep_status").on("change", function(){
+			$("#sleep_status").on("change", function () {
 				var $this = $(this);
-				if($this.val() == 1)
-				{
-					$("#daterange-wrapper").show();
-				}
-				else
-				{
-					$("#daterange-wrapper").hide();
+				if ($this.val() == 1) {
+					$("#sleeprange-wrapper").show();
+				} else {
+					$("#sleeprange-wrapper").hide();
 				}
 
-				if($this.val() > 0)
-				{
+				if ($this.val() > 0) {
 					$("#sleep_msg-wrapper").show();
-				}
-				else
-				{
+				} else {
 					$("#sleep_msg-wrapper").hide();
 				}
 			});
-			$("#sleep_msg").css("height","50px").autosize();
+			$("#sleep_msg").css("height", "80px");
 
-			$("#schlafmtzenfunktion-form").on("submit", function(ev){
+			$("#schlafmtzenfunktion-form").on("submit", function (ev) {
 				ev.preventDefault();
-				if ($("#sleep_status").val() == 1 ){
-					if ($("#daterange_from").val() == "" || $("#daterange_to").val() == "" ){
-						pulseError("' . $this->translationHelper->s('sleep_mode_date_missing') . '");
+				if ($("#sleep_status").val() == 1) {
+					if ($("#sleeprange_from").val() == "" || $("#sleeprange_to").val() == "") {
+						pulseError("' . $this->translator->trans('settings.sleep.missing-date') . '");
 						return;
 					}
 				}
-				ajax.req("settings","sleepmode",{
-					method:"post",
+				ajax.req("settings", "sleepmode", {
+					method: "post",
 					data: {
 						status: $("#sleep_status").val(),
-						from: $("#daterange_from").val(),
-						until: $("#daterange_to").val(),
+						from: $("#sleeprange_from").val(),
+						until: $("#sleeprange_to").val(),
 						msg: $("#sleep_msg").val()
 					},
-					success: function(){
-						pulseSuccess("' . $this->translationHelper->s('sleep_mode_saved') . '");
+					success: function () {
+						pulseSuccess("' . $this->translator->trans('settings.sleep.saved') . '");
 					}
 				});
 			});
 			$("#formwrapper").show();
 		');
 
-		$out = $this->v_utils->v_quickform($this->translationHelper->s('sleepmode'), [
-			$this->v_utils->v_info($this->translationHelper->s('sleepmode_info')),
-			$this->v_utils->v_info($this->translationHelper->s('sleepmode_show')),
+		$out = $this->v_utils->v_quickform($this->translator->trans('settings.sleep.header'), [
+			$this->v_utils->v_info($this->translator->trans('settings.sleep.info')),
 			$this->v_utils->v_form_select('sleep_status', [
 				'values' => [
-					['id' => SleepStatus::NONE, 'name' => $this->translationHelper->s('no_sleepmode')],
-					['id' => SleepStatus::TEMP, 'name' => $this->translationHelper->s('temp_sleepmode')],
-					['id' => SleepStatus::FULL, 'name' => $this->translationHelper->s('full_sleepmode')]
+					['id' => SleepStatus::NONE, 'name' => $this->translator->trans('settings.sleep.none')],
+					['id' => SleepStatus::TEMP, 'name' => $this->translator->trans('settings.sleep.temp')],
+					['id' => SleepStatus::FULL, 'name' => $this->translator->trans('settings.sleep.full')]
 				]
 			]),
-			$this->v_utils->v_form_daterange(),
+			$this->v_utils->v_form_daterange('sleeprange', $this->translator->trans('settings.sleep.range')),
 			$this->v_utils->v_form_textarea('sleep_msg', [
 				'maxlength' => 150
-			])
-		], ['submit' => $this->translationHelper->s('save')]);
+			]),
+			$this->v_utils->v_info($this->translator->trans('settings.sleep.show'))
+		], ['submit' => $this->translator->trans('button.save')]);
 
-		return '<div id="formwrapper" style="display:none;">' . $out . '</div>';
+		return '<div id="formwrapper" style="display: none;">' . $out . '</div>';
 	}
 
 	public function settingsInfo($foodSharePoints, $threads)
@@ -164,7 +158,7 @@ class SettingsView extends View
 		if ($foodSharePoints) {
 			foreach ($foodSharePoints as $fsp) {
 				$this->pageHelper->addJs('
-					$("input[disabled=\'disabled\']").parent().on("click", function(){
+					$("input[disabled=\'disabled\']").parent().on("click", function () {
 						pulseInfo("' . $this->translator->trans('fsp.info.manager') . '");
 					});
 				');
@@ -187,11 +181,11 @@ class SettingsView extends View
 			foreach ($threads as $thread) {
 				$g_data['thread_' . $thread['id']] = $thread['infotype'];
 				$out .= $this->v_utils->v_form_radio('thread_' . $thread['id'], [
-					'label' => $this->translationHelper->sv('follow_thread', $thread['name']),
-					'desc' => $this->translationHelper->sv('follow_thread_desc', $thread['name']),
+					'label' => $this->translator->trans('settings.follow.thread', ['{thread}' => $thread['name']]),
+					'desc' => $thread['name'],
 					'values' => [
-						['id' => InfoType::EMAIL, 'name' => $this->translationHelper->s('follow_thread_mail')],
-						['id' => InfoType::NONE, 'name' => $this->translationHelper->s('follow_thread_none')]
+						['id' => InfoType::EMAIL, 'name' => $this->translator->trans('settings.follow.mail')],
+						['id' => InfoType::NONE, 'name' => $this->translator->trans('settings.follow.none')]
 					]
 				]);
 			}
@@ -199,22 +193,22 @@ class SettingsView extends View
 
 		return $this->v_utils->v_field($this->v_utils->v_form('settingsinfo', [
 			$this->v_utils->v_input_wrapper(
-				$this->translationHelper->s('push_notifications'),
-				'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
-						<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
+				$this->translator->trans('settings.push.title'),
+					'<div id="push-notification-label"><!-- Content to be set via JavaScript --></div>
+					<a href="#" class="button" id="push-notification-button"><!-- Content to be set via JavaScript --></a>'
 			),
 			$this->v_utils->v_form_radio('newsletter', [
-				'desc' => $this->translationHelper->s('newsletter_desc'),
+				'desc' => $this->translator->trans('settings.newsletter'),
 				'values' => [
-					['id' => 0, 'name' => $this->translationHelper->s('no')],
-					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+					['id' => 0, 'name' => $this->translator->trans('no')],
+					['id' => 1, 'name' => $this->translator->trans('yes')]
 				]
 			]),
 			$this->v_utils->v_form_radio('infomail_message', [
-				'desc' => $this->translationHelper->s('infomail_message_desc'),
+				'desc' => $this->translator->trans('settings.chatmail'),
 				'values' => [
-					['id' => 0, 'name' => $this->translationHelper->s('no')],
-					['id' => 1, 'name' => $this->translationHelper->s('yes')]
+					['id' => 0, 'name' => $this->translator->trans('no')],
+					['id' => 1, 'name' => $this->translator->trans('yes')]
 				]
 			]),
 			$out
@@ -495,9 +489,13 @@ class SettingsView extends View
 			$this->v_utils->v_form_date('geb_datum', ['required' => true, 'yearRangeFrom' => (int)date('Y') - 120, 'yearRangeTo' => (int)date('Y') - 8]),
 			$communications,
 			$position,
-			$this->v_utils->v_form_textarea('about_me_intern', ['desc' => $this->translationHelper->s('profile_description_text_display_info')]),
-			$this->v_utils->v_form_textarea('about_me_public', ['desc' => $this->translationHelper->s('profile_description_text_info')]),
-		], ['submit' => $this->translationHelper->s('save')]);
+			$this->v_utils->v_form_textarea('about_me_intern', [
+				'desc' => $this->translator->trans('foodsaver.about_me_intern'),
+			]),
+			$this->v_utils->v_form_textarea('about_me_public', [
+				'desc' => $this->translator->trans('foodsaver.about_me_public'),
+			]),
+		], ['submit' => $this->translator->trans('button.save')]);
 	}
 
 	public function quizFailed($failed)
@@ -618,7 +616,11 @@ class SettingsView extends View
 
 	public function picture_box($photo): string
 	{
-		$p_cnt = $this->v_utils->v_info($this->translationHelper->s('photo_should_be_usable'));
+		$p_cnt = $this->v_utils->v_info($this->translator->trans('settings.photo.info', [
+			'{link_photo}' => 'https://wiki.foodsharing.de/Leitfaden_f%C3%BCr_ein_repr%C3%A4sentatives_Foto',
+			'{link_id}' => 'https://wiki.foodsharing.de/Ausweis',
+			'{link_fs}' => 'https://wiki.foodsharing.de/Foodsaver',
+		]));
 
 		if (!file_exists('images/thumb_crop_' . $photo)) {
 			$p_cnt .= $this->v_utils->v_photo_edit('img/portrait.png');
@@ -626,6 +628,6 @@ class SettingsView extends View
 			$p_cnt .= $this->v_utils->v_photo_edit('images/thumb_crop_' . $photo);
 		}
 
-		return $this->v_utils->v_field($p_cnt, 'Dein Foto');
+		return $this->v_utils->v_field($p_cnt, $this->translator->trans('settings.photo.title'));
 	}
 }

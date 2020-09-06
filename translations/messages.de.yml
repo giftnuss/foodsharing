@@ -954,6 +954,13 @@ foodsaver:
     actions: Optionen
     remove: Aus Bezirk löschen
     orga: ist im bundesweiten Orgateam dabei
+  about_me_public: |
+    Diese Kurzbeschreibung wird für alle auf der <a href="https://foodsharing.de/team">Team-</a>
+    und der <a href="https://foodsharing.de/team/ehemalige">Ehemaligenseite</a> aufgeführten
+    Personen angezeigt und kann dort auf der Webseite von allen eingesehen werden.
+  about_me_intern: |
+    Diese Kurzbeschreibung wird auf deiner Profilseite angezeigt
+    und ist dort für alle in der foodsharing-Community sichtbar.
   data:
     request: 'Bitte noch ein paar Daten vervollständigen bzw. überprüfen!'
     explain: |
@@ -1052,12 +1059,70 @@ settings:
   title: Einstellungen
   header: Deine Daten/Einstellungen
   notifications: Benachrichtigungen
+  follow:
+    thread: 'Über das Forenthema "{thread}" auf dem Laufenden bleiben?'
+    mail: 'Ja, ich möchte per E-Mail über neue Posts informiert werden.'
+    none: 'Bitte nicht mehr per E-Mail über neue Posts informieren.'
+  newsletter: |
+    Ca. 1x im Monat versenden wir aktuelle Informationen
+    rund um die Lebensmittelretterbewegung in einem Newsletter.
+    Möchtest du diese E-Mails bekommen?
+  chatmail: |
+    Wenn du auf der foodsharing-Homepage eine interne Nachricht geschickt bekommst,
+    aber gerade nicht eingeloggt bist, kannst du per E-Mail darüber informiert werden.
+    Möchtest du das?
   businesscard: Persönliche Visitenkarte
   account: Account-Optionen
-  sleep: Schlafmütze
+  sleep:
+    title: Schlafmütze
+    header: Schlafmützenfunktion
+    info: |
+      Mit der Schlafmützenfunktion teilst du der Community mit, dass du zur Zeit verreist bist
+      oder aus anderen Gründen gerade keine Zeit für das Retten von Lebensmitteln hast.
+      Es ist hilfreich zu wissen, ob du auf Nachrichten reagieren kannst
+      oder sogar manchmal Abholungen durchführst.
+    show: |
+      Mit der Nutzung dieser Funktion bist du damit einverstanden, dass dein Status,
+      deine Abwesenheitsdauer und deine Nachricht auf deiner Profilseite angezeigt
+      und ein "Schlafmützensymbol" über dein Profilbild gesetzt wird.
+    missing-date: Bitte gib für einen Zeitraum sowohl ein Anfangs- als auch ein Enddatum ein!
+    none: Ich bin aktiv und voll dabei
+    temp: Ich bin für folgenden Zeitraum nicht verfügbar
+    full: Ich tauche erstmal auf unbestimmte Zeit ab
+    range: 'Gib an, für welchen Zeitraum du in etwa nicht zur Verfügung stehen wirst:'
+    saved: Die Einstellungen wurden gespeichert
   email: E-Mail-Adresse ändern
   saved: Änderungen wurden gespeichert.
   calendar: Kalender
+  photo:
+    title: Dein Foto
+    info: |
+      Dein Gesicht sollte auf dem Profilfoto <a href="{link_photo}">erkennbar</a> sein,
+      da es für den Foodsharing-<a href="{link_id}">Ausweis</a> verwendet wird, wenn du
+      später <a href="{link_fs}">Foodsaver</a> wirst und Lebensmittel in Betrieben rettest.
+  push:
+    title: Push-Benachrichtigungen
+    not-supported: 'Dein Browser unterstützt leider keine Push-Benarichtigungen.'
+    denied: |
+      Du hast das Anzeigen von Push-Benachrichtigungen durch foodsharing in deinem Browser abgelehnt.
+      Wenn du Push-Nachrichten empfangen willst, ändere deine Browser-Einstellungen für foodsharing
+      und lade die Seite neu.
+    info-on: |
+      Wenn du Push-Benachrichtigungen für dieses Gerät aktivierst,
+      werden Chat-Nachrichten zukünftig direkt an dein Gerät zugestellt,
+      auch dann, wenn du nicht eingeloggt bist.
+      Dein Gerät zeigt dann eine entprechende Benachrichtigung
+      bzw. reagiert mit einem Ton oder einer Vibration.
+    enable: Push-Benachrichtigungen aktivieren
+    success: Push-Benachrichtigungen erfolgreich aktiviert
+    info-off: |
+      Auf diesem Gerät sind die Push-Benachrichtigungen von foodsharing eingeschaltet.
+      Wenn du die Push-Benachrichtigungen deaktivierst, werden Chat-Nachrichten zukünftig
+      nicht mehr direkt an dein Gerät zugestellt.
+      Dein Gerät zeigt dann keine Benachrichtigungen mehr wenn du nicht eingeloggt bist
+      und reagiert auch nicht mehr mit einem Ton oder einer Vibration.
+    disable: Push-Benachrichtigungen deaktivieren
+    disabled: Push-Benachrichtigungen erfolgreich deaktiviert
 
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"

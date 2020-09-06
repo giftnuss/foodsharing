@@ -42,25 +42,25 @@ async function refreshPushNotificationSettings () {
   const pushNotificationsButton = document.querySelector('#push-notification-button')
 
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    pushNotificationsLabel.textContent = i18n('push_notifications_not_supported')
+    pushNotificationsLabel.textContent = i18n('settings.push.not-supported')
     pushNotificationsButton.style.display = 'none'
     return
   }
 
   if (Notification.permission === 'denied') {
-    pushNotificationsLabel.textContent = i18n('push_notifications_denied_by_user')
+    pushNotificationsLabel.textContent = i18n('settings.push.denied')
     pushNotificationsButton.style.display = 'none'
     return
   }
 
   const subscription = await (await navigator.serviceWorker.ready).pushManager.getSubscription()
   if (subscription === null) {
-    pushNotificationsLabel.textContent = i18n('push_notifications_activation_explanation')
-    pushNotificationsButton.text = i18n('push_notifications_activation_button_text')
+    pushNotificationsLabel.textContent = i18n('settings.push.info-on')
+    pushNotificationsButton.text = i18n('settings.push.enable')
     pushNotificationsButton.addEventListener('click', async () => {
       try {
         await subscribeForPushNotifications()
-        pulseSuccess(i18n('push_notifications_activation_success'))
+        pulseSuccess(i18n('settings.push.success'))
         refreshPushNotificationSettings()
       } catch (error) {
         pulseError(i18n('error_ajax'))
@@ -71,12 +71,12 @@ async function refreshPushNotificationSettings () {
     return
   }
 
-  pushNotificationsLabel.textContent = i18n('push_notifications_deactivation_explanation')
-  pushNotificationsButton.text = i18n('push_notifications_deactivation_button_text')
+  pushNotificationsLabel.textContent = i18n('settings.push.info-off')
+  pushNotificationsButton.text = i18n('settings.push.disable')
   pushNotificationsButton.addEventListener('click', async () => {
     try {
       await unsubscribeFromPushNotifications()
-      pulseSuccess(i18n('push_notifications_deactivation_success'))
+      pulseSuccess(i18n('settings.push.disabled'))
       refreshPushNotificationSettings()
     } catch (error) {
       pulseError(i18n('error_ajax'))
