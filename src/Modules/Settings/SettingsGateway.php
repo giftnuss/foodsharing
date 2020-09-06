@@ -2,6 +2,7 @@
 
 namespace Foodsharing\Modules\Settings;
 
+use Exception;
 use Foodsharing\Modules\Core\BaseGateway;
 
 class SettingsGateway extends BaseGateway
@@ -120,16 +121,20 @@ class SettingsGateway extends BaseGateway
 		);
 	}
 
-	public function getNewMail(int $fsId, string $token): string
+	public function getNewMail(int $fsId, string $token): ?string
 	{
-		return $this->db->fetchValueByCriteria(
-			'fs_mailchange',
-			'newmail',
-			[
-				'token' => strip_tags($token),
-				'foodsaver_id' => $fsId
-			]
-		);
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_mailchange',
+				'newmail',
+				[
+					'token' => strip_tags($token),
+					'foodsaver_id' => $fsId
+				]
+			);
+		} catch (Exception $e) {
+			return null;
+		}
 	}
 
 	public function saveApiToken(int $fsId, string $token): void

@@ -23,6 +23,7 @@
 - Exclude author of FoodSharePoint posts from notification emails !1638 #835 @alex.simm
 - Try to correct scrolling to requested forum post #930 #968 !1650 @ChrisOelmueller
 - Allow adding workgroup admins or members if none exist currently #896 !1637 @ChrisOelmueller
+- Fix server error when activating new email address that has already been activated #966 !1664 @alex.simm
 
 ## Refactoring
 - Move registration request to the REST endpoint #819 !1632 !1642 @alex.simm
