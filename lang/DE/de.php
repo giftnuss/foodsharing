@@ -42,15 +42,6 @@ $g_lang['active'] = 'Aktiviert';
 $g_lang['date'] = 'Datum';
 $g_lang['mailbox_name'] = 'Mailbox-Name'; // XhrMethods
 $g_lang['card'] = 'Karte';
-$g_lang['dow1'] = 'Montag';
-$g_lang['dow2'] = 'Dienstag';
-$g_lang['dow3'] = 'Mittwoch';
-$g_lang['dow4'] = 'Donnerstag';
-$g_lang['dow5'] = 'Freitag';
-$g_lang['dow6'] = 'Samstag';
-$g_lang['dow0'] = 'Sonntag';
-$g_lang['time'] = 'Uhrzeit';
-$g_lang['day'] = 'Tag'; // StoreUserView
 
 $g_lang['rolle'] = 'Benutzerrolle';
 
@@ -90,10 +81,10 @@ $g_lang['title'] = 'Überschrift';
 $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';
 
-// $g_lang['search'] = 'Suchen';
+// $g_lang['search'] = 'Suchen'; TODO check if used anywhere else
 $g_lang['daterange'] = 'Zeitraum';
-// $g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter';
-// $g_lang['regions'] = 'Bezirke';
+// $g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter'; TODO check if used anywhere else
+// $g_lang['regions'] = 'Bezirke'; TODO check if used anywhere else
 
 $g_lang['push_notifications'] = 'Push-Benachrichtigungen';
 $g_lang['push_notifications_not_supported'] = 'Dein Browser unterstützt leider keine Push-Benarichtigungen.';
@@ -130,19 +121,25 @@ $g_lang['location_name'] = 'Veranstaltungsort / Konferenzraum';
 $g_lang['online_type'] = 'Findet das Event offline oder online statt?';
 $g_lang['dateend'] = 'Enddatum';
 // FoodsaverView
-// $g_lang['orgateam'] = 'Bundesweite Orga';
+// $g_lang['orgateam'] = 'Bundesweite Orga'; TODO check if used anywhere else
 $g_lang['fs_id'] = 'foodsharing-ID';
 $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
 // LoginView
 $g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
 $g_lang['pass2'] = 'Passwortwiederholung';
-// $g_lang['login_location'] = 'Deine Adresse';
+// $g_lang['login_location'] = 'Deine Adresse'; // TODO check if used anywhere else
 // MapView
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
 $g_lang['specials'] = 'Besonderheiten';
 // MessageView
 $g_lang['compose_recipients'] = 'Empfänger';
 $g_lang['compose_body'] = 'Nachricht';
+// StoreView
+$g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder'; // StoreUserControl
+$g_lang['storemanagers'] = 'Betriebsverantwortliche'; // StoreUserControl
+$g_lang['team_status'] = 'Teamstatus'; // StoreUserView
+$g_lang['time'] = 'Uhrzeit'; // StoreView
+$g_lang['fetchercount'] = 'Anzahl der Abholer*innen'; // StoreView
 // WorkGroup
 $g_lang['member'] = 'Mitglieder';
 $g_lang['leader'] = 'Gruppen-Admins';

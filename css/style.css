@@ -504,10 +504,6 @@ table.pintable tr.milestone td a:hover {
   text-decoration: underline;
 }
 
-table.timetable {
-  width: 100%;
-}
-
 select.childChanger {
   width: 355px;
   margin-bottom: 8px;

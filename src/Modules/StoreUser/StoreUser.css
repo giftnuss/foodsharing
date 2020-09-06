@@ -1,0 +1,28 @@
+table.timetable {
+  width: 100%;
+}
+
+table.timetable td {
+  height: 20px;
+  vertical-align: middle;
+}
+
+table.timetable select.nft-dow {
+  width: 6rem;
+}
+table.timetable select.nfttime-hour,
+table.timetable select.nfttime-min {
+  width: 3rem;
+}
+table.timetable input.fetchercount {
+  width: 2rem;
+}
+
+table.timetable button.nft-remove {
+  float: right;
+  height: 30px;
+}
+
+table.timetable button.nft-remove .ui-icon {
+  transform: scale(1.25);
+}

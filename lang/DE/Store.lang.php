@@ -19,6 +19,5 @@ $g_lang['first_post'] = 'Erster Pinnwandeintrag';
 $g_lang['foodsaver'] = 'Verantwortliche Foodsaver';
 $g_lang['public_info'] = 'Öffentliche Infos zum Betrieb';
 $g_lang['public_time'] = 'Ungefähre Tageszeit der Abholung';
-$g_lang['fetchercount'] = 'Anzahl der Abholer/innen';
 $g_lang['prefetchtime'] = 'Wie viele Wochen im Voraus können sich Foodsaver mittels automatischer Slots eintragen?';
 $g_lang['store_status_impact_explanation'] = 'Bitte aktualisiere nach jedem Betriebskontakt (<a href="https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste" target="_blank">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href="https://wiki.foodsharing.de/Betrieb" target="_blank">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt.';

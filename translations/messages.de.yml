@@ -356,6 +356,8 @@ notice: Hinweis!
 validate:
   required: '{it} darf nicht leer sein'
 select: Bitte auswählen
+time: Uhrzeit
+day: Tag
 
 info:
   md: Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.
@@ -509,18 +511,6 @@ storeedit:
     orga: |
       Du bist nicht verantwortlich für diesen Betrieb.
       Du hast jedoch weitreichende Rechte als Teil des globalen Orgateams.
-  time:
-    bread: Abholzeiten bearbeiten
-    add: Abholzeiten eintragen
-    many-people: |
-      Du hast mehr als zwei Personen zum Abholen angegeben.
-      <br />
-      Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb.
-      Zu viele Abholer führten schon oft zum Ende einer Kooperation.
-      <br />
-      Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab!
-      Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
-      außer Sichtweite des Betriebes warten.
   store:
     status: Status
   fetch:
@@ -573,6 +563,21 @@ pickup:
   history:
     title: Abholungshistorie
     search: Abholungen anzeigen
+  edit:
+    bread: Abholzeiten bearbeiten
+    add: Abholzeiten eintragen
+    more: Termin hinzufügen
+    slotcount: 1 Abholer*in
+    slotscount: '{count} Abholer*innen'
+    many-people: |
+      Du hast mehr als zwei Personen zum Abholen angegeben.
+      <br />
+      Bitte schick <strong>nur so viele Abholer wie nötig</strong> in den Betrieb.
+      Zu viele Abholer führten schon oft zum Ende einer Kooperation.
+      <br />
+      Kläre die maximale Zahl möglicher Abholer mit dem Betrieb ab!
+      Zusätzlich benötigte Helfer*innen können mit Fahrradanhänger o. ä.
+      außer Sichtweite des Betriebes warten.
 
 calendar:
   locale: de

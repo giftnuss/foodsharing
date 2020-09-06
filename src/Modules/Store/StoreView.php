@@ -54,18 +54,17 @@ class StoreView extends View
 
 	public function dateForm()
 	{
-		return
-			'<div id="datepicker" style="height:220px;"></div>' .
-			$this->v_utils->v_input_wrapper('Uhrzeit', $this->v_utils->v_form_time('time')) .
-			$this->v_utils->v_form_select('fetchercount', ['selected' => 1, 'values' => [
-				['id' => 1, 'name' => '1 Abholer/in'],
-				['id' => 2, 'name' => '2 Abholer/innen'],
-				['id' => 3, 'name' => '3 Abholer/innen'],
-				['id' => 4, 'name' => '4 Abholer/innen'],
-				['id' => 5, 'name' => '5 Abholer/innen'],
-				['id' => 6, 'name' => '6 Abholer/innen'],
-				['id' => 7, 'name' => '7 Abholer/innen'],
-				['id' => 8, 'name' => '8 Abholer/innen']
+		return '<div id="datepicker" style="height: 220px;"></div>'
+			. $this->v_utils->v_input_wrapper('time', $this->v_utils->v_form_time('time'))
+			. $this->v_utils->v_form_select('fetchercount', ['selected' => 1, 'values' => [
+				['id' => 1, 'name' => $this->translator->trans('pickup.edit.slotcount')],
+				['id' => 2, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 2])],
+				['id' => 3, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 3])],
+				['id' => 4, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 4])],
+				['id' => 5, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 5])],
+				['id' => 6, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 6])],
+				['id' => 7, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 7])],
+				['id' => 8, 'name' => $this->translator->trans('pickup.edit.slotscount', ['{count}' => 8])],
 			]]);
 	}
 

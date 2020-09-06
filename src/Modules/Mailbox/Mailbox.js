@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq,camelcase */
 import '@/core'
 import '@/globals'
-import '@/tablesorter'
+// import '@/tablesorter' // TODO is this used here?
 import $ from 'jquery'
 import 'jquery-dynatree'
 import 'corejs-typeahead'

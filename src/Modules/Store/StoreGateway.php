@@ -704,24 +704,30 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		return [];
 	}
 
-	public function getAbholzeiten($storeId)
+	public function getAbholzeiten(int $storeId): array
 	{
-		if ($res = $this->db->fetchAll('SELECT `time`,`dow`,`fetcher` FROM `fs_abholzeiten` WHERE `betrieb_id` = :id', [':id' => $storeId])) {
-			$result = [];
-			foreach ($res as $r) {
-				$result[$r['dow'] . '-' . $r['time']] = [
-					'dow' => $r['dow'],
-					'time' => $r['time'],
-					'fetcher' => $r['fetcher']
-				];
-			}
+		$times = $this->db->fetchAll('
+			SELECT `time`, `dow`, `fetcher`
+			FROM `fs_abholzeiten`
+			WHERE `betrieb_id` = :storeId
+		', [':storeId' => $storeId]);
 
-			ksort($result);
-
-			return $result;
+		if (!$times) {
+			return [];
 		}
 
-		return false;
+		$result = [];
+		foreach ($times as $r) {
+			$result[$r['dow'] . '-' . $r['time']] = [
+				'dow' => $r['dow'],
+				'time' => $r['time'],
+				'fetcher' => $r['fetcher'],
+			];
+		}
+
+		ksort($result);
+
+		return $result;
 	}
 
 	public function getBetriebConversation(int $storeId, bool $springerConversation = false): ?int

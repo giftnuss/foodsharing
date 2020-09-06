@@ -333,15 +333,6 @@ ul.toolbar span.ui-icon {
   padding-bottom: 10px;
 }
 
-table.timetable td {
-  height: 20px;
-  vertical-align: middle;
-}
-
-table.timetable select {
-  width: 50px;
-}
-
 input.swap {
   color: #666666;
 }

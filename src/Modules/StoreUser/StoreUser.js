@@ -2,12 +2,15 @@
 
 import '@/core'
 import '@/globals'
+import $ from 'jquery'
+
+import 'jquery-tagedit'
+import 'jquery-tagedit-auto-grow-input'
 
 import i18n from '@/i18n'
-
 import { expose } from '@/utils'
+import './StoreUser.css'
 
-import $ from 'jquery'
 import {
   ajax,
   pulseError, pulseInfo,
@@ -15,10 +18,7 @@ import {
   hideLoader,
   GET
 } from '@/script'
-
-import 'jquery-tagedit'
-import 'jquery-tagedit-auto-grow-input'
-import '@/tablesorter'
+import '@/tablesorter' // Remove after replacing u_storeList
 
 import {
   u_updatePosts,
@@ -160,7 +160,7 @@ $(document).ready(() => {
   $('.nft-remove').button({
     text: false,
     icons: {
-      primary: 'ui-icon-minus'
+      primary: 'ui-icon-trash'
     }
   }).on('click', function () {
     const $this = $(this)
@@ -173,7 +173,7 @@ $(document).ready(() => {
       if (val == 0) {
         val = 1
       } else if (val > 2) {
-        pulseInfo(i18n('storeedit.team.many-people'), {
+        pulseInfo(i18n('pickup.edit.many-people'), {
           sticky: true
         })
       }
@@ -185,22 +185,10 @@ $(document).ready(() => {
     text: false
   }).on('click', function () {
     $('table.timetable tbody').append($('table#nft-hidden-row tbody').html())
-    let clname = 'odd'
-    $('table.timetable tbody tr').each(function () {
-      if (clname == 'odd') {
-        clname = 'even'
-      } else {
-        clname = 'odd'
-      }
-
-      const $this = $(this)
-      $this.removeClass('odd even')
-      $this.addClass(clname)
-    })
     $('.nft-remove').button({
       text: false,
       icons: {
-        primary: 'ui-icon-minus'
+        primary: 'ui-icon-trash'
       }
     }).on('click', function () {
       const $this = $(this)

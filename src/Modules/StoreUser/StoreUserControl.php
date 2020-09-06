@@ -236,7 +236,7 @@ class StoreUserControl extends Control
 						. '});',
 					];
 					$menu[] = [
-						'name' => $this->translator->trans('storeedit.time.bread'),
+						'name' => $this->translator->trans('pickup.edit.bread'),
 						'click' => '$(\'#bid\').val(' . (int)$store['id'] . ');'
 							. '$(\'#dialog_abholen\').dialog(\'open\');'
 							. 'return false;',
@@ -353,7 +353,7 @@ class StoreUserControl extends Control
 						[$this->view->u_form_abhol_table($pickup_dates),
 							$this->v_utils->v_form_hidden('bid', 0)
 						],
-						$this->translator->trans('storeedit.time.add'), ['reload' => true, 'width' => $width]);
+						$this->translator->trans('pickup.edit.add'), ['reload' => true, 'width' => $width]);
 				}
 
 				if (!$store['jumper']) {
