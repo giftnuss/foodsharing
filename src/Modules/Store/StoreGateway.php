@@ -760,7 +760,6 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 
 	public function deleteBPost($id): int
 	{
-
 		return $this->db->delete('fs_betrieb_notiz', ['id' => $id]);
 	}
 
