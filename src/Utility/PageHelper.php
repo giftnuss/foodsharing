@@ -16,37 +16,39 @@ use Twig\Environment;
 
 final class PageHelper
 {
-	private $add_css;
-	private $bread;
-	private $hidden;
-	private $content_main;
-	private $content_right;
-	private $content_left;
-	private $content_bottom;
-	private $content_top;
-	private $content_overtop;
-	private $js_func;
-	private $js;
-	private $head;
-	private $title;
-	private $webpackScripts;
-	private $webpackStylesheets;
-	private $session;
-	private $sanitizerService;
-	private $imageService;
-	private $routeHelper;
-	private $translationHelper;
-	public $jsData = [];
-	private $twig;
-	private $identificationHelper;
-	private $blogPermissions;
-	private $mailboxPermissions;
-	private $quizPermissions;
-	private $reportPermissions;
-	private $storePermissions;
-	private $contentPermissions;
-	private $newsletterEmailPermissions;
-	private $regionPermissions;
+	private string $add_css = '';
+	private string $content_main = '';
+	private string $content_right = '';
+	private string $content_left = '';
+	private string $content_bottom = '';
+	private string $content_top = '';
+	private string $content_overtop = '';
+	private string $head = '';
+	private string $hidden = '';
+	private string $js_func = '';
+	private string $js = '';
+	private array $bread = [];
+	private array $title = ['foodsharing'];
+	private array $webpackScripts = [];
+	private array $webpackStylesheets = [];
+
+	public array $jsData = [];
+
+	private IdentificationHelper $identificationHelper;
+	private ImageHelper $imageService;
+	private RouteHelper $routeHelper;
+	private Sanitizer $sanitizerService;
+	private TranslationHelper $translationHelper;
+	private Session $session;
+	private BlogPermissions $blogPermissions;
+	private ContentPermissions $contentPermissions;
+	private MailboxPermissions $mailboxPermissions;
+	private NewsletterEmailPermissions $newsletterEmailPermissions;
+	private QuizPermissions $quizPermissions;
+	private RegionPermissions $regionPermissions;
+	private ReportPermissions $reportPermissions;
+	private StorePermissions $storePermissions;
+	private Environment $twig;
 
 	public function __construct(
 		Session $session,
@@ -65,34 +67,21 @@ final class PageHelper
 		RegionPermissions $regionPermissions,
 		NewsletterEmailPermissions $newsletterEmailPermissions
 	) {
-		$this->content_main = '';
-		$this->content_right = '';
-		$this->content_left = '';
-		$this->content_bottom = '';
-		$this->content_top = '';
-		$this->content_overtop = '';
-		$this->add_css = '';
-		$this->bread = [];
-		$this->hidden = '';
-		$this->js_func = '';
-		$this->js = '';
-		$this->head = '';
-		$this->title = ['foodsharing'];
-		$this->session = $session;
-		$this->sanitizerService = $sanitizerService;
-		$this->imageService = $imageService;
 		$this->twig = $twig;
-		$this->routeHelper = $routeHelper;
-		$this->translationHelper = $translationHelper;
 		$this->identificationHelper = $identificationHelper;
+		$this->imageService = $imageService;
+		$this->routeHelper = $routeHelper;
+		$this->sanitizerService = $sanitizerService;
+		$this->translationHelper = $translationHelper;
+		$this->session = $session;
 		$this->blogPermissions = $blogPermissions;
-		$this->mailboxPermissions = $mailboxPermissions;
-		$this->quizPermissions = $quizPermissions;
-		$this->reportPermissions = $reportPermissions;
 		$this->contentPermissions = $contentPermissions;
-		$this->storePermissions = $storePermissions;
+		$this->mailboxPermissions = $mailboxPermissions;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
+		$this->quizPermissions = $quizPermissions;
 		$this->regionPermissions = $regionPermissions;
+		$this->reportPermissions = $reportPermissions;
+		$this->storePermissions = $storePermissions;
 	}
 
 	public function generateAndGetGlobalViewData(): array
@@ -177,7 +166,7 @@ final class PageHelper
 	/**
 	 * This is used to set window.serverData on in the frontend.
 	 */
-	public function getServerData()
+	public function getServerData(): array
 	{
 		$user = $this->session->get('user');
 
