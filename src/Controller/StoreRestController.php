@@ -135,7 +135,7 @@ class StoreRestController extends AbstractFOSRestController
 		}
 		$result = $this->storeGateway->getSingleStoreNote($postId);
 
-		$this->storeGateway->addStoreLog($result['betrieb_id'], $fs_id, $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
+		$this->storeGateway->addStoreLog($result['betrieb_id'], $this->session->id(), $result['foodsaver_id'], new \DateTime($result['zeit']), StoreLogAction::DELETED_FROM_WALL, $result['text']);
 
 		$this->storeGateway->deleteBPost($postId);
 
