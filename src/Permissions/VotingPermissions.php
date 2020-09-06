@@ -77,11 +77,9 @@ final class VotingPermissions
 		if ($type == Type::WORKING_GROUP) {
 			if ($regionId == RegionIDs::VOTING_BETA) {
 				return true;
-				//return $this->session->isAdminFor($regionId);
 			} else {
 				return false;
 			}
-
 		} else {
 			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
 
