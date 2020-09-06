@@ -31,7 +31,9 @@ class FoodSharePointView extends View
 
 	public function foodSharePointHead(): string
 	{
-		return $this->twig->render('pages/FoodSharePoint/foodSharePointTop.html.twig', ['food_share_point' => $this->foodSharePoint]);
+		return $this->twig->render('pages/FoodSharePoint/foodSharePointTop.html.twig', [
+			'food_share_point' => $this->foodSharePoint,
+		]);
 	}
 
 	public function checkFoodSharePoint(array $foodSharePoint): string
@@ -39,27 +41,49 @@ class FoodSharePointView extends View
 		$htmlEscapedName = htmlspecialchars($foodSharePoint['name']);
 		$content = '';
 		if ($foodSharePoint['pic']) {
-			$content .= $this->v_utils->v_input_wrapper('Foto', '<img src="' . $foodSharePoint['pic']['head'] . '" alt="' . $htmlEscapedName . '" />');
+			$content .= $this->v_utils->v_input_wrapper($this->translator->trans('fsp.pic'),
+				'<img src="' . $foodSharePoint['pic']['head'] . '" alt="' . $htmlEscapedName . '" />'
+			);
 		}
 
-		$content .= $this->v_utils->v_input_wrapper('Adresse', '
-		' . $foodSharePoint['anschrift'] . '<br />
-		' . $foodSharePoint['plz'] . ' ' . $foodSharePoint['ort']);
+		$content .= $this->v_utils->v_input_wrapper($this->translator->trans('fsp.address'),
+			$foodSharePoint['anschrift']
+			. '<br />'
+			. $foodSharePoint['plz'] . ' ' . $foodSharePoint['ort']
+		);
 
-		$content .= $this->v_utils->v_input_wrapper('Beschreibung', $this->sanitizerService->markdownToHtml($foodSharePoint['desc']));
+		$content .= $this->v_utils->v_input_wrapper($this->translator->trans('fsp.description'),
+			$this->sanitizerService->markdownToHtml($foodSharePoint['desc'])
+		);
 
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt am', date('d.m.Y', $foodSharePoint['time_ts']));
-		$content .= $this->v_utils->v_input_wrapper('Hinzugefügt von', '<a href="/profile/' . (int)$foodSharePoint['fs_id'] . '">' . $foodSharePoint['fs_name'] . ' ' . $foodSharePoint['fs_nachname'] . '</a>');
+		$content .= $this->v_utils->v_input_wrapper($this->translator->trans('fsp.addedOn'),
+			date('d.m.Y', $foodSharePoint['time_ts'])
+		);
 
-		return $this->v_utils->v_field($content, $foodSharePoint['name'] . ' freischalten', ['class' => 'ui-padding']);
+		$fsName = $foodSharePoint['fs_name'] . ' ' . $foodSharePoint['fs_nachname'];
+		$content .= $this->v_utils->v_input_wrapper($this->translator->trans('fsp.addedBy'),
+			'<a href="/profile/' . (int)$foodSharePoint['fs_id'] . '">' . $fsName . '</a>'
+		);
+
+		return $this->v_utils->v_field(
+			$content,
+			$this->translator->trans('fsp.acceptName', ['{name}' => $foodSharePoint['name']]),
+			['class' => 'ui-padding']
+		);
 	}
 
 	public function address(): string
 	{
+		$address = $this->v_utils->v_input_wrapper($this->translator->trans('fsp.street'),
+		   $this->foodSharePoint['anschrift']
+	   );
+		$location = $this->v_utils->v_input_wrapper($this->translator->trans('fsp.location'),
+			$this->foodSharePoint['plz'] . ' ' . $this->foodSharePoint['ort']
+		);
+
 		return $this->v_utils->v_field(
-			$this->v_utils->v_input_wrapper('Anschrift', $this->foodSharePoint['anschrift']) .
-			$this->v_utils->v_input_wrapper('PLZ / Ort', $this->foodSharePoint['plz'] . ' ' . $this->foodSharePoint['ort']),
-			'Adresse',
+			$address . $location,
+			$this->translator->trans('fsp.address'),
 			['class' => 'ui-padding']
 		);
 	}
@@ -73,16 +97,17 @@ class FoodSharePointView extends View
 			$fspName = $this->foodSharePoint['name'];
 			$title = $this->translator->trans('fsp.editName', ['{name}' => $fspName]);
 
-			$tagselect = $this->v_utils->v_form_tagselect('fspmanagers', ['valueOptions' => $data['bfoodsaver_values'], 'values' => $data['bfoodsaver']]);
+			$tagselect = $this->v_utils->v_form_tagselect('fspmanagers', [
+				'valueOptions' => $data['bfoodsaver_values'],
+				'values' => $data['bfoodsaver'],
+			]);
 			$this->pageHelper->addJs('
-			$("#fairteiler-form").on("submit", function(ev){
-				if($("#fspmanagers input[type=\'hidden\']").length == 0)
-				{
+			$("#fairteiler-form").on("submit", function (ev) {
+				if ($("#fspmanagers input[type=\'hidden\']").length == 0) {
 					ev.preventDefault();
 					pulseError("' . $this->translator->trans('fsp.noCoordinator') . '");
 				}
-			});
-			');
+			});');
 
 			foreach (['anschrift', 'plz', 'ort', 'lat', 'lon'] as $i) {
 				$latLonOptions[$i] = $data[$i];
@@ -90,10 +115,12 @@ class FoodSharePointView extends View
 			$latLonOptions['location'] = ['lat' => $data['lat'], 'lon' => $data['lon']];
 		} else {
 			$latLonOptions = [];
-			$data['bezirk_id'] = null;
-			$data['name'] = '';
-			$data['desc'] = '';
-			$data['picture'] = '';
+			$data = [
+				'bezirk_id' => null,
+				'name' => '',
+				'desc' => '',
+				'picture' => '',
+			];
 		}
 
 		// initial value for the image chooser can be empty (no image yet) or an old or new file path
@@ -103,7 +130,7 @@ class FoodSharePointView extends View
 		}
 
 		return $this->v_utils->v_field($this->v_utils->v_form('fairteiler', [
-			$this->v_utils->v_form_select('bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
+			$this->v_utils->v_form_select('fsp_bezirk_id', ['values' => $this->regions, 'selected' => $data['bezirk_id'], 'required' => true]),
 			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
 			$this->v_utils->v_form_textarea('desc', [
 				'value' => $data['desc'],
@@ -131,8 +158,7 @@ class FoodSharePointView extends View
 	public function followHidden(): string
 	{
 		$this->pageHelper->addJsFunc('
-			function u_follow()
-			{
+			function u_follow () {
 				$("#follow-hidden").dialog("open");
 			}
 		');
@@ -146,7 +172,7 @@ class FoodSharePointView extends View
 				width: 500,
 				resizable: false,
 				buttons: {
-					"' . $this->translator->trans('button.save') . '": function(){
+					"' . $this->translator->trans('button.save') . '": function () {
 						goTo("' . $this->routeHelper->getSelf() . '&follow=1&infotype=" + $("input[name=\'infotype\']:checked").val());
 					}
 				}
@@ -156,20 +182,16 @@ class FoodSharePointView extends View
 		global $g_data;
 		$g_data['infotype'] = 1;
 
-		return '
-			<div id="follow-hidden">
-				' . $this->v_utils->v_form_radio(
-					'infotype',
-					[
-						'desc' => $this->translator->trans('fsp.info.descModal'),
-						'values' => [
-							['id' => InfoType::BELL, 'name' => $this->translator->trans('fsp.info.bell')],
-							['id' => InfoType::EMAIL, 'name' => $this->translator->trans('fsp.info.mail')],
-						]
-					]
-				) . '
-			</div>
-		';
+		return '<div id="follow-hidden">' . $this->v_utils->v_form_radio(
+			'infotype',
+			[
+				'desc' => $this->translator->trans('fsp.info.descModal'),
+				'values' => [
+					['id' => InfoType::BELL, 'name' => $this->translator->trans('fsp.info.bell')],
+					['id' => InfoType::EMAIL, 'name' => $this->translator->trans('fsp.info.mail')],
+				]
+			]
+		) . '</div>';
 	}
 
 	public function follower(): string

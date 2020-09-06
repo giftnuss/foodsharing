@@ -223,41 +223,37 @@ class FoodSharePointControl extends Control
 
 	public function check(Request $request): void
 	{
-		if ($foodSharePoint = $this->foodSharePoint) {
-			if ($this->foodSharePointPermissions->mayApproveFoodSharePointCreation($foodSharePoint['bezirk_id'])) {
-				if ($request->query->has('agree')) {
-					if ($request->query->get('agree')) {
-						$this->accept();
-					} else {
-						$this->delete();
-					}
-				}
-				$this->pageHelper->addContent($this->view->checkFoodSharePoint($foodSharePoint));
-				$this->pageHelper->addContent(
-					$this->view->menu(
-						[
-							[
-								'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=1',
-								'name' => $this->translator->trans('fsp.accept'),
-							],
-							[
-								'click' => 'if(confirm(\''
-									. $this->translator->trans('fsp.rejectConfirm')
-									. '\')){goTo(this.href);}else{return false;}',
-								'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=0',
-								'name' => $this->translator->trans('fsp.reject'),
-							],
-						],
-						['title' => $this->translator->trans('options')]
-					),
-					CNT_RIGHT
-				);
-			} else {
-				$this->routeHelper->goPage('fairteiler');
-			}
-		} else {
+		$foodSharePoint = $this->foodSharePoint;
+		if (!$foodSharePoint || !$this->foodSharePointPermissions->mayApproveFoodSharePointCreation($foodSharePoint['bezirk_id'])) {
 			$this->routeHelper->goPage('fairteiler');
+
+			return;
 		}
+
+		if ($request->query->has('agree')) {
+			if ($request->query->get('agree')) {
+				$this->accept();
+			} else {
+				$this->delete();
+			}
+		}
+		$this->pageHelper->addContent($this->view->checkFoodSharePoint($foodSharePoint));
+
+		$menuAccept = [
+			'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=1',
+			'name' => $this->translator->trans('fsp.accept'),
+		];
+		$menuReject = [
+			'href' => '/?page=fairteiler&sub=check&id=' . (int)$foodSharePoint['id'] . '&agree=0',
+			'name' => $this->translator->trans('fsp.reject'),
+			'click' => 'if (confirm(\''
+				. $this->translator->trans('fsp.rejectConfirm')
+				. '\')) { goTo(this.href); } else { return false; }',
+		];
+		$this->pageHelper->addContent($this->view->menu(
+			[$menuAccept, $menuReject],
+			['title' => $this->translator->trans('options')]
+		), CNT_RIGHT);
 	}
 
 	private function accept(): void
@@ -312,7 +308,7 @@ class FoodSharePointControl extends Control
 			} else {
 				$items[] = [
 					'name' => $this->translator->trans('fsp.follow'),
-					'click' => 'u_follow();return false;'
+					'click' => 'u_follow(); return false;'
 				];
 				$this->pageHelper->addHidden($this->view->followHidden());
 			}
@@ -341,37 +337,33 @@ class FoodSharePointControl extends Control
 				$this->flashMessageHelper->error($this->translator->trans('fsp.addError'));
 			}
 		}
-
 		$this->pageHelper->addContent($this->view->foodSharePointForm());
+
+		$goBack = [
+			'name' => $this->translator->trans('back'),
+			'href' => '/?page=fairteiler&bid=' . (int)$this->regionId . '',
+		];
 		$this->pageHelper->addContent(
-			$this->v_utils->v_menu(
-				[
-					[
-						'name' => $this->translator->trans('back'),
-						'href' => '/?page=fairteiler&bid=' . (int)$this->regionId . '',
-					],
-				],
-				$this->translator->trans('options')
-			),
+			$this->v_utils->v_menu([$goBack], $this->translator->trans('options')),
 			CNT_RIGHT
 		);
 	}
 
 	private function handleEditFsp(Request $request): bool
 	{
-		if ($this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
-			$data = $this->prepareInput($request);
-			if ($this->validateInput($data)) {
-				$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('fspmanagers'));
-				$this->foodSharePointGateway->updateFSPManagers($this->foodSharePoint['id'], $fspManager);
-
-				return $this->foodSharePointGateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);
-			}
-
+		if (!$this->foodSharePointPermissions->mayEdit($this->regionId, $this->follower)) {
 			return false;
 		}
 
-		return false;
+		$data = $this->prepareInput($request);
+		if (!$this->validateInput($data)) {
+			return false;
+		}
+
+		$fspManager = $this->sanitizerService->tagSelectIds($request->request->get('fspmanagers'));
+		$this->foodSharePointGateway->updateFSPManagers($this->foodSharePoint['id'], $fspManager);
+
+		return $this->foodSharePointGateway->updateFoodSharePoint($this->foodSharePoint['id'], $data);
 	}
 
 	private function prepareInput(Request $request): array
@@ -383,7 +375,7 @@ class FoodSharePointControl extends Control
 			'plz' => preg_replace('[^0-9]', '', $request->request->get('plz')),
 			'ort' => strip_tags($request->request->get('ort')),
 			'picture' => strip_tags($request->request->get('picture')),
-			'bezirk_id' => (int)$request->request->getDigits('bezirk_id'),
+			'bezirk_id' => (int)$request->request->getDigits('fsp_bezirk_id'),
 			'lat' => $request->request->filter(
 				'lat',
 				null,
@@ -407,19 +399,17 @@ class FoodSharePointControl extends Control
 	private function handleAdd(Request $request): int
 	{
 		$data = $this->prepareInput($request);
-		if ($this->validateInput($data)) {
-			$status = 0;
-			if ($this->foodSharePointPermissions->mayAdd($this->regionId)) {
-				$status = 1;
-			}
-			$data['status'] = $status;
-			$userId = $this->session->id();
-			if ($userId !== null) {
-				return $this->foodSharePointGateway->addFoodSharePoint($userId, $data);
-			}
+		if (!$this->validateInput($data)) {
+			return 0;
 		}
 
-		return 0;
+		$userId = $this->session->id();
+		if ($userId === null || !$this->foodSharePointPermissions->mayAdd($this->regionId)) {
+			return 0;
+		}
+		$data['status'] = 1;
+
+		return $this->foodSharePointGateway->addFoodSharePoint($userId, $data);
 	}
 
 	private function isFollower(): bool

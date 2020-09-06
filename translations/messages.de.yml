@@ -380,12 +380,19 @@ fsp:
   suggest: Fairteiler vorschlagen
   suggestSuccess: Fairteiler wurde vorgeschlagen und muss nun noch durch einen Botschafter bestätigt werden.
   accept: Fairteiler freischalten
+  acceptName: '{name} freischalten'
   acceptSuccess: Fairteiler ist jetzt aktiv
   reject: Fairteiler ablehnen
   rejectConfirm: Achtung! Wenn du den Fairteiler löschst, kannst du dies nicht mehr rückgängig machen. Fortfahren?
   edit: Fairteiler bearbeiten
   editName: 'Fairteiler "{name}" bearbeiten'
   editSuccess: Fairteiler wurde erfolgreich bearbeitet
+  address: Adresse
+  street: Anschrift
+  location: PLZ / Ort
+  pic: Foto
+  addedOn: Hinzugefügt am
+  addedBy: Hinzugefügt von
   descLabel: Schreibe hier ein paar grundsätzliche Infos über den Fairteiler! Insbesondere wann er zugänglich/geöffnet ist.
   noManager: Es muss mindestens einen Verantwortlichen für diesen Fairteiler geben!
   publicwall: Beachte, dass deine Beiträge auf der Fairteiler-Pinnwand öffentlich einsehbar sind.

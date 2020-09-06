@@ -108,7 +108,8 @@ $g_lang['fetchstate'] = 'Hat alles gut geklappt?';
 $g_lang['contact_type'] = 'Wie möchtest du kontaktiert werden?';
 $g_lang['lifetime'] = 'Wie lange soll dein Essenskorb gültig sein?';
 // BlogView
-$g_lang['teaser'] = 'Teaser';
+$g_lang['teaser'] = 'Teaser'; // BlogView
+$g_lang['bezirk_id'] = 'Für welche Region ist der Artikel relevant?'; // BlogView
 // BusinessCardView
 $g_lang['opt'] = 'Optionen';
 // ContentControl (and maybe others)
@@ -124,6 +125,10 @@ $g_lang['dateend'] = 'Enddatum';
 // $g_lang['orgateam'] = 'Bundesweite Orga'; TODO check if used anywhere else
 $g_lang['fs_id'] = 'foodsharing-ID';
 $g_lang['position'] = 'Position bei foodsharing (öffentlich)';
+// FoodSharePoint
+$g_lang['infotype'] = 'Benachrichtigung'; // follow/unfollow modal
+$g_lang['fsp_bezirk_id'] = 'In welchem Bezirk ist der Fairteiler?'; // FoodSharePoint
+$g_lang['fspmanagers'] = 'Foodsaver, die Ansprechpartner für den Fairteiler sind'; // FoodSharePoint
 // LoginView
 $g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
 $g_lang['pass2'] = 'Passwortwiederholung';

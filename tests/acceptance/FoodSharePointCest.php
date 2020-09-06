@@ -41,7 +41,7 @@ class FoodSharePointCest
 		$I->waitForText('Fairteiler eintragen', 10);
 		$I->click('Fairteiler eintragen');
 		$I->waitForText('In welchem Bezirk');
-		$I->selectOption('#bezirk_id', $this->testBezirk['id']);
+		$I->selectOption('#fsp_bezirk_id', $this->testBezirk['id']);
 		$I->fillField('#name', 'The greatest fairsharepoint');
 		$I->fillField('#desc', 'Blablabla if you come here be hungry!');
 		$I->unlockAllInputFields();
