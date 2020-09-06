@@ -966,14 +966,17 @@ foodsaver:
     needs_fs: Du musst erst Foodsaver werden
     needs_sm: Du musst erst BetriebsverantwortlicheR werden
     needs_fs_quiz: Du darfst zunächst das Foodsaver Quiz machen
+    to_sm: Werde Betriebsverantwortliche*r
+    to_amb: Werde Botschafter*in
     amb_region: In welcher Region möchtest du Botschafter werden?
     needs_publicinfo: Deine Kurzbeschreibung ist leer
-    needs_region: Du hast keinen Bezirk gewählt, in dem du Botschafter werden möchtest
+    needs_region: Wähle bitte aus, in welchem Bezirk du Botschafter*in werden möchtest
     rv: Ja, ich habe die Rechtsvereinbarung gelesen und akzeptiere sie.
     needs_rv: Du musst die Rechtsvereinbarung akzeptieren!
     quiz_error: 'Fehler! Quizdaten für deine Rolle konnten nicht geladen werden. Bitte wende dich an den IT-Support:'
     fs_success: Danke! Du bist jetzt Foodsaver
     sm_success: Danke! Du bist jetzt Betriebsverantwortlicher
+    amb_requested: Anfrage erfolgreich versendet!
     amb_success: Danke dir für deine Motivation, mehr Verantwortung zu übernehmen! Die Anfrage wird schnellstmöglich vom globalen Orga-Team bearbeitet.
   restricted: Du hast leider keine Berechtigung, diese Daten einzusehen.
   addresschange:
@@ -1046,7 +1049,15 @@ mailbox:
   filesize: 'Sorry! Die Datei ist zu groß.'
 
 settings:
+  title: Einstellungen
+  header: Deine Daten/Einstellungen
+  notifications: Benachrichtigungen
+  businesscard: Persönliche Visitenkarte
+  account: Account-Optionen
+  sleep: Schlafmütze
+  email: E-Mail-Adresse ändern
   saved: Änderungen wurden gespeichert.
+  calendar: Kalender
 
 mail:
   noreply_addresses_not_allowed: "E-Mails an \"noreply@\" Adressen sind nicht zustellbar.<br>Bitte überprüfe die Empfängeradresse!"
@@ -1382,7 +1393,6 @@ menu:
     ids: Ausweise
     joinregion: Einem Bezirk beitreten
     conference: Videokonferenz
-  your_settings: Deine Daten/Einstellungen
 
 footer:
   team: Team

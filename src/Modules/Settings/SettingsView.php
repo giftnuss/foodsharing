@@ -218,7 +218,7 @@ class SettingsView extends View
 				]
 			]),
 			$out
-		], ['submit' => $this->translationHelper->s('save')]), $this->translationHelper->s('settings_info'), ['class' => 'ui-padding']);
+		], ['submit' => $this->translator->trans('button.save')]), $this->translator->trans('settings.notifications'), ['class' => 'ui-padding']);
 	}
 
 	public function quizSession($session, $try_count, ContentGateway $contentGateway)
@@ -487,7 +487,7 @@ class SettingsView extends View
 		}
 		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), [
+		return $this->v_utils->v_quickform($this->translator->trans('settings.header'), [
 			$regionPicker,
 			$this->latLonPicker('LatLng', $latLonOptions, '_profile'),
 			$this->v_utils->v_form_text('telefon'),

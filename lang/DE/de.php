@@ -81,9 +81,7 @@ $g_lang['title'] = 'Überschrift';
 $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';
 
-// $g_lang['search'] = 'Suchen'; TODO check if used anywhere else
 $g_lang['daterange'] = 'Zeitraum';
-// $g_lang['rv_botschafter'] = 'Rechtsvereinbarung für Botschafter'; TODO check if used anywhere else
 // $g_lang['regions'] = 'Bezirke'; TODO check if used anywhere else
 
 $g_lang['push_notifications'] = 'Push-Benachrichtigungen';
@@ -111,34 +109,34 @@ $g_lang['lifetime'] = 'Wie lange soll dein Essenskorb gültig sein?';
 $g_lang['teaser'] = 'Teaser'; // BlogView
 $g_lang['bezirk_id'] = 'Für welche Region ist der Artikel relevant?'; // BlogView
 // BusinessCardView
-$g_lang['opt'] = 'Optionen';
-// ContentControl (and maybe others)
-$g_lang['body'] = 'Inhalt';
+$g_lang['opt'] = 'Optionen'; // BusinessCardView
+// ContentControl
+$g_lang['body'] = 'Inhalt'; // ContentControl (and maybe others)
 // EmailControl
-$g_lang['testemail'] = 'Test-E-Mail-Adresse';
-$g_lang['mailbox_id'] = 'Absender-E-Mail-Adresse';
+$g_lang['testemail'] = 'Test-E-Mail-Adresse'; // EmailControl
+$g_lang['mailbox_id'] = 'Absender-E-Mail-Adresse'; // EmailControl
 // EventView
-$g_lang['location_name'] = 'Veranstaltungsort / Konferenzraum';
-$g_lang['online_type'] = 'Findet das Event offline oder online statt?';
-$g_lang['dateend'] = 'Enddatum';
+$g_lang['location_name'] = 'Veranstaltungsort / Konferenzraum'; // EventView
+$g_lang['online_type'] = 'Findet das Event offline oder online statt?'; // EventView
+$g_lang['dateend'] = 'Enddatum'; // EventView
 // FoodsaverView
-// $g_lang['orgateam'] = 'Bundesweite Orga'; TODO check if used anywhere else
-$g_lang['fs_id'] = 'foodsharing-ID';
-$g_lang['position'] = 'Position bei foodsharing (öffentlich)';
+$g_lang['orgateam'] = 'Bundesweite Orga'; // FoodsaverView
+$g_lang['fs_id'] = 'foodsharing-ID'; // FoodsaverView
+$g_lang['position'] = 'Position bei foodsharing (öffentlich)'; // FoodsaverView
 // FoodSharePoint
 $g_lang['infotype'] = 'Benachrichtigung'; // follow/unfollow modal
 $g_lang['fsp_bezirk_id'] = 'In welchem Bezirk ist der Fairteiler?'; // FoodSharePoint
 $g_lang['fspmanagers'] = 'Foodsaver, die Ansprechpartner für den Fairteiler sind'; // FoodSharePoint
 // LoginView
-$g_lang['pass1'] = 'Dein neues gewünschtes Passwort';
-$g_lang['pass2'] = 'Passwortwiederholung';
+$g_lang['pass1'] = 'Dein neues gewünschtes Passwort'; // LoginView
+$g_lang['pass2'] = 'Passwortwiederholung'; // LoginView
 // $g_lang['login_location'] = 'Deine Adresse'; // TODO check if used anywhere else
 // MapView
-$g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.';
-$g_lang['specials'] = 'Besonderheiten';
+$g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.'; // MapView
+$g_lang['specials'] = 'Besonderheiten'; // MapView
 // MessageView
-$g_lang['compose_recipients'] = 'Empfänger';
-$g_lang['compose_body'] = 'Nachricht';
+$g_lang['compose_recipients'] = 'Empfänger'; // MessageView
+$g_lang['compose_body'] = 'Nachricht'; // MessageView
 // StoreView (pickup time management)
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder'; // StoreUserControl
 $g_lang['storemanagers'] = 'Betriebsverantwortliche'; // StoreUserControl
