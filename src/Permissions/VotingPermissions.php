@@ -5,6 +5,7 @@ namespace Foodsharing\Permissions;
 use DateTime;
 use Exception;
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\RegionIDs;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Region\RegionGateway;
 use Foodsharing\Modules\Store\StoreGateway;
@@ -74,7 +75,9 @@ final class VotingPermissions
 
 		$type = $this->regionGateway->getType($regionId);
 		if ($type == Type::WORKING_GROUP) {
-			return $this->session->isAdminFor($regionId);
+			if ($regionId == RegionIDs::VOTING_BETA)
+				return true;
+			//return $this->session->isAdminFor($regionId);
 		} else {
 			$votingGroup = $this->regionGateway->getRegionVotingGroupId($regionId);
 
