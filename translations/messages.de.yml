@@ -1092,6 +1092,14 @@ settings:
     range: 'Gib an, für welchen Zeitraum du in etwa nicht zur Verfügung stehen wirst:'
     saved: Die Einstellungen wurden gespeichert
   email: E-Mail-Adresse ändern
+  changemail:
+    passcheck: Bestätige die Änderung bitte mit deinem Passwort
+    passfail: Das Passwort stimmt nicht, vertippt?
+    invalid: 'Mit der eingegebenen E-Mail-Adresse stimmt etwas nicht.'
+    domain: 'Bitte verwende eine andere E-Mail-Adresse, damit du dein Passwort jederzeit wiederherstellen kannst.'
+    occupied: Die E-Mail-Adresse konnte nicht geändert werden, irgendwer benutzt sie schon!
+    sent: Gehe jetzt zu deinem <strong>neuen</strong> E-Mail-Postfach, um die Adresse zu bestätigen!
+    done: Deine E-Mail-Adresse wurde geändert!
   saved: Änderungen wurden gespeichert.
   calendar: Kalender
   photo:
@@ -1658,7 +1666,7 @@ tablesorter:
 
 password:
   reset: Passwort zurücksetzen
-  insertmail: Bitte trage hier Deine E-Mail-Adresse ein, mit welcher Du auf foodsharing.de angemeldet bist!
+  insertmail: Bitte trage hier deine E-Mail-Adresse ein, mit welcher du auf foodsharing.de angemeldet bist!
 
 sidenav:
   superregional: Überregionale Gruppen

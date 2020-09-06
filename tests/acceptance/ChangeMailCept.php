@@ -17,7 +17,7 @@ $I->waitForElementVisible('#newmail', 5);
 $I->fillField('#newmail', $newmail);
 $I->executeJS("$('button:contains(E-Mail-Adresse ändern)').trigger('click')");
 $I->waitForElementVisible('#pulse-info', 5);
-$I->see('Gehe jetzt zu Deinem');
+$I->see('Gehe jetzt zu deinem');
 
 // receive a mail
 $I->expectNumMails(1, 5);

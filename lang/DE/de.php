@@ -1,49 +1,40 @@
 <?php
 $g_lang = [];
-$g_lang['password'] = 'Passwort';
-$g_lang['login'] = 'Login';
 $g_lang['geb_datum'] = 'Geburtsdatum';
-$g_lang['actions'] = 'Aktionen';
 $g_lang['name'] = 'Name';
 $g_lang['add'] = 'hinzufügen'; // StoreUserView
 $g_lang['nachname'] = 'Nachname';
 $g_lang['subject'] = 'Betreff'; // at least EmailControl
 $g_lang['message'] = 'Nachricht';
-$g_lang['yes'] = 'Ja'; // SettingsView SettingsView
-$g_lang['no'] = 'Nein'; // SettingsView SettingsView
 $g_lang['address'] = 'Adresse';
-$g_lang['delete'] = 'löschen'; // WallPostView
 $g_lang['edit'] = 'bearbeiten'; // StoreControl
 $g_lang['desc'] = 'Beschreibung';
 $g_lang['description'] = 'Beschreibung';
 $g_lang['plz'] = 'Postleitzahl (automatisch aus Karte oben!)';
 $g_lang['email'] = 'E-Mail-Adresse';
 $g_lang['attachement'] = 'Anhang'; // EmailControl
-$g_lang['about_me_public'] = 'Öffentliche Kurzbeschreibung';
-$g_lang['about_me_intern'] = 'Kurzbeschreibung';
+$g_lang['about_me_public'] = 'Öffentliche Kurzbeschreibung'; // SettingsView
+$g_lang['about_me_intern'] = 'Kurzbeschreibung'; // SettingsView
 $g_lang['telefon'] = 'Festnetznummer';
 $g_lang['handy'] = 'Handynummer';
 $g_lang['anschrift'] = 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)';
 $g_lang['geschlecht'] = 'Geschlecht';
 $g_lang['botschafter'] = 'Botschafter';
-$g_lang['save'] = 'Speichern'; // SettingsView SettingsView SettingsView
-$g_lang['options'] = 'Optionen';
-$g_lang['picture'] = 'Bild';
+$g_lang['options'] = 'Optionen'; // FoodSharePointControl FoodSharePointView foodSharePoint.twig
+$g_lang['picture'] = 'Bild'; // BlogView and maybe more
 $g_lang['message'] = 'Nachricht';
 $g_lang['parent_id'] = 'Elternbezirk'; // at least XhrMethods and RegionAdminControl
 $g_lang['fs_id'] = 'Deine foodsharing-ID';
 $g_lang['lat'] = 'Längengrad';
 $g_lang['lon'] = 'Breitengrad';
-$g_lang['stadt'] = 'Deine Stadt oder Gemeinde';
+$g_lang['stadt'] = 'Deine Stadt oder Gemeinde'; // DashboardControl
 $g_lang['bezirk'] = 'Bezirk';
 $g_lang['betrieb'] = 'Kooperationsbetrieb/e';
 $g_lang['foodsaver'] = 'Foodsaver';
-$g_lang['active'] = 'Aktiviert';
+$g_lang['active'] = 'Aktiviert'; // TODO check this
 $g_lang['date'] = 'Datum';
 $g_lang['mailbox_name'] = 'Mailbox-Name'; // XhrMethods
-$g_lang['card'] = 'Karte';
-
-$g_lang['rolle'] = 'Benutzerrolle';
+$g_lang['rolle'] = 'Benutzerrolle'; // FoodsaverView
 
 $g_lang['rolle_0_0'] = 'Foodsharer/in';
 $g_lang['rolle_0_1'] = 'Foodsharer';
@@ -129,6 +120,15 @@ $g_lang['specials'] = 'Besonderheiten'; // MapView
 // MessageView
 $g_lang['compose_recipients'] = 'Empfänger'; // MessageView
 $g_lang['compose_body'] = 'Nachricht'; // MessageView
+// SettingsView
+$g_lang['newsletter'] = 'Newsletter'; // SettingsView
+$g_lang['infomail_message'] = 'Benachrichtigung über Chat-Nachrichten auf foodsharing'; // SettingsView
+// $g_lang['comment'] = 'Anregungen, Kritik und Kommentare'; // this looks very unused
+$g_lang['newmail'] = 'Gib hier deine neue E-Mail-Adresse ein'; // SettingsView
+$g_lang['passcheck'] = 'Bestätige die Änderung bitte mit deinem Passwort'; // SettingsView
+$g_lang['sleep_status'] = 'Dein aktueller Status'; // SettingsView
+$g_lang['sleep_msg'] = 'Hier kannst du eine kurze Nachricht hinterlassen, warum du gerade keine Zeit hast.'; // SettingsView
+$g_lang['homepage'] = 'Deine Webseite'; // SettingsView
 // StoreView (pickup time management)
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder'; // StoreUserControl
 $g_lang['storemanagers'] = 'Betriebsverantwortliche'; // StoreUserControl

@@ -10,7 +10,7 @@ $user = $I->createFoodsaver();
 $I->amOnPage('/?page=login');
 $I->click('Passwort vergessen?');
 
-$I->see('Bitte trage hier Deine E-Mail-Adresse ein');
+$I->see('Bitte trage hier deine E-Mail-Adresse ein');
 $I->fillField('#email', $user['email']);
 $I->click('Senden');
 
@@ -32,7 +32,7 @@ $link = $matches[1];
 
 // go to link in the mail
 $I->amOnPage(html_entity_decode($link));
-$I->see('Jetzt kannst Du Dein Passwort ändern');
+$I->see('Jetzt kannst du dein Passwort ändern');
 $I->fillField('#pass1', $newpass);
 $I->fillField('#pass2', 'INVALID');
 $I->click('Speichern');

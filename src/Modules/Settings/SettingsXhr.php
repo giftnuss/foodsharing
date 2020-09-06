@@ -13,10 +13,10 @@ use Foodsharing\Modules\Mails\MailsGateway;
 
 class SettingsXhr extends Control
 {
-	private $foodsaverGateway;
-	private $loginGateway;
-	private $settingsGateway;
-	private $mailsGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private LoginGateway $loginGateway;
+	private SettingsGateway $settingsGateway;
+	private MailsGateway $mailsGateway;
 
 	public function __construct(
 		SettingsView $view,
@@ -40,121 +40,145 @@ class SettingsXhr extends Control
 
 	public function changemail()
 	{
-		if ($this->session->may()) {
-			$dia = new XhrDialog();
-			$dia->setTitle('E-Mail-Adresse ändern');
-
-			$dia->addContent($this->view->changeMail());
-
-			$dia->addButton('E-Mail-Adresse ändern', 'ajreq(\'changemail2\',{email:$(\'#newmail\').val()});');
-
-			return $dia->xhrout();
+		if (!$this->session->may()) {
+			echo '0';
+			die();
 		}
 
-		echo '0';
-		die();
+		$dia = new XhrDialog();
+		$dia->setTitle($this->translator->trans('settings.email'));
+
+		$dia->addContent($this->view->changeMail());
+
+		$dia->addButton($this->translator->trans('settings.email'), 'ajreq("changemail2", {email: $("#newmail").val()});');
+
+		return $dia->xhrout();
 	}
 
-	public function changemail2()
+	public function changemail2(): array
 	{
 		$emailAddress = $_GET['email'];
 		if (!$this->emailHelper->validEmail($emailAddress)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_invalid') . '");'
+				'script' => 'pulseInfo("' . $this->translator->trans('settings.changemail.invalid') . '");',
 			];
 		}
 		if ($this->emailHelper->isFoodsharingEmailAddress($emailAddress)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_illegal_domain') . '");'
+				'script' => 'pulseInfo("' . $this->translator->trans('settings.changemail.domain') . '");',
 			];
 		}
 		if ($this->foodsaverGateway->emailExists($emailAddress)) {
 			return [
 				'status' => 1,
-				'script' => 'pulseError("' . $this->translationHelper->s('newmail_in_use') . '");'
+				'script' => 'pulseError("' . $this->translator->trans('settings.changemail.occupied') . '");',
 			];
 		}
 
 		$token = bin2hex(random_bytes(16));
 		$this->settingsGateway->addNewMail($this->session->id(), $emailAddress, $token);
 
-		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id())) {
-			$this->mailsGateway->removeBounceForMail($emailAddress);
-			$this->emailHelper->tplMail('user/change_email', $emailAddress, [
-				'anrede' => $this->translationHelper->genderWord($fs['geschlecht'], 'Lieber', 'Liebe', 'Liebe/r'),
-				'name' => $fs['name'],
-				'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
-			], false, true);
-
+		$fs = $this->foodsaverGateway->getFoodsaverBasics($this->session->id());
+		if (!$fs) {
 			return [
 				'status' => 1,
-				'script' => 'pulseInfo("' . $this->translationHelper->s('newmail_sent') . '",{sticky:true});'
+				'script' => 'pulseError("' . $this->translator->trans('error_unexpected') . '");',
 			];
 		}
+
+		$this->mailsGateway->removeBounceForMail($emailAddress);
+		$this->emailHelper->tplMail('user/change_email', $emailAddress, [
+			'anrede' => $this->translator->trans('salutation.' . $fs['geschlecht']),
+			'name' => $fs['name'],
+			'link' => BASE_URL . '/?page=settings&sub=general&newmail=' . $token
+		], false, true);
+
+		return [
+			'status' => 1,
+			'script' => 'pulseInfo("' . $this->translator->trans('settings.changemail.sent') . '",{sticky:true});'
+		];
 	}
 
 	public function changemail3()
 	{
-		if ($email = $this->settingsGateway->getMailChange($this->session->id())) {
-			$dia = new XhrDialog();
-			$dia->setTitle('E-Mail-Adresse ändern');
-
-			$dia->addContent($this->view->changemail3($email));
-
-			$dia->addButton('Abbrechen', 'ajreq(\'abortchangemail\');$(\'#' . $dia->getId() . '\').dialog(\'close\');');
-			$dia->addButton('Bestätigen', 'ajreq(\'changemail4\',{pw:$(\'#passcheck\').val(),did:\'' . $dia->getId() . '\'});');
-
-			return $dia->xhrout();
+		$email = $this->settingsGateway->getMailChange($this->session->id());
+		if (!$email) {
+			return;
 		}
+
+		$dia = new XhrDialog();
+		$dia->setTitle($this->translator->trans('settings.email'));
+
+		$dia->addContent($this->view->changemail3($email));
+
+		$dia->addButton('Abbrechen', 'ajreq(\'abortchangemail\');$(\'#' . $dia->getId() . '\').dialog(\'close\');');
+		$dia->addButton('Bestätigen', 'ajreq(\'changemail4\',{pw:$(\'#passcheck\').val(),did:\'' . $dia->getId() . '\'});');
+
+		return $dia->xhrout();
 	}
 
-	public function abortchangemail()
+	public function abortchangemail(): void
 	{
 		$this->settingsGateway->abortChangemail($this->session->id());
 	}
 
-	public function changemail4()
+	public function changemail4(): array
 	{
 		$fsId = $this->session->id();
-		if ($currentEmail = $this->foodsaverGateway->getEmailAddress($fsId)) {
-			$did = strip_tags($_GET['did']);
-			if ($this->loginGateway->checkClient($currentEmail, $_GET['pw'])) {
-				if ($newEmail = $this->settingsGateway->getMailChange($fsId)) {
-					if ($this->settingsGateway->changeMail($fsId, $newEmail) > 0) {
-						$this->settingsGateway->logChangedSetting($fsId, ['email' => $this->session->user('email')], ['email' => $newEmail], ['email']);
+		$currentEmail = $this->foodsaverGateway->getEmailAddress($fsId);
 
-						return [
-							'status' => 1,
-							'script' => 'pulseInfo("Deine E-Mail-Adresse wurde geändert!");$("#' . $did . '").dialog("close");'
-						];
-					}
-
-					return [
-						'status' => 1,
-						'script' => 'pulseInfo(\'Die E-Mail-Adresse konnte nicht geändert werden, jemand anderes benutzt sie schon!\');'
-					];
-				}
-			}
+		if (!$currentEmail || !$this->loginGateway->checkClient($currentEmail, $_GET['pw'])) {
+			return [
+				'status' => 1,
+				'script' => '
+					pulseError("' . $this->translator->trans('settings.changemail.passfail') . '");
+					$("#passcheck").val("");
+					$("#passcheck")[0].focus();
+				',
+			];
 		}
+
+		$newEmail = $this->settingsGateway->getMailChange($fsId);
+		if (!$newEmail) {
+			return [
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translator->trans('error_unexpected') . '");',
+			];
+		}
+
+		if ($this->settingsGateway->changeMail($fsId, $newEmail) == 0) {
+			return [
+				'status' => 1,
+				'script' => 'pulseInfo("' . $this->translator->trans('settings.changemail.occupied') . '");',
+			];
+		}
+
+		$this->settingsGateway->logChangedSetting($fsId,
+			['email' => $this->session->user('email')],
+			['email' => $newEmail],
+			['email']
+		);
+		$dialogId = strip_tags($_GET['did']);
 
 		return [
 			'status' => 1,
-			'script' => 'pulseError("Das Passwort wahl wohl falsch, vertippt?");$("#passcheck").val("");$("#passcheck")[0].focus();'
+			'script' => '
+				pulseInfo("' . $this->translator->trans('settings.changemail.done') . '");
+				$("#' . $dialogId . '").dialog("close");
+			',
 		];
 	}
 
-	public function sleepmode()
+	public function sleepmode(): void
 	{
-		/*
+		/**
 		 * from
 		 * until
-			msg
-			status	2
-
+		 * msg
+		 * status.
 		 */
-
 		$from = '';
 		$to = '';
 		$msg = '';
