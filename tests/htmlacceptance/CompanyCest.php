@@ -102,10 +102,10 @@ class CompanyCest
 		call_user_func([$this, $example[0]]);
 		$I->amOnPage($I->storeEditUrl($this->store['id']));
 		if ($canAccess) {
-			$I->see('Stammbezirk');
+			$I->see('Bezirk ändern');
 			$I->see('Betriebsansprechpartner');
 		} else {
-			$I->dontSee('Stammbezirk');
+			$I->dontSee('Bezirk ändern');
 			$I->dontSee('Betriebsansprechpartner');
 		}
 	}

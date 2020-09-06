@@ -465,7 +465,7 @@ class SettingsView extends View
 	{
 		global $g_data;
 
-		$bezirkchoose = '';
+		$regionPicker = '';
 		$position = '';
 		$communications = $this->v_utils->v_form_text('homepage');
 
@@ -476,7 +476,7 @@ class SettingsView extends View
 				$bezirk['name'] = $b['name'];
 			}
 
-			$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $bezirk);
+			$regionPicker = $this->v_utils->v_regionPicker($bezirk, $this->translator->trans('terminology.homeRegion'));
 			$position = $this->v_utils->v_form_text('position');
 		}
 
@@ -488,7 +488,7 @@ class SettingsView extends View
 		$latLonOptions['location'] = ['lat' => $g_data['lat'], 'lon' => $g_data['lon']];
 
 		return $this->v_utils->v_quickform($this->translationHelper->s('settings'), [
-			$bezirkchoose,
+			$regionPicker,
 			$this->latLonPicker('LatLng', $latLonOptions, '_profile'),
 			$this->v_utils->v_form_text('telefon'),
 			$this->v_utils->v_form_text('handy'),

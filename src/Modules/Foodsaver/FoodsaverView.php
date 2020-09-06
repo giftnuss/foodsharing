@@ -154,11 +154,11 @@ class FoodsaverView extends View
 			$("#lon-wrapper").hide();
 		');
 
-		$bezirkchoose = $this->v_utils->v_bezirkChooser('bezirk_id', $regionDetails);
+		$regionPicker = $this->v_utils->v_regionPicker($regionDetails ?: [], $this->translator->trans('terminology.homeRegion'));
 		$link = '<a href="/?page=settings&sub=general">' . $this->translator->trans('terminology.settings') . '</a>';
 
 		return $this->v_utils->v_quickform($title, [
-			$bezirkchoose,
+			$regionPicker,
 			$orga,
 			$this->v_utils->v_form_text('name', ['required' => true]),
 			$this->v_utils->v_form_text('nachname', ['required' => true]),

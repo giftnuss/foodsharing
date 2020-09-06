@@ -72,7 +72,7 @@ class StoreView extends View
 	{
 		global $g_data;
 
-		$bc = $this->v_utils->v_bezirkChooser('bezirk_id', $region);
+		$regionPicker = $this->v_utils->v_regionPicker($region ?: [], $this->translator->trans('terminology.region'));
 
 		if (!isset($g_data['foodsaver'])) {
 			$g_data['foodsaver'] = [$this->session->id()];
@@ -108,7 +108,7 @@ class StoreView extends View
 		}
 
 		return $this->v_utils->v_quickform($this->translationHelper->s('betrieb'), [
-			$bc,
+			$regionPicker,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name', ['required' => true]),
 			$this->latLonPicker('LatLng', $latLonOptions),

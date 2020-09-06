@@ -4,5 +4,5 @@ global $g_lang;
 $g_lang['infotype'] = 'Benachrichtigung';
 
 /* implicit translations for edit screen, fields top-to-bottom: */
-$g_lang['bezirk_id'] = 'In welchem Bezirk ist der Fairteiler?'; // Blog FoodSharePoint Store
+$g_lang['bezirk_id'] = 'In welchem Bezirk ist der Fairteiler?'; // Blog FoodSharePoint
 $g_lang['fspmanagers'] = 'Foodsaver, die Ansprechpartner für den Fairteiler sind';

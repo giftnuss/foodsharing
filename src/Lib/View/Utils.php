@@ -121,15 +121,13 @@ class Utils
 			</div>';
 	}
 
-	public function v_bezirkChooser(string $id = 'bezirk_id', $bezirk = false, array $option = []): string
+	public function v_regionPicker(array $region, string $label): string
 	{
-		if (!$bezirk) {
-			$bezirk = [
-				'id' => 0,
-				'name' => $this->translator->trans('region.none'),
-			];
-		}
-		$id = $this->identificationHelper->id($id);
+		$id = $this->identificationHelper->id('bezirk_id');
+		$region = $region ?: [
+			'id' => 0,
+			'name' => $this->translator->trans('region.none'),
+		];
 
 		$this->pageHelper->addJs('$("#' . $id . '-button").button().on("click", function () {
 			$("#' . $id . '-dialog").dialog("open");
@@ -185,18 +183,12 @@ class Utils
 		});');
 		$this->pageHelper->addHidden('<div id="' . $id . '-dialog"><div id="' . $id . '-tree"></div></div>');
 
-		if (isset($option['label'])) {
-			$label = $option['label'];
-		} else {
-			$label = $this->translator->trans('terminology.homeRegion');
-		}
-
 		return $this->v_input_wrapper($label,
-			'<span id="' . $id . '-preview">' . $bezirk['name'] . '</span> '
+			'<span id="' . $id . '-preview">' . $region['name'] . '</span> '
 			. '<span id="' . $id . '-button">' . $this->translator->trans('region.change') . '</span>'
-			. '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $bezirk['id'] . '" />'
-			. '<input type="hidden" name="' . $id . '-hName" id="' . $id . '-hName" value="' . $bezirk['id'] . '" />'
-			. '<input type="hidden" name="' . $id . 'hId" id="' . $id . '-hId" value="' . $bezirk['id'] . '" />'
+			. '<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $region['id'] . '" />'
+			. '<input type="hidden" name="' . $id . '-hName" id="' . $id . '-hName" value="' . $region['id'] . '" />'
+			. '<input type="hidden" name="' . $id . 'hId" id="' . $id . '-hId" value="' . $region['id'] . '" />'
 		);
 	}
 
