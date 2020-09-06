@@ -1095,7 +1095,7 @@ class StoreGateway extends BaseGateway implements BellUpdaterInterface
 		]);
 	}
 
-	private function getSingleStoreNote($id): array
+	public function getSingleStoreNote($id): array
 	{
 		return $this->db->fetch('
 			SELECT
