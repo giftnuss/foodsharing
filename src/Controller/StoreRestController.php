@@ -5,6 +5,7 @@ namespace Foodsharing\Controller;
 use Foodsharing\Lib\Session;
 use Foodsharing\Modules\Bell\BellGateway;
 use Foodsharing\Modules\Bell\DTO\Bell;
+use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Store\StoreGateway;
 use Foodsharing\Modules\Store\StoreTransactions;
@@ -99,7 +100,7 @@ class StoreRestController extends AbstractFOSRestController
 			'betrieb_id' => $storeId,
 			'text' => $text,
 			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 0,
+			'milestone' => Milestone::NONE,
 			'last' => 1
 		]);
 

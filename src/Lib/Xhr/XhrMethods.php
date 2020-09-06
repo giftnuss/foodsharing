@@ -13,6 +13,7 @@ use Foodsharing\Modules\Bell\DTO\Bell;
 use Foodsharing\Modules\Core\DBConstants\Email\EmailStatus;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Core\DBConstants\Store\Milestone;
 use Foodsharing\Modules\Core\DBConstants\Store\StoreLogAction;
 use Foodsharing\Modules\Core\DBConstants\Store\TeamStatus;
 use Foodsharing\Modules\Email\EmailGateway;
@@ -182,9 +183,6 @@ class XhrMethods
 	 */
 	public function xhr_getPinPost($data)
 	{
-		$this->incLang('Store');
-		$this->incLang('StoreUser');
-
 		$storeId = (int)$data['bid'];
 
 		if (!$this->storePermissions->mayReadStoreWall($storeId)) {
@@ -214,19 +212,15 @@ class XhrMethods
 			return json_encode(['status' => 0]);
 		}
 
-		//$allWallposts = array_reverse($allWallposts);
 		$html = '<table class="pintable">';
-		$odd = 'odd';
 		foreach ($allWallposts as $wallpost) {
-			if ($odd == 'odd') {
-				$odd = 'even';
-			} else {
-				$odd = 'odd';
-			}
+			$classes = 'odd';
 			$pic = $this->imageService->img($wallpost['photo']);
+			$userId = intval($wallpost['fsid']);
+			$mile = intval($wallpost['milestone']);
 
 			$delete = '';
-			if ($this->session->id() == $wallpost['fsid'] || $this->session->isOrgaTeam()) {
+			if ($this->session->id() == $userId || $this->session->isOrgaTeam()) {
 				$delete = '<span class="dot">·</span>'
 					. '<a class="pdelete light" href="#p' . $wallpost['id'] . '"'
 					. ' onclick="u_delPost(' . (int)$wallpost['id'] . '); return false;">'
@@ -235,6 +229,8 @@ class XhrMethods
 			}
 
 			$time = date('d.m.Y H:i', $wallpost['zeit']);
+			$day = date('d.m.Y', $wallpost['zeit']);
+
 			$msg = '<span class="msg">' . nl2br($wallpost['text']) . '</span>
 				<div class="foot">
 					<span class="time">'
@@ -245,30 +241,41 @@ class XhrMethods
 					. '</span>' . $delete . '
 				</div>';
 
-			if ($wallpost['milestone'] == 1) {
-				$odd .= ' milestone';
+			if ($mile == Milestone::ACCEPTED || $mile == Milestone::DROPPED) {
+				$fsName = $this->model->getVal('name', 'foodsaver', $userId);
+				$link = '<a href="/profile/' . $userId . '">' . $fsName . '</a>';
+				$msg = '<span class="msg">' . $this->translator->trans(
+					($mile == Milestone::ACCEPTED) ? 'storeedit.milestone.accepted' : 'storeedit.milestone.dropped',
+					['{user}' => $link]
+				) . '</span>';
+			} elseif ($mile == Milestone::CREATED) {
+				$msg = '<div class="milestone">'
+					. $this->translator->trans('storeedit.milestone.created', [
+						'{user}' => '<a href="/profile/' . $userId . '">' . $wallpost['name'] . '</a>',
+						'{date}' => $day,
+					]) . '</div>';
+			} elseif ($mile == Milestone::STATUS_CHANGED) {
+				$msg = '<span class="msg">'
+					. '<strong>'
+					. $this->translator->trans('storeedit.milestone.statuschanged', ['{date}' => $day])
+					. '</strong> '
+					// the old messages are `status_msg_{1,2,3,4,5,6}`
+					. $this->translator->trans($wallpost['text'])
+				. '</span>';
+			}
 
-				$msg = '
-			<div class="milestone">
-				<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $wallpost['name'] . '</a> ' . $this->translationHelper->sv('betrieb_added', date('d.m.Y', $wallpost['zeit'])) . '
-			</div>';
-
+			if (Milestone::isStoreMilestone($mile) || Milestone::isTeamMilestone($mile)) {
+				$classes .= ' milestone';
+			}
+			if (Milestone::isStoreMilestone($mile)) {
 				$pic = 'img/milestone.png';
-			} elseif ($wallpost['milestone'] == 2) {
-				$odd .= ' milestone';
-				$msg = '<span class="msg">' . $this->translationHelper->sv('accept_request', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
-			} elseif ($wallpost['milestone'] == 3) {
-				$odd .= ' milestone';
-				$pic = 'img/milestone.png';
-				$msg = '<span class="msg"><strong>' . $this->translationHelper->sv('status_change_at', date('d.m.Y', $wallpost['zeit'])) . '</strong> ' . $this->translationHelper->s($wallpost['text']) . '</span>';
-			} elseif ($wallpost['milestone'] == 5) {
-				$odd .= ' milestone';
-				$msg = '<span class="msg">' . $this->translationHelper->sv('quiz_dropped', '<a href="/profile/' . (int)$wallpost['fsid'] . '">' . $this->model->getVal('name', 'foodsaver', $wallpost['fsid']) . '</a>') . '</span>';
 			}
 
 			$html .= '
-			<tr class="' . $odd . ' bpost bpost-' . $wallpost['id'] . '">
-				<td class="img"><a href="/profile/' . (int)$wallpost['fsid'] . '"><img src="' . $pic . '" /></a></td>
+			<tr class="' . $classes . ' bpost bpost-' . $wallpost['id'] . '">
+				<td class="img">
+					<a href="/profile/' . $userId . '"><img src="' . $pic . '" /></a>
+				</td>
 				<td>' . $msg . '</td>
 			</tr>';
 		}
@@ -1302,7 +1309,7 @@ class XhrMethods
 			'betrieb_id' => $data['bid'],
 			'text' => '{ACCEPT_REQUEST}',
 			'zeit' => date('Y-m-d H:i:s'),
-			'milestone' => 2
+			'milestone' => Milestone::ACCEPTED,
 		]);
 
 		$regionId = $this->model->getVal('bezirk_id', 'betrieb', $data['bid']);
@@ -1440,11 +1447,6 @@ class XhrMethods
 			'status' => 1,
 			'script' => 'pulseInfo("' . $this->translator->trans('region.edit_success') . '");',
 		]);
-	}
-
-	private function incLang(string $moduleName): void
-	{
-		include ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
 	}
 
 	public function xhr_abortEmail($data)

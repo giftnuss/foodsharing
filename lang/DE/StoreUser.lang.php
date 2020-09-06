@@ -1,6 +1,5 @@
 <?php
 global $g_lang;
-$g_lang['status_change_at'] = 'Statusänderung am {var}';
 $g_lang['verantwortlicher'] = 'Verantwortliche Mitglieder';
 $g_lang['storemanagers'] = 'Betriebsverantwortliche';
 $g_lang['fetcher'] = 'Abholer';
