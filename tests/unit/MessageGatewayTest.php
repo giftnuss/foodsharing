@@ -2,23 +2,11 @@
 
 use Codeception\Test\Unit;
 use Foodsharing\Modules\Message\MessageGateway;
-use Foodsharing\Utility\TranslationHelper;
 
 class MessageGatewayTest extends Unit
 {
-	/**
-	 * @var UnitTester
-	 */
-	protected $tester;
-	/**
-	 * @var MessageGateway
-	 */
-	private $gateway;
-
-	/**
-	 * @var TranslationHelper
-	 */
-	private $translationHelper;
+	protected UnitTester $tester;
+	private MessageGateway $gateway;
 
 	private $testFoodsaver1;
 	private $testFoodsaver2;
@@ -26,7 +14,6 @@ class MessageGatewayTest extends Unit
 	protected function _before()
 	{
 		$this->gateway = $this->tester->get(MessageGateway::class);
-		$this->translationHelper = $this->tester->get(TranslationHelper::class);
 
 		$this->testFoodsaver1 = $this->tester->createFoodsaver();
 		$this->testFoodsaver2 = $this->tester->createFoodsaver();
@@ -35,14 +22,14 @@ class MessageGatewayTest extends Unit
 	public function testGetConversationName()
 	{
 		$testName = 'test conversation';
-		$testConverstaion = $this->tester->createConversation(
+		$testConversation = $this->tester->createConversation(
 			[$this->testFoodsaver1['id'], $this->testFoodsaver2['id']],
 			['name' => $testName]
 		);
 
 		$this->tester->assertEquals(
 			$testName,
-			$this->gateway->getConversationName($testConverstaion['id'])
+			$this->gateway->getConversationName($testConversation['id'])
 		);
 	}
 

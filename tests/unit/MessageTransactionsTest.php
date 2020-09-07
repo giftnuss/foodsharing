@@ -2,23 +2,11 @@
 
 use Codeception\Test\Unit;
 use Foodsharing\Modules\Message\MessageTransactions;
-use Foodsharing\Utility\TranslationHelper;
 
 class MessageTransactionsTest extends Unit
 {
-	/**
-	 * @var UnitTester
-	 */
-	protected $tester;
-	/**
-	 * @var MessageTransactions
-	 */
-	private $service;
-
-	/**
-	 * @var TranslationHelper
-	 */
-	private $translationHelper;
+	protected UnitTester $tester;
+	private MessageTransactions $service;
 
 	private $testFoodsaver1;
 	private $testFoodsaver2;
@@ -26,7 +14,6 @@ class MessageTransactionsTest extends Unit
 	protected function _before()
 	{
 		$this->service = $this->tester->get(MessageTransactions::class);
-		$this->translationHelper = $this->tester->get(TranslationHelper::class);
 
 		$this->testFoodsaver1 = $this->tester->createFoodsaver();
 		$this->testFoodsaver2 = $this->tester->createFoodsaver();

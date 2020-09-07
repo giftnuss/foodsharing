@@ -32,7 +32,6 @@ use Foodsharing\Utility\EmailHelper;
 use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\ImageHelper;
 use Foodsharing\Utility\Sanitizer;
-use Foodsharing\Utility\TranslationHelper;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +60,6 @@ class XhrMethods
 	private ImageHelper $imageService;
 	private IdentificationHelper $identificationHelper;
 	private DataHelper $dataHelper;
-	private TranslationHelper $translationHelper;
 	private NewsletterEmailPermissions $newsletterEmailPermissions;
 	private RegionPermissions $regionPermissions;
 	private TranslatorInterface $translator;
@@ -88,7 +86,6 @@ class XhrMethods
 		ImageHelper $imageService,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper,
 		NewsletterEmailPermissions $newsletterEmailPermissions,
 		RegionPermissions $regionPermission,
 		TranslatorInterface $translator
@@ -114,7 +111,6 @@ class XhrMethods
 		$this->imageService = $imageService;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
-		$this->translationHelper = $translationHelper;
 		$this->newsletterEmailPermissions = $newsletterEmailPermissions;
 		$this->regionPermissions = $regionPermission;
 		$this->translator = $translator;
