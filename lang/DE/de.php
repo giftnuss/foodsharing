@@ -36,7 +36,6 @@ $g_lang['date'] = 'Datum';
 $g_lang['mailbox_name'] = 'Mailbox-Name'; // XhrMethods
 $g_lang['rolle'] = 'Benutzerrolle'; // FoodsaverView
 $g_lang['last_login'] = 'Letzter Login';
-$g_lang['datetime'] = 'Zeitpunkt'; // ReportView
 $g_lang['title'] = 'Überschrift';
 $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';

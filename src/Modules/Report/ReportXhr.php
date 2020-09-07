@@ -120,7 +120,8 @@ class ReportXhr extends Control
 	public function reportDialog(): array
 	{
 		// disabled until reports are fixed
-		/*$dialog = new XhrDialog();
+		/*
+		$dialog = new XhrDialog();
 		$dialog->setTitle($this->foodsaver['name'] . ' melden');
 
 		global $g_data;
@@ -135,7 +136,9 @@ class ReportXhr extends Control
 			$storeId = $_GET['bid'];
 		}
 
-		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', ['desc' => $this->translationHelper->s('reportmessage_desc')]));
+		$dialog->addContent($this->v_utils->v_form_textarea('reportmessage', [
+			'desc' => $this->translator->trans('reports.info'),
+		]));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportfsid', (int)$_GET['fsid']));
 		$dialog->addContent($this->v_utils->v_form_hidden('reportbid', $storeId));
 		$dialog->addOpt('width', '$(window).width()*0.9', false);
@@ -158,32 +161,27 @@ class ReportXhr extends Control
 		$dialog->addJs('$("#reportmessage").css("width","$(window).width()*0.6");');
 		$dialog->addButton('Meldung senden', '
 
-		if($("#reportreason").val() == 0)
-		{
+		if ($("#reportreason").val() == 0) {
 			pulseError("Gib Bitte einen Grund für die Meldung an!");
-		}
-		else
-		{
-
+		} else {
 			var reason = $("#reportreason option:selected").text();
 
-			if($("select#reportreason_" + $("#reportreason").val()).length > 0 && $("select#reportreason_" + $("#reportreason").val()).val() != 0)
-			{
+			if ($("select#reportreason_" + $("#reportreason").val()).length > 0 && $("select#reportreason_" + $("#reportreason").val()).val() != 0) {
 				reason += " => " + $("select#reportreason_" + $("#reportreason").val() + " option:selected").text();
 			}
-			if($("#reportreason_" + $("#reportreason").val() + " input:checked").length > 0 )
-			{
+
+			if ($("#reportreason_" + $("#reportreason").val() + " input:checked").length > 0) {
 				$("#reportreason_" + $("#reportreason").val() + " input:checked").each(function(){
 					reason += " => " + $(this).parent().text();
-
 				});
 			}
-			if($("select#reportreason_" + $("#reportreason").val() + "_sub").length > 0 && $("select#reportreason_" + $("#reportreason").val() + "_sub").val() != 0)
-			{
+
+			if ($("select#reportreason_" + $("#reportreason").val() + "_sub").length > 0 && $("select#reportreason_" + $("#reportreason").val() + "_sub").val() != 0) {
 				reason += " => " + $("select#reportreason_" + $("#reportreason").val() + "_sub" + " option:selected").text();
 			}
-			ajreq("betriebReport",{
-				app:"report",
+
+			ajreq("betriebReport", {
+				app: "report",
 				bid: $("#reportbid").val(),
 				fsid: $("#reportfsid").val(),
 				reason_id: $("#reportreason").val(),
@@ -194,7 +192,8 @@ class ReportXhr extends Control
 		');
 		$dialog->noOverflow();
 
-		return $dialog->xhrout();*/
+		return $dialog->xhrout();
+		*/
 		return ['status' => 0];
 	}
 

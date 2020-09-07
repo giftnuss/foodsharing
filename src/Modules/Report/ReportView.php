@@ -215,8 +215,8 @@ class ReportView extends View
 		$table = $this->v_utils->v_tablesorter([
 			['name' => 'Über', 'width' => 40],
 			['name' => 'Von', 'width' => 40],
-			['name' => $this->translationHelper->s('message')],
-			['name' => $this->translationHelper->s('datetime'), 'width' => 80],
+			['name' => $this->translator->trans('reportmessage')],
+			['name' => $this->translator->trans('reports.when'), 'width' => 80],
 			['name' => 'FS Wohnort', 'width' => 80],
 			['name' => 'Stammbezirk', 'width' => 40]
 		], $rows, ['pager' => true]);
