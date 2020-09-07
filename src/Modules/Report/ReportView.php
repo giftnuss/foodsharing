@@ -15,7 +15,10 @@ class ReportView extends View
 
 	public function betriebList($betriebe): string
 	{
-		return $this->v_utils->v_form_select('betrieb_id', ['label' => $this->translationHelper->sv('betrieb_id', $this->foodsaver['name']), 'values' => $betriebe]);
+		return $this->v_utils->v_form_select('betrieb_id', [
+			'label' => $this->translator->trans('reports.in-store', ['{user}' => $this->foodsaver['name']]),
+			'values' => $betriebe,
+		]);
 	}
 
 	public function reportDialog(): string

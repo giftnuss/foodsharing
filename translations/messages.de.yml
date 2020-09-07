@@ -841,6 +841,7 @@ reports:
   time: Zeitpunkt
   no_reports_fallback: Es sind noch keine Meldungen vorhanden
   store: Zugeordneter Betrieb
+  in-store: 'Betrifft die Meldung einen bestimmten Betrieb, in dem {user} abholt?'
 
 bell:
   no_bells: Du hast derzeit keine Benachrichtigungen

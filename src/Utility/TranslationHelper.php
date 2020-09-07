@@ -25,23 +25,6 @@ final class TranslationHelper
 		return $id;
 	}
 
-	public function sv($id, $var)
-	{
-		global $g_lang;
-		if (is_array($var)) {
-			$search = [];
-			$replace = [];
-			foreach ($var as $key => $value) {
-				$search[] = '{' . $key . '}';
-				$replace[] = $value;
-			}
-
-			return str_replace($search, $replace, $g_lang[$id]);
-		}
-
-		return str_replace('{var}', $var, $g_lang[$id]);
-	}
-
 	public function genderWord(int $gender, string $m, string $f, string $d): string
 	{
 		if ($gender == Gender::MALE) {
