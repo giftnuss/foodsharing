@@ -166,9 +166,11 @@ group:
     title: Arbeitsgruppenfunktion
     welcome: Begrüßung
     voting: Abstimmung
+    fsp: Fairteiler
     invalid: 'Ein Bezirk kann nicht mit einer Arbeitsgruppenfunktion versehen werden.'
     duplicate_welcome_team: 'Begrüßungsteam schon angelegt! Pro Bezirk kann es nur ein Begrüßungsteam geben.'
     duplicate_voting_team: 'Abstimmungsteam schon angelegt ! Pro Bezirk kann es nur ein Abstimmungsteam geben.'
+    duplicate_fsp_team: 'Fairteilerteam schon angelegt ! Pro Bezirk kann es nur ein Fairteilerteam geben.'
 
 legal:
   pp: Datenschutzerklärung
@@ -311,6 +313,7 @@ terminology:
   admins: Administratoren
   welcomeAdmins: Begrüßungsteam
   votingAdmins: Abstimmungsteam
+  fspAdmins: Fairteilerteam
   wall: Pinnwand
   statistic: Statistik
   reports: Regelverletzungen (Preview)
