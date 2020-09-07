@@ -6,6 +6,7 @@
 - Add voting tool #309 #975 !1633 !1668 @alex.simm
 - Add voting tool #309 !1633 @alex.simm
 - Add FairSharePoint Function Workgroup #974 !1667 @fs_k
+- Add FairSharePoint Function Workgroup @fs_k
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg
