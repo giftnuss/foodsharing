@@ -13,12 +13,12 @@ use Foodsharing\Utility\Sanitizer;
 
 class QuizXhr extends Control
 {
-	private $contentGateway;
-	private $quizGateway;
-	private $quizSessionGateway;
-	private $sanitizerService;
-	private $dataHelper;
-	private $quizPermissions;
+	private ContentGateway $contentGateway;
+	private QuizGateway $quizGateway;
+	private QuizSessionGateway $quizSessionGateway;
+	private Sanitizer $sanitizerService;
+	private DataHelper $dataHelper;
+	private QuizPermissions $quizPermissions;
 
 	public function __construct(
 		QuizGateway $quizGateway,

@@ -8,14 +8,14 @@ use Foodsharing\Modules\Core\View;
 
 class QuizView extends View
 {
-	public function abortOrPause()
+	public function abortOrPause(): string
 	{
 		return '
 				<p>Nimm Dir doch noch die Zeit diese Frage zu beantworten! Ansonsten wird diese Frage als falsch gewertet.</p>
 				<p>Nach der Beantwortung der Frage kannst Du auch <strong>pausieren</strong> ohne Fehlerpunkte zu bekommen.</p>';
 	}
 
-	public function sessionList($sessions, $quiz)
+	public function sessionList(array $sessions, array $quiz): string
 	{
 		$rows = [];
 
@@ -55,7 +55,7 @@ class QuizView extends View
 		return $this->v_utils->v_field($table, $quiz['name']);
 	}
 
-	public function userSessions($sessions, $fs)
+	public function userSessions(array $sessions): string
 	{
 		$out = '';
 
@@ -120,12 +120,12 @@ class QuizView extends View
 		return $out;
 	}
 
-	public function noSessions($quiz)
+	public function noSessions(array $quiz): string
 	{
 		return $this->v_utils->v_field($this->v_utils->v_info('Dieses Quiz wurde noch nicht ausgeführt'), $quiz['name']);
 	}
 
-	public function listQuiz($quizze)
+	public function listQuiz($quizze): string
 	{
 		$menu = [];
 		$out = '';
@@ -146,7 +146,7 @@ class QuizView extends View
 		return $this->v_utils->v_field($out, ' Quizze');
 	}
 
-	public function quizbuttons($quizid)
+	public function quizbuttons($quizid): string
 	{
 		return '
 		<div class="ui-widget ui-widget-content ui-corner-all ui-padding margin-bottom">
@@ -154,15 +154,15 @@ class QuizView extends View
 		</div>';
 	}
 
-	public function quizComment()
+	public function quizComment(): string
 	{
-		return '
-		<div id="quizcomment">
-			' . $this->v_utils->v_form_textarea('quizusercomment', ['placeholder' => $this->translationHelper->s('quizusercomment'), 'nolabel' => true]) . '
-		</div>';
+		return '<div id="quizcomment"> ' . $this->v_utils->v_form_textarea('quizusercomment', [
+			'placeholder' => $this->translator->trans('quizusercomment'),
+			'nolabel' => true
+		]) . '</div>';
 	}
 
-	public function questionForm()
+	public function questionForm(): string
 	{
 		return
 			$this->v_utils->v_form_textarea('text') .
@@ -202,7 +202,7 @@ class QuizView extends View
 			$this->v_utils->v_form_text('wikilink');
 	}
 
-	public function answerForm()
+	public function answerForm(): string
 	{
 		return
 			$this->v_utils->v_form_textarea('text') .
@@ -226,7 +226,7 @@ class QuizView extends View
 		return $this->menu($menu);
 	}
 
-	public function quizForm()
+	public function quizForm(): string
 	{
 		return $this->v_utils->v_quickform('Neues Quiz', [
 			$this->v_utils->v_form_text('name'),
@@ -236,7 +236,7 @@ class QuizView extends View
 		]);
 	}
 
-	public function quizQuestion($question, $answers)
+	public function quizQuestion(array $question, array $answers): string
 	{
 		$out = '
 				<div style="float:right;width:150px;margin-left:50px;margin-bottom:10px;" id="countdown"></div>
@@ -282,7 +282,7 @@ class QuizView extends View
 			</table>';
 	}
 
-	public function pause()
+	public function pause(): string
 	{
 		$msg = '';
 		if (isset($_GET['timefail'])) {
@@ -295,7 +295,7 @@ class QuizView extends View
 		</p>';
 	}
 
-	public function result($explains, $failurePoints, $maxFailurePoints)
+	public function result($explains, $failurePoints, $maxFailurePoints): string
 	{
 		$valid = 'Sorry, diesmal hat es nicht geklappt.';
 		$bg = '#ED563D';
@@ -377,7 +377,7 @@ class QuizView extends View
 		return '<h1>' . $page['title'] . '</h1>' . $page['body'];
 	}
 
-	public function listQuestions($questions, $quiz_id)
+	public function listQuestions($questions, $quiz_id): string
 	{
 		if (is_array($questions)) {
 			$this->pageHelper->addJs('

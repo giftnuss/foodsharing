@@ -1,3 +1,21 @@
+# FORM DATA KEYS: QuizView QuizXhr
+right: 'Wertung'
+text: 'Text'
+fp: 'Fehlerpunkte'
+explanation: 'Erklärung'
+duration: 'Zeit zum Antworten'
+answers: 'Welche Antworten sind richtig?'
+maxfp: 'Maximale Anzahl von Fehlerpunkten um zu bestehen'
+questcount: 'Wie viele Fragen sollen bei Klausur gestellt werden?'
+wikilink: 'Link zur Wiki-Seite'
+
+# quiz: Quiz
+# For legacy UI reasons (QuizView), needs to be toplevel with this exact key:
+quizusercomment: |
+    Gib uns Feedback zu dieser Frage!
+    War sie zu leicht, zu schwer, unverständlich?
+    Oder sind einzelne Antworten bzw. Erklärungen nicht richtig?
+
 image: Bild
 picture_upload_widget:
   picture_upload: Foto-Upload

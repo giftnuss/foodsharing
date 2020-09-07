@@ -176,7 +176,7 @@ class QuizControl extends Control
 			$this->pageHelper->addContent($this->getSessionDetailTopbarContent($fs), CNT_TOP);
 
 			if ($sessions = $this->quizSessionGateway->listUserSessions($_GET['fsid'])) {
-				$this->pageHelper->addContent($this->view->userSessions($sessions, $fs));
+				$this->pageHelper->addContent($this->view->userSessions($sessions));
 			}
 		}
 	}

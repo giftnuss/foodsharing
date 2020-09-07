@@ -10,7 +10,7 @@ use Foodsharing\Modules\Core\DBConstants\Quiz\SessionStatus;
 
 class QuizSessionGateway extends BaseGateway
 {
-	private $quizGateway;
+	private QuizGateway $quizGateway;
 
 	public function __construct(Database $db, QuizGateway $quizGateway)
 	{
