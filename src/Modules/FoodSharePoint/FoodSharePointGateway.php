@@ -8,6 +8,7 @@ use Foodsharing\Modules\Core\BaseGateway;
 use Foodsharing\Modules\Core\Database;
 use Foodsharing\Modules\Core\DBConstants\FoodSharePoint\FollowerType;
 use Foodsharing\Modules\Core\DBConstants\Info\InfoType;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
 use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointGateway extends BaseGateway
@@ -435,7 +436,12 @@ class FoodSharePointGateway extends BaseGateway
 
 		$region = $this->regionGateway->getRegion($foodSharePoint['bezirk_id']);
 
-		$ambassadorIds = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
+		$fspWGId = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
+		if ($fspWGId) {
+			$fspBellRecipients = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $fspWGId]);
+		} else {
+			$fspBellRecipients = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $region['id']]);
+		}
 
 		$bellData = Bell::create(
 			'sharepoint_activate_title',
@@ -446,7 +452,7 @@ class FoodSharePointGateway extends BaseGateway
 			'new-fairteiler-' . $foodSharePointId,
 			false
 		);
-		$this->bellGateway->addBell($ambassadorIds, $bellData);
+		$this->bellGateway->addBell($fspBellRecipients, $bellData);
 	}
 
 	private function removeBellNotificationForNewFoodSharePoint(int $foodSharePointId): void

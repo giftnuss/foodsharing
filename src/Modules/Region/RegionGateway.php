@@ -46,7 +46,11 @@ class RegionGateway extends BaseGateway
 			if ($this->existRegionVotingGroup($out['id'], $out['parent_id'])) {
 				$out['workgroup_function'] = WorkgroupFunction::VOTING;
 			} else {
-				$out['workgroup_function'] = [];
+				if ($this->existRegionFSPGroup($out['id'], $out['parent_id'])) {
+					$out['workgroup_function'] = WorkgroupFunction::FSP;
+				} else {
+					$out['workgroup_function'] = [];
+				}
 			}
 		}
 
@@ -304,18 +308,25 @@ class RegionGateway extends BaseGateway
 		$region['botschafter'] = $this->foodsaverGateway->getAdminsOrAmbassadors($regionId);
 		shuffle($region['botschafter']);
 
-		if ($welcomeGroupId = $this->getRegionWelcomeGroupId($regionId)) {
+		if ($welcomeGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::WELCOME)) {
 			$region['welcomeAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($welcomeGroupId);
 			shuffle($region['welcomeAdmins']);
 		} else {
 			$region['welcomeAdmins'] = [];
 		}
 
-		if ($votingGroupId = $this->getRegionVotingGroupId($regionId)) {
+		if ($votingGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::VOTING)) {
 			$region['votingAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($votingGroupId);
 			shuffle($region['votingAdmins']);
 		} else {
 			$region['votingAdmins'] = [];
+		}
+
+		if ($fspGroupId = $this->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP)) {
+			$region['fspAdmins'] = $this->foodsaverGateway->getAdminsOrAmbassadors($fspGroupId);
+			shuffle($region['fspAdmins']);
+		} else {
+			$region['fspAdmins'] = [];
 		}
 
 		return $region;
@@ -538,6 +549,22 @@ class RegionGateway extends BaseGateway
 		}
 	}
 
+	public function getRegionFunctionGroupId(int $parentId, int $function): ?int
+	{
+		try {
+			return $this->db->fetchValueByCriteria(
+				'fs_region_function',
+				'region_id',
+				[
+					'target_id' => $parentId,
+					'function_id' => $function
+				]
+			);
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
+
 	public function deleteRegionFunction($regionId, $functionId)
 	{
 		return $this->db->delete('fs_region_function',
@@ -582,6 +609,11 @@ class RegionGateway extends BaseGateway
 	public function existRegionVotingGroup(int $region_id, int $target_id): bool
 	{
 		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $target_id]);
+	}
+
+	public function existRegionFSPGroup(int $region_id, int $target_id): bool
+	{
+		return  $this->db->exists('fs_region_function', ['region_id' => $region_id, 'function_id' => WorkgroupFunction::FSP, 'target_id' => $target_id]);
 	}
 
 	public function genderCountRegion(int $regionId): array
