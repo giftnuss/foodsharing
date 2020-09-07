@@ -184,7 +184,9 @@ class QuizControl extends Control
 	private function getSessionDetailTopbarContent($fs)
 	{
 		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
-		$subtitle = $this->translationHelper->s('rolle_' . $fs['rolle'] . '_' . $fs['geschlecht']);
+		$subtitle = $this->translator->trans(
+			$this->translationHelper->getRoleName($fs['rolle'], $fs['geschlecht'])
+		);
 		$icon = $this->imageHelper->avatar($fs);
 
 		return $this->view->topbar($title, $subtitle, $icon);

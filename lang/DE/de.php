@@ -35,43 +35,15 @@ $g_lang['active'] = 'Aktiviert'; // TODO check this
 $g_lang['date'] = 'Datum';
 $g_lang['mailbox_name'] = 'Mailbox-Name'; // XhrMethods
 $g_lang['rolle'] = 'Benutzerrolle'; // FoodsaverView
-
-$g_lang['rolle_0_0'] = 'Foodsharer/in';
-$g_lang['rolle_0_1'] = 'Foodsharer';
-$g_lang['rolle_0_2'] = 'Foodsharerin';
-$g_lang['rolle_0_3'] = 'Foodsharer/in';
-
-$g_lang['rolle_1_0'] = 'Foodsaver/in';
-$g_lang['rolle_1_1'] = 'Foodsaver';
-$g_lang['rolle_1_2'] = 'Foodsaverin';
-$g_lang['rolle_1_3'] = 'Foodsaver/in';
-
-$g_lang['rolle_2_0'] = 'Betriebsverantwortliche/r Foodsaver/in';
-$g_lang['rolle_2_1'] = 'Betriebsverantwortlicher Foodsaver';
-$g_lang['rolle_2_2'] = 'Betriebsverantwortliche Foodsaverin';
-$g_lang['rolle_2_3'] = 'Betriebsverantwortliche/r Foodsaver/in';
-
-$g_lang['rolle_3_0'] = 'Botschafter/in';
-$g_lang['rolle_3_1'] = 'Botschafter';
-$g_lang['rolle_3_2'] = 'Botschafterin';
-$g_lang['rolle_3_3'] = 'Botschafter/in';
-
-$g_lang['rolle_4_0'] = 'Orgamensch';
-$g_lang['rolle_4_1'] = 'Orgamensch';
-$g_lang['rolle_4_2'] = 'Orgamensch';
-$g_lang['rolle_4_3'] = 'Orgamensch';
-
-$g_lang['status'] = 'Aktueller Status';
-$g_lang['info'] = 'Informationen';
-$g_lang['photo'] = 'Foto';
-$g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
-
 $g_lang['last_login'] = 'Letzter Login';
 $g_lang['datetime'] = 'Zeitpunkt'; // ReportView
 $g_lang['title'] = 'Überschrift';
 $g_lang['body'] = 'Nachricht';
 $g_lang['forum'] = 'Forum';
-
+$g_lang['status'] = 'Aktueller Status';
+$g_lang['info'] = 'Informationen';
+$g_lang['photo'] = 'Foto';
+$g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
 $g_lang['daterange'] = 'Zeitraum';
 // $g_lang['regions'] = 'Bezirke'; TODO check if used anywhere else
 

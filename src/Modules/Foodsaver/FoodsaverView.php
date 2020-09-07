@@ -64,7 +64,9 @@ class FoodsaverView extends View
 		);
 
 		$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('foodsaver.manage.role'),
-			$this->translationHelper->s('rolle_' . $foodsaver['rolle'] . '_' . $foodsaver['geschlecht'])
+			$this->translator->trans(
+				$this->translationHelper->getRoleName($foodsaver['rolle'], $foodsaver['geschlecht'])
+			)
 		);
 
 		$cnt .= $this->v_utils->v_input_wrapper($this->translator->trans('foodsaver.manage.last-login'),

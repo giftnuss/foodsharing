@@ -53,7 +53,7 @@ class MainXhr extends Control
 
 		if (!$check) {
 			$function = 'window.parent.pulseError(\''
-				. $this->translationHelper->s('upload.image-problem')
+				. $this->translator->trans('upload.image-problem')
 				. '\');'
 				. 'window.parent.$(\'.attach-preview\').hide();';
 		}
