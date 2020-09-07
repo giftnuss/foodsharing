@@ -62,7 +62,7 @@ then open the conflicting file with an editor of your choice. It will have the H
         if ($this->foodsaver['about_me_public'])
         {
             $infos[] = [
-                'name' => $this->translationHelper->s('about_me_public_profile'),
+                'name' => $this->translator->trans('foodsaver.about_me_public'),
                 'val' => foodsaver['about_me_public'],
             ];
         }
@@ -89,7 +89,7 @@ then open the conflicting file with an editor of your choice. It will have the H
         if ($this->foodsaver['about_me_public'])
         {
             $infos[] = [
-                'name' => $this->translationHelper->s('about_me_public_profile'),
+                'name' => $this->translator->trans('foodsaver.about_me_public'),
                 'val' => $this->foodsaver['about_me_public'],
             ];
         }

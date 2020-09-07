@@ -11,10 +11,9 @@
 - Disable chat notification by mail for new users. #949 !1620 @chriswalg
 - Removed quiz description #737 !1565 @chriswalg
 - Removed unused legal agreement for new amb's #821 !1619 @chriswalg
-- Allow translating lots and lots of text !1637 @ChrisOelmueller
+- Allow translating lots and lots of text !1637 !1666 @ChrisOelmueller
 - Workgroup Admins of Startpage and Team/Partner page can edit their pages #967 !1651 @fs_k
 - Moved guide page (ratgeber) to wiki page #776 !1567 !1664 @chriswalg
-- Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
 - Add store log for different user activities in store #553 !1658 @fs_k
 - Orga may 'delete' foodbaskets #51 !1670 @fsk_k
  
@@ -36,8 +35,7 @@
 - Use existing use search endpoint for tagedit autocomplete !1588 @alex.simm
 - Move removal of store requests to new REST endpoint !1648 @alex.simm
 - Move buddy requests to REST endpoint !1646 #847 #798 @alex.simm
-- Move registration request to the REST endpoint #819 !1632 @alex.simm
-- Use TranslatorInterface for many old translations !1637 !1655 !1659 !1662 !1663 @ChrisOelmueller
+- Use TranslatorInterface for many old translations !1637 !1655 !1659 !1662 !1663 !1666 @ChrisOelmueller
 - Prepare event invitations for REST !1627 !1657 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 @ChrisOelmueller
 - Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
