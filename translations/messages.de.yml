@@ -1282,6 +1282,10 @@ dashboard:
     ack: Hinweis gelesen und nicht mehr anzeigen
     read: weiterlesen
     go: Weiter zum Quiz
+  push:
+    title: Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen.
+    info: Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren.
+    button: Push-Benachrichtigungen aktivieren
 
 home:
   title: Startseite

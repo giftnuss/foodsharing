@@ -46,11 +46,6 @@ $g_lang['photo'] = 'Foto';
 $g_lang['ort'] = 'Stadt/Gemeinde (automatisch aus Karte oben!)';
 $g_lang['daterange'] = 'Zeitraum';
 // $g_lang['regions'] = 'Bezirke'; TODO check if used anywhere else
-
-$g_lang['push_notifications_activation_button_text'] = 'Push-Benachrichtigungen aktivieren'; // TWIG
-$g_lang['push_notifications_banner_heading'] = 'Du kannst jetzt Push-Benachrichtigungen von foodsharing empfangen.'; // TWIG
-
-$g_lang['push_notifications_banner_text'] = 'Wenn du keine Push-Benachrichtigungen mehr empfangen willst, kannst du sie jederzeit in den Einstellungen wieder deaktivieren.';
 $g_lang['message_text_to_group_admin_workgroup'] = 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>';
 // === more hardcoded form data below === //
 // BasketView + BasketXhr
