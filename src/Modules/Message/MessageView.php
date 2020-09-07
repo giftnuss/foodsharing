@@ -16,8 +16,10 @@ final class MessageView extends View
 		]);
 	}
 
-	private function peopleChooser($id, $option = [])
+	private function peopleChooser(): string
 	{
+		$id = 'compose_recipients';
+
 		$this->pageHelper->addJs('
 			var date = new Date();
 			tstring = ""+date.getYear() + ""+date.getMonth() + ""+date.getDate() + ""+date.getHours();
@@ -67,12 +69,17 @@ final class MessageView extends View
 
 		$input = '<input type="text" name="' . $id . '[]" value="" class="tag input text value" />';
 
-		return $this->v_utils->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_utils->v_input_wrapper(
+			$this->translator->trans('recipients.recipients'),
+			'<div id="' . $id . '">' . $input . '</div>',
+			$id,
+			[]
+		);
 	}
 
 	public function compose(): string
 	{
-		$content = $this->peopleChooser('compose_recipients');
+		$content = $this->peopleChooser();
 
 		$content .= $this->v_utils->v_form_textarea('compose_body');
 

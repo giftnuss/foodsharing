@@ -84,7 +84,6 @@ $g_lang['pass2'] = 'Passwortwiederholung'; // LoginView
 $g_lang['want_to_fetch'] = 'In diesem Team würde ich gerne helfen.'; // MapView
 $g_lang['specials'] = 'Besonderheiten'; // MapView
 // MessageView
-$g_lang['compose_recipients'] = 'Empfänger'; // MessageView
 $g_lang['compose_body'] = 'Nachricht'; // MessageView
 // SettingsView
 $g_lang['newsletter'] = 'Newsletter'; // SettingsView
