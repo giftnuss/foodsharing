@@ -112,3 +112,7 @@ profile:
     by: ' by '
     sent: The banana was sent!
     messageTooShort: The text message accompanying your banana should be at least 100 characters long.
+
+test:
+  plain: This is a nice translation
+  vars: 'My name is {NAME} and I am {AGE} years old'

@@ -1,4 +1,152 @@
+# OLD TRANSLATION DATA
+#
+# FORM DATA KEYS: Global
+# --
+geb_datum: Geburtsdatum
+name: Name
+add: hinzufügen # StoreUserView
+nachname: Nachname
+subject: Betreff # at least EmailControl
+message: Nachricht
+address: Adresse
+edit: bearbeiten # StoreControl
+desc: Beschreibung
+description: Beschreibung
+plz: 'Postleitzahl (automatisch aus Karte oben!)'
+email: E-Mail-Adresse
+attachement: Anhang # EmailControl
+telefon: Festnetznummer
+handy: Handynummer
+anschrift: 'Straße und Hausnummer (automatisch aus Karte oben, ggf. anschließend korrigieren!)'
+geschlecht: Geschlecht
+botschafter: Botschafter
+options: Optionen # FoodSharePointControl FoodSharePointView foodSharePoint.twig
+picture: Bild # BlogView and maybe more
+parent_id: Elternbezirk # at least XhrMethods and RegionAdminControl
+fs_id: foodsharing-ID
+lat: Längengrad
+lon: Breitengrad
+stadt: 'Deine Stadt oder Gemeinde' # DashboardControl
+bezirk: Bezirk
+betrieb: Kooperationsbetrieb/e
+active: Aktiviert # TODO check this
+mailbox_name: Mailbox-Name # XhrMethods
+rolle: Benutzerrolle # FoodsaverView
+last_login: 'Letzter Login'
+title: Überschrift
+body: Nachricht
+status: 'Aktueller Status'
+info: Informationen
+photo: Foto
+ort: 'Stadt/Gemeinde (automatisch aus Karte oben!)'
+daterange: Zeitraum
+regions: Bezirke # TODO check if used anywhere else
+message_text_to_group_admin_workgroup: 'Die Region/AG <b>{groupName}</b> hat <b>keinen</b> Botschafter/Admin mehr.<br><br><br>Sie besitzt folgende ID-Struktur:<br>{idStructureList}<br><br>Die ID lautet: {groupId}<br><br>URL: <a href="https://foodsharing.de/?page=bezirk&bid={groupId}&sub=forum" target="_blank">Klicke hier um zur zur Region/AG zu gehen</a>'
+#
+# FORM DATA KEYS: SettingsView
+# --
+about_me_public: 'Öffentliche Kurzbeschreibung'
+about_me_intern: Kurzbeschreibung
+#
+# FORM DATA KEYS: BasketView + BasketXhr
+# --
+weight: 'Geschätztes Gewicht'
+food_type: 'Welche Arten von Lebensmitteln sind dabei?'
+food_art: 'Was trifft auf die Lebensmittel zu?'
+fetchstate: 'Hat alles gut geklappt?'
+contact_type: 'Wie möchtest du kontaktiert werden?'
+lifetime: 'Wie lange soll dein Essenskorb gültig sein?'
+#
+# FORM DATA KEYS: BlogView
+# --
+teaser: Teaser
+bezirk_id: 'Für welche Region ist der Artikel relevant?'
+#
+# FORM DATA KEYS: BusinessCardView
+# --
+opt: Optionen
+#
+# FORM DATA KEYS: EmailControl
+# --
+testemail: Test-E-Mail-Adresse
+mailbox_id: Absender-E-Mail-Adresse
+#
+# FORM DATA KEYS: EventView
+# --
+location_name: 'Veranstaltungsort / Konferenzraum'
+online_type: 'Findet das Event offline oder online statt?'
+dateend: Enddatum
+#
+# FORM DATA KEYS: FoodsaverView
+# --
+orgateam: 'Bundesweite Orga'
+position: 'Position bei foodsharing (öffentlich)'
+#
+# FORM DATA KEYS: FoodSharePoint
+# --
+infotype: Benachrichtigung
+fsp_bezirk_id: 'In welchem Bezirk ist der Fairteiler?'
+fspmanagers: 'Foodsaver, die Ansprechpartner für den Fairteiler sind'
+#
+# FORM DATA KEYS: LoginView
+# --
+pass1: 'Dein neues gewünschtes Passwort'
+pass2: Passwortwiederholung
+#login_location: 'Deine Adresse' # TODO check if used anywhere
+#
+# FORM DATA KEYS: MessageView
+# --
+compose_body: Nachricht
+#
+# FORM DATA KEYS: SettingsView
+# --
+newsletter: Newsletter
+# comment: 'Anregungen, Kritik und Kommentare' # this looks very unused
+infomail_message: 'Benachrichtigung über Chat-Nachrichten auf foodsharing'
+newmail: 'Gib hier deine neue E-Mail-Adresse ein'
+passcheck: 'Bestätige die Änderung bitte mit deinem Passwort'
+sleep_status: 'Dein aktueller Status'
+sleep_msg: 'Hier kannst du eine kurze Nachricht hinterlassen, warum du gerade keine Zeit hast.'
+homepage: 'Deine Webseite'
+#
+# FORM DATA KEYS: StoreView (team + pickup time management)
+# --
+verantwortlicher: 'Verantwortliche Mitglieder'
+storemanagers: Betriebsverantwortliche
+team_status: Teamstatus
+fetchercount: 'Anzahl der Abholer*innen'
+#
+# FORM DATA KEYS: StoreView (betrieb_form)
+# --
+kette_id: Betriebskette
+betrieb_kategorie_id: Kategorie
+betrieb_status_id: Status
+store_status_impact_explanation: 'Bitte aktualisiere nach jedem Betriebskontakt (<a href="https://wiki.foodsharing.de/Kooperationsaufbau_-_Checkliste" target="_blank">Wiki: Kooperationsaufbau - Checkliste</a>) den Status (<a href="https://wiki.foodsharing.de/Betrieb" target="_blank">Wiki: Betrieb</a>) des Betriebes, so dass der Stand der Ansprache für alle sichtbar ist.<br><br>Nur kooperationswillige Betriebe werden später oben im Betriebsmenü der Navigationsleiste angezeigt.'
+ansprechpartner: 'Betriebsansprechpartner (Filialleiter etc.)'
+fax: Fax
+lebensmittel: 'Welche Lebensmittel dürfen abgeholt werden?'
+begin: 'Beginn der Kooperation'
+besonderheiten: Besonderheiten
+public_info: 'Öffentliche Infos zum Betrieb'
+public_time: 'Ungefähre Tageszeit der Abholung'
+first_post: 'Erster Pinnwandeintrag'
+ueberzeugungsarbeit: 'War es einfach, eine/n Verantwortliche/n zu überzeugen, mit foodsharing zu kooperieren?'
+presse: 'Ist der Betrieb/Laden/Verein bereit, bei der Presse und foodsharing.de genannt zu werden?'
+sticker: 'Ist der Betrieb/Laden/Verein etc. gewillt, einen Sticker beim Eingang oder anderswo sichtbar anzubringen?'
+prefetchtime: 'Wie viele Wochen im Voraus können sich Foodsaver mittels automatischer Slots eintragen?'
+abholmenge: 'Wie viel Kilogramm werden pro Abholung ungefähr mitgenommen?'
+#
+# FORM DATA KEYS: WorkGroup
+# --
+member: Mitglieder
+leader: Gruppen-Admins
+apply_type: 'Wer kann sich für diese Gruppe eintragen?'
+banana_count: 'Wie viele Vertrauensbananen braucht ein Mitglied?'
+fetch_count: 'Wie viele Abholungen sollte ein Bewerber gemacht haben?'
+week_num: 'Seit wie vielen Wochen sollte ein Bewerber schon dabei sein?'
+#
 # FORM DATA KEYS: QuizView QuizXhr
+# --
 right: 'Wertung'
 text: 'Text'
 fp: 'Fehlerpunkte'
@@ -367,7 +515,6 @@ really_delete: Wirklich löschen?
 yes: Ja
 no: Nein
 back: Zurück
-options: Optionen
 success: Erfolgreich abgeschlossen
 error_unexpected: Es ist ein Fehler aufgetreten
 error_ajax: |
@@ -382,7 +529,7 @@ select: Bitte auswählen
 time: Uhrzeit
 day: Tag
 
-info:
+formatting:
   md: Du kannst zur Formatierung <a href="http://markdown.de/">Markdown</a> verwenden.
 
 fsp:
@@ -449,6 +596,8 @@ storeview:
   frequency4: nachts
   status: Aktueller Status
   managers: Verantwortliche Foodsaver
+  specials: Besonderheiten
+  want_to_fetch: 'In diesem Team würde ich gerne helfen.'
 
 store:
   bread: Alle Betriebe
@@ -526,6 +675,7 @@ storeedit:
   actions: Optionen
   team:
     bread: Team bearbeiten
+    foodsaver: Foodsaver
     leave: Aus Betrieb austragen
     cannot-leave: Du bist noch verantwortlich für diesen Betrieb und kannst ihn daher nicht verlassen!
     empty: Das Team darf nicht leer sein
@@ -697,6 +847,7 @@ events:
   add_new_event: Jetzt neuen Termin eintragen
   add_event: Neuer Termin
   create:
+    date: Datum
     title: Neue Veranstaltung eintragen
     public: Ist die Veranstaltung öffentlich?
     isPublic: Ja, die Veranstaltung ist öffentlich
@@ -776,6 +927,8 @@ recipients:
   confirm: E-Mail senden?
   test: Newsletter testen
   testmail: Test-Mail senden
+  test_email_sent: E-Mail wurde versendet!
+  test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
   variables: Persönliche Anrede
   variable-info: |
     Um die Mail persönlicher zu gestalten, kannst Du <strong>{NAME}</strong> anstelle des Namens einfügen
@@ -1515,10 +1668,6 @@ footer:
   donate: Unterstützen
   thanksHoster: Vielen Dank an unseren Öko-Hoster
   version: "Version: {version}"
-
-newsletter:
-  test_email_sent: E-Mail wurde versendet!
-  test_email_invalid: Mit der E-Mail-Adresse stimmt etwas nicht!
 
 storestatus:
   0: Status unklar

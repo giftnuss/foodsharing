@@ -3,13 +3,14 @@ import de from '@translations/messages.de.yml'
 import en from '@translations/messages.en.yml'
 import objectPath from 'object-path'
 
-const { translations, locale } = serverData
+const { locale } = serverData
 
 export default function (key, variables = {}) {
-  const src = 'en'.localeCompare(locale) === 0 ? en : de
+  const src = 'en'.localeCompare(locale || 'en') === 0 ? en : de
   let message = objectPath.get(src, key)
-  if (!message) message = objectPath.get(de, key)
-  if (!message) message = translations[key]
+  if (!message) {
+    message = objectPath.get(de, key)
+  }
   if (!message) {
     console.error(new Error(`Missing translation for [${key}]`))
     return key

@@ -29,7 +29,6 @@ if (isset($g_page_cache) && strtolower($_SERVER['REQUEST_METHOD']) == 'get') {
 
 $translator = $container->get('translator');
 $translator->setLocale($session->getLocale());
-require_once 'lang/DE/de.php';
 
 error_reporting(E_ALL);
 

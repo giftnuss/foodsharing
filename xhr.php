@@ -72,8 +72,6 @@ if (isset($g_page_cache)) {
 	$cache->lookup();
 }
 
-require_once 'lang/DE/de.php';
-
 $request = Request::createFromGlobals();
 
 $action = $request->query->get('f');

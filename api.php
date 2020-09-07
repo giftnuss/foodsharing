@@ -9,8 +9,6 @@ require __DIR__ . '/includes/setup.php';
 
 require_once 'config.inc.php';
 
-require_once 'lang/DE/de.php';
-
 /** Checks the validity of an API token.
  * @param Foodsaver $fs ID
  * @param API $key token

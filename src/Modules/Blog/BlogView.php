@@ -190,6 +190,7 @@ class BlogView extends View
 			$this->v_utils->v_field($this->v_utils->v_form_tinymce('body', [
 				'nowrapper' => true,
 				'public_content' => true,
+				'label' => $this->translator->trans('blog.content'),
 			]), $this->translator->trans('blog.content'))
 		]);
 	}

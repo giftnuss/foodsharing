@@ -7,24 +7,6 @@ use Foodsharing\Modules\Core\DBConstants\Foodsaver\Role;
 
 final class TranslationHelper
 {
-	public function getTranslations(): array
-	{
-		global $g_lang;
-
-		return $g_lang;
-	}
-
-	public function s($id)
-	{
-		global $g_lang;
-
-		if (isset($g_lang[$id])) {
-			return $g_lang[$id];
-		}
-
-		return $id;
-	}
-
 	public function genderWord(int $gender, string $m, string $f, string $d): string
 	{
 		if ($gender == Gender::MALE) {

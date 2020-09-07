@@ -119,7 +119,6 @@ if (isset($_GET['app'], $_GET['m'])) {
 	$meth = str_replace('/', '', $_GET['m']);
 
 	require_once 'config.inc.php';
-	require_once 'lang/DE/de.php';
 
 	/* @var \Foodsharing\Lib\Session $session */
 	$session = $container->get(Session::class);

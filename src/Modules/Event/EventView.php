@@ -239,7 +239,7 @@ class EventView extends View
 			$public_el,
 			$bezirkchoose,
 			$this->v_utils->v_form_text('name', ['required' => true]),
-			$this->v_utils->v_form_date('date', ['required' => true]),
+			$this->v_utils->v_form_date('date', ['required' => true, 'label' => $this->translator->trans('events.create.date')]),
 			$this->v_utils->v_form_date('dateend', ['required' => true]),
 			$this->v_utils->v_input_wrapper(
 				$this->translator->trans('events.create.starttime'),

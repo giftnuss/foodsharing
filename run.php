@@ -17,8 +17,6 @@ if (!isset($argv)) {
 	exit();
 }
 
-require_once ROOT_DIR . 'lang/DE/de.php';
-
 $app = 'Console';
 $method = 'index';
 

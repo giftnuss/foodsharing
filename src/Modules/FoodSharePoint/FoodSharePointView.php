@@ -180,7 +180,7 @@ class FoodSharePointView extends View
 			$this->v_utils->v_form_text('name', ['value' => $data['name'], 'required' => true]),
 			$this->v_utils->v_form_textarea('desc', [
 				'value' => $data['desc'],
-				'desc' => $this->translator->trans('fsp.descLabel') . '<br>' . $this->translator->trans('info.md'),
+				'desc' => $this->translator->trans('fsp.descLabel') . '<br>' . $this->translator->trans('formatting.md'),
 				'required' => true,
 			]),
 			$this->vueComponent('image-upload', 'file-upload-v-form', [

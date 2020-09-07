@@ -38,7 +38,6 @@ final class PageHelper
 	private ImageHelper $imageService;
 	private RouteHelper $routeHelper;
 	private Sanitizer $sanitizerService;
-	private TranslationHelper $translationHelper;
 	private Session $session;
 	private BlogPermissions $blogPermissions;
 	private ContentPermissions $contentPermissions;
@@ -56,7 +55,6 @@ final class PageHelper
 		ImageHelper $imageService,
 		Environment $twig,
 		RouteHelper $routeHelper,
-		TranslationHelper $translationHelper,
 		IdentificationHelper $identificationHelper,
 		MailboxPermissions $mailboxPermissions,
 		QuizPermissions $quizPermissions,
@@ -72,7 +70,6 @@ final class PageHelper
 		$this->imageService = $imageService;
 		$this->routeHelper = $routeHelper;
 		$this->sanitizerService = $sanitizerService;
-		$this->translationHelper = $translationHelper;
 		$this->session = $session;
 		$this->blogPermissions = $blogPermissions;
 		$this->contentPermissions = $contentPermissions;
@@ -208,7 +205,6 @@ final class PageHelper
 			'subPage' => $this->routeHelper->getSubPage(),
 			'location' => $location,
 			'ravenConfig' => $sentryConfig,
-			'translations' => $this->translationHelper->getTranslations(),
 			'isDev' => getenv('FS_ENV') === 'dev',
 			'locale' => $this->session->getLocale()
 		]);

@@ -280,7 +280,7 @@ class Utils
 	public function v_form_tinymce(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translator->trans($id);
+		$label = $option['label'] ?? $this->translator->trans($id);
 		$value = $this->dataHelper->getValue($id);
 
 		$this->pageHelper->addStyle('div#content {width: 580px;} div#right {width: 222px;}');
@@ -820,6 +820,8 @@ class Utils
 			$url = $option['url'];
 		}
 
+		$label = $option['label'] ?? $this->translator->trans($id);
+
 		$source = 'autocompleteURL: "/xhr.php?f=' . $url . '"';
 		$post = '';
 
@@ -856,7 +858,7 @@ class Utils
 			}
 		}
 
-		return $this->v_input_wrapper($this->translator->trans($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($label, '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function v_form_picture(string $id, array $option = []): string
@@ -1151,7 +1153,7 @@ class Utils
 	public function v_form_date(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translator->trans($id);
+		$label = $option['label'] ?? $this->translator->trans($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : ((int)date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : ((int)date('Y') + 60);

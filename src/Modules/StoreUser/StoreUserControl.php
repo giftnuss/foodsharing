@@ -147,10 +147,13 @@ class StoreUserControl extends Control
 						}
 					}
 					$verantwortlich_select = $this->v_utils->v_form_checkbox('verantwortlicher', ['values' => $bibsaver, 'checked' => $checked]);
+					$valueOptions = $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs());
 
 					$elements = [
-						$this->v_utils->v_form_tagselect('foodsaver', ['valueOptions' => $this->foodsaverGateway->xhrGetFoodsaversOfRegionsForTagSelect($this->session->listRegionIDs())]
-						),
+						$this->v_utils->v_form_tagselect('foodsaver', [
+							'valueOptions' => $valueOptions,
+							'label' => $this->translator->trans('storeedit.team.foodsaver'),
+						]),
 						$verantwortlich_select,
 					];
 
@@ -290,7 +293,7 @@ class StoreUserControl extends Control
 					$this->pageHelper->addContent(
 						$this->v_utils->v_field(
 							$this->view->u_legacyStoreTeamStatus($store),
-							$this->translationHelper->s('status'),
+							$this->translator->trans('status'),
 							['class' => 'ui-padding']
 						),
 						CNT_LEFT

@@ -13,8 +13,8 @@ expose({ trySendTestEmail })
 async function trySendTestEmail () {
   try {
     await sendTestEmail($('#testemail').val(), $('#subject').val(), $('#message').tinymce().getContent())
-    pulseInfo(i18n('newsletter.test_email_sent'))
+    pulseInfo(i18n('recipients.test_email_sent'))
   } catch (err) {
-    pulseError(i18n('newsletter.test_email_invalid'))
+    pulseError(i18n('recipients.test_email_invalid'))
   }
 }

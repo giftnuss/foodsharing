@@ -77,20 +77,11 @@ abstract class Control
 		} elseif (($pos = strpos($className, 'Xhr')) !== false) {
 			$this->isXhrControl = true;
 		}
-		$moduleName = substr($className, 0, $pos);
 
-		if (file_exists(ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php')) {
-			require_once ROOT_DIR . 'lang/DE/' . $moduleName . '.lang.php';
-		}
-		if (isset($_GET['lang']) && $_GET['lang'] == 'en') {
-			$fn = ROOT_DIR . 'lang/EN/' . $moduleName . '.lang.php';
-			if (file_exists($fn)) {
-				require_once $fn;
-			}
-		}
 		if ($this->isControl) {
 			$webpackModules = $dir . '../../../assets/modules.json';
 			$manifest = json_decode(file_get_contents($webpackModules), true);
+			$moduleName = substr($className, 0, $pos);
 			$entry = 'Modules/' . $moduleName;
 			if (isset($manifest[$entry])) {
 				foreach ($manifest[$entry] as $asset) {

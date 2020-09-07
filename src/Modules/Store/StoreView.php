@@ -107,7 +107,7 @@ class StoreView extends View
 			$latLonOptions['location'] = ['lat' => 0, 'lon' => 0];
 		}
 
-		return $this->v_utils->v_quickform($this->translationHelper->s('betrieb'), [
+		return $this->v_utils->v_quickform($this->translator->trans('betrieb'), [
 			$regionPicker,
 			$this->v_utils->v_form_hidden('page', $page),
 			$this->v_utils->v_form_text('name', ['required' => true]),
@@ -116,7 +116,7 @@ class StoreView extends View
 			$this->v_utils->v_form_select('kette_id', ['add' => true, 'values' => $chains, 'desc' => 'Bitte nur inhabergeführte Betriebe bis maximal 3 Filialen ansprechen, niemals Filialen einer größeren Kette ansprechen! Betriebskettenregeln beachten!']),
 			$this->v_utils->v_form_select('betrieb_kategorie_id', ['add' => true, 'values' => $categories]),
 
-			$this->v_utils->v_form_select('betrieb_status_id', ['values' => $status, 'desc' => $this->v_utils->v_info($this->translationHelper->s('store_status_impact_explanation'))]),
+			$this->v_utils->v_form_select('betrieb_status_id', ['values' => $status, 'desc' => $this->v_utils->v_info($this->translator->trans('store_status_impact_explanation'))]),
 
 			$this->v_utils->v_form_text('ansprechpartner'),
 			$this->v_utils->v_form_text('telefon'),
@@ -126,7 +126,7 @@ class StoreView extends View
 			$this->v_utils->v_form_checkbox('lebensmittel', ['values' => $lebensmittel_values]),
 			$this->v_utils->v_form_date('begin'),
 			$this->v_utils->v_form_textarea('besonderheiten', [
-				'desc' => $this->v_utils->v_info($this->translator->trans('info.md'), false, '<i class="fab fa-markdown fa-2x d-inline align-middle text-muted"></i>')
+				'desc' => $this->v_utils->v_info($this->translator->trans('formatting.md'), false, '<i class="fab fa-markdown fa-2x d-inline align-middle text-muted"></i>')
 			]),
 			$this->v_utils->v_form_textarea('public_info', ['maxlength' => 180, 'desc' => 'Hier kannst Du einige Infos für die Foodsaver angeben, die sich für das Team bewerben möchten. <br />(max. 180 Zeichen)<div>' . $this->v_utils->v_info('<strong>Wichtig:</strong> Gib hier keine genauen Abholzeiten an.<br />Es ist des Öfteren vorgekommen, dass Leute unabgesprochen zum Laden gegangen sind.') . '</div>']),
 			$this->v_utils->v_form_select('public_time', ['values' => [
