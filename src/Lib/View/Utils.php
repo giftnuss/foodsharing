@@ -8,7 +8,6 @@ use Foodsharing\Utility\IdentificationHelper;
 use Foodsharing\Utility\PageHelper;
 use Foodsharing\Utility\RouteHelper;
 use Foodsharing\Utility\Sanitizer;
-use Foodsharing\Utility\TranslationHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Utils
@@ -21,7 +20,6 @@ class Utils
 	private RouteHelper $routeHelper;
 	private IdentificationHelper $identificationHelper;
 	private DataHelper $dataHelper;
-	private TranslationHelper $translationHelper;
 	private TranslatorInterface $translator;
 
 	public function __construct(
@@ -30,7 +28,6 @@ class Utils
 		RouteHelper $routeHelper,
 		IdentificationHelper $identificationHelper,
 		DataHelper $dataHelper,
-		TranslationHelper $translationHelper,
 		TranslatorInterface $translator
 	) {
 		$this->id = []; // TODO shouldn't this be a string?
@@ -39,7 +36,6 @@ class Utils
 		$this->routeHelper = $routeHelper;
 		$this->identificationHelper = $identificationHelper;
 		$this->dataHelper = $dataHelper;
-		$this->translationHelper = $translationHelper;
 		$this->translator = $translator;
 	}
 
@@ -284,7 +280,7 @@ class Utils
 	public function v_form_tinymce(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 		$value = $this->dataHelper->getValue($id);
 
 		$this->pageHelper->addStyle('div#content {width: 580px;} div#right {width: 222px;}');
@@ -734,7 +730,7 @@ class Utils
 
 		$value = htmlspecialchars($value);
 
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 
 		$style = '';
 		if (isset($option['style'])) {
@@ -778,7 +774,7 @@ class Utils
 		} else {
 			$value = $this->dataHelper->getValue($id);
 		}
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 
 		if (isset($option['values'])) {
 			$values = $option['values'];
@@ -860,7 +856,7 @@ class Utils
 			}
 		}
 
-		return $this->v_input_wrapper($this->translationHelper->s($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
+		return $this->v_input_wrapper($this->translator->trans($id), '<div id="' . $id . '">' . $input . '</div>', $id, $option);
 	}
 
 	public function v_form_picture(string $id, array $option = []): string
@@ -934,7 +930,7 @@ class Utils
 			<input type="hidden" name="' . $id . '" id="' . $id . '" value="' . $pic . '" /><div id="' . $id . '-preview">' . $thumb . '</div>
 			<span id="' . $id . '-opener">' . $this->translator->trans('upload.image') . '</span><span style="display: none;"><a href="#' . $id . '-fancy" id="' . $id . '-link">&nbsp;</a></span>';
 
-		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
+		return $this->v_input_wrapper($this->translator->trans($id), $out);
 	}
 
 	public function v_form_file(string $id, array $option = []): string
@@ -964,13 +960,13 @@ class Utils
 
 		$out = '<input style="display: block; visibility: hidden; margin-bottom: -23px;" type="file" name="' . $id . '" id="' . $id . '" size="chars" maxlength="100000" /><span id="' . $id . '-button">' . $btlabel . '</span> <span id="' . $id . '-info">' . $val . '</span>';
 
-		return $this->v_input_wrapper($this->translationHelper->s($id), $out);
+		return $this->v_input_wrapper($this->translator->trans($id), $out);
 	}
 
 	public function v_form_radio(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 
 		$check = $this->jsValidate($option, $id, $label);
 
@@ -1029,7 +1025,7 @@ class Utils
 		} else {
 			$selected = $this->dataHelper->getValue($id);
 		}
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 		$check = $this->jsValidate($option, $id, $label);
 
 		if (isset($option['values'])) {
@@ -1155,7 +1151,7 @@ class Utils
 	public function v_form_date(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 
 		$yearRangeFrom = (isset($option['yearRangeFrom'])) ? $option['yearRangeFrom'] : ((int)date('Y') - 60);
 		$yearRangeTo = (isset($option['yearRangeTo'])) ? $option['yearRangeTo'] : ((int)date('Y') + 60);
@@ -1181,7 +1177,7 @@ class Utils
 	public function v_form_text(string $id, array $option = []): string
 	{
 		$id = $this->identificationHelper->id($id);
-		$label = $this->translationHelper->s($id);
+		$label = $this->translator->trans($id);
 
 		if (isset($option['value'])) {
 			$value = $option['value'];
@@ -1253,7 +1249,7 @@ class Utils
 			$pl = ' placeholder="' . $option['placeholder'] . '"';
 		}
 
-		return $this->v_input_wrapper($this->translationHelper->s($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
+		return $this->v_input_wrapper($this->translator->trans($id), '<input' . $pl . ' class="input text" type="password" name="' . $id . '" id="' . $id . '" />', $id, $option);
 	}
 
 	public function v_getStatusAmpel($status): string
