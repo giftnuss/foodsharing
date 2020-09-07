@@ -436,7 +436,7 @@ class FoodSharePointGateway extends BaseGateway
 
 		$region = $this->regionGateway->getRegion($foodSharePoint['bezirk_id']);
 
-		$fspWGId = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
+		$fspWGId = $this->regionGateway->getRegionFunctionGroupId($region['id'], WorkgroupFunction::FSP);
 		if ($fspWGId) {
 			$fspBellRecipients = $this->db->fetchAllValuesByCriteria('fs_botschafter', 'foodsaver_id', ['bezirk_id' => $fspWGId]);
 		} else {
