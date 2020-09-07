@@ -183,9 +183,9 @@ class SeedCommand extends Command implements CustomCommandInterface
 			$I->addRegionAdmin($id, $userbot['id']);
 		}
 
-		// Create a welcome Group if it doesn't exist.
+		// Create a welcome Group
 		$this->output->writeln('- create welcome group');
-		$welcomeGroup = $I->createWorkingGroup('Begrüßung', ['parent_id' => $region1, 'email_name' => 'Begrüßung Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
+		$welcomeGroup = $I->createWorkingGroup('Begrüßung Göttingen', ['parent_id' => $region1, 'email_name' => 'Begruessung.Göttingen', 'teaser' => 'Hier sind die Begrüßer für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $welcomeGroup['id'], 'function_id' => WorkgroupFunction::WELCOME, 'target_id' => $region1]);
 		$welcomeGroup['id'];
 		$this->output->writeln('- make foodsaver responsible for welcome group');
@@ -194,12 +194,21 @@ class SeedCommand extends Command implements CustomCommandInterface
 
 		// Create voting Group
 		$this->output->writeln('- create voting group');
-		$votingGroup = $I->createWorkingGroup('Abstimmung', ['parent_id' => $region1, 'email_name' => 'Abstimmung Göttingen', 'teaser' => 'Hier sind die Abstimmungen für unseren Bezirk']);
+		$votingGroup = $I->createWorkingGroup('Abstimmungen Göttingen', ['parent_id' => $region1, 'email_name' => 'Abstimmung.Göttingen', 'teaser' => 'Hier sind die Abstimmungen für unseren Bezirk']);
 		$I->haveInDatabase('fs_region_function', ['region_id' => $votingGroup['id'], 'function_id' => WorkgroupFunction::VOTING, 'target_id' => $region1]);
 		$I->addRegionMember($votingGroup['id'], $userStoreManager['id']);
 		$I->addRegionAdmin($votingGroup['id'], $userStoreManager['id']);
 		$I->addRegionMember($votingGroup['id'], $userbot['id']);
 		$I->addRegionAdmin($votingGroup['id'], $userbot['id']);
+
+		// Create fsp Group
+		$this->output->writeln('- create fsp group');
+		$fspGroup = $I->createWorkingGroup('Fairteiler Göttingen', ['parent_id' => $region1, 'email_name' => 'Fairteiler.Göttingen', 'teaser' => 'Hier sind die Fairteileransprechpartner für unseren Bezirk']);
+		$I->haveInDatabase('fs_region_function', ['region_id' => $fspGroup['id'], 'function_id' => WorkgroupFunction::FSP, 'target_id' => $region1]);
+		$I->addRegionMember($fspGroup['id'], $userStoreManager['id']);
+		$I->addRegionAdmin($fspGroup['id'], $userStoreManager['id']);
+		$I->addRegionMember($fspGroup['id'], $userbot['id']);
+		$I->addRegionAdmin($fspGroup['id'], $userbot['id']);
 
 		// Create store team conversations
 		$this->output->writeln('- create store team conversations');

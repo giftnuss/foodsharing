@@ -25,6 +25,14 @@
     {% endembed %}
 {% endif %}
 
+{% if isRegion and region.fspAdmins %}
+    {% embed 'components/field.twig' with {'title': 'terminology.fspAdmins'|trans} %}
+        {% block content %}
+            {% include 'partials/avatarList.twig' with {'id': 'fsp-list', 'entries': region.fspAdmins}%}
+        {% endblock %}
+    {% endembed %}
+{% endif %}
+
 <div id="signout_sure" title="{{ 'are_you_sure'|trans }}">
     {% include 'partials/info.twig' with {'msg': 'group.really_quit_name'|trans({'%name%': region.name})} %}
     <input type="hidden" name="bid" class="bid" value="{{ region.id }}" />

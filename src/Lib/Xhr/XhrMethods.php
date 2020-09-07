@@ -1164,6 +1164,10 @@ class XhrMethods
 						'id' => WorkgroupFunction::VOTING,
 						'name' => $this->translator->trans('group.function.voting'),
 					],
+					[
+						'id' => WorkgroupFunction::FSP,
+						'name' => $this->translator->trans('group.function.fsp'),
+					],
 				],
 			]),
 			$this->v_utils->v_input_wrapper(
@@ -1388,7 +1392,7 @@ class XhrMethods
 				'script' => 'pulseError("' . $this->translator->trans('group.function.invalid') . '");',
 			]);
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::WELCOME) {
-			$welcomeGroupId = $this->regionGateway->getRegionWelcomeGroupId($parentId);
+			$welcomeGroupId = $this->regionGateway->getRegionFunctionGroupId($parentId, WorkgroupFunction::WELCOME);
 			if ($welcomeGroupId && ($welcomeGroupId != $regionId)) {
 				return json_encode([
 					'status' => 1,
@@ -1396,11 +1400,19 @@ class XhrMethods
 				]);
 			}
 		} elseif ($data['workgroup_function'] == WorkgroupFunction::VOTING) {
-			$votingGroupId = $this->regionGateway->getRegionVotingGroupId($data['parent_id']);
+			$votingGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::VOTING);
 			if ($votingGroupId !== null && $votingGroupId !== (int)$data['bezirk_id']) {
 				return json_encode([
 					'status' => 1,
-					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_welcome_team') . '");',
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_voting_team') . '");',
+				]);
+			}
+		} elseif ($data['workgroup_function'] == WorkgroupFunction::FSP) {
+			$fspGroupId = $this->regionGateway->getRegionFunctionGroupId($data['parent_id'], WorkgroupFunction::FSP);
+			if ($fspGroupId !== null && $fspGroupId !== (int)$data['bezirk_id']) {
+				return json_encode([
+					'status' => 1,
+					'script' => 'pulseError("' . $this->translator->trans('group.function.duplicate_fsp_team') . '");',
 				]);
 			}
 		}

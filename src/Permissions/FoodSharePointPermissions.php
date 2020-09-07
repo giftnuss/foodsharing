@@ -3,14 +3,20 @@
 namespace Foodsharing\Permissions;
 
 use Foodsharing\Lib\Session;
+use Foodsharing\Modules\Core\DBConstants\Region\WorkgroupFunction;
+use Foodsharing\Modules\Region\RegionGateway;
 
 class FoodSharePointPermissions
 {
 	private Session $session;
+	private RegionGateway $regionGateway;
 
-	public function __construct(Session $session)
+	public function __construct(
+		Session $session,
+		RegionGateway $regionGateway)
 	{
 		$this->session = $session;
+		$this->regionGateway = $regionGateway;
 	}
 
 	public function mayFollow(): bool
@@ -26,6 +32,11 @@ class FoodSharePointPermissions
 
 	public function mayAdd(int $regionId): bool
 	{
+		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
+		if ($fspGroup) {
+			return $this->session->isAdminFor($fspGroup) || $this->session->isOrgaTeam();
+		}
+
 		return $this->session->isAdminFor($regionId) || $this->session->isOrgaTeam();
 	}
 
