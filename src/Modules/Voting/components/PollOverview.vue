@@ -26,22 +26,28 @@
         <div class="my-1">
           <b>{{ $i18n('poll.type') }}:</b> {{ $i18n('poll.type_description_'+poll.type) }}
         </div>
-        <div
-          v-if="userVoteDate !== null"
-          class="my-1 mt-3"
-        >
-          {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
-        </div>
 
         <VoteForm
-          v-if="mayVote"
+          v-if="!isPollInPast"
           :poll="poll"
           :may-vote="mayVote"
           class="mt-5"
           @disableVoteForm="disableVoteForm"
         />
         <div
-          v-else-if="userVoteDate === null"
+          v-if="userVoteDate !== null"
+          class="my-1 mt-3"
+        >
+          {{ $i18n('poll.already_voted') }}: {{ $dateFormat(parseDate(userVoteDate.date)) }}
+        </div>
+        <div
+          v-else-if="isPollInFuture"
+          class="my-1 mt-3"
+        >
+          {{ $i18n('poll.may_not_yet_vote') }}
+        </div>
+        <div
+          v-else-if="!mayVote && !isPollInPast"
           class="mt-3"
         >
           {{ $i18n('poll.may_not_vote') }}

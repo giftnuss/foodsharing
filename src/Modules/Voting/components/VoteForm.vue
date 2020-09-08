@@ -1,8 +1,7 @@
 <template>
   <div class="bootstrap">
     <b-form
-      v-if="mayVote"
-      @submit="submitVote"
+      @submit="showConfirmDialog"
     >
       <SingleSelectionVotingComponent
         v-if="poll.type===0"
@@ -39,16 +38,29 @@
       <b-button
         type="submit"
         variant="primary"
-        :disabled="!isValidSelection"
+        :disabled="!mayVote || !isValidSelection"
       >
         {{ $i18n('poll.submit_vote') }}
       </b-button>
     </b-form>
+
+    <b-modal
+      ref="modal_request"
+      :title="$i18n('poll.submit_vote')"
+      :cancel-title="$i18n('button.cancel')"
+      :ok-title="$i18n('button.send')"
+      modal-class="bootstrap"
+      header-class="d-flex"
+      content-class="pr-3 pt-3"
+      @ok="submitVote"
+    >
+      {{ $i18n('poll.submit_vote_question') }}
+    </b-modal>
   </div>
 </template>
 
 <script>
-import { BButton, BForm, BAlert } from 'bootstrap-vue'
+import { BButton, BForm, BAlert, BModal } from 'bootstrap-vue'
 import ThumbVotingComponent from './ThumbVotingComponent'
 import ScoreVotingComponent from './ScoreVotingComponent'
 import SingleSelectionVotingComponent from './SingleSelectionVotingComponent'
@@ -65,7 +77,8 @@ export default {
     MultiSelectionVotingComponent,
     BButton,
     BForm,
-    BAlert
+    BAlert,
+    BModal
   },
   props: {
     poll: {
@@ -84,6 +97,10 @@ export default {
     }
   },
   methods: {
+    showConfirmDialog (e) {
+      e.preventDefault()
+      this.$refs.modal_request.show()
+    },
     async submitVote (e) {
       e.preventDefault()
       this.isLoading = true

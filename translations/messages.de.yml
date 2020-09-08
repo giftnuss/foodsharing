@@ -1632,8 +1632,10 @@ poll:
   begins_at: Beginn
   already_voted: Du hast an dieser Abstimmung bereits teilgenommen
   may_not_vote: Du kannst in dieser Abstimmung nicht abstimmen.
+  may_not_yet_vote: Diese Abstimmung hat noch nicht begonnen.
   results:
     number_of_votes: Abgegebene Stimmen
     votes: Stimmen
     option_text: Option
     average: Mittelwert
+  submit_vote_question: Wirklich jetzt abstimmen? Deine Auswahl kann danach nicht mehr geändert werden.
