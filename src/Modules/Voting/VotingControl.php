@@ -41,12 +41,10 @@ class VotingControl extends Control
 				$this->pageHelper->addTitle($poll->name);
 
 				$mayVote = $this->votingPermissions->mayVote($poll);
-				$voteDateTime = null;
-				if ($mayVote) {
-					try {
-						$voteDateTime = $this->votingGateway->getVoteDatetime($poll->id, $this->session->id());
-					} catch (Exception $e) {
-					}
+				try {
+					$voteDateTime = $this->votingGateway->getVoteDatetime($poll->id, $this->session->id());
+				} catch (Exception $e) {
+					$voteDateTime = null;
 				}
 				$this->pageHelper->addContent($this->view->pollOverview($poll, $region, $mayVote,
 					$mayVote ? null : $voteDateTime)

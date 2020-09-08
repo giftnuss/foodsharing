@@ -3,7 +3,7 @@
 ## Features
 - Display deep link to forum posts, better responsive layout #937 !1650 !1652 @ChrisOelmueller
 - New store status "permanently closed" #786 !1655 @ChrisOelmueller
-- Add voting tool #309 !1633 @alex.simm
+- Add voting tool #309 #975 !1633 !1668 @alex.simm
 
 ## Changes
 - Removed FAQ section !1568 @chriswalg

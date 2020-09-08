@@ -36,16 +36,17 @@
         {{ $i18n('poll.submit_vote_warning') }}
       </b-alert>
       <b-button
+        v-if="mayVote"
         type="submit"
         variant="primary"
-        :disabled="!mayVote || !isValidSelection"
+        :disabled="!isValidSelection"
       >
         {{ $i18n('poll.submit_vote') }}
       </b-button>
     </b-form>
 
     <b-modal
-      ref="modal_request"
+      ref="confirmModal"
       :title="$i18n('poll.submit_vote')"
       :cancel-title="$i18n('button.cancel')"
       :ok-title="$i18n('button.send')"
@@ -99,10 +100,9 @@ export default {
   methods: {
     showConfirmDialog (e) {
       e.preventDefault()
-      this.$refs.modal_request.show()
+      this.$refs.confirmModal.show()
     },
     async submitVote (e) {
-      e.preventDefault()
       this.isLoading = true
       this.isValidSelection = false
       try {
