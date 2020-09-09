@@ -110,7 +110,7 @@ class WallPostGateway extends BaseGateway
 		return $posts;
 	}
 
-	public function getLastPostId(string $target, int $targetId): int
+	public function getLastPostId(string $target, int $targetId): ?int
 	{
 		return $this->db->fetchValue('
 			SELECT 	MAX(id)
@@ -147,7 +147,7 @@ class WallPostGateway extends BaseGateway
 		return $postId;
 	}
 
-	public function getFsByPost(int $postId): int
+	public function getFsByPost(int $postId): ?int
 	{
 		return $this->db->fetchValueByCriteria('fs_wallpost', 'foodsaver_id', ['id' => $postId]);
 	}
