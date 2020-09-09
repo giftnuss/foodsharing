@@ -32,17 +32,19 @@ class FoodSharePointPermissions
 
 	public function mayAdd(int $regionId): bool
 	{
-		if ($this->session->isOrgaTeam())
+		if ($this->session->isOrgaTeam()) {
 			return true;
+		}
 
 		$fspGroup = $this->regionGateway->getRegionFunctionGroupId($regionId, WorkgroupFunction::FSP);
 		if ($this->session->isAdminFor($fspGroup)) {
 			return true;
 		}
 
-		if ($this->session->isAdminFor($regionId))
+		if ($this->session->isAdminFor($regionId)) {
 			return true;
-		
+		}
+
 		return false;
 	}
 
