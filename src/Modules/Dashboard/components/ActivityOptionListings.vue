@@ -27,8 +27,8 @@
                 type="checkbox"
               >
               <img
-                v-if="item.imgUrl"
-                :src="item.imgUrl"
+                v-if="item.imageUrl"
+                :src="item.imageUrl"
                 class="option-img"
                 height="24"
               >

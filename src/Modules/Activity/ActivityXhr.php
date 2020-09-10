@@ -4,7 +4,6 @@ namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Xhr\Xhr;
 use Foodsharing\Modules\Core\Control;
-use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Utility\ImageHelper;
 
@@ -97,117 +96,6 @@ class ActivityXhr extends Control
 		if (isset($_GET['select_all_options'])) {
 			$this->session->setOption('activity-listings', false);
 		}
-	}
-
-	public function getOptionList(): void
-	{
-		/*
-		 * get forum updates
-		 */
-
-		$xhr = new Xhr();
-
-		$listings = [
-			'groups' => [],
-			'regions' => [],
-			'mailboxes' => [],
-			'stores' => [],
-			'buddywalls' => []
-		];
-
-		$option = [];
-
-		if ($list = $this->session->getOption('activity-listings')) {
-			$option = $list;
-		}
-
-		/*
-			* listings regions
-		*/
-		if ($bezirke = $this->session->getRegions()) {
-			foreach ($bezirke as $b) {
-				$checked = true;
-				$regionId = 'bezirk-' . $b['id'];
-				if (isset($option[$regionId])) {
-					$checked = false;
-				}
-				$dat = [
-					'id' => $b['id'],
-					'name' => $b['name'],
-					'checked' => $checked
-				];
-				if ($b['type'] == Type::WORKING_GROUP) {
-					$listings['groups'][] = $dat;
-				} else {
-					$listings['regions'][] = $dat;
-				}
-			}
-		}
-
-		/*
-		 * listings buddy walls
-		 */
-		$buddies = $this->getBuddies();
-		foreach ($buddies as $b) {
-			$checked = true;
-			$buddyWallId = 'buddywall-' . $b['id'];
-			if (isset($option[$buddyWallId])) {
-				$checked = false;
-			}
-			$listings['buddywalls'][] = [
-				'id' => $b['id'],
-				'imgUrl' => $this->imageService->img($b['photo']),
-				'name' => $b['name'],
-				'checked' => $checked
-			];
-		}
-
-		/*
-			* listings mailboxes
-		*/
-		if ($boxes = $this->mailboxGateway->getBoxes(
-				$this->session->isAmbassador(),
-				$this->session->id(),
-				$this->session->may('bieb'))
-			) {
-			foreach ($boxes as $b) {
-				$checked = true;
-				$mailboxId = 'mailbox-' . $b['id'];
-				if (isset($option[$mailboxId])) {
-					$checked = false;
-				}
-				$listings['mailboxes'][] = [
-					'id' => $b['id'],
-					'name' => $b['name'] . '@' . PLATFORM_MAILBOX_HOST,
-					'checked' => $checked
-				];
-			}
-		}
-
-		$xhr->addData('listings', [
-			0 => [
-				'name' => $this->translator->trans('search.mygroups'),
-				'index' => 'bezirk',
-				'items' => $listings['groups']
-			],
-			1 => [
-				'name' => $this->translator->trans('search.myregions'),
-				'index' => 'bezirk',
-				'items' => $listings['regions']
-			],
-			2 => [
-				'name' => $this->translator->trans('terminology.mailboxes'),
-				'index' => 'mailbox',
-				'items' => $listings['mailboxes']
-			],
-			3 => [
-				'name' => $this->translator->trans('search.mybuddies'),
-				'index' => 'buddywall',
-				'items' => $listings['buddywalls']
-			],
-		]);
-
-		$xhr->send();
 	}
 
 	private function buildUpdateData(array $hidden_ids, int $page): array
@@ -453,20 +341,6 @@ class ActivityXhr extends Control
 			}
 
 			return $out;
-		}
-
-		return [];
-	}
-
-	/**
-	 * Lists all of the user's buddies.
-	 *
-	 * @return array a list of buddies or an empty array
-	 */
-	private function getBuddies(): array
-	{
-		if ($buddyIds = $this->session->get('buddy-ids')) {
-			return $this->activityGateway->fetchAllBuddies($buddyIds);
 		}
 
 		return [];
