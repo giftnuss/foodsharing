@@ -9,6 +9,7 @@
 ## Refactoring
 - Flatten some workgroup function calls !1702 @ChrisOelmueller
 - Remove some long-unused grabInfo code !1695 @ChrisOelmueller
+- New endpoints for requesting and setting dashboard activity options !1669 @alex.simm
 
 ## Dev/Test/CI stuff
 

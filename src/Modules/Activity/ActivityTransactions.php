@@ -25,8 +25,7 @@ class ActivityTransactions
 		ImageHelper $imageHelper,
 		TranslatorInterface $translator,
 		Session $session
-	)
-	{
+	) {
 		$this->activityGateway = $activityGateway;
 		$this->mailboxGateway = $mailboxGateway;
 		$this->imageHelper = $imageHelper;
@@ -52,7 +51,9 @@ class ActivityTransactions
 		$groupOptions = [];
 		if ($bezirke = $this->session->getRegions()) {
 			foreach ($bezirke as $b) {
-				$option = ActivityOption::create($b['name'], $b['id'], !isset($uncheckedOptions['bezirk-' . $b['id']]));
+				$option = ActivityOption::create($b['name'], $b['id'],
+					!isset($uncheckedOptions['bezirk-' . $b['id']])
+				);
 				if ($b['type'] == Type::WORKING_GROUP) {
 					$groupOptions[] = $option;
 				} else {
@@ -70,7 +71,8 @@ class ActivityTransactions
 		) {
 			$mailboxOptions = array_map(function ($b) use ($uncheckedOptions) {
 				return ActivityOption::create(
-					$b['name'] . '@' . PLATFORM_MAILBOX_HOST, $b['id'], !isset($option['mailbox-' . $b['id']])
+					$b['name'] . '@' . PLATFORM_MAILBOX_HOST, $b['id'],
+					!isset($uncheckedOptions['mailbox-' . $b['id']])
 				);
 			}, $boxes);
 		}
@@ -93,5 +95,25 @@ class ActivityTransactions
 			ActivityCategory::create('mailbox', $this->translator->trans('terminology.mailboxes'), $mailboxOptions),
 			ActivityCategory::create('buddywall', $this->translator->trans('search.mybuddies'), $buddyOptions)
 		];
+	}
+
+	/**
+	 * Sets the deactivated activities for the logged in user.
+	 *
+	 * @param array $options a list of activities to be deactivated, objects with 'index' and 'id' entries
+	 */
+	public function setOptions(array $options): void
+	{
+		$list = [];
+		foreach ($options as $o) {
+			if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
+				$list[$o['index'] . '-' . $o['id']] = [
+					'index' => $o['index'],
+					'id' => $o['id']
+				];
+			}
+		}
+
+		$this->session->setOption('activity-listings', empty($list) ? false : $list);
 	}
 }

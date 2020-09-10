@@ -73,31 +73,6 @@ class ActivityXhr extends Control
 		$xhr->send();
 	}
 
-	public function setOptionList(): void
-	{
-		if (isset($_GET['options'])) {
-			$options = [];
-			foreach ($_GET['options'] as $o) {
-				if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
-					$options[$o['index'] . '-' . $o['id']] = [
-						'index' => $o['index'],
-						'id' => $o['id']
-					];
-				}
-			}
-
-			if (empty($options)) {
-				$options = false;
-			}
-
-			$this->session->setOption('activity-listings', $options);
-		}
-
-		if (isset($_GET['select_all_options'])) {
-			$this->session->setOption('activity-listings', false);
-		}
-	}
-
 	private function buildUpdateData(array $hidden_ids, int $page): array
 	{
 		return array_merge(

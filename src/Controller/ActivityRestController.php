@@ -7,6 +7,7 @@ use Foodsharing\Modules\Activity\ActivityGateway;
 use Foodsharing\Modules\Activity\ActivityTransactions;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcher;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,11 +29,11 @@ class ActivityRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Returns the options for all activities of this user that can be turned on or off.
+	 * Returns the options for all dashboard activities for the current user.
 	 *
 	 * @SWG\Response(response="200", description="Success.")
 	 * @SWG\Response(response="403", description="Insufficient permissions to request the options.")
-	 * @SWG\Tag(name="tag")
+	 * @SWG\Tag(name="activities")
 	 *
 	 * @Rest\Get("activities/options")
 	 */
@@ -45,5 +46,27 @@ class ActivityRestController extends AbstractFOSRestController
 		$options = $this->activityTransactions->getOptions();
 
 		return $this->handleView($this->view($options, 200));
+	}
+
+	/**
+	 * Sets which dashboard activities should be deactivated for the current user.
+	 *
+	 * @SWG\Response(response="200", description="Success.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to set options.")
+	 * @SWG\Tag(name="activities")
+	 *
+	 * @Rest\Patch("activities/options")
+	 * @Rest\RequestParam(name="options")
+	 */
+	public function setActivityOptionsAction(ParamFetcher $paramFetcher): Response
+	{
+		if (!$this->session->id()) {
+			throw new HttpException(403);
+		}
+
+		$options = $paramFetcher->get('options');
+		$this->activityTransactions->setOptions($options);
+
+		return $this->handleView($this->view([], 200));
 	}
 }
