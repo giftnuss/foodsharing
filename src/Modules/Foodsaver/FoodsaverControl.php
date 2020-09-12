@@ -15,16 +15,16 @@ use Foodsharing\Utility\IdentificationHelper;
 
 class FoodsaverControl extends Control
 {
-	private $foodsaverGateway;
-	private $foodsaverTransactions;
-	private $contentGateway;
-	private $regionGateway;
-	private $settingsGateway;
-	private $storeModel;
-	private $profilePermissions;
-	private $regionPermissions;
-	private $dataHelper;
-	private $identificationHelper;
+	private FoodsaverGateway $foodsaverGateway;
+	private FoodsaverTransactions $foodsaverTransactions;
+	private ContentGateway $contentGateway;
+	private RegionGateway $regionGateway;
+	private SettingsGateway $settingsGateway;
+	private StoreModel $storeModel;
+	private ProfilePermissions $profilePermissions;
+	private RegionPermissions $regionPermissions;
+	private DataHelper $dataHelper;
+	private IdentificationHelper $identificationHelper;
 
 	public function __construct(
 		FoodsaverView $view,
@@ -148,7 +148,7 @@ class FoodsaverControl extends Control
 		}
 	}
 
-	private function handle_edit()
+	private function handle_edit(): void
 	{
 		global $g_data;
 
@@ -198,7 +198,7 @@ class FoodsaverControl extends Control
 		return $downgradedRows > 0 || $updatedRows > 0;
 	}
 
-	private function picture_box()
+	private function picture_box(): string
 	{
 		$photo = $this->foodsaverGateway->getPhotoFileName($_GET['id']);
 
