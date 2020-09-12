@@ -18,15 +18,15 @@ use Foodsharing\Utility\Sanitizer;
 
 class EmailControl extends Control
 {
-	private $storeGateway;
-	private $foodsaverGateway;
-	private $emailGateway;
-	private $regionGateway;
-	private $sanitizerService;
-	private $mailboxGateway;
-	private $identificationHelper;
-	private $dataHelper;
-	private $newsletterEmailPermissions;
+	private StoreGateway $storeGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private EmailGateway $emailGateway;
+	private RegionGateway $regionGateway;
+	private Sanitizer $sanitizerService;
+	private MailboxGateway $mailboxGateway;
+	private IdentificationHelper $identificationHelper;
+	private DataHelper $dataHelper;
+	private NewsletterEmailPermissions $newsletterEmailPermissions;
 
 	public function __construct(
 		StoreGateway $storeGateway,
@@ -56,7 +56,7 @@ class EmailControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->handleEmail();
 		$this->pageHelper->addBread($this->translator->trans('recipients.bread'), '/?page=email');
@@ -149,7 +149,7 @@ class EmailControl extends Control
 		$this->pageHelper->addContent('</ul></div>' . $divs, CNT_RIGHT);
 	}
 
-	private function handleEmail()
+	private function handleEmail(): void
 	{
 		if ($this->submitted()) {
 			$subject = $_POST['subject'];
@@ -278,7 +278,7 @@ class EmailControl extends Control
 		];
 	}
 
-	private function v_email_statusbox($mail)
+	private function v_email_statusbox(array $mail): string
 	{
 		$out = '';
 
