@@ -2,6 +2,8 @@
 
 namespace Foodsharing\Modules\Bell\DTO;
 
+use DateTime;
+
 /**
  * Class that represents the data of a bell notification, in a format in which it can be sent to foodsavers or be
  * retrieved from the database. This is not an entity class, it does not provide any bell related domain logic nor
@@ -68,21 +70,17 @@ class Bell
 	public bool $closeable;
 
 	/**
-	 * @var \DateTime
-	 *
 	 * Some bells contain information that expires after a certain amount of time. Setting an expiration date allows you
 	 * to fetch expired bells and remove or update them. If you want to do this on a regular basis, you can subscribe
 	 * the Gateway that controls your bells to the BellUpdateTrigger service. @see BellUpdateTrigger documentation
 	 * for how to set this up.
 	 */
-	public $expiration;
+	public ?DateTime $expiration;
 
 	/**
-	 * @var \DateTime
-	 *
-	 * A timestamp for when the bell got created
+	 * A timestamp for when the bell got created.
 	 */
-	public $time;
+	public ?DateTime $time;
 
 	public static function create(
 		string $title,
@@ -92,8 +90,8 @@ class Bell
 		array $vars,
 		string $identifier = '',
 		bool $closeable = true,
-		\DateTime $expiration = null,
-		\DateTime $time = null
+		?DateTime $expiration = null,
+		?DateTime $time = null
 	): Bell {
 		$bell = new Bell();
 		$bell->title = $title;
