@@ -10,12 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LegalControl extends Control
 {
-	private $gateway;
-
-	/**
-	 * @var FormFactoryInterface
-	 */
-	private $formFactory;
+	private LegalGateway $gateway;
+	private FormFactoryInterface $formFactory;
 
 	public function __construct(LegalGateway $gateway, View $view)
 	{
@@ -33,7 +29,7 @@ class LegalControl extends Control
 		$this->formFactory = $formFactory;
 	}
 
-	public function index(Request $request, Response $response)
+	public function index(Request $request, Response $response): void
 	{
 		$privacyPolicyDate = $this->gateway->getPpVersion();
 		$privacyNoticeDate = $this->gateway->getPnVersion();
