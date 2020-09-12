@@ -11,10 +11,7 @@ use Foodsharing\Modules\Core\Database;
 
 class BellGateway extends BaseGateway
 {
-	/**
-	 * @var WebSocketConnection
-	 */
-	private $webSocketConnection;
+	private WebSocketConnection $webSocketConnection;
 
 	public function __construct(Database $db, WebSocketConnection $webSocketConnection)
 	{
