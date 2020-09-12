@@ -18,23 +18,20 @@ class View
 {
 	private $sub;
 
-	/* @var \Foodsharing\Lib\Session */
-	protected $session;
-	/* @var \Foodsharing\Lib\View\Utils */
-	protected $v_utils;
+	protected Session $session;
+	protected Utils $v_utils;
 
-	/* @var \Twig\Environment */
-	public $twig;
+	public \Twig\Environment $twig;
 
-	protected $dataHelper;
-	protected $identificationHelper;
-	protected $imageService;
-	protected $pageHelper;
-	protected $routeHelper;
-	protected $sanitizerService;
-	protected $timeHelper;
-	protected $translationHelper;
-	protected $translator;
+	protected DataHelper $dataHelper;
+	protected IdentificationHelper $identificationHelper;
+	protected ImageHelper $imageService;
+	protected PageHelper $pageHelper;
+	protected RouteHelper $routeHelper;
+	protected Sanitizer $sanitizerService;
+	protected TimeHelper $timeHelper;
+	protected TranslationHelper $translationHelper;
+	protected TranslatorInterface $translator;
 
 	public function __construct(
 		\Twig\Environment $twig,
@@ -69,7 +66,7 @@ class View
 		$this->sub = $sub;
 	}
 
-	public function topbar($title, $subtitle = '', $icon = '')
+	public function topbar(string $title, string $subtitle = '', string $icon = ''): string
 	{
 		if ($icon != '') {
 			$icon = '<div class="img">' . $icon . '</div>';
