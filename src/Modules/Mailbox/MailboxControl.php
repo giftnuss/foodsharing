@@ -8,9 +8,9 @@ use Foodsharing\Utility\Sanitizer;
 
 class MailboxControl extends Control
 {
-	private $sanitizerService;
-	private $mailboxGateway;
-	private $mailboxPermissions;
+	private Sanitizer $sanitizerService;
+	private MailboxGateway $mailboxGateway;
+	private MailboxPermissions $mailboxPermissions;
 
 	public function __construct(
 		MailboxView $view,
