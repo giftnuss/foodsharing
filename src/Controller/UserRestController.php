@@ -230,7 +230,7 @@ class UserRestController extends AbstractFOSRestController
 		}
 
 		$birthdate = Carbon::createFromFormat('Y-m-d', $paramFetcher->get('birthdate'));
-		if (!$birthdate) {
+		if (empty($birthdate)) {
 			throw new HttpException(400, 'invalid birthdate');
 		}
 		$minBirthdate = Carbon::today()->subYears(self::MIN_AGE_YEARS);
