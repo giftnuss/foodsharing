@@ -3,9 +3,9 @@
 namespace Foodsharing\Modules\Activity;
 
 use Foodsharing\Lib\Session;
-use Foodsharing\Modules\Activity\DTO\ActivityCategory;
-use Foodsharing\Modules\Activity\DTO\ActivityImageOption;
-use Foodsharing\Modules\Activity\DTO\ActivityOption;
+use Foodsharing\Modules\Activity\DTO\ActivityFilter;
+use Foodsharing\Modules\Activity\DTO\ActivityFilterCategory;
+use Foodsharing\Modules\Activity\DTO\ImageActivityFilter;
 use Foodsharing\Modules\Core\DBConstants\Region\Type;
 use Foodsharing\Modules\Mailbox\MailboxGateway;
 use Foodsharing\Utility\ImageHelper;
@@ -34,22 +34,22 @@ class ActivityTransactions
 	}
 
 	/**
-	 * Returns all activity options for the logged in user sorted into categories.
+	 * Returns all activity filters for the logged in user sorted into categories.
 	 *
-	 * @return array ActivityCategory[]
+	 * @return array ActivityFilterCategory[]
 	 */
-	public function getOptions(): array
+	public function getFilters(): array
 	{
-		// list of currently unchecked options
-		$uncheckedOptions = $this->session->getOption('activity-listings') ?: [];
+		// list of currently excluded activities
+		$excluded = $this->session->getOption('activity-listings') ?: [];
 
 		// regions and groups
 		$regionOptions = [];
 		$groupOptions = [];
 		if ($bezirke = $this->session->getRegions()) {
 			foreach ($bezirke as $b) {
-				$option = ActivityOption::create($b['name'], $b['id'],
-					!isset($uncheckedOptions['bezirk-' . $b['id']])
+				$option = ActivityFilter::create($b['name'], $b['id'],
+					!isset($excluded['bezirk-' . $b['id']])
 				);
 				if ($b['type'] == Type::WORKING_GROUP) {
 					$groupOptions[] = $option;
@@ -66,10 +66,10 @@ class ActivityTransactions
 			$this->session->id(),
 			$this->session->may('bieb'))
 		) {
-			$mailboxOptions = array_map(function ($b) use ($uncheckedOptions) {
-				return ActivityOption::create(
+			$mailboxOptions = array_map(function ($b) use ($excluded) {
+				return ActivityFilter::create(
 					$b['name'] . '@' . PLATFORM_MAILBOX_HOST, $b['id'],
-					!isset($uncheckedOptions['mailbox-' . $b['id']])
+					!isset($excluded['mailbox-' . $b['id']])
 				);
 			}, $boxes);
 		}
@@ -78,22 +78,22 @@ class ActivityTransactions
 		$buddyOptions = [];
 		if ($buddyIds = $this->session->get('buddy-ids')) {
 			$buddies = $this->activityGateway->fetchAllBuddies((array)$buddyIds);
-			$buddyOptions = array_map(function ($b) use ($uncheckedOptions) {
-				return ActivityImageOption::create(
-					$b['name'], $b['id'], !isset($uncheckedOptions['buddywall-' . $b['id']]),
+			$buddyOptions = array_map(function ($b) use ($excluded) {
+				return ImageActivityFilter::create(
+					$b['name'], $b['id'], !isset($excluded['buddywall-' . $b['id']]),
 					$this->imageHelper->img($b['photo'])
 				);
 			}, $buddies);
 		}
 
 		return [
-			ActivityCategory::create('bezirk', $this->translator->trans('search.mygroups'),
+			ActivityFilterCategory::create('bezirk', $this->translator->trans('search.mygroups'),
 				$this->translator->trans('terminology.groups'), $groupOptions),
-			ActivityCategory::create('bezirk', $this->translator->trans('search.myregions'),
+			ActivityFilterCategory::create('bezirk', $this->translator->trans('search.myregions'),
 				$this->translator->trans('terminology.regions'), $regionOptions),
-			ActivityCategory::create('mailbox', $this->translator->trans('terminology.mailboxes'),
+			ActivityFilterCategory::create('mailbox', $this->translator->trans('terminology.mailboxes'),
 				$this->translator->trans('terminology.mailboxes'), $mailboxOptions),
-			ActivityCategory::create('buddywall', $this->translator->trans('search.mybuddies'),
+			ActivityFilterCategory::create('buddywall', $this->translator->trans('search.mybuddies'),
 				$this->translator->trans('terminology.buddies'), $buddyOptions)
 		];
 	}
@@ -101,13 +101,14 @@ class ActivityTransactions
 	/**
 	 * Sets the deactivated activities for the logged in user.
 	 *
-	 * @param array $options a list of activities to be deactivated, objects with 'index' and 'id' entries
+	 * @param array $excluded a list of activities to be deactivated. List entries should be objects with
+	 * 'index' and 'id' entries
 	 */
-	public function setOptions(array $options): void
+	public function setExcludedFilters(array $excluded): void
 	{
 		$list = [];
-		foreach ($options as $o) {
-			if ((int)$o['id'] > 0 && isset($o['index'], $o['id'])) {
+		foreach ($excluded as $o) {
+			if (isset($o['index'], $o['id']) && (int)$o['id'] > 0) {
 				$list[$o['index'] . '-' . $o['id']] = [
 					'index' => $o['index'],
 					'id' => $o['id']

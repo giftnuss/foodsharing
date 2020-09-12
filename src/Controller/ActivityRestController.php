@@ -29,43 +29,43 @@ class ActivityRestController extends AbstractFOSRestController
 	}
 
 	/**
-	 * Returns the options for all dashboard activities for the current user.
+	 * Returns the filters for all dashboard activities for the current user.
 	 *
 	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to request the options.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to request filters.")
 	 * @SWG\Tag(name="activities")
 	 *
-	 * @Rest\Get("activities/options")
+	 * @Rest\Get("activities/filters")
 	 */
-	public function getActivityOptionsAction(): Response
+	public function getActivityFiltersAction(): Response
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(403);
 		}
 
-		$options = $this->activityTransactions->getOptions();
+		$filters = $this->activityTransactions->getFilters();
 
-		return $this->handleView($this->view($options, 200));
+		return $this->handleView($this->view($filters, 200));
 	}
 
 	/**
 	 * Sets which dashboard activities should be deactivated for the current user.
 	 *
 	 * @SWG\Response(response="200", description="Success.")
-	 * @SWG\Response(response="403", description="Insufficient permissions to set options.")
+	 * @SWG\Response(response="403", description="Insufficient permissions to set filters.")
 	 * @SWG\Tag(name="activities")
 	 *
-	 * @Rest\Patch("activities/options")
-	 * @Rest\RequestParam(name="options")
+	 * @Rest\Patch("activities/filters")
+	 * @Rest\RequestParam(name="excluded")
 	 */
-	public function setActivityOptionsAction(ParamFetcher $paramFetcher): Response
+	public function setActivityFiltersAction(ParamFetcher $paramFetcher): Response
 	{
 		if (!$this->session->id()) {
 			throw new HttpException(403);
 		}
 
-		$options = $paramFetcher->get('options');
-		$this->activityTransactions->setOptions($options);
+		$excluded = $paramFetcher->get('excluded');
+		$this->activityTransactions->setExcludedFilters($excluded);
 
 		return $this->handleView($this->view([], 200));
 	}

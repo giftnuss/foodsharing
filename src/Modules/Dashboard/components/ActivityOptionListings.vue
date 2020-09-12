@@ -21,7 +21,7 @@
               class="pure-checkbox"
             >
               <input
-                v-model="item.checked"
+                v-model="item.included"
                 :name="listing.index"
                 :value="item.id"
                 type="checkbox"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { getOptionListings, saveOptionListings } from '@/api/dashboard'
+import { getFilters, setFilters } from '@/api/dashboard'
 
 export default {
   components: {},
@@ -79,13 +79,13 @@ export default {
     }
   },
   async created () {
-    this.listings = await getOptionListings()
+    this.listings = await getFilters()
     this.isLoading = false
   },
   methods: {
     async saveOptionListings () {
       this.isLoading = true
-      await saveOptionListings(this.listings)
+      await setFilters(this.listings)
       this.$emit('close')
       this.isLoading = false
       this.$emit('reloadData')
