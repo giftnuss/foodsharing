@@ -479,8 +479,6 @@ class XhrMethods
 				}
 
 				return '<html><head></head><body onload="parent.' . $func . '(\'' . $id . '\',\'' . $newname . '\');"></body></html>';
-
-				echo uniqid();
 			}
 		}
 	}
