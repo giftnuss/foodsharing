@@ -131,7 +131,7 @@ class WallPostXhr extends Control
 
 		$message = strip_tags($_POST['text']);
 		if (!(empty($message) && empty($_POST['attach']))) {
-			$attach = '';
+			$attach = null;
 			if (!empty($_POST['attach'])) {
 				$parts = explode(':', $_POST['attach']);
 				if (count($parts) > 0) {
@@ -147,7 +147,7 @@ class WallPostXhr extends Control
 							];
 						}
 					}
-					$attach = json_encode($attach);
+					$attach = json_encode($attach) ?: null;
 				}
 			}
 			if ($this->wallPostGateway->addPost($message, $this->session->id(), $this->table, $this->id, $attach)) {

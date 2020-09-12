@@ -132,13 +132,13 @@ class WallPostGateway extends BaseGateway
 	 *
 	 * @throws \Exception
 	 */
-	public function addPost(string $message, int $fsId, string $target = '', int $targetId = 0, string $attach = ''): int
+	public function addPost(string $message, int $fsId, string $target = '', int $targetId = 0, ?string $attach = null): int
 	{
 		$postId = $this->db->insert('fs_wallpost', [
 			'foodsaver_id' => $fsId,
 			'body' => $message,
 			'time' => $this->db->now(),
-			'attach' => $attach
+			'attach' => $attach ?? '',
 		]);
 		if ($target && $targetId) {
 			$this->linkPost($postId, $target, $targetId);
