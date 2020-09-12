@@ -11,8 +11,8 @@ class ApplicationControl extends Control
 	private $bezirk;
 	private $bezirk_id;
 	private $mode;
-	private $gateway;
-	private $identificationHelper;
+	private ApplicationGateway $gateway;
+	private IdentificationHelper $identificationHelper;
 
 	public function __construct(
 		ApplicationGateway $gateway,
@@ -48,7 +48,7 @@ class ApplicationControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
 		if ($application = $this->gateway->getApplication($this->bezirk_id, $_GET['fid'])) {
 			$this->pageHelper->addBread($this->bezirk['name'], '/?page=bezirk&bid=' . $this->bezirk_id);
