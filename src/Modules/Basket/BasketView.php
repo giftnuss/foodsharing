@@ -177,6 +177,8 @@ class BasketView extends View
 
 	private function userBox(array $basket, array $requests): string
 	{
+		$request = '';
+
 		if ($basket['fs_id'] != $this->session->id()) {
 			$hasRequested = $requests && count($requests) > 0;
 
