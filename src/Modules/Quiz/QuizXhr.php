@@ -1116,7 +1116,7 @@ class QuizXhr extends Control
 
 				$count = round($this->percentTo($count_questions, $percent));
 
-				if ($rquest = $this->quizGateway->getRandomQuestions($count, $failurePoints, $quiz_id)) {
+				if ($rquest = $this->quizGateway->getRandomQuestions(intval($count), $failurePoints, $quiz_id)) {
 					foreach ($rquest as $r) {
 						$out[] = $r;
 					}
