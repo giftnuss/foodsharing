@@ -327,7 +327,7 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function removeBasketAction(int $basketId): ?Response
 	{
-		if (!$this->session->may() || !$this->session->may('orga')) {
+		if (!$this->session->may()) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
