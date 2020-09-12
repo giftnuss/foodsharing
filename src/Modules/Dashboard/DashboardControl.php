@@ -18,18 +18,18 @@ use Foodsharing\Utility\Sanitizer;
 
 class DashboardControl extends Control
 {
-	private $user;
-	private $dashboardGateway;
-	private $contentGateway;
-	private $basketGateway;
-	private $storeGateway;
-	private $foodsaverGateway;
-	private $eventGateway;
-	private $twig;
-	private $profileGateway;
-	private $sanitizerService;
-	private $imageService;
-	private $quizSessionGateway;
+	private ?array $user;
+	private DashboardGateway $dashboardGateway;
+	private ContentGateway $contentGateway;
+	private BasketGateway $basketGateway;
+	private StoreGateway $storeGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private EventGateway $eventGateway;
+	private \Twig\Environment $twig;
+	private ProfileGateway $profileGateway;
+	private Sanitizer $sanitizerService;
+	private ImageHelper $imageService;
+	private QuizSessionGateway $quizSessionGateway;
 
 	public function __construct(
 		DashboardView $view,
@@ -67,7 +67,7 @@ class DashboardControl extends Control
 		$this->user = $this->dashboardGateway->getUser($this->session->id());
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$check = false;
 
@@ -202,7 +202,7 @@ class DashboardControl extends Control
 		}
 	}
 
-	private function getUserLocationOrDefault()
+	private function getUserLocationOrDefault(): array
 	{
 		return $this->session->getLocation() ?? ['lat' => MapConstants::CENTER_GERMANY_LAT, 'lon' => MapConstants::CENTER_GERMANY_LON];
 	}
@@ -210,7 +210,7 @@ class DashboardControl extends Control
 	/**
 	 * Dashboard for all users except for foodsharers (they get a simpler one –  @see DashboardControl::dashFoodsharer() ).
 	 */
-	private function dashFoodsaver()
+	private function dashFoodsaver(): void
 	{
 		$address = $this->foodsaverGateway->getFoodsaverAddress($this->session->id());
 
