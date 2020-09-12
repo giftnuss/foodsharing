@@ -87,10 +87,14 @@ class ActivityTransactions
 		}
 
 		return [
-			ActivityCategory::create('bezirk', $this->translator->trans('search.mygroups'), $groupOptions),
-			ActivityCategory::create('bezirk', $this->translator->trans('search.myregions'), $regionOptions),
-			ActivityCategory::create('mailbox', $this->translator->trans('terminology.mailboxes'), $mailboxOptions),
-			ActivityCategory::create('buddywall', $this->translator->trans('search.mybuddies'), $buddyOptions)
+			ActivityCategory::create('bezirk', $this->translator->trans('search.mygroups'),
+				$this->translator->trans('terminology.groups'), $groupOptions),
+			ActivityCategory::create('bezirk', $this->translator->trans('search.myregions'),
+				$this->translator->trans('terminology.regions'), $regionOptions),
+			ActivityCategory::create('mailbox', $this->translator->trans('terminology.mailboxes'),
+				$this->translator->trans('terminology.mailboxes'), $mailboxOptions),
+			ActivityCategory::create('buddywall', $this->translator->trans('search.mybuddies'),
+				$this->translator->trans('terminology.buddies'), $buddyOptions)
 		];
 	}
 

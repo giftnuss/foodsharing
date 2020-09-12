@@ -508,6 +508,7 @@ terminology:
   homeRegion: Stammbezirk
   message: Nachricht
   polls: Abstimmungen
+  buddies: Bekannte
 
 statistics:
   kg_food_saved: '%count% kg Lebensmittel gerettet'

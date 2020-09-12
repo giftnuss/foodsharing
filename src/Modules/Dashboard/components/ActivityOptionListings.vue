@@ -38,7 +38,7 @@
               v-if="listing.items.length === 0"
               class="info-italic"
             >
-              {{ $i18n('dashboard.empty_section', {type: listing.name}) }}
+              {{ $i18n('dashboard.empty_section', {type: listing.shortName}) }}
             </label>
           </p>
         </div>
