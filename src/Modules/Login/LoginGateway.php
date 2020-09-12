@@ -103,7 +103,7 @@ class LoginGateway extends BaseGateway
 				'password' => strip_tags($this->password_hash($data->password)),
 				'name' => strip_tags($data->firstName),
 				'nachname' => strip_tags($data->lastName),
-				'geb_datum' => strip_tags($data->birthday), // FIXME DateTime / string mismatch
+				'geb_datum' => $data->birthday,
 				'handy' => strip_tags($data->mobilePhone),
 				'newsletter' => (int)$data->subscribeNewsletter,
 				'geschlecht' => (int)$data->gender,
