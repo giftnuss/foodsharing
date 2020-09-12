@@ -47,7 +47,7 @@ class QuizControl extends Control
 		}
 	}
 
-	public function index()
+	public function index(): void
 	{
 		// quiz&a=delete&id=9
 		if ($quizSessionId = $this->identificationHelper->getActionId('delete')) {
@@ -91,7 +91,7 @@ class QuizControl extends Control
 		}
 	}
 
-	private function listQuestions($quizId)
+	private function listQuestions($quizId): void
 	{
 		$quizButtons = $this->view->quizbuttons($quizId);
 		$this->pageHelper->addContent($quizButtons);
@@ -102,7 +102,7 @@ class QuizControl extends Control
 		$this->pageHelper->addContent('<div style="height:15px;"></div>' . $quizButtons);
 	}
 
-	public function wall()
+	public function wall(): void
 	{
 		$questionId = (int)$_GET['id'];
 		if ($question = $this->quizGateway->getQuestion($questionId)) {
@@ -118,7 +118,7 @@ class QuizControl extends Control
 		}
 	}
 
-	private function getWallTopbarContent($question)
+	private function getWallTopbarContent(array $question): string
 	{
 		return $this->view->topbar(
 			'Quizfrage  #' . (int)$question['id'],
@@ -127,7 +127,7 @@ class QuizControl extends Control
 		);
 	}
 
-	public function edit()
+	public function edit(): void
 	{
 		$quizId = (int)$_GET['qid'];
 		if ($quiz = $this->quizGateway->getQuiz($quizId)) {
@@ -150,7 +150,7 @@ class QuizControl extends Control
 		}
 	}
 
-	public function newquiz()
+	public function newquiz(): void
 	{
 		if ($this->isSubmitted()) {
 			$name = trim(strip_tags($_POST['name']));
@@ -169,7 +169,7 @@ class QuizControl extends Control
 		$this->pageHelper->addContent($this->view->quizForm());
 	}
 
-	public function sessiondetail()
+	public function sessiondetail(): void
 	{
 		if ($fs = $this->foodsaverGateway->getFoodsaverBasics($_GET['fsid'])) {
 			$this->pageHelper->addBread('Quiz Sessions von ' . $fs['name'] . ' ' . $fs['nachname']);
@@ -181,7 +181,7 @@ class QuizControl extends Control
 		}
 	}
 
-	private function getSessionDetailTopbarContent($fs)
+	private function getSessionDetailTopbarContent(array $fs): string
 	{
 		$title = 'Quiz-Sessions von ' . $fs['name'] . ' ' . $fs['nachname'];
 		$subtitle = $this->translator->trans(
@@ -192,7 +192,7 @@ class QuizControl extends Control
 		return $this->view->topbar($title, $subtitle, $icon);
 	}
 
-	public function sessions()
+	public function sessions(): void
 	{
 		if ($quiz = $this->quizGateway->getQuiz($_GET['id'])) {
 			$this->pageHelper->addContent($this->getSessionListContent($quiz));
