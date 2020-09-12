@@ -130,6 +130,7 @@ class StoreXhr extends Control
 		return ['status' => 1];
 	}
 
+	// see https://gitlab.com/foodsharing-dev/foodsharing/-/issues/885
 	public function setbezirkids()
 	{
 		if (isset($_SESSION['client']['verantwortlich']) && is_array($_SESSION['client']['verantwortlich'])) {
