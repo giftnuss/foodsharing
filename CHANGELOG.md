@@ -31,6 +31,7 @@
 - Update backend dependencies (codeception, twig, symfony, friendsofsymfony, phpunit) and removed abandoned flow/jsonpath !1732 @chriswalg
 - Update Composer to version 2 and PHP to version 7.4.11 !1734 @peter.toennies
 - Fixed `rm` and `clean` scripts !1737 @\_fridtjof_
+- Increase phpstan analysis level to 5 and fix all issues !1674 !1729 @ChrisOelmueller
 
 # 2020-10-23 Hotfix
 
@@ -89,9 +90,7 @@
 - Refactor some translations from twig to messages.de.yml #824 !1639 @chriswalg @jonathan_b
 - Clarify and extract some permission handling !1671 @ChrisOelmueller
 - Some PHP linting chores and more type hints !1641 !1654 @ChrisOelmueller
-- Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
 - Move bell XHR requests to REST !1659 @alex.simm
-- Increase phpstan analysis level to 4 and fix all issues !1672 @ChrisOelmueller
 - Introduce some more specific store gateway functionality !1686 @ChrisOelmueller
 - Replace Vue filters with prototypes !1689 @ChrisOelmueller
 - Remove unused Xhr methods for region applications !1707 @alex.simm
@@ -103,6 +102,8 @@
 ## Dev/Test/CI stuff
 - Fix banana unit test !1649 !1656 #964 @alex.simm
 - Update devdocs for database migrations in phinx, fedora 32 and WSL2 !1675 @chriswalg
+- Increase phpstan analysis level to 3 and fix all issues !1654 @ChrisOelmueller
+- Increase phpstan analysis level to 4 and fix all issues !1672 @ChrisOelmueller
 
 # 2020-08-11 Hotfix
 

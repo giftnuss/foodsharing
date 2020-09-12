@@ -1,5 +1,5 @@
 parameters:
-  level: 4
+  level: 5
   paths:
     - src
   excludes_analyse:
@@ -8,8 +8,9 @@ parameters:
   bootstrapFiles:
     - config.inc.php
   ignoreErrors:
+    # LEVEL 0+ see https://github.com/phpstan/phpstan/issues/1557
     - '#Static call to instance method Carbon\\CarbonInterval::[a-zA-Z]+\(\)#'
-    # We include constant values for MEM_ENABLED from config.inc.*.php:
+    # LEVEL 4+ We include constant values for MEM_ENABLED from config.inc.*.php:
     -
       message: '#If condition is always true#'
       paths:
@@ -18,3 +19,28 @@ parameters:
       message: '#Unreachable statement - code above always terminates#'
       paths:
         - src/Lib/Db/Mem.php
+    # LEVEL 5+ some legacy code calling legacy library code:
+    -
+      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Flourish\\fImage::[a-zA-Z]+\(\) expects Flourish\\numeric, int given#'
+      paths:
+        - src/
+    -
+      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Flourish\\fImage::[a-zA-Z]+\(\) expects int, string given#'
+      paths:
+        - src/
+    # LEVEL 5+ DateTimeInterface / DateTime / DateTimeImmutable, see https://github.com/phpstan/phpstan/issues/314
+    -
+      message: '#expects (DateTime|Carbon\\Carbon)(\|null)?, (DateTimeInterface|Carbon\\CarbonInterface)(\|null)? given#'
+      paths:
+        - src/Modules/Store/StoreTransactions.php
+        - src/Modules/Store/StoreGateway.php
+    # LEVEL 5+ Weirdness with InputBag / ParameterBag, see https://github.com/symfony/symfony/issues/37100
+    -
+      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of method Symfony\\Component\\HttpFoundation\\InputBag::get\(\) expects string\|null, int given#'
+      paths:
+        - src/Modules/FoodSharePoint/FoodSharePointControl.php
+    # LEVEL 5+ imap and the MessageIterator in disguise, see https://github.com/ddeboer/imap/issues/389
+    -
+      message: '#Parameter \#[0-9]+ \$[a-zA-Z_]+ of function count expects array\|Countable, Ddeboer\\Imap\\MessageIteratorInterface given#'
+      paths:
+        - src/Modules/Mails/MailsControl.php
