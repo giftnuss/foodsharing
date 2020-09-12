@@ -410,16 +410,15 @@ abstract class Control
 
 	public function uriInt($index)
 	{
-		if (($val = (int)$this->uri($index)) !== false) {
-			return $val;
-		}
+		$val = (int)$this->uri($index);
 
-		return false;
+		return $val;
 	}
 
 	public function uriStr($index)
 	{
-		if (($val = $this->uri($index)) !== false) {
+		$val = $this->uri($index);
+		if ($val !== false) {
 			return preg_replace('/[^a-z0-9\-]/', '', $val);
 		}
 
