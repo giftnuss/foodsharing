@@ -15,7 +15,8 @@
 - Moved guide page (ratgeber) to wiki page #776 !1567 !1664 @chriswalg
 - Moved guide page (ratgeber) to wiki page #776 !1567 @chriswalg
 - Add store log for different user activities in store #553 !1658 @fs_k
-
+- Orga may 'delete' foodbaskets #51 @fsk_k
+ 
 ## Bugfixes
 - Filter outdated baskets from REST responses #706 !1608 @alex.simm
 - Fix removal of non-existing user photos in nightly maintenance !1634 @alex.simm

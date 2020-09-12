@@ -87,7 +87,7 @@ class BasketView extends View
 		$page = new vPage($label,
 			'<div class="fbasket-wrap">
 				<div class="fbasket-pic">
-					' . $this->pageImg($basket['picture'] ?? '') . '	
+					' . $this->pageImg($basket['picture'] ?? '') . '
 				</div>
 				<div class="fbasket-desc">
 					<p>' . nl2br($basket['description']) . '</p>
@@ -197,7 +197,8 @@ class BasketView extends View
 				'landlineNumber' => ($allowContactByPhone && !empty($basket['tel'])) ? $basket['tel'] : null,
 				'allowRequestByMessage' => $allowContactByMessage
 			]);
-		} else {
+		}
+		if ($basket['fs_id'] == $this->session->id()) {
 			$request = '
 				<div class="ui-padding-bottom">
 					<a class="button button-big" href="#" onclick="ajreq(\'editBasket\','
@@ -205,7 +206,12 @@ class BasketView extends View
 					. ',id:' . (int)$basket['id']
 					. '});">' . $this->translator->trans('basket.edit') . '
 					</a>
-				</div><div>
+				</div>';
+		}
+		if ($basket['fs_id'] == $this->session->id() || $this->session->may('orga')) {
+			$request = $request . '
+
+				<div>
 					<a class="button button-big" href="#" onclick="tryRemoveBasket(' . (int)$basket['id'] . ');">'
 					. $this->translator->trans('basket.delete') . '
 					</a>

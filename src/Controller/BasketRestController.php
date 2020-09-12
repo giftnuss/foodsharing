@@ -327,11 +327,11 @@ final class BasketRestController extends AbstractFOSRestController
 	 */
 	public function removeBasketAction(int $basketId): ?Response
 	{
-		if (!$this->session->may()) {
+		if (!$this->session->may() || !$this->session->may('orga')) {
 			throw new HttpException(401, self::NOT_LOGGED_IN);
 		}
 
-		$status = $this->gateway->removeBasket($basketId, $this->session->id());
+		$status = $this->gateway->removeBasket($basketId);
 
 		if ($status === 0) {
 			throw new HttpException(404, 'Basket was not found or cannot be deleted.');
