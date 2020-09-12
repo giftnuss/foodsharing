@@ -7,8 +7,8 @@ use Foodsharing\Modules\Foodsaver\FoodsaverGateway;
 
 class LookupControl extends ConsoleControl
 {
-	private $foodsaverGateway;
-	private $lookupGateway;
+	private FoodsaverGateway $foodsaverGateway;
+	private LookupGateway $lookupGateway;
 
 	public function __construct(LookupGateway $lookupGateway, FoodsaverGateway $foodsaverGateway)
 	{
